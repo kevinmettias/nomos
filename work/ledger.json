@@ -19744,6 +19744,61 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-GATE-014-015-RUN-TRIGGER-FIRED",
+      "title": "OD-GATE-014 and OD-GATE-015: the run-verb trigger fired, but gate run still has no real caller",
+      "why": "`OD-GATE-014` and `OD-GATE-015` each name \"`Gate` gaining a `run` verb\" as an independent trigger for revisiting whether `ScopeSelector`/`RuleSelector` and `BaselinePolicy`/`SuppressionPolicy` are built now. `P13-GATE-RUN-FIRST-INCREMENT-3` landed that verb. Both records' prose still describes `run` as hypothetical (\"Gate's only implemented verb (Plan) is report-only\"), which is now false, and their own stated trigger fired -- they need to be read again with the real thing in front of them, not left stale.\n\nRead again rather than assumed: `run`'s real shape (walk unconditionally, judge everything, reduce through `Can_Fail_A_Build`) resolves the *design* risk both records named -- shaping a selector or a policy type around a `run` that might not match what got built. It does not resolve the *deeper* condition each record was really waiting on: a real caller whose build `run`'s output actually affects. Verified directly against `.github/workflows/gate.yml`, not assumed: the `Rules` step (`OD-GATE-004`'s own CI step) still invokes `cargo run --quiet -p nomos-cli --bin nomos -- check --root .` -- `nomos check` directly, not `nomos gate run` or `nomos gate plan`. `Gate` has a real `run` verb with nobody calling it. That is not the same claim as \"the trigger has not fired\" -- it has, in the narrow sense both records named it -- but it is not the same claim as \"build the selectors or the policy types now\" either, which neither record's own logic supports without a caller whose behavior they would change.",
+      "done_when": "Both records are edited through `nomos spec preview`/`commit` (not hand-edited), and both stay `status: open` -- this item settles what changed, not whether to build either policy family, per the user's own explicit direction not to jump to implementation on roadmap grounds.\n\n`OD-GATE-014`: \"Current Position\" gains a paragraph verifying `run`'s real shape and citing `P13-GATE-RUN-FIRST-INCREMENT-3`, and stating directly, checked against the workflow file, that `OD-GATE-004`'s `Rules` step still invokes `nomos check` rather than `Gate`. \"What Would Decide It\" is rewritten to say plainly that the `run`-verb trigger has fired (closing the risk of shaping a selector around a hypothetical `run`), while the first, primary trigger -- a real caller wanting fewer than every rule or every file -- has not, because nothing calls `gate run` at all yet. \"Status\" stays Open, with the reasoning current rather than describing `Plan` as `Gate`'s only verb.\n\n`OD-GATE-015`: the same shape. \"Current Position\" gains a paragraph noting `Disposition`'s reduction is now a real seam a suppression hook or baseline scope could sit inside, but that nothing outside this item's own tests calls it. \"What Would Decide It\" says the `run`-verb trigger fired and the second, independent trigger (a real caller's accumulated debt) has not. \"Status\" stays Open, current.\n\nNeither record is closed. Neither schedules ScopeSelector, RuleSelector, BaselinePolicy, SuppressionPolicy or adoption configuration. Both keep their existing \"one question, three separate concerns, not one shape\" and \"OD-HOST-004 already decided the adjacent case\" reasoning intact -- unchanged, not restated -- since neither is what `run`'s arrival touches.\n\nBoth records' `version` frontmatter moves from 1 to 2, and each Status section names this item as what moved it, the same citation shape `ARC-ECOSYSTEM-001` and other amended-while-open records already use.\n\n`cargo test --no-fail-fast -p nomos-spec-validate` is green (preservation holds over the edit). Both derived projections -- `diagrams/relations.mmd` and `spec/domain-specification.md` -- are re-rendered per `OD-GATE-005` from a detached worktree holding exactly the records this commit publishes, and `nomos spec freshness --into . --require diagram-set --require domain-specification` exits 0 there.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md",
+          "docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-validate"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-validate"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 8 tests\ntest run::tests::Test_The_Ruleset_Hash_Should_Be_Order_Independent_And_Sensitive ... ok\ntest run::tests::Test_A_Rule_Nobody_Declared_Should_Fail_The_Run ... ok\ntest run::tests::Test_An_Empty_Ruleset_Should_Not_Pass ... ok\ntest run::tests::Test_Violations_Should_Fail_The_Run_And_Be_Listed ... ok\ntest run::tests::Test_A_Complete_Satisfied_Run_Should_Pass ... ok\ntest run::tests::Test_A_Vacuous_Rule_Should_Be_Visible ... ok\ntest run::tests::Test_An_Errored_Rule_Should_Fail_The_Run ... ok\ntest run::tests::Test_A_Declared_But_Unregistered_Rule_Should_Fail_The_Run ... ok\n\ntest result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s\n\n\nrunning 11 tests\ntest Test_A_Declared_Repeated_Body_Should_Satisfy_Preserve_004 ... ok\ntest Test_An_Empty_Store_Should_Report_Vacuous_Rules ... ok\ntest Test_An_Undisposed_Block_Should_Violate_Preserve_002 ... ok\ntest Test_A_Statement_Without_Preserved_Lineage_Should_Violate_Preserve_006 ... ok\ntest Test_A_Traced_Statement_Should_Satisfy_Preserve_006 ... ok\ntest Test_Disposed_Blocks_Should_Satisfy_Preserve_002 ... ok\ntest Test_The_Registry_Should_Match_The_Manifest ... ok\ntest Test_An_Omitted_Block_Should_Satisfy_Preserve_002 ... ok\ntest Test_An_Undeclared_Repeated_Body_Should_Violate_Preserve_004 ... ok\ntest Test_A_Populated_Store_Should_Not_Report_Vacuous_Block_Rules ... ok\ntest Test_A_Seeded_Store_Should_Pass_Preservation_Non_Vacuously ... ok\n\ntest result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.86s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.13s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_validate-acd7b674edff1f45.exe)\n     Running tests\\preservation_holds.rs (target\\debug\\deps\\preservation_holds-c1582b858346687e.exe)\n   Doc-tests nomos_spec_validate\n",
+        "verified_at": 1787169878,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "d53bcff1d829465cf9393a67da511132fef5210f"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

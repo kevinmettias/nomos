@@ -68,8 +68,8 @@ profile: domain-specification
 | docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md@authored | docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md | authored | 22 | 7 | sha256:47c0b032d29826a3aefa121ae2a70bbf8eadb84cd84e530a0692a8bb2ef0b42b |
 | docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md@authored | docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md | authored | 32 | 8 | sha256:7e415cc70febf6bbbcc01cafffc5866abb03ee5d83ddfad6b829ea224bfcc9aa |
 | docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md@authored | docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md | authored | 17 | 7 | sha256:db6c652a9e6a7ddad8f6d701642e08c3a91d0f38c07839fdf7b5c5fc9e6ffa50 |
-| docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md@authored | docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md | authored | 13 | 5 | sha256:7b9fcda1e16d60b1bd592a936b2ea513f5ca39a581784a410999bdc5ec4dce1f |
-| docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md@authored | docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md | authored | 19 | 7 | sha256:26615732c6f51db0865a23830a4f6f463190d30c5fa0bd98b8191ebb79be230a |
+| docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md@authored | docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md | authored | 15 | 6 | sha256:0e8c3cb40a42008bf61b484394e9a9a69fcddc8e18149394b6ad791a5051094f |
+| docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md@authored | docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md | authored | 22 | 8 | sha256:2222f4a69838a5611b5cb1906281abc58397b201ef32c85d7b16d2d8c9dd7f9d |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md@authored | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md | authored | 16 | 5 | sha256:e3d0afb3cabc0ab33a09a700e110b803806d3c4e063673d8c18ca7adc84c3012 |
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md@authored | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md | authored | 29 | 6 | sha256:95a9bc9275ea24b17ac4458927631e589405b0813779a6945f42240a47af2f1f |
 | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md@authored | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md | authored | 19 | 6 | sha256:9237ea74e89c7f49295d2e4bde41ff135c64838767ba17c27b0aad79037ced10 |
@@ -630,15 +630,17 @@ profile: domain-specification
 | docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md#1 | authored | 1 | Whether Gate's ScopeSelector and RuleSelector are built now, or wait for a caller that needs to select less than everything |
 | docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md#2 | authored | 2 | Question |
 | docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md#4 | authored | 2 | Current Position |
-| docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md#9 | authored | 2 | What Would Decide It |
-| docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md#12 | authored | 2 | Status |
+| docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md#9 | authored | 2 | `run` Arrived: What Changed And What Did Not |
+| docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md#12 | authored | 2 | What Would Decide It |
+| docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md#14 | authored | 2 | Status |
 | docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md#1 | authored | 1 | Whether Gate's BaselinePolicy, SuppressionPolicy and adoption configuration are built now, or wait for a run verb that can observe their effect |
 | docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md#2 | authored | 2 | Question |
 | docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md#4 | authored | 2 | What The Corpus Specifies |
 | docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md#8 | authored | 2 | Current Position |
 | docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md#12 | authored | 2 | One Question, Three Concerns |
-| docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md#15 | authored | 2 | What Would Decide It |
-| docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md#18 | authored | 2 | Status |
+| docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md#15 | authored | 2 | `run` Arrived: What Changed And What Did Not |
+| docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md#18 | authored | 2 | What Would Decide It |
+| docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md#21 | authored | 2 | Status |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#1 | authored | 1 | Choosing a platform, running a verb and rendering its outcome are three crates, not one |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#4 | authored | 2 | The decision |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#8 | authored | 2 | What stayed out, and why |
@@ -16331,46 +16333,72 @@ questions rather than builds despite arising from the same prioritized work.
 
 ### docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md#9
 
+*revision: authored · kind: heading · heading: Whether Gate's ScopeSelector and RuleSelector are built now, or wait for a caller that needs to select less than everything / `run` Arrived: What Changed And What Did Not · hash: sha256:01b1dc2b193899942cacbd70668994bd93b422a543465b77b838b7d2f663a39f*
+
+## `run` Arrived: What Changed And What Did Not
+
+### docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md#10
+
+*revision: authored · kind: prose · heading: Whether Gate's ScopeSelector and RuleSelector are built now, or wait for a caller that needs to select less than everything / `run` Arrived: What Changed And What Did Not · hash: sha256:6e1f055c303c2733159f6da3a3e1b7eb5bf0803ebc26f2be1d90918baffaa270*
+
+`P13-GATE-RUN-FIRST-INCREMENT-3` gave `Gate` a real `run` verb, closing part of what this
+record was waiting on. Verified directly against the real code, not assumed: `nomos gate
+run` (`crates/host/nomos-cli/src/gate/run.rs`) walks the tree exactly as `nomos check`
+does, calls `nomos_check_orchestration::Run` unconditionally over everything it finds, and
+reduces the result through `nomos_gate_orchestration::Disposition` — no scope or rule
+filtering happens anywhere in that path, the same "unconditionally, over everything it is
+handed" shape `Run` itself has always had. `run`'s real shape is exactly what this record
+already predicted it would be: nothing here surprised the prediction, only confirmed it.
+
+### docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md#11
+
+*revision: authored · kind: prose · heading: Whether Gate's ScopeSelector and RuleSelector are built now, or wait for a caller that needs to select less than everything / `run` Arrived: What Changed And What Did Not · hash: sha256:819d8f841363b0189321847a8a9de0c9b81b5ea5ee12269193311f042ec07800*
+
+`run` still has no real caller. Verified directly against `.github/workflows/gate.yml`, not
+assumed: the `Rules` step — `OD-GATE-004`'s own CI step — still invokes `cargo run --quiet
+-p nomos-cli --bin nomos -- check --root .`. `nomos check` directly, not `nomos gate run` or
+`nomos gate plan`. This repository's own enforcement does not go through `Gate` at all yet.
+
+### docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md#12
+
 *revision: authored · kind: heading · heading: Whether Gate's ScopeSelector and RuleSelector are built now, or wait for a caller that needs to select less than everything / What Would Decide It · hash: sha256:b21c34f083f944a8317c5bb99f866d38e2c77a3ce5a1a64810a532456b826658*
 
 ## What Would Decide It
 
-### docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md#10
+### docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md#13
 
-*revision: authored · kind: prose · heading: Whether Gate's ScopeSelector and RuleSelector are built now, or wait for a caller that needs to select less than everything / What Would Decide It · hash: sha256:27cef63ee603715b6f4eca845a4dbe585c13bca8810581bba9023faf15314132*
+*revision: authored · kind: prose · heading: Whether Gate's ScopeSelector and RuleSelector are built now, or wait for a caller that needs to select less than everything / What Would Decide It · hash: sha256:5f7f2ef53e62def3d03a1c2517d2e28b5f4a418b079399b8051053478b2bc533*
 
-A real caller that needs to evaluate fewer than all registered rules, or fewer than every
-file a root contains — this repository's own CI wanting to run only one rule over a subset of
-paths, or a second, genuinely different repository or configuration wanting a different rule
-set than this one. That caller's own request would name the selector's real shape, the same
-way `Check_Naming_Convention`'s arrival gave `OD-RULES-006` a second rule to compare rationale
-against instead of one. Until such a caller exists, any shape for either selector is equally
-unmotivated.
+The risk `run`'s absence posed — building either selector type against a hypothetical `run`
+whose real shape might not match what got built — is gone: that risk is what this record's
+second, independent trigger named, and it has fired. It has not resolved the record's first
+and primary trigger, which remains exactly as unmet as before: a real caller that needs to
+evaluate fewer than all registered rules, or fewer than every file a root contains — this
+repository's own CI wanting to run only one rule over a subset of paths, or a second,
+genuinely different repository or configuration wanting a different rule set than this one.
+Nothing calls `gate run` at all yet, so no such caller exists to name either selector's real
+shape. `run` existing only means that shape, whenever a caller arrives to want it, can now be
+checked against a real reduction pipeline instead of a hypothetical one — the same way
+`Check_Naming_Convention`'s arrival gave `OD-RULES-006` a second rule to compare rationale
+against instead of one.
 
-### docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md#11
-
-*revision: authored · kind: prose · heading: Whether Gate's ScopeSelector and RuleSelector are built now, or wait for a caller that needs to select less than everything / What Would Decide It · hash: sha256:ba2b7ed607e36baedf799e5e6defe3010699584fcddd96acd3da7de07a1ddd34*
-
-A second, independent trigger: `Gate` gaining a `run` verb that actually walks a tree and
-executes rules (rather than `plan`'s report-only shape). `run` is the first verb where scope
-and rule filtering would have an observable effect on what gets checked; building the
-selector types before `run` exists risks shaping them around `Plan`'s narrower needs rather
-than `run`'s real ones.
-
-### docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md#12
+### docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md#14
 
 *revision: authored · kind: heading · heading: Whether Gate's ScopeSelector and RuleSelector are built now, or wait for a caller that needs to select less than everything / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md#13
+### docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md#15
 
-*revision: authored · kind: prose · heading: Whether Gate's ScopeSelector and RuleSelector are built now, or wait for a caller that needs to select less than everything / Status · hash: sha256:738c2a868c5fbbb06cfcd57457174ba2a8e9a0a997522d5ba42d678ce030b82f*
+*revision: authored · kind: prose · heading: Whether Gate's ScopeSelector and RuleSelector are built now, or wait for a caller that needs to select less than everything / Status · hash: sha256:b60afc51ef1ffb3c3135328d7a44297f7b97f33447f51443d206cf1b41f988ab*
 
-Open. No caller in this workspace needs to evaluate fewer than every registered rule over
-fewer than every file today, and `Gate`'s only implemented verb (`Plan`) is report-only.
-Revisit when a real caller names a concrete selection need, or when `Gate` gains a `run` verb
-whose behavior the selectors would actually change.
+Open. `Gate` has a real `run` verb now (`P13-GATE-RUN-FIRST-INCREMENT-3`,
+`P13-GATE-014-015-RUN-TRIGGER-FIRED`), which closes the risk of shaping a selector around a
+`run` that did not yet exist. It still has no real caller: `OD-GATE-004`'s CI step invokes
+`nomos check` directly, not `Gate`, and no consuming repository has adopted `Gate`. Revisit
+when `gate run` gains a real caller that needs to evaluate fewer than every registered rule
+over fewer than every file — this repository's own CI switching to it and wanting a subset,
+or a second repository wanting a different rule set.
 
 ### docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md#1
 
@@ -16531,47 +16559,82 @@ economy of one record rather than economy of one type.
 
 ### docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md#15
 
+*revision: authored · kind: heading · heading: Whether Gate's BaselinePolicy, SuppressionPolicy and adoption configuration are built now, or wait for a run verb that can observe their effect / `run` Arrived: What Changed And What Did Not · hash: sha256:01b1dc2b193899942cacbd70668994bd93b422a543465b77b838b7d2f663a39f*
+
+## `run` Arrived: What Changed And What Did Not
+
+### docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md#16
+
+*revision: authored · kind: prose · heading: Whether Gate's BaselinePolicy, SuppressionPolicy and adoption configuration are built now, or wait for a run verb that can observe their effect / `run` Arrived: What Changed And What Did Not · hash: sha256:b909ca43b77a8303f55e6969dbe56e765b2b313cb006951843c5f1f040a4eb7f*
+
+`P13-GATE-RUN-FIRST-INCREMENT-3` gave `Gate` a real `run` verb and a real `GateRunOutcome
+{ Passed, Failed, Indeterminate }`, so `Finding::Can_Fail_A_Build`'s two conditions are no
+longer the only thing standing between a finding and a build result. Verified directly
+against the real code, not assumed: `nomos_gate_orchestration::Disposition` now reduces a
+run's findings into that verdict, and there is a real place — between `Disposition`'s
+reduction and the findings it reduces — a suppression hook or a baseline's tolerated-debt
+scope could sit, where before there was only `Plan`'s unevaluated report.
+
+### docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md#17
+
+*revision: authored · kind: prose · heading: Whether Gate's BaselinePolicy, SuppressionPolicy and adoption configuration are built now, or wait for a run verb that can observe their effect / `run` Arrived: What Changed And What Did Not · hash: sha256:b862a2c3d4277ef349ec3b21d83e2470fe96457f10cd1d2ee18e141d07173852*
+
+Nothing calls `Disposition` except `run`, and nothing calls `run` except this record's own
+tests. Verified directly against `.github/workflows/gate.yml`, not assumed: the `Rules`
+step — `OD-GATE-004`'s own CI step — still invokes `nomos check` directly, not `nomos gate
+run`. `run`'s own disposition, whichever of the three it comes to, has no consumer whose
+build it actually gates. A `BaselinePolicy` or `SuppressionPolicy` added today would still
+sit beside a disposition nothing outside this record's own tests observes.
+
+### docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md#18
+
 *revision: authored · kind: heading · heading: Whether Gate's BaselinePolicy, SuppressionPolicy and adoption configuration are built now, or wait for a run verb that can observe their effect / What Would Decide It · hash: sha256:b21c34f083f944a8317c5bb99f866d38e2c77a3ce5a1a64810a532456b826658*
 
 ## What Would Decide It
 
-### docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md#16
+### docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md#19
 
-*revision: authored · kind: prose · heading: Whether Gate's BaselinePolicy, SuppressionPolicy and adoption configuration are built now, or wait for a run verb that can observe their effect / What Would Decide It · hash: sha256:09ef53bc59de6925da548371065639ec4d38d5572c49ad1650fd1bd500d40862*
+*revision: authored · kind: prose · heading: Whether Gate's BaselinePolicy, SuppressionPolicy and adoption configuration are built now, or wait for a run verb that can observe their effect / What Would Decide It · hash: sha256:623b42f0cd8a6afba13cb3c171b526d087b6bcc51b08d3933e9703ab497a23fd*
 
-`Gate` gaining a `run` verb that actually walks a tree and executes rules, rather than
-`Plan`'s report-only shape — the same second trigger `OD-GATE-014` already names for
-`ScopeSelector`/`RuleSelector`. `run` is the first verb where a baseline's tolerated-debt
-scope or a suppression's per-finding exemption would have an observable effect on whether a
-build passes; building either policy type before `run` exists risks shaping them around
-`Plan`'s narrower needs rather than `run`'s real ones.
+The first named trigger — `Gate` gaining a `run` verb — has fired: `run` is real, and
+`Disposition`'s reduction is exactly the seam a suppression hook or a baseline's
+tolerated-debt scope would sit inside, closing the risk of shaping either policy type
+around a `Plan`-only `Gate` that never judged anything. What has not fired is the deeper
+condition that trigger was standing in for: a real caller whose build `run`'s disposition
+actually gates. `run` exists, but nothing depends on what it says — `OD-GATE-004`'s own CI
+step still enforces this repository through `nomos check`, not through `Gate`. Baseline and
+suppression policy shaped against a `run` nobody's build depends on would repeat the exact
+mistake this record already declined once, one layer further in.
 
-### docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md#17
+### docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md#20
 
-*revision: authored · kind: prose · heading: Whether Gate's BaselinePolicy, SuppressionPolicy and adoption configuration are built now, or wait for a run verb that can observe their effect / What Would Decide It · hash: sha256:8c62b6a9b8101db9c175d116256dcc3f702f3e49d1ac295335761c57c01799e3*
+*revision: authored · kind: prose · heading: Whether Gate's BaselinePolicy, SuppressionPolicy and adoption configuration are built now, or wait for a run verb that can observe their effect / What Would Decide It · hash: sha256:c969011c96618798ee29eedf0fbe61aeb0d3f89d18eb380b598d5b8034986228*
 
-A second, independent trigger particular to this question: a real caller — this repository's
-own CI, or a consuming repository — accumulating enough existing debt, or enough
-false-positive/rationale friction, that an unconditional `Blocking` gate becomes
-impractical to adopt. That caller's own shape of debt would argue for which of the three
-concerns to build first, rather than building all three speculatively from the corpus's
-naming alone.
+A second, independent trigger particular to this question, unchanged by `run`'s arrival: a
+real caller — this repository's own CI, or a consuming repository — accumulating enough
+existing debt, or enough false-positive/rationale friction, that an unconditional
+`Blocking` gate becomes impractical to adopt. That caller's own shape of debt would still
+argue for which of the three concerns to build first, rather than building all three
+speculatively from the corpus's naming alone.
 
-### docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md#18
+### docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md#21
 
 *revision: authored · kind: heading · heading: Whether Gate's BaselinePolicy, SuppressionPolicy and adoption configuration are built now, or wait for a run verb that can observe their effect / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md#19
+### docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md#22
 
-*revision: authored · kind: prose · heading: Whether Gate's BaselinePolicy, SuppressionPolicy and adoption configuration are built now, or wait for a run verb that can observe their effect / Status · hash: sha256:7cc19c5021cbb2fce6909b49cab7561e9d852a4d44baf1732f3b876d1971f0ce*
+*revision: authored · kind: prose · heading: Whether Gate's BaselinePolicy, SuppressionPolicy and adoption configuration are built now, or wait for a run verb that can observe their effect / Status · hash: sha256:45953bf82ba174c0bdd67b01dd10d9988aad7749f0eaae0f102dd8b16c68a097*
 
-Open. No caller in this workspace can observe a baseline's or a suppression's effect today,
-and `Gate`'s only implemented verb (`Plan`) is report-only. Revisit when `Gate` gains a
-`run` verb, or when a real caller's accumulated debt or exemption need names a concrete
-shape for one of the three concerns above — and treat that as a trigger for the concern it
-names, not for all three at once.
+Open. `Gate` has a real `run` verb and a real disposition now
+(`P13-GATE-RUN-FIRST-INCREMENT-3`, `P13-GATE-014-015-RUN-TRIGGER-FIRED`), which closes the
+risk of shaping baseline or suppression policy around a `Plan`-only `Gate`. No caller in
+this workspace observes that disposition yet: `OD-GATE-004`'s CI step enforces through
+`nomos check` directly, not through `Gate`. Revisit when `gate run` gains a real caller
+whose build its disposition gates, or when a real caller's accumulated debt or exemption
+need names a concrete shape for one of the three concerns above — and treat that as a
+trigger for the concern it names, not for all three at once.
 
 ### docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#1
 

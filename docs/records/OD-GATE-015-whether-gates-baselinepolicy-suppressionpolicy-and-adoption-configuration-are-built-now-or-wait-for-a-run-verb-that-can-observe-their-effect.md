@@ -3,7 +3,7 @@ id: OD-GATE-015
 type: decision
 title: Whether Gate's BaselinePolicy, SuppressionPolicy and adoption configuration are built now, or wait for a run verb that can observe their effect
 status: open
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - gate
@@ -121,26 +121,49 @@ prematurely; forcing one now would repeat the exact mistake `D-135` names, infer
 genericity from a wish rather than a demonstrated need — except here the "wish" would be
 economy of one record rather than economy of one type.
 
+## `run` Arrived: What Changed And What Did Not
+
+`P13-GATE-RUN-FIRST-INCREMENT-3` gave `Gate` a real `run` verb and a real `GateRunOutcome
+{ Passed, Failed, Indeterminate }`, so `Finding::Can_Fail_A_Build`'s two conditions are no
+longer the only thing standing between a finding and a build result. Verified directly
+against the real code, not assumed: `nomos_gate_orchestration::Disposition` now reduces a
+run's findings into that verdict, and there is a real place — between `Disposition`'s
+reduction and the findings it reduces — a suppression hook or a baseline's tolerated-debt
+scope could sit, where before there was only `Plan`'s unevaluated report.
+
+Nothing calls `Disposition` except `run`, and nothing calls `run` except this record's own
+tests. Verified directly against `.github/workflows/gate.yml`, not assumed: the `Rules`
+step — `OD-GATE-004`'s own CI step — still invokes `nomos check` directly, not `nomos gate
+run`. `run`'s own disposition, whichever of the three it comes to, has no consumer whose
+build it actually gates. A `BaselinePolicy` or `SuppressionPolicy` added today would still
+sit beside a disposition nothing outside this record's own tests observes.
+
 ## What Would Decide It
 
-`Gate` gaining a `run` verb that actually walks a tree and executes rules, rather than
-`Plan`'s report-only shape — the same second trigger `OD-GATE-014` already names for
-`ScopeSelector`/`RuleSelector`. `run` is the first verb where a baseline's tolerated-debt
-scope or a suppression's per-finding exemption would have an observable effect on whether a
-build passes; building either policy type before `run` exists risks shaping them around
-`Plan`'s narrower needs rather than `run`'s real ones.
+The first named trigger — `Gate` gaining a `run` verb — has fired: `run` is real, and
+`Disposition`'s reduction is exactly the seam a suppression hook or a baseline's
+tolerated-debt scope would sit inside, closing the risk of shaping either policy type
+around a `Plan`-only `Gate` that never judged anything. What has not fired is the deeper
+condition that trigger was standing in for: a real caller whose build `run`'s disposition
+actually gates. `run` exists, but nothing depends on what it says — `OD-GATE-004`'s own CI
+step still enforces this repository through `nomos check`, not through `Gate`. Baseline and
+suppression policy shaped against a `run` nobody's build depends on would repeat the exact
+mistake this record already declined once, one layer further in.
 
-A second, independent trigger particular to this question: a real caller — this repository's
-own CI, or a consuming repository — accumulating enough existing debt, or enough
-false-positive/rationale friction, that an unconditional `Blocking` gate becomes
-impractical to adopt. That caller's own shape of debt would argue for which of the three
-concerns to build first, rather than building all three speculatively from the corpus's
-naming alone.
+A second, independent trigger particular to this question, unchanged by `run`'s arrival: a
+real caller — this repository's own CI, or a consuming repository — accumulating enough
+existing debt, or enough false-positive/rationale friction, that an unconditional
+`Blocking` gate becomes impractical to adopt. That caller's own shape of debt would still
+argue for which of the three concerns to build first, rather than building all three
+speculatively from the corpus's naming alone.
 
 ## Status
 
-Open. No caller in this workspace can observe a baseline's or a suppression's effect today,
-and `Gate`'s only implemented verb (`Plan`) is report-only. Revisit when `Gate` gains a
-`run` verb, or when a real caller's accumulated debt or exemption need names a concrete
-shape for one of the three concerns above — and treat that as a trigger for the concern it
-names, not for all three at once.
+Open. `Gate` has a real `run` verb and a real disposition now
+(`P13-GATE-RUN-FIRST-INCREMENT-3`, `P13-GATE-014-015-RUN-TRIGGER-FIRED`), which closes the
+risk of shaping baseline or suppression policy around a `Plan`-only `Gate`. No caller in
+this workspace observes that disposition yet: `OD-GATE-004`'s CI step enforces through
+`nomos check` directly, not through `Gate`. Revisit when `gate run` gains a real caller
+whose build its disposition gates, or when a real caller's accumulated debt or exemption
+need names a concrete shape for one of the three concerns above — and treat that as a
+trigger for the concern it names, not for all three at once.

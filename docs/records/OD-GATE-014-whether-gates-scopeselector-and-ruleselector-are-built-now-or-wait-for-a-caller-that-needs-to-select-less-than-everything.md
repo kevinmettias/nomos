@@ -3,7 +3,7 @@ id: OD-GATE-014
 type: decision
 title: Whether Gate's ScopeSelector and RuleSelector are built now, or wait for a caller that needs to select less than everything
 status: open
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - gate
@@ -73,25 +73,43 @@ Nothing about `ScopeSelector`/`RuleSelector` blocks independent plugin or packag
 the same distinction that kept `OD-RULES-005`, `OD-RULES-006` and `OD-CAPABILITY-007` as open
 questions rather than builds despite arising from the same prioritized work.
 
+## `run` Arrived: What Changed And What Did Not
+
+`P13-GATE-RUN-FIRST-INCREMENT-3` gave `Gate` a real `run` verb, closing part of what this
+record was waiting on. Verified directly against the real code, not assumed: `nomos gate
+run` (`crates/host/nomos-cli/src/gate/run.rs`) walks the tree exactly as `nomos check`
+does, calls `nomos_check_orchestration::Run` unconditionally over everything it finds, and
+reduces the result through `nomos_gate_orchestration::Disposition` — no scope or rule
+filtering happens anywhere in that path, the same "unconditionally, over everything it is
+handed" shape `Run` itself has always had. `run`'s real shape is exactly what this record
+already predicted it would be: nothing here surprised the prediction, only confirmed it.
+
+`run` still has no real caller. Verified directly against `.github/workflows/gate.yml`, not
+assumed: the `Rules` step — `OD-GATE-004`'s own CI step — still invokes `cargo run --quiet
+-p nomos-cli --bin nomos -- check --root .`. `nomos check` directly, not `nomos gate run` or
+`nomos gate plan`. This repository's own enforcement does not go through `Gate` at all yet.
+
 ## What Would Decide It
 
-A real caller that needs to evaluate fewer than all registered rules, or fewer than every
-file a root contains — this repository's own CI wanting to run only one rule over a subset of
-paths, or a second, genuinely different repository or configuration wanting a different rule
-set than this one. That caller's own request would name the selector's real shape, the same
-way `Check_Naming_Convention`'s arrival gave `OD-RULES-006` a second rule to compare rationale
-against instead of one. Until such a caller exists, any shape for either selector is equally
-unmotivated.
-
-A second, independent trigger: `Gate` gaining a `run` verb that actually walks a tree and
-executes rules (rather than `plan`'s report-only shape). `run` is the first verb where scope
-and rule filtering would have an observable effect on what gets checked; building the
-selector types before `run` exists risks shaping them around `Plan`'s narrower needs rather
-than `run`'s real ones.
+The risk `run`'s absence posed — building either selector type against a hypothetical `run`
+whose real shape might not match what got built — is gone: that risk is what this record's
+second, independent trigger named, and it has fired. It has not resolved the record's first
+and primary trigger, which remains exactly as unmet as before: a real caller that needs to
+evaluate fewer than all registered rules, or fewer than every file a root contains — this
+repository's own CI wanting to run only one rule over a subset of paths, or a second,
+genuinely different repository or configuration wanting a different rule set than this one.
+Nothing calls `gate run` at all yet, so no such caller exists to name either selector's real
+shape. `run` existing only means that shape, whenever a caller arrives to want it, can now be
+checked against a real reduction pipeline instead of a hypothetical one — the same way
+`Check_Naming_Convention`'s arrival gave `OD-RULES-006` a second rule to compare rationale
+against instead of one.
 
 ## Status
 
-Open. No caller in this workspace needs to evaluate fewer than every registered rule over
-fewer than every file today, and `Gate`'s only implemented verb (`Plan`) is report-only.
-Revisit when a real caller names a concrete selection need, or when `Gate` gains a `run` verb
-whose behavior the selectors would actually change.
+Open. `Gate` has a real `run` verb now (`P13-GATE-RUN-FIRST-INCREMENT-3`,
+`P13-GATE-014-015-RUN-TRIGGER-FIRED`), which closes the risk of shaping a selector around a
+`run` that did not yet exist. It still has no real caller: `OD-GATE-004`'s CI step invokes
+`nomos check` directly, not `Gate`, and no consuming repository has adopted `Gate`. Revisit
+when `gate run` gains a real caller that needs to evaluate fewer than every registered rule
+over fewer than every file — this repository's own CI switching to it and wanting a subset,
+or a second repository wanting a different rule set.
