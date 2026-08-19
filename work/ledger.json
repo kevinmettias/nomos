@@ -18743,6 +18743,60 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-DEPENDENCY-INVALIDATION-TEST",
+      "title": "dependency.edges' own fact through Invalidate across a real generation change is untested",
+      "why": "P13-DEPENDENCY-WIRE-1 wired dependency.edges into the real check path, but nothing exercises a real Materialize_Workspace fact through MemoryFactStore::Invalidate at a later generation -- every existing test in this crate reads a single generation, and the generic Invalidate/Current/Historical lifecycle is proven only against synthetic payloads (nomos-analysis's own tests) or a different capability's leaf fact (nomos-lang-rust, through nomos-lang-rust/tests/rollup.rs). This capability's own doc comment (provider.rs's Keyed) argues semantic_inputs is deliberately empty because generation is the only axis that can distinguish two resolutions of the same manifest, which is exactly the claim an invalidation round-trip would exercise and nothing does yet.",
+      "done_when": "A test in crates/languages/nomos-lang-rust-cargo materializes a real Materialize_Workspace fact for a two-member fixture workspace (cargo metadata run against a temp directory, not the real repo) into a MemoryFactStore at one generation, edits the fixture's manifest to remove a first-party edge, invalidates the store via GenerationCause::SubjectChanged naming that package's subject at the next generation, and asserts: the old fact is not FactStore::Current at the new generation, a freshly materialized fact reflecting the edited edges is Current at the new generation, and FactStore::Historical on the old key reports the correct Supersession.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages/nomos-lang-rust-cargo/tests/invalidation.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-lang-rust-cargo"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-lang-rust-cargo"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 10 tests\ntest guarantee::tests::Test_The_Declared_Guarantee_Should_Satisfy_The_Contract_Ceiling ... ok\ntest metadata::tests::Test_Edges_Should_Be_In_Canonical_Order ... ok\ntest metadata::tests::Test_Every_Discovered_Package_Should_Carry_A_Manifest_Relative_Root ... ok\ntest metadata::tests::Test_Nomos_Contracts_Should_Have_No_First_Party_Edges ... ok\ntest provider::tests::Test_A_Fact_Should_Carry_The_Declared_Guarantee ... ok\ntest metadata::tests::Test_This_Crate_Should_Depend_On_Nomos_Contracts ... ok\ntest provider::tests::Test_A_Facts_Path_Should_Be_What_Its_Subject_Was_Addressed_By ... ok\ntest provider::tests::Test_Every_Workspace_Member_Should_Produce_One_Fact ... ok\ntest provider::tests::Test_A_Facts_Subject_Should_Match_Subject_Of_Its_Own_Path ... ok\ntest provider::tests::Test_Two_Runs_Over_The_Same_Tree_Should_Reach_The_Same_Semantic_Inputs ... ok\n\ntest result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s\n\n\nrunning 1 test\ntest Test_An_Edited_Manifests_Old_Fact_Should_Not_Survive_The_Generation_It_Was_Invalidated_At ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.10s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lang_rust_cargo-e8542b0bec8bcf4a.exe)\n     Running tests\\invalidation.rs (target\\debug\\deps\\invalidation-94afb7ef7ae80060.exe)\n   Doc-tests nomos_lang_rust_cargo\n",
+        "verified_at": 1787159955,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "73a9ebce32483331ce75a86fd694dc805ccc87a2"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
