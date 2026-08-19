@@ -70,7 +70,7 @@ profile: domain-specification
 | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md@authored | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md | authored | 19 | 6 | sha256:9237ea74e89c7f49295d2e4bde41ff135c64838767ba17c27b0aad79037ced10 |
 | docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md@authored | docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md | authored | 15 | 5 | sha256:bcf1bfd865c60493754d4a765742627fd4c18504722d27a065b5201be2ac218f |
 | docs/records/OD-HOST-005-whether-request-commands-seam-is-its-own-crate-or-a-verb-inside-spec-orchestration.md@authored | docs/records/OD-HOST-005-whether-request-commands-seam-is-its-own-crate-or-a-verb-inside-spec-orchestration.md | authored | 15 | 5 | sha256:0cb15b83d0fb7a58f4a2afda083ac512ba0ac344d15ca0556f3446736cbd7ea9 |
-| docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md@authored | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md | authored | 36 | 9 | sha256:86d202ce7dedd842300f8a4b2fe9f233f28009b3db705bad1060f84ebd240922 |
+| docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md@authored | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md | authored | 41 | 9 | sha256:dd08db28191c57f150438f906daae1c7733089e622904118ea906349fb8a5e30 |
 | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md@authored | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md | authored | 23 | 8 | sha256:45ad77676397a486ad7f463e44d50aaea8213377aaa200fe47ee2570fcdfef33 |
 | docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md@authored | docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md | authored | 25 | 6 | sha256:769ce2801152cca166570d3b88ce2f5bc133a3545afa26e0068652357cca5fa2 |
 | docs/records/OD-LEDGER-004-the-record-directory-is-the-lock.md@authored | docs/records/OD-LEDGER-004-the-record-directory-is-the-lock.md | authored | 40 | 11 | sha256:24377a098af14a7108359fca1224d1d1ef08d6c700415a93b4322713f2624785 |
@@ -631,7 +631,7 @@ profile: domain-specification
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#18 | authored | 2 | What Would Reduce It Now |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#26 | authored | 3 | Why this rule says "the record" and not "`docs/records`" |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#29 | authored | 2 | What Would Close It |
-| docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#32 | authored | 2 | Status |
+| docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#36 | authored | 2 | Status |
 | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md#1 | authored | 1 | A ledger id's number is the ledger's own, and P8 is not the plan's Phase 8 |
 | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md#2 | authored | 2 | Question |
 | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md#6 | authored | 2 | What The Ledger Actually Holds |
@@ -16853,28 +16853,85 @@ that keeps it.
 
 ### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#30
 
-*revision: authored · kind: prose · heading: Territory is declared but not enforced, and nothing yet notices the difference / What Would Close It · hash: sha256:683a6981601776f194e17c418305c12edb0240a32ab343ced8cfd9ecb48407f8*
+*revision: authored · kind: prose · heading: Territory is declared but not enforced, and nothing yet notices the difference / What Would Close It · hash: sha256:571c6d8206fded4d9060761f64d0fa6c26649da7b42258adf5fc54fce7bfcb70*
 
-`nomos.rules.work-ledger`, at Phase 10, over a real changeset: the set of paths a holder
-modified must be contained in the territory it claimed. That requires the changeset model
-and the rule engine, so it cannot be built earlier.
+`nomos.rules.work-ledger`, over a real changeset: the set of paths a holder modified must be
+contained in the territory it claimed. Version 4 said this required only "the changeset model
+and the rule engine," and named Phase 10 as the point both would exist. Both now exist by
+name — `nomos_workspace::WorkspaceChangeSet` and `nomos-rules` with two real rules — and at
+Phase 13 that reads as the gate having cleared. Checked directly against the tree, it has
+not, on three separate points:
 
 ### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#31
 
-*revision: authored · kind: prose · heading: Territory is declared but not enforced, and nothing yet notices the difference / What Would Close It · hash: sha256:72e914f27bb0d3b1a3640f884968aab57aeb882bdebe3760b0a8f950bda29137*
+*revision: authored · kind: prose · heading: Territory is declared but not enforced, and nothing yet notices the difference / What Would Close It · hash: sha256:9eda5ff9f2e5b9695c56b9f13a62cbf00df296fc1c8591cee52b935e215623ca*
 
-Until then the honest statement is that territory prevents two agents from claiming the
-same ground, and does not prevent one agent from working outside its own. Declaring that
-plainly is worth more than a check that runs nowhere, because a stated gap can be planned
-around and a false clean cannot.
+**No producer builds a changeset from what a holder actually did.** The only non-test
+`WorkspaceChangeSet` producer in the workspace is `As_One_Checkout`
+(`crates/orchestration/nomos-check-orchestration/src/facts.rs`): it wraps every `SourceFile`
+a tree walk already read as one `WorkspaceChangeSet::From(ChangeSource::GitCheckout)` —
+a full snapshot of the current disk, labeled `GitCheckout` by convention only. Nothing reads
+actual git state to build one. "The changeset model . . . exists" was true of the type and
+false of the thing this rule actually needs: a changeset scoped to one holder's own edits.
 
 ### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#32
+
+*revision: authored · kind: prose · heading: Territory is declared but not enforced, and nothing yet notices the difference / What Would Close It · hash: sha256:d31a0f992a2d514ad6172795e723787eca73c394bdcba6f98e3f7052714d5c0b*
+
+**Nothing records which edits are a holder's own.** `Claim` (`crates/substrate/nomos-ledger/
+src/claim.rs`) carries exactly `holder`, `acquired_at`, `lease_expires_at` — no commit SHA,
+no range. `VerificationRecord::revision` (`OD-LEDGER-027`) is a single point read at `finish`
+time, not a range, and answers "what tree was this checked against," not "what did this
+claim change." `OD-LEDGER-027` itself named this directly and declined it on cost grounds,
+not on impossibility: "Not a subprocess `git` integration, and not a whole-tree or
+territory-scoped digest — both are named above and both were rejected for the concrete
+costs stated . . . a later item with a different question . . . may need one of them and
+would decide that on its own terms." This is that later item, and its own terms have not
+been decided yet — a per-claim start point (or an equivalent way to name "everything this
+holder committed") is a ledger schema question this record does not resolve.
+
+### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#33
+
+*revision: authored · kind: prose · heading: Territory is declared but not enforced, and nothing yet notices the difference / What Would Close It · hash: sha256:54b527a907694590a9b48d2329c2fa380848d47de628b7abd001f9d6135ca114*
+
+**The rule engine's one function shape does not fit this rule's subject.** Every rule
+`nomos-rules` ships — `Check_Naming_Convention`, `Check_Completeness_Mirrors`
+(`crates/rules/nomos-rules/src/{naming,mirror}.rs`) — has the signature
+`fn(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>`: a subject built for
+judging source text a capability already read. `nomos.rules.work-ledger`'s subject is a
+changeset compared against a territory, neither of which is a `SourceFile` or reaches a
+capability's `FactReader` at all. "The rule engine . . . exists" is true of the crate and
+does not by itself mean this rule fits the one shape it currently offers; whether it needs a
+second composition seam, or the existing one generalizes, is undecided.
+
+### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#34
+
+*revision: authored · kind: prose · heading: Territory is declared but not enforced, and nothing yet notices the difference / What Would Close It · hash: sha256:3bdfe3e231e68d95c2fdffacb42a4674474aaf2d9c993ac75bba316f68241001*
+
+None of the three is this record's to resolve — each is its own design question, and forcing
+an answer here would be exactly the mistake `D-135` warns building generic machinery from a
+wish produces. What this version corrects is the closing condition itself: "the changeset
+model and the rule engine" is necessary but was never sufficient, and treating their
+existence as the gate clearing is the same shape of premise error `D-130` was found to have
+made about XVPE's compile state — true of what was checked, false of what the phase actually
+needed.
+
+### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#35
+
+*revision: authored · kind: prose · heading: Territory is declared but not enforced, and nothing yet notices the difference / What Would Close It · hash: sha256:6e67e3c6a880b779e70bc27f67f3562b82c968cea7e89b90ce4c8fb23d079863*
+
+Until all three are settled, the honest statement is unchanged from version 4: territory
+prevents two agents from claiming the same ground, and does not prevent one agent from
+working outside its own. Declaring that plainly is worth more than a check that runs
+nowhere, because a stated gap can be planned around and a false clean cannot.
+
+### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#36
 
 *revision: authored · kind: heading · heading: Territory is declared but not enforced, and nothing yet notices the difference / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#33
+### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#37
 
 *revision: authored · kind: prose · heading: Territory is declared but not enforced, and nothing yet notices the difference / Status · hash: sha256:e3686342e94a683a5c305bfb0af3e2f9da7085d0a9d5b2de5607d644f94e93ae*
 
@@ -16883,14 +16940,14 @@ against the territory at `finish` time — was considered and rejected: it canno
 already committed, it cannot distinguish an agent's writes from a concurrent one's, and a
 check that is wrong in both directions teaches people to ignore the ones that are right.
 
-### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#34
+### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#38
 
 *revision: authored · kind: prose · heading: Territory is declared but not enforced, and nothing yet notices the difference / Status · hash: sha256:8d027994040f8fa27c9e2a98eef5776431b079a0d9138bbd8933de1a4e8692ac*
 
 Amended at version 2 with three further instances and the two authoring rules they suggest.
 The gap is unchanged; what changed is the evidence about which half of it is expensive.
 
-### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#35
+### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#39
 
 *revision: authored · kind: prose · heading: Territory is declared but not enforced, and nothing yet notices the difference / Status · hash: sha256:3e6784a3ed18f3a981310c1c59682c13b4043576525a14cc48954a528737e345*
 
@@ -16900,7 +16957,7 @@ directory. The enforcement gap this record is *about* is still open and still wa
 `nomos.rules.work-ledger`; what version 3 changes is only the granularity of a declaration,
 which is the half that was already working.
 
-### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#36
+### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#40
 
 *revision: authored · kind: prose · heading: Territory is declared but not enforced, and nothing yet notices the difference / Status · hash: sha256:8854bab220eb77638d89a9b848e1b71a1884cbdb553ddeaebc7c1796ddd51be8*
 
@@ -16909,6 +16966,19 @@ whole crate and so re-imposed, on the store, the exclusion version 3 had just re
 `docs/records`. `OD-SPEC-007` made a record's declaration a file of its own, and the rule now
 reserves that file. Again only the granularity moved — the rule still says a canonical record
 cannot land without its declaration, because that is what `OD-SPEC-005` was.
+
+### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#41
+
+*revision: authored · kind: prose · heading: Territory is declared but not enforced, and nothing yet notices the difference / Status · hash: sha256:dfe83e8394ed65c9a45f7f830e3aed46a5effc8ce09805fbc86d6351944de6c1*
+
+Amended at version 5 because version 4's closing condition, checked directly against the
+Phase-13 tree, was not actually satisfied by what now exists under those two names. The
+changeset type and the rule engine crate are both real, but no changeset producer reads git
+history, no claim records which commits it covers, and the rule engine's one function shape
+does not take this rule's subject. "What Would Close It" now states the three unresolved
+questions those checks actually found, instead of the two-item list that reads as already
+satisfied. The enforcement gap itself is unchanged; what changed, again, is the evidence
+about how far from closed it still is.
 
 ### docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md#1
 

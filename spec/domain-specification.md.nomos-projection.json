@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:19f4191071196e2f7bc8b2cad9e84b2e1cdf91b46330932af545dd8840bcabd4",
-  "inputs_digest": "sha256:218937dac2e0c11fbb65c7e783999aeabe9a0d59bce3a1a57685cf82d335cc1d",
+  "content_digest": "sha256:e3591346268697660315f72a0246ead4fbda7b8c2971006b5bb3a5b43448ce02",
+  "inputs_digest": "sha256:aae01366b61cd2a251b364865edfbf3031e9f4537feb6118ee81749dad081733",
   "sections": [
     [
       "Documents",
@@ -16,7 +16,7 @@
     ],
     [
       "Source blocks",
-      4199
+      4204
     ]
   ],
   "inputs": [
@@ -323,7 +323,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md@authored",
-      "hash": "sha256:86d202ce7dedd842300f8a4b2fe9f233f28009b3db705bad1060f84ebd240922"
+      "hash": "sha256:dd08db28191c57f150438f906daae1c7733089e622904118ea906349fb8a5e30"
     },
     {
       "content": "documents",
@@ -3102,8 +3102,8 @@
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#32",
-      "hash": "sha256:c85241a70979b52d8155890171eb07dae5f399c27b5e1289d203793318e0b659"
+      "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#36",
+      "hash": "sha256:5457b9ad0ede51fa648a4edca383f1c086a3386551ef67ea5f9e340ace2e7099"
     },
     {
       "content": "headings",
@@ -15088,37 +15088,62 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#30",
-      "hash": "sha256:683a6981601776f194e17c418305c12edb0240a32ab343ced8cfd9ecb48407f8"
+      "hash": "sha256:571c6d8206fded4d9060761f64d0fa6c26649da7b42258adf5fc54fce7bfcb70"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#31",
-      "hash": "sha256:72e914f27bb0d3b1a3640f884968aab57aeb882bdebe3760b0a8f950bda29137"
+      "hash": "sha256:9eda5ff9f2e5b9695c56b9f13a62cbf00df296fc1c8591cee52b935e215623ca"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#32",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:d31a0f992a2d514ad6172795e723787eca73c394bdcba6f98e3f7052714d5c0b"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#33",
-      "hash": "sha256:e3686342e94a683a5c305bfb0af3e2f9da7085d0a9d5b2de5607d644f94e93ae"
+      "hash": "sha256:54b527a907694590a9b48d2329c2fa380848d47de628b7abd001f9d6135ca114"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#34",
-      "hash": "sha256:8d027994040f8fa27c9e2a98eef5776431b079a0d9138bbd8933de1a4e8692ac"
+      "hash": "sha256:3bdfe3e231e68d95c2fdffacb42a4674474aaf2d9c993ac75bba316f68241001"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#35",
-      "hash": "sha256:3e6784a3ed18f3a981310c1c59682c13b4043576525a14cc48954a528737e345"
+      "hash": "sha256:6e67e3c6a880b779e70bc27f67f3562b82c968cea7e89b90ce4c8fb23d079863"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#36",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#37",
+      "hash": "sha256:e3686342e94a683a5c305bfb0af3e2f9da7085d0a9d5b2de5607d644f94e93ae"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#38",
+      "hash": "sha256:8d027994040f8fa27c9e2a98eef5776431b079a0d9138bbd8933de1a4e8692ac"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#39",
+      "hash": "sha256:3e6784a3ed18f3a981310c1c59682c13b4043576525a14cc48954a528737e345"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#40",
       "hash": "sha256:8854bab220eb77638d89a9b848e1b71a1884cbdb553ddeaebc7c1796ddd51be8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#41",
+      "hash": "sha256:dfe83e8394ed65c9a45f7f830e3aed46a5effc8ce09805fbc86d6351944de6c1"
     },
     {
       "content": "blocks",

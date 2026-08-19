@@ -3,7 +3,7 @@ id: OD-LEDGER-001
 type: decision
 title: Territory is declared but not enforced, and nothing yet notices the difference
 status: open
-version: 4
+version: 5
 authority: canonical-normative-record
 tags:
   - work-ledger
@@ -132,14 +132,55 @@ that keeps it.
 
 ## What Would Close It
 
-`nomos.rules.work-ledger`, at Phase 10, over a real changeset: the set of paths a holder
-modified must be contained in the territory it claimed. That requires the changeset model
-and the rule engine, so it cannot be built earlier.
+`nomos.rules.work-ledger`, over a real changeset: the set of paths a holder modified must be
+contained in the territory it claimed. Version 4 said this required only "the changeset model
+and the rule engine," and named Phase 10 as the point both would exist. Both now exist by
+name — `nomos_workspace::WorkspaceChangeSet` and `nomos-rules` with two real rules — and at
+Phase 13 that reads as the gate having cleared. Checked directly against the tree, it has
+not, on three separate points:
 
-Until then the honest statement is that territory prevents two agents from claiming the
-same ground, and does not prevent one agent from working outside its own. Declaring that
-plainly is worth more than a check that runs nowhere, because a stated gap can be planned
-around and a false clean cannot.
+**No producer builds a changeset from what a holder actually did.** The only non-test
+`WorkspaceChangeSet` producer in the workspace is `As_One_Checkout`
+(`crates/orchestration/nomos-check-orchestration/src/facts.rs`): it wraps every `SourceFile`
+a tree walk already read as one `WorkspaceChangeSet::From(ChangeSource::GitCheckout)` —
+a full snapshot of the current disk, labeled `GitCheckout` by convention only. Nothing reads
+actual git state to build one. "The changeset model . . . exists" was true of the type and
+false of the thing this rule actually needs: a changeset scoped to one holder's own edits.
+
+**Nothing records which edits are a holder's own.** `Claim` (`crates/substrate/nomos-ledger/
+src/claim.rs`) carries exactly `holder`, `acquired_at`, `lease_expires_at` — no commit SHA,
+no range. `VerificationRecord::revision` (`OD-LEDGER-027`) is a single point read at `finish`
+time, not a range, and answers "what tree was this checked against," not "what did this
+claim change." `OD-LEDGER-027` itself named this directly and declined it on cost grounds,
+not on impossibility: "Not a subprocess `git` integration, and not a whole-tree or
+territory-scoped digest — both are named above and both were rejected for the concrete
+costs stated . . . a later item with a different question . . . may need one of them and
+would decide that on its own terms." This is that later item, and its own terms have not
+been decided yet — a per-claim start point (or an equivalent way to name "everything this
+holder committed") is a ledger schema question this record does not resolve.
+
+**The rule engine's one function shape does not fit this rule's subject.** Every rule
+`nomos-rules` ships — `Check_Naming_Convention`, `Check_Completeness_Mirrors`
+(`crates/rules/nomos-rules/src/{naming,mirror}.rs`) — has the signature
+`fn(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>`: a subject built for
+judging source text a capability already read. `nomos.rules.work-ledger`'s subject is a
+changeset compared against a territory, neither of which is a `SourceFile` or reaches a
+capability's `FactReader` at all. "The rule engine . . . exists" is true of the crate and
+does not by itself mean this rule fits the one shape it currently offers; whether it needs a
+second composition seam, or the existing one generalizes, is undecided.
+
+None of the three is this record's to resolve — each is its own design question, and forcing
+an answer here would be exactly the mistake `D-135` warns building generic machinery from a
+wish produces. What this version corrects is the closing condition itself: "the changeset
+model and the rule engine" is necessary but was never sufficient, and treating their
+existence as the gate clearing is the same shape of premise error `D-130` was found to have
+made about XVPE's compile state — true of what was checked, false of what the phase actually
+needed.
+
+Until all three are settled, the honest statement is unchanged from version 4: territory
+prevents two agents from claiming the same ground, and does not prevent one agent from
+working outside its own. Declaring that plainly is worth more than a check that runs
+nowhere, because a stated gap can be planned around and a false clean cannot.
 
 ## Status
 
@@ -162,3 +203,12 @@ whole crate and so re-imposed, on the store, the exclusion version 3 had just re
 `docs/records`. `OD-SPEC-007` made a record's declaration a file of its own, and the rule now
 reserves that file. Again only the granularity moved — the rule still says a canonical record
 cannot land without its declaration, because that is what `OD-SPEC-005` was.
+
+Amended at version 5 because version 4's closing condition, checked directly against the
+Phase-13 tree, was not actually satisfied by what now exists under those two names. The
+changeset type and the rule engine crate are both real, but no changeset producer reads git
+history, no claim records which commits it covers, and the rule engine's one function shape
+does not take this rule's subject. "What Would Close It" now states the three unresolved
+questions those checks actually found, instead of the two-item list that reads as already
+satisfied. The enforcement gap itself is unchanged; what changed, again, is the evidence
+about how far from closed it still is.
