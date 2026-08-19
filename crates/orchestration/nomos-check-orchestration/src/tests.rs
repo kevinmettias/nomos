@@ -28,7 +28,7 @@ fn Test_Variant() -> BuildVariant
 #[test]
 fn Test_A_Clean_Tree_Should_Be_Judged_Complete_With_No_Findings()
 {
-    let sources = vec![Source("a.rs", "pub fn ok() {}\n")];
+    let sources = vec![Source("a.rs", "pub fn Ok() {}\n")];
 
     let outcome = Run(&sources, Test_Variant());
 

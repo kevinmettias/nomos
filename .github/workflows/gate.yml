@@ -215,8 +215,8 @@ jobs:
       # `run:` is refused outright. See OD-GATE-004.
       #
       # Linux only. It judges code content, and code content does not vary with the host --
-      # measured green on Windows while this item was open, 466 files examined and the same
-      # 13 findings, none of which can fail a build. A second run buys a second identical
+      # measured green on Windows while this item was open, 830 files examined and the same
+      # 4 findings, none of which can fail a build. A second run buys a second identical
       # answer.
       - name: Rules
         if: matrix.os == 'ubuntu-latest'

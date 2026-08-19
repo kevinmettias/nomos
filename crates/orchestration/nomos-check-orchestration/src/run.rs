@@ -2,7 +2,7 @@
 //! rendering what came of it.
 
 use nomos_analysis::{MemoryFactStore, Reader};
-use nomos_rules::{Check_Completeness_Mirrors, SourceFile};
+use nomos_rules::{Check_Completeness_Mirrors, Check_Naming_Convention, SourceFile};
 use nomos_workspace::BuildVariant;
 
 use crate::composition::Registered;
@@ -11,7 +11,8 @@ use crate::outcome::{Claim_Of, Examined};
 use crate::CheckOutcome;
 
 /// Composes the capability registry, ingests `sources` into one workspace state,
-/// materializes a syntax fact per file and runs the completeness rule over the result.
+/// materializes a syntax fact per file and runs the completeness and naming-convention
+/// rules over the result.
 ///
 /// `sources` is the walk, already done -- this crate has no [`nomos_platform::FileSystem`]
 /// port to walk a directory through, the same reason `nomos-cli::check::sources::Walked`
@@ -47,7 +48,8 @@ pub fn Run(sources: &[SourceFile], variant: BuildVariant) -> CheckOutcome
     }
 
     let mut reader = Reader::On(&store, &registry, context);
-    let findings = Check_Completeness_Mirrors(sources, &mut reader);
+    let mut findings = Check_Completeness_Mirrors(sources, &mut reader);
+    findings.extend(Check_Naming_Convention(sources, &mut reader));
     let examined = Examined { files: sources.len(), facts };
     let claim = Claim_Of(&findings);
 
