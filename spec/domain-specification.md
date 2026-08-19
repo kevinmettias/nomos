@@ -45,7 +45,7 @@ profile: domain-specification
 | docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md@authored | docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md | authored | 36 | 11 | sha256:54e8c8e7d8328ce45e97b3e117eaf7ed7a547d61a8518b2d638de18b1f2768fc |
 | docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md@authored | docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md | authored | 22 | 10 | sha256:baac7713f8077db7fc36aeeebe1f7cbe8e1a59d1a743943e26e42df668b0b3cb |
 | docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md@authored | docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md | authored | 36 | 8 | sha256:6921af0ffee38a77a00c90bb6ebeebcd97e7db786652bdfdb80f9f854577cdfd |
-| docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md@authored | docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md | authored | 13 | 5 | sha256:f380526facdc6f8371f437a7f9963f9d50cb3c69c88227ee91e29e95b31c2f52 |
+| docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md@authored | docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md | authored | 16 | 6 | sha256:28d369d79f6b9bc16f144ce71796ae80ccae724f627a779891daec3b61fa5b35 |
 | docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md@authored | docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md | authored | 19 | 6 | sha256:4d04815ed763e5dcf94dac93b3ea02bfc1095a5ca15731b5d342e314f8a33fc8 |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md@authored | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md | authored | 33 | 9 | sha256:26a4c8c8e217e97e0c147d846441c33d854347e490c3757345f06a4021b6d7ff |
 | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md@authored | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md | authored | 54 | 10 | sha256:fc95b7901fc9e920666e8f04eb01c6436a96d16fc63f94e0599114d5cfa5928b |
@@ -422,8 +422,9 @@ profile: domain-specification
 | docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md#1 | authored | 1 | Whether a provider needs a declared decline-with-reason, or waits for a second capability contract |
 | docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md#2 | authored | 2 | Question |
 | docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md#6 | authored | 2 | Current Position |
-| docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md#9 | authored | 2 | What Would Decide It |
-| docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md#12 | authored | 2 | Status |
+| docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md#9 | authored | 2 | A Second Capability Contract Arrives: What It Does And Does Not Settle |
+| docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md#12 | authored | 2 | What Would Decide It |
+| docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md#15 | authored | 2 | Status |
 | docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#1 | authored | 1 | Whether the provider convention needs a declared trait, or Registry's compile-time offer construction already closes the gap nomos-proto's structural typing opened |
 | docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#2 | authored | 2 | Question |
 | docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#6 | authored | 2 | Current Position |
@@ -9670,24 +9671,62 @@ question.
 
 ### docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md#9
 
+*revision: authored · kind: heading · heading: Whether a provider needs a declared decline-with-reason, or waits for a second capability contract / A Second Capability Contract Arrives: What It Does And Does Not Settle · hash: sha256:643ee623d8d51dbdd63a2be88cf9fbdd0c4d57d43b83b4631861149a33942139*
+
+## A Second Capability Contract Arrives: What It Does And Does Not Settle
+
+### docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md#10
+
+*revision: authored · kind: prose · heading: Whether a provider needs a declared decline-with-reason, or waits for a second capability contract / A Second Capability Contract Arrives: What It Does And Does Not Settle · hash: sha256:4e37a229d1c1e36a573c82ef3548a6ceddfb757731c322488676c48dbc837c7c*
+
+`nomos-cap-dependency` (`nomos.cap.dependency.edges`) was built after this record was
+written and is, checked directly rather than assumed, a real second capability contract —
+its own crate doc states it earned that immediately, "band 23... owned by neither its
+provider nor any rule that reads it," with `nomos-rules::Check_Dependency_Direction` as its
+real second party. This record's own first named trigger — "a second capability contract" —
+has arrived in the literal sense the sentence names.
+
+### docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md#11
+
+*revision: authored · kind: prose · heading: Whether a provider needs a declared decline-with-reason, or waits for a second capability contract / A Second Capability Contract Arrives: What It Does And Does Not Settle · hash: sha256:2b4199bb6d946509040455d56f7fc2eb445e47951efc1751363b6a2746187284*
+
+What it has not done is give the decline question a real case to check a design against.
+Verified directly against the real code: exactly one provider, `nomos-lang-rust-cargo`,
+offers against `nomos.cap.dependency.edges` (grepped for every reference to
+`nomos_cap_dependency::Capability` across the workspace — the provider itself, the rule that
+reads it, and the contract crate are the only three sites), and its offer
+(`crates/languages/nomos-lang-rust-cargo/src/guarantee.rs::Provider_Offer`) sits at the
+contract's own declared ceiling — `Sound`/`Sound` — the same as `nomos-cap-syntax`'s
+strongest existing offer, not a narrower one. No provider anywhere in this workspace
+structurally cannot satisfy this contract; the one provider that offers against it satisfies
+it maximally. The trigger this record actually cares about — "the moment a real provider
+exists that could plausibly be asked to offer against a contract it structurally cannot
+satisfy" — has still not fired: a second contract now exists, but nothing has yet failed to
+meet one.
+
+### docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md#12
+
 *revision: authored · kind: heading · heading: Whether a provider needs a declared decline-with-reason, or waits for a second capability contract / What Would Decide It · hash: sha256:b21c34f083f944a8317c5bb99f866d38e2c77a3ce5a1a64810a532456b826658*
 
 ## What Would Decide It
 
-### docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md#10
+### docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md#13
 
-*revision: authored · kind: prose · heading: Whether a provider needs a declared decline-with-reason, or waits for a second capability contract / What Would Decide It · hash: sha256:098889f1f73e9f7d0fb99243638c645a4b8e71d1326808c46ab92a0251579ee3*
+*revision: authored · kind: prose · heading: Whether a provider needs a declared decline-with-reason, or waits for a second capability contract / What Would Decide It · hash: sha256:7ef571f36fe4ef32e791ab2f0fec70d6ed831ce1fb408189014f33234a2bc591*
 
 A second capability contract is the natural trigger — the moment a real provider exists
 that could plausibly be asked to offer against a contract it structurally cannot satisfy,
 the question becomes concrete: what a decline actually needs to say, and where a
 completeness check would read it from, rather than a mechanism designed against zero real
 declines, which is exactly the mistake `D-135` warns building generic machinery from a wish
-produces.
+produces. That contract now exists (`nomos-cap-dependency`), but the concrete case it was
+meant to supply has not arrived with it: its one provider satisfies it fully, so there is
+still nothing a decline mechanism's design could be checked against beyond a second instance
+of "and it offers," which this record already had one of.
 
-### docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md#11
+### docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md#14
 
-*revision: authored · kind: prose · heading: Whether a provider needs a declared decline-with-reason, or waits for a second capability contract / What Would Decide It · hash: sha256:acc7234a20c38ad47877d91079270fafad06bbc02ee0d6d44465181d5b25c0ff*
+*revision: authored · kind: prose · heading: Whether a provider needs a declared decline-with-reason, or waits for a second capability contract / What Would Decide It · hash: sha256:f38932b15f4cd99c6af5628b19e5e872fe23522b329d6afaa629edd15cdf1635*
 
 A second, independent trigger: if a completeness or coverage check is found to need to
 distinguish "never asked" from "structurally declines" for a capability that already
@@ -9696,22 +9735,26 @@ exists today — for instance, if `nomos-lang-rust-scan`'s narrower `Guarantee` 
 actually is, and that silence is mistaken for a gap. If that need surfaces against an
 existing contract rather than a hypothetical second one, it argues for building the
 mechanism for a different reason than the one considered and declined here, and should be
-evaluated on its own evidence.
+evaluated on its own evidence. Unchanged by `nomos-cap-dependency`'s arrival.
 
-### docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md#12
+### docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md#15
 
 *revision: authored · kind: heading · heading: Whether a provider needs a declared decline-with-reason, or waits for a second capability contract / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md#13
+### docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md#16
 
-*revision: authored · kind: prose · heading: Whether a provider needs a declared decline-with-reason, or waits for a second capability contract / Status · hash: sha256:ba44387502ef30495f2b97ba562e26960ed0a2806c28352612f574358ec301d1*
+*revision: authored · kind: prose · heading: Whether a provider needs a declared decline-with-reason, or waits for a second capability contract / Status · hash: sha256:5707f498032c10209e75d56b315efefcc462db409d64cea3a9d93e2a3061a54d*
 
-Open. This question is deliberately left open rather than resolved either way: unlike
-`OD-PACKAGE-006`, the plugin-enablement direction does not reach it — a provider can
-already register fully without a decline mechanism existing — and no second capability
-contract exists to check a design against. Revisit when either trigger above arrives.
+Open. The record's own first named trigger, read literally, has fired — a second capability
+contract, `nomos.cap.dependency.edges`, exists — but the deeper condition that sentence was
+standing in for has not: no provider anywhere in this workspace structurally fails to
+satisfy any capability contract that exists, `nomos-cap-dependency`'s one provider included,
+which offers at the contract's own ceiling. Revisit when a real provider is found that
+cannot satisfy a contract it could plausibly be asked about — against `nomos.cap.dependency.
+edges`, a third contract, or the existing `nomos.cap.syntax.items` — or when the second,
+independent trigger above fires.
 
 ### docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#1
 

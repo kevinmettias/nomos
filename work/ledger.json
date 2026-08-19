@@ -20079,6 +20079,60 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-CAPABILITY-007-SECOND-CONTRACT-LANDED",
+      "title": "OD-CAPABILITY-007: a second capability contract arrives, and no provider has a real decline case yet",
+      "why": "OD-CAPABILITY-007 (authored 2026-08-18, status open) named its first trigger plainly: \"a second capability contract is the natural trigger.\" nomos-cap-dependency (nomos.cap.dependency.edges) was built after the record was written -- verified directly against the real code, not assumed: its own crate doc names it a real second capability contract, \"band 23... owned by neither its provider nor any rule that reads it,\" with nomos-rules::Check_Dependency_Direction as its real second party. Nothing has read this record against that arrival -- grepped the full ledger, nothing references OD-CAPABILITY-007 since it was authored.\n\nWhat the arrival actually settles, checked directly rather than assumed: grepped every reference to nomos_cap_dependency::Capability across the workspace -- the provider (nomos-lang-rust-cargo), the rule that reads it (nomos-rules), and the contract crate itself are the only three sites. Exactly one provider offers against this contract, and its offer (crates/languages/nomos-lang-rust-cargo/src/guarantee.rs::Provider_Offer) sits at the contract's own declared ceiling, Sound/Sound -- not a narrower one. No provider anywhere in this workspace structurally cannot satisfy any capability contract that exists. The record's own deeper condition -- \"the moment a real provider exists that could plausibly be asked to offer against a contract it structurally cannot satisfy\" -- has not fired, even though the literal sentence naming a second contract has. This is the same shape OD-GATE-014's own literal-trigger-fired-but-deeper-condition-unmet reading already established this session for a sibling record.",
+      "done_when": "OD-CAPABILITY-007 is edited through nomos spec preview / nomos spec commit (never hand-edited), front matter version bumps 1 -> 2, and it stays status: open -- this item settles what nomos-cap-dependency's arrival shows, not whether to build a decline mechanism.\n\nThe record gains a new section, after \"Current Position\" and before \"What Would Decide It\", titled \"A Second Capability Contract Arrives: What It Does And Does Not Settle\", stating: nomos-cap-dependency is a real second capability contract (cited from its own crate doc); grepped directly, exactly one provider (nomos-lang-rust-cargo) offers against it, at the contract's own declared ceiling (Sound/Sound), not a narrower guarantee; no provider anywhere in this workspace structurally fails to satisfy any capability contract that exists; the record's literal first-named trigger has fired but the deeper condition it stands for (a provider that cannot satisfy a contract it could plausibly be asked about) has not.\n\n\"What Would Decide It\" is rewritten to say the second-capability-contract trigger's literal sentence is now true but the concrete decline case it was meant to supply has not arrived with it. The second, independent trigger (a completeness/coverage check needing to distinguish \"never asked\" from \"structurally declines\" against an existing contract) is restated unchanged.\n\n\"Status\" stays open, restated to say the first trigger fired literally but not in the sense that matters, and names the same two revisit conditions, extended to name nomos-cap-dependency itself as a place a future decline could arrive against, alongside a third contract or the existing nomos.cap.syntax.items.\n\nPreservation: cargo test --no-fail-fast -p nomos-spec-validate passes with NOMOS_V14_CORPUS, NOMOS_SPEC_ARCHIVES and NOMOS_RUST_CORPUS all set (not corpus-unset only).\n\nProjections re-rendered from a scratch worktree holding exactly the registered record set this commit publishes (OD-GATE-005's discipline), via nomos spec render --profile diagram-set --into . and nomos spec render --profile domain-specification --into ., verified fresh via nomos spec freshness --into . --require diagram-set --require domain-specification (must exit 0) before copying spec/domain-specification.md (+ sidecar) back, and diagrams/relations.mmd (+ sidecar) too if its content actually changed, and committing them alongside the edited record and work/ledger.json.\n\ncargo test --no-fail-fast -p nomos-spec-validate passes (this item's own predicate, run corpus-set per the paragraph above).",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-validate"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-validate"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 8 tests\ntest run::tests::Test_The_Ruleset_Hash_Should_Be_Order_Independent_And_Sensitive ... ok\ntest run::tests::Test_A_Vacuous_Rule_Should_Be_Visible ... ok\ntest run::tests::Test_An_Empty_Ruleset_Should_Not_Pass ... ok\ntest run::tests::Test_An_Errored_Rule_Should_Fail_The_Run ... ok\ntest run::tests::Test_Violations_Should_Fail_The_Run_And_Be_Listed ... ok\ntest run::tests::Test_A_Declared_But_Unregistered_Rule_Should_Fail_The_Run ... ok\ntest run::tests::Test_A_Rule_Nobody_Declared_Should_Fail_The_Run ... ok\ntest run::tests::Test_A_Complete_Satisfied_Run_Should_Pass ... ok\n\ntest result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s\n\n\nrunning 11 tests\ntest Test_An_Empty_Store_Should_Report_Vacuous_Rules ... ok\ntest Test_A_Traced_Statement_Should_Satisfy_Preserve_006 ... ok\ntest Test_The_Registry_Should_Match_The_Manifest ... ok\ntest Test_A_Statement_Without_Preserved_Lineage_Should_Violate_Preserve_006 ... ok\ntest Test_Disposed_Blocks_Should_Satisfy_Preserve_002 ... ok\ntest Test_An_Undisposed_Block_Should_Violate_Preserve_002 ... ok\ntest Test_A_Declared_Repeated_Body_Should_Satisfy_Preserve_004 ... ok\ntest Test_An_Omitted_Block_Should_Satisfy_Preserve_002 ... ok\ntest Test_A_Populated_Store_Should_Not_Report_Vacuous_Block_Rules ... ok\ntest Test_An_Undeclared_Repeated_Body_Should_Violate_Preserve_004 ... ok\ntest Test_A_Seeded_Store_Should_Pass_Preservation_Non_Vacuously ... ok\n\ntest result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.88s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.13s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_validate-acd7b674edff1f45.exe)\n     Running tests\\preservation_holds.rs (target\\debug\\deps\\preservation_holds-c1582b858346687e.exe)\n   Doc-tests nomos_spec_validate\n",
+        "verified_at": 1787180323,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "7ba9ae763653afd4fa65b33ec015e483575b4c15"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

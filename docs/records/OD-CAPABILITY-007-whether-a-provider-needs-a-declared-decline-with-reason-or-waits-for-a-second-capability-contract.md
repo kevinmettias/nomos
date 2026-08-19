@@ -3,7 +3,7 @@ id: OD-CAPABILITY-007
 type: decision
 title: Whether a provider needs a declared decline-with-reason, or waits for a second capability contract
 status: open
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - capability
@@ -71,6 +71,29 @@ precedent that resolved `OD-PACKAGE-006` does not automatically transfer here fo
 reason, the same conclusion `OD-RULES-005` already reached for the adjacent Inputs
 question.
 
+## A Second Capability Contract Arrives: What It Does And Does Not Settle
+
+`nomos-cap-dependency` (`nomos.cap.dependency.edges`) was built after this record was
+written and is, checked directly rather than assumed, a real second capability contract —
+its own crate doc states it earned that immediately, "band 23... owned by neither its
+provider nor any rule that reads it," with `nomos-rules::Check_Dependency_Direction` as its
+real second party. This record's own first named trigger — "a second capability contract" —
+has arrived in the literal sense the sentence names.
+
+What it has not done is give the decline question a real case to check a design against.
+Verified directly against the real code: exactly one provider, `nomos-lang-rust-cargo`,
+offers against `nomos.cap.dependency.edges` (grepped for every reference to
+`nomos_cap_dependency::Capability` across the workspace — the provider itself, the rule that
+reads it, and the contract crate are the only three sites), and its offer
+(`crates/languages/nomos-lang-rust-cargo/src/guarantee.rs::Provider_Offer`) sits at the
+contract's own declared ceiling — `Sound`/`Sound` — the same as `nomos-cap-syntax`'s
+strongest existing offer, not a narrower one. No provider anywhere in this workspace
+structurally cannot satisfy this contract; the one provider that offers against it satisfies
+it maximally. The trigger this record actually cares about — "the moment a real provider
+exists that could plausibly be asked to offer against a contract it structurally cannot
+satisfy" — has still not fired: a second contract now exists, but nothing has yet failed to
+meet one.
+
 ## What Would Decide It
 
 A second capability contract is the natural trigger — the moment a real provider exists
@@ -78,7 +101,10 @@ that could plausibly be asked to offer against a contract it structurally cannot
 the question becomes concrete: what a decline actually needs to say, and where a
 completeness check would read it from, rather than a mechanism designed against zero real
 declines, which is exactly the mistake `D-135` warns building generic machinery from a wish
-produces.
+produces. That contract now exists (`nomos-cap-dependency`), but the concrete case it was
+meant to supply has not arrived with it: its one provider satisfies it fully, so there is
+still nothing a decline mechanism's design could be checked against beyond a second instance
+of "and it offers," which this record already had one of.
 
 A second, independent trigger: if a completeness or coverage check is found to need to
 distinguish "never asked" from "structurally declines" for a capability that already
@@ -87,11 +113,15 @@ exists today — for instance, if `nomos-lang-rust-scan`'s narrower `Guarantee` 
 actually is, and that silence is mistaken for a gap. If that need surfaces against an
 existing contract rather than a hypothetical second one, it argues for building the
 mechanism for a different reason than the one considered and declined here, and should be
-evaluated on its own evidence.
+evaluated on its own evidence. Unchanged by `nomos-cap-dependency`'s arrival.
 
 ## Status
 
-Open. This question is deliberately left open rather than resolved either way: unlike
-`OD-PACKAGE-006`, the plugin-enablement direction does not reach it — a provider can
-already register fully without a decline mechanism existing — and no second capability
-contract exists to check a design against. Revisit when either trigger above arrives.
+Open. The record's own first named trigger, read literally, has fired — a second capability
+contract, `nomos.cap.dependency.edges`, exists — but the deeper condition that sentence was
+standing in for has not: no provider anywhere in this workspace structurally fails to
+satisfy any capability contract that exists, `nomos-cap-dependency`'s one provider included,
+which offers at the contract's own ceiling. Revisit when a real provider is found that
+cannot satisfy a contract it could plausibly be asked about — against `nomos.cap.dependency.
+edges`, a third contract, or the existing `nomos.cap.syntax.items` — or when the second,
+independent trigger above fires.
