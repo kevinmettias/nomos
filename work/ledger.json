@@ -16572,6 +16572,41 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-PACKAGE-008-EVIDENCE",
+      "title": "OD-PACKAGE-008 gains code-standards' own per-check packaging abandonment as corroborating evidence",
+      "why": "A fuller research pass over code-standards/nomos-proto's rule/check architecture (this session, 2026-08-18) found direct, verifiable evidence bearing on OD-PACKAGE-008's open question. That Go system's own go.work carries this comment verbatim: 'This file carried 45 entries -- one per check -- because every check was its own Go module. That boundary was packaging, never design: it forced the gate to go run each check, and it is why a shared driver could not simply be imported.' A mature, production system directly analogous to nomos-rules tried independently packaging each rule/check as its own unit and reversed it, for a concrete technical reason (a shared driver could not be imported across module boundaries) rather than merely a population-of-one caution. OD-PACKAGE-008 currently reasons about the RulePackage manifest question from first principles alone (population of one rule, ARCH-002's contents list) with no external corroborating case. This is exactly the shape of evidence OD-RULES-004 already cites nomos-add-plugin section 2 for and OD-RULES-005 already cites nomos-proto's checkspec.Inputs for -- verified directly against the Go repo's own go.work file, not secondhand.",
+      "done_when": "OD-PACKAGE-008's version is bumped and a new subsection (e.g. under Current Position or a new Corroborating Evidence heading) quotes go.work's comment verbatim, states which repository and file it is from, and states plainly what it does and does not prove: that per-artifact packaging at a population comparable to nomos-rules' today was tried by a mature analogous system and reversed for a driver-composition reason, not proof that nomos-rules' own eventual second rule will diverge the same way. The record's Status and open question are unchanged -- this is a citation added to an open record, not a resolution. Registered already (crates/spec/nomos-spec-store/records/OD-PACKAGE-008.record exists); diagrams/relations.mmd and spec/domain-specification.md (with sidecars) are re-rendered and fresh per nomos spec freshness --require diagram-set --require domain-specification, verified from an isolated worktree holding exactly the record set this commit publishes.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
