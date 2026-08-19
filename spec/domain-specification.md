@@ -107,6 +107,9 @@ profile: domain-specification
 | docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md@authored | docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md | authored | 20 | 8 | sha256:b9b8e8c69db8cd1669f9965df1e32ba0ee19634968e153e1d5bb50f6ed7e0d80 |
 | docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md@authored | docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md | authored | 15 | 7 | sha256:13bc9a8a9f32e0d46c78adb4f917e5bb47fc79932a8c2bcac5b1f19c0306e7e9 |
 | docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md@authored | docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md | authored | 35 | 9 | sha256:8b99c94d98fdfc2f28901faef55e6d8589203ed121e1d8de16673266842cc199 |
+| docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md@authored | docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md | authored | 17 | 5 | sha256:69ab019a45e8742af61dfa35899a6c68c9d29cc11a8c28c52356296a97a114ea |
+| docs/records/OD-LEDGER-034-whether-work-needs-a-typed-reconciliation-outcome-beside-the-free-text-reason-work-decline-already-carries.md@authored | docs/records/OD-LEDGER-034-whether-work-needs-a-typed-reconciliation-outcome-beside-the-free-text-reason-work-decline-already-carries.md | authored | 14 | 5 | sha256:cb61b6f602f2fc7836f03727ce282c5f46da3e5ef3c6f92108dc77cc862577fc |
+| docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md@authored | docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md | authored | 17 | 5 | sha256:e28fcdcd8881a5405bfd5398964764cd59fa6d45e8340359ca94d9df98a0d732 |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md@authored | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md | authored | 29 | 8 | sha256:dea2667f08661d51389468ccb32132d696dd6cb5a0936574b89125c523341962 |
 | docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md@authored | docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md | authored | 24 | 7 | sha256:aba629fefa9d9503489cfcae8626b61030287a2f29e558cf0b775875eb32c5b7 |
 | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md@authored | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md | authored | 54 | 10 | sha256:0a930d2a044d183c00fc821119d1645738cb398a9374b5a6eb3a736cb50764d2 |
@@ -994,6 +997,21 @@ profile: domain-specification
 | docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#25 | authored | 2 | What Was Considered And Rejected |
 | docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#31 | authored | 2 | What Holds It |
 | docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#34 | authored | 2 | Status |
+| docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md#1 | authored | 1 | Whether docs/records needs a distinct result-record type, or the doubling in OD-LEDGER-017 is unmeasured rather than costly |
+| docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md#2 | authored | 2 | Question |
+| docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md#5 | authored | 2 | What Was Measured |
+| docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md#12 | authored | 2 | Decision |
+| docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md#16 | authored | 2 | Status |
+| docs/records/OD-LEDGER-034-whether-work-needs-a-typed-reconciliation-outcome-beside-the-free-text-reason-work-decline-already-carries.md#1 | authored | 1 | Whether work needs a typed reconciliation outcome beside the free-text reason work decline already carries |
+| docs/records/OD-LEDGER-034-whether-work-needs-a-typed-reconciliation-outcome-beside-the-free-text-reason-work-decline-already-carries.md#2 | authored | 2 | Question |
+| docs/records/OD-LEDGER-034-whether-work-needs-a-typed-reconciliation-outcome-beside-the-free-text-reason-work-decline-already-carries.md#5 | authored | 2 | What Was Measured |
+| docs/records/OD-LEDGER-034-whether-work-needs-a-typed-reconciliation-outcome-beside-the-free-text-reason-work-decline-already-carries.md#10 | authored | 2 | Decision |
+| docs/records/OD-LEDGER-034-whether-work-needs-a-typed-reconciliation-outcome-beside-the-free-text-reason-work-decline-already-carries.md#13 | authored | 2 | Status |
+| docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md#1 | authored | 1 | Whether actual impact should be recorded against declared territory, or territory being declared not enforced makes the drift unmeasured rather than owed |
+| docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md#2 | authored | 2 | Question |
+| docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md#4 | authored | 2 | What Was Measured |
+| docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md#13 | authored | 2 | Decision |
+| docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md#16 | authored | 2 | Status |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#1 | authored | 1 | A claim and a fact address a path by one rule, and the record-identifier fold stays with the ledger |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#2 | authored | 2 | Question |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#8 | authored | 2 | What Was Actually Wrong |
@@ -27788,6 +27806,456 @@ unrelated to the commit is `OD-LEDGER-003`'s scoping gap seen from the other sid
 runs the item's own predicate, so a workspace-wide failure no item's predicate names can persist
 across many green finishes — measured on 2026-08-19 at a full day for an unrelated failure, and
 at nearly the whole branch for this one.
+
+### docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md#1
+
+*revision: authored · kind: heading · heading: Whether docs/records needs a distinct result-record type, or the doubling in OD-LEDGER-017 is unmeasured rather than costly · hash: sha256:5a61cd1789e33a2f265c069767be92a481364ee25e5291940f7c77ddab313a99*
+
+# Whether docs/records needs a distinct result-record type, or the doubling in OD-LEDGER-017 is unmeasured rather than costly
+
+### docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md#2
+
+*revision: authored · kind: heading · heading: Whether docs/records needs a distinct result-record type, or the doubling in OD-LEDGER-017 is unmeasured rather than costly / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md#3
+
+*revision: authored · kind: prose · heading: Whether docs/records needs a distinct result-record type, or the doubling in OD-LEDGER-017 is unmeasured rather than costly / Question · hash: sha256:2d33bccb0d7565edc41e9fd20b7142a3fa0de5e02a1c5b547cbb2bcf497793a8*
+
+An external design review (`nomos_spec_and_work_ledger_arch.txt`, read against this
+workspace rather than accepted on read) proposes splitting a completed unit of work into
+four artifact kinds — task, change record, architecture-decision record, and result
+record — so that a durable decision (why something is true), a semantic delta (how the
+intent moved and why), and a delivery report (what was actually built, against which
+commit) never share one file. `docs/records/` has one type today: a governing record,
+`type` drawn from the same closed set `LedgerItem::kind` uses (architecture, decision,
+correction, validation, cleanup), that carries decision content and delivery narrative in
+the same file whenever the two coincide. `OD-LEDGER-017` is the concrete instance named by
+`P13-RESULT-RECORD-QUESTION`: it states a decision (all six `WORK-LEDGER` requirements
+bind), narrates what was measured (216 v14 task files, the review that produced the six
+requirements), and reports a verdict per requirement — in one record, one `status`, one
+`version`.
+
+### docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md#4
+
+*revision: authored · kind: prose · heading: Whether docs/records needs a distinct result-record type, or the doubling in OD-LEDGER-017 is unmeasured rather than costly / Question · hash: sha256:26ec3041d8b3958a4aa9d1d3f9860be26735d2cf7c6d829872aa416a1a33e54c*
+
+Whether that doubling is a real cost or a distinction without a difference was unmeasured
+before this record. No prior record here argued either way.
+
+### docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md#5
+
+*revision: authored · kind: heading · heading: Whether docs/records needs a distinct result-record type, or the doubling in OD-LEDGER-017 is unmeasured rather than costly / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md#6
+
+*revision: authored · kind: prose · heading: Whether docs/records needs a distinct result-record type, or the doubling in OD-LEDGER-017 is unmeasured rather than costly / What Was Measured · hash: sha256:b1af44ad5a7e6f64703008139eef5e618c6f4fa066771db921e69faa89befa06*
+
+**Revision churn, across the whole set.** `docs/records/*.md` carries a `version` field
+per `D-129`'s front matter, and it is not always `1`:
+
+### docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md#7
+
+*revision: authored · kind: prose · heading: Whether docs/records needs a distinct result-record type, or the doubling in OD-LEDGER-017 is unmeasured rather than costly / What Was Measured · hash: sha256:ece00457f0c1bf9c71eb30280a789fb0ba67c234169ac4ac8c35c8e77f70b08f*
+
+| `version` | Count |
+|---:|---:|
+| 1 | 107 |
+| 2 | 27 |
+| 3 | 4 |
+| 4 | 2 |
+| 5 | 1 |
+
+### docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md#8
+
+*revision: authored · kind: prose · heading: Whether docs/records needs a distinct result-record type, or the doubling in OD-LEDGER-017 is unmeasured rather than costly / What Was Measured · hash: sha256:e84c94e5957311b7887a292eb681eb3a84360dd4416a25d7ffd626308a8f590e*
+
+34 of 141 records — about a quarter — have been revised at least once. Two records sit at
+`version: 3` and are load-bearing for this question specifically: `OD-GATE-014` and
+`OD-GATE-015`, the ScopeSelector/RuleSelector and BaselinePolicy/SuppressionPolicy
+open-decision records `ARC-ROADMAP-001`'s near-term tier depends on. Both are
+"is this built now, or does it wait for a trigger" records, and both have been revised
+twice — not because the decision changed, but because a `Correction`-kind item updated
+their `Status` section each time a landing changed which trigger had fired.
+`P13-GATE-014-015-RUN-CALLER-LANDED` is one such correction: it left `OD-GATE-014`'s
+decision exactly where it stood (ScopeSelector still waits) and rewrote only the sentence
+recording that `OD-GATE-015`'s trigger had newly fired.
+
+### docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md#9
+
+*revision: authored · kind: prose · heading: Whether docs/records needs a distinct result-record type, or the doubling in OD-LEDGER-017 is unmeasured rather than costly / What Was Measured · hash: sha256:259bda8713f957074fd447c71cb998af7dc3f27a41b6359d5b2fe672853ca7d2*
+
+**This is exactly the doubling the reviewed design names**, and it is real: these two
+records' narrative half moves on a different schedule than their decision half. The
+question is whether the current mechanism for that movement — a version-bumped edit to
+the same file — is a cost worth a second artifact type, or is already the cheapest correct
+answer.
+
+### docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md#10
+
+*revision: authored · kind: prose · heading: Whether docs/records needs a distinct result-record type, or the doubling in OD-LEDGER-017 is unmeasured rather than costly / What Was Measured · hash: sha256:c26759892fe8a4839e630c6a5dab9e40e6c3fdf8ce53616f7e4f3c35b91e7804*
+
+**What the alternative would cost.** A separate result/change-record type would not remove
+the need to touch something every time a trigger fires; it would move that touch from a
+`Status` paragraph in the existing record to an entry in a second, append-only file, and
+require both to be read together to answer "is this decision still open, and what has
+happened toward its trigger." The record file's own `git log -p` already **is** that
+append-only history — `OD-LEDGER-033-...`'s own predecessor sentences are recoverable from
+`OD-GATE-014`'s three committed revisions without a second file existing to hold them. The
+brainstorming document's own later section concedes as much for its own proposal ("Git
+remains authoritative for... exact line changes... patch content"), and the two-file design
+it argues for is aimed at a system where the durable source is *not* version-controlled
+prose — which `docs/records/` already is.
+
+### docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md#11
+
+*revision: authored · kind: prose · heading: Whether docs/records needs a distinct result-record type, or the doubling in OD-LEDGER-017 is unmeasured rather than costly / What Was Measured · hash: sha256:c826c26b27df455c9b5d537ffb2017d499e3f81de52e375b9a8c6c8fb13d81f6*
+
+**What corrections actually cost, measured.** The `Correction`-kind items that perform
+these status updates are narrowly territoried — one or two files, a specific `Status`
+paragraph — and they finish in the same shape as any other item: claim, edit, verify,
+finish. Nothing in the ledger shows a correction blocked, delayed, or made unsafe by
+sharing a file with the decision it updates. `OD-LEDGER-006` already generalized the one
+real defect in this neighborhood — a single-valued field silently overwriting prior
+history (`abandoned`, `displaced`) — to a list, precisely so that repeated events on one
+subject do not lose earlier ones. The same fix, applied to a record's own body, is already
+what a version-bumped git history gives for free.
+
+### docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md#12
+
+*revision: authored · kind: heading · heading: Whether docs/records needs a distinct result-record type, or the doubling in OD-LEDGER-017 is unmeasured rather than costly / Decision · hash: sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511*
+
+## Decision
+
+### docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md#13
+
+*revision: authored · kind: prose · heading: Whether docs/records needs a distinct result-record type, or the doubling in OD-LEDGER-017 is unmeasured rather than costly / Decision · hash: sha256:21a459c834a157b287561370de5ace5bed4fa6093af9458e9ce58fd1312f8c2b*
+
+**Declined.** No separate result-record or change-record type is built. `docs/records/`
+keeps its single governing-record type, and a record whose narrative half moves faster
+than its decision half — `OD-GATE-014` and `OD-GATE-015` are the two instances measured
+here — continues to absorb that movement as a versioned edit to its own `Status` section,
+recoverable through `git log` rather than through a second committed artifact.
+
+### docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md#14
+
+*revision: authored · kind: prose · heading: Whether docs/records needs a distinct result-record type, or the doubling in OD-LEDGER-017 is unmeasured rather than costly / Decision · hash: sha256:258ddace99b9b93469e40bf4765aac43b8bcee2de319f13be465f983dbc355eb*
+
+This is not a claim that no record will ever need independent narrative and decision
+histories. It is a claim that the 34-of-141 revision rate measured here, concentrated in
+two records revised twice each for a stated and legible reason, is evidence of the
+mechanism working rather than evidence of it failing.
+
+### docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md#15
+
+*revision: authored · kind: prose · heading: Whether docs/records needs a distinct result-record type, or the doubling in OD-LEDGER-017 is unmeasured rather than costly / Decision · hash: sha256:ab498cd58f267428237eea7af3fa1b1b6a4fdae86794041c4b2069aa9916d077*
+
+**What would reverse this.** A decision record whose narrative half needs to be read
+*without* also reading its current decision — for example, because the decision changed in
+a way that makes an earlier narrative entry actively misleading rather than merely
+superseded, and `git log` is not how downstream readers (agents building a projection, or
+`nomos spec render`) are expected to reach the store. Or a record accumulating enough
+narrative revisions that its `Status` section stops being a paragraph and starts being a
+log a reader has to reconstruct by eye across several `version`s — a shape `OD-LEDGER-001`
+already reached at `version: 5`, which is the nearest live candidate to watch.
+
+### docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md#16
+
+*revision: authored · kind: heading · heading: Whether docs/records needs a distinct result-record type, or the doubling in OD-LEDGER-017 is unmeasured rather than costly / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md#17
+
+*revision: authored · kind: prose · heading: Whether docs/records needs a distinct result-record type, or the doubling in OD-LEDGER-017 is unmeasured rather than costly / Status · hash: sha256:66ef5399b712cefe43fec8036b4b1ed8605d7a21e61ddc08da9fafa11eec4023*
+
+Accepted, drawn by `P13-RESULT-RECORD-QUESTION` against evidence in this repository's own
+record set, not against the reviewed design's abstract case for the split. Revisit on
+either trigger named above.
+
+### docs/records/OD-LEDGER-034-whether-work-needs-a-typed-reconciliation-outcome-beside-the-free-text-reason-work-decline-already-carries.md#1
+
+*revision: authored · kind: heading · heading: Whether work needs a typed reconciliation outcome beside the free-text reason work decline already carries · hash: sha256:0194212e234e2dd60f93ef94167c62f903eea9a2f4afae11e34a5b4c1102107a*
+
+# Whether work needs a typed reconciliation outcome beside the free-text reason work decline already carries
+
+### docs/records/OD-LEDGER-034-whether-work-needs-a-typed-reconciliation-outcome-beside-the-free-text-reason-work-decline-already-carries.md#2
+
+*revision: authored · kind: heading · heading: Whether work needs a typed reconciliation outcome beside the free-text reason work decline already carries / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-LEDGER-034-whether-work-needs-a-typed-reconciliation-outcome-beside-the-free-text-reason-work-decline-already-carries.md#3
+
+*revision: authored · kind: prose · heading: Whether work needs a typed reconciliation outcome beside the free-text reason work decline already carries / Question · hash: sha256:02e92477d33f1ac7803457a423f9171a6c350b9568cbc4c1e1b8919b3f7a2f3f*
+
+An external design review (`nomos_spec_and_work_ledger_arch.txt`) recommends a typed
+reconciliation-outcome vocabulary — `not_started`, `partially_implemented`,
+`implemented_unverified`, `implemented_verified`, `superseded`, `not_applicable` — for a
+task claimed against a repository where the requested behavior turns out to already
+exist. Its argument: collapsing "already implemented" into either `done` (asserting
+verification that did not happen) or silent abandonment loses information a later reader
+needs.
+
+### docs/records/OD-LEDGER-034-whether-work-needs-a-typed-reconciliation-outcome-beside-the-free-text-reason-work-decline-already-carries.md#4
+
+*revision: authored · kind: prose · heading: Whether work needs a typed reconciliation outcome beside the free-text reason work decline already carries / Question · hash: sha256:1bcb269b76d67d63de5cbeee5d903a151b1312200a1e269cf595a4d8dd5bfd24*
+
+This repository's nearest mechanism is `work decline`, whose own CLI text says it "ends an
+item that turned out not to be work — superseded by another item, or refused by a record
+since it was written" (`OD-LEDGER-019` is the record that split it from `abandon` on
+exactly that ground), carried only in a free-text `--reason`. Grepping the workspace for
+`reconciliation`, `already_implemented`, `partially_implemented` finds matches only in
+`nomos-spec-ingest`'s v14/v15 corpus-overlay reconciliation
+(`crates/spec/nomos-spec-ingest/src/reconciliation/`) — a different domain, restoring lost
+document families from an archived corpus, not a ledger item discovering pre-existing
+code. Nothing in `nomos-ledger` or `nomos-cli` carries this vocabulary.
+
+### docs/records/OD-LEDGER-034-whether-work-needs-a-typed-reconciliation-outcome-beside-the-free-text-reason-work-decline-already-carries.md#5
+
+*revision: authored · kind: heading · heading: Whether work needs a typed reconciliation outcome beside the free-text reason work decline already carries / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-LEDGER-034-whether-work-needs-a-typed-reconciliation-outcome-beside-the-free-text-reason-work-decline-already-carries.md#6
+
+*revision: authored · kind: prose · heading: Whether work needs a typed reconciliation outcome beside the free-text reason work decline already carries / What Was Measured · hash: sha256:cdb1f1748bb4c3b3221ec55132ae1a2ee5282e3887dec7f53ea114fee8f1f87f*
+
+Every `Declined` item on the board, read in full: **61 items**, `state.Declined.reason`
+read for each one.
+
+### docs/records/OD-LEDGER-034-whether-work-needs-a-typed-reconciliation-outcome-beside-the-free-text-reason-work-decline-already-carries.md#7
+
+*revision: authored · kind: prose · heading: Whether work needs a typed reconciliation outcome beside the free-text reason work decline already carries / What Was Measured · hash: sha256:c5280a8272308ff909a990f81a08ffbf303d38c4f6c85e53807df435f1b896c2*
+
+**Zero cite "the requested behavior already existed in the codebase."** None. The reasons
+cluster into a small number of recurring, already-named failure modes instead:
+
+### docs/records/OD-LEDGER-034-whether-work-needs-a-typed-reconciliation-outcome-beside-the-free-text-reason-work-decline-already-carries.md#8
+
+*revision: authored · kind: prose · heading: Whether work needs a typed reconciliation outcome beside the free-text reason work decline already carries / What Was Measured · hash: sha256:b678e59dc27145f7da8ba29ababe2baefa9cc970475956d79847fb94dc8993ec*
+
+| Pattern | Approximate count | Example |
+|---:|---:|---|
+| Territory mis-scoped or found short mid-claim, re-authored under a new id | ~28 | `P10-DECLINED-DEPENDENCY-2`, `P13-PACKAGE-MANIFEST` |
+| Superseded by a reissue of the same subject (authoring error, corrected predicate, record-id collision) | ~20 | `P11-SPENT-RECORD-ID`, `P12-DUPLICATE-AUTHORITY-2` |
+| Verification predicate unsatisfiable or missing, item re-authored with a working one | ~9 | `P13-NAMING-V15-CASING`, `P12-NO-PRIVILEGED-SURFACE-2` |
+| Genuinely not work (a probe, a test artifact) | 1 | `T-PROBE-FREE` |
+| Dependency on an item that itself declined | ~3 | `P10-EDGE-CONSTRAINTS`, `P12-NO-PRIVILEGED-SURFACE` |
+
+### docs/records/OD-LEDGER-034-whether-work-needs-a-typed-reconciliation-outcome-beside-the-free-text-reason-work-decline-already-carries.md#9
+
+*revision: authored · kind: prose · heading: Whether work needs a typed reconciliation outcome beside the free-text reason work decline already carries / What Was Measured · hash: sha256:954a8969c3cd3ada99136f91ffea076111f61dd5f3d35fe4226f3447bf3acdb1*
+
+The scenario the reviewed vocabulary targets — a task-ledger stood up against a
+*pre-existing, previously untracked* codebase, so early claims routinely discover work
+that already happened before the ledger existed — is the shape `OD-LEDGER-017` measured in
+the *v14* Go-era task set (216 tasks, migrated onto code with real prior history). It is
+not this ledger's shape: `work/ledger.json` was built incrementally from `P1-MODEL`
+forward, alongside the code each item's `done_when` describes, so there is structurally no
+period during which capability could accumulate untracked ahead of the board. The nearest
+thing this board has to "discovered something already true" is a `Correction`-kind item
+finding a *stale claim* in a record or comment — which already has a typed home, the
+`Correction` `kind` itself, and a `why` that states what was found wrong.
+
+### docs/records/OD-LEDGER-034-whether-work-needs-a-typed-reconciliation-outcome-beside-the-free-text-reason-work-decline-already-carries.md#10
+
+*revision: authored · kind: heading · heading: Whether work needs a typed reconciliation outcome beside the free-text reason work decline already carries / Decision · hash: sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511*
+
+## Decision
+
+### docs/records/OD-LEDGER-034-whether-work-needs-a-typed-reconciliation-outcome-beside-the-free-text-reason-work-decline-already-carries.md#11
+
+*revision: authored · kind: prose · heading: Whether work needs a typed reconciliation outcome beside the free-text reason work decline already carries / Decision · hash: sha256:c06f745921aa811cc77f1291f135221765356d5dd270d7cc4aa78f24019e943b*
+
+**Declined.** No typed reconciliation-outcome field is added to `work decline` or
+`work finish`. The vocabulary answers a reconciliation problem — pre-existing,
+previously-untracked implementation discovered under a tracked task — that has not
+occurred on this board in 61 measured instances, and does not have a structural reason to
+occur given how this ledger was built.
+
+### docs/records/OD-LEDGER-034-whether-work-needs-a-typed-reconciliation-outcome-beside-the-free-text-reason-work-decline-already-carries.md#12
+
+*revision: authored · kind: prose · heading: Whether work needs a typed reconciliation outcome beside the free-text reason work decline already carries / Decision · hash: sha256:2adc1bc8eb83f7dc69792c2bb164fff79b81a53f59589adc9d7780d7bb020628*
+
+**What would reverse this.** A real instance of an item claimed whose `done_when` is then
+found already satisfied by code nobody tracked to a prior item — most plausibly if a whole
+subsystem were ever imported wholesale (a vendored crate, an acquired codebase, a merge of
+a long-lived side branch) rather than built item-by-item as this workspace has been so
+far. Until that occurs, `work decline`'s free-text `--reason` is sufficient because the
+population it would need to distinguish between has exactly one measured member.
+
+### docs/records/OD-LEDGER-034-whether-work-needs-a-typed-reconciliation-outcome-beside-the-free-text-reason-work-decline-already-carries.md#13
+
+*revision: authored · kind: heading · heading: Whether work needs a typed reconciliation outcome beside the free-text reason work decline already carries / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-LEDGER-034-whether-work-needs-a-typed-reconciliation-outcome-beside-the-free-text-reason-work-decline-already-carries.md#14
+
+*revision: authored · kind: prose · heading: Whether work needs a typed reconciliation outcome beside the free-text reason work decline already carries / Status · hash: sha256:20ec5470cf207ea505dd7cdd80d0734ff95a1da148ca354c918eddec8ffb0a9f*
+
+Accepted, drawn by `P13-RECONCILIATION-OUTCOME-QUESTION` against a full read of the 61
+`Declined` items on the board at the commit this record lands on, not against the reviewed
+design's general case for the vocabulary.
+
+### docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md#1
+
+*revision: authored · kind: heading · heading: Whether actual impact should be recorded against declared territory, or territory being declared not enforced makes the drift unmeasured rather than owed · hash: sha256:18a817d8dad9ac371127bcf0d1d364f30c6e5c7b2ba66960c486498288b055fd*
+
+# Whether actual impact should be recorded against declared territory, or territory being declared not enforced makes the drift unmeasured rather than owed
+
+### docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md#2
+
+*revision: authored · kind: heading · heading: Whether actual impact should be recorded against declared territory, or territory being declared not enforced makes the drift unmeasured rather than owed / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md#3
+
+*revision: authored · kind: prose · heading: Whether actual impact should be recorded against declared territory, or territory being declared not enforced makes the drift unmeasured rather than owed / Question · hash: sha256:1579468a2df6d8c10a82b6444d71665541cc91ac265a4a667f13e84c36bcc09b*
+
+An external design review (`nomos_spec_and_work_ledger_arch.txt`) recommends recording a
+task's actual touched paths against its declared expected impact at completion, flagging
+expansion beyond declared scope, to catch undeclared scope creep and improve future
+planning. `LedgerItem::territory` declares expected paths and patterns; `OD-LEDGER-001`
+already states territory is *declared, not enforced* — nothing stops a write into a
+claimed path. So a finished item's actual diff can exceed its declared territory today,
+and nothing records that it did. `P13-IMPACT-ACTUAL-QUESTION` asks whether that gap is a
+real, currently-occurring cost or a theoretical one, by checking real commits rather than
+arguing from the schema alone.
+
+### docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md#4
+
+*revision: authored · kind: heading · heading: Whether actual impact should be recorded against declared territory, or territory being declared not enforced makes the drift unmeasured rather than owed / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md#5
+
+*revision: authored · kind: prose · heading: Whether actual impact should be recorded against declared territory, or territory being declared not enforced makes the drift unmeasured rather than owed / What Was Measured · hash: sha256:7ea07100f6c84d4555d2a53c899e7a9ec1570294fc7f7dd10377d3eb4775c3f3*
+
+`e7e7d9a` (`P13-CAPABILITY-008-THIRD-PROVIDER-LANDED`) declared one path as territory:
+
+### docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md#6
+
+*revision: authored · kind: code · heading: Whether actual impact should be recorded against declared territory, or territory being declared not enforced makes the drift unmeasured rather than owed / What Was Measured · hash: sha256:ab339061894efc343c125c91a98711dc40d30f9e2dac894a289e1d8dfd7a34ff*
+
+```
+docs/records/OD-CAPABILITY-008-...-already-closes-the-gap.md
+```
+
+### docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md#7
+
+*revision: authored · kind: prose · heading: Whether actual impact should be recorded against declared territory, or territory being declared not enforced makes the drift unmeasured rather than owed / What Was Measured · hash: sha256:93db8abcf94de54bca84e0c1adf910295e0b84cd5f57e132ac3c9432595f60f0*
+
+`git show --stat --format="" e7e7d9a` reports four files actually changed:
+
+### docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md#8
+
+*revision: authored · kind: code · heading: Whether actual impact should be recorded against declared territory, or territory being declared not enforced makes the drift unmeasured rather than owed / What Was Measured · hash: sha256:01f1b156ce1051c1e5ea8093f88cafcc42674dee044184335e3d02ad97999fdf*
+
+```
+...already-closes-the-gap.md                          |  86 +++++++++++---
+spec/domain-specification.md                           | 123 ++++++++++++++++-----
+spec/domain-specification.md.nomos-projection.json     |  54 +++++++--
+work/ledger.json                                       |  54 +++++++++
+4 files changed, 263 insertions(+), 54 deletions(-)
+```
+
+### docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md#9
+
+*revision: authored · kind: prose · heading: Whether actual impact should be recorded against declared territory, or territory being declared not enforced makes the drift unmeasured rather than owed / What Was Measured · hash: sha256:8b319203da06b9ec54f6c055e52d233943b6b7cff3f4cf6058006317d5f8a778*
+
+Two files outside declared territory, every time a record-writing item finishes: the
+rendered `domain-specification.md` and its `.nomos-projection.json` sidecar. `work/ledger.json`
+is not a territory violation — every `work finish` writes the board itself, expected by
+construction.
+
+### docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md#10
+
+*revision: authored · kind: prose · heading: Whether actual impact should be recorded against declared territory, or territory being declared not enforced makes the drift unmeasured rather than owed / What Was Measured · hash: sha256:5fe1f965f7fe41caa42b261232e61e940f0c13823d6b588bbea09f4a8b0299c7*
+
+**This is not drift; it is a named, deliberate exception.** `OD-GATE-005` decision 2
+already ruled that the derived diagram (and, by the same reasoning, the derived
+domain-specification projection) is reserved by no item, specifically because reserving it
+in every record-writer's territory "would serialize the whole board on a file nobody can
+conflict over." So the one reproducible category of actual-impact exceeding declared
+territory that this record could find is a category `OD-GATE-005` already excluded from
+territory on purpose, not an oversight `OD-LEDGER-001`'s "not enforced" was warning about.
+
+### docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md#11
+
+*revision: authored · kind: prose · heading: Whether actual impact should be recorded against declared territory, or territory being declared not enforced makes the drift unmeasured rather than owed / What Was Measured · hash: sha256:7e449c41e63b8696ad8efd7bb3650996db611dccd55a6a3c7a01a05cca8e3814*
+
+**What a naive version of the reviewed recommendation would do.** A mechanical check
+comparing a commit's actual files against declared `Territory` and flagging any excess
+would flag `spec/domain-specification.md` and its sidecar on essentially every
+record-writing commit — a large fraction of this board's completed items, since most
+`Correction` and `Decision`-kind items touch `docs/records/`. Built without first
+exempting exactly the outputs `OD-GATE-005` already named as nobody's territory, the
+check's first measured behavior would be a false positive on the majority of its subjects,
+which is worse than the silence it would replace: a warning that fires on nearly everything
+teaches its reader to ignore it.
+
+### docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md#12
+
+*revision: authored · kind: prose · heading: Whether actual impact should be recorded against declared territory, or territory being declared not enforced makes the drift unmeasured rather than owed / What Was Measured · hash: sha256:9b3d146b7dc2175c38eac63b4a2b2aaa563fd258aa592d999bac598a1e92a939*
+
+**What was not found.** No commit sampled shows a *non-projection* file touched outside its
+item's declared territory. This does not establish the absence generally — only this one
+commit and the surrounding pattern were checked, and `OD-LEDGER-001`'s point stands: nothing
+mechanical would catch it if it happened. The finding is that the one concrete, reproducible
+instance of the gap this record could locate is already accounted for by a different,
+already-written record, not that the underlying risk `OD-LEDGER-001` names is closed.
+
+### docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md#13
+
+*revision: authored · kind: heading · heading: Whether actual impact should be recorded against declared territory, or territory being declared not enforced makes the drift unmeasured rather than owed / Decision · hash: sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511*
+
+## Decision
+
+### docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md#14
+
+*revision: authored · kind: prose · heading: Whether actual impact should be recorded against declared territory, or territory being declared not enforced makes the drift unmeasured rather than owed / Decision · hash: sha256:44a4ad1c90723d0349023c100c096a704e702cf791d949206c5cdc8549e1106a*
+
+**Declined**, as currently scoped. No actual-impact field or `work finish`-time
+git-diff-versus-territory comparison is built now. Building it before the projection
+exception exists as a named allowlist would make the first version of the check actively
+misleading — flagging the normal, sanctioned case as the notable one — and no incident of
+a genuine, non-projection out-of-territory write has been found to justify the cost of
+building that allowlist first.
+
+### docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md#15
+
+*revision: authored · kind: prose · heading: Whether actual impact should be recorded against declared territory, or territory being declared not enforced makes the drift unmeasured rather than owed / Decision · hash: sha256:1eebe2842c9eace8d3ab2dd020b0e300441781bf95654e38ed451df5f745529a*
+
+**What would reverse this.** A real incident of a non-projection file being touched outside
+an item's declared territory, undetected until it caused an actual coordination failure —
+a peer's claim colliding with work nobody could see coming because it was never declared.
+Or, independently, someone building a `work finish`-time git-diff check for an unrelated
+reason (catching an accidentally-broad commit before it lands, for instance) — at which
+point excluding the `OD-GATE-005` projection outputs from its comparison is a small
+addition to a mechanism that already exists, rather than a reason to build the mechanism
+itself.
+
+### docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md#16
+
+*revision: authored · kind: heading · heading: Whether actual impact should be recorded against declared territory, or territory being declared not enforced makes the drift unmeasured rather than owed / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md#17
+
+*revision: authored · kind: prose · heading: Whether actual impact should be recorded against declared territory, or territory being declared not enforced makes the drift unmeasured rather than owed / Status · hash: sha256:f9a833592ba1c749d278fe8c4301c4ff602bc78296f469dd1707388739e006c8*
+
+Accepted, drawn by `P13-IMPACT-ACTUAL-QUESTION` against one sampled commit rather than a
+survey of the whole board — the sample is small by construction, and the trigger above is
+written so a future reader does not need a larger survey to reopen this if a real incident
+appears.
 
 ### docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#1
 

@@ -20133,6 +20133,183 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-RESULT-RECORD-QUESTION",
+      "title": "Whether docs/records needs a distinct result-record type, or the doubling in OD-LEDGER-017 is unmeasured rather than costly",
+      "why": "An external design review (nomos_spec_and_work_ledger_arch.txt, reviewed this session) proposes splitting a completed unit of work into four artifact kinds -- task, change record, ADR, and result record -- so a durable decision (why), a semantic delta (what changed and why the intent moved), and a delivery report (what was actually built, against which commit) never share one file. docs/records/ has one type today: a governing record (architecture/decision/correction/validation/cleanup, matching LedgerItem::kind) that carries decision content and delivery narrative in the same file when the two coincide. OD-LEDGER-017 is the concrete instance: it states a decision (all six WORK-LEDGER requirements bind), narrates what was measured (216 v14 task files, the review that produced the six requirements), and reports verdicts per requirement, in one record with one status. Whether that doubling is a real cost or a distinction without a difference is unmeasured: no record in docs/records/ has visibly needed independent revision of its narrative content versus its decision content, and no ledger item has been blocked by lacking a separate place for 'what was actually delivered.'",
+      "done_when": "A new OD-LEDGER decision record states the question, cites OD-LEDGER-017 as the concrete instance of the doubling, checks whether any record in docs/records/ has actually needed independent revision of its delivery-narrative half versus its decision half (a real count against the record set, not an assertion), and either: (a) declines a separate result/change-record type and names the trigger that would reopen it -- a record needing to describe delivery for a unit of work with no natural decision to anchor it, or a decision record whose narrative half goes stale on its own schedule while the decision half doesn't -- or (b) if the count shows real doubling-cost, proposes the type and its territory rather than building it inline. Registered as governing, related to OD-LEDGER-017 and ARC-ROADMAP-001, with diagram-set and domain-specification re-rendered fresh from the publishing record set.",
+      "kind": "Validation",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md",
+          "crates/spec/nomos-spec-store/records/OD-LEDGER-033.record"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "ument_Should_Not_Renumber_Its_Rows ... ok\n\ntest result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.17s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-24e890adbbdbd7ff.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-03e4f2f6b2b5235a.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-6f45b4c663e8f582.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-cccb4093ee8d4117.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-c30a05f2ef47daed.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-50863f332dc9a75e.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-06bc2ccbc9aebf45.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-f701bf4e7baf7e3d.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-e9fd68fc190e7ac8.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-9a4c16cab1f4ab9b.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-ee111bd537ecd137.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-2919ec68747ddb5b.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-99272398d303e3e7.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-756fcac740cd78ad.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-259eb839edee86c9.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1787180942,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-RECONCILIATION-OUTCOME-QUESTION",
+      "title": "Whether work needs a typed reconciliation outcome beside the free-text reason work decline already carries",
+      "why": "An external design review (nomos_spec_and_work_ledger_arch.txt, reviewed this session) recommends a typed reconciliation-outcome vocabulary -- not_started, partially_implemented, implemented_unverified, implemented_verified, superseded, not_applicable -- for a task claimed against a repository where the requested behavior turns out to already exist, so 'already implemented' does not collapse into either done (asserting verification that did not happen) or silence. This repository's nearest mechanism is work decline, whose own help text says it 'ends an item that turned out not to be work -- superseded by another item, or refused by a record since it was written,' carried only in a free-text --reason. Grepping the workspace for reconciliation/already_implemented/partially_implemented finds matches only in nomos-spec-ingest's v14/v15 corpus-overlay reconciliation (crates/spec/nomos-spec-ingest/src/reconciliation/), an unrelated domain; nothing in nomos-ledger or nomos-cli. Whether that gap is real work or already covered in substance by prose reason text plus OD-LEDGER-017's WORK-LEDGER-003 finding (0 of 101 items lacked a verification predicate) is unmeasured.",
+      "done_when": "A new OD-LEDGER decision record states the question, counts how many Declined items on the current board used a reason indicating pre-existing implementation (a real count against work/ledger.json's declined reasons, not an assertion), and either: (a) proposes a typed outcome on decline or finish distinguishing already-implemented-unverified from already-implemented-verified from genuinely-not-work, with its own schema shape and territory named as a follow-on rather than built inline, or (b) declines and names the trigger that would reopen it -- a real instance where a free-text decline reason was misread or lost the already-implemented distinction. Registered as governing, related to OD-LEDGER-017's WORK-LEDGER-003 and WORK-LEDGER-004 verdicts, with diagram-set and domain-specification re-rendered fresh from the publishing record set.",
+      "kind": "Validation",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-LEDGER-034-whether-work-needs-a-typed-reconciliation-outcome-beside-the-free-text-reason-work-decline-already-carries.md",
+          "crates/spec/nomos-spec-store/records/OD-LEDGER-034.record"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "With_No_Table_Should_Store_No_Rows ... ok\n\ntest result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.16s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-24e890adbbdbd7ff.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-03e4f2f6b2b5235a.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-6f45b4c663e8f582.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-cccb4093ee8d4117.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-c30a05f2ef47daed.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-50863f332dc9a75e.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-06bc2ccbc9aebf45.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-f701bf4e7baf7e3d.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-e9fd68fc190e7ac8.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-9a4c16cab1f4ab9b.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-ee111bd537ecd137.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-2919ec68747ddb5b.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-99272398d303e3e7.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-756fcac740cd78ad.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-259eb839edee86c9.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1787180952,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-IMPACT-ACTUAL-QUESTION",
+      "title": "Whether actual impact should be recorded against declared territory, or territory being declared not enforced makes the drift unmeasured rather than owed",
+      "why": "An external design review (nomos_spec_and_work_ledger_arch.txt, reviewed this session) recommends recording actual touched paths/symbols against a task's expected impact at completion, flagging expansion beyond declared scope, on the argument that it improves future planning and catches undeclared scope creep before it collides with another claim. LedgerItem's Territory declares expected paths and patterns, and OD-LEDGER-001 already states territory is declared, not enforced -- nothing stops a write into a claimed path, so a finished item's actual diff can silently exceed its declared Territory today and nothing records that it did. Whether this is a real, currently-occurring gap or a theoretical one is unmeasured: no incident of an item's actual impact exceeding its declared territory has been checked against git history for this board.",
+      "done_when": "A new OD-LEDGER decision record states the question, cites OD-LEDGER-001's territory-is-declared-not-enforced finding as the reason drift is possible today, samples a set of Done items' actual git diffs against their declared Territory paths to measure whether expansion beyond declared territory has actually occurred on this board, and either: (a) proposes a mechanism -- deriving actual-touched-paths from git diff at work finish time and recording a mismatch against declared Territory without blocking it -- with its own territory and scope named as a follow-on rather than built inline, or (b) declines and names the trigger that would reopen it -- a real incident where an item's actual impact silently exceeded its declared territory and nobody could reconstruct that after the fact. Registered as governing, related to OD-LEDGER-001, with diagram-set and domain-specification re-rendered fresh from the publishing record set.",
+      "kind": "Validation",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md",
+          "crates/spec/nomos-spec-store/records/OD-LEDGER-035.record"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "rom_A_Row_Should_Trace_To_That_Row ... ok\n\ntest result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.16s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-24e890adbbdbd7ff.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-03e4f2f6b2b5235a.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-6f45b4c663e8f582.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-cccb4093ee8d4117.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-c30a05f2ef47daed.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-50863f332dc9a75e.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-06bc2ccbc9aebf45.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-f701bf4e7baf7e3d.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-e9fd68fc190e7ac8.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-9a4c16cab1f4ab9b.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-ee111bd537ecd137.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-2919ec68747ddb5b.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-99272398d303e3e7.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-756fcac740cd78ad.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-259eb839edee86c9.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1787180962,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

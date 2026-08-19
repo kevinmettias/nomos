@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:2bd9eddc61bdc59206544ce50cc7ba45e279bfa57b609538c8b35aa8facc0676",
-  "inputs_digest": "sha256:ac811ad814df5a5f9ad2a7e8eda45d482639128c213e897e16b772dd389d499b",
+  "content_digest": "sha256:4baa3b3427d38c4628d85e06dcfc6d81abc5d6e97797d7ed9aec9a31cbb8dca6",
+  "inputs_digest": "sha256:27aed183d62573182a15f4e2494b5b89d8ff59e612e85550dd857dcbb8805eab",
   "sections": [
     [
       "Documents",
-      141
+      144
     ],
     [
       "Sections",
-      1224
+      1239
     ],
     [
       "Source blocks",
-      4364
+      4412
     ]
   ],
   "inputs": [
@@ -504,6 +504,21 @@
       "content": "documents",
       "identity": "docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md@authored",
       "hash": "sha256:8b99c94d98fdfc2f28901faef55e6d8589203ed121e1d8de16673266842cc199"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md@authored",
+      "hash": "sha256:69ab019a45e8742af61dfa35899a6c68c9d29cc11a8c28c52356296a97a114ea"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-LEDGER-034-whether-work-needs-a-typed-reconciliation-outcome-beside-the-free-text-reason-work-decline-already-carries.md@authored",
+      "hash": "sha256:cb61b6f602f2fc7836f03727ce282c5f46da3e5ef3c6f92108dc77cc862577fc"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md@authored",
+      "hash": "sha256:e28fcdcd8881a5405bfd5398964764cd59fa6d45e8340359ca94d9df98a0d732"
     },
     {
       "content": "documents",
@@ -4914,6 +4929,81 @@
       "content": "headings",
       "identity": "docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#34",
       "hash": "sha256:045f1cdf50bfd87c280adb7f790e52f7421d1e09eba549fc18170280dde1c3f0"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md#1",
+      "hash": "sha256:008676ec13818cf9712f421f11b86ff891a8bc51e1557460d9432a1d1541515b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md#2",
+      "hash": "sha256:616375123a095e357441e3e6bbb25ebae0926ea14e4ebb8d1d3a8710f33a439d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md#5",
+      "hash": "sha256:c611734abb4a6575004791e41fce644abbe1571416a9554ce601a1e44fe8e0b1"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md#12",
+      "hash": "sha256:1d3fa07ac27754105bdc0774b8ca42207b54083beb87ca159940d4fc2fdea947"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md#16",
+      "hash": "sha256:1ee494f1e8c99a28e6d66c30a7d5d82189881b2d11a33c02542574d491119a7c"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-034-whether-work-needs-a-typed-reconciliation-outcome-beside-the-free-text-reason-work-decline-already-carries.md#1",
+      "hash": "sha256:90ae9e3b2b1e54ce49d4e1a0c121053bb6d4a845d178233b425cc4d8bd24eaa5"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-034-whether-work-needs-a-typed-reconciliation-outcome-beside-the-free-text-reason-work-decline-already-carries.md#2",
+      "hash": "sha256:041b091e51edfc77fb60f62168ec134587dd53da4297a30975b463336d7e9b27"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-034-whether-work-needs-a-typed-reconciliation-outcome-beside-the-free-text-reason-work-decline-already-carries.md#5",
+      "hash": "sha256:e01b638f33fcdf5b480a26521330be29410a2ab5a22dc8db6bd116180965fc16"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-034-whether-work-needs-a-typed-reconciliation-outcome-beside-the-free-text-reason-work-decline-already-carries.md#10",
+      "hash": "sha256:6b596731a9fb22806132e939bf5b0572dd34f4fd8c5157afc87aef42852f3331"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-034-whether-work-needs-a-typed-reconciliation-outcome-beside-the-free-text-reason-work-decline-already-carries.md#13",
+      "hash": "sha256:9342934f2ff34be9439aa5448e14b12a10c4cc65eeb8950b9641487860a1ddca"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md#1",
+      "hash": "sha256:9d593b2a6fc5d9621980d69c8047bd27b0772bd75b7cce4baad5b56c20e62895"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md#2",
+      "hash": "sha256:abb7b24e3853e4651873364ef48a3a8f9cd0f86d4ad134603c71d689b6aae9d9"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md#4",
+      "hash": "sha256:ff2e888c253e81ac5b6907a33c326c1b822fb63449f753b8f1f16656b3037f30"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md#13",
+      "hash": "sha256:e4fd095f6159a5e36837c5d4270ea4268d4ee11e9f14d4049f951568259bc4b2"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md#16",
+      "hash": "sha256:a2e8c209d68b116c822853ef33671c00f2cbcf20fc8d3ff029e91288dca6fb9c"
     },
     {
       "content": "headings",
@@ -21684,6 +21774,246 @@
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#35",
       "hash": "sha256:90f23309d3c903e0085c0e7e1b3053213c7acf407596462ad80efc5a3cfe22d7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md#1",
+      "hash": "sha256:5a61cd1789e33a2f265c069767be92a481364ee25e5291940f7c77ddab313a99"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md#3",
+      "hash": "sha256:2d33bccb0d7565edc41e9fd20b7142a3fa0de5e02a1c5b547cbb2bcf497793a8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md#4",
+      "hash": "sha256:26ec3041d8b3958a4aa9d1d3f9860be26735d2cf7c6d829872aa416a1a33e54c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md#5",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md#6",
+      "hash": "sha256:b1af44ad5a7e6f64703008139eef5e618c6f4fa066771db921e69faa89befa06"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md#7",
+      "hash": "sha256:ece00457f0c1bf9c71eb30280a789fb0ba67c234169ac4ac8c35c8e77f70b08f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md#8",
+      "hash": "sha256:e84c94e5957311b7887a292eb681eb3a84360dd4416a25d7ffd626308a8f590e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md#9",
+      "hash": "sha256:259bda8713f957074fd447c71cb998af7dc3f27a41b6359d5b2fe672853ca7d2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md#10",
+      "hash": "sha256:c26759892fe8a4839e630c6a5dab9e40e6c3fdf8ce53616f7e4f3c35b91e7804"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md#11",
+      "hash": "sha256:c826c26b27df455c9b5d537ffb2017d499e3f81de52e375b9a8c6c8fb13d81f6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md#12",
+      "hash": "sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md#13",
+      "hash": "sha256:21a459c834a157b287561370de5ace5bed4fa6093af9458e9ce58fd1312f8c2b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md#14",
+      "hash": "sha256:258ddace99b9b93469e40bf4765aac43b8bcee2de319f13be465f983dbc355eb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md#15",
+      "hash": "sha256:ab498cd58f267428237eea7af3fa1b1b6a4fdae86794041c4b2069aa9916d077"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md#16",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md#17",
+      "hash": "sha256:66ef5399b712cefe43fec8036b4b1ed8605d7a21e61ddc08da9fafa11eec4023"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-034-whether-work-needs-a-typed-reconciliation-outcome-beside-the-free-text-reason-work-decline-already-carries.md#1",
+      "hash": "sha256:0194212e234e2dd60f93ef94167c62f903eea9a2f4afae11e34a5b4c1102107a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-034-whether-work-needs-a-typed-reconciliation-outcome-beside-the-free-text-reason-work-decline-already-carries.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-034-whether-work-needs-a-typed-reconciliation-outcome-beside-the-free-text-reason-work-decline-already-carries.md#3",
+      "hash": "sha256:02e92477d33f1ac7803457a423f9171a6c350b9568cbc4c1e1b8919b3f7a2f3f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-034-whether-work-needs-a-typed-reconciliation-outcome-beside-the-free-text-reason-work-decline-already-carries.md#4",
+      "hash": "sha256:1bcb269b76d67d63de5cbeee5d903a151b1312200a1e269cf595a4d8dd5bfd24"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-034-whether-work-needs-a-typed-reconciliation-outcome-beside-the-free-text-reason-work-decline-already-carries.md#5",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-034-whether-work-needs-a-typed-reconciliation-outcome-beside-the-free-text-reason-work-decline-already-carries.md#6",
+      "hash": "sha256:cdb1f1748bb4c3b3221ec55132ae1a2ee5282e3887dec7f53ea114fee8f1f87f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-034-whether-work-needs-a-typed-reconciliation-outcome-beside-the-free-text-reason-work-decline-already-carries.md#7",
+      "hash": "sha256:c5280a8272308ff909a990f81a08ffbf303d38c4f6c85e53807df435f1b896c2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-034-whether-work-needs-a-typed-reconciliation-outcome-beside-the-free-text-reason-work-decline-already-carries.md#8",
+      "hash": "sha256:b678e59dc27145f7da8ba29ababe2baefa9cc970475956d79847fb94dc8993ec"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-034-whether-work-needs-a-typed-reconciliation-outcome-beside-the-free-text-reason-work-decline-already-carries.md#9",
+      "hash": "sha256:954a8969c3cd3ada99136f91ffea076111f61dd5f3d35fe4226f3447bf3acdb1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-034-whether-work-needs-a-typed-reconciliation-outcome-beside-the-free-text-reason-work-decline-already-carries.md#10",
+      "hash": "sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-034-whether-work-needs-a-typed-reconciliation-outcome-beside-the-free-text-reason-work-decline-already-carries.md#11",
+      "hash": "sha256:c06f745921aa811cc77f1291f135221765356d5dd270d7cc4aa78f24019e943b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-034-whether-work-needs-a-typed-reconciliation-outcome-beside-the-free-text-reason-work-decline-already-carries.md#12",
+      "hash": "sha256:2adc1bc8eb83f7dc69792c2bb164fff79b81a53f59589adc9d7780d7bb020628"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-034-whether-work-needs-a-typed-reconciliation-outcome-beside-the-free-text-reason-work-decline-already-carries.md#13",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-034-whether-work-needs-a-typed-reconciliation-outcome-beside-the-free-text-reason-work-decline-already-carries.md#14",
+      "hash": "sha256:20ec5470cf207ea505dd7cdd80d0734ff95a1da148ca354c918eddec8ffb0a9f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md#1",
+      "hash": "sha256:18a817d8dad9ac371127bcf0d1d364f30c6e5c7b2ba66960c486498288b055fd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md#3",
+      "hash": "sha256:1579468a2df6d8c10a82b6444d71665541cc91ac265a4a667f13e84c36bcc09b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md#4",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md#5",
+      "hash": "sha256:7ea07100f6c84d4555d2a53c899e7a9ec1570294fc7f7dd10377d3eb4775c3f3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md#6",
+      "hash": "sha256:ab339061894efc343c125c91a98711dc40d30f9e2dac894a289e1d8dfd7a34ff"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md#7",
+      "hash": "sha256:93db8abcf94de54bca84e0c1adf910295e0b84cd5f57e132ac3c9432595f60f0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md#8",
+      "hash": "sha256:01f1b156ce1051c1e5ea8093f88cafcc42674dee044184335e3d02ad97999fdf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md#9",
+      "hash": "sha256:8b319203da06b9ec54f6c055e52d233943b6b7cff3f4cf6058006317d5f8a778"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md#10",
+      "hash": "sha256:5fe1f965f7fe41caa42b261232e61e940f0c13823d6b588bbea09f4a8b0299c7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md#11",
+      "hash": "sha256:7e449c41e63b8696ad8efd7bb3650996db611dccd55a6a3c7a01a05cca8e3814"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md#12",
+      "hash": "sha256:9b3d146b7dc2175c38eac63b4a2b2aaa563fd258aa592d999bac598a1e92a939"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md#13",
+      "hash": "sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md#14",
+      "hash": "sha256:44a4ad1c90723d0349023c100c096a704e702cf791d949206c5cdc8549e1106a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md#15",
+      "hash": "sha256:1eebe2842c9eace8d3ab2dd020b0e300441781bf95654e38ed451df5f745529a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md#16",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md#17",
+      "hash": "sha256:f9a833592ba1c749d278fe8c4301c4ff602bc78296f469dd1707388739e006c8"
     },
     {
       "content": "blocks",
