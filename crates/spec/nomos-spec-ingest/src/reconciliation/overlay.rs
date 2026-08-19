@@ -333,7 +333,7 @@ fn Record_Filler(
 /// # Errors
 ///
 /// Returns [`IngestError::Parse`] if a record does not read.
-pub fn Ingest_v15_Record(
+pub fn Ingest_V15_Record(
     store: &mut SpecificationStore,
     path: &str,
     markdown: &str,
@@ -383,7 +383,7 @@ mod tests
     }
 
     #[test]
-    fn Test_Inline_Identifiers_Should_Be_Read_Where_v15_Put_Them()
+    fn Test_Inline_Identifiers_Should_Be_Read_Where_V15_Put_Them()
     {
         let found = Statements_In(
             "> **Requirement:** {#MODEL-001} MODEL-001 Artifact represents persisted objects.\n\

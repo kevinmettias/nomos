@@ -101,7 +101,7 @@ pub fn nomos_spec_ingest::Ingest_Section_Lineage( store: &mut SpecificationStore
 pub fn nomos_spec_ingest::Ingest_Sibling_Suite( store: &mut SpecificationStore, archive: &mut Archive, sibling: Sibling, ) -> Result<SuiteReport, IngestError>
 pub fn nomos_spec_ingest::Ingest_Source_Document( store: &mut SpecificationStore, path: &str, revision: &str, markdown: &str, ) -> Result<u32, IngestError>
 pub fn nomos_spec_ingest::Ingest_Statements( store: &mut SpecificationStore, file: &StatementFile, ) -> Result<StatementReport, IngestError>
-pub fn nomos_spec_ingest::Ingest_v15_Record( store: &mut SpecificationStore, path: &str, markdown: &str, ) -> Result<String, IngestError>
+pub fn nomos_spec_ingest::Ingest_V15_Record( store: &mut SpecificationStore, path: &str, markdown: &str, ) -> Result<String, IngestError>
 pub fn nomos_spec_ingest::Is_Filler(text: &str) -> Option<&'static str>
 pub fn nomos_spec_ingest::Listing::Contains(&self, entry: &str) -> bool
 pub fn nomos_spec_ingest::Listing::Ending_With(&self, suffix: &str) -> Vec<String>

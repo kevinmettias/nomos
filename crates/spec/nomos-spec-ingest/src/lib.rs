@@ -42,7 +42,7 @@ pub use reconciliation::fate::member::MemberFate;
 pub use reconciliation::lineage::origin::Origin;
 pub use reconciliation::overlay::overlaid::Overlaid;
 pub use reconciliation::overlay::{
-    FILLER_PATTERNS, Ingest_Overlay_Document, Ingest_v15_Record, Is_Filler, OverlayReport, Parse_Artifact, Reconcile,
+    FILLER_PATTERNS, Ingest_Overlay_Document, Ingest_V15_Record, Is_Filler, OverlayReport, Parse_Artifact, Reconcile,
     Statements_In,
 };
 pub use reconciliation::overlay::pair_change::PairChange;

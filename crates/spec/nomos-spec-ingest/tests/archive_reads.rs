@@ -234,7 +234,7 @@ fn Count_One_Archive(path: &std::path::Path, counted: &mut Series)
 
 /// v15.0 in particular, since it is what P3-OVERLAY reads.
 #[test]
-fn Test_The_v15_Archive_Should_Yield_Its_Records()
+fn Test_The_V15_Archive_Should_Yield_Its_Records()
 {
     let Some(root) = Archives()
     else

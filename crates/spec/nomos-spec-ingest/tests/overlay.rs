@@ -10,7 +10,7 @@
 //! estimates that motivated the work, not readings.
 
 use nomos_spec_ingest::{
-    Archive, Disposition, Family, Ingest_Overlay_Document, Ingest_v15_Record, Is_Filler, Overlaid,
+    Archive, Disposition, Family, Ingest_Overlay_Document, Ingest_V15_Record, Is_Filler, Overlaid,
     OverlayReport, Parse_Artifact, Reconcile, ReconciliationReport, Statements_In,
 };
 use nomos_spec_store::{SpecificationStore, Table};
@@ -269,7 +269,7 @@ fn Filler_Lineage_Rows(store: &SpecificationStore) -> u32
 
 /// The v15-only records, as authored nodes.
 #[test]
-fn Test_The_v15_Records_Should_Be_Ingested_As_Authored_Nodes()
+fn Test_The_V15_Records_Should_Be_Ingested_As_Authored_Nodes()
 {
     let Some((_, mut archive)) = Both()
     else
@@ -285,7 +285,7 @@ fn Test_The_v15_Records_Should_Be_Ingested_As_Authored_Nodes()
             // A record that will not read is a node the store never receives, and the count below
             // would call that the v15 record set having changed size.
             let text = archive.Read_Text(&entry).unwrap_or_else(|error| panic!("{error}"));
-            let record = Ingest_v15_Record(&mut store, &entry, &text)
+            let record = Ingest_V15_Record(&mut store, &entry, &text)
                 // Named per entry, because the check at the end of this test can only say that a
                 // governing record is not in the store — never that its ingest refused.
                 .unwrap_or_else(|error| panic!("{entry}: {error}"));

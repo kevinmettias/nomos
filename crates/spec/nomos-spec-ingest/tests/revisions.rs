@@ -254,7 +254,7 @@ fn Test_A_Scope_The_Revision_Does_Not_Have_Should_Be_Refused()
 
 /// What v15.0 does retain, measured over the only scope it has.
 #[test]
-fn Test_v15_Should_Retain_Almost_No_Table_And_No_Code_At_All()
+fn Test_V15_Should_Retain_Almost_No_Table_And_No_Code_At_All()
 {
     let Some(root) = Archives()
     else
