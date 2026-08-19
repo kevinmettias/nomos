@@ -18971,6 +18971,225 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-RULES-LIB-COUNT-STALE",
+      "title": "nomos-rules' own crate doc still says it holds two rules; it holds three since Check_Dependency_Direction landed",
+      "why": "lib.rs's own 'What is here' section (lines 44-61) describes only Check_Completeness_Mirrors and Check_Naming_Convention as 'two rules', but the same file's mod dependency; and pub use dependency::{Check_Dependency_Direction, DEPENDENCY_DIRECTION}; (lines 66, 79) show a third rule already lives here, landed by P13-DEPENDENCY-EDGES-2/P13-DEPENDENCY-WIRE-1. The same staleness pattern was already fixed this session in .claude/skills/nomos-add-plugin/SKILL.md and docs/records/OD-RULES-007-....md.",
+      "done_when": "lib.rs's 'What is here' section names Check_Dependency_Direction as a third rule and no longer says 'Two rules.'",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/lib.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "clippy",
+          "-p",
+          "nomos-rules",
+          "--all-targets",
+          "--",
+          "-D",
+          "warnings"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "clippy",
+          "-p",
+          "nomos-rules",
+          "--all-targets",
+          "--",
+          "-D",
+          "warnings"
+        ],
+        "exit_code": 0,
+        "output_tail": "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.04s\n",
+        "verified_at": 1787161431,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "2dbb45fbe2255e5139186809da4881d3fecf2802"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-RULES-DEPENDENCY-DOC-STALE",
+      "title": "nomos-rules' Check_Dependency_Direction still claims it is not yet composed into nomos-check-orchestration::Run",
+      "why": "dependency.rs's own module doc (lines 5-14) says the rule 'is not yet composed into nomos-check-orchestration's Run' and stands only 'additive and unwired'. Confirmed false: run.rs's Run function calls Check_Dependency_Direction directly, wired by P13-DEPENDENCY-WIRE-1 (commit 2af91f9), the same commit that last touched this very file's tests -- but the top-of-file module doc was never updated even though the rest of the file was. The identical pattern was already fixed once this session in nomos-lang-rust-cargo/src/lib.rs (commit c8e260f).",
+      "done_when": "dependency.rs's module doc no longer claims to be unwired from nomos-check-orchestration::Run; it states plainly that run.rs composes it.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/dependency.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "clippy",
+          "-p",
+          "nomos-rules",
+          "--all-targets",
+          "--",
+          "-D",
+          "warnings"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "clippy",
+          "-p",
+          "nomos-rules",
+          "--all-targets",
+          "--",
+          "-D",
+          "warnings"
+        ],
+        "exit_code": 0,
+        "output_tail": "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.05s\n",
+        "verified_at": 1787161429,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "2dbb45fbe2255e5139186809da4881d3fecf2802"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-GATE-ORCHESTRATION-LIB-COUNT-STALE",
+      "title": "nomos-gate-orchestration's own crate doc misdescribes nomos-check-orchestration::Run as calling two rules; it calls three",
+      "why": "lib.rs line 14 says nomos-check-orchestration::run::Run 'calls both shipped rules' -- confirmed false, run.rs now calls three (Check_Completeness_Mirrors, Check_Naming_Convention, Check_Dependency_Direction), wired by P13-DEPENDENCY-WIRE-1 after this crate's lib.rs was written. Line 20's 'this workspace's two shipped rules' is separately ambiguous now the workspace ships three, though composition.rs's own registry genuinely still holds only two -- that part is a real, current gap, not a doc bug, and stays as is.",
+      "done_when": "lib.rs no longer claims nomos-check-orchestration::Run calls two rules (it names three), and its reference to Gate's own two-rule registry is unambiguous about being a subset of three rather than the workspace's total.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/lib.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "clippy",
+          "-p",
+          "nomos-gate-orchestration",
+          "--all-targets",
+          "--",
+          "-D",
+          "warnings"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "clippy",
+          "-p",
+          "nomos-gate-orchestration",
+          "--all-targets",
+          "--",
+          "-D",
+          "warnings"
+        ],
+        "exit_code": 0,
+        "output_tail": "    Checking nomos-gate-orchestration v0.1.0 (F:\\repos\\nomos\\crates\\orchestration\\nomos-gate-orchestration)\n    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.12s\n",
+        "verified_at": 1787161466,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "2dbb45fbe2255e5139186809da4881d3fecf2802"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-GATE-014-RULE-COUNT-STALE",
+      "title": "OD-GATE-014's Current Position still says Run calls both shipped rules; it calls three since Check_Dependency_Direction landed",
+      "why": "OD-GATE-014's Current Position section (status: open, a live claim not history) says: Run 'still calls both shipped rules, Check_Completeness_Mirrors and Check_Naming_Convention, unconditionally over every source it is handed.' Verified directly against run.rs: Run now calls three rules unconditionally, Check_Dependency_Direction included, wired by P13-DEPENDENCY-WIRE-1 after this record was written. The rule-count increase does not change the record's reasoning (no caller wants a subset of rules or scope; Gate's only implemented verb is report-only) -- only the stated count needs correcting, the same shape as the OD-RULES-007 fix already done this session.",
+      "done_when": "OD-GATE-014's Current Position section correctly names three unconditionally-called rules including Check_Dependency_Direction, its content committed through the store via nomos spec preview/commit, and both diagram-set and domain-specification projections re-rendered fresh from the publishing record set and passing nomos spec freshness.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-session-b59b4190",
+        "acquired_at": 1787161438,
+        "lease_expires_at": 1787168638
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

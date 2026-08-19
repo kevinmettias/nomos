@@ -2,16 +2,14 @@
 //! `tests/contract/tests/boundaries/graph.rs`'s `Test_Dependencies_Should_Run_Strictly_
 //! Downward` already enforces for this repository by hand.
 //!
-//! # What this rule is, and what it is not yet
+//! # Composed into `nomos-check-orchestration::Run`
 //!
 //! `OD-RULES-003` designed this: a declared architecture is data, the observed dependency
 //! graph is a fact a capability provider establishes, and a rule composes the two into
-//! findings. This is that rule. It is not yet composed into `nomos-check-orchestration`'s
-//! `Run` — `nomos_lang_rust_cargo`'s own module doc says why (that provider performs I/O
-//! `nomos-check-orchestration` is deliberately built without, and wiring it in means
-//! touching `nomos-cli`, held live by a concurrent item at the time this rule was
-//! written). This rule stands and is tested on its own, the same "additive and unwired"
-//! shape `RuleRegistry` carried from `OD-RULES-004`.
+//! findings. This is that rule. `run.rs`'s `Run` calls [`Check_Dependency_Direction`]
+//! directly over the edges `Materialize_Dependencies` wrote, wired by
+//! `P13-DEPENDENCY-WIRE-1` the same way `nomos_lang_rust_cargo`'s own provider was wired in
+//! ahead of it — `nomos check` judges dependency direction as part of an ordinary run.
 //!
 //! # `BANDS` is a second copy, deliberately, for now
 //!
