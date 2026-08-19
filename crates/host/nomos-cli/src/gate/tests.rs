@@ -141,14 +141,15 @@ fn Test_An_Unknown_Flag_Should_Refuse()
     assert!(error.contains("usage"), "{error}");
 }
 
-/// A real run over this workspace's own two shipped rules reports both, and exits clean.
+/// A real run over this workspace's own three shipped rules reports all three, and exits
+/// clean.
 ///
 /// End to end, the way the shipped binary is actually called -- `nomos_gate_orchestration
-/// ::Registered` composes the same two real offers `P13-GATE-ORCHESTRATION-1`'s own crate
+/// ::Registered` composes the same three real offers `P13-GATE-ORCHESTRATION-1`'s own crate
 /// test already checks; this is the assertion that the CLI seam renders what came back
 /// rather than trusting the crate boundary silently.
 #[test]
-fn Test_A_Real_Plan_Should_Report_Both_Shipped_Rules()
+fn Test_A_Real_Plan_Should_Report_All_Three_Shipped_Rules()
 {
     let command = GateCommand { root: PathBuf::from(".") };
     let mut stdout = Vec::new();
@@ -158,8 +159,9 @@ fn Test_A_Real_Plan_Should_Report_Both_Shipped_Rules()
     let rendered = String::from_utf8_lossy(&stdout).into_owned();
 
     assert_eq!(code, ExitCode::Ok, "{rendered}");
-    assert!(rendered.contains("rules: 2"), "{rendered}");
+    assert!(rendered.contains("rules: 3"), "{rendered}");
     assert!(rendered.contains("completeness-mirror"), "{rendered}");
+    assert!(rendered.contains("dependency-direction"), "{rendered}");
     assert!(rendered.contains("function-naming-convention"), "{rendered}");
     assert!(String::from_utf8_lossy(&stderr).is_empty());
 }
