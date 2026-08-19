@@ -1,0 +1,26 @@
+pub const fn nomos_cap_dependency::Ceiling() -> Guarantee
+pub const fn nomos_cap_dependency::DependencyKind::Label(self) -> &'static str
+pub const nomos_cap_dependency::CAPABILITY: &str
+pub const nomos_cap_dependency::CONTRACT_VERSION: ContractVersion
+pub const nomos_cap_dependency::SCHEMA: &str
+pub enum nomos_cap_dependency::DependencyKind
+pub enum variant nomos_cap_dependency::DependencyKind::Build
+pub enum variant nomos_cap_dependency::DependencyKind::Dev
+pub enum variant nomos_cap_dependency::DependencyKind::Normal
+pub fn nomos_cap_dependency::Capability() -> CapabilityId
+pub fn nomos_cap_dependency::Capability_Contract() -> CapabilityContract
+pub fn nomos_cap_dependency::DependencyKind::From_Label(label: &str) -> Option<Self>
+pub fn nomos_cap_dependency::Encode_Payload(payload: &DependencyPayload) -> Vec<u8>
+pub fn nomos_cap_dependency::Parse_Payload(bytes: &[u8]) -> Result<DependencyPayload, PayloadRefusal>
+pub fn nomos_cap_dependency::PayloadRefusal::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_cap_dependency::Payload_Schema() -> SchemaId
+pub impl nomos_cap_dependency::PayloadRefusal implements core::fmt::Display
+pub struct field nomos_cap_dependency::DependencyEdge::kind: DependencyKind
+pub struct field nomos_cap_dependency::DependencyEdge::optional: bool
+pub struct field nomos_cap_dependency::DependencyEdge::target: String
+pub struct field nomos_cap_dependency::DependencyPayload::edges: Vec<DependencyEdge>
+pub struct field nomos_cap_dependency::DependencyPayload::package: String
+pub struct field nomos_cap_dependency::PayloadRefusal::reason: String
+pub struct nomos_cap_dependency::DependencyEdge
+pub struct nomos_cap_dependency::DependencyPayload
+pub struct nomos_cap_dependency::PayloadRefusal

@@ -1,0 +1,25 @@
+pub const fn nomos_lang_rust_cargo::Declared_Guarantee() -> Guarantee
+pub const nomos_lang_rust_cargo::DependencyFactProduction::SCOPE: ReproducibilityScope
+pub const nomos_lang_rust_cargo::DependencyFactProduction::STRENGTH: DeterminismStrength
+pub const nomos_lang_rust_cargo::DependencyFactProduction::TRACE: TraceEquivalence
+pub const nomos_lang_rust_cargo::PROVIDER: &str
+pub fn nomos_lang_rust_cargo::Discover_Workspace(root: &Path) -> Result<Vec<DiscoveredPackage>, MetadataError>
+pub fn nomos_lang_rust_cargo::Materialize_Workspace(root: &Path, context: FactContext) -> Result<Vec<PackageFact>, MetadataError>
+pub fn nomos_lang_rust_cargo::MetadataError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_lang_rust_cargo::Provider_Offer() -> ProviderOffer
+pub impl nomos_lang_rust_cargo::DependencyFactProduction implements Strategy
+pub impl nomos_lang_rust_cargo::MetadataError implements core::fmt::Display
+pub struct field nomos_lang_rust_cargo::DiscoveredPackage::manifest_relative_root: String
+pub struct field nomos_lang_rust_cargo::DiscoveredPackage::payload: DependencyPayload
+pub struct field nomos_lang_rust_cargo::FactContext::configuration: ConfigurationId
+pub struct field nomos_lang_rust_cargo::FactContext::generation: GenerationId
+pub struct field nomos_lang_rust_cargo::FactContext::snapshot: SnapshotId
+pub struct field nomos_lang_rust_cargo::FactContext::variant: BuildVariantId
+pub struct field nomos_lang_rust_cargo::MetadataError::reason: String
+pub struct field nomos_lang_rust_cargo::PackageFact::fact: MaterializedFact
+pub struct field nomos_lang_rust_cargo::PackageFact::subject: SubjectId
+pub struct nomos_lang_rust_cargo::DependencyFactProduction
+pub struct nomos_lang_rust_cargo::DiscoveredPackage
+pub struct nomos_lang_rust_cargo::FactContext
+pub struct nomos_lang_rust_cargo::MetadataError
+pub struct nomos_lang_rust_cargo::PackageFact

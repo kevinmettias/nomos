@@ -43,9 +43,11 @@ band, and `tests/contract` asserts it.
 | 21 | `nomos-capability` | The contract registry whose answer is never a bare no. |
 | 22 | `nomos-analysis` | Fact identity, fact readers, the fact store, and invalidation. |
 | 23 | `nomos-cap-syntax` | A capability contract, housed below every provider that offers against it. |
+| 23 | `nomos-cap-dependency` | The `nomos.cap.dependency.edges` contract — a workspace member's own first-party dependency edges, resolved by Cargo. Housed below its provider and below the rule that reads it: `nomos-rules` is a real second party from the day it was written, so this did not wait beside `nomos-lang-rust-cargo` the way `nomos.cap.module.index` waits inside `nomos-lang-rust`. |
 | 24 | `nomos-package` | The language-agnostic manifest core: `PackageId`, `PackageKind` and `PKG-007`'s four version domains, minus any typed version-domain abstraction or provider allowlist a specific language would supply. Depends on nothing above `nomos-contracts`. |
 | 25 | `nomos-lang-rust` | Recognition and syntax facts from `syn`, and the module rollup derived from them — the one fact in this workspace computed from other facts. |
 | 25 | `nomos-lang-rust-scan` | The second provider of that capability. Same band, so neither may name the other. |
+| 25 | `nomos-lang-rust-cargo` | The one provider of `nomos.cap.dependency.edges` — runs `cargo metadata` and reads the filesystem, the only I/O any provider in this workspace performs. Not yet composed into `nomos-check-orchestration::Run`. |
 | 26 | `nomos-lang-package` | The Rust `LanguagePackage` manifest format and its refusing reader — wraps `nomos-package`'s generic core with `RustEdition` resolution and this workspace's two Rust providers. |
 | 30 | `nomos-rules` | A rule as a pure function whose subject is an argument: source it is handed, and facts it reads through a `FactReader`. |
 | 35 | `nomos-corrections` | `CorrectionCandidate`, `CorrectionPlan`, and the deterministic preview, stage, validate, commit and rollback lifecycle over a workspace change. No agent, no model backend. |

@@ -22,6 +22,10 @@ nomos-model = { workspace = true }
 nomos-analysis = { workspace = true }
 nomos-capability = { workspace = true }
 nomos-cap-syntax = { workspace = true }
+# nomos-cap-dependency and not nomos-lang-rust-cargo, for the same reason: this crate
+# names a capability contract and lets the registry choose who answers it, never the
+# provider that does the answering.
+nomos-cap-dependency = { workspace = true }
 #
 # There is no parser here, and that is the end condition OD-RULES-001 wrote down rather
 # than a gap. `universe.rs` carried `syn` and `proc-macro2` for one reason — the agreed

@@ -1,0 +1,19 @@
+[package]
+name = "nomos-cap-dependency"
+version = "0.1.0"
+description = "Band 23. The nomos.cap.dependency.edges contract: the agreed meaning of the question its provider answers, owned by neither it nor any rule that reads it."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+# No provider, and no rule. The same position nomos-cap-syntax holds relative to its two
+# providers, extended here to a rule as the second party: a rule that consumed this
+# capability's types from its provider's own crate would be naming the provider, exactly
+# what nomos-rules' own Cargo.toml already documents rules must not do.
+[dependencies]
+nomos-contracts = { workspace = true }
+nomos-capability = { workspace = true }
+
+[lints]
+workspace = true

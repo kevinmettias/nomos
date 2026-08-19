@@ -299,6 +299,63 @@ fn Rendered_Rollup(rolled: &rollup::Rolled) -> Vec<u8>
     return rendered;
 }
 
+/// `nomos-lang-rust-cargo`'s facts over this repository's own real workspace.
+///
+/// Not the shared `FIXTURE` above: this provider's whole reason for existing is that it
+/// reads Cargo's own resolution of a real workspace, not bytes a caller already holds.
+/// This repository is that real workspace, the same real subject
+/// `nomos-lang-rust-cargo`'s own crate tests and `tests/contract`'s boundary tests already
+/// measure against, so nothing new is being trusted to stay stable.
+///
+/// Rendered in package-name order rather than in whatever order `Discover_Workspace`
+/// returned. `DependencyFactProduction` declares `State`, not `StateTemporal` — the final
+/// set of facts is the claim, not the order they arrived in — and sorting here is what
+/// makes the test measure exactly that claim rather than a stronger one nobody declared.
+pub(crate) fn Dependency_Production() -> Vec<u8>
+{
+    let context = nomos_lang_rust_cargo::FactContext {
+        snapshot: SnapshotId::From_Digest(Content_Digest(b"nomos.determinism.snapshot")),
+        variant: BuildVariantId::From_Digest(Content_Digest(b"nomos.determinism.variant")),
+        configuration: ConfigurationId::From_Digest(Content_Digest(
+            b"nomos.determinism.configuration",
+        )),
+        generation: GenerationId::INITIAL,
+    };
+
+    let mut facts = nomos_lang_rust_cargo::Materialize_Workspace(&Repository_Root(), context)
+        .expect("this repository is a real cargo workspace; a provider that cannot see it \
+                 verifies nothing");
+
+    assert!(
+        facts.len() > 10,
+        "this repository has far more than ten workspace members, so {} is too few to have \
+         measured much: {facts:?}",
+        facts.len()
+    );
+
+    facts.sort_by(|left, right| return left.fact.payload.bytes.cmp(&right.fact.payload.bytes));
+
+    let mut rendered = Vec::new();
+    for fact in &facts
+    {
+        rendered.extend_from_slice(format!("key\t{}\n", fact.fact.Key().Digest()).as_bytes());
+        rendered.extend_from_slice(&fact.fact.payload.bytes);
+    }
+
+    return rendered;
+}
+
+/// The workspace root, from this crate's own manifest directory.
+fn Repository_Root() -> std::path::PathBuf
+{
+    let manifest = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+    return manifest
+        .parent()
+        .and_then(std::path::Path::parent)
+        .map(std::path::PathBuf::from)
+        .expect("tests/integration sits two levels below the workspace root");
+}
+
 /// The scanner's facts over the same fixture, rendered the same way.
 pub(crate) fn Scanned_Production() -> Vec<u8>
 {

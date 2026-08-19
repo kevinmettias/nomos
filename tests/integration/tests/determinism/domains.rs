@@ -12,8 +12,8 @@ use crate::goldens::{
     SNAPSHOT_GOLDEN,
 };
 use crate::productions::{
-    Correction_Production, Parsed_Production, Reuse_Production, Rolled_Production,
-    Scanned_Production, Snapshot_Production,
+    Correction_Production, Dependency_Production, Parsed_Production, Reuse_Production,
+    Rolled_Production, Scanned_Production, Snapshot_Production,
 };
 use crate::spec_productions::{Alternating, Bundle_Bytes, Projection_Bytes};
 use nomos_lang_rust::SyntaxFactProduction;
@@ -47,6 +47,17 @@ fn Test_The_Scanner_Should_Meet_Its_Declared_Strategy()
     use nomos_lang_rust_scan::ScanFactProduction;
 
     Check::<ScanFactProduction>("scan-fact-production", &Scanned_Production, SCANNED_GOLDEN);
+}
+
+#[test]
+fn Test_The_Dependency_Provider_Should_Meet_Its_Declared_Strategy()
+{
+    use nomos_lang_rust_cargo::DependencyFactProduction;
+
+    // No golden. `DependencyFactProduction` declares `CrossRun`, and `Cross_Environment_
+    // Owed` therefore never reaches for one — the same shape `FactReuse` and
+    // `CorrectionStaging` already take below.
+    Check::<DependencyFactProduction>("dependency-fact-production", &Dependency_Production, "");
 }
 
 #[test]

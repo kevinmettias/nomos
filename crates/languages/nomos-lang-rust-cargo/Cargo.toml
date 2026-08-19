@@ -1,0 +1,22 @@
+[package]
+name = "nomos-lang-rust-cargo"
+version = "0.1.0"
+description = "Band 25. The nomos.cap.dependency.edges capability and its provider: a workspace member's own first-party dependency edges, resolved by Cargo rather than scanned from manifest text."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+# nomos-cap-dependency and not a contract module of its own: nomos-rules is this
+# capability's second real party from day one, and OD-CAPABILITY-002's contention
+# criterion is met immediately rather than waited for.
+[dependencies]
+nomos-contracts = { workspace = true }
+nomos-model = { workspace = true }
+nomos-capability = { workspace = true }
+nomos-analysis = { workspace = true }
+nomos-cap-dependency = { workspace = true }
+serde_json = { workspace = true }
+
+[lints]
+workspace = true

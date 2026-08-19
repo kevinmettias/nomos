@@ -29,6 +29,7 @@ fn Test_Every_Domain_In_The_Tree_Should_Declare_And_Be_Registered()
     use nomos_analysis::FactReuse;
     use nomos_corrections::CorrectionStaging;
     use nomos_lang_rust::SyntaxFactProduction;
+    use nomos_lang_rust_cargo::DependencyFactProduction;
     use nomos_lang_rust_scan::ScanFactProduction;
     use nomos_spec_bundle::BundleSerialization;
     use nomos_spec_project::ProjectionOutput;
@@ -43,6 +44,7 @@ fn Test_Every_Domain_In_The_Tree_Should_Declare_And_Be_Registered()
         // second is covered by a sentence and measured by nothing.
         ("module-index-rollup", SyntaxFactProduction::STRENGTH),
         ("scan-fact-production", ScanFactProduction::STRENGTH),
+        ("dependency-fact-production", DependencyFactProduction::STRENGTH),
         ("fact-reuse", FactReuse::STRENGTH),
         ("snapshot-serialization", SnapshotSerialization::STRENGTH),
         ("bundle-serialization", BundleSerialization::STRENGTH),
@@ -51,8 +53,8 @@ fn Test_Every_Domain_In_The_Tree_Should_Declare_And_Be_Registered()
     ];
     assert_eq!(
         declared.len(),
-        8,
-        "eight productions are covered by seven declarations; a new producer needs a row in \
+        9,
+        "nine productions are covered by eight declarations; a new producer needs a row in \
          this table and a test of its own, whether or not it also needs a declaration of \
          its own"
     );

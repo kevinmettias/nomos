@@ -18415,14 +18415,14 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": {
+        "Declined": {
+          "reason": "Territory did not anticipate tests/contract's determinism_declarations gate: every fact-producing crate must declare a Strategy and be discharged in tests/integration/tests/determinism/. Re-adding as -2 with that directory included."
+        }
+      },
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-dependency-edges",
-        "acquired_at": 1787125729,
-        "lease_expires_at": 1787132929
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -18442,6 +18442,107 @@
         "timeout_seconds": 600
       },
       "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-dependency-edges",
+          "reason": "Widening territory to include tests/integration/tests/determinism/, discovered mid-implementation.",
+          "abandoned_at": 1787126593
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-dependency-edges",
+        "declined_at": 1787126593
+      }
+    },
+    {
+      "id": "P13-DEPENDENCY-EDGES-2",
+      "title": "dependency.edges capability, a Cargo-metadata provider, and Check_Dependency_Direction -- built and tested, not yet wired into Run",
+      "why": "Same as P13-DEPENDENCY-EDGES-1 (declined only to widen territory, all reasoning carries over): OD-RULES-003 designed this -- a declared architecture is data (bands.rs's BANDS, kept as rule-authored constant data, population-of-one restraint applied throughout this workspace), the observed dependency graph is a fact a capability provider establishes at FactVariant::SemanticallyResolved, and a rule compares the two. SubjectId and Subject_Of_Path place no file-shaped restriction on a subject, so a crate's manifest path works identically to a file's. nomos-check-orchestration performs zero I/O by design, so the Cargo-metadata provider is built and tested standing alone rather than wired through nomos-cli, which a concurrent item held live. Discovered mid-implementation: nomos-contract-tests' determinism_declarations gate requires every fact-producing crate to declare a Strategy, discharged by a production in tests/integration/tests/determinism/ -- this item's territory now includes that directory for the one new production this requires.",
+      "done_when": "nomos-cap-dependency exists (contract.rs following nomos-cap-syntax's template, ceiling SemanticallyResolved/Sound/Sound/Project); nomos-lang-rust-cargo offers against it with a real Materialize() shelling to cargo metadata and reading kind/optional/target, tested over this repository's own real workspace; Check_Dependency_Direction exists in nomos-rules with the same (sources, facts) -> Vec<Finding> signature as the other two rules, comparing a rule-local BANDS-shaped constant table against dependency facts, tested against hand-built facts; nomos-lang-rust-cargo declares a Strategy for its fact production and tests/integration/tests/determinism/ discharges it (declarations.rs, domains.rs, harness.rs, productions.rs all updated consistently, the same shape every existing domain there follows); all three new/changed crates are added to Cargo.toml, README.md's band table, and tests/contract/tests/boundaries/bands.rs, each gets a public-surface snapshot; nothing in nomos-check-orchestration or nomos-cli is touched.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities/nomos-cap-dependency",
+          "crates/languages/nomos-lang-rust-cargo",
+          "crates/rules/nomos-rules",
+          "Cargo.toml",
+          "Cargo.lock",
+          "README.md",
+          "tests/contract/tests/boundaries/bands.rs",
+          "tests/integration/tests/determinism",
+          "tests/contract/surface/nomos-cap-dependency.txt",
+          "tests/contract/surface/nomos-lang-rust-cargo.txt",
+          "tests/contract/surface/nomos-rules.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cap-dependency",
+          "-p",
+          "nomos-lang-rust-cargo",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-integration-tests",
+          "--test",
+          "determinism",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "public_surface",
+          "--test",
+          "determinism_declarations"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cap-dependency",
+          "-p",
+          "nomos-lang-rust-cargo",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-integration-tests",
+          "--test",
+          "determinism",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "public_surface",
+          "--test",
+          "determinism_declarations"
+        ],
+        "exit_code": 0,
+        "output_tail": "r_Should_Not_Be_An_Export ... ok\ntest bless::Test_A_Bless_Naming_No_Crate_Should_Be_Refused_Rather_Than_Widened ... ok\ntest snapshots::Test_Every_Crates_Public_Surface_Should_Match_Its_Snapshot ... ok\ntest bless::Test_Blessing_One_Crate_Should_Leave_Another_Crates_Snapshot_Byte_Identical ... ok\ntest snapshots::Test_Every_Snapshot_Should_Belong_To_A_Crate_That_Has_One ... ok\ntest snapshots::Test_Every_Member_Should_Be_Snapshotted_Or_Declared_Library_Less ... ok\n\ntest result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.51s\n\n\nrunning 12 tests\ntest controls::Test_A_Domain_That_Does_Not_Repeat_Itself_Should_Fail_The_Harness ... ok\ntest declarations::Test_Every_Domain_In_The_Tree_Should_Declare_And_Be_Registered ... ok\ntest domains::Test_Snapshot_Serialization_Should_Meet_Its_Declared_Strategy ... ok\ntest controls::Test_An_Altered_Byte_Should_Move_The_Digest_The_Golden_Pins ... ok\ntest domains::Test_Corrections_Should_Meet_Their_Declared_Strategy ... ok\ntest domains::Test_The_Scanner_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_The_Parser_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_The_Fact_Cache_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_The_Rollup_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_Projection_Output_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_Bundle_Serialization_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_The_Dependency_Provider_Should_Meet_Its_Declared_Strategy ... ok\n\ntest result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.34s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.19s\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-50863f332dc9a75e.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-06bc2ccbc9aebf45.exe)\n     Running tests\\determinism\\main.rs (target\\debug\\deps\\determinism-66320da26208a4fb.exe)\n",
+        "verified_at": 1787126778,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "f7e6cf7b2643a04a5d146bc8abb488927f6084ab"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

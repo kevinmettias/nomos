@@ -38,6 +38,11 @@ pub(crate) const BANDS: &[(&str, u32)] = &[
     // provider that offers against it. Not beside the providers: an agreement that lives
     // with one party to it is that party's to change, and the other cannot see the file.
     ("nomos-cap-syntax", 23),
+    // The nomos.cap.dependency.edges contract, below both its provider and the rule that
+    // reads it -- nomos-rules is a real second party from the day it was written, so this
+    // did not wait beside nomos-lang-rust-cargo the way nomos.cap.module.index waits
+    // inside nomos-lang-rust. `OD-CAPABILITY-002`.
+    ("nomos-cap-dependency", 23),
     // The language-agnostic manifest core PKG-007's four version domains name, minus
     // any typed version-domain abstraction or provider allowlist a specific language
     // would supply. Below the language providers deliberately: it names none of them,
@@ -54,6 +59,11 @@ pub(crate) const BANDS: &[(&str, u32)] = &[
     // crates at one band, which is what stops the second answer from being derived from
     // the first. Two providers that shared a parser could not disagree.
     ("nomos-lang-rust-scan", 25),
+    // The one provider of nomos.cap.dependency.edges. Different shape from its two
+    // siblings here -- it is the only provider in this workspace that performs I/O -- but
+    // the same band, for the same reason: nothing below it may be able to name it and
+    // nothing beside it may either.
+    ("nomos-lang-rust-cargo", 25),
     // The Rust installable-unit manifest format: PackageId, PackageKind and PKG-007's
     // four version domains, given a reader that refuses what it cannot resolve. Wraps
     // nomos-package's generic core with RustEdition resolution. Above the two language
