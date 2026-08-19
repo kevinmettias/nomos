@@ -16790,6 +16790,89 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-DEPENDENCY-PROPAGATION-SUBSTITUTABLE",
+      "title": "propagation::Spread is a bare function, not a substitution seam; nothing proves an alternate implementation can replace it",
+      "why": "P13-ANALYSIS-PROPAGATION-SEAM-2 separated the dirty-propagation walk into propagation.rs, free of fact-identity vocabulary, but left it a plain function MemoryFactStore calls directly. That satisfies D-135/D-138's vocabulary requirement but not the actual migration promise: nothing demonstrates the mechanism is swappable without touching FactStore or its consumers, which is the property D-130's deferred-adoption design is supposed to buy. FactStore itself stays sealed and untouched; this item is only about the internal seam beneath it, per the reviewed correction that the replaceable boundary belongs below FactStore, not at it.",
+      "done_when": "propagation.rs declares a crate-private DependencyPropagation trait with exactly one method matching todays Spread signature, plus the one implementation MemoryFactStore actually uses today. MemoryFactStore gains a crate-private constructor that accepts a boxed DependencyPropagation implementation, with its existing public New() defaulting to the current implementation so FactStore consumers and its public API are unchanged. A test constructs a MemoryFactStore with a second, distinct DependencyPropagation implementation (not just the default) and shows FactStore::Invalidate produces the same InvalidationReport shape as the default implementation over the same fixture, proving substitution does not require touching FactStore or its consumers. A second test extends the existing vocabulary conformance check to also forbid Broadening, Supersession and GuaranteeDigest in propagation.rs's non-comment, non-test code, as a negative control against provider-broadening or supersession policy migrating into the generic mechanism merely because it participates in invalidation. cargo test -p nomos-analysis passes with the pre-existing 36 tests unchanged in behavior. No XVPE dependency is introduced anywhere in the workspace.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-analysis/src/propagation.rs",
+          "crates/substrate/nomos-analysis/src/fact/memory_store.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-architecture-review",
+        "acquired_at": 1787101254,
+        "lease_expires_at": 1787108454
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-analysis"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-PACKAGE-SCHEMA-VERSION",
+      "title": "The manifest JSON gains a required schema_version, refusing what this build cannot read",
+      "why": "A real manifest file already exists on disk (packages/nomos.lang.rust.json) with a real consumer (nomos_lang_package::Read_Manifest) and no marker anywhere saying which revision of the JSON field layout it was written against. code-standards/nomos-proto's own out-of-process plugin manifest carries a third, independent MANIFEST_SCHEMA_VERSION for exactly this (verified directly against kernel/plugin/installation_contract.go), and this workspace already has its own closer precedent for the identical problem: nomos-ledger's LedgerDocument.schema_version, checked against SCHEMA_VERSION before a document is trusted (crates/substrate/nomos-ledger/src/store/document.rs, store.rs), specifically so a newer-schema file is refused with a legible reason rather than misread as merely malformed. Unlike this session's other two corpus-inspired questions (OD-CAPABILITY-007 decline-with-reason, OD-RULES-006 EnforcementPlacementRationale), this has a real, live consumer and a real, already-published artifact today, and nomos's own ledger schema field is direct internal precedent that the design already works for this exact class of problem -- not machinery designed against zero instances.",
+      "done_when": "nomos_package::Parse_Manifest reads a required schema_version field first, refusing ManifestError::MissingField if absent (the existing variant, no new one needed there) and a new ManifestError::UnknownSchema{at,understood,found} if the manifest names a schema newer than this build's SCHEMA_VERSION constant (starting at 1, pub, mirroring nomos-ledger::store::SCHEMA_VERSION). PackageManifest's parsed shape and every other refusal are unchanged. crates/packages/nomos-package/tests/manifest.rs and crates/packages/nomos-lang-package/tests/manifest.rs's fixtures carry schema_version, plus a new test exercising UnknownSchema. packages/nomos.lang.rust.json, the one real manifest on disk, carries schema_version: 1. tests/contract/surface/nomos-package.txt is reblessed for the new ManifestError variant and the new SCHEMA_VERSION export. A new record under OD-PACKAGE (accepted, not open -- a real consumer and real precedent decide this rather than defer it) states the decision, cites nomos-ledger's own schema_version as precedent and code-standards' MANIFEST_SCHEMA_VERSION as convergent prior art, verified directly against both. Registered in crates/spec/nomos-spec-store/records/, diagrams/relations.mmd and spec/domain-specification.md (with sidecars) re-rendered and fresh per nomos spec freshness --require diagram-set --require domain-specification from an isolated worktree holding exactly the record set this commit publishes.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md",
+          "crates/spec/nomos-spec-store/records/OD-PACKAGE-009.record",
+          "crates/packages/nomos-package/src/reader.rs",
+          "crates/packages/nomos-package/src/lib.rs",
+          "crates/packages/nomos-package/tests/manifest.rs",
+          "crates/packages/nomos-lang-package/tests/manifest.rs",
+          "packages/nomos.lang.rust.json",
+          "tests/contract/surface/nomos-package.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-package",
+          "-p",
+          "nomos-lang-package",
+          "-p",
+          "nomos-contract-tests",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
