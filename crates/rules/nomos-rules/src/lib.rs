@@ -43,8 +43,8 @@
 //!
 //! # What is here
 //!
-//! Two rules. [`Check_Completeness_Mirrors`] was chosen first because it is the only rule
-//! in this tree with three recorded historical instances to test a judgment against —
+//! Three rules. [`Check_Completeness_Mirrors`] was chosen first because it is the only
+//! rule in this tree with three recorded historical instances to test a judgment against —
 //! `P10-FIRST-CHECK` shipped with exactly this one and no more, because a single check
 //! that is honest end to end is worth more than three that are nearly wired.
 //! [`Check_Naming_Convention`] is the second, added once a real second rule was needed to
@@ -52,8 +52,14 @@
 //! boundaries generalize past a population of one — against something other than the
 //! first rule's own shape. It judges a different kind of claim (a lexical convention
 //! stated once in prose, not a per-subject doc comment) for exactly that reason.
+//! [`Check_Dependency_Direction`] is the third, designed by `OD-RULES-003`: a declared
+//! architecture is data, the observed dependency graph is a fact a capability provider
+//! establishes, and this rule composes the two into findings — the same property
+//! `tests/contract/tests/boundaries/graph.rs` already enforces for this repository by
+//! hand. `P13-DEPENDENCY-EDGES-2` landed the rule and `P13-DEPENDENCY-WIRE-1` composed it
+//! into `nomos-check-orchestration`'s real `Run`.
 //!
-//! [`RuleRegistry`] is a third thing, deliberately not a rule: `OD-RULES-004` extracted a
+//! [`RuleRegistry`] is a fourth thing, deliberately not a rule: `OD-RULES-004` extracted a
 //! registration contract ahead of a second rule, so a rule package can be designed and
 //! built against a stated shape rather than by copying this crate's own hand-written
 //! composition. It is additive and unconsulted — `Run()` still calls each rule directly,
