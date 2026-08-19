@@ -17349,6 +17349,103 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-LEDGER-001-REVERIFY",
+      "title": "OD-LEDGER-001's changeset-model/rule-engine gate is not actually clear yet",
+      "why": "OD-LEDGER-001 says nomos.rules.work-ledger closes it and names two prerequisites -- the changeset model and the rule engine -- as why it 'cannot be built earlier'. Both types now nominally exist (nomos_workspace::WorkspaceChangeSet, and nomos-rules with two real rules), which reads as the gate having cleared. Direct investigation shows it has not: the only real (non-test) WorkspaceChangeSet producer, As_One_Checkout in nomos-check-orchestration/src/facts.rs, wraps a full-tree snapshot of the current disk, not a diff of what a claim holder actually committed -- there is no producer that builds a changeset from git history at all. LedgerItem records no commit SHA or range for a claim (only a single post-hoc verified.revision was just added by OD-LEDGER-027), so 'the set of paths a holder modified' cannot even be asked for yet. OD-LEDGER-027 itself deliberately left subprocess git integration and any territory-scoped diff to a later item with a different question -- this is that item. Separately, every existing nomos-rules rule has the signature fn(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>, a subject shape built for judging source text, not a changeset-vs-territory comparison; nomos.rules.work-ledger would not fit the convention nomos-add-plugin documents without either bending it or being a different kind of check entirely. Authoring nomos.rules.work-ledger as a ledger item today would very likely repeat the exact failure OD-LEDGER-001 is about: an item whose territory names nomos-rules but whose real work lands in nomos-ledger's schema and a new git-reading module nobody named.",
+      "done_when": "OD-LEDGER-001 is amended (version 5) to state precisely, with current evidence, what remains before nomos.rules.work-ledger is buildable: (1) a per-claim commit-range or start-SHA field the ledger schema does not carry today, (2) a real changeset producer built from git history rather than a full-tree snapshot, and (3) that the existing nomos-rules rule signature (sources + FactReader) does not fit this rule's subject and either needs a documented exception or a different composition seam. The amendment does not build any of the three -- it corrects 'What Would Close It' from a two-item list that reads as satisfied to an accurate one that is not, the same kind of premise-correction P13-D130-REVERIFY already made for D-130. domain-specification.md (and diagram-set if relations changed) are re-rendered and fresh, from an isolated worktree holding exactly this commit's record set.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-session-1f455e15",
+        "acquired_at": 1787119793,
+        "lease_expires_at": 1787126993
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-SKILL-PLUGIN-PATH-STALE",
+      "title": "nomos-add-plugin names a path the agent-harness checker cannot resolve",
+      "why": "P13-SKILL-PACKAGE-006-STALE (commit db55a94) rewrote nomos-add-plugin's closing section and wrote the code span `nomos-lang-package::known_providers.rs` -- crate-qualified notation, not a repository path. tests/contract/tests/agent_harness/checks.rs::Test_Every_Path_The_Harness_Names_Should_Exist fails on clean HEAD: 'the harness routes to paths that do not exist: [\".claude/skills/nomos-add-plugin/SKILL.md names nomos-lang-package::known_providers.rs, which is not in the tree\"]'. The real file is crates/packages/nomos-lang-package/src/known_providers.rs, which does exist. This blocks nomos-contract-tests for every session on this tree until it is fixed; it is not caused by anything else in flight.",
+      "done_when": "The code span in .claude/skills/nomos-add-plugin/SKILL.md's closing section names a real repository path (crates/packages/nomos-lang-package/src/known_providers.rs) instead of crate::file notation, and cargo test -p nomos-contract-tests --test agent_harness passes, including Test_Every_Path_The_Harness_Names_Should_Exist.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          ".claude/skills/nomos-add-plugin/SKILL.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "agent_harness"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "agent_harness"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 14 tests\ntest Test_The_Contract_Should_Name_The_Selection_Authority_Rather_Than_Instruct_Picking ... ok\ntest checks::Test_The_Adapter_Should_Import_The_Contract_Rather_Than_Repeat_It ... ok\ntest checks::Test_Every_Committed_Skill_Should_Declare_A_Name_Matching_Its_Directory ... ok\ntest checks::Test_The_Contract_Should_Stay_Inside_Its_Line_Budget ... ok\ntest checks::Test_The_Contract_Should_Name_Every_Authority_It_Routes_To ... ok\ntest checks::Test_The_Repository_Should_Have_An_Agent_Front_Door ... ok\ntest Test_A_Cited_Contract_Step_Should_Still_Say_What_Is_Quoted_From_It ... ok\ntest checks::Test_The_Harness_Should_Not_Restate_The_Gate_Command_List ... ok\ntest checks::Test_The_Harness_Should_Not_Restate_The_Ledger_Verb_Reference ... ok\ntest checks::Test_Every_Item_The_Harness_Names_Should_Be_Declared_As_A_Temporary_Hazard ... ok\ntest checks::Test_Every_Path_The_Harness_Names_Should_Exist ... ok\ntest checks::Test_Every_Temporary_Hazard_Should_Name_An_Item_That_Is_Still_Open ... ok\ntest controls::Test_Every_Check_Here_Should_Fail_On_A_Fixture_That_Breaks_It ... ok\ntest checks::Test_The_Harness_Should_Not_Restate_The_Band_Table ... ok\n\ntest result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.10s\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-03bb3b77a304179f.exe)\n",
+        "verified_at": 1787120086,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "db55a94689f1969206a989dbb7c9ddf721d4f063"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

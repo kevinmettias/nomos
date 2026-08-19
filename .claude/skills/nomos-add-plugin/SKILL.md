@@ -139,7 +139,7 @@ same-band or upward edge.
 `OD-PACKAGE-006` is accepted, not open: `nomos_package::KnownProviders`
 (`crates/packages/nomos-package/src/known_providers.rs`) is the generic
 provider-registration base type the resolution decided, and
-`nomos-lang-package::known_providers.rs` is its first real consumer, building
+`crates/packages/nomos-lang-package/src/known_providers.rs` is its first real consumer, building
 `KNOWN_PROVIDERS` through `KnownProviders::New(...).As_Slice()` rather than as a bespoke
 array of its own. §1's "Package registration" step and §4 both describe that shape as it
 stands today.
