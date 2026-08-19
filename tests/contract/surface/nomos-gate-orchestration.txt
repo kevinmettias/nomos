@@ -1,0 +1,9 @@
+pub enum nomos_gate_orchestration::GateOutcome
+pub enum variant nomos_gate_orchestration::GateOutcome::Contradictory(RuleRegistryError)
+pub enum variant nomos_gate_orchestration::GateOutcome::Planned(GatePlan)
+pub fn nomos_gate_orchestration::Registered() -> Result<RuleRegistry, RuleRegistryError>
+pub fn nomos_gate_orchestration::Run(_command: &GateCommand) -> GateOutcome
+pub struct field nomos_gate_orchestration::GateCommand::root: PathBuf
+pub struct field nomos_gate_orchestration::GatePlan::rules: Vec<RuleOffer>
+pub struct nomos_gate_orchestration::GateCommand
+pub struct nomos_gate_orchestration::GatePlan

@@ -18150,6 +18150,68 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-GATE-ORCHESTRATION-1",
+      "title": "ARC-ROADMAP-001's first-class Gate object gets its crate, starting with Plan over the rule registry",
+      "why": "ARC-ROADMAP-001 names a first-class Gate object as near-term work, distinct from OD-GATE-004's CI step: \"a first-class object an end-user repository would configure (ScopeSelector, RuleSelector, ApplicabilityPolicy, CoveragePolicy, BaselinePolicy, SuppressionPolicy, required phases, evidence requirements, failure disposition), exposed as nomos gate plan / run / explain / compare\". WF-001 (v14 corpus, volume-05.7-4-gates-phases-and-workflows, canonical-normative-record) makes it binding: \"A gate shall define policy: required phases, thresholds, coverage, unsupported-analysis policy, waivers, approvals, and blocking behavior.\"\n\nVerified directly against current code, not assumed: nomos-check-orchestration's Run (crates/orchestration/nomos-check-orchestration/src/run.rs) calls Check_Completeness_Mirrors and Check_Naming_Convention unconditionally over every source file every time -- there is no scope or rule selection anywhere in this workspace today, so CHK-001/CHK-002's selection mechanism does not exist yet, contrary to a first pass that assumed it did. What does exist and is genuinely unused: nomos-rules::RuleRegistry/RuleOffer (crates/rules/nomos-rules/src/registry.rs, OD-RULES-004), whose own module doc says plainly \"Nothing here is consulted by Run(), and nothing here changes what runs on any given nomos check.\"\n\nThis increment is the smallest real slice: a new crate giving Gate its own seam (matching how WorkCommand/CheckCommand/SpecCommand each got one), implementing only Plan -- wiring a real RuleRegistry with both rules' real offers and reporting them, finally giving RuleRegistry a real consumer. Everything else WF-001 asks for (thresholds, waivers, approvals, blocking behavior, actual scope/rule filtering, run/explain/compare) is explicitly out of scope and left for later increments, the same shape P13-SPEC-ORCHESTRATION-1 used for SpecCommand's nine verbs.\n\nOne real wrinkle this increment must resolve, not paper over: Check_Naming_Convention has no CONTRACT_RECORD the way Check_Completeness_Mirrors cites D-134 -- naming.rs's own \"# Why this has no CONTRACT_RECORD\" section says its contract is README.md's Conventions section, prose rather than a versioned record. RuleOffer::contract_record/contract_record_version have no representation for that today. This item does not change RuleOffer's shape (OD-RULES-005 and OD-RULES-006 already declined extending it without a second real case, and this is not that case); it documents, at the one call site in the new crate that constructs naming's offer, what contract_record/contract_record_version hold for a record-less rule and why.",
+      "done_when": "crates/orchestration/nomos-gate-orchestration exists at band 40 (sibling to nomos-work/check/spec-orchestration; depends only on nomos-rules and nomos-contracts, both well below 40, so it names none of its band-40 siblings and none of them may name it). GateCommand { root: PathBuf } (a struct, not an enum, matching CheckCommand's own precedent for \"exactly one verb today\"). A Registered() function builds a real RuleRegistry with two real RuleOffers: Check_Completeness_Mirrors's (rule nomos_rules::COMPLETENESS_MIRROR, contract_record nomos_rules::CONTRACT_RECORD, contract_record_version nomos_rules::CONTRACT_RECORD_VERSION -- read from the existing constants, not restated) and Check_Naming_Convention's (rule nomos_rules::NAMING_CONVENTION, contract_record \"README.md\", contract_record_version 0, with a doc comment at that construction site explaining 0 marks \"no versioned record\", citing naming.rs's own \"why this has no CONTRACT_RECORD\" section, and stating this is a local, revisitable choice rather than a claim about what RuleOffer's fields mean in general). GateOutcome::Planned(GatePlan) where GatePlan { rules: Vec<RuleOffer> } is Registered()'s two offers in RuleId order; GateOutcome::Contradictory(RuleRegistryError) if registration fails (structurally unreachable today with two distinct rule ids, kept for the same reason nomos-check-orchestration keeps CheckOutcome::Contradictory: a composition root's own defect must be representable, not unwound). A Run(&GateCommand) -> GateOutcome function. The crate's own module doc states plainly, the same way check-orchestration's and RuleRegistry's own docs do, that Plan does not yet filter by scope or rule (root is accepted and carried in GateCommand but not yet read), and that run/explain/compare do not exist yet as verbs -- this increment is Plan only. nomos-cli is not touched; nothing calls this crate yet, the same \"additive and unwired\" shape RuleRegistry itself has had since OD-RULES-004. Cargo.toml gains the workspace member; README.md's band table gains the row; tests/contract/tests/boundaries/bands.rs gains the band-40 declaration (naming none of its band-40 siblings as a dependency, and being named by none of them); tests/contract/surface gains the crate's blessed snapshot.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration",
+          "Cargo.toml",
+          "README.md",
+          "tests/contract/surface",
+          "tests/contract/tests/boundaries/bands.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "Match_The_Toolchain_The_Gate_Installs ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 4 tests\ntest tests::Test_A_Plan_Should_Hold_Both_Shipped_Rules ... ok\ntest tests::Test_The_Plan_Should_Not_Vary_By_Root ... ok\ntest tests::Test_The_Naming_Rule_Should_Cite_Its_Record_Less_Contract ... ok\ntest tests::Test_The_Mirror_Rule_Should_Carry_Its_Real_Contract_Citation ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.13s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-2bf6f03006d6e169.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-03bb3b77a304179f.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-3a2571bf0b9d7834.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-15739aa19297e553.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-92b11eaac815a8cd.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-ca16a9d136103b26.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-04cd6948a9e9b567.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-6e8c3aea949064d8.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-43695c5ec5ad83ec.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-b67424df197dae04.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_gate_orchestration-75466f751d6208e0.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_gate_orchestration\n",
+        "verified_at": 1787123594,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "66c9999de4ec6b17e7d26cf3d2f6a4348cbe21b7"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

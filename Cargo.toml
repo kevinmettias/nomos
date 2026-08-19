@@ -75,6 +75,12 @@ members = [
     # from choosing a platform or rendering the answer. `OD-HOST-002`.
     "crates/orchestration/nomos-spec-orchestration",
 
+    # Band 40 — orchestration. The seam for the first-class Gate object
+    # `ARC-ROADMAP-001` names, starting with `Plan`: a real rule registry, reported
+    # back whole, apart from selecting scope, choosing a platform or rendering the
+    # answer.
+    "crates/orchestration/nomos-gate-orchestration",
+
     # Band 1 — the specification system. Reaches the product only through a
     # KnowledgeCapability, never directly.
     "crates/spec/nomos-spec-model",
@@ -139,6 +145,7 @@ nomos-corrections = { path = "crates/corrections/nomos-corrections" }
 nomos-work-orchestration = { path = "crates/orchestration/nomos-work-orchestration" }
 nomos-check-orchestration = { path = "crates/orchestration/nomos-check-orchestration" }
 nomos-spec-orchestration = { path = "crates/orchestration/nomos-spec-orchestration" }
+nomos-gate-orchestration = { path = "crates/orchestration/nomos-gate-orchestration" }
 nomos-integration-tests = { path = "tests/integration" }
 nomos-spec-model = { path = "crates/spec/nomos-spec-model" }
 nomos-spec-store = { path = "crates/spec/nomos-spec-store" }

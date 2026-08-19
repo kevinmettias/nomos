@@ -375,6 +375,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "nomos-gate-orchestration"
+version = "0.1.0"
+dependencies = [
+ "nomos-contracts",
+ "nomos-rules",
+]
+
+[[package]]
 name = "nomos-integration-tests"
 version = "0.1.0"
 dependencies = [
