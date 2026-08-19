@@ -221,3 +221,83 @@ fn Test_A_Chain_Through_A_Cycle_Should_Preserve_Both_The_Order_And_The_Group()
     assert_eq!(third.members, vec![p], "P depends on the cycle and must come after it");
     assert!(!third.Is_Cycle());
 }
+
+/// A chain of one hundred thousand facts, each depending on the next. `Condensation_Of`
+/// visits nodes in digest order rather than construction order, so which node starts the
+/// walk is effectively random relative to chain position — at this depth, the first walk
+/// alone is over 98% likely to descend tens of thousands of links before it ever returns,
+/// which is exactly the shape that overflowed the native stack before `Tarjan::Visit` became
+/// iterative. The assertion is unchanged from the small chain test above: one singleton
+/// group per fact, root first.
+#[test]
+fn Test_A_Chain_One_Hundred_Thousand_Deep_Should_Condense_Without_Overflowing_The_Stack()
+{
+    const DEPTH: u32 = 100_000;
+
+    fn Key_For_Index(index: u32) -> FactKey
+    {
+        let mut bytes = [0u8; Digest128::BYTE_LENGTH];
+        bytes[..4].copy_from_slice(&index.to_be_bytes());
+
+        return FactKey {
+            contract: CapabilityId::New("nomos.cap.syntax.tree"),
+            contract_version: ContractVersion::New(1, 0),
+            subject: SubjectId::From_Digest(Digest128::From_Bytes(bytes)),
+            semantic_inputs: InputDigest::Of(&[b"fixture"]),
+            provider: ProviderId::New("nomos.provider.fixture"),
+            provider_version: ContractVersion::New(1, 0),
+            guarantee: GuaranteeDigest::Of(&Fixture_Guarantee()),
+            variant: BuildVariantId::From_Digest(Digest(3)),
+            configuration: ConfigurationId::From_Digest(Digest(4)),
+        };
+    }
+
+    let keys: Vec<FactKey> = (0..DEPTH).map(Key_For_Index).collect();
+
+    let Some(root) = keys.last().cloned()
+    else
+    {
+        panic!("DEPTH is nonzero");
+    };
+    let Some(first_key) = keys.first().cloned()
+    else
+    {
+        panic!("DEPTH is nonzero");
+    };
+
+    let mut store = MemoryFactStore::New();
+    Depends_On(&mut store, &root, &[]);
+    for window in keys.windows(2).rev()
+    {
+        let [dependent, dependency] = window
+        else
+        {
+            continue;
+        };
+        Depends_On(&mut store, dependent, &[dependency]);
+    }
+
+    let report = Subject_Changed(&mut store, root.subject);
+    assert_eq!(report.Invalidated(), DEPTH as usize, "the deep chain did not fully invalidate");
+
+    let groups = Condensation_Of(&report, &store);
+
+    assert_eq!(groups.len(), DEPTH as usize, "expected one singleton group per fact");
+    for (position, group) in groups.iter().enumerate()
+    {
+        assert!(!group.Is_Cycle(), "a chain link was reported as a cycle at position {position}");
+    }
+
+    let Some(first_group) = groups.first()
+    else
+    {
+        panic!("checked len == DEPTH above");
+    };
+    let Some(last_group) = groups.last()
+    else
+    {
+        panic!("checked len == DEPTH above");
+    };
+    assert_eq!(first_group.members, vec![root]);
+    assert_eq!(last_group.members, vec![first_key]);
+}

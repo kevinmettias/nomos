@@ -240,9 +240,79 @@ struct Tarjan<'a>
     components: Vec<Vec<Digest128>>,
 }
 
+/// One node's position in the iterative walk `Visit` runs: which node it names, the
+/// (already sorted, from the `BTreeSet` edge set) targets its edges reach, and how many of
+/// them have been folded into its lowlink so far. Stands in for a recursive `Visit` call's
+/// own stack frame, so a chain of dependencies does not recurse the native call stack one
+/// level per fact.
+struct Frame
+{
+    node: Digest128,
+    targets: Vec<Digest128>,
+    next: usize,
+}
+
 impl Tarjan<'_>
 {
-    fn Visit(&mut self, node: Digest128)
+    /// Runs the walk from `start` to completion, iteratively: `frames` holds one entry per
+    /// node currently open, in the same order a chain of recursive `Visit` calls would hold
+    /// them on the native stack, and each iteration advances exactly the frame on top.
+    fn Visit(&mut self, start: Digest128)
+    {
+        let mut frames: Vec<Frame> = vec![self.Opened(start)];
+
+        loop
+        {
+            let Some(frame) = frames.last_mut()
+            else
+            {
+                break;
+            };
+
+            if let Some(target) = frame.targets.get(frame.next).copied()
+            {
+                let node = frame.node;
+                frame.next = frame.next.saturating_add(1);
+
+                if self.indices.contains_key(&target)
+                {
+                    self.Fold_If_On_Stack(node, target);
+                }
+                else
+                {
+                    let opened = self.Opened(target);
+                    frames.push(opened);
+                }
+
+                continue;
+            }
+
+            let node = frame.node;
+            frames.pop();
+            self.Finish(node);
+
+            let Some(parent) = frames.last()
+            else
+            {
+                continue;
+            };
+            let parent_node = parent.node;
+            let Some(child_low) = self.lowlink.get(&node).copied()
+            else
+            {
+                continue;
+            };
+            if let Some(entry) = self.lowlink.get_mut(&parent_node)
+            {
+                *entry = (*entry).min(child_low);
+            }
+        }
+    }
+
+    /// Assigns `node` its index and lowlink, places it on the SCC stack, and reads its edge
+    /// targets — the part of the original recursive `Visit` that ran once per call before it
+    /// walked edges.
+    fn Opened(&mut self, node: Digest128) -> Frame
     {
         let index = self.counter;
         self.counter = self.counter.saturating_add(1);
@@ -257,11 +327,35 @@ impl Tarjan<'_>
             .map(|set| return set.iter().copied().collect())
             .unwrap_or_default();
 
-        for target in targets
+        return Frame { node, targets, next: 0 };
+    }
+
+    /// Lowers `node`'s lowlink against a back edge to `target`, an already-indexed node —
+    /// only if `target` is still on the SCC stack, meaning it is part of an in-progress
+    /// component rather than a finished, unrelated one.
+    fn Fold_If_On_Stack(&mut self, node: Digest128, target: Digest128)
+    {
+        if !self.on_stack.contains(&target)
         {
-            self.Relax(node, target);
+            return;
         }
 
+        let Some(target_index) = self.indices.get(&target).copied()
+        else
+        {
+            return;
+        };
+        if let Some(entry) = self.lowlink.get_mut(&node)
+        {
+            *entry = (*entry).min(target_index);
+        }
+    }
+
+    /// Pops `node`'s completed component off the SCC stack, if `node` is its root — the tail
+    /// of the original recursive `Visit`, run once every edge out of `node` has been folded
+    /// in.
+    fn Finish(&mut self, node: Digest128)
+    {
         let finished = self
             .lowlink
             .get(&node)
@@ -283,42 +377,5 @@ impl Tarjan<'_>
             }
         }
         self.components.push(component);
-    }
-
-    /// Lowers `node`'s lowlink against one edge to `target`: recursing into it first if it
-    /// has not been visited, and folding in whichever of `target`'s lowlink (unvisited) or
-    /// index (still on the stack, so part of an in-progress component) applies.
-    fn Relax(&mut self, node: Digest128, target: Digest128)
-    {
-        if !self.indices.contains_key(&target)
-        {
-            self.Visit(target);
-            let Some(target_low) = self.lowlink.get(&target).copied()
-            else
-            {
-                return;
-            };
-            if let Some(entry) = self.lowlink.get_mut(&node)
-            {
-                *entry = (*entry).min(target_low);
-            }
-
-            return;
-        }
-
-        if !self.on_stack.contains(&target)
-        {
-            return;
-        }
-
-        let Some(target_index) = self.indices.get(&target).copied()
-        else
-        {
-            return;
-        };
-        if let Some(entry) = self.lowlink.get_mut(&node)
-        {
-            *entry = (*entry).min(target_index);
-        }
     }
 }

@@ -17611,6 +17611,61 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-TARJAN-ITERATIVE",
+      "title": "Condensation_Of's Tarjan SCC walk recurses per node, with no depth guard",
+      "why": "Tarjan::Visit in crates/substrate/nomos-analysis/src/store.rs calls self.Visit(target) recursively inside Relax with no depth guard. An architecture review verified this against current HEAD: a sufficiently deep fact-dependency chain can overflow the native stack, which is a reliability defect distinct from the store's separate, larger, deliberately-deferred performance hazards (dependents.clone() etc). The user reviewed the finding directly and signed off on converting it to iterative rather than adding an arbitrary recursion limit.",
+      "done_when": "Visit no longer calls itself; all three existing invalidation_order.rs tests (chain, four-cycle, chain-through-cycle) still pass unchanged, proving finishing order and grouping are preserved; a new regression test drives a dependency chain deep enough that the prior recursive implementation would overflow the native stack, and it completes without crashing.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-analysis/src/store.rs",
+          "crates/substrate/nomos-analysis/tests/invalidation_order.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-analysis"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-analysis"
+        ],
+        "exit_code": 0,
+        "output_tail": "_The_Cache ... ok\ntest reader::Test_The_Recorded_Edges_Should_Become_The_Stored_Dependencies ... ok\ntest invalidation::Test_Replacing_A_Snapshot_Should_Invalidate_Exactly_The_Members_That_Differ ... ok\ntest require::Test_Require_Should_Not_Fabricate_A_Fact_The_Store_Does_Not_Hold ... ok\ntest reader::Test_A_Read_That_Misses_Should_Record_Its_Miss ... ok\ntest invalidation::Test_Invalidation_Should_Follow_Dependency_Edges ... ok\ntest key_identity::Test_Every_Component_Should_Reach_The_Key_Digest ... ok\n\ntest result: ok. 31 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 4 tests\ntest Test_A_Chain_Should_Condense_Into_One_Singleton_Group_Per_Fact_In_Dependency_Order ... ok\ntest Test_A_Chain_Through_A_Cycle_Should_Preserve_Both_The_Order_And_The_Group ... ok\ntest Test_A_Four_Cycle_Should_Condense_Into_One_Group_Naming_All_Four ... ok\ntest Test_A_Chain_One_Hundred_Thousand_Deep_Should_Condense_Without_Overflowing_The_Stack ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.99s\n\n\nrunning 2 tests\ntest Test_An_Unrecorded_Dependency_Edge_Leaves_A_Stale_Downstream_Value_That_Disagrees_With_A_Clean_Rebuild ... ok\ntest Test_Incremental_Recomputation_After_A_Change_Agrees_With_A_Clean_Rebuild ... ok\n\ntest result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.10s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_analysis-8ed2b98a0abe7ca2.exe)\n     Running tests\\fact_identity\\main.rs (target\\debug\\deps\\fact_identity-472de15e56a195d2.exe)\n     Running tests\\invalidation_order.rs (target\\debug\\deps\\invalidation_order-5c58ca88752defbc.exe)\n     Running tests\\recomputation_equivalence.rs (target\\debug\\deps\\recomputation_equivalence-8bcea38aeda441f4.exe)\n   Doc-tests nomos_analysis\n",
+        "verified_at": 1787121874,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "439ab21a1ff619b52a120cd69f9042541b075b5d"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
