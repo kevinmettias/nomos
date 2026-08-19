@@ -37,7 +37,7 @@
 use crate::SourceFile;
 use nomos_analysis::{FactReader, InputDigest};
 use nomos_capability::Requirement;
-use nomos_cap_dependency::{DependencyEdge, DependencyPayload};
+use nomos_cap_dependency::{DependencyEdge, DependencyKind, DependencyPayload};
 use nomos_contracts::{
     Applicability, Assurance, EvidenceClass, FactVariant, Finding, GateCategory,
     Guarantee, IncrementalGranularity, RuleId,
@@ -222,6 +222,17 @@ fn Violations_In(payload: &DependencyPayload, source: &SourceFile) -> Vec<Findin
     let mut findings = Vec::new();
     for edge in &payload.edges
     {
+        // A dev-dependency does not ship, so it is not part of the graph this judgment is
+        // about — `tests/contract/src/workspace.rs`'s own `Is_Not_Dev` excludes it from
+        // `graph.rs`'s identical downward-ordering check for exactly this reason, and
+        // `nomos-spec-ingest`'s own `Cargo.toml` names the real case this rule would
+        // otherwise misjudge: a band-13 crate's dev-only dependency on band-14's validator,
+        // present only so its own test suite can exercise a preservation run.
+        if edge.kind == DependencyKind::Dev
+        {
+            continue;
+        }
+
         let Some(dependency_band) = Declared_Band(&edge.target)
         else
         {
@@ -266,7 +277,6 @@ fn Violation(
 mod tests
 {
     use super::*;
-    use nomos_cap_dependency::DependencyKind;
     use nomos_model::Content_Digest;
     use nomos_contracts::SubjectId;
 
@@ -280,6 +290,15 @@ mod tests
         return DependencyEdge {
             target: target.to_owned(),
             kind: DependencyKind::Normal,
+            optional: false,
+        };
+    }
+
+    fn Dev_Edge(target: &str) -> DependencyEdge
+    {
+        return DependencyEdge {
+            target: target.to_owned(),
+            kind: DependencyKind::Dev,
             optional: false,
         };
     }
@@ -331,6 +350,27 @@ mod tests
                 findings.len(),
                 1,
                 "two providers of one capability must not be able to name each other: {findings:?}"
+            );
+        }
+
+        #[test]
+        fn Test_A_Dev_Dependency_Running_Upward_Should_Produce_No_Finding()
+        {
+            // The real case this guards: nomos-spec-ingest (13) dev-depends on
+            // nomos-spec-validate (14) so its own test suite can run a preservation
+            // check, and `Cargo.toml`'s own comment there says exactly why this must not
+            // read as a violation.
+            let payload = DependencyPayload {
+                package: "nomos-spec-ingest".to_owned(),
+                edges: vec![Dev_Edge("nomos-spec-validate")],
+            };
+
+            let findings = Violations_In(&payload, &Source("nomos-spec-ingest"));
+
+            assert!(
+                findings.is_empty(),
+                "a dev-dependency does not ship and must not be judged as an architecture \
+                 edge: {findings:?}"
             );
         }
 

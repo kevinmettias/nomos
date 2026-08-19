@@ -286,6 +286,17 @@ fn Test_A_Provider_Refusal_Must_Not_Render_The_Same_As_A_Clean_Run()
     let _ignored = std::fs::remove_dir_all(&clean_root);
     std::fs::create_dir_all(&clean_root).expect("the temporary root is creatable");
     std::fs::write(clean_root.join("a.rs"), "pub fn ok() {}\n").expect("writable");
+    // A real, if minimal, Cargo.toml -- without one, `cargo metadata` cannot find a
+    // workspace here at all, and the dependency-edges provider reports
+    // `ProviderUnavailable` for a reason that has nothing to do with what this test
+    // means by "clean": a tree with no findings, not a tree the provider cannot even see.
+    std::fs::write(
+        clean_root.join("Cargo.toml"),
+        "[package]\nname = \"nomos-check-clean-only-fixture\"\nversion = \"0.0.0\"\nedition = \"2021\"\n",
+    )
+    .expect("writable");
+    std::fs::create_dir_all(clean_root.join("src")).expect("the src directory is creatable");
+    std::fs::write(clean_root.join("src").join("lib.rs"), "").expect("writable");
 
     let mut clean_stdout = Vec::new();
     let mut clean_stderr = Vec::new();

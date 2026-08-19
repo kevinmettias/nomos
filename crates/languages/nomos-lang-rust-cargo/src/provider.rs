@@ -23,12 +23,21 @@ pub struct FactContext
     pub generation: GenerationId,
 }
 
-/// One package's fact, together with the subject it was filed under — a caller needs the
-/// subject to key its own read of the same fact back out of a store.
+/// One package's fact, together with the subject it was filed under and the
+/// repository-relative path that subject addresses.
+///
+/// The path is carried rather than left for a caller to recover from the payload, the same
+/// reason `nomos_rules::SourceFile::path` is a field and not a decode: a caller building a
+/// rule's subject list needs a reporting path without knowing this capability's payload
+/// schema, and a caller that decoded the payload just to get the path it already computed
+/// would be a second reader of a schema owned by `nomos_cap_dependency`.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct PackageFact
 {
     pub subject: SubjectId,
+    /// Repository-relative, forward slashes — the same path `Subject_Of_Path` addressed to
+    /// produce `subject`.
+    pub path: String,
     pub fact: MaterializedFact,
 }
 
@@ -57,7 +66,7 @@ pub fn Materialize_Workspace(root: &Path, context: FactContext) -> Result<Vec<Pa
             let subject = nomos_model::Subject_Of_Path(&package.manifest_relative_root);
             let guarantee = Declared_Guarantee();
             let payload_bytes = Encode_Payload(&package.payload);
-            let key = Keyed(subject, &payload_bytes, guarantee, context);
+            let key = Keyed(subject, guarantee, context);
             let fact = MaterializedFact {
                 identity: key.At(context.generation),
                 snapshot: context.snapshot,
@@ -66,18 +75,35 @@ pub fn Materialize_Workspace(root: &Path, context: FactContext) -> Result<Vec<Pa
                 payload: FactPayload::New(Payload_Schema(), payload_bytes),
             };
 
-            return PackageFact { subject, fact };
+            return PackageFact {
+                subject,
+                path: package.manifest_relative_root,
+                fact,
+            };
         })
         .collect());
 }
 
-fn Keyed(subject: SubjectId, payload_bytes: &[u8], guarantee: Guarantee, context: FactContext) -> FactKey
+/// The key this package's fact is filed under.
+///
+/// `semantic_inputs` is empty, deliberately, unlike `nomos_lang_rust::Materialize`'s own
+/// key -- that provider's semantic input is `source.text`, bytes the *caller* already
+/// holds and can recompute the identical digest from without asking the provider anything.
+/// This provider's real input is Cargo's own resolution of a manifest, which no caller has
+/// independently; a caller building a lookup key from `Encode_Payload`'s own output, the
+/// way an earlier version of this function did, could only ever reproduce a key by already
+/// knowing the answer, which is not a key a `FactReader::Require` caller can ever
+/// construct. `IncrementalGranularity::Project` already says there is nothing below "the
+/// whole package" to distinguish, so `subject` alone carries what this key needs to
+/// address; a change in what cargo resolves is a new run's fact, addressed by generation,
+/// not by a second axis this capability has no independent input to compute one from.
+fn Keyed(subject: SubjectId, guarantee: Guarantee, context: FactContext) -> FactKey
 {
     return FactKey {
         contract: Capability(),
         contract_version: CONTRACT_VERSION,
         subject,
-        semantic_inputs: InputDigest::Of(&[payload_bytes]),
+        semantic_inputs: InputDigest::Of(&[]),
         provider: ProviderId::New(PROVIDER),
         provider_version: CONTRACT_VERSION,
         guarantee: GuaranteeDigest::Of(&guarantee),
@@ -139,6 +165,20 @@ mod tests
             rules.subject,
             nomos_model::Subject_Of_Path("crates/rules/nomos-rules")
         );
+    }
+
+    #[test]
+    fn Test_A_Facts_Path_Should_Be_What_Its_Subject_Was_Addressed_By()
+    {
+        let facts = Materialize_Workspace(&Repository_Root(), Context()).expect("a real workspace");
+
+        let rules = facts
+            .iter()
+            .find(|fact| fact.fact.payload.bytes.starts_with(b"package\tnomos-rules\n"))
+            .expect("nomos-rules is a workspace member");
+
+        assert_eq!(rules.path, "crates/rules/nomos-rules");
+        assert_eq!(rules.subject, nomos_model::Subject_Of_Path(&rules.path));
     }
 
     #[test]

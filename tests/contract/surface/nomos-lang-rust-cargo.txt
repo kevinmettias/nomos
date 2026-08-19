@@ -17,6 +17,7 @@ pub struct field nomos_lang_rust_cargo::FactContext::snapshot: SnapshotId
 pub struct field nomos_lang_rust_cargo::FactContext::variant: BuildVariantId
 pub struct field nomos_lang_rust_cargo::MetadataError::reason: String
 pub struct field nomos_lang_rust_cargo::PackageFact::fact: MaterializedFact
+pub struct field nomos_lang_rust_cargo::PackageFact::path: String
 pub struct field nomos_lang_rust_cargo::PackageFact::subject: SubjectId
 pub struct nomos_lang_rust_cargo::DependencyFactProduction
 pub struct nomos_lang_rust_cargo::DiscoveredPackage

@@ -25,12 +25,29 @@ fn Test_Variant() -> BuildVariant
     return BuildVariant::New("test-target", "test-profile", "test-toolchain", std::iter::empty::<String>());
 }
 
+/// This repository's own real root, for `root` -- `Run`'s dependency step runs `cargo
+/// metadata` against it regardless of what `sources` a test hands in, since the dependency
+/// capability is a workspace-wide fact and not a fact about any one of `sources`'s files.
+/// Real on purpose, the same choice this crate's own doc comment already states for the
+/// syntax half: "the real composition... which is what makes every assertion a statement
+/// about the shipped seam rather than about a fixture."
+fn Repository_Root() -> std::path::PathBuf
+{
+    let manifest = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+    return manifest
+        .parent()
+        .and_then(std::path::Path::parent)
+        .and_then(std::path::Path::parent)
+        .map(std::path::PathBuf::from)
+        .expect("this crate sits three levels below the workspace root");
+}
+
 #[test]
 fn Test_A_Clean_Tree_Should_Be_Judged_Complete_With_No_Findings()
 {
     let sources = vec![Source("a.rs", "pub fn Ok() {}\n")];
 
-    let outcome = Run(&sources, Test_Variant());
+    let outcome = Run(&sources, Test_Variant(), &Repository_Root());
 
     let CheckOutcome::Judged { findings, examined, claim } = outcome
     else
@@ -56,7 +73,7 @@ fn Test_A_Blocking_Finding_Should_Still_Be_Judged_Complete()
         "/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n",
     )];
 
-    let outcome = Run(&sources, Test_Variant());
+    let outcome = Run(&sources, Test_Variant(), &Repository_Root());
 
     let CheckOutcome::Judged { findings, claim, .. } = outcome
     else
@@ -79,7 +96,7 @@ fn Test_A_Run_That_Materializes_No_Facts_Should_Report_NoFacts()
 {
     let sources = vec![Source("broken.rs", "pub const ??? = ;")];
 
-    let outcome = Run(&sources, Test_Variant());
+    let outcome = Run(&sources, Test_Variant(), &Repository_Root());
 
     assert!(
         matches!(outcome, CheckOutcome::NoFacts { files: 1 }),
@@ -96,7 +113,7 @@ fn Test_Conflicting_Paths_Should_Be_Unreadable()
 {
     let sources = vec![Source("a.rs", "pub fn one() {}\n"), Source("a.rs", "pub fn two() {}\n")];
 
-    let outcome = Run(&sources, Test_Variant());
+    let outcome = Run(&sources, Test_Variant(), &Repository_Root());
 
     assert!(matches!(outcome, CheckOutcome::Unreadable), "duplicate paths must not be ingested");
 }
@@ -109,7 +126,7 @@ fn Test_The_Registered_Provider_Should_Satisfy_The_Rules_Floor()
 {
     let sources = vec![Source("a.rs", "pub const T: &[&str] = &[];\n")];
 
-    let outcome = Run(&sources, Test_Variant());
+    let outcome = Run(&sources, Test_Variant(), &Repository_Root());
 
     let CheckOutcome::Judged { findings, .. } = outcome
     else
@@ -163,6 +180,38 @@ fn Test_The_Composed_Crate_Should_Resolve_A_Mirror_Through_A_Real_Fact()
     assert!(
         short.iter().any(|finding| return finding.subject_name == "T"),
         "with b.rs's fact withheld the claim must not resolve: {short:?}"
+    );
+}
+
+/// The wiring itself, proven directly: real sources flow out of the real provider over the
+/// real repository root, not merely "zero findings" -- which an empty source list would
+/// also produce, silently, the exact vacuity `Test_A_Clean_Tree_Should_Be_Judged_Complete_
+/// With_No_Findings` cannot rule out on its own, because a `Run` that materialized nothing
+/// and a `Run` that materialized a clean workspace render identically over that assertion
+/// alone.
+#[test]
+fn Test_Materialize_Dependencies_Should_Return_Real_Workspace_Members()
+{
+    // What `Materialize_Dependencies` needs from a `Context` -- snapshot, variant,
+    // configuration, generation -- has nothing to do with `sources`; one placeholder file
+    // is enough to build a real one, the same way `Findings_Over`'s own fixtures do.
+    let placeholder = [Source("placeholder.rs", "pub fn Placeholder() {}\n")];
+    let registry = crate::composition::Registered().expect("fixture composition");
+    let context = crate::facts::Ingested(&placeholder, &registry, Test_Variant()).expect("a single real file ingests");
+    let mut store = MemoryFactStore::New();
+
+    let (sources, findings) = crate::facts::Materialize_Dependencies(&Repository_Root(), &context, &mut store);
+
+    assert!(findings.is_empty(), "a real workspace root must not report ProviderUnavailable: {findings:?}");
+    assert!(
+        sources.len() > 10,
+        "this repository has far more than ten workspace members, so {} real sources is too \
+         few to have exercised the provider: {sources:?}",
+        sources.len()
+    );
+    assert!(
+        sources.iter().any(|source| return source.path == "crates/rules/nomos-rules"),
+        "expected nomos-rules among the real sources: {sources:?}"
     );
 }
 

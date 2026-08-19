@@ -11,7 +11,7 @@ pub fn nomos_check_orchestration::Claim::fmt(&self, formatter: &mut core::fmt::F
 pub fn nomos_check_orchestration::Claim_Of(findings: &[Finding]) -> Claim
 pub fn nomos_check_orchestration::Registered() -> Result<Registry, RegistryError>
 pub fn nomos_check_orchestration::Resolved_Configuration(registry: &Registry) -> ConfigurationId
-pub fn nomos_check_orchestration::Run(sources: &[SourceFile], variant: BuildVariant) -> CheckOutcome
+pub fn nomos_check_orchestration::Run(sources: &[SourceFile], variant: BuildVariant, root: &Path) -> CheckOutcome
 pub impl nomos_check_orchestration::Claim implements core::fmt::Display
 pub struct field nomos_check_orchestration::CheckCommand::root: PathBuf
 pub struct field nomos_check_orchestration::Examined::facts: usize

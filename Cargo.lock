@@ -322,10 +322,12 @@ name = "nomos-check-orchestration"
 version = "0.1.0"
 dependencies = [
  "nomos-analysis",
+ "nomos-cap-dependency",
  "nomos-cap-syntax",
  "nomos-capability",
  "nomos-contracts",
  "nomos-lang-rust",
+ "nomos-lang-rust-cargo",
  "nomos-lang-rust-scan",
  "nomos-model",
  "nomos-rules",

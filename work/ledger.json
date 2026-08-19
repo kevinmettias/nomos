@@ -18546,6 +18546,89 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-DEPENDENCY-WIRE-1",
+      "title": "Wire dependency.edges and Check_Dependency_Direction into the real nomos check path",
+      "why": "P13-DEPENDENCY-EDGES-2 built and tested the capability, provider and rule standing alone, deliberately unwired because nomos-check-orchestration performs no I/O by design and wiring meant touching nomos-cli, held live by the concurrent Gate CLI item at the time. That item finished and committed (P13-GATE-ORCHESTRATION-2); nomos-cli is free. nomos-cli::check already carries command.root: PathBuf, the same value Walked() and Render() already use, so this is a threaded parameter into nomos_check_orchestration::Run rather than a new abstraction -- explicitly not the AnalysisOperation/environmental-inputs generalization considered and declined as premature from a population of one I/O-performing provider.",
+      "done_when": "nomos_check_orchestration::Run takes an additional root: &Path parameter (nomos-cli::check::Run passes command.root); a new Materialize_Dependencies in facts.rs calls nomos_lang_rust_cargo::Materialize_Workspace once per run and writes each package's fact into the store, returning the package subjects as SourceFiles for the rule to consume; on a Materialize_Workspace failure this produces one Applicability::ProviderUnavailable finding rather than silently returning zero dependency findings (the same anti-vacuity discipline NoFacts already applies to the syntax walk) and the syntax rules still run; Check_Dependency_Direction's findings appear in CheckOutcome::Judged's findings alongside the existing two rules; a real end-to-end test proves this by running nomos_check_orchestration::Run over this repository's own real tree and asserting dependency-direction findings or their absence are actually present in the result, not merely that materialization occurred; nomos-lang-rust-cargo's PackageFact gains what facts.rs needs to build a SourceFile's path without decoding payload bytes; every touched crate's public-surface snapshot is reblessed.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages/nomos-lang-rust-cargo/src/provider.rs",
+          "crates/orchestration/nomos-check-orchestration/src/composition.rs",
+          "crates/orchestration/nomos-check-orchestration/src/facts.rs",
+          "crates/orchestration/nomos-check-orchestration/src/run.rs",
+          "crates/orchestration/nomos-check-orchestration/Cargo.toml",
+          "crates/orchestration/nomos-check-orchestration/tests",
+          "crates/host/nomos-cli/src/check.rs",
+          "tests/contract/surface/nomos-lang-rust-cargo.txt",
+          "tests/contract/surface/nomos-check-orchestration.txt",
+          "tests/contract/surface/nomos-cli.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-lang-rust-cargo",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "public_surface",
+          "--test",
+          "boundaries"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-lang-rust-cargo",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "public_surface",
+          "--test",
+          "boundaries"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 9 tests\ntest band_zero::Test_Band_Zero_Should_Be_Described_In_One_Place ... ok\ntest readme::Test_The_Readme_Should_List_Every_Member_At_Its_Declared_Band ... ok\ntest graph::Test_Dependencies_Should_Run_Strictly_Downward ... ok\ntest graph::Test_Contracts_Should_Depend_On_The_Allowlist_And_Nothing_Else ... ok\ntest graph::Test_The_Workspace_Should_Not_Appear_Empty ... ok\ntest graph::Test_Only_The_Platform_Adapter_May_Name_The_Sibling_Workspace ... ok\ntest graph::Test_Every_Member_Should_Declare_A_Band ... ok\ntest capabilities::Test_A_Capability_Id_Should_Be_Written_In_One_Crate ... ok\ntest reachability::Test_Every_Source_File_Should_Be_Reachable ... ok\n\ntest result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s\n\n\nrunning 8 tests\ntest scanner::Test_An_Unfollowable_Re_Export_Should_Be_Reported_While_Its_Siblings_Resolve ... ok\ntest scanner::Test_The_Scanner_Should_Find_Real_Exports_And_Stop_At_Restricted_Ones ... ok\ntest scanner::Test_A_Crate_Visible_Helper_Should_Not_Be_An_Export ... ok\ntest snapshots::Test_Every_Snapshot_Should_Belong_To_A_Crate_That_Has_One ... ok\ntest bless::Test_A_Bless_Naming_No_Crate_Should_Be_Refused_Rather_Than_Widened ... ok\ntest snapshots::Test_Every_Crates_Public_Surface_Should_Match_Its_Snapshot ... ok\ntest bless::Test_Blessing_One_Crate_Should_Leave_Another_Crates_Snapshot_Byte_Identical ... ok\ntest snapshots::Test_Every_Member_Should_Be_Snapshotted_Or_Declared_Library_Less ... ok\n\ntest result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.46s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.11s\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-50ba5fa82cca7b60.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-b675e407dc094bff.exe)\n",
+        "verified_at": 1787128933,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "cb9ffb920a024a04a772e28e29b84bf7d45b353f"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

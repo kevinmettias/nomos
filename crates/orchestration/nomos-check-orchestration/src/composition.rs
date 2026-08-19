@@ -33,6 +33,10 @@ pub fn Registered() -> Result<Registry, RegistryError>
     // the offer `Resolve` chooses with no preference named.
     registry.Offer(nomos_lang_rust_scan::Provider_Offer())?;
 
+    // A second capability, one offer against it -- `OD-RULES-003`'s design, wired for real.
+    registry.Declare(nomos_cap_dependency::Capability_Contract())?;
+    registry.Offer(nomos_lang_rust_cargo::Provider_Offer())?;
+
     return Ok(registry);
 }
 
