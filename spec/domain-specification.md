@@ -43,6 +43,7 @@ profile: domain-specification
 | docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md@authored | docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md | authored | 22 | 10 | sha256:baac7713f8077db7fc36aeeebe1f7cbe8e1a59d1a743943e26e42df668b0b3cb |
 | docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md@authored | docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md | authored | 36 | 8 | sha256:6921af0ffee38a77a00c90bb6ebeebcd97e7db786652bdfdb80f9f854577cdfd |
 | docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md@authored | docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md | authored | 13 | 5 | sha256:f380526facdc6f8371f437a7f9963f9d50cb3c69c88227ee91e29e95b31c2f52 |
+| docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md@authored | docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md | authored | 14 | 5 | sha256:0a29729535d828232371334d9709d42a39384283029ed84cf5fc75c8f925c7cc |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md@authored | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md | authored | 33 | 9 | sha256:26a4c8c8e217e97e0c147d846441c33d854347e490c3757345f06a4021b6d7ff |
 | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md@authored | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md | authored | 54 | 10 | sha256:fc95b7901fc9e920666e8f04eb01c6436a96d16fc63f94e0599114d5cfa5928b |
 | docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md@authored | docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md | authored | 27 | 8 | sha256:ae576ae44e0cc42f6fd2a44efd4c144eb6e6563fe999ad97a9d074e9037c1d2a |
@@ -391,6 +392,11 @@ profile: domain-specification
 | docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md#6 | authored | 2 | Current Position |
 | docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md#9 | authored | 2 | What Would Decide It |
 | docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md#12 | authored | 2 | Status |
+| docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#1 | authored | 1 | Whether the provider convention needs a declared trait, or Registry's compile-time offer construction already closes the gap nomos-proto's structural typing opened |
+| docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#2 | authored | 2 | Question |
+| docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#6 | authored | 2 | Current Position |
+| docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#11 | authored | 2 | What Would Decide It |
+| docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#13 | authored | 2 | Status |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md#1 | authored | 1 | A completeness guard is only as complete as the universe it quantifies over |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md#2 | authored | 2 | Question |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md#5 | authored | 2 | The Shape, Which Is Not The One The Item Assumed |
@@ -9040,6 +9046,155 @@ Open. This question is deliberately left open rather than resolved either way: u
 `OD-PACKAGE-006`, the plugin-enablement direction does not reach it — a provider can
 already register fully without a decline mechanism existing — and no second capability
 contract exists to check a design against. Revisit when either trigger above arrives.
+
+### docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#1
+
+*revision: authored · kind: heading · heading: Whether the provider convention needs a declared trait, or Registry's compile-time offer construction already closes the gap nomos-proto's structural typing opened · hash: sha256:fe4fea0558848c4dd5ce66d949bcf2eadeba1a5f769ed40fa60ed9daa7915c52*
+
+# Whether the provider convention needs a declared trait, or Registry's compile-time offer construction already closes the gap nomos-proto's structural typing opened
+
+### docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#2
+
+*revision: authored · kind: heading · heading: Whether the provider convention needs a declared trait, or Registry's compile-time offer construction already closes the gap nomos-proto's structural typing opened / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#3
+
+*revision: authored · kind: prose · heading: Whether the provider convention needs a declared trait, or Registry's compile-time offer construction already closes the gap nomos-proto's structural typing opened / Question · hash: sha256:5f21659df4d798be19ef786fa006fed70cd87ae524eba48d155f37fa014af7cd*
+
+`code-standards`/`nomos-proto`, the Go-era predecessor this workspace rebuilds, once let a
+check-local package hand-roll its own copy of the Rust language type. Go's structural typing
+let the copy silently satisfy less of the real interface than it meant to; the resolver fell
+back to a weaker default with no build error, and the check quietly stopped being enforced in
+every shipped binary while its own tests, which linked only the kernel, kept passing. The fix
+was manual: a file of nothing but `var _ analyzer.Interface = RustLanguage{}` compile-time
+assertions, hand-added per surface, to recover a guarantee Go's structural typing does not
+give for free.
+
+### docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#4
+
+*revision: authored · kind: prose · heading: Whether the provider convention needs a declared trait, or Registry's compile-time offer construction already closes the gap nomos-proto's structural typing opened / Question · hash: sha256:57fd25584e837b9af42e91ddc1f85545048753f93f497f17493f2f6d55e1fe33*
+
+`crates/languages/nomos-lang-rust/src/provider.rs` and
+`crates/languages/nomos-lang-rust-scan/src/provider.rs` both implement the identical
+four-part shape today — a `PROVIDER` identity constant, `Declared_Guarantee()`, `Materialize`,
+and an identically-shaped `FactContext` struct each redeclares — as free functions and
+constants, by convention, with no shared trait naming the shape. Two real, live
+implementations of the same convention exist, so a trait covering it would not be designed
+from zero instances the way `OD-PACKAGE-006` refused to design `KNOWN_PROVIDERS` from a
+population of two.
+
+### docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#5
+
+*revision: authored · kind: prose · heading: Whether the provider convention needs a declared trait, or Registry's compile-time offer construction already closes the gap nomos-proto's structural typing opened / Question · hash: sha256:e706832da16a4b5af26580ac546083568a02e54fd07216d1b2577ec973a3db67*
+
+The open question: does formalizing `PROVIDER`/`Declared_Guarantee`/`Materialize` as a real
+trait close a Rust-shaped version of the Go bug above, or does
+`crates/orchestration/nomos-check-orchestration/src/composition.rs`'s existing shape —
+`registry.Offer(nomos_lang_rust::Provider_Offer())`, calling each provider's function by its
+real, statically-resolved name — already make the bug unreachable here for a reason specific
+to Rust, so a trait would add a vocabulary with nothing left for it to prevent?
+
+### docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#6
+
+*revision: authored · kind: heading · heading: Whether the provider convention needs a declared trait, or Registry's compile-time offer construction already closes the gap nomos-proto's structural typing opened / Current Position · hash: sha256:3410589a125ce4b264969343987e63e029f80de6e30da91448b149ee4405900f*
+
+## Current Position
+
+### docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#7
+
+*revision: authored · kind: prose · heading: Whether the provider convention needs a declared trait, or Registry's compile-time offer construction already closes the gap nomos-proto's structural typing opened / Current Position · hash: sha256:f7440e4830fb6687a338bb5f927c0ecf4f8e8fabd263c016821764007958be8f*
+
+The Go bug's mechanism was structural: a type can satisfy an interface it was never declared
+against, so a second, drifted implementation can silently *replace* the real one at a call
+site that never named either by type. Rust has no structural typing of that kind. `Registered()`
+in `composition.rs` calls `nomos_lang_rust::Provider_Offer()` and
+`nomos_lang_rust_scan::Provider_Offer()` by their real paths — a rename, a signature change,
+or a dropped function is a compile error at that call site, not a silent fallback to a weaker
+default nobody asked for. `OD-CAPABILITY-001`'s registry ranks by `Guarantee` among offers that
+were already, individually, constructed by code the composition root explicitly calls; nothing
+there resembles Go's runtime interface satisfaction, where the resolver chose among candidates
+the source never named together.
+
+### docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#8
+
+*revision: authored · kind: prose · heading: Whether the provider convention needs a declared trait, or Registry's compile-time offer construction already closes the gap nomos-proto's structural typing opened / Current Position · hash: sha256:4f85a06c6d086ed60cd44b6685e98d4a2670b8b259e244cd18ee6735ca632782*
+
+That argues the bug class is already closed here, for a reason this workspace already chose
+independently before either provider existed: the composition root is a single, explicit,
+hand-maintained list, the same shape a companion research pass separately found Go's own
+blank-import registry converged on and called weaker than Rust's, because a missing
+registration here is a missing function call a reviewer can see rather than a missing blank
+import whose absence is invisible until the check silently stops running.
+
+### docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#9
+
+*revision: authored · kind: prose · heading: Whether the provider convention needs a declared trait, or Registry's compile-time offer construction already closes the gap nomos-proto's structural typing opened / Current Position · hash: sha256:23943f002d6e5f2a31572dab33d98b732ad15f1a321d045bdbaa72b59352fcca*
+
+What a trait would add instead, if anything, is not safety against silent drift — the four
+functions already cannot drift silently, being named and typed at their one call site — but a
+single place stating the shape the convention requires. Today nothing except reading both
+`provider.rs` files side by side confirms `Materialize`'s signature, `Declared_Guarantee`'s
+return type, and `PROVIDER`'s type actually agree between the two implementations, or would
+catch a *third* provider that got one of the four subtly wrong in a way that still compiles on
+its own (for instance a `Materialize` taking its context by a different shape than the other
+two share) — the two existing providers were checked to match by inspection this session, not
+by anything the compiler enforces across them.
+
+### docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#10
+
+*revision: authored · kind: prose · heading: Whether the provider convention needs a declared trait, or Registry's compile-time offer construction already closes the gap nomos-proto's structural typing opened / Current Position · hash: sha256:af2e4f24d3a8c72d974292c16b854a5038888848306850d786a2aabe7048d533*
+
+A trait would also interact with, and should not be read as license to remove, this crate's
+already-reasoned decision to duplicate `Encode_Payload` deliberately —
+`nomos-lang-rust/src/provider.rs`: "a shared writer would make two providers of one capability
+agree by construction and prove nothing"; `nomos-lang-rust-scan/src/provider.rs`: "the
+duplication is the interface." Whether a trait over `Materialize`/`Declared_Guarantee` (the
+registration surface) can be added without touching `Encode_Payload` (the payload-construction
+surface those comments defend) is itself unverified — it looks separable on inspection, since
+`Encode_Payload` sits outside the convention's four parts, but this record does not assume the
+boundary holds. A design pass would need to confirm the trait's method set does not end up
+pulling `Encode_Payload` along with it, which would then be reopening a duplication this
+workspace already reasoned about and kept on purpose.
+
+### docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#11
+
+*revision: authored · kind: heading · heading: Whether the provider convention needs a declared trait, or Registry's compile-time offer construction already closes the gap nomos-proto's structural typing opened / What Would Decide It · hash: sha256:b21c34f083f944a8317c5bb99f866d38e2c77a3ce5a1a64810a532456b826658*
+
+## What Would Decide It
+
+### docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#12
+
+*revision: authored · kind: prose · heading: Whether the provider convention needs a declared trait, or Registry's compile-time offer construction already closes the gap nomos-proto's structural typing opened / What Would Decide It · hash: sha256:0e8abb6f143240e430fa3888f7039fc16619d4d8a99545c3303979ae7a9039b4*
+
+A third provider is the natural trigger, the same role it plays in `OD-PACKAGE-006`: at that
+point the question of whether the convention's four parts genuinely agree stops being
+answerable by reading two files side by side, and a shape mismatch a trait would have caught
+at the second provider becomes one only a trait catches at the third. A second, independent
+trigger: if a consumer is ever built that needs to hold providers polymorphically — iterating
+over an unknown-length list of them, rather than the composition root's current shape of
+naming each by import — since that is the one construction where Rust's static call-site
+checking stops applying and something closer to Go's dynamic dispatch reappears, this time by
+design rather than by accident.
+
+### docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#13
+
+*revision: authored · kind: heading · heading: Whether the provider convention needs a declared trait, or Registry's compile-time offer construction already closes the gap nomos-proto's structural typing opened / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#14
+
+*revision: authored · kind: prose · heading: Whether the provider convention needs a declared trait, or Registry's compile-time offer construction already closes the gap nomos-proto's structural typing opened / Status · hash: sha256:42943b5148a339e87e6e626f7f083c56c89067ba1ad2073159f1db0cec5d43cd*
+
+Open. Left open rather than resolved either way: the motivating Go bug's specific mechanism —
+structural typing letting a copy silently satisfy less than it meant to — has no direct Rust
+analogue at today's one call site per provider, so adopting a trait now would be adding
+vocabulary for a documentation/consistency benefit rather than closing a live hole, and
+`OD-CAPABILITY-007` already left the adjacent provider-facing question open for a structurally
+similar reason: no second real case exists yet to check a design against. Revisit when a third
+provider joins, or when a consumer needs to hold providers polymorphically rather than by name.
 
 ### docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md#1
 

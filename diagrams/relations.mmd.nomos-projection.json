@@ -3,16 +3,16 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:36276914b019202497a0f1d999078f85adcd98556aa6660f8a2bb1181ec925f1",
-  "inputs_digest": "sha256:d348d0bd82e11db9e3a5c022f5dbd7b0389c69bfed773a9f1db481d7ea7bf3cf",
+  "content_digest": "sha256:731d493da71181bac945f8e0528ee45d751a080b6cdf145a68b47a917607cf86",
+  "inputs_digest": "sha256:adb52f7aa576b7627f0d852cdeb784402203ebc7b19c51fc2a4adaea99d49785",
   "sections": [
     [
       "Relations",
-      868
+      874
     ],
     [
       "Decisions",
-      125
+      126
     ]
   ],
   "inputs": [
@@ -1033,6 +1033,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-CAPABILITY-001 relates-to OD-CAPABILITY-008",
+      "hash": "sha256:b014eff8caf987001f9df0811fdbdc565e5e59bc86c47c10fe504956e6b9efb7"
+    },
+    {
+      "content": "relations",
       "identity": "OD-CAPABILITY-001 relates-to OD-CONTRACTS-002",
       "hash": "sha256:ce90c00d6bea3f9e6ab42b21b7e01a05ef8acedfde757c4cfde777de86c1d517"
     },
@@ -1208,6 +1213,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-CAPABILITY-007 relates-to OD-CAPABILITY-008",
+      "hash": "sha256:053302d2f938449ef7261b968999a470321d93d98914a54c2a5856ff87d355bd"
+    },
+    {
+      "content": "relations",
       "identity": "OD-CAPABILITY-007 relates-to OD-PACKAGE-006",
       "hash": "sha256:0be1ee2edfe8bbfd940a59d0635004ec63e30fc64fa1a76f3d602cfb84c5f350"
     },
@@ -1215,6 +1225,21 @@
       "content": "relations",
       "identity": "OD-CAPABILITY-007 relates-to OD-RULES-005",
       "hash": "sha256:bfa0563a1fedc507e535d635ab105676c81d40c1ba61a33d4e65ff2e29a0c975"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-CAPABILITY-008 relates-to OD-CAPABILITY-001",
+      "hash": "sha256:93b9ee2d80332bf6a127efb734f33ffed4f3faed3739713dd785ff24e8380609"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-CAPABILITY-008 relates-to OD-CAPABILITY-007",
+      "hash": "sha256:a3ca0d2c886753adb77631cd83651151766d561d20885cbc83da1879c8ce5c85"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-CAPABILITY-008 relates-to OD-PACKAGE-006",
+      "hash": "sha256:2c16636715dee0c86247b03f3a2acc43ce753cba6e3fd94cf36ce6072e03a945"
     },
     {
       "content": "relations",
@@ -3358,6 +3383,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-PACKAGE-006 relates-to OD-CAPABILITY-008",
+      "hash": "sha256:e02e0c4d4dc2a3ea9e8aba38d2d8c96d4b3e72fd0ac5da58df478e6e54810016"
+    },
+    {
+      "content": "relations",
       "identity": "OD-PACKAGE-006 relates-to OD-HOST-004",
       "hash": "sha256:6bec44bdb98023f9f00206ea05789a6285318a41afc7e6287d1d4904bac9b14a"
     },
@@ -4485,6 +4515,11 @@
       "content": "nodes",
       "identity": "OD-CAPABILITY-007",
       "hash": "sha256:ad4b3ea314ad7eb9a0b3143cbbe12ff3216a435344e66ad33c39dccebb711a99"
+    },
+    {
+      "content": "nodes",
+      "identity": "OD-CAPABILITY-008",
+      "hash": "sha256:bdd9749a9836e85872d91d391318ce6f418cf1b20da28889bd2d9ae5da91634d"
     },
     {
       "content": "nodes",
