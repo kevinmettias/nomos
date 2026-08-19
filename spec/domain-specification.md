@@ -37,6 +37,7 @@ profile: domain-specification
 | docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md@authored | docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md | authored | 30 | 7 | sha256:2d1cc618a04047fd179e4d5f24fd112d9fafc6d05fe7710be734b52d3d2dc8e9 |
 | docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md@authored | docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md | authored | 23 | 7 | sha256:f8ced57db03fbaac9fbbb8a550e6e9561a4d5e651d59adb613370d47e46725be |
 | docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md@authored | docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md | authored | 38 | 8 | sha256:d44936bdfee31770dd5c295dfd8b5c31ee3fd0f843aa2f0878024e7e7e977227 |
+| docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md@authored | docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md | authored | 12 | 5 | sha256:7b868459b4901509f831d98949e39dd926a2a649fc7ab419ad983c06f799c1a1 |
 | docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md@authored | docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md | authored | 34 | 10 | sha256:f1e0d83250422ce9a01b49549ecadefeb10363f0ac7ac1e0aad7ef647caa2626 |
 | docs/records/OD-CAPABILITY-002-a-capability-contract-is-not-a-providers-property.md@authored | docs/records/OD-CAPABILITY-002-a-capability-contract-is-not-a-providers-property.md | authored | 30 | 8 | sha256:37a877700da32038de6f0928850c29baadca4cb64984b86bc683e0cff204b669 |
 | docs/records/OD-CAPABILITY-003-per-subject-fallback-is-admitted-because-the-provider-is-part-of-the-address.md@authored | docs/records/OD-CAPABILITY-003-per-subject-fallback-is-admitted-because-the-provider-is-part-of-the-address.md | authored | 23 | 7 | sha256:45b5e163405af8ddb16c7acfa3a07390919b0f8605a212a676fa9a0e5a260994 |
@@ -347,6 +348,11 @@ profile: domain-specification
 | docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#24 | authored | 2 | What A Runtime-Informed Claim Means When No Observation Exists |
 | docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#30 | authored | 2 | What This Record Does Not Do |
 | docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#37 | authored | 2 | Status |
+| docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md#1 | authored | 1 | Whether the first program-semantics capability is picked and built now, or waits for a rule that needs the evidence it would produce |
+| docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md#2 | authored | 2 | Question |
+| docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md#5 | authored | 2 | Current Position |
+| docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md#8 | authored | 2 | What Would Decide It |
+| docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md#11 | authored | 2 | Status |
 | docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md#1 | authored | 1 | The guarantee decides which usable offer answers, and the caller decides how far down to spend |
 | docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md#2 | authored | 2 | Question |
 | docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md#4 | authored | 2 | What It Did |
@@ -7625,6 +7631,128 @@ implementation questions this record does not reach.
 *revision: authored · kind: prose · heading: A runtime observation is a workload-scoped fact, and the determinism declarations exempt it rather than bind it / Status · hash: sha256:d16b36763d2df48dce1c5530f8d1048ff6bc8f5439c71282509185aa3fff1da1*
 
 Closed by `P12-RUNTIME-EVIDENCE`.
+
+### docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md#1
+
+*revision: authored · kind: heading · heading: Whether the first program-semantics capability is picked and built now, or waits for a rule that needs the evidence it would produce · hash: sha256:9143ddb006f0388754879fb32372d7789474712a2dbcf19267cba09a0201bac3*
+
+# Whether the first program-semantics capability is picked and built now, or waits for a rule that needs the evidence it would produce
+
+### docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md#2
+
+*revision: authored · kind: heading · heading: Whether the first program-semantics capability is picked and built now, or waits for a rule that needs the evidence it would produce / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md#3
+
+*revision: authored · kind: prose · heading: Whether the first program-semantics capability is picked and built now, or waits for a rule that needs the evidence it would produce / Question · hash: sha256:d68dce276003dc76de21e88b08ea246d191534a88796ef6d40c24a6b9201bb7f*
+
+`OD-ANALYSIS-004` settled what a program-semantics capability must say — the five existing
+epistemic types (`FactVariant`, `Guarantee`, `EvidenceClass`, `Applicability`, `Observation`),
+never a domain-local substitute — and what `FactVariant::SemanticallyResolved` obliges a
+producer to have actually done. It deliberately does not pick which capability gets built
+first: its five worked shapes (ownership crossing a closed boundary, lifetime/allocation
+against a performance policy, escape past a module boundary, a synchronization ordering a
+determinism policy forbids, an effect a package or authority policy restricts) are named as
+"illustration of the boundary test... not a closed list," and its "What This Record Does Not
+Do" section states plainly: "The first program-semantics producer is separate work, reserving
+its own territory."
+
+### docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md#4
+
+*revision: authored · kind: prose · heading: Whether the first program-semantics capability is picked and built now, or waits for a rule that needs the evidence it would produce / Question · hash: sha256:1a2921b96c55d3ffa5b6a18848d0371950134d1c94bd6059757b02d1695c53da*
+
+`crates/capabilities` holds exactly one crate, `nomos-cap-syntax`, filing every fact it
+produces at `FactVariant::Syntactic`. `FactVariant`'s ordering — `Predicted`, `Approximate`,
+`Syntactic`, `SemanticallyResolved`, `RuntimeObserved` — exists so a rule needing resolved
+names can refuse a weaker answer, but today it orders one value against nothing: no rule in
+this workspace has ever asked for `SemanticallyResolved` or `RuntimeObserved` evidence, and
+neither of `nomos-rules`' two real rules (`Check_Naming_Convention`,
+`Check_Completeness_Mirrors`) reads past `Syntactic`/`Approximate`. Picking one of the five
+illustrative shapes and building a crate under `crates/capabilities` for it now — the first
+question a session reading `OD-ANALYSIS-004` reaches for — would be exactly the shape `D-135`
+already named a mistake elsewhere: inferring genericity, or in this case a whole new capability
+domain, from a wish rather than a demonstrated concrete need. The open question is whether that
+choice gets made now, on the strength of `OD-ANALYSIS-004`'s worked examples alone, or waits
+for a real consumer to force it.
+
+### docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md#5
+
+*revision: authored · kind: heading · heading: Whether the first program-semantics capability is picked and built now, or waits for a rule that needs the evidence it would produce / Current Position · hash: sha256:3410589a125ce4b264969343987e63e029f80de6e30da91448b149ee4405900f*
+
+## Current Position
+
+### docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md#6
+
+*revision: authored · kind: prose · heading: Whether the first program-semantics capability is picked and built now, or waits for a rule that needs the evidence it would produce / Current Position · hash: sha256:6c072bfdaf0ee72e1834f60432b5ee8803ec2533f5d4fb226b04b18ec78d7037*
+
+`OD-ANALYSIS-004` names no trigger for this choice — neither it nor `OD-ANALYSIS-002`,
+`OD-ANALYSIS-003`, `ARC-CONFORMANCE-001` nor `OD-CAPABILITY-002` states a concrete condition
+under which the first program-semantics capability should be selected. Nothing in this
+workspace today is blocked on the absence: no rule, native or from a package, has a subject
+that needs an ownership, lifetime, escape, concurrency-structure or effects claim to reach a
+verdict it cannot reach otherwise. `nomos-cap-syntax` remains the only capability contract;
+`OD-CAPABILITY-007`'s decline-with-reason question and `OD-CAPABILITY-008`'s provider-trait
+question were both left open for the identical reason — a population of one (or, for
+`OD-CAPABILITY-008`, two) provider instances is not enough to check a design against, and the
+same is true here for a population of zero real consumers of the two unused `FactVariant`
+levels.
+
+### docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md#7
+
+*revision: authored · kind: prose · heading: Whether the first program-semantics capability is picked and built now, or waits for a rule that needs the evidence it would produce / Current Position · hash: sha256:7f7d50d74764faeae901471a7330ac49b884c5ff61bfac0dedaba080d3cf6cbf*
+
+Building any one of the five illustrative shapes now would fix a choice — which fact, in
+which payload shape, against which of this repository's own policies — before a real rule
+exists to hold that choice to account. `OD-ANALYSIS-004`'s own worked examples are explicit
+that each is a *shape* of claim, not a specific one this workspace has committed to; treating
+one of them as pre-selected would be reading a decided answer into a record that named the
+opposite.
+
+### docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md#8
+
+*revision: authored · kind: heading · heading: Whether the first program-semantics capability is picked and built now, or waits for a rule that needs the evidence it would produce / What Would Decide It · hash: sha256:b21c34f083f944a8317c5bb99f866d38e2c77a3ce5a1a64810a532456b826658*
+
+## What Would Decide It
+
+### docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md#9
+
+*revision: authored · kind: prose · heading: Whether the first program-semantics capability is picked and built now, or waits for a rule that needs the evidence it would produce / What Would Decide It · hash: sha256:60eccf259eccda83201753bb6fa79a3c52e880348b6530ea939bfbb661329395*
+
+A rule — native, or from a future rule package — that needs a program-semantics fact to reach
+a verdict it cannot reach at `Syntactic` or `Approximate` today. That rule's own subject would
+name which of `OD-ANALYSIS-004`'s five shapes (or a sixth this record does not anticipate) is
+the real one to build, the same way `Check_Naming_Convention`'s arrival was what let
+`OD-RULES-006` compare two rules' placement rationale on real evidence instead of one. Until
+such a rule exists, any of the five shapes is equally unmotivated, and picking among them would
+be a design choice with no case to check it against.
+
+### docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md#10
+
+*revision: authored · kind: prose · heading: Whether the first program-semantics capability is picked and built now, or waits for a rule that needs the evidence it would produce / What Would Decide It · hash: sha256:15c98b89fcebce5a5afeda69d8ab411e544b4fe20ff1b54a2012e6328e41d971*
+
+A second, independent trigger: this repository's own architecture, requirement or policy
+records naming a specific claim in this family as something a conformance check must make —
+for example a future band or authority-class rule that can only be enforced by knowing whether
+a value's ownership crosses a closed boundary once resolved. A named requirement of that shape
+would pick the first capability by naming the fact it needs, rather than by a session choosing
+among `OD-ANALYSIS-004`'s illustrations for its own reasons.
+
+### docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md#11
+
+*revision: authored · kind: heading · heading: Whether the first program-semantics capability is picked and built now, or waits for a rule that needs the evidence it would produce / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md#12
+
+*revision: authored · kind: prose · heading: Whether the first program-semantics capability is picked and built now, or waits for a rule that needs the evidence it would produce / Status · hash: sha256:26c4c4381f4043334126da3e5cf0318aa59f19ebfc885e9142fafbf52850bd4f*
+
+Open. No rule in this workspace needs a `SemanticallyResolved` or `RuntimeObserved` fact
+today, so nothing picks among `OD-ANALYSIS-004`'s five illustrative shapes yet. Revisit when a
+rule's own subject names the fact it needs, or when an architecture, requirement or policy
+record names a specific program-semantics claim a conformance check must make.
 
 ### docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md#1
 

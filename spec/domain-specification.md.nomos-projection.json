@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:987996c0307a0f8d0863b68815e80a0ef6d1c9a6f8fc781364b2a32480a52eff",
-  "inputs_digest": "sha256:f9b4400c20e8c6f5b0a0aebbc3f867854360a8769fbd9cf959365a7908ad3bfe",
+  "content_digest": "sha256:11802dea59716c61533be7cf75d7a4b6f1045bfcb7f2be015ff459c1e6dd84fb",
+  "inputs_digest": "sha256:406fb3d0278107f37bed48c9752ea60075d79c8f5860c1fa90c00b52c38661ec",
   "sections": [
     [
       "Documents",
-      135
+      136
     ],
     [
       "Sections",
-      1180
+      1185
     ],
     [
       "Source blocks",
-      4233
+      4245
     ]
   ],
   "inputs": [
@@ -154,6 +154,11 @@
       "content": "documents",
       "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md@authored",
       "hash": "sha256:d44936bdfee31770dd5c295dfd8b5c31ee3fd0f843aa2f0878024e7e7e977227"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md@authored",
+      "hash": "sha256:7b868459b4901509f831d98949e39dd926a2a649fc7ab419ad983c06f799c1a1"
     },
     {
       "content": "documents",
@@ -1679,6 +1684,31 @@
       "content": "headings",
       "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#37",
       "hash": "sha256:9e761b542fe4199a65a70aa55a85853b63b4dfc6267da0e6e0a5ecd522065d4d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md#1",
+      "hash": "sha256:fc6f3a76af8ec0ad57fe93090efa1a9b3e140b56bb8a6d0792aeb8f4b654085e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md#2",
+      "hash": "sha256:dcab3453bd380e3e1f6f9b6a6a48e76c4b84de97b13069b46f1f75b5023bd52f"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md#5",
+      "hash": "sha256:55ed8d5d813a12c0c5f22c56f723bd7108cb23a6ea75d031ddb3fa59cb2f9a1b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md#8",
+      "hash": "sha256:8e4eaab96474dc014c40b0ea61eb45af53962f044171cdb95509f7b15e70b39c"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md#11",
+      "hash": "sha256:c129187bfa4d268c5a928afe940699641dd68c533bc9063d889e1146fe5cd6cb"
     },
     {
       "content": "headings",
@@ -10054,6 +10084,66 @@
       "content": "blocks",
       "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#38",
       "hash": "sha256:d16b36763d2df48dce1c5530f8d1048ff6bc8f5439c71282509185aa3fff1da1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md#1",
+      "hash": "sha256:9143ddb006f0388754879fb32372d7789474712a2dbcf19267cba09a0201bac3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md#3",
+      "hash": "sha256:d68dce276003dc76de21e88b08ea246d191534a88796ef6d40c24a6b9201bb7f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md#4",
+      "hash": "sha256:1a2921b96c55d3ffa5b6a18848d0371950134d1c94bd6059757b02d1695c53da"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md#5",
+      "hash": "sha256:3410589a125ce4b264969343987e63e029f80de6e30da91448b149ee4405900f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md#6",
+      "hash": "sha256:6c072bfdaf0ee72e1834f60432b5ee8803ec2533f5d4fb226b04b18ec78d7037"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md#7",
+      "hash": "sha256:7f7d50d74764faeae901471a7330ac49b884c5ff61bfac0dedaba080d3cf6cbf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md#8",
+      "hash": "sha256:b21c34f083f944a8317c5bb99f866d38e2c77a3ce5a1a64810a532456b826658"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md#9",
+      "hash": "sha256:60eccf259eccda83201753bb6fa79a3c52e880348b6530ea939bfbb661329395"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md#10",
+      "hash": "sha256:15c98b89fcebce5a5afeda69d8ab411e544b4fe20ff1b54a2012e6328e41d971"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md#11",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md#12",
+      "hash": "sha256:26c4c4381f4043334126da3e5cf0318aa59f19ebfc885e9142fafbf52850bd4f"
     },
     {
       "content": "blocks",
