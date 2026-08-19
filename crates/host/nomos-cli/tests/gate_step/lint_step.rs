@@ -7,7 +7,7 @@ use crate::workflow::{RULES_STEP, Workflow};
 /// `OD-LEDGER-003` decided that finishing derives its lint argv from the workflow rather than
 /// copying it, and `Derive_Step` finds that argv **by the step's name**. So a step in this
 /// file named `Lint` would make every `work finish` run whatever that step runs — here, `cargo
-/// run … check --root .` — and clippy would stop running before every item's predicate with
+/// run … gate run --root .` — and clippy would stop running before every item's predicate with
 /// nothing saying so. That is why the step `OD-GATE-004` added is named `Rules`.
 ///
 /// The argv no longer carries `-- -D warnings`. `OD-GATE-007` collapsed this workspace's clippy

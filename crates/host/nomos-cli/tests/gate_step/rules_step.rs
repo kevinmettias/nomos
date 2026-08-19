@@ -21,8 +21,9 @@ fn Test_This_Repository_Gate_Should_Run_The_Rules()
 
     assert_eq!(argv.first().map(String::as_str), Some("cargo"));
     assert!(
-        argv.iter().any(|argument| return argument == "check"),
-        "the Rules step must still run the check group, got {argv:?}"
+        argv.iter().any(|argument| return argument == "gate")
+            && argv.iter().any(|argument| return argument == "run"),
+        "the Rules step must still run `gate run`, got {argv:?}"
     );
     assert!(
         argv.iter().any(|argument| return argument == "nomos-cli"),

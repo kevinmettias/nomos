@@ -199,9 +199,10 @@ jobs:
       # rule layer over this workspace and exits on what it found.
       #
       # There is deliberately NO exit-code branch here, and adding one would be a
-      # regression rather than a clarification. crates/host/nomos-cli/src/check.rs is the
-      # authority on what each code means; a `case $?` block restating 1, 5 and 6 in YAML
-      # would be a second place for one contract to be spelled -- the objection
+      # regression rather than a clarification. crates/host/nomos-cli/src/gate/exit_code.rs
+      # and gate/parsing.rs's USAGE string are the authority on what each code means; a
+      # `case $?` block restating 1, 5 and 6 in YAML would be a second place for one
+      # contract to be spelled -- the objection
       # OD-LEDGER-003 makes about the lint command and OD-GATE-002 about the surface
       # snapshot. Actions fails a step on any non-zero exit, and that default IS the
       # policy this step needs: zero is the only success. In particular a run that judged
@@ -220,7 +221,7 @@ jobs:
       # answer.
       - name: Rules
         if: matrix.os == 'ubuntu-latest'
-        run: cargo run --quiet -p nomos-cli --bin nomos -- check --root .
+        run: cargo run --quiet -p nomos-cli --bin nomos -- gate run --root .
 
       # deny.toml is policy this repository declared and never ran. D-130 cites it as
       # governing -- the GPU, windowing and UI ban is what keeps a headless CLI from

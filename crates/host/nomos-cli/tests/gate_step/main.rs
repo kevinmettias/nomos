@@ -1,7 +1,7 @@
 //! The gate runs the rule layer, and nothing here can excuse it from failing.
 //!
 //! `OD-GATE-004` appended a `Rules` step to `.github/workflows/gate.yml` running
-//! `cargo run --quiet -p nomos-cli --bin nomos -- check --root .`. Everything that decides
+//! `cargo run --quiet -p nomos-cli --bin nomos -- gate run --root .`. Everything that decides
 //! whether that step *judges anything* lives in three places, and only one of them is code:
 //! the step's presence, the tree it is pointed at, and whether it is allowed to fail.
 //! `check_command.rs` beside this file asserts what the command does; this file asserts that

@@ -19799,6 +19799,65 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-GATE-RUN-CI-CALLER",
+      "title": "nomos gate run becomes the Rules step's caller, giving OD-GATE-015 a real build its disposition gates",
+      "why": "OD-GATE-014 and OD-GATE-015 both name the same trigger for the deeper question each is really waiting on: a real caller whose build Gate's run actually affects. P13-GATE-RUN-FIRST-INCREMENT-3 gave Gate a real run verb; P13-GATE-014-015-RUN-TRIGGER-FIRED (8fc6296) re-read both records against it and confirmed, against the real workflow file rather than assumed, that OD-GATE-004's own Rules step still invokes `cargo run --quiet -p nomos-cli --bin nomos -- check --root .` -- nomos check directly, never nomos gate run or nomos gate plan. Gate has had a real run verb with no caller since that item landed.\n\nVerified directly against the real code, not assumed: nomos gate run's exit codes (crates/host/nomos-cli/src/gate/exit_code.rs) are deliberately the same numbers check.rs's ExitCode already gives 0/1/5/6, documented there as \"a run that finds a blocking finding or judges nothing must not read differently at the shell than a check that did.\" run.rs walks the tree and calls nomos_check_orchestration::Run exactly as check.rs does. So switching the Rules step's argv from `check --root .` to `gate run --root .` changes nothing about what CI can pass or fail on, and gives OD-GATE-015's primary trigger -- \"a real caller whose build run's disposition gates\" -- something concrete to point at instead of \"nothing outside this record's own tests.\" It does not touch ScopeSelector/RuleSelector: the step still judges everything, unconditionally, so OD-GATE-014's own primary trigger (a caller wanting fewer than every rule or every file) still does not fire from this alone.",
+      "done_when": ".github/workflows/gate.yml's Rules step's run: becomes exactly one bare command, `cargo run --quiet -p nomos-cli --bin nomos -- gate run --root .` -- still one bare argv with no shell metacharacters (a scripted run: is refused by Derive_Step, per OD-GATE-004), the step is still named `Rules` and never `Lint` (work finish derives its lint argv by that exact name), and --root . stays written out explicitly so narrowing it stays visible in a diff. The step's own comment block is edited for accuracy: it names crates/host/nomos-cli/src/gate/exit_code.rs and gate/parsing.rs's USAGE as the authority on what each exit code means, in place of check.rs, since gate is now the direct thing CI invokes -- while still not restating the codes in YAML.\n\ncrates/host/nomos-cli/tests/gate_step/rules_step.rs's three tests are updated to match: Test_This_Repository_Gate_Should_Run_The_Rules asserts the derived argv contains \"gate\" and \"run\" (not \"check\") plus \"nomos-cli\", Test_A_Scripted_Rules_Step_Should_Not_Satisfy_That_Assertion and Test_The_Rules_Step_Should_Judge_The_Whole_Workspace need no assertion change but must still pass against the edited fixture. gate_step/main.rs's and gate_step/lint_step.rs's doc comments, which quote the old `check --root .` invocation by name, are corrected to quote the new one.\n\nNo new exit-code meaning is invented and none of check.rs, gate/exit_code.rs or gate/parsing.rs change -- this item is CI wiring only, reusing the exit-code parity gate/run.rs and gate/report.rs already carry. OD-GATE-014 and OD-GATE-015 themselves are not edited by this item (a separate item reads them against this landing, the same two-step split P13-GATE-RUN-FIRST-INCREMENT-3 / P13-GATE-014-015-RUN-TRIGGER-FIRED already used).\n\ncargo test --no-fail-fast -p nomos-cli -p nomos-contract-tests passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          ".github/workflows/gate.yml",
+          "crates/host/nomos-cli/tests/gate_step"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "ts\\add_guarantees_what_it_says.rs (target\\debug\\deps\\add_guarantees_what_it_says-641e0d2a0a217bd1.exe)\n     Running tests\\authoring_surface.rs (target\\debug\\deps\\authoring_surface-6cb74c3764d0a5ef.exe)\n     Running tests\\check_command.rs (target\\debug\\deps\\check_command-07d98298ed960912.exe)\n     Running tests\\freshness.rs (target\\debug\\deps\\freshness-a78dafc4921d28b5.exe)\n     Running tests\\gate_step\\main.rs (target\\debug\\deps\\gate_step-a1943a1e503fff24.exe)\n     Running tests\\list_tells_the_truth.rs (target\\debug\\deps\\list_tells_the_truth-13dbd4b42c31a18d.exe)\n     Running tests\\read_surface.rs (target\\debug\\deps\\read_surface-eea31a3569f203bb.exe)\n     Running tests\\request_submit.rs (target\\debug\\deps\\request_submit-b7ccf29aca7a9ab8.exe)\n     Running tests\\stale_writer_is_refused.rs (target\\debug\\deps\\stale_writer_is_refused-a75d01ec344959bb.exe)\n     Running tests\\takeover_is_recorded.rs (target\\debug\\deps\\takeover_is_recorded-f933ea9d3f5eb4c8.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-a783bf8edf754616.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-1c3535ca3610bc76.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-50ba5fa82cca7b60.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-bdb2d74892f50983.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-046303bba4076e0c.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-c6bb6b8a93378329.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-b675e407dc094bff.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-a463b20fe8dc07fb.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-e43dae1fbeeccb0f.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-98324bffc538e3eb.exe)\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1787172929,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "8fc629629b7f43705ec1f92a0bd6629011cd0281"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
