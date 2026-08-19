@@ -132,6 +132,7 @@ profile: domain-specification
 | docs/records/OD-RULES-005-whether-a-rules-offer-needs-a-measured-inputs-classification-or-waits-for-a-caching-consumer.md@authored | docs/records/OD-RULES-005-whether-a-rules-offer-needs-a-measured-inputs-classification-or-waits-for-a-caching-consumer.md | authored | 13 | 5 | sha256:3bcc3aad22947f89bb1436da5b44db13aabd4af1c97a60dbdab28899bbdad057 |
 | docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md@authored | docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md | authored | 18 | 6 | sha256:5e7bde3ad034017040659d44bc4b044696c4a0b33830e8596bd67906a2d2ac4c |
 | docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md@authored | docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md | authored | 15 | 5 | sha256:45afb6da12c9c097b8769739c122fc5780401a07f2c6bc0834eac32d4c109ba7 |
+| docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md@authored | docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md | authored | 29 | 5 | sha256:3aa286a2c572fe4d37f45f85c06e701857ef92ece293de0368566a1615a78c6d |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md@authored | docs/records/OD-SPEC-001-the-storage-backend-question.md | authored | 11 | 5 | sha256:e4feddab256024ea38e21849120fdd52d0ddf17d4e3f69cfb24eb4c8e766c8ae |
 | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md@authored | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md | authored | 20 | 7 | sha256:2c45051e43390556bfd68865152580e1ae09c2e82dc94bb20e65cdbf60d69a10 |
 | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md@authored | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md | authored | 23 | 7 | sha256:481ffd62b02df705439b4ef914adb21e24894d1d3f0295754fc13f7d95c89c85 |
@@ -1194,6 +1195,11 @@ profile: domain-specification
 | docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md#6 | authored | 2 | Current Position |
 | docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md#10 | authored | 2 | What Would Decide It |
 | docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md#14 | authored | 2 | Status |
+| docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md#1 | authored | 1 | Which semantic domain the next production rule needs, and which deferred architecture piece it actually forces |
+| docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md#2 | authored | 2 | Question |
+| docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md#5 | authored | 2 | The candidate: `Check_Unread_Reaches_A_Finding` |
+| docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md#20 | authored | 2 | What this candidate forces, checked against each open deferred question in turn |
+| docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md#28 | authored | 2 | Status |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#1 | authored | 1 | Whether the specification store gains a second backend, and what would decide it |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#2 | authored | 2 | Question |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#4 | authored | 2 | Current Position |
@@ -34746,6 +34752,354 @@ Open. This question is deliberately left open rather than resolved either way: n
 this workspace today needs anything a capability requirement and the (not yet built) analysis
 planner cannot already express. Revisit when two or more real rules exhibit one of the
 triggers above.
+
+### docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md#1
+
+*revision: authored · kind: heading · heading: Which semantic domain the next production rule needs, and which deferred architecture piece it actually forces · hash: sha256:f240fac2c0b19cbc1748cd11f643510d3e3f17efc637189ef035632e2f635793*
+
+# Which semantic domain the next production rule needs, and which deferred architecture piece it actually forces
+
+### docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md#2
+
+*revision: authored · kind: heading · heading: Which semantic domain the next production rule needs, and which deferred architecture piece it actually forces / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md#3
+
+*revision: authored · kind: prose · heading: Which semantic domain the next production rule needs, and which deferred architecture piece it actually forces / Question · hash: sha256:41570ffcf2453cbfdfdd0bed3c1db1812cab98a58821358a43f577538466eeaf*
+
+The board went quiescent after `P13-LEDGER-GAPS-3`: every item is `Done` or `Declined`,
+and `nomos work list` reports `next: nothing is eligible`. The three shipped rules --
+`Check_Naming_Convention`, `Check_Completeness_Mirrors`, `Check_Dependency_Direction` --
+occupy three narrow domains: syntax-local per-item judgment, cross-artifact consistency
+over already-decoded fact text, and package-dependency graph reachability. None reads a
+program's control flow, its call structure, or a resolved name or type. `OD-RULES-005`,
+`OD-RULES-006`, `OD-RULES-007`, `OD-GATE-014` and `OD-CAPABILITY-008` each left a deferred
+abstraction open rather than built, and each named its own concrete trigger -- a second
+rule, a third provider, two rules exhibiting a shared shape, a caller needing to select
+less than everything. Re-litigating any of those from a taxonomy would repeat the mistake
+`D-135` already names: inferring genericity from a wish rather than a demonstrated need.
+
+### docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md#4
+
+*revision: authored · kind: prose · heading: Which semantic domain the next production rule needs, and which deferred architecture piece it actually forces / Question · hash: sha256:98274dcbff7482f8bd611b02ca3c593c0624755a4f4c12f012bd04820c9fdff2*
+
+The board's next honest move is not another pass over those open questions from the
+outside. It is a concrete next rule, real enough that its own requirements either trip one
+of those triggers or plainly do not -- decided from what the rule needs, not from what
+would make a tidier architecture. This record names one candidate, drawn from a defect
+this workspace's own three shipped rules already exhibit, independently, three times, and
+follows it through every deferred question it touches.
+
+### docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md#5
+
+*revision: authored · kind: heading · heading: Which semantic domain the next production rule needs, and which deferred architecture piece it actually forces / The candidate: `Check_Unread_Reaches_A_Finding` · hash: sha256:74a6d4a9c9dc72c80e7d92c6de7fd331ede07510ce74399ec13e306cac11e2bf*
+
+## The candidate: `Check_Unread_Reaches_A_Finding`
+
+### docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md#6
+
+*revision: authored · kind: prose · heading: Which semantic domain the next production rule needs, and which deferred architecture piece it actually forces / The candidate: `Check_Unread_Reaches_A_Finding` · hash: sha256:2f39d80eca54d25450cbb07a59aec82b3c42ffbb9eb18da09697e4daf88dc3af*
+
+**Informal statement.** Every control-flow path that begins at a fact-read failure --
+`FactReader::Require` returning `Err(applicability)` -- must reach a `Finding`
+construction, directly or by propagation, before the enclosing function returns. A path
+that instead falls through, returns an empty collection, or otherwise continues as though
+the read had succeeded is the exact defect `Applicability`'s own module doc names as this
+product's first principle: "unknown is not pass."
+
+### docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md#7
+
+*revision: authored · kind: prose · heading: Which semantic domain the next production rule needs, and which deferred architecture piece it actually forces / The candidate: `Check_Unread_Reaches_A_Finding` · hash: sha256:b58c862ffc45fcbe22eea87e26e5720240af006986bb98a0ce1c1f0a976cf02b*
+
+**Why this one, and not an invented example.** The convention this rule would mechanize is
+not hypothetical -- it is already hand-written, independently, three times, with nothing
+checking that any of the three actually holds it:
+
+### docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md#8
+
+*revision: authored · kind: prose · heading: Which semantic domain the next production rule needs, and which deferred architecture piece it actually forces / The candidate: `Check_Unread_Reaches_A_Finding` · hash: sha256:eead00e946688da0538f78c13bdad5b606b6bda501706aeb707d20b4bee9227a*
+
+- `crates/rules/nomos-rules/src/naming.rs`, `Payload_Of` (line 78): matches
+  `facts.Require(...)`'s `Err(applicability)` arm and returns `Err(Unread(...))`.
+- `crates/rules/nomos-rules/src/mirror/index.rs` (line 74 on): the identical shape, its
+  own private `Unread_Of`.
+- `crates/rules/nomos-rules/src/dependency.rs`, `Payload_Of` (line 168): the identical
+  shape again, its own private `Unread`.
+
+### docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md#9
+
+*revision: authored · kind: prose · heading: Which semantic domain the next production rule needs, and which deferred architecture piece it actually forces / The candidate: `Check_Unread_Reaches_A_Finding` · hash: sha256:3860a98b063191ef05cb9c26ce925ff76678ee3ae63a47c22557117f2bc711de*
+
+Three rule authors, working on three different capabilities, each reached for the same
+pattern and each wrote their own copy of the function that closes it, because nothing
+states the obligation once and checks it. That is the same shape `nomos-cap-syntax`'s own
+module doc describes for why a contract needed a home of its own: "nothing would have
+noticed the day one of them was retyped differently." Here nothing would notice the day
+one of them forgot the `Err` arm entirely -- `Violations_In`, `Check_Names_In` and every
+sibling judgment function stay exactly as green if a future edit to any of these three
+`Payload_Of`s drops its error path, because nothing but a human re-reading the diff holds
+the convention.
+
+### docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md#10
+
+*revision: authored · kind: prose · heading: Which semantic domain the next production rule needs, and which deferred architecture piece it actually forces / The candidate: `Check_Unread_Reaches_A_Finding` · hash: sha256:54c97d6bb1bbfd86af80f7f02dca5c3ca0d1c1bba41d7f755bff32d6b6f2493c*
+
+**Canonical subject.** Not a file and not a package, the grain every rule to date reads.
+The subject is a control-flow edge inside one function body: the continuation of an `Err`
+arm (or an equivalent early-exit branch) reached from a fact-read call. This is a subject
+grain finer than anything a `SubjectId` names in this workspace today.
+`IncrementalGranularity::Region` -- "a sub-symbol region refreshes independently" -- is
+already declared in `crates/contracts/nomos-contracts/src/guarantee/incremental_granularity.rs`
+and has never been used by a real provider; this candidate's subject is the first real
+shape that grain was named for.
+
+### docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md#11
+
+*revision: authored · kind: prose · heading: Which semantic domain the next production rule needs, and which deferred architecture piece it actually forces / The candidate: `Check_Unread_Reaches_A_Finding` · hash: sha256:55d20e5103bce368b6ad4e2524bf0ac2d8a3d98bd23cc7c1557b61cd1920f904*
+
+**Semantic domain.** Intraprocedural control flow / error-flow reachability: whether a
+`Finding` is constructed on every path forward from a given point, not what the source
+declares or what package depends on what.
+
+### docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md#12
+
+*revision: authored · kind: prose · heading: Which semantic domain the next production rule needs, and which deferred architecture piece it actually forces / The candidate: `Check_Unread_Reaches_A_Finding` · hash: sha256:313f0f8c07f45b3d9486baf4e47b1923970cf7706e2f1a6205d0608e2db76e19*
+
+**Logical form.** A per-path reachability obligation -- "on every path forward from S,
+some node before the function's exit constructs a `Finding`" -- not the flat
+per-subject decode-and-compare predicate all three shipped rules share.
+`Check_Dependency_Direction` is, in `OD-RULES-007`'s own words, "a plain per-source,
+per-edge loop over an already-decoded fact." This candidate cannot be phrased that way: it
+is a graph traversal over a function body's own branches, not a loop over a list a
+provider already flattened.
+
+### docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md#13
+
+*revision: authored · kind: prose · heading: Which semantic domain the next production rule needs, and which deferred architecture piece it actually forces / The candidate: `Check_Unread_Reaches_A_Finding` · hash: sha256:bd461c063e2b3c9f1af4aee7ef727b81031136020e56de48ae3eabd83e45aae3*
+
+**The exact facts it would consume, checked against what exists today, not assumed.**
+`crates/capabilities/nomos-cap-syntax` is checked directly: its payload is `header
+item*`, one record per top-level declaration (`crates/capabilities/nomos-cap-syntax/src/payload.rs`'s
+grammar), carrying `ordinal`, `kind`, `visibility`, `qualified_name`, `documentation` and
+`shape` -- and `shape` itself, for a function, is only `fn/<arity>`, the parameter count.
+There is no statement, expression, branch or call-site record anywhere in this schema.
+`nomos.cap.dependency.edges` carries package-level edges, not function bodies. Neither
+existing capability can answer this candidate's question at any guarantee level; the fact
+it needs -- an intraprocedural control-flow graph, with fact-read calls and
+`Finding`-construction sites identified within it -- does not exist under any capability
+this workspace ships.
+
+### docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md#14
+
+*revision: authored · kind: prose · heading: Which semantic domain the next production rule needs, and which deferred architecture piece it actually forces / The candidate: `Check_Unread_Reaches_A_Finding` · hash: sha256:c536cd9dbe90c996960c90501894946ec1f9db6879e884aeb3d2453a2556d20c*
+
+**Examined / unsupported / insufficient evidence / not applicable**, in this workspace's
+own vocabulary (`Applicability`, `crates/contracts/nomos-contracts/src/finding/applicability.rs`):
+
+### docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md#15
+
+*revision: authored · kind: prose · heading: Which semantic domain the next production rule needs, and which deferred architecture piece it actually forces / The candidate: `Check_Unread_Reaches_A_Finding` · hash: sha256:8166f88a36038e9b23b45fc7fe6a1178972eaa0941d793e4abf6a2b96aa03f54*
+
+- `NotApplicable` -- the function contains no fact-read call (no `Require` call whose
+  result is matched or propagated) at all.
+- `Supported` -- a control-flow provider resolved every path from every `Err` arm found
+  and confirmed a `Finding` reaches the function's exit on each.
+- `PartiallySupported` -- some paths in the function were resolved and some were not (a
+  macro-expanded arm, for instance -- `nomos-cap-syntax`'s own header record already
+  carries "a lower bound on unexpanded tokens" for exactly this reason).
+- `AgentRequired` -- the path forwards into a call the provider cannot resolve
+  statically: a call through `dyn FactReader` itself (the very trait this rule's own
+  sources call through), a stored closure invoked elsewhere, or any other dynamic
+  dispatch. This is not `MissingCapability` or `ProviderUnavailable`; a provider is
+  present and ran, and the honest answer is that no mechanical method decides the
+  question for this specific path.
+- `MissingCapability` / `ProviderUnavailable` -- no control-flow provider is installed,
+  or one is installed and could not run, the same two-state split
+  `Materialize_Dependencies` already draws for a `cargo metadata` failure.
+
+### docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md#16
+
+*revision: authored · kind: prose · heading: Which semantic domain the next production rule needs, and which deferred architecture piece it actually forces / The candidate: `Check_Unread_Reaches_A_Finding` · hash: sha256:9df75ea07e182e31ed06762cdd02be749d4378855c9f8bbf072f4baa0462db56*
+
+**Whether deterministic enforcement is possible.** In two tiers, not one:
+
+### docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md#17
+
+*revision: authored · kind: prose · heading: Which semantic domain the next production rule needs, and which deferred architecture piece it actually forces / The candidate: `Check_Unread_Reaches_A_Finding` · hash: sha256:c2a0ce3eae37210ee0118065efa98680e4056df027ee73ab5126f9db38713388*
+
+1. A heuristic, `Syntactic`-level version can flag the syntactically obvious cases --
+   an `Err` arm with an empty body, or one whose tail expression is plainly `Ok(...)`,
+   `continue`, or a bare `return` with no `Finding`-shaped value in sight -- by pattern
+   matching the AST alone, no name or type resolution required. This would already catch
+   the shape of defect a careless edit to any of the three existing `Payload_Of`s could
+   introduce.
+2. A sound version -- one that does not merely fail to flag a defect it happened not to
+   recognise -- requires resolving every call the `Err` arm reaches, including into
+   helper functions elsewhere in the crate, to confirm each actually constructs or
+   propagates a `Finding` rather than merely being named as though it does (`Unread`,
+   `Unread_Of` and `Unreadable` are three different functions with the same implied
+   contract and no shared type enforcing it). That resolution is
+   `FactVariant::SemanticallyResolved`'s own obligation as `OD-ANALYSIS-004` fixed it:
+   "resolved every name occurrence in its subject to the declaration it actually binds."
+   Tier 1 is a lint; tier 2 is the actual claim this rule states, and only tier 2 is
+   honestly reportable as `Applicability::Supported` rather than
+   `Applicability::SupportedWithFallback`.
+
+### docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md#18
+
+*revision: authored · kind: prose · heading: Which semantic domain the next production rule needs, and which deferred architecture piece it actually forces / The candidate: `Check_Unread_Reaches_A_Finding` · hash: sha256:f447e13106bd2d7dd917733b61ef6126f81c7e1a5c5d25d530fd05f82c5b6718*
+
+Neither tier exists in this workspace today. Building either is not this record's
+territory -- this record specifies the rule and traces what building it would force, and
+stops there.
+
+### docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md#19
+
+*revision: authored · kind: prose · heading: Which semantic domain the next production rule needs, and which deferred architecture piece it actually forces / The candidate: `Check_Unread_Reaches_A_Finding` · hash: sha256:92b532bc9bd8d18aab6f362e5ca1832ec67ee580078d518f19477807e39ab14a*
+
+**Whether correction is meaningful.** Mostly not. `nomos-corrections`' own crate doc states
+its lifecycle runs "no agent and no model backend anywhere," every step a pure function of
+an already-decided plan. The fix for a missing `Finding` on an `Err` path is "write a
+`Finding` that correctly describes this specific failure" -- a judgment about wording and
+severity, not a deterministic edit `nomos-corrections` could stage. The one exception is
+also the weakest claim: a syntactically empty arm (`Err(_) => {}`) is deterministically
+*wrong*, but the correction available for it is still only "flag it," a `Finding`, not a
+supplied fix.
+
+### docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md#20
+
+*revision: authored · kind: heading · heading: Which semantic domain the next production rule needs, and which deferred architecture piece it actually forces / What this candidate forces, checked against each open deferred question in turn · hash: sha256:3a7b25eddcfa27f015c25e79a7eb71377c86156dc4a9e2b608e59b4f54941338*
+
+## What this candidate forces, checked against each open deferred question in turn
+
+### docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md#21
+
+*revision: authored · kind: prose · heading: Which semantic domain the next production rule needs, and which deferred architecture piece it actually forces / What this candidate forces, checked against each open deferred question in turn · hash: sha256:de1a9590e23c9e15962cb44c32bf394ba895e7896f76a54c8020cc5938ad1d44*
+
+**`OD-ANALYSIS-007` -- the first program-semantics capability.** This is the one question
+this candidate actually moves. `OD-ANALYSIS-007`'s own "What Would Decide It" section
+names its trigger exactly: "a rule ... that needs a program-semantics fact to reach a
+verdict it cannot reach at `Syntactic` or `Approximate` today. That rule's own subject
+would name which of `OD-ANALYSIS-004`'s five shapes ... is the real one to build." This
+candidate's sound tier is precisely that: a claim that a `Finding`-construction effect
+does not occur on a path this repository's own convention (`Applicability`'s "unknown is
+not pass") forbids the absence of -- `OD-ANALYSIS-004`'s "Effects" shape by name ("a claim
+that an effect occurs from code this repository's own ... policy restricts it from
+performing," read in the negative). `OD-ANALYSIS-007` also states, as of its own writing,
+"no rule in this workspace has ever asked for `SemanticallyResolved` ... evidence" --
+true when it was written, against a population of two rules, and no longer precisely true
+today: `Check_Dependency_Direction`'s own `Dependency_Requirement` (`dependency.rs`, line
+124) already asks for `FactVariant::SemanticallyResolved`, at `IncrementalGranularity::Project`.
+That existing instance is resolution of Cargo's own package graph, not of program code --
+a materially different sense of "semantically resolved" than `OD-ANALYSIS-004`'s five
+illustrative shapes name, all of which are about a *program's* resolved names, types and
+control flow. So `OD-ANALYSIS-007`'s premise needs a narrower restatement -- a real rule
+has asked for `SemanticallyResolved` build-graph evidence, but none has yet asked for
+`SemanticallyResolved` program-code evidence in `OD-ANALYSIS-004`'s sense -- and this
+candidate is the first that would. Correcting `OD-ANALYSIS-007`'s own text is outside this
+record's territory; noting the distinction here is not.
+
+### docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md#22
+
+*revision: authored · kind: prose · heading: Which semantic domain the next production rule needs, and which deferred architecture piece it actually forces / What this candidate forces, checked against each open deferred question in turn · hash: sha256:b884e4f75ed003ce40053f44c5748728f3537e1135cafc40e8ca6ec9a4dc90a8*
+
+`OD-ANALYSIS-007` is not therefore closed by this record. It is narrowed the same way
+`OD-CAPABILITY-008` narrowed its own question on its third provider landing: this
+candidate is a real, specified subject naming a real, undecided shape (an
+intraprocedural control-flow / effects capability), which is what that record's own
+trigger asked for. Building it is separate work reserving its own territory, per
+`OD-ANALYSIS-004`'s "What This Record Does Not Do."
+
+### docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md#23
+
+*revision: authored · kind: prose · heading: Which semantic domain the next production rule needs, and which deferred architecture piece it actually forces / What this candidate forces, checked against each open deferred question in turn · hash: sha256:4a66a6a33ccf115c4700aa4d476272c1faa2a3e289fd10c94daa1cea2753db70*
+
+**`OD-RULES-007` -- a Rule Program/IR.** Not forced. The candidate's own judgment
+function stays the same flat shape every shipped rule already has: a loop over subjects,
+reading one already-materialized fact per subject and comparing it. The graph traversal
+this candidate needs happens once, inside the new capability's own provider, building the
+control-flow fact -- ordinary capability work, the same place `Check_Dependency_Direction`'s
+own graph-shaped fact (`DependencyPayload`'s edges) is built, not inside rule execution.
+`OD-RULES-007`'s own three-way split already places "new capability families" in the tier
+that is allowed to emerge from a real rule, separately from a Rule Program/IR; this
+candidate is exactly that tier and nothing else.
+
+### docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md#24
+
+*revision: authored · kind: prose · heading: Which semantic domain the next production rule needs, and which deferred architecture piece it actually forces / What this candidate forces, checked against each open deferred question in turn · hash: sha256:3d383ba604ad55d7b64915bfecdbfca39248405d2c6511bb8c53ca2a70a82f88*
+
+**`OD-CAPABILITY-008` -- a declared provider trait.** Not forced, and not moved either
+way. A control-flow provider would be the first (not a third or fourth) implementation of
+a wholly new capability, not another instance of `nomos.cap.syntax.items` or
+`nomos.cap.dependency.edges`. It adds no population to the question `OD-CAPABILITY-008`
+is actually asking, which is whether *multiple providers of the same capability* need a
+shared trait.
+
+### docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md#25
+
+*revision: authored · kind: prose · heading: Which semantic domain the next production rule needs, and which deferred architecture piece it actually forces / What this candidate forces, checked against each open deferred question in turn · hash: sha256:863d6cabfa6fb8d7deee987ad56402e015c677c8315cc71e608f5f9269e4a8bd*
+
+**`OD-RULES-005` -- a measured `Inputs` classification.** Not forced. This candidate reads
+one function body's already-walked source, the same "scoped files" shape
+`Check_Naming_Convention` and `Check_Completeness_Mirrors` already have -- it names no
+whole-corpus or external-tool dependency `OD-RULES-005`'s open question is about.
+
+### docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md#26
+
+*revision: authored · kind: prose · heading: Which semantic domain the next production rule needs, and which deferred architecture piece it actually forces / What this candidate forces, checked against each open deferred question in turn · hash: sha256:a28c108f0baa8fc001f47fe9a22f9f1bee5e8b681d0a58aa7ac527f298b1d4a7*
+
+**`ARC-ROADMAP-001`'s shared demand planner.** Not forced, on the workspace's own already-
+stated reasoning, not a fresh judgment call. `Materialize_Dependencies`'s own doc comment
+(`crates/orchestration/nomos-check-orchestration/src/facts.rs`, line 119) already answers
+this for a second hardcoded materialization step: "composing this as one more hardcoded
+step is `OD-HOST-004`'s 'composition, not choice' again, not a case for the shared demand
+planner `ARC-ROADMAP-001` still leaves for later." A third hardcoded step for this
+candidate's control-flow fact would be the identical shape a third time: `Run` (`crates/orchestration/nomos-check-orchestration/src/run.rs`)
+still has no selector of any kind (`OD-GATE-014`, still open), so nothing is asking to
+materialize *less* than everything -- the planner's trigger is selection creating unread
+demand, not the count of hardcoded steps rising. Three unconditional steps cost more than
+two the same way two cost more than one, and that growing cost is worth naming, but it is
+not, by itself, the trigger `OD-GATE-014` and `ARC-ROADMAP-001` already require.
+
+### docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md#27
+
+*revision: authored · kind: prose · heading: Which semantic domain the next production rule needs, and which deferred architecture piece it actually forces / What this candidate forces, checked against each open deferred question in turn · hash: sha256:0aff74315da803dd0ad780c759e6311d0b924d621798891f96b5bbd29735e4e2*
+
+**Architecture-core facts, feature topology, richer applicability beyond what
+`Applicability` already states.** Not forced. This candidate's subject is one function
+body; it makes no claim about cross-module architecture, feature ownership, or a coverage
+model `Applicability`'s existing ten variants cannot already state -- `AgentRequired`
+already exists for exactly the tail this candidate would be the first rule ever to use.
+Checked directly: no rule under `crates/rules` or `crates/orchestration` constructs
+`Applicability::AgentRequired` today.
+
+### docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md#28
+
+*revision: authored · kind: heading · heading: Which semantic domain the next production rule needs, and which deferred architecture piece it actually forces / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md#29
+
+*revision: authored · kind: prose · heading: Which semantic domain the next production rule needs, and which deferred architecture piece it actually forces / Status · hash: sha256:de49816273b9ef7ac419c8cd0ec141df5cb834b2b12bde64f2e7861be6c00443*
+
+Open, narrowed rather than resolved, the same standing `OD-CAPABILITY-008` records for
+its own question. `OD-ANALYSIS-007`'s trigger -- a rule naming the program-semantics fact
+it needs -- is the one this record answers in the affirmative: `Check_Unread_Reaches_A_Finding`
+is a real, specified subject whose sound form needs an intraprocedural control-flow /
+effects capability at `FactVariant::SemanticallyResolved`, a shape `OD-ANALYSIS-004`
+already names and a producer for which does not exist. The concrete next capability item,
+should one be claimed, is that provider -- `nomos.cap.controlflow.reachability` or
+equivalent, scoped to intraprocedural reachability from a fact-read failure to a
+`Finding`-construction site -- with `Check_Unread_Reaches_A_Finding` as its first and, at
+first, only consumer. Every other deferred question this record checked -- a Rule
+Program/IR, a declared provider trait, a measured `Inputs` classification, the shared
+demand planner, architecture-core facts and feature topology -- stays exactly as
+undecided as its own record already left it; this candidate's real requirements do not
+reach any of them. Revisit `OD-ANALYSIS-007` when a session claims the capability this
+record names, or names a different one this record did not anticipate.
 
 ### docs/records/OD-SPEC-001-the-storage-backend-question.md#1
 
