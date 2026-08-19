@@ -20310,6 +20310,42 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-RULE-DOMAIN-DECISION",
+      "title": "Which semantic domain the next production rule needs, and which deferred architecture piece it actually forces",
+      "why": "The board is quiescent -- work list reports next: nothing is eligible, and every P13 item is Done or Declined. The three shipped rules (Check_Naming_Convention, Check_Completeness_Mirrors, Check_Dependency_Direction) span only syntax-local judgment, cross-artifact consistency, and package-dependency graph reachability -- none touches resolved types, control flow, dataflow, or architecture-boundary facts. OD-RULES-005, OD-RULES-006, OD-RULES-007, OD-GATE-014, OD-CAPABILITY-008 and OD-PACKAGE-006/008 all declined to build a deferred abstraction (a measured Inputs classification, EnforcementPlacementRationale, a Rule Program/IR, ScopeSelector/RuleSelector, a provider trait, generic registration bases) ahead of a real case demonstrating the need, and each named the concrete trigger that would revisit it. This item follows the same discipline in the other direction: rather than re-litigating an already-declined abstraction, it picks one concrete next rule from an unrepresented semantic domain and lets that rule's actual requirements be the evidence for whether any deferred piece is now forced -- decided from the requirement, not in advance of it.",
+      "done_when": "A new record OD-RULES-008 is registered in crates/spec/nomos-spec-store/records/, following the existing rule records' shape (Question / Current Position / analysis / Status), and: names ONE concrete candidate rule from a semantic domain none of the three shipped rules occupies (a resolved-type/API constraint, a control-flow/error-flow invariant, a dataflow source-to-sink rule, or an architecture-boundary/port rule -- not another syntax or dependency-graph rule); states the candidate's canonical subject (symbol, path, module, edge, or boundary), its semantic domain, and its logical form (predicate, relation, reachability, dominance, flow, or existential obligation); names the exact canonical facts the rule would consume, citing which already exist (nomos-analysis, nomos-lang-rust syntax facts, dependency.edges) and which do not; defines what the rule would report as examined, unsupported, insufficient evidence, and not applicable, matching the vocabulary nomos-capability already uses for a provider's own answer; states plainly whether the check is deterministically decidable from facts alone or requires a model/tool fallback, and whether a correction is meaningful for it; and for each deferred architecture piece this item's why names (shared demand planning, a common provider Materialize trait, a Rule Program/IR, architecture-core facts, feature topology, richer RuleOffer applicability, persistent analysis services), states plainly whether the candidate rule's actual requirements force it, citing the specific requirement that does or does not -- not a restatement of the existing declines. Status is left open if nothing is forced, or names the concrete next capability item if something is, following OD-CAPABILITY-008's precedent of narrowing rather than resolving. Closed by the record alone: no crate changes. diagrams/relations.mmd and spec/domain-specification.md (with sidecars) are re-rendered and pass nomos spec freshness --require diagram-set --require domain-specification, verified from an isolated worktree holding exactly the record set this commit publishes, per OD-GATE-005.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md",
+          "crates/spec/nomos-spec-store/records/OD-RULES-008.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
