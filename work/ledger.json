@@ -18797,6 +18797,62 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-LANG-RUST-CARGO-DOC-STALE",
+      "title": "nomos-lang-rust-cargo's own crate doc still claims it is not composed into nomos-check-orchestration::Run",
+      "why": "P13-DEPENDENCY-WIRE-1 wired this crate in: crates/orchestration/nomos-check-orchestration/src/facts.rs's Materialize_Dependencies calls Materialize_Workspace directly and crate::Run calls it, confirmed by reading run.rs (line 55) and facts.rs (lines 130-155) directly. This crate's own lib.rs doc comment (the 'What this crate does not do' section) still says the opposite -- 'It is not composed into nomos-check-orchestration::Run and does not change what nomos check does' and 'nomos-check-orchestration performs no I/O of its own by design' -- both now false; run.rs's own doc comment already correctly calls this 'the one provider in this workspace with I/O of its own', so only this crate's doc lags.",
+      "done_when": "nomos-lang-rust-cargo/src/lib.rs's crate doc no longer claims the crate is unwired or that nomos-check-orchestration performs no I/O; it states plainly that Materialize_Dependencies composes it into the real check run.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages/nomos-lang-rust-cargo/src/lib.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "rg",
+          "-U",
+          "--pcre2",
+          "-q",
+          "(?s)\\A(?!.*It is not composed into)(?!.*performs no I/O of its own by design).*Materialize_Dependencies.*\\z",
+          "crates/languages/nomos-lang-rust-cargo/src/lib.rs"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "rg",
+          "-U",
+          "--pcre2",
+          "-q",
+          "(?s)\\A(?!.*It is not composed into)(?!.*performs no I/O of its own by design).*Materialize_Dependencies.*\\z",
+          "crates/languages/nomos-lang-rust-cargo/src/lib.rs"
+        ],
+        "exit_code": 0,
+        "output_tail": "",
+        "verified_at": 1787160042,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "3d2b84a92eef9e1dd8216ff70858108ccee4f056"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

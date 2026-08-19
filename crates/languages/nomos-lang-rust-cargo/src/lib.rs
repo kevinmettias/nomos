@@ -18,16 +18,15 @@
 //! [`Materialize_Workspace`] turns its answer into facts. Composing this crate into a real
 //! check run is separate, later work — see below.
 //!
-//! # What this crate does not do
+//! # Composed into `nomos-check-orchestration::Run`
 //!
-//! It is not composed into `nomos-check-orchestration::Run` and does not change what
-//! `nomos check` does. `nomos-check-orchestration` performs no I/O of its own by design —
-//! every existing provider it calls is a pure function over bytes the composition root
-//! already read — and wiring this provider in means touching where that root walks a
-//! tree, `nomos-cli`, which a concurrent item held live at the time this crate was
-//! written. This crate is real and tested standing alone, the same "additive and unwired"
-//! shape `nomos_rules::RuleRegistry` carried from `OD-RULES-004` until something consumed
-//! it.
+//! `crate::facts::Materialize_Dependencies` calls [`Materialize_Workspace`] over the tree a
+//! check run was asked about and writes what it returns into the same store the syntax
+//! rules read, so `nomos check` judges dependency direction as part of an ordinary run.
+//! This is the one provider in that composition with I/O of its own — every other provider
+//! it calls is a pure function over bytes the composition root already read — which is why
+//! `Materialize_Dependencies` takes the walked tree's own root path rather than only the
+//! sources that walk already produced.
 
 #![forbid(unsafe_code)]
 
