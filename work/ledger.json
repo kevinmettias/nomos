@@ -19278,6 +19278,41 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-ACCEPTED-FORM-LETTER",
+      "title": "Three records' Status sections are the single word Accepted., which trips NSV-PRESERVE-004 and has had the gate's Test step red on dev since 2026-08-18",
+      "why": "Reproduced on a clean tree at 417fbcd, not inferred from a log:\n\n  cargo test -p nomos-spec-validate --test preservation_holds\n  Test_A_Seeded_Store_Should_Pass_Preservation_Non_Vacuously ... FAILED\n  5 rule(s) ran over 5519 subject(s): 1 violation(s)\n  [Violation { subject: '3 section(s) across 3 document(s)',\n               detail: 'repeats an undeclared template: Accepted.' }]\n\nThe three are ARC-ROADMAP-001, OD-CONNECTOR-001 and OD-CONNECTOR-002. Each closes with a Status section whose entire body is the word 'Accepted.'\n\nnomos_spec_ingest::SHARED_BY is 3. OD-CONNECTOR-001 and OD-CONNECTOR-002 have carried that body since 2026-08-16 (2eedd12, 947a834), which is two and under the threshold. ARC-ROADMAP-001 landed the third on 2026-08-18 in 62bb1ad. The gate's Test step has been red on dev since that commit.\n\nIt stayed invisible for a reason worth writing down rather than only fixing. nomos work finish runs the gate's Lint step plus the finishing item's own predicate -- not cargo test --workspace. Every item that landed after 62bb1ad had a predicate scoped to its own crates, none of which is nomos-spec-validate, so each one finished green over a workspace that was already red. The check that would have caught it is the one nobody runs between commits.\n\nThe rule is right and this is not a false positive to suppress. NSV-PRESERVE-004 exists because OD-SPEC-004 measured a v14-to-v15 migration hollowing 44 restored members with one undeclared adjective, and a one-word status body repeated verbatim across three unrelated governing records is exactly the form letter it names. Declaring 'Accepted.' in FILLER_PATTERNS would silence it by widening the definition of accounted-for filler, which is the opposite of what that list is for -- and FILLER_PATTERNS is itself already flagged by completeness-mirror as declaring no mirror.\n\nThe rest of this repository's records do not write Status this way. OD-GATE-009's says 'Closed. P11-PLATFORM-UNCHECKED carries it, and it discharges the fourth and last of the instances OD-GATE-006 measured.' The three above are the outliers, not the convention.",
+      "done_when": "cargo test --no-fail-fast -p nomos-spec-validate is green, and green because the three Status sections say something about the record they close rather than because the rule was widened to accept them.\n\nEach of the three says what its own status is of -- what carries it, what it discharges, what would reopen it -- in the shape the other 137 records already use. Three sections that merely differ from each other while still saying nothing have moved the violation rather than answered it.\n\nFILLER_PATTERNS is unchanged, and SHARED_BY is unchanged. Either edit would close the test by making the rule blind to the class it was written for.\n\nThe projection obligation is discharged, not deferred: three governing records move, so diagrams/relations.mmd and spec/domain-specification.md are both re-rendered per OD-GATE-005 from a detached worktree holding exactly the records this commit publishes, and freshness reports both current there.\n\nSeparately, the hole that let this sit for a day is named. work finish's predicate scoping is why a red workspace kept finishing items green; whether that is a defect in finish, in how predicates are authored, or neither is a question this item may log as a record rather than answer -- but it is not left unwritten.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md",
+          "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md",
+          "docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-validate"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
