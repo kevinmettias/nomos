@@ -17215,6 +17215,140 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-NAMING-V15-CASING",
+      "title": "Fix 5 real Pascal_Snake_Case violations: v15 segment must be V15",
+      "why": "The rule is correct as designed; these names are genuinely non-conforming, and fixing them first means item 2 (wiring Check_Naming_Convention into the real check path) can wire the rule in against an already-clean corpus instead of shipping known debt on day one.",
+      "done_when": "cargo test --workspace --no-fail-fast passes; the 5 v15-segment renames (Ingest_v15_Record and 4 test fns) and their call sites are updated to V15; the nomos-spec-ingest public surface snapshot is reblessed and stable.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-ingest/src/reconciliation/overlay.rs",
+          "crates/spec/nomos-spec-ingest/src/lib.rs",
+          "crates/spec/nomos-spec-ingest/tests/overlay.rs",
+          "crates/spec/nomos-spec-ingest/tests/archive_reads.rs",
+          "crates/spec/nomos-spec-ingest/tests/revisions.rs",
+          "tests/contract/surface/nomos-spec-ingest.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-item1",
+        "acquired_at": 1787119376,
+        "lease_expires_at": 1787126576
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--workspace",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-CHECK-NAMING-WIRE",
+      "title": "Wire Check_Naming_Convention into the real nomos-check-orchestration Run path",
+      "why": "The rule shipped Advisory-only and deliberately unwired pending a clean corpus; wiring it in now, following nomos-add-plugin section 3's already-recorded recipe (a second unconditional call folded into one Claim_Of), proves it composes safely in the real path rather than inventing a new one.",
+      "done_when": "run.rs calls both Check_Completeness_Mirrors and Check_Naming_Convention unconditionally and merges findings before one Claim_Of call, exactly per nomos-add-plugin section 3 (no RuleRegistry); Run's doc comment mentions both rules; the broken Test_A_Clean_Tree_Should_Be_Judged_Complete_With_No_Findings fixture is fixed to still assert zero findings on a clean tree; nomos-cli check tests are re-verified and fixed if needed; cargo test --workspace --no-fail-fast passes; a real nomos check --root . run against this repo shows the naming rule active and reports zero naming findings against this workspace's own source; the gate.yml comment citing stale finding counts is refreshed to real current numbers.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-check-orchestration/src/run.rs",
+          "crates/orchestration/nomos-check-orchestration/src/tests.rs",
+          "crates/host/nomos-cli/src/check/tests.rs",
+          ".github/workflows/gate.yml"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P13-NAMING-V15-CASING"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--workspace",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-SKILL-PACKAGE-006-STALE",
+      "title": "nomos-add-plugin's closing note claims OD-PACKAGE-006 is still open; it is accepted and implemented",
+      "why": "OD-PACKAGE-006 was accepted (status: accepted, version 2) and fully implemented by P13-PACKAGE-REGISTRY-DECISION and P13-PACKAGE-REGISTRY-BASE (both Done): nomos_package::KnownProviders (crates/packages/nomos-package/src/known_providers.rs) is the generic provider-registration base type the record decided, and nomos-lang-package::known_providers.rs is its first real consumer, building KNOWN_PROVIDERS through KnownProviders::New(...).As_Slice() rather than a bespoke array. The nomos-add-plugin skill's closing section still tells a cold-reading session the whole record is open, which is the actual onboarding doc a future session reads before touching this seam -- a wrong pointer there is worse than none, since it reads as current and is not cross-checked against the record before being trusted. What genuinely remains open under OD-PACKAGE-006 is only its original trigger, which the record's own Status section says explicitly its resolution does not reach: a third same-language Rust provider crate joining the workspace, and whether KnownProviders needs anything beyond one more line pulled by reference at that point.",
+      "done_when": "The skill's closing section (\"What this skill does not cover\") states OD-PACKAGE-006's actual resolution -- the generic KnownProviders base type in nomos-package and nomos-lang-package as its first consumer -- instead of claiming the whole record is open, and separately names what is still open under it: a third same-language provider crate, the record's own unmet original trigger, which its Status section says explicitly the resolution does not reach. The file no longer contains the string \"is still open\" while still mentioning OD-PACKAGE-006. No other section of the skill changes.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          ".claude/skills/nomos-add-plugin/SKILL.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "rg",
+          "-U",
+          "--pcre2",
+          "-q",
+          "(?s)\\A(?=.*OD-PACKAGE-006)(?!.*is still open).*\\z",
+          ".claude/skills/nomos-add-plugin/SKILL.md"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "rg",
+          "-U",
+          "--pcre2",
+          "-q",
+          "(?s)\\A(?=.*OD-PACKAGE-006)(?!.*is still open).*\\z",
+          ".claude/skills/nomos-add-plugin/SKILL.md"
+        ],
+        "exit_code": 0,
+        "output_tail": "",
+        "verified_at": 1787119461,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "2f9603abcd29b786df74e51dfcdbeb43e7e77f08"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

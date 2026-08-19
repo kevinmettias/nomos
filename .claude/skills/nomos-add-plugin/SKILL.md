@@ -136,8 +136,18 @@ same-band or upward edge.
 
 ## What this skill does not cover
 
-`OD-PACKAGE-006` is still open: whether a `KNOWN_PROVIDERS`-shaped array needs a
-self-registering mechanism once a third provider of one language exists, or stays
-hand-maintained. This skill's §1 describes today's answer (hand-maintained, pulled by
-reference) because that is what the code does; it is not a guarantee that answer survives a
-third same-language provider.
+`OD-PACKAGE-006` is accepted, not open: `nomos_package::KnownProviders`
+(`crates/packages/nomos-package/src/known_providers.rs`) is the generic
+provider-registration base type the resolution decided, and
+`nomos-lang-package::known_providers.rs` is its first real consumer, building
+`KNOWN_PROVIDERS` through `KnownProviders::New(...).As_Slice()` rather than as a bespoke
+array of its own. §1's "Package registration" step and §4 both describe that shape as it
+stands today.
+
+What the resolution explicitly does not reach is `OD-PACKAGE-006`'s own original
+trigger: a third same-language (Rust) provider crate joining this workspace has still not
+happened, and whether `KnownProviders` needs anything beyond "one more line, pulled by
+reference" at that point is a question the record's own text says this resolution does not
+answer. Read `OD-PACKAGE-006` directly before assuming that question is settled — the
+generic base type resolves how a package crate builds its allowlist, not what a third
+same-language provider would demand of it.
