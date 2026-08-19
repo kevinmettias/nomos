@@ -16395,6 +16395,42 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-RULE-INPUTS-QUESTION",
+      "title": "Whether RuleOffer needs a measured Inputs classification now, or waits for a caching consumer",
+      "why": "code-standards/nomos-proto (github.com/kevinmettias/nomos-proto), an earlier Go implementation of the same tool this workspace rebuilds in Rust, declares a closed, optional checkspec.Inputs enum (INPUT_SCOPED_FILES, INPUT_WHOLE_CORPUS, INPUT_REPOSITORY_CONFIG, INPUT_EXTERNAL_TOOL) on every check -- stated by the rule itself, defaulting to undeclared (which disables caching rather than wrongly enabling it), and explicitly measured rather than typed from reading the source, because a plausible-but-unmeasured list would be indistinguishable from a measured one while carrying none of the evidence. nomos-rules' new registration contract (crates/rules/nomos-rules/src/registry.rs, from OD-RULES-004 / P13-RULE-REGISTRY-BASE-3) carries RuleOffer{rule, contract_record, contract_record_version} with no equivalent: a rule states which capability contract it reads through Syntax_Requirement, but nothing states what kind of input its answer depends on. nomos-analysis already treats invalidation as a first-class fact-layer concern (crates/substrate/nomos-analysis/src/invalidation.rs) that a rule-level classification would extend rather than introduce from nothing. The registry's own module doc states plainly that nothing in nomos_check_orchestration::run::Run consults it yet, so there is no identified consumer today -- the open question is whether that absence means the classification belongs in RuleOffer now, before nomos-rules' two rules and any future rule package multiply the migration cost, or whether it should wait for an actual caching/invalidation consumer to exist first, the same population-of-two caution OD-PACKAGE-006 originally stated for KNOWN_PROVIDERS before this workspace's own explicit direction to build language/rule plugin infrastructure ahead of demonstrated need overrode it there.",
+      "done_when": "A new record under OD-RULES states, for nomos-rules' RuleOffer: whether it gains a closed, optional Inputs-shaped classification now (naming a rule's dependency as roughly per-file, whole-corpus, repository-configuration, or external-tool, defaulting to undeclared/conservative, measured rather than guessed) or waits for a real caching/invalidation consumer in nomos_check_orchestration or nomos-analysis to exist first. It cites code-standards/nomos-proto's checkspec.Inputs as the precedent and states the concrete trigger that would flip the answer if it declines to build now. It relates to OD-RULES-004, D-135 and nomos-analysis's existing invalidation module, is registered in crates/spec/nomos-spec-store/records/, and diagrams/relations.mmd and spec/domain-specification.md are re-rendered and current per nomos spec freshness, verified from an isolated worktree at the record set this commit publishes. Closed by the record alone: no crate changes, and nomos-rules is not touched.",
+      "kind": "Validation",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-RULES-005-whether-a-rules-offer-needs-a-measured-inputs-classification-or-waits-for-a-caching-consumer.md",
+          "crates/spec/nomos-spec-store/records/OD-RULES-005.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
