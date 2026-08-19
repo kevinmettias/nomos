@@ -16454,6 +16454,78 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-CAPABILITY-DECLINE-QUESTION",
+      "title": "Whether a provider needs a declared decline-with-reason, or waits for a second capability contract",
+      "why": "code-standards/nomos-proto (github.com/kevinmettias/nomos-proto), an earlier Go implementation of the same tool this workspace rebuilds in Rust, gives every language kernel a <lang>_declines.go pattern -- DeclinedCapabilities.Declined_Capability(capability) -> (reason, declined) -- letting a provider state, ahead of time and in one discoverable place, that it will never offer against a capability, and why. Its own decline map runs to roughly seventy reasoned entries in production. crates/substrate/nomos-capability/src/provider_offer.rs's ProviderOffer{provider, capability, version, guarantee} has no equivalent, and offer_refusal.rs's OfferRefusal is a different concept entirely -- why the registry rejects a bad submission (ForUndeclared/ExceedsCeiling/Duplicate), not a provider's own advance statement that it will never offer. Today a provider that does not offer against a capability is indistinguishable from one that was never asked, and only one capability contract exists in this workspace (nomos.cap.syntax.items, crates/capabilities/nomos-cap-syntax), so there is no second contract for a real provider to structurally decline against yet -- the same population-of-two shape OD-PACKAGE-006 originally deferred for KNOWN_PROVIDERS and OD-RULES-005 left open for RuleOffer's Inputs classification.",
+      "done_when": "A new record under OD-CAPABILITY states whether ProviderOffer/Registry gains a decline-with-reason mechanism now, before a second capability contract multiplies the migration cost, or waits for one to exist so the design has a real case to check against. It cites code-standards/nomos-proto's <lang>_declines.go pattern as the precedent, follows OD-RULES-005's shape (Question / Current Position / What Would Decide It / Status), relates to OD-CAPABILITY-002, OD-PACKAGE-006 and D-135, and states the concrete trigger that would flip the answer. Registered in crates/spec/nomos-spec-store/records/, and diagrams/relations.mmd and spec/domain-specification.md (with sidecars) are re-rendered and fresh per nomos spec freshness --require diagram-set --require domain-specification, verified from an isolated worktree holding exactly the record set this commit publishes. Closed by the record alone: no crate changes.",
+      "kind": "Validation",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md",
+          "crates/spec/nomos-spec-store/records/OD-CAPABILITY-007.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-RULE-PLACEMENT-RATIONALE-QUESTION",
+      "title": "Whether RuleOffer needs a declared EnforcementPlacementRationale, or waits for a second rule",
+      "why": "docs/nomos-spec-internal-artifacts/01_authoring/markdown_volumes/04-04-packages-providers-rules-and-applicability/ (PKG-028, the same corpus tree nomos already treats as its v14 corpus) requires that every proposed RulePackage normative contract include an EnforcementPlacementRationale -- why this rule is not better solved by the compiler, the type system, the build, a formatter, or a linter. crates/rules/nomos-rules/src/registry.rs's RuleOffer{rule, contract_record, contract_record_version} (OD-RULES-004 / P13-RULE-REGISTRY-BASE-3) has no equivalent field, and nothing in nomos-rules requires a rule to justify its own placement today. RuleOffer is itself still additive and unwired -- its own module doc says nothing consults it and Run() stays hand-written -- and nothing outside registry.rs's own test helper constructs one yet, the same no-real-consumer shape OD-RULES-005 already found for the Inputs classification question on this identical struct.",
+      "done_when": "A new record under OD-RULES states whether RuleOffer gains a declared EnforcementPlacementRationale field now, before nomos-rules' rules and any future rule package multiply the migration cost, or waits for a second rule (or a rule package) to demonstrate the need for stating it. It cites PKG-028 from docs/nomos-spec-internal-artifacts as the precedent, follows OD-RULES-005's shape (Question / Current Position / What Would Decide It / Status), relates to OD-RULES-004, OD-RULES-005 and D-135, and states the concrete trigger that would flip the answer. Registered in crates/spec/nomos-spec-store/records/, and diagrams/relations.mmd and spec/domain-specification.md (with sidecars) are re-rendered and fresh per nomos spec freshness --require diagram-set --require domain-specification, verified from an isolated worktree holding exactly the record set this commit publishes. Closed by the record alone: no crate changes, and nomos-rules is not touched.",
+      "kind": "Validation",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md",
+          "crates/spec/nomos-spec-store/records/OD-RULES-006.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
