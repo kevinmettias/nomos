@@ -68,7 +68,7 @@ profile: domain-specification
 | docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md@authored | docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md | authored | 22 | 7 | sha256:47c0b032d29826a3aefa121ae2a70bbf8eadb84cd84e530a0692a8bb2ef0b42b |
 | docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md@authored | docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md | authored | 32 | 8 | sha256:7e415cc70febf6bbbcc01cafffc5866abb03ee5d83ddfad6b829ea224bfcc9aa |
 | docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md@authored | docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md | authored | 17 | 7 | sha256:db6c652a9e6a7ddad8f6d701642e08c3a91d0f38c07839fdf7b5c5fc9e6ffa50 |
-| docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md@authored | docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md | authored | 13 | 5 | sha256:3636ed3ea9bfff064b2d92c9b6ccb6ca45ed879199c4e8eb74664599724fe445 |
+| docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md@authored | docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md | authored | 13 | 5 | sha256:7b9fcda1e16d60b1bd592a936b2ea513f5ca39a581784a410999bdc5ec4dce1f |
 | docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md@authored | docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md | authored | 19 | 7 | sha256:26615732c6f51db0865a23830a4f6f463190d30c5fa0bd98b8191ebb79be230a |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md@authored | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md | authored | 16 | 5 | sha256:e3d0afb3cabc0ab33a09a700e110b803806d3c4e063673d8c18ca7adc84c3012 |
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md@authored | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md | authored | 29 | 6 | sha256:95a9bc9275ea24b17ac4458927631e589405b0813779a6945f42240a47af2f1f |
@@ -16254,18 +16254,19 @@ waits for a real caller that needs to select fewer than all rules or all files.
 
 ### docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md#5
 
-*revision: authored · kind: prose · heading: Whether Gate's ScopeSelector and RuleSelector are built now, or wait for a caller that needs to select less than everything / Current Position · hash: sha256:284ab12a936ff38ced845424097d4ed72d25e55fc96ef09364de1a7c2b2a00c5*
+*revision: authored · kind: prose · heading: Whether Gate's ScopeSelector and RuleSelector are built now, or wait for a caller that needs to select less than everything / Current Position · hash: sha256:7f1e57233e91005ac83bb7e380934d4207da9e33cc53bc6458b6a16b1932213e*
 
 `OD-HOST-004` already decided the immediately adjacent case: `nomos-check-orchestration::
 Run` "stays hand-written for as long as every rule it calls runs unconditionally, on every
 invocation," and flips only "the first time a rule... is meant to run for *some* check
 invocations and not others." Verified directly against the real code, not assumed:
-`Run` (`crates/orchestration/nomos-check-orchestration/src/run.rs`) still calls both shipped
-rules, `Check_Completeness_Mirrors` and `Check_Naming_Convention`, unconditionally over
-every source it is handed. Only one language provider, `nomos-lang-rust`, exists, so no
-per-language variance is demonstrated either — nothing in this workspace today wants to run
-a subset of rules or a subset of scope. This repository's own use of the rule layer
-(`OD-GATE-004`'s CI step) always wants both rules over everything it is given.
+`Run` (`crates/orchestration/nomos-check-orchestration/src/run.rs`) now calls three shipped
+rules, `Check_Completeness_Mirrors`, `Check_Naming_Convention` and (since `P13-DEPENDENCY-
+WIRE-1`) `Check_Dependency_Direction`, unconditionally over every source it is handed. Only
+one language provider, `nomos-lang-rust`, exists, so no per-language variance is
+demonstrated either — nothing in this workspace today wants to run a subset of rules or a
+subset of scope. This repository's own use of the rule layer (`OD-GATE-004`'s CI step)
+always wants all three rules over everything it is given.
 
 ### docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md#6
 

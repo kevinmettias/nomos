@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:7724fb2483582880301cdc70db887370fcb021fe1c82e7627d5c3521df34a834",
-  "inputs_digest": "sha256:24331512ee0702168116fecbac237a4cb7c1be06cc246366452ed9766127575b",
+  "content_digest": "sha256:bfaba35b1f86cd3f0aa0e26cc431ce9d8485e3933884829512e3403836a396cf",
+  "inputs_digest": "sha256:f6827b522d9af39dbf2e9839f56f9ca47abf3d168838130416d8ba6181e2fd46",
   "sections": [
     [
       "Documents",
@@ -313,7 +313,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md@authored",
-      "hash": "sha256:3636ed3ea9bfff064b2d92c9b6ccb6ca45ed879199c4e8eb74664599724fe445"
+      "hash": "sha256:7b9fcda1e16d60b1bd592a936b2ea513f5ca39a581784a410999bdc5ec4dce1f"
     },
     {
       "content": "documents",
@@ -15023,7 +15023,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md#5",
-      "hash": "sha256:284ab12a936ff38ced845424097d4ed72d25e55fc96ef09364de1a7c2b2a00c5"
+      "hash": "sha256:7f1e57233e91005ac83bb7e380934d4207da9e33cc53bc6458b6a16b1932213e"
     },
     {
       "content": "blocks",

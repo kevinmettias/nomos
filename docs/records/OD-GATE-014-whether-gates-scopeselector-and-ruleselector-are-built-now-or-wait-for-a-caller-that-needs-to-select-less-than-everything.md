@@ -39,12 +39,13 @@ waits for a real caller that needs to select fewer than all rules or all files.
 Run` "stays hand-written for as long as every rule it calls runs unconditionally, on every
 invocation," and flips only "the first time a rule... is meant to run for *some* check
 invocations and not others." Verified directly against the real code, not assumed:
-`Run` (`crates/orchestration/nomos-check-orchestration/src/run.rs`) still calls both shipped
-rules, `Check_Completeness_Mirrors` and `Check_Naming_Convention`, unconditionally over
-every source it is handed. Only one language provider, `nomos-lang-rust`, exists, so no
-per-language variance is demonstrated either — nothing in this workspace today wants to run
-a subset of rules or a subset of scope. This repository's own use of the rule layer
-(`OD-GATE-004`'s CI step) always wants both rules over everything it is given.
+`Run` (`crates/orchestration/nomos-check-orchestration/src/run.rs`) now calls three shipped
+rules, `Check_Completeness_Mirrors`, `Check_Naming_Convention` and (since `P13-DEPENDENCY-
+WIRE-1`) `Check_Dependency_Direction`, unconditionally over every source it is handed. Only
+one language provider, `nomos-lang-rust`, exists, so no per-language variance is
+demonstrated either — nothing in this workspace today wants to run a subset of rules or a
+subset of scope. This repository's own use of the rule layer (`OD-GATE-004`'s CI step)
+always wants all three rules over everything it is given.
 
 `ARC-ROADMAP-001` itself disclaims settling this: its "What This Record Does Not Do" section
 states plainly that it "does not order the near-term tier internally. Which of those items is
