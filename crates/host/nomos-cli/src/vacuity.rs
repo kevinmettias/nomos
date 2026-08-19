@@ -136,11 +136,8 @@ pub(crate) fn Stance_Of(group: Group) -> Stance
                       no caller-chosen subject set for it to have walked and found empty the \
                       way a checked-out tree or a queried record can be",
         },
-        Group::Gate => Stance::NotApplicable {
-            because: "plan reports this gate's own rule registry, fixed by composition, not \
-                      a caller-chosen subject set -- GateCommand::root is accepted but this \
-                      increment does not read it, so there is nothing yet that narrowing \
-                      could find empty the way a checked-out tree can be",
+        Group::Gate => Stance::Guarded {
+            decided_in: "gate::sources::Walked / nomos_check_orchestration::Run",
         },
     };
 }
@@ -229,11 +226,30 @@ mod tests
         assert!(matches!(Stance_Of(Group::Request), Stance::NotApplicable { .. }));
     }
 
-    /// `gate plan` reports its own registry's fixed contents, not a caller-chosen subject
-    /// set -- the same reasoning as `work` and `request`, not `check`'s or `spec`'s.
+    /// `gate run` walks a caller-chosen tree exactly as `check` does, so an empty one must
+    /// not report `Ok` there either -- the same claim
+    /// `Test_Check_Should_Refuse_Ok_Over_An_Empty_Tree` makes for `check`, checked at this
+    /// seam too rather than trusted by analogy. `gate plan` itself has no vacuity condition
+    /// of its own -- it reports a fixed registry, not a caller-chosen subject set -- but
+    /// `Group::Gate`'s stance is declared for the group, not per verb, and `run`'s real
+    /// guard is what makes `Guarded` the honest declaration now.
     #[test]
-    fn Test_Gate_Is_Declared_Not_Applicable()
+    fn Test_Gate_Run_Should_Refuse_Ok_Over_An_Empty_Tree()
     {
-        assert!(matches!(Stance_Of(Group::Gate), Stance::NotApplicable { .. }));
+        assert!(matches!(Stance_Of(Group::Gate), Stance::Guarded { .. }));
+
+        let empty = std::env::temp_dir().join("nomos-cli-vacuity-guard-empty-gate-tree");
+        let _ignored = std::fs::remove_dir_all(&empty);
+        std::fs::create_dir_all(&empty).expect("creates an empty directory");
+
+        let invocation = crate::gate::GateInvocation::Run(crate::gate::GateCommand { root: empty.clone() });
+        let mut stdout = Vec::new();
+        let mut stderr = Vec::new();
+        let code = crate::gate::Run(&invocation, &mut stdout, &mut stderr);
+
+        let _ignored = std::fs::remove_dir_all(&empty);
+
+        assert_ne!(code.Value(), 0, "an empty tree must not report the same code as a clean run");
+        assert_eq!(code, crate::gate::ExitCode::Vacuous);
     }
 }

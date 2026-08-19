@@ -19504,6 +19504,194 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-GATE-RUN-FIRST-INCREMENT",
+      "title": "Gate gains a first real run verb: walk, judge, and reduce to Passed/Failed/Indeterminate",
+      "why": "ARC-ROADMAP-001 constraint 5, OD-GATE-014 and OD-GATE-015 all name the same trigger: Gate gaining a run verb that actually executes rules, rather than plan's report-only shape. 417fbcd (P13-GATE-REGISTRY-THIRD-RULE) closed the plan/check rule-count gap but explicitly did not touch run/explain/compare or any policy surface -- confirmed by re-reading its diff and nomos-gate-orchestration/src/lib.rs, which still says so. Both open decisions are otherwise blocked on this: neither ScopeSelector/RuleSelector nor BaselinePolicy/SuppressionPolicy has a caller whose behavior they would change until run exists to be filtered or to have its disposition altered.",
+      "done_when": "Disposition shape, settled before coding (per user direction) and verified against the real code rather than assumed:\n\nGateRunOutcome { Passed, Failed, Indeterminate } lives in nomos-gate-orchestration (crates/orchestration/nomos-gate-orchestration/src/outcome.rs), alongside a pure function Disposition(findings: &[Finding]) -> GateRunOutcome that returns Failed if any finding.Can_Fail_A_Build(), Passed otherwise -- never Indeterminate, which only nomos-cli assigns, for CheckOutcome variants Disposition never sees.\n\nVerified band constraint: nomos-gate-orchestration and nomos-check-orchestration are both band 40 (README.md), so gate-orchestration must not depend on check-orchestration (tests/contract/tests/boundaries/graph.rs's Test_Dependencies_Should_Run_Strictly_Downward requires dependency_band < band). GateRunResult { root, check_outcome: CheckOutcome, blocking_findings, disposition } therefore lives in nomos-cli (band 90, already depends on both peers), which walks the tree, calls nomos_check_orchestration::Run, and reduces:\n\n  Judged { findings, .. }  -> disposition = nomos_gate_orchestration::Disposition(&findings); blocking_findings = findings filtered by Can_Fail_A_Build()\n  Unreadable, Contradictory(_), NoSource, NoFacts { .. } -> disposition = Indeterminate, blocking_findings empty\n\nClaim (coverage-debt/agent-required) rides in check_outcome for information only and does not affect disposition, matching OD-COMPLETENESS-004's existing choice that Claim is reported, not gated on.\n\nExit codes for the new  verb reuse the existing cross-group numbering nomos-cli's own exit_code.rs docs already state as binding (an exit code means one thing per binary): Ok=0 for Passed, Violations=1 for Failed (same meaning check::ExitCode::Violations already carries), Contradictory=5 extended to also cover CheckOutcome::Unreadable/Contradictory beneath a run (same meaning it already claims: the foundational thing could not be assembled), and a new Vacuous=6 for CheckOutcome::NoSource/NoFacts (same meaning check::ExitCode::Vacuous already carries). No new exit-code meaning is invented. Indeterminate is never exit 0, proving it does not collapse into Passed.\n\n is unchanged: Test_A_Real_Plan_Should_Report_All_Three_Shipped_Rules keeps passing without modification to its assertions. Test_An_Unimplemented_Verb_Should_Refuse (which currently asserts  is refused) is replaced --  is no longer unimplemented -- while  and  stay refused as usage, unchanged. parsing.rs's USAGE text and doc comment, gate.rs's own doc comment ('What this module does not do'), and nomos-gate-orchestration/src/lib.rs's doc comment are all corrected to stop saying  is unimplemented; they keep saying so for explain/compare/ScopeSelector/RuleSelector/CoveragePolicy/BaselinePolicy/SuppressionPolicy/phases/thresholds/waivers/approvals, none of which this item builds.\n\nAt least one real, non-synthetic test runs  (or the crate-internal equivalent) over this repository's own tree end to end and checks the disposition is structurally consistent with whether any rendered finding can fail a build, the same 'real run over the real tree' discipline Test_A_Real_Plan_Should_Report_All_Three_Shipped_Rules already uses for plan.\n\ntests/contract/surface/nomos-gate-orchestration.txt is re-blessed for the new public items (GateRunOutcome, Disposition).\n\ncargo test --no-fail-fast -p nomos-gate-orchestration -p nomos-cli is green, and cargo clippy --workspace --all-targets -- -D warnings is clean.\n\nOut of scope, named rather than silently skipped: explain, compare, ScopeSelector, RuleSelector, CoveragePolicy, BaselinePolicy, SuppressionPolicy, required phases, thresholds, waivers, approvals. This item's done_when does not require OD-GATE-014 or OD-GATE-015 to be resolved -- landing run is what gives them a real trigger to fire on, not a reason to fire them here.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/outcome.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/lib.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/tests.rs",
+          "tests/contract/surface/nomos-gate-orchestration.txt",
+          "crates/host/nomos-cli/src/gate.rs",
+          "crates/host/nomos-cli/src/gate/parsing.rs",
+          "crates/host/nomos-cli/src/gate/exit_code.rs",
+          "crates/host/nomos-cli/src/gate/report.rs",
+          "crates/host/nomos-cli/src/gate/tests.rs",
+          "crates/host/nomos-cli/src/gate/composition.rs",
+          "crates/host/nomos-cli/src/gate/sources.rs",
+          "crates/host/nomos-cli/src/gate/run.rs"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "authored with backticks in an unquoted-for-substitution shell string; bash command-substituted every backtick-quoted term into empty/error output, corrupting done_when. Superseded by P13-GATE-RUN-FIRST-INCREMENT-2, added from files instead of an inline shell string."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-cli"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-gate-run",
+          "reason": "releasing before decline: done_when text was corrupted by shell backtick command substitution during authoring",
+          "abandoned_at": 1787167485
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-gate-run",
+        "declined_at": 1787167485
+      }
+    },
+    {
+      "id": "P13-GATE-RUN-FIRST-INCREMENT-2",
+      "title": "Gate gains a first real run verb: walk, judge, and reduce to Passed/Failed/Indeterminate",
+      "why": "ARC-ROADMAP-001 constraint 5, OD-GATE-014 and OD-GATE-015 all name the same trigger: Gate gaining a `run` verb that actually executes rules, rather than `plan`'s report-only shape. `417fbcd` (P13-GATE-REGISTRY-THIRD-RULE) closed the plan/check rule-count gap but explicitly did not touch run/explain/compare or any policy surface -- confirmed by re-reading its diff and `nomos-gate-orchestration/src/lib.rs`, which still says so. Both open decisions are otherwise blocked on this: neither ScopeSelector/RuleSelector nor BaselinePolicy/SuppressionPolicy has a caller whose behavior they would change until `run` exists to be filtered or to have its disposition altered.",
+      "done_when": "Disposition shape, settled before coding (per user direction) and verified against the real code rather than assumed:\n\n`GateRunOutcome { Passed, Failed, Indeterminate }` lives in nomos-gate-orchestration (crates/orchestration/nomos-gate-orchestration/src/outcome.rs), alongside a pure function `Disposition(findings: &[Finding]) -> GateRunOutcome` that returns `Failed` if any `finding.Can_Fail_A_Build()`, `Passed` otherwise -- never `Indeterminate`, which only nomos-cli assigns, for `CheckOutcome` variants `Disposition` never sees.\n\nVerified band constraint: nomos-gate-orchestration and nomos-check-orchestration are both band 40 (README.md), so gate-orchestration must not depend on check-orchestration (tests/contract/tests/boundaries/graph.rs's Test_Dependencies_Should_Run_Strictly_Downward requires dependency_band < band). `GateRunResult { root, check_outcome: CheckOutcome, blocking_findings, disposition }` therefore lives in nomos-cli (band 90, already depends on both peers), which walks the tree, calls `nomos_check_orchestration::Run`, and reduces:\n\n  Judged { findings, .. }  -> disposition = nomos_gate_orchestration::Disposition(&findings); blocking_findings = findings filtered by Can_Fail_A_Build()\n  Unreadable, Contradictory(_), NoSource, NoFacts { .. } -> disposition = Indeterminate, blocking_findings empty\n\nClaim (coverage-debt/agent-required) rides in check_outcome for information only and does not affect disposition, matching OD-COMPLETENESS-004's existing choice that Claim is reported, not gated on.\n\nExit codes for the new `run` verb reuse the existing cross-group numbering nomos-cli's own exit_code.rs docs already state as binding (an exit code means one thing per binary): Ok=0 for Passed, Violations=1 for Failed (same meaning check::ExitCode::Violations already carries), Contradictory=5 extended to also cover CheckOutcome::Unreadable/Contradictory beneath a run (same meaning it already claims: the foundational thing could not be assembled), and a new Vacuous=6 for CheckOutcome::NoSource/NoFacts (same meaning check::ExitCode::Vacuous already carries). No new exit-code meaning is invented. Indeterminate is never exit 0, proving it does not collapse into Passed.\n\n`plan` is unchanged: Test_A_Real_Plan_Should_Report_All_Three_Shipped_Rules keeps passing without modification to its assertions. Test_An_Unimplemented_Verb_Should_Refuse (which currently asserts `run` is refused) is replaced -- `run` is no longer unimplemented -- while `explain` and `compare` stay refused as usage, unchanged. parsing.rs's USAGE text and doc comment, gate.rs's own doc comment (\"What this module does not do\"), and nomos-gate-orchestration/src/lib.rs's doc comment are all corrected to stop saying `run` is unimplemented; they keep saying so for explain/compare/ScopeSelector/RuleSelector/CoveragePolicy/BaselinePolicy/SuppressionPolicy/phases/thresholds/waivers/approvals, none of which this item builds.\n\nAt least one real, non-synthetic test runs `nomos gate run --root .` (or the crate-internal equivalent) over this repository's own tree end to end and checks the disposition is structurally consistent with whether any rendered finding can fail a build, the same \"real run over the real tree\" discipline Test_A_Real_Plan_Should_Report_All_Three_Shipped_Rules already uses for plan.\n\ntests/contract/surface/nomos-gate-orchestration.txt is re-blessed for the new public items (GateRunOutcome, Disposition).\n\ncargo test --no-fail-fast -p nomos-gate-orchestration -p nomos-cli is green, and cargo clippy --workspace --all-targets -- -D warnings is clean.\n\nOut of scope, named rather than silently skipped: explain, compare, ScopeSelector, RuleSelector, CoveragePolicy, BaselinePolicy, SuppressionPolicy, required phases, thresholds, waivers, approvals. This item's done_when does not require OD-GATE-014 or OD-GATE-015 to be resolved -- landing run is what gives them a real trigger to fire on, not a reason to fire them here.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/outcome.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/lib.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/tests.rs",
+          "tests/contract/surface/nomos-gate-orchestration.txt",
+          "crates/host/nomos-cli/src/gate.rs",
+          "crates/host/nomos-cli/src/gate/parsing.rs",
+          "crates/host/nomos-cli/src/gate/exit_code.rs",
+          "crates/host/nomos-cli/src/gate/report.rs",
+          "crates/host/nomos-cli/src/gate/tests.rs",
+          "crates/host/nomos-cli/src/gate/composition.rs",
+          "crates/host/nomos-cli/src/gate/sources.rs",
+          "crates/host/nomos-cli/src/gate/run.rs"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "territory too narrow: missed crates/host/nomos-cli/src/vacuity.rs, whose Group::Gate NotApplicable stance this item's own run verb falsifies. Superseded by P13-GATE-RUN-FIRST-INCREMENT-3 with that path added."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-cli"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-gate-run",
+          "reason": "territory needs widening to include crates/host/nomos-cli/src/vacuity.rs, discovered mid-implementation: Group::Gate's NotApplicable vacuity stance is reasoned specifically from plan never reading root, and becomes false once run exists with real vacuous conditions. No work committed yet, nothing lost by re-adding.",
+          "abandoned_at": 1787167709
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-gate-run",
+        "declined_at": 1787167709
+      }
+    },
+    {
+      "id": "P13-GATE-RUN-FIRST-INCREMENT-3",
+      "title": "Gate gains a first real run verb: walk, judge, and reduce to Passed/Failed/Indeterminate",
+      "why": "ARC-ROADMAP-001 constraint 5, OD-GATE-014 and OD-GATE-015 all name the same trigger: Gate gaining a `run` verb that actually executes rules, rather than `plan`'s report-only shape. `417fbcd` (P13-GATE-REGISTRY-THIRD-RULE) closed the plan/check rule-count gap but explicitly did not touch run/explain/compare or any policy surface -- confirmed by re-reading its diff and `nomos-gate-orchestration/src/lib.rs`, which still says so. Both open decisions are otherwise blocked on this: neither ScopeSelector/RuleSelector nor BaselinePolicy/SuppressionPolicy has a caller whose behavior they would change until `run` exists to be filtered or to have its disposition altered.",
+      "done_when": "Disposition shape, settled before coding (per user direction) and verified against the real code rather than assumed:\n\n`GateRunOutcome { Passed, Failed, Indeterminate }` lives in nomos-gate-orchestration (crates/orchestration/nomos-gate-orchestration/src/outcome.rs), alongside a pure function `Disposition(findings: &[Finding]) -> GateRunOutcome` that returns `Failed` if any `finding.Can_Fail_A_Build()`, `Passed` otherwise -- never `Indeterminate`, which only nomos-cli assigns, for `CheckOutcome` variants `Disposition` never sees.\n\nVerified band constraint: nomos-gate-orchestration and nomos-check-orchestration are both band 40 (README.md), so gate-orchestration must not depend on check-orchestration (tests/contract/tests/boundaries/graph.rs's Test_Dependencies_Should_Run_Strictly_Downward requires dependency_band < band). `GateRunResult { root, check_outcome: CheckOutcome, blocking_findings, disposition }` therefore lives in nomos-cli (band 90, already depends on both peers), which walks the tree, calls `nomos_check_orchestration::Run`, and reduces:\n\n  Judged { findings, .. }  -> disposition = nomos_gate_orchestration::Disposition(&findings); blocking_findings = findings filtered by Can_Fail_A_Build()\n  Unreadable, Contradictory(_), NoSource, NoFacts { .. } -> disposition = Indeterminate, blocking_findings empty\n\nClaim (coverage-debt/agent-required) rides in check_outcome for information only and does not affect disposition, matching OD-COMPLETENESS-004's existing choice that Claim is reported, not gated on.\n\nExit codes for the new `run` verb reuse the existing cross-group numbering nomos-cli's own exit_code.rs docs already state as binding (an exit code means one thing per binary): Ok=0 for Passed, Violations=1 for Failed (same meaning check::ExitCode::Violations already carries), Contradictory=5 extended to also cover CheckOutcome::Unreadable/Contradictory beneath a run (same meaning it already claims: the foundational thing could not be assembled), and a new Vacuous=6 for CheckOutcome::NoSource/NoFacts (same meaning check::ExitCode::Vacuous already carries). No new exit-code meaning is invented. Indeterminate is never exit 0, proving it does not collapse into Passed.\n\n`plan` is unchanged: Test_A_Real_Plan_Should_Report_All_Three_Shipped_Rules keeps passing without modification to its assertions. Test_An_Unimplemented_Verb_Should_Refuse (which currently asserts `run` is refused) is replaced -- `run` is no longer unimplemented -- while `explain` and `compare` stay refused as usage, unchanged. parsing.rs's USAGE text and doc comment, gate.rs's own doc comment (\"What this module does not do\"), and nomos-gate-orchestration/src/lib.rs's doc comment are all corrected to stop saying `run` is unimplemented; they keep saying so for explain/compare/ScopeSelector/RuleSelector/CoveragePolicy/BaselinePolicy/SuppressionPolicy/phases/thresholds/waivers/approvals, none of which this item builds.\n\nAt least one real, non-synthetic test runs `nomos gate run --root .` (or the crate-internal equivalent) over this repository's own tree end to end and checks the disposition is structurally consistent with whether any rendered finding can fail a build, the same \"real run over the real tree\" discipline Test_A_Real_Plan_Should_Report_All_Three_Shipped_Rules already uses for plan.\n\ntests/contract/surface/nomos-gate-orchestration.txt is re-blessed for the new public items (GateRunOutcome, Disposition).\n\n`crates/host/nomos-cli/src/vacuity.rs`'s `Group::Gate` stance moves from `Stance::NotApplicable` (reasoned specifically from `plan` never reading `root`) to `Stance::Guarded`, and `Test_Gate_Is_Declared_Not_Applicable` is replaced with a real end-to-end test over an emptied directory, mirroring `Test_Check_Should_Refuse_Ok_Over_An_Empty_Tree` exactly: `gate run` over an empty tree must not report the same exit code as a clean run. This is not a neighboring defect -- this item's own `run` verb is what falsifies the existing `NotApplicable` reasoning, so fixing it is this item's own obligation under `OD-GATE-003`, not a second item's.\n\ncargo test --no-fail-fast -p nomos-gate-orchestration -p nomos-cli is green, and cargo clippy --workspace --all-targets -- -D warnings is clean.\n\nOut of scope, named rather than silently skipped: explain, compare, ScopeSelector, RuleSelector, CoveragePolicy, BaselinePolicy, SuppressionPolicy, required phases, thresholds, waivers, approvals. This item's done_when does not require OD-GATE-014 or OD-GATE-015 to be resolved -- landing run is what gives them a real trigger to fire on, not a reason to fire them here.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/outcome.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/lib.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/tests.rs",
+          "tests/contract/surface/nomos-gate-orchestration.txt",
+          "crates/host/nomos-cli/src/gate.rs",
+          "crates/host/nomos-cli/src/gate/parsing.rs",
+          "crates/host/nomos-cli/src/gate/exit_code.rs",
+          "crates/host/nomos-cli/src/gate/report.rs",
+          "crates/host/nomos-cli/src/gate/tests.rs",
+          "crates/host/nomos-cli/src/gate/composition.rs",
+          "crates/host/nomos-cli/src/gate/sources.rs",
+          "crates/host/nomos-cli/src/gate/run.rs",
+          "crates/host/nomos-cli/src/vacuity.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-cli"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-cli"
+        ],
+        "exit_code": 0,
+        "output_tail": "an_Should_Hold_All_Three_Shipped_Rules ... ok\ntest tests::Test_One_Blocking_Finding_Among_Many_Should_Fail ... ok\ntest tests::Test_The_Dependency_Rule_Should_Carry_Its_Real_Contract_Citation ... ok\ntest tests::Test_The_Naming_Rule_Should_Cite_Its_Record_Less_Contract ... ok\ntest tests::Test_The_Plan_Should_Not_Vary_By_Root ... ok\ntest tests::Test_The_Mirror_Rule_Should_Carry_Its_Real_Contract_Citation ... ok\n\ntest result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.73s\n     Running unittests src\\main.rs (target\\debug\\deps\\nomos-6d2838273fb535d9.exe)\n     Running tests\\abandon_is_readable.rs (target\\debug\\deps\\abandon_is_readable-bd6033eed665bf85.exe)\n     Running tests\\add_guarantees_what_it_says.rs (target\\debug\\deps\\add_guarantees_what_it_says-641e0d2a0a217bd1.exe)\n     Running tests\\authoring_surface.rs (target\\debug\\deps\\authoring_surface-6cb74c3764d0a5ef.exe)\n     Running tests\\check_command.rs (target\\debug\\deps\\check_command-07d98298ed960912.exe)\n     Running tests\\freshness.rs (target\\debug\\deps\\freshness-a78dafc4921d28b5.exe)\n     Running tests\\gate_step\\main.rs (target\\debug\\deps\\gate_step-a1943a1e503fff24.exe)\n     Running tests\\list_tells_the_truth.rs (target\\debug\\deps\\list_tells_the_truth-13dbd4b42c31a18d.exe)\n     Running tests\\read_surface.rs (target\\debug\\deps\\read_surface-eea31a3569f203bb.exe)\n     Running tests\\request_submit.rs (target\\debug\\deps\\request_submit-b7ccf29aca7a9ab8.exe)\n     Running tests\\stale_writer_is_refused.rs (target\\debug\\deps\\stale_writer_is_refused-a75d01ec344959bb.exe)\n     Running tests\\takeover_is_recorded.rs (target\\debug\\deps\\takeover_is_recorded-f933ea9d3f5eb4c8.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_gate_orchestration-fc59e3db973f3212.exe)\n   Doc-tests nomos_gate_orchestration\n",
+        "verified_at": 1787168754,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "eb979faca6a1694acf6272be101ee09fc2574d2b"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

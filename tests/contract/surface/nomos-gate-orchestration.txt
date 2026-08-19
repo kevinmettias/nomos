@@ -1,6 +1,11 @@
 pub enum nomos_gate_orchestration::GateOutcome
+pub enum nomos_gate_orchestration::GateRunOutcome
 pub enum variant nomos_gate_orchestration::GateOutcome::Contradictory(RuleRegistryError)
 pub enum variant nomos_gate_orchestration::GateOutcome::Planned(GatePlan)
+pub enum variant nomos_gate_orchestration::GateRunOutcome::Failed
+pub enum variant nomos_gate_orchestration::GateRunOutcome::Indeterminate
+pub enum variant nomos_gate_orchestration::GateRunOutcome::Passed
+pub fn nomos_gate_orchestration::Disposition(findings: &[Finding]) -> GateRunOutcome
 pub fn nomos_gate_orchestration::Registered() -> Result<RuleRegistry, RuleRegistryError>
 pub fn nomos_gate_orchestration::Run(_command: &GateCommand) -> GateOutcome
 pub struct field nomos_gate_orchestration::GateCommand::root: PathBuf

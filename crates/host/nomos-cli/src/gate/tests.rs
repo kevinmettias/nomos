@@ -10,8 +10,10 @@ fn Labelled(code: ExitCode) -> &'static str
     return match code
     {
         ExitCode::Ok => "Ok",
+        ExitCode::Violations => "Violations",
         ExitCode::Usage => "Usage",
         ExitCode::Contradictory => "Contradictory",
+        ExitCode::Vacuous => "Vacuous",
     };
 }
 
@@ -27,8 +29,10 @@ fn Test_Every_ExitCode_Should_Be_Matched_Exhaustively()
         return match code
         {
             ExitCode::Ok => 0,
-            ExitCode::Usage => 1,
-            ExitCode::Contradictory => 2,
+            ExitCode::Violations => 1,
+            ExitCode::Usage => 2,
+            ExitCode::Contradictory => 3,
+            ExitCode::Vacuous => 4,
         };
     }
 
@@ -89,24 +93,31 @@ fn Sorted(codes: impl Iterator<Item = i32>) -> Vec<i32>
     return sorted;
 }
 
+/// A [`GateInvocation`]'s carried [`GateCommand`], whichever verb it is -- most of these
+/// tests only care about `root` and would otherwise have to match twice for no reason.
+fn Root_Of(invocation: &GateInvocation) -> &PathBuf
+{
+    return match invocation
+    {
+        GateInvocation::Plan(command) | GateInvocation::Run(command) => &command.root,
+    };
+}
+
 #[test]
 fn Test_A_Root_Should_Default_To_Here()
 {
-    assert_eq!(
-        Parse(&["plan".to_owned()]).expect("plan with no root is valid").root,
-        PathBuf::from(".")
-    );
+    let invocation = Parse(&["plan".to_owned()]).expect("plan with no root is valid");
+
+    assert_eq!(Root_Of(&invocation), &PathBuf::from("."));
 }
 
 #[test]
 fn Test_A_Given_Root_Should_Win()
 {
     let arguments = vec!["plan".to_owned(), "--root".to_owned(), "somewhere".to_owned()];
+    let invocation = Parse(&arguments).expect("plan --root is valid");
 
-    assert_eq!(
-        Parse(&arguments).expect("plan --root is valid").root,
-        PathBuf::from("somewhere")
-    );
+    assert_eq!(Root_Of(&invocation), &PathBuf::from("somewhere"));
 }
 
 /// No verb at all must not be silently read as `plan`.
@@ -118,14 +129,24 @@ fn Test_No_Verb_Should_Refuse()
     assert!(error.contains("usage"), "{error}");
 }
 
-/// `run`, `explain` and `compare` are named by `ARC-ROADMAP-001` but have no real
-/// implementation yet, so this must refuse rather than quietly running `plan` instead.
+/// `run` is a real verb now -- `plan` and `run` must both parse.
+#[test]
+fn Test_Run_Should_Parse()
+{
+    let invocation = Parse(&["run".to_owned()]).expect("run with no root is valid");
+
+    assert!(matches!(invocation, GateInvocation::Run(_)), "run must not parse as Plan");
+    assert_eq!(Root_Of(&invocation), &PathBuf::from("."));
+}
+
+/// `explain` and `compare` are named by `ARC-ROADMAP-001` but have no real implementation
+/// yet, so this must refuse rather than quietly running `plan` instead.
 #[test]
 fn Test_An_Unimplemented_Verb_Should_Refuse()
 {
-    let error = Parse(&["run".to_owned()]).expect_err("must refuse");
+    let error = Parse(&["explain".to_owned()]).expect_err("must refuse");
 
-    assert!(error.contains("run"), "{error}");
+    assert!(error.contains("explain"), "{error}");
     assert!(error.contains("usage"), "{error}");
 }
 
@@ -151,11 +172,11 @@ fn Test_An_Unknown_Flag_Should_Refuse()
 #[test]
 fn Test_A_Real_Plan_Should_Report_All_Three_Shipped_Rules()
 {
-    let command = GateCommand { root: PathBuf::from(".") };
+    let invocation = GateInvocation::Plan(GateCommand { root: PathBuf::from(".") });
     let mut stdout = Vec::new();
     let mut stderr = Vec::new();
 
-    let code = Run(&command, &mut stdout, &mut stderr);
+    let code = Run(&invocation, &mut stdout, &mut stderr);
     let rendered = String::from_utf8_lossy(&stdout).into_owned();
 
     assert_eq!(code, ExitCode::Ok, "{rendered}");
@@ -164,4 +185,51 @@ fn Test_A_Real_Plan_Should_Report_All_Three_Shipped_Rules()
     assert!(rendered.contains("dependency-direction"), "{rendered}");
     assert!(rendered.contains("function-naming-convention"), "{rendered}");
     assert!(String::from_utf8_lossy(&stderr).is_empty());
+}
+
+/// A real `run` over this workspace's own tree, end to end -- the same "real run over the
+/// real tree" discipline the `plan` test above already uses. This repository's own gate
+/// step already runs `nomos check` over this same tree and expects it clean, so `run`
+/// judging it the same way must agree: `Ok`, not `Violations`, and the same three rule
+/// names `plan` already reports must be nameable in the rendered findings' rule ids where
+/// any exist, or the finding count must be zero.
+#[test]
+fn Test_A_Real_Run_Should_Judge_This_Workspaces_Own_Tree()
+{
+    let invocation = GateInvocation::Run(GateCommand { root: PathBuf::from(".") });
+    let mut stdout = Vec::new();
+    let mut stderr = Vec::new();
+
+    let code = Run(&invocation, &mut stdout, &mut stderr);
+    let rendered = String::from_utf8_lossy(&stdout).into_owned();
+
+    assert_eq!(
+        code,
+        ExitCode::Ok,
+        "this repository's own gate step already requires `nomos check --root .` to exit \
+         clean; `run` judges the same tree the same way, so it must agree: {rendered}"
+    );
+    assert!(rendered.contains("finding(s), 0 of which can fail a build"), "{rendered}");
+    assert!(String::from_utf8_lossy(&stderr).is_empty());
+}
+
+/// `run` over an empty tree must not report the same code as a clean run -- `OD-GATE-003`,
+/// `Test_Check_Should_Refuse_Ok_Over_An_Empty_Tree`'s own reasoning, now checked at this
+/// seam too.
+#[test]
+fn Test_A_Run_Over_An_Empty_Tree_Should_Not_Report_Ok()
+{
+    let empty = std::env::temp_dir().join("nomos-cli-gate-run-empty-tree");
+    let _ignored = std::fs::remove_dir_all(&empty);
+    std::fs::create_dir_all(&empty).expect("creates an empty directory");
+
+    let invocation = GateInvocation::Run(GateCommand { root: empty.clone() });
+    let mut stdout = Vec::new();
+    let mut stderr = Vec::new();
+
+    let code = Run(&invocation, &mut stdout, &mut stderr);
+
+    let _ignored = std::fs::remove_dir_all(&empty);
+
+    assert_eq!(code, ExitCode::Vacuous, "an empty tree must not report Ok");
 }

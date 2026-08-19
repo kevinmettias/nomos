@@ -4,21 +4,40 @@
 ///
 /// The numbers are shared with every other group on this binary: an exit code means one
 /// thing per binary rather than one thing per group. `3` and `4` are `work`'s claim codes
-/// and are not reused here. `5` carries the meaning `check`'s `Unreadable` and `spec`'s
-/// `StoreError` already gave it -- the foundational thing this group depends on could not
-/// be assembled -- because [`Contradictory`](ExitCode::Contradictory) is the same shape one
-/// layer down: this gate's own rule registry refused its own composition.
+/// and are not reused here. [`Violations`](ExitCode::Violations) and
+/// [`Vacuous`](ExitCode::Vacuous) carry exactly the meanings `check`'s own `Violations` and
+/// `Vacuous` already gave those numbers -- `run` judges a tree the same way `nomos check`
+/// does, so a `run` that finds a blocking finding or judges nothing must not read
+/// differently at the shell than a `check` that did. [`Contradictory`](ExitCode::Contradictory)
+/// carries the meaning `check`'s `Unreadable` and `spec`'s `StoreError` already gave `5` --
+/// the foundational thing this group depends on could not be assembled -- and now covers
+/// two cases: this gate's own rule registry refusing its own composition (`plan` and
+/// `run` alike), and, for `run` only, the tree beneath it being unreadable or the check
+/// registry beneath *that* being self-contradictory. Both are "nothing here was ever
+/// assembled enough to judge", the same claim one layer down each time.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub(crate) enum ExitCode
 {
-    /// The plan was composed and reported.
+    /// The plan was composed and reported, or `run` judged the tree and nothing it found
+    /// can fail a build.
     Ok = 0,
+    /// `run` found at least one finding that can fail a build.
+    Violations = 1,
     /// The command line was wrong.
     Usage = 2,
-    /// This gate's own rule composition is self-contradictory. Not reachable today -- see
-    /// `nomos_gate_orchestration::Registered`'s own doc -- but a real code all the same,
-    /// the same discipline `check`'s and `spec`'s foundational-failure codes already hold to.
+    /// This gate's own rule composition is self-contradictory (reachable for `plan` and
+    /// `run` alike, though not reachable today -- see `nomos_gate_orchestration::
+    /// Registered`'s own doc), or `run`'s tree could not be read at all, or the check
+    /// registry beneath a `run` was itself self-contradictory. Every one of these is
+    /// `GateRunOutcome::Indeterminate` when it comes from `run`; `run` never carries this
+    /// distinction any further than that shared exit code, the same discipline `check`'s
+    /// and `spec`'s foundational-failure codes already hold to.
     Contradictory = 5,
+    /// `run` found no source under the tree, or no fact was materialized for any of it, so
+    /// nothing was judged. Also `GateRunOutcome::Indeterminate`; a clean result here would
+    /// mean only that the walk or the analysis found nothing, the same lie `check`'s own
+    /// `Vacuous` already refuses to render as `Ok`.
+    Vacuous = 6,
 }
 
 impl ExitCode
@@ -42,5 +61,11 @@ impl ExitCode
 #[cfg(test)]
 pub(super) const fn Every_Exit_Code() -> &'static [ExitCode]
 {
-    return &[ExitCode::Ok, ExitCode::Usage, ExitCode::Contradictory];
+    return &[
+        ExitCode::Ok,
+        ExitCode::Violations,
+        ExitCode::Usage,
+        ExitCode::Contradictory,
+        ExitCode::Vacuous,
+    ];
 }
