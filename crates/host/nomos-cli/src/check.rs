@@ -47,18 +47,25 @@
 //! is now the one place a reader finds that this module and `spec.rs` both made that
 //! decision, rather than discovering it twice by reading two doc comments.
 //!
-//! # This command is a gate step now, and that changes what an exit code costs
+//! # This module's exit-code design underlies a gate step now, and that changes what a code costs
 //!
-//! `OD-GATE-004` wired the `Rules` step of `.github/workflows/gate.yml` to
-//! `cargo run --quiet -p nomos-cli --bin nomos -- check --root .`. Until then nothing in
-//! CI ran this command, so the rule layer enforced nothing: a broken walk, a provider that
-//! stopped answering, a rotted argv or a panic out of [`nomos_check_orchestration::
-//! Registered`] all shipped green.
+//! `.github/workflows/gate.yml`'s `Rules` step no longer invokes this command directly.
+//! Since the increment that gave `gate` a real `run` verb, that step invokes
+//! `cargo run --quiet -p nomos-cli --bin nomos -- gate run --root .`, and it is
+//! [`crate::gate::ExitCode`] — not this module's own [`ExitCode`] — that CI's build now
+//! observes. `gate/run.rs` walks and judges the tree through the very
+//! [`nomos_check_orchestration::Run`] call this module makes, and reduces the same
+//! [`CheckOutcome`] this module renders; [`crate::gate::ExitCode`] deliberately carries
+//! forward the zero-is-the-only-success meanings this module gave those numbers first. So
+//! the per-variant narration below documents the design those meanings originated from, and
+//! that `gate::ExitCode` now enforces directly against the `Rules` step — not a first-hand
+//! claim about this module's own role in CI, which it no longer has.
 //!
 //! **Zero is the only success, and the workflow says so by containing no branch.** Actions
 //! fails a step on any non-zero exit, and that default *is* the policy — so the numbers
 //! below stay spelled here, once, rather than being restated in YAML where they would go
-//! stale against this enum. What each code now does to a pull request:
+//! stale against this enum. What each code originally means, and what a build now reads off
+//! `gate::ExitCode` in its place:
 //!
 //! - [`ExitCode::Ok`] — the rules ran over the workspace, materialized facts, and nothing
 //!   they found can fail a build. Not "found nothing": twelve admitted gaps and the two
@@ -79,11 +86,14 @@
 //!   truncation. Absence, unknown and error must not become success, and the default gives
 //!   that for free. **Red.**
 //!
-//! Two consequences for anybody editing this module. A sixth code must survive
-//! `main`'s `u8::try_from(code).unwrap_or(1)`, or a distinct outcome arrives at CI as an
-//! ordinary violation. And [`ExitCode::Vacuous`] must never be renumbered to `0` "because
-//! there is nothing to report" — `Test_Only_Ok_Should_Carry_The_Passing_Exit_Code` below is
-//! the whole exit-code policy as one assertion, and it is where that would go red.
+//! Two consequences for anybody editing this module, and both still true regardless of
+//! which binary invocation CI runs, because `gate/run.rs` reduces off the same
+//! [`CheckOutcome`] this module produces rather than owning a second judgment of its own. A
+//! sixth code must survive `main`'s `u8::try_from(code).unwrap_or(1)`, or a distinct outcome
+//! arrives at CI as an ordinary violation. And [`ExitCode::Vacuous`] must never be
+//! renumbered to `0` "because there is nothing to report" —
+//! `Test_Only_Ok_Should_Carry_The_Passing_Exit_Code` below is the whole exit-code policy as
+//! one assertion, and it is where that would go red.
 //!
 //! No corpus is involved. This command reads no environment variable at run time —
 //! `main.rs` passes it none — so a CI runner with no `NOMOS_*` set produces the full

@@ -19913,6 +19913,61 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-CHECK-GATE-COMMENT-STALE",
+      "title": "check.rs's own doc comment and a gate/tests.rs assertion still claim CI runs check directly",
+      "why": "P13-GATE-RUN-CI-CALLER (24e6cea) switched .github/workflows/gate.yml's Rules step from invoking `nomos check --root .` directly to invoking `nomos gate run --root .`. Two doc comments in crates/host/nomos-cli, verified directly against the real files rather than assumed, still describe the old wiring as current.\n\ncheck.rs's own module doc, under \"# This command is a gate step now, and that changes what an exit code costs\", states \"OD-GATE-004 wired the Rules step of .github/workflows/gate.yml to cargo run --quiet -p nomos-cli --bin nomos -- check --root .\" and then narrates check::ExitCode's variants as literally \"what each code now does to a pull request\" -- both false since P13-GATE-RUN-CI-CALLER. The design reasoning (zero is the only success, a sixth code must survive, Vacuous must never be renumbered) is still true of check::ExitCode itself and still worth keeping, but the claim that this module's exit code is what CI observes directly is not: CI now observes gate::ExitCode (crates/host/nomos-cli/src/gate/exit_code.rs), which deliberately carries the identical meanings forward one hop away, through CheckOutcome consumed inside gate/run.rs.\n\ngate/tests.rs's Test_A_Real_Run_Should_Judge_This_Workspaces_Own_Tree carries a doc comment and an assert failure message both claiming \"this repository's own gate step already runs/requires nomos check --root . to exit clean\" as the reason `run` must agree with it. The test's behavior (asserting `run` is clean over this workspace's own tree) is still correct and does not change -- only the stated reason is stale, since the gate step this repository actually has is now `gate run`, the same command under test, not `check` as a separate thing it is being compared against.\n\nThis is the same shape as the many already-closed P13-*-STALE corrections in this ledger (e.g. P13-CLI-CARGO-GATE-COMMENT-STALE, P13-LANG-RUST-CARGO-DOC-STALE): a doc comment describing a caller's reach that drifted true after a related landing.",
+      "done_when": "check.rs's \"# This command is a gate step now, and that changes what an exit code costs\" section is edited for accuracy: it no longer claims .github/workflows/gate.yml's Rules step invokes this command's own check --root . directly. It states instead that the Rules step invokes `nomos gate run`, that gate::ExitCode (crates/host/nomos-cli/src/gate/exit_code.rs) is what CI observes now, and that gate::ExitCode deliberately carries forward the identical zero-is-the-only-success meanings this module's own ExitCode variants document below -- so the per-variant narration here (Ok/Violations/Usage/Unreadable/Vacuous, what each costs a pull request) stays accurate as a description of the design those meanings originated from, reframed as \"the contract gate::ExitCode now enforces directly, unchanged\" rather than as a first-hand claim about this command's own CI role. The design-consequence paragraphs (a sixth code must survive u8::try_from, Vacuous must never be renumbered to 0) are kept, since they remain true of check::ExitCode itself regardless of which binary invocation CI runs.\n\ngate/tests.rs's Test_A_Real_Run_Should_Judge_This_Workspaces_Own_Tree: its doc comment and its assert_eq failure message are reworded so neither claims this repository's gate step runs or requires `nomos check --root .` as a separate command `run` is being compared against. State instead that this repository's own Rules step already runs `gate run` over this same tree and expects it clean, so this test -- the same command under test -- must agree with itself end to end. No assertion logic changes; this is wording only.\n\nNo other file in the territory changes. Territory is exactly these two files.\n\ncargo test --no-fail-fast -p nomos-cli passes.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/src/check.rs",
+          "crates/host/nomos-cli/src/gate/tests.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli"
+        ],
+        "exit_code": 0,
+        "output_tail": "_Builds ... ok\ntest Test_A_Build_That_Cannot_Read_The_Ledger_Should_Not_Rewrite_It ... ok\ntest Test_A_Build_That_Can_Read_The_Ledger_Should_Still_Write_It ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s\n\n\nrunning 5 tests\ntest Test_Claiming_A_Lapsed_Item_Should_Refuse_And_Name_The_Takeover ... ok\ntest Test_Taking_Over_A_Lapsed_Item_Should_Record_The_Claim_It_Displaced ... ok\ntest Test_Show_Should_Report_The_Claim_A_Takeover_Displaced ... ok\ntest Test_A_Lapsed_Item_Should_List_As_Lapsed_And_Be_Takeable ... ok\ntest Test_Takeover_Should_Exit_Three_When_The_Lease_Is_Live_And_Four_When_It_Is_Not_Held ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.14s\n     Running unittests src\\main.rs (target\\debug\\deps\\nomos-6d2838273fb535d9.exe)\n     Running tests\\abandon_is_readable.rs (target\\debug\\deps\\abandon_is_readable-bd6033eed665bf85.exe)\n     Running tests\\add_guarantees_what_it_says.rs (target\\debug\\deps\\add_guarantees_what_it_says-641e0d2a0a217bd1.exe)\n     Running tests\\authoring_surface.rs (target\\debug\\deps\\authoring_surface-6cb74c3764d0a5ef.exe)\n     Running tests\\check_command.rs (target\\debug\\deps\\check_command-07d98298ed960912.exe)\n     Running tests\\freshness.rs (target\\debug\\deps\\freshness-a78dafc4921d28b5.exe)\n     Running tests\\gate_step\\main.rs (target\\debug\\deps\\gate_step-a1943a1e503fff24.exe)\n     Running tests\\list_tells_the_truth.rs (target\\debug\\deps\\list_tells_the_truth-13dbd4b42c31a18d.exe)\n     Running tests\\read_surface.rs (target\\debug\\deps\\read_surface-eea31a3569f203bb.exe)\n     Running tests\\request_submit.rs (target\\debug\\deps\\request_submit-b7ccf29aca7a9ab8.exe)\n     Running tests\\stale_writer_is_refused.rs (target\\debug\\deps\\stale_writer_is_refused-a75d01ec344959bb.exe)\n     Running tests\\takeover_is_recorded.rs (target\\debug\\deps\\takeover_is_recorded-f933ea9d3f5eb4c8.exe)\n",
+        "verified_at": 1787173886,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "78c7e284d0a67604cef228af305cc71ed7270088"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

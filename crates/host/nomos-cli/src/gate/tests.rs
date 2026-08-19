@@ -188,11 +188,12 @@ fn Test_A_Real_Plan_Should_Report_All_Three_Shipped_Rules()
 }
 
 /// A real `run` over this workspace's own tree, end to end -- the same "real run over the
-/// real tree" discipline the `plan` test above already uses. This repository's own gate
-/// step already runs `nomos check` over this same tree and expects it clean, so `run`
-/// judging it the same way must agree: `Ok`, not `Violations`, and the same three rule
-/// names `plan` already reports must be nameable in the rendered findings' rule ids where
-/// any exist, or the finding count must be zero.
+/// real tree" discipline the `plan` test above already uses. This repository's own `Rules`
+/// step already runs `gate run` over this same tree and expects it clean -- the exact
+/// command under test here -- so this test, exercising the same command CI actually runs,
+/// must agree with itself end to end: `Ok`, not `Violations`, and the same three rule names
+/// `plan` already reports must be nameable in the rendered findings' rule ids where any
+/// exist, or the finding count must be zero.
 #[test]
 fn Test_A_Real_Run_Should_Judge_This_Workspaces_Own_Tree()
 {
@@ -206,8 +207,9 @@ fn Test_A_Real_Run_Should_Judge_This_Workspaces_Own_Tree()
     assert_eq!(
         code,
         ExitCode::Ok,
-        "this repository's own gate step already requires `nomos check --root .` to exit \
-         clean; `run` judges the same tree the same way, so it must agree: {rendered}"
+        "this repository's own `Rules` step already runs `gate run --root .` over this \
+         same tree and requires it to exit clean; this test exercises that same command, \
+         so it must agree with itself end to end: {rendered}"
     );
     assert!(rendered.contains("finding(s), 0 of which can fail a build"), "{rendered}");
     assert!(String::from_utf8_lossy(&stderr).is_empty());
