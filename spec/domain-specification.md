@@ -117,6 +117,7 @@ profile: domain-specification
 | docs/records/OD-RULES-002-incompleteness-is-a-property-of-the-claim-and-not-of-the-run.md@authored | docs/records/OD-RULES-002-incompleteness-is-a-property-of-the-claim-and-not-of-the-run.md | authored | 69 | 16 | sha256:d17fccae2b6b9a6002f9cdbdc385dffbe1d4f839820436b89a3c50f09aa2bb8a |
 | docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md@authored | docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md | authored | 30 | 11 | sha256:c3a3b91dbb03f3f2ff52ab3d4d84186b0bb31760a93024fedee02b48a1b8722f |
 | docs/records/OD-RULES-004-a-rule-package-registers-into-a-declared-registry-extracted-before-a-second-rule-needs-it.md@authored | docs/records/OD-RULES-004-a-rule-package-registers-into-a-declared-registry-extracted-before-a-second-rule-needs-it.md | authored | 17 | 6 | sha256:35e6671b64241f3b351b2f75159a6860300ee83d671151305c075f1a1dd398a6 |
+| docs/records/OD-RULES-005-whether-a-rules-offer-needs-a-measured-inputs-classification-or-waits-for-a-caching-consumer.md@authored | docs/records/OD-RULES-005-whether-a-rules-offer-needs-a-measured-inputs-classification-or-waits-for-a-caching-consumer.md | authored | 13 | 5 | sha256:3bcc3aad22947f89bb1436da5b44db13aabd4af1c97a60dbdab28899bbdad057 |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md@authored | docs/records/OD-SPEC-001-the-storage-backend-question.md | authored | 11 | 5 | sha256:e4feddab256024ea38e21849120fdd52d0ddf17d4e3f69cfb24eb4c8e766c8ae |
 | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md@authored | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md | authored | 20 | 7 | sha256:2c45051e43390556bfd68865152580e1ae09c2e82dc94bb20e65cdbf60d69a10 |
 | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md@authored | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md | authored | 23 | 7 | sha256:481ffd62b02df705439b4ef914adb21e24894d1d3f0295754fc13f7d95c89c85 |
@@ -1079,6 +1080,11 @@ profile: domain-specification
 | docs/records/OD-RULES-004-a-rule-package-registers-into-a-declared-registry-extracted-before-a-second-rule-needs-it.md#9 | authored | 2 | Why This Does Not Contradict `OD-HOST-004` |
 | docs/records/OD-RULES-004-a-rule-package-registers-into-a-declared-registry-extracted-before-a-second-rule-needs-it.md#11 | authored | 2 | What This Record Does Not Do |
 | docs/records/OD-RULES-004-a-rule-package-registers-into-a-declared-registry-extracted-before-a-second-rule-needs-it.md#16 | authored | 2 | Status |
+| docs/records/OD-RULES-005-whether-a-rules-offer-needs-a-measured-inputs-classification-or-waits-for-a-caching-consumer.md#1 | authored | 1 | Whether a rule's offer needs a measured Inputs classification, or waits for a caching consumer |
+| docs/records/OD-RULES-005-whether-a-rules-offer-needs-a-measured-inputs-classification-or-waits-for-a-caching-consumer.md#2 | authored | 2 | Question |
+| docs/records/OD-RULES-005-whether-a-rules-offer-needs-a-measured-inputs-classification-or-waits-for-a-caching-consumer.md#6 | authored | 2 | Current Position |
+| docs/records/OD-RULES-005-whether-a-rules-offer-needs-a-measured-inputs-classification-or-waits-for-a-caching-consumer.md#9 | authored | 2 | What Would Decide It |
+| docs/records/OD-RULES-005-whether-a-rules-offer-needs-a-measured-inputs-classification-or-waits-for-a-caching-consumer.md#12 | authored | 2 | Status |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#1 | authored | 1 | Whether the specification store gains a second backend, and what would decide it |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#2 | authored | 2 | Question |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#4 | authored | 2 | Current Position |
@@ -31614,6 +31620,127 @@ would target now has a stated shape to build against.
 *revision: authored · kind: prose · heading: A rule package registers into a declared registry, extracted before a second rule needs it / Status · hash: sha256:0a741f1aa45c56d159ec05bf69f24b8eb62b6008fedc32d11f06ff026b1c27bf*
 
 Accepted, landed by `P13-RULE-PACKAGE-DECISION`.
+
+### docs/records/OD-RULES-005-whether-a-rules-offer-needs-a-measured-inputs-classification-or-waits-for-a-caching-consumer.md#1
+
+*revision: authored · kind: heading · heading: Whether a rule's offer needs a measured Inputs classification, or waits for a caching consumer · hash: sha256:80bd592785a60a8fb2fd3c1b4e9638f4e1414f2fc71c039798b581070d55be06*
+
+# Whether a rule's offer needs a measured Inputs classification, or waits for a caching consumer
+
+### docs/records/OD-RULES-005-whether-a-rules-offer-needs-a-measured-inputs-classification-or-waits-for-a-caching-consumer.md#2
+
+*revision: authored · kind: heading · heading: Whether a rule's offer needs a measured Inputs classification, or waits for a caching consumer / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-RULES-005-whether-a-rules-offer-needs-a-measured-inputs-classification-or-waits-for-a-caching-consumer.md#3
+
+*revision: authored · kind: prose · heading: Whether a rule's offer needs a measured Inputs classification, or waits for a caching consumer / Question · hash: sha256:657543fe414e12d1803e737c69927ccfafd6b2dcb31e7d346f94b8df95be4d5b*
+
+`code-standards`/`nomos-proto` (`github.com/kevinmettias/nomos-proto`), an earlier Go
+implementation of the same tool this workspace rebuilds in Rust, declares a closed, optional
+`checkspec.Inputs` enum on every check — `INPUT_SCOPED_FILES`, `INPUT_WHOLE_CORPUS`,
+`INPUT_REPOSITORY_CONFIG`, `INPUT_EXTERNAL_TOOL` — stated by the check itself, defaulting to
+undeclared (which disables caching rather than wrongly enabling it), and explicitly
+*measured*, not typed from reading the source: "a plausible list would be indistinguishable
+from a measured one while carrying none of the evidence."
+
+### docs/records/OD-RULES-005-whether-a-rules-offer-needs-a-measured-inputs-classification-or-waits-for-a-caching-consumer.md#4
+
+*revision: authored · kind: prose · heading: Whether a rule's offer needs a measured Inputs classification, or waits for a caching consumer / Question · hash: sha256:0bdcb0a9c4df739a892353b6e86141693844171d42a6598a9a5638372e2f18d9*
+
+`crates/rules/nomos-rules/src/registry.rs` (`OD-RULES-004`) carries `RuleOffer{ rule,
+contract_record, contract_record_version }` with no equivalent. A rule states which
+capability contract it reads through `Syntax_Requirement` — but nothing states what *kind*
+of thing its answer depends on: a single file, the whole corpus, repository configuration,
+an external tool. `crates/substrate/nomos-analysis/src/invalidation.rs` already treats
+invalidation as a first-class fact-layer concern, so a rule-level classification would
+extend an existing discipline rather than introduce one from nothing.
+
+### docs/records/OD-RULES-005-whether-a-rules-offer-needs-a-measured-inputs-classification-or-waits-for-a-caching-consumer.md#5
+
+*revision: authored · kind: prose · heading: Whether a rule's offer needs a measured Inputs classification, or waits for a caching consumer / Question · hash: sha256:f88208e2040d1b62cfbee550e8cfafbf38ae6a6b2e758901c49bf46be58163f8*
+
+The open question is whether `RuleOffer` gains that classification now, before nomos-rules'
+two rules and any future rule package multiply the migration cost of adding it later, or
+whether it waits for a real consumer to demonstrate the need.
+
+### docs/records/OD-RULES-005-whether-a-rules-offer-needs-a-measured-inputs-classification-or-waits-for-a-caching-consumer.md#6
+
+*revision: authored · kind: heading · heading: Whether a rule's offer needs a measured Inputs classification, or waits for a caching consumer / Current Position · hash: sha256:3410589a125ce4b264969343987e63e029f80de6e30da91448b149ee4405900f*
+
+## Current Position
+
+### docs/records/OD-RULES-005-whether-a-rules-offer-needs-a-measured-inputs-classification-or-waits-for-a-caching-consumer.md#7
+
+*revision: authored · kind: prose · heading: Whether a rule's offer needs a measured Inputs classification, or waits for a caching consumer / Current Position · hash: sha256:a7eb8d61cc799ba330106da0d03ae8625f01f6cf3c6a518982dec0794c6ccb0d*
+
+`registry.rs`'s own module doc states plainly: "Nothing here is consulted by `Run()`, and
+nothing here changes what runs on any given `nomos check`." There is no caching or
+invalidation consumer for a rule-level Inputs classification anywhere in this workspace
+today — `nomos-analysis`'s invalidation module operates on facts, not on rules, and nothing
+downstream of `RuleRegistry` reads `RuleOffer` for any purpose beyond registration itself.
+
+### docs/records/OD-RULES-005-whether-a-rules-offer-needs-a-measured-inputs-classification-or-waits-for-a-caching-consumer.md#8
+
+*revision: authored · kind: prose · heading: Whether a rule's offer needs a measured Inputs classification, or waits for a caching consumer / Current Position · hash: sha256:be0d1dabadd93cf29b32034b32fd5e6d8beaac24a5cffba4ba6ff8da7f6a747b*
+
+This is the same population-of-two shape `OD-PACKAGE-006` originally named for
+`KNOWN_PROVIDERS`: a plausible generalization with no second real consumer to check the
+design against. `OD-PACKAGE-006` was resolved anyway, but on a different basis than "a
+consumer exists" — an explicit, standing product direction to invest in language- and
+rule-*plugin* infrastructure ahead of demonstrated need, so a package could be developed on
+a separate thread from this workspace's own core work. That direction is about the seam a
+rule package registers through, which `OD-RULES-004`/`RuleRegistry` already provides in
+full: a rule package can register a `RuleOffer` today without an Inputs classification
+existing at all. An Inputs classification is a caching/invalidation quality concern, not a
+plugin-enablement one — it does not gate whether a rule package can be built independently,
+the way `KNOWN_PROVIDERS`' shape did gate a second language's package crate. The extract-
+early precedent that resolved `OD-PACKAGE-006` does not automatically transfer here for that
+reason, even though the surface shape of the question looks similar.
+
+### docs/records/OD-RULES-005-whether-a-rules-offer-needs-a-measured-inputs-classification-or-waits-for-a-caching-consumer.md#9
+
+*revision: authored · kind: heading · heading: Whether a rule's offer needs a measured Inputs classification, or waits for a caching consumer / What Would Decide It · hash: sha256:b21c34f083f944a8317c5bb99f866d38e2c77a3ce5a1a64810a532456b826658*
+
+## What Would Decide It
+
+### docs/records/OD-RULES-005-whether-a-rules-offer-needs-a-measured-inputs-classification-or-waits-for-a-caching-consumer.md#10
+
+*revision: authored · kind: prose · heading: Whether a rule's offer needs a measured Inputs classification, or waits for a caching consumer / What Would Decide It · hash: sha256:5bd9862173823cb9d7a32653541c63dadddfa6f5c21d2d55a6ae324578fac1c7*
+
+A real consumer is the natural trigger: `nomos_check_orchestration::run::Run`, or some
+successor, wanting to skip or cache a rule's re-run based on what changed since its last
+run. At that point the question becomes concrete — what Inputs vocabulary an actual caching
+mechanism needs — rather than a classification designed against zero real uses, which is
+exactly the mistake `D-135` warns building generic machinery from a wish produces.
+
+### docs/records/OD-RULES-005-whether-a-rules-offer-needs-a-measured-inputs-classification-or-waits-for-a-caching-consumer.md#11
+
+*revision: authored · kind: prose · heading: Whether a rule's offer needs a measured Inputs classification, or waits for a caching consumer / What Would Decide It · hash: sha256:5057c3a97f80196a6c2d7fa5713b49a5fdaf49226005516c625a068c037f936b*
+
+A second, independent trigger: if a rule package (native or contributed) is found to need
+`RuleOffer` to state something about its own dependency shape for a reason *other* than
+caching — for instance, so a caller can refuse to run a rule against a scope it structurally
+cannot answer for, the way `nomos-proto`'s own `INPUT_WHOLE_CORPUS` distinguishes a
+project-wide check from a per-file one before the check runs, not only for cache
+invalidation after. If that need surfaces, it argues for building the classification for a
+different reason than the one considered and declined here, and should be evaluated on its
+own evidence rather than folded into this record's answer.
+
+### docs/records/OD-RULES-005-whether-a-rules-offer-needs-a-measured-inputs-classification-or-waits-for-a-caching-consumer.md#12
+
+*revision: authored · kind: heading · heading: Whether a rule's offer needs a measured Inputs classification, or waits for a caching consumer / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-RULES-005-whether-a-rules-offer-needs-a-measured-inputs-classification-or-waits-for-a-caching-consumer.md#13
+
+*revision: authored · kind: prose · heading: Whether a rule's offer needs a measured Inputs classification, or waits for a caching consumer / Status · hash: sha256:2aa6bdd998a23c1adbe405ce99f18cc7a39908a4b9b940acfab1df0a15836cbd*
+
+Open. This question is deliberately left open rather than resolved either way: unlike
+`OD-PACKAGE-006`, no direction has been given to build ahead of need here, and no consumer
+exists to build against. Revisit when either trigger above arrives.
 
 ### docs/records/OD-SPEC-001-the-storage-backend-question.md#1
 

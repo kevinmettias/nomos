@@ -16411,7 +16411,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -16427,7 +16427,30 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "s)\n   Compiling nomos-lang-rust v0.1.0 (C:\\Users\\kmett\\AppData\\Local\\Temp\\claude\\f--repos-nomos\\028fc4aa-853d-4d77-9ad1-445245beeb3a\\scratchpad\\wt-rules005\\crates\\languages\\nomos-lang-rust)\n   Compiling nomos-contract-tests v0.1.0 (C:\\Users\\kmett\\AppData\\Local\\Temp\\claude\\f--repos-nomos\\028fc4aa-853d-4d77-9ad1-445245beeb3a\\scratchpad\\wt-rules005\\tests\\contract)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 10.38s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-e643c65bbad4483e.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-433c47e6dd66b347.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-c14312faf4ba080e.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-d6ecb11a387c468a.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-a4a043f2643142bd.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-30f549b5771eb641.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-5b419e0002ced6ae.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-4b668c0f67b59fe5.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-5f786069b772789f.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-b8c4ebd0adb5625f.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-ee111bd537ecd137.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-2919ec68747ddb5b.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-99272398d303e3e7.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-756fcac740cd78ad.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-259eb839edee86c9.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1787098829,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

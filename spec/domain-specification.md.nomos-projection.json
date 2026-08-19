@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:2a5d7e24247abeb7602ccf0fbd7b9610eff55a239d8e1850a9040af3d5dd3fe1",
-  "inputs_digest": "sha256:92c017fe7e4a89662cce0ede24d10acd4ee3849be0a5a02d24152c96cd6a385a",
+  "content_digest": "sha256:b9d41250f08a0e4b7546ce193354ae9212282e33fe71a7ef9f5d3336a798cf3f",
+  "inputs_digest": "sha256:422f16364116563f18a4fbe0cbefd65f8765cda279337e591ea66dafccabc9ab",
   "sections": [
     [
       "Documents",
-      129
+      130
     ],
     [
       "Sections",
-      1139
+      1144
     ],
     [
       "Source blocks",
-      4112
+      4125
     ]
   ],
   "inputs": [
@@ -554,6 +554,11 @@
       "content": "documents",
       "identity": "docs/records/OD-RULES-004-a-rule-package-registers-into-a-declared-registry-extracted-before-a-second-rule-needs-it.md@authored",
       "hash": "sha256:35e6671b64241f3b351b2f75159a6860300ee83d671151305c075f1a1dd398a6"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-RULES-005-whether-a-rules-offer-needs-a-measured-inputs-classification-or-waits-for-a-caching-consumer.md@authored",
+      "hash": "sha256:3bcc3aad22947f89bb1436da5b44db13aabd4af1c97a60dbdab28899bbdad057"
     },
     {
       "content": "documents",
@@ -5339,6 +5344,31 @@
       "content": "headings",
       "identity": "docs/records/OD-RULES-004-a-rule-package-registers-into-a-declared-registry-extracted-before-a-second-rule-needs-it.md#16",
       "hash": "sha256:d297ee05c25226c633c2f2c6163b40868b7179d438240b940b7e35dca3f4412e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-005-whether-a-rules-offer-needs-a-measured-inputs-classification-or-waits-for-a-caching-consumer.md#1",
+      "hash": "sha256:3e6f56ad196fa572f3b03f93158c54bc75c25f150588ad7a5251d230db4d1711"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-005-whether-a-rules-offer-needs-a-measured-inputs-classification-or-waits-for-a-caching-consumer.md#2",
+      "hash": "sha256:0924819e5fa7dfc90fbba31d83990c6813bed13af803ae639d615e1ab328605b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-005-whether-a-rules-offer-needs-a-measured-inputs-classification-or-waits-for-a-caching-consumer.md#6",
+      "hash": "sha256:cf00eab10741d1b4e55b31c8fb75624844d63b44572c3c0fce753cd776e42bb7"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-005-whether-a-rules-offer-needs-a-measured-inputs-classification-or-waits-for-a-caching-consumer.md#9",
+      "hash": "sha256:345e711bcdd296825f54f739da9e132874483156df09aa0e0827d91af1153197"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-005-whether-a-rules-offer-needs-a-measured-inputs-classification-or-waits-for-a-caching-consumer.md#12",
+      "hash": "sha256:0863cb9358d6a7a78b11a49f1531bf3981d1f246ae55934ab926ab1171de089c"
     },
     {
       "content": "headings",
@@ -23424,6 +23454,71 @@
       "content": "blocks",
       "identity": "docs/records/OD-RULES-004-a-rule-package-registers-into-a-declared-registry-extracted-before-a-second-rule-needs-it.md#17",
       "hash": "sha256:0a741f1aa45c56d159ec05bf69f24b8eb62b6008fedc32d11f06ff026b1c27bf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-005-whether-a-rules-offer-needs-a-measured-inputs-classification-or-waits-for-a-caching-consumer.md#1",
+      "hash": "sha256:80bd592785a60a8fb2fd3c1b4e9638f4e1414f2fc71c039798b581070d55be06"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-005-whether-a-rules-offer-needs-a-measured-inputs-classification-or-waits-for-a-caching-consumer.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-005-whether-a-rules-offer-needs-a-measured-inputs-classification-or-waits-for-a-caching-consumer.md#3",
+      "hash": "sha256:657543fe414e12d1803e737c69927ccfafd6b2dcb31e7d346f94b8df95be4d5b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-005-whether-a-rules-offer-needs-a-measured-inputs-classification-or-waits-for-a-caching-consumer.md#4",
+      "hash": "sha256:0bdcb0a9c4df739a892353b6e86141693844171d42a6598a9a5638372e2f18d9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-005-whether-a-rules-offer-needs-a-measured-inputs-classification-or-waits-for-a-caching-consumer.md#5",
+      "hash": "sha256:f88208e2040d1b62cfbee550e8cfafbf38ae6a6b2e758901c49bf46be58163f8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-005-whether-a-rules-offer-needs-a-measured-inputs-classification-or-waits-for-a-caching-consumer.md#6",
+      "hash": "sha256:3410589a125ce4b264969343987e63e029f80de6e30da91448b149ee4405900f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-005-whether-a-rules-offer-needs-a-measured-inputs-classification-or-waits-for-a-caching-consumer.md#7",
+      "hash": "sha256:a7eb8d61cc799ba330106da0d03ae8625f01f6cf3c6a518982dec0794c6ccb0d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-005-whether-a-rules-offer-needs-a-measured-inputs-classification-or-waits-for-a-caching-consumer.md#8",
+      "hash": "sha256:be0d1dabadd93cf29b32034b32fd5e6d8beaac24a5cffba4ba6ff8da7f6a747b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-005-whether-a-rules-offer-needs-a-measured-inputs-classification-or-waits-for-a-caching-consumer.md#9",
+      "hash": "sha256:b21c34f083f944a8317c5bb99f866d38e2c77a3ce5a1a64810a532456b826658"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-005-whether-a-rules-offer-needs-a-measured-inputs-classification-or-waits-for-a-caching-consumer.md#10",
+      "hash": "sha256:5bd9862173823cb9d7a32653541c63dadddfa6f5c21d2d55a6ae324578fac1c7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-005-whether-a-rules-offer-needs-a-measured-inputs-classification-or-waits-for-a-caching-consumer.md#11",
+      "hash": "sha256:5057c3a97f80196a6c2d7fa5713b49a5fdaf49226005516c625a068c037f936b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-005-whether-a-rules-offer-needs-a-measured-inputs-classification-or-waits-for-a-caching-consumer.md#12",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-005-whether-a-rules-offer-needs-a-measured-inputs-classification-or-waits-for-a-caching-consumer.md#13",
+      "hash": "sha256:2aa6bdd998a23c1adbe405ce99f18cc7a39908a4b9b940acfab1df0a15836cbd"
     },
     {
       "content": "blocks",
