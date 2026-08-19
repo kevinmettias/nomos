@@ -11,14 +11,18 @@
 //! approvals, and blocking behavior."
 //!
 //! Nothing in this workspace implements any of that yet. Verified directly, not assumed:
-//! `nomos-check-orchestration::run::Run` calls both shipped rules unconditionally over every
-//! source it is handed, so no scope or rule selection exists anywhere today. What does exist,
-//! genuinely unused, is [`nomos_rules::RuleRegistry`] (`OD-RULES-004`) -- its own module doc
-//! says plainly that nothing consults it. This crate is `Gate`'s own seam, the same shape
-//! `nomos-work-orchestration`, `nomos-check-orchestration` and `nomos-spec-orchestration`
-//! each are for their own verb group, and its first increment gives `RuleRegistry` a real
-//! consumer: [`Run`] composes a real registry from this workspace's two shipped rules and
-//! reports what it holds as [`GatePlan`].
+//! `nomos-check-orchestration::run::Run` calls three rules unconditionally over every source
+//! it is handed -- `Check_Completeness_Mirrors`, `Check_Naming_Convention`, and (since
+//! `P13-DEPENDENCY-WIRE-1`) `Check_Dependency_Direction` -- so no scope or rule selection
+//! exists anywhere today. What does exist, genuinely unused, is [`nomos_rules::RuleRegistry`]
+//! (`OD-RULES-004`) -- its own module doc says plainly that nothing consults it. This crate is
+//! `Gate`'s own seam, the same shape `nomos-work-orchestration`, `nomos-check-orchestration`
+//! and `nomos-spec-orchestration` each are for their own verb group, and its first increment
+//! gives `RuleRegistry` a real consumer: [`Run`] composes a real registry from two of this
+//! workspace's three shipped rules and reports what it holds as [`GatePlan`]. `Gate`'s own
+//! registry has not been extended to the third, `Check_Dependency_Direction` -- that is real,
+//! current behavior, not a doc bug, and closing it is separate work this increment does not
+//! do.
 //!
 //! # What this increment is not
 //!
