@@ -18330,6 +18330,121 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-GATE-ORCHESTRATION-2",
+      "title": "nomos gate plan: wire nomos-gate-orchestration's Plan into the CLI, the same shape check/work/spec already have",
+      "why": "P13-GATE-ORCHESTRATION-1 gave Gate its own crate implementing Plan, but its own module doc says plainly 'nothing calls this crate yet' -- verified directly: main.rs's dispatch (crates/host/nomos-cli/src/main.rs) matches only vacuity::Group::{Work,Spec,Check,Request}, a closed set with no wildcard arm, and grep confirms no reference to GateCommand or nomos_gate_orchestration anywhere outside the crate itself. This is not the ScopeSelector/RuleSelector question OD-GATE-014 just logged as open -- it invents no new policy type or field shape. It gives the crate's existing, already-implemented, pure Run(&GateCommand) -> GateOutcome function a real composition root and a real end-user command, the same seam OD-HOST-002 already built for check/work/spec and that GateCommand::root's own doc comment names by its literal intended spelling: 'nomos gate plan'.",
+      "done_when": "nomos gate plan [--root <path>] is a real CLI command: main.rs dispatches a Gate group, vacuity.rs declares Group::Gate with a Stance_Of arm (NotApplicable, since Plan reports the registry's own fixed contents rather than a caller-chosen subject set that could be found empty), and a new crates/host/nomos-cli/src/gate.rs (plus gate/ submodules for parsing, exit codes and rendering, mirroring check.rs's split) renders GateOutcome::Planned's rules and GateOutcome::Contradictory's error to stdout/stderr with a typed, tested exit code. No change to nomos-gate-orchestration's own public surface or to ScopeSelector/RuleSelector/CoveragePolicy/etc, which stay exactly as undecided as OD-GATE-014 leaves them. cargo test --no-fail-fast -p nomos-cli -p nomos-contract-tests passes, including an exhaustive-match test over the new ExitCode (mirroring check/tests.rs) and a vacuity-stance test (mirroring vacuity.rs's own pattern).",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/src/main.rs",
+          "crates/host/nomos-cli/src/vacuity.rs",
+          "crates/host/nomos-cli/src/gate.rs",
+          "crates/host/nomos-cli/src/gate"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "ts\\add_guarantees_what_it_says.rs (target\\debug\\deps\\add_guarantees_what_it_says-c09c5220c3eec22b.exe)\n     Running tests\\authoring_surface.rs (target\\debug\\deps\\authoring_surface-42c7acaf9a1c9df2.exe)\n     Running tests\\check_command.rs (target\\debug\\deps\\check_command-510a216f6f71d297.exe)\n     Running tests\\freshness.rs (target\\debug\\deps\\freshness-de550010bcb79a4a.exe)\n     Running tests\\gate_step\\main.rs (target\\debug\\deps\\gate_step-c717e10eadedb05c.exe)\n     Running tests\\list_tells_the_truth.rs (target\\debug\\deps\\list_tells_the_truth-65b854c9706e1744.exe)\n     Running tests\\read_surface.rs (target\\debug\\deps\\read_surface-c9569bf3692bb8c1.exe)\n     Running tests\\request_submit.rs (target\\debug\\deps\\request_submit-2cacabd4247416c8.exe)\n     Running tests\\stale_writer_is_refused.rs (target\\debug\\deps\\stale_writer_is_refused-7a2916a912e39660.exe)\n     Running tests\\takeover_is_recorded.rs (target\\debug\\deps\\takeover_is_recorded-2588855d1d72f9b9.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-6de7c117e50af0e9.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-2d3fa4eea983fada.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-6fd5d6ddd8065539.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-78140b3e0a30f3fe.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-e6e28111cf44d96c.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-86828ba6d107bd76.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-81db3ebc061bb28d.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-0f842de40a9ebe8a.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-bbda0280e085c1f9.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-f727927700d7b942.exe)\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1787125839,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "ce7c820ea5327fbedc81f9c0ad9cd29f3d7d1b88"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-DEPENDENCY-EDGES-1",
+      "title": "dependency.edges capability, a Cargo-metadata provider, and Check_Dependency_Direction -- built and tested, not yet wired into Run",
+      "why": "OD-RULES-003 already designed this: a declared architecture is data (bands.rs's BANDS/CONTRACTS_ALLOWLIST/PLATFORM_ADAPTER, kept as rule-authored constant data rather than generalized into a portable format, the same population-of-one restraint applied everywhere else in this workspace), the observed dependency graph is a fact a capability provider establishes at FactVariant::SemanticallyResolved (not Syntactic -- distinguishing optional/build/target-cfg'd edges, which tests/contract/src/workspace.rs's existing --no-deps cargo-metadata call currently discards), and a rule compares the two. Verified directly: SubjectId ('identity of an addressable analysis subject') and nomos_model::Subject_Of_Path place no file-shaped restriction on a subject -- a crate's manifest path works identically to a file's path through the same kernel function, and IncrementalGranularity::Project already fits a per-crate fact with no new type needed. Separately verified: nomos-check-orchestration performs zero I/O by design (Materialize_Syntax operates only on text the composition root already read), so a Cargo-metadata provider -- which must shell out and read Cargo.lock -- cannot plug into the existing eager-materialization loop without touching nomos-cli's walk, which P13-GATE-ORCHESTRATION-2 currently holds live and uncommitted. This item stops short of that wiring for exactly that reason, the same 'additive and unwired' shape P13-GATE-ORCHESTRATION-1 and OD-RULES-004's RuleRegistry both already used.",
+      "done_when": "nomos-cap-dependency exists (contract.rs: CAPABILITY/SCHEMA/CONTRACT_VERSION/Ceiling() pinned at FactVariant::SemanticallyResolved + IncrementalGranularity::Project, following nomos-cap-syntax's template exactly); a new provider crate offers against it with a real Materialize() that shells out to cargo metadata (without --no-deps) and reads kind/optional/target from the JSON to produce real per-package dependency-edge facts, with its own tests proving it over a real Cargo workspace fixture; Check_Dependency_Direction exists in nomos-rules with the same (sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding> signature as the other two rules, comparing a rule-local BANDS-shaped constant table against dependency facts and producing findings for same-band or upward edges, with its own test module proving it against hand-built facts (no real cargo-metadata call in the rule's own tests, matching how the existing two rules test); both new crates are added to Cargo.toml, README.md's band table, and tests/contract/tests/boundaries/bands.rs, each gets a public-surface snapshot, and nomos-rules' own snapshot is reblessed; nothing in nomos-check-orchestration or nomos-cli is touched -- Run() still calls only the existing two rules, and this is stated explicitly rather than silently left undone.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities/nomos-cap-dependency",
+          "crates/languages/nomos-lang-rust-cargo",
+          "crates/rules/nomos-rules",
+          "Cargo.toml",
+          "Cargo.lock",
+          "README.md",
+          "tests/contract/tests/boundaries/bands.rs",
+          "tests/contract/surface/nomos-cap-dependency.txt",
+          "tests/contract/surface/nomos-lang-rust-cargo.txt",
+          "tests/contract/surface/nomos-rules.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-dependency-edges",
+        "acquired_at": 1787125729,
+        "lease_expires_at": 1787132929
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cap-dependency",
+          "-p",
+          "nomos-lang-rust-cargo",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "public_surface"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

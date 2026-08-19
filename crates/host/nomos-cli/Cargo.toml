@@ -53,6 +53,11 @@ nomos-check-orchestration = { workspace = true }
 # `spec.rs` still parses, assembles and dispatches the other seven verbs on its own, over a
 # store this crate hands it as a value. `OD-HOST-002`.
 nomos-spec-orchestration = { workspace = true }
+# The seam for the first-class Gate object ARC-ROADMAP-001 names -- `gate.rs` parses argv
+# and renders what came back; this crate composes the rule registry and reports it. Reads
+# no disk and chooses no platform, so unlike `check.rs` there is nothing else for this
+# composition root to assemble. `P13-GATE-ORCHESTRATION-1`, `P13-GATE-ORCHESTRATION-2`.
+nomos-gate-orchestration = { workspace = true }
 # The specification system. A composition root is the only place permitted to name
 # these: the spec crates sit beside the kernel rather than above it, and nothing in the
 # product may reach them directly. The submission type `request.rs` constructs comes from

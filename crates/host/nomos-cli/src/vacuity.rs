@@ -50,13 +50,15 @@ pub(crate) enum Group
     Spec,
     Check,
     Request,
+    Gate,
 }
 
 #[cfg(test)]
 impl Group
 {
     /// Every group, for a test to walk without hand-maintaining a second list.
-    pub(crate) const ALL: [Self; 4] = [Self::Work, Self::Spec, Self::Check, Self::Request];
+    pub(crate) const ALL: [Self; 5] =
+        [Self::Work, Self::Spec, Self::Check, Self::Request, Self::Gate];
 }
 
 /// Every group's on-argv spelling, paired with the [`Group`] `Stance_Of` reads.
@@ -66,11 +68,12 @@ impl Group
 /// can route to it at all. That is what makes this module the entry point every group's
 /// dispatch actually passes through, and not merely a place a stance happens to be written
 /// down beside the code it describes.
-pub(crate) const NAMES: [(&str, Group); 4] = [
+pub(crate) const NAMES: [(&str, Group); 5] = [
     ("work", Group::Work),
     ("spec", Group::Spec),
     ("check", Group::Check),
     ("request", Group::Request),
+    ("gate", Group::Gate),
 ];
 
 /// The group named on argv, if [`NAMES`] spells it.
@@ -132,6 +135,12 @@ pub(crate) fn Stance_Of(group: Group) -> Stance
             because: "submit always names exactly one submission the caller wrote; there is \
                       no caller-chosen subject set for it to have walked and found empty the \
                       way a checked-out tree or a queried record can be",
+        },
+        Group::Gate => Stance::NotApplicable {
+            because: "plan reports this gate's own rule registry, fixed by composition, not \
+                      a caller-chosen subject set -- GateCommand::root is accepted but this \
+                      increment does not read it, so there is nothing yet that narrowing \
+                      could find empty the way a checked-out tree can be",
         },
     };
 }
@@ -218,5 +227,13 @@ mod tests
     {
         assert!(matches!(Stance_Of(Group::Work), Stance::NotApplicable { .. }));
         assert!(matches!(Stance_Of(Group::Request), Stance::NotApplicable { .. }));
+    }
+
+    /// `gate plan` reports its own registry's fixed contents, not a caller-chosen subject
+    /// set -- the same reasoning as `work` and `request`, not `check`'s or `spec`'s.
+    #[test]
+    fn Test_Gate_Is_Declared_Not_Applicable()
+    {
+        assert!(matches!(Stance_Of(Group::Gate), Stance::NotApplicable { .. }));
     }
 }

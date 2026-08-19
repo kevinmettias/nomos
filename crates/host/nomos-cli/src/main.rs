@@ -19,6 +19,7 @@
 
 mod arguments;
 mod check;
+mod gate;
 mod request;
 mod spec;
 mod vacuity;
@@ -51,6 +52,7 @@ fn main() -> std::process::ExitCode
         Some((vacuity::Group::Spec, rest)) => Spec(rest),
         Some((vacuity::Group::Check, rest)) => Check(rest),
         Some((vacuity::Group::Request, rest)) => Request(rest),
+        Some((vacuity::Group::Gate, rest)) => Gate(rest),
         None => Usage(),
     };
 
@@ -113,6 +115,20 @@ fn Request(rest: &[String]) -> i32
     return request::Run(&command, &Corpus_Request(rest), &mut stdout, &mut stderr).Value();
 }
 
+/// The gate group: composing this repository's rule registry and reporting what it holds.
+fn Gate(rest: &[String]) -> i32
+{
+    let mut stdout = std::io::stdout();
+    let mut stderr = std::io::stderr();
+    let Ok(command) = gate::Parse(rest).inspect_err(|message| eprintln!("{message}"))
+    else
+    {
+        return gate::ExitCode::Usage.Value();
+    };
+
+    return gate::Run(&command, &mut stdout, &mut stderr).Value();
+}
+
 /// What the binary answers when it was not told which group it is being asked for.
 fn Usage() -> i32
 {
@@ -121,7 +137,8 @@ fn Usage() -> i32
          work    coordinate concurrent work over this repository\n  \
          spec    read the specification store and render its projections\n  \
          check   run the rules over a tree and report what they find\n  \
-         request submit a feature request, design spec or feature result"
+         request submit a feature request, design spec or feature result\n  \
+         gate    compose this gate's rule registry and report what it holds"
     );
 
     return work::ExitCode::Usage.Value();
