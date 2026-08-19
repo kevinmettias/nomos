@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:bfaba35b1f86cd3f0aa0e26cc431ce9d8485e3933884829512e3403836a396cf",
-  "inputs_digest": "sha256:f6827b522d9af39dbf2e9839f56f9ca47abf3d168838130416d8ba6181e2fd46",
+  "content_digest": "sha256:70eb59e9ea177e16fe5ea5e1d29270b49752b3de7534f00e7eb899fb81fa7698",
+  "inputs_digest": "sha256:5364baf6b1aeff453748dbdb3450c7acd6fc3a6d59c12cfcf4c3349febe1cb8c",
   "sections": [
     [
       "Documents",
@@ -48,7 +48,7 @@
     {
       "content": "documents",
       "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md@authored",
-      "hash": "sha256:da7896730f15d10a82134602b8f31b4faabdfed9bac80985da9378e13a91f9e5"
+      "hash": "sha256:db0e084fa51ebf7c8d2bee1bf08171f06b0df1a0c12be3ff6d46ed0df0e79429"
     },
     {
       "content": "documents",
@@ -223,12 +223,12 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md@authored",
-      "hash": "sha256:8747b101030932e66b9bcfac31894e7676e3850041148d026bef58c8bfe4d2e8"
+      "hash": "sha256:243cd01d0c3a76110de1cec5697fa03f185768f31467662081557f8ccca82386"
     },
     {
       "content": "documents",
       "identity": "docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md@authored",
-      "hash": "sha256:2de6c66157c81460c04202fa550d57a830560e25befd9d6087223a67d6ab5cba"
+      "hash": "sha256:a4d8c71e62610f704811e42757155af8725a195a9b7f6d47a5af13197be33516"
     },
     {
       "content": "documents",
@@ -7843,7 +7843,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#29",
-      "hash": "sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3"
+      "hash": "sha256:2ffb50448c1a0bd55b9f4b762350200e4030ea898fe8665b6d3656a1499110ba"
     },
     {
       "content": "blocks",
@@ -12113,7 +12113,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#26",
-      "hash": "sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3"
+      "hash": "sha256:aa943f6057634cd8d81662fe999423cd89d54c7ac4c55c780eeb9552a3a84f28"
     },
     {
       "content": "blocks",
@@ -12253,7 +12253,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#28",
-      "hash": "sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3"
+      "hash": "sha256:7432c4ebba7aa6fa8361c79ab9e093d72b1ff17844c4a037337b1c59baaf6e6c"
     },
     {
       "content": "blocks",

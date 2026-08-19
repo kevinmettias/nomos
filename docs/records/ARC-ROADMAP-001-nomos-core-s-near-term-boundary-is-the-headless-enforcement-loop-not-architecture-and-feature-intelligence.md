@@ -209,4 +209,9 @@ depend on rather than duplicate.
 
 ## Status
 
-Accepted.
+Accepted, drawn by `P13-CORE-ROADMAP-RECONCILIATION-3`. It schedules no item and orders
+nothing within either tier, so nothing discharges it as a whole; what would revisit each
+part is named in place instead — constraint 2 on `OD-PACKAGE-008`'s own recorded trigger,
+constraint 3 once workflow orchestration or agent execution reach the point of needing
+typed cross-entity relationships, constraint 4 by an amendment to `ARC-ECOSYSTEM-001`
+rather than to this record.

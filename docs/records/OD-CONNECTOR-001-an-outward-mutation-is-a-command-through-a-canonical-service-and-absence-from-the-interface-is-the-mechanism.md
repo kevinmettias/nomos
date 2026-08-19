@@ -165,4 +165,8 @@ named precedent, rather than a discouragement without a structural reason.
 
 ## Status
 
-Accepted.
+Closed by `P12-WRITE-CAPABILITY`, which named the mechanism `ARC-CONNECTOR-001`'s fourth
+invariant assumed without naming: omission where this workspace owns the type, containment
+where it does not. It discharges the mechanism question for connectors; whether an
+executor, a plugin, an agent or a transport carries the same rule is left to that
+boundary's own record, citing this one as precedent rather than inheriting it.

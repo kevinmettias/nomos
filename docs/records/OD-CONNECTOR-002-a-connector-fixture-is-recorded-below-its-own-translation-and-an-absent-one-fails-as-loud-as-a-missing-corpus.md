@@ -172,4 +172,8 @@ that none of the three is decided by whichever test is first instead of by this 
 
 ## Status
 
-Accepted.
+Closed by `P12-CONNECTOR-REPLAY`, which placed the recording below the translation layer
+and set the evidence and absence rules around it. It discharges the fixture-and-evidence
+question for connector tests ahead of the first connector; a fixture file format, a
+recording tool and a corpus-gate table remain for that first connector's own tests to
+define.

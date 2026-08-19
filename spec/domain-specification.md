@@ -15,7 +15,7 @@ profile: domain-specification
 | docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md@authored | docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md | authored | 73 | 15 | sha256:9c180099cbe0676f26fbb605bcf1696c99b2ff6fb542c0d367a429cfeb236d87 |
 | docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md@authored | docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md | authored | 22 | 9 | sha256:617fdf9751303c87338720a7a50927cab3bfa84d19c92ec42cc43a7876566a9e |
 | docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md@authored | docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md | authored | 31 | 8 | sha256:1931b6cbe939acaa26774b46b8533002d2ff588626d1e25834dd6b8f8dc5b802 |
-| docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md@authored | docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md | authored | 29 | 12 | sha256:da7896730f15d10a82134602b8f31b4faabdfed9bac80985da9378e13a91f9e5 |
+| docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md@authored | docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md | authored | 29 | 12 | sha256:db0e084fa51ebf7c8d2bee1bf08171f06b0df1a0c12be3ff6d46ed0df0e79429 |
 | docs/records/ARC-SPECDB-001-the-specification-is-a-database.md@authored | docs/records/ARC-SPECDB-001-the-specification-is-a-database.md | authored | 18 | 5 | sha256:795ab3ead8311de8e0f1a93828209d5c1654275417d109a92e491cab9e3b5b45 |
 | docs/records/ARC-SPECDB-002-a-canonical-substrate-is-decided-by-whether-the-schema-precedes-the-content.md@authored | docs/records/ARC-SPECDB-002-a-canonical-substrate-is-decided-by-whether-the-schema-precedes-the-content.md | authored | 33 | 8 | sha256:6345396571caf05ec03eb1d4cf5f6f4b940f8f2f42dce4026dfabd0836faefa9 |
 | docs/records/D-129-the-store-is-the-identity-substrate.md@authored | docs/records/D-129-the-store-is-the-identity-substrate.md | authored | 28 | 7 | sha256:c1f3eeec14e44a3f55d1f71522686a9f695f79060ac32e84aacdd0ff245d7778 |
@@ -50,8 +50,8 @@ profile: domain-specification
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md@authored | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md | authored | 33 | 9 | sha256:26a4c8c8e217e97e0c147d846441c33d854347e490c3757345f06a4021b6d7ff |
 | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md@authored | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md | authored | 54 | 10 | sha256:fc95b7901fc9e920666e8f04eb01c6436a96d16fc63f94e0599114d5cfa5928b |
 | docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md@authored | docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md | authored | 27 | 8 | sha256:ae576ae44e0cc42f6fd2a44efd4c144eb6e6563fe999ad97a9d074e9037c1d2a |
-| docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md@authored | docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md | authored | 26 | 10 | sha256:8747b101030932e66b9bcfac31894e7676e3850041148d026bef58c8bfe4d2e8 |
-| docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md@authored | docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md | authored | 28 | 9 | sha256:2de6c66157c81460c04202fa550d57a830560e25befd9d6087223a67d6ab5cba |
+| docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md@authored | docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md | authored | 26 | 10 | sha256:243cd01d0c3a76110de1cec5697fa03f185768f31467662081557f8ccca82386 |
+| docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md@authored | docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md | authored | 28 | 9 | sha256:a4d8c71e62610f704811e42757155af8725a195a9b7f6d47a5af13197be33516 |
 | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md@authored | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md | authored | 29 | 9 | sha256:0351be57f7a37c7b7e8965886b9fa29c15f87fe4660ee253dcebcad932fe77a6 |
 | docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md@authored | docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md | authored | 28 | 9 | sha256:9f1c5229277415e49115502a643ecee1e889b80a83acb01e8695fe922761f0c2 |
 | docs/records/OD-DETERMINISM-001-a-declaration-proven-only-behind-a-corpus-gate.md@authored | docs/records/OD-DETERMINISM-001-a-declaration-proven-only-behind-a-corpus-gate.md | authored | 26 | 7 | sha256:b080a464d0e59ac731e8b78eb0104aeed978958713f99969d1506ebbee92802e |
@@ -3369,9 +3369,14 @@ depend on rather than duplicate.
 
 ### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#29
 
-*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Status · hash: sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3*
+*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Status · hash: sha256:2ffb50448c1a0bd55b9f4b762350200e4030ea898fe8665b6d3656a1499110ba*
 
-Accepted.
+Accepted, drawn by `P13-CORE-ROADMAP-RECONCILIATION-3`. It schedules no item and orders
+nothing within either tier, so nothing discharges it as a whole; what would revisit each
+part is named in place instead — constraint 2 on `OD-PACKAGE-008`'s own recorded trigger,
+constraint 3 once workflow orchestration or agent execution reach the point of needing
+typed cross-entity relationships, constraint 4 by an amendment to `ARC-ECOSYSTEM-001`
+rather than to this record.
 
 ### docs/records/ARC-SPECDB-001-the-specification-is-a-database.md#1
 
@@ -11122,9 +11127,13 @@ named precedent, rather than a discouragement without a structural reason.
 
 ### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#26
 
-*revision: authored · kind: prose · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / Status · hash: sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3*
+*revision: authored · kind: prose · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / Status · hash: sha256:aa943f6057634cd8d81662fe999423cd89d54c7ac4c55c780eeb9552a3a84f28*
 
-Accepted.
+Closed by `P12-WRITE-CAPABILITY`, which named the mechanism `ARC-CONNECTOR-001`'s fourth
+invariant assumed without naming: omission where this workspace owns the type, containment
+where it does not. It discharges the mechanism question for connectors; whether an
+executor, a plugin, an agent or a transport carries the same rule is left to that
+boundary's own record, citing this one as precedent rather than inheriting it.
 
 ### docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#1
 
@@ -11389,9 +11398,13 @@ that none of the three is decided by whichever test is first instead of by this 
 
 ### docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#28
 
-*revision: authored · kind: prose · heading: A connector fixture is recorded below its own translation, and an absent one fails as loud as a missing corpus / Status · hash: sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3*
+*revision: authored · kind: prose · heading: A connector fixture is recorded below its own translation, and an absent one fails as loud as a missing corpus / Status · hash: sha256:7432c4ebba7aa6fa8361c79ab9e093d72b1ff17844c4a037337b1c59baaf6e6c*
 
-Accepted.
+Closed by `P12-CONNECTOR-REPLAY`, which placed the recording below the translation layer
+and set the evidence and absence rules around it. It discharges the fixture-and-evidence
+question for connector tests ahead of the first connector; a fixture file format, a
+recording tool and a corpus-gate table remain for that first connector's own tests to
+define.
 
 ### docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#1
 
