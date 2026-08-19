@@ -18629,6 +18629,62 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-SKILL-RULE-COUNT-STALE",
+      "title": "nomos-add-plugin still says nomos-rules holds two rules; it holds three since Check_Dependency_Direction landed",
+      "why": "P13-DEPENDENCY-EDGES-2/P13-DEPENDENCY-WIRE-1 added Check_Dependency_Direction as a third rule beside Check_Completeness_Mirrors and Check_Naming_Convention, but SKILL.md's own '3. A second rule' section was never updated and still names two, understating the wiring example and the population a reader checks their own third rule against.",
+      "done_when": "SKILL.md's rule-count text names Check_Dependency_Direction and no longer claims the crate holds two rules.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          ".claude/skills/nomos-add-plugin/SKILL.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "rg",
+          "-U",
+          "--pcre2",
+          "-q",
+          "(?s)\\A(?=.*Check_Dependency_Direction)(?!.*holds two rules,).*\\z",
+          ".claude/skills/nomos-add-plugin/SKILL.md"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "rg",
+          "-U",
+          "--pcre2",
+          "-q",
+          "(?s)\\A(?=.*Check_Dependency_Direction)(?!.*holds two rules,).*\\z",
+          ".claude/skills/nomos-add-plugin/SKILL.md"
+        ],
+        "exit_code": 0,
+        "output_tail": "",
+        "verified_at": 1787159363,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "2af91f940c3fdf2e50fff99ec3d34b3f26565922"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

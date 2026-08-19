@@ -86,11 +86,11 @@ expected to offer against it, not only once one actually has.
 
 ## 3. A second rule
 
-Much smaller than a provider. `crates/rules/nomos-rules` holds two rules today,
-`Check_Completeness_Mirrors` and `Check_Naming_Convention` — both
-`fn(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>` — a third rule is a
-third function of that same shape inside the same crate, not a new crate or a new band.
-There is no `Rule` trait; match the signature.
+Much smaller than a provider. `crates/rules/nomos-rules` holds three rules today,
+`Check_Completeness_Mirrors`, `Check_Naming_Convention` and `Check_Dependency_Direction` —
+all `fn(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>` — a fourth rule
+is a fourth function of that same shape inside the same crate, not a new crate or a new
+band. There is no `Rule` trait; match the signature.
 
 **Wiring it in**: `crates/orchestration/nomos-check-orchestration/src/run.rs`'s `Run`
 function calls every rule it knows about unconditionally:
