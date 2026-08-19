@@ -51,14 +51,16 @@ judge/coverage loop — is that check dependencies are heterogeneous and that sh
 structure emerges once duplication is real. That is evidence for explicit dependency
 declaration and demand-driven shared planning. It is not evidence for a rule program IR.
 
-`nomos-rules` holds exactly two rules today, `Check_Completeness_Mirrors` and
-`Check_Naming_Convention`. Neither exhibits rule-local control flow, a reusable
-subcomputation, or a correction/recheck loop that a capability requirement plus the (not yet
-built) analysis planner cannot already express. Building a Rule Program IR now would be
-designing a general execution model from a population of two rules, neither of which needs
-it — the same shape `OD-RULES-005`, `OD-RULES-006` and `OD-CAPABILITY-008` already declined
-to build ahead of, and the specific mistake `D-135` names: inferring genericity from a wish
-rather than a demonstrated concrete need.
+`nomos-rules` holds exactly three rules today, `Check_Completeness_Mirrors`,
+`Check_Naming_Convention` and `Check_Dependency_Direction`. None exhibits rule-local control
+flow, a reusable subcomputation, or a correction/recheck loop that a capability requirement
+plus the (not yet built) analysis planner cannot already express — `Check_Dependency_
+Direction` is a plain per-source, per-edge loop over an already-decoded fact, the same
+shape as the other two. Building a Rule Program IR now would be designing a general
+execution model from a population of three rules, none of which needs it — the same shape
+`OD-RULES-005`, `OD-RULES-006` and `OD-CAPABILITY-008` already declined to build ahead of,
+and the specific mistake `D-135` names: inferring genericity from a wish rather than a
+demonstrated concrete need.
 
 ## Current Position
 

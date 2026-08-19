@@ -125,7 +125,7 @@ profile: domain-specification
 | docs/records/OD-RULES-004-a-rule-package-registers-into-a-declared-registry-extracted-before-a-second-rule-needs-it.md@authored | docs/records/OD-RULES-004-a-rule-package-registers-into-a-declared-registry-extracted-before-a-second-rule-needs-it.md | authored | 17 | 6 | sha256:35e6671b64241f3b351b2f75159a6860300ee83d671151305c075f1a1dd398a6 |
 | docs/records/OD-RULES-005-whether-a-rules-offer-needs-a-measured-inputs-classification-or-waits-for-a-caching-consumer.md@authored | docs/records/OD-RULES-005-whether-a-rules-offer-needs-a-measured-inputs-classification-or-waits-for-a-caching-consumer.md | authored | 13 | 5 | sha256:3bcc3aad22947f89bb1436da5b44db13aabd4af1c97a60dbdab28899bbdad057 |
 | docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md@authored | docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md | authored | 18 | 6 | sha256:5e7bde3ad034017040659d44bc4b044696c4a0b33830e8596bd67906a2d2ac4c |
-| docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md@authored | docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md | authored | 15 | 5 | sha256:aad6f73159d0761db0032e0770bef784047ead801942da93128256841cb50337 |
+| docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md@authored | docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md | authored | 15 | 5 | sha256:45afb6da12c9c097b8769739c122fc5780401a07f2c6bc0834eac32d4c109ba7 |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md@authored | docs/records/OD-SPEC-001-the-storage-backend-question.md | authored | 11 | 5 | sha256:e4feddab256024ea38e21849120fdd52d0ddf17d4e3f69cfb24eb4c8e766c8ae |
 | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md@authored | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md | authored | 20 | 7 | sha256:2c45051e43390556bfd68865152580e1ae09c2e82dc94bb20e65cdbf60d69a10 |
 | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md@authored | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md | authored | 23 | 7 | sha256:481ffd62b02df705439b4ef914adb21e24894d1d3f0295754fc13f7d95c89c85 |
@@ -33241,16 +33241,18 @@ declaration and demand-driven shared planning. It is not evidence for a rule pro
 
 ### docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md#5
 
-*revision: authored · kind: prose · heading: Whether heterogeneous rule populations justify a structured Rule Program/IR and global rule-compilation layer, or wait for two rules that actually need one / Question · hash: sha256:4c95694d10f41a25ac942cc43d6617fa0a2e3893aa97869d71a6e3258345dbcc*
+*revision: authored · kind: prose · heading: Whether heterogeneous rule populations justify a structured Rule Program/IR and global rule-compilation layer, or wait for two rules that actually need one / Question · hash: sha256:273d3452d3df4ae1b81764c0a03a8fa5022a55bfa9c593a5c4f57afe8369dbd2*
 
-`nomos-rules` holds exactly two rules today, `Check_Completeness_Mirrors` and
-`Check_Naming_Convention`. Neither exhibits rule-local control flow, a reusable
-subcomputation, or a correction/recheck loop that a capability requirement plus the (not yet
-built) analysis planner cannot already express. Building a Rule Program IR now would be
-designing a general execution model from a population of two rules, neither of which needs
-it — the same shape `OD-RULES-005`, `OD-RULES-006` and `OD-CAPABILITY-008` already declined
-to build ahead of, and the specific mistake `D-135` names: inferring genericity from a wish
-rather than a demonstrated concrete need.
+`nomos-rules` holds exactly three rules today, `Check_Completeness_Mirrors`,
+`Check_Naming_Convention` and `Check_Dependency_Direction`. None exhibits rule-local control
+flow, a reusable subcomputation, or a correction/recheck loop that a capability requirement
+plus the (not yet built) analysis planner cannot already express — `Check_Dependency_
+Direction` is a plain per-source, per-edge loop over an already-decoded fact, the same
+shape as the other two. Building a Rule Program IR now would be designing a general
+execution model from a population of three rules, none of which needs it — the same shape
+`OD-RULES-005`, `OD-RULES-006` and `OD-CAPABILITY-008` already declined to build ahead of,
+and the specific mistake `D-135` names: inferring genericity from a wish rather than a
+demonstrated concrete need.
 
 ### docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md#6
 

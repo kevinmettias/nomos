@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:a5f20734772231666ab4018c11efd0a4e3115d96c62a38a2702a90796fbae012",
-  "inputs_digest": "sha256:adde51768e0990222b6da1e380ae4cd43945c59625f61666c405f99e57874765",
+  "content_digest": "sha256:b2083ae30d5f93ca89a605b94ed8318b4b89dde0d23d87cda1e7492e6af0994d",
+  "inputs_digest": "sha256:d57fd1e6ac87c98b2de13acb0e0f50f0d98d9197beeaed187b689ee6f43eaf1e",
   "sections": [
     [
       "Documents",
@@ -598,7 +598,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md@authored",
-      "hash": "sha256:aad6f73159d0761db0032e0770bef784047ead801942da93128256841cb50337"
+      "hash": "sha256:45afb6da12c9c097b8769739c122fc5780401a07f2c6bc0834eac32d4c109ba7"
     },
     {
       "content": "documents",
@@ -24503,7 +24503,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md#5",
-      "hash": "sha256:4c95694d10f41a25ac942cc43d6617fa0a2e3893aa97869d71a6e3258345dbcc"
+      "hash": "sha256:273d3452d3df4ae1b81764c0a03a8fa5022a55bfa9c593a5c4f57afe8369dbd2"
     },
     {
       "content": "blocks",
