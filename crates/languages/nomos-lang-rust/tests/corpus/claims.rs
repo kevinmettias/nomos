@@ -117,16 +117,20 @@ fn Test_The_Corpus_Should_Yield_Syntax_Facts()
 ///
 /// # What this corpus actually refuses
 ///
-/// Seven files of 7,580, and all seven for one reason: a `U+FEFF` byte order mark at
-/// byte 15, immediately after a `use super::*;` that somebody prepended to a file which
-/// already began with one. A mark at offset zero is an encoding announcement and parses;
-/// a mark anywhere else is not whitespace, and rustc rejects those seven files too.
+/// Two files of 8,975 as last measured, both for the same reason: `//!` placed after
+/// `use super::*;` in `xvpe-thread-pool`'s `benches/fiber/throughput_*.rs`. An inner doc
+/// comment is sugar for an inner attribute, and an inner attribute must precede every other
+/// item in its scope, in any position — a rule this walk enforces by refusing to parse the
+/// file, and rustc rejects the same two files for the same reason. The historical case this
+/// comment once named, a stray `U+FEFF` byte order mark, is not currently present in this
+/// corpus; the check for it stays, because a mark reappearing would be exactly this kind of
+/// damage again.
 ///
 /// So the assertion is not a tolerance for a reader that has fallen behind the language.
-/// It is that every refusal is explained: a refusal this walk cannot attribute to a stray
-/// mark is a new fact and fails the test, whether it turns out to be a corpus defect or a
-/// gap in this provider. A budget with no explanation attached is a place for the second
-/// kind of failure to hide behind the first.
+/// It is that every refusal is explained: a refusal this walk cannot attribute to a known
+/// kind of damage is a new fact and fails the test, whether it turns out to be a corpus
+/// defect or a gap in this provider. A budget with no explanation attached is a place for
+/// the second kind of failure to hide behind the first.
 #[test]
 fn Test_Every_Refusal_Should_Be_Named_And_Explained()
 {
@@ -151,7 +155,8 @@ fn Test_Every_Refusal_Should_Be_Named_And_Explained()
         unexplained.extend(unaccounted);
     }
     eprintln!(
-        "refusals: {} of {total} files, {} explained by a stray byte order mark",
+        "refusals: {} of {total} files, {} explained (byte order mark or misplaced inner \
+         doc comment; the reason for each is on its own line above)",
         walked.refused.len(),
         walked.refused.len().saturating_sub(unexplained.len())
     );
@@ -168,10 +173,10 @@ fn Test_Every_Refusal_Should_Be_Named_And_Explained()
 
 /// A refused file this walk cannot account for, if it cannot account for it.
 ///
-/// A stray byte order mark is the one damage this corpus is known to carry, so it is
-/// reported and excused. Anything else is either new damage or a provider that has fallen
-/// behind the language, and the two need different responses — which is why the count alone
-/// was never going to be enough.
+/// A stray byte order mark and a misplaced inner doc comment are the two kinds of damage
+/// this corpus is known to carry, so both are reported and excused. Anything else is either
+/// new damage or a provider that has fallen behind the language, and the two need different
+/// responses — which is why the count alone was never going to be enough.
 fn Unexplained(path: &Path, failure: &str) -> Option<PathBuf>
 {
     assert!(
@@ -180,16 +185,68 @@ fn Unexplained(path: &Path, failure: &str) -> Option<PathBuf>
         path.display()
     );
 
-    let stray_mark = std::fs::read_to_string(path)
-        .is_ok_and(|source| return source.trim_start_matches('\u{feff}').contains('\u{feff}'));
+    let source = std::fs::read_to_string(path).ok();
+    let stray_mark = source
+        .as_deref()
+        .is_some_and(|source| return source.trim_start_matches('\u{feff}').contains('\u{feff}'));
+    let misplaced_inner_doc = !stray_mark && source.as_deref().is_some_and(Has_Misplaced_Inner_Doc);
+    let reason = if stray_mark
+    {
+        Some("stray byte order mark")
+    }
+    else if misplaced_inner_doc
+    {
+        Some("misplaced inner doc comment")
+    }
+    else
+    {
+        None
+    };
 
     eprintln!(
         "refused {} ({}): {failure}",
         path.display(),
-        if stray_mark { "stray byte order mark" } else { "UNEXPLAINED" }
+        reason.unwrap_or("UNEXPLAINED")
     );
 
-    return (!stray_mark).then(|| return path.to_path_buf());
+    return reason.is_none().then(|| return path.to_path_buf());
+}
+
+/// Whether `source` places a `//!` or `#![...]` inner doc comment or attribute after a real
+/// item already began the file.
+///
+/// Invalid in any position under Rust's own grammar — inner attributes must precede every
+/// other item in their scope — so a file shaped this way is refused by rustc as well as by
+/// this provider; it is not this provider falling behind the language. A textual scan rather
+/// than a second parse, at the same level of precision the byte-order-mark check above
+/// already uses: comments and blank lines do not count as "an item began", anything else
+/// does.
+fn Has_Misplaced_Inner_Doc(source: &str) -> bool
+{
+    let mut seen_item = false;
+
+    for line in source.lines()
+    {
+        let trimmed = line.trim_start();
+
+        if trimmed.starts_with("//!") || trimmed.starts_with("#![")
+        {
+            if seen_item
+            {
+                return true;
+            }
+
+            continue;
+        }
+        if trimmed.is_empty() || trimmed.starts_with("//")
+        {
+            continue;
+        }
+
+        seen_item = true;
+    }
+
+    return false;
 }
 
 /// Soundness, over files nobody chose to make it pass.

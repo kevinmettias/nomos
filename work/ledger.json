@@ -20022,6 +20022,63 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-CORPUS-REFUSAL-TAXONOMY",
+      "title": "nomos-lang-rust's corpus test cannot explain a misplaced inner doc comment, and a stray agent worktree doubles its refusal count",
+      "why": "cargo test -p nomos-lang-rust --test corpus, run against the real corpus (NOMOS_RUST_CORPUS=F:/repos/xvpe, or its DEFAULT_ROOT fallback which happens to resolve on this machine), fails Test_Every_Refusal_Should_Be_Named_And_Explained. Reproduced directly: 4 of 17369 files refused, 0 explained by the one known reason (a stray byte order mark) this test's own doc comment names, all 4 UNEXPLAINED.\n\nTwo distinct, independent causes, both verified directly rather than assumed:\n\n1. crates/languages/nomos-lang-rust/tests/corpus/walk.rs's NOT_SOURCE list excludes `target` and `.git` but not `.claude`. This xvpe checkout carries a stray agent worktree under .claude/worktrees/agent-a4b4daaf1328e4f69/, itself a checked-out copy of (part of) the same tree, so the same two real files are walked twice -- once at their real path, once again under the worktree -- doubling every count that touches them, including this test's refusal count (2 real refusals reported as 4).\n\n2. The two real files (crates/engine/foundations/xvpe-thread-pool/benches/fiber/throughput_context_stack_pool.rs and .../throughput_wait_scaling_wakeup.rs) each place a `//!` inner doc comment after `use super::*;`. Read directly: this is invalid under Rust's own grammar, not a gap in this provider's parser -- inner attributes and inner doc comments must precede every other item in their scope, in any position, so rustc would refuse these two files as well. This is the corpus growing a new kind of damage, in the sense this test's own doc comment already names as one of the two possible causes (\"Either the corpus grew a new kind of damage or this provider has fallen behind the language, and the two need different responses\") -- and the response for damage, not a provider gap, is to name and explain it the same way a stray byte order mark already is, not to change what this provider accepts.\n\nThis test is corpus-gated and CI never runs it (no NOMOS_RUST_CORPUS is set in .github/workflows/gate.yml), so this failure is invisible there and only reproduces on a machine holding a real xvpe checkout -- this is such a machine. The test's own purpose, stated in its doc comment, is exactly to catch this: \"a refusal this walk cannot attribute to a stray mark is a new fact and fails the test.\" It did its job.",
+      "done_when": "walk.rs's NOT_SOURCE gains \".claude\", with its doc comment explaining why: a worktree checked out under .claude/worktrees/ duplicates real source under a hidden directory nobody authored, the same \"not somebody's source\" reasoning target and .git already state. Every file this repository's own walk touches under that directory is scratch state, not a second copy of the corpus.\n\nclaims.rs's Unexplained (or a sibling helper) gains a second recognized refusal category alongside the existing stray-byte-order-mark check: a `//!` or `#![...]` inner doc comment/attribute appearing after a real item already began the file. The check is textual (line-scan for the first `//!`/`#![` line that follows an earlier non-comment, non-blank line), mirroring the existing byte-order-mark check's own level of precision, not a second parse. The eprintln! per-refusal report names which of the two reasons applied (\"stray byte order mark\" / \"misplaced inner doc comment\" / \"UNEXPLAINED\"), and the doc comment on Test_Every_Refusal_Should_Be_Named_And_Explained (\"What this corpus actually refuses\") is rewritten with fresh, actually-measured counts and both reasons -- not left describing only the historical byte-order-mark case, since re-measuring after the .claude exclusion shows that reason no longer occurring in this corpus at all.\n\nTerritory is exactly crates/languages/nomos-lang-rust/tests/corpus/walk.rs and crates/languages/nomos-lang-rust/tests/corpus/claims.rs. No change to any file under crates/languages/nomos-lang-rust/src -- this provider's own parsing is correct; only the corpus test's own accounting changes.\n\ncargo test -p nomos-lang-rust --test corpus passes against the real corpus on this machine (NOMOS_RUST_CORPUS=F:/repos/xvpe, or DEFAULT_ROOT's own fallback to the same path), all six tests green, Test_Every_Refusal_Should_Be_Named_And_Explained reporting every refusal explained.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages/nomos-lang-rust/tests/corpus/walk.rs",
+          "crates/languages/nomos-lang-rust/tests/corpus/claims.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lang-rust",
+          "--test",
+          "corpus"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lang-rust",
+          "--test",
+          "corpus"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 6 tests\ntest claims::Test_Reading_The_Corpus_Twice_Should_Reach_The_Same_Facts ... ok\ntest claims::Test_Unrecognized_Files_Should_Be_Skipped_Rather_Than_Failed ... ok\ntest claims::Test_Every_Refusal_Should_Be_Named_And_Explained ... ok\ntest claims::Test_The_Corpus_Should_Yield_Syntax_Facts ... ok\ntest claims::Test_The_Corpus_Should_Show_Why_Completeness_Is_Unknown ... ok\ntest claims::Test_Soundness_Should_Hold_Over_The_Whole_Corpus ... ok\n\ntest result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 13.98s\n\n   Compiling nomos-lang-rust v0.1.0 (F:\\repos\\nomos\\crates\\languages\\nomos-lang-rust)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.51s\n     Running tests\\corpus\\main.rs (target\\debug\\deps\\corpus-566fb6c1e515bd0e.exe)\n",
+        "verified_at": 1787180100,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "e7e7d9ae0dd4776173dd54aa812d072294a0798f"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

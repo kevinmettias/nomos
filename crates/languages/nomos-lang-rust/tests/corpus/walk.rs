@@ -10,8 +10,12 @@ use std::path::{Path, PathBuf};
 ///
 /// `target` is compiler output — reading it would inflate every count here with generated
 /// code and measure this provider against rustc's formatting rather than against a person's.
-/// `.git` is object storage that happens to sit in the tree.
-const NOT_SOURCE: &[&str] = &["target", ".git"];
+/// `.git` is object storage that happens to sit in the tree. `.claude` is agent scratch
+/// state — a worktree checked out under `.claude/worktrees/` duplicates real source under a
+/// hidden directory nobody authored, the same "not somebody's source" reasoning `target` and
+/// `.git` already state, and every file under it doubles whatever count the file it copies
+/// already contributes.
+const NOT_SOURCE: &[&str] = &["target", ".git", ".claude"];
 
 /// Every file under a root that is not inside a directory nobody's source lives in.
 pub(crate) fn Each_File(root: &Path, mut visit: impl FnMut(&Path, &str))
