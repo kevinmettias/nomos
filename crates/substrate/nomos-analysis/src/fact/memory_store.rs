@@ -15,6 +15,8 @@ use crate::FactError;
 use crate::FactKey;
 use crate::Dependency;
 use crate::MaterializedFact;
+use crate::propagation::DependencyPropagation;
+use crate::propagation::LocalGraphPropagation;
 #[derive(Clone, Debug)]
 struct Entry
 {
@@ -24,13 +26,19 @@ struct Entry
     dependencies: Vec<Dependency>,
 }
 
-#[derive(Debug, Default)]
 pub struct MemoryFactStore
 {
     entries: BTreeMap<Digest128, Vec<Entry>>,
     dependents: BTreeMap<Digest128, BTreeSet<Digest128>>,
     keys: BTreeMap<Digest128, FactKey>,
     materializations: u32,
+    /// Held as `Option` rather than bare `Box<dyn DependencyPropagation>` so `Invalidate`
+    /// can take it out with [`Option::take`] before the walk: the walk's callback needs
+    /// `&mut self` for `Invalidate_One` and `self.keys`, which cannot coexist with a borrow
+    /// of this field for the call that runs it. Always `Some` between calls; taking it and
+    /// never restoring it is the one invariant this field asks a caller inside this file to
+    /// keep.
+    propagation: Option<Box<dyn DependencyPropagation>>,
 }
 
 impl MemoryFactStore
@@ -38,7 +46,13 @@ impl MemoryFactStore
     #[must_use]
     pub fn New() -> Self
     {
-        return Self::default();
+        return Self {
+            entries: BTreeMap::new(),
+            dependents: BTreeMap::new(),
+            keys: BTreeMap::new(),
+            materializations: 0,
+            propagation: Some(Box::new(LocalGraphPropagation)),
+        };
     }
 
     /// # Errors
@@ -179,6 +193,31 @@ impl MemoryFactStore
     }
 }
 
+/// A separate, wholly test-only `impl` block rather than one more method on the block
+/// above: `With_Propagation` exists only to let a test substitute a `DependencyPropagation`
+/// implementation, and keeping it out of the block real callers read keeps that block a
+/// description of what this crate's other consumers can actually reach.
+#[cfg(test)]
+impl MemoryFactStore
+{
+    /// Built with a chosen `DependencyPropagation` rather than the default
+    /// `LocalGraphPropagation` — crate-private because nothing outside this crate has a
+    /// second implementation to offer yet. Exists to prove the seam `docs/records/D-138`
+    /// promises: a test can substitute an alternate implementation and observe
+    /// `FactStore::Invalidate` produce the same `InvalidationReport` without this type or
+    /// `FactStore` changing.
+    pub(crate) fn With_Propagation(propagation: Box<dyn DependencyPropagation>) -> Self
+    {
+        return Self {
+            entries: BTreeMap::new(),
+            dependents: BTreeMap::new(),
+            keys: BTreeMap::new(),
+            materializations: 0,
+            propagation: Some(propagation),
+        };
+    }
+}
+
 /// An empty report of what this cause is about to invalidate.
 fn Opened(cause: &GenerationCause, from: GenerationId) -> InvalidationReport
 {
@@ -305,12 +344,18 @@ impl FactStore for MemoryFactStore
         let roots = self.Invalidate_Named(cause, from, &described, &mut report);
         let mut seen: BTreeSet<Digest128> = roots.iter().copied().collect();
 
-        // Cloned once rather than held as a borrow across the walk: `on_reach` below needs
-        // `&mut self` for `Invalidate_One` and `self.keys`, and `propagation::Spread` has no
-        // Nomos-specific reason to know about that conflict. See `docs/records/D-135` and
+        // Cloned once, and `propagation` taken out of `self`, rather than either held as a
+        // borrow across the walk: the callback below needs `&mut self` for `Invalidate_One`
+        // and `self.keys`, which cannot coexist with a borrow of `self.dependents` or
+        // `self.propagation` for the call that runs it. `DependencyPropagation` has no
+        // Nomos-specific reason to know about that conflict — see `docs/records/D-135` and
         // `docs/records/D-138`.
         let dependents = self.dependents.clone();
-        crate::propagation::Spread(&dependents, roots, |consumer| {
+        let propagation = self
+            .propagation
+            .take()
+            .expect("propagation implementation is always present between calls");
+        propagation.Spread(&dependents, roots, &mut |consumer| {
             seen.insert(consumer);
             if !self.Invalidate_One(consumer, from, &described)
             {
@@ -322,11 +367,162 @@ impl FactStore for MemoryFactStore
             }
             return true;
         });
+        self.propagation = Some(propagation);
 
         self.Note_Broadening(cause.Granularity(), &seen, &mut report);
 
         self.Settle(&mut report);
 
         return report;
+    }
+}
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use crate::Dependency;
+    use crate::FactPayload;
+    use crate::GuaranteeDigest;
+    use crate::InputDigest;
+    use crate::ReadOutcome;
+    use nomos_contracts::Assurance;
+    use nomos_contracts::BuildVariantId;
+    use nomos_contracts::CapabilityId;
+    use nomos_contracts::ConfigurationId;
+    use nomos_contracts::ContractVersion;
+    use nomos_contracts::EvidenceClass;
+    use nomos_contracts::FactVariant;
+    use nomos_contracts::Guarantee;
+    use nomos_contracts::ProviderId;
+    use nomos_contracts::SchemaId;
+    use nomos_contracts::SnapshotId;
+    use nomos_contracts::SubjectId;
+    use std::collections::VecDeque;
+
+    fn Seeded(seed: u8) -> Digest128
+    {
+        return Digest128::From_Bytes([seed; Digest128::BYTE_LENGTH]);
+    }
+
+    fn File_Guarantee() -> Guarantee
+    {
+        return Guarantee::New(
+            FactVariant::Syntactic,
+            Assurance::Sound,
+            Assurance::Sound,
+            IncrementalGranularity::File,
+        );
+    }
+
+    fn Key_For(subject_seed: u8) -> FactKey
+    {
+        return FactKey {
+            contract: CapabilityId::New("nomos.cap.syntax.tree"),
+            contract_version: ContractVersion::New(1, 0),
+            subject: SubjectId::From_Digest(Seeded(subject_seed)),
+            semantic_inputs: InputDigest::Of(&[b"fn main() {}"]),
+            provider: ProviderId::New("nomos.provider.test"),
+            provider_version: ContractVersion::New(1, 0),
+            guarantee: GuaranteeDigest::Of(&File_Guarantee()),
+            variant: BuildVariantId::From_Digest(Seeded(3)),
+            configuration: ConfigurationId::From_Digest(Seeded(4)),
+        };
+    }
+
+    fn Fact_For(key: &FactKey, generation: GenerationId) -> MaterializedFact
+    {
+        return MaterializedFact {
+            identity: key.clone().At(generation),
+            snapshot: SnapshotId::From_Digest(Seeded(2)),
+            evidence: EvidenceClass::Derived,
+            guarantee: File_Guarantee(),
+            payload: FactPayload::New(SchemaId::New("nomos.syntax.v1"), b"tree".to_vec()),
+        };
+    }
+
+    /// A second, distinct [`DependencyPropagation`]: a proper FIFO queue rather than
+    /// [`LocalGraphPropagation`]'s stack, so the two reach downstream nodes in a
+    /// different order while computing the same reachable set. What this proves is the
+    /// reviewed correction's own point: the substitution boundary is `DependencyPropagation`,
+    /// not `FactStore` — this type never implements `FactStore` itself, `MemoryFactStore`
+    /// does, unchanged.
+    struct QueueOrderPropagation;
+
+    impl DependencyPropagation for QueueOrderPropagation
+    {
+        fn Spread(
+            &self,
+            dependents: &BTreeMap<Digest128, BTreeSet<Digest128>>,
+            roots: Vec<Digest128>,
+            on_reach: &mut dyn FnMut(Digest128) -> bool,
+        )
+        {
+            let mut seen: BTreeSet<Digest128> = roots.iter().copied().collect();
+            let mut frontier: VecDeque<Digest128> = roots.into();
+
+            while let Some(digest) = frontier.pop_front()
+            {
+                let Some(downstream) = dependents.get(&digest)
+                else
+                {
+                    continue;
+                };
+
+                for consumer in downstream.iter().copied().collect::<Vec<_>>()
+                {
+                    if seen.insert(consumer) && on_reach(consumer)
+                    {
+                        frontier.push_back(consumer);
+                    }
+                }
+            }
+        }
+    }
+
+    fn Two_Fact_Store(propagation: Box<dyn DependencyPropagation>) -> (MemoryFactStore, FactKey, FactKey)
+    {
+        let upstream = Key_For(1);
+        // A different subject than `upstream`, so `derived` is reached only by following
+        // the dependency edge below — the walk this test exists to exercise — rather than
+        // also matching `GenerationCause::SubjectChanged` directly.
+        let derived = Key_For(7);
+
+        let mut store = MemoryFactStore::With_Propagation(propagation);
+        store
+            .Materialize(Fact_For(&upstream, GenerationId::INITIAL), &[])
+            .expect("materializes");
+        store
+            .Materialize(
+                Fact_For(&derived, GenerationId::INITIAL),
+                &[Dependency {
+                    key: upstream.clone(),
+                    outcome: ReadOutcome::Materialized,
+                }],
+            )
+            .expect("materializes");
+
+        return (store, upstream, derived);
+    }
+
+    #[test]
+    fn Test_An_Alternate_Propagation_Implementation_Should_Produce_The_Same_Report()
+    {
+        let (mut default_store, upstream, _) = Two_Fact_Store(Box::new(LocalGraphPropagation));
+        let (mut alternate_store, _, _) = Two_Fact_Store(Box::new(QueueOrderPropagation));
+        let next = GenerationId::INITIAL.Next();
+        let cause = GenerationCause::SubjectChanged {
+            subject: upstream.subject,
+            granularity: IncrementalGranularity::File,
+        };
+
+        let default_report = default_store.Invalidate(&cause, next);
+        let alternate_report = alternate_store.Invalidate(&cause, next);
+
+        assert_eq!(
+            default_report, alternate_report,
+            "swapping the DependencyPropagation implementation changed FactStore's own \
+             output, so MemoryFactStore is not actually independent of which one it holds"
+        );
     }
 }

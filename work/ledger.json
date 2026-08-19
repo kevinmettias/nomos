@@ -16806,14 +16806,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-architecture-review",
-        "acquired_at": 1787101254,
-        "lease_expires_at": 1787108454
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -16823,7 +16819,27 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-analysis"
+        ],
+        "exit_code": 0,
+        "output_tail": "ent_Should_Be_Matched_Exhaustively ... ok\ntest store::Test_A_Fact_Should_Answer_Its_Own_Key ... ok\ntest store::Test_A_Later_Generation_Should_Still_Answer_The_Same_Key ... ok\ntest key_identity::Test_The_Component_List_Should_Cover_Every_Part_Of_The_Key ... ok\ntest store::Test_The_Same_Question_Twice_Should_Materialize_Once ... ok\ntest store::Test_The_Store_Trait_Should_Be_Sealed ... ok\ntest reader::Test_A_Read_That_Misses_Should_Record_Its_Miss ... ok\ntest store::Test_A_Backdated_Materialization_Should_Be_Refused ... ok\ntest store::Test_An_Invalidated_Fact_Should_Stay_Readable_As_History ... ok\n\ntest result: ok. 31 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 3 tests\ntest Test_A_Chain_Through_A_Cycle_Should_Preserve_Both_The_Order_And_The_Group ... ok\ntest Test_A_Four_Cycle_Should_Condense_Into_One_Group_Naming_All_Four ... ok\ntest Test_A_Chain_Should_Condense_Into_One_Singleton_Group_Per_Fact_In_Dependency_Order ... ok\n\ntest result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 2 tests\ntest Test_An_Unrecorded_Dependency_Edge_Leaves_A_Stale_Downstream_Value_That_Disagrees_With_A_Clean_Rebuild ... ok\ntest Test_Incremental_Recomputation_After_A_Change_Agrees_With_A_Clean_Rebuild ... ok\n\ntest result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.14s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_analysis-8ed2b98a0abe7ca2.exe)\n     Running tests\\fact_identity\\main.rs (target\\debug\\deps\\fact_identity-472de15e56a195d2.exe)\n     Running tests\\invalidation_order.rs (target\\debug\\deps\\invalidation_order-5c58ca88752defbc.exe)\n     Running tests\\recomputation_equivalence.rs (target\\debug\\deps\\recomputation_equivalence-8bcea38aeda441f4.exe)\n   Doc-tests nomos_analysis\n",
+        "verified_at": 1787101842,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "f4efb6d6501963a2c1c58ee2332e28755f21ec36"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -16849,7 +16865,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -16869,7 +16885,34 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-package",
+          "-p",
+          "nomos-lang-package",
+          "-p",
+          "nomos-contract-tests",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "exit_code": 0,
+        "output_tail": " + debuginfo] target(s) in 12.20s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-e643c65bbad4483e.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-433c47e6dd66b347.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-c14312faf4ba080e.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-d6ecb11a387c468a.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-a4a043f2643142bd.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-30f549b5771eb641.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-5b419e0002ced6ae.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-4b668c0f67b59fe5.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-5f786069b772789f.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-b8c4ebd0adb5625f.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lang_package-610b35cd54dbed31.exe)\n     Running tests\\manifest.rs (target\\debug\\deps\\manifest-e4bb99ccf7075bb7.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_package-63ba0d11c51d1079.exe)\n     Running tests\\manifest.rs (target\\debug\\deps\\manifest-d698b54f2e556e26.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-ee111bd537ecd137.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-2919ec68747ddb5b.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-99272398d303e3e7.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-756fcac740cd78ad.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-259eb839edee86c9.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_lang_package\n   Doc-tests nomos_package\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1787101843,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
