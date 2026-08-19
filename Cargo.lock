@@ -530,6 +530,7 @@ dependencies = [
  "nomos-platform",
  "nomos-platform-std",
  "nomos-spec-ingest",
+ "nomos-spec-model",
  "nomos-spec-project",
  "nomos-spec-store",
 ]

@@ -3,6 +3,12 @@
 //! Moved verbatim from `nomos-cli::spec::command`, the same way `nomos_check_orchestration
 //! ::CheckCommand` moved from `nomos-cli::check::command`: a second adapter wanting this
 //! vocabulary previously had to depend on `nomos-cli` itself to get it.
+//!
+//! `nomos request submit` is deliberately not a tenth variant here. `OD-HOST-005` moved its
+//! verb into this crate too, but its own resolution is explicit that "a `nomos request
+//! submit` invocation is not a `nomos spec` verb by the CLI's own naming" -- [`crate::Submit`]
+//! is a sibling of [`crate::Run`] over this same enum, not a case of it, and [`SpecCommand`]
+//! stays exactly the nine verbs `nomos spec` itself answers.
 
 use crate::request::CommitRequest;
 use crate::request::EditRequest;

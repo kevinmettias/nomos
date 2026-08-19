@@ -1,5 +1,5 @@
-//! Band 40 — running every `nomos spec` verb apart from parsing arguments, choosing a corpus
-//! environment variable or rendering an answer.
+//! Band 40 — running every `nomos spec` verb, and `nomos request submit`, apart from parsing
+//! arguments, choosing a corpus environment variable or rendering an answer.
 //!
 //! `OD-HOST-002` named family 9's `SpecCommand` half as the one remaining command group with
 //! no orchestration crate the way `WorkCommand` and, since `nomos-check-orchestration`,
@@ -16,6 +16,24 @@
 //! [`SpecCommand::Preview`] and [`SpecCommand::Commit`] (increment 4), `D-129`'s authoring
 //! round trip -- stage an edit, preview what it would change, and commit it as a transaction
 //! against the store.
+//!
+//! # A second command group, answered beside `SpecCommand` rather than folded into it
+//!
+//! `OD-HOST-002` named a fourth control-command group, `request::Command`, that family 9 left
+//! open. `OD-HOST-005` decided its one verb, `Submit`, is not a fourth peer crate at some band
+//! above 40: reading `nomos-cli::request` whole showed its real work was already three calls
+//! into this crate's own domain -- [`corpus::Assemble`], `nomos-spec-store`'s
+//! `Accept_Submission`, and, through `--into`, the same `subject-dossier` render
+//! [`SpecCommand::Render`] already wraps. [`Submit`] is that verb, added here at no new band
+//! and no new crate -- but it is not a tenth [`SpecCommand`] variant, because that record's
+//! own resolution is explicit that "a `nomos request submit` invocation is not a `nomos spec`
+//! verb by the CLI's own naming": `SpecCommand` and [`SpecOutcome`] stay exactly the nine
+//! verbs `nomos spec` answers, and [`Submit`] is a sibling of [`Run`] over its own
+//! [`SubmitRequest`] and [`SubmitAnswer`]/[`SubmitRefusal`] pair instead. `nomos request
+//! submit` is still its own CLI surface -- `nomos-cli::request` keeps its own argument
+//! parsing, exit codes and text rendering, exactly as `nomos-cli::spec` does for `SpecCommand`
+//! -- but the verb it dispatches to lives here now, the same way every `SpecCommand` variant's
+//! real work already does.
 //!
 //! # Increment 3's decision: `Render` and `Freshness` are generic over `FileSystem`
 //!
@@ -90,8 +108,10 @@ mod tests;
 pub use command::SpecCommand;
 pub use outcome::{
     CommitAnswer, CommitRefusal, FreshnessAnswer, FreshnessRefusal, PreviewRefusal, ProfileOutcome, RecordAnswer,
-    RecordRefusal, RenderAnswer, RenderRefusal, Reproduction, SourcesAnswer, SpecOutcome, TableAnswer, TableRefusal,
-    VacateOutcome, Vacated, Verdict,
+    RecordRefusal, RenderAnswer, RenderRefusal, Reproduction, SourcesAnswer, SpecOutcome, SubmitAnswer,
+    SubmitRefusal, TableAnswer, TableRefusal, VacateOutcome, Vacated, Verdict,
 };
-pub use request::{CommitRequest, EditRequest, FreshnessRequest, RecordRequest, RenderRequest, TableRequest};
-pub use run::{Commit, Freshness, Markdown, Preview, Profiles, Record, Render, Run, Sources, Table};
+pub use request::{
+    CommitRequest, EditRequest, FreshnessRequest, RecordRequest, RenderRequest, SubmitRequest, TableRequest,
+};
+pub use run::{Commit, Freshness, Markdown, Preview, Profiles, Record, Render, Run, Sources, Submit, Table};

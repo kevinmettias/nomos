@@ -7,6 +7,7 @@ mod markdown;
 mod preview;
 mod record;
 mod render;
+mod submit;
 mod table;
 
 use nomos_platform::FileSystem;
@@ -23,6 +24,7 @@ pub use markdown::Markdown;
 pub use preview::Preview;
 pub use record::Record;
 pub use render::Render;
+pub use submit::Submit;
 pub use table::Table;
 
 /// The shipped projection catalogue.
@@ -68,7 +70,9 @@ pub fn Sources(assembly: &Assembly) -> SourcesAnswer
 /// takes `F`, `C`, `L` and `P` for every [`nomos_ledger`] verb even the ones that touch none
 /// of them, because one generic `Run` a caller can depend on without also depending on
 /// `nomos-platform-std` is worth more than sparing the five that do not need `F` a type
-/// parameter.
+/// parameter. [`Submit`] is generic over [`FileSystem`] the same way, for the same reason
+/// [`crate::run::render`] gives -- it just is not one of this function's nine cases, per
+/// [`SpecCommand`]'s own module documentation.
 ///
 /// [`SpecCommand::Profiles`] never assembles a store, matching
 /// [`Profiles`]'s own guarantee. Every other variant assembles one from `request` first, so

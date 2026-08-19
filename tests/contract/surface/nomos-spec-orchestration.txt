@@ -7,6 +7,7 @@ pub enum nomos_spec_orchestration::RenderRefusal
 pub enum nomos_spec_orchestration::Reproduction
 pub enum nomos_spec_orchestration::SpecCommand
 pub enum nomos_spec_orchestration::SpecOutcome
+pub enum nomos_spec_orchestration::SubmitRefusal
 pub enum nomos_spec_orchestration::TableRefusal
 pub enum nomos_spec_orchestration::VacateOutcome
 pub enum nomos_spec_orchestration::Verdict
@@ -47,6 +48,9 @@ pub enum variant nomos_spec_orchestration::SpecOutcome::Record(Result<RecordAnsw
 pub enum variant nomos_spec_orchestration::SpecOutcome::Render(Result<RenderAnswer, RenderRefusal>)
 pub enum variant nomos_spec_orchestration::SpecOutcome::Sources(Result<SourcesAnswer, StoreError>)
 pub enum variant nomos_spec_orchestration::SpecOutcome::Table(Result<TableAnswer, TableRefusal>)
+pub enum variant nomos_spec_orchestration::SubmitRefusal::Refused(Refusal)
+pub enum variant nomos_spec_orchestration::SubmitRefusal::Store(StoreError)
+pub enum variant nomos_spec_orchestration::SubmitRefusal::Written(RenderRefusal)
 pub enum variant nomos_spec_orchestration::TableRefusal::AmbiguousDocument { matched: usize, tier: PathMatch, }
 pub enum variant nomos_spec_orchestration::TableRefusal::NoRows { document: DocumentSource, tier: PathMatch, census: RowCensus, }
 pub enum variant nomos_spec_orchestration::TableRefusal::NoSuchDocument
@@ -70,12 +74,15 @@ pub fn nomos_spec_orchestration::Run<F: FileSystem>(command: &SpecCommand, reque
 pub fn nomos_spec_orchestration::Sources(assembly: &Assembly) -> SourcesAnswer
 pub fn nomos_spec_orchestration::SourcesAnswer::Describe_Absences(&self) -> String
 pub fn nomos_spec_orchestration::SourcesAnswer::Is_Complete(&self) -> bool
+pub fn nomos_spec_orchestration::Submit<F: FileSystem>( assembly: &mut Assembly, request: &SubmitRequest, filesystem: &F, ) -> Result<SubmitAnswer, SubmitRefusal>
+pub fn nomos_spec_orchestration::SubmitRefusal::from(error: AcceptError) -> Self
 pub fn nomos_spec_orchestration::Table(assembly: &Assembly, request: &TableRequest) -> Result<TableAnswer, TableRefusal>
 pub fn nomos_spec_orchestration::corpus::Absence::Describe(&self) -> String
 pub fn nomos_spec_orchestration::corpus::Assemble(request: &CorpusRequest) -> Result<Assembly, StoreError>
 pub fn nomos_spec_orchestration::corpus::Assembly::Describe_Absences(&self) -> String
 pub fn nomos_spec_orchestration::corpus::Assembly::Is_Complete(&self) -> bool
 pub impl nomos_spec_orchestration::CommitRefusal implements From<crate::outcome::PreviewRefusal>
+pub impl nomos_spec_orchestration::SubmitRefusal implements From<AcceptError>
 pub struct field nomos_spec_orchestration::CommitAnswer::destination: PathBuf
 pub struct field nomos_spec_orchestration::CommitAnswer::preview: EditPreview
 pub struct field nomos_spec_orchestration::CommitAnswer::report: CommitReport
@@ -106,6 +113,18 @@ pub struct field nomos_spec_orchestration::RenderRequest::profile: String
 pub struct field nomos_spec_orchestration::RenderRequest::subject: Option<String>
 pub struct field nomos_spec_orchestration::SourcesAnswer::absent: Vec<Absence>
 pub struct field nomos_spec_orchestration::SourcesAnswer::read: Vec<String>
+pub struct field nomos_spec_orchestration::SubmitAnswer::submission: Submission
+pub struct field nomos_spec_orchestration::SubmitAnswer::uid: i64
+pub struct field nomos_spec_orchestration::SubmitAnswer::written: Option<RenderAnswer>
+pub struct field nomos_spec_orchestration::SubmitRequest::by: String
+pub struct field nomos_spec_orchestration::SubmitRequest::contract_version: u32
+pub struct field nomos_spec_orchestration::SubmitRequest::fields: Vec<(String, String)>
+pub struct field nomos_spec_orchestration::SubmitRequest::gaps: Vec<DecisionGap>
+pub struct field nomos_spec_orchestration::SubmitRequest::id: String
+pub struct field nomos_spec_orchestration::SubmitRequest::into: Option<PathBuf>
+pub struct field nomos_spec_orchestration::SubmitRequest::kind: SubmissionKind
+pub struct field nomos_spec_orchestration::SubmitRequest::state: SubmissionState
+pub struct field nomos_spec_orchestration::SubmitRequest::submitted_through: String
 pub struct field nomos_spec_orchestration::TableAnswer::census: RowCensus
 pub struct field nomos_spec_orchestration::TableAnswer::document: DocumentSource
 pub struct field nomos_spec_orchestration::TableAnswer::lines: Vec<TableLine>
@@ -137,6 +156,8 @@ pub struct nomos_spec_orchestration::RecordRequest
 pub struct nomos_spec_orchestration::RenderAnswer
 pub struct nomos_spec_orchestration::RenderRequest
 pub struct nomos_spec_orchestration::SourcesAnswer
+pub struct nomos_spec_orchestration::SubmitAnswer
+pub struct nomos_spec_orchestration::SubmitRequest
 pub struct nomos_spec_orchestration::TableAnswer
 pub struct nomos_spec_orchestration::TableRequest
 pub struct nomos_spec_orchestration::Vacated

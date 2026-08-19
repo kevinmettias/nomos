@@ -21,6 +21,7 @@ mod preview;
 mod record;
 mod render;
 mod sources;
+mod submit;
 mod table;
 
 pub use commit::{CommitAnswer, CommitRefusal, Reproduction, VacateOutcome, Vacated};
@@ -29,6 +30,7 @@ pub use preview::PreviewRefusal;
 pub use record::{RecordAnswer, RecordRefusal};
 pub use render::{RenderAnswer, RenderRefusal};
 pub use sources::SourcesAnswer;
+pub use submit::{SubmitAnswer, SubmitRefusal};
 pub use table::{TableAnswer, TableRefusal};
 
 use nomos_spec_project::{Profile, ProjectError};

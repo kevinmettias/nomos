@@ -2,13 +2,17 @@
 //! one accept door `OD-SPEC-009` decided.
 //!
 //! This is a transport and nothing else, per that record: it parses arguments into a
-//! [`Submission`], hands it to [`Accept_Submission`], and renders the verdict it gets back. It
-//! validates nothing and persists nothing on its own behalf — `OD-SPEC-009` forbids a transport
-//! doing either. `--state` and `--contract-version` default when the caller does not give them,
-//! and that is not the same thing: a default here is a fact about *this run*, decided before any
-//! field is read, and it lands on [`Submission`]'s own struct fields rather than on a value's
-//! origin. Every `--field` value is what the caller typed, so every one of them carries origin
-//! `submitted`.
+//! [`SubmitRequest`] and dispatches to [`nomos_spec_orchestration::Submit`], which constructs
+//! the `Submission` and calls `Accept_Submission` itself -- `OD-HOST-005`'s resolution that
+//! this verb's real work is `nomos-spec-orchestration`'s `SpecCommand::Submit`, the same
+//! store `nomos spec`'s other nine verbs already share. This module keeps only what
+//! `nomos-cli::spec` keeps for those nine: argument parsing, exit-code mapping and text
+//! rendering. It validates nothing and persists nothing on its own behalf — `OD-SPEC-009`
+//! forbids a transport doing either. `--state` and `--contract-version` default when the
+//! caller does not give them, and that is not the same thing: a default here is a fact about
+//! *this run*, decided before any field is read, and it lands on `Submission`'s own struct
+//! fields rather than on a value's origin. Every `--field` value is what the caller typed, so
+//! every one of them carries origin `submitted`.
 //!
 //! # The store this verb writes to does not survive the process
 //!
@@ -19,15 +23,14 @@
 //! will not exist a moment later, is still a true stamp of what this store held.
 
 use crate::arguments::{Named_Value, Named_Values, Required};
-use nomos_spec_orchestration::corpus::{Assemble, Assembly, CorpusRequest};
+use nomos_platform_std::StdFileSystem;
+use nomos_spec_orchestration::corpus::{Assemble, CorpusRequest};
+use nomos_spec_orchestration::{RenderRefusal, SubmitAnswer, SubmitRefusal, SubmitRequest};
 
-use nomos_spec_model::{
-    DecisionGap, FieldValue, Origin, Severity, Submission, SubmissionKind, SubmissionState,
-};
-use nomos_spec_project::{Build, Catalogue, Output, SIDECAR_SUFFIX};
-use nomos_spec_store::{AcceptError, Accept_Submission, SpecificationStore};
+use nomos_spec_model::{DecisionGap, Severity, SubmissionKind, SubmissionState};
+use nomos_spec_project::SIDECAR_SUFFIX;
 
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 
 /// What the process exits with.
 ///
@@ -65,20 +68,6 @@ impl ExitCode
 pub(crate) enum Command
 {
     Submit(SubmitRequest),
-}
-
-/// One submission, as a transport read it off the command line.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub(crate) struct SubmitRequest
-{
-    kind: SubmissionKind,
-    id: String,
-    by: String,
-    state: SubmissionState,
-    contract_version: u32,
-    fields: Vec<(String, String)>,
-    gaps: Vec<DecisionGap>,
-    into: Option<PathBuf>,
 }
 
 /// Parses `nomos request` arguments.
@@ -130,6 +119,7 @@ fn Parse_Submit(arguments: &[String]) -> Result<Command, String>
         contract_version,
         fields,
         gaps,
+        submitted_through: "cli".to_owned(),
         into,
     }));
 }
@@ -261,6 +251,10 @@ pub(crate) fn Run(
     };
 }
 
+/// Assembles the store `request` names, and dispatches `submit` against it through
+/// `nomos-spec-orchestration::Submit` -- the same composition-root choice `nomos-cli::spec`
+/// already makes for the other nine `SpecCommand` verbs, `nomos_platform_std::StdFileSystem`
+/// as the concrete platform.
 fn Submit(
     submit: &SubmitRequest,
     request: &CorpusRequest,
@@ -278,187 +272,76 @@ fn Submit(
         }
     };
 
-    let submission = Constructed(submit);
-
-    return match Accept_Submission(&mut assembly.store, &submission)
+    return match nomos_spec_orchestration::Submit(&mut assembly, submit, &StdFileSystem)
     {
-        Ok(uid) => Accepted(&assembly, &submission, uid, submit.into.as_deref(), output, notes),
-        Err(AcceptError::Refused(refusal)) =>
+        Ok(answer) => Accepted(&answer, output),
+        Err(SubmitRefusal::Refused(refusal)) =>
         {
             let _ = writeln!(notes, "{refusal}");
             ExitCode::Refused
         }
-        Err(AcceptError::Store(error)) =>
+        Err(SubmitRefusal::Store(error)) =>
+        {
+            let _ = writeln!(notes, "{error}");
+            ExitCode::StoreError
+        }
+        Err(SubmitRefusal::Written(refusal)) => Unwritten(&refusal, notes),
+    };
+}
+
+/// A submission accepted, and its `subject-dossier` projection reported if one was written.
+fn Accepted(answer: &SubmitAnswer, output: &mut impl std::io::Write) -> ExitCode
+{
+    let _ = writeln!(
+        output,
+        "accepted {} as {} ({}), uid {}",
+        answer.submission.id,
+        answer.submission.kind.Label(),
+        answer.submission.state.Label(),
+        answer.uid
+    );
+
+    if let Some(written) = &answer.written
+    {
+        let _ = writeln!(
+            output,
+            "{} -> {}\nsidecar ({SIDECAR_SUFFIX}) -> {}",
+            written.id,
+            written.body.display(),
+            written.sidecar.display()
+        );
+    }
+
+    return ExitCode::Ok;
+}
+
+/// The submission was accepted and its `subject-dossier` projection could not be built or
+/// placed.
+fn Unwritten(refusal: &RenderRefusal, notes: &mut impl std::io::Write) -> ExitCode
+{
+    return match refusal
+    {
+        RenderRefusal::Unwritable { path, error } =>
+        {
+            let _ = writeln!(notes, "cannot write {}: {error}", path.display());
+            ExitCode::Unwritable
+        }
+        RenderRefusal::Store(error) =>
+        {
+            let _ = writeln!(notes, "{error}");
+            ExitCode::StoreError
+        }
+        RenderRefusal::NoSuchProfile { requested, .. } =>
+        {
+            let _ = writeln!(notes, "the shipped catalogue no longer carries {requested}");
+            ExitCode::StoreError
+        }
+        RenderRefusal::Project(error) =>
         {
             let _ = writeln!(notes, "{error}");
             ExitCode::StoreError
         }
     };
-}
-
-/// The submission this run's arguments describe.
-///
-/// Every field value carries origin `submitted`, because it is exactly what was typed: this
-/// transport supplies nothing of its own that lands in `values`. `state` and
-/// `form_contract_version` are not values and carry no origin — `OD-SPEC-013` keeps them
-/// columns rather than attributed rows for that reason.
-fn Constructed(submit: &SubmitRequest) -> Submission
-{
-    return Submission {
-        id: submit.id.clone(),
-        kind: submit.kind,
-        form_contract_version: submit.contract_version,
-        state: submit.state,
-        submitted_by: submit.by.clone(),
-        submitted_through: "cli".to_owned(),
-        values: submit
-            .fields
-            .iter()
-            .map(|(field, value)| {
-                return FieldValue {
-                    field: field.clone(),
-                    value: value.clone(),
-                    origin: Origin::Submitted,
-                };
-            })
-            .collect(),
-        gaps: submit.gaps.clone(),
-    };
-}
-
-/// The shipped profile this verb takes its one chance at a freshness proof through.
-///
-/// `subject-dossier` rather than a profile of its own: `OD-SPEC-013` made a submission a row in
-/// `nodes`, and `subject-dossier` already projects any node by identity — the store cannot tell
-/// a submission's node from any other, and adding a second profile that says the same thing
-/// about the same table would be a second answer to what a subject is.
-const DOSSIER: &str = "subject-dossier";
-
-fn Accepted(
-    assembly: &Assembly,
-    submission: &Submission,
-    uid: i64,
-    into: Option<&Path>,
-    output: &mut impl std::io::Write,
-    notes: &mut impl std::io::Write,
-) -> ExitCode
-{
-    let _ = writeln!(
-        output,
-        "accepted {} as {} ({}), uid {uid}",
-        submission.id,
-        submission.kind.Label(),
-        submission.state.Label()
-    );
-
-    let Some(into) = into
-    else
-    {
-        return ExitCode::Ok;
-    };
-
-    return Projected(&assembly.store, &submission.id, into, output, notes);
-}
-
-fn Projected(
-    store: &SpecificationStore,
-    subject: &str,
-    into: &Path,
-    output: &mut impl std::io::Write,
-    notes: &mut impl std::io::Write,
-) -> ExitCode
-{
-    let catalogue = match Catalogue::Shipped()
-    {
-        Ok(catalogue) => catalogue,
-        Err(error) =>
-        {
-            let _ = writeln!(notes, "{error}");
-            return ExitCode::StoreError;
-        }
-    };
-    let Some(profile) = catalogue.Named(DOSSIER)
-    else
-    {
-        let _ = writeln!(notes, "the shipped catalogue no longer carries {DOSSIER}");
-        return ExitCode::StoreError;
-    };
-    let resolved = match profile.For(Some(subject))
-    {
-        Ok(resolved) => resolved,
-        Err(error) =>
-        {
-            let _ = writeln!(notes, "{error}");
-            return ExitCode::StoreError;
-        }
-    };
-    let built = match Build(store, &resolved)
-    {
-        Ok(built) => built,
-        Err(error) =>
-        {
-            let _ = writeln!(notes, "{error}");
-            return ExitCode::StoreError;
-        }
-    };
-
-    return Written(&built, into, output, notes);
-}
-
-/// Both halves of a built projection, written where the run asked for them.
-fn Written(
-    built: &Output,
-    into: &Path,
-    output: &mut impl std::io::Write,
-    notes: &mut impl std::io::Write,
-) -> ExitCode
-{
-    let body = into.join(&built.path);
-    let sidecar = into.join(&built.sidecar_path);
-    let sheet = match built.Sidecar()
-    {
-        Ok(sheet) => sheet,
-        Err(error) =>
-        {
-            let _ = writeln!(notes, "{error}");
-            return ExitCode::StoreError;
-        }
-    };
-
-    for (path, content) in [(&body, &built.body), (&sidecar, &sheet)]
-    {
-        if let Some(code) = Place(path, content, notes)
-        {
-            return code;
-        }
-    }
-
-    let _ = writeln!(
-        output,
-        "{DOSSIER} -> {}\nsidecar ({SIDECAR_SUFFIX}) -> {}",
-        body.display(),
-        sidecar.display()
-    );
-
-    return ExitCode::Ok;
-}
-
-fn Place(destination: &Path, content: &str, notes: &mut dyn std::io::Write) -> Option<ExitCode>
-{
-    if let Some(parent) = destination.parent()
-        && let Err(error) = std::fs::create_dir_all(parent)
-    {
-        let _ = writeln!(notes, "cannot create {}: {error}", parent.display());
-        return Some(ExitCode::Unwritable);
-    }
-
-    if let Err(error) = std::fs::write(destination, content)
-    {
-        let _ = writeln!(notes, "cannot write {}: {error}", destination.display());
-        return Some(ExitCode::Unwritable);
-    }
-
-    return None;
 }
 
 fn Usage_Text() -> String
@@ -562,22 +445,14 @@ mod tests
     }
 
     #[test]
-    fn Test_A_Constructed_Submission_Should_Carry_Submitted_Origin_On_Every_Field()
+    fn Test_A_Parsed_Submission_Should_Carry_This_Transport_Name()
     {
-        let submit = SubmitRequest {
-            kind: SubmissionKind::FeatureRequest,
-            id: "FR-104".to_owned(),
-            by: "kevin".to_owned(),
-            state: SubmissionState::Draft,
-            contract_version: 1,
-            fields: vec![("title".to_owned(), "t".to_owned())],
-            gaps: Vec::new(),
-            into: None,
-        };
+        let arguments = Arguments(
+            "submit --kind feature-request --id FR-104 --by kevin --field title=t",
+        );
 
-        let submission = Constructed(&submit);
+        let Command::Submit(request) = Parse(&arguments).expect("parses");
 
-        assert_eq!(submission.submitted_through, "cli");
-        assert!(submission.values.iter().all(|value| return value.origin == Origin::Submitted));
+        assert_eq!(request.submitted_through, "cli");
     }
 }
