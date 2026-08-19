@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:b9d41250f08a0e4b7546ce193354ae9212282e33fe71a7ef9f5d3336a798cf3f",
-  "inputs_digest": "sha256:422f16364116563f18a4fbe0cbefd65f8765cda279337e591ea66dafccabc9ab",
+  "content_digest": "sha256:4ebd808fddca4b7b3bc2fa9881fd73678c7ee576531dc37005bd94fcfdfe6141",
+  "inputs_digest": "sha256:78d9b642835ef8587b369b19bf1847dc91a210f31d7183636ee084b27a46fa13",
   "sections": [
     [
       "Documents",
-      130
+      131
     ],
     [
       "Sections",
-      1144
+      1149
     ],
     [
       "Source blocks",
-      4125
+      4138
     ]
   ],
   "inputs": [
@@ -179,6 +179,11 @@
       "content": "documents",
       "identity": "docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md@authored",
       "hash": "sha256:6921af0ffee38a77a00c90bb6ebeebcd97e7db786652bdfdb80f9f854577cdfd"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md@authored",
+      "hash": "sha256:f380526facdc6f8371f437a7f9963f9d50cb3c69c88227ee91e29e95b31c2f52"
     },
     {
       "content": "documents",
@@ -1864,6 +1869,31 @@
       "content": "headings",
       "identity": "docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#35",
       "hash": "sha256:fce4be783bce0d535ec577752843f3026a4d09c8dc060a3bc02fd8bfb172e1b2"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md#1",
+      "hash": "sha256:098b9a5b6bf8eeebfda963bb49c83a7e55155a8ef28f472d569bc20544eca166"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md#2",
+      "hash": "sha256:bb1cff0bb8bc358f1a5a0d4fb1d8463e4959e18855eac05b9ec0751b31d567f7"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md#6",
+      "hash": "sha256:eebbc8f103bc2206a34ad1f885cdce21539ed3982349c3ff338e911f0cbca64c"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md#9",
+      "hash": "sha256:1bbfa2c1d538c10431d20990beeda719aee533c86e5c933f8a690839adc0b86e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md#12",
+      "hash": "sha256:ab61dd809fdce85ffbaaabab96d1fa1e67378885679d6110ee8cd09d327b58f1"
     },
     {
       "content": "headings",
@@ -10609,6 +10639,71 @@
       "content": "blocks",
       "identity": "docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#36",
       "hash": "sha256:72a0ff988d00d85f176d1954825f930a6a88df50e32ac03330d41a540ea3bfa7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md#1",
+      "hash": "sha256:b25e5e4e88bead311d990948578d93ab1f53acb179e5961503aa0fd76ce53f2f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md#3",
+      "hash": "sha256:3126a260e6f01993690de702caff1184af8ee0e22b4d63874aadf337a122331e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md#4",
+      "hash": "sha256:3991a46b2439af1448efd0d74d9fc5fe5e358cb30e10041a48fdfd982315485b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md#5",
+      "hash": "sha256:fcc1aefac1ed2d236860c3f1e0dec113ccb4fcf2f29a1e772513ce116e89b6cb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md#6",
+      "hash": "sha256:3410589a125ce4b264969343987e63e029f80de6e30da91448b149ee4405900f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md#7",
+      "hash": "sha256:cb98750c6e9d2704e785b1362f784a95211de10cefcd4a5946d4b31b43e5c617"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md#8",
+      "hash": "sha256:a5927bf68a3b4776a40568873f214f1f21d02c1f88ba8e7f3e9128d7b6b3f68a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md#9",
+      "hash": "sha256:b21c34f083f944a8317c5bb99f866d38e2c77a3ce5a1a64810a532456b826658"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md#10",
+      "hash": "sha256:098889f1f73e9f7d0fb99243638c645a4b8e71d1326808c46ab92a0251579ee3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md#11",
+      "hash": "sha256:acc7234a20c38ad47877d91079270fafad06bbc02ee0d6d44465181d5b25c0ff"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md#12",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md#13",
+      "hash": "sha256:ba44387502ef30495f2b97ba562e26960ed0a2806c28352612f574358ec301d1"
     },
     {
       "content": "blocks",

@@ -138,6 +138,7 @@ graph LR
     d_135 -->|"relates-to"| d_136
     d_135 -->|"relates-to"| d_137
     d_135 -->|"relates-to"| d_138
+    d_135 -->|"relates-to"| od_capability_007["OD-CAPABILITY-007"]
     d_135 -->|"relates-to"| od_host_004
     d_135 -->|"relates-to"| od_rules_004["OD-RULES-004"]
     d_135 -->|"relates-to"| od_rules_005["OD-RULES-005"]
@@ -210,6 +211,7 @@ graph LR
     od_capability_002 -->|"relates-to"| od_capability_001
     od_capability_002 -->|"relates-to"| od_capability_004
     od_capability_002 -->|"relates-to"| od_capability_006
+    od_capability_002 -->|"relates-to"| od_capability_007
     od_capability_002 -->|"relates-to"| od_rules_001
     od_capability_002 -->|"relates-to"| od_rules_003
     od_capability_002 -->|"relates-to"| od_store_001
@@ -236,6 +238,10 @@ graph LR
     od_capability_006 -->|"relates-to"| od_capability_002
     od_capability_006 -->|"relates-to"| od_capability_004
     od_capability_006 -->|"relates-to"| od_rules_003
+    od_capability_007 -->|"relates-to"| d_135
+    od_capability_007 -->|"relates-to"| od_capability_002
+    od_capability_007 -->|"relates-to"| od_package_006
+    od_capability_007 -->|"relates-to"| od_rules_005
     od_completeness_001 -->|"affected_by"| d_134
     od_completeness_001 -->|"affected_by"| od_completeness_002
     od_completeness_001 -->|"affected_by"| od_completeness_004["OD-COMPLETENESS-004"]
@@ -663,6 +669,7 @@ graph LR
     od_package_005 -->|"relates-to"| od_package_004
     od_package_005 -->|"relates-to"| od_project_002
     od_package_006 -->|"relates-to"| d_134
+    od_package_006 -->|"relates-to"| od_capability_007
     od_package_006 -->|"relates-to"| od_host_004
     od_package_006 -->|"relates-to"| od_package_001
     od_package_006 -->|"relates-to"| od_package_007
@@ -727,6 +734,7 @@ graph LR
     od_rules_004 -->|"relates-to"| od_rules_001
     od_rules_004 -->|"relates-to"| od_rules_005
     od_rules_005 -->|"relates-to"| d_135
+    od_rules_005 -->|"relates-to"| od_capability_007
     od_rules_005 -->|"relates-to"| od_package_006
     od_rules_005 -->|"relates-to"| od_rules_004
     od_spec_001 -->|"affects"| arc_specdb_001
@@ -884,6 +892,7 @@ graph LR
     od_capability_004
     od_capability_005
     od_capability_006
+    od_capability_007
     od_completeness_001
     od_completeness_002
     od_completeness_004
