@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:44f0ec4c38aa8766f347493dd2fb348a2384eca577e28e30453fc511b49c0a5c",
-  "inputs_digest": "sha256:6c75de6c068d4c15abbf444659e77a930d02ab8681cb877eb39953055ac2d610",
+  "content_digest": "sha256:7c5b506215c0757b588fbfb2a94573f161947723d5bddef324b57b2a15f6bab4",
+  "inputs_digest": "sha256:cf96670d955af495759ce5fbd03cc0e0b8bfbf94f6ea525bd8a1a02a2cfb9574",
   "sections": [
     [
       "Documents",
-      133
+      134
     ],
     [
       "Sections",
-      1160
+      1165
     ],
     [
       "Source blocks",
-      4170
+      4184
     ]
   ],
   "inputs": [
@@ -524,6 +524,11 @@
       "content": "documents",
       "identity": "docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md@authored",
       "hash": "sha256:6b5a01da7549134b0f7cce0d44245687e46660f6e07242861e692c30522e7d3f"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md@authored",
+      "hash": "sha256:8e66ebc7fa4c6ee44260128c0f37957605f33a078676edb3c504d701d929362f"
     },
     {
       "content": "documents",
@@ -5024,6 +5029,31 @@
       "content": "headings",
       "identity": "docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#18",
       "hash": "sha256:f3e2627ca09599716fff6d0e14d7398ec5dcbe7973b15624b989c41b98983842"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md#1",
+      "hash": "sha256:f2cd92ca8651fb59ef113ff8c4f14ef9c424c38b19bfba2f592659eb14765e92"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md#2",
+      "hash": "sha256:593ed256d03823c674285960d0d4b745a026fc8939e76cf0ea530176a1777232"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md#6",
+      "hash": "sha256:1616f64132cdcbf9f84277eb266ec63e37c6fbfc530baae19a9fb0173c96a66a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md#10",
+      "hash": "sha256:a193ce8f9ba3e38eb67204a423751ff49c36c72da865e335d9cd217b14de917a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md#13",
+      "hash": "sha256:bfbce8cc83c9f2abfbc32ddea81cb5af9d867c69b3d4e0abb0cd653378b6756a"
     },
     {
       "content": "headings",
@@ -22159,6 +22189,76 @@
       "content": "blocks",
       "identity": "docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#19",
       "hash": "sha256:58415abf218f40e58a4a92c76633afd0b8538329610640a7f920ae6c1104e195"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md#1",
+      "hash": "sha256:71018699a0fb52f9d52212f92524637a73b0bc954414704e82f687ef67144da3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md#3",
+      "hash": "sha256:d647aa9a685d30dbdfc25289cd09c06a429d89cd6a248e1e3c1a8c5a44152541"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md#4",
+      "hash": "sha256:a8571c22449f94b99369b56cf0c2fe7d9a42bf62f3a173018b25651cabd82fdd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md#5",
+      "hash": "sha256:ad91218f46da0c0f951edb0bab83ce045569859ace5d689d28ada48c65e7925a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md#6",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md#7",
+      "hash": "sha256:e4d88a7fd793284bc153062b65666e2f5159e184cb4e04153d7c420da881b09b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md#8",
+      "hash": "sha256:5661b678e1d627ef51a68fe4898d74bc1f3ac02f1220dc63aede816cb844de75"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md#9",
+      "hash": "sha256:15228a0719c9219c848a10fc19479f4b68b54c42f0499660c5981aa1ce77cea2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md#10",
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md#11",
+      "hash": "sha256:e82e932ea82c3a58ec4745c3b555ebc33438fd838d1c8625d22f8217d8edd4c4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md#12",
+      "hash": "sha256:dbaa87f6303f53a3cc876ea026f41181ab984ececc84ef198b6206a76f6f0803"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md#13",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md#14",
+      "hash": "sha256:11fcf5cc39a209152436fbea283a928ffa0882395dd20d31760a799650f6bca2"
     },
     {
       "content": "blocks",

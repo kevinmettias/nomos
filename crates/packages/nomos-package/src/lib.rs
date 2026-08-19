@@ -33,5 +33,5 @@ pub use known_providers::KnownProviders;
 pub use manifest::PackageManifest;
 pub use protocol_range::ProtocolRange;
 pub use provider_registration::ProviderRegistration;
-pub use reader::{ManifestError, Parse_Manifest, Read_Manifest};
+pub use reader::{ManifestError, Parse_Manifest, Read_Manifest, SCHEMA_VERSION};
 pub use version::PackageVersion;

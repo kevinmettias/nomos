@@ -3,6 +3,7 @@ pub const fn nomos_package::KnownProviders::New(providers: &'static [&'static st
 pub const fn nomos_package::PackageVersion::New(major: u16, minor: u16, patch: u16) -> Self
 pub const fn nomos_package::ProtocolRange::Is_Ordered(&self) -> bool
 pub const fn nomos_package::ProtocolRange::New(minimum: ContractVersion, maximum: ContractVersion) -> Self
+pub const nomos_package::SCHEMA_VERSION: u32
 pub enum nomos_package::ManifestError
 pub enum variant nomos_package::ManifestError::EmptyList { at: String, field: String, }
 pub enum variant nomos_package::ManifestError::InvertedProtocolRange { at: String, }
@@ -10,6 +11,7 @@ pub enum variant nomos_package::ManifestError::MalformedVersion { at: String, fi
 pub enum variant nomos_package::ManifestError::MissingField { at: String, field: String, }
 pub enum variant nomos_package::ManifestError::NotJson { at: String, cause: String, }
 pub enum variant nomos_package::ManifestError::UnknownPackageKind { at: String, found: String, }
+pub enum variant nomos_package::ManifestError::UnknownSchema { at: String, understood: u32, found: u32, }
 pub enum variant nomos_package::ManifestError::Unreadable { at: String, cause: String, }
 pub enum variant nomos_package::ManifestError::UnresolvedProvider { at: String, provider: String, }
 pub enum variant nomos_package::ManifestError::WrongPackageKind { at: String, found: PackageKind, }

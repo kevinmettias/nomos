@@ -23,6 +23,15 @@ use nomos_contracts::{ContractVersion, PackageId, PackageKind, ProviderId};
 use serde_json::{Map, Value};
 use std::path::Path;
 
+/// The highest manifest schema this build can read.
+///
+/// Mirrors `nomos_ledger`'s own `store::SCHEMA_VERSION`: a persistent, hand-authored,
+/// on-disk document read by code that will keep changing needs a marker distinguishing "a
+/// shape this build has never heard of" from "a file that is simply broken," and this
+/// workspace already has that design working for the identical class of problem.
+/// `OD-PACKAGE-009` is why this exists now rather than after the first real schema change.
+pub const SCHEMA_VERSION: u32 = 1;
+
 /// Why a manifest was refused.
 ///
 /// Every condition here is a refusal and not a skip, the same discipline
@@ -94,6 +103,17 @@ pub enum ManifestError
         at: String,
         provider: String,
     },
+    /// `schema_version` names a manifest shape newer than this build understands.
+    ///
+    /// A different refusal from every other variant here on purpose: those describe a
+    /// document this build understands the shape of and finds wrong; this describes a
+    /// document whose shape this build was never told about, which is not the same claim.
+    UnknownSchema
+    {
+        at: String,
+        understood: u32,
+        found: u32,
+    },
 }
 
 impl core::fmt::Display for ManifestError
@@ -137,6 +157,11 @@ impl core::fmt::Display for ManifestError
                 formatter,
                 "{at} registers `{provider}`, which is not a provider this crate knows."
             ),
+            Self::UnknownSchema { at, understood, found } => write!(
+                formatter,
+                "{at}'s `schema_version` is {found}, and this build only understands manifest \
+                 schema {understood}."
+            ),
         };
     }
 }
@@ -177,6 +202,8 @@ pub fn Parse_Manifest(
         return ManifestError::NotJson { at: at.to_owned(), cause: error.to_string() };
     })?;
     let root = Object_At(&value, at, "<root>")?;
+
+    Schema_Version_Field(root, at)?;
 
     let package_id = String_At(root, "package_id", at, "package_id")?;
     let package_kind = Package_Kind_Field(root, at)?;
@@ -291,6 +318,30 @@ fn Contract_Version_At(
     let minor = U16_At(inner, "minor", at, &format!("{full}.minor"))?;
 
     return Ok(ContractVersion::New(major, minor));
+}
+
+/// `schema_version`, refused if this build does not understand it.
+///
+/// Checked first and its value discarded on success: nothing downstream needs to carry a
+/// schema this build already agreed to read, the same reason [`ManifestError::
+/// InvertedProtocolRange`]'s check does not keep the ordering it confirmed either.
+fn Schema_Version_Field(object: &Map<String, Value>, at: &str) -> Result<(), ManifestError>
+{
+    let raw = Field_At(object, "schema_version", at, "schema_version")?;
+    let found = raw.as_u64().and_then(|value| return u32::try_from(value).ok()).ok_or_else(|| {
+        return ManifestError::WrongType {
+            at: at.to_owned(),
+            field: "schema_version".to_owned(),
+            expected: "non-negative integer".to_owned(),
+        };
+    })?;
+
+    if found > SCHEMA_VERSION
+    {
+        return Err(ManifestError::UnknownSchema { at: at.to_owned(), understood: SCHEMA_VERSION, found });
+    }
+
+    return Ok(());
 }
 
 /// `package_kind`, resolved and checked against [`PackageKind::LanguagePackage`].

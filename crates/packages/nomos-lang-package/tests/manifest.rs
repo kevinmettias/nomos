@@ -76,7 +76,8 @@ fn Field(name: &str, value: &str) -> String
 fn Manifest_Missing_Package_Id() -> String
 {
     return format!(
-        "{{{}, {}, {}, {}, {}}}",
+        "{{{}, {}, {}, {}, {}, {}}}",
+        Field("schema_version", "1"),
         Field("package_kind", "\"LanguagePackage\""),
         Field("package_version", "{\"major\": 1, \"minor\": 0, \"patch\": 0}"),
         Field(
@@ -107,7 +108,8 @@ fn Test_A_Missing_Required_Field_Should_Be_Refused()
 fn Manifest_With_Kind(kind: &str) -> String
 {
     return format!(
-        "{{{}, {}, {}, {}, {}, {}}}",
+        "{{{}, {}, {}, {}, {}, {}, {}}}",
+        Field("schema_version", "1"),
         Field("package_id", "\"nomos.rules.completeness-mirror\""),
         Field("package_kind", &format!("\"{kind}\"")),
         Field("package_version", "{\"major\": 1, \"minor\": 0, \"patch\": 0}"),
@@ -153,7 +155,8 @@ fn Test_A_Package_Kind_Nothing_Defines_Should_Be_Refused_Differently_From_A_Wron
 fn Manifest_With_Language_Version(value: &str) -> String
 {
     return format!(
-        "{{{}, {}, {}, {}, {}, {}}}",
+        "{{{}, {}, {}, {}, {}, {}, {}}}",
+        Field("schema_version", "1"),
         Field("package_id", "\"nomos.lang.rust\""),
         Field("package_kind", "\"LanguagePackage\""),
         Field("package_version", "{\"major\": 1, \"minor\": 0, \"patch\": 0}"),
@@ -189,7 +192,8 @@ fn Test_A_Malformed_Version_Domain_Should_Be_Refused()
 fn Manifest_With_Provider(provider_id: &str) -> String
 {
     return format!(
-        "{{{}, {}, {}, {}, {}, {}}}",
+        "{{{}, {}, {}, {}, {}, {}, {}}}",
+        Field("schema_version", "1"),
         Field("package_id", "\"nomos.lang.rust\""),
         Field("package_kind", "\"LanguagePackage\""),
         Field("package_version", "{\"major\": 1, \"minor\": 0, \"patch\": 0}"),
@@ -228,7 +232,8 @@ fn Test_An_Unresolvable_Provider_Should_Be_Refused()
 fn Test_An_Inverted_Protocol_Range_Should_Be_Refused()
 {
     let text = format!(
-        "{{{}, {}, {}, {}, {}, {}}}",
+        "{{{}, {}, {}, {}, {}, {}, {}}}",
+        Field("schema_version", "1"),
         Field("package_id", "\"nomos.lang.rust\""),
         Field("package_kind", "\"LanguagePackage\""),
         Field("package_version", "{\"major\": 1, \"minor\": 0, \"patch\": 0}"),

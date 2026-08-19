@@ -111,6 +111,7 @@ profile: domain-specification
 | docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md@authored | docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md | authored | 16 | 6 | sha256:002bf8b3eb0d2b37459e2db671092341f12b498413eb29078351cc623202f7f6 |
 | docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md@authored | docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md | authored | 16 | 6 | sha256:34a10502da7ccee01b768adbdb67dd71f28209b6bc4ae2afc512b343bf59ebb9 |
 | docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md@authored | docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md | authored | 19 | 6 | sha256:6b5a01da7549134b0f7cce0d44245687e46660f6e07242861e692c30522e7d3f |
+| docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md@authored | docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md | authored | 14 | 5 | sha256:8e66ebc7fa4c6ee44260128c0f37957605f33a078676edb3c504d701d929362f |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md@authored | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md | authored | 34 | 9 | sha256:871e1ada836924e8fad8d9f05a7badd9349eefb18e90e0157a28ac34879555d0 |
 | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md@authored | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md | authored | 28 | 7 | sha256:f98efe7a4dd950df779912722f9deb19ecdc75a81e52d9635900c2f424a8623a |
 | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md@authored | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md | authored | 45 | 10 | sha256:9af1a60d2bc3755845a1d9c3eeae503b2a8f6ec315cfc906d633c7dc2d5f0483 |
@@ -1016,6 +1017,11 @@ profile: domain-specification
 | docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#11 | authored | 2 | Corroborating Evidence |
 | docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#16 | authored | 2 | What Would Decide It |
 | docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#18 | authored | 2 | Status |
+| docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md#1 | authored | 1 | The manifest JSON carries its own schema version, distinct from PKG-007's four content domains |
+| docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md#2 | authored | 2 | Question |
+| docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md#6 | authored | 2 | The Decision |
+| docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md#10 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md#13 | authored | 2 | Status |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#1 | authored | 1 | A port that names its outcomes says nothing about how they are obtained |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#2 | authored | 2 | Question |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#5 | authored | 2 | What Was Measured |
@@ -29164,6 +29170,137 @@ Open. Revisit when a second rule (function or crate) is added under `crates/rule
 count. Recorded here so the asymmetry between `ARCH-001`'s now-satisfied mechanism and
 `ARCH-002`'s untouched one is legible rather than silently inherited by whichever item next
 touches `crates/rules/nomos-rules` or `crates/contracts/nomos-contracts/src/package.rs`.
+
+### docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md#1
+
+*revision: authored · kind: heading · heading: The manifest JSON carries its own schema version, distinct from PKG-007's four content domains · hash: sha256:71018699a0fb52f9d52212f92524637a73b0bc954414704e82f687ef67144da3*
+
+# The manifest JSON carries its own schema version, distinct from PKG-007's four content domains
+
+### docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md#2
+
+*revision: authored · kind: heading · heading: The manifest JSON carries its own schema version, distinct from PKG-007's four content domains / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md#3
+
+*revision: authored · kind: prose · heading: The manifest JSON carries its own schema version, distinct from PKG-007's four content domains / Question · hash: sha256:d647aa9a685d30dbdfc25289cd09c06a429d89cd6a248e1e3c1a8c5a44152541*
+
+`crates/packages/nomos-package/src/manifest.rs`'s `PackageManifest` models `PKG-007`'s four
+version domains — package version, protocol range, language versions, provider tool
+versions — none of which answer a different question: what shape is the JSON file itself?
+`crates/packages/nomos-package/src/reader.rs::Parse_Manifest` reads `package_id`,
+`package_kind` and the rest positionally, by field name, with no marker anywhere in the
+document saying which revision of that field layout a given file was written against. A
+real, hand-authored manifest already exists on disk at `packages/nomos.lang.rust.json`, read
+by a real consumer (`nomos_lang_package::Read_Manifest`, exercised by
+`crates/packages/nomos-lang-package/tests/manifest.rs::Test_The_Real_Rust_Manifest_Should_
+Round_Trip`) — this is not a hypothetical future format, it is a format with one real file
+already committed to this repository.
+
+### docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md#4
+
+*revision: authored · kind: prose · heading: The manifest JSON carries its own schema version, distinct from PKG-007's four content domains / Question · hash: sha256:a8571c22449f94b99369b56cf0c2fe7d9a42bf62f3a173018b25651cabd82fdd*
+
+`code-standards`/`nomos-proto` (`github.com/kevinmettias/nomos-proto`), the Go-era
+predecessor this workspace rebuilds, names exactly this as a third, independent version
+domain on its own out-of-process plugin manifest: `MANIFEST_SCHEMA_VERSION`, distinct from
+both a plugin's own `Version` and its `Engine{Minimum,Ceiling}` compatibility range —
+verified directly against `kernel/plugin/installation_contract.go`.
+
+### docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md#5
+
+*revision: authored · kind: prose · heading: The manifest JSON carries its own schema version, distinct from PKG-007's four content domains / Question · hash: sha256:ad91218f46da0c0f951edb0bab83ce045569859ace5d689d28ada48c65e7925a*
+
+This workspace already has its own, closer precedent for the identical problem:
+`crates/substrate/nomos-ledger/src/store/ledger_document.rs`'s `LedgerDocument` carries a
+required `schema_version: u32` field, checked against a `SCHEMA_VERSION` constant
+(`store.rs`) before a document is trusted, specifically so a build reading a newer-schema
+file refuses with a legible reason (`document.rs::Explain`, `LedgerError::Unrecognized`)
+rather than misreading it as a merely malformed one. `OD-LEDGER-008` is why the ledger's own
+container is `#[serde(deny_unknown_fields)]` in the first place — the same "a build that
+cannot account for every key does not get to write it back" discipline a schema marker
+exists to make legible across a format change.
+
+### docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md#6
+
+*revision: authored · kind: heading · heading: The manifest JSON carries its own schema version, distinct from PKG-007's four content domains / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md#7
+
+*revision: authored · kind: prose · heading: The manifest JSON carries its own schema version, distinct from PKG-007's four content domains / The Decision · hash: sha256:e4d88a7fd793284bc153062b65666e2f5159e184cb4e04153d7c420da881b09b*
+
+`PackageManifest`'s JSON format gains a required `schema_version` field, checked first, with
+a distinct refusal — `ManifestError::UnknownSchema { at, understood, found }` — when a
+manifest names a schema version newer than this build understands. A missing
+`schema_version` is refused the same way any other missing required field already is
+(`ManifestError::MissingField`); there is no default and no silent inference, the same
+choice `nomos-ledger` already made for its own schema marker.
+
+### docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md#8
+
+*revision: authored · kind: prose · heading: The manifest JSON carries its own schema version, distinct from PKG-007's four content domains / The Decision · hash: sha256:5661b678e1d627ef51a68fe4898d74bc1f3ac02f1220dc63aede816cb844de75*
+
+Built now rather than logged as an open question, unlike `OD-CAPABILITY-007` and
+`OD-RULES-006`'s decline-with-reason and `EnforcementPlacementRationale` questions decided
+the same session: those concern a mechanism with no real consumer and no second real
+instance to design against. This is different in kind. `Parse_Manifest` has a real consumer
+today, and a real, already-published manifest file exists with zero forward-compatibility
+marker on it. The cost of waiting is not symmetric the way it is for an unconsumed struct
+field: every manifest published before a schema marker exists is a file a future reader can
+never distinguish from one written against whatever shape came first, the same reason a
+ledger schema field could not usefully be added after the first real schema change rather
+than before it. `nomos-ledger`'s own `schema_version` is not analogous evidence borrowed
+from elsewhere; it is this workspace's own prior, independent arrival at the identical
+design for the identical class of problem — a persistent, hand-authored, on-disk document
+read by code that will itself keep changing.
+
+### docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md#9
+
+*revision: authored · kind: prose · heading: The manifest JSON carries its own schema version, distinct from PKG-007's four content domains / The Decision · hash: sha256:15228a0719c9219c848a10fc19479f4b68b54c42f0499660c5981aa1ce77cea2*
+
+`SCHEMA_VERSION` starts at `1`. Nothing about the JSON shape `Parse_Manifest` reads today
+changes; this only adds the one new required field and the one new refusal path.
+
+### docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md#10
+
+*revision: authored · kind: heading · heading: The manifest JSON carries its own schema version, distinct from PKG-007's four content domains / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md#11
+
+*revision: authored · kind: prose · heading: The manifest JSON carries its own schema version, distinct from PKG-007's four content domains / What This Record Does Not Do · hash: sha256:e82e932ea82c3a58ec4745c3b555ebc33438fd838d1c8625d22f8217d8edd4c4*
+
+It does not build a migration mechanism between schema versions, forward or backward
+compatible reading of an older schema, or any equivalent of `nomos-ledger`'s
+`READS_MAJOR`-style escape hatch — `code-standards`' own `HANDOFF.md` documents that
+mechanism as having shipped unreachable there (an equality check ran before the range check
+meant to allow it through), and this record deliberately does not attempt the more complex
+version of the problem before the simpler one — refuse cleanly on mismatch — has a real
+second schema to be checked against.
+
+### docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md#12
+
+*revision: authored · kind: prose · heading: The manifest JSON carries its own schema version, distinct from PKG-007's four content domains / What This Record Does Not Do · hash: sha256:dbaa87f6303f53a3cc876ea026f41181ab984ececc84ef198b6206a76f6f0803*
+
+It does not touch `PKG-007`'s four content domains, `nomos-lang-package`'s Rust-specific
+reading, or any provider/language-specific manifest content.
+
+### docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md#13
+
+*revision: authored · kind: heading · heading: The manifest JSON carries its own schema version, distinct from PKG-007's four content domains / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md#14
+
+*revision: authored · kind: prose · heading: The manifest JSON carries its own schema version, distinct from PKG-007's four content domains / Status · hash: sha256:11fcf5cc39a209152436fbea283a928ffa0882395dd20d31760a799650f6bca2*
+
+Accepted, landed by `P13-PACKAGE-SCHEMA-VERSION`.
 
 ### docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#1
 

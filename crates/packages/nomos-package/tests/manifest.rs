@@ -18,7 +18,8 @@ fn Field(name: &str, value: &str) -> String
 fn Manifest_Text(language_versions: &str, providers: &str) -> String
 {
     return format!(
-        "{{{}, {}, {}, {}, {}, {}}}",
+        "{{{}, {}, {}, {}, {}, {}, {}}}",
+        Field("schema_version", "1"),
         Field("package_id", "\"nomos.lang.python\""),
         Field("package_kind", "\"LanguagePackage\""),
         Field("package_version", "{\"major\": 1, \"minor\": 0, \"patch\": 0}"),
@@ -128,5 +129,22 @@ fn Test_An_Empty_Language_Versions_List_Is_Refused()
     assert_eq!(
         refused,
         ManifestError::EmptyList { at: "test".to_owned(), field: "language_versions".to_owned() }
+    );
+}
+
+/// A schema newer than this build understands is refused before any other field is read --
+/// `Well_Formed` below is otherwise a valid manifest, so a refusal here can only be the
+/// schema check, not some other field this reader happens to reject too.
+#[test]
+fn Test_A_Manifest_Newer_Than_This_Build_Understands_Is_Refused()
+{
+    let text = Well_Formed().replacen("\"schema_version\": 1", "\"schema_version\": 999", 1);
+
+    let refused = Parse_Manifest(&text, "test", &KNOWN_PROVIDERS)
+        .expect_err("schema 999 is newer than this build understands");
+
+    assert_eq!(
+        refused,
+        ManifestError::UnknownSchema { at: "test".to_owned(), understood: nomos_package::SCHEMA_VERSION, found: 999 }
     );
 }

@@ -1,4 +1,5 @@
 {
+  "schema_version": 1,
   "package_id": "nomos.lang.rust",
   "package_kind": "LanguagePackage",
   "package_version": { "major": 1, "minor": 0, "patch": 0 },
