@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:639968d7753f856f0ca40c2bb0de2ca59dabde7302bea46800bd12d50ef99055",
-  "inputs_digest": "sha256:3f854e2da998f546332cbc7bba5f472fd5374cd2e67481a0cef5c65cd8fecaac",
+  "content_digest": "sha256:19f4191071196e2f7bc8b2cad9e84b2e1cdf91b46330932af545dd8840bcabd4",
+  "inputs_digest": "sha256:218937dac2e0c11fbb65c7e783999aeabe9a0d59bce3a1a57685cf82d335cc1d",
   "sections": [
     [
       "Documents",
@@ -12,11 +12,11 @@
     ],
     [
       "Sections",
-      1167
+      1168
     ],
     [
       "Source blocks",
-      4195
+      4199
     ]
   ],
   "inputs": [
@@ -318,7 +318,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-HOST-005-whether-request-commands-seam-is-its-own-crate-or-a-verb-inside-spec-orchestration.md@authored",
-      "hash": "sha256:a33c6e7760f69293086948c66c604f52e898dacaf8e330533626c16e6703a1da"
+      "hash": "sha256:0cb15b83d0fb7a58f4a2afda083ac512ba0ac344d15ca0556f3446736cbd7ea9"
     },
     {
       "content": "documents",
@@ -3053,7 +3053,12 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-HOST-005-whether-request-commands-seam-is-its-own-crate-or-a-verb-inside-spec-orchestration.md#10",
-      "hash": "sha256:f7492a2ddb6d543ee3e4c4828dc46de7cd10b188a6084d070bd7916b0bce4a9b"
+      "hash": "sha256:a8650dc9a48954904e7c225b7bf89b4032ba041cf527ca1eaa23fd7714a8ced4"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-005-whether-request-commands-seam-is-its-own-crate-or-a-verb-inside-spec-orchestration.md#14",
+      "hash": "sha256:7a2d90ccc1ccc8d602bc5ec50f5f83c78069c075a065c5aa15e3282919f336c5"
     },
     {
       "content": "headings",
@@ -14908,12 +14913,32 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-HOST-005-whether-request-commands-seam-is-its-own-crate-or-a-verb-inside-spec-orchestration.md#10",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:5d8184015dfef929c99053e3163c9dcd5080bb6652e3bcaddfdecb6fe0ddab17"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-HOST-005-whether-request-commands-seam-is-its-own-crate-or-a-verb-inside-spec-orchestration.md#11",
-      "hash": "sha256:76c03540ca5dfa1b96856b05a7864a8fecf7326e572c7d6fbdd32e053f475d19"
+      "hash": "sha256:a67f544679a4325df4414193bd519cf588093827235bffce59454824184ba819"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-005-whether-request-commands-seam-is-its-own-crate-or-a-verb-inside-spec-orchestration.md#12",
+      "hash": "sha256:344a810a99cc8def35c35590a822e6ecf5c1f0dcedf3371536e7e06580a091ab"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-005-whether-request-commands-seam-is-its-own-crate-or-a-verb-inside-spec-orchestration.md#13",
+      "hash": "sha256:d2434e76f735b1b2c6574e834b8510a7bd36ca9258cd5ba58dc2aa0712d62ed0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-005-whether-request-commands-seam-is-its-own-crate-or-a-verb-inside-spec-orchestration.md#14",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-005-whether-request-commands-seam-is-its-own-crate-or-a-verb-inside-spec-orchestration.md#15",
+      "hash": "sha256:6962e58c35ab40fca7d20b53986f30fe06c73f8ae4d26687723083fc2d2149ba"
     },
     {
       "content": "blocks",

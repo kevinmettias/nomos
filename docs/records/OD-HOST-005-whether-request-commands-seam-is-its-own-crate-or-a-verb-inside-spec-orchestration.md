@@ -2,8 +2,8 @@
 id: OD-HOST-005
 type: decision
 title: Whether request::Command's orchestration seam is its own crate or a verb inside nomos-spec-orchestration
-status: open
-version: 1
+status: accepted
+version: 2
 authority: canonical-normative-record
 tags:
   - host
@@ -70,8 +70,41 @@ without either becoming the other's sibling. `request.rs`'s own module doc calls
 front door, not a clearly separate domain, which is why this record does not resolve the
 question by inspection alone.
 
+## Resolution
+
+Accepted, by reading `crates/host/nomos-cli/src/request.rs` in full rather than by the
+inspection-by-description this record's own "What Would Decide It" section declined to
+settle for. That file is short enough to read whole, and it answers its own question in its
+first line: `//! nomos request — submitting a feature request, design spec or feature result
+through the one accept door OD-SPEC-009 decided`, and further, in its own module doc, "This
+is a transport and nothing else... It validates nothing and persists nothing on its own
+behalf."
+
+`Command` has exactly one variant, `Submit`. `Submit`'s real work — the part that is not CLI
+argument parsing — is three calls: `nomos_spec_orchestration::corpus::Assemble` (the same
+corpus assembly `SpecCommand` already wraps), `nomos_spec_store::Accept_Submission` (the
+store `nomos-spec-orchestration` already owns), and, when `--into` is given,
+`nomos_spec_project::{Catalogue::Shipped, Build}` through the `subject-dossier` profile (the
+same render primitive `SpecCommand::Render` already wraps). There is no fourth primitive:
+`request.rs` contributes a `SubmitRequest` parse and a `Submission` construction — a
+different *shape* of input than `SpecCommand`'s verbs take, not a different *domain* of
+work. That is the direct evidence for this record's own "fifth `SpecCommand`-adjacent verb"
+reading, measured against the file rather than inferred from its module doc alone, and it
+was not available when this record was first written at a stage before `request.rs`'s
+current shape existed to read.
+
+**The decision:** `request::Command`'s seam is a `Submit` verb added to
+`nomos-spec-orchestration`, alongside `SpecCommand`'s existing verbs — the second shape this
+record named, not a fourth peer crate. No code moves as part of this resolution;
+`request.rs` keeps running exactly as it does today until a follow-on item performs the
+move, at which point `nomos-spec-orchestration`'s own module doc and `README.md` row need to
+say it answers a second command type, the update this record's "Question" section already
+anticipated would be needed under this shape.
+
 ## Status
 
-Open. `request::Command`'s seam does not build itself until this is decided — building
-either shape first would decide the question by whichever a session happened to reach for,
-the exact accretion `OD-HOST-004` and this record's own reasoning both warn against.
+Accepted. `request::Command`'s seam does not build itself until this is decided; it is
+decided now, by direct evidence read out of `request.rs` rather than by inspection of its
+module doc's description alone. The seam build itself — moving `Submit`'s orchestration
+logic into `nomos-spec-orchestration` and updating that crate's own description — is
+separate work this resolution unblocks rather than performs.
