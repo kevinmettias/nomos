@@ -19968,6 +19968,60 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-CAPABILITY-008-THIRD-PROVIDER-LANDED",
+      "title": "OD-CAPABILITY-008: a third provider joins, and Materialize diverges from PROVIDER/Declared_Guarantee/FactContext for a principled reason",
+      "why": "OD-CAPABILITY-008 (authored 2026-08-18, status open) named its own trigger plainly: \"revisit when a third provider joins.\" crates/languages/nomos-lang-rust-cargo was built and composed into nomos-check-orchestration's Registered() (P13-DEPENDENCY-EDGES-2, P13-DEPENDENCY-WIRE-1) after the record was written -- verified directly against the real code, not assumed: it is a third live implementation of the PROVIDER/Declared_Guarantee/Materialize/FactContext convention the record analyzes. The trigger has fired and nothing has read the record against it yet -- grepped the full ledger, nothing references OD-CAPABILITY-008 since it was authored.\n\nWhat the third instance actually shows, checked field by field rather than assumed: PROVIDER (&str), Declared_Guarantee() -> Guarantee (identical pub const fn signature verified across all three guarantee.rs files) and FactContext (identical four fields -- snapshot, variant, configuration, generation, same types -- verified across all three provider.rs files) agree exactly across all three providers. Materialize does not: nomos_lang_rust_cargo::Materialize_Workspace(root: &Path, context: FactContext) -> Result<Vec<PackageFact>, MetadataError> takes no SubjectId (it discovers every workspace member's subject itself) and returns many facts per call, where the first two providers' Materialize takes a subject: SubjectId, source: &str and returns one fact per call (with return type already varying between those two by fallibility -- Materialization enum vs MaterializedFact directly). This is exactly the shape of divergence the record's own \"Current Position\" section speculated a third provider might reveal (\"a Materialize taking its context by a different shape than the other two share\"), and it is principled rather than accidental: nomos-lang-rust-cargo is a whole-workspace capability, the first two are per-file capabilities, and Materialize's shape tracks that real difference in what each capability is of.",
+      "done_when": "OD-CAPABILITY-008 is edited through nomos spec preview / nomos spec commit (never hand-edited), front matter version bumps 1 -> 2, and it stays status: open -- this item settles what the third instance shows, not whether to build a trait, per the same discipline P13-GATE-014-015-RUN-CALLER-LANDED already applied to a sibling record.\n\nThe record gains a new section, after \"Current Position\" and before \"What Would Decide It\", titled \"A Third Provider Joins: What It Reveals\", stating: the trigger has fired (nomos-lang-rust-cargo exists and is composed into Registered()); PROVIDER, Declared_Guarantee and FactContext are verified identical across all three real provider.rs/guarantee.rs files; Materialize is not identical -- nomos_lang_rust_cargo::Materialize_Workspace's divergence (no SubjectId parameter, a Result<Vec<PackageFact>, MetadataError> return instead of one fact) is named specifically, together with the fact that Materialize's return type already varied by fallibility between the first two providers before this one arrived; and the divergence is characterized as principled (whole-workspace vs per-file capability granularity), not as an accidental shape mismatch a trait exists to catch.\n\n\"What Would Decide It\" is rewritten to say the trigger fired and narrows the question rather than resolving it: a trait over exactly PROVIDER/Declared_Guarantee/FactContext now has three checked instances to be built against; a trait attempting to also cover Materialize would have to invent a shape general enough to admit both \"one fact from one named subject\" and \"many facts from one discovered root\", which the record explicitly declines to endorse building speculatively, citing the same reasoning it already gave for keeping Encode_Payload undeduplicated.\n\n\"Status\" stays open, restated to reflect the narrowed question and to give two independent revisit conditions: a caller needing the three-part trait enforced rather than inspected, or a fourth provider naming a third distinct capability granularity to check the per-file/whole-workspace split against.\n\nPreservation: cargo test --no-fail-fast -p nomos-spec-validate passes with NOMOS_V14_CORPUS, NOMOS_SPEC_ARCHIVES and NOMOS_RUST_CORPUS all set (not corpus-unset only).\n\nProjections re-rendered from a scratch worktree holding exactly the registered record set this commit publishes (OD-GATE-005's discipline), via nomos spec render --profile diagram-set --into . and nomos spec render --profile domain-specification --into ., verified fresh via nomos spec freshness --into . --require diagram-set --require domain-specification (must exit 0) before copying diagrams/relations.mmd (+ sidecar) and spec/domain-specification.md (+ sidecar) back and committing them alongside the edited record and work/ledger.json.\n\ncargo test --no-fail-fast -p nomos-spec-validate passes (this item's own predicate, run corpus-set per the paragraph above).",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-validate"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-validate"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 8 tests\ntest run::tests::Test_The_Ruleset_Hash_Should_Be_Order_Independent_And_Sensitive ... ok\ntest run::tests::Test_A_Rule_Nobody_Declared_Should_Fail_The_Run ... ok\ntest run::tests::Test_A_Complete_Satisfied_Run_Should_Pass ... ok\ntest run::tests::Test_An_Empty_Ruleset_Should_Not_Pass ... ok\ntest run::tests::Test_Violations_Should_Fail_The_Run_And_Be_Listed ... ok\ntest run::tests::Test_An_Errored_Rule_Should_Fail_The_Run ... ok\ntest run::tests::Test_A_Vacuous_Rule_Should_Be_Visible ... ok\ntest run::tests::Test_A_Declared_But_Unregistered_Rule_Should_Fail_The_Run ... ok\n\ntest result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s\n\n\nrunning 11 tests\ntest Test_A_Declared_Repeated_Body_Should_Satisfy_Preserve_004 ... ok\ntest Test_The_Registry_Should_Match_The_Manifest ... ok\ntest Test_An_Empty_Store_Should_Report_Vacuous_Rules ... ok\ntest Test_An_Undisposed_Block_Should_Violate_Preserve_002 ... ok\ntest Test_A_Populated_Store_Should_Not_Report_Vacuous_Block_Rules ... ok\ntest Test_Disposed_Blocks_Should_Satisfy_Preserve_002 ... ok\ntest Test_An_Undeclared_Repeated_Body_Should_Violate_Preserve_004 ... ok\ntest Test_An_Omitted_Block_Should_Satisfy_Preserve_002 ... ok\ntest Test_A_Traced_Statement_Should_Satisfy_Preserve_006 ... ok\ntest Test_A_Statement_Without_Preserved_Lineage_Should_Violate_Preserve_006 ... ok\ntest Test_A_Seeded_Store_Should_Pass_Preservation_Non_Vacuously ... ok\n\ntest result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.86s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.13s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_validate-acd7b674edff1f45.exe)\n     Running tests\\preservation_holds.rs (target\\debug\\deps\\preservation_holds-c1582b858346687e.exe)\n   Doc-tests nomos_spec_validate\n",
+        "verified_at": 1787174615,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "ee0860b9ab9b05265feeb25c0f5b85a9cef92682"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

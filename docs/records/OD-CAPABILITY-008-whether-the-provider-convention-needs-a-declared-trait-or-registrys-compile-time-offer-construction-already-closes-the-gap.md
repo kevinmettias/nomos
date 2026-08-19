@@ -3,7 +3,7 @@ id: OD-CAPABILITY-008
 type: decision
 title: Whether the provider convention needs a declared trait, or Registry's compile-time offer construction already closes the gap nomos-proto's structural typing opened
 status: open
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - capability
@@ -89,24 +89,76 @@ boundary holds. A design pass would need to confirm the trait's method set does 
 pulling `Encode_Payload` along with it, which would then be reopening a duplication this
 workspace already reasoned about and kept on purpose.
 
+## A Third Provider Joins: What It Reveals
+
+`crates/languages/nomos-lang-rust-cargo` was built and composed into `Registered()` after this
+record was written (`P13-DEPENDENCY-EDGES-2`, `P13-DEPENDENCY-WIRE-1`), and this record's own
+named trigger — "a third provider joins" — has fired in the literal sense. What it reveals is
+not what "the trigger fires, so build the trait" would suggest.
+
+Checked field by field against the real code, not assumed: `PROVIDER` (`&str`),
+`Declared_Guarantee() -> Guarantee` (identical `pub const fn` signature, verified across all
+three `guarantee.rs` files), and `FactContext` (the identical four fields — `snapshot`,
+`variant`, `configuration`, `generation`, the same types — verified across all three
+`provider.rs` files) agree exactly across all three providers now. A trait over just those
+three parts would be sound today and would now have three real instances to check a shape
+against instead of two, closing part of what this record's "Current Position" section named
+as the actual gap — nothing except reading files side by side confirms agreement.
+
+`Materialize` does not agree, and this record's own speculation about what a third provider
+might reveal — "a `Materialize` taking its context by a different shape than the other two
+share" — is exactly what happened, in a larger way than that sentence anticipated. Even
+between the first two providers, `Materialize`'s return type already varied with each
+provider's own fallibility (`nomos_lang_rust::Materialize` returns `Materialization`, an enum
+of `Materialized`/`Unparseable`, because syntax parsing can fail per file;
+`nomos_lang_rust_scan::Materialize` returns `MaterializedFact` directly, because an
+approximate scan cannot). `nomos_lang_rust_cargo::Materialize_Workspace` diverges further, by
+design rather than by drift: it takes `root: &Path` instead of `subject: SubjectId, source:
+&str` — no `SubjectId` exists yet when it is called, because it discovers every workspace
+member's subject itself — and it returns `Result<Vec<PackageFact>, MetadataError>`, one call
+producing many facts, rather than the one-call-one-fact shape the first two share. This is not
+a bug: `nomos_lang_rust_cargo` is a whole-workspace capability (Cargo resolves a manifest
+graph, not a single file), where the first two are per-file capabilities called once per
+`SubjectId` a caller already holds. The difference in `Materialize`'s shape tracks a genuine
+difference in what each provider's capability is *of*, not a subtly-wrong copy of a shape that
+should have matched.
+
 ## What Would Decide It
 
-A third provider is the natural trigger, the same role it plays in `OD-PACKAGE-006`: at that
-point the question of whether the convention's four parts genuinely agree stops being
-answerable by reading two files side by side, and a shape mismatch a trait would have caught
-at the second provider becomes one only a trait catches at the third. A second, independent
-trigger: if a consumer is ever built that needs to hold providers polymorphically — iterating
-over an unknown-length list of them, rather than the composition root's current shape of
-naming each by import — since that is the one construction where Rust's static call-site
-checking stops applying and something closer to Go's dynamic dispatch reappears, this time by
-design rather than by accident.
+A third provider was named as the natural trigger, the same role it plays in
+`OD-PACKAGE-006`: at that point the question of whether the convention's four parts genuinely
+agree stops being answerable by reading two files side by side, and a shape mismatch a trait
+would have caught at the second provider becomes one only a trait catches at the third. The
+third provider has now answered that question directly, for three of the four parts, in the
+affirmative — `PROVIDER`, `Declared_Guarantee` and `FactContext` agree across all three, and a
+trait spanning exactly those three has real, checked agreement to be built against rather than
+an assumption. `Materialize` answers it in the negative: the third instance's divergence is
+principled, tracking a real difference in capability granularity, so a single trait method
+covering all three `Materialize`s would have to be shaped generically enough to admit both "one
+fact from one named subject" and "many facts from one discovered root" — which is not "the
+convention's shape" so much as a new, more general shape invented to paper over two capability
+kinds that are not actually the same kind. Building that trait now would repeat the mistake
+this record already named for `Encode_Payload`: making two providers of different things agree
+by construction, which proves nothing and forecloses a third capability kind (a fourth
+provider, whole-repository rather than whole-workspace or per-file) from needing its own
+`Materialize` shape without the trait's signature growing again to admit it.
+
+A second, independent trigger from the original record is unchanged by this: if a consumer is
+ever built that needs to hold providers polymorphically — iterating over an unknown-length
+list of them, rather than the composition root's current shape of naming each by import —
+Rust's static call-site checking stops applying for that consumer specifically, and something
+closer to Go's dynamic dispatch reappears by design. That consumer does not exist yet.
 
 ## Status
 
-Open. Left open rather than resolved either way: the motivating Go bug's specific mechanism —
-structural typing letting a copy silently satisfy less than it meant to — has no direct Rust
-analogue at today's one call site per provider, so adopting a trait now would be adding
-vocabulary for a documentation/consistency benefit rather than closing a live hole, and
-`OD-CAPABILITY-007` already left the adjacent provider-facing question open for a structurally
-similar reason: no second real case exists yet to check a design against. Revisit when a third
-provider joins, or when a consumer needs to hold providers polymorphically rather than by name.
+Open. The record's own named trigger — a third provider — has fired, and what it shows
+narrows rather than resolves the question: `PROVIDER`/`Declared_Guarantee`/`FactContext` are
+verified identical across all three real instances today, so a trait over exactly those three
+is buildable on real, checked agreement rather than an assumption from two instances — but
+`Materialize` itself should not be unified, because its divergence at the third instance
+tracks a genuine difference in capability granularity (per-file versus whole-workspace) rather
+than an accidental drift a trait exists to catch. Revisit either half independently: build the
+narrower three-part trait when a caller needs it enforced rather than inspected (the same
+"wait for a need, not a wish" discipline `D-135` already names elsewhere), or reopen
+`Materialize`'s own shape when a fourth provider arrives with a third, genuinely distinct
+capability granularity to check the per-file/whole-workspace split against.

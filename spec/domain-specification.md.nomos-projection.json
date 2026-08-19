@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:bfd6e0dcf98bee2e7c2614ef5aa5c5fafaeac182b49faadddbfa9254bd8c3a24",
-  "inputs_digest": "sha256:e6e250932c7c538642b1c65812670cf5be5fd9bbb824d08933b8ba0be3f68208",
+  "content_digest": "sha256:f8ebc0cc590803da126600508b239bf726d19162579b543d052c30a7c471c08b",
+  "inputs_digest": "sha256:2f06eb304b4b31371cf30c0e2794eb37aa703ac1f45e48d822b2cc90d8fe6a82",
   "sections": [
     [
       "Documents",
@@ -12,11 +12,11 @@
     ],
     [
       "Sections",
-      1222
+      1223
     ],
     [
       "Source blocks",
-      4356
+      4361
     ]
   ],
   "inputs": [
@@ -203,7 +203,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md@authored",
-      "hash": "sha256:0a29729535d828232371334d9709d42a39384283029ed84cf5fc75c8f925c7cc"
+      "hash": "sha256:4d04815ed763e5dcf94dac93b3ea02bfc1095a5ca15731b5d342e314f8a33fc8"
     },
     {
       "content": "documents",
@@ -2083,12 +2083,17 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#11",
-      "hash": "sha256:5c43c5be5456d8f75b9504ac5009662d0d1ebe7b4181f3a3290b747016a80cc4"
+      "hash": "sha256:9f49e0113d2ffe6df817eb079b541cd9146aa8fbd2f29c93dd3f6b69e90325e7"
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#13",
-      "hash": "sha256:7476f97485b2c7a284be3be7b5fd2752fd494ed26feeb8c0549cb08401b32e7f"
+      "identity": "docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#15",
+      "hash": "sha256:28a7d0d557be179ee37ae5a0a5230024b485027ee169eba8322acc4ad95b459a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#18",
+      "hash": "sha256:83e90fa82d2dbf915892448aaa718200925a00cf740cb2d4c4b90415a805906b"
     },
     {
       "content": "headings",
@@ -11468,22 +11473,47 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#11",
-      "hash": "sha256:b21c34f083f944a8317c5bb99f866d38e2c77a3ce5a1a64810a532456b826658"
+      "hash": "sha256:cc02981fd1ba242ecc2bf56616e7b29ecccf6c6b08010335c6aa4e95a1945a07"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#12",
-      "hash": "sha256:0e8abb6f143240e430fa3888f7039fc16619d4d8a99545c3303979ae7a9039b4"
+      "hash": "sha256:726f62c3e81612be1001e7cfabc8fb655ccc3234f45e98a7152678439455a5d7"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#13",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:40cda1f1526ec82205073a73a8e18ff83078dc7fd80d46de4202b9b979ca65de"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#14",
-      "hash": "sha256:42943b5148a339e87e6e626f7f083c56c89067ba1ad2073159f1db0cec5d43cd"
+      "hash": "sha256:400e7a947d2a0ed5be72e12781835f4ca22616de0beea224e81568edf05ea204"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#15",
+      "hash": "sha256:b21c34f083f944a8317c5bb99f866d38e2c77a3ce5a1a64810a532456b826658"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#16",
+      "hash": "sha256:46f4018ad753a95e68ab7906c18161f1af9788aa0274ff8422a55b023b10362f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#17",
+      "hash": "sha256:6158c9b49f770978ef14e1815758af5abeac04fc8c3bbf1f19558f46e30d33a9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#18",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#19",
+      "hash": "sha256:9d86be1e32f0b271eb3bb536ad953f9efde7a061493203da01683e227d07196e"
     },
     {
       "content": "blocks",
