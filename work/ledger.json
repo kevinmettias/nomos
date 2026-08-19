@@ -18271,6 +18271,65 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-GATE-SELECTOR-QUESTION",
+      "title": "Whether Gate's ScopeSelector and RuleSelector are built now, or wait for a caller that needs to select less than everything",
+      "why": "ARC-ROADMAP-001 names ScopeSelector and RuleSelector as Gate's first two configurable policy types, and nomos-gate-orchestration's first increment (P13-GATE-ORCHESTRATION-1) deliberately left both unbuilt: GateCommand::root is accepted and carried, not read, and GatePlan reports every registered rule unconditionally. Verified directly against the real code: nomos-check-orchestration::Run (crates/orchestration/nomos-check-orchestration/src/run.rs) still calls both shipped rules unconditionally over every source it is handed, and only one language provider exists, so no real caller anywhere in this workspace demonstrates a need to select fewer than all rules or all files. OD-HOST-004 already decided the adjacent case -- Run stays hand-written until a rule's participation actually varies by request -- and building either selector now, on ARC-ROADMAP-001's naming alone, would repeat the exact machinery-before-demonstrated-need mistake D-135 already named, that OD-PACKAGE-006 and OD-PACKAGE-008 already declined for provider and rule registration. This is deliberately not covered by the user's 2026-08-18 override prioritizing plugin/package registration infrastructure: that override is about the registration seam, and RuleRegistry::Offer already lets any count of rules register unconditionally -- nothing about the selectors blocks independent plugin or package development, the same distinction that kept OD-RULES-005/006 and OD-CAPABILITY-007 as open questions rather than builds.",
+      "done_when": "A new record under OD-GATE states whether Gate's ScopeSelector/RuleSelector are picked and built now or wait for a real caller that needs to select less than everything. It follows OD-ANALYSIS-007's shape (Question / Current Position / What Would Decide It / Status), relates to ARC-ROADMAP-001, OD-HOST-004 and D-135, and states the concrete trigger that would flip the answer. Registered in crates/spec/nomos-spec-store/records/, and diagrams/relations.mmd and spec/domain-specification.md (with sidecars) are re-rendered and fresh per nomos spec freshness --require diagram-set --require domain-specification, verified from an isolated worktree holding exactly the record set this commit publishes. Closed by the record alone: no crate changes.",
+      "kind": "Validation",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md",
+          "crates/spec/nomos-spec-store/records/OD-GATE-014.record"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "Block_Should_Store_Every_Pipe_Line ... ok\n\ntest result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.14s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-e643c65bbad4483e.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-433c47e6dd66b347.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-c14312faf4ba080e.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-d6ecb11a387c468a.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-a4a043f2643142bd.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-30f549b5771eb641.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-5b419e0002ced6ae.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-4b668c0f67b59fe5.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-5f786069b772789f.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-b8c4ebd0adb5625f.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-ee111bd537ecd137.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-2919ec68747ddb5b.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-99272398d303e3e7.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-756fcac740cd78ad.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-259eb839edee86c9.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1787125195,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "57e8636b748bb157af8f3c17d76f9586a89f2167"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

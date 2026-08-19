@@ -3,16 +3,16 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:e3173f70a8d3c975437f06cad7247a56e57783b80a4b327619b7bc856d63d622",
-  "inputs_digest": "sha256:7a72318c6080eca10725a1221108e8db403f344526cd4e9eadcc6e861b8616b4",
+  "content_digest": "sha256:cf3512f03dc56e480cd6feed65f511294038feaedf452f5b5a13d16977e124fd",
+  "inputs_digest": "sha256:00dd1655def5aee7f340d4e9b48aa135dd17eb6bb30f57c41d2ea98bd250d6c5",
   "sections": [
     [
       "Relations",
-      920
+      926
     ],
     [
       "Decisions",
-      129
+      130
     ]
   ],
   "inputs": [
@@ -280,6 +280,11 @@
       "content": "relations",
       "identity": "ARC-ROADMAP-001 relates-to OD-GATE-004",
       "hash": "sha256:14b4835ad08f1615cf952b79a8d6f962e77788d26de34afc947860fbe620283a"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-ROADMAP-001 relates-to OD-GATE-014",
+      "hash": "sha256:cfa9bab8089742a4f9470a195e9f927c8f6e7f5bc35e63021eae5a72338f7d1e"
     },
     {
       "content": "relations",
@@ -765,6 +770,11 @@
       "content": "relations",
       "identity": "D-135 relates-to OD-CAPABILITY-007",
       "hash": "sha256:b10cbd57705bc52b18b12f54c56d616a6ca88a66de08f1111bead12386c8f228"
+    },
+    {
+      "content": "relations",
+      "identity": "D-135 relates-to OD-GATE-014",
+      "hash": "sha256:de287dc8d5d5b283de590a1ea02e16e31798ffbb9583082a9a348f6402decb7c"
     },
     {
       "content": "relations",
@@ -2093,6 +2103,21 @@
     },
     {
       "content": "relations",
+      "identity": "OD-GATE-014 relates-to ARC-ROADMAP-001",
+      "hash": "sha256:87f7ffc411280c3f9cd69ccfcfdb7a9f479da29267850158ba37ec46eefccf52"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-GATE-014 relates-to D-135",
+      "hash": "sha256:5b7f0433813f27ea8bae802eb193174d07861aff4f977519d079cb6fbf6f77f0"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-GATE-014 relates-to OD-HOST-004",
+      "hash": "sha256:ab0254230178465078634c38e0bb5c4a64d3f882f866493221faa36327bb06af"
+    },
+    {
+      "content": "relations",
       "identity": "OD-HOST-001 relates-to OD-HOST-002",
       "hash": "sha256:b293e682d81221d87e6a4c73613db235a21b324d3c43e2ac398a52f0c0d6dd77"
     },
@@ -2155,6 +2180,11 @@
       "content": "relations",
       "identity": "OD-HOST-004 relates-to D-135",
       "hash": "sha256:9080094c0114d19afa3cecae1dab1310d0b4c11ecfbd1a8ad295cb724ca0d71b"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-HOST-004 relates-to OD-GATE-014",
+      "hash": "sha256:274ac78ffbc0f811767253aba54b31c0523a5f5db252c599068c18fddaf7acc6"
     },
     {
       "content": "relations",
@@ -4860,6 +4890,11 @@
       "content": "nodes",
       "identity": "OD-GATE-013",
       "hash": "sha256:01d9537127939a023befafd8fac00907a73d76def2b5a52917f15c73adeb26b4"
+    },
+    {
+      "content": "nodes",
+      "identity": "OD-GATE-014",
+      "hash": "sha256:b97ba4b792460de8eb85a35e939263c869070312f8d9291ce4e1deab6fda2974"
     },
     {
       "content": "nodes",

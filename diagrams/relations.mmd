@@ -56,6 +56,7 @@ graph LR
     arc_roadmap_001 -->|"relates-to"| arc_ecosystem_001
     arc_roadmap_001 -->|"relates-to"| d_132["D-132"]
     arc_roadmap_001 -->|"relates-to"| od_gate_004["OD-GATE-004"]
+    arc_roadmap_001 -->|"relates-to"| od_gate_014["OD-GATE-014"]
     arc_roadmap_001 -->|"relates-to"| od_package_008["OD-PACKAGE-008"]
     arc_roadmap_001 -->|"relates-to"| od_rules_001["OD-RULES-001"]
     arc_roadmap_001 -->|"relates-to"| od_rules_002["OD-RULES-002"]
@@ -153,6 +154,7 @@ graph LR
     d_135 -->|"relates-to"| d_138
     d_135 -->|"relates-to"| od_analysis_007["OD-ANALYSIS-007"]
     d_135 -->|"relates-to"| od_capability_007["OD-CAPABILITY-007"]
+    d_135 -->|"relates-to"| od_gate_014
     d_135 -->|"relates-to"| od_host_004
     d_135 -->|"relates-to"| od_rules_004["OD-RULES-004"]
     d_135 -->|"relates-to"| od_rules_005["OD-RULES-005"]
@@ -418,6 +420,9 @@ graph LR
     od_gate_012 -->|"relates-to"| od_gate_006
     od_gate_013 -->|"relates-to"| od_gate_007
     od_gate_013 -->|"relates-to"| od_gate_011
+    od_gate_014 -->|"relates-to"| arc_roadmap_001
+    od_gate_014 -->|"relates-to"| d_135
+    od_gate_014 -->|"relates-to"| od_host_004
     od_host_001["OD-HOST-001"] -->|"relates-to"| od_host_002["OD-HOST-002"]
     od_host_001 -->|"relates-to"| od_host_003["OD-HOST-003"]
     od_host_001 -->|"relates-to"| od_host_004
@@ -431,6 +436,7 @@ graph LR
     od_host_003 -->|"relates-to"| od_host_002
     od_host_004 -->|"relates-to"| arc_harness_001
     od_host_004 -->|"relates-to"| d_135
+    od_host_004 -->|"relates-to"| od_gate_014
     od_host_004 -->|"relates-to"| od_host_001
     od_host_004 -->|"relates-to"| od_host_002
     od_host_004 -->|"relates-to"| od_package_006
@@ -974,6 +980,7 @@ graph LR
     od_gate_011
     od_gate_012
     od_gate_013
+    od_gate_014
     od_host_001
     od_host_002
     od_host_003
