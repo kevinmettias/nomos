@@ -17032,6 +17032,58 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-README-PROFILE-COUNT",
+      "title": "README's nomos-spec-project row still says Fourteen projection profiles; the shipped catalogue holds eighteen",
+      "why": "README.md:70 describes nomos-spec-project as shipping \"Fourteen projection profiles.\" crates/spec/nomos-spec-project/src/catalogue.rs's SHIPPED array holds eighteen entries today (measured directly: grep -c include_str! catalogue.rs = 18, and nomos spec freshness's own output over the two required profiles names sixteen others not built there, 16+2=18), matching OD-SPEC-014's own text (\"eighteen declared profiles\"). OD-PROJECT-001 deliberately does not mechanically check this prose -- it keeps only the band-and-crate-name columns freshness-checked, giving up freshness for descriptive text -- so this drifted silently rather than failing a gate. It is still wrong on its own terms.",
+      "done_when": "README.md's band 14 row for nomos-spec-project states the shipped profile count that matches crates/spec/nomos-spec-project/src/catalogue.rs::SHIPPED.len() at the time of the edit, rather than the stale count.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "README.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-project"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-project"
+        ],
+        "exit_code": 0,
+        "output_tail": "_The_Sidecar_Should_Round_Trip ... ok\ntest determinism::Test_Every_Body_Should_Declare_Itself_Generated ... ok\ntest subjects::Test_A_Subject_Should_See_The_Relations_At_Either_End ... ok\ntest freshness::Test_An_Unchanged_Store_Should_Be_Fresh ... ok\ntest freshness::Test_An_Output_That_Was_Never_Built_Should_Be_Absent ... ok\ntest freshness::Test_A_Changed_Store_Should_Be_Stale ... ok\ntest freshness::Test_A_Stamp_Rewritten_To_Agree_With_An_Edited_Body_Should_Still_Be_Refused ... ok\ntest freshness::Test_An_Edited_Output_Should_Be_Reported_As_Edited ... ok\ntest catalogue::Test_Every_Shipped_Profile_Should_Render_Content_From_The_Store ... ok\ntest determinism::Test_A_Rebuild_Should_Be_Byte_Identical ... ok\ntest subjects::Test_One_Profile_Should_Serve_Every_Subject ... ok\ntest subjects::Test_An_Unresolved_Template_Should_Not_Be_Built ... ok\ntest subjects::Test_Every_Subject_Profile_Should_Render_The_Same_Subject_In_Its_Own_Format ... ok\ntest determinism::Test_Insertion_Order_Should_Not_Reach_The_Output ... ok\ntest determinism::Test_Building_From_A_Fresh_Import_Should_Equal_Building_From_The_Original ... ok\ntest rebuildability::Test_A_Seeded_Store_Should_Answer_For_Exactly_The_Declared_Content_Kinds ... ok\ntest rebuildability::Test_Every_Required_Profile_Should_Render_Over_A_Seeded_Store ... ok\ntest rebuildability::Test_Rendering_Over_A_Seeded_Store_Should_Imply_Reaching_Only_Seeded_Content ... ok\ntest renderers::Test_The_Governing_Records_Should_Project_As_A_Document_Suite ... ok\n\ntest result: ok. 43 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.29s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.12s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_project-90ace1b899f038c8.exe)\n     Running tests\\projections\\main.rs (target\\debug\\deps\\projections-91a00061d9a9372a.exe)\n   Doc-tests nomos_spec_project\n",
+        "verified_at": 1787112262,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "8ef96cf6a0bef90dc505b654fb09a1f6199ae89a"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

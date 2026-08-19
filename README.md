@@ -67,7 +67,7 @@ product only through a knowledge capability, so nothing in the product may name 
 | 13 | `nomos-spec-bundle` | Deterministic JSONL export and import — the portable authority committed to git. |
 | 13 | `nomos-spec-ingest` | Parsers and the manifest gate against the real v14 corpus. |
 | 14 | `nomos-spec-validate` | The `NSV-PRESERVE-*` rules and the run that fails closed. |
-| 14 | `nomos-spec-project` | Fourteen projection profiles, the renderers, and the freshness stamp. |
+| 14 | `nomos-spec-project` | Eighteen projection profiles, the renderers, and the freshness stamp. |
 
 The normalizer was **recovered from the corpus, not chosen**: v14's hash generator does
 not ship, so the algorithm was reconstructed and verified against all 2,533 recorded
