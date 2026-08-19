@@ -19313,6 +19313,114 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-CLI-GATE-TEST-RULE-COUNT-STALE",
+      "title": "nomos-cli's gate test still asserts two shipped rules",
+      "why": "Test_A_Real_Plan_Should_Report_Both_Shipped_Rules asserts rendered.contains(\"rules: 2\") but P13-GATE-REGISTRY-THIRD-RULE composed the registry to three rules; the test now fails on HEAD",
+      "done_when": "cargo test -p nomos-cli passes, the test asserts rules: 3 and checks the dependency-direction rule's presence, and its doc comment no longer says two shipped rules",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/src/gate/tests.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli",
+          "--no-fail-fast"
+        ],
+        "exit_code": 0,
+        "output_tail": "_Builds ... ok\ntest Test_A_Build_That_Cannot_Read_The_Ledger_Should_Not_Rewrite_It ... ok\ntest Test_A_Build_That_Can_Read_The_Ledger_Should_Still_Write_It ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s\n\n\nrunning 5 tests\ntest Test_Claiming_A_Lapsed_Item_Should_Refuse_And_Name_The_Takeover ... ok\ntest Test_A_Lapsed_Item_Should_List_As_Lapsed_And_Be_Takeable ... ok\ntest Test_Taking_Over_A_Lapsed_Item_Should_Record_The_Claim_It_Displaced ... ok\ntest Test_Show_Should_Report_The_Claim_A_Takeover_Displaced ... ok\ntest Test_Takeover_Should_Exit_Three_When_The_Lease_Is_Live_And_Four_When_It_Is_Not_Held ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.14s\n     Running unittests src\\main.rs (target\\debug\\deps\\nomos-6d2838273fb535d9.exe)\n     Running tests\\abandon_is_readable.rs (target\\debug\\deps\\abandon_is_readable-bd6033eed665bf85.exe)\n     Running tests\\add_guarantees_what_it_says.rs (target\\debug\\deps\\add_guarantees_what_it_says-641e0d2a0a217bd1.exe)\n     Running tests\\authoring_surface.rs (target\\debug\\deps\\authoring_surface-6cb74c3764d0a5ef.exe)\n     Running tests\\check_command.rs (target\\debug\\deps\\check_command-07d98298ed960912.exe)\n     Running tests\\freshness.rs (target\\debug\\deps\\freshness-a78dafc4921d28b5.exe)\n     Running tests\\gate_step\\main.rs (target\\debug\\deps\\gate_step-a1943a1e503fff24.exe)\n     Running tests\\list_tells_the_truth.rs (target\\debug\\deps\\list_tells_the_truth-13dbd4b42c31a18d.exe)\n     Running tests\\read_surface.rs (target\\debug\\deps\\read_surface-eea31a3569f203bb.exe)\n     Running tests\\request_submit.rs (target\\debug\\deps\\request_submit-b7ccf29aca7a9ab8.exe)\n     Running tests\\stale_writer_is_refused.rs (target\\debug\\deps\\stale_writer_is_refused-a75d01ec344959bb.exe)\n     Running tests\\takeover_is_recorded.rs (target\\debug\\deps\\takeover_is_recorded-f933ea9d3f5eb4c8.exe)\n",
+        "verified_at": 1787163040,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "aa53b8aefbfddbf5687b2da0c101c6f60bcadfcc"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-LANG-RUST-CARGO-PROVIDER-DOC-STALE",
+      "title": "nomos-lang-rust-cargo's provider.rs still claims it is not composed into Run",
+      "why": "Materialize_Workspace's doc comment says this crate is not yet composed into nomos-check-orchestration's Run; lib.rs already documents the real composition (fixed under P13-LANG-RUST-CARGO-DOC-STALE) but this second file carrying the identical claim was missed",
+      "done_when": "provider.rs's Materialize_Workspace doc comment describes the real composition into Run rather than claiming it is not yet wired",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages/nomos-lang-rust-cargo/src/provider.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lang-rust-cargo",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lang-rust-cargo",
+          "--no-fail-fast"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 10 tests\ntest guarantee::tests::Test_The_Declared_Guarantee_Should_Satisfy_The_Contract_Ceiling ... ok\ntest metadata::tests::Test_Every_Discovered_Package_Should_Carry_A_Manifest_Relative_Root ... ok\ntest metadata::tests::Test_This_Crate_Should_Depend_On_Nomos_Contracts ... ok\ntest metadata::tests::Test_Nomos_Contracts_Should_Have_No_First_Party_Edges ... ok\ntest provider::tests::Test_A_Facts_Path_Should_Be_What_Its_Subject_Was_Addressed_By ... ok\ntest metadata::tests::Test_Edges_Should_Be_In_Canonical_Order ... ok\ntest provider::tests::Test_Every_Workspace_Member_Should_Produce_One_Fact ... ok\ntest provider::tests::Test_A_Fact_Should_Carry_The_Declared_Guarantee ... ok\ntest provider::tests::Test_A_Facts_Subject_Should_Match_Subject_Of_Its_Own_Path ... ok\ntest provider::tests::Test_Two_Runs_Over_The_Same_Tree_Should_Reach_The_Same_Semantic_Inputs ... ok\n\ntest result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s\n\n\nrunning 1 test\ntest Test_An_Edited_Manifests_Old_Fact_Should_Not_Survive_The_Generation_It_Was_Invalidated_At ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.05s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lang_rust_cargo-e8542b0bec8bcf4a.exe)\n     Running tests\\invalidation.rs (target\\debug\\deps\\invalidation-94afb7ef7ae80060.exe)\n   Doc-tests nomos_lang_rust_cargo\n",
+        "verified_at": 1787163025,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "aa53b8aefbfddbf5687b2da0c101c6f60bcadfcc"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

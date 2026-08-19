@@ -47,11 +47,14 @@ pub struct PackageFact
 /// dependency edges, the same shape `nomos_lang_rust::Materialize`'s own doc comment
 /// states for the identical reason.
 ///
-/// Deliberately not itself a `nomos_analysis::MemoryFactStore` writer: this crate is not
-/// yet composed into `nomos-check-orchestration`'s `Run`, which is the only place today
-/// that owns writing to a store, and a function here that took `&mut MemoryFactStore`
-/// would be inventing a second composition root's worth of responsibility this crate does
-/// not have a caller for yet.
+/// Deliberately not itself a `nomos_analysis::MemoryFactStore` writer: this crate is
+/// composed into `nomos-check-orchestration`'s `Run` through that crate's own
+/// `crate::facts::Materialize_Dependencies`, which calls this function over the tree a
+/// check run walked and then loops over the returned `PackageFact`s itself, calling
+/// `store.Materialize` for each one. Writing to a store is that composition root's
+/// responsibility, the same way it already owns `Materialize_Syntax`'s writes; a function
+/// here that took `&mut MemoryFactStore` would be duplicating a decision `Run` already
+/// makes, not filling a gap it left open.
 ///
 /// # Errors
 ///
