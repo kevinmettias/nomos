@@ -3,7 +3,7 @@ id: OD-PACKAGE-008
 type: decision
 title: Whether RulePackage needs its manifest crate now that nomos-package exists, or stays a bare rule bounded to a population of one
 status: open
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - packages
@@ -108,6 +108,33 @@ registered with `nomos_capability::Registry` long before `nomos-lang-package` ga
 manifest to be named in. Whether that registration contract, once built, changes the
 population this record reasons from is itself a fact for a later reader to check, not one
 this record assumes.
+
+## Corroborating Evidence
+
+`code-standards`/`nomos-proto` (`github.com/kevinmettias/nomos-proto`), the Go-era
+predecessor this workspace rebuilds, tried independent per-artifact packaging at
+approximately this population and reversed it, for a concrete technical reason rather than
+a population-of-one caution alone. Its `go.work` carries this comment verbatim, verified
+directly against the file rather than secondhand:
+
+> This file carried 45 entries — one per check — because every check was its own Go module.
+> That boundary was packaging, never design: it forced the gate to `go run` each check, and
+> it is why a shared driver could not simply be imported.
+
+What this shows: a mature, production system directly analogous to `nomos-rules` — checks
+there play the same role rules do here — packaged each unit independently as its own Go
+module, and collapsed that back to one module/one binary because the packaging boundary
+itself broke composition (a shared driver could no longer be `import`ed across it, only
+invoked as a subprocess via `go run`). The reversal was driven by a driver-composition cost,
+not merely by having too few checks to design a schema against.
+
+What this does not show: that `nomos-rules`' own eventual second rule will diverge from
+`Check_Completeness_Mirrors` the same way, or that a `nomos-rule-package` wrapper crate
+would reproduce Go's specific failure — Rust's crate/module system is not Go's, and this
+record's own reasoning above (a `RulePackage`'s contents list containing data corpora and
+executable fixtures no version comparison can reason about) is a different, independently
+sufficient caution. This evidence corroborates waiting for a second rule; it does not by
+itself decide what shape the wait should end in.
 
 ## What Would Decide It
 
