@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:4ebd808fddca4b7b3bc2fa9881fd73678c7ee576531dc37005bd94fcfdfe6141",
-  "inputs_digest": "sha256:78d9b642835ef8587b369b19bf1847dc91a210f31d7183636ee084b27a46fa13",
+  "content_digest": "sha256:17d0dd530d59be927641e3bd128ebf10fc2030d1c0a9c6cf3bd18928f98388be",
+  "inputs_digest": "sha256:a0574de07d492d06da795b1afff0bb2a205fce281ffb8a74d882c77ababa9323",
   "sections": [
     [
       "Documents",
-      131
+      132
     ],
     [
       "Sections",
-      1149
+      1154
     ],
     [
       "Source blocks",
-      4138
+      4151
     ]
   ],
   "inputs": [
@@ -564,6 +564,11 @@
       "content": "documents",
       "identity": "docs/records/OD-RULES-005-whether-a-rules-offer-needs-a-measured-inputs-classification-or-waits-for-a-caching-consumer.md@authored",
       "hash": "sha256:3bcc3aad22947f89bb1436da5b44db13aabd4af1c97a60dbdab28899bbdad057"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md@authored",
+      "hash": "sha256:1c60bc3207e0ff90aa0f20ef9f058999d8820edb3813f565903ef25098fd54ca"
     },
     {
       "content": "documents",
@@ -5399,6 +5404,31 @@
       "content": "headings",
       "identity": "docs/records/OD-RULES-005-whether-a-rules-offer-needs-a-measured-inputs-classification-or-waits-for-a-caching-consumer.md#12",
       "hash": "sha256:0863cb9358d6a7a78b11a49f1531bf3981d1f246ae55934ab926ab1171de089c"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#1",
+      "hash": "sha256:37ef5575febed712f2ef815b4d86d31d6814ae6dfa913c7d14cd004d90fab5f8"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#2",
+      "hash": "sha256:f96ea89bd60ce49c2f8267e41982c49a21c493a20fa33b0a697585c36f65864a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#6",
+      "hash": "sha256:000796182f2ebc850dcd58f21a1541f437dff237f31ac039b3c96ea9f9aa9505"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#9",
+      "hash": "sha256:8a3fc7f67eb034b64cda8647a95d0d23c09bb2ca92badcfb4d6c8e36fa9bc789"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#12",
+      "hash": "sha256:6f8d5c5c71285a9ef1ea3c237ce8a822f305382de3e48f5d01e41aa4d87f887f"
     },
     {
       "content": "headings",
@@ -23614,6 +23644,71 @@
       "content": "blocks",
       "identity": "docs/records/OD-RULES-005-whether-a-rules-offer-needs-a-measured-inputs-classification-or-waits-for-a-caching-consumer.md#13",
       "hash": "sha256:2aa6bdd998a23c1adbe405ce99f18cc7a39908a4b9b940acfab1df0a15836cbd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#1",
+      "hash": "sha256:6776f565a0931bb8f7068328a374946f9f4c97b864afe3a385fdc94dde9d03dd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#3",
+      "hash": "sha256:796d57128a1fb967ea9bc82a1da0ff5fa4cca4e246c0b4252f635538ba86ec28"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#4",
+      "hash": "sha256:301ad691ae1c68629281fdcdfca8e4f4e758e1a73bbd1f16cb3013e30004f3ba"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#5",
+      "hash": "sha256:f861c1d64ffabdddca3d84c0e879824a5da3c557b00498a67fd8ea1a50a51961"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#6",
+      "hash": "sha256:3410589a125ce4b264969343987e63e029f80de6e30da91448b149ee4405900f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#7",
+      "hash": "sha256:52162eaaa841989fba0adb689afe607c8e2bc3d6e5698a36e96e94ca36243bd2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#8",
+      "hash": "sha256:174b9caf496adcee938eb4d8190d4c98afa76cd5bf2fcd87c9153523ff8032d7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#9",
+      "hash": "sha256:b21c34f083f944a8317c5bb99f866d38e2c77a3ce5a1a64810a532456b826658"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#10",
+      "hash": "sha256:28686d9458d812efc0b8390d49b7e64d1d7a8062f1de4f180bb9973887b87eca"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#11",
+      "hash": "sha256:5aab4169c9fb9f94fb74ed4027be0fcbf92c354a0a3e5f8ee7b4cb58fdce4ab4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#12",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#13",
+      "hash": "sha256:34c02826827b79d8853b1e51ea2e3ac78fa20a4fae5066d028dff53162fefd76"
     },
     {
       "content": "blocks",

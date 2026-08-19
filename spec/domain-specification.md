@@ -119,6 +119,7 @@ profile: domain-specification
 | docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md@authored | docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md | authored | 30 | 11 | sha256:c3a3b91dbb03f3f2ff52ab3d4d84186b0bb31760a93024fedee02b48a1b8722f |
 | docs/records/OD-RULES-004-a-rule-package-registers-into-a-declared-registry-extracted-before-a-second-rule-needs-it.md@authored | docs/records/OD-RULES-004-a-rule-package-registers-into-a-declared-registry-extracted-before-a-second-rule-needs-it.md | authored | 17 | 6 | sha256:35e6671b64241f3b351b2f75159a6860300ee83d671151305c075f1a1dd398a6 |
 | docs/records/OD-RULES-005-whether-a-rules-offer-needs-a-measured-inputs-classification-or-waits-for-a-caching-consumer.md@authored | docs/records/OD-RULES-005-whether-a-rules-offer-needs-a-measured-inputs-classification-or-waits-for-a-caching-consumer.md | authored | 13 | 5 | sha256:3bcc3aad22947f89bb1436da5b44db13aabd4af1c97a60dbdab28899bbdad057 |
+| docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md@authored | docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md | authored | 13 | 5 | sha256:1c60bc3207e0ff90aa0f20ef9f058999d8820edb3813f565903ef25098fd54ca |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md@authored | docs/records/OD-SPEC-001-the-storage-backend-question.md | authored | 11 | 5 | sha256:e4feddab256024ea38e21849120fdd52d0ddf17d4e3f69cfb24eb4c8e766c8ae |
 | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md@authored | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md | authored | 20 | 7 | sha256:2c45051e43390556bfd68865152580e1ae09c2e82dc94bb20e65cdbf60d69a10 |
 | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md@authored | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md | authored | 23 | 7 | sha256:481ffd62b02df705439b4ef914adb21e24894d1d3f0295754fc13f7d95c89c85 |
@@ -1091,6 +1092,11 @@ profile: domain-specification
 | docs/records/OD-RULES-005-whether-a-rules-offer-needs-a-measured-inputs-classification-or-waits-for-a-caching-consumer.md#6 | authored | 2 | Current Position |
 | docs/records/OD-RULES-005-whether-a-rules-offer-needs-a-measured-inputs-classification-or-waits-for-a-caching-consumer.md#9 | authored | 2 | What Would Decide It |
 | docs/records/OD-RULES-005-whether-a-rules-offer-needs-a-measured-inputs-classification-or-waits-for-a-caching-consumer.md#12 | authored | 2 | Status |
+| docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#1 | authored | 1 | Whether RuleOffer needs a declared EnforcementPlacementRationale, or waits for a second rule |
+| docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#2 | authored | 2 | Question |
+| docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#6 | authored | 2 | Current Position |
+| docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#9 | authored | 2 | What Would Decide It |
+| docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#12 | authored | 2 | Status |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#1 | authored | 1 | Whether the specification store gains a second backend, and what would decide it |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#2 | authored | 2 | Question |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#4 | authored | 2 | Current Position |
@@ -31875,6 +31881,123 @@ own evidence rather than folded into this record's answer.
 Open. This question is deliberately left open rather than resolved either way: unlike
 `OD-PACKAGE-006`, no direction has been given to build ahead of need here, and no consumer
 exists to build against. Revisit when either trigger above arrives.
+
+### docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#1
+
+*revision: authored · kind: heading · heading: Whether RuleOffer needs a declared EnforcementPlacementRationale, or waits for a second rule · hash: sha256:6776f565a0931bb8f7068328a374946f9f4c97b864afe3a385fdc94dde9d03dd*
+
+# Whether RuleOffer needs a declared EnforcementPlacementRationale, or waits for a second rule
+
+### docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#2
+
+*revision: authored · kind: heading · heading: Whether RuleOffer needs a declared EnforcementPlacementRationale, or waits for a second rule / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#3
+
+*revision: authored · kind: prose · heading: Whether RuleOffer needs a declared EnforcementPlacementRationale, or waits for a second rule / Question · hash: sha256:796d57128a1fb967ea9bc82a1da0ff5fa4cca4e246c0b4252f635538ba86ec28*
+
+`docs/nomos-spec-internal-artifacts/01_authoring/markdown_volumes/
+04-04-packages-providers-rules-and-applicability/` — the same corpus tree this workspace
+already treats as its v14 corpus — states requirement `PKG-028`: every proposed
+`RulePackage` normative contract must carry an `EnforcementPlacementRationale`, stating why
+the rule is not better solved by the compiler, the type system, the build, a formatter, or a
+linter.
+
+### docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#4
+
+*revision: authored · kind: prose · heading: Whether RuleOffer needs a declared EnforcementPlacementRationale, or waits for a second rule / Question · hash: sha256:301ad691ae1c68629281fdcdfca8e4f4e758e1a73bbd1f16cb3013e30004f3ba*
+
+`crates/rules/nomos-rules/src/registry.rs` (`OD-RULES-004`) carries `RuleOffer{rule,
+contract_record, contract_record_version}` with no such field, and nothing in
+`nomos-rules` today requires a rule to justify why it exists as a *rule* rather than as one
+of those alternatives. `crates/rules/nomos-rules/src/mirror.rs`'s own module doc gives an
+informal version of this justification in prose for `Check_Completeness_Mirrors` — that a
+declared universe's coverage cannot be verified by the compiler, because the claim is about
+what the source *fails to name*, not about what it states — but that reasoning lives in a
+doc comment a reader has to find, not in a field a registration carries.
+
+### docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#5
+
+*revision: authored · kind: prose · heading: Whether RuleOffer needs a declared EnforcementPlacementRationale, or waits for a second rule / Question · hash: sha256:f861c1d64ffabdddca3d84c0e879824a5da3c557b00498a67fd8ea1a50a51961*
+
+The open question is whether `RuleOffer` gains a declared
+`EnforcementPlacementRationale`-shaped field now, before nomos-rules' rules and any future
+rule package multiply the migration cost of adding it later, or whether it waits for a
+second rule, or a rule package, to make the absence concrete.
+
+### docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#6
+
+*revision: authored · kind: heading · heading: Whether RuleOffer needs a declared EnforcementPlacementRationale, or waits for a second rule / Current Position · hash: sha256:3410589a125ce4b264969343987e63e029f80de6e30da91448b149ee4405900f*
+
+## Current Position
+
+### docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#7
+
+*revision: authored · kind: prose · heading: Whether RuleOffer needs a declared EnforcementPlacementRationale, or waits for a second rule / Current Position · hash: sha256:52162eaaa841989fba0adb689afe607c8e2bc3d6e5698a36e96e94ca36243bd2*
+
+`registry.rs`'s own module doc states plainly that nothing consults `RuleOffer` yet and
+`Run()` stays hand-written and unconditional — the same position `OD-RULES-005` already
+found for the adjacent Inputs-classification question on this identical struct. No call
+site outside `registry.rs`'s own test helper constructs a `RuleOffer` today; `nomos-rules`'
+one real rule, `Check_Completeness_Mirrors`, does not register one.
+
+### docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#8
+
+*revision: authored · kind: prose · heading: Whether RuleOffer needs a declared EnforcementPlacementRationale, or waits for a second rule / Current Position · hash: sha256:174b9caf496adcee938eb4d8190d4c98afa76cd5bf2fcd87c9153523ff8032d7*
+
+This is the same population-of-two shape `OD-PACKAGE-006` originally named for
+`KNOWN_PROVIDERS`, and the shape `OD-RULES-005` already declined to extend the plugin-
+enablement direction to. That direction is about the seam a rule package registers
+through — `RuleRegistry::Offer` already accepts a `RuleOffer` today with no rationale field
+present, so a rule package can register fully without one existing. An
+`EnforcementPlacementRationale` is a contract-quality concern — a stronger requirement on
+what a registered rule must state about itself — not a precondition for the seam existing at
+all, the same distinction `OD-RULES-005` drew for Inputs. Nothing about a second rule
+package's ability to register is blocked by this absence.
+
+### docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#9
+
+*revision: authored · kind: heading · heading: Whether RuleOffer needs a declared EnforcementPlacementRationale, or waits for a second rule / What Would Decide It · hash: sha256:b21c34f083f944a8317c5bb99f866d38e2c77a3ce5a1a64810a532456b826658*
+
+## What Would Decide It
+
+### docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#10
+
+*revision: authored · kind: prose · heading: Whether RuleOffer needs a declared EnforcementPlacementRationale, or waits for a second rule / What Would Decide It · hash: sha256:28686d9458d812efc0b8390d49b7e64d1d7a8062f1de4f180bb9973887b87eca*
+
+A second rule is the natural trigger. `Check_Completeness_Mirrors` is the only rule in this
+tree with three recorded historical instances to test a judgment against — a genuinely
+different second rule, native or from a package, would be the first real case where two
+rules' rationales could be compared side by side, which is what would tell whether a closed,
+structured field is worth the migration or whether `mirror.rs`'s own prose-doc-comment
+pattern already carries the weight PKG-028 wants.
+
+### docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#11
+
+*revision: authored · kind: prose · heading: Whether RuleOffer needs a declared EnforcementPlacementRationale, or waits for a second rule / What Would Decide It · hash: sha256:5aab4169c9fb9f94fb74ed4027be0fcbf92c354a0a3e5f8ee7b4cb58fdce4ab4*
+
+A second, independent trigger: if a rule package's own review process — human or
+mechanical — is found to need to ask "why is this a rule and not a lint" as a gate a
+registration must pass, rather than as a question a reviewer asks by reading source. If that
+concrete review need surfaces before a second rule ships, it argues for building the field
+for a different reason than the one considered and declined here.
+
+### docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#12
+
+*revision: authored · kind: heading · heading: Whether RuleOffer needs a declared EnforcementPlacementRationale, or waits for a second rule / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#13
+
+*revision: authored · kind: prose · heading: Whether RuleOffer needs a declared EnforcementPlacementRationale, or waits for a second rule / Status · hash: sha256:34c02826827b79d8853b1e51ea2e3ac78fa20a4fae5066d028dff53162fefd76*
+
+Open. This question is deliberately left open rather than resolved either way: unlike
+`OD-PACKAGE-006`, the plugin-enablement direction does not reach it — a rule package can
+already register fully without this field existing — and no second rule or rule package
+exists to check the design against. Revisit when either trigger above arrives.
 
 ### docs/records/OD-SPEC-001-the-storage-backend-question.md#1
 
