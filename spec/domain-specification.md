@@ -121,7 +121,7 @@ profile: domain-specification
 | docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md@authored | docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md | authored | 30 | 11 | sha256:c3a3b91dbb03f3f2ff52ab3d4d84186b0bb31760a93024fedee02b48a1b8722f |
 | docs/records/OD-RULES-004-a-rule-package-registers-into-a-declared-registry-extracted-before-a-second-rule-needs-it.md@authored | docs/records/OD-RULES-004-a-rule-package-registers-into-a-declared-registry-extracted-before-a-second-rule-needs-it.md | authored | 17 | 6 | sha256:35e6671b64241f3b351b2f75159a6860300ee83d671151305c075f1a1dd398a6 |
 | docs/records/OD-RULES-005-whether-a-rules-offer-needs-a-measured-inputs-classification-or-waits-for-a-caching-consumer.md@authored | docs/records/OD-RULES-005-whether-a-rules-offer-needs-a-measured-inputs-classification-or-waits-for-a-caching-consumer.md | authored | 13 | 5 | sha256:3bcc3aad22947f89bb1436da5b44db13aabd4af1c97a60dbdab28899bbdad057 |
-| docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md@authored | docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md | authored | 13 | 5 | sha256:1c60bc3207e0ff90aa0f20ef9f058999d8820edb3813f565903ef25098fd54ca |
+| docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md@authored | docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md | authored | 18 | 6 | sha256:5e7bde3ad034017040659d44bc4b044696c4a0b33830e8596bd67906a2d2ac4c |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md@authored | docs/records/OD-SPEC-001-the-storage-backend-question.md | authored | 11 | 5 | sha256:e4feddab256024ea38e21849120fdd52d0ddf17d4e3f69cfb24eb4c8e766c8ae |
 | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md@authored | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md | authored | 20 | 7 | sha256:2c45051e43390556bfd68865152580e1ae09c2e82dc94bb20e65cdbf60d69a10 |
 | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md@authored | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md | authored | 23 | 7 | sha256:481ffd62b02df705439b4ef914adb21e24894d1d3f0295754fc13f7d95c89c85 |
@@ -1109,7 +1109,8 @@ profile: domain-specification
 | docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#2 | authored | 2 | Question |
 | docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#6 | authored | 2 | Current Position |
 | docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#9 | authored | 2 | What Would Decide It |
-| docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#12 | authored | 2 | Status |
+| docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#12 | authored | 2 | Resolution |
+| docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#17 | authored | 2 | Status |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#1 | authored | 1 | Whether the specification store gains a second backend, and what would decide it |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#2 | authored | 2 | Question |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#4 | authored | 2 | Current Position |
@@ -32326,18 +32327,97 @@ for a different reason than the one considered and declined here.
 
 ### docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#12
 
+*revision: authored · kind: heading · heading: Whether RuleOffer needs a declared EnforcementPlacementRationale, or waits for a second rule / Resolution · hash: sha256:5d8184015dfef929c99053e3163c9dcd5080bb6652e3bcaddfdecb6fe0ddab17*
+
+## Resolution
+
+### docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#13
+
+*revision: authored · kind: prose · heading: Whether RuleOffer needs a declared EnforcementPlacementRationale, or waits for a second rule / Resolution · hash: sha256:15325d251b482bfc1e9ad08e9cfe5c4e43183cc95f3080461791a74d9b2ef9fe*
+
+Accepted, on the trigger this record itself named. `crates/rules/nomos-rules/src/naming.rs`
+(`Check_Naming_Convention`, `P13-RULE-NAMING-CONVENTION`) is now nomos-rules' second real
+rule, and the side-by-side comparison this record asked for is possible on real evidence
+rather than a population of one.
+
+### docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#14
+
+*revision: authored · kind: prose · heading: Whether RuleOffer needs a declared EnforcementPlacementRationale, or waits for a second rule / Resolution · hash: sha256:29b9c49d8426bc0ad6a9545a777067ef72e801e55b076bdd2002b856c5d1afe1*
+
+The comparison does not show what the "Current Position" section above predicted. It is not
+that both rules carry the same informal-prose pattern; the two carry placement rationale in
+genuinely different shapes. `naming.rs` is explicit and structurally marked: its module doc
+opens by naming exactly what PKG-028 asks for — "the one rustc lint that would have caught a
+deviation from Rust's own convention... is turned off... and nothing was turned on to check
+the convention that replaced it. This rule is that check" — and carries a dedicated `# Why
+this has no CONTRACT_RECORD` section besides. `mirror.rs`, re-read for this resolution, does
+not: nowhere in `mirror.rs` or its `mirror/` submodules does the text name the compiler, the
+type system, a formatter or a linter, or otherwise frame itself against PKG-028's alternative
+list. Its module doc argues *what* the rule is for — "a false claim of coverage is worse than
+an admitted gap" — not why that judgment could not have been placed somewhere other than a
+rule. The "informal version of this justification" this record's own "Question" section
+credited to `mirror.rs` is this resolution's own paraphrase of that reasoning, not a
+quotation, and does not hold up as one on a second, closer read. `D-134`, the contract
+`mirror.rs` cites by `CONTRACT_RECORD`, does not carry a `PKG-028`-shaped rationale either.
+
+### docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#15
+
+*revision: authored · kind: prose · heading: Whether RuleOffer needs a declared EnforcementPlacementRationale, or waits for a second rule / Resolution · hash: sha256:fdd3709f2d9937d20e59ebe4a465271684726313043481e9c39d9f5258f8da74*
+
+That is a real inconsistency, not a confirmation that prose already carries the weight
+uniformly — the two rules genuinely disagree about whether this gets written down at all,
+which is closer to the risk a structured field would guard against than to evidence a field
+is unnecessary. It does not change the answer, for a narrower reason than "prose is
+consistent": a field on `RuleOffer` would not fix this particular inconsistency, because
+`RuleOffer` is a runtime registration struct — `rule`, `contract_record`,
+`contract_record_version` — populated at the call site that offers a rule into a
+`RuleRegistry`, not the rule's normative contract itself. PKG-028 asks for the rationale on
+"every proposed `RulePackage` normative contract," the record a rule cites (`D-134` for
+`Check_Completeness_Mirrors`; nothing versioned for `Check_Naming_Convention`, which cites
+`README.md` prose instead and says why in its own `# Why this has no CONTRACT_RECORD`
+section). Adding a `String` field to `RuleOffer` would let a registration carry a rationale
+that nothing checks for content, the same "a plausible list would be indistinguishable from
+a measured one while carrying none of the evidence" concern `OD-RULES-005` already raised
+against a parallel field on the same struct — it would prove a caller typed something at
+`Offer()` time, not that the reasoning is real, is current, or was ever the rule author's
+actual justification, and it would not touch `mirror.rs`'s own already-written, already-
+inconsistent module doc at all. The gap this comparison surfaced is a documentation-
+consistency gap in the two rules' own module docs and (for `mirror.rs`) in `D-134` itself,
+not a registration-struct gap `RuleOffer` is positioned to close.
+
+### docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#16
+
+*revision: authored · kind: prose · heading: Whether RuleOffer needs a declared EnforcementPlacementRationale, or waits for a second rule / Resolution · hash: sha256:0effc6f53b03a9a21dc05aceab9192e7905f78e55c673ae051591286a7dad139*
+
+`RuleOffer` gains no new field. The registration seam `OD-RULES-004` built is unchanged, and
+a rule package can register fully today exactly as it could before this resolution, which is
+the distinction `OD-RULES-005` already drew and this resolution applies again: the standing
+direction to build language- and rule-plugin infrastructure ahead of a second real instance
+is about that seam existing, not about mechanically enforcing every corpus-named quality
+field the moment a second data point makes it nameable. Whether `mirror.rs`'s own module doc
+or `D-134` should be brought into line with `naming.rs`'s more explicit shape is a documentation
+question about one existing rule, left to whoever next touches `mirror.rs`'s contract, and is
+not this record's own question to reach.
+
+### docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#17
+
 *revision: authored · kind: heading · heading: Whether RuleOffer needs a declared EnforcementPlacementRationale, or waits for a second rule / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#13
+### docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#18
 
-*revision: authored · kind: prose · heading: Whether RuleOffer needs a declared EnforcementPlacementRationale, or waits for a second rule / Status · hash: sha256:34c02826827b79d8853b1e51ea2e3ac78fa20a4fae5066d028dff53162fefd76*
+*revision: authored · kind: prose · heading: Whether RuleOffer needs a declared EnforcementPlacementRationale, or waits for a second rule / Status · hash: sha256:5c7e22709885f1eb5ead37b124109cd427123600dd7a8332b8379276bb2563a2*
 
-Open. This question is deliberately left open rather than resolved either way: unlike
-`OD-PACKAGE-006`, the plugin-enablement direction does not reach it — a rule package can
-already register fully without this field existing — and no second rule or rule package
-exists to check the design against. Revisit when either trigger above arrives.
+Accepted. The trigger this record named — a second, genuinely different rule — has arrived
+and was compared against the first on real evidence, not speculation. The comparison argues
+against a structured `EnforcementPlacementRationale` field on `RuleOffer` for a narrower
+reason than originally anticipated: not because the two rules already agree, but because the
+inconsistency between them is a documentation gap in each rule's own module doc and
+governing contract, which a field on a runtime registration struct would not close. The
+second, independent trigger this record also named — a rule package's own review process
+needing this as a mechanical gate — has still not arrived, and would still argue for
+building the field on its own evidence rather than this comparison's, should it arrive.
 
 ### docs/records/OD-SPEC-001-the-storage-backend-question.md#1
 

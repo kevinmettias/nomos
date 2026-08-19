@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:7c5b506215c0757b588fbfb2a94573f161947723d5bddef324b57b2a15f6bab4",
-  "inputs_digest": "sha256:cf96670d955af495759ce5fbd03cc0e0b8bfbf94f6ea525bd8a1a02a2cfb9574",
+  "content_digest": "sha256:1aca6ea52f13c6484d9a27853f89a052fead03f076c2ecb8e0a18c61b888ff15",
+  "inputs_digest": "sha256:a70060f993d6724bf2c61e7d72818e495bf10e2be720a5c441db66d4fb5a8358",
   "sections": [
     [
       "Documents",
@@ -12,11 +12,11 @@
     ],
     [
       "Sections",
-      1165
+      1166
     ],
     [
       "Source blocks",
-      4184
+      4189
     ]
   ],
   "inputs": [
@@ -578,7 +578,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md@authored",
-      "hash": "sha256:1c60bc3207e0ff90aa0f20ef9f058999d8820edb3813f565903ef25098fd54ca"
+      "hash": "sha256:5e7bde3ad034017040659d44bc4b044696c4a0b33830e8596bd67906a2d2ac4c"
     },
     {
       "content": "documents",
@@ -5493,7 +5493,12 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#12",
-      "hash": "sha256:6f8d5c5c71285a9ef1ea3c237ce8a822f305382de3e48f5d01e41aa4d87f887f"
+      "hash": "sha256:8f504ff66ba82d8790c12f99a716dbfb3f8405ad080fc5ad91e7a6fe767d72bd"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#17",
+      "hash": "sha256:b631da4aaecff8f4afa5cbff906ba8a8082bd9412d08b188feb26e4ded58a8c6"
     },
     {
       "content": "headings",
@@ -23933,12 +23938,37 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#12",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:5d8184015dfef929c99053e3163c9dcd5080bb6652e3bcaddfdecb6fe0ddab17"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#13",
-      "hash": "sha256:34c02826827b79d8853b1e51ea2e3ac78fa20a4fae5066d028dff53162fefd76"
+      "hash": "sha256:15325d251b482bfc1e9ad08e9cfe5c4e43183cc95f3080461791a74d9b2ef9fe"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#14",
+      "hash": "sha256:29b9c49d8426bc0ad6a9545a777067ef72e801e55b076bdd2002b856c5d1afe1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#15",
+      "hash": "sha256:fdd3709f2d9937d20e59ebe4a465271684726313043481e9c39d9f5258f8da74"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#16",
+      "hash": "sha256:0effc6f53b03a9a21dc05aceab9192e7905f78e55c673ae051591286a7dad139"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#17",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#18",
+      "hash": "sha256:5c7e22709885f1eb5ead37b124109cd427123600dd7a8332b8379276bb2563a2"
     },
     {
       "content": "blocks",
