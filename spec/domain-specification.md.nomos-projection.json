@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:e3591346268697660315f72a0246ead4fbda7b8c2971006b5bb3a5b43448ce02",
-  "inputs_digest": "sha256:aae01366b61cd2a251b364865edfbf3031e9f4537feb6118ee81749dad081733",
+  "content_digest": "sha256:987996c0307a0f8d0863b68815e80a0ef6d1c9a6f8fc781364b2a32480a52eff",
+  "inputs_digest": "sha256:f9b4400c20e8c6f5b0a0aebbc3f867854360a8769fbd9cf959365a7908ad3bfe",
   "sections": [
     [
       "Documents",
-      134
+      135
     ],
     [
       "Sections",
-      1168
+      1180
     ],
     [
       "Source blocks",
-      4204
+      4233
     ]
   ],
   "inputs": [
@@ -44,6 +44,11 @@
       "content": "documents",
       "identity": "docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md@authored",
       "hash": "sha256:1931b6cbe939acaa26774b46b8533002d2ff588626d1e25834dd6b8f8dc5b802"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md@authored",
+      "hash": "sha256:da7896730f15d10a82134602b8f31b4faabdfed9bac80985da9378e13a91f9e5"
     },
     {
       "content": "documents",
@@ -949,6 +954,66 @@
       "content": "headings",
       "identity": "docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#28",
       "hash": "sha256:5202ba6e3e2fd43cd442eb23d85ac05f2cb3ad3511a5ca0caf1e8fcbb5f5b0b0"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#1",
+      "hash": "sha256:bd2c3e2216faa03a022688823e54c748bded3c4a3341576188e3113b7d401fda"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#2",
+      "hash": "sha256:4de55d5231bcfd4a376074d90de55ef81f08737f78b608b965b2159bb3e60382"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#5",
+      "hash": "sha256:aa173775b0daef33a5dd22f89ab059748ffa5e1c3d74ad21a77a970d4ade1a52"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#9",
+      "hash": "sha256:a8222be17624ee13204321c6e39b99d2262fb1e7b25fe7a8ccb41de68378e10c"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#14",
+      "hash": "sha256:591bb4d177212252f80f8c792972565bae600cc179ad78ab4c7bda967d9096bf"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#15",
+      "hash": "sha256:f12bdb34ab3a0aeca8c26547e1395897164cf5e117f8418a6afe7852b783395b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#17",
+      "hash": "sha256:c2d6564c92f14cdec122c9428fa1bdd1af8034c610fe6dd37cca3af618fe5cf9"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#19",
+      "hash": "sha256:4c00b9910733704c1582e20075a97468a434815607118738f7c4b15e91e3d155"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#22",
+      "hash": "sha256:6f5ddfed1499549367b93e03c21a06300b774f11e0195a690b61d5e2658bade2"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#24",
+      "hash": "sha256:6e43eeb44c8ccbb2364a5c4283f6ea5392055d1dc7b5b984eaa351cc331db1c8"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#26",
+      "hash": "sha256:04400cd88b1d805f6fad2789b3c8f08b6b826a4e81a615fc83cdfe0b2cd3f334"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#28",
+      "hash": "sha256:c77ba0d6fe4fd4025ba0db22c622a65f127a9deb2c0d41a125b02e8916ad9d74"
     },
     {
       "content": "headings",
@@ -7464,6 +7529,151 @@
       "content": "blocks",
       "identity": "docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#31",
       "hash": "sha256:ed4fd4ccc2058b20df5f1675de19a290868e849d3d9d8af37e97a9dadb15ac38"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#1",
+      "hash": "sha256:b3f2c2316a19e375941a6e5fb45ecb0b930b0d82bb777efefff646ceebe08dfd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#3",
+      "hash": "sha256:9a717aaae4722ae311c7e4b32f16ffbd86bd2e8c5aff5291af02e0cec1a6d6ce"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#4",
+      "hash": "sha256:80bb12abfe017ba79580f09b79babd0639d31a6376cfd9ef11f003718a8de7e7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#5",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#6",
+      "hash": "sha256:93d7264c1560ba2a90cd047fda36bb6624b0bb72d8b670296cc4ca0e89647842"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#7",
+      "hash": "sha256:23c962560ecb5deaaab530b9c33a276d58aee71d15c416f4c27adabfd4a5be91"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#8",
+      "hash": "sha256:bfba1dfc210aba70c9e94a8f42f29650773fdda881afeb90997e0ca6a97aa72f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#9",
+      "hash": "sha256:f49232158bb3013964985ffbee9533dbeb7e8defbc8a01122e0600bcd026ecad"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#10",
+      "hash": "sha256:f12fddc815ea45b8ef72a8fbb13771d02e4b6e1b73a34561de7da4e8fcb910be"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#11",
+      "hash": "sha256:5c6b2a4271d474eb6c7a75af5a596cdc2516a68bf887acf2be00ecf986018790"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#12",
+      "hash": "sha256:fa58307736ff0354411dea4876a29e9ebc9cb6b465f763ecf243f0e6d4308738"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#13",
+      "hash": "sha256:83268947fda65ddac8215a7dfa0ba04abcfeb4e79f2fda08cfaab453f461445c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#14",
+      "hash": "sha256:2fa515738e75c4a2ea1a1f6469456294f2a52f3f0ca4647fa1adacc6a56d62fb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#15",
+      "hash": "sha256:a7a8fc26ad52ecc7364d602e2bc8886273c05553d56538c4c86633ec0a1922ea"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#16",
+      "hash": "sha256:aa4a0fbeaf7ca6c81fe4b105b88ca948a03dd1654ca9731f6b13096974ebd562"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#17",
+      "hash": "sha256:01119f1b47a8cf183d5d7680fac0bfda41a7dfd097e070aeb1cd067ff96a076a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#18",
+      "hash": "sha256:260a394d988502913e4bf49ea4f282c6e6e4323c22b1d00e608f5887df2d0d09"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#19",
+      "hash": "sha256:fb6b8dcbcdb1980de879846c8786811638f6eb705def798e775942ae9f4520e3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#20",
+      "hash": "sha256:ae3ea05bd49121338d2c471db8a98b5bcf02dd5d6ea871e797f3575c5619667e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#21",
+      "hash": "sha256:21d52728f757d3512f11b578702632c2408fc114268ebe5ee0827f4327c9e3f0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#22",
+      "hash": "sha256:01d2eb6abdb8ccf8a95c94ac6d974ba94f491d07a3b3d363d5b52143365ff943"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#23",
+      "hash": "sha256:f1ef98c33024d1d024da224fa74a802f9102ea96d421c39f58e4283913f98179"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#24",
+      "hash": "sha256:884a13c6cf313e032ad54e45cddcb5edadde2e561b23f73cc003b95b46926bd8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#25",
+      "hash": "sha256:520e202f5edf4bfc3a3d091297a2850403c1c7ba11d7004765ea38a0a151d320"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#26",
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#27",
+      "hash": "sha256:1940678addeff306b36101c26ebc12432ac9a49b7ffcedf370eced4e0bd15743"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#28",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#29",
+      "hash": "sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3"
     },
     {
       "content": "blocks",

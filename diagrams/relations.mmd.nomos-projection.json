@@ -3,12 +3,12 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:dafe85f9615bc385bf287e8e91398f0de574fb07472d8f7e2a9f03ecd654bc4c",
-  "inputs_digest": "sha256:6c720fcc0608ddb6131c4f5041e18a6be332892a151505165a76f77ff6119db7",
+  "content_digest": "sha256:6ead28043465dbb8e1423094b20eedfe4c41e81bb45127a4bef53833bbe7172e",
+  "inputs_digest": "sha256:7dda6282473d6447e7feb88731a7197e8fa9cee694a1d8edff57fca992566b9e",
   "sections": [
     [
       "Relations",
-      884
+      900
     ],
     [
       "Decisions",
@@ -100,6 +100,11 @@
       "content": "relations",
       "identity": "ARC-ECOSYSTEM-001 relates-to ARC-HARNESS-001",
       "hash": "sha256:41adc75149450bc5428315ceab3bce9343743d95db2563f3768e826bdd9dc70d"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-ECOSYSTEM-001 relates-to ARC-ROADMAP-001",
+      "hash": "sha256:3bcbdedcd2c87ac0bbf59b84403d8618a370fa44e27eeb54ef71134d0d294dc5"
     },
     {
       "content": "relations",
@@ -260,6 +265,46 @@
       "content": "relations",
       "identity": "ARC-HARNESS-001 relates-to OD-PLATFORM-001",
       "hash": "sha256:aa94e7c1fe05e7b81022ed71ccfe5e43eebdce429ecc79c2a62a95674bd1287c"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-ROADMAP-001 relates-to ARC-ECOSYSTEM-001",
+      "hash": "sha256:edb90386218979196b8068066a3b62d607296c7bff2c9a9d62d9385390070d9b"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-ROADMAP-001 relates-to D-132",
+      "hash": "sha256:f384bb2996fa7794ea819defc1efba71c0e4ffe23ca01a10be2e5940bb727fe7"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-ROADMAP-001 relates-to OD-GATE-004",
+      "hash": "sha256:14b4835ad08f1615cf952b79a8d6f962e77788d26de34afc947860fbe620283a"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-ROADMAP-001 relates-to OD-PACKAGE-008",
+      "hash": "sha256:7e09946fc5f6874fd32caed83a749ba2eca4629dbd2e20b21a9cc66a3ff8aeef"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-ROADMAP-001 relates-to OD-RULES-001",
+      "hash": "sha256:1a9f0fb4af0d67d703ee8e45a7715c6a620c537efc6517a728baa09cb7faae05"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-ROADMAP-001 relates-to OD-RULES-002",
+      "hash": "sha256:4be478ef53a2c9286df6afdb1ffbbecef4437269b43c9b50d4133543136a42ed"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-ROADMAP-001 relates-to OD-TRACE-001",
+      "hash": "sha256:d4505b525744035289141b5efc4b2aaba194444c6d455cd235511454da35e533"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-ROADMAP-001 relates-to OD-TRACE-002",
+      "hash": "sha256:c66ac56714e7a2a0bb744d5bb80138f6a59fb7a4a960cf15bb731046c00424ef"
     },
     {
       "content": "relations",
@@ -585,6 +630,11 @@
       "content": "relations",
       "identity": "D-132 affects OD-SPEC-002",
       "hash": "sha256:ad6f9d08f54f456941f3f9084e7ffef282c55251681d6d695138d98bd50450c4"
+    },
+    {
+      "content": "relations",
+      "identity": "D-132 relates-to ARC-ROADMAP-001",
+      "hash": "sha256:2af30e066a0f3b6a13efa6c56bbd12db6519a8b5778dcff647b897493b4bcec0"
     },
     {
       "content": "relations",
@@ -1725,6 +1775,11 @@
       "content": "relations",
       "identity": "OD-GATE-003 relates-to OD-GATE-004",
       "hash": "sha256:c919df019624a05b3fe1e719aa3e9ad108deb07fefa6c6a9434577af407d6de4"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-GATE-004 relates-to ARC-ROADMAP-001",
+      "hash": "sha256:ace6db3527856ad12b53eb9aad401d1fd88df60d0b049c1111a3717e551e2703"
     },
     {
       "content": "relations",
@@ -3458,6 +3513,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-PACKAGE-008 relates-to ARC-ROADMAP-001",
+      "hash": "sha256:57a96d9418fee072c8bfa5a4eec9563b8c751ce1b24bb8b8f09b102a0ad0d370"
+    },
+    {
+      "content": "relations",
       "identity": "OD-PACKAGE-008 relates-to D-134",
       "hash": "sha256:be5dbf1e09130bc568af6330b222997af54712737878dbc0f45e59e1c86bebab"
     },
@@ -3618,6 +3678,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-RULES-001 relates-to ARC-ROADMAP-001",
+      "hash": "sha256:e7067238b43ce72bc77c4de2c87f9a65f3f774b8f28f55f47756f2dfcc4ff23b"
+    },
+    {
+      "content": "relations",
       "identity": "OD-RULES-001 relates-to OD-CAPABILITY-002",
       "hash": "sha256:09a924a2a9e3c6500bb5f1514e8576c1ea868b1cfa2c7b09580dbf173fb4818b"
     },
@@ -3680,6 +3745,11 @@
       "content": "relations",
       "identity": "OD-RULES-002 affects OD-RULES-001",
       "hash": "sha256:854a85bb4e132346517d2c9cef200dd811ba0b17c9477a99d5780452844d8d10"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-RULES-002 relates-to ARC-ROADMAP-001",
+      "hash": "sha256:affae3cd2370927cc43965a5b032b4009f783c5f4f7d23698148443ead411097"
     },
     {
       "content": "relations",
@@ -4248,6 +4318,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-TRACE-001 relates-to ARC-ROADMAP-001",
+      "hash": "sha256:fe5d775d4f20ff4d3fc1895a801b849f914c6f1a75f2797d13fa989c636e41ab"
+    },
+    {
+      "content": "relations",
       "identity": "OD-TRACE-001 relates-to ARC-SPECDB-001",
       "hash": "sha256:8a9cac077e10f3784d23025214b209c23e1e11a3421181178001ff3c21c7bb6e"
     },
@@ -4310,6 +4385,11 @@
       "content": "relations",
       "identity": "OD-TRACE-001 relates-to OD-TRACE-005",
       "hash": "sha256:57a639c382b4e2f4b6f2dd849c2b5d2f521af3a43b8a029512ab695e0f984943"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-TRACE-002 relates-to ARC-ROADMAP-001",
+      "hash": "sha256:6428508fb0107e382feae81e0f4a830d3f242d4e13afcbd186a9fb9c162aa949"
     },
     {
       "content": "relations",

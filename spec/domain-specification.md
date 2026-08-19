@@ -15,6 +15,7 @@ profile: domain-specification
 | docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md@authored | docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md | authored | 73 | 15 | sha256:9c180099cbe0676f26fbb605bcf1696c99b2ff6fb542c0d367a429cfeb236d87 |
 | docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md@authored | docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md | authored | 22 | 9 | sha256:617fdf9751303c87338720a7a50927cab3bfa84d19c92ec42cc43a7876566a9e |
 | docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md@authored | docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md | authored | 31 | 8 | sha256:1931b6cbe939acaa26774b46b8533002d2ff588626d1e25834dd6b8f8dc5b802 |
+| docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md@authored | docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md | authored | 29 | 12 | sha256:da7896730f15d10a82134602b8f31b4faabdfed9bac80985da9378e13a91f9e5 |
 | docs/records/ARC-SPECDB-001-the-specification-is-a-database.md@authored | docs/records/ARC-SPECDB-001-the-specification-is-a-database.md | authored | 18 | 5 | sha256:795ab3ead8311de8e0f1a93828209d5c1654275417d109a92e491cab9e3b5b45 |
 | docs/records/ARC-SPECDB-002-a-canonical-substrate-is-decided-by-whether-the-schema-precedes-the-content.md@authored | docs/records/ARC-SPECDB-002-a-canonical-substrate-is-decided-by-whether-the-schema-precedes-the-content.md | authored | 33 | 8 | sha256:6345396571caf05ec03eb1d4cf5f6f4b940f8f2f42dce4026dfabd0836faefa9 |
 | docs/records/D-129-the-store-is-the-identity-substrate.md@authored | docs/records/D-129-the-store-is-the-identity-substrate.md | authored | 28 | 7 | sha256:c1f3eeec14e44a3f55d1f71522686a9f695f79060ac32e84aacdd0ff245d7778 |
@@ -201,6 +202,18 @@ profile: domain-specification
 | docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#19 | authored | 2 | Nothing Here Is Built, And That Is The Present Answer |
 | docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#24 | authored | 2 | Why Location Will Argue Against This |
 | docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#28 | authored | 2 | Alternatives Considered |
+| docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#1 | authored | 1 | Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence |
+| docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#2 | authored | 2 | Question |
+| docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#5 | authored | 2 | What Was Measured |
+| docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#9 | authored | 2 | The Boundary |
+| docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#14 | authored | 2 | Four Constraints |
+| docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#15 | authored | 3 | 1. The corpus is normative; this record and the game plan are sequencing aids |
+| docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#17 | authored | 3 | 2. `OD-PACKAGE-008` remains authoritative; no `RulePackage` manifest is scheduled |
+| docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#19 | authored | 3 | 3. EGRAPH is a kernel constraint now, not a kernel construction now |
+| docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#22 | authored | 3 | 4. Ecosystem ownership is `ARC-ECOSYSTEM-001`'s, unrepeated here |
+| docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#24 | authored | 3 | 5. "Gate" here means the product object, not `OD-GATE-004`'s CI step |
+| docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#26 | authored | 2 | What This Record Does Not Do |
+| docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#28 | authored | 2 | Status |
 | docs/records/ARC-SPECDB-001-the-specification-is-a-database.md#1 | authored | 1 | The specification is a database with an enforced preservation ledger |
 | docs/records/ARC-SPECDB-001-the-specification-is-a-database.md#2 | authored | 2 | Context |
 | docs/records/ARC-SPECDB-001-the-specification-is-a-database.md#6 | authored | 2 | Decision |
@@ -3027,6 +3040,304 @@ every session and reviewed by a person approximately never, which promotes an un
 architecture to normative status through the least reviewed surface in the repository.
 `ARC-ECOSYSTEM-001` exists because of that refusal, and this record exists because that
 record left a subsystem it did not reach.
+
+### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#1
+
+*revision: authored · kind: heading · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence · hash: sha256:b3f2c2316a19e375941a6e5fb45ecb0b930b0d82bb777efefff646ceebe08dfd*
+
+# Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence
+
+### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#2
+
+*revision: authored · kind: heading · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#3
+
+*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Question · hash: sha256:9a717aaae4722ae311c7e4b32f16ffbd86bd2e8c5aff5291af02e0cec1a6d6ce*
+
+The workspace has grown a real vertical slice — capability registry, two independent Rust
+providers, a fact store, deterministic rules, applicability, coverage, and an early
+correction lifecycle — beside a much larger specified surface that has not been built:
+architecture discovery, feature topology, runtime/debug intelligence, and rich clients. What
+was missing was not a list of gaps. It was a boundary: which of those belong to "the first
+usable Nomos product" and which belong to what that product is later extended by.
+
+### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#4
+
+*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Question · hash: sha256:80bb12abfe017ba79580f09b79babd0639d31a6376cfd9ef11f003718a8de7e7*
+
+Getting this wrong in either direction is a real cost. Treating architecture and feature
+intelligence as near-term work pulls effort into consumer-side algorithms before the
+substrate they consume (facts, applicability, gates, corrections) is production-grade.
+Treating the enforcement loop as already sufficient without naming what still separates it
+from a product — first-class gates, baselines, suppressions, a headless workflow engine, a
+stable application-service boundary, agent/model infrastructure — leaves the gap
+undiscoverable until someone tries to deploy the thing continuously.
+
+### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#5
+
+*revision: authored · kind: heading · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#6
+
+*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / What Was Measured · hash: sha256:93d7264c1560ba2a90cd047fda36bb6624b0bb72d8b670296cc4ca0e89647842*
+
+Two independent external architecture reviews of the `dev` branch were each checked against
+the real workspace rather than accepted on read. Concretely verified, not merely repeated
+from the reviews: the crate/band structure in `Cargo.toml` and `README.md`; the CI gate's
+actual steps in `.github/workflows/gate.yml`; the presence and shape of `Applicability`
+(`crates/contracts/nomos-contracts/src/finding/applicability.rs`), `Coverage`/`Claim`
+(`crates/model/nomos-model/src/evidence`), and `nomos-corrections`' preview/stage/validate/
+commit/rollback chain; and eight specific performance claims against
+`crates/substrate/nomos-analysis` (six confirmed as real hazards deliberately left for later
+work, one — the recursive `Tarjan::Visit` with no depth guard — fixed by
+`P13-TARJAN-ITERATIVE`, verified by reverting it and reproducing a native stack overflow on
+the unfixed code before restoring the fix).
+
+### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#7
+
+*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / What Was Measured · hash: sha256:23c962560ecb5deaaab530b9c33a276d58aee71d15c416f4c27adabfd4a5be91*
+
+Separately, the 363 requirements the v14 corpus carries at `authority:
+canonical-normative-record` were surveyed structurally: every filename under
+`01_authoring/artifacts/requirements` in the v14 corpus, grouped into the corpus's own 61
+requirement-family prefixes by count, with one representative requirement title read per
+family. This is **not** the formal per-requirement `Met`/`Diverges`/`NotBinding` assessment
+`OD-TRACE-001` and `OD-TRACE-002` govern — no `.assessment` file was written by this survey,
+and the assessed set stays at the six entries those records already describe. It is a
+coarser question: does the corpus's own family structure support the boundary this record
+draws, or contradict it.
+
+### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#8
+
+*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / What Was Measured · hash: sha256:bfba1dfc210aba70c9e94a8f42f29650773fdda881afeb90997e0ca6a97aa72f*
+
+It supports it. Grouping the 61 families by title against the two-tier split below,
+roughly three-quarters of the 363 requirements (kernel, package, rule, finding, gate,
+workflow, agent, and the cross-cutting non-functional families) fall on the near-term side;
+the remainder clusters almost exactly onto `ATL` (Atlas), `ARC`/`ARC-AN` (Architecture
+Explorer), `FEAT` (feature topology), `PLACE` (placement analysis), `PLAY` (feature-path
+playback), `DBG` (debugger integration) and `TEST` (feature-scenario test intelligence) —
+the corpus's own grouping, not one imposed on it. Specific requirements upgrade parts of
+this record from judgment to binding text: `WF-001` defines gate policy (phases, thresholds,
+coverage) in terms matching the Gate object named below; `IF-001` requires every
+user-visible query or action to have a canonical application service, which is the
+CLI/API/MCP-parity item named below, not a proposal; `MODEL-ROUTE-037` names
+`ModelBackendPackage` and `AgentExecutorPackage` as distinct versioned interfaces, matching
+the split named below rather than inventing it.
+
+### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#9
+
+*revision: authored · kind: heading · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / The Boundary · hash: sha256:f49232158bb3013964985ffbee9533dbeb7e8defbc8a01122e0600bcd026ecad*
+
+## The Boundary
+
+### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#10
+
+*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / The Boundary · hash: sha256:f12fddc815ea45b8ef72a8fbb13771d02e4b6e1b73a34561de7da4e8fcb910be*
+
+Two tiers. Given as sets, not a numbered sequence — the survey above establishes which side
+of the line each item falls on, not a validated ordering *within* the near-term side. Any
+internal sequencing among these items is a separate, later judgment call, not something this
+record settles.
+
+### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#11
+
+*revision: authored · kind: code · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / The Boundary · hash: sha256:5c6b2a4271d474eb6c7a75af5a596cdc2516a68bf887acf2be00ecf986018790*
+
+```text
+Nomos Core / near-term
+├ stable kernel and identities
+├ analysis + incremental fact infrastructure
+├ language/provider/capability system
+├ deterministic rules
+├ applicability + truthful coverage
+├ first-class gates (the product object; see constraint 5)
+├ baselines / suppressions / adoption
+├ corrections
+├ headless workflow orchestration
+├ application-service boundary
+├ CLI / API / MCP projections
+├ model backend + agent executor infrastructure
+└ production hardening / continuous enforcement
+```
+
+### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#12
+
+*revision: authored · kind: code · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / The Boundary · hash: sha256:fa58307736ff0354411dea4876a29e9ebc9cb6b465f763ecf243f0e6d4308738*
+
+```text
+Deferred consuming systems
+├ architecture discovery/inference
+├ feature topology and path tracing
+├ placement analysis
+├ runtime/debug intelligence
+├ test intelligence built on those models
+├ Atlas
+├ desktop
+├ web
+└ mobile
+```
+
+### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#13
+
+*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / The Boundary · hash: sha256:83268947fda65ddac8215a7dfa0ba04abcfeb4e79f2fda08cfaab453f461445c*
+
+EGRAPH — the relationship/evidence graph the corpus's `EGRAPH` family describes connecting
+`ChangeIntent`, `CorrectionPlan`, `AgentWorkResult` and workflow state — is deliberately
+absent from both lists. Constraint 3 states what happens to it instead.
+
+### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#14
+
+*revision: authored · kind: heading · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Four Constraints · hash: sha256:2fa515738e75c4a2ea1a1f6469456294f2a52f3f0ca4647fa1adacc6a56d62fb*
+
+## Four Constraints
+
+### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#15
+
+*revision: authored · kind: heading · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Four Constraints / 1. The corpus is normative; this record and the game plan are sequencing aids · hash: sha256:a7a8fc26ad52ecc7364d602e2bc8886273c05553d56538c4c86633ec0a1922ea*
+
+### 1. The corpus is normative; this record and the game plan are sequencing aids
+
+### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#16
+
+*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Four Constraints / 1. The corpus is normative; this record and the game plan are sequencing aids · hash: sha256:aa4a0fbeaf7ca6c81fe4b105b88ca948a03dd1654ca9731f6b13096974ebd562*
+
+`D-132` already rules that the external "nomos full game plan" reasoning trace is advisory,
+superseded by the corpus wherever they disagree. This record is the same kind of document —
+useful for sequencing, wrong to treat as authority over the corpus. The 363-requirement
+corpus stays what `OD-TRACE-001` already made it: the binding authority, assessed by a
+committed entry per requirement, not derived at check time. This record's structural survey
+is not that assessment and does not claim to be. Six requirements are formally assessed
+today (`OD-TRACE-002`); 357 remain `Unassessed`, which `OD-TRACE-001` already established as
+a state, not a gap. Formal assessment population continues as its own governed, many-hands
+work, unaffected by this record.
+
+### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#17
+
+*revision: authored · kind: heading · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Four Constraints / 2. `OD-PACKAGE-008` remains authoritative; no `RulePackage` manifest is scheduled · hash: sha256:01119f1b47a8cf183d5d7680fac0bfda41a7dfd097e070aeb1cd067ff96a076a*
+
+### 2. `OD-PACKAGE-008` remains authoritative; no `RulePackage` manifest is scheduled
+
+### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#18
+
+*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Four Constraints / 2. `OD-PACKAGE-008` remains authoritative; no `RulePackage` manifest is scheduled · hash: sha256:260a394d988502913e4bf49ea4f282c6e6e4323c22b1d00e608f5887df2d0d09*
+
+`OD-PACKAGE-008` tested its own named trigger — a second rule — and concluded the wait for a
+`RulePackage` manifest crate was load-bearing, not merely cautious. Nothing in this record
+reopens that. "Rule platform" in the near-term list above means scaling what already exists
+— the rule registry, applicability, coverage, execution and related policy surfaces — against
+more real rules, not building `nomos-rule-package` or an install/enable/disable lifecycle.
+That question reopens only on `OD-PACKAGE-008`'s own recorded trigger (a third rule whose
+shape argues the population has changed) or on evidence genuinely independent of rule count.
+
+### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#19
+
+*revision: authored · kind: heading · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Four Constraints / 3. EGRAPH is a kernel constraint now, not a kernel construction now · hash: sha256:fb6b8dcbcdb1980de879846c8786811638f6eb705def798e775942ae9f4520e3*
+
+### 3. EGRAPH is a kernel constraint now, not a kernel construction now
+
+### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#20
+
+*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Four Constraints / 3. EGRAPH is a kernel constraint now, not a kernel construction now · hash: sha256:ae3ea05bd49121338d2c471db8a98b5bcf02dd5d6ea871e797f3575c5619667e*
+
+The corpus weighs `EGRAPH` at ten requirements and ties it to systems this record defers
+(architecture, feature topology) as well as one that exists (`nomos-corrections`) and two
+that don't yet (workflow, agent execution). That is a population of at most one real
+consumer today. This workspace has twice declined to generalize from that population size —
+`OD-PACKAGE-006` waited for a third provider, `OD-PACKAGE-008` waited for and then tested
+against a second rule, and both found the wait load-bearing once a second real instance
+existed to check field boundaries against.
+
+### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#21
+
+*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Four Constraints / 3. EGRAPH is a kernel constraint now, not a kernel construction now · hash: sha256:21d52728f757d3512f11b578702632c2408fc114268ebe5ee0827f4327c9e3f0*
+
+So no dedicated relationship-graph crate is scheduled by this record. What *is* decided:
+kernel, corrections and workflow work must not foreclose a later generalization — identity,
+evidence classification, and typed-relationship vocabulary should be shaped so a future
+`EGRAPH` can be added without redesigning what came before it, the same "must not be
+impossible to add later" bar the architecture/feature tier is held to below. That is a
+weaker, checkable claim ("does not preclude"), not "is first-class and built." Revisit
+construction once a second real consumer exists to check the first one's shape against —
+concretely, once workflow orchestration or agent execution reach the point of needing typed
+cross-entity relationships themselves.
+
+### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#22
+
+*revision: authored · kind: heading · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Four Constraints / 4. Ecosystem ownership is `ARC-ECOSYSTEM-001`'s, unrepeated here · hash: sha256:01d2eb6abdb8ccf8a95c94ac6d974ba94f491d07a3b3d363d5b52143365ff943*
+
+### 4. Ecosystem ownership is `ARC-ECOSYSTEM-001`'s, unrepeated here
+
+### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#23
+
+*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Four Constraints / 4. Ecosystem ownership is `ARC-ECOSYSTEM-001`'s, unrepeated here · hash: sha256:f1ef98c33024d1d024da224fa74a802f9102ea96d421c39f58e4283913f98179*
+
+`ARC-ECOSYSTEM-001` (version 4) already governs what Nomos, KWB, XVPE, and repository
+tooling each own, including the specific question an earlier draft of this reasoning got
+wrong: package installation and activation is XVPE's, by explicit adoption of `D-091`, not
+unfinished Nomos work. This record governs sequencing inside Nomos's own boundary. It adds
+no ownership claim and restates none; where the two are read together, `ARC-ECOSYSTEM-001`
+is the authority on who owns what, and this record is the authority on what order Nomos
+builds its own share in.
+
+### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#24
+
+*revision: authored · kind: heading · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Four Constraints / 5. "Gate" here means the product object, not `OD-GATE-004`'s CI step · hash: sha256:884a13c6cf313e032ad54e45cddcb5edadde2e561b23f73cc003b95b46926bd8*
+
+### 5. "Gate" here means the product object, not `OD-GATE-004`'s CI step
+
+### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#25
+
+*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Four Constraints / 5. "Gate" here means the product object, not `OD-GATE-004`'s CI step · hash: sha256:520e202f5edf4bfc3a3d091297a2850403c1c7ba11d7004765ea38a0a151d320*
+
+`OD-GATE-004` wired this repository's own rule layer into its own CI as a step named
+`Rules`, so that `nomos check` judges this workspace on every pull request. That is
+self-application — this repository enforcing itself — and it is done. It is not the
+product-level `Gate` this record lists as near-term: a first-class object an end-user
+repository would configure (`ScopeSelector`, `RuleSelector`, `ApplicabilityPolicy`,
+`CoveragePolicy`, `BaselinePolicy`, `SuppressionPolicy`, required phases, evidence
+requirements, failure disposition), exposed as `nomos gate plan` / `run` / `explain` /
+`compare` over the same application-service boundary the CLI/API/MCP item shares. Nothing in
+`OD-GATE-004`, `OD-RULES-001` or `OD-RULES-002` builds that object; they establish the rule
+layer's own soundness and this repository's own enforcement, which the product Gate will
+depend on rather than duplicate.
+
+### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#26
+
+*revision: authored · kind: heading · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#27
+
+*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / What This Record Does Not Do · hash: sha256:1940678addeff306b36101c26ebc12432ac9a49b7ffcedf370eced4e0bd15743*
+
+- It does not schedule work. It draws a boundary; ledger items that build inside it are
+  authored separately, against this record where relevant.
+- It does not claim the 363-requirement corpus has been reconciled. It is a structural
+  survey by family and representative title, not a per-requirement audit.
+- It does not reopen `OD-PACKAGE-008`, restate `ARC-ECOSYSTEM-001`, or redefine what
+  `OD-GATE-004` already did.
+- It does not order the near-term tier internally. Which of those items is built next is a
+  separate judgment, informed by this record but not fixed by it.
+- It does not commit to building `EGRAPH`, or any dedicated relationship-graph crate, now.
+
+### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#28
+
+*revision: authored · kind: heading · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#29
+
+*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Status · hash: sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3*
+
+Accepted.
 
 ### docs/records/ARC-SPECDB-001-the-specification-is-a-database.md#1
 

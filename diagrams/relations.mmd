@@ -20,6 +20,7 @@ graph LR
     arc_ecosystem_001 -->|"relates-to"| arc_connector_001
     arc_ecosystem_001 -->|"relates-to"| arc_ecosystem_002
     arc_ecosystem_001 -->|"relates-to"| arc_harness_001
+    arc_ecosystem_001 -->|"relates-to"| arc_roadmap_001["ARC-ROADMAP-001"]
     arc_ecosystem_001 -->|"relates-to"| arc_specdb_001["ARC-SPECDB-001"]
     arc_ecosystem_001 -->|"relates-to"| d_085["D-085"]
     arc_ecosystem_001 -->|"relates-to"| d_086["D-086"]
@@ -52,10 +53,18 @@ graph LR
     arc_harness_001 -->|"relates-to"| od_ledger_022["OD-LEDGER-022"]
     arc_harness_001 -->|"relates-to"| od_package_001["OD-PACKAGE-001"]
     arc_harness_001 -->|"relates-to"| od_platform_001["OD-PLATFORM-001"]
+    arc_roadmap_001 -->|"relates-to"| arc_ecosystem_001
+    arc_roadmap_001 -->|"relates-to"| d_132["D-132"]
+    arc_roadmap_001 -->|"relates-to"| od_gate_004["OD-GATE-004"]
+    arc_roadmap_001 -->|"relates-to"| od_package_008["OD-PACKAGE-008"]
+    arc_roadmap_001 -->|"relates-to"| od_rules_001["OD-RULES-001"]
+    arc_roadmap_001 -->|"relates-to"| od_rules_002["OD-RULES-002"]
+    arc_roadmap_001 -->|"relates-to"| od_trace_001["OD-TRACE-001"]
+    arc_roadmap_001 -->|"relates-to"| od_trace_002["OD-TRACE-002"]
     arc_specdb_001 -->|"affected_by"| d_129
     arc_specdb_001 -->|"affected_by"| d_130
     arc_specdb_001 -->|"affected_by"| d_131["D-131"]
-    arc_specdb_001 -->|"affected_by"| d_132["D-132"]
+    arc_specdb_001 -->|"affected_by"| d_132
     arc_specdb_001 -->|"affected_by"| d_133["D-133"]
     arc_specdb_001 -->|"affected_by"| od_gate_001["OD-GATE-001"]
     arc_specdb_001 -->|"affected_by"| od_ledger_001
@@ -73,7 +82,7 @@ graph LR
     arc_specdb_001 -->|"relates-to"| od_spec_008["OD-SPEC-008"]
     arc_specdb_001 -->|"relates-to"| od_spec_010["OD-SPEC-010"]
     arc_specdb_001 -->|"relates-to"| od_spec_011["OD-SPEC-011"]
-    arc_specdb_001 -->|"relates-to"| od_trace_001["OD-TRACE-001"]
+    arc_specdb_001 -->|"relates-to"| od_trace_001
     arc_specdb_002 -->|"relates-to"| arc_specdb_001
     arc_specdb_002 -->|"relates-to"| od_model_002["OD-MODEL-002"]
     arc_specdb_002 -->|"relates-to"| od_spec_005
@@ -117,6 +126,7 @@ graph LR
     d_132 -->|"affects"| od_package_002["OD-PACKAGE-002"]
     d_132 -->|"affects"| od_package_003
     d_132 -->|"affects"| od_spec_002
+    d_132 -->|"relates-to"| arc_roadmap_001
     d_132 -->|"relates-to"| od_ledger_002["OD-LEDGER-002"]
     d_132 -->|"relates-to"| od_trace_001
     d_133 -->|"affects"| arc_specdb_001
@@ -124,15 +134,15 @@ graph LR
     d_133 -->|"relates-to"| od_spec_001
     d_133 -->|"relates-to"| od_spec_006
     d_134 -->|"affected_by"| od_completeness_002["OD-COMPLETENESS-002"]
-    d_134 -->|"affected_by"| od_rules_001["OD-RULES-001"]
+    d_134 -->|"affected_by"| od_rules_001
     d_134 -->|"affects"| od_completeness_001["OD-COMPLETENESS-001"]
     d_134 -->|"relates-to"| arc_specdb_001
     d_134 -->|"relates-to"| od_gate_001
-    d_134 -->|"relates-to"| od_gate_004["OD-GATE-004"]
+    d_134 -->|"relates-to"| od_gate_004
     d_134 -->|"relates-to"| od_package_001
     d_134 -->|"relates-to"| od_package_006["OD-PACKAGE-006"]
-    d_134 -->|"relates-to"| od_package_008["OD-PACKAGE-008"]
-    d_134 -->|"relates-to"| od_rules_002["OD-RULES-002"]
+    d_134 -->|"relates-to"| od_package_008
+    d_134 -->|"relates-to"| od_rules_002
     d_134 -->|"relates-to"| od_rules_006["OD-RULES-006"]
     d_134 -->|"relates-to"| od_trace_001
     d_135 -->|"relates-to"| arc_ecosystem_001
@@ -265,7 +275,7 @@ graph LR
     od_completeness_001 -->|"relates-to"| od_syntax_001
     od_completeness_001 -->|"relates-to"| od_syntax_002
     od_completeness_001 -->|"relates-to"| od_trace_001
-    od_completeness_001 -->|"relates-to"| od_trace_002["OD-TRACE-002"]
+    od_completeness_001 -->|"relates-to"| od_trace_002
     od_completeness_002 -->|"affects"| d_134
     od_completeness_002 -->|"affects"| od_completeness_001
     od_completeness_002 -->|"relates-to"| od_gate_001
@@ -345,6 +355,7 @@ graph LR
     od_gate_003 -->|"relates-to"| od_gate_001
     od_gate_003 -->|"relates-to"| od_gate_002
     od_gate_003 -->|"relates-to"| od_gate_004
+    od_gate_004 -->|"relates-to"| arc_roadmap_001
     od_gate_004 -->|"relates-to"| d_134
     od_gate_004 -->|"relates-to"| od_completeness_001
     od_gate_004 -->|"relates-to"| od_completeness_004
@@ -691,6 +702,7 @@ graph LR
     od_package_007 -->|"relates-to"| od_package_006
     od_package_007 -->|"relates-to"| od_package_008
     od_package_007 -->|"relates-to"| od_package_009
+    od_package_008 -->|"relates-to"| arc_roadmap_001
     od_package_008 -->|"relates-to"| d_134
     od_package_008 -->|"relates-to"| od_package_001
     od_package_008 -->|"relates-to"| od_package_006
@@ -723,6 +735,7 @@ graph LR
     od_rules_001 -->|"affected_by"| od_rules_002
     od_rules_001 -->|"affected_by"| od_syntax_002
     od_rules_001 -->|"affects"| d_134
+    od_rules_001 -->|"relates-to"| arc_roadmap_001
     od_rules_001 -->|"relates-to"| od_capability_002
     od_rules_001 -->|"relates-to"| od_capability_003
     od_rules_001 -->|"relates-to"| od_completeness_001
@@ -736,6 +749,7 @@ graph LR
     od_rules_001 -->|"relates-to"| od_rules_004
     od_rules_001 -->|"relates-to"| od_syntax_001
     od_rules_002 -->|"affects"| od_rules_001
+    od_rules_002 -->|"relates-to"| arc_roadmap_001
     od_rules_002 -->|"relates-to"| d_134
     od_rules_002 -->|"relates-to"| od_completeness_001
     od_rules_002 -->|"relates-to"| od_completeness_004
@@ -849,6 +863,7 @@ graph LR
     od_syntax_002 -->|"relates-to"| od_analysis_006
     od_syntax_002 -->|"relates-to"| od_completeness_001
     od_syntax_002 -->|"relates-to"| od_syntax_001
+    od_trace_001 -->|"relates-to"| arc_roadmap_001
     od_trace_001 -->|"relates-to"| arc_specdb_001
     od_trace_001 -->|"relates-to"| d_132
     od_trace_001 -->|"relates-to"| d_134
@@ -862,6 +877,7 @@ graph LR
     od_trace_001 -->|"relates-to"| od_trace_003
     od_trace_001 -->|"relates-to"| od_trace_004
     od_trace_001 -->|"relates-to"| od_trace_005
+    od_trace_002 -->|"relates-to"| arc_roadmap_001
     od_trace_002 -->|"relates-to"| od_completeness_001
     od_trace_002 -->|"relates-to"| od_contracts_002
     od_trace_002 -->|"relates-to"| od_gate_001
