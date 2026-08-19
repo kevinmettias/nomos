@@ -43,22 +43,29 @@
 //!
 //! # What is here
 //!
-//! One rule: [`Check_Completeness_Mirrors`]. Scope is one rule and not three —
-//! `P10-FIRST-CHECK` says so explicitly, because a single check that is honest end to
-//! end is worth more than three that are nearly wired.
+//! Two rules. [`Check_Completeness_Mirrors`] was chosen first because it is the only rule
+//! in this tree with three recorded historical instances to test a judgment against —
+//! `P10-FIRST-CHECK` shipped with exactly this one and no more, because a single check
+//! that is honest end to end is worth more than three that are nearly wired.
+//! [`Check_Naming_Convention`] is the second, added once a real second rule was needed to
+//! test `OD-PACKAGE-008`'s question — whether a future `RulePackage` manifest's field
+//! boundaries generalize past a population of one — against something other than the
+//! first rule's own shape. It judges a different kind of claim (a lexical convention
+//! stated once in prose, not a per-subject doc comment) for exactly that reason.
 //!
-//! [`RuleRegistry`] is a second thing, deliberately not a second rule: `OD-RULES-004`
-//! extracted a registration contract now, ahead of a second rule, so a rule package can be
-//! designed and built against a stated shape rather than by copying this crate's own
-//! hand-written composition. It is additive and unconsulted — `Run()` still calls
-//! `Check_Completeness_Mirrors` directly, exactly as `OD-HOST-004` decided, and nothing
-//! here changes what runs on any given `nomos check`.
+//! [`RuleRegistry`] is a third thing, deliberately not a rule: `OD-RULES-004` extracted a
+//! registration contract ahead of a second rule, so a rule package can be designed and
+//! built against a stated shape rather than by copying this crate's own hand-written
+//! composition. It is additive and unconsulted — `Run()` still calls each rule directly,
+//! unconditionally, exactly as `OD-HOST-004` decided, and nothing here changes what runs
+//! on any given `nomos check`.
 
 #![forbid(unsafe_code)]
 
 mod declared_universe;
 mod facts;
 mod mirror;
+mod naming;
 mod reading;
 mod registry;
 mod universe;
@@ -68,6 +75,7 @@ use nomos_contracts::{Assurance, FactVariant, Guarantee, IncrementalGranularity,
 
 pub use mirror::{Check_Completeness_Mirrors, COMPLETENESS_MIRROR, CONTRACT_RECORD, CONTRACT_RECORD_VERSION};
 pub use declared_universe::DeclaredUniverse;
+pub use naming::{Check_Naming_Convention, NAMING_CONVENTION};
 pub use reading::Reading;
 pub use registry::{RuleOffer, RuleRegistry, RuleRegistryError};
 pub use universe::{UniverseKind, Universes_In};

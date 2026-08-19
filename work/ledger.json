@@ -16152,7 +16152,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Superseded by P13-RULE-REGISTRY-BASE-3 (commit 483fc75), which already built this exact contract: RuleOffer/RuleRegistry in crates/rules/nomos-rules/src/registry.rs, additive and unwired into Run(), tests/contract/surface/nomos-rules.txt reblessed. Authored independently and concurrently off the same OD-RULES-004 decision before either session saw the other's claim."
+        }
+      },
       "depends_on": [
         "P13-RULE-PACKAGE-DECISION"
       ],
@@ -16173,7 +16177,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-rule-registry-base",
+        "declined_at": 1787096454
+      }
     },
     {
       "id": "P13-RULE-REGISTRY-BASE",
@@ -16323,6 +16330,67 @@
           "exit_code": 0
         },
         "revision": "e6f9987abc6736f2925005dc9dcaf28db2551cb3"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-RULE-NAMING-CONVENTION",
+      "title": "nomos-rules gains a second rule, Check_Naming_Convention, judging Pascal_Snake_Case function names",
+      "why": "Explicit direction to invest in a second, genuinely useful rule -- both to prove the RuleRegistry contract P13-RULE-REGISTRY-BASE-3 built against a real second party, and to give OD-PACKAGE-008's question (whether a future RulePackage manifest's field boundaries generalize past a population of one rule) a second data point to reason from. README.md's Conventions section states directly that function names are Pascal_Snake_Case, and Cargo.toml's own [workspace.lints.rust] comment names the resulting gap: non_snake_case is set to allow specifically because of this convention, and nothing was turned on to check the convention that replaced it. This rule reads the same nomos.cap.syntax.items facts Check_Completeness_Mirrors already reads (no new capability contract needed) and reconciles each function's own name against the workspace's stated convention -- a one-sided lexical predicate, deliberately different in shape from the mirror rule's two-sided claim-vs-fact reconciliation, so it is a real second data point and not a copy of the first rule's own shape.",
+      "done_when": "crates/rules/nomos-rules exposes Check_Naming_Convention(sources, facts) -> Vec<Finding> and NAMING_CONVENTION, matching Check_Completeness_Mirrors's existing signature shape. It judges every Function item nomos.cap.syntax.items facts declare: Own_Name() must be Pascal_Snake_Case (each underscore-separated segment starts uppercase-ASCII or is all-digits), exempting the literal main and any function enclosed by a trait implementation (name fixed by the trait, not by this workspace). A subject whose fact cannot be read produces a finding rather than rendering as clean, matching the mirror rule's own principle. Findings report GateCategory::Advisory (a newly-added, not-yet-broadly-verified check, deliberately not Blocking on its first landing) and EvidenceClass::Derived. Not wired into crates/orchestration/nomos-check-orchestration/src/run.rs::Run -- that is a separate decision OD-HOST-004 already governs, and this item does not make nomos check report it. Not registered into RuleRegistry either -- OD-RULES-004 states that registration is optional for the registry's first real consumer. tests/contract/surface/nomos-rules.txt is reblessed for the new exports (NOMOS_SURFACE_BLESS=nomos-rules cargo test -p nomos-contract-tests --test public_surface). cargo test -p nomos-rules -p nomos-contract-tests passes, and the rule has been sanity-checked against real source files in this repository (not only hand-written fixtures) before landing, with the check script removed before commit.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules",
+          "tests/contract/surface/nomos-rules.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [
+        "P13-RULE-REGISTRY-BASE-3"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "Test_A_Payload_From_A_Blind_Provider_Should_Not_Read_As_No_Mirror ... ok\ntest universe::tests::Test_A_Private_List_Should_Not_Be_A_Universe ... ok\ntest universe::tests::Test_A_Scalar_Constant_Should_Not_Be_A_Universe ... ok\ntest universe::tests::Test_A_Trait_Impl_Should_Not_Claim_The_Type ... ok\ntest universe::tests::Test_An_All_Should_Be_Attributed_To_Its_Type ... ok\ntest universe::tests::Test_An_All_That_Takes_A_Receiver_Should_Not_Be_A_Universe ... ok\n\ntest result: ok. 61 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.15s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-2bf6f03006d6e169.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-03bb3b77a304179f.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-3a2571bf0b9d7834.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-15739aa19297e553.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-92b11eaac815a8cd.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-ca16a9d136103b26.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-04cd6948a9e9b567.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-6e8c3aea949064d8.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-43695c5ec5ad83ec.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-b67424df197dae04.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-d8b5b2c7fdfc8471.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_rules\n",
+        "verified_at": 1787097911,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "483fc7565e9222e4f020436171a5d9cb5f6a1f7d"
       },
       "abandoned": [],
       "displaced": [],
