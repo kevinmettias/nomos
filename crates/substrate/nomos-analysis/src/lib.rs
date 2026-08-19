@@ -8,6 +8,7 @@ mod context;
 mod determinism;
 mod fact;
 mod identity;
+mod propagation;
 mod reader;
 mod reading;
 mod store;

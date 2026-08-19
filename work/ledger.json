@@ -16630,6 +16630,147 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-ANALYSIS-PROPAGATION-SEAM",
+      "title": "nomos-analysis's dirty-propagation walk is fused with fact-identity vocabulary, contrary to D-135/D-138's rename-later contract",
+      "why": "D-135 sends domain-neutral code (no crate/rule/finding/claim vocabulary) to XVPE authorship by default; D-138 says where XVPE cannot yet absorb it, Nomos builds it under an ordinary crate name whose public contract still carries no Nomos-specific vocabulary, so a later rename-and-move is mechanical. MemoryFactStore (crates/substrate/nomos-analysis/src/fact/memory_store.rs) implements exactly the kind of mechanism D-130's own rationale names as an XVPE candidate -- dirty propagation and topological layering over a dependents adjacency map keyed on opaque Digest128 -- but its propagation walk (Invalidate_Named/Follow_Edges/Reach/Spreading) is not separated from Component/FactKey/GenerationCause, which are Nomos-specific fact-identity vocabulary. A later extraction is a rewrite, not a rename, contradicting D-138's own stated cost claim.",
+      "done_when": "The dependents/keys adjacency walk (Invalidate_Named, Follow_Edges, Reach, Spreading, Opened, Settle, Note_Broadening's non-Nomos parts) is isolated in a module whose types reference only opaque digests and generic dependency edges -- no FactIdentity, FactKey, Component, GenerationCause, or other fact-identity vocabulary in its own signatures -- with MemoryFactStore adapting it for the FactStore contract. cargo test -p nomos-analysis passes with unchanged externally-observable behavior (same test assertions), and a test asserts the new module's source contains no  of the fact-identity types.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-analysis/src/fact/memory_store.rs",
+          "crates/substrate/nomos-analysis/src/fact/store.rs",
+          "crates/substrate/nomos-analysis/src/lib.rs",
+          "crates/substrate/nomos-analysis/src/fact.rs",
+          "crates/substrate/nomos-analysis/src/propagation.rs",
+          "tests/contract/surface/nomos-analysis.txt"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Authoring bug: a backtick in --done-when was interpreted by the shell as command substitution, silently dropping the word 'use' from the predicate text. Re-authoring under a new id with corrected quoting rather than leaving garbled text in shared state; no claim was ever taken on this one."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-analysis"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-architecture-review",
+        "declined_at": 1787100614
+      }
+    },
+    {
+      "id": "P13-ANALYSIS-PROPAGATION-SEAM-2",
+      "title": "nomos-analysis dirty-propagation walk is fused with fact-identity vocabulary, contrary to D-135/D-138 rename-later contract",
+      "why": "D-135 sends domain-neutral code (no crate, rule, finding, or claim vocabulary) to XVPE authorship by default; D-138 says where XVPE cannot yet absorb it, Nomos builds it under an ordinary crate name whose public contract still carries no Nomos-specific vocabulary, so a later rename-and-move is mechanical. MemoryFactStore (crates/substrate/nomos-analysis/src/fact/memory_store.rs) implements exactly the kind of mechanism D-130's own rationale names as an XVPE candidate: dirty propagation and topological layering over a dependents adjacency map keyed on opaque Digest128. Its propagation walk, Invalidate_Named, Follow_Edges, Reach and Spreading, is not separated from Component, FactKey and GenerationCause, which are Nomos-specific fact-identity vocabulary. A later extraction is a rewrite, not a rename, contradicting D-138's own stated cost claim.",
+      "done_when": "The dependents and keys adjacency walk, Invalidate_Named, Follow_Edges, Reach, Spreading, Opened, Settle, and the non-Nomos parts of Note_Broadening, is isolated in a module whose types reference only opaque digests and generic dependency edges, with no FactIdentity, FactKey, Component, or GenerationCause in its own signatures, and MemoryFactStore adapts it for the FactStore contract. cargo test -p nomos-analysis passes with unchanged externally observable behavior, and a test asserts the new module imports none of the fact-identity types.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-analysis/src/fact/memory_store.rs",
+          "crates/substrate/nomos-analysis/src/fact/store.rs",
+          "crates/substrate/nomos-analysis/src/lib.rs",
+          "crates/substrate/nomos-analysis/src/fact.rs",
+          "crates/substrate/nomos-analysis/src/propagation.rs",
+          "tests/contract/surface/nomos-analysis.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-analysis"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-analysis"
+        ],
+        "exit_code": 0,
+        "output_tail": "ord_Its_Miss ... ok\ntest key_identity::Test_Two_Workspace_States_Should_Not_Produce_Two_Facts ... ok\ntest store::Test_A_Backdated_Materialization_Should_Be_Refused ... ok\ntest store::Test_A_Later_Generation_Should_Still_Answer_The_Same_Key ... ok\ntest store::Test_A_Live_Fact_Should_Have_No_History ... ok\ntest key_identity::Test_The_Component_List_Should_Cover_Every_Part_Of_The_Key ... ok\ntest reader::Test_Every_Read_Should_Record_An_Edge ... ok\ntest require::Test_Require_Should_Refuse_A_Provider_Below_The_Requirement ... ok\ntest store::Test_The_Same_Question_Twice_Should_Materialize_Once ... ok\n\ntest result: ok. 31 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 3 tests\ntest Test_A_Chain_Should_Condense_Into_One_Singleton_Group_Per_Fact_In_Dependency_Order ... ok\ntest Test_A_Chain_Through_A_Cycle_Should_Preserve_Both_The_Order_And_The_Group ... ok\ntest Test_A_Four_Cycle_Should_Condense_Into_One_Group_Naming_All_Four ... ok\n\ntest result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 2 tests\ntest Test_An_Unrecorded_Dependency_Edge_Leaves_A_Stale_Downstream_Value_That_Disagrees_With_A_Clean_Rebuild ... ok\ntest Test_Incremental_Recomputation_After_A_Change_Agrees_With_A_Clean_Rebuild ... ok\n\ntest result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.17s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_analysis-8ed2b98a0abe7ca2.exe)\n     Running tests\\fact_identity\\main.rs (target\\debug\\deps\\fact_identity-472de15e56a195d2.exe)\n     Running tests\\invalidation_order.rs (target\\debug\\deps\\invalidation_order-5c58ca88752defbc.exe)\n     Running tests\\recomputation_equivalence.rs (target\\debug\\deps\\recomputation_equivalence-8bcea38aeda441f4.exe)\n   Doc-tests nomos_analysis\n",
+        "verified_at": 1787100861,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "44dea151922187cddbc8a83cdfe2dff6b986960c"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-PROVIDER-TRAIT-QUESTION",
+      "title": "Whether the provider convention needs a declared trait, or waits for a third provider",
+      "why": "Three research memos comparing nomos against its Go-era predecessor nomos-proto/code-standards were reviewed this session. The highest-ranked recommendation in one of them is to formalize the provider convention -- the PROVIDER constant, Declared_Guarantee(), and Materialize() every capability provider implements -- as a real Rust trait rather than a bare naming convention. The memo's motivating case: a check-local Go package once hand-rolled its own copy of the Rust language type; Go's structural typing let it silently satisfy less than the real interface, and the resolver fell back to a weaker default with no build error -- fixed only by hand-added var _ Interface = Type{} compile-time assertions. crates/languages/nomos-lang-rust/src/provider.rs and crates/languages/nomos-lang-rust-scan/src/provider.rs both hand-implement the identical four-part shape today (PROVIDER, Declared_Guarantee, Materialize, and an identically-shaped FactContext) with no shared trait -- two real, live implementations exist, so a trait would not be designed from zero instances. But composition.rs already calls each provider's function by its real, statically-resolved name (registry.Offer(nomos_lang_rust::Provider_Offer())), which has no structural-typing hole for a trait to close the way Go's did -- and both provider.rs files carry doc comments explicitly defending deliberate duplication elsewhere in the same files (Encode_Payload), a design tension a trait proposal should not gloss over.",
+      "done_when": "A new record under OD-CAPABILITY states whether PROVIDER/Declared_Guarantee/Materialize gains a declared trait now, before a third provider multiplies the migration cost, or waits for one to exist so the design has a real case to check against -- and states plainly why Rust's static call-site checking already closes the specific structural-typing hole the Go bug exploited, so the record is not framed as fixing an active bug. It follows OD-CAPABILITY-007's shape (Question / Current Position / What Would Decide It / Status), relates to OD-CAPABILITY-001, OD-CAPABILITY-007 and OD-PACKAGE-006, and states the concrete trigger that would flip the answer (a third provider, or a consumer needing to hold providers polymorphically). Registered in crates/spec/nomos-spec-store/records/, and diagrams/relations.mmd and spec/domain-specification.md (with sidecars) are re-rendered and fresh per nomos spec freshness --require diagram-set --require domain-specification, verified from an isolated worktree holding exactly the record set this commit publishes. Closed by the record alone: no crate changes.",
+      "kind": "Validation",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md",
+          "crates/spec/nomos-spec-store/records/OD-CAPABILITY-008.record"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-prior-art-gaps-2",
+        "acquired_at": 1787100806,
+        "lease_expires_at": 1787108006
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

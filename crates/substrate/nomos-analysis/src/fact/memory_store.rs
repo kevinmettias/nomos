@@ -192,21 +192,6 @@ fn Opened(cause: &GenerationCause, from: GenerationId) -> InvalidationReport
     };
 }
 
-/// The state an invalidation spreads through: what it has already reached, what it has yet
-/// to walk, and what it is reporting.
-///
-/// Carried as one value because the three change together at every step, and passing them
-/// separately would put the edge walk over the argument budget.
-struct Spreading<'a>
-{
-    /// Every digest already reached, so a cycle terminates.
-    seen: &'a mut BTreeSet<Digest128>,
-    /// Digests reached and not yet walked out of.
-    frontier: &'a mut Vec<Digest128>,
-    /// What the caller is told.
-    report: &'a mut InvalidationReport,
-}
-
 impl MemoryFactStore
 {
     /// Invalidates every fact the cause names directly, and returns them as the frontier.
@@ -240,54 +225,6 @@ impl MemoryFactStore
         }
 
         return frontier;
-    }
-
-    /// Invalidates everything that read this fact, and queues each of them in turn.
-    ///
-    /// A consumer already seen is not walked again. Without that, a store holding a cycle
-    /// of dependency edges would never finish reporting one.
-    fn Follow_Edges(
-        &mut self,
-        digest: Digest128,
-        from: GenerationId,
-        described: &str,
-        spreading: &mut Spreading<'_>,
-    )
-    {
-        let downstream: Vec<Digest128> = self
-            .dependents
-            .get(&digest)
-            .map(|set| return set.iter().copied().collect())
-            .unwrap_or_default();
-
-        for consumer in downstream
-        {
-            if spreading.seen.insert(consumer)
-            {
-                self.Reach(consumer, from, described, spreading);
-            }
-        }
-    }
-
-    /// One consumer reached for the first time.
-    fn Reach(
-        &mut self,
-        consumer: Digest128,
-        from: GenerationId,
-        described: &str,
-        spreading: &mut Spreading<'_>,
-    )
-    {
-        if !self.Invalidate_One(consumer, from, described)
-        {
-            return;
-        }
-
-        if let Some(key) = self.keys.get(&consumer)
-        {
-            spreading.report.dependent.push(key.clone());
-        }
-        spreading.frontier.push(consumer);
     }
 
     /// Puts the report into the one order two runs over one store both produce.
@@ -365,17 +302,26 @@ impl FactStore for MemoryFactStore
     {
         let described = cause.Describe();
         let mut report = Opened(cause, from);
-        let mut frontier = self.Invalidate_Named(cause, from, &described, &mut report);
-        let mut seen: BTreeSet<Digest128> = frontier.iter().copied().collect();
+        let roots = self.Invalidate_Named(cause, from, &described, &mut report);
+        let mut seen: BTreeSet<Digest128> = roots.iter().copied().collect();
 
-        while let Some(digest) = frontier.pop()
-        {
-            self.Follow_Edges(digest, from, &described, &mut Spreading {
-                seen: &mut seen,
-                frontier: &mut frontier,
-                report: &mut report,
-            });
-        }
+        // Cloned once rather than held as a borrow across the walk: `on_reach` below needs
+        // `&mut self` for `Invalidate_One` and `self.keys`, and `propagation::Spread` has no
+        // Nomos-specific reason to know about that conflict. See `docs/records/D-135` and
+        // `docs/records/D-138`.
+        let dependents = self.dependents.clone();
+        crate::propagation::Spread(&dependents, roots, |consumer| {
+            seen.insert(consumer);
+            if !self.Invalidate_One(consumer, from, &described)
+            {
+                return false;
+            }
+            if let Some(key) = self.keys.get(&consumer)
+            {
+                report.dependent.push(key.clone());
+            }
+            return true;
+        });
 
         self.Note_Broadening(cause.Granularity(), &seen, &mut report);
 
