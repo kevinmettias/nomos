@@ -68,7 +68,7 @@ profile: domain-specification
 | docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md@authored | docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md | authored | 22 | 7 | sha256:47c0b032d29826a3aefa121ae2a70bbf8eadb84cd84e530a0692a8bb2ef0b42b |
 | docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md@authored | docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md | authored | 32 | 8 | sha256:7e415cc70febf6bbbcc01cafffc5866abb03ee5d83ddfad6b829ea224bfcc9aa |
 | docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md@authored | docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md | authored | 17 | 7 | sha256:db6c652a9e6a7ddad8f6d701642e08c3a91d0f38c07839fdf7b5c5fc9e6ffa50 |
-| docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md@authored | docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md | authored | 18 | 7 | sha256:6f4641a5880349085b0024910a1e846ce7a8c0c0c0fb2565df2afec25bc14c75 |
+| docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md@authored | docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md | authored | 21 | 8 | sha256:fde76ddb443213fdd5c253144550e72aa60a127201be1c067156bd52c9a071dd |
 | docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md@authored | docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md | authored | 25 | 9 | sha256:2ca140dc9f92acdeafb345caf060be98aa5759734cce2b551250a5b605c7353f |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md@authored | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md | authored | 16 | 5 | sha256:e3d0afb3cabc0ab33a09a700e110b803806d3c4e063673d8c18ca7adc84c3012 |
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md@authored | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md | authored | 33 | 7 | sha256:9b64932b5379c801e27d55a8182022bc7ee9524dd13249c6ec8795ed1624a2d6 |
@@ -640,7 +640,8 @@ profile: domain-specification
 | docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md#9 | authored | 2 | `run` Arrived: What Changed And What Did Not |
 | docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md#12 | authored | 2 | `run` Gets A Real Caller: What Changed And What Did Not |
 | docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md#15 | authored | 2 | What Would Decide It |
-| docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md#17 | authored | 2 | Status |
+| docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md#17 | authored | 2 | Built Under Override, Not By The Primary Trigger Firing |
+| docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md#20 | authored | 2 | Status |
 | docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md#1 | authored | 1 | Whether Gate's BaselinePolicy, SuppressionPolicy and adoption configuration are built now, or wait for a run verb that can observe their effect |
 | docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md#2 | authored | 2 | Question |
 | docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md#4 | authored | 2 | What The Corpus Specifies |
@@ -16568,24 +16569,60 @@ compare rationale against instead of one.
 
 ### docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md#17
 
+*revision: authored · kind: heading · heading: Whether Gate's ScopeSelector and RuleSelector are built now, or wait for a caller that needs to select less than everything / Built Under Override, Not By The Primary Trigger Firing · hash: sha256:3c96abae9a045645589c04135482c9d4fcaa1a01c7ff1927e61b39d6499cd91e*
+
+## Built Under Override, Not By The Primary Trigger Firing
+
+### docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md#18
+
+*revision: authored · kind: prose · heading: Whether Gate's ScopeSelector and RuleSelector are built now, or wait for a caller that needs to select less than everything / Built Under Override, Not By The Primary Trigger Firing · hash: sha256:cf4b2dc8a27c510f16cede6a207f07af54705b984d0e3b31e86fb30484783048*
+
+`P13-GATE-014-SCOPE-RULE-SELECTORS` built both types this record was waiting on, but the
+primary trigger named above — a real caller that needs to evaluate fewer than every
+registered rule over fewer than every file — still never fired. What changed is the same
+kind of event the "What Would Decide It" section already distinguished from a real caller
+for the plugin-registration case: the user gave a standing, explicit override of this
+record's own wait, the same shape as the 2026-08-18 direction this record already declined
+to read as covering selector policy. That direction was scoped to registration machinery;
+this one is scoped to `ScopeSelector`/`RuleSelector` by name, so the distinction this record
+drew between the two does not apply to itself here — the override names this record
+directly rather than being read into it by analogy.
+
+### docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md#19
+
+*revision: authored · kind: prose · heading: Whether Gate's ScopeSelector and RuleSelector are built now, or wait for a caller that needs to select less than everything / Built Under Override, Not By The Primary Trigger Firing · hash: sha256:b544843274b1b58f9629ab22b90bacf0fb58a3c04f128d5ab1fdd242ca0f8cf8*
+
+Verified directly against the real code, not assumed: `ScopeSelector`
+(`crates/orchestration/nomos-gate-orchestration/src/scope_selector.rs`) is `include`/
+`exclude` lists compared to `nomos_rules::SourceFile::path` by textual prefix containment —
+no glob engine, the same soundness choice `OD-LEDGER-013` already made for ledger territory
+over glob-against-glob comparison — consulted by `Run_Gate` before
+`nomos_check_orchestration::Run` is called, so an out-of-scope file is never judged at all.
+`RuleSelector` (`.../rule_selector.rs`) filters findings by `RuleId` after `Run` returns and
+before `Disposition` reduces them: a real narrowing of what can fail a build, but honestly
+short of a real narrowing of what runs — `Run` still executes every rule unconditionally
+over every source it is handed, and changing that needs a signature change to `Run` itself
+across every one of its callers, which this increment does not attempt. Both fields default
+to select-everything, so every construction site that predates them, and this repository's
+own `gate run --root .` in CI, are unchanged in behavior.
+
+### docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md#20
+
 *revision: authored · kind: heading · heading: Whether Gate's ScopeSelector and RuleSelector are built now, or wait for a caller that needs to select less than everything / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md#18
+### docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md#21
 
-*revision: authored · kind: prose · heading: Whether Gate's ScopeSelector and RuleSelector are built now, or wait for a caller that needs to select less than everything / Status · hash: sha256:456d93e120d5794b3f91900e3c7252c696f0173c37d1e12a27344562507dc2f8*
+*revision: authored · kind: prose · heading: Whether Gate's ScopeSelector and RuleSelector are built now, or wait for a caller that needs to select less than everything / Status · hash: sha256:edf9c5974373ab70c6b2d900b16082108ba03bc7186b87353a7690b97f90986b*
 
-Open. `Gate` has a real `run` verb now (`P13-GATE-RUN-FIRST-INCREMENT-3`,
-`P13-GATE-014-015-RUN-TRIGGER-FIRED`), which closes the risk of shaping a selector around a
-`run` that did not yet exist, and `run` has gained its first real caller
-(`P13-GATE-RUN-CI-CALLER`): `.github/workflows/gate.yml`'s `Rules` step now invokes `gate
-run`, not `check`, and this repository's own build now depends on its disposition. That
-caller still judges everything, unconditionally — it does not need to evaluate fewer than
-every registered rule over fewer than every file, so this record's own primary trigger
-remains unmet. Revisit when `gate run` gains a caller that needs to evaluate fewer than
-every registered rule over fewer than every file — this repository's own CI wanting a
-subset, or a second repository wanting a different rule set.
+Accepted. `ScopeSelector` and `RuleSelector` exist and are consulted by a real `run`, closing
+what this record asked. Not by the primary trigger this record names — no caller has yet
+asked for fewer than every rule over fewer than every file — but by the user's own standing
+override, recorded above rather than left to be inferred from a different one. Nothing
+further to revisit: the fields this record asked for are built, and any future narrowing of
+their shape (a real glob syntax, a deny-list form, `Run` itself gaining a per-call rule
+subset) is a new question for a new record, not a reopening of this one.
 
 ### docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md#1
 

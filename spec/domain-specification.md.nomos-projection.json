@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:be98c8086f1e13a2c886a1987e48d14d53ace65cd7026b7749308daf689a17e9",
-  "inputs_digest": "sha256:c457fba26195d31678b67c80914128ebcde54048d14f739c3c89aa59179d38ac",
+  "content_digest": "sha256:161f6786ac537fc1b6821fd8cbd62366b717be6c3b067fdb21d49c4ab90fdba4",
+  "inputs_digest": "sha256:f472cb480d16b1ec4469883b521ec99e629c4202eb5d37f2b420471345bbd1c4",
   "sections": [
     [
       "Documents",
@@ -12,11 +12,11 @@
     ],
     [
       "Sections",
-      1254
+      1255
     ],
     [
       "Source blocks",
-      4477
+      4480
     ]
   ],
   "inputs": [
@@ -313,7 +313,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md@authored",
-      "hash": "sha256:6f4641a5880349085b0024910a1e846ce7a8c0c0c0fb2565df2afec25bc14c75"
+      "hash": "sha256:fde76ddb443213fdd5c253144550e72aa60a127201be1c067156bd52c9a071dd"
     },
     {
       "content": "documents",
@@ -3148,7 +3148,12 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md#17",
-      "hash": "sha256:42b6c2b2f6a961afe2a88f8b94b5c437c22bd895aa36f3438838e7792564e06c"
+      "hash": "sha256:776d8fb7e0d93901d31efa5e8aa8d8a727b9ba0493ba410a053db236665b6a13"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md#20",
+      "hash": "sha256:d65038b1f33db9750879a54ed06ea21929d6319d1cca497ae6faef67fac53254"
     },
     {
       "content": "headings",
@@ -15378,12 +15383,27 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md#17",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:3c96abae9a045645589c04135482c9d4fcaa1a01c7ff1927e61b39d6499cd91e"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md#18",
-      "hash": "sha256:456d93e120d5794b3f91900e3c7252c696f0173c37d1e12a27344562507dc2f8"
+      "hash": "sha256:cf4b2dc8a27c510f16cede6a207f07af54705b984d0e3b31e86fb30484783048"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md#19",
+      "hash": "sha256:b544843274b1b58f9629ab22b90bacf0fb58a3c04f128d5ab1fdd242ca0f8cf8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md#20",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md#21",
+      "hash": "sha256:edf9c5974373ab70c6b2d900b16082108ba03bc7186b87353a7690b97f90986b"
     },
     {
       "content": "blocks",

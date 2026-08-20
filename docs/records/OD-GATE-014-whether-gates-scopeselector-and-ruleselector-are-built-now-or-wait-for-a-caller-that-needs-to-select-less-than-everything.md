@@ -2,8 +2,8 @@
 id: OD-GATE-014
 type: decision
 title: Whether Gate's ScopeSelector and RuleSelector are built now, or wait for a caller that needs to select less than everything
-status: open
-version: 4
+status: accepted
+version: 5
 authority: canonical-normative-record
 tags:
   - gate
@@ -123,15 +123,39 @@ to want it, can now be checked against a real reduction pipeline instead of a hy
 one — the same way `Check_Naming_Convention`'s arrival gave `OD-RULES-006` a second rule to
 compare rationale against instead of one.
 
+## Built Under Override, Not By The Primary Trigger Firing
+
+`P13-GATE-014-SCOPE-RULE-SELECTORS` built both types this record was waiting on, but the
+primary trigger named above — a real caller that needs to evaluate fewer than every
+registered rule over fewer than every file — still never fired. What changed is the same
+kind of event the "What Would Decide It" section already distinguished from a real caller
+for the plugin-registration case: the user gave a standing, explicit override of this
+record's own wait, the same shape as the 2026-08-18 direction this record already declined
+to read as covering selector policy. That direction was scoped to registration machinery;
+this one is scoped to `ScopeSelector`/`RuleSelector` by name, so the distinction this record
+drew between the two does not apply to itself here — the override names this record
+directly rather than being read into it by analogy.
+
+Verified directly against the real code, not assumed: `ScopeSelector`
+(`crates/orchestration/nomos-gate-orchestration/src/scope_selector.rs`) is `include`/
+`exclude` lists compared to `nomos_rules::SourceFile::path` by textual prefix containment —
+no glob engine, the same soundness choice `OD-LEDGER-013` already made for ledger territory
+over glob-against-glob comparison — consulted by `Run_Gate` before
+`nomos_check_orchestration::Run` is called, so an out-of-scope file is never judged at all.
+`RuleSelector` (`.../rule_selector.rs`) filters findings by `RuleId` after `Run` returns and
+before `Disposition` reduces them: a real narrowing of what can fail a build, but honestly
+short of a real narrowing of what runs — `Run` still executes every rule unconditionally
+over every source it is handed, and changing that needs a signature change to `Run` itself
+across every one of its callers, which this increment does not attempt. Both fields default
+to select-everything, so every construction site that predates them, and this repository's
+own `gate run --root .` in CI, are unchanged in behavior.
+
 ## Status
 
-Open. `Gate` has a real `run` verb now (`P13-GATE-RUN-FIRST-INCREMENT-3`,
-`P13-GATE-014-015-RUN-TRIGGER-FIRED`), which closes the risk of shaping a selector around a
-`run` that did not yet exist, and `run` has gained its first real caller
-(`P13-GATE-RUN-CI-CALLER`): `.github/workflows/gate.yml`'s `Rules` step now invokes `gate
-run`, not `check`, and this repository's own build now depends on its disposition. That
-caller still judges everything, unconditionally — it does not need to evaluate fewer than
-every registered rule over fewer than every file, so this record's own primary trigger
-remains unmet. Revisit when `gate run` gains a caller that needs to evaluate fewer than
-every registered rule over fewer than every file — this repository's own CI wanting a
-subset, or a second repository wanting a different rule set.
+Accepted. `ScopeSelector` and `RuleSelector` exist and are consulted by a real `run`, closing
+what this record asked. Not by the primary trigger this record names — no caller has yet
+asked for fewer than every rule over fewer than every file — but by the user's own standing
+override, recorded above rather than left to be inferred from a different one. Nothing
+further to revisit: the fields this record asked for are built, and any future narrowing of
+their shape (a real glob syntax, a deny-list form, `Run` itself gaining a per-call rule
+subset) is a new question for a new record, not a reopening of this one.
