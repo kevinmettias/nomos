@@ -20775,6 +20775,111 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-CRATES-README-BAND-CLAIM-STALE",
+      "title": "crates/README.md claims one directory per band; the tree has folders spanning several",
+      "why": "crates/README.md and its folder-organization comment both state 'one directory per dependency band, which is the workspace's architecture.' crates/substrate/ alone holds nomos-workspace(18), nomos-ledger(20), nomos-capability(21) and nomos-analysis(22) -- four bands under one directory -- so the claim is false against the real tree. An external architecture review flagged this drift and it was verified directly against the tree and against root README.md's band table before filing. Folders group by responsibility family; dependency bands are the orthogonal ordering root README.md's table already owns.",
+      "done_when": "crates/README.md and its folder-organization HTML comment no longer claim one directory per band; they describe folders as responsibility-family groupings and point to root README.md's band table as the band authority, in prose no longer than the current text. No other file changes.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/README.md"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Predicate chosen at add-time (boundaries::readme) checks root README.md's band table and would pass whether or not crates/README.md's false claim gets fixed -- not real verification. Re-authored as P13-CRATES-README-BAND-CLAIM-STALE-2 with an rg predicate asserting the stale phrase is gone and the corrected framing is present in crates/README.md itself, the same shape P13-LANG-RUST-CARGO-DOC-STALE used for its doc-only fix."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "contract",
+          "--",
+          "boundaries::readme"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-readme-fix",
+          "reason": "Predicate at add-time does not verify the fix; re-authoring as -2 with a real predicate.",
+          "abandoned_at": 1787188319
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-readme-fix",
+        "declined_at": 1787188323
+      }
+    },
+    {
+      "id": "P13-CRATES-README-BAND-CLAIM-STALE-2",
+      "title": "crates/README.md claims one directory per band; the tree has folders spanning several",
+      "why": "crates/README.md and its folder-organization comment both state 'one directory per dependency band, which is the workspace's architecture.' crates/substrate/ alone holds nomos-workspace(18), nomos-ledger(20), nomos-capability(21) and nomos-analysis(22) -- four bands under one directory -- so the claim is false against the real tree. An external architecture review flagged this drift and it was verified directly against the tree and against root README.md's band table before filing. Folders group by responsibility family; dependency bands are the orthogonal ordering root README.md's table already owns. Amends P13-CRATES-README-BAND-CLAIM-STALE, declined for a predicate that could not have caught a wrong fix.",
+      "done_when": "crates/README.md no longer claims one directory per band; it describes folders as responsibility-family groupings and names root README.md's band table as the band authority.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/README.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "rg",
+          "-U",
+          "--pcre2",
+          "-q",
+          "(?s)\\A(?!.*[Oo]ne directory per dependency band).*responsibility.*README\\.md.*\\z",
+          "crates/README.md"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "rg",
+          "-U",
+          "--pcre2",
+          "-q",
+          "(?s)\\A(?!.*[Oo]ne directory per dependency band).*responsibility.*README\\.md.*\\z",
+          "crates/README.md"
+        ],
+        "exit_code": 0,
+        "output_tail": "",
+        "verified_at": 1787188383,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "9cbe34e8397002f5c978b3b6ccc7b7b084214e3d"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
