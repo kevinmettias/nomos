@@ -1,0 +1,26 @@
+pub const fn nomos_cap_controlflow::ArmShape::Label(self) -> &'static str
+pub const fn nomos_cap_controlflow::Ceiling() -> Guarantee
+pub const nomos_cap_controlflow::CAPABILITY: &str
+pub const nomos_cap_controlflow::CONTRACT_VERSION: ContractVersion
+pub const nomos_cap_controlflow::SCHEMA: &str
+pub enum nomos_cap_controlflow::ArmShape
+pub enum variant nomos_cap_controlflow::ArmShape::BareContinue
+pub enum variant nomos_cap_controlflow::ArmShape::BareReturn
+pub enum variant nomos_cap_controlflow::ArmShape::Empty
+pub enum variant nomos_cap_controlflow::ArmShape::TailOk
+pub fn nomos_cap_controlflow::ArmShape::From_Label(label: &str) -> Option<Self>
+pub fn nomos_cap_controlflow::Capability() -> CapabilityId
+pub fn nomos_cap_controlflow::Capability_Contract() -> CapabilityContract
+pub fn nomos_cap_controlflow::Encode_Payload(payload: &ReachabilityPayload) -> Vec<u8>
+pub fn nomos_cap_controlflow::Parse_Payload(bytes: &[u8]) -> Result<ReachabilityPayload, PayloadRefusal>
+pub fn nomos_cap_controlflow::PayloadRefusal::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_cap_controlflow::Payload_Schema() -> SchemaId
+pub impl nomos_cap_controlflow::PayloadRefusal implements core::fmt::Display
+pub struct field nomos_cap_controlflow::PayloadRefusal::reason: String
+pub struct field nomos_cap_controlflow::ReachabilityPayload::sites: Vec<ReachabilitySite>
+pub struct field nomos_cap_controlflow::ReachabilitySite::binding: String
+pub struct field nomos_cap_controlflow::ReachabilitySite::function: String
+pub struct field nomos_cap_controlflow::ReachabilitySite::shape: ArmShape
+pub struct nomos_cap_controlflow::PayloadRefusal
+pub struct nomos_cap_controlflow::ReachabilityPayload
+pub struct nomos_cap_controlflow::ReachabilitySite

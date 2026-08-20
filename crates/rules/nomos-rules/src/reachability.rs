@@ -1,0 +1,401 @@
+//! Every control-flow path that begins at a fact-read failure must reach a `Finding`
+//! before the enclosing function returns — the property `Applicability`'s own module doc
+//! names as this product's first principle: unknown is not pass.
+//!
+//! # `OD-RULES-008` specified this; `P13-CONTROLFLOW-REACHABILITY-CAPABILITY` built it
+//!
+//! `OD-RULES-008` named `Check_Unread_Reaches_A_Finding` as the candidate for the first
+//! rule outside syntax-local judgment and dependency-graph reachability, and traced what
+//! building it would force: an intraprocedural control-flow capability, `OD-ANALYSIS-007`
+//! narrowed rather than closed. This is that rule's tier-1 form — a heuristic over one
+//! file's parse tree, not the sound tier the same record's own analysis names.
+//!
+//! # This rule states its own floor honestly, below the capability's ceiling
+//!
+//! `nomos_cap_controlflow`'s ceiling is `FactVariant::SemanticallyResolved` — what a sound
+//! answer needs. `nomos-capability`'s own resolution code admits an offer only once it
+//! clears a caller's stated floor (`crates/substrate/nomos-capability/src/registry.rs`'s
+//! `Selected`), so a `Requirement` asking for `SemanticallyResolved` today would find
+//! nothing — no offer against this capability claims it yet. This rule's own
+//! [`Reachability_Requirement`] asks for exactly [`nomos_contracts::FactVariant::Syntactic`],
+//! what `nomos-lang-rust`'s tier-1 offer actually delivers, and every finding it raises
+//! carries [`nomos_contracts::Applicability::PartiallySupported`] rather than `Supported` —
+//! evaluated over part of the question (the syntactically obvious wrong shapes), not the
+//! whole one `OD-RULES-008`'s sound tier states.
+//!
+//! # Not composed into `nomos-check-orchestration::Run`
+//!
+//! Deliberately, the same split `Check_Dependency_Direction` used:
+//! `P13-CONTROLFLOW-REACHABILITY-CAPABILITY` built and tested this rule and its provider;
+//! wiring either into a real run is a follow-on item, the way `P13-DEPENDENCY-WIRE-1`
+//! followed `P13-DEPENDENCY-EDGES-2`.
+
+use crate::SourceFile;
+use nomos_analysis::{FactReader, InputDigest};
+use nomos_capability::Requirement;
+use nomos_cap_controlflow::{ArmShape, ReachabilityPayload, ReachabilitySite};
+use nomos_contracts::{
+    Applicability, Assurance, EvidenceClass, FactVariant, Finding, GateCategory,
+    Guarantee, IncrementalGranularity, RuleId,
+};
+
+/// This rule's own identifier.
+pub const UNREAD_REACHES_FINDING: &str = "unread-reaches-finding";
+
+/// The record this implementation's contract is written in.
+///
+/// `OD-RULES-008` named this rule's candidate and traced what building it would force;
+/// `P13-CONTROLFLOW-REACHABILITY-CAPABILITY` amended its `Status` once the tier-1 provider
+/// and this rule existed, which is why this citation names version 2 rather than the
+/// record's original 1 — `tests/contract/tests/rule_contract_citation.rs` reads the
+/// record's own front matter on every run and compares it against
+/// [`UNREAD_REACHES_FINDING_CONTRACT_RECORD_VERSION`] for exactly this reason.
+pub const UNREAD_REACHES_FINDING_CONTRACT_RECORD: &str = "OD-RULES-008";
+
+/// The version of [`UNREAD_REACHES_FINDING_CONTRACT_RECORD`] this implementation was
+/// written against.
+pub const UNREAD_REACHES_FINDING_CONTRACT_RECORD_VERSION: u32 = 2;
+
+/// What this rule needs from `nomos.cap.controlflow.reachability` before it will believe
+/// an answer.
+///
+/// Asks for exactly `Syntactic` — what this item's own tier-1 provider offers — rather
+/// than the capability's `SemanticallyResolved` ceiling. This module's own doc says why:
+/// asking above every installed offer's guarantee would make the offer unreachable, not
+/// merely graded as a fallback. Soundness `Sound` because a flagged site must really be
+/// one of `ArmShape`'s four shapes; completeness `Unknown` because this rule does not
+/// require a bound on what the provider missed — it already knows, from its own floor,
+/// that it is reading a heuristic and reports accordingly.
+#[must_use]
+pub(crate) fn Reachability_Requirement() -> Requirement
+{
+    let guarantee = Guarantee::New(
+        FactVariant::Syntactic,
+        Assurance::Sound,
+        Assurance::Unknown,
+        IncrementalGranularity::File,
+    );
+
+    return Requirement::New(
+        nomos_cap_controlflow::Capability(),
+        nomos_cap_controlflow::CONTRACT_VERSION,
+        guarantee,
+    );
+}
+
+/// Judges every source `sources` names for arms whose control flow does not reach a
+/// `Finding`.
+///
+/// The same shape [`crate::Check_Dependency_Direction`] and
+/// [`crate::Check_Naming_Convention`] both have: one fact per source, read and judged.
+#[must_use]
+pub fn Check_Unread_Reaches_A_Finding(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
+{
+    let mut findings = Vec::new();
+
+    for source in sources
+    {
+        match Payload_Of(source, facts)
+        {
+            Ok(payload) => findings.extend(Violations_In(&payload, source)),
+            Err(finding) => findings.push(finding),
+        }
+    }
+
+    findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
+    return findings;
+}
+
+/// One source's decoded reachability payload, or a finding reporting why it could not be
+/// read.
+fn Payload_Of(source: &SourceFile, facts: &mut dyn FactReader) -> Result<ReachabilityPayload, Finding>
+{
+    let need = Reachability_Requirement();
+    let capability = nomos_cap_controlflow::Capability();
+    // The provider's semantic input is the file bytes it parsed, not a digest this rule
+    // recomputes — the same reasoning `dependency.rs`'s own `Payload_Of` gives: a reader
+    // resolves a fact by subject and requirement, and an empty digest here names nothing
+    // this rule is required to get right.
+    let inputs = InputDigest::Of(&[]);
+
+    let fact = match facts.Require(&capability, &source.subject, inputs, &need)
+    {
+        Ok(fact) => fact,
+        Err(applicability) =>
+        {
+            return Err(Unread(
+                source,
+                applicability,
+                &format!("no admitted provider answered for it ({})", applicability.Label()),
+            ));
+        }
+    };
+
+    if fact.payload.schema != nomos_cap_controlflow::Payload_Schema()
+    {
+        return Err(Unread(
+            source,
+            Applicability::Unparseable,
+            &format!(
+                "the fact for this source carries payload schema `{}`, which this build \
+                 does not read",
+                fact.payload.schema
+            ),
+        ));
+    }
+
+    return nomos_cap_controlflow::Parse_Payload(&fact.payload.bytes)
+        .map_err(|refusal| return Unread(source, Applicability::Unparseable, &refusal.to_string()));
+}
+
+fn Unread(source: &SourceFile, applicability: Applicability, because: &str) -> Finding
+{
+    return Finding {
+        rule: RuleId::New(UNREAD_REACHES_FINDING),
+        subject: source.subject,
+        subject_name: source.path.clone(),
+        applicability,
+        evidence: EvidenceClass::Derived,
+        gate: GateCategory::Advisory,
+        summary: format!("this source's reachability could not be judged: {because}"),
+        locations: vec![source.path.clone()],
+    };
+}
+
+/// Every flagged site `payload` carries, as findings.
+///
+/// A pure function of an already-decoded payload, testable against hand-built fixtures —
+/// no registry, no store, no reader — the same split [`crate::naming::Violations_In`] and
+/// [`crate::dependency::Violations_In`] both draw for the same reason.
+fn Violations_In(payload: &ReachabilityPayload, source: &SourceFile) -> Vec<Finding>
+{
+    return payload.sites.iter().map(|site| return Violation(source, site)).collect();
+}
+
+fn Violation(source: &SourceFile, site: &ReachabilitySite) -> Finding
+{
+    return Finding {
+        rule: RuleId::New(UNREAD_REACHES_FINDING),
+        subject: source.subject,
+        subject_name: source.path.clone(),
+        // Not `Supported` — this module's own doc says why: a heuristic pattern match
+        // over one arm's body judged part of the question, not the whole one a sound,
+        // call-resolving provider would answer.
+        applicability: Applicability::PartiallySupported,
+        evidence: EvidenceClass::Derived,
+        gate: GateCategory::Advisory,
+        summary: format!(
+            "{}: the `Err({})` arm in `{}` is {}, so a control-flow path from this \
+             fact-read failure does not reach a Finding — the exact defect `Applicability`'s \
+             own module doc calls unknown is not pass.",
+            source.path,
+            site.binding,
+            site.function,
+            Shape_Description(site.shape)
+        ),
+        locations: vec![source.path.clone()],
+    };
+}
+
+fn Shape_Description(shape: ArmShape) -> &'static str
+{
+    return match shape
+    {
+        ArmShape::Empty => "empty",
+        ArmShape::BareContinue => "a bare `continue` with no other effect",
+        ArmShape::BareReturn => "a bare `return` with no value",
+        ArmShape::TailOk => "a tail call to `Ok(...)`, treating the failure as success",
+    };
+}
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use nomos_model::Content_Digest;
+    use nomos_contracts::SubjectId;
+
+    fn Source(path: &str) -> SourceFile
+    {
+        return SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), String::new());
+    }
+
+    fn Site(function: &str, shape: ArmShape) -> ReachabilitySite
+    {
+        return ReachabilitySite {
+            function: function.to_owned(),
+            binding: "applicability".to_owned(),
+            shape,
+        };
+    }
+
+    mod judging
+    {
+        use super::*;
+
+        #[test]
+        fn Test_A_Payload_With_No_Sites_Should_Produce_No_Finding()
+        {
+            let payload = ReachabilityPayload { sites: Vec::new() };
+
+            let findings = Violations_In(&payload, &Source("a.rs"));
+
+            assert!(findings.is_empty(), "{findings:?}");
+        }
+
+        #[test]
+        fn Test_One_Flagged_Site_Should_Produce_One_Finding()
+        {
+            let payload = ReachabilityPayload {
+                sites: vec![Site("Payload_Of", ArmShape::Empty)],
+            };
+
+            let findings = Violations_In(&payload, &Source("a.rs"));
+
+            assert_eq!(findings.len(), 1, "{findings:?}");
+            let found = findings.first().expect("asserted len 1 above");
+            assert_eq!(found.applicability, Applicability::PartiallySupported);
+            assert_eq!(found.gate, GateCategory::Advisory);
+            assert!(found.summary.contains("Payload_Of"), "{}", found.summary);
+        }
+
+        #[test]
+        fn Test_Every_Site_Should_Produce_Its_Own_Finding()
+        {
+            let payload = ReachabilityPayload {
+                sites: vec![
+                    Site("One", ArmShape::BareContinue),
+                    Site("Two", ArmShape::BareReturn),
+                    Site("Three", ArmShape::TailOk),
+                ],
+            };
+
+            let findings = Violations_In(&payload, &Source("a.rs"));
+
+            assert_eq!(findings.len(), 3, "{findings:?}");
+        }
+    }
+
+    /// [`Check_Unread_Reaches_A_Finding`] itself, through a real registry, store and
+    /// reader — the half [`Violations_In`]'s own tests do not reach.
+    mod reading_a_fact
+    {
+        use super::*;
+        use nomos_analysis::{
+            Context, FactKey, FactPayload, GuaranteeDigest, MaterializedFact, MemoryFactStore, Reader,
+        };
+        use nomos_capability::{ProviderOffer, Registry};
+        use nomos_contracts::{BuildVariantId, ConfigurationId, Digest128, GenerationId, ProviderId, SnapshotId};
+
+        const PROVIDER: &str = "nomos.test.reachability.resolves";
+
+        fn Test_Context() -> Context
+        {
+            return Context {
+                snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([1; 16])),
+                variant: BuildVariantId::From_Digest(Digest128::From_Bytes([2; 16])),
+                configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([3; 16])),
+                generation: GenerationId::INITIAL,
+            };
+        }
+
+        fn Offering() -> (MemoryFactStore, Registry, ProviderOffer)
+        {
+            let mut registry = Registry::New();
+            registry
+                .Declare(nomos_cap_controlflow::Capability_Contract())
+                .expect("the controlflow capability is declared once");
+
+            let offer = ProviderOffer {
+                provider: ProviderId::New(PROVIDER),
+                capability: nomos_cap_controlflow::Capability(),
+                version: nomos_cap_controlflow::CONTRACT_VERSION,
+                guarantee: Guarantee::New(
+                    FactVariant::Syntactic,
+                    Assurance::Sound,
+                    Assurance::Unsound,
+                    IncrementalGranularity::File,
+                ),
+            };
+            registry.Offer(offer.clone()).expect("within the ceiling");
+
+            return (MemoryFactStore::New(), registry, offer);
+        }
+
+        fn Materialize(store: &mut MemoryFactStore, source: &SourceFile, offer: &ProviderOffer, payload: &ReachabilityPayload)
+        {
+            let context = Test_Context();
+            let bytes = nomos_cap_controlflow::Encode_Payload(payload);
+            let key = FactKey {
+                contract: nomos_cap_controlflow::Capability(),
+                contract_version: offer.version,
+                subject: source.subject,
+                semantic_inputs: InputDigest::Of(&[]),
+                provider: offer.provider.clone(),
+                provider_version: offer.version,
+                guarantee: GuaranteeDigest::Of(&offer.guarantee),
+                variant: context.variant,
+                configuration: context.configuration,
+            };
+
+            store
+                .Materialize(
+                    MaterializedFact {
+                        identity: key.At(context.generation),
+                        snapshot: context.snapshot,
+                        evidence: EvidenceClass::Verified,
+                        guarantee: offer.guarantee,
+                        payload: FactPayload::New(nomos_cap_controlflow::Payload_Schema(), bytes),
+                    },
+                    &[],
+                )
+                .expect("nothing here is backdated");
+        }
+
+        #[test]
+        fn Test_A_Real_Fact_Should_Be_Read_And_Judged()
+        {
+            let source = Source("a.rs");
+            let (mut store, registry, offer) = Offering();
+            Materialize(
+                &mut store,
+                &source,
+                &offer,
+                &ReachabilityPayload {
+                    sites: vec![Site("Payload_Of", ArmShape::Empty)],
+                },
+            );
+
+            let mut reader = Reader::On(&store, &registry, Test_Context());
+            let findings = Check_Unread_Reaches_A_Finding(&[source], &mut reader);
+
+            assert_eq!(findings.len(), 1, "{findings:?}");
+            assert_eq!(findings.first().expect("asserted len 1 above").subject_name, "a.rs");
+        }
+
+        #[test]
+        fn Test_A_Subject_With_No_Fact_Should_Be_Reported_Rather_Than_Silently_Clean()
+        {
+            let source = Source("a.rs");
+            let (store, registry, _offer) = Offering();
+
+            let mut reader = Reader::On(&store, &registry, Test_Context());
+            let findings = Check_Unread_Reaches_A_Finding(&[source], &mut reader);
+
+            assert_eq!(findings.len(), 1, "an unread subject must not render as a clean one: {findings:?}");
+        }
+
+        #[test]
+        fn Test_A_Source_With_No_Flagged_Sites_Should_Produce_No_Finding()
+        {
+            let source = Source("a.rs");
+            let (mut store, registry, offer) = Offering();
+            Materialize(&mut store, &source, &offer, &ReachabilityPayload { sites: Vec::new() });
+
+            let mut reader = Reader::On(&store, &registry, Test_Context());
+            let findings = Check_Unread_Reaches_A_Finding(&[source], &mut reader);
+
+            assert!(findings.is_empty(), "{findings:?}");
+        }
+    }
+}

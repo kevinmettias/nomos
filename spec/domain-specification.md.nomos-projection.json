@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:534b99e75e6a296f84ea4a6130e923546a340e48259512f7e1c524f8cd2b4639",
-  "inputs_digest": "sha256:b2bedae72635f2e4eb5eb3178ac29ef85f5b3fffe158bf14b2ed0e2486ab0c99",
+  "content_digest": "sha256:ad6786cb9bbcf18786083e776d024159be74fca3f52ec59ce669baa0b8787da6",
+  "inputs_digest": "sha256:06191cfbd7902c4e6c6ce7f6fffd4f6c604a364cbde1e13ed948ad4512254031",
   "sections": [
     [
       "Documents",
@@ -12,11 +12,11 @@
     ],
     [
       "Sections",
-      1244
+      1245
     ],
     [
       "Source blocks",
-      4441
+      4444
     ]
   ],
   "inputs": [
@@ -633,7 +633,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md@authored",
-      "hash": "sha256:3aa286a2c572fe4d37f45f85c06e701857ef92ece293de0368566a1615a78c6d"
+      "hash": "sha256:335f2ed03def8b979a66bf55ff3278c706fbc7e1105bc01a4fd5a1a75cedfe0a"
     },
     {
       "content": "documents",
@@ -5944,6 +5944,11 @@
       "content": "headings",
       "identity": "docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md#28",
       "hash": "sha256:af1839bcdbb0fb1385bd49cb930af979928766aad0eba9bdfc00bff872821f9b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md#30",
+      "hash": "sha256:6df6edb88b81cabf2aa91ba8153da8858eaaa8774c19ab057f96c9b971ea96e4"
     },
     {
       "content": "headings",
@@ -25674,6 +25679,21 @@
       "content": "blocks",
       "identity": "docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md#29",
       "hash": "sha256:de49816273b9ef7ac419c8cd0ec141df5cb834b2b12bde64f2e7861be6c00443"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md#30",
+      "hash": "sha256:94d309d408a2e499c0f01557bf0558c9a2505c7e6aed81a538419e9de65cac44"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md#31",
+      "hash": "sha256:97bd61d2aac2482cd24833bfca558623d4d3ef505deaaed5c745927492f51076"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md#32",
+      "hash": "sha256:5e88ea6cfad0ae1e6c0a0f3d060f4ca2d9b5ebee5607910f0048b660a652cdda"
     },
     {
       "content": "blocks",

@@ -295,6 +295,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "nomos-cap-controlflow"
+version = "0.1.0"
+dependencies = [
+ "nomos-capability",
+ "nomos-contracts",
+]
+
+[[package]]
 name = "nomos-cap-dependency"
 version = "0.1.0"
 dependencies = [
@@ -431,6 +439,7 @@ name = "nomos-lang-rust"
 version = "0.1.0"
 dependencies = [
  "nomos-analysis",
+ "nomos-cap-controlflow",
  "nomos-cap-syntax",
  "nomos-capability",
  "nomos-contracts",
@@ -511,6 +520,7 @@ name = "nomos-rules"
 version = "0.1.0"
 dependencies = [
  "nomos-analysis",
+ "nomos-cap-controlflow",
  "nomos-cap-dependency",
  "nomos-cap-syntax",
  "nomos-capability",

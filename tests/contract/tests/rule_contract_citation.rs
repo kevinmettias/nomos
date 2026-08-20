@@ -37,6 +37,11 @@ const CITATIONS: &[(&str, &str, u32)] = &[
         nomos_rules::DEPENDENCY_CONTRACT_RECORD,
         nomos_rules::DEPENDENCY_CONTRACT_RECORD_VERSION,
     ),
+    (
+        "nomos_rules::UNREAD_REACHES_FINDING_CONTRACT_RECORD",
+        nomos_rules::UNREAD_REACHES_FINDING_CONTRACT_RECORD,
+        nomos_rules::UNREAD_REACHES_FINDING_CONTRACT_RECORD_VERSION,
+    ),
 ];
 
 /// Every cited version must match its record's own front matter, or the citation is a claim
@@ -77,10 +82,11 @@ fn Test_The_Citation_Table_Should_Cover_Every_Cited_Rule()
 {
     assert_eq!(
         CITATIONS.len(),
-        2,
-        "nomos-rules ships three rules, two of which cite a versioned record: \
-         Check_Completeness_Mirrors cites D-134 and Check_Dependency_Direction cites \
-         OD-RULES-003. Check_Naming_Convention cites README.md prose and has no front matter \
+        3,
+        "nomos-rules ships four rules, three of which cite a versioned record: \
+         Check_Completeness_Mirrors cites D-134, Check_Dependency_Direction cites \
+         OD-RULES-003, and Check_Unread_Reaches_A_Finding cites OD-RULES-008. \
+         Check_Naming_Convention cites README.md prose and has no front matter \
          to compare against. A rule added with a real record needs a row in CITATIONS and \
          this number raised with it."
     );

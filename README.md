@@ -44,6 +44,7 @@ band, and `tests/contract` asserts it.
 | 22 | `nomos-analysis` | Fact identity, fact readers, the fact store, and invalidation. |
 | 23 | `nomos-cap-syntax` | A capability contract, housed below every provider that offers against it. |
 | 23 | `nomos-cap-dependency` | The `nomos.cap.dependency.edges` contract — a workspace member's own first-party dependency edges, resolved by Cargo. Housed below its provider and below the rule that reads it: `nomos-rules` is a real second party from the day it was written, so this did not wait beside `nomos-lang-rust-cargo` the way `nomos.cap.module.index` waits inside `nomos-lang-rust`. |
+| 23 | `nomos-cap-controlflow` | The `nomos.cap.controlflow.reachability` contract — whether a control-flow path forward from a fact-read failure reaches a `Finding`. Housed below its provider (`nomos-lang-rust`) and below the rule that reads it (`nomos-rules`), the same real-second-party-from-day-one reason `nomos-cap-dependency` did not wait beside its own provider. |
 | 24 | `nomos-package` | The language-agnostic manifest core: `PackageId`, `PackageKind` and `PKG-007`'s four version domains, minus any typed version-domain abstraction or provider allowlist a specific language would supply. Depends on nothing above `nomos-contracts`. |
 | 25 | `nomos-lang-rust` | Recognition and syntax facts from `syn`, and the module rollup derived from them — the one fact in this workspace computed from other facts. |
 | 25 | `nomos-lang-rust-scan` | The second provider of that capability. Same band, so neither may name the other. |

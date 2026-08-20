@@ -101,6 +101,10 @@ pub(crate) fn Test_Name_For(domain: &str) -> &'static str
     {
         "syntax-fact-production" => "domains::Test_The_Parser_Should_Meet_Its_Declared_Strategy",
         "module-index-rollup" => "domains::Test_The_Rollup_Should_Meet_Its_Declared_Strategy",
+        "controlflow-reachability-production" =>
+        {
+            "domains::Test_The_Reachability_Offer_Should_Meet_Its_Declared_Strategy"
+        }
         "scan-fact-production" => "domains::Test_The_Scanner_Should_Meet_Its_Declared_Strategy",
         "dependency-fact-production" =>
         {

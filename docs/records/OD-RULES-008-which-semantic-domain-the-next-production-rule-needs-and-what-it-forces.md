@@ -3,7 +3,7 @@ id: OD-RULES-008
 type: decision
 title: Which semantic domain the next production rule needs, and which deferred architecture piece it actually forces
 status: open
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - rules
@@ -260,3 +260,31 @@ demand planner, architecture-core facts and feature topology -- stays exactly as
 undecided as its own record already left it; this candidate's real requirements do not
 reach any of them. Revisit `OD-ANALYSIS-007` when a session claims the capability this
 record names, or names a different one this record did not anticipate.
+
+### `P13-CONTROLFLOW-REACHABILITY-CAPABILITY` landed the tier-1 half
+
+`nomos.cap.controlflow.reachability` exists (`crates/capabilities/nomos-cap-controlflow`),
+its ceiling stated honestly at `FactVariant::SemanticallyResolved` -- the sound tier this
+section names, not moved down to match what shipped. `nomos-lang-rust` offers a second,
+`Syntactic`-tier answer against it: a pattern match over one file's parse tree for
+`Err(applicability) => <body>` arms whose body is one of four syntactically obvious wrong
+shapes (empty, a bare `continue`, a bare `return`, a tail `Ok(...)`), no name or type
+resolution attempted. `Check_Unread_Reaches_A_Finding` (`crates/rules/nomos-rules/src/
+reachability.rs`) consumes it, asking for exactly `Syntactic` -- not this section's
+`SemanticallyResolved` ceiling, which no installed offer clears and which
+`nomos-capability`'s own floor-then-select resolution (`crates/substrate/nomos-capability/
+src/registry.rs`'s `Selected`) would simply fail to reach rather than fall back from. Every
+finding this rule raises carries `Applicability::PartiallySupported`, not `Supported`: a
+heuristic judged part of the question, not the whole one this section's sound tier states.
+
+**What remains exactly as open as this record already left it.** Tier 2 -- resolving every
+call an `Err` arm reaches, so a `Finding` merely named as though it exists (`Unread`,
+`Unread_Of`, `Unreadable`, three functions with the same implied contract this section
+already named) cannot pass as one that actually does -- is not built. No offer against this
+capability claims `SemanticallyResolved`. `OD-ANALYSIS-007`'s narrowing stands unchanged:
+revisit it when a session claims the capability this section names at its sound tier, which
+is a different, larger item than the one that landed here. Neither the tier-1 provider nor
+this rule is composed into `nomos-check-orchestration::Run` -- reserving either file was
+kept out of `P13-CONTROLFLOW-REACHABILITY-CAPABILITY`'s own territory, the same split
+`P13-DEPENDENCY-EDGES-2` and `P13-DEPENDENCY-WIRE-1` used, so a follow-on item does that
+composing.

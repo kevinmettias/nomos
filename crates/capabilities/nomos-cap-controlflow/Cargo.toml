@@ -1,0 +1,18 @@
+[package]
+name = "nomos-cap-controlflow"
+version = "0.1.0"
+description = "Band 23. The nomos.cap.controlflow.reachability contract: the agreed meaning of the question its provider answers, owned by neither it nor any rule that reads it."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+# No provider, and no rule. The same position nomos-cap-dependency holds relative to
+# nomos-lang-rust-cargo and nomos-rules, drawn here because a rule (nomos-rules) reads this
+# capability from the day it is written.
+[dependencies]
+nomos-contracts = { workspace = true }
+nomos-capability = { workspace = true }
+
+[lints]
+workspace = true

@@ -1,5 +1,6 @@
 pub const fn nomos_lang_rust::Declared_Guarantee() -> Guarantee
 pub const fn nomos_lang_rust::ItemKind::Label(self) -> &'static str
+pub const fn nomos_lang_rust::reachability::Declared_Guarantee() -> Guarantee
 pub const fn nomos_lang_rust::rollup::Ceiling() -> Guarantee
 pub const fn nomos_lang_rust::rollup::Declared_Guarantee() -> Guarantee
 pub const fn nomos_lang_rust::rollup::Outcome::Answered(self) -> bool
@@ -21,6 +22,7 @@ pub enum nomos_lang_rust::Materialization
 pub enum nomos_lang_rust::Reading
 pub enum nomos_lang_rust::Recognition
 pub enum nomos_lang_rust::Visibility
+pub enum nomos_lang_rust::reachability::ReachabilityReading
 pub enum nomos_lang_rust::rollup::Outcome
 pub enum variant nomos_lang_rust::ItemKind::Constant
 pub enum variant nomos_lang_rust::ItemKind::Enum
@@ -47,6 +49,8 @@ pub enum variant nomos_lang_rust::Visibility::NotApplicable
 pub enum variant nomos_lang_rust::Visibility::Private
 pub enum variant nomos_lang_rust::Visibility::Public
 pub enum variant nomos_lang_rust::Visibility::Restricted { scope: String, }
+pub enum variant nomos_lang_rust::reachability::ReachabilityReading::Parsed(Vec<ReachabilitySite>)
+pub enum variant nomos_lang_rust::reachability::ReachabilityReading::Unparseable(ParseFailure)
 pub enum variant nomos_lang_rust::rollup::Outcome::Approximate
 pub enum variant nomos_lang_rust::rollup::Outcome::Read
 pub enum variant nomos_lang_rust::rollup::Outcome::Unreachable
@@ -61,6 +65,9 @@ pub fn nomos_lang_rust::SyntaxFacts::Declares_Nothing(&self) -> bool
 pub fn nomos_lang_rust::SyntaxItem::Qualified_Name(&self) -> String
 pub fn nomos_lang_rust::Visibility::Label(&self) -> String
 pub fn nomos_lang_rust::Visibility::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_lang_rust::reachability::Materialize(subject: SubjectId, source: &str, context: FactContext) -> Materialization
+pub fn nomos_lang_rust::reachability::Provider_Offer() -> ProviderOffer
+pub fn nomos_lang_rust::reachability::Read_Reachability(source: &str) -> ReachabilityReading
 pub fn nomos_lang_rust::rollup::Capability() -> CapabilityId
 pub fn nomos_lang_rust::rollup::Capability_Contract() -> CapabilityContract
 pub fn nomos_lang_rust::rollup::Encode_Index(index: &ModuleIndex) -> Vec<u8>

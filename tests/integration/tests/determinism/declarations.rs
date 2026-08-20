@@ -37,12 +37,17 @@ fn Test_Every_Domain_In_The_Tree_Should_Declare_And_Be_Registered()
 
     let declared = [
         ("syntax-fact-production", SyntaxFactProduction::STRENGTH),
-        // The same declaration, discharged over the other thing it covers. Two entries and
+        // The same declaration, discharged over the other things it covers. Entries and
         // one strategy is the shape `P10-ROLLUP-DETERMINISM` settled on: `nomos-lang-rust`
-        // has two fact producers occupying one row of the contracts table, so they are one
-        // promise — and a promise covering two producers has to be run over both, or the
-        // second is covered by a sentence and measured by nothing.
+        // has fact producers occupying one row of the contracts table, so they are one
+        // promise — and a promise covering more than one producer has to be run over each,
+        // or the rest are covered by a sentence and measured by nothing.
         ("module-index-rollup", SyntaxFactProduction::STRENGTH),
+        // The reachability offer's Materialize is the identical shape: one file's bytes in,
+        // deterministic bytes out, `syn`'s own source-order traversal. `SyntaxFactProduction`
+        // is reused rather than a fourth Strategy type declared for it, per its own module
+        // doc's stated policy for a producer holding the same triple.
+        ("controlflow-reachability-production", SyntaxFactProduction::STRENGTH),
         ("scan-fact-production", ScanFactProduction::STRENGTH),
         ("dependency-fact-production", DependencyFactProduction::STRENGTH),
         ("fact-reuse", FactReuse::STRENGTH),
@@ -53,8 +58,8 @@ fn Test_Every_Domain_In_The_Tree_Should_Declare_And_Be_Registered()
     ];
     assert_eq!(
         declared.len(),
-        9,
-        "nine productions are covered by eight declarations; a new producer needs a row in \
+        10,
+        "ten productions are covered by eight declarations; a new producer needs a row in \
          this table and a test of its own, whether or not it also needs a declaration of \
          its own"
     );

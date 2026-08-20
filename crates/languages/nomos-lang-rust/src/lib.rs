@@ -30,24 +30,35 @@
 //!
 //! # Scope
 //!
-//! Items — every declaration form Rust has — at every syntactic nesting depth, with the
-//! visibility each one declares. Not expressions, not statements, not enum variants and
-//! not struct fields. The boundary is stated rather than discovered: an item is the unit
-//! at which Rust attaches visibility and a name, which is the unit the capability is
-//! about.
+//! For `nomos.cap.syntax.items`: items — every declaration form Rust has — at every
+//! syntactic nesting depth, with the visibility each one declares. Not expressions, not
+//! statements, not enum variants and not struct fields. The boundary is stated rather than
+//! discovered: an item is the unit at which Rust attaches visibility and a name, which is
+//! the unit that capability is about.
 //!
-//! # Two capabilities, and why the second one is here
+//! [`reachability`] is narrower reach into expressions than the sentence above once
+//! claimed for this whole crate — one arm shape inside one function body, for
+//! `nomos.cap.controlflow.reachability`. The two readings are independent passes over the
+//! same parse tree; neither claims the other's boundary.
+//!
+//! # Three capabilities, and why the second and third are here
 //!
 //! [`Materialize`] answers `nomos-cap-syntax`'s capability about one file, from its bytes.
 //! [`rollup`] answers a second one about a *module*, from the first one's facts — the only
 //! producer in this workspace that derives a fact from other facts, and therefore the only
-//! one that declares a dependency edge.
+//! one that declares a dependency edge. [`reachability::Materialize`] answers a third,
+//! `nomos-cap-controlflow`'s, about one file, from its bytes — the same shape as the
+//! first, and housed here for the identical reason `nomos-cap-controlflow`'s own crate doc
+//! gives: this crate is a real second party to `nomos.cap.syntax.items` from the day this
+//! third capability was written, and it already owns the `syn` parse both readings run.
 //!
-//! It is not a widening of the first. A capability whose semantic input is one file's text
-//! can never depend on another answer, so the dependent half of `nomos-analysis`'s
+//! Rollup is not a widening of the first. A capability whose semantic input is one file's
+//! text can never depend on another answer, so the dependent half of `nomos-analysis`'s
 //! invalidation had no producer it could possibly have had until a second capability
 //! existed. `docs/records/OD-ANALYSIS-002` records that, and why the second contract lives
-//! beside its only provider rather than under `crates/capabilities`.
+//! beside its only provider rather than under `crates/capabilities`. The third capability's
+//! own contract, unlike the second's, lives under `crates/capabilities` from the start —
+//! `nomos-cap-controlflow`'s own crate doc says why.
 
 #![forbid(unsafe_code)]
 
@@ -56,6 +67,7 @@ mod guarantee;
 mod materialization;
 mod parse_failure;
 mod provider;
+pub mod reachability;
 mod reading;
 mod recognition;
 pub mod rollup;

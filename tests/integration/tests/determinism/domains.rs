@@ -8,12 +8,12 @@
 
 use crate::harness::Check;
 use crate::goldens::{
-    BUNDLE_GOLDEN, PARSED_GOLDEN, PROJECTION_GOLDEN, ROLLED_GOLDEN, SCANNED_GOLDEN,
-    SNAPSHOT_GOLDEN,
+    BUNDLE_GOLDEN, PARSED_GOLDEN, PROJECTION_GOLDEN, REACHABILITY_GOLDEN, ROLLED_GOLDEN,
+    SCANNED_GOLDEN, SNAPSHOT_GOLDEN,
 };
 use crate::productions::{
-    Correction_Production, Dependency_Production, Parsed_Production, Reuse_Production,
-    Rolled_Production, Scanned_Production, Snapshot_Production,
+    Correction_Production, Dependency_Production, Parsed_Production, Reachability_Production,
+    Reuse_Production, Rolled_Production, Scanned_Production, Snapshot_Production,
 };
 use crate::spec_productions::{Alternating, Bundle_Bytes, Projection_Bytes};
 use nomos_lang_rust::SyntaxFactProduction;
@@ -39,6 +39,19 @@ fn Test_The_Parser_Should_Meet_Its_Declared_Strategy()
 fn Test_The_Rollup_Should_Meet_Its_Declared_Strategy()
 {
     Check::<SyntaxFactProduction>("module-index-rollup", &Rolled_Production, ROLLED_GOLDEN);
+}
+
+/// The third producer covered by `nomos-lang-rust`'s declaration, discharged separately —
+/// the identical reasoning [`Test_The_Rollup_Should_Meet_Its_Declared_Strategy`] gives for
+/// the second.
+#[test]
+fn Test_The_Reachability_Offer_Should_Meet_Its_Declared_Strategy()
+{
+    Check::<SyntaxFactProduction>(
+        "controlflow-reachability-production",
+        &Reachability_Production,
+        REACHABILITY_GOLDEN,
+    );
 }
 
 #[test]

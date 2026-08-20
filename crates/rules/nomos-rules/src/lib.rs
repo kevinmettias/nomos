@@ -43,7 +43,7 @@
 //!
 //! # What is here
 //!
-//! Three rules. [`Check_Completeness_Mirrors`] was chosen first because it is the only
+//! Four rules. [`Check_Completeness_Mirrors`] was chosen first because it is the only
 //! rule in this tree with three recorded historical instances to test a judgment against —
 //! `P10-FIRST-CHECK` shipped with exactly this one and no more, because a single check
 //! that is honest end to end is worth more than three that are nearly wired.
@@ -57,7 +57,13 @@
 //! establishes, and this rule composes the two into findings — the same property
 //! `tests/contract/tests/boundaries/graph.rs` already enforces for this repository by
 //! hand. `P13-DEPENDENCY-EDGES-2` landed the rule and `P13-DEPENDENCY-WIRE-1` composed it
-//! into `nomos-check-orchestration`'s real `Run`.
+//! into `nomos-check-orchestration`'s real `Run`. [`Check_Unread_Reaches_A_Finding`] is
+//! the fourth, the candidate `OD-RULES-008` named and `P13-CONTROLFLOW-REACHABILITY-
+//! CAPABILITY` built: a control-flow edge inside one function body either reaches a
+//! `Finding` after a fact-read failure or it does not, the first judgment in this crate
+//! that is not a flat per-subject decode-and-compare. Neither it nor its provider is
+//! composed into `nomos-check-orchestration::Run` yet — a follow-on item, the same split
+//! `Check_Dependency_Direction` used.
 //!
 //! [`RuleRegistry`] is a fourth thing, deliberately not a rule: `OD-RULES-004` extracted a
 //! registration contract ahead of a second rule, so a rule package can be designed and
@@ -73,6 +79,7 @@ mod dependency;
 mod facts;
 mod mirror;
 mod naming;
+mod reachability;
 mod reading;
 mod registry;
 mod universe;
@@ -84,6 +91,10 @@ pub use mirror::{Check_Completeness_Mirrors, COMPLETENESS_MIRROR, CONTRACT_RECOR
 pub use declared_universe::DeclaredUniverse;
 pub use dependency::{Check_Dependency_Direction, DEPENDENCY_CONTRACT_RECORD, DEPENDENCY_CONTRACT_RECORD_VERSION, DEPENDENCY_DIRECTION};
 pub use naming::{Check_Naming_Convention, NAMING_CONVENTION};
+pub use reachability::{
+    Check_Unread_Reaches_A_Finding, UNREAD_REACHES_FINDING, UNREAD_REACHES_FINDING_CONTRACT_RECORD,
+    UNREAD_REACHES_FINDING_CONTRACT_RECORD_VERSION,
+};
 pub use reading::Reading;
 pub use registry::{RuleOffer, RuleRegistry, RuleRegistryError};
 pub use universe::{UniverseKind, Universes_In};

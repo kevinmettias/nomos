@@ -132,7 +132,7 @@ profile: domain-specification
 | docs/records/OD-RULES-005-whether-a-rules-offer-needs-a-measured-inputs-classification-or-waits-for-a-caching-consumer.md@authored | docs/records/OD-RULES-005-whether-a-rules-offer-needs-a-measured-inputs-classification-or-waits-for-a-caching-consumer.md | authored | 13 | 5 | sha256:3bcc3aad22947f89bb1436da5b44db13aabd4af1c97a60dbdab28899bbdad057 |
 | docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md@authored | docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md | authored | 18 | 6 | sha256:5e7bde3ad034017040659d44bc4b044696c4a0b33830e8596bd67906a2d2ac4c |
 | docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md@authored | docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md | authored | 15 | 5 | sha256:45afb6da12c9c097b8769739c122fc5780401a07f2c6bc0834eac32d4c109ba7 |
-| docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md@authored | docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md | authored | 29 | 5 | sha256:3aa286a2c572fe4d37f45f85c06e701857ef92ece293de0368566a1615a78c6d |
+| docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md@authored | docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md | authored | 32 | 6 | sha256:335f2ed03def8b979a66bf55ff3278c706fbc7e1105bc01a4fd5a1a75cedfe0a |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md@authored | docs/records/OD-SPEC-001-the-storage-backend-question.md | authored | 11 | 5 | sha256:e4feddab256024ea38e21849120fdd52d0ddf17d4e3f69cfb24eb4c8e766c8ae |
 | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md@authored | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md | authored | 20 | 7 | sha256:2c45051e43390556bfd68865152580e1ae09c2e82dc94bb20e65cdbf60d69a10 |
 | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md@authored | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md | authored | 23 | 7 | sha256:481ffd62b02df705439b4ef914adb21e24894d1d3f0295754fc13f7d95c89c85 |
@@ -1200,6 +1200,7 @@ profile: domain-specification
 | docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md#5 | authored | 2 | The candidate: `Check_Unread_Reaches_A_Finding` |
 | docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md#20 | authored | 2 | What this candidate forces, checked against each open deferred question in turn |
 | docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md#28 | authored | 2 | Status |
+| docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md#30 | authored | 3 | `P13-CONTROLFLOW-REACHABILITY-CAPABILITY` landed the tier-1 half |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#1 | authored | 1 | Whether the specification store gains a second backend, and what would decide it |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#2 | authored | 2 | Question |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#4 | authored | 2 | Current Position |
@@ -35100,6 +35101,46 @@ demand planner, architecture-core facts and feature topology -- stays exactly as
 undecided as its own record already left it; this candidate's real requirements do not
 reach any of them. Revisit `OD-ANALYSIS-007` when a session claims the capability this
 record names, or names a different one this record did not anticipate.
+
+### docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md#30
+
+*revision: authored · kind: heading · heading: Which semantic domain the next production rule needs, and which deferred architecture piece it actually forces / Status / `P13-CONTROLFLOW-REACHABILITY-CAPABILITY` landed the tier-1 half · hash: sha256:94d309d408a2e499c0f01557bf0558c9a2505c7e6aed81a538419e9de65cac44*
+
+### `P13-CONTROLFLOW-REACHABILITY-CAPABILITY` landed the tier-1 half
+
+### docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md#31
+
+*revision: authored · kind: prose · heading: Which semantic domain the next production rule needs, and which deferred architecture piece it actually forces / Status / `P13-CONTROLFLOW-REACHABILITY-CAPABILITY` landed the tier-1 half · hash: sha256:97bd61d2aac2482cd24833bfca558623d4d3ef505deaaed5c745927492f51076*
+
+`nomos.cap.controlflow.reachability` exists (`crates/capabilities/nomos-cap-controlflow`),
+its ceiling stated honestly at `FactVariant::SemanticallyResolved` -- the sound tier this
+section names, not moved down to match what shipped. `nomos-lang-rust` offers a second,
+`Syntactic`-tier answer against it: a pattern match over one file's parse tree for
+`Err(applicability) => <body>` arms whose body is one of four syntactically obvious wrong
+shapes (empty, a bare `continue`, a bare `return`, a tail `Ok(...)`), no name or type
+resolution attempted. `Check_Unread_Reaches_A_Finding` (`crates/rules/nomos-rules/src/
+reachability.rs`) consumes it, asking for exactly `Syntactic` -- not this section's
+`SemanticallyResolved` ceiling, which no installed offer clears and which
+`nomos-capability`'s own floor-then-select resolution (`crates/substrate/nomos-capability/
+src/registry.rs`'s `Selected`) would simply fail to reach rather than fall back from. Every
+finding this rule raises carries `Applicability::PartiallySupported`, not `Supported`: a
+heuristic judged part of the question, not the whole one this section's sound tier states.
+
+### docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md#32
+
+*revision: authored · kind: prose · heading: Which semantic domain the next production rule needs, and which deferred architecture piece it actually forces / Status / `P13-CONTROLFLOW-REACHABILITY-CAPABILITY` landed the tier-1 half · hash: sha256:5e88ea6cfad0ae1e6c0a0f3d060f4ca2d9b5ebee5607910f0048b660a652cdda*
+
+**What remains exactly as open as this record already left it.** Tier 2 -- resolving every
+call an `Err` arm reaches, so a `Finding` merely named as though it exists (`Unread`,
+`Unread_Of`, `Unreadable`, three functions with the same implied contract this section
+already named) cannot pass as one that actually does -- is not built. No offer against this
+capability claims `SemanticallyResolved`. `OD-ANALYSIS-007`'s narrowing stands unchanged:
+revisit it when a session claims the capability this section names at its sound tier, which
+is a different, larger item than the one that landed here. Neither the tier-1 provider nor
+this rule is composed into `nomos-check-orchestration::Run` -- reserving either file was
+kept out of `P13-CONTROLFLOW-REACHABILITY-CAPABILITY`'s own territory, the same split
+`P13-DEPENDENCY-EDGES-2` and `P13-DEPENDENCY-WIRE-1` used, so a follow-on item does that
+composing.
 
 ### docs/records/OD-SPEC-001-the-storage-backend-question.md#1
 

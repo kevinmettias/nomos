@@ -43,6 +43,10 @@ pub(crate) const BANDS: &[(&str, u32)] = &[
     // did not wait beside nomos-lang-rust-cargo the way nomos.cap.module.index waits
     // inside nomos-lang-rust. `OD-CAPABILITY-002`.
     ("nomos-cap-dependency", 23),
+    // The nomos.cap.controlflow.reachability contract, below both its provider
+    // (nomos-lang-rust) and the rule that reads it (nomos-rules) for the identical
+    // reason nomos-cap-dependency states above. `OD-RULES-008`.
+    ("nomos-cap-controlflow", 23),
     // The language-agnostic manifest core PKG-007's four version domains name, minus
     // any typed version-domain abstraction or provider allowlist a specific language
     // would supply. Below the language providers deliberately: it names none of them,

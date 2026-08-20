@@ -24,6 +24,9 @@ pub(crate) const PARSED_GOLDEN: &str = "6ec4ad9fe9c81ab2358e3c3756a3f1f5";
 /// those is a change to what a later invalidation will reach, which is worth a sentence in a
 /// diff.
 pub(crate) const ROLLED_GOLDEN: &str = "a9dc834595e753e498f3a981020b2214";
+
+/// The reachability offer's golden, over the fixture that finds no site to flag.
+pub(crate) const REACHABILITY_GOLDEN: &str = "45ad5b30ad5a0a0299749b362f65fe83";
 pub(crate) const SCANNED_GOLDEN: &str = "e692ad97796279579ca5cd77764e08e5";
 pub(crate) const SNAPSHOT_GOLDEN: &str = "1fb5fb67d666b0bb983f3b71e7e09f93";
 
