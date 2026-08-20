@@ -21242,14 +21242,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-cleanfile-corrections",
-        "acquired_at": 1787189903,
-        "lease_expires_at": 1787197103
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -21259,9 +21255,35 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-corrections"
+        ],
+        "exit_code": 0,
+        "output_tail": "ts::Test_Identical_Candidates_Should_Share_An_Identity ... ok\ntest candidate::correction_candidate::tests::Test_A_Different_Description_Should_Change_The_Identity ... ok\ntest change_set::tests::Test_An_Empty_Change_Set_Touches_Nothing ... ok\ntest change_set::tests::Test_Touched_Names_Every_Edited_Path ... ok\ntest plan::tests::Test_An_Empty_Plan_Should_Be_Refused ... ok\ntest preview::tests::Test_A_Preview_Names_Every_Candidate_And_Edit ... ok\ntest preview::tests::Test_Previewing_The_Same_Plan_Twice_Should_Agree ... ok\ntest plan::tests::Test_Candidates_Touching_Different_Paths_Should_Be_Accepted ... ok\ntest committed::tests::Test_Rollback_After_The_Workspace_Moved_Should_Be_Refused ... ok\ntest plan::tests::Test_Two_Candidates_Touching_The_Same_Path_Should_Be_Refused ... ok\ntest staged::tests::Test_Validating_An_Unmoved_Workspace_Should_Succeed ... ok\ntest committed::tests::Test_Committing_Then_Rolling_Back_Should_Return_To_The_Base_Snapshot ... ok\ntest edit::tests::Test_An_Addition_Should_Reverse_To_A_Removal ... ok\ntest validated::tests::Test_Committing_After_The_Workspace_Moved_Should_Be_Refused ... ok\ntest edit::tests::Test_Reverse_Should_Undo_Forward ... ok\ntest staged::tests::Test_Staging_Against_Stale_Content_Should_Be_Refused ... ok\ntest staged::tests::Test_Validating_A_Moved_Workspace_Should_Be_Refused ... ok\ntest edit::tests::Test_A_Removal_Should_Reverse_To_A_Restoration ... ok\ntest validated::tests::Test_Committing_A_Validated_Plan_Should_Change_The_Workspace ... ok\ntest staged::tests::Test_Staging_Against_The_Content_It_Was_Built_Over_Should_Succeed ... ok\n\ntest result: ok. 21 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.08s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_corrections-d0fc0ae09ec504ab.exe)\n   Doc-tests nomos_corrections\n",
+        "verified_at": 1787246872,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "63dbdd63b250462fe3fb749b65c9de5f0b0ddfe1"
+      },
       "abandoned": [],
-      "displaced": [],
+      "displaced": [
+        {
+          "holder": "claude-cleanfile-corrections",
+          "acquired_at": 1787189903,
+          "lease_expires_at": 1787197103
+        }
+      ],
       "declined": null
     },
     {
