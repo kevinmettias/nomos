@@ -22050,7 +22050,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -22067,7 +22067,31 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-analysis",
+          "-p",
+          "nomos-capability",
+          "-p",
+          "nomos-ledger"
+        ],
+        "exit_code": 0,
+        "output_tail": "finished in 0.08s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-capability v0.1.0 (F:\\repos\\nomos\\crates\\substrate\\nomos-capability)\n   Compiling nomos-ledger v0.1.0 (F:\\repos\\nomos\\crates\\substrate\\nomos-ledger)\n   Compiling nomos-analysis v0.1.0 (F:\\repos\\nomos\\crates\\substrate\\nomos-analysis)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.44s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_analysis-8ed2b98a0abe7ca2.exe)\n     Running tests\\fact_identity\\main.rs (target\\debug\\deps\\fact_identity-472de15e56a195d2.exe)\n     Running tests\\invalidation_order.rs (target\\debug\\deps\\invalidation_order-5c58ca88752defbc.exe)\n     Running tests\\recomputation_equivalence.rs (target\\debug\\deps\\recomputation_equivalence-8bcea38aeda441f4.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_capability-12789463b7316368.exe)\n     Running tests\\resolution_never_says_no.rs (target\\debug\\deps\\resolution_never_says_no-d102e83a2cd81962.exe)\n     Running tests\\selection_is_decided.rs (target\\debug\\deps\\selection_is_decided-58a5d925e73702fc.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_ledger-9f0da988d67699df.exe)\n     Running tests\\declining_ends_an_item.rs (target\\debug\\deps\\declining_ends_an_item-b7c376552463c63c.exe)\n     Running tests\\exclusion_holds\\main.rs (target\\debug\\deps\\exclusion_holds-da7f1fa9457ac951.exe)\n     Running tests\\gate_covers_finish\\main.rs (target\\debug\\deps\\gate_covers_finish-2e5a5ed1fbbe02e7.exe)\n     Running tests\\records_do_not_serialize\\main.rs (target\\debug\\deps\\records_do_not_serialize-e02314411601679d.exe)\n   Doc-tests nomos_analysis\n   Doc-tests nomos_capability\n   Doc-tests nomos_ledger\n",
+        "verified_at": 1787197388,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "b48fe7f39ba38e4faea0b2e879c6f19391d16d26"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

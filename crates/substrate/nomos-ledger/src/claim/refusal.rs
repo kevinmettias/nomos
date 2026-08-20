@@ -1,5 +1,13 @@
 //! Every way a claim is refused, in the words the holder gets.
 
+// `RefusalLayer` is its own public type and keeps its own file. The one-line renderings
+// behind `Describe` are private and keep theirs too, split out by responsibility; neither
+// is part of the crate's public surface, so only `ClaimRefusal` itself stays here.
+mod layer;
+mod message;
+
+pub use layer::RefusalLayer;
+
 use std::time::Duration;
 use nomos_model::UnknownReason;
 use crate::ItemId;
@@ -180,32 +188,32 @@ impl ClaimRefusal
                 holder,
                 until,
                 item,
-            } => Held_By(item, holder, *until),
-            Self::UnknownIndependence { against, reason } => Unknown_Independence(against, reason),
-            Self::LeaseTooLong { requested, maximum } => Lease_Too_Long(*requested, *maximum),
+            } => message::Held_By(item, holder, *until),
+            Self::UnknownIndependence { against, reason } => message::Unknown_Independence(against, reason),
+            Self::LeaseTooLong { requested, maximum } => message::Lease_Too_Long(*requested, *maximum),
             Self::Lapsed {
                 item,
                 holder,
                 since,
-            } => Lapsed(item, holder, *since),
+            } => message::Lapsed(item, holder, *since),
             Self::StillHeld {
                 item,
                 holder,
                 until,
-            } => Still_Held(item, holder, *until),
-            Self::NotClaimable { item, state } => Not_Claimable(item, state),
+            } => message::Still_Held(item, holder, *until),
+            Self::NotClaimable { item, state } => message::Not_Claimable(item, state),
             Self::DependencyUnmet {
                 item,
                 dependency,
                 state,
-            } => Dependency_Unmet(item, dependency, state),
+            } => message::Dependency_Unmet(item, dependency, state),
             Self::DependencyDeclined {
                 item,
                 dependency,
                 state,
-            } => Dependency_Declined(item, dependency, state),
-            Self::NoSuchItem { item } => No_Such_Item(item),
-            Self::LedgerUnusable { cause } => Ledger_Unusable(cause),
+            } => message::Dependency_Declined(item, dependency, state),
+            Self::NoSuchItem { item } => message::No_Such_Item(item),
+            Self::LedgerUnusable { cause } => message::Ledger_Unusable(cause),
         };
     }
 
@@ -288,314 +296,5 @@ impl ClaimRefusal
     }
 }
 
-/// Which of two owners a [`ClaimRefusal`] is a fact about.
-///
-/// `ARC-HARNESS-001`'s sentence names the two owners this splits: "the scheduler decides what
-/// should run, coordination decides whether it can run now". A refusal answers one of those
-/// questions, and this type is what lets a caller above the ledger ask *which* one it answered
-/// without reading [`ClaimRefusal::Describe`]'s prose or reconstructing the CLI's own match
-/// arm — `OD-LEDGER-022` is the record of why that reconstruction was the defect.
-///
-/// The one-way rule this exists to make askable: coordination may withhold work the plan
-/// calls ready, and coordination alone can never make ready what the plan calls not ready.
-/// Nothing in this type enforces the rule — [`ClaimRefusal::Layer`] only classifies what a
-/// refusal already is — but the classification is what lets the rule be tested at all, over
-/// the whole set of refusals rather than the two variants a caller happens to remember.
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub enum RefusalLayer
-{
-    /// A fact about the plan: whether this item can be worked at all, by anybody, regardless
-    /// of when they ask. Stays true until the plan itself changes — a dependency finishes, an
-    /// item's state changes, an item is authored.
-    Readiness,
-    /// A fact about this moment: the plan says the work is ready, and coordination — a lease,
-    /// a lock, an unprovable independence, a store it could not reach — stands between a
-    /// caller and starting it right now. A later attempt, against the same plan, can find it
-    /// already resolved.
-    Dispatch,
-}
-
-/// Territory another live claim already covers.
-fn Held_By(item: &ItemId, holder: &str, until: Timestamp) -> String
-{
-    return format!(
-        "territory overlaps {item}, held by {holder} until unix {}",
-        until.Unix_Seconds()
-    );
-}
-
-/// A dependency that will never finish, and the remedy that is not "wait".
-fn Dependency_Declined(item: &ItemId, dependency: &ItemId, state: &str) -> String
-{
-    return format!(
-        "{item} depends on {dependency}, which is {state}; a declined dependency never becomes \
-         Done, so retrying will not resolve this — {item} must be closed with `nomos work \
-         decline` and re-authored against a dependency that can still finish"
-    );
-}
-
-/// A requested lease past the ceiling coordination allows.
-fn Lease_Too_Long(requested: Duration, maximum: Duration) -> String
-{
-    return format!("a lease of {requested:?} exceeds the {maximum:?} ceiling");
-}
-
-/// An item whose current state refuses the operation outright.
-fn Not_Claimable(item: &ItemId, state: &str) -> String
-{
-    return format!("{item} is {state}, so the operation was refused");
-}
-
-/// A dependency that has not finished yet, and may still.
-fn Dependency_Unmet(item: &ItemId, dependency: &ItemId, state: &str) -> String
-{
-    return format!("{item} depends on {dependency}, which is {state}");
-}
-
-/// An identifier that matched nothing on the board.
-fn No_Such_Item(item: &ItemId) -> String
-{
-    return format!("no item named {item}");
-}
-
-/// The ledger's own store could not be read or written.
-fn Ledger_Unusable(cause: &str) -> String
-{
-    return format!("the ledger could not be used: {cause}");
-}
-
-/// Two territories the ledger cannot prove disjoint.
-///
-/// Refused rather than granted: unknown independence is not safe parallelism, and a claim
-/// granted on a maybe is two sessions writing one path believing they are alone.
-fn Unknown_Independence(against: &ItemId, reason: &UnknownReason) -> String
-{
-    return format!(
-        "cannot establish independence from {against}: {}. Unknown independence is not safe \
-         parallelism, so this claim is refused rather than granted",
-        reason.Describe()
-    );
-}
-
-/// A claim whose lease has run out, and what replaces it.
-fn Lapsed(item: &ItemId, holder: &str, since: Timestamp) -> String
-{
-    return format!(
-        "{item} was held by {holder} and the lease ran out at unix {}; `nomos work takeover` \
-         replaces it and keeps {holder}'s claim on the item",
-        since.Unix_Seconds()
-    );
-}
-
-/// A live claim somebody else holds, and whose call it is to end it.
-fn Still_Held(item: &ItemId, holder: &str, until: Timestamp) -> String
-{
-    return format!(
-        "{item} is held by {holder} until unix {}; ending it is {holder}'s call — `nomos work \
-         abandon` releases it and `nomos work decline` then ends it",
-        until.Unix_Seconds()
-    );
-}
-
 #[cfg(test)]
-mod layer_tests
-{
-    use super::*;
-    use nomos_model::UnknownReason;
-    use std::time::Duration;
-
-    fn At(seconds: i64) -> Timestamp
-    {
-        return Timestamp::From_Unix_Seconds(seconds);
-    }
-
-    /// One of every variant, built once so a test that forgets one is impossible rather than
-    /// merely unlikely — the shape `Applicability`'s `ALL` array uses for the same reason.
-    fn All() -> [ClaimRefusal; 10]
-    {
-        return [
-            ClaimRefusal::HeldBy {
-                holder: "agent-a".to_owned(),
-                until: At(2_000),
-                item: ItemId::New("T-1"),
-            },
-            ClaimRefusal::UnknownIndependence {
-                against: ItemId::New("T-2"),
-                reason: UnknownReason::IncomparableSnapshots,
-            },
-            ClaimRefusal::LeaseTooLong {
-                requested: Duration::from_secs(9_999_999),
-                maximum: Duration::from_secs(3_600),
-            },
-            ClaimRefusal::Lapsed {
-                item: ItemId::New("T-3"),
-                holder: "dead-agent".to_owned(),
-                since: At(2_000),
-            },
-            ClaimRefusal::StillHeld {
-                item: ItemId::New("T-4"),
-                holder: "agent-b".to_owned(),
-                until: At(2_000),
-            },
-            ClaimRefusal::NotClaimable {
-                item: ItemId::New("T-5"),
-                state: "Done".to_owned(),
-            },
-            ClaimRefusal::DependencyUnmet {
-                item: ItemId::New("T-6"),
-                dependency: ItemId::New("T-7"),
-                state: "Ready".to_owned(),
-            },
-            ClaimRefusal::DependencyDeclined {
-                item: ItemId::New("T-8"),
-                dependency: ItemId::New("T-9"),
-                state: "declined".to_owned(),
-            },
-            ClaimRefusal::NoSuchItem {
-                item: ItemId::New("T-10"),
-            },
-            ClaimRefusal::LedgerUnusable {
-                cause: "disk full".to_owned(),
-            },
-        ];
-    }
-
-    /// The plan's own answers: whether a dependency is unfinished or declined, whether the
-    /// item is claimable, whether it exists at all. None of these mention a holder, a lease
-    /// or a lock, which is the property that makes them plan facts rather than moment facts.
-    #[test]
-    fn Test_Readiness_Refusals_Should_Be_Exactly_The_Plan_Facts()
-    {
-        let readiness = [
-            ClaimRefusal::NotClaimable {
-                item: ItemId::New("T-1"),
-                state: "Done".to_owned(),
-            },
-            ClaimRefusal::DependencyUnmet {
-                item: ItemId::New("T-2"),
-                dependency: ItemId::New("T-3"),
-                state: "Ready".to_owned(),
-            },
-            ClaimRefusal::DependencyDeclined {
-                item: ItemId::New("T-4"),
-                dependency: ItemId::New("T-5"),
-                state: "declined".to_owned(),
-            },
-            ClaimRefusal::NoSuchItem {
-                item: ItemId::New("T-6"),
-            },
-        ];
-
-        for refusal in readiness
-        {
-            assert_eq!(refusal.Layer(), RefusalLayer::Readiness, "{refusal:?}");
-            assert!(refusal.Is_Readiness(), "{refusal:?}");
-            assert!(!refusal.Is_Dispatch(), "{refusal:?}");
-        }
-    }
-
-    /// Coordination's own answers: a holder, a lease, a lock, an unprovable overlap, an
-    /// unusable store. Every one of these can be true of an item the plan calls perfectly
-    /// ready, which is exactly why they must not share a layer with the readiness facts above.
-    #[test]
-    fn Test_Dispatch_Refusals_Should_Be_Exactly_The_Coordination_Facts()
-    {
-        let dispatch = [
-            ClaimRefusal::HeldBy {
-                holder: "agent-a".to_owned(),
-                until: At(2_000),
-                item: ItemId::New("T-1"),
-            },
-            ClaimRefusal::UnknownIndependence {
-                against: ItemId::New("T-2"),
-                reason: UnknownReason::IncomparableSnapshots,
-            },
-            ClaimRefusal::LeaseTooLong {
-                requested: Duration::from_secs(9_999_999),
-                maximum: Duration::from_secs(3_600),
-            },
-            ClaimRefusal::Lapsed {
-                item: ItemId::New("T-3"),
-                holder: "dead-agent".to_owned(),
-                since: At(2_000),
-            },
-            ClaimRefusal::StillHeld {
-                item: ItemId::New("T-4"),
-                holder: "agent-b".to_owned(),
-                until: At(2_000),
-            },
-            ClaimRefusal::LedgerUnusable {
-                cause: "disk full".to_owned(),
-            },
-        ];
-
-        for refusal in dispatch
-        {
-            assert_eq!(refusal.Layer(), RefusalLayer::Dispatch, "{refusal:?}");
-            assert!(refusal.Is_Dispatch(), "{refusal:?}");
-            assert!(!refusal.Is_Readiness(), "{refusal:?}");
-        }
-    }
-
-    /// The one-way rule stated as a disjointness assertion over the whole set rather than
-    /// over the two variants a caller happens to remember — `OD-CONTRACTS-002`'s shape for
-    /// `Applicability`'s three predicates, applied to this type's two. A refusal that answered
-    /// both would be a refusal a scheduler could read as a plan fact in one place and a
-    /// coordination fact in another, which is the confusion this type exists to end.
-    #[test]
-    fn Test_No_Refusal_Should_Answer_Both_Layers()
-    {
-        for refusal in All()
-        {
-            let answers = usize::from(refusal.Is_Readiness()) + usize::from(refusal.Is_Dispatch());
-            assert_eq!(answers, 1, "{refusal:?} answered {answers} layers");
-        }
-    }
-
-    /// `ALL` is a hand-written universe. The match below has no wildcard, so an eleventh
-    /// variant arriving stops the build here, beside the list it has to be added to —
-    /// `OD-COMPLETENESS-001`'s reasoning applied to this enum's own coverage of itself.
-    #[test]
-    fn Test_Every_Variant_Should_Be_In_The_Tested_Universe()
-    {
-        for refusal in All()
-        {
-            match refusal
-            {
-                ClaimRefusal::HeldBy { .. }
-                | ClaimRefusal::UnknownIndependence { .. }
-                | ClaimRefusal::LeaseTooLong { .. }
-                | ClaimRefusal::Lapsed { .. }
-                | ClaimRefusal::StillHeld { .. }
-                | ClaimRefusal::NotClaimable { .. }
-                | ClaimRefusal::DependencyUnmet { .. }
-                | ClaimRefusal::DependencyDeclined { .. }
-                | ClaimRefusal::NoSuchItem { .. }
-                | ClaimRefusal::LedgerUnusable { .. } =>
-                {}
-            }
-        }
-    }
-
-    /// A refusal that is retryable but not a plan fact — the case `Is_Retryable` alone cannot
-    /// tell apart from `DependencyUnmet`, which is retryable and *is* a plan fact. Layer and
-    /// retryability are different axes, and this is the pair that proves it: both `true` on
-    /// one and `true`/`true` on the other for different reasons.
-    #[test]
-    fn Test_Layer_And_Retryability_Are_Independent_Axes()
-    {
-        let held_by = ClaimRefusal::HeldBy {
-            holder: "agent-a".to_owned(),
-            until: At(2_000),
-            item: ItemId::New("T-1"),
-        };
-        let dependency_unmet = ClaimRefusal::DependencyUnmet {
-            item: ItemId::New("T-2"),
-            dependency: ItemId::New("T-3"),
-            state: "Ready".to_owned(),
-        };
-
-        assert!(held_by.Is_Retryable() && held_by.Is_Dispatch());
-        assert!(dependency_unmet.Is_Retryable() && dependency_unmet.Is_Readiness());
-    }
-}
+mod tests;

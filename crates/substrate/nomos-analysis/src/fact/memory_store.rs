@@ -1,9 +1,14 @@
 //! The in-memory store, and the walk an invalidation spreads through.
 
+// The walk itself -- naming what a cause reaches, propagating to dependents, noting
+// broadened guarantees, and settling the report -- is its own responsibility, split out of
+// this file. It stays a sibling rather than a trait implementation's second home because
+// none of it is part of this type's public surface.
+mod invalidation;
+
 use crate::fact::sealed;
 use std::collections::BTreeSet;
 use std::collections::BTreeMap;
-use nomos_contracts::IncrementalGranularity;
 use nomos_contracts::Digest128;
 use nomos_contracts::GenerationId;
 use crate::Supersession;
@@ -193,126 +198,6 @@ impl MemoryFactStore
     }
 }
 
-/// A separate, wholly test-only `impl` block rather than one more method on the block
-/// above: `With_Propagation` exists only to let a test substitute a `DependencyPropagation`
-/// implementation, and keeping it out of the block real callers read keeps that block a
-/// description of what this crate's other consumers can actually reach.
-#[cfg(test)]
-impl MemoryFactStore
-{
-    /// Built with a chosen `DependencyPropagation` rather than the default
-    /// `LocalGraphPropagation` — crate-private because nothing outside this crate has a
-    /// second implementation to offer yet. Exists to prove the seam `docs/records/D-138`
-    /// promises: a test can substitute an alternate implementation and observe
-    /// `FactStore::Invalidate` produce the same `InvalidationReport` without this type or
-    /// `FactStore` changing.
-    pub(crate) fn With_Propagation(propagation: Box<dyn DependencyPropagation>) -> Self
-    {
-        return Self {
-            entries: BTreeMap::new(),
-            dependents: BTreeMap::new(),
-            keys: BTreeMap::new(),
-            materializations: 0,
-            propagation: Some(propagation),
-        };
-    }
-}
-
-/// An empty report of what this cause is about to invalidate.
-fn Opened(cause: &GenerationCause, from: GenerationId) -> InvalidationReport
-{
-    return InvalidationReport {
-        cause: cause.clone(),
-        from,
-        direct: Vec::new(),
-        dependent: Vec::new(),
-        broadened: Vec::new(),
-        retained: 0,
-    };
-}
-
-impl MemoryFactStore
-{
-    /// Invalidates every fact the cause names directly, and returns them as the frontier.
-    fn Invalidate_Named(
-        &mut self,
-        cause: &GenerationCause,
-        from: GenerationId,
-        described: &str,
-        report: &mut InvalidationReport,
-    ) -> Vec<Digest128>
-    {
-        let named: Vec<Digest128> = self
-            .keys
-            .iter()
-            .filter(|(_, key)| return cause.Names(key))
-            .map(|(digest, _)| return *digest)
-            .collect();
-
-        let mut frontier: Vec<Digest128> = Vec::new();
-        for digest in named
-        {
-            if !self.Invalidate_One(digest, from, described)
-            {
-                continue;
-            }
-            if let Some(key) = self.keys.get(&digest)
-            {
-                report.direct.push(key.clone());
-            }
-            frontier.push(digest);
-        }
-
-        return frontier;
-    }
-
-    /// Puts the report into the one order two runs over one store both produce.
-    ///
-    /// The retained count is taken last, after everything the cause reaches has been
-    /// invalidated, because it is the answer to "what survived" and not to "what was here".
-    fn Settle(&self, report: &mut InvalidationReport)
-    {
-        report.direct.sort();
-        report.dependent.sort();
-        report.broadened.sort_by(|first, second| return first.key.cmp(&second.key));
-        report.retained = u32::try_from(self.Live()).unwrap_or(u32::MAX);
-    }
-
-    /// Every invalidated fact whose own guarantee is coarser than the cause was.
-    ///
-    /// Reported rather than silently applied: a provider that can only answer at whole-
-    /// workspace granularity turns a one-file edit into a full rebuild, and the caller is
-    /// entitled to know which provider did that and to how many facts.
-    fn Note_Broadening(
-        &self,
-        requested: IncrementalGranularity,
-        seen: &BTreeSet<Digest128>,
-        report: &mut InvalidationReport,
-    )
-    {
-        use crate::Broadening;
-
-        for digest in seen
-        {
-            let (Some(key), Some(entry)) = (self.keys.get(digest), self.Latest(*digest))
-            else
-            {
-                continue;
-            };
-
-            let applied = requested.Broadened_To(entry.fact.guarantee.incremental);
-            if applied != requested
-            {
-                report.broadened.push(Broadening {
-                    key: key.clone(),
-                    requested,
-                    applied,
-                });
-            }
-        }
-    }
-}
-
 impl sealed::Sealed for MemoryFactStore
 {}
 
@@ -339,244 +224,34 @@ impl FactStore for MemoryFactStore
 
     fn Invalidate(&mut self, cause: &GenerationCause, from: GenerationId) -> InvalidationReport
     {
-        let described = cause.Describe();
-        let mut report = Opened(cause, from);
-        let roots = self.Invalidate_Named(cause, from, &described, &mut report);
-
-        let seen = self.Propagate(roots, from, &described, &mut report);
-
-        self.Note_Broadening(cause.Granularity(), &seen, &mut report);
-        self.Settle(&mut report);
-
-        return report;
+        return invalidation::Invalidate(self, cause, from);
     }
 }
 
+/// A separate, wholly test-only `impl` block rather than one more method on the block
+/// above: `With_Propagation` exists only to let a test substitute a `DependencyPropagation`
+/// implementation, and keeping it out of the block real callers read keeps that block a
+/// description of what this crate's other consumers can actually reach.
+#[cfg(test)]
 impl MemoryFactStore
 {
-    /// Spreads invalidation from `roots` through `self.dependents`, recording each reached
-    /// dependent's key into `report`. Returns every digest visited, roots included.
-    fn Propagate(
-        &mut self,
-        roots: Vec<Digest128>,
-        from: GenerationId,
-        described: &str,
-        report: &mut InvalidationReport,
-    ) -> BTreeSet<Digest128>
+    /// Built with a chosen `DependencyPropagation` rather than the default
+    /// `LocalGraphPropagation` — crate-private because nothing outside this crate has a
+    /// second implementation to offer yet. Exists to prove the seam `docs/records/D-138`
+    /// promises: a test can substitute an alternate implementation and observe
+    /// `FactStore::Invalidate` produce the same `InvalidationReport` without this type or
+    /// `FactStore` changing.
+    pub(crate) fn With_Propagation(propagation: Box<dyn DependencyPropagation>) -> Self
     {
-        let mut seen: BTreeSet<Digest128> = roots.iter().copied().collect();
-        let (dependents, propagation) = self.Taken_Propagation();
-        let invalidating = Invalidating { from, described };
-
-        propagation.Spread(&dependents, roots, &mut |consumer| {
-            return self.Reached(consumer, invalidating, &mut seen, report);
-        });
-        self.propagation = Some(propagation);
-
-        return seen;
+        return Self {
+            entries: BTreeMap::new(),
+            dependents: BTreeMap::new(),
+            keys: BTreeMap::new(),
+            materializations: 0,
+            propagation: Some(propagation),
+        };
     }
-
-    /// Takes `self.propagation` out, alongside a snapshot of `self.dependents`, so the walk
-    /// in [`Self::Propagate`] can hold `&mut self` inside its own callback without a live
-    /// borrow of either field conflicting with it.
-    ///
-    /// Cloned once, and `propagation` taken out of `self`, rather than either held as a
-    /// borrow across the walk: the callback needs `&mut self` for [`Self::Invalidate_One`]
-    /// and `self.keys`, which cannot coexist with a borrow of `self.dependents` or
-    /// `self.propagation` for the call that runs it. `DependencyPropagation` has no
-    /// Nomos-specific reason to know about that conflict — see `docs/records/D-135` and
-    /// `docs/records/D-138`.
-    fn Taken_Propagation(&mut self) -> (BTreeMap<Digest128, BTreeSet<Digest128>>, Box<dyn DependencyPropagation>)
-    {
-        let dependents = self.dependents.clone();
-        let propagation = self
-            .propagation
-            .take()
-            .expect("propagation implementation is always present between calls");
-
-        return (dependents, propagation);
-    }
-
-    /// One node the walk reached: recorded into `seen`, invalidated, and — if it was live —
-    /// named in `report`. Returns whether the walk should continue past it.
-    fn Reached(
-        &mut self,
-        consumer: Digest128,
-        invalidating: Invalidating<'_>,
-        seen: &mut BTreeSet<Digest128>,
-        report: &mut InvalidationReport,
-    ) -> bool
-    {
-        seen.insert(consumer);
-        if !self.Invalidate_One(consumer, invalidating.from, invalidating.described)
-        {
-            return false;
-        }
-        if let Some(key) = self.keys.get(&consumer)
-        {
-            report.dependent.push(key.clone());
-        }
-
-        return true;
-    }
-}
-
-/// The generation and description a walk is invalidating under, threaded through
-/// [`MemoryFactStore::Reached`] as one value so the function stays under this crate's own
-/// parameter-count ceiling.
-#[derive(Clone, Copy)]
-struct Invalidating<'a>
-{
-    from: GenerationId,
-    described: &'a str,
 }
 
 #[cfg(test)]
-mod tests
-{
-    use super::*;
-    use crate::Dependency;
-    use crate::FactPayload;
-    use crate::GuaranteeDigest;
-    use crate::InputDigest;
-    use crate::ReadOutcome;
-    use nomos_contracts::Assurance;
-    use nomos_contracts::BuildVariantId;
-    use nomos_contracts::CapabilityId;
-    use nomos_contracts::ConfigurationId;
-    use nomos_contracts::ContractVersion;
-    use nomos_contracts::EvidenceClass;
-    use nomos_contracts::FactVariant;
-    use nomos_contracts::Guarantee;
-    use nomos_contracts::ProviderId;
-    use nomos_contracts::SchemaId;
-    use nomos_contracts::SnapshotId;
-    use nomos_contracts::SubjectId;
-    use std::collections::VecDeque;
-
-    fn Seeded(seed: u8) -> Digest128
-    {
-        return Digest128::From_Bytes([seed; Digest128::BYTE_LENGTH]);
-    }
-
-    fn File_Guarantee() -> Guarantee
-    {
-        return Guarantee::New(
-            FactVariant::Syntactic,
-            Assurance::Sound,
-            Assurance::Sound,
-            IncrementalGranularity::File,
-        );
-    }
-
-    fn Key_For(subject_seed: u8) -> FactKey
-    {
-        return FactKey {
-            contract: CapabilityId::New("nomos.cap.syntax.tree"),
-            contract_version: ContractVersion::New(1, 0),
-            subject: SubjectId::From_Digest(Seeded(subject_seed)),
-            semantic_inputs: InputDigest::Of(&[b"fn main() {}"]),
-            provider: ProviderId::New("nomos.provider.test"),
-            provider_version: ContractVersion::New(1, 0),
-            guarantee: GuaranteeDigest::Of(&File_Guarantee()),
-            variant: BuildVariantId::From_Digest(Seeded(3)),
-            configuration: ConfigurationId::From_Digest(Seeded(4)),
-        };
-    }
-
-    fn Fact_For(key: &FactKey, generation: GenerationId) -> MaterializedFact
-    {
-        return MaterializedFact {
-            identity: key.clone().At(generation),
-            snapshot: SnapshotId::From_Digest(Seeded(2)),
-            evidence: EvidenceClass::Derived,
-            guarantee: File_Guarantee(),
-            payload: FactPayload::New(SchemaId::New("nomos.syntax.v1"), b"tree".to_vec()),
-        };
-    }
-
-    /// A second, distinct [`DependencyPropagation`]: a proper FIFO queue rather than
-    /// [`LocalGraphPropagation`]'s stack, so the two reach downstream nodes in a
-    /// different order while computing the same reachable set. What this proves is the
-    /// reviewed correction's own point: the substitution boundary is `DependencyPropagation`,
-    /// not `FactStore` — this type never implements `FactStore` itself, `MemoryFactStore`
-    /// does, unchanged.
-    struct QueueOrderPropagation;
-
-    impl DependencyPropagation for QueueOrderPropagation
-    {
-        fn Spread(
-            &self,
-            dependents: &BTreeMap<Digest128, BTreeSet<Digest128>>,
-            roots: Vec<Digest128>,
-            on_reach: &mut dyn FnMut(Digest128) -> bool,
-        )
-        {
-            let mut seen: BTreeSet<Digest128> = roots.iter().copied().collect();
-            let mut frontier: VecDeque<Digest128> = roots.into();
-
-            while let Some(digest) = frontier.pop_front()
-            {
-                let Some(downstream) = dependents.get(&digest)
-                else
-                {
-                    continue;
-                };
-
-                for consumer in downstream.iter().copied().collect::<Vec<_>>()
-                {
-                    if seen.insert(consumer) && on_reach(consumer)
-                    {
-                        frontier.push_back(consumer);
-                    }
-                }
-            }
-        }
-    }
-
-    fn Two_Fact_Store(propagation: Box<dyn DependencyPropagation>) -> (MemoryFactStore, FactKey, FactKey)
-    {
-        let upstream = Key_For(1);
-        // A different subject than `upstream`, so `derived` is reached only by following
-        // the dependency edge below — the walk this test exists to exercise — rather than
-        // also matching `GenerationCause::SubjectChanged` directly.
-        let derived = Key_For(7);
-
-        let mut store = MemoryFactStore::With_Propagation(propagation);
-        let upstream_fact = Fact_For(&upstream, GenerationId::INITIAL);
-        store.Materialize(upstream_fact, &[]).expect("materializes");
-        let derived_fact = Fact_For(&derived, GenerationId::INITIAL);
-        store
-            .Materialize(
-                derived_fact,
-                &[Dependency {
-                    key: upstream.clone(),
-                    outcome: ReadOutcome::Materialized,
-                }],
-            )
-            .expect("materializes");
-
-        return (store, upstream, derived);
-    }
-
-    #[test]
-    fn Test_An_Alternate_Propagation_Implementation_Should_Produce_The_Same_Report()
-    {
-        let (mut default_store, upstream, _) = Two_Fact_Store(Box::new(LocalGraphPropagation));
-        let (mut alternate_store, _, _) = Two_Fact_Store(Box::new(QueueOrderPropagation));
-        let next = GenerationId::INITIAL.Next();
-        let cause = GenerationCause::SubjectChanged {
-            subject: upstream.subject,
-            granularity: IncrementalGranularity::File,
-        };
-
-        let default_report = default_store.Invalidate(&cause, next);
-        let alternate_report = alternate_store.Invalidate(&cause, next);
-
-        assert_eq!(
-            default_report, alternate_report,
-            "swapping the DependencyPropagation implementation changed FactStore's own \
-             output, so MemoryFactStore is not actually independent of which one it holds"
-        );
-    }
-}
+mod tests;
