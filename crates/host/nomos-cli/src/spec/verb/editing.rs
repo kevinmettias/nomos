@@ -50,6 +50,9 @@ pub(in crate::spec) fn Commit(
         {
             let CommitRefusalError::FileSystem(error) = error else
             {
+                // rust-panic: allow: CommitRefusal's constructors are the only way to build one, and
+                // CommitRefusal::Unreadable always pairs CommitRefusalKind::Unreadable with a
+                // CommitRefusalError::FileSystem; no other constructor produces this kind.
                 unreachable!("CommitRefusalKind::Unreadable always carries a filesystem CommitRefusalError")
             };
 
@@ -59,6 +62,9 @@ pub(in crate::spec) fn Commit(
         {
             let CommitRefusalError::Edit(error) = error else
             {
+                // rust-panic: allow: CommitRefusal's constructors are the only way to build one, and
+                // CommitRefusal::Edit always pairs CommitRefusalKind::Edit with a
+                // CommitRefusalError::Edit; no other constructor produces this kind.
                 unreachable!("CommitRefusalKind::Edit always carries an edit CommitRefusalError")
             };
 
@@ -68,6 +74,9 @@ pub(in crate::spec) fn Commit(
         {
             let CommitRefusalError::Edit(error) = error else
             {
+                // rust-panic: allow: CommitRefusal's constructors are the only way to build one, and
+                // CommitRefusal::Refused always pairs CommitRefusalKind::Refused with a
+                // CommitRefusalError::Edit; no other constructor produces this kind.
                 unreachable!("CommitRefusalKind::Refused always carries an edit CommitRefusalError")
             };
 
@@ -77,6 +86,9 @@ pub(in crate::spec) fn Commit(
         {
             let CommitRefusalError::FileSystem(error) = error else
             {
+                // rust-panic: allow: CommitRefusal's constructors are the only way to build one, and
+                // CommitRefusal::Unwritable always pairs CommitRefusalKind::Unwritable with a
+                // CommitRefusalError::FileSystem; no other constructor produces this kind.
                 unreachable!("CommitRefusalKind::Unwritable always carries a filesystem CommitRefusalError")
             };
             let _ = writeln!(channels.output, "{}", preview.Describe());

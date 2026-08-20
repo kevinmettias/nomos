@@ -92,6 +92,9 @@ fn Render(command: &WorkCommand, outcome: WorkOutcome, output: &mut impl std::io
         }
         (WorkCommand::Validate, WorkOutcome::Validate(result)) => Report_Validation(result, output),
         (WorkCommand::Audit, WorkOutcome::Audit(result)) => Render_Audit(result, output),
+        // rust-panic: allow: Run is the only caller of this match, and it always builds
+        // WorkOutcome from the same WorkCommand variant it dispatched on -- no other pairing
+        // reaches this function.
         (_, _) => unreachable!("Run always pairs a command with its own outcome shape"),
     };
 }
