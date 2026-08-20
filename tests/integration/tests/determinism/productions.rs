@@ -12,6 +12,7 @@ use nomos_contracts::{
 use nomos_corrections::{ChangeSet, CorrectionCandidate, CorrectionPlan, Edit};
 use nomos_lang_rust::rollup;
 use nomos_model::Content_Digest;
+use nomos_platform_std::StdProcessLauncher;
 use nomos_workspace::{BuildVariant, ChangeSource, Workspace, WorkspaceChangeSet};
 
 /// The source every producing domain is measured over.
@@ -128,6 +129,50 @@ fn Rendered_Fact(path: &str, source: &str, context: nomos_lang_rust::FactContext
             // refusal means the production below is rendered over fewer files than the
             // fixture names, and a shorter production repeats itself just as identically —
             // the domain would discharge its strength claim having read less than it says.
+            panic!("the fixture must parse; {path} did not: {failure}");
+        }
+    };
+    let mut rendered = Vec::new();
+
+    rendered.extend_from_slice(format!("file\t{path}\n").as_bytes());
+    rendered.extend_from_slice(format!("key\t{}\n", fact.Key().Digest()).as_bytes());
+    rendered.extend_from_slice(&fact.payload.bytes);
+
+    return rendered;
+}
+
+/// The reachability offer's facts over the same fixture, rendered.
+///
+/// This item's fixture files declare no `Err(applicability)` arm at all, so every rendered
+/// fact carries an empty site list — the payload is still real bytes with a real digest,
+/// and the determinism claim under test is that two runs over the same source produce the
+/// identical empty answer, not that the fixture exercises the walker's positive case.
+/// `crates/languages/nomos-lang-rust/src/reachability/provider.rs`'s own tests already
+/// cover the positive case against synthetic sources.
+pub(crate) fn Reachability_Production() -> Vec<u8>
+{
+    let context = Fact_Context();
+    let mut rendered = Vec::new();
+
+    for (path, source) in FIXTURE
+    {
+        let one = Rendered_Reachability_Fact(path, source, context);
+
+        rendered.extend_from_slice(&one);
+    }
+
+    return rendered;
+}
+
+/// One fixture file's reachability fact: the path it came from, the key it landed under,
+/// and its payload.
+fn Rendered_Reachability_Fact(path: &str, source: &str, context: nomos_lang_rust::FactContext) -> Vec<u8>
+{
+    let fact = match nomos_lang_rust::reachability::Materialize(Subject_Of(path), source, context)
+    {
+        nomos_lang_rust::Materialization::Materialized(fact) => fact,
+        nomos_lang_rust::Materialization::Unparseable(failure) =>
+        {
             panic!("the fixture must parse; {path} did not: {failure}");
         }
     };
@@ -322,9 +367,10 @@ pub(crate) fn Dependency_Production() -> Vec<u8>
         generation: GenerationId::INITIAL,
     };
 
-    let mut facts = nomos_lang_rust_cargo::Materialize_Workspace(&Repository_Root(), context)
-        .expect("this repository is a real cargo workspace; a provider that cannot see it \
-                 verifies nothing");
+    let mut facts =
+        nomos_lang_rust_cargo::Materialize_Workspace(&Repository_Root(), context, &StdProcessLauncher)
+            .expect("this repository is a real cargo workspace; a provider that cannot see it \
+                     verifies nothing");
 
     assert!(
         facts.len() > 10,

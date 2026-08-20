@@ -12,6 +12,7 @@ use nomos_analysis::Context;
 use nomos_capability::Registry;
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
 use nomos_lang_rust::{FactContext, Materialization};
+use nomos_platform::ProcessLauncher;
 use nomos_rules::SourceFile;
 use nomos_workspace::{BuildVariant, ChangeSource, Workspace, WorkspaceChangeSet, WorkspaceError};
 
@@ -113,8 +114,9 @@ fn Production(context: &Context) -> FactContext
     };
 }
 
-/// Runs `cargo metadata` over `root`, materializes one `nomos.cap.dependency.edges` fact
-/// per workspace member, and returns the subjects a rule can judge them under.
+/// Runs `cargo metadata` over `root` through `launcher`, materializes one
+/// `nomos.cap.dependency.edges` fact per workspace member, and returns the subjects a rule
+/// can judge them under.
 ///
 /// A second, independent materialization step beside [`Materialize_Syntax`] rather than a
 /// generalization of it: `dependency.edges` has exactly one consumer today and nothing to
@@ -127,7 +129,12 @@ fn Production(context: &Context) -> FactContext
 /// exactly the vacuity [`Materialize_Syntax`]'s own `NoFacts` case exists to catch one layer
 /// over. So a failed materialization returns no dependency sources and one synthetic
 /// finding reporting why, rather than nothing at all.
-pub fn Materialize_Dependencies(root: &Path, context: &Context, store: &mut MemoryFactStore) -> (Vec<SourceFile>, Vec<Finding>)
+pub fn Materialize_Dependencies<P: ProcessLauncher>(
+    root: &Path,
+    context: &Context,
+    store: &mut MemoryFactStore,
+    launcher: &P,
+) -> (Vec<SourceFile>, Vec<Finding>)
 {
     let production = nomos_lang_rust_cargo::FactContext {
         snapshot: context.snapshot,
@@ -136,7 +143,7 @@ pub fn Materialize_Dependencies(root: &Path, context: &Context, store: &mut Memo
         generation: context.generation,
     };
 
-    let facts = match nomos_lang_rust_cargo::Materialize_Workspace(root, production)
+    let facts = match nomos_lang_rust_cargo::Materialize_Workspace(root, production, launcher)
     {
         Ok(facts) => facts,
         Err(error) => return (Vec::new(), vec![Dependency_Capability_Unavailable(&error)]),

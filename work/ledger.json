@@ -20412,7 +20412,13 @@
         "timeout_seconds": 600
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "claude-session",
+          "reason": "Territory was short of the work. Materialize_Workspace's signature also reaches crates/languages/nomos-lang-rust-cargo/tests/invalidation.rs and tests/integration/tests/determinism/productions.rs (plus its Cargo.toml, for the launcher dev-dependency), neither reserved. Nothing written to the tree under this claim; the source edits already made under it (metadata.rs, provider.rs, lib.rs, Cargo.toml, all within the reserved crates/languages/nomos-lang-rust-cargo/src + Cargo.toml territory) are left in place in the working tree and are still correct -- re-claimed as P13-CARGO-METADATA-PROCESSLAUNCHER-2 with the corrected territory.",
+          "abandoned_at": 1787184838
+        }
+      ],
       "displaced": [],
       "declined": null
     },
@@ -20509,14 +20515,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-controlflow",
-        "acquired_at": 1787184350,
-        "lease_expires_at": 1787191550
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -20533,7 +20535,114 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cap-controlflow",
+          "-p",
+          "nomos-lang-rust",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "ed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.10s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_cap_controlflow-fa3fd94de99cebe0.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-06ab25b0491e144c.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-4c32ae08be8df958.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-9350d088b8d6ed0d.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-9ca3879aab70176f.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-308fef82df004321.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-f6f7228f8cfa874c.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-ea500c062215f506.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-790c8c5856e63fa5.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-98429b682798ce96.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-c1e906054609f777.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lang_rust-25d6cbe866f82aaf.exe)\n     Running tests\\corpus\\main.rs (target\\debug\\deps\\corpus-e34530f831f0fb6f.exe)\n     Running tests\\guarantee.rs (target\\debug\\deps\\guarantee-f39aa9dc71680878.exe)\n     Running tests\\rollup.rs (target\\debug\\deps\\rollup-71909a03bd10f839.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-12a9eec0a9b372bd.exe)\n   Doc-tests nomos_cap_controlflow\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_lang_rust\n   Doc-tests nomos_rules\n",
+        "verified_at": 1787185534,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "4da628eb282b5eee284e3d0bed89900d35d035e4"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-CARGO-METADATA-PROCESSLAUNCHER-2",
+      "title": "nomos-lang-rust-cargo shells out to cargo metadata with raw std::process::Command instead of nomos-platform's ProcessLauncher port",
+      "why": "crates/languages/nomos-lang-rust-cargo/src/metadata.rs::Run_Cargo_Metadata calls std::process::Command::new(cargo).output() directly. nomos-platform (band 15, already below this crate's band 25) declares exactly a ProcessLauncher port for this -- an argv Command with timeout/idle-timeout and a working_directory, returning captured stdout/stderr and a typed ExitOutcome that distinguishes a real exit from TimedOut/Stalled/Terminated rather than collapsing them. StdProcessLauncher already implements it without the pipe-buffer deadlock an earlier ledger item recorded (Drain_Into spawns a reader thread per stream), and nomos-work-orchestration::Run already establishes the exact idiom this fix follows: a generic P: ProcessLauncher parameter threaded from the composition root, so the orchestration crate depends only on nomos-platform and not nomos-platform-std. nomos-cli already owns a StdProcessLauncher instance (work.rs) and is the only caller of nomos_check_orchestration::Run (check.rs:137, gate/run.rs:60), so both call sites can pass it with no new composition-root state. The crate's own lib.rs doc names this as the one provider in the check composition with I/O of its own, but justifies that only against sources already read, never against the port this workspace already built for exactly this. Verified in session: no record or open ledger item addresses this bypass specifically.\n\nSuccessor of P13-CARGO-METADATA-PROCESSLAUNCHER, abandoned for exactly this: Materialize_Workspace's signature also reaches crates/languages/nomos-lang-rust-cargo/tests/invalidation.rs and tests/integration/tests/determinism/productions.rs, plus tests/integration/Cargo.toml for the launcher dev-dependency, none of which the first territory reserved.",
+      "done_when": "Discover_Workspace and Materialize_Workspace (nomos-lang-rust-cargo) and Materialize_Dependencies and Run (nomos-check-orchestration) each gain a generic P: nomos_platform::ProcessLauncher parameter, following nomos_work_orchestration::Run's own pattern; Run_Cargo_Metadata builds a nomos_platform::Command (argv, working_directory = Some(root), a named timeout constant) and calls launcher.Run(&command) instead of std::process::Command, mapping a non-success ExitOutcome (TimedOut/Stalled/Terminated/non-zero Exited) to MetadataError with a reason distinguishing which; nomos-cli's check.rs and gate/run.rs pass &StdProcessLauncher at both call sites, matching work.rs's existing usage; every existing caller of Discover_Workspace/Materialize_Workspace -- nomos-lang-rust-cargo's own unit tests in metadata.rs and provider.rs, crates/languages/nomos-lang-rust-cargo/tests/invalidation.rs, and tests/integration/tests/determinism/productions.rs -- passes a real StdProcessLauncher (nomos-platform-std added as a dev-dependency wherever it is not already present) and keeps exercising this repository's own real workspace; lib.rs, provider.rs and nomos-check-orchestration's facts.rs/run.rs doc comments are updated to describe the process launch as going through the injected port rather than raw std::process::Command, preserving the existing I/O-vs-pure-bytes distinction; tests/contract/surface/nomos-lang-rust-cargo.txt and tests/contract/surface/nomos-check-orchestration.txt are reblessed for the new signatures; cargo test -p nomos-lang-rust-cargo -p nomos-check-orchestration -p nomos-cli -p nomos-contract-tests -p nomos-integration-tests and cargo clippy --workspace --all-targets -- -D warnings both pass.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages/nomos-lang-rust-cargo/src",
+          "crates/languages/nomos-lang-rust-cargo/Cargo.toml",
+          "crates/languages/nomos-lang-rust-cargo/tests/invalidation.rs",
+          "crates/orchestration/nomos-check-orchestration/src",
+          "crates/orchestration/nomos-check-orchestration/Cargo.toml",
+          "crates/host/nomos-cli/src/check.rs",
+          "crates/host/nomos-cli/src/gate/run.rs",
+          "tests/contract/surface/nomos-lang-rust-cargo.txt",
+          "tests/contract/surface/nomos-check-orchestration.txt",
+          "tests/integration/tests/determinism/productions.rs",
+          "tests/integration/Cargo.toml"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lang-rust-cargo",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests",
+          "-p",
+          "nomos-integration-tests",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lang-rust-cargo",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests",
+          "-p",
+          "nomos-integration-tests",
+          "--no-fail-fast"
+        ],
+        "exit_code": 0,
+        "output_tail": "s\\read_surface.rs (target\\debug\\deps\\read_surface-fd04c2f5c5eef331.exe)\n     Running tests\\request_submit.rs (target\\debug\\deps\\request_submit-a5bdb016f629692d.exe)\n     Running tests\\stale_writer_is_refused.rs (target\\debug\\deps\\stale_writer_is_refused-445af99fa52b8069.exe)\n     Running tests\\takeover_is_recorded.rs (target\\debug\\deps\\takeover_is_recorded-6ef76046a7059014.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-95a1aef077b5f9ba.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-ead301eb7c8d8256.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-a61f2bcd75c8d4d9.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-fba07f1fa1c92105.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-2bb84d2d8744d800.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-c2987d8eceda16d3.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-0eeaea7cd309c35b.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-2db99bdd604951c5.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-56e2b70874db076c.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-1204b8c22ecd0b43.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_integration_tests-77d538e834d039cc.exe)\n     Running tests\\analysis_slice\\main.rs (target\\debug\\deps\\analysis_slice-166d5337b1293c65.exe)\n     Running tests\\determinism\\main.rs (target\\debug\\deps\\determinism-2406276ba3c53cbc.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lang_rust_cargo-d33d2096b79415f3.exe)\n     Running tests\\invalidation.rs (target\\debug\\deps\\invalidation-4053bf60cf183488.exe)\n   Doc-tests nomos_check_orchestration\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_integration_tests\n   Doc-tests nomos_lang_rust_cargo\n",
+        "verified_at": 1787185644,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "4da628eb282b5eee284e3d0bed89900d35d035e4"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

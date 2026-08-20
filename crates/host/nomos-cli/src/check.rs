@@ -10,7 +10,7 @@
 //!
 //! # What a composition root still has to assemble
 //!
-//! Two things only, now that composing the registry, ingesting the walk and judging it live
+//! Three things now, since composing the registry, ingesting the walk and judging it live
 //! in `nomos-check-orchestration`:
 //!
 //! 1. walk the tree — [`sources::Walked`] — because no [`nomos_platform::FileSystem`]
@@ -18,9 +18,12 @@
 //!    Published_Records` already has;
 //! 2. read what this binary was compiled as — [`composition::Host_Variant`] — because
 //!    `env!` resolves against the crate that calls it and cannot be read correctly from
-//!    inside the orchestration crate.
+//!    inside the orchestration crate;
+//! 3. choose a [`nomos_platform::ProcessLauncher`] — [`nomos_platform_std::StdProcessLauncher`]
+//!    — for the one provider in that composition that runs a process, the same choice
+//!    `work.rs` already makes for `nomos work`.
 //!
-//! Both are handed to [`nomos_check_orchestration::Run`] as values, the same way
+//! All three are handed to [`nomos_check_orchestration::Run`] as values, the same way
 //! `nomos_work_orchestration::Run` takes `published` as a value rather than deriving it.
 //!
 //! # The vacuity guard lives here, and it now has two shapes
@@ -123,6 +126,7 @@ use nomos_check_orchestration::CheckOutcome;
 use nomos_contracts::Finding;
 use nomos_rules::SourceFile;
 use nomos_model::Subject_Of_Path;
+use nomos_platform_std::StdProcessLauncher;
 use nomos_workspace::BuildVariant;
 use std::io::Write;
 use std::path::{Path, PathBuf};
@@ -134,7 +138,7 @@ pub fn Run(command: &CheckCommand, stdout: &mut impl Write, stderr: &mut impl Wr
     {
         None => CheckOutcome::Unreadable,
         Some(sources) if sources.is_empty() => CheckOutcome::NoSource,
-        Some(sources) => nomos_check_orchestration::Run(&sources, Host_Variant(), &command.root),
+        Some(sources) => nomos_check_orchestration::Run(&sources, Host_Variant(), &command.root, &StdProcessLauncher),
     };
 
     return Render(&command.root, &outcome, stdout, stderr);

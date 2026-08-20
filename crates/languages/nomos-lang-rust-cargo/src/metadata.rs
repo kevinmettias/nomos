@@ -1,11 +1,14 @@
 //! Running `cargo metadata` and reading a workspace's own first-party dependency edges
 //! out of it.
 //!
-//! The only I/O in this crate, and the only I/O in any provider this workspace ships —
-//! `nomos-lang-rust` and `nomos-lang-rust-scan` both read bytes a caller already supplied.
-//! A capability whose provider must run a process and read the filesystem for itself is a
-//! different shape from either of them, which is why this crate exists apart from both
-//! rather than as a second offer inside one of them.
+//! The only process this crate ever runs, and the only provider this workspace ships whose
+//! `Materialize` needs more than bytes a caller already supplied — `nomos-lang-rust` and
+//! `nomos-lang-rust-scan` are both pure functions over text. That process runs through a
+//! caller-supplied [`ProcessLauncher`] rather than `std::process::Command` directly, the
+//! same [`nomos_platform`] port `nomos-ledger` and `nomos-work-orchestration` already run
+//! their own subprocesses through, so this crate depends on `nomos-platform` and not on any
+//! concrete implementation of it — the composition root chooses that, same as it chooses a
+//! [`nomos_platform::FileSystem`] for anything that walks a directory.
 //!
 //! Deliberately the same invocation `tests/contract/src/workspace.rs` already runs and
 //! already established works over this workspace — `--no-deps` is kept, not dropped: for
@@ -16,8 +19,15 @@
 //! reader keeps the `kind`/`optional` fields that one discards.
 
 use nomos_cap_dependency::{DependencyEdge, DependencyKind, DependencyPayload};
+use nomos_platform::{Command, ExitOutcome, ProcessLauncher};
 use std::collections::BTreeSet;
 use std::path::{Path, PathBuf};
+use std::time::Duration;
+
+/// `cargo metadata` over this workspace finishes in well under a second; a full minute is
+/// generous headroom, the same bound `nomos-surface-provenance`'s own quick subprocess
+/// calls use for the same reason.
+const TIMEOUT: Duration = Duration::from_secs(60);
 
 /// `cargo metadata` could not be run or its answer could not be read as this reader
 /// expects.
@@ -64,11 +74,12 @@ pub struct DiscoveredPackage
 ///
 /// # Errors
 ///
-/// [`MetadataError`] if the `cargo` binary cannot be run, exits non-zero, or its stdout is
-/// not the JSON document `--format-version 1` promises.
-pub fn Discover_Workspace(root: &Path) -> Result<Vec<DiscoveredPackage>, MetadataError>
+/// [`MetadataError`] if the `cargo` binary cannot be run, exits non-zero, is killed for
+/// exceeding [`TIMEOUT`] or going idle for that long, or its stdout is not the JSON
+/// document `--format-version 1` promises.
+pub fn Discover_Workspace<P: ProcessLauncher>(root: &Path, launcher: &P) -> Result<Vec<DiscoveredPackage>, MetadataError>
 {
-    let document = Run_Cargo_Metadata(root)?;
+    let document = Run_Cargo_Metadata(root, launcher)?;
     let members = Member_Ids(&document)?;
     let packages = document
         .get("packages")
@@ -106,28 +117,54 @@ pub fn Discover_Workspace(root: &Path) -> Result<Vec<DiscoveredPackage>, Metadat
     return Ok(discovered);
 }
 
-fn Run_Cargo_Metadata(root: &Path) -> Result<serde_json::Value, MetadataError>
+fn Run_Cargo_Metadata<P: ProcessLauncher>(root: &Path, launcher: &P) -> Result<serde_json::Value, MetadataError>
 {
     let cargo = std::env::var("CARGO").unwrap_or_else(|_| "cargo".to_owned());
-    let output = std::process::Command::new(cargo)
-        .args(["metadata", "--format-version", "1", "--no-deps", "--all-features"])
-        .current_dir(root)
-        .output()
-        .map_err(|error| MetadataError {
-            reason: format!("cargo metadata could not be run: {error}"),
-        })?;
+    let mut command = Command::New(
+        vec![
+            cargo,
+            "metadata".to_owned(),
+            "--format-version".to_owned(),
+            "1".to_owned(),
+            "--no-deps".to_owned(),
+            "--all-features".to_owned(),
+        ],
+        TIMEOUT,
+    );
+    command.working_directory = Some(root.to_path_buf());
 
-    if !output.status.success()
+    let output = launcher.Run(&command).map_err(|error| MetadataError {
+        reason: format!("cargo metadata could not be run: {error}"),
+    })?;
+
+    match output.outcome
     {
-        return Err(MetadataError {
-            reason: format!(
-                "cargo metadata failed: {}",
-                String::from_utf8_lossy(&output.stderr)
-            ),
-        });
+        ExitOutcome::Exited { code: 0 } => {}
+        ExitOutcome::Exited { code } => {
+            return Err(MetadataError {
+                reason: format!("cargo metadata failed (exit {code}): {}", output.stderr),
+            });
+        }
+        ExitOutcome::TimedOut => {
+            return Err(MetadataError {
+                reason: format!("cargo metadata was still running after {TIMEOUT:?} and was killed"),
+            });
+        }
+        ExitOutcome::Stalled { idle_elapsed } => {
+            return Err(MetadataError {
+                reason: format!(
+                    "cargo metadata produced no output for {idle_elapsed:?} and was judged stalled"
+                ),
+            });
+        }
+        ExitOutcome::Terminated => {
+            return Err(MetadataError {
+                reason: "cargo metadata was terminated before it could finish".to_owned(),
+            });
+        }
     }
 
-    return serde_json::from_slice(&output.stdout).map_err(|error| MetadataError {
+    return serde_json::from_str(&output.stdout).map_err(|error| MetadataError {
         reason: format!("cargo metadata's stdout was not the JSON it promised: {error}"),
     });
 }
@@ -261,6 +298,7 @@ fn Read_Dependency(dependency: &serde_json::Value, member_names: &BTreeSet<Strin
 mod tests
 {
     use super::*;
+    use nomos_platform_std::StdProcessLauncher;
 
     /// Run over this workspace's own real root, the same standard `tests/contract`
     /// already holds this exact invocation to: a boundary reader that cannot be checked
@@ -279,7 +317,7 @@ mod tests
     #[test]
     fn Test_This_Crate_Should_Depend_On_Nomos_Contracts()
     {
-        let discovered = Discover_Workspace(&Repository_Root()).expect("a real cargo workspace");
+        let discovered = Discover_Workspace(&Repository_Root(), &StdProcessLauncher).expect("a real cargo workspace");
 
         let this_crate = discovered
             .iter()
@@ -300,7 +338,7 @@ mod tests
     #[test]
     fn Test_Nomos_Contracts_Should_Have_No_First_Party_Edges()
     {
-        let discovered = Discover_Workspace(&Repository_Root()).expect("a real cargo workspace");
+        let discovered = Discover_Workspace(&Repository_Root(), &StdProcessLauncher).expect("a real cargo workspace");
 
         let contracts = discovered
             .iter()
@@ -317,7 +355,7 @@ mod tests
     #[test]
     fn Test_Every_Discovered_Package_Should_Carry_A_Manifest_Relative_Root()
     {
-        let discovered = Discover_Workspace(&Repository_Root()).expect("a real cargo workspace");
+        let discovered = Discover_Workspace(&Repository_Root(), &StdProcessLauncher).expect("a real cargo workspace");
 
         let this_crate = discovered
             .iter()
@@ -333,7 +371,7 @@ mod tests
     #[test]
     fn Test_Edges_Should_Be_In_Canonical_Order()
     {
-        let discovered = Discover_Workspace(&Repository_Root()).expect("a real cargo workspace");
+        let discovered = Discover_Workspace(&Repository_Root(), &StdProcessLauncher).expect("a real cargo workspace");
 
         for package in &discovered
         {

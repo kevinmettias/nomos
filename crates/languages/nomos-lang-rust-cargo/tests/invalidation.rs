@@ -13,6 +13,7 @@
 use nomos_analysis::{FactStore, GenerationCause, MemoryFactStore};
 use nomos_contracts::{BuildVariantId, ConfigurationId, Digest128, GenerationId, IncrementalGranularity, SnapshotId};
 use nomos_lang_rust_cargo::{FactContext, Materialize_Workspace};
+use nomos_platform_std::StdProcessLauncher;
 use std::path::{Path, PathBuf};
 
 fn Context(generation: GenerationId) -> FactContext
@@ -87,7 +88,7 @@ fn Test_An_Edited_Manifests_Old_Fact_Should_Not_Survive_The_Generation_It_Was_In
     let fixture = Fixture::New("survive");
     let mut store = MemoryFactStore::New();
 
-    let initial = Materialize_Workspace(fixture.Path(), Context(GenerationId::INITIAL))
+    let initial = Materialize_Workspace(fixture.Path(), Context(GenerationId::INITIAL), &StdProcessLauncher)
         .expect("a real cargo workspace with an edge");
     let alpha_before = initial
         .iter()
@@ -137,7 +138,8 @@ fn Test_An_Edited_Manifests_Old_Fact_Should_Not_Survive_The_Generation_It_Was_In
         "the supersession must name the generation the edit was invalidated at"
     );
 
-    let refreshed = Materialize_Workspace(fixture.Path(), Context(next)).expect("a real cargo workspace with the edge removed");
+    let refreshed = Materialize_Workspace(fixture.Path(), Context(next), &StdProcessLauncher)
+        .expect("a real cargo workspace with the edge removed");
     let alpha_after = refreshed
         .iter()
         .find(|package| package.path == "alpha")

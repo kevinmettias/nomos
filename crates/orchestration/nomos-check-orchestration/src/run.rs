@@ -2,6 +2,7 @@
 //! rendering what came of it.
 
 use nomos_analysis::{MemoryFactStore, Reader};
+use nomos_platform::ProcessLauncher;
 use nomos_rules::{Check_Completeness_Mirrors, Check_Dependency_Direction, Check_Naming_Convention, SourceFile};
 use nomos_workspace::BuildVariant;
 use std::path::Path;
@@ -22,8 +23,11 @@ use crate::CheckOutcome;
 /// as, read through `env!` there because that macro resolves against the *compiling*
 /// crate and cannot be read correctly from this one. `root` is the tree `sources` was
 /// walked from -- carried separately because the dependency-edges provider runs `cargo
-/// metadata` itself rather than reading bytes `sources` already holds, the one provider in
-/// this workspace with I/O of its own.
+/// metadata` rather than reading bytes `sources` already holds, the one provider in this
+/// workspace with I/O of its own. `launcher` is what that `cargo metadata` call runs
+/// through -- generic the same way `nomos_work_orchestration::Run` is generic over
+/// [`nomos_platform`]'s traits, so this crate depends on `nomos-platform` and not on any
+/// concrete implementation of it; the composition root supplies one.
 ///
 /// Writes nothing and never exits: [`CheckOutcome`] is the whole answer, the same
 /// division `nomos_work_orchestration::Run` draws around [`nomos_work_orchestration`]'s own
@@ -31,7 +35,7 @@ use crate::CheckOutcome;
 /// (`CheckOutcome::NoSource`) made before this function is ever called, not a case this
 /// function classifies.
 #[must_use]
-pub fn Run(sources: &[SourceFile], variant: BuildVariant, root: &Path) -> CheckOutcome
+pub fn Run<P: ProcessLauncher>(sources: &[SourceFile], variant: BuildVariant, root: &Path, launcher: &P) -> CheckOutcome
 {
     let registry = match Registered()
     {
@@ -52,7 +56,7 @@ pub fn Run(sources: &[SourceFile], variant: BuildVariant, root: &Path) -> CheckO
         return CheckOutcome::NoFacts { files: sources.len() };
     }
 
-    let (dependency_sources, mut dependency_findings) = Materialize_Dependencies(root, &context, &mut store);
+    let (dependency_sources, mut dependency_findings) = Materialize_Dependencies(root, &context, &mut store, launcher);
 
     let mut reader = Reader::On(&store, &registry, context);
     let mut findings = Check_Completeness_Mirrors(sources, &mut reader);

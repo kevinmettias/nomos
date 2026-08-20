@@ -12,6 +12,7 @@ use crate::{CheckOutcome, Claim, Run};
 use nomos_analysis::{MemoryFactStore, Reader};
 use nomos_contracts::{Finding, GateCategory};
 use nomos_model::Subject_Of_Path;
+use nomos_platform_std::StdProcessLauncher;
 use nomos_rules::{Check_Completeness_Mirrors, SourceFile};
 use nomos_workspace::BuildVariant;
 
@@ -47,7 +48,7 @@ fn Test_A_Clean_Tree_Should_Be_Judged_Complete_With_No_Findings()
 {
     let sources = vec![Source("a.rs", "pub fn Ok() {}\n")];
 
-    let outcome = Run(&sources, Test_Variant(), &Repository_Root());
+    let outcome = Run(&sources, Test_Variant(), &Repository_Root(), &StdProcessLauncher);
 
     let CheckOutcome::Judged { findings, examined, claim } = outcome
     else
@@ -73,7 +74,7 @@ fn Test_A_Blocking_Finding_Should_Still_Be_Judged_Complete()
         "/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n",
     )];
 
-    let outcome = Run(&sources, Test_Variant(), &Repository_Root());
+    let outcome = Run(&sources, Test_Variant(), &Repository_Root(), &StdProcessLauncher);
 
     let CheckOutcome::Judged { findings, claim, .. } = outcome
     else
@@ -96,7 +97,7 @@ fn Test_A_Run_That_Materializes_No_Facts_Should_Report_NoFacts()
 {
     let sources = vec![Source("broken.rs", "pub const ??? = ;")];
 
-    let outcome = Run(&sources, Test_Variant(), &Repository_Root());
+    let outcome = Run(&sources, Test_Variant(), &Repository_Root(), &StdProcessLauncher);
 
     assert!(
         matches!(outcome, CheckOutcome::NoFacts { files: 1 }),
@@ -113,7 +114,7 @@ fn Test_Conflicting_Paths_Should_Be_Unreadable()
 {
     let sources = vec![Source("a.rs", "pub fn one() {}\n"), Source("a.rs", "pub fn two() {}\n")];
 
-    let outcome = Run(&sources, Test_Variant(), &Repository_Root());
+    let outcome = Run(&sources, Test_Variant(), &Repository_Root(), &StdProcessLauncher);
 
     assert!(matches!(outcome, CheckOutcome::Unreadable), "duplicate paths must not be ingested");
 }
@@ -126,7 +127,7 @@ fn Test_The_Registered_Provider_Should_Satisfy_The_Rules_Floor()
 {
     let sources = vec![Source("a.rs", "pub const T: &[&str] = &[];\n")];
 
-    let outcome = Run(&sources, Test_Variant(), &Repository_Root());
+    let outcome = Run(&sources, Test_Variant(), &Repository_Root(), &StdProcessLauncher);
 
     let CheckOutcome::Judged { findings, .. } = outcome
     else
@@ -200,7 +201,8 @@ fn Test_Materialize_Dependencies_Should_Return_Real_Workspace_Members()
     let context = crate::facts::Ingested(&placeholder, &registry, Test_Variant()).expect("a single real file ingests");
     let mut store = MemoryFactStore::New();
 
-    let (sources, findings) = crate::facts::Materialize_Dependencies(&Repository_Root(), &context, &mut store);
+    let (sources, findings) =
+        crate::facts::Materialize_Dependencies(&Repository_Root(), &context, &mut store, &StdProcessLauncher);
 
     assert!(findings.is_empty(), "a real workspace root must not report ProviderUnavailable: {findings:?}");
     assert!(

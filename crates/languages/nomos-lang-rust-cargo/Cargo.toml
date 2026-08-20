@@ -16,7 +16,11 @@ nomos-model = { workspace = true }
 nomos-capability = { workspace = true }
 nomos-analysis = { workspace = true }
 nomos-cap-dependency = { workspace = true }
+nomos-platform = { workspace = true }
 serde_json = { workspace = true }
+
+[dev-dependencies]
+nomos-platform-std = { workspace = true }
 
 [lints]
 workspace = true

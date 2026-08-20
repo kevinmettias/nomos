@@ -17,8 +17,12 @@ nomos-lang-rust = { workspace = true }
 nomos-lang-rust-scan = { workspace = true }
 nomos-lang-rust-cargo = { workspace = true }
 nomos-model = { workspace = true }
+nomos-platform = { workspace = true }
 nomos-rules = { workspace = true }
 nomos-workspace = { workspace = true }
+
+[dev-dependencies]
+nomos-platform-std = { workspace = true }
 
 [lints]
 workspace = true

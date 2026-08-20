@@ -20,6 +20,7 @@ use super::{GateCommand, PathBuf};
 use nomos_check_orchestration::CheckOutcome;
 use nomos_contracts::Finding;
 use nomos_gate_orchestration::GateRunOutcome;
+use nomos_platform_std::StdProcessLauncher;
 
 /// What a real `nomos gate run` produced.
 ///
@@ -57,7 +58,7 @@ pub(super) fn Run_Gate(command: &GateCommand) -> GateRunResult
     {
         None => CheckOutcome::Unreadable,
         Some(sources) if sources.is_empty() => CheckOutcome::NoSource,
-        Some(sources) => nomos_check_orchestration::Run(&sources, Host_Variant(), &command.root),
+        Some(sources) => nomos_check_orchestration::Run(&sources, Host_Variant(), &command.root, &StdProcessLauncher),
     };
 
     let (blocking_findings, disposition) = Reduced(&outcome);
