@@ -40,12 +40,13 @@ pub use reconciliation::lineage::{Ingest_Block_Dispositions, Ingest_Section_Line
 pub use archive::member::Member;
 pub use reconciliation::fate::member::MemberFate;
 pub use reconciliation::lineage::origin::Origin;
+pub use reconciliation::overlay::artifact::Parse_Artifact;
+pub use reconciliation::overlay::identifiers::Statements_In;
+pub use reconciliation::overlay::ingest::{Ingest_Overlay_Document, Ingest_V15_Record, OverlayReport};
 pub use reconciliation::overlay::overlaid::Overlaid;
-pub use reconciliation::overlay::{
-    FILLER_PATTERNS, Ingest_Overlay_Document, Ingest_V15_Record, Is_Filler, OverlayReport, Parse_Artifact, Reconcile,
-    Statements_In,
-};
 pub use reconciliation::overlay::pair_change::PairChange;
+pub use reconciliation::overlay::reconcile::Reconcile;
+pub use reconciliation::overlay::{FILLER_PATTERNS, Is_Filler};
 pub use phases::{Check_Against_Manifest, GateReport, IngestError, Ingest_Blob, Ingest_Catalog, Ingest_Source_Document, Ingest_Statements, Parse_Block_Lineage, Parse_Catalog, Parse_Statements};
 pub use content::block::recorded::RecordedBlock;
 pub use content::section::recorded::RecordedSection;

@@ -21714,6 +21714,63 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-DECOMPOSEFILE-SPEC",
+      "title": "decompose-file's structural checks report findings across crates/spec",
+      "why": "code-standards' rust decompose-file phase (check-one-public-type, check-responsibility-extraction, check-class-size, check-extractable-subset, check-file-size) was run over the whole workspace on user request and must reach 0 violations. nomos-spec-store carried a check-one-public-type finding (RelationConstraint sharing store.rs with SpecificationStore) plus check-responsibility-extraction and check-file-size findings on store.rs (646 lines, 46 declarations) and store/write.rs (627 lines, 41 declarations); nomos-spec-ingest carried check-responsibility-extraction and check-file-size findings on reconciliation/overlay.rs (507 lines, 35 declarations).",
+      "done_when": "check-one-public-type, check-responsibility-extraction, check-class-size, check-extractable-subset and check-file-size report no finding under crates/spec/nomos-spec-store or crates/spec/nomos-spec-ingest, run via code-standards' 'go run ./rules/general/run-all/phase rust/decompose-file <path> --keep-going'. Any module split keeps the whole workspace compiling, verified with cargo check --workspace --all-targets. cargo test -p nomos-spec-store -p nomos-spec-ingest stays green.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-store",
+          "crates/spec/nomos-spec-ingest"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-spec-ingest"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-spec-ingest"
+        ],
+        "exit_code": 0,
+        "output_tail": "e_No_Rows ... ok\ntest refusals::Test_A_Refused_Table_Should_Not_Write_Half_A_Document ... ok\ntest census::Test_A_Row_Should_Be_Findable_By_Its_Content ... ok\n\ntest result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.12s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_ingest-b91882f9705d3be2.exe)\n     Running tests\\archive_reads.rs (target\\debug\\deps\\archive_reads-57f26477296ecf13.exe)\n     Running tests\\family_counts\\main.rs (target\\debug\\deps\\family_counts-0d6551e8953f8961.exe)\n     Running tests\\gate_holds.rs (target\\debug\\deps\\gate_holds-b5ea4afc81bd7b71.exe)\n     Running tests\\overlay.rs (target\\debug\\deps\\overlay-1ca11b4be69ec8f5.exe)\n     Running tests\\real_corpus.rs (target\\debug\\deps\\real_corpus-4cef0bf42080529e.exe)\n     Running tests\\regression_report\\main.rs (target\\debug\\deps\\regression_report-f2b6e7608b1a7ca9.exe)\n     Running tests\\restoration.rs (target\\debug\\deps\\restoration-c37ddda2e96814aa.exe)\n     Running tests\\revisions.rs (target\\debug\\deps\\revisions-3f881ebab8687f1c.exe)\n     Running tests\\siblings.rs (target\\debug\\deps\\siblings-aa491999edd2b154.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-2049d200876e17c5.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-664bcf5196b763d4.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-b77bfff260f58dcf.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-5768e840765d1bfc.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-55bd8f919d9bc0a0.exe)\n   Doc-tests nomos_spec_ingest\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1787192863,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "672e1df7117019c36ba4c3d4ed23ef552a7b0e98"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

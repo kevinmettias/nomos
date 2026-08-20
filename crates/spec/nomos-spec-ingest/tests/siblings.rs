@@ -52,7 +52,7 @@ fn Put_Depends_On_Relation_Type(store: &mut SpecificationStore)
         .Put_Relation_Type(
             "depends_on",
             "seed",
-            nomos_spec_store::RelationConstraint {
+            &nomos_spec_store::RelationConstraint {
                 domain: &["decision"],
                 range: &["decision"],
                 max_per_node: 4,

@@ -266,7 +266,7 @@ fn Declare_The_Relation_Types(store: &mut SpecificationStore) -> Result<(), Stor
         store.Put_Relation_Type(
             seed.name,
             SEED_TIER,
-            RelationConstraint { domain: seed.domain, range: seed.range, max_per_node: seed.max_per_node },
+            &RelationConstraint { domain: seed.domain, range: seed.range, max_per_node: seed.max_per_node },
         )?;
     }
     for seed in RELATION_TYPES
