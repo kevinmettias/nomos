@@ -39,6 +39,8 @@ use nomos_platform::{Clock, CrossProcessLock, FileSystem, StaleTakeover, Timesta
 
 use crate::Claim;
 use crate::ClaimRefusal;
+use crate::DeclineReason;
+use crate::Holder;
 use crate::exclusion::{Check_Lease, ExclusionLedger};
 use crate::LedgerItem;
 use crate::ItemId;
@@ -302,14 +304,14 @@ impl<F: FileSystem, C: Clock, L: CrossProcessLock> FileLedger<F, C, L>
     /// holder is gone rather than working, [`ClaimRefusal::NotClaimable`] when the item is
     /// already `Done` or already `Declined`, and [`ClaimRefusal::NoSuchItem`] for an
     /// identifier that matches nothing.
-    pub fn Decline(
+    pub fn Decline<'a>(
         &mut self,
         item: &ItemId,
-        holder: &str,
-        reason: &str,
+        holder: impl Into<Holder<'a>>,
+        reason: impl Into<DeclineReason<'a>>,
     ) -> Result<(), ClaimRefusal>
     {
-        return Decline(self, item, holder, reason);
+        return Decline(self, item, holder.into(), reason.into());
     }
 
     /// Puts a new item on the board.

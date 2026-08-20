@@ -100,6 +100,74 @@ pub fn Workflow_Path(tree: &Path) -> std::path::PathBuf
     return tree.join(GATE_WORKFLOW);
 }
 
+/// The text of a whole GitHub Actions workflow file, distinguished from [`StepName`] purely
+/// by type.
+///
+/// [`Derive_Step`] takes one of each as adjacent parameters, and two parameters that both
+/// read as `&str` there let a caller swap the workflow for the step name and have the
+/// compiler accept it. `From<&str>` and `From<&String>` both convert into this, so no
+/// existing call site needs to change shape to adopt it — every one already passes a
+/// borrowed string.
+#[derive(Clone, Copy, Debug)]
+pub struct WorkflowText<'a>(&'a str);
+
+impl<'a> From<&'a str> for WorkflowText<'a>
+{
+    fn from(value: &'a str) -> Self
+    {
+        return WorkflowText(value);
+    }
+}
+
+impl<'a> From<&'a String> for WorkflowText<'a>
+{
+    fn from(value: &'a String) -> Self
+    {
+        return WorkflowText(value.as_str());
+    }
+}
+
+impl<'a> WorkflowText<'a>
+{
+    /// The workflow's text as a plain string.
+    #[must_use]
+    pub fn As_Str(&self) -> &'a str
+    {
+        return self.0;
+    }
+}
+
+/// The name of one step within a workflow, distinguished from [`WorkflowText`] for the
+/// reason given on that type.
+#[derive(Clone, Copy, Debug)]
+pub struct StepName<'a>(&'a str);
+
+impl<'a> From<&'a str> for StepName<'a>
+{
+    fn from(value: &'a str) -> Self
+    {
+        return StepName(value);
+    }
+}
+
+impl<'a> From<&'a String> for StepName<'a>
+{
+    fn from(value: &'a String) -> Self
+    {
+        return StepName(value.as_str());
+    }
+}
+
+impl<'a> StepName<'a>
+{
+    /// The step name as a plain string.
+    #[must_use]
+    pub fn As_Str(&self) -> &'a str
+    {
+        return self.0;
+    }
+}
+
 /// The argv of a named step in a GitHub Actions workflow.
 ///
 /// Deliberately not a YAML parser. It reads the two line shapes a step is written in and
@@ -109,17 +177,19 @@ pub fn Workflow_Path(tree: &Path) -> std::path::PathBuf
 /// # Errors
 ///
 /// Returns a [`GateUnknown`] naming why no argv could be derived.
-pub fn Derive_Step(workflow: &str, step: &str) -> Result<Vec<String>, GateUnknown>
+pub fn Derive_Step<'a>(workflow: impl Into<WorkflowText<'a>>, step: impl Into<StepName<'a>>) -> Result<Vec<String>, GateUnknown>
 {
+    let workflow = workflow.into();
+    let step = step.into();
     let mut inside = false;
 
-    for line in workflow.lines()
+    for line in workflow.As_Str().lines()
     {
         let trimmed = line.trim();
 
         if let Some(name) = Step_Named(trimmed)
         {
-            inside = name == step;
+            inside = name == step.As_Str();
             continue;
         }
 
@@ -131,7 +201,7 @@ pub fn Derive_Step(workflow: &str, step: &str) -> Result<Vec<String>, GateUnknow
     }
 
     return Err(GateUnknown::NoSuchStep {
-        step: step.to_owned(),
+        step: step.As_Str().to_owned(),
     });
 }
 
@@ -150,12 +220,16 @@ fn Step_Named(trimmed: &str) -> Option<&str>
 }
 
 /// Splits a bare command into an argv, or refuses.
-fn Argv_Of(run: &str, step: &str) -> Result<Vec<String>, GateUnknown>
+///
+/// `step` is [`StepName`] rather than `&str`: it travels here as the second of two adjacent
+/// string-shaped parameters, and giving it the same type [`Derive_Step`] already gave it
+/// keeps the two positions from becoming transposable again one call down.
+fn Argv_Of(run: &str, step: StepName<'_>) -> Result<Vec<String>, GateUnknown>
 {
     if run.is_empty() || run.contains(SHELL_METACHARACTERS)
     {
         return Err(GateUnknown::NotASingleCommand {
-            step: step.to_owned(),
+            step: step.As_Str().to_owned(),
             run: run.to_owned(),
         });
     }

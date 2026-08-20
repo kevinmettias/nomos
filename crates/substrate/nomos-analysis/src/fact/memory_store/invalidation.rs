@@ -140,7 +140,7 @@ fn Propagate(
 ) -> BTreeSet<Digest128>
 {
     let mut seen: BTreeSet<Digest128> = roots.iter().copied().collect();
-    let (dependents, propagation) = Taken_Propagation(store);
+    let Taken { dependents, propagation } = Taken_Propagation(store);
     let invalidating = Invalidating { from, described };
 
     propagation.Spread(&dependents, roots, &mut |consumer| {
@@ -149,6 +149,15 @@ fn Propagate(
     store.propagation = Some(propagation);
 
     return seen;
+}
+
+/// What [`Taken_Propagation`] takes out of `store` for the walk: the dependents snapshot it
+/// reads and the propagation implementation it calls into. Named so the two travel as a
+/// struct with named fields rather than a pair whose two positions a caller has to remember.
+struct Taken
+{
+    dependents: BTreeMap<Digest128, BTreeSet<Digest128>>,
+    propagation: Box<dyn DependencyPropagation>,
 }
 
 /// Takes `store.propagation` out, alongside a snapshot of `store.dependents`, so the walk
@@ -161,15 +170,22 @@ fn Propagate(
 /// of `store.dependents` or `store.propagation` for the call that runs it.
 /// `DependencyPropagation` has no Nomos-specific reason to know about that conflict — see
 /// `docs/records/D-135` and `docs/records/D-138`.
-fn Taken_Propagation(store: &mut MemoryFactStore) -> (BTreeMap<Digest128, BTreeSet<Digest128>>, Box<dyn DependencyPropagation>)
+fn Taken_Propagation(store: &mut MemoryFactStore) -> Taken
 {
     let dependents = store.dependents.clone();
-    let propagation = store
-        .propagation
-        .take()
-        .expect("propagation implementation is always present between calls");
 
-    return (dependents, propagation);
+    // `store.propagation` is `Some` between any two calls into this type — see the field's
+    // own doc comment on `MemoryFactStore` — so an absence here is this file's own
+    // invariant broken, not a failure a caller could recover from. `unreachable!` says
+    // that; forcing a `Result` the caller has to handle would misclassify a bug as an
+    // outcome.
+    let Some(propagation) = store.propagation.take()
+    else
+    {
+        unreachable!("propagation implementation is always present between calls");
+    };
+
+    return Taken { dependents, propagation };
 }
 
 /// One node the walk reached: recorded into `seen`, invalidated, and — if it was live —

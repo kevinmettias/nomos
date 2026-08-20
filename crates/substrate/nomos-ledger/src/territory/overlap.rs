@@ -15,7 +15,7 @@ pub(super) fn Shared_Subjects(mine: &[String], theirs: &[String]) -> Vec<Subject
     {
         for right in theirs
         {
-            if !Contains_Or_Equals(left, right)
+            if !Contains_Or_Equals(Mine(left), Theirs(right))
             {
                 continue;
             }
@@ -46,15 +46,25 @@ pub(super) fn Narrower<'a>(left: &'a str, right: &'a str) -> &'a str
     return right;
 }
 
+/// One side of an overlap check: a path from the territory asking whether it overlaps
+/// another's. Distinguished from [`Theirs`] purely by type, so the two positions of
+/// [`Contains_Or_Equals`] cannot be swapped and still compile — the relation this function
+/// computes happens to be symmetric, but its one call site still has a `mine`/`theirs`
+/// distinction worth keeping visible at the call.
+pub(super) struct Mine<'a>(&'a str);
+
+/// The other side of an overlap check. See [`Mine`].
+pub(super) struct Theirs<'a>(&'a str);
+
 /// Whether one path is the other, or contains it.
 ///
 /// Purely textual, on normalized segments. `a/b` contains `a/b/c`; it does not contain
 /// `a/bc`, which is why the comparison appends a separator rather than using a bare
 /// `starts_with`.
-pub(super) fn Contains_Or_Equals(left: &str, right: &str) -> bool
+pub(super) fn Contains_Or_Equals(left: Mine<'_>, right: Theirs<'_>) -> bool
 {
-    let left = Normalize_Path(left);
-    let right = Normalize_Path(right);
+    let left = Normalize_Path(left.0);
+    let right = Normalize_Path(right.0);
 
     if left == right
     {

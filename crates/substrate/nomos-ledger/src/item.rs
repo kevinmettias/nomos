@@ -43,6 +43,73 @@ use nomos_platform::Timestamp;
 use serde::{Deserialize, Serialize};
 use std::time::Duration;
 
+/// Who is declining an item, distinguished from [`DeclineReason`] purely by type.
+///
+/// The two travel as adjacent parameters through every layer of `Decline` —
+/// [`LedgerItem::Decline`], [`crate::FileLedger::Decline`], and the verb body beneath it —
+/// and two same-typed strings at any of those layers would let a caller swap who is
+/// declining for why and have the compiler accept it. `From<&str>` and `From<&String>` both
+/// convert into one, so no existing call site needs to change shape to adopt it: every one
+/// already passes a borrowed string.
+#[derive(Clone, Copy, Debug)]
+pub struct Holder<'a>(&'a str);
+
+impl<'a> From<&'a str> for Holder<'a>
+{
+    fn from(value: &'a str) -> Self
+    {
+        return Holder(value);
+    }
+}
+
+impl<'a> From<&'a String> for Holder<'a>
+{
+    fn from(value: &'a String) -> Self
+    {
+        return Holder(value.as_str());
+    }
+}
+
+impl<'a> Holder<'a>
+{
+    /// The holder's identifier as a plain string.
+    #[must_use]
+    pub fn As_Str(&self) -> &'a str
+    {
+        return self.0;
+    }
+}
+
+/// Why an item is being declined, distinguished from [`Holder`] for the reason given there.
+#[derive(Clone, Copy, Debug)]
+pub struct DeclineReason<'a>(&'a str);
+
+impl<'a> From<&'a str> for DeclineReason<'a>
+{
+    fn from(value: &'a str) -> Self
+    {
+        return DeclineReason(value);
+    }
+}
+
+impl<'a> From<&'a String> for DeclineReason<'a>
+{
+    fn from(value: &'a String) -> Self
+    {
+        return DeclineReason(value.as_str());
+    }
+}
+
+impl<'a> DeclineReason<'a>
+{
+    /// The reason as a plain string.
+    #[must_use]
+    pub fn As_Str(&self) -> &'a str
+    {
+        return self.0;
+    }
+}
+
 /// The lease a claim gets when the holder does not ask for a specific one.
 ///
 /// Long enough that an agent working a real item is not interrupted; short enough that
@@ -221,13 +288,16 @@ impl LedgerItem
     /// It performs no checks. Whether this item may be declined at all is
     /// `Decline_Refusal`'s question, asked once under the lock, and asking it twice is how
     /// two answers come to disagree.
-    pub fn Decline(&mut self, reason: &str, holder: &str, at: Timestamp)
+    pub fn Decline<'a>(&mut self, reason: impl Into<DeclineReason<'a>>, holder: impl Into<Holder<'a>>, at: Timestamp)
     {
+        let reason = reason.into();
+        let holder = holder.into();
+
         self.state = ItemState::Declined {
-            reason: reason.to_owned(),
+            reason: reason.As_Str().to_owned(),
         };
         self.declined = Some(Declination {
-            holder: holder.to_owned(),
+            holder: holder.As_Str().to_owned(),
             declined_at: at,
         });
     }

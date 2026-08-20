@@ -82,7 +82,10 @@ pub fn nomos_ledger::AddRefusal::from(error: &LedgerError) -> Self
 pub fn nomos_ledger::Claim::Has_Lapsed(&self, now: Timestamp) -> bool
 pub fn nomos_ledger::ClaimRefusal::Describe(&self) -> String
 pub fn nomos_ledger::Claim_Refusal( document: &LedgerDocument, item: &ItemId, now: Timestamp, ) -> Option<ClaimRefusal>
-pub fn nomos_ledger::Derive_Step(workflow: &str, step: &str) -> Result<Vec<String>, GateUnknown>
+pub fn nomos_ledger::DeclineReason::As_Str(&self) -> &'a str
+pub fn nomos_ledger::DeclineReason::from(value: &'a String) -> Self
+pub fn nomos_ledger::DeclineReason::from(value: &'a str) -> Self
+pub fn nomos_ledger::Derive_Step<'a>(workflow: impl Into<WorkflowText<'a>>, step: impl Into<StepName<'a>>) -> Result<Vec<String>, GateUnknown>
 pub fn nomos_ledger::Eligible_Items(document: &LedgerDocument, now: Timestamp) -> Vec<&LedgerItem>
 pub fn nomos_ledger::ExclusionLedger::Claim( &mut self, item: &ItemId, holder: &str, lease: Duration, ) -> Result<Reservation, ClaimRefusal>
 pub fn nomos_ledger::ExclusionLedger::Release( &mut self, item: &ItemId, holder: &str, outcome: ReleaseOutcome, ) -> Result<(), ClaimRefusal>
@@ -90,7 +93,7 @@ pub fn nomos_ledger::ExclusionLedger::Renew(&mut self, item: &ItemId, holder: &s
 pub fn nomos_ledger::FileLedger::Add( &mut self, item: &LedgerItem, holder: &str, published: &Territory, amending: &Territory, ) -> Result<(), AddRefusal>
 pub fn nomos_ledger::FileLedger::At(path: impl Into<PathBuf>, filesystem: F, clock: C, lock: L) -> Self
 pub fn nomos_ledger::FileLedger::Claim( &mut self, item: &ItemId, holder: &str, lease: Duration, ) -> Result<Reservation, ClaimRefusal>
-pub fn nomos_ledger::FileLedger::Decline( &mut self, item: &ItemId, holder: &str, reason: &str, ) -> Result<(), ClaimRefusal>
+pub fn nomos_ledger::FileLedger::Decline<'a>( &mut self, item: &ItemId, holder: impl Into<Holder<'a>>, reason: impl Into<DeclineReason<'a>>, ) -> Result<(), ClaimRefusal>
 pub fn nomos_ledger::FileLedger::Load(&self) -> Result<LedgerDocument, LedgerError>
 pub fn nomos_ledger::FileLedger::Now(&self) -> Timestamp
 pub fn nomos_ledger::FileLedger::Path(&self) -> &Path
@@ -104,16 +107,22 @@ pub fn nomos_ledger::FileLedger::With_Lock<T>( &self, holder: &str, modify: impl
 pub fn nomos_ledger::Finish<F: FileSystem, C: Clock, L: CrossProcessLock>( ledger: &mut FileLedger<F, C, L>, launcher: &impl ProcessLauncher, finishing: &Finishing<'_>, working_directory: Option<&Path>, ) -> Result<VerificationRecord, FinishRefusal>
 pub fn nomos_ledger::FinishRefusal::Describe(&self) -> String
 pub fn nomos_ledger::GateUnknown::Describe(&self) -> String
+pub fn nomos_ledger::Holder::As_Str(&self) -> &'a str
+pub fn nomos_ledger::Holder::from(value: &'a String) -> Self
+pub fn nomos_ledger::Holder::from(value: &'a str) -> Self
 pub fn nomos_ledger::ItemId::As_Str(&self) -> &str
 pub fn nomos_ledger::ItemId::New(value: impl Into<String>) -> Self
 pub fn nomos_ledger::ItemId::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_ledger::ItemState::Describe(&self) -> String
 pub fn nomos_ledger::LedgerError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
-pub fn nomos_ledger::LedgerItem::Decline(&mut self, reason: &str, holder: &str, at: Timestamp)
+pub fn nomos_ledger::LedgerItem::Decline<'a>(&mut self, reason: impl Into<DeclineReason<'a>>, holder: impl Into<Holder<'a>>, at: Timestamp)
 pub fn nomos_ledger::LedgerItem::Has_Active_Claim(&self, now: Timestamp) -> bool
 pub fn nomos_ledger::LedgerItem::Replace_Lapsed_Claim(&mut self, replacement: Claim, now: Timestamp) -> bool
 pub fn nomos_ledger::Normalize_Path(path: &str) -> String
 pub fn nomos_ledger::ReleaseOutcome::Record_On(&self, item: &mut LedgerItem, holder: &str, at: Timestamp)
+pub fn nomos_ledger::StepName::As_Str(&self) -> &'a str
+pub fn nomos_ledger::StepName::from(value: &'a String) -> Self
+pub fn nomos_ledger::StepName::from(value: &'a str) -> Self
 pub fn nomos_ledger::Territory::Ambiguous_Paths(&self) -> Vec<(String, String)>
 pub fn nomos_ledger::Territory::As_Subject_Set(&self) -> SubjectSet
 pub fn nomos_ledger::Territory::Empty() -> Self
@@ -124,12 +133,23 @@ pub fn nomos_ledger::Territory::With_Pattern(mut self, pattern: impl Into<String
 pub fn nomos_ledger::Validate(document: &LedgerDocument, now: Timestamp) -> Vec<String>
 pub fn nomos_ledger::VerificationPredicate::Is_Runnable(&self) -> bool
 pub fn nomos_ledger::VerificationPredicate::New(argv: Vec<String>) -> Self
+pub fn nomos_ledger::WorkflowText::As_Str(&self) -> &'a str
+pub fn nomos_ledger::WorkflowText::from(value: &'a String) -> Self
+pub fn nomos_ledger::WorkflowText::from(value: &'a str) -> Self
 pub fn nomos_ledger::Workflow_Path(tree: &Path) -> std::path::PathBuf
 pub impl nomos_ledger::AddRefusal implements From<&LedgerError>
+pub impl nomos_ledger::DeclineReason implements From<&'a String>
+pub impl nomos_ledger::DeclineReason implements From<&'a str>
 pub impl nomos_ledger::FileLedger implements ExclusionLedger
+pub impl nomos_ledger::Holder implements From<&'a String>
+pub impl nomos_ledger::Holder implements From<&'a str>
 pub impl nomos_ledger::ItemId implements core::fmt::Display
 pub impl nomos_ledger::LedgerError implements core::fmt::Display
 pub impl nomos_ledger::LedgerError implements std::error::Error
+pub impl nomos_ledger::StepName implements From<&'a String>
+pub impl nomos_ledger::StepName implements From<&'a str>
+pub impl nomos_ledger::WorkflowText implements From<&'a String>
+pub impl nomos_ledger::WorkflowText implements From<&'a str>
 pub struct field nomos_ledger::Abandonment::abandoned_at: Timestamp
 pub struct field nomos_ledger::Abandonment::holder: String
 pub struct field nomos_ledger::Abandonment::reason: String
@@ -177,14 +197,18 @@ pub struct field nomos_ledger::VerificationRecord::verified_at: Timestamp
 pub struct nomos_ledger::Abandonment
 pub struct nomos_ledger::Claim
 pub struct nomos_ledger::Declination
+pub struct nomos_ledger::DeclineReason<'a>(&'a str)
 pub struct nomos_ledger::FileLedger<F, C, L>
 pub struct nomos_ledger::Finishing<'a>
 pub struct nomos_ledger::GateOutcome
+pub struct nomos_ledger::Holder<'a>(&'a str)
 pub struct nomos_ledger::ItemId(String)
 pub struct nomos_ledger::LedgerDocument
 pub struct nomos_ledger::LedgerItem
 pub struct nomos_ledger::Reservation
+pub struct nomos_ledger::StepName<'a>(&'a str)
 pub struct nomos_ledger::Territory
 pub struct nomos_ledger::VerificationPredicate
 pub struct nomos_ledger::VerificationRecord
+pub struct nomos_ledger::WorkflowText<'a>(&'a str)
 pub trait nomos_ledger::ExclusionLedger

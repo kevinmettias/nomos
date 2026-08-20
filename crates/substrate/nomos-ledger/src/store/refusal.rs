@@ -396,10 +396,21 @@ mod tests
         };
     }
 
-    /// A `Ready` item held back by a live overlapping claim, the item contesting its
-    /// territory, and an item nothing touches — the fixture
-    /// `Test_Eligible_Items_Should_Exclude_What_Claim_Refusal_Would_Refuse` asserts over.
-    fn Held_Contested_And_Free() -> (LedgerItem, LedgerItem, LedgerItem)
+    /// The fixture `Test_Eligible_Items_Should_Exclude_What_Claim_Refusal_Would_Refuse`
+    /// asserts over: a `Ready` item held back by a live overlapping claim, the item
+    /// contesting its territory, and an item nothing touches.
+    ///
+    /// A named struct rather than a three-`LedgerItem` tuple: the tuple repeats one type
+    /// three times, so a caller destructuring it by position could swap two members and the
+    /// compiler would not notice.
+    struct Fixture
+    {
+        held: LedgerItem,
+        contested: LedgerItem,
+        free: LedgerItem,
+    }
+
+    fn Held_Contested_And_Free() -> Fixture
     {
         let mut held = Item("P1-HELD");
         held.territory = Territory::Of_Files(["a/shared.rs"]);
@@ -416,7 +427,7 @@ mod tests
         let mut free = Item("P3-FREE");
         free.territory = Territory::Of_Files(["b/other.rs"]);
 
-        return (held, contested, free);
+        return Fixture { held, contested, free };
     }
 
     /// The property [`Eligible_Items`] exists to give a name to: a `Ready` item held back by
@@ -425,7 +436,7 @@ mod tests
     #[test]
     fn Test_Eligible_Items_Should_Exclude_What_Claim_Refusal_Would_Refuse()
     {
-        let (held, contested, free) = Held_Contested_And_Free();
+        let Fixture { held, contested, free } = Held_Contested_And_Free();
         let document = Document(vec![held, contested, free]);
 
         let eligible: Vec<&str> = Eligible_Items(&document, At(2_000))

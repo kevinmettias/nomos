@@ -12,6 +12,8 @@ use nomos_platform::{Clock, CrossProcessLock, FileSystem, Timestamp};
 
 use crate::AddRefusal;
 use crate::ClaimRefusal;
+use crate::DeclineReason;
+use crate::Holder;
 use crate::LedgerDocument;
 use crate::LedgerItem;
 use crate::ItemId;
@@ -73,11 +75,11 @@ pub(super) fn Add<F: FileSystem, C: Clock, L: CrossProcessLock>(
 pub(super) fn Decline<F: FileSystem, C: Clock, L: CrossProcessLock>(
     ledger: &mut FileLedger<F, C, L>,
     item: &ItemId,
-    holder: &str,
-    reason: &str,
+    holder: Holder<'_>,
+    reason: DeclineReason<'_>,
 ) -> Result<(), ClaimRefusal>
 {
-    return Decide_Under_Lock(ledger, holder, |document, now| {
+    return Decide_Under_Lock(ledger, holder.As_Str(), |document, now| {
         if let Some(refusal) = Decline_Refusal(document, item, now)
         {
             return Err(refusal);
