@@ -22005,14 +22005,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-decomposefile-capabilities",
-        "acquired_at": 1787197056,
-        "lease_expires_at": 1787204256
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -22024,9 +22020,37 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cap-controlflow",
+          "-p",
+          "nomos-cap-dependency"
+        ],
+        "exit_code": 0,
+        "output_tail": "A_Claim_Above_Semantically_Resolved ... ok\ntest contract::tests::Test_The_Contract_Should_Stand_With_No_Provider_At_All ... ok\ntest payload::tests::Test_An_Unrecognized_Shape_Should_Be_Refused ... ok\ntest payload::tests::Test_A_Payload_Should_Round_Trip_Through_Its_Own_Encoding ... ok\ntest payload::tests::Test_An_Empty_Byte_String_Should_Round_Trip_To_No_Sites ... ok\ntest payload::tests::Test_A_Malformed_Site_Line_Should_Be_Refused ... ok\ntest payload::tests::Test_The_Encoding_Should_Be_Stable_And_Diffable ... ok\n\ntest result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 9 tests\ntest contract::tests::Test_One_Capability_Should_Admit_One_Contract ... ok\ntest contract::tests::Test_The_Ceiling_Should_Refuse_A_Claim_Above_Semantically_Resolved ... ok\ntest contract::tests::Test_The_Ceiling_Should_Admit_A_Weaker_Offer ... ok\ntest payload::tests::Test_An_Empty_Byte_String_Should_Be_Refused ... ok\ntest payload::tests::Test_A_Malformed_Edge_Line_Should_Be_Refused ... ok\ntest payload::tests::Test_A_Package_With_No_Edges_Should_Round_Trip ... ok\ntest payload::tests::Test_A_Payload_Should_Round_Trip_Through_Its_Own_Encoding ... ok\ntest contract::tests::Test_The_Contract_Should_Stand_With_No_Provider_At_All ... ok\ntest payload::tests::Test_The_Encoding_Should_Be_Stable_And_Diffable ... ok\n\ntest result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.08s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_cap_controlflow-b157af51a6a3a063.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_cap_dependency-bcfc3d6b958337b7.exe)\n   Doc-tests nomos_cap_controlflow\n   Doc-tests nomos_cap_dependency\n",
+        "verified_at": 1787257482,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "5e4366ee024c9cb3c3757a5c92ed6c43d5c1d32d"
+      },
       "abandoned": [],
-      "displaced": [],
+      "displaced": [
+        {
+          "holder": "claude-decomposefile-capabilities",
+          "acquired_at": 1787197056,
+          "lease_expires_at": 1787204256
+        }
+      ],
       "declined": null
     },
     {
