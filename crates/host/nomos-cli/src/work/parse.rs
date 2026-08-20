@@ -186,13 +186,45 @@ fn Parse_Add(named: &[String], predicate_argv: &[String]) -> Result<WorkCommand,
     let amended = Named_Values(named, "--amends");
     let amending = Territory::Of_Files(amended);
     let territory = Parse_Territory(named, &amending)?;
-    let verification = Parse_Predicate(predicate_argv);
+    let verification = Timed(Parse_Predicate(predicate_argv), named)?;
     let item = New_Item(named, territory, verification)?;
 
     return Ok(WorkCommand::Add {
         item: Box::new(item),
         amending,
     });
+}
+
+/// Applies `--timeout` to a parsed predicate, or refuses it when there is no predicate to
+/// bound.
+///
+/// `VerificationPredicate::New` always starts a predicate at its own ten-minute default,
+/// which is too short for a territory that legitimately runs quiet for a while — a
+/// corpus-backed crate's determinism test, for one, which can stay silent for several
+/// minutes before printing anything and trips `nomos-ledger`'s idle bound (half the wall
+/// bound) long before the wall bound itself would. Without this flag no author could ever
+/// declare a predicate patient enough for that territory, on any item, ever.
+fn Timed(predicate: Option<VerificationPredicate>, named: &[String]) -> Result<Option<VerificationPredicate>, String>
+{
+    let Some(text) = Named_Value(named, "--timeout")
+    else
+    {
+        return Ok(predicate);
+    };
+
+    let Some(mut predicate) = predicate
+    else
+    {
+        return Err(format!(
+            "--timeout {text:?} was given but there is no predicate to bound: everything \
+             after `--` is the predicate, and nothing followed it here.\n\n{}",
+            Usage_Text()
+        ));
+    };
+
+    predicate.timeout_seconds = Parse_Duration(&text)?.as_secs();
+
+    return Ok(Some(predicate));
 }
 
 /// The item itself, from the arguments describing it.
@@ -385,7 +417,7 @@ const VERBS: &str = "\x20 list     [--state ready|waiting|held|snagged|stranded|
      \x20          --territory <path> [--territory <path> …]\n\
      \x20          [--amends <record> …]\n\
      \x20          [--depends-on <id> …]\n\
-     \x20          [-- <program> <args…>]\n\
+     \x20          [-- <program> <args…>] [--timeout 2h]\n\
      \x20          `--kind` says what sort of work this is; `--origin` says whether a person \
      required it or a session proposed it. Both are required and both are closed sets: an \
      unrecognized value is refused rather than stored. `OD-LEDGER-024`.\n\
@@ -394,6 +426,11 @@ const VERBS: &str = "\x20 list     [--state ready|waiting|held|snagged|stranded|
      an identifier is allocated once and the two acts are otherwise the same act. Either \
      spelling works — the identifier or the file — and it reserves what it names, so the \
      record does not also need `--territory`.\n\
+     \x20          `--timeout` bounds the predicate named after `--`, defaulting to 10 \
+     minutes like the predicate itself does; it is refused if given with no predicate to \
+     bound. `finish` halves it for the idle bound (`OD-PLATFORM-001`), so a predicate \
+     expected to run quiet for a while — a corpus-backed test, say — needs a longer one \
+     declared here rather than left at the default.\n\
      \x20 claim    --item <id> --holder <name> [--lease 2h]\n\
      \x20 renew    --item <id> --holder <name> [--lease 2h]\n\
      \x20 takeover --item <id> --holder <name> [--lease 2h]\n\

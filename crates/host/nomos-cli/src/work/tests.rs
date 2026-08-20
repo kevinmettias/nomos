@@ -355,6 +355,58 @@ fn Test_Add_Should_Take_The_Predicate_After_The_Separator()
     );
 }
 
+/// `--timeout` overrides the predicate's default ten-minute bound.
+#[test]
+fn Test_Timeout_Should_Bound_The_Predicate()
+{
+    let item = Added(
+        "add --item T-1 --title t --why w --done-when d --kind correction --origin proposed \
+         --territory src/a.rs --timeout 40m \
+         -- cargo test -p nomos-workspace",
+    );
+
+    assert_eq!(
+        item.verification.map(|predicate| predicate.timeout_seconds),
+        Some(2_400)
+    );
+}
+
+/// Left unset, the predicate keeps the ten-minute default `VerificationPredicate::New`
+/// gives it — `--timeout` overrides, it does not replace, the construction.
+#[test]
+fn Test_Timeout_Should_Default_When_Omitted()
+{
+    let item = Added(
+        "add --item T-1 --title t --why w --done-when d --kind correction --origin proposed \
+         --territory src/a.rs \
+         -- cargo test -p nomos-workspace",
+    );
+
+    assert_eq!(
+        item.verification.map(|predicate| predicate.timeout_seconds),
+        Some(600)
+    );
+}
+
+/// A bound with nothing to bound is a mistake, not a no-op: an author who typed
+/// `--timeout` meant to give the predicate a longer wall bound, and silently discarding it
+/// because there is no predicate would leave that author believing the item is more
+/// patient than it is.
+#[test]
+fn Test_Timeout_Without_A_Predicate_Should_Be_Refused()
+{
+    let error = Parse(&Arguments(
+        "add --item T-1 --title t --why w --done-when d --kind correction --origin proposed \
+         --territory src/a.rs --timeout 40m",
+    ))
+    .unwrap_err();
+
+    assert!(
+        error.contains("--timeout"),
+        "the refusal must name the flag that has nothing to bound: {error}"
+    );
+}
+
 /// A flag that looks like a named argument but sits after the separator belongs to
 /// the predicate. Without the split, `--lib` above would be read as an option to
 /// `nomos work`.
