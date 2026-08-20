@@ -21442,14 +21442,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-cleanfile-capabilities",
-        "acquired_at": 1787189849,
-        "lease_expires_at": 1787197049
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -21463,9 +21459,39 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cap-syntax",
+          "-p",
+          "nomos-cap-dependency",
+          "-p",
+          "nomos-cap-controlflow"
+        ],
+        "exit_code": 0,
+        "output_tail": "0.00s\n\n\nrunning 13 tests\ntest contract::tests::Test_One_Capability_Should_Admit_One_Contract ... ok\ntest contract::tests::Test_The_Ceiling_Should_Refuse_A_Claim_Of_Name_Resolution ... ok\ntest contract::tests::Test_The_Contract_Should_Stand_With_No_Provider_At_All ... ok\ntest contract::tests::Test_The_Ceiling_Should_Admit_A_Weaker_Offer ... ok\ntest payload::tests::Test_A_Decoded_Payload_Should_Render_Back_To_The_Bytes_It_Came_From ... ok\ntest payload::tests::Test_A_Function_Shape_Should_Carry_Its_Arity ... ok\ntest payload::tests::Test_A_File_That_Declares_Nothing_Should_Decode_To_No_Items ... ok\ntest payload::tests::Test_A_Member_Should_Be_Enclosed_By_The_Record_It_Follows ... ok\ntest payload::tests::Test_A_Payload_This_Build_Cannot_Read_Should_Not_Decode_To_No_Items ... ok\ntest payload::tests::Test_A_Refusal_Should_Say_What_It_Refused ... ok\ntest payload::tests::Test_A_Well_Formed_Payload_Should_Decode_To_Its_Records ... ok\ntest payload::tests::Test_Documentation_Should_Survive_The_Field_It_Travels_In ... ok\ntest payload::tests::Test_Not_Observed_And_Absent_Should_Be_Different_Bytes ... ok\n\ntest result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.09s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_cap_controlflow-b157af51a6a3a063.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_cap_dependency-bcfc3d6b958337b7.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_cap_syntax-f135b42935de4b26.exe)\n   Doc-tests nomos_cap_controlflow\n   Doc-tests nomos_cap_dependency\n   Doc-tests nomos_cap_syntax\n",
+        "verified_at": 1787257443,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "783771db7472a6a7f5958f2acd0e42d53f1e083f"
+      },
       "abandoned": [],
-      "displaced": [],
+      "displaced": [
+        {
+          "holder": "claude-cleanfile-capabilities",
+          "acquired_at": 1787189849,
+          "lease_expires_at": 1787197049
+        }
+      ],
       "declined": null
     },
     {
