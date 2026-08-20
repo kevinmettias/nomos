@@ -20987,6 +20987,496 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-CLEANFILE-HOST",
+      "title": "clean-file's structural checks report findings across crates/host",
+      "why": "code-standards' rust clean-file phase (nested-call, nesting-depth, function-size, literals, parameter-count, intrafile-duplication) was run over the whole workspace on user request and must reach 0 violations on the five structural checks; nomos-cli and nomos-surface-provenance together carry 3 nested-call, 12+5 function-size, 4+1 parameter-count and 2 intrafile-duplication findings.",
+      "done_when": "check-nested-call, check-function-size, check-parameter-count and check-intrafile-duplication (--include-tests) report no finding under crates/host/nomos-cli or crates/host/nomos-surface-provenance. Any parameter-count fix that changes a function's signature keeps every call site across the workspace compiling, verified with cargo check --workspace --all-targets. cargo test -p nomos-cli -p nomos-surface-provenance stays green.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli",
+          "crates/host/nomos-surface-provenance"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-cleanfile-host",
+        "acquired_at": 1787189928,
+        "lease_expires_at": 1787197128
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-surface-provenance"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-CLEANFILE-SUBSTRATE",
+      "title": "clean-file's structural checks report findings across crates/substrate",
+      "why": "The rust clean-file phase's five structural checks were run workspace-wide on user request. nomos-ledger, nomos-analysis, nomos-capability and nomos-workspace together carry 8 nested-call, 9+8+3+2 function-size, 1 parameter-count and 1 intrafile-duplication findings.",
+      "done_when": "check-nested-call, check-function-size, check-parameter-count and check-intrafile-duplication (--include-tests) report no finding under crates/substrate/nomos-ledger, crates/substrate/nomos-analysis, crates/substrate/nomos-capability or crates/substrate/nomos-workspace. Any signature change keeps the whole workspace compiling, verified with cargo check --workspace --all-targets. cargo test -p nomos-ledger -p nomos-analysis -p nomos-capability -p nomos-workspace stays green.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger",
+          "crates/substrate/nomos-analysis",
+          "crates/substrate/nomos-capability",
+          "crates/substrate/nomos-workspace"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-cleanfile-substrate",
+        "acquired_at": 1787189999,
+        "lease_expires_at": 1787197199
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-analysis",
+          "-p",
+          "nomos-capability",
+          "-p",
+          "nomos-workspace"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-CLEANFILE-SPEC",
+      "title": "clean-file's structural checks report findings across crates/spec",
+      "why": "The rust clean-file phase's five structural checks were run workspace-wide on user request. nomos-spec-store, nomos-spec-bundle, nomos-spec-ingest, nomos-spec-validate and nomos-spec-project together carry 11+7+3+1+1 function-size and 3 parameter-count findings.",
+      "done_when": "check-function-size and check-parameter-count (--include-tests) report no finding under crates/spec/nomos-spec-store, crates/spec/nomos-spec-bundle, crates/spec/nomos-spec-ingest, crates/spec/nomos-spec-validate or crates/spec/nomos-spec-project. Any signature change keeps the whole workspace compiling, verified with cargo check --workspace --all-targets. cargo test -p nomos-spec-store -p nomos-spec-bundle -p nomos-spec-ingest -p nomos-spec-validate -p nomos-spec-project stays green.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-store",
+          "crates/spec/nomos-spec-bundle",
+          "crates/spec/nomos-spec-ingest",
+          "crates/spec/nomos-spec-validate",
+          "crates/spec/nomos-spec-project"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-spec-bundle",
+          "-p",
+          "nomos-spec-ingest",
+          "-p",
+          "nomos-spec-validate",
+          "-p",
+          "nomos-spec-project"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-CLEANFILE-ORCHESTRATION",
+      "title": "clean-file's structural checks report findings across crates/orchestration",
+      "why": "The rust clean-file phase's five structural checks were run workspace-wide on user request. nomos-check-orchestration, nomos-spec-orchestration, nomos-work-orchestration and nomos-gate-orchestration together carry 4+3+7 nested-call, 4+5+3+1 function-size and 1 intrafile-duplication findings.",
+      "done_when": "check-nested-call, check-function-size and check-intrafile-duplication (--include-tests) report no finding under crates/orchestration/nomos-check-orchestration, crates/orchestration/nomos-spec-orchestration, crates/orchestration/nomos-work-orchestration or crates/orchestration/nomos-gate-orchestration. cargo check --workspace --all-targets and cargo test -p nomos-check-orchestration -p nomos-spec-orchestration -p nomos-work-orchestration -p nomos-gate-orchestration stay green.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-check-orchestration",
+          "crates/orchestration/nomos-spec-orchestration",
+          "crates/orchestration/nomos-work-orchestration",
+          "crates/orchestration/nomos-gate-orchestration"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-cleanfile-orchestration",
+        "acquired_at": 1787190042,
+        "lease_expires_at": 1787197242
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-spec-orchestration",
+          "-p",
+          "nomos-work-orchestration",
+          "-p",
+          "nomos-gate-orchestration"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-CLEANFILE-LANGUAGES",
+      "title": "clean-file's structural checks report findings across crates/languages",
+      "why": "The rust clean-file phase's five structural checks were run workspace-wide on user request. nomos-lang-rust and nomos-lang-rust-cargo together carry the workspace's only check-nesting-depth finding (walk.rs:156), 1 nested-call and 8+4 function-size findings.",
+      "done_when": "check-nested-call, check-nesting-depth and check-function-size (--include-tests) report no finding under crates/languages/nomos-lang-rust or crates/languages/nomos-lang-rust-cargo. cargo check --workspace --all-targets and cargo test -p nomos-lang-rust -p nomos-lang-rust-cargo stay green.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages/nomos-lang-rust",
+          "crates/languages/nomos-lang-rust-cargo"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-cleanfile-languages",
+        "acquired_at": 1787189877,
+        "lease_expires_at": 1787197077
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lang-rust",
+          "-p",
+          "nomos-lang-rust-cargo"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-CLEANFILE-CORRECTIONS",
+      "title": "clean-file's structural checks report findings across crates/corrections",
+      "why": "The rust clean-file phase's five structural checks were run workspace-wide on user request. nomos-corrections carries 13 nested-call and 3 function-size findings, all New(...)/Present(...) piped straight into With(...)/Apply(...).",
+      "done_when": "check-nested-call and check-function-size (--include-tests) report no finding under crates/corrections/nomos-corrections. cargo check --workspace --all-targets and cargo test -p nomos-corrections stay green.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/corrections/nomos-corrections"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-cleanfile-corrections",
+        "acquired_at": 1787189903,
+        "lease_expires_at": 1787197103
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-corrections"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-CLEANFILE-RULES",
+      "title": "clean-file's structural checks report findings across crates/rules",
+      "why": "The rust clean-file phase's five structural checks were run workspace-wide on user request. nomos-rules carries 5 nested-call, 5 function-size and 1 parameter-count findings.",
+      "done_when": "check-nested-call, check-function-size and check-parameter-count (--include-tests) report no finding under crates/rules/nomos-rules. Any signature change keeps the whole workspace compiling, verified with cargo check --workspace --all-targets. cargo test -p nomos-rules stays green.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-cleanfile-rules",
+        "acquired_at": 1787189861,
+        "lease_expires_at": 1787197061
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-CLEANFILE-CAPABILITIES",
+      "title": "clean-file's structural checks report findings across crates/capabilities",
+      "why": "The rust clean-file phase's five structural checks were run workspace-wide on user request. nomos-cap-syntax, nomos-cap-dependency and nomos-cap-controlflow each carry one check-function-size finding (payload.rs / payload/tests.rs).",
+      "done_when": "check-function-size (--include-tests) reports no finding under crates/capabilities/nomos-cap-syntax, crates/capabilities/nomos-cap-dependency or crates/capabilities/nomos-cap-controlflow. cargo test -p nomos-cap-syntax -p nomos-cap-dependency -p nomos-cap-controlflow stays green.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities/nomos-cap-syntax",
+          "crates/capabilities/nomos-cap-dependency",
+          "crates/capabilities/nomos-cap-controlflow"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-cleanfile-capabilities",
+        "acquired_at": 1787189849,
+        "lease_expires_at": 1787197049
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cap-syntax",
+          "-p",
+          "nomos-cap-dependency",
+          "-p",
+          "nomos-cap-controlflow"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-CLEANFILE-PLATFORM",
+      "title": "clean-file's structural checks report findings across crates/platform",
+      "why": "The rust clean-file phase's five structural checks were run workspace-wide on user request. nomos-platform-std carries 1 nested-call, 2 function-size and 1 parameter-count findings, all in launcher.rs / launcher/tests.rs.",
+      "done_when": "check-nested-call, check-function-size and check-parameter-count (--include-tests) report no finding under crates/platform/nomos-platform-std. Any signature change keeps the whole workspace compiling, verified with cargo check --workspace --all-targets. cargo test -p nomos-platform-std stays green.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/platform/nomos-platform-std"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-cleanfile-platform",
+        "acquired_at": 1787189841,
+        "lease_expires_at": 1787197041
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-platform-std"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-CLEANFILE-TESTS-INTEGRATION",
+      "title": "clean-file's structural checks report findings across tests/integration",
+      "why": "The rust clean-file phase's five structural checks were run workspace-wide on user request. tests/integration carries 1 nested-call and 11 function-size findings, mostly in the determinism and analysis_slice suites.",
+      "done_when": "check-nested-call and check-function-size (--include-tests) report no finding under tests/integration. cargo test -p nomos-integration-tests stays green.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/integration"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-cleanfile-tests-integration",
+        "acquired_at": 1787189939,
+        "lease_expires_at": 1787197139
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-integration-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-CLEANFILE-TESTS-CONTRACT",
+      "title": "clean-file's structural checks report findings across tests/contract",
+      "why": "The rust clean-file phase's five structural checks were run workspace-wide on user request. tests/contract carries 13 function-size, 1 parameter-count and 1 intrafile-duplication findings.",
+      "done_when": "check-function-size, check-parameter-count and check-intrafile-duplication (--include-tests) report no finding under tests/contract. Any signature change keeps the whole workspace compiling, verified with cargo check --workspace --all-targets. cargo test -p nomos-contract-tests stays green.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-cleanfile-tests-contract",
+        "acquired_at": 1787189954,
+        "lease_expires_at": 1787197154
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-RULES-007-FOUR-RULE-RECHECK",
+      "title": "OD-RULES-007 still measures a three-rule population; check the fourth against its own six triggers",
+      "why": "OD-RULES-007's Current Position paragraph still says nomos-rules holds exactly three rules and names only Check_Completeness_Mirrors, Check_Naming_Convention and Check_Dependency_Direction. Check_Unread_Reaches_A_Finding has run unconditionally since P13-CONTROLFLOW-REACHABILITY-WIRE, so the sentence is false at current HEAD. An external review flagged this and specifically asked for the population to be re-measured at four (the way OD-PACKAGE-008 already did for itself), not merely have a number swapped.",
+      "done_when": "OD-RULES-007's Current Position paragraph states the real population (four rules, naming all four) and the record explicitly checks Check_Unread_Reaches_A_Finding's own judgment shape against each of the six triggers in its own What Would Decide It section, reaching a stated conclusion. The record's own verdict (Rule Program IR stays deferred) is unchanged unless the check finds otherwise.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "rg",
+          "-U",
+          "--pcre2",
+          "-q",
+          "(?s)\\A(?!.*exactly three rules)(?=.*Check_Unread_Reaches_A_Finding).*\\z",
+          "docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "rg",
+          "-U",
+          "--pcre2",
+          "-q",
+          "(?s)\\A(?!.*exactly three rules)(?=.*Check_Unread_Reaches_A_Finding).*\\z",
+          "docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md"
+        ],
+        "exit_code": 0,
+        "output_tail": "",
+        "verified_at": 1787190032,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "396f6473e0715f9397d0437980a98e9c1e86f024"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

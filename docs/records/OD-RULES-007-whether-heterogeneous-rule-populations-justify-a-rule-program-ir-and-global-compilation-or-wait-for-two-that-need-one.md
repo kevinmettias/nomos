@@ -3,7 +3,7 @@ id: OD-RULES-007
 type: decision
 title: Whether heterogeneous rule populations justify a structured Rule Program/IR and global rule-compilation layer, or wait for two rules that actually need one
 status: open
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - rules
@@ -51,16 +51,17 @@ judge/coverage loop — is that check dependencies are heterogeneous and that sh
 structure emerges once duplication is real. That is evidence for explicit dependency
 declaration and demand-driven shared planning. It is not evidence for a rule program IR.
 
-`nomos-rules` holds exactly three rules today, `Check_Completeness_Mirrors`,
-`Check_Naming_Convention` and `Check_Dependency_Direction`. None exhibits rule-local control
-flow, a reusable subcomputation, or a correction/recheck loop that a capability requirement
-plus the (not yet built) analysis planner cannot already express — `Check_Dependency_
-Direction` is a plain per-source, per-edge loop over an already-decoded fact, the same
-shape as the other two. Building a Rule Program IR now would be designing a general
-execution model from a population of three rules, none of which needs it — the same shape
-`OD-RULES-005`, `OD-RULES-006` and `OD-CAPABILITY-008` already declined to build ahead of,
-and the specific mistake `D-135` names: inferring genericity from a wish rather than a
-demonstrated concrete need.
+`nomos-rules` holds four rules today, `Check_Completeness_Mirrors`, `Check_Naming_
+Convention`, `Check_Dependency_Direction` and `Check_Unread_Reaches_A_Finding`
+(`P13-CONTROLFLOW-REACHABILITY-WIRE`). None exhibits rule-local control flow, a reusable
+subcomputation, or a correction/recheck loop that a capability requirement plus the (not
+yet built) analysis planner cannot already express — `Check_Dependency_Direction` and
+`Check_Unread_Reaches_A_Finding` are both a plain per-source loop over an already-decoded
+fact (`Payload_Of`/`Violations_In`), the same shape the other two already have. Building a
+Rule Program IR now would be designing a general execution model from a population of four
+rules, none of which needs it — the same shape `OD-RULES-005`, `OD-RULES-006` and
+`OD-CAPABILITY-008` already declined to build ahead of, and the specific mistake `D-135`
+names: inferring genericity from a wish rather than a demonstrated concrete need.
 
 ## Current Position
 
@@ -84,6 +85,40 @@ The corrected three-way split this record leaves standing:
 3. **Deferred, per `ARC-ROADMAP-001`:** architecture discovery/inference, feature topology,
    path tracing, Atlas-style projections, and — this record's own subject — a Rule Program IR
    and whole-rule-set compilation.
+
+## A Fourth Rule Arrives: Checked Against The Six Triggers
+
+`Check_Unread_Reaches_A_Finding` (`crates/rules/nomos-rules/src/reachability.rs`,
+`P13-CONTROLFLOW-REACHABILITY-CAPABILITY`/`P13-CONTROLFLOW-REACHABILITY-WIRE`) is this
+record's own population growing from three to four, checked directly against the six
+conditions in "What Would Decide It" below rather than assumed to still not apply:
+
+- **A shared multi-step derived computation that cannot be captured as an ordinary fact the
+  planner materializes once and several rules read.** No. Its one fact
+  (`nomos.cap.controlflow.reachability`) is read once, decoded, and mapped in
+  `Payload_Of`/`Violations_In` — the identical split `naming.rs` and `dependency.rs` already
+  have, not a computation a planner would need to cache or reuse across rules.
+- **Rule-local control flow that must be visible to the planner to schedule or cache
+  correctly.** No. The judgment is a flat loop over `payload.sites`, one `Finding` per site —
+  no branching, iteration, or procedure a planner-visible representation would help with.
+- **A correction/recheck loop with reusable semantics across more than one rule.** No. This
+  rule only raises findings, the same as the other three; nothing here corrects or rechecks.
+- **A reusable subworkflow or procedure two or more rules genuinely share**, beyond the
+  ordinary `Payload_Of`/`Violations_In` read-and-map shape all four rules already have in
+  common. No new sharing beyond that already-generalized split.
+- **A planner-visible native operation with declared effects an ordinary capability
+  requirement cannot express.** No. `Payload_Of` reads one fact through `FactReader`, the
+  same primitive every rule in this workspace already uses.
+- **An optimization opportunity fact-demand union alone cannot obtain** — common-subexpression
+  elimination, traversal fusion, batched external invocation. No. This rule's own redundancy,
+  if any, is in fact acquisition, already deduplicated by the one shared `MemoryFactStore`
+  `nomos-check-orchestration::run::Run` materializes into (`Materialize_Reachability` runs
+  once per check, the same as `Materialize_Syntax` and `Materialize_Dependencies`), not in
+  judgment structure a rule program IR would optimize.
+
+None of the six triggers fire for this rule either. The wait for two or more real rules
+demonstrating one of them remains exactly where this record already left it — the population
+grew, and the conclusion did not move, checked rather than assumed.
 
 ## What Would Decide It
 
@@ -112,6 +147,6 @@ own questions.
 ## Status
 
 Open. This question is deliberately left open rather than resolved either way: no rule in
-this workspace today needs anything a capability requirement and the (not yet built) analysis
-planner cannot already express. Revisit when two or more real rules exhibit one of the
-triggers above.
+this workspace today — four, not three, re-measured rather than reaffirmed by count alone —
+needs anything a capability requirement and the (not yet built) analysis planner cannot
+already express. Revisit when two or more real rules exhibit one of the triggers above.
