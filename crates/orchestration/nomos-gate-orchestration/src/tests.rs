@@ -1,7 +1,7 @@
 //! What this crate promises today: a real rule registry, reported back whole, and a real
 //! disposition reduction over an already-judged list of findings.
 
-use crate::{Disposition, GateCommand, GateOutcome, GateRunOutcome, Run, Run_Gate};
+use crate::{Disposition, GateCommand, GateOutcome, GateRunOutcome, RuleSelector, Run, Run_Gate, ScopeSelector};
 use nomos_check_orchestration::CheckOutcome;
 use nomos_contracts::{
     Applicability, Digest128, EvidenceClass, Finding, GateCategory, RuleId, SubjectId,
@@ -19,7 +19,13 @@ use std::path::PathBuf;
 
 fn Command() -> GateCommand
 {
-    return GateCommand { root: PathBuf::from(".") };
+    return GateCommand { root: PathBuf::from("."), ..Default::default() };
+}
+
+/// [`Command`] over `root`, everything else select-everything.
+fn Command_At(root: PathBuf) -> GateCommand
+{
+    return GateCommand { root, ..Default::default() };
 }
 
 fn Source(path: &str, text: &str) -> SourceFile
@@ -169,12 +175,12 @@ fn Test_The_Naming_Rule_Should_Cite_Its_Record_Less_Contract()
 #[test]
 fn Test_The_Plan_Should_Not_Vary_By_Root()
 {
-    let GateOutcome::Planned(here) = Run(&GateCommand { root: PathBuf::from(".") })
+    let GateOutcome::Planned(here) = Run(&Command_At(PathBuf::from(".")))
     else
     {
         panic!("this crate's own registration must not be contradictory");
     };
-    let GateOutcome::Planned(elsewhere) = Run(&GateCommand { root: PathBuf::from("elsewhere") })
+    let GateOutcome::Planned(elsewhere) = Run(&Command_At(PathBuf::from("elsewhere")))
     else
     {
         panic!("this crate's own registration must not be contradictory");
@@ -253,7 +259,7 @@ fn Test_One_Blocking_Finding_Among_Many_Should_Fail()
 #[test]
 fn Test_An_Unwalked_Root_Should_Be_Indeterminate()
 {
-    let result = Run_Gate(None, Test_Variant(), &Repository_Root(), &StdProcessLauncher);
+    let result = Run_Gate(None, Test_Variant(), &Command_At(Repository_Root()), &StdProcessLauncher);
 
     assert!(matches!(result.check_outcome, CheckOutcome::Unreadable));
     assert_eq!(result.disposition, GateRunOutcome::Indeterminate);
@@ -266,7 +272,7 @@ fn Test_An_Unwalked_Root_Should_Be_Indeterminate()
 #[test]
 fn Test_A_Walk_That_Found_No_Source_Should_Be_Indeterminate()
 {
-    let result = Run_Gate(Some(Vec::new()), Test_Variant(), &Repository_Root(), &StdProcessLauncher);
+    let result = Run_Gate(Some(Vec::new()), Test_Variant(), &Command_At(Repository_Root()), &StdProcessLauncher);
 
     assert!(matches!(result.check_outcome, CheckOutcome::NoSource));
     assert_eq!(result.disposition, GateRunOutcome::Indeterminate);
@@ -282,7 +288,7 @@ fn Test_A_Clean_Source_Should_Pass()
 {
     let sources = vec![Source("a.rs", "pub fn Ok() {}\n")];
 
-    let result = Run_Gate(Some(sources), Test_Variant(), &Repository_Root(), &StdProcessLauncher);
+    let result = Run_Gate(Some(sources), Test_Variant(), &Command_At(Repository_Root()), &StdProcessLauncher);
 
     assert!(matches!(result.check_outcome, CheckOutcome::Judged { .. }));
     assert_eq!(result.disposition, GateRunOutcome::Passed);
@@ -302,7 +308,7 @@ fn Test_A_Blocking_Finding_Should_Fail_The_Run()
         "/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n",
     )];
 
-    let result = Run_Gate(Some(sources), Test_Variant(), &Repository_Root(), &StdProcessLauncher);
+    let result = Run_Gate(Some(sources), Test_Variant(), &Command_At(Repository_Root()), &StdProcessLauncher);
 
     assert_eq!(result.disposition, GateRunOutcome::Failed);
     assert!(!result.blocking_findings.is_empty());
@@ -310,4 +316,61 @@ fn Test_A_Blocking_Finding_Should_Fail_The_Run()
         .blocking_findings
         .iter()
         .all(|finding| return finding.gate == GateCategory::Blocking));
+}
+
+/// [`ScopeSelector`] excludes the one source a walk found, so `Run_Gate` never calls
+/// `nomos_check_orchestration::Run` at all -- the same `CheckOutcome::NoSource` an empty
+/// walk already produces, because "scoped to nothing" and "found nothing" mean the same
+/// thing to a caller.
+#[test]
+fn Test_A_Scoped_Out_Source_Should_Not_Be_Judged()
+{
+    let sources = vec![Source(
+        "a.rs",
+        "/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n",
+    )];
+    let command = GateCommand {
+        root: Repository_Root(),
+        scope: ScopeSelector { include: vec!["b.rs".to_owned()], exclude: Vec::new() },
+        rules: RuleSelector::default(),
+    };
+
+    let result = Run_Gate(Some(sources), Test_Variant(), &command, &StdProcessLauncher);
+
+    assert!(matches!(result.check_outcome, CheckOutcome::NoSource));
+    assert_eq!(result.disposition, GateRunOutcome::Indeterminate);
+    assert!(result.blocking_findings.is_empty());
+}
+
+/// [`RuleSelector`] excludes the rule behind the one blocking finding this fixture produces:
+/// the run still judges the source, `check_outcome` still carries the finding in full, but
+/// it can no longer fail the build -- selection of what blocks, honestly short of
+/// selection of what runs.
+#[test]
+fn Test_A_Deselected_Rules_Finding_Should_Not_Block()
+{
+    let sources = vec![Source(
+        "a.rs",
+        "/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n",
+    )];
+    let command = GateCommand {
+        root: Repository_Root(),
+        scope: ScopeSelector::default(),
+        rules: RuleSelector { include: vec![RuleId::New(NAMING_CONVENTION)] },
+    };
+
+    let result = Run_Gate(Some(sources), Test_Variant(), &command, &StdProcessLauncher);
+
+    assert!(matches!(result.check_outcome, CheckOutcome::Judged { .. }));
+    assert_eq!(result.disposition, GateRunOutcome::Passed);
+    assert!(result.blocking_findings.is_empty());
+    let CheckOutcome::Judged { findings, .. } = &result.check_outcome
+    else
+    {
+        panic!("just matched Judged above");
+    };
+    assert!(
+        findings.iter().any(|finding| return finding.rule == RuleId::New(COMPLETENESS_MIRROR)),
+        "the deselected rule's finding must still be judged and carried, just not blocking"
+    );
 }

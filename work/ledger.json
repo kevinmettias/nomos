@@ -23028,6 +23028,72 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-GATE-014-SCOPE-RULE-SELECTORS",
+      "title": "OD-GATE-014's ScopeSelector and RuleSelector, built under the user's standing override",
+      "why": "OD-GATE-014's own primary trigger (a real caller needing fewer than every rule or file) never fired, but the user has explicitly overridden the default machinery-before-demonstrated-need hold for this item and the rest of ARC-ROADMAP-001's near-term tier. Gate run now has both a real Run_Gate seam (P13-GATE-RUN-SEAM-CRATE) and a real caller (P13-GATE-RUN-CI-CALLER), so the risk OD-GATE-014 named of shaping a selector around a hypothetical run is already gone; only the override removes the wait on the primary trigger itself.",
+      "done_when": "GateCommand gains scope: ScopeSelector and rules: RuleSelector fields, both defaulting to select-everything so every existing construction site and CI's gate run --root . are unchanged in behavior. ScopeSelector filters SourceFile::path by include/exclude path-prefix lists (textual containment, no glob engine, the same choice OD-LEDGER-013 already made over glob-against-glob) before nomos_check_orchestration::Run is called, so a scoped-out file is not judged at all. RuleSelector filters findings by RuleId after Run returns and before Disposition reduces them, documented as filtering findings rather than skipping rule execution -- skipping execution needs a signature change to nomos_check_orchestration::Run across every caller, a separate larger item. nomos gate run gains --include/--exclude/--rule repeatable flags wired through parsing.rs and USAGE. tests/contract/surface/nomos-gate-orchestration.txt is reblessed for the new public fields and types.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration",
+          "crates/host/nomos-cli/src/gate.rs",
+          "crates/host/nomos-cli/src/gate",
+          "crates/host/nomos-cli/src/vacuity.rs",
+          "tests/contract/surface/nomos-gate-orchestration.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "e.rs (target\\debug\\deps\\authoring_surface-47a846b52b043a6d.exe)\n     Running tests\\check_command.rs (target\\debug\\deps\\check_command-1f72f9de0f7a6e95.exe)\n     Running tests\\freshness.rs (target\\debug\\deps\\freshness-ae80954d21bc9069.exe)\n     Running tests\\gate_step\\main.rs (target\\debug\\deps\\gate_step-8aeb2760425cece4.exe)\n     Running tests\\list_tells_the_truth.rs (target\\debug\\deps\\list_tells_the_truth-c6279836e2d738ac.exe)\n     Running tests\\read_surface.rs (target\\debug\\deps\\read_surface-561323bd3ef694b7.exe)\n     Running tests\\request_submit.rs (target\\debug\\deps\\request_submit-c0186ed1293ae299.exe)\n     Running tests\\stale_writer_is_refused.rs (target\\debug\\deps\\stale_writer_is_refused-329acf8fb3ec4644.exe)\n     Running tests\\takeover_is_recorded.rs (target\\debug\\deps\\takeover_is_recorded-fb58a3672c6cb420.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-95a1aef077b5f9ba.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-ead301eb7c8d8256.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-a61f2bcd75c8d4d9.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-fba07f1fa1c92105.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-2bb84d2d8744d800.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-c2987d8eceda16d3.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-0eeaea7cd309c35b.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-2db99bdd604951c5.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-56e2b70874db076c.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-1204b8c22ecd0b43.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_gate_orchestration-0e0249ddc168c5c8.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_gate_orchestration\n",
+        "verified_at": 1787207925,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "0397d42765eccba45be802eec4d5b990542fba4b"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

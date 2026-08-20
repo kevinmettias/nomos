@@ -242,7 +242,8 @@ mod tests
         let _ignored = std::fs::remove_dir_all(&empty);
         std::fs::create_dir_all(&empty).expect("creates an empty directory");
 
-        let invocation = crate::gate::GateInvocation::Run(crate::gate::GateCommand { root: empty.clone() });
+        let invocation =
+            crate::gate::GateInvocation::Run(crate::gate::GateCommand { root: empty.clone(), ..Default::default() });
         let mut stdout = Vec::new();
         let mut stderr = Vec::new();
         let code = crate::gate::Run(&invocation, &mut stdout, &mut stderr);

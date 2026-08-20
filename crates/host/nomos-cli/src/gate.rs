@@ -23,14 +23,19 @@
 //! cross into `Run_Gate` as arguments; nothing about judging or reducing lives in this crate
 //! any more.
 //!
-//! # What this module does not do
+//! # `--include` / `--exclude` / `--rule`, after `P13-GATE-014-SCOPE-RULE-SELECTORS`
 //!
-//! It does not select by scope or rule -- [`GateCommand::root`] is read by `run` now, but
-//! nothing filters what `run` judges by it beyond "is this the tree" -- `OD-GATE-014` is
-//! the open question about when a selector would narrow that further. It does not
-//! implement `explain` or `compare`: [`parsing::Parse`] refuses either verb as usage, the
-//! same "no invented shape ahead of a real body" discipline the orchestration crate's own
-//! `command.rs` already documents.
+//! [`parsing::Parse`] reads these repeatable flags into [`GateCommand::scope`] and
+//! [`GateCommand::rules`] for both verbs; `Run_Gate` is what actually consults them for
+//! `run`, and `nomos_gate_orchestration::Run` (`plan`) still does not, the same asymmetry
+//! `root` already had. See `nomos_gate_orchestration`'s own `lib.rs` doc for what
+//! selection here does and does not mean.
+//!
+//! # What this module still does not do
+//!
+//! It does not implement `explain` or `compare`: [`parsing::Parse`] refuses either verb as
+//! usage, the same "no invented shape ahead of a real body" discipline the orchestration
+//! crate's own `command.rs` already documents.
 
 mod composition;
 mod parsing;
@@ -90,7 +95,7 @@ pub fn Run(invocation: &GateInvocation, stdout: &mut impl Write, stderr: &mut im
             let result = nomos_gate_orchestration::Run_Gate(
                 walked,
                 composition::Host_Variant(),
-                &command.root,
+                command,
                 &StdProcessLauncher,
             );
             Render_Run(&result, stdout, stderr)

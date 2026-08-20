@@ -172,7 +172,7 @@ fn Test_An_Unknown_Flag_Should_Refuse()
 #[test]
 fn Test_A_Real_Plan_Should_Report_All_Four_Shipped_Rules()
 {
-    let invocation = GateInvocation::Plan(GateCommand { root: PathBuf::from(".") });
+    let invocation = GateInvocation::Plan(GateCommand { root: PathBuf::from("."), ..Default::default() });
     let mut stdout = Vec::new();
     let mut stderr = Vec::new();
 
@@ -198,7 +198,7 @@ fn Test_A_Real_Plan_Should_Report_All_Four_Shipped_Rules()
 #[test]
 fn Test_A_Real_Run_Should_Judge_This_Workspaces_Own_Tree()
 {
-    let invocation = GateInvocation::Run(GateCommand { root: PathBuf::from(".") });
+    let invocation = GateInvocation::Run(GateCommand { root: PathBuf::from("."), ..Default::default() });
     let mut stdout = Vec::new();
     let mut stderr = Vec::new();
 
@@ -226,7 +226,7 @@ fn Test_A_Run_Over_An_Empty_Tree_Should_Not_Report_Ok()
     let _ignored = std::fs::remove_dir_all(&empty);
     std::fs::create_dir_all(&empty).expect("creates an empty directory");
 
-    let invocation = GateInvocation::Run(GateCommand { root: empty.clone() });
+    let invocation = GateInvocation::Run(GateCommand { root: empty.clone(), ..Default::default() });
     let mut stdout = Vec::new();
     let mut stderr = Vec::new();
 
@@ -235,4 +235,66 @@ fn Test_A_Run_Over_An_Empty_Tree_Should_Not_Report_Ok()
     let _ignored = std::fs::remove_dir_all(&empty);
 
     assert_eq!(code, ExitCode::Vacuous, "an empty tree must not report Ok");
+}
+
+/// `--include`/`--exclude` repeat, the same shape `Named_Values` already gives every other
+/// repeatable flag in this binary.
+#[test]
+fn Test_Include_And_Exclude_Should_Repeat()
+{
+    let arguments = vec![
+        "plan".to_owned(),
+        "--include".to_owned(),
+        "crates/rules".to_owned(),
+        "--include".to_owned(),
+        "crates/contracts".to_owned(),
+        "--exclude".to_owned(),
+        "crates/rules/nomos-rules/tests".to_owned(),
+    ];
+    let invocation = Parse(&arguments).expect("plan with include/exclude is valid");
+
+    let GateInvocation::Plan(command) = invocation
+    else
+    {
+        panic!("plan must parse as Plan");
+    };
+    assert_eq!(command.scope.include, vec!["crates/rules".to_owned(), "crates/contracts".to_owned()]);
+    assert_eq!(command.scope.exclude, vec!["crates/rules/nomos-rules/tests".to_owned()]);
+}
+
+/// `--rule` repeats into [`nomos_gate_orchestration::RuleSelector::include`].
+#[test]
+fn Test_Rule_Should_Repeat()
+{
+    let arguments = vec!["run".to_owned(), "--rule".to_owned(), "naming-convention".to_owned()];
+    let invocation = Parse(&arguments).expect("run with --rule is valid");
+
+    let GateInvocation::Run(command) = invocation
+    else
+    {
+        panic!("run must parse as Run");
+    };
+    assert_eq!(command.rules.include, vec![nomos_contracts::RuleId::New("naming-convention")]);
+}
+
+/// A real `run` scoped to a file that does not exist judges nothing, the same `Vacuous`
+/// exit an empty tree already gets -- "scoped to nothing" and "found nothing" are the same
+/// claim to a caller.
+#[test]
+fn Test_A_Run_Scoped_To_Nothing_Should_Not_Report_Ok()
+{
+    let invocation = GateInvocation::Run(GateCommand {
+        root: PathBuf::from("."),
+        scope: nomos_gate_orchestration::ScopeSelector {
+            include: vec!["does/not/exist.rs".to_owned()],
+            exclude: Vec::new(),
+        },
+        rules: nomos_gate_orchestration::RuleSelector::default(),
+    });
+    let mut stdout = Vec::new();
+    let mut stderr = Vec::new();
+
+    let code = Run(&invocation, &mut stdout, &mut stderr);
+
+    assert_eq!(code, ExitCode::Vacuous, "a scope matching nothing must not report Ok");
 }

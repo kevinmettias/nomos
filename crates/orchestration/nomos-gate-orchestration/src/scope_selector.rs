@@ -1,0 +1,89 @@
+//! Which files a `nomos gate run` judges.
+
+/// Which files under [`crate::GateCommand::root`] a run judges.
+///
+/// Textual path-prefix containment, not a glob engine -- the same choice `OD-LEDGER-013`
+/// already made for ledger territory, and for the identical soundness reason: a wrong
+/// `Disjoint` there costs an edit that does not come back, and a wrong exclusion here costs
+/// a file silently going unjudged. `include`/`exclude` compare against
+/// [`nomos_rules::SourceFile::path`] -- repo-relative, forward slashes -- one entry per
+/// prefix, no `*`/`**` syntax to get subtly wrong.
+///
+/// Both lists empty is "select everything," the state every existing caller is in today:
+/// `Default` gives that state, so `GateCommand`'s other construction sites and CI's `gate
+/// run --root .` are unchanged in behavior by this type existing.
+#[derive(Clone, Debug, Default, PartialEq, Eq)]
+pub struct ScopeSelector
+{
+    /// Prefixes a file's path must match at least one of, or every file matches when this
+    /// is empty.
+    pub include: Vec<String>,
+    /// Prefixes that remove a file even if `include` matched it.
+    pub exclude: Vec<String>,
+}
+
+impl ScopeSelector
+{
+    /// Whether `path` is in scope: included (or nothing was named, so everything is) and
+    /// not excluded.
+    #[must_use]
+    pub fn Matches(&self, path: &str) -> bool
+    {
+        let included = self.include.is_empty() || self.include.iter().any(|prefix| return Is_Under(prefix, path));
+        let excluded = self.exclude.iter().any(|prefix| return Is_Under(prefix, path));
+
+        return included && !excluded;
+    }
+}
+
+/// Whether `path` is `prefix` itself or lives under it, textually -- the same containment
+/// `README.md`'s territory rules already use, not a filesystem check.
+fn Is_Under(prefix: &str, path: &str) -> bool
+{
+    return path == prefix || path.starts_with(&format!("{prefix}/"));
+}
+
+#[cfg(test)]
+mod tests
+{
+    use super::ScopeSelector;
+
+    #[test]
+    fn Test_An_Empty_Selector_Should_Match_Everything()
+    {
+        let selector = ScopeSelector::default();
+
+        assert!(selector.Matches("crates/rules/nomos-rules/src/lib.rs"));
+        assert!(selector.Matches("README.md"));
+    }
+
+    #[test]
+    fn Test_Include_Should_Admit_Only_Its_Own_Subtree()
+    {
+        let selector = ScopeSelector { include: vec!["crates/rules".to_owned()], exclude: Vec::new() };
+
+        assert!(selector.Matches("crates/rules/nomos-rules/src/lib.rs"));
+        assert!(!selector.Matches("crates/host/nomos-cli/src/gate.rs"));
+    }
+
+    #[test]
+    fn Test_An_Exact_File_Should_Match_Its_Own_Include_Entry()
+    {
+        let selector = ScopeSelector { include: vec!["README.md".to_owned()], exclude: Vec::new() };
+
+        assert!(selector.Matches("README.md"));
+        assert!(!selector.Matches("README.md.bak"));
+    }
+
+    #[test]
+    fn Test_Exclude_Should_Win_Over_A_Matching_Include()
+    {
+        let selector = ScopeSelector {
+            include: vec!["crates/rules".to_owned()],
+            exclude: vec!["crates/rules/nomos-rules/tests".to_owned()],
+        };
+
+        assert!(selector.Matches("crates/rules/nomos-rules/src/lib.rs"));
+        assert!(!selector.Matches("crates/rules/nomos-rules/tests/corpus.rs"));
+    }
+}

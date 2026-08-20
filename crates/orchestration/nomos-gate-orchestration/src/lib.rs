@@ -42,29 +42,45 @@
 //! `nomos-check-orchestration`'s band 40, so it may depend on it, and [`Run_Gate`] now owns
 //! the walk-judge-reduce composition directly -- generic over `nomos-platform`'s traits the
 //! same way `nomos_check_orchestration::Run` and `nomos_work_orchestration::Run` already
-//! are, so a second adapter can call it without depending on `nomos-cli`. `nomos-cli`'s
-//! `gate` module has not yet been migrated to call it; it still duplicates the composition
-//! `Run_Gate` now also performs, until a follow-up increment retires the copy.
+//! are, so a second adapter can call it without depending on `nomos-cli`. `P13-GATE-RUN-SEAM-
+//! CLI` then migrated `nomos-cli`'s `gate` module to call it instead of duplicating the
+//! composition.
+//!
+//! Its fourth increment, `P13-GATE-014-SCOPE-RULE-SELECTORS`, gives [`GateCommand`] real
+//! [`ScopeSelector`] and [`RuleSelector`] fields under the user's standing override of
+//! `OD-GATE-014`'s wait for a real caller -- `OD-GATE-014`'s own module doc records the
+//! override rather than this one repeating it. [`ScopeSelector`] filters
+//! `nomos_rules::SourceFile::path` by textual prefix containment before
+//! `nomos_check_orchestration::Run` is called, so an out-of-scope file is not judged at all.
+//! [`RuleSelector`] filters findings by `nomos_contracts::RuleId` after `Run` returns,
+//! before [`Disposition`] reduces them -- a real selection of what can fail a build, but
+//! honestly short of a real selection of what runs: `Run` still executes every rule
+//! unconditionally, and narrowing that needs a signature change to `Run` itself across
+//! every caller, which is not this increment. Both fields default to select-everything, so
+//! every construction site that predates them and CI's own `gate run --root .` are
+//! unchanged in behavior.
 //!
 //! # What no increment is
 //!
-//! None selects by scope or rule -- [`GateCommand::root`] is accepted and carried, not
-//! read beyond naming the tree, because `ScopeSelector`/`RuleSelector` do not exist yet.
 //! None implements `explain` or `compare` -- those verbs have no variant here at all, not a
 //! stub one, the same "no invented shape ahead of a real body" this crate's own [`command`]
 //! module documents. None touches `CoveragePolicy`, `BaselinePolicy`, `SuppressionPolicy`,
 //! required phases, thresholds, waivers or approvals -- every other clause `WF-001` names.
 //! `Claim` (coverage debt / agent-required subjects) rides through [`GateRunResult`] for
 //! information only and does not affect [`GateRunOutcome`], the same choice
-//! `OD-COMPLETENESS-004` already made for `nomos check`'s own exit code.
+//! `OD-COMPLETENESS-004` already made for `nomos check`'s own exit code. `GatePlan` still
+//! does not vary by [`GateCommand::root`], `scope` or `rules` -- it reports the registry,
+//! not a walk, so no selection applies to it yet.
 
 #![forbid(unsafe_code)]
 
 mod command;
 mod composition;
 mod outcome;
+mod rule_selector;
 mod run;
 mod run_gate;
+mod scope_selector;
 
 #[cfg(test)]
 mod tests;
@@ -72,5 +88,7 @@ mod tests;
 pub use command::GateCommand;
 pub use composition::Registered;
 pub use outcome::{Disposition, GateOutcome, GatePlan, GateRunOutcome, GateRunResult};
+pub use rule_selector::RuleSelector;
 pub use run::Run;
 pub use run_gate::Run_Gate;
+pub use scope_selector::ScopeSelector;

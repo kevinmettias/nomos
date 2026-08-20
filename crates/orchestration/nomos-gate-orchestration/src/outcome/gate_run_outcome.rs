@@ -4,9 +4,10 @@ use nomos_contracts::Finding;
 
 /// What a real `nomos gate run` judged, apart from the check facts that produced it.
 ///
-/// Deliberately three variants and no more -- `ARC-ROADMAP-001`'s other policy types
-/// (`ScopeSelector`, `RuleSelector`, `CoveragePolicy`, `BaselinePolicy`,
-/// `SuppressionPolicy`) do not exist yet, so nothing here varies by them. `Indeterminate`
+/// Deliberately three variants and no more. `ScopeSelector` and `RuleSelector` narrow what
+/// feeds [`Disposition`] rather than adding a variant of their own; `ARC-ROADMAP-001`'s
+/// remaining policy types (`CoveragePolicy`, `BaselinePolicy`, `SuppressionPolicy`) still do
+/// not exist, so nothing here varies by them. `Indeterminate`
 /// must never collapse into `Passed`: a run this gate could not judge is not the same
 /// claim as a run it judged clean, the same distinction `nomos_check_orchestration::
 /// CheckOutcome::Vacuous`-shaped conditions already refuse to blur one layer down.

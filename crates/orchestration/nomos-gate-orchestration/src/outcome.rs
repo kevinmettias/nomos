@@ -19,10 +19,10 @@ use nomos_rules::RuleOffer;
 ///
 /// `rules` is every rule [`crate::composition::Registered`] holds, in [`nomos_rules::
 /// RuleRegistry::Offers`]'s own order -- [`nomos_contracts::RuleId`] order, so two runs over
-/// the same registration agree without depending on a hasher. It does not yet vary by
-/// [`crate::GateCommand::root`] or filter by scope or rule: `ScopeSelector` and
-/// `RuleSelector`, the two policy types `ARC-ROADMAP-001` names first, do not exist yet, and
-/// this increment reports the one thing that is real without pretending to filter it.
+/// the same registration agree without depending on a hasher. It does not vary by
+/// [`crate::GateCommand::root`], `scope` or `rules`: `Plan` reports the registry, not a
+/// walk, so `ScopeSelector` and `RuleSelector` -- real since `P13-GATE-014-SCOPE-RULE-
+/// SELECTORS`, and consulted by [`crate::Run_Gate`] -- have nothing here to narrow.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct GatePlan
 {

@@ -1,11 +1,18 @@
 //! What `nomos gate` was asked for.
 
 use super::{GateCommand, GateInvocation, Named_Value, PathBuf};
+use crate::arguments::Named_Values;
+use nomos_contracts::RuleId;
+use nomos_gate_orchestration::{RuleSelector, ScopeSelector};
 
-pub(super) const USAGE: &str = "usage: nomos gate plan [--root <path>]\n       \
-     nomos gate run  [--root <path>]\n\n\
+pub(super) const USAGE: &str = "usage: nomos gate plan [--root <path>] [--include <path>]… \
+[--exclude <path>]… [--rule <id>]…\n       \
+     nomos gate run  [--root <path>] [--include <path>]… [--exclude <path>]… [--rule <id>]…\n\n\
      plan composes this gate's rule registry and reports what it holds.\n\
      run walks the tree, judges it, and reports a real disposition.\n\n\
+     --include/--exclude narrow which files `run` judges, by path prefix; repeat for \
+several. --rule narrows which rules' findings can fail the build. Neither is read by \
+plan, which still reports the whole registry over any root.\n\n\
      exit codes: 0 clean (the plan was composed, or nothing judged can fail a build),\n\
      \x20           1 at least one finding can fail a build, 2 usage,\n\
      \x20           5 this build's own composition is self-contradictory, or the tree could \
@@ -39,6 +46,11 @@ pub fn Parse(arguments: &[String]) -> Result<GateInvocation, String>
 
     let command = GateCommand {
         root: Named_Value(rest, "--root").map_or_else(|| return PathBuf::from("."), PathBuf::from),
+        scope: ScopeSelector {
+            include: Named_Values(rest, "--include"),
+            exclude: Named_Values(rest, "--exclude"),
+        },
+        rules: RuleSelector { include: Named_Values(rest, "--rule").into_iter().map(RuleId::New).collect() },
     };
 
     return Ok(if verb == "run" { GateInvocation::Run(command) } else { GateInvocation::Plan(command) });
@@ -55,12 +67,14 @@ fn Known_Verb(verb: &str) -> Result<(), String>
     return Ok(());
 }
 
-/// Refuses any flag but `--root`.
+/// Refuses any flag but `--root`, `--include`, `--exclude` and `--rule`.
 fn No_Unknown_Argument(rest: &[String]) -> Result<(), String>
 {
+    const KNOWN: [&str; 4] = ["--root", "--include", "--exclude", "--rule"];
+
     if let Some(unknown) = rest
         .iter()
-        .find(|argument| return argument.starts_with('-') && argument.as_str() != "--root")
+        .find(|argument| return argument.starts_with('-') && !KNOWN.contains(&argument.as_str()))
     {
         return Err(format!("unknown argument `{unknown}`.\n\n{USAGE}"));
     }
