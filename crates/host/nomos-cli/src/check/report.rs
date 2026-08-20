@@ -9,6 +9,7 @@
 //! second adapter would otherwise have to re-derive rather than read off `CheckOutcome`.
 
 use super::{ExitCode, Finding, Path, Write};
+use nomos_capability::RegistryError;
 use nomos_check_orchestration::{CheckOutcome, Claim, Examined};
 use nomos_contracts::Applicability;
 
@@ -135,52 +136,65 @@ pub(super) fn Render(root: &Path, outcome: &CheckOutcome, stdout: &mut impl Writ
 {
     return match outcome
     {
-        CheckOutcome::Unreadable =>
-        {
-            let _ignored = writeln!(
-                stderr,
-                "cannot judge `{}`: not a directory, or its walk could not be ingested as a \
-                 workspace state",
-                root.display()
-            );
-
-            ExitCode::Unreadable
-        }
-        CheckOutcome::Contradictory(error) =>
-        {
-            let _ignored = writeln!(
-                stderr,
-                "this build's own composition is contradictory, so no fact it produced would \
-                 have been offered by anybody: {error}"
-            );
-
-            ExitCode::Unreadable
-        }
-        CheckOutcome::NoSource =>
-        {
-            let _ignored = writeln!(
-                stderr,
-                "no Rust source found under `{}`, so nothing was judged.\n\
-                 A clean result here would mean only that the walk found nothing.",
-                root.display()
-            );
-
-            ExitCode::Vacuous
-        }
-        CheckOutcome::NoFacts { files } =>
-        {
-            let _ignored = writeln!(
-                stderr,
-                "{files} file(s) were read under `{}` and no syntax fact was materialized for \
-                 any of them, so no mirror claim could be resolved.\n\
-                 A clean result here would mean only that the analysis never ran.",
-                root.display()
-            );
-
-            ExitCode::Vacuous
-        }
+        CheckOutcome::Unreadable => Render_Unreadable(root, stderr),
+        CheckOutcome::Contradictory(error) => Render_Contradictory(error, stderr),
+        CheckOutcome::NoSource => Render_No_Source(root, stderr),
+        CheckOutcome::NoFacts { files } => Render_No_Facts(root, *files, stderr),
         CheckOutcome::Judged { findings, examined, claim } => Report(findings, *examined, *claim, stdout),
     };
+}
+
+/// The root does not exist, is not a directory, or its walk could not be ingested.
+fn Render_Unreadable(root: &Path, stderr: &mut impl Write) -> ExitCode
+{
+    let _ignored = writeln!(
+        stderr,
+        "cannot judge `{}`: not a directory, or its walk could not be ingested as a \
+         workspace state",
+        root.display()
+    );
+
+    return ExitCode::Unreadable;
+}
+
+/// This build's own capability registry is self-contradictory -- a defect in the
+/// composition, not in the tree being checked.
+fn Render_Contradictory(error: &RegistryError, stderr: &mut impl Write) -> ExitCode
+{
+    let _ignored = writeln!(
+        stderr,
+        "this build's own composition is contradictory, so no fact it produced would \
+         have been offered by anybody: {error}"
+    );
+
+    return ExitCode::Unreadable;
+}
+
+/// The walk found no source under `root`.
+fn Render_No_Source(root: &Path, stderr: &mut impl Write) -> ExitCode
+{
+    let _ignored = writeln!(
+        stderr,
+        "no Rust source found under `{}`, so nothing was judged.\n\
+         A clean result here would mean only that the walk found nothing.",
+        root.display()
+    );
+
+    return ExitCode::Vacuous;
+}
+
+/// Source was found but no syntax fact was materialized for any of it.
+fn Render_No_Facts(root: &Path, files: usize, stderr: &mut impl Write) -> ExitCode
+{
+    let _ignored = writeln!(
+        stderr,
+        "{files} file(s) were read under `{}` and no syntax fact was materialized for \
+         any of them, so no mirror claim could be resolved.\n\
+         A clean result here would mean only that the analysis never ran.",
+        root.display()
+    );
+
+    return ExitCode::Vacuous;
 }
 
 /// Renders the findings and decides the exit code.

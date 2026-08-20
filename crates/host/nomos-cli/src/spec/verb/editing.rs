@@ -48,54 +48,89 @@ pub(in crate::spec) fn Commit(
         Ok(answer) => Reported(assembly, &answer, channels),
         Err(CommitRefusal { kind: CommitRefusalKind::Unreadable { path }, error }) =>
         {
-            let CommitRefusalError::FileSystem(error) = error else
-            {
-                // rust-panic: allow: CommitRefusal's constructors are the only way to build one, and
-                // CommitRefusal::Unreadable always pairs CommitRefusalKind::Unreadable with a
-                // CommitRefusalError::FileSystem; no other constructor produces this kind.
-                unreachable!("CommitRefusalKind::Unreadable always carries a filesystem CommitRefusalError")
-            };
-
-            Unreadable(&path, &error, channels.notes)
+            Report_Unreadable_Refusal(&path, error, channels.notes)
         }
         Err(CommitRefusal { kind: CommitRefusalKind::Edit, error }) =>
         {
-            let CommitRefusalError::Edit(error) = error else
-            {
-                // rust-panic: allow: CommitRefusal's constructors are the only way to build one, and
-                // CommitRefusal::Edit always pairs CommitRefusalKind::Edit with a
-                // CommitRefusalError::Edit; no other constructor produces this kind.
-                unreachable!("CommitRefusalKind::Edit always carries an edit CommitRefusalError")
-            };
-
-            Report_Edit_Error(assembly, &error, channels.notes)
+            Report_Edit_Refusal(assembly, error, channels.notes)
         }
         Err(CommitRefusal { kind: CommitRefusalKind::Refused { preview }, error }) =>
         {
-            let CommitRefusalError::Edit(error) = error else
-            {
-                // rust-panic: allow: CommitRefusal's constructors are the only way to build one, and
-                // CommitRefusal::Refused always pairs CommitRefusalKind::Refused with a
-                // CommitRefusalError::Edit; no other constructor produces this kind.
-                unreachable!("CommitRefusalKind::Refused always carries an edit CommitRefusalError")
-            };
-
-            Refused(assembly, &preview, &error, channels)
+            Report_Refused_Refusal(assembly, &preview, error, channels)
         }
         Err(CommitRefusal { kind: CommitRefusalKind::Unwritable { preview, report: _, path }, error }) =>
         {
-            let CommitRefusalError::FileSystem(error) = error else
-            {
-                // rust-panic: allow: CommitRefusal's constructors are the only way to build one, and
-                // CommitRefusal::Unwritable always pairs CommitRefusalKind::Unwritable with a
-                // CommitRefusalError::FileSystem; no other constructor produces this kind.
-                unreachable!("CommitRefusalKind::Unwritable always carries a filesystem CommitRefusalError")
-            };
-            let _ = writeln!(channels.output, "{}", preview.Describe());
-
-            Unwritable(&path, &error, channels.notes)
+            Report_Unwritable_Refusal(&preview, &path, error, channels)
         }
     };
+}
+
+/// `CommitRefusalKind::Unreadable`'s own error is always [`CommitRefusalError::FileSystem`]
+/// -- see the constructor's own guarantee named in the `unreachable!` below.
+fn Report_Unreadable_Refusal(path: &Path, error: CommitRefusalError, notes: &mut dyn std::io::Write) -> ExitCode
+{
+    let CommitRefusalError::FileSystem(error) = error else
+    {
+        // rust-panic: allow: CommitRefusal's constructors are the only way to build one, and
+        // CommitRefusal::Unreadable always pairs CommitRefusalKind::Unreadable with a
+        // CommitRefusalError::FileSystem; no other constructor produces this kind.
+        unreachable!("CommitRefusalKind::Unreadable always carries a filesystem CommitRefusalError")
+    };
+
+    return Unreadable(path, &error, notes);
+}
+
+/// `CommitRefusalKind::Edit`'s own error is always [`CommitRefusalError::Edit`].
+fn Report_Edit_Refusal(assembly: &Assembly, error: CommitRefusalError, notes: &mut dyn std::io::Write) -> ExitCode
+{
+    let CommitRefusalError::Edit(error) = error else
+    {
+        // rust-panic: allow: CommitRefusal's constructors are the only way to build one, and
+        // CommitRefusal::Edit always pairs CommitRefusalKind::Edit with a
+        // CommitRefusalError::Edit; no other constructor produces this kind.
+        unreachable!("CommitRefusalKind::Edit always carries an edit CommitRefusalError")
+    };
+
+    return Report_Edit_Error(assembly, &error, notes);
+}
+
+/// `CommitRefusalKind::Refused`'s own error is always [`CommitRefusalError::Edit`].
+fn Report_Refused_Refusal(
+    assembly: &Assembly,
+    preview: &EditPreview,
+    error: CommitRefusalError,
+    channels: &mut Channels<'_>,
+) -> ExitCode
+{
+    let CommitRefusalError::Edit(error) = error else
+    {
+        // rust-panic: allow: CommitRefusal's constructors are the only way to build one, and
+        // CommitRefusal::Refused always pairs CommitRefusalKind::Refused with a
+        // CommitRefusalError::Edit; no other constructor produces this kind.
+        unreachable!("CommitRefusalKind::Refused always carries an edit CommitRefusalError")
+    };
+
+    return Refused(assembly, preview, &error, channels);
+}
+
+/// `CommitRefusalKind::Unwritable`'s own error is always [`CommitRefusalError::FileSystem`].
+fn Report_Unwritable_Refusal(
+    preview: &EditPreview,
+    path: &Path,
+    error: CommitRefusalError,
+    channels: &mut Channels<'_>,
+) -> ExitCode
+{
+    let CommitRefusalError::FileSystem(error) = error else
+    {
+        // rust-panic: allow: CommitRefusal's constructors are the only way to build one, and
+        // CommitRefusal::Unwritable always pairs CommitRefusalKind::Unwritable with a
+        // CommitRefusalError::FileSystem; no other constructor produces this kind.
+        unreachable!("CommitRefusalKind::Unwritable always carries a filesystem CommitRefusalError")
+    };
+    let _ = writeln!(channels.output, "{}", preview.Describe());
+
+    return Unwritable(path, &error, channels.notes);
 }
 
 /// An edit that previewed cleanly, printed, ahead of the store's own refusal to commit it.

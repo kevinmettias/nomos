@@ -233,13 +233,22 @@ mod tests
         assert!(!finding.Is_A_Finding());
     }
 
+    /// A launcher scripted for `nomos-model`'s surface file changing -- the "diff touched
+    /// the surface" premise both `Test_A_Changed_Surface_With_*` tests share, differing only
+    /// in what commits the two `log` answers report: `records_log` for whether a records
+    /// commit touched the range, `surface_log` for the surface commit itself.
+    fn Changed_Surface_Launcher(records_log: &str, surface_log: &str) -> Scripted
+    {
+        return Scripted::New()
+            .Answer("diff", 0, Stdout("tests/contract/surface/nomos-model.txt\n"), Stderr(""))
+            .Answer("log a..b --format=%H --", 0, Stdout(records_log), Stderr(""))
+            .Answer("log a..b --format=%H\t%s --", 0, Stdout(surface_log), Stderr(""));
+    }
+
     #[test]
     fn Test_A_Changed_Surface_With_No_Records_Commit_Is_A_Finding()
     {
-        let launcher = Scripted::New()
-            .Answer("diff", 0, Stdout("tests/contract/surface/nomos-model.txt\n"), Stderr(""))
-            .Answer("log a..b --format=%H --", 0, Stdout(""), Stderr(""))
-            .Answer("log a..b --format=%H\t%s --", 0, Stdout("deadbeef\treblessed\n"), Stderr(""));
+        let launcher = Changed_Surface_Launcher("", "deadbeef\treblessed\n");
         let finding = Joined(&launcher, Repo_Range(), "nomos-model");
 
         assert!(finding.surface_changed);
@@ -252,10 +261,7 @@ mod tests
     #[test]
     fn Test_A_Changed_Surface_With_A_Records_Commit_Is_Not_A_Finding()
     {
-        let launcher = Scripted::New()
-            .Answer("diff", 0, Stdout("tests/contract/surface/nomos-model.txt\n"), Stderr(""))
-            .Answer("log a..b --format=%H --", 0, Stdout("cafef00d\n"), Stderr(""))
-            .Answer("log a..b --format=%H\t%s --", 0, Stdout("deadbeef\treal change\n"), Stderr(""));
+        let launcher = Changed_Surface_Launcher("cafef00d\n", "deadbeef\treal change\n");
         let finding = Joined(&launcher, Repo_Range(), "nomos-model");
 
         assert!(finding.surface_changed);

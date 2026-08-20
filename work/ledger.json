@@ -21003,14 +21003,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-cleanfile-host",
-        "acquired_at": 1787189928,
-        "lease_expires_at": 1787197128
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -21022,9 +21018,37 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-surface-provenance"
+        ],
+        "exit_code": 0,
+        "output_tail": "nding_Is_Named_With_Its_Commits ... ok\ntest discovery::tests::Test_The_Snapshot_Path_Is_Repository_Relative ... ok\ntest tests::Test_A_Missing_Since_Is_A_Usage_Error_Before_Anything_Runs ... ok\ntest evaluate::tests::Test_A_Blank_Diff_Means_No_Finding ... ok\ntest evaluate::tests::Test_A_Changed_Surface_With_A_Records_Commit_Is_Not_A_Finding ... ok\ntest tests::Test_A_Finding_Reaches_The_Rendered_Report_And_Still_Exits_Ok ... ok\ntest tests::Test_An_Unknown_Crate_Name_Is_A_Usage_Error ... ok\n\ntest result: ok. 18 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-cli v0.1.0 (F:\\repos\\nomos\\crates\\host\\nomos-cli)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.33s\n     Running unittests src\\main.rs (target\\debug\\deps\\nomos-4872f6c71fdf7380.exe)\n     Running tests\\abandon_is_readable.rs (target\\debug\\deps\\abandon_is_readable-438fb02b385d78aa.exe)\n     Running tests\\add_guarantees_what_it_says.rs (target\\debug\\deps\\add_guarantees_what_it_says-f703d341d244dcf5.exe)\n     Running tests\\authoring_surface.rs (target\\debug\\deps\\authoring_surface-47a846b52b043a6d.exe)\n     Running tests\\check_command.rs (target\\debug\\deps\\check_command-1f72f9de0f7a6e95.exe)\n     Running tests\\freshness.rs (target\\debug\\deps\\freshness-ae80954d21bc9069.exe)\n     Running tests\\gate_step\\main.rs (target\\debug\\deps\\gate_step-8aeb2760425cece4.exe)\n     Running tests\\list_tells_the_truth.rs (target\\debug\\deps\\list_tells_the_truth-c6279836e2d738ac.exe)\n     Running tests\\read_surface.rs (target\\debug\\deps\\read_surface-561323bd3ef694b7.exe)\n     Running tests\\request_submit.rs (target\\debug\\deps\\request_submit-c0186ed1293ae299.exe)\n     Running tests\\stale_writer_is_refused.rs (target\\debug\\deps\\stale_writer_is_refused-329acf8fb3ec4644.exe)\n     Running tests\\takeover_is_recorded.rs (target\\debug\\deps\\takeover_is_recorded-fb58a3672c6cb420.exe)\n     Running unittests src\\main.rs (target\\debug\\deps\\nomos_surface_provenance-b8c6763b3cf76d00.exe)\n",
+        "verified_at": 1787247390,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "3c6d4200d269d48d47fb6aa827d75a7181bbca52"
+      },
       "abandoned": [],
-      "displaced": [],
+      "displaced": [
+        {
+          "holder": "claude-cleanfile-host",
+          "acquired_at": 1787189928,
+          "lease_expires_at": 1787197128
+        }
+      ],
       "declined": null
     },
     {

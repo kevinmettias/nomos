@@ -57,7 +57,16 @@ pub fn Parse(arguments: &[String]) -> Result<GateInvocation, String>
         return Explain_Invocation(rest, root);
     }
 
-    let command = GateCommand {
+    let command = Plan_Or_Run_Command(root, rest);
+
+    return Ok(if verb == "run" { GateInvocation::Run(command) } else { GateInvocation::Plan(command) });
+}
+
+/// Builds `plan`/`run`'s shared command from `rest`'s flags, now that the verb and its
+/// argument shape are already known.
+fn Plan_Or_Run_Command(root: PathBuf, rest: &[String]) -> GateCommand
+{
+    return GateCommand {
         root,
         scope: ScopeSelector {
             include: Named_Values(rest, "--include"),
@@ -68,8 +77,6 @@ pub fn Parse(arguments: &[String]) -> Result<GateInvocation, String>
         // own doc for why inventing one now would be premature.
         suppressions: nomos_gate_orchestration::SuppressionPolicy::default(),
     };
-
-    return Ok(if verb == "run" { GateInvocation::Run(command) } else { GateInvocation::Plan(command) });
 }
 
 /// `explain`'s own required `--rule`/`--location`, read as single values rather than

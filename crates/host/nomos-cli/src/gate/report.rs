@@ -2,10 +2,14 @@
 //! answered into text and an [`ExitCode`].
 
 use super::ExitCode;
+use nomos_capability::RegistryError;
 use nomos_check_orchestration::CheckOutcome;
 use nomos_contracts::Finding;
-use nomos_gate_orchestration::{Explanation, GateExplainResult, GateOutcome, GateRunOutcome, GateRunResult};
+use nomos_gate_orchestration::{
+    Explanation, GateExplainResult, GateOutcome, GateRunOutcome, GateRunResult, Suppression,
+};
 use std::io::Write;
+use std::path::Path;
 
 /// Renders what `nomos_gate_orchestration::Run` answered for `plan`.
 pub(super) fn Render_Plan(outcome: &GateOutcome, stdout: &mut impl Write, stderr: &mut impl Write) -> ExitCode
@@ -45,53 +49,67 @@ pub(super) fn Render_Run(result: &GateRunResult, stdout: &mut impl Write, stderr
 {
     return match &result.check_outcome
     {
-        CheckOutcome::Unreadable =>
-        {
-            let _ = writeln!(
-                stderr,
-                "cannot judge `{}`: not a directory, or its walk could not be ingested as a \
-                 workspace state",
-                result.root.display()
-            );
-
-            ExitCode::Contradictory
-        }
-        CheckOutcome::Contradictory(error) =>
-        {
-            let _ = writeln!(
-                stderr,
-                "the check layer beneath this gate run has its own composition \
-                 contradictory, so no fact it produced would have been offered by anybody: \
-                 {error}"
-            );
-
-            ExitCode::Contradictory
-        }
-        CheckOutcome::NoSource =>
-        {
-            let _ = writeln!(
-                stderr,
-                "no Rust source found under `{}`, so nothing was judged.\n\
-                 A clean result here would mean only that the walk found nothing.",
-                result.root.display()
-            );
-
-            ExitCode::Vacuous
-        }
-        CheckOutcome::NoFacts { files } =>
-        {
-            let _ = writeln!(
-                stderr,
-                "{files} file(s) were read under `{}` and no syntax fact was materialized \
-                 for any of them, so no mirror claim could be resolved.\n\
-                 A clean result here would mean only that the analysis never ran.",
-                result.root.display()
-            );
-
-            ExitCode::Vacuous
-        }
+        CheckOutcome::Unreadable => Render_Check_Unreadable(&result.root, stderr),
+        CheckOutcome::Contradictory(error) => Render_Run_Contradictory(error, stderr),
+        CheckOutcome::NoSource => Render_Run_No_Source(&result.root, stderr),
+        CheckOutcome::NoFacts { files } => Render_Run_No_Facts(&result.root, *files, stderr),
         CheckOutcome::Judged { findings, .. } => Report_Judged(findings, result, stdout),
     };
+}
+
+/// The root does not exist, is not a directory, or its walk could not be ingested -- the
+/// same message whether the caller was `run` or `explain`, since neither verb's own
+/// question ever got asked.
+fn Render_Check_Unreadable(root: &Path, stderr: &mut impl Write) -> ExitCode
+{
+    let _ = writeln!(
+        stderr,
+        "cannot judge `{}`: not a directory, or its walk could not be ingested as a \
+         workspace state",
+        root.display()
+    );
+
+    return ExitCode::Contradictory;
+}
+
+/// The check layer beneath this gate run has its own composition contradictory.
+fn Render_Run_Contradictory(error: &RegistryError, stderr: &mut impl Write) -> ExitCode
+{
+    let _ = writeln!(
+        stderr,
+        "the check layer beneath this gate run has its own composition \
+         contradictory, so no fact it produced would have been offered by anybody: \
+         {error}"
+    );
+
+    return ExitCode::Contradictory;
+}
+
+/// The walk found no source under `root`, so `run` judged nothing.
+fn Render_Run_No_Source(root: &Path, stderr: &mut impl Write) -> ExitCode
+{
+    let _ = writeln!(
+        stderr,
+        "no Rust source found under `{}`, so nothing was judged.\n\
+         A clean result here would mean only that the walk found nothing.",
+        root.display()
+    );
+
+    return ExitCode::Vacuous;
+}
+
+/// Source was found under `root` but no syntax fact was materialized for any of it.
+fn Render_Run_No_Facts(root: &Path, files: usize, stderr: &mut impl Write) -> ExitCode
+{
+    let _ = writeln!(
+        stderr,
+        "{files} file(s) were read under `{}` and no syntax fact was materialized \
+         for any of them, so no mirror claim could be resolved.\n\
+         A clean result here would mean only that the analysis never ran.",
+        root.display()
+    );
+
+    return ExitCode::Vacuous;
 }
 
 /// Renders a judged run's findings and reduces its disposition to an [`ExitCode`] -- the
@@ -113,7 +131,13 @@ fn Report_Judged(findings: &[Finding], result: &GateRunResult, stdout: &mut impl
         result.suppressed_findings.len()
     );
 
-    return match result.disposition
+    return Exit_Code_For(result.disposition);
+}
+
+/// Reduces a real run's disposition to the [`ExitCode`] it reports.
+fn Exit_Code_For(disposition: GateRunOutcome) -> ExitCode
+{
+    return match disposition
     {
         GateRunOutcome::Failed => ExitCode::Violations,
         GateRunOutcome::Passed => ExitCode::Ok,
@@ -134,52 +158,52 @@ pub(super) fn Render_Explain(result: &GateExplainResult, stdout: &mut impl Write
 {
     return match &result.check_outcome
     {
-        CheckOutcome::Unreadable =>
-        {
-            let _ = writeln!(
-                stderr,
-                "cannot judge `{}`: not a directory, or its walk could not be ingested as a \
-                 workspace state",
-                result.root.display()
-            );
-
-            ExitCode::Contradictory
-        }
-        CheckOutcome::Contradictory(error) =>
-        {
-            let _ = writeln!(
-                stderr,
-                "the check layer beneath this gate explain has its own composition \
-                 contradictory, so no fact it produced would have been offered by anybody: \
-                 {error}"
-            );
-
-            ExitCode::Contradictory
-        }
-        CheckOutcome::NoSource =>
-        {
-            let _ = writeln!(
-                stderr,
-                "no Rust source found under `{}`, so nothing was judged and the query \
-                 cannot be answered.",
-                result.root.display()
-            );
-
-            ExitCode::Vacuous
-        }
-        CheckOutcome::NoFacts { files } =>
-        {
-            let _ = writeln!(
-                stderr,
-                "{files} file(s) were read under `{}` and no syntax fact was materialized \
-                 for any of them, so the query cannot be answered.",
-                result.root.display()
-            );
-
-            ExitCode::Vacuous
-        }
+        CheckOutcome::Unreadable => Render_Check_Unreadable(&result.root, stderr),
+        CheckOutcome::Contradictory(error) => Render_Explain_Contradictory(error, stderr),
+        CheckOutcome::NoSource => Render_Explain_No_Source(&result.root, stderr),
+        CheckOutcome::NoFacts { files } => Render_Explain_No_Facts(&result.root, *files, stderr),
         CheckOutcome::Judged { .. } => Report_Explanation(&result.explanation, stdout),
     };
+}
+
+/// The check layer beneath this gate explain has its own composition contradictory.
+fn Render_Explain_Contradictory(error: &RegistryError, stderr: &mut impl Write) -> ExitCode
+{
+    let _ = writeln!(
+        stderr,
+        "the check layer beneath this gate explain has its own composition \
+         contradictory, so no fact it produced would have been offered by anybody: \
+         {error}"
+    );
+
+    return ExitCode::Contradictory;
+}
+
+/// The walk found no source under `root`, so `explain`'s query cannot be answered.
+fn Render_Explain_No_Source(root: &Path, stderr: &mut impl Write) -> ExitCode
+{
+    let _ = writeln!(
+        stderr,
+        "no Rust source found under `{}`, so nothing was judged and the query \
+         cannot be answered.",
+        root.display()
+    );
+
+    return ExitCode::Vacuous;
+}
+
+/// Source was found under `root` but no syntax fact was materialized for any of it, so
+/// `explain`'s query cannot be answered.
+fn Render_Explain_No_Facts(root: &Path, files: usize, stderr: &mut impl Write) -> ExitCode
+{
+    let _ = writeln!(
+        stderr,
+        "{files} file(s) were read under `{}` and no syntax fact was materialized \
+         for any of them, so the query cannot be answered.",
+        root.display()
+    );
+
+    return ExitCode::Vacuous;
 }
 
 /// Renders `explain`'s answer and reduces it to an [`ExitCode`] -- `Violations` when the
@@ -198,18 +222,25 @@ fn Report_Explanation(explanation: &Explanation, stdout: &mut impl Write) -> Exi
         }
         Explanation::Found { finding, would_block, suppressed_by } =>
         {
-            let _ = writeln!(stdout, "{}", finding.Describe());
-            let _ = writeln!(stdout, "would block: {would_block}");
-            if let Some(suppression) = suppressed_by
-            {
-                let _ = writeln!(
-                    stdout,
-                    "suppressed by: {:?} — {} (owner: {})",
-                    suppression.disposition, suppression.rationale, suppression.owner
-                );
-            }
-
-            if *would_block { ExitCode::Violations } else { ExitCode::Ok }
+            Report_Found(finding, *would_block, suppressed_by.as_ref(), stdout)
         }
     };
+}
+
+/// Renders one found explanation's finding, block status, and suppression note (if any),
+/// and reduces it to the [`ExitCode`] a real run would decide for this one finding.
+fn Report_Found(finding: &Finding, would_block: bool, suppressed_by: Option<&Suppression>, stdout: &mut impl Write) -> ExitCode
+{
+    let _ = writeln!(stdout, "{}", finding.Describe());
+    let _ = writeln!(stdout, "would block: {would_block}");
+    if let Some(suppression) = suppressed_by
+    {
+        let _ = writeln!(
+            stdout,
+            "suppressed by: {:?} — {} (owner: {})",
+            suppression.disposition, suppression.rationale, suppression.owner
+        );
+    }
+
+    return if would_block { ExitCode::Violations } else { ExitCode::Ok };
 }

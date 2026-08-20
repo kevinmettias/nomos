@@ -165,6 +165,23 @@ fn Test_An_Unknown_Flag_Should_Refuse()
     assert!(error.contains("usage"), "{error}");
 }
 
+/// Runs `invocation` over this workspace's own tree and captures stdout/stderr as owned
+/// strings -- the "real command over the real tree" setup
+/// `Test_A_Real_Plan_Should_Report_All_Four_Shipped_Rules` and
+/// `Test_A_Real_Run_Should_Judge_This_Workspaces_Own_Tree` both need, differing only in
+/// which verb's [`GateInvocation`] they build.
+fn Run_Over_This_Tree(invocation: GateInvocation) -> (ExitCode, String, String)
+{
+    let mut stdout = Vec::new();
+    let mut stderr = Vec::new();
+
+    let code = Run(&invocation, &mut stdout, &mut stderr);
+    let rendered = String::from_utf8_lossy(&stdout).into_owned();
+    let rendered_stderr = String::from_utf8_lossy(&stderr).into_owned();
+
+    return (code, rendered, rendered_stderr);
+}
+
 /// A real run over this workspace's own four shipped rules reports all four, and exits
 /// clean.
 ///
@@ -175,12 +192,8 @@ fn Test_An_Unknown_Flag_Should_Refuse()
 #[test]
 fn Test_A_Real_Plan_Should_Report_All_Four_Shipped_Rules()
 {
-    let invocation = GateInvocation::Plan(GateCommand { root: PathBuf::from("."), ..Default::default() });
-    let mut stdout = Vec::new();
-    let mut stderr = Vec::new();
-
-    let code = Run(&invocation, &mut stdout, &mut stderr);
-    let rendered = String::from_utf8_lossy(&stdout).into_owned();
+    let command = GateCommand { root: PathBuf::from("."), ..Default::default() };
+    let (code, rendered, stderr) = Run_Over_This_Tree(GateInvocation::Plan(command));
 
     assert_eq!(code, ExitCode::Ok, "{rendered}");
     assert!(rendered.contains("rules: 4"), "{rendered}");
@@ -188,7 +201,7 @@ fn Test_A_Real_Plan_Should_Report_All_Four_Shipped_Rules()
     assert!(rendered.contains("dependency-direction"), "{rendered}");
     assert!(rendered.contains("function-naming-convention"), "{rendered}");
     assert!(rendered.contains("unread-reaches-finding"), "{rendered}");
-    assert!(String::from_utf8_lossy(&stderr).is_empty());
+    assert!(stderr.is_empty());
 }
 
 /// A real `run` over this workspace's own tree, end to end -- the same "real run over the
@@ -201,12 +214,8 @@ fn Test_A_Real_Plan_Should_Report_All_Four_Shipped_Rules()
 #[test]
 fn Test_A_Real_Run_Should_Judge_This_Workspaces_Own_Tree()
 {
-    let invocation = GateInvocation::Run(GateCommand { root: PathBuf::from("."), ..Default::default() });
-    let mut stdout = Vec::new();
-    let mut stderr = Vec::new();
-
-    let code = Run(&invocation, &mut stdout, &mut stderr);
-    let rendered = String::from_utf8_lossy(&stdout).into_owned();
+    let command = GateCommand { root: PathBuf::from("."), ..Default::default() };
+    let (code, rendered, stderr) = Run_Over_This_Tree(GateInvocation::Run(command));
 
     assert_eq!(
         code,
@@ -216,7 +225,7 @@ fn Test_A_Real_Run_Should_Judge_This_Workspaces_Own_Tree()
          so it must agree with itself end to end: {rendered}"
     );
     assert!(rendered.contains("finding(s), 0 of which can fail a build"), "{rendered}");
-    assert!(String::from_utf8_lossy(&stderr).is_empty());
+    assert!(stderr.is_empty());
 }
 
 /// `run` over an empty tree must not report the same code as a clean run -- `OD-GATE-003`,
