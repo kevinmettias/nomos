@@ -21771,6 +21771,248 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-DECOMPOSEFILE-CAPABILITIES",
+      "title": "decompose-file's structural checks report findings across crates/capabilities",
+      "why": "code-standards' rust decompose-file phase was run over the whole workspace on user request and must reach 0 violations. nomos-cap-controlflow/src/payload.rs carries 3 check-one-public-type findings (ReachabilitySite, ReachabilityPayload, PayloadRefusal alongside the file's main type) and nomos-cap-dependency/src/payload.rs carries 3 more (DependencyEdge, DependencyPayload, PayloadRefusal) plus 1 check-responsibility-extraction finding (Dependency-prefixed cluster: DependencyEdge, DependencyKind, DependencyPayload).",
+      "done_when": "check-one-public-type, check-responsibility-extraction, check-class-size, check-extractable-subset and check-file-size report no finding under crates/capabilities/nomos-cap-controlflow or crates/capabilities/nomos-cap-dependency, run via code-standards' 'go run ./rules/general/run-all/phase rust/decompose-file <path> --keep-going'. Any module split keeps the whole workspace compiling, verified with cargo check --workspace --all-targets. cargo test -p nomos-cap-controlflow -p nomos-cap-dependency stays green.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities/nomos-cap-controlflow",
+          "crates/capabilities/nomos-cap-dependency"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cap-controlflow",
+          "-p",
+          "nomos-cap-dependency"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-DECOMPOSEFILE-CORRECTIONS",
+      "title": "decompose-file's structural checks report findings across crates/corrections",
+      "why": "code-standards' rust decompose-file phase was run over the whole workspace on user request and must reach 0 violations. nomos-corrections/src/candidate.rs carries 1 check-one-public-type finding (CorrectionCandidate alongside the file's main type) and src/edit.rs carries 1 check-class-size finding (type Edit splits into 2 method/field clusters sharing no state).",
+      "done_when": "check-one-public-type, check-responsibility-extraction, check-class-size, check-extractable-subset and check-file-size report no finding under crates/corrections/nomos-corrections, run via code-standards' 'go run ./rules/general/run-all/phase rust/decompose-file <path> --keep-going'. Any module split keeps the whole workspace compiling, verified with cargo check --workspace --all-targets. cargo test -p nomos-corrections stays green.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/corrections/nomos-corrections"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-corrections"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-DECOMPOSEFILE-LANGUAGES",
+      "title": "decompose-file's structural checks report findings across crates/languages",
+      "why": "code-standards' rust decompose-file phase was run over the whole workspace on user request and must reach 0 violations. nomos-lang-rust-cargo/src/metadata.rs carries 1 check-one-public-type finding (DiscoveredPackage alongside the file's main type) and src/provider.rs carries 1 more (PackageFact).",
+      "done_when": "check-one-public-type, check-responsibility-extraction, check-class-size, check-extractable-subset and check-file-size report no finding under crates/languages/nomos-lang-rust-cargo, run via code-standards' 'go run ./rules/general/run-all/phase rust/decompose-file <path> --keep-going'. Any module split keeps the whole workspace compiling, verified with cargo check --workspace --all-targets. cargo test -p nomos-lang-rust-cargo stays green.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages/nomos-lang-rust-cargo"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lang-rust-cargo"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-DECOMPOSEFILE-ORCHESTRATION",
+      "title": "decompose-file's structural checks report findings across crates/orchestration",
+      "why": "code-standards' rust decompose-file phase was run over the whole workspace on user request and must reach 0 violations. check-one-public-type fires 17 times (nomos-check-orchestration/src/outcome.rs: Claim, CheckOutcome; nomos-gate-orchestration/src/outcome.rs: GateOutcome, GateRunOutcome; nomos-spec-orchestration/src/outcome/commit.rs: Vacated, VacateOutcome, Reproduction, CommitRefusal; src/outcome/freshness.rs: ProfileOutcome, FreshnessAnswer, FreshnessRefusal; src/outcome/record.rs: RecordRefusal; src/outcome/render.rs: RenderRefusal; src/outcome/submit.rs: SubmitRefusal; src/outcome/table.rs: TableRefusal; nomos-work-orchestration/src/outcome.rs: ShowView, WorkOutcome) and check-responsibility-extraction fires twice (nomos-check-orchestration/src/facts.rs Materialize-prefixed cluster; nomos-gate-orchestration/src/outcome.rs Gate-prefixed cluster).",
+      "done_when": "check-one-public-type, check-responsibility-extraction, check-class-size, check-extractable-subset and check-file-size report no finding under crates/orchestration/nomos-check-orchestration, crates/orchestration/nomos-gate-orchestration, crates/orchestration/nomos-spec-orchestration or crates/orchestration/nomos-work-orchestration, run via code-standards' 'go run ./rules/general/run-all/phase rust/decompose-file <path> --keep-going'. Any module split keeps the whole workspace compiling, verified with cargo check --workspace --all-targets. cargo test -p nomos-check-orchestration -p nomos-gate-orchestration -p nomos-spec-orchestration -p nomos-work-orchestration stays green.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-check-orchestration",
+          "crates/orchestration/nomos-gate-orchestration",
+          "crates/orchestration/nomos-spec-orchestration",
+          "crates/orchestration/nomos-work-orchestration"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-spec-orchestration",
+          "-p",
+          "nomos-work-orchestration"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-DECOMPOSEFILE-RULES",
+      "title": "decompose-file's structural checks report findings across crates/rules",
+      "why": "code-standards' rust decompose-file phase was run over the whole workspace on user request and must reach 0 violations. nomos-rules/src/registry.rs carries 2 check-one-public-type findings (RuleRegistryError, RuleRegistry) and 1 check-responsibility-extraction finding (Rule-prefixed cluster: RuleOffer, RuleRegistry, RuleRegistryError); src/dependency.rs (622 lines, 37 declarations) and src/naming.rs (523 lines, 37 declarations) each carry a check-responsibility-extraction and a check-file-size finding.",
+      "done_when": "check-one-public-type, check-responsibility-extraction, check-class-size, check-extractable-subset and check-file-size report no finding under crates/rules/nomos-rules, run via code-standards' 'go run ./rules/general/run-all/phase rust/decompose-file <path> --keep-going'. Any module split keeps the whole workspace compiling, verified with cargo check --workspace --all-targets. cargo test -p nomos-rules stays green.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-DECOMPOSEFILE-SUBSTRATE",
+      "title": "decompose-file's structural checks report findings across crates/substrate",
+      "why": "code-standards' rust decompose-file phase was run over the whole workspace on user request and must reach 0 violations. check-one-public-type fires 4 times (nomos-analysis/src/store.rs: RematerializationGroup; nomos-capability/src/registry.rs: RequiredResolution, Registry; nomos-ledger/src/claim/refusal.rs: RefusalLayer). check-responsibility-extraction and check-file-size each fire on nomos-analysis/src/fact/memory_store.rs (582 lines, 43 declarations) and nomos-capability/src/registry.rs (663 lines, 37 declarations); check-file-size also fires alone on nomos-ledger/src/claim/refusal.rs (601 lines) and nomos-ledger/src/store.rs (516 lines).",
+      "done_when": "check-one-public-type, check-responsibility-extraction, check-class-size, check-extractable-subset and check-file-size report no finding under crates/substrate/nomos-analysis, crates/substrate/nomos-capability or crates/substrate/nomos-ledger, run via code-standards' 'go run ./rules/general/run-all/phase rust/decompose-file <path> --keep-going'. Any module split keeps the whole workspace compiling, verified with cargo check --workspace --all-targets. cargo test -p nomos-analysis -p nomos-capability -p nomos-ledger stays green.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-analysis",
+          "crates/substrate/nomos-capability",
+          "crates/substrate/nomos-ledger"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-analysis",
+          "-p",
+          "nomos-capability",
+          "-p",
+          "nomos-ledger"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-DECOMPOSEFILE-PLATFORM",
+      "title": "decompose-file's structural checks report findings across crates/platform",
+      "why": "code-standards' rust decompose-file phase was run over the whole workspace on user request and must reach 0 violations. nomos-platform-std/src/launcher.rs (509 lines, 33 declarations) carries a check-responsibility-extraction finding and a check-file-size finding.",
+      "done_when": "check-one-public-type, check-responsibility-extraction, check-class-size, check-extractable-subset and check-file-size report no finding under crates/platform/nomos-platform-std, run via code-standards' 'go run ./rules/general/run-all/phase rust/decompose-file <path> --keep-going'. Any module split keeps the whole workspace compiling, verified with cargo check --workspace --all-targets. cargo test -p nomos-platform-std stays green.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/platform/nomos-platform-std"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-platform-std"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
