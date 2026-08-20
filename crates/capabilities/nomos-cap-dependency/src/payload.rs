@@ -1,5 +1,13 @@
 //! The wire shape of a `nomos.dependency.edges.v1` payload, and its canonical encoding.
 
+pub(crate) mod dependency_edge;
+pub(crate) mod dependency_payload;
+pub(crate) mod payload_refusal;
+
+use dependency_edge::DependencyEdge;
+use dependency_payload::DependencyPayload;
+use payload_refusal::PayloadRefusal;
+
 /// Which of the manifest's three dependency tables an edge was declared in.
 ///
 /// Not a `bool`: a dev-dependency and a build-dependency are both distinct from a normal
@@ -39,26 +47,6 @@ impl DependencyKind
     }
 }
 
-/// One edge: this package names `target` as a dependency of kind `kind`, optionally.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct DependencyEdge
-{
-    /// The dependency's own package name, as Cargo resolved it — not the manifest's
-    /// `package = "..."` rename, if one was given, because a rule comparing this against
-    /// `bands.rs`'s table must compare against the same name the table is written in.
-    pub target: String,
-    pub kind: DependencyKind,
-    pub optional: bool,
-}
-
-/// One package's full set of first-party dependency edges.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct DependencyPayload
-{
-    pub package: String,
-    pub edges: Vec<DependencyEdge>,
-}
-
 /// Encodes a payload as tab-separated lines, the same shape `nomos-cap-syntax` uses and
 /// for the same two reasons: diffable by a person, and written in one place with no
 /// derive between the data and the bytes.
@@ -83,21 +71,6 @@ pub fn Encode_Payload(payload: &DependencyPayload) -> Vec<u8>
     }
 
     return encoded.into_bytes();
-}
-
-/// A payload could not be decoded under this schema.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct PayloadRefusal
-{
-    pub reason: String,
-}
-
-impl core::fmt::Display for PayloadRefusal
-{
-    fn fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
-    {
-        return write!(formatter, "{}", self.reason);
-    }
 }
 
 /// Reads a payload back out of its canonical encoding.

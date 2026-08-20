@@ -1,6 +1,14 @@
 //! The wire shape of a `nomos.controlflow.reachability.v1` payload, and its canonical
 //! encoding.
 
+pub(crate) mod payload_refusal;
+pub(crate) mod reachability_payload;
+pub(crate) mod reachability_site;
+
+use payload_refusal::PayloadRefusal;
+use reachability_payload::ReachabilityPayload;
+use reachability_site::ReachabilitySite;
+
 /// How one flagged arm's body was shaped, restricted to the four `OD-RULES-008` names as
 /// syntactically obvious without name or type resolution.
 ///
@@ -50,33 +58,6 @@ impl ArmShape
     }
 }
 
-/// One `Err(binding) => <body>` arm this file's provider found and could classify as one
-/// of [`ArmShape`]'s four obvious-defect shapes.
-///
-/// Absence from a payload is not a claim of cleanliness — an arm whose body is anything
-/// else is simply not recorded, the same "no finding is not confirmed clean" convention
-/// every rule in this workspace already keeps.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct ReachabilitySite
-{
-    /// The nearest enclosing function's own name, unqualified. Tier-1's canonical subject
-    /// is a control-flow edge inside one function body in one file; a fully qualified path
-    /// through enclosing `impl`/`mod` blocks is real information a sound provider should
-    /// carry, and is not attempted here.
-    pub function: String,
-    /// The identifier the `Err(...)` pattern binds. Not asserted to be `applicability` by
-    /// this type — the provider that writes it is the one narrowing to that name.
-    pub binding: String,
-    pub shape: ArmShape,
-}
-
-/// One file's full set of flagged reachability sites.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct ReachabilityPayload
-{
-    pub sites: Vec<ReachabilitySite>,
-}
-
 /// Encodes a payload as tab-separated lines, the same shape `nomos-cap-dependency` and
 /// `nomos-cap-syntax` both use and for the same two reasons: diffable by a person, and
 /// written in one place with no derive between the data and the bytes.
@@ -97,21 +78,6 @@ pub fn Encode_Payload(payload: &ReachabilityPayload) -> Vec<u8>
     }
 
     return encoded.into_bytes();
-}
-
-/// A payload could not be decoded under this schema.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct PayloadRefusal
-{
-    pub reason: String,
-}
-
-impl core::fmt::Display for PayloadRefusal
-{
-    fn fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
-    {
-        return write!(formatter, "{}", self.reason);
-    }
 }
 
 /// Reads a payload back out of its canonical encoding.

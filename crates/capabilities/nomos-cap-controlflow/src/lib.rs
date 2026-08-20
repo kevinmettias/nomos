@@ -26,4 +26,7 @@ mod payload;
 pub use contract::{
     Capability, Capability_Contract, Ceiling, CAPABILITY, CONTRACT_VERSION, Payload_Schema, SCHEMA,
 };
-pub use payload::{ArmShape, Encode_Payload, Parse_Payload, PayloadRefusal, ReachabilityPayload, ReachabilitySite};
+pub use payload::{ArmShape, Encode_Payload, Parse_Payload};
+pub use payload::payload_refusal::PayloadRefusal;
+pub use payload::reachability_payload::ReachabilityPayload;
+pub use payload::reachability_site::ReachabilitySite;

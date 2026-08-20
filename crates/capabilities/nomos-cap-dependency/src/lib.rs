@@ -28,4 +28,7 @@ mod contract;
 mod payload;
 
 pub use contract::{Capability, Capability_Contract, Ceiling, CAPABILITY, CONTRACT_VERSION, Payload_Schema, SCHEMA};
-pub use payload::{DependencyEdge, DependencyKind, DependencyPayload, Encode_Payload, Parse_Payload, PayloadRefusal};
+pub use payload::{DependencyKind, Encode_Payload, Parse_Payload};
+pub use payload::dependency_edge::DependencyEdge;
+pub use payload::dependency_payload::DependencyPayload;
+pub use payload::payload_refusal::PayloadRefusal;
