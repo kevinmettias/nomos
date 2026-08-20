@@ -2,8 +2,8 @@
 //! disposition reduction over an already-judged list of findings.
 
 use crate::{
-    Disposition, GateCommand, GateOutcome, GateRunOutcome, RuleSelector, Run, Run_Gate, ScopeSelector, Suppression,
-    SuppressionDisposition, SuppressionPolicy,
+    Disposition, Explain_Gate, Explanation, FindingQuery, GateCommand, GateOutcome, GateRunOutcome, RuleSelector, Run,
+    Run_Gate, ScopeSelector, Suppression, SuppressionDisposition, SuppressionPolicy,
 };
 use nomos_check_orchestration::CheckOutcome;
 use nomos_contracts::{
@@ -430,4 +430,108 @@ fn Test_A_Suppressed_Finding_Should_Not_Block()
         findings.iter().any(|finding| return finding.rule == RuleId::New(COMPLETENESS_MIRROR)),
         "the suppressed finding must still be judged and carried in check_outcome"
     );
+}
+
+/// A query naming a rule and location no finding carries is [`Explanation::NotFound`], not
+/// a panic or a default -- the same "an absent answer is a typed state, not a shorter one"
+/// discipline `CheckOutcome::NoSource` already keeps one layer down.
+#[test]
+fn Test_Explain_Should_Report_Not_Found_For_A_Query_Nothing_Answers()
+{
+    let sources = vec![Source("a.rs", "pub fn Ok() {}\n")];
+    let query = FindingQuery { rule: RuleId::New(COMPLETENESS_MIRROR), location: "nowhere.rs".to_owned() };
+
+    let result = Explain_Gate(Some(sources), Test_Variant(), &Command_At(Repository_Root()), &query, &StdProcessLauncher);
+
+    assert!(matches!(result.check_outcome, CheckOutcome::Judged { .. }));
+    assert_eq!(result.explanation, Explanation::NotFound);
+}
+
+/// A real query naming the one blocking finding this fixture produces answers `Found`, with
+/// `would_block` true and no suppression -- the everyday case, checked against a real judged
+/// finding rather than a fixture built to look like one.
+#[test]
+fn Test_Explain_Should_Find_A_Real_Blocking_Finding()
+{
+    let sources = vec![Source(
+        "a.rs",
+        "/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n",
+    )];
+    let query = FindingQuery { rule: RuleId::New(COMPLETENESS_MIRROR), location: "a.rs".to_owned() };
+
+    let result = Explain_Gate(Some(sources), Test_Variant(), &Command_At(Repository_Root()), &query, &StdProcessLauncher);
+
+    let Explanation::Found { finding, would_block, suppressed_by } = result.explanation
+    else
+    {
+        panic!("this fixture must produce the finding the query names");
+    };
+    assert_eq!(finding.rule, RuleId::New(COMPLETENESS_MIRROR));
+    assert!(would_block);
+    assert_eq!(suppressed_by, None);
+}
+
+/// A [`Suppression`] matching the queried finding flips `would_block` to `false` and names
+/// itself in `suppressed_by` -- `explain` consults `command.suppressions` even though it
+/// ignores `scope` and `rules`, because whether a suppression applies is part of this
+/// finding's own explanation.
+#[test]
+fn Test_Explain_Should_Report_A_Suppression_That_Applies()
+{
+    let source = || return Source("a.rs", "/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n");
+    let query = FindingQuery { rule: RuleId::New(COMPLETENESS_MIRROR), location: "a.rs".to_owned() };
+    let unsuppressed =
+        Explain_Gate(Some(vec![source()]), Test_Variant(), &Command_At(Repository_Root()), &query, &StdProcessLauncher);
+    let Explanation::Found { finding: real_finding, .. } = unsuppressed.explanation
+    else
+    {
+        panic!("this fixture must produce the finding the query names");
+    };
+
+    let command = GateCommand {
+        root: Repository_Root(),
+        scope: ScopeSelector::default(),
+        rules: RuleSelector::default(),
+        suppressions: SuppressionPolicy {
+            suppressions: vec![Suppression {
+                rule: real_finding.rule,
+                subject: real_finding.subject,
+                disposition: SuppressionDisposition::FalsePositiveDisposition,
+                rationale: "test fixture".to_owned(),
+                owner: "test".to_owned(),
+            }],
+        },
+    };
+
+    let result = Explain_Gate(Some(vec![source()]), Test_Variant(), &command, &query, &StdProcessLauncher);
+
+    let Explanation::Found { would_block, suppressed_by, .. } = result.explanation
+    else
+    {
+        panic!("this fixture must still produce the finding the query names");
+    };
+    assert!(!would_block);
+    assert!(suppressed_by.is_some());
+}
+
+/// `explain` is independent of `command.scope`: a scope that would exclude `a.rs` from a
+/// real `run` must not stop `explain` from finding and reporting the same query.
+#[test]
+fn Test_Explain_Should_Ignore_Scope()
+{
+    let sources = vec![Source(
+        "a.rs",
+        "/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n",
+    )];
+    let query = FindingQuery { rule: RuleId::New(COMPLETENESS_MIRROR), location: "a.rs".to_owned() };
+    let command = GateCommand {
+        root: Repository_Root(),
+        scope: ScopeSelector { include: vec!["b.rs".to_owned()], exclude: Vec::new() },
+        rules: RuleSelector::default(),
+        suppressions: SuppressionPolicy::default(),
+    };
+
+    let result = Explain_Gate(Some(sources), Test_Variant(), &command, &query, &StdProcessLauncher);
+
+    assert!(matches!(result.explanation, Explanation::Found { .. }));
 }

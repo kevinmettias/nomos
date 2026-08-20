@@ -4,7 +4,7 @@
 use super::ExitCode;
 use nomos_check_orchestration::CheckOutcome;
 use nomos_contracts::Finding;
-use nomos_gate_orchestration::{GateOutcome, GateRunOutcome, GateRunResult};
+use nomos_gate_orchestration::{Explanation, GateExplainResult, GateOutcome, GateRunOutcome, GateRunResult};
 use std::io::Write;
 
 /// Renders what `nomos_gate_orchestration::Run` answered for `plan`.
@@ -122,5 +122,94 @@ fn Report_Judged(findings: &[Finding], result: &GateRunResult, stdout: &mut impl
              Run_Gate only assigns it for a CheckOutcome that never reached Judged, \
              and this arm is Judged's own"
         ),
+    };
+}
+
+/// Renders what [`nomos_gate_orchestration::Explain_Gate`] answered for `explain`.
+///
+/// The same `check_outcome`-first match [`Render_Run`] uses, for the same reason: the exit
+/// code for every non-`Judged` variant is a property of *why* nothing was judged, not of
+/// the query.
+pub(super) fn Render_Explain(result: &GateExplainResult, stdout: &mut impl Write, stderr: &mut impl Write) -> ExitCode
+{
+    return match &result.check_outcome
+    {
+        CheckOutcome::Unreadable =>
+        {
+            let _ = writeln!(
+                stderr,
+                "cannot judge `{}`: not a directory, or its walk could not be ingested as a \
+                 workspace state",
+                result.root.display()
+            );
+
+            ExitCode::Contradictory
+        }
+        CheckOutcome::Contradictory(error) =>
+        {
+            let _ = writeln!(
+                stderr,
+                "the check layer beneath this gate explain has its own composition \
+                 contradictory, so no fact it produced would have been offered by anybody: \
+                 {error}"
+            );
+
+            ExitCode::Contradictory
+        }
+        CheckOutcome::NoSource =>
+        {
+            let _ = writeln!(
+                stderr,
+                "no Rust source found under `{}`, so nothing was judged and the query \
+                 cannot be answered.",
+                result.root.display()
+            );
+
+            ExitCode::Vacuous
+        }
+        CheckOutcome::NoFacts { files } =>
+        {
+            let _ = writeln!(
+                stderr,
+                "{files} file(s) were read under `{}` and no syntax fact was materialized \
+                 for any of them, so the query cannot be answered.",
+                result.root.display()
+            );
+
+            ExitCode::Vacuous
+        }
+        CheckOutcome::Judged { .. } => Report_Explanation(&result.explanation, stdout),
+    };
+}
+
+/// Renders `explain`'s answer and reduces it to an [`ExitCode`] -- `Violations` when the
+/// named finding would block a real run, `Ok` otherwise (not found, or found but not
+/// blocking), the same "the exit code mirrors what `run` would decide for this one
+/// finding" reasoning `nomos_gate_orchestration::explain`'s own doc gives.
+fn Report_Explanation(explanation: &Explanation, stdout: &mut impl Write) -> ExitCode
+{
+    return match explanation
+    {
+        Explanation::NotFound =>
+        {
+            let _ = writeln!(stdout, "not found");
+
+            ExitCode::Ok
+        }
+        Explanation::Found { finding, would_block, suppressed_by } =>
+        {
+            let _ = writeln!(stdout, "{}", finding.Describe());
+            let _ = writeln!(stdout, "would block: {would_block}");
+            if let Some(suppression) = suppressed_by
+            {
+                let _ = writeln!(
+                    stdout,
+                    "suppressed by: {:?} — {} (owner: {})",
+                    suppression.disposition, suppression.rationale, suppression.owner
+                );
+            }
+
+            if *would_block { ExitCode::Violations } else { ExitCode::Ok }
+        }
     };
 }

@@ -70,13 +70,23 @@
 //! caller needs one would repeat the mistake `OD-GATE-015` already declined, so this
 //! increment is the type and its consultation only.
 //!
+//! Its sixth increment, `P13-GATE-EXPLAIN-FIRST-INCREMENT`, gives `explain` its first real
+//! body: [`Explain_Gate`] judges a tree exactly as [`Run_Gate`] does (through a shared
+//! [`run_gate::Judged`] helper, so the two do not duplicate the walk/empty/unreadable
+//! match) and answers a [`FindingQuery`] -- a rule and one of a finding's own human-visible
+//! locations, not a digest -- with an [`Explanation`]. Deliberately independent of
+//! `GateCommand::scope`/`rules`: `explain` answers what one named finding looks like right
+//! now, not what a scope- or rule-narrowed `run` would currently see. `suppressions` is
+//! still consulted, because whether a suppression applies is part of the finding's own
+//! explanation.
+//!
 //! # What no increment is
 //!
-//! None implements `explain` or `compare` -- those verbs have no variant here at all, not a
-//! stub one, the same "no invented shape ahead of a real body" this crate's own [`command`]
-//! module documents. None touches `CoveragePolicy`, `BaselinePolicy`, adoption
-//! configuration, required phases, thresholds or approvals -- every other clause `WF-001`
-//! names beyond suppression. `Claim` (coverage debt / agent-required subjects) rides through
+//! None implements `compare` -- that verb has no variant here at all, not a stub one, the
+//! same "no invented shape ahead of a real body" this crate's own [`command`] module
+//! documents. None touches `CoveragePolicy`, `BaselinePolicy`, adoption configuration,
+//! required phases, thresholds or approvals -- every other clause `WF-001` names beyond
+//! suppression. `Claim` (coverage debt / agent-required subjects) rides through
 //! [`GateRunResult`] for information only and does not affect [`GateRunOutcome`], the same
 //! choice `OD-COMPLETENESS-004` already made for `nomos check`'s own exit code. `GatePlan`
 //! still does not vary by [`GateCommand::root`], `scope`, `rules` or `suppressions` -- it
@@ -86,6 +96,7 @@
 
 mod command;
 mod composition;
+mod explain;
 mod outcome;
 mod rule_selector;
 mod run;
@@ -98,6 +109,7 @@ mod tests;
 
 pub use command::GateCommand;
 pub use composition::Registered;
+pub use explain::{Explain_Gate, Explanation, FindingQuery, GateExplainResult};
 pub use outcome::{Disposition, GateOutcome, GatePlan, GateRunOutcome, GateRunResult};
 pub use rule_selector::RuleSelector;
 pub use run::Run;

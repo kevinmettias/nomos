@@ -6,31 +6,45 @@ use nomos_contracts::Finding;
 use nomos_platform::ProcessLauncher;
 use nomos_rules::SourceFile;
 use nomos_workspace::BuildVariant;
+use std::path::Path;
 
 use crate::{Disposition, GateCommand, GateRunOutcome, GateRunResult, RuleSelector, ScopeSelector, SuppressionPolicy};
 
-/// Judges `walked` exactly as `nomos check` would, and reduces the result to a
-/// [`GateRunResult`].
+/// Judges `walked` exactly as `nomos check` would.
 ///
 /// `walked` is the walk, already done and already decided by the composition root, the same
 /// reason `nomos_check_orchestration::Run` takes `sources` rather than a root to read:
 /// `None` for a root that was not a directory, `Some(sources)` otherwise -- including the
 /// empty case, so the no-source-found decision stays visible to a caller rather than
-/// collapsing into `Some` versus `None`. `command.scope` narrows `walked` before `Run` is
-/// called; a walk that becomes empty after scoping is `CheckOutcome::NoSource`, the same
-/// state an empty walk already was, because both mean "nothing was judged" to a caller.
-/// `variant` and `launcher` cross to [`nomos_check_orchestration::Run`] unchanged; see its
-/// own documentation for why each is a composition-root value this crate cannot compute for
-/// itself.
-#[must_use]
-pub fn Run_Gate<P: ProcessLauncher>(walked: Option<Vec<SourceFile>>, variant: BuildVariant, command: &GateCommand, launcher: &P) -> GateRunResult
+/// collapsing into `Some` versus `None`. `variant` and `launcher` cross to
+/// [`nomos_check_orchestration::Run`] unchanged; see its own documentation for why each is a
+/// composition-root value this crate cannot compute for itself.
+///
+/// Shared by [`Run_Gate`] (over a `command.scope`-narrowed walk) and
+/// [`crate::Explain_Gate`] (over the whole one, since explain answers a question about one
+/// named finding, not a scope-narrowed disposition) — factored out so the two do not
+/// duplicate this match.
+pub(crate) fn Judged<P: ProcessLauncher>(walked: Option<Vec<SourceFile>>, variant: BuildVariant, root: &Path, launcher: &P) -> CheckOutcome
 {
-    let outcome = match walked.map(|sources| return Scoped(sources, &command.scope))
+    return match walked
     {
         None => CheckOutcome::Unreadable,
         Some(sources) if sources.is_empty() => CheckOutcome::NoSource,
-        Some(sources) => nomos_check_orchestration::Run(&sources, variant, &command.root, launcher),
+        Some(sources) => nomos_check_orchestration::Run(&sources, variant, root, launcher),
     };
+}
+
+/// Judges `walked` exactly as `nomos check` would, and reduces the result to a
+/// [`GateRunResult`].
+///
+/// `command.scope` narrows `walked` before [`Judged`] runs; a walk that becomes empty after
+/// scoping is `CheckOutcome::NoSource`, the same state an empty walk already was, because
+/// both mean "nothing was judged" to a caller.
+#[must_use]
+pub fn Run_Gate<P: ProcessLauncher>(walked: Option<Vec<SourceFile>>, variant: BuildVariant, command: &GateCommand, launcher: &P) -> GateRunResult
+{
+    let scoped = walked.map(|sources| return Scoped(sources, &command.scope));
+    let outcome = Judged(scoped, variant, &command.root, launcher);
 
     let (blocking_findings, suppressed_findings, disposition) = Reduced(&outcome, &command.rules, &command.suppressions);
 

@@ -26,16 +26,24 @@
 //! # `--include` / `--exclude` / `--rule`, after `P13-GATE-014-SCOPE-RULE-SELECTORS`
 //!
 //! [`parsing::Parse`] reads these repeatable flags into [`GateCommand::scope`] and
-//! [`GateCommand::rules`] for both verbs; `Run_Gate` is what actually consults them for
+//! [`GateCommand::rules`] for every verb; `Run_Gate` is what actually consults them for
 //! `run`, and `nomos_gate_orchestration::Run` (`plan`) still does not, the same asymmetry
 //! `root` already had. See `nomos_gate_orchestration`'s own `lib.rs` doc for what
 //! selection here does and does not mean.
 //!
+//! # `explain`, after `P13-GATE-EXPLAIN-FIRST-INCREMENT`
+//!
+//! [`GateInvocation::Explain`] carries a [`GateCommand`] and a
+//! `nomos_gate_orchestration::FindingQuery` -- `--rule <id> --location <path>` --
+//! [`parsing::Parse`] now recognizes as a third verb. `Explain_Gate` is what actually
+//! answers it; this module still owns only the walk and the host build variant, the same
+//! division `run` already has.
+//!
 //! # What this module still does not do
 //!
-//! It does not implement `explain` or `compare`: [`parsing::Parse`] refuses either verb as
-//! usage, the same "no invented shape ahead of a real body" discipline the orchestration
-//! crate's own `command.rs` already documents.
+//! It does not implement `compare`: [`parsing::Parse`] refuses it as usage, the same "no
+//! invented shape ahead of a real body" discipline the orchestration crate's own
+//! `command.rs` already documents.
 
 mod composition;
 mod parsing;
@@ -46,12 +54,12 @@ mod sources;
 mod tests;
 
 pub use parsing::Parse;
-use report::{Render_Plan, Render_Run};
+use report::{Render_Explain, Render_Plan, Render_Run};
 
 mod exit_code;
 
 pub(crate) use exit_code::ExitCode;
-pub(crate) use nomos_gate_orchestration::GateCommand;
+pub(crate) use nomos_gate_orchestration::{FindingQuery, GateCommand};
 use nomos_platform_std::StdProcessLauncher;
 
 use crate::arguments::Named_Value;
@@ -77,6 +85,9 @@ pub enum GateInvocation
     /// Walk the tree, judge it exactly as `nomos check` would, and report a real
     /// disposition.
     Run(GateCommand),
+    /// Walk the tree, judge it, and answer what one named finding looks like and whether
+    /// it would block.
+    Explain(GateCommand, FindingQuery),
 }
 
 /// Runs the requested verb and renders what it says.
@@ -99,6 +110,18 @@ pub fn Run(invocation: &GateInvocation, stdout: &mut impl Write, stderr: &mut im
                 &StdProcessLauncher,
             );
             Render_Run(&result, stdout, stderr)
+        }
+        GateInvocation::Explain(command, query) =>
+        {
+            let walked = sources::Walked(&command.root);
+            let result = nomos_gate_orchestration::Explain_Gate(
+                walked,
+                composition::Host_Variant(),
+                command,
+                query,
+                &StdProcessLauncher,
+            );
+            Render_Explain(&result, stdout, stderr)
         }
     };
 }

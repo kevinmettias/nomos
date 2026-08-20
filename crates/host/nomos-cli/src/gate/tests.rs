@@ -99,7 +99,7 @@ fn Root_Of(invocation: &GateInvocation) -> &PathBuf
 {
     return match invocation
     {
-        GateInvocation::Plan(command) | GateInvocation::Run(command) => &command.root,
+        GateInvocation::Plan(command) | GateInvocation::Run(command) | GateInvocation::Explain(command, _) => &command.root,
     };
 }
 
@@ -139,14 +139,17 @@ fn Test_Run_Should_Parse()
     assert_eq!(Root_Of(&invocation), &PathBuf::from("."));
 }
 
-/// `explain` and `compare` are named by `ARC-ROADMAP-001` but have no real implementation
-/// yet, so this must refuse rather than quietly running `plan` instead.
+/// `compare` is named by `ARC-ROADMAP-001` but has no real implementation yet, so this
+/// must refuse rather than quietly running `plan` instead. `explain` moved out of this
+/// test once it gained a real body (`P13-GATE-EXPLAIN-FIRST-INCREMENT`) -- it is now
+/// covered by its own parsing tests instead, and would pass this one for the wrong reason
+/// (a missing `--rule`, not an unrecognized verb) if it stayed.
 #[test]
 fn Test_An_Unimplemented_Verb_Should_Refuse()
 {
-    let error = Parse(&["explain".to_owned()]).expect_err("must refuse");
+    let error = Parse(&["compare".to_owned()]).expect_err("must refuse");
 
-    assert!(error.contains("explain"), "{error}");
+    assert!(error.contains("compare"), "{error}");
     assert!(error.contains("usage"), "{error}");
 }
 
@@ -298,4 +301,72 @@ fn Test_A_Run_Scoped_To_Nothing_Should_Not_Report_Ok()
     let code = Run(&invocation, &mut stdout, &mut stderr);
 
     assert_eq!(code, ExitCode::Vacuous, "a scope matching nothing must not report Ok");
+}
+
+/// `explain` is a real verb now -- it must parse, and carry the rule/location it named.
+#[test]
+fn Test_Explain_Should_Parse_With_Rule_And_Location()
+{
+    let arguments = vec![
+        "explain".to_owned(),
+        "--rule".to_owned(),
+        "naming-convention".to_owned(),
+        "--location".to_owned(),
+        "a.rs".to_owned(),
+    ];
+    let invocation = Parse(&arguments).expect("explain with --rule and --location is valid");
+
+    let GateInvocation::Explain(_, query) = invocation
+    else
+    {
+        panic!("explain must parse as Explain");
+    };
+    assert_eq!(query.rule, nomos_contracts::RuleId::New("naming-convention"));
+    assert_eq!(query.location, "a.rs");
+}
+
+/// `explain` without `--rule` must not silently answer about no rule at all.
+#[test]
+fn Test_Explain_Should_Require_Rule()
+{
+    let arguments = vec!["explain".to_owned(), "--location".to_owned(), "a.rs".to_owned()];
+
+    let error = Parse(&arguments).expect_err("must refuse");
+
+    assert!(error.contains("--rule"), "{error}");
+}
+
+/// `explain` without `--location` must not silently answer about no location at all.
+#[test]
+fn Test_Explain_Should_Require_Location()
+{
+    let arguments = vec!["explain".to_owned(), "--rule".to_owned(), "naming-convention".to_owned()];
+
+    let error = Parse(&arguments).expect_err("must refuse");
+
+    assert!(error.contains("--location"), "{error}");
+}
+
+/// A real `explain` over this workspace's own clean tree, for a query naming a finding
+/// that does not exist, answers `not found` and exits clean -- end to end, the same "real
+/// run over the real tree" discipline `run`'s and `plan`'s own tests already use.
+#[test]
+fn Test_A_Real_Explain_Should_Report_Not_Found_Over_A_Clean_Tree()
+{
+    let invocation = GateInvocation::Explain(
+        GateCommand { root: PathBuf::from("."), ..Default::default() },
+        nomos_gate_orchestration::FindingQuery {
+            rule: nomos_contracts::RuleId::New("naming-convention"),
+            location: "does/not/exist.rs".to_owned(),
+        },
+    );
+    let mut stdout = Vec::new();
+    let mut stderr = Vec::new();
+
+    let code = Run(&invocation, &mut stdout, &mut stderr);
+    let rendered = String::from_utf8_lossy(&stdout).into_owned();
+
+    assert_eq!(code, ExitCode::Ok, "{rendered}");
+    assert!(rendered.contains("not found"), "{rendered}");
+    assert!(String::from_utf8_lossy(&stderr).is_empty());
 }

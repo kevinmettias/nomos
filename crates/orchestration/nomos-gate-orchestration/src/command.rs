@@ -1,17 +1,23 @@
 //! What a `nomos gate` verb was asked for, independent of how it was spelled.
 //!
 //! `ARC-ROADMAP-001` names four eventual verbs -- `plan`, `run`, `explain`, `compare` -- and
-//! `Plan` and `Run_Gate` both have real computations behind them now, but this stays a
-//! struct rather than an enum: the two share every field, and inventing argument shapes for
-//! `explain`/`compare` now, before either has a real implementation to fit, would be exactly
-//! the kind of premature surface this workspace has repeatedly declined to build ahead of a
-//! second real case (`OD-PACKAGE-006`, `OD-RULES-005`, `OD-RULES-006`) -- so they are simply
-//! absent, not stubbed, until an increment gives one of them a real body.
+//! `Plan`, `Run_Gate` and `Explain_Gate` all have real computations behind them now.
+//! `explain` needs one more input `plan`/`run` do not, `crate::FindingQuery`, which travels
+//! as `Explain_Gate`'s own separate parameter rather than a field here: every verb shares
+//! `GateCommand`, `explain` alone also needs to name which finding, and folding that into
+//! this struct would make every other verb carry a field it never reads, the same
+//! `root`/`scope`/`rules`/`suppressions` asymmetry this struct already has for `Plan`. This
+//! stays a struct rather than an enum for the same reason it always has: the verbs share
+//! every field of it, so there is nothing for an enum to gain. `compare` is the one verb
+//! left with no real implementation -- inventing an argument shape for it now would be
+//! exactly the kind of premature surface this workspace has repeatedly declined to build
+//! ahead of a second real case (`OD-PACKAGE-006`, `OD-RULES-005`, `OD-RULES-006`) -- so it
+//! is simply absent, not stubbed, until an increment gives it a real body.
 
 use crate::{RuleSelector, ScopeSelector, SuppressionPolicy};
 use std::path::PathBuf;
 
-/// What to plan or run a gate over.
+/// What to plan, run or explain a gate over.
 #[derive(Clone, Debug, Default, PartialEq, Eq)]
 pub struct GateCommand
 {
