@@ -6,9 +6,13 @@
 //! at scale and is therefore in [`crate::scale`].
 
 use crate::corpus::{Over_The_Precision_Corpus, Surface_Of};
+use nomos_cap_syntax as syntax;
+use nomos_capability::Requirement;
 use nomos_contracts::{
     Applicability, Assurance, CapabilityId, FactVariant, Guarantee, IncrementalGranularity
 };
+use nomos_integration_tests::Slice;
+use nomos_lang_rust as rust;
 
 /// A hole in the corpus stays visible.
 ///
@@ -72,12 +76,19 @@ fn Test_The_Precision_Corpus_Should_Have_The_Shape_Its_Readme_Claims()
 #[test]
 fn Test_An_Unmeetable_Requirement_Should_Report_Coverage_Debt()
 {
-    use nomos_cap_syntax as syntax;
-    use nomos_capability::Requirement;
-    use nomos_integration_tests::Slice;
-    use nomos_lang_rust as rust;
-
     let slice = Slice::Composed();
+
+    An_Unreachable_Guarantee_Resolves_To_Coverage_Debt(&slice);
+    // The positive control. If resolution refused everything the assertion above would
+    // pass over a composition that serves nobody.
+    A_Guarantee_The_Provider_Declares_Still_Resolves(&slice);
+}
+
+/// A requirement no offer reaches resolves to `MissingCapability` — coverage debt — rather
+/// than to `NotApplicable`, which would be a statement about the subject that only a rule
+/// may make.
+fn An_Unreachable_Guarantee_Resolves_To_Coverage_Debt(slice: &Slice)
+{
     let guarantee = Guarantee::New(
         FactVariant::SemanticallyResolved,
         Assurance::Sound,
@@ -98,8 +109,12 @@ fn Test_An_Unmeetable_Requirement_Should_Report_Coverage_Debt()
         "nothing offers this, which is coverage debt. NotApplicable would say the subject \
          does not bind the rule, and the registry is in no position to say that"
     );
-    // The positive control. If resolution refused everything the assertion above would
-    // pass over a composition that serves nobody.
+}
+
+/// The positive control. If resolution refused everything the assertion above would pass
+/// over a composition that serves nobody.
+fn A_Guarantee_The_Provider_Declares_Still_Resolves(slice: &Slice)
+{
     let servable = Requirement::New(
         CapabilityId::New(syntax::CAPABILITY),
         syntax::CONTRACT_VERSION,

@@ -45,6 +45,22 @@ fn Root_Suite_Uid(store: &SpecificationStore) -> i64
         .expect("queries");
 }
 
+/// Names `depends_on`, admitting only `decision` at either end, at a cardinality of 4.
+fn Put_Depends_On_Relation_Type(store: &mut SpecificationStore)
+{
+    store
+        .Put_Relation_Type(
+            "depends_on",
+            "seed",
+            nomos_spec_store::RelationConstraint {
+                domain: &["decision"],
+                range: &["decision"],
+                max_per_node: 4,
+            },
+        )
+        .expect("names the type");
+}
+
 /// The two plans, and whose lineage each one is.
 const PLANS: &[(&str, Option<Sibling>)] = &[
     ("nomos full game plan.txt", None),
@@ -63,28 +79,45 @@ fn Ecosystem() -> Option<SpecificationStore>
 {
     let archives = Archives()?;
     let mut store = SpecificationStore::In_Memory().expect("opens");
+    let root = Put_Root_Suite(&mut store);
 
-    let root = store
+    Ingest_Every_Sibling(&mut store, &archives);
+    Ingest_Every_Plan(&mut store, &archives, root);
+
+    return Some(store);
+}
+
+/// This repository's own root suite.
+fn Put_Root_Suite(store: &mut SpecificationStore) -> i64
+{
+    return store
         .Put_Suite(ROOT_SUITE, "The Nomos specification", SuiteAuthority::Root)
         .expect("records the root suite");
+}
 
+/// Every sibling's suite, ingested from its own archive.
+fn Ingest_Every_Sibling(store: &mut SpecificationStore, archives: &Path)
+{
     for sibling in Sibling::All()
     {
-        Ingest_One_Sibling(&mut store, &archives, *sibling);
+        Ingest_One_Sibling(store, archives, *sibling);
     }
+}
+
+/// Both game plans, each under the suite its lineage belongs to.
+fn Ingest_Every_Plan(store: &mut SpecificationStore, archives: &Path, root: i64)
+{
     for (name, owner) in PLANS
     {
-        let suite = Suite_For(&mut store, root, *owner);
-        let text = Plan_Text(&archives, name);
+        let suite = Suite_For(store, root, *owner);
+        let text = Plan_Text(archives, name);
 
-        Ingest_Game_Plan(&mut store, suite, name, &text)
+        Ingest_Game_Plan(store, suite, name, &text)
             // I8 asserts only "the plans did not land" over a block count, and there are two
             // plans under two different authorities. Naming this one and the ingest's own error
             // is the difference between that count and a repair.
             .unwrap_or_else(|error| panic!("{name}: {error}"));
     }
-
-    return Some(store);
 }
 
 /// One sibling suite, ingested and checked for the two ways it could arrive empty.
@@ -269,9 +302,7 @@ fn Test_A_Cross_Suite_Relation_Should_Be_An_Ordinary_Row()
     // than defaulted, so this test's own ad hoc type now declares them too. `D-130` and the
     // sibling record it depends on are both decisions, and one dependency per test is all
     // this fixture ever writes.
-    store
-        .Put_Relation_Type("depends_on", "seed", &["decision"], &["decision"], 4)
-        .expect("names the type");
+    Put_Depends_On_Relation_Type(&mut store);
     store
         .Upsert_Node(NodeRow {
             node_id: "D-130",

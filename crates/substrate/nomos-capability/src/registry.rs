@@ -295,10 +295,7 @@ impl Registry
         required: &ProviderId,
     ) -> RequiredResolution
     {
-        let scoped = Requirement {
-            preferred: Some(required.clone()),
-            ..requirement.clone()
-        };
+        let scoped = Scoped_To(requirement, required);
 
         let selection = match self.Selected(&scoped)
         {
@@ -309,18 +306,7 @@ impl Registry
             },
         };
 
-        if &selection.chosen.provider == required
-        {
-            return RequiredResolution::Satisfied { selection };
-        }
-
-        return RequiredResolution::Unsatisfied {
-            capability: requirement.capability.clone(),
-            reason: RequiredUnmet::AnsweredByOther {
-                required: required.clone(),
-                answered: selection.chosen.provider.clone(),
-            },
-        };
+        return Settle_Required(requirement, required, selection);
     }
 
     /// Which offer answers, or which of the four things was missing.
@@ -414,6 +400,35 @@ fn Honoured(requirement: &Requirement, selection: &Selection) -> Applicability
     }
 
     return Applicability::SupportedWithFallback;
+}
+
+/// `requirement`, with its preference pinned to `required` — `Resolve_Requiring`'s way of
+/// reusing `Selected`'s own ranking rather than searching a second time.
+fn Scoped_To(requirement: &Requirement, required: &ProviderId) -> Requirement
+{
+    return Requirement {
+        preferred: Some(required.clone()),
+        ..requirement.clone()
+    };
+}
+
+/// Whether `selection` answered from `required` itself, or from somebody else — the
+/// distinction `Resolve_Requiring` exists to draw once `Selected` has already ranked the
+/// offers.
+fn Settle_Required(requirement: &Requirement, required: &ProviderId, selection: Selection) -> RequiredResolution
+{
+    if &selection.chosen.provider == required
+    {
+        return RequiredResolution::Satisfied { selection };
+    }
+
+    return RequiredResolution::Unsatisfied {
+        capability: requirement.capability.clone(),
+        reason: RequiredUnmet::AnsweredByOther {
+            required: required.clone(),
+            answered: selection.chosen.provider.clone(),
+        },
+    };
 }
 
 #[cfg(test)]
@@ -576,8 +591,10 @@ mod tests
     /// than" not "only". A requirement the registry cannot honour is refused, because the
     /// caller said "only" — `Resolve` and `Resolve_Requiring` must disagree here or the
     /// second strength does not exist.
-    #[test]
-    fn Test_A_Required_Naming_Should_Refuse_What_A_Preferred_Naming_Falls_Back_To()
+    /// A registry that has declared `Contract()` and can answer it via `Offer()` — but not
+    /// via the `absent` provider these tests ask for and never offer. Returns the registry,
+    /// `absent`, and who actually answers, since every assertion below needs at least one.
+    fn Registry_With_One_Offer() -> (Registry, ProviderId, ProviderId)
     {
         let mut registry = Registry::New();
         registry.Declare(Contract()).expect("declared once");
@@ -586,9 +603,11 @@ mod tests
         let absent = ProviderId::New("nomos.test.absent");
         let answering = Offer().provider;
 
-        let via_preference = registry.Resolve(&Need().Preferring(absent.clone()));
-        let via_requirement = registry.Resolve_Requiring(&Need(), &absent);
+        return (registry, absent, answering);
+    }
 
+    fn Assert_Preference_Falls_Back(via_preference: &Resolution)
+    {
         assert!(
             matches!(
                 via_preference,
@@ -599,6 +618,10 @@ mod tests
             ),
             "an unavailable preference is still answered by somebody else: {via_preference:?}"
         );
+    }
+
+    fn Assert_Requirement_Refuses(via_requirement: RequiredResolution, required: ProviderId, answered: ProviderId)
+    {
         assert!(
             matches!(via_requirement, RequiredResolution::Unsatisfied { .. }),
             "an unavailable requirement must not be answered by somebody else: \
@@ -613,11 +636,28 @@ mod tests
 
         assert_eq!(
             reason,
-            RequiredUnmet::AnsweredByOther {
-                required: absent,
-                answered: answering,
-            },
+            RequiredUnmet::AnsweredByOther { required, answered },
             "the refusal must name both who was required and who would have answered"
         );
+    }
+
+    /// The same registry, the same unavailable provider, and two different resolutions —
+    /// not merely two applicabilities on the same `Satisfied`.
+    ///
+    /// `OD-CAPABILITY-005` is what draws this line: a preference the registry cannot honour
+    /// is still answered, because the guarantee is still met and the caller said "rather
+    /// than" not "only". A requirement the registry cannot honour is refused, because the
+    /// caller said "only" — `Resolve` and `Resolve_Requiring` must disagree here or the
+    /// second strength does not exist.
+    #[test]
+    fn Test_A_Required_Naming_Should_Refuse_What_A_Preferred_Naming_Falls_Back_To()
+    {
+        let (registry, absent, answering) = Registry_With_One_Offer();
+
+        let via_preference = registry.Resolve(&Need().Preferring(absent.clone()));
+        let via_requirement = registry.Resolve_Requiring(&Need(), &absent);
+
+        Assert_Preference_Falls_Back(&via_preference);
+        Assert_Requirement_Refuses(via_requirement, absent, answering);
     }
 }

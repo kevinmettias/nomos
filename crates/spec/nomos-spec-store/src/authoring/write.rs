@@ -35,32 +35,48 @@ pub(crate) fn Write_Record(
     record: &Record,
 ) -> Result<RecordWrite, StoreError>
 {
-    use crate::NodeRow;
-
     let Authored { path, revision, markdown } = authored;
     let front_matter = &record.front_matter;
-    let node_uid = Write_Node(connection, NodeRow {
+
+    let node_uid = Write_Record_Node(connection, front_matter)?;
+    let document_uid = Write_Source_Document(connection, path, revision, markdown)?;
+    let (blocks, headings) = Write_Record_Content(connection, document_uid, node_uid, record)?;
+    let relations = Write_Declared_Relations(connection, document_uid, &front_matter.relations)?;
+
+    return Ok(RecordWrite { node_uid, document_uid, blocks, headings, relations });
+}
+
+/// The record's own node: its identifier, kind, authority and title.
+fn Write_Record_Node(connection: &Connection, front_matter: &RecordFrontMatter) -> Result<i64, StoreError>
+{
+    use crate::NodeRow;
+
+    return Write_Node(connection, NodeRow {
         node_id: &front_matter.id,
         kind: &front_matter.kind,
         authority: &front_matter.authority,
         representation: "document",
         title: &front_matter.title,
-    })?;
-    let document_uid = Write_Source_Document(connection, path, revision, markdown)?;
+    });
+}
+
+/// The record's body: its blocks, its headings, their dispositions and its front matter —
+/// everything written once the node and the document both have surrogates. Returns the
+/// block count and the heading count.
+fn Write_Record_Content(
+    connection: &Connection,
+    document_uid: i64,
+    node_uid: i64,
+    record: &Record,
+) -> Result<(u32, u32), StoreError>
+{
     let blocks = Segment(&record.body);
     Write_Source_Blocks(connection, document_uid, &blocks)?;
     let headings = Write_Headings(connection, document_uid, node_uid, &blocks)?;
     Dispose_Blocks(connection, document_uid, node_uid, &blocks)?;
-    Write_Front_Matter(connection, document_uid, node_uid, front_matter)?;
-    let relations = Write_Declared_Relations(connection, document_uid, &front_matter.relations)?;
+    Write_Front_Matter(connection, document_uid, node_uid, &record.front_matter)?;
 
-    return Ok(RecordWrite {
-        node_uid,
-        document_uid,
-        blocks: u32::try_from(blocks.len()).unwrap_or(u32::MAX),
-        headings,
-        relations,
-    });
+    return Ok((u32::try_from(blocks.len()).unwrap_or(u32::MAX), headings));
 }
 
 /// Writes each heading and points it at the record it belongs to.

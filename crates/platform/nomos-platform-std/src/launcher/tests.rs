@@ -338,11 +338,35 @@ fn Test_A_Kill_Should_Reach_The_Whole_Process_Tree_Not_Only_The_Direct_Child()
         return;
     }
 
+    let marker = Fresh_Marker_Path("tree");
+    let nested = Nested_Ping_Command(&marker);
+
+    let output = StdProcessLauncher.Run(&nested).unwrap();
+    Assert_Killed_Before_Completion(&output);
+
+    let (right_after_kill, settled) = Bytes_Written_Before_And_After_Settling(&marker);
+    Cleared(&marker);
+
+    Assert_Marker_Stopped_Growing(right_after_kill, settled);
+}
+
+/// A fresh path for a marker file, with anything left over from a previous run cleared
+/// first so a stale marker cannot be mistaken for one this run wrote.
+fn Fresh_Marker_Path(name: &str) -> PathBuf
+{
     let mut marker = std::env::temp_dir();
-    marker.push(format!("nomos-launcher-tree-{}.txt", std::process::id()));
+    marker.push(format!("nomos-launcher-{name}-{}.txt", std::process::id()));
     let _ = std::fs::remove_file(&marker);
 
-    let nested = Command::New(
+    return marker;
+}
+
+/// A command whose direct child is `cmd`, and whose actual work is `ping` running two
+/// generations down — reproducing the shape `cargo test` and its compiled test binary
+/// take, at a short enough bound that the test does not have to wait it out.
+fn Nested_Ping_Command(marker: &Path) -> Command
+{
+    return Command::New(
         vec![
             "cmd".to_owned(),
             "/C".to_owned(),
@@ -350,19 +374,34 @@ fn Test_A_Kill_Should_Reach_The_Whole_Process_Tree_Not_Only_The_Direct_Child()
         ],
         Duration::from_secs(2),
     );
+}
 
-    let output = StdProcessLauncher.Run(&nested).unwrap();
+/// Verifies the wait ended because the launcher's bound expired, not because `ping`
+/// itself finished — the distinction that makes the marker file's later behavior mean
+/// anything.
+fn Assert_Killed_Before_Completion(output: &ProcessOutput)
+{
     assert!(
         !output.outcome.Produced_A_Verdict(),
         "the wait must have ended at a bound, not at the program's own completion"
     );
+}
 
-    let right_after_kill = Bytes_Written(&marker);
+/// How many bytes the marker holds right after the launcher returns, and again after
+/// giving anything still running a settling window to keep writing.
+fn Bytes_Written_Before_And_After_Settling(marker: &Path) -> (u64, u64)
+{
+    let right_after_kill = Bytes_Written(marker);
     std::thread::sleep(Duration::from_millis(1_500));
-    let settled = Bytes_Written(&marker);
+    let settled = Bytes_Written(marker);
 
-    Cleared(&marker);
+    return (right_after_kill, settled);
+}
 
+/// Verifies the marker stopped growing the moment the launcher returned — proof that
+/// `ping`, and not only the `cmd` above it, was actually killed.
+fn Assert_Marker_Stopped_Growing(right_after_kill: u64, settled: u64)
+{
     assert_eq!(
         right_after_kill, settled,
         "the marker file kept growing after the launcher returned, so `ping` was still \

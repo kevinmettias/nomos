@@ -44,21 +44,39 @@ fn Test_The_Three_Instances_Should_Have_Failed_This_Check()
 /// counted hole.
 fn Assert_It_Would_Have_Failed(name: &'static str, mirror: &'static str)
 {
-    let row = UNIVERSES
+    let row = Universe_Row(name);
+
+    Assert_Currently_Mirrored_By(row, name, mirror);
+    Assert_Removing_Its_Mirror_Falls_In_The_Hole(name);
+}
+
+/// The universe classified under `name`, or a panic -- the three names are the recorded
+/// instances of P9-ONE-DIRECTION, and one of them no longer classified in UNIVERSES means the
+/// reconstruction below cannot be performed at all, and skipping it would leave this control
+/// claiming three instances and checking two.
+fn Universe_Row(name: &'static str) -> &'static Universe
+{
+    return UNIVERSES
         .iter()
         .find(|universe| return universe.name == name)
-        // The three names are the recorded instances of P9-ONE-DIRECTION. One of them no
-        // longer classified in UNIVERSES means the reconstruction below cannot be performed
-        // at all, and skipping it would leave this control claiming three and checking two.
         .unwrap_or_else(|| panic!("{name} must be classified"));
+}
 
+/// `row` must be mirrored by `mirror` today, or the reconstruction that follows has nothing
+/// to take away.
+fn Assert_Currently_Mirrored_By(row: &Universe, name: &str, mirror: &'static str)
+{
     assert_eq!(
         row.standing,
         Standing::Mirrored { by: mirror },
         "{name} is expected to be mirrored by {mirror} today"
     );
+}
 
-    // As originally written, before that mirror existed.
+/// As originally written, before `name`'s mirror existed -- removing it must leave the count
+/// one above UNMIRRORED_TOTAL, which is what would have failed.
+fn Assert_Removing_Its_Mirror_Falls_In_The_Hole(name: &str)
+{
     let before = Unmirrored_Names_Without(name);
 
     assert_eq!(

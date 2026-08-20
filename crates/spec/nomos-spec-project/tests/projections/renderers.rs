@@ -98,22 +98,30 @@ fn Test_The_Governing_Records_Should_Project_As_A_Document_Suite()
 
     for id in ["domain-specification", "html-site"]
     {
-        let profile = Profile_Named(id);
-        // Unreachable while both profiles project the governing records. The id has to be in
-        // the message because the loop builds two of them and `second` below is a plain
-        // `expect`: this is the only arm that can say which profile refused its first build.
-        let first = Build(&store, &profile).unwrap_or_else(|error| panic!("{id}: {error}"));
-        let second = Build(&store, &profile).expect("rebuilds");
-
-        assert_eq!(first.body, second.body, "{id} does not rebuild to itself");
-        assert!(
-            first.body.contains("The specification is a database"),
-            "{id} projected none of the records that govern it"
-        );
-        assert!(
-            first.stamp.inputs.len() > 100,
-            "{id} consumed {} inputs from the governing records",
-            first.stamp.inputs.len()
-        );
+        Assert_Profile_Projects_The_Governing_Records(&store, id);
     }
+}
+
+/// One profile, built twice and checked: it rebuilds to itself, it carries the governing
+/// records' own text, and it consumed enough of them for the count to be more than a
+/// coincidence.
+fn Assert_Profile_Projects_The_Governing_Records(store: &nomos_spec_store::SpecificationStore, id: &str)
+{
+    let profile = Profile_Named(id);
+    // Unreachable while both profiles project the governing records. The id has to be in
+    // the message because the caller builds two of them and `second` below is a plain
+    // `expect`: this is the only arm that can say which profile refused its first build.
+    let first = Build(store, &profile).unwrap_or_else(|error| panic!("{id}: {error}"));
+    let second = Build(store, &profile).expect("rebuilds");
+
+    assert_eq!(first.body, second.body, "{id} does not rebuild to itself");
+    assert!(
+        first.body.contains("The specification is a database"),
+        "{id} projected none of the records that govern it"
+    );
+    assert!(
+        first.stamp.inputs.len() > 100,
+        "{id} consumed {} inputs from the governing records",
+        first.stamp.inputs.len()
+    );
 }

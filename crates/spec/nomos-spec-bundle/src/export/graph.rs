@@ -107,13 +107,25 @@ pub(super) fn Node_Histories(connection: &Connection, records: &mut Vec<Record>)
 
 pub(super) fn Relation_Types(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
 {
-    use crate::RelationType;
+    for row in Raw_Relation_Type_Rows(connection)?
+    {
+        Push_Relation_Type(records, row)?;
+    }
 
+    return Ok(());
+}
+
+/// A relation type row, still carrying its domain and range as undecoded JSON.
+type RawRelationTypeRow = (String, String, Option<String>, String, String, u32);
+
+/// Every relation type row, in the order named.
+fn Raw_Relation_Type_Rows(connection: &Connection) -> Result<Vec<RawRelationTypeRow>, BundleError>
+{
     let mut statement = connection.prepare(
         "SELECT name, tier, inverse_of, domain_kinds_json, range_kinds_json, max_per_node
          FROM relation_types ORDER BY name",
     )?;
-    let rows = statement
+    return Ok(statement
         .query_map([], |row| {
             let mut columns = Columns::Of(row);
             let name = columns.Next()?;
@@ -125,19 +137,23 @@ pub(super) fn Relation_Types(connection: &Connection, records: &mut Vec<Record>)
 
             return Ok((name, tier, inverse_of, domain_json, range_json, max_per_node));
         })?
-        .collect::<Result<Vec<_>, _>>()?;
+        .collect::<Result<Vec<_>, _>>()?);
+}
 
-    for (name, tier, inverse_of, domain_json, range_json, max_per_node) in rows
-    {
-        records.push(Record::RelationType(RelationType {
-            name,
-            tier,
-            inverse_of,
-            domain: Decoded(&domain_json)?,
-            range: Decoded(&range_json)?,
-            max_per_node,
-        }));
-    }
+/// One relation type row, decoded and appended.
+fn Push_Relation_Type(records: &mut Vec<Record>, row: RawRelationTypeRow) -> Result<(), BundleError>
+{
+    use crate::RelationType;
+    let (name, tier, inverse_of, domain_json, range_json, max_per_node) = row;
+
+    records.push(Record::RelationType(RelationType {
+        name,
+        tier,
+        inverse_of,
+        domain: Decoded(&domain_json)?,
+        range: Decoded(&range_json)?,
+        max_per_node,
+    }));
 
     return Ok(());
 }
@@ -238,6 +254,15 @@ pub(super) fn Lineages(connection: &Connection, records: &mut Vec<Record>) -> Re
 
 pub(super) fn Omissions(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
 {
+    let rows = Omission_Rows(connection)?;
+
+    records.extend(rows.into_iter().map(Record::Omission));
+    return Ok(());
+}
+
+/// Every omission row, in the order named.
+fn Omission_Rows(connection: &Connection) -> Result<Vec<crate::Omission>, BundleError>
+{
     use crate::Omission;
 
     let mut statement = connection.prepare(
@@ -253,7 +278,7 @@ pub(super) fn Omissions(connection: &Connection, records: &mut Vec<Record>) -> R
                   coalesce(hd.path, ''), coalesce(hd.revision, ''), coalesce(h.ordinal, -1),
                   o.reason, o.justification, o.decision_record",
     )?;
-    let rows = statement
+    return Ok(statement
         .query_map([], |row| {
             let mut columns = Columns::Of(row);
             return Ok(Omission {
@@ -264,10 +289,7 @@ pub(super) fn Omissions(connection: &Connection, records: &mut Vec<Record>) -> R
                 decision_record: columns.Next()?,
             });
         })?
-        .collect::<Result<Vec<_>, _>>()?;
-
-    records.extend(rows.into_iter().map(Record::Omission));
-    return Ok(());
+        .collect::<Result<Vec<_>, _>>()?);
 }
 
 /// The four columns a table-row reference spans, taken in the order a query names them.
@@ -348,6 +370,15 @@ fn Read_Front_Matter(row: &rusqlite::Row<'_>) -> rusqlite::Result<(RecordFrontMa
 /// The declared relations, in the order the record declared them.
 pub(super) fn Record_Relations(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
 {
+    let rows = Record_Relation_Rows(connection)?;
+
+    records.extend(rows.into_iter().map(Record::RecordRelation));
+    return Ok(());
+}
+
+/// Every declared relation row, in the order the record declared them.
+fn Record_Relation_Rows(connection: &Connection) -> Result<Vec<crate::RecordRelation>, BundleError>
+{
     use crate::RecordRelation;
 
     let mut statement = connection.prepare(
@@ -356,7 +387,7 @@ pub(super) fn Record_Relations(connection: &Connection, records: &mut Vec<Record
          JOIN source_documents d ON d.uid = r.document_uid
          ORDER BY d.path, d.revision, r.ordinal",
     )?;
-    let rows = statement
+    return Ok(statement
         .query_map([], |row| {
             let mut columns = Columns::Of(row);
             return Ok(RecordRelation {
@@ -369,8 +400,5 @@ pub(super) fn Record_Relations(connection: &Connection, records: &mut Vec<Record
                 relation: columns.Next()?,
             });
         })?
-        .collect::<Result<Vec<_>, _>>()?;
-
-    records.extend(rows.into_iter().map(Record::RecordRelation));
-    return Ok(());
+        .collect::<Result<Vec<_>, _>>()?);
 }

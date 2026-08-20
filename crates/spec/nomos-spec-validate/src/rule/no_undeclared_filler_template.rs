@@ -81,19 +81,8 @@ impl Rule for NoUndeclaredFillerTemplate
 /// by hand instead of reusing it.
 fn Undeclared_Templates(store: &SpecificationStore) -> Result<Vec<Violation>, String>
 {
-    let connection = store.Connection();
-    let mut statement = connection.prepare(TEMPLATES).map_err(|error| return error.to_string())?;
-    let rows = statement
-        .query_map([SHARED_BY], |row| {
-            let sections: u32 = row.get(0)?;
-            let documents: u32 = row.get(1)?;
-            let sample: String = row.get(2)?;
-            return Ok((sections, documents, sample));
-        })
-        .map_err(|error| return error.to_string())?;
-
     let mut violations = Vec::new();
-    for (sections, documents, sample) in rows.filter_map(Result::ok)
+    for (sections, documents, sample) in Template_Rows(store)?
     {
         if Is_Filler(&sample).is_some()
         {
@@ -107,6 +96,24 @@ fn Undeclared_Templates(store: &SpecificationStore) -> Result<Vec<Violation>, St
     }
 
     return Ok(violations);
+}
+
+/// Every group of prose blocks sharing a body across `SHARED_BY` or more sections: the
+/// section count, the document count, and one sample of the shared text.
+fn Template_Rows(store: &SpecificationStore) -> Result<Vec<(u32, u32, String)>, String>
+{
+    let connection = store.Connection();
+    let mut statement = connection.prepare(TEMPLATES).map_err(|error| return error.to_string())?;
+    let rows = statement
+        .query_map([SHARED_BY], |row| {
+            let sections: u32 = row.get(0)?;
+            let documents: u32 = row.get(1)?;
+            let sample: String = row.get(2)?;
+            return Ok((sections, documents, sample));
+        })
+        .map_err(|error| return error.to_string())?;
+
+    return Ok(rows.filter_map(Result::ok).collect());
 }
 
 /// The first 80 characters of a template's shared text, so a violation names what repeats

@@ -146,16 +146,38 @@ fn Recompute_Incrementally(
 ) -> (MaterializedFact, MaterializedFact)
 {
     let mut store = MemoryFactStore::New();
-    let gen0 = GenerationId::INITIAL;
     let dependency_edges: Vec<Dependency> =
         if record_dependency { vec![Downstream_Dependency()] } else { Vec::new() };
 
-    store.Materialize(Upstream_Fact(initial_upstream, gen0), &[]).expect("materializes upstream");
-    store
-        .Materialize(Downstream_Fact(initial_upstream, gen0), &dependency_edges)
-        .expect("materializes downstream");
+    Materialize_Pair(&mut store, initial_upstream, GenerationId::INITIAL, &dependency_edges);
 
-    let gen1 = gen0.Next();
+    let gen1 = GenerationId::INITIAL.Next();
+    let named = Invalidated_Names(&mut store, gen1);
+    Rematerialize_Named(&mut store, &named, changed_upstream, &dependency_edges);
+
+    return Current_After_Recompute(&store, gen1);
+}
+
+/// Materializes both fixture facts at `generation`, from `upstream_payload`, with
+/// `dependency_edges` recorded against the downstream fact.
+fn Materialize_Pair(
+    store: &mut MemoryFactStore,
+    upstream_payload: &[u8],
+    generation: GenerationId,
+    dependency_edges: &[Dependency],
+)
+{
+    let upstream_fact = Upstream_Fact(upstream_payload, generation);
+    store.Materialize(upstream_fact, &[]).expect("materializes upstream");
+
+    let downstream_fact = Downstream_Fact(upstream_payload, generation);
+    store.Materialize(downstream_fact, dependency_edges).expect("materializes downstream");
+}
+
+/// Invalidates the upstream subject at `gen1` and returns every fact key the report named,
+/// direct and dependent together, in the order a real caller would rematerialize them.
+fn Invalidated_Names(store: &mut MemoryFactStore, gen1: GenerationId) -> Vec<FactKey>
+{
     let report = store.Invalidate(
         &GenerationCause::SubjectChanged {
             subject: Upstream_Key().subject,
@@ -167,20 +189,38 @@ fn Recompute_Incrementally(
     let mut named: Vec<FactKey> = report.direct.clone();
     named.extend(report.dependent.clone());
 
-    for key in &named
+    return named;
+}
+
+/// Rematerializes whichever of `named`'s keys this fixture recognizes, at
+/// `GenerationId::INITIAL.Next()`, from `changed_upstream`.
+fn Rematerialize_Named(
+    store: &mut MemoryFactStore,
+    named: &[FactKey],
+    changed_upstream: &[u8],
+    dependency_edges: &[Dependency],
+)
+{
+    let gen1 = GenerationId::INITIAL.Next();
+
+    for key in named
     {
         if *key == Upstream_Key()
         {
-            store.Materialize(Upstream_Fact(changed_upstream, gen1), &[]).expect("rematerializes upstream");
+            let fact = Upstream_Fact(changed_upstream, gen1);
+            store.Materialize(fact, &[]).expect("rematerializes upstream");
         }
         else if *key == Downstream_Key()
         {
-            store
-                .Materialize(Downstream_Fact(changed_upstream, gen1), &dependency_edges)
-                .expect("rematerializes downstream");
+            let fact = Downstream_Fact(changed_upstream, gen1);
+            store.Materialize(fact, dependency_edges).expect("rematerializes downstream");
         }
     }
+}
 
+/// Reads both fixture facts back at `gen1`, the state the incremental path above ends at.
+fn Current_After_Recompute(store: &MemoryFactStore, gen1: GenerationId) -> (MaterializedFact, MaterializedFact)
+{
     let upstream_now = store
         .Current(&Upstream_Key().At(gen1), gen1)
         .expect("upstream must be readable after the incremental recompute");
@@ -199,11 +239,7 @@ fn Recompute_Incrementally(
 fn Recompute_From_Empty(upstream_payload: &[u8], generation: GenerationId) -> (MaterializedFact, MaterializedFact)
 {
     let mut store = MemoryFactStore::New();
-
-    store.Materialize(Upstream_Fact(upstream_payload, generation), &[]).expect("materializes upstream");
-    store
-        .Materialize(Downstream_Fact(upstream_payload, generation), &[Downstream_Dependency()])
-        .expect("materializes downstream");
+    Materialize_Pair(&mut store, upstream_payload, generation, &[Downstream_Dependency()]);
 
     let upstream = store
         .Current(&Upstream_Key().At(generation), generation)

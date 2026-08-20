@@ -24,16 +24,30 @@ use nomos_lang_rust_scan as scan;
 #[test]
 fn Test_A_Lowered_Floor_Should_Be_Spent_On_The_Subjects_The_Parser_Refuses()
 {
-    use nomos_lang_rust as rust;
-
     let corpus = Precision_Corpus();
     let run = Slice::Over(&corpus).Accepting(Approximate_Floor()).Run(&corpus);
 
+    Nothing_Below_The_Floor_Was_Admitted_And_Refused(&run);
+    Each_Provider_Answered_For_What_It_Could_Read(&run);
+    The_Fallen_Back_Subject_Is_Named(&run);
+}
+
+/// Admitting the scanner must not leave a still-unreadable file counted as refused.
+fn Nothing_Below_The_Floor_Was_Admitted_And_Refused(run: &RunReport)
+{
     assert!(
         run.refused.is_empty(),
         "something below the floor was still admitted and still refused: {:?}",
         run.refused
     );
+}
+
+/// The parser keeps the files it can read, and the scanner answers for exactly the one it
+/// cannot.
+fn Each_Provider_Answered_For_What_It_Could_Read(run: &RunReport)
+{
+    use nomos_lang_rust as rust;
+
     assert_eq!(
         run.Answered_By(rust::PROVIDER),
         5,
@@ -46,6 +60,11 @@ fn Test_A_Lowered_Floor_Should_Be_Spent_On_The_Subjects_The_Parser_Refuses()
         "and the scanner must answer for exactly the one it cannot: {:?}",
         run.answered_by
     );
+}
+
+/// The subject that fell back is named, not counted.
+fn The_Fallen_Back_Subject_Is_Named(run: &RunReport)
+{
     assert_eq!(
         run.fell_back,
         vec![("gamma/broken.rs".to_owned(), scan::PROVIDER.to_owned())],

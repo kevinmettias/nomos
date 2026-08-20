@@ -19,33 +19,51 @@ pub(crate) fn Render(since: &str, until: &str, findings: &[CrateFinding]) -> Str
     let flagged: Vec<&CrateFinding> = findings.iter().filter(|finding| finding.Is_A_Finding()).collect();
     let clean: Vec<&CrateFinding> = findings.iter().filter(|finding| !finding.Is_A_Finding()).collect();
 
+    Render_Flagged(&mut text, &flagged);
+    Render_Clean(&mut text, &clean);
+
+    let _ = writeln!(text, "{} crate(s) checked, {} finding(s).", findings.len(), flagged.len());
+
+    return text;
+}
+
+/// Every flagged crate's `FINDING` block, or the one line saying none were flagged.
+fn Render_Flagged(text: &mut String, flagged: &[&CrateFinding])
+{
     if flagged.is_empty()
     {
         text.push_str("no crate's surface changed with no docs/records/ commit in range.\n");
     }
-    for finding in &flagged
+    for finding in flagged
     {
-        // `write!` into a `String` never fails; the `Result` exists only because
-        // `std::fmt::Write` is shared with fallible sinks.
-        let _ = writeln!(text, "FINDING {}", finding.krate);
-        text.push_str("  surface changed; no commit under docs/records/ landed in this range\n");
-        text.push_str("  commits touching the surface snapshot:\n");
-        for commit in &finding.surface_commits
-        {
-            let _ = writeln!(text, "    {}  {}", Short(&commit.hash), commit.subject);
-        }
-        text.push('\n');
+        Append_Finding(text, finding);
     }
+}
 
+/// The one summary line naming every crate that checked out clean, when any did.
+fn Render_Clean(text: &mut String, clean: &[&CrateFinding])
+{
     if !clean.is_empty()
     {
         let names: Vec<&str> = clean.iter().map(|finding| finding.krate.as_str()).collect();
         let _ = writeln!(text, "checked and clean: {}\n", names.join(", "));
     }
+}
 
-    let _ = writeln!(text, "{} crate(s) checked, {} finding(s).", findings.len(), flagged.len());
-
-    return text;
+/// One `FINDING` block: the crate's name, why, and every commit that touched its
+/// snapshot in this range.
+fn Append_Finding(text: &mut String, finding: &CrateFinding)
+{
+    // `write!` into a `String` never fails; the `Result` exists only because
+    // `std::fmt::Write` is shared with fallible sinks.
+    let _ = writeln!(text, "FINDING {}", finding.krate);
+    text.push_str("  surface changed; no commit under docs/records/ landed in this range\n");
+    text.push_str("  commits touching the surface snapshot:\n");
+    for commit in &finding.surface_commits
+    {
+        let _ = writeln!(text, "    {}  {}", Short(&commit.hash), commit.subject);
+    }
+    text.push('\n');
 }
 
 /// The first eight characters of a commit hash — enough for a person to recognize,

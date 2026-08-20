@@ -24,7 +24,8 @@ pub(in crate::spec) fn Record(
         }
         Err(RecordRefusal::NotFound { id, revision, node }) =>
         {
-            Nothing_Behind(assembly, &id, revision.as_deref(), node.as_ref(), channels.notes)
+            let absent = NotFound { id: &id, revision: revision.as_deref(), node: node.as_ref() };
+            Nothing_Behind(assembly, &absent, channels.notes)
         }
     };
 }
@@ -70,22 +71,25 @@ pub(super) fn Ambiguous_Revision(
     return ExitCode::NotFound;
 }
 
+/// The three fields `RecordRefusal::NotFound` carries -- grouped so [`Nothing_Behind`]
+/// takes one parameter instead of three that only ever travel together.
+pub(super) struct NotFound<'a>
+{
+    pub(super) id: &'a str,
+    pub(super) revision: Option<&'a str>,
+    pub(super) node: Option<&'a NodeSummary>,
+}
+
 /// What to say when a record read produced no document.
 ///
 /// Two different things, because they are two different situations and only one of them is
 /// the reader's mistake.
-pub(super) fn Nothing_Behind(
-    assembly: &Assembly,
-    id: &str,
-    revision: Option<&str>,
-    node: Option<&NodeSummary>,
-    notes: &mut dyn std::io::Write,
-) -> ExitCode
+pub(super) fn Nothing_Behind(assembly: &Assembly, absent: &NotFound<'_>, notes: &mut dyn std::io::Write) -> ExitCode
 {
-    match node
+    match absent.node
     {
-        Some(node) => Note_Unsourced_Node(id, revision, node, notes),
-        None => drop(writeln!(notes, "no node in this store is identified {id}.")),
+        Some(node) => Note_Unsourced_Node(absent.id, absent.revision, node, notes),
+        None => drop(writeln!(notes, "no node in this store is identified {}.", absent.id)),
     }
 
     return Absent_Or(assembly, ExitCode::NotFound, notes);

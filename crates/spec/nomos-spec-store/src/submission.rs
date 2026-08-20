@@ -75,8 +75,17 @@ pub fn Accept_Submission(
     submission: &Submission,
 ) -> Result<i64, AcceptError>
 {
-    use crate::NodeRow;
+    Assert_No_Refusals(store, submission)?;
 
+    let uid = Persist_Submission(store, submission)?;
+    Write_Lifecycle_Edges(store, submission)?;
+
+    return Ok(uid);
+}
+
+/// The submission passes every rule, or the refusal names every one it fails.
+fn Assert_No_Refusals(store: &SpecificationStore, submission: &Submission) -> Result<(), AcceptError>
+{
     let failures = Refusals(store, submission)?;
     if !failures.is_empty()
     {
@@ -86,6 +95,15 @@ pub fn Accept_Submission(
         }));
     }
 
+    return Ok(());
+}
+
+/// The submission's own node, and its row — with its values and gaps — under a caller's
+/// transaction.
+fn Persist_Submission(store: &mut SpecificationStore, submission: &Submission) -> Result<i64, StoreError>
+{
+    use crate::NodeRow;
+
     let node_uid = store.Upsert_Node(NodeRow {
         node_id: &submission.id,
         kind: submission.kind.Label(),
@@ -93,12 +111,10 @@ pub fn Accept_Submission(
         representation: "structured",
         title: Title_Of(submission),
     })?;
-    let uid = store.In_Transaction(|transaction| {
-        return Write_Submission(transaction, node_uid, submission);
-    })?;
-    Write_Lifecycle_Edges(store, submission)?;
 
-    return Ok(uid);
+    return store.In_Transaction(|transaction| {
+        return Write_Submission(transaction, node_uid, submission);
+    });
 }
 
 /// Every rule this submission fails: the ones about its shape and the ones about what it

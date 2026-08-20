@@ -65,6 +65,20 @@ pub fn Crate_Identifier(package: &str) -> String
 #[must_use]
 pub fn Public_Surface(package: &str, root: &Path) -> Option<Surface>
 {
+    let modules = Load_Module_Tree(root)?;
+    let identifier = Crate_Identifier(package);
+    let (declarations, unresolved) = Emit_All_Modules(&identifier, &modules);
+
+    return Some(Surface {
+        package: package.to_owned(),
+        declarations: declarations.into_iter().collect(),
+        unresolved: unresolved.into_iter().collect(),
+    });
+}
+
+/// The module tree rooted at `root`'s library entry point, or [`None`] if it has no library.
+fn Load_Module_Tree(root: &Path) -> Option<BTreeMap<Vec<String>, crate::reading::module_tree::Module>>
+{
     use crate::reading::module_tree::Load_Module;
 
     let entry = root.join("src/lib.rs");
@@ -74,7 +88,15 @@ pub fn Public_Surface(package: &str, root: &Path) -> Option<Surface>
     }
     let mut modules = BTreeMap::new();
     Load_Module(&entry, &[], &mut modules);
-    let identifier = Crate_Identifier(package);
+    return Some(modules);
+}
+
+/// Every declaration and unresolved re-export reachable from `modules`.
+fn Emit_All_Modules(
+    identifier: &str,
+    modules: &BTreeMap<Vec<String>, crate::reading::module_tree::Module>,
+) -> (BTreeSet<String>, BTreeSet<String>)
+{
     let mut declarations = BTreeSet::new();
     let mut unresolved = BTreeSet::new();
     let mut emitting = Emitting {
@@ -85,16 +107,11 @@ pub fn Public_Surface(package: &str, root: &Path) -> Option<Surface>
     {
         let tree = Tree {
             from: path,
-            modules: &modules,
+            modules,
         };
-        Emit_Module(&identifier, tree, &mut emitting);
+        Emit_Module(identifier, tree, &mut emitting);
     }
-
-    return Some(Surface {
-        package: package.to_owned(),
-        declarations: declarations.into_iter().collect(),
-        unresolved: unresolved.into_iter().collect(),
-    });
+    return (declarations, unresolved);
 }
 
 /// Everything one exported module contributes: its own declarations, then its re-exports.

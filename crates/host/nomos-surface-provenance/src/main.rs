@@ -85,71 +85,131 @@ fn Run(
     stderr: &mut impl std::io::Write,
 ) -> ExitCode
 {
+    return match Report_Text(arguments, launcher, stderr)
+    {
+        Ok(text) =>
+        {
+            let _ = write!(stdout, "{text}");
+            ExitCode::Ok
+        }
+        Err(code) => code,
+    };
+}
+
+/// Everything [`Run`] does before it has anywhere to write the answer: parse, select,
+/// query, render.
+fn Report_Text(
+    arguments: &[String],
+    launcher: &impl ProcessLauncher,
+    stderr: &mut impl std::io::Write,
+) -> Result<String, ExitCode>
+{
     let parsed = match self::arguments::Parse(arguments)
     {
         Ok(parsed) => parsed,
         Err(message) =>
         {
             let _ = writeln!(stderr, "{message}");
-            return ExitCode::Usage;
+            return Err(ExitCode::Usage);
         }
     };
 
+    let selected = Selected_Crates(&parsed, stderr)?;
+    let findings = Findings(launcher, &parsed, &selected, stderr)?;
+
+    return Ok(report::Render(&parsed.since, &parsed.until, &findings));
+}
+
+/// Which crates to check: every name `--crate` named, or every crate with a snapshot when
+/// none were.
+fn Selected_Crates(parsed: &self::arguments::Parsed, stderr: &mut impl std::io::Write) -> Result<Vec<String>, ExitCode>
+{
     let known = match discovery::Every_Snapshotted_Crate(&parsed.root)
     {
         Ok(known) => known,
         Err(message) =>
         {
             let _ = writeln!(stderr, "{message}");
-            return ExitCode::Usage;
+            return Err(ExitCode::Usage);
         }
     };
 
-    let selected: Vec<String> = if parsed.crates.is_empty()
+    if parsed.crates.is_empty()
     {
-        known
+        return Ok(known);
     }
-    else
-    {
-        let unknown: Vec<&String> = parsed.crates.iter().filter(|name| !known.contains(name)).collect();
-        if !unknown.is_empty()
-        {
-            let _ = writeln!(
-                stderr,
-                "these --crate names have no tests/contract/surface/<name>.txt: {unknown:?}"
-            );
-            return ExitCode::Usage;
-        }
-        parsed.crates
-    };
 
+    Known_Names(&parsed.crates, &known, stderr)?;
+
+    return Ok(parsed.crates.clone());
+}
+
+/// Refuses when `wanted` names a crate `known` has no snapshot for.
+fn Known_Names(wanted: &[String], known: &[String], stderr: &mut impl std::io::Write) -> Result<(), ExitCode>
+{
+    let unknown: Vec<&String> = wanted.iter().filter(|name| !known.contains(name)).collect();
+    if !unknown.is_empty()
+    {
+        let _ = writeln!(
+            stderr,
+            "these --crate names have no tests/contract/surface/<name>.txt: {unknown:?}"
+        );
+        return Err(ExitCode::Usage);
+    }
+
+    return Ok(());
+}
+
+/// Whether `docs/records/` was touched in this range, then the finding for every selected
+/// crate given that answer.
+fn Findings(
+    launcher: &impl ProcessLauncher,
+    parsed: &self::arguments::Parsed,
+    selected: &[String],
+    stderr: &mut impl std::io::Write,
+) -> Result<Vec<evaluate::CrateFinding>, ExitCode>
+{
     let records_touched = match evaluate::Records_Touched(launcher, &parsed.root, &parsed.since, &parsed.until)
     {
         Ok(touched) => touched,
         Err(message) =>
         {
             let _ = writeln!(stderr, "{message}");
-            return ExitCode::QueryFailed;
+            return Err(ExitCode::QueryFailed);
         }
     };
 
+    let query = evaluate::Query {
+        range: evaluate::CommitRange { root: &parsed.root, since: &parsed.since, until: &parsed.until },
+        records_touched,
+    };
+
+    return Findings_For_Every(launcher, &query, selected, stderr);
+}
+
+/// The finding for every selected crate, stopping at the first query that could not run.
+fn Findings_For_Every(
+    launcher: &impl ProcessLauncher,
+    query: &evaluate::Query<'_>,
+    selected: &[String],
+    stderr: &mut impl std::io::Write,
+) -> Result<Vec<evaluate::CrateFinding>, ExitCode>
+{
     let mut findings = Vec::new();
-    for krate in &selected
+    for krate in selected
     {
-        match evaluate::Finding_For(launcher, &parsed.root, &parsed.since, &parsed.until, krate, records_touched)
+        match evaluate::Finding_For(launcher, query, krate)
         {
             Ok(finding) => findings.push(finding),
             Err(message) =>
             {
                 let _ = writeln!(stderr, "{krate}: {message}");
-                return ExitCode::QueryFailed;
+                return Err(ExitCode::QueryFailed);
             }
         }
     }
 
-    let _ = write!(stdout, "{}", report::Render(&parsed.since, &parsed.until, &findings));
-
-    return ExitCode::Ok;
+    return Ok(findings);
 }
 
 #[cfg(test)]
@@ -157,6 +217,36 @@ mod tests
 {
     use super::*;
     use fake_launcher::Scripted;
+
+    /// A scratch repository root carrying exactly one snapshot file (`nomos-model`) --
+    /// the fixture every test below needs before it can call `Run` at all. `label`
+    /// distinguishes one test's directory from another's so concurrent runs never collide.
+    fn Scratch_Root_With_One_Snapshot(label: &str) -> std::path::PathBuf
+    {
+        let root = std::env::temp_dir().join(format!("nomos-surface-provenance-test-{label}{}", std::process::id()));
+        let surface = root.join("tests").join("contract").join("surface");
+        std::fs::create_dir_all(&surface).expect("test needs a directory");
+        std::fs::write(surface.join("nomos-model.txt"), "pub fn f();\n").expect("test needs a file");
+
+        return root;
+    }
+
+    /// The `--since a --until b --root <root>` every test below needs, plus whatever else
+    /// it wants to name.
+    fn Arguments(root: &std::path::Path, extra: &[&str]) -> Vec<String>
+    {
+        let mut arguments = vec![
+            "--since".to_owned(),
+            "a".to_owned(),
+            "--until".to_owned(),
+            "b".to_owned(),
+            "--root".to_owned(),
+            root.to_string_lossy().into_owned(),
+        ];
+        arguments.extend(extra.iter().map(|value| (*value).to_owned()));
+
+        return arguments;
+    }
 
     /// A usage error is rendered and exits `2` before any query is attempted — proven
     /// with no launcher scripted at all, since none should be asked to run anything.
@@ -181,10 +271,7 @@ mod tests
     #[test]
     fn Test_A_Finding_Reaches_The_Rendered_Report_And_Still_Exits_Ok()
     {
-        let root = std::env::temp_dir().join(format!("nomos-surface-provenance-test-{}", std::process::id()));
-        let surface = root.join("tests").join("contract").join("surface");
-        std::fs::create_dir_all(&surface).expect("test needs a directory");
-        std::fs::write(surface.join("nomos-model.txt"), "pub fn f();\n").expect("test needs a file");
+        let root = Scratch_Root_With_One_Snapshot("");
 
         let launcher = Scripted::New()
             .Answer("log a..b --format=%H --", 0, "", "")
@@ -192,14 +279,7 @@ mod tests
             .Answer("log a..b --format=%H\t%s --", 0, "deadbeef\treblessed\n", "");
         let mut stdout = Vec::new();
         let mut stderr = Vec::new();
-        let arguments = [
-            "--since".to_owned(),
-            "a".to_owned(),
-            "--until".to_owned(),
-            "b".to_owned(),
-            "--root".to_owned(),
-            root.to_string_lossy().into_owned(),
-        ];
+        let arguments = Arguments(&root, &[]);
 
         let code = Run(&arguments, &launcher, &mut stdout, &mut stderr);
 
@@ -217,24 +297,12 @@ mod tests
     #[test]
     fn Test_An_Unknown_Crate_Name_Is_A_Usage_Error()
     {
-        let root = std::env::temp_dir().join(format!("nomos-surface-provenance-test-unknown-{}", std::process::id()));
-        let surface = root.join("tests").join("contract").join("surface");
-        std::fs::create_dir_all(&surface).expect("test needs a directory");
-        std::fs::write(surface.join("nomos-model.txt"), "pub fn f();\n").expect("test needs a file");
+        let root = Scratch_Root_With_One_Snapshot("unknown-");
 
         let launcher = Scripted::New();
         let mut stdout = Vec::new();
         let mut stderr = Vec::new();
-        let arguments = [
-            "--since".to_owned(),
-            "a".to_owned(),
-            "--until".to_owned(),
-            "b".to_owned(),
-            "--root".to_owned(),
-            root.to_string_lossy().into_owned(),
-            "--crate".to_owned(),
-            "no-such-crate".to_owned(),
-        ];
+        let arguments = Arguments(&root, &["--crate", "no-such-crate"]);
 
         let code = Run(&arguments, &launcher, &mut stdout, &mut stderr);
 

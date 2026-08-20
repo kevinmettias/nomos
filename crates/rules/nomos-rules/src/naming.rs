@@ -30,7 +30,7 @@
 //! record standing in for the check, not the other way around.
 
 use crate::{SourceFile, Syntax_Requirement};
-use nomos_analysis::{FactReader, InputDigest};
+use nomos_analysis::{FactReader, InputDigest, MaterializedFact};
 use nomos_cap_syntax::{PayloadItem, SyntaxPayload, FUNCTION, IMPLEMENTATION, TRAIT};
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId, SubjectId};
 use nomos_model::Content_Digest;
@@ -60,7 +60,11 @@ pub fn Check_Naming_Convention(
     {
         match Payload_Of(source, facts)
         {
-            Ok(payload) => findings.extend(Violations_In(&payload, &source.path)),
+            Ok(payload) =>
+            {
+                let violations = Violations_In(&payload, &source.path);
+                findings.extend(violations);
+            }
             Err(finding) => findings.push(finding),
         }
     }
@@ -77,23 +81,33 @@ pub fn Check_Naming_Convention(
 /// sharing the mirror rule's.
 fn Payload_Of(source: &SourceFile, facts: &mut dyn FactReader) -> Result<SyntaxPayload, Finding>
 {
+    let fact = Require_Fact(source, facts)?;
+    Check_Schema(source, fact)?;
+    return Parse_Fact(source, fact);
+}
+
+/// Requires this file's syntax fact, turning an inadmissible answer into an [`Unread`]
+/// finding.
+fn Require_Fact<'a>(source: &SourceFile, facts: &'a mut dyn FactReader) -> Result<&'a MaterializedFact, Finding>
+{
     let need = Syntax_Requirement();
     let capability = nomos_cap_syntax::Capability();
     let inputs = InputDigest::Of(&[source.text.as_bytes()]);
 
-    let fact = match facts.Require(&capability, &source.subject, inputs, &need)
+    return match facts.Require(&capability, &source.subject, inputs, &need)
     {
-        Ok(fact) => fact,
-        Err(applicability) =>
-        {
-            return Err(Unread(
-                source,
-                applicability,
-                &format!("no admitted provider answered for it ({})", applicability.Label()),
-            ));
-        }
+        Ok(fact) => Ok(fact),
+        Err(applicability) => Err(Unread(
+            source,
+            applicability,
+            &format!("no admitted provider answered for it ({})", applicability.Label()),
+        )),
     };
+}
 
+/// Confirms `fact`'s payload schema is the one this rule knows how to decode.
+fn Check_Schema(source: &SourceFile, fact: &MaterializedFact) -> Result<(), Finding>
+{
     if fact.payload.schema != nomos_cap_syntax::Payload_Schema()
     {
         return Err(Unread(
@@ -107,6 +121,12 @@ fn Payload_Of(source: &SourceFile, facts: &mut dyn FactReader) -> Result<SyntaxP
         ));
     }
 
+    return Ok(());
+}
+
+/// Decodes `fact`'s payload bytes into this rule's own [`SyntaxPayload`] shape.
+fn Parse_Fact(source: &SourceFile, fact: &MaterializedFact) -> Result<SyntaxPayload, Finding>
+{
     return nomos_cap_syntax::Parse_Payload(&fact.payload.bytes)
         .map_err(|refusal| return Unread(source, Applicability::Unparseable, &refusal.Describe()));
 }
@@ -144,7 +164,8 @@ fn Violations_In(payload: &SyntaxPayload, path: &str) -> Vec<Finding>
 
         if !Is_Pascal_Snake_Case(item.Own_Name())
         {
-            findings.push(Violation(path, item));
+            let violation = Violation(path, item);
+            findings.push(violation);
         }
     }
 

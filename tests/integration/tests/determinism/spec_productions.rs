@@ -43,9 +43,21 @@ pub(crate) enum Order
 
 fn Spec_Store(order: Order) -> SpecificationStore
 {
+    let mut store = SpecificationStore::In_Memory().expect("an in-memory store opens");
+
+    Insert_Source_Documents(&mut store, order);
+    Populate_Spec_Graph(&store, order);
+
+    return store;
+}
+
+/// The fixture's two documents and their source blocks, in whichever order this store is
+/// being written in. Insertion order is the only thing that decides a row's `uid`, which is
+/// what the alternating orders exist to catch.
+fn Insert_Source_Documents(store: &mut SpecificationStore, order: Order)
+{
     use nomos_spec_model::Segment;
 
-    let mut store = SpecificationStore::In_Memory().expect("an in-memory store opens");
     let mut documents = vec![
         ("volumes/02-core.md", SPEC_CORE),
         ("volumes/03-conformance.md", SPEC_CONFORMANCE),
@@ -63,9 +75,6 @@ fn Spec_Store(order: Order) -> SpecificationStore
             .Put_Source_Blocks(document, &Segment(text))
             .expect("the fixture blocks store");
     }
-    Populate_Spec_Graph(&store, order);
-
-    return store;
 }
 
 /// Everything above the documents: suites, nodes, relations, statements, lineage.
@@ -248,24 +257,31 @@ pub(crate) fn Projection_Bytes(order: Order) -> Vec<u8>
 
     for text in PROJECTION_PROFILES
     {
-        let profile = Profile::Parse(text).expect("the fixture profile parses");
-        let output = Build(&store, &profile)
-            // This production is the two profiles concatenated. Dropping a failed build would
-            // shorten it, and the repetition that discharges the strength claim agrees over
-            // the shortened bytes exactly as readily as over the whole of them.
-            .unwrap_or_else(|error| panic!("{}: {error}", profile.id));
-
-        rendered.extend_from_slice(format!("profile\t{}\n", output.path).as_bytes());
-        rendered.extend_from_slice(output.body.as_bytes());
-        rendered.extend_from_slice(
-            output
-                .Sidecar()
-                .expect("the stamp renders")
-                .as_bytes(),
-        );
+        Render_One_Profile(&store, text, &mut rendered);
     }
 
     return rendered;
+}
+
+/// One profile parsed, built and rendered: path, body and stamp in that order, so a body
+/// that held still and a stamp that did not cannot hide behind each other.
+fn Render_One_Profile(store: &SpecificationStore, text: &str, rendered: &mut Vec<u8>)
+{
+    let profile = Profile::Parse(text).expect("the fixture profile parses");
+    let output = Build(store, &profile)
+        // This production is the two profiles concatenated. Dropping a failed build would
+        // shorten it, and the repetition that discharges the strength claim agrees over
+        // the shortened bytes exactly as readily as over the whole of them.
+        .unwrap_or_else(|error| panic!("{}: {error}", profile.id));
+
+    rendered.extend_from_slice(format!("profile\t{}\n", output.path).as_bytes());
+    rendered.extend_from_slice(output.body.as_bytes());
+    rendered.extend_from_slice(
+        output
+            .Sidecar()
+            .expect("the stamp renders")
+            .as_bytes(),
+    );
 }
 
 /// A production that alternates the insertion order of an otherwise identical corpus.

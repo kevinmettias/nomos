@@ -37,6 +37,17 @@ pub(super) fn Submissions(connection: &Connection, records: &mut Vec<Record>) ->
 pub(super) fn Submission_Values(connection: &Connection, records: &mut Vec<Record>)
 -> Result<(), BundleError>
 {
+    let rows = Submission_Value_Rows(connection)?;
+
+    records.extend(rows.into_iter().map(Record::SubmissionValue));
+    return Ok(());
+}
+
+/// Every submission value row, in the order that makes the last one the current reading.
+fn Submission_Value_Rows(
+    connection: &Connection,
+) -> Result<Vec<crate::row::submission::value::SubmissionValue>, BundleError>
+{
     use crate::row::submission::value::SubmissionValue;
 
     let mut statement = connection.prepare(
@@ -47,7 +58,7 @@ pub(super) fn Submission_Values(connection: &Connection, records: &mut Vec<Recor
          JOIN nodes n ON n.uid = s.node_uid
          ORDER BY n.node_id, v.field, v.ordinal",
     )?;
-    let rows = statement
+    return Ok(statement
         .query_map([], |row| {
             let mut columns = Columns::Of(row);
             return Ok(SubmissionValue {
@@ -61,10 +72,7 @@ pub(super) fn Submission_Values(connection: &Connection, records: &mut Vec<Recor
                 recorded_at: columns.Next()?,
             });
         })?
-        .collect::<Result<Vec<_>, _>>()?;
-
-    records.extend(rows.into_iter().map(Record::SubmissionValue));
-    return Ok(());
+        .collect::<Result<Vec<_>, _>>()?);
 }
 
 /// The decision gaps, open and closed alike.

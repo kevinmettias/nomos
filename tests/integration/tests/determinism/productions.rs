@@ -358,7 +358,17 @@ fn Rendered_Rollup(rolled: &rollup::Rolled) -> Vec<u8>
 /// makes the test measure exactly that claim rather than a stronger one nobody declared.
 pub(crate) fn Dependency_Production() -> Vec<u8>
 {
-    let context = nomos_lang_rust_cargo::FactContext {
+    let context = Dependency_Context();
+    let facts = Discovered_Workspace_Facts(context);
+
+    return Rendered_Dependency_Facts(facts);
+}
+
+/// A context whose components are constants — see [`Fact_Context`] for why that is right
+/// here and wrong elsewhere.
+fn Dependency_Context() -> nomos_lang_rust_cargo::FactContext
+{
+    return nomos_lang_rust_cargo::FactContext {
         snapshot: SnapshotId::From_Digest(Content_Digest(b"nomos.determinism.snapshot")),
         variant: BuildVariantId::From_Digest(Content_Digest(b"nomos.determinism.variant")),
         configuration: ConfigurationId::From_Digest(Content_Digest(
@@ -366,8 +376,16 @@ pub(crate) fn Dependency_Production() -> Vec<u8>
         )),
         generation: GenerationId::INITIAL,
     };
+}
 
-    let mut facts =
+/// This repository's own real workspace, materialized through the door this provider
+/// actually reads Cargo's resolution through, and checked to have found enough of it to
+/// have measured something.
+fn Discovered_Workspace_Facts(
+    context: nomos_lang_rust_cargo::FactContext,
+) -> Vec<nomos_lang_rust_cargo::PackageFact>
+{
+    let facts =
         nomos_lang_rust_cargo::Materialize_Workspace(&Repository_Root(), context, &StdProcessLauncher)
             .expect("this repository is a real cargo workspace; a provider that cannot see it \
                      verifies nothing");
@@ -379,6 +397,15 @@ pub(crate) fn Dependency_Production() -> Vec<u8>
         facts.len()
     );
 
+    return facts;
+}
+
+/// The facts in package-name order rather than in whatever order `Discover_Workspace`
+/// returned. `DependencyFactProduction` declares `State`, not `StateTemporal` — the final
+/// set of facts is the claim, not the order they arrived in — and sorting here is what makes
+/// the test measure exactly that claim rather than a stronger one nobody declared.
+fn Rendered_Dependency_Facts(mut facts: Vec<nomos_lang_rust_cargo::PackageFact>) -> Vec<u8>
+{
     facts.sort_by(|left, right| return left.fact.payload.bytes.cmp(&right.fact.payload.bytes));
 
     let mut rendered = Vec::new();
@@ -525,16 +552,39 @@ pub(crate) fn Snapshot_Production() -> Vec<u8>
 /// claims would still repeat itself identically.
 pub(crate) fn Correction_Production() -> Vec<u8>
 {
+    let mut workspace = Fresh_Workspace_With_The_Fixture_File();
+    let plan = A_Plan_That_States_The_Return_Type();
+    let base = workspace.Id();
+    let mut rendered = Vec::new();
+
+    rendered.extend_from_slice(b"preview\n");
+    rendered.extend_from_slice(plan.Preview().Rendered());
+
+    let staged = Staged_Against_The_Workspace(&plan, &workspace, &mut rendered);
+    let committed = Validated_And_Committed(staged, &mut workspace, base, &mut rendered);
+    Rolled_Back_To_The_Base(committed, &mut workspace, base, &mut rendered);
+
+    return rendered;
+}
+
+/// A fresh workspace with the one file this lifecycle corrects already landed.
+fn Fresh_Workspace_With_The_Fixture_File() -> Workspace
+{
     let variant = BuildVariant::New("x86_64-unknown-none", "determinism", "fixed", ["one", "two"]);
     let configuration =
         ConfigurationId::From_Digest(Content_Digest(b"nomos.determinism.corrections"));
     let mut workspace = Workspace::Empty(variant, configuration);
 
-    workspace
-        .Apply(&WorkspaceChangeSet::From(ChangeSource::GitCheckout).Present("src/lib.rs", "pub fn a() {}"))
-        .expect("a fresh present is always accepted");
+    let presented = WorkspaceChangeSet::From(ChangeSource::GitCheckout).Present("src/lib.rs", "pub fn a() {}");
+    workspace.Apply(&presented).expect("a fresh present is always accepted");
 
-    let plan = CorrectionPlan::New(vec![CorrectionCandidate::New(
+    return workspace;
+}
+
+/// One candidate on one path: state the return type `a` takes for granted.
+fn A_Plan_That_States_The_Return_Type() -> CorrectionPlan
+{
+    return CorrectionPlan::New(vec![CorrectionCandidate::New(
         "state the return type a takes for granted",
         ChangeSet::Empty().With(Edit::New(
             "src/lib.rs",
@@ -543,37 +593,63 @@ pub(crate) fn Correction_Production() -> Vec<u8>
         )),
     )])
     .expect("one candidate on one path is a valid plan");
+}
 
-    let base = workspace.Id();
-    let mut rendered = Vec::new();
-
-    rendered.extend_from_slice(b"preview\n");
-    rendered.extend_from_slice(plan.Preview().Rendered());
-
+/// The plan staged against the still-fresh workspace, with its base identity rendered —
+/// staging agreeing with what commit applies is part of the sequence this production
+/// exercises.
+fn Staged_Against_The_Workspace(
+    plan: &CorrectionPlan,
+    workspace: &Workspace,
+    rendered: &mut Vec<u8>,
+) -> nomos_corrections::StagedPlan
+{
     let staged = plan
-        .Stage(&workspace)
+        .Stage(workspace)
         .expect("the candidate's declared prior content matches the fixture");
     rendered.extend_from_slice(format!("staged-base\t{}\n", staged.Base()).as_bytes());
 
+    return staged;
+}
+
+/// Validated against the still-unmoved workspace and then committed to it, with both
+/// identities rendered and the commit asserted to have actually moved the workspace.
+fn Validated_And_Committed(
+    staged: nomos_corrections::StagedPlan,
+    workspace: &mut Workspace,
+    base: SnapshotId,
+    rendered: &mut Vec<u8>,
+) -> nomos_corrections::CommittedPlan
+{
     let validated = staged
-        .Validate(&workspace)
+        .Validate(workspace)
         .expect("nothing has moved the workspace since staging");
 
     let committed = validated
-        .Commit(&mut workspace)
+        .Commit(workspace)
         .expect("the workspace door accepts the forward change");
     rendered.extend_from_slice(format!("committed-base\t{}\n", committed.Base()).as_bytes());
     rendered.extend_from_slice(format!("committed-after\t{}\n", committed.After()).as_bytes());
     assert_ne!(committed.After(), base, "the commit must have changed the workspace");
 
+    return committed;
+}
+
+/// Rolled back through the workspace door, with the identity it landed on rendered and
+/// asserted to be exactly the snapshot the lifecycle started from.
+fn Rolled_Back_To_The_Base(
+    committed: nomos_corrections::CommittedPlan,
+    workspace: &mut Workspace,
+    base: SnapshotId,
+    rendered: &mut Vec<u8>,
+)
+{
     let rolled_back_to = committed
-        .Rollback(&mut workspace)
+        .Rollback(workspace)
         .expect("the workspace door accepts the reverse change");
     rendered.extend_from_slice(format!("rolled-back-to\t{rolled_back_to}\n").as_bytes());
     assert_eq!(
         rolled_back_to, base,
         "rolling back a commit must return to exactly the snapshot it started from"
     );
-
-    return rendered;
 }

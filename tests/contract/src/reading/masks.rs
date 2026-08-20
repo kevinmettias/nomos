@@ -404,10 +404,21 @@ pub(crate) fn Next_Code_Byte(bytes: &[u8], mask: &[bool], from: usize, target: u
 /// The offset of the brace closing the one at `open`.
 pub(crate) fn Matching_Brace(bytes: &[u8], mask: &[bool], open: usize) -> Option<usize>
 {
-    return Matching_Delimiter(bytes, mask, open, b'{', b'}');
+    return Matching_Delimiter(bytes, mask, open, Delimiter { opening: b'{', closing: b'}' });
 }
 
-/// The offset of the `closing` byte that closes the `opening` one at `open`.
+/// The pair of bytes a depth walk counts: the byte that opens a level and the byte that
+/// closes it. Grouped rather than passed separately, because the two are never meaningful
+/// apart -- an opening byte with no closing byte to balance it counts nothing.
+#[derive(Clone, Copy)]
+pub(crate) struct Delimiter
+{
+    pub(crate) opening: u8,
+    pub(crate) closing: u8,
+}
+
+/// The offset of the `delimiter.closing` byte that closes the `delimiter.opening` one at
+/// `open`.
 ///
 /// Braces and parentheses are counted by one depth walk rather than by two, because the
 /// walk is the whole content of both: skip anything the mask says is not code, count the
@@ -417,8 +428,7 @@ pub(crate) fn Matching_Delimiter(
     bytes: &[u8],
     mask: &[bool],
     open: usize,
-    opening: u8,
-    closing: u8,
+    delimiter: Delimiter,
 ) -> Option<usize>
 {
     let mut depth = 0_u32;
@@ -433,8 +443,8 @@ pub(crate) fn Matching_Delimiter(
 
         match bytes.get(cursor).copied()
         {
-            Some(byte) if byte == opening => depth = depth.saturating_add(1),
-            Some(byte) if byte == closing =>
+            Some(byte) if byte == delimiter.opening => depth = depth.saturating_add(1),
+            Some(byte) if byte == delimiter.closing =>
             {
                 depth = depth.saturating_sub(1);
                 if depth == 0

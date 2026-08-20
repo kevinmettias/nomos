@@ -10,9 +10,11 @@
 //! exercise, over a real `cargo metadata` run against a fixture workspace rather than the
 //! real repository, so nothing here is destructive to this tree's own `Cargo.toml`.
 
-use nomos_analysis::{FactStore, GenerationCause, MemoryFactStore};
-use nomos_contracts::{BuildVariantId, ConfigurationId, Digest128, GenerationId, IncrementalGranularity, SnapshotId};
-use nomos_lang_rust_cargo::{FactContext, Materialize_Workspace};
+use nomos_analysis::{FactKey, FactStore, GenerationCause, InvalidationReport, MaterializedFact, MemoryFactStore};
+use nomos_contracts::{
+    BuildVariantId, ConfigurationId, Digest128, GenerationId, IncrementalGranularity, SnapshotId, SubjectId,
+};
+use nomos_lang_rust_cargo::{FactContext, Materialize_Workspace, PackageFact};
 use nomos_platform_std::StdProcessLauncher;
 use std::path::{Path, PathBuf};
 
@@ -88,6 +90,23 @@ fn Test_An_Edited_Manifests_Old_Fact_Should_Not_Survive_The_Generation_It_Was_In
     let fixture = Fixture::New("survive");
     let mut store = MemoryFactStore::New();
 
+    let (old_key, old_generation, alpha_subject) = Materialize_And_Store_Initial(&fixture, &mut store);
+    Assert_Initial_Fact_Readable(&store, &old_key, old_generation);
+
+    let next = GenerationId::INITIAL.Next();
+    let report = Drop_Edge_And_Invalidate(&fixture, &mut store, alpha_subject, next);
+    Assert_Invalidation_Report(&report, &old_key, &store, old_generation, next);
+
+    let historical_fact = Assert_Historical_Fact(&store, &old_key, next);
+
+    let (new_key, alpha_after) = Materialize_And_Store_Refresh(&fixture, &mut store, next);
+    Assert_Refreshed_Fact_Current(&store, &new_key, next, &alpha_after, &historical_fact);
+}
+
+/// Materializes alpha's fact at the initial generation, stores it, and returns its key,
+/// generation, and subject — everything the rest of this test invalidates and re-reads by.
+fn Materialize_And_Store_Initial(fixture: &Fixture, store: &mut MemoryFactStore) -> (FactKey, GenerationId, SubjectId)
+{
     let initial = Materialize_Workspace(fixture.Path(), Context(GenerationId::INITIAL), &StdProcessLauncher)
         .expect("a real cargo workspace with an edge");
     let alpha_before = initial
@@ -104,21 +123,45 @@ fn Test_An_Edited_Manifests_Old_Fact_Should_Not_Survive_The_Generation_It_Was_In
         .Materialize(alpha_before.fact.clone(), &[])
         .expect("the first generation's fact is never backdated");
 
+    return (old_key, old_generation, alpha_before.subject);
+}
+
+fn Assert_Initial_Fact_Readable(store: &MemoryFactStore, old_key: &FactKey, old_generation: GenerationId)
+{
     assert!(
         store.Current(&old_key.clone().At(old_generation), old_generation).is_some(),
         "the fact must be readable at the generation it was written"
     );
+}
 
+/// Edits alpha's manifest on disk and invalidates the subject the edit changed, returning
+/// the store's report of what that invalidation reached.
+fn Drop_Edge_And_Invalidate(
+    fixture: &Fixture,
+    store: &mut MemoryFactStore,
+    subject: SubjectId,
+    next: GenerationId,
+) -> InvalidationReport
+{
     fixture.Drop_Alphas_Edge();
-    let next = GenerationId::INITIAL.Next();
-    let report = store.Invalidate(
+
+    return store.Invalidate(
         &GenerationCause::SubjectChanged {
-            subject: alpha_before.subject,
+            subject,
             granularity: IncrementalGranularity::Project,
         },
         next,
     );
+}
 
+fn Assert_Invalidation_Report(
+    report: &InvalidationReport,
+    old_key: &FactKey,
+    store: &MemoryFactStore,
+    old_generation: GenerationId,
+    next: GenerationId,
+)
+{
     assert_eq!(
         report.direct,
         vec![old_key.clone()],
@@ -128,20 +171,30 @@ fn Test_An_Edited_Manifests_Old_Fact_Should_Not_Survive_The_Generation_It_Was_In
         store.Current(&old_key.clone().At(old_generation), next).is_none(),
         "the pre-edit fact must not survive as current at the generation it was invalidated at"
     );
+}
 
+fn Assert_Historical_Fact(store: &MemoryFactStore, old_key: &FactKey, next: GenerationId) -> MaterializedFact
+{
     let (historical_fact, supersession) = store
-        .Historical(&old_key)
+        .Historical(old_key)
         .expect("an invalidated fact is reported historically rather than disappearing");
-    assert_eq!(historical_fact.Key(), &old_key);
+    assert_eq!(historical_fact.Key(), old_key);
     assert_eq!(
         supersession.invalidated_at, next,
         "the supersession must name the generation the edit was invalidated at"
     );
 
+    return historical_fact;
+}
+
+/// Re-runs `cargo metadata` at the post-edit generation, stores the refreshed fact, and
+/// returns its key alongside the fact itself.
+fn Materialize_And_Store_Refresh(fixture: &Fixture, store: &mut MemoryFactStore, next: GenerationId) -> (FactKey, PackageFact)
+{
     let refreshed = Materialize_Workspace(fixture.Path(), Context(next), &StdProcessLauncher)
         .expect("a real cargo workspace with the edge removed");
     let alpha_after = refreshed
-        .iter()
+        .into_iter()
         .find(|package| package.path == "alpha")
         .expect("alpha is still a workspace member");
     let new_key = alpha_after.fact.Key().clone();
@@ -149,6 +202,17 @@ fn Test_An_Edited_Manifests_Old_Fact_Should_Not_Survive_The_Generation_It_Was_In
         .Materialize(alpha_after.fact.clone(), &[])
         .expect("the later generation's fact is not backdated against the invalidated one");
 
+    return (new_key, alpha_after);
+}
+
+fn Assert_Refreshed_Fact_Current(
+    store: &MemoryFactStore,
+    new_key: &FactKey,
+    next: GenerationId,
+    alpha_after: &PackageFact,
+    historical_fact: &MaterializedFact,
+)
+{
     let current = store
         .Current(&new_key.clone().At(next), next)
         .expect("the re-materialized fact is current at the generation it was written");

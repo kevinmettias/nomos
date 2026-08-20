@@ -157,19 +157,9 @@ pub(super) fn Source_Table_Rows(connection: &Connection, records: &mut Vec<Recor
 /// One row and the JSON cells column that travels beside it, still undecoded.
 fn Read_A_Table_Row(row: &rusqlite::Row<'_>) -> rusqlite::Result<(SourceTableRow, String)>
 {
-    use crate::OrdinalRef;
-
     let mut columns = Columns::Of(row);
-    let block = OrdinalRef {
-        document: DocumentRef {
-            path: columns.Next()?,
-            revision: columns.Next()?,
-        },
-        ordinal: columns.Next()?,
-    };
-    let ordinal = columns.Next()?;
-    let table_ordinal = columns.Next()?;
-    let kind = columns.Next()?;
+    let block = Table_Row_Block(&mut columns)?;
+    let (ordinal, table_ordinal, kind) = Table_Row_Identity(&mut columns)?;
     let cells: String = columns.Next()?;
 
     return Ok((
@@ -185,4 +175,29 @@ fn Read_A_Table_Row(row: &rusqlite::Row<'_>) -> rusqlite::Result<(SourceTableRow
         },
         cells,
     ));
+}
+
+/// The block a table row belongs to: the three columns the query names for it.
+fn Table_Row_Block(columns: &mut Columns<'_, '_>) -> rusqlite::Result<crate::OrdinalRef>
+{
+    use crate::OrdinalRef;
+
+    return Ok(OrdinalRef {
+        document: DocumentRef {
+            path: columns.Next()?,
+            revision: columns.Next()?,
+        },
+        ordinal: columns.Next()?,
+    });
+}
+
+/// A table row's own ordinal, its table ordinal and its kind — the three columns the query
+/// names immediately after the block it belongs to.
+fn Table_Row_Identity(columns: &mut Columns<'_, '_>) -> rusqlite::Result<(i64, i64, String)>
+{
+    let ordinal = columns.Next()?;
+    let table_ordinal = columns.Next()?;
+    let kind = columns.Next()?;
+
+    return Ok((ordinal, table_ordinal, kind));
 }

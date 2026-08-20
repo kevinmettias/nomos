@@ -195,7 +195,7 @@ fn Report(findings: &[Finding], examined: Examined, claim: Claim, stdout: &mut i
         .iter()
         .filter(|finding| return finding.Can_Fail_A_Build())
         .count();
-    Counts(findings, blocking, examined, claim, stdout);
+    Counts(findings, examined, claim, stdout);
 
     if blocking > 0
     {
@@ -213,9 +213,13 @@ fn Report(findings: &[Finding], examined: Examined, claim: Claim, stdout: &mut i
 /// reached a judgment about everything and "0 findings" over a run that could not judge a
 /// third of it are a third pair a reader must not be left to conflate, which is what the
 /// claim line and the coverage breakdown below say.
-fn Counts(findings: &[Finding], blocking: usize, examined: Examined, claim: Claim, stdout: &mut impl Write)
+fn Counts(findings: &[Finding], examined: Examined, claim: Claim, stdout: &mut impl Write)
 {
     let found = findings.len();
+    let blocking = findings
+        .iter()
+        .filter(|finding| return finding.Can_Fail_A_Build())
+        .count();
     let _ignored = writeln!(
         stdout,
         "\n{} file(s) examined, {} with a syntax fact, {found} finding(s), {blocking} of \
@@ -301,32 +305,36 @@ mod tests
     #[test]
     fn Test_Coverage_Debt_And_Agent_Required_Should_Be_Incomplete_Deliberate_Absences_Should_Not()
     {
-        for debt in [
-            Applicability::MissingCapability,
-            Applicability::ProviderUnavailable,
-            Applicability::DependencyUnavailable,
-            Applicability::Unparseable,
-            Applicability::AnalysisFailed,
-            Applicability::AgentRequired,
-        ]
-        {
-            assert_eq!(
-                Claim_Of(&[Finding_With(debt)]),
-                Claim::Incomplete,
-                "{debt} must mark the claim incomplete"
-            );
-        }
+        Assert_Claim_For_Each(
+            [
+                Applicability::MissingCapability,
+                Applicability::ProviderUnavailable,
+                Applicability::DependencyUnavailable,
+                Applicability::Unparseable,
+                Applicability::AnalysisFailed,
+                Applicability::AgentRequired,
+            ],
+            Claim::Incomplete,
+            "must mark the claim incomplete",
+        );
 
-        for deliberate in [Applicability::NotApplicable, Applicability::ConfigurationDisabled]
-        {
-            assert_eq!(
-                Claim_Of(&[Finding_With(deliberate)]),
-                Claim::Complete,
-                "{deliberate} is a decision, not a gap"
-            );
-        }
+        Assert_Claim_For_Each(
+            [Applicability::NotApplicable, Applicability::ConfigurationDisabled],
+            Claim::Complete,
+            "is a decision, not a gap",
+        );
 
         assert_eq!(Claim_Of(&[Finding_With(Applicability::Supported)]), Claim::Complete);
+    }
+
+    /// Every listed applicability, alone, must reduce to `expected` -- the assertion this
+    /// test repeats for two different reasons the message text names.
+    fn Assert_Claim_For_Each(variants: impl IntoIterator<Item = Applicability>, expected: Claim, why: &str)
+    {
+        for variant in variants
+        {
+            assert_eq!(Claim_Of(&[Finding_With(variant)]), expected, "{variant} {why}");
+        }
     }
 
     /// The counts are part of the result. Without them, a broken walk and a clean tree

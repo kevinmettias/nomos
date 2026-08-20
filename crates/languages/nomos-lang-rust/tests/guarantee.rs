@@ -190,19 +190,23 @@ fn Test_Completeness_Should_Be_Unknown_Because_Macros_Hide_Items()
 {
     assert_eq!(Declared_Guarantee().completeness, Assurance::Unknown);
 
-    let facts = Parsed(
-        // This text is a fixture handed to the provider, not a macro this suite defines, and
-        // it has to be a real `macro_rules!` because the weakness being demonstrated is
-        // exactly that `syn` sees the definition and never the body it would expand to.
-        "macro_rules! declare {\n\
-             () => { pub fn generated() {} };\n\
-         }\n\
-         declare!();\n\
-         pub fn visible() {}\n",
-    );
-
+    let facts = Parsed(SOURCE_WITH_A_MACRO_HIDDEN_ITEM);
     let names = Names(&facts);
 
+    Assert_Macro_Item_Is_Hidden(&names);
+}
+
+// This text is a fixture handed to the provider, not a macro this suite defines, and it
+// has to be a real `macro_rules!` because the weakness being demonstrated is exactly that
+// `syn` sees the definition and never the body it would expand to.
+const SOURCE_WITH_A_MACRO_HIDDEN_ITEM: &str = "macro_rules! declare {\n\
+     () => { pub fn generated() {} };\n\
+ }\n\
+ declare!();\n\
+ pub fn visible() {}\n";
+
+fn Assert_Macro_Item_Is_Hidden(names: &[String])
+{
     assert!(
         names.iter().any(|name| return name == "visible"),
         "an item outside a macro is reported: {names:?}"

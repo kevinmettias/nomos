@@ -277,15 +277,27 @@ fn Test_The_V15_Records_Should_Be_Ingested_As_Authored_Nodes()
         return;
     };
     let mut store = SpecificationStore::In_Memory().expect("opens");
+    let ingested = Ingest_Every_V15_Record(&mut store, &mut archive);
+
+    // The plan says 64. The archive holds 66 — 54 under records/ and 12 under
+    // spec-governance/records/ — and the file wins, as it did for the catalog's 2,619
+    // against the plan's 1,632.
+    Assert_The_Record_Set_Is_Complete(&ingested, &store);
+    Assert_Governing_Records_Are_Present(&store);
+}
+
+/// Every record under `records/` in the archive, ingested as an authored node.
+fn Ingest_Every_V15_Record(store: &mut SpecificationStore, archive: &mut Archive) -> Vec<String>
+{
     let mut ingested = Vec::new();
     for entry in archive.Listing().Ending_With(".md")
     {
         if entry.contains("/records/")
         {
-            // A record that will not read is a node the store never receives, and the count below
-            // would call that the v15 record set having changed size.
+            // A record that will not read is a node the store never receives, and the count the
+            // caller checks would read that as the v15 record set having changed size.
             let text = archive.Read_Text(&entry).unwrap_or_else(|error| panic!("{error}"));
-            let record = Ingest_V15_Record(&mut store, &entry, &text)
+            let record = Ingest_V15_Record(store, &entry, &text)
                 // Named per entry, because the check at the end of this test can only say that a
                 // governing record is not in the store — never that its ingest refused.
                 .unwrap_or_else(|error| panic!("{entry}: {error}"));
@@ -293,9 +305,14 @@ fn Test_The_V15_Records_Should_Be_Ingested_As_Authored_Nodes()
             ingested.push(record);
         }
     }
-    // The plan says 64. The archive holds 66 — 54 under records/ and 12 under
-    // spec-governance/records/ — and the file wins, as it did for the catalog's 2,619
-    // against the plan's 1,632.
+
+    return ingested;
+}
+
+/// The record set ingested is exactly 66 records, each with a distinct identifier, and the
+/// store received one node per record.
+fn Assert_The_Record_Set_Is_Complete(ingested: &[String], store: &SpecificationStore)
+{
     assert_eq!(ingested.len(), 66, "the v15 record count changed");
     assert_eq!(
         ingested.iter().collect::<std::collections::BTreeSet<_>>().len(),
@@ -303,7 +320,11 @@ fn Test_The_V15_Records_Should_Be_Ingested_As_Authored_Nodes()
         "two records share an identifier"
     );
     assert_eq!(store.Count(Table::Nodes).expect("counts"), 66);
+}
 
+/// The records this system's own governance depends on are among the ones ingested.
+fn Assert_Governing_Records_Are_Present(store: &SpecificationStore)
+{
     for required in ["ADR-ARTIFACT-GRAPH-002", "D-117", "D-120", "D-127", "D-128"]
     {
         assert!(

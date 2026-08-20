@@ -182,10 +182,7 @@ impl ClaimRefusal
                 item,
             } => Held_By(item, holder, *until),
             Self::UnknownIndependence { against, reason } => Unknown_Independence(against, reason),
-            Self::LeaseTooLong { requested, maximum } =>
-            {
-                format!("a lease of {requested:?} exceeds the {maximum:?} ceiling")
-            }
+            Self::LeaseTooLong { requested, maximum } => Lease_Too_Long(*requested, *maximum),
             Self::Lapsed {
                 item,
                 holder,
@@ -196,25 +193,19 @@ impl ClaimRefusal
                 holder,
                 until,
             } => Still_Held(item, holder, *until),
-            Self::NotClaimable { item, state } =>
-            {
-                format!("{item} is {state}, so the operation was refused")
-            }
+            Self::NotClaimable { item, state } => Not_Claimable(item, state),
             Self::DependencyUnmet {
                 item,
                 dependency,
                 state,
-            } => format!("{item} depends on {dependency}, which is {state}"),
+            } => Dependency_Unmet(item, dependency, state),
             Self::DependencyDeclined {
                 item,
                 dependency,
                 state,
             } => Dependency_Declined(item, dependency, state),
-            Self::NoSuchItem { item } => format!("no item named {item}"),
-            Self::LedgerUnusable { cause } =>
-            {
-                format!("the ledger could not be used: {cause}")
-            }
+            Self::NoSuchItem { item } => No_Such_Item(item),
+            Self::LedgerUnusable { cause } => Ledger_Unusable(cause),
         };
     }
 
@@ -341,6 +332,36 @@ fn Dependency_Declined(item: &ItemId, dependency: &ItemId, state: &str) -> Strin
          Done, so retrying will not resolve this — {item} must be closed with `nomos work \
          decline` and re-authored against a dependency that can still finish"
     );
+}
+
+/// A requested lease past the ceiling coordination allows.
+fn Lease_Too_Long(requested: Duration, maximum: Duration) -> String
+{
+    return format!("a lease of {requested:?} exceeds the {maximum:?} ceiling");
+}
+
+/// An item whose current state refuses the operation outright.
+fn Not_Claimable(item: &ItemId, state: &str) -> String
+{
+    return format!("{item} is {state}, so the operation was refused");
+}
+
+/// A dependency that has not finished yet, and may still.
+fn Dependency_Unmet(item: &ItemId, dependency: &ItemId, state: &str) -> String
+{
+    return format!("{item} depends on {dependency}, which is {state}");
+}
+
+/// An identifier that matched nothing on the board.
+fn No_Such_Item(item: &ItemId) -> String
+{
+    return format!("no item named {item}");
+}
+
+/// The ledger's own store could not be read or written.
+fn Ledger_Unusable(cause: &str) -> String
+{
+    return format!("the ledger could not be used: {cause}");
 }
 
 /// Two territories the ledger cannot prove disjoint.

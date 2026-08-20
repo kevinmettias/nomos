@@ -4,12 +4,51 @@
 //! the same as an invalidation pass that ran and reached nothing.
 
 use super::{
-    Applied, BTreeSet, ChangeSource, Corpus, FactStore, IncrementalGranularity,
+    Applied, BTreeSet, ChangeSource, Corpus, Edited, FactStore, IncrementalGranularity,
     InvalidationReport, Slice, SnapshotId, SubjectId, Subject_Of_Path, WorkspaceChangeSet,
 };
 
 impl Slice
 {
+    /// The change set of one path, applied through the one door.
+    ///
+    /// A refused edit absorbed here would leave the caller asserting that changing nothing
+    /// invalidated nothing: every invalidation test downstream would pass over a workspace
+    /// that never moved, and read that as the engine being conservative.
+    pub(super) fn Apply_The_Change(
+        &mut self,
+        source: ChangeSource,
+        path: &str,
+        content: &str,
+    ) -> Applied
+    {
+        let presented = WorkspaceChangeSet::From(source).Present(path, content);
+        return self
+            .workspace
+            .Apply(&presented)
+            .unwrap_or_else(|error| panic!("`{path}` could not be edited: {error}"));
+    }
+
+    /// What an applied edit becomes: unchanged if the workspace did not advance, or the new
+    /// generation with exactly what it invalidated.
+    pub(super) fn Advance_After_Edit(&mut self, applied: Applied, path: &str) -> Edited
+    {
+        let Applied::Advanced { generation, .. } = applied
+        else
+        {
+            return Edited::Unchanged { applied };
+        };
+        self.generation = generation;
+        self.snapshot = applied.Snapshot();
+
+        let invalidated = self.Invalidate_One_Subject(path);
+
+        return Edited::Advanced {
+            applied,
+            invalidated,
+        };
+    }
+
     /// The corpus is rewritten to match, because it is the reading of the tree the providers
     /// actually parse. A silent no-op here would make an invalidation test assert that
     /// changing nothing invalidates nothing.

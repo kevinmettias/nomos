@@ -219,6 +219,24 @@ fn Test_Both_Providers_Should_Offer_Against_A_Contract_Neither_Declares()
         .find(|declared| return declared.id == capability)
         .expect("the syntax capability is declared");
 
+    The_Contract_Terms_Belong_To_The_Crate(contract, &registry, &capability);
+    // The ceiling leaves room neither provider occupies. Without this the assertion above
+    // would pass over a ceiling that is merely the incumbent's guarantee restated — which
+    // is a ceiling that has to be raised whenever somebody improves something, and one that
+    // silently forbids a better second provider.
+    Neither_Provider_Claims_The_Whole_Ceiling(&registry, &capability);
+}
+
+/// The terms in the registry are the contract crate's, not a provider's, and both providers
+/// offer against the one contract.
+fn The_Contract_Terms_Belong_To_The_Crate(
+    contract: &nomos_capability::CapabilityContract,
+    registry: &nomos_capability::Registry,
+    capability: &CapabilityId,
+)
+{
+    use nomos_cap_syntax as syntax;
+
     assert_eq!(
         contract.ceiling,
         syntax::Ceiling(),
@@ -226,18 +244,25 @@ fn Test_Both_Providers_Should_Offer_Against_A_Contract_Neither_Declares()
     );
     assert_eq!(
         registry
-            .Offers(&capability)
+            .Offers(capability)
             .iter()
             .map(|offer| return offer.provider.As_Str())
             .collect::<Vec<&str>>(),
         vec![scan::PROVIDER, rust::PROVIDER],
         "both providers offer against the one contract"
     );
-    // The ceiling leaves room neither provider occupies. Without this the assertion above
-    // would pass over a ceiling that is merely the incumbent's guarantee restated — which
-    // is a ceiling that has to be raised whenever somebody improves something, and one that
-    // silently forbids a better second provider.
-    for offer in registry.Offers(&capability)
+}
+
+/// Neither provider claims exactly the ceiling — it bounds what either may claim, not what
+/// the incumbent already does.
+fn Neither_Provider_Claims_The_Whole_Ceiling(
+    registry: &nomos_capability::Registry,
+    capability: &CapabilityId,
+)
+{
+    use nomos_cap_syntax as syntax;
+
+    for offer in registry.Offers(capability)
     {
         assert_ne!(
             offer.guarantee,

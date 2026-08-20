@@ -81,6 +81,59 @@ impl nomos_platform::ProcessLauncher for Unreached
     }
 }
 
+/// Adds `item` to `ledger` through [`Run`], exactly the way `nomos work add` would, and
+/// hands `item` back so a test can claim, decline or validate against it next.
+///
+/// Discards the [`WorkOutcome::Add`] itself: the tests reusing this fixture (`Claim_Then_
+/// Second_Claim`, `Decline_Should_End_An_Unclaimed_Item`) are proving what happens *after*
+/// the add, not the add itself -- `Test_Add_Then_Show_Should_Find_What_Add_Wrote` already
+/// proves `Add`'s own outcome and keeps checking it inline.
+fn Added(ledger: &mut FileLedger<StdFileSystem, SystemClock, FileLock>, item: LedgerItem) -> LedgerItem
+{
+    let _ = Run(
+        &WorkCommand::Add {
+            item: Box::new(item.clone()),
+            amending: Territory::Empty(),
+        },
+        ledger,
+        &Unreached,
+        Territory::Empty,
+    );
+
+    return item;
+}
+
+/// Claims `item` as `holder`, through [`Run`] the way `nomos work claim` would.
+fn Claimed(ledger: &mut FileLedger<StdFileSystem, SystemClock, FileLock>, item: &ItemId, holder: &str) -> WorkOutcome
+{
+    let request = ClaimRequest {
+        item: item.clone(),
+        holder: holder.to_owned(),
+        lease: Duration::from_secs(60),
+    };
+
+    return Run(&WorkCommand::Claim(request), ledger, &Unreached, Territory::Empty);
+}
+
+/// `item`, read back off `ledger` through [`Run`]'s own `audit` verb -- the same read
+/// `nomos work audit` would perform.
+fn On_Board(ledger: &mut FileLedger<StdFileSystem, SystemClock, FileLock>, item: &ItemId) -> LedgerItem
+{
+    let audited = Run(&WorkCommand::Audit, ledger, &Unreached, Territory::Empty);
+    let WorkOutcome::Audit(Ok(view)) = audited
+    else
+    {
+        panic!("an auditable board must answer WorkOutcome::Audit");
+    };
+
+    return view
+        .document
+        .items
+        .into_iter()
+        .find(|found| found.id == *item)
+        .expect("the item add wrote is still on the board");
+}
+
 #[test]
 fn Test_List_Should_Read_An_Empty_Board()
 {
@@ -131,30 +184,12 @@ fn Test_Add_Then_Show_Should_Find_What_Add_Wrote()
 fn Test_Claim_Then_Second_Claim_Should_Be_Refused_As_Held()
 {
     let mut ledger = Scratch_Ledger("claim-twice");
-    let item = Item("T-TWO");
-    let _ = Run(
-        &WorkCommand::Add {
-            item: Box::new(item.clone()),
-            amending: Territory::Empty(),
-        },
-        &mut ledger,
-        &Unreached,
-        Territory::Empty,
-    );
+    let item = Added(&mut ledger, Item("T-TWO"));
 
-    let request = ClaimRequest {
-        item: item.id.clone(),
-        holder: "agent-a".to_owned(),
-        lease: Duration::from_secs(60),
-    };
-    let first = Run(&WorkCommand::Claim(request.clone()), &mut ledger, &Unreached, Territory::Empty);
+    let first = Claimed(&mut ledger, &item.id, "agent-a");
     assert!(matches!(first, WorkOutcome::Claim(Ok(_))));
 
-    let contested = ClaimRequest {
-        holder: "agent-b".to_owned(),
-        ..request
-    };
-    let second = Run(&WorkCommand::Claim(contested), &mut ledger, &Unreached, Territory::Empty);
+    let second = Claimed(&mut ledger, &item.id, "agent-b");
     let WorkOutcome::Claim(Err(refusal)) = second
     else
     {
@@ -189,16 +224,7 @@ fn Test_Validate_Should_Accept_A_Board_This_Run_Wrote()
 fn Test_Decline_Should_End_An_Unclaimed_Item()
 {
     let mut ledger = Scratch_Ledger("decline");
-    let item = Item("T-FOUR");
-    let _ = Run(
-        &WorkCommand::Add {
-            item: Box::new(item.clone()),
-            amending: Territory::Empty(),
-        },
-        &mut ledger,
-        &Unreached,
-        Territory::Empty,
-    );
+    let item = Added(&mut ledger, Item("T-FOUR"));
 
     let declined = Run(
         &WorkCommand::Decline(EndingRequest {
@@ -212,17 +238,6 @@ fn Test_Decline_Should_End_An_Unclaimed_Item()
     );
     assert!(matches!(declined, WorkOutcome::Decline(Ok(()))));
 
-    let audited = Run(&WorkCommand::Audit, &mut ledger, &Unreached, Territory::Empty);
-    let WorkOutcome::Audit(Ok(view)) = audited
-    else
-    {
-        panic!("a declined board is still a readable one");
-    };
-    let found = view
-        .document
-        .items
-        .iter()
-        .find(|found| found.id == item.id)
-        .expect("the item add wrote is still on the board");
+    let found = On_Board(&mut ledger, &item.id);
     assert!(found.declined.is_some());
 }

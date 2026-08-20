@@ -101,7 +101,8 @@ fn Required_Value(arguments: &[String], name: &str) -> Result<String, String>
 
 fn Parse_Submit(arguments: &[String]) -> Result<Command, String>
 {
-    let kind = Parse_Kind(&Required_Value(arguments, "--kind")?)?;
+    let kind_text = Required_Value(arguments, "--kind")?;
+    let kind = Parse_Kind(&kind_text)?;
     let id = Required_Value(arguments, "--id")?;
     let by = Required_Value(arguments, "--by")?;
     let state = Parse_State(Named_Value(arguments, "--state").as_deref())?;
@@ -200,6 +201,21 @@ fn Parse_Gaps(arguments: &[String]) -> Result<Vec<DecisionGap>, String>
 
 fn Parse_Gap(entry: &str) -> Result<DecisionGap, String>
 {
+    let (question, blocks, severity, closed_by) = Gap_Fields(entry)?;
+    let severity = Gap_Severity(severity)?;
+
+    return Ok(DecisionGap {
+        question: question.to_owned(),
+        blocks: Gap_Blocks(blocks),
+        severity,
+        closed_by: closed_by.map(str::to_owned),
+    });
+}
+
+/// Splits one `--gap` entry into its pipe-separated fields, refusing when either of the two
+/// required ones is missing.
+fn Gap_Fields(entry: &str) -> Result<(&str, &str, &str, Option<&str>), String>
+{
     let mut parts = entry.splitn(4, '|');
     let question = parts.next().unwrap_or_default();
     let blocks = parts.next();
@@ -215,24 +231,30 @@ fn Parse_Gap(entry: &str) -> Result<DecisionGap, String>
             Usage_Text()
         ));
     };
-    let severity = Severity::Parse(severity).ok_or_else(|| {
+
+    return Ok((question, blocks, severity, closed_by));
+}
+
+/// Parses the severity field of a `--gap` entry.
+fn Gap_Severity(text: &str) -> Result<Severity, String>
+{
+    return Severity::Parse(text).ok_or_else(|| {
         return format!(
-            "--gap's severity takes blocking or non-blocking; `{severity}` is neither.\n\n{}",
+            "--gap's severity takes blocking or non-blocking; `{text}` is neither.\n\n{}",
             Usage_Text()
         );
-    })?;
-
-    return Ok(DecisionGap {
-        question: question.to_owned(),
-        blocks: blocks
-            .split(',')
-            .map(str::trim)
-            .filter(|entry| return !entry.is_empty())
-            .map(str::to_owned)
-            .collect(),
-        severity,
-        closed_by: closed_by.map(str::to_owned),
     });
+}
+
+/// The comma-separated blocked-field list, trimmed and with empty entries dropped.
+fn Gap_Blocks(text: &str) -> Vec<String>
+{
+    return text
+        .split(',')
+        .map(str::trim)
+        .filter(|entry| return !entry.is_empty())
+        .map(str::to_owned)
+        .collect();
 }
 
 /// Runs a command, writing content to `output` and everything about it to `notes`.

@@ -156,8 +156,9 @@ fn Test_The_Registered_Provider_Should_Satisfy_The_Rules_Floor()
 /// expose that split -- a second adapter has no reason to ingest less than it judges -- so
 /// this is where the split-composition guarantee is proven instead: internally, once, by
 /// the crate that owns it.
-#[test]
-fn Test_The_Composed_Crate_Should_Resolve_A_Mirror_Through_A_Real_Fact()
+/// The declaring/checking pair `Test_The_Composed_Crate_Should_Resolve_A_Mirror_Through_A_
+/// Real_Fact` proves the split-composition guarantee over.
+fn Mirror_Fixture() -> (SourceFile, SourceFile)
 {
     let declaring = Source(
         "a.rs",
@@ -168,7 +169,15 @@ fn Test_The_Composed_Crate_Should_Resolve_A_Mirror_Through_A_Real_Fact()
         "b.rs",
         "#[cfg(test)]\nmod tests\n{\n    #[test]\n    fn Test_The_Real_Provider_Found_This()\n    {\n    }\n}\n",
     );
-    let whole = vec![declaring.clone(), checking.clone()];
+
+    return (declaring, checking);
+}
+
+#[test]
+fn Test_The_Composed_Crate_Should_Resolve_A_Mirror_Through_A_Real_Fact()
+{
+    let (declaring, checking) = Mirror_Fixture();
+    let whole = vec![declaring.clone(), checking];
 
     let resolved = Findings_Over(&whole, &whole);
     // The store is told about the declaring file only; the rule is handed both.

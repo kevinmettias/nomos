@@ -25,7 +25,21 @@ use nomos_contracts::{DeterminismStrength, Strategy};
 #[test]
 fn Test_Every_Domain_In_The_Tree_Should_Declare_And_Be_Registered()
 {
-    use crate::harness::Test_Name_For;
+    let declared = Declared_Domains();
+    assert_eq!(
+        declared.len(),
+        10,
+        "ten productions are covered by eight declarations; a new producer needs a row in \
+         this table and a test of its own, whether or not it also needs a declaration of \
+         its own"
+    );
+
+    Each_Domain_Declares_A_Strategy_And_Is_Registered(declared);
+}
+
+/// Every domain this workspace has, with the row of the contracts table it occupies.
+fn Declared_Domains() -> [(&'static str, DeterminismStrength); 10]
+{
     use nomos_analysis::FactReuse;
     use nomos_corrections::CorrectionStaging;
     use nomos_lang_rust::SyntaxFactProduction;
@@ -35,7 +49,7 @@ fn Test_Every_Domain_In_The_Tree_Should_Declare_And_Be_Registered()
     use nomos_spec_project::ProjectionOutput;
     use nomos_workspace::SnapshotSerialization;
 
-    let declared = [
+    return [
         ("syntax-fact-production", SyntaxFactProduction::STRENGTH),
         // The same declaration, discharged over the other things it covers. Entries and
         // one strategy is the shape `P10-ROLLUP-DETERMINISM` settled on: `nomos-lang-rust`
@@ -56,13 +70,14 @@ fn Test_Every_Domain_In_The_Tree_Should_Declare_And_Be_Registered()
         ("projection-output", ProjectionOutput::STRENGTH),
         ("correction-staging", CorrectionStaging::STRENGTH),
     ];
-    assert_eq!(
-        declared.len(),
-        10,
-        "ten productions are covered by eight declarations; a new producer needs a row in \
-         this table and a test of its own, whether or not it also needs a declaration of \
-         its own"
-    );
+}
+
+/// Each declared domain has a test registered under its name, and measures something —
+/// `DeterminismStrength::None` would be an obligation this loop discharges without ever
+/// checking anything.
+fn Each_Domain_Declares_A_Strategy_And_Is_Registered(declared: [(&str, DeterminismStrength); 10])
+{
+    use crate::harness::Test_Name_For;
 
     for (domain, strength) in declared
     {

@@ -1,4 +1,4 @@
-use crate::{AUTHORED, SpecificationStore};
+use crate::{AUTHORED, RelationConstraint, SpecificationStore};
 use crate::StoreError;
 
 /// The records that govern this system, embedded so they travel with the binary.
@@ -263,7 +263,11 @@ fn Declare_The_Relation_Types(store: &mut SpecificationStore) -> Result<(), Stor
 {
     for seed in RELATION_TYPES
     {
-        store.Put_Relation_Type(seed.name, SEED_TIER, seed.domain, seed.range, seed.max_per_node)?;
+        store.Put_Relation_Type(
+            seed.name,
+            SEED_TIER,
+            RelationConstraint { domain: seed.domain, range: seed.range, max_per_node: seed.max_per_node },
+        )?;
     }
     for seed in RELATION_TYPES
     {
@@ -353,22 +357,35 @@ mod tests
     {
         let refusal = Refuse_Unknown_Relation("docs/records/OD-LEDGER-014-x.md", "amends")
             .expect("`amends` is not in the seeded vocabulary");
-
-        let StoreError::Record { path, cause } = refusal
-        else
-        {
-            // Unreachable while an unknown relation term is reported as a defect in the
-            // record that used it. Any other variant would mean the refusal blamed something
-            // else, and the three assertions below — the path, the term, and every admissible
-            // term — would have no message to read.
-            panic!("an unknown relation type is a defect in a record: {refusal:?}");
-        };
+        let (path, cause) = Record_Refusal(refusal);
 
         assert_eq!(path, "docs/records/OD-LEDGER-014-x.md", "which record stopped the seed");
         assert!(cause.contains("amends"), "which term it used: {cause}");
+        Assert_Every_Seeded_Term_Is_Offered(&cause);
+    }
 
-        // And what it could have said instead — every seeded term, so the author does not
-        // have to open governing.rs to find out.
+    /// The path and cause of a `StoreError::Record` refusal, or a panic naming the wrong
+    /// variant.
+    ///
+    /// Unreachable while an unknown relation term is reported as a defect in the record
+    /// that used it. Any other variant would mean the refusal blamed something else, and
+    /// the caller's assertions — the path, the term, and every admissible term — would have
+    /// no message to read.
+    fn Record_Refusal(refusal: StoreError) -> (String, String)
+    {
+        let StoreError::Record { path, cause } = refusal
+        else
+        {
+            panic!("an unknown relation type is a defect in a record: {refusal:?}");
+        };
+
+        return (path, cause);
+    }
+
+    /// What the refusal could have said instead — every seeded term, so the author does not
+    /// have to open governing.rs to find out.
+    fn Assert_Every_Seeded_Term_Is_Offered(cause: &str)
+    {
         for seed in RELATION_TYPES
         {
             assert!(

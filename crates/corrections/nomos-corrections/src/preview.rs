@@ -1,6 +1,6 @@
 //! What a plan would do, rendered without touching any workspace.
 
-use crate::CorrectionPlan;
+use crate::{CorrectionCandidate, CorrectionPlan, Edit};
 
 /// A deterministic rendering of a plan's candidates and their edits.
 ///
@@ -22,22 +22,7 @@ impl Preview
 
         for candidate in plan.Candidates()
         {
-            rendered.extend_from_slice(format!("candidate\t{}\n", candidate.Id()).as_bytes());
-            rendered
-                .extend_from_slice(format!("description\t{}\n", candidate.Description()).as_bytes());
-
-            for edit in candidate.Change().Edits()
-            {
-                rendered.extend_from_slice(
-                    format!(
-                        "edit\t{}\t{}\t{}\n",
-                        edit.Path(),
-                        edit.Before().unwrap_or("-"),
-                        edit.After().unwrap_or("-")
-                    )
-                    .as_bytes(),
-                );
-            }
+            Render_Candidate(&mut rendered, candidate);
         }
 
         return Self { rendered };
@@ -48,6 +33,38 @@ impl Preview
     {
         return &self.rendered;
     }
+}
+
+/// Appends one candidate's header and every one of its edits to `rendered`.
+fn Render_Candidate(rendered: &mut Vec<u8>, candidate: &CorrectionCandidate)
+{
+    Render_Header(rendered, candidate);
+
+    for edit in candidate.Change().Edits()
+    {
+        Render_Edit(rendered, edit);
+    }
+}
+
+/// Appends a candidate's identity and description lines to `rendered`.
+fn Render_Header(rendered: &mut Vec<u8>, candidate: &CorrectionCandidate)
+{
+    rendered.extend_from_slice(format!("candidate\t{}\n", candidate.Id()).as_bytes());
+    rendered.extend_from_slice(format!("description\t{}\n", candidate.Description()).as_bytes());
+}
+
+/// Appends one edit's line to `rendered`.
+fn Render_Edit(rendered: &mut Vec<u8>, edit: &Edit)
+{
+    rendered.extend_from_slice(
+        format!(
+            "edit\t{}\t{}\t{}\n",
+            edit.Path(),
+            edit.Before().unwrap_or("-"),
+            edit.After().unwrap_or("-")
+        )
+        .as_bytes(),
+    );
 }
 
 #[cfg(test)]

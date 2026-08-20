@@ -5,7 +5,7 @@
 //! rather than splitting on lines, because a tuple variant's payload can carry a comma
 //! inside a generic argument.
 
-use crate::reading::masks::{Identifier_After, Is_Code, Matching_Delimiter};
+use crate::reading::masks::{Delimiter, Identifier_After, Is_Code, Matching_Delimiter};
 use crate::reading::text::{Collapsed, Line_End, Next_Line};
 
 /// Which of the two bodies is being read.
@@ -180,8 +180,8 @@ fn Bracketed(
     let bytes = text.as_bytes();
     let matched = match opener
     {
-        Some(b'{') => Matching_Delimiter(bytes, &masks.code, cursor, b'{', b'}'),
-        Some(b'(') => Matching_Delimiter(bytes, &masks.code, cursor, b'(', b')'),
+        Some(b'{') => Matching_Delimiter(bytes, &masks.code, cursor, Delimiter { opening: b'{', closing: b'}' }),
+        Some(b'(') => Matching_Delimiter(bytes, &masks.code, cursor, Delimiter { opening: b'(', closing: b')' }),
         _ =>
         {
             return Carried {

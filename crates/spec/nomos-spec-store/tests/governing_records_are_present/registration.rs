@@ -143,6 +143,13 @@ fn Test_Every_Governing_Record_Should_Resolve_By_Id()
 
     let store = Seeded();
 
+    Assert_Every_Governing_Record_Resolves(&store);
+    Assert_At_Least_The_Floor_Governs();
+}
+
+/// Every declared governing identifier resolves to a node the store actually holds.
+fn Assert_Every_Governing_Record_Resolves(store: &SpecificationStore)
+{
     let missing: Vec<&str> = GOVERNING_RECORD_IDS
         .iter()
         .filter(|id| store.Node_Uid(id).expect("queries").is_none())
@@ -150,9 +157,12 @@ fn Test_Every_Governing_Record_Should_Resolve_By_Id()
         .collect();
 
     assert!(missing.is_empty(), "not in the store: {missing:?}");
+}
 
-    // A floor rather than a count. What that keeps, what it gives up, and why there is no
-    // ceiling are on `FEWEST_GOVERNING_RECORDS` above.
+/// A floor rather than a count. What that keeps, what it gives up, and why there is no
+/// ceiling are on `FEWEST_GOVERNING_RECORDS` above.
+fn Assert_At_Least_The_Floor_Governs()
+{
     assert!(
         GOVERNING_RECORD_IDS.len() >= FEWEST_GOVERNING_RECORDS,
         "{} governing record(s), and this build accepts no fewer than \
@@ -218,32 +228,41 @@ fn Test_Every_Canonical_Record_On_Disk_Should_Be_Governing()
 fn Test_A_Record_Whose_Registration_Is_Missing_Should_Be_Unseeded()
 {
     let canonical = Canonical_Records();
-    let Some(dropped) = GOVERNING_RECORD_IDS.first()
-    else
-    {
+    let dropped = Any_Governing_Id();
+    let governing = Governing_Ids_Without(dropped);
+
+    let Disagreement { unseeded, phantom } = Disagreements(&canonical, &governing);
+
+    assert_eq!(
+        unseeded,
+        vec![dropped.to_owned()],
+        "a canonical record with no registration was not reported as unseeded, so the \
+         guard no longer sees the thing OD-SPEC-005 exists about"
+    );
+    assert!(phantom.is_empty(), "removing a registration invented a phantom: {phantom:?}");
+}
+
+/// Any governing identifier, to drop for the control above.
+fn Any_Governing_Id() -> &'static str
+{
+    return GOVERNING_RECORD_IDS.first().copied().unwrap_or_else(|| {
         // Unreachable while anything at all governs this build — `FEWEST_GOVERNING_RECORDS`
         // holds the floor at 32. It is a panic rather than an early return because this test
         // is the control that proves the guard still sees a missing registration: with no id
         // to drop there is nothing to control for, and a silent skip would leave the suite
         // reporting that the guard had been exercised.
         panic!("nothing governs this build, so this control has nothing to remove")
-    };
+    });
+}
 
-    let governing: Vec<&str> = GOVERNING_RECORD_IDS
+/// The governing set with one identifier removed.
+fn Governing_Ids_Without(dropped: &str) -> Vec<&'static str>
+{
+    return GOVERNING_RECORD_IDS
         .iter()
-        .filter(|id| return *id != dropped)
+        .filter(|id| return **id != dropped)
         .copied()
         .collect();
-
-    let Disagreement { unseeded, phantom } = Disagreements(&canonical, &governing);
-
-    assert_eq!(
-        unseeded,
-        vec![(*dropped).to_owned()],
-        "a canonical record with no registration was not reported as unseeded, so the \
-         guard no longer sees the thing OD-SPEC-005 exists about"
-    );
-    assert!(phantom.is_empty(), "removing a registration invented a phantom: {phantom:?}");
 }
 
 /// The other direction: a registration nothing on disk declares.

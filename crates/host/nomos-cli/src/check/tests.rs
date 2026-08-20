@@ -269,41 +269,8 @@ fn Test_A_Phantom_Should_Block_Though_The_Tree_Holds_A_File_The_Parser_Refuses()
 #[test]
 fn Test_A_Provider_Refusal_Must_Not_Render_The_Same_As_A_Clean_Run()
 {
-    let root = std::env::temp_dir().join("nomos-check-coverage-debt-beside-clean");
-    let _ignored = std::fs::remove_dir_all(&root);
-    std::fs::create_dir_all(&root).expect("the temporary root is creatable");
-    std::fs::write(root.join("a.rs"), "pub fn ok() {}\n").expect("writable");
-    std::fs::write(root.join("broken.rs"), "pub const ??? = ;\n").expect("writable");
-
-    let mut stdout = Vec::new();
-    let mut stderr = Vec::new();
-    let code = Run(&CheckCommand { root: root.clone() }, &mut stdout, &mut stderr);
-    let rendered = String::from_utf8_lossy(&stdout).into_owned();
-
-    let _ignored = std::fs::remove_dir_all(&root);
-
-    let clean_root = std::env::temp_dir().join("nomos-check-clean-only");
-    let _ignored = std::fs::remove_dir_all(&clean_root);
-    std::fs::create_dir_all(&clean_root).expect("the temporary root is creatable");
-    std::fs::write(clean_root.join("a.rs"), "pub fn ok() {}\n").expect("writable");
-    // A real, if minimal, Cargo.toml -- without one, `cargo metadata` cannot find a
-    // workspace here at all, and the dependency-edges provider reports
-    // `ProviderUnavailable` for a reason that has nothing to do with what this test
-    // means by "clean": a tree with no findings, not a tree the provider cannot even see.
-    std::fs::write(
-        clean_root.join("Cargo.toml"),
-        "[package]\nname = \"nomos-check-clean-only-fixture\"\nversion = \"0.0.0\"\nedition = \"2021\"\n",
-    )
-    .expect("writable");
-    std::fs::create_dir_all(clean_root.join("src")).expect("the src directory is creatable");
-    std::fs::write(clean_root.join("src").join("lib.rs"), "").expect("writable");
-
-    let mut clean_stdout = Vec::new();
-    let mut clean_stderr = Vec::new();
-    let clean_code = Run(&CheckCommand { root: clean_root.clone() }, &mut clean_stdout, &mut clean_stderr);
-    let clean_rendered = String::from_utf8_lossy(&clean_stdout).into_owned();
-
-    let _ignored = std::fs::remove_dir_all(&clean_root);
+    let (code, rendered) = Broken_Provider_Run();
+    let (clean_code, clean_rendered) = Clean_Run();
 
     // Neither run fails the build: nothing declares a mirror, so there is nothing to be a
     // phantom about, and the refusal is advisory. That is exactly why the exit code alone
@@ -322,6 +289,57 @@ fn Test_A_Provider_Refusal_Must_Not_Render_The_Same_As_A_Clean_Run()
         !clean_rendered.contains("DependencyUnavailable") && !clean_rendered.contains("Unparseable"),
         "{clean_rendered}"
     );
+}
+
+/// A tree with one clean file and one the parser genuinely refuses to read -- the run and
+/// its rendered stdout, with the temporary root cleaned up before returning.
+fn Broken_Provider_Run() -> (ExitCode, String)
+{
+    let root = std::env::temp_dir().join("nomos-check-coverage-debt-beside-clean");
+    let _ignored = std::fs::remove_dir_all(&root);
+    std::fs::create_dir_all(&root).expect("the temporary root is creatable");
+    std::fs::write(root.join("a.rs"), "pub fn ok() {}\n").expect("writable");
+    std::fs::write(root.join("broken.rs"), "pub const ??? = ;\n").expect("writable");
+
+    let mut stdout = Vec::new();
+    let mut stderr = Vec::new();
+    let code = Run(&CheckCommand { root: root.clone() }, &mut stdout, &mut stderr);
+    let rendered = String::from_utf8_lossy(&stdout).into_owned();
+
+    let _ignored = std::fs::remove_dir_all(&root);
+
+    return (code, rendered);
+}
+
+/// A tree with nothing for the parser to refuse -- the run and its rendered stdout, with
+/// the temporary root cleaned up before returning.
+///
+/// A real, if minimal, Cargo.toml is required: without one, `cargo metadata` cannot find a
+/// workspace here at all, and the dependency-edges provider reports `ProviderUnavailable`
+/// for a reason that has nothing to do with what this test means by "clean": a tree with no
+/// findings, not a tree the provider cannot even see.
+fn Clean_Run() -> (ExitCode, String)
+{
+    let root = std::env::temp_dir().join("nomos-check-clean-only");
+    let _ignored = std::fs::remove_dir_all(&root);
+    std::fs::create_dir_all(&root).expect("the temporary root is creatable");
+    std::fs::write(root.join("a.rs"), "pub fn ok() {}\n").expect("writable");
+    std::fs::write(
+        root.join("Cargo.toml"),
+        "[package]\nname = \"nomos-check-clean-only-fixture\"\nversion = \"0.0.0\"\nedition = \"2021\"\n",
+    )
+    .expect("writable");
+    std::fs::create_dir_all(root.join("src")).expect("the src directory is creatable");
+    std::fs::write(root.join("src").join("lib.rs"), "").expect("writable");
+
+    let mut stdout = Vec::new();
+    let mut stderr = Vec::new();
+    let code = Run(&CheckCommand { root: root.clone() }, &mut stdout, &mut stderr);
+    let rendered = String::from_utf8_lossy(&stdout).into_owned();
+
+    let _ignored = std::fs::remove_dir_all(&root);
+
+    return (code, rendered);
 }
 
 /// One file claiming a mirror nothing declares, beside one the parser genuinely refuses.

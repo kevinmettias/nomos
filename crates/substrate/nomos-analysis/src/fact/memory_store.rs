@@ -342,39 +342,93 @@ impl FactStore for MemoryFactStore
         let described = cause.Describe();
         let mut report = Opened(cause, from);
         let roots = self.Invalidate_Named(cause, from, &described, &mut report);
-        let mut seen: BTreeSet<Digest128> = roots.iter().copied().collect();
 
-        // Cloned once, and `propagation` taken out of `self`, rather than either held as a
-        // borrow across the walk: the callback below needs `&mut self` for `Invalidate_One`
-        // and `self.keys`, which cannot coexist with a borrow of `self.dependents` or
-        // `self.propagation` for the call that runs it. `DependencyPropagation` has no
-        // Nomos-specific reason to know about that conflict — see `docs/records/D-135` and
-        // `docs/records/D-138`.
+        let seen = self.Propagate(roots, from, &described, &mut report);
+
+        self.Note_Broadening(cause.Granularity(), &seen, &mut report);
+        self.Settle(&mut report);
+
+        return report;
+    }
+}
+
+impl MemoryFactStore
+{
+    /// Spreads invalidation from `roots` through `self.dependents`, recording each reached
+    /// dependent's key into `report`. Returns every digest visited, roots included.
+    fn Propagate(
+        &mut self,
+        roots: Vec<Digest128>,
+        from: GenerationId,
+        described: &str,
+        report: &mut InvalidationReport,
+    ) -> BTreeSet<Digest128>
+    {
+        let mut seen: BTreeSet<Digest128> = roots.iter().copied().collect();
+        let (dependents, propagation) = self.Taken_Propagation();
+        let invalidating = Invalidating { from, described };
+
+        propagation.Spread(&dependents, roots, &mut |consumer| {
+            return self.Reached(consumer, invalidating, &mut seen, report);
+        });
+        self.propagation = Some(propagation);
+
+        return seen;
+    }
+
+    /// Takes `self.propagation` out, alongside a snapshot of `self.dependents`, so the walk
+    /// in [`Self::Propagate`] can hold `&mut self` inside its own callback without a live
+    /// borrow of either field conflicting with it.
+    ///
+    /// Cloned once, and `propagation` taken out of `self`, rather than either held as a
+    /// borrow across the walk: the callback needs `&mut self` for [`Self::Invalidate_One`]
+    /// and `self.keys`, which cannot coexist with a borrow of `self.dependents` or
+    /// `self.propagation` for the call that runs it. `DependencyPropagation` has no
+    /// Nomos-specific reason to know about that conflict — see `docs/records/D-135` and
+    /// `docs/records/D-138`.
+    fn Taken_Propagation(&mut self) -> (BTreeMap<Digest128, BTreeSet<Digest128>>, Box<dyn DependencyPropagation>)
+    {
         let dependents = self.dependents.clone();
         let propagation = self
             .propagation
             .take()
             .expect("propagation implementation is always present between calls");
-        propagation.Spread(&dependents, roots, &mut |consumer| {
-            seen.insert(consumer);
-            if !self.Invalidate_One(consumer, from, &described)
-            {
-                return false;
-            }
-            if let Some(key) = self.keys.get(&consumer)
-            {
-                report.dependent.push(key.clone());
-            }
-            return true;
-        });
-        self.propagation = Some(propagation);
 
-        self.Note_Broadening(cause.Granularity(), &seen, &mut report);
-
-        self.Settle(&mut report);
-
-        return report;
+        return (dependents, propagation);
     }
+
+    /// One node the walk reached: recorded into `seen`, invalidated, and — if it was live —
+    /// named in `report`. Returns whether the walk should continue past it.
+    fn Reached(
+        &mut self,
+        consumer: Digest128,
+        invalidating: Invalidating<'_>,
+        seen: &mut BTreeSet<Digest128>,
+        report: &mut InvalidationReport,
+    ) -> bool
+    {
+        seen.insert(consumer);
+        if !self.Invalidate_One(consumer, invalidating.from, invalidating.described)
+        {
+            return false;
+        }
+        if let Some(key) = self.keys.get(&consumer)
+        {
+            report.dependent.push(key.clone());
+        }
+
+        return true;
+    }
+}
+
+/// The generation and description a walk is invalidating under, threaded through
+/// [`MemoryFactStore::Reached`] as one value so the function stays under this crate's own
+/// parameter-count ceiling.
+#[derive(Clone, Copy)]
+struct Invalidating<'a>
+{
+    from: GenerationId,
+    described: &'a str,
 }
 
 #[cfg(test)]
@@ -489,12 +543,12 @@ mod tests
         let derived = Key_For(7);
 
         let mut store = MemoryFactStore::With_Propagation(propagation);
-        store
-            .Materialize(Fact_For(&upstream, GenerationId::INITIAL), &[])
-            .expect("materializes");
+        let upstream_fact = Fact_For(&upstream, GenerationId::INITIAL);
+        store.Materialize(upstream_fact, &[]).expect("materializes");
+        let derived_fact = Fact_For(&derived, GenerationId::INITIAL);
         store
             .Materialize(
-                Fact_For(&derived, GenerationId::INITIAL),
+                derived_fact,
                 &[Dependency {
                     key: upstream.clone(),
                     outcome: ReadOutcome::Materialized,

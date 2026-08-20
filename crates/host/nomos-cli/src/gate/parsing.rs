@@ -34,11 +34,30 @@ pub fn Parse(arguments: &[String]) -> Result<GateInvocation, String>
         return Err(USAGE.to_owned());
     };
 
+    Known_Verb(verb)?;
+    No_Unknown_Argument(rest)?;
+
+    let command = GateCommand {
+        root: Named_Value(rest, "--root").map_or_else(|| return PathBuf::from("."), PathBuf::from),
+    };
+
+    return Ok(if verb == "run" { GateInvocation::Run(command) } else { GateInvocation::Plan(command) });
+}
+
+/// Refuses anything but the two verbs this group implements today.
+fn Known_Verb(verb: &str) -> Result<(), String>
+{
     if verb != "plan" && verb != "run"
     {
         return Err(format!("unknown verb `{verb}`.\n\n{USAGE}"));
     }
 
+    return Ok(());
+}
+
+/// Refuses any flag but `--root`.
+fn No_Unknown_Argument(rest: &[String]) -> Result<(), String>
+{
     if let Some(unknown) = rest
         .iter()
         .find(|argument| return argument.starts_with('-') && argument.as_str() != "--root")
@@ -46,9 +65,5 @@ pub fn Parse(arguments: &[String]) -> Result<GateInvocation, String>
         return Err(format!("unknown argument `{unknown}`.\n\n{USAGE}"));
     }
 
-    let command = GateCommand {
-        root: Named_Value(rest, "--root").map_or_else(|| return PathBuf::from("."), PathBuf::from),
-    };
-
-    return Ok(if verb == "run" { GateInvocation::Run(command) } else { GateInvocation::Plan(command) });
+    return Ok(());
 }

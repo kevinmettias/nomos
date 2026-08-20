@@ -104,7 +104,8 @@ mod tests
     #[test]
     fn Test_Identical_Candidates_Should_Share_An_Identity()
     {
-        let change = ChangeSet::Empty().With(Edit::New("a.rs", None, Some("x".to_owned())));
+        let edit = Edit::New("a.rs", None, Some("x".to_owned()));
+        let change = ChangeSet::Empty().With(edit);
 
         let one = CorrectionCandidate::New("fix a", change.clone());
         let other = CorrectionCandidate::New("fix a", change);
@@ -115,7 +116,8 @@ mod tests
     #[test]
     fn Test_A_Different_Description_Should_Change_The_Identity()
     {
-        let change = ChangeSet::Empty().With(Edit::New("a.rs", None, Some("x".to_owned())));
+        let edit = Edit::New("a.rs", None, Some("x".to_owned()));
+        let change = ChangeSet::Empty().With(edit);
 
         let one = CorrectionCandidate::New("fix a", change.clone());
         let other = CorrectionCandidate::New("fix a differently", change);
@@ -126,14 +128,11 @@ mod tests
     #[test]
     fn Test_A_Different_Change_Should_Change_The_Identity()
     {
-        let one = CorrectionCandidate::New(
-            "fix a",
-            ChangeSet::Empty().With(Edit::New("a.rs", None, Some("x".to_owned()))),
-        );
-        let other = CorrectionCandidate::New(
-            "fix a",
-            ChangeSet::Empty().With(Edit::New("a.rs", None, Some("y".to_owned()))),
-        );
+        let edit_one = Edit::New("a.rs", None, Some("x".to_owned()));
+        let one = CorrectionCandidate::New("fix a", ChangeSet::Empty().With(edit_one));
+
+        let edit_other = Edit::New("a.rs", None, Some("y".to_owned()));
+        let other = CorrectionCandidate::New("fix a", ChangeSet::Empty().With(edit_other));
 
         assert_ne!(one.Id(), other.Id());
     }

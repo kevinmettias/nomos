@@ -45,7 +45,10 @@ pub use table::row_census::RowCensus;
 pub use table::row_scope::RowScope;
 pub use schema::{Latest_Version, Migration, MIGRATIONS};
 pub use edit::staged::StagedEdit;
-pub use store::{AUTHORED, EXTERNAL, GOVERNING_RECORD_IDS, SeedReport, Seed_Governing_Records, SpecificationStore};
+pub use store::{
+    AUTHORED, EXTERNAL, GOVERNING_RECORD_IDS, RelationConstraint, SeedReport,
+    Seed_Governing_Records, SpecificationStore,
+};
 pub use store::error::StoreError;
 pub use submission::{Accept_Submission, AcceptError, Transport_Origin};
 pub use table::suite_authority::SuiteAuthority;

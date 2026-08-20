@@ -175,6 +175,12 @@ fn Test_Broken_Source_Should_Be_Unparseable_Rather_Than_Empty()
 #[test]
 fn Test_A_Byte_Order_Mark_Should_Be_Leading_Or_Refused()
 {
+    Assert_Leading_Mark_Is_Ordinary_Rust();
+    Assert_Stray_Mark_Is_Refused();
+}
+
+fn Assert_Leading_Mark_Is_Ordinary_Rust()
+{
     let facts = Parsed("\u{feff}pub fn after_the_mark() {}\n");
 
     assert_eq!(
@@ -182,7 +188,10 @@ fn Test_A_Byte_Order_Mark_Should_Be_Leading_Or_Refused()
         Some("after_the_mark".to_owned()),
         "a leading mark is an encoding announcement and the file is ordinary Rust"
     );
+}
 
+fn Assert_Stray_Mark_Is_Refused()
+{
     let stray = "use super::*;\n\n\u{feff}//! documentation\npub fn hidden() {}\n";
 
     match Read_Source(stray)

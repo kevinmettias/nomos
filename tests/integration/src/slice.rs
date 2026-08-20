@@ -381,31 +381,11 @@ impl Slice
         content: &str,
     ) -> Edited
     {
-        let presented = WorkspaceChangeSet::From(source).Present(path, content);
-        let applied = self
-            .workspace
-            .Apply(&presented)
-            // A refused edit absorbed here would leave the caller asserting that changing
-            // nothing invalidated nothing: every invalidation test downstream would pass over
-            // a workspace that never moved, and read that as the engine being conservative.
-            .unwrap_or_else(|error| panic!("`{path}` could not be edited: {error}"));
+        let applied = self.Apply_The_Change(source, path, content);
 
         Self::Assert_The_Corpus_Holds(corpus, path, content);
 
-        let Applied::Advanced { generation, .. } = applied
-        else
-        {
-            return Edited::Unchanged { applied };
-        };
-        self.generation = generation;
-        self.snapshot = applied.Snapshot();
-
-        let invalidated = self.Invalidate_One_Subject(path);
-
-        return Edited::Advanced {
-            applied,
-            invalidated,
-        };
+        return self.Advance_After_Edit(applied, path);
     }
 
     /// A checkout: several members land at once, and the store is told which of them differ.

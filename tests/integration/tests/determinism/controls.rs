@@ -84,6 +84,19 @@ fn Test_An_Altered_Byte_Should_Move_The_Digest_The_Golden_Pins()
     let honest = Production {
         trace: Bundle_Bytes(Order::Forwards),
     };
+    let tampered = Tampered_With_One_Byte_Flipped(&honest);
+
+    assert_ne!(
+        tampered.trace, honest.trace,
+        "the control altered nothing, so the comparison below cannot fail"
+    );
+    The_Altered_Digest_Moved_Away_From_The_Golden(&honest, &tampered, BUNDLE_GOLDEN);
+}
+
+/// A copy of the honest trace with its last lower-case byte flipped to upper case — one
+/// changed byte, anywhere in a real bundle.
+fn Tampered_With_One_Byte_Flipped(honest: &Production) -> Production
+{
     let mut altered = honest.trace.clone();
     let last = altered
         .iter()
@@ -93,12 +106,14 @@ fn Test_An_Altered_Byte_Should_Move_The_Digest_The_Golden_Pins()
         .get_mut(last)
         .expect("the position just found is in range");
     *target = target.to_ascii_uppercase();
-    let tampered = Production { trace: altered };
 
-    assert_ne!(
-        tampered.trace, honest.trace,
-        "the control altered nothing, so the comparison below cannot fail"
-    );
+    return Production { trace: altered };
+}
+
+/// The changed byte left the digest where it was, and the honest half of this control is
+/// the bundle the golden was captured from.
+fn The_Altered_Digest_Moved_Away_From_The_Golden(honest: &Production, tampered: &Production, golden: &str)
+{
     assert_ne!(
         tampered.Digest_At(DeterminismStrength::State),
         honest.Digest_At(DeterminismStrength::State),
@@ -106,7 +121,7 @@ fn Test_An_Altered_Byte_Should_Move_The_Digest_The_Golden_Pins()
     );
     assert_eq!(
         honest.Digest_At(DeterminismStrength::State),
-        BUNDLE_GOLDEN,
+        golden,
         "the honest half of this control must be the bundle the golden was captured from"
     );
 }

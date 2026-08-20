@@ -134,20 +134,31 @@ pub(super) fn Insert_Relation_Types(transaction: &Transaction<'_>, bundle: &Bund
             continue;
         };
 
-        let domain_json = serde_json::to_string(&relation_type.domain)
-            .map_err(|error| return BundleError::Sql(error.to_string()))?;
-        let range_json = serde_json::to_string(&relation_type.range)
-            .map_err(|error| return BundleError::Sql(error.to_string()))?;
-
-        insert.execute(params![
-            relation_type.name,
-            relation_type.tier,
-            relation_type.inverse_of,
-            domain_json,
-            range_json,
-            relation_type.max_per_node,
-        ])?;
+        Insert_One_Relation_Type(&mut insert, relation_type)?;
     }
+
+    return Ok(());
+}
+
+/// One relation type row, its domain and range encoded back to JSON.
+fn Insert_One_Relation_Type(
+    insert: &mut rusqlite::Statement<'_>,
+    relation_type: &crate::RelationType,
+) -> Result<(), BundleError>
+{
+    let domain_json = serde_json::to_string(&relation_type.domain)
+        .map_err(|error| return BundleError::Sql(error.to_string()))?;
+    let range_json = serde_json::to_string(&relation_type.range)
+        .map_err(|error| return BundleError::Sql(error.to_string()))?;
+
+    insert.execute(params![
+        relation_type.name,
+        relation_type.tier,
+        relation_type.inverse_of,
+        domain_json,
+        range_json,
+        relation_type.max_per_node,
+    ])?;
 
     return Ok(());
 }

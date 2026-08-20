@@ -147,6 +147,21 @@ fn Package_Line(line: Option<&str>) -> Result<String, PayloadRefusal>
 
 fn Edge_Line(line: &str) -> Result<DependencyEdge, PayloadRefusal>
 {
+    let rest = Strip_Edge_Prefix(line)?;
+    let (target, kind, optionality) = Split_Edge_Fields(rest, line)?;
+    let kind = Parse_Dependency_Kind(kind)?;
+    let optional = Parse_Optionality(optionality)?;
+
+    return Ok(DependencyEdge {
+        target: target.to_owned(),
+        kind,
+        optional,
+    });
+}
+
+/// Strips the `edge\t` tag every edge line must open with.
+fn Strip_Edge_Prefix(line: &str) -> Result<&str, PayloadRefusal>
+{
     let Some(rest) = line.strip_prefix("edge\t")
     else
     {
@@ -155,6 +170,12 @@ fn Edge_Line(line: &str) -> Result<DependencyEdge, PayloadRefusal>
         });
     };
 
+    return Ok(rest);
+}
+
+/// Splits an edge line's tagged remainder into its three tab-separated fields.
+fn Split_Edge_Fields<'a>(rest: &'a str, line: &str) -> Result<(&'a str, &'a str, &'a str), PayloadRefusal>
+{
     let fields: Vec<&str> = rest.split('\t').collect();
     let [target, kind, optionality] = fields.as_slice()
     else
@@ -164,6 +185,12 @@ fn Edge_Line(line: &str) -> Result<DependencyEdge, PayloadRefusal>
         });
     };
 
+    return Ok((*target, *kind, *optionality));
+}
+
+/// Resolves an edge line's kind field to the [`DependencyKind`] it names.
+fn Parse_Dependency_Kind(kind: &str) -> Result<DependencyKind, PayloadRefusal>
+{
     let Some(kind) = DependencyKind::From_Label(kind)
     else
     {
@@ -172,23 +199,20 @@ fn Edge_Line(line: &str) -> Result<DependencyEdge, PayloadRefusal>
         });
     };
 
-    let optional = match *optionality
-    {
-        "optional" => true,
-        "required" => false,
-        other =>
-        {
-            return Err(PayloadRefusal {
-                reason: format!("unrecognized optionality: {other:?}"),
-            });
-        }
-    };
+    return Ok(kind);
+}
 
-    return Ok(DependencyEdge {
-        target: (*target).to_owned(),
-        kind,
-        optional,
-    });
+/// Resolves an edge line's optionality field to the `bool` it names.
+fn Parse_Optionality(optionality: &str) -> Result<bool, PayloadRefusal>
+{
+    return match optionality
+    {
+        "optional" => Ok(true),
+        "required" => Ok(false),
+        other => Err(PayloadRefusal {
+            reason: format!("unrecognized optionality: {other:?}"),
+        }),
+    };
 }
 
 #[cfg(test)]

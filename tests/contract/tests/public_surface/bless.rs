@@ -7,6 +7,7 @@
 
 use crate::reading::{Rendered, Snapshot_Path, Surfaces, BLESS};
 use nomos_contract_tests::Surface;
+use std::collections::BTreeSet;
 use std::path::{Path, PathBuf};
 
 /// A directory of this suite's own to bless into.
@@ -166,17 +167,10 @@ fn Assert_A_Name_Matching_Nothing_Is_Refused(surfaces: &[Surface])
 /// wired up.
 fn Requested(value: &str, surfaces: &[Surface]) -> Result<Vec<String>, String>
 {
-    use std::collections::BTreeSet;
-
-    let known: BTreeSet<&str> =
-        surfaces.iter().map(|surface| return surface.package.as_str()).collect();
-    let names: BTreeSet<&str> = value
-        .split(|character: char| return character == ',' || character.is_whitespace())
-        .map(str::trim)
-        .filter(|name| return !name.is_empty())
-        .collect();
-
+    let known = Known_Package_Names(surfaces);
+    let names = Requested_Names(value);
     let listed = known.iter().copied().collect::<Vec<&str>>().join(", ");
+
     if names.is_empty()
     {
         return Err(Names_No_Crate(value, &listed));
@@ -189,6 +183,22 @@ fn Requested(value: &str, surfaces: &[Surface]) -> Result<Vec<String>, String>
     }
 
     return Ok(names.into_iter().map(str::to_owned).collect());
+}
+
+/// The package name of every crate with a snapshot -- the closed set a request may name.
+fn Known_Package_Names(surfaces: &[Surface]) -> BTreeSet<&str>
+{
+    return surfaces.iter().map(|surface| return surface.package.as_str()).collect();
+}
+
+/// The crate names `value` names, split on commas and whitespace and stripped of blanks.
+fn Requested_Names(value: &str) -> BTreeSet<&str>
+{
+    return value
+        .split(|character: char| return character == ',' || character.is_whitespace())
+        .map(str::trim)
+        .filter(|name| return !name.is_empty())
+        .collect();
 }
 
 /// The refusal for a value that is a flag rather than a list of names.

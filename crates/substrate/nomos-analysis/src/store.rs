@@ -170,14 +170,33 @@ impl RematerializationGroup
 #[must_use]
 pub fn Condensation_Of(report: &InvalidationReport, store: &MemoryFactStore) -> Vec<RematerializationGroup>
 {
+    let nodes = Named_Nodes(report);
+    let edges = Dependency_Edges(&nodes, store);
+
+    return Condense(&nodes, &edges);
+}
+
+/// Every fact `report` named, keyed by digest.
+fn Named_Nodes(report: &InvalidationReport) -> BTreeMap<Digest128, FactKey>
+{
     let mut nodes: BTreeMap<Digest128, FactKey> = BTreeMap::new();
     for key in report.direct.iter().chain(report.dependent.iter())
     {
         nodes.insert(key.Digest(), key.clone());
     }
 
+    return nodes;
+}
+
+/// The dependency edges among `nodes`, read back from `store`, with any edge leading
+/// outside `nodes` dropped — that target was not invalidated, so it forms no edge here.
+fn Dependency_Edges(
+    nodes: &BTreeMap<Digest128, FactKey>,
+    store: &MemoryFactStore,
+) -> BTreeMap<Digest128, BTreeSet<Digest128>>
+{
     let mut edges: BTreeMap<Digest128, BTreeSet<Digest128>> = BTreeMap::new();
-    for (digest, key) in &nodes
+    for (digest, key) in nodes
     {
         let targets: BTreeSet<Digest128> = store
             .Dependencies_Of(key)
@@ -188,8 +207,30 @@ pub fn Condensation_Of(report: &InvalidationReport, store: &MemoryFactStore) -> 
         edges.insert(*digest, targets);
     }
 
+    return edges;
+}
+
+/// Runs Tarjan's SCC algorithm over `nodes`/`edges` and resolves the components it finds
+/// into rematerialization groups, each with its members sorted for a deterministic order.
+fn Condense(
+    nodes: &BTreeMap<Digest128, FactKey>,
+    edges: &BTreeMap<Digest128, BTreeSet<Digest128>>,
+) -> Vec<RematerializationGroup>
+{
+    let components = Strongly_Connected_Components(nodes, edges);
+
+    return Resolved_Groups(nodes, components);
+}
+
+/// Runs Tarjan's algorithm over `nodes`/`edges`, visiting every node not already reached
+/// from an earlier one, and returns its components in finishing order.
+fn Strongly_Connected_Components(
+    nodes: &BTreeMap<Digest128, FactKey>,
+    edges: &BTreeMap<Digest128, BTreeSet<Digest128>>,
+) -> Vec<Vec<Digest128>>
+{
     let mut tarjan = Tarjan {
-        edges: &edges,
+        edges,
         counter: 0,
         indices: BTreeMap::new(),
         lowlink: BTreeMap::new(),
@@ -206,8 +247,17 @@ pub fn Condensation_Of(report: &InvalidationReport, store: &MemoryFactStore) -> 
         }
     }
 
-    return tarjan
-        .components
+    return tarjan.components;
+}
+
+/// Each component resolved back into the fact keys `nodes` names, sorted for a
+/// deterministic member order.
+fn Resolved_Groups(
+    nodes: &BTreeMap<Digest128, FactKey>,
+    components: Vec<Vec<Digest128>>,
+) -> Vec<RematerializationGroup>
+{
+    return components
         .into_iter()
         .map(|members| {
             let mut resolved: Vec<FactKey> = members
@@ -261,26 +311,12 @@ impl Tarjan<'_>
     {
         let mut frames: Vec<Frame> = vec![self.Opened(start)];
 
-        loop
+        while let Some(frame) = frames.last_mut()
         {
-            let Some(frame) = frames.last_mut()
-            else
-            {
-                break;
-            };
-
             if let Some(target) = frame.targets.get(frame.next).copied()
             {
-                let node = frame.node;
-                frame.next = frame.next.saturating_add(1);
-
-                if self.indices.contains_key(&target)
+                if let Some(opened) = self.Advance(frame, target)
                 {
-                    self.Fold_If_On_Stack(node, target);
-                }
-                else
-                {
-                    let opened = self.Opened(target);
                     frames.push(opened);
                 }
 
@@ -288,25 +324,49 @@ impl Tarjan<'_>
             }
 
             let node = frame.node;
-            frames.pop();
-            self.Finish(node);
-
-            let Some(parent) = frames.last()
-            else
-            {
-                continue;
-            };
-            let parent_node = parent.node;
-            let Some(child_low) = self.lowlink.get(&node).copied()
-            else
-            {
-                continue;
-            };
-            if let Some(entry) = self.lowlink.get_mut(&parent_node)
-            {
-                *entry = (*entry).min(child_low);
-            }
+            self.Finish_Frame(&mut frames, node);
         }
+    }
+
+    /// Pops the finished top frame named `node`, closes it, and — if a parent frame is still
+    /// open beneath it — folds its lowlink into that parent's.
+    fn Finish_Frame(&mut self, frames: &mut Vec<Frame>, node: Digest128)
+    {
+        frames.pop();
+        self.Finish(node);
+
+        let Some(parent) = frames.last()
+        else
+        {
+            return;
+        };
+        let parent_node = parent.node;
+        let Some(child_low) = self.lowlink.get(&node).copied()
+        else
+        {
+            return;
+        };
+        if let Some(entry) = self.lowlink.get_mut(&parent_node)
+        {
+            *entry = (*entry).min(child_low);
+        }
+    }
+
+    /// Advances `frame` past `target`: folds `target`'s lowlink into `frame`'s node if it
+    /// is already discovered and still on the SCC stack, or opens it as a new frame for the
+    /// caller to push. The part of the original recursive `Visit` that ran once per edge.
+    fn Advance(&mut self, frame: &mut Frame, target: Digest128) -> Option<Frame>
+    {
+        let node = frame.node;
+        frame.next = frame.next.saturating_add(1);
+
+        if self.indices.contains_key(&target)
+        {
+            self.Fold_If_On_Stack(node, target);
+            return None;
+        }
+
+        return Some(self.Opened(target));
     }
 
     /// Assigns `node` its index and lowlink, places it on the SCC stack, and reads its edge

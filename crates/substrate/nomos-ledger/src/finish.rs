@@ -68,8 +68,6 @@ pub fn Finish<F: FileSystem, C: Clock, L: CrossProcessLock>(
     working_directory: Option<&Path>,
 ) -> Result<VerificationRecord, FinishRefusal>
 {
-    use gate_step::Run_Gate_Step;
-
     let item = finishing.item;
     let document = Loaded(ledger)?;
     let predicate = Runnable_Predicate(&document, item)?;
@@ -78,21 +76,44 @@ pub fn Finish<F: FileSystem, C: Clock, L: CrossProcessLock>(
         timeout: std::time::Duration::from_secs(predicate.timeout_seconds),
     };
 
-    // The gate's own step runs first and short-circuits. An author told "your tests passed"
-    // and "you cannot land" in one breath reads only the first sentence.
-    let gate = Run_Gate_Step(ledger, launcher, item, runner)?;
-
-    let command = Commanded(predicate.argv.clone(), runner);
-    let ran = Ran_To_Completion(launcher, &command, item)?;
-    Refuse_Nonzero(item, ran.code, &ran.tail)?;
+    let (gate, ran) = Verify_Predicate(ledger, launcher, item, PredicateRun { predicate, runner })?;
 
     let revision = Current_Revision(ledger, working_directory);
-    let record = Verified(&predicate.argv, &ran, gate, ledger.Now(), revision);
+    let record = Verified(&predicate.argv, &ran, gate, RecordContext { at: ledger.Now(), revision });
     ledger
         .Release(item, finishing.holder, ReleaseOutcome::Finished(record.clone()))
         .map_err(|refusal| FinishRefusal::NotHeld { refusal })?;
 
     return Ok(record);
+}
+
+/// A predicate paired with how it is to be run — the two [`Verify_Predicate`] needs
+/// together for both the gate's step and the predicate's own, grouped so the function that
+/// takes them stays under this crate's own parameter-count ceiling.
+struct PredicateRun<'a>
+{
+    predicate: &'a VerificationPredicate,
+    runner: Runner<'a>,
+}
+
+/// Runs the gate's step, then the item's own predicate, refusing on either's failure.
+///
+/// The gate's own step runs first and short-circuits: an author told "your tests passed"
+/// and "you cannot land" in one breath reads only the first sentence.
+fn Verify_Predicate<F: FileSystem, C: Clock, L: CrossProcessLock>(
+    ledger: &mut FileLedger<F, C, L>,
+    launcher: &impl ProcessLauncher,
+    item: &ItemId,
+    run: PredicateRun<'_>,
+) -> Result<(GateOutcome, Ran), FinishRefusal>
+{
+    let gate = gate_step::Run_Gate_Step(ledger, launcher, item, run.runner)?;
+
+    let command = Commanded(run.predicate.argv.clone(), run.runner);
+    let ran = Ran_To_Completion(launcher, &command, item)?;
+    Refuse_Nonzero(item, ran.code, &ran.tail)?;
+
+    return Ok((gate, ran));
 }
 
 /// The ledger as it stands, or the reason it could not be read.
@@ -111,25 +132,27 @@ fn Loaded<F: FileSystem, C: Clock, L: CrossProcessLock>(
     });
 }
 
+/// When, and against which tree revision, a predicate was verified — grouped so
+/// [`Verified`] stays under this crate's own parameter-count ceiling.
+struct RecordContext
+{
+    at: Timestamp,
+    revision: Option<String>,
+}
+
 /// The record a passing predicate leaves behind.
 ///
 /// It carries the gate's outcome as well as its own, because "this item was verified" is
 /// only true of a tree the gate also accepted.
-fn Verified(
-    argv: &[String],
-    ran: &Ran,
-    gate: GateOutcome,
-    at: Timestamp,
-    revision: Option<String>,
-) -> VerificationRecord
+fn Verified(argv: &[String], ran: &Ran, gate: GateOutcome, context: RecordContext) -> VerificationRecord
 {
     return VerificationRecord {
         argv: argv.to_vec(),
         exit_code: ran.code,
         output_tail: ran.tail.clone(),
-        verified_at: at,
+        verified_at: context.at,
         gate: Some(gate),
-        revision,
+        revision: context.revision,
     };
 }
 

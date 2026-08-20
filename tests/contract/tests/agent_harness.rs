@@ -179,31 +179,47 @@ fn Step_Citations(text: &str) -> Vec<(u32, String)>
 
     while let Some(start) = rest.find(marker)
     {
-        rest = &rest[start.saturating_add(marker.len())..];
-        let digits: String = rest.chars().take_while(char::is_ascii_digit).collect();
-        rest = &rest[digits.len()..];
-
-        let Some(step) = digits.parse::<u32>().ok()
-        else
+        let after_marker = &rest[start.saturating_add(marker.len())..];
+        let (citation, remainder) = Parse_One_Citation(after_marker);
+        rest = remainder;
+        if let Some(citation) = citation
         {
-            continue;
-        };
-        let Some(after_colon) = rest.strip_prefix(": \"")
-        else
-        {
-            continue;
-        };
-        let Some(end) = after_colon.find('"')
-        else
-        {
-            continue;
-        };
-
-        citations.push((step, after_colon[..end].to_owned()));
-        rest = &after_colon[end.saturating_add(1)..];
+            citations.push(citation);
+        }
     }
 
     return citations;
+}
+
+/// One citation parsed from the text immediately after an `AGENTS.md step ` marker, paired
+/// with the text remaining once the citation's digits (and, if well-formed, its whole quoted
+/// anchor) are consumed.
+///
+/// [`None`] in the first slot when the digits do not resolve to a well-formed citation -- the
+/// remainder still advances past the digits, so the caller's search for the next marker
+/// cannot loop on the same text.
+fn Parse_One_Citation(rest: &str) -> (Option<(u32, String)>, &str)
+{
+    let digits: String = rest.chars().take_while(char::is_ascii_digit).collect();
+    let rest = &rest[digits.len()..];
+
+    let Some(step) = digits.parse::<u32>().ok()
+    else
+    {
+        return (None, rest);
+    };
+    let Some(after_colon) = rest.strip_prefix(": \"")
+    else
+    {
+        return (None, rest);
+    };
+    let Some(end) = after_colon.find('"')
+    else
+    {
+        return (None, rest);
+    };
+
+    return (Some((step, after_colon[..end].to_owned())), &after_colon[end.saturating_add(1)..]);
 }
 
 /// One numbered step of `AGENTS.md`'s loop, its continuation lines rejoined into one string.
@@ -254,22 +270,59 @@ fn Is_Loop_Step_Marker(line: &str) -> bool
 #[test]
 fn Test_A_Cited_Contract_Step_Should_Still_Say_What_Is_Quoted_From_It()
 {
+    Assert_Uncited_Prose_Reads_No_Citations();
+    Assert_Well_Formed_Citation_Reads_Back();
+
+    let fixture_contract = Fixture_Loop_Contract();
+    Assert_Fixture_Step_Carries_Its_Own_Wording(fixture_contract);
+    Assert_Editing_The_Fixture_Changes_What_Is_Read_Back(fixture_contract);
+
+    let broken = Citations_Broken_Against_The_Live_Contract();
+
+    assert!(
+        broken.is_empty(),
+        "a harness file quotes a contract step that has moved on without it: {broken:#?}.\n\
+         OD-AGENT-003 admits a procedure carrying a step in its own words only paired with a \
+         citation in exactly this shape, so a paraphrase and the step it paraphrases are held \
+         together mechanically rather than by a reviewer noticing the drift."
+    );
+}
+
+/// Prose with no `AGENTS.md step ` marker at all must read back as citing nothing.
+fn Assert_Uncited_Prose_Reads_No_Citations()
+{
     assert_eq!(
         Step_Citations("no citation appears in this prose at all"),
         Vec::<(u32, String)>::new(),
         "prose with no citation marker was read as citing a step"
     );
+}
+
+/// A well-formed citation must read back its step number and quoted anchor.
+fn Assert_Well_Formed_Citation_Reads_Back()
+{
     assert_eq!(
         Step_Citations("see AGENTS.md step 2: \"picked by eye\" for why"),
         vec![(2, "picked by eye".to_owned())],
         "a well-formed citation was not read back out of the prose that carries it"
     );
+}
 
-    let fixture_contract = "## The loop\n\n\
+/// A small loop fixture carrying a step 2 whose wording the two assertions that follow it
+/// depend on: that the reader finds the wording, and that it stops finding it once edited.
+fn Fixture_Loop_Contract() -> &'static str
+{
+    return "## The loop\n\n\
         1. Read the board.\n\
         2. Read the board. `nomos work list` names the item to claim next, computed rather\n   \
            than picked by eye.\n\
         3. Claim it.\n";
+}
+
+/// The fixture's own step 2 must carry "picked by eye", or the reader below cannot be
+/// trusted to have found it in the live contract either.
+fn Assert_Fixture_Step_Carries_Its_Own_Wording(fixture_contract: &str)
+{
     let live = Loop_Step_Text(fixture_contract, 2).expect("the fixture names a step 2");
 
     assert!(
@@ -277,7 +330,12 @@ fn Test_A_Cited_Contract_Step_Should_Still_Say_What_Is_Quoted_From_It()
         "the fixture's own step 2 carries \"picked by eye\" and the reader did not find it: \
          {live}"
     );
+}
 
+/// Editing the fixture's step 2 wording must be visible to the reader, or a real edit to
+/// `AGENTS.md` would never be seen by this check either.
+fn Assert_Editing_The_Fixture_Changes_What_Is_Read_Back(fixture_contract: &str)
+{
     let edited_contract = fixture_contract.replace("picked by eye", "chosen by a session");
     let after_edit =
         Loop_Step_Text(&edited_contract, 2).expect("step 2 still exists after the edit");
@@ -287,7 +345,13 @@ fn Test_A_Cited_Contract_Step_Should_Still_Say_What_Is_Quoted_From_It()
         "the edited fixture still reads back the pre-edit wording, so a real edit to \
          AGENTS.md would never be seen by this check"
     );
+}
 
+/// Every citation any harness file makes of a live `AGENTS.md` loop step, checked against
+/// what that step currently says -- one message per citation whose anchor the step no
+/// longer carries, or that names a step the loop no longer has.
+fn Citations_Broken_Against_The_Live_Contract() -> Vec<String>
+{
     let contract = readers::Read_Harness_File(CONTRACT);
     let mut broken = Vec::new();
     for (file, text) in readers::Harness_Files()
@@ -310,12 +374,6 @@ fn Test_A_Cited_Contract_Step_Should_Still_Say_What_Is_Quoted_From_It()
         }
     }
 
-    assert!(
-        broken.is_empty(),
-        "a harness file quotes a contract step that has moved on without it: {broken:#?}.\n\
-         OD-AGENT-003 admits a procedure carrying a step in its own words only paired with a \
-         citation in exactly this shape, so a paraphrase and the step it paraphrases are held \
-         together mechanically rather than by a reviewer noticing the drift."
-    );
+    return broken;
 }
 

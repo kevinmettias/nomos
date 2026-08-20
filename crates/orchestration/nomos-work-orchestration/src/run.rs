@@ -28,6 +28,13 @@ use crate::outcome::{BoardView, ShowView, WorkOutcome};
 /// composition root computes it however its own tree is reached and handed over as a
 /// value, the same division `nomos-ledger::FileLedger::Add`'s own documentation already
 /// draws around this exact question.
+///
+/// The whole body is one `match` on `command`, and stays that way even though it is long:
+/// every arm is already the smallest unit this dispatch has -- one named local holding the
+/// ledger call's own result, wrapped in the [`WorkOutcome`] variant of the same name. Pulling
+/// an arm out into its own function would not separate two things this function currently
+/// conflates; it would only relocate a single ledger call behind a name used once, so the
+/// `match` stays inline rather than manufacturing a seam that is not there.
 pub fn Run<F, C, L, P>(
     command: &WorkCommand,
     ledger: &mut FileLedger<F, C, L>,
@@ -46,38 +53,43 @@ where
         WorkCommand::Show { .. } => WorkOutcome::Show(Show_View(ledger)),
         WorkCommand::Add { item, amending } =>
         {
-            WorkOutcome::Add(ledger.Add(item, "nomos work add", &published(), amending))
+            let added = ledger.Add(item, "nomos work add", &published(), amending);
+            WorkOutcome::Add(added)
         }
         WorkCommand::Finish { item, holder } =>
         {
             let finishing = Finishing { item, holder };
-            WorkOutcome::Finish(Finish(ledger, launcher, &finishing, None))
+            let finished = Finish(ledger, launcher, &finishing, None);
+            WorkOutcome::Finish(finished)
         }
         WorkCommand::Claim(request) =>
         {
-            WorkOutcome::Claim(ledger.Claim(&request.item, &request.holder, request.lease))
+            let claimed = ledger.Claim(&request.item, &request.holder, request.lease);
+            WorkOutcome::Claim(claimed)
         }
         WorkCommand::Renew(request) =>
         {
-            WorkOutcome::Renew(ledger.Renew(&request.item, &request.holder, request.lease))
+            let renewed = ledger.Renew(&request.item, &request.holder, request.lease);
+            WorkOutcome::Renew(renewed)
         }
-        WorkCommand::TakeOver(request) => WorkOutcome::TakeOver(ledger.Take_Over(
-            &request.item,
-            &request.holder,
-            request.lease,
-        )),
+        WorkCommand::TakeOver(request) =>
+        {
+            let taken_over = ledger.Take_Over(&request.item, &request.holder, request.lease);
+            WorkOutcome::TakeOver(taken_over)
+        }
         WorkCommand::Abandon(request) =>
         {
             let abandoned = ReleaseOutcome::Abandoned {
                 reason: request.reason.clone(),
             };
-            WorkOutcome::Abandon(ledger.Release(&request.item, &request.holder, abandoned))
+            let released = ledger.Release(&request.item, &request.holder, abandoned);
+            WorkOutcome::Abandon(released)
         }
-        WorkCommand::Decline(request) => WorkOutcome::Decline(ledger.Decline(
-            &request.item,
-            &request.holder,
-            &request.reason,
-        )),
+        WorkCommand::Decline(request) =>
+        {
+            let declined = ledger.Decline(&request.item, &request.holder, &request.reason);
+            WorkOutcome::Decline(declined)
+        }
         WorkCommand::Validate => WorkOutcome::Validate(Validated(ledger)),
         WorkCommand::Audit => WorkOutcome::Audit(Board_View(ledger)),
     };

@@ -363,49 +363,34 @@ impl SpecificationStore
     ///
     /// `OD-SPEC-012`: a relation type that declares neither is not a lighter-weight
     /// registration, it is the absence of the thing this function exists to record — so
-    /// `domain`, `range` and `max_per_node` are required rather than defaulted, and an empty
-    /// declaration is refused here rather than admitted and left permissive downstream.
+    /// `constraint`'s domain, range and cardinality are required rather than defaulted, and
+    /// an empty declaration is refused here rather than admitted and left permissive
+    /// downstream.
     ///
     /// Idempotent like the rest of seeding: registering the same name twice keeps the first
     /// declaration rather than erroring or silently overwriting it.
     ///
     /// # Errors
     ///
-    /// Returns [`StoreError::UnconstrainedRelationType`] if `domain`, `range` or
-    /// `max_per_node` is empty or zero, and [`StoreError`] on any SQL failure.
+    /// Returns [`StoreError::UnconstrainedRelationType`] if the constraint's domain, range
+    /// or `max_per_node` is empty or zero, and [`StoreError`] on any SQL failure.
     pub fn Put_Relation_Type(
         &mut self,
         name: &str,
         tier: &str,
-        domain: &[&str],
-        range: &[&str],
-        max_per_node: u32,
+        constraint: RelationConstraint<'_>,
     ) -> Result<(), StoreError>
     {
-        if domain.is_empty() || range.is_empty() || max_per_node == 0
-        {
-            return Err(StoreError::UnconstrainedRelationType { name: name.to_owned() });
-        }
+        Assert_Constraint_Is_Declared(name, &constraint)?;
 
-        let mut domain_sorted: Vec<&str> = domain.to_vec();
-        domain_sorted.sort_unstable();
-        let mut range_sorted: Vec<&str> = range.to_vec();
-        range_sorted.sort_unstable();
-
-        // Sorted before serializing so the same set of kinds always writes the same bytes,
-        // regardless of the order a caller happened to list them in — the bundle's byte-
-        // identical round trip depends on it exactly the way it depends on every other
-        // ordering in this store being by natural key rather than by insertion order.
-        let domain_json = serde_json::to_string(&domain_sorted)
-            .map_err(|error| return StoreError::Sql(error.to_string()))?;
-        let range_json = serde_json::to_string(&range_sorted)
-            .map_err(|error| return StoreError::Sql(error.to_string()))?;
+        let domain_json = Sorted_Kinds_Json(constraint.domain)?;
+        let range_json = Sorted_Kinds_Json(constraint.range)?;
 
         self.connection.execute(
             "INSERT OR IGNORE INTO relation_types
                  (name, tier, domain_kinds_json, range_kinds_json, max_per_node)
              VALUES (?1, ?2, ?3, ?4, ?5)",
-            params![name, tier, domain_json, range_json, max_per_node],
+            params![name, tier, domain_json, range_json, constraint.max_per_node],
         )?;
 
         return Ok(());
@@ -474,6 +459,46 @@ impl SpecificationStore
     }
 }
 
+/// What a relation type constrains: the node kinds it may join at each end, and how many
+/// edges of it one node may carry.
+///
+/// Grouped because `OD-SPEC-012` requires all three together — a relation type that
+/// declares domain and range but not cardinality, or the reverse, is not a lighter-weight
+/// registration, it is the absence of the thing [`SpecificationStore::Put_Relation_Type`]
+/// exists to record.
+pub struct RelationConstraint<'a>
+{
+    pub domain: &'a [&'a str],
+    pub range: &'a [&'a str],
+    pub max_per_node: u32,
+}
+
+/// The constraint declares something at every end, or the refusal names the type that
+/// declared nothing.
+fn Assert_Constraint_Is_Declared(name: &str, constraint: &RelationConstraint<'_>) -> Result<(), StoreError>
+{
+    if constraint.domain.is_empty() || constraint.range.is_empty() || constraint.max_per_node == 0
+    {
+        return Err(StoreError::UnconstrainedRelationType { name: name.to_owned() });
+    }
+
+    return Ok(());
+}
+
+/// A set of node kinds, sorted and serialized.
+///
+/// Sorted before serializing so the same set of kinds always writes the same bytes,
+/// regardless of the order a caller happened to list them in — the bundle's byte-identical
+/// round trip depends on it exactly the way it depends on every other ordering in this
+/// store being by natural key rather than by insertion order.
+fn Sorted_Kinds_Json(kinds: &[&str]) -> Result<String, StoreError>
+{
+    let mut sorted: Vec<&str> = kinds.to_vec();
+    sorted.sort_unstable();
+
+    return serde_json::to_string(&sorted).map_err(|error| return StoreError::Sql(error.to_string()));
+}
+
 #[cfg(test)]
 mod tests
 {
@@ -492,6 +517,19 @@ mod tests
             .expect("mints a node");
     }
 
+    /// The `joins` relation type, admitting only `widget` at either end, at the cardinality
+    /// the caller asks for.
+    fn Put_Joins_Relation_Type(store: &mut SpecificationStore, max_per_node: u32)
+    {
+        store
+            .Put_Relation_Type(
+                "joins",
+                "seed",
+                RelationConstraint { domain: &["widget"], range: &["widget"], max_per_node },
+            )
+            .expect("registers");
+    }
+
     /// `OD-SPEC-012`: a relation type declaring nothing is refused where it is registered,
     /// not left to write an edge that later discovers there was nothing to check.
     #[test]
@@ -499,7 +537,11 @@ mod tests
     {
         let mut store = SpecificationStore::In_Memory().expect("opens");
 
-        let refusal = store.Put_Relation_Type("nothing", "seed", &[], &["widget"], 1);
+        let refusal = store.Put_Relation_Type(
+            "nothing",
+            "seed",
+            RelationConstraint { domain: &[], range: &["widget"], max_per_node: 1 },
+        );
         let message = format!("{refusal:?}");
 
         assert!(
@@ -513,7 +555,11 @@ mod tests
     {
         let mut store = SpecificationStore::In_Memory().expect("opens");
 
-        let refusal = store.Put_Relation_Type("nothing", "seed", &["widget"], &["widget"], 0);
+        let refusal = store.Put_Relation_Type(
+            "nothing",
+            "seed",
+            RelationConstraint { domain: &["widget"], range: &["widget"], max_per_node: 0 },
+        );
 
         assert!(
             matches!(refusal, Err(StoreError::UnconstrainedRelationType { .. })),
@@ -529,7 +575,7 @@ mod tests
         let mut store = SpecificationStore::In_Memory().expect("opens");
         Node(&mut store, "A", "widget");
         Node(&mut store, "B", "gadget");
-        store.Put_Relation_Type("joins", "seed", &["widget"], &["widget"], 4).expect("registers");
+        Put_Joins_Relation_Type(&mut store, 4);
 
         let error = store.Put_Relation("A", "joins", "B").expect_err("B is a gadget, not a widget");
 
@@ -553,7 +599,7 @@ mod tests
         Node(&mut store, "A", "widget");
         Node(&mut store, "B", "widget");
         Node(&mut store, "C", "widget");
-        store.Put_Relation_Type("joins", "seed", &["widget"], &["widget"], 1).expect("registers");
+        Put_Joins_Relation_Type(&mut store, 1);
         store.Put_Relation("A", "joins", "B").expect("the first edge fits the cap of 1");
 
         let error =
@@ -577,7 +623,7 @@ mod tests
         let mut store = SpecificationStore::In_Memory().expect("opens");
         Node(&mut store, "A", "widget");
         Node(&mut store, "B", "widget");
-        store.Put_Relation_Type("joins", "seed", &["widget"], &["widget"], 1).expect("registers");
+        Put_Joins_Relation_Type(&mut store, 1);
         store.Put_Relation("A", "joins", "B").expect("first write");
 
         store.Put_Relation("A", "joins", "B").expect("an idempotent re-write must not refuse");
@@ -591,7 +637,7 @@ mod tests
         let mut store = SpecificationStore::In_Memory().expect("opens");
         Node(&mut store, "A", "widget");
         store.Reference_Node("B").expect("mints a placeholder");
-        store.Put_Relation_Type("joins", "seed", &["widget"], &["widget"], 4).expect("registers");
+        Put_Joins_Relation_Type(&mut store, 4);
 
         store
             .Put_Relation("A", "joins", "B")

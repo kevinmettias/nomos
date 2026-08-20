@@ -21,15 +21,28 @@ pub(in crate::spec) fn Table(assembly: &Assembly, request: &TableRequest, channe
         }
         Err(TableRefusal::NoRows { document, tier, census }) =>
         {
-            Unselected(assembly, request, &document, tier, census, channels.notes)
+            let resolved = ResolvedDocument { document: &document, census, tier };
+            Unselected(assembly, request, &resolved, channels.notes)
         }
     };
+}
+
+/// A document that was actually read: its path, how it was matched, and how many pipe
+/// lines it carries -- the three coordinates [`Note_Document`] and [`Unselected`] both need
+/// and only ever receive together, from either a resolved [`TableAnswer`] or a
+/// [`TableRefusal::NoRows`].
+pub(super) struct ResolvedDocument<'a>
+{
+    pub(super) document: &'a DocumentSource,
+    pub(super) census: RowCensus,
+    pub(super) tier: PathMatch,
 }
 
 /// The rows an address resolved to, with a note saying which document they came from.
 pub(super) fn Printed_Answer(request: &TableRequest, answer: &TableAnswer, channels: &mut Channels<'_>) -> ExitCode
 {
-    Note_Document(&answer.document, answer.census, answer.tier, &request.document, channels.notes);
+    let resolved = ResolvedDocument { document: &answer.document, census: answer.census, tier: answer.tier };
+    Note_Document(&resolved, &request.document, channels.notes);
 
     return Printed(&answer.lines, request, channels);
 }
@@ -38,40 +51,43 @@ pub(super) fn Printed_Answer(request: &TableRequest, answer: &TableAnswer, chann
 pub(super) fn Unselected(
     assembly: &Assembly,
     request: &TableRequest,
-    document: &DocumentSource,
-    tier: PathMatch,
-    census: RowCensus,
+    resolved: &ResolvedDocument<'_>,
     notes: &mut dyn std::io::Write,
 ) -> ExitCode
 {
-    Note_Document(document, census, tier, &request.document, notes);
+    Note_Document(resolved, &request.document, notes);
 
     let _ = writeln!(
         notes,
         "{} carries no table row{}.",
-        document.path,
+        resolved.document.path,
         Narrowed(request.block, request.table)
     );
 
     // The document was read, so this is an answer rather than a shortfall — unless the
     // narrowing selected a table that is not there, which the census makes visible either
     // way.
-    return Nothing_Selected(assembly, census.lines, notes);
+    return Nothing_Selected(assembly, resolved.census.lines, notes);
 }
 
 /// Which document was read, how it was matched, and how many pipe lines it carries.
-pub(super) fn Note_Document(found: &DocumentSource, census: RowCensus, tier: PathMatch, asked: &str, notes: &mut dyn std::io::Write)
+pub(super) fn Note_Document(resolved: &ResolvedDocument<'_>, asked: &str, notes: &mut dyn std::io::Write)
 {
-    if tier != PathMatch::Exact
+    if resolved.tier != PathMatch::Exact
     {
-        let _ = writeln!(notes, "{asked} matched {} by {}", found.path, tier.Label());
+        let _ = writeln!(notes, "{asked} matched {} by {}", resolved.document.path, resolved.tier.Label());
     }
 
     let _ = writeln!(
         notes,
         "{} at revision {}: {} pipe line(s) in the whole document — {} header, {} content, \
          {} separator",
-        found.path, found.revision, census.lines, census.header, census.content, census.separator
+        resolved.document.path,
+        resolved.document.revision,
+        resolved.census.lines,
+        resolved.census.header,
+        resolved.census.content,
+        resolved.census.separator
     );
 }
 

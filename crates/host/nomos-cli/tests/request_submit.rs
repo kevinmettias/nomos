@@ -166,24 +166,15 @@ fn Test_An_Unrecognised_Command_Should_Be_A_Usage_Error()
 fn Test_Into_Should_Render_The_Accepted_Submission_With_A_Freshness_Stamp()
 {
     let into = Scratch("request-submit-into");
-    let mut arguments = Complete_Request_Fields("FR-CLI-005");
-    let destination = into.display().to_string();
-    arguments.push("--into");
-    arguments.push(&destination);
 
-    let output = Nomos(&arguments);
+    let output = Submitted_With_Into("FR-CLI-005", &into);
 
     assert_eq!(Code(&output), 0, "{}", Err_Text(&output));
     let said = Out_Text(&output);
     assert!(said.contains("subject-dossier ->"), "{said}");
     assert!(said.contains("sidecar (.nomos-projection.json) ->"), "{said}");
 
-    let body_path = into.join("subjects/FR-CLI-005/dossier.md");
-    let sidecar_path = into.join("subjects/FR-CLI-005/dossier.md.nomos-projection.json");
-    let body = std::fs::read_to_string(&body_path)
-        .unwrap_or_else(|error| panic!("reads {}: {error}", body_path.display()));
-    let sidecar = std::fs::read_to_string(&sidecar_path)
-        .unwrap_or_else(|error| panic!("reads {}: {error}", sidecar_path.display()));
+    let (body, sidecar) = Written_Dossier(&into, "FR-CLI-005");
 
     assert!(body.contains("FR-CLI-005"), "{body}");
     assert!(body.contains("feature-request"), "{body}");
@@ -196,6 +187,30 @@ fn Test_Into_Should_Render_The_Accepted_Submission_With_A_Freshness_Stamp()
     assert!(sidecar.contains("\"content_digest\":"), "{sidecar}");
 }
 
+/// Submits `id`'s complete request with `--into` pointed at `into`.
+fn Submitted_With_Into(id: &str, into: &Path) -> Output
+{
+    let mut arguments = Complete_Request_Fields(id);
+    let destination = into.display().to_string();
+    arguments.push("--into");
+    arguments.push(&destination);
+
+    return Nomos(&arguments);
+}
+
+/// The written dossier body and its freshness-stamp sidecar for `id`, read out of `into`.
+fn Written_Dossier(into: &Path, id: &str) -> (String, String)
+{
+    let body_path = into.join(format!("subjects/{id}/dossier.md"));
+    let sidecar_path = into.join(format!("subjects/{id}/dossier.md.nomos-projection.json"));
+    let body = std::fs::read_to_string(&body_path)
+        .unwrap_or_else(|error| panic!("reads {}: {error}", body_path.display()));
+    let sidecar = std::fs::read_to_string(&sidecar_path)
+        .unwrap_or_else(|error| panic!("reads {}: {error}", sidecar_path.display()));
+
+    return (body, sidecar);
+}
+
 /// A refused submission has nothing to project, so `--into` is never reached.
 #[test]
 fn Test_Into_Should_Write_Nothing_When_The_Submission_Is_Refused()
@@ -203,7 +218,21 @@ fn Test_Into_Should_Write_Nothing_When_The_Submission_Is_Refused()
     let into = Scratch("request-submit-into-refused");
     let destination = into.display().to_string();
 
-    let output = Nomos(&[
+    let output = Refused_Submission(&destination);
+
+    assert_eq!(Code(&output), 9, "{}", Out_Text(&output));
+    assert!(
+        std::fs::read_dir(&into).expect("the directory itself exists").next().is_none(),
+        "a refused submission wrote something into {}",
+        into.display()
+    );
+}
+
+/// An incomplete submission -- missing every required field but `title` -- with `--into`
+/// given anyway, so the caller can prove it is never reached.
+fn Refused_Submission(destination: &str) -> Output
+{
+    return Nomos(&[
         "request",
         "submit",
         "--kind",
@@ -215,13 +244,6 @@ fn Test_Into_Should_Write_Nothing_When_The_Submission_Is_Refused()
         "--field",
         "title=only a title",
         "--into",
-        &destination,
+        destination,
     ]);
-
-    assert_eq!(Code(&output), 9, "{}", Out_Text(&output));
-    assert!(
-        std::fs::read_dir(&into).expect("the directory itself exists").next().is_none(),
-        "a refused submission wrote something into {}",
-        into.display()
-    );
 }

@@ -91,7 +91,16 @@ mod tests
             .Declare(Capability_Contract())
             .expect("the contract is the first declaration in a fresh registry");
 
-        let claiming_observation = ProviderOffer {
+        let refused = registry.Offer(Offer_Claiming_Runtime_Observation());
+
+        Assert_Refused_For_Exceeding_Ceiling(&refused);
+    }
+
+    /// An offer identical to [`Provider_Offer`] except its fact variant claims
+    /// `RuntimeObserved` — one tier past the capability's own ceiling.
+    fn Offer_Claiming_Runtime_Observation() -> ProviderOffer
+    {
+        return ProviderOffer {
             guarantee: Guarantee::New(
                 FactVariant::RuntimeObserved,
                 Assurance::Sound,
@@ -100,11 +109,12 @@ mod tests
             ),
             ..Provider_Offer()
         };
+    }
 
-        let refused = registry.Offer(claiming_observation);
-
+    fn Assert_Refused_For_Exceeding_Ceiling(refused: &Result<(), RegistryError>)
+    {
         assert_eq!(
-            refused,
+            *refused,
             Err(RegistryError {
                 capability: Capability(),
                 kind: RegistryErrorKind::Offer {

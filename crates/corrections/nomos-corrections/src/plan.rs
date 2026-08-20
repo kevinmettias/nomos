@@ -96,10 +96,9 @@ mod tests
 
     fn Candidate(description: &str, path: &str) -> CorrectionCandidate
     {
-        return CorrectionCandidate::New(
-            description,
-            ChangeSet::Empty().With(Edit::New(path, None, Some("x".to_owned()))),
-        );
+        let edit = Edit::New(path, None, Some("x".to_owned()));
+
+        return CorrectionCandidate::New(description, ChangeSet::Empty().With(edit));
     }
 
     #[test]

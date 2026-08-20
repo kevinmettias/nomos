@@ -21090,7 +21090,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -21111,7 +21111,35 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-spec-bundle",
+          "-p",
+          "nomos-spec-ingest",
+          "-p",
+          "nomos-spec-validate",
+          "-p",
+          "nomos-spec-project"
+        ],
+        "exit_code": 0,
+        "output_tail": "ests\\round_trip\\main.rs (target\\debug\\deps\\round_trip-14c9c137b199be69.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_ingest-b91882f9705d3be2.exe)\n     Running tests\\archive_reads.rs (target\\debug\\deps\\archive_reads-57f26477296ecf13.exe)\n     Running tests\\family_counts\\main.rs (target\\debug\\deps\\family_counts-0d6551e8953f8961.exe)\n     Running tests\\gate_holds.rs (target\\debug\\deps\\gate_holds-b5ea4afc81bd7b71.exe)\n     Running tests\\overlay.rs (target\\debug\\deps\\overlay-1ca11b4be69ec8f5.exe)\n     Running tests\\real_corpus.rs (target\\debug\\deps\\real_corpus-4cef0bf42080529e.exe)\n     Running tests\\regression_report\\main.rs (target\\debug\\deps\\regression_report-f2b6e7608b1a7ca9.exe)\n     Running tests\\restoration.rs (target\\debug\\deps\\restoration-c37ddda2e96814aa.exe)\n     Running tests\\revisions.rs (target\\debug\\deps\\revisions-3f881ebab8687f1c.exe)\n     Running tests\\siblings.rs (target\\debug\\deps\\siblings-aa491999edd2b154.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_project-90ace1b899f038c8.exe)\n     Running tests\\projections\\main.rs (target\\debug\\deps\\projections-91a00061d9a9372a.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-2049d200876e17c5.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-664bcf5196b763d4.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-b77bfff260f58dcf.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-5768e840765d1bfc.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-55bd8f919d9bc0a0.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_validate-acd7b674edff1f45.exe)\n     Running tests\\preservation_holds.rs (target\\debug\\deps\\preservation_holds-c1582b858346687e.exe)\n   Doc-tests nomos_spec_bundle\n   Doc-tests nomos_spec_ingest\n   Doc-tests nomos_spec_project\n   Doc-tests nomos_spec_store\n   Doc-tests nomos_spec_validate\n",
+        "verified_at": 1787191259,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "c777913c1127ae5cb0b3133d6c50ef165d52c987"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

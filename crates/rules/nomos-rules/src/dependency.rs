@@ -33,7 +33,7 @@
 //! this capability does not observe at all, so there is nothing here for them to except.
 
 use crate::SourceFile;
-use nomos_analysis::{FactReader, InputDigest};
+use nomos_analysis::{FactReader, InputDigest, MaterializedFact};
 use nomos_capability::Requirement;
 use nomos_cap_dependency::{DependencyEdge, DependencyKind, DependencyPayload};
 use nomos_contracts::{
@@ -154,7 +154,11 @@ pub fn Check_Dependency_Direction(sources: &[SourceFile], facts: &mut dyn FactRe
     {
         match Payload_Of(source, facts)
         {
-            Ok(payload) => findings.extend(Violations_In(&payload, source)),
+            Ok(payload) =>
+            {
+                let violations = Violations_In(&payload, source);
+                findings.extend(violations);
+            }
             Err(finding) => findings.push(finding),
         }
     }
@@ -167,6 +171,15 @@ pub fn Check_Dependency_Direction(sources: &[SourceFile], facts: &mut dyn FactRe
 /// read.
 fn Payload_Of(source: &SourceFile, facts: &mut dyn FactReader) -> Result<DependencyPayload, Finding>
 {
+    let fact = Require_Fact(source, facts)?;
+    Check_Schema(source, fact)?;
+    return Parse_Fact(source, fact);
+}
+
+/// Requires this member's dependency fact, turning an inadmissible answer into an
+/// [`Unread`] finding.
+fn Require_Fact<'a>(source: &SourceFile, facts: &'a mut dyn FactReader) -> Result<&'a MaterializedFact, Finding>
+{
     let need = Dependency_Requirement();
     let capability = nomos_cap_dependency::Capability();
     // The provider's semantic input is the encoded payload it wrote, not `source.text` —
@@ -176,19 +189,20 @@ fn Payload_Of(source: &SourceFile, facts: &mut dyn FactReader) -> Result<Depende
     // required to get right.
     let inputs = InputDigest::Of(&[]);
 
-    let fact = match facts.Require(&capability, &source.subject, inputs, &need)
+    return match facts.Require(&capability, &source.subject, inputs, &need)
     {
-        Ok(fact) => fact,
-        Err(applicability) =>
-        {
-            return Err(Unread(
-                source,
-                applicability,
-                &format!("no admitted provider answered for it ({})", applicability.Label()),
-            ));
-        }
+        Ok(fact) => Ok(fact),
+        Err(applicability) => Err(Unread(
+            source,
+            applicability,
+            &format!("no admitted provider answered for it ({})", applicability.Label()),
+        )),
     };
+}
 
+/// Confirms `fact`'s payload schema is the one this rule knows how to decode.
+fn Check_Schema(source: &SourceFile, fact: &MaterializedFact) -> Result<(), Finding>
+{
     if fact.payload.schema != nomos_cap_dependency::Payload_Schema()
     {
         return Err(Unread(
@@ -202,6 +216,12 @@ fn Payload_Of(source: &SourceFile, facts: &mut dyn FactReader) -> Result<Depende
         ));
     }
 
+    return Ok(());
+}
+
+/// Decodes `fact`'s payload bytes into this rule's own [`DependencyPayload`] shape.
+fn Parse_Fact(source: &SourceFile, fact: &MaterializedFact) -> Result<DependencyPayload, Finding>
+{
     return nomos_cap_dependency::Parse_Payload(&fact.payload.bytes)
         .map_err(|refusal| return Unread(source, Applicability::Unparseable, &refusal.to_string()));
 }
@@ -237,55 +257,84 @@ fn Violations_In(payload: &DependencyPayload, source: &SourceFile) -> Vec<Findin
         return Vec::new();
     };
 
-    let mut findings = Vec::new();
-    for edge in &payload.edges
-    {
-        // A dev-dependency does not ship, so it is not part of the graph this judgment is
-        // about — `tests/contract/src/workspace.rs`'s own `Is_Not_Dev` excludes it from
-        // `graph.rs`'s identical downward-ordering check for exactly this reason, and
-        // `nomos-spec-ingest`'s own `Cargo.toml` names the real case this rule would
-        // otherwise misjudge: a band-13 crate's dev-only dependency on band-14's validator,
-        // present only so its own test suite can exercise a preservation run.
-        if edge.kind == DependencyKind::Dev
-        {
-            continue;
-        }
-
-        let Some(dependency_band) = Declared_Band(&edge.target)
-        else
-        {
-            continue;
-        };
-
-        if dependency_band >= band
-        {
-            findings.push(Violation(source, &payload.package, band, edge, dependency_band));
-        }
-    }
-
-    return findings;
+    return payload
+        .edges
+        .iter()
+        .filter_map(|edge| return Violation_For_Edge(source, &payload.package, band, edge))
+        .collect();
 }
 
-fn Violation(
-    source: &SourceFile,
-    package: &str,
+/// `edge`, judged against its declaring member's own `band`, as a finding — or `None`
+/// when the edge is out of scope (a dev-dependency) or its target has no declared band to
+/// compare against.
+fn Violation_For_Edge(source: &SourceFile, package: &str, band: u32, edge: &DependencyEdge) -> Option<Finding>
+{
+    if Is_Dev_Dependency(edge)
+    {
+        return None;
+    }
+
+    let dependency_band = Declared_Band(&edge.target)?;
+    let violation = EdgeViolation {
+        package,
+        band,
+        edge,
+        dependency_band,
+    };
+
+    return Violation_If_Wrong_Direction(source, &violation);
+}
+
+/// Whether `edge` is out of scope for this judgment.
+///
+/// A dev-dependency does not ship, so it is not part of the graph this judgment is about —
+/// `tests/contract/src/workspace.rs`'s own `Is_Not_Dev` excludes it from `graph.rs`'s
+/// identical downward-ordering check for exactly this reason, and `nomos-spec-ingest`'s own
+/// `Cargo.toml` names the real case this rule would otherwise misjudge: a band-13 crate's
+/// dev-only dependency on band-14's validator, present only so its own test suite can
+/// exercise a preservation run.
+fn Is_Dev_Dependency(edge: &DependencyEdge) -> bool
+{
+    return edge.kind == DependencyKind::Dev;
+}
+
+/// The specifics of one wrong-direction edge, grouped so [`Violation`] takes a type rather
+/// than an unbounded parameter list.
+struct EdgeViolation<'a>
+{
+    package: &'a str,
     band: u32,
-    edge: &DependencyEdge,
+    edge: &'a DependencyEdge,
     dependency_band: u32,
-) -> Finding
+}
+
+/// `violation` as a finding, when its `dependency_band` really does run same-band or
+/// upward from its declaring member's own `band`.
+fn Violation_If_Wrong_Direction(source: &SourceFile, violation: &EdgeViolation<'_>) -> Option<Finding>
+{
+    if violation.dependency_band < violation.band
+    {
+        return None;
+    }
+
+    let finding = Violation(source, violation);
+    return Some(finding);
+}
+
+fn Violation(source: &SourceFile, violation: &EdgeViolation<'_>) -> Finding
 {
     return Finding {
         rule: RuleId::New(DEPENDENCY_DIRECTION),
         subject: source.subject,
-        subject_name: package.to_owned(),
+        subject_name: violation.package.to_owned(),
         applicability: Applicability::Supported,
         evidence: EvidenceClass::Derived,
         gate: GateCategory::Advisory,
         summary: format!(
-            "{package} (band {band}) depends on {} (band {dependency_band}). Dependencies \
-             run strictly downward; equal or upward edges are how a layered architecture \
-             becomes a graph nobody can reason about.",
-            edge.target
+            "{} (band {}) depends on {} (band {}). Dependencies run strictly downward; \
+             equal or upward edges are how a layered architecture becomes a graph nobody \
+             can reason about.",
+            violation.package, violation.band, violation.edge.target, violation.dependency_band
         ),
         locations: vec![source.path.clone()],
     };

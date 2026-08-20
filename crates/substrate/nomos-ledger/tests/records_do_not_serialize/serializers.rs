@@ -265,12 +265,7 @@ fn Undeclared_Serializers(document: &LedgerDocument) -> BTreeSet<String>
     let writers = Record_Writers(document);
     let declared = Declared();
 
-    if writers.len() < 2
-    {
-        return BTreeSet::new();
-    }
-
-    let Some(first) = writers.first()
+    let Some(first) = First_Writer_If_Comparable(&writers)
     else
     {
         return BTreeSet::new();
@@ -285,6 +280,19 @@ fn Undeclared_Serializers(document: &LedgerDocument) -> BTreeSet<String>
         .filter(|candidate| return Serializes(candidate, &writers, &declared))
         .map(|candidate| return Normalize_Path(candidate))
         .collect();
+}
+
+/// The writer candidates are drawn from, if there are at least two writers to compare —
+/// below that, "reserved by all of them" is not a claim a population of one can make, per
+/// [`Undeclared_Serializers`]'s own doc comment.
+fn First_Writer_If_Comparable<'a>(writers: &[&'a LedgerItem]) -> Option<&'a LedgerItem>
+{
+    if writers.len() < 2
+    {
+        return None;
+    }
+
+    return writers.first().copied();
 }
 
 /// Whether every record writer reserves this path, and nobody declared it.

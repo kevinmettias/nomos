@@ -396,11 +396,10 @@ mod tests
         };
     }
 
-    /// The property [`Eligible_Items`] exists to give a name to: a `Ready` item held back by
-    /// a live overlapping claim is not eligible, and one nothing contests is, in the same
-    /// order [`Claim_Refusal`] would decide each of them individually.
-    #[test]
-    fn Test_Eligible_Items_Should_Exclude_What_Claim_Refusal_Would_Refuse()
+    /// A `Ready` item held back by a live overlapping claim, the item contesting its
+    /// territory, and an item nothing touches — the fixture
+    /// `Test_Eligible_Items_Should_Exclude_What_Claim_Refusal_Would_Refuse` asserts over.
+    fn Held_Contested_And_Free() -> (LedgerItem, LedgerItem, LedgerItem)
     {
         let mut held = Item("P1-HELD");
         held.territory = Territory::Of_Files(["a/shared.rs"]);
@@ -417,6 +416,16 @@ mod tests
         let mut free = Item("P3-FREE");
         free.territory = Territory::Of_Files(["b/other.rs"]);
 
+        return (held, contested, free);
+    }
+
+    /// The property [`Eligible_Items`] exists to give a name to: a `Ready` item held back by
+    /// a live overlapping claim is not eligible, and one nothing contests is, in the same
+    /// order [`Claim_Refusal`] would decide each of them individually.
+    #[test]
+    fn Test_Eligible_Items_Should_Exclude_What_Claim_Refusal_Would_Refuse()
+    {
+        let (held, contested, free) = Held_Contested_And_Free();
         let document = Document(vec![held, contested, free]);
 
         let eligible: Vec<&str> = Eligible_Items(&document, At(2_000))

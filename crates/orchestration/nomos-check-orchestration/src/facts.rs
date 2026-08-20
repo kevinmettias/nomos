@@ -171,12 +171,7 @@ pub fn Materialize_Dependencies<P: ProcessLauncher>(
     launcher: &P,
 ) -> (Vec<SourceFile>, Vec<Finding>)
 {
-    let production = nomos_lang_rust_cargo::FactContext {
-        snapshot: context.snapshot,
-        variant: context.variant,
-        configuration: context.configuration,
-        generation: context.generation,
-    };
+    let production = Cargo_Production(context);
 
     let facts = match nomos_lang_rust_cargo::Materialize_Workspace(root, production, launcher)
     {
@@ -184,16 +179,40 @@ pub fn Materialize_Dependencies<P: ProcessLauncher>(
         Err(error) => return (Vec::new(), vec![Dependency_Capability_Unavailable(&error)]),
     };
 
+    let sources = Materialized_Dependency_Sources(facts, store);
+
+    return (sources, Vec::new());
+}
+
+/// The reading context as `nomos_lang_rust_cargo`'s provider takes it.
+fn Cargo_Production(context: &Context) -> nomos_lang_rust_cargo::FactContext
+{
+    return nomos_lang_rust_cargo::FactContext {
+        snapshot: context.snapshot,
+        variant: context.variant,
+        configuration: context.configuration,
+        generation: context.generation,
+    };
+}
+
+/// Every `dependency.edges` fact the store accepted, as the source list `Check_Dependency_
+/// Direction` can judge -- one per workspace member `store.Materialize` did not refuse.
+fn Materialized_Dependency_Sources(
+    facts: Vec<nomos_lang_rust_cargo::PackageFact>,
+    store: &mut MemoryFactStore,
+) -> Vec<SourceFile>
+{
     let mut sources = Vec::new();
     for package in facts
     {
         if store.Materialize(package.fact, &[]).is_ok()
         {
-            sources.push(SourceFile::New(package.path, package.subject, String::new()));
+            let source = SourceFile::New(package.path, package.subject, String::new());
+            sources.push(source);
         }
     }
 
-    return (sources, Vec::new());
+    return sources;
 }
 
 /// The one finding a failed [`nomos_lang_rust_cargo::Materialize_Workspace`] call produces.

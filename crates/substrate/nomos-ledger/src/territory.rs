@@ -169,28 +169,36 @@ impl Territory
     {
         use overlap::Shared_Subjects;
 
+        if let Some(reason) = self.Incomparable(other)
+        {
+            return Intersection::Unknown(reason);
+        }
+
+        let shared = Shared_Subjects(&self.paths, &other.paths);
+
+        return if shared.is_empty() { Intersection::Disjoint } else { Intersection::Overlaps(shared) };
+    }
+
+    /// Why `self` and `other` cannot be compared for overlap at all, if there is a reason —
+    /// an unexpanded pattern on either side, or paths resolved under different rules.
+    fn Incomparable(&self, other: &Self) -> Option<UnknownReason>
+    {
         if let Some(pattern) = self.patterns.first().or_else(|| other.patterns.first())
         {
-            return Intersection::Unknown(UnknownReason::UnexpandedPattern {
+            return Some(UnknownReason::UnexpandedPattern {
                 pattern: pattern.clone(),
             });
         }
 
         if self.resolution != other.resolution
         {
-            return Intersection::Unknown(UnknownReason::IncomparableResolution {
+            return Some(UnknownReason::IncomparableResolution {
                 left: self.resolution,
                 right: other.resolution,
             });
         }
 
-        let shared = Shared_Subjects(&self.paths, &other.paths);
-        if shared.is_empty()
-        {
-            return Intersection::Disjoint;
-        }
-
-        return Intersection::Overlaps(shared);
+        return None;
     }
 
     /// Authored paths that denote the same subject as another entry.

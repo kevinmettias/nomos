@@ -16,7 +16,11 @@ use nomos_spec_store::StoreError;
 
 use crate::command::SpecCommand;
 use crate::corpus::{Assemble, Assembly, CorpusRequest};
-use crate::outcome::{CommitRefusal, FreshnessRefusal, PreviewRefusal, RenderRefusal, SourcesAnswer, SpecOutcome};
+use crate::outcome::{
+    CommitRefusal, FreshnessRefusal, PreviewRefusal, RecordRefusal, RenderRefusal, SourcesAnswer, SpecOutcome,
+    TableRefusal,
+};
+use crate::request::{CommitRequest, EditRequest, FreshnessRequest, RecordRequest, RenderRequest, TableRequest};
 
 pub use commit::Commit;
 pub use freshness::Freshness;
@@ -97,6 +101,11 @@ pub fn Run<F: FileSystem>(command: &SpecCommand, request: &CorpusRequest, filesy
 
 /// Every non-`Profiles` variant's outcome, given the assembly its verb needs (or the error
 /// that kept one from being built).
+///
+/// One private helper per verb rather than one arm's worth of chained `map_err`/`and_then`
+/// inline: each helper is the answer to "what does `nomos spec <verb>` do with an assembly,"
+/// nameable on its own, and this function is left as exactly the dispatch its own doc
+/// comment already promises -- match the verb, hand the assembly to the verb's own outcome.
 fn Outcome_For<F: FileSystem>(
     command: &SpecCommand,
     assembled: Result<Assembly, StoreError>,
@@ -105,45 +114,101 @@ fn Outcome_For<F: FileSystem>(
 {
     return match command
     {
-        SpecCommand::Sources => SpecOutcome::Sources(assembled.map(|assembly| return Sources(&assembly))),
-        SpecCommand::Record(request) => SpecOutcome::Record(
-            assembled
-                .map_err(crate::outcome::RecordRefusal::Store)
-                .and_then(|assembly| return Record(&assembly, request)),
-        ),
-        SpecCommand::Table(request) => SpecOutcome::Table(
-            assembled
-                .map_err(crate::outcome::TableRefusal::Store)
-                .and_then(|assembly| return Table(&assembly, request)),
-        ),
-        SpecCommand::Render(request) => SpecOutcome::Render(
-            assembled
-                .map_err(RenderRefusal::Store)
-                .and_then(|assembly| return Render(&assembly, request, filesystem)),
-        ),
-        SpecCommand::Freshness(request) => SpecOutcome::Freshness(
-            assembled
-                .map_err(FreshnessRefusal::Store)
-                .and_then(|assembly| return Freshness(&assembly, request, filesystem)),
-        ),
-        SpecCommand::Markdown(request) => SpecOutcome::Markdown(
-            assembled
-                .map_err(nomos_spec_store::EditError::Store)
-                .and_then(|assembly| return Markdown(&assembly, request)),
-        ),
-        SpecCommand::Preview(request) => SpecOutcome::Preview(
-            assembled
-                .map_err(nomos_spec_store::EditError::Store)
-                .map_err(PreviewRefusal::Edit)
-                .and_then(|assembly| return Preview(&assembly, request, filesystem)),
-        ),
-        SpecCommand::Commit(request) => SpecOutcome::Commit(
-            assembled
-                .map_err(nomos_spec_store::EditError::Store)
-                .map_err(PreviewRefusal::Edit)
-                .map_err(CommitRefusal::from)
-                .and_then(|mut assembly| return Commit(&mut assembly, request, filesystem)),
-        ),
+        SpecCommand::Sources => Sources_Outcome(assembled),
+        SpecCommand::Record(request) => Record_Outcome(assembled, request),
+        SpecCommand::Table(request) => Table_Outcome(assembled, request),
+        SpecCommand::Render(request) => Render_Outcome(assembled, request, filesystem),
+        SpecCommand::Freshness(request) => Freshness_Outcome(assembled, request, filesystem),
+        SpecCommand::Markdown(request) => Markdown_Outcome(assembled, request),
+        SpecCommand::Preview(request) => Preview_Outcome(assembled, request, filesystem),
+        SpecCommand::Commit(request) => Commit_Outcome(assembled, request, filesystem),
         SpecCommand::Profiles => SpecOutcome::Profiles(Profiles()),
     };
+}
+
+fn Sources_Outcome(assembled: Result<Assembly, StoreError>) -> SpecOutcome
+{
+    return SpecOutcome::Sources(assembled.map(|assembly| return Sources(&assembly)));
+}
+
+fn Record_Outcome(assembled: Result<Assembly, StoreError>, request: &RecordRequest) -> SpecOutcome
+{
+    return SpecOutcome::Record(
+        assembled
+            .map_err(RecordRefusal::Store)
+            .and_then(|assembly| return Record(&assembly, request)),
+    );
+}
+
+fn Table_Outcome(assembled: Result<Assembly, StoreError>, request: &TableRequest) -> SpecOutcome
+{
+    return SpecOutcome::Table(
+        assembled
+            .map_err(TableRefusal::Store)
+            .and_then(|assembly| return Table(&assembly, request)),
+    );
+}
+
+fn Render_Outcome<F: FileSystem>(
+    assembled: Result<Assembly, StoreError>,
+    request: &RenderRequest,
+    filesystem: &F,
+) -> SpecOutcome
+{
+    return SpecOutcome::Render(
+        assembled
+            .map_err(RenderRefusal::Store)
+            .and_then(|assembly| return Render(&assembly, request, filesystem)),
+    );
+}
+
+fn Freshness_Outcome<F: FileSystem>(
+    assembled: Result<Assembly, StoreError>,
+    request: &FreshnessRequest,
+    filesystem: &F,
+) -> SpecOutcome
+{
+    return SpecOutcome::Freshness(
+        assembled
+            .map_err(FreshnessRefusal::Store)
+            .and_then(|assembly| return Freshness(&assembly, request, filesystem)),
+    );
+}
+
+fn Markdown_Outcome(assembled: Result<Assembly, StoreError>, request: &RecordRequest) -> SpecOutcome
+{
+    return SpecOutcome::Markdown(
+        assembled
+            .map_err(nomos_spec_store::EditError::Store)
+            .and_then(|assembly| return Markdown(&assembly, request)),
+    );
+}
+
+fn Preview_Outcome<F: FileSystem>(
+    assembled: Result<Assembly, StoreError>,
+    request: &EditRequest,
+    filesystem: &F,
+) -> SpecOutcome
+{
+    return SpecOutcome::Preview(
+        assembled
+            .map_err(nomos_spec_store::EditError::Store)
+            .map_err(PreviewRefusal::Edit)
+            .and_then(|assembly| return Preview(&assembly, request, filesystem)),
+    );
+}
+
+fn Commit_Outcome<F: FileSystem>(
+    assembled: Result<Assembly, StoreError>,
+    request: &CommitRequest,
+    filesystem: &F,
+) -> SpecOutcome
+{
+    return SpecOutcome::Commit(
+        assembled
+            .map_err(nomos_spec_store::EditError::Store)
+            .map_err(PreviewRefusal::Edit)
+            .map_err(CommitRefusal::from)
+            .and_then(|mut assembly| return Commit(&mut assembly, request, filesystem)),
+    );
 }

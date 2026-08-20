@@ -81,30 +81,63 @@ pub fn Discover_Workspace<P: ProcessLauncher>(root: &Path, launcher: &P) -> Resu
 {
     let document = Run_Cargo_Metadata(root, launcher)?;
     let members = Member_Ids(&document)?;
-    let packages = document
+    let packages = Packages_Array(&document)?;
+    let member_names = Member_Names(packages, &members);
+    let discovered = Discovered_Packages(packages, &members, &member_names, root)?;
+
+    return Require_Nonempty(discovered);
+}
+
+/// The "packages" array `cargo metadata`'s document promises alongside `workspace_members`.
+fn Packages_Array(document: &serde_json::Value) -> Result<&Vec<serde_json::Value>, MetadataError>
+{
+    return document
         .get("packages")
         .and_then(serde_json::Value::as_array)
         .ok_or_else(|| MetadataError {
             reason: "cargo metadata's document has no \"packages\" array".to_owned(),
-        })?;
+        });
+}
 
-    let member_names: BTreeSet<String> = packages
+/// Every workspace member's own package name — the set `Read_Dependency` checks a
+/// dependency's target against to decide whether it names another workspace member.
+fn Member_Names(packages: &[serde_json::Value], members: &BTreeSet<String>) -> BTreeSet<String>
+{
+    return packages
         .iter()
-        .filter(|package| Is_Member(package, &members))
+        .filter(|package| Is_Member(package, members))
         .filter_map(Package_Name)
         .collect();
+}
 
+/// Each workspace member's own package, read into a [`DiscoveredPackage`]; a package that
+/// is not a workspace member is skipped rather than read.
+fn Discovered_Packages(
+    packages: &[serde_json::Value],
+    members: &BTreeSet<String>,
+    member_names: &BTreeSet<String>,
+    root: &Path,
+) -> Result<Vec<DiscoveredPackage>, MetadataError>
+{
     let mut discovered = Vec::new();
     for package in packages
     {
-        if !Is_Member(package, &members)
+        if !Is_Member(package, members)
         {
             continue;
         }
 
-        discovered.push(Read_Package(package, &member_names, root)?);
+        let read = Read_Package(package, member_names, root)?;
+        discovered.push(read);
     }
 
+    return Ok(discovered);
+}
+
+/// Refuses an empty result: `cargo metadata` reporting no workspace members means this
+/// reader saw nothing, not that the workspace's own graph is empty.
+fn Require_Nonempty(discovered: Vec<DiscoveredPackage>) -> Result<Vec<DiscoveredPackage>, MetadataError>
+{
     if discovered.is_empty()
     {
         return Err(MetadataError {
@@ -118,6 +151,20 @@ pub fn Discover_Workspace<P: ProcessLauncher>(root: &Path, launcher: &P) -> Resu
 }
 
 fn Run_Cargo_Metadata<P: ProcessLauncher>(root: &Path, launcher: &P) -> Result<serde_json::Value, MetadataError>
+{
+    let command = Cargo_Metadata_Command(root);
+    let output = launcher.Run(&command).map_err(|error| MetadataError {
+        reason: format!("cargo metadata could not be run: {error}"),
+    })?;
+
+    Require_Clean_Exit(&output.outcome, &output.stderr)?;
+
+    return Parse_Metadata_Document(&output.stdout);
+}
+
+/// The `cargo metadata` invocation `tests/contract/src/workspace.rs` already established
+/// works over this workspace, run from `root`.
+fn Cargo_Metadata_Command(root: &Path) -> Command
 {
     let cargo = std::env::var("CARGO").unwrap_or_else(|_| "cargo".to_owned());
     let mut command = Command::New(
@@ -133,16 +180,18 @@ fn Run_Cargo_Metadata<P: ProcessLauncher>(root: &Path, launcher: &P) -> Result<s
     );
     command.working_directory = Some(root.to_path_buf());
 
-    let output = launcher.Run(&command).map_err(|error| MetadataError {
-        reason: format!("cargo metadata could not be run: {error}"),
-    })?;
+    return command;
+}
 
-    match output.outcome
+/// Refuses every outcome a launched process can report other than a clean, zero exit.
+fn Require_Clean_Exit(outcome: &ExitOutcome, stderr: &str) -> Result<(), MetadataError>
+{
+    match outcome
     {
-        ExitOutcome::Exited { code: 0 } => {}
+        ExitOutcome::Exited { code: 0 } => return Ok(()),
         ExitOutcome::Exited { code } => {
             return Err(MetadataError {
-                reason: format!("cargo metadata failed (exit {code}): {}", output.stderr),
+                reason: format!("cargo metadata failed (exit {code}): {stderr}"),
             });
         }
         ExitOutcome::TimedOut => {
@@ -163,8 +212,12 @@ fn Run_Cargo_Metadata<P: ProcessLauncher>(root: &Path, launcher: &P) -> Result<s
             });
         }
     }
+}
 
-    return serde_json::from_str(&output.stdout).map_err(|error| MetadataError {
+/// `cargo metadata`'s stdout, parsed as the JSON document `--format-version 1` promises.
+fn Parse_Metadata_Document(stdout: &str) -> Result<serde_json::Value, MetadataError>
+{
+    return serde_json::from_str(stdout).map_err(|error| MetadataError {
         reason: format!("cargo metadata's stdout was not the JSON it promised: {error}"),
     });
 }
@@ -274,24 +327,34 @@ fn Read_Dependency(dependency: &serde_json::Value, member_names: &BTreeSet<Strin
         return None;
     }
 
-    let kind = match dependency.get("kind").and_then(serde_json::Value::as_str)
-    {
-        None | Some("null") => DependencyKind::Normal,
-        Some("dev") => DependencyKind::Dev,
-        Some("build") => DependencyKind::Build,
-        Some(_other) => return None,
-    };
-
-    let optional = dependency
-        .get("optional")
-        .and_then(serde_json::Value::as_bool)
-        .unwrap_or(false);
+    let kind = Dependency_Kind(dependency)?;
+    let optional = Dependency_Optional(dependency);
 
     return Some(DependencyEdge {
         target: target.to_owned(),
         kind,
         optional,
     });
+}
+
+/// This dependency's kind, or `None` for a kind this reader does not recognize.
+fn Dependency_Kind(dependency: &serde_json::Value) -> Option<DependencyKind>
+{
+    return match dependency.get("kind").and_then(serde_json::Value::as_str)
+    {
+        None | Some("null") => Some(DependencyKind::Normal),
+        Some("dev") => Some(DependencyKind::Dev),
+        Some("build") => Some(DependencyKind::Build),
+        Some(_other) => None,
+    };
+}
+
+fn Dependency_Optional(dependency: &serde_json::Value) -> bool
+{
+    return dependency
+        .get("optional")
+        .and_then(serde_json::Value::as_bool)
+        .unwrap_or(false);
 }
 
 #[cfg(test)]

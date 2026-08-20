@@ -136,7 +136,8 @@ fn Verdict_Of<F: FileSystem>(
         (None, Some(_)) => Verdict::Unbodied,
         (Some(body), Some(sidecar)) =>
         {
-            Verdict::Compared(Check(&assembly.store, profile, Some(&body), Some(&sidecar)))
+            let comparison = Check(&assembly.store, profile, Some(&body), Some(&sidecar));
+            Verdict::Compared(comparison)
         }
     };
 }

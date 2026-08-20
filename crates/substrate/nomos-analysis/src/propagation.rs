@@ -135,6 +135,18 @@ mod tests
         return Digest128::From_Bytes([byte; 16]);
     }
 
+    /// A dependents adjacency map built from `(from, to)` edges, one insertion per edge.
+    fn Graph(edges: &[(Digest128, Digest128)]) -> BTreeMap<Digest128, BTreeSet<Digest128>>
+    {
+        let mut dependents: BTreeMap<Digest128, BTreeSet<Digest128>> = BTreeMap::new();
+        for (from, to) in edges.iter().copied()
+        {
+            dependents.entry(from).or_default().insert(to);
+        }
+
+        return dependents;
+    }
+
     fn Spread(
         dependents: &BTreeMap<Digest128, BTreeSet<Digest128>>,
         roots: Vec<Digest128>,
@@ -159,9 +171,7 @@ mod tests
         let b = Digest(2);
         let c = Digest(3);
 
-        let mut dependents: BTreeMap<Digest128, BTreeSet<Digest128>> = BTreeMap::new();
-        dependents.insert(a, BTreeSet::from([b]));
-        dependents.insert(b, BTreeSet::from([c]));
+        let dependents = Graph(&[(a, b), (b, c)]);
 
         let reached = Spread(&dependents, vec![a], |_| return true);
 
@@ -174,9 +184,7 @@ mod tests
         let a = Digest(1);
         let b = Digest(2);
 
-        let mut dependents: BTreeMap<Digest128, BTreeSet<Digest128>> = BTreeMap::new();
-        dependents.insert(a, BTreeSet::from([b]));
-        dependents.insert(b, BTreeSet::from([a]));
+        let dependents = Graph(&[(a, b), (b, a)]);
 
         let reached = Spread(&dependents, vec![a], |_| return true);
 
@@ -190,9 +198,7 @@ mod tests
         let b = Digest(2);
         let c = Digest(3);
 
-        let mut dependents: BTreeMap<Digest128, BTreeSet<Digest128>> = BTreeMap::new();
-        dependents.insert(a, BTreeSet::from([b]));
-        dependents.insert(b, BTreeSet::from([c]));
+        let dependents = Graph(&[(a, b), (b, c)]);
 
         let reached = Spread(&dependents, vec![a], |digest| return digest != b);
 

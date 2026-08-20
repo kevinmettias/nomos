@@ -108,10 +108,24 @@ fn Render_List(
         Err(error) => return Report_Error(&error, output),
     };
 
+    Print_Board(&document, state, now, output);
+
+    return ExitCode::Ok;
+}
+
+/// Every item in `state`'s bucket, or the "nothing" line when none matched -- and, on the
+/// unfiltered board only, the one line naming which item to claim next.
+fn Print_Board(
+    document: &LedgerDocument,
+    state: Option<&str>,
+    now: nomos_platform::Timestamp,
+    output: &mut impl std::io::Write,
+)
+{
     let mut shown = 0_u32;
     for item in &document.items
     {
-        let Some(label) = Listed_As(&document, item, state, now)
+        let Some(label) = Listed_As(document, item, state, now)
         else
         {
             continue;
@@ -128,10 +142,8 @@ fn Render_List(
     // for -- `--state lapsed` is not the place to also learn what is `Ready` elsewhere.
     if state.is_none()
     {
-        Print_Next(&document, now, output);
+        Print_Next(document, now, output);
     }
-
-    return ExitCode::Ok;
 }
 
 /// The one line that answers "which one": the first item [`nomos_ledger::Eligible_Items`]
@@ -222,10 +234,18 @@ fn Render_Audit(result: Result<BoardView, LedgerError>, output: &mut impl std::i
         Err(error) => return Report_Error(&error, output),
     };
 
+    Print_Audit(&document, now, output);
+
+    return ExitCode::Ok;
+}
+
+/// Every claimable item currently blocked, or the "nothing" line when none is.
+fn Print_Audit(document: &LedgerDocument, now: nomos_platform::Timestamp, output: &mut impl std::io::Write)
+{
     let mut reported = 0_u32;
     for item in &document.items
     {
-        let Some(refusal) = Blocking_Refusal(&document, item, now)
+        let Some(refusal) = Blocking_Refusal(document, item, now)
         else
         {
             continue;
@@ -239,8 +259,6 @@ fn Render_Audit(result: Result<BoardView, LedgerError>, output: &mut impl std::i
         // express what is blocking this", and only one of those is good news.
         let _ = writeln!(output, "nothing claimable is blocked");
     }
-
-    return ExitCode::Ok;
 }
 
 /// Every record this repository has already published, as repository-relative paths.

@@ -1,7 +1,7 @@
 use nomos_contract_tests::Workspace;
-use nomos_ledger::LedgerDocument;
+use nomos_ledger::{LedgerDocument, LedgerItem};
 use std::collections::BTreeSet;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use crate::readers::{
     Board, Declared_Skill_Name, Gate_Run_Commands, Harness_Files, Imports, Ledger_Verb_Lines,
     Missing_Paths, Named_Items, Named_Paths, Read_Harness_File, Read_Repo_File,
@@ -163,16 +163,7 @@ fn Test_The_Harness_Should_Not_Restate_The_Gate_Command_List()
          file at all"
     );
 
-    let mut restated = Vec::new();
-    for (name, text) in Harness_Files()
-    {
-        let found = Restated_Gate_Commands(&text, &commands);
-
-        if found.len() >= 2
-        {
-            restated.push(format!("{name}: {found:#?}"));
-        }
-    }
+    let restated = Files_Restating_Two_Or_More(&commands, Restated_Gate_Commands);
 
     assert!(
         restated.is_empty(),
@@ -180,6 +171,31 @@ fn Test_The_Harness_Should_Not_Restate_The_Gate_Command_List()
          OD-AGENT-002 admits naming one command in passing and refuses a copy of the list \
          `.github/workflows/gate.yml` already runs."
     );
+}
+
+/// Every harness file that restates two or more of `lines`, formatted as `name: found`.
+///
+/// Shared by [`Test_The_Harness_Should_Not_Restate_The_Gate_Command_List`] and
+/// [`Test_The_Harness_Should_Not_Restate_The_Ledger_Verb_Reference`] below -- both check the
+/// same rule against a different source (the gate's commands, the ledger's verb reference),
+/// and "two or more is a copy, one in passing is a reference" is one rule, not two.
+fn Files_Restating_Two_Or_More(
+    lines: &[String],
+    restated_in: impl Fn(&str, &[String]) -> Vec<String>,
+) -> Vec<String>
+{
+    let mut restated = Vec::new();
+    for (name, text) in Harness_Files()
+    {
+        let found = restated_in(&text, lines);
+
+        if found.len() >= 2
+        {
+            restated.push(format!("{name}: {found:#?}"));
+        }
+    }
+
+    return restated;
 }
 
 /// The ledger verb reference is checked where `README.md` already documents it, and nowhere
@@ -200,16 +216,7 @@ fn Test_The_Harness_Should_Not_Restate_The_Ledger_Verb_Reference()
          check would pass over any file at all"
     );
 
-    let mut restated = Vec::new();
-    for (name, text) in Harness_Files()
-    {
-        let found = Restated_Ledger_Verb_Lines(&text, &verbs);
-
-        if found.len() >= 2
-        {
-            restated.push(format!("{name}: {found:#?}"));
-        }
-    }
+    let restated = Files_Restating_Two_Or_More(&verbs, Restated_Ledger_Verb_Lines);
 
     assert!(
         restated.is_empty(),
@@ -265,6 +272,22 @@ fn Test_Every_Temporary_Hazard_Should_Name_An_Item_That_Is_Still_Open()
 /// while the sentence is there.
 pub(crate) fn Assert_The_Hazard_Is_Still_Live(board: &LedgerDocument, file: &str, item: &str)
 {
+    Assert_Hazard_Sentence_Still_Present(file, item);
+
+    let entry = Board_Entry_For(board, file, item);
+
+    assert!(
+        !entry.state.Is_Finished(),
+        "{item} is finished, so the hazard {file} carries for it is over. Remove the \
+         warning and its entry here — OD-AGENT-001 admits a temporary hazard on \
+         exactly this condition."
+    );
+}
+
+/// The sentence declaring `item`'s hazard must still be in `file`, or the warning was
+/// removed while the defect it names is still open.
+fn Assert_Hazard_Sentence_Still_Present(file: &str, item: &str)
+{
     let text = Read_Harness_File(file);
 
     assert!(
@@ -273,22 +296,22 @@ pub(crate) fn Assert_The_Hazard_Is_Still_Live(board: &LedgerDocument, file: &str
          Either the warning was removed while the defect is still open, or this \
          declaration should have gone with it."
     );
+}
 
+/// The board entry for `item`, or a panic naming `file` -- with no entry there is nothing for
+/// the finished-state assertion in the caller to run against, and returning quietly instead
+/// would let a hazard declaration cite an id that is on no board and still pass, which is the
+/// one arrangement nobody can retire.
+fn Board_Entry_For<'a>(board: &'a LedgerDocument, file: &str, item: &str) -> &'a LedgerItem
+{
     let Some(entry) = board.items.iter().find(|entry| return entry.id.As_Str() == item)
     else
     {
-        // With no entry there is nothing for the finished-state assertion below to run
-        // against. Returning quietly instead would let a hazard declaration cite an id that
-        // is on no board and still pass, which is the one arrangement nobody can retire.
         panic!("{file} names {item}, which is on no board. A hazard pointing at an \
                 item nobody can look up cannot be retired by anybody.");
     };
-    assert!(
-        !entry.state.Is_Finished(),
-        "{item} is finished, so the hazard {file} carries for it is over. Remove the \
-         warning and its entry here — OD-AGENT-001 admits a temporary hazard on \
-         exactly this condition."
-    );
+
+    return entry;
 }
 
 /// A hazard cannot be added quietly, which is what makes the declaration above worth having.
@@ -357,23 +380,8 @@ fn Test_Every_Committed_Skill_Should_Declare_A_Name_Matching_Its_Directory()
 pub(crate) fn Assert_The_Skill_Is_Named_For_Its_Directory(directory: &Path)
 {
     let label = directory.display().to_string().replace('\\', "/");
-    let manifest = directory.join("SKILL.md");
-
-    assert!(
-        manifest.is_file(),
-        "{label} is a skill directory with no SKILL.md, so it is a directory the tool \
-         will not load and a reader will assume works"
-    );
-    let text = std::fs::read_to_string(&manifest)
-        // The assertion above already established this manifest is a file, so a read that
-        // fails here is a SKILL.md the tool would fail to load too. There is no name left to
-        // compare and no weaker comparison to fall back to.
-        .unwrap_or_else(|error| panic!("cannot read {label}/SKILL.md: {error}"));
-    let declared = Declared_Skill_Name(&text)
-        // Front matter with no name is worse than front matter with the wrong one: the tool
-        // then has nothing to report the skill under at all. Reading the absence as "nothing
-        // to compare" would pass it through the check that exists to pin the name down.
-        .unwrap_or_else(|| panic!("{label}/SKILL.md declares no name in its front matter"));
+    let manifest = Assert_Skill_Manifest_Exists(directory, &label);
+    let declared = Declared_Name_In_Manifest(&manifest, &label);
     let expected = directory
         .file_name()
         .map(|name| return name.to_string_lossy().into_owned())
@@ -383,4 +391,36 @@ pub(crate) fn Assert_The_Skill_Is_Named_For_Its_Directory(directory: &Path)
         declared, expected,
         "{label}/SKILL.md calls itself {declared} while living at {expected}"
     );
+}
+
+/// The skill's `SKILL.md`, or a panic naming `label` -- a directory with no manifest is one
+/// the tool will not load, and a reader has no way to notice that from the directory alone.
+fn Assert_Skill_Manifest_Exists(directory: &Path, label: &str) -> PathBuf
+{
+    let manifest = directory.join("SKILL.md");
+
+    assert!(
+        manifest.is_file(),
+        "{label} is a skill directory with no SKILL.md, so it is a directory the tool \
+         will not load and a reader will assume works"
+    );
+
+    return manifest;
+}
+
+/// The name `manifest`'s front matter declares, or a panic naming `label` -- unreadable or
+/// nameless front matter leaves nothing for the caller's comparison to run against.
+fn Declared_Name_In_Manifest(manifest: &Path, label: &str) -> String
+{
+    let text = std::fs::read_to_string(manifest)
+        // The caller already established this manifest is a file, so a read that fails
+        // here is a SKILL.md the tool would fail to load too. There is no name left to
+        // compare and no weaker comparison to fall back to.
+        .unwrap_or_else(|error| panic!("cannot read {label}/SKILL.md: {error}"));
+
+    return Declared_Skill_Name(&text)
+        // Front matter with no name is worse than front matter with the wrong one: the tool
+        // then has nothing to report the skill under at all. Reading the absence as "nothing
+        // to compare" would pass it through the check that exists to pin the name down.
+        .unwrap_or_else(|| panic!("{label}/SKILL.md declares no name in its front matter"));
 }

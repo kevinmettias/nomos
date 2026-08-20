@@ -8,10 +8,11 @@
 
 use std::time::Duration;
 
-use nomos_platform::{Clock, CrossProcessLock, FileSystem};
+use nomos_platform::{Clock, CrossProcessLock, FileSystem, Timestamp};
 
 use crate::AddRefusal;
 use crate::ClaimRefusal;
+use crate::LedgerDocument;
 use crate::LedgerItem;
 use crate::ItemId;
 use crate::LedgerError;
@@ -106,31 +107,54 @@ pub(super) fn Take_Over<F: FileSystem, C: Clock, L: CrossProcessLock>(
     lease: Duration,
 ) -> Result<Reservation, ClaimRefusal>
 {
-    use crate::Claim;
     use crate::exclusion::Check_Lease;
-    use super::claiming::Replace_Lapsed;
 
     Check_Lease(lease)?;
 
+    let request = TakeoverRequest { item, holder, lease };
+
     return Decide_Under_Lock(ledger, holder, |document, now| {
-        let expires_at = now.Plus(lease);
+        return Take_Over_Locked(document, &request, now);
+    });
+}
 
-        if let Some(refusal) = Takeover_Refusal(document, item, now)
-        {
-            return Err(refusal);
-        }
+/// What [`Take_Over`] asks for, grouped so the function that acts on it under the lock
+/// stays under this crate's own parameter-count ceiling.
+struct TakeoverRequest<'a>
+{
+    item: &'a ItemId,
+    holder: &'a str,
+    lease: Duration,
+}
 
-        let replacement = Claim {
-            holder: holder.to_owned(),
-            acquired_at: now,
-            lease_expires_at: expires_at,
-        };
-        Replace_Lapsed(document, item, &replacement, now)?;
+/// [`Take_Over`]'s body once the lock is held and `now` is known: replaces a lapsed claim
+/// with a fresh one, or refuses.
+fn Take_Over_Locked(
+    document: &mut LedgerDocument,
+    request: &TakeoverRequest<'_>,
+    now: Timestamp,
+) -> Result<Reservation, ClaimRefusal>
+{
+    use crate::Claim;
+    use super::claiming::Replace_Lapsed;
 
-        return Ok(Reservation {
-            item: item.clone(),
-            holder: holder.to_owned(),
-            expires_at,
-        });
+    let expires_at = now.Plus(request.lease);
+
+    if let Some(refusal) = Takeover_Refusal(document, request.item, now)
+    {
+        return Err(refusal);
+    }
+
+    let replacement = Claim {
+        holder: request.holder.to_owned(),
+        acquired_at: now,
+        lease_expires_at: expires_at,
+    };
+    Replace_Lapsed(document, request.item, &replacement, now)?;
+
+    return Ok(Reservation {
+        item: request.item.clone(),
+        holder: request.holder.to_owned(),
+        expires_at,
     });
 }

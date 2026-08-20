@@ -86,11 +86,21 @@ fn Test_A_Function_Shape_Should_Carry_Its_Arity()
 #[test]
 fn Test_Documentation_Should_Survive_The_Field_It_Travels_In()
 {
+    let prose = "Mirrored by `Test_X`.\n\nA second\tparagraph with a \\ in it.";
+    let payload = Build_Single_Item_Payload_With_Documentation(prose);
+
+    let rendered = Render_Payload(&payload);
+    Assert_Prose_Newlines_Did_Not_Become_Records(&rendered);
+    Assert_Documentation_Round_Trips_To_The_Same_Prose(&rendered, prose);
+}
+
+/// Builds a one-item payload whose `documentation` field is exactly `prose`.
+fn Build_Single_Item_Payload_With_Documentation(prose: &str) -> SyntaxPayload
+{
     use crate::PayloadItem;
     use crate::SyntaxPayload;
 
-    let prose = "Mirrored by `Test_X`.\n\nA second\tparagraph with a \\ in it.";
-    let payload = SyntaxPayload {
+    return SyntaxPayload {
         unexpanded: 0,
         items: vec![PayloadItem {
             ordinal: 0,
@@ -101,15 +111,24 @@ fn Test_Documentation_Should_Survive_The_Field_It_Travels_In()
             shape: Observation::Present(SLICE.to_owned()),
         }],
     };
+}
 
-    let rendered = Render_Payload(&payload);
+/// Counts the rendered bytes' newlines: the prose's own two newlines, and no others —
+/// confirming its embedded newlines were escaped rather than read back as record breaks.
+fn Assert_Prose_Newlines_Did_Not_Become_Records(rendered: &[u8])
+{
     assert_eq!(
         rendered.iter().filter(|byte| return **byte == b'\n').count(),
         2,
         "the newlines in the prose must not become records"
     );
+}
 
-    let read = Parse_Payload(&rendered).expect("what this module wrote");
+/// Parses the rendered bytes back and checks the one item's `documentation` field is
+/// exactly the prose that was written into it.
+fn Assert_Documentation_Round_Trips_To_The_Same_Prose(rendered: &[u8], prose: &str)
+{
+    let read = Parse_Payload(rendered).expect("what this module wrote");
     assert_eq!(read.items.first().expect("one item").documentation.Value(), Some(prose));
 }
 

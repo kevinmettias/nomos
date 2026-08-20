@@ -161,11 +161,10 @@ fn Goal_Values(store: &SpecificationStore) -> Vec<(String, u32, Option<String>)>
         .collect();
 }
 
-#[test]
-fn Test_An_Open_Blocking_Gap_Should_Be_A_Row_And_Should_Refuse_Acceptance()
+/// The named request, carrying one open gap over `question`, blocking `behaviour`.
+fn Submission_With_A_Blocking_Gap(id: &str, state: SubmissionState) -> Submission
 {
-    let mut store = Store();
-    let mut submission = Request("FR-005", SubmissionState::Draft);
+    let mut submission = Request(id, state);
     submission.gaps = vec![DecisionGap {
         question: "which substrate is canonical".to_owned(),
         blocks: vec!["behaviour".to_owned()],
@@ -173,21 +172,39 @@ fn Test_An_Open_Blocking_Gap_Should_Be_A_Row_And_Should_Refuse_Acceptance()
         closed_by: None,
     }];
 
+    return submission;
+}
+
+/// The refusal a rejected `Accept_Submission` call carried, or a panic naming the wrong
+/// variant.
+///
+/// Only `Refused` carries the rule name a caller wants to assert on; a `Store` variant would
+/// mean the write failed for a database reason and the rule set was never consulted, which is
+/// the reading the caller's own assertion would otherwise be unable to distinguish from a
+/// passing test.
+fn Expect_Refusal(result: Result<i64, AcceptError>, message: &str) -> Refusal
+{
+    let AcceptError::Refused(refusal) = result.expect_err(message)
+    else
+    {
+        panic!("refused for the wrong reason");
+    };
+
+    return refusal;
+}
+
+#[test]
+fn Test_An_Open_Blocking_Gap_Should_Be_A_Row_And_Should_Refuse_Acceptance()
+{
+    let mut store = Store();
+    let mut submission = Submission_With_A_Blocking_Gap("FR-005", SubmissionState::Draft);
+
     Accept_Submission(&mut store, &submission).expect("a draft may carry an open gap");
     assert_eq!(store.Count(Table::SubmissionGaps).expect("a count"), 1);
 
     submission.state = SubmissionState::Accepted;
-    let error = Accept_Submission(&mut store, &submission).expect_err("refused");
+    let refusal = Expect_Refusal(Accept_Submission(&mut store, &submission), "refused");
 
-    let AcceptError::Refused(refusal) = error
-    else
-    {
-        // The same submission was accepted as a draft four lines up, so the only thing that
-        // changed is its state. A `Store` variant would mean the second write failed for a
-        // database reason and the gap rule was never consulted — which is the reading the
-        // assertion below would otherwise be unable to distinguish from a passing test.
-        panic!("refused for the wrong reason");
-    };
     assert_eq!(First(&refusal.failures).rule, "no-open-blocking-gap");
 }
 
@@ -195,27 +212,11 @@ fn Test_An_Open_Blocking_Gap_Should_Be_A_Row_And_Should_Refuse_Acceptance()
 fn Test_A_Gap_Should_Not_Be_Closed_By_Supplying_The_Value_It_Blocks()
 {
     let mut store = Store();
-    let mut submission = Request("FR-006", SubmissionState::Accepted);
-    submission.gaps = vec![DecisionGap {
-        question: "which substrate is canonical".to_owned(),
-        blocks: vec!["behaviour".to_owned()],
-        severity: Severity::Blocking,
-        closed_by: None,
-    }];
+    let mut submission = Submission_With_A_Blocking_Gap("FR-006", SubmissionState::Accepted);
     let supplied = Value("behaviour", "the blocked value, supplied", Origin::Submitted);
     submission.values.push(supplied);
 
-    let error = Accept_Submission(&mut store, &submission).expect_err("still refused");
-
-    let AcceptError::Refused(refusal) = error
-    else
-    {
-        // The submission supplies `behaviour`, the very field the gap blocks, so the question
-        // is whether that value closed the gap. Only `Refused` carries the rule name the
-        // assertion below reads, and it is the rule name — not the fact of a refusal — that
-        // says the gap was still open rather than some other check firing.
-        panic!("refused for the wrong reason");
-    };
+    let refusal = Expect_Refusal(Accept_Submission(&mut store, &submission), "still refused");
     assert_eq!(First(&refusal.failures).rule, "no-open-blocking-gap");
 
     submission.gaps.first_mut().expect("a gap").closed_by = Some("OD-SPEC-008".to_owned());

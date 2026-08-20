@@ -8,6 +8,7 @@
 use crate::walk::{Each_File, Rust_Files};
 use crate::walked::{Report_The_Walk, Walk};
 use nomos_lang_rust::{Read_Source, Recognition};
+use std::collections::BTreeMap;
 use std::path::{Path, PathBuf};
 
 /// The corpus this provider was built to survive.
@@ -179,29 +180,10 @@ fn Test_Every_Refusal_Should_Be_Named_And_Explained()
 /// responses — which is why the count alone was never going to be enough.
 fn Unexplained(path: &Path, failure: &str) -> Option<PathBuf>
 {
-    assert!(
-        failure.starts_with("line "),
-        "a refusal must say where: {} — {failure}",
-        path.display()
-    );
+    Assert_Refusal_Names_Position(path, failure);
 
     let source = std::fs::read_to_string(path).ok();
-    let stray_mark = source
-        .as_deref()
-        .is_some_and(|source| return source.trim_start_matches('\u{feff}').contains('\u{feff}'));
-    let misplaced_inner_doc = !stray_mark && source.as_deref().is_some_and(Has_Misplaced_Inner_Doc);
-    let reason = if stray_mark
-    {
-        Some("stray byte order mark")
-    }
-    else if misplaced_inner_doc
-    {
-        Some("misplaced inner doc comment")
-    }
-    else
-    {
-        None
-    };
+    let reason = Damage_Reason(source.as_deref());
 
     eprintln!(
         "refused {} ({}): {failure}",
@@ -210,6 +192,32 @@ fn Unexplained(path: &Path, failure: &str) -> Option<PathBuf>
     );
 
     return reason.is_none().then(|| return path.to_path_buf());
+}
+
+fn Assert_Refusal_Names_Position(path: &Path, failure: &str)
+{
+    assert!(
+        failure.starts_with("line "),
+        "a refusal must say where: {} — {failure}",
+        path.display()
+    );
+}
+
+/// Which of the two known kinds of damage `source` carries, if either.
+fn Damage_Reason(source: Option<&str>) -> Option<&'static str>
+{
+    let stray_mark = source.is_some_and(|source| return source.trim_start_matches('\u{feff}').contains('\u{feff}'));
+    if stray_mark
+    {
+        return Some("stray byte order mark");
+    }
+
+    if source.is_some_and(Has_Misplaced_Inner_Doc)
+    {
+        return Some("misplaced inner doc comment");
+    }
+
+    return None;
 }
 
 /// Whether `source` places a `//!` or `#![...]` inner doc comment or attribute after a real
@@ -227,24 +235,32 @@ fn Has_Misplaced_Inner_Doc(source: &str) -> bool
 
     for line in source.lines()
     {
-        let trimmed = line.trim_start();
-
-        if trimmed.starts_with("//!") || trimmed.starts_with("#![")
+        if Line_Is_Misplaced_Inner_Doc(line, &mut seen_item)
         {
-            if seen_item
-            {
-                return true;
-            }
-
-            continue;
+            return true;
         }
-        if trimmed.is_empty() || trimmed.starts_with("//")
-        {
-            continue;
-        }
-
-        seen_item = true;
     }
+
+    return false;
+}
+
+/// One line's contribution to the scan: whether it is itself an inner doc comment or
+/// attribute arriving after a real item already began the file, and — if it is neither —
+/// whether it is the item that would make a later one misplaced.
+fn Line_Is_Misplaced_Inner_Doc(line: &str, seen_item: &mut bool) -> bool
+{
+    let trimmed = line.trim_start();
+
+    if trimmed.starts_with("//!") || trimmed.starts_with("#![")
+    {
+        return *seen_item;
+    }
+    if trimmed.is_empty() || trimmed.starts_with("//")
+    {
+        return false;
+    }
+
+    *seen_item = true;
 
     return false;
 }
@@ -257,13 +273,29 @@ fn Has_Misplaced_Inner_Doc(source: &str) -> bool
 #[test]
 fn Test_Soundness_Should_Hold_Over_The_Whole_Corpus()
 {
-    use crate::soundness::Names_Checked;
-
     let Some(corpus) = Corpus_Or_Skip()
     else
     {
         return;
     };
+
+    let (checked, files) = Count_Checked_Names(&corpus);
+
+    eprintln!("soundness: {checked} names checked across {files} files");
+    assert!(
+        checked > 10_000,
+        "only {checked} names were checked across {files} files; that is too few for this \
+         corpus to have been read"
+    );
+}
+
+/// How many identifiers were checked for membership in the file they came from, and
+/// across how many files — the whole-corpus counterpart to the sample `tests/guarantee.rs`
+/// checks the same way.
+fn Count_Checked_Names(corpus: &Corpus) -> (u64, usize)
+{
+    use crate::soundness::Names_Checked;
+
     let mut checked = 0_u64;
     let mut files = 0_usize;
 
@@ -278,12 +310,8 @@ fn Test_Soundness_Should_Hold_Over_The_Whole_Corpus()
         checked = checked.saturating_add(names);
         files = files.saturating_add(1);
     }
-    eprintln!("soundness: {checked} names checked across {files} files");
-    assert!(
-        checked > 10_000,
-        "only {checked} names were checked across {files} files; that is too few for this \
-         corpus to have been read"
-    );
+
+    return (checked, files);
 }
 
 /// Reading is a function of the bytes, checked against the corpus rather than against a
@@ -378,14 +406,29 @@ fn Test_The_Corpus_Should_Show_Why_Completeness_Is_Unknown()
 #[test]
 fn Test_Unrecognized_Files_Should_Be_Skipped_Rather_Than_Failed()
 {
-    use std::collections::BTreeMap;
-
     let Some(corpus) = Corpus_Or_Skip()
     else
     {
         return;
     };
+
+    let skipped = Skipped_Extensions(&corpus);
+    let total: usize = skipped.values().copied().sum();
+
+    eprintln!(
+        "recognition: {} Rust files read, {total} files skipped across {} extensions",
+        corpus.files.len(),
+        skipped.len()
+    );
+    Assert_Skips_Are_Real(&skipped);
+}
+
+/// Every extension this walk recognized as not-Rust, and how many files it skipped for
+/// each — the evidence that recognition discriminates rather than accepting everything.
+fn Skipped_Extensions(corpus: &Corpus) -> BTreeMap<String, usize>
+{
     let mut skipped: BTreeMap<String, usize> = BTreeMap::new();
+
     Each_File(&corpus.root, |_, name| {
         if let Recognition::Unrecognized { extension } = Recognition::Of_Path(name)
         {
@@ -394,13 +437,12 @@ fn Test_Unrecognized_Files_Should_Be_Skipped_Rather_Than_Failed()
             *seen = seen.saturating_add(1);
         }
     });
-    let total: usize = skipped.values().copied().sum();
 
-    eprintln!(
-        "recognition: {} Rust files read, {total} files skipped across {} extensions",
-        corpus.files.len(),
-        skipped.len()
-    );
+    return skipped;
+}
+
+fn Assert_Skips_Are_Real(skipped: &BTreeMap<String, usize>)
+{
     assert!(
         !skipped.is_empty(),
         "a real tree has files that are not Rust; finding none means recognition \

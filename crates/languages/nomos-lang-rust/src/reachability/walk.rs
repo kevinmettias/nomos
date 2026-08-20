@@ -45,6 +45,30 @@ impl Walk
             shape,
         });
     }
+
+    /// One `match` arm's own contribution: recorded only if its pattern binds
+    /// `Err(applicability)` and its body is one of [`ArmShape`]'s four obvious wrong shapes.
+    fn Visit_Match_Arm(&mut self, arm: &syn::Arm)
+    {
+        let Some(binding) = Err_Binding(&arm.pat)
+        else
+        {
+            return;
+        };
+
+        if binding != "applicability"
+        {
+            return;
+        }
+
+        let Some(shape) = Classify(&arm.body)
+        else
+        {
+            return;
+        };
+
+        self.Record(&binding, shape);
+    }
 }
 
 /// The identifier one `Err(...)` tuple-struct pattern binds, if it binds exactly one and
@@ -149,16 +173,7 @@ impl<'ast> Visit<'ast> for Walk
     {
         for arm in &node.arms
         {
-            if let Some(binding) = Err_Binding(&arm.pat)
-            {
-                if binding == "applicability"
-                {
-                    if let Some(shape) = Classify(&arm.body)
-                    {
-                        self.Record(&binding, shape);
-                    }
-                }
-            }
+            self.Visit_Match_Arm(arm);
         }
 
         syn::visit::visit_expr_match(self, node);

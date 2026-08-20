@@ -61,9 +61,8 @@ mod tests
         let configuration = ConfigurationId::From_Digest(Digest128::From_Bytes([0x22; 16]));
         let mut workspace = Workspace::Empty(variant, configuration);
 
-        workspace
-            .Apply(&WorkspaceChangeSet::From(ChangeSource::GitCheckout).Present("a.rs", "old"))
-            .expect("a fresh present is always accepted");
+        let initial = WorkspaceChangeSet::From(ChangeSource::GitCheckout).Present("a.rs", "old");
+        workspace.Apply(&initial).expect("a fresh present is always accepted");
 
         return workspace;
     }
@@ -106,7 +105,8 @@ mod tests
             .Validate(&base)
             .expect("validates cleanly");
 
-        base.Apply(&WorkspaceChangeSet::From(ChangeSource::GitCheckout).Present("b.rs", "other"))
+        let advance = WorkspaceChangeSet::From(ChangeSource::GitCheckout).Present("b.rs", "other");
+        base.Apply(&advance)
             .expect("an unrelated change still advances the workspace");
 
         let refusal = validated

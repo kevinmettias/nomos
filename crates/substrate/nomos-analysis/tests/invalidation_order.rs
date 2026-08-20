@@ -105,8 +105,10 @@ fn Subject_Changed(store: &mut MemoryFactStore, subject: SubjectId) -> Invalidat
 /// incidental to this graph's shape, and `Condensation_Of` is computed fresh from the
 /// store's own dependency edges among the invalidated keys, so it does not vary with where
 /// the walk entered.
-#[test]
-fn Test_A_Chain_Should_Condense_Into_One_Singleton_Group_Per_Fact_In_Dependency_Order()
+/// A depends on B depends on C depends on D, in a fresh store — the fixture graph
+/// `Test_A_Chain_Should_Condense_Into_One_Singleton_Group_Per_Fact_In_Dependency_Order`
+/// asserts over.
+fn Four_Long_Chain() -> (MemoryFactStore, FactKey, FactKey, FactKey, FactKey)
 {
     let a = Key_For(1);
     let b = Key_For(2);
@@ -119,6 +121,14 @@ fn Test_A_Chain_Should_Condense_Into_One_Singleton_Group_Per_Fact_In_Dependency_
     Depends_On(&mut store, &b, &[&c]);
     Depends_On(&mut store, &a, &[&b]);
 
+    return (store, a, b, c, d);
+}
+
+#[test]
+fn Test_A_Chain_Should_Condense_Into_One_Singleton_Group_Per_Fact_In_Dependency_Order()
+{
+    let (mut store, a, b, c, d) = Four_Long_Chain();
+
     let report = Subject_Changed(&mut store, d.subject);
     assert_eq!(report.direct, vec![d.clone()]);
     let mut expected_dependent = vec![c.clone(), b.clone(), a.clone()];
@@ -126,7 +136,6 @@ fn Test_A_Chain_Should_Condense_Into_One_Singleton_Group_Per_Fact_In_Dependency_
     assert_eq!(report.dependent, expected_dependent, "the chain was not fully invalidated");
 
     let groups = Condensation_Of(&report, &store);
-
     assert_eq!(
         groups,
         vec![
@@ -142,8 +151,9 @@ fn Test_A_Chain_Should_Condense_Into_One_Singleton_Group_Per_Fact_In_Dependency_
 /// W depends on X depends on Y depends on Z depends on W: a cycle over four facts. It must
 /// condense into exactly one group naming all four, with no claim of a total order among
 /// them — a cycle is a shape of the dependency graph, not a fault the store refuses.
-#[test]
-fn Test_A_Four_Cycle_Should_Condense_Into_One_Group_Naming_All_Four()
+/// W depends on X depends on Y depends on Z depends on W, in a fresh store — the fixture
+/// graph `Test_A_Four_Cycle_Should_Condense_Into_One_Group_Naming_All_Four` asserts over.
+fn Four_Cycle() -> (MemoryFactStore, FactKey, FactKey, FactKey, FactKey)
 {
     let w = Key_For(10);
     let x = Key_For(11);
@@ -156,12 +166,19 @@ fn Test_A_Four_Cycle_Should_Condense_Into_One_Group_Naming_All_Four()
     Depends_On(&mut store, &y, &[&z]);
     Depends_On(&mut store, &z, &[&w]);
 
+    return (store, w, x, y, z);
+}
+
+#[test]
+fn Test_A_Four_Cycle_Should_Condense_Into_One_Group_Naming_All_Four()
+{
+    let (mut store, w, x, y, z) = Four_Cycle();
+
     let report = Subject_Changed(&mut store, w.subject);
     assert_eq!(report.direct, vec![w.clone()]);
     assert_eq!(report.Invalidated(), 4, "the cycle did not terminate cleanly");
 
     let groups = Condensation_Of(&report, &store);
-
     assert_eq!(groups.len(), 1, "a four-cycle produced more than one group: {groups:?}");
     let Some(only) = groups.first()
     else
@@ -182,8 +199,10 @@ fn Test_A_Four_Cycle_Should_Condense_Into_One_Group_Naming_All_Four()
 /// `Condensation_Of` must preserve both: the acyclic ordering around the cycle (S before
 /// the cycle, the cycle before P), and the mutual-dependency group inside it (Q and R named
 /// together, with no order claimed between them).
-#[test]
-fn Test_A_Chain_Through_A_Cycle_Should_Preserve_Both_The_Order_And_The_Group()
+/// P depends on Q; Q and R depend on each other; R also depends on S, in a fresh store — the
+/// fixture graph `Test_A_Chain_Through_A_Cycle_Should_Preserve_Both_The_Order_And_The_Group`
+/// asserts over.
+fn Chain_Through_Cycle() -> (MemoryFactStore, FactKey, FactKey, FactKey, FactKey)
 {
     let p = Key_For(20);
     let q = Key_For(21);
@@ -196,30 +215,46 @@ fn Test_A_Chain_Through_A_Cycle_Should_Preserve_Both_The_Order_And_The_Group()
     Depends_On(&mut store, &q, &[&r]);
     Depends_On(&mut store, &p, &[&q]);
 
+    return (store, p, q, r, s);
+}
+
+/// Asserts `groups` is exactly three, in order: `before` alone, `cycle`'s two members
+/// together as one cycle, then `after` alone — both the acyclic order around the cycle and
+/// the mutual-dependency group inside it, which is the property this file's chain-through-a-
+/// cycle test exists to prove `Condensation_Of` preserves.
+fn Assert_Chain_Around_Cycle(groups: &[RematerializationGroup], before: FactKey, cycle: [FactKey; 2], after: FactKey)
+{
+    let [first, second, third] = groups
+    else
+    {
+        panic!("expected exactly 3 groups (entering fact, the 2-cycle, leaving fact), got {groups:?}");
+    };
+
+    assert_eq!(first.members, vec![before], "the entering fact must be rematerializable before the cycle it feeds");
+    assert!(!first.Is_Cycle());
+
+    let mut cycle_members = second.members.clone();
+    cycle_members.sort();
+    let mut expected_cycle = cycle.to_vec();
+    expected_cycle.sort();
+    assert_eq!(cycle_members, expected_cycle, "the two-fact cycle was not named as one group");
+    assert!(second.Is_Cycle(), "the cycle members depend on each other and must be reported as a cycle");
+
+    assert_eq!(third.members, vec![after], "the leaving fact depends on the cycle and must come after it");
+    assert!(!third.Is_Cycle());
+}
+
+#[test]
+fn Test_A_Chain_Through_A_Cycle_Should_Preserve_Both_The_Order_And_The_Group()
+{
+    let (mut store, p, q, r, s) = Chain_Through_Cycle();
+
     let report = Subject_Changed(&mut store, s.subject);
     assert_eq!(report.direct, vec![s.clone()]);
     assert_eq!(report.Invalidated(), 4, "the chain through the cycle did not fully invalidate");
 
     let groups = Condensation_Of(&report, &store);
-
-    let [first, second, third] = groups.as_slice()
-    else
-    {
-        panic!("expected exactly 3 groups (s, {{q, r}}, p), got {groups:?}");
-    };
-
-    assert_eq!(first.members, vec![s], "S must be rematerializable before the cycle it feeds");
-    assert!(!first.Is_Cycle());
-
-    let mut cycle_members = second.members.clone();
-    cycle_members.sort();
-    let mut expected_cycle = vec![q, r];
-    expected_cycle.sort();
-    assert_eq!(cycle_members, expected_cycle, "the two-fact cycle was not named as one group");
-    assert!(second.Is_Cycle(), "Q and R depend on each other and must be reported as a cycle");
-
-    assert_eq!(third.members, vec![p], "P depends on the cycle and must come after it");
-    assert!(!third.Is_Cycle());
+    Assert_Chain_Around_Cycle(&groups, s, [q, r], p);
 }
 
 /// A chain of one hundred thousand facts, each depending on the next. `Condensation_Of`
@@ -229,11 +264,12 @@ fn Test_A_Chain_Through_A_Cycle_Should_Preserve_Both_The_Order_And_The_Group()
 /// which is exactly the shape that overflowed the native stack before `Tarjan::Visit` became
 /// iterative. The assertion is unchanged from the small chain test above: one singleton
 /// group per fact, root first.
-#[test]
-fn Test_A_Chain_One_Hundred_Thousand_Deep_Should_Condense_Without_Overflowing_The_Stack()
+/// `depth` fact keys, distinguished only by an index folded into the subject's digest —
+/// large enough, and cheap enough to build, to make a chain over them exercise
+/// `Tarjan::Visit`'s iterative walk rather than a native recursion depth nothing here
+/// controls.
+fn Deep_Chain_Keys(depth: u32) -> Vec<FactKey>
 {
-    const DEPTH: u32 = 100_000;
-
     fn Key_For_Index(index: u32) -> FactKey
     {
         let mut bytes = [0u8; Digest128::BYTE_LENGTH];
@@ -252,8 +288,13 @@ fn Test_A_Chain_One_Hundred_Thousand_Deep_Should_Condense_Without_Overflowing_Th
         };
     }
 
-    let keys: Vec<FactKey> = (0..DEPTH).map(Key_For_Index).collect();
+    return (0..depth).map(Key_For_Index).collect();
+}
 
+/// The root (last) and leaf (first) of a chain built from `keys` — panics if `keys` is
+/// empty, which only a zero depth could produce.
+fn Chain_Ends(keys: &[FactKey]) -> (FactKey, FactKey)
+{
     let Some(root) = keys.last().cloned()
     else
     {
@@ -265,8 +306,15 @@ fn Test_A_Chain_One_Hundred_Thousand_Deep_Should_Condense_Without_Overflowing_Th
         panic!("DEPTH is nonzero");
     };
 
+    return (root, first_key);
+}
+
+/// Materializes `keys` as one chain, root first, each fact depending on the next so its
+/// dependency is already present when it is materialized.
+fn Deep_Chain_Store(keys: &[FactKey], root: &FactKey) -> MemoryFactStore
+{
     let mut store = MemoryFactStore::New();
-    Depends_On(&mut store, &root, &[]);
+    Depends_On(&mut store, root, &[]);
     for window in keys.windows(2).rev()
     {
         let [dependent, dependency] = window
@@ -277,17 +325,35 @@ fn Test_A_Chain_One_Hundred_Thousand_Deep_Should_Condense_Without_Overflowing_Th
         Depends_On(&mut store, dependent, &[dependency]);
     }
 
-    let report = Subject_Changed(&mut store, root.subject);
-    assert_eq!(report.Invalidated(), DEPTH as usize, "the deep chain did not fully invalidate");
+    return store;
+}
 
-    let groups = Condensation_Of(&report, &store);
-
-    assert_eq!(groups.len(), DEPTH as usize, "expected one singleton group per fact");
+/// Asserts every group in `groups` is a singleton, non-cycle — the shape a chain with no
+/// mutual dependency must condense into.
+fn Assert_All_Singletons(groups: &[RematerializationGroup])
+{
     for (position, group) in groups.iter().enumerate()
     {
         assert!(!group.Is_Cycle(), "a chain link was reported as a cycle at position {position}");
     }
+}
 
+/// `depth` fact keys chained root-to-leaf in a fresh store, alongside the root and leaf
+/// keys — merges [`Deep_Chain_Keys`], [`Chain_Ends`] and [`Deep_Chain_Store`] into the one
+/// fixture the deep-chain test asserts over.
+fn Deep_Chain(depth: u32) -> (MemoryFactStore, FactKey, FactKey)
+{
+    let keys = Deep_Chain_Keys(depth);
+    let (root, first_key) = Chain_Ends(&keys);
+    let store = Deep_Chain_Store(&keys, &root);
+
+    return (store, root, first_key);
+}
+
+/// Asserts `groups`' first group is `root` alone and its last is `first_key` alone — the
+/// root end and the leaf end of the chain [`Deep_Chain`] built.
+fn Assert_Chain_Ends(groups: &[RematerializationGroup], root: FactKey, first_key: FactKey)
+{
     let Some(first_group) = groups.first()
     else
     {
@@ -300,4 +366,20 @@ fn Test_A_Chain_One_Hundred_Thousand_Deep_Should_Condense_Without_Overflowing_Th
     };
     assert_eq!(first_group.members, vec![root]);
     assert_eq!(last_group.members, vec![first_key]);
+}
+
+#[test]
+fn Test_A_Chain_One_Hundred_Thousand_Deep_Should_Condense_Without_Overflowing_The_Stack()
+{
+    const DEPTH: u32 = 100_000;
+    let (mut store, root, first_key) = Deep_Chain(DEPTH);
+
+    let report = Subject_Changed(&mut store, root.subject);
+    assert_eq!(report.Invalidated(), DEPTH as usize, "the deep chain did not fully invalidate");
+
+    let groups = Condensation_Of(&report, &store);
+    assert_eq!(groups.len(), DEPTH as usize, "expected one singleton group per fact");
+    Assert_All_Singletons(&groups);
+
+    Assert_Chain_Ends(&groups, root, first_key);
 }

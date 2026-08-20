@@ -159,11 +159,18 @@ fn Test_Every_Gap_Should_Resolve()
 #[test]
 fn Test_The_Assessed_Set_Should_Not_Shrink()
 {
-    use std::collections::BTreeSet;
-
     let root = Workspace::Workspace_Root();
     let assessments = Committed(&root);
 
+    Assert_At_Least_The_Floor(&assessments);
+    Assert_No_Requirement_Assessed_Twice(&assessments);
+}
+
+/// The assessed set may not shrink below `FEWEST_ASSESSMENTS`. An entry cannot be quietly
+/// deleted to make a divergence disappear; a deliberate removal must lower the floor in the
+/// same commit and say why.
+fn Assert_At_Least_The_Floor(assessments: &[crate::assessment::Assessment])
+{
     assert!(
         assessments.len() >= FEWEST_ASSESSMENTS,
         "{} requirements are assessed and FEWEST_ASSESSMENTS says at least \
@@ -172,6 +179,13 @@ fn Test_The_Assessed_Set_Should_Not_Shrink()
          is deliberate, lower the floor in the same commit and say why in the message.",
         assessments.len()
     );
+}
+
+/// No two entries assess the same requirement, or the floor above counts a requirement
+/// twice.
+fn Assert_No_Requirement_Assessed_Twice(assessments: &[crate::assessment::Assessment])
+{
+    use std::collections::BTreeSet;
 
     let distinct: BTreeSet<&str> = assessments
         .iter()
@@ -194,27 +208,48 @@ fn Test_The_Assessed_Set_Should_Not_Shrink()
 #[test]
 fn Test_CHK_003_Should_Be_Assessed_Met_By_The_Record_That_Decided_It()
 {
-    use crate::assessment::Verdict;
-
     let root = Workspace::Workspace_Root();
     let assessments = Committed(&root);
-    let entry = assessments
-        .iter()
-        .find(|assessment| return assessment.requirement == "CHK-003")
-        .expect("CHK-003 must be assessed; OD-CONTRACTS-002 says Met in prose until it is");
+    let entry = Chk_003_Entry(&assessments);
 
-    assert_eq!(entry.verdict, Verdict::Met);
-    assert_eq!(entry.record.as_deref(), Some("OD-CONTRACTS-002"));
+    Assert_Decided_Met_By_OD_Contracts_002(entry);
+
     for file in [
         "crates/contracts/nomos-contracts/src/finding/applicability.rs",
         "crates/contracts/nomos-contracts/src/finding/evidence.rs",
     ]
     {
-        assert!(
-            entry.sites.iter().any(|site| return site.path == file),
-            "CHK-003's entry must name a site in {file}; the seventh reporting category is \
-             a variant in one and the evidence class it must not be confused with is in \
-             the other"
-        );
+        Assert_Entry_Names_A_Site_In(entry, file);
     }
+}
+
+/// The committed assessment for `CHK-003`, or a panic -- OD-CONTRACTS-002 says Met in prose
+/// until this entry exists.
+fn Chk_003_Entry(assessments: &[crate::assessment::Assessment]) -> &crate::assessment::Assessment
+{
+    return assessments
+        .iter()
+        .find(|assessment| return assessment.requirement == "CHK-003")
+        .expect("CHK-003 must be assessed; OD-CONTRACTS-002 says Met in prose until it is");
+}
+
+/// `entry` must be Met, and decided by the record that argued it.
+fn Assert_Decided_Met_By_OD_Contracts_002(entry: &crate::assessment::Assessment)
+{
+    use crate::assessment::Verdict;
+
+    assert_eq!(entry.verdict, Verdict::Met);
+    assert_eq!(entry.record.as_deref(), Some("OD-CONTRACTS-002"));
+}
+
+/// `entry` must name a site in `file` -- the seventh reporting category is a variant in one
+/// and the evidence class it must not be confused with is in the other.
+fn Assert_Entry_Names_A_Site_In(entry: &crate::assessment::Assessment, file: &str)
+{
+    assert!(
+        entry.sites.iter().any(|site| return site.path == file),
+        "CHK-003's entry must name a site in {file}; the seventh reporting category is \
+         a variant in one and the evidence class it must not be confused with is in \
+         the other"
+    );
 }

@@ -61,42 +61,71 @@ pub(crate) fn Records_Touched(
     return Ok(Nonempty(&stdout));
 }
 
-/// The finding for one crate, given whether `docs/records/` was already answered for
-/// this range.
+/// The commit range and repository root every per-crate query needs.
+///
+/// Grouped because [`Finding_For`] otherwise carries three coordinates that never vary
+/// independently of one another within one run — they come from the same `--since`,
+/// `--until` and `--root` this whole invocation was given.
+pub(crate) struct CommitRange<'a>
+{
+    pub(crate) root: &'a Path,
+    pub(crate) since: &'a str,
+    pub(crate) until: &'a str,
+}
+
+/// A [`CommitRange`] together with whether `docs/records/` was already touched in that
+/// same range -- answered once per run, not once per crate, and carried alongside the
+/// range because [`Finding_For`] needs both to decide anything about one crate.
+pub(crate) struct Query<'a>
+{
+    pub(crate) range: CommitRange<'a>,
+    pub(crate) records_touched: bool,
+}
+
+/// The finding for one crate, given `query`'s range and its already-answered
+/// `records_touched`.
 ///
 /// # Errors
 ///
 /// Returns a message when either `git` call could not be run or refused.
-pub(crate) fn Finding_For(
-    launcher: &impl ProcessLauncher,
-    root: &Path,
-    since: &str,
-    until: &str,
-    krate: &str,
-    records_touched: bool,
-) -> Result<CrateFinding, String>
+pub(crate) fn Finding_For(launcher: &impl ProcessLauncher, query: &Query<'_>, krate: &str) -> Result<CrateFinding, String>
 {
     let path = crate::discovery::Snapshot_Path(krate);
+    let range = &query.range;
 
-    let diff = Ran(launcher, &git::Endpoint_Diff(root, since, until, &path))?;
+    let diff_command = git::Endpoint_Diff(range.root, range.since, range.until, &path);
+    let diff = Ran(launcher, &diff_command)?;
     let surface_changed = Nonempty(&diff);
 
-    let surface_commits = if surface_changed
-    {
-        let history = Ran(launcher, &git::Path_History(root, since, until, &path))?;
-        Parse_Commits(&history)
-    }
-    else
-    {
-        Vec::new()
-    };
+    let surface_commits = Surface_Commits(launcher, range, &path, surface_changed)?;
 
     return Ok(CrateFinding {
         krate: krate.to_owned(),
         surface_changed,
         surface_commits,
-        records_touched,
+        records_touched: query.records_touched,
     });
+}
+
+/// Every commit touching `path` in `range`, or none when the surface never changed --
+/// skipping the second `git log` call entirely rather than running it just to discard the
+/// answer.
+fn Surface_Commits(
+    launcher: &impl ProcessLauncher,
+    range: &CommitRange<'_>,
+    path: &str,
+    surface_changed: bool,
+) -> Result<Vec<CommitRef>, String>
+{
+    if !surface_changed
+    {
+        return Ok(Vec::new());
+    }
+
+    let history_command = git::Path_History(range.root, range.since, range.until, path);
+    let history = Ran(launcher, &history_command)?;
+
+    return Ok(Parse_Commits(&history));
 }
 
 /// Runs `command` and returns its stdout, or a message describing why no answer came
@@ -153,15 +182,33 @@ mod tests
     use super::*;
     use crate::fake_launcher::Scripted;
 
+    /// Runs the whole join a real invocation performs -- `Records_Touched` then
+    /// `Finding_For`, both expected to succeed. Every test below wants exactly this
+    /// sequence and differs only in what `launcher` answers, so they share it rather than
+    /// each repeating the two-call join.
+    fn Joined(launcher: &Scripted, range: CommitRange<'_>, krate: &str) -> CrateFinding
+    {
+        let records_touched = Records_Touched(launcher, range.root, range.since, range.until).expect("must run");
+        let query = Query { range, records_touched };
+
+        return Finding_For(launcher, &query, krate).expect("must run");
+    }
+
+    /// The range and root every test in this module scripts a launcher against -- the git
+    /// coordinates themselves are never the fact under test, only what `launcher` answers
+    /// for them.
+    fn Repo_Range() -> CommitRange<'static>
+    {
+        return CommitRange { root: Path::new("/repo"), since: "a", until: "b" };
+    }
+
     #[test]
     fn Test_A_Blank_Diff_Means_No_Finding()
     {
         let launcher = Scripted::New()
             .Answer("diff", 0, "", "")
             .Answer("log a..b --format=%H --", 0, "", "");
-        let touched = Records_Touched(&launcher, Path::new("/repo"), "a", "b").expect("must run");
-        let finding = Finding_For(&launcher, Path::new("/repo"), "a", "b", "nomos-model", touched)
-            .expect("must run");
+        let finding = Joined(&launcher, Repo_Range(), "nomos-model");
 
         assert!(!finding.surface_changed);
         assert!(!finding.Is_A_Finding());
@@ -174,9 +221,7 @@ mod tests
             .Answer("diff", 0, "tests/contract/surface/nomos-model.txt\n", "")
             .Answer("log a..b --format=%H --", 0, "", "")
             .Answer("log a..b --format=%H\t%s --", 0, "deadbeef\treblessed\n", "");
-        let touched = Records_Touched(&launcher, Path::new("/repo"), "a", "b").expect("must run");
-        let finding = Finding_For(&launcher, Path::new("/repo"), "a", "b", "nomos-model", touched)
-            .expect("must run");
+        let finding = Joined(&launcher, Repo_Range(), "nomos-model");
 
         assert!(finding.surface_changed);
         assert!(!finding.records_touched);
@@ -192,9 +237,7 @@ mod tests
             .Answer("diff", 0, "tests/contract/surface/nomos-model.txt\n", "")
             .Answer("log a..b --format=%H --", 0, "cafef00d\n", "")
             .Answer("log a..b --format=%H\t%s --", 0, "deadbeef\treal change\n", "");
-        let touched = Records_Touched(&launcher, Path::new("/repo"), "a", "b").expect("must run");
-        let finding = Finding_For(&launcher, Path::new("/repo"), "a", "b", "nomos-model", touched)
-            .expect("must run");
+        let finding = Joined(&launcher, Repo_Range(), "nomos-model");
 
         assert!(finding.surface_changed);
         assert!(finding.records_touched);
@@ -205,8 +248,12 @@ mod tests
     fn Test_A_Bad_Revision_Is_An_Error_Not_A_Finding()
     {
         let launcher = Scripted::New().Answer("diff", 128, "", "fatal: bad revision 'nonsense'");
+        let query = Query {
+            range: CommitRange { root: Path::new("/repo"), since: "nonsense", until: "b" },
+            records_touched: false,
+        };
 
-        let result = Finding_For(&launcher, Path::new("/repo"), "nonsense", "b", "nomos-model", false);
+        let result = Finding_For(&launcher, &query, "nomos-model");
 
         assert!(result.is_err());
     }

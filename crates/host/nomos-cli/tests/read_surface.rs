@@ -278,9 +278,23 @@ fn Test_A_Profile_Should_Render_To_A_File()
     let into = Scratch("render");
 
     let output = Render("domain-specification", &into);
-
     assert_eq!(Code(&output), 0, "{}", Err_Text(&output));
 
+    let (rendered, stamp) = Rendered_Domain_Specification(&into);
+
+    assert!(rendered.starts_with("---\nnomos_generated: true\n"), "{:?}", rendered.get(..60));
+    assert!(
+        rendered.contains("OD-GATE-001-a-skipped-test-reports-ok.md"),
+        "the projection does not carry what the store holds"
+    );
+    assert!(stamp.contains("\"profile\": \"domain-specification\""), "{stamp:.200}");
+    assert!(stamp.contains("\"content_digest\""), "{stamp:.200}");
+}
+
+/// The rendered `domain-specification` body and its freshness-stamp sidecar, read out of
+/// `into`.
+fn Rendered_Domain_Specification(into: &Path) -> (String, String)
+{
     let body = into.join("spec/domain-specification.md");
     let sidecar = into.join("spec/domain-specification.md.nomos-projection.json");
     let rendered = std::fs::read_to_string(&body)
@@ -295,13 +309,7 @@ fn Test_A_Profile_Should_Render_To_A_File()
         // different repair from a render that wrote nothing at all.
         .unwrap_or_else(|error| panic!("{} was not written: {error}", sidecar.display()));
 
-    assert!(rendered.starts_with("---\nnomos_generated: true\n"), "{:?}", rendered.get(..60));
-    assert!(
-        rendered.contains("OD-GATE-001-a-skipped-test-reports-ok.md"),
-        "the projection does not carry what the store holds"
-    );
-    assert!(stamp.contains("\"profile\": \"domain-specification\""), "{stamp:.200}");
-    assert!(stamp.contains("\"content_digest\""), "{stamp:.200}");
+    return (rendered, stamp);
 }
 
 /// A profile whose sections need the corpus fails as an absence, not as the profile's own

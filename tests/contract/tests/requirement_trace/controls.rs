@@ -159,6 +159,16 @@ fn Test_An_Entry_Naming_A_Vanished_Gap_Should_Be_Reported()
 #[test]
 fn Test_A_Partial_With_No_Gap_Should_Be_Refused()
 {
+    let unnamed = Assert_Partial_With_No_Gap_Is_Reported();
+
+    Assert_Partial_Naming_A_Gap_Is_Not_Reported();
+    Assert_Met_Owing_No_Gap_Is_Not_Reported(unnamed);
+}
+
+/// A `Partial` entry naming no gap must be reported, or the negative controls below prove
+/// nothing.
+fn Assert_Partial_With_No_Gap_Is_Reported() -> Assessment
+{
     let unnamed = Assessment {
         verdict: Verdict::Partial,
         ..Naming(
@@ -169,13 +179,25 @@ fn Test_A_Partial_With_No_Gap_Should_Be_Refused()
     };
     assert_eq!(Partials_With_No_Gap(std::slice::from_ref(&unnamed)).len(), 1);
 
+    return unnamed;
+}
+
+/// A `Partial` entry naming a gap must not be reported, or the control above proves only
+/// that the function always reports something.
+fn Assert_Partial_Naming_A_Gap_Is_Not_Reported()
+{
     let named = Partial_Naming("CHK-003", "README.md", "Nomos");
     assert!(
         Partials_With_No_Gap(&[named]).is_empty(),
         "a Partial entry naming a gap must not be reported, or the control above proves \
          only that the function always reports something"
     );
+}
 
+/// A `Met` entry owes no gap, and reporting one would make the obligation unstatable rather
+/// than merely strict.
+fn Assert_Met_Owing_No_Gap_Is_Not_Reported(unnamed: Assessment)
+{
     let met = Assessment {
         verdict: Verdict::Met,
         ..unnamed

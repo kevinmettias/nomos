@@ -279,15 +279,18 @@ pub(crate) fn Write_Source_Document(
 /// Returns [`StoreError`] on any SQL failure.
 pub(crate) fn Write_Node(connection: &Connection, node: NodeRow<'_>) -> Result<i64, StoreError>
 {
+    Upsert_Node_Row(connection, node)?;
+
+    return Node_Uid_By_Id(connection, node.node_id);
+}
+
+/// Inserts a node, or upgrades a placeholder — never a real one — through the authority
+/// guard on the conflict clause.
+fn Upsert_Node_Row(connection: &Connection, node: NodeRow<'_>) -> Result<(), StoreError>
+{
     use super::EXTERNAL;
 
-    let NodeRow {
-        node_id,
-        kind,
-        authority,
-        representation,
-        title,
-    } = node;
+    let NodeRow { node_id, kind, authority, representation, title } = node;
     connection.execute(
         "INSERT INTO nodes (node_id, kind, authority, representation, title)
          VALUES (?1, ?2, ?3, ?4, ?5)
@@ -300,6 +303,12 @@ pub(crate) fn Write_Node(connection: &Connection, node: NodeRow<'_>) -> Result<i
         params![node_id, kind, authority, representation, title, EXTERNAL],
     )?;
 
+    return Ok(());
+}
+
+/// The surrogate a node's identifier resolves to.
+fn Node_Uid_By_Id(connection: &Connection, node_id: &str) -> Result<i64, StoreError>
+{
     return Ok(connection.query_row(
         "SELECT uid FROM nodes WHERE node_id = ?1",
         params![node_id],
@@ -335,9 +344,15 @@ pub(crate) fn Write_Relation(
     return Ok(());
 }
 
-/// One node, as an edge's endpoint: its surrogate, its kind, and whether it is real yet.
+/// One node, as an edge's endpoint: its own identifier, its surrogate, its kind, and
+/// whether it is real yet.
+///
+/// Carries `node_id` alongside the row `Fetch_Endpoint` reads, rather than leaving the
+/// caller to keep the two paired, so a refusal built from an `Endpoint` can always name the
+/// node it is about without a second parameter threaded beside it.
 struct Endpoint
 {
+    node_id: String,
     uid: i64,
     kind: String,
     authority: String,
@@ -358,6 +373,7 @@ fn Fetch_Endpoint(connection: &Connection, node_id: &str) -> Result<Option<Endpo
             |row| {
                 let mut columns = Columns::Of(row);
                 return Ok(Endpoint {
+                    node_id: node_id.to_owned(),
                     uid: columns.Next()?,
                     kind: columns.Next()?,
                     authority: columns.Next()?,
@@ -441,8 +457,6 @@ fn Write_One_Relation(
     to_node_id: &str,
 ) -> Result<(), StoreError>
 {
-    use super::EXTERNAL;
-
     let Some(from) = Fetch_Endpoint(connection, from_node_id)?
     else
     {
@@ -454,25 +468,7 @@ fn Write_One_Relation(
         return Ok(());
     };
 
-    if let Some(constraint) = Fetch_Constraint(connection, relation_type)?
-    {
-        if from.authority != EXTERNAL
-        {
-            Assert_Admits(relation_type, "domain", from_node_id, &from.kind, &constraint.domain)?;
-        }
-        if to.authority != EXTERNAL
-        {
-            Assert_Admits(relation_type, "range", to_node_id, &to.kind, &constraint.range)?;
-        }
-        Assert_Within_Cardinality(
-            connection,
-            relation_type,
-            from.uid,
-            from_node_id,
-            to.uid,
-            constraint.max_per_node,
-        )?;
-    }
+    Enforce_Constraint(connection, relation_type, &from, &to)?;
 
     connection.execute(
         "INSERT OR IGNORE INTO relations (from_node_uid, relation_type, to_node_uid)
@@ -483,28 +479,81 @@ fn Write_One_Relation(
     return Ok(());
 }
 
-/// The endpoint's kind is one the relation type admits at that role, or the refusal names
-/// the type, the role, the endpoint and what would have satisfied it.
-fn Assert_Admits(
+/// The edge is checked against its relation type's declared constraint, if the type
+/// declares one.
+///
+/// A placeholder endpoint (`authority = EXTERNAL`, minted by `Reference_Node` for a target
+/// nothing has ingested yet) is exempt from the domain/range check at its own end: its kind
+/// is the sentinel `unknown`, which is not a fact about the node yet, and `OD-SPEC-012`
+/// records that the check is deferred rather than widened to admit the sentinel as if it
+/// were a real kind. Cardinality is not exempted the same way, because it counts edges from
+/// a real endpoint (the `from` side always resolves to a concrete node by the time this
+/// runs) rather than judging the placeholder's kind.
+fn Enforce_Constraint(
+    connection: &Connection,
     relation_type: &str,
-    role: &'static str,
-    node_id: &str,
-    kind: &str,
-    admits: &[String],
+    from: &Endpoint,
+    to: &Endpoint,
 ) -> Result<(), StoreError>
 {
-    if admits.iter().any(|admitted| return admitted == kind)
+    use super::EXTERNAL;
+
+    let Some(constraint) = Fetch_Constraint(connection, relation_type)?
+    else
+    {
+        return Ok(());
+    };
+
+    if from.authority != EXTERNAL
+    {
+        Assert_Admits(AdmissionCheck { relation_type, role: "domain", endpoint: from, admits: &constraint.domain })?;
+    }
+    if to.authority != EXTERNAL
+    {
+        Assert_Admits(AdmissionCheck { relation_type, role: "range", endpoint: to, admits: &constraint.range })?;
+    }
+
+    return Assert_Within_Cardinality(
+        connection,
+        CardinalityCheck { relation_type, from, to_uid: to.uid, max_per_node: constraint.max_per_node },
+    );
+}
+
+/// What one endpoint's admission into a relation type's declared role is checked against.
+struct AdmissionCheck<'a>
+{
+    relation_type: &'a str,
+    role: &'static str,
+    endpoint: &'a Endpoint,
+    admits: &'a [String],
+}
+
+/// The endpoint's kind is one the relation type admits at that role, or the refusal names
+/// the type, the role, the endpoint and what would have satisfied it.
+fn Assert_Admits(check: AdmissionCheck<'_>) -> Result<(), StoreError>
+{
+    if check.admits.iter().any(|admitted| return admitted == &check.endpoint.kind)
     {
         return Ok(());
     }
 
     return Err(StoreError::RelationEndpoint {
-        relation_type: relation_type.to_owned(),
-        role,
-        node_id: node_id.to_owned(),
-        kind: kind.to_owned(),
-        admits: admits.to_vec(),
+        relation_type: check.relation_type.to_owned(),
+        role: check.role,
+        node_id: check.endpoint.node_id.clone(),
+        kind: check.endpoint.kind.clone(),
+        admits: check.admits.to_vec(),
     });
+}
+
+/// What a new edge from a node is checked against: the relation type's own cardinality cap,
+/// and the edge it would add.
+struct CardinalityCheck<'a>
+{
+    relation_type: &'a str,
+    from: &'a Endpoint,
+    to_uid: i64,
+    max_per_node: u32,
 }
 
 /// A new edge does not push a node past its type's declared cap.
@@ -512,39 +561,45 @@ fn Assert_Admits(
 /// An edge that already exists is not new: re-inserting one a re-ingest already wrote must
 /// stay idempotent, the same property `INSERT OR IGNORE` gives every other edge, so an
 /// existing triple is let through without counting against the cap a second time.
-fn Assert_Within_Cardinality(
-    connection: &Connection,
-    relation_type: &str,
-    from_uid: i64,
-    from_node_id: &str,
-    to_uid: i64,
-    max_per_node: u32,
-) -> Result<(), StoreError>
+fn Assert_Within_Cardinality(connection: &Connection, check: CardinalityCheck<'_>) -> Result<(), StoreError>
 {
-    let already: i64 = connection.query_row(
-        "SELECT count(*) FROM relations
-         WHERE from_node_uid = ?1 AND relation_type = ?2 AND to_node_uid = ?3",
-        params![from_uid, relation_type, to_uid],
-        |row| return row.get(0),
-    )?;
-    if already > 0
+    if Edge_Already_Exists(connection, &check)?
     {
         return Ok(());
     }
 
+    return Assert_Cap_Not_Exceeded(connection, &check);
+}
+
+/// The edge this check is about is already one of the ones counted against the cap.
+fn Edge_Already_Exists(connection: &Connection, check: &CardinalityCheck<'_>) -> Result<bool, StoreError>
+{
+    let already: i64 = connection.query_row(
+        "SELECT count(*) FROM relations
+         WHERE from_node_uid = ?1 AND relation_type = ?2 AND to_node_uid = ?3",
+        params![check.from.uid, check.relation_type, check.to_uid],
+        |row| return row.get(0),
+    )?;
+
+    return Ok(already > 0);
+}
+
+/// How many edges of this type the node already carries has not reached the declared cap.
+fn Assert_Cap_Not_Exceeded(connection: &Connection, check: &CardinalityCheck<'_>) -> Result<(), StoreError>
+{
     let carried: i64 = connection.query_row(
         "SELECT count(*) FROM relations WHERE from_node_uid = ?1 AND relation_type = ?2",
-        params![from_uid, relation_type],
+        params![check.from.uid, check.relation_type],
         |row| return row.get(0),
     )?;
     let carried = u32::try_from(carried).unwrap_or(u32::MAX);
 
-    if carried >= max_per_node
+    if carried >= check.max_per_node
     {
         return Err(StoreError::RelationCardinality {
-            relation_type: relation_type.to_owned(),
-            node_id: from_node_id.to_owned(),
-            max_per_node,
+            relation_type: check.relation_type.to_owned(),
+            node_id: check.from.node_id.clone(),
+            max_per_node: check.max_per_node,
         });
     }
 

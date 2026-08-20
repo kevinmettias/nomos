@@ -141,6 +141,20 @@ pub fn Parse_Payload(bytes: &[u8]) -> Result<ReachabilityPayload, PayloadRefusal
 
 fn Site_Line(line: &str) -> Result<ReachabilitySite, PayloadRefusal>
 {
+    let rest = Strip_Site_Prefix(line)?;
+    let (function, binding, shape) = Split_Site_Fields(rest, line)?;
+    let shape = Parse_Arm_Shape(shape)?;
+
+    return Ok(ReachabilitySite {
+        function: function.to_owned(),
+        binding: binding.to_owned(),
+        shape,
+    });
+}
+
+/// Strips the `site\t` tag every site line must open with.
+fn Strip_Site_Prefix(line: &str) -> Result<&str, PayloadRefusal>
+{
     let Some(rest) = line.strip_prefix("site\t")
     else
     {
@@ -149,6 +163,12 @@ fn Site_Line(line: &str) -> Result<ReachabilitySite, PayloadRefusal>
         });
     };
 
+    return Ok(rest);
+}
+
+/// Splits a site line's tagged remainder into its three tab-separated fields.
+fn Split_Site_Fields<'a>(rest: &'a str, line: &str) -> Result<(&'a str, &'a str, &'a str), PayloadRefusal>
+{
     let fields: Vec<&str> = rest.split('\t').collect();
     let [function, binding, shape] = fields.as_slice()
     else
@@ -158,6 +178,12 @@ fn Site_Line(line: &str) -> Result<ReachabilitySite, PayloadRefusal>
         });
     };
 
+    return Ok((*function, *binding, *shape));
+}
+
+/// Resolves a site line's shape field to the [`ArmShape`] it names.
+fn Parse_Arm_Shape(shape: &str) -> Result<ArmShape, PayloadRefusal>
+{
     let Some(shape) = ArmShape::From_Label(shape)
     else
     {
@@ -166,11 +192,7 @@ fn Site_Line(line: &str) -> Result<ReachabilitySite, PayloadRefusal>
         });
     };
 
-    return Ok(ReachabilitySite {
-        function: (*function).to_owned(),
-        binding: (*binding).to_owned(),
-        shape,
-    });
+    return Ok(shape);
 }
 
 #[cfg(test)]

@@ -4,6 +4,7 @@
 use super::run::GateRunResult;
 use super::ExitCode;
 use nomos_check_orchestration::CheckOutcome;
+use nomos_contracts::Finding;
 use nomos_gate_orchestration::{GateOutcome, GateRunOutcome};
 use std::io::Write;
 
@@ -90,30 +91,36 @@ pub(super) fn Render_Run(result: &GateRunResult, stdout: &mut impl Write, stderr
 
             ExitCode::Vacuous
         }
-        CheckOutcome::Judged { findings, .. } =>
-        {
-            for finding in findings
-            {
-                let _ = writeln!(stdout, "{}", finding.Describe());
-            }
+        CheckOutcome::Judged { findings, .. } => Report_Judged(findings, result, stdout),
+    };
+}
 
-            let _ = writeln!(
-                stdout,
-                "\n{} finding(s), {} of which can fail a build",
-                findings.len(),
-                result.blocking_findings.len()
-            );
+/// Renders a judged run's findings and reduces its disposition to an [`ExitCode`] -- the
+/// one arm of [`Render_Run`] that does real work, the same way `check::report::Render`
+/// delegates its own `Judged` arm to a dedicated function rather than folding it into the
+/// outer match.
+fn Report_Judged(findings: &[Finding], result: &GateRunResult, stdout: &mut impl Write) -> ExitCode
+{
+    for finding in findings
+    {
+        let _ = writeln!(stdout, "{}", finding.Describe());
+    }
 
-            match result.disposition
-            {
-                GateRunOutcome::Failed => ExitCode::Violations,
-                GateRunOutcome::Passed => ExitCode::Ok,
-                GateRunOutcome::Indeterminate => unreachable!(
-                    "nomos_gate_orchestration::Disposition never returns Indeterminate; \
-                     Run_Gate only assigns it for a CheckOutcome that never reached Judged, \
-                     and this arm is Judged's own"
-                ),
-            }
-        }
+    let _ = writeln!(
+        stdout,
+        "\n{} finding(s), {} of which can fail a build",
+        findings.len(),
+        result.blocking_findings.len()
+    );
+
+    return match result.disposition
+    {
+        GateRunOutcome::Failed => ExitCode::Violations,
+        GateRunOutcome::Passed => ExitCode::Ok,
+        GateRunOutcome::Indeterminate => unreachable!(
+            "nomos_gate_orchestration::Disposition never returns Indeterminate; \
+             Run_Gate only assigns it for a CheckOutcome that never reached Judged, \
+             and this arm is Judged's own"
+        ),
     };
 }

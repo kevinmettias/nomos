@@ -266,21 +266,15 @@ fn Assert_The_Index_Still_Derives(store: &mut DocumentStore, workspace: &Workspa
 #[test]
 fn Test_A_Hundred_Ingestion_Orders_Should_Yield_Byte_Identical_Queries()
 {
-    use crate::permutation::{Snapshot_Of_One_Order, Taken};
+    use crate::permutation::Taken;
 
     let Some((_, members)) = Scale_Corpus_Or_Skip()
     else
     {
         return;
     };
-    let mut baseline: Option<Taken> = None;
-    for permutation in 0..100_u32
-    {
-        let taken = Snapshot_Of_One_Order(&members, permutation);
 
-        crate::permutation::Assert_Same_As_The_First(&mut baseline, taken, permutation);
-    }
-    let Taken { bytes, members, .. } = baseline.expect("a hundred permutations ran");
+    let Taken { bytes, members, .. } = Permuted_A_Hundred_Ways(&members);
 
     eprintln!("permutations: 100 orders, {members} members, {} identical bytes", bytes.len());
 
@@ -290,6 +284,24 @@ fn Test_A_Hundred_Ingestion_Orders_Should_Yield_Byte_Identical_Queries()
         members >= 5_000,
         "{members} members cannot meaningfully be permuted a hundred ways"
     );
+}
+
+/// Snapshots `members` a hundred times, in a hundred deterministic orders, asserting each
+/// against the first as it goes. Returns the first snapshot taken, once all hundred agreed
+/// with it.
+fn Permuted_A_Hundred_Ways(members: &[(String, String)]) -> crate::permutation::Taken
+{
+    use crate::permutation::{Snapshot_Of_One_Order, Taken};
+
+    let mut baseline: Option<Taken> = None;
+    for permutation in 0..100_u32
+    {
+        let taken = Snapshot_Of_One_Order(members, permutation);
+
+        crate::permutation::Assert_Same_As_The_First(&mut baseline, taken, permutation);
+    }
+
+    return baseline.expect("a hundred permutations ran");
 }
 
 // ---------------------------------------------------------------------------------
@@ -312,22 +324,46 @@ fn Test_Re_Ingesting_The_Corpus_Should_Advance_Nothing()
         return;
     };
 
-    let mut workspace = Fresh();
-    Ingest(&mut workspace, &members, 512);
+    let outcome = Ingested_Twice(&members);
 
-    let after_first = workspace.Generation();
-    let identity = workspace.Id();
-    let redundant = Re_Ingest(&mut workspace, &members);
-
-    assert_eq!(workspace.Generation(), after_first);
-    assert_eq!(workspace.Id(), identity);
-    assert_eq!(redundant, members.len());
+    assert_eq!(outcome.after_second, outcome.after_first);
+    assert_eq!(outcome.identity_after_second, outcome.identity);
+    assert_eq!(outcome.redundant, members.len());
     // The positive control. The first ingestion must have advanced, or "nothing advanced"
     // is a statement about a workspace that never did anything.
     assert!(
-        after_first > GenerationId::INITIAL,
+        outcome.after_first > GenerationId::INITIAL,
         "the first ingestion advanced nothing either"
     );
+}
+
+/// What a fresh workspace's generation and identity were after the corpus was ingested
+/// once, and what they became after [`Re_Ingest`] applied the same corpus a second time.
+struct ReIngestion
+{
+    after_first: nomos_contracts::GenerationId,
+    identity: nomos_contracts::SnapshotId,
+    after_second: nomos_contracts::GenerationId,
+    identity_after_second: nomos_contracts::SnapshotId,
+    redundant: usize,
+}
+
+fn Ingested_Twice(members: &[(String, String)]) -> ReIngestion
+{
+    let mut workspace = Fresh();
+    Ingest(&mut workspace, members, 512);
+
+    let after_first = workspace.Generation();
+    let identity = workspace.Id();
+    let redundant = Re_Ingest(&mut workspace, members);
+
+    return ReIngestion {
+        after_first,
+        identity,
+        after_second: workspace.Generation(),
+        identity_after_second: workspace.Id(),
+        redundant,
+    };
 }
 
 /// The same corpus applied a second time, and how many paths came back redundant.

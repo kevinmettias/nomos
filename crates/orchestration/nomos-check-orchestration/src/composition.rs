@@ -24,28 +24,48 @@ pub fn Registered() -> Result<Registry, RegistryError>
 {
     let mut registry = Registry::New();
 
+    Declare_Syntax_Capability(&mut registry)?;
+    Declare_Dependency_Capability(&mut registry)?;
+    Declare_Controlflow_Capability(&mut registry)?;
+
+    return Ok(registry);
+}
+
+/// The syntax capability, and its two competing offers.
+///
+/// No selection mechanism is added alongside the second offer -- `OD-HOST-004` decided a
+/// second offer is composition, not choice, and `nomos_capability::Registry::Resolve` ranks
+/// between the two on its own: the parser's guarantee is strictly stronger on every axis the
+/// scanner differs on, so it remains the offer `Resolve` chooses with no preference named.
+fn Declare_Syntax_Capability(registry: &mut Registry) -> Result<(), RegistryError>
+{
     registry.Declare(nomos_cap_syntax::Capability_Contract())?;
     registry.Offer(nomos_lang_rust::Provider_Offer())?;
-    // The second offer against the same capability. No selection mechanism is added
-    // alongside it -- `OD-HOST-004` decided a second offer is composition, not choice, and
-    // `nomos_capability::Registry::Resolve` ranks between the two on its own: the parser's
-    // guarantee is strictly stronger on every axis the scanner differs on, so it remains
-    // the offer `Resolve` chooses with no preference named.
     registry.Offer(nomos_lang_rust_scan::Provider_Offer())?;
 
-    // A second capability, one offer against it -- `OD-RULES-003`'s design, wired for real.
+    return Ok(());
+}
+
+/// A second capability, one offer against it -- `OD-RULES-003`'s design, wired for real.
+fn Declare_Dependency_Capability(registry: &mut Registry) -> Result<(), RegistryError>
+{
     registry.Declare(nomos_cap_dependency::Capability_Contract())?;
     registry.Offer(nomos_lang_rust_cargo::Provider_Offer())?;
 
-    // A third capability, one tier-1 offer against it -- `OD-RULES-008`'s design, wired for
-    // real. `nomos_lang_rust::reachability::Provider_Offer` states its own guarantee at
-    // `Syntactic`, below the ceiling `nomos_cap_controlflow::Capability_Contract` states at
-    // `SemanticallyResolved`; `Check_Unread_Reaches_A_Finding`'s own `Reachability_
-    // Requirement` asks for exactly what this offer delivers.
+    return Ok(());
+}
+
+/// A third capability, one tier-1 offer against it -- `OD-RULES-008`'s design, wired for
+/// real. `nomos_lang_rust::reachability::Provider_Offer` states its own guarantee at
+/// `Syntactic`, below the ceiling `nomos_cap_controlflow::Capability_Contract` states at
+/// `SemanticallyResolved`; `Check_Unread_Reaches_A_Finding`'s own `Reachability_Requirement`
+/// asks for exactly what this offer delivers.
+fn Declare_Controlflow_Capability(registry: &mut Registry) -> Result<(), RegistryError>
+{
     registry.Declare(nomos_cap_controlflow::Capability_Contract())?;
     registry.Offer(nomos_lang_rust::reachability::Provider_Offer())?;
 
-    return Ok(registry);
+    return Ok(());
 }
 
 /// The identity of this run's effective policy.

@@ -30,20 +30,26 @@ pub(crate) fn Every_Snapshotted_Crate(root: &Path) -> Result<Vec<String>, String
     for entry in entries
     {
         let entry = entry.map_err(|error| format!("cannot read an entry under {}: {error}", directory.display()))?;
-        let path = entry.path();
-        if path.extension().and_then(|extension| extension.to_str()) != Some("txt")
+        if let Some(stem) = Snapshot_Stem(&entry.path())
         {
-            continue;
-        }
-        if let Some(stem) = path.file_stem().and_then(|stem| stem.to_str())
-        {
-            names.push(stem.to_owned());
+            names.push(stem);
         }
     }
 
     names.sort();
 
     return Ok(names);
+}
+
+/// The crate name a `tests/contract/surface/` entry names, if it is a `.txt` snapshot.
+fn Snapshot_Stem(path: &Path) -> Option<String>
+{
+    if path.extension().and_then(|extension| extension.to_str()) != Some("txt")
+    {
+        return None;
+    }
+
+    return path.file_stem().and_then(|stem| stem.to_str()).map(str::to_owned);
 }
 
 /// The snapshot path for one crate, relative to a repository root — the same path the

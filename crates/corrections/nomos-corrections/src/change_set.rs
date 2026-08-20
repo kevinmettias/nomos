@@ -68,9 +68,9 @@ mod tests
     #[test]
     fn Test_Touched_Names_Every_Edited_Path()
     {
-        let set = ChangeSet::Empty()
-            .With(Edit::New("a.rs", None, Some("x".to_owned())))
-            .With(Edit::New("b.rs", Some("y".to_owned()), None));
+        let edit_a = Edit::New("a.rs", None, Some("x".to_owned()));
+        let edit_b = Edit::New("b.rs", Some("y".to_owned()), None);
+        let set = ChangeSet::Empty().With(edit_a).With(edit_b);
 
         assert_eq!(set.Touched(), BTreeSet::from(["a.rs", "b.rs"]));
         assert!(!set.Is_Empty());

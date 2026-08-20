@@ -39,47 +39,71 @@ pub fn Registered() -> Result<RuleRegistry, RuleRegistryError>
 {
     let mut registry = RuleRegistry::New();
 
+    Offer_Completeness_Mirror(&mut registry)?;
+    Offer_Dependency_Direction(&mut registry)?;
+    Offer_Naming_Convention(&mut registry)?;
+    Offer_Unread_Reaches_A_Finding(&mut registry)?;
+
+    return Ok(registry);
+}
+
+fn Offer_Completeness_Mirror(registry: &mut RuleRegistry) -> Result<(), RuleRegistryError>
+{
     registry.Offer(RuleOffer {
         rule: RuleId::New(COMPLETENESS_MIRROR),
         contract_record: CONTRACT_RECORD.to_owned(),
         contract_record_version: CONTRACT_RECORD_VERSION,
     })?;
 
-    // `Check_Dependency_Direction` cites `OD-RULES-003` through constants beside the rule,
-    // the shape `mirror.rs` already uses, rather than a literal here. A version literal in a
-    // composition root drifts silently against the record it names; a version beside the
-    // implementation is where whoever amends the record is already reading, and
-    // `tests/contract/tests/rule_contract_citation.rs` checks both citations against the
-    // records' own front matter.
+    return Ok(());
+}
+
+/// `Check_Dependency_Direction` cites `OD-RULES-003` through constants beside the rule, the
+/// shape `mirror.rs` already uses, rather than a literal here. A version literal in a
+/// composition root drifts silently against the record it names; a version beside the
+/// implementation is where whoever amends the record is already reading, and
+/// `tests/contract/tests/rule_contract_citation.rs` checks both citations against the
+/// records' own front matter.
+fn Offer_Dependency_Direction(registry: &mut RuleRegistry) -> Result<(), RuleRegistryError>
+{
     registry.Offer(RuleOffer {
         rule: RuleId::New(DEPENDENCY_DIRECTION),
         contract_record: DEPENDENCY_CONTRACT_RECORD.to_owned(),
         contract_record_version: DEPENDENCY_CONTRACT_RECORD_VERSION,
     })?;
 
-    // `Check_Naming_Convention` has no `CONTRACT_RECORD` the way `Check_Completeness_
-    // Mirrors` cites `D-134` -- `naming.rs`'s own "# Why this has no `CONTRACT_RECORD`"
-    // section says its contract is `README.md`'s Conventions section, prose rather than a
-    // versioned record `RuleOffer::contract_record_version` could cite meaningfully.
-    // `contract_record_version: 0` marks that absence -- "no versioned record", not "version
-    // zero of one" -- local to this one construction site. It does not change what
-    // `RuleOffer`'s fields mean generally: `OD-RULES-005` and `OD-RULES-006` already declined
-    // to extend `RuleOffer`'s shape without a second real case forcing it, and a record-less
-    // rule needing its own representation is that second case, left for whoever next needs
-    // more than a sentinel here to say so.
+    return Ok(());
+}
+
+/// `Check_Naming_Convention` has no `CONTRACT_RECORD` the way `Check_Completeness_Mirrors`
+/// cites `D-134` -- `naming.rs`'s own "# Why this has no `CONTRACT_RECORD`" section says its
+/// contract is `README.md`'s Conventions section, prose rather than a versioned record
+/// `RuleOffer::contract_record_version` could cite meaningfully. `contract_record_version:
+/// 0` marks that absence -- "no versioned record", not "version zero of one" -- local to
+/// this one construction site. It does not change what `RuleOffer`'s fields mean generally:
+/// `OD-RULES-005` and `OD-RULES-006` already declined to extend `RuleOffer`'s shape without
+/// a second real case forcing it, and a record-less rule needing its own representation is
+/// that second case, left for whoever next needs more than a sentinel here to say so.
+fn Offer_Naming_Convention(registry: &mut RuleRegistry) -> Result<(), RuleRegistryError>
+{
     registry.Offer(RuleOffer {
         rule: RuleId::New(NAMING_CONVENTION),
         contract_record: "README.md".to_owned(),
         contract_record_version: 0,
     })?;
 
-    // `Check_Unread_Reaches_A_Finding` cites `OD-RULES-008` through constants beside the
-    // rule, the identical shape `DEPENDENCY_DIRECTION`'s citation above already uses.
+    return Ok(());
+}
+
+/// `Check_Unread_Reaches_A_Finding` cites `OD-RULES-008` through constants beside the rule,
+/// the identical shape `DEPENDENCY_DIRECTION`'s citation above already uses.
+fn Offer_Unread_Reaches_A_Finding(registry: &mut RuleRegistry) -> Result<(), RuleRegistryError>
+{
     registry.Offer(RuleOffer {
         rule: RuleId::New(UNREAD_REACHES_FINDING),
         contract_record: UNREAD_REACHES_FINDING_CONTRACT_RECORD.to_owned(),
         contract_record_version: UNREAD_REACHES_FINDING_CONTRACT_RECORD_VERSION,
     })?;
 
-    return Ok(registry);
+    return Ok(());
 }

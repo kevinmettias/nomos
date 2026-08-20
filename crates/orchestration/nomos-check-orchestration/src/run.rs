@@ -1,7 +1,9 @@
 //! Running one check over already-walked source, apart from finding that source or
 //! rendering what came of it.
 
-use nomos_analysis::{MemoryFactStore, Reader};
+use nomos_analysis::{Context, MemoryFactStore, Reader};
+use nomos_capability::Registry;
+use nomos_contracts::Finding;
 use nomos_platform::ProcessLauncher;
 use nomos_rules::{
     Check_Completeness_Mirrors, Check_Dependency_Direction, Check_Naming_Convention,
@@ -40,16 +42,10 @@ use crate::CheckOutcome;
 #[must_use]
 pub fn Run<P: ProcessLauncher>(sources: &[SourceFile], variant: BuildVariant, root: &Path, launcher: &P) -> CheckOutcome
 {
-    let registry = match Registered()
+    let (registry, context) = match Composed(sources, variant)
     {
-        Ok(registry) => registry,
-        Err(error) => return CheckOutcome::Contradictory(error),
-    };
-
-    let Ok(context) = Ingested(sources, &registry, variant)
-    else
-    {
-        return CheckOutcome::Unreadable;
+        Ok(composed) => composed,
+        Err(outcome) => return outcome,
     };
 
     let mut store = MemoryFactStore::New();
@@ -59,18 +55,78 @@ pub fn Run<P: ProcessLauncher>(sources: &[SourceFile], variant: BuildVariant, ro
         return CheckOutcome::NoFacts { files: sources.len() };
     }
 
-    let (dependency_sources, mut dependency_findings) = Materialize_Dependencies(root, &context, &mut store, launcher);
-    Materialize_Reachability(sources, &context, &mut store);
+    let (dependency_sources, dependency_findings) = Materialize_Capabilities(sources, root, &context, &mut store, launcher);
+    let findings = Judged(sources, &dependency_sources, dependency_findings, &store, &registry, context);
 
-    let mut reader = Reader::On(&store, &registry, context);
-    let mut findings = Check_Completeness_Mirrors(sources, &mut reader);
-    findings.extend(Check_Naming_Convention(sources, &mut reader));
-    findings.extend(Check_Dependency_Direction(&dependency_sources, &mut reader));
-    findings.extend(Check_Unread_Reaches_A_Finding(sources, &mut reader));
-    findings.append(&mut dependency_findings);
+    return Outcome_Of(sources.len(), facts, findings);
+}
 
-    let examined = Examined { files: sources.len(), facts };
+/// The registry composed and `sources` ingested through it, or the [`CheckOutcome`] that
+/// already answers the run when either step refuses.
+fn Composed(sources: &[SourceFile], variant: BuildVariant) -> Result<(Registry, Context), CheckOutcome>
+{
+    let registry = Registered().map_err(CheckOutcome::Contradictory)?;
+    let context = Ingested(sources, &registry, variant).map_err(|_error| return CheckOutcome::Unreadable)?;
+
+    return Ok((registry, context));
+}
+
+/// The whole run, once judging is done -- how many files and facts it examined, and the
+/// claim its own findings support.
+fn Outcome_Of(files: usize, facts: usize, findings: Vec<Finding>) -> CheckOutcome
+{
+    let examined = Examined { files, facts };
     let claim = Claim_Of(&findings);
 
     return CheckOutcome::Judged { findings, examined, claim };
+}
+
+/// The dependency-edges and reachability facts, materialized into `store` alongside the
+/// syntax facts [`Run`] already wrote -- the two capabilities beside `syntax.items` that
+/// this crate's registration composes, each with its own materialization step for the
+/// reasons [`Materialize_Dependencies`] and [`Materialize_Reachability`] give.
+fn Materialize_Capabilities<P: ProcessLauncher>(
+    sources: &[SourceFile],
+    root: &Path,
+    context: &Context,
+    store: &mut MemoryFactStore,
+    launcher: &P,
+) -> (Vec<SourceFile>, Vec<Finding>)
+{
+    let (dependency_sources, dependency_findings) = Materialize_Dependencies(root, context, store, launcher);
+    Materialize_Reachability(sources, context, store);
+
+    return (dependency_sources, dependency_findings);
+}
+
+/// Every finding the completeness, naming-convention, dependency-direction and
+/// unread-reaches-finding rules produce over `sources` and `dependency_sources`, plus
+/// whatever [`Materialize_Capabilities`] already found on its own (a failed dependency
+/// materialization, reported rather than judged).
+fn Judged(
+    sources: &[SourceFile],
+    dependency_sources: &[SourceFile],
+    mut dependency_findings: Vec<Finding>,
+    store: &MemoryFactStore,
+    registry: &Registry,
+    context: Context,
+) -> Vec<Finding>
+{
+    let mut reader = Reader::On(store, registry, context);
+
+    let completeness_findings = Check_Completeness_Mirrors(sources, &mut reader);
+    let mut findings = completeness_findings;
+
+    let naming_findings = Check_Naming_Convention(sources, &mut reader);
+    findings.extend(naming_findings);
+
+    let dependency_direction_findings = Check_Dependency_Direction(dependency_sources, &mut reader);
+    findings.extend(dependency_direction_findings);
+
+    let unread_findings = Check_Unread_Reaches_A_Finding(sources, &mut reader);
+    findings.extend(unread_findings);
+
+    findings.append(&mut dependency_findings);
+
+    return findings;
 }

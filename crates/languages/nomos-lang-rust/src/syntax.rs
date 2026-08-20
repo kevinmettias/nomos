@@ -22,8 +22,9 @@ pub(crate) use shape::Path_As_Written;
 use shape::{Bound_By, Function_Shape, Impl_Shape, Type_Head, Type_Shape};
 use documentation::Documentation;
 
-use crate::Reading;
+use crate::{ParseFailure, Reading};
 use syn::visit::Visit;
+use walk::Walk;
 
 /// Reads Rust source.
 ///
@@ -34,29 +35,35 @@ use syn::visit::Visit;
 #[must_use]
 pub fn Read_Source(source: &str) -> Reading
 {
-    use crate::ParseFailure;
-    use walk::Walk;
-
     let file = match syn::parse_file(source)
     {
         Ok(file) => file,
-        Err(error) =>
-        {
-            let at = error.span().start();
-
-            return Reading::Unparseable(ParseFailure {
-                line: at.line,
-                column: at.column,
-                message: error.to_string(),
-            });
-        }
+        Err(error) => return Reading::Unparseable(Parse_Failure(&error)),
     };
 
-    let mut walk = Walk::New();
-    walk.visit_file(&file);
+    return Reading::Parsed(Walk_File(&file));
+}
 
-    return Reading::Parsed(SyntaxFacts {
+/// The line, column, and message a caller sees when `syn` refuses to parse a file.
+fn Parse_Failure(error: &syn::Error) -> ParseFailure
+{
+    let at = error.span().start();
+
+    return ParseFailure {
+        line: at.line,
+        column: at.column,
+        message: error.to_string(),
+    };
+}
+
+/// Every item and unexpanded construct a full walk of an already-parsed file records.
+fn Walk_File(file: &syn::File) -> SyntaxFacts
+{
+    let mut walk = Walk::New();
+    walk.visit_file(file);
+
+    return SyntaxFacts {
         items: walk.items,
         unexpanded: walk.unexpanded,
-    });
+    };
 }

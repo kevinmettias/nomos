@@ -62,21 +62,31 @@ fn Read_The_Three() -> (Vec<&'static str>, Vec<&'static str>)
     let mut silent = Vec::new();
     for relative in DESCRIBED
     {
-        let path = root.join(relative);
-        let text = std::fs::read_to_string(&path)
-            // A file that will not open drops out of both vectors below, and both assertions
-            // over them are emptiness checks. A missing member of DESCRIBED would therefore
-            // report band 0 as correctly claimed by having read one file fewer than named.
-            .unwrap_or_else(|error| panic!("cannot read {}: {error}", path.display()));
-        if text.contains(OWNERSHIP)
+        let (claims, is_silent) = Describes_Band_Zero(&root, relative);
+        if claims
         {
             claiming.push(*relative);
         }
-        if !text.contains(RECORD)
+        if is_silent
         {
             silent.push(*relative);
         }
     }
 
     return (claiming, silent);
+}
+
+/// Whether `relative`'s text under `root` claims the ownership sentence, and whether it never
+/// names the record -- both read off the same file open, since they are two readings of one
+/// text rather than two separate questions.
+fn Describes_Band_Zero(root: &std::path::Path, relative: &str) -> (bool, bool)
+{
+    let path = root.join(relative);
+    let text = std::fs::read_to_string(&path)
+        // A file that will not open drops out of both vectors below, and both assertions
+        // over them are emptiness checks. A missing member of DESCRIBED would therefore
+        // report band 0 as correctly claimed by having read one file fewer than named.
+        .unwrap_or_else(|error| panic!("cannot read {}: {error}", path.display()));
+
+    return (text.contains(OWNERSHIP), !text.contains(RECORD));
 }

@@ -40,21 +40,39 @@ fn Test_Every_Headline_Clause_Should_Be_Answered_Once()
 #[test]
 fn Test_Every_Restored_Family_Should_Carry_A_Fate()
 {
-    use nomos_spec_ingest::Restored;
-
     let entries = Register();
     let named: Vec<&str> = entries.iter().filter_map(|entry| return entry.family.as_deref()).collect();
+
+    Assert_Every_Restored_Family_Is_Named_Exactly_Once(&named);
+    Assert_Every_Named_Family_Resolves(&named);
+    Assert_Fates_Are_Stated_Only_By_A_Family_Entry(&entries);
+}
+
+/// Every restored family the ingest knows about is carried by exactly one entry.
+fn Assert_Every_Restored_Family_Is_Named_Exactly_Once(named: &[&str])
+{
+    use nomos_spec_ingest::Restored;
 
     for family in Restored::All()
     {
         let carrying = named.iter().filter(|label| return **label == family.Label()).count();
         assert_eq!(carrying, 1, "{} carries {carrying} fate entries", family.Label());
     }
-    for label in &named
+}
+
+/// Every family label the register names is one the ingest still recognizes.
+fn Assert_Every_Named_Family_Resolves(named: &[&str])
+{
+    for label in named
     {
         Family(label);
     }
-    for entry in &entries
+}
+
+/// A family entry states fates, and only a family entry does.
+fn Assert_Fates_Are_Stated_Only_By_A_Family_Entry(entries: &[Entry])
+{
+    for entry in entries
     {
         assert_eq!(
             entry.family.is_some(),

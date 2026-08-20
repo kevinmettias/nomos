@@ -203,27 +203,45 @@ fn Not_Provably_Disjoint(item: &LedgerItem, other: &LedgerItem) -> Option<String
 {
     use nomos_model::Intersection;
 
-    let holder = Holder_Of(item);
-    let other_holder = Holder_Of(other);
+    let first = Claimant { item, holder: Holder_Of(item) };
+    let second = Claimant { item: other, holder: Holder_Of(other) };
 
     return match item.territory.Intersect(&other.territory)
     {
         Intersection::Disjoint => None,
-        Intersection::Overlaps(shared) => Some(format!(
-            "{} (held by {holder}) and {} (held by {other_holder}) both claim {} overlapping \
-             subject(s)",
-            item.id,
-            other.id,
-            shared.len()
-        )),
-        Intersection::Unknown(reason) => Some(format!(
-            "{} (held by {holder}) and {} (held by {other_holder}) cannot be shown \
-             independent: {}",
-            item.id,
-            other.id,
-            reason.Describe()
-        )),
+        Intersection::Overlaps(shared) => Some(Overlap_Message(first, second, shared.len())),
+        Intersection::Unknown(reason) => Some(Unknown_Message(first, second, &reason)),
     };
+}
+
+/// One claimant in a pair being compared, and who holds it — grouped so the message
+/// functions below stay under this crate's own parameter-count ceiling.
+struct Claimant<'a>
+{
+    item: &'a LedgerItem,
+    holder: &'a str,
+}
+
+/// Two claimants whose territory provably shares `shared_count` subject(s).
+fn Overlap_Message(first: Claimant<'_>, second: Claimant<'_>, shared_count: usize) -> String
+{
+    return format!(
+        "{} (held by {}) and {} (held by {}) both claim {shared_count} overlapping subject(s)",
+        first.item.id, first.holder, second.item.id, second.holder
+    );
+}
+
+/// Two claimants whose territory could not be shown independent, and why.
+fn Unknown_Message(first: Claimant<'_>, second: Claimant<'_>, reason: &nomos_model::UnknownReason) -> String
+{
+    return format!(
+        "{} (held by {}) and {} (held by {}) cannot be shown independent: {}",
+        first.item.id,
+        first.holder,
+        second.item.id,
+        second.holder,
+        reason.Describe()
+    );
 }
 
 /// Who holds a claim, for a message that has to name somebody either way.

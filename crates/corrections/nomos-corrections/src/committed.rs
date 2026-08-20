@@ -61,7 +61,7 @@ impl CommittedPlan
 #[cfg(test)]
 mod tests
 {
-    use crate::{ChangeSet, CorrectionCandidate, CorrectionPlan, Edit};
+    use crate::{ChangeSet, CommittedPlan, CorrectionCandidate, CorrectionPlan, Edit};
     use nomos_contracts::{ConfigurationId, Digest128};
     use nomos_model::Content_Digest;
     use nomos_workspace::{BuildVariant, ChangeSource, Workspace, WorkspaceChangeSet};
@@ -72,11 +72,36 @@ mod tests
         let configuration = ConfigurationId::From_Digest(Digest128::From_Bytes([0x33; 16]));
         let mut workspace = Workspace::Empty(variant, configuration);
 
-        workspace
-            .Apply(&WorkspaceChangeSet::From(ChangeSource::GitCheckout).Present("a.rs", "old"))
-            .expect("a fresh present is always accepted");
+        let initial = WorkspaceChangeSet::From(ChangeSource::GitCheckout).Present("a.rs", "old");
+        workspace.Apply(&initial).expect("a fresh present is always accepted");
 
         return workspace;
+    }
+
+    /// A plan with a single candidate that rewrites `a.rs` from `before` to `after`.
+    fn Plan_Changing_A(before: &str, after: &str) -> CorrectionPlan
+    {
+        return CorrectionPlan::New(vec![CorrectionCandidate::New(
+            "fix a",
+            ChangeSet::Empty().With(Edit::New(
+                "a.rs",
+                Some(before.to_owned()),
+                Some(after.to_owned()),
+            )),
+        )])
+        .expect("a single candidate is a valid plan");
+    }
+
+    /// Stages, validates and commits `plan` against `base` in one step.
+    fn Commit_Plan(plan: &CorrectionPlan, base: &mut Workspace) -> CommittedPlan
+    {
+        return plan
+            .Stage(base)
+            .expect("stages cleanly")
+            .Validate(base)
+            .expect("validates cleanly")
+            .Commit(base)
+            .expect("commits cleanly");
     }
 
     /// The invariant that makes rollback worth having: undoing a committed plan returns
@@ -86,19 +111,8 @@ mod tests
     {
         let mut base = Base();
         let starting = base.Id();
-        let plan = CorrectionPlan::New(vec![CorrectionCandidate::New(
-            "fix a",
-            ChangeSet::Empty().With(Edit::New("a.rs", Some("old".to_owned()), Some("new".to_owned()))),
-        )])
-        .expect("a single candidate is a valid plan");
-
-        let committed = plan
-            .Stage(&base)
-            .expect("stages cleanly")
-            .Validate(&base)
-            .expect("validates cleanly")
-            .Commit(&mut base)
-            .expect("commits cleanly");
+        let plan = Plan_Changing_A("old", "new");
+        let committed = Commit_Plan(&plan, &mut base);
 
         assert_ne!(base.Id(), starting, "the commit must have changed something");
 
@@ -113,21 +127,11 @@ mod tests
     fn Test_Rollback_After_The_Workspace_Moved_Should_Be_Refused()
     {
         let mut base = Base();
-        let plan = CorrectionPlan::New(vec![CorrectionCandidate::New(
-            "fix a",
-            ChangeSet::Empty().With(Edit::New("a.rs", Some("old".to_owned()), Some("new".to_owned()))),
-        )])
-        .expect("a single candidate is a valid plan");
+        let plan = Plan_Changing_A("old", "new");
+        let committed = Commit_Plan(&plan, &mut base);
 
-        let committed = plan
-            .Stage(&base)
-            .expect("stages cleanly")
-            .Validate(&base)
-            .expect("validates cleanly")
-            .Commit(&mut base)
-            .expect("commits cleanly");
-
-        base.Apply(&WorkspaceChangeSet::From(ChangeSource::GitCheckout).Present("b.rs", "other"))
+        let advance = WorkspaceChangeSet::From(ChangeSource::GitCheckout).Present("b.rs", "other");
+        base.Apply(&advance)
             .expect("an unrelated change still advances the workspace");
 
         let refusal = committed

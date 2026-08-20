@@ -67,29 +67,33 @@ fn Test_A_Scripted_Rules_Step_Should_Not_Satisfy_That_Assertion()
 fn Test_The_Rules_Step_Should_Judge_The_Whole_Workspace()
 {
     let workflow = Workflow();
+    // This test's claim is about one argument inside the argv, so it has nothing to say
+    // about a workflow that yields no argv at all — that claim belongs to the first test in
+    // this file. Stopping here keeps the two separable: a reader of a red run sees the
+    // step-exists failure fire there and the scope failure fire here, instead of one
+    // vacuous pass hiding behind the other.
     let argv = nomos_ledger::Derive_Step(&workflow, RULES_STEP)
-        // This test's claim is about one argument inside the argv, so it has nothing to say
-        // about a workflow that yields no argv at all — that claim belongs to the first test
-        // in this file. Stopping here keeps the two separable: a reader of a red run sees the
-        // step-exists failure fire there and the scope failure fire here, instead of one
-        // vacuous pass hiding behind the other.
         .unwrap_or_else(|refusal| panic!("{}", refusal.Describe()));
+    let root_value = Root_Flag_Value(&argv);
 
-    let root = argv
-        .iter()
-        .position(|argument| return argument == "--root")
-        // No index can stand in for a missing flag. Defaulting to zero would make the
-        // assertion below read `argv[1]` — the word `check` — and report the step as judging
-        // a tree it never named, which is the `OD-GATE-001` defect wearing this test's badge.
-        .unwrap_or_else(|| panic!("the Rules step must name the tree it judges: {argv:?}"));
-
-    assert_eq!(
-        argv.get(root.saturating_add(1)).map(String::as_str),
-        Some("."),
-        "the Rules step must judge the whole workspace, got {argv:?}"
-    );
+    assert_eq!(root_value, Some("."), "the Rules step must judge the whole workspace, got {argv:?}");
     assert!(
         !workflow.contains("working-directory:"),
         "a working directory would move the tree the step judges without changing its argv"
     );
+}
+
+/// The value following `--root` in `argv`.
+///
+/// No index can stand in for a missing flag. Defaulting to zero would make the caller's
+/// assertion read `argv[1]` — the word `check` — and report the step as judging a tree it
+/// never named, which is the `OD-GATE-001` defect wearing this test's badge.
+fn Root_Flag_Value(argv: &[String]) -> Option<&str>
+{
+    let root = argv
+        .iter()
+        .position(|argument| return argument == "--root")
+        .unwrap_or_else(|| panic!("the Rules step must name the tree it judges: {argv:?}"));
+
+    return argv.get(root.saturating_add(1)).map(String::as_str);
 }
