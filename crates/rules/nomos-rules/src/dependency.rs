@@ -156,7 +156,16 @@ mod tests
         };
     }
 
-    fn Offering() -> (MemoryFactStore, Registry, ProviderOffer)
+    /// A fresh fact store, registry, and the one [`ProviderOffer`] declared into it — named
+    /// so a call site reads `offering.store`, not a position it has to count.
+    struct TestOffering
+    {
+        store: MemoryFactStore,
+        registry: Registry,
+        offer: ProviderOffer,
+    }
+
+    fn Offering() -> TestOffering
     {
         let mut registry = Registry::New();
         registry
@@ -171,7 +180,7 @@ mod tests
         };
         registry.Offer(offer.clone()).expect("within the ceiling");
 
-        return (MemoryFactStore::New(), registry, offer);
+        return TestOffering { store: MemoryFactStore::New(), registry, offer };
     }
 
     fn Materialize(store: &mut MemoryFactStore, source: &SourceFile, offer: &ProviderOffer, payload: &DependencyPayload)
@@ -208,7 +217,7 @@ mod tests
     fn Test_A_Real_Fact_Should_Be_Read_And_Judged()
     {
         let source = Source("nomos-cap-syntax");
-        let (mut store, registry, offer) = Offering();
+        let TestOffering { mut store, registry, offer } = Offering();
         Materialize(
             &mut store,
             &source,
@@ -230,7 +239,7 @@ mod tests
     fn Test_A_Subject_With_No_Fact_Should_Be_Reported_Rather_Than_Silently_Clean()
     {
         let source = Source("nomos-cap-syntax");
-        let (store, registry, _offer) = Offering();
+        let TestOffering { store, registry, .. } = Offering();
 
         let mut reader = Reader::On(&store, &registry, Test_Context());
         let findings = Check_Dependency_Direction(&[source], &mut reader);

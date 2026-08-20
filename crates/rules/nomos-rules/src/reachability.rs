@@ -320,7 +320,16 @@ mod tests
             };
         }
 
-        fn Offering() -> (MemoryFactStore, Registry, ProviderOffer)
+        /// A fresh fact store, registry, and the one [`ProviderOffer`] declared into it —
+        /// named so a call site reads `offering.store`, not a position it has to count.
+        struct TestOffering
+        {
+            store: MemoryFactStore,
+            registry: Registry,
+            offer: ProviderOffer,
+        }
+
+        fn Offering() -> TestOffering
         {
             let mut registry = Registry::New();
             registry
@@ -340,7 +349,7 @@ mod tests
             };
             registry.Offer(offer.clone()).expect("within the ceiling");
 
-            return (MemoryFactStore::New(), registry, offer);
+            return TestOffering { store: MemoryFactStore::New(), registry, offer };
         }
 
         fn Materialize(store: &mut MemoryFactStore, source: &SourceFile, offer: &ProviderOffer, payload: &ReachabilityPayload)
@@ -377,7 +386,7 @@ mod tests
         fn Test_A_Real_Fact_Should_Be_Read_And_Judged()
         {
             let source = Source("a.rs");
-            let (mut store, registry, offer) = Offering();
+            let TestOffering { mut store, registry, offer } = Offering();
             Materialize(
                 &mut store,
                 &source,
@@ -398,7 +407,7 @@ mod tests
         fn Test_A_Subject_With_No_Fact_Should_Be_Reported_Rather_Than_Silently_Clean()
         {
             let source = Source("a.rs");
-            let (store, registry, _offer) = Offering();
+            let TestOffering { store, registry, .. } = Offering();
 
             let mut reader = Reader::On(&store, &registry, Test_Context());
             let findings = Check_Unread_Reaches_A_Finding(&[source], &mut reader);
@@ -410,7 +419,7 @@ mod tests
         fn Test_A_Source_With_No_Flagged_Sites_Should_Produce_No_Finding()
         {
             let source = Source("a.rs");
-            let (mut store, registry, offer) = Offering();
+            let TestOffering { mut store, registry, offer } = Offering();
             Materialize(&mut store, &source, &offer, &ReachabilityPayload { sites: Vec::new() });
 
             let mut reader = Reader::On(&store, &registry, Test_Context());

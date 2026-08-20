@@ -108,9 +108,16 @@ mod tests
         );
     }
 
-    fn Source(path: &str, text: &str) -> SourceFile
+    /// `path` and `text` are both `&str`; without a distinct type per position a call site
+    /// like `Source("src/lib.rs", "fn bad_name() {}")` reads as two interchangeable
+    /// strings and a swap compiles silently. These wrappers give each position a type the
+    /// other cannot satisfy.
+    struct Path<'a>(&'a str);
+    struct Text<'a>(&'a str);
+
+    fn Source(path: Path<'_>, text: Text<'_>) -> SourceFile
     {
-        return SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), text);
+        return SourceFile::New(path.0, SubjectId::From_Digest(Content_Digest(path.0.as_bytes())), text.0);
     }
 
     fn Test_Context() -> Context
@@ -123,7 +130,16 @@ mod tests
         };
     }
 
-    fn Offering() -> (MemoryFactStore, Registry, ProviderOffer)
+    /// A fresh fact store, registry, and the one [`ProviderOffer`] declared into it — named
+    /// so a call site reads `offering.store`, not a position it has to count.
+    struct TestOffering
+    {
+        store: MemoryFactStore,
+        registry: Registry,
+        offer: ProviderOffer,
+    }
+
+    fn Offering() -> TestOffering
     {
         let mut registry = Registry::New();
         registry
@@ -138,7 +154,7 @@ mod tests
         };
         registry.Offer(offer.clone()).expect("within the ceiling");
 
-        return (MemoryFactStore::New(), registry, offer);
+        return TestOffering { store: MemoryFactStore::New(), registry, offer };
     }
 
     fn Materialize(store: &mut MemoryFactStore, source: &SourceFile, offer: &ProviderOffer, payload: &str)
@@ -176,8 +192,8 @@ mod tests
     #[test]
     fn Test_A_Real_Fact_Should_Be_Read_And_Judged()
     {
-        let source = Source("src/lib.rs", "fn bad_name() {}");
-        let (mut store, registry, offer) = Offering();
+        let source = Source(Path("src/lib.rs"), Text("fn bad_name() {}"));
+        let TestOffering { mut store, registry, offer } = Offering();
         Materialize(
             &mut store,
             &source,
@@ -195,8 +211,8 @@ mod tests
     #[test]
     fn Test_A_Subject_With_No_Fact_Should_Be_Reported_Rather_Than_Silently_Clean()
     {
-        let source = Source("src/lib.rs", "fn bad_name() {}");
-        let (store, registry, _offer) = Offering();
+        let source = Source(Path("src/lib.rs"), Text("fn bad_name() {}"));
+        let TestOffering { store, registry, .. } = Offering();
 
         let mut reader = Reader::On(&store, &registry, Test_Context());
         let findings = Check_Naming_Convention(&[source], &mut reader);
