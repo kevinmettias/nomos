@@ -24,7 +24,7 @@ mod sources;
 mod submit;
 mod table;
 
-pub use commit::{CommitAnswer, CommitRefusal, Reproduction, VacateOutcome, Vacated};
+pub use commit::{CommitAnswer, CommitRefusal, CommitRefusalError, CommitRefusalKind, Reproduction, VacateOutcome, Vacated};
 pub use freshness::{FreshnessAnswer, FreshnessRefusal, ProfileOutcome, Verdict};
 pub use preview::PreviewRefusal;
 pub use record::{RecordAnswer, RecordRefusal};

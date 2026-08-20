@@ -10,7 +10,7 @@
 
 mod materialize;
 
-pub use materialize::{Materialize_Dependencies, Materialize_Reachability, Materialize_Syntax};
+pub use materialize::{DependencyMaterialization, Materialize_Dependencies, Materialize_Reachability, Materialize_Syntax};
 
 use nomos_analysis::Context;
 use nomos_capability::Registry;

@@ -111,19 +111,33 @@ pub fn Materialize_Dependencies<P: ProcessLauncher>(
     context: &Context,
     store: &mut MemoryFactStore,
     launcher: &P,
-) -> (Vec<SourceFile>, Vec<Finding>)
+) -> DependencyMaterialization
 {
     let production = Cargo_Production(context);
 
     let facts = match nomos_lang_rust_cargo::Materialize_Workspace(root, production, launcher)
     {
         Ok(facts) => facts,
-        Err(error) => return (Vec::new(), vec![Dependency_Capability_Unavailable(&error)]),
+        Err(error) => return DependencyMaterialization {
+            sources: Vec::new(),
+            findings: vec![Dependency_Capability_Unavailable(&error)],
+        },
     };
 
     let sources = Materialized_Dependency_Sources(facts, store);
 
-    return (sources, Vec::new());
+    return DependencyMaterialization { sources, findings: Vec::new() };
+}
+
+/// What materializing `dependency.edges` facts produced: the sources a rule can judge them
+/// under, and any finding the materialization itself already raised (a failed `cargo
+/// metadata` call, reported rather than judged) -- named rather than left as a positional
+/// pair, so a caller reads which is which without re-deriving it from
+/// [`Materialize_Dependencies`]'s own body.
+pub struct DependencyMaterialization
+{
+    pub sources: Vec<SourceFile>,
+    pub findings: Vec<Finding>,
 }
 
 /// The reading context as `nomos_lang_rust_cargo`'s provider takes it.

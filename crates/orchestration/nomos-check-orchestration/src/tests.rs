@@ -210,7 +210,7 @@ fn Test_Materialize_Dependencies_Should_Return_Real_Workspace_Members()
     let context = crate::facts::Ingested(&placeholder, &registry, Test_Variant()).expect("a single real file ingests");
     let mut store = MemoryFactStore::New();
 
-    let (sources, findings) =
+    let crate::facts::DependencyMaterialization { sources, findings } =
         crate::facts::Materialize_Dependencies(&Repository_Root(), &context, &mut store, &StdProcessLauncher);
 
     assert!(findings.is_empty(), "a real workspace root must not report ProviderUnavailable: {findings:?}");

@@ -11,7 +11,10 @@
 use crate::spec::{Assembly, EditRequest, Channels, ExitCode, EPHEMERAL, CommitRequest, EditPreview, CommitReport, Path, EditError, Absent_Or};
 use nomos_platform::FileSystemError;
 use nomos_platform_std::StdFileSystem;
-use nomos_spec_orchestration::{CommitAnswer, CommitRefusal, PreviewRefusal, Reproduction, VacateOutcome, Vacated};
+use nomos_spec_orchestration::{
+    CommitAnswer, CommitRefusal, CommitRefusalError, CommitRefusalKind, PreviewRefusal, Reproduction, VacateOutcome,
+    Vacated,
+};
 
 /// The preview, printed, changing nothing.
 pub(in crate::spec) fn Preview(assembly: &Assembly, request: &EditRequest, channels: &mut Channels<'_>) -> ExitCode
@@ -43,11 +46,39 @@ pub(in crate::spec) fn Commit(
     return match nomos_spec_orchestration::Commit(assembly, request, &StdFileSystem)
     {
         Ok(answer) => Reported(assembly, &answer, channels),
-        Err(CommitRefusal::Unreadable { path, error }) => Unreadable(&path, &error, channels.notes),
-        Err(CommitRefusal::Edit(error)) => Report_Edit_Error(assembly, &error, channels.notes),
-        Err(CommitRefusal::Refused { preview, error }) => Refused(assembly, &preview, &error, channels),
-        Err(CommitRefusal::Unwritable { preview, report: _, path, error }) =>
+        Err(CommitRefusal { kind: CommitRefusalKind::Unreadable { path }, error }) =>
         {
+            let CommitRefusalError::FileSystem(error) = error else
+            {
+                unreachable!("CommitRefusalKind::Unreadable always carries a filesystem CommitRefusalError")
+            };
+
+            Unreadable(&path, &error, channels.notes)
+        }
+        Err(CommitRefusal { kind: CommitRefusalKind::Edit, error }) =>
+        {
+            let CommitRefusalError::Edit(error) = error else
+            {
+                unreachable!("CommitRefusalKind::Edit always carries an edit CommitRefusalError")
+            };
+
+            Report_Edit_Error(assembly, &error, channels.notes)
+        }
+        Err(CommitRefusal { kind: CommitRefusalKind::Refused { preview }, error }) =>
+        {
+            let CommitRefusalError::Edit(error) = error else
+            {
+                unreachable!("CommitRefusalKind::Refused always carries an edit CommitRefusalError")
+            };
+
+            Refused(assembly, &preview, &error, channels)
+        }
+        Err(CommitRefusal { kind: CommitRefusalKind::Unwritable { preview, report: _, path }, error }) =>
+        {
+            let CommitRefusalError::FileSystem(error) = error else
+            {
+                unreachable!("CommitRefusalKind::Unwritable always carries a filesystem CommitRefusalError")
+            };
             let _ = writeln!(channels.output, "{}", preview.Describe());
 
             Unwritable(&path, &error, channels.notes)

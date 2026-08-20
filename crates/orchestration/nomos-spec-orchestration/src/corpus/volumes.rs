@@ -1,6 +1,6 @@
 //! Reading the domain volumes off disk and putting them in.
 
-use super::{Assembly, Path, BTreeMap, Absence, Ingest_Source_Document, Refused};
+use super::{Assembly, Path, BTreeMap, Absence, Expected, Ingest_Source_Document, Refused, Subject};
 
 pub(super) fn Ingest_Volumes(assembly: &mut Assembly, root: &Path, revision: &str)
 {
@@ -173,8 +173,8 @@ pub(super) fn Ingest_Each(
             Err(error) =>
             {
                 let refusal = Refused(
-                    &format!("the domain volume {name}"),
-                    &directory.join(name).display().to_string(),
+                    Subject(&format!("the domain volume {name}")),
+                    Expected(&directory.join(name).display().to_string()),
                     &error,
                     "that document and its rows are not in this store",
                 );

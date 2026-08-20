@@ -1,5 +1,6 @@
 pub const nomos_spec_orchestration::corpus::DEFAULT_REVISION: &str
-pub enum nomos_spec_orchestration::CommitRefusal
+pub enum nomos_spec_orchestration::CommitRefusalError
+pub enum nomos_spec_orchestration::CommitRefusalKind
 pub enum nomos_spec_orchestration::FreshnessRefusal
 pub enum nomos_spec_orchestration::PreviewRefusal
 pub enum nomos_spec_orchestration::RecordRefusal
@@ -11,10 +12,12 @@ pub enum nomos_spec_orchestration::SubmitRefusal
 pub enum nomos_spec_orchestration::TableRefusal
 pub enum nomos_spec_orchestration::VacateOutcome
 pub enum nomos_spec_orchestration::Verdict
-pub enum variant nomos_spec_orchestration::CommitRefusal::Edit(EditError)
-pub enum variant nomos_spec_orchestration::CommitRefusal::Refused { preview: EditPreview, error: EditError, }
-pub enum variant nomos_spec_orchestration::CommitRefusal::Unreadable { path: PathBuf, error: FileSystemError, }
-pub enum variant nomos_spec_orchestration::CommitRefusal::Unwritable { preview: EditPreview, report: CommitReport, path: PathBuf, error: FileSystemError, }
+pub enum variant nomos_spec_orchestration::CommitRefusalError::Edit(EditError)
+pub enum variant nomos_spec_orchestration::CommitRefusalError::FileSystem(FileSystemError)
+pub enum variant nomos_spec_orchestration::CommitRefusalKind::Edit
+pub enum variant nomos_spec_orchestration::CommitRefusalKind::Refused { preview: EditPreview, }
+pub enum variant nomos_spec_orchestration::CommitRefusalKind::Unreadable { path: PathBuf, }
+pub enum variant nomos_spec_orchestration::CommitRefusalKind::Unwritable { preview: EditPreview, report: CommitReport, path: PathBuf, }
 pub enum variant nomos_spec_orchestration::FreshnessRefusal::NoSuchProfile { requested: String, known: Vec<String>, }
 pub enum variant nomos_spec_orchestration::FreshnessRefusal::Project(ProjectError)
 pub enum variant nomos_spec_orchestration::FreshnessRefusal::RequirementUnexamined { requested: String, only: Option<String>, }
@@ -63,6 +66,10 @@ pub enum variant nomos_spec_orchestration::Verdict::Compared(Result<Freshness, P
 pub enum variant nomos_spec_orchestration::Verdict::Unbodied
 pub enum variant nomos_spec_orchestration::Verdict::Unstamped
 pub fn nomos_spec_orchestration::Commit<F: FileSystem>( assembly: &mut Assembly, request: &CommitRequest, filesystem: &F, ) -> Result<CommitAnswer, CommitRefusal>
+pub fn nomos_spec_orchestration::CommitRefusal::Edit(error: EditError) -> Self
+pub fn nomos_spec_orchestration::CommitRefusal::Refused(preview: EditPreview, error: EditError) -> Self
+pub fn nomos_spec_orchestration::CommitRefusal::Unreadable(path: PathBuf, error: FileSystemError) -> Self
+pub fn nomos_spec_orchestration::CommitRefusal::Unwritable(preview: EditPreview, report: CommitReport, path: PathBuf, error: FileSystemError) -> Self
 pub fn nomos_spec_orchestration::CommitRefusal::from(refusal: crate::outcome::PreviewRefusal) -> Self
 pub fn nomos_spec_orchestration::Freshness<F: FileSystem>( assembly: &Assembly, request: &FreshnessRequest, filesystem: &F, ) -> Result<FreshnessAnswer, FreshnessRefusal>
 pub fn nomos_spec_orchestration::Markdown(assembly: &Assembly, request: &RecordRequest) -> Result<RecordProjection, EditError>
@@ -88,6 +95,8 @@ pub struct field nomos_spec_orchestration::CommitAnswer::preview: EditPreview
 pub struct field nomos_spec_orchestration::CommitAnswer::report: CommitReport
 pub struct field nomos_spec_orchestration::CommitAnswer::reproduction: Result<Reproduction, EditError>
 pub struct field nomos_spec_orchestration::CommitAnswer::vacated: Option<Vacated>
+pub struct field nomos_spec_orchestration::CommitRefusal::error: CommitRefusalError
+pub struct field nomos_spec_orchestration::CommitRefusal::kind: CommitRefusalKind
 pub struct field nomos_spec_orchestration::CommitRequest::edit: EditRequest
 pub struct field nomos_spec_orchestration::CommitRequest::into: PathBuf
 pub struct field nomos_spec_orchestration::EditRequest::from: PathBuf
@@ -146,6 +155,7 @@ pub struct field nomos_spec_orchestration::corpus::CorpusRequest::revision: Stri
 pub struct field nomos_spec_orchestration::corpus::CorpusRequest::root: Option<PathBuf>
 pub struct field nomos_spec_orchestration::corpus::CorpusRequest::variable: String
 pub struct nomos_spec_orchestration::CommitAnswer
+pub struct nomos_spec_orchestration::CommitRefusal
 pub struct nomos_spec_orchestration::CommitRequest
 pub struct nomos_spec_orchestration::EditRequest
 pub struct nomos_spec_orchestration::FreshnessAnswer

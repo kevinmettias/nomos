@@ -5,7 +5,7 @@ mod reproduction;
 mod vacate_outcome;
 mod vacated;
 
-pub use commit_refusal::CommitRefusal;
+pub use commit_refusal::{CommitRefusal, CommitRefusalError, CommitRefusalKind};
 pub use reproduction::Reproduction;
 pub use vacate_outcome::VacateOutcome;
 pub use vacated::Vacated;

@@ -59,13 +59,13 @@ pub fn Commit<F: FileSystem>(
     let report = match assembly.store.Commit_Edit(&preview)
     {
         Ok(report) => report,
-        Err(error) => return Err(CommitRefusal::Refused { preview, error }),
+        Err(error) => return Err(CommitRefusal::Refused(preview, error)),
     };
 
     let destination = request.into.join(&report.path);
     if let Err(error) = filesystem.Replace_Atomically(&destination, preview.Markdown())
     {
-        return Err(CommitRefusal::Unwritable { preview, report, path: destination, error });
+        return Err(CommitRefusal::Unwritable(preview, report, destination, error));
     }
 
     let vacated = renamed.map(|old| return Vacate(&destination, &request.into.join(old)));

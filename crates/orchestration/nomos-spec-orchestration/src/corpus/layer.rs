@@ -43,8 +43,8 @@ pub(super) fn Text_Of(assembly: &mut Assembly, input: &Layered<'_>) -> Option<St
 pub(super) fn Refuse(assembly: &mut Assembly, input: &Layered<'_>, error: &IngestError)
 {
     let refusal = Refused(
-        input.subject,
-        &input.path.display().to_string(),
+        Subject(input.subject),
+        Expected(&input.path.display().to_string()),
         error,
         input.refused,
     );
@@ -131,17 +131,24 @@ pub(super) fn Ingest_Catalog_File(assembly: &mut Assembly, root: &Path)
     Note(assembly, &input, report.nodes, "catalog node(s)");
 }
 
+/// What an absence calls the input that refused -- distinct from [`Expected`] so the two
+/// adjacent `&str` positions in [`Refused`] cannot be passed in the wrong order.
+pub(super) struct Subject<'a>(pub &'a str);
+
+/// Where the refused input was expected -- distinct from [`Subject`] for the same reason.
+pub(super) struct Expected<'a>(pub &'a str);
+
 /// An input that was found and refused.
 ///
 /// The same shape as one that was not there at all, deliberately. From the answer's point
 /// of view a corpus that will not parse and a corpus that is missing cost exactly the same
 /// rows, and a reader who is told only that something failed will read the shortfall in
 /// the answer as the answer.
-pub(super) fn Refused(subject: &str, path: &str, error: &IngestError, cost: &str) -> Absence
+pub(super) fn Refused(subject: Subject<'_>, path: Expected<'_>, error: &IngestError, cost: &str) -> Absence
 {
     return Absence {
-        subject: subject.to_owned(),
-        expected: path.to_owned(),
+        subject: subject.0.to_owned(),
+        expected: path.0.to_owned(),
         cause: format!("it was found and refused: {error}"),
         cost: cost.to_owned(),
     };

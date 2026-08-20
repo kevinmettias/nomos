@@ -29,7 +29,7 @@ mod layer;
 mod tests;
 
 pub use roots::DEFAULT_REVISION;
-use layer::{Ingest_Catalog_File, Ingest_Statement_File, Refused};
+use layer::{Expected, Ingest_Catalog_File, Ingest_Statement_File, Refused, Subject};
 
 mod absence;
 mod request;

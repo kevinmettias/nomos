@@ -107,9 +107,10 @@ mod tests;
 
 pub use command::SpecCommand;
 pub use outcome::{
-    CommitAnswer, CommitRefusal, FreshnessAnswer, FreshnessRefusal, PreviewRefusal, ProfileOutcome, RecordAnswer,
-    RecordRefusal, RenderAnswer, RenderRefusal, Reproduction, SourcesAnswer, SpecOutcome, SubmitAnswer,
-    SubmitRefusal, TableAnswer, TableRefusal, VacateOutcome, Vacated, Verdict,
+    CommitAnswer, CommitRefusal, CommitRefusalError, CommitRefusalKind, FreshnessAnswer, FreshnessRefusal,
+    PreviewRefusal, ProfileOutcome, RecordAnswer, RecordRefusal, RenderAnswer, RenderRefusal, Reproduction,
+    SourcesAnswer, SpecOutcome, SubmitAnswer, SubmitRefusal, TableAnswer, TableRefusal, VacateOutcome, Vacated,
+    Verdict,
 };
 pub use request::{
     CommitRequest, EditRequest, FreshnessRequest, RecordRequest, RenderRequest, SubmitRequest, TableRequest,

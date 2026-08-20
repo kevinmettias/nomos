@@ -13,7 +13,7 @@ use nomos_workspace::BuildVariant;
 use std::path::Path;
 
 use crate::composition::Registered;
-use crate::facts::{Ingested, Materialize_Dependencies, Materialize_Reachability, Materialize_Syntax};
+use crate::facts::{DependencyMaterialization, Ingested, Materialize_Dependencies, Materialize_Reachability, Materialize_Syntax};
 use crate::outcome::{Claim_Of, Examined};
 use crate::CheckOutcome;
 
@@ -55,8 +55,8 @@ pub fn Run<P: ProcessLauncher>(sources: &[SourceFile], variant: BuildVariant, ro
         return CheckOutcome::NoFacts { files: sources.len() };
     }
 
-    let (dependency_sources, dependency_findings) = Materialize_Capabilities(sources, root, &context, &mut store, launcher);
-    let findings = Judged(sources, &dependency_sources, dependency_findings, &store, &registry, context);
+    let capabilities = Materialize_Capabilities(sources, root, &context, &mut store, launcher);
+    let findings = Judged(sources, &capabilities.sources, capabilities.findings, &store, &registry, context);
 
     return Outcome_Of(sources.len(), facts, findings);
 }
@@ -91,12 +91,24 @@ fn Materialize_Capabilities<P: ProcessLauncher>(
     context: &Context,
     store: &mut MemoryFactStore,
     launcher: &P,
-) -> (Vec<SourceFile>, Vec<Finding>)
+) -> CapabilityMaterialization
 {
-    let (dependency_sources, dependency_findings) = Materialize_Dependencies(root, context, store, launcher);
+    let dependencies = Materialize_Dependencies(root, context, store, launcher);
     Materialize_Reachability(sources, context, store);
 
-    return (dependency_sources, dependency_findings);
+    let DependencyMaterialization { sources, findings } = dependencies;
+
+    return CapabilityMaterialization { sources, findings };
+}
+
+/// What [`Materialize_Capabilities`] produced: the dependency-edges sources a rule can judge,
+/// and any finding materializing them already raised on its own -- named rather than left as
+/// a positional pair, the same reason [`crate::facts::DependencyMaterialization`] exists one
+/// layer under it.
+struct CapabilityMaterialization
+{
+    sources: Vec<SourceFile>,
+    findings: Vec<Finding>,
 }
 
 /// Every finding the completeness, naming-convention, dependency-direction and
