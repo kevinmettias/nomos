@@ -20369,6 +20369,174 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-CARGO-METADATA-PROCESSLAUNCHER",
+      "title": "nomos-lang-rust-cargo shells out to cargo metadata with raw std::process::Command instead of nomos-platform's ProcessLauncher port",
+      "why": "crates/languages/nomos-lang-rust-cargo/src/metadata.rs::Run_Cargo_Metadata calls std::process::Command::new(cargo).output() directly. nomos-platform (band 15, already below this crate's band 25) declares exactly a ProcessLauncher port for this -- an argv Command with timeout/idle-timeout and a working_directory, returning captured stdout/stderr and a typed ExitOutcome that distinguishes a real exit from TimedOut/Stalled/Terminated rather than collapsing them. StdProcessLauncher already implements it without the pipe-buffer deadlock an earlier ledger item recorded (Drain_Into spawns a reader thread per stream), and nomos-work-orchestration::Run already establishes the exact idiom this fix follows: a generic P: ProcessLauncher parameter threaded from the composition root, so the orchestration crate depends only on nomos-platform and not nomos-platform-std. nomos-cli already owns a StdProcessLauncher instance (work.rs) and is the only caller of nomos_check_orchestration::Run (check.rs:137, gate/run.rs:60), so both call sites can pass it with no new composition-root state. The crate's own lib.rs doc names this as the one provider in the check composition with I/O of its own, but justifies that only against sources already read, never against the port this workspace already built for exactly this. Verified in session: no record or open ledger item addresses this bypass specifically.",
+      "done_when": "Discover_Workspace and Materialize_Workspace (nomos-lang-rust-cargo) and Materialize_Dependencies and Run (nomos-check-orchestration) each gain a generic P: nomos_platform::ProcessLauncher parameter, following nomos_work_orchestration::Run's own pattern; Run_Cargo_Metadata builds a nomos_platform::Command (argv, working_directory = Some(root), a named timeout constant) and calls launcher.Run(&command) instead of std::process::Command, mapping a non-success ExitOutcome (TimedOut/Stalled/Terminated/non-zero Exited) to MetadataError with a reason distinguishing which; nomos-cli's check.rs and gate/run.rs pass &StdProcessLauncher at both call sites, matching work.rs's existing usage; nomos-lang-rust-cargo's own unit tests in metadata.rs and provider.rs pass a real StdProcessLauncher (nomos-platform-std added as a dev-dependency) and keep exercising this repository's own real workspace; lib.rs, provider.rs and nomos-check-orchestration's facts.rs/run.rs doc comments are updated to describe the process launch as going through the injected port rather than raw std::process::Command, preserving the existing I/O-vs-pure-bytes distinction; tests/contract/surface/nomos-lang-rust-cargo.txt and tests/contract/surface/nomos-check-orchestration.txt are reblessed for the new signatures; cargo test -p nomos-lang-rust-cargo -p nomos-check-orchestration -p nomos-cli -p nomos-contract-tests and cargo clippy --workspace --all-targets -- -D warnings both pass.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages/nomos-lang-rust-cargo/src",
+          "crates/languages/nomos-lang-rust-cargo/Cargo.toml",
+          "crates/orchestration/nomos-check-orchestration/src",
+          "crates/orchestration/nomos-check-orchestration/Cargo.toml",
+          "crates/host/nomos-cli/src/check.rs",
+          "crates/host/nomos-cli/src/gate/run.rs",
+          "tests/contract/surface/nomos-lang-rust-cargo.txt",
+          "tests/contract/surface/nomos-check-orchestration.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lang-rust-cargo",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-PROBE-LITTER-CLEANUP",
+      "title": "A single refactor commit clobbered six real lint-allow attributes with a stray // PROBE line, in six files plus three more with no clobbered attribute",
+      "why": "git log -S'// PROBE' traces the marker to commit 8e1a793 ('refactor', 89 files, mostly blank-line noise) plus one file (nomos-corrections/src/lib.rs) where it was present since that crate's own first commit 206be26. Nothing in the repository greps, asserts on, or documents '// PROBE' as a convention -- verified by searching tests/, .github/, and every doc. In six files, 8e1a793 did not add noise beside a real line, it replaced one: crates/kernel/nomos-store/src/lib.rs and crates/substrate/nomos-analysis/src/lib.rs each lost #![allow(clippy::missing_errors_doc)], crates/substrate/nomos-workspace/src/lib.rs lost the same, and crates/substrate/nomos-ledger/tests/exclusion_holds/board.rs plus crates/substrate/nomos-workspace/tests/portable/{walk,permutation,arrival}.rs each lost #![allow(dead_code)]. Verified in session, not assumed: cargo clippy --workspace --all-targets -- -D warnings passes clean at current HEAD with none of those six attributes present, so nothing here is silently red today -- whatever made each allow necessary at the time it was added no longer applies, and this item is a pure text removal, not a revert. nomos-corrections/src/lib.rs and nomos-substrate's two remaining sites (crates/substrate/nomos-workspace/src/lib.rs already counted) round out the nine total files T-PROBE-FREE's own reason field already distinguishes from this -- that item was a stray board-write probe against work/ledger.json, an unrelated use of the same English word, not this code convention.",
+      "done_when": "The nine stray // PROBE lines (and the blank line each was followed by) are removed from crates/substrate/nomos-analysis/src/lib.rs, crates/kernel/nomos-store/src/lib.rs, crates/substrate/nomos-ledger/tests/exclusion_holds/board.rs, crates/corrections/nomos-corrections/src/lib.rs, crates/substrate/nomos-workspace/src/lib.rs, and crates/substrate/nomos-workspace/tests/portable/{walk,permutation,arrival}.rs, with no attribute restored in any of them since cargo clippy --workspace --all-targets -- -D warnings already passes without them; cargo clippy --workspace --all-targets -- -D warnings and cargo test -p nomos-analysis -p nomos-store -p nomos-ledger -p nomos-corrections -p nomos-workspace --no-fail-fast both still pass after removal, proving the verification was not stale by the time the edit landed.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-analysis/src/lib.rs",
+          "crates/kernel/nomos-store/src/lib.rs",
+          "crates/substrate/nomos-ledger/tests/exclusion_holds/board.rs",
+          "crates/corrections/nomos-corrections/src/lib.rs",
+          "crates/substrate/nomos-workspace/src/lib.rs",
+          "crates/substrate/nomos-workspace/tests/portable/walk.rs",
+          "crates/substrate/nomos-workspace/tests/portable/permutation.rs",
+          "crates/substrate/nomos-workspace/tests/portable/arrival.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "clippy",
+          "--workspace",
+          "--all-targets",
+          "--",
+          "-D",
+          "warnings"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "clippy",
+          "--workspace",
+          "--all-targets",
+          "--",
+          "-D",
+          "warnings"
+        ],
+        "exit_code": 0,
+        "output_tail": "-cap-syntax)\n    Checking nomos-cap-dependency v0.1.0 (F:\\repos\\nomos\\crates\\capabilities\\nomos-cap-dependency)\n    Checking nomos-cap-controlflow v0.1.0 (F:\\repos\\nomos\\crates\\capabilities\\nomos-cap-controlflow)\n    Checking nomos-spec-ingest v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-ingest)\n    Checking nomos-spec-project v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-project)\n    Checking nomos-spec-bundle v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-bundle)\n    Checking nomos-analysis v0.1.0 (F:\\repos\\nomos\\crates\\substrate\\nomos-analysis)\n    Checking nomos-ledger v0.1.0 (F:\\repos\\nomos\\crates\\substrate\\nomos-ledger)\n    Checking nomos-store v0.1.0 (F:\\repos\\nomos\\crates\\kernel\\nomos-store)\n    Checking nomos-lang-rust v0.1.0 (F:\\repos\\nomos\\crates\\languages\\nomos-lang-rust)\n    Checking nomos-rules v0.1.0 (F:\\repos\\nomos\\crates\\rules\\nomos-rules)\n    Checking nomos-lang-rust-scan v0.1.0 (F:\\repos\\nomos\\crates\\languages\\nomos-lang-rust-scan)\n    Checking nomos-lang-rust-cargo v0.1.0 (F:\\repos\\nomos\\crates\\languages\\nomos-lang-rust-cargo)\n    Checking nomos-workspace v0.1.0 (F:\\repos\\nomos\\crates\\substrate\\nomos-workspace)\n    Checking nomos-gate-orchestration v0.1.0 (F:\\repos\\nomos\\crates\\orchestration\\nomos-gate-orchestration)\n    Checking nomos-corrections v0.1.0 (F:\\repos\\nomos\\crates\\corrections\\nomos-corrections)\n    Checking nomos-check-orchestration v0.1.0 (F:\\repos\\nomos\\crates\\orchestration\\nomos-check-orchestration)\n    Checking nomos-lang-package v0.1.0 (F:\\repos\\nomos\\crates\\packages\\nomos-lang-package)\n    Checking nomos-spec-orchestration v0.1.0 (F:\\repos\\nomos\\crates\\orchestration\\nomos-spec-orchestration)\n    Checking nomos-spec-validate v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-validate)\n    Checking nomos-work-orchestration v0.1.0 (F:\\repos\\nomos\\crates\\orchestration\\nomos-work-orchestration)\n    Checking nomos-contract-tests v0.1.0 (F:\\repos\\nomos\\tests\\contract)\n    Finished `dev` profile [unoptimized + debuginfo] target(s) in 3.75s\n",
+        "verified_at": 1787184653,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "1f76442aee08c493f24534acbf79edd0b9acf716"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-CONTROLFLOW-REACHABILITY-CAPABILITY",
+      "title": "Build nomos.cap.controlflow.reachability's tier-1 heuristic provider and Check_Unread_Reaches_A_Finding, per OD-RULES-008",
+      "why": "OD-RULES-008's own Status names the concrete next step: 'The concrete next capability item, should one be claimed, is that provider -- nomos.cap.controlflow.reachability or equivalent, scoped to intraprocedural reachability from a fact-read failure to a Finding-construction site -- with Check_Unread_Reaches_A_Finding as its first and, at first, only consumer.' Checked directly against nomos-capability's own resolution code (crates/substrate/nomos-capability/src/registry.rs Selected, src/resolution/selection.rs): a floor decides which offers are usable before Selection ever ranks among them, so a rule whose Requirement asks above every installed offer's guarantee gets Unmet::BelowRequirement, not a fallback -- Require_Any walks Selection::Weaker() among offers that already cleared the floor, not offers beneath it. So OD-RULES-008's own tier-1/tier-2 framing has to be read as an authorial choice at the rule, not a mechanical SupportedWithFallback: this item's Requirement asks for exactly FactVariant::Syntactic, what a heuristic AST-pattern-match tier actually delivers, and reports each finding as Applicability::PartiallySupported -- evaluated over part of the subject (the syntactically obvious wrong shapes), not the whole question OD-RULES-008's sound tier states. nomos-add-plugin's own skill (section 2) requires a capability contract that names a shape no existing capability carries to get its own crate below every provider, the same position nomos-cap-syntax and nomos-cap-dependency hold; this is a new capability (no statement, expression, branch or call-site record exists in nomos.cap.syntax.items' schema, confirmed against crates/capabilities/nomos-cap-syntax/src/payload.rs), so it gets one.",
+      "done_when": "crates/capabilities/nomos-cap-controlflow declares capability nomos.cap.controlflow.reachability (schema nomos.controlflow.reachability.v1), matching nomos-cap-dependency's shape (Capability(), CONTRACT_VERSION, Payload_Schema(), Ceiling(), Capability_Contract()), with Ceiling() honestly stated at FactVariant::Syntactic, soundness Assurance::Sound (every shape this tier flags is a real, provable defect with no name or type resolution needed to see it), completeness Assurance::Unsound (known, by this item's own design, to miss every shape it does not pattern-match), IncrementalGranularity::File; and Encode_Payload/Parse_Payload round-trip a ReachabilityPayload{ sites: Vec<ReachabilitySite{ function, binding, shape }> } where shape is one of exactly Empty, BareContinue, BareReturn, TailOk. nomos-lang-rust gains a second capability offer (same PROVIDER constant, a new Declared_Guarantee/Provider_Offer pair naming this capability) whose Materialize walks one file's syn::ExprMatch arms via a new syn::visit::Visit walker (crates/languages/nomos-lang-rust/src/reachability.rs and reachability/walk.rs, not extending the existing item-level Walk) for the pattern Err(applicability) => <body> -- exactly the binding name found three times in crates/rules/nomos-rules/src/{naming.rs:78,mirror/index.rs:74,dependency.rs:168} -- and records a ReachabilitySite naming the nearest enclosing function for every such arm whose body is syntactically empty, a bare continue, a bare return with no value, or a tail Ok(...) call, and records nothing for any other shape. crates/rules/nomos-rules gains Check_Unread_Reaches_A_Finding(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>, signature-matching the other three rules, whose own Requirement asks for exactly FactVariant::Syntactic (not an aspirational floor nothing installed can clear -- see this item's why), whose Payload_Of reports a real Unread finding on a failed Require the same shape dependency.rs:168 does, and whose Violations_In emits one Finding per recorded ReachabilitySite with Applicability::PartiallySupported and a summary naming the function, the shape found, and why it is the exact defect Applicability's own module doc calls 'unknown is not pass'; cites OD-RULES-008 (this item's amendment, at the version it lands at) as its contract record, the same _CONTRACT_RECORD/_CONTRACT_RECORD_VERSION shape dependency.rs uses, checked live by tests/contract/tests/rule_contract_citation.rs. OD-RULES-008 is amended: its Status section states plainly that the tier-1 provider and rule now exist, names their real identifiers (nomos.cap.controlflow.reachability, Check_Unread_Reaches_A_Finding), and states that tier 2 (FactVariant::SemanticallyResolved, sound) remains unbuilt -- the part of its own original claim this item does not close. Neither the new rule nor the new provider is wired into nomos-gate-orchestration::Registered() or nomos-check-orchestration::Run -- reserving either file is out of this item's territory, and wiring is a follow-on the same way P13-DEPENDENCY-WIRE-1 followed P13-DEPENDENCY-EDGES-2. The new crate is declared at band 23 in Cargo.toml, README.md and tests/contract/tests/boundaries/bands.rs (alongside nomos-cap-syntax and nomos-cap-dependency); tests/contract/surface gains a blessed snapshot for nomos-cap-controlflow and re-blessed snapshots for nomos-lang-rust and nomos-rules; tests/integration/tests/determinism/{declarations,domains}.rs register the new fact production (reusing SyntaxFactProduction::STRENGTH if its determinism claim genuinely matches, stating why in a doc comment if it does not). diagrams/relations.mmd and spec/domain-specification.md (with sidecars) are re-rendered and pass nomos spec freshness --require diagram-set --require domain-specification, verified from an isolated worktree holding exactly the record set this commit publishes, per OD-GATE-005.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities/nomos-cap-controlflow",
+          "crates/languages/nomos-lang-rust/src/reachability.rs",
+          "crates/languages/nomos-lang-rust/src/reachability",
+          "crates/languages/nomos-lang-rust/src/lib.rs",
+          "crates/rules/nomos-rules/src/reachability.rs",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "Cargo.toml",
+          "README.md",
+          "tests/contract/tests/boundaries/bands.rs",
+          "tests/contract/surface/nomos-cap-controlflow.txt",
+          "tests/contract/surface/nomos-lang-rust.txt",
+          "tests/contract/surface/nomos-rules.txt",
+          "tests/integration/tests/determinism/declarations.rs",
+          "tests/integration/tests/determinism/domains.rs",
+          "docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-controlflow",
+        "acquired_at": 1787184350,
+        "lease_expires_at": 1787191550
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cap-controlflow",
+          "-p",
+          "nomos-lang-rust",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

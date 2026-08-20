@@ -4,9 +4,6 @@
 //! reads as the claim it makes rather than as the fixture it needs. A suite whose fixtures
 //! are restated per file drifts into several boards that agree only by coincidence.
 
-// PROBE
-
-
 pub(crate) use nomos_ledger::{
     Finishing,
     Abandonment, AddRefusal, Blocker, Claim, ClaimRefusal, Declination, ExclusionLedger, FileLedger, Finish,

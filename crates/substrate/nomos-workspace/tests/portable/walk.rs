@@ -4,9 +4,6 @@
 //! workspace: what counts as a source file, what a workspace-relative path is, and the guard
 //! against a walk that found a directory and almost nothing in it.
 
-// PROBE
-
-
 use std::path::{Path, PathBuf};
 
 const NOT_SOURCE: &[&str] = &["target", ".git"];

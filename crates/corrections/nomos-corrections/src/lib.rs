@@ -7,7 +7,6 @@
 //! here only ever checks that state has not moved and submits through
 //! [`nomos_workspace::Workspace`]'s one door.
 #![forbid(unsafe_code)]
-// PROBE
 
 mod candidate;
 mod change_set;

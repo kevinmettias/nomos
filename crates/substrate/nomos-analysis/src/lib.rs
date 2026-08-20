@@ -1,6 +1,4 @@
 #![forbid(unsafe_code)]
-// PROBE
-
 
 mod invalidation;
 mod component;

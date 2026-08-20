@@ -1,6 +1,4 @@
 #![forbid(unsafe_code)]
-// PROBE
-
 
 // A document's identity and its kind live beneath `document`, which is what they are
 // parts of. Flat, this level was eleven files with that relationship spelled only in

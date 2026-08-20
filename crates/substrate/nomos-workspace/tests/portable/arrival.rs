@@ -3,9 +3,6 @@
 //! Held in one place because a permutation compared against a baseline built from a
 //! different variant would be comparing two workspaces, not two arrival orders.
 
-// PROBE
-
-
 pub(crate) use nomos_contracts::{ConfigurationId, Digest128};
 pub(crate) use nomos_workspace::{ChangeSource, Workspace, WorkspaceChangeSet};
 

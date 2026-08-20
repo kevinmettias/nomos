@@ -4,9 +4,6 @@
 //! corpus — it builds five hundred synthetic members, because the claim is about the walk
 //! rather than about any particular tree. It lives beside the walk it checks.
 
-// PROBE
-
-
 use crate::arrival::{Fresh, Ingest, Workspace};
 
 /// What one arrival order produced, and the stride it arrived under.
