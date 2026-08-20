@@ -11,19 +11,21 @@
 //! approvals, and blocking behavior."
 //!
 //! Most of that is still unbuilt. Verified directly, not assumed: `nomos-check-orchestration::
-//! run::Run` calls three rules unconditionally over every source it is handed --
-//! `Check_Completeness_Mirrors`, `Check_Naming_Convention`, and (since
-//! `P13-DEPENDENCY-WIRE-1`) `Check_Dependency_Direction` -- so no scope or rule selection
-//! exists anywhere today. What does exist, genuinely unused for scope/rule selection, is
-//! [`nomos_rules::RuleRegistry`] (`OD-RULES-004`) -- its own module doc says plainly that
-//! nothing consults it for that. This crate is `Gate`'s own seam, the same shape
-//! `nomos-work-orchestration`, `nomos-check-orchestration` and `nomos-spec-orchestration`
-//! each are for their own verb group. Its first increment gave `RuleRegistry` a real
-//! consumer: [`Run`] composes a real registry from all three of this workspace's shipped
-//! rules and reports what it holds as [`GatePlan`]. It composed only two until
-//! `P13-GATE-REGISTRY-THIRD-RULE`, which is worth keeping written down: a plan smaller than
-//! the run it describes reads as "dependency direction is unenforced" to a caller for whom
-//! it is enforced on every check, so the registry being *whole* is the claim there, not the
+//! run::Run` calls four rules unconditionally over every source it is handed --
+//! `Check_Completeness_Mirrors`, `Check_Naming_Convention`, (since
+//! `P13-DEPENDENCY-WIRE-1`) `Check_Dependency_Direction`, and (since
+//! `P13-CONTROLFLOW-REACHABILITY-WIRE`) `Check_Unread_Reaches_A_Finding` -- so no scope or
+//! rule selection exists anywhere today. What does exist, genuinely unused for scope/rule
+//! selection, is [`nomos_rules::RuleRegistry`] (`OD-RULES-004`) -- its own module doc says
+//! plainly that nothing consults it for that. This crate is `Gate`'s own seam, the same
+//! shape `nomos-work-orchestration`, `nomos-check-orchestration` and
+//! `nomos-spec-orchestration` each are for their own verb group. Its first increment gave
+//! `RuleRegistry` a real consumer: [`Run`] composes a real registry from all four of this
+//! workspace's shipped rules and reports what it holds as [`GatePlan`]. It composed only
+//! two until `P13-GATE-REGISTRY-THIRD-RULE`, then three until
+//! `P13-CONTROLFLOW-REACHABILITY-WIRE`, which is worth keeping written down: a plan smaller
+//! than the run it describes reads as "some rule is unenforced" to a caller for whom it is
+//! enforced on every check, so the registry being *whole* is the claim there, not the
 //! registry merely existing.
 //!
 //! Its second increment, `P13-GATE-RUN-FIRST-INCREMENT-2`, is [`GateRunOutcome`] and

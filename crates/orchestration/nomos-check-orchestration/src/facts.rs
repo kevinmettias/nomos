@@ -114,6 +114,41 @@ fn Production(context: &Context) -> FactContext
     };
 }
 
+/// Produces one `nomos.cap.controlflow.reachability` fact per source and returns how many
+/// were written.
+///
+/// The identical shape [`Materialize_Syntax`] has: pure, per-source, no I/O --
+/// `nomos_lang_rust::reachability::Materialize` takes only a subject, source text and this
+/// same [`FactContext`], the tier-1 heuristic provider `P13-CONTROLFLOW-REACHABILITY-
+/// CAPABILITY` built. Not folded into `Materialize_Syntax` itself: the two are independent
+/// capabilities read from the same bytes, and a shared materialization step would hide
+/// which one a caller is actually asking about, the same reason [`Materialize_Dependencies`]
+/// stayed a second, separate step rather than a generalization of the first.
+pub fn Materialize_Reachability(sources: &[SourceFile], context: &Context, store: &mut MemoryFactStore) -> usize
+{
+    let production = Production(context);
+    let mut written = 0_usize;
+
+    for source in sources
+    {
+        let Materialization::Materialized(fact) =
+            nomos_lang_rust::reachability::Materialize(source.subject, &source.text, production)
+        else
+        {
+            continue;
+        };
+
+        // No dependency edges: a reachability fact is a leaf, the identical reasoning
+        // Materialize_Syntax gives for its own fact.
+        if store.Materialize(*fact, &[]).is_ok()
+        {
+            written = written.saturating_add(1);
+        }
+    }
+
+    return written;
+}
+
 /// Runs `cargo metadata` over `root` through `launcher`, materializes one
 /// `nomos.cap.dependency.edges` fact per workspace member, and returns the subjects a rule
 /// can judge them under.

@@ -37,6 +37,14 @@ pub fn Registered() -> Result<Registry, RegistryError>
     registry.Declare(nomos_cap_dependency::Capability_Contract())?;
     registry.Offer(nomos_lang_rust_cargo::Provider_Offer())?;
 
+    // A third capability, one tier-1 offer against it -- `OD-RULES-008`'s design, wired for
+    // real. `nomos_lang_rust::reachability::Provider_Offer` states its own guarantee at
+    // `Syntactic`, below the ceiling `nomos_cap_controlflow::Capability_Contract` states at
+    // `SemanticallyResolved`; `Check_Unread_Reaches_A_Finding`'s own `Reachability_
+    // Requirement` asks for exactly what this offer delivers.
+    registry.Declare(nomos_cap_controlflow::Capability_Contract())?;
+    registry.Offer(nomos_lang_rust::reachability::Provider_Offer())?;
+
     return Ok(registry);
 }
 

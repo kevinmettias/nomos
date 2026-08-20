@@ -20653,6 +20653,74 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-CONTROLFLOW-REACHABILITY-WIRE",
+      "title": "Wire nomos.cap.controlflow.reachability and Check_Unread_Reaches_A_Finding into nomos-check-orchestration::Run and gate's registry",
+      "why": "P13-CONTROLFLOW-REACHABILITY-CAPABILITY built the tier-1 provider and Check_Unread_Reaches_A_Finding, built and tested, deliberately not composed into Run or Registered() -- the same split P13-DEPENDENCY-EDGES-2 (built dependency.edges + Check_Dependency_Direction) then P13-DEPENDENCY-WIRE-1 (composed it into Run) already used. Checked directly against the current tree, post P13-CARGO-METADATA-PROCESSLAUNCHER-2: nomos_check_orchestration::run::Run(sources, variant, root, launcher) still hand-calls only Check_Completeness_Mirrors, Check_Naming_Convention and Check_Dependency_Direction; facts.rs's Materialize_Syntax is the exact shape the reachability provider needs (pure, per-source, no I/O, unlike Materialize_Dependencies which shells out) since nomos_lang_rust::reachability::Materialize takes only a subject, source text and FactContext; nomos-gate-orchestration::composition::Registered() still offers three of the four rules nomos-rules now ships. nomos-cli's check.rs and gate/run.rs call nomos_check_orchestration::Run by its existing signature and need no change: this item adds an internal materialization step and a fourth rule call, not a new parameter.",
+      "done_when": "nomos-check-orchestration::facts.rs gains Materialize_Reachability(sources: &[SourceFile], context: &Context, store: &mut MemoryFactStore) -> usize, matching Materialize_Syntax's exact shape (pure, per-source, nomos_lang_rust::reachability::Materialize, no dependency edges recorded since a reachability fact is a leaf); run::Run calls it after Materialize_Syntax and folds Check_Unread_Reaches_A_Finding's findings into the same findings Vec the other three rules extend, with no change to Run's own signature or CheckOutcome shape (an unparseable file already degrades Materialize_Syntax's own count the identical way; this step is not counted in Examined.facts, matching how Materialize_Dependencies's own facts are not counted there either, and this item does not change that boundary). nomos-gate-orchestration::composition::Registered() gains a fourth RuleOffer for UNREAD_REACHES_FINDING citing UNREAD_REACHES_FINDING_CONTRACT_RECORD / _VERSION, in RuleId order beside the other three; its own and composition.rs's doc comments stop saying two-of-three/three shipped rules. tests.rs's Test_A_Plan_Should_Hold_All_Three_Shipped_Rules is renamed and extended to expect all four RuleIds in order, and gains a sibling test asserting the reachability rule's offer carries its real OD-RULES-008 citation, the same shape Test_The_Dependency_Rule_Should_Carry_Its_Real_Contract_Citation already has. nomos-gate-orchestration's lib.rs doc comment stops saying Run calls three rules. tests/contract/surface/nomos-check-orchestration.txt and nomos-gate-orchestration.txt are reblessed if either crate's public surface actually changed (Materialize_Reachability's own visibility decided at the implementation site, matching Materialize_Syntax's). cargo test --no-fail-fast -p nomos-check-orchestration -p nomos-gate-orchestration -p nomos-contract-tests and cargo clippy --workspace --all-targets both pass.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-check-orchestration/src/facts.rs",
+          "crates/orchestration/nomos-check-orchestration/src/run.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/composition.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/tests.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/lib.rs",
+          "tests/contract/surface/nomos-check-orchestration.txt",
+          "tests/contract/surface/nomos-gate-orchestration.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "aming_Rule_Should_Cite_Its_Record_Less_Contract ... ok\ntest tests::Test_The_Plan_Should_Not_Vary_By_Root ... ok\ntest tests::Test_One_Blocking_Finding_Among_Many_Should_Fail ... ok\n\ntest result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.14s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_check_orchestration-20bfa03d2c713828.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-06ab25b0491e144c.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-4c32ae08be8df958.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-9350d088b8d6ed0d.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-9ca3879aab70176f.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-308fef82df004321.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-f6f7228f8cfa874c.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-ea500c062215f506.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-790c8c5856e63fa5.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-98429b682798ce96.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-c1e906054609f777.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_gate_orchestration-12b3954b916e1e0d.exe)\n   Doc-tests nomos_check_orchestration\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_gate_orchestration\n",
+        "verified_at": 1787187532,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "e6c41e12508d3aeda504b1597ce37224715deb0f"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

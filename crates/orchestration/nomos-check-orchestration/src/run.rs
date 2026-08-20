@@ -3,19 +3,22 @@
 
 use nomos_analysis::{MemoryFactStore, Reader};
 use nomos_platform::ProcessLauncher;
-use nomos_rules::{Check_Completeness_Mirrors, Check_Dependency_Direction, Check_Naming_Convention, SourceFile};
+use nomos_rules::{
+    Check_Completeness_Mirrors, Check_Dependency_Direction, Check_Naming_Convention,
+    Check_Unread_Reaches_A_Finding, SourceFile,
+};
 use nomos_workspace::BuildVariant;
 use std::path::Path;
 
 use crate::composition::Registered;
-use crate::facts::{Ingested, Materialize_Dependencies, Materialize_Syntax};
+use crate::facts::{Ingested, Materialize_Dependencies, Materialize_Reachability, Materialize_Syntax};
 use crate::outcome::{Claim_Of, Examined};
 use crate::CheckOutcome;
 
 /// Composes the capability registry, ingests `sources` into one workspace state,
-/// materializes a syntax fact per file and a dependency-edges fact per workspace member,
-/// and runs the completeness, naming-convention and dependency-direction rules over the
-/// result.
+/// materializes a syntax fact per file, a reachability fact per file and a dependency-edges
+/// fact per workspace member, and runs the completeness, naming-convention,
+/// dependency-direction and unread-reaches-finding rules over the result.
 ///
 /// `sources` is the walk, already done -- this crate has no [`nomos_platform::FileSystem`]
 /// port to walk a directory through, the same reason `nomos-cli::check::sources::Walked`
@@ -57,11 +60,13 @@ pub fn Run<P: ProcessLauncher>(sources: &[SourceFile], variant: BuildVariant, ro
     }
 
     let (dependency_sources, mut dependency_findings) = Materialize_Dependencies(root, &context, &mut store, launcher);
+    Materialize_Reachability(sources, &context, &mut store);
 
     let mut reader = Reader::On(&store, &registry, context);
     let mut findings = Check_Completeness_Mirrors(sources, &mut reader);
     findings.extend(Check_Naming_Convention(sources, &mut reader));
     findings.extend(Check_Dependency_Direction(&dependency_sources, &mut reader));
+    findings.extend(Check_Unread_Reaches_A_Finding(sources, &mut reader));
     findings.append(&mut dependency_findings);
 
     let examined = Examined { files: sources.len(), facts };

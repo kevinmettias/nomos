@@ -5,7 +5,12 @@ use crate::{Disposition, GateCommand, GateOutcome, GateRunOutcome, Run};
 use nomos_contracts::{
     Applicability, Digest128, EvidenceClass, Finding, GateCategory, RuleId, SubjectId,
 };
-use nomos_rules::{COMPLETENESS_MIRROR, CONTRACT_RECORD, CONTRACT_RECORD_VERSION, DEPENDENCY_CONTRACT_RECORD, DEPENDENCY_CONTRACT_RECORD_VERSION, DEPENDENCY_DIRECTION, NAMING_CONVENTION};
+use nomos_rules::{
+    COMPLETENESS_MIRROR, CONTRACT_RECORD, CONTRACT_RECORD_VERSION, DEPENDENCY_CONTRACT_RECORD,
+    DEPENDENCY_CONTRACT_RECORD_VERSION, DEPENDENCY_DIRECTION, NAMING_CONVENTION,
+    UNREAD_REACHES_FINDING, UNREAD_REACHES_FINDING_CONTRACT_RECORD,
+    UNREAD_REACHES_FINDING_CONTRACT_RECORD_VERSION,
+};
 use std::path::PathBuf;
 
 fn Command() -> GateCommand
@@ -15,10 +20,11 @@ fn Command() -> GateCommand
 
 /// The whole plan, by identity and in `RuleId` order, rather than by length. A count agrees
 /// with itself: this registry composed two of the three shipped rules until
-/// `P13-GATE-REGISTRY-THIRD-RULE`, and an assertion on `plan.rules.len()` would have been
-/// green throughout.
+/// `P13-GATE-REGISTRY-THIRD-RULE`, then three of four until
+/// `P13-CONTROLFLOW-REACHABILITY-WIRE`, and an assertion on `plan.rules.len()` would have
+/// been green throughout.
 #[test]
-fn Test_A_Plan_Should_Hold_All_Three_Shipped_Rules()
+fn Test_A_Plan_Should_Hold_All_Four_Shipped_Rules()
 {
     let GateOutcome::Planned(plan) = Run(&Command())
     else
@@ -32,9 +38,36 @@ fn Test_A_Plan_Should_Hold_All_Three_Shipped_Rules()
         vec![
             RuleId::New(COMPLETENESS_MIRROR),
             RuleId::New(DEPENDENCY_DIRECTION),
-            RuleId::New(NAMING_CONVENTION)
+            RuleId::New(NAMING_CONVENTION),
+            RuleId::New(UNREAD_REACHES_FINDING)
         ],
         "in RuleId order: {ids:?}"
+    );
+}
+
+/// `Check_Unread_Reaches_A_Finding` cites a versioned record, the identical shape
+/// `Check_Dependency_Direction`'s own citation test asserts above.
+/// `tests/contract/tests/rule_contract_citation.rs` is what keeps that citation honest against
+/// `OD-RULES-008`'s own front matter; this asserts the offer carries it at all.
+#[test]
+fn Test_The_Reachability_Rule_Should_Carry_Its_Real_Contract_Citation()
+{
+    let GateOutcome::Planned(plan) = Run(&Command())
+    else
+    {
+        panic!("this crate's own registration must not be contradictory");
+    };
+
+    let reachability = plan
+        .rules
+        .iter()
+        .find(|offer| return offer.rule == RuleId::New(UNREAD_REACHES_FINDING))
+        .expect("the reachability rule must be registered");
+
+    assert_eq!(reachability.contract_record, UNREAD_REACHES_FINDING_CONTRACT_RECORD);
+    assert_eq!(
+        reachability.contract_record_version,
+        UNREAD_REACHES_FINDING_CONTRACT_RECORD_VERSION
     );
 }
 

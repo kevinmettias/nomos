@@ -330,6 +330,7 @@ name = "nomos-check-orchestration"
 version = "0.1.0"
 dependencies = [
  "nomos-analysis",
+ "nomos-cap-controlflow",
  "nomos-cap-dependency",
  "nomos-cap-syntax",
  "nomos-capability",

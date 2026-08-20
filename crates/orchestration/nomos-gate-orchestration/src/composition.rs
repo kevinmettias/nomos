@@ -11,23 +11,30 @@
 //! `P13-DEPENDENCY-WIRE-1` and `P13-GATE-REGISTRY-THIRD-RULE`, and a plan smaller than the run
 //! it describes is worse than no plan: a caller reading it concludes dependency direction is
 //! unenforced when every `nomos check` enforces it. `crate::tests` asserts the offers rather
-//! than counting them, because a count agrees with itself.
+//! than counting them, because a count agrees with itself. `P13-CONTROLFLOW-REACHABILITY-WIRE`
+//! composed the fourth the same way.
 
 use nomos_contracts::RuleId;
-use nomos_rules::{RuleOffer, RuleRegistry, RuleRegistryError, COMPLETENESS_MIRROR, CONTRACT_RECORD, CONTRACT_RECORD_VERSION, DEPENDENCY_CONTRACT_RECORD, DEPENDENCY_CONTRACT_RECORD_VERSION, DEPENDENCY_DIRECTION, NAMING_CONVENTION};
+use nomos_rules::{
+    RuleOffer, RuleRegistry, RuleRegistryError, COMPLETENESS_MIRROR, CONTRACT_RECORD,
+    CONTRACT_RECORD_VERSION, DEPENDENCY_CONTRACT_RECORD, DEPENDENCY_CONTRACT_RECORD_VERSION,
+    DEPENDENCY_DIRECTION, NAMING_CONVENTION, UNREAD_REACHES_FINDING,
+    UNREAD_REACHES_FINDING_CONTRACT_RECORD, UNREAD_REACHES_FINDING_CONTRACT_RECORD_VERSION,
+};
 
-/// Registers this workspace's three shipped rules and hands back the registry.
+/// Registers this workspace's four shipped rules and hands back the registry.
 ///
-/// The three are exactly what `nomos-check-orchestration::run::Run` calls, and that is the
+/// The four are exactly what `nomos-check-orchestration::run::Run` calls, and that is the
 /// property this function exists to keep true rather than a coincidence to note.
 ///
 /// # Errors
 ///
 /// [`RuleRegistryError::AlreadyOffered`] if the same [`RuleId`] were offered twice. Not
-/// reachable today -- `COMPLETENESS_MIRROR`, `DEPENDENCY_DIRECTION` and `NAMING_CONVENTION`
-/// are distinct constants -- but returned rather than unwound for the same reason
-/// `nomos_check_orchestration::composition::Registered` returns its own `RegistryError`:
-/// a composition root's own defect must be representable, not panicked past.
+/// reachable today -- `COMPLETENESS_MIRROR`, `DEPENDENCY_DIRECTION`, `NAMING_CONVENTION` and
+/// `UNREAD_REACHES_FINDING` are distinct constants -- but returned rather than unwound for
+/// the same reason `nomos_check_orchestration::composition::Registered` returns its own
+/// `RegistryError`: a composition root's own defect must be representable, not panicked
+/// past.
 pub fn Registered() -> Result<RuleRegistry, RuleRegistryError>
 {
     let mut registry = RuleRegistry::New();
@@ -64,6 +71,14 @@ pub fn Registered() -> Result<RuleRegistry, RuleRegistryError>
         rule: RuleId::New(NAMING_CONVENTION),
         contract_record: "README.md".to_owned(),
         contract_record_version: 0,
+    })?;
+
+    // `Check_Unread_Reaches_A_Finding` cites `OD-RULES-008` through constants beside the
+    // rule, the identical shape `DEPENDENCY_DIRECTION`'s citation above already uses.
+    registry.Offer(RuleOffer {
+        rule: RuleId::New(UNREAD_REACHES_FINDING),
+        contract_record: UNREAD_REACHES_FINDING_CONTRACT_RECORD.to_owned(),
+        contract_record_version: UNREAD_REACHES_FINDING_CONTRACT_RECORD_VERSION,
     })?;
 
     return Ok(registry);

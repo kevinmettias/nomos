@@ -112,11 +112,12 @@ fn Payload_Of(source: &SourceFile, facts: &mut dyn FactReader) -> Result<Reachab
 {
     let need = Reachability_Requirement();
     let capability = nomos_cap_controlflow::Capability();
-    // The provider's semantic input is the file bytes it parsed, not a digest this rule
-    // recomputes — the same reasoning `dependency.rs`'s own `Payload_Of` gives: a reader
-    // resolves a fact by subject and requirement, and an empty digest here names nothing
-    // this rule is required to get right.
-    let inputs = InputDigest::Of(&[]);
+    // Not an empty digest the way `dependency.rs`'s own `Payload_Of` uses — that provider's
+    // own `semantic_inputs` is empty by its own stated convention
+    // (`nomos-lang-rust-cargo`'s `provider.rs`), so an empty digest here matches it. This
+    // capability's provider is content-keyed the same way `nomos.cap.syntax.items` is —
+    // `naming.rs`'s own `Payload_Of` is the precedent this follows instead.
+    let inputs = InputDigest::Of(&[source.text.as_bytes()]);
 
     let fact = match facts.Require(&capability, &source.subject, inputs, &need)
     {
@@ -330,7 +331,7 @@ mod tests
                 contract: nomos_cap_controlflow::Capability(),
                 contract_version: offer.version,
                 subject: source.subject,
-                semantic_inputs: InputDigest::Of(&[]),
+                semantic_inputs: InputDigest::Of(&[source.text.as_bytes()]),
                 provider: offer.provider.clone(),
                 provider_version: offer.version,
                 guarantee: GuaranteeDigest::Of(&offer.guarantee),

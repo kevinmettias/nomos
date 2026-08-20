@@ -11,6 +11,7 @@ publish.workspace = true
 nomos-analysis = { workspace = true }
 nomos-cap-syntax = { workspace = true }
 nomos-cap-dependency = { workspace = true }
+nomos-cap-controlflow = { workspace = true }
 nomos-capability = { workspace = true }
 nomos-contracts = { workspace = true }
 nomos-lang-rust = { workspace = true }
