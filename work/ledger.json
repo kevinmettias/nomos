@@ -20391,7 +20391,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Superseded by P13-CARGO-METADATA-PROCESSLAUNCHER-2, done and committed at 3f6b869. This item's territory was short of the work (missed crates/languages/nomos-lang-rust-cargo/tests/invalidation.rs and tests/integration's determinism harness plus its Cargo.toml), so it was abandoned rather than finished; declining rather than leaving it ready, since the work it names is already complete."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -20420,7 +20424,10 @@
         }
       ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-session",
+        "declined_at": 1787185722
+      }
     },
     {
       "id": "P13-PROBE-LITTER-CLEANUP",
