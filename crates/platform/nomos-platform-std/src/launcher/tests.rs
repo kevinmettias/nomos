@@ -1,6 +1,7 @@
 //! What the launcher promises, exercised.
 
 use super::*;
+use nomos_platform::ExitOutcome;
 use std::fmt::Write as _;
 use std::path::{Path, PathBuf};
 use std::time::Duration;
