@@ -8,7 +8,7 @@
 //! second real case (`OD-PACKAGE-006`, `OD-RULES-005`, `OD-RULES-006`) -- so they are simply
 //! absent, not stubbed, until an increment gives one of them a real body.
 
-use crate::{RuleSelector, ScopeSelector};
+use crate::{RuleSelector, ScopeSelector, SuppressionPolicy};
 use std::path::PathBuf;
 
 /// What to plan or run a gate over.
@@ -31,4 +31,9 @@ pub struct GateCommand
     /// Which rules' findings count toward a real run's disposition. Read by
     /// [`crate::Run_Gate`] only, the same asymmetry as `scope`.
     pub rules: RuleSelector,
+    /// Which findings a real run must not let fail the build, despite `Finding::
+    /// Can_Fail_A_Build`. Read by [`crate::Run_Gate`] only, the same asymmetry as `scope`
+    /// and `rules`. Nothing constructs a non-empty one yet -- see
+    /// [`crate::SuppressionPolicy`]'s own doc for what authors one, and what does not yet.
+    pub suppressions: SuppressionPolicy,
 }

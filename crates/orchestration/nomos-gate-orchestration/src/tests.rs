@@ -1,7 +1,10 @@
 //! What this crate promises today: a real rule registry, reported back whole, and a real
 //! disposition reduction over an already-judged list of findings.
 
-use crate::{Disposition, GateCommand, GateOutcome, GateRunOutcome, RuleSelector, Run, Run_Gate, ScopeSelector};
+use crate::{
+    Disposition, GateCommand, GateOutcome, GateRunOutcome, RuleSelector, Run, Run_Gate, ScopeSelector, Suppression,
+    SuppressionDisposition, SuppressionPolicy,
+};
 use nomos_check_orchestration::CheckOutcome;
 use nomos_contracts::{
     Applicability, Digest128, EvidenceClass, Finding, GateCategory, RuleId, SubjectId,
@@ -333,6 +336,7 @@ fn Test_A_Scoped_Out_Source_Should_Not_Be_Judged()
         root: Repository_Root(),
         scope: ScopeSelector { include: vec!["b.rs".to_owned()], exclude: Vec::new() },
         rules: RuleSelector::default(),
+        suppressions: SuppressionPolicy::default(),
     };
 
     let result = Run_Gate(Some(sources), Test_Variant(), &command, &StdProcessLauncher);
@@ -357,6 +361,7 @@ fn Test_A_Deselected_Rules_Finding_Should_Not_Block()
         root: Repository_Root(),
         scope: ScopeSelector::default(),
         rules: RuleSelector { include: vec![RuleId::New(NAMING_CONVENTION)] },
+        suppressions: SuppressionPolicy::default(),
     };
 
     let result = Run_Gate(Some(sources), Test_Variant(), &command, &StdProcessLauncher);
@@ -372,5 +377,57 @@ fn Test_A_Deselected_Rules_Finding_Should_Not_Block()
     assert!(
         findings.iter().any(|finding| return finding.rule == RuleId::New(COMPLETENESS_MIRROR)),
         "the deselected rule's finding must still be judged and carried, just not blocking"
+    );
+}
+
+/// A [`Suppression`] matching the one blocking finding this fixture produces: the run still
+/// judges the source and `check_outcome` still carries the finding in full, and it now also
+/// appears in `suppressed_findings` rather than `blocking_findings` -- suppressed, not
+/// silenced.
+///
+/// The suppression's `subject` is read off a real, unsuppressed run first, rather than
+/// recomputed from the file's own path: `Check_Completeness_Mirrors` addresses a finding by
+/// the mirrored item's own subject, not the file's -- `Subject_Of_Path` alone does not name
+/// it, and this test does not need to know that addressing scheme to prove suppression
+/// works over whatever subject a real finding actually carries.
+#[test]
+fn Test_A_Suppressed_Finding_Should_Not_Block()
+{
+    let source = || return Source("a.rs", "/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n");
+    let unsuppressed = Run_Gate(Some(vec![source()]), Test_Variant(), &Command_At(Repository_Root()), &StdProcessLauncher);
+    let real_finding = unsuppressed
+        .blocking_findings
+        .first()
+        .expect("this fixture must produce one real blocking finding to suppress");
+
+    let command = GateCommand {
+        root: Repository_Root(),
+        scope: ScopeSelector::default(),
+        rules: RuleSelector::default(),
+        suppressions: SuppressionPolicy {
+            suppressions: vec![Suppression {
+                rule: real_finding.rule.clone(),
+                subject: real_finding.subject,
+                disposition: SuppressionDisposition::FalsePositiveDisposition,
+                rationale: "test fixture".to_owned(),
+                owner: "test".to_owned(),
+            }],
+        },
+    };
+
+    let result = Run_Gate(Some(vec![source()]), Test_Variant(), &command, &StdProcessLauncher);
+
+    assert!(matches!(result.check_outcome, CheckOutcome::Judged { .. }));
+    assert_eq!(result.disposition, GateRunOutcome::Passed);
+    assert!(result.blocking_findings.is_empty(), "{:?}", result.blocking_findings);
+    assert!(!result.suppressed_findings.is_empty(), "the suppressed finding must still be visible");
+    let CheckOutcome::Judged { findings, .. } = &result.check_outcome
+    else
+    {
+        panic!("just matched Judged above");
+    };
+    assert!(
+        findings.iter().any(|finding| return finding.rule == RuleId::New(COMPLETENESS_MIRROR)),
+        "the suppressed finding must still be judged and carried in check_outcome"
     );
 }

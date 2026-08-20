@@ -23155,6 +23155,125 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-GATE-015-SUPPRESSION-FIRST-INCREMENT",
+      "title": "OD-GATE-015's SuppressionPolicy, built under the user's standing override -- suppression only, not baseline or adoption",
+      "why": "OD-GATE-015 named a single trigger for three separate corpus concerns (SUP-*/SUP-EVID-*, BASELINE-*, ADOPT-CONFIG-*) but its own 'One Question, Three Concerns' section already argues against unifying them, since they share no real field shape. The user's standing override removes the wait on the shared trigger; this item takes only the suppression concern, the most self-contained of the three, per that section's own reasoning. No config-file or CLI authoring surface exists anywhere in this workspace yet (grepped, none found), so inventing one now would repeat the exact 'field shape ahead of a real caller' mistake OD-GATE-015 already declined -- that surface is a separate, later item once a real one is needed.",
+      "done_when": "nomos-gate-orchestration gains Suppression (rule: RuleId, subject: SubjectId, disposition: SuppressionDisposition with the corpus's six named variants -- InlineSuppression, RepositoryPolicyException, TemporaryWaiver, AcceptedBaselineDebt, FalsePositiveDisposition, FormalRiskAcceptance -- rationale: String, owner: String) and SuppressionPolicy (a Vec<Suppression>, matched by rule+subject identity, the same identity Finding already carries -- no new addressing scheme invented). GateCommand gains a suppressions field, defaulting to empty so every existing construction site and CI's own gate run are unchanged in behavior. Run_Gate partitions blockable findings (rule-selected, Can_Fail_A_Build) into blocking_findings and a new GateRunResult::suppressed_findings by whether a matching Suppression exists, so a suppressed finding cannot fail the build but is still visible in both check_outcome and suppressed_findings -- the corpus's own 'must preserve suppressed ... states distinctly' requirement, not collapsed into silence. nomos gate run's report renders the suppressed count alongside the blocking count. Documented explicitly as what this increment is not: no owner/approver/date/revalidation-trigger enforcement, no CLI flag or config file constructs a Suppression yet -- both are named as separate future items rather than built speculatively. Surface snapshot reblessed.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration",
+          "crates/host/nomos-cli/src/gate/report.rs",
+          "crates/host/nomos-cli/src/gate/tests.rs",
+          "tests/contract/surface/nomos-gate-orchestration.txt"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "territory omitted crates/host/nomos-cli/src/gate/parsing.rs, a construction site the new suppressions field requires touching; superseded by P13-GATE-015-SUPPRESSION-FIRST-INCREMENT-2 with corrected territory"
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-gate-015-suppression",
+          "reason": "territory omitted crates/host/nomos-cli/src/gate/parsing.rs, whose GateCommand construction literal needs updating for the new suppressions field; re-authoring under a fresh id with corrected territory rather than widening mid-claim",
+          "abandoned_at": 1787208650
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-gate-015-suppression",
+        "declined_at": 1787208655
+      }
+    },
+    {
+      "id": "P13-GATE-015-SUPPRESSION-FIRST-INCREMENT-2",
+      "title": "OD-GATE-015's SuppressionPolicy, built under the user's standing override -- suppression only, not baseline or adoption",
+      "why": "OD-GATE-015 named a single trigger for three separate corpus concerns (SUP-*/SUP-EVID-*, BASELINE-*, ADOPT-CONFIG-*) but its own 'One Question, Three Concerns' section already argues against unifying them, since they share no real field shape. The user's standing override removes the wait on the shared trigger; this item takes only the suppression concern, the most self-contained of the three, per that section's own reasoning. No config-file or CLI authoring surface exists anywhere in this workspace yet (grepped, none found), so inventing one now would repeat the exact 'field shape ahead of a real caller' mistake OD-GATE-015 already declined -- that surface is a separate, later item once a real one is needed. Supersedes P13-GATE-015-SUPPRESSION-FIRST-INCREMENT, declined for omitting crates/host/nomos-cli/src/gate/parsing.rs from territory.",
+      "done_when": "nomos-gate-orchestration gains Suppression (rule: RuleId, subject: SubjectId, disposition: SuppressionDisposition with the corpus's six named variants -- InlineSuppression, RepositoryPolicyException, TemporaryWaiver, AcceptedBaselineDebt, FalsePositiveDisposition, FormalRiskAcceptance -- rationale: String, owner: String) and SuppressionPolicy (a Vec<Suppression>, matched by rule+subject identity, the same identity Finding already carries -- no new addressing scheme invented). GateCommand gains a suppressions field, defaulting to empty so every existing construction site and CI's own gate run are unchanged in behavior. Run_Gate partitions blockable findings (rule-selected, Can_Fail_A_Build) into blocking_findings and a new GateRunResult::suppressed_findings by whether a matching Suppression exists, so a suppressed finding cannot fail the build but is still visible in both check_outcome and suppressed_findings -- the corpus's own 'must preserve suppressed ... states distinctly' requirement, not collapsed into silence. nomos gate run's report renders the suppressed count alongside the blocking count. Documented explicitly as what this increment is not: no owner/approver/date/revalidation-trigger enforcement, no CLI flag or config file constructs a Suppression yet -- both are named as separate future items rather than built speculatively. Surface snapshot reblessed.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration",
+          "crates/host/nomos-cli/src/gate/report.rs",
+          "crates/host/nomos-cli/src/gate/tests.rs",
+          "crates/host/nomos-cli/src/gate/parsing.rs",
+          "tests/contract/surface/nomos-gate-orchestration.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "e.rs (target\\debug\\deps\\authoring_surface-47a846b52b043a6d.exe)\n     Running tests\\check_command.rs (target\\debug\\deps\\check_command-1f72f9de0f7a6e95.exe)\n     Running tests\\freshness.rs (target\\debug\\deps\\freshness-ae80954d21bc9069.exe)\n     Running tests\\gate_step\\main.rs (target\\debug\\deps\\gate_step-8aeb2760425cece4.exe)\n     Running tests\\list_tells_the_truth.rs (target\\debug\\deps\\list_tells_the_truth-c6279836e2d738ac.exe)\n     Running tests\\read_surface.rs (target\\debug\\deps\\read_surface-561323bd3ef694b7.exe)\n     Running tests\\request_submit.rs (target\\debug\\deps\\request_submit-c0186ed1293ae299.exe)\n     Running tests\\stale_writer_is_refused.rs (target\\debug\\deps\\stale_writer_is_refused-329acf8fb3ec4644.exe)\n     Running tests\\takeover_is_recorded.rs (target\\debug\\deps\\takeover_is_recorded-fb58a3672c6cb420.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-95a1aef077b5f9ba.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-ead301eb7c8d8256.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-a61f2bcd75c8d4d9.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-fba07f1fa1c92105.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-2bb84d2d8744d800.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-c2987d8eceda16d3.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-0eeaea7cd309c35b.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-2db99bdd604951c5.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-56e2b70874db076c.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-1204b8c22ecd0b43.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_gate_orchestration-0e0249ddc168c5c8.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_gate_orchestration\n",
+        "verified_at": 1787208864,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "d249b63fc87fa8e6c8719cdf80260354a1f15c76"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

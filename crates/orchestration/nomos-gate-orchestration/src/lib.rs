@@ -60,17 +60,27 @@
 //! every construction site that predates them and CI's own `gate run --root .` are
 //! unchanged in behavior.
 //!
+//! Its fifth increment, `P13-GATE-015-SUPPRESSION-FIRST-INCREMENT`, gives [`GateCommand`] a
+//! real [`SuppressionPolicy`] under the same user override, taking only the suppression
+//! concern of `OD-GATE-015`'s three -- `SuppressionPolicy` matches a [`nomos_contracts::
+//! Finding`] by `rule` and `subject`, the identity `Finding` already carries, and a matched
+//! finding cannot fail the build but still appears in [`GateRunResult::check_outcome`] and
+//! [`GateRunResult::suppressed_findings`], never silently. No CLI flag or config file
+//! constructs a [`crate::Suppression`] yet -- inventing an authoring surface before a real
+//! caller needs one would repeat the mistake `OD-GATE-015` already declined, so this
+//! increment is the type and its consultation only.
+//!
 //! # What no increment is
 //!
 //! None implements `explain` or `compare` -- those verbs have no variant here at all, not a
 //! stub one, the same "no invented shape ahead of a real body" this crate's own [`command`]
-//! module documents. None touches `CoveragePolicy`, `BaselinePolicy`, `SuppressionPolicy`,
-//! required phases, thresholds, waivers or approvals -- every other clause `WF-001` names.
-//! `Claim` (coverage debt / agent-required subjects) rides through [`GateRunResult`] for
-//! information only and does not affect [`GateRunOutcome`], the same choice
-//! `OD-COMPLETENESS-004` already made for `nomos check`'s own exit code. `GatePlan` still
-//! does not vary by [`GateCommand::root`], `scope` or `rules` -- it reports the registry,
-//! not a walk, so no selection applies to it yet.
+//! module documents. None touches `CoveragePolicy`, `BaselinePolicy`, adoption
+//! configuration, required phases, thresholds or approvals -- every other clause `WF-001`
+//! names beyond suppression. `Claim` (coverage debt / agent-required subjects) rides through
+//! [`GateRunResult`] for information only and does not affect [`GateRunOutcome`], the same
+//! choice `OD-COMPLETENESS-004` already made for `nomos check`'s own exit code. `GatePlan`
+//! still does not vary by [`GateCommand::root`], `scope`, `rules` or `suppressions` -- it
+//! reports the registry, not a walk, so no selection applies to it yet.
 
 #![forbid(unsafe_code)]
 
@@ -81,6 +91,7 @@ mod rule_selector;
 mod run;
 mod run_gate;
 mod scope_selector;
+mod suppression;
 
 #[cfg(test)]
 mod tests;
@@ -92,3 +103,4 @@ pub use rule_selector::RuleSelector;
 pub use run::Run;
 pub use run_gate::Run_Gate;
 pub use scope_selector::ScopeSelector;
+pub use suppression::{Suppression, SuppressionDisposition, SuppressionPolicy};

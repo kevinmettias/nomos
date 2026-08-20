@@ -290,6 +290,7 @@ fn Test_A_Run_Scoped_To_Nothing_Should_Not_Report_Ok()
             exclude: Vec::new(),
         },
         rules: nomos_gate_orchestration::RuleSelector::default(),
+        suppressions: nomos_gate_orchestration::SuppressionPolicy::default(),
     });
     let mut stdout = Vec::new();
     let mut stderr = Vec::new();

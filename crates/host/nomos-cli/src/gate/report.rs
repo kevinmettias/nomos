@@ -107,9 +107,10 @@ fn Report_Judged(findings: &[Finding], result: &GateRunResult, stdout: &mut impl
 
     let _ = writeln!(
         stdout,
-        "\n{} finding(s), {} of which can fail a build",
+        "\n{} finding(s), {} of which can fail a build, {} suppressed",
         findings.len(),
-        result.blocking_findings.len()
+        result.blocking_findings.len(),
+        result.suppressed_findings.len()
     );
 
     return match result.disposition

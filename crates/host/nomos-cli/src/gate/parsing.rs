@@ -51,6 +51,9 @@ pub fn Parse(arguments: &[String]) -> Result<GateInvocation, String>
             exclude: Named_Values(rest, "--exclude"),
         },
         rules: RuleSelector { include: Named_Values(rest, "--rule").into_iter().map(RuleId::New).collect() },
+        // No flag authors a Suppression yet -- see `nomos_gate_orchestration::SuppressionPolicy`'s
+        // own doc for why inventing one now would be premature.
+        suppressions: nomos_gate_orchestration::SuppressionPolicy::default(),
     };
 
     return Ok(if verb == "run" { GateInvocation::Run(command) } else { GateInvocation::Plan(command) });

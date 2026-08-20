@@ -1,29 +1,48 @@
 pub enum nomos_gate_orchestration::GateOutcome
 pub enum nomos_gate_orchestration::GateRunOutcome
+pub enum nomos_gate_orchestration::SuppressionDisposition
 pub enum variant nomos_gate_orchestration::GateOutcome::Contradictory(RuleRegistryError)
 pub enum variant nomos_gate_orchestration::GateOutcome::Planned(GatePlan)
 pub enum variant nomos_gate_orchestration::GateRunOutcome::Failed
 pub enum variant nomos_gate_orchestration::GateRunOutcome::Indeterminate
 pub enum variant nomos_gate_orchestration::GateRunOutcome::Passed
+pub enum variant nomos_gate_orchestration::SuppressionDisposition::AcceptedBaselineDebt
+pub enum variant nomos_gate_orchestration::SuppressionDisposition::FalsePositiveDisposition
+pub enum variant nomos_gate_orchestration::SuppressionDisposition::FormalRiskAcceptance
+pub enum variant nomos_gate_orchestration::SuppressionDisposition::InlineSuppression
+pub enum variant nomos_gate_orchestration::SuppressionDisposition::RepositoryPolicyException
+pub enum variant nomos_gate_orchestration::SuppressionDisposition::TemporaryWaiver
 pub fn nomos_gate_orchestration::Disposition(findings: &[Finding]) -> GateRunOutcome
 pub fn nomos_gate_orchestration::Registered() -> Result<RuleRegistry, RuleRegistryError>
 pub fn nomos_gate_orchestration::RuleSelector::Matches(&self, rule: &RuleId) -> bool
 pub fn nomos_gate_orchestration::Run(_command: &GateCommand) -> GateOutcome
 pub fn nomos_gate_orchestration::Run_Gate<P: ProcessLauncher>(walked: Option<Vec<SourceFile>>, variant: BuildVariant, command: &GateCommand, launcher: &P) -> GateRunResult
 pub fn nomos_gate_orchestration::ScopeSelector::Matches(&self, path: &str) -> bool
+pub fn nomos_gate_orchestration::Suppression::Matches(&self, finding: &Finding) -> bool
+pub fn nomos_gate_orchestration::SuppressionPolicy::Suppressing<'a>(&'a self, finding: &Finding) -> Option<&'a Suppression>
 pub struct field nomos_gate_orchestration::GateCommand::root: PathBuf
 pub struct field nomos_gate_orchestration::GateCommand::rules: RuleSelector
 pub struct field nomos_gate_orchestration::GateCommand::scope: ScopeSelector
+pub struct field nomos_gate_orchestration::GateCommand::suppressions: SuppressionPolicy
 pub struct field nomos_gate_orchestration::GatePlan::rules: Vec<RuleOffer>
 pub struct field nomos_gate_orchestration::GateRunResult::blocking_findings: Vec<Finding>
 pub struct field nomos_gate_orchestration::GateRunResult::check_outcome: CheckOutcome
 pub struct field nomos_gate_orchestration::GateRunResult::disposition: GateRunOutcome
 pub struct field nomos_gate_orchestration::GateRunResult::root: PathBuf
+pub struct field nomos_gate_orchestration::GateRunResult::suppressed_findings: Vec<Finding>
 pub struct field nomos_gate_orchestration::RuleSelector::include: Vec<RuleId>
 pub struct field nomos_gate_orchestration::ScopeSelector::exclude: Vec<String>
 pub struct field nomos_gate_orchestration::ScopeSelector::include: Vec<String>
+pub struct field nomos_gate_orchestration::Suppression::disposition: SuppressionDisposition
+pub struct field nomos_gate_orchestration::Suppression::owner: String
+pub struct field nomos_gate_orchestration::Suppression::rationale: String
+pub struct field nomos_gate_orchestration::Suppression::rule: RuleId
+pub struct field nomos_gate_orchestration::Suppression::subject: SubjectId
+pub struct field nomos_gate_orchestration::SuppressionPolicy::suppressions: Vec<Suppression>
 pub struct nomos_gate_orchestration::GateCommand
 pub struct nomos_gate_orchestration::GatePlan
 pub struct nomos_gate_orchestration::GateRunResult
 pub struct nomos_gate_orchestration::RuleSelector
 pub struct nomos_gate_orchestration::ScopeSelector
+pub struct nomos_gate_orchestration::Suppression
+pub struct nomos_gate_orchestration::SuppressionPolicy
