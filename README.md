@@ -19,9 +19,9 @@ sections of narrative, and the mechanism that would have caught it was present a
 ran. See `docs/records/ARC-SPECDB-001-the-specification-is-a-database.md`.
 
 And the analysis kernel, which is young: a capability registry whose answer is never a
-bare no, a fact store keyed on identity rather than on a workspace snapshot, two Rust
-providers of one capability that are able to disagree, and a rules crate whose first rule
-judges real code and is reachable as `nomos check`.
+bare no, a fact store keyed on identity rather than on a workspace snapshot, capability
+contracts with independent providers that are able to disagree, and a rules crate whose
+rules judge real code and are reachable as `nomos check`.
 
 What is built and what is not is the ledger's answer rather than this paragraph's. Run
 `nomos work list`.

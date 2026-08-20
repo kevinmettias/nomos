@@ -21505,6 +21505,215 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-README-INTRO-PROVIDER-COUNT-STALE",
+      "title": "README's analysis-kernel paragraph still says two providers of one capability and a rules crate whose first rule; there are three capability contracts and four rules now",
+      "why": "root README.md's intro paragraph (lines 21-24) reads 'two Rust providers of one capability that are able to disagree, and a rules crate whose first rule judges real code.' Verified directly against the tree: three capability-contract crates now exist (nomos-cap-syntax, nomos-cap-dependency, nomos-cap-controlflow), and nomos-rules holds four rules (P13-CONTROLFLOW-REACHABILITY-WIRE landed the fourth). An external status review flagged this drift. The paragraph already disclaims itself ('What is built and what is not is the ledger's answer rather than this paragraph's'), so the fix generalizes the wording to the current qualitative shape rather than hardcoding a count that will drift again at the next provider or rule.",
+      "done_when": "README.md's analysis-kernel paragraph no longer says 'two Rust providers of one capability' or 'first rule', and instead describes capability contracts with independently-disagreeing providers and a rules crate whose rules (plural) judge real code.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "README.md"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "predicate used a literal space between 'capability' and 'contracts' that cannot survive the paragraph's markdown line wrap, so it fails against a correct fix. Superseded by P13-README-INTRO-PROVIDER-COUNT-STALE-2 with a whitespace-tolerant predicate."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "rg",
+          "-U",
+          "--pcre2",
+          "-q",
+          "(?s)\\A(?!.*two Rust providers of one capability)(?!.*whose first rule).*capability contracts.*\\z",
+          "README.md"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-readme-intro",
+          "reason": "predicate's literal 'capability contracts' does not match across the paragraph's natural markdown line wrap (capability\\ncontracts); re-adding with a whitespace-tolerant predicate.",
+          "abandoned_at": 1787191707
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-readme-intro",
+        "declined_at": 1787191707
+      }
+    },
+    {
+      "id": "P13-GATE-014-RULE-COUNT-STALE-2",
+      "title": "OD-GATE-014's Current Position still says Run calls three shipped rules; it calls four since Check_Unread_Reaches_A_Finding landed",
+      "why": "OD-GATE-014's Current Position section says Run 'now calls three shipped rules, Check_Completeness_Mirrors, Check_Naming_Convention and (since P13-DEPENDENCY-WIRE-1) Check_Dependency_Direction' and later 'always wants all three rules over everything it is given.' Verified directly against run.rs: Run now calls four rules unconditionally, Check_Unread_Reaches_A_Finding included, wired by P13-CONTROLFLOW-REACHABILITY-WIRE after this record's last edit. The rule-count increase does not change the record's reasoning (still no caller wants a subset of rules or scope) -- only the stated count needs correcting, the same shape as this record's own prior fix (P13-GATE-014-RULE-COUNT-STALE, two to three) and OD-RULES-007's fix this session (three to four).",
+      "done_when": "OD-GATE-014's Current Position section correctly names four unconditionally-called rules including Check_Unread_Reaches_A_Finding, its content committed through the store via nomos spec preview/commit, and both diagram-set and domain-specification projections re-rendered fresh from the publishing record set and passing nomos spec freshness.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "wrong predicate: -p nomos-contract-tests couples this item to an unrelated red surface-snapshot test outside its territory. Superseded by P13-GATE-014-RULE-COUNT-STALE-3 with a predicate scoped to nomos-spec-store's own registration/round-trip test."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-gate014-recount",
+          "reason": "predicate couples to nomos-contract-tests, which is red right now for an unrelated reason (concurrent commit 144f555 widened nomos-spec-store::Put_Relation_Type's surface without blessing the snapshot) -- re-adding with a predicate scoped to what this item's done_when actually needs.",
+          "abandoned_at": 1787191653
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-gate014-recount",
+        "declined_at": 1787191653
+      }
+    },
+    {
+      "id": "P13-GATE-014-RULE-COUNT-STALE-3",
+      "title": "OD-GATE-014's Current Position still says Run calls three shipped rules; it calls four since Check_Unread_Reaches_A_Finding landed",
+      "why": "Amends P13-GATE-014-RULE-COUNT-STALE-2, declined for a predicate (-p nomos-contract-tests) that couples this item to an unrelated red public_surface snapshot test outside its territory (concurrent commit 144f555 widened nomos-spec-store's surface without blessing it). Same defect as OD-GATE-014's Current Position section verified against run.rs: Run now calls four rules unconditionally, Check_Unread_Reaches_A_Finding included, wired by P13-CONTROLFLOW-REACHABILITY-WIRE.",
+      "done_when": "OD-GATE-014's Current Position section correctly names four unconditionally-called rules including Check_Unread_Reaches_A_Finding, its content committed through the store via nomos spec preview/commit, and both diagram-set and domain-specification projections re-rendered fresh from the publishing record set and passing nomos spec freshness.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "--test",
+          "governing_records_are_present"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "--test",
+          "governing_records_are_present"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 18 tests\ntest registration::Test_The_Build_Script_Should_Not_Enumerate_The_Record_Directory ... ok\ntest registration::Test_The_Governing_List_Should_Be_The_Registration_Directory ... ok\ntest registration::Test_A_Registration_With_No_Record_Should_Be_A_Phantom ... ok\ntest registration::Test_A_Record_Whose_Registration_Is_Missing_Should_Be_Unseeded ... ok\ntest registration::Test_Every_Canonical_Record_On_Disk_Should_Be_Governing ... ok\ntest registration::Test_Comparing_The_Directory_Against_Itself_Would_Check_Nothing ... ok\ntest registration::Test_An_Unseeded_Store_Should_Hold_None_Of_Them ... ok\ntest seeding::Test_Authored_Content_Should_Be_Distinguishable_From_An_Ingested_Revision ... ok\ntest siblings::Test_A_Relation_To_A_Sibling_Record_Should_Arrive_As_A_Reported_Placeholder ... ok\ntest supersession::Test_Adr_Doc_001_Should_Carry_An_Explicit_Supersession_Edge ... ok\ntest siblings::Test_A_Placeholder_Should_Become_The_Node_Of_The_Suite_That_Claims_It ... ok\ntest supersession::Test_The_Superseded_Record_Should_Be_A_Visible_Placeholder ... ok\ntest seeding::Test_No_Governing_Record_Should_Carry_A_Carriage_Return ... ok\ntest registration::Test_Every_Governing_Record_Should_Resolve_By_Id ... ok\ntest supersession::Test_A_Real_Record_Should_Replace_A_Placeholder_But_Not_A_Real_One ... ok\ntest seeding::Test_Rewriting_A_Document_Should_Not_Renumber_Its_Blocks ... ok\ntest seeding::Test_Seeding_Should_Be_Idempotent ... ok\ntest seeding::Test_The_Records_Should_Be_Present_As_Disposed_Content ... ok\n\ntest result: ok. 18 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.36s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.11s\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-68598d7aa5979f42.exe)\n",
+        "verified_at": 1787191732,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "144f55583f939032b7fd5cf43c2e47be3b09add0"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-README-INTRO-PROVIDER-COUNT-STALE-2",
+      "title": "README's analysis-kernel paragraph still says two providers of one capability and a rules crate whose first rule; there are three capability contracts and four rules now",
+      "why": "Amends P13-README-INTRO-PROVIDER-COUNT-STALE, declined for a predicate whose literal 'capability contracts' could not survive the paragraph's markdown line wrap. Same defect: README.md's intro paragraph read 'two Rust providers of one capability that are able to disagree, and a rules crate whose first rule judges real code.' Verified directly against the tree: three capability-contract crates now exist (nomos-cap-syntax, nomos-cap-dependency, nomos-cap-controlflow), and nomos-rules holds four rules.",
+      "done_when": "README.md's analysis-kernel paragraph no longer says 'two Rust providers of one capability' or 'first rule', and instead describes capability contracts with independently-disagreeing providers and a rules crate whose rules (plural) judge real code.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "README.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "rg",
+          "-U",
+          "--pcre2",
+          "-q",
+          "(?s)\\A(?!.*two Rust providers of one capability)(?!.*whose first rule).*capability\\s+contracts.*\\z",
+          "README.md"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "rg",
+          "-U",
+          "--pcre2",
+          "-q",
+          "(?s)\\A(?!.*two Rust providers of one capability)(?!.*whose first rule).*capability\\s+contracts.*\\z",
+          "README.md"
+        ],
+        "exit_code": 0,
+        "output_tail": "",
+        "verified_at": 1787191723,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "144f55583f939032b7fd5cf43c2e47be3b09add0"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
