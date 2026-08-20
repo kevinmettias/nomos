@@ -20880,6 +20880,113 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-RULES-009-EXTERNAL-PLANNER-REVIEW",
+      "title": "Whether an external review's RunPlanner-now argument overrides the recorded planner trigger",
+      "why": "An external architecture review names check/gate's duplicated rule list as the biggest problem and recommends building a generalized RunPlanner at P0. OD-RULES-007/008 already name a specific, checkable trigger for this exact planner ('selection creating unread work') and it has not fired -- OD-GATE-014 is still open, Run has no selector. The review's own stated stopping point (stop adding rules by hand after three) was already crossed by a real commit (P13-CONTROLFLOW-REACHABILITY-WIRE) using the existing pattern with no observed cost. This needs its own decision record rather than leaving the review's claim unanswered against the workspace's own governance.",
+      "done_when": "docs/records/OD-RULES-009-*.md exists, registered via crates/spec/nomos-spec-store/records/OD-RULES-009.record, both directions of the registration test pass, and both required projections (diagram-set, domain-specification) are re-rendered from a clean worktree holding exactly this commit's record set and pass freshness.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md",
+          "crates/spec/nomos-spec-store/records/OD-RULES-009.record"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Predicate at add-time (cargo test -p nomos-spec-store --lib) does not run governing_records_are_present, the integration test binary that actually checks a record's registration both ways -- would pass whether or not OD-RULES-009 got registered correctly. Re-authored as -2 targeting that test binary directly."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "--lib"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-planner-record",
+          "reason": "Predicate at add-time (--lib) misses the actual bidirectional registration test, which lives in the governing_records_are_present integration test binary, not the lib target.",
+          "abandoned_at": 1787189313
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-planner-record",
+        "declined_at": 1787189313
+      }
+    },
+    {
+      "id": "P13-RULES-009-EXTERNAL-PLANNER-REVIEW-2",
+      "title": "Whether an external review's RunPlanner-now argument overrides the recorded planner trigger",
+      "why": "An external architecture review names check/gate's duplicated rule list as the biggest problem and recommends building a generalized RunPlanner at P0. OD-RULES-007/008 already name a specific, checkable trigger for this exact planner ('selection creating unread work') and it has not fired -- OD-GATE-014 is still open, Run has no selector. The review's own stated stopping point (stop adding rules by hand after three) was already crossed by a real commit (P13-CONTROLFLOW-REACHABILITY-WIRE) using the existing pattern with no observed cost. This needs its own decision record rather than leaving the review's claim unanswered against the workspace's own governance. Amends P13-RULES-009-EXTERNAL-PLANNER-REVIEW, declined for a predicate that could not have caught a bad registration.",
+      "done_when": "docs/records/OD-RULES-009-*.md exists, registered via crates/spec/nomos-spec-store/records/OD-RULES-009.record, both directions of the registration test pass, and both required projections (diagram-set, domain-specification) are re-rendered from a clean worktree holding exactly this commit's record set and pass freshness.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md",
+          "crates/spec/nomos-spec-store/records/OD-RULES-009.record"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "--test",
+          "governing_records_are_present"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "--test",
+          "governing_records_are_present"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 18 tests\ntest registration::Test_The_Build_Script_Should_Not_Enumerate_The_Record_Directory ... ok\ntest registration::Test_The_Governing_List_Should_Be_The_Registration_Directory ... ok\ntest registration::Test_Comparing_The_Directory_Against_Itself_Would_Check_Nothing ... ok\ntest registration::Test_A_Registration_With_No_Record_Should_Be_A_Phantom ... ok\ntest registration::Test_A_Record_Whose_Registration_Is_Missing_Should_Be_Unseeded ... ok\ntest registration::Test_Every_Canonical_Record_On_Disk_Should_Be_Governing ... ok\ntest registration::Test_An_Unseeded_Store_Should_Hold_None_Of_Them ... ok\ntest seeding::Test_No_Governing_Record_Should_Carry_A_Carriage_Return ... ok\ntest registration::Test_Every_Governing_Record_Should_Resolve_By_Id ... ok\ntest seeding::Test_Authored_Content_Should_Be_Distinguishable_From_An_Ingested_Revision ... ok\ntest supersession::Test_A_Real_Record_Should_Replace_A_Placeholder_But_Not_A_Real_One ... ok\ntest siblings::Test_A_Relation_To_A_Sibling_Record_Should_Arrive_As_A_Reported_Placeholder ... ok\ntest siblings::Test_A_Placeholder_Should_Become_The_Node_Of_The_Suite_That_Claims_It ... ok\ntest supersession::Test_Adr_Doc_001_Should_Carry_An_Explicit_Supersession_Edge ... ok\ntest supersession::Test_The_Superseded_Record_Should_Be_A_Visible_Placeholder ... ok\ntest seeding::Test_Rewriting_A_Document_Should_Not_Renumber_Its_Blocks ... ok\ntest seeding::Test_Seeding_Should_Be_Idempotent ... ok\ntest seeding::Test_The_Records_Should_Be_Present_As_Disposed_Content ... ok\n\ntest result: ok. 18 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.48s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.14s\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-68598d7aa5979f42.exe)\n",
+        "verified_at": 1787189476,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "aded068d25bb0164e1ed5122983866a3ae192149"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

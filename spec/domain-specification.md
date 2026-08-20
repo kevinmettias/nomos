@@ -133,6 +133,7 @@ profile: domain-specification
 | docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md@authored | docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md | authored | 18 | 6 | sha256:5e7bde3ad034017040659d44bc4b044696c4a0b33830e8596bd67906a2d2ac4c |
 | docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md@authored | docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md | authored | 15 | 5 | sha256:45afb6da12c9c097b8769739c122fc5780401a07f2c6bc0834eac32d4c109ba7 |
 | docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md@authored | docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md | authored | 32 | 6 | sha256:335f2ed03def8b979a66bf55ff3278c706fbc7e1105bc01a4fd5a1a75cedfe0a |
+| docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md@authored | docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md | authored | 18 | 6 | sha256:8b3e9e1c4514f68ddb8e43539acc0e27b77c86c13dae2e4d0d6d23bdfe3cd5fd |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md@authored | docs/records/OD-SPEC-001-the-storage-backend-question.md | authored | 11 | 5 | sha256:e4feddab256024ea38e21849120fdd52d0ddf17d4e3f69cfb24eb4c8e766c8ae |
 | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md@authored | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md | authored | 20 | 7 | sha256:2c45051e43390556bfd68865152580e1ae09c2e82dc94bb20e65cdbf60d69a10 |
 | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md@authored | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md | authored | 23 | 7 | sha256:481ffd62b02df705439b4ef914adb21e24894d1d3f0295754fc13f7d95c89c85 |
@@ -1202,6 +1203,12 @@ profile: domain-specification
 | docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md#20 | authored | 2 | What this candidate forces, checked against each open deferred question in turn |
 | docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md#28 | authored | 2 | Status |
 | docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md#30 | authored | 3 | `P13-CONTROLFLOW-REACHABILITY-CAPABILITY` landed the tier-1 half |
+| docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#1 | authored | 1 | Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it |
+| docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#2 | authored | 2 | Question |
+| docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#5 | authored | 2 | What Was Measured |
+| docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#11 | authored | 2 | Decision |
+| docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#14 | authored | 2 | What Would Decide It |
+| docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#17 | authored | 2 | Status |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#1 | authored | 1 | Whether the specification store gains a second backend, and what would decide it |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#2 | authored | 2 | Question |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#4 | authored | 2 | Current Position |
@@ -35242,6 +35249,208 @@ this rule is composed into `nomos-check-orchestration::Run` -- reserving either 
 kept out of `P13-CONTROLFLOW-REACHABILITY-CAPABILITY`'s own territory, the same split
 `P13-DEPENDENCY-EDGES-2` and `P13-DEPENDENCY-WIRE-1` used, so a follow-on item does that
 composing.
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#1
+
+*revision: authored · kind: heading · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it · hash: sha256:45d418270880d4cd153a551ec5b957d8c4827b5dd9622ebbb74650cc454e513d*
+
+# Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#2
+
+*revision: authored · kind: heading · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#3
+
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Question · hash: sha256:a9807431a6cfcd7c86c4b2d71c7a3a3ee6700998cc277e40f989f39df96c5e39*
+
+An external architecture review (read against this workspace rather than accepted on read)
+names `nomos-check-orchestration::run::Run`'s hand-written `Materialize_X`/`Check_Y` call
+list, and `nomos-gate-orchestration`'s separately-composed `RuleRegistry`, as this
+workspace's biggest architectural problem, and recommends — at P0, ahead of any further rule
+work — building a generalized `RunPlanner`: rules declare capability requirements, a planner
+collects and deduplicates them into a shared fact DAG, resolves providers, and both `check`
+and `gate` execute through the same planned object.
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#4
+
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Question · hash: sha256:8bed8c80a9617ae4ad15111b2b7c5e8808bef0ba1bfe2242b876adabb4ad0ce7*
+
+This is not a new question to this workspace. `OD-RULES-007` and `OD-RULES-008` already
+name "the shared demand planner `ARC-ROADMAP-001` still leaves for later" and give it a
+specific, checkable trigger. Whether this review's argument is new evidence that fires that
+trigger, or a restatement of a case the workspace's own records already considered, was
+unmeasured before this record.
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#5
+
+*revision: authored · kind: heading · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#6
+
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / What Was Measured · hash: sha256:7a0bbfdbbdb95d8aa0db9fe1deeb99c57572fb30a67bd0caa1a7b641af01f3c3*
+
+**The trigger already on record has not fired.** `nomos-lang-rust/../facts.rs`'s own doc
+comment on `Materialize_Dependencies` states composing a second hardcoded materialization
+step is "`OD-HOST-004`'s 'composition, not choice' again, not a case for the shared demand
+planner `ARC-ROADMAP-001` still leaves for later." `OD-RULES-008`, checking a third
+candidate materialization step against the same question, sharpened this into a criterion:
+"`Run` ... still has no selector of any kind (`OD-GATE-014`, still open), so nothing is
+asking to materialize *less* than everything — the planner's trigger is selection creating
+unread work." Verified directly against the real code at this record's own HEAD, not
+assumed: `nomos-check-orchestration::run::Run` (`crates/orchestration/nomos-check-
+orchestration/src/run.rs`) now calls four rules —
+`Check_Completeness_Mirrors`, `Check_Naming_Convention`, `Check_Dependency_Direction`,
+`Check_Unread_Reaches_A_Finding` — unconditionally, over every source it is handed, with no
+field on `Run` or its caller that varies the set per invocation. `OD-GATE-014` is still
+open: `.github/workflows/gate.yml`'s `Rules` step calls `gate run`, but that caller judges
+everything, unconditionally, the identical shape it has always had. No selector exists
+anywhere in this workspace. The trigger `OD-RULES-008` named — selection creating unread
+work — has not fired.
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#7
+
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / What Was Measured · hash: sha256:0c6cab6ceeab7caf15049b1f73942a1cb38c7943190a7bc068e80a69b88b7a22*
+
+**A fourth rule already joined using the pattern the review says to stop using, and nothing
+broke.** The review's underlying commit is `e6c41e1`, three rules, before
+`Check_Unread_Reaches_A_Finding` was wired in. `P13-CONTROLFLOW-REACHABILITY-WIRE` (commit
+`7672b65`) added it as a fourth hand-written call in `Run` and a fourth `RuleOffer` in
+`gate-orchestration`'s registry, the identical shape the first three already had. This is
+direct evidence bearing on the review's own stated stopping point ("I would not add a
+fourth/fifth/sixth rule using the existing direct-call pattern"): a fourth rule was added
+using exactly that pattern, under `OD-HOST-004`'s own criterion (unconditional participation
+is composition, not a selection problem, regardless of count), and the workspace's own
+`crate::tests` in `gate-orchestration` — which pins the registry's offers against what `Run`
+actually calls — passed without needing a planner to keep the two lists honest.
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#8
+
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / What Was Measured · hash: sha256:6bdffbf1c83c404421867b85f998b70d0b4aed7c51f14a5e09db559c4b6d62b8*
+
+**The review's efficiency case does not describe this codebase.** The review's central
+argument for a shared fact DAG is that facts should be "reused across rules" rather than
+recomputed. `run.rs` already does this: `Materialize_Syntax`, `Materialize_Dependencies` and
+`Materialize_Reachability` each run once per `Run` call, write into one `MemoryFactStore`,
+and all four rules read the result through one shared `Reader`. No rule in this workspace
+recomputes a fact another rule already produced. The scaling problem the review names — the
+*list* of `Materialize_X`/`Check_Y` calls growing linearly with rule and capability count —
+is real, but it is the maintenance/duplicated-authority problem `OD-GATE-011` already names
+as a defect class, not the recomputation-efficiency problem the review's fact-DAG diagram
+argues from.
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#9
+
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / What Was Measured · hash: sha256:5d51c8e5d0edd8ec79365afdbae0a1580000d53b0051e79f376bcc2ca79be5dc*
+
+**The duplicated-authority half is already named, and its own record already declined to
+build a checker now.** `OD-GATE-011` (accepted) names "two independent encodings of one
+decision" as a defect class from five closed instances in this repository's history — the
+same shape `Run`'s hand-written call list and `gate-orchestration`'s separately-composed
+`RuleRegistry` share. `OD-GATE-011`'s own "What This Record Does Not Decide" section already
+states building a check against this class "is a later item's territory, not this one's."
+`gate-orchestration/src/composition.rs`'s own module doc already states its `RuleRegistry`
+composition is "that registry's first real consumer... not a change to what `nomos check`
+runs," and ships `crate::tests` asserting the two lists agree — the same "a test pins the
+pair against each other so drift between the two is still caught" shape `OD-GATE-011`
+describes as distinguishing a tracked, tested duplication from an unaccountable one, short of
+meeting that record's full three-part legitimate-exception test (the derivation is not yet
+from one *named* stated authority at the site, only from a test).
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#10
+
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / What Was Measured · hash: sha256:82df1f9ba6318ebe9bb46ae1025007a85588f069f1b21119b4b8e06f3140a9f6*
+
+**Real growth exists, and the closest existing precedent for generalizing from it already
+declined to.** `OD-PACKAGE-008`, at its own most recent revision (four rules, not two),
+measured genuine capability-shape divergence — three structurally distinct
+`FactVariant`/`Assurance`/`IncrementalGranularity` families (`nomos_cap_syntax`,
+`nomos_cap_dependency`, `nomos_cap_controlflow`), and, for the first time,
+`Applicability::PartiallySupported` as a rule's structural output rather than an edge case —
+the same "partially supported rules" and "alternate providers" growth the review's own
+scaling list names. `OD-PACKAGE-008` measured that growth against the real population and
+still declined to scaffold a generalized `RulePackage` manifest, on the ground that roughly a
+third of the manifest's contents list has zero real instance anywhere in the workspace yet.
+That is a different artifact than a `RunPlanner`, but it is the nearest "does real growth
+justify generalizing now" precedent this workspace has, checked against evidence rather than
+argued from a wish, and its answer was no.
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#11
+
+*revision: authored · kind: heading · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Decision · hash: sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511*
+
+## Decision
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#12
+
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Decision · hash: sha256:4f712dddc1b072aa42a048d9ad9d547d147663f7a4786a161640fec75eea7620*
+
+**Declined to elevate to P0 or to build now.** No `RunPlanner` is built. `Run` stays a
+hand-written, unconditional list; `gate-orchestration`'s `RuleRegistry` composition stays a
+test-pinned second rendering of the same list, per `OD-GATE-011`'s already-accepted cost.
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#13
+
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Decision · hash: sha256:80dc39a2c06ba8dbaa9407406a89ac75c88a18777c18a7f881687a39ddc9fb7a*
+
+This is not a verdict that a shared analysis planner is the wrong target — `ARC-ROADMAP-
+001`'s near-term tier already names "analysis + incremental fact infrastructure" and
+"first-class gates" as needed work, and the review's `RunPlanner` shape is broadly compatible
+with `OD-CAPABILITY-001`'s existing `Registry::Resolve`, which `OD-HOST-004` already
+identifies as the layer that would carry selection if and when it is needed. It is a verdict
+that the review's *sequencing* claim — build this now, before adding a fifth rule, ahead of
+everything else — restates a case `OD-RULES-007`, `OD-RULES-008`, `OD-HOST-004` and
+`OD-GATE-014` already weighed and did not find fired, and that `ARC-ROADMAP-001` itself
+explicitly declines to order: "it does not order the near-term tier internally... a separate
+judgment, informed by this record but not fixed by it."
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#14
+
+*revision: authored · kind: heading · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / What Would Decide It · hash: sha256:b21c34f083f944a8317c5bb99f866d38e2c77a3ce5a1a64810a532456b826658*
+
+## What Would Decide It
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#15
+
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / What Would Decide It · hash: sha256:fc751beb672a715b517cafbf01d73f85d1d33781bac20860195ae3f7c6fa285e*
+
+Unchanged from the records this one confirms, named together for a reader who arrives at
+this question through the review rather than through them:
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#16
+
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / What Would Decide It · hash: sha256:9f2a48f5d1c09f5a87fa6629befbc6458384d3b80ed9c85518f27ff551d749eb*
+
+- **Selection creating unread work** (`OD-RULES-008`'s own trigger): something asks `Run`,
+  or `Gate`, to materialize or judge less than everything — `OD-GATE-014`'s `ScopeSelector`/
+  `RuleSelector` getting built is the concrete case this would arrive through.
+- **Participation varying by request** (`OD-HOST-004`'s trigger): a rule meant to run for
+  *some* check invocations and not others, rather than unconditionally on all of them.
+- **A materialization step measured to cost real work for a population where not every rule
+  needs every fact.** Not yet observed: `Materialize_Reachability`'s tier-1 provider is a
+  pure per-file heuristic, the identical cheap shape `Materialize_Syntax` already has, and
+  today's four rules partition cleanly across three capability families with no rule waiting
+  on a fact only a sibling needs.
+- **A fifth rule's required-capability shape reconverging with an existing one**, rather than
+  adding a fourth distinct family — `OD-PACKAGE-008`'s own tracked trigger, load-bearing here
+  too: a converging population is weaker evidence for a general planner than a diverging one.
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#17
+
+*revision: authored · kind: heading · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#18
+
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Status · hash: sha256:796343121663f2fadc0c5367e03b9aa1f69a344b48715067015b9dc5a1ad6c0b*
+
+Accepted. Revisit on any trigger named above, or when `OD-GATE-014`'s or `OD-RULES-007`'s own
+status next changes.
 
 ### docs/records/OD-SPEC-001-the-storage-backend-question.md#1
 
