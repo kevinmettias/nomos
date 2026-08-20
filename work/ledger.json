@@ -20721,6 +20721,60 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-PACKAGE-008-TRIGGER-FIRED",
+      "title": "OD-PACKAGE-008: its named trigger fires twice (dependency and reachability contract citations), reassess against the four-rule population",
+      "why": "OD-PACKAGE-008 (status accepted, version 3) named its own revisit trigger plainly in its Status section: \"Revisit again if a third rule, or Check_Naming_Convention itself, is found to need a version-bearing contract citation.\" Checked directly against the real code, not assumed: two more rules have landed under crates/rules/nomos-rules/src since version 3 was written. Check_Dependency_Direction (dependency.rs:149) cites DEPENDENCY_CONTRACT_RECORD = \"OD-RULES-003\" / DEPENDENCY_CONTRACT_RECORD_VERSION = 1 (dependency.rs:62,65). Check_Unread_Reaches_A_Finding (reachability.rs:92) cites UNREAD_REACHES_FINDING_CONTRACT_RECORD = \"OD-RULES-008\" / UNREAD_REACHES_FINDING_CONTRACT_RECORD_VERSION = 2 (reachability.rs:53,57). Both are version-bearing contract citations, mechanically checked by tests/contract/tests/rule_contract_citation.rs the same way the record's own text says D-134's citation is. The named trigger has fired twice over and nothing has read the record against it since -- grepped work/ledger.json for OD-PACKAGE-008, no item references it after P13-PACKAGE-008-... landed version 3.\n\nThe record's own Resolution and Status sections still discuss only the original two-rule (Check_Completeness_Mirrors / Check_Naming_Convention) comparison and do not mention dependency.rs or reachability.rs at all. Re-reading the population at four rules rather than two, checked field by field against ARCH-002's contents list, shows the version-3 comparison's own convergent/divergent split no longer describes the real population: \"required canonical capabilities,\" which version 3 found unchanged between the first two rules (both nomos_cap_syntax via crate::Syntax_Requirement()), is no longer convergent across four -- Check_Dependency_Direction requires nomos_cap_dependency (Dependency_Requirement: FactVariant::SemanticallyResolved, Sound/Sound, IncrementalGranularity::Project) and Check_Unread_Reaches_A_Finding requires nomos_cap_controlflow (Reachability_Requirement: FactVariant::Syntactic, Sound/Unknown, IncrementalGranularity::File) -- two more distinct capability families, not variations on one shape. A field version 3 never had to examine because it had not yet diverged -- applicability semantics -- has now diverged structurally: Check_Completeness_Mirrors, Check_Naming_Convention and Check_Dependency_Direction all raise Applicability::Supported for a genuine violation (dependency.rs:281); Check_Unread_Reaches_A_Finding structurally never does -- every violation it raises carries Applicability::PartiallySupported (reachability.rs:185), by the rule's own stated design, because its tier-1 heuristic provider answers only part of its own question. Meanwhile the field the trigger actually named -- identity/version and normative specification, the contract-citation pair -- has moved from a 1-of-2 split version 3 read as unsettled to a 3-of-4 split (mirror/dependency/reachability cite a versioned record; naming remains the sole, deliberately documented exception, per its own module doc's \"Why this has no CONTRACT_RECORD\" section) -- materially more evidence the field itself is stable, which argues the opposite direction from the other two fields' new divergence.",
+      "done_when": "OD-PACKAGE-008 is edited through nomos spec preview / nomos spec commit (never hand-edited), front matter version bumps 3 -> 4, and it stays status: accepted -- this item settles what the four-rule population now shows, the same discipline P13-CAPABILITY-008-THIRD-PROVIDER-LANDED and P13-GATE-014-015-RUN-CALLER-LANDED already applied to sibling records, not a decision made in advance of reading the evidence.\n\nThe record gains a new section, after \"Resolution\" and before \"Status,\" naming the fired trigger and redoing the field-by-field comparison at a population of four rather than reaffirming the population-of-two outcome by citation count alone: states plainly that the named trigger fired twice (Check_Dependency_Direction's OD-RULES-003/v1 and Check_Unread_Reaches_A_Finding's OD-RULES-008/v2 citations, both real and mechanically checked); states that identity/version and normative specification -- the field the trigger names -- moved from a 1-of-2 split to 3-of-4 (naming remains the sole, documented exception), which is more evidence for that field's stability, not less; states that required canonical capabilities, which the version-3 text found unchanged between the first two rules, is no longer convergent across four -- dependency and reachability each require a distinct capability family (nomos_cap_dependency, nomos_cap_controlflow) with distinct FactVariant/Assurance/IncrementalGranularity shapes, named specifically; states that applicability semantics, a field version 3 did not need to examine, has newly diverged -- three rules raise Applicability::Supported for a genuine violation, Check_Unread_Reaches_A_Finding structurally never does, always PartiallySupported, by its own stated tier-1 design; and states what still converges across all four with no exception -- the Payload_Of/Violations_In judgment split each later rule's own doc comment cites as reused from the one before it, EvidenceClass::Derived, and the complete absence across all four of any real instance of an optional enhanced implementation, an external diagnostic mapping, a correction/suppression contract, an evaluation corpus or agent-guidance fragments.\n\nResolution does not reverse: no nomos-rule-package crate is scaffolded now. The new section says why the reasoning is corrected rather than merely reaffirmed -- one of the two axes the original wait rested on (contract-citation instability) is no longer well supported by the real population, but two others (capability-requirement shape, applicability semantics) newly diverged as the population grew from two rules to four, and roughly half of ARCH-002's contents list has zero real instance across every rule that exists today to shape a manifest field against, which is a harder form of the same caution the record already raised, now checked rather than assumed.\n\nStatus is rewritten to keep the record open to revisit but name a sharper trigger than plain rule count, since counting rules already fired twice without moving the outcome: revisit when a rule's real contents populate one of the fields with zero instance today (optional enhanced implementation, external diagnostic mapping, correction/suppression contract, evaluation corpus, or agent-guidance fragments) for the first time, or when a fifth rule's required-capability shape or applicability semantics is found to reconverge with an existing rule rather than adding a third variant.\n\nPreservation: cargo test --no-fail-fast -p nomos-spec-validate passes with NOMOS_V14_CORPUS, NOMOS_SPEC_ARCHIVES and NOMOS_RUST_CORPUS all set (not corpus-unset only).\n\nProjections re-rendered from a scratch worktree holding exactly the registered record set this commit publishes (OD-GATE-005's discipline), via nomos spec render --profile diagram-set --into . and nomos spec render --profile domain-specification --into ., verified fresh via nomos spec freshness --into . --require diagram-set --require domain-specification (must exit 0) before copying diagrams/relations.mmd (+ sidecar) and spec/domain-specification.md (+ sidecar) back and committing them alongside the edited record and work/ledger.json.\n\ncargo test --no-fail-fast -p nomos-spec-validate passes (this item's own predicate, run corpus-set per the paragraph above).",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-validate"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-validate"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 8 tests\ntest run::tests::Test_The_Ruleset_Hash_Should_Be_Order_Independent_And_Sensitive ... ok\ntest run::tests::Test_A_Declared_But_Unregistered_Rule_Should_Fail_The_Run ... ok\ntest run::tests::Test_Violations_Should_Fail_The_Run_And_Be_Listed ... ok\ntest run::tests::Test_An_Errored_Rule_Should_Fail_The_Run ... ok\ntest run::tests::Test_An_Empty_Ruleset_Should_Not_Pass ... ok\ntest run::tests::Test_A_Vacuous_Rule_Should_Be_Visible ... ok\ntest run::tests::Test_A_Complete_Satisfied_Run_Should_Pass ... ok\ntest run::tests::Test_A_Rule_Nobody_Declared_Should_Fail_The_Run ... ok\n\ntest result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s\n\n\nrunning 11 tests\ntest Test_A_Declared_Repeated_Body_Should_Satisfy_Preserve_004 ... ok\ntest Test_Disposed_Blocks_Should_Satisfy_Preserve_002 ... ok\ntest Test_A_Statement_Without_Preserved_Lineage_Should_Violate_Preserve_006 ... ok\ntest Test_An_Empty_Store_Should_Report_Vacuous_Rules ... ok\ntest Test_An_Omitted_Block_Should_Satisfy_Preserve_002 ... ok\ntest Test_An_Undisposed_Block_Should_Violate_Preserve_002 ... ok\ntest Test_An_Undeclared_Repeated_Body_Should_Violate_Preserve_004 ... ok\ntest Test_A_Traced_Statement_Should_Satisfy_Preserve_006 ... ok\ntest Test_The_Registry_Should_Match_The_Manifest ... ok\ntest Test_A_Populated_Store_Should_Not_Report_Vacuous_Block_Rules ... ok\ntest Test_A_Seeded_Store_Should_Pass_Preservation_Non_Vacuously ... ok\n\ntest result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.92s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.14s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_validate-acd7b674edff1f45.exe)\n     Running tests\\preservation_holds.rs (target\\debug\\deps\\preservation_holds-c1582b858346687e.exe)\n   Doc-tests nomos_spec_validate\n",
+        "verified_at": 1787188006,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "7672b65f798feb46fdef7f110b46f56ba4890c1a"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

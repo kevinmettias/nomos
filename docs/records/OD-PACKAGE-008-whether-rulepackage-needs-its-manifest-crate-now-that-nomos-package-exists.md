@@ -3,7 +3,7 @@ id: OD-PACKAGE-008
 type: decision
 title: Whether RulePackage needs its manifest crate now that nomos-package exists, or stays a bare rule bounded to a population of one
 status: accepted
-version: 3
+version: 4
 authority: canonical-normative-record
 tags:
   - packages
@@ -17,6 +17,10 @@ relations:
   - target: OD-PACKAGE-007
     type: relates-to
   - target: D-134
+    type: relates-to
+  - target: OD-RULES-003
+    type: relates-to
+  - target: OD-RULES-008
     type: relates-to
 ---
 
@@ -202,14 +206,86 @@ as unconsumed as `OD-PACKAGE-001` and `crates/contracts/nomos-contracts/src/pack
 module doc already found: no manifest, no reader, no `PackageId` constructed. That half of the
 condition recorded on `PackageKind` stays open, and this resolution does not close it.
 
+## A Third And Fourth Rule Arrive: What The Population Now Shows
+
+The trigger this record named at version 3 — "a third rule ... is found to need a
+version-bearing contract citation" — has fired, twice over. `Check_Dependency_Direction`
+(`crates/rules/nomos-rules/src/dependency.rs`) cites `DEPENDENCY_CONTRACT_RECORD = "OD-RULES-003"`,
+`DEPENDENCY_CONTRACT_RECORD_VERSION = 1`. `Check_Unread_Reaches_A_Finding`
+(`crates/rules/nomos-rules/src/reachability.rs`) cites
+`UNREAD_REACHES_FINDING_CONTRACT_RECORD = "OD-RULES-008"`,
+`UNREAD_REACHES_FINDING_CONTRACT_RECORD_VERSION = 2`. Both are checked the same way `D-134`'s
+citation is, by `tests/contract/tests/rule_contract_citation.rs` against each record's own
+front matter. Re-reading this record's own comparison at the population it names — four rules,
+not two — rather than re-affirming the version-3 outcome by citation count alone changes what
+converges and what diverges.
+
+Identity/version and normative specification, the field the trigger itself names, is the
+field that most changes shape. At version 3 it was a 1-of-2 split — one rule cited, one did
+not — and this record read that as evidence the field was unsettled. At four rules it is 3-of-4:
+`Check_Completeness_Mirrors`, `Check_Dependency_Direction` and `Check_Unread_Reaches_A_Finding`
+all cite a versioned governing record; `Check_Naming_Convention` remains the sole exception, and
+it remains a documented one — its own module doc's "Why this has no `CONTRACT_RECORD`" section
+still gives the same reason version 3 already read. Three independent rules, designed at
+different times against different capabilities, converging on the same citation shape is
+materially more evidence for that field's stability than one rule doing so alone. Read on its
+own, this axis would argue for building the wrapper now rather than against it.
+
+It is not read on its own, because two other fields moved the opposite direction over the same
+two rules. Required canonical capabilities, which version 3 found unchanged between the first
+two rules (both `crate::Syntax_Requirement()`, against `nomos_cap_syntax`), is no longer
+convergent across four. `Check_Dependency_Direction` requires `nomos_cap_dependency` via its own
+`Dependency_Requirement()` — `FactVariant::SemanticallyResolved`, soundness and completeness both
+`Sound`, `IncrementalGranularity::Project`. `Check_Unread_Reaches_A_Finding` requires
+`nomos_cap_controlflow` via its own `Reachability_Requirement()` — `FactVariant::Syntactic`,
+soundness `Sound`, completeness `Unknown`, `IncrementalGranularity::File`. These are not two
+variations on one shape; they are two more distinct capability families, each with its own
+`FactVariant`/`Assurance`/`IncrementalGranularity` combination, joining `nomos_cap_syntax`. A
+manifest field for "required canonical capabilities" built from the first two rules alone would
+have had one shape to generalize from; it now has three, and nothing yet says three is the
+ceiling rather than a running count.
+
+Applicability semantics is a field version 3 did not examine, because it had not yet diverged.
+`Check_Completeness_Mirrors`, `Check_Naming_Convention` and `Check_Dependency_Direction` each
+raise `Applicability::Supported` for a genuine violation. `Check_Unread_Reaches_A_Finding`
+structurally never does — every finding it raises carries `Applicability::PartiallySupported`
+(`reachability.rs`'s own `Violation`), by the rule's own stated design: its tier-1 provider is a
+heuristic over one file's parse tree, evaluating part of `OD-RULES-008`'s question rather than
+the whole of it, and the rule reports that honestly rather than rounding up. This is a second
+axis version 3's population of two could not have shown, because no rule needed it until this
+one.
+
+What still converges, with no exception across all four: the judgment implementation shape — a
+pure function of `&[SourceFile]` and a `FactReader` returning `Vec<Finding>`, split into a
+`Payload_Of`/`Violations_In` pair each later rule's own doc comment names as reused from the one
+before it (`naming.rs`'s split, then `dependency.rs`'s, then `reachability.rs`'s, each citing the
+last); the evidence schema, `EvidenceClass::Derived`, unchanged in every rule; and the complete
+absence, in every one of the four, of any real instance of an optional enhanced implementation,
+an external diagnostic mapping, a correction and suppression contract, an evaluation corpus, or
+agent-guidance fragments — five of `ARCH-002`'s contents-list items with zero real shape to build
+a manifest field against anywhere in the workspace today, a caution this record raised from a
+population of one and can now report checked against a population of four rather than assumed.
+
+This does not reverse the resolution above: no `nomos-rule-package` crate is scaffolded now. But
+the reasoning the resolution stands on is corrected rather than merely reaffirmed. One of the two
+original axes — contract-citation instability — is no longer well supported by the real
+population; if it were the only axis, the wait would be over. Two other axes that version 3 could
+not see, because the population was too small to show them, newly diverge as the population grew
+from two rules to four, and roughly a third of `ARCH-002`'s full contents list still has no real
+instance anywhere to shape a schema against. The wait remains load-bearing, on harder evidence
+than it had at version 3, not on the same evidence read twice.
+
 ## Status
 
-Accepted. The trigger this record named — a second rule under `crates/rules/` — has arrived
-and was compared against the first on real evidence: the two converge on capability
-requirements, judgment shape and evidence schema, and diverge on identity/version and
-normative specification, the two contents `ARCH-002` and `PKG-007` name first. `RulePackage`
-stays a bare rule bounded to what has been observed rather than gaining a manifest crate.
-Revisit again if a third rule, or `Check_Naming_Convention` itself, is found to need a
-version-bearing contract citation — the concrete case that would mean the population this
-resolution reasoned from was mid-transition rather than settled — or if `ARCH-002`'s contents
-list is found to need a manifest sooner for a reason unrelated to rule count.
+Accepted. The trigger this record named at version 3 has fired twice — `Check_Dependency_
+Direction` and `Check_Unread_Reaches_A_Finding` both cite a version-bearing contract record —
+and the comparison was redone at the real population of four rather than reaffirmed by count
+alone. `RulePackage` stays a bare rule bounded to what has been observed; no `nomos-rule-package`
+crate is scaffolded. Counting rules is no longer this record's own trigger for revisiting, since
+it has now fired twice without moving the outcome. Revisit again if a rule's real contents
+populate one of the fields with zero instance today — an optional enhanced implementation, an
+external diagnostic mapping, a correction and suppression contract, an evaluation corpus, or
+agent-guidance fragments — for the first time, or if a fifth rule's required-capability shape or
+applicability semantics is found to reconverge with an existing rule rather than adding a third
+variant, or if `ARCH-002`'s contents list is found to need a manifest sooner for a reason
+unrelated to rule count.

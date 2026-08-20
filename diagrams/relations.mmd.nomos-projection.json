@@ -3,12 +3,12 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:4de83285f7c2889560b43a5d447723d59dc6be612a430daffe5591d34f01a0bd",
-  "inputs_digest": "sha256:2c2c87d7b7d509eef5bac3d992b6cb99dd93be523c4075cb3043f35745b49430",
+  "content_digest": "sha256:1408a9d1fea90002c72a14ad44d5742efba5d5f230490198347c76367f310a65",
+  "inputs_digest": "sha256:e48a7bf48d09535dca67943b2253054863aa3bd20c7cf12869eb6de9cfb0a338",
   "sections": [
     [
       "Relations",
-      980
+      984
     ],
     [
       "Decisions",
@@ -3838,6 +3838,16 @@
     },
     {
       "content": "relations",
+      "identity": "OD-PACKAGE-008 relates-to OD-RULES-003",
+      "hash": "sha256:06b9d27521427a26265ac3478fbe20b53e8b7f5f27d087dadd4b7f587b617ddf"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-PACKAGE-008 relates-to OD-RULES-008",
+      "hash": "sha256:863203de28515c6cbed63c2902f85e6326d07b897fd8e451860b6ffa490724eb"
+    },
+    {
+      "content": "relations",
       "identity": "OD-PACKAGE-009 affects OD-PACKAGE-001",
       "hash": "sha256:7cacfabf0e73725d60ecb6a232cc5f89a064aa1be4ba81e5d9b2f6b9095f6be0"
     },
@@ -4093,6 +4103,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-RULES-003 relates-to OD-PACKAGE-008",
+      "hash": "sha256:777ec34c890bf614c00860658680203ccaa39991ee13d32c6c33d8eb3eddd851"
+    },
+    {
+      "content": "relations",
       "identity": "OD-RULES-003 relates-to OD-RULES-001",
       "hash": "sha256:cc786051e0ba3fce0b6cacb5207f33e82b9e39023d0a0ba1f5838fa14190d2b1"
     },
@@ -4255,6 +4270,11 @@
       "content": "relations",
       "identity": "OD-RULES-008 relates-to OD-GATE-014",
       "hash": "sha256:e37a61df7ba36c995d28e6f711cd71f3823c076779976c325222f4be1f6f6bab"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-RULES-008 relates-to OD-PACKAGE-008",
+      "hash": "sha256:153c2ca8e377e5947e53831a10a83ee2c195edf34a30f22d352fab46e05d8e9b"
     },
     {
       "content": "relations",
