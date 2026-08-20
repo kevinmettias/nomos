@@ -64,7 +64,7 @@ struct Stated<'a>
 /// deliberately not asked about a second time under its own table.
 fn Stated_Identity(record: &Record) -> Option<Stated<'_>>
 {
-    use super::resolve::Document_Key_Of;
+    use super::resolve::{Document_Key_Of, Path, Revision};
 
     return match record
     {
@@ -72,7 +72,7 @@ fn Stated_Identity(record: &Record) -> Option<Stated<'_>>
         Record::SourceDocument(document) => Some(Stated {
             sql: "SELECT 1 FROM source_documents WHERE path = ?1 AND revision = ?2",
             arguments: vec![document.path.as_str(), document.revision.as_str()],
-            identity: Document_Key_Of(&document.path, &document.revision),
+            identity: Document_Key_Of(Path(&document.path), Revision(&document.revision)),
         }),
         Record::Suite(suite) => Some(By_One("SELECT 1 FROM suites WHERE suite_id = ?1", &suite.suite_id)),
         Record::Node(node) => Some(By_One("SELECT 1 FROM nodes WHERE node_id = ?1", &node.node_id)),

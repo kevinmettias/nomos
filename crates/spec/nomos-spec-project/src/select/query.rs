@@ -12,6 +12,13 @@ pub(super) struct Query
     values: Vec<String>,
 }
 
+/// The first of the two columns [`Query::Either`] matches a value against, kept distinct
+/// from [`SecondColumn`] so the two positions cannot be swapped at a call site.
+pub(super) struct FirstColumn<'a>(pub(super) &'a str);
+
+/// The second of the two columns [`Query::Either`] matches a value against.
+pub(super) struct SecondColumn<'a>(pub(super) &'a str);
+
 impl Query
 {
     pub(super) fn On(base: &str) -> Self
@@ -49,8 +56,11 @@ impl Query
     /// A relation has two ends and a subject sits at one or the other. Narrowing only the
     /// end an edge starts from would show a subject what it declares and hide what is
     /// declared about it, which is the half of a graph a reader is usually looking for.
-    pub(super) fn Either(&mut self, first: &str, second: &str, value: Option<&String>)
+    pub(super) fn Either(&mut self, first: FirstColumn<'_>, second: SecondColumn<'_>, value: Option<&String>)
     {
+        let first = first.0;
+        let second = second.0;
+
         if let Some(value) = value
         {
             self.values.push(value.clone());

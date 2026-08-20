@@ -29,11 +29,21 @@ impl SourceBlock
     }
 }
 
+/// The lines of a fenced block, and the index of its last line.
+///
+/// Named rather than an unnamed pair, so the two positions cannot be swapped at a call site
+/// without a type error: both are ordinary values a tuple would give no names at all.
+struct FenceSpan<'a>
+{
+    lines: Vec<&'a str>,
+    closing: usize,
+}
+
 /// The lines of the fenced block opening at `index`, and the index of its last line.
 ///
 /// An unterminated fence runs to the end of the document rather than being refused, which
 /// is what v14's readers do and therefore what reproducing their segmentation requires.
-fn Fence<'a>(lines: &[&'a str], index: usize) -> (Vec<&'a str>, usize)
+fn Fence<'a>(lines: &[&'a str], index: usize) -> FenceSpan<'a>
 {
     let mut fence: Vec<&str> = Vec::new();
     let mut cursor = index;
@@ -48,7 +58,7 @@ fn Fence<'a>(lines: &[&'a str], index: usize) -> (Vec<&'a str>, usize)
         cursor = cursor.saturating_add(1);
     }
 
-    return (fence, cursor);
+    return FenceSpan { lines: fence, closing: cursor };
 }
 
 /// Splits an authored markdown document into the blocks the preservation ledger tracks.
@@ -107,12 +117,12 @@ fn Push_A_Fence(
     index: usize,
 ) -> usize
 {
-    let (fence, closing) = Fence(lines, index);
-    let block = A_Fence(blocks, heading_path, &fence);
+    let span = Fence(lines, index);
+    let block = A_Fence(blocks, heading_path, &span.lines);
 
     blocks.push(block);
 
-    return closing;
+    return span.closing;
 }
 
 /// One heading line as a block, under the path it has just extended.

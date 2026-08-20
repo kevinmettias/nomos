@@ -1,6 +1,9 @@
 //! One reader per kind of section a profile can ask for.
 
-use super::{Columns, Connection, Filter, Item, ProjectError, Query, Narrow_To_Nodes, Row};
+use super::{
+    Columns, Connection, Filter, FirstColumn, Item, Name, ProjectError, Query, Narrow_To_Nodes, Row,
+    SecondColumn, Value,
+};
 
 pub(super) fn Suites(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
 {
@@ -16,8 +19,8 @@ pub(super) fn Suites(connection: &Connection, filter: &Filter) -> Result<Vec<Ite
         let root: i64 = columns.Next()?;
 
         return Ok(Item::Of(&suite)
-            .With("title", &title)
-            .With("authority", if root == 1 { "root" } else { "sibling" }));
+            .With(Name("title"), Value(&title))
+            .With(Name("authority"), Value(if root == 1 { "root" } else { "sibling" })));
     });
 }
 
@@ -42,11 +45,11 @@ pub(super) fn Documents(connection: &Connection, filter: &Filter) -> Result<Vec<
         let headings: i64 = columns.Next()?;
 
         return Ok(Item::Of(&format!("{path}@{revision}"))
-            .With("path", &path)
-            .With("revision", &revision)
-            .With("blocks", &blocks.to_string())
-            .With("headings", &headings.to_string())
-            .With("hash", &hash));
+            .With(Name("path"), Value(&path))
+            .With(Name("revision"), Value(&revision))
+            .With(Name("blocks"), Value(&blocks.to_string()))
+            .With(Name("headings"), Value(&headings.to_string()))
+            .With(Name("hash"), Value(&hash)));
     });
 }
 
@@ -71,9 +74,9 @@ pub(super) fn Headings(connection: &Connection, filter: &Filter) -> Result<Vec<I
             let title = columns.Text()?;
 
             return Ok(Item::Of(&format!("{path}#{ordinal}"))
-                .With("revision", &revision)
-                .With("depth", &depth.to_string())
-                .With("title", &title));
+                .With(Name("revision"), Value(&revision))
+                .With(Name("depth"), Value(&depth.to_string()))
+                .With(Name("title"), Value(&title)));
         });
 }
 
@@ -101,10 +104,10 @@ pub(super) fn Blocks(connection: &Connection, filter: &Filter) -> Result<Vec<Ite
             let hash = columns.Text()?;
 
             return Ok(Item::Of(&format!("{path}#{ordinal}"))
-                .With("revision", &revision)
-                .With("kind", &kind)
-                .With("heading", &heading)
-                .With("hash", &hash)
+                .With(Name("revision"), Value(&revision))
+                .With(Name("kind"), Value(&kind))
+                .With(Name("heading"), Value(&heading))
+                .With(Name("hash"), Value(&hash))
                 .Carrying(&text));
         });
 }
@@ -139,11 +142,11 @@ pub(super) fn Rows(connection: &Connection, filter: &Filter) -> Result<Vec<Item>
             let hash = columns.Text()?;
 
             return Ok(Item::Of(&format!("{path}#{block}:{ordinal}"))
-                .With("revision", &revision)
-                .With("kind", &kind)
-                .With("table", &table.to_string())
-                .With("cells", &cells.join(" | "))
-                .With("hash", &hash)
+                .With(Name("revision"), Value(&revision))
+                .With(Name("kind"), Value(&kind))
+                .With(Name("table"), Value(&table.to_string()))
+                .With(Name("cells"), Value(&cells.join(" | ")))
+                .With(Name("hash"), Value(&hash))
                 .Carrying(&text));
         });
 }
@@ -167,11 +170,11 @@ pub(super) fn Nodes(connection: &Connection, filter: &Filter) -> Result<Vec<Item
         let suite = columns.Text()?;
 
         return Ok(Item::Of(&node)
-            .With("kind", &kind)
-            .With("authority", &authority)
-            .With("representation", &representation)
-            .With("title", &title)
-            .With("suite", &suite));
+            .With(Name("kind"), Value(&kind))
+            .With(Name("authority"), Value(&authority))
+            .With(Name("representation"), Value(&representation))
+            .With(Name("title"), Value(&title))
+            .With(Name("suite"), Value(&suite)));
     });
 }
 
@@ -197,10 +200,10 @@ pub(super) fn Statements(connection: &Connection, filter: &Filter) -> Result<Vec
         let supersedes = columns.Text()?;
 
         return Ok(Item::Of(&statement)
-            .With("kind", &kind)
-            .With("node", &node)
-            .With("supersedes", &supersedes)
-            .With("hash", &hash)
+            .With(Name("kind"), Value(&kind))
+            .With(Name("node"), Value(&node))
+            .With(Name("supersedes"), Value(&supersedes))
+            .With(Name("hash"), Value(&hash))
             .Carrying(&text));
     });
 }
@@ -219,7 +222,7 @@ pub(super) fn Relations(connection: &Connection, filter: &Filter) -> Result<Vec<
     query.Equal("r.relation_type", filter.relation_type.as_ref());
     query.Equal("s.suite_id", filter.suite.as_ref());
     query.Prefix("f.node_id", filter.identifier_prefix.as_ref());
-    query.Either("f.node_id", "t.node_id", filter.node_id.as_ref());
+    query.Either(FirstColumn("f.node_id"), SecondColumn("t.node_id"), filter.node_id.as_ref());
 
     return query
         .Ordered_By("f.node_id, r.relation_type, t.node_id")
@@ -231,10 +234,10 @@ pub(super) fn Relations(connection: &Connection, filter: &Filter) -> Result<Vec<
             let tier = columns.Text()?;
 
             return Ok(Item::Of(&format!("{from} {relation} {to}"))
-                .With("from", &from)
-                .With("relation", &relation)
-                .With("to", &to)
-                .With("tier", &tier));
+                .With(Name("from"), Value(&from))
+                .With(Name("relation"), Value(&relation))
+                .With(Name("to"), Value(&to))
+                .With(Name("tier"), Value(&tier)));
         });
 }
 
@@ -289,9 +292,9 @@ pub(super) fn Lineage(connection: &Connection, filter: &Filter) -> Result<Vec<It
             let target = if statement.is_empty() { node } else { statement };
 
             return Ok(Item::Of(&format!("{source} -> {disposition}"))
-                .With("source", &source)
-                .With("disposition", &disposition)
-                .With("target", &target));
+                .With(Name("source"), Value(&source))
+                .With(Name("disposition"), Value(&disposition))
+                .With(Name("target"), Value(&target)));
         });
 }
 
@@ -361,8 +364,8 @@ fn An_Omission(row: &Row<'_>) -> rusqlite::Result<Item>
     };
 
     return Ok(Item::Of(&format!("{source} -> {decision}"))
-        .With("source", &source)
-        .With("reason", &reason)
-        .With("justification", &justification)
-        .With("decision", &decision));
+        .With(Name("source"), Value(&source))
+        .With(Name("reason"), Value(&reason))
+        .With(Name("justification"), Value(&justification))
+        .With(Name("decision"), Value(&decision)));
 }

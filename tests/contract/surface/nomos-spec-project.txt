@@ -52,7 +52,7 @@ pub fn nomos_spec_project::Item::Carrying(mut self, body: &str) -> Self
 pub fn nomos_spec_project::Item::Digest(&self) -> String
 pub fn nomos_spec_project::Item::Field(&self, name: &str) -> Option<&str>
 pub fn nomos_spec_project::Item::Of(identity: &str) -> Self
-pub fn nomos_spec_project::Item::With(mut self, name: &str, value: &str) -> Self
+pub fn nomos_spec_project::Item::With(mut self, name: Name<'_>, value: Value<'_>) -> Self
 pub fn nomos_spec_project::Output::Sidecar(&self) -> Result<String, ProjectError>
 pub fn nomos_spec_project::Profile::Digest(&self) -> String
 pub fn nomos_spec_project::Profile::For(&self, subject: Option<&str>) -> Result<Self, ProjectError>
@@ -131,6 +131,7 @@ pub struct nomos_spec_project::Filter
 pub struct nomos_spec_project::Freshness
 pub struct nomos_spec_project::Input
 pub struct nomos_spec_project::Item
+pub struct nomos_spec_project::Name<'a>(pub &'a str)
 pub struct nomos_spec_project::Output
 pub struct nomos_spec_project::Profile
 pub struct nomos_spec_project::ProfileSection
@@ -138,3 +139,4 @@ pub struct nomos_spec_project::Projection
 pub struct nomos_spec_project::ProjectionOutput
 pub struct nomos_spec_project::Section
 pub struct nomos_spec_project::Stamp
+pub struct nomos_spec_project::Value<'a>(pub &'a str)

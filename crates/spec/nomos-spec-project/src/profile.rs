@@ -4,6 +4,8 @@ mod section;
 pub use section::ProfileSection;
 
 use crate::Format;
+use crate::OutputPath;
+use crate::ProfileName;
 use crate::ProjectError;
 use serde::{Deserialize, Serialize};
 
@@ -40,7 +42,7 @@ impl Profile
         self.Named()?;
         self.Sections_Are_Citable()?;
 
-        return Path_Is_Relative(&self.id, &self.output);
+        return Path_Is_Relative(ProfileName(&self.id), OutputPath(&self.output));
     }
 
     /// A profile has to say what it is and what it renders as a heading.
@@ -161,8 +163,11 @@ impl Profile
 /// What a profile writes where a subject belongs.
 pub const SUBJECT: &str = "{subject}";
 
-fn Path_Is_Relative(profile: &str, output: &str) -> Result<(), ProjectError>
+fn Path_Is_Relative(profile: ProfileName<'_>, output: OutputPath<'_>) -> Result<(), ProjectError>
 {
+    let profile = profile.0;
+    let output = output.0;
+
     let refused = output.trim().is_empty()
         || output.starts_with('/')
         || output.starts_with('\\')

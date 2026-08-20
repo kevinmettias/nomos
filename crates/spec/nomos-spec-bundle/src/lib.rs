@@ -138,12 +138,14 @@ impl core::fmt::Display for BundleError
             Self::Sql(cause) => write!(formatter, "bundle sql error: {cause}"),
             Self::Json(cause) => write!(formatter, "bundle json error: {cause}"),
             Self::Incomplete { table, in_store, exported } => Say_Incomplete(formatter, table, *in_store, *exported),
-            Self::UncoveredColumn { table, column } => Say_Uncovered_Column(formatter, table, column),
+            Self::UncoveredColumn { table, column } =>
+                Say_Uncovered_Column(formatter, TableName(table), ColumnName(column)),
             Self::PhantomColumn { table, column } => write!(
                 formatter,
                 "the exporter claims to carry {table}.{column}, which the schema does not have"
             ),
-            Self::Uncarried { table, column, field } => Say_Uncarried(formatter, table, column, field),
+            Self::Uncarried { table, column, field } =>
+                Say_Uncarried(formatter, TableName(table), ColumnName(column), FieldName(field)),
             Self::Tampered { declared, computed } => write!(
                 formatter,
                 "the manifest declares {declared} but the content hashes to {computed}"
@@ -166,7 +168,7 @@ impl core::fmt::Display for BundleError
                 formatter,
                 "{record} names {reference}, which the bundle does not contain"
             ),
-            Self::Occupied { table, identity } => Say_Occupied(formatter, table, identity),
+            Self::Occupied { table, identity } => Say_Occupied(formatter, TableName(table), Identity(identity)),
         };
     }
 }
@@ -186,13 +188,31 @@ fn Say_Incomplete(
     );
 }
 
+/// A table name, kept distinct from [`ColumnName`] (and the other identifiers below) so a
+/// call site cannot swap two plain strings that mean different things without a type error.
+pub(crate) struct TableName<'a>(pub(crate) &'a str);
+
+/// A column name, kept distinct from [`TableName`] for the same reason.
+pub(crate) struct ColumnName<'a>(pub(crate) &'a str);
+
+/// A record field name. Often spelled the same as a [`ColumnName`], but naming a different
+/// thing — a column is what the schema calls it, a field is what the record's own
+/// serialization calls it — so the two positions still need to stay distinct.
+pub(crate) struct FieldName<'a>(pub(crate) &'a str);
+
+/// A record's identity, reported alongside a [`TableName`].
+pub(crate) struct Identity<'a>(pub(crate) &'a str);
+
 /// The column guard: every row counts and each is missing a field.
 fn Say_Uncovered_Column(
     formatter: &mut core::fmt::Formatter<'_>,
-    table: &str,
-    column: &str,
+    table: TableName<'_>,
+    column: ColumnName<'_>,
 ) -> core::fmt::Result
 {
+    let table = table.0;
+    let column = column.0;
+
     return write!(
         formatter,
         "{table}.{column} reaches no bundle record. Refusing to write a bundle whose \
@@ -203,11 +223,15 @@ fn Say_Uncovered_Column(
 /// A declaration naming a field the record does not have.
 fn Say_Uncarried(
     formatter: &mut core::fmt::Formatter<'_>,
-    table: &str,
-    column: &str,
-    field: &str,
+    table: TableName<'_>,
+    column: ColumnName<'_>,
+    field: FieldName<'_>,
 ) -> core::fmt::Result
 {
+    let table = table.0;
+    let column = column.0;
+    let field = field.0;
+
     return write!(
         formatter,
         "{table}.{column} claims to travel as `{field}`, which is not a field of a \
@@ -228,10 +252,13 @@ fn Say_Not_Canonical(formatter: &mut core::fmt::Formatter<'_>, line: usize) -> c
 /// Import places a bundle beside what a store holds rather than merging into it.
 fn Say_Occupied(
     formatter: &mut core::fmt::Formatter<'_>,
-    table: &str,
-    identity: &str,
+    table: TableName<'_>,
+    identity: Identity<'_>,
 ) -> core::fmt::Result
 {
+    let table = table.0;
+    let identity = identity.0;
+
     return write!(
         formatter,
         "the store already holds {table} {identity}, which this bundle also carries. \

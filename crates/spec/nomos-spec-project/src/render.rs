@@ -260,6 +260,14 @@ fn Slug(value: &str) -> String
     return slug;
 }
 
+/// A node's identity, kept distinct from [`Label`] so [`Names::Declared`]'s two positions
+/// cannot be swapped at a call site — both are plain strings and nothing else would tell
+/// them apart.
+struct Identity<'a>(&'a str);
+
+/// A node's rendered label, kept distinct from [`Identity`] for the same reason.
+struct Label<'a>(&'a str);
+
 struct Names
 {
     known: BTreeMap<String, String>,
@@ -295,8 +303,11 @@ impl Names
         return unique;
     }
 
-    fn Declared(&mut self, identity: &str, label: &str) -> String
+    fn Declared(&mut self, identity: Identity<'_>, label: Label<'_>) -> String
     {
+        let identity = identity.0;
+        let label = label.0;
+
         let named = self.For(identity);
         if self.labelled.contains(&named)
         {
@@ -353,15 +364,15 @@ fn Node_Or_Edge(out: &mut String, names: &mut Names, item: &Item)
     else
     {
         let label = item.Field("title").unwrap_or(&item.identity);
-        let declared = names.Declared(&item.identity, label);
+        let declared = names.Declared(Identity(&item.identity), Label(label));
         let _ = writeln!(out, "    {declared}");
 
         return;
     };
 
     let relation = item.Field("relation").unwrap_or("relates");
-    let tail = names.Declared(from, from);
-    let head = names.Declared(to, to);
+    let tail = names.Declared(Identity(from), Label(from));
+    let head = names.Declared(Identity(to), Label(to));
     let _ = writeln!(out, "    {tail} -->|{}| {head}", Quoted(relation));
 }
 

@@ -97,7 +97,7 @@ fn Render_Identity(text: &mut String, front_matter: &RecordFrontMatter) -> Resul
         ("status", &front_matter.status),
     ]
     {
-        let scalar = Scalar(field, value)?;
+        let scalar = Scalar(Field(field), Value(value))?;
         text.push_str(&scalar);
     }
 
@@ -105,7 +105,7 @@ fn Render_Identity(text: &mut String, front_matter: &RecordFrontMatter) -> Resul
     text.push_str(&front_matter.version.to_string());
     text.push('\n');
 
-    let authority = Scalar("authority", &front_matter.authority)?;
+    let authority = Scalar(Field("authority"), Value(&front_matter.authority))?;
     text.push_str(&authority);
 
     return Ok(());
@@ -186,8 +186,18 @@ pub fn Round_Trips(markdown: &str) -> bool
         .is_ok_and(|rendered| return rendered == markdown);
 }
 
-fn Scalar(field: &str, value: &str) -> Result<String, RenderError>
+/// A front matter key, kept distinct from [`Value`] so [`Scalar`]'s two positions cannot be
+/// swapped at a call site.
+struct Field<'a>(&'a str);
+
+/// A front matter scalar's value, kept distinct from [`Field`] for the same reason.
+struct Value<'a>(&'a str);
+
+fn Scalar(field: Field<'_>, value: Value<'_>) -> Result<String, RenderError>
 {
+    let field = field.0;
+    let value = value.0;
+
     return Ok(format!("{field}: {}\n", Plain(field, value)?));
 }
 

@@ -18,7 +18,9 @@ mod tests;
 use coverage::{COVERAGE, Carried};
 
 use crate::BundleError;
+use crate::ColumnName;
 use crate::Record;
+use crate::TableName;
 use nomos_spec_store::Table;
 use rusqlite::Connection;
 use std::collections::BTreeSet;
@@ -126,7 +128,7 @@ fn Assert_Fields_Exist(
     let fields = Fields(sample)?;
     for (column, carried) in declared
     {
-        Assert_The_Field_Is_Carried(table, column, carried, &fields)?;
+        Assert_The_Field_Is_Carried(TableName(table), ColumnName(column), carried, &fields)?;
     }
 
     return Ok(());
@@ -134,12 +136,15 @@ fn Assert_Fields_Exist(
 
 /// One declared column, and the field the record has to have for it.
 fn Assert_The_Field_Is_Carried(
-    table: &str,
-    column: &str,
+    table: TableName<'_>,
+    column: ColumnName<'_>,
     carried: &Carried,
     fields: &BTreeSet<String>,
 ) -> Result<(), BundleError>
 {
+    let table = table.0;
+    let column = column.0;
+
     let Carried::Field(field) = carried
     else
     {

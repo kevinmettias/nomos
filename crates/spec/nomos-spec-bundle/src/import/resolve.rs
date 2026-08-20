@@ -56,7 +56,7 @@ impl Identities
             Record::Blob(blob) => Keep(&mut self.blobs, blob.sha256.clone()),
             Record::SourceDocument(document) =>
             {
-                let key = Document_Key_Of(&document.path, &document.revision);
+                let key = Document_Key_Of(Path(&document.path), Revision(&document.revision));
                 Keep(&mut self.documents, key);
             }
             Record::SourceHeading(heading) =>
@@ -116,15 +116,15 @@ fn Assert_Submission_Resolves(record: &Record, carried: &Identities) -> Result<(
         // A submission is a node, so the node is what it must resolve against.
         Record::Submission(submission) =>
         {
-            Carried(&carried.nodes, &submission.node_id, "node")?;
+            Carried(&carried.nodes, Key(&submission.node_id), Kind("node"))?;
         }
         Record::SubmissionValue(value) =>
         {
-            Carried(&carried.submissions, &value.node_id, "submission")?;
+            Carried(&carried.submissions, Key(&value.node_id), Kind("submission"))?;
         }
         Record::SubmissionGap(gap) =>
         {
-            Carried(&carried.submissions, &gap.node_id, "submission")?;
+            Carried(&carried.submissions, Key(&gap.node_id), Kind("submission"))?;
         }
         _ =>
         {}
@@ -183,22 +183,22 @@ fn Assert_Source_Record_Resolves(record: &Record, carried: &Identities)
     {
         Record::SourceDocument(document) =>
         {
-            Carried(&carried.blobs, &document.blob_sha256, "blob")?;
+            Carried(&carried.blobs, Key(&document.blob_sha256), Kind("blob"))?;
         }
         Record::SourceHeading(heading) =>
         {
             let key = Document_Key(&heading.document);
-            Carried(&carried.documents, &key, "source document")?;
+            Carried(&carried.documents, Key(&key), Kind("source document"))?;
         }
         Record::SourceBlock(block) =>
         {
             let key = Document_Key(&block.document);
-            Carried(&carried.documents, &key, "source document")?;
+            Carried(&carried.documents, Key(&key), Kind("source document"))?;
         }
         Record::SourceTableRow(row) =>
         {
             let key = Ordinal_Key(&row.block.document, row.block.ordinal);
-            Carried(&carried.blocks, &key, "source block")?;
+            Carried(&carried.blocks, Key(&key), Kind("source block"))?;
         }
         _ =>
         {}
@@ -218,27 +218,27 @@ fn Assert_Graph_Record_Resolves(record: &Record, carried: &Identities)
         {
             if let Some(suite_id) = node.suite_id.as_deref()
             {
-                Carried(&carried.suites, suite_id, "suite")?;
+                Carried(&carried.suites, Key(suite_id), Kind("suite"))?;
             }
         }
-        Record::NodeAlias(alias) => Carried(&carried.nodes, &alias.node_id, "node")?,
-        Record::NodeHistory(entry) => Carried(&carried.nodes, &entry.node_id, "node")?,
+        Record::NodeAlias(alias) => Carried(&carried.nodes, Key(&alias.node_id), Kind("node"))?,
+        Record::NodeHistory(entry) => Carried(&carried.nodes, Key(&entry.node_id), Kind("node"))?,
         Record::RelationType(relation_type) =>
         {
             if let Some(inverse) = relation_type.inverse_of.as_deref()
             {
-                Carried(&carried.relation_types, inverse, "relation type")?;
+                Carried(&carried.relation_types, Key(inverse), Kind("relation type"))?;
             }
         }
         Record::Relation(relation) =>
         {
-            Carried(&carried.nodes, &relation.from_node_id, "node")?;
-            Carried(&carried.nodes, &relation.to_node_id, "node")?;
-            Carried(&carried.relation_types, &relation.relation_type, "relation type")?;
+            Carried(&carried.nodes, Key(&relation.from_node_id), Kind("node"))?;
+            Carried(&carried.nodes, Key(&relation.to_node_id), Kind("node"))?;
+            Carried(&carried.relation_types, Key(&relation.relation_type), Kind("relation type"))?;
         }
         Record::NormativeStatement(statement) =>
         {
-            Carried(&carried.nodes, &statement.node_id, "node")?;
+            Carried(&carried.nodes, Key(&statement.node_id), Kind("node"))?;
         }
         _ =>
         {}
@@ -256,13 +256,13 @@ fn Assert_Declared_Resolves(record: &Record, carried: &Identities) -> Result<(),
         Record::RecordFrontMatter(front_matter) =>
         {
             let key = Document_Key(&front_matter.document);
-            Carried(&carried.documents, &key, "source document")?;
-            Carried(&carried.nodes, &front_matter.node_id, "node")?;
+            Carried(&carried.documents, Key(&key), Kind("source document"))?;
+            Carried(&carried.nodes, Key(&front_matter.node_id), Kind("node"))?;
         }
         Record::RecordRelation(relation) =>
         {
             let key = Document_Key(&relation.document);
-            Carried(&carried.documents, &key, "source document")?;
+            Carried(&carried.documents, Key(&key), Kind("source document"))?;
         }
         _ =>
         {}
@@ -285,15 +285,15 @@ fn Assert_Lineage_Resolves(
     if let Some(row) = lineage.source_table_row.as_ref()
     {
         let key = Row_Key(&row.block, row.ordinal);
-        Carried(&carried.rows, &key, "source table row")?;
+        Carried(&carried.rows, Key(&key), Kind("source table row"))?;
     }
     if let Some(node_id) = lineage.target_node_id.as_deref()
     {
-        Carried(&carried.nodes, node_id, "node")?;
+        Carried(&carried.nodes, Key(node_id), Kind("node"))?;
     }
     if let Some(statement_id) = lineage.target_statement_id.as_deref()
     {
-        Carried(&carried.statements, statement_id, "normative statement")?;
+        Carried(&carried.statements, Key(statement_id), Kind("normative statement"))?;
     }
 
     return Ok(());
@@ -310,40 +310,55 @@ fn Assert_Source_Resolves(
     if let Some(block) = block
     {
         let key = Ordinal_Key(&block.document, block.ordinal);
-        Carried(&carried.blocks, &key, "source block")?;
+        Carried(&carried.blocks, Key(&key), Kind("source block"))?;
     }
     if let Some(heading) = heading
     {
         let key = Ordinal_Key(&heading.document, heading.ordinal);
-        Carried(&carried.headings, &key, "source heading")?;
+        Carried(&carried.headings, Key(&key), Kind("source heading"))?;
     }
 
     return Ok(());
 }
 
-fn Carried(carried: &BTreeSet<String>, key: &str, kind: &str) -> Result<(), BundleError>
+/// The identity a reference names, kept distinct from [`Kind`] so the two cannot be
+/// swapped at a call site — both are plain strings and nothing else would tell them apart.
+struct Key<'a>(&'a str);
+
+/// What a reference is naming, reported in [`BundleError::Unresolved`] alongside the key
+/// that did not resolve.
+struct Kind<'a>(&'a str);
+
+fn Carried(carried: &BTreeSet<String>, key: Key<'_>, kind: Kind<'_>) -> Result<(), BundleError>
 {
-    if carried.contains(key)
+    if carried.contains(key.0)
     {
         return Ok(());
     }
 
     return Err(BundleError::Unresolved {
-        record: kind.to_owned(),
-        reference: key.to_owned(),
+        record: kind.0.to_owned(),
+        reference: key.0.to_owned(),
     });
 }
 
 fn Document_Key(document: &DocumentRef) -> String
 {
-    return Document_Key_Of(&document.path, &document.revision);
+    return Document_Key_Of(Path(&document.path), Revision(&document.revision));
 }
+
+/// A document's path, kept distinct from [`Revision`] so the two positions of
+/// [`Document_Key_Of`] cannot be swapped at a call site.
+pub(super) struct Path<'a>(pub(super) &'a str);
+
+/// A document's revision, kept distinct from [`Path`] for the same reason.
+pub(super) struct Revision<'a>(pub(super) &'a str);
 
 /// The same key from the two parts a [`SourceDocument`] carries loose rather than as a
 /// [`DocumentRef`]. One spelling of the key, so the set and its lookups cannot drift.
-pub(super) fn Document_Key_Of(path: &str, revision: &str) -> String
+pub(super) fn Document_Key_Of(path: Path<'_>, revision: Revision<'_>) -> String
 {
-    return format!("{path}@{revision}");
+    return format!("{}@{}", path.0, revision.0);
 }
 
 fn Ordinal_Key(document: &DocumentRef, ordinal: i64) -> String

@@ -14,7 +14,7 @@ mod output;
 
 pub use content::Content;
 pub use input::Input;
-pub use item::Item;
+pub use item::{Item, Name, Value};
 pub use output::Output;
 
 use crate::Section;

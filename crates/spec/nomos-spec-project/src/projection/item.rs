@@ -1,6 +1,15 @@
 //! One row of a rendered projection.
 
 use serde::Serialize;
+
+/// A field name given to [`Item::With`], kept distinct from [`Value`] so the two positions
+/// cannot be swapped at a call site — both are plain strings and nothing else would tell
+/// them apart.
+pub struct Name<'a>(pub &'a str);
+
+/// A field value given to [`Item::With`], kept distinct from [`Name`] for the same reason.
+pub struct Value<'a>(pub &'a str);
+
 #[derive(Clone, Debug, Default, PartialEq, Eq, Serialize)]
 pub struct Item
 {
@@ -24,9 +33,9 @@ impl Item
     }
 
     #[must_use]
-    pub fn With(mut self, name: &str, value: &str) -> Self
+    pub fn With(mut self, name: Name<'_>, value: Value<'_>) -> Self
     {
-        self.fields.push((name.to_owned(), value.to_owned()));
+        self.fields.push((name.0.to_owned(), value.0.to_owned()));
 
         return self;
     }

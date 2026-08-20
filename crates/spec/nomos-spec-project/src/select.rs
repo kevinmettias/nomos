@@ -1,7 +1,7 @@
 mod query;
 mod sections;
 
-use query::{Columns, Gather, Narrow_To_Nodes, Query};
+use query::{Columns, FirstColumn, Gather, Narrow_To_Nodes, Query, SecondColumn};
 use sections::{Blocks, Documents, Headings, Lineage, Nodes, Omissions, Relations, Rows, Statements, Suites};
 
 use crate::Content;
@@ -9,7 +9,9 @@ use crate::Filter;
 use crate::{Profile, SUBJECT};
 use crate::Input;
 use crate::Item;
+use crate::Name;
 use crate::Projection;
+use crate::Value;
 use crate::Section;
 use crate::ProjectError;
 use nomos_spec_store::SpecificationStore;

@@ -59,7 +59,7 @@ fn Assert_The_Heading_Corroborates(
             id: front_matter.id.clone(),
         });
     };
-    if Corroborates(&heading, &front_matter.id, &front_matter.title)
+    if Corroborates(Heading(&heading), Id(&front_matter.id), Title(&front_matter.title))
     {
         return Ok(());
     }
@@ -99,8 +99,23 @@ fn Split_At_Closing_Fence(text: &str) -> Option<(&str, &str)>
 /// allowed as the prefix, so a heading naming a different concept still diverges, which
 /// is what the refusal exists for. Widening it here rather than adding a second reader is
 /// deliberate: two readers for one format is how the two come to disagree.
-fn Corroborates(heading: &str, id: &str, title: &str) -> bool
+/// The heading a document opens with, kept distinct from [`Id`] and [`Title`] so the three
+/// positions of [`Corroborates`] cannot be swapped at its call site: all three are plain
+/// strings and nothing else would tell them apart.
+struct Heading<'a>(&'a str);
+
+/// A record's declared identifier, kept distinct from [`Heading`] and [`Title`].
+struct Id<'a>(&'a str);
+
+/// A record's declared title, kept distinct from [`Heading`] and [`Id`].
+struct Title<'a>(&'a str);
+
+fn Corroborates(heading: Heading<'_>, id: Id<'_>, title: Title<'_>) -> bool
 {
+    let heading = heading.0;
+    let id = id.0;
+    let title = title.0;
+
     if heading == title
     {
         return true;

@@ -33,7 +33,7 @@ pub fn Table_Rows(block: &SourceBlock) -> Vec<TableRow>
             in_table = true;
             table_ordinal = table_ordinal.saturating_add(1);
         }
-        let row = One_Row(line, trimmed, table_ordinal, rows.len());
+        let row = One_Row(RawLine(line), Trimmed(trimmed), table_ordinal, rows.len());
         rows.push(row);
     }
 
@@ -41,13 +41,22 @@ pub fn Table_Rows(block: &SourceBlock) -> Vec<TableRow>
     return rows;
 }
 
+/// A pipe line exactly as authored, kept distinct from [`Trimmed`] so the two cannot be
+/// swapped at a call site: both are the same line, one carries whitespace the other has
+/// already cut.
+struct RawLine<'a>(&'a str);
+
+/// A pipe line with its surrounding whitespace cut, kept distinct from [`RawLine`] for the
+/// same reason.
+struct Trimmed<'a>(&'a str);
+
 /// One pipe line as a row, typed by whether its cells are a delimiter.
 ///
 /// A header cannot be told from content here, because a line is not known to precede the
 /// delimiter until the delimiter has been seen. [`Retype_Headers`] is that second pass.
-fn One_Row(line: &str, trimmed: &str, table_ordinal: u32, already: usize) -> TableRow
+fn One_Row(line: RawLine<'_>, trimmed: Trimmed<'_>, table_ordinal: u32, already: usize) -> TableRow
 {
-    let cells = Split_Cells(trimmed);
+    let cells = Split_Cells(trimmed.0);
     let kind = if Is_Separator(&cells) { RowKind::Separator } else { RowKind::Content };
 
     return TableRow {
@@ -55,7 +64,7 @@ fn One_Row(line: &str, trimmed: &str, table_ordinal: u32, already: usize) -> Tab
         table_ordinal,
         kind,
         cells,
-        text: line.to_owned(),
+        text: line.0.to_owned(),
     };
 }
 
@@ -150,41 +159,53 @@ fn Split_Cells(trimmed: &str) -> Vec<String>
     let inner = trimmed.trim_start_matches('|').trim_end_matches('|');
     let mut cells = Vec::new();
     let mut current = String::new();
-    let mut escaped = false;
+    let mut escape = Escape::Plain;
     for character in inner.chars()
     {
-        escaped = Take_One_Character(character, escaped, &mut cells, &mut current);
+        escape = Take_One_Character(character, escape, &mut cells, &mut current);
     }
     cells.push(current.trim().to_owned());
 
     return cells;
 }
 
+/// Whether the character just read was a backslash, so the one after it is literal rather
+/// than a pipe delimiter.
+///
+/// A named two-state type in place of a bool, because a bare `true`/`false` at the call
+/// site says nothing about which state either one means.
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum Escape
+{
+    Plain,
+    Escaped,
+}
+
 /// One character folded into the cell being read, answering whether the next one is escaped.
 fn Take_One_Character(
     character: char,
-    escaped: bool,
+    escape: Escape,
     cells: &mut Vec<String>,
     current: &mut String,
-) -> bool
+) -> Escape
 {
-    if escaped
+    if escape == Escape::Escaped
     {
         current.push(character);
 
-        return false;
+        return Escape::Plain;
     }
     if character == '|'
     {
         cells.push(current.trim().to_owned());
         current.clear();
 
-        return false;
+        return Escape::Plain;
     }
 
     current.push(character);
 
-    return character == '\\';
+    return if character == '\\' { Escape::Escaped } else { Escape::Plain };
 }
 
 fn Is_Separator(cells: &[String]) -> bool
