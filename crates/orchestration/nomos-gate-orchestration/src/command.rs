@@ -15,7 +15,7 @@
 //! ahead of a second real case (`OD-PACKAGE-006`, `OD-RULES-005`, `OD-RULES-006`) -- so it
 //! is simply absent, not stubbed, until an increment gives it a real body.
 
-use crate::{BaselinePolicy, RuleSelector, ScopeSelector, SuppressionPolicy};
+use crate::{AdoptionPolicy, BaselinePolicy, RuleSelector, ScopeSelector, SuppressionPolicy};
 use std::path::PathBuf;
 
 /// What to plan, run or explain a gate over.
@@ -49,4 +49,10 @@ pub struct GateCommand
     /// Nothing constructs a non-empty one yet -- see [`crate::BaselinePolicy`]'s own doc for
     /// what authors one, and what does not yet.
     pub baseline: BaselinePolicy,
+    /// Rules a real run must treat as advisory rather than blocking, checked before
+    /// `suppressions` and `baseline` since it is a coarser, rule-wide override rather than a
+    /// per-finding one. Read by [`crate::Run_Gate`] only, the same asymmetry as `scope`,
+    /// `rules`, `suppressions` and `baseline`. Nothing constructs a non-empty one yet -- see
+    /// [`crate::AdoptionPolicy`]'s own doc for what authors one, and what does not yet.
+    pub adoption: AdoptionPolicy,
 }

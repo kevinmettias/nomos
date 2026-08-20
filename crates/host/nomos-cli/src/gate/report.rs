@@ -6,7 +6,7 @@ use nomos_capability::RegistryError;
 use nomos_check_orchestration::CheckOutcome;
 use nomos_contracts::Finding;
 use nomos_gate_orchestration::{
-    BaselineDebt, Explanation, GateExplainResult, GateOutcome, GateRunOutcome, GateRunResult, Suppression,
+    BaselineDebt, Explanation, GateExplainResult, GateOutcome, GateRunOutcome, GateRunResult, RuleCalibration, Suppression,
 };
 use std::io::Write;
 use std::path::Path;
@@ -125,9 +125,10 @@ fn Report_Judged(findings: &[Finding], result: &GateRunResult, stdout: &mut impl
 
     let _ = writeln!(
         stdout,
-        "\n{} finding(s), {} of which can fail a build, {} suppressed, {} baselined",
+        "\n{} finding(s), {} of which can fail a build, {} calibrated, {} suppressed, {} baselined",
         findings.len(),
         result.blocking_findings.len(),
+        result.calibrated_findings.len(),
         result.suppressed_findings.len(),
         result.baselined_findings.len()
     );
@@ -221,32 +222,41 @@ fn Report_Explanation(explanation: &Explanation, stdout: &mut impl Write) -> Exi
 
             ExitCode::Ok
         }
-        Explanation::Found { finding, would_block, suppressed_by, baselined_by } =>
+        Explanation::Found { finding, would_block, calibrated_by, suppressed_by, baselined_by } =>
         {
-            let tolerance = Toleration { suppressed_by: suppressed_by.as_ref(), baselined_by: baselined_by.as_ref() };
+            let tolerance = Toleration {
+                calibrated_by: calibrated_by.as_ref(),
+                suppressed_by: suppressed_by.as_ref(),
+                baselined_by: baselined_by.as_ref(),
+            };
 
             Report_Found(finding, *would_block, tolerance, stdout)
         }
     };
 }
 
-/// The suppression or baseline note [`Report_Found`] renders alongside a found
-/// explanation's block status -- never both at once, since `Explain_Gate` checks baseline
-/// only once suppression is ruled out, but grouped as a pair rather than two parameters:
-/// what a found explanation was tolerated by is one fact, not two.
+/// The calibration, suppression or baseline note [`Report_Found`] renders alongside a found
+/// explanation's block status -- never more than one at once, since `Explain_Gate` checks
+/// them in that order and stops at the first match, but grouped as a triple rather than
+/// three parameters: what a found explanation was tolerated by is one fact, not three.
 struct Toleration<'a>
 {
+    calibrated_by: Option<&'a RuleCalibration>,
     suppressed_by: Option<&'a Suppression>,
     baselined_by: Option<&'a BaselineDebt>,
 }
 
-/// Renders one found explanation's finding, block status, and suppression or baseline note
-/// (if either applies), and reduces it to the [`ExitCode`] a real run would decide for this
-/// one finding.
+/// Renders one found explanation's finding, block status, and calibration, suppression or
+/// baseline note (if any applies), and reduces it to the [`ExitCode`] a real run would
+/// decide for this one finding.
 fn Report_Found(finding: &Finding, would_block: bool, tolerance: Toleration<'_>, stdout: &mut impl Write) -> ExitCode
 {
     let _ = writeln!(stdout, "{}", finding.Describe());
     let _ = writeln!(stdout, "would block: {would_block}");
+    if let Some(calibration) = tolerance.calibrated_by
+    {
+        let _ = writeln!(stdout, "calibrated by: {}", calibration.rationale);
+    }
     if let Some(suppression) = tolerance.suppressed_by
     {
         let _ = writeln!(

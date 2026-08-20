@@ -23959,6 +23959,115 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-GATE-015-ADOPTION-FIRST-INCREMENT",
+      "title": "OD-GATE-015's adoption configuration, built under the user's standing override -- the third and last of its three concerns",
+      "why": "OD-GATE-015 records adoption configuration (ADOPT-CONFIG-*) as the one concern still open once P13-GATE-015-SUPPRESSION-FIRST-INCREMENT-2 and P13-GATE-015-BASELINE-FIRST-INCREMENT closed suppression and baseline. The user's 2026-08-19/20 'proceed with all remaining work' directive names adoption configuration by name, now that the other two are built -- the same standing override that closed them. ADOPT-CONFIG-003 frames adoption as a layer above suppression and baseline, not a third finding-matcher of their shape: 'adoption is expressed through declared gates, phases and calibration policy, explicitly not by forking rule implementations.' The narrowest real instance of that is a rule-level calibration -- a repository declaring a whole rule advisory rather than blocking during adoption, matched by rule alone (not rule/subject, the identity Suppression and BaselineDebt both match by) -- deliberately narrower than ADOPT-CONFIG-*'s full corpus shape (no declared phases, no thresholds, no approvals, no separate consumer-owned file), the same discipline BaselineDebt's own doc already states for this crate.",
+      "done_when": "GateCommand carries a real AdoptionPolicy field (crate::AdoptionPolicy holding RuleCalibration entries matched by RuleId alone); Run_Gate partitions a matched, otherwise-blocking finding into GateRunResult::calibrated_findings, checked before suppression and baseline so a finding matched by more than one reports as calibrated first; Explain_Gate reports a matching RuleCalibration in Explanation::Found::calibrated_by under the same ordering; nomos-cli's gate report and parsing wire the new field through with no CLI flag constructing one yet. cargo test -p nomos-gate-orchestration -p nomos-cli stays green, and nomos-gate-orchestration's public surface snapshot is reblessed.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration",
+          "crates/host/nomos-cli/src/gate",
+          "tests/contract/surface/nomos-gate-orchestration.txt"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "authored with a malformed predicate: --timeout was given after the -- separator and was swallowed into the predicate argv as a literal cargo argument rather than read as the ledger's own timeout flag, so cargo test refuses with 'unexpected argument --timeout' and the item can never produce a verdict. Superseded by P13-GATE-015-ADOPTION-FIRST-INCREMENT-2, same territory and done_when, with the flag placed correctly."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-cli",
+          "--timeout",
+          "10m"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-session-nomos-2026-08-20",
+          "reason": "predicate malformed: --timeout was passed after the -- separator and was swallowed into the predicate argv as a literal cargo argument instead of being read as the ledger's own timeout flag; cargo test then fails on 'unexpected argument --timeout'. Re-authoring with the flag placed before the separator.",
+          "abandoned_at": 1787270247
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-session-nomos-2026-08-20",
+        "declined_at": 1787270253
+      }
+    },
+    {
+      "id": "P13-GATE-015-ADOPTION-FIRST-INCREMENT-2",
+      "title": "OD-GATE-015's adoption configuration, built under the user's standing override -- the third and last of its three concerns",
+      "why": "P13-GATE-015-ADOPTION-FIRST-INCREMENT was declined for a malformed predicate (--timeout landed after the -- separator and was read as a literal cargo argument). This item re-authors the same work with the flag placed correctly. OD-GATE-015 records adoption configuration (ADOPT-CONFIG-*) as the one concern still open once P13-GATE-015-SUPPRESSION-FIRST-INCREMENT-2 and P13-GATE-015-BASELINE-FIRST-INCREMENT closed suppression and baseline. The user's 2026-08-19/20 'proceed with all remaining work' directive names adoption configuration by name, now that the other two are built -- the same standing override that closed them. ADOPT-CONFIG-003 frames adoption as a layer above suppression and baseline, not a third finding-matcher of their shape: 'adoption is expressed through declared gates, phases and calibration policy, explicitly not by forking rule implementations.' The narrowest real instance of that is a rule-level calibration -- a repository declaring a whole rule advisory rather than blocking during adoption, matched by rule alone (not rule/subject, the identity Suppression and BaselineDebt both match by) -- deliberately narrower than ADOPT-CONFIG-*'s full corpus shape (no declared phases, no thresholds, no approvals, no separate consumer-owned file), the same discipline BaselineDebt's own doc already states for this crate.",
+      "done_when": "GateCommand carries a real AdoptionPolicy field (crate::AdoptionPolicy holding RuleCalibration entries matched by RuleId alone); Run_Gate partitions a matched, otherwise-blocking finding into GateRunResult::calibrated_findings, checked before suppression and baseline so a finding matched by more than one reports as calibrated first; Explain_Gate reports a matching RuleCalibration in Explanation::Found::calibrated_by under the same ordering; nomos-cli's gate report and parsing wire the new field through with no CLI flag constructing one yet. cargo test -p nomos-gate-orchestration -p nomos-cli stays green, and nomos-gate-orchestration's public surface snapshot is reblessed.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration",
+          "crates/host/nomos-cli/src/gate",
+          "tests/contract/surface/nomos-gate-orchestration.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-cli"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-cli"
+        ],
+        "exit_code": 0,
+        "output_tail": "_A_Calibrated_Finding_Should_Not_Block ... ok\ntest tests::Test_A_Suppressed_And_Baselined_Finding_Should_Report_As_Suppressed ... ok\ntest tests::Test_Explain_Should_Report_A_Baseline_That_Applies ... ok\ntest tests::Test_Explain_Should_Report_A_Suppression_That_Applies ... ok\ntest tests::Test_A_Suppressed_Finding_Should_Not_Block ... ok\ntest tests::Test_Explain_Should_Report_A_Calibration_That_Applies ... ok\n\ntest result: ok. 44 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.13s\n     Running unittests src\\main.rs (target\\debug\\deps\\nomos-4872f6c71fdf7380.exe)\n     Running tests\\abandon_is_readable.rs (target\\debug\\deps\\abandon_is_readable-438fb02b385d78aa.exe)\n     Running tests\\add_guarantees_what_it_says.rs (target\\debug\\deps\\add_guarantees_what_it_says-f703d341d244dcf5.exe)\n     Running tests\\authoring_surface.rs (target\\debug\\deps\\authoring_surface-47a846b52b043a6d.exe)\n     Running tests\\check_command.rs (target\\debug\\deps\\check_command-1f72f9de0f7a6e95.exe)\n     Running tests\\freshness.rs (target\\debug\\deps\\freshness-ae80954d21bc9069.exe)\n     Running tests\\gate_step\\main.rs (target\\debug\\deps\\gate_step-8aeb2760425cece4.exe)\n     Running tests\\list_tells_the_truth.rs (target\\debug\\deps\\list_tells_the_truth-c6279836e2d738ac.exe)\n     Running tests\\read_surface.rs (target\\debug\\deps\\read_surface-561323bd3ef694b7.exe)\n     Running tests\\request_submit.rs (target\\debug\\deps\\request_submit-c0186ed1293ae299.exe)\n     Running tests\\stale_writer_is_refused.rs (target\\debug\\deps\\stale_writer_is_refused-329acf8fb3ec4644.exe)\n     Running tests\\takeover_is_recorded.rs (target\\debug\\deps\\takeover_is_recorded-fb58a3672c6cb420.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_gate_orchestration-0e0249ddc168c5c8.exe)\n   Doc-tests nomos_gate_orchestration\n",
+        "verified_at": 1787270286,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "b945840e9f5fce6f6b7fa5bc9fb2e0cca466d056"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

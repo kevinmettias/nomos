@@ -2,9 +2,9 @@
 //! disposition reduction over an already-judged list of findings.
 
 use crate::{
-    BaselineDebt, BaselinePolicy, Disposition, Explain_Gate, Explanation, FindingQuery, GateCommand, GateOutcome,
-    GateRunOutcome, GateRunResult, RuleSelector, Run, Run_Gate, ScopeSelector, Suppression, SuppressionDisposition,
-    SuppressionPolicy,
+    AdoptionPolicy, BaselineDebt, BaselinePolicy, Disposition, Explain_Gate, Explanation, FindingQuery, GateCommand,
+    GateOutcome, GateRunOutcome, GateRunResult, RuleCalibration, RuleSelector, Run, Run_Gate, ScopeSelector, Suppression,
+    SuppressionDisposition, SuppressionPolicy,
 };
 use nomos_check_orchestration::CheckOutcome;
 use nomos_contracts::{
@@ -77,6 +77,22 @@ fn Baseline_Of(finding: &Finding) -> BaselineDebt
     };
 }
 
+/// [`Command_At`] `root`, with `calibration` as the whole adoption policy and every rule
+/// still selected -- the shape both a `run` and an `explain` fixture build once they have a
+/// real finding whose rule to calibrate.
+fn Command_With_Calibration(root: PathBuf, calibration: RuleCalibration) -> GateCommand
+{
+    return GateCommand { adoption: AdoptionPolicy { calibrated: vec![calibration] }, ..Command_At(root) };
+}
+
+/// A [`RuleCalibration`] matching `finding`'s rule exactly, with a rationale fixed for every
+/// fixture that reaches for one -- the same "what a test needs is that it addresses a
+/// specific real finding" discipline [`Suppression_Of`] and [`Baseline_Of`] both keep.
+fn Calibration_Of(finding: &Finding) -> RuleCalibration
+{
+    return RuleCalibration { rule: finding.rule.clone(), rationale: "test fixture".to_owned() };
+}
+
 /// Judges one fresh call of `source` with every policy empty, and returns its one real
 /// blocking finding -- the shared setup a suppression and a baseline fixture both need
 /// before either can address a specific finding with its own policy.
@@ -129,19 +145,19 @@ fn Explain_Applies_Fixture() -> (impl Fn() -> SourceFile, FindingQuery, Finding)
     return (source, query, real_finding);
 }
 
-/// Destructures `explanation`'s `Found` variant into the three fields a suppression and a
-/// baseline explain fixture each read a different pair of, or panics naming what every
-/// fixture that reaches this helper has already asserted -- the explain-side counterpart
-/// to [`Judged_Findings`].
-fn Explained_Found(explanation: Explanation) -> (bool, Option<Suppression>, Option<BaselineDebt>)
+/// Destructures `explanation`'s `Found` variant into the four fields a calibration, a
+/// suppression and a baseline explain fixture each read a different one of, or panics naming
+/// what every fixture that reaches this helper has already asserted -- the explain-side
+/// counterpart to [`Judged_Findings`].
+fn Explained_Found(explanation: Explanation) -> (bool, Option<RuleCalibration>, Option<Suppression>, Option<BaselineDebt>)
 {
-    let Explanation::Found { would_block, suppressed_by, baselined_by, .. } = explanation
+    let Explanation::Found { would_block, calibrated_by, suppressed_by, baselined_by, .. } = explanation
     else
     {
         panic!("this fixture must still produce the finding the query names");
     };
 
-    return (would_block, suppressed_by, baselined_by);
+    return (would_block, calibrated_by, suppressed_by, baselined_by);
 }
 
 /// The findings a judged `check_outcome` carries, or a panic naming what every fixture that
@@ -570,6 +586,55 @@ fn Test_A_Suppressed_And_Baselined_Finding_Should_Report_As_Suppressed()
     );
 }
 
+/// A [`RuleCalibration`] matching the one blocking finding this fixture produces: the run
+/// still judges the source and `check_outcome` still carries the finding in full, and it now
+/// also appears in `calibrated_findings` rather than `blocking_findings` -- tolerated, not
+/// silenced. Mirrors [`Test_A_Suppressed_Finding_Should_Not_Block`] and
+/// [`Test_A_Baselined_Finding_Should_Not_Block`] for the third of `Run_Gate`'s three
+/// policies.
+#[test]
+fn Test_A_Calibrated_Finding_Should_Not_Block()
+{
+    let source = || return Source("a.rs", "/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n");
+    let real_finding = One_Real_Blocking_Finding(source);
+    let command = Command_With_Calibration(Repository_Root(), Calibration_Of(&real_finding));
+
+    let result = Run_Gate(Some(vec![source()]), Test_Variant(), &command, &StdProcessLauncher);
+
+    Assert_Tolerated_Not_Blocking(&result, &result.calibrated_findings);
+}
+
+/// A finding matched by a [`RuleCalibration`], a [`Suppression`] and a [`BaselineDebt`] all
+/// at once reports as calibrated, not suppressed or baselined -- `Run_Gate` checks
+/// calibration first, since it is a coarser, rule-wide override, so none of the three lists
+/// double-count the same finding.
+#[test]
+fn Test_A_Calibrated_Suppressed_And_Baselined_Finding_Should_Report_As_Calibrated()
+{
+    let source = || return Source("a.rs", "/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n");
+    let real_finding = One_Real_Blocking_Finding(source);
+    let command = GateCommand {
+        adoption: AdoptionPolicy { calibrated: vec![Calibration_Of(&real_finding)] },
+        suppressions: SuppressionPolicy { suppressions: vec![Suppression_Of(&real_finding)] },
+        baseline: BaselinePolicy { debt: vec![Baseline_Of(&real_finding)] },
+        ..Command_At(Repository_Root())
+    };
+
+    let result = Run_Gate(Some(vec![source()]), Test_Variant(), &command, &StdProcessLauncher);
+
+    assert!(!result.calibrated_findings.is_empty(), "the triple-matched finding must report as calibrated");
+    assert!(
+        result.suppressed_findings.is_empty(),
+        "the triple-matched finding must not also report as suppressed: {:?}",
+        result.suppressed_findings
+    );
+    assert!(
+        result.baselined_findings.is_empty(),
+        "the triple-matched finding must not also report as baselined: {:?}",
+        result.baselined_findings
+    );
+}
+
 /// A query naming a rule and location no finding carries is [`Explanation::NotFound`], not
 /// a panic or a default -- the same "an absent answer is a typed state, not a shorter one"
 /// discipline `CheckOutcome::NoSource` already keeps one layer down.
@@ -599,13 +664,14 @@ fn Test_Explain_Should_Find_A_Real_Blocking_Finding()
 
     let result = Explain_Gate(Some(sources), Test_Variant(), &Command_At(Repository_Root()), &query, &StdProcessLauncher);
 
-    let Explanation::Found { finding, would_block, suppressed_by, baselined_by } = result.explanation
+    let Explanation::Found { finding, would_block, calibrated_by, suppressed_by, baselined_by } = result.explanation
     else
     {
         panic!("this fixture must produce the finding the query names");
     };
     assert_eq!(finding.rule, RuleId::New(COMPLETENESS_MIRROR));
     assert!(would_block);
+    assert_eq!(calibrated_by, None);
     assert_eq!(suppressed_by, None);
     assert_eq!(baselined_by, None);
 }
@@ -622,7 +688,7 @@ fn Test_Explain_Should_Report_A_Suppression_That_Applies()
 
     let result = Explain_Gate(Some(vec![source()]), Test_Variant(), &command, &query, &StdProcessLauncher);
 
-    let (would_block, suppressed_by, _) = Explained_Found(result.explanation);
+    let (would_block, _, suppressed_by, _) = Explained_Found(result.explanation);
     assert!(!would_block);
     assert!(suppressed_by.is_some());
 }
@@ -638,9 +704,26 @@ fn Test_Explain_Should_Report_A_Baseline_That_Applies()
 
     let result = Explain_Gate(Some(vec![source()]), Test_Variant(), &command, &query, &StdProcessLauncher);
 
-    let (would_block, _, baselined_by) = Explained_Found(result.explanation);
+    let (would_block, _, _, baselined_by) = Explained_Found(result.explanation);
     assert!(!would_block);
     assert!(baselined_by.is_some());
+}
+
+/// A [`RuleCalibration`] matching the queried finding's rule flips `would_block` to `false`
+/// and names itself in `calibrated_by` -- mirrors
+/// [`Test_Explain_Should_Report_A_Suppression_That_Applies`] for the third of `explain`'s
+/// three consulted policies.
+#[test]
+fn Test_Explain_Should_Report_A_Calibration_That_Applies()
+{
+    let (source, query, real_finding) = Explain_Applies_Fixture();
+    let command = Command_With_Calibration(Repository_Root(), Calibration_Of(&real_finding));
+
+    let result = Explain_Gate(Some(vec![source()]), Test_Variant(), &command, &query, &StdProcessLauncher);
+
+    let (would_block, calibrated_by, _, _) = Explained_Found(result.explanation);
+    assert!(!would_block);
+    assert!(calibrated_by.is_some());
 }
 
 /// `explain` is independent of `command.scope`: a scope that would exclude `a.rs` from a

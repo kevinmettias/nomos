@@ -93,21 +93,38 @@
 //! the two lists do not overlap. No CLI flag or config file constructs a [`BaselineDebt`]
 //! yet, the same absence [`SuppressionPolicy`]'s fifth increment already declined to fill.
 //!
+//! Its eighth increment, `P13-GATE-015-ADOPTION-FIRST-INCREMENT`, gives [`GateCommand`] a
+//! real [`AdoptionPolicy`] under the same user override, taking the third and last of
+//! `OD-GATE-015`'s three concerns -- deliberately a different addressing scheme than
+//! [`SuppressionPolicy`] and [`BaselinePolicy`]: [`RuleCalibration`] matches by
+//! [`nomos_contracts::RuleId`] alone, not `rule`/`subject`, because `ADOPT-CONFIG-*` frames
+//! adoption as a layer above both -- "declared gates, phases and calibration policy" -- not
+//! a third per-finding matcher of their shape. A calibrated rule cannot fail a build
+//! regardless of which subject triggered it; `Run_Gate` checks calibration before
+//! suppression and baseline, so a finding matched by more than one reports as calibrated,
+//! and it still appears in [`GateRunResult::check_outcome`] and
+//! [`GateRunResult::calibrated_findings`], never silently. Deliberately narrower than
+//! `ADOPT-CONFIG-*`'s full corpus shape: no declared phases, thresholds or approvals, and no
+//! separate consumer-owned configuration file -- [`RuleCalibration`]'s own doc says why. No
+//! CLI flag or config file constructs one yet, the same absence [`SuppressionPolicy`]'s and
+//! [`BaselinePolicy`]'s own first increments already declined to fill.
+//!
 //! # What no increment is
 //!
 //! None implements `compare` -- that verb has no variant here at all, not a stub one, the
 //! same "no invented shape ahead of a real body" this crate's own [`command`] module
-//! documents. None touches `CoveragePolicy`, adoption configuration, required phases,
-//! thresholds or approvals -- every other clause `WF-001` names beyond suppression and
-//! baseline. `Claim` (coverage debt / agent-required subjects) rides through
+//! documents. None touches `CoveragePolicy`, declared phases, thresholds or approvals --
+//! every other clause `WF-001` names beyond suppression, baseline and rule calibration.
+//! `Claim` (coverage debt / agent-required subjects) rides through
 //! [`GateRunResult`] for information only and does not affect [`GateRunOutcome`], the same
 //! choice `OD-COMPLETENESS-004` already made for `nomos check`'s own exit code. `GatePlan`
-//! still does not vary by [`GateCommand::root`], `scope`, `rules`, `suppressions` or
-//! `baseline` -- it
+//! still does not vary by [`GateCommand::root`], `scope`, `rules`, `suppressions`,
+//! `baseline` or `adoption` -- it
 //! reports the registry, not a walk, so no selection applies to it yet.
 
 #![forbid(unsafe_code)]
 
+mod adoption;
 mod baseline;
 mod command;
 mod composition;
@@ -122,6 +139,7 @@ mod suppression;
 #[cfg(test)]
 mod tests;
 
+pub use adoption::{AdoptionPolicy, RuleCalibration};
 pub use baseline::{BaselineDebt, BaselinePolicy};
 pub use command::GateCommand;
 pub use composition::Registered;
