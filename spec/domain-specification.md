@@ -71,7 +71,7 @@ profile: domain-specification
 | docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md@authored | docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md | authored | 18 | 7 | sha256:6f4641a5880349085b0024910a1e846ce7a8c0c0c0fb2565df2afec25bc14c75 |
 | docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md@authored | docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md | authored | 25 | 9 | sha256:2ca140dc9f92acdeafb345caf060be98aa5759734cce2b551250a5b605c7353f |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md@authored | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md | authored | 16 | 5 | sha256:e3d0afb3cabc0ab33a09a700e110b803806d3c4e063673d8c18ca7adc84c3012 |
-| docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md@authored | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md | authored | 29 | 6 | sha256:95a9bc9275ea24b17ac4458927631e589405b0813779a6945f42240a47af2f1f |
+| docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md@authored | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md | authored | 33 | 7 | sha256:9b64932b5379c801e27d55a8182022bc7ee9524dd13249c6ec8795ed1624a2d6 |
 | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md@authored | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md | authored | 19 | 6 | sha256:9237ea74e89c7f49295d2e4bde41ff135c64838767ba17c27b0aad79037ced10 |
 | docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md@authored | docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md | authored | 15 | 5 | sha256:bcf1bfd865c60493754d4a765742627fd4c18504722d27a065b5201be2ac218f |
 | docs/records/OD-HOST-005-whether-request-commands-seam-is-its-own-crate-or-a-verb-inside-spec-orchestration.md@authored | docs/records/OD-HOST-005-whether-request-commands-seam-is-its-own-crate-or-a-verb-inside-spec-orchestration.md | authored | 15 | 5 | sha256:0cb15b83d0fb7a58f4a2afda083ac512ba0ac344d15ca0556f3446736cbd7ea9 |
@@ -661,6 +661,7 @@ profile: domain-specification
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#20 | authored | 2 | What is not privileged state |
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#25 | authored | 2 | What this constrains |
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#27 | authored | 2 | Amendment: SpecCommand's Seam Closed; request::Command Is the One Gap Family 9 Still Names |
+| docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#30 | authored | 2 | Amendment: GateCommand's `run` Verb Is a Closed Seam Family 9 Never Named |
 | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#1 | authored | 1 | An editor surface is a client of the canonical services, not a parser of the CLI's rendered output |
 | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#4 | authored | 2 | What an editor surface is |
 | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#7 | authored | 2 | What a diagnostic carries |
@@ -17326,6 +17327,53 @@ stale against a codebase that had already closed it.
 (`Submit`), parsed and dispatched entirely inside `nomos-cli::request`, with no crate a
 second adapter could depend on to reach it without also taking `nomos-cli`. It is the one
 piece of family 9 this record still names as open.
+
+### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#30
+
+*revision: authored · kind: heading · heading: A surface holds no state its canonical services cannot reconstruct / Amendment: GateCommand's `run` Verb Is a Closed Seam Family 9 Never Named · hash: sha256:a190918fbca5539126980b0d804026b7623cdf029286bf92c4dd0b8abf92b5ac*
+
+## Amendment: GateCommand's `run` Verb Is a Closed Seam Family 9 Never Named
+
+### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#31
+
+*revision: authored · kind: prose · heading: A surface holds no state its canonical services cannot reconstruct / Amendment: GateCommand's `run` Verb Is a Closed Seam Family 9 Never Named · hash: sha256:136e298a7af2551562316c55746010869e761e469e68757d4885b95cfcf2b2fb*
+
+Family 9 above, as first written and as the amendment before this one left it, enumerates
+`WorkCommand`, `CheckCommand`, `SpecCommand` and `request::Command` — four command groups,
+naming three seams closed and one still open. It never named `GateCommand` at all: the
+survey predates `nomos-gate-orchestration` having any `run` computation to seam.
+`GateCommand` already existed as vocabulary for `plan`, which needed no seam of its own —
+`plan`'s whole computation fit inside `nomos-gate-orchestration` from the day that crate
+shipped, the same reason family 9's original four did not include it.
+
+### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#32
+
+*revision: authored · kind: prose · heading: A surface holds no state its canonical services cannot reconstruct / Amendment: GateCommand's `run` Verb Is a Closed Seam Family 9 Never Named · hash: sha256:7423f804e852b7317176f7a26815490f18e2b5df059f50dd90dc22865cbd59f7*
+
+`run` was different from the day it was given a real body. `nomos-gate-orchestration` and
+`nomos-check-orchestration` were both band 40, and a band may not depend on its own band
+(`tests/contract/tests/boundaries/graph.rs`), so the walk-judge-reduce composition for
+`GateInvocation::Run` lived in `crates/host/nomos-cli/src/gate/run.rs` instead — a second
+adapter wanting `gate run` without depending on `nomos-cli` would have had to re-derive it,
+the same duplication `OD-HOST-001` closed for the work group before this record ever
+shipped. `P13-GATE-RUN-SEAM-CRATE` closed it the identical way: `nomos-gate-orchestration`
+moved to band 41, above `nomos-check-orchestration`'s band, so it may depend on it, and
+`nomos_gate_orchestration::Run_Gate`
+(`crates/orchestration/nomos-gate-orchestration/src/run_gate.rs`) now composes
+`nomos_check_orchestration::Run` and this crate's own `Disposition` into a `GateRunResult`,
+generic over `nomos-platform`'s traits the same way `nomos_check_orchestration::Run` and
+`nomos_work_orchestration::Run` already are. `P13-GATE-RUN-SEAM-CLI` migrated the caller:
+`crates/host/nomos-cli/src/gate.rs`'s `GateInvocation::Run` arm now walks the tree and
+reads the host build variant — the composition-root role `check.rs` already keeps for the
+same reason — and hands both to `Run_Gate`, and `gate/run.rs` no longer exists.
+
+### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#33
+
+*revision: authored · kind: prose · heading: A surface holds no state its canonical services cannot reconstruct / Amendment: GateCommand's `run` Verb Is a Closed Seam Family 9 Never Named · hash: sha256:378276a3a7bdb27ff9efd7b59591063695f7e3e8a0ad8cf93913683f40686479*
+
+This does not change the amendment before it: `request::Command` is still the one command
+group with no orchestration crate at all. `GateCommand` was never that — it is the case
+family 9 simply forgot to list, closed before this record ever had to call it open.
 
 ### docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#1
 

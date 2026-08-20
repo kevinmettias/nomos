@@ -3,7 +3,7 @@ id: OD-HOST-002
 type: decision
 title: A surface holds no state its canonical services cannot reconstruct
 status: accepted
-version: 4
+version: 5
 authority: canonical-normative-record
 tags:
   - host
@@ -209,3 +209,34 @@ stale against a codebase that had already closed it.
 (`Submit`), parsed and dispatched entirely inside `nomos-cli::request`, with no crate a
 second adapter could depend on to reach it without also taking `nomos-cli`. It is the one
 piece of family 9 this record still names as open.
+
+## Amendment: GateCommand's `run` Verb Is a Closed Seam Family 9 Never Named
+
+Family 9 above, as first written and as the amendment before this one left it, enumerates
+`WorkCommand`, `CheckCommand`, `SpecCommand` and `request::Command` — four command groups,
+naming three seams closed and one still open. It never named `GateCommand` at all: the
+survey predates `nomos-gate-orchestration` having any `run` computation to seam.
+`GateCommand` already existed as vocabulary for `plan`, which needed no seam of its own —
+`plan`'s whole computation fit inside `nomos-gate-orchestration` from the day that crate
+shipped, the same reason family 9's original four did not include it.
+
+`run` was different from the day it was given a real body. `nomos-gate-orchestration` and
+`nomos-check-orchestration` were both band 40, and a band may not depend on its own band
+(`tests/contract/tests/boundaries/graph.rs`), so the walk-judge-reduce composition for
+`GateInvocation::Run` lived in `crates/host/nomos-cli/src/gate/run.rs` instead — a second
+adapter wanting `gate run` without depending on `nomos-cli` would have had to re-derive it,
+the same duplication `OD-HOST-001` closed for the work group before this record ever
+shipped. `P13-GATE-RUN-SEAM-CRATE` closed it the identical way: `nomos-gate-orchestration`
+moved to band 41, above `nomos-check-orchestration`'s band, so it may depend on it, and
+`nomos_gate_orchestration::Run_Gate`
+(`crates/orchestration/nomos-gate-orchestration/src/run_gate.rs`) now composes
+`nomos_check_orchestration::Run` and this crate's own `Disposition` into a `GateRunResult`,
+generic over `nomos-platform`'s traits the same way `nomos_check_orchestration::Run` and
+`nomos_work_orchestration::Run` already are. `P13-GATE-RUN-SEAM-CLI` migrated the caller:
+`crates/host/nomos-cli/src/gate.rs`'s `GateInvocation::Run` arm now walks the tree and
+reads the host build variant — the composition-root role `check.rs` already keeps for the
+same reason — and hands both to `Run_Gate`, and `gate/run.rs` no longer exists.
+
+This does not change the amendment before it: `request::Command` is still the one command
+group with no orchestration crate at all. `GateCommand` was never that — it is the case
+family 9 simply forgot to list, closed before this record ever had to call it open.
