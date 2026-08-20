@@ -21068,7 +21068,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "the fix is correct and independently verified (code-standards check.exe: zero findings across all four territory crates; cargo test -p nomos-ledger -p nomos-analysis -p nomos-capability -p nomos-workspace passes standalone), but this item's declared predicate timeout_seconds=600 gives nomos-ledger's Finish a 300s idle bound, and nomos-workspace's corpus test over_the_corpus::Test_A_Hundred_Ingestion_Orders_Should_Yield_Byte_Identical_Queries runs ~469s silent against the real corpus -- reproduced twice as Stalled { idle_elapsed: 300s }. work add had no way to declare a bigger timeout until P13-LEDGER-TIMEOUT-DECLARABLE built --timeout. Superseded by P13-CLEANFILE-SUBSTRATE-2, same territory and fix, declared with a timeout that can survive the corpus test's silence."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -21093,6 +21097,11 @@
           "holder": "claude-nomos-continue",
           "reason": "predicate cannot produce a verdict: nomos-workspace's corpus test runs ~469s silent, past the ledger's 300s idle bound derived from work add's fixed 600s default. Freeing territory to build P13-LEDGER-TIMEOUT-DECLARABLE, then re-authoring with a bigger declared timeout.",
           "abandoned_at": 1787257529
+        },
+        {
+          "holder": "claude-nomos-continue",
+          "reason": "releasing to decline: superseded by P13-CLEANFILE-SUBSTRATE-2 with a larger declared timeout",
+          "abandoned_at": 1787257726
         }
       ],
       "displaced": [
@@ -21102,7 +21111,10 @@
           "lease_expires_at": 1787197199
         }
       ],
-      "declined": null
+      "declined": {
+        "holder": "claude-nomos-continue",
+        "declined_at": 1787257726
+      }
     },
     {
       "id": "P13-CLEANFILE-SPEC",
@@ -23766,6 +23778,73 @@
           "exit_code": 0
         },
         "revision": "9207c52449d0372e47a3b32004dd159a9504ecba"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-CLEANFILE-SUBSTRATE-2",
+      "title": "clean-file's structural checks report findings across crates/substrate",
+      "why": "Same findings as the declined P13-CLEANFILE-SUBSTRATE, already fixed and committed (783771d): nomos-analysis::fact::memory_store::invalidation.rs and nomos-ledger's gate.rs / claim/refusal/tests.rs. Re-authored only because the original's 600s timeout gave nomos-ledger's Finish a 300s idle bound too short for nomos-workspace's real-corpus test (over_the_corpus::Test_A_Hundred_Ingestion_Orders_Should_Yield_Byte_Identical_Queries, ~469s silent), and work add now has --timeout (P13-LEDGER-TIMEOUT-DECLARABLE) to declare one that fits.",
+      "done_when": "code-standards' clean-file phase reports no findings across crates/substrate/nomos-ledger, nomos-analysis, nomos-capability and nomos-workspace, and cargo test -p nomos-ledger -p nomos-analysis -p nomos-capability -p nomos-workspace stays green -- run through nomos work finish, not just standalone.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger",
+          "crates/substrate/nomos-analysis",
+          "crates/substrate/nomos-capability",
+          "crates/substrate/nomos-workspace"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-analysis",
+          "-p",
+          "nomos-capability",
+          "-p",
+          "nomos-workspace"
+        ],
+        "timeout_seconds": 1500
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-analysis",
+          "-p",
+          "nomos-capability",
+          "-p",
+          "nomos-workspace"
+        ],
+        "exit_code": 0,
+        "output_tail": "ailed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.09s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_analysis-8ed2b98a0abe7ca2.exe)\n     Running tests\\fact_identity\\main.rs (target\\debug\\deps\\fact_identity-472de15e56a195d2.exe)\n     Running tests\\invalidation_order.rs (target\\debug\\deps\\invalidation_order-5c58ca88752defbc.exe)\n     Running tests\\recomputation_equivalence.rs (target\\debug\\deps\\recomputation_equivalence-8bcea38aeda441f4.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_capability-12789463b7316368.exe)\n     Running tests\\resolution_never_says_no.rs (target\\debug\\deps\\resolution_never_says_no-d102e83a2cd81962.exe)\n     Running tests\\selection_is_decided.rs (target\\debug\\deps\\selection_is_decided-58a5d925e73702fc.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_ledger-9f0da988d67699df.exe)\n     Running tests\\declining_ends_an_item.rs (target\\debug\\deps\\declining_ends_an_item-b7c376552463c63c.exe)\n     Running tests\\exclusion_holds\\main.rs (target\\debug\\deps\\exclusion_holds-da7f1fa9457ac951.exe)\n     Running tests\\gate_covers_finish\\main.rs (target\\debug\\deps\\gate_covers_finish-2e5a5ed1fbbe02e7.exe)\n     Running tests\\records_do_not_serialize\\main.rs (target\\debug\\deps\\records_do_not_serialize-e02314411601679d.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_workspace-cc333bbec8c05f96.exe)\n     Running tests\\portable\\main.rs (target\\debug\\deps\\portable-9c5623185604db42.exe)\n   Doc-tests nomos_analysis\n   Doc-tests nomos_capability\n   Doc-tests nomos_ledger\n   Doc-tests nomos_workspace\n",
+        "verified_at": 1787258203,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "e77eabaf68aa74e431cd830c450c03391ebe5ddd"
       },
       "abandoned": [],
       "displaced": [],
