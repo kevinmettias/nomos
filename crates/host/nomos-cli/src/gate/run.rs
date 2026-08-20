@@ -61,20 +61,34 @@ pub(super) fn Run_Gate(command: &GateCommand) -> GateRunResult
         Some(sources) => nomos_check_orchestration::Run(&sources, Host_Variant(), &command.root, &StdProcessLauncher),
     };
 
-    let (blocking_findings, disposition) = Reduced(&outcome);
+    let reduction = Reduced(&outcome);
 
-    return GateRunResult { root: command.root.clone(), check_outcome: outcome, blocking_findings, disposition };
+    return GateRunResult {
+        root: command.root.clone(),
+        check_outcome: outcome,
+        blocking_findings: reduction.blocking_findings,
+        disposition: reduction.disposition,
+    };
+}
+
+/// What [`Reduced`] read off a [`CheckOutcome`]: the findings that would fail a build,
+/// and the disposition they imply together. Named so the two are told apart by what they
+/// mean rather than by position.
+struct Reduction
+{
+    blocking_findings: Vec<Finding>,
+    disposition: GateRunOutcome,
 }
 
 /// The blocking findings and the disposition they imply, read off a [`CheckOutcome`]
 /// this function does not own and must not consume -- `check_outcome` still has to end up
 /// in [`GateRunResult`] afterward.
-fn Reduced(outcome: &CheckOutcome) -> (Vec<Finding>, GateRunOutcome)
+fn Reduced(outcome: &CheckOutcome) -> Reduction
 {
     let CheckOutcome::Judged { findings, .. } = outcome
     else
     {
-        return (Vec::new(), GateRunOutcome::Indeterminate);
+        return Reduction { blocking_findings: Vec::new(), disposition: GateRunOutcome::Indeterminate };
     };
 
     let disposition = nomos_gate_orchestration::Disposition(findings);
@@ -84,5 +98,5 @@ fn Reduced(outcome: &CheckOutcome) -> (Vec<Finding>, GateRunOutcome)
         .cloned()
         .collect();
 
-    return (blocking_findings, disposition);
+    return Reduction { blocking_findings, disposition };
 }

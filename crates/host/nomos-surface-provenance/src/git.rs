@@ -14,21 +14,35 @@ use std::time::Duration;
 /// disk as "unchanged".
 const TIMEOUT: Duration = Duration::from_secs(60);
 
+/// One endpoint of the commit range every query in this crate takes -- the revision
+/// named after `--since`.
+///
+/// A distinct type from [`Until`] only so the two positions in a call such as
+/// `Endpoint_Diff(root, since, until, path)` cannot be swapped without the compiler
+/// noticing: `since` and `until` are both `&str` and name opposite ends of the same
+/// range, which is exactly the pair a transposition would not announce itself.
+#[derive(Clone, Copy)]
+pub(crate) struct Since<'a>(pub(crate) &'a str);
+
+/// The other endpoint of the range. See [`Since`].
+#[derive(Clone, Copy)]
+pub(crate) struct Until<'a>(pub(crate) &'a str);
+
 /// Whether `path`'s blob differs between the two endpoints, read literally as
 /// `OD-STORE-002`'s Worked Case states it — the two trees compared directly, not a
 /// three-dot merge-base range.
 ///
 /// `--name-only` against a single path answers exactly one question: is `path` among the
 /// names `git diff` prints. Nonempty output means yes.
-pub(crate) fn Endpoint_Diff(root: &Path, since: &str, until: &str, path: &str) -> Command
+pub(crate) fn Endpoint_Diff(root: &Path, since: Since<'_>, until: Until<'_>, path: &str) -> Command
 {
     return In(
         root,
         vec![
             "git".to_owned(),
             "diff".to_owned(),
-            since.to_owned(),
-            until.to_owned(),
+            since.0.to_owned(),
+            until.0.to_owned(),
             "--name-only".to_owned(),
             "--".to_owned(),
             path.to_owned(),
@@ -39,14 +53,14 @@ pub(crate) fn Endpoint_Diff(root: &Path, since: &str, until: &str, path: &str) -
 /// Every commit in the range `since..until` that touched `path`, one hash and subject
 /// per line, tab-separated — the context a finding is rendered with, not the boolean
 /// itself.
-pub(crate) fn Path_History(root: &Path, since: &str, until: &str, path: &str) -> Command
+pub(crate) fn Path_History(root: &Path, since: Since<'_>, until: Until<'_>, path: &str) -> Command
 {
     return In(
         root,
         vec![
             "git".to_owned(),
             "log".to_owned(),
-            format!("{since}..{until}"),
+            format!("{}..{}", since.0, until.0),
             "--format=%H\t%s".to_owned(),
             "--".to_owned(),
             path.to_owned(),
@@ -58,14 +72,14 @@ pub(crate) fn Path_History(root: &Path, since: &str, until: &str, path: &str) ->
 ///
 /// One call per report run, not per crate: the range is the same for every crate this
 /// run checks, and `docs/records/` is not scoped to any one of them.
-pub(crate) fn Records_Touched_In_Range(root: &Path, since: &str, until: &str) -> Command
+pub(crate) fn Records_Touched_In_Range(root: &Path, since: Since<'_>, until: Until<'_>) -> Command
 {
     return In(
         root,
         vec![
             "git".to_owned(),
             "log".to_owned(),
-            format!("{since}..{until}"),
+            format!("{}..{}", since.0, until.0),
             "--format=%H".to_owned(),
             "--".to_owned(),
             "docs/records/".to_owned(),
@@ -89,7 +103,7 @@ mod tests
     #[test]
     fn Test_Endpoint_Diff_Compares_The_Two_Trees_Directly()
     {
-        let command = Endpoint_Diff(Path::new("/repo"), "a", "b", "tests/contract/surface/x.txt");
+        let command = Endpoint_Diff(Path::new("/repo"), Since("a"), Until("b"), "tests/contract/surface/x.txt");
 
         assert_eq!(
             command.argv,
@@ -101,7 +115,7 @@ mod tests
     #[test]
     fn Test_Records_Touched_Scopes_To_Docs_Records_Only()
     {
-        let command = Records_Touched_In_Range(Path::new("/repo"), "a", "b");
+        let command = Records_Touched_In_Range(Path::new("/repo"), Since("a"), Until("b"));
 
         assert_eq!(
             command.argv,
@@ -112,7 +126,7 @@ mod tests
     #[test]
     fn Test_Path_History_Carries_Hash_And_Subject()
     {
-        let command = Path_History(Path::new("/repo"), "a", "b", "tests/contract/surface/x.txt");
+        let command = Path_History(Path::new("/repo"), Since("a"), Until("b"), "tests/contract/surface/x.txt");
 
         assert_eq!(
             command.argv,

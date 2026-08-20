@@ -335,7 +335,7 @@ fn Parse_Predicate(predicate_argv: &[String]) -> Option<VerificationPredicate>
 
 fn Required(value: Option<&String>, name: &str) -> Result<String, String>
 {
-    return crate::arguments::Required(value, name, &Usage_Text());
+    return crate::arguments::Required(value, crate::arguments::Name(name), crate::arguments::Usage(&Usage_Text()));
 }
 
 /// Parses a lease such as `2h`, `30m` or `45s`.

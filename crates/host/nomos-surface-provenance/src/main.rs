@@ -117,7 +117,7 @@ fn Report_Text(
     let selected = Selected_Crates(&parsed, stderr)?;
     let findings = Findings(launcher, &parsed, &selected, stderr)?;
 
-    return Ok(report::Render(&parsed.since, &parsed.until, &findings));
+    return Ok(report::Render(git::Since(&parsed.since), git::Until(&parsed.until), &findings));
 }
 
 /// Which crates to check: every name `--crate` named, or every crate with a snapshot when
@@ -169,7 +169,7 @@ fn Findings(
     stderr: &mut impl std::io::Write,
 ) -> Result<Vec<evaluate::CrateFinding>, ExitCode>
 {
-    let records_touched = match evaluate::Records_Touched(launcher, &parsed.root, &parsed.since, &parsed.until)
+    let records_touched = match evaluate::Records_Touched(launcher, &parsed.root, git::Since(&parsed.since), git::Until(&parsed.until))
     {
         Ok(touched) => touched,
         Err(message) =>
@@ -216,7 +216,7 @@ fn Findings_For_Every(
 mod tests
 {
     use super::*;
-    use fake_launcher::Scripted;
+    use fake_launcher::{Scripted, Stderr, Stdout};
 
     /// A scratch repository root carrying exactly one snapshot file (`nomos-model`) --
     /// the fixture every test below needs before it can call `Run` at all. `label`
@@ -274,9 +274,9 @@ mod tests
         let root = Scratch_Root_With_One_Snapshot("");
 
         let launcher = Scripted::New()
-            .Answer("log a..b --format=%H --", 0, "", "")
-            .Answer("diff a b --name-only", 0, "tests/contract/surface/nomos-model.txt\n", "")
-            .Answer("log a..b --format=%H\t%s --", 0, "deadbeef\treblessed\n", "");
+            .Answer("log a..b --format=%H --", 0, Stdout(""), Stderr(""))
+            .Answer("diff a b --name-only", 0, Stdout("tests/contract/surface/nomos-model.txt\n"), Stderr(""))
+            .Answer("log a..b --format=%H\t%s --", 0, Stdout("deadbeef\treblessed\n"), Stderr(""));
         let mut stdout = Vec::new();
         let mut stderr = Vec::new();
         let arguments = Arguments(&root, &[]);

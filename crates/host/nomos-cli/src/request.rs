@@ -22,7 +22,7 @@
 //! `ARC-SPECDB-002` charges a born-structured object with: a stamp taken now, over a store that
 //! will not exist a moment later, is still a true stamp of what this store held.
 
-use crate::arguments::{Named_Value, Named_Values, Required};
+use crate::arguments::{Name, Named_Value, Named_Values, Required, Usage};
 use nomos_platform_std::StdFileSystem;
 use nomos_spec_orchestration::corpus::{Assemble, CorpusRequest};
 use nomos_spec_orchestration::{RenderRefusal, SubmitAnswer, SubmitRefusal, SubmitRequest};
@@ -96,7 +96,7 @@ fn Required_Value(arguments: &[String], name: &str) -> Result<String, String>
 {
     let value = Named_Value(arguments, name);
 
-    return Required(value.as_ref(), name, &Usage_Text());
+    return Required(value.as_ref(), Name(name), Usage(&Usage_Text()));
 }
 
 fn Parse_Submit(arguments: &[String]) -> Result<Command, String>

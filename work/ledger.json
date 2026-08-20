@@ -22163,14 +22163,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-declaretypes-spec-store",
-        "acquired_at": 1787202444,
-        "lease_expires_at": 1787213244
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -22182,7 +22178,29 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-spec-ingest"
+        ],
+        "exit_code": 0,
+        "output_tail": "ery_Pipe_Line ... ok\ntest census::Test_A_Row_Should_Be_Findable_By_Its_Content ... ok\ntest census::Test_The_Store_Should_Answer_Every_Count_Separately ... ok\n\ntest result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.13s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_ingest-b91882f9705d3be2.exe)\n     Running tests\\archive_reads.rs (target\\debug\\deps\\archive_reads-57f26477296ecf13.exe)\n     Running tests\\family_counts\\main.rs (target\\debug\\deps\\family_counts-0d6551e8953f8961.exe)\n     Running tests\\gate_holds.rs (target\\debug\\deps\\gate_holds-b5ea4afc81bd7b71.exe)\n     Running tests\\overlay.rs (target\\debug\\deps\\overlay-1ca11b4be69ec8f5.exe)\n     Running tests\\real_corpus.rs (target\\debug\\deps\\real_corpus-4cef0bf42080529e.exe)\n     Running tests\\regression_report\\main.rs (target\\debug\\deps\\regression_report-f2b6e7608b1a7ca9.exe)\n     Running tests\\restoration.rs (target\\debug\\deps\\restoration-c37ddda2e96814aa.exe)\n     Running tests\\revisions.rs (target\\debug\\deps\\revisions-3f881ebab8687f1c.exe)\n     Running tests\\siblings.rs (target\\debug\\deps\\siblings-aa491999edd2b154.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-2049d200876e17c5.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-664bcf5196b763d4.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-b77bfff260f58dcf.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-5768e840765d1bfc.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-55bd8f919d9bc0a0.exe)\n   Doc-tests nomos_spec_ingest\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1787205101,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "c780abf68e40254dd06cbddd02be1441c3015d4a"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -22203,14 +22221,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-declaretypes-spec-project",
-        "acquired_at": 1787202444,
-        "lease_expires_at": 1787213244
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -22224,7 +22238,31 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-project",
+          "-p",
+          "nomos-spec-bundle",
+          "-p",
+          "nomos-spec-model"
+        ],
+        "exit_code": 0,
+        "output_tail": "Same_Subject_In_Its_Own_Format ... ok\ntest subjects::Test_One_Profile_Should_Serve_Every_Subject ... ok\ntest determinism::Test_Insertion_Order_Should_Not_Reach_The_Output ... ok\ntest determinism::Test_Building_From_A_Fresh_Import_Should_Equal_Building_From_The_Original ... ok\ntest rebuildability::Test_A_Seeded_Store_Should_Answer_For_Exactly_The_Declared_Content_Kinds ... ok\ntest rebuildability::Test_Every_Required_Profile_Should_Render_Over_A_Seeded_Store ... ok\ntest rebuildability::Test_Rendering_Over_A_Seeded_Store_Should_Imply_Reaching_Only_Seeded_Content ... ok\ntest renderers::Test_The_Governing_Records_Should_Project_As_A_Document_Suite ... ok\n\ntest result: ok. 43 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.29s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.12s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_bundle-b1909fd3ca310e10.exe)\n     Running tests\\durable_load.rs (target\\debug\\deps\\durable_load-4860a51c1ae706a3.exe)\n     Running tests\\round_trip\\main.rs (target\\debug\\deps\\round_trip-14c9c137b199be69.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_model-ce5db4274686441d.exe)\n     Running tests\\byte_order_mark.rs (target\\debug\\deps\\byte_order_mark-e91e03ad41a0319f.exe)\n     Running tests\\normalizer_gate.rs (target\\debug\\deps\\normalizer_gate-40b34e670d9ef6b4.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_project-90ace1b899f038c8.exe)\n     Running tests\\projections\\main.rs (target\\debug\\deps\\projections-91a00061d9a9372a.exe)\n   Doc-tests nomos_spec_bundle\n   Doc-tests nomos_spec_model\n   Doc-tests nomos_spec_project\n",
+        "verified_at": 1787205088,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "c780abf68e40254dd06cbddd02be1441c3015d4a"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -22244,14 +22282,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-declaretypes-host",
-        "acquired_at": 1787202444,
-        "lease_expires_at": 1787213244
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -22263,7 +22297,29 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-surface-provenance"
+        ],
+        "exit_code": 0,
+        "output_tail": "Test_A_Clean_Crate_Is_Named_But_Not_Flagged ... ok\ntest report::tests::Test_A_Finding_Is_Named_With_Its_Commits ... ok\ntest discovery::tests::Test_This_Repositorys_Own_Surface_Directory_Yields_Its_Crates ... ok\ntest evaluate::tests::Test_A_Blank_Diff_Means_No_Finding ... ok\ntest arguments::tests::Test_Crate_Repeats_And_Root_Are_Read ... ok\ntest git::tests::Test_Endpoint_Diff_Compares_The_Two_Trees_Directly ... ok\ntest tests::Test_A_Finding_Reaches_The_Rendered_Report_And_Still_Exits_Ok ... ok\ntest tests::Test_An_Unknown_Crate_Name_Is_A_Usage_Error ... ok\n\ntest result: ok. 18 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.16s\n     Running unittests src\\main.rs (target\\debug\\deps\\nomos-4872f6c71fdf7380.exe)\n     Running tests\\abandon_is_readable.rs (target\\debug\\deps\\abandon_is_readable-438fb02b385d78aa.exe)\n     Running tests\\add_guarantees_what_it_says.rs (target\\debug\\deps\\add_guarantees_what_it_says-f703d341d244dcf5.exe)\n     Running tests\\authoring_surface.rs (target\\debug\\deps\\authoring_surface-47a846b52b043a6d.exe)\n     Running tests\\check_command.rs (target\\debug\\deps\\check_command-1f72f9de0f7a6e95.exe)\n     Running tests\\freshness.rs (target\\debug\\deps\\freshness-ae80954d21bc9069.exe)\n     Running tests\\gate_step\\main.rs (target\\debug\\deps\\gate_step-8aeb2760425cece4.exe)\n     Running tests\\list_tells_the_truth.rs (target\\debug\\deps\\list_tells_the_truth-c6279836e2d738ac.exe)\n     Running tests\\read_surface.rs (target\\debug\\deps\\read_surface-561323bd3ef694b7.exe)\n     Running tests\\request_submit.rs (target\\debug\\deps\\request_submit-c0186ed1293ae299.exe)\n     Running tests\\stale_writer_is_refused.rs (target\\debug\\deps\\stale_writer_is_refused-329acf8fb3ec4644.exe)\n     Running tests\\takeover_is_recorded.rs (target\\debug\\deps\\takeover_is_recorded-fb58a3672c6cb420.exe)\n     Running unittests src\\main.rs (target\\debug\\deps\\nomos_surface_provenance-b8c6763b3cf76d00.exe)\n",
+        "verified_at": 1787205011,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "c780abf68e40254dd06cbddd02be1441c3015d4a"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -22283,14 +22339,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-declaretypes-substrate",
-        "acquired_at": 1787202444,
-        "lease_expires_at": 1787213244
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -22302,7 +22354,29 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-analysis",
+          "-p",
+          "nomos-ledger"
+        ],
+        "exit_code": 0,
+        "output_tail": "Be_Found ... ok\ntest serializers::Test_Every_Declared_Serializer_Should_Still_Serialize ... ok\ntest serializers::Test_The_Old_Authoring_Should_Offer_No_Concurrent_Pair ... ok\ntest record_directory::Test_No_Open_Item_Should_Reserve_The_Whole_Record_Directory ... ok\ntest serializers::Test_Every_Universal_Reservation_Should_Be_Declared ... ok\ntest identifier_and_file::Test_An_Item_Naming_A_Records_File_Should_Be_Refused_By_Its_Identifiers_Holder ... ok\ntest sharing_a_record::Test_Two_Items_Writing_One_Record_Should_Still_Be_Refused ... ok\ntest record_exclusion::Test_A_Record_Should_Exclude_Nobody_But_Its_Own_Writer ... ok\n\ntest result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.10s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_analysis-8ed2b98a0abe7ca2.exe)\n     Running tests\\fact_identity\\main.rs (target\\debug\\deps\\fact_identity-472de15e56a195d2.exe)\n     Running tests\\invalidation_order.rs (target\\debug\\deps\\invalidation_order-5c58ca88752defbc.exe)\n     Running tests\\recomputation_equivalence.rs (target\\debug\\deps\\recomputation_equivalence-8bcea38aeda441f4.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_ledger-9f0da988d67699df.exe)\n     Running tests\\declining_ends_an_item.rs (target\\debug\\deps\\declining_ends_an_item-b7c376552463c63c.exe)\n     Running tests\\exclusion_holds\\main.rs (target\\debug\\deps\\exclusion_holds-da7f1fa9457ac951.exe)\n     Running tests\\gate_covers_finish\\main.rs (target\\debug\\deps\\gate_covers_finish-2e5a5ed1fbbe02e7.exe)\n     Running tests\\records_do_not_serialize\\main.rs (target\\debug\\deps\\records_do_not_serialize-e02314411601679d.exe)\n   Doc-tests nomos_analysis\n   Doc-tests nomos_ledger\n",
+        "verified_at": 1787205079,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "c780abf68e40254dd06cbddd02be1441c3015d4a"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -22360,14 +22434,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-declaretypes-rules",
-        "acquired_at": 1787202444,
-        "lease_expires_at": 1787213244
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -22377,7 +22447,27 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "exit_code": 0,
+        "output_tail": "t_Every_Site_Should_Produce_Its_Own_Finding ... ok\ntest naming::violations::tests::casing::Test_A_Double_Underscore_Should_Not_Conform ... ok\ntest reachability::tests::judging::Test_One_Flagged_Site_Should_Produce_One_Finding ... ok\ntest naming::violations::tests::scanning::Test_A_Conforming_Function_Should_Produce_No_Finding ... ok\ntest registry::rule_registry::tests::Test_An_Empty_Registry_Should_Offer_Nothing ... ok\ntest registry::rule_registry::tests::Test_A_Rule_Should_Be_Findable_By_Its_Id ... ok\ntest registry::rule_registry::tests::Test_A_Second_Offer_For_One_Rule_Should_Be_Refused ... ok\ntest universe::tests::Test_A_Constant_Slice_Should_Be_Found ... ok\ntest universe::tests::Test_A_Declared_Mirror_Should_Be_Read_Off_The_Doc_Comment ... ok\ntest universe::tests::Test_A_List_With_No_Documentation_Should_Claim_No_Mirror ... ok\ntest universe::tests::Test_A_File_That_Declares_Nothing_Should_Be_Observed_And_Empty ... ok\ntest universe::tests::Test_A_Private_List_Should_Not_Be_A_Universe ... ok\ntest naming::violations::tests::scanning::Test_An_Inherent_Methods_Non_Conforming_Name_Should_Not_Be_Exempt ... ok\ntest universe::tests::Test_A_Payload_From_A_Blind_Provider_Should_Not_Read_As_No_Mirror ... ok\ntest universe::tests::Test_A_Trait_Impl_Should_Not_Claim_The_Type ... ok\ntest universe::tests::Test_A_Scalar_Constant_Should_Not_Be_A_Universe ... ok\ntest universe::tests::Test_An_All_Should_Be_Attributed_To_Its_Type ... ok\ntest universe::tests::Test_An_All_That_Takes_A_Receiver_Should_Not_Be_A_Universe ... ok\n\ntest result: ok. 78 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-rules v0.1.0 (F:\\repos\\nomos\\crates\\rules\\nomos-rules)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.88s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-12a9eec0a9b372bd.exe)\n   Doc-tests nomos_rules\n",
+        "verified_at": 1787205070,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "c780abf68e40254dd06cbddd02be1441c3015d4a"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -22510,7 +22600,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Splitting: the code seam needs no spec-store territory, and a live peer holds crates/spec/nomos-spec-store for ~3h; re-authoring as two disjoint items so the code half is claimable now."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -22533,7 +22627,140 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
+      "declined": {
+        "holder": "claude-gate-run-seam",
+        "declined_at": 1787202580
+      }
+    },
+    {
+      "id": "P13-GATE-RUN-SEAM-CODE",
+      "title": "nomos-cli composes gate run because gate-orchestration and check-orchestration are peer bands: give gate-orchestration the seam OD-HOST-001 already built for the work group",
+      "why": "crates/host/nomos-cli/src/gate/run.rs documents why itself: nomos-gate-orchestration and nomos-check-orchestration are both band 40 (README.md), and tests/contract/tests/boundaries/graph.rs Test_Dependencies_Should_Run_Strictly_Downward forbids a band depending on its own band, so the walk-judge-reduce composition for nomos gate run lives in nomos-cli instead of nomos-gate-orchestration. A second adapter wanting gate run without depending on nomos-cli -- exactly the API/MCP parity ARC-ROADMAP-001 names as near-term, next to Gate policy itself -- would have to re-derive that composition, the same duplication OD-HOST-001 fixed for the work group before a second adapter existed. Grepped directly: nothing else at band 40 depends on nomos-gate-orchestration, so moving it above nomos-check-orchestration band costs nothing else in the workspace. Split from P13-GATE-RUN-SEAM (declined): the OD-HOST-002 record amendment this gap also deserves needs crates/spec/nomos-spec-store territory a live peer holds, and does not need to block this code change.",
+      "done_when": "nomos-gate-orchestration exposes a public function generic over nomos-platform traits (the same genericity nomos_check_orchestration::Run and nomos_work_orchestration::Run already have) that, given an already-walked source set, composes nomos_check_orchestration::Run and the Disposition function this crate already owns into a GateRunResult -- the same value crates/host/nomos-cli/src/gate/run.rs currently builds by hand. nomos-gate-orchestration band moves above nomos-check-orchestration band so that dependency satisfies the strictly-downward rule, and README.md band table and tests/contract/tests/boundaries/bands.rs BANDS agree. crates/host/nomos-cli/src/gate/run.rs shrinks to the directory walk and platform construction only, calling the new function instead of duplicating its logic. tests/contract/surface/nomos-gate-orchestration.txt is regenerated against the new public surface.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration",
+          "crates/host/nomos-cli/src/gate.rs",
+          "crates/host/nomos-cli/src/gate",
+          "README.md",
+          "tests/contract/tests/boundaries/bands.rs",
+          "tests/contract/surface/nomos-gate-orchestration.txt"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Splitting further: crates/host is currently locked by P13-DECLARETYPES-HOST for ~3h, but crates/orchestration/nomos-gate-orchestration itself is free. Building the seam crate-side now, wiring nomos-cli to call it in a follow-up once that claim frees."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-gate-run-seam",
+        "declined_at": 1787202633
+      }
+    },
+    {
+      "id": "P13-GATE-RUN-SEAM-CRATE",
+      "title": "Give nomos-gate-orchestration a real Run_Gate seam over nomos-check-orchestration, the OD-HOST-001 shape, before nomos-cli is migrated to call it",
+      "why": "crates/host/nomos-cli/src/gate/run.rs documents why the walk-judge-reduce composition for nomos gate run currently lives in nomos-cli: nomos-gate-orchestration and nomos-check-orchestration are both band 40 (README.md), and tests/contract/tests/boundaries/graph.rs Test_Dependencies_Should_Run_Strictly_Downward forbids a band depending on its own band. A second adapter wanting gate run without depending on nomos-cli -- exactly the API/MCP parity ARC-ROADMAP-001 names as near-term, next to Gate policy itself -- would have to re-derive that composition, the same duplication OD-HOST-001 fixed for the work group before a second adapter existed. Grepped directly: nothing else at band 40 depends on nomos-gate-orchestration, so moving it above nomos-check-orchestration band costs nothing else in the workspace. Split from P13-GATE-RUN-SEAM-CODE (declined): P13-DECLARETYPES-HOST currently holds all of crates/host for roughly three hours, so the nomos-cli call site cannot be migrated yet. This item builds the seam crate-side only, leaving nomos-cli/src/gate/run.rs unchanged and still correct -- it keeps duplicating the composition until the follow-up migrates it, not calling the new function yet is not a regression.",
+      "done_when": "nomos-gate-orchestration depends on nomos-check-orchestration and exposes a public Run_Gate function generic over nomos-platform traits (the same genericity nomos_check_orchestration::Run and nomos_work_orchestration::Run already have) that, given an already-walked source set (None for unreadable, Some(empty) for no source, Some(sources) to judge -- the same triad crates/host/nomos-cli/src/gate/run.rs currently dispatches by hand), composes nomos_check_orchestration::Run and the Disposition function this crate already owns into a public GateRunResult. nomos-gate-orchestration band moves above nomos-check-orchestration band in both README.md band table and tests/contract/tests/boundaries/bands.rs BANDS. tests/contract/surface/nomos-gate-orchestration.txt is regenerated against the new public surface. crates/host/nomos-cli is not touched by this item.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration",
+          "README.md",
+          "tests/contract/tests/boundaries/bands.rs",
+          "tests/contract/surface/nomos-gate-orchestration.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-gate-run-seam",
+        "acquired_at": 1787202652,
+        "lease_expires_at": 1787209852
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-CLI-GATE-PLAN-RULE-COUNT-STALE-2",
+      "title": "nomos-cli gate::tests still asserts three shipped rules; a fourth (unread-reaches-finding) is registered",
+      "why": "Discovered while finishing the declare-types cleanup items: Test_A_Real_Plan_Should_Report_All_Three_Shipped_Rules in crates/host/nomos-cli/src/gate/tests.rs asserts rules: 3 and names only completeness-mirror, dependency-direction and function-naming-convention. P13-CONTROLFLOW-REACHABILITY-WIRE has since registered a fourth rule, unread-reaches-finding, so a real nomos gate plan now reports rules: 4 and this test fails against the workspaces own tree, blocking any items whose verification predicate touches cargo test -p nomos-cli. Same drift family as the already-landed P13-RULES-007-FOUR-RULE-RECHECK.",
+      "done_when": "Test_A_Real_Plan_Should_Report_All_Three_Shipped_Rules (renamed to reflect four rules) asserts rules: 4 and names all four registered rule ids, matching a real nomos gate plan --root . run over this workspace. cargo test -p nomos-cli stays green.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "folded into P13-DECLARETYPES-HOST's own finish to unblock its cargo test -p nomos-cli predicate — same file (gate/tests.rs), fixed under that claim instead of a separate one"
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-declaretypes-host",
+        "declined_at": 1787205017
+      }
     }
   ]
 }

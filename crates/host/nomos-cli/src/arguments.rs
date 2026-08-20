@@ -42,16 +42,26 @@ pub(crate) fn Named_Values(arguments: &[String], name: &str) -> Vec<String>
     return values;
 }
 
+/// The flag's own name, e.g. `--item` -- echoed back into the refusal message so a
+/// caller learns what was missing. A distinct type from [`Usage`] only so the two
+/// adjacent `&str` positions in [`Required`] cannot be swapped without the compiler
+/// noticing.
+pub(crate) struct Name<'a>(pub(crate) &'a str);
+
+/// The usage text appended after [`Name`] in a refusal, so a caller sees not just what
+/// was missing but how to supply it.
+pub(crate) struct Usage<'a>(pub(crate) &'a str);
+
 /// A required value, or a message naming what is missing and what the group accepts.
 ///
 /// # Errors
 ///
 /// Returns the message when the value is absent.
-pub(crate) fn Required(value: Option<&String>, name: &str, usage: &str) -> Result<String, String>
+pub(crate) fn Required(value: Option<&String>, name: Name<'_>, usage: Usage<'_>) -> Result<String, String>
 {
     return value
         .cloned()
-        .ok_or_else(|| return format!("{name} is required.\n\n{usage}"));
+        .ok_or_else(|| return format!("{} is required.\n\n{}", name.0, usage.0));
 }
 
 #[cfg(test)]
@@ -88,7 +98,7 @@ mod tests
     #[test]
     fn Test_A_Missing_Required_Value_Should_Name_Itself()
     {
-        let error = Required(None, "--item", "usage: nomos work").expect_err("must refuse");
+        let error = Required(None, Name("--item"), Usage("usage: nomos work")).expect_err("must refuse");
 
         assert!(error.contains("--item"));
         assert!(error.contains("usage"));

@@ -1,6 +1,6 @@
 //! What `nomos spec` was asked for, and the usage it prints when it cannot tell.
 
-use super::{SpecCommand, Named_Value, Required, PathBuf, RecordRequest, EditRequest, TableRequest, RenderRequest, FreshnessRequest, Named_Values, CommitRequest};
+use super::{SpecCommand, Name, Named_Value, Required, PathBuf, RecordRequest, EditRequest, TableRequest, RenderRequest, FreshnessRequest, Named_Values, CommitRequest, Usage};
 
 /// Parses `nomos spec` arguments.
 ///
@@ -35,7 +35,7 @@ pub(super) fn Required_Value(arguments: &[String], name: &str) -> Result<String,
 {
     let value = Named_Value(arguments, name);
 
-    return Required(value.as_ref(), name, &Usage_Text());
+    return Required(value.as_ref(), Name(name), Usage(&Usage_Text()));
 }
 
 /// A flag with no default, read as a path.

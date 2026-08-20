@@ -162,15 +162,15 @@ fn Test_An_Unknown_Flag_Should_Refuse()
     assert!(error.contains("usage"), "{error}");
 }
 
-/// A real run over this workspace's own three shipped rules reports all three, and exits
+/// A real run over this workspace's own four shipped rules reports all four, and exits
 /// clean.
 ///
 /// End to end, the way the shipped binary is actually called -- `nomos_gate_orchestration
-/// ::Registered` composes the same three real offers `P13-GATE-ORCHESTRATION-1`'s own crate
+/// ::Registered` composes the same four real offers `P13-GATE-ORCHESTRATION-1`'s own crate
 /// test already checks; this is the assertion that the CLI seam renders what came back
 /// rather than trusting the crate boundary silently.
 #[test]
-fn Test_A_Real_Plan_Should_Report_All_Three_Shipped_Rules()
+fn Test_A_Real_Plan_Should_Report_All_Four_Shipped_Rules()
 {
     let invocation = GateInvocation::Plan(GateCommand { root: PathBuf::from(".") });
     let mut stdout = Vec::new();
@@ -180,10 +180,11 @@ fn Test_A_Real_Plan_Should_Report_All_Three_Shipped_Rules()
     let rendered = String::from_utf8_lossy(&stdout).into_owned();
 
     assert_eq!(code, ExitCode::Ok, "{rendered}");
-    assert!(rendered.contains("rules: 3"), "{rendered}");
+    assert!(rendered.contains("rules: 4"), "{rendered}");
     assert!(rendered.contains("completeness-mirror"), "{rendered}");
     assert!(rendered.contains("dependency-direction"), "{rendered}");
     assert!(rendered.contains("function-naming-convention"), "{rendered}");
+    assert!(rendered.contains("unread-reaches-finding"), "{rendered}");
     assert!(String::from_utf8_lossy(&stderr).is_empty());
 }
 
@@ -191,7 +192,7 @@ fn Test_A_Real_Plan_Should_Report_All_Three_Shipped_Rules()
 /// real tree" discipline the `plan` test above already uses. This repository's own `Rules`
 /// step already runs `gate run` over this same tree and expects it clean -- the exact
 /// command under test here -- so this test, exercising the same command CI actually runs,
-/// must agree with itself end to end: `Ok`, not `Violations`, and the same three rule names
+/// must agree with itself end to end: `Ok`, not `Violations`, and the same four rule names
 /// `plan` already reports must be nameable in the rendered findings' rule ids where any
 /// exist, or the finding count must be zero.
 #[test]

@@ -63,7 +63,7 @@ pub(crate) use nomos_spec_orchestration::{
     TableRequest,
 };
 
-use crate::arguments::{Named_Value, Named_Values, Required};
+use crate::arguments::{Name, Named_Value, Named_Values, Required, Usage};
 use nomos_spec_orchestration::corpus::{Assemble, Assembly, CorpusRequest};
 use nomos_spec_project::{Profile, ProjectError, SIDECAR_SUFFIX, Stamp};
 use nomos_spec_store::{

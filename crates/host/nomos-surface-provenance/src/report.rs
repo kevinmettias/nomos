@@ -1,19 +1,21 @@
 //! Rendering findings as text a person reads, never as a verdict a machine acts on.
 
 use crate::evaluate::CrateFinding;
+use crate::git::{Since, Until};
 use std::fmt::Write as _;
 
 /// The whole report for one run: every crate checked, in the order it was checked.
-pub(crate) fn Render(since: &str, until: &str, findings: &[CrateFinding]) -> String
+pub(crate) fn Render(since: Since<'_>, until: Until<'_>, findings: &[CrateFinding]) -> String
 {
     let mut text = format!(
-        "OD-STORE-002 surface/records report -- range {since}..{until}\n\n\
+        "OD-STORE-002 surface/records report -- range {}..{}\n\n\
          A finding names a crate whose tests/contract/surface/<crate>.txt blob differs \
          between the two endpoints above, in a range where no commit touched \
          docs/records/. This is Derived evidence, not a violation: a rebless-only commit \
          (no design decided, just a snapshot catching up to a change made elsewhere) reads \
          identically to an undocumented one from git history alone. Read the commits named \
-         below before treating either as record-worthy.\n\n"
+         below before treating either as record-worthy.\n\n",
+        since.0, until.0
     );
 
     let flagged: Vec<&CrateFinding> = findings.iter().filter(|finding| finding.Is_A_Finding()).collect();
@@ -79,25 +81,37 @@ mod tests
     use super::*;
     use crate::evaluate::CommitRef;
 
-    fn Finding(krate: &str, surface_changed: bool, records_touched: bool) -> CrateFinding
+    /// What [`Finding`] needs beyond the crate's name -- bundled into one value rather
+    /// than passed as two adjacent `bool` parameters, which a call site like
+    /// `Finding("nomos-model", true, false)` cannot tell apart without counting.
+    struct FindingState
+    {
+        surface_changed: bool,
+        records_touched: bool,
+    }
+
+    fn Finding(krate: &str, state: FindingState) -> CrateFinding
     {
         return CrateFinding {
             krate: krate.to_owned(),
-            surface_changed,
+            surface_changed: state.surface_changed,
             surface_commits: vec![CommitRef {
                 hash: "deadbeefcafe".to_owned(),
                 subject: "reblessed".to_owned(),
             }],
-            records_touched,
+            records_touched: state.records_touched,
         };
     }
 
     #[test]
     fn Test_A_Finding_Is_Named_With_Its_Commits()
     {
-        let findings = vec![Finding("nomos-model", true, false)];
+        let findings = vec![Finding(
+            "nomos-model",
+            FindingState { surface_changed: true, records_touched: false },
+        )];
 
-        let text = Render("a", "b", &findings);
+        let text = Render(Since("a"), Until("b"), &findings);
 
         assert!(text.contains("FINDING nomos-model"));
         assert!(text.contains("deadbeef"));
@@ -108,9 +122,12 @@ mod tests
     #[test]
     fn Test_A_Clean_Crate_Is_Named_But_Not_Flagged()
     {
-        let findings = vec![Finding("nomos-model", true, true)];
+        let findings = vec![Finding(
+            "nomos-model",
+            FindingState { surface_changed: true, records_touched: true },
+        )];
 
-        let text = Render("a", "b", &findings);
+        let text = Render(Since("a"), Until("b"), &findings);
 
         assert!(!text.contains("FINDING"));
         assert!(text.contains("checked and clean: nomos-model"));

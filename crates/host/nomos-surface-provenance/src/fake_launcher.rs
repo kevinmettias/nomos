@@ -10,6 +10,15 @@
 
 use nomos_platform::{Command, ExitOutcome, ProcessLauncher, ProcessOutput};
 
+/// The stdout a scripted answer hands back. A distinct type from [`Stderr`] only so the
+/// two adjacent `&str` positions in [`Scripted::Answer`] cannot be swapped without the
+/// compiler noticing -- this is test-support fixture code, not part of the crate's
+/// production surface, so a lightweight local pair is enough.
+pub(crate) struct Stdout<'a>(pub(crate) &'a str);
+
+/// The stderr a scripted answer hands back. See [`Stdout`].
+pub(crate) struct Stderr<'a>(pub(crate) &'a str);
+
 /// One scripted answer: a substring of the joined argv to match, and what to hand
 /// back when it does.
 struct ScriptedAnswer
@@ -35,13 +44,13 @@ impl Scripted
 
     /// Adds an answer for the first command whose joined argv contains `matching`.
     #[must_use]
-    pub(crate) fn Answer(mut self, matching: &str, code: i32, stdout: &str, stderr: &str) -> Self
+    pub(crate) fn Answer(mut self, matching: &str, code: i32, stdout: Stdout<'_>, stderr: Stderr<'_>) -> Self
     {
         self.answers.push(ScriptedAnswer {
             matching: matching.to_owned(),
             code,
-            stdout: stdout.to_owned(),
-            stderr: stderr.to_owned(),
+            stdout: stdout.0.to_owned(),
+            stderr: stderr.0.to_owned(),
         });
 
         return self;

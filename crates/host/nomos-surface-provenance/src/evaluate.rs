@@ -51,8 +51,8 @@ impl CrateFinding
 pub(crate) fn Records_Touched(
     launcher: &impl ProcessLauncher,
     root: &Path,
-    since: &str,
-    until: &str,
+    since: git::Since<'_>,
+    until: git::Until<'_>,
 ) -> Result<bool, String>
 {
     let command = git::Records_Touched_In_Range(root, since, until);
@@ -93,11 +93,11 @@ pub(crate) fn Finding_For(launcher: &impl ProcessLauncher, query: &Query<'_>, kr
     let path = crate::discovery::Snapshot_Path(krate);
     let range = &query.range;
 
-    let diff_command = git::Endpoint_Diff(range.root, range.since, range.until, &path);
+    let diff_command = git::Endpoint_Diff(range.root, git::Since(range.since), git::Until(range.until), &path);
     let diff = Ran(launcher, &diff_command)?;
     let surface_changed = Nonempty(&diff);
 
-    let surface_commits = Surface_Commits(launcher, range, &path, surface_changed)?;
+    let surface_commits = Surface_Commits(launcher, range, &path, surface_changed.into())?;
 
     return Ok(CrateFinding {
         krate: krate.to_owned(),
@@ -107,6 +107,24 @@ pub(crate) fn Finding_For(launcher: &impl ProcessLauncher, query: &Query<'_>, kr
     });
 }
 
+/// Whether the surface snapshot actually differs between the two endpoints -- the
+/// answer [`Finding_For`] already computed before asking [`Surface_Commits`] whether to
+/// also list the commits that produced it. A named two-state type rather than a bare
+/// `bool` parameter, so a call site reads as a decision rather than an unlabeled flag.
+enum SurfaceChanged
+{
+    Yes,
+    No,
+}
+
+impl From<bool> for SurfaceChanged
+{
+    fn from(value: bool) -> Self
+    {
+        return if value { Self::Yes } else { Self::No };
+    }
+}
+
 /// Every commit touching `path` in `range`, or none when the surface never changed --
 /// skipping the second `git log` call entirely rather than running it just to discard the
 /// answer.
@@ -114,15 +132,15 @@ fn Surface_Commits(
     launcher: &impl ProcessLauncher,
     range: &CommitRange<'_>,
     path: &str,
-    surface_changed: bool,
+    surface_changed: SurfaceChanged,
 ) -> Result<Vec<CommitRef>, String>
 {
-    if !surface_changed
+    if matches!(surface_changed, SurfaceChanged::No)
     {
         return Ok(Vec::new());
     }
 
-    let history_command = git::Path_History(range.root, range.since, range.until, path);
+    let history_command = git::Path_History(range.root, git::Since(range.since), git::Until(range.until), path);
     let history = Ran(launcher, &history_command)?;
 
     return Ok(Parse_Commits(&history));
@@ -180,7 +198,7 @@ fn Parse_Commits(text: &str) -> Vec<CommitRef>
 mod tests
 {
     use super::*;
-    use crate::fake_launcher::Scripted;
+    use crate::fake_launcher::{Scripted, Stderr, Stdout};
 
     /// Runs the whole join a real invocation performs -- `Records_Touched` then
     /// `Finding_For`, both expected to succeed. Every test below wants exactly this
@@ -188,7 +206,8 @@ mod tests
     /// each repeating the two-call join.
     fn Joined(launcher: &Scripted, range: CommitRange<'_>, krate: &str) -> CrateFinding
     {
-        let records_touched = Records_Touched(launcher, range.root, range.since, range.until).expect("must run");
+        let records_touched =
+            Records_Touched(launcher, range.root, git::Since(range.since), git::Until(range.until)).expect("must run");
         let query = Query { range, records_touched };
 
         return Finding_For(launcher, &query, krate).expect("must run");
@@ -206,8 +225,8 @@ mod tests
     fn Test_A_Blank_Diff_Means_No_Finding()
     {
         let launcher = Scripted::New()
-            .Answer("diff", 0, "", "")
-            .Answer("log a..b --format=%H --", 0, "", "");
+            .Answer("diff", 0, Stdout(""), Stderr(""))
+            .Answer("log a..b --format=%H --", 0, Stdout(""), Stderr(""));
         let finding = Joined(&launcher, Repo_Range(), "nomos-model");
 
         assert!(!finding.surface_changed);
@@ -218,9 +237,9 @@ mod tests
     fn Test_A_Changed_Surface_With_No_Records_Commit_Is_A_Finding()
     {
         let launcher = Scripted::New()
-            .Answer("diff", 0, "tests/contract/surface/nomos-model.txt\n", "")
-            .Answer("log a..b --format=%H --", 0, "", "")
-            .Answer("log a..b --format=%H\t%s --", 0, "deadbeef\treblessed\n", "");
+            .Answer("diff", 0, Stdout("tests/contract/surface/nomos-model.txt\n"), Stderr(""))
+            .Answer("log a..b --format=%H --", 0, Stdout(""), Stderr(""))
+            .Answer("log a..b --format=%H\t%s --", 0, Stdout("deadbeef\treblessed\n"), Stderr(""));
         let finding = Joined(&launcher, Repo_Range(), "nomos-model");
 
         assert!(finding.surface_changed);
@@ -234,9 +253,9 @@ mod tests
     fn Test_A_Changed_Surface_With_A_Records_Commit_Is_Not_A_Finding()
     {
         let launcher = Scripted::New()
-            .Answer("diff", 0, "tests/contract/surface/nomos-model.txt\n", "")
-            .Answer("log a..b --format=%H --", 0, "cafef00d\n", "")
-            .Answer("log a..b --format=%H\t%s --", 0, "deadbeef\treal change\n", "");
+            .Answer("diff", 0, Stdout("tests/contract/surface/nomos-model.txt\n"), Stderr(""))
+            .Answer("log a..b --format=%H --", 0, Stdout("cafef00d\n"), Stderr(""))
+            .Answer("log a..b --format=%H\t%s --", 0, Stdout("deadbeef\treal change\n"), Stderr(""));
         let finding = Joined(&launcher, Repo_Range(), "nomos-model");
 
         assert!(finding.surface_changed);
@@ -247,7 +266,7 @@ mod tests
     #[test]
     fn Test_A_Bad_Revision_Is_An_Error_Not_A_Finding()
     {
-        let launcher = Scripted::New().Answer("diff", 128, "", "fatal: bad revision 'nonsense'");
+        let launcher = Scripted::New().Answer("diff", 128, Stdout(""), Stderr("fatal: bad revision 'nonsense'"));
         let query = Query {
             range: CommitRange { root: Path::new("/repo"), since: "nonsense", until: "b" },
             records_touched: false,
