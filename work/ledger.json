@@ -22925,14 +22925,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-concurrency-unsafe",
-        "acquired_at": 1787206143,
-        "lease_expires_at": 1787209743
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -22944,7 +22940,29 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-analysis",
+          "-p",
+          "nomos-platform-std"
+        ],
+        "exit_code": 0,
+        "output_tail": "ry_Behind ... ok\ntest lock::tests::Test_A_Stale_Lock_Should_Be_Broken_And_Reported ... ok\ntest lock::tests::Test_A_Held_Lock_Should_Refuse_A_Second_Holder ... ok\ntest filesystem::tests::Test_Replace_Should_Round_Trip_Contents ... ok\ntest launcher::tests::Test_A_Failing_Program_Should_Report_Its_Exit_Code ... ok\ntest launcher::tests::Test_A_Successful_Program_Should_Report_A_Zero_Exit ... ok\ntest launcher::tests::Test_A_Loud_Programs_Output_Should_Arrive_Whole ... ok\ntest launcher::tests::Test_A_Loud_Program_Should_Be_Judged_On_Its_Result_Not_Its_Volume ... ok\ntest launcher::tests::Test_A_Program_That_Exceeds_Its_Timeout_Should_Still_Time_Out ... ok\ntest launcher::tests::Test_A_Progressing_Program_Should_Report_Timed_Out_Rather_Than_Stalled ... ok\ntest launcher::tests::Test_A_Silent_Program_Should_Report_Stalled_Rather_Than_Timed_Out ... ok\ntest launcher::tests::Test_A_Kill_Should_Reach_The_Whole_Process_Tree_Not_Only_The_Direct_Child ... ok\ntest launcher::tests::Test_A_Grandchild_Holding_The_Pipe_Should_Not_Hold_The_Launcher ... ok\n\ntest result: ok. 21 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 5.08s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.10s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_analysis-8ed2b98a0abe7ca2.exe)\n     Running tests\\fact_identity\\main.rs (target\\debug\\deps\\fact_identity-472de15e56a195d2.exe)\n     Running tests\\invalidation_order.rs (target\\debug\\deps\\invalidation_order-5c58ca88752defbc.exe)\n     Running tests\\recomputation_equivalence.rs (target\\debug\\deps\\recomputation_equivalence-8bcea38aeda441f4.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_platform_std-9df357ef2edc3eb1.exe)\n   Doc-tests nomos_analysis\n   Doc-tests nomos_platform_std\n",
+        "verified_at": 1787206199,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "44162d7599a95ff6618b7a0b5f872504d63d6acb"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

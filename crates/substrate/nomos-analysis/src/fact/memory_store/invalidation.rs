@@ -182,6 +182,9 @@ fn Taken_Propagation(store: &mut MemoryFactStore) -> Taken
     let Some(propagation) = store.propagation.take()
     else
     {
+        // rust-panic: allow: propagation is always present between calls -- see the field's own
+        // doc comment on MemoryFactStore -- so an absence here is this file's own invariant
+        // broken, not a failure a caller could recover from.
         unreachable!("propagation implementation is always present between calls");
     };
 
