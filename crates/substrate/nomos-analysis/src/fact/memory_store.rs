@@ -196,6 +196,20 @@ impl MemoryFactStore
 
         return true;
     }
+
+    /// Whether `digest`'s latest entry is already invalidated, without mutating it -- the
+    /// read-only half of what [`Self::Invalidate_One`] checks before it mutates, split out
+    /// so a walk can decide whether to keep spreading past a node under an immutable
+    /// borrow, before any mutation happens. `OD-ANALYSIS-008` is why this exists as its own
+    /// method rather than staying folded into `Invalidate_One`.
+    fn Already_Invalidated(&self, digest: Digest128) -> bool
+    {
+        return self
+            .entries
+            .get(&digest)
+            .and_then(|history| return history.last())
+            .is_some_and(|entry| return entry.invalidated_at.is_some());
+    }
 }
 
 impl sealed::Sealed for MemoryFactStore

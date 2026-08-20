@@ -11,7 +11,6 @@
 //! `MemoryFactStore` against.
 
 use std::collections::BTreeSet;
-use std::collections::BTreeMap;
 use nomos_contracts::IncrementalGranularity;
 use nomos_contracts::Digest128;
 use nomos_contracts::GenerationId;
@@ -131,6 +130,23 @@ fn Note_Broadening(
 
 /// Spreads invalidation from `roots` through `store.dependents`, recording each reached
 /// dependent's key into `report`. Returns every digest visited, roots included.
+///
+/// Two passes, not one, and the split is why this reads `store.dependents` directly rather
+/// than cloning it first (`OD-ANALYSIS-008`, whose cost was `O(the whole store's
+/// dependents map)` on every call, not just what a given invalidation's frontier actually
+/// reaches). The first pass borrows `store` immutably to walk `dependents` and decide,
+/// through [`MemoryFactStore::Already_Invalidated`] -- the read-only half of what
+/// [`MemoryFactStore::Invalidate_One`] checks before it mutates -- which nodes to keep
+/// spreading past and to collect. Nothing mutates during that pass, so the immutable
+/// borrow `Spread` needs for `dependents` coexists with the immutable reads
+/// `Already_Invalidated` needs; neither coexists with the mutation `Invalidate_One` needs,
+/// which is exactly why the original clone existed. Only the second pass, after the walk
+/// and its borrow have ended, calls `Invalidate_One` and writes into `report`.
+///
+/// The split is sound because a digest is visited exactly once per call -- the trait's own
+/// invariant, pinned by `propagation.rs`'s own suite -- so no digest's `Already_Invalidated`
+/// read in the first pass can be stale from a mutation this same call made to a *different*
+/// digest: invalidating one digest's entry never touches another digest's entry.
 fn Propagate(
     store: &mut MemoryFactStore,
     roots: Vec<Digest128>,
@@ -140,40 +156,36 @@ fn Propagate(
 ) -> BTreeSet<Digest128>
 {
     let mut seen: BTreeSet<Digest128> = roots.iter().copied().collect();
-    let Taken { dependents, propagation } = Taken_Propagation(store);
-    let invalidating = Invalidating { from, described };
+    let propagation = Taken_Propagation(store);
 
-    propagation.Spread(&dependents, roots, &mut |consumer| {
-        return Reached(store, consumer, invalidating, &mut seen, report);
+    let mut reached: Vec<Digest128> = Vec::new();
+    propagation.Spread(&store.dependents, roots, &mut |consumer| {
+        seen.insert(consumer);
+        if store.Already_Invalidated(consumer)
+        {
+            return false;
+        }
+        reached.push(consumer);
+
+        return true;
     });
+
     store.propagation = Some(propagation);
+
+    let invalidating = Invalidating { from, described };
+    for consumer in reached
+    {
+        Apply(store, consumer, invalidating, report);
+    }
 
     return seen;
 }
 
-/// What [`Taken_Propagation`] takes out of `store` for the walk: the dependents snapshot it
-/// reads and the propagation implementation it calls into. Named so the two travel as a
-/// struct with named fields rather than a pair whose two positions a caller has to remember.
-struct Taken
+/// Takes `store.propagation` out so the first pass in [`Propagate`] can call it under an
+/// immutable borrow of `store` without a live mutable borrow of this one field left behind
+/// to conflict with it.
+fn Taken_Propagation(store: &mut MemoryFactStore) -> Box<dyn DependencyPropagation>
 {
-    dependents: BTreeMap<Digest128, BTreeSet<Digest128>>,
-    propagation: Box<dyn DependencyPropagation>,
-}
-
-/// Takes `store.propagation` out, alongside a snapshot of `store.dependents`, so the walk
-/// in [`Propagate`] can hold `&mut MemoryFactStore` inside its own callback without a live
-/// borrow of either field conflicting with it.
-///
-/// Cloned once, and `propagation` taken out of `store`, rather than either held as a
-/// borrow across the walk: the callback needs `&mut MemoryFactStore` for
-/// [`MemoryFactStore::Invalidate_One`] and `store.keys`, which cannot coexist with a borrow
-/// of `store.dependents` or `store.propagation` for the call that runs it.
-/// `DependencyPropagation` has no Nomos-specific reason to know about that conflict — see
-/// `docs/records/D-135` and `docs/records/D-138`.
-fn Taken_Propagation(store: &mut MemoryFactStore) -> Taken
-{
-    let dependents = store.dependents.clone();
-
     // `store.propagation` is `Some` between any two calls into this type — see the field's
     // own doc comment on `MemoryFactStore` — so an absence here is this file's own
     // invariant broken, not a failure a caller could recover from. `unreachable!` says
@@ -188,30 +200,21 @@ fn Taken_Propagation(store: &mut MemoryFactStore) -> Taken
         unreachable!("propagation implementation is always present between calls");
     };
 
-    return Taken { dependents, propagation };
+    return propagation;
 }
 
-/// One node the walk reached: recorded into `seen`, invalidated, and — if it was live —
-/// named in `report`. Returns whether the walk should continue past it.
-fn Reached(
-    store: &mut MemoryFactStore,
-    consumer: Digest128,
-    invalidating: Invalidating<'_>,
-    seen: &mut BTreeSet<Digest128>,
-    report: &mut InvalidationReport,
-) -> bool
+/// One node the first pass decided to keep: invalidated for real, and — if it was live —
+/// named in `report`.
+fn Apply(store: &mut MemoryFactStore, consumer: Digest128, invalidating: Invalidating<'_>, report: &mut InvalidationReport)
 {
-    seen.insert(consumer);
     if !store.Invalidate_One(consumer, invalidating.from, invalidating.described)
     {
-        return false;
+        return;
     }
     if let Some(key) = store.keys.get(&consumer)
     {
         report.dependent.push(key.clone());
     }
-
-    return true;
 }
 
 /// The generation and description a walk is invalidating under, threaded through

@@ -23335,6 +23335,73 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-ANALYSIS-008-TWO-PASS-INVALIDATE",
+      "title": "MemoryFactStore::Invalidate stops cloning the whole dependents map, by splitting into two passes",
+      "why": "OD-ANALYSIS-008 named the clone's O(whole store) cost as a real, accepted hazard, and named its own fix option 2 -- restructure Invalidate into two passes without touching DependencyPropagation at all -- as 'a real candidate for a future item' precisely because it does not touch the seam D-130/D-138 care about matching against a second implementation. The user's roadmap override covers incremental-analysis performance hardening, but this fix does not even need it: it changes no public seam, only MemoryFactStore's own internal walk.",
+      "done_when": "MemoryFactStore::Invalidate no longer clones self.dependents. Propagate (fact/memory_store/invalidation.rs) becomes two passes: pass one calls DependencyPropagation::Spread with a real immutable borrow of store.dependents and a callback that only reads (via a new MemoryFactStore::Already_Invalidated, the read-only half of what Invalidate_One already checks) to decide whether to keep spreading and to collect the accepted digests; pass two, after the walk and its borrow have ended, calls Invalidate_One and writes report.dependent for each collected digest. The reasoning that makes the split sound (a digest is visited exactly once per call, so no digest's Already_Invalidated read can be stale from a mutation this same call made to a different digest) is written down beside the new function, not left implicit. Every existing invalidation test in fact/memory_store/tests.rs continues to pass unmodified, proving the observable InvalidationReport is unchanged. DependencyPropagation's trait signature in propagation.rs is untouched. OD-ANALYSIS-008 gains an amendment recording this fix and that its own seam-facing option remains open.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-analysis/src/fact/memory_store.rs",
+          "crates/substrate/nomos-analysis/src/fact/memory_store/invalidation.rs",
+          "crates/spec/nomos-spec-store/records/OD-ANALYSIS-008.record",
+          "diagrams/relations.mmd",
+          "spec/domain-specification.md",
+          "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-analysis",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-analysis",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "n 0.13s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_analysis-ce688c3f4bf7c2df.exe)\n     Running tests\\fact_identity\\main.rs (target\\debug\\deps\\fact_identity-0484328f47175b6d.exe)\n     Running tests\\invalidation_order.rs (target\\debug\\deps\\invalidation_order-c64136d187dce592.exe)\n     Running tests\\recomputation_equivalence.rs (target\\debug\\deps\\recomputation_equivalence-b8efe55e07acf189.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-55ad3baadee2ff4e.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-56e1c9fba250ca24.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-4d4e16ab50ac70a5.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-35945c6ebc64c902.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-48bfe8d6f3ebf24c.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-ad5f178a2fa55ca5.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-a4b9594685bdc99a.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-0a473518710ef1f1.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-612bfa361c61aabd.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-13810cc2d23617bf.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-ee111bd537ecd137.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-2919ec68747ddb5b.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-99272398d303e3e7.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-756fcac740cd78ad.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-259eb839edee86c9.exe)\n   Doc-tests nomos_analysis\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1787209498,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "33d38fb812752a24511a84747fa1ab589232fc9a"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

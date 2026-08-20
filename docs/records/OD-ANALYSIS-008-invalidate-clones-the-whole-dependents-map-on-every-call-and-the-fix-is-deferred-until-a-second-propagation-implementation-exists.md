@@ -3,7 +3,7 @@ id: OD-ANALYSIS-008
 type: decision
 title: Invalidate clones the whole dependents map on every call, and the fix is deferred until a second propagation implementation exists
 status: open
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - analysis
@@ -114,8 +114,40 @@ Either of:
 
 Until either arrives, the clone stands as a named, accepted cost rather than a silent one.
 
+## The Seam-Free Fix Is Built; The Seam-Facing Question Stays Open
+
+`P13-ANALYSIS-008-TWO-PASS-INVALIDATE` built the second of this record's two "Why It Is
+Deferred" options — restructure `Invalidate` into two passes without touching
+`DependencyPropagation` at all — under the user's roadmap override for incremental-analysis
+performance hardening, though this fix does not actually need that override: it changes no
+public seam, only `MemoryFactStore`'s own internal walk, so it was never blocked by the
+`DependencyPropagation`-seam risk this record's "Why It Is Deferred Rather Than Fixed Here"
+section named for the *other* option.
+
+Verified directly against the real code, not assumed:
+`crates/substrate/nomos-analysis/src/fact/memory_store/invalidation.rs`'s `Propagate` no
+longer clones `self.dependents`. It reads `store.dependents` by real immutable borrow in a
+first pass that decides, through the new `MemoryFactStore::Already_Invalidated` — the
+read-only half of what `Invalidate_One` already checked before mutating — which nodes to
+keep spreading past and to collect; a second pass, after that borrow ends, calls
+`Invalidate_One` and writes the report for each collected digest. Every existing
+invalidation test passed unmodified, including a 100,000-deep chain stress test and the
+test that substitutes an alternate `DependencyPropagation` implementation and checks the
+report agrees — the observable behavior this record's own "must survive being split across
+two passes" risk for the early-decline semantics named as the cost of this exact option.
+`propagation.rs`'s `DependencyPropagation` trait and `LocalGraphPropagation` are byte-for-
+byte unchanged.
+
+The other option — changing `Spread`'s own signature — is untouched by this, and this
+record's primary question (a second real `DependencyPropagation` implementation, or measured
+evidence from a real workload) is unaffected: nothing about the clone's *cost model* changed
+who may design that seam next, only that the clone this record measured no longer exists to
+be a cost at all.
+
 ## Status
 
-Open. Revisit when a second `DependencyPropagation` implementation exists to check the
-seam's shape against, or when a real workload measures this clone's cost rather than its
-complexity.
+Open, narrowed. The clone this record originally measured is gone
+(`P13-ANALYSIS-008-TWO-PASS-INVALIDATE`), so there is no live cost left for a workload to
+measure. What remains open is the seam-facing question this record always kept separate: a
+second real `DependencyPropagation` implementation, or measured evidence that `Spread`'s own
+signature is what should change. Revisit on either.

@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:0ba3f5a34255da5cdb0ab62908b6b621d7b2cd48e9e53dfc9cc1393885f34dd4",
-  "inputs_digest": "sha256:091528414e9998d2eacb1a76e8826bd67e8b27fadfbc36f7f8c32417a90e318c",
+  "content_digest": "sha256:39eeedd385b46fea020c760813cff62877791b77e99b9a8b26567ea97e8ecf27",
+  "inputs_digest": "sha256:0f6616609180393b961d925aea5b1ed8e7dc125d23e717b0a4ecf8e4a477adaa",
   "sections": [
     [
       "Documents",
@@ -12,11 +12,11 @@
     ],
     [
       "Sections",
-      1256
+      1257
     ],
     [
       "Source blocks",
-      4483
+      4487
     ]
   ],
   "inputs": [
@@ -163,7 +163,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md@authored",
-      "hash": "sha256:d56cc8fc4c76215a1ee11ef40613912d0ee3ed7cbacc083d8750e7e8afea113f"
+      "hash": "sha256:2a1f9cc14ba7229566dea2754dfbafa91116a43aa78032e04f419cbd3c313272"
     },
     {
       "content": "documents",
@@ -1793,7 +1793,12 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#17",
-      "hash": "sha256:ec618fa1e89192111edb9058d64e0642fb9c8c36d18096d70a10547a80f1807e"
+      "hash": "sha256:487997600efca70929034111720545139e4bcaaef5c76333f65f1fd60ba1ceb8"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#21",
+      "hash": "sha256:22a22ab170d799fdf9007374e583f75759adada2033dae00387d7c0b6b00dfba"
     },
     {
       "content": "headings",
@@ -10633,12 +10638,32 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#17",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:f2c0335128fb2bfd65e521269f4737cd08cbf99a974b151f97efd2dc9a052f51"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#18",
-      "hash": "sha256:1c0053458af95466b149a8820f8bca9d3d398af2dad6e2404ba46a69150a605d"
+      "hash": "sha256:f12ae831698a0b871fcfe5302fdb1a95f43dfa5f8262635cebe2119ce6f998a8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#19",
+      "hash": "sha256:c1bbad380841f907bdff7bd8e603947df1957e9794ebe8c8f904502a9519e687"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#20",
+      "hash": "sha256:3619287cdc8bfa04820090806825bac5f182c8d911b98f5280fd0796a3c28ca4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#21",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#22",
+      "hash": "sha256:177dbd64fa76856edc2db2b2750a1ad30645b8f8e95a647ddc19b76ff0ca8de4"
     },
     {
       "content": "blocks",
