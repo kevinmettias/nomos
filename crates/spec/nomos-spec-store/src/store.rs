@@ -17,12 +17,15 @@ pub(crate) use write::{
     Write_Source_Document,
 };
 
+use crate::DocumentPath;
+use crate::DocumentRevision;
 use crate::NodeRow;
 use crate::RowCensus;
 use crate::RowScope;
 use crate::StoreError;
 use crate::SuiteAuthority;
 use crate::Table;
+use crate::{SuiteId, SuiteTitle};
 use crate::{Latest_Version, MIGRATIONS, Migration};
 use nomos_spec_model::SourceBlock;
 use rusqlite::{Connection, OptionalExtension, params};
@@ -150,14 +153,14 @@ impl SpecificationStore
     /// # Errors
     ///
     /// Returns [`StoreError`] on any SQL failure.
-    pub fn Put_Source_Document(
+    pub fn Put_Source_Document<'a>(
         &mut self,
-        path: &str,
-        revision: &str,
+        path: impl Into<DocumentPath<'a>>,
+        revision: impl Into<DocumentRevision<'a>>,
         content: &str,
     ) -> Result<i64, StoreError>
     {
-        return Write_Source_Document(&self.connection, path, revision, content);
+        return Write_Source_Document(&self.connection, path.into(), revision.into(), content);
     }
 
     /// Writes blocks and, for any block carrying a table, its typed rows.
@@ -266,13 +269,16 @@ impl SpecificationStore
     /// # Errors
     ///
     /// Returns [`StoreError`] on any SQL failure.
-    pub fn Put_Suite(
+    pub fn Put_Suite<'a>(
         &mut self,
-        suite_id: &str,
-        title: &str,
+        suite_id: impl Into<SuiteId<'a>>,
+        title: impl Into<SuiteTitle<'a>>,
         authority: SuiteAuthority,
     ) -> Result<i64, StoreError>
     {
+        let suite_id = suite_id.into().0;
+        let title = title.into().0;
+
         self.connection.execute(
             "INSERT INTO suites (suite_id, title, authority_root) VALUES (?1, ?2, ?3)
              ON CONFLICT(suite_id) DO UPDATE SET title = excluded.title,
@@ -375,13 +381,16 @@ impl SpecificationStore
     ///
     /// Returns [`StoreError::UnconstrainedRelationType`] if the constraint's domain, range
     /// or `max_per_node` is empty or zero, and [`StoreError`] on any SQL failure.
-    pub fn Put_Relation_Type(
+    pub fn Put_Relation_Type<'a>(
         &mut self,
-        name: &str,
-        tier: &str,
+        name: impl Into<relation::RelationTypeName<'a>>,
+        tier: impl Into<relation::RelationTier<'a>>,
         constraint: &relation::RelationConstraint<'_>,
     ) -> Result<(), StoreError>
     {
+        let name = name.into().0;
+        let tier = tier.into().0;
+
         relation::Assert_Constraint_Is_Declared(name, constraint)?;
 
         let domain_json = relation::Sorted_Kinds_Json(constraint.domain)?;
@@ -408,8 +417,15 @@ impl SpecificationStore
     /// # Errors
     ///
     /// Returns [`StoreError`] if either name is not a relation type.
-    pub fn Pair_Relation_Type(&mut self, name: &str, inverse: &str) -> Result<(), StoreError>
+    pub fn Pair_Relation_Type<'a>(
+        &mut self,
+        name: impl Into<relation::RelationTypeName<'a>>,
+        inverse: impl Into<relation::InverseRelationType<'a>>,
+    ) -> Result<(), StoreError>
     {
+        let name = name.into().0;
+        let inverse = inverse.into().0;
+
         let changed = self.connection.execute(
             "UPDATE relation_types SET inverse_of = ?2 WHERE name = ?1",
             params![name, inverse],
@@ -433,14 +449,14 @@ impl SpecificationStore
     /// # Errors
     ///
     /// Returns [`StoreError`] on any SQL failure.
-    pub fn Put_Relation(
+    pub fn Put_Relation<'a>(
         &mut self,
-        from_node_id: &str,
-        relation_type: &str,
-        to_node_id: &str,
+        from_node_id: impl Into<relation::FromNodeId<'a>>,
+        relation_type: impl Into<relation::RelationTypeName<'a>>,
+        to_node_id: impl Into<relation::ToNodeId<'a>>,
     ) -> Result<(), StoreError>
     {
-        return Write_Relation(&self.connection, from_node_id, relation_type, to_node_id);
+        return Write_Relation(&self.connection, from_node_id.into(), relation_type.into(), to_node_id.into());
     }
 
     /// # Errors

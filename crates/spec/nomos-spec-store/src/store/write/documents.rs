@@ -3,6 +3,8 @@
 use nomos_spec_model::ContentHash;
 use rusqlite::{Connection, OptionalExtension, params};
 
+use crate::DocumentPath;
+use crate::DocumentRevision;
 use crate::NodeRow;
 use crate::StoreError;
 
@@ -44,11 +46,13 @@ pub(crate) fn Write_Blob(connection: &Connection, content: &[u8]) -> Result<i64,
 /// Returns [`StoreError`] on any SQL failure.
 pub(crate) fn Write_Source_Document(
     connection: &Connection,
-    path: &str,
-    revision: &str,
+    path: DocumentPath<'_>,
+    revision: DocumentRevision<'_>,
     content: &str,
 ) -> Result<i64, StoreError>
 {
+    let path = path.0;
+    let revision = revision.0;
     let blob_uid = Write_Blob(connection, content.as_bytes())?;
 
     connection.execute(

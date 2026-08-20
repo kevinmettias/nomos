@@ -4,7 +4,7 @@ use crate::FillerBlock;
 use crate::IngestError;
 use crate::Overlaid;
 use nomos_spec_model::{Parse_Record, Segment, SourceBlock};
-use nomos_spec_store::{NodeRow, SpecificationStore, StoreError};
+use nomos_spec_store::{DocumentPath, NodeRow, SpecificationStore, StoreError};
 use std::collections::BTreeMap;
 
 #[derive(Clone, Debug, Default, PartialEq, Eq)]
@@ -122,12 +122,13 @@ fn Record_Filler(
 /// # Errors
 ///
 /// Returns [`IngestError::Parse`] if a record does not read.
-pub fn Ingest_V15_Record(
+pub fn Ingest_V15_Record<'a>(
     store: &mut SpecificationStore,
-    path: &str,
+    path: impl Into<DocumentPath<'a>>,
     markdown: &str,
 ) -> Result<String, IngestError>
 {
+    let path = path.into().0;
     let record = Parse_Record(markdown)
         .map_err(|error| IngestError::Parse(format!("{path}: {error}")))?;
 

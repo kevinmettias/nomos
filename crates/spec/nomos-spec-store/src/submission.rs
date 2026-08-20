@@ -162,7 +162,7 @@ fn Unresolved_Citations(
 
     for (field, wanted) in [("answers", "feature-request"), ("implements", "design-spec")]
     {
-        let unresolved = Unresolved_Citation(store, submission, field, wanted)?;
+        let unresolved = Unresolved_Citation(store, submission, CitedField(field), WantedKind(wanted))?;
 
         failures.extend(unresolved);
     }
@@ -170,14 +170,22 @@ fn Unresolved_Citations(
     return Ok(failures);
 }
 
+/// The submission field a citation rule checks (`answers`, `implements`).
+struct CitedField<'a>(&'a str);
+/// The kind of submission a citation rule requires (`feature-request`, `design-spec`).
+struct WantedKind<'a>(&'a str);
+
 /// Why one cited field does not resolve to an accepted submission of the kind it must name.
 fn Unresolved_Citation(
     store: &SpecificationStore,
     submission: &Submission,
-    field: &str,
-    wanted: &str,
+    field: CitedField<'_>,
+    wanted: WantedKind<'_>,
 ) -> Result<Option<Failure>, StoreError>
 {
+    let field = field.0;
+    let wanted = wanted.0;
+
     let Some(cited) = submission.Current(field)
     else
     {

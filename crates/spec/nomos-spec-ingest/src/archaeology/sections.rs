@@ -2,6 +2,20 @@
 
 use super::{SourceBlock, BTreeSet, BTreeMap, Is_Filler, SHARED_BY, Segment, BlockKind, Table_Rows, RowKind, TableRow, Models_In};
 
+/// Where a section sits: which document, under what heading.
+#[derive(Clone, Copy)]
+pub(super) struct SectionPath<'a>(&'a str);
+
+/// The heading a section is filed under, distinct from [`SectionPath`] and [`SectionText`]
+/// even though all three are `&str` and sit adjacent at more than one call site here.
+#[derive(Clone, Copy)]
+pub(super) struct SectionTitle<'a>(&'a str);
+
+/// A block's or a document's own text, as opposed to the [`SectionPath`] or [`SectionTitle`]
+/// it is judged against.
+#[derive(Clone, Copy)]
+pub(super) struct SectionText<'a>(&'a str);
+
 /// Every section of every document, as a path, a heading, and the blocks under it.
 ///
 /// It is a list rather than a map because two documents may carry the same heading, and
@@ -77,19 +91,21 @@ impl Later
         later.templates = Repetitions_In(&sections);
         for (path, title, body) in &sections
         {
-            later.Note_Section(path, title, body);
+            later.Note_Section(SectionPath(path), SectionTitle(title), body);
         }
 
         return later;
     }
 
     /// What one section contributes: how much of it is filler, and where its heading stands.
-    fn Note_Section(&mut self, path: &str, title: &str, body: &[SourceBlock])
+    fn Note_Section(&mut self, path: SectionPath<'_>, title: SectionTitle<'_>, body: &[SourceBlock])
     {
+        let path = path.0;
+        let title = title.0;
         let mut strongest: Option<Body> = None;
         for block in Keyable(body)
         {
-            let shape = self.Shape(&block.text, title);
+            let shape = self.Shape(SectionText(&block.text), SectionTitle(title));
             let counted = self.bodies.entry(path.to_owned()).or_default();
             counted.blocks = counted.blocks.saturating_add(1);
             if matches!(shape, Body::Template { .. })
@@ -109,10 +125,12 @@ impl Later
         });
     }
 
-    fn Shape(&self, text: &str, title: &str) -> Body
+    fn Shape(&self, text: SectionText<'_>, title: SectionTitle<'_>) -> Body
     {
+        let text = text.0;
+        let title = title.0;
         let declared = Is_Filler(text);
-        let key = Template_Key(text, title);
+        let key = Template_Key(SectionText(text), SectionTitle(title));
         let shared = self
             .templates
             .get(&key)
@@ -140,7 +158,7 @@ pub(super) fn Sections_Of(documents: &BTreeMap<String, String>, later: &mut Late
 
     for (path, markdown) in documents
     {
-        Cut_At_Headings(path, markdown, later, &mut sections);
+        Cut_At_Headings(SectionPath(path), SectionText(markdown), later, &mut sections);
     }
 
     return sections;
@@ -151,8 +169,10 @@ pub(super) fn Sections_Of(documents: &BTreeMap<String, String>, later: &mut Late
 /// A block before the first heading belongs to no section and is indexed but not kept: it
 /// is front matter, and keying it against an empty title would make every document's front
 /// matter look like a repetition of every other's.
-pub(super) fn Cut_At_Headings(path: &str, markdown: &str, later: &mut Later, sections: &mut Sections)
+pub(super) fn Cut_At_Headings(path: SectionPath<'_>, markdown: SectionText<'_>, later: &mut Later, sections: &mut Sections)
 {
+    let path = path.0;
+    let markdown = markdown.0;
     let mut title: Option<String> = None;
     let mut body: Vec<SourceBlock> = Vec::new();
 
@@ -202,7 +222,7 @@ pub(super) fn Repetitions_In(sections: &[(String, String, Vec<SourceBlock>)]) ->
     {
         for block in Keyable(body)
         {
-            let key = Template_Key(&block.text, title);
+            let key = Template_Key(SectionText(&block.text), SectionTitle(title));
             let repetition = templates.entry(key).or_default();
             repetition.sections = repetition.sections.saturating_add(1);
             repetition.documents.insert(path.clone());
@@ -281,8 +301,10 @@ pub(super) fn Is_Navigation(text: &str) -> bool
     });
 }
 
-pub(super) fn Template_Key(text: &str, title: &str) -> String
+pub(super) fn Template_Key(text: SectionText<'_>, title: SectionTitle<'_>) -> String
 {
+    let text = text.0;
+    let title = title.0;
     let flattened = text.split_whitespace().collect::<Vec<&str>>().join(" ");
     let elided = title.split_whitespace().collect::<Vec<&str>>().join(" ");
 

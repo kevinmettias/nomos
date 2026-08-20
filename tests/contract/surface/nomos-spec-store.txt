@@ -90,6 +90,10 @@ pub fn nomos_spec_store::ClaimedRecord::Node_Id(&self) -> &str
 pub fn nomos_spec_store::ClaimedRecord::Path(&self) -> &str
 pub fn nomos_spec_store::ClaimedRecord::Stage(self, markdown: &str, rename: Option<&str>) -> Result<StagedEdit, EditError>
 pub fn nomos_spec_store::Disposition::Parse(label: &str) -> Option<Self>
+pub fn nomos_spec_store::DocumentPath::from(value: &'a String) -> Self
+pub fn nomos_spec_store::DocumentPath::from(value: &'a str) -> Self
+pub fn nomos_spec_store::DocumentRevision::from(value: &'a String) -> Self
+pub fn nomos_spec_store::DocumentRevision::from(value: &'a str) -> Self
 pub fn nomos_spec_store::EditError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_spec_store::EditError::from(error: RenderError) -> Self
 pub fn nomos_spec_store::EditError::from(error: StoreError) -> Self
@@ -106,9 +110,17 @@ pub fn nomos_spec_store::EditPreview::Relations_Removed(&self) -> &[RecordRelati
 pub fn nomos_spec_store::EditPreview::Rename(&self) -> Option<(&str, &str)>
 pub fn nomos_spec_store::EditPreview::Statements(&self) -> &[NormativeMovement]
 pub fn nomos_spec_store::EditPreview::Wording_Moved(&self) -> bool
+pub fn nomos_spec_store::FromNodeId::from(value: &'a String) -> Self
+pub fn nomos_spec_store::FromNodeId::from(value: &'a str) -> Self
+pub fn nomos_spec_store::InverseRelationType::from(value: &'a String) -> Self
+pub fn nomos_spec_store::InverseRelationType::from(value: &'a str) -> Self
 pub fn nomos_spec_store::Latest_Version() -> u32
 pub fn nomos_spec_store::NormativeOutcome::Describe(&self) -> String
 pub fn nomos_spec_store::RecordProjection::Matches_Source(&self) -> bool
+pub fn nomos_spec_store::RelationTier::from(value: &'a String) -> Self
+pub fn nomos_spec_store::RelationTier::from(value: &'a str) -> Self
+pub fn nomos_spec_store::RelationTypeName::from(value: &'a String) -> Self
+pub fn nomos_spec_store::RelationTypeName::from(value: &'a str) -> Self
 pub fn nomos_spec_store::Seed_Governing_Records(store: &mut SpecificationStore) -> Result<SeedReport, StoreError>
 pub fn nomos_spec_store::SpecificationStore::Assign_Suite(&mut self, node_uid: i64, suite_uid: i64) -> Result<(), StoreError>
 pub fn nomos_spec_store::SpecificationStore::Connection(&self) -> &Connection
@@ -117,14 +129,14 @@ pub fn nomos_spec_store::SpecificationStore::In_Memory() -> Result<Self, StoreEr
 pub fn nomos_spec_store::SpecificationStore::In_Transaction<T, E>( &mut self, work: impl FnOnce(&rusqlite::Transaction<'_>) -> Result<T, E>, ) -> Result<T, E> where E: From<StoreError>,
 pub fn nomos_spec_store::SpecificationStore::Node_Uid(&self, node_id: &str) -> Result<Option<i64>, StoreError>
 pub fn nomos_spec_store::SpecificationStore::Open(path: &Path) -> Result<Self, StoreError>
-pub fn nomos_spec_store::SpecificationStore::Pair_Relation_Type(&mut self, name: &str, inverse: &str) -> Result<(), StoreError>
+pub fn nomos_spec_store::SpecificationStore::Pair_Relation_Type<'a>( &mut self, name: impl Into<relation::RelationTypeName<'a>>, inverse: impl Into<relation::InverseRelationType<'a>>, ) -> Result<(), StoreError>
 pub fn nomos_spec_store::SpecificationStore::Put_Blob(&mut self, content: &[u8]) -> Result<i64, StoreError>
-pub fn nomos_spec_store::SpecificationStore::Put_Relation( &mut self, from_node_id: &str, relation_type: &str, to_node_id: &str, ) -> Result<(), StoreError>
-pub fn nomos_spec_store::SpecificationStore::Put_Relation_Type( &mut self, name: &str, tier: &str, domain: &[&str], range: &[&str], max_per_node: u32, ) -> Result<(), StoreError>
+pub fn nomos_spec_store::SpecificationStore::Put_Relation<'a>( &mut self, from_node_id: impl Into<relation::FromNodeId<'a>>, relation_type: impl Into<relation::RelationTypeName<'a>>, to_node_id: impl Into<relation::ToNodeId<'a>>, ) -> Result<(), StoreError>
+pub fn nomos_spec_store::SpecificationStore::Put_Relation_Type<'a>( &mut self, name: impl Into<relation::RelationTypeName<'a>>, tier: impl Into<relation::RelationTier<'a>>, constraint: &relation::RelationConstraint<'_>, ) -> Result<(), StoreError>
 pub fn nomos_spec_store::SpecificationStore::Put_Row_Lineage( &mut self, row_uid: i64, disposition: &str, target_node_uid: Option<i64>, ) -> Result<(), StoreError>
 pub fn nomos_spec_store::SpecificationStore::Put_Source_Blocks( &mut self, document_uid: i64, blocks: &[SourceBlock], ) -> Result<usize, StoreError>
-pub fn nomos_spec_store::SpecificationStore::Put_Source_Document( &mut self, path: &str, revision: &str, content: &str, ) -> Result<i64, StoreError>
-pub fn nomos_spec_store::SpecificationStore::Put_Suite( &mut self, suite_id: &str, title: &str, authority: SuiteAuthority, ) -> Result<i64, StoreError>
+pub fn nomos_spec_store::SpecificationStore::Put_Source_Document<'a>( &mut self, path: impl Into<DocumentPath<'a>>, revision: impl Into<DocumentRevision<'a>>, content: &str, ) -> Result<i64, StoreError>
+pub fn nomos_spec_store::SpecificationStore::Put_Suite<'a>( &mut self, suite_id: impl Into<SuiteId<'a>>, title: impl Into<SuiteTitle<'a>>, authority: SuiteAuthority, ) -> Result<i64, StoreError>
 pub fn nomos_spec_store::SpecificationStore::Reference_Node(&mut self, node_id: &str) -> Result<i64, StoreError>
 pub fn nomos_spec_store::SpecificationStore::Row_Census(&self, scope: RowScope) -> Result<RowCensus, StoreError>
 pub fn nomos_spec_store::SpecificationStore::Suite_Of(&self, node_id: &str) -> Result<Option<(String, SuiteAuthority)>, StoreError>
@@ -134,16 +146,40 @@ pub fn nomos_spec_store::SpecificationStore::Version(&self) -> u32
 pub fn nomos_spec_store::StagedEdit::Preview(self, store: &SpecificationStore) -> Result<EditPreview, EditError>
 pub fn nomos_spec_store::StoreError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_spec_store::StoreError::from(error: rusqlite::Error) -> Self
+pub fn nomos_spec_store::SuiteId::from(value: &'a String) -> Self
+pub fn nomos_spec_store::SuiteId::from(value: &'a str) -> Self
+pub fn nomos_spec_store::SuiteTitle::from(value: &'a String) -> Self
+pub fn nomos_spec_store::SuiteTitle::from(value: &'a str) -> Self
+pub fn nomos_spec_store::ToNodeId::from(value: &'a String) -> Self
+pub fn nomos_spec_store::ToNodeId::from(value: &'a str) -> Self
 pub impl nomos_spec_store::AcceptError implements From<StoreError>
 pub impl nomos_spec_store::AcceptError implements std::fmt::Display
+pub impl nomos_spec_store::DocumentPath implements From<&'a String>
+pub impl nomos_spec_store::DocumentPath implements From<&'a str>
+pub impl nomos_spec_store::DocumentRevision implements From<&'a String>
+pub impl nomos_spec_store::DocumentRevision implements From<&'a str>
 pub impl nomos_spec_store::EditError implements From<RenderError>
 pub impl nomos_spec_store::EditError implements From<StoreError>
 pub impl nomos_spec_store::EditError implements From<rusqlite::Error>
 pub impl nomos_spec_store::EditError implements core::fmt::Display
 pub impl nomos_spec_store::EditError implements std::error::Error
+pub impl nomos_spec_store::FromNodeId implements From<&'a String>
+pub impl nomos_spec_store::FromNodeId implements From<&'a str>
+pub impl nomos_spec_store::InverseRelationType implements From<&'a String>
+pub impl nomos_spec_store::InverseRelationType implements From<&'a str>
+pub impl nomos_spec_store::RelationTier implements From<&'a String>
+pub impl nomos_spec_store::RelationTier implements From<&'a str>
+pub impl nomos_spec_store::RelationTypeName implements From<&'a String>
+pub impl nomos_spec_store::RelationTypeName implements From<&'a str>
 pub impl nomos_spec_store::StoreError implements From<rusqlite::Error>
 pub impl nomos_spec_store::StoreError implements core::fmt::Display
 pub impl nomos_spec_store::StoreError implements std::error::Error
+pub impl nomos_spec_store::SuiteId implements From<&'a String>
+pub impl nomos_spec_store::SuiteId implements From<&'a str>
+pub impl nomos_spec_store::SuiteTitle implements From<&'a String>
+pub impl nomos_spec_store::SuiteTitle implements From<&'a str>
+pub impl nomos_spec_store::ToNodeId implements From<&'a String>
+pub impl nomos_spec_store::ToNodeId implements From<&'a str>
 pub struct field nomos_spec_store::CommitReport::blocks: usize
 pub struct field nomos_spec_store::CommitReport::blocks_removed: usize
 pub struct field nomos_spec_store::CommitReport::node_id: String
@@ -186,6 +222,9 @@ pub struct field nomos_spec_store::RecordWrite::document_uid: i64
 pub struct field nomos_spec_store::RecordWrite::headings: u32
 pub struct field nomos_spec_store::RecordWrite::node_uid: i64
 pub struct field nomos_spec_store::RecordWrite::relations: u32
+pub struct field nomos_spec_store::RelationConstraint::domain: &'a [&'a str]
+pub struct field nomos_spec_store::RelationConstraint::max_per_node: u32
+pub struct field nomos_spec_store::RelationConstraint::range: &'a [&'a str]
 pub struct field nomos_spec_store::RowCensus::content: u32
 pub struct field nomos_spec_store::RowCensus::header: u32
 pub struct field nomos_spec_store::RowCensus::lines: u32
@@ -205,17 +244,27 @@ pub struct field nomos_spec_store::TableLine::table_ordinal: u32
 pub struct field nomos_spec_store::TableLine::text: String
 pub struct nomos_spec_store::ClaimedRecord
 pub struct nomos_spec_store::CommitReport
+pub struct nomos_spec_store::DocumentPath<'a>(pub &'a str)
+pub struct nomos_spec_store::DocumentRevision<'a>(pub &'a str)
 pub struct nomos_spec_store::DocumentSource
 pub struct nomos_spec_store::EditPreview
+pub struct nomos_spec_store::FromNodeId<'a>(pub &'a str)
 pub struct nomos_spec_store::IdentityChange
+pub struct nomos_spec_store::InverseRelationType<'a>(pub &'a str)
 pub struct nomos_spec_store::Migration
 pub struct nomos_spec_store::NodeRow<'a>
 pub struct nomos_spec_store::NodeSummary
 pub struct nomos_spec_store::NormativeMovement
 pub struct nomos_spec_store::RecordProjection
 pub struct nomos_spec_store::RecordWrite
+pub struct nomos_spec_store::RelationConstraint<'a>
+pub struct nomos_spec_store::RelationTier<'a>(pub &'a str)
+pub struct nomos_spec_store::RelationTypeName<'a>(pub &'a str)
 pub struct nomos_spec_store::RowCensus
 pub struct nomos_spec_store::SeedReport
 pub struct nomos_spec_store::SpecificationStore
 pub struct nomos_spec_store::StagedEdit
+pub struct nomos_spec_store::SuiteId<'a>(pub &'a str)
+pub struct nomos_spec_store::SuiteTitle<'a>(pub &'a str)
 pub struct nomos_spec_store::TableLine
+pub struct nomos_spec_store::ToNodeId<'a>(pub &'a str)

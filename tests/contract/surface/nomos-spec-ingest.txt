@@ -93,15 +93,15 @@ pub fn nomos_spec_ingest::GateReport::Summary(&self) -> String
 pub fn nomos_spec_ingest::IngestError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_spec_ingest::IngestError::from(error: StoreError) -> Self
 pub fn nomos_spec_ingest::Ingest_Blob(store: &mut SpecificationStore, content: &[u8]) -> Result<i64, IngestError>
-pub fn nomos_spec_ingest::Ingest_Block_Dispositions( store: &mut SpecificationStore, document: &str, revision: &str, dispositions: &[(u32, String)], ) -> Result<u32, IngestError>
+pub fn nomos_spec_ingest::Ingest_Block_Dispositions<'a>( store: &mut SpecificationStore, document: impl Into<DocumentPath<'a>>, revision: impl Into<DocumentRevision<'a>>, dispositions: &[(u32, String)], ) -> Result<u32, IngestError>
 pub fn nomos_spec_ingest::Ingest_Catalog( store: &mut SpecificationStore, entities: &[CatalogEntity], ) -> Result<CatalogReport, IngestError>
-pub fn nomos_spec_ingest::Ingest_Game_Plan( store: &mut SpecificationStore, suite_uid: i64, path: &str, text: &str, ) -> Result<String, IngestError>
+pub fn nomos_spec_ingest::Ingest_Game_Plan<'a>( store: &mut SpecificationStore, suite_uid: i64, path: impl Into<DocumentPath<'a>>, text: &str, ) -> Result<String, IngestError>
 pub fn nomos_spec_ingest::Ingest_Overlay_Document( store: &mut SpecificationStore, document: &Overlaid<'_>, v14_headings: &BTreeMap<String, i64>, report: &mut OverlayReport, ) -> Result<(), IngestError>
 pub fn nomos_spec_ingest::Ingest_Section_Lineage( store: &mut SpecificationStore, lineage: &SectionLineage, revision: &str, ) -> Result<SectionReport, IngestError>
 pub fn nomos_spec_ingest::Ingest_Sibling_Suite( store: &mut SpecificationStore, archive: &mut Archive, sibling: Sibling, ) -> Result<SuiteReport, IngestError>
-pub fn nomos_spec_ingest::Ingest_Source_Document( store: &mut SpecificationStore, path: &str, revision: &str, markdown: &str, ) -> Result<u32, IngestError>
+pub fn nomos_spec_ingest::Ingest_Source_Document<'a>( store: &mut SpecificationStore, path: impl Into<DocumentPath<'a>>, revision: impl Into<DocumentRevision<'a>>, markdown: &str, ) -> Result<u32, IngestError>
 pub fn nomos_spec_ingest::Ingest_Statements( store: &mut SpecificationStore, file: &StatementFile, ) -> Result<StatementReport, IngestError>
-pub fn nomos_spec_ingest::Ingest_V15_Record( store: &mut SpecificationStore, path: &str, markdown: &str, ) -> Result<String, IngestError>
+pub fn nomos_spec_ingest::Ingest_V15_Record<'a>( store: &mut SpecificationStore, path: impl Into<DocumentPath<'a>>, markdown: &str, ) -> Result<String, IngestError>
 pub fn nomos_spec_ingest::Is_Filler(text: &str) -> Option<&'static str>
 pub fn nomos_spec_ingest::Listing::Contains(&self, entry: &str) -> bool
 pub fn nomos_spec_ingest::Listing::Ending_With(&self, suffix: &str) -> Vec<String>

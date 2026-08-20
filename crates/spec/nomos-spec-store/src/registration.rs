@@ -292,8 +292,8 @@ fn Read_Registration(file: &Path, root: &Path) -> Result<Registration, Registrat
             cause: error.to_string(),
         };
     })?;
-    let named = Named_Record(&text, &at)?;
-    Check_Is_A_Record(&named, &at, root)?;
+    let named = Named_Record(&text, At(&at))?;
+    Check_Is_A_Record(&named, At(&at), root)?;
 
     return Ok(Registration {
         id: stem.to_owned(),
@@ -328,7 +328,7 @@ fn Assert_One_Identity_Per_Record(found: &[Registration]) -> Result<(), Registra
 ///
 /// Blank lines and `#` comments are ignored, and that is the only tolerance. Anything else
 /// is refused rather than passed over.
-fn Named_Record(text: &str, at: &str) -> Result<String, RegistrationError>
+fn Named_Record(text: &str, at: At<'_>) -> Result<String, RegistrationError>
 {
     let mut named: Option<String> = None;
 
@@ -342,9 +342,17 @@ fn Named_Record(text: &str, at: &str) -> Result<String, RegistrationError>
     }
 
     return named.ok_or_else(|| {
-        return RegistrationError::NoPath { at: at.to_owned() };
+        return RegistrationError::NoPath { at: at.0.to_owned() };
     });
 }
+
+/// Where a registration lives, for a refusal to name.
+///
+/// Distinct from the plain `&str` positions it sits beside — `text`, `line`, `named` — so a
+/// caller cannot pass the registration's own location where its content was meant, or the
+/// reverse.
+#[derive(Clone, Copy)]
+struct At<'a>(&'a str);
 
 /// The path one line names, or `None` for a blank line or a comment.
 ///
@@ -352,10 +360,12 @@ fn Named_Record(text: &str, at: &str) -> Result<String, RegistrationError>
 /// than resolved by taking one of them.
 fn Path_Line(
     line: &str,
-    at: &str,
+    at: At<'_>,
     held: Option<&str>,
 ) -> Result<Option<String>, RegistrationError>
 {
+    let at = at.0;
+
     if line.is_empty() || line.starts_with('#')
     {
         return Ok(None);
@@ -386,19 +396,29 @@ fn Path_Line(
     return Ok(Some(value.trim().to_owned()));
 }
 
+/// The two halves [`Check_Is_A_Record`] computes about a named path, bundled rather than
+/// passed as two adjacent bools — a position is not a name, and `Is_A_Record_Path(named,
+/// true, false)` said nothing at the call site about which half was which.
+struct PathShape
+{
+    inside: bool,
+    markdown: bool,
+}
+
 /// Whether a registered path is one this store will read a record from.
 ///
-/// `inside` and `markdown` are the two halves already computed above. The other two clauses
-/// are traversal: a `..` or a backslash would leave the record directory while still
-/// spelling a name that looks as though it sits inside it.
-fn Is_A_Record_Path(named: &str, inside: bool, markdown: bool) -> bool
+/// `shape.inside` and `shape.markdown` are the two halves already computed above. The other
+/// two clauses are traversal: a `..` or a backslash would leave the record directory while
+/// still spelling a name that looks as though it sits inside it.
+fn Is_A_Record_Path(named: &str, shape: PathShape) -> bool
 {
-    return inside && markdown && !named.contains("..") && !named.contains('\\');
+    return shape.inside && shape.markdown && !named.contains("..") && !named.contains('\\');
 }
 
 /// That what a registration names is a record file, and that it is there.
-fn Check_Is_A_Record(named: &str, at: &str, root: &Path) -> Result<(), RegistrationError>
+fn Check_Is_A_Record(named: &str, at: At<'_>, root: &Path) -> Result<(), RegistrationError>
 {
+    let at = at.0;
     let inside = named
         .strip_prefix(RECORD_DIRECTORY)
         .and_then(|rest| return rest.strip_prefix('/'))
@@ -406,7 +426,7 @@ fn Check_Is_A_Record(named: &str, at: &str, root: &Path) -> Result<(), Registrat
     let markdown = Path::new(named)
         .extension()
         .is_some_and(|extension| return extension == "md");
-    if !Is_A_Record_Path(named, inside, markdown)
+    if !Is_A_Record_Path(named, PathShape { inside, markdown })
     {
         return Err(RegistrationError::Outside {
             at: at.to_owned(),

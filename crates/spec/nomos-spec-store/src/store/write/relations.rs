@@ -6,6 +6,7 @@ use rusqlite::{Connection, OptionalExtension, params};
 use crate::EXTERNAL;
 use crate::StoreError;
 use crate::read::columns::Columns;
+use crate::store::relation::{FromNodeId, RelationTypeName, ToNodeId};
 
 /// Records an edge and its inverse through a caller's transaction.
 ///
@@ -20,16 +21,21 @@ use crate::read::columns::Columns;
 /// type's declared cap, and [`StoreError`] on any SQL failure.
 pub(crate) fn Write_Relation(
     connection: &Connection,
-    from_node_id: &str,
-    relation_type: &str,
-    to_node_id: &str,
+    from_node_id: FromNodeId<'_>,
+    relation_type: RelationTypeName<'_>,
+    to_node_id: ToNodeId<'_>,
 ) -> Result<(), StoreError>
 {
     Write_One_Relation(connection, from_node_id, relation_type, to_node_id)?;
 
-    if let Some(inverse) = Inverse_Of(connection, relation_type)?
+    if let Some(inverse) = Inverse_Of(connection, relation_type.0)?
     {
-        Write_One_Relation(connection, to_node_id, &inverse, from_node_id)?;
+        Write_One_Relation(
+            connection,
+            FromNodeId(to_node_id.0),
+            RelationTypeName(&inverse),
+            ToNodeId(from_node_id.0),
+        )?;
     }
 
     return Ok(());
@@ -163,28 +169,28 @@ fn Decoded_Kinds(json: &str) -> Result<Vec<String>, StoreError>
 /// runs) rather than judging the placeholder's kind.
 fn Write_One_Relation(
     connection: &Connection,
-    from_node_id: &str,
-    relation_type: &str,
-    to_node_id: &str,
+    from_node_id: FromNodeId<'_>,
+    relation_type: RelationTypeName<'_>,
+    to_node_id: ToNodeId<'_>,
 ) -> Result<(), StoreError>
 {
-    let Some(from) = Fetch_Endpoint(connection, from_node_id)?
+    let Some(from) = Fetch_Endpoint(connection, from_node_id.0)?
     else
     {
         return Ok(());
     };
-    let Some(to) = Fetch_Endpoint(connection, to_node_id)?
+    let Some(to) = Fetch_Endpoint(connection, to_node_id.0)?
     else
     {
         return Ok(());
     };
 
-    Enforce_Constraint(connection, relation_type, &from, &to)?;
+    Enforce_Constraint(connection, relation_type.0, &from, &to)?;
 
     connection.execute(
         "INSERT OR IGNORE INTO relations (from_node_uid, relation_type, to_node_uid)
          VALUES (?1, ?2, ?3)",
-        params![from.uid, relation_type, to.uid],
+        params![from.uid, relation_type.0, to.uid],
     )?;
 
     return Ok(());

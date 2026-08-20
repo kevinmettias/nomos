@@ -261,12 +261,20 @@ pub(crate) fn Why_Not_Canonical(markdown: &str, record: &Record) -> String
     return match Render_Record(&record.front_matter, &Segment(&record.body))
     {
         Err(error) => error.to_string(),
-        Ok(rendered) => First_Difference(&rendered, markdown),
+        Ok(rendered) => First_Difference(Expected(&rendered), Found(markdown)),
     };
 }
 
-fn First_Difference(expected: &str, found: &str) -> String
+/// What this surface would have written.
+struct Expected<'a>(&'a str);
+/// What the staged text actually holds.
+struct Found<'a>(&'a str);
+
+fn First_Difference(expected: Expected<'_>, found: Found<'_>) -> String
 {
+    let expected = expected.0;
+    let found = found.0;
+
     for (index, (left, right)) in expected.lines().zip(found.lines()).enumerate()
     {
         if left != right

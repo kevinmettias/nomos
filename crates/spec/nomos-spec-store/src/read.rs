@@ -17,6 +17,7 @@ pub(crate) mod document_source;
 pub(crate) mod path_match;
 
 use crate::read::columns::Columns;
+use crate::DocumentPath;
 use crate::DocumentSource;
 use crate::NodeSummary;
 use crate::PathMatch;
@@ -182,7 +183,7 @@ impl SpecificationStore
         {
             let matched: Vec<i64> = candidates
                 .iter()
-                .filter(|(_, path)| return Matches(path, needle, tier))
+                .filter(|(_, path)| return Matches(DocumentPath(path), Needle(needle), tier))
                 .map(|(uid, _)| return *uid)
                 .collect();
 
@@ -275,8 +276,14 @@ fn A_Path(row: &rusqlite::Row<'_>) -> rusqlite::Result<(i64, String, String)>
     return Ok((uid, path, found));
 }
 
-fn Matches(path: &str, needle: &str, tier: PathMatch) -> bool
+/// What `Matches` is asked to find, as distinct from the [`DocumentPath`] it searches.
+struct Needle<'a>(&'a str);
+
+fn Matches(path: DocumentPath<'_>, needle: Needle<'_>, tier: PathMatch) -> bool
 {
+    let path = path.0;
+    let needle = needle.0;
+
     return match tier
     {
         PathMatch::Exact => path == needle,

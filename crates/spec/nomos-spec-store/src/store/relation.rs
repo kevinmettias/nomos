@@ -2,6 +2,112 @@
 
 use crate::StoreError;
 
+/// The identifier of a relation edge's source node.
+///
+/// Distinct from [`ToNodeId`] even though both carry a node identifier, because the two
+/// sit next to each other at every edge-writing call site — `Write_Relation(from, type, to)`
+/// — and a position is not a name. Naming the role rather than leaving both `&str` is what
+/// keeps a transposed pair a compile error instead of a silently reversed edge.
+#[derive(Clone, Copy, Debug)]
+pub struct FromNodeId<'a>(pub &'a str);
+
+/// The identifier of a relation edge's target node.
+#[derive(Clone, Copy, Debug)]
+pub struct ToNodeId<'a>(pub &'a str);
+
+/// The name of a relation type: what an edge is registered under, what a type is declared
+/// as, or which type a pairing names as the one gaining an inverse.
+#[derive(Clone, Copy, Debug)]
+pub struct RelationTypeName<'a>(pub &'a str);
+
+/// The tier a relation type is declared at (`seed`, `core`, `extended`, ...).
+#[derive(Clone, Copy, Debug)]
+pub struct RelationTier<'a>(pub &'a str);
+
+/// The relation type a [`RelationTypeName`] is paired with as its inverse.
+#[derive(Clone, Copy, Debug)]
+pub struct InverseRelationType<'a>(pub &'a str);
+
+impl<'a> From<&'a str> for FromNodeId<'a>
+{
+    fn from(value: &'a str) -> Self
+    {
+        return Self(value);
+    }
+}
+
+impl<'a> From<&'a String> for FromNodeId<'a>
+{
+    fn from(value: &'a String) -> Self
+    {
+        return Self(value.as_str());
+    }
+}
+
+impl<'a> From<&'a str> for ToNodeId<'a>
+{
+    fn from(value: &'a str) -> Self
+    {
+        return Self(value);
+    }
+}
+
+impl<'a> From<&'a String> for ToNodeId<'a>
+{
+    fn from(value: &'a String) -> Self
+    {
+        return Self(value.as_str());
+    }
+}
+
+impl<'a> From<&'a str> for RelationTypeName<'a>
+{
+    fn from(value: &'a str) -> Self
+    {
+        return Self(value);
+    }
+}
+
+impl<'a> From<&'a String> for RelationTypeName<'a>
+{
+    fn from(value: &'a String) -> Self
+    {
+        return Self(value.as_str());
+    }
+}
+
+impl<'a> From<&'a str> for RelationTier<'a>
+{
+    fn from(value: &'a str) -> Self
+    {
+        return Self(value);
+    }
+}
+
+impl<'a> From<&'a String> for RelationTier<'a>
+{
+    fn from(value: &'a String) -> Self
+    {
+        return Self(value.as_str());
+    }
+}
+
+impl<'a> From<&'a str> for InverseRelationType<'a>
+{
+    fn from(value: &'a str) -> Self
+    {
+        return Self(value);
+    }
+}
+
+impl<'a> From<&'a String> for InverseRelationType<'a>
+{
+    fn from(value: &'a String) -> Self
+    {
+        return Self(value.as_str());
+    }
+}
+
 /// What a relation type constrains: the node kinds it may join at each end, and how many
 /// edges of it one node may carry.
 ///
@@ -51,15 +157,18 @@ mod tests
     use crate::SpecificationStore;
     use super::super::AUTHORED;
 
-    fn Node(store: &mut SpecificationStore, node_id: &str, kind: &str)
+    struct TestNodeId<'a>(&'a str);
+    struct TestNodeKind<'a>(&'a str);
+
+    fn Node(store: &mut SpecificationStore, node_id: TestNodeId<'_>, kind: TestNodeKind<'_>)
     {
         store
             .Upsert_Node(NodeRow {
-                node_id,
-                kind,
+                node_id: node_id.0,
+                kind: kind.0,
                 authority: AUTHORED,
                 representation: "record",
-                title: node_id,
+                title: node_id.0,
             })
             .expect("mints a node");
     }
@@ -120,8 +229,8 @@ mod tests
     fn Test_An_Edge_Whose_Endpoint_Kind_Is_Not_Admitted_Should_Be_Refused_By_Name()
     {
         let mut store = SpecificationStore::In_Memory().expect("opens");
-        Node(&mut store, "A", "widget");
-        Node(&mut store, "B", "gadget");
+        Node(&mut store, TestNodeId("A"), TestNodeKind("widget"));
+        Node(&mut store, TestNodeId("B"), TestNodeKind("gadget"));
         Put_Joins_Relation_Type(&mut store, 4);
 
         let error = store.Put_Relation("A", "joins", "B").expect_err("B is a gadget, not a widget");
@@ -143,9 +252,9 @@ mod tests
     fn Test_An_Edge_Past_The_Declared_Cardinality_Should_Be_Refused_By_Name()
     {
         let mut store = SpecificationStore::In_Memory().expect("opens");
-        Node(&mut store, "A", "widget");
-        Node(&mut store, "B", "widget");
-        Node(&mut store, "C", "widget");
+        Node(&mut store, TestNodeId("A"), TestNodeKind("widget"));
+        Node(&mut store, TestNodeId("B"), TestNodeKind("widget"));
+        Node(&mut store, TestNodeId("C"), TestNodeKind("widget"));
         Put_Joins_Relation_Type(&mut store, 1);
         store.Put_Relation("A", "joins", "B").expect("the first edge fits the cap of 1");
 
@@ -168,8 +277,8 @@ mod tests
     fn Test_Re_Writing_The_Same_Edge_Should_Not_Count_Against_Cardinality()
     {
         let mut store = SpecificationStore::In_Memory().expect("opens");
-        Node(&mut store, "A", "widget");
-        Node(&mut store, "B", "widget");
+        Node(&mut store, TestNodeId("A"), TestNodeKind("widget"));
+        Node(&mut store, TestNodeId("B"), TestNodeKind("widget"));
         Put_Joins_Relation_Type(&mut store, 1);
         store.Put_Relation("A", "joins", "B").expect("first write");
 
@@ -182,7 +291,7 @@ mod tests
     fn Test_A_Placeholder_Endpoint_Should_Be_Exempt_From_The_Kind_Check()
     {
         let mut store = SpecificationStore::In_Memory().expect("opens");
-        Node(&mut store, "A", "widget");
+        Node(&mut store, TestNodeId("A"), TestNodeKind("widget"));
         store.Reference_Node("B").expect("mints a placeholder");
         Put_Joins_Relation_Type(&mut store, 4);
 

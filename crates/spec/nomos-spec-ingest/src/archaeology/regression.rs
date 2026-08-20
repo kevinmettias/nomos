@@ -1,6 +1,7 @@
 //! What one revision lost against the one before it.
 
 use super::{Revision, RegressionReport, IngestError, Later, Relocations, Census, BTreeMap, DOMAIN_VOLUMES, MemberFate, Extract, Judge, RevisionFingerprint, PairChange, Walk};
+use nomos_spec_store::DocumentPath;
 
 pub fn Regression(from: &Revision, to: &Revision) -> Result<RegressionReport, IngestError>
 {
@@ -49,7 +50,7 @@ pub(super) fn Judged(
     let mut members = Vec::new();
     for (document, markdown) in volumes
     {
-        for member in Extract(document, markdown)?
+        for member in Extract(DocumentPath(document), markdown)?
         {
             let judged = Judge(&member, later, documents);
             members.push(judged);

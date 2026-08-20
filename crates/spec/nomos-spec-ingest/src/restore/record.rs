@@ -4,6 +4,7 @@ use super::{
     BTreeMap, Extract, IngestError, Member, NodeRow, Origin, Refuse_Collisions, RestorationReport,
     SpecificationStore, StoreError,
 };
+use nomos_spec_store::{DocumentPath, DocumentRevision};
 
 /// I5 — restores every family across the corpus into a store that already holds it.
 ///
@@ -58,8 +59,8 @@ pub(super) fn Located(
 
     for (document, markdown) in documents
     {
-        let document_uid = Document_Uid(store, revision, document)?;
-        for member in Extract(document, markdown)?
+        let document_uid = Document_Uid(store, DocumentRevision(revision), DocumentPath(document))?;
+        for member in Extract(DocumentPath(document), markdown)?
         {
             located.push((document_uid, member));
         }
@@ -209,10 +210,13 @@ pub(super) fn Ambiguous(members: &[Member]) -> Vec<String>
 
 pub(super) fn Document_Uid(
     store: &SpecificationStore,
-    revision: &str,
-    document: &str,
+    revision: DocumentRevision<'_>,
+    document: DocumentPath<'_>,
 ) -> Result<i64, IngestError>
 {
+    let revision = revision.0;
+    let document = document.0;
+
     return store
         .Connection()
         .query_row(

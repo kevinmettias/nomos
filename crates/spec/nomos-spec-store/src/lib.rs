@@ -6,6 +6,7 @@
 
 #![forbid(unsafe_code)]
 
+mod addressing;
 mod authoring;
 mod edit;
 mod read;
@@ -26,6 +27,7 @@ mod store;
 mod submission;
 mod table;
 
+pub use addressing::{DocumentPath, DocumentRevision};
 pub use edit::block_change::BlockChange;
 pub use record::claimed::ClaimedRecord;
 pub use edit::commit_report::CommitReport;
@@ -49,9 +51,11 @@ pub use store::{
     AUTHORED, EXTERNAL, GOVERNING_RECORD_IDS, SeedReport,
     Seed_Governing_Records, SpecificationStore,
 };
-pub use store::relation::RelationConstraint;
+pub use store::relation::{
+    FromNodeId, InverseRelationType, RelationConstraint, RelationTier, RelationTypeName, ToNodeId,
+};
 pub use store::error::StoreError;
 pub use submission::{Accept_Submission, AcceptError, Transport_Origin};
-pub use table::suite_authority::SuiteAuthority;
+pub use table::suite_authority::{SuiteAuthority, SuiteId, SuiteTitle};
 pub use table::Table;
 pub use table::line::TableLine;

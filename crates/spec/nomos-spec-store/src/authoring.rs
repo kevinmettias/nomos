@@ -39,6 +39,8 @@ use rusqlite::{OptionalExtension, params};
 use crate::ClaimedRecord;
 use crate::read::columns::Columns;
 use crate::CommitReport;
+use crate::DocumentPath;
+use crate::DocumentRevision;
 use crate::DocumentSource;
 use crate::EditError;
 use crate::EditPreview;
@@ -73,13 +75,15 @@ impl SpecificationStore
     ///
     /// Returns [`StoreError::Record`] if the markdown is not a readable record, and
     /// [`StoreError`] on any SQL failure.
-    pub fn Put_Record(
+    pub fn Put_Record<'a>(
         &mut self,
-        path: &str,
-        revision: &str,
+        path: impl Into<DocumentPath<'a>>,
+        revision: impl Into<DocumentRevision<'a>>,
         markdown: &str,
     ) -> Result<RecordWrite, StoreError>
     {
+        let path = path.into().0;
+        let revision = revision.into().0;
         let record = Parse_Record(markdown).map_err(|error| {
             return StoreError::Record {
                 path: path.to_owned(),

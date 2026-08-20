@@ -112,7 +112,7 @@ fn Ingest_Every_Plan(store: &mut SpecificationStore, archives: &Path, root: i64)
         let suite = Suite_For(store, root, *owner);
         let text = Plan_Text(archives, name);
 
-        Ingest_Game_Plan(store, suite, name, &text)
+        Ingest_Game_Plan(store, suite, *name, &text)
             // I8 asserts only "the plans did not land" over a block count, and there are two
             // plans under two different authorities. Naming this one and the ingest's own error
             // is the difference between that count and a repair.

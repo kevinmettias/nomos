@@ -2,6 +2,13 @@
 
 use super::{NodeRow, SpecificationStore, Archive, Suite, SuiteReport, IngestError, Text, Ingest_Document, Sibling, Qualified, Stem, Parse_Record, Claim};
 
+/// A markdown entry's location in the archive, as opposed to the [`Sibling`] it came from
+/// or the text it holds — the two `&str`-shaped things `Declared_By` sits next to.
+pub(super) struct EntryAt<'a>(&'a str);
+
+/// The bytes a markdown entry holds, distinct from where it sits ([`EntryAt`]).
+pub(super) struct EntryText<'a>(&'a str);
+
 /// A document as the archive holds it: where it sits, and what it says.
 pub(super) struct Sourced<'a>
 {
@@ -29,7 +36,7 @@ pub(super) fn Ingest_Prose(
     for entry in archive.Listing().Ending_With(".md")
     {
         let text = Text(archive, &entry)?;
-        let declared = Declared_By(suite.sibling, &entry, &text)?;
+        let declared = Declared_By(suite.sibling, EntryAt(&entry), EntryText(&text))?;
         let node = Take(store, &declared, suite, report)?;
 
         let sourced = Sourced {
@@ -49,8 +56,11 @@ pub(super) fn Ingest_Prose(
 /// A record keeps its own declared identifier — D-085 is D-085 in every suite that names
 /// it, which is what makes a cross-suite relation an ordinary row. Anything else is
 /// suite-qualified, because a filename is only unique inside its own seed.
-pub(super) fn Declared_By(sibling: Sibling, entry: &str, text: &str) -> Result<Declared, IngestError>
+pub(super) fn Declared_By(sibling: Sibling, entry: EntryAt<'_>, text: EntryText<'_>) -> Result<Declared, IngestError>
 {
+    let entry = entry.0;
+    let text = text.0;
+
     if !entry.contains("/records/")
     {
         return Ok(Declared {

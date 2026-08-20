@@ -4,6 +4,7 @@ use super::{
     BlockKind, BTreeMap, Collision, DOMAIN_MODEL, EXTENDED_TERMS, GLOSSARY, IngestError, Member, Origin, Restored,
     RowKind, Segment, SERVICES, SourceBlock, Table_Rows, TableRow,
 };
+use nomos_spec_store::DocumentPath;
 
 /// Reads one volume's family members without touching a store.
 ///
@@ -13,8 +14,9 @@ use super::{
 /// # Errors
 ///
 /// Returns [`IngestError::Parse`] naming both members when two would take one identifier.
-pub(crate) fn Extract(document: &str, markdown: &str) -> Result<Vec<Member>, IngestError>
+pub(crate) fn Extract(document: DocumentPath<'_>, markdown: &str) -> Result<Vec<Member>, IngestError>
 {
+    let document = document.0;
     let mut members: Vec<Member> = Vec::new();
 
     for block in &Segment(markdown)

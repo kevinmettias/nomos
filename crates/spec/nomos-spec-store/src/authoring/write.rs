@@ -6,6 +6,8 @@ use nomos_spec_model::{
 use rusqlite::{Connection, params};
 
 use crate::Disposition;
+use crate::DocumentPath;
+use crate::DocumentRevision;
 use crate::RecordWrite;
 use crate::store::{
     Write_Node,
@@ -39,7 +41,7 @@ pub(crate) fn Write_Record(
     let front_matter = &record.front_matter;
 
     let node_uid = Write_Record_Node(connection, front_matter)?;
-    let document_uid = Write_Source_Document(connection, path, revision, markdown)?;
+    let document_uid = Write_Source_Document(connection, DocumentPath(path), DocumentRevision(revision), markdown)?;
     let (blocks, headings) = Write_Record_Content(connection, document_uid, node_uid, record)?;
     let relations = Write_Declared_Relations(connection, document_uid, &front_matter.relations)?;
 

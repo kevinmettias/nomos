@@ -1,4 +1,5 @@
-use crate::{AUTHORED, RelationConstraint, SpecificationStore};
+use crate::{AUTHORED, RelationConstraint, RelationTypeName, SpecificationStore};
+use crate::DocumentPath;
 use crate::StoreError;
 
 /// The records that govern this system, embedded so they travel with the binary.
@@ -191,8 +192,11 @@ fn Admissible_Relations() -> String
 /// This deliberately does **not** admit unknown terms. `ADR-ARTIFACT-GRAPH-002`'s vocabulary
 /// arrives with the corpus, and widening the seed table now would put an invented answer
 /// where a recorded one belongs. The defect was the diagnosis, not the refusal.
-fn Refuse_Unknown_Relation(path: &str, term: &str) -> Option<StoreError>
+fn Refuse_Unknown_Relation(path: DocumentPath<'_>, term: RelationTypeName<'_>) -> Option<StoreError>
 {
+    let path = path.0;
+    let term = term.0;
+
     if RELATION_TYPES.iter().any(|seed| return seed.name == term)
     {
         return None;
@@ -245,7 +249,7 @@ pub fn Seed_Governing_Records(store: &mut SpecificationStore) -> Result<SeedRepo
     Declare_The_Relation_Types(store)?;
     for (path, text) in RECORDS
     {
-        Put_The_Record(store, path, text, &mut report)?;
+        Put_The_Record(store, DocumentPath(path), text, &mut report)?;
     }
     // A second pass, because a relation may name a record later in the list and an edge
     // to a node that does not exist yet would become a placeholder that never resolves.
@@ -280,7 +284,7 @@ fn Declare_The_Relation_Types(store: &mut SpecificationStore) -> Result<(), Stor
 /// One record's blocks and headings, counted into the report.
 fn Put_The_Record(
     store: &mut SpecificationStore,
-    path: &str,
+    path: DocumentPath<'_>,
     text: &str,
     report: &mut SeedReport,
 ) -> Result<(), StoreError>
@@ -300,7 +304,7 @@ fn Refuse_Unknown_Terms(path: &str, record: &nomos_spec_model::Record) -> Result
 {
     for relation in &record.front_matter.relations
     {
-        if let Some(refusal) = Refuse_Unknown_Relation(path, &relation.relation)
+        if let Some(refusal) = Refuse_Unknown_Relation(DocumentPath(path), RelationTypeName(&relation.relation))
         {
             return Err(refusal);
         }
@@ -355,13 +359,24 @@ mod tests
     #[test]
     fn Test_An_Unknown_Relation_Should_Name_The_Record_The_Term_And_The_Vocabulary()
     {
-        let refusal = Refuse_Unknown_Relation("docs/records/OD-LEDGER-014-x.md", "amends")
-            .expect("`amends` is not in the seeded vocabulary");
-        let (path, cause) = Record_Refusal(refusal);
+        let refusal = Refuse_Unknown_Relation(
+            DocumentPath("docs/records/OD-LEDGER-014-x.md"),
+            RelationTypeName("amends"),
+        )
+        .expect("`amends` is not in the seeded vocabulary");
+        let refusal = Record_Refusal(refusal);
 
-        assert_eq!(path, "docs/records/OD-LEDGER-014-x.md", "which record stopped the seed");
-        assert!(cause.contains("amends"), "which term it used: {cause}");
-        Assert_Every_Seeded_Term_Is_Offered(&cause);
+        assert_eq!(refusal.path, "docs/records/OD-LEDGER-014-x.md", "which record stopped the seed");
+        assert!(refusal.cause.contains("amends"), "which term it used: {}", refusal.cause);
+        Assert_Every_Seeded_Term_Is_Offered(&refusal.cause);
+    }
+
+    /// The path and cause of a `StoreError::Record` refusal, named so the caller cannot
+    /// read them back in the wrong order.
+    struct RecordRefusal
+    {
+        path: String,
+        cause: String,
     }
 
     /// The path and cause of a `StoreError::Record` refusal, or a panic naming the wrong
@@ -371,7 +386,7 @@ mod tests
     /// that used it. Any other variant would mean the refusal blamed something else, and
     /// the caller's assertions — the path, the term, and every admissible term — would have
     /// no message to read.
-    fn Record_Refusal(refusal: StoreError) -> (String, String)
+    fn Record_Refusal(refusal: StoreError) -> RecordRefusal
     {
         let StoreError::Record { path, cause } = refusal
         else
@@ -379,7 +394,7 @@ mod tests
             panic!("an unknown relation type is a defect in a record: {refusal:?}");
         };
 
-        return (path, cause);
+        return RecordRefusal { path, cause };
     }
 
     /// What the refusal could have said instead — every seeded term, so the author does not
@@ -407,7 +422,8 @@ mod tests
         for seed in RELATION_TYPES
         {
             assert!(
-                Refuse_Unknown_Relation("docs/records/anything.md", seed.name).is_none(),
+                Refuse_Unknown_Relation(DocumentPath("docs/records/anything.md"), RelationTypeName(seed.name))
+                    .is_none(),
                 "`{}` is in the vocabulary and must not be refused",
                 seed.name
             );

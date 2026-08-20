@@ -6,6 +6,8 @@ use nomos_spec_model::{
 use rusqlite::{Connection, OptionalExtension, params};
 
 use crate::CommitReport;
+use crate::DocumentPath;
+use crate::DocumentRevision;
 use crate::EditError;
 use crate::EditPreview;
 use crate::store::{
@@ -13,6 +15,7 @@ use crate::store::{
     Write_Source_Blocks,
 };
 use crate::StoreError;
+use crate::{FromNodeId, RelationTypeName, ToNodeId};
 
 use super::write::{
     Dispose_Blocks, Write_Declared_Relations, Write_Front_Matter, Write_Headings,
@@ -27,7 +30,7 @@ pub(super) fn Apply(connection: &Connection, preview: &EditPreview) -> Result<Co
 
     if let Some((_, after)) = preview.Rename()
     {
-        Rename_Document(connection, document_uid, after, &claimed.projection.revision)?;
+        Rename_Document(connection, document_uid, DocumentPath(after), DocumentRevision(&claimed.projection.revision))?;
     }
     Rewrite_Bytes(connection, document_uid, &preview.staged.markdown)?;
     let node_uid = Restate_Node(connection, front_matter)?;
@@ -116,8 +119,8 @@ fn Reported(preview: &EditPreview, blocks: usize, blocks_removed: usize) -> Comm
 fn Rename_Document(
     connection: &Connection,
     document_uid: i64,
-    path: &str,
-    revision: &str,
+    path: DocumentPath<'_>,
+    revision: DocumentRevision<'_>,
 ) -> Result<(), EditError>
 {
     let holder = Document_At(connection, path, revision)?;
@@ -125,14 +128,14 @@ fn Rename_Document(
     if holder.is_some_and(|found| return found != document_uid)
     {
         return Err(EditError::PathTaken {
-            path: path.to_owned(),
+            path: path.0.to_owned(),
         });
     }
 
     connection
         .execute(
             "UPDATE source_documents SET path = ?2 WHERE uid = ?1",
-            params![document_uid, path],
+            params![document_uid, path.0],
         )
         .map_err(StoreError::from)?;
 
@@ -140,13 +143,13 @@ fn Rename_Document(
 }
 
 /// Which document, if any, already lives at this address.
-fn Document_At(connection: &Connection, path: &str, revision: &str)
+fn Document_At(connection: &Connection, path: DocumentPath<'_>, revision: DocumentRevision<'_>)
     -> Result<Option<i64>, StoreError>
 {
     return Ok(connection
         .query_row(
             "SELECT uid FROM source_documents WHERE path = ?1 AND revision = ?2",
-            params![path, revision],
+            params![path.0, revision.0],
             |row| row.get(0),
         )
         .optional()?);
@@ -266,18 +269,33 @@ fn Add_Relation(connection: &Connection, node_id: &str, relation: &RecordRelatio
         })?;
     }
 
-    return Write_Relation(connection, node_id, &relation.relation, &relation.target);
+    return Write_Relation(
+        connection,
+        FromNodeId(node_id),
+        RelationTypeName(&relation.relation),
+        ToNodeId(&relation.target),
+    );
 }
 
 /// Withdraws a relation, and the inverse the schema keeps beside it.
 fn Remove_Relation(connection: &Connection, node_id: &str, relation: &RecordRelation)
     -> Result<(), StoreError>
 {
-    Delete_Relation(connection, node_id, &relation.relation, &relation.target)?;
+    Delete_Relation(
+        connection,
+        FromNodeId(node_id),
+        RelationTypeName(&relation.relation),
+        ToNodeId(&relation.target),
+    )?;
 
     if let Some(inverse) = Inverse_Of(connection, &relation.relation)?
     {
-        Delete_Relation(connection, &relation.target, &inverse, node_id)?;
+        Delete_Relation(
+            connection,
+            FromNodeId(&relation.target),
+            RelationTypeName(&inverse),
+            ToNodeId(node_id),
+        )?;
     }
 
     return Ok(());
@@ -285,9 +303,9 @@ fn Remove_Relation(connection: &Connection, node_id: &str, relation: &RecordRela
 
 fn Delete_Relation(
     connection: &Connection,
-    from_node_id: &str,
-    relation_type: &str,
-    to_node_id: &str,
+    from_node_id: FromNodeId<'_>,
+    relation_type: RelationTypeName<'_>,
+    to_node_id: ToNodeId<'_>,
 ) -> Result<(), StoreError>
 {
     connection.execute(
@@ -295,7 +313,7 @@ fn Delete_Relation(
          WHERE from_node_uid = (SELECT uid FROM nodes WHERE node_id = ?1)
            AND relation_type = ?2
            AND to_node_uid = (SELECT uid FROM nodes WHERE node_id = ?3)",
-        params![from_node_id, relation_type, to_node_id],
+        params![from_node_id.0, relation_type.0, to_node_id.0],
     )?;
 
     return Ok(());

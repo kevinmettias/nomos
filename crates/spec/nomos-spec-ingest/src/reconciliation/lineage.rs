@@ -4,7 +4,7 @@ pub(crate) mod relocation;
 use crate::RecordedSection;
 use crate::SectionLineage;
 use crate::IngestError;
-use nomos_spec_store::{SpecificationStore, StoreError};
+use nomos_spec_store::{DocumentPath, DocumentRevision, SpecificationStore, StoreError};
 
 #[derive(Debug, Default)]
 pub struct SectionReport
@@ -85,7 +85,8 @@ pub fn Ingest_Section_Lineage(
 
     for (ordinal, section) in lineage.sections.iter().enumerate()
     {
-        let Some(document_uid) = Document_Uid(store, &section.source_document, revision)
+        let Some(document_uid) =
+            Document_Uid(store, DocumentPath(&section.source_document), DocumentRevision(revision))
         else
         {
             report
@@ -113,13 +114,13 @@ struct HeadingAt
 }
 
 /// The document row a path and revision name, if the store holds one.
-fn Document_Uid(store: &mut SpecificationStore, path: &str, revision: &str) -> Option<i64>
+fn Document_Uid(store: &mut SpecificationStore, path: DocumentPath<'_>, revision: DocumentRevision<'_>) -> Option<i64>
 {
     return store
         .Connection()
         .query_row(
             "SELECT uid FROM source_documents WHERE path = ?1 AND revision = ?2",
-            rusqlite::params![path, revision],
+            rusqlite::params![path.0, revision.0],
             |row| row.get(0),
         )
         .ok();
@@ -187,13 +188,15 @@ fn Upsert_Heading(
 /// # Errors
 ///
 /// Returns [`IngestError`] on any store failure.
-pub fn Ingest_Block_Dispositions(
+pub fn Ingest_Block_Dispositions<'a>(
     store: &mut SpecificationStore,
-    document: &str,
-    revision: &str,
+    document: impl Into<DocumentPath<'a>>,
+    revision: impl Into<DocumentRevision<'a>>,
     dispositions: &[(u32, String)],
 ) -> Result<u32, IngestError>
 {
+    let document = document.into().0;
+    let revision = revision.into().0;
     let selected_document = store.Connection().query_row(
         "SELECT uid FROM source_documents WHERE path = ?1 AND revision = ?2",
         rusqlite::params![document, revision],

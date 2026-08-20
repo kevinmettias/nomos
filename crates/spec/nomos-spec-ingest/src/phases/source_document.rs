@@ -1,20 +1,21 @@
 //! Putting one source document in, blocks and all.
 
 use super::{SpecificationStore, IngestError, Segment, RecordedStatement, StoreError};
+use nomos_spec_store::{DocumentPath, DocumentRevision};
 
 /// I1 — a source document, its blob and its blocks.
 ///
 /// # Errors
 ///
 /// Returns [`IngestError`] on any store failure.
-pub fn Ingest_Source_Document(
+pub fn Ingest_Source_Document<'a>(
     store: &mut SpecificationStore,
-    path: &str,
-    revision: &str,
+    path: impl Into<DocumentPath<'a>>,
+    revision: impl Into<DocumentRevision<'a>>,
     markdown: &str,
 ) -> Result<u32, IngestError>
 {
-    let document_uid = store.Put_Source_Document(path, revision, markdown)?;
+    let document_uid = store.Put_Source_Document(path.into(), revision.into(), markdown)?;
     let blocks = Segment(markdown);
     let written = store.Put_Source_Blocks(document_uid, &blocks)?;
 

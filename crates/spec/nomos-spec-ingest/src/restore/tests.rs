@@ -2,6 +2,7 @@
 
 use super::*;
 use super::extract::{Milestone, Numbering};
+use nomos_spec_store::DocumentPath;
 
 const CORE: &str = "# Core\n\n## 5. Canonical domain model\n\n\
                     | Model | Responsibility |\n| --- | --- |\n\
@@ -44,7 +45,7 @@ fn Corpus(documents: &[(&str, &str)]) -> Built
 
     for (document, markdown) in documents
     {
-        Ingest_Source_Document(&mut store, document, "v14.36", markdown).expect("ingests");
+        Ingest_Source_Document(&mut store, *document, "v14.36", markdown).expect("ingests");
         set.insert((*document).to_owned(), (*markdown).to_owned());
     }
 
@@ -62,7 +63,7 @@ fn Core() -> Built
 #[test]
 fn Test_A_Domain_Model_Row_Should_Become_A_Concept_Named_After_Itself()
 {
-    let members = Extract("02-core.md", CORE).expect("extracts");
+    let members = Extract(DocumentPath("02-core.md"), CORE).expect("extracts");
     let models: Vec<&Member> = members
         .iter()
         .filter(|member| return member.family == Restored::CanonicalDomainModel)
@@ -79,7 +80,7 @@ fn Test_A_Domain_Model_Row_Should_Become_A_Concept_Named_After_Itself()
 #[test]
 fn Test_The_Column_Titles_Should_Not_Become_A_Concept()
 {
-    let members = Extract("02-core.md", CORE).expect("extracts");
+    let members = Extract(DocumentPath("02-core.md"), CORE).expect("extracts");
 
     assert!(
         !members.iter().any(|member| return member.name == "Model"),
@@ -90,7 +91,7 @@ fn Test_The_Column_Titles_Should_Not_Become_A_Concept()
 #[test]
 fn Test_Only_A_Leaf_Naming_A_Service_Should_Become_One()
 {
-    let members = Extract("02-core.md", CORE).expect("extracts");
+    let members = Extract(DocumentPath("02-core.md"), CORE).expect("extracts");
     let services: Vec<&str> = members
         .iter()
         .filter(|member| return member.family == Restored::Service)
@@ -104,7 +105,7 @@ fn Test_Only_A_Leaf_Naming_A_Service_Should_Become_One()
 #[test]
 fn Test_A_Catalog_Section_Should_Not_Become_A_Scenario()
 {
-    let members = Extract("09-reference.md", REFERENCE).expect("extracts");
+    let members = Extract(DocumentPath("09-reference.md"), REFERENCE).expect("extracts");
     let scenarios: Vec<&str> = members
         .iter()
         .filter(|member| return member.family == Restored::Scenario)
@@ -117,7 +118,7 @@ fn Test_A_Catalog_Section_Should_Not_Become_A_Scenario()
 #[test]
 fn Test_The_Glossary_Should_Restore_Both_Of_Its_Shapes()
 {
-    let members = Extract("09-reference.md", REFERENCE).expect("extracts");
+    let members = Extract(DocumentPath("09-reference.md"), REFERENCE).expect("extracts");
     let terms: Vec<&str> = members
         .iter()
         .filter(|member| return member.family == Restored::GlossaryTerm)
@@ -132,7 +133,7 @@ fn Test_The_Glossary_Should_Restore_Both_Of_Its_Shapes()
 #[test]
 fn Test_A_Family_Should_Not_Be_Recognised_Outside_Its_Volume()
 {
-    assert!(Extract("07-clients.md", CORE).expect("extracts").is_empty());
+    assert!(Extract(DocumentPath("07-clients.md"), CORE).expect("extracts").is_empty());
 }
 
 #[test]
@@ -141,7 +142,7 @@ fn Test_Two_Members_Taking_One_Identifier_Should_Be_Refused()
     let doubled = "# X\n\n## Glossary\n\n| Term | Definition |\n| --- | --- |\n\
                    | Applicability | One. |\n| applicability | Two. |\n";
 
-    let refusal = Extract("09-reference.md", doubled).expect_err("must refuse");
+    let refusal = Extract(DocumentPath("09-reference.md"), doubled).expect_err("must refuse");
 
     assert!(format!("{refusal}").contains("GLS-APPLICABILITY"), "{refusal}");
 }
