@@ -73,9 +73,11 @@ fn Plan_Or_Run_Command(root: PathBuf, rest: &[String]) -> GateCommand
             exclude: Named_Values(rest, "--exclude"),
         },
         rules: RuleSelector { include: Named_Values(rest, "--rule").into_iter().map(RuleId::New).collect() },
-        // No flag authors a Suppression yet -- see `nomos_gate_orchestration::SuppressionPolicy`'s
-        // own doc for why inventing one now would be premature.
+        // No flag authors a Suppression or a BaselineDebt yet -- see
+        // `nomos_gate_orchestration::SuppressionPolicy`'s own doc for why inventing one now
+        // would be premature.
         suppressions: nomos_gate_orchestration::SuppressionPolicy::default(),
+        baseline: nomos_gate_orchestration::BaselinePolicy::default(),
     };
 }
 

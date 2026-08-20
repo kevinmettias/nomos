@@ -8,7 +8,7 @@ use nomos_rules::SourceFile;
 use nomos_workspace::BuildVariant;
 use std::path::Path;
 
-use crate::{Disposition, GateCommand, GateRunOutcome, GateRunResult, RuleSelector, ScopeSelector, SuppressionPolicy};
+use crate::{BaselinePolicy, Disposition, GateCommand, GateRunOutcome, GateRunResult, RuleSelector, ScopeSelector, SuppressionPolicy};
 
 /// Judges `walked` exactly as `nomos check` would.
 ///
@@ -46,13 +46,15 @@ pub fn Run_Gate<P: ProcessLauncher>(walked: Option<Vec<SourceFile>>, variant: Bu
     let scoped = walked.map(|sources| return Scoped(sources, &command.scope));
     let outcome = Judged(scoped, variant, &command.root, launcher);
 
-    let (blocking_findings, suppressed_findings, disposition) = Reduced(&outcome, &command.rules, &command.suppressions);
+    let (blocking_findings, suppressed_findings, baselined_findings, disposition) =
+        Reduced(&outcome, &command.rules, &command.suppressions, &command.baseline);
 
     return GateRunResult {
         root: command.root.clone(),
         check_outcome: outcome,
         blocking_findings,
         suppressed_findings,
+        baselined_findings,
         disposition,
     };
 }
@@ -63,26 +65,34 @@ fn Scoped(sources: Vec<SourceFile>, scope: &ScopeSelector) -> Vec<SourceFile>
     return sources.into_iter().filter(|source| return scope.Matches(&source.path)).collect();
 }
 
-/// The blocking findings, the findings a `Suppression` kept from blocking, and the
-/// disposition they imply, read off a [`CheckOutcome`] this function does not own and must
-/// not consume -- `check_outcome` still has to end up in [`GateRunResult`] afterward.
-/// `rules` narrows which findings count before either list is computed; a finding whose
-/// rule is not selected can be neither blocking nor suppressed, but it still exists in
-/// `check_outcome` untouched. `suppressions` then splits what remains: a matched finding
-/// moves from blocking to suppressed rather than disappearing.
-fn Reduced(outcome: &CheckOutcome, rules: &RuleSelector, suppressions: &SuppressionPolicy) -> (Vec<Finding>, Vec<Finding>, GateRunOutcome)
+/// The blocking findings, the findings a `Suppression` kept from blocking, the findings a
+/// `BaselineDebt` kept from blocking, and the disposition they imply, read off a
+/// [`CheckOutcome`] this function does not own and must not consume -- `check_outcome`
+/// still has to end up in [`GateRunResult`] afterward. `rules` narrows which findings count
+/// before any list is computed; a finding whose rule is not selected can be neither
+/// blocking, suppressed nor baselined, but it still exists in `check_outcome` untouched.
+/// `suppressions` splits what remains first, then `baseline` splits what suppression did
+/// not match -- a finding matched by both reports as suppressed, not counted twice.
+fn Reduced(
+    outcome: &CheckOutcome,
+    rules: &RuleSelector,
+    suppressions: &SuppressionPolicy,
+    baseline: &BaselinePolicy,
+) -> (Vec<Finding>, Vec<Finding>, Vec<Finding>, GateRunOutcome)
 {
     let CheckOutcome::Judged { findings, .. } = outcome
     else
     {
-        return (Vec::new(), Vec::new(), GateRunOutcome::Indeterminate);
+        return (Vec::new(), Vec::new(), Vec::new(), GateRunOutcome::Indeterminate);
     };
 
     let selected: Vec<Finding> = findings.iter().filter(|finding| return rules.Matches(&finding.rule)).cloned().collect();
     let blockable: Vec<Finding> = selected.into_iter().filter(|finding| return finding.Can_Fail_A_Build()).collect();
-    let (suppressed_findings, blocking_findings): (Vec<Finding>, Vec<Finding>) =
+    let (suppressed_findings, remaining): (Vec<Finding>, Vec<Finding>) =
         blockable.into_iter().partition(|finding| return suppressions.Suppressing(finding).is_some());
+    let (baselined_findings, blocking_findings): (Vec<Finding>, Vec<Finding>) =
+        remaining.into_iter().partition(|finding| return baseline.Tolerating(finding).is_some());
     let disposition = Disposition(&blocking_findings);
 
-    return (blocking_findings, suppressed_findings, disposition);
+    return (blocking_findings, suppressed_findings, baselined_findings, disposition);
 }

@@ -2,7 +2,7 @@ pub enum nomos_gate_orchestration::Explanation
 pub enum nomos_gate_orchestration::GateOutcome
 pub enum nomos_gate_orchestration::GateRunOutcome
 pub enum nomos_gate_orchestration::SuppressionDisposition
-pub enum variant nomos_gate_orchestration::Explanation::Found { finding: Box<Finding>, would_block: bool, suppressed_by: Option<Suppression>, }
+pub enum variant nomos_gate_orchestration::Explanation::Found { finding: Box<Finding>, would_block: bool, suppressed_by: Option<Suppression>, baselined_by: Option<BaselineDebt>, }
 pub enum variant nomos_gate_orchestration::Explanation::NotFound
 pub enum variant nomos_gate_orchestration::GateOutcome::Contradictory(RuleRegistryError)
 pub enum variant nomos_gate_orchestration::GateOutcome::Planned(GatePlan)
@@ -15,6 +15,8 @@ pub enum variant nomos_gate_orchestration::SuppressionDisposition::FormalRiskAcc
 pub enum variant nomos_gate_orchestration::SuppressionDisposition::InlineSuppression
 pub enum variant nomos_gate_orchestration::SuppressionDisposition::RepositoryPolicyException
 pub enum variant nomos_gate_orchestration::SuppressionDisposition::TemporaryWaiver
+pub fn nomos_gate_orchestration::BaselineDebt::Matches(&self, finding: &Finding) -> bool
+pub fn nomos_gate_orchestration::BaselinePolicy::Tolerating<'a>(&'a self, finding: &Finding) -> Option<&'a BaselineDebt>
 pub fn nomos_gate_orchestration::Disposition(findings: &[Finding]) -> GateRunOutcome
 pub fn nomos_gate_orchestration::Explain_Gate<P: ProcessLauncher>( walked: Option<Vec<SourceFile>>, variant: BuildVariant, command: &GateCommand, query: &FindingQuery, launcher: &P, ) -> GateExplainResult
 pub fn nomos_gate_orchestration::Registered() -> Result<RuleRegistry, RuleRegistryError>
@@ -24,8 +26,13 @@ pub fn nomos_gate_orchestration::Run_Gate<P: ProcessLauncher>(walked: Option<Vec
 pub fn nomos_gate_orchestration::ScopeSelector::Matches(&self, path: &str) -> bool
 pub fn nomos_gate_orchestration::Suppression::Matches(&self, finding: &Finding) -> bool
 pub fn nomos_gate_orchestration::SuppressionPolicy::Suppressing<'a>(&'a self, finding: &Finding) -> Option<&'a Suppression>
+pub struct field nomos_gate_orchestration::BaselineDebt::rationale: String
+pub struct field nomos_gate_orchestration::BaselineDebt::rule: RuleId
+pub struct field nomos_gate_orchestration::BaselineDebt::subject: SubjectId
+pub struct field nomos_gate_orchestration::BaselinePolicy::debt: Vec<BaselineDebt>
 pub struct field nomos_gate_orchestration::FindingQuery::location: String
 pub struct field nomos_gate_orchestration::FindingQuery::rule: RuleId
+pub struct field nomos_gate_orchestration::GateCommand::baseline: BaselinePolicy
 pub struct field nomos_gate_orchestration::GateCommand::root: PathBuf
 pub struct field nomos_gate_orchestration::GateCommand::rules: RuleSelector
 pub struct field nomos_gate_orchestration::GateCommand::scope: ScopeSelector
@@ -34,6 +41,7 @@ pub struct field nomos_gate_orchestration::GateExplainResult::check_outcome: Che
 pub struct field nomos_gate_orchestration::GateExplainResult::explanation: Explanation
 pub struct field nomos_gate_orchestration::GateExplainResult::root: PathBuf
 pub struct field nomos_gate_orchestration::GatePlan::rules: Vec<RuleOffer>
+pub struct field nomos_gate_orchestration::GateRunResult::baselined_findings: Vec<Finding>
 pub struct field nomos_gate_orchestration::GateRunResult::blocking_findings: Vec<Finding>
 pub struct field nomos_gate_orchestration::GateRunResult::check_outcome: CheckOutcome
 pub struct field nomos_gate_orchestration::GateRunResult::disposition: GateRunOutcome
@@ -48,6 +56,8 @@ pub struct field nomos_gate_orchestration::Suppression::rationale: String
 pub struct field nomos_gate_orchestration::Suppression::rule: RuleId
 pub struct field nomos_gate_orchestration::Suppression::subject: SubjectId
 pub struct field nomos_gate_orchestration::SuppressionPolicy::suppressions: Vec<Suppression>
+pub struct nomos_gate_orchestration::BaselineDebt
+pub struct nomos_gate_orchestration::BaselinePolicy
 pub struct nomos_gate_orchestration::FindingQuery
 pub struct nomos_gate_orchestration::GateCommand
 pub struct nomos_gate_orchestration::GateExplainResult

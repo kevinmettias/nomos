@@ -6,7 +6,7 @@ use nomos_capability::RegistryError;
 use nomos_check_orchestration::CheckOutcome;
 use nomos_contracts::Finding;
 use nomos_gate_orchestration::{
-    Explanation, GateExplainResult, GateOutcome, GateRunOutcome, GateRunResult, Suppression,
+    BaselineDebt, Explanation, GateExplainResult, GateOutcome, GateRunOutcome, GateRunResult, Suppression,
 };
 use std::io::Write;
 use std::path::Path;
@@ -125,10 +125,11 @@ fn Report_Judged(findings: &[Finding], result: &GateRunResult, stdout: &mut impl
 
     let _ = writeln!(
         stdout,
-        "\n{} finding(s), {} of which can fail a build, {} suppressed",
+        "\n{} finding(s), {} of which can fail a build, {} suppressed, {} baselined",
         findings.len(),
         result.blocking_findings.len(),
-        result.suppressed_findings.len()
+        result.suppressed_findings.len(),
+        result.baselined_findings.len()
     );
 
     return Exit_Code_For(result.disposition);
@@ -220,26 +221,43 @@ fn Report_Explanation(explanation: &Explanation, stdout: &mut impl Write) -> Exi
 
             ExitCode::Ok
         }
-        Explanation::Found { finding, would_block, suppressed_by } =>
+        Explanation::Found { finding, would_block, suppressed_by, baselined_by } =>
         {
-            Report_Found(finding, *would_block, suppressed_by.as_ref(), stdout)
+            let tolerance = Toleration { suppressed_by: suppressed_by.as_ref(), baselined_by: baselined_by.as_ref() };
+
+            Report_Found(finding, *would_block, tolerance, stdout)
         }
     };
 }
 
-/// Renders one found explanation's finding, block status, and suppression note (if any),
-/// and reduces it to the [`ExitCode`] a real run would decide for this one finding.
-fn Report_Found(finding: &Finding, would_block: bool, suppressed_by: Option<&Suppression>, stdout: &mut impl Write) -> ExitCode
+/// The suppression or baseline note [`Report_Found`] renders alongside a found
+/// explanation's block status -- never both at once, since `Explain_Gate` checks baseline
+/// only once suppression is ruled out, but grouped as a pair rather than two parameters:
+/// what a found explanation was tolerated by is one fact, not two.
+struct Toleration<'a>
+{
+    suppressed_by: Option<&'a Suppression>,
+    baselined_by: Option<&'a BaselineDebt>,
+}
+
+/// Renders one found explanation's finding, block status, and suppression or baseline note
+/// (if either applies), and reduces it to the [`ExitCode`] a real run would decide for this
+/// one finding.
+fn Report_Found(finding: &Finding, would_block: bool, tolerance: Toleration<'_>, stdout: &mut impl Write) -> ExitCode
 {
     let _ = writeln!(stdout, "{}", finding.Describe());
     let _ = writeln!(stdout, "would block: {would_block}");
-    if let Some(suppression) = suppressed_by
+    if let Some(suppression) = tolerance.suppressed_by
     {
         let _ = writeln!(
             stdout,
             "suppressed by: {:?} — {} (owner: {})",
             suppression.disposition, suppression.rationale, suppression.owner
         );
+    }
+    if let Some(debt) = tolerance.baselined_by
+    {
+        let _ = writeln!(stdout, "baselined by: {}", debt.rationale);
     }
 
     return if would_block { ExitCode::Violations } else { ExitCode::Ok };

@@ -2,8 +2,9 @@
 //! disposition reduction over an already-judged list of findings.
 
 use crate::{
-    Disposition, Explain_Gate, Explanation, FindingQuery, GateCommand, GateOutcome, GateRunOutcome, RuleSelector, Run,
-    Run_Gate, ScopeSelector, Suppression, SuppressionDisposition, SuppressionPolicy,
+    BaselineDebt, BaselinePolicy, Disposition, Explain_Gate, Explanation, FindingQuery, GateCommand, GateOutcome,
+    GateRunOutcome, GateRunResult, RuleSelector, Run, Run_Gate, ScopeSelector, Suppression, SuppressionDisposition,
+    SuppressionPolicy,
 };
 use nomos_check_orchestration::CheckOutcome;
 use nomos_contracts::{
@@ -54,6 +55,93 @@ fn Suppression_Of(finding: &Finding) -> Suppression
         rationale: "test fixture".to_owned(),
         owner: "test".to_owned(),
     };
+}
+
+/// [`Command_At`] `root`, with `debt` as the whole baseline policy and every rule still
+/// selected -- the shape both a `run` and an `explain` fixture build once they have a real
+/// finding to baseline.
+fn Command_With_Baseline(root: PathBuf, debt: BaselineDebt) -> GateCommand
+{
+    return GateCommand { baseline: BaselinePolicy { debt: vec![debt] }, ..Command_At(root) };
+}
+
+/// A [`BaselineDebt`] matching `finding` exactly, with a rationale fixed for every fixture
+/// that reaches for one -- the same "what a test needs is that it addresses a specific real
+/// finding" discipline [`Suppression_Of`] already keeps.
+fn Baseline_Of(finding: &Finding) -> BaselineDebt
+{
+    return BaselineDebt {
+        rule: finding.rule.clone(),
+        subject: finding.subject,
+        rationale: "test fixture".to_owned(),
+    };
+}
+
+/// Judges one fresh call of `source` with every policy empty, and returns its one real
+/// blocking finding -- the shared setup a suppression and a baseline fixture both need
+/// before either can address a specific finding with its own policy.
+fn One_Real_Blocking_Finding(source: impl Fn() -> SourceFile) -> Finding
+{
+    let unmatched = Run_Gate(Some(vec![source()]), Test_Variant(), &Command_At(Repository_Root()), &StdProcessLauncher);
+
+    return unmatched
+        .blocking_findings
+        .into_iter()
+        .next()
+        .expect("this fixture must produce one real blocking finding");
+}
+
+/// Asserts `result` reports no finding able to fail the build, and that `tolerated` --
+/// whichever of `result.suppressed_findings`/`result.baselined_findings` the caller's own
+/// policy populated -- is not empty, so the one real finding a suppression or a baseline
+/// fixture produces is visible somewhere rather than silently disappearing.
+fn Assert_Tolerated_Not_Blocking(result: &GateRunResult, tolerated: &[Finding])
+{
+    assert!(matches!(result.check_outcome, CheckOutcome::Judged { .. }));
+    assert_eq!(result.disposition, GateRunOutcome::Passed);
+    assert!(result.blocking_findings.is_empty(), "{:?}", result.blocking_findings);
+    assert!(!tolerated.is_empty(), "the tolerated finding must still be visible");
+}
+
+/// Answers `query` against one fresh call of `source` with every policy empty, and returns
+/// the finding it found -- the shared setup a suppression and a baseline explain fixture
+/// both need before either can address that finding with its own policy.
+fn Real_Finding_For(query: &FindingQuery, source: impl Fn() -> SourceFile) -> Finding
+{
+    let unmatched = Explain_Gate(Some(vec![source()]), Test_Variant(), &Command_At(Repository_Root()), query, &StdProcessLauncher);
+    let Explanation::Found { finding, .. } = unmatched.explanation
+    else
+    {
+        panic!("this fixture must produce the finding the query names");
+    };
+
+    return *finding;
+}
+
+/// The source, query and real finding a suppression and a baseline "applies" fixture both
+/// build identically, before either addresses that finding with its own policy.
+fn Explain_Applies_Fixture() -> (impl Fn() -> SourceFile, FindingQuery, Finding)
+{
+    let source = || return Source("a.rs", "/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n");
+    let query = FindingQuery { rule: RuleId::New(COMPLETENESS_MIRROR), location: "a.rs".to_owned() };
+    let real_finding = Real_Finding_For(&query, source);
+
+    return (source, query, real_finding);
+}
+
+/// Destructures `explanation`'s `Found` variant into the three fields a suppression and a
+/// baseline explain fixture each read a different pair of, or panics naming what every
+/// fixture that reaches this helper has already asserted -- the explain-side counterpart
+/// to [`Judged_Findings`].
+fn Explained_Found(explanation: Explanation) -> (bool, Option<Suppression>, Option<BaselineDebt>)
+{
+    let Explanation::Found { would_block, suppressed_by, baselined_by, .. } = explanation
+    else
+    {
+        panic!("this fixture must still produce the finding the query names");
+    };
+
+    return (would_block, suppressed_by, baselined_by);
 }
 
 /// The findings a judged `check_outcome` carries, or a panic naming what every fixture that
@@ -372,10 +460,8 @@ fn Test_A_Scoped_Out_Source_Should_Not_Be_Judged()
         "/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n",
     )];
     let command = GateCommand {
-        root: Repository_Root(),
         scope: ScopeSelector { include: vec!["b.rs".to_owned()], exclude: Vec::new() },
-        rules: RuleSelector::default(),
-        suppressions: SuppressionPolicy::default(),
+        ..Command_At(Repository_Root())
     };
 
     let result = Run_Gate(Some(sources), Test_Variant(), &command, &StdProcessLauncher);
@@ -397,10 +483,8 @@ fn Test_A_Deselected_Rules_Finding_Should_Not_Block()
         "/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n",
     )];
     let command = GateCommand {
-        root: Repository_Root(),
-        scope: ScopeSelector::default(),
         rules: RuleSelector { include: vec![RuleId::New(NAMING_CONVENTION)] },
-        suppressions: SuppressionPolicy::default(),
+        ..Command_At(Repository_Root())
     };
 
     let result = Run_Gate(Some(sources), Test_Variant(), &command, &StdProcessLauncher);
@@ -430,24 +514,59 @@ fn Test_A_Deselected_Rules_Finding_Should_Not_Block()
 fn Test_A_Suppressed_Finding_Should_Not_Block()
 {
     let source = || return Source("a.rs", "/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n");
-    let unsuppressed = Run_Gate(Some(vec![source()]), Test_Variant(), &Command_At(Repository_Root()), &StdProcessLauncher);
-    let real_finding = unsuppressed
-        .blocking_findings
-        .first()
-        .expect("this fixture must produce one real blocking finding to suppress");
-    let command = Command_With_Suppression(Repository_Root(), Suppression_Of(real_finding));
+    let real_finding = One_Real_Blocking_Finding(source);
+    let command = Command_With_Suppression(Repository_Root(), Suppression_Of(&real_finding));
 
     let result = Run_Gate(Some(vec![source()]), Test_Variant(), &command, &StdProcessLauncher);
 
-    assert!(matches!(result.check_outcome, CheckOutcome::Judged { .. }));
-    assert_eq!(result.disposition, GateRunOutcome::Passed);
-    assert!(result.blocking_findings.is_empty(), "{:?}", result.blocking_findings);
-    assert!(!result.suppressed_findings.is_empty(), "the suppressed finding must still be visible");
+    Assert_Tolerated_Not_Blocking(&result, &result.suppressed_findings);
     assert!(
         Judged_Findings(&result.check_outcome)
             .iter()
             .any(|finding| return finding.rule == RuleId::New(COMPLETENESS_MIRROR)),
         "the suppressed finding must still be judged and carried in check_outcome"
+    );
+}
+
+/// A [`BaselineDebt`] matching the one blocking finding this fixture produces: the run still
+/// judges the source and `check_outcome` still carries the finding in full, and it now also
+/// appears in `baselined_findings` rather than `blocking_findings` -- tolerated, not
+/// silenced. Mirrors [`Test_A_Suppressed_Finding_Should_Not_Block`] for the second of
+/// `Run_Gate`'s two policies.
+#[test]
+fn Test_A_Baselined_Finding_Should_Not_Block()
+{
+    let source = || return Source("a.rs", "/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n");
+    let real_finding = One_Real_Blocking_Finding(source);
+    let command = Command_With_Baseline(Repository_Root(), Baseline_Of(&real_finding));
+
+    let result = Run_Gate(Some(vec![source()]), Test_Variant(), &command, &StdProcessLauncher);
+
+    Assert_Tolerated_Not_Blocking(&result, &result.baselined_findings);
+}
+
+/// A finding matched by both a [`Suppression`] and a [`BaselineDebt`] reports as suppressed,
+/// not baselined -- `Run_Gate` checks suppression first, so the two lists never double-count
+/// the same finding, and this is the one case a passing "not blocking" assertion alone would
+/// not catch: `blocking_findings` empty is also true if the ordering were reversed.
+#[test]
+fn Test_A_Suppressed_And_Baselined_Finding_Should_Report_As_Suppressed()
+{
+    let source = || return Source("a.rs", "/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n");
+    let real_finding = One_Real_Blocking_Finding(source);
+    let command = GateCommand {
+        suppressions: SuppressionPolicy { suppressions: vec![Suppression_Of(&real_finding)] },
+        baseline: BaselinePolicy { debt: vec![Baseline_Of(&real_finding)] },
+        ..Command_At(Repository_Root())
+    };
+
+    let result = Run_Gate(Some(vec![source()]), Test_Variant(), &command, &StdProcessLauncher);
+
+    assert!(!result.suppressed_findings.is_empty(), "the double-matched finding must report as suppressed");
+    assert!(
+        result.baselined_findings.is_empty(),
+        "the double-matched finding must not also report as baselined: {:?}",
+        result.baselined_findings
     );
 }
 
@@ -480,7 +599,7 @@ fn Test_Explain_Should_Find_A_Real_Blocking_Finding()
 
     let result = Explain_Gate(Some(sources), Test_Variant(), &Command_At(Repository_Root()), &query, &StdProcessLauncher);
 
-    let Explanation::Found { finding, would_block, suppressed_by } = result.explanation
+    let Explanation::Found { finding, would_block, suppressed_by, baselined_by } = result.explanation
     else
     {
         panic!("this fixture must produce the finding the query names");
@@ -488,6 +607,7 @@ fn Test_Explain_Should_Find_A_Real_Blocking_Finding()
     assert_eq!(finding.rule, RuleId::New(COMPLETENESS_MIRROR));
     assert!(would_block);
     assert_eq!(suppressed_by, None);
+    assert_eq!(baselined_by, None);
 }
 
 /// A [`Suppression`] matching the queried finding flips `would_block` to `false` and names
@@ -497,26 +617,30 @@ fn Test_Explain_Should_Find_A_Real_Blocking_Finding()
 #[test]
 fn Test_Explain_Should_Report_A_Suppression_That_Applies()
 {
-    let source = || return Source("a.rs", "/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n");
-    let query = FindingQuery { rule: RuleId::New(COMPLETENESS_MIRROR), location: "a.rs".to_owned() };
-    let unsuppressed =
-        Explain_Gate(Some(vec![source()]), Test_Variant(), &Command_At(Repository_Root()), &query, &StdProcessLauncher);
-    let Explanation::Found { finding: real_finding, .. } = unsuppressed.explanation
-    else
-    {
-        panic!("this fixture must produce the finding the query names");
-    };
+    let (source, query, real_finding) = Explain_Applies_Fixture();
     let command = Command_With_Suppression(Repository_Root(), Suppression_Of(&real_finding));
 
     let result = Explain_Gate(Some(vec![source()]), Test_Variant(), &command, &query, &StdProcessLauncher);
 
-    let Explanation::Found { would_block, suppressed_by, .. } = result.explanation
-    else
-    {
-        panic!("this fixture must still produce the finding the query names");
-    };
+    let (would_block, suppressed_by, _) = Explained_Found(result.explanation);
     assert!(!would_block);
     assert!(suppressed_by.is_some());
+}
+
+/// A [`BaselineDebt`] matching the queried finding flips `would_block` to `false` and names
+/// itself in `baselined_by` -- mirrors [`Test_Explain_Should_Report_A_Suppression_That_Applies`]
+/// for the second of `explain`'s two consulted policies.
+#[test]
+fn Test_Explain_Should_Report_A_Baseline_That_Applies()
+{
+    let (source, query, real_finding) = Explain_Applies_Fixture();
+    let command = Command_With_Baseline(Repository_Root(), Baseline_Of(&real_finding));
+
+    let result = Explain_Gate(Some(vec![source()]), Test_Variant(), &command, &query, &StdProcessLauncher);
+
+    let (would_block, _, baselined_by) = Explained_Found(result.explanation);
+    assert!(!would_block);
+    assert!(baselined_by.is_some());
 }
 
 /// `explain` is independent of `command.scope`: a scope that would exclude `a.rs` from a
@@ -530,10 +654,8 @@ fn Test_Explain_Should_Ignore_Scope()
     )];
     let query = FindingQuery { rule: RuleId::New(COMPLETENESS_MIRROR), location: "a.rs".to_owned() };
     let command = GateCommand {
-        root: Repository_Root(),
         scope: ScopeSelector { include: vec!["b.rs".to_owned()], exclude: Vec::new() },
-        rules: RuleSelector::default(),
-        suppressions: SuppressionPolicy::default(),
+        ..Command_At(Repository_Root())
     };
 
     let result = Explain_Gate(Some(sources), Test_Variant(), &command, &query, &StdProcessLauncher);

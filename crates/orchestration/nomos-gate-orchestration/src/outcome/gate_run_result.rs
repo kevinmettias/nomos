@@ -29,6 +29,11 @@ pub struct GateRunResult
     /// that was never found, and the corpus's own `SUP-EVID-*` requirement is that a
     /// suppressed state stays visible rather than collapsing into silence.
     pub suppressed_findings: Vec<Finding>,
+    /// Findings for which `Finding::Can_Fail_A_Build` is true, no `Suppression` matched, but
+    /// a `BaselineDebt` did, so they could not fail the build either -- carried for the same
+    /// reason `suppressed_findings` is, and disjoint from it: a finding matched by both is
+    /// reported as suppressed, not counted twice.
+    pub baselined_findings: Vec<Finding>,
     /// The reduced verdict.
     pub disposition: GateRunOutcome,
 }

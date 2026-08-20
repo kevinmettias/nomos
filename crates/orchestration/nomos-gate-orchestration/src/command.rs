@@ -6,7 +6,8 @@
 //! as `Explain_Gate`'s own separate parameter rather than a field here: every verb shares
 //! `GateCommand`, `explain` alone also needs to name which finding, and folding that into
 //! this struct would make every other verb carry a field it never reads, the same
-//! `root`/`scope`/`rules`/`suppressions` asymmetry this struct already has for `Plan`. This
+//! `root`/`scope`/`rules`/`suppressions`/`baseline` asymmetry this struct already has for
+//! `Plan`. This
 //! stays a struct rather than an enum for the same reason it always has: the verbs share
 //! every field of it, so there is nothing for an enum to gain. `compare` is the one verb
 //! left with no real implementation -- inventing an argument shape for it now would be
@@ -14,7 +15,7 @@
 //! ahead of a second real case (`OD-PACKAGE-006`, `OD-RULES-005`, `OD-RULES-006`) -- so it
 //! is simply absent, not stubbed, until an increment gives it a real body.
 
-use crate::{RuleSelector, ScopeSelector, SuppressionPolicy};
+use crate::{BaselinePolicy, RuleSelector, ScopeSelector, SuppressionPolicy};
 use std::path::PathBuf;
 
 /// What to plan, run or explain a gate over.
@@ -42,4 +43,10 @@ pub struct GateCommand
     /// and `rules`. Nothing constructs a non-empty one yet -- see
     /// [`crate::SuppressionPolicy`]'s own doc for what authors one, and what does not yet.
     pub suppressions: SuppressionPolicy,
+    /// Existing debt a real run must not let fail the build either, checked after
+    /// `suppressions` so a finding matched by both reports as suppressed. Read by
+    /// [`crate::Run_Gate`] only, the same asymmetry as `scope`, `rules` and `suppressions`.
+    /// Nothing constructs a non-empty one yet -- see [`crate::BaselinePolicy`]'s own doc for
+    /// what authors one, and what does not yet.
+    pub baseline: BaselinePolicy,
 }
