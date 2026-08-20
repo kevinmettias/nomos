@@ -21256,14 +21256,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-cleanfile-languages",
-        "acquired_at": 1787189877,
-        "lease_expires_at": 1787197077
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -21275,9 +21271,37 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lang-rust",
+          "-p",
+          "nomos-lang-rust-cargo"
+        ],
+        "exit_code": 0,
+        "output_tail": "_Should_Satisfy_The_Contract_Ceiling ... ok\ntest provider::tests::Test_Every_Workspace_Member_Should_Produce_One_Fact ... ok\ntest metadata::tests::Test_Nomos_Contracts_Should_Have_No_First_Party_Edges ... ok\ntest metadata::tests::Test_Edges_Should_Be_In_Canonical_Order ... ok\ntest provider::tests::Test_A_Fact_Should_Carry_The_Declared_Guarantee ... ok\ntest provider::tests::Test_A_Facts_Subject_Should_Match_Subject_Of_Its_Own_Path ... ok\ntest metadata::tests::Test_This_Crate_Should_Depend_On_Nomos_Contracts ... ok\ntest metadata::tests::Test_Every_Discovered_Package_Should_Carry_A_Manifest_Relative_Root ... ok\ntest provider::tests::Test_A_Facts_Path_Should_Be_What_Its_Subject_Was_Addressed_By ... ok\ntest provider::tests::Test_Two_Runs_Over_The_Same_Tree_Should_Reach_The_Same_Semantic_Inputs ... ok\n\ntest result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s\n\n\nrunning 1 test\ntest Test_An_Edited_Manifests_Old_Fact_Should_Not_Survive_The_Generation_It_Was_Invalidated_At ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.09s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lang_rust-25d6cbe866f82aaf.exe)\n     Running tests\\corpus\\main.rs (target\\debug\\deps\\corpus-e34530f831f0fb6f.exe)\n     Running tests\\guarantee.rs (target\\debug\\deps\\guarantee-f39aa9dc71680878.exe)\n     Running tests\\rollup.rs (target\\debug\\deps\\rollup-71909a03bd10f839.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lang_rust_cargo-0b1744f47a5870b2.exe)\n     Running tests\\invalidation.rs (target\\debug\\deps\\invalidation-c681aa72c3511259.exe)\n   Doc-tests nomos_lang_rust\n   Doc-tests nomos_lang_rust_cargo\n",
+        "verified_at": 1787247156,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "3c6d4200d269d48d47fb6aa827d75a7181bbca52"
+      },
       "abandoned": [],
-      "displaced": [],
+      "displaced": [
+        {
+          "holder": "claude-cleanfile-languages",
+          "acquired_at": 1787189877,
+          "lease_expires_at": 1787197077
+        }
+      ],
       "declined": null
     },
     {
@@ -21352,14 +21376,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-cleanfile-rules",
-        "acquired_at": 1787189861,
-        "lease_expires_at": 1787197061
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -21369,9 +21389,35 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "exit_code": 0,
+        "output_tail": "ed_Site_Should_Produce_One_Finding ... ok\ntest reachability::tests::reading_a_fact::Test_A_Real_Fact_Should_Be_Read_And_Judged ... ok\ntest reachability::tests::reading_a_fact::Test_A_Source_With_No_Flagged_Sites_Should_Produce_No_Finding ... ok\ntest reachability::tests::reading_a_fact::Test_A_Subject_With_No_Fact_Should_Be_Reported_Rather_Than_Silently_Clean ... ok\ntest registry::rule_registry::tests::Test_A_Rule_Should_Be_Findable_By_Its_Id ... ok\ntest registry::rule_registry::tests::Test_A_Second_Offer_For_One_Rule_Should_Be_Refused ... ok\ntest registry::rule_registry::tests::Test_An_Empty_Registry_Should_Offer_Nothing ... ok\ntest universe::tests::Test_A_Constant_Slice_Should_Be_Found ... ok\ntest universe::tests::Test_A_Declared_Mirror_Should_Be_Read_Off_The_Doc_Comment ... ok\ntest universe::tests::Test_A_File_That_Declares_Nothing_Should_Be_Observed_And_Empty ... ok\ntest universe::tests::Test_A_List_With_No_Documentation_Should_Claim_No_Mirror ... ok\ntest universe::tests::Test_A_Payload_From_A_Blind_Provider_Should_Not_Read_As_No_Mirror ... ok\ntest universe::tests::Test_A_Private_List_Should_Not_Be_A_Universe ... ok\ntest universe::tests::Test_A_Scalar_Constant_Should_Not_Be_A_Universe ... ok\ntest universe::tests::Test_A_Trait_Impl_Should_Not_Claim_The_Type ... ok\ntest universe::tests::Test_An_All_Should_Be_Attributed_To_Its_Type ... ok\ntest universe::tests::Test_An_All_That_Takes_A_Receiver_Should_Not_Be_A_Universe ... ok\n\ntest result: ok. 78 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Blocking waiting for file lock on package cache\n    Blocking waiting for file lock on package cache\n    Blocking waiting for file lock on package cache\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.39s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-12a9eec0a9b372bd.exe)\n   Doc-tests nomos_rules\n",
+        "verified_at": 1787247046,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "3c6d4200d269d48d47fb6aa827d75a7181bbca52"
+      },
       "abandoned": [],
-      "displaced": [],
+      "displaced": [
+        {
+          "holder": "claude-cleanfile-rules",
+          "acquired_at": 1787189861,
+          "lease_expires_at": 1787197061
+        }
+      ],
       "declined": null
     },
     {
@@ -21430,14 +21476,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-cleanfile-platform",
-        "acquired_at": 1787189841,
-        "lease_expires_at": 1787197041
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -21447,9 +21489,35 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-platform-std"
+        ],
+        "exit_code": 0,
+        "output_tail": "efused ... ok\ntest launcher::tests::Test_A_Missing_Program_Should_Be_An_Error_Not_A_Failed_Check ... ok\ntest lock::tests::Test_An_Uncontended_Lock_Should_Be_Acquired_Cleanly ... ok\ntest filesystem::tests::Test_Replace_Should_Create_Missing_Parent_Directories ... ok\ntest lock::tests::Test_A_Held_Lock_Should_Refuse_A_Second_Holder ... ok\ntest lock::tests::Test_A_Refusal_Should_Name_The_Current_Holder ... ok\ntest lock::tests::Test_A_Fresh_Lock_Should_Not_Be_Broken ... ok\ntest lock::tests::Test_A_Clean_Acquisition_Should_Not_Report_A_Takeover ... ok\ntest filesystem::tests::Test_Replace_Should_Not_Leave_A_Temporary_Behind ... ok\ntest lock::tests::Test_A_Stale_Lock_Should_Be_Broken_And_Reported ... ok\ntest filesystem::tests::Test_Replace_Should_Round_Trip_Contents ... ok\ntest launcher::tests::Test_A_Failing_Program_Should_Report_Its_Exit_Code ... ok\ntest launcher::tests::Test_A_Successful_Program_Should_Report_A_Zero_Exit ... ok\ntest launcher::tests::Test_A_Loud_Programs_Output_Should_Arrive_Whole ... ok\ntest launcher::tests::Test_A_Loud_Program_Should_Be_Judged_On_Its_Result_Not_Its_Volume ... ok\ntest launcher::tests::Test_A_Silent_Program_Should_Report_Stalled_Rather_Than_Timed_Out ... ok\ntest launcher::tests::Test_A_Program_That_Exceeds_Its_Timeout_Should_Still_Time_Out ... ok\ntest launcher::tests::Test_A_Progressing_Program_Should_Report_Timed_Out_Rather_Than_Stalled ... ok\ntest launcher::tests::Test_A_Kill_Should_Reach_The_Whole_Process_Tree_Not_Only_The_Direct_Child ... ok\ntest launcher::tests::Test_A_Grandchild_Holding_The_Pipe_Should_Not_Hold_The_Launcher ... ok\n\ntest result: ok. 21 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 5.07s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.13s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_platform_std-9df357ef2edc3eb1.exe)\n   Doc-tests nomos_platform_std\n",
+        "verified_at": 1787247099,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "3c6d4200d269d48d47fb6aa827d75a7181bbca52"
+      },
       "abandoned": [],
-      "displaced": [],
+      "displaced": [
+        {
+          "holder": "claude-cleanfile-platform",
+          "acquired_at": 1787189841,
+          "lease_expires_at": 1787197041
+        }
+      ],
       "declined": null
     },
     {
@@ -21466,14 +21534,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-cleanfile-tests-integration",
-        "acquired_at": 1787189939,
-        "lease_expires_at": 1787197139
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -21483,9 +21547,35 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-integration-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "orpus ... ok\ntest scale::Test_A_Derived_Signal_Should_Be_Neither_Silent_Nor_Background_Hum ... ok\ntest scale::Test_A_Second_Run_Should_Materialize_Zero ... ok\ntest scale::Test_The_Weaker_Provider_Should_Answer_For_The_Whole_Scale_Corpus ... ok\n\ntest result: ok. 29 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 31.96s\n\n\nrunning 13 tests\ntest declarations::Test_Every_Domain_In_The_Tree_Should_Declare_And_Be_Registered ... ok\ntest controls::Test_A_Domain_That_Does_Not_Repeat_Itself_Should_Fail_The_Harness ... ok\ntest domains::Test_Snapshot_Serialization_Should_Meet_Its_Declared_Strategy ... ok\ntest controls::Test_An_Altered_Byte_Should_Move_The_Digest_The_Golden_Pins ... ok\ntest domains::Test_The_Scanner_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_Corrections_Should_Meet_Their_Declared_Strategy ... ok\ntest domains::Test_The_Reachability_Offer_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_The_Fact_Cache_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_The_Parser_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_The_Rollup_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_Projection_Output_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_Bundle_Serialization_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_The_Dependency_Provider_Should_Meet_Its_Declared_Strategy ... ok\n\ntest result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.41s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.07s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_integration_tests-ed91bfaa443c8962.exe)\n     Running tests\\analysis_slice\\main.rs (target\\debug\\deps\\analysis_slice-257b6e41c529946d.exe)\n     Running tests\\determinism\\main.rs (target\\debug\\deps\\determinism-748a8eb73a77a32f.exe)\n   Doc-tests nomos_integration_tests\n",
+        "verified_at": 1787247162,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "3c6d4200d269d48d47fb6aa827d75a7181bbca52"
+      },
       "abandoned": [],
-      "displaced": [],
+      "displaced": [
+        {
+          "holder": "claude-cleanfile-tests-integration",
+          "acquired_at": 1787189939,
+          "lease_expires_at": 1787197139
+        }
+      ],
       "declined": null
     },
     {
@@ -21502,14 +21592,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-cleanfile-tests-contract",
-        "acquired_at": 1787189954,
-        "lease_expires_at": 1787197154
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -21519,9 +21605,35 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "Cited_Rule ... ok\ntest Test_Every_Cited_Record_Should_Still_Exist ... ok\ntest Test_Every_Cited_Version_Should_Match_The_Records_Own_Front_Matter ... ok\ntest Test_A_Mismatched_Version_Should_Fail_The_Comparison ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n\n\nrunning 5 tests\ntest Test_A_Lowered_Declaration_Should_Fail_The_Comparison ... ok\ntest Test_An_Unrelated_Minor_Version_Should_Fail_The_Comparison ... ok\ntest Test_A_Matching_Declaration_Should_Pass_The_Comparison ... ok\ntest Test_The_Real_Workflow_Should_Still_Have_The_Install_Step ... ok\ntest Test_The_Declared_Floor_Should_Match_The_Toolchain_The_Gate_Installs ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.73s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-06ab25b0491e144c.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-4c32ae08be8df958.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-9350d088b8d6ed0d.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-9ca3879aab70176f.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-308fef82df004321.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-f6f7228f8cfa874c.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-ea500c062215f506.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-790c8c5856e63fa5.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-98429b682798ce96.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-c1e906054609f777.exe)\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1787247131,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "3c6d4200d269d48d47fb6aa827d75a7181bbca52"
+      },
       "abandoned": [],
-      "displaced": [],
+      "displaced": [
+        {
+          "holder": "claude-cleanfile-tests-contract",
+          "acquired_at": 1787189954,
+          "lease_expires_at": 1787197154
+        }
+      ],
       "declined": null
     },
     {
