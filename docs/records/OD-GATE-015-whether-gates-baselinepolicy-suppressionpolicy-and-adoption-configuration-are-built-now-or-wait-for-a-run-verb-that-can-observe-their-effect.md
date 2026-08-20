@@ -3,7 +3,7 @@ id: OD-GATE-015
 type: decision
 title: Whether Gate's BaselinePolicy, SuppressionPolicy and adoption configuration are built now, or wait for a run verb that can observe their effect
 status: open
-version: 3
+version: 4
 authority: canonical-normative-record
 tags:
   - gate
@@ -175,12 +175,40 @@ existing debt, or enough false-positive/rationale friction, that an unconditiona
 argue for which of the three concerns to build first, rather than building all three
 speculatively from the corpus's naming alone. Nothing has accumulated yet.
 
+## One Of Three Is Built, Under Override — The Other Two Are Not
+
+`P13-GATE-015-SUPPRESSION-FIRST-INCREMENT-2` built `SuppressionPolicy`, the first of this
+record's three named concerns, under the same standing user override
+`OD-GATE-014`'s own amendment already records — not by the shared trigger firing, which
+still has not. This record's own "One Question, Three Concerns" section already argued
+against resolving `SUP-*`, `BASELINE-*` and `ADOPT-CONFIG-*` together, since they share no
+real field shape; this amendment is that argument bearing out. Only the suppression concern
+is built. `BaselinePolicy` and adoption configuration remain exactly as unbuilt as before,
+and now wait on their own second, independent trigger rather than a trigger a built concern
+no longer needs.
+
+Verified directly against the real code, not assumed: `Suppression`
+(`crates/orchestration/nomos-gate-orchestration/src/suppression.rs`) carries the six `SUP-*`
+dispositions by name (`InlineSuppression`, `RepositoryPolicyException`, `TemporaryWaiver`,
+`AcceptedBaselineDebt`, `FalsePositiveDisposition`, `FormalRiskAcceptance`) and matches a
+finding by `rule`/`subject` — the identity `Finding` already carries, no new addressing
+scheme invented. `Run_Gate` partitions a matched, otherwise-blocking finding into
+`GateRunResult::suppressed_findings` rather than `blocking_findings`; it stays visible in
+both that field and `check_outcome`, never silently dropped. No CLI flag or configuration
+file constructs a `Suppression` yet — nothing in this workspace has any config-file
+authoring convention at all, so inventing one now, before a real caller needs it, would
+repeat the exact mistake this record's own reasoning already declined. `owner`/`approver`/
+dates/revalidation triggers, `SUP-*`'s other required fields, are not enforced: nothing
+constructs a `Suppression` today, so validating fields nothing populates would validate
+against nothing.
+
 ## Status
 
-Open. `Gate` has a real `run` verb and a real disposition (`P13-GATE-RUN-FIRST-INCREMENT-3`,
-`P13-GATE-014-015-RUN-TRIGGER-FIRED`), and now a real caller whose build it gates:
-`.github/workflows/gate.yml`'s `Rules` step invokes `gate run`, not `check`, since
-`P13-GATE-RUN-CI-CALLER`. This record's first named trigger has fired. Revisit when a real
-caller's accumulated debt or exemption need names a concrete shape for one of the three
-concerns above — unchanged from before this landing — and treat that as a trigger for the
-concern it names, not for all three at once.
+Open, for `BaselinePolicy` and adoption configuration. `Gate` has a real `run` verb and a
+real disposition (`P13-GATE-RUN-FIRST-INCREMENT-3`, `P13-GATE-014-015-RUN-TRIGGER-FIRED`),
+and a real caller whose build it gates: `.github/workflows/gate.yml`'s `Rules` step invokes
+`gate run`, not `check`, since `P13-GATE-RUN-CI-CALLER`. This record's first named trigger
+has fired. The suppression concern is closed, by override rather than by that trigger — see
+above. `BaselinePolicy` and adoption configuration remain: revisit either when a real
+caller's accumulated debt or exemption need names a concrete shape for it, or when the same
+kind of standing override that closed suppression is given for it by name.

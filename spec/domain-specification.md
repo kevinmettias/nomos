@@ -69,7 +69,7 @@ profile: domain-specification
 | docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md@authored | docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md | authored | 32 | 8 | sha256:7e415cc70febf6bbbcc01cafffc5866abb03ee5d83ddfad6b829ea224bfcc9aa |
 | docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md@authored | docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md | authored | 17 | 7 | sha256:db6c652a9e6a7ddad8f6d701642e08c3a91d0f38c07839fdf7b5c5fc9e6ffa50 |
 | docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md@authored | docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md | authored | 21 | 8 | sha256:fde76ddb443213fdd5c253144550e72aa60a127201be1c067156bd52c9a071dd |
-| docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md@authored | docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md | authored | 25 | 9 | sha256:2ca140dc9f92acdeafb345caf060be98aa5759734cce2b551250a5b605c7353f |
+| docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md@authored | docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md | authored | 28 | 10 | sha256:c293a1249c4a0212c77e678f229470a9f8acf55d713665ebae9e0326d9bac032 |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md@authored | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md | authored | 16 | 5 | sha256:e3d0afb3cabc0ab33a09a700e110b803806d3c4e063673d8c18ca7adc84c3012 |
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md@authored | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md | authored | 33 | 7 | sha256:9b64932b5379c801e27d55a8182022bc7ee9524dd13249c6ec8795ed1624a2d6 |
 | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md@authored | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md | authored | 19 | 6 | sha256:9237ea74e89c7f49295d2e4bde41ff135c64838767ba17c27b0aad79037ced10 |
@@ -650,7 +650,8 @@ profile: domain-specification
 | docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md#15 | authored | 2 | `run` Arrived: What Changed And What Did Not |
 | docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md#18 | authored | 2 | `run` Gets A Real Caller: What Changed And What Did Not |
 | docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md#21 | authored | 2 | What Would Decide It |
-| docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md#24 | authored | 2 | Status |
+| docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md#24 | authored | 2 | One Of Three Is Built, Under Override — The Other Two Are Not |
+| docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md#27 | authored | 2 | Status |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#1 | authored | 1 | Choosing a platform, running a verb and rendering its outcome are three crates, not one |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#4 | authored | 2 | The decision |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#8 | authored | 2 | What stayed out, and why |
@@ -16873,21 +16874,61 @@ speculatively from the corpus's naming alone. Nothing has accumulated yet.
 
 ### docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md#24
 
+*revision: authored · kind: heading · heading: Whether Gate's BaselinePolicy, SuppressionPolicy and adoption configuration are built now, or wait for a run verb that can observe their effect / One Of Three Is Built, Under Override — The Other Two Are Not · hash: sha256:185ff8e0e07961de75e7c34de2c6c75302549ce2daad9b171c4c84e18bf76dfd*
+
+## One Of Three Is Built, Under Override — The Other Two Are Not
+
+### docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md#25
+
+*revision: authored · kind: prose · heading: Whether Gate's BaselinePolicy, SuppressionPolicy and adoption configuration are built now, or wait for a run verb that can observe their effect / One Of Three Is Built, Under Override — The Other Two Are Not · hash: sha256:c3017e6209cec45ae5d747c88736b83178a5279069469ba3c81350daea6ac1a9*
+
+`P13-GATE-015-SUPPRESSION-FIRST-INCREMENT-2` built `SuppressionPolicy`, the first of this
+record's three named concerns, under the same standing user override
+`OD-GATE-014`'s own amendment already records — not by the shared trigger firing, which
+still has not. This record's own "One Question, Three Concerns" section already argued
+against resolving `SUP-*`, `BASELINE-*` and `ADOPT-CONFIG-*` together, since they share no
+real field shape; this amendment is that argument bearing out. Only the suppression concern
+is built. `BaselinePolicy` and adoption configuration remain exactly as unbuilt as before,
+and now wait on their own second, independent trigger rather than a trigger a built concern
+no longer needs.
+
+### docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md#26
+
+*revision: authored · kind: prose · heading: Whether Gate's BaselinePolicy, SuppressionPolicy and adoption configuration are built now, or wait for a run verb that can observe their effect / One Of Three Is Built, Under Override — The Other Two Are Not · hash: sha256:fc8f1cdceee11f16d5cdb8ea0eba9c031fa8948c1943e7ec4158573f4d70ab65*
+
+Verified directly against the real code, not assumed: `Suppression`
+(`crates/orchestration/nomos-gate-orchestration/src/suppression.rs`) carries the six `SUP-*`
+dispositions by name (`InlineSuppression`, `RepositoryPolicyException`, `TemporaryWaiver`,
+`AcceptedBaselineDebt`, `FalsePositiveDisposition`, `FormalRiskAcceptance`) and matches a
+finding by `rule`/`subject` — the identity `Finding` already carries, no new addressing
+scheme invented. `Run_Gate` partitions a matched, otherwise-blocking finding into
+`GateRunResult::suppressed_findings` rather than `blocking_findings`; it stays visible in
+both that field and `check_outcome`, never silently dropped. No CLI flag or configuration
+file constructs a `Suppression` yet — nothing in this workspace has any config-file
+authoring convention at all, so inventing one now, before a real caller needs it, would
+repeat the exact mistake this record's own reasoning already declined. `owner`/`approver`/
+dates/revalidation triggers, `SUP-*`'s other required fields, are not enforced: nothing
+constructs a `Suppression` today, so validating fields nothing populates would validate
+against nothing.
+
+### docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md#27
+
 *revision: authored · kind: heading · heading: Whether Gate's BaselinePolicy, SuppressionPolicy and adoption configuration are built now, or wait for a run verb that can observe their effect / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md#25
+### docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md#28
 
-*revision: authored · kind: prose · heading: Whether Gate's BaselinePolicy, SuppressionPolicy and adoption configuration are built now, or wait for a run verb that can observe their effect / Status · hash: sha256:dec096bf384a031c90c78427380e9902cb7faae88cf070e1de17253ca01a5adc*
+*revision: authored · kind: prose · heading: Whether Gate's BaselinePolicy, SuppressionPolicy and adoption configuration are built now, or wait for a run verb that can observe their effect / Status · hash: sha256:2d13b1affe3a0effe3e5251adc3d3d426e662dbafde0b553125d03667a038e7c*
 
-Open. `Gate` has a real `run` verb and a real disposition (`P13-GATE-RUN-FIRST-INCREMENT-3`,
-`P13-GATE-014-015-RUN-TRIGGER-FIRED`), and now a real caller whose build it gates:
-`.github/workflows/gate.yml`'s `Rules` step invokes `gate run`, not `check`, since
-`P13-GATE-RUN-CI-CALLER`. This record's first named trigger has fired. Revisit when a real
-caller's accumulated debt or exemption need names a concrete shape for one of the three
-concerns above — unchanged from before this landing — and treat that as a trigger for the
-concern it names, not for all three at once.
+Open, for `BaselinePolicy` and adoption configuration. `Gate` has a real `run` verb and a
+real disposition (`P13-GATE-RUN-FIRST-INCREMENT-3`, `P13-GATE-014-015-RUN-TRIGGER-FIRED`),
+and a real caller whose build it gates: `.github/workflows/gate.yml`'s `Rules` step invokes
+`gate run`, not `check`, since `P13-GATE-RUN-CI-CALLER`. This record's first named trigger
+has fired. The suppression concern is closed, by override rather than by that trigger — see
+above. `BaselinePolicy` and adoption configuration remain: revisit either when a real
+caller's accumulated debt or exemption need names a concrete shape for it, or when the same
+kind of standing override that closed suppression is given for it by name.
 
 ### docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#1
 
