@@ -2,18 +2,23 @@
 
 use nomos_workspace::Change;
 
+mod side;
+
+use side::EditSide;
+
 /// One path a correction touches, carrying both directions.
 ///
 /// `nomos_workspace::Change` carries only what a path becomes, because the workspace does
 /// not retain content for a caller to reverse against — only digests. A correction has to
 /// be undoable, so an `Edit` carries what a path held before as well as what it should hold
 /// after, and [`Edit::Reverse`] is then a plain swap rather than a lookup that might fail.
+/// Each direction is an [`EditSide`], because it is the side carrying the content that
+/// knows where that content goes.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Edit
 {
-    path: String,
-    before: Option<String>,
-    after: Option<String>,
+    before: EditSide,
+    after: EditSide,
 }
 
 impl Edit
@@ -23,58 +28,45 @@ impl Edit
     #[must_use]
     pub fn New(path: impl Into<String>, before: Option<String>, after: Option<String>) -> Self
     {
+        let path = path.into();
+
         return Self {
-            path: path.into(),
-            before,
-            after,
+            before: EditSide::New(path.clone(), before),
+            after: EditSide::New(path, after),
         };
     }
 
     #[must_use]
     pub fn Path(&self) -> &str
     {
-        return &self.path;
+        return self.after.Path();
     }
 
     #[must_use]
     pub fn Before(&self) -> Option<&str>
     {
-        return self.before.as_deref();
+        return self.before.Content();
     }
 
     #[must_use]
     pub fn After(&self) -> Option<&str>
     {
-        return self.after.as_deref();
+        return self.after.Content();
     }
 
     /// What this edit does, as a change the workspace door accepts.
     #[must_use]
     pub fn Forward(&self) -> Change
     {
-        return Change_Toward(&self.path, self.after.as_deref());
+        return self.after.As_Change();
     }
 
     /// What undoes this edit, as a change the workspace door accepts.
     #[must_use]
     pub fn Reverse(&self) -> Change
     {
-        return Change_Toward(&self.path, self.before.as_deref());
+        return self.before.As_Change();
     }
-}
-
-fn Change_Toward(path: &str, content: Option<&str>) -> Change
-{
-    return match content
-    {
-        Some(content) => Change::Present {
-            path: path.to_owned(),
-            content: content.to_owned(),
-        },
-        None => Change::Absent {
-            path: path.to_owned(),
-        },
-    };
 }
 
 #[cfg(test)]

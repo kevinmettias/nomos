@@ -21787,10 +21787,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-decomposefile-capabilities",
+        "acquired_at": 1787197056,
+        "lease_expires_at": 1787204256
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -21821,7 +21825,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -21834,7 +21838,27 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-corrections"
+        ],
+        "exit_code": 0,
+        "output_tail": "n_candidate::tests::Test_A_Different_Change_Should_Change_The_Identity ... ok\ntest change_set::tests::Test_An_Empty_Change_Set_Touches_Nothing ... ok\ntest edit::tests::Test_A_Removal_Should_Reverse_To_A_Restoration ... ok\ntest change_set::tests::Test_Touched_Names_Every_Edited_Path ... ok\ntest preview::tests::Test_Previewing_The_Same_Plan_Twice_Should_Agree ... ok\ntest edit::tests::Test_An_Addition_Should_Reverse_To_A_Removal ... ok\ntest committed::tests::Test_Rollback_After_The_Workspace_Moved_Should_Be_Refused ... ok\ntest edit::tests::Test_Reverse_Should_Undo_Forward ... ok\ntest plan::tests::Test_An_Empty_Plan_Should_Be_Refused ... ok\ntest committed::tests::Test_Committing_Then_Rolling_Back_Should_Return_To_The_Base_Snapshot ... ok\ntest plan::tests::Test_Candidates_Touching_Different_Paths_Should_Be_Accepted ... ok\ntest plan::tests::Test_Two_Candidates_Touching_The_Same_Path_Should_Be_Refused ... ok\ntest preview::tests::Test_A_Preview_Names_Every_Candidate_And_Edit ... ok\ntest staged::tests::Test_Validating_A_Moved_Workspace_Should_Be_Refused ... ok\ntest staged::tests::Test_Staging_Against_Stale_Content_Should_Be_Refused ... ok\ntest staged::tests::Test_Staging_Against_The_Content_It_Was_Built_Over_Should_Succeed ... ok\ntest staged::tests::Test_Validating_An_Unmoved_Workspace_Should_Succeed ... ok\ntest validated::tests::Test_Committing_A_Validated_Plan_Should_Change_The_Workspace ... ok\ntest validated::tests::Test_Committing_After_The_Workspace_Moved_Should_Be_Refused ... ok\n\ntest result: ok. 21 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-corrections v0.1.0 (F:\\repos\\nomos\\crates\\corrections\\nomos-corrections)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.23s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_corrections-d0fc0ae09ec504ab.exe)\n   Doc-tests nomos_corrections\n",
+        "verified_at": 1787197191,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "0d1aa2086da8e6195967fb20f2260b0a790602c1"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
