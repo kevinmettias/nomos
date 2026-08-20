@@ -4,13 +4,14 @@
 use std::path::Path;
 
 use nomos_ledger::{
-    ExclusionLedger, FileLedger, Finish, Finishing, LedgerDocument, LedgerError, ReleaseOutcome,
-    Territory, Validate,
+    ExclusionLedger, FileLedger, Finish, Finishing, ItemId, LedgerDocument, LedgerError,
+    LedgerItem, ReleaseOutcome, Territory, Validate,
 };
 use nomos_platform::{Clock, CrossProcessLock, FileSystem, ProcessLauncher};
 
 use crate::command::WorkCommand;
 use crate::outcome::{BoardView, ShowView, WorkOutcome};
+use crate::{ClaimRequest, EndingRequest};
 
 /// Runs one command against `ledger` and hands back what happened, choosing nothing about
 /// the platform and rendering nothing about the answer.
@@ -29,12 +30,12 @@ use crate::outcome::{BoardView, ShowView, WorkOutcome};
 /// value, the same division `nomos-ledger::FileLedger::Add`'s own documentation already
 /// draws around this exact question.
 ///
-/// The whole body is one `match` on `command`, and stays that way even though it is long:
-/// every arm is already the smallest unit this dispatch has -- one named local holding the
-/// ledger call's own result, wrapped in the [`WorkOutcome`] variant of the same name. Pulling
-/// an arm out into its own function would not separate two things this function currently
-/// conflates; it would only relocate a single ledger call behind a name used once, so the
-/// `match` stays inline rather than manufacturing a seam that is not there.
+/// The body is one `match` on `command`. `List`, `Show`, `Validate` and `Audit` need
+/// nothing but `ledger`, so each wraps its helper's result in the [`WorkOutcome`] variant of
+/// the same name right there. The other seven need `launcher`, `published`, or more than one
+/// field off `command`, so each hands off to a per-command function below that owns both the
+/// single ledger call and the [`WorkOutcome`] wrap -- naming what that arm already was,
+/// rather than leaving `Run` itself carry every arm's own ledger call inline.
 pub fn Run<F, C, L, P>(
     command: &WorkCommand,
     ledger: &mut FileLedger<F, C, L>,
@@ -51,48 +52,103 @@ where
     {
         WorkCommand::List { .. } => WorkOutcome::List(Board_View(ledger)),
         WorkCommand::Show { .. } => WorkOutcome::Show(Show_View(ledger)),
-        WorkCommand::Add { item, amending } =>
-        {
-            let added = ledger.Add(item, "nomos work add", &published(), amending);
-            WorkOutcome::Add(added)
-        }
-        WorkCommand::Finish { item, holder } =>
-        {
-            let finishing = Finishing { item, holder };
-            let finished = Finish(ledger, launcher, &finishing, None);
-            WorkOutcome::Finish(finished)
-        }
-        WorkCommand::Claim(request) =>
-        {
-            let claimed = ledger.Claim(&request.item, &request.holder, request.lease);
-            WorkOutcome::Claim(claimed)
-        }
-        WorkCommand::Renew(request) =>
-        {
-            let renewed = ledger.Renew(&request.item, &request.holder, request.lease);
-            WorkOutcome::Renew(renewed)
-        }
-        WorkCommand::TakeOver(request) =>
-        {
-            let taken_over = ledger.Take_Over(&request.item, &request.holder, request.lease);
-            WorkOutcome::TakeOver(taken_over)
-        }
-        WorkCommand::Abandon(request) =>
-        {
-            let abandoned = ReleaseOutcome::Abandoned {
-                reason: request.reason.clone(),
-            };
-            let released = ledger.Release(&request.item, &request.holder, abandoned);
-            WorkOutcome::Abandon(released)
-        }
-        WorkCommand::Decline(request) =>
-        {
-            let declined = ledger.Decline(&request.item, &request.holder, &request.reason);
-            WorkOutcome::Decline(declined)
-        }
+        WorkCommand::Add { item, amending } => Add_Outcome(ledger, item, amending, published),
+        WorkCommand::Finish { item, holder } => Finish_Outcome(ledger, launcher, item, holder),
+        WorkCommand::Claim(request) => Claim_Outcome(ledger, request),
+        WorkCommand::Renew(request) => Renew_Outcome(ledger, request),
+        WorkCommand::TakeOver(request) => TakeOver_Outcome(ledger, request),
+        WorkCommand::Abandon(request) => Abandon_Outcome(ledger, request),
+        WorkCommand::Decline(request) => Decline_Outcome(ledger, request),
         WorkCommand::Validate => WorkOutcome::Validate(Validated(ledger)),
         WorkCommand::Audit => WorkOutcome::Audit(Board_View(ledger)),
     };
+}
+
+/// The outcome of adding `item` to the board under `amending`, for [`WorkCommand::Add`].
+fn Add_Outcome<F: FileSystem, C: Clock, L: CrossProcessLock>(
+    ledger: &mut FileLedger<F, C, L>,
+    item: &LedgerItem,
+    amending: &Territory,
+    published: impl FnOnce() -> Territory,
+) -> WorkOutcome
+{
+    let added = ledger.Add(item, "nomos work add", &published(), amending);
+
+    return WorkOutcome::Add(added);
+}
+
+/// The outcome of running `item`'s verification predicate as `holder` claims it, for
+/// [`WorkCommand::Finish`].
+fn Finish_Outcome<F: FileSystem, C: Clock, L: CrossProcessLock, P: ProcessLauncher>(
+    ledger: &mut FileLedger<F, C, L>,
+    launcher: &P,
+    item: &ItemId,
+    holder: &str,
+) -> WorkOutcome
+{
+    let finishing = Finishing { item, holder };
+    let finished = Finish(ledger, launcher, &finishing, None);
+
+    return WorkOutcome::Finish(finished);
+}
+
+/// The outcome of granting `request`, for [`WorkCommand::Claim`].
+fn Claim_Outcome<F: FileSystem, C: Clock, L: CrossProcessLock>(
+    ledger: &mut FileLedger<F, C, L>,
+    request: &ClaimRequest,
+) -> WorkOutcome
+{
+    let claimed = ledger.Claim(&request.item, &request.holder, request.lease);
+
+    return WorkOutcome::Claim(claimed);
+}
+
+/// The outcome of extending `request`'s lease, for [`WorkCommand::Renew`].
+fn Renew_Outcome<F: FileSystem, C: Clock, L: CrossProcessLock>(
+    ledger: &mut FileLedger<F, C, L>,
+    request: &ClaimRequest,
+) -> WorkOutcome
+{
+    let renewed = ledger.Renew(&request.item, &request.holder, request.lease);
+
+    return WorkOutcome::Renew(renewed);
+}
+
+/// The outcome of taking over `request`'s lapsed claim, for [`WorkCommand::TakeOver`].
+fn TakeOver_Outcome<F: FileSystem, C: Clock, L: CrossProcessLock>(
+    ledger: &mut FileLedger<F, C, L>,
+    request: &ClaimRequest,
+) -> WorkOutcome
+{
+    let taken_over = ledger.Take_Over(&request.item, &request.holder, request.lease);
+
+    return WorkOutcome::TakeOver(taken_over);
+}
+
+/// The outcome of giving up `request`'s claim without finishing it, for
+/// [`WorkCommand::Abandon`].
+fn Abandon_Outcome<F: FileSystem, C: Clock, L: CrossProcessLock>(
+    ledger: &mut FileLedger<F, C, L>,
+    request: &EndingRequest,
+) -> WorkOutcome
+{
+    let abandoned = ReleaseOutcome::Abandoned {
+        reason: request.reason.clone(),
+    };
+    let released = ledger.Release(&request.item, &request.holder, abandoned);
+
+    return WorkOutcome::Abandon(released);
+}
+
+/// The outcome of ending `request`'s item as not being work, for [`WorkCommand::Decline`].
+fn Decline_Outcome<F: FileSystem, C: Clock, L: CrossProcessLock>(
+    ledger: &mut FileLedger<F, C, L>,
+    request: &EndingRequest,
+) -> WorkOutcome
+{
+    let declined = ledger.Decline(&request.item, &request.holder, &request.reason);
+
+    return WorkOutcome::Decline(declined);
 }
 
 /// The board and the moment it was read, for `list` and `audit` alike.

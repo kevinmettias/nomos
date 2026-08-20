@@ -21185,14 +21185,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-cleanfile-orchestration",
-        "acquired_at": 1787190042,
-        "lease_expires_at": 1787197242
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -21208,9 +21204,41 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-spec-orchestration",
+          "-p",
+          "nomos-work-orchestration",
+          "-p",
+          "nomos-gate-orchestration"
+        ],
+        "exit_code": 0,
+        "output_tail": "on_Built_With_No_Corpus ... ok\ntest tests::Test_Run_Of_Record_Should_Tell_An_Unsourced_Node_From_An_Unknown_One ... ok\ntest tests::Test_Run_Of_Commit_Should_Write_The_Record_And_Close_The_Round_Trip ... ok\ntest tests::Test_Run_Of_Preview_Should_Describe_A_Staged_Edit_And_Write_Nothing ... ok\ntest tests::Test_Run_Of_Freshness_Should_Report_A_Freshly_Rendered_Output_As_Current ... ok\n\ntest result: ok. 23 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.50s\n\n\nrunning 5 tests\ntest tests::Test_List_Should_Read_An_Empty_Board ... ok\ntest tests::Test_Add_Then_Show_Should_Find_What_Add_Wrote ... ok\ntest tests::Test_Validate_Should_Accept_A_Board_This_Run_Wrote ... ok\ntest tests::Test_Decline_Should_End_An_Unclaimed_Item ... ok\ntest tests::Test_Claim_Then_Second_Claim_Should_Be_Refused_As_Held ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.14s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_check_orchestration-c6dcd354ced65f49.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_gate_orchestration-0e0249ddc168c5c8.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_orchestration-f10cea549c7c8481.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_work_orchestration-7f53c93d56ca9a5a.exe)\n   Doc-tests nomos_check_orchestration\n   Doc-tests nomos_gate_orchestration\n   Doc-tests nomos_spec_orchestration\n   Doc-tests nomos_work_orchestration\n",
+        "verified_at": 1787247653,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "3c6d4200d269d48d47fb6aa827d75a7181bbca52"
+      },
       "abandoned": [],
-      "displaced": [],
+      "displaced": [
+        {
+          "holder": "claude-cleanfile-orchestration",
+          "acquired_at": 1787190042,
+          "lease_expires_at": 1787197242
+        }
+      ],
       "declined": null
     },
     {

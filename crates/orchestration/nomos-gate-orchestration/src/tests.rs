@@ -31,6 +31,45 @@ fn Command_At(root: PathBuf) -> GateCommand
     return GateCommand { root, ..Default::default() };
 }
 
+/// [`Command_At`] `root`, with `suppression` as the whole suppression policy and every rule
+/// still selected -- the shape both a `run` and an `explain` fixture build once they have a
+/// real finding to suppress.
+fn Command_With_Suppression(root: PathBuf, suppression: Suppression) -> GateCommand
+{
+    return GateCommand {
+        suppressions: SuppressionPolicy { suppressions: vec![suppression] },
+        ..Command_At(root)
+    };
+}
+
+/// A [`Suppression`] matching `finding` exactly, with a disposition, rationale and owner
+/// fixed for every fixture that reaches for one -- what a test needs is that it addresses a
+/// specific real finding, never what the suppression itself says.
+fn Suppression_Of(finding: &Finding) -> Suppression
+{
+    return Suppression {
+        rule: finding.rule.clone(),
+        subject: finding.subject,
+        disposition: SuppressionDisposition::FalsePositiveDisposition,
+        rationale: "test fixture".to_owned(),
+        owner: "test".to_owned(),
+    };
+}
+
+/// The findings a judged `check_outcome` carries, or a panic naming what every fixture that
+/// reaches this helper has already asserted -- `Judged`, checked once here rather than
+/// re-destructured at each call site.
+fn Judged_Findings(check_outcome: &CheckOutcome) -> &[Finding]
+{
+    let CheckOutcome::Judged { findings, .. } = check_outcome
+    else
+    {
+        panic!("expected a judged check outcome");
+    };
+
+    return findings;
+}
+
 fn Source(path: &str, text: &str) -> SourceFile
 {
     return SourceFile::New(path, Subject_Of_Path(path), text);
@@ -369,13 +408,10 @@ fn Test_A_Deselected_Rules_Finding_Should_Not_Block()
     assert!(matches!(result.check_outcome, CheckOutcome::Judged { .. }));
     assert_eq!(result.disposition, GateRunOutcome::Passed);
     assert!(result.blocking_findings.is_empty());
-    let CheckOutcome::Judged { findings, .. } = &result.check_outcome
-    else
-    {
-        panic!("just matched Judged above");
-    };
     assert!(
-        findings.iter().any(|finding| return finding.rule == RuleId::New(COMPLETENESS_MIRROR)),
+        Judged_Findings(&result.check_outcome)
+            .iter()
+            .any(|finding| return finding.rule == RuleId::New(COMPLETENESS_MIRROR)),
         "the deselected rule's finding must still be judged and carried, just not blocking"
     );
 }
@@ -399,21 +435,7 @@ fn Test_A_Suppressed_Finding_Should_Not_Block()
         .blocking_findings
         .first()
         .expect("this fixture must produce one real blocking finding to suppress");
-
-    let command = GateCommand {
-        root: Repository_Root(),
-        scope: ScopeSelector::default(),
-        rules: RuleSelector::default(),
-        suppressions: SuppressionPolicy {
-            suppressions: vec![Suppression {
-                rule: real_finding.rule.clone(),
-                subject: real_finding.subject,
-                disposition: SuppressionDisposition::FalsePositiveDisposition,
-                rationale: "test fixture".to_owned(),
-                owner: "test".to_owned(),
-            }],
-        },
-    };
+    let command = Command_With_Suppression(Repository_Root(), Suppression_Of(real_finding));
 
     let result = Run_Gate(Some(vec![source()]), Test_Variant(), &command, &StdProcessLauncher);
 
@@ -421,13 +443,10 @@ fn Test_A_Suppressed_Finding_Should_Not_Block()
     assert_eq!(result.disposition, GateRunOutcome::Passed);
     assert!(result.blocking_findings.is_empty(), "{:?}", result.blocking_findings);
     assert!(!result.suppressed_findings.is_empty(), "the suppressed finding must still be visible");
-    let CheckOutcome::Judged { findings, .. } = &result.check_outcome
-    else
-    {
-        panic!("just matched Judged above");
-    };
     assert!(
-        findings.iter().any(|finding| return finding.rule == RuleId::New(COMPLETENESS_MIRROR)),
+        Judged_Findings(&result.check_outcome)
+            .iter()
+            .any(|finding| return finding.rule == RuleId::New(COMPLETENESS_MIRROR)),
         "the suppressed finding must still be judged and carried in check_outcome"
     );
 }
@@ -487,21 +506,7 @@ fn Test_Explain_Should_Report_A_Suppression_That_Applies()
     {
         panic!("this fixture must produce the finding the query names");
     };
-
-    let command = GateCommand {
-        root: Repository_Root(),
-        scope: ScopeSelector::default(),
-        rules: RuleSelector::default(),
-        suppressions: SuppressionPolicy {
-            suppressions: vec![Suppression {
-                rule: real_finding.rule,
-                subject: real_finding.subject,
-                disposition: SuppressionDisposition::FalsePositiveDisposition,
-                rationale: "test fixture".to_owned(),
-                owner: "test".to_owned(),
-            }],
-        },
-    };
+    let command = Command_With_Suppression(Repository_Root(), Suppression_Of(&real_finding));
 
     let result = Explain_Gate(Some(vec![source()]), Test_Variant(), &command, &query, &StdProcessLauncher);
 
