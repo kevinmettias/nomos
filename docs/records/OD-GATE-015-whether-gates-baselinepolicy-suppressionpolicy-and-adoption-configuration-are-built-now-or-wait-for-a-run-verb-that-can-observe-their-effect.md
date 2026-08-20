@@ -3,7 +3,7 @@ id: OD-GATE-015
 type: decision
 title: Whether Gate's BaselinePolicy, SuppressionPolicy and adoption configuration are built now, or wait for a run verb that can observe their effect
 status: open
-version: 4
+version: 5
 authority: canonical-normative-record
 tags:
   - gate
@@ -202,13 +202,35 @@ dates/revalidation triggers, `SUP-*`'s other required fields, are not enforced: 
 constructs a `Suppression` today, so validating fields nothing populates would validate
 against nothing.
 
+## Two Of Three Are Built, Under Override — Adoption Is Not
+
+The user's broader 2026-08-19/20 "proceed with all remaining work" directive named Gate
+policy's `BaselinePolicy` by name among the unblocked near-term tier — the same kind of
+standing override this record's own "Status" section already said would resolve it, given
+by name rather than inferred from `ARC-ROADMAP-001`'s naming alone.
+`P13-GATE-015-BASELINE-FIRST-INCREMENT` built it, deliberately narrower than `BASELINE-*`'s
+full corpus shape, for the same reason `SuppressionPolicy`'s own first increment was narrow:
+no new-code, diff- or identity-based detection distinguishes tolerated debt from a
+reintroduced or genuinely new finding, and no scope beyond the named `rule`/`subject` pairs
+an entry lists. Adoption configuration remains exactly as unbuilt as before.
+
+Verified directly against the real code, not assumed: `BaselineDebt`
+(`crates/orchestration/nomos-gate-orchestration/src/baseline.rs`) matches a finding by
+`rule`/`subject`, the identical identity `Suppression` already matches by. `Run_Gate` checks
+`suppressions` first and `baseline` second, so a finding matched by both reports as
+suppressed and the two result lists never double-count it; a matched finding moves from
+`blocking_findings` to `GateRunResult::baselined_findings` rather than disappearing, and
+`Explain_Gate` reports the same disposition through `Explanation::Found::baselined_by`. No
+CLI flag or configuration file constructs a `BaselineDebt` yet, the same absence
+`SuppressionPolicy`'s fifth increment already declined to fill for the same reason.
+
 ## Status
 
-Open, for `BaselinePolicy` and adoption configuration. `Gate` has a real `run` verb and a
-real disposition (`P13-GATE-RUN-FIRST-INCREMENT-3`, `P13-GATE-014-015-RUN-TRIGGER-FIRED`),
-and a real caller whose build it gates: `.github/workflows/gate.yml`'s `Rules` step invokes
-`gate run`, not `check`, since `P13-GATE-RUN-CI-CALLER`. This record's first named trigger
-has fired. The suppression concern is closed, by override rather than by that trigger — see
-above. `BaselinePolicy` and adoption configuration remain: revisit either when a real
-caller's accumulated debt or exemption need names a concrete shape for it, or when the same
-kind of standing override that closed suppression is given for it by name.
+Open, for adoption configuration alone. `Gate` has a real `run` verb and a real disposition
+(`P13-GATE-RUN-FIRST-INCREMENT-3`, `P13-GATE-014-015-RUN-TRIGGER-FIRED`), and a real caller
+whose build it gates: `.github/workflows/gate.yml`'s `Rules` step invokes `gate run`, not
+`check`, since `P13-GATE-RUN-CI-CALLER`. This record's first named trigger has fired. The
+suppression and baseline concerns are both closed, by override rather than by that trigger —
+see above. Adoption configuration remains: revisit it when a real caller's accumulated debt
+or exemption need names a concrete shape for it, or when the same kind of standing override
+that closed the other two is given for it by name.

@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:39eeedd385b46fea020c760813cff62877791b77e99b9a8b26567ea97e8ecf27",
-  "inputs_digest": "sha256:0f6616609180393b961d925aea5b1ed8e7dc125d23e717b0a4ecf8e4a477adaa",
+  "content_digest": "sha256:8013d81b7da2efcc613069eaffd577ad6ba41f76c9cfc45b44e1fee3a1c7d214",
+  "inputs_digest": "sha256:75124a81fe69c8eeae665cde2ab7bde1cfb60267d1c1e60d9c3d8d0380fb9f94",
   "sections": [
     [
       "Documents",
@@ -12,11 +12,11 @@
     ],
     [
       "Sections",
-      1257
+      1258
     ],
     [
       "Source blocks",
-      4487
+      4490
     ]
   ],
   "inputs": [
@@ -318,7 +318,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md@authored",
-      "hash": "sha256:c293a1249c4a0212c77e678f229470a9f8acf55d713665ebae9e0326d9bac032"
+      "hash": "sha256:5c92aed2c2042bfaae1eb1681a7d7c043e208c260783798dcb7cd4190507a24a"
     },
     {
       "content": "documents",
@@ -3208,7 +3208,12 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md#27",
-      "hash": "sha256:ce949b2977195194446b2bb169c759d74685a8e77f19d09b81a2dfa1ef24f9be"
+      "hash": "sha256:22ac3bfdcfc23db2572afc8c4c080544c158c5ef0541f7344cb94cec20911702"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md#30",
+      "hash": "sha256:3864328901e3cb59cb3d0a1c371eba289c935aee820bb9cb65988856314d14df"
     },
     {
       "content": "headings",
@@ -15568,12 +15573,27 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md#27",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:5741667efb7e791db236a55a8d9c0f2c96c9bd02c86825b5c8dde2d0be8b42a1"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md#28",
-      "hash": "sha256:2d13b1affe3a0effe3e5251adc3d3d426e662dbafde0b553125d03667a038e7c"
+      "hash": "sha256:8ae8e8b7ca53b2f19eeee3748af867b9001ebaa352c84558d769c38ab67979d8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md#29",
+      "hash": "sha256:93d7053fb63753de32edd99d4cd7b2990cca03305f7642cbaedc4f3ff53d518b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md#30",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md#31",
+      "hash": "sha256:3556dbaf14512489749426a4c6611c42c2353cb3786755854f40d33bb9a8ed0c"
     },
     {
       "content": "blocks",
