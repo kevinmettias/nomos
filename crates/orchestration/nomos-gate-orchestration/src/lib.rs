@@ -1,4 +1,4 @@
-//! Band 40 — the seam for the first-class Gate object `ARC-ROADMAP-001` names, starting with
+//! Band 41 — the seam for the first-class Gate object `ARC-ROADMAP-001` names, starting with
 //! `Plan`.
 //!
 //! `ARC-ROADMAP-001` distinguishes `OD-GATE-004`'s CI step, which wires this repository's own
@@ -31,26 +31,32 @@
 //! Its second increment, `P13-GATE-RUN-FIRST-INCREMENT-2`, is [`GateRunOutcome`] and
 //! [`Disposition`]: `OD-GATE-014` and `OD-GATE-015` both name the same trigger for the
 //! policy types this crate still does not build -- `Gate` gaining a `run` verb that
-//! actually executes rules, rather than `plan`'s report-only shape. `nomos-cli`'s `gate`
-//! module owns the actual running: it walks a tree, calls `nomos_check_orchestration::Run`
-//! and reduces the result, because `nomos-gate-orchestration` and
-//! `nomos-check-orchestration` are both band 40 and a band may not depend on its own band
-//! (`README.md`, `tests/contract/tests/boundaries/graph.rs`). What lives here is only the
-//! part that is genuinely this crate's own policy: [`GateRunOutcome`]'s three variants, and
-//! [`Disposition`], the pure `Failed`-if-any-blocking-finding reduction a caller applies to
-//! a real, already-judged list of findings.
+//! actually executes rules, rather than `plan`'s report-only shape. At that increment,
+//! `nomos-cli`'s `gate` module owned the actual running -- it walked a tree, called
+//! `nomos_check_orchestration::Run` and reduced the result itself -- because
+//! `nomos-gate-orchestration` and `nomos-check-orchestration` were both band 40, and a band
+//! may not depend on its own band (`README.md`, `tests/contract/tests/boundaries/graph.rs`).
 //!
-//! # What neither increment is
+//! Its third increment, `P13-GATE-RUN-SEAM-CRATE`, closes that gap the way `OD-HOST-001`
+//! closed the same shape of gap for the work group: this crate moved to band 41, above
+//! `nomos-check-orchestration`'s band 40, so it may depend on it, and [`Run_Gate`] now owns
+//! the walk-judge-reduce composition directly -- generic over `nomos-platform`'s traits the
+//! same way `nomos_check_orchestration::Run` and `nomos_work_orchestration::Run` already
+//! are, so a second adapter can call it without depending on `nomos-cli`. `nomos-cli`'s
+//! `gate` module has not yet been migrated to call it; it still duplicates the composition
+//! `Run_Gate` now also performs, until a follow-up increment retires the copy.
 //!
-//! Neither selects by scope or rule -- [`GateCommand::root`] is accepted and carried, not
-//! read, because `ScopeSelector`/`RuleSelector` do not exist yet. Neither implements
-//! `explain` or `compare` -- those verbs have no variant here at all, not a stub one, the
-//! same "no invented shape ahead of a real body" this crate's own [`command`] module
-//! documents. Neither touches `CoveragePolicy`, `BaselinePolicy`, `SuppressionPolicy`,
+//! # What no increment is
+//!
+//! None selects by scope or rule -- [`GateCommand::root`] is accepted and carried, not
+//! read beyond naming the tree, because `ScopeSelector`/`RuleSelector` do not exist yet.
+//! None implements `explain` or `compare` -- those verbs have no variant here at all, not a
+//! stub one, the same "no invented shape ahead of a real body" this crate's own [`command`]
+//! module documents. None touches `CoveragePolicy`, `BaselinePolicy`, `SuppressionPolicy`,
 //! required phases, thresholds, waivers or approvals -- every other clause `WF-001` names.
-//! `Claim` (coverage debt / agent-required subjects) rides through a `run` for information
-//! only and does not affect [`GateRunOutcome`], the same choice `OD-COMPLETENESS-004`
-//! already made for `nomos check`'s own exit code.
+//! `Claim` (coverage debt / agent-required subjects) rides through [`GateRunResult`] for
+//! information only and does not affect [`GateRunOutcome`], the same choice
+//! `OD-COMPLETENESS-004` already made for `nomos check`'s own exit code.
 
 #![forbid(unsafe_code)]
 
@@ -58,11 +64,13 @@ mod command;
 mod composition;
 mod outcome;
 mod run;
+mod run_gate;
 
 #[cfg(test)]
 mod tests;
 
 pub use command::GateCommand;
 pub use composition::Registered;
-pub use outcome::{Disposition, GateOutcome, GatePlan, GateRunOutcome};
+pub use outcome::{Disposition, GateOutcome, GatePlan, GateRunOutcome, GateRunResult};
 pub use run::Run;
+pub use run_gate::Run_Gate;

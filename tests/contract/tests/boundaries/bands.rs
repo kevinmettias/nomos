@@ -112,10 +112,12 @@ pub(crate) const BANDS: &[(&str, u32)] = &[
     // band as its two siblings above: the middle of a three-crate seam, increment 1 of 4
     // closing family 9's `SpecCommand` half. `OD-HOST-002`.
     ("nomos-spec-orchestration", 40),
-    // The seam for the first-class Gate object `ARC-ROADMAP-001` names, starting with
-    // `Plan`. Same band as its three siblings above -- it reaches only `nomos-rules`
-    // (30) and `nomos-contracts` (0), well below 40, and names none of them.
-    ("nomos-gate-orchestration", 40),
+    // The seam for the first-class Gate object `ARC-ROADMAP-001` names: `Plan` reaches
+    // only `nomos-rules` (30) and `nomos-contracts` (0); `Run_Gate` reaches
+    // `nomos-check-orchestration` (40) too, one band below, which is why this crate is
+    // 41 rather than a fourth sibling at 40 -- a band may not depend on its own band.
+    // `OD-HOST-001`, `P13-GATE-RUN-SEAM-CRATE`.
+    ("nomos-gate-orchestration", 41),
     ("nomos-cli", 90),
     // A report over this repository's own git history, not over the workspace's crate
     // graph — OD-STORE-002's Worked Case join between a crate's surface snapshot and

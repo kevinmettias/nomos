@@ -20,10 +20,9 @@ pub enum GateRunOutcome
     /// The check behind this run could not produce an authoritative judgment -- the tree
     /// could not be read, this build's own capability registry was self-contradictory, or
     /// no source or no fact was found to judge. [`Disposition`] never returns this variant;
-    /// a caller assigns it for a [`nomos_check_orchestration::CheckOutcome`] that never
-    /// reached `Judged`, which this crate does not depend on and cannot see -- both
-    /// `nomos-gate-orchestration` and `nomos-check-orchestration` are band 40, and a band
-    /// may not depend on its own band.
+    /// [`crate::Run_Gate`] assigns it directly for a [`nomos_check_orchestration::
+    /// CheckOutcome`] that never reached `Judged`, the one condition `Disposition` itself
+    /// cannot see because it reduces a list of findings, not the outcome that produced one.
     Indeterminate,
 }
 

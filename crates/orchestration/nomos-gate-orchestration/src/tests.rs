@@ -1,21 +1,50 @@
 //! What this crate promises today: a real rule registry, reported back whole, and a real
 //! disposition reduction over an already-judged list of findings.
 
-use crate::{Disposition, GateCommand, GateOutcome, GateRunOutcome, Run};
+use crate::{Disposition, GateCommand, GateOutcome, GateRunOutcome, Run, Run_Gate};
+use nomos_check_orchestration::CheckOutcome;
 use nomos_contracts::{
     Applicability, Digest128, EvidenceClass, Finding, GateCategory, RuleId, SubjectId,
 };
+use nomos_model::Subject_Of_Path;
+use nomos_platform_std::StdProcessLauncher;
 use nomos_rules::{
-    COMPLETENESS_MIRROR, CONTRACT_RECORD, CONTRACT_RECORD_VERSION, DEPENDENCY_CONTRACT_RECORD,
-    DEPENDENCY_CONTRACT_RECORD_VERSION, DEPENDENCY_DIRECTION, NAMING_CONVENTION,
-    UNREAD_REACHES_FINDING, UNREAD_REACHES_FINDING_CONTRACT_RECORD,
+    SourceFile, COMPLETENESS_MIRROR, CONTRACT_RECORD, CONTRACT_RECORD_VERSION,
+    DEPENDENCY_CONTRACT_RECORD, DEPENDENCY_CONTRACT_RECORD_VERSION, DEPENDENCY_DIRECTION,
+    NAMING_CONVENTION, UNREAD_REACHES_FINDING, UNREAD_REACHES_FINDING_CONTRACT_RECORD,
     UNREAD_REACHES_FINDING_CONTRACT_RECORD_VERSION,
 };
+use nomos_workspace::BuildVariant;
 use std::path::PathBuf;
 
 fn Command() -> GateCommand
 {
     return GateCommand { root: PathBuf::from(".") };
+}
+
+fn Source(path: &str, text: &str) -> SourceFile
+{
+    return SourceFile::New(path, Subject_Of_Path(path), text);
+}
+
+fn Test_Variant() -> BuildVariant
+{
+    return BuildVariant::New("test-target", "test-profile", "test-toolchain", std::iter::empty::<String>());
+}
+
+/// This repository's own real root -- [`Run_Gate`]'s dependency step, through
+/// `nomos_check_orchestration::Run`, runs `cargo metadata` against it regardless of what
+/// sources a test hands in. Real on purpose, the same choice `nomos-check-orchestration`'s
+/// own tests already make.
+fn Repository_Root() -> PathBuf
+{
+    let manifest = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+    return manifest
+        .parent()
+        .and_then(std::path::Path::parent)
+        .and_then(std::path::Path::parent)
+        .map(PathBuf::from)
+        .expect("this crate sits three levels below the workspace root");
 }
 
 /// The whole plan, by identity and in `RuleId` order, rather than by length. A count agrees
@@ -215,4 +244,70 @@ fn Test_One_Blocking_Finding_Among_Many_Should_Fail()
     ];
 
     assert_eq!(Disposition(&findings), GateRunOutcome::Failed);
+}
+
+/// A root that was never walked -- the composition root's own `None`, the same case
+/// `crates/host/nomos-cli/src/gate/run.rs` currently assigns `CheckOutcome::Unreadable` for
+/// by hand. [`Run_Gate`] must make the identical assignment, since this crate now performs
+/// that composition too.
+#[test]
+fn Test_An_Unwalked_Root_Should_Be_Indeterminate()
+{
+    let result = Run_Gate(None, Test_Variant(), &Repository_Root(), &StdProcessLauncher);
+
+    assert!(matches!(result.check_outcome, CheckOutcome::Unreadable));
+    assert_eq!(result.disposition, GateRunOutcome::Indeterminate);
+    assert!(result.blocking_findings.is_empty());
+}
+
+/// A directory that was walked and held nothing -- `Some(Vec::new())` -- is a different
+/// claim than a root nobody could walk at all, and must not collapse into the same
+/// variant.
+#[test]
+fn Test_A_Walk_That_Found_No_Source_Should_Be_Indeterminate()
+{
+    let result = Run_Gate(Some(Vec::new()), Test_Variant(), &Repository_Root(), &StdProcessLauncher);
+
+    assert!(matches!(result.check_outcome, CheckOutcome::NoSource));
+    assert_eq!(result.disposition, GateRunOutcome::Indeterminate);
+    assert!(result.blocking_findings.is_empty());
+}
+
+/// A clean source, judged through the real `nomos_check_orchestration::Run` this crate now
+/// calls directly, must pass -- the same fixture `nomos-check-orchestration`'s own
+/// `Test_A_Clean_Tree_Should_Be_Judged_Complete_With_No_Findings` already proves clean
+/// under all four shipped rules.
+#[test]
+fn Test_A_Clean_Source_Should_Pass()
+{
+    let sources = vec![Source("a.rs", "pub fn Ok() {}\n")];
+
+    let result = Run_Gate(Some(sources), Test_Variant(), &Repository_Root(), &StdProcessLauncher);
+
+    assert!(matches!(result.check_outcome, CheckOutcome::Judged { .. }));
+    assert_eq!(result.disposition, GateRunOutcome::Passed);
+    assert!(result.blocking_findings.is_empty(), "{:?}", result.blocking_findings);
+}
+
+/// A phantom mirror -- the same fixture `nomos-check-orchestration`'s own
+/// `Test_A_Blocking_Finding_Should_Still_Be_Judged_Complete` uses -- must reach [`Run_Gate`]
+/// as a real blocking finding and flip the disposition, proving the reduction this crate now
+/// owns runs over `nomos_check_orchestration::Run`'s real output rather than a fixture typed
+/// to look like it.
+#[test]
+fn Test_A_Blocking_Finding_Should_Fail_The_Run()
+{
+    let sources = vec![Source(
+        "a.rs",
+        "/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n",
+    )];
+
+    let result = Run_Gate(Some(sources), Test_Variant(), &Repository_Root(), &StdProcessLauncher);
+
+    assert_eq!(result.disposition, GateRunOutcome::Failed);
+    assert!(!result.blocking_findings.is_empty());
+    assert!(result
+        .blocking_findings
+        .iter()
+        .all(|finding| return finding.gate == GateCategory::Blocking));
 }

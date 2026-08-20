@@ -7,9 +7,11 @@
 
 mod gate_outcome;
 mod gate_run_outcome;
+mod gate_run_result;
 
 pub use gate_outcome::GateOutcome;
 pub use gate_run_outcome::{Disposition, GateRunOutcome};
+pub use gate_run_result::GateRunResult;
 
 use nomos_rules::RuleOffer;
 

@@ -400,8 +400,13 @@ dependencies = [
 name = "nomos-gate-orchestration"
 version = "0.1.0"
 dependencies = [
+ "nomos-check-orchestration",
  "nomos-contracts",
+ "nomos-model",
+ "nomos-platform",
+ "nomos-platform-std",
  "nomos-rules",
+ "nomos-workspace",
 ]
 
 [[package]]
