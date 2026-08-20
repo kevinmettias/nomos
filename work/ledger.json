@@ -21072,9 +21072,9 @@
       "depends_on": [],
       "blocked": null,
       "claim": {
-        "holder": "claude-cleanfile-substrate",
-        "acquired_at": 1787189999,
-        "lease_expires_at": 1787197199
+        "holder": "claude-nomos-continue",
+        "acquired_at": 1787255714,
+        "lease_expires_at": 1787262914
       },
       "verification": {
         "argv": [
@@ -21093,7 +21093,13 @@
       },
       "verified": null,
       "abandoned": [],
-      "displaced": [],
+      "displaced": [
+        {
+          "holder": "claude-cleanfile-substrate",
+          "acquired_at": 1787189999,
+          "lease_expires_at": 1787197199
+        }
+      ],
       "declined": null
     },
     {
@@ -23652,6 +23658,41 @@
         },
         "revision": "f6f47f40cd1116c8d1c6bef8c368b802df154172"
       },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-LEDGER-TIMEOUT-DECLARABLE",
+      "title": "work add cannot declare a predicate's timeout, so a corpus-reaching territory can never produce a verdict",
+      "why": "P13-CLEANFILE-SUBSTRATE's predicate (cargo test -p nomos-ledger -p nomos-analysis -p nomos-capability -p nomos-workspace) stalls at exactly 300s every time: nomos-workspace::tests::portable::over_the_corpus::Test_A_Hundred_Ingestion_Orders_Should_Yield_Byte_Identical_Queries legitimately runs ~469s silent against the real F:/repos/xvpe corpus (5000+ members, 100 permutations) before printing anything, and OD-PLATFORM-001 (P13-LEDGER-IDLE-BOUND-2) fixes the idle bound at half the wall bound. P11-EXEC-IDLE already named a bigger timeout as the only remedy for this exact tension, but DEFAULT_TIMEOUT_SECONDS=600 in crates/substrate/nomos-ledger/src/verification/predicate.rs is not exposed by nomos-cli's work add (crates/host/nomos-cli/src/work/parse.rs), so no newly authored item can ever choose a timeout that fits a corpus-backed predicate. Confirmed twice directly: work finish on P13-CLEANFILE-SUBSTRATE reported Stalled { idle_elapsed: 300.00s } both times, with the same predicate run standalone taking 469.39s and passing cleanly.",
+      "done_when": "nomos work add exposes a way to declare a predicate's timeout_seconds above the 600s default, and re-running P13-CLEANFILE-SUBSTRATE's exact predicate (or a successor item with the same territory) through nomos work finish with an adjusted timeout produces a real verdict instead of the Stalled conflict.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger",
+          "crates/host/nomos-cli/src/work"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-cli"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
       "abandoned": [],
       "displaced": [],
       "declined": null

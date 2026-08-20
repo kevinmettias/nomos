@@ -25,10 +25,11 @@ use super::MemoryFactStore;
 pub(super) fn Invalidate(store: &mut MemoryFactStore, cause: &GenerationCause, from: GenerationId) -> InvalidationReport
 {
     let described = cause.Describe();
+    let invalidating = Invalidating { from, described: &described };
     let mut report = Opened(cause, from);
-    let roots = Invalidate_Named(store, cause, from, &described, &mut report);
+    let roots = Invalidate_Named(store, cause, invalidating, &mut report);
 
-    let seen = Propagate(store, roots, from, &described, &mut report);
+    let seen = Propagate(store, roots, invalidating, &mut report);
 
     Note_Broadening(store, cause.Granularity(), &seen, &mut report);
     Settle(store, &mut report);
@@ -53,8 +54,7 @@ fn Opened(cause: &GenerationCause, from: GenerationId) -> InvalidationReport
 fn Invalidate_Named(
     store: &mut MemoryFactStore,
     cause: &GenerationCause,
-    from: GenerationId,
-    described: &str,
+    invalidating: Invalidating<'_>,
     report: &mut InvalidationReport,
 ) -> Vec<Digest128>
 {
@@ -68,7 +68,7 @@ fn Invalidate_Named(
     let mut frontier: Vec<Digest128> = Vec::new();
     for digest in named
     {
-        if !store.Invalidate_One(digest, from, described)
+        if !store.Invalidate_One(digest, invalidating.from, invalidating.described)
         {
             continue;
         }
@@ -150,15 +150,30 @@ fn Note_Broadening(
 fn Propagate(
     store: &mut MemoryFactStore,
     roots: Vec<Digest128>,
-    from: GenerationId,
-    described: &str,
+    invalidating: Invalidating<'_>,
     report: &mut InvalidationReport,
 ) -> BTreeSet<Digest128>
 {
-    let mut seen: BTreeSet<Digest128> = roots.iter().copied().collect();
     let propagation = Taken_Propagation(store);
+    let (seen, reached) = Walked(store, propagation.as_ref(), roots);
+    store.propagation = Some(propagation);
 
+    for consumer in reached
+    {
+        Apply(store, consumer, invalidating, report);
+    }
+
+    return seen;
+}
+
+/// The first pass of [`Propagate`]'s walk: every digest visited (`seen`, roots included),
+/// and, in visit order, those reached but not yet invalidated (`reached`) -- the frontier
+/// the second pass still has to apply.
+fn Walked(store: &MemoryFactStore, propagation: &dyn DependencyPropagation, roots: Vec<Digest128>) -> (BTreeSet<Digest128>, Vec<Digest128>)
+{
+    let mut seen: BTreeSet<Digest128> = roots.iter().copied().collect();
     let mut reached: Vec<Digest128> = Vec::new();
+
     propagation.Spread(&store.dependents, roots, &mut |consumer| {
         seen.insert(consumer);
         if store.Already_Invalidated(consumer)
@@ -170,15 +185,7 @@ fn Propagate(
         return true;
     });
 
-    store.propagation = Some(propagation);
-
-    let invalidating = Invalidating { from, described };
-    for consumer in reached
-    {
-        Apply(store, consumer, invalidating, report);
-    }
-
-    return seen;
+    return (seen, reached);
 }
 
 /// Takes `store.propagation` out so the first pass in [`Propagate`] can call it under an

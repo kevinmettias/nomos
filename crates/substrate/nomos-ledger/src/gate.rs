@@ -181,28 +181,42 @@ pub fn Derive_Step<'a>(workflow: impl Into<WorkflowText<'a>>, step: impl Into<St
 {
     let workflow = workflow.into();
     let step = step.into();
+
+    let Some(run) = Find_Run(workflow.As_Str(), step.As_Str())
+    else
+    {
+        return Err(GateUnknown::NoSuchStep {
+            step: step.As_Str().to_owned(),
+        });
+    };
+
+    return Argv_Of(run, step);
+}
+
+/// The trimmed argument of the named step's `run:` line, or `None` if the workflow never
+/// declares that step, or declares it with no `run:` line.
+fn Find_Run<'a>(workflow: &'a str, step: &str) -> Option<&'a str>
+{
     let mut inside = false;
 
-    for line in workflow.As_Str().lines()
+    for line in workflow.lines()
     {
         let trimmed = line.trim();
 
         if let Some(name) = Step_Named(trimmed)
         {
-            inside = name == step.As_Str();
+            inside = name == step;
             continue;
         }
 
         if inside
             && let Some(run) = trimmed.strip_prefix("run:")
         {
-            return Argv_Of(run.trim(), step);
+            return Some(run.trim());
         }
     }
 
-    return Err(GateUnknown::NoSuchStep {
-        step: step.As_Str().to_owned(),
-    });
+    return None;
 }
 
 /// The step name a line declares, in either of the two spellings a step is written in.

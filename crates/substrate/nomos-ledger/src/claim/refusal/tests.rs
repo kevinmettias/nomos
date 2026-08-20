@@ -9,7 +9,24 @@ fn At(seconds: i64) -> Timestamp
 
 /// One of every variant, built once so a test that forgets one is impossible rather than
 /// merely unlikely — the shape `Applicability`'s `ALL` array uses for the same reason.
+///
+/// Assembled from the two layer universes below rather than written flat: the split is the
+/// same one `Test_Readiness_Refusals_Should_Be_Exactly_The_Plan_Facts` and
+/// `Test_Dispatch_Refusals_Should_Be_Exactly_The_Coordination_Facts` already draw, so this
+/// is the natural seam rather than an arbitrary halving.
 fn All() -> [ClaimRefusal; 10]
+{
+    let mut all = Dispatch_Universe().to_vec();
+    all.extend(Readiness_Universe());
+
+    return all.try_into().unwrap_or_else(|found: Vec<ClaimRefusal>| {
+        panic!("All() must produce exactly 10 refusals, found {}", found.len());
+    });
+}
+
+/// The six refusals coordination answers: a holder, a lease, a lock, an unprovable
+/// overlap, an unusable store.
+fn Dispatch_Universe() -> [ClaimRefusal; 6]
 {
     return [
         ClaimRefusal::HeldBy {
@@ -35,6 +52,17 @@ fn All() -> [ClaimRefusal; 10]
             holder: "agent-b".to_owned(),
             until: At(2_000),
         },
+        ClaimRefusal::LedgerUnusable {
+            cause: "disk full".to_owned(),
+        },
+    ];
+}
+
+/// The four refusals the plan answers: whether a dependency is unfinished or declined,
+/// whether the item is claimable, whether it exists at all.
+fn Readiness_Universe() -> [ClaimRefusal; 4]
+{
+    return [
         ClaimRefusal::NotClaimable {
             item: ItemId::New("T-5"),
             state: "Done".to_owned(),
@@ -51,9 +79,6 @@ fn All() -> [ClaimRefusal; 10]
         },
         ClaimRefusal::NoSuchItem {
             item: ItemId::New("T-10"),
-        },
-        ClaimRefusal::LedgerUnusable {
-            cause: "disk full".to_owned(),
         },
     ];
 }
