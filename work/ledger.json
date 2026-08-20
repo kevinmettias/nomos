@@ -22780,6 +22780,100 @@
         "holder": "claude-declaretypes-host",
         "declined_at": 1787205017
       }
+    },
+    {
+      "id": "P13-RULES-BANDS-GATE-ORCHESTRATION-41-STALE",
+      "title": "nomos-rules bands.rs still lists nomos-gate-orchestration at band 40; its Cargo.toml and README already say 41",
+      "why": "P13-GATE-RUN-SEAM-CRATE (commit 7e0b621) bumped nomos-gate-orchestration to band 41 in its own Cargo.toml and in README.md, since Run_Gate now composes nomos-check-orchestration (also band 40) and an equal-band dependency is what the band system exists to catch. crates/rules/nomos-rules/src/dependency/bands.rs, the hardcoded table Check_Dependency_Direction judges against, was not updated in that commit, so a real gate run over this workspace now reports a same-band dependency-direction finding for nomos-gate-orchestration on nomos-check-orchestration and Test_A_Clean_Tree_Should_Be_Judged_Complete_With_No_Findings fails.",
+      "done_when": "bands.rs lists nomos-gate-orchestration at 41. cargo test -p nomos-check-orchestration passes Test_A_Clean_Tree_Should_Be_Judged_Complete_With_No_Findings. cargo test -p nomos-rules stays green.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration"
+        ],
+        "exit_code": 0,
+        "output_tail": "fact::Test_A_Subject_With_No_Fact_Should_Be_Reported_Rather_Than_Silently_Clean ... ok\ntest registry::rule_registry::tests::Test_A_Rule_Should_Be_Findable_By_Its_Id ... ok\ntest registry::rule_registry::tests::Test_A_Second_Offer_For_One_Rule_Should_Be_Refused ... ok\ntest registry::rule_registry::tests::Test_An_Empty_Registry_Should_Offer_Nothing ... ok\ntest universe::tests::Test_A_Constant_Slice_Should_Be_Found ... ok\ntest universe::tests::Test_A_Declared_Mirror_Should_Be_Read_Off_The_Doc_Comment ... ok\ntest universe::tests::Test_A_File_That_Declares_Nothing_Should_Be_Observed_And_Empty ... ok\ntest universe::tests::Test_A_List_With_No_Documentation_Should_Claim_No_Mirror ... ok\ntest universe::tests::Test_A_Payload_From_A_Blind_Provider_Should_Not_Read_As_No_Mirror ... ok\ntest universe::tests::Test_A_Private_List_Should_Not_Be_A_Universe ... ok\ntest universe::tests::Test_A_Scalar_Constant_Should_Not_Be_A_Universe ... ok\ntest universe::tests::Test_A_Trait_Impl_Should_Not_Claim_The_Type ... ok\ntest universe::tests::Test_An_All_Should_Be_Attributed_To_Its_Type ... ok\ntest universe::tests::Test_An_All_That_Takes_A_Receiver_Should_Not_Be_A_Universe ... ok\n\ntest result: ok. 78 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-rules v0.1.0 (F:\\repos\\nomos\\crates\\rules\\nomos-rules)\n   Compiling nomos-check-orchestration v0.1.0 (F:\\repos\\nomos\\crates\\orchestration\\nomos-check-orchestration)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.15s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_check_orchestration-20bfa03d2c713828.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-12a9eec0a9b372bd.exe)\n   Doc-tests nomos_check_orchestration\n   Doc-tests nomos_rules\n",
+        "verified_at": 1787206066,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "7e0b621a0a368638ca5e7f5183e1e33aff0ccd77"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-GATE-RUN-SEAM-CLI",
+      "title": "Migrate nomos-cli/src/gate/run.rs to call nomos_gate_orchestration::Run_Gate instead of duplicating its composition",
+      "why": "P13-GATE-RUN-SEAM-CRATE gave nomos-gate-orchestration a real Run_Gate seam, generic over nomos-platform traits, that composes nomos_check_orchestration::Run and this crate own Disposition into a GateRunResult -- the same value crates/host/nomos-cli/src/gate/run.rs still builds by hand. That item deliberately left nomos-cli untouched because P13-DECLARETYPES-HOST held all of crates/host for the whole span of the work; that claim has since finished and committed (162e7bf), so the migration this item exists for is now unblocked. Until nomos-cli is migrated, the seam nomos-gate-orchestration now exposes has no real caller, and the duplication OD-HOST-001 already showed how to close for the work group stays open here in practice even though the crate-side half is done.",
+      "done_when": "crates/host/nomos-cli/src/gate.rs GateInvocation::Run arm calls nomos_gate_orchestration::Run_Gate (walking the tree and reading the host build variant itself, the same composition-root role check.rs already plays) instead of the local run::Run_Gate. crates/host/nomos-cli/src/gate/run.rs is deleted -- its GateRunResult, Run_Gate and the Reduced/Reduction reduction all now live in nomos-gate-orchestration and nothing here reimplements them. crates/host/nomos-cli/src/gate/report.rs imports GateRunResult from nomos_gate_orchestration instead of the deleted local module. Every existing test in crates/host/nomos-cli/src/gate/tests.rs still passes unchanged, including Test_A_Real_Run_Should_Judge_This_Workspaces_Own_Tree and Test_A_Run_Over_An_Empty_Tree_Should_Not_Report_Ok, proving the migration preserves behavior rather than merely compiling.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/src/gate.rs",
+          "crates/host/nomos-cli/src/gate"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-gate-run-seam",
+        "acquired_at": 1787206068,
+        "lease_expires_at": 1787213268
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
