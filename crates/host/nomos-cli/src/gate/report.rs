@@ -1,11 +1,10 @@
-//! Turning what [`nomos_gate_orchestration::Run`] or [`super::run::Run_Gate`] answered into
-//! text and an [`ExitCode`].
+//! Turning what [`nomos_gate_orchestration::Run`] or [`nomos_gate_orchestration::Run_Gate`]
+//! answered into text and an [`ExitCode`].
 
-use super::run::GateRunResult;
 use super::ExitCode;
 use nomos_check_orchestration::CheckOutcome;
 use nomos_contracts::Finding;
-use nomos_gate_orchestration::{GateOutcome, GateRunOutcome};
+use nomos_gate_orchestration::{GateOutcome, GateRunOutcome, GateRunResult};
 use std::io::Write;
 
 /// Renders what `nomos_gate_orchestration::Run` answered for `plan`.

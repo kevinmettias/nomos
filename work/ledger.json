@@ -22396,14 +22396,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-declaretypes-orchestration",
-        "acquired_at": 1787202444,
-        "lease_expires_at": 1787213244
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -22415,7 +22411,29 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-spec-orchestration"
+        ],
+        "exit_code": 0,
+        "output_tail": "Absent ... ok\ntest tests::Test_Submit_Should_Place_Its_Subject_Dossier_Projection_When_Into_Is_Given ... ok\ntest tests::Test_Run_Of_Markdown_Should_Render_A_Governing_Record_Back_Out ... ok\ntest tests::Test_Run_Of_Freshness_Should_Refuse_An_Unexamined_Requirement ... ok\ntest corpus::tests::Test_With_No_Corpus_The_Governing_Records_Should_Still_Be_There ... ok\ntest tests::Test_Run_Of_Record_Should_Resolve_A_Governing_Record_With_No_Corpus ... ok\ntest tests::Test_Run_Of_Sources_Should_Report_The_Corpus_As_Absent_When_None_Is_Named ... ok\ntest tests::Test_Submit_Should_Accept_A_Complete_Submission_With_Submitted_Origin ... ok\ntest corpus::tests::Test_An_Unset_Corpus_Should_Be_An_Absence_That_Names_What_Was_Expected ... ok\ntest tests::Test_Run_Of_Preview_Should_Refuse_A_Staged_File_That_Cannot_Be_Read ... ok\ntest tests::Test_Run_Of_Render_Should_Refuse_An_Unknown_Profile ... ok\ntest tests::Test_Run_Of_Render_Should_Place_A_Projection_Built_With_No_Corpus ... ok\ntest tests::Test_Run_Of_Commit_Should_Write_The_Record_And_Close_The_Round_Trip ... ok\ntest tests::Test_Run_Of_Record_Should_Tell_An_Unsourced_Node_From_An_Unknown_One ... ok\ntest tests::Test_Run_Of_Preview_Should_Describe_A_Staged_Edit_And_Write_Nothing ... ok\ntest tests::Test_Run_Of_Freshness_Should_Report_A_Freshly_Rendered_Output_As_Current ... ok\n\ntest result: ok. 23 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.89s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.13s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_check_orchestration-c6dcd354ced65f49.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_orchestration-f10cea549c7c8481.exe)\n   Doc-tests nomos_check_orchestration\n   Doc-tests nomos_spec_orchestration\n",
+        "verified_at": 1787206089,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "6e72d8a8c4dd886929913ec6ca3acc6756849072"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -22852,14 +22870,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-gate-run-seam",
-        "acquired_at": 1787206068,
-        "lease_expires_at": 1787213268
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -22867,6 +22881,66 @@
           "--no-fail-fast",
           "-p",
           "nomos-cli"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli"
+        ],
+        "exit_code": 0,
+        "output_tail": "_Builds ... ok\ntest Test_A_Build_That_Cannot_Read_The_Ledger_Should_Not_Rewrite_It ... ok\ntest Test_A_Build_That_Can_Read_The_Ledger_Should_Still_Write_It ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s\n\n\nrunning 5 tests\ntest Test_Claiming_A_Lapsed_Item_Should_Refuse_And_Name_The_Takeover ... ok\ntest Test_Show_Should_Report_The_Claim_A_Takeover_Displaced ... ok\ntest Test_Taking_Over_A_Lapsed_Item_Should_Record_The_Claim_It_Displaced ... ok\ntest Test_A_Lapsed_Item_Should_List_As_Lapsed_And_Be_Takeable ... ok\ntest Test_Takeover_Should_Exit_Three_When_The_Lease_Is_Live_And_Four_When_It_Is_Not_Held ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.16s\n     Running unittests src\\main.rs (target\\debug\\deps\\nomos-4872f6c71fdf7380.exe)\n     Running tests\\abandon_is_readable.rs (target\\debug\\deps\\abandon_is_readable-438fb02b385d78aa.exe)\n     Running tests\\add_guarantees_what_it_says.rs (target\\debug\\deps\\add_guarantees_what_it_says-f703d341d244dcf5.exe)\n     Running tests\\authoring_surface.rs (target\\debug\\deps\\authoring_surface-47a846b52b043a6d.exe)\n     Running tests\\check_command.rs (target\\debug\\deps\\check_command-1f72f9de0f7a6e95.exe)\n     Running tests\\freshness.rs (target\\debug\\deps\\freshness-ae80954d21bc9069.exe)\n     Running tests\\gate_step\\main.rs (target\\debug\\deps\\gate_step-8aeb2760425cece4.exe)\n     Running tests\\list_tells_the_truth.rs (target\\debug\\deps\\list_tells_the_truth-c6279836e2d738ac.exe)\n     Running tests\\read_surface.rs (target\\debug\\deps\\read_surface-561323bd3ef694b7.exe)\n     Running tests\\request_submit.rs (target\\debug\\deps\\request_submit-c0186ed1293ae299.exe)\n     Running tests\\stale_writer_is_refused.rs (target\\debug\\deps\\stale_writer_is_refused-329acf8fb3ec4644.exe)\n     Running tests\\takeover_is_recorded.rs (target\\debug\\deps\\takeover_is_recorded-fb58a3672c6cb420.exe)\n",
+        "verified_at": 1787206176,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "6e72d8a8c4dd886929913ec6ca3acc6756849072"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-CONCURRENCYUNSAFE-SUBSTRATE-PLATFORM",
+      "title": "concurrency-and-unsafe's checks report findings across crates/substrate/nomos-analysis and crates/platform/nomos-platform-std",
+      "why": "code-standards' rust concurrency-and-unsafe phase (check-borrowing through check-boundary-in-loop) was run over the whole workspace on user request. nomos-analysis' invalidation.rs has a check-panic-primitives finding on an unreachable! whose invariant was already explained in prose but not marked; check-panic-primitives is one of this repository's thirteen safety-critical checks (kernel/config/waivers/policy.go), so its in-code rust-panic marker is honoured under the default safety-only policy even though nomos has no standards.json. nomos-platform-std's drain.rs carries a check-lifetime-discipline finding whose rust-lifetime marker was already present but placed three lines above the flagged line (separated by a doc comment) rather than directly above it; check-lifetime-discipline is NOT one of the thirteen safety-critical checks, so even correctly placed the marker is not honoured here, and this finding is expected to remain -- the placement fix is a correctness improvement to the existing justification comment, not a count reduction.",
+      "done_when": "check-panic-primitives reports no finding under crates/substrate/nomos-analysis. crates/platform/nomos-platform-std's rust-lifetime marker on Reading sits directly above the line it justifies. cargo test -p nomos-analysis -p nomos-platform-std stays green.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-analysis",
+          "crates/platform/nomos-platform-std"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-concurrency-unsafe",
+        "acquired_at": 1787206143,
+        "lease_expires_at": 1787209743
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-analysis",
+          "-p",
+          "nomos-platform-std"
         ],
         "timeout_seconds": 600
       },

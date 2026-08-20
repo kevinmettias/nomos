@@ -6,19 +6,22 @@
 //! or write to a terminal, and until this module existed nothing called it. This is the
 //! same seam `OD-HOST-002` already built for `check`/`work`/`spec`: `Parse` turns argv into
 //! a typed [`GateInvocation`], [`Run`] below dispatches to either the orchestration crate's
-//! own `Run` (`plan`) or [`run::Run_Gate`] (`run`), and [`report`] turns what came back into
-//! text and an [`ExitCode`].
+//! own `Run` (`plan`) or `Run_Gate` (`run`), and [`report`] turns what came back into text
+//! and an [`ExitCode`].
 //!
-//! # Why `run` is not `nomos_gate_orchestration::Run`
+//! # What `run` still does here, after `P13-GATE-RUN-SEAM-CRATE`
 //!
-//! `nomos-gate-orchestration` and `nomos-check-orchestration` are both band 40
-//! (`README.md`) and a band may not depend on its own band
-//! (`tests/contract/tests/boundaries/graph.rs`). `plan`'s whole computation fits inside
-//! `nomos-gate-orchestration` because it never needs a `CheckOutcome`; `run`'s does, so it
-//! lives in this crate instead, the same way `check.rs` itself is where a tree gets walked
-//! because `nomos-check-orchestration` cannot do that from inside its own band either.
-//! `run.rs`'s own doc says this at length; `[GateInvocation::Run]`'s two branches in [`Run`]
-//! below are the two places that division is visible from this module.
+//! `nomos_gate_orchestration::Run_Gate` now owns the walk-judge-reduce composition itself --
+//! this module used to duplicate it (`crates/host/nomos-cli/src/gate/run.rs`, deleted by
+//! `P13-GATE-RUN-SEAM-CLI`) because `nomos-gate-orchestration` and `nomos-check-orchestration`
+//! were both band 40 and a band may not depend on its own band
+//! (`tests/contract/tests/boundaries/graph.rs`); `nomos-gate-orchestration` moved to band 41
+//! to depend on it instead. What stays here is exactly what `check.rs` also keeps for the
+//! same reason: the directory walk ([`sources::Walked`] -- no
+//! [`nomos_platform::FileSystem`] directory-listing port exists) and the host build variant
+//! ([`composition::Host_Variant`] -- `env!` resolves against the crate that calls it). Both
+//! cross into `Run_Gate` as arguments; nothing about judging or reducing lives in this crate
+//! any more.
 //!
 //! # What this module does not do
 //!
@@ -32,7 +35,6 @@
 mod composition;
 mod parsing;
 mod report;
-mod run;
 mod sources;
 
 #[cfg(test)]
@@ -45,7 +47,7 @@ mod exit_code;
 
 pub(crate) use exit_code::ExitCode;
 pub(crate) use nomos_gate_orchestration::GateCommand;
-use run::Run_Gate;
+use nomos_platform_std::StdProcessLauncher;
 
 use crate::arguments::Named_Value;
 use nomos_model::Subject_Of_Path;
@@ -84,7 +86,13 @@ pub fn Run(invocation: &GateInvocation, stdout: &mut impl Write, stderr: &mut im
         }
         GateInvocation::Run(command) =>
         {
-            let result = Run_Gate(command);
+            let walked = sources::Walked(&command.root);
+            let result = nomos_gate_orchestration::Run_Gate(
+                walked,
+                composition::Host_Variant(),
+                &command.root,
+                &StdProcessLauncher,
+            );
             Render_Run(&result, stdout, stderr)
         }
     };
