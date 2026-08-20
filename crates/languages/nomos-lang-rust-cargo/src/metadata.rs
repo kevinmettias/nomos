@@ -24,6 +24,10 @@ use std::collections::BTreeSet;
 use std::path::{Path, PathBuf};
 use std::time::Duration;
 
+mod discovered_package;
+
+pub use discovered_package::DiscoveredPackage;
+
 /// `cargo metadata` over this workspace finishes in well under a second; a full minute is
 /// generous headroom, the same bound `nomos-surface-provenance`'s own quick subprocess
 /// calls use for the same reason.
@@ -49,17 +53,6 @@ impl core::fmt::Display for MetadataError
     {
         return write!(formatter, "{}", self.reason);
     }
-}
-
-/// One workspace member as this reader found it: its own dependency payload, and the
-/// repository-relative path its manifest lives at.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct DiscoveredPackage
-{
-    pub payload: DependencyPayload,
-    /// Repository-relative, forward slashes — the same convention `Subject_Of_Path`
-    /// takes, because this is what a caller derives this package's subject from.
-    pub manifest_relative_root: String,
 }
 
 /// Every first-party workspace member's own dependency edges, restricted to edges that

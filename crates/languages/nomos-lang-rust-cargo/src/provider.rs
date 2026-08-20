@@ -11,6 +11,10 @@ use nomos_contracts::{
 use nomos_platform::ProcessLauncher;
 use std::path::Path;
 
+mod package_fact;
+
+pub use package_fact::PackageFact;
+
 /// Where in the workspace's history a fact is being produced.
 ///
 /// The same shape `nomos_lang_rust::FactContext` carries, for the same reason: these four
@@ -22,24 +26,6 @@ pub struct FactContext
     pub variant: BuildVariantId,
     pub configuration: ConfigurationId,
     pub generation: GenerationId,
-}
-
-/// One package's fact, together with the subject it was filed under and the
-/// repository-relative path that subject addresses.
-///
-/// The path is carried rather than left for a caller to recover from the payload, the same
-/// reason `nomos_rules::SourceFile::path` is a field and not a decode: a caller building a
-/// rule's subject list needs a reporting path without knowing this capability's payload
-/// schema, and a caller that decoded the payload just to get the path it already computed
-/// would be a second reader of a schema owned by `nomos_cap_dependency`.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct PackageFact
-{
-    pub subject: SubjectId,
-    /// Repository-relative, forward slashes — the same path `Subject_Of_Path` addressed to
-    /// produce `subject`.
-    pub path: String,
-    pub fact: MaterializedFact,
 }
 
 /// Runs `cargo metadata` over `root` and produces one fact per workspace member, each a

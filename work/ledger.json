@@ -21877,7 +21877,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -21890,7 +21890,27 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lang-rust-cargo"
+        ],
+        "exit_code": 0,
+        "output_tail": "lared_Guarantee_Should_Satisfy_The_Contract_Ceiling ... ok\ntest metadata::tests::Test_Every_Discovered_Package_Should_Carry_A_Manifest_Relative_Root ... ok\ntest provider::tests::Test_A_Fact_Should_Carry_The_Declared_Guarantee ... ok\ntest metadata::tests::Test_This_Crate_Should_Depend_On_Nomos_Contracts ... ok\ntest metadata::tests::Test_Nomos_Contracts_Should_Have_No_First_Party_Edges ... ok\ntest metadata::tests::Test_Edges_Should_Be_In_Canonical_Order ... ok\ntest provider::tests::Test_A_Facts_Subject_Should_Match_Subject_Of_Its_Own_Path ... ok\ntest provider::tests::Test_A_Facts_Path_Should_Be_What_Its_Subject_Was_Addressed_By ... ok\ntest provider::tests::Test_Every_Workspace_Member_Should_Produce_One_Fact ... ok\ntest provider::tests::Test_Two_Runs_Over_The_Same_Tree_Should_Reach_The_Same_Semantic_Inputs ... ok\n\ntest result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s\n\n\nrunning 1 test\ntest Test_An_Edited_Manifests_Old_Fact_Should_Not_Survive_The_Generation_It_Was_Invalidated_At ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-capability v0.1.0 (F:\\repos\\nomos\\crates\\substrate\\nomos-capability)\n   Compiling nomos-platform-std v0.1.0 (F:\\repos\\nomos\\crates\\platform\\nomos-platform-std)\n   Compiling nomos-analysis v0.1.0 (F:\\repos\\nomos\\crates\\substrate\\nomos-analysis)\n   Compiling nomos-cap-dependency v0.1.0 (F:\\repos\\nomos\\crates\\capabilities\\nomos-cap-dependency)\n   Compiling nomos-lang-rust-cargo v0.1.0 (F:\\repos\\nomos\\crates\\languages\\nomos-lang-rust-cargo)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.62s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lang_rust_cargo-93635b3de6e9f30b.exe)\n     Running tests\\invalidation.rs (target\\debug\\deps\\invalidation-c1d25b32653260e2.exe)\n   Doc-tests nomos_lang_rust_cargo\n",
+        "verified_at": 1787197226,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "71ef599203ce43083131296d173af278f39d1737"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
