@@ -78,15 +78,18 @@ mod tests
         return workspace;
     }
 
+    struct Before<'a>(&'a str);
+    struct After<'a>(&'a str);
+
     /// A plan with a single candidate that rewrites `a.rs` from `before` to `after`.
-    fn Plan_Changing_A(before: &str, after: &str) -> CorrectionPlan
+    fn Plan_Changing_A(before: Before<'_>, after: After<'_>) -> CorrectionPlan
     {
         return CorrectionPlan::New(vec![CorrectionCandidate::New(
             "fix a",
             ChangeSet::Empty().With(Edit::New(
                 "a.rs",
-                Some(before.to_owned()),
-                Some(after.to_owned()),
+                Some(before.0.to_owned()),
+                Some(after.0.to_owned()),
             )),
         )])
         .expect("a single candidate is a valid plan");
@@ -111,7 +114,7 @@ mod tests
     {
         let mut base = Base();
         let starting = base.Id();
-        let plan = Plan_Changing_A("old", "new");
+        let plan = Plan_Changing_A(Before("old"), After("new"));
         let committed = Commit_Plan(&plan, &mut base);
 
         assert_ne!(base.Id(), starting, "the commit must have changed something");
@@ -127,7 +130,7 @@ mod tests
     fn Test_Rollback_After_The_Workspace_Moved_Should_Be_Refused()
     {
         let mut base = Base();
-        let plan = Plan_Changing_A("old", "new");
+        let plan = Plan_Changing_A(Before("old"), After("new"));
         let committed = Commit_Plan(&plan, &mut base);
 
         let advance = WorkspaceChangeSet::From(ChangeSource::GitCheckout).Present("b.rs", "other");

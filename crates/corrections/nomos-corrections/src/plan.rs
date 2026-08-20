@@ -94,11 +94,14 @@ mod tests
     use super::*;
     use crate::{ChangeSet, Edit};
 
-    fn Candidate(description: &str, path: &str) -> CorrectionCandidate
-    {
-        let edit = Edit::New(path, None, Some("x".to_owned()));
+    struct Description<'a>(&'a str);
+    struct Path<'a>(&'a str);
 
-        return CorrectionCandidate::New(description, ChangeSet::Empty().With(edit));
+    fn Candidate(description: Description<'_>, path: Path<'_>) -> CorrectionCandidate
+    {
+        let edit = Edit::New(path.0, None, Some("x".to_owned()));
+
+        return CorrectionCandidate::New(description.0, ChangeSet::Empty().With(edit));
     }
 
     #[test]
@@ -113,8 +116,8 @@ mod tests
     fn Test_Two_Candidates_Touching_The_Same_Path_Should_Be_Refused()
     {
         let refusal = CorrectionPlan::New(vec![
-            Candidate("first", "a.rs"),
-            Candidate("second", "a.rs"),
+            Candidate(Description("first"), Path("a.rs")),
+            Candidate(Description("second"), Path("a.rs")),
         ])
         .expect_err("two candidates on one path conflict");
 
@@ -129,7 +132,10 @@ mod tests
     #[test]
     fn Test_Candidates_Touching_Different_Paths_Should_Be_Accepted()
     {
-        let plan = CorrectionPlan::New(vec![Candidate("first", "a.rs"), Candidate("second", "b.rs")])
+        let plan = CorrectionPlan::New(vec![
+            Candidate(Description("first"), Path("a.rs")),
+            Candidate(Description("second"), Path("b.rs")),
+        ])
             .expect("disjoint candidates form a plan");
 
         assert_eq!(plan.Candidates().len(), 2);

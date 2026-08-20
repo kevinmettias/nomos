@@ -78,13 +78,16 @@ mod tests
     use super::*;
     use crate::Content_Digest;
 
-    fn Identity(qualified: &str, signature: &str) -> CompositeIdentity
+    struct Qualified<'a>(&'a str);
+    struct Signature<'a>(&'a str);
+
+    fn Identity(qualified: Qualified<'_>, signature: Signature<'_>) -> CompositeIdentity
     {
         return CompositeIdentity {
             language: "rust".to_owned(),
             provider_native: None,
-            qualified_name: Some(qualified.to_owned()),
-            signature: Some(signature.to_owned()),
+            qualified_name: Some(qualified.0.to_owned()),
+            signature: Some(signature.0.to_owned()),
             structural: StructuralFingerprint::From_Digest(Content_Digest(b"shape")),
             provenance: SourceProvenance {
                 repository: "nomos".to_owned(),
@@ -99,8 +102,8 @@ mod tests
     fn Test_Identity_Should_Be_Stable_For_The_Same_Components()
     {
         assert_eq!(
-            Identity("crate::foo", "(u32) -> bool").Entity_Id(),
-            Identity("crate::foo", "(u32) -> bool").Entity_Id()
+            Identity(Qualified("crate::foo"), Signature("(u32) -> bool")).Entity_Id(),
+            Identity(Qualified("crate::foo"), Signature("(u32) -> bool")).Entity_Id()
         );
     }
 
@@ -111,8 +114,8 @@ mod tests
     fn Test_Overloads_Should_Be_Distinct_Under_The_Strict_Policy()
     {
         assert_ne!(
-            Identity("crate::foo", "(u32) -> bool").Entity_Id(),
-            Identity("crate::foo", "(String) -> bool").Entity_Id()
+            Identity(Qualified("crate::foo"), Signature("(u32) -> bool")).Entity_Id(),
+            Identity(Qualified("crate::foo"), Signature("(String) -> bool")).Entity_Id()
         );
     }
 
@@ -123,9 +126,9 @@ mod tests
     #[test]
     fn Test_Overloads_Should_Collapse_When_The_Policy_Says_So()
     {
-        let mut lenient = Identity("crate::foo", "(u32) -> bool");
+        let mut lenient = Identity(Qualified("crate::foo"), Signature("(u32) -> bool"));
         lenient.policy.distinguish_overloads = false;
-        let mut other_signature = Identity("crate::foo", "(String) -> bool");
+        let mut other_signature = Identity(Qualified("crate::foo"), Signature("(String) -> bool"));
         other_signature.policy.distinguish_overloads = false;
 
         assert_eq!(lenient.Entity_Id(), other_signature.Entity_Id());
@@ -136,12 +139,12 @@ mod tests
     #[test]
     fn Test_Identity_Should_Not_Depend_On_Location()
     {
-        let mut moved = Identity("crate::foo", "(u32) -> bool");
+        let mut moved = Identity(Qualified("crate::foo"), Signature("(u32) -> bool"));
         moved.provenance.revision = "def456".to_owned();
 
         assert_eq!(
             moved.Entity_Id(),
-            Identity("crate::foo", "(u32) -> bool").Entity_Id()
+            Identity(Qualified("crate::foo"), Signature("(u32) -> bool")).Entity_Id()
         );
     }
 
@@ -151,12 +154,12 @@ mod tests
     #[test]
     fn Test_Generated_Declarations_Should_Be_Distinct_From_Authored_Ones()
     {
-        let mut generated = Identity("crate::foo", "(u32) -> bool");
+        let mut generated = Identity(Qualified("crate::foo"), Signature("(u32) -> bool"));
         generated.provenance.generator = Some("protoc".to_owned());
 
         assert_ne!(
             generated.Entity_Id(),
-            Identity("crate::foo", "(u32) -> bool").Entity_Id()
+            Identity(Qualified("crate::foo"), Signature("(u32) -> bool")).Entity_Id()
         );
     }
 }

@@ -22147,6 +22147,393 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-DECLARETYPES-SPEC-STORE",
+      "title": "declare-types checks report findings across crates/spec/nomos-spec-store and nomos-spec-ingest",
+      "why": "code-standards rust declare-types phase (check-tuple-return, check-bool-parameter, check-error-values, check-variant-payload plus advisory check-transposable-parameters) was run over the whole workspace on user request and must reach 0 violations, advisory included. nomos-spec-store and nomos-spec-ingest together carry the largest share: repeated adjacent path/revision and from_node_id/relation_type/to_node_id string pairs across authoring, store, registration and the ingest pipeline, plus tuple-return findings in store.rs and store/governing.rs.",
+      "done_when": "check-tuple-return, check-bool-parameter, check-error-values, check-variant-payload and check-transposable-parameters report no finding under crates/spec/nomos-spec-store or crates/spec/nomos-spec-ingest, run via code-standards go run ./rules/general/run-all/phase rust/declare-types <path> --keep-going. cargo check --workspace --all-targets and cargo test -p nomos-spec-store -p nomos-spec-ingest stay green.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-store",
+          "crates/spec/nomos-spec-ingest"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-declaretypes-spec-store",
+        "acquired_at": 1787202444,
+        "lease_expires_at": 1787213244
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-spec-ingest"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-DECLARETYPES-SPEC-PROJECT",
+      "title": "declare-types checks report findings across crates/spec/nomos-spec-project, nomos-spec-bundle and nomos-spec-model",
+      "why": "code-standards rust declare-types phase was run over the whole workspace on user request and must reach 0 violations, advisory included. These three crates carry repeated adjacent str parameter pairs (profile/output, table/column, since/until-shaped names) in project rendering and bundle carriage, plus tuple-return and bool-parameter findings in spec-model table.rs and block.rs.",
+      "done_when": "check-tuple-return, check-bool-parameter, check-error-values, check-variant-payload and check-transposable-parameters report no finding under crates/spec/nomos-spec-project, crates/spec/nomos-spec-bundle or crates/spec/nomos-spec-model, run via code-standards go run ./rules/general/run-all/phase rust/declare-types <path> --keep-going. cargo check --workspace --all-targets and cargo test -p nomos-spec-project -p nomos-spec-bundle -p nomos-spec-model stay green.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-project",
+          "crates/spec/nomos-spec-bundle",
+          "crates/spec/nomos-spec-model"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-declaretypes-spec-project",
+        "acquired_at": 1787202444,
+        "lease_expires_at": 1787213244
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-project",
+          "-p",
+          "nomos-spec-bundle",
+          "-p",
+          "nomos-spec-model"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-DECLARETYPES-HOST",
+      "title": "declare-types checks report findings across crates/host",
+      "why": "code-standards rust declare-types phase was run over the whole workspace on user request and must reach 0 violations, advisory included. nomos-surface-provenance carries bool-parameter findings (Surface_Commits, Finding) and adjacent str pairs (since/until, root/path); nomos-cli carries a tuple-return finding in gate/run.rs and a transposable pair in arguments.rs.",
+      "done_when": "check-tuple-return, check-bool-parameter, check-error-values, check-variant-payload and check-transposable-parameters report no finding under crates/host/nomos-cli or crates/host/nomos-surface-provenance, run via code-standards go run ./rules/general/run-all/phase rust/declare-types <path> --keep-going. cargo check --workspace --all-targets and cargo test -p nomos-cli -p nomos-surface-provenance stay green.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli",
+          "crates/host/nomos-surface-provenance"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-declaretypes-host",
+        "acquired_at": 1787202444,
+        "lease_expires_at": 1787213244
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-surface-provenance"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-DECLARETYPES-SUBSTRATE",
+      "title": "declare-types checks report findings across crates/substrate/nomos-analysis and nomos-ledger",
+      "why": "code-standards rust declare-types phase was run over the whole workspace on user request and must reach 0 violations, advisory included. nomos-analysis invalidation.rs carries a tuple-return and an error-values finding (an expect call on a recoverable path); nomos-ledger carries a tuple-return finding in store/refusal.rs and repeated adjacent str pairs (holder/reason, workflow/step) across gate.rs, item.rs, store.rs, store/verbs.rs and territory/overlap.rs.",
+      "done_when": "check-tuple-return, check-bool-parameter, check-error-values, check-variant-payload and check-transposable-parameters report no finding under crates/substrate/nomos-analysis or crates/substrate/nomos-ledger, run via code-standards go run ./rules/general/run-all/phase rust/declare-types <path> --keep-going. The Invalidate reverse-index clone documented at fact/memory_store/invalidation.rs stays behaviorally unchanged. cargo check --workspace --all-targets and cargo test -p nomos-analysis -p nomos-ledger stay green.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-analysis",
+          "crates/substrate/nomos-ledger"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-declaretypes-substrate",
+        "acquired_at": 1787202444,
+        "lease_expires_at": 1787213244
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-analysis",
+          "-p",
+          "nomos-ledger"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-DECLARETYPES-ORCHESTRATION",
+      "title": "declare-types checks report findings across crates/orchestration/nomos-check-orchestration and nomos-spec-orchestration",
+      "why": "code-standards rust declare-types phase was run over the whole workspace on user request and must reach 0 violations, advisory included. nomos-check-orchestration carries tuple-return findings in facts/materialize.rs and run.rs; nomos-spec-orchestration carries a variant-payload finding (CommitRefusal repeated error field) and a transposable pair in corpus/layer.rs.",
+      "done_when": "check-tuple-return, check-bool-parameter, check-error-values, check-variant-payload and check-transposable-parameters report no finding under crates/orchestration/nomos-check-orchestration or crates/orchestration/nomos-spec-orchestration, run via code-standards go run ./rules/general/run-all/phase rust/declare-types <path> --keep-going. cargo check --workspace --all-targets and cargo test -p nomos-check-orchestration -p nomos-spec-orchestration stay green.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-check-orchestration",
+          "crates/orchestration/nomos-spec-orchestration"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-declaretypes-orchestration",
+        "acquired_at": 1787202444,
+        "lease_expires_at": 1787213244
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-spec-orchestration"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-DECLARETYPES-RULES",
+      "title": "declare-types checks report findings across crates/rules/nomos-rules",
+      "why": "code-standards rust declare-types phase was run over the whole workspace on user request and must reach 0 violations, advisory included. dependency.rs, naming.rs and reachability.rs each return an unnamed Offering tuple, and naming.rs additionally carries a transposable path/text pair.",
+      "done_when": "check-tuple-return, check-bool-parameter, check-error-values, check-variant-payload and check-transposable-parameters report no finding under crates/rules/nomos-rules, run via code-standards go run ./rules/general/run-all/phase rust/declare-types <path> --keep-going. cargo check --workspace --all-targets and cargo test -p nomos-rules stay green.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-declaretypes-rules",
+        "acquired_at": 1787202444,
+        "lease_expires_at": 1787213244
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-DECLARETYPES-KERNEL",
+      "title": "declare-types checks report findings across crates/kernel/nomos-model",
+      "why": "code-standards rust declare-types phase was run over the whole workspace on user request and must reach 0 violations, advisory included. identity/composite_identity.rs Identity constructor takes an adjacent qualified/signature str pair.",
+      "done_when": "check-transposable-parameters and the rest of the phase required checks report no finding under crates/kernel/nomos-model, run via code-standards go run ./rules/general/run-all/phase rust/declare-types <path> --keep-going. cargo check --workspace --all-targets and cargo test -p nomos-model stay green.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/kernel/nomos-model"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-model"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-model"
+        ],
+        "exit_code": 0,
+        "output_tail": "s::Test_Recreation_Should_Not_Preserve_History ... ok\ntest identity::transition_kind::tests::Test_Renames_And_Moves_Should_Preserve_History ... ok\ntest subject::set::tests::Test_Mismatched_Resolutions_Should_Be_Unknown_Not_Disjoint ... ok\ntest subject::set::tests::Test_A_Nonempty_Set_Should_Overlap_Itself ... ok\ntest path::tests::Test_The_Root_Should_Normalize_To_The_Empty_String ... ok\ntest subject::set::tests::Test_An_Unexpanded_Pattern_Should_Make_The_Answer_Unknown ... ok\ntest subject::set::tests::Test_Empty_Sets_Should_Be_Disjoint ... ok\ntest subject::set::tests::Test_Unknown_Should_Never_Permit_Concurrency ... ok\ntest subject::set::tests::Test_Every_Unknown_Reason_Should_Describe_Itself_Usefully ... ok\ntest subject::set::tests::Test_Intersection_Should_Be_Symmetric ... ok\ntest identity::composite_identity::tests::Test_Overloads_Should_Collapse_When_The_Policy_Says_So ... ok\ntest evidence::coverage::tests::Test_A_Run_That_Evaluated_Nothing_Should_Have_No_Effective_Coverage ... ok\ntest path::tests::Test_A_Record_Filename_Should_Not_Fold_Onto_Its_Identifier ... ok\ntest path::tests::Test_Spellings_Of_One_Path_Should_Be_One_Subject ... ok\ntest subject::set::tests::Test_Overlapping_Sets_Should_Report_The_Shared_Members ... ok\ntest subject::set::tests::Test_Disjoint_Sets_Should_Permit_Concurrency ... ok\ntest identity::composite_identity::tests::Test_Generated_Declarations_Should_Be_Distinct_From_Authored_Ones ... ok\ntest subject::tests::Test_Target_Kind_Should_Follow_The_Variant ... ok\ntest transition::tests::Test_An_Asserted_Transition_Should_Report_Itself_As_Unevidenced ... ok\n\ntest result: ok. 39 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.10s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_model-7709ca212f1803ae.exe)\n   Doc-tests nomos_model\n",
+        "verified_at": 1787202562,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "21d45d6aa44c8b5328464a6cb8a68270e28b4092"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-DECLARETYPES-CORRECTIONS",
+      "title": "declare-types checks report findings across crates/corrections/nomos-corrections",
+      "why": "code-standards rust declare-types phase was run over the whole workspace on user request and must reach 0 violations, advisory included. committed.rs Plan_Changing_A and plan.rs Candidate each take an adjacent str pair a caller can transpose.",
+      "done_when": "check-transposable-parameters and the rest of the phase required checks report no finding under crates/corrections/nomos-corrections, run via code-standards go run ./rules/general/run-all/phase rust/declare-types <path> --keep-going. cargo check --workspace --all-targets and cargo test -p nomos-corrections stay green.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/corrections/nomos-corrections"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-corrections"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-corrections"
+        ],
+        "exit_code": 0,
+        "output_tail": "hould_Share_An_Identity ... ok\ntest candidate::correction_candidate::tests::Test_A_Different_Change_Should_Change_The_Identity ... ok\ntest candidate::correction_candidate::tests::Test_A_Different_Description_Should_Change_The_Identity ... ok\ntest change_set::tests::Test_Touched_Names_Every_Edited_Path ... ok\ntest plan::tests::Test_Candidates_Touching_Different_Paths_Should_Be_Accepted ... ok\ntest plan::tests::Test_An_Empty_Plan_Should_Be_Refused ... ok\ntest preview::tests::Test_Previewing_The_Same_Plan_Twice_Should_Agree ... ok\ntest committed::tests::Test_Rollback_After_The_Workspace_Moved_Should_Be_Refused ... ok\ntest committed::tests::Test_Committing_Then_Rolling_Back_Should_Return_To_The_Base_Snapshot ... ok\ntest edit::tests::Test_A_Removal_Should_Reverse_To_A_Restoration ... ok\ntest edit::tests::Test_An_Addition_Should_Reverse_To_A_Removal ... ok\ntest staged::tests::Test_Staging_Against_Stale_Content_Should_Be_Refused ... ok\ntest validated::tests::Test_Committing_A_Validated_Plan_Should_Change_The_Workspace ... ok\ntest staged::tests::Test_Staging_Against_The_Content_It_Was_Built_Over_Should_Succeed ... ok\ntest plan::tests::Test_Two_Candidates_Touching_The_Same_Path_Should_Be_Refused ... ok\ntest staged::tests::Test_Validating_An_Unmoved_Workspace_Should_Succeed ... ok\ntest edit::tests::Test_Reverse_Should_Undo_Forward ... ok\ntest staged::tests::Test_Validating_A_Moved_Workspace_Should_Be_Refused ... ok\ntest preview::tests::Test_A_Preview_Names_Every_Candidate_And_Edit ... ok\ntest validated::tests::Test_Committing_After_The_Workspace_Moved_Should_Be_Refused ... ok\n\ntest result: ok. 21 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.10s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_corrections-d0fc0ae09ec504ab.exe)\n   Doc-tests nomos_corrections\n",
+        "verified_at": 1787202562,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "21d45d6aa44c8b5328464a6cb8a68270e28b4092"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-GATE-RUN-SEAM",
+      "title": "nomos-cli composes gate run because gate-orchestration and check-orchestration are peer bands, a seam OD-HOST-002 does not yet record",
+      "why": "OD-HOST-002 surveys nine state families and records WorkCommand, CheckCommand and SpecCommand seams as closed, but never mentions the run verb GateCommand gained -- family 9 predates it. crates/host/nomos-cli/src/gate/run.rs documents why itself: nomos-gate-orchestration and nomos-check-orchestration are both band 40 (README.md), and tests/contract/tests/boundaries/graph.rs Test_Dependencies_Should_Run_Strictly_Downward forbids a band depending on its own band, so the walk-judge-reduce composition for nomos gate run lives in nomos-cli instead of nomos-gate-orchestration. A second adapter wanting gate run without depending on nomos-cli -- exactly the API/MCP parity ARC-ROADMAP-001 names as near-term, next to Gate policy itself -- would have to re-derive that composition, the same duplication OD-HOST-001 fixed for the work group before a second adapter existed. Grepped directly: nothing else at band 40 depends on nomos-gate-orchestration, so moving it above nomos-check-orchestration band costs nothing else in the workspace.",
+      "done_when": "nomos-gate-orchestration exposes a public function generic over nomos-platform traits (the same genericity nomos_check_orchestration::Run and nomos_work_orchestration::Run already have) that, given an already-walked source set, composes nomos_check_orchestration::Run and the Disposition function this crate already owns into a GateRunResult -- the same value crates/host/nomos-cli/src/gate/run.rs currently builds by hand. nomos-gate-orchestration band moves above nomos-check-orchestration band so that dependency satisfies the strictly-downward rule, and README.md band table and tests/contract/tests/boundaries/bands.rs BANDS agree. crates/host/nomos-cli/src/gate/run.rs shrinks to the directory walk and platform construction only, calling the new function instead of duplicating its logic. tests/contract/surface/nomos-gate-orchestration.txt is regenerated against the new public surface. OD-HOST-002 gains an amendment recording the GateCommand run verb as a closed seam, alongside the existing SpecCommand amendment, and diagrams/relations.mmd and spec/domain-specification.md are both re-rendered and pass their freshness checks.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration",
+          "crates/host/nomos-cli/src/gate.rs",
+          "crates/host/nomos-cli/src/gate",
+          "README.md",
+          "tests/contract/tests/boundaries/bands.rs",
+          "tests/contract/surface/nomos-gate-orchestration.txt",
+          "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md",
+          "crates/spec/nomos-spec-store/records/OD-HOST-002.record",
+          "diagrams/relations.mmd",
+          "spec/domain-specification.md",
+          "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
