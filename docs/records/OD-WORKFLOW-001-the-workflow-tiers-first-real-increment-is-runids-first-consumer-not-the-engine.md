@@ -3,7 +3,7 @@ id: OD-WORKFLOW-001
 type: decision
 title: The workflow tier's first real increment is RunId's first real consumer, not the engine
 status: accepted
-version: 2
+version: 3
 authority: canonical-normative-record
 tags:
   - workflow
@@ -89,9 +89,13 @@ root-supplied dependency, the same shape `variant` and `launcher` already are, n
 `SystemTime::now()` read buried in the crate -- and `GateRunResult` gains a `pub run: RunId`
 field, computed once per call from the clock reading (and nothing else content-addressed,
 because content-addressing it would silently re-introduce the collapse this record just ruled
-out). Every existing caller of `Run_Gate` (`nomos-cli`'s `gate.rs`, `nomos-ledger`'s
-`finish/gate_step.rs`, `nomos-api`'s `Handle_Gate_Run`) supplies a real clock the same way each
-already supplies a real build variant and a real process launcher.
+out). Every existing caller of `Run_Gate` -- `nomos-cli`'s `gate.rs` and `nomos-api`'s
+`Handle_Gate_Run`, the only two; `nomos-ledger`'s own `Run_Gate_Step` is a distinct function
+(`crates/substrate/nomos-ledger/src/finish/gate_step.rs`) that runs the workflow's own
+lint-step argv through a `ProcessLauncher` and never calls `nomos_gate_orchestration::Run_Gate`
+at all, a conflation an earlier draft of this paragraph made from a substring grep rather than
+reading the file -- supplies a real clock the same way each already supplies a real build
+variant and a real process launcher.
 
 ## What This Does Not Do
 
@@ -101,7 +105,7 @@ found them, and this record schedules none of them -- the same "does not schedul
 `ARC-ROADMAP-001` itself states for its own boundary.
 
 It does not implement the `Run_Gate`/`GateRunResult` change the previous section names. That is
-real code touching a shipped, multiply-depended-on seam (three callers today), and belongs in
+real code touching a shipped, multiply-depended-on seam (two callers today), and belongs in
 its own claimed item with its own verification, the same split `OD-GATE-014`'s override record
 and `P13-GATE-014-SCOPE-RULE-SELECTORS` already used between naming a decision and building it.
 

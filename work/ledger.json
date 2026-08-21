@@ -24358,6 +24358,64 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-WORKFLOW-001-LEDGER-CALLER-STALE",
+      "title": "OD-WORKFLOW-001 wrongly lists nomos-ledger as a Run_Gate caller -- Run_Gate_Step is a different function",
+      "why": "OD-WORKFLOW-001's \"Concretely, for the follow-up\" paragraph (docs/records/OD-WORKFLOW-001-...) lists nomos-ledger's finish/gate_step.rs among Run_Gate's callers (\"Every existing caller of Run_Gate (nomos-cli's gate.rs, nomos-ledger's finish/gate_step.rs, nomos-api's Handle_Gate_Run) supplies a real clock\"). Checking that file directly (crates/substrate/nomos-ledger/src/finish/gate_step.rs) rather than trusting an earlier substring grep for \"Run_Gate\": its function is Run_Gate_Step, a distinct name that only contains \"Run_Gate\" as a substring. Run_Gate_Step reads the workflow's own LINT_STEP argv and runs it directly through a ProcessLauncher (crates/substrate/nomos-ledger/src/finish.rs:110) -- nomos work finish's own pre-flight lint check, unrelated to nomos_gate_orchestration::Run_Gate, which nomos-ledger never calls or imports anywhere. Grepped again to confirm: no occurrence of nomos_gate_orchestration or the literal token Run_Gate (not Run_Gate_Step) exists anywhere under crates/substrate/nomos-ledger. There are exactly two real callers of Run_Gate in this workspace today: nomos-cli's gate.rs and nomos-api's Handle_Gate_Run.\n\nThis does not change OD-WORKFLOW-001's decision or its amendment's corrected plan -- both survive with nomos-ledger simply removed from the caller list -- but a governing record asserting a grepped fact that turns out false undermines the same \"grepped directly\" credibility this record and its neighbors repeatedly lean on, and a future session building the Run_Gate/RunId follow-up would otherwise update a fourth caller that does not exist.",
+      "done_when": "docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md is amended to version 3: the \"Concretely, for the follow-up\" paragraph's caller list (\"nomos-cli's gate.rs, nomos-ledger's finish/gate_step.rs, nomos-api's Handle_Gate_Run\") is corrected in place (not a new appended section this time, since it is a plain factual correction to an already-superseded paragraph, not a new decision) to name only the two real callers -- nomos-cli's gate.rs and nomos-api's Handle_Gate_Run -- with a one-sentence note that nomos-ledger's Run_Gate_Step is a distinct, unrelated function (the workflow's own lint-step runner) that an earlier substring grep conflated with Run_Gate. `nomos spec preview --id OD-WORKFLOW-001 --from <the edited file>` reports no lost blocks or relations. diagrams/relations.mmd and spec/domain-specification.md are both re-rendered from a clean worktree carrying exactly this commit's registered records and are current.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "rust)\n   Compiling nomos-rules v0.1.0 (C:\\Users\\kmett\\AppData\\Local\\Temp\\claude\\f--repos-nomos\\03654339-c43c-4124-9647-c07ee491f5bb\\scratchpad\\render-workflow3\\crates\\rules\\nomos-rules)\n   Compiling nomos-contract-tests v0.1.0 (C:\\Users\\kmett\\AppData\\Local\\Temp\\claude\\f--repos-nomos\\03654339-c43c-4124-9647-c07ee491f5bb\\scratchpad\\render-workflow3\\tests\\contract)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 7.32s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-55ad3baadee2ff4e.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-56e1c9fba250ca24.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-4d4e16ab50ac70a5.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-35945c6ebc64c902.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-48bfe8d6f3ebf24c.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-ad5f178a2fa55ca5.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-a4b9594685bdc99a.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-0a473518710ef1f1.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-612bfa361c61aabd.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-13810cc2d23617bf.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-ee111bd537ecd137.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-2919ec68747ddb5b.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-99272398d303e3e7.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-756fcac740cd78ad.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-259eb839edee86c9.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1787279730,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

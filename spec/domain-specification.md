@@ -156,7 +156,7 @@ profile: domain-specification
 | docs/records/OD-TRACE-003-a-requirement-half-satisfied-is-partial-and-its-obligation-is-a-gap-checked-like-a-site-not-a-record.md@authored | docs/records/OD-TRACE-003-a-requirement-half-satisfied-is-partial-and-its-obligation-is-a-gap-checked-like-a-site-not-a-record.md | authored | 19 | 8 | sha256:09379db6f9c710a7de0de6a1cb9d749fbdcb23ecbd7f6e25323adb946c14d741 |
 | docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md@authored | docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md | authored | 21 | 8 | sha256:20584da07fdc54fcdca104e7137bc67b265954ba3734fc8b2d17a9036b2806b1 |
 | docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md@authored | docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md | authored | 29 | 11 | sha256:de7e7ec53c19ad7a55b98bcef5dadc7f7b1234b80d6dc2f3ce0098b4a1463685 |
-| docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md@authored | docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md | authored | 21 | 7 | sha256:850885523266afd2749699198bd0d0e44981cb94ef8479b510cc641e6a21bf43 |
+| docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md@authored | docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md | authored | 21 | 7 | sha256:93d764e016d3a0cf2f5b1f71eb3907c24791f0abc35e5990d3aecd054aead5f9 |
 
 ## Sections
 
@@ -41799,7 +41799,7 @@ distinction with no key to carry it.
 
 ### docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#10
 
-*revision: authored · kind: prose · heading: The workflow tier's first real increment is RunId's first real consumer, not the engine / The Decision · hash: sha256:3aa5dfc0d68511506dcf6bf6778788fd5dcf147957d60b891fa00e1dc5643dba*
+*revision: authored · kind: prose · heading: The workflow tier's first real increment is RunId's first real consumer, not the engine / The Decision · hash: sha256:477e34976f4dd7c299187f0389637c9592dfa83035d83f57e602921ff2ed6cd2*
 
 Concretely, for the follow-up this record unblocks: `nomos_gate_orchestration::Run_Gate` gains a
 `nomos_platform::Clock` parameter alongside its existing `ProcessLauncher` one -- a composition-
@@ -41807,9 +41807,13 @@ root-supplied dependency, the same shape `variant` and `launcher` already are, n
 `SystemTime::now()` read buried in the crate -- and `GateRunResult` gains a `pub run: RunId`
 field, computed once per call from the clock reading (and nothing else content-addressed,
 because content-addressing it would silently re-introduce the collapse this record just ruled
-out). Every existing caller of `Run_Gate` (`nomos-cli`'s `gate.rs`, `nomos-ledger`'s
-`finish/gate_step.rs`, `nomos-api`'s `Handle_Gate_Run`) supplies a real clock the same way each
-already supplies a real build variant and a real process launcher.
+out). Every existing caller of `Run_Gate` -- `nomos-cli`'s `gate.rs` and `nomos-api`'s
+`Handle_Gate_Run`, the only two; `nomos-ledger`'s own `Run_Gate_Step` is a distinct function
+(`crates/substrate/nomos-ledger/src/finish/gate_step.rs`) that runs the workflow's own
+lint-step argv through a `ProcessLauncher` and never calls `nomos_gate_orchestration::Run_Gate`
+at all, a conflation an earlier draft of this paragraph made from a substring grep rather than
+reading the file -- supplies a real clock the same way each already supplies a real build
+variant and a real process launcher.
 
 ### docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#11
 
@@ -41828,10 +41832,10 @@ found them, and this record schedules none of them -- the same "does not schedul
 
 ### docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#13
 
-*revision: authored · kind: prose · heading: The workflow tier's first real increment is RunId's first real consumer, not the engine / What This Does Not Do · hash: sha256:fdd52c75a794929578b5745e41f8de4cd229d9dc124de9841627422a97b3424e*
+*revision: authored · kind: prose · heading: The workflow tier's first real increment is RunId's first real consumer, not the engine / What This Does Not Do · hash: sha256:02caf55a80aa6c9bbb833d1ef258d71e8d7db1e192fdb65bdcf87984efab66e8*
 
 It does not implement the `Run_Gate`/`GateRunResult` change the previous section names. That is
-real code touching a shipped, multiply-depended-on seam (three callers today), and belongs in
+real code touching a shipped, multiply-depended-on seam (two callers today), and belongs in
 its own claimed item with its own verification, the same split `OD-GATE-014`'s override record
 and `P13-GATE-014-SCOPE-RULE-SELECTORS` already used between naming a decision and building it.
 

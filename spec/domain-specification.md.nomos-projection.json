@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:21295d2d243d51ddc9bcbb97d8b92a6c44b7d20fab72da3a74f3121910b0a13e",
-  "inputs_digest": "sha256:7dae16e4242e623d6c5842360e115da5836500c7ebb4ada8e5620e3b4f836328",
+  "content_digest": "sha256:be88936d20eace1129310406c1406d82250c72e9db1d641537ef9939324dd471",
+  "inputs_digest": "sha256:ddfc32c5a69f21bd05666a10dce9cf39fd1705100c0501f6a7521dc006b78cec",
   "sections": [
     [
       "Documents",
@@ -753,7 +753,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md@authored",
-      "hash": "sha256:850885523266afd2749699198bd0d0e44981cb94ef8479b510cc641e6a21bf43"
+      "hash": "sha256:93d764e016d3a0cf2f5b1f71eb3907c24791f0abc35e5990d3aecd054aead5f9"
     },
     {
       "content": "headings",
@@ -29598,7 +29598,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#10",
-      "hash": "sha256:3aa5dfc0d68511506dcf6bf6778788fd5dcf147957d60b891fa00e1dc5643dba"
+      "hash": "sha256:477e34976f4dd7c299187f0389637c9592dfa83035d83f57e602921ff2ed6cd2"
     },
     {
       "content": "blocks",
@@ -29613,7 +29613,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#13",
-      "hash": "sha256:fdd52c75a794929578b5745e41f8de4cd229d9dc124de9841627422a97b3424e"
+      "hash": "sha256:02caf55a80aa6c9bbb833d1ef258d71e8d7db1e192fdb65bdcf87984efab66e8"
     },
     {
       "content": "blocks",
