@@ -24486,6 +24486,65 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-CORRECTIONS-001-STATE-SURVEY",
+      "title": "OD-CORRECTIONS-001: corrections has real staging machinery and zero real callers",
+      "why": "ARC-ROADMAP-001 names corrections as a near-term-tier item, and the user's standing roadmap override names it unblocked, not still waiting for a trigger. Grepped directly: nothing outside crates/corrections/nomos-corrections itself and tests/integration/tests/determinism (which only checks CorrectionStaging's determinism declaration, not real usage) references nomos_corrections anywhere in this workspace -- zero real callers, matching the \"corrections product workflow\" gap the roadmap override names.\n\nRead in full before drafting any code (candidate.rs, plan.rs, staged.rs, validated.rs, committed.rs, determinism.rs): the crate is not empty scaffolding. CorrectionPlan::New already refuses two candidates touching the same path (COR-003's \"planned as a compatible set\", read from the v14 corpus's COR-001..COR-013 family, volume-05.7-3-corrections-and-convergence); StagedPlan::Of already refuses a candidate whose declared prior content does not match the live workspace; ValidatedPlan::Commit and CommittedPlan::Rollback already submit through and reverse through nomos_workspace::Workspace's one real door, checking at every step that the workspace has not moved since the previous one (Assert_Not_Moved, shared by all three). This is a real, tested implementation of COR-005's first half (stage, validate, commit or refuse).\n\nWhat is not built, checked against the same COR family: COR-005's second half (rerun affected rules, compare state signatures after commit -- ValidatedPlan::Commit does not call back into nomos-check-orchestration or nomos-rules at all); COR-006 (oscillation/divergence/stall detection, which needs a caller loop that does not exist since nothing calls this crate); COR-001/COR-010 (classifying a candidate as mechanical, proposed, agent, or interactive); COR-011..COR-013 (ranking, arbitration, objective weights). The crate's own module doc states this omission is deliberate: \"No agent and no model backend appears anywhere in this crate... what a candidate would do is decided before this crate exists to run it\" -- this crate is scoped to the mechanical executor half only, by its own design, not by an oversight this item would be filling in.\n\nChecked against the one real candidate for \"what decides what to fix\": this workspace's four shipped rules (Check_Completeness_Mirrors, Check_Naming_Convention, Check_Dependency_Direction, Check_Unread_Reaches_A_Finding). None produces a violation with a safe, judgment-free fix today -- Check_Naming_Convention's own violation (a function name against README.md's Pascal_Snake_Case convention) would need every call site renamed in step to stay correct, which is a real refactor requiring semantic understanding this workspace has no infrastructure for, not a mechanical edit. OD-PACKAGE-008 already measured the same absence from a different angle: \"the complete absence... of any real instance of ... a correction and suppression contract... with zero real shape to build a manifest field against anywhere in the workspace today.\"\n\nBuilding a CorrectionCandidate generator now would mean inventing either a fix for a rule that has none safely available, or the classification/ranking layer (COR-001, COR-010-013) that has no real case to check its shape against -- the same \"no invented shape ahead of a real body\" caution this workspace applies repeatedly (OD-PACKAGE-006, OD-PACKAGE-008, nomos-gate-orchestration's own doc on why compare is not stubbed). This item does not build code. It names, checks and records the real state so a future session does not re-derive it from scratch or assume the crate is either more or less finished than it is.",
+      "done_when": "docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md exists, accepted, authority canonical-normative-record, and states: (1) nomos-corrections' CorrectionPlan/StagedPlan/ValidatedPlan/CommittedPlan lifecycle is real and tested (COR-003's compatible-set check, COR-005's stage/validate/commit-or-refuse half, all through nomos_workspace::Workspace's one door), not scaffolding; (2) it has zero real callers anywhere in this workspace, verified by grep, not merely assumed from \"no crate depends on it\" tooling; (3) the missing half is not infrastructure this item should build but a real trigger: no shipped rule (of the four) produces a mechanically safe, judgment-free fix today, and the classification/ranking layer COR-001/COR-010..COR-013 name has no real case to check its shape against, the same population-of-zero caution OD-PACKAGE-006 and OD-PACKAGE-008 already apply elsewhere; (4) revisits on either a shipped rule gaining a genuinely mechanical fix, or a real driver for agent/interactive-class corrections existing. crates/spec/nomos-spec-store/records/OD-CORRECTIONS-001.record registers the record's path. diagrams/relations.mmd and spec/domain-specification.md are both re-rendered from a clean worktree carrying exactly this commit's registered records and are current. No code in crates/corrections/nomos-corrections or anywhere else is touched by this item.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md",
+          "crates/spec/nomos-spec-store/records/OD-CORRECTIONS-001.record"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "ng nomos-lang-rust v0.1.0 (C:\\Users\\kmett\\AppData\\Local\\Temp\\claude\\f--repos-nomos\\03654339-c43c-4124-9647-c07ee491f5bb\\scratchpad\\render-corrections\\crates\\languages\\nomos-lang-rust)\n   Compiling nomos-contract-tests v0.1.0 (C:\\Users\\kmett\\AppData\\Local\\Temp\\claude\\f--repos-nomos\\03654339-c43c-4124-9647-c07ee491f5bb\\scratchpad\\render-corrections\\tests\\contract)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 8.18s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-55ad3baadee2ff4e.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-56e1c9fba250ca24.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-4d4e16ab50ac70a5.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-35945c6ebc64c902.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-48bfe8d6f3ebf24c.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-ad5f178a2fa55ca5.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-a4b9594685bdc99a.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-0a473518710ef1f1.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-612bfa361c61aabd.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-13810cc2d23617bf.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-ee111bd537ecd137.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-2919ec68747ddb5b.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-99272398d303e3e7.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-756fcac740cd78ad.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-259eb839edee86c9.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1787282707,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

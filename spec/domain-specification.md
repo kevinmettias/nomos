@@ -54,6 +54,7 @@ profile: domain-specification
 | docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md@authored | docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md | authored | 28 | 9 | sha256:a4d8c71e62610f704811e42757155af8725a195a9b7f6d47a5af13197be33516 |
 | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md@authored | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md | authored | 29 | 9 | sha256:0351be57f7a37c7b7e8965886b9fa29c15f87fe4660ee253dcebcad932fe77a6 |
 | docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md@authored | docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md | authored | 28 | 9 | sha256:9f1c5229277415e49115502a643ecee1e889b80a83acb01e8695fe922761f0c2 |
+| docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md@authored | docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md | authored | 21 | 7 | sha256:1b76256697879186b4f2368f4ca1eb180a8aea16bca5e3fd06a9b74b620116e5 |
 | docs/records/OD-DETERMINISM-001-a-declaration-proven-only-behind-a-corpus-gate.md@authored | docs/records/OD-DETERMINISM-001-a-declaration-proven-only-behind-a-corpus-gate.md | authored | 26 | 7 | sha256:b080a464d0e59ac731e8b78eb0104aeed978958713f99969d1506ebbee92802e |
 | docs/records/OD-DETERMINISM-002-the-last-two-rows-declare-and-the-guard-stops-asking-about-facts.md@authored | docs/records/OD-DETERMINISM-002-the-last-two-rows-declare-and-the-guard-stops-asking-about-facts.md | authored | 35 | 10 | sha256:14dba5ba489a39e4b5605d97a5eb1389a55a6f0efa07f1aa076ccd5dece46428 |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md@authored | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md | authored | 30 | 8 | sha256:ede1d73ff937b80913dd5c6fd4d7d5cc70cb8158b29e13bfe003ae5cd5f805d5 |
@@ -502,6 +503,13 @@ profile: domain-specification
 | docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md#21 | authored | 2 | Why DisplayLabel Grows A Variant Too |
 | docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md#23 | authored | 2 | What This Does Not Do |
 | docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md#27 | authored | 2 | Status |
+| docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#1 | authored | 1 | Corrections has real staging machinery and zero real callers |
+| docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#2 | authored | 2 | Question |
+| docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#4 | authored | 2 | What Was Measured |
+| docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#9 | authored | 2 | The Finding |
+| docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#14 | authored | 2 | What This Does Not Do |
+| docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#16 | authored | 2 | What Would Decide The Next Increment |
+| docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#20 | authored | 2 | Status |
 | docs/records/OD-DETERMINISM-001-a-declaration-proven-only-behind-a-corpus-gate.md#1 | authored | 1 | A determinism declaration proven only behind a corpus gate is proven nowhere |
 | docs/records/OD-DETERMINISM-001-a-declaration-proven-only-behind-a-corpus-gate.md#2 | authored | 2 | Question |
 | docs/records/OD-DETERMINISM-001-a-declaration-proven-only-behind-a-corpus-gate.md#5 | authored | 2 | What Was Not Widened, And Why That Is The Decision |
@@ -12079,6 +12087,196 @@ mechanism `OD-TRACE-001` specified.
 *revision: authored · kind: prose · heading: A subject that needs a model is agent-required, rather than a missing provider or nothing at all / Status · hash: sha256:c93d45da64ee180e38d221c24185d7a92cb26f237738ce7cf6e6891c623dc68f*
 
 Closed by `P10-AGENT-REQUIRED`.
+
+### docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#1
+
+*revision: authored · kind: heading · heading: Corrections has real staging machinery and zero real callers · hash: sha256:561f55204d9750931a223d66fb7d4096dcaf81a0c882e88300dbba7ca2cecf3b*
+
+# Corrections has real staging machinery and zero real callers
+
+### docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#2
+
+*revision: authored · kind: heading · heading: Corrections has real staging machinery and zero real callers / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#3
+
+*revision: authored · kind: prose · heading: Corrections has real staging machinery and zero real callers / Question · hash: sha256:6d32e7abb9900b7d4dcb75359a5f80b0605cb055615e2c5b39f52f1605b50c9d*
+
+`ARC-ROADMAP-001` names corrections as a near-term-tier item, and the user's standing
+roadmap override names it as unblocked work, not still waiting for a trigger. Nothing in
+this workspace names what corrections' first real increment actually is, or even what
+state the crate is really in. Building the wrong first piece here is the same expensive
+mistake `OD-WORKFLOW-001` corrected twice over for the workflow tier -- so this record
+checks the real code and the real corpus before naming anything, rather than after.
+
+### docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#4
+
+*revision: authored · kind: heading · heading: Corrections has real staging machinery and zero real callers / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#5
+
+*revision: authored · kind: prose · heading: Corrections has real staging machinery and zero real callers / What Was Measured · hash: sha256:9670de26d2cc3e61b833faad34325d9533e69587480adc31a4eff01b578ff1a6*
+
+Grepped directly: nothing outside `crates/corrections/nomos-corrections` itself references
+`nomos_corrections` anywhere in this workspace, except
+`tests/integration/tests/determinism/{declarations,domains,productions}.rs`, which check
+only that `CorrectionStaging` declares a determinism strategy -- not real usage. Zero real
+callers, matching the "corrections product workflow" gap the roadmap override names.
+
+### docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#6
+
+*revision: authored · kind: prose · heading: Corrections has real staging machinery and zero real callers / What Was Measured · hash: sha256:a7bc5d0bf219feab29060f3ecd4414c9f9215f35a271ace3ff823010da97cf0f*
+
+Read in full before drafting any code -- `candidate.rs`, `plan.rs`, `staged.rs`,
+`validated.rs`, `committed.rs`, `determinism.rs` -- rather than assumed from the crate
+existing: it is not empty scaffolding.
+
+### docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#7
+
+*revision: authored · kind: prose · heading: Corrections has real staging machinery and zero real callers / What Was Measured · hash: sha256:59cc2b1bf6e495a2c9894a2b93d27a80fc559f638c0d2f82ea49215b1c5fb9d8*
+
+- `CorrectionPlan::New` already refuses two candidates that touch the same path --
+  `COR-003`'s "multiple corrections shall be planned as a compatible set", read from the
+  v14 corpus's `COR-001`..`COR-013` family (`volume-05.7-3-corrections-and-convergence`).
+- `StagedPlan::Of` already refuses a candidate whose declared prior content does not match
+  what the live workspace holds at that path.
+- `ValidatedPlan::Commit` and `CommittedPlan::Rollback` already submit through and reverse
+  through `nomos_workspace::Workspace`'s one real door, and every step
+  (`staged::Assert_Not_Moved`, shared by all three) refuses if the workspace moved since
+  the previous one.
+
+### docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#8
+
+*revision: authored · kind: prose · heading: Corrections has real staging machinery and zero real callers / What Was Measured · hash: sha256:c96178d1beb11b7725bcf88675b5f30e69772dcbbbaea11d3c83483172438df3*
+
+This is a real, tested implementation of `COR-005`'s first half: "After staging, the
+system shall compile/test as required, rerun affected rules, compare state signatures,
+and commit or roll back" -- the stage/validate/commit-or-refuse half, not the
+rerun-and-compare half.
+
+### docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#9
+
+*revision: authored · kind: heading · heading: Corrections has real staging machinery and zero real callers / The Finding · hash: sha256:b2ec4aa8b7784c9edabcf052da47b8624bf30212b1b531fe2256919d3346b773*
+
+## The Finding
+
+### docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#10
+
+*revision: authored · kind: prose · heading: Corrections has real staging machinery and zero real callers / The Finding · hash: sha256:ab2680fe7004086b3e6fbd0aaa75219e986b734ffd3374ec3795f6d3ea76a9ac*
+
+**What is missing is not infrastructure this item should build. It is a real trigger --
+and none exists today.**
+
+### docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#11
+
+*revision: authored · kind: prose · heading: Corrections has real staging machinery and zero real callers / The Finding · hash: sha256:b3a6f961b68708cdea82088c614c12207a43f9eb6ee21c74574d4122cc444565*
+
+Checked against `COR-005`'s second half: `ValidatedPlan::Commit` does not call back into
+`nomos-check-orchestration` or `nomos-rules` at all, so nothing reruns affected rules or
+compares state signatures after a commit. Checked against `COR-006` (oscillation,
+divergence, stall detection): that needs a caller loop, and there is no caller. Checked
+against `COR-001`/`COR-010` (classifying a candidate as mechanical, proposed, agent, or
+interactive) and `COR-011`..`COR-013` (ranking, arbitration, objective weights): none of
+it exists, and the crate's own module doc says this is deliberate, not an oversight this
+item is filling in -- "No agent and no model backend appears anywhere in this crate ...
+what a candidate would do is decided before this crate exists to run it." This crate is
+scoped to the mechanical executor half by its own design.
+
+### docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#12
+
+*revision: authored · kind: prose · heading: Corrections has real staging machinery and zero real callers / The Finding · hash: sha256:5e67518d5d693ae3e4a3c11485ad0089ae454ab9e3440416674c6cf1f048bc7e*
+
+Checked against the one real candidate for "what decides what to fix": this workspace's
+four shipped rules (`Check_Completeness_Mirrors`, `Check_Naming_Convention`,
+`Check_Dependency_Direction`, `Check_Unread_Reaches_A_Finding`). None produces a violation
+with a safe, judgment-free fix today. `Check_Naming_Convention`'s own violation -- a
+function name against `README.md`'s `Pascal_Snake_Case` convention -- would need every
+call site renamed in step to stay correct, a real refactor requiring semantic
+understanding this workspace has no infrastructure for, not a mechanical edit. The other
+three rules' violations (an unmirrored doc claim, a dependency pointed the wrong way, an
+unread value reaching a finding) are no more mechanical. `OD-PACKAGE-008` already measured
+the same absence from a different angle, about `RulePackage`'s manifest fields: "the
+complete absence ... of any real instance of ... a correction and suppression contract ...
+with zero real shape to build a manifest field against anywhere in the workspace today."
+
+### docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#13
+
+*revision: authored · kind: prose · heading: Corrections has real staging machinery and zero real callers / The Finding · hash: sha256:7817c8477e535427b41d29161c96596a648950a0d8c26b56986ccf439d8a6b4a*
+
+Building a `CorrectionCandidate` generator now would mean inventing either a fix for a
+rule that has none safely available, or the classification/ranking layer (`COR-001`,
+`COR-010`..`COR-013`) that has no real case to check its shape against -- the same
+"no invented shape ahead of a real body" caution this workspace applies repeatedly
+(`OD-PACKAGE-006`, `OD-PACKAGE-008`, `nomos-gate-orchestration`'s own doc on why `compare`
+is not stubbed).
+
+### docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#14
+
+*revision: authored · kind: heading · heading: Corrections has real staging machinery and zero real callers / What This Does Not Do · hash: sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf*
+
+## What This Does Not Do
+
+### docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#15
+
+*revision: authored · kind: prose · heading: Corrections has real staging machinery and zero real callers / What This Does Not Do · hash: sha256:901b13a25ab329af5655a47fce9baf3a323adb13fb6ba1cdc19fae44025b285d*
+
+It does not build a `CorrectionCandidate` generator, a classification or ranking layer,
+`COR-005`'s rerun-and-compare half, or any oscillation detection. It does not add a
+`nomos correct` verb or an orchestration crate for corrections -- there is nothing yet for
+either to compose that isn't already exercised by the crate's own tests. It does not
+reopen `OD-PACKAGE-008` or restate `ARC-ROADMAP-001`.
+
+### docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#16
+
+*revision: authored · kind: heading · heading: Corrections has real staging machinery and zero real callers / What Would Decide The Next Increment · hash: sha256:2a49a3ba679fcfb358fdad9c23368250d14e31320f8c91494208c2e9050a975b*
+
+## What Would Decide The Next Increment
+
+### docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#17
+
+*revision: authored · kind: prose · heading: Corrections has real staging machinery and zero real callers / What Would Decide The Next Increment · hash: sha256:edb612ef0f2179a68df9903b5f417d9c1c4f248c9a7f25f6cef1b07160590397*
+
+Either of:
+
+### docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#18
+
+*revision: authored · kind: prose · heading: Corrections has real staging machinery and zero real callers / What Would Decide The Next Increment · hash: sha256:d3e0234ec6e56a57be348699a19c6042d6f1175228c8532914243a188954402c*
+
+- **A shipped rule gains a genuinely mechanical fix.** A rule whose violation has exactly
+  one safe correction with no semantic judgment required -- the same bar `COR-001`'s
+  "mechanical correction" category names -- gives `CorrectionCandidate::New` a real caller
+  and this crate's stage/validate/commit chain a real first exercise.
+- **A real driver for agent- or interactive-class corrections exists.** `ARC-ROADMAP-001`
+  defers `ModelBackend`/`AgentExecutor` infrastructure as its own near-term item; once
+  either is real, `COR-001`'s other three classes (proposed, agent, interactive) have
+  something to be driven by.
+
+### docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#19
+
+*revision: authored · kind: prose · heading: Corrections has real staging machinery and zero real callers / What Would Decide The Next Increment · hash: sha256:222b69f2b72218601ec53fdbc983b9f139345585e9a3748dac35e73e85f6a6a6*
+
+Until either arrives, this crate's real, tested half stands as what it is -- a mechanical
+executor with no caller -- rather than an unmeasured "zero consumers" a future session has
+to re-derive from scratch.
+
+### docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#20
+
+*revision: authored · kind: heading · heading: Corrections has real staging machinery and zero real callers / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#21
+
+*revision: authored · kind: prose · heading: Corrections has real staging machinery and zero real callers / Status · hash: sha256:5f90ed2c2e12423b27c371f6537d3c2b60446f199ffd748a3d47f216fd2f3e8b*
+
+Accepted. Names corrections' real current state precisely, checked against the code and
+the `COR-*` corpus family rather than assumed, and the two conditions that would decide its
+next real increment. Schedules no work of its own, the same restraint `ARC-ROADMAP-001`
+holds for its own boundary.
 
 ### docs/records/OD-DETERMINISM-001-a-declaration-proven-only-behind-a-corpus-gate.md#1
 
