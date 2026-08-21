@@ -2,8 +2,8 @@
 id: OD-GATE-015
 type: decision
 title: Whether Gate's BaselinePolicy, SuppressionPolicy and adoption configuration are built now, or wait for a run verb that can observe their effect
-status: open
-version: 5
+status: accepted
+version: 6
 authority: canonical-normative-record
 tags:
   - gate
@@ -224,13 +224,40 @@ suppressed and the two result lists never double-count it; a matched finding mov
 CLI flag or configuration file constructs a `BaselineDebt` yet, the same absence
 `SuppressionPolicy`'s fifth increment already declined to fill for the same reason.
 
+## All Three Are Built, Under Override
+
+The user's 2026-08-19/20 "proceed with all remaining work" directive named adoption
+configuration by name, the last of this record's three concerns still open, now that
+suppression and baseline are both built. `P13-GATE-015-ADOPTION-FIRST-INCREMENT-2` built it
+(the original `P13-GATE-015-ADOPTION-FIRST-INCREMENT` was declined for an authoring mistake
+in its own predicate, unrelated to what it built), taking the narrowest real instance of
+`ADOPT-CONFIG-003`'s "declared gates, phases and calibration policy": a rule-level
+calibration, not a third per-finding matcher of `Suppression`'s or `BaselineDebt`'s shape.
+
+Verified directly against the real code, not assumed: `RuleCalibration`
+(`crates/orchestration/nomos-gate-orchestration/src/adoption.rs`) matches a `Finding` by
+`rule` alone, deliberately not `rule`/`subject` -- a
+different addressing scheme from `Suppression` and `BaselineDebt`, since adoption is framed
+as a layer above both rather than a third way to name one finding. `Run_Gate` checks
+`AdoptionPolicy` before `suppressions` and `baseline`, so a finding matched by more than one
+reports as calibrated; a matched finding moves from `blocking_findings` to
+`GateRunResult::calibrated_findings` rather than disappearing, and `Explain_Gate` reports
+the same disposition through `Explanation::Found::calibrated_by`. No CLI flag or
+configuration file constructs an `AdoptionPolicy` yet, the same absence
+`SuppressionPolicy`'s and `BaselinePolicy`'s own first increments already declined to fill.
+No declared phases, thresholds or approvals either -- `ADOPT-CONFIG-*`'s full corpus shape
+-- and no separate consumer-owned configuration file: `RuleCalibration`'s own doc says why.
+
 ## Status
 
-Open, for adoption configuration alone. `Gate` has a real `run` verb and a real disposition
-(`P13-GATE-RUN-FIRST-INCREMENT-3`, `P13-GATE-014-015-RUN-TRIGGER-FIRED`), and a real caller
-whose build it gates: `.github/workflows/gate.yml`'s `Rules` step invokes `gate run`, not
-`check`, since `P13-GATE-RUN-CI-CALLER`. This record's first named trigger has fired. The
-suppression and baseline concerns are both closed, by override rather than by that trigger —
-see above. Adoption configuration remains: revisit it when a real caller's accumulated debt
-or exemption need names a concrete shape for it, or when the same kind of standing override
-that closed the other two is given for it by name.
+Accepted. `BaselinePolicy`, `SuppressionPolicy` and now `AdoptionPolicy` all exist and are
+consulted by a real `run` and a real `explain`, closing what this record asked -- not by the
+second, independent trigger this record names (no real caller has yet accumulated debt or
+exemption friction of its own), but by the user's own standing override, given by name for
+each of the three concerns in turn and recorded above rather than left to be inferred.
+Nothing further to revisit under this record: any future widening of one policy's own shape
+(`SUP-*`'s owner/approver/date fields and revalidation triggers, `BASELINE-*`'s diff- and
+identity-based new-code detection, `ADOPT-CONFIG-*`'s declared phases and a real
+authoring/config surface for any of the three) is a new question for a new record, the same
+way `OD-GATE-014`'s own acceptance already treats a future narrowing of `ScopeSelector`/
+`RuleSelector`.
