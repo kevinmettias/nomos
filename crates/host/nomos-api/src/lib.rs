@@ -9,8 +9,11 @@
 //! shares a name fragment, `OD-WORKFLOW-001`'s own correction). `ARC-ROADMAP-001` names
 //! `CLI / API / MCP projections` as a near-term-tier item next to the Gate object itself;
 //! this crate's first increment was `Handle_Gate_Run`. Its second, [`work::Handle_Work_List`],
-//! proves the same is true of `nomos_work_orchestration::Run`: grepped directly, before this
+//! proves the same is true of `nomos_work_orchestration::Run`: grepped directly, before that
 //! increment its only real caller anywhere in this workspace was `nomos-cli`'s own `work.rs`.
+//! Its third, [`spec::Handle_Spec_Profiles`], does the same for `nomos_spec_orchestration::
+//! Profiles` -- the simplest of that crate's nine `SpecCommand` verbs plus `Submit`, all ten
+//! of which had exactly one real caller, `nomos-cli`, before this increment.
 //!
 //! [`Handle_Gate_Run`] is a deliberate twin of `nomos-cli`'s `gate.rs`
 //! `GateInvocation::Run` arm: it walks `root` for `.rs` sources
@@ -42,9 +45,11 @@
 mod composition;
 mod response;
 mod sources;
+mod spec;
 mod work;
 
 pub use response::{Disposition, GateRunResponse};
+pub use spec::{Handle_Spec_Profiles, ProfilesResponse};
 pub use work::{Handle_Work_List, WorkListResponse};
 
 use nomos_gate_orchestration::GateCommand;
