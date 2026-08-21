@@ -300,10 +300,12 @@ version = "0.1.0"
 dependencies = [
  "nomos-contracts",
  "nomos-gate-orchestration",
+ "nomos-ledger",
  "nomos-model",
  "nomos-platform",
  "nomos-platform-std",
  "nomos-rules",
+ "nomos-work-orchestration",
  "nomos-workspace",
  "serde",
  "serde_json",

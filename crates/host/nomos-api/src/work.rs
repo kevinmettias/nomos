@@ -1,0 +1,139 @@
+//! A second real caller of `nomos_work_orchestration::Run` -- the `List` verb only, the
+//! same "one verb, not the whole command set" scope `Handle_Gate_Run` already uses for
+//! Gate's own `run`.
+
+use nomos_ledger::{FileLedger, LedgerDocument, Territory};
+use nomos_platform::Timestamp;
+use nomos_platform_std::{FileLock, StdFileSystem, StdProcessLauncher, SystemClock};
+use nomos_work_orchestration::WorkCommand;
+use serde::Serialize;
+use std::path::Path;
+
+/// Lists every item on the board at `directory`, exactly as `nomos work list` would, and
+/// hands back a JSON-serializable response.
+///
+/// `directory` is expected to hold `ledger.json` and `ledger.lock`, the same layout
+/// `crates/host/nomos-cli/src/work.rs`'s own composition root reads. The `published`
+/// closure `nomos_work_orchestration::Run` takes is asked for lazily and reached only by
+/// `WorkCommand::Add` (that crate's own doc), so `List` never reaches it -- an empty,
+/// real `Territory` is handed here rather than a closure that would panic if this crate's
+/// own scope ever widened past `List` without updating this comment.
+#[must_use]
+pub fn Handle_Work_List(directory: &Path) -> WorkListResponse
+{
+    let mut ledger = FileLedger::At(
+        directory.join("ledger.json"),
+        StdFileSystem,
+        SystemClock,
+        FileLock::At(directory.join("ledger.lock")),
+    );
+
+    let outcome = nomos_work_orchestration::Run(
+        &WorkCommand::List { state: None },
+        &mut ledger,
+        &StdProcessLauncher,
+        || Territory::Of_Files(std::iter::empty::<String>()),
+    );
+
+    let nomos_work_orchestration::WorkOutcome::List(listed) = outcome
+    else
+    {
+        unreachable!("Run always returns the WorkOutcome variant naming the WorkCommand it was given")
+    };
+
+    return WorkListResponse::From(listed);
+}
+
+/// What a real `nomos work list` produced, in a shape `serde_json` can hand across a wire.
+///
+/// A tagged enum rather than a bare `Result`-shaped struct: `nomos_ledger::LedgerError`
+/// does not derive `Serialize` -- nothing needed a wire format for it before this crate
+/// existed -- and naming both outcomes here, the same honesty this workspace's other
+/// two-state vocabularies (`Applicability`, `GateRunResponse::Disposition`) already hold
+/// to, is clearer than collapsing a real refusal into an empty success.
+#[derive(Debug, Serialize)]
+#[serde(tag = "outcome", rename_all = "snake_case")]
+pub enum WorkListResponse
+{
+    /// The board was read.
+    Listed
+    {
+        /// Every item, as the ledger holds them.
+        document: LedgerDocument,
+        /// The moment the board was read.
+        now: Timestamp,
+    },
+    /// The ledger file could not be read at all.
+    Unreadable
+    {
+        /// What went wrong, as `LedgerError`'s own `Display` renders it.
+        cause: String,
+    },
+}
+
+impl WorkListResponse
+{
+    fn From(listed: Result<nomos_work_orchestration::BoardView, nomos_ledger::LedgerError>) -> Self
+    {
+        return match listed
+        {
+            Ok(view) => Self::Listed { document: view.document, now: view.now },
+            Err(error) => Self::Unreadable { cause: error.to_string() },
+        };
+    }
+}
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    /// A scratch board of this test's own -- never the real shared `work/` directory,
+    /// which live sessions write to concurrently. The same `std::env::temp_dir()` /
+    /// `std::process::id()` scoping `crates/host/nomos-cli/tests/scratch_ledger` already
+    /// uses, and the same minimal two-key shape (`schema_version`, `items`) `work/
+    /// ledger.json` itself has.
+    fn Scratch_Board() -> std::path::PathBuf
+    {
+        let directory = std::env::temp_dir().join(format!("nomos-api-work-list-{}", std::process::id()));
+        let _ignored = std::fs::remove_dir_all(&directory);
+        std::fs::create_dir_all(&directory).expect("creates a scratch directory");
+        std::fs::write(directory.join("ledger.json"), "{\"schema_version\": 5, \"items\": []}\n")
+            .expect("writes a minimal valid ledger");
+
+        return directory;
+    }
+
+    #[test]
+    fn Test_Listing_A_Real_Empty_Board_Should_Read_It_Not_Refuse_It()
+    {
+        let directory = Scratch_Board();
+
+        let response = Handle_Work_List(&directory);
+
+        let _ignored = std::fs::remove_dir_all(&directory);
+
+        let WorkListResponse::Listed { document, .. } = response
+        else
+        {
+            panic!("a well-formed, empty ledger reads cleanly");
+        };
+        assert!(document.items.is_empty());
+    }
+
+    #[test]
+    fn Test_A_Real_Listings_Response_Should_Round_Trip_As_Json()
+    {
+        let directory = Scratch_Board();
+
+        let response = Handle_Work_List(&directory);
+
+        let _ignored = std::fs::remove_dir_all(&directory);
+
+        let json = serde_json::to_string(&response).expect("a WorkListResponse always serializes");
+        let parsed: serde_json::Value = serde_json::from_str(&json).expect("what was just written parses back");
+        let outcome = parsed.get("outcome").expect("a serialized WorkListResponse always has this field");
+
+        assert_eq!(outcome, "listed", "{json}");
+    }
+}

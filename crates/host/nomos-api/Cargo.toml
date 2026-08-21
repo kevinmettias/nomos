@@ -1,7 +1,7 @@
 [package]
 name = "nomos-api"
 version = "0.1.0"
-description = "Band 90. A second real caller of nomos_gate_orchestration::Run_Gate: walks a tree, judges it exactly as nomos gate run would, and hands back a JSON-serializable response -- apart from choosing a platform or wiring an actual transport over it."
+description = "Band 90. A second real caller of orchestration seams nomos-cli otherwise has to itself: nomos_gate_orchestration::Run_Gate and nomos_work_orchestration::Run, each producing a JSON-serializable response -- apart from choosing a platform or wiring an actual transport over it."
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
@@ -10,10 +10,12 @@ publish.workspace = true
 [dependencies]
 nomos-contracts = { workspace = true }
 nomos-gate-orchestration = { workspace = true }
+nomos-ledger = { workspace = true }
 nomos-model = { workspace = true }
 nomos-platform = { workspace = true }
 nomos-platform-std = { workspace = true }
 nomos-rules = { workspace = true }
+nomos-work-orchestration = { workspace = true }
 nomos-workspace = { workspace = true }
 serde = { workspace = true }
 

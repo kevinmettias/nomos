@@ -24610,6 +24610,65 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-API-WORK-LIST-SEAM",
+      "title": "nomos-api gains a second real seam: Work's List verb, alongside Gate's run",
+      "why": "ARC-ROADMAP-001 names CLI/API/MCP projections and the application-service boundary as near-term-tier items. nomos-api's own module doc states its purpose directly: proving nomos-cli is not the only real caller of an orchestration seam. It has proven this for Gate (Run_Gate) but not for any of the other three closed OD-HOST-001/002 seams -- grepped directly: nomos_work_orchestration::Run has exactly one real caller in this workspace, crates/host/nomos-cli/src/work.rs, and nothing else, including nomos-api, calls it. This is the same \"declared and deliberately unconsumed by a second caller\" gap nomos-api was built to close for Gate, now real for Work too.\n\nChecked before implementing: nomos_work_orchestration::Run's signature (crates/orchestration/nomos-work-orchestration/src/run.rs) takes a FileLedger<F, C, L> generic over FileSystem/Clock/CrossProcessLock, a ProcessLauncher, and a WorkCommand -- more platform surface than Run_Gate's root+variant+launcher shape, since a ledger read/write is a bigger composition than a source walk. Its own doc says `published` (a Territory-producing closure) is asked for lazily and reached only by WorkCommand::Add -- so a read-only WorkCommand::List call never touches it, and this item does not need to build Published_Records's real directory-listing logic to prove the seam. WorkOutcome::List(BoardView) wraps nomos_ledger::LedgerDocument, which already derives Serialize/Deserialize (it is the type ledger.json itself round-trips through) -- so, unlike GateRunResult, no new serializable projection type is needed here; the real type is JSON-ready already.\n\nScoped to WorkCommand::List alone, the simplest, read-only verb -- the same \"one verb, not the whole command set\" scope nomos-api's own Handle_Gate_Run already uses (only gate run, not plan or explain).",
+      "done_when": "nomos-api gains a new public function Handle_Work_List(directory: &Path) -> WorkListResponse, calling nomos_work_orchestration::Run(&WorkCommand::List{state: None}, &mut ledger, &StdProcessLauncher, published) where ledger is a real FileLedger::At(directory.join(\"ledger.json\"), StdFileSystem, SystemClock, FileLock::At(directory.join(\"ledger.lock\"))) -- mirroring crates/host/nomos-cli/src/work.rs's own composition exactly -- and published is a real (not unreachable!()) empty Territory::Of_Files(std::iter::empty::<String>()) closure, honestly documented as unreached by List rather than papered over with a panic. WorkListResponse{document: nomos_ledger::LedgerDocument, now: nomos_platform::Timestamp} derives Serialize directly, reusing LedgerDocument as-is since it already round-trips through ledger.json -- no new projection type invented for it, unlike GateRunResponse. A real test proves this crate -- not nomos-cli -- can list a real ledger: it writes a minimal valid ledger.json ({\"schema_version\": 5, \"items\": []}, the same two-key shape work/ledger.json itself has) to a process-id-scoped scratch directory (the same std::env::temp_dir()/std::process::id() pattern crates/host/nomos-cli/tests/scratch_ledger already uses, so it never touches the real shared board), points Handle_Work_List at it, and asserts the returned document has zero items and a real timestamp. A second test proves the response round-trips through serde_json. nomos-api's Cargo.toml gains nomos-ledger and nomos-work-orchestration as dependencies. tests/contract/surface/nomos-api.txt is regenerated (NOMOS_SURFACE_BLESS) and current. nomos-work-orchestration, nomos-cli and nomos-ledger are not touched by this item.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-api",
+          "tests/contract/surface/nomos-api.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "t result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 5 tests\ntest Test_A_Lowered_Declaration_Should_Fail_The_Comparison ... ok\ntest Test_A_Matching_Declaration_Should_Pass_The_Comparison ... ok\ntest Test_An_Unrelated_Minor_Version_Should_Fail_The_Comparison ... ok\ntest Test_The_Real_Workflow_Should_Still_Have_The_Install_Step ... ok\ntest Test_The_Declared_Floor_Should_Match_The_Toolchain_The_Gate_Installs ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.10s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_api-e38898ab50b3f881.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-06ab25b0491e144c.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-4c32ae08be8df958.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-9350d088b8d6ed0d.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-9ca3879aab70176f.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-308fef82df004321.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-f6f7228f8cfa874c.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-ea500c062215f506.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-790c8c5856e63fa5.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-98429b682798ce96.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-c1e906054609f777.exe)\n   Doc-tests nomos_api\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1787286098,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "17363951e2e7b5a3886f6a7086ce5ac9381913fb"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

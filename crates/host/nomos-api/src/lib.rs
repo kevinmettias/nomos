@@ -1,13 +1,16 @@
-//! Band 90 — host. A second real caller of [`nomos_gate_orchestration::Run_Gate`].
+//! Band 90 — host. A second real caller of orchestration seams `nomos-cli` otherwise has
+//! to itself.
 //!
 //! `nomos-gate-orchestration`'s own module doc, since `P13-GATE-RUN-SEAM-CRATE`, states the
 //! point directly: `Run_Gate` is generic over `nomos-platform`'s traits "so a second adapter
 //! can call it without depending on `nomos-cli`." Until this crate, nothing did --
 //! `nomos-cli`'s own `gate.rs` was the only caller outside the orchestration crate itself,
-//! apart from `nomos-ledger`'s internal gate step inside `work finish`, which is a
-//! composition inside that flow rather than an external-facing adapter. `ARC-ROADMAP-001`
-//! names `CLI / API / MCP projections` as a near-term-tier item next to the Gate object
-//! itself; this is that item's first real increment.
+//! apart from `nomos-ledger`'s own unrelated `Run_Gate_Step` (a lint-argv runner that merely
+//! shares a name fragment, `OD-WORKFLOW-001`'s own correction). `ARC-ROADMAP-001` names
+//! `CLI / API / MCP projections` as a near-term-tier item next to the Gate object itself;
+//! this crate's first increment was `Handle_Gate_Run`. Its second, [`work::Handle_Work_List`],
+//! proves the same is true of `nomos_work_orchestration::Run`: grepped directly, before this
+//! increment its only real caller anywhere in this workspace was `nomos-cli`'s own `work.rs`.
 //!
 //! [`Handle_Gate_Run`] is a deliberate twin of `nomos-cli`'s `gate.rs`
 //! `GateInvocation::Run` arm: it walks `root` for `.rs` sources
@@ -39,8 +42,10 @@
 mod composition;
 mod response;
 mod sources;
+mod work;
 
 pub use response::{Disposition, GateRunResponse};
+pub use work::{Handle_Work_List, WorkListResponse};
 
 use nomos_gate_orchestration::GateCommand;
 use nomos_platform::Clock;
