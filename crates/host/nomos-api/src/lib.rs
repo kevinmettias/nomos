@@ -13,7 +13,10 @@
 //! increment its only real caller anywhere in this workspace was `nomos-cli`'s own `work.rs`.
 //! Its third, [`spec::Handle_Spec_Profiles`], does the same for `nomos_spec_orchestration::
 //! Profiles` -- the simplest of that crate's nine `SpecCommand` verbs plus `Submit`, all ten
-//! of which had exactly one real caller, `nomos-cli`, before this increment.
+//! of which had exactly one real caller, `nomos-cli`, before this increment. Its fourth,
+//! [`work::Handle_Work_Show`], does the same for `WorkCommand::Show` -- the lookup by id
+//! stays at the caller, exactly where `nomos-cli`'s own `Render_Show` already puts it, rather
+//! than being invented inside `nomos_work_orchestration` for this increment's convenience.
 //!
 //! [`Handle_Gate_Run`] is a deliberate twin of `nomos-cli`'s `gate.rs`
 //! `GateInvocation::Run` arm: it walks `root` for `.rs` sources
@@ -50,7 +53,7 @@ mod work;
 
 pub use response::{Disposition, GateRunResponse};
 pub use spec::{Handle_Spec_Profiles, ProfilesResponse};
-pub use work::{Handle_Work_List, WorkListResponse};
+pub use work::{Handle_Work_List, Handle_Work_Show, WorkListResponse, WorkShowResponse};
 
 use nomos_gate_orchestration::GateCommand;
 use nomos_platform::Clock;
