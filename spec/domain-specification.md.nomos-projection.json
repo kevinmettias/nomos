@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:a2865a69e7e2d6bd6315d4e0eb3d484de61f9d7e12cf12f2ab4fb24491f4a099",
-  "inputs_digest": "sha256:70467ef6ec531f79904c72167db4b07b2e391cd8e9576014e517fc0f307f3aa5",
+  "content_digest": "sha256:e3ea64f58e3153ce9023d1c6ef860f047cf62ca0474d52b48c04cde6d66754ee",
+  "inputs_digest": "sha256:543b3b3dfdbd22c86c21c394355164e62d195999919fb80eb915969f9eb51dfe",
   "sections": [
     [
       "Documents",
-      148
+      149
     ],
     [
       "Sections",
-      1273
+      1279
     ],
     [
       "Source blocks",
-      4535
+      4549
     ]
   ],
   "inputs": [
@@ -579,6 +579,11 @@
       "content": "documents",
       "identity": "docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md@authored",
       "hash": "sha256:8e66ebc7fa4c6ee44260128c0f37957605f33a078676edb3c504d701d929362f"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md@authored",
+      "hash": "sha256:6e33c1ccc6d608a1f5d45f677aa83fa0f62fb743bf9f653bdef1c7f8ad29f8ed"
     },
     {
       "content": "documents",
@@ -5534,6 +5539,36 @@
       "content": "headings",
       "identity": "docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md#13",
       "hash": "sha256:bfbce8cc83c9f2abfbc32ddea81cb5af9d867c69b3d4e0abb0cd653378b6756a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#1",
+      "hash": "sha256:7959bb10a9b3b2b19a499c29774a3aa8893fb00e3e479273beb4161c71427630"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#2",
+      "hash": "sha256:5e802f0b1a7cf054eaba218b3a7603c6bedccd4dddd4d2207e1f5dce4f409c9d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#4",
+      "hash": "sha256:a338db5578e17a14c4d93f8a34e514db322026353695f4fcd3659f7664fb36bf"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#8",
+      "hash": "sha256:350c0d57a3bc10683f78b9c3fbe3a8d8ba7a78b515c4542a7733d306289c43a5"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#11",
+      "hash": "sha256:c9023ef5e8abf65cd796315dcd38ee02289574d650820d6619328eb2e9211dcf"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#13",
+      "hash": "sha256:37dafff25897eed00ce00c5b3c8f1d93fa63d261fa4c973d629aa736576166bb"
     },
     {
       "content": "headings",
@@ -24149,6 +24184,76 @@
       "content": "blocks",
       "identity": "docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md#14",
       "hash": "sha256:11fcf5cc39a209152436fbea283a928ffa0882395dd20d31760a799650f6bca2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#1",
+      "hash": "sha256:cebff281735cee679cda2e95a30a8147d98b422b04c9163263e82f1e21298a04"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#3",
+      "hash": "sha256:68a3fc828abdee4eb7534946a513e0419594b713926073835da0fe9b925ac925"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#4",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#5",
+      "hash": "sha256:095ebf0aaa88ddab9d3c2313f85167ea7150860ca313c0d45b26903b24fef88a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#6",
+      "hash": "sha256:0a978f9b7139a403129951193e7d0ba7303e1cef2e193b7fa653e1a52ea7ea8c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#7",
+      "hash": "sha256:c23f020aad69993062d8157dd7c8c732799a50ceb67636dd14160e854721a68d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#8",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#9",
+      "hash": "sha256:d6637f0e7c4581576ae8a8d9073065dbd02c6710320a106bc8d2a0d9b9f07ca8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#10",
+      "hash": "sha256:fcd34d1e1f868166d7d5019a76ea0ac9be0039e86a6be41c506c62ae3d08a0a9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#11",
+      "hash": "sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#12",
+      "hash": "sha256:289d2caae55032c62db584632726f3b3ce00b7c28d4b0ab8af6a807240102250"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#13",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#14",
+      "hash": "sha256:a643a77ebd5e3b3194386f7fd5432ade77c0ed2845133ec5f54ddb17623b27fd"
     },
     {
       "content": "blocks",

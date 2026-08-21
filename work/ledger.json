@@ -24545,6 +24545,71 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-MODEL-PACKAGE-FIRST-INCREMENT",
+      "title": "OD-PACKAGE-010: ModelBackendPackage/AgentExecutorPackage's first manifest maturity is model selection",
+      "why": "ARC-ROADMAP-001 names model backend and agent executor infrastructure as a near-term-tier item. The user explicitly overrode the population-of-zero caution OD-PACKAGE-006/OD-PACKAGE-008 apply elsewhere (no real ModelBackend or AgentExecutor implementation exists anywhere in this workspace to check a manifest shape against) after being asked directly whether to build this now, do a performance audit instead, or stop -- chose to build it now, in the same terms nomos-lang-package's own creation used for LanguagePackage: OD-PACKAGE-001 scoped that crate to \"the first manifest maturity,\" explicitly deferring PKG-022's larger field list (recognition, file mappings, capability claims, canonical mappings, environment requirements, projections, quality objectives, conformance suites) to later. This record draws the same boundary for ModelBackendPackage/AgentExecutorPackage.\n\nRead directly from NOMOS_V14_CORPUS's requirements directory: MODEL-ROUTE-037 through MODEL-ROUTE-049 describe a mature model-routing system -- resolution invalidation on catalog/entitlement/capability change (044), a normative RoutingPolicyConformanceSuite with deterministic fixtures (045-047), preserved conformance results with resolution hashes and semantic diffs (048), and conformance gates at publication/release/canary (049). None of it has any real implementation to check a shape against, and building it now would be pure invention with no second real case, the same OD-PACKAGE-008 already-tested caution -- the override authorizes building something now, not building everything. MODEL-ROUTE-037's own opening clause is the one piece with a bounded, statable shape: \"Every ModelBackendPackage and AgentExecutorPackage shall expose a versioned discovered model catalog or explicitly declare that model selection is opaque or executor-controlled.\"\n\nRead in full before drafting any code: crates/packages/nomos-package's real shape (PackageManifest, Parse_Manifest, ProviderRegistration) and crates/packages/nomos-lang-package's real shape, the one existing precedent for a second PackageKind's manifest maturity. Two things that do not carry over cleanly: nomos_package::Parse_Manifest's Package_Kind_Field hard-refuses every PackageKind except LanguagePackage today (a one-line check, not an architectural wall); and PKG-007's fourth version domain (language_versions/providers, ProviderRegistration's tool_version) is genuinely Rust/language-tooling-shaped -- a model backend does not register nomos_capability providers the way nomos-lang-rust does, so reusing that field for this kind would produce a manifest that \"resolves\" while carrying none of MODEL-ROUTE-037's real content, the same hollow-surface risk this workspace's honesty vocabularies (Applicability::PartiallySupported) exist to name rather than paper over.",
+      "done_when": "docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md exists, accepted, authority canonical-normative-record, registered via crates/spec/nomos-spec-store/records/OD-PACKAGE-010.record, and decides: the first ModelBackendPackage/AgentExecutorPackage manifest maturity carries identity, PackageKind (restricted to those two kinds), PKG-007's first two version domains (package_version, protocol_range, reused unchanged from nomos-package), and a new ModelSelection domain (Opaque, ExecutorControlled, or Catalog(Vec<String>) of raw unresolved model identifiers) satisfying MODEL-ROUTE-037's opening clause only; it replaces PKG-007's fourth domain (language_versions/providers) rather than forcing a language-shaped field onto a kind it does not fit; and MODEL-ROUTE-038 through 049 (routing invalidation, conformance suites, telemetry, canary gating) are explicitly out of scope as a later manifest maturity, the same deferral OD-PACKAGE-001 already used for LanguagePackage's own PKG-022 field list.\n\nA new crate crates/packages/nomos-model-package (band 26, peer of nomos-lang-package) exists: Cargo.toml depends on nomos-contracts, nomos-package, serde_json; src/model_selection.rs declares ModelSelection; src/manifest.rs declares ModelRoutePackage{package_id, package_kind, package_version, protocol_range, model_selection}; src/reader.rs declares Parse_Manifest/Read_Manifest/ManifestError mirroring nomos-package's own reader discipline (every malformed input a named refusal, never a default), refusing every package_kind except ModelBackendPackage and AgentExecutorPackage; src/lib.rs re-exports PackageVersion/ProtocolRange from nomos-package unchanged, the same shape nomos-lang-package already uses. Real tests exercise: a well-formed manifest for each of the two accepted PackageKinds parses; a wrong PackageKind, a missing field, and a malformed model_selection are each refused with a named ManifestError variant, not a default. nomos-model-package joins [workspace] members in the root Cargo.toml at band 26. README.md's band table, tests/contract/tests/boundaries/bands.rs's BANDS, and crates/rules/nomos-rules/src/dependency/bands.rs all gain a (\"nomos-model-package\", 26) entry. tests/contract/surface/nomos-model-package.txt is generated (NOMOS_SURFACE_BLESS) and current. nomos-package and nomos-lang-package are not touched by this item -- this crate depends on the former unchanged and duplicates nothing from the latter beyond the established wrap-the-generic-core pattern.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md",
+          "crates/spec/nomos-spec-store/records/OD-PACKAGE-010.record",
+          "crates/packages/nomos-model-package",
+          "Cargo.toml",
+          "README.md",
+          "tests/contract/tests/boundaries/bands.rs",
+          "crates/rules/nomos-rules/src/dependency/bands.rs",
+          "tests/contract/surface/nomos-model-package.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-model-package",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-model-package",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "Is_Refused ... ok\ntest Test_An_Unknown_Model_Selection_Kind_Is_Refused ... ok\ntest Test_An_Empty_Catalog_Is_Refused ... ok\ntest Test_An_Inverted_Protocol_Range_Is_Refused ... ok\ntest Test_A_Well_Formed_AgentExecutorPackage_Resolves_With_An_Executor_Controlled_Selection ... ok\ntest Test_A_Well_Formed_ModelBackendPackage_Resolves_With_An_Opaque_Selection ... ok\n\ntest result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.10s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-06ab25b0491e144c.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-4c32ae08be8df958.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-9350d088b8d6ed0d.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-9ca3879aab70176f.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-308fef82df004321.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-f6f7228f8cfa874c.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-ea500c062215f506.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-790c8c5856e63fa5.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-98429b682798ce96.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-c1e906054609f777.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_model_package-4a170be70efd6007.exe)\n     Running tests\\manifest.rs (target\\debug\\deps\\manifest-3d139320a9e15562.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_model_package\n",
+        "verified_at": 1787283506,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "588c4746562a7710f2c776c9c95358dd14d3273e"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

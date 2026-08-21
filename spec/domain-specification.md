@@ -122,6 +122,7 @@ profile: domain-specification
 | docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md@authored | docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md | authored | 16 | 6 | sha256:34a10502da7ccee01b768adbdb67dd71f28209b6bc4ae2afc512b343bf59ebb9 |
 | docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md@authored | docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md | authored | 32 | 8 | sha256:cf9bbe40eeaca57b06ca4a774ba3d2d341aa765886fd321d053f7b6748cafe80 |
 | docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md@authored | docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md | authored | 14 | 5 | sha256:8e66ebc7fa4c6ee44260128c0f37957605f33a078676edb3c504d701d929362f |
+| docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md@authored | docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md | authored | 14 | 6 | sha256:6e33c1ccc6d608a1f5d45f677aa83fa0f62fb743bf9f653bdef1c7f8ad29f8ed |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md@authored | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md | authored | 34 | 9 | sha256:871e1ada836924e8fad8d9f05a7badd9349eefb18e90e0157a28ac34879555d0 |
 | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md@authored | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md | authored | 28 | 7 | sha256:f98efe7a4dd950df779912722f9deb19ecdc75a81e52d9635900c2f424a8623a |
 | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md@authored | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md | authored | 45 | 10 | sha256:9af1a60d2bc3755845a1d9c3eeae503b2a8f6ec315cfc906d633c7dc2d5f0483 |
@@ -1118,6 +1119,12 @@ profile: domain-specification
 | docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md#6 | authored | 2 | The Decision |
 | docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md#10 | authored | 2 | What This Record Does Not Do |
 | docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md#13 | authored | 2 | Status |
+| docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#1 | authored | 1 | ModelBackendPackage and AgentExecutorPackage's first manifest maturity is model selection |
+| docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#2 | authored | 2 | Question |
+| docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#4 | authored | 2 | What Was Measured |
+| docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#8 | authored | 2 | The Decision |
+| docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#11 | authored | 2 | What This Does Not Do |
+| docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#13 | authored | 2 | Status |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#1 | authored | 1 | A port that names its outcomes says nothing about how they are obtained |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#2 | authored | 2 | Question |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#5 | authored | 2 | What Was Measured |
@@ -32053,6 +32060,161 @@ reading, or any provider/language-specific manifest content.
 *revision: authored · kind: prose · heading: The manifest JSON carries its own schema version, distinct from PKG-007's four content domains / Status · hash: sha256:11fcf5cc39a209152436fbea283a928ffa0882395dd20d31760a799650f6bca2*
 
 Accepted, landed by `P13-PACKAGE-SCHEMA-VERSION`.
+
+### docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#1
+
+*revision: authored · kind: heading · heading: ModelBackendPackage and AgentExecutorPackage's first manifest maturity is model selection · hash: sha256:cebff281735cee679cda2e95a30a8147d98b422b04c9163263e82f1e21298a04*
+
+# ModelBackendPackage and AgentExecutorPackage's first manifest maturity is model selection
+
+### docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#2
+
+*revision: authored · kind: heading · heading: ModelBackendPackage and AgentExecutorPackage's first manifest maturity is model selection / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#3
+
+*revision: authored · kind: prose · heading: ModelBackendPackage and AgentExecutorPackage's first manifest maturity is model selection / Question · hash: sha256:68a3fc828abdee4eb7534946a513e0419594b713926073835da0fe9b925ac925*
+
+`ARC-ROADMAP-001` names model backend and agent executor infrastructure as a near-term-tier
+item. `PackageKind::ModelBackendPackage` and `PackageKind::AgentExecutorPackage`
+(`crates/contracts/nomos-contracts/src/package.rs`) have existed, declared and unconsumed,
+since that enum's own creation. No implementation of either exists anywhere in this
+workspace, the same population-of-zero this workspace has repeatedly declined to build a
+manifest ahead of (`OD-PACKAGE-006`, `OD-PACKAGE-008`, both about `RulePackage`). The user
+was asked directly whether to build this now, run a performance audit instead, or stop, and
+chose to build it now -- an explicit, informed override of that caution, the same shape
+`OD-PACKAGE-006`'s own wait was already overridden once for language/rule plugin
+infrastructure. This record draws the boundary the override does not itself draw: *what*
+gets built first.
+
+### docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#4
+
+*revision: authored · kind: heading · heading: ModelBackendPackage and AgentExecutorPackage's first manifest maturity is model selection / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#5
+
+*revision: authored · kind: prose · heading: ModelBackendPackage and AgentExecutorPackage's first manifest maturity is model selection / What Was Measured · hash: sha256:095ebf0aaa88ddab9d3c2313f85167ea7150860ca313c0d45b26903b24fef88a*
+
+Read directly from `NOMOS_V14_CORPUS`'s requirements directory: `MODEL-ROUTE-037` through
+`MODEL-ROUTE-049` describe a mature model-routing system, not a manifest alone -- resolution
+invalidation on catalog, entitlement or capability change (`044`); a normative
+`RoutingPolicyConformanceSuite` with deterministic selector-precedence, budget-fallback and
+data-boundary fixtures (`045`-`047`); conformance results preserving resolution hashes and
+semantic diffs (`048`); and conformance gating at package publication, engine release and
+canary validation (`049`). None of it has a real implementation anywhere in this workspace
+to check a shape against, so building past a manifest's first maturity now would be
+invention with no second real case -- the override authorizes building *something* now, not
+building all thirteen requirements at once.
+
+### docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#6
+
+*revision: authored · kind: prose · heading: ModelBackendPackage and AgentExecutorPackage's first manifest maturity is model selection / What Was Measured · hash: sha256:0a978f9b7139a403129951193e7d0ba7303e1cef2e193b7fa653e1a52ea7ea8c*
+
+`MODEL-ROUTE-037`'s own opening clause is the one piece with a bounded, statable shape:
+"Every `ModelBackendPackage` and `AgentExecutorPackage` shall expose a versioned discovered
+model catalog or explicitly declare that model selection is opaque or executor-controlled."
+Its second clause -- catalog entries distinguishing configured identity, discovered
+identity, exact revision, mutable alias, deprecation, temporary unavailability, removal,
+entitlement availability and executor-selected identity, nine states -- is its own later
+maturity, named but not built here, the same way `OD-PACKAGE-001` scoped `LanguagePackage`
+to identity, kind, `PKG-007`'s four version domains and provider registration, and named
+`PKG-022`'s larger field list (recognition, file mappings, capability claims, canonical
+mappings, environment requirements, projections, quality objectives, conformance suites) as
+explicitly out of scope for that first step.
+
+### docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#7
+
+*revision: authored · kind: prose · heading: ModelBackendPackage and AgentExecutorPackage's first manifest maturity is model selection / What Was Measured · hash: sha256:c23f020aad69993062d8157dd7c8c732799a50ceb67636dd14160e854721a68d*
+
+Read in full before drafting any code: `crates/packages/nomos-package`'s real shape
+(`PackageManifest`, `Parse_Manifest`, `ProviderRegistration`) and
+`crates/packages/nomos-lang-package`'s real shape, the one existing precedent for a second
+`PackageKind` gaining a manifest maturity. Two things do not carry over cleanly.
+`nomos_package::Parse_Manifest`'s `Package_Kind_Field` hard-refuses every `PackageKind`
+except `LanguagePackage` today -- a one-line check (`crates/packages/nomos-package/src/
+reader.rs`), not an architectural wall this record needs to argue past. And `PKG-007`'s
+fourth version domain, as `nomos-package` and `nomos-lang-package` both build it
+(`language_versions` / `providers`, `ProviderRegistration`'s `tool_version`), is genuinely
+Rust/language-tooling-shaped: a model backend does not register a `nomos_capability`
+provider the way `nomos-lang-rust` does. Reusing that field for this kind would produce a
+manifest that "resolves" while carrying none of `MODEL-ROUTE-037`'s real content -- the
+same hollow-surface risk this workspace's honesty vocabularies (`Applicability::
+PartiallySupported`) exist to name rather than paper over.
+
+### docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#8
+
+*revision: authored · kind: heading · heading: ModelBackendPackage and AgentExecutorPackage's first manifest maturity is model selection / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#9
+
+*revision: authored · kind: prose · heading: ModelBackendPackage and AgentExecutorPackage's first manifest maturity is model selection / The Decision · hash: sha256:d6637f0e7c4581576ae8a8d9073065dbd02c6710320a106bc8d2a0d9b9f07ca8*
+
+**The first `ModelBackendPackage`/`AgentExecutorPackage` manifest maturity carries identity,
+`PackageKind` (restricted to those two), `PKG-007`'s first two version domains unchanged
+from `nomos-package` (`package_version`, `protocol_range`), and a new `ModelSelection`
+domain replacing the fourth -- `Opaque`, `ExecutorControlled`, or `Catalog` of raw,
+unresolved model identifiers -- satisfying `MODEL-ROUTE-037`'s opening clause and nothing
+past it.**
+
+### docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#10
+
+*revision: authored · kind: prose · heading: ModelBackendPackage and AgentExecutorPackage's first manifest maturity is model selection / The Decision · hash: sha256:fcd34d1e1f868166d7d5019a76ea0ac9be0039e86a6be41c506c62ae3d08a0a9*
+
+A new crate, `nomos-model-package`, band 26 (a peer of `nomos-lang-package`, both
+manifest-maturity crates wrapping `nomos-package`'s generic core), carries this. It reuses
+`nomos_package::{PackageVersion, ProtocolRange}` unchanged -- both domains are genuinely
+kind-agnostic, the same reason `nomos-lang-package` re-exports them rather than redefining
+them. It does not reuse `PackageManifest`, `Parse_Manifest` or `ProviderRegistration`: the
+fourth domain's real shape for this kind is `ModelSelection`, not a provider list, and the
+reader's accepted `PackageKind` set is `{ModelBackendPackage, AgentExecutorPackage}`, not
+`{LanguagePackage}`. Catalog entries stay raw strings, unresolved -- the same choice
+`nomos_package::PackageManifest::language_versions` made for its own third domain before a
+language-specific crate existed to resolve it, because there is no one typed shape a catalog
+entry takes yet, only `MODEL-ROUTE-037`'s nine-state list of what it would eventually need
+to distinguish.
+
+### docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#11
+
+*revision: authored · kind: heading · heading: ModelBackendPackage and AgentExecutorPackage's first manifest maturity is model selection / What This Does Not Do · hash: sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf*
+
+## What This Does Not Do
+
+### docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#12
+
+*revision: authored · kind: prose · heading: ModelBackendPackage and AgentExecutorPackage's first manifest maturity is model selection / What This Does Not Do · hash: sha256:289d2caae55032c62db584632726f3b3ce00b7c28d4b0ab8af6a807240102250*
+
+It does not build `MODEL-ROUTE-038` through `049`: no resolution invalidation, no
+`RoutingPolicyConformanceSuite`, no conformance-result preservation, no publication or
+canary gating. It does not resolve a catalog entry's nine-state shape -- `Catalog` carries
+raw identifiers, not a typed entry, the same way `language_versions: Vec<String>` did before
+`RustEdition` existed to resolve it. It does not reopen `OD-PACKAGE-006` or `OD-PACKAGE-008`
+for `RulePackage`, which stays exactly as deferred as those records left it -- this override
+is scoped to `ModelBackendPackage`/`AgentExecutorPackage` alone. It does not give either
+package kind a real backend or executor implementation; nothing in this workspace registers
+one, and this manifest format is checkable against a fixture, not against a second real
+instance, until one exists.
+
+### docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#13
+
+*revision: authored · kind: heading · heading: ModelBackendPackage and AgentExecutorPackage's first manifest maturity is model selection / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#14
+
+*revision: authored · kind: prose · heading: ModelBackendPackage and AgentExecutorPackage's first manifest maturity is model selection / Status · hash: sha256:a643a77ebd5e3b3194386f7fd5432ade77c0ed2845133ec5f54ddb17623b27fd*
+
+Accepted. Names the first manifest maturity for `ModelBackendPackage` and
+`AgentExecutorPackage`, under the user's explicit override of the population-of-zero caution
+this workspace otherwise holds, and the two clauses (`MODEL-ROUTE-037`'s catalog-entry
+detail, `038`-`049`'s routing/conformance system) it deliberately leaves for a later
+increment to name against a real case.
 
 ### docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#1
 

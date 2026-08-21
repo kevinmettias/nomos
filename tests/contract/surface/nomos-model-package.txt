@@ -1,0 +1,31 @@
+pub const nomos_model_package::SCHEMA_VERSION: u32
+pub enum nomos_model_package::ManifestError
+pub enum nomos_model_package::ModelSelection
+pub enum variant nomos_model_package::ManifestError::EmptyList { at: String, field: String, }
+pub enum variant nomos_model_package::ManifestError::InvertedProtocolRange { at: String, }
+pub enum variant nomos_model_package::ManifestError::MalformedVersion { at: String, field: String, cause: String, }
+pub enum variant nomos_model_package::ManifestError::MissingField { at: String, field: String, }
+pub enum variant nomos_model_package::ManifestError::NotJson { at: String, cause: String, }
+pub enum variant nomos_model_package::ManifestError::UnknownModelSelectionKind { at: String, found: String, }
+pub enum variant nomos_model_package::ManifestError::UnknownPackageKind { at: String, found: String, }
+pub enum variant nomos_model_package::ManifestError::UnknownSchema { at: String, understood: u32, found: u32, }
+pub enum variant nomos_model_package::ManifestError::Unreadable { at: String, cause: String, }
+pub enum variant nomos_model_package::ManifestError::WrongPackageKind { at: String, found: PackageKind, }
+pub enum variant nomos_model_package::ManifestError::WrongType { at: String, field: String, expected: String, }
+pub enum variant nomos_model_package::ModelSelection::Catalog(Vec<String>)
+pub enum variant nomos_model_package::ModelSelection::ExecutorControlled
+pub enum variant nomos_model_package::ModelSelection::Opaque
+pub fn nomos_model_package::ManifestError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_model_package::Parse_Manifest(text: &str, at: &str) -> Result<ModelRoutePackage, ManifestError>
+pub fn nomos_model_package::Read_Manifest(path: &Path) -> Result<ModelRoutePackage, ManifestError>
+pub impl nomos_model_package::ManifestError implements core::fmt::Display
+pub struct field nomos_model_package::ModelRoutePackage::model_selection: ModelSelection
+pub struct field nomos_model_package::ModelRoutePackage::package_id: PackageId
+pub struct field nomos_model_package::ModelRoutePackage::package_kind: PackageKind
+pub struct field nomos_model_package::ModelRoutePackage::package_version: PackageVersion
+pub struct field nomos_model_package::ModelRoutePackage::protocol_range: ProtocolRange
+pub struct nomos_model_package::ModelRoutePackage
+
+# re-exports of items declared outside this crate
+pub use nomos_package::PackageVersion
+pub use nomos_package::ProtocolRange

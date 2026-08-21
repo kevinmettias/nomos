@@ -519,6 +519,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "nomos-model-package"
+version = "0.1.0"
+dependencies = [
+ "nomos-contracts",
+ "nomos-package",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
 name = "nomos-package"
 version = "0.1.0"
 dependencies = [

@@ -23,6 +23,7 @@ pub(super) const BANDS: &[(&str, u32)] = &[
     ("nomos-lang-rust-scan", 25),
     ("nomos-lang-rust-cargo", 25),
     ("nomos-lang-package", 26),
+    ("nomos-model-package", 26),
     ("nomos-spec-model", 11),
     ("nomos-spec-store", 12),
     ("nomos-spec-bundle", 13),
