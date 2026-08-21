@@ -3,7 +3,7 @@ id: OD-WORKFLOW-001
 type: decision
 title: The workflow tier's first real increment is RunId's first real consumer, not the engine
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - workflow
@@ -117,8 +117,43 @@ constraint 3 already reserves that question for once workflow orchestration or a
 reach the point of needing typed cross-entity relationships; giving `GateRunResult` an identity
 of its own is not that point.
 
+## Amendment: A Bare Clock Reading Cannot Give RunId Real Per-Execution Uniqueness
+
+The "Concretely, for the follow-up" paragraph above was written before checking the one type it
+depends on. `nomos_platform::Timestamp`'s own module doc
+(`crates/platform/nomos-platform/src/clock/timestamp.rs`) is explicit: "Second resolution is
+deliberate ... Where ordering matters more finely than a second, the ordering is carried
+explicitly rather than inferred from a clock." A `RunId` computed purely from `clock.Now()`
+therefore collides for any two runs that start within the same wall-clock second -- not a rare
+case. `nomos-api`'s own test suite calls `Handle_Gate_Run` twice inside one process, well under a
+second apart, and `.github/workflows/gate.yml` runs several gate-adjacent steps in quick
+succession. That paragraph's plan is withdrawn: it would have shipped a `RunId` that fails this
+record's own stated purpose -- distinguishing two real executions -- the first time two runs
+happened to land in the same second, which is routine rather than rare.
+
+Grepped directly: no `Random` or nonce port exists anywhere in `nomos-platform`, and the
+workspace's root `Cargo.toml` carries no `rand` or `uuid` dependency. Adding one is its own
+decision -- a new external dependency, subject to `cargo-deny`'s advisories/bans/licenses/sources
+check -- and out of scope for a record naming a first increment rather than building it.
+
+**The corrected decision: `Run_Gate` does not compute a `RunId` at all.** It accepts one as a
+plain caller-supplied value -- a `run: RunId` parameter, the same composition-root-supplied shape
+`variant` and `launcher` already are -- and `nomos-gate-orchestration` gains no `Clock`
+dependency and no generic parameter for one. Each composition root constructs its own `RunId`
+however it can. The honest construction for a first increment -- named as what it is rather than
+implied to be more -- is a new `nomos_contracts::RunId::Fresh(now: Timestamp) -> RunId`,
+alongside `Digest_Identity!`'s existing `From_Digest`/`Digest`, combining the clock reading,
+`std::process::id()` (already used this way for scratch-path uniqueness in this workspace's own
+tests, e.g. `crates/host/nomos-cli/tests/check_command.rs`), and a process-local monotonic
+counter: collision-free within one process, reduced but not eliminated in probability across
+processes that start in the same second. Naming that limitation plainly is the same honesty this
+workspace already holds `Applicability::PartiallySupported` to, rather than a caveat this record
+would rather not state.
+
 ## Status
 
-Accepted. Names the workflow tier's first real increment and the one open design question a
-follow-up implementation needs answered -- content-addressed versus per-execution identity --
-without building either the increment or the engine `WF-*` describes beyond it.
+Accepted, amended. Names the workflow tier's first real increment -- giving `RunId` its first
+real consumer through Gate -- and, after the amendment above, the corrected shape a follow-up
+implementation needs: `Run_Gate` takes a caller-supplied `RunId`, not a `Clock`, and
+`RunId::Fresh` is the first-increment construction each composition root can call. Still builds
+neither the increment nor the engine `WF-*` describes beyond it.
