@@ -108,6 +108,13 @@ members = [
     # Band 10 — host. Composition roots and binaries.
     "crates/host/nomos-cli",
 
+    # Band 90 — host. A second real caller of nomos_gate_orchestration::Run_Gate,
+    # proving the seam P13-GATE-RUN-SEAM-CRATE built is reachable from a composition
+    # root other than nomos-cli. A library crate, not a binary: Handle_Gate_Run walks a
+    # tree and hands back a JSON-serializable response, with no transport (stdio, HTTP,
+    # MCP framing) wired over it yet. `P13-GATE-API-ADAPTER-FIRST-INCREMENT`.
+    "crates/host/nomos-api",
+
     # Band 91. A report over this repository's own git history, run by a human on
     # demand and invoked from nowhere else in this workspace: OD-STORE-002's Worked
     # Case join between a crate's tests/contract/surface/ snapshot and docs/records/,

@@ -295,6 +295,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "nomos-api"
+version = "0.1.0"
+dependencies = [
+ "nomos-contracts",
+ "nomos-gate-orchestration",
+ "nomos-model",
+ "nomos-platform-std",
+ "nomos-rules",
+ "nomos-workspace",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
 name = "nomos-cap-controlflow"
 version = "0.1.0"
 dependencies = [

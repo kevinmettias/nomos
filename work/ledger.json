@@ -24127,6 +24127,69 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-GATE-API-ADAPTER-FIRST-INCREMENT",
+      "title": "nomos-api: the first real second adapter over nomos_gate_orchestration::Run_Gate, a JSON-serializable gate-run response with no transport yet",
+      "why": "ARC-ROADMAP-001 names CLI/API/MCP projections as a near-term-tier item, and P13-GATE-RUN-SEAM-CRATE built nomos_gate_orchestration::Run_Gate specifically so a second adapter could call gate run without depending on nomos-cli -- its own why field says so directly. Grepped directly: nothing outside nomos-gate-orchestration's own crate and nomos-cli calls Run_Gate today, except nomos-ledger's internal gate step (crates/substrate/nomos-ledger/src/finish/gate_step.rs), which is an internal composition inside the work-finish flow, not an external-facing adapter. No API or MCP crate exists anywhere in this workspace (grepped Cargo.toml files for nomos-api/nomos-mcp, none found). The user's standing roadmap override (recorded after the seam itself was built) names 'an actual API/MCP adapter calling the seam' as unblocked work, not still waiting for a trigger. This item is the smallest real first increment: a new library crate that walks a tree, calls Run_Gate exactly as nomos-cli's gate.rs does, and converts the result into a serde-Serialize response a wire transport can hand back -- proving the seam is reachable and JSON-projectable from a second composition root. It deliberately does not add stdio/JSON-RPC framing, MCP tool schemas, or an HTTP listener: inventing that shape before a real transport need is exactly the premature-surface pattern this workspace has repeatedly declined (OD-PACKAGE-006, OD-PACKAGE-008, gate.rs's own doc on why compare is not stubbed), and the user's own override memory explicitly calls for small disjoint items rather than an end-to-end plan. A follow-up item wires an actual transport over this crate's Handle_Gate_Run once this increment lands.",
+      "done_when": "A new crate crates/host/nomos-api exists: Cargo.toml (deps: nomos-gate-orchestration, nomos-contracts, nomos-rules, nomos-model, nomos-platform-std, nomos-workspace, serde with derive), a build.rs twin of nomos-cli's own (captures NOMOS_TARGET/PROFILE/TOOLCHAIN/FEATURES the same way), and src/lib.rs exposing a public Handle_Gate_Run(root: &Path) -> GateRunResponse. Handle_Gate_Run walks root for .rs sources (a twin of crates/host/nomos-cli/src/gate/sources.rs -- skipping target and .git, filing each SourceFile under Subject_Of_Path), builds a GateCommand{root, ..Default::default()}, and calls nomos_gate_orchestration::Run_Gate with StdProcessLauncher and a Host_Variant() built the same way crates/host/nomos-cli/src/gate/composition.rs builds one. GateRunResponse is a #[derive(Serialize)] struct owned by nomos-api (not added to nomos-gate-orchestration's own GateRunResult, which stays exactly as it is) carrying root, a serializable Disposition enum (Passed/Failed/Indeterminate, mapped from GateRunOutcome), and the four finding vectors (Finding already derives Serialize). A real test in nomos-api proves this crate -- not nomos-cli -- produces a judged disposition over a real temp directory containing at least one .rs file, and that serde_json::to_string on the response succeeds and round-trips a disposition field. nomos-api joins [workspace] members in the root Cargo.toml at band 90 (host tier, peer of nomos-cli). README.md's band table gains a nomos-api row. tests/contract/tests/boundaries/bands.rs's BANDS and crates/rules/nomos-rules/src/dependency/bands.rs both gain a (\"nomos-api\", 90) entry. tests/contract/surface/nomos-api.txt is generated (NOMOS_SURFACE_BLESS=nomos-api) and committed, current against the crate's real public surface. nomos-cli and nomos-gate-orchestration are not touched by this item.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-api",
+          "Cargo.toml",
+          "README.md",
+          "tests/contract/tests/boundaries/bands.rs",
+          "crates/rules/nomos-rules/src/dependency/bands.rs",
+          "tests/contract/surface/nomos-api.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "ut; finished in 0.01s\n\n\nrunning 5 tests\ntest Test_A_Matching_Declaration_Should_Pass_The_Comparison ... ok\ntest Test_A_Lowered_Declaration_Should_Fail_The_Comparison ... ok\ntest Test_An_Unrelated_Minor_Version_Should_Fail_The_Comparison ... ok\ntest Test_The_Real_Workflow_Should_Still_Have_The_Install_Step ... ok\ntest Test_The_Declared_Floor_Should_Match_The_Toolchain_The_Gate_Installs ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-api v0.1.0 (F:\\repos\\nomos\\crates\\host\\nomos-api)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.53s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_api-80ae0a404733a119.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-06ab25b0491e144c.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-4c32ae08be8df958.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-9350d088b8d6ed0d.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-9ca3879aab70176f.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-308fef82df004321.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-f6f7228f8cfa874c.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-ea500c062215f506.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-790c8c5856e63fa5.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-98429b682798ce96.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-c1e906054609f777.exe)\n   Doc-tests nomos_api\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1787275160,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "d274bc356adee7b0cfc2646b2ed03910d492a3fe"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

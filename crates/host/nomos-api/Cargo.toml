@@ -1,0 +1,23 @@
+[package]
+name = "nomos-api"
+version = "0.1.0"
+description = "Band 90. A second real caller of nomos_gate_orchestration::Run_Gate: walks a tree, judges it exactly as nomos gate run would, and hands back a JSON-serializable response -- apart from choosing a platform or wiring an actual transport over it."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+nomos-contracts = { workspace = true }
+nomos-gate-orchestration = { workspace = true }
+nomos-model = { workspace = true }
+nomos-platform-std = { workspace = true }
+nomos-rules = { workspace = true }
+nomos-workspace = { workspace = true }
+serde = { workspace = true }
+
+[dev-dependencies]
+serde_json = { workspace = true }
+
+[lints]
+workspace = true

@@ -119,6 +119,12 @@ pub(crate) const BANDS: &[(&str, u32)] = &[
     // `OD-HOST-001`, `P13-GATE-RUN-SEAM-CRATE`.
     ("nomos-gate-orchestration", 41),
     ("nomos-cli", 90),
+    // A second real caller of `nomos-gate-orchestration`'s `Run_Gate`: walks a tree,
+    // judges it exactly as `nomos gate run` would, and hands back a JSON-serializable
+    // response rather than rendered text. Same band as `nomos-cli`: both are composition
+    // roots over the same orchestration seams, neither depending on the other.
+    // `P13-GATE-API-ADAPTER-FIRST-INCREMENT`.
+    ("nomos-api", 90),
     // A report over this repository's own git history, not over the workspace's crate
     // graph — OD-STORE-002's Worked Case join between a crate's surface snapshot and
     // docs/records/, for a caller-given commit range. Above nomos-cli because it is a
