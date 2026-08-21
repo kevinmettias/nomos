@@ -301,6 +301,7 @@ dependencies = [
  "nomos-contracts",
  "nomos-gate-orchestration",
  "nomos-model",
+ "nomos-platform",
  "nomos-platform-std",
  "nomos-rules",
  "nomos-workspace",

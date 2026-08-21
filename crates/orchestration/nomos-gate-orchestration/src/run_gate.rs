@@ -2,7 +2,7 @@
 //! platform, walking a tree or rendering the answer.
 
 use nomos_check_orchestration::CheckOutcome;
-use nomos_contracts::Finding;
+use nomos_contracts::{Finding, RunId};
 use nomos_platform::ProcessLauncher;
 use nomos_rules::SourceFile;
 use nomos_workspace::BuildVariant;
@@ -40,8 +40,14 @@ pub(crate) fn Judged<P: ProcessLauncher>(walked: Option<Vec<SourceFile>>, varian
 /// `command.scope` narrows `walked` before [`Judged`] runs; a walk that becomes empty after
 /// scoping is `CheckOutcome::NoSource`, the same state an empty walk already was, because
 /// both mean "nothing was judged" to a caller.
+///
+/// `run` identifies this execution and is not computed here -- `OD-WORKFLOW-001`'s amendment
+/// decided a `RunId` identifies one execution, not one configuration, so this function must
+/// not derive it from `command` or `variant` the way everything else it composes is derived.
+/// The composition root supplies one, typically [`crate::Fresh_Run_Id`] over a real clock
+/// reading.
 #[must_use]
-pub fn Run_Gate<P: ProcessLauncher>(walked: Option<Vec<SourceFile>>, variant: BuildVariant, command: &GateCommand, launcher: &P) -> GateRunResult
+pub fn Run_Gate<P: ProcessLauncher>(walked: Option<Vec<SourceFile>>, variant: BuildVariant, command: &GateCommand, launcher: &P, run: RunId) -> GateRunResult
 {
     let scoped = walked.map(|sources| return Scoped(sources, &command.scope));
     let outcome = Judged(scoped, variant, &command.root, launcher);
@@ -51,6 +57,7 @@ pub fn Run_Gate<P: ProcessLauncher>(walked: Option<Vec<SourceFile>>, variant: Bu
 
     return GateRunResult {
         root: command.root.clone(),
+        run,
         check_outcome: outcome,
         blocking_findings,
         calibrated_findings,

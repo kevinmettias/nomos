@@ -8,5 +8,6 @@ pub struct field nomos_api::GateRunResponse::blocking_findings: Vec<Finding>
 pub struct field nomos_api::GateRunResponse::calibrated_findings: Vec<Finding>
 pub struct field nomos_api::GateRunResponse::disposition: Disposition
 pub struct field nomos_api::GateRunResponse::root: PathBuf
+pub struct field nomos_api::GateRunResponse::run: RunId
 pub struct field nomos_api::GateRunResponse::suppressed_findings: Vec<Finding>
 pub struct nomos_api::GateRunResponse

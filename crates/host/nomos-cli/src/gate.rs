@@ -60,7 +60,8 @@ mod exit_code;
 
 pub(crate) use exit_code::ExitCode;
 pub(crate) use nomos_gate_orchestration::{FindingQuery, GateCommand};
-use nomos_platform_std::StdProcessLauncher;
+use nomos_platform::Clock;
+use nomos_platform_std::{StdProcessLauncher, SystemClock};
 
 use crate::arguments::Named_Value;
 use nomos_model::Subject_Of_Path;
@@ -103,11 +104,13 @@ pub fn Run(invocation: &GateInvocation, stdout: &mut impl Write, stderr: &mut im
         GateInvocation::Run(command) =>
         {
             let walked = sources::Walked(&command.root);
+            let run = nomos_gate_orchestration::Fresh_Run_Id(SystemClock.Now());
             let result = nomos_gate_orchestration::Run_Gate(
                 walked,
                 composition::Host_Variant(),
                 command,
                 &StdProcessLauncher,
+                run,
             );
             Render_Run(&result, stdout, stderr)
         }

@@ -43,7 +43,8 @@ mod sources;
 pub use response::{Disposition, GateRunResponse};
 
 use nomos_gate_orchestration::GateCommand;
-use nomos_platform_std::StdProcessLauncher;
+use nomos_platform::Clock;
+use nomos_platform_std::{StdProcessLauncher, SystemClock};
 use std::path::Path;
 
 /// Walks `root` and judges it exactly as `nomos gate run` would, over the default
@@ -54,11 +55,13 @@ pub fn Handle_Gate_Run(root: &Path) -> GateRunResponse
 {
     let command = GateCommand { root: root.to_path_buf(), ..Default::default() };
     let walked = sources::Walked(root);
+    let run = nomos_gate_orchestration::Fresh_Run_Id(SystemClock.Now());
     let result = nomos_gate_orchestration::Run_Gate(
         walked,
         composition::Host_Variant(),
         &command,
         &StdProcessLauncher,
+        run,
     );
 
     return GateRunResponse::From(result);

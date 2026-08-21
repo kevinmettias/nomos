@@ -10,12 +10,12 @@ publish.workspace = true
 [dependencies]
 nomos-check-orchestration = { workspace = true }
 nomos-contracts = { workspace = true }
+nomos-model = { workspace = true }
 nomos-platform = { workspace = true }
 nomos-rules = { workspace = true }
 nomos-workspace = { workspace = true }
 
 [dev-dependencies]
-nomos-model = { workspace = true }
 nomos-platform-std = { workspace = true }
 
 [lints]

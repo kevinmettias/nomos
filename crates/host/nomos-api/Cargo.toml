@@ -11,6 +11,7 @@ publish.workspace = true
 nomos-contracts = { workspace = true }
 nomos-gate-orchestration = { workspace = true }
 nomos-model = { workspace = true }
+nomos-platform = { workspace = true }
 nomos-platform-std = { workspace = true }
 nomos-rules = { workspace = true }
 nomos-workspace = { workspace = true }

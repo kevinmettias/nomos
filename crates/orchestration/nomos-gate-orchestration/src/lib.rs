@@ -133,6 +133,7 @@ mod outcome;
 mod rule_selector;
 mod run;
 mod run_gate;
+mod run_id;
 mod scope_selector;
 mod suppression;
 
@@ -148,5 +149,6 @@ pub use outcome::{Disposition, GateOutcome, GatePlan, GateRunOutcome, GateRunRes
 pub use rule_selector::RuleSelector;
 pub use run::Run;
 pub use run_gate::Run_Gate;
+pub use run_id::Fresh_Run_Id;
 pub use scope_selector::ScopeSelector;
 pub use suppression::{Suppression, SuppressionDisposition, SuppressionPolicy};

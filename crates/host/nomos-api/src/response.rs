@@ -8,7 +8,7 @@
 //! conversion from the borrowed result, so `nomos-gate-orchestration` stays exactly as it
 //! was.
 
-use nomos_contracts::Finding;
+use nomos_contracts::{Finding, RunId};
 use nomos_gate_orchestration::{GateRunOutcome, GateRunResult};
 use serde::Serialize;
 use std::path::PathBuf;
@@ -18,6 +18,9 @@ use std::path::PathBuf;
 #[derive(Debug, Serialize)]
 pub struct GateRunResponse
 {
+    /// The identity of this execution. `RunId` already derives `Serialize` -- unlike
+    /// [`GateRunOutcome`], it needs no local twin.
+    pub run: RunId,
     /// The tree this run judged.
     pub root: PathBuf,
     /// The reduced verdict.
@@ -38,6 +41,7 @@ impl GateRunResponse
     pub(crate) fn From(result: GateRunResult) -> Self
     {
         return Self {
+            run: result.run,
             root: result.root,
             disposition: Disposition::From(result.disposition),
             blocking_findings: result.blocking_findings,

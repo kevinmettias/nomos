@@ -1,7 +1,7 @@
 //! What a real `nomos gate run` produced, including the check facts behind it.
 
 use nomos_check_orchestration::CheckOutcome;
-use nomos_contracts::Finding;
+use nomos_contracts::{Finding, RunId};
 use std::path::PathBuf;
 
 use crate::GateRunOutcome;
@@ -14,6 +14,11 @@ use crate::GateRunOutcome;
 /// re-judge anything to get it.
 pub struct GateRunResult
 {
+    /// The identity of this execution -- `OD-WORKFLOW-001`'s first real consumer for
+    /// `RunId`. Supplied by the caller to [`crate::Run_Gate`], not derived from anything
+    /// else in this struct: two runs over the same `root` with the same findings are still
+    /// two different executions.
+    pub run: RunId,
     /// The tree this run judged.
     pub root: PathBuf,
     /// What [`nomos_check_orchestration::Run`] (or the walk decision made before it was

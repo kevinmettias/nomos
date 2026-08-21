@@ -24416,6 +24416,76 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-WORKFLOW-001-RUNID-FRESH-AND-RUN-GATE",
+      "title": "Fresh_Run_Id and a real run: RunId on GateRunResult, per OD-WORKFLOW-001",
+      "why": "OD-WORKFLOW-001 (version 3, accepted) names this exact follow-up as unblocked, real code: give nomos_gate_orchestration::GateRunResult a real RunId, computed per-execution rather than as a content digest of the command. Its amendment corrected the original clock-only plan (Timestamp is deliberately second-resolution per its own module doc) to a caller-supplied RunId value plus a first-increment RunId::Fresh construction combining a clock reading, the process id, and a process-local counter.\n\nChecked against the real dependency-band constraints before writing code (the record's own text named the construction as living in nomos-contracts, which this item corrects in the doing rather than the record, since it is a code-shape detail the record's own \"does not implement\" clause already left to the implementation): nomos-contracts is band 0 and may depend on nothing but serde (OD-CONTRACTS-001, enforced by Test_Contracts_Should_Depend_On_The_Allowlist_And_Nothing_Else), so it cannot take a nomos_platform::Timestamp parameter or use nomos_model::Digest_Of_Parts. nomos-model is band 10 and nomos-platform is band 15, so nomos-model cannot depend on nomos-platform either. The only band-legal home for a function needing both a real clock reading and Digest_Of_Parts is nomos-gate-orchestration itself (band 41), which already depends on nomos-platform and gains nomos-model as a real (not dev-only) dependency here.\n\nGrepped directly: exactly two real callers of nomos_gate_orchestration::Run_Gate exist in this workspace -- nomos-cli's gate.rs and nomos-api's Handle_Gate_Run (nomos-ledger's Run_Gate_Step, OD-WORKFLOW-001's own correction already established, is unrelated). Both already depend on nomos-platform-std for StdProcessLauncher; nomos-cli already depends on nomos-platform too, nomos-api gains it here for the Clock trait.",
+      "done_when": "nomos-gate-orchestration exports a new pub fn Fresh_Run_Id(now: nomos_platform::Timestamp) -> nomos_contracts::RunId, combining now.Unix_Seconds(), std::process::id() and a process-local monotonic AtomicU64 counter through nomos_model::Digest_Of_Parts into RunId::From_Digest -- documented as collision-free within one process and reduced-but-not-eliminated across processes, not claimed as more. nomos_gate_orchestration::Run_Gate gains a run: RunId parameter (a plain caller-supplied value, no Clock generic, no internal computation) and nomos_gate_orchestration::GateRunResult gains a pub run: RunId field, set from that parameter. Every existing call site in crates/orchestration/nomos-gate-orchestration/src/tests.rs is updated to pass one (a fixed test RunId is fine there; a real Fresh_Run_Id call is not required in every test). crates/host/nomos-cli/src/gate.rs's GateInvocation::Run arm calls Fresh_Run_Id(SystemClock.Now()) and passes it to Run_Gate. crates/host/nomos-api/src/lib.rs's Handle_Gate_Run does the same, and crates/host/nomos-api/src/response.rs's GateRunResponse gains a pub run: RunId field carried from GateRunResult::run (RunId already derives Serialize). nomos-gate-orchestration's Cargo.toml moves nomos-model from dev-dependencies to dependencies; nomos-api's Cargo.toml gains nomos-platform. tests/contract/surface/nomos-gate-orchestration.txt and tests/contract/surface/nomos-api.txt are regenerated (NOMOS_SURFACE_BLESS) and current. nomos-cli's gate/report.rs text rendering is unchanged -- this increment does not add RunId to the CLI's printed output, only to the typed result. nomos-contracts is not touched: RunId's existing From_Digest/Digest accessors are sufficient and no new method is added there.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration",
+          "crates/host/nomos-cli/src/gate.rs",
+          "crates/host/nomos-api",
+          "tests/contract/surface/nomos-gate-orchestration.txt",
+          "tests/contract/surface/nomos-api.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "\\authoring_surface-d95f722acf338643.exe)\n     Running tests\\check_command.rs (target\\debug\\deps\\check_command-36f7870ca829ee19.exe)\n     Running tests\\freshness.rs (target\\debug\\deps\\freshness-6e27c5bc43054dcb.exe)\n     Running tests\\gate_step\\main.rs (target\\debug\\deps\\gate_step-03a16b732cd3a5c8.exe)\n     Running tests\\list_tells_the_truth.rs (target\\debug\\deps\\list_tells_the_truth-5053d34ed8711a14.exe)\n     Running tests\\read_surface.rs (target\\debug\\deps\\read_surface-398ed9348c82edf1.exe)\n     Running tests\\request_submit.rs (target\\debug\\deps\\request_submit-240834dfc6dbe61a.exe)\n     Running tests\\stale_writer_is_refused.rs (target\\debug\\deps\\stale_writer_is_refused-7dc5bcfa3034afe8.exe)\n     Running tests\\takeover_is_recorded.rs (target\\debug\\deps\\takeover_is_recorded-35e4a7b5bea281ec.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-95a1aef077b5f9ba.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-ead301eb7c8d8256.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-a61f2bcd75c8d4d9.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-fba07f1fa1c92105.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-2bb84d2d8744d800.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-c2987d8eceda16d3.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-0eeaea7cd309c35b.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-2db99bdd604951c5.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-56e2b70874db076c.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-1204b8c22ecd0b43.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_gate_orchestration-0e0249ddc168c5c8.exe)\n   Doc-tests nomos_api\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_gate_orchestration\n",
+        "verified_at": 1787281787,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "2b13113826550b8a05f048f1862a020aabe05a46"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

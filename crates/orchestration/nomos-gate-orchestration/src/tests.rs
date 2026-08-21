@@ -8,7 +8,7 @@ use crate::{
 };
 use nomos_check_orchestration::CheckOutcome;
 use nomos_contracts::{
-    Applicability, Digest128, EvidenceClass, Finding, GateCategory, RuleId, SubjectId,
+    Applicability, Digest128, EvidenceClass, Finding, GateCategory, RuleId, RunId, SubjectId,
 };
 use nomos_model::Subject_Of_Path;
 use nomos_platform_std::StdProcessLauncher;
@@ -98,7 +98,7 @@ fn Calibration_Of(finding: &Finding) -> RuleCalibration
 /// before either can address a specific finding with its own policy.
 fn One_Real_Blocking_Finding(source: impl Fn() -> SourceFile) -> Finding
 {
-    let unmatched = Run_Gate(Some(vec![source()]), Test_Variant(), &Command_At(Repository_Root()), &StdProcessLauncher);
+    let unmatched = Run_Gate(Some(vec![source()]), Test_Variant(), &Command_At(Repository_Root()), &StdProcessLauncher, Test_Run_Id());
 
     return unmatched
         .blocking_findings
@@ -182,6 +182,13 @@ fn Source(path: &str, text: &str) -> SourceFile
 fn Test_Variant() -> BuildVariant
 {
     return BuildVariant::New("test-target", "test-profile", "test-toolchain", std::iter::empty::<String>());
+}
+
+/// A fixed `RunId` for tests that judge a run's findings and disposition, not its identity.
+/// `Fresh_Run_Id` has its own tests for that.
+fn Test_Run_Id() -> RunId
+{
+    return RunId::From_Digest(Digest128::From_Bytes([0; Digest128::BYTE_LENGTH]));
 }
 
 /// This repository's own real root -- [`Run_Gate`]'s dependency step, through
@@ -405,7 +412,7 @@ fn Test_One_Blocking_Finding_Among_Many_Should_Fail()
 #[test]
 fn Test_An_Unwalked_Root_Should_Be_Indeterminate()
 {
-    let result = Run_Gate(None, Test_Variant(), &Command_At(Repository_Root()), &StdProcessLauncher);
+    let result = Run_Gate(None, Test_Variant(), &Command_At(Repository_Root()), &StdProcessLauncher, Test_Run_Id());
 
     assert!(matches!(result.check_outcome, CheckOutcome::Unreadable));
     assert_eq!(result.disposition, GateRunOutcome::Indeterminate);
@@ -418,7 +425,7 @@ fn Test_An_Unwalked_Root_Should_Be_Indeterminate()
 #[test]
 fn Test_A_Walk_That_Found_No_Source_Should_Be_Indeterminate()
 {
-    let result = Run_Gate(Some(Vec::new()), Test_Variant(), &Command_At(Repository_Root()), &StdProcessLauncher);
+    let result = Run_Gate(Some(Vec::new()), Test_Variant(), &Command_At(Repository_Root()), &StdProcessLauncher, Test_Run_Id());
 
     assert!(matches!(result.check_outcome, CheckOutcome::NoSource));
     assert_eq!(result.disposition, GateRunOutcome::Indeterminate);
@@ -434,7 +441,7 @@ fn Test_A_Clean_Source_Should_Pass()
 {
     let sources = vec![Source("a.rs", "pub fn Ok() {}\n")];
 
-    let result = Run_Gate(Some(sources), Test_Variant(), &Command_At(Repository_Root()), &StdProcessLauncher);
+    let result = Run_Gate(Some(sources), Test_Variant(), &Command_At(Repository_Root()), &StdProcessLauncher, Test_Run_Id());
 
     assert!(matches!(result.check_outcome, CheckOutcome::Judged { .. }));
     assert_eq!(result.disposition, GateRunOutcome::Passed);
@@ -454,7 +461,7 @@ fn Test_A_Blocking_Finding_Should_Fail_The_Run()
         "/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n",
     )];
 
-    let result = Run_Gate(Some(sources), Test_Variant(), &Command_At(Repository_Root()), &StdProcessLauncher);
+    let result = Run_Gate(Some(sources), Test_Variant(), &Command_At(Repository_Root()), &StdProcessLauncher, Test_Run_Id());
 
     assert_eq!(result.disposition, GateRunOutcome::Failed);
     assert!(!result.blocking_findings.is_empty());
@@ -480,7 +487,7 @@ fn Test_A_Scoped_Out_Source_Should_Not_Be_Judged()
         ..Command_At(Repository_Root())
     };
 
-    let result = Run_Gate(Some(sources), Test_Variant(), &command, &StdProcessLauncher);
+    let result = Run_Gate(Some(sources), Test_Variant(), &command, &StdProcessLauncher, Test_Run_Id());
 
     assert!(matches!(result.check_outcome, CheckOutcome::NoSource));
     assert_eq!(result.disposition, GateRunOutcome::Indeterminate);
@@ -503,7 +510,7 @@ fn Test_A_Deselected_Rules_Finding_Should_Not_Block()
         ..Command_At(Repository_Root())
     };
 
-    let result = Run_Gate(Some(sources), Test_Variant(), &command, &StdProcessLauncher);
+    let result = Run_Gate(Some(sources), Test_Variant(), &command, &StdProcessLauncher, Test_Run_Id());
 
     assert!(matches!(result.check_outcome, CheckOutcome::Judged { .. }));
     assert_eq!(result.disposition, GateRunOutcome::Passed);
@@ -533,7 +540,7 @@ fn Test_A_Suppressed_Finding_Should_Not_Block()
     let real_finding = One_Real_Blocking_Finding(source);
     let command = Command_With_Suppression(Repository_Root(), Suppression_Of(&real_finding));
 
-    let result = Run_Gate(Some(vec![source()]), Test_Variant(), &command, &StdProcessLauncher);
+    let result = Run_Gate(Some(vec![source()]), Test_Variant(), &command, &StdProcessLauncher, Test_Run_Id());
 
     Assert_Tolerated_Not_Blocking(&result, &result.suppressed_findings);
     assert!(
@@ -556,7 +563,7 @@ fn Test_A_Baselined_Finding_Should_Not_Block()
     let real_finding = One_Real_Blocking_Finding(source);
     let command = Command_With_Baseline(Repository_Root(), Baseline_Of(&real_finding));
 
-    let result = Run_Gate(Some(vec![source()]), Test_Variant(), &command, &StdProcessLauncher);
+    let result = Run_Gate(Some(vec![source()]), Test_Variant(), &command, &StdProcessLauncher, Test_Run_Id());
 
     Assert_Tolerated_Not_Blocking(&result, &result.baselined_findings);
 }
@@ -576,7 +583,7 @@ fn Test_A_Suppressed_And_Baselined_Finding_Should_Report_As_Suppressed()
         ..Command_At(Repository_Root())
     };
 
-    let result = Run_Gate(Some(vec![source()]), Test_Variant(), &command, &StdProcessLauncher);
+    let result = Run_Gate(Some(vec![source()]), Test_Variant(), &command, &StdProcessLauncher, Test_Run_Id());
 
     assert!(!result.suppressed_findings.is_empty(), "the double-matched finding must report as suppressed");
     assert!(
@@ -599,7 +606,7 @@ fn Test_A_Calibrated_Finding_Should_Not_Block()
     let real_finding = One_Real_Blocking_Finding(source);
     let command = Command_With_Calibration(Repository_Root(), Calibration_Of(&real_finding));
 
-    let result = Run_Gate(Some(vec![source()]), Test_Variant(), &command, &StdProcessLauncher);
+    let result = Run_Gate(Some(vec![source()]), Test_Variant(), &command, &StdProcessLauncher, Test_Run_Id());
 
     Assert_Tolerated_Not_Blocking(&result, &result.calibrated_findings);
 }
@@ -620,7 +627,7 @@ fn Test_A_Calibrated_Suppressed_And_Baselined_Finding_Should_Report_As_Calibrate
         ..Command_At(Repository_Root())
     };
 
-    let result = Run_Gate(Some(vec![source()]), Test_Variant(), &command, &StdProcessLauncher);
+    let result = Run_Gate(Some(vec![source()]), Test_Variant(), &command, &StdProcessLauncher, Test_Run_Id());
 
     assert!(!result.calibrated_findings.is_empty(), "the triple-matched finding must report as calibrated");
     assert!(
