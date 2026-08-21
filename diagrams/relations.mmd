@@ -68,6 +68,7 @@ graph LR
     arc_roadmap_001 -->|"relates-to"| od_rules_009["OD-RULES-009"]
     arc_roadmap_001 -->|"relates-to"| od_trace_001["OD-TRACE-001"]
     arc_roadmap_001 -->|"relates-to"| od_trace_002["OD-TRACE-002"]
+    arc_roadmap_001 -->|"relates-to"| od_workflow_001["OD-WORKFLOW-001"]
     arc_specdb_001 -->|"affected_by"| d_129
     arc_specdb_001 -->|"affected_by"| d_130
     arc_specdb_001 -->|"affected_by"| d_131["D-131"]
@@ -328,6 +329,7 @@ graph LR
     od_contracts_001 -->|"relates-to"| od_analysis_004
     od_contracts_001 -->|"relates-to"| od_contracts_002
     od_contracts_001 -->|"relates-to"| od_gate_003
+    od_contracts_001 -->|"relates-to"| od_workflow_001
     od_contracts_002 -->|"relates-to"| arc_harness_001
     od_contracts_002 -->|"relates-to"| od_analysis_006
     od_contracts_002 -->|"relates-to"| od_capability_001
@@ -448,6 +450,7 @@ graph LR
     od_gate_014 -->|"relates-to"| od_host_004
     od_gate_014 -->|"relates-to"| od_rules_008
     od_gate_014 -->|"relates-to"| od_rules_009
+    od_gate_014 -->|"relates-to"| od_workflow_001
     od_gate_015 -->|"relates-to"| arc_roadmap_001
     od_gate_015 -->|"relates-to"| d_135
     od_gate_015 -->|"relates-to"| od_gate_014
@@ -460,6 +463,7 @@ graph LR
     od_host_002 -->|"relates-to"| od_host_003
     od_host_002 -->|"relates-to"| od_host_004
     od_host_002 -->|"relates-to"| od_host_005
+    od_host_002 -->|"relates-to"| od_workflow_001
     od_host_003 -->|"relates-to"| od_host_001
     od_host_003 -->|"relates-to"| od_host_002
     od_host_004 -->|"relates-to"| arc_harness_001
@@ -998,6 +1002,10 @@ graph LR
     od_trace_005 -->|"relates-to"| od_trace_001
     od_trace_005 -->|"relates-to"| od_trace_002
     od_trace_005 -->|"relates-to"| od_trace_003
+    od_workflow_001 -->|"relates-to"| arc_roadmap_001
+    od_workflow_001 -->|"relates-to"| od_contracts_001
+    od_workflow_001 -->|"relates-to"| od_gate_014
+    od_workflow_001 -->|"relates-to"| od_host_002
     p10_package_seam -->|"relates-to"| arc_ecosystem_001
   end
   subgraph "Decisions"
@@ -1139,4 +1147,5 @@ graph LR
     od_trace_003
     od_trace_004
     od_trace_005
+    od_workflow_001
   end

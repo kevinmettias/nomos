@@ -3,16 +3,16 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:964c34ec9d8b7f2749e8a27c61c37af8fc23cae4fa8a458710e6ef9303d83855",
-  "inputs_digest": "sha256:3ba3afa6ba34c00bd3747c9f573a4bd1476f86b7a5b1284a33257eefd5e4517a",
+  "content_digest": "sha256:3c6376e7137d17d14df8c012a515691497e2dd98007d44d1e0581768ea62712c",
+  "inputs_digest": "sha256:6f08566113a2fa8c2841b2ad6ec2139067dcd5fd8112bde0fbf32417a5dbe962",
   "sections": [
     [
       "Relations",
-      996
+      1004
     ],
     [
       "Decisions",
-      138
+      139
     ]
   ],
   "inputs": [
@@ -340,6 +340,11 @@
       "content": "relations",
       "identity": "ARC-ROADMAP-001 relates-to OD-TRACE-002",
       "hash": "sha256:c66ac56714e7a2a0bb744d5bb80138f6a59fb7a4a960cf15bb731046c00424ef"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-ROADMAP-001 relates-to OD-WORKFLOW-001",
+      "hash": "sha256:33cfeb23670508f11183e37aa9915ff02c54da9c31d532d7838a9b0530ab2d03"
     },
     {
       "content": "relations",
@@ -1643,6 +1648,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-CONTRACTS-001 relates-to OD-WORKFLOW-001",
+      "hash": "sha256:83a18cfd3aba3213d8eb4087eb8bb545fc3f90e15b213e850397b81842222190"
+    },
+    {
+      "content": "relations",
       "identity": "OD-CONTRACTS-002 relates-to ARC-HARNESS-001",
       "hash": "sha256:07a19b34b079d0a7db652fddaeac371cc5caaada46540d1bfbe9ca7c5ba0873d"
     },
@@ -2243,6 +2253,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-GATE-014 relates-to OD-WORKFLOW-001",
+      "hash": "sha256:231e4018b8fecd6712f2d00011b62814af20c42913d84807b6495c5055a151f2"
+    },
+    {
+      "content": "relations",
       "identity": "OD-GATE-015 relates-to ARC-ROADMAP-001",
       "hash": "sha256:8b98fe30de3199ffa654bbff7455c2a1bace2cb4a324e62e6341a397fb8caa71"
     },
@@ -2300,6 +2315,11 @@
       "content": "relations",
       "identity": "OD-HOST-002 relates-to OD-HOST-005",
       "hash": "sha256:45b880746d01c1c54ccd8381864e0b14ef2c933def15aca2e5c2008a084b7d90"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-HOST-002 relates-to OD-WORKFLOW-001",
+      "hash": "sha256:cff8a25110de0cf8326abeef4abd3e27f091bf4f1e64c0dd0a8a445822ff4cae"
     },
     {
       "content": "relations",
@@ -4993,6 +5013,26 @@
     },
     {
       "content": "relations",
+      "identity": "OD-WORKFLOW-001 relates-to ARC-ROADMAP-001",
+      "hash": "sha256:0a21a32b5f51e0f6fa306b95eb733c0710fb3bacd9b2a67bb02f9f94785401f7"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-WORKFLOW-001 relates-to OD-CONTRACTS-001",
+      "hash": "sha256:4d5bd5bf84b848835b96fef157c75e77c35107ed01be9cb6b094c3efcce0bb30"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-WORKFLOW-001 relates-to OD-GATE-014",
+      "hash": "sha256:65dbdaef1aa27690dc07501fd833242b1673a1cfb17b3821810b4ebe5ae80845"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-WORKFLOW-001 relates-to OD-HOST-002",
+      "hash": "sha256:cceaeb5e3229d1c53b0b8be02d3406c29ac61d8a73e1192c7a484ad4df871ad5"
+    },
+    {
+      "content": "relations",
       "identity": "P10-PACKAGE-SEAM relates-to ARC-ECOSYSTEM-001",
       "hash": "sha256:90e05669d077f9e3163df4bc2a1810dd21e44377c7f6bac11927442f83efdb0b"
     },
@@ -5685,6 +5725,11 @@
       "content": "nodes",
       "identity": "OD-TRACE-005",
       "hash": "sha256:b2f7742776d35e4a0ffa868b27d6e576427746f1d234ba3d24519358b1e6dba6"
+    },
+    {
+      "content": "nodes",
+      "identity": "OD-WORKFLOW-001",
+      "hash": "sha256:09c76d0ca6cb9feb0dfaa4f47e317599968cc35eee0611397010de2fb96fac4f"
     }
   ]
 }

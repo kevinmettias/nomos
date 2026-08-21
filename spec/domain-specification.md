@@ -156,6 +156,7 @@ profile: domain-specification
 | docs/records/OD-TRACE-003-a-requirement-half-satisfied-is-partial-and-its-obligation-is-a-gap-checked-like-a-site-not-a-record.md@authored | docs/records/OD-TRACE-003-a-requirement-half-satisfied-is-partial-and-its-obligation-is-a-gap-checked-like-a-site-not-a-record.md | authored | 19 | 8 | sha256:09379db6f9c710a7de0de6a1cb9d749fbdcb23ecbd7f6e25323adb946c14d741 |
 | docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md@authored | docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md | authored | 21 | 8 | sha256:20584da07fdc54fcdca104e7137bc67b265954ba3734fc8b2d17a9036b2806b1 |
 | docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md@authored | docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md | authored | 29 | 11 | sha256:de7e7ec53c19ad7a55b98bcef5dadc7f7b1234b80d6dc2f3ce0098b4a1463685 |
+| docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md@authored | docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md | authored | 17 | 6 | sha256:81055d02c5456f8a1ce7d5f6c7da7da578ba2405b7ac8b69bdb17890386c6dd4 |
 
 ## Sections
 
@@ -1420,6 +1421,12 @@ profile: domain-specification
 | docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#24 | authored | 2 | Why This Is `OD-TRACE-002`'s Constraint Honored, Not Routed Around |
 | docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#26 | authored | 2 | What This Record Does Not Do |
 | docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#28 | authored | 2 | Status |
+| docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#1 | authored | 1 | The workflow tier's first real increment is RunId's first real consumer, not the engine |
+| docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#2 | authored | 2 | Question |
+| docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#4 | authored | 2 | What Was Measured |
+| docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#7 | authored | 2 | The Decision |
+| docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#11 | authored | 2 | What This Does Not Do |
+| docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#16 | authored | 2 | Status |
 
 ## Source blocks
 
@@ -41690,3 +41697,173 @@ or its `corpus_gates.rs` declaration; this record decides their shape so that wh
 does inherits it rather than reopening the address question `OD-TRACE-002` already
 half-answered — the same relationship `OD-TRACE-001` had to the registry `OD-TRACE-002` and
 `P10-LEDGER-CORPUS` still owe.
+
+### docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#1
+
+*revision: authored · kind: heading · heading: The workflow tier's first real increment is RunId's first real consumer, not the engine · hash: sha256:4356b32928cabc5530c4f9bba58c52fd3705f45a6e07b922a5d2cc99213eb4f9*
+
+# The workflow tier's first real increment is RunId's first real consumer, not the engine
+
+### docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#2
+
+*revision: authored · kind: heading · heading: The workflow tier's first real increment is RunId's first real consumer, not the engine / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#3
+
+*revision: authored · kind: prose · heading: The workflow tier's first real increment is RunId's first real consumer, not the engine / Question · hash: sha256:a9a4f61db518acb5acf17b3273670f15d19cdbac182d5e09908db2c38e44e1c1*
+
+`ARC-ROADMAP-001` names "headless workflow orchestration" as a near-term-tier item, and the
+user's standing roadmap override (recorded after `P13-GATE-API-ADAPTER-FIRST-INCREMENT`) names
+it as unblocked work, not still waiting for a trigger. Nothing in this workspace names what its
+first real increment actually is. Building the wrong first piece is expensive here specifically:
+this repository has repeatedly declined to design a seam ahead of a second real case
+(`OD-PACKAGE-006`, `OD-PACKAGE-008`, `nomos-gate-orchestration`'s own doc on why `compare` is not
+stubbed), and "workflow orchestration" has zero real code and zero real consumers to check a
+design against today.
+
+### docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#4
+
+*revision: authored · kind: heading · heading: The workflow tier's first real increment is RunId's first real consumer, not the engine / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#5
+
+*revision: authored · kind: prose · heading: The workflow tier's first real increment is RunId's first real consumer, not the engine / What Was Measured · hash: sha256:062567b3d4c08a018440abd9e55edd60be2ffec2ac51244b477f094b94b2381f*
+
+The v14 corpus's own `WF-*` and `WF-ORDER-*` requirement families, read directly from
+`NOMOS_V14_CORPUS`'s requirements directory (`WF-001` through `WF-012`, `WF-ORDER-001` through
+`WF-ORDER-005`) rather than summarized from `ARC-ROADMAP-001`'s own reading of them. They
+describe a real execution engine: deterministic branch/merge semantics and bounded parallelism
+(`WF-010`), retries that must not repeat non-idempotent effects without a compensation or
+deduplication token (`WF-012`), workflow definitions versioned independently from runs with
+historical replay pinning the exact definition, packages, providers, environment, inputs and
+approval decisions (`WF-011`), immutable published artifacts (`WF-009`), and a
+`WorkflowStep` contract (`WF-008`) declaring eleven distinct properties -- typed inputs/outputs,
+side effects, idempotency, retry policy, timeout, cacheability/cache key inputs, privileges,
+cancellation behavior, compensation/rollback, determinism class, and evidence emitted. Every one
+of those is a real subsystem or a multi-field contract with no existing implementation anywhere
+in this workspace to check a shape against -- the same absence `OD-PACKAGE-008` measured for
+`RulePackage`'s manifest fields, at a larger scale.
+
+### docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#6
+
+*revision: authored · kind: prose · heading: The workflow tier's first real increment is RunId's first real consumer, not the engine / What Was Measured · hash: sha256:a5b143231ffaaa3ea7670c3bb02448e16379a4c06f6af4ad50f7b1279a0ef7ff*
+
+Separately, `crates/contracts/nomos-contracts/src/identity.rs` already declares `RunId`
+("Identity of one execution of a workflow or gate") -- present since this crate's very first
+commit (`205e66c`, "Add nomos-contracts, the band-0 protocol vocabulary"), grepped directly: its
+only reference anywhere in the workspace outside `identity.rs` itself is its re-export in
+`nomos-contracts`' own `lib.rs`. Nothing constructs one. `nomos_gate_orchestration::
+GateRunResult` -- this workspace's one real, shipped "one execution" today -- carries no run
+identity of its own, the same "declared and deliberately unconsumed" state `OD-HOST-002` already
+names for `PackageKind::ModelBackendPackage` and `PackageKind::AgentExecutorPackage`.
+
+### docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#7
+
+*revision: authored · kind: heading · heading: The workflow tier's first real increment is RunId's first real consumer, not the engine / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#8
+
+*revision: authored · kind: prose · heading: The workflow tier's first real increment is RunId's first real consumer, not the engine / The Decision · hash: sha256:729507bade84b515d209527e496a76faa31683899402d821354e34b13e306c80*
+
+**The workflow tier's first real increment is not `WorkflowStep`, not the engine `WF-009`
+through `WF-012` describe, and not a new crate. It is giving `RunId` -- vocabulary this
+workspace already committed to, naming exactly the "workflow or gate" split this tier needs --
+its first real consumer, through the one real "one execution" this workspace has: a Gate run.**
+
+### docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#9
+
+*revision: authored · kind: prose · heading: The workflow tier's first real increment is RunId's first real consumer, not the engine / The Decision · hash: sha256:9bef498556f8cab7b7865102ec0d5c0073ab8222cb840d1146c4f7873b7f6d5f*
+
+This is deliberately the narrowest defensible piece. It invents no new field, no new type and no
+new crate: `RunId`'s shape (a `Digest128` newtype, `Digest_Identity!`'s standard pattern) is
+already fixed by code committed under `OD-CONTRACTS-001`'s band-0 criterion, which this record
+does not reopen. What it does decide, because nothing has decided it yet and a follow-up
+implementation cannot proceed without an answer: **a `RunId` identifies one execution, not one
+configuration, and is therefore not a pure content digest of `GateCommand` and the build
+variant** -- two runs of an identical command are two different executions, the same distinction
+`nomos-platform::Clock`'s own module doc draws between a value that is a dependency and one that
+is an ambient fact. `WF-005`'s own text keeps "cache hits" as a concept distinct from a run's own
+identity ("stream progress and retain execution DAG, cache hits, retries, artifacts, costs, and
+exact tool provenance") -- the run is the container the cache hits are recorded *against*, not
+the same digest as a cache key. A `RunId` that collapsed into a content digest of the command
+would make two genuinely different runs of the same command indistinguishable, which is the same
+failure mode `identity.rs`'s own module doc calls out for path-and-line identity: a real
+distinction with no key to carry it.
+
+### docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#10
+
+*revision: authored · kind: prose · heading: The workflow tier's first real increment is RunId's first real consumer, not the engine / The Decision · hash: sha256:3aa5dfc0d68511506dcf6bf6778788fd5dcf147957d60b891fa00e1dc5643dba*
+
+Concretely, for the follow-up this record unblocks: `nomos_gate_orchestration::Run_Gate` gains a
+`nomos_platform::Clock` parameter alongside its existing `ProcessLauncher` one -- a composition-
+root-supplied dependency, the same shape `variant` and `launcher` already are, not a
+`SystemTime::now()` read buried in the crate -- and `GateRunResult` gains a `pub run: RunId`
+field, computed once per call from the clock reading (and nothing else content-addressed,
+because content-addressing it would silently re-introduce the collapse this record just ruled
+out). Every existing caller of `Run_Gate` (`nomos-cli`'s `gate.rs`, `nomos-ledger`'s
+`finish/gate_step.rs`, `nomos-api`'s `Handle_Gate_Run`) supplies a real clock the same way each
+already supplies a real build variant and a real process launcher.
+
+### docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#11
+
+*revision: authored · kind: heading · heading: The workflow tier's first real increment is RunId's first real consumer, not the engine / What This Does Not Do · hash: sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf*
+
+## What This Does Not Do
+
+### docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#12
+
+*revision: authored · kind: prose · heading: The workflow tier's first real increment is RunId's first real consumer, not the engine / What This Does Not Do · hash: sha256:e9bc502fc83c041dc0e2f90832bcaa75ab92ebee2089f1b2940561522c43e08b*
+
+It does not build `WorkflowStep`, any part of the execution engine `WF-009` through `WF-012`
+describe, or a `nomos-workflow` crate. Those stay exactly as unbuilt as `ARC-ROADMAP-001` already
+found them, and this record schedules none of them -- the same "does not schedule work" limit
+`ARC-ROADMAP-001` itself states for its own boundary.
+
+### docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#13
+
+*revision: authored · kind: prose · heading: The workflow tier's first real increment is RunId's first real consumer, not the engine / What This Does Not Do · hash: sha256:fdd52c75a794929578b5745e41f8de4cd229d9dc124de9841627422a97b3424e*
+
+It does not implement the `Run_Gate`/`GateRunResult` change the previous section names. That is
+real code touching a shipped, multiply-depended-on seam (three callers today), and belongs in
+its own claimed item with its own verification, the same split `OD-GATE-014`'s override record
+and `P13-GATE-014-SCOPE-RULE-SELECTORS` already used between naming a decision and building it.
+
+### docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#14
+
+*revision: authored · kind: prose · heading: The workflow tier's first real increment is RunId's first real consumer, not the engine / What This Does Not Do · hash: sha256:41339776ee4c93a8018031b9c3586446aa455f714fafe4eba5a485347ba31c86*
+
+It does not reopen `OD-CONTRACTS-001`'s admission criterion, or `RunId`'s own shape. `RunId`
+already satisfies that criterion today, on the same reasoning `OD-CONTRACTS-001` gives for
+`GateCategory` and `EvidenceClass`: a peer executor -- `WF-006`'s "API-hosted, subscription-agent,
+human, and recorded-replay executors" -- cannot agree with Nomos about which execution a result
+belongs to without a shared identity for it, so this stays band 0 rather than moving to
+whichever crate builds its first consumer.
+
+### docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#15
+
+*revision: authored · kind: prose · heading: The workflow tier's first real increment is RunId's first real consumer, not the engine / What This Does Not Do · hash: sha256:375953063427ac64447df673e72b598431b123c62465686cf66cbeb1c227d85e*
+
+It does not commit to `EGRAPH` or any relationship-graph construction. `ARC-ROADMAP-001`
+constraint 3 already reserves that question for once workflow orchestration or agent execution
+reach the point of needing typed cross-entity relationships; giving `GateRunResult` an identity
+of its own is not that point.
+
+### docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#16
+
+*revision: authored · kind: heading · heading: The workflow tier's first real increment is RunId's first real consumer, not the engine / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#17
+
+*revision: authored · kind: prose · heading: The workflow tier's first real increment is RunId's first real consumer, not the engine / Status · hash: sha256:7669f3af6ce06470ea932636959709149b4febe7e642f96daf6aec8ab758be52*
+
+Accepted. Names the workflow tier's first real increment and the one open design question a
+follow-up implementation needs answered -- content-addressed versus per-execution identity --
+without building either the increment or the engine `WF-*` describes beyond it.

@@ -24190,6 +24190,116 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-WORKFLOW-001-RUNID-FIRST-INCREMENT",
+      "title": "OD-WORKFLOW-001: the workflow tier's first real increment is RunId's first consumer, not the engine",
+      "why": "ARC-ROADMAP-001 names headless workflow orchestration as a near-term-tier item, and the user's standing roadmap override names it as unblocked work, not still waiting for a trigger. Read directly against the v14 corpus (NOMOS_V14_CORPUS's requirements directory): WF-001 through WF-012 and WF-ORDER-001 through WF-ORDER-005 describe a real execution engine -- deterministic branch/merge semantics and bounded parallelism (WF-010), retries that must not repeat non-idempotent effects without a compensation or deduplication token (WF-012), workflow definitions versioned independently from runs with historical replay pinning the exact definition/packages/providers/environment/inputs/approval decisions (WF-011), immutable published artifacts (WF-009), and a WorkflowStep contract (WF-008) with eleven distinct declared properties. Every one of those is a real subsystem or multi-field contract with zero existing implementation anywhere in this workspace to check a shape against -- the same absence OD-PACKAGE-008 already measured for RulePackage's manifest fields, at a larger scale, and this workspace has repeatedly declined to design a seam ahead of a second real case (OD-PACKAGE-006, OD-PACKAGE-008, nomos-gate-orchestration's own doc on why compare is not stubbed).\n\nGrepped directly: crates/contracts/nomos-contracts/src/identity.rs already declares RunId (\"Identity of one execution of a workflow or gate\"), present since this crate's first commit, and its only reference anywhere in the workspace outside identity.rs itself is its own re-export in nomos-contracts's lib.rs -- nothing constructs one. nomos_gate_orchestration::GateRunResult, this workspace's one real shipped \"one execution\" today, carries no run identity of its own.\n\nRather than invent WorkflowStep or any part of the engine blind, this item authors OD-WORKFLOW-001: the workflow tier's first real, defensible increment is giving RunId -- vocabulary this workspace already committed to, naming exactly the \"workflow or gate\" split this tier needs -- its first real consumer via Gate, the one real \"one execution\" that exists, and deciding the one open design question a follow-up implementation needs answered (content-addressed versus per-execution identity) before nomos-gate-orchestration::Run_Gate's signature is touched. It builds no code against a shipped, multiply-depended-on seam (nomos-cli, nomos-ledger and nomos-api all call Run_Gate today) -- that is a separate, later claimed item, the same record-then-code split OD-GATE-014's override record and P13-GATE-014-SCOPE-RULE-SELECTORS already used.",
+      "done_when": "docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md exists, accepted, authority canonical-normative-record, and decides: (1) the workflow tier's first real increment is RunId's first real consumer through Gate, not WorkflowStep or any part of the WF-009..WF-012 execution engine; (2) RunId identifies one execution, not one configuration -- not a pure content digest of GateCommand and the build variant, since two runs of an identical command are two different executions and WF-005's own text keeps cache hits distinct from a run's own identity; (3) the follow-up implementation this record unblocks (not built by this item) threads a nomos_platform::Clock parameter into nomos_gate_orchestration::Run_Gate alongside its existing ProcessLauncher one, and gives GateRunResult a pub run: RunId field computed from that clock reading. crates/spec/nomos-spec-store/records/OD-WORKFLOW-001.record registers the record's path so it is governing, not merely written. diagrams/relations.mmd and spec/domain-specification.md are both re-rendered (nomos spec render --profile diagram-set --into . and --profile domain-specification --into .) against a tree whose registered records are exactly the ones this commit publishes, and are current. No code in nomos-gate-orchestration, nomos-cli, nomos-ledger or nomos-api is touched by this item.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md",
+          "crates/spec/nomos-spec-store/records/OD-WORKFLOW-001.record",
+          "diagrams/relations.mmd",
+          "spec/domain-specification.md"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "over-reserved territory: diagrams/relations.mmd and spec/domain-specification.md are derived, nobody's-territory projections per the nomos-spec-change skill's step 4/6, not reservable paths -- reauthored as -2 with only the record and its registration file reserved"
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-loop-session",
+          "reason": "releasing to redeclare with corrected territory",
+          "abandoned_at": 1787277310
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-loop-session",
+        "declined_at": 1787277310
+      }
+    },
+    {
+      "id": "P13-WORKFLOW-001-RUNID-FIRST-INCREMENT-2",
+      "title": "OD-WORKFLOW-001: the workflow tier's first real increment is RunId's first consumer, not the engine",
+      "why": "ARC-ROADMAP-001 names headless workflow orchestration as a near-term-tier item, and the user's standing roadmap override names it as unblocked work, not still waiting for a trigger. Read directly against the v14 corpus (NOMOS_V14_CORPUS's requirements directory): WF-001 through WF-012 and WF-ORDER-001 through WF-ORDER-005 describe a real execution engine -- deterministic branch/merge semantics and bounded parallelism (WF-010), retries that must not repeat non-idempotent effects without a compensation or deduplication token (WF-012), workflow definitions versioned independently from runs with historical replay pinning the exact definition/packages/providers/environment/inputs/approval decisions (WF-011), immutable published artifacts (WF-009), and a WorkflowStep contract (WF-008) with eleven distinct declared properties. Every one of those is a real subsystem or multi-field contract with zero existing implementation anywhere in this workspace to check a shape against -- the same absence OD-PACKAGE-008 already measured for RulePackage's manifest fields, at a larger scale, and this workspace has repeatedly declined to design a seam ahead of a second real case (OD-PACKAGE-006, OD-PACKAGE-008, nomos-gate-orchestration's own doc on why compare is not stubbed).\n\nGrepped directly: crates/contracts/nomos-contracts/src/identity.rs already declares RunId (\"Identity of one execution of a workflow or gate\"), present since this crate's first commit, and its only reference anywhere in the workspace outside identity.rs itself is its own re-export in nomos-contracts's lib.rs -- nothing constructs one. nomos_gate_orchestration::GateRunResult, this workspace's one real shipped \"one execution\" today, carries no run identity of its own.\n\nRather than invent WorkflowStep or any part of the engine blind, this item authors OD-WORKFLOW-001: the workflow tier's first real, defensible increment is giving RunId -- vocabulary this workspace already committed to, naming exactly the \"workflow or gate\" split this tier needs -- its first real consumer via Gate, the one real \"one execution\" that exists, and deciding the one open design question a follow-up implementation needs answered (content-addressed versus per-execution identity) before nomos-gate-orchestration::Run_Gate's signature is touched. It builds no code against a shipped, multiply-depended-on seam (nomos-cli, nomos-ledger and nomos-api all call Run_Gate today) -- that is a separate, later claimed item, the same record-then-code split OD-GATE-014's override record and P13-GATE-014-SCOPE-RULE-SELECTORS already used.",
+      "done_when": "docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md exists, accepted, authority canonical-normative-record, and decides: (1) the workflow tier's first real increment is RunId's first real consumer through Gate, not WorkflowStep or any part of the WF-009..WF-012 execution engine; (2) RunId identifies one execution, not one configuration -- not a pure content digest of GateCommand and the build variant, since two runs of an identical command are two different executions and WF-005's own text keeps cache hits distinct from a run's own identity; (3) the follow-up implementation this record unblocks (not built by this item) threads a nomos_platform::Clock parameter into nomos_gate_orchestration::Run_Gate alongside its existing ProcessLauncher one, and gives GateRunResult a pub run: RunId field computed from that clock reading. crates/spec/nomos-spec-store/records/OD-WORKFLOW-001.record registers the record's path so it is governing, not merely written. diagrams/relations.mmd and spec/domain-specification.md are both re-rendered (nomos spec render --profile diagram-set --into . and --profile domain-specification --into .) against a tree whose registered records are exactly the ones this commit publishes, and are current. No code in nomos-gate-orchestration, nomos-cli, nomos-ledger or nomos-api is touched by this item.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md",
+          "crates/spec/nomos-spec-store/records/OD-WORKFLOW-001.record"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "ompiling nomos-lang-rust v0.1.0 (C:\\Users\\kmett\\AppData\\Local\\Temp\\claude\\f--repos-nomos\\03654339-c43c-4124-9647-c07ee491f5bb\\scratchpad\\render-workflow\\crates\\languages\\nomos-lang-rust)\n   Compiling nomos-contract-tests v0.1.0 (C:\\Users\\kmett\\AppData\\Local\\Temp\\claude\\f--repos-nomos\\03654339-c43c-4124-9647-c07ee491f5bb\\scratchpad\\render-workflow\\tests\\contract)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 8.06s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-55ad3baadee2ff4e.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-56e1c9fba250ca24.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-4d4e16ab50ac70a5.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-35945c6ebc64c902.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-48bfe8d6f3ebf24c.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-ad5f178a2fa55ca5.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-a4b9594685bdc99a.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-0a473518710ef1f1.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-612bfa361c61aabd.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-13810cc2d23617bf.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-ee111bd537ecd137.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-2919ec68747ddb5b.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-99272398d303e3e7.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-756fcac740cd78ad.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-259eb839edee86c9.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1787277501,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
