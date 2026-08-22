@@ -1,15 +1,18 @@
-//! A JSON-serializable projection of `nomos_gate_orchestration::GateRunResult`.
+//! JSON-serializable projections of what `nomos-gate-orchestration` produces for `run` and
+//! `plan`.
 //!
-//! `GateRunResult` and `GateRunOutcome` do not derive `Serialize` -- nothing needed a wire
-//! format for either before this crate existed. Adding it to them directly would grow
-//! `nomos-gate-orchestration`'s own public surface on behalf of one caller's shape, before a
-//! second transport exists to check that shape against -- the same premature-surface caution
-//! this crate's own module doc names. This type is that shape, owned here and built by
-//! conversion from the borrowed result, so `nomos-gate-orchestration` stays exactly as it
-//! was.
+//! `GateRunResult`, `GateRunOutcome`, `GateOutcome` and `nomos_rules::RuleOffer` do not
+//! derive `Serialize` -- nothing needed a wire format for any of them before this crate
+//! existed. Adding it to them directly would grow `nomos-gate-orchestration`'s or
+//! `nomos-rules`' own public surface on behalf of one caller's shape, before a second
+//! transport exists to check that shape against -- the same premature-surface caution this
+//! crate's own module doc names. The types here are that shape, owned in this crate and
+//! built by conversion from the borrowed or owned result, so neither orchestration crate
+//! changes.
 
-use nomos_contracts::{Finding, RunId};
-use nomos_gate_orchestration::{GateRunOutcome, GateRunResult};
+use nomos_contracts::{Finding, RuleId, RunId};
+use nomos_gate_orchestration::{GateOutcome, GateRunOutcome, GateRunResult};
+use nomos_rules::RuleOffer;
 use serde::Serialize;
 use std::path::PathBuf;
 
@@ -79,6 +82,70 @@ impl Disposition
             GateRunOutcome::Passed => Disposition::Passed,
             GateRunOutcome::Failed => Disposition::Failed,
             GateRunOutcome::Indeterminate => Disposition::Indeterminate,
+        };
+    }
+}
+
+/// What a real `nomos gate plan` produced, in a shape `serde_json` can hand across a wire.
+#[derive(Debug, Serialize)]
+#[serde(tag = "outcome", rename_all = "snake_case")]
+pub enum GatePlanResponse
+{
+    /// This gate's rule registry composed cleanly.
+    Planned
+    {
+        /// Every rule this gate's registry holds.
+        rules: Vec<RuleOfferResponse>,
+    },
+    /// This gate's own rule composition is self-contradictory -- a defect in the
+    /// composition, not in anything a caller supplied. Not reachable today; see
+    /// `nomos_gate_orchestration::Registered`'s own doc.
+    Contradictory
+    {
+        /// What went wrong, as `RuleRegistryError`'s own `Debug` renders it -- it does not
+        /// derive `Display`, the same reason `crates/host/nomos-cli/src/gate/report.rs`'s
+        /// own `Render_Plan` prints `{error:?}` too.
+        cause: String,
+    },
+}
+
+impl GatePlanResponse
+{
+    pub(crate) fn From(outcome: GateOutcome) -> Self
+    {
+        return match outcome
+        {
+            GateOutcome::Planned(plan) => Self::Planned {
+                rules: plan.rules.into_iter().map(RuleOfferResponse::From).collect(),
+            },
+            GateOutcome::Contradictory(error) => Self::Contradictory { cause: format!("{error:?}") },
+        };
+    }
+}
+
+/// A serializable twin of [`nomos_rules::RuleOffer`], for the same reason [`Disposition`]
+/// twins [`GateRunOutcome`]: the type it mirrors does not derive `Serialize`, and growing
+/// `nomos-rules`' own public surface on behalf of one caller's wire shape is not this
+/// increment's to spend.
+#[derive(Debug, Serialize)]
+pub struct RuleOfferResponse
+{
+    /// The rule's own identity.
+    pub rule: RuleId,
+    /// The governing record this rule's implementation cites, e.g. `"D-134"`.
+    pub contract_record: String,
+    /// The version of `contract_record` this implementation was written against.
+    pub contract_record_version: u32,
+}
+
+impl RuleOfferResponse
+{
+    fn From(offer: RuleOffer) -> Self
+    {
+        return Self {
+            rule: offer.rule,
+            contract_record: offer.contract_record,
+            contract_record_version: offer.contract_record_version,
         };
     }
 }

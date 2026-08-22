@@ -24,6 +24,11 @@
 //! makes this seam an audit and not a second listing is a caller-side filter over the same
 //! canonical `nomos_ledger::Claim_Refusal` `crates/host/nomos-cli/src/work/report.rs`'s own
 //! `Blocking_Refusal` already calls, rather than a second implementation of that one rule.
+//! Its seventh, [`Handle_Gate_Plan`], does the same for `nomos_gate_orchestration::Run` (the
+//! `Plan` verb's own body, not this crate's `Run_Gate`) -- a function that takes a full
+//! `GateCommand` but, by its own doc, reads none of it: `Plan` reports what this gate's rule
+//! registry holds, not a walk over `root`. `Handle_Gate_Plan` takes no argument for that
+//! reason, unlike [`Handle_Gate_Run`].
 //!
 //! [`Handle_Gate_Run`] is a deliberate twin of `nomos-cli`'s `gate.rs`
 //! `GateInvocation::Run` arm: it walks `root` for `.rs` sources
@@ -58,7 +63,7 @@ mod sources;
 mod spec;
 mod work;
 
-pub use response::{Disposition, GateRunResponse};
+pub use response::{Disposition, GatePlanResponse, GateRunResponse, RuleOfferResponse};
 pub use spec::{Handle_Spec_Profiles, ProfilesResponse};
 pub use work::{
     BlockedItem, Handle_Work_Audit, Handle_Work_List, Handle_Work_Show, Handle_Work_Validate,
@@ -88,6 +93,22 @@ pub fn Handle_Gate_Run(root: &Path) -> GateRunResponse
     );
 
     return GateRunResponse::From(result);
+}
+
+/// Composes this gate's rule registry and reports what it holds, exactly as `nomos gate
+/// plan` would, and hands back a JSON-serializable [`GatePlanResponse`].
+///
+/// `nomos_gate_orchestration::Run` -- the `Plan` verb's own real body, not this crate's own
+/// `Run_Gate` -- takes a full [`GateCommand`] but, by its own doc, reads none of it: `Plan`
+/// reports what [`nomos_gate_orchestration::Registered`] holds, not a walk over `root`, so a
+/// default command is built here rather than asking a caller to supply one nothing reads.
+#[must_use]
+pub fn Handle_Gate_Plan() -> GatePlanResponse
+{
+    let command = GateCommand::default();
+    let outcome = nomos_gate_orchestration::Run(&command);
+
+    return GatePlanResponse::From(outcome);
 }
 
 #[cfg(test)]
@@ -147,5 +168,34 @@ mod tests
         let disposition = parsed.get("disposition").expect("a serialized GateRunResponse always has this field");
 
         assert_eq!(disposition, expected, "{json}");
+    }
+
+    /// A real plan composes this workspace's own real rule registry, not an empty one --
+    /// proving this crate, not `nomos-cli`, can produce a real `GatePlanResponse::Planned`.
+    #[test]
+    fn Test_A_Real_Plan_Should_Compose_This_Workspaces_Own_Registry()
+    {
+        let response = Handle_Gate_Plan();
+
+        let GatePlanResponse::Planned { rules } = response
+        else
+        {
+            panic!("this crate's own rule registry composes cleanly");
+        };
+        assert!(!rules.is_empty(), "this workspace ships real rules");
+    }
+
+    /// The response a real plan produces is valid JSON, and its outcome round-trips through
+    /// `serde_json` under the field name a wire caller would actually read.
+    #[test]
+    fn Test_A_Real_Planned_Response_Should_Round_Trip_As_Json()
+    {
+        let response = Handle_Gate_Plan();
+
+        let json = serde_json::to_string(&response).expect("a GatePlanResponse always serializes");
+        let parsed: serde_json::Value = serde_json::from_str(&json).expect("what was just written parses back");
+        let outcome = parsed.get("outcome").expect("a serialized GatePlanResponse always has this field");
+
+        assert_eq!(outcome, "planned", "{json}");
     }
 }

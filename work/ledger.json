@@ -24905,6 +24905,65 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-API-GATE-PLAN-SEAM",
+      "title": "nomos-api gains a seventh real seam: Gate's Plan verb",
+      "why": "ARC-ROADMAP-001 names CLI/API/MCP projections as a near-term-tier item. nomos-api has proven a second real caller for Gate::run, Work::List, Spec::Profiles, Work::Show, Work::Validate and Work::Audit. crates/host/nomos-cli/src/gate.rs's own GateInvocation::Plan arm calls nomos_gate_orchestration::Run(command) directly -- a plain function named Run, not this crate's own Run_Gate -- crates/orchestration/nomos-gate-orchestration/src/run.rs is the Plan verb's own real body, distinct from run_gate.rs. Grepped directly: that function's only real caller in this workspace is that one gate.rs arm.\n\nChecked before authoring: nomos_gate_orchestration::Run(_command: &GateCommand) -> GateOutcome takes a full GateCommand but reads none of it -- its own doc says root, scope and rules are all unread, because Plan reports the registry composition::Registered() holds, not a walk over root. GateOutcome is a plain (non-Serialize) enum wrapping GatePlan{rules: Vec<RuleOffer>} on success or RuleRegistryError on the one contradiction case crates/orchestration/nomos-gate-orchestration/src/composition.rs's own doc calls unreachable today. Neither RuleOffer nor RuleRegistryError derives Serialize (checked crates/rules/nomos-rules/src/registry/rule_offer.rs and rule_registry_error.rs) and RuleRegistryError has no Display impl at all -- crates/host/nomos-cli/src/gate/report.rs's own Render_Plan prints its Contradictory case with {error:?}, the only rendering that exists anywhere in this workspace for it.",
+      "done_when": "nomos-api gains a new public function Handle_Gate_Plan() -> GatePlanResponse in lib.rs, calling nomos_gate_orchestration::Run(&GateCommand::default()) -- a default command rather than a parameter nothing reads, the same \"no invented shape ahead of a real body\" discipline nomos-gate-orchestration's own command.rs already holds to. GatePlanResponse is a new tagged Planned{rules: Vec<RuleOfferResponse>} / Contradictory{cause: String} enum added to response.rs, alongside the existing GateRunResponse/Disposition it already holds -- Contradictory's cause is RuleRegistryError formatted with {error:?} (Debug), matching Render_Plan's own rendering since the type has no Display. RuleOfferResponse is a new public struct {rule: nomos_contracts::RuleId, contract_record: String, contract_record_version: u32}, a serializable twin of nomos_rules::RuleOffer built by conversion, the same twinning response.rs's own module doc already explains Disposition does for GateRunOutcome. A real test proves this crate can plan this workspace's own real rule registry and gets back a non-empty Planned{rules}. A second test proves the Planned response round-trips through serde_json. tests/contract/surface/nomos-api.txt is regenerated (NOMOS_SURFACE_BLESS) and current. nomos-gate-orchestration, nomos-rules and nomos-cli are not touched by this item.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-api",
+          "tests/contract/surface/nomos-api.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "t result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 5 tests\ntest Test_A_Lowered_Declaration_Should_Fail_The_Comparison ... ok\ntest Test_A_Matching_Declaration_Should_Pass_The_Comparison ... ok\ntest Test_An_Unrelated_Minor_Version_Should_Fail_The_Comparison ... ok\ntest Test_The_Real_Workflow_Should_Still_Have_The_Install_Step ... ok\ntest Test_The_Declared_Floor_Should_Match_The_Toolchain_The_Gate_Installs ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.12s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_api-072c024c685eb8d5.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-95a1aef077b5f9ba.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-ead301eb7c8d8256.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-a61f2bcd75c8d4d9.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-fba07f1fa1c92105.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-2bb84d2d8744d800.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-c2987d8eceda16d3.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-0eeaea7cd309c35b.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-2db99bdd604951c5.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-56e2b70874db076c.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-1204b8c22ecd0b43.exe)\n   Doc-tests nomos_api\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1787422031,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
