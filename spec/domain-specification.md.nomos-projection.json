@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:5bffd4c1ac88f8d1470607aabc200b5e2b11eb06fd1a74a9cdee8a966f9d9c43",
-  "inputs_digest": "sha256:1f629d0d521ad11a5b990202862e103332d065ec81d16b7a55d232ef69c12498",
+  "content_digest": "sha256:9b78ce3283bc15d0cc954ae782222de422d2ebd28e68e13940eb2a6e4690c8ac",
+  "inputs_digest": "sha256:d072482f6ce3a09f4b776648b45a807746ab0ac3a5ca52365f4fe84ed2ecbcd1",
   "sections": [
     [
       "Documents",
-      150
+      151
     ],
     [
       "Sections",
-      1287
+      1293
     ],
     [
       "Source blocks",
-      4570
+      4587
     ]
   ],
   "inputs": [
@@ -589,6 +589,11 @@
       "content": "documents",
       "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md@authored",
       "hash": "sha256:22f2d1d5697a515ae27ef5e18d82433ee900d7506df63159793e435e5daac74d"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md@authored",
+      "hash": "sha256:91c99e209eacfaacbe91a9299652a3e8f89ac7b4e451e24acb882ad7930aee77"
     },
     {
       "content": "documents",
@@ -5614,6 +5619,36 @@
       "content": "headings",
       "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#20",
       "hash": "sha256:f04204df6b41915d75c1b4725a57b8919d45b522c68b35b79a843774d8b4f9c9"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#1",
+      "hash": "sha256:8f93a09590c807d7899f02605dd554ee7010ccaa2d7107afdf8f74fc9774db35"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#2",
+      "hash": "sha256:631c98305122271f36488d6f98b9a559c48b644ef8cb97ce008503b9bb98dc67"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#5",
+      "hash": "sha256:63cf402cfb562a634673c8fc5c4b839fe3183152d2aeddec222513740fe912f8"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#11",
+      "hash": "sha256:fa9834685c39c2015d30cc6588aa219d05ecf7a8ca0d6428587c116a65a68229"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#14",
+      "hash": "sha256:c08ff6bc75788be94fd1ad43eba238fceb049705d6489ee880be8ec021b7b8b7"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#16",
+      "hash": "sha256:be5a41ec5cad6ef5950f4ca85e2fce04191ee02055eaea1045662021b3762c9a"
     },
     {
       "content": "headings",
@@ -24404,6 +24439,91 @@
       "content": "blocks",
       "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#21",
       "hash": "sha256:5d8e0121e319b080080187d2fe3dc8ba018c9a7eddfb970f035dd8208b79e1b5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#1",
+      "hash": "sha256:93e7904095895b9342e9ac2ec47dfef1d013c20ca0a4db7ffeb07392f109b471"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#3",
+      "hash": "sha256:6b808cdb4929ab52c7fa4d9ac9a3c54965535e3637dd20b2578524905b50d4ce"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#4",
+      "hash": "sha256:e6c3f01545efddf19ab968c2f04c8b4792e8379f56e27347ba9574a612e632d7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#5",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#6",
+      "hash": "sha256:e7e059b69839c972bac628551e386f37c9744e9ce64ff2371b36c99ba83ee236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#7",
+      "hash": "sha256:e8de1bddb3e945bd20f9327b3a948444bdf1166bf719c7927acd26e3886eed90"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#8",
+      "hash": "sha256:667a20a0f398e3e7ffa84d26a280bd105c0cab28e5d8f7a1c1ce77a1e8c91618"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#9",
+      "hash": "sha256:57985a415f69878d1b96d1d355c3e44a24e737dbb54dd7d8187eb36d89b243b2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#10",
+      "hash": "sha256:7dbc2db8548d55b177e68ef01307185dff7a4daa2f90cbd90e0c09edb7d5a2b9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#11",
+      "hash": "sha256:b2ec4aa8b7784c9edabcf052da47b8624bf30212b1b531fe2256919d3346b773"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#12",
+      "hash": "sha256:58c45a2b5cf742e81fb7c8821aa89ff73b1a52b252d43ade4bfab388cfe19039"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#13",
+      "hash": "sha256:5d487a7996c8e263079f9d6304bb56e25eeacc575ebd8bd10356a450b88e7fb8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#14",
+      "hash": "sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#15",
+      "hash": "sha256:7b5fa60e7d8f3a77bc2954cfc27b9dee9be3831e414c94d117e579341bc9514f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#16",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#17",
+      "hash": "sha256:4c528b5b14b78f2b56edc601342cdb3e385bcc9e77ca0c60a091d8b0aa69b340"
     },
     {
       "content": "blocks",

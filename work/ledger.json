@@ -24999,6 +24999,65 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-PACKAGE-012-CAPABILITY-INTEGRATION-CONSTRAINT",
+      "title": "OD-PACKAGE-012: model/agent backend routing binds to the existing capability system when it is built, not a privileged layer",
+      "why": "The user handed over four external prior-art/brainstorm documents to check against this track's work. Only one, nomos arch review.txt, names anything specific to ModelBackendPackage/AgentExecutorPackage (the other three -- a rule-registry-wiring survey, a Go-predecessor package-architecture study, and a spec/work-ledger file-format brainstorm -- are grepped and confirmed to contain zero mentions of model backend, agent executor, model routing, or ModelSelection). That document's section 18 states a design principle nowhere written in this workspace's governing records: a model or an agent executor is one more way of satisfying a capability, so ModelBackend/AgentExecutor should integrate through the existing capability/evidence/provider interfaces -- the same nomos_capability::Registry/ProviderOffer split OD-CAPABILITY-002 already established for language providers -- rather than the routing/execution system becoming a separate, privileged 'AI layer' invented from scratch. Grepped ARC-ROADMAP-001 and ARC-ECOSYSTEM-001 directly: neither states this. OD-PACKAGE-010 only states the negative fact that a model backend does not currently register a nomos_capability provider (the reason nomos-package's providers field was not reused for ModelSelection) -- it never commits to whether the eventual routing system SHOULD integrate through nomos_capability once built. OD-PACKAGE-011, landed earlier this session, confirmed no real second case exists yet for MODEL-ROUTE-038-049 (the routing/conformance system this principle would bind), so this is not yet actionable -- but the principle is real, sourced from a serious external review, not contradicted by anything in the corpus or the existing records, and consistent with (not a departure from) OD-PACKAGE-010's own design, which already gives nomos-model-package the same manifest-crate shape as nomos-lang-package rather than a privileged one. Naming it now, precisely and without building it, means the session that eventually builds MODEL-ROUTE-038-049's first real increment does not have to independently rediscover or accidentally contradict this constraint.",
+      "done_when": "docs/records/OD-PACKAGE-012-*.md exists, accepted, authority canonical-normative-record, registered via crates/spec/nomos-spec-store/records/OD-PACKAGE-012.record, and states: (1) which of the four handed-over documents actually names anything in this track's territory (only nomos arch review.txt, section 18) and that the other three were checked and contain nothing relevant, so a future session does not have to re-check them; (2) the principle itself -- ModelBackend/AgentExecutor routing, when built, integrates through the existing capability/evidence/provider system (nomos_capability::Registry/ProviderOffer, the same split OD-CAPABILITY-002 established) rather than becoming a separate privileged mechanism; (3) that this is not yet actionable because OD-PACKAGE-011 already confirmed no real routing implementation exists to build it against, and does not reopen or contradict OD-PACKAGE-010; (4) what would make it actionable, matching OD-PACKAGE-011's own named trigger. No code in crates/packages/nomos-model-package or anywhere else is touched.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md",
+          "crates/spec/nomos-spec-store/records/OD-PACKAGE-012.record"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "With_No_Table_Should_Store_No_Rows ... ok\n\ntest result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.16s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-55ad3baadee2ff4e.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-56e1c9fba250ca24.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-4d4e16ab50ac70a5.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-35945c6ebc64c902.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-48bfe8d6f3ebf24c.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-ad5f178a2fa55ca5.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-a4b9594685bdc99a.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-0a473518710ef1f1.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-612bfa361c61aabd.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-13810cc2d23617bf.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-ee111bd537ecd137.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-2919ec68747ddb5b.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-99272398d303e3e7.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-756fcac740cd78ad.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-259eb839edee86c9.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1787424196,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

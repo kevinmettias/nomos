@@ -124,6 +124,7 @@ profile: domain-specification
 | docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md@authored | docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md | authored | 14 | 5 | sha256:8e66ebc7fa4c6ee44260128c0f37957605f33a078676edb3c504d701d929362f |
 | docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md@authored | docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md | authored | 14 | 6 | sha256:6e33c1ccc6d608a1f5d45f677aa83fa0f62fb743bf9f653bdef1c7f8ad29f8ed |
 | docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md@authored | docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md | authored | 21 | 8 | sha256:22f2d1d5697a515ae27ef5e18d82433ee900d7506df63159793e435e5daac74d |
+| docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md@authored | docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md | authored | 17 | 6 | sha256:91c99e209eacfaacbe91a9299652a3e8f89ac7b4e451e24acb882ad7930aee77 |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md@authored | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md | authored | 34 | 9 | sha256:871e1ada836924e8fad8d9f05a7badd9349eefb18e90e0157a28ac34879555d0 |
 | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md@authored | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md | authored | 28 | 7 | sha256:f98efe7a4dd950df779912722f9deb19ecdc75a81e52d9635900c2f424a8623a |
 | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md@authored | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md | authored | 45 | 10 | sha256:9af1a60d2bc3755845a1d9c3eeae503b2a8f6ec315cfc906d633c7dc2d5f0483 |
@@ -1134,6 +1135,12 @@ profile: domain-specification
 | docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#14 | authored | 2 | What This Does Not Do |
 | docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#16 | authored | 2 | What Would Decide The Next Increment |
 | docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#20 | authored | 2 | Status |
+| docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#1 | authored | 1 | Model and agent backend routing integrates through the existing capability system, not a privileged layer, when it is built |
+| docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#2 | authored | 2 | Question |
+| docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#5 | authored | 2 | What Was Measured |
+| docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#11 | authored | 2 | The Finding |
+| docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#14 | authored | 2 | What This Does Not Do |
+| docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#16 | authored | 2 | Status |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#1 | authored | 1 | A port that names its outcomes says nothing about how they are obtained |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#2 | authored | 2 | Question |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#5 | authored | 2 | What Was Measured |
@@ -32434,6 +32441,172 @@ Accepted. Confirms, by direct measurement against the live workspace rather than
 assumption, that neither deferred piece `OD-PACKAGE-010` named has a real second case yet,
 and that `OD-CORRECTIONS-001`'s agent/interactive-correction trigger has not fired.
 Schedules no work of its own.
+
+### docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#1
+
+*revision: authored · kind: heading · heading: Model and agent backend routing integrates through the existing capability system, not a privileged layer, when it is built · hash: sha256:93e7904095895b9342e9ac2ec47dfef1d013c20ca0a4db7ffeb07392f109b471*
+
+# Model and agent backend routing integrates through the existing capability system, not a privileged layer, when it is built
+
+### docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#2
+
+*revision: authored · kind: heading · heading: Model and agent backend routing integrates through the existing capability system, not a privileged layer, when it is built / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#3
+
+*revision: authored · kind: prose · heading: Model and agent backend routing integrates through the existing capability system, not a privileged layer, when it is built / Question · hash: sha256:6b808cdb4929ab52c7fa4d9ac9a3c54965535e3637dd20b2578524905b50d4ce*
+
+The user handed over four external documents to check against this track's work for
+anything not already rejected, superseded, or incoherent with this workspace's design:
+`nomos arch review.txt`, `nomos plan.txt`, `nomos packages.txt`, and
+`nomos_spec_and_work_ledger_arch.txt`. Three of the four, checked directly rather than
+assumed irrelevant, name nothing in `ModelBackendPackage`/`AgentExecutorPackage`'s
+territory at all: `nomos plan.txt` is a rule-registry-wiring survey, `nomos packages.txt`
+is a study of `nomos-proto`'s (the Go predecessor's) package architecture, and
+`nomos_spec_and_work_ledger_arch.txt` is a specification-format and work-ledger-format
+brainstorm. Grepped for `model backend`, `agent executor`, `model rout*`, `ModelSelection`,
+and `MODEL-ROUTE` across all four: zero matches outside `nomos arch review.txt`.
+
+### docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#4
+
+*revision: authored · kind: prose · heading: Model and agent backend routing integrates through the existing capability system, not a privileged layer, when it is built / Question · hash: sha256:e6c3f01545efddf19ab968c2f04c8b4792e8379f56e27347ba9574a612e632d7*
+
+That document's section 18, "Model backends should similarly be providers, not privileged
+architecture," names a design principle this workspace's governing records do not
+currently state anywhere. This record checks whether it is already covered, already
+rejected, or in conflict with anything decided -- and finds none of the three, which is
+what licenses recording it.
+
+### docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#5
+
+*revision: authored · kind: heading · heading: Model and agent backend routing integrates through the existing capability system, not a privileged layer, when it is built / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#6
+
+*revision: authored · kind: prose · heading: Model and agent backend routing integrates through the existing capability system, not a privileged layer, when it is built / What Was Measured · hash: sha256:e7e059b69839c972bac628551e386f37c9744e9ce64ff2371b36c99ba83ee236*
+
+The claim: "A model is another way of satisfying a capability... the architecture should
+avoid a giant parallel 'AI layer'... `ModelBackend`/`AgentExecutor` [should] integrate
+through existing capability/evidence/work interfaces," rather than the eventual routing
+system inventing its own resolution mechanism from nothing.
+
+### docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#7
+
+*revision: authored · kind: prose · heading: Model and agent backend routing integrates through the existing capability system, not a privileged layer, when it is built / What Was Measured · hash: sha256:e8de1bddb3e945bd20f9327b3a948444bdf1166bf719c7927acd26e3886eed90*
+
+Checked against `ARC-ROADMAP-001` and `ARC-ECOSYSTEM-001` directly (grep, not memory):
+neither states this. `ARC-ROADMAP-001` lists "language/provider/capability system" and
+"model backend + agent executor infrastructure" as two separate near-term-tier bullets,
+without saying whether the second binds to the first.
+
+### docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#8
+
+*revision: authored · kind: prose · heading: Model and agent backend routing integrates through the existing capability system, not a privileged layer, when it is built / What Was Measured · hash: sha256:667a20a0f398e3e7ffa84d26a280bd105c0cab28e5d8f7a1c1ce77a1e8c91618*
+
+Checked against `OD-PACKAGE-010` directly: it states only the negative fact that "a model
+backend does not register a `nomos_capability` provider the way `nomos_lang_rust` does" --
+the reason `nomos-package`'s `providers` field (`PKG-007`'s fourth domain, shaped for a
+language's tool registrations) was not reused for `ModelSelection`. That is a statement
+about what `nomos-model-package`'s *manifest* does not do today, not a decision about
+whether the eventual routing/execution system (`MODEL-ROUTE-038` through `049`) should
+bind to `nomos_capability` once one exists. The two questions are different: a
+`ModelBackendPackage` manifest is a distribution/versioning artifact, parallel to how a
+`LanguagePackage` manifest is one -- neither wires directly into `nomos_capability::
+Registry` by itself; a language's actual capability registration happens separately, in
+composition (`registry.Offer(nomos_lang_rust::Provider_Offer())`). So `OD-PACKAGE-010`'s
+statement is consistent with the principle, not a decision against it, and leaves the
+routing-layer question genuinely open.
+
+### docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#9
+
+*revision: authored · kind: prose · heading: Model and agent backend routing integrates through the existing capability system, not a privileged layer, when it is built / What Was Measured · hash: sha256:57985a415f69878d1b96d1d355c3e44a24e737dbb54dd7d8187eb36d89b243b2*
+
+Checked against `OD-PACKAGE-011`, landed earlier this session: it confirms no real
+implementation of `MODEL-ROUTE-038` through `049` exists anywhere in this workspace to
+check any shape against -- including this one. So the principle is not yet actionable, and
+this record does not make it so.
+
+### docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#10
+
+*revision: authored · kind: prose · heading: Model and agent backend routing integrates through the existing capability system, not a privileged layer, when it is built / What Was Measured · hash: sha256:7dbc2db8548d55b177e68ef01307185dff7a4daa2f90cbd90e0c09edb7d5a2b9*
+
+Checked against `OD-CAPABILITY-002`: this workspace already applied the identical
+principle once, for language providers -- "a capability contract is not a provider's
+property," resolved through `nomos_capability`'s registry rather than a provider claiming
+its own terms, with the criterion for when a shared concept earns dedicated machinery
+being contention between real parties, not anticipation of one. The external review's
+point 18 is the same shape applied to a different pair of parties (a model/agent backend
+and the thing that would route to it) that this workspace has not yet reached.
+
+### docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#11
+
+*revision: authored · kind: heading · heading: Model and agent backend routing integrates through the existing capability system, not a privileged layer, when it is built / The Finding · hash: sha256:b2ec4aa8b7784c9edabcf052da47b8624bf30212b1b531fe2256919d3346b773*
+
+## The Finding
+
+### docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#12
+
+*revision: authored · kind: prose · heading: Model and agent backend routing integrates through the existing capability system, not a privileged layer, when it is built / The Finding · hash: sha256:58c45a2b5cf742e81fb7c8821aa89ff73b1a52b252d43ade4bfab388cfe19039*
+
+**The principle is real, not already stated, not contradicted, and not yet actionable.**
+Naming it now, precisely, means the session that eventually builds `MODEL-ROUTE-038`
+through `049`'s first real increment does not have to independently rediscover it or
+build a routing mechanism that later has to be reconciled with `nomos_capability`'s
+existing provider/evidence split after the fact.
+
+### docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#13
+
+*revision: authored · kind: prose · heading: Model and agent backend routing integrates through the existing capability system, not a privileged layer, when it is built / The Finding · hash: sha256:5d487a7996c8e263079f9d6304bb56e25eeacc575ebd8bd10356a450b88e7fb8*
+
+**When `MODEL-ROUTE-038` through `049`'s first real increment is eventually built** --
+the same trigger `OD-PACKAGE-011` already names, unchanged here -- it should be checked
+against `nomos_capability::Registry`/`ProviderOffer` before inventing a separate
+resolution mechanism: does a model or agent executor's selection genuinely fit the
+existing capability/provider/evidence shape (a capability demand, a set of provider
+offers, a resolution bounded by a ceiling), or does it need its own? `OD-CAPABILITY-002`'s
+criterion applies unchanged: shared machinery earns its place when a second real party
+contends for it, not by resemblance alone. This record does not answer that question in
+advance of the real body that would decide it -- it names the question so it is asked
+rather than skipped.
+
+### docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#14
+
+*revision: authored · kind: heading · heading: Model and agent backend routing integrates through the existing capability system, not a privileged layer, when it is built / What This Does Not Do · hash: sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf*
+
+## What This Does Not Do
+
+### docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#15
+
+*revision: authored · kind: prose · heading: Model and agent backend routing integrates through the existing capability system, not a privileged layer, when it is built / What This Does Not Do · hash: sha256:7b5fa60e7d8f3a77bc2954cfc27b9dee9be3831e414c94d117e579341bc9514f*
+
+It does not touch `crates/packages/nomos-model-package` or any other code. It does not
+build any part of `MODEL-ROUTE-038` through `049`, resolve `MODEL-ROUTE-037`'s
+catalog-entry shape, or decide that model/agent routing *will* use `nomos_capability` --
+only that the question must be asked against that system before an alternative is
+invented, when a real case to check it against finally exists. It does not reopen
+`OD-PACKAGE-010`, which stands exactly as it left the boundary, and does not restate or
+amend `OD-PACKAGE-011`'s finding that no such case exists yet. It does not act on
+`nomos plan.txt`, `nomos packages.txt`, or `nomos_spec_and_work_ledger_arch.txt` -- checked
+and confirmed to name nothing in this track's territory, so a future session does not have
+to re-check them for this purpose.
+
+### docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#16
+
+*revision: authored · kind: heading · heading: Model and agent backend routing integrates through the existing capability system, not a privileged layer, when it is built / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#17
+
+*revision: authored · kind: prose · heading: Model and agent backend routing integrates through the existing capability system, not a privileged layer, when it is built / Status · hash: sha256:4c528b5b14b78f2b56edc601342cdb3e385bcc9e77ca0c60a091d8b0aa69b340*
+
+Accepted. Names a design constraint surfaced by external review, checked against this
+workspace's own records and found neither duplicated nor contradicted, for whichever
+future increment `OD-PACKAGE-011` already licenses. Schedules no work of its own.
 
 ### docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#1
 
