@@ -25249,6 +25249,60 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-README-SHIPS-PROJECTIONS-FALSE",
+      "title": "README claims this repository ships README.projection.md and spec/architecture.md as committed projections; neither file has ever existed",
+      "why": "README.md lines 264-267 say 'this repository ships two of them as projections: README.projection.md from the github-markdown profile, and spec/architecture.md from architecture-document.' Neither file exists in the working tree or anywhere in git history (git ls-files and git log --all --diff-filter=A both empty for both paths). OD-PROJECT-002's own table lists only diagram-set, domain-specification, html-site and traceability-matrix as the profiles that render without a corpus; github-markdown and architecture-document are two of the other fourteen that refuse without one, and .github/workflows/gate.yml only requires diagram-set and domain-specification. OD-PROJECT-001 itself never claims these two files are shipped -- it says only that they are 'D-128's documents here,' correctly, and separately notes the corpus is on no CI runner. The false claim is specific to this README paragraph.",
+      "done_when": "README.md no longer claims this repository ships README.projection.md or spec/architecture.md; it states they are the two corpus-backed profiles D-128 names for this repository, that neither renders without a corpus per OD-PROJECT-002, and that the corpus is not present here so neither is committed. rg -F -c 'this repository ships two of them as projections' README.md exits 1 (no match).",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "README.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "rg",
+          "-F",
+          "-c",
+          "neither is committed here",
+          "README.md"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "rg",
+          "-F",
+          "-c",
+          "neither is committed here",
+          "README.md"
+        ],
+        "exit_code": 0,
+        "output_tail": "1\n",
+        "verified_at": 1787422775,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

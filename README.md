@@ -263,8 +263,10 @@ third time here.
 
 `D-128` requires `README.md`, `ARCHITECTURE.md` and `ARTIFACT_MAP.md` to be
 freshness-validated publication outputs. Those are the *specification suite's* overview
-documents, and this repository ships two of them as projections: `README.projection.md`
-from the `github-markdown` profile, and `spec/architecture.md` from `architecture-document`.
+documents: `README.projection.md` from the `github-markdown` profile, and
+`spec/architecture.md` from `architecture-document`. Both are corpus-backed profiles —
+neither is among the four that render without one (`OD-PROJECT-002`) — and the corpus they
+need is not in this repository or on any CI runner, so neither is committed here.
 
 This file is a different document that happens to share a name. It describes the
 workspace, and no content kind in the projection system selects a crate's band or a gate
