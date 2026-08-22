@@ -23,11 +23,11 @@
 //! evaluated over part of the question (the syntactically obvious wrong shapes), not the
 //! whole one `OD-RULES-008`'s sound tier states.
 //!
-//! # Not composed into `nomos-check-orchestration::Run`
+//! # Composed into `nomos-check-orchestration::Run`
 //!
-//! Deliberately, the same split `Check_Dependency_Direction` used:
-//! `P13-CONTROLFLOW-REACHABILITY-CAPABILITY` built and tested this rule and its provider;
-//! wiring either into a real run is a follow-on item, the way `P13-DEPENDENCY-WIRE-1`
+//! The same split `Check_Dependency_Direction` used: `P13-CONTROLFLOW-REACHABILITY-
+//! CAPABILITY` built and tested this rule and its provider, and `P13-CONTROLFLOW-
+//! REACHABILITY-WIRE` composed it into a real run, the way `P13-DEPENDENCY-WIRE-1`
 //! followed `P13-DEPENDENCY-EDGES-2`.
 
 use crate::SourceFile;
