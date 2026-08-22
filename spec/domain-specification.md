@@ -158,7 +158,7 @@ profile: domain-specification
 | docs/records/OD-TRACE-003-a-requirement-half-satisfied-is-partial-and-its-obligation-is-a-gap-checked-like-a-site-not-a-record.md@authored | docs/records/OD-TRACE-003-a-requirement-half-satisfied-is-partial-and-its-obligation-is-a-gap-checked-like-a-site-not-a-record.md | authored | 19 | 8 | sha256:09379db6f9c710a7de0de6a1cb9d749fbdcb23ecbd7f6e25323adb946c14d741 |
 | docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md@authored | docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md | authored | 21 | 8 | sha256:20584da07fdc54fcdca104e7137bc67b265954ba3734fc8b2d17a9036b2806b1 |
 | docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md@authored | docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md | authored | 29 | 11 | sha256:de7e7ec53c19ad7a55b98bcef5dadc7f7b1234b80d6dc2f3ce0098b4a1463685 |
-| docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md@authored | docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md | authored | 21 | 7 | sha256:93d764e016d3a0cf2f5b1f71eb3907c24791f0abc35e5990d3aecd054aead5f9 |
+| docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md@authored | docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md | authored | 24 | 8 | sha256:397fcafaea1e57df681cd4fe9f235f3994dfe990cfab99487fc72a91f797ec84 |
 
 ## Sections
 
@@ -1444,6 +1444,7 @@ profile: domain-specification
 | docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#11 | authored | 2 | What This Does Not Do |
 | docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#16 | authored | 2 | Amendment: A Bare Clock Reading Cannot Give RunId Real Per-Execution Uniqueness |
 | docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#20 | authored | 2 | Status |
+| docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#22 | authored | 2 | Amendment: The Increment Landed; The Construction Lives In `nomos-gate-orchestration`, Not `nomos-contracts` |
 
 ## Source blocks
 
@@ -42317,3 +42318,35 @@ real consumer through Gate -- and, after the amendment above, the corrected shap
 implementation needs: `Run_Gate` takes a caller-supplied `RunId`, not a `Clock`, and
 `RunId::Fresh` is the first-increment construction each composition root can call. Still builds
 neither the increment nor the engine `WF-*` describes beyond it.
+
+### docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#22
+
+*revision: authored · kind: heading · heading: The workflow tier's first real increment is RunId's first real consumer, not the engine / Amendment: The Increment Landed; The Construction Lives In `nomos-gate-orchestration`, Not `nomos-contracts` · hash: sha256:881a60c64c4a8ea2334a6d0934f1be058aeb420ecc11d0558206dcaa9077bd23*
+
+## Amendment: The Increment Landed; The Construction Lives In `nomos-gate-orchestration`, Not `nomos-contracts`
+
+### docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#23
+
+*revision: authored · kind: prose · heading: The workflow tier's first real increment is RunId's first real consumer, not the engine / Amendment: The Increment Landed; The Construction Lives In `nomos-gate-orchestration`, Not `nomos-contracts` · hash: sha256:97c4f87e16870e678f0d5ee6d33824c72359b6aedf04098d7e28e4987aeda756*
+
+`P13-WORKFLOW-001-RUNID-FRESH-AND-RUN-GATE` built the increment "What This Does Not Do" and the
+Status above still describe as unbuilt. `Run_Gate`
+(`crates/orchestration/nomos-gate-orchestration/src/run_gate.rs`) now takes a caller-supplied
+`run: RunId` parameter rather than a `Clock`, and `GateRunResult.run` carries it -- its own doc
+comment names this record as the reason. Both of `Run_Gate`'s real callers construct one:
+`nomos-cli`'s `gate.rs` and `nomos-api`'s `Handle_Gate_Run`.
+
+### docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#24
+
+*revision: authored · kind: prose · heading: The workflow tier's first real increment is RunId's first real consumer, not the engine / Amendment: The Increment Landed; The Construction Lives In `nomos-gate-orchestration`, Not `nomos-contracts` · hash: sha256:183a24363cb0d50317065d319a28b98aafbb9f2076ab82fb829d9121fc45021b*
+
+The construction is not where the amendment above proposed it. `nomos_contracts::RunId::Fresh`
+was never built, and could not have been: band 0 may depend on nothing but `serde`, so `RunId`
+itself cannot read a `Timestamp` or call `Digest_Of_Parts` -- the same constraint the amendment's
+own reasoning states two paragraphs earlier, then contradicts in the signature it proposes. The
+function that exists is `nomos_gate_orchestration::Fresh_Run_Id(now: Timestamp) -> RunId`
+(`crates/orchestration/nomos-gate-orchestration/src/run_id.rs`), combining the clock reading,
+`std::process::id()` and a process-local monotonic counter exactly as the amendment above
+described -- only the crate that hosts it differs, and its own module doc states why band 0
+could not: this crate is the lowest band that can reach both a `Timestamp` and
+`Digest_Of_Parts`.
