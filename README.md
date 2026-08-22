@@ -90,13 +90,15 @@ territories are provably disjoint, and an unanswerable overlap question refuses 
 claim rather than granting it.
 
 ```
-nomos work list [--state ready|claimed|blocked|done|declined]
+nomos work list [--state ready|waiting|held|snagged|stranded|claimed|blocked|done|declined]
+nomos work show   --item <id>
 nomos work add     --item <id> --title <text> --why <text> --done-when <text>
                    --kind capability|decision|validation|correction|cleanup
                    --origin required|proposed
                    --territory <path> [--territory <path> …]
+                   [--amends <record> …]
                    [--depends-on <id> …]
-                   [-- <program> <args…>]
+                   [-- <program> <args…>] [--timeout 2h]
 nomos work claim   --item <id> --holder <name> [--lease 2h]
 nomos work renew   --item <id> --holder <name> [--lease 2h]
 nomos work takeover --item <id> --holder <name> [--lease 2h]

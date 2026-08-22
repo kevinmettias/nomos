@@ -25095,6 +25095,60 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-README-WORK-VERB-SYNOPSIS-STALE",
+      "title": "README's nomos work verb synopsis is missing show, and its list/add option lists trail the real CLI",
+      "why": "README.md's fenced verb-synopsis block (lines 92-108) omits 'nomos work show --item <id>' entirely, even though it is a real, working verb (WorkCommand::Show, crates/host/nomos-cli/src/work/parse.rs) real enough that nomos-api built Handle_Work_Show over it. The same block's list --state options list only ready|claimed|blocked|done|declined, missing waiting|held|snagged|stranded that the real CLI usage (nomos work add --help) prints; and its add synopsis is missing [--amends <record> ...] and [--timeout 2h], both real flags the same usage text documents. The block was complete when authored and has fallen behind as show/amends/timeout/the extra list states were added.",
+      "done_when": "README.md's verb synopsis block includes 'nomos work show --item <id>', lists all eight list --state values (ready, waiting, held, snagged, stranded, claimed, blocked, done, declined), and add's synopsis includes --amends and --timeout. rg -F -c 'nomos work show   --item <id>' README.md returns 1.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "README.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "rg",
+          "-F",
+          "-c",
+          "nomos work show   --item <id>",
+          "README.md"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "rg",
+          "-F",
+          "-c",
+          "nomos work show   --item <id>",
+          "README.md"
+        ],
+        "exit_code": 0,
+        "output_tail": "1\n",
+        "verified_at": 1787422283,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
