@@ -25002,6 +25002,99 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-README-API-SEAM-COUNT-STALE",
+      "title": "README's nomos-api band row still describes it as a second caller of only Run_Gate; four more real seams have landed since",
+      "why": "README.md line 61 says nomos-api is 'A second real caller of nomos-gate-orchestration's Run_Gate' and stops there. crates/host/nomos-api/src/lib.rs's own module doc now names five real increments: Handle_Gate_Run, work::Handle_Work_List, spec::Handle_Spec_Profiles, work::Handle_Work_Show and work::Handle_Work_Validate -- confirmed by git log (60a8a98, 97774f3, 3025c58, 51afce9, each titled 'nomos-api gains a Nth real seam'). The row was accurate when nomos-api had exactly one seam and has not been touched since.",
+      "done_when": "README.md's nomos-api row names nomos-work-orchestration's Run and nomos-spec-orchestration's Profiles alongside nomos-gate-orchestration's Run_Gate, not just Run_Gate alone, matching what crates/host/nomos-api/src/lib.rs's own module doc currently claims. rg -c 'A second real caller of .nomos-gate-orchestration.s .Run_Gate.: walks a tree' README.md returns 0 (the old sentence is gone).",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "README.md"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Predicate error: rg exits 1 (not 0) when the stale phrase is absent, so the chosen predicate can never pass once the fix lands. Re-authoring as P13-README-API-SEAM-COUNT-STALE-2 with a predicate that asserts the corrected phrase is present instead of asserting the stale one is absent."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "rg",
+          "-c",
+          "A second real caller of .nomos-gate-orchestration.s .Run_Gate.: walks a tree",
+          "README.md"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-track-d-staleness",
+        "declined_at": 1787422108
+      }
+    },
+    {
+      "id": "P13-README-API-SEAM-COUNT-STALE-2",
+      "title": "README's nomos-api band row still describes it as a second caller of only Run_Gate; four more real seams have landed since",
+      "why": "Amends P13-README-API-SEAM-COUNT-STALE, declined for an unusable predicate (rg exits 1, not 0, when a pattern is absent, so asserting the stale text's absence that way can never pass). Same defect: README.md line 61 says nomos-api is 'A second real caller of nomos-gate-orchestration's Run_Gate' and stops there. crates/host/nomos-api/src/lib.rs's own module doc now names five real increments: Handle_Gate_Run, work::Handle_Work_List, spec::Handle_Spec_Profiles, work::Handle_Work_Show and work::Handle_Work_Validate -- confirmed by git log (60a8a98, 97774f3, 3025c58, 51afce9, each titled 'nomos-api gains a Nth real seam'). The row was accurate when nomos-api had exactly one seam and has not been touched since.",
+      "done_when": "README.md's nomos-api row names nomos-work-orchestration's Run and nomos-spec-orchestration's Profiles alongside nomos-gate-orchestration's Run_Gate, not just Run_Gate alone. rg -F -c \"nomos-work-orchestration`'s `Run` and `nomos-spec-orchestration`'s `Profiles`\" README.md returns 1 (the corrected sentence is present).",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "README.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "rg",
+          "-F",
+          "-c",
+          "nomos-work-orchestration`'s `Run` and `nomos-spec-orchestration`'s `Profiles`",
+          "README.md"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "rg",
+          "-F",
+          "-c",
+          "nomos-work-orchestration`'s `Run` and `nomos-spec-orchestration`'s `Profiles`",
+          "README.md"
+        ],
+        "exit_code": 0,
+        "output_tail": "1\n",
+        "verified_at": 1787422175,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
