@@ -24950,6 +24950,58 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-LANG-RUST-CARGO-SOLE-CALLER-STALE",
+      "title": "nomos-lang-rust-cargo lib.rs still calls nomos-cli the only composition root reaching nomos-check-orchestration::Run; nomos-api is a second one now",
+      "why": "lib.rs lines 33-35 say 'nomos-cli, the only composition root that calls nomos-check-orchestration::Run today, is the one that chooses StdProcessLauncher.' This crate was already touched once for a different stale claim (P13-LANG-RUST-CARGO-DOC-STALE), and this sentence has drifted stale a second time since: nomos-api::Handle_Gate_Run (crates/host/nomos-api/src/lib.rs:72-86) also passes &StdProcessLauncher into nomos_gate_orchestration::Run_Gate, which calls nomos_check_orchestration::Run (crates/orchestration/nomos-gate-orchestration/src/run_gate.rs:33) -- a second composition root reaching this same path.",
+      "done_when": "lib.rs names nomos-cli and nomos-api (through Run_Gate) as the two composition roots that reach nomos-check-orchestration::Run today, both choosing StdProcessLauncher. cargo test -p nomos-lang-rust-cargo stays green.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages/nomos-lang-rust-cargo/src/lib.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lang-rust-cargo"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lang-rust-cargo"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 10 tests\ntest guarantee::tests::Test_The_Declared_Guarantee_Should_Satisfy_The_Contract_Ceiling ... ok\ntest metadata::tests::Test_Edges_Should_Be_In_Canonical_Order ... ok\ntest metadata::tests::Test_Every_Discovered_Package_Should_Carry_A_Manifest_Relative_Root ... ok\ntest metadata::tests::Test_Nomos_Contracts_Should_Have_No_First_Party_Edges ... ok\ntest metadata::tests::Test_This_Crate_Should_Depend_On_Nomos_Contracts ... ok\ntest provider::tests::Test_A_Fact_Should_Carry_The_Declared_Guarantee ... ok\ntest provider::tests::Test_A_Facts_Path_Should_Be_What_Its_Subject_Was_Addressed_By ... ok\ntest provider::tests::Test_A_Facts_Subject_Should_Match_Subject_Of_Its_Own_Path ... ok\ntest provider::tests::Test_Every_Workspace_Member_Should_Produce_One_Fact ... ok\ntest provider::tests::Test_Two_Runs_Over_The_Same_Tree_Should_Reach_The_Same_Semantic_Inputs ... ok\n\ntest result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s\n\n\nrunning 1 test\ntest Test_An_Edited_Manifests_Old_Fact_Should_Not_Survive_The_Generation_It_Was_Invalidated_At ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.09s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lang_rust_cargo-93635b3de6e9f30b.exe)\n     Running tests\\invalidation.rs (target\\debug\\deps\\invalidation-c1d25b32653260e2.exe)\n   Doc-tests nomos_lang_rust_cargo\n",
+        "verified_at": 1787422025,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
