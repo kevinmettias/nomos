@@ -24964,6 +24964,65 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-API-GATE-EXPLAIN-SEAM",
+      "title": "nomos-api gains an eighth real seam: Gate's Explain verb",
+      "why": "ARC-ROADMAP-001 names CLI/API/MCP projections as a near-term-tier item. nomos-api has proven a second real caller for Gate::run, Gate::plan, Work::List, Spec::Profiles, Work::Show, Work::Validate and Work::Audit. crates/host/nomos-cli/src/gate.rs's own GateInvocation::Explain arm is the only real caller anywhere in this workspace of nomos_gate_orchestration::Explain_Gate, real since P13-GATE-EXPLAIN-FIRST-INCREMENT.\n\nChecked before authoring: Explain_Gate(walked, variant, command, query, launcher) -> GateExplainResult takes the same walked/variant/command/launcher shape Run_Gate does, plus a FindingQuery{rule, location}; GateExplainResult carries {root, check_outcome, explanation: Explanation}. Explanation::NotFound collapses two different causes into one value by Explain_Gate's own design (crates/orchestration/nomos-gate-orchestration/src/explain.rs's Explained: a tree that was never Judged, and a Judged tree whose findings simply do not include query's rule/location, both fall through to the same NotFound) -- this item's response preserves that collapse rather than inventing a finer distinction the orchestration crate itself does not draw, the same reason GateRunResponse already drops check_outcome entirely from its own wire shape (checked response.rs's own module doc) rather than re-exposing CheckOutcome for callers to reconstruct a distinction Run_Gate already reduced away.\n\nExplanation::Found carries finding: Box<Finding> (Finding already derives Serialize, used directly in GateRunResponse's own blocking_findings: Vec<Finding>) plus would_block: bool and three Option fields -- calibrated_by: Option<RuleCalibration>, suppressed_by: Option<Suppression>, baselined_by: Option<BaselineDebt> -- none of which derive Serialize (checked crates/orchestration/nomos-gate-orchestration/src/adoption.rs, suppression.rs, baseline.rs). Suppression additionally carries disposition: SuppressionDisposition, a six-variant enum that also does not derive Serialize. Four new local twin types are needed, the same reason response.rs's own module doc already gives for Disposition and RuleOfferResponse: growing nomos-gate-orchestration's own public surface on behalf of one caller's wire shape is not this increment's to spend.",
+      "done_when": "nomos-api gains a new public function Handle_Gate_Explain(root: &Path, query: &FindingQuery) -> GateExplainResponse in lib.rs, walking root with sources::Walked (the same helper Handle_Gate_Run already uses) and calling nomos_gate_orchestration::Explain_Gate(walked, composition::Host_Variant(), &command, query, &StdProcessLauncher) with a default GateCommand{root: root.to_path_buf(), ..Default::default()}, the same composition Handle_Gate_Run already uses. FindingQuery is nomos_gate_orchestration::FindingQuery directly, not re-exported from this crate -- the same \"a caller depends on the orchestration crate to construct its own input\" precedent Handle_Work_Show's ItemId parameter already sets.\n\nGateExplainResponse is a new tagged NotFound / Found{finding: Finding, would_block: bool, calibrated_by: Option<RuleCalibrationResponse>, suppressed_by: Option<SuppressionResponse>, baselined_by: Option<BaselineDebtResponse>} enum added to response.rs. It carries no root or check_outcome field, matching GateRunResponse's own precedent of dropping check_outcome from the wire shape entirely. RuleCalibrationResponse{rule: RuleId, rationale: String}, SuppressionResponse{rule: RuleId, subject: SubjectId, disposition: SuppressionDispositionResponse, rationale: String, owner: String} and BaselineDebtResponse{rule: RuleId, subject: SubjectId, rationale: String} are new public structs, serializable twins built by conversion, the same twinning response.rs's own module doc already explains for Disposition and RuleOfferResponse. SuppressionDispositionResponse is a new public six-variant enum twinning nomos_gate_orchestration::SuppressionDisposition variant-for-variant.\n\nA real test proves a query naming a rule/location no finding carries answers NotFound over a real walked directory (a scratch directory holding one real \"a.rs\" file this test writes itself, with content that triggers no finding), not a panic or a default. A second test proves a query naming a real triggering pattern for nomos_rules::COMPLETENESS_MIRROR -- a scratch \"a.rs\" containing the exact \"/// Mirrored by `Test_Nowhere`.\\npub const T: &[&str] = &[];\\n\" trigger crates/orchestration/nomos-gate-orchestration/src/tests.rs's own Test_Explain_Should_Find_A_Real_Blocking_Finding fixture already uses -- answers Found with would_block true and all three Option fields None, over this crate's own real walk and Explain_Gate call rather than a synthetic SourceFile list. A third test proves the Found response round-trips through serde_json. tests/contract/surface/nomos-api.txt is regenerated (NOMOS_SURFACE_BLESS) and current. nomos-gate-orchestration, nomos-rules and nomos-cli are not touched by this item.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-api",
+          "tests/contract/surface/nomos-api.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "t result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 5 tests\ntest Test_A_Lowered_Declaration_Should_Fail_The_Comparison ... ok\ntest Test_An_Unrelated_Minor_Version_Should_Fail_The_Comparison ... ok\ntest Test_A_Matching_Declaration_Should_Pass_The_Comparison ... ok\ntest Test_The_Real_Workflow_Should_Still_Have_The_Install_Step ... ok\ntest Test_The_Declared_Floor_Should_Match_The_Toolchain_The_Gate_Installs ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.13s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_api-072c024c685eb8d5.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-95a1aef077b5f9ba.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-ead301eb7c8d8256.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-a61f2bcd75c8d4d9.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-fba07f1fa1c92105.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-2bb84d2d8744d800.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-c2987d8eceda16d3.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-0eeaea7cd309c35b.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-2db99bdd604951c5.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-56e2b70874db076c.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-1204b8c22ecd0b43.exe)\n   Doc-tests nomos_api\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1787422498,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

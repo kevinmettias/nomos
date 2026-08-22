@@ -28,7 +28,9 @@
 //! `Plan` verb's own body, not this crate's `Run_Gate`) -- a function that takes a full
 //! `GateCommand` but, by its own doc, reads none of it: `Plan` reports what this gate's rule
 //! registry holds, not a walk over `root`. `Handle_Gate_Plan` takes no argument for that
-//! reason, unlike [`Handle_Gate_Run`].
+//! reason, unlike [`Handle_Gate_Run`]. Its eighth, [`Handle_Gate_Explain`], does the same for
+//! `Explain_Gate` -- the same walk-and-judge composition `Handle_Gate_Run` already uses, plus
+//! a `FindingQuery` naming one finding to answer for.
 //!
 //! [`Handle_Gate_Run`] is a deliberate twin of `nomos-cli`'s `gate.rs`
 //! `GateInvocation::Run` arm: it walks `root` for `.rs` sources
@@ -63,14 +65,17 @@ mod sources;
 mod spec;
 mod work;
 
-pub use response::{Disposition, GatePlanResponse, GateRunResponse, RuleOfferResponse};
+pub use response::{
+    BaselineDebtResponse, Disposition, GateExplainResponse, GatePlanResponse, GateRunResponse, RuleCalibrationResponse,
+    RuleOfferResponse, SuppressionDispositionResponse, SuppressionResponse,
+};
 pub use spec::{Handle_Spec_Profiles, ProfilesResponse};
 pub use work::{
     BlockedItem, Handle_Work_Audit, Handle_Work_List, Handle_Work_Show, Handle_Work_Validate,
     WorkAuditResponse, WorkListResponse, WorkShowResponse, WorkValidateResponse,
 };
 
-use nomos_gate_orchestration::GateCommand;
+use nomos_gate_orchestration::{FindingQuery, GateCommand};
 use nomos_platform::Clock;
 use nomos_platform_std::{StdProcessLauncher, SystemClock};
 use std::path::Path;
@@ -111,10 +116,30 @@ pub fn Handle_Gate_Plan() -> GatePlanResponse
     return GatePlanResponse::From(outcome);
 }
 
+/// Walks `root`, judges it exactly as `nomos gate run` would, and answers `query` against
+/// what was judged -- exactly as `nomos gate explain` would -- and hands back a
+/// JSON-serializable [`GateExplainResponse`].
+///
+/// The same walk-and-judge composition [`Handle_Gate_Run`] already uses, over the default
+/// [`GateCommand`] narrowed only by `root`: `Explain_Gate` itself does not consult
+/// `command.scope` or `command.rules`, by its own doc.
+#[must_use]
+pub fn Handle_Gate_Explain(root: &Path, query: &FindingQuery) -> GateExplainResponse
+{
+    let command = GateCommand { root: root.to_path_buf(), ..Default::default() };
+    let walked = sources::Walked(root);
+    let result =
+        nomos_gate_orchestration::Explain_Gate(walked, composition::Host_Variant(), &command, query, &StdProcessLauncher);
+
+    return GateExplainResponse::From(result.explanation);
+}
+
 #[cfg(test)]
 mod tests
 {
     use super::*;
+    use nomos_contracts::RuleId;
+    use nomos_rules::COMPLETENESS_MIRROR;
 
     /// A real run over this crate's own tree reaches a real judgment -- not
     /// [`Disposition::Indeterminate`], the state a walk that never became a judged check
@@ -197,5 +222,91 @@ mod tests
         let outcome = parsed.get("outcome").expect("a serialized GatePlanResponse always has this field");
 
         assert_eq!(outcome, "planned", "{json}");
+    }
+
+    /// A real, freshly walkable scratch tree of this test's own -- never the real repository
+    /// tree, which live sessions write to concurrently. A call-local counter, the same
+    /// `crates/host/nomos-api/src/work.rs::tests::Unique_Scratch_Directory` fix: several
+    /// tests below build a tree holding the same trigger content, and the default test
+    /// runner's threads would otherwise race on one directory a bare pid gave them.
+    fn Scratch_Source_Tree(label: &str, file_name: &str, content: &str) -> std::path::PathBuf
+    {
+        static COUNTER: std::sync::atomic::AtomicU64 = std::sync::atomic::AtomicU64::new(0);
+        let unique = COUNTER.fetch_add(1, std::sync::atomic::Ordering::Relaxed);
+
+        let directory =
+            std::env::temp_dir().join(format!("nomos-api-gate-explain-{label}-{}-{unique}", std::process::id()));
+        let _ignored = std::fs::remove_dir_all(&directory);
+        std::fs::create_dir_all(&directory).expect("creates a scratch directory");
+        std::fs::write(directory.join(file_name), content).expect("writes a real source file");
+
+        return directory;
+    }
+
+    /// A query naming a rule and location no finding carries is [`GateExplainResponse::
+    /// NotFound`], not a panic or a default -- over a real walked directory, the same "an
+    /// absent answer is a typed state, not a shorter one" discipline `crates/orchestration/
+    /// nomos-gate-orchestration/src/tests.rs`'s own `Test_Explain_Should_Report_Not_Found_
+    /// For_A_Query_Nothing_Answers` already proves at the orchestration layer.
+    #[test]
+    fn Test_Explaining_A_Query_Nothing_Answers_Should_Be_Not_Found()
+    {
+        let directory = Scratch_Source_Tree("not-found", "a.rs", "pub fn Ok() {}\n");
+        let query = FindingQuery { rule: RuleId::New(COMPLETENESS_MIRROR), location: "nowhere.rs".to_owned() };
+
+        let response = Handle_Gate_Explain(&directory, &query);
+
+        let _ignored = std::fs::remove_dir_all(&directory);
+
+        assert!(matches!(response, GateExplainResponse::NotFound), "{response:?}");
+    }
+
+    /// A real query naming the one blocking finding a real trigger produces answers `Found`,
+    /// with `would_block` true and no calibration, suppression or baseline -- the same
+    /// trigger content `crates/orchestration/nomos-gate-orchestration/src/tests.rs`'s own
+    /// `Test_Explain_Should_Find_A_Real_Blocking_Finding` fixture uses, walked from a real
+    /// directory by this crate's own `sources::Walked` rather than handed to `Explain_Gate`
+    /// as a synthetic `SourceFile` list.
+    #[test]
+    fn Test_Explaining_A_Real_Trigger_Should_Find_A_Real_Blocking_Finding()
+    {
+        let directory =
+            Scratch_Source_Tree("found", "a.rs", "/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n");
+        let query = FindingQuery { rule: RuleId::New(COMPLETENESS_MIRROR), location: "a.rs".to_owned() };
+
+        let response = Handle_Gate_Explain(&directory, &query);
+
+        let _ignored = std::fs::remove_dir_all(&directory);
+
+        let GateExplainResponse::Found { would_block, calibrated_by, suppressed_by, baselined_by, .. } = response
+        else
+        {
+            panic!("this fixture must produce the finding the query names");
+        };
+        assert!(would_block);
+        assert!(calibrated_by.is_none());
+        assert!(suppressed_by.is_none());
+        assert!(baselined_by.is_none());
+    }
+
+    /// The response a real `Found` explanation produces is valid JSON, and its outcome
+    /// round-trips through `serde_json` under the field name a wire caller would actually
+    /// read.
+    #[test]
+    fn Test_A_Real_Found_Explanation_Should_Round_Trip_As_Json()
+    {
+        let directory =
+            Scratch_Source_Tree("json", "a.rs", "/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n");
+        let query = FindingQuery { rule: RuleId::New(COMPLETENESS_MIRROR), location: "a.rs".to_owned() };
+
+        let response = Handle_Gate_Explain(&directory, &query);
+
+        let _ignored = std::fs::remove_dir_all(&directory);
+
+        let json = serde_json::to_string(&response).expect("a GateExplainResponse always serializes");
+        let parsed: serde_json::Value = serde_json::from_str(&json).expect("what was just written parses back");
+        let outcome = parsed.get("outcome").expect("a serialized GateExplainResponse always has this field");
+
+        assert_eq!(outcome, "found", "{json}");
     }
 }

@@ -1,6 +1,8 @@
 pub enum nomos_api::Disposition
+pub enum nomos_api::GateExplainResponse
 pub enum nomos_api::GatePlanResponse
 pub enum nomos_api::ProfilesResponse
+pub enum nomos_api::SuppressionDispositionResponse
 pub enum nomos_api::WorkAuditResponse
 pub enum nomos_api::WorkListResponse
 pub enum nomos_api::WorkShowResponse
@@ -8,10 +10,18 @@ pub enum nomos_api::WorkValidateResponse
 pub enum variant nomos_api::Disposition::Failed
 pub enum variant nomos_api::Disposition::Indeterminate
 pub enum variant nomos_api::Disposition::Passed
+pub enum variant nomos_api::GateExplainResponse::Found { finding: Box<Finding>, would_block: bool, calibrated_by: Option<RuleCalibrationResponse>, suppressed_by: Box<Option<SuppressionResponse>>, baselined_by: Option<BaselineDebtResponse>, }
+pub enum variant nomos_api::GateExplainResponse::NotFound
 pub enum variant nomos_api::GatePlanResponse::Contradictory { cause: String, }
 pub enum variant nomos_api::GatePlanResponse::Planned { rules: Vec<RuleOfferResponse>, }
 pub enum variant nomos_api::ProfilesResponse::Listed { profiles: Vec<Profile>, }
 pub enum variant nomos_api::ProfilesResponse::Unreadable { cause: String, }
+pub enum variant nomos_api::SuppressionDispositionResponse::AcceptedBaselineDebt
+pub enum variant nomos_api::SuppressionDispositionResponse::FalsePositiveDisposition
+pub enum variant nomos_api::SuppressionDispositionResponse::FormalRiskAcceptance
+pub enum variant nomos_api::SuppressionDispositionResponse::InlineSuppression
+pub enum variant nomos_api::SuppressionDispositionResponse::RepositoryPolicyException
+pub enum variant nomos_api::SuppressionDispositionResponse::TemporaryWaiver
 pub enum variant nomos_api::WorkAuditResponse::Audited { blocked: Vec<BlockedItem>, now: Timestamp, }
 pub enum variant nomos_api::WorkAuditResponse::Unreadable { cause: String, }
 pub enum variant nomos_api::WorkListResponse::Listed { document: LedgerDocument, now: Timestamp, }
@@ -21,6 +31,7 @@ pub enum variant nomos_api::WorkShowResponse::NotFound { item: ItemId, }
 pub enum variant nomos_api::WorkShowResponse::Unreadable { cause: String, }
 pub enum variant nomos_api::WorkValidateResponse::Invalid { cause: String, }
 pub enum variant nomos_api::WorkValidateResponse::Valid { document: LedgerDocument, }
+pub fn nomos_api::Handle_Gate_Explain(root: &Path, query: &FindingQuery) -> GateExplainResponse
 pub fn nomos_api::Handle_Gate_Plan() -> GatePlanResponse
 pub fn nomos_api::Handle_Gate_Run(root: &Path) -> GateRunResponse
 pub fn nomos_api::Handle_Spec_Profiles() -> ProfilesResponse
@@ -28,6 +39,9 @@ pub fn nomos_api::Handle_Work_Audit(directory: &Path) -> WorkAuditResponse
 pub fn nomos_api::Handle_Work_List(directory: &Path) -> WorkListResponse
 pub fn nomos_api::Handle_Work_Show(directory: &Path, item: &ItemId) -> WorkShowResponse
 pub fn nomos_api::Handle_Work_Validate(directory: &Path) -> WorkValidateResponse
+pub struct field nomos_api::BaselineDebtResponse::rationale: String
+pub struct field nomos_api::BaselineDebtResponse::rule: RuleId
+pub struct field nomos_api::BaselineDebtResponse::subject: SubjectId
 pub struct field nomos_api::BlockedItem::cause: String
 pub struct field nomos_api::BlockedItem::item: LedgerItem
 pub struct field nomos_api::GateRunResponse::baselined_findings: Vec<Finding>
@@ -37,9 +51,19 @@ pub struct field nomos_api::GateRunResponse::disposition: Disposition
 pub struct field nomos_api::GateRunResponse::root: PathBuf
 pub struct field nomos_api::GateRunResponse::run: RunId
 pub struct field nomos_api::GateRunResponse::suppressed_findings: Vec<Finding>
+pub struct field nomos_api::RuleCalibrationResponse::rationale: String
+pub struct field nomos_api::RuleCalibrationResponse::rule: RuleId
 pub struct field nomos_api::RuleOfferResponse::contract_record: String
 pub struct field nomos_api::RuleOfferResponse::contract_record_version: u32
 pub struct field nomos_api::RuleOfferResponse::rule: RuleId
+pub struct field nomos_api::SuppressionResponse::disposition: SuppressionDispositionResponse
+pub struct field nomos_api::SuppressionResponse::owner: String
+pub struct field nomos_api::SuppressionResponse::rationale: String
+pub struct field nomos_api::SuppressionResponse::rule: RuleId
+pub struct field nomos_api::SuppressionResponse::subject: SubjectId
+pub struct nomos_api::BaselineDebtResponse
 pub struct nomos_api::BlockedItem
 pub struct nomos_api::GateRunResponse
+pub struct nomos_api::RuleCalibrationResponse
 pub struct nomos_api::RuleOfferResponse
+pub struct nomos_api::SuppressionResponse

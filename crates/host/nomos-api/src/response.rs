@@ -1,17 +1,21 @@
-//! JSON-serializable projections of what `nomos-gate-orchestration` produces for `run` and
-//! `plan`.
+//! JSON-serializable projections of what `nomos-gate-orchestration` produces for `run`,
+//! `plan` and `explain`.
 //!
-//! `GateRunResult`, `GateRunOutcome`, `GateOutcome` and `nomos_rules::RuleOffer` do not
-//! derive `Serialize` -- nothing needed a wire format for any of them before this crate
-//! existed. Adding it to them directly would grow `nomos-gate-orchestration`'s or
-//! `nomos-rules`' own public surface on behalf of one caller's shape, before a second
-//! transport exists to check that shape against -- the same premature-surface caution this
-//! crate's own module doc names. The types here are that shape, owned in this crate and
-//! built by conversion from the borrowed or owned result, so neither orchestration crate
-//! changes.
+//! `GateRunResult`, `GateRunOutcome`, `GateOutcome`, `Explanation` and its own
+//! `RuleCalibration`/`Suppression`/`SuppressionDisposition`/`BaselineDebt`, and
+//! `nomos_rules::RuleOffer`, do not derive `Serialize` -- nothing needed a wire format for
+//! any of them before this crate existed. Adding it to them directly would grow
+//! `nomos-gate-orchestration`'s or `nomos-rules`' own public surface on behalf of one
+//! caller's shape, before a second transport exists to check that shape against -- the same
+//! premature-surface caution this crate's own module doc names. The types here are that
+//! shape, owned in this crate and built by conversion from the borrowed or owned result, so
+//! neither orchestration crate changes.
 
-use nomos_contracts::{Finding, RuleId, RunId};
-use nomos_gate_orchestration::{GateOutcome, GateRunOutcome, GateRunResult};
+use nomos_contracts::{Finding, RuleId, RunId, SubjectId};
+use nomos_gate_orchestration::{
+    BaselineDebt, Explanation, GateOutcome, GateRunOutcome, GateRunResult, RuleCalibration, Suppression,
+    SuppressionDisposition,
+};
 use nomos_rules::RuleOffer;
 use serde::Serialize;
 use std::path::PathBuf;
@@ -147,5 +151,177 @@ impl RuleOfferResponse
             contract_record: offer.contract_record,
             contract_record_version: offer.contract_record_version,
         };
+    }
+}
+
+/// What a real `nomos gate explain` produced, in a shape `serde_json` can hand across a
+/// wire.
+///
+/// Carries no `root` and no `check_outcome`: this crate's caller already supplied `root`,
+/// and `GateRunResponse` already sets the precedent of dropping `check_outcome` from its own
+/// wire shape entirely, rather than re-exposing `CheckOutcome` for a caller to reconstruct a
+/// distinction `Explain_Gate` itself does not draw -- see [`Self::NotFound`]'s own doc for
+/// the one it collapses.
+#[derive(Debug, Serialize)]
+#[serde(tag = "outcome", rename_all = "snake_case")]
+pub enum GateExplainResponse
+{
+    /// No finding from the query's rule at the query's location exists in this judgment.
+    ///
+    /// Two different causes collapse into this one value, by `Explain_Gate`'s own design
+    /// (`crates/orchestration/nomos-gate-orchestration/src/explain.rs`'s `Explained`): a
+    /// tree that was never judged at all, and a judged tree whose real findings simply do
+    /// not include this rule and location. This type preserves that collapse rather than
+    /// inventing a finer distinction the orchestration crate does not draw.
+    NotFound,
+    /// The finding the query names, and what it would do to a real run's disposition.
+    Found
+    {
+        /// The finding itself, in full. `Finding` already derives `Serialize`. Boxed, the
+        /// same reason `WorkShowResponse::Found::item` is: `NotFound` carries nothing, and
+        /// an unboxed `Finding` here would size every `GateExplainResponse` to `Found`'s own
+        /// width regardless of which variant it holds.
+        finding: Box<Finding>,
+        /// Whether this finding, on its own, could fail a build a real `run` reduces it
+        /// into.
+        would_block: bool,
+        /// The calibration that kept it from blocking, when `would_block` is `false`
+        /// because of one.
+        calibrated_by: Option<RuleCalibrationResponse>,
+        /// The suppression that kept it from blocking, when `would_block` is `false`,
+        /// `calibrated_by` is `None`, and a suppression matched. Boxed: `SuppressionResponse`
+        /// is the largest of the three calibration/suppression/baseline fields (it alone
+        /// carries two owned `String`s beside `rule` and `subject`), so it is the one
+        /// `clippy::large_enum_variant` names to shrink `Found`'s own width by.
+        suppressed_by: Box<Option<SuppressionResponse>>,
+        /// The baseline debt entry that kept it from blocking, when `would_block` is
+        /// `false` and both `calibrated_by` and `suppressed_by` are `None`.
+        baselined_by: Option<BaselineDebtResponse>,
+    },
+}
+
+impl GateExplainResponse
+{
+    pub(crate) fn From(explanation: Explanation) -> Self
+    {
+        return match explanation
+        {
+            Explanation::NotFound => Self::NotFound,
+            Explanation::Found { finding, would_block, calibrated_by, suppressed_by, baselined_by } => Self::Found {
+                finding,
+                would_block,
+                calibrated_by: calibrated_by.map(RuleCalibrationResponse::From),
+                suppressed_by: Box::new(suppressed_by.map(SuppressionResponse::From)),
+                baselined_by: baselined_by.map(BaselineDebtResponse::From),
+            },
+        };
+    }
+}
+
+/// A serializable twin of [`nomos_gate_orchestration::RuleCalibration`], for the same reason
+/// [`Disposition`] twins [`GateRunOutcome`].
+#[derive(Debug, Serialize)]
+pub struct RuleCalibrationResponse
+{
+    /// The rule this calibration applies to.
+    pub rule: RuleId,
+    /// Why this rule is not yet blocking for this repository.
+    pub rationale: String,
+}
+
+impl RuleCalibrationResponse
+{
+    fn From(calibration: RuleCalibration) -> Self
+    {
+        return Self { rule: calibration.rule, rationale: calibration.rationale };
+    }
+}
+
+/// A serializable twin of [`nomos_gate_orchestration::Suppression`], for the same reason
+/// [`Disposition`] twins [`GateRunOutcome`].
+#[derive(Debug, Serialize)]
+pub struct SuppressionResponse
+{
+    /// The rule this disposition applies to.
+    pub rule: RuleId,
+    /// The subject this disposition applies to.
+    pub subject: SubjectId,
+    /// Which of `SUP-*`'s six dispositions this is.
+    pub disposition: SuppressionDispositionResponse,
+    /// Why.
+    pub rationale: String,
+    /// Who is accountable for this disposition.
+    pub owner: String,
+}
+
+impl SuppressionResponse
+{
+    fn From(suppression: Suppression) -> Self
+    {
+        return Self {
+            rule: suppression.rule,
+            subject: suppression.subject,
+            disposition: SuppressionDispositionResponse::From(suppression.disposition),
+            rationale: suppression.rationale,
+            owner: suppression.owner,
+        };
+    }
+}
+
+/// A serializable twin of [`nomos_gate_orchestration::SuppressionDisposition`], kept to the
+/// same six variants, in the same order, so a mismatch between the two is a compile error in
+/// [`SuppressionDispositionResponse::From`] rather than a silent divergence.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum SuppressionDispositionResponse
+{
+    /// Suppressed at the finding's own site, e.g. an inline annotation.
+    InlineSuppression,
+    /// Exempted by a repository-wide policy rather than a per-finding annotation.
+    RepositoryPolicyException,
+    /// Accepted for a bounded period, expected to be revisited.
+    TemporaryWaiver,
+    /// Existing debt a baseline tolerates rather than blocks.
+    AcceptedBaselineDebt,
+    /// The finding does not hold; the rule (or its inputs) were wrong here.
+    FalsePositiveDisposition,
+    /// A deliberate, owned decision to accept the risk the finding names.
+    FormalRiskAcceptance,
+}
+
+impl SuppressionDispositionResponse
+{
+    fn From(disposition: SuppressionDisposition) -> Self
+    {
+        return match disposition
+        {
+            SuppressionDisposition::InlineSuppression => Self::InlineSuppression,
+            SuppressionDisposition::RepositoryPolicyException => Self::RepositoryPolicyException,
+            SuppressionDisposition::TemporaryWaiver => Self::TemporaryWaiver,
+            SuppressionDisposition::AcceptedBaselineDebt => Self::AcceptedBaselineDebt,
+            SuppressionDisposition::FalsePositiveDisposition => Self::FalsePositiveDisposition,
+            SuppressionDisposition::FormalRiskAcceptance => Self::FormalRiskAcceptance,
+        };
+    }
+}
+
+/// A serializable twin of [`nomos_gate_orchestration::BaselineDebt`], for the same reason
+/// [`Disposition`] twins [`GateRunOutcome`].
+#[derive(Debug, Serialize)]
+pub struct BaselineDebtResponse
+{
+    /// The rule this debt applies to.
+    pub rule: RuleId,
+    /// The subject this debt applies to.
+    pub subject: SubjectId,
+    /// Why this finding is tolerated rather than fixed.
+    pub rationale: String,
+}
+
+impl BaselineDebtResponse
+{
+    fn From(debt: BaselineDebt) -> Self
+    {
+        return Self { rule: debt.rule, subject: debt.subject, rationale: debt.rationale };
     }
 }
