@@ -72,7 +72,7 @@ profile: domain-specification
 | docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md@authored | docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md | authored | 21 | 8 | sha256:fde76ddb443213fdd5c253144550e72aa60a127201be1c067156bd52c9a071dd |
 | docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md@authored | docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md | authored | 34 | 12 | sha256:ee64f184602e1bd210eeca6144c88552d97cebce829ccdedea3db6487fc6e36d |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md@authored | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md | authored | 16 | 5 | sha256:e3d0afb3cabc0ab33a09a700e110b803806d3c4e063673d8c18ca7adc84c3012 |
-| docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md@authored | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md | authored | 33 | 7 | sha256:9b64932b5379c801e27d55a8182022bc7ee9524dd13249c6ec8795ed1624a2d6 |
+| docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md@authored | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md | authored | 36 | 8 | sha256:3ececaaf506dff6cacf4aa066df5a3fdd61032c1ec291ef9f21e3a4b939d37ef |
 | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md@authored | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md | authored | 19 | 6 | sha256:9237ea74e89c7f49295d2e4bde41ff135c64838767ba17c27b0aad79037ced10 |
 | docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md@authored | docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md | authored | 15 | 5 | sha256:bcf1bfd865c60493754d4a765742627fd4c18504722d27a065b5201be2ac218f |
 | docs/records/OD-HOST-005-whether-request-commands-seam-is-its-own-crate-or-a-verb-inside-spec-orchestration.md@authored | docs/records/OD-HOST-005-whether-request-commands-seam-is-its-own-crate-or-a-verb-inside-spec-orchestration.md | authored | 15 | 5 | sha256:0cb15b83d0fb7a58f4a2afda083ac512ba0ac344d15ca0556f3446736cbd7ea9 |
@@ -677,6 +677,7 @@ profile: domain-specification
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#25 | authored | 2 | What this constrains |
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#27 | authored | 2 | Amendment: SpecCommand's Seam Closed; request::Command Is the One Gap Family 9 Still Names |
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#30 | authored | 2 | Amendment: GateCommand's `run` Verb Is a Closed Seam Family 9 Never Named |
+| docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#34 | authored | 2 | Amendment: `PackageKind` Has One Real Consumer Now |
 | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#1 | authored | 1 | An editor surface is a client of the canonical services, not a parser of the CLI's rendered output |
 | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#4 | authored | 2 | What an editor surface is |
 | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#7 | authored | 2 | What a diagnostic carries |
@@ -17789,6 +17790,39 @@ same reason — and hands both to `Run_Gate`, and `gate/run.rs` no longer exists
 This does not change the amendment before it: `request::Command` is still the one command
 group with no orchestration crate at all. `GateCommand` was never that — it is the case
 family 9 simply forgot to list, closed before this record ever had to call it open.
+
+### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#34
+
+*revision: authored · kind: heading · heading: A surface holds no state its canonical services cannot reconstruct / Amendment: `PackageKind` Has One Real Consumer Now · hash: sha256:04882d7be717bad1bb12e6bf2e1e20a9f52f9d45df32dc37e253ff94691847b7*
+
+## Amendment: `PackageKind` Has One Real Consumer Now
+
+### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#35
+
+*revision: authored · kind: prose · heading: A surface holds no state its canonical services cannot reconstruct / Amendment: `PackageKind` Has One Real Consumer Now · hash: sha256:d6b7cbe876819125814d3ac0c06c0b3da18b4cb5b04b0d710d55807d078f5840*
+
+Family 6 above, as first written, said `PackageKind` "is declared and deliberately
+unconsumed — no manifest reader exists yet, by the type's own documentation." That has not
+been true since `P13-PACKAGE-GENERIC-CORE` (`OD-PACKAGE-007`): `nomos-package`'s reader
+(`crates/packages/nomos-package/src/reader.rs`) resolves a manifest's `package_kind` field
+against this enum and returns `ManifestError::WrongPackageKind` for anything other than
+`PackageKind::LanguagePackage` — this enum's first real consumer. The type's own doc
+comment (`crates/contracts/nomos-contracts/src/package.rs:57-89`) states the change in
+full and was corrected once already, by `P13-PACKAGEKIND-CONSUMER-STALE`, a correction this
+record never picked up.
+
+### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#36
+
+*revision: authored · kind: prose · heading: A surface holds no state its canonical services cannot reconstruct / Amendment: `PackageKind` Has One Real Consumer Now · hash: sha256:e325a7cfa0d0bdd76c7f709ad942d9840a18b343f0e20ee7d19b84ee41a7f61f*
+
+The other fifteen kinds remain exactly the open condition family 6 described:
+`RulePackage`, and — named since family 6 was first written — `ModelBackendPackage` and
+`AgentExecutorPackage` (`OD-PACKAGE-010`'s first manifest maturity for model selection,
+which gives neither package kind a real backend or executor implementation). Each still
+gains its consumer the way `LanguagePackage` did: something reads a declared manifest of
+that kind and refuses one it cannot resolve. Until then, family 6's original point holds
+for those fifteen unchanged — package state is reconstructed through that reader once it
+exists, not accumulated inside whichever surface implements resolution first.
 
 ### docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#1
 

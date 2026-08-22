@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:e3ea64f58e3153ce9023d1c6ef860f047cf62ca0474d52b48c04cde6d66754ee",
-  "inputs_digest": "sha256:543b3b3dfdbd22c86c21c394355164e62d195999919fb80eb915969f9eb51dfe",
+  "content_digest": "sha256:35e5ecfb246c5b15806f774116b13f472bf3f78832db077513b147ba1d104abc",
+  "inputs_digest": "sha256:aed9b8976b30855cffcffd42591112af8965c743618e82d9382e15e26fb7a995",
   "sections": [
     [
       "Documents",
@@ -12,11 +12,11 @@
     ],
     [
       "Sections",
-      1279
+      1280
     ],
     [
       "Source blocks",
-      4549
+      4552
     ]
   ],
   "inputs": [
@@ -333,7 +333,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md@authored",
-      "hash": "sha256:9b64932b5379c801e27d55a8182022bc7ee9524dd13249c6ec8795ed1624a2d6"
+      "hash": "sha256:3ececaaf506dff6cacf4aa066df5a3fdd61032c1ec291ef9f21e3a4b939d37ef"
     },
     {
       "content": "documents",
@@ -3329,6 +3329,11 @@
       "content": "headings",
       "identity": "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#30",
       "hash": "sha256:3130d71b1fadf5e932fc0c11d621e6f7ca507a1917bc2fea3a729c3cc00d47f6"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#34",
+      "hash": "sha256:97e7b4648a86515c39686e355d698cf9a3fe7598a243f16895d243a591c73efb"
     },
     {
       "content": "headings",
@@ -16079,6 +16084,21 @@
       "content": "blocks",
       "identity": "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#33",
       "hash": "sha256:378276a3a7bdb27ff9efd7b59591063695f7e3e8a0ad8cf93913683f40686479"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#34",
+      "hash": "sha256:04882d7be717bad1bb12e6bf2e1e20a9f52f9d45df32dc37e253ff94691847b7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#35",
+      "hash": "sha256:d6b7cbe876819125814d3ac0c06c0b3da18b4cb5b04b0d710d55807d078f5840"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#36",
+      "hash": "sha256:e325a7cfa0d0bdd76c7f709ad942d9840a18b343f0e20ee7d19b84ee41a7f61f"
     },
     {
       "content": "blocks",

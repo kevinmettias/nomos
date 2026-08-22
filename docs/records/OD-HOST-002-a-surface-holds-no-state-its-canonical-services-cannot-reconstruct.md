@@ -3,7 +3,7 @@ id: OD-HOST-002
 type: decision
 title: A surface holds no state its canonical services cannot reconstruct
 status: accepted
-version: 5
+version: 6
 authority: canonical-normative-record
 tags:
   - host
@@ -240,3 +240,24 @@ same reason — and hands both to `Run_Gate`, and `gate/run.rs` no longer exists
 This does not change the amendment before it: `request::Command` is still the one command
 group with no orchestration crate at all. `GateCommand` was never that — it is the case
 family 9 simply forgot to list, closed before this record ever had to call it open.
+
+## Amendment: `PackageKind` Has One Real Consumer Now
+
+Family 6 above, as first written, said `PackageKind` "is declared and deliberately
+unconsumed — no manifest reader exists yet, by the type's own documentation." That has not
+been true since `P13-PACKAGE-GENERIC-CORE` (`OD-PACKAGE-007`): `nomos-package`'s reader
+(`crates/packages/nomos-package/src/reader.rs`) resolves a manifest's `package_kind` field
+against this enum and returns `ManifestError::WrongPackageKind` for anything other than
+`PackageKind::LanguagePackage` — this enum's first real consumer. The type's own doc
+comment (`crates/contracts/nomos-contracts/src/package.rs:57-89`) states the change in
+full and was corrected once already, by `P13-PACKAGEKIND-CONSUMER-STALE`, a correction this
+record never picked up.
+
+The other fifteen kinds remain exactly the open condition family 6 described:
+`RulePackage`, and — named since family 6 was first written — `ModelBackendPackage` and
+`AgentExecutorPackage` (`OD-PACKAGE-010`'s first manifest maturity for model selection,
+which gives neither package kind a real backend or executor implementation). Each still
+gains its consumer the way `LanguagePackage` did: something reads a declared manifest of
+that kind and refuses one it cannot resolve. Until then, family 6's original point holds
+for those fifteen unchanged — package state is reconstructed through that reader once it
+exists, not accumulated inside whichever surface implements resolution first.
