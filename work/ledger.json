@@ -24846,6 +24846,65 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-API-WORK-AUDIT-SEAM",
+      "title": "nomos-api gains a sixth real seam: Work's Audit verb",
+      "why": "ARC-ROADMAP-001 names CLI/API/MCP projections as a near-term-tier item. nomos-api has proven a second real caller for Gate::run, Work::List, Spec::Profiles, Work::Show and Work::Validate. crates/orchestration/nomos-work-orchestration/src/run.rs's own doc groups WorkCommand's eleven verbs by what Run needs to execute them: \"List, Show, Validate and Audit need nothing but ledger\" -- Audit is the last of that group with no seam. Grepped directly: nomos_work_orchestration::Run's WorkCommand::Audit arm has exactly one real caller in this workspace, crates/host/nomos-cli/src/work.rs's Render_Audit.\n\nChecked before authoring: crates/orchestration/nomos-work-orchestration/src/outcome/work_outcome.rs declares WorkOutcome::Audit(Result<BoardView, LedgerError>) -- byte-for-byte the same wrapped type WorkOutcome::List already carries, and run.rs's own match arm confirms it: WorkCommand::Audit maps to WorkOutcome::Audit(Board_View(ledger)), the identical helper the List arm calls. What makes an audit an audit rather than a second listing is entirely a caller-side filter: crates/host/nomos-cli/src/work/report.rs's Blocking_Refusal keeps only Ready items nomos_ledger::Claim_Refusal actually refuses, and its own doc names why that filter is a function and not a second check: \"Two implementations of one rule is how they come to disagree\" (OD-LEDGER-005), so Blocking_Refusal adds nothing over Claim_Refusal but a one-line state-equals-Ready gate. Claim_Refusal itself is already public in nomos_ledger's own surface (crates/substrate/nomos-ledger/src/lib.rs's pub use store). Handle_Work_Show already established that a lookup a caller does over data Run hands back, rather than a filter invented inside nomos_work_orchestration, belongs at the caller -- this item does the same for Audit's Ready-and-refused filter, calling the one canonical nomos_ledger::Claim_Refusal directly rather than reaching into nomos-cli's own pub(super) Blocking_Refusal, which this item's territory cannot touch regardless. It does not reproduce nomos-cli's own Refusal_Label -- the waiting/held/lapsed/snagged word choice OD-LEDGER-022 draws real distinctions around -- and instead hands back each blocked item's full ClaimRefusal::Describe() text, the same string-the-refusal shape WorkListResponse::Unreadable and WorkValidateResponse::Invalid already use for a type that does not derive Serialize.",
+      "done_when": "nomos-api gains a new public function Handle_Work_Audit(directory: &Path) -> WorkAuditResponse, calling nomos_work_orchestration::Run(&WorkCommand::Audit, &mut ledger, &StdProcessLauncher, published) with the same FileLedger::At/StdFileSystem/SystemClock/FileLock composition and the same unreached empty Territory::Of_Files closure for published that Handle_Work_List, Handle_Work_Show and Handle_Work_Validate already use (WorkCommand::Audit never reaches it). WorkAuditResponse is a tagged Audited{blocked: Vec<BlockedItem>, now: nomos_platform::Timestamp} / Unreadable{cause: String} enum, the same two-state honesty shape WorkListResponse::{Listed,Unreadable} already establishes. BlockedItem is a new public struct {item: nomos_ledger::LedgerItem, cause: String} pairing one Ready item with the ClaimRefusal::Describe() text of the one thing standing between it and a claimant. The Audited case is built by iterating view.document.items, keeping only items whose state is nomos_ledger::ItemState::Ready, calling nomos_ledger::Claim_Refusal(&view.document, &item.id, view.now) for each and keeping only the Some(refusal) results -- the identical filter crates/host/nomos-cli/src/work/report.rs's Blocking_Refusal applies, called against the same canonical nomos_ledger::Claim_Refusal function rather than reimplemented, so the two reports of what is blocked cannot drift from each other's rule even though they are two call sites. This item does not reproduce nomos-cli's own Refusal_Label word mapping (waiting/held/lapsed/snagged) -- a wire caller gets the full Describe() text per blocked item instead of that terse label. A real test proves this crate can audit a real, well-formed scratch ledger it writes itself, carrying two Ready items where one depends_on the other (the same nomos_ledger::ClaimRefusal::DependencyUnmet trigger crates/substrate/nomos-ledger/src/store/refusal.rs's own tests use, reached here through the public seam rather than reimplemented) and asserts Audited names exactly the dependent item as blocked, not the item it depends on. A second test proves a scratch board with no Ready items at all returns Audited with an empty blocked list, not Unreadable. A third test proves the Audited response round-trips through serde_json. tests/contract/surface/nomos-api.txt is regenerated (NOMOS_SURFACE_BLESS) and current. nomos-work-orchestration, nomos-ledger and nomos-cli are not touched by this item.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-api",
+          "tests/contract/surface/nomos-api.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "t result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 5 tests\ntest Test_A_Lowered_Declaration_Should_Fail_The_Comparison ... ok\ntest Test_An_Unrelated_Minor_Version_Should_Fail_The_Comparison ... ok\ntest Test_A_Matching_Declaration_Should_Pass_The_Comparison ... ok\ntest Test_The_Real_Workflow_Should_Still_Have_The_Install_Step ... ok\ntest Test_The_Declared_Floor_Should_Match_The_Toolchain_The_Gate_Installs ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.13s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_api-072c024c685eb8d5.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-95a1aef077b5f9ba.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-ead301eb7c8d8256.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-a61f2bcd75c8d4d9.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-fba07f1fa1c92105.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-2bb84d2d8744d800.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-c2987d8eceda16d3.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-0eeaea7cd309c35b.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-2db99bdd604951c5.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-56e2b70874db076c.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-1204b8c22ecd0b43.exe)\n   Doc-tests nomos_api\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1787421740,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

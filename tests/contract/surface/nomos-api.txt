@@ -1,5 +1,6 @@
 pub enum nomos_api::Disposition
 pub enum nomos_api::ProfilesResponse
+pub enum nomos_api::WorkAuditResponse
 pub enum nomos_api::WorkListResponse
 pub enum nomos_api::WorkShowResponse
 pub enum nomos_api::WorkValidateResponse
@@ -8,6 +9,8 @@ pub enum variant nomos_api::Disposition::Indeterminate
 pub enum variant nomos_api::Disposition::Passed
 pub enum variant nomos_api::ProfilesResponse::Listed { profiles: Vec<Profile>, }
 pub enum variant nomos_api::ProfilesResponse::Unreadable { cause: String, }
+pub enum variant nomos_api::WorkAuditResponse::Audited { blocked: Vec<BlockedItem>, now: Timestamp, }
+pub enum variant nomos_api::WorkAuditResponse::Unreadable { cause: String, }
 pub enum variant nomos_api::WorkListResponse::Listed { document: LedgerDocument, now: Timestamp, }
 pub enum variant nomos_api::WorkListResponse::Unreadable { cause: String, }
 pub enum variant nomos_api::WorkShowResponse::Found { item: Box<LedgerItem>, current_revision: Option<String>, now: Timestamp, }
@@ -17,9 +20,12 @@ pub enum variant nomos_api::WorkValidateResponse::Invalid { cause: String, }
 pub enum variant nomos_api::WorkValidateResponse::Valid { document: LedgerDocument, }
 pub fn nomos_api::Handle_Gate_Run(root: &Path) -> GateRunResponse
 pub fn nomos_api::Handle_Spec_Profiles() -> ProfilesResponse
+pub fn nomos_api::Handle_Work_Audit(directory: &Path) -> WorkAuditResponse
 pub fn nomos_api::Handle_Work_List(directory: &Path) -> WorkListResponse
 pub fn nomos_api::Handle_Work_Show(directory: &Path, item: &ItemId) -> WorkShowResponse
 pub fn nomos_api::Handle_Work_Validate(directory: &Path) -> WorkValidateResponse
+pub struct field nomos_api::BlockedItem::cause: String
+pub struct field nomos_api::BlockedItem::item: LedgerItem
 pub struct field nomos_api::GateRunResponse::baselined_findings: Vec<Finding>
 pub struct field nomos_api::GateRunResponse::blocking_findings: Vec<Finding>
 pub struct field nomos_api::GateRunResponse::calibrated_findings: Vec<Finding>
@@ -27,4 +33,5 @@ pub struct field nomos_api::GateRunResponse::disposition: Disposition
 pub struct field nomos_api::GateRunResponse::root: PathBuf
 pub struct field nomos_api::GateRunResponse::run: RunId
 pub struct field nomos_api::GateRunResponse::suppressed_findings: Vec<Finding>
+pub struct nomos_api::BlockedItem
 pub struct nomos_api::GateRunResponse

@@ -1,8 +1,8 @@
-//! A second real caller of `nomos_work_orchestration::Run` -- `List`, `Show` and `Validate`,
-//! the same "one verb at a time, not the whole command set" scope `Handle_Gate_Run` already
-//! uses for Gate's own `run`.
+//! A second real caller of `nomos_work_orchestration::Run` -- `List`, `Show`, `Validate` and
+//! `Audit`, the same "one verb at a time, not the whole command set" scope `Handle_Gate_Run`
+//! already uses for Gate's own `run`.
 
-use nomos_ledger::{FileLedger, ItemId, LedgerDocument, LedgerItem, Territory};
+use nomos_ledger::{Claim_Refusal, FileLedger, ItemId, ItemState, LedgerDocument, LedgerItem, Territory};
 use nomos_platform::Timestamp;
 use nomos_platform_std::{FileLock, StdFileSystem, StdProcessLauncher, SystemClock};
 use nomos_work_orchestration::WorkCommand;
@@ -246,21 +246,140 @@ impl WorkValidateResponse
     }
 }
 
+/// Audits the board at `directory` for what stands between a `Ready` item and an agent that
+/// would take it, exactly as `nomos work audit` would, and hands back a JSON-serializable
+/// response.
+///
+/// `nomos_work_orchestration::Run`'s own `WorkCommand::Audit` arm returns the identical
+/// `Result<BoardView, LedgerError>` its `List` arm does -- both call the same `Board_View`
+/// helper. What makes an audit an audit rather than a second listing is a caller-side filter:
+/// `crates/host/nomos-cli/src/work/report.rs`'s `Blocking_Refusal` keeps only `Ready` items
+/// `nomos_ledger::Claim_Refusal` actually refuses, and adds nothing over that one canonical
+/// function but a one-line state check -- "two implementations of one rule is how they come
+/// to disagree" (`OD-LEDGER-005`). This function applies the same filter, over the same
+/// public `Claim_Refusal`, rather than reaching into nomos-cli's own `pub(super)`
+/// `Blocking_Refusal`. It does not reproduce nomos-cli's own `Refusal_Label` word mapping --
+/// a wire caller gets each blocked item's full `ClaimRefusal::Describe()` text instead of
+/// that terse label.
+#[must_use]
+pub fn Handle_Work_Audit(directory: &Path) -> WorkAuditResponse
+{
+    let mut ledger = FileLedger::At(
+        directory.join("ledger.json"),
+        StdFileSystem,
+        SystemClock,
+        FileLock::At(directory.join("ledger.lock")),
+    );
+
+    let outcome = nomos_work_orchestration::Run(
+        &WorkCommand::Audit,
+        &mut ledger,
+        &StdProcessLauncher,
+        || Territory::Of_Files(std::iter::empty::<String>()),
+    );
+
+    let nomos_work_orchestration::WorkOutcome::Audit(audited) = outcome
+    else
+    {
+        unreachable!("Run always returns the WorkOutcome variant naming the WorkCommand it was given")
+    };
+
+    return WorkAuditResponse::From(audited);
+}
+
+/// One `Ready` item [`Handle_Work_Audit`] found blocked, paired with why.
+#[derive(Debug, Serialize)]
+pub struct BlockedItem
+{
+    /// The blocked item, including what has happened to it.
+    pub item: LedgerItem,
+    /// What [`nomos_ledger::ClaimRefusal::Describe`] says stands between it and a claimant.
+    pub cause: String,
+}
+
+/// What a real `nomos work audit` produced, in a shape `serde_json` can hand across a wire.
+///
+/// The same two-state honesty shape [`WorkListResponse`] already holds to: `Unreadable`
+/// names the board itself failing to read, the one way this can fail short of a genuine
+/// audit answer.
+#[derive(Debug, Serialize)]
+#[serde(tag = "outcome", rename_all = "snake_case")]
+pub enum WorkAuditResponse
+{
+    /// The board was read, and every claimable item currently blocked is named.
+    Audited
+    {
+        /// Every `Ready` item something stands between and an agent that would take it.
+        blocked: Vec<BlockedItem>,
+        /// The moment the board was read.
+        now: Timestamp,
+    },
+    /// The ledger file could not be read at all.
+    Unreadable
+    {
+        /// What went wrong, as `LedgerError`'s own `Display` renders it.
+        cause: String,
+    },
+}
+
+impl WorkAuditResponse
+{
+    fn From(audited: Result<nomos_work_orchestration::BoardView, nomos_ledger::LedgerError>) -> Self
+    {
+        let view = match audited
+        {
+            Ok(view) => view,
+            Err(error) => return Self::Unreadable { cause: error.to_string() },
+        };
+
+        let blocked = view
+            .document
+            .items
+            .iter()
+            .filter(|item| return item.state == ItemState::Ready)
+            .filter_map(|item| {
+                let refusal = Claim_Refusal(&view.document, &item.id, view.now)?;
+                return Some(BlockedItem { item: item.clone(), cause: refusal.Describe() });
+            })
+            .collect();
+
+        return Self::Audited { blocked, now: view.now };
+    }
+}
+
 #[cfg(test)]
 mod tests
 {
     use super::*;
 
-    /// A scratch board of this test's own -- never the real shared `work/` directory,
+    /// A scratch directory of this test's own -- never the real shared `work/` directory,
     /// which live sessions write to concurrently. The same `std::env::temp_dir()` /
     /// `std::process::id()` scoping `crates/host/nomos-cli/tests/scratch_ledger` already
-    /// uses, and the same minimal two-key shape (`schema_version`, `items`) `work/
-    /// ledger.json` itself has.
-    fn Scratch_Board() -> std::path::PathBuf
+    /// uses, plus a call-local counter: several tests below share one `label` (`Scratch_Board`
+    /// backs both `List` and `Validate` tests, for instance), and the default test runner's
+    /// threads raced on the one directory a bare pid gave them -- one thread's
+    /// `remove_dir_all` deleting the `ledger.json` another was mid-read of. `process::id()`
+    /// alone tells two runs of the whole suite apart; it says nothing about two calls inside
+    /// one.
+    fn Unique_Scratch_Directory(label: &str) -> std::path::PathBuf
     {
-        let directory = std::env::temp_dir().join(format!("nomos-api-work-list-{}", std::process::id()));
+        static COUNTER: std::sync::atomic::AtomicU64 = std::sync::atomic::AtomicU64::new(0);
+        let unique = COUNTER.fetch_add(1, std::sync::atomic::Ordering::Relaxed);
+
+        let directory =
+            std::env::temp_dir().join(format!("nomos-api-work-{label}-{}-{unique}", std::process::id()));
         let _ignored = std::fs::remove_dir_all(&directory);
         std::fs::create_dir_all(&directory).expect("creates a scratch directory");
+
+        return directory;
+    }
+
+    /// A scratch board with no items, for the `List`, `Validate` and `Audit` tests that need
+    /// only a well-formed, empty ledger -- the same minimal two-key shape (`schema_version`,
+    /// `items`) `work/ledger.json` itself has.
+    fn Scratch_Board() -> std::path::PathBuf
+    {
+        let directory = Unique_Scratch_Directory("list");
         std::fs::write(directory.join("ledger.json"), "{\"schema_version\": 5, \"items\": []}\n")
             .expect("writes a minimal valid ledger");
 
@@ -304,9 +423,7 @@ mod tests
     /// empty board proves nothing about a found item.
     fn Scratch_Board_With_One_Item() -> (std::path::PathBuf, ItemId)
     {
-        let directory = std::env::temp_dir().join(format!("nomos-api-work-show-{}", std::process::id()));
-        let _ignored = std::fs::remove_dir_all(&directory);
-        std::fs::create_dir_all(&directory).expect("creates a scratch directory");
+        let directory = Unique_Scratch_Directory("show");
         let id = ItemId::New("SCRATCH-ITEM");
         let ledger = format!(
             "{{\"schema_version\": 5, \"items\": [{{\"id\": \"{id}\", \"title\": \"t\", \"why\": \"w\", \
@@ -420,5 +537,81 @@ mod tests
         let outcome = parsed.get("outcome").expect("a serialized WorkValidateResponse always has this field");
 
         assert_eq!(outcome, "valid", "{json}");
+    }
+
+    /// A scratch board carrying two real items, one blocking the other -- for the `Audit`
+    /// tests. `dependency` is `Ready` and unclaimed, so `blocked` earns a real
+    /// `ClaimRefusal::DependencyUnmet` from `nomos_ledger::Claim_Refusal` rather than a
+    /// fixture-only refusal this crate invented.
+    fn Scratch_Board_With_A_Blocked_Item() -> (std::path::PathBuf, ItemId, ItemId)
+    {
+        let directory = Unique_Scratch_Directory("audit");
+        let dependency = ItemId::New("SCRATCH-DEPENDENCY");
+        let blocked = ItemId::New("SCRATCH-BLOCKED");
+        let ledger = format!(
+            "{{\"schema_version\": 5, \"items\": [{{\"id\": \"{dependency}\", \"title\": \"t\", \
+             \"why\": \"w\", \"done_when\": \"d\", \"kind\": \"Capability\", \"origin\": \
+             \"Proposed\", \"territory\": {{\"resolution\": \"File\", \"paths\": [\"a\"], \
+             \"patterns\": []}}, \"state\": \"Ready\"}}, {{\"id\": \"{blocked}\", \"title\": \"t\", \
+             \"why\": \"w\", \"done_when\": \"d\", \"kind\": \"Capability\", \"origin\": \
+             \"Proposed\", \"territory\": {{\"resolution\": \"File\", \"paths\": [\"b\"], \
+             \"patterns\": []}}, \"state\": \"Ready\", \"depends_on\": [\"{dependency}\"]}}]}}\n"
+        );
+        std::fs::write(directory.join("ledger.json"), ledger).expect("writes a minimal valid ledger");
+
+        return (directory, dependency, blocked);
+    }
+
+    #[test]
+    fn Test_Auditing_A_Board_With_A_Real_Dependency_Should_Name_The_Blocked_Item_Not_Its_Dependency()
+    {
+        let (directory, dependency, blocked) = Scratch_Board_With_A_Blocked_Item();
+
+        let response = Handle_Work_Audit(&directory);
+
+        let _ignored = std::fs::remove_dir_all(&directory);
+
+        let WorkAuditResponse::Audited { blocked: found, .. } = response
+        else
+        {
+            panic!("a well-formed board reads cleanly");
+        };
+        assert_eq!(found.len(), 1, "{found:?}");
+        let only = found.first().expect("just asserted this has exactly one element");
+        assert_eq!(only.item.id, blocked);
+        assert_ne!(only.item.id, dependency);
+    }
+
+    #[test]
+    fn Test_Auditing_A_Board_With_No_Ready_Items_Should_Report_Nothing_Blocked()
+    {
+        let directory = Scratch_Board();
+
+        let response = Handle_Work_Audit(&directory);
+
+        let _ignored = std::fs::remove_dir_all(&directory);
+
+        let WorkAuditResponse::Audited { blocked, .. } = response
+        else
+        {
+            panic!("a well-formed, empty ledger reads cleanly");
+        };
+        assert!(blocked.is_empty());
+    }
+
+    #[test]
+    fn Test_A_Real_Audited_Response_Should_Round_Trip_As_Json()
+    {
+        let (directory, _dependency, _blocked) = Scratch_Board_With_A_Blocked_Item();
+
+        let response = Handle_Work_Audit(&directory);
+
+        let _ignored = std::fs::remove_dir_all(&directory);
+
+        let json = serde_json::to_string(&response).expect("a WorkAuditResponse always serializes");
+        let parsed: serde_json::Value = serde_json::from_str(&json).expect("what was just written parses back");
+        let outcome = parsed.get("outcome").expect("a serialized WorkAuditResponse always has this field");
+
+        assert_eq!(outcome, "audited", "{json}");
     }
 }

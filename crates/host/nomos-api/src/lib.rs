@@ -18,7 +18,12 @@
 //! stays at the caller, exactly where `nomos-cli`'s own `Render_Show` already puts it, rather
 //! than being invented inside `nomos_work_orchestration` for this increment's convenience.
 //! Its fifth, [`work::Handle_Work_Validate`], does the same for `WorkCommand::Validate` -- a
-//! real internal-consistency check, not a second view onto data `List` already exposes.
+//! real internal-consistency check, not a second view onto data `List` already exposes. Its
+//! sixth, [`work::Handle_Work_Audit`], does the same for `WorkCommand::Audit` -- whose own
+//! `Run` arm returns the identical `Result<BoardView, LedgerError>` `List`'s arm does, so what
+//! makes this seam an audit and not a second listing is a caller-side filter over the same
+//! canonical `nomos_ledger::Claim_Refusal` `crates/host/nomos-cli/src/work/report.rs`'s own
+//! `Blocking_Refusal` already calls, rather than a second implementation of that one rule.
 //!
 //! [`Handle_Gate_Run`] is a deliberate twin of `nomos-cli`'s `gate.rs`
 //! `GateInvocation::Run` arm: it walks `root` for `.rs` sources
@@ -56,8 +61,8 @@ mod work;
 pub use response::{Disposition, GateRunResponse};
 pub use spec::{Handle_Spec_Profiles, ProfilesResponse};
 pub use work::{
-    Handle_Work_List, Handle_Work_Show, Handle_Work_Validate, WorkListResponse, WorkShowResponse,
-    WorkValidateResponse,
+    BlockedItem, Handle_Work_Audit, Handle_Work_List, Handle_Work_Show, Handle_Work_Validate,
+    WorkAuditResponse, WorkListResponse, WorkShowResponse, WorkValidateResponse,
 };
 
 use nomos_gate_orchestration::GateCommand;
