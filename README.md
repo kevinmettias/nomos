@@ -140,9 +140,9 @@ abandoned work is a decision, and a decision belongs in a verb somebody typed.
 
 **Abandoning ends a claim; declining ends an item.** They take the same three arguments and
 they are not degrees of one thing. `abandon` says this holder stopped, so the item goes back on
-the board with the reason attached — which is right for eighteen of the twenty abandonments this
-ledger has recorded, because the work was still wanted and somebody else finished it. `decline`
-says the item is not work at all: superseded by a successor that already landed it, or refused
+the board with the reason attached — which is right whenever the work is still wanted and
+somebody else can finish it, the common case among the abandonments this ledger has recorded.
+`decline` says the item is not work at all: superseded by a successor that already landed it, or refused
 by name in a record written since it was authored. It takes no claim, because an item nobody
 intends to do should not have to be claimed first, and it refuses an item somebody is holding —
 that call is the holder's, and the refusal names the two commands. `OD-LEDGER-019` measures what

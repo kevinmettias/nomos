@@ -25303,6 +25303,60 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-README-ABANDON-COUNT-STALE",
+      "title": "README's 'eighteen of the twenty abandonments' is off by nearly 4x; the ledger now records 77",
+      "why": "README.md line 141-144 says abandoning 'is right for eighteen of the twenty abandonments this ledger has recorded.' Counted directly from work/ledger.json (summing every item's abandoned array): 77 abandonment entries, not twenty -- and this count only grows as more agents work the ledger, so any specific number hardcoded here goes stale again almost immediately (it grew by one within this very session). Judging what fraction of 77 reasons fit 'the work was still wanted and somebody else finished it' would need reading all 77 reason strings by hand, which is not a mechanically verifiable claim worth re-asserting with a new fixed number.",
+      "done_when": "README.md no longer states a specific count or fraction of abandonments; the sentence states the general case (the work still wanted, finished by someone else) without a number that will drift again. rg -F -c 'eighteen of the twenty abandonments' README.md exits 1 (no match), and rg -F -c 'the work is still wanted' README.md exits 0.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "README.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "rg",
+          "-F",
+          "-c",
+          "the work is still wanted",
+          "README.md"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "rg",
+          "-F",
+          "-c",
+          "the work is still wanted",
+          "README.md"
+        ],
+        "exit_code": 0,
+        "output_tail": "1\n",
+        "verified_at": 1787422861,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
