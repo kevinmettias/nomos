@@ -24846,6 +24846,58 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-RULES-LIB-REACHABILITY-COMPOSED-STALE",
+      "title": "nomos-rules lib.rs still claims Check_Unread_Reaches_A_Finding is not composed into Run, but P13-CONTROLFLOW-REACHABILITY-WIRE wired it",
+      "why": "src/lib.rs lines 64-66 say 'Neither it nor its provider is composed into nomos-check-orchestration::Run yet -- a follow-on item, the same split Check_Dependency_Direction used.' This is stale: crates/orchestration/nomos-check-orchestration/src/run.rs imports and calls Check_Unread_Reaches_A_Finding unconditionally (line 138), wired by P13-CONTROLFLOW-REACHABILITY-WIRE, already done in this ledger.",
+      "done_when": "lib.rs no longer claims Check_Unread_Reaches_A_Finding is uncomposed; it states P13-CONTROLFLOW-REACHABILITY-WIRE composed it into Run, mirroring how Check_Dependency_Direction's composition is described two sentences earlier. cargo test -p nomos-rules stays green.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/lib.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "exit_code": 0,
+        "output_tail": "No_Finding ... ok\ntest reachability::tests::judging::Test_Every_Site_Should_Produce_Its_Own_Finding ... ok\ntest reachability::tests::judging::Test_One_Flagged_Site_Should_Produce_One_Finding ... ok\ntest reachability::tests::reading_a_fact::Test_A_Source_With_No_Flagged_Sites_Should_Produce_No_Finding ... ok\ntest reachability::tests::reading_a_fact::Test_A_Real_Fact_Should_Be_Read_And_Judged ... ok\ntest reachability::tests::reading_a_fact::Test_A_Subject_With_No_Fact_Should_Be_Reported_Rather_Than_Silently_Clean ... ok\ntest registry::rule_registry::tests::Test_A_Rule_Should_Be_Findable_By_Its_Id ... ok\ntest registry::rule_registry::tests::Test_A_Second_Offer_For_One_Rule_Should_Be_Refused ... ok\ntest registry::rule_registry::tests::Test_An_Empty_Registry_Should_Offer_Nothing ... ok\ntest universe::tests::Test_A_Constant_Slice_Should_Be_Found ... ok\ntest universe::tests::Test_A_Declared_Mirror_Should_Be_Read_Off_The_Doc_Comment ... ok\ntest universe::tests::Test_A_File_That_Declares_Nothing_Should_Be_Observed_And_Empty ... ok\ntest universe::tests::Test_A_List_With_No_Documentation_Should_Claim_No_Mirror ... ok\ntest universe::tests::Test_A_Payload_From_A_Blind_Provider_Should_Not_Read_As_No_Mirror ... ok\ntest universe::tests::Test_A_Private_List_Should_Not_Be_A_Universe ... ok\ntest universe::tests::Test_A_Scalar_Constant_Should_Not_Be_A_Universe ... ok\ntest universe::tests::Test_A_Trait_Impl_Should_Not_Claim_The_Type ... ok\ntest universe::tests::Test_An_All_Should_Be_Attributed_To_Its_Type ... ok\ntest universe::tests::Test_An_All_That_Takes_A_Receiver_Should_Not_Be_A_Universe ... ok\n\ntest result: ok. 78 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.09s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-12a9eec0a9b372bd.exe)\n   Doc-tests nomos_rules\n",
+        "verified_at": 1787421894,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
