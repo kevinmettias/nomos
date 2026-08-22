@@ -25082,6 +25082,65 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-API-WORK-ABANDON-DECLINE-SEAM",
+      "title": "nomos-api gains a tenth real seam: Work's Abandon and Decline verbs",
+      "why": "ARC-ROADMAP-001 names CLI/API/MCP projections as a near-term-tier item. nomos-api has proven a second real caller for List, Show, Validate, Audit, Claim, Renew and TakeOver (Work), Profiles (Spec), and run/plan/explain (Gate). This item takes the next two of WorkCommand's remaining mutation verbs: Abandon and Decline.\n\nChecked before authoring: crates/orchestration/nomos-work-orchestration/src/ending_request.rs's own doc states these two verbs share one request type, EndingRequest{item, holder, reason}, \"for the shape of the argument list only. What they end is different, which is why they stay two verbs and two ledger calls\" -- the opposite of nomos_work_orchestration::ClaimRequest's own doc, which is why P13-API-WORK-CLAIM-RENEW-TAKEOVER-SEAM shared one response type across three verbs and this item does not share one across these two. crates/host/nomos-cli/src/work.rs's own dispatch agrees: (WorkCommand::Abandon(_), WorkOutcome::Abandon(result)) renders through Report_Release, while (WorkCommand::Decline(request), WorkOutcome::Decline(result)) renders through a separate Report_Decline that also names the item -- the CLI keeps these two apart at the rendering layer exactly as the request type's own doc says it must, so this item mints two response types rather than one shared across both.\n\nGrepped directly: run.rs's Abandon_Outcome calls ledger.Release(item, holder, ReleaseOutcome::Abandoned{reason}), Decline_Outcome calls ledger.Decline(item, holder, reason) -- both nomos_ledger::ExclusionLedger methods returning Result<(), ClaimRefusal>, both crates/host/nomos-cli/src/work.rs's own arms their only real caller today. Neither has any success payload beyond () to project; ClaimRefusal itself still does not derive Serialize (established by the two prior Work items), so both responses reuse the same cause/retryable shape WorkReservationResponse::Refused already established for a refusal with no other data to carry.",
+      "done_when": "nomos-api gains two new public functions in work.rs: Handle_Work_Abandon(directory: &Path, request: &EndingRequest) -> WorkAbandonResponse and Handle_Work_Decline(directory: &Path, request: &EndingRequest) -> WorkDeclineResponse, each using the shared Ledger_At composition P13-API-WORK-CLAIM-RENEW-TAKEOVER-SEAM already factored out and the same unreached empty Territory::Of_Files closure for published. Each calls nomos_work_orchestration::Run with WorkCommand::Abandon(request.clone()) / Decline(request.clone()) respectively, matches the WorkOutcome variant naming that command, and converts through its own From. EndingRequest is nomos_work_orchestration::EndingRequest directly, not re-exported from this crate, the same input-stays-at-the-orchestration-crate precedent every prior verb parameter (ItemId, FindingQuery, ClaimRequest) already set.\n\nWorkAbandonResponse is a new tagged Abandoned / Refused{cause: String, retryable: bool} enum; WorkDeclineResponse is a new tagged Declined / Refused{cause: String, retryable: bool} enum -- two response types, not one shared across both, because EndingRequest's own doc and nomos-cli's own separate Report_Release/Report_Decline rendering both say these two verbs stay apart past their shared argument shape. Both Refused variants use the same cause (ClaimRefusal::Describe()) / retryable (ClaimRefusal::Is_Retryable()) shape WorkReservationResponse::Refused already established.\n\nA real test proves Handle_Work_Abandon releases a real claim this holder actually has. A second test proves Handle_Work_Abandon refuses (Refused, retryable true -- a real ClaimRefusal::HeldBy) when the requesting holder does not match the item's real active claim. A third test proves Handle_Work_Decline ends a real unclaimed Ready item. A fourth test proves Handle_Work_Decline refuses (Refused, retryable true -- a real ClaimRefusal::StillHeld) against an item a real active claim still holds. A fifth test proves one of the two success responses round-trips through serde_json. tests/contract/surface/nomos-api.txt is regenerated (NOMOS_SURFACE_BLESS) and current. nomos-work-orchestration, nomos-ledger and nomos-cli are not touched by this item.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-api",
+          "tests/contract/surface/nomos-api.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "t result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 5 tests\ntest Test_A_Lowered_Declaration_Should_Fail_The_Comparison ... ok\ntest Test_An_Unrelated_Minor_Version_Should_Fail_The_Comparison ... ok\ntest Test_A_Matching_Declaration_Should_Pass_The_Comparison ... ok\ntest Test_The_Real_Workflow_Should_Still_Have_The_Install_Step ... ok\ntest Test_The_Declared_Floor_Should_Match_The_Toolchain_The_Gate_Installs ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.14s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_api-072c024c685eb8d5.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-95a1aef077b5f9ba.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-ead301eb7c8d8256.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-a61f2bcd75c8d4d9.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-fba07f1fa1c92105.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-2bb84d2d8744d800.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-c2987d8eceda16d3.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-0eeaea7cd309c35b.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-2db99bdd604951c5.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-56e2b70874db076c.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-1204b8c22ecd0b43.exe)\n   Doc-tests nomos_api\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1787423299,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

@@ -34,7 +34,12 @@
 //! (with [`work::Handle_Work_Renew`] and [`work::Handle_Work_TakeOver`] alongside it), does
 //! the same for three of `WorkCommand`'s seven remaining mutation verbs -- one shared
 //! response type across all three, because `nomos_work_orchestration::ClaimRequest` is
-//! already one shared request type for them, by that type's own doc.
+//! already one shared request type for them, by that type's own doc. Its tenth,
+//! [`work::Handle_Work_Abandon`] (with [`work::Handle_Work_Decline`] alongside it), does the
+//! same for `WorkCommand`'s remaining two verbs, `Abandon` and `Decline` -- kept to two
+//! response types rather than one, because `EndingRequest`'s own doc says the opposite of
+//! `ClaimRequest`'s: `abandon` and `decline` share only their argument shape, not what they
+//! mean.
 //!
 //! [`Handle_Gate_Run`] is a deliberate twin of `nomos-cli`'s `gate.rs`
 //! `GateInvocation::Run` arm: it walks `root` for `.rs` sources
@@ -75,9 +80,10 @@ pub use response::{
 };
 pub use spec::{Handle_Spec_Profiles, ProfilesResponse};
 pub use work::{
-    BlockedItem, Handle_Work_Audit, Handle_Work_Claim, Handle_Work_List, Handle_Work_Renew, Handle_Work_Show,
-    Handle_Work_TakeOver, Handle_Work_Validate, ReservationResponse, WorkAuditResponse, WorkListResponse,
-    WorkReservationResponse, WorkShowResponse, WorkValidateResponse,
+    BlockedItem, Handle_Work_Abandon, Handle_Work_Audit, Handle_Work_Claim, Handle_Work_Decline, Handle_Work_List,
+    Handle_Work_Renew, Handle_Work_Show, Handle_Work_TakeOver, Handle_Work_Validate, ReservationResponse,
+    WorkAbandonResponse, WorkAuditResponse, WorkDeclineResponse, WorkListResponse, WorkReservationResponse,
+    WorkShowResponse, WorkValidateResponse,
 };
 
 use nomos_gate_orchestration::{FindingQuery, GateCommand};
