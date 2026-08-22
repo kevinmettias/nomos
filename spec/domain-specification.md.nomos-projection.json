@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:e3ea64f58e3153ce9023d1c6ef860f047cf62ca0474d52b48c04cde6d66754ee",
-  "inputs_digest": "sha256:543b3b3dfdbd22c86c21c394355164e62d195999919fb80eb915969f9eb51dfe",
+  "content_digest": "sha256:5bffd4c1ac88f8d1470607aabc200b5e2b11eb06fd1a74a9cdee8a966f9d9c43",
+  "inputs_digest": "sha256:1f629d0d521ad11a5b990202862e103332d065ec81d16b7a55d232ef69c12498",
   "sections": [
     [
       "Documents",
-      149
+      150
     ],
     [
       "Sections",
-      1279
+      1287
     ],
     [
       "Source blocks",
-      4549
+      4570
     ]
   ],
   "inputs": [
@@ -584,6 +584,11 @@
       "content": "documents",
       "identity": "docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md@authored",
       "hash": "sha256:6e33c1ccc6d608a1f5d45f677aa83fa0f62fb743bf9f653bdef1c7f8ad29f8ed"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md@authored",
+      "hash": "sha256:22f2d1d5697a515ae27ef5e18d82433ee900d7506df63159793e435e5daac74d"
     },
     {
       "content": "documents",
@@ -5569,6 +5574,46 @@
       "content": "headings",
       "identity": "docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#13",
       "hash": "sha256:37dafff25897eed00ce00c5b3c8f1d93fa63d261fa4c973d629aa736576166bb"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#1",
+      "hash": "sha256:42ee25bb01828a7e79242094ba2c093c46f20efd95bf03b24334cc58ba79eddf"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#2",
+      "hash": "sha256:066a135975397353ab2c4a2228e7b185a60c2169a4540bda76eddb1b12bfb7be"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#4",
+      "hash": "sha256:acf481c7c3f33770ddad0e14bad400609b09e3b5e3368798d10623208b538573"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#9",
+      "hash": "sha256:1baaed7ad58ee7900079cc01588f5a09376f32e8e49f36eb0a381b7dae137261"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#12",
+      "hash": "sha256:fb104fb4a00250883b170cfe62256c0f5fa572c6b4f9f729ca149d8e4608cb24"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#14",
+      "hash": "sha256:6643f552845eb84789f982e8dfb3f3b20cfe9a69cc07ef4e8deff7dee75610ce"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#16",
+      "hash": "sha256:1ddc5f5a21e1d2bf5651ff80ad285aed4a365a429da9fde3289b3090e8f42e9e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#20",
+      "hash": "sha256:f04204df6b41915d75c1b4725a57b8919d45b522c68b35b79a843774d8b4f9c9"
     },
     {
       "content": "headings",
@@ -24254,6 +24299,111 @@
       "content": "blocks",
       "identity": "docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#14",
       "hash": "sha256:a643a77ebd5e3b3194386f7fd5432ade77c0ed2845133ec5f54ddb17623b27fd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#1",
+      "hash": "sha256:a35fe264ebd2935f1c3833315c54b2ee4df031223b9de63f8063c10b58f49986"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#3",
+      "hash": "sha256:7a1b189746654419cbd1c360c7604f15946e048afade495318dc61d534f47ef1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#4",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#5",
+      "hash": "sha256:cae8a26e625048e95c814d34b786958e126cd7a83ef3e78bf93bc46e29531be3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#6",
+      "hash": "sha256:b7bd8e7bb80c7ed72dda5a96117300e00afbe743221646e1eceb780e460ac010"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#7",
+      "hash": "sha256:398d9f386e6c449be3d81748469cfb0b4811111fe91d673cf7024b8027b866cd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#8",
+      "hash": "sha256:c66a056b088739aeb95f1575981559835152846ad465bc14b7d0503bc6ba8665"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#9",
+      "hash": "sha256:b2ec4aa8b7784c9edabcf052da47b8624bf30212b1b531fe2256919d3346b773"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#10",
+      "hash": "sha256:b9978ea063c8aac2d1fd79ac5887ec95acf2616b7139cc7cad8ef00b55cc76a8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#11",
+      "hash": "sha256:7e17a698d8b592e4915c954f85a9c2952a765984bf51126ed51c3c53562871b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#12",
+      "hash": "sha256:e666d4e1deec3e6040fbda7737bf053782a9e877e8756740d87a9d7945e51a68"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#13",
+      "hash": "sha256:4ff047f2b9627e87fc2eccc2b6c66152b3951c0461c1fbf4c634ea2bc2bd38f1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#14",
+      "hash": "sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#15",
+      "hash": "sha256:f75cfe9b56cc9804d5400d1fb11cf948182e652d0e3f79d521d5ab71f50432d1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#16",
+      "hash": "sha256:2a49a3ba679fcfb358fdad9c23368250d14e31320f8c91494208c2e9050a975b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#17",
+      "hash": "sha256:ce341a80af8e358e1592d97d774d4d2d4c7b34c75d591bcbbb558b01c1622da5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#18",
+      "hash": "sha256:80a683450425440f3c4ab3534a1167a6e1278ec946f870517f22e63911265b52"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#19",
+      "hash": "sha256:e4b71f6f733aaa1d9509d2f9fbfd2e454f65a3fb6f903cc97f330d240af189cc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#20",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#21",
+      "hash": "sha256:5d8e0121e319b080080187d2fe3dc8ba018c9a7eddfb970f035dd8208b79e1b5"
     },
     {
       "content": "blocks",

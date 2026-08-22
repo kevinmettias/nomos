@@ -3,16 +3,16 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:40fcd9138a343da062bc334a79c1fa1c0cd071489f553cd079cd6618bb7c0b2e",
-  "inputs_digest": "sha256:14d94e9dd54640f5d819ed23ffb08ed5b6d535a5a83fac18bfd8d696cfc8a8d6",
+  "content_digest": "sha256:a7bc63d949a6e638aa604a505d8205dcd96610289c5aec0679c5d88372ad764e",
+  "inputs_digest": "sha256:3eb242ff052fbb97984f58778a039337f897b9f2002deb60489be3ae42b7a3a6",
   "sections": [
     [
       "Relations",
-      1018
+      1026
     ],
     [
       "Decisions",
-      141
+      142
     ]
   ],
   "inputs": [
@@ -315,6 +315,11 @@
       "content": "relations",
       "identity": "ARC-ROADMAP-001 relates-to OD-PACKAGE-010",
       "hash": "sha256:de3ac5be5a65225a9612470a4b8b9815f74a9759167ad6f115f01b9e24911e88"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-ROADMAP-001 relates-to OD-PACKAGE-011",
+      "hash": "sha256:fbf3e93a602d4c7c3fb3914efb3ea5e42a56e14202e91b081958272c331d6f04"
     },
     {
       "content": "relations",
@@ -1730,6 +1735,11 @@
       "content": "relations",
       "identity": "OD-CORRECTIONS-001 relates-to OD-PACKAGE-008",
       "hash": "sha256:8258907fe8346cb06c1fdac37d132e417f7077a9f03527276be6b14380546477"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-CORRECTIONS-001 relates-to OD-PACKAGE-011",
+      "hash": "sha256:1711df2b2067dd4fb9427722d03a1fc05cf882333aecd37235c8644be328afa8"
     },
     {
       "content": "relations",
@@ -3683,6 +3693,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-PACKAGE-001 relates-to OD-PACKAGE-011",
+      "hash": "sha256:ad503a9ef464e8df002c56aab6ca761aa3eb1ff7ada292a49347b8879e6f34a4"
+    },
+    {
+      "content": "relations",
       "identity": "OD-PACKAGE-001 relates-to OD-RULES-001",
       "hash": "sha256:ccddbe7278fe21121bcb1ec9d6b94e2efc93c6ef40c8aa3e0d0270a118675571"
     },
@@ -3970,6 +3985,31 @@
       "content": "relations",
       "identity": "OD-PACKAGE-010 relates-to OD-PACKAGE-008",
       "hash": "sha256:3fbf511eacb2dbf3261a6228d5e7ff74384a9b6c4413829c34b5ed9bbb867d61"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-PACKAGE-010 relates-to OD-PACKAGE-011",
+      "hash": "sha256:b837f0d00628f03236bed8d544ac08885f6bd532cd987184914fe78b79f63c76"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-PACKAGE-011 relates-to ARC-ROADMAP-001",
+      "hash": "sha256:23042c31c2a75d3048aeb7efea575ae75ba4a696f5b45c9abcddda5b4a75c0c3"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-PACKAGE-011 relates-to OD-CORRECTIONS-001",
+      "hash": "sha256:b0f186e5f24a7073b8a7b91cae69e570377c84b1f31cbae2760a2fc13de283b8"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-PACKAGE-011 relates-to OD-PACKAGE-001",
+      "hash": "sha256:6042f7a89d83f99970c803de39c794d9d09ce8d39f4717a6d87aec2b6910fcca"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-PACKAGE-011 relates-to OD-PACKAGE-010",
+      "hash": "sha256:f7841317bf188c728135d801bcdc152439dd0c1e82026e4534045ab84c5ad770"
     },
     {
       "content": "relations",
@@ -5630,6 +5670,11 @@
       "content": "nodes",
       "identity": "OD-PACKAGE-010",
       "hash": "sha256:5e2f259c799066bbbe9b6de3fd712e7662ee28df64086d1ed90ea2bd0371bc90"
+    },
+    {
+      "content": "nodes",
+      "identity": "OD-PACKAGE-011",
+      "hash": "sha256:f50522742d2a364ffa41489daba6f1f89245a21bea42a06161ed95b37e37b442"
     },
     {
       "content": "nodes",
