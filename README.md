@@ -187,7 +187,7 @@ reports the file's schema version and the running build's side by side, without 
 provoke a refusal first:
 
 ```
-ledger is valid (schema 2, and this build understands 2)
+ledger is valid (schema 5, and this build understands 5)
 ```
 
 ## Reading the specification

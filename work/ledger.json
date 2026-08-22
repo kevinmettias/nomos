@@ -25357,6 +25357,60 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-README-VALIDATE-SCHEMA-EXAMPLE-STALE",
+      "title": "README's nomos work validate example output is stuck at schema 2; the ledger is schema 5 now",
+      "why": "README.md line 190 shows the example output 'ledger is valid (schema 2, and this build understands 2)'. work/ledger.json's schema_version is now 5 (OD-LEDGER-008 and OD-LEDGER-024 both added fields since), confirmed by running the real built binary's own 'nomos work validate' in this tree, which prints 'ledger is valid (schema 5, and this build understands 5)'. The message format itself (crates/host/nomos-cli/src/work/report.rs) is unchanged; only the illustrated numbers are outdated, and they will drift again the next time a schema field is added.",
+      "done_when": "README.md's example output matches the real current schema. rg -F -c 'ledger is valid (schema 5, and this build understands 5)' README.md returns 1.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "README.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "rg",
+          "-F",
+          "-c",
+          "ledger is valid (schema 5, and this build understands 5)",
+          "README.md"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "rg",
+          "-F",
+          "-c",
+          "ledger is valid (schema 5, and this build understands 5)",
+          "README.md"
+        ],
+        "exit_code": 0,
+        "output_tail": "1\n",
+        "verified_at": 1787422912,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
