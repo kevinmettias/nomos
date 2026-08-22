@@ -25200,6 +25200,65 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-API-WORK-ADD-SEAM",
+      "title": "nomos-api gains a twelfth real seam: Work's Add verb, closing Work entirely",
+      "why": "ARC-ROADMAP-001 names CLI/API/MCP projections as a near-term-tier item. nomos-api has now proven a second real caller for every WorkCommand verb except Add: List, Show, Validate, Audit, Claim, Renew, TakeOver, Abandon, Decline, Finish. This item closes Work entirely.\n\nChecked before authoring: crates/orchestration/nomos-work-orchestration/src/run.rs's own Add_Outcome calls ledger.Add(item, \"nomos work add\", &published(), amending) -- the holder string is a literal hard-coded there, not a caller-supplied value, so this item does not invent a holder parameter either. published is the one input every other seamed verb's own Territory::Of_Files(std::iter::empty()) closure never had to compute for real: crates/host/nomos-cli/src/work.rs's own Published_Records(directory) walks directory.parent()/docs/records and lists every file there as a Territory, the enumeration nomos_work_orchestration::Run's own doc says a composition root supplies because \"that port is read, atomically-replace and exists, not a directory walk\" (nomos_platform::FileSystem has no listing operation). This item ports that same function into nomos-api, the same \"deliberate twin, not a shared dependency\" choice sources.rs already makes for gate's own directory walk, because OD-HOST-002 treats a walk as a composition-root concern every composition root re-implements rather than shares.\n\nLedgerItem, ItemId, ItemKind, ItemOrigin and Territory all already derive Serialize (checked -- all four are stored directly in ledger.json), so WorkCommand::Add's own item and amending fields need no twin types; a caller constructs a real nomos_ledger::LedgerItem directly, the same \"the orchestration crate's real input type, not a re-export\" precedent Handle_Work_Show's ItemId and Handle_Gate_Explain's FindingQuery both already set. AddRefusal does not derive Serialize and has Describe() but no single Is_X()-style method the way ClaimRefusal/FinishRefusal do -- crates/host/nomos-cli/src/work/report.rs's own Code_For_Refusal maps its six variants across three different exit codes with no one boolean capturing that split -- so this item's Refused variant carries only cause: String, the same choice WorkListResponse::Unreadable and WorkValidateResponse::Invalid already made for LedgerError, which has no such method either. Inventing a categorization AddRefusal itself does not expose as a method would be a second, uncanonical implementation of a distinction only nomos-cli's own Code_For_Refusal currently draws -- the same \"two implementations of one rule is how they come to disagree\" reasoning crates/host/nomos-cli/src/work/report.rs's own Blocking_Refusal doc already states for a different refusal type, applied here to the same shape of risk.",
+      "done_when": "nomos-api gains a new public function Handle_Work_Add(directory: &Path, item: &LedgerItem, amending: &Territory) -> WorkAddResponse in work.rs, using the shared Ledger_At composition every existing Work handler already uses. It calls nomos_work_orchestration::Run(&WorkCommand::Add{item: Box::new(item.clone()), amending: amending.clone()}, &mut ledger, &StdProcessLauncher, || Published_Records(directory)), matches WorkOutcome::Add, and converts through WorkAddResponse::From. Published_Records(directory) and its helper Record_Files(root) are new private functions in work.rs, a deliberate twin of crates/host/nomos-cli/src/work.rs's own Published_Records/Record_Files -- directory.parent()/docs/records listed and sorted into a Territory::Of_Files, Territory::Empty() when the parent cannot be read -- ported rather than shared, the same division sources.rs already documents for gate's own walk. LedgerItem and Territory are nomos_ledger's own types, used directly as parameters, not re-exported from this crate, the same input-stays-at-the-orchestration-crate precedent every prior verb parameter already set.\n\nWorkAddResponse is a new tagged Added / Refused{cause: String} enum -- no second field beyond cause, because AddRefusal exposes no single Is_X() method the way ClaimRefusal/FinishRefusal do, and crates/host/nomos-cli/src/work/report.rs's own Code_For_Refusal maps AddRefusal's six variants across three exit codes with nothing this crate can reduce to one bool without inventing a second, uncanonical implementation of that split.\n\nA real test proves Handle_Work_Add records a real, well-formed new item on a scratch board this test writes itself, with a territory that reserves no docs/records path (so Published_Records's own real, empty-on-a-fresh-scratch-tree answer never refuses it). A second test proves Handle_Work_Add refuses (Refused) adding an item whose id is already on the board -- a real AddRefusal::AlreadyPresent. A third test proves the Added response round-trips through serde_json. tests/contract/surface/nomos-api.txt is regenerated (NOMOS_SURFACE_BLESS) and current. nomos-work-orchestration, nomos-ledger and nomos-cli are not touched by this item.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-api",
+          "tests/contract/surface/nomos-api.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "t result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 5 tests\ntest Test_A_Lowered_Declaration_Should_Fail_The_Comparison ... ok\ntest Test_A_Matching_Declaration_Should_Pass_The_Comparison ... ok\ntest Test_An_Unrelated_Minor_Version_Should_Fail_The_Comparison ... ok\ntest Test_The_Real_Workflow_Should_Still_Have_The_Install_Step ... ok\ntest Test_The_Declared_Floor_Should_Match_The_Toolchain_The_Gate_Installs ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.12s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_api-072c024c685eb8d5.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-95a1aef077b5f9ba.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-ead301eb7c8d8256.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-a61f2bcd75c8d4d9.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-fba07f1fa1c92105.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-2bb84d2d8744d800.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-c2987d8eceda16d3.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-0eeaea7cd309c35b.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-2db99bdd604951c5.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-56e2b70874db076c.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-1204b8c22ecd0b43.exe)\n   Doc-tests nomos_api\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1787424253,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

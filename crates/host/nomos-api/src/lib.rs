@@ -42,9 +42,12 @@
 //! what they mean. Its eleventh, [`work::Handle_Work_Finish`], does the same for `Finish` --
 //! `nomos_work_orchestration::Run`'s own `Finish` arm always passes `working_directory: None`
 //! to `nomos_ledger::Finish`, so the gate's own lint step resolves relative to the calling
-//! process's own directory, not anything this crate's caller supplies. `Add` alone is left:
-//! it is the one verb needing a real, walked `published` `Territory`, a materially different
-//! composition from every verb seamed so far.
+//! process's own directory, not anything this crate's caller supplies. Its twelfth,
+//! [`work::Handle_Work_Add`], does the same for `Add`, closing `WorkCommand` entirely -- the
+//! one verb needing a real, walked `published` `Territory`, computed by a private
+//! `Published_Records` this crate keeps to itself, a deliberate twin of `nomos-cli`'s own
+//! function of the same name rather than a shared dependency of it, the same division
+//! `sources.rs` already draws for Gate's own walk.
 //!
 //! [`Handle_Gate_Run`] is a deliberate twin of `nomos-cli`'s `gate.rs`
 //! `GateInvocation::Run` arm: it walks `root` for `.rs` sources
@@ -85,10 +88,11 @@ pub use response::{
 };
 pub use spec::{Handle_Spec_Profiles, ProfilesResponse};
 pub use work::{
-    BlockedItem, Handle_Work_Abandon, Handle_Work_Audit, Handle_Work_Claim, Handle_Work_Decline, Handle_Work_Finish,
-    Handle_Work_List, Handle_Work_Renew, Handle_Work_Show, Handle_Work_TakeOver, Handle_Work_Validate,
-    ReservationResponse, WorkAbandonResponse, WorkAuditResponse, WorkDeclineResponse, WorkFinishResponse,
-    WorkListResponse, WorkReservationResponse, WorkShowResponse, WorkValidateResponse,
+    BlockedItem, Handle_Work_Abandon, Handle_Work_Add, Handle_Work_Audit, Handle_Work_Claim, Handle_Work_Decline,
+    Handle_Work_Finish, Handle_Work_List, Handle_Work_Renew, Handle_Work_Show, Handle_Work_TakeOver,
+    Handle_Work_Validate, ReservationResponse, WorkAbandonResponse, WorkAddResponse, WorkAuditResponse,
+    WorkDeclineResponse, WorkFinishResponse, WorkListResponse, WorkReservationResponse, WorkShowResponse,
+    WorkValidateResponse,
 };
 
 use nomos_gate_orchestration::{FindingQuery, GateCommand};

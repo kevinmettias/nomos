@@ -4,6 +4,7 @@ pub enum nomos_api::GatePlanResponse
 pub enum nomos_api::ProfilesResponse
 pub enum nomos_api::SuppressionDispositionResponse
 pub enum nomos_api::WorkAbandonResponse
+pub enum nomos_api::WorkAddResponse
 pub enum nomos_api::WorkAuditResponse
 pub enum nomos_api::WorkDeclineResponse
 pub enum nomos_api::WorkFinishResponse
@@ -28,6 +29,8 @@ pub enum variant nomos_api::SuppressionDispositionResponse::RepositoryPolicyExce
 pub enum variant nomos_api::SuppressionDispositionResponse::TemporaryWaiver
 pub enum variant nomos_api::WorkAbandonResponse::Abandoned
 pub enum variant nomos_api::WorkAbandonResponse::Refused { cause: String, retryable: bool, }
+pub enum variant nomos_api::WorkAddResponse::Added
+pub enum variant nomos_api::WorkAddResponse::Refused { cause: String, }
 pub enum variant nomos_api::WorkAuditResponse::Audited { blocked: Vec<BlockedItem>, now: Timestamp, }
 pub enum variant nomos_api::WorkAuditResponse::Unreadable { cause: String, }
 pub enum variant nomos_api::WorkDeclineResponse::Declined
@@ -48,6 +51,7 @@ pub fn nomos_api::Handle_Gate_Plan() -> GatePlanResponse
 pub fn nomos_api::Handle_Gate_Run(root: &Path) -> GateRunResponse
 pub fn nomos_api::Handle_Spec_Profiles() -> ProfilesResponse
 pub fn nomos_api::Handle_Work_Abandon(directory: &Path, request: &EndingRequest) -> WorkAbandonResponse
+pub fn nomos_api::Handle_Work_Add(directory: &Path, item: &LedgerItem, amending: &Territory) -> WorkAddResponse
 pub fn nomos_api::Handle_Work_Audit(directory: &Path) -> WorkAuditResponse
 pub fn nomos_api::Handle_Work_Claim(directory: &Path, request: &ClaimRequest) -> WorkReservationResponse
 pub fn nomos_api::Handle_Work_Decline(directory: &Path, request: &EndingRequest) -> WorkDeclineResponse
