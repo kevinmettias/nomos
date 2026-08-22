@@ -25149,6 +25149,106 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-SKILL-ADD-PLUGIN-RULE-CAPABILITY-COUNT-STALE",
+      "title": "nomos-add-plugin SKILL.md still says two capability ids and three rules; there are four of each now, and one capability id is misnamed",
+      "why": "Line 76 says nomos.cap.syntax.items and nomos.cap.module.surface are the only two capability ids -- there are now four real ones (nomos.cap.syntax.items, nomos.cap.module.index, nomos.cap.dependency.edges, nomos.cap.controlflow.reachability, each grepped from its own contract.rs's pub const CAPABILITY), and the second name is also just wrong: the real constant is nomos.cap.module.index (crates/languages/nomos-lang-rust/src/rollup/contract.rs:11), not module.surface. Lines 89-90 say nomos-rules holds three rules -- it holds four (nomos-rules/src/lib.rs's own module doc says 'Four rules', naming Check_Unread_Reaches_A_Finding as the fourth) -- the same undercount pattern P13-SKILL-RULE-COUNT-STALE already fixed once in this file, recurred as a fourth rule landed since. The 'Wiring it in' code example at lines 98-101 only shows two of the four real calls nomos-check-orchestration/src/run.rs's Judged function makes, understating what a clean run actually does.",
+      "done_when": "SKILL.md names all four capability ids with correct real names, states nomos-rules holds four rules naming all four, and its wiring-in code example shows all four calls made in run.rs's Judged function. rg -F -c 'nomos.cap.module.index' .claude/skills/nomos-add-plugin/SKILL.md returns 1, and rg -F -c 'Check_Unread_Reaches_A_Finding' .claude/skills/nomos-add-plugin/SKILL.md returns 1.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          ".claude/skills/nomos-add-plugin/SKILL.md"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Predicate unusable: chained through bash -c, and the nomos-spawned bash's PATH does not include rg, so it fails with exit 127 (command not found) regardless of file content. Re-authored as P13-SKILL-ADD-PLUGIN-RULE-CAPABILITY-COUNT-STALE-2 with a single rg -U multiline regex instead of a bash -c chain."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "bash",
+          "-c",
+          "rg -F -c 'nomos.cap.module.index' .claude/skills/nomos-add-plugin/SKILL.md && rg -F -c 'Check_Unread_Reaches_A_Finding' .claude/skills/nomos-add-plugin/SKILL.md"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-track-d-staleness",
+          "reason": "Predicate unusable: chained through bash -c, and the nomos-spawned bash's PATH does not include rg, so it fails with exit 127 (command not found) regardless of file content. Re-authoring as -2 with a single rg -U multiline regex instead of a bash -c chain.",
+          "abandoned_at": 1787422451
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-track-d-staleness",
+        "declined_at": 1787422458
+      }
+    },
+    {
+      "id": "P13-SKILL-ADD-PLUGIN-RULE-CAPABILITY-COUNT-STALE-2",
+      "title": "nomos-add-plugin SKILL.md still says two capability ids and three rules; there are four of each now, and one capability id is misnamed",
+      "why": "Amends P13-SKILL-ADD-PLUGIN-RULE-CAPABILITY-COUNT-STALE, declined for an unusable predicate (chained through bash -c, whose PATH does not include rg on this machine, exit 127 regardless of file content). Same defect: line 76 said nomos.cap.syntax.items and nomos.cap.module.surface are the only two capability ids -- there are now four real ones (nomos.cap.syntax.items, nomos.cap.module.index, nomos.cap.dependency.edges, nomos.cap.controlflow.reachability, each grepped from its own contract.rs's pub const CAPABILITY), and the second name was also just wrong: the real constant is nomos.cap.module.index (crates/languages/nomos-lang-rust/src/rollup/contract.rs:11), not module.surface. Lines 89-90 said nomos-rules holds three rules -- it holds four (nomos-rules/src/lib.rs's own module doc says 'Four rules', naming Check_Unread_Reaches_A_Finding as the fourth) -- the same undercount pattern P13-SKILL-RULE-COUNT-STALE already fixed once in this file, recurred as a fourth rule landed since. The wiring-in code example only showed two of the four real calls nomos-check-orchestration/src/run.rs's Judged function makes.",
+      "done_when": "SKILL.md names all four capability ids with correct real names, states nomos-rules holds four rules naming all four, and its wiring-in code example shows all four calls made in run.rs's Judged function. A single rg -U multiline check that nomos.cap.module.index appears before Check_Unread_Reaches_A_Finding somewhere later in the file returns a nonzero match count.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          ".claude/skills/nomos-add-plugin/SKILL.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "rg",
+          "-U",
+          "--multiline-dotall",
+          "-c",
+          "nomos\\.cap\\.module\\.index[\\s\\S]*Check_Unread_Reaches_A_Finding",
+          ".claude/skills/nomos-add-plugin/SKILL.md"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "rg",
+          "-U",
+          "--multiline-dotall",
+          "-c",
+          "nomos\\.cap\\.module\\.index[\\s\\S]*Check_Unread_Reaches_A_Finding",
+          ".claude/skills/nomos-add-plugin/SKILL.md"
+        ],
+        "exit_code": 0,
+        "output_tail": "1\n",
+        "verified_at": 1787422481,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
