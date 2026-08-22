@@ -17,6 +17,7 @@ nomos-platform-std = { workspace = true }
 nomos-rules = { workspace = true }
 nomos-spec-orchestration = { workspace = true }
 nomos-spec-project = { workspace = true }
+nomos-spec-store = { workspace = true }
 nomos-work-orchestration = { workspace = true }
 nomos-workspace = { workspace = true }
 serde = { workspace = true }

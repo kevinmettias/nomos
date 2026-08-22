@@ -25259,6 +25259,65 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-API-SPEC-SOURCES-SEAM",
+      "title": "nomos-api gains a thirteenth real seam: Spec's Sources verb",
+      "why": "ARC-ROADMAP-001 names CLI/API/MCP projections as a near-term-tier item. nomos-api has proven a second real caller for the whole of Gate and Work, and for Spec's simplest verb, Profiles (which nomos_spec_orchestration::Run special-cases to skip corpus assembly entirely). Every other SpecCommand verb, including Sources, goes through Assemble(request: &CorpusRequest) first. This item takes Sources, the next-simplest of the eight remaining Spec verbs: it takes no request fields of its own beyond the shared CorpusRequest (SpecCommand::Sources is a unit variant) and, unlike Record/Table/Render/Freshness/Markdown/Preview/Commit, needs nothing keyed to a specific record, table or edit.\n\nChecked before authoring: crates/host/nomos-cli/src/main.rs's own Corpus_Request(rest) builds { variable: \"NOMOS_V14_CORPUS\", root: --corpus flag or that env var, revision: --corpus-revision flag or nomos_spec_orchestration::corpus::DEFAULT_REVISION }, and its own doc says \"Both are optional: neither being given is a supported state and produces an absence rather than an error, because the governing records are embedded and there are real questions this binary can still answer.\" nomos-api has no argv, so Handle_Spec_Sources builds the same CorpusRequest reading only the environment variable, the same \"no invented shape ahead of a real body\" choice Handle_Gate_Run already makes for GateCommand's own scope/rules selectors -- CorpusRequest's fields are configuration (which corpus, which revision), not a per-call identifier the way FindingQuery or ItemId are, so this seam does not take one as a parameter.\n\nnomos_spec_orchestration::run::Sources(&Assembly) -> SourcesAnswer and Run's own Sources_Outcome wrap it as SpecOutcome::Sources(Result<SourcesAnswer, StoreError>). Neither SourcesAnswer nor its own Absence field derives Serialize (checked crates/orchestration/nomos-spec-orchestration/src/outcome/sources.rs and corpus/absence.rs); nomos_spec_store::StoreError derives none either but does implement Display (checked crates/spec/nomos-spec-store/src/store/error.rs), the same shape LedgerError already has that WorkListResponse::Unreadable's error.to_string() already exploits.",
+      "done_when": "nomos-api gains a new public function Handle_Spec_Sources() -> SpecSourcesResponse, a new file spec.rs section alongside the existing Handle_Spec_Profiles. It builds nomos_spec_orchestration::corpus::CorpusRequest{variable: \"NOMOS_V14_CORPUS\".to_owned(), root: std::env::var_os(\"NOMOS_V14_CORPUS\").map(PathBuf::from), revision: nomos_spec_orchestration::corpus::DEFAULT_REVISION.to_owned()} -- the same composition crates/host/nomos-cli/src/main.rs's own Corpus_Request builds minus the two argv overrides this crate has no argv to read -- and calls nomos_spec_orchestration::Run(&SpecCommand::Sources, &request, &StdFileSystem), matches SpecOutcome::Sources, and converts through SpecSourcesResponse::From.\n\nSpecSourcesResponse is a new tagged Assembled{read: Vec<String>, absent: Vec<AbsenceResponse>} / Unreadable{cause: String} enum. AbsenceResponse is a new public struct {subject: String, expected: String, cause: String, cost: String}, a serializable twin of nomos_spec_orchestration::corpus::Absence, built by conversion, the same twinning response.rs's own module doc already explains for Disposition and RuleOfferResponse (a different file, same reasoning). Unreadable's cause comes from StoreError's own Display via to_string(), the same shape WorkListResponse::Unreadable already uses for LedgerError.\n\nA real test proves Handle_Spec_Sources reaches Assembled -- not Unreadable -- when called for real, over whatever this session's own NOMOS_V14_CORPUS state happens to be (the assembly succeeds and reports absences rather than erroring when the corpus is unset, by Assemble's own documented contract, so the test asserts only the outcome variant, not a specific read/absent count that would depend on local environment). A second test proves the Assembled response round-trips through serde_json. tests/contract/surface/nomos-api.txt is regenerated (NOMOS_SURFACE_BLESS) and current. nomos-spec-orchestration, nomos-spec-store and nomos-cli are not touched by this item.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-api",
+          "tests/contract/surface/nomos-api.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "t result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 5 tests\ntest Test_A_Lowered_Declaration_Should_Fail_The_Comparison ... ok\ntest Test_An_Unrelated_Minor_Version_Should_Fail_The_Comparison ... ok\ntest Test_A_Matching_Declaration_Should_Pass_The_Comparison ... ok\ntest Test_The_Real_Workflow_Should_Still_Have_The_Install_Step ... ok\ntest Test_The_Declared_Floor_Should_Match_The_Toolchain_The_Gate_Installs ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.14s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_api-ba7bce32110d92cc.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-95a1aef077b5f9ba.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-ead301eb7c8d8256.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-a61f2bcd75c8d4d9.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-fba07f1fa1c92105.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-2bb84d2d8744d800.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-c2987d8eceda16d3.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-0eeaea7cd309c35b.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-2db99bdd604951c5.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-56e2b70874db076c.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-1204b8c22ecd0b43.exe)\n   Doc-tests nomos_api\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1787424650,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

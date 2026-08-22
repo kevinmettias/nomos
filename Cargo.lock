@@ -307,6 +307,7 @@ dependencies = [
  "nomos-rules",
  "nomos-spec-orchestration",
  "nomos-spec-project",
+ "nomos-spec-store",
  "nomos-work-orchestration",
  "nomos-workspace",
  "serde",

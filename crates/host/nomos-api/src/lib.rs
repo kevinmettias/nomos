@@ -47,7 +47,10 @@
 //! one verb needing a real, walked `published` `Territory`, computed by a private
 //! `Published_Records` this crate keeps to itself, a deliberate twin of `nomos-cli`'s own
 //! function of the same name rather than a shared dependency of it, the same division
-//! `sources.rs` already draws for Gate's own walk.
+//! `sources.rs` already draws for Gate's own walk. Its thirteenth,
+//! [`spec::Handle_Spec_Sources`], moves on to Spec's own remaining verbs: `Sources` is a
+//! unit `SpecCommand` variant, the next-simplest of that crate's nine after `Profiles`, but
+//! the first here to go through `nomos_spec_orchestration::corpus::Assemble` at all.
 //!
 //! [`Handle_Gate_Run`] is a deliberate twin of `nomos-cli`'s `gate.rs`
 //! `GateInvocation::Run` arm: it walks `root` for `.rs` sources
@@ -86,7 +89,7 @@ pub use response::{
     BaselineDebtResponse, Disposition, GateExplainResponse, GatePlanResponse, GateRunResponse, RuleCalibrationResponse,
     RuleOfferResponse, SuppressionDispositionResponse, SuppressionResponse,
 };
-pub use spec::{Handle_Spec_Profiles, ProfilesResponse};
+pub use spec::{AbsenceResponse, Handle_Spec_Profiles, Handle_Spec_Sources, ProfilesResponse, SpecSourcesResponse};
 pub use work::{
     BlockedItem, Handle_Work_Abandon, Handle_Work_Add, Handle_Work_Audit, Handle_Work_Claim, Handle_Work_Decline,
     Handle_Work_Finish, Handle_Work_List, Handle_Work_Renew, Handle_Work_Show, Handle_Work_TakeOver,
