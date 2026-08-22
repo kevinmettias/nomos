@@ -1,9 +1,12 @@
 //! A second real caller of `nomos_work_orchestration::Run` -- `List`, `Show`, `Validate`,
-//! `Audit`, `Claim`, `Renew`, `TakeOver`, `Abandon` and `Decline`, the same "one verb at a
-//! time, not the whole command set" scope `Handle_Gate_Run` already uses for Gate's own
-//! `run`.
+//! `Audit`, `Claim`, `Renew`, `TakeOver`, `Abandon`, `Decline` and `Finish`, the same "one
+//! verb at a time, not the whole command set" scope `Handle_Gate_Run` already uses for
+//! Gate's own `run`.
 
-use nomos_ledger::{Claim_Refusal, ClaimRefusal, FileLedger, ItemId, ItemState, LedgerDocument, LedgerItem, Reservation, Territory};
+use nomos_ledger::{
+    Claim_Refusal, ClaimRefusal, FileLedger, FinishRefusal, ItemId, ItemState, LedgerDocument, LedgerItem, Reservation,
+    Territory, VerificationRecord,
+};
 use nomos_platform::Timestamp;
 use nomos_platform_std::{FileLock, StdFileSystem, StdProcessLauncher, SystemClock};
 use nomos_work_orchestration::{ClaimRequest, EndingRequest, WorkCommand};
@@ -608,6 +611,73 @@ impl WorkDeclineResponse
     }
 }
 
+/// Runs `item`'s verification predicate as `holder` on the board at `directory`, recording
+/// it done if it passes, exactly as `nomos work finish` would, and hands back a
+/// JSON-serializable response.
+///
+/// `nomos_work_orchestration::Run`'s own `WorkCommand::Finish` arm always calls
+/// `nomos_ledger::Finish` with a `None` `working_directory` -- not a choice this function or
+/// its caller can vary, so the gate's own lint step (derived from `.github/workflows/
+/// gate.yml`) resolves relative to the calling process's own current directory, the same
+/// fixed composition `nomos-cli`'s own `nomos work finish` already runs under.
+#[must_use]
+pub fn Handle_Work_Finish(directory: &Path, item: &ItemId, holder: &str) -> WorkFinishResponse
+{
+    let mut ledger = Ledger_At(directory);
+
+    let outcome = nomos_work_orchestration::Run(
+        &WorkCommand::Finish { item: item.clone(), holder: holder.to_owned() },
+        &mut ledger,
+        &StdProcessLauncher,
+        || Territory::Of_Files(std::iter::empty::<String>()),
+    );
+
+    let nomos_work_orchestration::WorkOutcome::Finish(finished) = outcome
+    else
+    {
+        unreachable!("Run always returns the WorkOutcome variant naming the WorkCommand it was given")
+    };
+
+    return WorkFinishResponse::From(finished);
+}
+
+/// What a real `nomos work finish` produced, in a shape `serde_json` can hand across a wire.
+#[derive(Debug, Serialize)]
+#[serde(tag = "outcome", rename_all = "snake_case")]
+pub enum WorkFinishResponse
+{
+    /// The predicate passed, and the item is recorded done.
+    Finished
+    {
+        /// The evidence. `nomos_ledger::VerificationRecord` already derives `Serialize` --
+        /// it is stored directly in `ledger.json` -- so no local twin is needed.
+        record: VerificationRecord,
+    },
+    /// The item was not finished.
+    Refused
+    {
+        /// What went wrong, as `FinishRefusal::Describe` renders it.
+        cause: String,
+        /// Whether the predicate ran and said no -- `FinishRefusal::Judged_The_Work`, the
+        /// same signal `crates/host/nomos-cli/src/work/report.rs`'s own `Report_Finish`
+        /// already branches an exit code on (a real judgment versus nobody finding out),
+        /// handed to a wire caller directly since it has no process exit code to read.
+        judged: bool,
+    },
+}
+
+impl WorkFinishResponse
+{
+    fn From(result: Result<VerificationRecord, FinishRefusal>) -> Self
+    {
+        return match result
+        {
+            Ok(record) => Self::Finished { record },
+            Err(refusal) => Self::Refused { judged: refusal.Judged_The_Work(), cause: refusal.Describe() },
+        };
+    }
+}
+
 #[cfg(test)]
 mod tests
 {
@@ -1111,5 +1181,57 @@ mod tests
         let outcome = parsed.get("outcome").expect("a serialized WorkDeclineResponse always has this field");
 
         assert_eq!(outcome, "declined", "{json}");
+    }
+
+    #[test]
+    fn Test_Finishing_An_Id_Absent_From_A_Real_Readable_Board_Should_Be_Refused_And_Not_Judged()
+    {
+        let directory = Scratch_Board();
+        let absent = ItemId::New("NO-SUCH-ITEM");
+
+        let response = Handle_Work_Finish(&directory, &absent, "test-holder");
+
+        let _ignored = std::fs::remove_dir_all(&directory);
+
+        let WorkFinishResponse::Refused { judged, cause } = response
+        else
+        {
+            panic!("an id absent from a real, readable board is a real refusal, not a finish");
+        };
+        assert!(!judged, "{cause}");
+    }
+
+    #[test]
+    fn Test_Finishing_A_Real_Item_With_No_Verification_Predicate_Should_Be_Refused_And_Not_Judged()
+    {
+        let (directory, id) = Scratch_Board_With_A_Claimable_Item();
+
+        let response = Handle_Work_Finish(&directory, &id, "test-holder");
+
+        let _ignored = std::fs::remove_dir_all(&directory);
+
+        let WorkFinishResponse::Refused { judged, cause } = response
+        else
+        {
+            panic!("an item with no verification predicate at all is a real refusal, not a finish");
+        };
+        assert!(!judged, "{cause}");
+    }
+
+    #[test]
+    fn Test_A_Real_Refused_Finish_Response_Should_Round_Trip_As_Json()
+    {
+        let directory = Scratch_Board();
+        let absent = ItemId::New("NO-SUCH-ITEM");
+
+        let response = Handle_Work_Finish(&directory, &absent, "test-holder");
+
+        let _ignored = std::fs::remove_dir_all(&directory);
+
+        let json = serde_json::to_string(&response).expect("a WorkFinishResponse always serializes");
+        let parsed: serde_json::Value = serde_json::from_str(&json).expect("what was just written parses back");
+        let outcome = parsed.get("outcome").expect("a serialized WorkFinishResponse always has this field");
+
+        assert_eq!(outcome, "refused", "{json}");
     }
 }

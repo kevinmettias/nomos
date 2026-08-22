@@ -36,10 +36,15 @@
 //! response type across all three, because `nomos_work_orchestration::ClaimRequest` is
 //! already one shared request type for them, by that type's own doc. Its tenth,
 //! [`work::Handle_Work_Abandon`] (with [`work::Handle_Work_Decline`] alongside it), does the
-//! same for `WorkCommand`'s remaining two verbs, `Abandon` and `Decline` -- kept to two
-//! response types rather than one, because `EndingRequest`'s own doc says the opposite of
-//! `ClaimRequest`'s: `abandon` and `decline` share only their argument shape, not what they
-//! mean.
+//! same for two of `WorkCommand`'s four still-remaining verbs, `Abandon` and `Decline` --
+//! kept to two response types rather than one, because `EndingRequest`'s own doc says the
+//! opposite of `ClaimRequest`'s: `abandon` and `decline` share only their argument shape, not
+//! what they mean. Its eleventh, [`work::Handle_Work_Finish`], does the same for `Finish` --
+//! `nomos_work_orchestration::Run`'s own `Finish` arm always passes `working_directory: None`
+//! to `nomos_ledger::Finish`, so the gate's own lint step resolves relative to the calling
+//! process's own directory, not anything this crate's caller supplies. `Add` alone is left:
+//! it is the one verb needing a real, walked `published` `Territory`, a materially different
+//! composition from every verb seamed so far.
 //!
 //! [`Handle_Gate_Run`] is a deliberate twin of `nomos-cli`'s `gate.rs`
 //! `GateInvocation::Run` arm: it walks `root` for `.rs` sources
@@ -80,10 +85,10 @@ pub use response::{
 };
 pub use spec::{Handle_Spec_Profiles, ProfilesResponse};
 pub use work::{
-    BlockedItem, Handle_Work_Abandon, Handle_Work_Audit, Handle_Work_Claim, Handle_Work_Decline, Handle_Work_List,
-    Handle_Work_Renew, Handle_Work_Show, Handle_Work_TakeOver, Handle_Work_Validate, ReservationResponse,
-    WorkAbandonResponse, WorkAuditResponse, WorkDeclineResponse, WorkListResponse, WorkReservationResponse,
-    WorkShowResponse, WorkValidateResponse,
+    BlockedItem, Handle_Work_Abandon, Handle_Work_Audit, Handle_Work_Claim, Handle_Work_Decline, Handle_Work_Finish,
+    Handle_Work_List, Handle_Work_Renew, Handle_Work_Show, Handle_Work_TakeOver, Handle_Work_Validate,
+    ReservationResponse, WorkAbandonResponse, WorkAuditResponse, WorkDeclineResponse, WorkFinishResponse,
+    WorkListResponse, WorkReservationResponse, WorkShowResponse, WorkValidateResponse,
 };
 
 use nomos_gate_orchestration::{FindingQuery, GateCommand};
