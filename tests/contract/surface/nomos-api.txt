@@ -2,6 +2,7 @@ pub enum nomos_api::Disposition
 pub enum nomos_api::ProfilesResponse
 pub enum nomos_api::WorkListResponse
 pub enum nomos_api::WorkShowResponse
+pub enum nomos_api::WorkValidateResponse
 pub enum variant nomos_api::Disposition::Failed
 pub enum variant nomos_api::Disposition::Indeterminate
 pub enum variant nomos_api::Disposition::Passed
@@ -12,10 +13,13 @@ pub enum variant nomos_api::WorkListResponse::Unreadable { cause: String, }
 pub enum variant nomos_api::WorkShowResponse::Found { item: Box<LedgerItem>, current_revision: Option<String>, now: Timestamp, }
 pub enum variant nomos_api::WorkShowResponse::NotFound { item: ItemId, }
 pub enum variant nomos_api::WorkShowResponse::Unreadable { cause: String, }
+pub enum variant nomos_api::WorkValidateResponse::Invalid { cause: String, }
+pub enum variant nomos_api::WorkValidateResponse::Valid { document: LedgerDocument, }
 pub fn nomos_api::Handle_Gate_Run(root: &Path) -> GateRunResponse
 pub fn nomos_api::Handle_Spec_Profiles() -> ProfilesResponse
 pub fn nomos_api::Handle_Work_List(directory: &Path) -> WorkListResponse
 pub fn nomos_api::Handle_Work_Show(directory: &Path, item: &ItemId) -> WorkShowResponse
+pub fn nomos_api::Handle_Work_Validate(directory: &Path) -> WorkValidateResponse
 pub struct field nomos_api::GateRunResponse::baselined_findings: Vec<Finding>
 pub struct field nomos_api::GateRunResponse::blocking_findings: Vec<Finding>
 pub struct field nomos_api::GateRunResponse::calibrated_findings: Vec<Finding>

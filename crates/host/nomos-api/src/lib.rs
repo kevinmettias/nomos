@@ -17,6 +17,8 @@
 //! [`work::Handle_Work_Show`], does the same for `WorkCommand::Show` -- the lookup by id
 //! stays at the caller, exactly where `nomos-cli`'s own `Render_Show` already puts it, rather
 //! than being invented inside `nomos_work_orchestration` for this increment's convenience.
+//! Its fifth, [`work::Handle_Work_Validate`], does the same for `WorkCommand::Validate` -- a
+//! real internal-consistency check, not a second view onto data `List` already exposes.
 //!
 //! [`Handle_Gate_Run`] is a deliberate twin of `nomos-cli`'s `gate.rs`
 //! `GateInvocation::Run` arm: it walks `root` for `.rs` sources
@@ -53,7 +55,10 @@ mod work;
 
 pub use response::{Disposition, GateRunResponse};
 pub use spec::{Handle_Spec_Profiles, ProfilesResponse};
-pub use work::{Handle_Work_List, Handle_Work_Show, WorkListResponse, WorkShowResponse};
+pub use work::{
+    Handle_Work_List, Handle_Work_Show, Handle_Work_Validate, WorkListResponse, WorkShowResponse,
+    WorkValidateResponse,
+};
 
 use nomos_gate_orchestration::GateCommand;
 use nomos_platform::Clock;

@@ -24787,6 +24787,65 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-API-WORK-VALIDATE-SEAM",
+      "title": "nomos-api gains a fifth real seam: Work's Validate verb",
+      "why": "ARC-ROADMAP-001 names CLI/API/MCP projections as a near-term-tier item. nomos-api has proven a second real caller for Gate::run, Work::List, Spec::Profiles and Work::Show. crates/orchestration/nomos-work-orchestration/src/run.rs's own doc groups WorkCommand's eleven verbs by what Run needs to execute them: \"List, Show, Validate and Audit need nothing but ledger\" -- the same zero-extra-composition shape List and Show already proved reachable from this crate. Validate is the next of that group with no seam: grepped directly, nomos_work_orchestration::Run's WorkCommand::Validate arm has exactly one real caller in this workspace, crates/host/nomos-cli/src/work.rs's Report_Validation.\n\nChecked before authoring: unlike List and Show, Validate is not a read reflected back -- run.rs's own Validated() helper loads the document, runs nomos_ledger::Validate(&document, now) and, on any violation, returns Err(LedgerError::Invalid{violations}) rather than Ok. So this is a real new capability for nomos-api, not a second view onto data List already exposes: a wire caller gets a genuine internal-consistency check, with the violation list folded into LedgerError's Display (the same string-the-error shape WorkListResponse::Unreadable already uses for a LedgerError that does not derive Serialize).",
+      "done_when": "nomos-api gains a new public function Handle_Work_Validate(directory: \\&Path) -> WorkValidateResponse, calling nomos_work_orchestration::Run(\\&WorkCommand::Validate, \\&mut ledger, \\&StdProcessLauncher, published) with the same FileLedger::At/StdFileSystem/SystemClock/FileLock composition and the same unreached empty Territory::Of_Files closure for published that Handle_Work_List and Handle_Work_Show already use (WorkCommand::Validate never reaches it). WorkValidateResponse is a tagged Valid{document: nomos_ledger::LedgerDocument} / Invalid{cause: String} enum, the same two-state honesty shape WorkListResponse::{Listed,Unreadable} already establishes -- Invalid names both a genuine ledger-invariant violation and an unreadable file alike, exactly as nomos_ledger::LedgerError::Invalid and its other variants already collapse under one Display, so no finer split is invented here than the type underneath already draws. A real test proves this crate can validate a real, well-formed scratch ledger it writes itself (the same process-id-scoped std::env::temp_dir() pattern the existing Work tests use) and asserts Valid. A second test proves a scratch ledger carrying a real invariant violation (two items whose territory overlaps, the same fixture shape nomos-ledger's own Validate tests use) returns Invalid with a non-empty cause naming the violation. A third test proves the Valid response round-trips through serde_json. tests/contract/surface/nomos-api.txt is regenerated (NOMOS_SURFACE_BLESS) and current. nomos-work-orchestration, nomos-ledger and nomos-cli are not touched by this item.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-api",
+          "tests/contract/surface/nomos-api.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "t result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 5 tests\ntest Test_A_Lowered_Declaration_Should_Fail_The_Comparison ... ok\ntest Test_A_Matching_Declaration_Should_Pass_The_Comparison ... ok\ntest Test_An_Unrelated_Minor_Version_Should_Fail_The_Comparison ... ok\ntest Test_The_Real_Workflow_Should_Still_Have_The_Install_Step ... ok\ntest Test_The_Declared_Floor_Should_Match_The_Toolchain_The_Gate_Installs ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.13s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_api-072c024c685eb8d5.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-95a1aef077b5f9ba.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-ead301eb7c8d8256.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-a61f2bcd75c8d4d9.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-fba07f1fa1c92105.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-2bb84d2d8744d800.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-c2987d8eceda16d3.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-0eeaea7cd309c35b.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-2db99bdd604951c5.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-56e2b70874db076c.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-1204b8c22ecd0b43.exe)\n   Doc-tests nomos_api\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1787388179,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "3025c589de3f3872650b740497eeb28814630c1c"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
