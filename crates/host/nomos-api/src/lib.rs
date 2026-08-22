@@ -30,7 +30,11 @@
 //! registry holds, not a walk over `root`. `Handle_Gate_Plan` takes no argument for that
 //! reason, unlike [`Handle_Gate_Run`]. Its eighth, [`Handle_Gate_Explain`], does the same for
 //! `Explain_Gate` -- the same walk-and-judge composition `Handle_Gate_Run` already uses, plus
-//! a `FindingQuery` naming one finding to answer for.
+//! a `FindingQuery` naming one finding to answer for. Its ninth, [`work::Handle_Work_Claim`]
+//! (with [`work::Handle_Work_Renew`] and [`work::Handle_Work_TakeOver`] alongside it), does
+//! the same for three of `WorkCommand`'s seven remaining mutation verbs -- one shared
+//! response type across all three, because `nomos_work_orchestration::ClaimRequest` is
+//! already one shared request type for them, by that type's own doc.
 //!
 //! [`Handle_Gate_Run`] is a deliberate twin of `nomos-cli`'s `gate.rs`
 //! `GateInvocation::Run` arm: it walks `root` for `.rs` sources
@@ -71,8 +75,9 @@ pub use response::{
 };
 pub use spec::{Handle_Spec_Profiles, ProfilesResponse};
 pub use work::{
-    BlockedItem, Handle_Work_Audit, Handle_Work_List, Handle_Work_Show, Handle_Work_Validate,
-    WorkAuditResponse, WorkListResponse, WorkShowResponse, WorkValidateResponse,
+    BlockedItem, Handle_Work_Audit, Handle_Work_Claim, Handle_Work_List, Handle_Work_Renew, Handle_Work_Show,
+    Handle_Work_TakeOver, Handle_Work_Validate, ReservationResponse, WorkAuditResponse, WorkListResponse,
+    WorkReservationResponse, WorkShowResponse, WorkValidateResponse,
 };
 
 use nomos_gate_orchestration::{FindingQuery, GateCommand};

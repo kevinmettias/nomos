@@ -1,11 +1,11 @@
-//! A second real caller of `nomos_work_orchestration::Run` -- `List`, `Show`, `Validate` and
-//! `Audit`, the same "one verb at a time, not the whole command set" scope `Handle_Gate_Run`
-//! already uses for Gate's own `run`.
+//! A second real caller of `nomos_work_orchestration::Run` -- `List`, `Show`, `Validate`,
+//! `Audit`, `Claim`, `Renew` and `TakeOver`, the same "one verb at a time, not the whole
+//! command set" scope `Handle_Gate_Run` already uses for Gate's own `run`.
 
-use nomos_ledger::{Claim_Refusal, FileLedger, ItemId, ItemState, LedgerDocument, LedgerItem, Territory};
+use nomos_ledger::{Claim_Refusal, ClaimRefusal, FileLedger, ItemId, ItemState, LedgerDocument, LedgerItem, Reservation, Territory};
 use nomos_platform::Timestamp;
 use nomos_platform_std::{FileLock, StdFileSystem, StdProcessLauncher, SystemClock};
-use nomos_work_orchestration::WorkCommand;
+use nomos_work_orchestration::{ClaimRequest, WorkCommand};
 use serde::Serialize;
 use std::path::Path;
 
@@ -347,6 +347,155 @@ impl WorkAuditResponse
     }
 }
 
+/// Grants `request` a reservation on the board at `directory`, exactly as `nomos work claim`
+/// would, and hands back a JSON-serializable response.
+#[must_use]
+pub fn Handle_Work_Claim(directory: &Path, request: &ClaimRequest) -> WorkReservationResponse
+{
+    let mut ledger = Ledger_At(directory);
+
+    let outcome = nomos_work_orchestration::Run(
+        &WorkCommand::Claim(request.clone()),
+        &mut ledger,
+        &StdProcessLauncher,
+        || Territory::Of_Files(std::iter::empty::<String>()),
+    );
+
+    let nomos_work_orchestration::WorkOutcome::Claim(claimed) = outcome
+    else
+    {
+        unreachable!("Run always returns the WorkOutcome variant naming the WorkCommand it was given")
+    };
+
+    return WorkReservationResponse::From(claimed);
+}
+
+/// Extends `request`'s already-held lease on the board at `directory`, exactly as `nomos
+/// work renew` would, and hands back a JSON-serializable response.
+#[must_use]
+pub fn Handle_Work_Renew(directory: &Path, request: &ClaimRequest) -> WorkReservationResponse
+{
+    let mut ledger = Ledger_At(directory);
+
+    let outcome = nomos_work_orchestration::Run(
+        &WorkCommand::Renew(request.clone()),
+        &mut ledger,
+        &StdProcessLauncher,
+        || Territory::Of_Files(std::iter::empty::<String>()),
+    );
+
+    let nomos_work_orchestration::WorkOutcome::Renew(renewed) = outcome
+    else
+    {
+        unreachable!("Run always returns the WorkOutcome variant naming the WorkCommand it was given")
+    };
+
+    return WorkReservationResponse::From(renewed);
+}
+
+/// Takes over `request`'s item on the board at `directory` from a lapsed holder, exactly as
+/// `nomos work takeover` would, and hands back a JSON-serializable response.
+#[must_use]
+pub fn Handle_Work_TakeOver(directory: &Path, request: &ClaimRequest) -> WorkReservationResponse
+{
+    let mut ledger = Ledger_At(directory);
+
+    let outcome = nomos_work_orchestration::Run(
+        &WorkCommand::TakeOver(request.clone()),
+        &mut ledger,
+        &StdProcessLauncher,
+        || Territory::Of_Files(std::iter::empty::<String>()),
+    );
+
+    let nomos_work_orchestration::WorkOutcome::TakeOver(taken_over) = outcome
+    else
+    {
+        unreachable!("Run always returns the WorkOutcome variant naming the WorkCommand it was given")
+    };
+
+    return WorkReservationResponse::From(taken_over);
+}
+
+/// The `FileLedger` composition every `Handle_Work_*` function in this module builds --
+/// factored out once a third function ([`Handle_Work_Claim`]) needed exactly the same four
+/// lines the first two already had inline.
+fn Ledger_At(directory: &Path) -> FileLedger<StdFileSystem, SystemClock, FileLock>
+{
+    return FileLedger::At(
+        directory.join("ledger.json"),
+        StdFileSystem,
+        SystemClock,
+        FileLock::At(directory.join("ledger.lock")),
+    );
+}
+
+/// A granted or refused reservation, in a shape `serde_json` can hand across a wire.
+///
+/// One shared response type for [`Handle_Work_Claim`], [`Handle_Work_Renew`] and
+/// [`Handle_Work_TakeOver`] rather than three that could only ever agree by discipline --
+/// the exact reason `nomos_work_orchestration::ClaimRequest` is already one shared request
+/// type for these three verbs (its own doc says so), and the same division `crates/host/
+/// nomos-cli/src/work.rs`'s own dispatch already draws: one `Report_Claim` renders all three
+/// outcomes today.
+#[derive(Debug, Serialize)]
+#[serde(tag = "outcome", rename_all = "snake_case")]
+pub enum WorkReservationResponse
+{
+    /// The reservation was granted.
+    Reserved
+    {
+        /// The reservation itself.
+        reservation: ReservationResponse,
+    },
+    /// The reservation was refused.
+    Refused
+    {
+        /// What went wrong, as `ClaimRefusal::Describe` renders it.
+        cause: String,
+        /// Whether retrying later might succeed -- `ClaimRefusal::Is_Retryable`, the same
+        /// signal `crates/host/nomos-cli/src/work/report.rs`'s own `Code_For` already
+        /// branches an exit code on, handed to a wire caller directly since it has no
+        /// process exit code to read.
+        retryable: bool,
+    },
+}
+
+impl WorkReservationResponse
+{
+    fn From(result: Result<Reservation, ClaimRefusal>) -> Self
+    {
+        return match result
+        {
+            Ok(reservation) => Self::Reserved { reservation: ReservationResponse::From(reservation) },
+            Err(refusal) => Self::Refused { retryable: refusal.Is_Retryable(), cause: refusal.Describe() },
+        };
+    }
+}
+
+/// A serializable twin of [`nomos_ledger::Reservation`], which does not derive `Serialize`.
+#[derive(Debug, Serialize)]
+pub struct ReservationResponse
+{
+    /// The item claimed.
+    pub item: ItemId,
+    /// Who holds it.
+    pub holder: String,
+    /// When the lease lapses.
+    pub expires_at: Timestamp,
+}
+
+impl ReservationResponse
+{
+    fn From(reservation: Reservation) -> Self
+    {
+        return Self {
+            item: reservation.item,
+            holder: reservation.holder,
+            expires_at: reservation.expires_at,
+        };
+    }
+}
+
 #[cfg(test)]
 mod tests
 {
@@ -613,5 +762,163 @@ mod tests
         let outcome = parsed.get("outcome").expect("a serialized WorkAuditResponse always has this field");
 
         assert_eq!(outcome, "audited", "{json}");
+    }
+
+    /// A scratch board carrying one real `Ready` item with a real, non-empty territory --
+    /// unlike `Scratch_Board_With_One_Item`'s deliberately territory-less fixture (built for
+    /// `Validate`'s own violation test), a document `Claim`/`Renew`/`TakeOver` write back
+    /// must itself stay valid, so every fixture below reserves something real.
+    fn Scratch_Board_With_A_Claimable_Item() -> (std::path::PathBuf, ItemId)
+    {
+        let directory = Unique_Scratch_Directory("claimable");
+        let id = ItemId::New("SCRATCH-CLAIMABLE");
+        let ledger = format!(
+            "{{\"schema_version\": 5, \"items\": [{{\"id\": \"{id}\", \"title\": \"t\", \"why\": \"w\", \
+             \"done_when\": \"d\", \"kind\": \"Capability\", \"origin\": \"Proposed\", \"territory\": \
+             {{\"resolution\": \"File\", \"paths\": [\"a\"], \"patterns\": []}}, \"state\": \"Ready\"}}]}}\n"
+        );
+        std::fs::write(directory.join("ledger.json"), ledger).expect("writes a minimal valid ledger");
+
+        return (directory, id);
+    }
+
+    /// A scratch board carrying one real item already `Claimed`, with `holder` and
+    /// `expires_at_unix` chosen by the caller -- an active lease far in the future for a
+    /// `Renew` fixture, or one far in the past (lapsed) for a `TakeOver` fixture.
+    fn Scratch_Board_With_A_Claimed_Item(holder: &str, expires_at_unix: i64) -> (std::path::PathBuf, ItemId)
+    {
+        let directory = Unique_Scratch_Directory("claimed");
+        let id = ItemId::New("SCRATCH-CLAIMED");
+        let ledger = format!(
+            "{{\"schema_version\": 5, \"items\": [{{\"id\": \"{id}\", \"title\": \"t\", \"why\": \"w\", \
+             \"done_when\": \"d\", \"kind\": \"Capability\", \"origin\": \"Proposed\", \"territory\": \
+             {{\"resolution\": \"File\", \"paths\": [\"a\"], \"patterns\": []}}, \"state\": \"Claimed\", \
+             \"claim\": {{\"holder\": \"{holder}\", \"acquired_at\": 1, \"lease_expires_at\": \
+             {expires_at_unix}}}}}]}}\n"
+        );
+        std::fs::write(directory.join("ledger.json"), ledger).expect("writes a minimal valid ledger");
+
+        return (directory, id);
+    }
+
+    /// A scratch board carrying two real items over the same territory: one already
+    /// `Claimed` with an active lease, the other `Ready` and unclaimed -- the real
+    /// `ClaimRefusal::HeldBy` trigger `crates/substrate/nomos-ledger/src/store/refusal.rs`'s
+    /// own `Held_Ground` looks for (another item's *live claim* over overlapping ground),
+    /// not the `ClaimRefusal::NotClaimable` a second `claim` of the same already-`Claimed`
+    /// item id would hit instead.
+    fn Scratch_Board_With_A_Held_Territory_Conflict() -> (std::path::PathBuf, ItemId)
+    {
+        let directory = Unique_Scratch_Directory("held");
+        let held = ItemId::New("SCRATCH-HELD");
+        let contested = ItemId::New("SCRATCH-CONTESTED");
+        let ledger = format!(
+            "{{\"schema_version\": 5, \"items\": [\
+             {{\"id\": \"{held}\", \"title\": \"t\", \"why\": \"w\", \"done_when\": \"d\", \
+             \"kind\": \"Capability\", \"origin\": \"Proposed\", \"territory\": \
+             {{\"resolution\": \"File\", \"paths\": [\"shared\"], \"patterns\": []}}, \"state\": \"Claimed\", \
+             \"claim\": {{\"holder\": \"someone-else\", \"acquired_at\": 1, \"lease_expires_at\": \
+             {far_future}}}}}, \
+             {{\"id\": \"{contested}\", \"title\": \"t\", \"why\": \"w\", \"done_when\": \"d\", \
+             \"kind\": \"Capability\", \"origin\": \"Proposed\", \"territory\": \
+             {{\"resolution\": \"File\", \"paths\": [\"shared\"], \"patterns\": []}}, \"state\": \"Ready\"}}\
+             ]}}\n",
+            far_future = i64::from(u32::MAX)
+        );
+        std::fs::write(directory.join("ledger.json"), ledger).expect("writes a minimal valid ledger");
+
+        return (directory, contested);
+    }
+
+    #[test]
+    fn Test_Claiming_A_Real_Ready_Item_Should_Grant_A_Reservation()
+    {
+        let (directory, id) = Scratch_Board_With_A_Claimable_Item();
+        let request = ClaimRequest { item: id.clone(), holder: "test-holder".to_owned(), lease: std::time::Duration::from_secs(3600) };
+
+        let response = Handle_Work_Claim(&directory, &request);
+
+        let _ignored = std::fs::remove_dir_all(&directory);
+
+        let WorkReservationResponse::Reserved { reservation } = response
+        else
+        {
+            panic!("an unclaimed Ready item grants a reservation");
+        };
+        assert_eq!(reservation.item, id);
+        assert_eq!(reservation.holder, "test-holder");
+    }
+
+    #[test]
+    fn Test_Claiming_An_Item_Whose_Territory_Another_Live_Claim_Holds_Should_Be_Refused_And_Retryable()
+    {
+        let (directory, id) = Scratch_Board_With_A_Held_Territory_Conflict();
+        let request = ClaimRequest { item: id, holder: "test-holder".to_owned(), lease: std::time::Duration::from_secs(3600) };
+
+        let response = Handle_Work_Claim(&directory, &request);
+
+        let _ignored = std::fs::remove_dir_all(&directory);
+
+        let WorkReservationResponse::Refused { retryable, cause } = response
+        else
+        {
+            panic!("ground another live claim holds is a real refusal, not a grant");
+        };
+        assert!(retryable, "{cause}");
+    }
+
+    #[test]
+    fn Test_Renewing_This_Holders_Own_Claim_Should_Extend_The_Lease()
+    {
+        let (directory, id) = Scratch_Board_With_A_Claimed_Item("test-holder", i64::from(u32::MAX));
+        let request = ClaimRequest { item: id.clone(), holder: "test-holder".to_owned(), lease: std::time::Duration::from_secs(3600) };
+
+        let response = Handle_Work_Renew(&directory, &request);
+
+        let _ignored = std::fs::remove_dir_all(&directory);
+
+        let WorkReservationResponse::Reserved { reservation } = response
+        else
+        {
+            panic!("renewing a claim this holder already has grants a reservation");
+        };
+        assert_eq!(reservation.item, id);
+        assert_eq!(reservation.holder, "test-holder");
+    }
+
+    #[test]
+    fn Test_Taking_Over_A_Real_Lapsed_Claim_Should_Grant_A_Reservation()
+    {
+        let (directory, id) = Scratch_Board_With_A_Claimed_Item("old-holder", 1);
+        let request = ClaimRequest { item: id.clone(), holder: "new-holder".to_owned(), lease: std::time::Duration::from_secs(3600) };
+
+        let response = Handle_Work_TakeOver(&directory, &request);
+
+        let _ignored = std::fs::remove_dir_all(&directory);
+
+        let WorkReservationResponse::Reserved { reservation } = response
+        else
+        {
+            panic!("a real lapsed claim is takeable");
+        };
+        assert_eq!(reservation.item, id);
+        assert_eq!(reservation.holder, "new-holder");
+    }
+
+    #[test]
+    fn Test_A_Real_Reserved_Response_Should_Round_Trip_As_Json()
+    {
+        let (directory, id) = Scratch_Board_With_A_Claimable_Item();
+        let request = ClaimRequest { item: id, holder: "test-holder".to_owned(), lease: std::time::Duration::from_secs(3600) };
+
+        let response = Handle_Work_Claim(&directory, &request);
+
+        let _ignored = std::fs::remove_dir_all(&directory);
+
+        let json = serde_json::to_string(&response).expect("a WorkReservationResponse always serializes");
+        let parsed: serde_json::Value = serde_json::from_str(&json).expect("what was just written parses back");
+        let outcome = parsed.get("outcome").expect("a serialized WorkReservationResponse always has this field");
+
+        assert_eq!(outcome, "reserved", "{json}");
     }
 }

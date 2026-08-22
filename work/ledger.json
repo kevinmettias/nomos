@@ -25023,6 +25023,65 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-API-WORK-CLAIM-RENEW-TAKEOVER-SEAM",
+      "title": "nomos-api gains a ninth real seam: Work's Claim, Renew and TakeOver verbs",
+      "why": "ARC-ROADMAP-001 names CLI/API/MCP projections as a near-term-tier item. Of nomos_work_orchestration::WorkCommand's eleven verbs, four (List, Show, Validate, Audit) are seamed and Gate's three verbs are seamed; the seven remaining Work verbs (Add, Finish, Claim, Renew, TakeOver, Abandon, Decline) are the group run.rs's own doc calls the ones that \"need launcher, published, or more than one field off command.\" This item takes the first three of those seven: Claim, Renew and TakeOver.\n\nChecked before authoring: crates/orchestration/nomos-work-orchestration/src/claim_request.rs's own doc states these three verbs deliberately share one request type, ClaimRequest{item, holder, lease}, \"because they take exactly the same three arguments and default the lease the same way. Three identical types would be three chances for them to drift apart.\" Grepped directly: run.rs's Claim_Outcome/Renew_Outcome/TakeOver_Outcome are three near-identical functions, each calling one ledger method (ledger.Claim/Renew/Take_Over) and wrapping the identical Result<Reservation, ClaimRefusal> in WorkOutcome::{Claim,Renew,TakeOver}. Neither Reservation (crates/substrate/nomos-ledger/src/exclusion/reservation.rs) nor ClaimRefusal (crates/substrate/nomos-ledger/src/claim/refusal.rs) derives Serialize. Grouping these three verbs into one item, sharing one response type across all three the same way ClaimRequest is already shared as one request type across all three, avoids minting three response enums that could only ever agree by discipline -- the exact drift ClaimRequest's own doc names as the reason not to duplicate.\n\nTheir only real caller today: crates/host/nomos-cli/src/work.rs's own match already combines all three into one arm, (WorkCommand::Claim(_), WorkOutcome::Claim(result)) | (WorkCommand::Renew(_), WorkOutcome::Renew(result)) | (WorkCommand::TakeOver(_), WorkOutcome::TakeOver(result)) => Report_Claim(result, output) -- the CLI's own rendering already treats these three as one answer, reinforcing rather than inventing the shared-response design this item takes.",
+      "done_when": "nomos-api gains three new public functions in a new work.rs section: Handle_Work_Claim(directory: &Path, request: &ClaimRequest), Handle_Work_Renew(directory: &Path, request: &ClaimRequest) and Handle_Work_TakeOver(directory: &Path, request: &ClaimRequest), each -> WorkReservationResponse, each with the same FileLedger::At/StdFileSystem/SystemClock/FileLock composition and unreached empty Territory::Of_Files closure for published the four existing Work handlers already use. Each calls nomos_work_orchestration::Run with WorkCommand::Claim(request.clone()) / Renew(request.clone()) / TakeOver(request.clone()) respectively, matches the WorkOutcome variant naming that command, and converts through one shared WorkReservationResponse::From. ClaimRequest is nomos_work_orchestration::ClaimRequest directly, not re-exported from this crate -- the same \"a caller depends on the orchestration crate to construct its own input\" precedent Handle_Work_Show's ItemId parameter and Handle_Gate_Explain's FindingQuery both already set.\n\nWorkReservationResponse is a new tagged Reserved{reservation: ReservationResponse} / Refused{cause: String, retryable: bool} enum in work.rs, shared across all three functions rather than three response types that could only ever agree by discipline -- the exact reason ClaimRequest itself is already one shared request type for these three verbs. retryable comes from nomos_ledger::ClaimRefusal::Is_Retryable(), the same signal crates/host/nomos-cli/src/work/report.rs's own Code_For already branches an exit code on, given to a wire caller directly since it has no process exit code to read. ReservationResponse is a new public struct {item: ItemId, holder: String, expires_at: Timestamp}, a serializable twin of nomos_ledger::Reservation (which does not derive Serialize).\n\nA real test proves Handle_Work_Claim grants a reservation for a real unclaimed Ready item on a scratch board this test writes itself. A second test proves Handle_Work_Claim refuses (Refused, retryable true) against an item another holder already holds -- a real ClaimRefusal::HeldBy, not a fabricated one. A third test proves Handle_Work_Renew extends a lease this same holder already has. A fourth test proves Handle_Work_TakeOver grants a reservation over a real lapsed claim (a scratch item whose claim.lease_expires_at is a timestamp far in the past). A fifth test proves a Reserved response round-trips through serde_json. tests/contract/surface/nomos-api.txt is regenerated (NOMOS_SURFACE_BLESS) and current. nomos-work-orchestration, nomos-ledger and nomos-cli are not touched by this item.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-api",
+          "tests/contract/surface/nomos-api.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "t result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 5 tests\ntest Test_A_Lowered_Declaration_Should_Fail_The_Comparison ... ok\ntest Test_A_Matching_Declaration_Should_Pass_The_Comparison ... ok\ntest Test_An_Unrelated_Minor_Version_Should_Fail_The_Comparison ... ok\ntest Test_The_Real_Workflow_Should_Still_Have_The_Install_Step ... ok\ntest Test_The_Declared_Floor_Should_Match_The_Toolchain_The_Gate_Installs ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.14s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_api-072c024c685eb8d5.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-95a1aef077b5f9ba.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-ead301eb7c8d8256.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-a61f2bcd75c8d4d9.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-fba07f1fa1c92105.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-2bb84d2d8744d800.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-c2987d8eceda16d3.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-0eeaea7cd309c35b.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-2db99bdd604951c5.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-56e2b70874db076c.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-1204b8c22ecd0b43.exe)\n   Doc-tests nomos_api\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1787423025,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
