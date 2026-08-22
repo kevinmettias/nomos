@@ -25411,6 +25411,58 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-RULES-BANDS-CAP-CONTROLFLOW-MISSING",
+      "title": "nomos-rules bands.rs is missing nomos-cap-controlflow; Declared_Band returns None for it today",
+      "why": "crates/rules/nomos-rules/src/dependency/bands.rs's hand-maintained BANDS table (the same kind of copy P13-RULES-BANDS-GATE-ORCHESTRATION-41-STALE already fixed once for a different crate) does not list nomos-cap-controlflow at all. tests/contract/tests/boundaries/bands.rs:49, the authoritative table, has it at band 23. Declared_Band(\"nomos-cap-controlflow\") therefore returns None today rather than Some(23), so Check_Dependency_Direction cannot judge this crate's dependency direction correctly -- the same real gap the prior fix's own commit described (a same-band or wrong-band dependency involving this crate would be silently unjudged rather than caught).",
+      "done_when": "BANDS lists nomos-cap-controlflow at 23, matching tests/contract/tests/boundaries/bands.rs. cargo test -p nomos-rules stays green, and Test_Every_Entry_Should_Be_Findable_By_Name covers the new entry since it iterates BANDS directly.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/dependency/bands.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "exit_code": 0,
+        "output_tail": "ng ... ok\ntest reachability::tests::judging::Test_A_Payload_With_No_Sites_Should_Produce_No_Finding ... ok\ntest reachability::tests::judging::Test_One_Flagged_Site_Should_Produce_One_Finding ... ok\ntest reachability::tests::reading_a_fact::Test_A_Source_With_No_Flagged_Sites_Should_Produce_No_Finding ... ok\ntest reachability::tests::reading_a_fact::Test_A_Real_Fact_Should_Be_Read_And_Judged ... ok\ntest reachability::tests::reading_a_fact::Test_A_Subject_With_No_Fact_Should_Be_Reported_Rather_Than_Silently_Clean ... ok\ntest registry::rule_registry::tests::Test_A_Second_Offer_For_One_Rule_Should_Be_Refused ... ok\ntest registry::rule_registry::tests::Test_An_Empty_Registry_Should_Offer_Nothing ... ok\ntest registry::rule_registry::tests::Test_A_Rule_Should_Be_Findable_By_Its_Id ... ok\ntest universe::tests::Test_A_Constant_Slice_Should_Be_Found ... ok\ntest universe::tests::Test_A_Declared_Mirror_Should_Be_Read_Off_The_Doc_Comment ... ok\ntest universe::tests::Test_A_File_That_Declares_Nothing_Should_Be_Observed_And_Empty ... ok\ntest universe::tests::Test_A_List_With_No_Documentation_Should_Claim_No_Mirror ... ok\ntest universe::tests::Test_A_Payload_From_A_Blind_Provider_Should_Not_Read_As_No_Mirror ... ok\ntest universe::tests::Test_A_Private_List_Should_Not_Be_A_Universe ... ok\ntest universe::tests::Test_A_Scalar_Constant_Should_Not_Be_A_Universe ... ok\ntest universe::tests::Test_A_Trait_Impl_Should_Not_Claim_The_Type ... ok\ntest universe::tests::Test_An_All_Should_Be_Attributed_To_Its_Type ... ok\ntest universe::tests::Test_An_All_That_Takes_A_Receiver_Should_Not_Be_A_Universe ... ok\n\ntest result: ok. 78 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.10s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-12a9eec0a9b372bd.exe)\n   Doc-tests nomos_rules\n",
+        "verified_at": 1787422979,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
