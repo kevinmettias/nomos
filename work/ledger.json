@@ -24846,6 +24846,65 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-WORKFLOW-002-SECOND-INCREMENT-SURVEY",
+      "title": "OD-WORKFLOW-002: the workflow tier's second increment has not arrived since RunId's first consumer shipped",
+      "why": "OD-WORKFLOW-001 named the workflow tier's first real increment narrowly (RunId's first real consumer through Gate) and shipped it in P13-WORKFLOW-001-RUNID-FRESH-AND-RUN-GATE. Nothing since has named the tier's second increment, and this repository's own instructions for a survey task ask the same rigor OD-WORKFLOW-001 and OD-CORRECTIONS-001 used before naming one: grep the live tree directly rather than trust the prior record's own description of it, and re-read the v14 corpus's WF-*/WF-ORDER-* families file by file.\n\nMeasured directly: nomos_gate_orchestration::Run_Gate still has exactly two real callers (nomos-cli's gate.rs, nomos-api's Handle_Gate_Run) -- unchanged. nomos-ledger's Run_Gate_Step remains the distinct, unrelated function OD-WORKFLOW-001's own amendment already separated out; it has no persisted or correlated executions to give an identity meaning against, so giving it a RunId now would manufacture a consumer rather than find one. nomos-cli's gate/report.rs still does not print result.run, exactly as the shipping item's own done_when deliberately scoped out -- a real, mechanical gap, but a one-line print against an already-decided field, not a design question this tier's record pattern exists to settle.\n\nThe v14 corpus's WF-008 through WF-012 (WorkflowStep, immutable artifacts, deterministic branch/merge, versioned definitions with pinned replay, retry/compensation) remain exactly as unbuilt as OD-WORKFLOW-001 found them. WF-ORDER-001 through WF-ORDER-005 (a gate's own remediation-phase ordering, a validator rejecting mis-ordered or unsatisfiable needs dependencies, a per-file coalescing harness) were checked against the real code for the first time at this rigor: grepped word-boundary for phase/Phase across crates/orchestration/nomos-gate-orchestration/src and crates/orchestration/nomos-check-orchestration/src, no match in either. This workspace's one real Gate still judges a tree in a single pass with no phase concept at all, so WF-ORDER-* has zero real structure anywhere to check a shape against -- an earlier-stage absence than WF-008's own.\n\nARC-ROADMAP-001's near-term tier is unchanged, and the adjacent near-term-tier work landed since OD-WORKFLOW-001 (OD-PACKAGE-010's ModelBackendPackage first manifest, four new nomos-api Work/Spec seams) touches model/agent package infrastructure and the application-service boundary respectively, and neither references RunId, WorkflowStep, or the WF-* family anywhere -- checked directly by grep and by reading nomos-api's response.rs and lib.rs in full. OD-CORRECTIONS-001, the same survey discipline applied to the corrections tier in the same window, likewise found zero real callers and named its own trigger rather than inventing one; this item follows the same shape for workflow. This item authors that record rather than inventing a shape to have something to build, the same honest-gate pattern OD-CORRECTIONS-001 set.",
+      "done_when": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md exists, accepted, authority canonical-normative-record, and states: (1) RunId still has exactly one real consumer (Gate, through Run_Gate and its two callers, nomos-cli and nomos-api), verified by grep rather than assumed; (2) nomos-ledger's Run_Gate_Step is not a second consumer worth manufacturing, since it has no persisted or correlated executions to give an identity meaning against; (3) the CLI's missing RunId print is a real but mechanical gap, not a decision this tier's record pattern should schedule; (4) WF-008 through WF-012 remain exactly as unbuilt as OD-WORKFLOW-001 found them; (5) WF-ORDER-001 through WF-ORDER-005 have zero real structure to check a shape against, since no phase concept exists anywhere in nomos-gate-orchestration or nomos-check-orchestration, verified by a word-boundary grep across both crates' src directories; (6) the three conditions that would decide a real next increment (a second real Run_Gate caller, Gate growing a real phase concept, ModelBackend/AgentExecutor reaching a real executor). crates/spec/nomos-spec-store/records/OD-WORKFLOW-002.record registers the record's path so it is governing, not merely written. diagrams/relations.mmd and spec/domain-specification.md are both re-rendered from a clean worktree carrying exactly this commit's registered records (per OD-GATE-005) and are current. No code anywhere in the workspace is touched by this item.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md",
+          "crates/spec/nomos-spec-store/records/OD-WORKFLOW-002.record"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "ould_Answer_Every_Count_Separately ... ok\n\ntest result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.11s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-55ad3baadee2ff4e.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-56e1c9fba250ca24.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-4d4e16ab50ac70a5.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-35945c6ebc64c902.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-48bfe8d6f3ebf24c.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-ad5f178a2fa55ca5.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-a4b9594685bdc99a.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-0a473518710ef1f1.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-612bfa361c61aabd.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-13810cc2d23617bf.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-ee111bd537ecd137.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-2919ec68747ddb5b.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-99272398d303e3e7.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-756fcac740cd78ad.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-259eb839edee86c9.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1787422008,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

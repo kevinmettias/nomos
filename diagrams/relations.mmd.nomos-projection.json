@@ -3,16 +3,16 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:40fcd9138a343da062bc334a79c1fa1c0cd071489f553cd079cd6618bb7c0b2e",
-  "inputs_digest": "sha256:14d94e9dd54640f5d819ed23ffb08ed5b6d535a5a83fac18bfd8d696cfc8a8d6",
+  "content_digest": "sha256:de455fc58630c00564cff128556a9bde2a5ded98f8c4d6ac3005b8256466442c",
+  "inputs_digest": "sha256:0bf98e39e109c830d8af2bfe33dfa20378fb82755194163cd03cd0d8f4769f1d",
   "sections": [
     [
       "Relations",
-      1018
+      1024
     ],
     [
       "Decisions",
-      141
+      142
     ]
   ],
   "inputs": [
@@ -355,6 +355,11 @@
       "content": "relations",
       "identity": "ARC-ROADMAP-001 relates-to OD-WORKFLOW-001",
       "hash": "sha256:33cfeb23670508f11183e37aa9915ff02c54da9c31d532d7838a9b0530ab2d03"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-ROADMAP-001 relates-to OD-WORKFLOW-002",
+      "hash": "sha256:90367742a40a9fa4fefa385015542b97680da1c7d5c2ea25ec1031e8f5355232"
     },
     {
       "content": "relations",
@@ -1730,6 +1735,11 @@
       "content": "relations",
       "identity": "OD-CORRECTIONS-001 relates-to OD-PACKAGE-008",
       "hash": "sha256:8258907fe8346cb06c1fdac37d132e417f7077a9f03527276be6b14380546477"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-CORRECTIONS-001 relates-to OD-WORKFLOW-002",
+      "hash": "sha256:b791df0fa01076efc49e541a29bdaf7932389a8e8acc7594d228f5d61564deba"
     },
     {
       "content": "relations",
@@ -5103,6 +5113,26 @@
     },
     {
       "content": "relations",
+      "identity": "OD-WORKFLOW-001 relates-to OD-WORKFLOW-002",
+      "hash": "sha256:073824da7e2ca611a0c3b7fd1506a1f6cc12646c8202ea381fb49a8901f76209"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-WORKFLOW-002 relates-to ARC-ROADMAP-001",
+      "hash": "sha256:acab47f8a3f9bc9b2128f61097529bb0162faf9ceaa2d60b4f0a25d5aa9a34f7"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-WORKFLOW-002 relates-to OD-CORRECTIONS-001",
+      "hash": "sha256:7c90546276d1efb45e6ff98cbb6ab1fa233defaa92ff510b48c1aa7bbfde43a1"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-WORKFLOW-002 relates-to OD-WORKFLOW-001",
+      "hash": "sha256:41b9f285beba38dd33f70432d2e1514cbba60c964aef475dd26756c03b213f99"
+    },
+    {
+      "content": "relations",
       "identity": "P10-PACKAGE-SEAM relates-to ARC-ECOSYSTEM-001",
       "hash": "sha256:90e05669d077f9e3163df4bc2a1810dd21e44377c7f6bac11927442f83efdb0b"
     },
@@ -5810,6 +5840,11 @@
       "content": "nodes",
       "identity": "OD-WORKFLOW-001",
       "hash": "sha256:09c76d0ca6cb9feb0dfaa4f47e317599968cc35eee0611397010de2fb96fac4f"
+    },
+    {
+      "content": "nodes",
+      "identity": "OD-WORKFLOW-002",
+      "hash": "sha256:9c4ee5b73655152af70d1b07111101ad377b46775a8299c4f2dbc73d7ffa0a5b"
     }
   ]
 }
