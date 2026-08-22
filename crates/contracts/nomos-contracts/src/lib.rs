@@ -84,6 +84,7 @@ mod guarantee;
 mod identity;
 mod package;
 mod peer;
+mod workflow_step;
 
 pub use authority::{AuthorityClass, MutationClass};
 pub use contract_version::ContractVersion;
@@ -94,3 +95,4 @@ pub use guarantee::{Assurance, FactVariant, Guarantee, IncrementalGranularity};
 pub use identity::{BuildVariantId, CapabilityId, ConfigurationId, Digest128, GenerationId, KnowledgeReferenceId, OperationName, PackageId, ProviderId, RuleId, RunId, SchemaId, SnapshotEntityId, SnapshotId, SubjectId};
 pub use package::PackageKind;
 pub use peer::{PeerAvailability, SynchronizationState};
+pub use workflow_step::{Cacheability, CancellationBehavior, Compensation, RetryPolicy, Timeout, WorkflowStep};

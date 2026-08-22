@@ -7,6 +7,11 @@ pub const fn nomos_contracts::Assurance::Label(self) -> &'static str
 pub const fn nomos_contracts::Assurance::Satisfies_Requirement(self) -> bool
 pub const fn nomos_contracts::AuthorityClass::Label(self) -> &'static str
 pub const fn nomos_contracts::AuthorityClass::Requires_Explicit_Grant(self) -> bool
+pub const fn nomos_contracts::Cacheability::Is_Cacheable(&self) -> bool
+pub const fn nomos_contracts::CancellationBehavior::Cancellable(self) -> bool
+pub const fn nomos_contracts::CancellationBehavior::Label(self) -> &'static str
+pub const fn nomos_contracts::Compensation::Exists(self) -> bool
+pub const fn nomos_contracts::Compensation::Label(self) -> &'static str
 pub const fn nomos_contracts::ContractVersion::Can_Read(self, other: Self) -> bool
 pub const fn nomos_contracts::ContractVersion::New(major: u16, minor: u16) -> Self
 pub const fn nomos_contracts::Declaration_Is_Coherent( strength: DeterminismStrength, trace: TraceEquivalence, ) -> bool
@@ -36,8 +41,10 @@ pub const fn nomos_contracts::PackageKind::Label(self) -> &'static str
 pub const fn nomos_contracts::PeerAvailability::Is_Knowledge(&self) -> bool
 pub const fn nomos_contracts::ReproducibilityScope::Label(self) -> &'static str
 pub const fn nomos_contracts::ReproducibilityScope::Requires_Cross_Environment_Verification(self) -> bool
+pub const fn nomos_contracts::RetryPolicy::Retryable(self) -> bool
 pub const fn nomos_contracts::SynchronizationState::Label(self) -> &'static str
 pub const fn nomos_contracts::SynchronizationState::Requires_Authorized_Resolution(self) -> bool
+pub const fn nomos_contracts::Timeout::Is_Bounded(self) -> bool
 pub const fn nomos_contracts::TraceEquivalence::Label(self) -> &'static str
 pub const fn nomos_contracts::TraceEquivalence::Weaker_Of(self, other: Self) -> Self
 pub const nomos_contracts::Digest128::BYTE_LENGTH: usize
@@ -49,6 +56,9 @@ pub const nomos_contracts::Strategy::TRACE: TraceEquivalence
 pub enum nomos_contracts::Applicability
 pub enum nomos_contracts::Assurance
 pub enum nomos_contracts::AuthorityClass
+pub enum nomos_contracts::Cacheability
+pub enum nomos_contracts::CancellationBehavior
+pub enum nomos_contracts::Compensation
 pub enum nomos_contracts::DeterminismStrength
 pub enum nomos_contracts::DisplayLabel
 pub enum nomos_contracts::EnforcementBreach
@@ -61,7 +71,9 @@ pub enum nomos_contracts::MutationClass
 pub enum nomos_contracts::PackageKind
 pub enum nomos_contracts::PeerAvailability
 pub enum nomos_contracts::ReproducibilityScope
+pub enum nomos_contracts::RetryPolicy
 pub enum nomos_contracts::SynchronizationState
+pub enum nomos_contracts::Timeout
 pub enum nomos_contracts::TraceEquivalence
 pub enum variant nomos_contracts::Applicability::AgentRequired
 pub enum variant nomos_contracts::Applicability::AnalysisFailed
@@ -84,6 +96,14 @@ pub enum variant nomos_contracts::AuthorityClass::Preview
 pub enum variant nomos_contracts::AuthorityClass::Propose
 pub enum variant nomos_contracts::AuthorityClass::Publish
 pub enum variant nomos_contracts::AuthorityClass::Read
+pub enum variant nomos_contracts::Cacheability::Cacheable { key_inputs: Vec<String>, }
+pub enum variant nomos_contracts::Cacheability::NotCacheable
+pub enum variant nomos_contracts::CancellationBehavior::CancellableBeforeSideEffects
+pub enum variant nomos_contracts::CancellationBehavior::CancellableWithCompensation
+pub enum variant nomos_contracts::CancellationBehavior::Uncancellable
+pub enum variant nomos_contracts::Compensation::ExternallyCompensated
+pub enum variant nomos_contracts::Compensation::None
+pub enum variant nomos_contracts::Compensation::SelfCompensating
 pub enum variant nomos_contracts::DeterminismStrength::None
 pub enum variant nomos_contracts::DeterminismStrength::State
 pub enum variant nomos_contracts::DeterminismStrength::StateTemporal
@@ -153,18 +173,24 @@ pub enum variant nomos_contracts::ReproducibilityScope::CrossBinary
 pub enum variant nomos_contracts::ReproducibilityScope::CrossPlatform
 pub enum variant nomos_contracts::ReproducibilityScope::CrossRun
 pub enum variant nomos_contracts::ReproducibilityScope::SingleRun
+pub enum variant nomos_contracts::RetryPolicy::NoRetry
+pub enum variant nomos_contracts::RetryPolicy::Retry { max_attempts: NonZeroU32, deduplication_token_required: bool, }
 pub enum variant nomos_contracts::SynchronizationState::Current
 pub enum variant nomos_contracts::SynchronizationState::Diverged
 pub enum variant nomos_contracts::SynchronizationState::OperationalNewer
 pub enum variant nomos_contracts::SynchronizationState::Rejected
 pub enum variant nomos_contracts::SynchronizationState::SourceNewer
 pub enum variant nomos_contracts::SynchronizationState::Unavailable
+pub enum variant nomos_contracts::Timeout::Seconds(NonZeroU32)
+pub enum variant nomos_contracts::Timeout::Unbounded
 pub enum variant nomos_contracts::TraceEquivalence::BehaviorallyEquivalent
 pub enum variant nomos_contracts::TraceEquivalence::BitIdentical
 pub enum variant nomos_contracts::TraceEquivalence::NotApplicable
 pub fn nomos_contracts::Applicability::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_contracts::Assurance::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_contracts::AuthorityClass::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_contracts::CancellationBehavior::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_contracts::Compensation::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_contracts::ContractVersion::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_contracts::DeterminismStrength::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_contracts::Digest128::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
@@ -189,9 +215,12 @@ pub fn nomos_contracts::PeerAvailability::Describe(&self) -> String
 pub fn nomos_contracts::ReproducibilityScope::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_contracts::SynchronizationState::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_contracts::TraceEquivalence::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_contracts::WorkflowStep::Is_Coherent(&self) -> bool
 pub impl nomos_contracts::Applicability implements core::fmt::Display
 pub impl nomos_contracts::Assurance implements core::fmt::Display
 pub impl nomos_contracts::AuthorityClass implements core::fmt::Display
+pub impl nomos_contracts::CancellationBehavior implements core::fmt::Display
+pub impl nomos_contracts::Compensation implements core::fmt::Display
 pub impl nomos_contracts::ContractVersion implements core::fmt::Display
 pub impl nomos_contracts::DeterminismStrength implements core::fmt::Display
 pub impl nomos_contracts::Digest128 implements core::fmt::Debug
@@ -227,12 +256,27 @@ pub struct field nomos_contracts::Guarantee::completeness: Assurance
 pub struct field nomos_contracts::Guarantee::incremental: IncrementalGranularity
 pub struct field nomos_contracts::Guarantee::soundness: Assurance
 pub struct field nomos_contracts::Guarantee::variant: FactVariant
+pub struct field nomos_contracts::WorkflowStep::cacheability: Cacheability
+pub struct field nomos_contracts::WorkflowStep::cancellation: CancellationBehavior
+pub struct field nomos_contracts::WorkflowStep::compensation: Compensation
+pub struct field nomos_contracts::WorkflowStep::determinism_strength: DeterminismStrength
+pub struct field nomos_contracts::WorkflowStep::evidence: EvidenceClass
+pub struct field nomos_contracts::WorkflowStep::has_side_effects: bool
+pub struct field nomos_contracts::WorkflowStep::idempotent: bool
+pub struct field nomos_contracts::WorkflowStep::input_schema: SchemaId
+pub struct field nomos_contracts::WorkflowStep::output_schema: SchemaId
+pub struct field nomos_contracts::WorkflowStep::privileges: Vec<String>
+pub struct field nomos_contracts::WorkflowStep::reproducibility_scope: ReproducibilityScope
+pub struct field nomos_contracts::WorkflowStep::retry: RetryPolicy
+pub struct field nomos_contracts::WorkflowStep::timeout: Timeout
+pub struct field nomos_contracts::WorkflowStep::trace_equivalence: TraceEquivalence
 pub struct nomos_contracts::ContractVersion
 pub struct nomos_contracts::Digest128([u8; Digest128::BYTE_LENGTH])
 pub struct nomos_contracts::EnforcementReach
 pub struct nomos_contracts::Finding
 pub struct nomos_contracts::GenerationId(u64)
 pub struct nomos_contracts::Guarantee
+pub struct nomos_contracts::WorkflowStep
 pub trait nomos_contracts::Strategy
 
 # re-exports of items declared outside this crate

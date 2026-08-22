@@ -24905,6 +24905,113 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-WORKFLOW-003-WORKFLOWSTEP-BAND-ZERO",
+      "title": "OD-WORKFLOW-003: WorkflowStep admitted to band 0 as WF-008's declared contract, not the engine",
+      "why": "placeholder",
+      "done_when": "placeholder",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md",
+          "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "added with placeholder why/done-when and incomplete territory while testing --amends spelling; re-adding correctly"
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contracts",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "n/a",
+        "declined_at": 1787442688
+      }
+    },
+    {
+      "id": "P13-WORKFLOW-003-WORKFLOWSTEP-BAND-ZERO-2",
+      "title": "OD-WORKFLOW-003: WorkflowStep admitted to band 0 as WF-008's declared contract, not the engine",
+      "why": "OD-WORKFLOW-002's own 'What This Does Not Do' section states unqualified: it does not build WorkflowStep. That answers whether the workflow EXECUTION ENGINE has a next real increment (no, unchanged). It never examined a separate question: OD-CONTRACTS-001 admits a type to band 0 when a peer on the other side of a boundary needs to agree on its shape, independent of whether a runtime consumer exists in this workspace -- the same test RunId itself passed with zero consumers before OD-WORKFLOW-001 gave it one. WF-006's own text ('API-hosted, subscription-agent, human, and recorded-replay executors shall use the same task/result protocol') frames WorkflowStep as exactly this kind of cross-executor protocol truth. WF-008's own statement is a single flat sentence naming exactly eleven properties with no further sub-structure -- the same bounded, statable-shape character OD-PACKAGE-010 found in MODEL-ROUTE-037's opening clause and built from while declining the rest as invention with no second real case. A partially-written WorkflowStep draft was already sitting uncommitted in this tree (crates/contracts/nomos-contracts/src/workflow_step*, written 28 minutes after OD-WORKFLOW-002 was committed, with no ledger claim behind it) mapping one-to-one onto WF-008's eleven properties plus WF-012's first (static coherence) clause only, explicitly declining WF-009/010/011 and WF-012's second (engine-reporting) clause by name in its own doc comments, and keeping every genuinely open sub-shape (key_inputs, privileges) raw and unresolved the same way OD-PACKAGE-010 did for ModelSelection::Catalog. The user was asked directly whether to discard it, gate it properly, or set it aside, given it directly contradicted a record just committed in this same session -- and chose to gate it properly. This item authors OD-WORKFLOW-003 narrowing OD-WORKFLOW-002's clause to the engine question it was actually answering, and accepts the existing draft as that narrower decision's implementation after checking it field by field against WF-008/WF-012 rather than re-deriving it from scratch.",
+      "done_when": "docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md exists, accepted, authority canonical-normative-record, and decides WorkflowStep (scoped to WF-008's eleven named properties plus WF-012's first static-coherence clause only) is admitted to nomos-contracts at band 0 under OD-CONTRACTS-001's criterion, narrowing rather than reversing OD-WORKFLOW-002's engine finding. crates/spec/nomos-spec-store/records/OD-WORKFLOW-003.record registers it. OD-WORKFLOW-002 is amended (version bumped, a relation added, its 'does not build WorkflowStep' clause narrowed to the engine question) to stay consistent with the new record rather than silently contradicted by it. crates/contracts/nomos-contracts/src/workflow_step.rs and its five submodules compile, are re-exported from lib.rs, and cargo test -p nomos-contracts -p nomos-contract-tests passes with the public-surface snapshot at tests/contract/surface/nomos-contracts.txt blessed to match. diagrams/relations.mmd and spec/domain-specification.md (both halves plus sidecars) are re-rendered from a worktree holding exactly the registered records this commit publishes and pass nomos spec freshness --require diagram-set --require domain-specification. No part of the WF-009..012 engine, no phase concept for Gate, and no real WorkflowStep constructor or consumer anywhere in this workspace is built.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md",
+          "crates/spec/nomos-spec-store/records/OD-WORKFLOW-003.record",
+          "crates/contracts/nomos-contracts/src/lib.rs",
+          "crates/contracts/nomos-contracts/src/workflow_step.rs",
+          "crates/contracts/nomos-contracts/src/workflow_step",
+          "tests/contract/surface/nomos-contracts.txt",
+          "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contracts",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contracts",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "nt ... ok\ntest workflow_step::tests::Test_An_Uncovered_Retry_Of_A_Non_Idempotent_Side_Effecting_Step_Should_Be_Incoherent ... ok\ntest workflow_step::tests::Test_No_Retry_Should_Always_Be_Coherent ... ok\ntest workflow_step::timeout::tests::Test_Seconds_Should_Be_Bounded ... ok\ntest workflow_step::timeout::tests::Test_Unbounded_Should_Not_Be_Bounded ... ok\n\ntest result: ok. 81 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-contracts v0.1.0 (F:\\repos\\nomos-track-b\\crates\\contracts\\nomos-contracts)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.91s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-06ab25b0491e144c.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-4c32ae08be8df958.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-9350d088b8d6ed0d.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-9ca3879aab70176f.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-308fef82df004321.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-f6f7228f8cfa874c.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-ea500c062215f506.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-790c8c5856e63fa5.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-98429b682798ce96.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-c1e906054609f777.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contracts-bd3fae8db8e41615.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_contracts\n",
+        "verified_at": 1787442972,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

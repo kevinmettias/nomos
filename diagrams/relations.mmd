@@ -333,6 +333,7 @@ graph LR
     od_contracts_001 -->|"relates-to"| od_contracts_002
     od_contracts_001 -->|"relates-to"| od_gate_003
     od_contracts_001 -->|"relates-to"| od_workflow_001
+    od_contracts_001 -->|"relates-to"| od_workflow_003["OD-WORKFLOW-003"]
     od_contracts_002 -->|"relates-to"| arc_harness_001
     od_contracts_002 -->|"relates-to"| od_analysis_006
     od_contracts_002 -->|"relates-to"| od_capability_001
@@ -796,6 +797,7 @@ graph LR
     od_package_010 -->|"relates-to"| od_package_001
     od_package_010 -->|"relates-to"| od_package_007
     od_package_010 -->|"relates-to"| od_package_008
+    od_package_010 -->|"relates-to"| od_workflow_003
     od_platform_001 -->|"relates-to"| arc_harness_001
     od_platform_001 -->|"relates-to"| d_130
     od_platform_001 -->|"relates-to"| od_gate_001
@@ -1023,9 +1025,15 @@ graph LR
     od_workflow_001 -->|"relates-to"| od_gate_014
     od_workflow_001 -->|"relates-to"| od_host_002
     od_workflow_001 -->|"relates-to"| od_workflow_002
+    od_workflow_001 -->|"relates-to"| od_workflow_003
     od_workflow_002 -->|"relates-to"| arc_roadmap_001
     od_workflow_002 -->|"relates-to"| od_corrections_001
     od_workflow_002 -->|"relates-to"| od_workflow_001
+    od_workflow_002 -->|"relates-to"| od_workflow_003
+    od_workflow_003 -->|"relates-to"| od_contracts_001
+    od_workflow_003 -->|"relates-to"| od_package_010
+    od_workflow_003 -->|"relates-to"| od_workflow_001
+    od_workflow_003 -->|"relates-to"| od_workflow_002
     p10_package_seam -->|"relates-to"| arc_ecosystem_001
   end
   subgraph "Decisions"
@@ -1171,4 +1179,5 @@ graph LR
     od_trace_005
     od_workflow_001
     od_workflow_002
+    od_workflow_003
   end

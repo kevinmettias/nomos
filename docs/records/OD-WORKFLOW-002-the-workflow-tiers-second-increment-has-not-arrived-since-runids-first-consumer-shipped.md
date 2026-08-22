@@ -3,7 +3,7 @@ id: OD-WORKFLOW-002
 type: decision
 title: The workflow tier's second increment has not arrived since RunId's first consumer shipped
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - workflow
@@ -16,6 +16,8 @@ relations:
   - target: ARC-ROADMAP-001
     type: relates-to
   - target: OD-CORRECTIONS-001
+    type: relates-to
+  - target: OD-WORKFLOW-003
     type: relates-to
 ---
 
@@ -135,9 +137,27 @@ Until one of those arrives, the workflow tier stands exactly where `OD-WORKFLOW-
 it: one real consumer, one real "one execution," and an engine with nothing yet to check its
 shape against.
 
+## Amendment (OD-WORKFLOW-003)
+
+The "What This Does Not Do" clause above -- "It does not build `WorkflowStep`, any part of the
+`WF-009`..`012` engine ..." -- was written answering one question: whether the workflow
+*execution engine* has a next real increment. It did not separately examine whether
+`WorkflowStep`'s own declared shape (`WF-008`'s eleven named properties) independently
+qualifies for band-0 admission under `OD-CONTRACTS-001`'s cross-boundary-vocabulary criterion,
+a test that does not require a workspace-internal runtime consumer -- the same test `RunId`
+itself passed with zero consumers before this tier's own first increment gave it one.
+`OD-WORKFLOW-003` answers that narrower question and admits `WorkflowStep`, scoped to `WF-008`
+plus `WF-012`'s first (static coherence) clause only, as vocabulary. That clause is narrowed
+accordingly: it continues to mean no execution engine, no `WF-009`/`010`/`011`, and no real
+`WorkflowStep` consumer anywhere in this workspace. Every other finding in this record --
+`RunId`'s one real consumer, the `WF-ORDER-*` phase absence, the three named triggers for a
+next engine increment -- is unchanged.
+
 ## Status
 
 Accepted. Re-surveys the workflow tier against the live tree and the v14 corpus a second
 time, after `OD-WORKFLOW-001`'s first increment shipped, and finds no genuine second
 increment has arrived -- naming the three conditions that would produce one rather than
-inventing a shape to have something to build.
+inventing a shape to have something to build. Amended by `OD-WORKFLOW-003` to narrow this
+record's "does not build `WorkflowStep`" clause to the execution-engine question it was
+actually answering; the rest of this record's survey stands.
