@@ -25012,6 +25012,61 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-TRACE-WF-008-WF-012-PARTIAL",
+      "title": "requirement_trace: WF-008 and WF-012 assessed Partial against OD-WORKFLOW-003",
+      "why": "OD-WORKFLOW-003 (this session) gave WF-008 and WF-012 real code to check for the first time: WorkflowStep's eleven fields map onto WF-008's eleven named properties, and Is_Coherent implements WF-012's first (static coherence) clause exactly, tested against the requirement's own named failure case. tests/contract/requirements/*.assessment (OD-TRACE-001/002/003) is the real, machine-readable registry for exactly this kind of finding -- currently 6 of 363 v14 requirements assessed, all Met or Diverges, with zero Partial entries filed despite OD-TRACE-003 building that verdict and both committed.rs tests documenting themselves as vacuous until 'the first honest partial assessment' arrives. Leaving this reasoning only in OD-WORKFLOW-003's prose repeats the exact 'Met in prose, unreadable to a machine' gap OD-TRACE-002 closed for CHK-003. Both requirements assess Partial rather than Met: WF-008 because the type mechanically enforces the shape but nothing in this workspace has ever constructed a WorkflowStep to check compliance against; WF-012 because its static clause is real and tested while its cancellation-reporting clause needs an engine that does not exist. This is real, low-risk, disjoint follow-on work distinct from anything nomos-api (Track A) or nomos-model-package (Track C) touch.",
+      "done_when": "tests/contract/requirements/WF-008.assessment and WF-012.assessment exist, each verdict: Partial with at least one site and one gap, every named site and gap resolving (its symbol occurring verbatim in the named file). cargo test --no-fail-fast -p nomos-contract-tests passes, including Test_Every_Assessment_Should_Name_A_Site_That_Exists, Test_Every_Partial_Should_Name_A_Gap and Test_Every_Gap_Should_Resolve now exercised non-vacuously for the first time. No other requirement's assessment is touched.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/requirements/WF-008.assessment",
+          "tests/contract/requirements/WF-012.assessment"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "Cited_Rule ... ok\ntest Test_Every_Cited_Record_Should_Still_Exist ... ok\ntest Test_Every_Cited_Version_Should_Match_The_Records_Own_Front_Matter ... ok\ntest Test_A_Mismatched_Version_Should_Fail_The_Comparison ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 5 tests\ntest Test_A_Lowered_Declaration_Should_Fail_The_Comparison ... ok\ntest Test_A_Matching_Declaration_Should_Pass_The_Comparison ... ok\ntest Test_An_Unrelated_Minor_Version_Should_Fail_The_Comparison ... ok\ntest Test_The_Real_Workflow_Should_Still_Have_The_Install_Step ... ok\ntest Test_The_Declared_Floor_Should_Match_The_Toolchain_The_Gate_Installs ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.10s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-06ab25b0491e144c.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-4c32ae08be8df958.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-9350d088b8d6ed0d.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-9ca3879aab70176f.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-308fef82df004321.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-f6f7228f8cfa874c.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-ea500c062215f506.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-790c8c5856e63fa5.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-98429b682798ce96.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-c1e906054609f777.exe)\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1787459960,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
