@@ -61,9 +61,9 @@
 //! the fourth, the candidate `OD-RULES-008` named and `P13-CONTROLFLOW-REACHABILITY-
 //! CAPABILITY` built: a control-flow edge inside one function body either reaches a
 //! `Finding` after a fact-read failure or it does not, the first judgment in this crate
-//! that is not a flat per-subject decode-and-compare. Neither it nor its provider is
-//! composed into `nomos-check-orchestration::Run` yet — a follow-on item, the same split
-//! `Check_Dependency_Direction` used.
+//! that is not a flat per-subject decode-and-compare. `P13-CONTROLFLOW-REACHABILITY-WIRE`
+//! composed it into `nomos-check-orchestration::Run`, the same way `P13-DEPENDENCY-WIRE-1`
+//! composed `Check_Dependency_Direction`.
 //!
 //! [`RuleRegistry`] is a fourth thing, deliberately not a rule: `OD-RULES-004` extracted a
 //! registration contract ahead of a second rule, so a rule package can be designed and

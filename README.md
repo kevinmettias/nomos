@@ -58,7 +58,7 @@ band, and `tests/contract` asserts it.
 | 40 | `nomos-spec-orchestration` | Assembles the specification store from the embedded governing records and a caller-named corpus, and answers all nine `SpecCommand` verbs plus `nomos request submit`'s `Submit`, generic over `nomos-platform`'s traits where a verb reads or writes — apart from choosing a platform or rendering the answer. |
 | 41 | `nomos-gate-orchestration` | The seam for the first-class Gate object `ARC-ROADMAP-001` names: `Plan` composes a real rule registry and reports what it holds, `Run_Gate` composes `nomos-check-orchestration` into a judged disposition — apart from selecting scope, choosing a platform or rendering the answer. Above `nomos-check-orchestration`'s band so it may depend on it. |
 | 90 | `nomos-cli` | The `nomos` binary. |
-| 90 | `nomos-api` | A second real caller of `nomos-gate-orchestration`'s `Run_Gate`: walks a tree, judges it exactly as `nomos gate run` would, and hands back a JSON-serializable response — apart from choosing a platform or wiring an actual transport over it. |
+| 90 | `nomos-api` | A second real caller of `nomos-gate-orchestration`'s `Run_Gate`, `nomos-work-orchestration`'s `Run` and `nomos-spec-orchestration`'s `Profiles`: walks a tree and judges it exactly as `nomos gate run` would, and lists, shows and validates work items exactly as `nomos work` would — apart from choosing a platform or wiring an actual transport over it. |
 | 91 | `nomos-surface-provenance` | A report over this repository's own git history, run on demand and invoked from nowhere else: `OD-STORE-002`'s Worked Case join between a crate's surface snapshot and `docs/records/`, for a caller-given commit range. Never a gate. |
 | 100 | `nomos-contract-tests` | The assertions in `tests/contract`. Observes the workspace; nothing observes it. |
 | 100 | `nomos-integration-tests` | The vertical slice, driving the product through its seams. Its peer, not its layer. |
@@ -90,13 +90,15 @@ territories are provably disjoint, and an unanswerable overlap question refuses 
 claim rather than granting it.
 
 ```
-nomos work list [--state ready|claimed|blocked|done|declined]
+nomos work list [--state ready|waiting|held|snagged|stranded|claimed|blocked|done|declined]
+nomos work show   --item <id>
 nomos work add     --item <id> --title <text> --why <text> --done-when <text>
                    --kind capability|decision|validation|correction|cleanup
                    --origin required|proposed
                    --territory <path> [--territory <path> …]
+                   [--amends <record> …]
                    [--depends-on <id> …]
-                   [-- <program> <args…>]
+                   [-- <program> <args…>] [--timeout 2h]
 nomos work claim   --item <id> --holder <name> [--lease 2h]
 nomos work renew   --item <id> --holder <name> [--lease 2h]
 nomos work takeover --item <id> --holder <name> [--lease 2h]
@@ -138,9 +140,9 @@ abandoned work is a decision, and a decision belongs in a verb somebody typed.
 
 **Abandoning ends a claim; declining ends an item.** They take the same three arguments and
 they are not degrees of one thing. `abandon` says this holder stopped, so the item goes back on
-the board with the reason attached — which is right for eighteen of the twenty abandonments this
-ledger has recorded, because the work was still wanted and somebody else finished it. `decline`
-says the item is not work at all: superseded by a successor that already landed it, or refused
+the board with the reason attached — which is right whenever the work is still wanted and
+somebody else can finish it, the common case among the abandonments this ledger has recorded.
+`decline` says the item is not work at all: superseded by a successor that already landed it, or refused
 by name in a record written since it was authored. It takes no claim, because an item nobody
 intends to do should not have to be claimed first, and it refuses an item somebody is holding —
 that call is the holder's, and the refusal names the two commands. `OD-LEDGER-019` measures what
@@ -185,7 +187,7 @@ reports the file's schema version and the running build's side by side, without 
 provoke a refusal first:
 
 ```
-ledger is valid (schema 2, and this build understands 2)
+ledger is valid (schema 5, and this build understands 5)
 ```
 
 ## Reading the specification
@@ -261,8 +263,10 @@ third time here.
 
 `D-128` requires `README.md`, `ARCHITECTURE.md` and `ARTIFACT_MAP.md` to be
 freshness-validated publication outputs. Those are the *specification suite's* overview
-documents, and this repository ships two of them as projections: `README.projection.md`
-from the `github-markdown` profile, and `spec/architecture.md` from `architecture-document`.
+documents: `README.projection.md` from the `github-markdown` profile, and
+`spec/architecture.md` from `architecture-document`. Both are corpus-backed profiles —
+neither is among the four that render without one (`OD-PROJECT-002`) — and the corpus they
+need is not in this repository or on any CI runner, so neither is committed here.
 
 This file is a different document that happens to share a name. It describes the
 workspace, and no content kind in the projection system selects a crate's band or a gate

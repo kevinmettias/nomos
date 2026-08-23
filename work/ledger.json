@@ -25318,6 +25318,739 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-RULES-LIB-REACHABILITY-COMPOSED-STALE",
+      "title": "nomos-rules lib.rs still claims Check_Unread_Reaches_A_Finding is not composed into Run, but P13-CONTROLFLOW-REACHABILITY-WIRE wired it",
+      "why": "src/lib.rs lines 64-66 say 'Neither it nor its provider is composed into nomos-check-orchestration::Run yet -- a follow-on item, the same split Check_Dependency_Direction used.' This is stale: crates/orchestration/nomos-check-orchestration/src/run.rs imports and calls Check_Unread_Reaches_A_Finding unconditionally (line 138), wired by P13-CONTROLFLOW-REACHABILITY-WIRE, already done in this ledger.",
+      "done_when": "lib.rs no longer claims Check_Unread_Reaches_A_Finding is uncomposed; it states P13-CONTROLFLOW-REACHABILITY-WIRE composed it into Run, mirroring how Check_Dependency_Direction's composition is described two sentences earlier. cargo test -p nomos-rules stays green.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/lib.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "exit_code": 0,
+        "output_tail": "No_Finding ... ok\ntest reachability::tests::judging::Test_Every_Site_Should_Produce_Its_Own_Finding ... ok\ntest reachability::tests::judging::Test_One_Flagged_Site_Should_Produce_One_Finding ... ok\ntest reachability::tests::reading_a_fact::Test_A_Source_With_No_Flagged_Sites_Should_Produce_No_Finding ... ok\ntest reachability::tests::reading_a_fact::Test_A_Real_Fact_Should_Be_Read_And_Judged ... ok\ntest reachability::tests::reading_a_fact::Test_A_Subject_With_No_Fact_Should_Be_Reported_Rather_Than_Silently_Clean ... ok\ntest registry::rule_registry::tests::Test_A_Rule_Should_Be_Findable_By_Its_Id ... ok\ntest registry::rule_registry::tests::Test_A_Second_Offer_For_One_Rule_Should_Be_Refused ... ok\ntest registry::rule_registry::tests::Test_An_Empty_Registry_Should_Offer_Nothing ... ok\ntest universe::tests::Test_A_Constant_Slice_Should_Be_Found ... ok\ntest universe::tests::Test_A_Declared_Mirror_Should_Be_Read_Off_The_Doc_Comment ... ok\ntest universe::tests::Test_A_File_That_Declares_Nothing_Should_Be_Observed_And_Empty ... ok\ntest universe::tests::Test_A_List_With_No_Documentation_Should_Claim_No_Mirror ... ok\ntest universe::tests::Test_A_Payload_From_A_Blind_Provider_Should_Not_Read_As_No_Mirror ... ok\ntest universe::tests::Test_A_Private_List_Should_Not_Be_A_Universe ... ok\ntest universe::tests::Test_A_Scalar_Constant_Should_Not_Be_A_Universe ... ok\ntest universe::tests::Test_A_Trait_Impl_Should_Not_Claim_The_Type ... ok\ntest universe::tests::Test_An_All_Should_Be_Attributed_To_Its_Type ... ok\ntest universe::tests::Test_An_All_That_Takes_A_Receiver_Should_Not_Be_A_Universe ... ok\n\ntest result: ok. 78 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.09s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-12a9eec0a9b372bd.exe)\n   Doc-tests nomos_rules\n",
+        "verified_at": 1787421894,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-REACHABILITY-COMPOSED-STALE",
+      "title": "reachability.rs still claims Check_Unread_Reaches_A_Finding is not composed into Run, the same claim already fixed once in lib.rs",
+      "why": "reachability.rs lines 26-31, under its own heading 'Not composed into nomos-check-orchestration::Run', duplicate the identical stale claim P13-RULES-LIB-REACHABILITY-COMPOSED-STALE just fixed in lib.rs -- the same two-file duplicate pattern P13-LANG-RUST-CARGO-DOC-STALE and P13-LANG-RUST-CARGO-PROVIDER-DOC-STALE fixed for a different crate. crates/orchestration/nomos-check-orchestration/src/run.rs imports and calls Check_Unread_Reaches_A_Finding unconditionally (line 138), wired by P13-CONTROLFLOW-REACHABILITY-WIRE.",
+      "done_when": "reachability.rs no longer claims the rule is uncomposed; its heading and prose state P13-CONTROLFLOW-REACHABILITY-WIRE composed it into Run. cargo test -p nomos-rules stays green.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/reachability.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "exit_code": 0,
+        "output_tail": "No_Finding ... ok\ntest reachability::tests::judging::Test_Every_Site_Should_Produce_Its_Own_Finding ... ok\ntest reachability::tests::judging::Test_One_Flagged_Site_Should_Produce_One_Finding ... ok\ntest reachability::tests::reading_a_fact::Test_A_Source_With_No_Flagged_Sites_Should_Produce_No_Finding ... ok\ntest reachability::tests::reading_a_fact::Test_A_Real_Fact_Should_Be_Read_And_Judged ... ok\ntest reachability::tests::reading_a_fact::Test_A_Subject_With_No_Fact_Should_Be_Reported_Rather_Than_Silently_Clean ... ok\ntest registry::rule_registry::tests::Test_A_Rule_Should_Be_Findable_By_Its_Id ... ok\ntest registry::rule_registry::tests::Test_A_Second_Offer_For_One_Rule_Should_Be_Refused ... ok\ntest registry::rule_registry::tests::Test_An_Empty_Registry_Should_Offer_Nothing ... ok\ntest universe::tests::Test_A_Constant_Slice_Should_Be_Found ... ok\ntest universe::tests::Test_A_Declared_Mirror_Should_Be_Read_Off_The_Doc_Comment ... ok\ntest universe::tests::Test_A_File_That_Declares_Nothing_Should_Be_Observed_And_Empty ... ok\ntest universe::tests::Test_A_List_With_No_Documentation_Should_Claim_No_Mirror ... ok\ntest universe::tests::Test_A_Payload_From_A_Blind_Provider_Should_Not_Read_As_No_Mirror ... ok\ntest universe::tests::Test_A_Private_List_Should_Not_Be_A_Universe ... ok\ntest universe::tests::Test_A_Scalar_Constant_Should_Not_Be_A_Universe ... ok\ntest universe::tests::Test_A_Trait_Impl_Should_Not_Claim_The_Type ... ok\ntest universe::tests::Test_An_All_Should_Be_Attributed_To_Its_Type ... ok\ntest universe::tests::Test_An_All_That_Takes_A_Receiver_Should_Not_Be_A_Universe ... ok\n\ntest result: ok. 78 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.08s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-12a9eec0a9b372bd.exe)\n   Doc-tests nomos_rules\n",
+        "verified_at": 1787421951,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-LANG-RUST-CARGO-SOLE-CALLER-STALE",
+      "title": "nomos-lang-rust-cargo lib.rs still calls nomos-cli the only composition root reaching nomos-check-orchestration::Run; nomos-api is a second one now",
+      "why": "lib.rs lines 33-35 say 'nomos-cli, the only composition root that calls nomos-check-orchestration::Run today, is the one that chooses StdProcessLauncher.' This crate was already touched once for a different stale claim (P13-LANG-RUST-CARGO-DOC-STALE), and this sentence has drifted stale a second time since: nomos-api::Handle_Gate_Run (crates/host/nomos-api/src/lib.rs:72-86) also passes &StdProcessLauncher into nomos_gate_orchestration::Run_Gate, which calls nomos_check_orchestration::Run (crates/orchestration/nomos-gate-orchestration/src/run_gate.rs:33) -- a second composition root reaching this same path.",
+      "done_when": "lib.rs names nomos-cli and nomos-api (through Run_Gate) as the two composition roots that reach nomos-check-orchestration::Run today, both choosing StdProcessLauncher. cargo test -p nomos-lang-rust-cargo stays green.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages/nomos-lang-rust-cargo/src/lib.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lang-rust-cargo"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lang-rust-cargo"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 10 tests\ntest guarantee::tests::Test_The_Declared_Guarantee_Should_Satisfy_The_Contract_Ceiling ... ok\ntest metadata::tests::Test_Edges_Should_Be_In_Canonical_Order ... ok\ntest metadata::tests::Test_Every_Discovered_Package_Should_Carry_A_Manifest_Relative_Root ... ok\ntest metadata::tests::Test_Nomos_Contracts_Should_Have_No_First_Party_Edges ... ok\ntest metadata::tests::Test_This_Crate_Should_Depend_On_Nomos_Contracts ... ok\ntest provider::tests::Test_A_Fact_Should_Carry_The_Declared_Guarantee ... ok\ntest provider::tests::Test_A_Facts_Path_Should_Be_What_Its_Subject_Was_Addressed_By ... ok\ntest provider::tests::Test_A_Facts_Subject_Should_Match_Subject_Of_Its_Own_Path ... ok\ntest provider::tests::Test_Every_Workspace_Member_Should_Produce_One_Fact ... ok\ntest provider::tests::Test_Two_Runs_Over_The_Same_Tree_Should_Reach_The_Same_Semantic_Inputs ... ok\n\ntest result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s\n\n\nrunning 1 test\ntest Test_An_Edited_Manifests_Old_Fact_Should_Not_Survive_The_Generation_It_Was_Invalidated_At ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.09s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lang_rust_cargo-93635b3de6e9f30b.exe)\n     Running tests\\invalidation.rs (target\\debug\\deps\\invalidation-c1d25b32653260e2.exe)\n   Doc-tests nomos_lang_rust_cargo\n",
+        "verified_at": 1787422025,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-README-API-SEAM-COUNT-STALE",
+      "title": "README's nomos-api band row still describes it as a second caller of only Run_Gate; four more real seams have landed since",
+      "why": "README.md line 61 says nomos-api is 'A second real caller of nomos-gate-orchestration's Run_Gate' and stops there. crates/host/nomos-api/src/lib.rs's own module doc now names five real increments: Handle_Gate_Run, work::Handle_Work_List, spec::Handle_Spec_Profiles, work::Handle_Work_Show and work::Handle_Work_Validate -- confirmed by git log (60a8a98, 97774f3, 3025c58, 51afce9, each titled 'nomos-api gains a Nth real seam'). The row was accurate when nomos-api had exactly one seam and has not been touched since.",
+      "done_when": "README.md's nomos-api row names nomos-work-orchestration's Run and nomos-spec-orchestration's Profiles alongside nomos-gate-orchestration's Run_Gate, not just Run_Gate alone, matching what crates/host/nomos-api/src/lib.rs's own module doc currently claims. rg -c 'A second real caller of .nomos-gate-orchestration.s .Run_Gate.: walks a tree' README.md returns 0 (the old sentence is gone).",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "README.md"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Predicate error: rg exits 1 (not 0) when the stale phrase is absent, so the chosen predicate can never pass once the fix lands. Re-authoring as P13-README-API-SEAM-COUNT-STALE-2 with a predicate that asserts the corrected phrase is present instead of asserting the stale one is absent."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "rg",
+          "-c",
+          "A second real caller of .nomos-gate-orchestration.s .Run_Gate.: walks a tree",
+          "README.md"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-track-d-staleness",
+        "declined_at": 1787422108
+      }
+    },
+    {
+      "id": "P13-README-API-SEAM-COUNT-STALE-2",
+      "title": "README's nomos-api band row still describes it as a second caller of only Run_Gate; four more real seams have landed since",
+      "why": "Amends P13-README-API-SEAM-COUNT-STALE, declined for an unusable predicate (rg exits 1, not 0, when a pattern is absent, so asserting the stale text's absence that way can never pass). Same defect: README.md line 61 says nomos-api is 'A second real caller of nomos-gate-orchestration's Run_Gate' and stops there. crates/host/nomos-api/src/lib.rs's own module doc now names five real increments: Handle_Gate_Run, work::Handle_Work_List, spec::Handle_Spec_Profiles, work::Handle_Work_Show and work::Handle_Work_Validate -- confirmed by git log (60a8a98, 97774f3, 3025c58, 51afce9, each titled 'nomos-api gains a Nth real seam'). The row was accurate when nomos-api had exactly one seam and has not been touched since.",
+      "done_when": "README.md's nomos-api row names nomos-work-orchestration's Run and nomos-spec-orchestration's Profiles alongside nomos-gate-orchestration's Run_Gate, not just Run_Gate alone. rg -F -c \"nomos-work-orchestration`'s `Run` and `nomos-spec-orchestration`'s `Profiles`\" README.md returns 1 (the corrected sentence is present).",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "README.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "rg",
+          "-F",
+          "-c",
+          "nomos-work-orchestration`'s `Run` and `nomos-spec-orchestration`'s `Profiles`",
+          "README.md"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "rg",
+          "-F",
+          "-c",
+          "nomos-work-orchestration`'s `Run` and `nomos-spec-orchestration`'s `Profiles`",
+          "README.md"
+        ],
+        "exit_code": 0,
+        "output_tail": "1\n",
+        "verified_at": 1787422175,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-README-WORK-VERB-SYNOPSIS-STALE",
+      "title": "README's nomos work verb synopsis is missing show, and its list/add option lists trail the real CLI",
+      "why": "README.md's fenced verb-synopsis block (lines 92-108) omits 'nomos work show --item <id>' entirely, even though it is a real, working verb (WorkCommand::Show, crates/host/nomos-cli/src/work/parse.rs) real enough that nomos-api built Handle_Work_Show over it. The same block's list --state options list only ready|claimed|blocked|done|declined, missing waiting|held|snagged|stranded that the real CLI usage (nomos work add --help) prints; and its add synopsis is missing [--amends <record> ...] and [--timeout 2h], both real flags the same usage text documents. The block was complete when authored and has fallen behind as show/amends/timeout/the extra list states were added.",
+      "done_when": "README.md's verb synopsis block includes 'nomos work show --item <id>', lists all eight list --state values (ready, waiting, held, snagged, stranded, claimed, blocked, done, declined), and add's synopsis includes --amends and --timeout. rg -F -c 'nomos work show   --item <id>' README.md returns 1.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "README.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "rg",
+          "-F",
+          "-c",
+          "nomos work show   --item <id>",
+          "README.md"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "rg",
+          "-F",
+          "-c",
+          "nomos work show   --item <id>",
+          "README.md"
+        ],
+        "exit_code": 0,
+        "output_tail": "1\n",
+        "verified_at": 1787422283,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-SKILL-ADD-PLUGIN-RULE-CAPABILITY-COUNT-STALE",
+      "title": "nomos-add-plugin SKILL.md still says two capability ids and three rules; there are four of each now, and one capability id is misnamed",
+      "why": "Line 76 says nomos.cap.syntax.items and nomos.cap.module.surface are the only two capability ids -- there are now four real ones (nomos.cap.syntax.items, nomos.cap.module.index, nomos.cap.dependency.edges, nomos.cap.controlflow.reachability, each grepped from its own contract.rs's pub const CAPABILITY), and the second name is also just wrong: the real constant is nomos.cap.module.index (crates/languages/nomos-lang-rust/src/rollup/contract.rs:11), not module.surface. Lines 89-90 say nomos-rules holds three rules -- it holds four (nomos-rules/src/lib.rs's own module doc says 'Four rules', naming Check_Unread_Reaches_A_Finding as the fourth) -- the same undercount pattern P13-SKILL-RULE-COUNT-STALE already fixed once in this file, recurred as a fourth rule landed since. The 'Wiring it in' code example at lines 98-101 only shows two of the four real calls nomos-check-orchestration/src/run.rs's Judged function makes, understating what a clean run actually does.",
+      "done_when": "SKILL.md names all four capability ids with correct real names, states nomos-rules holds four rules naming all four, and its wiring-in code example shows all four calls made in run.rs's Judged function. rg -F -c 'nomos.cap.module.index' .claude/skills/nomos-add-plugin/SKILL.md returns 1, and rg -F -c 'Check_Unread_Reaches_A_Finding' .claude/skills/nomos-add-plugin/SKILL.md returns 1.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          ".claude/skills/nomos-add-plugin/SKILL.md"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Predicate unusable: chained through bash -c, and the nomos-spawned bash's PATH does not include rg, so it fails with exit 127 (command not found) regardless of file content. Re-authored as P13-SKILL-ADD-PLUGIN-RULE-CAPABILITY-COUNT-STALE-2 with a single rg -U multiline regex instead of a bash -c chain."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "bash",
+          "-c",
+          "rg -F -c 'nomos.cap.module.index' .claude/skills/nomos-add-plugin/SKILL.md && rg -F -c 'Check_Unread_Reaches_A_Finding' .claude/skills/nomos-add-plugin/SKILL.md"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-track-d-staleness",
+          "reason": "Predicate unusable: chained through bash -c, and the nomos-spawned bash's PATH does not include rg, so it fails with exit 127 (command not found) regardless of file content. Re-authoring as -2 with a single rg -U multiline regex instead of a bash -c chain.",
+          "abandoned_at": 1787422451
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-track-d-staleness",
+        "declined_at": 1787422458
+      }
+    },
+    {
+      "id": "P13-SKILL-ADD-PLUGIN-RULE-CAPABILITY-COUNT-STALE-2",
+      "title": "nomos-add-plugin SKILL.md still says two capability ids and three rules; there are four of each now, and one capability id is misnamed",
+      "why": "Amends P13-SKILL-ADD-PLUGIN-RULE-CAPABILITY-COUNT-STALE, declined for an unusable predicate (chained through bash -c, whose PATH does not include rg on this machine, exit 127 regardless of file content). Same defect: line 76 said nomos.cap.syntax.items and nomos.cap.module.surface are the only two capability ids -- there are now four real ones (nomos.cap.syntax.items, nomos.cap.module.index, nomos.cap.dependency.edges, nomos.cap.controlflow.reachability, each grepped from its own contract.rs's pub const CAPABILITY), and the second name was also just wrong: the real constant is nomos.cap.module.index (crates/languages/nomos-lang-rust/src/rollup/contract.rs:11), not module.surface. Lines 89-90 said nomos-rules holds three rules -- it holds four (nomos-rules/src/lib.rs's own module doc says 'Four rules', naming Check_Unread_Reaches_A_Finding as the fourth) -- the same undercount pattern P13-SKILL-RULE-COUNT-STALE already fixed once in this file, recurred as a fourth rule landed since. The wiring-in code example only showed two of the four real calls nomos-check-orchestration/src/run.rs's Judged function makes.",
+      "done_when": "SKILL.md names all four capability ids with correct real names, states nomos-rules holds four rules naming all four, and its wiring-in code example shows all four calls made in run.rs's Judged function. A single rg -U multiline check that nomos.cap.module.index appears before Check_Unread_Reaches_A_Finding somewhere later in the file returns a nonzero match count.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          ".claude/skills/nomos-add-plugin/SKILL.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "rg",
+          "-U",
+          "--multiline-dotall",
+          "-c",
+          "nomos\\.cap\\.module\\.index[\\s\\S]*Check_Unread_Reaches_A_Finding",
+          ".claude/skills/nomos-add-plugin/SKILL.md"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "rg",
+          "-U",
+          "--multiline-dotall",
+          "-c",
+          "nomos\\.cap\\.module\\.index[\\s\\S]*Check_Unread_Reaches_A_Finding",
+          ".claude/skills/nomos-add-plugin/SKILL.md"
+        ],
+        "exit_code": 0,
+        "output_tail": "1\n",
+        "verified_at": 1787422481,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-README-SHIPS-PROJECTIONS-FALSE",
+      "title": "README claims this repository ships README.projection.md and spec/architecture.md as committed projections; neither file has ever existed",
+      "why": "README.md lines 264-267 say 'this repository ships two of them as projections: README.projection.md from the github-markdown profile, and spec/architecture.md from architecture-document.' Neither file exists in the working tree or anywhere in git history (git ls-files and git log --all --diff-filter=A both empty for both paths). OD-PROJECT-002's own table lists only diagram-set, domain-specification, html-site and traceability-matrix as the profiles that render without a corpus; github-markdown and architecture-document are two of the other fourteen that refuse without one, and .github/workflows/gate.yml only requires diagram-set and domain-specification. OD-PROJECT-001 itself never claims these two files are shipped -- it says only that they are 'D-128's documents here,' correctly, and separately notes the corpus is on no CI runner. The false claim is specific to this README paragraph.",
+      "done_when": "README.md no longer claims this repository ships README.projection.md or spec/architecture.md; it states they are the two corpus-backed profiles D-128 names for this repository, that neither renders without a corpus per OD-PROJECT-002, and that the corpus is not present here so neither is committed. rg -F -c 'this repository ships two of them as projections' README.md exits 1 (no match).",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "README.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "rg",
+          "-F",
+          "-c",
+          "neither is committed here",
+          "README.md"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "rg",
+          "-F",
+          "-c",
+          "neither is committed here",
+          "README.md"
+        ],
+        "exit_code": 0,
+        "output_tail": "1\n",
+        "verified_at": 1787422775,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-README-ABANDON-COUNT-STALE",
+      "title": "README's 'eighteen of the twenty abandonments' is off by nearly 4x; the ledger now records 77",
+      "why": "README.md line 141-144 says abandoning 'is right for eighteen of the twenty abandonments this ledger has recorded.' Counted directly from work/ledger.json (summing every item's abandoned array): 77 abandonment entries, not twenty -- and this count only grows as more agents work the ledger, so any specific number hardcoded here goes stale again almost immediately (it grew by one within this very session). Judging what fraction of 77 reasons fit 'the work was still wanted and somebody else finished it' would need reading all 77 reason strings by hand, which is not a mechanically verifiable claim worth re-asserting with a new fixed number.",
+      "done_when": "README.md no longer states a specific count or fraction of abandonments; the sentence states the general case (the work still wanted, finished by someone else) without a number that will drift again. rg -F -c 'eighteen of the twenty abandonments' README.md exits 1 (no match), and rg -F -c 'the work is still wanted' README.md exits 0.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "README.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "rg",
+          "-F",
+          "-c",
+          "the work is still wanted",
+          "README.md"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "rg",
+          "-F",
+          "-c",
+          "the work is still wanted",
+          "README.md"
+        ],
+        "exit_code": 0,
+        "output_tail": "1\n",
+        "verified_at": 1787422861,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-README-VALIDATE-SCHEMA-EXAMPLE-STALE",
+      "title": "README's nomos work validate example output is stuck at schema 2; the ledger is schema 5 now",
+      "why": "README.md line 190 shows the example output 'ledger is valid (schema 2, and this build understands 2)'. work/ledger.json's schema_version is now 5 (OD-LEDGER-008 and OD-LEDGER-024 both added fields since), confirmed by running the real built binary's own 'nomos work validate' in this tree, which prints 'ledger is valid (schema 5, and this build understands 5)'. The message format itself (crates/host/nomos-cli/src/work/report.rs) is unchanged; only the illustrated numbers are outdated, and they will drift again the next time a schema field is added.",
+      "done_when": "README.md's example output matches the real current schema. rg -F -c 'ledger is valid (schema 5, and this build understands 5)' README.md returns 1.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "README.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "rg",
+          "-F",
+          "-c",
+          "ledger is valid (schema 5, and this build understands 5)",
+          "README.md"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "rg",
+          "-F",
+          "-c",
+          "ledger is valid (schema 5, and this build understands 5)",
+          "README.md"
+        ],
+        "exit_code": 0,
+        "output_tail": "1\n",
+        "verified_at": 1787422912,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-RULES-BANDS-CAP-CONTROLFLOW-MISSING",
+      "title": "nomos-rules bands.rs is missing nomos-cap-controlflow; Declared_Band returns None for it today",
+      "why": "crates/rules/nomos-rules/src/dependency/bands.rs's hand-maintained BANDS table (the same kind of copy P13-RULES-BANDS-GATE-ORCHESTRATION-41-STALE already fixed once for a different crate) does not list nomos-cap-controlflow at all. tests/contract/tests/boundaries/bands.rs:49, the authoritative table, has it at band 23. Declared_Band(\"nomos-cap-controlflow\") therefore returns None today rather than Some(23), so Check_Dependency_Direction cannot judge this crate's dependency direction correctly -- the same real gap the prior fix's own commit described (a same-band or wrong-band dependency involving this crate would be silently unjudged rather than caught).",
+      "done_when": "BANDS lists nomos-cap-controlflow at 23, matching tests/contract/tests/boundaries/bands.rs. cargo test -p nomos-rules stays green, and Test_Every_Entry_Should_Be_Findable_By_Name covers the new entry since it iterates BANDS directly.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/dependency/bands.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "exit_code": 0,
+        "output_tail": "ng ... ok\ntest reachability::tests::judging::Test_A_Payload_With_No_Sites_Should_Produce_No_Finding ... ok\ntest reachability::tests::judging::Test_One_Flagged_Site_Should_Produce_One_Finding ... ok\ntest reachability::tests::reading_a_fact::Test_A_Source_With_No_Flagged_Sites_Should_Produce_No_Finding ... ok\ntest reachability::tests::reading_a_fact::Test_A_Real_Fact_Should_Be_Read_And_Judged ... ok\ntest reachability::tests::reading_a_fact::Test_A_Subject_With_No_Fact_Should_Be_Reported_Rather_Than_Silently_Clean ... ok\ntest registry::rule_registry::tests::Test_A_Second_Offer_For_One_Rule_Should_Be_Refused ... ok\ntest registry::rule_registry::tests::Test_An_Empty_Registry_Should_Offer_Nothing ... ok\ntest registry::rule_registry::tests::Test_A_Rule_Should_Be_Findable_By_Its_Id ... ok\ntest universe::tests::Test_A_Constant_Slice_Should_Be_Found ... ok\ntest universe::tests::Test_A_Declared_Mirror_Should_Be_Read_Off_The_Doc_Comment ... ok\ntest universe::tests::Test_A_File_That_Declares_Nothing_Should_Be_Observed_And_Empty ... ok\ntest universe::tests::Test_A_List_With_No_Documentation_Should_Claim_No_Mirror ... ok\ntest universe::tests::Test_A_Payload_From_A_Blind_Provider_Should_Not_Read_As_No_Mirror ... ok\ntest universe::tests::Test_A_Private_List_Should_Not_Be_A_Universe ... ok\ntest universe::tests::Test_A_Scalar_Constant_Should_Not_Be_A_Universe ... ok\ntest universe::tests::Test_A_Trait_Impl_Should_Not_Claim_The_Type ... ok\ntest universe::tests::Test_An_All_Should_Be_Attributed_To_Its_Type ... ok\ntest universe::tests::Test_An_All_That_Takes_A_Receiver_Should_Not_Be_A_Universe ... ok\n\ntest result: ok. 78 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.10s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-12a9eec0a9b372bd.exe)\n   Doc-tests nomos_rules\n",
+        "verified_at": 1787422979,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-HOST-002-PACKAGEKIND-CONSUMER-STALE",
+      "title": "OD-HOST-002 family 6 still says PackageKind is deliberately unconsumed; nomos-package's reader has been a real consumer since P13-PACKAGE-GENERIC-CORE",
+      "why": "OD-HOST-002 family 6 (docs/records/OD-HOST-002-....md) says PackageKind 'is declared and deliberately unconsumed -- no manifest reader exists yet, by the type's own documentation.' The type's own documentation (crates/contracts/nomos-contracts/src/package.rs:57-89) now says the opposite: nomos-package's reader is LanguagePackage's real consumer, landed by P13-PACKAGE-GENERIC-CORE under OD-PACKAGE-007, and the other fifteen kinds (ModelBackendPackage and AgentExecutorPackage included, per OD-PACKAGE-010) remain genuinely unconsumed. P13-PACKAGEKIND-CONSUMER-STALE already fixed the doc comment itself but never propagated the correction back into this record, which cites that same doc comment for the opposite claim.",
+      "done_when": "OD-HOST-002 family 6 states LanguagePackage now has a real consumer (nomos-package's reader, P13-PACKAGE-GENERIC-CORE / OD-PACKAGE-007) and that the other fifteen kinds remain unconsumed, matching PackageKind's own current doc comment. version increments. diagrams/relations.mmd and spec/domain-specification.md are both re-rendered from a tree whose registered records match this commit and pass their freshness checks (nomos spec freshness --into . --require diagram-set --require domain-specification exits 0).",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "ould_Answer_Every_Count_Separately ... ok\n\ntest result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.12s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-55ad3baadee2ff4e.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-56e1c9fba250ca24.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-4d4e16ab50ac70a5.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-35945c6ebc64c902.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-48bfe8d6f3ebf24c.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-ad5f178a2fa55ca5.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-a4b9594685bdc99a.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-0a473518710ef1f1.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-612bfa361c61aabd.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-13810cc2d23617bf.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-ee111bd537ecd137.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-2919ec68747ddb5b.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-99272398d303e3e7.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-756fcac740cd78ad.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-259eb839edee86c9.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1787423422,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-WORKFLOW-001-INCREMENT-BUILT-STALE",
+      "title": "OD-WORKFLOW-001 still says its first increment is unbuilt and proposes RunId::Fresh in nomos-contracts; P13-WORKFLOW-001-RUNID-FRESH-AND-RUN-GATE built it elsewhere",
+      "why": "OD-WORKFLOW-001's 'What This Does Not Do' section and Status section both say the Run_Gate/GateRunResult change is not implemented. It is: Run_Gate (crates/orchestration/nomos-gate-orchestration/src/run_gate.rs:50) takes a caller-supplied run: RunId parameter, GateRunResult.run carries it, and both real callers (nomos-cli's gate.rs, nomos-api's Handle_Gate_Run) construct one -- landed by P13-WORKFLOW-001-RUNID-FRESH-AND-RUN-GATE, done in this ledger. The record's own prior amendment also proposed the construction as nomos_contracts::RunId::Fresh(now: Timestamp) -> RunId, which was never built that way and could not have been: band 0 may depend on nothing but serde, so RunId itself cannot read a Timestamp or call Digest_Of_Parts -- the same constraint the amendment's own reasoning states two paragraphs earlier, then contradicts. The real function is nomos_gate_orchestration::Fresh_Run_Id(now: Timestamp) -> RunId (crates/orchestration/nomos-gate-orchestration/src/run_id.rs), whose own module doc explains why band 0 could not host it.",
+      "done_when": "OD-WORKFLOW-001 gains a new Amendment section naming P13-WORKFLOW-001-RUNID-FRESH-AND-RUN-GATE, stating the increment is built and correcting the construction's real location to nomos_gate_orchestration::Fresh_Run_Id, following the same append-only correction shape the record's own prior amendment section and OD-HOST-002's amendments already use (the original 'What This Does Not Do' and 'Status' text stays as written, superseded by the new section rather than edited in place). version increments. diagrams/relations.mmd and spec/domain-specification.md are both re-rendered from a tree whose registered records match this commit and pass their freshness checks (nomos spec freshness --into . --require diagram-set --require domain-specification exits 0).",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "Block_Should_Store_Every_Pipe_Line ... ok\n\ntest result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.13s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-55ad3baadee2ff4e.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-56e1c9fba250ca24.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-4d4e16ab50ac70a5.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-35945c6ebc64c902.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-48bfe8d6f3ebf24c.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-ad5f178a2fa55ca5.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-a4b9594685bdc99a.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-0a473518710ef1f1.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-612bfa361c61aabd.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-13810cc2d23617bf.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-ee111bd537ecd137.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-2919ec68747ddb5b.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-99272398d303e3e7.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-756fcac740cd78ad.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-259eb839edee86c9.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1787423673,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

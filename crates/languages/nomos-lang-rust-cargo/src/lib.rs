@@ -31,8 +31,9 @@
 //! The process itself runs through a caller-supplied [`nomos_platform::ProcessLauncher`],
 //! not `std::process::Command` directly: [`Materialize_Workspace`] and [`Discover_Workspace`]
 //! are generic over it, so this crate depends on `nomos-platform` and not on any concrete
-//! implementation of that port. `nomos-cli`, the only composition root that calls
-//! `nomos-check-orchestration::Run` today, is the one that chooses `StdProcessLauncher`.
+//! implementation of that port. Two composition roots reach `nomos-check-orchestration::Run`
+//! today, `nomos-cli` directly and `nomos-api` through `nomos_gate_orchestration::Run_Gate`,
+//! and both choose `StdProcessLauncher`.
 
 #![forbid(unsafe_code)]
 

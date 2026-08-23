@@ -18,6 +18,7 @@ pub(super) const BANDS: &[(&str, u32)] = &[
     ("nomos-analysis", 22),
     ("nomos-cap-syntax", 23),
     ("nomos-cap-dependency", 23),
+    ("nomos-cap-controlflow", 23),
     ("nomos-package", 24),
     ("nomos-lang-rust", 25),
     ("nomos-lang-rust-scan", 25),

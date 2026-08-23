@@ -3,7 +3,7 @@ id: OD-WORKFLOW-001
 type: decision
 title: The workflow tier's first real increment is RunId's first real consumer, not the engine
 status: accepted
-version: 3
+version: 4
 authority: canonical-normative-record
 tags:
   - workflow
@@ -161,3 +161,23 @@ real consumer through Gate -- and, after the amendment above, the corrected shap
 implementation needs: `Run_Gate` takes a caller-supplied `RunId`, not a `Clock`, and
 `RunId::Fresh` is the first-increment construction each composition root can call. Still builds
 neither the increment nor the engine `WF-*` describes beyond it.
+
+## Amendment: The Increment Landed; The Construction Lives In `nomos-gate-orchestration`, Not `nomos-contracts`
+
+`P13-WORKFLOW-001-RUNID-FRESH-AND-RUN-GATE` built the increment "What This Does Not Do" and the
+Status above still describe as unbuilt. `Run_Gate`
+(`crates/orchestration/nomos-gate-orchestration/src/run_gate.rs`) now takes a caller-supplied
+`run: RunId` parameter rather than a `Clock`, and `GateRunResult.run` carries it -- its own doc
+comment names this record as the reason. Both of `Run_Gate`'s real callers construct one:
+`nomos-cli`'s `gate.rs` and `nomos-api`'s `Handle_Gate_Run`.
+
+The construction is not where the amendment above proposed it. `nomos_contracts::RunId::Fresh`
+was never built, and could not have been: band 0 may depend on nothing but `serde`, so `RunId`
+itself cannot read a `Timestamp` or call `Digest_Of_Parts` -- the same constraint the amendment's
+own reasoning states two paragraphs earlier, then contradicts in the signature it proposes. The
+function that exists is `nomos_gate_orchestration::Fresh_Run_Id(now: Timestamp) -> RunId`
+(`crates/orchestration/nomos-gate-orchestration/src/run_id.rs`), combining the clock reading,
+`std::process::id()` and a process-local monotonic counter exactly as the amendment above
+described -- only the crate that hosts it differs, and its own module doc states why band 0
+could not: this crate is the lowest band that can reach both a `Timestamp` and
+`Digest_Of_Parts`.

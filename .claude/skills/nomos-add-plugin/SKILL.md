@@ -73,8 +73,9 @@ cargo test -p nomos-contract-tests --test public_surface`).
 ## 2. A capability contract that does not exist yet
 
 If the fact your provider produces is not shaped like any existing capability
-(`nomos.cap.syntax.items`, `nomos.cap.module.surface` are the only two in this workspace
-today), the contract itself needs a home first — its own crate, below every provider that
+(`nomos.cap.syntax.items`, `nomos.cap.module.index`, `nomos.cap.dependency.edges` and
+`nomos.cap.controlflow.reachability` are the four in this workspace today), the contract
+itself needs a home first — its own crate, below every provider that
 will offer against it, the way `nomos-cap-syntax` sits below `nomos-lang-rust` and
 `nomos-lang-rust-scan`. Do not define a capability contract inside the first provider that
 needs it: `crates/languages/nomos-lang-rust-scan/src/guarantee.rs`'s module doc is the
@@ -86,10 +87,11 @@ expected to offer against it, not only once one actually has.
 
 ## 3. A second rule
 
-Much smaller than a provider. `crates/rules/nomos-rules` holds three rules today,
-`Check_Completeness_Mirrors`, `Check_Naming_Convention` and `Check_Dependency_Direction` —
-all `fn(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>` — a fourth rule
-is a fourth function of that same shape inside the same crate, not a new crate or a new
+Much smaller than a provider. `crates/rules/nomos-rules` holds four rules today,
+`Check_Completeness_Mirrors`, `Check_Naming_Convention`, `Check_Dependency_Direction` and
+`Check_Unread_Reaches_A_Finding` — all
+`fn(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>` — a fifth rule
+is a fifth function of that same shape inside the same crate, not a new crate or a new
 band. There is no `Rule` trait; match the signature.
 
 **Wiring it in**: `crates/orchestration/nomos-check-orchestration/src/run.rs`'s `Run`
@@ -98,6 +100,8 @@ function calls every rule it knows about unconditionally:
 ```rust
 let mut findings = Check_Completeness_Mirrors(sources, &mut reader);
 findings.extend(Check_Naming_Convention(sources, &mut reader));
+findings.extend(Check_Dependency_Direction(dependency_sources, &mut reader));
+findings.extend(Check_Unread_Reaches_A_Finding(sources, &mut reader));
 ```
 
 `OD-HOST-004` decided `Run()` stays hand-written, and one more unconditional call beside the

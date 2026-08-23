@@ -72,7 +72,7 @@ profile: domain-specification
 | docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md@authored | docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md | authored | 21 | 8 | sha256:fde76ddb443213fdd5c253144550e72aa60a127201be1c067156bd52c9a071dd |
 | docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md@authored | docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md | authored | 34 | 12 | sha256:ee64f184602e1bd210eeca6144c88552d97cebce829ccdedea3db6487fc6e36d |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md@authored | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md | authored | 16 | 5 | sha256:e3d0afb3cabc0ab33a09a700e110b803806d3c4e063673d8c18ca7adc84c3012 |
-| docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md@authored | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md | authored | 33 | 7 | sha256:9b64932b5379c801e27d55a8182022bc7ee9524dd13249c6ec8795ed1624a2d6 |
+| docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md@authored | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md | authored | 36 | 8 | sha256:3ececaaf506dff6cacf4aa066df5a3fdd61032c1ec291ef9f21e3a4b939d37ef |
 | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md@authored | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md | authored | 19 | 6 | sha256:9237ea74e89c7f49295d2e4bde41ff135c64838767ba17c27b0aad79037ced10 |
 | docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md@authored | docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md | authored | 15 | 5 | sha256:bcf1bfd865c60493754d4a765742627fd4c18504722d27a065b5201be2ac218f |
 | docs/records/OD-HOST-005-whether-request-commands-seam-is-its-own-crate-or-a-verb-inside-spec-orchestration.md@authored | docs/records/OD-HOST-005-whether-request-commands-seam-is-its-own-crate-or-a-verb-inside-spec-orchestration.md | authored | 15 | 5 | sha256:0cb15b83d0fb7a58f4a2afda083ac512ba0ac344d15ca0556f3446736cbd7ea9 |
@@ -158,7 +158,7 @@ profile: domain-specification
 | docs/records/OD-TRACE-003-a-requirement-half-satisfied-is-partial-and-its-obligation-is-a-gap-checked-like-a-site-not-a-record.md@authored | docs/records/OD-TRACE-003-a-requirement-half-satisfied-is-partial-and-its-obligation-is-a-gap-checked-like-a-site-not-a-record.md | authored | 19 | 8 | sha256:09379db6f9c710a7de0de6a1cb9d749fbdcb23ecbd7f6e25323adb946c14d741 |
 | docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md@authored | docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md | authored | 21 | 8 | sha256:20584da07fdc54fcdca104e7137bc67b265954ba3734fc8b2d17a9036b2806b1 |
 | docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md@authored | docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md | authored | 29 | 11 | sha256:de7e7ec53c19ad7a55b98bcef5dadc7f7b1234b80d6dc2f3ce0098b4a1463685 |
-| docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md@authored | docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md | authored | 21 | 7 | sha256:93d764e016d3a0cf2f5b1f71eb3907c24791f0abc35e5990d3aecd054aead5f9 |
+| docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md@authored | docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md | authored | 24 | 8 | sha256:397fcafaea1e57df681cd4fe9f235f3994dfe990cfab99487fc72a91f797ec84 |
 
 ## Sections
 
@@ -677,6 +677,7 @@ profile: domain-specification
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#25 | authored | 2 | What this constrains |
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#27 | authored | 2 | Amendment: SpecCommand's Seam Closed; request::Command Is the One Gap Family 9 Still Names |
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#30 | authored | 2 | Amendment: GateCommand's `run` Verb Is a Closed Seam Family 9 Never Named |
+| docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#34 | authored | 2 | Amendment: `PackageKind` Has One Real Consumer Now |
 | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#1 | authored | 1 | An editor surface is a client of the canonical services, not a parser of the CLI's rendered output |
 | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#4 | authored | 2 | What an editor surface is |
 | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#7 | authored | 2 | What a diagnostic carries |
@@ -1443,6 +1444,7 @@ profile: domain-specification
 | docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#11 | authored | 2 | What This Does Not Do |
 | docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#16 | authored | 2 | Amendment: A Bare Clock Reading Cannot Give RunId Real Per-Execution Uniqueness |
 | docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#20 | authored | 2 | Status |
+| docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#22 | authored | 2 | Amendment: The Increment Landed; The Construction Lives In `nomos-gate-orchestration`, Not `nomos-contracts` |
 
 ## Source blocks
 
@@ -17789,6 +17791,39 @@ same reason — and hands both to `Run_Gate`, and `gate/run.rs` no longer exists
 This does not change the amendment before it: `request::Command` is still the one command
 group with no orchestration crate at all. `GateCommand` was never that — it is the case
 family 9 simply forgot to list, closed before this record ever had to call it open.
+
+### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#34
+
+*revision: authored · kind: heading · heading: A surface holds no state its canonical services cannot reconstruct / Amendment: `PackageKind` Has One Real Consumer Now · hash: sha256:04882d7be717bad1bb12e6bf2e1e20a9f52f9d45df32dc37e253ff94691847b7*
+
+## Amendment: `PackageKind` Has One Real Consumer Now
+
+### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#35
+
+*revision: authored · kind: prose · heading: A surface holds no state its canonical services cannot reconstruct / Amendment: `PackageKind` Has One Real Consumer Now · hash: sha256:d6b7cbe876819125814d3ac0c06c0b3da18b4cb5b04b0d710d55807d078f5840*
+
+Family 6 above, as first written, said `PackageKind` "is declared and deliberately
+unconsumed — no manifest reader exists yet, by the type's own documentation." That has not
+been true since `P13-PACKAGE-GENERIC-CORE` (`OD-PACKAGE-007`): `nomos-package`'s reader
+(`crates/packages/nomos-package/src/reader.rs`) resolves a manifest's `package_kind` field
+against this enum and returns `ManifestError::WrongPackageKind` for anything other than
+`PackageKind::LanguagePackage` — this enum's first real consumer. The type's own doc
+comment (`crates/contracts/nomos-contracts/src/package.rs:57-89`) states the change in
+full and was corrected once already, by `P13-PACKAGEKIND-CONSUMER-STALE`, a correction this
+record never picked up.
+
+### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#36
+
+*revision: authored · kind: prose · heading: A surface holds no state its canonical services cannot reconstruct / Amendment: `PackageKind` Has One Real Consumer Now · hash: sha256:e325a7cfa0d0bdd76c7f709ad942d9840a18b343f0e20ee7d19b84ee41a7f61f*
+
+The other fifteen kinds remain exactly the open condition family 6 described:
+`RulePackage`, and — named since family 6 was first written — `ModelBackendPackage` and
+`AgentExecutorPackage` (`OD-PACKAGE-010`'s first manifest maturity for model selection,
+which gives neither package kind a real backend or executor implementation). Each still
+gains its consumer the way `LanguagePackage` did: something reads a declared manifest of
+that kind and refuses one it cannot resolve. Until then, family 6's original point holds
+for those fifteen unchanged — package state is reconstructed through that reader once it
+exists, not accumulated inside whichever surface implements resolution first.
 
 ### docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#1
 
@@ -42283,3 +42318,35 @@ real consumer through Gate -- and, after the amendment above, the corrected shap
 implementation needs: `Run_Gate` takes a caller-supplied `RunId`, not a `Clock`, and
 `RunId::Fresh` is the first-increment construction each composition root can call. Still builds
 neither the increment nor the engine `WF-*` describes beyond it.
+
+### docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#22
+
+*revision: authored · kind: heading · heading: The workflow tier's first real increment is RunId's first real consumer, not the engine / Amendment: The Increment Landed; The Construction Lives In `nomos-gate-orchestration`, Not `nomos-contracts` · hash: sha256:881a60c64c4a8ea2334a6d0934f1be058aeb420ecc11d0558206dcaa9077bd23*
+
+## Amendment: The Increment Landed; The Construction Lives In `nomos-gate-orchestration`, Not `nomos-contracts`
+
+### docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#23
+
+*revision: authored · kind: prose · heading: The workflow tier's first real increment is RunId's first real consumer, not the engine / Amendment: The Increment Landed; The Construction Lives In `nomos-gate-orchestration`, Not `nomos-contracts` · hash: sha256:97c4f87e16870e678f0d5ee6d33824c72359b6aedf04098d7e28e4987aeda756*
+
+`P13-WORKFLOW-001-RUNID-FRESH-AND-RUN-GATE` built the increment "What This Does Not Do" and the
+Status above still describe as unbuilt. `Run_Gate`
+(`crates/orchestration/nomos-gate-orchestration/src/run_gate.rs`) now takes a caller-supplied
+`run: RunId` parameter rather than a `Clock`, and `GateRunResult.run` carries it -- its own doc
+comment names this record as the reason. Both of `Run_Gate`'s real callers construct one:
+`nomos-cli`'s `gate.rs` and `nomos-api`'s `Handle_Gate_Run`.
+
+### docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#24
+
+*revision: authored · kind: prose · heading: The workflow tier's first real increment is RunId's first real consumer, not the engine / Amendment: The Increment Landed; The Construction Lives In `nomos-gate-orchestration`, Not `nomos-contracts` · hash: sha256:183a24363cb0d50317065d319a28b98aafbb9f2076ab82fb829d9121fc45021b*
+
+The construction is not where the amendment above proposed it. `nomos_contracts::RunId::Fresh`
+was never built, and could not have been: band 0 may depend on nothing but `serde`, so `RunId`
+itself cannot read a `Timestamp` or call `Digest_Of_Parts` -- the same constraint the amendment's
+own reasoning states two paragraphs earlier, then contradicts in the signature it proposes. The
+function that exists is `nomos_gate_orchestration::Fresh_Run_Id(now: Timestamp) -> RunId`
+(`crates/orchestration/nomos-gate-orchestration/src/run_id.rs`), combining the clock reading,
+`std::process::id()` and a process-local monotonic counter exactly as the amendment above
+described -- only the crate that hosts it differs, and its own module doc states why band 0
+could not: this crate is the lowest band that can reach both a `Timestamp` and
+`Digest_Of_Parts`.
