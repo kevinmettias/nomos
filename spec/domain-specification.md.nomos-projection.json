@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:1aa4d5123d7e50a389adbff8b0acc0b817d911bada6d8601869d3bdaffa92c80",
-  "inputs_digest": "sha256:a89724daa9830ac89bfabfe0245abc18bf6f41192586fb06675c2d3dfd9810b4",
+  "content_digest": "sha256:d89a66822b6682eeca8d59c9466f3436d5c8e75502545ab09d17cd19c3d7ff05",
+  "inputs_digest": "sha256:19f82bd71a4f50b20311fc3885e6e94ef34bc76bf8a0d8e2d606b4f353c08a79",
   "sections": [
     [
       "Documents",
-      149
+      151
     ],
     [
       "Sections",
-      1281
+      1295
     ],
     [
       "Source blocks",
-      4555
+      4593
     ]
   ],
   "inputs": [
@@ -584,6 +584,16 @@
       "content": "documents",
       "identity": "docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md@authored",
       "hash": "sha256:6e33c1ccc6d608a1f5d45f677aa83fa0f62fb743bf9f653bdef1c7f8ad29f8ed"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md@authored",
+      "hash": "sha256:22f2d1d5697a515ae27ef5e18d82433ee900d7506df63159793e435e5daac74d"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md@authored",
+      "hash": "sha256:91c99e209eacfaacbe91a9299652a3e8f89ac7b4e451e24acb882ad7930aee77"
     },
     {
       "content": "documents",
@@ -5574,6 +5584,76 @@
       "content": "headings",
       "identity": "docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#13",
       "hash": "sha256:37dafff25897eed00ce00c5b3c8f1d93fa63d261fa4c973d629aa736576166bb"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#1",
+      "hash": "sha256:42ee25bb01828a7e79242094ba2c093c46f20efd95bf03b24334cc58ba79eddf"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#2",
+      "hash": "sha256:066a135975397353ab2c4a2228e7b185a60c2169a4540bda76eddb1b12bfb7be"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#4",
+      "hash": "sha256:acf481c7c3f33770ddad0e14bad400609b09e3b5e3368798d10623208b538573"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#9",
+      "hash": "sha256:1baaed7ad58ee7900079cc01588f5a09376f32e8e49f36eb0a381b7dae137261"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#12",
+      "hash": "sha256:fb104fb4a00250883b170cfe62256c0f5fa572c6b4f9f729ca149d8e4608cb24"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#14",
+      "hash": "sha256:6643f552845eb84789f982e8dfb3f3b20cfe9a69cc07ef4e8deff7dee75610ce"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#16",
+      "hash": "sha256:1ddc5f5a21e1d2bf5651ff80ad285aed4a365a429da9fde3289b3090e8f42e9e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#20",
+      "hash": "sha256:f04204df6b41915d75c1b4725a57b8919d45b522c68b35b79a843774d8b4f9c9"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#1",
+      "hash": "sha256:8f93a09590c807d7899f02605dd554ee7010ccaa2d7107afdf8f74fc9774db35"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#2",
+      "hash": "sha256:631c98305122271f36488d6f98b9a559c48b644ef8cb97ce008503b9bb98dc67"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#5",
+      "hash": "sha256:63cf402cfb562a634673c8fc5c4b839fe3183152d2aeddec222513740fe912f8"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#11",
+      "hash": "sha256:fa9834685c39c2015d30cc6588aa219d05ecf7a8ca0d6428587c116a65a68229"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#14",
+      "hash": "sha256:c08ff6bc75788be94fd1ad43eba238fceb049705d6489ee880be8ec021b7b8b7"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#16",
+      "hash": "sha256:be5a41ec5cad6ef5950f4ca85e2fce04191ee02055eaea1045662021b3762c9a"
     },
     {
       "content": "headings",
@@ -24279,6 +24359,196 @@
       "content": "blocks",
       "identity": "docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#14",
       "hash": "sha256:a643a77ebd5e3b3194386f7fd5432ade77c0ed2845133ec5f54ddb17623b27fd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#1",
+      "hash": "sha256:a35fe264ebd2935f1c3833315c54b2ee4df031223b9de63f8063c10b58f49986"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#3",
+      "hash": "sha256:7a1b189746654419cbd1c360c7604f15946e048afade495318dc61d534f47ef1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#4",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#5",
+      "hash": "sha256:cae8a26e625048e95c814d34b786958e126cd7a83ef3e78bf93bc46e29531be3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#6",
+      "hash": "sha256:b7bd8e7bb80c7ed72dda5a96117300e00afbe743221646e1eceb780e460ac010"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#7",
+      "hash": "sha256:398d9f386e6c449be3d81748469cfb0b4811111fe91d673cf7024b8027b866cd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#8",
+      "hash": "sha256:c66a056b088739aeb95f1575981559835152846ad465bc14b7d0503bc6ba8665"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#9",
+      "hash": "sha256:b2ec4aa8b7784c9edabcf052da47b8624bf30212b1b531fe2256919d3346b773"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#10",
+      "hash": "sha256:b9978ea063c8aac2d1fd79ac5887ec95acf2616b7139cc7cad8ef00b55cc76a8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#11",
+      "hash": "sha256:7e17a698d8b592e4915c954f85a9c2952a765984bf51126ed51c3c53562871b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#12",
+      "hash": "sha256:e666d4e1deec3e6040fbda7737bf053782a9e877e8756740d87a9d7945e51a68"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#13",
+      "hash": "sha256:4ff047f2b9627e87fc2eccc2b6c66152b3951c0461c1fbf4c634ea2bc2bd38f1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#14",
+      "hash": "sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#15",
+      "hash": "sha256:f75cfe9b56cc9804d5400d1fb11cf948182e652d0e3f79d521d5ab71f50432d1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#16",
+      "hash": "sha256:2a49a3ba679fcfb358fdad9c23368250d14e31320f8c91494208c2e9050a975b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#17",
+      "hash": "sha256:ce341a80af8e358e1592d97d774d4d2d4c7b34c75d591bcbbb558b01c1622da5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#18",
+      "hash": "sha256:80a683450425440f3c4ab3534a1167a6e1278ec946f870517f22e63911265b52"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#19",
+      "hash": "sha256:e4b71f6f733aaa1d9509d2f9fbfd2e454f65a3fb6f903cc97f330d240af189cc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#20",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#21",
+      "hash": "sha256:5d8e0121e319b080080187d2fe3dc8ba018c9a7eddfb970f035dd8208b79e1b5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#1",
+      "hash": "sha256:93e7904095895b9342e9ac2ec47dfef1d013c20ca0a4db7ffeb07392f109b471"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#3",
+      "hash": "sha256:6b808cdb4929ab52c7fa4d9ac9a3c54965535e3637dd20b2578524905b50d4ce"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#4",
+      "hash": "sha256:e6c3f01545efddf19ab968c2f04c8b4792e8379f56e27347ba9574a612e632d7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#5",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#6",
+      "hash": "sha256:e7e059b69839c972bac628551e386f37c9744e9ce64ff2371b36c99ba83ee236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#7",
+      "hash": "sha256:e8de1bddb3e945bd20f9327b3a948444bdf1166bf719c7927acd26e3886eed90"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#8",
+      "hash": "sha256:667a20a0f398e3e7ffa84d26a280bd105c0cab28e5d8f7a1c1ce77a1e8c91618"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#9",
+      "hash": "sha256:57985a415f69878d1b96d1d355c3e44a24e737dbb54dd7d8187eb36d89b243b2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#10",
+      "hash": "sha256:7dbc2db8548d55b177e68ef01307185dff7a4daa2f90cbd90e0c09edb7d5a2b9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#11",
+      "hash": "sha256:b2ec4aa8b7784c9edabcf052da47b8624bf30212b1b531fe2256919d3346b773"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#12",
+      "hash": "sha256:58c45a2b5cf742e81fb7c8821aa89ff73b1a52b252d43ade4bfab388cfe19039"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#13",
+      "hash": "sha256:5d487a7996c8e263079f9d6304bb56e25eeacc575ebd8bd10356a450b88e7fb8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#14",
+      "hash": "sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#15",
+      "hash": "sha256:7b5fa60e7d8f3a77bc2954cfc27b9dee9be3831e414c94d117e579341bc9514f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#16",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#17",
+      "hash": "sha256:4c528b5b14b78f2b56edc601342cdb3e385bcc9e77ca0c60a091d8b0aa69b340"
     },
     {
       "content": "blocks",
