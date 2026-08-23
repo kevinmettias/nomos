@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:d89a66822b6682eeca8d59c9466f3436d5c8e75502545ab09d17cd19c3d7ff05",
-  "inputs_digest": "sha256:19f82bd71a4f50b20311fc3885e6e94ef34bc76bf8a0d8e2d606b4f353c08a79",
+  "content_digest": "sha256:087e17c2661fae764c5ab87e7e6a3312b3a4b36d87678bdfd3e4107a6e352b12",
+  "inputs_digest": "sha256:c3f95b68d0c86183493ccd8f570f0788528e891eb70d9d6508dc0c34e2badc95",
   "sections": [
     [
       "Documents",
-      151
+      153
     ],
     [
       "Sections",
-      1295
+      1309
     ],
     [
       "Source blocks",
-      4593
+      4626
     ]
   ],
   "inputs": [
@@ -774,6 +774,16 @@
       "content": "documents",
       "identity": "docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md@authored",
       "hash": "sha256:397fcafaea1e57df681cd4fe9f235f3994dfe990cfab99487fc72a91f797ec84"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md@authored",
+      "hash": "sha256:69cde99580f195232f0308209b87341d8195267121d3dadbb332dbe61940f50a"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md@authored",
+      "hash": "sha256:e067ed756ffd159cb17a6fdc76092fd0f3ff664bcc77349204ce572497711c6e"
     },
     {
       "content": "headings",
@@ -7249,6 +7259,76 @@
       "content": "headings",
       "identity": "docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#22",
       "hash": "sha256:5521a129f60df157ed77f8bd10b432f49dfa3671aa1d53cb785c7557e1e4df8b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#1",
+      "hash": "sha256:a94a015f57343ab0ef4fc2feae5730f8a377439af41f453e81c7f04d5afe6e99"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#2",
+      "hash": "sha256:5bf4a8ab3a15dd32455b8918ce3becb6519b449bdb2ae99cef52fcb1b9ee1b6a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#4",
+      "hash": "sha256:6473a47dee10e969f038b04ee81dfb3a387bebcdff3caef287a55e8a7a75af59"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#7",
+      "hash": "sha256:a001d636d32f01fac7119e1fd86d938c6d0b0c1bcc1342f3797a98f2e3a8c183"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#9",
+      "hash": "sha256:6a4be766dcb8561ab9950dc9c77fbb299e3cf646f22b7493030b3dd48e4392d1"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#11",
+      "hash": "sha256:ecd88ec83366f6370aa14ad2b4ede751b16938dbc97ac2cddf681697511764d3"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#15",
+      "hash": "sha256:818383d9c21d61fa3c7bbb48d381d28a3c6040c343de02e3745e4890ad8ef2c7"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#17",
+      "hash": "sha256:6f0513b1e8aa287a4a5f19f2ac39e84498c613c2e151a8e98575959f5b46197d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#1",
+      "hash": "sha256:91b0d8d6c1acc2d663f875985437731c2252e24ea5f0d4e935f02b516bb1f8ef"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#2",
+      "hash": "sha256:4a4d4b3547f4f91b463cafd6eba66468ffd313e34964e0f16ca318ad6ca48676"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#6",
+      "hash": "sha256:812bca4985722ee53bbc07152fda7329791e91e4c1185c674af9d245d882eb21"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#9",
+      "hash": "sha256:4e031c3f82f2e2848bc088a87072c98b3b47622746a419871111d9e88de7fbdb"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#12",
+      "hash": "sha256:f9e4895cd998ebb4d311b000f932e794560c2edff044a2a1f93809537eada9e1"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#14",
+      "hash": "sha256:ec83db572bc424afe918e0f85c898592627d6a0bb7dda3581799a608844b5080"
     },
     {
       "content": "blocks",
@@ -30214,6 +30294,171 @@
       "content": "blocks",
       "identity": "docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#24",
       "hash": "sha256:183a24363cb0d50317065d319a28b98aafbb9f2076ab82fb829d9121fc45021b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#1",
+      "hash": "sha256:18bde830e47457a54d9ed472b7bf7164b3f784bfd5abb6ac4bfafeeb778b8dd8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#3",
+      "hash": "sha256:a4ad39f6dd250129543ffdd301d7f1521cb3370ae735fef08af3415334780a8e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#4",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#5",
+      "hash": "sha256:28b31148de113e0e84ed23dc102325f7727a21e48c1a702fc9ff70053f0b45a3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#6",
+      "hash": "sha256:b6261665f9d75ee7106ea51d734ad9bd9d448d849fa5a8bf702a9e41c19968ca"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#7",
+      "hash": "sha256:b2ec4aa8b7784c9edabcf052da47b8624bf30212b1b531fe2256919d3346b773"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#8",
+      "hash": "sha256:5b18fe9ffbf74e8908b1789ab9566f2f93c743afebc4392fcc85bde2351c2095"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#9",
+      "hash": "sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#10",
+      "hash": "sha256:e52c5cb3c6121cd29ac25a07a0af38080b8a3119153d0947d3e4dc0c8bab97ad"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#11",
+      "hash": "sha256:2a49a3ba679fcfb358fdad9c23368250d14e31320f8c91494208c2e9050a975b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#12",
+      "hash": "sha256:1e366fba2006bcc506bf192a6ed77ed65491fee1f5a86b03b79a926ad9b65591"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#13",
+      "hash": "sha256:b437a9790d20c92b6173d203ea86c67cfe6abce64c59f19d1a5ffdc58841d749"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#14",
+      "hash": "sha256:dd75f393b04f4a103de410e79fd3850661a0295a3fd4cad847ee0e900e07a745"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#15",
+      "hash": "sha256:989f1c8153da941cda78b62b2d18114929c5b49645ed457a52a79fcf91ed2b8e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#16",
+      "hash": "sha256:4de3245d47934f77b8a823356152c1a9e546609c41b0395cb6c6def895d6ced9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#17",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#18",
+      "hash": "sha256:3af1e7d7437236587a4d53aa3662210e9db99e98839373a2bdf5637f879e1b20"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#1",
+      "hash": "sha256:f7037a82431410627a642ab2726fd3c4b3b9427c016e5923c7ee9e54bbd1f20a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#3",
+      "hash": "sha256:4b8c55a75d40da7c56dfacde3ab85666033f5c92ae4867a4f175a702b3f1079d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#4",
+      "hash": "sha256:21867d975e51565b5fba4b1f659711bf481abe41658514644c6b1d8034634151"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#5",
+      "hash": "sha256:81607b3622b77768c8f2fb0eecf25471aacca7a29986142478c773d2670ab63b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#6",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#7",
+      "hash": "sha256:cea900781e30b771d89f180ceccb8e50e26f0c0c1a87c929970b0a02134aefc2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#8",
+      "hash": "sha256:aa8faba40e460323c4889ac51f49b1c3561fab11f37e59acafde7e19e60916f8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#9",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#10",
+      "hash": "sha256:fea1cc6514dae47698d366f4ad02f24ce90579537db6ec6b4bd1498efe290098"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#11",
+      "hash": "sha256:b70c699833c4f5de506bf2478aca24f1017b676e992a65ca328a47f2ada3abc7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#12",
+      "hash": "sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#13",
+      "hash": "sha256:aa9b550a9c586c6a6422f2e56cb0b9cf3839fbdd001c98e74eee4e2dafc71dc5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#14",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#15",
+      "hash": "sha256:b35f27fc1021167a102904107348d9973c5f7ba99147584c0f5713da839586e0"
     }
   ]
 }

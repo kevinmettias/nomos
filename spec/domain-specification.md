@@ -161,6 +161,8 @@ profile: domain-specification
 | docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md@authored | docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md | authored | 21 | 8 | sha256:20584da07fdc54fcdca104e7137bc67b265954ba3734fc8b2d17a9036b2806b1 |
 | docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md@authored | docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md | authored | 29 | 11 | sha256:de7e7ec53c19ad7a55b98bcef5dadc7f7b1234b80d6dc2f3ce0098b4a1463685 |
 | docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md@authored | docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md | authored | 24 | 8 | sha256:397fcafaea1e57df681cd4fe9f235f3994dfe990cfab99487fc72a91f797ec84 |
+| docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md@authored | docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md | authored | 18 | 8 | sha256:69cde99580f195232f0308209b87341d8195267121d3dadbb332dbe61940f50a |
+| docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md@authored | docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md | authored | 15 | 6 | sha256:e067ed756ffd159cb17a6fdc76092fd0f3ff664bcc77349204ce572497711c6e |
 
 ## Sections
 
@@ -1461,6 +1463,20 @@ profile: domain-specification
 | docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#16 | authored | 2 | Amendment: A Bare Clock Reading Cannot Give RunId Real Per-Execution Uniqueness |
 | docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#20 | authored | 2 | Status |
 | docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#22 | authored | 2 | Amendment: The Increment Landed; The Construction Lives In `nomos-gate-orchestration`, Not `nomos-contracts` |
+| docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#1 | authored | 1 | The workflow tier's second increment has not arrived since RunId's first consumer shipped |
+| docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#2 | authored | 2 | Question |
+| docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#4 | authored | 2 | What Was Measured |
+| docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#7 | authored | 2 | The Finding |
+| docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#9 | authored | 2 | What This Does Not Do |
+| docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#11 | authored | 2 | What Would Decide The Next Increment |
+| docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#15 | authored | 2 | Amendment (OD-WORKFLOW-003) |
+| docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#17 | authored | 2 | Status |
+| docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#1 | authored | 1 | WorkflowStep is admitted to band 0 as WF-008's declared contract, not the engine OD-WORKFLOW-002 declined |
+| docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#2 | authored | 2 | Question |
+| docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#6 | authored | 2 | What Was Measured |
+| docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#9 | authored | 2 | The Decision |
+| docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#12 | authored | 2 | What This Does Not Do |
+| docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#14 | authored | 2 | Status |
 
 ## Source blocks
 
@@ -42742,3 +42758,396 @@ function that exists is `nomos_gate_orchestration::Fresh_Run_Id(now: Timestamp) 
 described -- only the crate that hosts it differs, and its own module doc states why band 0
 could not: this crate is the lowest band that can reach both a `Timestamp` and
 `Digest_Of_Parts`.
+
+### docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#1
+
+*revision: authored · kind: heading · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped · hash: sha256:18bde830e47457a54d9ed472b7bf7164b3f784bfd5abb6ac4bfafeeb778b8dd8*
+
+# The workflow tier's second increment has not arrived since RunId's first consumer shipped
+
+### docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#2
+
+*revision: authored · kind: heading · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#3
+
+*revision: authored · kind: prose · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped / Question · hash: sha256:a4ad39f6dd250129543ffdd301d7f1521cb3370ae735fef08af3415334780a8e*
+
+`OD-WORKFLOW-001` (v3, accepted) named the workflow tier's first real increment narrowly:
+give `RunId` its first real consumer through `Gate`, and build nothing else --
+`WorkflowStep` and the `WF-009`..`012` engine stay unbuilt "as a real subsystem ... with no
+existing implementation to check a shape against." `P13-WORKFLOW-001-RUNID-FRESH-AND-RUN-GATE`
+shipped that increment (`Fresh_Run_Id`, `Run_Gate`'s `run: RunId` parameter,
+`GateRunResult::run`, threaded through both real callers). Nothing has since named what the
+tier's *second* increment is. Building the wrong next piece here is the same expensive
+mistake `OD-WORKFLOW-001` corrected twice over for its own first one (its withdrawn
+clock-only `RunId` plan, and its false `nomos-ledger` caller claim), so this record checks
+the real code and the real corpus again before naming anything, rather than assuming the
+question answers itself just because time passed.
+
+### docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#4
+
+*revision: authored · kind: heading · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#5
+
+*revision: authored · kind: prose · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped / What Was Measured · hash: sha256:28b31148de113e0e84ed23dc102325f7727a21e48c1a702fc9ff70053f0b45a3*
+
+Read directly from the live tree, not from `OD-WORKFLOW-001`'s own description of it:
+
+### docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#6
+
+*revision: authored · kind: prose · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped / What Was Measured · hash: sha256:b6261665f9d75ee7106ea51d734ad9bd9d448d849fa5a8bf702a9e41c19968ca*
+
+- `git log` confirms `P13-WORKFLOW-001-RUNID-FRESH-AND-RUN-GATE` (`3a155fb`) is the tip of
+  what this tier has built. No `OD-WORKFLOW-002` existed in `docs/records/` or
+  `work/ledger.json` before this one, and `nomos work list` reports `next: nothing is
+  eligible` -- every non-`done` item on the board is `declined`, including
+  `P13-WORKFLOW-001-RUNID-FIRST-INCREMENT` itself (superseded by its own `-2`, which is
+  `Done`). No live session has claimed or proposed a second workflow-tier increment.
+- Grepped directly: `nomos_gate_orchestration::Run_Gate` still has exactly two real callers
+  in this workspace -- `nomos-cli`'s `gate.rs` and `nomos-api`'s `Handle_Gate_Run` -- the
+  same two `OD-WORKFLOW-001` named. `nomos-ledger`'s `Run_Gate_Step`
+  (`crates/substrate/nomos-ledger/src/finish/gate_step.rs`) remains the distinct, unrelated
+  function `OD-WORKFLOW-001`'s own amendment already corrected an earlier draft for
+  conflating; read in full, it runs the workflow's own lint-step argv through a bare
+  `ProcessLauncher` with no persisted or correlated executions anywhere to give an identity
+  meaning against. Giving it a `RunId` now would manufacture a second consumer rather than
+  find a real one.
+- `nomos-cli`'s `gate/report.rs` still does not print `result.run` -- the same boundary
+  `P13-WORKFLOW-001-RUNID-FRESH-AND-RUN-GATE`'s own `done_when` drew on purpose ("this
+  increment does not add `RunId` to the CLI's printed output, only to the typed result").
+  That is a real, human-visible gap, but it is mechanical -- one `writeln!` against an
+  already-computed field, with no design question to settle -- not the kind of decision
+  `OD-WORKFLOW-001` and `OD-PACKAGE-010`'s record pattern exists for. Naming it as a
+  "decision" here would misuse that pattern rather than follow it.
+- The v14 corpus's `WF-*`/`WF-ORDER-*` requirement families were re-read in full, file by
+  file, from `NOMOS_V14_CORPUS`'s requirements directory (`WF-001` through `WF-012`, absent
+  at `WF-007`, and `WF-ORDER-001` through `WF-ORDER-005`) rather than trusted from
+  `OD-WORKFLOW-001`'s own summary of them. `WF-008`..`WF-012` (the `WorkflowStep` contract,
+  immutable published artifacts, deterministic branch/merge and bounded parallelism,
+  independently versioned definitions with pinned historical replay, retry/compensation)
+  remain exactly the unbuilt subsystem `OD-WORKFLOW-001` already found; nothing new checks
+  their shape. `WF-ORDER-001`..`005` describe a gate's *own* remediation-phase ordering --
+  file-scoped phases completing before tree-scoped ones, a validator rejecting mis-ordered or
+  unsatisfiable `needs` dependencies, a harness that may coalesce consecutive file-scoped
+  phases into a per-file band. Grepped directly for a word-boundary match on `phase`/`Phase`
+  across `crates/orchestration/nomos-gate-orchestration/src` and
+  `crates/orchestration/nomos-check-orchestration/src`: no match in either. This workspace's
+  one real `Gate` still judges a tree in a single pass with no phase concept at all, so
+  `WF-ORDER-*` has zero real structure anywhere to check a shape against -- an earlier-stage
+  absence than `WF-008`'s own, not a later one a second increment could plausibly reach.
+- `ARC-ROADMAP-001`'s near-term tier and its four constraints were re-read in full and are
+  unchanged; nothing in it names workflow orchestration as ready to advance past
+  `OD-WORKFLOW-001`. The adjacent near-term-tier work that has landed since --
+  `P13-MODEL-PACKAGE-FIRST-INCREMENT` (`OD-PACKAGE-010`, Track C's lane) and four new
+  `nomos-api` seams (`P13-API-WORK-LIST-SEAM` through `P13-API-WORK-VALIDATE-SEAM`, Track A's
+  lane) -- touches model/agent package infrastructure and the CLI/API/MCP
+  application-service boundary respectively, and neither constructs, consumes, or references
+  `RunId`, `WorkflowStep`, or anything in the `WF-*` family: checked directly by grep and by
+  reading `nomos-api`'s `response.rs` and `lib.rs` in full, `RunId`'s only appearance
+  anywhere in `nomos-api` is still `Handle_Gate_Run`'s existing `GateRunResponse::run` field
+  from the first increment. `OD-CORRECTIONS-001` -- the same survey discipline applied to
+  the corrections tier, in the same window -- likewise found zero real callers for its own
+  subject and named the trigger that would produce a real increment rather than inventing
+  one; this record follows the same shape for workflow.
+
+### docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#7
+
+*revision: authored · kind: heading · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped / The Finding · hash: sha256:b2ec4aa8b7784c9edabcf052da47b8624bf30212b1b531fe2256919d3346b773*
+
+## The Finding
+
+### docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#8
+
+*revision: authored · kind: prose · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped / The Finding · hash: sha256:5b18fe9ffbf74e8908b1789ab9566f2f93c743afebc4392fcc85bde2351c2095*
+
+**Nothing has changed.** `RunId` still has exactly one real consumer (`Gate`, through
+`Run_Gate` and its two callers), the `WF-009`..`012` engine and the `WorkflowStep` contract
+remain exactly as unbuilt as `OD-WORKFLOW-001` found them, and the `WF-ORDER-*` family has no
+phase concept anywhere in this workspace to check a shape against -- an absence one level
+more basic than `WF-008`'s own. There is no genuine second increment to name here yet. The
+one real, mechanical gap this survey found -- the CLI does not print `RunId` -- is not a
+second increment; it is a print statement against an already-decided field, deliberately
+left out of the first increment's scope for narrowness rather than as an oversight, and
+recording it as a "decision" would misuse the pattern this tier's own records exist for.
+
+### docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#9
+
+*revision: authored · kind: heading · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped / What This Does Not Do · hash: sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf*
+
+## What This Does Not Do
+
+### docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#10
+
+*revision: authored · kind: prose · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped / What This Does Not Do · hash: sha256:e52c5cb3c6121cd29ac25a07a0af38080b8a3119153d0947d3e4dc0c8bab97ad*
+
+It does not build `WorkflowStep`, any part of the `WF-009`..`012` engine, a phase concept
+for `Gate`, or a `nomos-workflow` crate. It does not give `RunId` a second consumer inside
+`nomos-ledger`'s `Run_Gate_Step`, which has no persisted or correlated executions to make an
+identity meaningful against -- manufacturing that consumer now would repeat the "no invented
+shape ahead of a real case" mistake this workspace has already declined to make elsewhere
+(`OD-PACKAGE-006`, `OD-PACKAGE-008`, `OD-CORRECTIONS-001`). It does not schedule the CLI's
+`RunId` print line as a ledger item needing its own decision; that is real, narrow,
+uncontroversial work a later item can simply do, with no record required to justify it. It
+does not reopen `ARC-ROADMAP-001`, `OD-CORRECTIONS-001`, or `OD-WORKFLOW-001` itself.
+
+### docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#11
+
+*revision: authored · kind: heading · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped / What Would Decide The Next Increment · hash: sha256:2a49a3ba679fcfb358fdad9c23368250d14e31320f8c91494208c2e9050a975b*
+
+## What Would Decide The Next Increment
+
+### docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#12
+
+*revision: authored · kind: prose · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped / What Would Decide The Next Increment · hash: sha256:1e366fba2006bcc506bf192a6ed77ed65491fee1f5a86b03b79a926ad9b65591*
+
+Any of:
+
+### docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#13
+
+*revision: authored · kind: prose · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped / What Would Decide The Next Increment · hash: sha256:b437a9790d20c92b6173d203ea86c67cfe6abce64c59f19d1a5ffdc58841d749*
+
+- **A second real caller of `Run_Gate` appears**, distinct from `nomos-cli` and `nomos-api`,
+  giving `RunId` a genuine second consumption pattern to check a broader identity contract
+  against -- persistence, comparison, or lookup by id.
+- **`Gate` grows a real phase concept** -- more than one ordered stage of judgment inside one
+  run -- giving `WF-ORDER-*` real structure to check file-scoped-before-tree-scoped ordering
+  against, rather than a single-pass walk with nothing to order.
+- **`ModelBackend`/`AgentExecutor` infrastructure reaches a real executor**
+  (`ARC-ROADMAP-001`'s own near-term item, distinct from this tier), giving `WF-006`'s
+  "API-hosted, subscription-agent, human, and recorded-replay executors" a first real
+  instance to check a shared task/result protocol against.
+
+### docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#14
+
+*revision: authored · kind: prose · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped / What Would Decide The Next Increment · hash: sha256:dd75f393b04f4a103de410e79fd3850661a0295a3fd4cad847ee0e900e07a745*
+
+Until one of those arrives, the workflow tier stands exactly where `OD-WORKFLOW-001` left
+it: one real consumer, one real "one execution," and an engine with nothing yet to check its
+shape against.
+
+### docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#15
+
+*revision: authored · kind: heading · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped / Amendment (OD-WORKFLOW-003) · hash: sha256:989f1c8153da941cda78b62b2d18114929c5b49645ed457a52a79fcf91ed2b8e*
+
+## Amendment (OD-WORKFLOW-003)
+
+### docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#16
+
+*revision: authored · kind: prose · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped / Amendment (OD-WORKFLOW-003) · hash: sha256:4de3245d47934f77b8a823356152c1a9e546609c41b0395cb6c6def895d6ced9*
+
+The "What This Does Not Do" clause above -- "It does not build `WorkflowStep`, any part of the
+`WF-009`..`012` engine ..." -- was written answering one question: whether the workflow
+*execution engine* has a next real increment. It did not separately examine whether
+`WorkflowStep`'s own declared shape (`WF-008`'s eleven named properties) independently
+qualifies for band-0 admission under `OD-CONTRACTS-001`'s cross-boundary-vocabulary criterion,
+a test that does not require a workspace-internal runtime consumer -- the same test `RunId`
+itself passed with zero consumers before this tier's own first increment gave it one.
+`OD-WORKFLOW-003` answers that narrower question and admits `WorkflowStep`, scoped to `WF-008`
+plus `WF-012`'s first (static coherence) clause only, as vocabulary. That clause is narrowed
+accordingly: it continues to mean no execution engine, no `WF-009`/`010`/`011`, and no real
+`WorkflowStep` consumer anywhere in this workspace. Every other finding in this record --
+`RunId`'s one real consumer, the `WF-ORDER-*` phase absence, the three named triggers for a
+next engine increment -- is unchanged.
+
+### docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#17
+
+*revision: authored · kind: heading · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#18
+
+*revision: authored · kind: prose · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped / Status · hash: sha256:3af1e7d7437236587a4d53aa3662210e9db99e98839373a2bdf5637f879e1b20*
+
+Accepted. Re-surveys the workflow tier against the live tree and the v14 corpus a second
+time, after `OD-WORKFLOW-001`'s first increment shipped, and finds no genuine second
+increment has arrived -- naming the three conditions that would produce one rather than
+inventing a shape to have something to build. Amended by `OD-WORKFLOW-003` to narrow this
+record's "does not build `WorkflowStep`" clause to the execution-engine question it was
+actually answering; the rest of this record's survey stands.
+
+### docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#1
+
+*revision: authored · kind: heading · heading: WorkflowStep is admitted to band 0 as WF-008's declared contract, not the engine OD-WORKFLOW-002 declined · hash: sha256:f7037a82431410627a642ab2726fd3c4b3b9427c016e5923c7ee9e54bbd1f20a*
+
+# WorkflowStep is admitted to band 0 as WF-008's declared contract, not the engine OD-WORKFLOW-002 declined
+
+### docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#2
+
+*revision: authored · kind: heading · heading: WorkflowStep is admitted to band 0 as WF-008's declared contract, not the engine OD-WORKFLOW-002 declined / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#3
+
+*revision: authored · kind: prose · heading: WorkflowStep is admitted to band 0 as WF-008's declared contract, not the engine OD-WORKFLOW-002 declined / Question · hash: sha256:4b8c55a75d40da7c56dfacde3ab85666033f5c92ae4867a4f175a702b3f1079d*
+
+`OD-WORKFLOW-002` re-surveyed the workflow tier and found no genuine second increment: `RunId`
+still has one real consumer, and `WF-008` through `WF-012` remain exactly as unbuilt as
+`OD-WORKFLOW-001` found them. Its own "What This Does Not Do" section states, without
+qualification: "It does not build `WorkflowStep`, any part of the `WF-009`..`012` engine ...
+manufacturing that consumer now would repeat the ... mistake this workspace has already
+declined to make elsewhere."
+
+### docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#4
+
+*revision: authored · kind: prose · heading: WorkflowStep is admitted to band 0 as WF-008's declared contract, not the engine OD-WORKFLOW-002 declined / Question · hash: sha256:21867d975e51565b5fba4b1f659711bf481abe41658514644c6b1d8034634151*
+
+That sentence answers one question -- does the workflow *execution engine* have a next real
+increment -- and the answer stays no; nothing here reopens it. It does not answer a separate
+question `OD-WORKFLOW-002` never examined: `OD-CONTRACTS-001` admits a type to band 0 when it
+"crosses a subsystem, process or plugin boundary and the parties on both sides need one stable
+shared representation of it," a test independent of whether a runtime consumer exists inside
+this workspace today -- `RunId` itself sat in `identity.rs`, band 0, with zero real consumers
+("nothing constructs one") until `OD-WORKFLOW-001` gave it one. Does `WorkflowStep`, `WF-008`'s
+own named contract, independently qualify under that criterion, distinct from whether the
+engine that would run one exists yet?
+
+### docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#5
+
+*revision: authored · kind: prose · heading: WorkflowStep is admitted to band 0 as WF-008's declared contract, not the engine OD-WORKFLOW-002 declined / Question · hash: sha256:81607b3622b77768c8f2fb0eecf25471aacca7a29986142478c773d2670ab63b*
+
+The user was asked directly, given a partially-written `WorkflowStep` implementation already
+sitting uncommitted in this tree with no ledger claim behind it -- written after
+`OD-WORKFLOW-002` was already committed, and not matching any of the three triggers that record
+itself named for a next increment -- whether to discard it, gate it properly, or set it aside.
+They chose to gate it properly rather than build blind on their say-so alone or discard
+disciplined work unread. This record is that gate.
+
+### docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#6
+
+*revision: authored · kind: heading · heading: WorkflowStep is admitted to band 0 as WF-008's declared contract, not the engine OD-WORKFLOW-002 declined / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#7
+
+*revision: authored · kind: prose · heading: WorkflowStep is admitted to band 0 as WF-008's declared contract, not the engine OD-WORKFLOW-002 declined / What Was Measured · hash: sha256:cea900781e30b771d89f180ceccb8e50e26f0c0c1a87c929970b0a02134aefc2*
+
+Read directly from `NOMOS_V14_CORPUS`'s requirements directory rather than from either prior
+record's own paraphrase:
+
+### docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#8
+
+*revision: authored · kind: prose · heading: WorkflowStep is admitted to band 0 as WF-008's declared contract, not the engine OD-WORKFLOW-002 declined / What Was Measured · hash: sha256:aa8faba40e460323c4889ac51f49b1c3561fab11f37e59acafde7e19e60916f8*
+
+- `WF-006`'s full statement: "API-hosted, subscription-agent, human, and recorded-replay
+  executors shall use the same task/result protocol." This is the corpus's own framing of a
+  step as cross-executor protocol truth, independent of which executor kind is built first --
+  the same "would a peer that never compiles this crate be unable to agree with us without it?"
+  test `OD-CONTRACTS-001` states, answered by the requirement's own text rather than by this
+  record inventing a peer.
+- `WF-008`'s full statement is a single flat sentence naming exactly eleven properties: typed
+  inputs/outputs, side effects, idempotency, retry policy, timeout, cacheability/cache key
+  inputs, privileges, cancellation behavior, compensation/rollback, determinism class, and
+  evidence emitted. No sub-structure beyond that sentence is stated anywhere in `WF-008` itself
+  -- the same "one bounded, statable shape" character `OD-PACKAGE-010` found in
+  `MODEL-ROUTE-037`'s opening clause and built from, while declining `038`-`049` as invention
+  with no second real case.
+- `WF-009` (artifact immutability and versioned mutation), `WF-010` (engine branch/merge,
+  bounded parallelism, daemon-restart recovery, partial-failure states) and `WF-011` (workflow
+  definitions versioned independently from runs, historical replay pinning) are, read again in
+  full, statements about running and publishing workflows -- engine behavior with no data
+  contract a step's own declaration could carry. They remain exactly the unbuilt subsystem
+  `OD-WORKFLOW-001` and `OD-WORKFLOW-002` both found, and nothing here builds any part of them.
+- `WF-012`'s full statement has two clauses: "Retries shall not repeat non-idempotent effects
+  without a compensation or deduplication token" (a static coherence rule over a step's own
+  declared fields -- checkable without an engine, the same shape
+  `crate::determinism::Declaration_Is_Coherent` already checks for a strategy declaration) and
+  "Cancellation shall report which side effects completed and what remains reversible" (a
+  runtime reporting obligation an engine discharges over a real execution, not something a
+  step's own contract can state in advance).
+- The uncommitted draft already in this tree
+  (`crates/contracts/nomos-contracts/src/workflow_step*`) was read in full against this split.
+  Its eleven `WorkflowStep` fields map one-to-one onto `WF-008`'s eleven named properties,
+  reusing `crate::determinism::Strategy`'s existing three-field split
+  (`determinism_strength`/`reproducibility_scope`/`trace_equivalence`) for "determinism class"
+  and `EvidenceClass` for "evidence emitted" rather than inventing parallel vocabulary. Its
+  `Is_Coherent` method implements only `WF-012`'s first, static clause;
+  `CancellationBehavior`'s own doc comment explicitly declines the second, reporting clause as
+  the engine's job "over a real run this workspace does not have yet."
+  `Cacheability::key_inputs` and `WorkflowStep::privileges` both stay raw, unresolved strings
+  rather than a typed taxonomy -- the same "first maturity, unresolved sub-shape" discipline
+  `OD-PACKAGE-010` used for `ModelSelection::Catalog`'s entries -- and `Compensation`
+  deliberately does not name which step provides external compensation, deferring that to
+  `WF-011`'s definition-graph concern by name in its own doc comment. No field, method or test
+  in the draft reaches into `WF-009`, `WF-010`, `WF-011`, or `WF-012`'s second clause.
+- Checked directly: nothing in this crate or workspace today constructs a `WorkflowStep`, the
+  same population of zero `RunId` had before `OD-WORKFLOW-001`. `OD-CONTRACTS-001`'s criterion
+  does not require a workspace-internal consumer -- it requires that a peer on the other side of
+  a boundary would need to agree on the shape, which `WF-006` states as a corpus-level
+  requirement independent of this workspace's own build order.
+
+### docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#9
+
+*revision: authored · kind: heading · heading: WorkflowStep is admitted to band 0 as WF-008's declared contract, not the engine OD-WORKFLOW-002 declined / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#10
+
+*revision: authored · kind: prose · heading: WorkflowStep is admitted to band 0 as WF-008's declared contract, not the engine OD-WORKFLOW-002 declined / The Decision · hash: sha256:fea1cc6514dae47698d366f4ad02f24ce90579537db6ec6b4bd1498efe290098*
+
+**`WorkflowStep`, scoped to exactly `WF-008`'s eleven named properties plus `WF-012`'s first
+(static coherence) clause, is admitted to `nomos-contracts` at band 0.** It is vocabulary --
+what a step's own declaration promises -- not the engine. `OD-WORKFLOW-002`'s "What This Does
+Not Do" clause is narrowed, not reversed: it correctly found no next increment for the workflow
+*execution engine*, and that finding stands unchanged. It did not separately examine whether
+`WorkflowStep`'s own declared shape independently satisfies `OD-CONTRACTS-001`'s band-0
+criterion, and this record answers that narrower question on its own terms.
+
+### docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#11
+
+*revision: authored · kind: prose · heading: WorkflowStep is admitted to band 0 as WF-008's declared contract, not the engine OD-WORKFLOW-002 declined / The Decision · hash: sha256:b70c699833c4f5de506bf2478aca24f1017b676e992a65ca328a47f2ada3abc7*
+
+The already-written draft is accepted as this decision's implementation, checked field by field
+against `WF-008` and `WF-012` above rather than re-derived from scratch, because it already
+carries the discipline this record's own analysis would have demanded: raw/unresolved
+sub-shapes where no closed taxonomy exists yet, explicit doc-comment call-outs of exactly which
+corpus clause each type does and does not cover, and reuse of existing crate vocabulary
+(`Strategy`, `EvidenceClass`, `Declaration_Is_Coherent`) over inventing parallel forms.
+
+### docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#12
+
+*revision: authored · kind: heading · heading: WorkflowStep is admitted to band 0 as WF-008's declared contract, not the engine OD-WORKFLOW-002 declined / What This Does Not Do · hash: sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf*
+
+## What This Does Not Do
+
+### docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#13
+
+*revision: authored · kind: prose · heading: WorkflowStep is admitted to band 0 as WF-008's declared contract, not the engine OD-WORKFLOW-002 declined / What This Does Not Do · hash: sha256:aa9b550a9c586c6a6422f2e56cb0b9cf3839fbdd001c98e74eee4e2dafc71dc5*
+
+It does not build `WF-009`, `WF-010`, `WF-011`, or `WF-012`'s second (reporting) clause. It does
+not build the `WF-009`..`012` execution engine, a phase concept for `Gate`, or a `nomos-workflow`
+crate -- `OD-WORKFLOW-002`'s finding that no such increment exists stands. It does not give
+`WorkflowStep` a real constructor, publisher, or consumer anywhere in this workspace; nothing
+here wires a `WorkflowStep` value into `Gate`, `nomos-cli`, or `nomos-api`, and doing so would be
+the same "manufacture a consumer" mistake `OD-WORKFLOW-002` already declined. It does not
+resolve `Cacheability::key_inputs` or `WorkflowStep::privileges` into a typed taxonomy -- both
+stay raw strings until a second real case exists to check field boundaries against, the same
+wait `OD-PACKAGE-008` held for `RulePackage` and `OD-PACKAGE-010` held for
+`ModelSelection::Catalog`'s entries. It does not reopen `OD-WORKFLOW-001` or the rest of
+`OD-WORKFLOW-002`'s survey.
+
+### docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#14
+
+*revision: authored · kind: heading · heading: WorkflowStep is admitted to band 0 as WF-008's declared contract, not the engine OD-WORKFLOW-002 declined / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#15
+
+*revision: authored · kind: prose · heading: WorkflowStep is admitted to band 0 as WF-008's declared contract, not the engine OD-WORKFLOW-002 declined / Status · hash: sha256:b35f27fc1021167a102904107348d9973c5f7ba99147584c0f5713da839586e0*
+
+Accepted. `WorkflowStep` is admitted to band 0 as `WF-008`'s declared contract, under the
+`OD-CONTRACTS-001` criterion applied on its own terms rather than the "does a runtime consumer
+exist" test `OD-WORKFLOW-001`/`OD-WORKFLOW-002` correctly applied to the engine. `OD-WORKFLOW-002`
+is amended to narrow its "does not build `WorkflowStep`" clause to the engine question it was
+actually answering; its survey of the execution-engine tier is otherwise unchanged and this
+record does not reopen it.
