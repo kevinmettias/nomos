@@ -83,12 +83,25 @@
 //! answer `MODEL-ROUTE-021`, `023`, `027` and `028` -- the four strongest of the
 //! `021`-`028` validation-diagnostics family, each with a dedicated corpus sentence
 //! that closes its own field or value list.
+//!
+//! # A tenth maturity: classification diagnostics, closing the licensed-25
+//!
+//! [`SelectorValidationFailure`]/[`SelectorValidationSeverity`],
+//! [`CorrectionExecutorAuthorityMismatch`]/[`CorrectionRouteClassification`] and
+//! [`ModelSelectorViolation`] answer `MODEL-ROUTE-022`, `025` and `026` -- the
+//! remaining three of the `021`-`028` family, closing every `MODEL-ROUTE` id
+//! `OD-PACKAGE-011` v3 licensed. None of the three corpus sentences names its own
+//! diagnostic, the same gap `MODEL-ROUTE-004`'s own text has for `EffortLevel`; each
+//! still closes a value or field list, which is the actual test. `026`'s
+//! `AgentExecutorRouteKind` half (subscription/chat/CLI/IDE) is deliberately not
+//! built -- see [`ModelSelectorViolation`]'s own doc comment for why.
 
 #![forbid(unsafe_code)]
 
 mod assembly_component_availability;
 mod budget_estimate;
 mod candidate_fit_adjustment;
+mod correction_executor_authority_mismatch;
 mod effort_level;
 mod effort_mapping;
 mod equal_specificity_conflict;
@@ -102,12 +115,14 @@ mod model_execution_telemetry;
 mod model_input_assembly_identity;
 mod model_selection;
 mod model_selector;
+mod model_selector_violation;
 mod output_determinism_expectation;
 mod reader;
 mod routing_replay_disposition;
 mod rule_model_configuration;
 mod runtime_candidate_disqualification;
 mod selector_specificity;
+mod selector_validation_failure;
 mod shadowed_profile;
 mod telemetry_guarantee;
 mod telemetry_junction;
@@ -117,6 +132,7 @@ mod workflow_validation_failure;
 pub use assembly_component_availability::AssemblyComponentAvailability;
 pub use budget_estimate::{BudgetEstimate, CheckOrFixStage};
 pub use candidate_fit_adjustment::{AuthorizedCandidateFitAdjustment, CandidateFitAdjustment, ChangeAuthorization};
+pub use correction_executor_authority_mismatch::{CorrectionExecutorAuthorityMismatch, CorrectionRouteClassification};
 pub use effort_level::EffortLevel;
 pub use effort_mapping::{EffortMappingRecord, MappingQuality};
 pub use equal_specificity_conflict::EqualSpecificityConflict;
@@ -130,6 +146,7 @@ pub use model_execution_telemetry::ModelExecutionTelemetry;
 pub use model_input_assembly_identity::ModelInputAssemblyIdentity;
 pub use model_selection::ModelSelection;
 pub use model_selector::ModelSelector;
+pub use model_selector_violation::ModelSelectorViolation;
 pub use nomos_package::{PackageVersion, ProtocolRange};
 pub use output_determinism_expectation::{OutputDeterminismExpectation, OutputDeterminismValue};
 pub use reader::{ManifestError, Parse_Manifest, Read_Manifest, SCHEMA_VERSION};
@@ -137,6 +154,7 @@ pub use routing_replay_disposition::{ReplayFacts, RoutingReplayDisposition};
 pub use rule_model_configuration::RuleModelConfiguration;
 pub use runtime_candidate_disqualification::{DisqualificationReason, RuntimeCandidateDisqualification};
 pub use selector_specificity::SelectorSpecificity;
+pub use selector_validation_failure::{SelectorValidationFailure, SelectorValidationSeverity};
 pub use shadowed_profile::{ShadowClassification, ShadowedProfile};
 pub use telemetry_guarantee::{ImpossibleReplayRequirement, ImpossibleTelemetryGuarantee, TelemetryGuaranteeKind};
 pub use telemetry_junction::{PipelineStage, TelemetryJunction};

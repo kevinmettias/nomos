@@ -13,6 +13,7 @@ pub enum nomos_model_package::CandidateFitAdjustment
 pub enum nomos_model_package::CandidateOutcome
 pub enum nomos_model_package::ChangeAuthorization
 pub enum nomos_model_package::CheckOrFixStage
+pub enum nomos_model_package::CorrectionRouteClassification
 pub enum nomos_model_package::DisqualificationEligibility
 pub enum nomos_model_package::DisqualificationReason
 pub enum nomos_model_package::EffortLevel
@@ -21,10 +22,13 @@ pub enum nomos_model_package::ManifestError
 pub enum nomos_model_package::MappingQuality
 pub enum nomos_model_package::ModelSelection
 pub enum nomos_model_package::ModelSelector
+pub enum nomos_model_package::ModelSelectorViolation
 pub enum nomos_model_package::OutputDeterminismValue
 pub enum nomos_model_package::PipelineStage
 pub enum nomos_model_package::RoutingReplayDisposition
 pub enum nomos_model_package::SelectorSpecificity
+pub enum nomos_model_package::SelectorValidationFailure
+pub enum nomos_model_package::SelectorValidationSeverity
 pub enum nomos_model_package::ShadowClassification
 pub enum nomos_model_package::TelemetryGuaranteeKind
 pub enum nomos_model_package::WorkflowValidationFailure
@@ -46,6 +50,8 @@ pub enum variant nomos_model_package::ChangeAuthorization::ApprovedDegradationMo
 pub enum variant nomos_model_package::ChangeAuthorization::ExplicitContextPolicy
 pub enum variant nomos_model_package::CheckOrFixStage::Check
 pub enum variant nomos_model_package::CheckOrFixStage::Fix
+pub enum variant nomos_model_package::CorrectionRouteClassification::AccidentallyNonExecutable
+pub enum variant nomos_model_package::CorrectionRouteClassification::IntentionallyProposalOnly
 pub enum variant nomos_model_package::DisqualificationEligibility::Retryable
 pub enum variant nomos_model_package::DisqualificationEligibility::SubstitutionEligible
 pub enum variant nomos_model_package::DisqualificationReason::ChangedDataBoundary
@@ -97,6 +103,8 @@ pub enum variant nomos_model_package::ModelSelector::BackendFamily(String)
 pub enum variant nomos_model_package::ModelSelector::CapabilityPredicate(String)
 pub enum variant nomos_model_package::ModelSelector::ExactIdentity { identity: String, pinned: bool, }
 pub enum variant nomos_model_package::ModelSelector::PolicyRankedCandidates(Vec<String>)
+pub enum variant nomos_model_package::ModelSelectorViolation::BackendFamilyViolation
+pub enum variant nomos_model_package::ModelSelectorViolation::UnavailableModel
 pub enum variant nomos_model_package::OutputDeterminismValue::Deterministic
 pub enum variant nomos_model_package::OutputDeterminismValue::ExecutorVariable
 pub enum variant nomos_model_package::OutputDeterminismValue::HumanVariable
@@ -122,6 +130,11 @@ pub enum variant nomos_model_package::SelectorSpecificity::ExactRuleCheckIdentit
 pub enum variant nomos_model_package::SelectorSpecificity::InheritedDefault
 pub enum variant nomos_model_package::SelectorSpecificity::RuleFamilySelectorPlusStage
 pub enum variant nomos_model_package::SelectorSpecificity::TaskClassSelector
+pub enum variant nomos_model_package::SelectorValidationFailure::NoMatchingOperation
+pub enum variant nomos_model_package::SelectorValidationFailure::UninheritedRuleCheckProfile
+pub enum variant nomos_model_package::SelectorValidationFailure::UnknownOrUnavailableReference
+pub enum variant nomos_model_package::SelectorValidationSeverity::Blocking
+pub enum variant nomos_model_package::SelectorValidationSeverity::ConditionalWarning
 pub enum variant nomos_model_package::ShadowClassification::Erroneous
 pub enum variant nomos_model_package::ShadowClassification::Intentional
 pub enum variant nomos_model_package::ShadowClassification::Redundant
@@ -168,6 +181,7 @@ pub struct field nomos_model_package::BudgetEstimate::resource: Option<String>
 pub struct field nomos_model_package::BudgetEstimate::rule: RuleId
 pub struct field nomos_model_package::BudgetEstimate::stage: CheckOrFixStage
 pub struct field nomos_model_package::BudgetEstimate::token: Option<u64>
+pub struct field nomos_model_package::CorrectionExecutorAuthorityMismatch::classification: CorrectionRouteClassification
 pub struct field nomos_model_package::EffortMappingRecord::limitations: Vec<String>
 pub struct field nomos_model_package::EffortMappingRecord::package_version: String
 pub struct field nomos_model_package::EffortMappingRecord::provider_disposition: String
@@ -258,6 +272,7 @@ pub struct field nomos_model_package::ValidationDiagnostic::remediation: String
 pub struct field nomos_model_package::ValidationDiagnostic::severity: String
 pub struct nomos_model_package::AuthorizedCandidateFitAdjustment
 pub struct nomos_model_package::BudgetEstimate
+pub struct nomos_model_package::CorrectionExecutorAuthorityMismatch
 pub struct nomos_model_package::EffortMappingRecord
 pub struct nomos_model_package::EqualSpecificityConflict
 pub struct nomos_model_package::ExecutorExposure
