@@ -7,8 +7,11 @@
 
 use nomos_platform_std::StdFileSystem;
 use nomos_spec_orchestration::corpus::{Absence, CorpusRequest, DEFAULT_REVISION};
-use nomos_spec_orchestration::{RecordAnswer, RecordRefusal, RecordRequest, SpecCommand, TableAnswer, TableRefusal, TableRequest};
-use nomos_spec_project::Profile;
+use nomos_spec_orchestration::{
+    FreshnessAnswer, FreshnessRefusal, FreshnessRequest, ProfileOutcome, RecordAnswer, RecordRefusal, RecordRequest,
+    SpecCommand, TableAnswer, TableRefusal, TableRequest, Verdict,
+};
+use nomos_spec_project::{Freshness, Profile};
 use nomos_spec_store::{DocumentSource, EditError, NodeSummary, PathMatch, RecordProjection, RowCensus, StoreError, TableLine};
 use serde::Serialize;
 use std::path::PathBuf;
@@ -564,6 +567,163 @@ impl SpecMarkdownResponse
     }
 }
 
+/// Compares every shipped profile's build root against the store, exactly as `nomos spec
+/// freshness` would, and hands back a JSON-serializable response.
+///
+/// Follows [`Handle_Spec_Record`]'s own composition. `run::freshness::Freshness` is generic
+/// over `FileSystem` (it reads a rendered body and its sidecar at `request.into`, through
+/// `nomos_platform::FileSystem::Read_To_String`), but never writes -- unlike `Render`,
+/// `Preview` and `Commit`, exposing it carries none of the "does a wire call write to this
+/// host's disk" hazard those three do, since `StdFileSystem` here only ever reads paths the
+/// caller already named.
+#[must_use]
+pub fn Handle_Spec_Freshness(request: &FreshnessRequest) -> SpecFreshnessResponse
+{
+    let corpus_request = CorpusRequest {
+        variable: CORPUS_VARIABLE.to_owned(),
+        root: std::env::var_os(CORPUS_VARIABLE).map(PathBuf::from),
+        revision: DEFAULT_REVISION.to_owned(),
+    };
+
+    let outcome =
+        nomos_spec_orchestration::Run(&SpecCommand::Freshness(request.clone()), &corpus_request, &StdFileSystem);
+
+    let nomos_spec_orchestration::SpecOutcome::Freshness(result) = outcome
+    else
+    {
+        unreachable!("Run always returns the SpecOutcome variant naming the SpecCommand it was given")
+    };
+
+    return SpecFreshnessResponse::From(result);
+}
+
+/// What a real `nomos spec freshness` produced, in a shape `serde_json` can hand across a
+/// wire.
+#[derive(Debug, Serialize)]
+#[serde(tag = "outcome", rename_all = "snake_case")]
+pub enum SpecFreshnessResponse
+{
+    /// Every profile this run looked at, and what it required.
+    Examined
+    {
+        examined: Vec<ProfileOutcomeResponse>,
+        required: Vec<String>,
+    },
+    /// `--profile` or a `--require` names an identifier the catalogue does not carry.
+    NoSuchProfile
+    {
+        requested: String,
+        known: Vec<String>,
+    },
+    /// `--require` names a profile that `--profile` narrowed this run away from.
+    RequirementUnexamined
+    {
+        requested: String,
+        only: Option<String>,
+    },
+    /// The embedded catalogue or the store could not be read at all.
+    Unreadable
+    {
+        /// What went wrong, as the underlying error's own `Display` renders it.
+        cause: String,
+    },
+}
+
+impl SpecFreshnessResponse
+{
+    fn From(result: Result<FreshnessAnswer, FreshnessRefusal>) -> Self
+    {
+        return match result
+        {
+            Ok(answer) => Self::Examined {
+                examined: answer.examined.into_iter().map(ProfileOutcomeResponse::From).collect(),
+                required: answer.required,
+            },
+            Err(FreshnessRefusal::NoSuchProfile { requested, known }) => Self::NoSuchProfile { requested, known },
+            Err(FreshnessRefusal::RequirementUnexamined { requested, only }) =>
+            {
+                Self::RequirementUnexamined { requested, only }
+            }
+            Err(FreshnessRefusal::Project(error)) => Self::Unreadable { cause: error.to_string() },
+            Err(FreshnessRefusal::Store(error)) => Self::Unreadable { cause: error.to_string() },
+        };
+    }
+}
+
+/// A serializable twin of [`nomos_spec_orchestration::ProfileOutcome`], which does not derive
+/// `Serialize`.
+#[derive(Debug, Serialize)]
+pub struct ProfileOutcomeResponse
+{
+    /// The profile examined, resolved and (if subject-addressed) already narrowed. Already
+    /// `Serialize` -- reused directly.
+    pub profile: Profile,
+    pub verdict: VerdictResponse,
+}
+
+impl ProfileOutcomeResponse
+{
+    fn From(outcome: ProfileOutcome) -> Self
+    {
+        return Self { profile: outcome.profile, verdict: VerdictResponse::From(outcome.verdict) };
+    }
+}
+
+/// A serializable twin of [`nomos_spec_orchestration::Verdict`], which does not derive
+/// `Serialize`. `Verdict::Compared`'s own `Result<Freshness, ProjectError>` is split into two
+/// variants here rather than nested, so a wire caller can match on `kind` alone.
+#[derive(Debug, Serialize)]
+#[serde(tag = "kind", rename_all = "snake_case")]
+pub enum VerdictResponse
+{
+    /// Neither the body nor its sidecar is on disk.
+    Absent,
+    /// A body is there and no sidecar beside it.
+    Unstamped,
+    /// A sidecar is there and no body beside it.
+    Unbodied,
+    /// Both halves are there, compared against what the store would produce now.
+    Compared
+    {
+        /// Whether every comparison below found nothing to report.
+        fresh: bool,
+        stale: Option<(String, String)>,
+        edited: Option<(String, String)>,
+        diverged: Option<(String, String)>,
+    },
+    /// Rebuilding the profile to compare against failed.
+    BuildFailed
+    {
+        /// What went wrong, as `ProjectError`'s own `Display` renders it.
+        cause: String,
+    },
+}
+
+impl VerdictResponse
+{
+    fn From(verdict: Verdict) -> Self
+    {
+        return match verdict
+        {
+            Verdict::Absent => Self::Absent,
+            Verdict::Unstamped => Self::Unstamped,
+            Verdict::Unbodied => Self::Unbodied,
+            Verdict::Compared(Ok(freshness)) => Self::From_Freshness(&freshness),
+            Verdict::Compared(Err(error)) => Self::BuildFailed { cause: error.to_string() },
+        };
+    }
+
+    fn From_Freshness(freshness: &Freshness) -> Self
+    {
+        return Self::Compared {
+            fresh: freshness.Is_Fresh(),
+            stale: freshness.stale.clone(),
+            edited: freshness.edited.clone(),
+            diverged: freshness.diverged.clone(),
+        };
+    }
+}
+
 #[cfg(test)]
 mod tests
 {
@@ -664,6 +824,75 @@ mod tests
         let outcome = parsed.get("outcome").expect("a serialized SpecRecordResponse always has this field");
 
         assert_eq!(outcome, "resolved", "{json}");
+    }
+
+    /// An empty, unique scratch directory means nothing has ever been rendered there, so
+    /// every shipped profile examines as `Absent` regardless of this session's own
+    /// `NOMOS_V14_CORPUS` state -- the same zero-setup determinism every other test in this
+    /// file already relies on.
+    fn Unique_Scratch_Directory(label: &str) -> std::path::PathBuf
+    {
+        use std::sync::atomic::{AtomicU32, Ordering};
+        static COUNTER: AtomicU32 = AtomicU32::new(0);
+
+        let directory = std::env::temp_dir().join(format!(
+            "nomos-api-spec-freshness-{label}-{}-{}",
+            std::process::id(),
+            COUNTER.fetch_add(1, Ordering::Relaxed)
+        ));
+        let _ = std::fs::remove_dir_all(&directory);
+        std::fs::create_dir_all(&directory).expect("a fresh scratch directory can always be created");
+
+        return directory;
+    }
+
+    #[test]
+    fn Test_A_Real_Call_Over_An_Empty_Root_Should_Examine_Every_Profile_As_Absent()
+    {
+        let request =
+            FreshnessRequest { into: Unique_Scratch_Directory("empty-root"), profile: None, require: Vec::new() };
+
+        let response = Handle_Spec_Freshness(&request);
+
+        let SpecFreshnessResponse::Examined { examined, .. } = response
+        else
+        {
+            panic!("an empty scratch root examines cleanly: {response:?}");
+        };
+        assert!(!examined.is_empty(), "the embedded catalogue always ships at least one profile");
+        assert!(
+            examined.iter().all(|outcome| matches!(outcome.verdict, VerdictResponse::Absent)),
+            "{examined:?}"
+        );
+    }
+
+    #[test]
+    fn Test_An_Unknown_Required_Profile_Should_Report_No_Such_Profile()
+    {
+        let request = FreshnessRequest {
+            into: Unique_Scratch_Directory("unknown-required"),
+            profile: None,
+            require: vec!["definitely-not-a-real-profile".to_owned()],
+        };
+
+        let response = Handle_Spec_Freshness(&request);
+
+        assert!(matches!(response, SpecFreshnessResponse::NoSuchProfile { .. }), "{response:?}");
+    }
+
+    #[test]
+    fn Test_A_Real_Examined_Response_Should_Round_Trip_As_Json()
+    {
+        let request =
+            FreshnessRequest { into: Unique_Scratch_Directory("round-trip"), profile: None, require: Vec::new() };
+
+        let response = Handle_Spec_Freshness(&request);
+
+        let json = serde_json::to_string(&response).expect("a SpecFreshnessResponse always serializes");
+        let parsed: serde_json::Value = serde_json::from_str(&json).expect("what was just written parses back");
+        let outcome = parsed.get("outcome").expect("a serialized SpecFreshnessResponse always has this field");
+
+        assert_eq!(outcome, "examined", "{json}");
     }
 
     /// No document under any corpus state can match this name, regardless of whether this

@@ -27611,6 +27611,65 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-API-SPEC-FRESHNESS-SEAM",
+      "title": "nomos-api gains a seventeenth real seam: Spec's Freshness verb",
+      "why": "ARC-ROADMAP-001 names CLI/API/MCP projections as a near-term-tier item. nomos-api has proven\na second real caller for Gate, Work, and Spec's Profiles, Sources, Record, Table and\nMarkdown. Freshness is the next verb: FreshnessRequest{into, profile, require}, answered as\nResult<FreshnessAnswer, FreshnessRefusal>.\n\nChecked before authoring: run::freshness::Freshness<F: FileSystem> is one of the four verbs\ngeneric over FileSystem (crates/orchestration/nomos-spec-orchestration/src/run/freshness.rs),\nbut its own module doc says it plainly: \"Reads through FileSystem::Read_To_String rather\nthan raw std::fs\" -- the function body calls Read_To_String exactly twice (a rendered body\nand its sidecar) and never Replace_Atomically, std::fs::write or std::fs::remove_file.\nUnlike Render (which places/overwrites two files) and Commit (which writes a committed\nrecord and can delete a vacated one), Freshness never writes -- so exposing it over\nnomos-api carries none of the \"does a wire call write to this host's disk\" hazard those two\ndo. It stays read-only in exactly the way Record/Table/Markdown are, just parameterized over\nFileSystem for testability rather than calling std::fs directly.\n\nFreshnessAnswer{examined: Vec<ProfileOutcome>, required: Vec<String>}, ProfileOutcome{\nprofile: Profile, verdict: Verdict}, Verdict{Absent, Unstamped, Unbodied,\nCompared(Result<Freshness, ProjectError>)} (crates/orchestration/nomos-spec-orchestration/src/\noutcome/freshness.rs and its submodules) -- none derive Serialize except Profile, which\nalready does (reused directly, the same way ProfilesResponse::Listed already reuses it).\nnomos_spec_project::Freshness{absent, stale, edited, diverged} (crates/spec/\nnomos-spec-project/src/build/freshness.rs) is four flat fields, no Serialize; its own\nIs_Fresh() is reused to add a convenience fresh: bool alongside the raw fields rather than\nrequiring a wire caller to re-derive it. FreshnessRefusal's Project/Store variants both\ncollapse to Unreadable{cause} via their own Display, the same shape this file's other\nverbs already use for their own non-Serialize error types.\n\nHandle_Spec_Freshness follows the &Request-by-reference convention Record/Table/Markdown\nalready established, rather than Handle_Spec_Sources's no-argument shape (Freshness is not a\nunit SpecCommand variant). Assemble(request) succeeds with real absences even when\nNOMOS_V14_CORPUS is unset, so a real test against a fresh, unique, empty scratch directory\ndeterministically finds every shipped profile Absent regardless of this session's own\nenvironment.",
+      "done_when": "nomos-api gains a new public function Handle_Spec_Freshness(request: &FreshnessRequest) ->\nSpecFreshnessResponse in spec.rs, following the &Request convention Record/Table/Markdown\nalready use: builds a CorpusRequest from NOMOS_V14_CORPUS, calls\nnomos_spec_orchestration::Run(&SpecCommand::Freshness(request.clone()), &corpus_request,\n&StdFileSystem), matches SpecOutcome::Freshness via an irrefutable let-else with unreachable!\non the wrong-variant arm, converts through SpecFreshnessResponse::From.\n\nSpecFreshnessResponse is a new tagged enum: Examined{examined: Vec<ProfileOutcomeResponse>,\nrequired: Vec<String>}, NoSuchProfile{requested, known}, RequirementUnexamined{requested,\nonly}, Unreadable{cause} (both FreshnessRefusal::Project and ::Store collapse here via their\nown Display). ProfileOutcomeResponse{profile: Profile, verdict: VerdictResponse} is a new\npublic struct reusing Profile directly (already Serialize). VerdictResponse is a new tagged\nenum: Absent, Unstamped, Unbodied, Compared{fresh: bool, stale, edited, diverged: Option<\n(String,String)>} (fresh computed from nomos_spec_project::Freshness::Is_Fresh(), the raw\nthree fields carried alongside it), BuildFailed{cause} -- Verdict::Compared's own\nResult<Freshness, ProjectError> is split into two outer variants here rather than nested, so\na wire caller matches on one tag.\n\nA real test proves Handle_Spec_Freshness over a fresh, unique, empty scratch directory\n(into) reports SpecFreshnessResponse::Examined with every shipped profile's verdict Absent,\ndeterministically regardless of this session's own NOMOS_V14_CORPUS. A second test proves an\nunknown --require name reports NoSuchProfile. A third test proves the Examined response\nround-trips through serde_json with the \"outcome\" tag reading \"examined\".\ntests/contract/surface/nomos-api.txt is regenerated (NOMOS_SURFACE_BLESS) and current.\nnomos-spec-orchestration, nomos-spec-project and nomos-spec-store are not touched by this\nitem.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-api",
+          "tests/contract/surface/nomos-api.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "t result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 5 tests\ntest Test_A_Lowered_Declaration_Should_Fail_The_Comparison ... ok\ntest Test_A_Matching_Declaration_Should_Pass_The_Comparison ... ok\ntest Test_An_Unrelated_Minor_Version_Should_Fail_The_Comparison ... ok\ntest Test_The_Real_Workflow_Should_Still_Have_The_Install_Step ... ok\ntest Test_The_Declared_Floor_Should_Match_The_Toolchain_The_Gate_Installs ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.13s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_api-ba7bce32110d92cc.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-95a1aef077b5f9ba.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-ead301eb7c8d8256.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-a61f2bcd75c8d4d9.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-fba07f1fa1c92105.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-2bb84d2d8744d800.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-c2987d8eceda16d3.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-0eeaea7cd309c35b.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-2db99bdd604951c5.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-56e2b70874db076c.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-1204b8c22ecd0b43.exe)\n   Doc-tests nomos_api\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1787593888,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
