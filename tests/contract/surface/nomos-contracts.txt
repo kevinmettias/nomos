@@ -32,6 +32,9 @@ pub const fn nomos_contracts::GenerationId::Next(self) -> Self
 pub const fn nomos_contracts::GenerationId::Raw(self) -> u64
 pub const fn nomos_contracts::Guarantee::New( variant: FactVariant, soundness: Assurance, completeness: Assurance, incremental: IncrementalGranularity, ) -> Self
 pub const fn nomos_contracts::IncrementalGranularity::Label(self) -> &'static str
+pub const fn nomos_contracts::KnowledgeContextItem::Is_Unresolved(&self) -> bool
+pub const fn nomos_contracts::KnowledgeSourceRole::Label(self) -> &'static str
+pub const fn nomos_contracts::KnowledgeSourceRole::May_Constrain(self) -> bool
 pub const fn nomos_contracts::MutationClass::Label(self) -> &'static str
 pub const fn nomos_contracts::MutationClass::Required_Authority(self) -> AuthorityClass
 pub const fn nomos_contracts::MutationClass::Writes(self) -> bool
@@ -42,11 +45,14 @@ pub const fn nomos_contracts::PeerAvailability::Is_Knowledge(&self) -> bool
 pub const fn nomos_contracts::ReproducibilityScope::Label(self) -> &'static str
 pub const fn nomos_contracts::ReproducibilityScope::Requires_Cross_Environment_Verification(self) -> bool
 pub const fn nomos_contracts::RetryPolicy::Retryable(self) -> bool
+pub const fn nomos_contracts::SemanticChangeClass::Label(self) -> &'static str
 pub const fn nomos_contracts::SynchronizationState::Label(self) -> &'static str
 pub const fn nomos_contracts::SynchronizationState::Requires_Authorized_Resolution(self) -> bool
 pub const fn nomos_contracts::Timeout::Is_Bounded(self) -> bool
 pub const fn nomos_contracts::TraceEquivalence::Label(self) -> &'static str
 pub const fn nomos_contracts::TraceEquivalence::Weaker_Of(self, other: Self) -> Self
+pub const fn nomos_contracts::UntrustedPromptOrigin::Label(self) -> &'static str
+pub const fn nomos_contracts::UntrustedPromptOrigin::May_Solely_Authorize(self) -> bool
 pub const nomos_contracts::Digest128::BYTE_LENGTH: usize
 pub const nomos_contracts::Digest128::HEX_LENGTH: usize
 pub const nomos_contracts::GenerationId::INITIAL: Self
@@ -67,14 +73,17 @@ pub enum nomos_contracts::EvidenceClass
 pub enum nomos_contracts::FactVariant
 pub enum nomos_contracts::GateCategory
 pub enum nomos_contracts::IncrementalGranularity
+pub enum nomos_contracts::KnowledgeSourceRole
 pub enum nomos_contracts::MutationClass
 pub enum nomos_contracts::PackageKind
 pub enum nomos_contracts::PeerAvailability
 pub enum nomos_contracts::ReproducibilityScope
 pub enum nomos_contracts::RetryPolicy
+pub enum nomos_contracts::SemanticChangeClass
 pub enum nomos_contracts::SynchronizationState
 pub enum nomos_contracts::Timeout
 pub enum nomos_contracts::TraceEquivalence
+pub enum nomos_contracts::UntrustedPromptOrigin
 pub enum variant nomos_contracts::Applicability::AgentRequired
 pub enum variant nomos_contracts::Applicability::AnalysisFailed
 pub enum variant nomos_contracts::Applicability::ConfigurationDisabled
@@ -145,6 +154,14 @@ pub enum variant nomos_contracts::IncrementalGranularity::Project
 pub enum variant nomos_contracts::IncrementalGranularity::Region
 pub enum variant nomos_contracts::IncrementalGranularity::Symbol
 pub enum variant nomos_contracts::IncrementalGranularity::WholeWorkspace
+pub enum variant nomos_contracts::KnowledgeSourceRole::AgentGeneratedInterpretation
+pub enum variant nomos_contracts::KnowledgeSourceRole::ApprovedArchitectureDecision
+pub enum variant nomos_contracts::KnowledgeSourceRole::CodeOrTestEvidence
+pub enum variant nomos_contracts::KnowledgeSourceRole::ExternalReference
+pub enum variant nomos_contracts::KnowledgeSourceRole::HistoricalRationale
+pub enum variant nomos_contracts::KnowledgeSourceRole::ImplementationDocumentation
+pub enum variant nomos_contracts::KnowledgeSourceRole::NormativeRepositoryPolicy
+pub enum variant nomos_contracts::KnowledgeSourceRole::RuntimeOrBenchmarkObservation
 pub enum variant nomos_contracts::MutationClass::Apply
 pub enum variant nomos_contracts::MutationClass::Preview
 pub enum variant nomos_contracts::MutationClass::Read
@@ -175,6 +192,17 @@ pub enum variant nomos_contracts::ReproducibilityScope::CrossRun
 pub enum variant nomos_contracts::ReproducibilityScope::SingleRun
 pub enum variant nomos_contracts::RetryPolicy::NoRetry
 pub enum variant nomos_contracts::RetryPolicy::Retry { max_attempts: NonZeroU32, deduplication_token_required: bool, }
+pub enum variant nomos_contracts::SemanticChangeClass::ArchitectureTopologyChange
+pub enum variant nomos_contracts::SemanticChangeClass::BehavioralDefaultChange
+pub enum variant nomos_contracts::SemanticChangeClass::ContractCompatibleExtension
+pub enum variant nomos_contracts::SemanticChangeClass::CorrectnessOrSafetyObligationChange
+pub enum variant nomos_contracts::SemanticChangeClass::DependencyBoundaryChange
+pub enum variant nomos_contracts::SemanticChangeClass::DestructiveRemoval
+pub enum variant nomos_contracts::SemanticChangeClass::GeneratedArtifactChange
+pub enum variant nomos_contracts::SemanticChangeClass::LocalImplementation
+pub enum variant nomos_contracts::SemanticChangeClass::PolicyOrConfigurationChange
+pub enum variant nomos_contracts::SemanticChangeClass::PublicInterfaceChange
+pub enum variant nomos_contracts::SemanticChangeClass::RuleChange
 pub enum variant nomos_contracts::SynchronizationState::Current
 pub enum variant nomos_contracts::SynchronizationState::Diverged
 pub enum variant nomos_contracts::SynchronizationState::OperationalNewer
@@ -186,6 +214,11 @@ pub enum variant nomos_contracts::Timeout::Unbounded
 pub enum variant nomos_contracts::TraceEquivalence::BehaviorallyEquivalent
 pub enum variant nomos_contracts::TraceEquivalence::BitIdentical
 pub enum variant nomos_contracts::TraceEquivalence::NotApplicable
+pub enum variant nomos_contracts::UntrustedPromptOrigin::Comment
+pub enum variant nomos_contracts::UntrustedPromptOrigin::IssueText
+pub enum variant nomos_contracts::UntrustedPromptOrigin::RepositoryFile
+pub enum variant nomos_contracts::UntrustedPromptOrigin::RetrievedKnowledge
+pub enum variant nomos_contracts::UntrustedPromptOrigin::ToolOutput
 pub fn nomos_contracts::Applicability::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_contracts::Assurance::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_contracts::AuthorityClass::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
@@ -209,12 +242,15 @@ pub fn nomos_contracts::GenerationId::fmt(&self, formatter: &mut core::fmt::Form
 pub fn nomos_contracts::Guarantee::Satisfies(&self, required: &Self) -> bool
 pub fn nomos_contracts::IncrementalGranularity::Broadened_To(self, provider: Self) -> Self
 pub fn nomos_contracts::IncrementalGranularity::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_contracts::KnowledgeSourceRole::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_contracts::MutationClass::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_contracts::PackageKind::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_contracts::PeerAvailability::Describe(&self) -> String
 pub fn nomos_contracts::ReproducibilityScope::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_contracts::SemanticChangeClass::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_contracts::SynchronizationState::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_contracts::TraceEquivalence::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_contracts::UntrustedPromptOrigin::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_contracts::WorkflowStep::Is_Coherent(&self) -> bool
 pub impl nomos_contracts::Applicability implements core::fmt::Display
 pub impl nomos_contracts::Assurance implements core::fmt::Display
@@ -232,11 +268,14 @@ pub impl nomos_contracts::FactVariant implements core::fmt::Display
 pub impl nomos_contracts::GateCategory implements core::fmt::Display
 pub impl nomos_contracts::GenerationId implements core::fmt::Display
 pub impl nomos_contracts::IncrementalGranularity implements core::fmt::Display
+pub impl nomos_contracts::KnowledgeSourceRole implements core::fmt::Display
 pub impl nomos_contracts::MutationClass implements core::fmt::Display
 pub impl nomos_contracts::PackageKind implements core::fmt::Display
 pub impl nomos_contracts::ReproducibilityScope implements core::fmt::Display
+pub impl nomos_contracts::SemanticChangeClass implements core::fmt::Display
 pub impl nomos_contracts::SynchronizationState implements core::fmt::Display
 pub impl nomos_contracts::TraceEquivalence implements core::fmt::Display
+pub impl nomos_contracts::UntrustedPromptOrigin implements core::fmt::Display
 pub struct field nomos_contracts::ContractVersion::major: u16
 pub struct field nomos_contracts::ContractVersion::minor: u16
 pub struct field nomos_contracts::EnforcementReach::breaches: Vec<EnforcementBreach>
@@ -256,6 +295,30 @@ pub struct field nomos_contracts::Guarantee::completeness: Assurance
 pub struct field nomos_contracts::Guarantee::incremental: IncrementalGranularity
 pub struct field nomos_contracts::Guarantee::soundness: Assurance
 pub struct field nomos_contracts::Guarantee::variant: FactVariant
+pub struct field nomos_contracts::KnowledgeContextItem::applicable_build_variant: Option<BuildVariantId>
+pub struct field nomos_contracts::KnowledgeContextItem::applicable_snapshot: Option<SnapshotId>
+pub struct field nomos_contracts::KnowledgeContextItem::authority_scope: Option<String>
+pub struct field nomos_contracts::KnowledgeContextItem::contradiction_links: Vec<KnowledgeReferenceId>
+pub struct field nomos_contracts::KnowledgeContextItem::freshness: Option<String>
+pub struct field nomos_contracts::KnowledgeContextItem::permitted_use: Option<String>
+pub struct field nomos_contracts::KnowledgeContextItem::provenance: String
+pub struct field nomos_contracts::KnowledgeContextItem::role: Option<KnowledgeSourceRole>
+pub struct field nomos_contracts::KnowledgeContextItem::source: Option<KnowledgeReferenceId>
+pub struct field nomos_contracts::KnowledgeContextItem::source_version: Option<String>
+pub struct field nomos_contracts::SemanticChangeAuthorityResolution::affected_build_variants: Vec<BuildVariantId>
+pub struct field nomos_contracts::SemanticChangeAuthorityResolution::approver_role: Option<String>
+pub struct field nomos_contracts::SemanticChangeAuthorityResolution::autonomous_execution: bool
+pub struct field nomos_contracts::SemanticChangeAuthorityResolution::decision_rationale: String
+pub struct field nomos_contracts::SemanticChangeAuthorityResolution::evidence_obligations: Vec<String>
+pub struct field nomos_contracts::SemanticChangeAuthorityResolution::observed_class: Option<SemanticChangeClass>
+pub struct field nomos_contracts::SemanticChangeAuthorityResolution::permitted_mutation_mode: MutationClass
+pub struct field nomos_contracts::SemanticChangeAuthorityResolution::predicted_class: SemanticChangeClass
+pub struct field nomos_contracts::SemanticChangeAuthorityResolution::required_authority: AuthorityClass
+pub struct field nomos_contracts::SemanticChangeAuthorityResolution::rollback_boundary: Option<String>
+pub struct field nomos_contracts::SemanticChangeAuthorityResolution::scope_expansion: bool
+pub struct field nomos_contracts::SemanticChangeAuthorityResolution::unresolved_effects: Vec<String>
+pub struct field nomos_contracts::UntrustedPromptContent::origin: UntrustedPromptOrigin
+pub struct field nomos_contracts::UntrustedPromptContent::text: String
 pub struct field nomos_contracts::WorkflowStep::cacheability: Cacheability
 pub struct field nomos_contracts::WorkflowStep::cancellation: CancellationBehavior
 pub struct field nomos_contracts::WorkflowStep::compensation: Compensation
@@ -276,6 +339,9 @@ pub struct nomos_contracts::EnforcementReach
 pub struct nomos_contracts::Finding
 pub struct nomos_contracts::GenerationId(u64)
 pub struct nomos_contracts::Guarantee
+pub struct nomos_contracts::KnowledgeContextItem
+pub struct nomos_contracts::SemanticChangeAuthorityResolution
+pub struct nomos_contracts::UntrustedPromptContent
 pub struct nomos_contracts::WorkflowStep
 pub trait nomos_contracts::Strategy
 

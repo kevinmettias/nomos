@@ -7,6 +7,10 @@
 
 mod class;
 mod mutation_class;
+mod semantic_change_class;
+mod untrusted_prompt_content;
 
 pub use class::AuthorityClass;
 pub use mutation_class::MutationClass;
+pub use semantic_change_class::{SemanticChangeAuthorityResolution, SemanticChangeClass};
+pub use untrusted_prompt_content::{UntrustedPromptContent, UntrustedPromptOrigin};

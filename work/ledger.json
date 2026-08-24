@@ -27438,6 +27438,65 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-AGT-010-012-018-EXEC-003-KNOWLEDGE-AUTHORITY",
+      "title": "nomos-contracts gains AGT-010/012/018/AGT-EXEC-003: knowledge-source role, semantic change authority, untrusted prompt content",
+      "why": "OD-ROADMAP-001 retires the wait these four requirements were left under: two prior audit passes (P13-TRACE-AGT-AUDIT-PARTIAL-2, the original AGT-EXEC audit) confirmed they had no real second consumer and left them Unassessed, but a fresh corpus re-read under the retired caution found all four genuinely grounded in concrete, field-level corpus text -- the caution they were waiting under, not an absence of shape, was the only reason they stayed unbuilt. AGT-010/AGT-011 name KnowledgeSourceRole's eight values and AGT-010's own field list for a knowledge context item, the same cross-product citation role KnowledgeReferenceId already plays for an external knowledge system (OD-CONTRACTS-001's admission test: a peer that never compiles this crate, i.e. KnowledgeWorkbench, must still agree on this vocabulary). AGT-012 narrows to one buildable slice of its ranking clause: NormativeRepositoryPolicy is the only role that may constrain work. AGT-018 names SemanticChangeClass's eleven values and SemanticChangeAuthorityResolution's field list verbatim, siblings of the already-admitted AuthorityClass/MutationClass in the same authority module. AGT-EXEC-003 (migration-remapped from a duplicate AGT-012 anchor, canonical id confirmed via 00_overview/migration/id-remap.json) names the five untrusted-content origins and the negative authorization constraint directly. None of the four builds a computation (ranking algorithm, authorization decision, dominance check) the corpus does not itself specify -- each stays at the declared-not-computed vocabulary layer this crate's existing authority types already establish.",
+      "done_when": "crates/contracts/nomos-contracts/src/knowledge.rs exists with KnowledgeSourceRole (8 variants, corpus order, Label/Display, May_Constrain) and KnowledgeContextItem (AGT-010's field list, Is_Unresolved). crates/contracts/nomos-contracts/src/authority/semantic_change_class.rs exists with SemanticChangeClass (11 variants) and SemanticChangeAuthorityResolution (AGT-018's field list). crates/contracts/nomos-contracts/src/authority/untrusted_prompt_content.rs exists with UntrustedPromptOrigin (5 variants, May_Solely_Authorize always false) and UntrustedPromptContent. All re-exported from lib.rs. cargo test -p nomos-contracts passes. cargo test --no-fail-fast -p nomos-contract-tests passes with tests/contract/surface/nomos-contracts.txt reblessed. cargo clippy --workspace --all-targets exits 0 (the gate's real Lint step per .github/workflows/gate.yml; OD-GATE-007 removed -D warnings from it).",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/contracts/nomos-contracts/src/lib.rs",
+          "crates/contracts/nomos-contracts/src/knowledge.rs",
+          "crates/contracts/nomos-contracts/src/authority.rs",
+          "crates/contracts/nomos-contracts/src/authority/semantic_change_class.rs",
+          "crates/contracts/nomos-contracts/src/authority/untrusted_prompt_content.rs",
+          "tests/contract/surface/nomos-contracts.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "Cited_Rule ... ok\ntest Test_Every_Cited_Record_Should_Still_Exist ... ok\ntest Test_Every_Cited_Version_Should_Match_The_Records_Own_Front_Matter ... ok\ntest Test_A_Mismatched_Version_Should_Fail_The_Comparison ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 5 tests\ntest Test_A_Lowered_Declaration_Should_Fail_The_Comparison ... ok\ntest Test_A_Matching_Declaration_Should_Pass_The_Comparison ... ok\ntest Test_An_Unrelated_Minor_Version_Should_Fail_The_Comparison ... ok\ntest Test_The_Real_Workflow_Should_Still_Have_The_Install_Step ... ok\ntest Test_The_Declared_Floor_Should_Match_The_Toolchain_The_Gate_Installs ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.09s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-06ab25b0491e144c.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-4c32ae08be8df958.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-9350d088b8d6ed0d.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-9ca3879aab70176f.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-308fef82df004321.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-f6f7228f8cfa874c.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-ea500c062215f506.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-790c8c5856e63fa5.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-98429b682798ce96.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-c1e906054609f777.exe)\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1787593050,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "d38c336a8fb1db2bac63bfecc447129167e35e79"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
