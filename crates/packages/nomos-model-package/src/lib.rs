@@ -72,10 +72,12 @@
 #![forbid(unsafe_code)]
 
 mod assembly_component_availability;
+mod budget_estimate;
 mod candidate_fit_adjustment;
 mod effort_level;
 mod effort_mapping;
 mod execution_scope;
+mod executor_exposure;
 mod fallback_admissibility;
 mod fallback_transition_trace;
 mod manifest;
@@ -86,14 +88,17 @@ mod model_selector;
 mod output_determinism_expectation;
 mod reader;
 mod routing_replay_disposition;
+mod rule_model_configuration;
 mod runtime_candidate_disqualification;
 mod selector_specificity;
 
 pub use assembly_component_availability::AssemblyComponentAvailability;
+pub use budget_estimate::{BudgetEstimate, CheckOrFixStage};
 pub use candidate_fit_adjustment::{AuthorizedCandidateFitAdjustment, CandidateFitAdjustment, ChangeAuthorization};
 pub use effort_level::EffortLevel;
 pub use effort_mapping::{EffortMappingRecord, MappingQuality};
 pub use execution_scope::ExecutionScope;
+pub use executor_exposure::ExecutorExposure;
 pub use fallback_admissibility::FallbackAdmissibility;
 pub use fallback_transition_trace::{DisqualificationEligibility, FallbackTransitionTrace};
 pub use manifest::ModelRoutePackage;
@@ -105,5 +110,6 @@ pub use nomos_package::{PackageVersion, ProtocolRange};
 pub use output_determinism_expectation::{OutputDeterminismExpectation, OutputDeterminismValue};
 pub use reader::{ManifestError, Parse_Manifest, Read_Manifest, SCHEMA_VERSION};
 pub use routing_replay_disposition::{ReplayFacts, RoutingReplayDisposition};
+pub use rule_model_configuration::RuleModelConfiguration;
 pub use runtime_candidate_disqualification::{DisqualificationReason, RuntimeCandidateDisqualification};
 pub use selector_specificity::SelectorSpecificity;

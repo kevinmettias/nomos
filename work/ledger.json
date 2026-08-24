@@ -28115,6 +28115,101 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-MODEL-ROUTE-002-007-011-CONFIGURATION-VOCABULARY",
+      "title": "nomos-model-package gains a seventh maturity: MODEL-ROUTE-002/007/011's configuration vocabulary",
+      "why": "Licensed by OD-PACKAGE-011 v3's per-id split, coordinated with a concurrent peer session (nomos-b7, landed the 005/015/018 sixth maturity in ea80fbc) to take a disjoint slice. MODEL-ROUTE-002 ('Check/review execution and correction/fix execution shall be independently configurable... one backend, model, effort level... to judge a finding and another to propose or implement remediation') reduces to a direct pairing of two already-built ModelExecutionProfile values (MODEL-ROUTE-001/003/004) -- only 'backend, model, effort level' of the sentence's six-item list has a real built type today, the rest (context policy, tool set, budget) stay unbuilt per the same reasoning ModelExecutionProfile's own prior increment already gave. MODEL-ROUTE-007 ('AgentExecutorPackages... shall expose only the model identities, families, effort controls, and switching operations actually supported by that environment') is a clean four-item enumerable list, the same pattern as MODEL-ROUTE-037's ModelSelection; kept standalone rather than wired into ModelRoutePackage's manifest, matching this session's established pattern of declared-vocabulary-first, consumer-wiring-later. MODEL-ROUTE-011 ('Users shall be able to preview estimated token, latency, resource, and monetary budgets by rule/check and by check-versus-fix stage. Estimates shall expose assumptions...') names four budget dimensions plus a required assumptions field and the rule/stage grouping directly.",
+      "done_when": "crates/packages/nomos-model-package/src/rule_model_configuration.rs, executor_exposure.rs, and budget_estimate.rs exist. RuleModelConfiguration pairs check/fix: ModelExecutionProfile. ExecutorExposure has MODEL-ROUTE-007's four fields (model_identities, model_families, effort_controls: Vec<EffortLevel>, switching_operations). BudgetEstimate has rule: RuleId, stage: CheckOrFixStage (Check/Fix), token/latency/resource/monetary as Option, and a required assumptions: Vec<String>. All re-exported from lib.rs. cargo test -p nomos-model-package passes. cargo test --no-fail-fast -p nomos-contract-tests passes with tests/contract/surface/nomos-model-package.txt reblessed. cargo clippy --workspace --all-targets exits 0.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/packages/nomos-model-package/src/lib.rs",
+          "crates/packages/nomos-model-package/src/rule_model_configuration.rs",
+          "crates/packages/nomos-model-package/src/executor_exposure.rs",
+          "crates/packages/nomos-model-package/src/budget_estimate.rs",
+          "tests/contract/surface/nomos-model-package.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "Cited_Rule ... ok\ntest Test_Every_Cited_Record_Should_Still_Exist ... ok\ntest Test_Every_Cited_Version_Should_Match_The_Records_Own_Front_Matter ... ok\ntest Test_A_Mismatched_Version_Should_Fail_The_Comparison ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 5 tests\ntest Test_A_Lowered_Declaration_Should_Fail_The_Comparison ... ok\ntest Test_A_Matching_Declaration_Should_Pass_The_Comparison ... ok\ntest Test_An_Unrelated_Minor_Version_Should_Fail_The_Comparison ... ok\ntest Test_The_Real_Workflow_Should_Still_Have_The_Install_Step ... ok\ntest Test_The_Declared_Floor_Should_Match_The_Toolchain_The_Gate_Installs ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.10s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-06ab25b0491e144c.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-4c32ae08be8df958.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-9350d088b8d6ed0d.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-9ca3879aab70176f.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-308fef82df004321.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-f6f7228f8cfa874c.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-ea500c062215f506.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-790c8c5856e63fa5.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-98429b682798ce96.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-c1e906054609f777.exe)\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1787595467,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "ea80fbcdbc876e3f8a99e4c975e3b1499e387bb9"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-MODEL-ROUTE-009-010-016-TELEMETRY-VOCABULARY",
+      "title": "nomos-model-package gains an eighth maturity: MODEL-ROUTE-009/010/016 validation-failure and telemetry vocabulary",
+      "why": "OD-PACKAGE-011 v3 reclassified MODEL-ROUTE-009, 010 and 016 from no-real-case to licensed, the same closed-enumeration test as the sixth and seventh maturities. 009 names seven closed validation-failure categories a workflow validation step shall detect. 010 names a thirteen-field telemetry record a model-assisted operation shall emit, reusing EffortLevel for the effort field the same way EffortMappingRecord already does; requested and effective are read as two separately constructed instances of the same flat record, the same no-invented-nesting choice ModelInputAssemblyIdentity already made for a comparably flat corpus sentence, rather than a wrapper naming both. 016 names nine closed context-assembly pipeline stages and a TelemetryJunction carrying five named observability fields plus a causal link, each field qualified where available, so each stays optional. None of the three computes a validation result, an emission or a causal graph the corpus does not itself specify.",
+      "done_when": "crates/packages/nomos-model-package/src/workflow_validation_failure.rs, model_execution_telemetry.rs and telemetry_junction.rs exist. WorkflowValidationFailure carries MODEL-ROUTE-009 seven categories in the corpus own order. ModelExecutionTelemetry carries MODEL-ROUTE-010 thirteen named fields, reusing EffortLevel for effort. PipelineStage carries MODEL-ROUTE-016 nine stages in the corpus own order; TelemetryJunction carries its five named fields (each Option, matching where available) plus a causal link field. Each enum has the crate standard Label()/Display pair. lib.rs gains an eighth maturity doc section matching the style already there, and re-exports all new public types. cargo test -p nomos-model-package passes, including a label-distinctness test per enum. cargo test --no-fail-fast -p nomos-contract-tests passes with tests/contract/surface/nomos-model-package.txt reblessed. cargo clippy --workspace --all-targets is clean.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/packages/nomos-model-package/src/lib.rs",
+          "crates/packages/nomos-model-package/src/workflow_validation_failure.rs",
+          "crates/packages/nomos-model-package/src/model_execution_telemetry.rs",
+          "crates/packages/nomos-model-package/src/telemetry_junction.rs",
+          "tests/contract/surface/nomos-model-package.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

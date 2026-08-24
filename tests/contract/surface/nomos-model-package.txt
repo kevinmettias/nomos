@@ -9,6 +9,7 @@ pub const nomos_model_package::SCHEMA_VERSION: u32
 pub enum nomos_model_package::AssemblyComponentAvailability
 pub enum nomos_model_package::CandidateFitAdjustment
 pub enum nomos_model_package::ChangeAuthorization
+pub enum nomos_model_package::CheckOrFixStage
 pub enum nomos_model_package::DisqualificationEligibility
 pub enum nomos_model_package::DisqualificationReason
 pub enum nomos_model_package::EffortLevel
@@ -34,6 +35,8 @@ pub enum variant nomos_model_package::CandidateFitAdjustment::WeakenStructuredOu
 pub enum variant nomos_model_package::ChangeAuthorization::AdmissibleFallbackEdge
 pub enum variant nomos_model_package::ChangeAuthorization::ApprovedDegradationMode
 pub enum variant nomos_model_package::ChangeAuthorization::ExplicitContextPolicy
+pub enum variant nomos_model_package::CheckOrFixStage::Check
+pub enum variant nomos_model_package::CheckOrFixStage::Fix
 pub enum variant nomos_model_package::DisqualificationEligibility::Retryable
 pub enum variant nomos_model_package::DisqualificationEligibility::SubstitutionEligible
 pub enum variant nomos_model_package::DisqualificationReason::ChangedDataBoundary
@@ -118,12 +121,23 @@ pub impl nomos_model_package::SelectorSpecificity implements core::fmt::Display
 pub struct field nomos_model_package::AuthorizedCandidateFitAdjustment::adjustment: CandidateFitAdjustment
 pub struct field nomos_model_package::AuthorizedCandidateFitAdjustment::authorization: ChangeAuthorization
 pub struct field nomos_model_package::AuthorizedCandidateFitAdjustment::result: ModelInputAssemblyIdentity
+pub struct field nomos_model_package::BudgetEstimate::assumptions: Vec<String>
+pub struct field nomos_model_package::BudgetEstimate::latency: Option<Duration>
+pub struct field nomos_model_package::BudgetEstimate::monetary: Option<String>
+pub struct field nomos_model_package::BudgetEstimate::resource: Option<String>
+pub struct field nomos_model_package::BudgetEstimate::rule: RuleId
+pub struct field nomos_model_package::BudgetEstimate::stage: CheckOrFixStage
+pub struct field nomos_model_package::BudgetEstimate::token: Option<u64>
 pub struct field nomos_model_package::EffortMappingRecord::limitations: Vec<String>
 pub struct field nomos_model_package::EffortMappingRecord::package_version: String
 pub struct field nomos_model_package::EffortMappingRecord::provider_disposition: String
 pub struct field nomos_model_package::EffortMappingRecord::quality: MappingQuality
 pub struct field nomos_model_package::EffortMappingRecord::rationale: String
 pub struct field nomos_model_package::EffortMappingRecord::requested_effort: EffortLevel
+pub struct field nomos_model_package::ExecutorExposure::effort_controls: Vec<EffortLevel>
+pub struct field nomos_model_package::ExecutorExposure::model_families: Vec<String>
+pub struct field nomos_model_package::ExecutorExposure::model_identities: Vec<String>
+pub struct field nomos_model_package::ExecutorExposure::switching_operations: Vec<String>
 pub struct field nomos_model_package::FallbackAdmissibility::may_change_backend_package: bool
 pub struct field nomos_model_package::FallbackAdmissibility::may_change_context_policy: bool
 pub struct field nomos_model_package::FallbackAdmissibility::may_change_cost_or_latency_class: bool
@@ -164,9 +178,13 @@ pub struct field nomos_model_package::OutputDeterminismExpectation::known_variab
 pub struct field nomos_model_package::OutputDeterminismExpectation::value: OutputDeterminismValue
 pub struct field nomos_model_package::ReplayFacts::executor_replay: RoutingReplayDisposition
 pub struct field nomos_model_package::ReplayFacts::live_operation_disposition: RoutingReplayDisposition
+pub struct field nomos_model_package::RuleModelConfiguration::check: ModelExecutionProfile
+pub struct field nomos_model_package::RuleModelConfiguration::fix: ModelExecutionProfile
 pub struct field nomos_model_package::RuntimeCandidateDisqualification::reason: DisqualificationReason
 pub struct nomos_model_package::AuthorizedCandidateFitAdjustment
+pub struct nomos_model_package::BudgetEstimate
 pub struct nomos_model_package::EffortMappingRecord
+pub struct nomos_model_package::ExecutorExposure
 pub struct nomos_model_package::FallbackAdmissibility
 pub struct nomos_model_package::FallbackTransitionTrace
 pub struct nomos_model_package::ModelExecutionProfile
@@ -174,6 +192,7 @@ pub struct nomos_model_package::ModelInputAssemblyIdentity
 pub struct nomos_model_package::ModelRoutePackage
 pub struct nomos_model_package::OutputDeterminismExpectation
 pub struct nomos_model_package::ReplayFacts
+pub struct nomos_model_package::RuleModelConfiguration
 pub struct nomos_model_package::RuntimeCandidateDisqualification
 
 # re-exports of items declared outside this crate
