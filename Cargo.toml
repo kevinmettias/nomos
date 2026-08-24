@@ -87,6 +87,13 @@ members = [
     # a finding a rule produced, and a band below rules would have forbidden that edge.
     "crates/corrections/nomos-corrections",
 
+    # Band 36 — agent contracts. AGT-001's TaskEnvelope and AGT-002's WorkResult, the
+    # typed input and output shape an agent-assisted operation carries. Depends
+    # downward on nomos-ledger, nomos-contracts and nomos-corrections; names none of
+    # nomos-model-package, nomos-rule-package or nomos-lang-package, which are peers
+    # at a different band, not dependents of this one. `OD-ROADMAP-001`.
+    "crates/agent/nomos-agent-contracts",
+
     # Band 40 — orchestration. Running a `nomos work` verb against a caller-chosen
     # platform, apart from choosing that platform and apart from rendering the answer.
     # Above the ledger it dispatches to and the platform port it is generic over, below
@@ -182,6 +189,7 @@ nomos-model-package = { path = "crates/packages/nomos-model-package" }
 nomos-rule-package = { path = "crates/packages/nomos-rule-package" }
 nomos-rules = { path = "crates/rules/nomos-rules" }
 nomos-corrections = { path = "crates/corrections/nomos-corrections" }
+nomos-agent-contracts = { path = "crates/agent/nomos-agent-contracts" }
 nomos-work-orchestration = { path = "crates/orchestration/nomos-work-orchestration" }
 nomos-check-orchestration = { path = "crates/orchestration/nomos-check-orchestration" }
 nomos-spec-orchestration = { path = "crates/orchestration/nomos-spec-orchestration" }

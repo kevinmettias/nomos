@@ -1,0 +1,15 @@
+pub struct field nomos_agent_contracts::TaskEnvelope::applicable_rules: Vec<RuleId>
+pub struct field nomos_agent_contracts::TaskEnvelope::available_tools: Vec<CapabilityId>
+pub struct field nomos_agent_contracts::TaskEnvelope::expected_output_schema: SchemaId
+pub struct field nomos_agent_contracts::TaskEnvelope::goal: String
+pub struct field nomos_agent_contracts::TaskEnvelope::knowledge_context: Vec<KnowledgeReferenceId>
+pub struct field nomos_agent_contracts::TaskEnvelope::prohibited_changes: Territory
+pub struct field nomos_agent_contracts::TaskEnvelope::scope: Territory
+pub struct field nomos_agent_contracts::WorkResult::assumptions: Vec<String>
+pub struct field nomos_agent_contracts::WorkResult::claims: Vec<Finding>
+pub struct field nomos_agent_contracts::WorkResult::plan: CorrectionPlan
+pub struct field nomos_agent_contracts::WorkResult::requested_verification: Option<VerificationPredicate>
+pub struct field nomos_agent_contracts::WorkResult::tests: Vec<VerificationPredicate>
+pub struct field nomos_agent_contracts::WorkResult::unresolved_questions: Vec<String>
+pub struct nomos_agent_contracts::TaskEnvelope
+pub struct nomos_agent_contracts::WorkResult

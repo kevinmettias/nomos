@@ -103,6 +103,10 @@ pub(crate) const BANDS: &[(&str, u32)] = &[
     // between: a correction candidate may one day need to name a finding a rule
     // produced, and a band below rules would have forbidden that edge.
     ("nomos-corrections", 35),
+    // AGT-001's TaskEnvelope and AGT-002's WorkResult, the typed input and output shape
+    // an agent-assisted operation carries. Depends downward on nomos-ledger,
+    // nomos-contracts and nomos-corrections. `OD-ROADMAP-001`.
+    ("nomos-agent-contracts", 36),
     // Runs a `nomos work` verb against a caller-chosen platform and hands back a typed
     // outcome, generic over the traits `nomos-platform` declares rather than over the
     // std implementation of them. Above the ledger it dispatches to; below every

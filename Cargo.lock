@@ -286,6 +286,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "nomos-agent-contracts"
+version = "0.1.0"
+dependencies = [
+ "nomos-contracts",
+ "nomos-corrections",
+ "nomos-ledger",
+ "serde",
+]
+
+[[package]]
 name = "nomos-analysis"
 version = "0.1.0"
 dependencies = [
