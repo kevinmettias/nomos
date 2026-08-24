@@ -1,11 +1,18 @@
 //! `CorrectionCandidate`, `CorrectionPlan`, and the deterministic preview, stage, validate,
 //! commit and rollback lifecycle over a workspace change.
 //!
-//! No agent and no model backend appears anywhere in this crate. Every step is a pure
+//! No agent and no model backend decides anything in this crate. Every step is a pure
 //! function of a plan and a [`nomos_workspace::Workspace`]'s current state: what a
 //! candidate would do is decided before this crate exists to run it, and the lifecycle
 //! here only ever checks that state has not moved and submits through
 //! [`nomos_workspace::Workspace`]'s one door.
+//!
+//! `ValidatedPlan::Commit`'s [`nomos_model::Evidence`] parameter, `OD-CORRECTIONS-002`,
+//! does not change that. This crate does not judge the evidence it is handed -- it does
+//! not decide what counts as evidence, and does not refuse a commit for the evidence being
+//! weak, only for the workspace having moved. It only stops being silent about how the
+//! caller says it knows, floored at [`nomos_model::EvidenceClass::AgentJudged`] when
+//! nothing stronger is offered.
 #![forbid(unsafe_code)]
 
 mod candidate;

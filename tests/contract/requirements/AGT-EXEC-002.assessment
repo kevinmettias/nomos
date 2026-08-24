@@ -1,0 +1,24 @@
+# The assessment of AGT-EXEC-002 against this build. The requirement identifier is this
+# file's stem and appears nowhere inside it, because a second place to spell the identity
+# is a second place for it to be wrong -- the rule OD-SPEC-007 chose for a record
+# registration, and CHK-003.assessment states for this registry.
+#
+# AGT-EXEC-002: "Agent runs shall declare filesystem scope, network policy, executable
+# allowlist, secret access, environment variables, process limits, model-provider/
+# data-retention policy, and maximum patch/artifact size." Eight declared dimensions.
+#
+# `Territory` (nomos-ledger) already declares the first: an item's `paths` name exactly
+# what a claiming agent's run is scoped to touch, checked for overlap against every other
+# claim before either may proceed. It is a real, tested, load-bearing declaration -- not an
+# aspiration -- and it is what an agent's own run is bound by in this workspace today,
+# since claiming and working a ledger item is the concrete shape an "agent run" already
+# takes here.
+#
+# The other seven -- network policy, executable allowlist, secret access, environment
+# variables, process limits, model-provider/data-retention policy, maximum patch/artifact
+# size -- have no declared shape anywhere. `Claim`, the type that actually represents one
+# agent holding one run, carries only who holds it and when the lease lapses; nothing about
+# what that run may reach beyond its territory.
+verdict: Partial
+site: crates/substrate/nomos-ledger/src/territory.rs#Territory
+gap: crates/substrate/nomos-ledger/src/claim.rs#Claim
