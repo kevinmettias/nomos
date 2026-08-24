@@ -68,6 +68,12 @@
 //! [`ModelInputAssemblyIdentity`]'s own doc comment already gives -- `ExecutionScope`
 //! is one more field contributed to its eventual assembly, not a license to type a
 //! partial wrapper now.
+//!
+//! # An eighth maturity: validation-failure and telemetry vocabulary
+//!
+//! [`WorkflowValidationFailure`], [`ModelExecutionTelemetry`] and
+//! [`PipelineStage`]/[`TelemetryJunction`] answer `MODEL-ROUTE-009`, `010` and `016`,
+//! on the same `OD-PACKAGE-011` v3 licensing.
 
 #![forbid(unsafe_code)]
 
@@ -82,6 +88,7 @@ mod fallback_admissibility;
 mod fallback_transition_trace;
 mod manifest;
 mod model_execution_profile;
+mod model_execution_telemetry;
 mod model_input_assembly_identity;
 mod model_selection;
 mod model_selector;
@@ -91,6 +98,8 @@ mod routing_replay_disposition;
 mod rule_model_configuration;
 mod runtime_candidate_disqualification;
 mod selector_specificity;
+mod telemetry_junction;
+mod workflow_validation_failure;
 
 pub use assembly_component_availability::AssemblyComponentAvailability;
 pub use budget_estimate::{BudgetEstimate, CheckOrFixStage};
@@ -103,6 +112,7 @@ pub use fallback_admissibility::FallbackAdmissibility;
 pub use fallback_transition_trace::{DisqualificationEligibility, FallbackTransitionTrace};
 pub use manifest::ModelRoutePackage;
 pub use model_execution_profile::ModelExecutionProfile;
+pub use model_execution_telemetry::ModelExecutionTelemetry;
 pub use model_input_assembly_identity::ModelInputAssemblyIdentity;
 pub use model_selection::ModelSelection;
 pub use model_selector::ModelSelector;
@@ -113,3 +123,5 @@ pub use routing_replay_disposition::{ReplayFacts, RoutingReplayDisposition};
 pub use rule_model_configuration::RuleModelConfiguration;
 pub use runtime_candidate_disqualification::{DisqualificationReason, RuntimeCandidateDisqualification};
 pub use selector_specificity::SelectorSpecificity;
+pub use telemetry_junction::{PipelineStage, TelemetryJunction};
+pub use workflow_validation_failure::WorkflowValidationFailure;

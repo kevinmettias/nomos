@@ -4,7 +4,9 @@ pub const fn nomos_model_package::ExecutionScope::Label(self) -> &'static str
 pub const fn nomos_model_package::FallbackAdmissibility::Permits(&self, changed: &Self) -> bool
 pub const fn nomos_model_package::MappingQuality::Label(self) -> &'static str
 pub const fn nomos_model_package::ModelExecutionProfile::New(selector: ModelSelector, effort: EffortLevel) -> Self
+pub const fn nomos_model_package::PipelineStage::Label(self) -> &'static str
 pub const fn nomos_model_package::SelectorSpecificity::Label(self) -> &'static str
+pub const fn nomos_model_package::WorkflowValidationFailure::Label(self) -> &'static str
 pub const nomos_model_package::SCHEMA_VERSION: u32
 pub enum nomos_model_package::AssemblyComponentAvailability
 pub enum nomos_model_package::CandidateFitAdjustment
@@ -19,8 +21,10 @@ pub enum nomos_model_package::MappingQuality
 pub enum nomos_model_package::ModelSelection
 pub enum nomos_model_package::ModelSelector
 pub enum nomos_model_package::OutputDeterminismValue
+pub enum nomos_model_package::PipelineStage
 pub enum nomos_model_package::RoutingReplayDisposition
 pub enum nomos_model_package::SelectorSpecificity
+pub enum nomos_model_package::WorkflowValidationFailure
 pub enum variant nomos_model_package::AssemblyComponentAvailability::ExecutorControlled
 pub enum variant nomos_model_package::AssemblyComponentAvailability::Missing
 pub enum variant nomos_model_package::AssemblyComponentAvailability::ProviderHidden
@@ -94,6 +98,15 @@ pub enum variant nomos_model_package::OutputDeterminismValue::HumanVariable
 pub enum variant nomos_model_package::OutputDeterminismValue::ProviderBestEffort
 pub enum variant nomos_model_package::OutputDeterminismValue::SeedControlled
 pub enum variant nomos_model_package::OutputDeterminismValue::Unknown
+pub enum variant nomos_model_package::PipelineStage::AuthorityResolution
+pub enum variant nomos_model_package::PipelineStage::Compression
+pub enum variant nomos_model_package::PipelineStage::Deduplication
+pub enum variant nomos_model_package::PipelineStage::Filtering
+pub enum variant nomos_model_package::PipelineStage::ModelInference
+pub enum variant nomos_model_package::PipelineStage::PostResponseValidation
+pub enum variant nomos_model_package::PipelineStage::PromptOrTaskEnvelopeProjection
+pub enum variant nomos_model_package::PipelineStage::RequestConstruction
+pub enum variant nomos_model_package::PipelineStage::Retrieval
 pub enum variant nomos_model_package::RoutingReplayDisposition::BestEffort { reasons: Vec<String>, }
 pub enum variant nomos_model_package::RoutingReplayDisposition::ConfigurationEquivalent { reasons: Vec<String>, }
 pub enum variant nomos_model_package::RoutingReplayDisposition::Exact
@@ -104,20 +117,31 @@ pub enum variant nomos_model_package::SelectorSpecificity::ExactRuleCheckIdentit
 pub enum variant nomos_model_package::SelectorSpecificity::InheritedDefault
 pub enum variant nomos_model_package::SelectorSpecificity::RuleFamilySelectorPlusStage
 pub enum variant nomos_model_package::SelectorSpecificity::TaskClassSelector
+pub enum variant nomos_model_package::WorkflowValidationFailure::ContextLimitViolation
+pub enum variant nomos_model_package::WorkflowValidationFailure::IncompatibleEffortLevel
+pub enum variant nomos_model_package::WorkflowValidationFailure::MissingFallbackRoute
+pub enum variant nomos_model_package::WorkflowValidationFailure::ProhibitedBackendCombination
+pub enum variant nomos_model_package::WorkflowValidationFailure::UnavailableModel
+pub enum variant nomos_model_package::WorkflowValidationFailure::UnobservableUsageOrCostRequirement
+pub enum variant nomos_model_package::WorkflowValidationFailure::UnsupportedStructuredOutputGuarantee
 pub fn nomos_model_package::DisqualificationReason::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_model_package::EffortLevel::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_model_package::ExecutionScope::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_model_package::ManifestError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_model_package::MappingQuality::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_model_package::Parse_Manifest(text: &str, at: &str) -> Result<ModelRoutePackage, ManifestError>
+pub fn nomos_model_package::PipelineStage::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_model_package::Read_Manifest(path: &Path) -> Result<ModelRoutePackage, ManifestError>
 pub fn nomos_model_package::SelectorSpecificity::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_model_package::WorkflowValidationFailure::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub impl nomos_model_package::DisqualificationReason implements core::fmt::Display
 pub impl nomos_model_package::EffortLevel implements core::fmt::Display
 pub impl nomos_model_package::ExecutionScope implements core::fmt::Display
 pub impl nomos_model_package::ManifestError implements core::fmt::Display
 pub impl nomos_model_package::MappingQuality implements core::fmt::Display
+pub impl nomos_model_package::PipelineStage implements core::fmt::Display
 pub impl nomos_model_package::SelectorSpecificity implements core::fmt::Display
+pub impl nomos_model_package::WorkflowValidationFailure implements core::fmt::Display
 pub struct field nomos_model_package::AuthorizedCandidateFitAdjustment::adjustment: CandidateFitAdjustment
 pub struct field nomos_model_package::AuthorizedCandidateFitAdjustment::authorization: ChangeAuthorization
 pub struct field nomos_model_package::AuthorizedCandidateFitAdjustment::result: ModelInputAssemblyIdentity
@@ -155,6 +179,19 @@ pub struct field nomos_model_package::FallbackTransitionTrace::fallback_decision
 pub struct field nomos_model_package::FallbackTransitionTrace::original_candidate: String
 pub struct field nomos_model_package::ModelExecutionProfile::effort: EffortLevel
 pub struct field nomos_model_package::ModelExecutionProfile::selector: ModelSelector
+pub struct field nomos_model_package::ModelExecutionTelemetry::backend_executor_package: String
+pub struct field nomos_model_package::ModelExecutionTelemetry::cost: String
+pub struct field nomos_model_package::ModelExecutionTelemetry::effort: EffortLevel
+pub struct field nomos_model_package::ModelExecutionTelemetry::fallback_lineage: Vec<String>
+pub struct field nomos_model_package::ModelExecutionTelemetry::inherited_settings: Vec<String>
+pub struct field nomos_model_package::ModelExecutionTelemetry::latency: String
+pub struct field nomos_model_package::ModelExecutionTelemetry::model_identity: String
+pub struct field nomos_model_package::ModelExecutionTelemetry::overrides: Vec<String>
+pub struct field nomos_model_package::ModelExecutionTelemetry::parameters: Vec<String>
+pub struct field nomos_model_package::ModelExecutionTelemetry::rejected_candidates: Vec<String>
+pub struct field nomos_model_package::ModelExecutionTelemetry::retries: u32
+pub struct field nomos_model_package::ModelExecutionTelemetry::selection_rationale: String
+pub struct field nomos_model_package::ModelExecutionTelemetry::usage: String
 pub struct field nomos_model_package::ModelInputAssemblyIdentity::composite_skill_context_generator_identity_and_version: String
 pub struct field nomos_model_package::ModelInputAssemblyIdentity::filtering_strategy_identities_and_versions: Vec<String>
 pub struct field nomos_model_package::ModelInputAssemblyIdentity::final_request_envelope_hash: String
@@ -181,6 +218,13 @@ pub struct field nomos_model_package::ReplayFacts::live_operation_disposition: R
 pub struct field nomos_model_package::RuleModelConfiguration::check: ModelExecutionProfile
 pub struct field nomos_model_package::RuleModelConfiguration::fix: ModelExecutionProfile
 pub struct field nomos_model_package::RuntimeCandidateDisqualification::reason: DisqualificationReason
+pub struct field nomos_model_package::TelemetryJunction::cache: Option<String>
+pub struct field nomos_model_package::TelemetryJunction::caused_by: Option<String>
+pub struct field nomos_model_package::TelemetryJunction::evidence_status: Option<String>
+pub struct field nomos_model_package::TelemetryJunction::latency: Option<String>
+pub struct field nomos_model_package::TelemetryJunction::resource: Option<String>
+pub struct field nomos_model_package::TelemetryJunction::stage: PipelineStage
+pub struct field nomos_model_package::TelemetryJunction::usage: Option<String>
 pub struct nomos_model_package::AuthorizedCandidateFitAdjustment
 pub struct nomos_model_package::BudgetEstimate
 pub struct nomos_model_package::EffortMappingRecord
@@ -188,12 +232,14 @@ pub struct nomos_model_package::ExecutorExposure
 pub struct nomos_model_package::FallbackAdmissibility
 pub struct nomos_model_package::FallbackTransitionTrace
 pub struct nomos_model_package::ModelExecutionProfile
+pub struct nomos_model_package::ModelExecutionTelemetry
 pub struct nomos_model_package::ModelInputAssemblyIdentity
 pub struct nomos_model_package::ModelRoutePackage
 pub struct nomos_model_package::OutputDeterminismExpectation
 pub struct nomos_model_package::ReplayFacts
 pub struct nomos_model_package::RuleModelConfiguration
 pub struct nomos_model_package::RuntimeCandidateDisqualification
+pub struct nomos_model_package::TelemetryJunction
 
 # re-exports of items declared outside this crate
 pub use nomos_package::PackageVersion
