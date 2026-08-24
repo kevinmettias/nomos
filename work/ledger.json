@@ -28231,6 +28231,65 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-MODEL-ROUTE-021-023-027-028-VALIDATION-DIAGNOSTICS",
+      "title": "nomos-model-package gains a ninth maturity: MODEL-ROUTE-021/023/027/028's named validation diagnostics",
+      "why": "Licensed by OD-PACKAGE-011 v3's per-id split; the four strongest of the 021-028 validation-diagnostics family, coordinated with a concurrent peer session (nomos-b7, landed the 009/010/016 eighth maturity in 4fab691) to close out the remaining licensed-25 backlog. MODEL-ROUTE-021 names ShadowedProfile directly ('A ShadowedProfile diagnostic shall identify the winning profile or policy that dominates every possible match, the affected fields, and whether the shadowing is intentional, redundant, or erroneous') -- a clean three-item enumeration sentence. MODEL-ROUTE-023 names EqualSpecificityConflict directly with an explicit 'shall enumerate' five-item list (conflicting profile IDs, fields, selectors, authority, candidate operations). MODEL-ROUTE-027 names both ImpossibleTelemetryGuarantee and ImpossibleReplayRequirement directly, tied to an eight-item guarantee-dimension list in the same clause that produces them. MODEL-ROUTE-028 gives ValidationDiagnostic no proper noun but a clean 'each diagnostic shall state' six-item field enumeration -- the same naming pattern EffortLevel itself used (the corpus closes the value/field list; this workspace supplies the type name), not weaker grounding for lacking one. remediation stays a raw String rather than a closed enum: 'such as' marks the corpus's own remediation list as illustrative, not exhaustive, unlike every closed list built this session.",
+      "done_when": "crates/packages/nomos-model-package/src/shadowed_profile.rs, equal_specificity_conflict.rs, telemetry_guarantee.rs, and validation_diagnostic.rs exist. ShadowedProfile has dominant/affected_fields/classification: ShadowClassification (Intentional/Redundant/Erroneous). EqualSpecificityConflict has MODEL-ROUTE-023's five enumerated fields. TelemetryGuaranteeKind has MODEL-ROUTE-027's eight named dimensions; ImpossibleTelemetryGuarantee wraps one; ImpossibleReplayRequirement is a unit marker. ValidationDiagnostic has MODEL-ROUTE-028's six fields (severity, blocking, affected_operations, evidence, candidates: CandidateOutcome, remediation: String); CandidateOutcome is Winning(Vec<String>)/Missing(Vec<String>). All re-exported from lib.rs. cargo test -p nomos-model-package passes. cargo test --no-fail-fast -p nomos-contract-tests passes with tests/contract/surface/nomos-model-package.txt reblessed. cargo clippy --workspace --all-targets exits 0.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/packages/nomos-model-package/src/lib.rs",
+          "crates/packages/nomos-model-package/src/shadowed_profile.rs",
+          "crates/packages/nomos-model-package/src/equal_specificity_conflict.rs",
+          "crates/packages/nomos-model-package/src/telemetry_guarantee.rs",
+          "crates/packages/nomos-model-package/src/validation_diagnostic.rs",
+          "tests/contract/surface/nomos-model-package.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "Cited_Rule ... ok\ntest Test_Every_Cited_Record_Should_Still_Exist ... ok\ntest Test_Every_Cited_Version_Should_Match_The_Records_Own_Front_Matter ... ok\ntest Test_A_Mismatched_Version_Should_Fail_The_Comparison ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 5 tests\ntest Test_A_Lowered_Declaration_Should_Fail_The_Comparison ... ok\ntest Test_A_Matching_Declaration_Should_Pass_The_Comparison ... ok\ntest Test_An_Unrelated_Minor_Version_Should_Fail_The_Comparison ... ok\ntest Test_The_Real_Workflow_Should_Still_Have_The_Install_Step ... ok\ntest Test_The_Declared_Floor_Should_Match_The_Toolchain_The_Gate_Installs ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.11s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-06ab25b0491e144c.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-4c32ae08be8df958.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-9350d088b8d6ed0d.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-9ca3879aab70176f.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-308fef82df004321.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-f6f7228f8cfa874c.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-ea500c062215f506.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-790c8c5856e63fa5.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-98429b682798ce96.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-c1e906054609f777.exe)\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1787595868,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "4fab69123e8d9465dbb006d9f6bdcd6eb193ced1"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

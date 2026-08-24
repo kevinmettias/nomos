@@ -74,6 +74,15 @@
 //! [`WorkflowValidationFailure`], [`ModelExecutionTelemetry`] and
 //! [`PipelineStage`]/[`TelemetryJunction`] answer `MODEL-ROUTE-009`, `010` and `016`,
 //! on the same `OD-PACKAGE-011` v3 licensing.
+//!
+//! # A ninth maturity: named validation diagnostics
+//!
+//! [`ShadowedProfile`], [`EqualSpecificityConflict`],
+//! [`TelemetryGuaranteeKind`]/[`ImpossibleTelemetryGuarantee`]/
+//! [`ImpossibleReplayRequirement`] and [`ValidationDiagnostic`]/[`CandidateOutcome`]
+//! answer `MODEL-ROUTE-021`, `023`, `027` and `028` -- the four strongest of the
+//! `021`-`028` validation-diagnostics family, each with a dedicated corpus sentence
+//! that closes its own field or value list.
 
 #![forbid(unsafe_code)]
 
@@ -82,6 +91,7 @@ mod budget_estimate;
 mod candidate_fit_adjustment;
 mod effort_level;
 mod effort_mapping;
+mod equal_specificity_conflict;
 mod execution_scope;
 mod executor_exposure;
 mod fallback_admissibility;
@@ -98,7 +108,10 @@ mod routing_replay_disposition;
 mod rule_model_configuration;
 mod runtime_candidate_disqualification;
 mod selector_specificity;
+mod shadowed_profile;
+mod telemetry_guarantee;
 mod telemetry_junction;
+mod validation_diagnostic;
 mod workflow_validation_failure;
 
 pub use assembly_component_availability::AssemblyComponentAvailability;
@@ -106,6 +119,7 @@ pub use budget_estimate::{BudgetEstimate, CheckOrFixStage};
 pub use candidate_fit_adjustment::{AuthorizedCandidateFitAdjustment, CandidateFitAdjustment, ChangeAuthorization};
 pub use effort_level::EffortLevel;
 pub use effort_mapping::{EffortMappingRecord, MappingQuality};
+pub use equal_specificity_conflict::EqualSpecificityConflict;
 pub use execution_scope::ExecutionScope;
 pub use executor_exposure::ExecutorExposure;
 pub use fallback_admissibility::FallbackAdmissibility;
@@ -123,5 +137,8 @@ pub use routing_replay_disposition::{ReplayFacts, RoutingReplayDisposition};
 pub use rule_model_configuration::RuleModelConfiguration;
 pub use runtime_candidate_disqualification::{DisqualificationReason, RuntimeCandidateDisqualification};
 pub use selector_specificity::SelectorSpecificity;
+pub use shadowed_profile::{ShadowClassification, ShadowedProfile};
+pub use telemetry_guarantee::{ImpossibleReplayRequirement, ImpossibleTelemetryGuarantee, TelemetryGuaranteeKind};
 pub use telemetry_junction::{PipelineStage, TelemetryJunction};
+pub use validation_diagnostic::{CandidateOutcome, ValidationDiagnostic};
 pub use workflow_validation_failure::WorkflowValidationFailure;
