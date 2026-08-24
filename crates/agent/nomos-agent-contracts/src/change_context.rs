@@ -1,0 +1,106 @@
+//! The Nomos-resolved half of `AGT-007`'s `PrepareChangeContext` operation.
+
+use std::collections::BTreeMap;
+
+use nomos_contracts::{Applicability, BuildVariantId, CapabilityId, RuleId, SnapshotId, SubjectId};
+use nomos_ledger::{Territory, VerificationPredicate};
+use serde::{Deserialize, Serialize};
+
+/// `AGT-007`: "Nomos shall expose a read-only `PrepareChangeContext` operation...
+/// Given a pinned repository snapshot plus a symbol, selected scope, or task
+/// description, it shall combine `KnowledgeWorkbench` architecture context, claims,
+/// design decisions, examples, contradictions, and historical evidence with
+/// Nomos-resolved applicability, permitted scope, required verification, prohibited
+/// actions, evidence gaps, approved capabilities, and task-envelope inputs."
+///
+/// Only the Nomos-resolved half. The `KnowledgeWorkbench`-sourced half (architecture
+/// context, claims, decisions, examples, contradictions, historical evidence) belongs
+/// to the sibling product per `ARC-ECOSYSTEM-001` -- a composing layer pairs this type
+/// with that other, separately-owned half to form the full composite result. Every
+/// item in that other half must stay attributed to `KnowledgeWorkbench`'s own
+/// namespace and must never be represented as this type's content.
+///
+/// `evidence_gaps` is deliberately omitted: `AGT-007` names it as one of the seven
+/// Nomos-resolved ingredients, but the only place the corpus gives `EvidenceGap` a
+/// concrete shape is the unrelated `OBS-002` evidence cluster, a different
+/// requirement's territory that is itself unbuilt anywhere in this workspace.
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+pub struct NomosResolvedChangeContext
+{
+    /// "a pinned repository snapshot" (`AGT-007`).
+    pub snapshot: SnapshotId,
+    /// "for a pinned snapshot and build variant" (`PrepareChangeContext`'s canonical
+    /// model, `02-core-architecture-identity-and-configuration.md`).
+    pub variant: BuildVariantId,
+    /// "a symbol, selected scope, or task description" (`AGT-007`) -- the request
+    /// this context was resolved for, echoed back in the result.
+    pub requested: ChangeContextSubject,
+    /// "Nomos-resolved applicability" (`AGT-007`) / "effective applicability"
+    /// (canonical model) -- per matched rule, for the requested scope.
+    pub applicability: BTreeMap<RuleId, Applicability>,
+    /// "permitted scope" (`AGT-007`) / "Nomos-resolved scope" (canonical model).
+    pub permitted_scope: Territory,
+    /// "required verification" (`AGT-007`, canonical model, and workflow 9.21).
+    pub required_verification: Vec<VerificationPredicate>,
+    /// "prohibited actions" (`AGT-007`, canonical model, 9.21). Free-text: the only
+    /// concrete shape the corpus gives this field is `ChangeIntent`'s worked example
+    /// ("Prohibited effects: removing existing strategies; changing workspace
+    /// topology; ..."), a sentence rather than a closed enum.
+    pub prohibited_actions: Vec<String>,
+    /// "approved capabilities" (`AGT-007`) / "permitted capabilities" (canonical
+    /// model).
+    pub approved_capabilities: Vec<CapabilityId>,
+}
+
+/// What a [`NomosResolvedChangeContext`] was resolved for -- `AGT-007`'s own "a
+/// symbol, selected scope, or task description", each transcribed as the existing
+/// type that already names that concept in this workspace.
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+pub enum ChangeContextSubject
+{
+    Symbol(SubjectId),
+    Scope(Territory),
+    TaskDescription(String),
+}
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use nomos_contracts::Digest128;
+
+    #[test]
+    fn Test_A_Context_Carries_Exactly_What_It_Was_Given()
+    {
+        let mut applicability = BTreeMap::new();
+        applicability.insert(RuleId::New("check-naming-convention"), Applicability::Supported);
+
+        let context = NomosResolvedChangeContext {
+            snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([3; Digest128::BYTE_LENGTH])),
+            variant: BuildVariantId::From_Digest(Digest128::From_Bytes([4; Digest128::BYTE_LENGTH])),
+            requested: ChangeContextSubject::TaskDescription("close AGT-007's gap".to_owned()),
+            applicability,
+            permitted_scope: Territory::Of_Files(["crates/agent/nomos-agent-contracts"]),
+            required_verification: vec![VerificationPredicate::New(vec!["cargo".to_owned(), "test".to_owned(), "-p".to_owned(), "nomos-agent-contracts".to_owned()])],
+            prohibited_actions: vec!["removing existing strategies".to_owned()],
+            approved_capabilities: vec![CapabilityId::New("nomos.cap.example.change_context_test_only")],
+        };
+
+        assert_eq!(context.applicability.len(), 1);
+        assert_eq!(context.permitted_scope.paths, ["crates/agent/nomos-agent-contracts"]);
+        assert_eq!(context.required_verification.len(), 1);
+        assert_eq!(context.prohibited_actions, ["removing existing strategies"]);
+        assert_eq!(context.approved_capabilities.len(), 1);
+    }
+
+    #[test]
+    fn Test_A_Subject_May_Be_A_Symbol_A_Scope_Or_A_Task_Description()
+    {
+        let symbol = ChangeContextSubject::Symbol(SubjectId::From_Digest(Digest128::From_Bytes([5; Digest128::BYTE_LENGTH])));
+        let scope = ChangeContextSubject::Scope(Territory::Of_Files(["crates/agent"]));
+        let task = ChangeContextSubject::TaskDescription("add a test".to_owned());
+
+        assert_ne!(symbol, scope);
+        assert_ne!(scope, task);
+    }
+}

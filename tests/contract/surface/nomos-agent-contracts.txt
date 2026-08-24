@@ -1,3 +1,15 @@
+pub enum nomos_agent_contracts::ChangeContextSubject
+pub enum variant nomos_agent_contracts::ChangeContextSubject::Scope(Territory)
+pub enum variant nomos_agent_contracts::ChangeContextSubject::Symbol(SubjectId)
+pub enum variant nomos_agent_contracts::ChangeContextSubject::TaskDescription(String)
+pub struct field nomos_agent_contracts::NomosResolvedChangeContext::applicability: BTreeMap<RuleId, Applicability>
+pub struct field nomos_agent_contracts::NomosResolvedChangeContext::approved_capabilities: Vec<CapabilityId>
+pub struct field nomos_agent_contracts::NomosResolvedChangeContext::permitted_scope: Territory
+pub struct field nomos_agent_contracts::NomosResolvedChangeContext::prohibited_actions: Vec<String>
+pub struct field nomos_agent_contracts::NomosResolvedChangeContext::requested: ChangeContextSubject
+pub struct field nomos_agent_contracts::NomosResolvedChangeContext::required_verification: Vec<VerificationPredicate>
+pub struct field nomos_agent_contracts::NomosResolvedChangeContext::snapshot: SnapshotId
+pub struct field nomos_agent_contracts::NomosResolvedChangeContext::variant: BuildVariantId
 pub struct field nomos_agent_contracts::TaskEnvelope::applicable_rules: Vec<RuleId>
 pub struct field nomos_agent_contracts::TaskEnvelope::available_tools: Vec<CapabilityId>
 pub struct field nomos_agent_contracts::TaskEnvelope::expected_output_schema: SchemaId
@@ -11,5 +23,6 @@ pub struct field nomos_agent_contracts::WorkResult::plan: CorrectionPlan
 pub struct field nomos_agent_contracts::WorkResult::requested_verification: Option<VerificationPredicate>
 pub struct field nomos_agent_contracts::WorkResult::tests: Vec<VerificationPredicate>
 pub struct field nomos_agent_contracts::WorkResult::unresolved_questions: Vec<String>
+pub struct nomos_agent_contracts::NomosResolvedChangeContext
 pub struct nomos_agent_contracts::TaskEnvelope
 pub struct nomos_agent_contracts::WorkResult

@@ -27885,6 +27885,62 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-AGT-007-CHANGE-CONTEXT",
+      "title": "nomos-agent-contracts gains AGT-007: NomosResolvedChangeContext, the Nomos-resolved half of PrepareChangeContext",
+      "why": "AGT-007's PrepareChangeContext splits across two products per ARC-ECOSYSTEM-001: the KnowledgeWorkbench-sourced half (architecture context, claims, decisions, examples, contradictions, historical evidence) belongs to the sibling product; only the Nomos-resolved half (permitted scope, applicable rules and their effective applicability, required verification, prohibited actions, approved capabilities, for a pinned snapshot/variant and a symbol/scope/task subject) is this product's to build. tests/contract/requirements/AGT-007.assessment (verdict Partial) confirms no operation named or shaped like PrepareChangeContext exists anywhere and that nomos-api's three handlers take no symbol/scope/task input. This session's earlier design-workflow audit proposed this shape for nomos-contracts (band 0), but that placement is wrong: two of its fields (permitted_scope: Territory, required_verification: Vec<VerificationPredicate>) are nomos_ledger types (band 20), which band 0 cannot depend on (nomos-contracts 'depends on serde and nothing else', OD-CONTRACTS-001) -- the same band violation already caught once for BuildVariant, but not caught for these two fields in the original proposal. The correct home is nomos-agent-contracts (band 36, built this session for AGT-001/002), which already depends downward on both nomos-ledger and nomos-contracts and already reuses Territory/VerificationPredicate for the closely related TaskEnvelope/WorkResult types -- this is a natural third type in the same crate, not a new band-0 admission question at all.",
+      "done_when": "crates/agent/nomos-agent-contracts/src/change_context.rs exists with NomosResolvedChangeContext (snapshot: SnapshotId, variant: BuildVariantId, requested: ChangeContextSubject, applicability: BTreeMap<RuleId, Applicability>, permitted_scope: Territory, required_verification: Vec<VerificationPredicate>, prohibited_actions: Vec<String>, approved_capabilities: Vec<CapabilityId>) and ChangeContextSubject (Symbol(SubjectId), Scope(Territory), TaskDescription(String)). evidence_gaps is documented as deliberately omitted (EvidenceGap has no built shape anywhere in this workspace, a different requirement's territory). Re-exported from lib.rs. cargo test -p nomos-agent-contracts passes. cargo test --no-fail-fast -p nomos-contract-tests passes with tests/contract/surface/nomos-agent-contracts.txt reblessed. cargo clippy --workspace --all-targets exits 0.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/agent/nomos-agent-contracts/src/lib.rs",
+          "crates/agent/nomos-agent-contracts/src/change_context.rs",
+          "tests/contract/surface/nomos-agent-contracts.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "Cited_Rule ... ok\ntest Test_Every_Cited_Record_Should_Still_Exist ... ok\ntest Test_Every_Cited_Version_Should_Match_The_Records_Own_Front_Matter ... ok\ntest Test_A_Mismatched_Version_Should_Fail_The_Comparison ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 5 tests\ntest Test_A_Lowered_Declaration_Should_Fail_The_Comparison ... ok\ntest Test_An_Unrelated_Minor_Version_Should_Fail_The_Comparison ... ok\ntest Test_A_Matching_Declaration_Should_Pass_The_Comparison ... ok\ntest Test_The_Real_Workflow_Should_Still_Have_The_Install_Step ... ok\ntest Test_The_Declared_Floor_Should_Match_The_Toolchain_The_Gate_Installs ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.11s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-06ab25b0491e144c.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-4c32ae08be8df958.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-9350d088b8d6ed0d.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-9ca3879aab70176f.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-308fef82df004321.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-f6f7228f8cfa874c.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-ea500c062215f506.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-790c8c5856e63fa5.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-98429b682798ce96.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-c1e906054609f777.exe)\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1787594526,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "28495af19adb91bccd1735ce6bcbf64d5379fa00"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
