@@ -5,10 +5,13 @@ pub const fn nomos_corrections::CommittedPlan::Mutation_Class(&self) -> Mutation
 pub const fn nomos_corrections::CorrectionCandidate::Change(&self) -> &ChangeSet
 pub const fn nomos_corrections::CorrectionCandidate::Class(&self) -> CorrectionClass
 pub const fn nomos_corrections::CorrectionCandidate::Id(&self) -> CorrectionId
+pub const fn nomos_corrections::CorrectionChoice::Selected(&self) -> CorrectionId
 pub const fn nomos_corrections::CorrectionClass::Label(self) -> &'static str
 pub const fn nomos_corrections::CorrectionId::Digest(&self) -> Digest128
 pub const fn nomos_corrections::CorrectionId::From_Digest(digest: Digest128) -> Self
 pub const fn nomos_corrections::Preview::Mutation_Class(&self) -> MutationClass
+pub const fn nomos_corrections::RankingCriterion::Label(self) -> &'static str
+pub const fn nomos_corrections::ReviewReason::Label(self) -> &'static str
 pub const fn nomos_corrections::StagedPlan::Base(&self) -> SnapshotId
 pub const fn nomos_corrections::StagedPlan::Mutation_Class(&self) -> MutationClass
 pub const fn nomos_corrections::ValidatedPlan::Mutation_Class(&self) -> MutationClass
@@ -18,7 +21,10 @@ pub const nomos_corrections::CorrectionStaging::STRENGTH: DeterminismStrength
 pub const nomos_corrections::CorrectionStaging::TRACE: TraceEquivalence
 pub enum nomos_corrections::CandidateLabel
 pub enum nomos_corrections::CorrectionClass
+pub enum nomos_corrections::CorrectionDecision
 pub enum nomos_corrections::CorrectionError
+pub enum nomos_corrections::RankingCriterion
+pub enum nomos_corrections::ReviewReason
 pub enum variant nomos_corrections::CandidateLabel::AgentProposed
 pub enum variant nomos_corrections::CandidateLabel::Architectural
 pub enum variant nomos_corrections::CandidateLabel::BehaviorPreserving
@@ -30,11 +36,25 @@ pub enum variant nomos_corrections::CorrectionClass::Agent
 pub enum variant nomos_corrections::CorrectionClass::Interactive
 pub enum variant nomos_corrections::CorrectionClass::Mechanical
 pub enum variant nomos_corrections::CorrectionClass::Proposed
+pub enum variant nomos_corrections::CorrectionDecision::Automatic(CorrectionChoice)
+pub enum variant nomos_corrections::CorrectionDecision::ReviewedProposal { candidates: Vec<CorrectionId>, reason: ReviewReason, }
 pub enum variant nomos_corrections::CorrectionError::Conflicting { paths: Vec<String>, }
 pub enum variant nomos_corrections::CorrectionError::Moved { expected: SnapshotId, found: SnapshotId, }
 pub enum variant nomos_corrections::CorrectionError::StaleCandidate { path: String, expected: Option<Digest128>, found: Option<Digest128>, }
 pub enum variant nomos_corrections::CorrectionError::Vacuous
 pub enum variant nomos_corrections::CorrectionError::Workspace(WorkspaceError)
+pub enum variant nomos_corrections::RankingCriterion::ApiStability
+pub enum variant nomos_corrections::RankingCriterion::ArchitectureFit
+pub enum variant nomos_corrections::RankingCriterion::BehaviorPreservation
+pub enum variant nomos_corrections::RankingCriterion::Confidence
+pub enum variant nomos_corrections::RankingCriterion::EditScope
+pub enum variant nomos_corrections::RankingCriterion::NormativeCorrectness
+pub enum variant nomos_corrections::RankingCriterion::Reversibility
+pub enum variant nomos_corrections::RankingCriterion::SecondaryFindings
+pub enum variant nomos_corrections::RankingCriterion::UserPreference
+pub enum variant nomos_corrections::RankingCriterion::VerificationCost
+pub enum variant nomos_corrections::ReviewReason::ChangesPublicBehaviorOrArchitecture
+pub enum variant nomos_corrections::ReviewReason::NoDominantCandidate
 pub fn nomos_corrections::CandidateLabel::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_corrections::ChangeSet::Edits(&self) -> &[Edit]
 pub fn nomos_corrections::ChangeSet::Empty() -> Self
@@ -46,6 +66,12 @@ pub fn nomos_corrections::CommittedPlan::Rollback(self, live: &mut Workspace) ->
 pub fn nomos_corrections::CorrectionCandidate::Description(&self) -> &str
 pub fn nomos_corrections::CorrectionCandidate::Labels(&self) -> &[CandidateLabel]
 pub fn nomos_corrections::CorrectionCandidate::New( description: impl Into<String>, change: ChangeSet, class: CorrectionClass, labels: Vec<CandidateLabel>, ) -> Self
+pub fn nomos_corrections::CorrectionChoice::New( selected: CorrectionId, objective_weights: Vec<(RankingCriterion, u32)>, rejected_alternatives: Vec<CorrectionId>, predicted_side_effects: Vec<String>, unresolved_tradeoffs: Vec<String>, verification_obligations: Vec<String>, ) -> Self
+pub fn nomos_corrections::CorrectionChoice::Objective_Weights(&self) -> &[(RankingCriterion, u32)]
+pub fn nomos_corrections::CorrectionChoice::Predicted_Side_Effects(&self) -> &[String]
+pub fn nomos_corrections::CorrectionChoice::Rejected_Alternatives(&self) -> &[CorrectionId]
+pub fn nomos_corrections::CorrectionChoice::Unresolved_Tradeoffs(&self) -> &[String]
+pub fn nomos_corrections::CorrectionChoice::Verification_Obligations(&self) -> &[String]
 pub fn nomos_corrections::CorrectionClass::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_corrections::CorrectionError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_corrections::CorrectionError::from(error: WorkspaceError) -> Self
@@ -61,6 +87,8 @@ pub fn nomos_corrections::Edit::New(path: impl Into<String>, before: Option<Stri
 pub fn nomos_corrections::Edit::Path(&self) -> &str
 pub fn nomos_corrections::Edit::Reverse(&self) -> Change
 pub fn nomos_corrections::Preview::Rendered(&self) -> &[u8]
+pub fn nomos_corrections::RankingCriterion::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_corrections::ReviewReason::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_corrections::StagedPlan::Validate(&self, live: &Workspace) -> Result<ValidatedPlan, CorrectionError>
 pub fn nomos_corrections::ValidatedPlan::Commit(self, live: &mut Workspace, evidence: Evidence) -> Result<CommittedPlan, CorrectionError>
 pub impl nomos_corrections::CandidateLabel implements core::fmt::Display
@@ -70,9 +98,12 @@ pub impl nomos_corrections::CorrectionError implements core::fmt::Display
 pub impl nomos_corrections::CorrectionError implements std::error::Error
 pub impl nomos_corrections::CorrectionId implements core::fmt::Display
 pub impl nomos_corrections::CorrectionStaging implements Strategy
+pub impl nomos_corrections::RankingCriterion implements core::fmt::Display
+pub impl nomos_corrections::ReviewReason implements core::fmt::Display
 pub struct nomos_corrections::ChangeSet
 pub struct nomos_corrections::CommittedPlan
 pub struct nomos_corrections::CorrectionCandidate
+pub struct nomos_corrections::CorrectionChoice
 pub struct nomos_corrections::CorrectionId(Digest128)
 pub struct nomos_corrections::CorrectionPlan
 pub struct nomos_corrections::CorrectionStaging
