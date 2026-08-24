@@ -1,6 +1,16 @@
+pub const fn nomos_model_package::EffortLevel::Label(self) -> &'static str
+pub const fn nomos_model_package::ModelExecutionProfile::New(selector: ModelSelector, effort: EffortLevel) -> Self
 pub const nomos_model_package::SCHEMA_VERSION: u32
+pub enum nomos_model_package::EffortLevel
 pub enum nomos_model_package::ManifestError
 pub enum nomos_model_package::ModelSelection
+pub enum nomos_model_package::ModelSelector
+pub enum variant nomos_model_package::EffortLevel::BackendDefault
+pub enum variant nomos_model_package::EffortLevel::High
+pub enum variant nomos_model_package::EffortLevel::Low
+pub enum variant nomos_model_package::EffortLevel::Maximum
+pub enum variant nomos_model_package::EffortLevel::Medium
+pub enum variant nomos_model_package::EffortLevel::Minimal
 pub enum variant nomos_model_package::ManifestError::EmptyList { at: String, field: String, }
 pub enum variant nomos_model_package::ManifestError::InvertedProtocolRange { at: String, }
 pub enum variant nomos_model_package::ManifestError::MalformedVersion { at: String, field: String, cause: String, }
@@ -15,15 +25,25 @@ pub enum variant nomos_model_package::ManifestError::WrongType { at: String, fie
 pub enum variant nomos_model_package::ModelSelection::Catalog(Vec<String>)
 pub enum variant nomos_model_package::ModelSelection::ExecutorControlled
 pub enum variant nomos_model_package::ModelSelection::Opaque
+pub enum variant nomos_model_package::ModelSelector::AllowedSet(Vec<String>)
+pub enum variant nomos_model_package::ModelSelector::BackendFamily(String)
+pub enum variant nomos_model_package::ModelSelector::CapabilityPredicate(String)
+pub enum variant nomos_model_package::ModelSelector::ExactIdentity { identity: String, pinned: bool, }
+pub enum variant nomos_model_package::ModelSelector::PolicyRankedCandidates(Vec<String>)
+pub fn nomos_model_package::EffortLevel::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_model_package::ManifestError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_model_package::Parse_Manifest(text: &str, at: &str) -> Result<ModelRoutePackage, ManifestError>
 pub fn nomos_model_package::Read_Manifest(path: &Path) -> Result<ModelRoutePackage, ManifestError>
+pub impl nomos_model_package::EffortLevel implements core::fmt::Display
 pub impl nomos_model_package::ManifestError implements core::fmt::Display
+pub struct field nomos_model_package::ModelExecutionProfile::effort: EffortLevel
+pub struct field nomos_model_package::ModelExecutionProfile::selector: ModelSelector
 pub struct field nomos_model_package::ModelRoutePackage::model_selection: ModelSelection
 pub struct field nomos_model_package::ModelRoutePackage::package_id: PackageId
 pub struct field nomos_model_package::ModelRoutePackage::package_kind: PackageKind
 pub struct field nomos_model_package::ModelRoutePackage::package_version: PackageVersion
 pub struct field nomos_model_package::ModelRoutePackage::protocol_range: ProtocolRange
+pub struct nomos_model_package::ModelExecutionProfile
 pub struct nomos_model_package::ModelRoutePackage
 
 # re-exports of items declared outside this crate
