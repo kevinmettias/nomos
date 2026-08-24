@@ -14,28 +14,42 @@
 # -- and `Requires_Explicit_Grant` gives a real, if binary, per-class authorization
 # distinction. It was simply never cited before now.
 #
-# But no operation anywhere in the live workspace actually carries or is checked against
-# `AuthorityClass` -- zero consumers outside its own declaring module -- and no
-# audit-requirement concept of any kind exists tied to authority. `Claim` (`nomos-ledger`,
-# the concrete shape an agent's run already takes here, per AGT-EXEC-002's own committed
-# assessment) carries who holds an item and when the lease lapses, nothing about which class
-# the held work exercises. `VerificationRecord` is the nearest real audit-shaped artifact
-# anywhere (argv, exit code, output tail, timestamp, gate, revision), but it is scoped to one
-# ledger item's finish-predicate verification, never keyed by `AuthorityClass`, and has no
-# counterpart for Propose/Approve/Publish, which have no implemented operation at all.
-# `nomos_corrections::ValidatedPlan::Commit` independently reinvents a state machine
-# (Stage -> Validate -> Commit -> Rollback) that structurally parallels `MutationClass`
-# (Preview -> Validate -> Apply -> Rollback), and OD-CORRECTIONS-002 just added `Evidence` to
-# it -- but `Commit` still takes no `AuthorityClass` and records nothing an auditor could call
-# a per-capability-class trail; that record's own "What This Does Not Do" section states
-# directly it "does not build AGT-EXEC-001's capability-class partitioning or
-# authorization/audit model," corroborating this finding independently. So "partitioned into
-# classes" is met at the type level while "separate authorization and audit requirements" has
-# no operational reality.
+# At the time of that re-check, no operation anywhere in the live workspace actually
+# carried or was checked against `AuthorityClass` -- zero consumers outside its own
+# declaring module. `nomos_corrections`' own Stage -> Validate -> Commit -> Rollback
+# lifecycle structurally parallels `MutationClass` (Preview -> Validate -> Apply ->
+# Rollback) almost exactly, and each of its real, tested lifecycle types (`Preview`,
+# `StagedPlan`, `ValidatedPlan`, `CommittedPlan`) now names its own `Mutation_Class`,
+# and `CommittedPlan::ROLLBACK_MUTATION_CLASS` names `Rollback`'s -- the first real
+# consumer `AuthorityClass`/`MutationClass` have had anywhere, closing the corrections
+# half of this requirement's own "partitioned into classes" clause down to the
+# operational level: `value.Mutation_Class().Required_Authority()` is a real,
+# tested, queryable `AuthorityClass` for a real operation today, not merely a type that
+# happens to exist. This is declared metadata carried alongside each value, the same
+# shape `CorrectionCandidate::Class`/`Labels` and `ValidatedPlan::Commit`'s `Evidence`
+# parameter already establish for this crate -- not an enforcement gate that refuses a
+# call lacking the right authority, which is the real remaining half of "separate
+# authorization ... requirements".
+#
+# `Claim` (`nomos-ledger`, the concrete shape an agent's run already takes here, per
+# AGT-EXEC-002's own committed assessment) still carries who holds an item and when the
+# lease lapses, nothing about which class the held work exercises -- deliberately not
+# touched by this build, since `Claim` is serialized into the shared, concurrently-held
+# `work/ledger.json` and a schema change there risks corrupting another live session's
+# read of the whole board, a different hazard than the population-of-zero caution
+# `OD-ROADMAP-001` retires. `VerificationRecord` is likewise untouched for the same
+# reason, and still has no counterpart for Propose/Approve/Publish, which have no
+# implemented operation at all. "Separate authorization and audit requirements" has real,
+# queryable operational reality for corrections' Preview/Validate/Apply/Rollback classes
+# now; it remains type-level only for the ledger-claim half of an agent's run, and
+# unbuilt entirely for Propose/Approve/Publish.
 verdict: Partial
 site: crates/contracts/nomos-contracts/src/authority/class.rs#AuthorityClass
 site: crates/contracts/nomos-contracts/src/authority/class.rs#Requires_Explicit_Grant
 site: crates/contracts/nomos-contracts/src/authority/mutation_class.rs#MutationClass
+site: crates/corrections/nomos-corrections/src/preview.rs#Mutation_Class
+site: crates/corrections/nomos-corrections/src/staged.rs#Mutation_Class
+site: crates/corrections/nomos-corrections/src/validated.rs#Mutation_Class
+site: crates/corrections/nomos-corrections/src/committed.rs#ROLLBACK_MUTATION_CLASS
 gap: crates/substrate/nomos-ledger/src/claim.rs#Claim
 gap: crates/substrate/nomos-ledger/src/verification/record.rs#VerificationRecord
-gap: crates/corrections/nomos-corrections/src/validated.rs#Commit

@@ -1,7 +1,7 @@
 //! A plan checked against a live workspace, and ready to be validated.
 
 use crate::{CorrectionError, CorrectionPlan, Edit, ValidatedPlan};
-use nomos_contracts::SnapshotId;
+use nomos_contracts::{MutationClass, SnapshotId};
 use nomos_model::Content_Digest;
 use nomos_workspace::{Change, ChangeSource, Workspace, WorkspaceChangeSet};
 
@@ -48,6 +48,16 @@ impl StagedPlan
     pub const fn Base(&self) -> SnapshotId
     {
         return self.base;
+    }
+
+    /// `AGT-EXEC-001`'s capability-class question, answered for this operation:
+    /// `nomos_contracts::MutationClass::Validate`, the same class
+    /// `CorrectionPlan::Stage` -- the method that produces a value of this type, by
+    /// checking every candidate's declared prior content against `base` -- belongs to.
+    #[must_use]
+    pub const fn Mutation_Class(&self) -> MutationClass
+    {
+        return MutationClass::Validate;
     }
 
     /// Checks the plan is still safe to commit: the workspace has not moved since staging.
@@ -110,7 +120,7 @@ pub(crate) fn Assert_Not_Moved(expected: SnapshotId, live: &Workspace) -> Result
 mod tests
 {
     use crate::{ChangeSet, CorrectionCandidate, CorrectionClass, CorrectionError, CorrectionPlan, Edit};
-    use nomos_contracts::{ConfigurationId, Digest128};
+    use nomos_contracts::{ConfigurationId, Digest128, MutationClass};
     use nomos_workspace::{BuildVariant, ChangeSource, Workspace, WorkspaceChangeSet};
 
     fn Base() -> Workspace
@@ -199,5 +209,21 @@ mod tests
         let refusal = staged.Validate(&base).expect_err("the workspace moved since staging");
 
         assert!(matches!(refusal, CorrectionError::Moved { .. }));
+    }
+
+    #[test]
+    fn Test_A_Staged_Plan_Belongs_To_The_Validate_Mutation_Class()
+    {
+        let base = Base();
+        let plan = CorrectionPlan::New(vec![CorrectionCandidate::New(
+            "fix a",
+            ChangeSet::Empty().With(Edit::New("a.rs", Some("old".to_owned()), Some("new".to_owned()))),
+            CorrectionClass::Mechanical,
+            vec![],
+        )])
+        .expect("a single candidate is a valid plan");
+        let staged = plan.Stage(&base).expect("stages cleanly");
+
+        assert_eq!(staged.Mutation_Class(), MutationClass::Validate);
     }
 }

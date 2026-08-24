@@ -1,6 +1,7 @@
 //! What a plan would do, rendered without touching any workspace.
 
 use crate::{CorrectionCandidate, CorrectionPlan, Edit};
+use nomos_contracts::MutationClass;
 
 /// A deterministic rendering of a plan's candidates and their edits.
 ///
@@ -32,6 +33,17 @@ impl Preview
     pub fn Rendered(&self) -> &[u8]
     {
         return &self.rendered;
+    }
+
+    /// `AGT-EXEC-001`'s capability-class question, answered for this operation:
+    /// `nomos_contracts::MutationClass::Preview`, the same class
+    /// `CorrectionPlan::Preview` -- the method that produces a value of this type --
+    /// belongs to. `Self::Mutation_Class().Required_Authority()` is the
+    /// `nomos_contracts::AuthorityClass` an actor would need to have called it.
+    #[must_use]
+    pub const fn Mutation_Class(&self) -> MutationClass
+    {
+        return MutationClass::Preview;
     }
 }
 
@@ -71,6 +83,7 @@ fn Render_Edit(rendered: &mut Vec<u8>, edit: &Edit)
 mod tests
 {
     use crate::{ChangeSet, CorrectionCandidate, CorrectionClass, CorrectionPlan, Edit};
+    use nomos_contracts::{AuthorityClass, MutationClass};
 
     #[test]
     fn Test_A_Preview_Names_Every_Candidate_And_Edit()
@@ -101,5 +114,24 @@ mod tests
         .expect("one candidate is a valid plan");
 
         assert_eq!(plan.Preview(), plan.Preview());
+    }
+
+    #[test]
+    fn Test_A_Preview_Belongs_To_The_Preview_Mutation_Class()
+    {
+        let plan = CorrectionPlan::New(vec![CorrectionCandidate::New(
+            "fix a",
+            ChangeSet::Empty().With(Edit::New("a.rs", None, Some("new".to_owned()))),
+            CorrectionClass::Mechanical,
+            vec![],
+        )])
+        .expect("one candidate is a valid plan");
+
+        assert_eq!(plan.Preview().Mutation_Class(), MutationClass::Preview);
+        assert_eq!(
+            plan.Preview().Mutation_Class().Required_Authority(),
+            AuthorityClass::Preview,
+            "previewing must never require Mutate authority, or callers skip it"
+        );
     }
 }

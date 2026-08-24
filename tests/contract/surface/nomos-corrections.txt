@@ -1,13 +1,18 @@
 pub const fn nomos_corrections::CandidateLabel::Label(self) -> &'static str
 pub const fn nomos_corrections::CommittedPlan::After(&self) -> SnapshotId
 pub const fn nomos_corrections::CommittedPlan::Base(&self) -> SnapshotId
+pub const fn nomos_corrections::CommittedPlan::Mutation_Class(&self) -> MutationClass
 pub const fn nomos_corrections::CorrectionCandidate::Change(&self) -> &ChangeSet
 pub const fn nomos_corrections::CorrectionCandidate::Class(&self) -> CorrectionClass
 pub const fn nomos_corrections::CorrectionCandidate::Id(&self) -> CorrectionId
 pub const fn nomos_corrections::CorrectionClass::Label(self) -> &'static str
 pub const fn nomos_corrections::CorrectionId::Digest(&self) -> Digest128
 pub const fn nomos_corrections::CorrectionId::From_Digest(digest: Digest128) -> Self
+pub const fn nomos_corrections::Preview::Mutation_Class(&self) -> MutationClass
 pub const fn nomos_corrections::StagedPlan::Base(&self) -> SnapshotId
+pub const fn nomos_corrections::StagedPlan::Mutation_Class(&self) -> MutationClass
+pub const fn nomos_corrections::ValidatedPlan::Mutation_Class(&self) -> MutationClass
+pub const nomos_corrections::CommittedPlan::ROLLBACK_MUTATION_CLASS: MutationClass
 pub const nomos_corrections::CorrectionStaging::SCOPE: ReproducibilityScope
 pub const nomos_corrections::CorrectionStaging::STRENGTH: DeterminismStrength
 pub const nomos_corrections::CorrectionStaging::TRACE: TraceEquivalence

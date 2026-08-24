@@ -2,7 +2,7 @@
 
 use crate::staged::Assert_Not_Moved;
 use crate::CorrectionError;
-use nomos_contracts::SnapshotId;
+use nomos_contracts::{MutationClass, SnapshotId};
 use nomos_model::Evidence;
 use nomos_workspace::{Workspace, WorkspaceChangeSet};
 
@@ -54,6 +54,24 @@ impl CommittedPlan
         return &self.evidence;
     }
 
+    /// `AGT-EXEC-001`'s capability-class question, answered for this value's own
+    /// history: `nomos_contracts::MutationClass::Apply`, the class
+    /// `ValidatedPlan::Commit` -- the method that produced this value -- belongs to.
+    /// [`Self::ROLLBACK_MUTATION_CLASS`] is the separate answer for `Self::Rollback`,
+    /// the operation this value is the *receiver* of rather than the *result* of.
+    #[must_use]
+    pub const fn Mutation_Class(&self) -> MutationClass
+    {
+        return MutationClass::Apply;
+    }
+
+    /// The mutation class [`Self::Rollback`] itself belongs to --
+    /// `nomos_contracts::MutationClass::Rollback`. An associated constant rather than a
+    /// method on `self`, because `Rollback` consumes `self` and returns a bare
+    /// `SnapshotId` with nowhere to hang an instance method that describes the call
+    /// that already happened.
+    pub const ROLLBACK_MUTATION_CLASS: MutationClass = MutationClass::Rollback;
+
     /// Submits this plan's reverse change through `live`'s one door, undoing it.
     ///
     /// # Errors
@@ -75,7 +93,7 @@ impl CommittedPlan
 mod tests
 {
     use crate::{ChangeSet, CommittedPlan, CorrectionCandidate, CorrectionClass, CorrectionPlan, Edit};
-    use nomos_contracts::{ConfigurationId, Digest128, EvidenceClass, ProviderId};
+    use nomos_contracts::{ConfigurationId, Digest128, EvidenceClass, MutationClass, ProviderId};
     use nomos_model::{Content_Digest, Evidence};
     use nomos_workspace::{BuildVariant, ChangeSource, Workspace, WorkspaceChangeSet};
 
@@ -179,5 +197,16 @@ mod tests
             .expect_err("the workspace moved since commit");
 
         assert!(matches!(refusal, crate::CorrectionError::Moved { .. }));
+    }
+
+    #[test]
+    fn Test_A_Committed_Plan_Belongs_To_The_Apply_Mutation_Class_And_Names_Rollbacks_Class()
+    {
+        let mut base = Base();
+        let plan = Plan_Changing_A(Before("old"), After("new"));
+        let committed = Commit_Plan(&plan, &mut base);
+
+        assert_eq!(committed.Mutation_Class(), MutationClass::Apply);
+        assert_eq!(CommittedPlan::ROLLBACK_MUTATION_CLASS, MutationClass::Rollback);
     }
 }
