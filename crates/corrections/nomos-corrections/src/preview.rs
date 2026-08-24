@@ -70,7 +70,7 @@ fn Render_Edit(rendered: &mut Vec<u8>, edit: &Edit)
 #[cfg(test)]
 mod tests
 {
-    use crate::{ChangeSet, CorrectionCandidate, CorrectionPlan, Edit};
+    use crate::{ChangeSet, CorrectionCandidate, CorrectionClass, CorrectionPlan, Edit};
 
     #[test]
     fn Test_A_Preview_Names_Every_Candidate_And_Edit()
@@ -78,6 +78,8 @@ mod tests
         let plan = CorrectionPlan::New(vec![CorrectionCandidate::New(
             "fix a",
             ChangeSet::Empty().With(Edit::New("a.rs", Some("old".to_owned()), Some("new".to_owned()))),
+            CorrectionClass::Mechanical,
+            vec![],
         )])
         .expect("one candidate is a valid plan");
 
@@ -93,6 +95,8 @@ mod tests
         let plan = CorrectionPlan::New(vec![CorrectionCandidate::New(
             "fix a",
             ChangeSet::Empty().With(Edit::New("a.rs", None, Some("new".to_owned()))),
+            CorrectionClass::Mechanical,
+            vec![],
         )])
         .expect("one candidate is a valid plan");
 

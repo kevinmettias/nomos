@@ -16,8 +16,10 @@
 #![forbid(unsafe_code)]
 
 mod candidate;
+mod candidate_label;
 mod change_set;
 mod committed;
+mod correction_class;
 mod determinism;
 mod edit;
 mod error;
@@ -27,7 +29,9 @@ mod staged;
 mod validated;
 
 pub use candidate::{CorrectionCandidate, CorrectionId};
+pub use candidate_label::CandidateLabel;
 pub use change_set::ChangeSet;
+pub use correction_class::CorrectionClass;
 pub use committed::CommittedPlan;
 pub use determinism::CorrectionStaging;
 pub use edit::Edit;

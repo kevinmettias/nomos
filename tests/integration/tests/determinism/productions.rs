@@ -9,7 +9,7 @@ use nomos_analysis::{
 use nomos_contracts::{
     BuildVariantId, ConfigurationId, EvidenceClass, GenerationId, ProviderId, SnapshotId, SubjectId,
 };
-use nomos_corrections::{ChangeSet, CorrectionCandidate, CorrectionPlan, Edit};
+use nomos_corrections::{ChangeSet, CorrectionCandidate, CorrectionClass, CorrectionPlan, Edit};
 use nomos_lang_rust::rollup;
 use nomos_model::{Content_Digest, Evidence};
 use nomos_platform_std::StdProcessLauncher;
@@ -591,6 +591,8 @@ fn A_Plan_That_States_The_Return_Type() -> CorrectionPlan
             Some("pub fn a() {}".to_owned()),
             Some("pub fn a() -> () {}".to_owned()),
         )),
+        CorrectionClass::Mechanical,
+        vec![],
     )])
     .expect("one candidate on one path is a valid plan");
 }

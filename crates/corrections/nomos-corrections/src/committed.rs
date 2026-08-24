@@ -74,7 +74,7 @@ impl CommittedPlan
 #[cfg(test)]
 mod tests
 {
-    use crate::{ChangeSet, CommittedPlan, CorrectionCandidate, CorrectionPlan, Edit};
+    use crate::{ChangeSet, CommittedPlan, CorrectionCandidate, CorrectionClass, CorrectionPlan, Edit};
     use nomos_contracts::{ConfigurationId, Digest128, EvidenceClass, ProviderId};
     use nomos_model::{Content_Digest, Evidence};
     use nomos_workspace::{BuildVariant, ChangeSource, Workspace, WorkspaceChangeSet};
@@ -114,6 +114,8 @@ mod tests
                 Some(before.0.to_owned()),
                 Some(after.0.to_owned()),
             )),
+            CorrectionClass::Mechanical,
+            vec![],
         )])
         .expect("a single candidate is a valid plan");
     }

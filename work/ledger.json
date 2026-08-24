@@ -27138,6 +27138,70 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-CORRECTIONS-001-CANDIDATE-CLASSIFICATION",
+      "title": "CorrectionCandidate carries COR-001's fix-action class and COR-010's independent labels",
+      "why": "OD-ROADMAP-001 retires OD-CORRECTIONS-001's wait for a real trigger before building corrections' classification layer. COR-001 (fix actions distinguish mechanical/proposed/agent/interactive correction) and COR-010 (candidates classified as mechanically-safe/behavior-preserving/policy-compliant/agent-proposed/interactive/architectural/speculative, independent of ranking) are both declared, not computed, matching this crate's own architectural boundary -- its module doc already states 'what a candidate would do is decided before this crate exists to run it,' the same shape OD-CORRECTIONS-002's Evidence parameter on Commit already established. CorrectionCandidate::New gained two required parameters, class: CorrectionClass and labels: Vec<CandidateLabel>, exactly mirroring how Commit gained evidence: Evidence. Identity (CorrectionId) is deliberately unaffected by class/labels -- they are declared metadata, not part of what identifies a correction, tested directly. COR-011 (ranking), COR-012 (recording the choice) and COR-013 (stop-for-review) are a larger arbitration system, scoped out of this increment deliberately -- this closes classification, not the whole COR-01x family.",
+      "done_when": "crates/corrections/nomos-corrections/src/correction_class.rs and candidate_label.rs exist with CorrectionClass (4 variants) and CandidateLabel (7 variants) matching COR-001 and COR-010's corpus text exactly. CorrectionCandidate::New takes class and labels; Class()/Labels() accessors exist. Every call site across the crate and tests/integration is updated. cargo test -p nomos-corrections passes including a test proving class/labels do not affect CorrectionId. cargo test --no-fail-fast -p nomos-contract-tests passes with tests/contract/surface/nomos-corrections.txt reblessed. cargo clippy --workspace --all-targets is clean of new warnings.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/corrections/nomos-corrections/src/candidate/correction_candidate.rs",
+          "crates/corrections/nomos-corrections/src/candidate_label.rs",
+          "crates/corrections/nomos-corrections/src/correction_class.rs",
+          "crates/corrections/nomos-corrections/src/committed.rs",
+          "crates/corrections/nomos-corrections/src/lib.rs",
+          "crates/corrections/nomos-corrections/src/plan.rs",
+          "crates/corrections/nomos-corrections/src/preview.rs",
+          "crates/corrections/nomos-corrections/src/staged.rs",
+          "crates/corrections/nomos-corrections/src/validated.rs",
+          "tests/contract/surface/nomos-corrections.txt",
+          "tests/integration/tests/determinism/productions.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "Cited_Rule ... ok\ntest Test_Every_Cited_Record_Should_Still_Exist ... ok\ntest Test_Every_Cited_Version_Should_Match_The_Records_Own_Front_Matter ... ok\ntest Test_A_Mismatched_Version_Should_Fail_The_Comparison ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 5 tests\ntest Test_A_Lowered_Declaration_Should_Fail_The_Comparison ... ok\ntest Test_A_Matching_Declaration_Should_Pass_The_Comparison ... ok\ntest Test_An_Unrelated_Minor_Version_Should_Fail_The_Comparison ... ok\ntest Test_The_Real_Workflow_Should_Still_Have_The_Install_Step ... ok\ntest Test_The_Declared_Floor_Should_Match_The_Toolchain_The_Gate_Installs ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.12s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-06ab25b0491e144c.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-4c32ae08be8df958.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-9350d088b8d6ed0d.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-9ca3879aab70176f.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-308fef82df004321.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-f6f7228f8cfa874c.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-ea500c062215f506.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-790c8c5856e63fa5.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-98429b682798ce96.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-c1e906054609f777.exe)\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1787589922,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "2a562c0e8aafc1bdf66cb79b2c1e322b7cf1bba9"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

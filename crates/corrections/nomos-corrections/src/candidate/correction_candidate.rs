@@ -1,7 +1,7 @@
 //! A proposed correction: why, and what it would change.
 
 use super::CorrectionId;
-use crate::ChangeSet;
+use crate::{CandidateLabel, ChangeSet, CorrectionClass};
 use nomos_model::Digest_Of_Parts;
 
 /// A proposed correction: a description of why, and the [`ChangeSet`] that would carry it
@@ -12,12 +12,23 @@ pub struct CorrectionCandidate
     id: CorrectionId,
     description: String,
     change: ChangeSet,
+    class: CorrectionClass,
+    labels: Vec<CandidateLabel>,
 }
 
 impl CorrectionCandidate
 {
+    /// Constructs a candidate. `class` is `COR-001`'s fix-action class and `labels` is
+    /// `COR-010`'s independent set of descriptive labels -- both declared by the caller,
+    /// never computed here, the same way `ValidatedPlan::Commit`'s `Evidence` parameter
+    /// is declared rather than judged (`OD-CORRECTIONS-002`).
     #[must_use]
-    pub fn New(description: impl Into<String>, change: ChangeSet) -> Self
+    pub fn New(
+        description: impl Into<String>,
+        change: ChangeSet,
+        class: CorrectionClass,
+        labels: Vec<CandidateLabel>,
+    ) -> Self
     {
         let description = description.into();
         let id = Identity_Of(&description, &change);
@@ -26,6 +37,8 @@ impl CorrectionCandidate
             id,
             description,
             change,
+            class,
+            labels,
         };
     }
 
@@ -45,6 +58,20 @@ impl CorrectionCandidate
     pub const fn Change(&self) -> &ChangeSet
     {
         return &self.change;
+    }
+
+    /// `COR-001`'s fix-action class this candidate was declared under.
+    #[must_use]
+    pub const fn Class(&self) -> CorrectionClass
+    {
+        return self.class;
+    }
+
+    /// `COR-010`'s independent descriptive labels this candidate was declared with.
+    #[must_use]
+    pub fn Labels(&self) -> &[CandidateLabel]
+    {
+        return &self.labels;
     }
 }
 
@@ -76,8 +103,8 @@ mod tests
         let edit = Edit::New("a.rs", None, Some("x".to_owned()));
         let change = ChangeSet::Empty().With(edit);
 
-        let one = CorrectionCandidate::New("fix a", change.clone());
-        let other = CorrectionCandidate::New("fix a", change);
+        let one = CorrectionCandidate::New("fix a", change.clone(), CorrectionClass::Mechanical, vec![]);
+        let other = CorrectionCandidate::New("fix a", change, CorrectionClass::Mechanical, vec![]);
 
         assert_eq!(one.Id(), other.Id());
     }
@@ -88,8 +115,8 @@ mod tests
         let edit = Edit::New("a.rs", None, Some("x".to_owned()));
         let change = ChangeSet::Empty().With(edit);
 
-        let one = CorrectionCandidate::New("fix a", change.clone());
-        let other = CorrectionCandidate::New("fix a differently", change);
+        let one = CorrectionCandidate::New("fix a", change.clone(), CorrectionClass::Mechanical, vec![]);
+        let other = CorrectionCandidate::New("fix a differently", change, CorrectionClass::Mechanical, vec![]);
 
         assert_ne!(one.Id(), other.Id());
     }
@@ -98,11 +125,47 @@ mod tests
     fn Test_A_Different_Change_Should_Change_The_Identity()
     {
         let edit_one = Edit::New("a.rs", None, Some("x".to_owned()));
-        let one = CorrectionCandidate::New("fix a", ChangeSet::Empty().With(edit_one));
+        let one =
+            CorrectionCandidate::New("fix a", ChangeSet::Empty().With(edit_one), CorrectionClass::Mechanical, vec![]);
 
         let edit_other = Edit::New("a.rs", None, Some("y".to_owned()));
-        let other = CorrectionCandidate::New("fix a", ChangeSet::Empty().With(edit_other));
+        let other =
+            CorrectionCandidate::New("fix a", ChangeSet::Empty().With(edit_other), CorrectionClass::Mechanical, vec![]);
 
         assert_ne!(one.Id(), other.Id());
+    }
+
+    #[test]
+    fn Test_A_Different_Class_Or_Labels_Should_Not_Change_The_Identity()
+    {
+        let edit = Edit::New("a.rs", None, Some("x".to_owned()));
+        let change = ChangeSet::Empty().With(edit);
+
+        let mechanical = CorrectionCandidate::New("fix a", change.clone(), CorrectionClass::Mechanical, vec![]);
+        let agent = CorrectionCandidate::New(
+            "fix a",
+            change,
+            CorrectionClass::Agent,
+            vec![CandidateLabel::AgentProposed, CandidateLabel::Speculative],
+        );
+
+        assert_eq!(
+            mechanical.Id(),
+            agent.Id(),
+            "class and labels are declared metadata, not part of what identifies a correction"
+        );
+    }
+
+    #[test]
+    fn Test_Class_And_Labels_Are_Carried_Rather_Than_Computed()
+    {
+        let edit = Edit::New("a.rs", None, Some("x".to_owned()));
+        let change = ChangeSet::Empty().With(edit);
+        let labels = vec![CandidateLabel::MechanicallySafe, CandidateLabel::BehaviorPreserving];
+
+        let candidate = CorrectionCandidate::New("fix a", change, CorrectionClass::Mechanical, labels.clone());
+
+        assert_eq!(candidate.Class(), CorrectionClass::Mechanical);
+        assert_eq!(candidate.Labels(), labels.as_slice());
     }
 }

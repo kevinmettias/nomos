@@ -92,7 +92,7 @@ fn Overlapping_Paths(candidates: &[CorrectionCandidate]) -> Vec<String>
 mod tests
 {
     use super::*;
-    use crate::{ChangeSet, Edit};
+    use crate::{ChangeSet, CorrectionClass, Edit};
 
     struct Description<'a>(&'a str);
     struct Path<'a>(&'a str);
@@ -101,7 +101,7 @@ mod tests
     {
         let edit = Edit::New(path.0, None, Some("x".to_owned()));
 
-        return CorrectionCandidate::New(description.0, ChangeSet::Empty().With(edit));
+        return CorrectionCandidate::New(description.0, ChangeSet::Empty().With(edit), CorrectionClass::Mechanical, vec![]);
     }
 
     #[test]
