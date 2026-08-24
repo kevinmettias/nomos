@@ -74,7 +74,15 @@
 //! was there. This is not a new category of risk for this crate -- [`Handle_Work_Claim`]
 //! already writes a real ledger file at a caller-named directory over an unauthenticated
 //! wire call -- and unlike `Commit`'s vacate step, a rendered projection is a derived,
-//! regenerable artifact, not the governing record itself.
+//! regenerable artifact, not the governing record itself. Its twentieth,
+//! [`spec::Handle_Spec_Commit`], closes `SpecCommand` entirely: it writes the committed
+//! record's own bytes the same way `Render` writes a projection's, but unlike `Render` it
+//! replaces the governing record itself, and a rename's old path is permanently unlinked via
+//! a raw `std::fs::remove_file` outside `nomos-platform`'s own port -- `run::commit`'s own
+//! documentation names the failure mode directly: "two files now declare this record."
+//! Building both `Render` and `Commit` was an explicit choice, asked of and confirmed by a
+//! person rather than decided here, once the research showed `Freshness` and `Preview` (both
+//! generic over `FileSystem`) never actually write, narrowing the real decision to these two.
 //!
 //! [`Handle_Gate_Run`] is a deliberate twin of `nomos-cli`'s `gate.rs`
 //! `GateInvocation::Run` arm: it walks `root` for `.rs` sources
@@ -114,12 +122,14 @@ pub use response::{
     RuleOfferResponse, SuppressionDispositionResponse, SuppressionResponse,
 };
 pub use spec::{
-    AbsenceResponse, BlockChangeResponse, DocumentSourceResponse, Handle_Spec_Freshness, Handle_Spec_Markdown,
-    Handle_Spec_Preview, Handle_Spec_Profiles, Handle_Spec_Record, Handle_Spec_Render, Handle_Spec_Sources,
-    Handle_Spec_Table, IdentityChangeResponse, NodeSummaryResponse, NormativeMovementResponse,
-    NormativeOutcomeResponse, PathMatchResponse, ProfileOutcomeResponse, ProfilesResponse, RecordRelationResponse,
-    RowCensusResponse, SpecFreshnessResponse, SpecMarkdownResponse, SpecPreviewResponse, SpecRecordResponse,
-    SpecRenderResponse, SpecSourcesResponse, SpecTableResponse, TableLineResponse, VerdictResponse,
+    AbsenceResponse, BlockChangeResponse, CommitReportResponse, CommittedPreviewResponse, DocumentSourceResponse,
+    Handle_Spec_Commit, Handle_Spec_Freshness, Handle_Spec_Markdown, Handle_Spec_Preview, Handle_Spec_Profiles,
+    Handle_Spec_Record, Handle_Spec_Render, Handle_Spec_Sources, Handle_Spec_Table, IdentityChangeResponse,
+    NodeSummaryResponse, NormativeMovementResponse, NormativeOutcomeResponse, PathMatchResponse,
+    ProfileOutcomeResponse, ProfilesResponse, RecordRelationResponse, ReproductionResponse, RowCensusResponse,
+    SpecCommitResponse, SpecFreshnessResponse, SpecMarkdownResponse, SpecPreviewResponse, SpecRecordResponse,
+    SpecRenderResponse, SpecSourcesResponse, SpecTableResponse, TableLineResponse, VacateOutcomeResponse,
+    VacatedResponse, VerdictResponse,
 };
 pub use work::{
     BlockedItem, Handle_Work_Abandon, Handle_Work_Add, Handle_Work_Audit, Handle_Work_Claim, Handle_Work_Decline,

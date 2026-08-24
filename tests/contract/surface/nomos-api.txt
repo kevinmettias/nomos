@@ -5,6 +5,8 @@ pub enum nomos_api::GatePlanResponse
 pub enum nomos_api::NormativeOutcomeResponse
 pub enum nomos_api::PathMatchResponse
 pub enum nomos_api::ProfilesResponse
+pub enum nomos_api::ReproductionResponse
+pub enum nomos_api::SpecCommitResponse
 pub enum nomos_api::SpecFreshnessResponse
 pub enum nomos_api::SpecMarkdownResponse
 pub enum nomos_api::SpecPreviewResponse
@@ -13,6 +15,7 @@ pub enum nomos_api::SpecRenderResponse
 pub enum nomos_api::SpecSourcesResponse
 pub enum nomos_api::SpecTableResponse
 pub enum nomos_api::SuppressionDispositionResponse
+pub enum nomos_api::VacateOutcomeResponse
 pub enum nomos_api::VerdictResponse
 pub enum nomos_api::WorkAbandonResponse
 pub enum nomos_api::WorkAddResponse
@@ -44,6 +47,14 @@ pub enum variant nomos_api::PathMatchResponse::FileName
 pub enum variant nomos_api::PathMatchResponse::Fragment
 pub enum variant nomos_api::ProfilesResponse::Listed { profiles: Vec<Profile>, }
 pub enum variant nomos_api::ProfilesResponse::Unreadable { cause: String, }
+pub enum variant nomos_api::ReproductionResponse::Matched { hash: String }
+pub enum variant nomos_api::ReproductionResponse::Mismatched { hash: String }
+pub enum variant nomos_api::ReproductionResponse::Unverifiable { cause: String }
+pub enum variant nomos_api::SpecCommitResponse::Committed { preview: CommittedPreviewResponse, report: CommitReportResponse, destination: PathBuf, vacated: Option<VacatedResponse>, reproduction: ReproductionResponse, }
+pub enum variant nomos_api::SpecCommitResponse::Refused { cause: String, }
+pub enum variant nomos_api::SpecCommitResponse::StoreRefused { preview: CommittedPreviewResponse, cause: String, }
+pub enum variant nomos_api::SpecCommitResponse::Unreadable { path: String, cause: String, }
+pub enum variant nomos_api::SpecCommitResponse::Unwritable { preview: CommittedPreviewResponse, report: CommitReportResponse, path: String, cause: String, }
 pub enum variant nomos_api::SpecFreshnessResponse::Examined { examined: Vec<ProfileOutcomeResponse>, required: Vec<String>, }
 pub enum variant nomos_api::SpecFreshnessResponse::NoSuchProfile { requested: String, known: Vec<String>, }
 pub enum variant nomos_api::SpecFreshnessResponse::RequirementUnexamined { requested: String, only: Option<String>, }
@@ -74,6 +85,9 @@ pub enum variant nomos_api::SuppressionDispositionResponse::FormalRiskAcceptance
 pub enum variant nomos_api::SuppressionDispositionResponse::InlineSuppression
 pub enum variant nomos_api::SuppressionDispositionResponse::RepositoryPolicyException
 pub enum variant nomos_api::SuppressionDispositionResponse::TemporaryWaiver
+pub enum variant nomos_api::VacateOutcomeResponse::AlreadyGone
+pub enum variant nomos_api::VacateOutcomeResponse::Failed { message: String }
+pub enum variant nomos_api::VacateOutcomeResponse::Removed
 pub enum variant nomos_api::VerdictResponse::Absent
 pub enum variant nomos_api::VerdictResponse::BuildFailed { cause: String, }
 pub enum variant nomos_api::VerdictResponse::Compared { fresh: bool, stale: Option<(String, String)>, edited: Option<(String, String)>, diverged: Option<(String, String)>, }
@@ -101,6 +115,7 @@ pub enum variant nomos_api::WorkValidateResponse::Valid { document: LedgerDocume
 pub fn nomos_api::Handle_Gate_Explain(root: &Path, query: &FindingQuery) -> GateExplainResponse
 pub fn nomos_api::Handle_Gate_Plan() -> GatePlanResponse
 pub fn nomos_api::Handle_Gate_Run(root: &Path) -> GateRunResponse
+pub fn nomos_api::Handle_Spec_Commit(request: &CommitRequest) -> SpecCommitResponse
 pub fn nomos_api::Handle_Spec_Freshness(request: &FreshnessRequest) -> SpecFreshnessResponse
 pub fn nomos_api::Handle_Spec_Markdown(request: &RecordRequest) -> SpecMarkdownResponse
 pub fn nomos_api::Handle_Spec_Preview(request: &EditRequest) -> SpecPreviewResponse
@@ -129,6 +144,24 @@ pub struct field nomos_api::BaselineDebtResponse::rule: RuleId
 pub struct field nomos_api::BaselineDebtResponse::subject: SubjectId
 pub struct field nomos_api::BlockedItem::cause: String
 pub struct field nomos_api::BlockedItem::item: LedgerItem
+pub struct field nomos_api::CommitReportResponse::blocks: usize
+pub struct field nomos_api::CommitReportResponse::blocks_removed: usize
+pub struct field nomos_api::CommitReportResponse::node_id: String
+pub struct field nomos_api::CommitReportResponse::path: String
+pub struct field nomos_api::CommitReportResponse::relations_added: usize
+pub struct field nomos_api::CommitReportResponse::relations_removed: usize
+pub struct field nomos_api::CommitReportResponse::renamed: bool
+pub struct field nomos_api::CommittedPreviewResponse::blocks: Vec<BlockChangeResponse>
+pub struct field nomos_api::CommittedPreviewResponse::changes_nothing: bool
+pub struct field nomos_api::CommittedPreviewResponse::identity: Vec<IdentityChangeResponse>
+pub struct field nomos_api::CommittedPreviewResponse::markdown: String
+pub struct field nomos_api::CommittedPreviewResponse::node_id: String
+pub struct field nomos_api::CommittedPreviewResponse::path: String
+pub struct field nomos_api::CommittedPreviewResponse::relations_added: Vec<RecordRelationResponse>
+pub struct field nomos_api::CommittedPreviewResponse::relations_removed: Vec<RecordRelationResponse>
+pub struct field nomos_api::CommittedPreviewResponse::rename: Option<(String, String)>
+pub struct field nomos_api::CommittedPreviewResponse::statements: Vec<NormativeMovementResponse>
+pub struct field nomos_api::CommittedPreviewResponse::wording_moved: bool
 pub struct field nomos_api::DocumentSourceResponse::content_hash: String
 pub struct field nomos_api::DocumentSourceResponse::path: String
 pub struct field nomos_api::DocumentSourceResponse::revision: String
@@ -180,9 +213,13 @@ pub struct field nomos_api::TableLineResponse::kind: String
 pub struct field nomos_api::TableLineResponse::row_ordinal: u32
 pub struct field nomos_api::TableLineResponse::table_ordinal: u32
 pub struct field nomos_api::TableLineResponse::text: String
+pub struct field nomos_api::VacatedResponse::outcome: VacateOutcomeResponse
+pub struct field nomos_api::VacatedResponse::path: PathBuf
 pub struct nomos_api::AbsenceResponse
 pub struct nomos_api::BaselineDebtResponse
 pub struct nomos_api::BlockedItem
+pub struct nomos_api::CommitReportResponse
+pub struct nomos_api::CommittedPreviewResponse
 pub struct nomos_api::DocumentSourceResponse
 pub struct nomos_api::GateRunResponse
 pub struct nomos_api::IdentityChangeResponse
@@ -196,3 +233,4 @@ pub struct nomos_api::RuleCalibrationResponse
 pub struct nomos_api::RuleOfferResponse
 pub struct nomos_api::SuppressionResponse
 pub struct nomos_api::TableLineResponse
+pub struct nomos_api::VacatedResponse

@@ -8,14 +8,15 @@
 use nomos_platform_std::StdFileSystem;
 use nomos_spec_orchestration::corpus::{Absence, CorpusRequest, DEFAULT_REVISION};
 use nomos_spec_orchestration::{
-    EditRequest, FreshnessAnswer, FreshnessRefusal, FreshnessRequest, PreviewRefusal, ProfileOutcome, RecordAnswer,
-    RecordRefusal, RecordRequest, RenderAnswer, RenderRefusal, RenderRequest, SpecCommand, TableAnswer, TableRefusal,
-    TableRequest, Verdict,
+    CommitAnswer, CommitRefusal, CommitRefusalError, CommitRefusalKind, CommitRequest, EditRequest, FreshnessAnswer,
+    FreshnessRefusal, FreshnessRequest, PreviewRefusal, ProfileOutcome, RecordAnswer, RecordRefusal, RecordRequest,
+    RenderAnswer, RenderRefusal, RenderRequest, Reproduction, SpecCommand, TableAnswer, TableRefusal, TableRequest,
+    VacateOutcome, Vacated, Verdict,
 };
 use nomos_spec_project::{Freshness, Profile, Stamp};
 use nomos_spec_store::{
-    BlockChange, DocumentSource, EditError, EditPreview, IdentityChange, NodeSummary, NormativeMovement,
-    NormativeOutcome, PathMatch, RecordProjection, RowCensus, StoreError, TableLine,
+    BlockChange, CommitReport, DocumentSource, EditError, EditPreview, IdentityChange, NodeSummary,
+    NormativeMovement, NormativeOutcome, PathMatch, RecordProjection, RowCensus, StoreError, TableLine,
 };
 use nomos_spec_model::RecordRelation;
 use serde::Serialize;
@@ -1074,6 +1075,295 @@ impl SpecRenderResponse
     }
 }
 
+/// Previews a staged edit, commits it to the store, and writes it where its own path says,
+/// exactly as `nomos spec commit` would, and hands back a JSON-serializable response.
+///
+/// Follows [`Handle_Spec_Record`]'s own composition. Like [`Handle_Spec_Render`], this verb
+/// writes real bytes through `StdFileSystem` -- `run::commit::Commit` writes the committed
+/// record at `request.into.join(&report.path)` via `Replace_Atomically`, the same shape
+/// `Render`'s own write already has, and this crate already has real, unauthenticated
+/// `StdFileSystem` writes as precedent (`Handle_Work_Claim`, `Handle_Spec_Render`). Unlike
+/// `Render`, a commit's write is not a derived, regenerable artifact: it replaces the
+/// governing record's own bytes, and a rename's old path is permanently unlinked via a raw
+/// `std::fs::remove_file` with no port-level guard -- `run::commit`'s own documentation names
+/// the known failure mode as "two files now declare this record" when that removal fails.
+#[must_use]
+pub fn Handle_Spec_Commit(request: &CommitRequest) -> SpecCommitResponse
+{
+    let corpus_request = CorpusRequest {
+        variable: CORPUS_VARIABLE.to_owned(),
+        root: std::env::var_os(CORPUS_VARIABLE).map(PathBuf::from),
+        revision: DEFAULT_REVISION.to_owned(),
+    };
+
+    let outcome =
+        nomos_spec_orchestration::Run(&SpecCommand::Commit(request.clone()), &corpus_request, &StdFileSystem);
+
+    let nomos_spec_orchestration::SpecOutcome::Commit(result) = outcome
+    else
+    {
+        unreachable!("Run always returns the SpecOutcome variant naming the SpecCommand it was given")
+    };
+
+    return SpecCommitResponse::From(result);
+}
+
+/// What a real `nomos spec commit` produced, in a shape `serde_json` can hand across a wire.
+#[derive(Debug, Serialize)]
+#[serde(tag = "outcome", rename_all = "snake_case")]
+pub enum SpecCommitResponse
+{
+    /// The store accepted the transaction and its bytes were written where the record
+    /// belongs.
+    Committed
+    {
+        /// What committing this edit changed, as `Preview` found it.
+        preview: CommittedPreviewResponse,
+        /// What the store's own transaction changed.
+        report: CommitReportResponse,
+        /// Where the record's bytes were written.
+        destination: PathBuf,
+        /// The path a rename left behind, and what became of removing it.
+        vacated: Option<VacatedResponse>,
+        /// Whether the store renders the just-committed record back as the same bytes.
+        reproduction: ReproductionResponse,
+    },
+    /// `--from` could not be read.
+    Unreadable
+    {
+        path: String,
+        cause: String,
+    },
+    /// Staging or previewing the edit was refused, before there was anything to commit.
+    Refused
+    {
+        cause: String,
+    },
+    /// The edit previewed cleanly and the store refused to commit it.
+    StoreRefused
+    {
+        preview: CommittedPreviewResponse,
+        cause: String,
+    },
+    /// The store accepted the transaction and its bytes could not be written where the
+    /// record belongs.
+    Unwritable
+    {
+        preview: CommittedPreviewResponse,
+        report: CommitReportResponse,
+        path: String,
+        cause: String,
+    },
+}
+
+impl SpecCommitResponse
+{
+    fn From(result: Result<CommitAnswer, CommitRefusal>) -> Self
+    {
+        return match result
+        {
+            Ok(answer) => Self::Committed {
+                preview: CommittedPreviewResponse::From(&answer.preview),
+                report: CommitReportResponse::From(answer.report),
+                destination: answer.destination,
+                vacated: answer.vacated.map(VacatedResponse::From),
+                reproduction: ReproductionResponse::From(answer.reproduction),
+            },
+            Err(CommitRefusal { kind: CommitRefusalKind::Unreadable { path }, error }) =>
+            {
+                Self::Unreadable { path: path.display().to_string(), cause: Refusal_Cause(error) }
+            }
+            Err(CommitRefusal { kind: CommitRefusalKind::Edit, error }) => Self::Refused { cause: Refusal_Cause(error) },
+            Err(CommitRefusal { kind: CommitRefusalKind::Refused { preview }, error }) => Self::StoreRefused {
+                preview: CommittedPreviewResponse::From(&preview),
+                cause: Refusal_Cause(error),
+            },
+            Err(CommitRefusal { kind: CommitRefusalKind::Unwritable { preview, report, path }, error }) =>
+            {
+                Self::Unwritable {
+                    preview: CommittedPreviewResponse::From(&preview),
+                    report: CommitReportResponse::From(report),
+                    path: path.display().to_string(),
+                    cause: Refusal_Cause(error),
+                }
+            }
+        };
+    }
+}
+
+/// `CommitRefusalError`'s own `Display`-equivalent: it wraps one of two error types, each
+/// with its own `Display`, and does not implement the trait itself.
+fn Refusal_Cause(error: CommitRefusalError) -> String
+{
+    return match error
+    {
+        CommitRefusalError::FileSystem(error) => error.to_string(),
+        CommitRefusalError::Edit(error) => error.to_string(),
+    };
+}
+
+/// The structured fields [`EditPreview`]'s own accessors expose, built the same way
+/// [`SpecPreviewResponse::Previewed`]'s payload is -- kept as its own type rather than shared
+/// with it, since `Preview`'s own wire shape is already fixed by
+/// `P13-API-SPEC-PREVIEW-SEAM` and this crate does not widen an already-shipped response.
+#[derive(Debug, Serialize)]
+pub struct CommittedPreviewResponse
+{
+    pub node_id: String,
+    pub path: String,
+    pub rename: Option<(String, String)>,
+    pub markdown: String,
+    pub blocks: Vec<BlockChangeResponse>,
+    pub identity: Vec<IdentityChangeResponse>,
+    pub relations_added: Vec<RecordRelationResponse>,
+    pub relations_removed: Vec<RecordRelationResponse>,
+    pub statements: Vec<NormativeMovementResponse>,
+    pub wording_moved: bool,
+    pub changes_nothing: bool,
+}
+
+impl CommittedPreviewResponse
+{
+    fn From(preview: &EditPreview) -> Self
+    {
+        return Self {
+            node_id: preview.Node_Id().to_owned(),
+            path: preview.Path().to_owned(),
+            rename: preview.Rename().map(|(before, after)| return (before.to_owned(), after.to_owned())),
+            markdown: preview.Markdown().to_owned(),
+            blocks: preview.Blocks().iter().cloned().map(BlockChangeResponse::From).collect(),
+            identity: preview.Identity().iter().cloned().map(IdentityChangeResponse::From).collect(),
+            relations_added: preview.Relations_Added().iter().cloned().map(RecordRelationResponse::From).collect(),
+            relations_removed: preview
+                .Relations_Removed()
+                .iter()
+                .cloned()
+                .map(RecordRelationResponse::From)
+                .collect(),
+            statements: preview.Statements().iter().cloned().map(NormativeMovementResponse::From).collect(),
+            wording_moved: preview.Wording_Moved(),
+            changes_nothing: preview.Changes_Nothing(),
+        };
+    }
+}
+
+/// A serializable twin of [`nomos_spec_store::CommitReport`], which does not derive
+/// `Serialize`.
+#[derive(Debug, Serialize)]
+pub struct CommitReportResponse
+{
+    pub node_id: String,
+    pub path: String,
+    pub blocks: usize,
+    pub blocks_removed: usize,
+    pub relations_added: usize,
+    pub relations_removed: usize,
+    pub renamed: bool,
+}
+
+impl CommitReportResponse
+{
+    fn From(report: CommitReport) -> Self
+    {
+        return Self {
+            node_id: report.node_id,
+            path: report.path,
+            blocks: report.blocks,
+            blocks_removed: report.blocks_removed,
+            relations_added: report.relations_added,
+            relations_removed: report.relations_removed,
+            renamed: report.renamed,
+        };
+    }
+}
+
+/// A serializable twin of [`nomos_spec_orchestration::Vacated`], which does not derive
+/// `Serialize`.
+#[derive(Debug, Serialize)]
+pub struct VacatedResponse
+{
+    /// The path the rename moved the record away from.
+    pub path: PathBuf,
+    pub outcome: VacateOutcomeResponse,
+}
+
+impl VacatedResponse
+{
+    fn From(vacated: Vacated) -> Self
+    {
+        return Self { path: vacated.path, outcome: VacateOutcomeResponse::From(vacated.outcome) };
+    }
+}
+
+/// A serializable twin of [`nomos_spec_orchestration::VacateOutcome`], which does not derive
+/// `Serialize`.
+#[derive(Debug, Serialize)]
+#[serde(tag = "kind", rename_all = "snake_case")]
+pub enum VacateOutcomeResponse
+{
+    /// The old path was removed.
+    Removed,
+    /// The old path was already gone.
+    AlreadyGone,
+    /// The old path could not be removed, so two files now declare this record.
+    Failed
+    {
+        message: String
+    },
+}
+
+impl VacateOutcomeResponse
+{
+    fn From(outcome: VacateOutcome) -> Self
+    {
+        return match outcome
+        {
+            VacateOutcome::Removed => Self::Removed,
+            VacateOutcome::AlreadyGone => Self::AlreadyGone,
+            VacateOutcome::Failed(message) => Self::Failed { message },
+        };
+    }
+}
+
+/// A serializable twin of `Result<`[`nomos_spec_orchestration::Reproduction`]`, EditError>`,
+/// split into three outer variants rather than nested, the same shape `VerdictResponse::
+/// Compared` already uses for `Verdict::Compared`'s own `Result`.
+#[derive(Debug, Serialize)]
+#[serde(tag = "kind", rename_all = "snake_case")]
+pub enum ReproductionResponse
+{
+    /// The store's own rendering matches what was staged, byte for byte.
+    Matched
+    {
+        hash: String
+    },
+    /// The store renders something else. The commit already happened; this says the round
+    /// trip did not close.
+    Mismatched
+    {
+        hash: String
+    },
+    /// The store could not be asked at all -- a defect in this run rather than in the edit,
+    /// since the transaction that produced this answer already committed.
+    Unverifiable
+    {
+        cause: String
+    },
+}
+
+impl ReproductionResponse
+{
+    fn From(reproduction: Result<Reproduction, EditError>) -> Self
+    {
+        return match reproduction
+        {
+            Ok(Reproduction::Matched { hash }) => Self::Matched { hash },
+            Ok(Reproduction::Mismatched { hash }) => Self::Mismatched { hash },
+            Err(error) => Self::Unverifiable { cause: error.to_string() },
+        };
+    }
+}
+
 #[cfg(test)]
 mod tests
 {
@@ -1444,5 +1734,60 @@ mod tests
         let outcome = parsed.get("outcome").expect("a serialized SpecRenderResponse always has this field");
 
         assert_eq!(outcome, "placed", "{json}");
+    }
+
+    #[test]
+    fn Test_A_Real_Commit_Should_Write_The_Record_And_Close_The_Round_Trip()
+    {
+        let into = Unique_Scratch_Directory("commit");
+        let staged = Staged_Heading_Rename("D-132", &into);
+        let edited = std::fs::read_to_string(&staged).expect("the staged file was just written");
+        let request = CommitRequest { edit: EditRequest { id: "D-132".to_owned(), from: staged, rename: None }, into };
+
+        let response = Handle_Spec_Commit(&request);
+
+        let SpecCommitResponse::Committed { report, destination, vacated, reproduction, .. } = response
+        else
+        {
+            panic!("a canonical heading rename commits cleanly: {response:?}");
+        };
+        assert_eq!(report.node_id, "D-132");
+        assert!(vacated.is_none(), "this edit did not rename the record's path");
+        let written = std::fs::read_to_string(&destination).expect("the record was written");
+        assert_eq!(written, edited, "the bytes on disk must be exactly what was staged");
+        assert!(matches!(reproduction, ReproductionResponse::Matched { .. }), "{reproduction:?}");
+    }
+
+    #[test]
+    fn Test_A_Missing_Staged_Commit_File_Should_Report_Unreadable()
+    {
+        let request = CommitRequest {
+            edit: EditRequest {
+                id: "D-132".to_owned(),
+                from: std::path::PathBuf::from("no-such-staged-file-anywhere.md"),
+                rename: None,
+            },
+            into: Unique_Scratch_Directory("commit-unreadable"),
+        };
+
+        let response = Handle_Spec_Commit(&request);
+
+        assert!(matches!(response, SpecCommitResponse::Unreadable { .. }), "{response:?}");
+    }
+
+    #[test]
+    fn Test_A_Real_Committed_Response_Should_Round_Trip_As_Json()
+    {
+        let into = Unique_Scratch_Directory("commit-json");
+        let staged = Staged_Heading_Rename("D-132", &into);
+        let request = CommitRequest { edit: EditRequest { id: "D-132".to_owned(), from: staged, rename: None }, into };
+
+        let response = Handle_Spec_Commit(&request);
+
+        let json = serde_json::to_string(&response).expect("a SpecCommitResponse always serializes");
+        let parsed: serde_json::Value = serde_json::from_str(&json).expect("what was just written parses back");
+        let outcome = parsed.get("outcome").expect("a serialized SpecCommitResponse always has this field");
+
+        assert_eq!(outcome, "committed", "{json}");
     }
 }

@@ -27788,6 +27788,65 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-API-SPEC-COMMIT-SEAM",
+      "title": "nomos-api gains a twentieth real seam: Spec's Commit verb, closing SpecCommand",
+      "why": "ARC-ROADMAP-001 names CLI/API/MCP projections as a near-term-tier item. nomos-api has proven\na second real caller for Gate, Work, and Spec's Profiles, Sources, Record, Table, Markdown,\nFreshness, Preview and Render. Commit is the last of the nine SpecCommand verbs:\nCommitRequest{edit: EditRequest, into: PathBuf}, answered as Result<CommitAnswer,\nCommitRefusal>.\n\nUser decision (same AskUserQuestion as P13-API-SPEC-RENDER-SEAM, presented together): build\nboth Render and Commit now. Checked before authoring: run::commit::Commit<F: FileSystem>\n(crates/orchestration/nomos-spec-orchestration/src/run/commit.rs) writes the committed\nrecord's bytes at request.into.join(&report.path) via filesystem.Replace_Atomically -- the\nsame shape Render's own write already has, confirmed by reading the whole function -- and,\non a rename, removes the vacated old path via a raw std::fs::remove_file call OUTSIDE\nnomos_platform::FileSystem entirely (deletion is not one of the port's three declared\noperations, by that port's own documentation). The module's own doc comment and the Vacate\nhelper both name the real failure mode directly: if that removal fails, \"two files now\ndeclare this record.\" Unlike Render's write (a derived, regenerable projection), Commit's\nwrite replaces the governing record's own bytes -- the same docs/records/-equivalent prose\nthis repository's README tables, contract tests and every session's own context treat as\nground truth for the spec store's own records.\n\nCommitAnswer{preview: EditPreview, report: CommitReport, destination: PathBuf, vacated:\nOption<Vacated>, reproduction: Result<Reproduction, EditError>} and CommitRefusal{kind:\nCommitRefusalKind (Unreadable{path}, Edit, Refused{preview}, Unwritable{preview,report,\npath}), error: CommitRefusalError (FileSystem(FileSystemError), Edit(EditError))} (crates/\norchestration/nomos-spec-orchestration/src/outcome/commit.rs and its four submodules) --\nnone derive Serialize. EditPreview is read through its own public accessors, the same\napproach P13-API-SPEC-PREVIEW-SEAM already established (a fresh CommittedPreviewResponse\ntype here rather than reusing SpecPreviewResponse's own payload shape, since that type's\nwire shape is already fixed by its own finished item and this item does not widen it).\nCommitReport is five usize/bool/String fields, trivial to twin. Vacated/VacateOutcome and\nReproduction are small, already fully understood from CommitAnswer's own fields; Reproduction\n's own Result<_, EditError> splits into three outer variants (Matched, Mismatched,\nUnverifiable{cause}) the same way VerdictResponse::Compared already splits Verdict::\nCompared's Result. CommitRefusalError has no Display impl of its own (only Debug); each of\nits two wrapped types (FileSystemError, EditError) does, so a small CommitRefusalError ->\nString helper matches on both arms directly rather than adding a Display impl to an\norchestration-crate type this item's territory does not include.\n\nD-132 commits cleanly with the same canonical heading rename Preview already stages\n(nomos_spec_orchestration's own Test_Run_Of_Commit_Should_Write_The_Record_And_Close_The_\nRound_Trip proves this exact edit round-trips), so a real end-to-end test against a fresh\nscratch directory needs no corpus, writes real bytes, and can assert them read back\nunchanged.",
+      "done_when": "nomos-api gains a new public function Handle_Spec_Commit(request: &CommitRequest) ->\nSpecCommitResponse in spec.rs, following the &Request convention every prior Spec seam here\nuses: builds a CorpusRequest from NOMOS_V14_CORPUS, calls\nnomos_spec_orchestration::Run(&SpecCommand::Commit(request.clone()), &corpus_request,\n&StdFileSystem), matches SpecOutcome::Commit via an irrefutable let-else with unreachable!\non the wrong-variant arm, converts through SpecCommitResponse::From.\n\nSpecCommitResponse is a new tagged enum: Committed{preview: CommittedPreviewResponse,\nreport: CommitReportResponse, destination: PathBuf, vacated: Option<VacatedResponse>,\nreproduction: ReproductionResponse}, Unreadable{path, cause} (CommitRefusalKind::Unreadable),\nRefused{cause} (CommitRefusalKind::Edit), StoreRefused{preview, cause}\n(CommitRefusalKind::Refused), Unwritable{preview, report, path, cause}\n(CommitRefusalKind::Unwritable) -- each refusal's cause comes from a new private\nRefusal_Cause(CommitRefusalError) -> String helper matching its FileSystem/Edit arms.\n\nCommittedPreviewResponse, CommitReportResponse, VacatedResponse, VacateOutcomeResponse and\nReproductionResponse are new public types, serializable twins of EditPreview (via its own\npublic accessors, not its private fields), nomos_spec_store::CommitReport, and\nnomos_spec_orchestration::{Vacated, VacateOutcome, Reproduction}.\n\nA real test proves Handle_Spec_Commit, given D-132's own real markdown with a canonical\nheading rename staged into a fresh scratch directory, reports SpecCommitResponse::Committed\nwith report.node_id == \"D-132\", vacated: None, the committed bytes on disk exactly matching\nwhat was staged, and reproduction matching ReproductionResponse::Matched. A second test\nproves a --from path that does not exist reports SpecCommitResponse::Unreadable. A third\ntest proves the Committed response round-trips through serde_json with the \"outcome\" tag\nreading \"committed\". tests/contract/surface/nomos-api.txt is regenerated\n(NOMOS_SURFACE_BLESS) and current. nomos-spec-orchestration and nomos-spec-store are not\ntouched by this item.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-api",
+          "tests/contract/surface/nomos-api.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "t result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 5 tests\ntest Test_A_Lowered_Declaration_Should_Fail_The_Comparison ... ok\ntest Test_A_Matching_Declaration_Should_Pass_The_Comparison ... ok\ntest Test_An_Unrelated_Minor_Version_Should_Fail_The_Comparison ... ok\ntest Test_The_Real_Workflow_Should_Still_Have_The_Install_Step ... ok\ntest Test_The_Declared_Floor_Should_Match_The_Toolchain_The_Gate_Installs ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.13s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_api-64d9b3c86a50fc3e.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-95a1aef077b5f9ba.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-ead301eb7c8d8256.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-a61f2bcd75c8d4d9.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-fba07f1fa1c92105.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-2bb84d2d8744d800.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-c2987d8eceda16d3.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-0eeaea7cd309c35b.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-2db99bdd604951c5.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-56e2b70874db076c.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-1204b8c22ecd0b43.exe)\n   Doc-tests nomos_api\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1787606703,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
