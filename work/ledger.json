@@ -28056,6 +28056,65 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-MODEL-ROUTE-005-015-018-RESOLUTION-VOCABULARY",
+      "title": "nomos-model-package gains a sixth maturity: MODEL-ROUTE-005/015/018 scope-precedence and mapping vocabulary",
+      "why": "OD-PACKAGE-011 v3 reclassified MODEL-ROUTE-005, 015 and 018 from no-real-case to licensed: each closes a real corpus enumeration directly transcribable at the declared vocabulary layer, the same test that already licensed EffortLevel/ModelSelector and the third/fourth/fifth maturities. 005 names eleven scope-precedence tiers in order (invocation override through backend default) and ResolvedModelExecution own eight preserved fields; my own earlier ModelExecutionProfile doc comment already named this precedence chain as deferred specifically because most of its eleven scopes lack a real type to order -- this builds the enum and the record as vocabulary only, no resolver, the same boundary that doc comment drew. 015 names a closed four-value mapping-quality set (Exact, Approximate, Unsupported, ExecutorControlled) and EffortMappingRecord seven fields, directly extending EffortLevel which this crate already carries. 018 names a closed six-level selector-specificity ranking. None of the three computes a resolution, a mapping or a ranking the corpus does not itself specify -- ExecutionScope and ResolvedModelExecution literal field-for-field transcription is noted in its own doc comment given the sentence does not fully disambiguate whether candidate is singular or repeated per resolution.",
+      "done_when": "crates/packages/nomos-model-package/src/execution_scope.rs, resolved_model_execution.rs, effort_mapping.rs and selector_specificity.rs exist. ExecutionScope carries MODEL-ROUTE-005 eleven scopes in the corpus own order; ResolvedModelExecution carries its eight named fields. MappingQuality carries MODEL-ROUTE-015 four values; EffortMappingRecord carries its seven named fields, reusing EffortLevel for the requested-effort field. SelectorSpecificity carries MODEL-ROUTE-018 six ranks in the corpus own order. Each enum has the crate standard Label()/Display pair. lib.rs gains a sixth maturity doc section matching the style of the five already there, and re-exports all four new public types. cargo test -p nomos-model-package passes, including a label-distinctness test per enum. cargo test --no-fail-fast -p nomos-contract-tests passes with tests/contract/surface/nomos-model-package.txt reblessed. cargo clippy --workspace --all-targets is clean.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/packages/nomos-model-package/src/lib.rs",
+          "crates/packages/nomos-model-package/src/execution_scope.rs",
+          "crates/packages/nomos-model-package/src/resolved_model_execution.rs",
+          "crates/packages/nomos-model-package/src/effort_mapping.rs",
+          "crates/packages/nomos-model-package/src/selector_specificity.rs",
+          "tests/contract/surface/nomos-model-package.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "Cited_Rule ... ok\ntest Test_Every_Cited_Record_Should_Still_Exist ... ok\ntest Test_Every_Cited_Version_Should_Match_The_Records_Own_Front_Matter ... ok\ntest Test_A_Mismatched_Version_Should_Fail_The_Comparison ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 5 tests\ntest Test_A_Lowered_Declaration_Should_Fail_The_Comparison ... ok\ntest Test_An_Unrelated_Minor_Version_Should_Fail_The_Comparison ... ok\ntest Test_A_Matching_Declaration_Should_Pass_The_Comparison ... ok\ntest Test_The_Real_Workflow_Should_Still_Have_The_Install_Step ... ok\ntest Test_The_Declared_Floor_Should_Match_The_Toolchain_The_Gate_Installs ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.11s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-06ab25b0491e144c.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-4c32ae08be8df958.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-9350d088b8d6ed0d.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-9ca3879aab70176f.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-308fef82df004321.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-f6f7228f8cfa874c.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-ea500c062215f506.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-790c8c5856e63fa5.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-98429b682798ce96.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-c1e906054609f777.exe)\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1787595243,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "c87d8e090b4738a24232a73e918dfbf4c335d4de"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

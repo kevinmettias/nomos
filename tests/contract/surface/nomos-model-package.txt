@@ -1,7 +1,10 @@
 pub const fn nomos_model_package::DisqualificationReason::Label(self) -> &'static str
 pub const fn nomos_model_package::EffortLevel::Label(self) -> &'static str
+pub const fn nomos_model_package::ExecutionScope::Label(self) -> &'static str
 pub const fn nomos_model_package::FallbackAdmissibility::Permits(&self, changed: &Self) -> bool
+pub const fn nomos_model_package::MappingQuality::Label(self) -> &'static str
 pub const fn nomos_model_package::ModelExecutionProfile::New(selector: ModelSelector, effort: EffortLevel) -> Self
+pub const fn nomos_model_package::SelectorSpecificity::Label(self) -> &'static str
 pub const nomos_model_package::SCHEMA_VERSION: u32
 pub enum nomos_model_package::AssemblyComponentAvailability
 pub enum nomos_model_package::CandidateFitAdjustment
@@ -9,11 +12,14 @@ pub enum nomos_model_package::ChangeAuthorization
 pub enum nomos_model_package::DisqualificationEligibility
 pub enum nomos_model_package::DisqualificationReason
 pub enum nomos_model_package::EffortLevel
+pub enum nomos_model_package::ExecutionScope
 pub enum nomos_model_package::ManifestError
+pub enum nomos_model_package::MappingQuality
 pub enum nomos_model_package::ModelSelection
 pub enum nomos_model_package::ModelSelector
 pub enum nomos_model_package::OutputDeterminismValue
 pub enum nomos_model_package::RoutingReplayDisposition
+pub enum nomos_model_package::SelectorSpecificity
 pub enum variant nomos_model_package::AssemblyComponentAvailability::ExecutorControlled
 pub enum variant nomos_model_package::AssemblyComponentAvailability::Missing
 pub enum variant nomos_model_package::AssemblyComponentAvailability::ProviderHidden
@@ -45,6 +51,17 @@ pub enum variant nomos_model_package::EffortLevel::Low
 pub enum variant nomos_model_package::EffortLevel::Maximum
 pub enum variant nomos_model_package::EffortLevel::Medium
 pub enum variant nomos_model_package::EffortLevel::Minimal
+pub enum variant nomos_model_package::ExecutionScope::BackendDefault
+pub enum variant nomos_model_package::ExecutionScope::ExactJudgmentImplementationProfile
+pub enum variant nomos_model_package::ExecutionScope::ExactLogicalOperationProfile
+pub enum variant nomos_model_package::ExecutionScope::GateProfile
+pub enum variant nomos_model_package::ExecutionScope::InvocationOverride
+pub enum variant nomos_model_package::ExecutionScope::OrganizationProfile
+pub enum variant nomos_model_package::ExecutionScope::PhaseProfile
+pub enum variant nomos_model_package::ExecutionScope::RepositoryProfile
+pub enum variant nomos_model_package::ExecutionScope::RuleCheckProfile
+pub enum variant nomos_model_package::ExecutionScope::TaskClassProfile
+pub enum variant nomos_model_package::ExecutionScope::WorkflowProfile
 pub enum variant nomos_model_package::ManifestError::EmptyList { at: String, field: String, }
 pub enum variant nomos_model_package::ManifestError::InvertedProtocolRange { at: String, }
 pub enum variant nomos_model_package::ManifestError::MalformedVersion { at: String, field: String, cause: String, }
@@ -56,6 +73,10 @@ pub enum variant nomos_model_package::ManifestError::UnknownSchema { at: String,
 pub enum variant nomos_model_package::ManifestError::Unreadable { at: String, cause: String, }
 pub enum variant nomos_model_package::ManifestError::WrongPackageKind { at: String, found: PackageKind, }
 pub enum variant nomos_model_package::ManifestError::WrongType { at: String, field: String, expected: String, }
+pub enum variant nomos_model_package::MappingQuality::Approximate
+pub enum variant nomos_model_package::MappingQuality::Exact
+pub enum variant nomos_model_package::MappingQuality::ExecutorControlled
+pub enum variant nomos_model_package::MappingQuality::Unsupported
 pub enum variant nomos_model_package::ModelSelection::Catalog(Vec<String>)
 pub enum variant nomos_model_package::ModelSelection::ExecutorControlled
 pub enum variant nomos_model_package::ModelSelection::Opaque
@@ -74,17 +95,35 @@ pub enum variant nomos_model_package::RoutingReplayDisposition::BestEffort { rea
 pub enum variant nomos_model_package::RoutingReplayDisposition::ConfigurationEquivalent { reasons: Vec<String>, }
 pub enum variant nomos_model_package::RoutingReplayDisposition::Exact
 pub enum variant nomos_model_package::RoutingReplayDisposition::NonReplayable { reasons: Vec<String>, }
+pub enum variant nomos_model_package::SelectorSpecificity::ExactJudgmentImplementationId
+pub enum variant nomos_model_package::SelectorSpecificity::ExactLogicalOperationId
+pub enum variant nomos_model_package::SelectorSpecificity::ExactRuleCheckIdentityPlusStage
+pub enum variant nomos_model_package::SelectorSpecificity::InheritedDefault
+pub enum variant nomos_model_package::SelectorSpecificity::RuleFamilySelectorPlusStage
+pub enum variant nomos_model_package::SelectorSpecificity::TaskClassSelector
 pub fn nomos_model_package::DisqualificationReason::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_model_package::EffortLevel::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_model_package::ExecutionScope::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_model_package::ManifestError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_model_package::MappingQuality::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_model_package::Parse_Manifest(text: &str, at: &str) -> Result<ModelRoutePackage, ManifestError>
 pub fn nomos_model_package::Read_Manifest(path: &Path) -> Result<ModelRoutePackage, ManifestError>
+pub fn nomos_model_package::SelectorSpecificity::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub impl nomos_model_package::DisqualificationReason implements core::fmt::Display
 pub impl nomos_model_package::EffortLevel implements core::fmt::Display
+pub impl nomos_model_package::ExecutionScope implements core::fmt::Display
 pub impl nomos_model_package::ManifestError implements core::fmt::Display
+pub impl nomos_model_package::MappingQuality implements core::fmt::Display
+pub impl nomos_model_package::SelectorSpecificity implements core::fmt::Display
 pub struct field nomos_model_package::AuthorizedCandidateFitAdjustment::adjustment: CandidateFitAdjustment
 pub struct field nomos_model_package::AuthorizedCandidateFitAdjustment::authorization: ChangeAuthorization
 pub struct field nomos_model_package::AuthorizedCandidateFitAdjustment::result: ModelInputAssemblyIdentity
+pub struct field nomos_model_package::EffortMappingRecord::limitations: Vec<String>
+pub struct field nomos_model_package::EffortMappingRecord::package_version: String
+pub struct field nomos_model_package::EffortMappingRecord::provider_disposition: String
+pub struct field nomos_model_package::EffortMappingRecord::quality: MappingQuality
+pub struct field nomos_model_package::EffortMappingRecord::rationale: String
+pub struct field nomos_model_package::EffortMappingRecord::requested_effort: EffortLevel
 pub struct field nomos_model_package::FallbackAdmissibility::may_change_backend_package: bool
 pub struct field nomos_model_package::FallbackAdmissibility::may_change_context_policy: bool
 pub struct field nomos_model_package::FallbackAdmissibility::may_change_cost_or_latency_class: bool
@@ -127,6 +166,7 @@ pub struct field nomos_model_package::ReplayFacts::executor_replay: RoutingRepla
 pub struct field nomos_model_package::ReplayFacts::live_operation_disposition: RoutingReplayDisposition
 pub struct field nomos_model_package::RuntimeCandidateDisqualification::reason: DisqualificationReason
 pub struct nomos_model_package::AuthorizedCandidateFitAdjustment
+pub struct nomos_model_package::EffortMappingRecord
 pub struct nomos_model_package::FallbackAdmissibility
 pub struct nomos_model_package::FallbackTransitionTrace
 pub struct nomos_model_package::ModelExecutionProfile

@@ -58,12 +58,24 @@
 //! answer `MODEL-ROUTE-035` and `036`, extending [`RuntimeCandidateDisqualification`]
 //! (`034`) and [`ModelInputAssemblyIdentity`] (`029`) directly rather than
 //! re-deriving either.
+//!
+//! # A sixth maturity: scope-precedence and mapping vocabulary
+//!
+//! [`ExecutionScope`], [`MappingQuality`]/[`EffortMappingRecord`] and
+//! [`SelectorSpecificity`] answer `MODEL-ROUTE-005`, `015` and `018`, on the same
+//! `OD-PACKAGE-011` v3 licensing. `005`'s own second sentence names further fields of
+//! `ResolvedModelExecution`; that record stays unbuilt for the same reason
+//! [`ModelInputAssemblyIdentity`]'s own doc comment already gives -- `ExecutionScope`
+//! is one more field contributed to its eventual assembly, not a license to type a
+//! partial wrapper now.
 
 #![forbid(unsafe_code)]
 
 mod assembly_component_availability;
 mod candidate_fit_adjustment;
 mod effort_level;
+mod effort_mapping;
+mod execution_scope;
 mod fallback_admissibility;
 mod fallback_transition_trace;
 mod manifest;
@@ -75,10 +87,13 @@ mod output_determinism_expectation;
 mod reader;
 mod routing_replay_disposition;
 mod runtime_candidate_disqualification;
+mod selector_specificity;
 
 pub use assembly_component_availability::AssemblyComponentAvailability;
 pub use candidate_fit_adjustment::{AuthorizedCandidateFitAdjustment, CandidateFitAdjustment, ChangeAuthorization};
 pub use effort_level::EffortLevel;
+pub use effort_mapping::{EffortMappingRecord, MappingQuality};
+pub use execution_scope::ExecutionScope;
 pub use fallback_admissibility::FallbackAdmissibility;
 pub use fallback_transition_trace::{DisqualificationEligibility, FallbackTransitionTrace};
 pub use manifest::ModelRoutePackage;
@@ -91,3 +106,4 @@ pub use output_determinism_expectation::{OutputDeterminismExpectation, OutputDet
 pub use reader::{ManifestError, Parse_Manifest, Read_Manifest, SCHEMA_VERSION};
 pub use routing_replay_disposition::{ReplayFacts, RoutingReplayDisposition};
 pub use runtime_candidate_disqualification::{DisqualificationReason, RuntimeCandidateDisqualification};
+pub use selector_specificity::SelectorSpecificity;
