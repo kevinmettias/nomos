@@ -10,8 +10,12 @@ pub const fn nomos_corrections::CorrectionChoice::Selected(&self) -> CorrectionI
 pub const fn nomos_corrections::CorrectionClass::Label(self) -> &'static str
 pub const fn nomos_corrections::CorrectionId::Digest(&self) -> Digest128
 pub const fn nomos_corrections::CorrectionId::From_Digest(digest: Digest128) -> Self
+pub const fn nomos_corrections::DerivedProvenance::Guarantee(&self) -> Guarantee
+pub const fn nomos_corrections::DerivedProvenance::Provider(&self) -> &ProviderId
 pub const fn nomos_corrections::Preview::Mutation_Class(&self) -> MutationClass
 pub const fn nomos_corrections::RankingCriterion::Label(self) -> &'static str
+pub const fn nomos_corrections::ReadWriteResolution::Label(self) -> &'static str
+pub const fn nomos_corrections::ReadWriteSet::Resolution(&self) -> ReadWriteResolution
 pub const fn nomos_corrections::ReviewReason::Label(self) -> &'static str
 pub const fn nomos_corrections::RollbackBoundary::Label(self) -> &'static str
 pub const fn nomos_corrections::StagedPlan::Base(&self) -> SnapshotId
@@ -26,6 +30,7 @@ pub enum nomos_corrections::CorrectionClass
 pub enum nomos_corrections::CorrectionDecision
 pub enum nomos_corrections::CorrectionError
 pub enum nomos_corrections::RankingCriterion
+pub enum nomos_corrections::ReadWriteResolution
 pub enum nomos_corrections::ReviewReason
 pub enum nomos_corrections::RollbackBoundary
 pub enum variant nomos_corrections::CandidateLabel::AgentProposed
@@ -56,6 +61,13 @@ pub enum variant nomos_corrections::RankingCriterion::Reversibility
 pub enum variant nomos_corrections::RankingCriterion::SecondaryFindings
 pub enum variant nomos_corrections::RankingCriterion::UserPreference
 pub enum variant nomos_corrections::RankingCriterion::VerificationCost
+pub enum variant nomos_corrections::ReadWriteResolution::Artifact
+pub enum variant nomos_corrections::ReadWriteResolution::Configuration
+pub enum variant nomos_corrections::ReadWriteResolution::Dependency
+pub enum variant nomos_corrections::ReadWriteResolution::GeneratedSource
+pub enum variant nomos_corrections::ReadWriteResolution::ProviderState
+pub enum variant nomos_corrections::ReadWriteResolution::Semantic
+pub enum variant nomos_corrections::ReadWriteResolution::Symbol
 pub enum variant nomos_corrections::ReviewReason::ChangesPublicBehaviorOrArchitecture
 pub enum variant nomos_corrections::ReviewReason::NoDominantCandidate
 pub enum variant nomos_corrections::RollbackBoundary::Compensating
@@ -88,6 +100,9 @@ pub fn nomos_corrections::CorrectionPlan::Candidates(&self) -> &[CorrectionCandi
 pub fn nomos_corrections::CorrectionPlan::New(candidates: Vec<CorrectionCandidate>) -> Result<Self, CorrectionError>
 pub fn nomos_corrections::CorrectionPlan::Preview(&self) -> Preview
 pub fn nomos_corrections::CorrectionPlan::Stage(&self, base: &Workspace) -> Result<StagedPlan, CorrectionError>
+pub fn nomos_corrections::DerivedProvenance::Confidence(&self) -> &str
+pub fn nomos_corrections::DerivedProvenance::Invalidation_Basis(&self) -> &str
+pub fn nomos_corrections::DerivedProvenance::New(provider: ProviderId, guarantee: Guarantee, confidence: impl Into<String>, invalidation_basis: impl Into<String>) -> Self
 pub fn nomos_corrections::Edit::After(&self) -> Option<&str>
 pub fn nomos_corrections::Edit::Before(&self) -> Option<&str>
 pub fn nomos_corrections::Edit::Forward(&self) -> Change
@@ -96,6 +111,11 @@ pub fn nomos_corrections::Edit::Path(&self) -> &str
 pub fn nomos_corrections::Edit::Reverse(&self) -> Change
 pub fn nomos_corrections::Preview::Rendered(&self) -> &[u8]
 pub fn nomos_corrections::RankingCriterion::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_corrections::ReadWriteResolution::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_corrections::ReadWriteSet::Declared(resolution: ReadWriteResolution, entries: Vec<String>) -> Self
+pub fn nomos_corrections::ReadWriteSet::Derived(resolution: ReadWriteResolution, entries: Vec<String>, provenance: DerivedProvenance) -> Self
+pub fn nomos_corrections::ReadWriteSet::Derived_Provenance(&self) -> Option<&DerivedProvenance>
+pub fn nomos_corrections::ReadWriteSet::Entries(&self) -> &[String]
 pub fn nomos_corrections::ReviewReason::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_corrections::RollbackBoundary::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_corrections::StagedPlan::Validate(&self, live: &Workspace) -> Result<ValidatedPlan, CorrectionError>
@@ -108,6 +128,7 @@ pub impl nomos_corrections::CorrectionError implements std::error::Error
 pub impl nomos_corrections::CorrectionId implements core::fmt::Display
 pub impl nomos_corrections::CorrectionStaging implements Strategy
 pub impl nomos_corrections::RankingCriterion implements core::fmt::Display
+pub impl nomos_corrections::ReadWriteResolution implements core::fmt::Display
 pub impl nomos_corrections::ReviewReason implements core::fmt::Display
 pub impl nomos_corrections::RollbackBoundary implements core::fmt::Display
 pub struct nomos_corrections::ChangeSet
@@ -117,7 +138,9 @@ pub struct nomos_corrections::CorrectionChoice
 pub struct nomos_corrections::CorrectionId(Digest128)
 pub struct nomos_corrections::CorrectionPlan
 pub struct nomos_corrections::CorrectionStaging
+pub struct nomos_corrections::DerivedProvenance
 pub struct nomos_corrections::Edit
 pub struct nomos_corrections::Preview
+pub struct nomos_corrections::ReadWriteSet
 pub struct nomos_corrections::StagedPlan
 pub struct nomos_corrections::ValidatedPlan
