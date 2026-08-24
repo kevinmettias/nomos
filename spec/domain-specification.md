@@ -55,6 +55,7 @@ profile: domain-specification
 | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md@authored | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md | authored | 29 | 9 | sha256:0351be57f7a37c7b7e8965886b9fa29c15f87fe4660ee253dcebcad932fe77a6 |
 | docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md@authored | docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md | authored | 28 | 9 | sha256:9f1c5229277415e49115502a643ecee1e889b80a83acb01e8695fe922761f0c2 |
 | docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md@authored | docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md | authored | 21 | 7 | sha256:1b76256697879186b4f2368f4ca1eb180a8aea16bca5e3fd06a9b74b620116e5 |
+| docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md@authored | docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md | authored | 14 | 6 | sha256:e55bd46b259be4c661ac4bb95475cd427ad66c783465edae129bac816f1ababf |
 | docs/records/OD-DETERMINISM-001-a-declaration-proven-only-behind-a-corpus-gate.md@authored | docs/records/OD-DETERMINISM-001-a-declaration-proven-only-behind-a-corpus-gate.md | authored | 26 | 7 | sha256:b080a464d0e59ac731e8b78eb0104aeed978958713f99969d1506ebbee92802e |
 | docs/records/OD-DETERMINISM-002-the-last-two-rows-declare-and-the-guard-stops-asking-about-facts.md@authored | docs/records/OD-DETERMINISM-002-the-last-two-rows-declare-and-the-guard-stops-asking-about-facts.md | authored | 35 | 10 | sha256:14dba5ba489a39e4b5605d97a5eb1389a55a6f0efa07f1aa076ccd5dece46428 |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md@authored | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md | authored | 30 | 8 | sha256:ede1d73ff937b80913dd5c6fd4d7d5cc70cb8158b29e13bfe003ae5cd5f805d5 |
@@ -513,6 +514,12 @@ profile: domain-specification
 | docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#14 | authored | 2 | What This Does Not Do |
 | docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#16 | authored | 2 | What Would Decide The Next Increment |
 | docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#20 | authored | 2 | Status |
+| docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md#1 | authored | 1 | ValidatedPlan::Commit requires attached Evidence, closing AGT-EXEC-004's real gap |
+| docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md#2 | authored | 2 | Question |
+| docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md#4 | authored | 2 | What Was Measured |
+| docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md#8 | authored | 2 | The Decision |
+| docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md#11 | authored | 2 | What This Does Not Do |
+| docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md#13 | authored | 2 | Status |
 | docs/records/OD-DETERMINISM-001-a-declaration-proven-only-behind-a-corpus-gate.md#1 | authored | 1 | A determinism declaration proven only behind a corpus gate is proven nowhere |
 | docs/records/OD-DETERMINISM-001-a-declaration-proven-only-behind-a-corpus-gate.md#2 | authored | 2 | Question |
 | docs/records/OD-DETERMINISM-001-a-declaration-proven-only-behind-a-corpus-gate.md#5 | authored | 2 | What Was Not Widened, And Why That Is The Decision |
@@ -12302,6 +12309,145 @@ Accepted. Names corrections' real current state precisely, checked against the c
 the `COR-*` corpus family rather than assumed, and the two conditions that would decide its
 next real increment. Schedules no work of its own, the same restraint `ARC-ROADMAP-001`
 holds for its own boundary.
+
+### docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md#1
+
+*revision: authored · kind: heading · heading: ValidatedPlan::Commit requires attached Evidence, closing AGT-EXEC-004's real gap · hash: sha256:3ee9bf06097a7ce915a7a25cf6b0f0d6e66e438144ccd08bbcdd706918861a01*
+
+# ValidatedPlan::Commit requires attached Evidence, closing AGT-EXEC-004's real gap
+
+### docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md#2
+
+*revision: authored · kind: heading · heading: ValidatedPlan::Commit requires attached Evidence, closing AGT-EXEC-004's real gap / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md#3
+
+*revision: authored · kind: prose · heading: ValidatedPlan::Commit requires attached Evidence, closing AGT-EXEC-004's real gap / Question · hash: sha256:10f25033a6f15b83fbee02dd80daa8c708c4a3abee0c14999e1c7541c99dc787*
+
+The user directed real `AgentExecutor` infrastructure to be built now, not another
+manifest layer -- an explicit override of the population-of-zero caution this workspace
+otherwise holds, the same shape `OD-PACKAGE-006`'s wait was already overridden once for
+language/rule plugin infrastructure. Before inventing a capability-class authorization
+system or a sandbox-policy schema from nothing, this record checks whether the corpus's
+own agent-executor threat model (`AGT-EXEC-001` through `005`, volume-08.7-8-1) names
+anything this workspace already has the pieces for, unconnected.
+
+### docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md#4
+
+*revision: authored · kind: heading · heading: ValidatedPlan::Commit requires attached Evidence, closing AGT-EXEC-004's real gap / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md#5
+
+*revision: authored · kind: prose · heading: ValidatedPlan::Commit requires attached Evidence, closing AGT-EXEC-004's real gap / What Was Measured · hash: sha256:d7f87fbb42fbf88eeff20e753a38c0446f862ef1a40ffaef904421ae8dcff148*
+
+An audit landed immediately before this record (`P13-TRACE-AGT-EXEC-AUDIT`,
+`tests/contract/requirements/AGT-EXEC-002.assessment`, `AGT-EXEC-004.assessment`,
+`AGT-EXEC-005.assessment`) checked all five `AGT-EXEC` requirements against the live
+workspace directly. Three had real, tested, previously unassessed grounding; two
+(`AGT-EXEC-001`'s capability-class authorization, `AGT-EXEC-003`'s untrusted-content
+handling) had none worth citing without overclaiming.
+
+### docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md#6
+
+*revision: authored · kind: prose · heading: ValidatedPlan::Commit requires attached Evidence, closing AGT-EXEC-004's real gap / What Was Measured · hash: sha256:535b2e9ef9cb9ac2d1c6dbf0b36645946e484edc65931c8e02da16b4adbd900a*
+
+`AGT-EXEC-004` -- "Agent claims of tests, builds, checks, or measurements require attached
+tool evidence from the corresponding trusted capability. Unsupported claims remain
+AgentJudged" -- is the one with a genuine, actionable gap rather than only a genuine match.
+`EvidenceClass::AgentJudged` and `Is_Mechanical` (`nomos-contracts`) are real: an ordered
+strength scale with `AgentJudged` as its un-promotable floor, wired into `Finding` and
+tested directly. `nomos_ledger::work finish` is a second, independently real instance of
+the requirement's positive half: `Ran_To_Completion` runs a claimed item's declared
+predicate through an actual process launcher, `Refuse_Nonzero` refuses to record completion
+on anything but a genuine exit code, and `VerificationRecord` carries the real argv, exit
+code, output tail and tree revision -- attached tool evidence from the corresponding
+trusted capability, mechanically, for every claim this session made about a ledger item's
+tests passing.
+
+### docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md#7
+
+*revision: authored · kind: prose · heading: ValidatedPlan::Commit requires attached Evidence, closing AGT-EXEC-004's real gap / What Was Measured · hash: sha256:e31b8e70c2f8d7f22ddcc42c887b136c10b6d3fede010058cc60abffb626e1f6*
+
+Checked against the one other real mutation-commit path in this workspace:
+`nomos_corrections::ValidatedPlan::Commit`. It takes no evidence parameter at all. A
+correction can be committed with zero attached tool evidence, and nothing downgrades an
+unsubstantiated claim about it to `AgentJudged` the way `work finish` already does for a
+ledger item's own predicate. Checked whether wiring `Evidence` (`nomos_model`) into
+`Commit` would require inventing anything: it would not. `nomos-corrections` (band 35)
+already depends on `nomos-model` (band 10, the crate `Evidence` lives in) -- a real, legal
+dependency edge today, unused for this purpose. `Evidence { class, producer, supporting }`
+is real, tested, and its only current construction site anywhere in the workspace is its
+own unit test (`crates/kernel/nomos-model/src/evidence/claim.rs`). What is missing is not a
+shape to invent; it is the wiring between two already-built systems built without knowing
+about each other -- the same kind of gap `OD-TRACE-002` closed for `CHK-003` and this
+session closed for `MODEL-ROUTE-037`, except the fix here is code, not a machine-readable
+entry.
+
+### docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md#8
+
+*revision: authored · kind: heading · heading: ValidatedPlan::Commit requires attached Evidence, closing AGT-EXEC-004's real gap / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md#9
+
+*revision: authored · kind: prose · heading: ValidatedPlan::Commit requires attached Evidence, closing AGT-EXEC-004's real gap / The Decision · hash: sha256:9a21918bbc38e545a17e8172e2845d49c9d9dbe52ebd549007524ff2edb11b34*
+
+**`ValidatedPlan::Commit` takes an additional `Evidence` parameter. `CommittedPlan` carries
+it and exposes it through a new `Evidence()` accessor.** A caller with no real tool evidence
+constructs `Evidence { class: EvidenceClass::AgentJudged, .. }` -- an honest declaration,
+not a refusal; `AGT-EXEC-004` does not forbid an agent-judged commit, it forbids one that
+is not labelled as such. `Commit` does not gate on the evidence's strength: `EvidenceClass`
+is already a floor-and-strength scale, not a pass/fail gate, and this crate does not start
+judging what a caller may commit -- it only stops being silent about how the caller says it
+knows.
+
+### docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md#10
+
+*revision: authored · kind: prose · heading: ValidatedPlan::Commit requires attached Evidence, closing AGT-EXEC-004's real gap / The Decision · hash: sha256:3861177d91b422d0d56447b323c7c21fbb4486108385412edc9d5acf7669dbb6*
+
+`Rollback` is deliberately untouched. `AGT-EXEC-004` is about claims of tests, builds,
+checks and measurements; undoing a commit is not such a claim, and giving it an evidence
+parameter would be scope this record was not asked to draw.
+
+### docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md#11
+
+*revision: authored · kind: heading · heading: ValidatedPlan::Commit requires attached Evidence, closing AGT-EXEC-004's real gap / What This Does Not Do · hash: sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf*
+
+## What This Does Not Do
+
+### docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md#12
+
+*revision: authored · kind: prose · heading: ValidatedPlan::Commit requires attached Evidence, closing AGT-EXEC-004's real gap / What This Does Not Do · hash: sha256:2770f26c388b2ef1c9262255912c0c90e620989fcf751ed343e1acbcd6c8430c*
+
+It does not build `AGT-EXEC-001`'s capability-class partitioning or authorization/audit
+model, `AGT-EXEC-002`'s remaining seven declared-run dimensions (network policy, executable
+allowlist, secret access, environment variables, process limits, model-provider/
+data-retention policy, maximum patch/artifact size), or `AGT-EXEC-003`'s untrusted-content
+handling. None has a real second case in this workspace to check a shape against yet, and
+`P13-TRACE-AGT-EXEC-AUDIT` already named that precisely rather than leaving it to be
+re-derived. It does not reopen `OD-CORRECTIONS-001`, which remains accurate about what this
+crate decides (nothing about what to fix) -- this record adds one honest declaration about
+what backs a decision already made elsewhere, not a second decision-making authority inside
+the crate. It does not change what `Commit` refuses; a plan whose workspace moved is still
+refused exactly as before, unconditionally on the evidence supplied.
+
+### docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md#13
+
+*revision: authored · kind: heading · heading: ValidatedPlan::Commit requires attached Evidence, closing AGT-EXEC-004's real gap / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md#14
+
+*revision: authored · kind: prose · heading: ValidatedPlan::Commit requires attached Evidence, closing AGT-EXEC-004's real gap / Status · hash: sha256:60da0afff8ba43b94adf0f61130ec4b413d4e9d03e15354f4c01174729b72555*
+
+Accepted. Closes the one real, non-invented gap `P13-TRACE-AGT-EXEC-AUDIT` found in
+`AGT-EXEC-004`, wiring two already-built systems together rather than adding a third.
 
 ### docs/records/OD-DETERMINISM-001-a-declaration-proven-only-behind-a-corpus-gate.md#1
 

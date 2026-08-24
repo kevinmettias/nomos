@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:d89a66822b6682eeca8d59c9466f3436d5c8e75502545ab09d17cd19c3d7ff05",
-  "inputs_digest": "sha256:19f82bd71a4f50b20311fc3885e6e94ef34bc76bf8a0d8e2d606b4f353c08a79",
+  "content_digest": "sha256:4e78145f738d3645bde5a5aa1d4a4a8ead6f495c815c45703c96d3f055092495",
+  "inputs_digest": "sha256:b4444aef24be8879b21bf53ddf4656f8a6979d972ed5521e454fe4ba693627e4",
   "sections": [
     [
       "Documents",
-      151
+      152
     ],
     [
       "Sections",
-      1295
+      1301
     ],
     [
       "Source blocks",
-      4593
+      4607
     ]
   ],
   "inputs": [
@@ -244,6 +244,11 @@
       "content": "documents",
       "identity": "docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md@authored",
       "hash": "sha256:1b76256697879186b4f2368f4ca1eb180a8aea16bca5e3fd06a9b74b620116e5"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md@authored",
+      "hash": "sha256:e55bd46b259be4c661ac4bb95475cd427ad66c783465edae129bac816f1ababf"
     },
     {
       "content": "documents",
@@ -2509,6 +2514,36 @@
       "content": "headings",
       "identity": "docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#20",
       "hash": "sha256:3467b939373f782cbf218cad2441886684a0592c1f65f2c66c3434f10b403ead"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md#1",
+      "hash": "sha256:31200e78f77af75cd07e665c5e297c29ec220543d794e095f05af3a93de08aa6"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md#2",
+      "hash": "sha256:d89a98ee15e622bfe707b908d0904c21fa0c93f45efb0a844bda4c25a59915c1"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md#4",
+      "hash": "sha256:4c68f6252d0cf6d149902a080845bbbc550f45310e3dd80b761c1aeb08ed7e85"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md#8",
+      "hash": "sha256:e9a2a3c1effc751fe1032f73fde24ccd2588f54156c20f9ccd1e23d91c4558d2"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md#11",
+      "hash": "sha256:07e3ec22c417dcd622194727481ea944feeddd032e623b8f1b9829f8bc1644cd"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md#13",
+      "hash": "sha256:04ed6be670fc7173cd9fb374e3d689d5dea1ee61d36734fa3804e68653ccd85a"
     },
     {
       "content": "headings",
@@ -13189,6 +13224,76 @@
       "content": "blocks",
       "identity": "docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#21",
       "hash": "sha256:5f90ed2c2e12423b27c371f6537d3c2b60446f199ffd748a3d47f216fd2f3e8b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md#1",
+      "hash": "sha256:3ee9bf06097a7ce915a7a25cf6b0f0d6e66e438144ccd08bbcdd706918861a01"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md#3",
+      "hash": "sha256:10f25033a6f15b83fbee02dd80daa8c708c4a3abee0c14999e1c7541c99dc787"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md#4",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md#5",
+      "hash": "sha256:d7f87fbb42fbf88eeff20e753a38c0446f862ef1a40ffaef904421ae8dcff148"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md#6",
+      "hash": "sha256:535b2e9ef9cb9ac2d1c6dbf0b36645946e484edc65931c8e02da16b4adbd900a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md#7",
+      "hash": "sha256:e31b8e70c2f8d7f22ddcc42c887b136c10b6d3fede010058cc60abffb626e1f6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md#8",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md#9",
+      "hash": "sha256:9a21918bbc38e545a17e8172e2845d49c9d9dbe52ebd549007524ff2edb11b34"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md#10",
+      "hash": "sha256:3861177d91b422d0d56447b323c7c21fbb4486108385412edc9d5acf7669dbb6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md#11",
+      "hash": "sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md#12",
+      "hash": "sha256:2770f26c388b2ef1c9262255912c0c90e620989fcf751ed343e1acbcd6c8430c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md#13",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md#14",
+      "hash": "sha256:60da0afff8ba43b94adf0f61130ec4b413d4e9d03e15354f4c01174729b72555"
     },
     {
       "content": "blocks",
