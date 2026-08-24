@@ -9,6 +9,7 @@ pub enum nomos_api::SpecFreshnessResponse
 pub enum nomos_api::SpecMarkdownResponse
 pub enum nomos_api::SpecPreviewResponse
 pub enum nomos_api::SpecRecordResponse
+pub enum nomos_api::SpecRenderResponse
 pub enum nomos_api::SpecSourcesResponse
 pub enum nomos_api::SpecTableResponse
 pub enum nomos_api::SuppressionDispositionResponse
@@ -56,6 +57,10 @@ pub enum variant nomos_api::SpecRecordResponse::Ambiguous { id: String, document
 pub enum variant nomos_api::SpecRecordResponse::NotFound { id: String, revision: Option<String>, node: Option<NodeSummaryResponse>, }
 pub enum variant nomos_api::SpecRecordResponse::Resolved { id: String, document: DocumentSourceResponse, }
 pub enum variant nomos_api::SpecRecordResponse::Unreadable { cause: String, }
+pub enum variant nomos_api::SpecRenderResponse::NoSuchProfile { requested: String, known: Vec<String>, }
+pub enum variant nomos_api::SpecRenderResponse::Placed { id: String, body: PathBuf, sidecar: PathBuf, stamp: Stamp, }
+pub enum variant nomos_api::SpecRenderResponse::Unreadable { cause: String, }
+pub enum variant nomos_api::SpecRenderResponse::Unwritable { path: String, cause: String, }
 pub enum variant nomos_api::SpecSourcesResponse::Assembled { read: Vec<String>, absent: Vec<AbsenceResponse>, }
 pub enum variant nomos_api::SpecSourcesResponse::Unreadable { cause: String, }
 pub enum variant nomos_api::SpecTableResponse::AmbiguousDocument { matched: usize, tier: PathMatchResponse, }
@@ -101,6 +106,7 @@ pub fn nomos_api::Handle_Spec_Markdown(request: &RecordRequest) -> SpecMarkdownR
 pub fn nomos_api::Handle_Spec_Preview(request: &EditRequest) -> SpecPreviewResponse
 pub fn nomos_api::Handle_Spec_Profiles() -> ProfilesResponse
 pub fn nomos_api::Handle_Spec_Record(request: &RecordRequest) -> SpecRecordResponse
+pub fn nomos_api::Handle_Spec_Render(request: &RenderRequest) -> SpecRenderResponse
 pub fn nomos_api::Handle_Spec_Sources() -> SpecSourcesResponse
 pub fn nomos_api::Handle_Spec_Table(request: &TableRequest) -> SpecTableResponse
 pub fn nomos_api::Handle_Work_Abandon(directory: &Path, request: &EndingRequest) -> WorkAbandonResponse

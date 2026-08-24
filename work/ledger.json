@@ -27729,6 +27729,65 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-API-SPEC-RENDER-SEAM",
+      "title": "nomos-api gains a nineteenth real seam: Spec's Render verb",
+      "why": "ARC-ROADMAP-001 names CLI/API/MCP projections as a near-term-tier item. nomos-api has proven\na second real caller for Gate, Work, and Spec's Profiles, Sources, Record, Table, Markdown,\nFreshness and Preview -- all read-only or write-nothing so far. Render is the next verb, and\nthe first here that writes: RenderRequest{profile, into, subject}, answered as\nResult<RenderAnswer, RenderRefusal>.\n\nUser decision (asked explicitly via AskUserQuestion, since Render/Commit are the two\nFileSystem-generic verbs that actually write, distinct from Freshness/Preview which only\nread): build both Render and Commit now. Checked before authoring: run::render::Render<F:\nFileSystem> (crates/orchestration/nomos-spec-orchestration/src/run/render.rs) places a built\nprojection's body and its sidecar under request.into via exactly two\nfilesystem.Replace_Atomically calls, unconditionally overwriting whatever was there --\nconfirmed by reading the whole function. nomos-api already performs real, unauthenticated\nStdFileSystem-backed writes over a wire call today: Handle_Work_Claim (crates/host/\nnomos-api/src/work.rs) writes a real ledger.json at a caller-named directory. request.into\nhere plays the same \"caller-named root\" role Work's directory parameter does, with the leaf\npath chosen by this crate's own store/profile machinery rather than by the caller -- so this\nis not a new category of risk for this crate, only its first Spec verb to exercise the write\nhalf of a pattern Work already established. Unlike Commit's vacate step, Render's write is\nnever destructive of the governing record itself: a rendered projection is a derived,\nregenerable artifact that a later render call simply rebuilds.\n\nRenderAnswer{id: String, body: PathBuf, sidecar: PathBuf, stamp: nomos_spec_project::Stamp}\n(crates/orchestration/nomos-spec-orchestration/src/outcome/render.rs) needs no twin at all:\nchecked that Stamp derives Serialize directly (crates/spec/nomos-spec-project/src/build.rs)\nalong with its own nested Format/Input fields, and PathBuf/String already serialize natively\n-- the first Ok-side answer in this file reused whole rather than twinned.\nRenderRefusal{NoSuchProfile{requested,known}, Project(ProjectError), Unwritable{path,error:\nFileSystemError}, Store(StoreError)} -- Project and Store both collapse to the same\nUnreadable{cause} shape every other verb in this file already uses; Unwritable keeps its own\npath (via .display().to_string(), the same shape PreviewRefusal::Unreadable's own path\nfield already uses) alongside a collapsed cause.\n\n\"domain-specification\" builds from the embedded governing records alone (the same profile\nnomos_spec_orchestration's own tests.rs and crates/host/nomos-cli/tests/read_surface.rs both\nuse for the same reason), so a real end-to-end test against a fresh, unique scratch\ndirectory needs no corpus and can assert the body/sidecar bytes actually landed on disk.",
+      "done_when": "nomos-api gains a new public function Handle_Spec_Render(request: &RenderRequest) ->\nSpecRenderResponse in spec.rs, following the &Request convention every prior Spec seam here\nuses: builds a CorpusRequest from NOMOS_V14_CORPUS, calls\nnomos_spec_orchestration::Run(&SpecCommand::Render(request.clone()), &corpus_request,\n&StdFileSystem), matches SpecOutcome::Render via an irrefutable let-else with unreachable!\non the wrong-variant arm, converts through SpecRenderResponse::From.\n\nSpecRenderResponse is a new tagged enum: Placed{id: String, body: PathBuf, sidecar: PathBuf,\nstamp: Stamp} (Stamp reused directly, already Serialize), NoSuchProfile{requested, known},\nUnwritable{path: String, cause: String} (RenderRefusal::Unwritable, path via\n.display().to_string(), cause via FileSystemError's Display), Unreadable{cause: String}\n(RenderRefusal::Project and ::Store both collapse here via their own Display, matching every\nother verb's own error handling in this file).\n\nA real test proves Handle_Spec_Render, given the embedded \"domain-specification\" profile and\na fresh unique scratch directory as into, reports SpecRenderResponse::Placed and that the\nbody and sidecar files it names actually exist on disk with real content (read back via\nstd::fs::read_to_string). A second test proves an unknown profile name reports\nSpecRenderResponse::NoSuchProfile. A third test proves the Placed response round-trips\nthrough serde_json with the \"outcome\" tag reading \"placed\". tests/contract/surface/\nnomos-api.txt is regenerated (NOMOS_SURFACE_BLESS) and current. nomos-spec-orchestration and\nnomos-spec-project are not touched by this item.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-api",
+          "tests/contract/surface/nomos-api.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "t result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 5 tests\ntest Test_A_Lowered_Declaration_Should_Fail_The_Comparison ... ok\ntest Test_An_Unrelated_Minor_Version_Should_Fail_The_Comparison ... ok\ntest Test_A_Matching_Declaration_Should_Pass_The_Comparison ... ok\ntest Test_The_Declared_Floor_Should_Match_The_Toolchain_The_Gate_Installs ... ok\ntest Test_The_Real_Workflow_Should_Still_Have_The_Install_Step ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.13s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_api-64d9b3c86a50fc3e.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-95a1aef077b5f9ba.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-ead301eb7c8d8256.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-a61f2bcd75c8d4d9.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-fba07f1fa1c92105.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-2bb84d2d8744d800.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-c2987d8eceda16d3.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-0eeaea7cd309c35b.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-2db99bdd604951c5.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-56e2b70874db076c.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-1204b8c22ecd0b43.exe)\n   Doc-tests nomos_api\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1787606490,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
