@@ -27999,6 +27999,63 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-MODEL-ROUTE-035-036-FALLBACK-TRANSITION",
+      "title": "nomos-model-package gains a fifth maturity: MODEL-ROUTE-035/036's fallback-transition vocabulary",
+      "why": "Licensed by OD-PACKAGE-011 v3's per-id split; both extend types already built this session. MODEL-ROUTE-035 ('The trace shall retain the original candidate, disqualification evidence, fallback decision, changed guarantees, and discarded assembly or request cost') is a clean five-field enumeration reusing RuntimeCandidateDisqualification (MODEL-ROUTE-034, built earlier this session). Its precondition clause ('the disqualification is retryable or substitution-eligible') is a separate, standalone two-state DisqualificationEligibility a caller checks before transitioning, not itself one of the five retained fields -- kept as its own type rather than folded into the trace, matching the requirement's own field/precondition distinction. MODEL-ROUTE-036 ('shall produce a new ModelInputAssemblyIdentity and ResolvedModelExecution') names two closed lists (seven forbidden silent adjustments, three authorization sources) tied directly to the same clause that mandates producing a fresh ModelInputAssemblyIdentity (MODEL-ROUTE-029, built earlier this session) -- reused rather than re-derived. ResolvedModelExecution itself is not referenced: it remains unbuilt per MODEL-ROUTE-029's own doc comment (030/031/032/036 each name further fields of it this session's audit did not ground).",
+      "done_when": "crates/packages/nomos-model-package/src/fallback_transition_trace.rs and candidate_fit_adjustment.rs exist. FallbackTransitionTrace has MODEL-ROUTE-035's five fields (original_candidate, disqualification: RuntimeCandidateDisqualification, fallback_decision, changed_guarantees, discarded_cost); DisqualificationEligibility has Retryable/SubstitutionEligible as a standalone type. CandidateFitAdjustment has MODEL-ROUTE-036's seven named forbidden adjustments; ChangeAuthorization has its three named authorization sources; AuthorizedCandidateFitAdjustment pairs adjustment+authorization+the resulting ModelInputAssemblyIdentity. All re-exported from lib.rs. cargo test -p nomos-model-package passes. cargo test --no-fail-fast -p nomos-contract-tests passes with tests/contract/surface/nomos-model-package.txt reblessed. cargo clippy --workspace --all-targets exits 0.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/packages/nomos-model-package/src/lib.rs",
+          "crates/packages/nomos-model-package/src/fallback_transition_trace.rs",
+          "crates/packages/nomos-model-package/src/candidate_fit_adjustment.rs",
+          "tests/contract/surface/nomos-model-package.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "Cited_Rule ... ok\ntest Test_Every_Cited_Record_Should_Still_Exist ... ok\ntest Test_Every_Cited_Version_Should_Match_The_Records_Own_Front_Matter ... ok\ntest Test_A_Mismatched_Version_Should_Fail_The_Comparison ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 5 tests\ntest Test_A_Lowered_Declaration_Should_Fail_The_Comparison ... ok\ntest Test_A_Matching_Declaration_Should_Pass_The_Comparison ... ok\ntest Test_An_Unrelated_Minor_Version_Should_Fail_The_Comparison ... ok\ntest Test_The_Real_Workflow_Should_Still_Have_The_Install_Step ... ok\ntest Test_The_Declared_Floor_Should_Match_The_Toolchain_The_Gate_Installs ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.10s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-06ab25b0491e144c.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-4c32ae08be8df958.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-9350d088b8d6ed0d.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-9ca3879aab70176f.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-308fef82df004321.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-f6f7228f8cfa874c.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-ea500c062215f506.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-790c8c5856e63fa5.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-98429b682798ce96.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-c1e906054609f777.exe)\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1787594960,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "12a57b75591b84124c1ea1d5a90486a70298b6f9"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

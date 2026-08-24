@@ -50,12 +50,22 @@
 //! `030`, `031` and `032`, on the same `OD-PACKAGE-011` v3 licensing. `030` attaches to
 //! [`ModelInputAssemblyIdentity`]'s per-field pinning; `017`/`032` together define one
 //! `RoutingReplayDisposition` type rather than two competing ones.
+//!
+//! # A fifth maturity: fallback-transition vocabulary
+//!
+//! [`FallbackTransitionTrace`]/[`DisqualificationEligibility`] and
+//! [`CandidateFitAdjustment`]/[`ChangeAuthorization`]/[`AuthorizedCandidateFitAdjustment`]
+//! answer `MODEL-ROUTE-035` and `036`, extending [`RuntimeCandidateDisqualification`]
+//! (`034`) and [`ModelInputAssemblyIdentity`] (`029`) directly rather than
+//! re-deriving either.
 
 #![forbid(unsafe_code)]
 
 mod assembly_component_availability;
+mod candidate_fit_adjustment;
 mod effort_level;
 mod fallback_admissibility;
+mod fallback_transition_trace;
 mod manifest;
 mod model_execution_profile;
 mod model_input_assembly_identity;
@@ -67,8 +77,10 @@ mod routing_replay_disposition;
 mod runtime_candidate_disqualification;
 
 pub use assembly_component_availability::AssemblyComponentAvailability;
+pub use candidate_fit_adjustment::{AuthorizedCandidateFitAdjustment, CandidateFitAdjustment, ChangeAuthorization};
 pub use effort_level::EffortLevel;
 pub use fallback_admissibility::FallbackAdmissibility;
+pub use fallback_transition_trace::{DisqualificationEligibility, FallbackTransitionTrace};
 pub use manifest::ModelRoutePackage;
 pub use model_execution_profile::ModelExecutionProfile;
 pub use model_input_assembly_identity::ModelInputAssemblyIdentity;

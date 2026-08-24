@@ -4,6 +4,9 @@ pub const fn nomos_model_package::FallbackAdmissibility::Permits(&self, changed:
 pub const fn nomos_model_package::ModelExecutionProfile::New(selector: ModelSelector, effort: EffortLevel) -> Self
 pub const nomos_model_package::SCHEMA_VERSION: u32
 pub enum nomos_model_package::AssemblyComponentAvailability
+pub enum nomos_model_package::CandidateFitAdjustment
+pub enum nomos_model_package::ChangeAuthorization
+pub enum nomos_model_package::DisqualificationEligibility
 pub enum nomos_model_package::DisqualificationReason
 pub enum nomos_model_package::EffortLevel
 pub enum nomos_model_package::ManifestError
@@ -15,6 +18,18 @@ pub enum variant nomos_model_package::AssemblyComponentAvailability::ExecutorCon
 pub enum variant nomos_model_package::AssemblyComponentAvailability::Missing
 pub enum variant nomos_model_package::AssemblyComponentAvailability::ProviderHidden
 pub enum variant nomos_model_package::AssemblyComponentAvailability::Redacted
+pub enum variant nomos_model_package::CandidateFitAdjustment::AlterExecutorAuthority
+pub enum variant nomos_model_package::CandidateFitAdjustment::ChangeDataRegion
+pub enum variant nomos_model_package::CandidateFitAdjustment::LowerTelemetryOrReplayGuarantees
+pub enum variant nomos_model_package::CandidateFitAdjustment::RemoveTools
+pub enum variant nomos_model_package::CandidateFitAdjustment::SubstituteModel
+pub enum variant nomos_model_package::CandidateFitAdjustment::TruncateContextOrEvidence
+pub enum variant nomos_model_package::CandidateFitAdjustment::WeakenStructuredOutputGuarantees
+pub enum variant nomos_model_package::ChangeAuthorization::AdmissibleFallbackEdge
+pub enum variant nomos_model_package::ChangeAuthorization::ApprovedDegradationMode
+pub enum variant nomos_model_package::ChangeAuthorization::ExplicitContextPolicy
+pub enum variant nomos_model_package::DisqualificationEligibility::Retryable
+pub enum variant nomos_model_package::DisqualificationEligibility::SubstitutionEligible
 pub enum variant nomos_model_package::DisqualificationReason::ChangedDataBoundary
 pub enum variant nomos_model_package::DisqualificationReason::EffectiveContextLimitOverflow
 pub enum variant nomos_model_package::DisqualificationReason::EmpiricalReliabilityBelowThreshold
@@ -67,6 +82,9 @@ pub fn nomos_model_package::Read_Manifest(path: &Path) -> Result<ModelRoutePacka
 pub impl nomos_model_package::DisqualificationReason implements core::fmt::Display
 pub impl nomos_model_package::EffortLevel implements core::fmt::Display
 pub impl nomos_model_package::ManifestError implements core::fmt::Display
+pub struct field nomos_model_package::AuthorizedCandidateFitAdjustment::adjustment: CandidateFitAdjustment
+pub struct field nomos_model_package::AuthorizedCandidateFitAdjustment::authorization: ChangeAuthorization
+pub struct field nomos_model_package::AuthorizedCandidateFitAdjustment::result: ModelInputAssemblyIdentity
 pub struct field nomos_model_package::FallbackAdmissibility::may_change_backend_package: bool
 pub struct field nomos_model_package::FallbackAdmissibility::may_change_context_policy: bool
 pub struct field nomos_model_package::FallbackAdmissibility::may_change_cost_or_latency_class: bool
@@ -77,6 +95,11 @@ pub struct field nomos_model_package::FallbackAdmissibility::may_change_model_fa
 pub struct field nomos_model_package::FallbackAdmissibility::may_change_structured_output_guarantee: bool
 pub struct field nomos_model_package::FallbackAdmissibility::may_change_telemetry_completeness: bool
 pub struct field nomos_model_package::FallbackAdmissibility::may_change_tool_permissions: bool
+pub struct field nomos_model_package::FallbackTransitionTrace::changed_guarantees: Vec<String>
+pub struct field nomos_model_package::FallbackTransitionTrace::discarded_cost: String
+pub struct field nomos_model_package::FallbackTransitionTrace::disqualification: RuntimeCandidateDisqualification
+pub struct field nomos_model_package::FallbackTransitionTrace::fallback_decision: String
+pub struct field nomos_model_package::FallbackTransitionTrace::original_candidate: String
 pub struct field nomos_model_package::ModelExecutionProfile::effort: EffortLevel
 pub struct field nomos_model_package::ModelExecutionProfile::selector: ModelSelector
 pub struct field nomos_model_package::ModelInputAssemblyIdentity::composite_skill_context_generator_identity_and_version: String
@@ -103,7 +126,9 @@ pub struct field nomos_model_package::OutputDeterminismExpectation::value: Outpu
 pub struct field nomos_model_package::ReplayFacts::executor_replay: RoutingReplayDisposition
 pub struct field nomos_model_package::ReplayFacts::live_operation_disposition: RoutingReplayDisposition
 pub struct field nomos_model_package::RuntimeCandidateDisqualification::reason: DisqualificationReason
+pub struct nomos_model_package::AuthorizedCandidateFitAdjustment
 pub struct nomos_model_package::FallbackAdmissibility
+pub struct nomos_model_package::FallbackTransitionTrace
 pub struct nomos_model_package::ModelExecutionProfile
 pub struct nomos_model_package::ModelInputAssemblyIdentity
 pub struct nomos_model_package::ModelRoutePackage
