@@ -1,0 +1,32 @@
+# The assessment of AGT-EXEC-004 against this build. The requirement identifier is this
+# file's stem and appears nowhere inside it, because a second place to spell the identity
+# is a second place for it to be wrong -- the rule OD-SPEC-007 chose for a record
+# registration, and CHK-003.assessment states for this registry.
+#
+# AGT-EXEC-004: "Agent claims of tests, builds, checks, or measurements require attached
+# tool evidence from the corresponding trusted capability. Unsupported claims remain
+# AgentJudged."
+#
+# `EvidenceClass::AgentJudged` is real: the floor of an ordered strength scale, matching
+# the requirement's own word for the unsupported case exactly, and `Is_Mechanical` refuses
+# to let it or `HumanAsserted` be reported as a mechanical result -- tested directly
+# (`Test_Agent_And_Human_Claims_Should_Not_Be_Mechanical`). `nomos_ledger::work finish`,
+# separately, is a real, tested instance of the requirement's positive half: it does not
+# take an agent's word that a ledger item's tests/build/check passed. `Ran_To_Completion`
+# runs the item's declared predicate through a real process launcher, and `Refuse_Nonzero`
+# refuses to record completion on anything but a genuine zero exit; `VerificationRecord`
+# then carries the real argv, exit code, output tail and tree revision -- attached tool
+# evidence from the corresponding trusted capability, exactly as the requirement asks,
+# for every claim this session made about a ledger item's tests passing this session.
+#
+# The gap: this is real for ledger-item completion claims specifically, not a general
+# requirement every agent claim in this workspace is held to. `nomos-corrections`'
+# `ValidatedPlan::Commit` takes no evidence parameter and records none -- a correction may
+# be committed with no attached tool evidence at all, and nothing downgrades an
+# unsubstantiated claim about it to `AgentJudged` the way `work finish` already does for a
+# ledger item's own predicate.
+verdict: Partial
+site: crates/substrate/nomos-ledger/src/verification/record.rs#VerificationRecord
+site: crates/substrate/nomos-ledger/src/finish/running.rs#Ran_To_Completion
+site: crates/contracts/nomos-contracts/src/finding/evidence.rs#AgentJudged
+gap: crates/corrections/nomos-corrections/src/validated.rs#Commit

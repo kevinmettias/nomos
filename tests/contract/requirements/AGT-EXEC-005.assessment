@@ -1,0 +1,30 @@
+# The assessment of AGT-EXEC-005 against this build. The requirement identifier is this
+# file's stem and appears nowhere inside it, because a second place to spell the identity
+# is a second place for it to be wrong -- the rule OD-SPEC-007 chose for a record
+# registration, and CHK-003.assessment states for this registry.
+#
+# AGT-EXEC-005: "Mutation operations shall support transaction previews, path constraints,
+# replay/deduplication protection, explicit scope expansion, and rollback or repository
+# recovery."
+#
+# Three of the five are real and tested in `nomos-corrections`. `Preview` renders exactly
+# what a plan would do without ever touching a live workspace -- a transaction preview,
+# tested deterministic across repeated calls. `Assert_Not_Stale`, run at staging, refuses a
+# candidate whose declared prior content does not match what the workspace actually holds
+# at that path -- a real path constraint, not merely a name check: `CorrectionPlan::New`
+# separately refuses two candidates that touch the same path before either ever reaches a
+# live workspace. `CommittedPlan::Rollback` undoes a committed plan back to the exact
+# snapshot it started from, byte for byte, tested directly
+# (`Test_Committing_Then_Rolling_Back_Should_Return_To_The_Base_Snapshot`) -- real rollback.
+#
+# The gap: the other two. Nothing in this crate protects against replaying or duplicating a
+# plan -- `CorrectionPlan::New` carries no idempotency or replay key, so committing the
+# same plan twice against two workspaces (or the same one, rebuilt) is indistinguishable
+# from two independent corrections. And nothing supports explicit scope expansion -- a
+# plan's candidates are fixed at construction; there is no operation that lets a staged or
+# validated plan declare it now needs to touch more than it originally did.
+verdict: Partial
+site: crates/corrections/nomos-corrections/src/preview.rs#Preview
+site: crates/corrections/nomos-corrections/src/staged.rs#Assert_Not_Stale
+site: crates/corrections/nomos-corrections/src/committed.rs#Rollback
+gap: crates/corrections/nomos-corrections/src/plan.rs#New
