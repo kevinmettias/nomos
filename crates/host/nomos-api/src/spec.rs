@@ -8,11 +8,15 @@
 use nomos_platform_std::StdFileSystem;
 use nomos_spec_orchestration::corpus::{Absence, CorpusRequest, DEFAULT_REVISION};
 use nomos_spec_orchestration::{
-    FreshnessAnswer, FreshnessRefusal, FreshnessRequest, ProfileOutcome, RecordAnswer, RecordRefusal, RecordRequest,
-    SpecCommand, TableAnswer, TableRefusal, TableRequest, Verdict,
+    EditRequest, FreshnessAnswer, FreshnessRefusal, FreshnessRequest, PreviewRefusal, ProfileOutcome, RecordAnswer,
+    RecordRefusal, RecordRequest, SpecCommand, TableAnswer, TableRefusal, TableRequest, Verdict,
 };
 use nomos_spec_project::{Freshness, Profile};
-use nomos_spec_store::{DocumentSource, EditError, NodeSummary, PathMatch, RecordProjection, RowCensus, StoreError, TableLine};
+use nomos_spec_store::{
+    BlockChange, DocumentSource, EditError, EditPreview, IdentityChange, NodeSummary, NormativeMovement,
+    NormativeOutcome, PathMatch, RecordProjection, RowCensus, StoreError, TableLine,
+};
+use nomos_spec_model::RecordRelation;
 use serde::Serialize;
 use std::path::PathBuf;
 
@@ -724,6 +728,258 @@ impl VerdictResponse
     }
 }
 
+/// Says what committing a staged edit would change, without writing anything, exactly as
+/// `nomos spec preview` would, and hands back a JSON-serializable response.
+///
+/// Follows [`Handle_Spec_Record`]'s own composition. `run::preview::Preview` is generic over
+/// `FileSystem` (it reads `request.from` through `nomos_platform::FileSystem::
+/// Read_To_String`), but that is its only contact with a filesystem -- everything else is an
+/// in-memory `assembly.store` operation. Unlike `Render` and `Commit`, which place or
+/// overwrite files at a caller-known output path, `Preview` never writes, so exposing it
+/// over nomos-api carries none of the "does a wire call write to this host's disk" hazard
+/// those two do -- the same reasoning [`Handle_Spec_Freshness`] already gives for its own
+/// `FileSystem` parameter.
+#[must_use]
+pub fn Handle_Spec_Preview(request: &EditRequest) -> SpecPreviewResponse
+{
+    let corpus_request = CorpusRequest {
+        variable: CORPUS_VARIABLE.to_owned(),
+        root: std::env::var_os(CORPUS_VARIABLE).map(PathBuf::from),
+        revision: DEFAULT_REVISION.to_owned(),
+    };
+
+    let outcome =
+        nomos_spec_orchestration::Run(&SpecCommand::Preview(request.clone()), &corpus_request, &StdFileSystem);
+
+    let nomos_spec_orchestration::SpecOutcome::Preview(result) = outcome
+    else
+    {
+        unreachable!("Run always returns the SpecOutcome variant naming the SpecCommand it was given")
+    };
+
+    return SpecPreviewResponse::From(result);
+}
+
+/// What a real `nomos spec preview` produced, in a shape `serde_json` can hand across a wire.
+#[derive(Debug, Serialize)]
+#[serde(tag = "outcome", rename_all = "snake_case")]
+pub enum SpecPreviewResponse
+{
+    /// What committing the staged edit would change.
+    Previewed
+    {
+        node_id: String,
+        path: String,
+        /// The paths before and after, when this edit is also a rename.
+        rename: Option<(String, String)>,
+        /// The staged bytes.
+        markdown: String,
+        blocks: Vec<BlockChangeResponse>,
+        identity: Vec<IdentityChangeResponse>,
+        relations_added: Vec<RecordRelationResponse>,
+        relations_removed: Vec<RecordRelationResponse>,
+        statements: Vec<NormativeMovementResponse>,
+        /// The question `D-129` calls mandatory: does this edit move wording that was there?
+        wording_moved: bool,
+        /// Whether this edit changes anything at all.
+        changes_nothing: bool,
+    },
+    /// `--from` could not be read.
+    Unreadable
+    {
+        path: String,
+        /// What went wrong, as `FileSystemError`'s own `Display` renders it.
+        cause: String,
+    },
+    /// The store refused the staged edit.
+    Refused
+    {
+        /// What went wrong, as `EditError`'s own `Display` renders it.
+        cause: String,
+    },
+}
+
+impl SpecPreviewResponse
+{
+    fn From(result: Result<EditPreview, PreviewRefusal>) -> Self
+    {
+        return match result
+        {
+            Ok(preview) => Self::From_Preview(&preview),
+            Err(PreviewRefusal::Unreadable { path, error }) =>
+            {
+                Self::Unreadable { path: path.display().to_string(), cause: error.to_string() }
+            }
+            Err(PreviewRefusal::Edit(error)) => Self::Refused { cause: error.to_string() },
+        };
+    }
+
+    fn From_Preview(preview: &EditPreview) -> Self
+    {
+        return Self::Previewed {
+            node_id: preview.Node_Id().to_owned(),
+            path: preview.Path().to_owned(),
+            rename: preview.Rename().map(|(before, after)| return (before.to_owned(), after.to_owned())),
+            markdown: preview.Markdown().to_owned(),
+            blocks: preview.Blocks().iter().cloned().map(BlockChangeResponse::From).collect(),
+            identity: preview.Identity().iter().cloned().map(IdentityChangeResponse::From).collect(),
+            relations_added: preview.Relations_Added().iter().cloned().map(RecordRelationResponse::From).collect(),
+            relations_removed: preview
+                .Relations_Removed()
+                .iter()
+                .cloned()
+                .map(RecordRelationResponse::From)
+                .collect(),
+            statements: preview.Statements().iter().cloned().map(NormativeMovementResponse::From).collect(),
+            wording_moved: preview.Wording_Moved(),
+            changes_nothing: preview.Changes_Nothing(),
+        };
+    }
+}
+
+/// A serializable twin of [`nomos_spec_store::BlockChange`], which does not derive
+/// `Serialize`. Tagged `change` rather than the more usual `kind`, since `Added` and
+/// `Removed` already carry a field of their own named `kind`.
+#[derive(Debug, Serialize)]
+#[serde(tag = "change", rename_all = "snake_case")]
+pub enum BlockChangeResponse
+{
+    Added
+    {
+        ordinal: u32, kind: String
+    },
+    Removed
+    {
+        ordinal: u32, kind: String
+    },
+    /// Same position, different wording.
+    Reworded
+    {
+        ordinal: u32, before: String, after: String
+    },
+    /// Same wording, different position.
+    Moved
+    {
+        from: u32, to: u32
+    },
+    /// Same wording, different whitespace.
+    Reflowed
+    {
+        ordinal: u32
+    },
+}
+
+impl BlockChangeResponse
+{
+    fn From(change: BlockChange) -> Self
+    {
+        return match change
+        {
+            BlockChange::Added { ordinal, kind } => Self::Added { ordinal, kind },
+            BlockChange::Removed { ordinal, kind } => Self::Removed { ordinal, kind },
+            BlockChange::Reworded { ordinal, before, after } => Self::Reworded { ordinal, before, after },
+            BlockChange::Moved { from, to } => Self::Moved { from, to },
+            BlockChange::Reflowed { ordinal } => Self::Reflowed { ordinal },
+        };
+    }
+}
+
+/// A serializable twin of [`nomos_spec_store::IdentityChange`], which does not derive
+/// `Serialize`.
+#[derive(Debug, Serialize)]
+pub struct IdentityChangeResponse
+{
+    pub field: String,
+    pub before: String,
+    pub after: String,
+}
+
+impl IdentityChangeResponse
+{
+    fn From(change: IdentityChange) -> Self
+    {
+        return Self { field: change.field, before: change.before, after: change.after };
+    }
+}
+
+/// A serializable twin of [`nomos_spec_model::RecordRelation`], which derives `Deserialize`
+/// but not `Serialize`.
+#[derive(Debug, Serialize)]
+pub struct RecordRelationResponse
+{
+    pub target: String,
+    pub relation: String,
+}
+
+impl RecordRelationResponse
+{
+    fn From(relation: RecordRelation) -> Self
+    {
+        return Self { target: relation.target, relation: relation.relation };
+    }
+}
+
+/// A serializable twin of [`nomos_spec_store::NormativeMovement`], which does not derive
+/// `Serialize`.
+#[derive(Debug, Serialize)]
+pub struct NormativeMovementResponse
+{
+    pub statement_id: String,
+    pub canonical_hash: String,
+    pub outcome: NormativeOutcomeResponse,
+}
+
+impl NormativeMovementResponse
+{
+    fn From(movement: NormativeMovement) -> Self
+    {
+        return Self {
+            statement_id: movement.statement_id,
+            canonical_hash: movement.canonical_hash,
+            outcome: NormativeOutcomeResponse::From(movement.outcome),
+        };
+    }
+}
+
+/// A serializable twin of [`nomos_spec_store::NormativeOutcome`], which does not derive
+/// `Serialize`.
+#[derive(Debug, Serialize)]
+#[serde(tag = "kind", rename_all = "snake_case")]
+pub enum NormativeOutcomeResponse
+{
+    /// Still in the block it was in.
+    Held
+    {
+        block: u32
+    },
+    /// Still present, in a different block.
+    Moved
+    {
+        from: u32, to: u32
+    },
+    /// Was in the record and is not in the staged text.
+    Gone
+    {
+        from: u32
+    },
+    /// Recorded against the record and not found in it before the edit either.
+    Unlocatable,
+}
+
+impl NormativeOutcomeResponse
+{
+    fn From(outcome: NormativeOutcome) -> Self
+    {
+        return match outcome
+        {
+            NormativeOutcome::Held { block } => Self::Held { block },
+            NormativeOutcome::Moved { from, to } => Self::Moved { from, to },
+            NormativeOutcome::Gone { from } => Self::Gone { from },
+            NormativeOutcome::Unlocatable => Self::Unlocatable,
+        };
+    }
+}
+
 #[cfg(test)]
 mod tests
 {
@@ -972,5 +1228,70 @@ mod tests
         let outcome = parsed.get("outcome").expect("a serialized SpecMarkdownResponse always has this field");
 
         assert_eq!(outcome, "resolved", "{json}");
+    }
+
+    /// Stages a canonical heading rename against `id`'s own real, embedded markdown (read
+    /// through this crate's own `Handle_Spec_Markdown`, so this test needs no corpus and
+    /// touches no file this repository tracks), writes it to `staged.md` under `into`, and
+    /// hands back the path it was written to. Mirrors
+    /// `nomos_spec_orchestration`'s own `Staged_Heading_Rename`.
+    fn Staged_Heading_Rename(id: &str, into: &std::path::Path) -> std::path::PathBuf
+    {
+        let request = RecordRequest { id: id.to_owned(), revision: None };
+        let SpecMarkdownResponse::Resolved { markdown, .. } = Handle_Spec_Markdown(&request)
+        else
+        {
+            panic!("{id} is a governing record, embedded even with no corpus");
+        };
+        let edited = markdown.replace("## Decision", "## The decision");
+        let staged = into.join("staged.md");
+        std::fs::write(&staged, &edited).expect("writes the staged edit");
+
+        return staged;
+    }
+
+    #[test]
+    fn Test_A_Real_Heading_Rename_Should_Preview_Wording_Moved()
+    {
+        let staged = Staged_Heading_Rename("D-132", &Unique_Scratch_Directory("preview"));
+        let request = EditRequest { id: "D-132".to_owned(), from: staged, rename: None };
+
+        let response = Handle_Spec_Preview(&request);
+
+        let SpecPreviewResponse::Previewed { wording_moved, .. } = response
+        else
+        {
+            panic!("a canonical heading rename previews cleanly: {response:?}");
+        };
+        assert!(wording_moved, "a heading rename must count as wording moved");
+    }
+
+    #[test]
+    fn Test_A_Missing_Staged_File_Should_Report_Unreadable()
+    {
+        let request = EditRequest {
+            id: "D-132".to_owned(),
+            from: std::path::PathBuf::from("no-such-staged-file-anywhere.md"),
+            rename: None,
+        };
+
+        let response = Handle_Spec_Preview(&request);
+
+        assert!(matches!(response, SpecPreviewResponse::Unreadable { .. }), "{response:?}");
+    }
+
+    #[test]
+    fn Test_A_Real_Previewed_Response_Should_Round_Trip_As_Json()
+    {
+        let staged = Staged_Heading_Rename("D-132", &Unique_Scratch_Directory("preview-json"));
+        let request = EditRequest { id: "D-132".to_owned(), from: staged, rename: None };
+
+        let response = Handle_Spec_Preview(&request);
+
+        let json = serde_json::to_string(&response).expect("a SpecPreviewResponse always serializes");
+        let parsed: serde_json::Value = serde_json::from_str(&json).expect("what was just written parses back");
+        let outcome = parsed.get("outcome").expect("a serialized SpecPreviewResponse always has this field");
+
+        assert_eq!(outcome, "previewed", "{json}");
     }
 }

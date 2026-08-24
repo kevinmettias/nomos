@@ -27670,6 +27670,65 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-API-SPEC-PREVIEW-SEAM",
+      "title": "nomos-api gains an eighteenth real seam: Spec's Preview verb",
+      "why": "ARC-ROADMAP-001 names CLI/API/MCP projections as a near-term-tier item. nomos-api has proven\na second real caller for Gate, Work, and Spec's Profiles, Sources, Record, Table, Markdown\nand Freshness. Preview is the next verb: EditRequest{id, from, rename}, answered as\nResult<EditPreview, PreviewRefusal>.\n\nChecked before authoring: run::preview::Preview<F: FileSystem> is generic over FileSystem\n(crates/orchestration/nomos-spec-orchestration/src/run/preview.rs) for exactly one reason,\nstated in its own module doc: `--from` names a file at an author-chosen path, and\nRead_To_String's shape does not care who chose it. Reading the function body confirms this\nis its only filesystem contact -- Staged_Text calls filesystem.Read_To_String(from) once,\nand everything after (Previewed) is an in-memory assembly.store operation\n(Claim_For_Edit -> Stage -> Preview). Preview never calls Replace_Atomically, std::fs::write\nor std::fs::remove_file. Unlike Render (which places/overwrites two files) and Commit (which\nwrites a committed record and can delete a vacated one), Preview never writes, so exposing\nit over nomos-api carries none of the \"does a wire call write to this host's disk\" hazard\nthose two do -- the same reasoning already given for Freshness by P13-API-SPEC-FRESHNESS-SEAM.\n\nEditPreview (crates/spec/nomos-spec-store/src/edit/preview.rs) has six pub(crate) fields, so\nthis crate cannot reach them directly; it reads through EditPreview's own public accessors\n(Node_Id, Rename, Blocks, Identity, Relations_Added, Relations_Removed, Statements, Markdown,\nPath, Wording_Moved, Changes_Nothing) instead. Blocks/Identity/Relations/Statements each\ncarry a further non-Serialize type -- BlockChange (5-variant enum), IdentityChange (3 flat\nString fields), RecordRelation (2 flat String fields, already Deserialize in\nnomos-spec-model but not Serialize), NormativeMovement (2 String fields plus a nested\nNormativeOutcome, itself a 4-variant enum) -- none of which derive Serialize, all confirmed\nby reading crates/spec/nomos-spec-store/src/edit/{block_change,identity_change,\nnormative_movement,normative_outcome}.rs and crates/spec/nomos-spec-model/src/record/\nrelation.rs. This item twins RecordRelation locally (nomos-api's own established\nDocumentSourceResponse/NodeSummaryResponse precedent) rather than adding Serialize to it in\nnomos-spec-model, keeping this item's territory to crates/host/nomos-api alone; the crate\ngains nomos-spec-model as a new direct dependency (previously only transitive) the same way\nnomos-spec-store was added as a direct dependency for P13-API-SPEC-SOURCES-SEAM.\n\nPreviewRefusal::Unreadable{path, error: FileSystemError} and ::Edit(EditError) both collapse\nvia their own Display -- EditError already has this treatment from Markdown\n(P13-API-SPEC-MARKDOWN-SEAM); FileSystemError is the same shape (derives only Debug, has a\nreal Display).\n\nD-132 previews cleanly with a canonical heading rename (\"## Decision\" -> \"## The decision\"),\nthe same edit nomos_spec_orchestration's own tests.rs already stages against this exact\nrecord with no corpus needed -- Handle_Spec_Markdown (this crate's own seam) supplies the\nreal bytes to edit rather than re-deriving them, so a real end-to-end preview test needs no\ncorpus and touches no file this repository tracks.",
+      "done_when": "nomos-api gains a new public function Handle_Spec_Preview(request: &EditRequest) ->\nSpecPreviewResponse in spec.rs, following the &Request convention Record/Table/Markdown/\nFreshness already use: builds a CorpusRequest from NOMOS_V14_CORPUS, calls\nnomos_spec_orchestration::Run(&SpecCommand::Preview(request.clone()), &corpus_request,\n&StdFileSystem), matches SpecOutcome::Preview via an irrefutable let-else with unreachable!\non the wrong-variant arm, converts through SpecPreviewResponse::From.\n\nSpecPreviewResponse is a new tagged enum: Previewed{node_id, path, rename: Option<(String,\nString)>, markdown, blocks: Vec<BlockChangeResponse>, identity: Vec<IdentityChangeResponse>,\nrelations_added/relations_removed: Vec<RecordRelationResponse>, statements: Vec<\nNormativeMovementResponse>, wording_moved: bool, changes_nothing: bool} (built entirely from\nEditPreview's own public accessors, never its private fields), Unreadable{path, cause} (\nPreviewRefusal::Unreadable, both fields via Display/to_string), Refused{cause} (\nPreviewRefusal::Edit(EditError), same collapse Markdown already established).\n\nBlockChangeResponse (tagged \"change\" rather than \"kind\", since Added/Removed already carry\ntheir own kind field), IdentityChangeResponse, RecordRelationResponse,\nNormativeMovementResponse and NormativeOutcomeResponse (tagged \"kind\") are new public types,\nserializable twins of nomos_spec_store::{BlockChange, IdentityChange, NormativeMovement,\nNormativeOutcome} and nomos_spec_model::RecordRelation. nomos-api's Cargo.toml gains\nnomos-spec-model as a direct dependency.\n\nA real test proves Handle_Spec_Preview, given D-132's own real markdown (read through this\ncrate's own Handle_Spec_Markdown) with a canonical heading rename staged into a fresh scratch\nfile, reports SpecPreviewResponse::Previewed with wording_moved: true. A second test proves a\n--from path that does not exist reports SpecPreviewResponse::Unreadable. A third test proves\nthe Previewed response round-trips through serde_json with the \"outcome\" tag reading\n\"previewed\". tests/contract/surface/nomos-api.txt is regenerated (NOMOS_SURFACE_BLESS) and\ncurrent. nomos-spec-orchestration, nomos-spec-store and nomos-spec-model are not touched by\nthis item.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-api",
+          "tests/contract/surface/nomos-api.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "t result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 5 tests\ntest Test_A_Lowered_Declaration_Should_Fail_The_Comparison ... ok\ntest Test_An_Unrelated_Minor_Version_Should_Fail_The_Comparison ... ok\ntest Test_A_Matching_Declaration_Should_Pass_The_Comparison ... ok\ntest Test_The_Real_Workflow_Should_Still_Have_The_Install_Step ... ok\ntest Test_The_Declared_Floor_Should_Match_The_Toolchain_The_Gate_Installs ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.13s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_api-64d9b3c86a50fc3e.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-95a1aef077b5f9ba.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-ead301eb7c8d8256.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-a61f2bcd75c8d4d9.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-fba07f1fa1c92105.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-2bb84d2d8744d800.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-c2987d8eceda16d3.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-0eeaea7cd309c35b.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-2db99bdd604951c5.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-56e2b70874db076c.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-1204b8c22ecd0b43.exe)\n   Doc-tests nomos_api\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1787594121,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

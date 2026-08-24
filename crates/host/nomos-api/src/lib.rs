@@ -65,7 +65,10 @@
 //! [`spec::Handle_Spec_Freshness`], does the same for `Freshness` -- generic over
 //! `nomos-platform`'s `FileSystem` like `Render`, `Preview` and `Commit`, but, unlike those
 //! three, only ever reads through it, so it carries none of their "does a wire call write to
-//! this host's disk" question.
+//! this host's disk" question. Its eighteenth, [`spec::Handle_Spec_Preview`], does the same
+//! for `Preview` -- also generic over `FileSystem`, and also read-only: its one contact with
+//! a filesystem is reading the staged `--from` file the caller already named, never a write.
+//! `Render` and `Commit`, which do write, are the two verbs this crate has not yet seamed.
 //!
 //! [`Handle_Gate_Run`] is a deliberate twin of `nomos-cli`'s `gate.rs`
 //! `GateInvocation::Run` arm: it walks `root` for `.rs` sources
@@ -105,10 +108,12 @@ pub use response::{
     RuleOfferResponse, SuppressionDispositionResponse, SuppressionResponse,
 };
 pub use spec::{
-    AbsenceResponse, DocumentSourceResponse, Handle_Spec_Freshness, Handle_Spec_Markdown, Handle_Spec_Profiles,
-    Handle_Spec_Record, Handle_Spec_Sources, Handle_Spec_Table, NodeSummaryResponse, PathMatchResponse,
-    ProfileOutcomeResponse, ProfilesResponse, RowCensusResponse, SpecFreshnessResponse, SpecMarkdownResponse,
-    SpecRecordResponse, SpecSourcesResponse, SpecTableResponse, TableLineResponse, VerdictResponse,
+    AbsenceResponse, BlockChangeResponse, DocumentSourceResponse, Handle_Spec_Freshness, Handle_Spec_Markdown,
+    Handle_Spec_Preview, Handle_Spec_Profiles, Handle_Spec_Record, Handle_Spec_Sources, Handle_Spec_Table,
+    IdentityChangeResponse, NodeSummaryResponse, NormativeMovementResponse, NormativeOutcomeResponse,
+    PathMatchResponse, ProfileOutcomeResponse, ProfilesResponse, RecordRelationResponse, RowCensusResponse,
+    SpecFreshnessResponse, SpecMarkdownResponse, SpecPreviewResponse, SpecRecordResponse, SpecSourcesResponse,
+    SpecTableResponse, TableLineResponse, VerdictResponse,
 };
 pub use work::{
     BlockedItem, Handle_Work_Abandon, Handle_Work_Add, Handle_Work_Audit, Handle_Work_Claim, Handle_Work_Decline,

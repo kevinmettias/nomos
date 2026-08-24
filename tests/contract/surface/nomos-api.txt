@@ -1,10 +1,13 @@
+pub enum nomos_api::BlockChangeResponse
 pub enum nomos_api::Disposition
 pub enum nomos_api::GateExplainResponse
 pub enum nomos_api::GatePlanResponse
+pub enum nomos_api::NormativeOutcomeResponse
 pub enum nomos_api::PathMatchResponse
 pub enum nomos_api::ProfilesResponse
 pub enum nomos_api::SpecFreshnessResponse
 pub enum nomos_api::SpecMarkdownResponse
+pub enum nomos_api::SpecPreviewResponse
 pub enum nomos_api::SpecRecordResponse
 pub enum nomos_api::SpecSourcesResponse
 pub enum nomos_api::SpecTableResponse
@@ -19,6 +22,11 @@ pub enum nomos_api::WorkListResponse
 pub enum nomos_api::WorkReservationResponse
 pub enum nomos_api::WorkShowResponse
 pub enum nomos_api::WorkValidateResponse
+pub enum variant nomos_api::BlockChangeResponse::Added { ordinal: u32, kind: String }
+pub enum variant nomos_api::BlockChangeResponse::Moved { from: u32, to: u32 }
+pub enum variant nomos_api::BlockChangeResponse::Reflowed { ordinal: u32 }
+pub enum variant nomos_api::BlockChangeResponse::Removed { ordinal: u32, kind: String }
+pub enum variant nomos_api::BlockChangeResponse::Reworded { ordinal: u32, before: String, after: String }
 pub enum variant nomos_api::Disposition::Failed
 pub enum variant nomos_api::Disposition::Indeterminate
 pub enum variant nomos_api::Disposition::Passed
@@ -26,6 +34,10 @@ pub enum variant nomos_api::GateExplainResponse::Found { finding: Box<Finding>, 
 pub enum variant nomos_api::GateExplainResponse::NotFound
 pub enum variant nomos_api::GatePlanResponse::Contradictory { cause: String, }
 pub enum variant nomos_api::GatePlanResponse::Planned { rules: Vec<RuleOfferResponse>, }
+pub enum variant nomos_api::NormativeOutcomeResponse::Gone { from: u32 }
+pub enum variant nomos_api::NormativeOutcomeResponse::Held { block: u32 }
+pub enum variant nomos_api::NormativeOutcomeResponse::Moved { from: u32, to: u32 }
+pub enum variant nomos_api::NormativeOutcomeResponse::Unlocatable
 pub enum variant nomos_api::PathMatchResponse::Exact
 pub enum variant nomos_api::PathMatchResponse::FileName
 pub enum variant nomos_api::PathMatchResponse::Fragment
@@ -37,6 +49,9 @@ pub enum variant nomos_api::SpecFreshnessResponse::RequirementUnexamined { reque
 pub enum variant nomos_api::SpecFreshnessResponse::Unreadable { cause: String, }
 pub enum variant nomos_api::SpecMarkdownResponse::Refused { cause: String, }
 pub enum variant nomos_api::SpecMarkdownResponse::Resolved { node_id: String, path: String, revision: String, markdown: String, source_hash: String, projected_hash: String, matches_source: bool, }
+pub enum variant nomos_api::SpecPreviewResponse::Previewed { node_id: String, path: String, rename: Option<(String, String)>, markdown: String, blocks: Vec<BlockChangeResponse>, identity: Vec<IdentityChangeResponse>, relations_added: Vec<RecordRelationResponse>, relations_removed: Vec<RecordRelationResponse>, statements: Vec<NormativeMovementResponse>, wording_moved: bool, changes_nothing: bool, }
+pub enum variant nomos_api::SpecPreviewResponse::Refused { cause: String, }
+pub enum variant nomos_api::SpecPreviewResponse::Unreadable { path: String, cause: String, }
 pub enum variant nomos_api::SpecRecordResponse::Ambiguous { id: String, documents: Vec<DocumentSourceResponse>, }
 pub enum variant nomos_api::SpecRecordResponse::NotFound { id: String, revision: Option<String>, node: Option<NodeSummaryResponse>, }
 pub enum variant nomos_api::SpecRecordResponse::Resolved { id: String, document: DocumentSourceResponse, }
@@ -83,6 +98,7 @@ pub fn nomos_api::Handle_Gate_Plan() -> GatePlanResponse
 pub fn nomos_api::Handle_Gate_Run(root: &Path) -> GateRunResponse
 pub fn nomos_api::Handle_Spec_Freshness(request: &FreshnessRequest) -> SpecFreshnessResponse
 pub fn nomos_api::Handle_Spec_Markdown(request: &RecordRequest) -> SpecMarkdownResponse
+pub fn nomos_api::Handle_Spec_Preview(request: &EditRequest) -> SpecPreviewResponse
 pub fn nomos_api::Handle_Spec_Profiles() -> ProfilesResponse
 pub fn nomos_api::Handle_Spec_Record(request: &RecordRequest) -> SpecRecordResponse
 pub fn nomos_api::Handle_Spec_Sources() -> SpecSourcesResponse
@@ -118,13 +134,21 @@ pub struct field nomos_api::GateRunResponse::disposition: Disposition
 pub struct field nomos_api::GateRunResponse::root: PathBuf
 pub struct field nomos_api::GateRunResponse::run: RunId
 pub struct field nomos_api::GateRunResponse::suppressed_findings: Vec<Finding>
+pub struct field nomos_api::IdentityChangeResponse::after: String
+pub struct field nomos_api::IdentityChangeResponse::before: String
+pub struct field nomos_api::IdentityChangeResponse::field: String
 pub struct field nomos_api::NodeSummaryResponse::authority: String
 pub struct field nomos_api::NodeSummaryResponse::kind: String
 pub struct field nomos_api::NodeSummaryResponse::node_id: String
 pub struct field nomos_api::NodeSummaryResponse::representation: String
 pub struct field nomos_api::NodeSummaryResponse::title: String
+pub struct field nomos_api::NormativeMovementResponse::canonical_hash: String
+pub struct field nomos_api::NormativeMovementResponse::outcome: NormativeOutcomeResponse
+pub struct field nomos_api::NormativeMovementResponse::statement_id: String
 pub struct field nomos_api::ProfileOutcomeResponse::profile: Profile
 pub struct field nomos_api::ProfileOutcomeResponse::verdict: VerdictResponse
+pub struct field nomos_api::RecordRelationResponse::relation: String
+pub struct field nomos_api::RecordRelationResponse::target: String
 pub struct field nomos_api::ReservationResponse::expires_at: Timestamp
 pub struct field nomos_api::ReservationResponse::holder: String
 pub struct field nomos_api::ReservationResponse::item: ItemId
@@ -155,8 +179,11 @@ pub struct nomos_api::BaselineDebtResponse
 pub struct nomos_api::BlockedItem
 pub struct nomos_api::DocumentSourceResponse
 pub struct nomos_api::GateRunResponse
+pub struct nomos_api::IdentityChangeResponse
 pub struct nomos_api::NodeSummaryResponse
+pub struct nomos_api::NormativeMovementResponse
 pub struct nomos_api::ProfileOutcomeResponse
+pub struct nomos_api::RecordRelationResponse
 pub struct nomos_api::ReservationResponse
 pub struct nomos_api::RowCensusResponse
 pub struct nomos_api::RuleCalibrationResponse
