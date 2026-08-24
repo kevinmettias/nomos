@@ -3,11 +3,18 @@ pub const fn nomos_model_package::EffortLevel::Label(self) -> &'static str
 pub const fn nomos_model_package::FallbackAdmissibility::Permits(&self, changed: &Self) -> bool
 pub const fn nomos_model_package::ModelExecutionProfile::New(selector: ModelSelector, effort: EffortLevel) -> Self
 pub const nomos_model_package::SCHEMA_VERSION: u32
+pub enum nomos_model_package::AssemblyComponentAvailability
 pub enum nomos_model_package::DisqualificationReason
 pub enum nomos_model_package::EffortLevel
 pub enum nomos_model_package::ManifestError
 pub enum nomos_model_package::ModelSelection
 pub enum nomos_model_package::ModelSelector
+pub enum nomos_model_package::OutputDeterminismValue
+pub enum nomos_model_package::RoutingReplayDisposition
+pub enum variant nomos_model_package::AssemblyComponentAvailability::ExecutorControlled
+pub enum variant nomos_model_package::AssemblyComponentAvailability::Missing
+pub enum variant nomos_model_package::AssemblyComponentAvailability::ProviderHidden
+pub enum variant nomos_model_package::AssemblyComponentAvailability::Redacted
 pub enum variant nomos_model_package::DisqualificationReason::ChangedDataBoundary
 pub enum variant nomos_model_package::DisqualificationReason::EffectiveContextLimitOverflow
 pub enum variant nomos_model_package::DisqualificationReason::EmpiricalReliabilityBelowThreshold
@@ -42,6 +49,16 @@ pub enum variant nomos_model_package::ModelSelector::BackendFamily(String)
 pub enum variant nomos_model_package::ModelSelector::CapabilityPredicate(String)
 pub enum variant nomos_model_package::ModelSelector::ExactIdentity { identity: String, pinned: bool, }
 pub enum variant nomos_model_package::ModelSelector::PolicyRankedCandidates(Vec<String>)
+pub enum variant nomos_model_package::OutputDeterminismValue::Deterministic
+pub enum variant nomos_model_package::OutputDeterminismValue::ExecutorVariable
+pub enum variant nomos_model_package::OutputDeterminismValue::HumanVariable
+pub enum variant nomos_model_package::OutputDeterminismValue::ProviderBestEffort
+pub enum variant nomos_model_package::OutputDeterminismValue::SeedControlled
+pub enum variant nomos_model_package::OutputDeterminismValue::Unknown
+pub enum variant nomos_model_package::RoutingReplayDisposition::BestEffort { reasons: Vec<String>, }
+pub enum variant nomos_model_package::RoutingReplayDisposition::ConfigurationEquivalent { reasons: Vec<String>, }
+pub enum variant nomos_model_package::RoutingReplayDisposition::Exact
+pub enum variant nomos_model_package::RoutingReplayDisposition::NonReplayable { reasons: Vec<String>, }
 pub fn nomos_model_package::DisqualificationReason::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_model_package::EffortLevel::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_model_package::ManifestError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
@@ -79,11 +96,19 @@ pub struct field nomos_model_package::ModelRoutePackage::package_id: PackageId
 pub struct field nomos_model_package::ModelRoutePackage::package_kind: PackageKind
 pub struct field nomos_model_package::ModelRoutePackage::package_version: PackageVersion
 pub struct field nomos_model_package::ModelRoutePackage::protocol_range: ProtocolRange
+pub struct field nomos_model_package::OutputDeterminismExpectation::basis: String
+pub struct field nomos_model_package::OutputDeterminismExpectation::controls: Vec<String>
+pub struct field nomos_model_package::OutputDeterminismExpectation::known_variability_sources: Vec<String>
+pub struct field nomos_model_package::OutputDeterminismExpectation::value: OutputDeterminismValue
+pub struct field nomos_model_package::ReplayFacts::executor_replay: RoutingReplayDisposition
+pub struct field nomos_model_package::ReplayFacts::live_operation_disposition: RoutingReplayDisposition
 pub struct field nomos_model_package::RuntimeCandidateDisqualification::reason: DisqualificationReason
 pub struct nomos_model_package::FallbackAdmissibility
 pub struct nomos_model_package::ModelExecutionProfile
 pub struct nomos_model_package::ModelInputAssemblyIdentity
 pub struct nomos_model_package::ModelRoutePackage
+pub struct nomos_model_package::OutputDeterminismExpectation
+pub struct nomos_model_package::ReplayFacts
 pub struct nomos_model_package::RuntimeCandidateDisqualification
 
 # re-exports of items declared outside this crate
