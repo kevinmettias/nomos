@@ -27493,6 +27493,65 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-API-SPEC-TABLE-SEAM",
+      "title": "nomos-api gains a fifteenth real seam: Spec's Table verb",
+      "why": "ARC-ROADMAP-001 names CLI/API/MCP projections as a near-term-tier item. nomos-api has proven\na second real caller for Gate, Work, and Spec's Profiles, Sources and Record. Table is the\nnext verb: a TableRequest{document, block, table, revision}, answered as\nResult<TableAnswer, TableRefusal>.\n\nChecked before authoring: TableAnswer{document: DocumentSource, tier: PathMatch, census:\nRowCensus, lines: Vec<TableLine>} and TableRefusal{NoSuchDocument, AmbiguousDocument{matched,\ntier}, NoRows{document, tier, census}, Store(StoreError)}\n(crates/orchestration/nomos-spec-orchestration/src/outcome/table.rs and\noutcome/table/table_refusal.rs) -- none derive Serialize. DocumentSource is already twinned\nas DocumentSourceResponse by P13-API-SPEC-RECORD-SEAM, reused here unchanged. PathMatch is a\n3-variant unit enum (Exact, FileName, Fragment), RowCensus is 5 flat u32 fields, TableLine is\nblock_ordinal/table_ordinal/row_ordinal: u32 plus kind/cells/text/content_hash\n(crates/spec/nomos-spec-store/src/read/path_match.rs, table/row_census.rs, table/line.rs) --\nnone derive Serialize, all are flat and trivial to twin.\n\nrun::table::Table(assembly, request) -> Result<TableAnswer, TableRefusal> takes no\nFileSystem parameter and never touches one, the same as Record. Handle_Spec_Table follows\nHandle_Spec_Record's own composition: builds a CorpusRequest from NOMOS_V14_CORPUS,\ndispatches through the shared Run entry point (still generic over FileSystem for all nine\nSpecCommand variants regardless), matches SpecOutcome::Table.\n\nAssemble(request) succeeds with real absences even when NOMOS_V14_CORPUS is unset\n(SpecSourcesResponse's own test already proves this), so a TableRequest naming a document\nthat cannot exist under any corpus state deterministically reaches TableRefusal::\nNoSuchDocument regardless of this session's own environment -- the same\nenvironment-independent refusal-path test shape Handle_Spec_Table's own research already\nconfirmed. Exercising the Selected/Ok path needs a real document under the actual v14\ncorpus, unavailable in CI per this workspace's corpus-outside-the-repo constraint, so only\nthe refusal path is asserted by a real end-to-end test here, the same limitation\nHandle_Spec_Sources's own tests already accept for corpus-dependent paths.",
+      "done_when": "nomos-api gains a new public function Handle_Spec_Table(request: &TableRequest) ->\nSpecTableResponse in spec.rs, following Handle_Spec_Record's exact composition: builds the\nsame CorpusRequest from NOMOS_V14_CORPUS, calls\nnomos_spec_orchestration::Run(&SpecCommand::Table(request.clone()), &corpus_request,\n&StdFileSystem), matches SpecOutcome::Table via an irrefutable let-else with unreachable! on\nthe wrong-variant arm, converts through SpecTableResponse::From.\n\nSpecTableResponse is a new tagged enum: Selected{document: DocumentSourceResponse, tier:\nPathMatchResponse, census: RowCensusResponse, lines: Vec<TableLineResponse>},\nNoSuchDocument (unit), AmbiguousDocument{matched: usize, tier: PathMatchResponse},\nNoRows{document: DocumentSourceResponse, tier: PathMatchResponse, census: RowCensusResponse},\nUnreadable{cause: String} (Store(StoreError) collapsed via .to_string(), the same shape\nevery other Unreadable variant in this file already uses).\n\nPathMatchResponse{Exact, FileName, Fragment}, RowCensusResponse{lines, header, content,\nseparator, non_separator: u32}, and TableLineResponse{block_ordinal, table_ordinal,\nrow_ordinal: u32, kind: String, cells: Vec<String>, text: String, content_hash: String} are\nnew public types, serializable twins of nomos_spec_store::PathMatch/RowCensus/TableLine.\nDocumentSourceResponse (already added by P13-API-SPEC-RECORD-SEAM) is reused unchanged for\nTableAnswer's own document field.\n\nA real test proves Handle_Spec_Table reports SpecTableResponse::NoSuchDocument for a document\nname this build cannot possibly resolve under any corpus state, regardless of this session's\nown NOMOS_V14_CORPUS. A second test proves that response round-trips through serde_json with\nthe \"outcome\" tag reading \"no_such_document\". tests/contract/surface/nomos-api.txt is\nregenerated (NOMOS_SURFACE_BLESS) and current. nomos-spec-orchestration and nomos-spec-store\nare not touched by this item.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-api",
+          "tests/contract/surface/nomos-api.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "t result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 5 tests\ntest Test_A_Lowered_Declaration_Should_Fail_The_Comparison ... ok\ntest Test_An_Unrelated_Minor_Version_Should_Fail_The_Comparison ... ok\ntest Test_A_Matching_Declaration_Should_Pass_The_Comparison ... ok\ntest Test_The_Real_Workflow_Should_Still_Have_The_Install_Step ... ok\ntest Test_The_Declared_Floor_Should_Match_The_Toolchain_The_Gate_Installs ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.13s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_api-ba7bce32110d92cc.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-95a1aef077b5f9ba.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-ead301eb7c8d8256.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-a61f2bcd75c8d4d9.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-fba07f1fa1c92105.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-2bb84d2d8744d800.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-c2987d8eceda16d3.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-0eeaea7cd309c35b.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-2db99bdd604951c5.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-56e2b70874db076c.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-1204b8c22ecd0b43.exe)\n   Doc-tests nomos_api\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1787593557,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

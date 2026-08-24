@@ -7,9 +7,9 @@
 
 use nomos_platform_std::StdFileSystem;
 use nomos_spec_orchestration::corpus::{Absence, CorpusRequest, DEFAULT_REVISION};
-use nomos_spec_orchestration::{RecordAnswer, RecordRefusal, RecordRequest, SpecCommand};
+use nomos_spec_orchestration::{RecordAnswer, RecordRefusal, RecordRequest, SpecCommand, TableAnswer, TableRefusal, TableRequest};
 use nomos_spec_project::Profile;
-use nomos_spec_store::{DocumentSource, NodeSummary, StoreError};
+use nomos_spec_store::{DocumentSource, NodeSummary, PathMatch, RowCensus, StoreError, TableLine};
 use serde::Serialize;
 use std::path::PathBuf;
 
@@ -305,6 +305,183 @@ impl NodeSummaryResponse
     }
 }
 
+/// Selects table rows exactly as `nomos spec table` would, and hands back a
+/// JSON-serializable response.
+///
+/// Follows [`Handle_Spec_Record`]'s own composition: builds a `CorpusRequest` from the
+/// environment, dispatches through the shared `Run` entry point, matches `SpecOutcome::
+/// Table`. `run::table::Table` itself never touches a `FileSystem`, the same as `Record`.
+#[must_use]
+pub fn Handle_Spec_Table(request: &TableRequest) -> SpecTableResponse
+{
+    let corpus_request = CorpusRequest {
+        variable: CORPUS_VARIABLE.to_owned(),
+        root: std::env::var_os(CORPUS_VARIABLE).map(PathBuf::from),
+        revision: DEFAULT_REVISION.to_owned(),
+    };
+
+    let outcome =
+        nomos_spec_orchestration::Run(&SpecCommand::Table(request.clone()), &corpus_request, &StdFileSystem);
+
+    let nomos_spec_orchestration::SpecOutcome::Table(result) = outcome
+    else
+    {
+        unreachable!("Run always returns the SpecOutcome variant naming the SpecCommand it was given")
+    };
+
+    return SpecTableResponse::From(result);
+}
+
+/// What a real `nomos spec table` produced, in a shape `serde_json` can hand across a wire.
+#[derive(Debug, Serialize)]
+#[serde(tag = "outcome", rename_all = "snake_case")]
+pub enum SpecTableResponse
+{
+    /// The rows the request selected, and the document and census they came from.
+    Selected
+    {
+        document: DocumentSourceResponse,
+        tier: PathMatchResponse,
+        census: RowCensusResponse,
+        lines: Vec<TableLineResponse>,
+    },
+    /// No document in the store matches the address.
+    NoSuchDocument,
+    /// The address matches more than one document.
+    AmbiguousDocument
+    {
+        matched: usize,
+        tier: PathMatchResponse,
+    },
+    /// The document was found and read, and the request's own narrowing selected no rows.
+    NoRows
+    {
+        document: DocumentSourceResponse,
+        tier: PathMatchResponse,
+        census: RowCensusResponse,
+    },
+    /// The store could not be read at all.
+    Unreadable
+    {
+        /// What went wrong, as `StoreError`'s own `Display` renders it.
+        cause: String,
+    },
+}
+
+impl SpecTableResponse
+{
+    fn From(result: Result<TableAnswer, TableRefusal>) -> Self
+    {
+        return match result
+        {
+            Ok(answer) => Self::Selected {
+                document: DocumentSourceResponse::From(answer.document),
+                tier: PathMatchResponse::From(answer.tier),
+                census: RowCensusResponse::From(answer.census),
+                lines: answer.lines.into_iter().map(TableLineResponse::From).collect(),
+            },
+            Err(TableRefusal::NoSuchDocument) => Self::NoSuchDocument,
+            Err(TableRefusal::AmbiguousDocument { matched, tier }) =>
+            {
+                Self::AmbiguousDocument { matched, tier: PathMatchResponse::From(tier) }
+            }
+            Err(TableRefusal::NoRows { document, tier, census }) => Self::NoRows {
+                document: DocumentSourceResponse::From(document),
+                tier: PathMatchResponse::From(tier),
+                census: RowCensusResponse::From(census),
+            },
+            Err(TableRefusal::Store(error)) => Self::Unreadable { cause: error.to_string() },
+        };
+    }
+}
+
+/// A serializable twin of [`nomos_spec_store::PathMatch`], which does not derive `Serialize`.
+#[derive(Debug, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum PathMatchResponse
+{
+    /// The path was given in full.
+    Exact,
+    /// The last segment of the path was given.
+    FileName,
+    /// The text appears somewhere in the path.
+    Fragment,
+}
+
+impl PathMatchResponse
+{
+    fn From(tier: PathMatch) -> Self
+    {
+        return match tier
+        {
+            PathMatch::Exact => Self::Exact,
+            PathMatch::FileName => Self::FileName,
+            PathMatch::Fragment => Self::Fragment,
+        };
+    }
+}
+
+/// A serializable twin of [`nomos_spec_store::RowCensus`], which does not derive `Serialize`.
+#[derive(Debug, Serialize)]
+pub struct RowCensusResponse
+{
+    /// Every pipe line, whatever it turned out to be.
+    pub lines: u32,
+    pub header: u32,
+    pub content: u32,
+    pub separator: u32,
+    /// Authored lines: header and content together.
+    pub non_separator: u32,
+}
+
+impl RowCensusResponse
+{
+    fn From(census: RowCensus) -> Self
+    {
+        return Self {
+            lines: census.lines,
+            header: census.header,
+            content: census.content,
+            separator: census.separator,
+            non_separator: census.non_separator,
+        };
+    }
+}
+
+/// A serializable twin of [`nomos_spec_store::TableLine`], which does not derive `Serialize`.
+#[derive(Debug, Serialize)]
+pub struct TableLineResponse
+{
+    /// Which block of the document carries it.
+    pub block_ordinal: u32,
+    /// Which table within that block.
+    pub table_ordinal: u32,
+    /// Which line within the block, 1-based.
+    pub row_ordinal: u32,
+    /// `header`, `content` or `separator`.
+    pub kind: String,
+    pub cells: Vec<String>,
+    /// The line as authored.
+    pub text: String,
+    pub content_hash: String,
+}
+
+impl TableLineResponse
+{
+    fn From(line: TableLine) -> Self
+    {
+        return Self {
+            block_ordinal: line.block_ordinal,
+            table_ordinal: line.table_ordinal,
+            row_ordinal: line.row_ordinal,
+            kind: line.kind,
+            cells: line.cells,
+            text: line.text,
+            content_hash: line.content_hash,
+        };
+    }
+}
+
 #[cfg(test)]
 mod tests
 {
@@ -405,5 +582,42 @@ mod tests
         let outcome = parsed.get("outcome").expect("a serialized SpecRecordResponse always has this field");
 
         assert_eq!(outcome, "resolved", "{json}");
+    }
+
+    /// No document under any corpus state can match this name, regardless of whether this
+    /// session's own `NOMOS_V14_CORPUS` happens to be set -- `Assemble`'s own contract is
+    /// that an absent corpus reports real absences rather than refusing.
+    #[test]
+    fn Test_A_Real_Call_For_An_Unknown_Document_Should_Report_No_Such_Document()
+    {
+        let request = TableRequest {
+            document: "definitely-nonexistent-table-document-xyz".to_owned(),
+            block: None,
+            table: None,
+            revision: None,
+        };
+
+        let response = Handle_Spec_Table(&request);
+
+        assert!(matches!(response, SpecTableResponse::NoSuchDocument), "{response:?}");
+    }
+
+    #[test]
+    fn Test_A_No_Such_Document_Response_Should_Round_Trip_As_Json()
+    {
+        let request = TableRequest {
+            document: "definitely-nonexistent-table-document-xyz".to_owned(),
+            block: None,
+            table: None,
+            revision: None,
+        };
+
+        let response = Handle_Spec_Table(&request);
+
+        let json = serde_json::to_string(&response).expect("a SpecTableResponse always serializes");
+        let parsed: serde_json::Value = serde_json::from_str(&json).expect("what was just written parses back");
+        let outcome = parsed.get("outcome").expect("a serialized SpecTableResponse always has this field");
+
+        assert_eq!(outcome, "no_such_document", "{json}");
     }
 }

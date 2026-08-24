@@ -56,7 +56,9 @@
 //! first whose own outcome needed twin types of its own,
 //! [`spec::DocumentSourceResponse`]/[`spec::NodeSummaryResponse`], because
 //! `nomos_spec_store::DocumentSource`/`NodeSummary` do not derive `Serialize` and are not
-//! this crate's own types to change.
+//! this crate's own types to change. Its fifteenth, [`spec::Handle_Spec_Table`], does the
+//! same for `Table`, reusing [`spec::DocumentSourceResponse`] and adding three more twins
+//! for `PathMatch`, `RowCensus` and `TableLine`.
 //!
 //! [`Handle_Gate_Run`] is a deliberate twin of `nomos-cli`'s `gate.rs`
 //! `GateInvocation::Run` arm: it walks `root` for `.rs` sources
@@ -97,7 +99,8 @@ pub use response::{
 };
 pub use spec::{
     AbsenceResponse, DocumentSourceResponse, Handle_Spec_Profiles, Handle_Spec_Record, Handle_Spec_Sources,
-    NodeSummaryResponse, ProfilesResponse, SpecRecordResponse, SpecSourcesResponse,
+    Handle_Spec_Table, NodeSummaryResponse, PathMatchResponse, ProfilesResponse, RowCensusResponse,
+    SpecRecordResponse, SpecSourcesResponse, SpecTableResponse, TableLineResponse,
 };
 pub use work::{
     BlockedItem, Handle_Work_Abandon, Handle_Work_Add, Handle_Work_Audit, Handle_Work_Claim, Handle_Work_Decline,

@@ -1,9 +1,11 @@
 pub enum nomos_api::Disposition
 pub enum nomos_api::GateExplainResponse
 pub enum nomos_api::GatePlanResponse
+pub enum nomos_api::PathMatchResponse
 pub enum nomos_api::ProfilesResponse
 pub enum nomos_api::SpecRecordResponse
 pub enum nomos_api::SpecSourcesResponse
+pub enum nomos_api::SpecTableResponse
 pub enum nomos_api::SuppressionDispositionResponse
 pub enum nomos_api::WorkAbandonResponse
 pub enum nomos_api::WorkAddResponse
@@ -21,6 +23,9 @@ pub enum variant nomos_api::GateExplainResponse::Found { finding: Box<Finding>, 
 pub enum variant nomos_api::GateExplainResponse::NotFound
 pub enum variant nomos_api::GatePlanResponse::Contradictory { cause: String, }
 pub enum variant nomos_api::GatePlanResponse::Planned { rules: Vec<RuleOfferResponse>, }
+pub enum variant nomos_api::PathMatchResponse::Exact
+pub enum variant nomos_api::PathMatchResponse::FileName
+pub enum variant nomos_api::PathMatchResponse::Fragment
 pub enum variant nomos_api::ProfilesResponse::Listed { profiles: Vec<Profile>, }
 pub enum variant nomos_api::ProfilesResponse::Unreadable { cause: String, }
 pub enum variant nomos_api::SpecRecordResponse::Ambiguous { id: String, documents: Vec<DocumentSourceResponse>, }
@@ -29,6 +34,11 @@ pub enum variant nomos_api::SpecRecordResponse::Resolved { id: String, document:
 pub enum variant nomos_api::SpecRecordResponse::Unreadable { cause: String, }
 pub enum variant nomos_api::SpecSourcesResponse::Assembled { read: Vec<String>, absent: Vec<AbsenceResponse>, }
 pub enum variant nomos_api::SpecSourcesResponse::Unreadable { cause: String, }
+pub enum variant nomos_api::SpecTableResponse::AmbiguousDocument { matched: usize, tier: PathMatchResponse, }
+pub enum variant nomos_api::SpecTableResponse::NoRows { document: DocumentSourceResponse, tier: PathMatchResponse, census: RowCensusResponse, }
+pub enum variant nomos_api::SpecTableResponse::NoSuchDocument
+pub enum variant nomos_api::SpecTableResponse::Selected { document: DocumentSourceResponse, tier: PathMatchResponse, census: RowCensusResponse, lines: Vec<TableLineResponse>, }
+pub enum variant nomos_api::SpecTableResponse::Unreadable { cause: String, }
 pub enum variant nomos_api::SuppressionDispositionResponse::AcceptedBaselineDebt
 pub enum variant nomos_api::SuppressionDispositionResponse::FalsePositiveDisposition
 pub enum variant nomos_api::SuppressionDispositionResponse::FormalRiskAcceptance
@@ -60,6 +70,7 @@ pub fn nomos_api::Handle_Gate_Run(root: &Path) -> GateRunResponse
 pub fn nomos_api::Handle_Spec_Profiles() -> ProfilesResponse
 pub fn nomos_api::Handle_Spec_Record(request: &RecordRequest) -> SpecRecordResponse
 pub fn nomos_api::Handle_Spec_Sources() -> SpecSourcesResponse
+pub fn nomos_api::Handle_Spec_Table(request: &TableRequest) -> SpecTableResponse
 pub fn nomos_api::Handle_Work_Abandon(directory: &Path, request: &EndingRequest) -> WorkAbandonResponse
 pub fn nomos_api::Handle_Work_Add(directory: &Path, item: &LedgerItem, amending: &Territory) -> WorkAddResponse
 pub fn nomos_api::Handle_Work_Audit(directory: &Path) -> WorkAuditResponse
@@ -99,6 +110,11 @@ pub struct field nomos_api::NodeSummaryResponse::title: String
 pub struct field nomos_api::ReservationResponse::expires_at: Timestamp
 pub struct field nomos_api::ReservationResponse::holder: String
 pub struct field nomos_api::ReservationResponse::item: ItemId
+pub struct field nomos_api::RowCensusResponse::content: u32
+pub struct field nomos_api::RowCensusResponse::header: u32
+pub struct field nomos_api::RowCensusResponse::lines: u32
+pub struct field nomos_api::RowCensusResponse::non_separator: u32
+pub struct field nomos_api::RowCensusResponse::separator: u32
 pub struct field nomos_api::RuleCalibrationResponse::rationale: String
 pub struct field nomos_api::RuleCalibrationResponse::rule: RuleId
 pub struct field nomos_api::RuleOfferResponse::contract_record: String
@@ -109,6 +125,13 @@ pub struct field nomos_api::SuppressionResponse::owner: String
 pub struct field nomos_api::SuppressionResponse::rationale: String
 pub struct field nomos_api::SuppressionResponse::rule: RuleId
 pub struct field nomos_api::SuppressionResponse::subject: SubjectId
+pub struct field nomos_api::TableLineResponse::block_ordinal: u32
+pub struct field nomos_api::TableLineResponse::cells: Vec<String>
+pub struct field nomos_api::TableLineResponse::content_hash: String
+pub struct field nomos_api::TableLineResponse::kind: String
+pub struct field nomos_api::TableLineResponse::row_ordinal: u32
+pub struct field nomos_api::TableLineResponse::table_ordinal: u32
+pub struct field nomos_api::TableLineResponse::text: String
 pub struct nomos_api::AbsenceResponse
 pub struct nomos_api::BaselineDebtResponse
 pub struct nomos_api::BlockedItem
@@ -116,6 +139,8 @@ pub struct nomos_api::DocumentSourceResponse
 pub struct nomos_api::GateRunResponse
 pub struct nomos_api::NodeSummaryResponse
 pub struct nomos_api::ReservationResponse
+pub struct nomos_api::RowCensusResponse
 pub struct nomos_api::RuleCalibrationResponse
 pub struct nomos_api::RuleOfferResponse
 pub struct nomos_api::SuppressionResponse
+pub struct nomos_api::TableLineResponse
