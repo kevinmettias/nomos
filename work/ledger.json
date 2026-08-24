@@ -27497,6 +27497,106 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-AGT-001-002-TASK-ENVELOPE-WORK-RESULT",
+      "title": "nomos-agent-contracts: AGT-001's TaskEnvelope and AGT-002's WorkResult, band 36",
+      "why": "OD-ROADMAP-001 retires the wait these named AGT-001/AGT-002 continuation candidates were left under. Both are directly transcribable from the corpus and both name their own artifact in the scenario table at line 1054 (TaskEnvelope, WorkResult). tests/contract/requirements/AGT-001.assessment and AGT-002.assessment (verdict Partial, prior audit wave) each independently confirm scattered real analogs exist but 'no single typed envelope bundles any of this into one artifact.' Every field of both types is a direct reuse of an already-existing type that already means what the corpus word means: TaskEnvelope's scope/prohibited_changes reuse nomos_ledger::Territory, applicable_rules/available_tools/expected_output_schema reuse nomos_contracts::{RuleId,CapabilityId,SchemaId}, knowledge_context reuses nomos_contracts::KnowledgeReferenceId (a citation, never KWB's own content, per ARC-ECOSYSTEM-001's ownership table and this session's own AGT-010 increment); WorkResult's plan reuses nomos_corrections::CorrectionPlan (which already bundles 'plans' and 'changes' together, since each CorrectionCandidate carries its own ChangeSet), claims reuses nomos_contracts::Finding, tests/requested_verification reuse nomos_ledger::VerificationPredicate at Vec/Option cardinality. assumptions/unresolved_questions are the only genuinely new pieces (Vec<String>, no existing type covers either concept). A new crate rather than an addition to an existing one because neither type is corrections, ledger, or contracts business specifically -- it is the AgentExecutor-facing envelope this whole session's mandate is named for -- placed at band 36 (free in README's table, above nomos-corrections at 35, below nomos-work-orchestration at 40) since it depends downward on nomos-ledger (20), nomos-contracts (0) and nomos-corrections (35).",
+      "done_when": "crates/agent/nomos-agent-contracts exists as a new workspace member (Cargo.toml, src/lib.rs, src/task_envelope.rs, src/work_result.rs) with TaskEnvelope (7 fields: goal, scope, knowledge_context, applicable_rules, prohibited_changes, available_tools, expected_output_schema) and WorkResult (6 fields: plan, claims, tests, requested_verification, assumptions, unresolved_questions). Registered in root Cargo.toml members and workspace.dependencies, README.md's band table at 36, tests/contract/tests/boundaries/bands.rs's BANDS const, and crates/rules/nomos-rules/src/dependency/bands.rs. cargo test -p nomos-agent-contracts passes. cargo test --no-fail-fast -p nomos-contract-tests passes, including a fresh tests/contract/surface/nomos-agent-contracts.txt snapshot. cargo clippy --workspace --all-targets exits 0 (the gate's real Lint step; OD-GATE-007 removed -D warnings from it).",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "Cargo.toml",
+          "Cargo.lock",
+          "README.md",
+          "crates/agent/nomos-agent-contracts",
+          "tests/contract/tests/boundaries/bands.rs",
+          "crates/rules/nomos-rules/src/dependency/bands.rs",
+          "tests/contract/surface/nomos-agent-contracts.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-p13-session",
+        "acquired_at": 1787593131,
+        "lease_expires_at": 1787603931
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-COR-EXEC-006-ROLLBACK-BOUNDARY",
+      "title": "nomos-corrections gains COR-EXEC-006: a declared rollback boundary for a committed correction",
+      "why": "OD-ROADMAP-001 retires the wait-for-a-second-consumer caution for the corrections cluster. COR-EXEC-006 names five reversal kinds in order: Exact, Compensating, RepositoryRecoverable, ProviderDependent, Irreversible -- directly transcribable, the same declared-not-computed pattern CorrectionClass and nomos_contracts::MutationClass already use (P13-AGT-EXEC-001-MUTATION-CLASS-WIRED landed that exact precedent for a sibling classification axis). CommittedPlan::Rollback is provably RollbackBoundary::Exact by construction: it restores the stored reverse changeset verbatim, and Test_Committing_Then_Rolling_Back_Should_Return_To_The_Base_Snapshot already asserts the byte-for-byte round trip that makes this true rather than aspirational. Does not build the second sentence (parallel groups shall not cross incompatible rollback boundaries) because CorrectionPlan has no parallel-group scheduler for it to constrain -- one plan runs at a time -- the same second-sentence carve-out RankingCriterion already drew for COR-011. Also does not build COR-EXEC-001 (a read/write set needing real reuse of nomos_contracts::Guarantee and ProviderId with band verification not yet done), or COR-EXEC-002/003/005/007/008 (an execution graph, parallel-wave scheduler, optimistic transaction manager, cascading invalidation, and an execution record whose fields presuppose that missing substrate) -- a materially larger scope closer to the excluded workflow engine than to declared vocabulary.",
+      "done_when": "crates/corrections/nomos-corrections/src/rollback_boundary.rs exists with RollbackBoundary carrying COR-EXEC-006 five variants in the order the corpus states them, with a Label()/Display pair matching the existing convention (CorrectionClass, RankingCriterion). CommittedPlan gains Rollback_Boundary(&self) -> RollbackBoundary returning RollbackBoundary::Exact, matching the existing Mutation_Class()/ROLLBACK_MUTATION_CLASS pattern. RollbackBoundary is re-exported from lib.rs. cargo test -p nomos-corrections passes, including a label-distinctness test and a test asserting a real committed plan reports Exact. cargo test --no-fail-fast -p nomos-contract-tests passes with tests/contract/surface/nomos-corrections.txt reblessed to include the new public items. cargo clippy --workspace --all-targets is clean.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/corrections/nomos-corrections/src/lib.rs",
+          "crates/corrections/nomos-corrections/src/rollback_boundary.rs",
+          "crates/corrections/nomos-corrections/src/committed.rs",
+          "tests/contract/surface/nomos-corrections.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "Cited_Rule ... ok\ntest Test_Every_Cited_Record_Should_Still_Exist ... ok\ntest Test_Every_Cited_Version_Should_Match_The_Records_Own_Front_Matter ... ok\ntest Test_A_Mismatched_Version_Should_Fail_The_Comparison ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n\n\nrunning 5 tests\ntest Test_A_Lowered_Declaration_Should_Fail_The_Comparison ... ok\ntest Test_A_Matching_Declaration_Should_Pass_The_Comparison ... ok\ntest Test_An_Unrelated_Minor_Version_Should_Fail_The_Comparison ... ok\ntest Test_The_Real_Workflow_Should_Still_Have_The_Install_Step ... ok\ntest Test_The_Declared_Floor_Should_Match_The_Toolchain_The_Gate_Installs ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.09s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-06ab25b0491e144c.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-4c32ae08be8df958.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-9350d088b8d6ed0d.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-9ca3879aab70176f.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-308fef82df004321.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-f6f7228f8cfa874c.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-ea500c062215f506.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-790c8c5856e63fa5.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-98429b682798ce96.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-c1e906054609f777.exe)\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1787593404,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "44d7ffa5801427fa55d1d475114a7a222e76b52b"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

@@ -2,6 +2,7 @@ pub const fn nomos_corrections::CandidateLabel::Label(self) -> &'static str
 pub const fn nomos_corrections::CommittedPlan::After(&self) -> SnapshotId
 pub const fn nomos_corrections::CommittedPlan::Base(&self) -> SnapshotId
 pub const fn nomos_corrections::CommittedPlan::Mutation_Class(&self) -> MutationClass
+pub const fn nomos_corrections::CommittedPlan::Rollback_Boundary(&self) -> RollbackBoundary
 pub const fn nomos_corrections::CorrectionCandidate::Change(&self) -> &ChangeSet
 pub const fn nomos_corrections::CorrectionCandidate::Class(&self) -> CorrectionClass
 pub const fn nomos_corrections::CorrectionCandidate::Id(&self) -> CorrectionId
@@ -12,6 +13,7 @@ pub const fn nomos_corrections::CorrectionId::From_Digest(digest: Digest128) -> 
 pub const fn nomos_corrections::Preview::Mutation_Class(&self) -> MutationClass
 pub const fn nomos_corrections::RankingCriterion::Label(self) -> &'static str
 pub const fn nomos_corrections::ReviewReason::Label(self) -> &'static str
+pub const fn nomos_corrections::RollbackBoundary::Label(self) -> &'static str
 pub const fn nomos_corrections::StagedPlan::Base(&self) -> SnapshotId
 pub const fn nomos_corrections::StagedPlan::Mutation_Class(&self) -> MutationClass
 pub const fn nomos_corrections::ValidatedPlan::Mutation_Class(&self) -> MutationClass
@@ -25,6 +27,7 @@ pub enum nomos_corrections::CorrectionDecision
 pub enum nomos_corrections::CorrectionError
 pub enum nomos_corrections::RankingCriterion
 pub enum nomos_corrections::ReviewReason
+pub enum nomos_corrections::RollbackBoundary
 pub enum variant nomos_corrections::CandidateLabel::AgentProposed
 pub enum variant nomos_corrections::CandidateLabel::Architectural
 pub enum variant nomos_corrections::CandidateLabel::BehaviorPreserving
@@ -55,6 +58,11 @@ pub enum variant nomos_corrections::RankingCriterion::UserPreference
 pub enum variant nomos_corrections::RankingCriterion::VerificationCost
 pub enum variant nomos_corrections::ReviewReason::ChangesPublicBehaviorOrArchitecture
 pub enum variant nomos_corrections::ReviewReason::NoDominantCandidate
+pub enum variant nomos_corrections::RollbackBoundary::Compensating
+pub enum variant nomos_corrections::RollbackBoundary::Exact
+pub enum variant nomos_corrections::RollbackBoundary::Irreversible
+pub enum variant nomos_corrections::RollbackBoundary::ProviderDependent
+pub enum variant nomos_corrections::RollbackBoundary::RepositoryRecoverable
 pub fn nomos_corrections::CandidateLabel::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_corrections::ChangeSet::Edits(&self) -> &[Edit]
 pub fn nomos_corrections::ChangeSet::Empty() -> Self
@@ -89,6 +97,7 @@ pub fn nomos_corrections::Edit::Reverse(&self) -> Change
 pub fn nomos_corrections::Preview::Rendered(&self) -> &[u8]
 pub fn nomos_corrections::RankingCriterion::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_corrections::ReviewReason::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_corrections::RollbackBoundary::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_corrections::StagedPlan::Validate(&self, live: &Workspace) -> Result<ValidatedPlan, CorrectionError>
 pub fn nomos_corrections::ValidatedPlan::Commit(self, live: &mut Workspace, evidence: Evidence) -> Result<CommittedPlan, CorrectionError>
 pub impl nomos_corrections::CandidateLabel implements core::fmt::Display
@@ -100,6 +109,7 @@ pub impl nomos_corrections::CorrectionId implements core::fmt::Display
 pub impl nomos_corrections::CorrectionStaging implements Strategy
 pub impl nomos_corrections::RankingCriterion implements core::fmt::Display
 pub impl nomos_corrections::ReviewReason implements core::fmt::Display
+pub impl nomos_corrections::RollbackBoundary implements core::fmt::Display
 pub struct nomos_corrections::ChangeSet
 pub struct nomos_corrections::CommittedPlan
 pub struct nomos_corrections::CorrectionCandidate

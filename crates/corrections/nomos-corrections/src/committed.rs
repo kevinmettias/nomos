@@ -1,7 +1,7 @@
 //! A plan that has been submitted through the door, and the reverse that undoes it.
 
 use crate::staged::Assert_Not_Moved;
-use crate::CorrectionError;
+use crate::{CorrectionError, RollbackBoundary};
 use nomos_contracts::{MutationClass, SnapshotId};
 use nomos_model::Evidence;
 use nomos_workspace::{Workspace, WorkspaceChangeSet};
@@ -71,6 +71,17 @@ impl CommittedPlan
     /// `SnapshotId` with nowhere to hang an instance method that describes the call
     /// that already happened.
     pub const ROLLBACK_MUTATION_CLASS: MutationClass = MutationClass::Rollback;
+
+    /// `COR-EXEC-006`'s declared reversal kind for [`Self::Rollback`]: always
+    /// [`RollbackBoundary::Exact`]. Provable rather than declared by a caller, because
+    /// `Rollback` restores the exact reverse changeset recorded at commit time --
+    /// `Test_Committing_Then_Rolling_Back_Should_Return_To_The_Base_Snapshot`, below, is
+    /// what makes that a fact about this implementation rather than an aspiration.
+    #[must_use]
+    pub const fn Rollback_Boundary(&self) -> RollbackBoundary
+    {
+        return RollbackBoundary::Exact;
+    }
 
     /// Submits this plan's reverse change through `live`'s one door, undoing it.
     ///
@@ -208,5 +219,15 @@ mod tests
 
         assert_eq!(committed.Mutation_Class(), MutationClass::Apply);
         assert_eq!(CommittedPlan::ROLLBACK_MUTATION_CLASS, MutationClass::Rollback);
+    }
+
+    #[test]
+    fn Test_A_Committed_Plan_Declares_An_Exact_Rollback_Boundary()
+    {
+        let mut base = Base();
+        let plan = Plan_Changing_A(Before("old"), After("new"));
+        let committed = Commit_Plan(&plan, &mut base);
+
+        assert_eq!(committed.Rollback_Boundary(), crate::RollbackBoundary::Exact);
     }
 }

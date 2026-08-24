@@ -28,6 +28,7 @@ mod error;
 mod plan;
 mod preview;
 mod ranking_criterion;
+mod rollback_boundary;
 mod staged;
 mod validated;
 
@@ -44,5 +45,6 @@ pub use error::CorrectionError;
 pub use plan::CorrectionPlan;
 pub use preview::Preview;
 pub use ranking_criterion::RankingCriterion;
+pub use rollback_boundary::RollbackBoundary;
 pub use staged::StagedPlan;
 pub use validated::ValidatedPlan;
