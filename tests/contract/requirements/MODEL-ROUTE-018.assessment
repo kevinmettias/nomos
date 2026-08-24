@@ -1,0 +1,18 @@
+# The assessment of MODEL-ROUTE-018 against this build. The requirement identifier is
+# this file's stem and appears nowhere inside it, because a second place to spell the
+# identity is a second place for it to be wrong -- the rule OD-SPEC-007 chose for a
+# record registration, and CHK-003.assessment states for this registry.
+#
+# MODEL-ROUTE-018: "When more than one selector matches an operation at the same
+# effective scope, the resolver shall rank selector specificity deterministically in
+# this order: exact judgment-implementation ID; exact logical-operation ID; ...
+# inherited default."
+#
+# SelectorSpecificity carries the six-level ranking, but no resolver anywhere in this
+# workspace ranks selectors by it. RuleSelector, the real selector type this workspace
+# has, matches at exactly one grain -- which RuleId -- per MODEL-ROUTE-013's own
+# assessment; nothing composes multiple selectors at one scope for this ranking to
+# apply to.
+verdict: Partial
+site: crates/packages/nomos-model-package/src/selector_specificity.rs#SelectorSpecificity
+gap: crates/orchestration/nomos-gate-orchestration/src/rule_selector.rs#RuleSelector

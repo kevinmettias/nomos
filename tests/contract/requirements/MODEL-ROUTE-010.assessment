@@ -1,0 +1,19 @@
+# The assessment of MODEL-ROUTE-010 against this build. The requirement identifier is
+# this file's stem and appears nowhere inside it, because a second place to spell the
+# identity is a second place for it to be wrong -- the rule OD-SPEC-007 chose for a
+# record registration, and CHK-003.assessment states for this registry.
+#
+# MODEL-ROUTE-010: "Telemetry shall record requested and effective profiles at every
+# model-assisted check, fix, and workflow step, including backend/executor package,
+# model identity, effort, parameters, inherited settings, overrides, rejected
+# candidates, selection rationale, usage, cost, latency, retries, and fallback
+# lineage."
+#
+# ModelExecutionTelemetry carries all thirteen named fields, but nothing in this
+# workspace emits one -- there is no model-assisted check, fix, or workflow step to
+# record telemetry for. Every registered rule is mechanical (MODEL-ROUTE-012's own
+# assessment), and ModelExecutionProfile's own doc comment already names that nothing
+# outside nomos-model-package references a profile yet.
+verdict: Partial
+site: crates/packages/nomos-model-package/src/model_execution_telemetry.rs#ModelExecutionTelemetry
+gap: crates/packages/nomos-model-package/src/model_execution_profile.rs#ModelExecutionProfile

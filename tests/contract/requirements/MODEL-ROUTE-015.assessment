@@ -1,0 +1,17 @@
+# The assessment of MODEL-ROUTE-015 against this build. The requirement identifier is
+# this file's stem and appears nowhere inside it, because a second place to spell the
+# identity is a second place for it to be wrong -- the rule OD-SPEC-007 chose for a
+# record registration, and CHK-003.assessment states for this registry.
+#
+# MODEL-ROUTE-015: "Every resolved effort request shall emit an EffortMappingRecord
+# containing the canonical requested effort, provider-native setting or
+# executor-controlled disposition, mapping quality of Exact, Approximate, Unsupported,
+# or ExecutorControlled, package/version, rationale, and limitations."
+#
+# MappingQuality and EffortMappingRecord carry the full named shape, but nothing in this
+# workspace resolves an effort request against a real backend -- OD-PACKAGE-011 already
+# measured that nothing registers a model backend or executor implementation anywhere
+# in this workspace, so there is no real resolution for this type to be emitted from.
+verdict: Partial
+site: crates/packages/nomos-model-package/src/effort_mapping.rs#EffortMappingRecord
+gap: crates/packages/nomos-model-package/src/model_execution_profile.rs#ModelExecutionProfile

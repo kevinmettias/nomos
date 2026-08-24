@@ -1,0 +1,19 @@
+# The assessment of MODEL-ROUTE-016 against this build. The requirement identifier is
+# this file's stem and appears nowhere inside it, because a second place to spell the
+# identity is a second place for it to be wrong -- the rule OD-SPEC-007 chose for a
+# record registration, and CHK-003.assessment states for this registry.
+#
+# MODEL-ROUTE-016: "Context assembly shall be separately observable and attributable.
+# Retrieval, filtering, authority resolution, deduplication, compression, prompt or
+# task-envelope projection, request construction, model inference, and post-response
+# validation shall emit separate causally linked TelemetryJunctions with resource,
+# latency, cache, usage, and evidence status where available."
+#
+# PipelineStage and TelemetryJunction carry the nine named stages and five named
+# observability fields, plus a caused_by link making a chain of junctions causally
+# linked. Nothing in this workspace emits one -- no context-assembly pipeline of any
+# kind exists to retrieve, filter, deduplicate, compress, or construct a request
+# against a model.
+verdict: Partial
+site: crates/packages/nomos-model-package/src/telemetry_junction.rs#TelemetryJunction
+gap: crates/packages/nomos-model-package/src/model_execution_profile.rs#ModelExecutionProfile

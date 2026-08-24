@@ -1,0 +1,21 @@
+# The assessment of COR-EXEC-006 against this build. The requirement identifier is this
+# file's stem and appears nowhere inside it, because a second place to spell the identity
+# is a second place for it to be wrong -- the rule OD-SPEC-007 chose for a record
+# registration, and CHK-003.assessment states for this registry.
+#
+# COR-EXEC-006: "Each operation shall declare its rollback boundary and whether reversal
+# is Exact, Compensating, RepositoryRecoverable, ProviderDependent, or Irreversible.
+# Parallel groups shall not cross incompatible rollback boundaries."
+#
+# First sentence: genuinely met. CommittedPlan::Rollback_Boundary is real and tested --
+# not unconsumed vocabulary sitting beside a real operation, but the declaration a real,
+# exercised operation (CommittedPlan::Rollback) makes about itself, provably Exact by
+# construction and asserted by
+# Test_A_Committed_Plan_Declares_An_Exact_Rollback_Boundary.
+#
+# Second sentence: a constraint on a parallel-group scheduler this crate does not have --
+# CorrectionPlan runs one plan at a time -- the same second-sentence carve-out
+# RankingCriterion's own doc comment already draws for COR-011's second sentence: a
+# constraint on a future function, not an obligation this type itself owes.
+verdict: Met
+site: crates/corrections/nomos-corrections/src/committed.rs#Rollback_Boundary
