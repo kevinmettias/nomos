@@ -27906,6 +27906,60 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-README-API-SEAM-COUNT-STALE-4",
+      "title": "README's nomos-api band row is stale a fourth time: Spec's 8 remaining verbs landed",
+      "why": "README's nomos-api band-90 row still describes Spec as only Profiles and Sources. Since\nP13-README-API-SEAM-COUNT-STALE-3 closed, 8 more real seams landed on track-a-nomos-api:\nRecord, Table, Markdown, Freshness, Preview, Render, Commit and Submit\n(P13-API-SPEC-RECORD-SEAM through P13-API-SPEC-SUBMIT-SEAM). nomos-spec-orchestration's own\nSpecCommand is now fully seamed here -- all nine verbs -- and Submit alongside it, closing\nthe crate entirely. The README's own table is the map of what exists; a stale row\nmisdescribes 8 real, committed seams as absent, the same recurring defect the three prior\nitems already named and closed.",
+      "done_when": "The nomos-api band-90 row in README.md names nomos-spec-orchestration's Run for all nine\nSpecCommand verbs (Profiles, Sources, Record, Table, Markdown, Freshness, Preview, Render,\nCommit) plus Submit, rather than the stale Profiles/Sources-only subset.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "README.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "rg",
+          "-F",
+          "-c",
+          "nine `SpecCommand` verbs",
+          "README.md"
+        ],
+        "timeout_seconds": 30
+      },
+      "verified": {
+        "argv": [
+          "rg",
+          "-F",
+          "-c",
+          "nine `SpecCommand` verbs",
+          "README.md"
+        ],
+        "exit_code": 0,
+        "output_tail": "2\n",
+        "verified_at": 1787607042,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
