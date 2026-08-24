@@ -50,7 +50,13 @@
 //! `sources.rs` already draws for Gate's own walk. Its thirteenth,
 //! [`spec::Handle_Spec_Sources`], moves on to Spec's own remaining verbs: `Sources` is a
 //! unit `SpecCommand` variant, the next-simplest of that crate's nine after `Profiles`, but
-//! the first here to go through `nomos_spec_orchestration::corpus::Assemble` at all.
+//! the first here to go through `nomos_spec_orchestration::corpus::Assemble` at all. Its
+//! fourteenth, [`spec::Handle_Spec_Record`], is the first Spec seam carrying a request
+//! payload of its own rather than a unit variant -- `RecordRequest{id, revision}` -- and the
+//! first whose own outcome needed twin types of its own,
+//! [`spec::DocumentSourceResponse`]/[`spec::NodeSummaryResponse`], because
+//! `nomos_spec_store::DocumentSource`/`NodeSummary` do not derive `Serialize` and are not
+//! this crate's own types to change.
 //!
 //! [`Handle_Gate_Run`] is a deliberate twin of `nomos-cli`'s `gate.rs`
 //! `GateInvocation::Run` arm: it walks `root` for `.rs` sources
@@ -89,7 +95,10 @@ pub use response::{
     BaselineDebtResponse, Disposition, GateExplainResponse, GatePlanResponse, GateRunResponse, RuleCalibrationResponse,
     RuleOfferResponse, SuppressionDispositionResponse, SuppressionResponse,
 };
-pub use spec::{AbsenceResponse, Handle_Spec_Profiles, Handle_Spec_Sources, ProfilesResponse, SpecSourcesResponse};
+pub use spec::{
+    AbsenceResponse, DocumentSourceResponse, Handle_Spec_Profiles, Handle_Spec_Record, Handle_Spec_Sources,
+    NodeSummaryResponse, ProfilesResponse, SpecRecordResponse, SpecSourcesResponse,
+};
 pub use work::{
     BlockedItem, Handle_Work_Abandon, Handle_Work_Add, Handle_Work_Audit, Handle_Work_Claim, Handle_Work_Decline,
     Handle_Work_Finish, Handle_Work_List, Handle_Work_Renew, Handle_Work_Show, Handle_Work_TakeOver,

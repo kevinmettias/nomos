@@ -2,6 +2,7 @@ pub enum nomos_api::Disposition
 pub enum nomos_api::GateExplainResponse
 pub enum nomos_api::GatePlanResponse
 pub enum nomos_api::ProfilesResponse
+pub enum nomos_api::SpecRecordResponse
 pub enum nomos_api::SpecSourcesResponse
 pub enum nomos_api::SuppressionDispositionResponse
 pub enum nomos_api::WorkAbandonResponse
@@ -22,6 +23,10 @@ pub enum variant nomos_api::GatePlanResponse::Contradictory { cause: String, }
 pub enum variant nomos_api::GatePlanResponse::Planned { rules: Vec<RuleOfferResponse>, }
 pub enum variant nomos_api::ProfilesResponse::Listed { profiles: Vec<Profile>, }
 pub enum variant nomos_api::ProfilesResponse::Unreadable { cause: String, }
+pub enum variant nomos_api::SpecRecordResponse::Ambiguous { id: String, documents: Vec<DocumentSourceResponse>, }
+pub enum variant nomos_api::SpecRecordResponse::NotFound { id: String, revision: Option<String>, node: Option<NodeSummaryResponse>, }
+pub enum variant nomos_api::SpecRecordResponse::Resolved { id: String, document: DocumentSourceResponse, }
+pub enum variant nomos_api::SpecRecordResponse::Unreadable { cause: String, }
 pub enum variant nomos_api::SpecSourcesResponse::Assembled { read: Vec<String>, absent: Vec<AbsenceResponse>, }
 pub enum variant nomos_api::SpecSourcesResponse::Unreadable { cause: String, }
 pub enum variant nomos_api::SuppressionDispositionResponse::AcceptedBaselineDebt
@@ -53,6 +58,7 @@ pub fn nomos_api::Handle_Gate_Explain(root: &Path, query: &FindingQuery) -> Gate
 pub fn nomos_api::Handle_Gate_Plan() -> GatePlanResponse
 pub fn nomos_api::Handle_Gate_Run(root: &Path) -> GateRunResponse
 pub fn nomos_api::Handle_Spec_Profiles() -> ProfilesResponse
+pub fn nomos_api::Handle_Spec_Record(request: &RecordRequest) -> SpecRecordResponse
 pub fn nomos_api::Handle_Spec_Sources() -> SpecSourcesResponse
 pub fn nomos_api::Handle_Work_Abandon(directory: &Path, request: &EndingRequest) -> WorkAbandonResponse
 pub fn nomos_api::Handle_Work_Add(directory: &Path, item: &LedgerItem, amending: &Territory) -> WorkAddResponse
@@ -74,6 +80,10 @@ pub struct field nomos_api::BaselineDebtResponse::rule: RuleId
 pub struct field nomos_api::BaselineDebtResponse::subject: SubjectId
 pub struct field nomos_api::BlockedItem::cause: String
 pub struct field nomos_api::BlockedItem::item: LedgerItem
+pub struct field nomos_api::DocumentSourceResponse::content_hash: String
+pub struct field nomos_api::DocumentSourceResponse::path: String
+pub struct field nomos_api::DocumentSourceResponse::revision: String
+pub struct field nomos_api::DocumentSourceResponse::text: String
 pub struct field nomos_api::GateRunResponse::baselined_findings: Vec<Finding>
 pub struct field nomos_api::GateRunResponse::blocking_findings: Vec<Finding>
 pub struct field nomos_api::GateRunResponse::calibrated_findings: Vec<Finding>
@@ -81,6 +91,11 @@ pub struct field nomos_api::GateRunResponse::disposition: Disposition
 pub struct field nomos_api::GateRunResponse::root: PathBuf
 pub struct field nomos_api::GateRunResponse::run: RunId
 pub struct field nomos_api::GateRunResponse::suppressed_findings: Vec<Finding>
+pub struct field nomos_api::NodeSummaryResponse::authority: String
+pub struct field nomos_api::NodeSummaryResponse::kind: String
+pub struct field nomos_api::NodeSummaryResponse::node_id: String
+pub struct field nomos_api::NodeSummaryResponse::representation: String
+pub struct field nomos_api::NodeSummaryResponse::title: String
 pub struct field nomos_api::ReservationResponse::expires_at: Timestamp
 pub struct field nomos_api::ReservationResponse::holder: String
 pub struct field nomos_api::ReservationResponse::item: ItemId
@@ -97,7 +112,9 @@ pub struct field nomos_api::SuppressionResponse::subject: SubjectId
 pub struct nomos_api::AbsenceResponse
 pub struct nomos_api::BaselineDebtResponse
 pub struct nomos_api::BlockedItem
+pub struct nomos_api::DocumentSourceResponse
 pub struct nomos_api::GateRunResponse
+pub struct nomos_api::NodeSummaryResponse
 pub struct nomos_api::ReservationResponse
 pub struct nomos_api::RuleCalibrationResponse
 pub struct nomos_api::RuleOfferResponse
