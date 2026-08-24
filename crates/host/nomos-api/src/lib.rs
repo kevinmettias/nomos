@@ -58,7 +58,10 @@
 //! `nomos_spec_store::DocumentSource`/`NodeSummary` do not derive `Serialize` and are not
 //! this crate's own types to change. Its fifteenth, [`spec::Handle_Spec_Table`], does the
 //! same for `Table`, reusing [`spec::DocumentSourceResponse`] and adding three more twins
-//! for `PathMatch`, `RowCensus` and `TableLine`.
+//! for `PathMatch`, `RowCensus` and `TableLine`. Its sixteenth, [`spec::Handle_Spec_Markdown`],
+//! does the same for `Markdown`, reusing `RecordRequest` and collapsing `EditError` -- a
+//! nine-variant error with no `Serialize` but a real `Display` -- to a single `cause` string,
+//! the same shape this crate's `StoreError` handling already uses.
 //!
 //! [`Handle_Gate_Run`] is a deliberate twin of `nomos-cli`'s `gate.rs`
 //! `GateInvocation::Run` arm: it walks `root` for `.rs` sources
@@ -98,9 +101,10 @@ pub use response::{
     RuleOfferResponse, SuppressionDispositionResponse, SuppressionResponse,
 };
 pub use spec::{
-    AbsenceResponse, DocumentSourceResponse, Handle_Spec_Profiles, Handle_Spec_Record, Handle_Spec_Sources,
-    Handle_Spec_Table, NodeSummaryResponse, PathMatchResponse, ProfilesResponse, RowCensusResponse,
-    SpecRecordResponse, SpecSourcesResponse, SpecTableResponse, TableLineResponse,
+    AbsenceResponse, DocumentSourceResponse, Handle_Spec_Markdown, Handle_Spec_Profiles, Handle_Spec_Record,
+    Handle_Spec_Sources, Handle_Spec_Table, NodeSummaryResponse, PathMatchResponse, ProfilesResponse,
+    RowCensusResponse, SpecMarkdownResponse, SpecRecordResponse, SpecSourcesResponse, SpecTableResponse,
+    TableLineResponse,
 };
 pub use work::{
     BlockedItem, Handle_Work_Abandon, Handle_Work_Add, Handle_Work_Audit, Handle_Work_Claim, Handle_Work_Decline,

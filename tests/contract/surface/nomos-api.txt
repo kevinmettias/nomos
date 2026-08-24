@@ -3,6 +3,7 @@ pub enum nomos_api::GateExplainResponse
 pub enum nomos_api::GatePlanResponse
 pub enum nomos_api::PathMatchResponse
 pub enum nomos_api::ProfilesResponse
+pub enum nomos_api::SpecMarkdownResponse
 pub enum nomos_api::SpecRecordResponse
 pub enum nomos_api::SpecSourcesResponse
 pub enum nomos_api::SpecTableResponse
@@ -28,6 +29,8 @@ pub enum variant nomos_api::PathMatchResponse::FileName
 pub enum variant nomos_api::PathMatchResponse::Fragment
 pub enum variant nomos_api::ProfilesResponse::Listed { profiles: Vec<Profile>, }
 pub enum variant nomos_api::ProfilesResponse::Unreadable { cause: String, }
+pub enum variant nomos_api::SpecMarkdownResponse::Refused { cause: String, }
+pub enum variant nomos_api::SpecMarkdownResponse::Resolved { node_id: String, path: String, revision: String, markdown: String, source_hash: String, projected_hash: String, matches_source: bool, }
 pub enum variant nomos_api::SpecRecordResponse::Ambiguous { id: String, documents: Vec<DocumentSourceResponse>, }
 pub enum variant nomos_api::SpecRecordResponse::NotFound { id: String, revision: Option<String>, node: Option<NodeSummaryResponse>, }
 pub enum variant nomos_api::SpecRecordResponse::Resolved { id: String, document: DocumentSourceResponse, }
@@ -67,6 +70,7 @@ pub enum variant nomos_api::WorkValidateResponse::Valid { document: LedgerDocume
 pub fn nomos_api::Handle_Gate_Explain(root: &Path, query: &FindingQuery) -> GateExplainResponse
 pub fn nomos_api::Handle_Gate_Plan() -> GatePlanResponse
 pub fn nomos_api::Handle_Gate_Run(root: &Path) -> GateRunResponse
+pub fn nomos_api::Handle_Spec_Markdown(request: &RecordRequest) -> SpecMarkdownResponse
 pub fn nomos_api::Handle_Spec_Profiles() -> ProfilesResponse
 pub fn nomos_api::Handle_Spec_Record(request: &RecordRequest) -> SpecRecordResponse
 pub fn nomos_api::Handle_Spec_Sources() -> SpecSourcesResponse

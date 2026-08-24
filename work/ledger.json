@@ -27552,6 +27552,65 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-API-SPEC-MARKDOWN-SEAM",
+      "title": "nomos-api gains a sixteenth real seam: Spec's Markdown verb",
+      "why": "ARC-ROADMAP-001 names CLI/API/MCP projections as a near-term-tier item. nomos-api has proven\na second real caller for Gate, Work, and Spec's Profiles, Sources, Record and Table.\nMarkdown is the next verb: it shares RecordRequest with Record (checked: both are\nSpecCommand variants carrying the same request type, crates/orchestration/\nnomos-spec-orchestration/src/command.rs), but its own outcome is\nSpecOutcome::Markdown(Result<RecordProjection, EditError>) -- not RecordAnswer/RecordRefusal\n-- confirmed by reading run.rs's Markdown_Outcome directly.\n\nChecked before authoring: RecordProjection{node_id, path, revision, markdown, source_hash,\nprojected_hash}, all flat String (crates/spec/nomos-spec-store/src/record/projection.rs) --\ndoes not derive Serialize. EditError (crates/spec/nomos-spec-store/src/edit/error.rs) has 9\nvariants, derives only Debug, but has hand-written Display and std::error::Error impls --\nthe same shape StoreError already has, which SpecSourcesResponse::Unreadable and\nSpecTableResponse::Unreadable already collapse via .to_string(). This item does the same for\nMarkdown's own refusal: a single Refused{cause: String} variant via EditError's Display,\nrather than a 9-variant granular twin -- the smallest increment consistent with this file's\nown established precedent, deferred until a real caller needs to branch on EditError's\nidentity rather than read its message (Report_Edit_Error in\ncrates/host/nomos-cli/src/spec/verb/editing.rs is the only place that need exists today, and\nit is CLI-side exit-code mapping, not a wire caller).\n\nrun::markdown::Markdown(assembly, request) -> Result<RecordProjection, EditError> takes no\nFileSystem parameter and never touches one, the same as Record and Table. Handle_Spec_Markdown\nfollows Handle_Spec_Record's own composition. D-132 is a real, embedded governing record with\ndeclared front matter (crates/orchestration/nomos-spec-orchestration/src/tests.rs:193-207\nalready renders it with no corpus), so a real end-to-end test needs no scratch directory and\nno NOMOS_V14_CORPUS to be set.",
+      "done_when": "nomos-api gains a new public function Handle_Spec_Markdown(request: &RecordRequest) ->\nSpecMarkdownResponse in spec.rs, following Handle_Spec_Record's exact composition: builds the\nsame CorpusRequest from NOMOS_V14_CORPUS, calls\nnomos_spec_orchestration::Run(&SpecCommand::Markdown(request.clone()), &corpus_request,\n&StdFileSystem), matches SpecOutcome::Markdown via an irrefutable let-else with unreachable!\non the wrong-variant arm, converts through SpecMarkdownResponse::From.\n\nSpecMarkdownResponse is a new tagged enum: Resolved{node_id: String, path: String, revision:\nString, markdown: String, source_hash: String, projected_hash: String, matches_source: bool}\n(matches_source computed from RecordProjection::Matches_Source(), the same fact\nnomos-cli's own Reproducible() reads to choose between ExitCode::Ok and ExitCode::Stale, kept\nhere as a plain bool field since this crate has no exit code to choose between), Refused{\ncause: String} (EditError collapsed via .to_string(), the same shape SpecSourcesResponse::\nUnreadable and SpecTableResponse::Unreadable already use for their own non-Serialize error\ntypes).\n\nA real test proves Handle_Spec_Markdown renders D-132 (an embedded governing record with\ndeclared front matter, no corpus needed) to SpecMarkdownResponse::Resolved with node_id ==\n\"D-132\" and markdown starting with the record's own front matter. A second test proves an\nunknown identifier reports SpecMarkdownResponse::Refused. A third test proves the Resolved\nresponse round-trips through serde_json with the \"outcome\" tag reading \"resolved\".\ntests/contract/surface/nomos-api.txt is regenerated (NOMOS_SURFACE_BLESS) and current.\nnomos-spec-orchestration and nomos-spec-store are not touched by this item.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-api",
+          "tests/contract/surface/nomos-api.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "t result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 5 tests\ntest Test_A_Lowered_Declaration_Should_Fail_The_Comparison ... ok\ntest Test_A_Matching_Declaration_Should_Pass_The_Comparison ... ok\ntest Test_An_Unrelated_Minor_Version_Should_Fail_The_Comparison ... ok\ntest Test_The_Real_Workflow_Should_Still_Have_The_Install_Step ... ok\ntest Test_The_Declared_Floor_Should_Match_The_Toolchain_The_Gate_Installs ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.13s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_api-ba7bce32110d92cc.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-95a1aef077b5f9ba.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-ead301eb7c8d8256.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-a61f2bcd75c8d4d9.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-fba07f1fa1c92105.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-2bb84d2d8744d800.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-c2987d8eceda16d3.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-0eeaea7cd309c35b.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-2db99bdd604951c5.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-56e2b70874db076c.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-1204b8c22ecd0b43.exe)\n   Doc-tests nomos_api\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1787593709,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
