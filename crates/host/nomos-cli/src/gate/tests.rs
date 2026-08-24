@@ -228,6 +228,25 @@ fn Test_A_Real_Run_Should_Judge_This_Workspaces_Own_Tree()
     assert!(stderr.is_empty());
 }
 
+/// A real `run`'s rendered report names the `RunId` `gate.rs` already computes via
+/// `Fresh_Run_Id` and threads through `Run_Gate` -- `OD-WORKFLOW-002`'s one real, mechanical
+/// gap, closed by `P13-GATE-REPORT-RUNID`. `RunId` renders as 32 lowercase hex characters
+/// (`Digest128`'s own `Display`), so this asserts the shape rather than a fixed value: two
+/// runs never share an id, the way `Fresh_Run_Id`'s own tests already guarantee.
+#[test]
+fn Test_A_Real_Run_Should_Report_Its_RunId()
+{
+    let command = GateCommand { root: PathBuf::from("."), ..Default::default() };
+    let (code, rendered, stderr) = Run_Over_This_Tree(GateInvocation::Run(command));
+
+    assert_eq!(code, ExitCode::Ok, "{rendered}");
+    let run_line = rendered.lines().find(|line| line.starts_with("run: ")).unwrap_or_else(|| panic!("no `run: ` line in: {rendered}"));
+    let hex = run_line.trim_start_matches("run: ");
+    assert_eq!(hex.len(), 32, "RunId should render as 32 hex characters: {run_line}");
+    assert!(hex.chars().all(|c| c.is_ascii_hexdigit() && !c.is_ascii_uppercase()), "RunId should be lowercase hex: {run_line}");
+    assert!(stderr.is_empty());
+}
+
 /// `run` over an empty tree must not report the same code as a clean run -- `OD-GATE-003`,
 /// `Test_Check_Should_Refuse_Ok_Over_An_Empty_Tree`'s own reasoning, now checked at this
 /// seam too.

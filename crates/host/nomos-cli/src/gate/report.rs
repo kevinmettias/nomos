@@ -118,6 +118,8 @@ fn Render_Run_No_Facts(root: &Path, files: usize, stderr: &mut impl Write) -> Ex
 /// outer match.
 fn Report_Judged(findings: &[Finding], result: &GateRunResult, stdout: &mut impl Write) -> ExitCode
 {
+    let _ = writeln!(stdout, "run: {}", result.run);
+
     for finding in findings
     {
         let _ = writeln!(stdout, "{}", finding.Describe());
