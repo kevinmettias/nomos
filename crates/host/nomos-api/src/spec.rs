@@ -6,19 +6,22 @@
 //! unit variant.
 
 use nomos_platform_std::StdFileSystem;
-use nomos_spec_orchestration::corpus::{Absence, CorpusRequest, DEFAULT_REVISION};
+use nomos_spec_orchestration::corpus::{Absence, Assemble, CorpusRequest, DEFAULT_REVISION};
 use nomos_spec_orchestration::{
     CommitAnswer, CommitRefusal, CommitRefusalError, CommitRefusalKind, CommitRequest, EditRequest, FreshnessAnswer,
     FreshnessRefusal, FreshnessRequest, PreviewRefusal, ProfileOutcome, RecordAnswer, RecordRefusal, RecordRequest,
-    RenderAnswer, RenderRefusal, RenderRequest, Reproduction, SpecCommand, TableAnswer, TableRefusal, TableRequest,
-    VacateOutcome, Vacated, Verdict,
+    RenderAnswer, RenderRefusal, RenderRequest, Reproduction, SpecCommand, SubmitAnswer, SubmitRefusal, SubmitRequest,
+    TableAnswer, TableRefusal, TableRequest, VacateOutcome, Vacated, Verdict,
 };
 use nomos_spec_project::{Freshness, Profile, Stamp};
 use nomos_spec_store::{
     BlockChange, CommitReport, DocumentSource, EditError, EditPreview, IdentityChange, NodeSummary,
     NormativeMovement, NormativeOutcome, PathMatch, RecordProjection, RowCensus, StoreError, TableLine,
 };
-use nomos_spec_model::RecordRelation;
+use nomos_spec_model::{
+    DecisionGap, Failure, FieldValue, Origin, RecordRelation, Refusal, Severity, Submission, SubmissionKind,
+    SubmissionState,
+};
 use serde::Serialize;
 use std::path::PathBuf;
 
@@ -1364,6 +1367,341 @@ impl ReproductionResponse
     }
 }
 
+/// Accepts a submission through the one door `OD-SPEC-009` decided, and places its
+/// `subject-dossier` projection when `request.into` asks for one, exactly as `nomos request
+/// submit` would, and hands back a JSON-serializable response.
+///
+/// `Submit` is not a `SpecCommand` variant -- `OD-HOST-005`'s own resolution says a `nomos
+/// request submit` invocation is not a `nomos spec` verb by the CLI's own naming, so
+/// [`nomos_spec_orchestration::Submit`] is a sibling of `Run`, not one of its cases, and
+/// takes an already-assembled `&mut Assembly` directly rather than being dispatched through
+/// `Run`. This function therefore assembles the store itself, the one step every other
+/// `Handle_Spec_*` function in this file gets from `Run`. Writes real bytes through
+/// `StdFileSystem` when `request.into` is given, the same `Render`-shaped write
+/// [`Handle_Spec_Render`] already performs (`Submit` calls `run::render::Render` internally
+/// for exactly that reason, addressed at the submission's own id under the same `into` root).
+#[must_use]
+pub fn Handle_Spec_Submit(request: &SubmitRequest) -> SpecSubmitResponse
+{
+    let corpus_request = CorpusRequest {
+        variable: CORPUS_VARIABLE.to_owned(),
+        root: std::env::var_os(CORPUS_VARIABLE).map(PathBuf::from),
+        revision: DEFAULT_REVISION.to_owned(),
+    };
+
+    let mut assembly = match Assemble(&corpus_request)
+    {
+        Ok(assembly) => assembly,
+        Err(error) => return SpecSubmitResponse::Unreadable { cause: error.to_string() },
+    };
+
+    return SpecSubmitResponse::From(nomos_spec_orchestration::Submit(&mut assembly, request, &StdFileSystem));
+}
+
+/// What a real `nomos request submit` produced, in a shape `serde_json` can hand across a
+/// wire.
+#[derive(Debug, Serialize)]
+#[serde(tag = "outcome", rename_all = "snake_case")]
+pub enum SpecSubmitResponse
+{
+    /// The submission was accepted, and its projection placed if one was asked for.
+    Accepted
+    {
+        /// The submission as it was accepted -- every field carrying the origin it was given.
+        submission: SubmissionResponse,
+        /// The row identifier the store assigned it.
+        uid: i64,
+        /// Both halves of its `subject-dossier` projection, when `request.into` asked for
+        /// one.
+        written: Option<RenderedProjectionResponse>,
+    },
+    /// The store could not be assembled or used at all.
+    Unreadable
+    {
+        /// What went wrong, as the underlying error's own `Display` renders it.
+        cause: String,
+    },
+    /// The submission failed `OD-SPEC-010`'s rule set. Nothing was stored.
+    Refused
+    {
+        refusal: RefusalResponse,
+    },
+    /// The submission was accepted and its `subject-dossier` projection could not be built
+    /// or placed.
+    WrittenRefused
+    {
+        /// What went wrong, as the underlying `RenderRefusal`'s own parts render.
+        cause: String,
+    },
+}
+
+impl SpecSubmitResponse
+{
+    fn From(result: Result<SubmitAnswer, SubmitRefusal>) -> Self
+    {
+        return match result
+        {
+            Ok(answer) => Self::Accepted {
+                submission: SubmissionResponse::From(answer.submission),
+                uid: answer.uid,
+                written: answer.written.map(RenderedProjectionResponse::From),
+            },
+            Err(SubmitRefusal::Store(error)) => Self::Unreadable { cause: error.to_string() },
+            Err(SubmitRefusal::Refused(refusal)) => Self::Refused { refusal: RefusalResponse::From(refusal) },
+            Err(SubmitRefusal::Written(refusal)) => Self::WrittenRefused { cause: Render_Refusal_Cause(refusal) },
+        };
+    }
+}
+
+/// A readable cause from any [`RenderRefusal`] variant. `RenderRefusal` itself has no
+/// `Display` (only `Debug`); its own parts do.
+fn Render_Refusal_Cause(refusal: RenderRefusal) -> String
+{
+    return match refusal
+    {
+        RenderRefusal::NoSuchProfile { requested, known } =>
+        {
+            format!("no profile named {requested} (known: {})", known.join(", "))
+        }
+        RenderRefusal::Project(error) => error.to_string(),
+        RenderRefusal::Unwritable { path, error } => format!("{}: {error}", path.display()),
+        RenderRefusal::Store(error) => error.to_string(),
+    };
+}
+
+/// A serializable twin of [`nomos_spec_model::Submission`], which does not derive
+/// `Serialize`.
+#[derive(Debug, Serialize)]
+pub struct SubmissionResponse
+{
+    /// Identity, assigned by the submitter rather than by the store.
+    pub id: String,
+    pub kind: SubmissionKindResponse,
+    pub form_contract_version: u32,
+    pub state: SubmissionStateResponse,
+    pub submitted_by: String,
+    pub submitted_through: String,
+    pub values: Vec<FieldValueResponse>,
+    pub gaps: Vec<DecisionGapResponse>,
+}
+
+impl SubmissionResponse
+{
+    fn From(submission: Submission) -> Self
+    {
+        return Self {
+            id: submission.id,
+            kind: SubmissionKindResponse::From(submission.kind),
+            form_contract_version: submission.form_contract_version,
+            state: SubmissionStateResponse::From(submission.state),
+            submitted_by: submission.submitted_by,
+            submitted_through: submission.submitted_through,
+            values: submission.values.into_iter().map(FieldValueResponse::From).collect(),
+            gaps: submission.gaps.into_iter().map(DecisionGapResponse::From).collect(),
+        };
+    }
+}
+
+/// A serializable twin of [`nomos_spec_model::SubmissionKind`], which does not derive
+/// `Serialize`.
+#[derive(Debug, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum SubmissionKindResponse
+{
+    FeatureRequest,
+    DesignSpec,
+    FeatureResult,
+}
+
+impl SubmissionKindResponse
+{
+    fn From(kind: SubmissionKind) -> Self
+    {
+        return match kind
+        {
+            SubmissionKind::FeatureRequest => Self::FeatureRequest,
+            SubmissionKind::DesignSpec => Self::DesignSpec,
+            SubmissionKind::FeatureResult => Self::FeatureResult,
+        };
+    }
+}
+
+/// A serializable twin of [`nomos_spec_model::SubmissionState`], which does not derive
+/// `Serialize`.
+#[derive(Debug, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum SubmissionStateResponse
+{
+    Draft,
+    Accepted,
+}
+
+impl SubmissionStateResponse
+{
+    fn From(state: SubmissionState) -> Self
+    {
+        return match state
+        {
+            SubmissionState::Draft => Self::Draft,
+            SubmissionState::Accepted => Self::Accepted,
+        };
+    }
+}
+
+/// A serializable twin of [`nomos_spec_model::FieldValue`], which does not derive
+/// `Serialize`.
+#[derive(Debug, Serialize)]
+pub struct FieldValueResponse
+{
+    pub field: String,
+    pub value: String,
+    pub origin: OriginResponse,
+}
+
+impl FieldValueResponse
+{
+    fn From(value: FieldValue) -> Self
+    {
+        return Self { field: value.field, value: value.value, origin: OriginResponse::From(value.origin) };
+    }
+}
+
+/// A serializable twin of [`nomos_spec_model::Origin`], which does not derive `Serialize`.
+#[derive(Debug, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum OriginResponse
+{
+    Submitted,
+    Clarified,
+    Inferred,
+    Decided,
+}
+
+impl OriginResponse
+{
+    fn From(origin: Origin) -> Self
+    {
+        return match origin
+        {
+            Origin::Submitted => Self::Submitted,
+            Origin::Clarified => Self::Clarified,
+            Origin::Inferred => Self::Inferred,
+            Origin::Decided => Self::Decided,
+        };
+    }
+}
+
+/// A serializable twin of [`nomos_spec_model::DecisionGap`], which does not derive
+/// `Serialize`.
+#[derive(Debug, Serialize)]
+pub struct DecisionGapResponse
+{
+    pub question: String,
+    pub blocks: Vec<String>,
+    pub severity: SeverityResponse,
+    pub closed_by: Option<String>,
+}
+
+impl DecisionGapResponse
+{
+    fn From(gap: DecisionGap) -> Self
+    {
+        return Self {
+            question: gap.question,
+            blocks: gap.blocks,
+            severity: SeverityResponse::From(gap.severity),
+            closed_by: gap.closed_by,
+        };
+    }
+}
+
+/// A serializable twin of [`nomos_spec_model::Severity`], which does not derive `Serialize`.
+#[derive(Debug, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum SeverityResponse
+{
+    Blocking,
+    NonBlocking,
+}
+
+impl SeverityResponse
+{
+    fn From(severity: Severity) -> Self
+    {
+        return match severity
+        {
+            Severity::Blocking => Self::Blocking,
+            Severity::NonBlocking => Self::NonBlocking,
+        };
+    }
+}
+
+/// A serializable twin of [`nomos_spec_model::Refusal`], which does not derive `Serialize`.
+#[derive(Debug, Serialize)]
+pub struct RefusalResponse
+{
+    /// Which submission was refused.
+    pub submission: String,
+    /// Every rule it failed.
+    pub failures: Vec<FailureResponse>,
+}
+
+impl RefusalResponse
+{
+    fn From(refusal: Refusal) -> Self
+    {
+        return Self {
+            submission: refusal.submission,
+            failures: refusal.failures.into_iter().map(FailureResponse::From).collect(),
+        };
+    }
+}
+
+/// A serializable twin of [`nomos_spec_model::Failure`], which does not derive `Serialize`.
+#[derive(Debug, Serialize)]
+pub struct FailureResponse
+{
+    /// The field that failed, or the rule's subject when no single field owns it.
+    pub field: String,
+    pub rule: String,
+    /// What would satisfy it.
+    pub remedy: String,
+}
+
+impl FailureResponse
+{
+    fn From(failure: Failure) -> Self
+    {
+        return Self { field: failure.field, rule: failure.rule, remedy: failure.remedy };
+    }
+}
+
+/// Both halves of a built projection, placed where a submission's own `into` asked for them
+/// -- the same fields [`SpecRenderResponse::Placed`] carries, kept as its own type here
+/// rather than shared with it for the same reason [`CommittedPreviewResponse`] is not shared
+/// with `SpecPreviewResponse`: `Render`'s own wire shape is already fixed by its own finished
+/// item.
+#[derive(Debug, Serialize)]
+pub struct RenderedProjectionResponse
+{
+    /// The profile identifier that was built -- always `"subject-dossier"` here.
+    pub id: String,
+    /// Where the body landed.
+    pub body: PathBuf,
+    /// Where its sidecar landed.
+    pub sidecar: PathBuf,
+    /// What the build selected, and what it hashes to. Already `Serialize`, reused directly.
+    pub stamp: Stamp,
+}
+
+impl RenderedProjectionResponse
+{
+    fn From(answer: RenderAnswer) -> Self
+    {
+        return Self { id: answer.id, body: answer.body, sidecar: answer.sidecar, stamp: answer.stamp };
+    }
+}
+
 #[cfg(test)]
 mod tests
 {
@@ -1789,5 +2127,94 @@ mod tests
         let outcome = parsed.get("outcome").expect("a serialized SpecCommitResponse always has this field");
 
         assert_eq!(outcome, "committed", "{json}");
+    }
+
+    /// Every universal field and every field `OD-SPEC-010` requires of `SubmissionKind::
+    /// FeatureRequest` -- the same set `nomos_spec_orchestration`'s own `tests.rs` submits.
+    fn Complete_Feature_Request(id: &str, into: Option<std::path::PathBuf>) -> SubmitRequest
+    {
+        return SubmitRequest {
+            kind: SubmissionKind::FeatureRequest,
+            id: id.to_owned(),
+            by: "kevin".to_owned(),
+            state: SubmissionState::Draft,
+            contract_version: 1,
+            fields: vec![
+                ("title".to_owned(), "t".to_owned()),
+                ("goal".to_owned(), "g".to_owned()),
+                ("behaviour".to_owned(), "b".to_owned()),
+                ("acceptance".to_owned(), "a".to_owned()),
+                ("invariants".to_owned(), "none".to_owned()),
+            ],
+            gaps: Vec::new(),
+            submitted_through: "nomos-api-test".to_owned(),
+            into,
+        };
+    }
+
+    #[test]
+    fn Test_A_Real_Complete_Submission_Should_Be_Accepted_With_Submitted_Origin()
+    {
+        let request = Complete_Feature_Request("FR-API-001", None);
+
+        let response = Handle_Spec_Submit(&request);
+
+        let SpecSubmitResponse::Accepted { submission, written, .. } = response
+        else
+        {
+            panic!("a complete feature request is accepted: {response:?}");
+        };
+        assert_eq!(submission.submitted_through, "nomos-api-test");
+        assert!(submission.values.iter().all(|value| matches!(value.origin, OriginResponse::Submitted)));
+        assert!(written.is_none(), "no into was given");
+    }
+
+    #[test]
+    fn Test_A_Real_Submission_With_Into_Should_Place_Its_Subject_Dossier_Projection()
+    {
+        let into = Unique_Scratch_Directory("submit");
+        let request = Complete_Feature_Request("FR-API-002", Some(into));
+
+        let response = Handle_Spec_Submit(&request);
+
+        let SpecSubmitResponse::Accepted { written, .. } = response
+        else
+        {
+            panic!("a complete feature request is accepted: {response:?}");
+        };
+        let written = written.expect("into was given");
+        assert_eq!(written.id, "subject-dossier");
+        let body = std::fs::read_to_string(&written.body).expect("the body was written");
+        assert!(body.contains("FR-API-002"), "{body}");
+    }
+
+    #[test]
+    fn Test_An_Incomplete_Submission_Should_Be_Refused_And_Write_Nothing()
+    {
+        let mut request = Complete_Feature_Request("FR-API-003", None);
+        request.fields.truncate(1);
+
+        let response = Handle_Spec_Submit(&request);
+
+        let SpecSubmitResponse::Refused { refusal } = response
+        else
+        {
+            panic!("an incomplete submission must be refused: {response:?}");
+        };
+        assert!(refusal.failures.iter().any(|failure| failure.field == "goal"), "{refusal:?}");
+    }
+
+    #[test]
+    fn Test_A_Real_Accepted_Response_Should_Round_Trip_As_Json()
+    {
+        let request = Complete_Feature_Request("FR-API-004", None);
+
+        let response = Handle_Spec_Submit(&request);
+
+        let json = serde_json::to_string(&response).expect("a SpecSubmitResponse always serializes");
+        let parsed: serde_json::Value = serde_json::from_str(&json).expect("what was just written parses back");
+        let outcome = parsed.get("outcome").expect("a serialized SpecSubmitResponse always has this field");
+
+        assert_eq!(outcome, "accepted", "{json}");
     }
 }

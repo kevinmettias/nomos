@@ -27847,6 +27847,65 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-API-SPEC-SUBMIT-SEAM",
+      "title": "nomos-api gains a twenty-first real seam: Submit, closing nomos-spec-orchestration entirely",
+      "why": "ARC-ROADMAP-001 names CLI/API/MCP projections as a near-term-tier item. nomos-api now seams\nall nine SpecCommand verbs. Submit is the last verb nomos_spec_orchestration answers and the\nlast one nomos-api had not yet seamed: SubmitRequest{kind, id, by, state, contract_version,\nfields, gaps, submitted_through, into: Option<PathBuf>}, answered as Result<SubmitAnswer,\nSubmitRefusal>.\n\nChecked before authoring: nomos_spec_orchestration::Submit is NOT a SpecCommand variant --\ncrate lib.rs's own \"A second command group\" section and OD-HOST-005's resolution are explicit\nthat a nomos request submit invocation is not a nomos spec verb by the CLI's own naming, so\nSubmit is a sibling of Run over its own SubmitRequest/SubmitAnswer/SubmitRefusal, taking an\nalready-assembled &mut Assembly directly (crates/orchestration/nomos-spec-orchestration/src/\nrun/submit.rs) rather than being dispatched through Run/SpecCommand. Confirmed against\nnomos-cli's own crates/host/nomos-cli/src/request.rs: it calls\nnomos_spec_orchestration::corpus::Assemble(request) then nomos_spec_orchestration::Submit(&mut\nassembly, submit, &StdFileSystem) directly, the same two-step composition this item's\nHandle_Spec_Submit uses.\n\nSubmitAnswer{submission: Submission, uid: i64, written: Option<RenderAnswer>} and\nSubmitRefusal{Store(StoreError), Refused(Refusal), Written(RenderRefusal)} -- none derive\nSerialize. Submission and everything it carries (SubmissionKind, SubmissionState, FieldValue,\nOrigin, DecisionGap, Severity, all in nomos-spec-model) need twins, all confirmed flat/trivial\nby reading crates/spec/nomos-spec-model/src/submission.rs and its submodules plus\ncrates/spec/nomos-spec-model/src/failure.rs and its submodules. Refusal{submission, failures:\nVec<Failure>} is NOT collapsed to a plain cause string the way most other refusals in this\nfile are: it carries the exact per-field validation detail (field, rule, remedy) a real form\nsubmission endpoint exists to surface, so RefusalResponse/FailureResponse twin it structurally\ninstead -- the one deliberate departure from this file's usual collapse-to-string default,\nmade because here the granular data is the whole point of the verb rather than incidental\nerror detail. SubmitRefusal::Written(RenderRefusal) collapses via a new Render_Refusal_Cause\nhelper (RenderRefusal itself has no Display, only its own parts do -- ProjectError,\nFileSystemError and StoreError's Display are each used directly). RenderAnswer's own fields\nare reused via a new RenderedProjectionResponse (kept separate from SpecRenderResponse::\nPlaced's own payload for the same already-shipped-shape reason CommittedPreviewResponse is\nkept separate from SpecPreviewResponse's).\n\nSubmit calls run::render::Render internally when request.into is given, so it writes real\nbytes through StdFileSystem exactly like P13-API-SPEC-RENDER-SEAM's own Handle_Spec_Render --\nalready covered by that item's own precedent discussion and the AskUserQuestion answer\n(\"build both now\") that also covered Render/Commit; Submit's write is the same shape as\nRender's (a derived, regenerable subject-dossier projection), not a new category.\n\nnomos_spec_orchestration's own tests.rs proves a complete FeatureRequest (title, goal,\nbehaviour, acceptance, invariants fields) accepts from the embedded records alone with no\ncorpus, and an incomplete one refuses naming \"goal\" -- the same fixtures this item's own\ntests reuse.",
+      "done_when": "nomos-api gains a new public function Handle_Spec_Submit(request: &SubmitRequest) ->\nSpecSubmitResponse in spec.rs -- the first Handle_Spec_* here that calls\nnomos_spec_orchestration::corpus::Assemble itself (Submit is not dispatched through Run) and\nthen nomos_spec_orchestration::Submit(&mut assembly, request, &StdFileSystem), converting\nthrough SpecSubmitResponse::From.\n\nSpecSubmitResponse is a new tagged enum: Accepted{submission: SubmissionResponse, uid: i64,\nwritten: Option<RenderedProjectionResponse>}, Unreadable{cause} (assembly failure or\nSubmitRefusal::Store), Refused{refusal: RefusalResponse} (SubmitRefusal::Refused, kept\nstructural rather than collapsed to a string, since per-field validation detail is this\nverb's whole point), WrittenRefused{cause} (SubmitRefusal::Written(RenderRefusal), collapsed\nvia a new Render_Refusal_Cause helper since RenderRefusal has no Display of its own).\n\nSubmissionResponse, SubmissionKindResponse, SubmissionStateResponse, FieldValueResponse,\nOriginResponse, DecisionGapResponse, SeverityResponse, RefusalResponse, FailureResponse and\nRenderedProjectionResponse are new public types, serializable twins of\nnomos_spec_model::{Submission, SubmissionKind, SubmissionState, FieldValue, Origin,\nDecisionGap, Severity, Refusal, Failure} and nomos_spec_orchestration::RenderAnswer.\n\nA real test proves Handle_Spec_Submit accepts a complete FeatureRequest (title, goal,\nbehaviour, acceptance, invariants) with every value's origin Submitted and written: None when\nno into is given. A second test proves the same submission with into: Some(scratch)\nplaces a real subject-dossier projection whose body, read back from disk, contains the\nsubmitted id. A third test proves an incomplete submission (fields truncated to one) reports\nSpecSubmitResponse::Refused naming \"goal\" among its failures. A fourth test proves the\nAccepted response round-trips through serde_json with the \"outcome\" tag reading \"accepted\".\ntests/contract/surface/nomos-api.txt is regenerated (NOMOS_SURFACE_BLESS) and current.\nnomos-spec-orchestration, nomos-spec-store and nomos-spec-model are not touched by this item.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-api",
+          "tests/contract/surface/nomos-api.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "t result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 5 tests\ntest Test_A_Lowered_Declaration_Should_Fail_The_Comparison ... ok\ntest Test_A_Matching_Declaration_Should_Pass_The_Comparison ... ok\ntest Test_An_Unrelated_Minor_Version_Should_Fail_The_Comparison ... ok\ntest Test_The_Real_Workflow_Should_Still_Have_The_Install_Step ... ok\ntest Test_The_Declared_Floor_Should_Match_The_Toolchain_The_Gate_Installs ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.13s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_api-64d9b3c86a50fc3e.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-95a1aef077b5f9ba.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-ead301eb7c8d8256.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-a61f2bcd75c8d4d9.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-fba07f1fa1c92105.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-2bb84d2d8744d800.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-c2987d8eceda16d3.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-0eeaea7cd309c35b.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-2db99bdd604951c5.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-56e2b70874db076c.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-1204b8c22ecd0b43.exe)\n   Doc-tests nomos_api\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1787606980,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

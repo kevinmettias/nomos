@@ -83,6 +83,13 @@
 //! Building both `Render` and `Commit` was an explicit choice, asked of and confirmed by a
 //! person rather than decided here, once the research showed `Freshness` and `Preview` (both
 //! generic over `FileSystem`) never actually write, narrowing the real decision to these two.
+//! With `Commit`, all nine `SpecCommand` verbs are seamed. Its twenty-first,
+//! [`spec::Handle_Spec_Submit`], seams the one verb `SpecCommand` does not carry:
+//! `nomos_spec_orchestration::Submit` is a sibling of `Run`, not one of its cases
+//! (`OD-HOST-005`'s own resolution: a `nomos request submit` invocation is not a `nomos spec`
+//! verb by the CLI's own naming), and takes an already-assembled `&mut Assembly` directly, so
+//! this is the first `Handle_Spec_*` function here that calls `corpus::Assemble` itself
+//! rather than getting it from `Run`.
 //!
 //! [`Handle_Gate_Run`] is a deliberate twin of `nomos-cli`'s `gate.rs`
 //! `GateInvocation::Run` arm: it walks `root` for `.rs` sources
@@ -122,14 +129,16 @@ pub use response::{
     RuleOfferResponse, SuppressionDispositionResponse, SuppressionResponse,
 };
 pub use spec::{
-    AbsenceResponse, BlockChangeResponse, CommitReportResponse, CommittedPreviewResponse, DocumentSourceResponse,
-    Handle_Spec_Commit, Handle_Spec_Freshness, Handle_Spec_Markdown, Handle_Spec_Preview, Handle_Spec_Profiles,
-    Handle_Spec_Record, Handle_Spec_Render, Handle_Spec_Sources, Handle_Spec_Table, IdentityChangeResponse,
-    NodeSummaryResponse, NormativeMovementResponse, NormativeOutcomeResponse, PathMatchResponse,
-    ProfileOutcomeResponse, ProfilesResponse, RecordRelationResponse, ReproductionResponse, RowCensusResponse,
-    SpecCommitResponse, SpecFreshnessResponse, SpecMarkdownResponse, SpecPreviewResponse, SpecRecordResponse,
-    SpecRenderResponse, SpecSourcesResponse, SpecTableResponse, TableLineResponse, VacateOutcomeResponse,
-    VacatedResponse, VerdictResponse,
+    AbsenceResponse, BlockChangeResponse, CommitReportResponse, CommittedPreviewResponse, DecisionGapResponse,
+    DocumentSourceResponse, FailureResponse, FieldValueResponse, Handle_Spec_Commit, Handle_Spec_Freshness,
+    Handle_Spec_Markdown, Handle_Spec_Preview, Handle_Spec_Profiles, Handle_Spec_Record, Handle_Spec_Render,
+    Handle_Spec_Sources, Handle_Spec_Submit, Handle_Spec_Table, IdentityChangeResponse, NodeSummaryResponse,
+    NormativeMovementResponse, NormativeOutcomeResponse, OriginResponse, PathMatchResponse, ProfileOutcomeResponse,
+    ProfilesResponse, RecordRelationResponse, RefusalResponse, RenderedProjectionResponse, ReproductionResponse,
+    RowCensusResponse, SeverityResponse, SpecCommitResponse, SpecFreshnessResponse, SpecMarkdownResponse,
+    SpecPreviewResponse, SpecRecordResponse, SpecRenderResponse, SpecSourcesResponse, SpecSubmitResponse,
+    SpecTableResponse, SubmissionKindResponse, SubmissionResponse, SubmissionStateResponse, TableLineResponse,
+    VacateOutcomeResponse, VacatedResponse, VerdictResponse,
 };
 pub use work::{
     BlockedItem, Handle_Work_Abandon, Handle_Work_Add, Handle_Work_Audit, Handle_Work_Claim, Handle_Work_Decline,
