@@ -3,7 +3,7 @@ id: OD-PACKAGE-011
 type: decision
 title: MODEL-ROUTE-037's second clause and MODEL-ROUTE-038 through 049 still have no real second case
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - package
@@ -122,6 +122,43 @@ does not reopen `OD-PACKAGE-010`, which stands exactly as it left the boundary. 
 not build anything in `crates/corrections/nomos-corrections`, which `OD-CORRECTIONS-001`
 already scoped precisely and which stays untouched here.
 
+## Amendment: MODEL-ROUTE-001 Through 036 Measured Too
+
+Added at version 2. This record's original measurement covered only `MODEL-ROUTE-037`'s
+second clause and `038` through `049` -- the pieces `OD-PACKAGE-010` had named as
+deferred. It said nothing about `MODEL-ROUTE-001` through `036`, an equally large piece of
+the same routing/model-execution family that no prior record had measured at all.
+
+A fourteen-agent audit fanned out across the full remaining `AGT`, `AGT-EXEC`, and
+`MODEL-ROUTE` requirement set (`P13-TRACE-AGT-AUDIT-PARTIAL-2`,
+`P13-TRACE-MODEL-ROUTE-012-013-PARTIAL-2`), each requirement grepped independently
+against the live workspace with real `path#symbol` citations rather than assumed from
+this record's own prior narrower sweep. Of `MODEL-ROUTE-001` through `036`, thirty-four
+came back the same way this record's original scope did: no `ModelExecutionProfile`,
+`ResolvedModelExecution`, `ModelInputAssemblyIdentity`, telemetry pipeline, fallback-edge,
+replay-classification, or dispatch mechanism of any kind exists anywhere in this
+workspace, confirmed per-requirement rather than by extension of this record's own
+argument. `MODEL-ROUTE-001` through `011` and `014` through `036` join `037`'s second
+clause and `038` through `049` under the same finding: no real second case yet.
+
+Two did not. `MODEL-ROUTE-012` ("a gate shall remain valid when no model is selected for
+deterministic checks; model configuration shall not implicitly convert deterministic
+rules into model judgments") and `MODEL-ROUTE-013` ("routing selectors shall address the
+exact judgment implementation, not only the owning `RulePackage`") each ground genuinely
+in real, already-built Nomos machinery this audit found and cited that no prior record
+had checked against them -- `Applicability::AgentRequired`/`Coverage` for 012's first
+clause, `RuleSelector`/`EvidenceClass`/`AuthorityClass` for both. They are entered as
+`Partial` in `tests/contract/requirements/MODEL-ROUTE-012.assessment` and
+`MODEL-ROUTE-013.assessment`, not folded into this record's "no real case" finding, because
+a real, tested, cited site is a different state from an absence and this registry's own
+`OD-TRACE-003` refuses to let the two read the same.
+
+This amendment changes no conclusion this record already reached about `037`'s second
+clause or `038` through `049` -- both stand exactly as measured at version 1. It extends
+the same finding to a range this record had never actually looked at, so a future session
+reading `OD-PACKAGE-011` sees the true current boundary of "no real case yet" across the
+whole `MODEL-ROUTE` family rather than the narrower slice this record originally checked.
+
 ## What Would Decide The Next Increment
 
 Unchanged from `OD-PACKAGE-010`, restated because it still has not arrived:
@@ -145,4 +182,8 @@ than an unmeasured "what's next" a future session has to re-derive.
 Accepted. Confirms, by direct measurement against the live workspace rather than
 assumption, that neither deferred piece `OD-PACKAGE-010` named has a real second case yet,
 and that `OD-CORRECTIONS-001`'s agent/interactive-correction trigger has not fired.
-Schedules no work of its own.
+Amended to version 2 by `P13-PACKAGE-011-MODEL-ROUTE-001-036-SURVEY`, which independently
+measured `MODEL-ROUTE-001` through `036` and found the same absence for thirty-four of the
+thirty-six -- all but `012` and `013`, which ground in real
+`Applicability`/`Coverage`/`RuleSelector`/`EvidenceClass`/`AuthorityClass` machinery and
+are assessed `Partial` separately. Schedules no work of its own.

@@ -124,7 +124,7 @@ profile: domain-specification
 | docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md@authored | docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md | authored | 32 | 8 | sha256:cf9bbe40eeaca57b06ca4a774ba3d2d341aa765886fd321d053f7b6748cafe80 |
 | docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md@authored | docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md | authored | 14 | 5 | sha256:8e66ebc7fa4c6ee44260128c0f37957605f33a078676edb3c504d701d929362f |
 | docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md@authored | docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md | authored | 14 | 6 | sha256:6e33c1ccc6d608a1f5d45f677aa83fa0f62fb743bf9f653bdef1c7f8ad29f8ed |
-| docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md@authored | docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md | authored | 21 | 8 | sha256:22f2d1d5697a515ae27ef5e18d82433ee900d7506df63159793e435e5daac74d |
+| docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md@authored | docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md | authored | 26 | 9 | sha256:26281bd6d828d182bcb95129c9d077521e5db2182a935aebeab526edd9f50441 |
 | docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md@authored | docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md | authored | 17 | 6 | sha256:91c99e209eacfaacbe91a9299652a3e8f89ac7b4e451e24acb882ad7930aee77 |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md@authored | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md | authored | 34 | 9 | sha256:871e1ada836924e8fad8d9f05a7badd9349eefb18e90e0157a28ac34879555d0 |
 | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md@authored | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md | authored | 28 | 7 | sha256:f98efe7a4dd950df779912722f9deb19ecdc75a81e52d9635900c2f424a8623a |
@@ -1143,8 +1143,9 @@ profile: domain-specification
 | docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#9 | authored | 2 | The Finding |
 | docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#12 | authored | 3 | The `OD-CORRECTIONS-001` trigger does not fire here either |
 | docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#14 | authored | 2 | What This Does Not Do |
-| docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#16 | authored | 2 | What Would Decide The Next Increment |
-| docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#20 | authored | 2 | Status |
+| docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#16 | authored | 2 | Amendment: MODEL-ROUTE-001 Through 036 Measured Too |
+| docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#21 | authored | 2 | What Would Decide The Next Increment |
+| docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#25 | authored | 2 | Status |
 | docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#1 | authored | 1 | Model and agent backend routing integrates through the existing capability system, not a privileged layer, when it is built |
 | docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#2 | authored | 2 | Question |
 | docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#5 | authored | 2 | What Was Measured |
@@ -32592,17 +32593,74 @@ already scoped precisely and which stays untouched here.
 
 ### docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#16
 
+*revision: authored · kind: heading · heading: MODEL-ROUTE-037's second clause and MODEL-ROUTE-038 through 049 still have no real second case / Amendment: MODEL-ROUTE-001 Through 036 Measured Too · hash: sha256:f7238d0ea026cf680a1a2e63197af6d0cb7d299ec0b0157960bb5cd8e5458245*
+
+## Amendment: MODEL-ROUTE-001 Through 036 Measured Too
+
+### docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#17
+
+*revision: authored · kind: prose · heading: MODEL-ROUTE-037's second clause and MODEL-ROUTE-038 through 049 still have no real second case / Amendment: MODEL-ROUTE-001 Through 036 Measured Too · hash: sha256:67e1bb5a5294777a82efdb8b7aceb1be9c75628e317bd6f3f16911aa5472c4a1*
+
+Added at version 2. This record's original measurement covered only `MODEL-ROUTE-037`'s
+second clause and `038` through `049` -- the pieces `OD-PACKAGE-010` had named as
+deferred. It said nothing about `MODEL-ROUTE-001` through `036`, an equally large piece of
+the same routing/model-execution family that no prior record had measured at all.
+
+### docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#18
+
+*revision: authored · kind: prose · heading: MODEL-ROUTE-037's second clause and MODEL-ROUTE-038 through 049 still have no real second case / Amendment: MODEL-ROUTE-001 Through 036 Measured Too · hash: sha256:2af81cf51f983e3c2e6dff820f50f3755785c5084548299f4427b85a0e686733*
+
+A fourteen-agent audit fanned out across the full remaining `AGT`, `AGT-EXEC`, and
+`MODEL-ROUTE` requirement set (`P13-TRACE-AGT-AUDIT-PARTIAL-2`,
+`P13-TRACE-MODEL-ROUTE-012-013-PARTIAL-2`), each requirement grepped independently
+against the live workspace with real `path#symbol` citations rather than assumed from
+this record's own prior narrower sweep. Of `MODEL-ROUTE-001` through `036`, thirty-four
+came back the same way this record's original scope did: no `ModelExecutionProfile`,
+`ResolvedModelExecution`, `ModelInputAssemblyIdentity`, telemetry pipeline, fallback-edge,
+replay-classification, or dispatch mechanism of any kind exists anywhere in this
+workspace, confirmed per-requirement rather than by extension of this record's own
+argument. `MODEL-ROUTE-001` through `011` and `014` through `036` join `037`'s second
+clause and `038` through `049` under the same finding: no real second case yet.
+
+### docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#19
+
+*revision: authored · kind: prose · heading: MODEL-ROUTE-037's second clause and MODEL-ROUTE-038 through 049 still have no real second case / Amendment: MODEL-ROUTE-001 Through 036 Measured Too · hash: sha256:6a0cd001bf3452a14e7b130a090b3bbb817d638a3ae108575c5607f73cf458c4*
+
+Two did not. `MODEL-ROUTE-012` ("a gate shall remain valid when no model is selected for
+deterministic checks; model configuration shall not implicitly convert deterministic
+rules into model judgments") and `MODEL-ROUTE-013` ("routing selectors shall address the
+exact judgment implementation, not only the owning `RulePackage`") each ground genuinely
+in real, already-built Nomos machinery this audit found and cited that no prior record
+had checked against them -- `Applicability::AgentRequired`/`Coverage` for 012's first
+clause, `RuleSelector`/`EvidenceClass`/`AuthorityClass` for both. They are entered as
+`Partial` in `tests/contract/requirements/MODEL-ROUTE-012.assessment` and
+`MODEL-ROUTE-013.assessment`, not folded into this record's "no real case" finding, because
+a real, tested, cited site is a different state from an absence and this registry's own
+`OD-TRACE-003` refuses to let the two read the same.
+
+### docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#20
+
+*revision: authored · kind: prose · heading: MODEL-ROUTE-037's second clause and MODEL-ROUTE-038 through 049 still have no real second case / Amendment: MODEL-ROUTE-001 Through 036 Measured Too · hash: sha256:02a6453e903991573ec6397aa97b777b91255d6f42bd6afae36349b2de1e19e3*
+
+This amendment changes no conclusion this record already reached about `037`'s second
+clause or `038` through `049` -- both stand exactly as measured at version 1. It extends
+the same finding to a range this record had never actually looked at, so a future session
+reading `OD-PACKAGE-011` sees the true current boundary of "no real case yet" across the
+whole `MODEL-ROUTE` family rather than the narrower slice this record originally checked.
+
+### docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#21
+
 *revision: authored · kind: heading · heading: MODEL-ROUTE-037's second clause and MODEL-ROUTE-038 through 049 still have no real second case / What Would Decide The Next Increment · hash: sha256:2a49a3ba679fcfb358fdad9c23368250d14e31320f8c91494208c2e9050a975b*
 
 ## What Would Decide The Next Increment
 
-### docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#17
+### docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#22
 
 *revision: authored · kind: prose · heading: MODEL-ROUTE-037's second clause and MODEL-ROUTE-038 through 049 still have no real second case / What Would Decide The Next Increment · hash: sha256:ce341a80af8e358e1592d97d774d4d2d4c7b34c75d591bcbbb558b01c1622da5*
 
 Unchanged from `OD-PACKAGE-010`, restated because it still has not arrived:
 
-### docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#18
+### docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#23
 
 *revision: authored · kind: prose · heading: MODEL-ROUTE-037's second clause and MODEL-ROUTE-038 through 049 still have no real second case / What Would Decide The Next Increment · hash: sha256:80a683450425440f3c4ab3534a1167a6e1278ec946f870517f22e63911265b52*
 
@@ -32616,7 +32674,7 @@ Unchanged from `OD-PACKAGE-010`, restated because it still has not arrived:
   actually runs -- giving `MODEL-ROUTE-038` through `049` something to build a first
   increment against instead of a corpus description alone.
 
-### docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#19
+### docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#24
 
 *revision: authored · kind: prose · heading: MODEL-ROUTE-037's second clause and MODEL-ROUTE-038 through 049 still have no real second case / What Would Decide The Next Increment · hash: sha256:e4b71f6f733aaa1d9509d2f9fbfd2e454f65a3fb6f903cc97f330d240af189cc*
 
@@ -32624,20 +32682,24 @@ Until either arrives, `nomos-model-package` stands exactly where `OD-PACKAGE-010
 it -- a real, tested first manifest maturity with no second maturity to build yet -- rather
 than an unmeasured "what's next" a future session has to re-derive.
 
-### docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#20
+### docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#25
 
 *revision: authored · kind: heading · heading: MODEL-ROUTE-037's second clause and MODEL-ROUTE-038 through 049 still have no real second case / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#21
+### docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#26
 
-*revision: authored · kind: prose · heading: MODEL-ROUTE-037's second clause and MODEL-ROUTE-038 through 049 still have no real second case / Status · hash: sha256:5d8e0121e319b080080187d2fe3dc8ba018c9a7eddfb970f035dd8208b79e1b5*
+*revision: authored · kind: prose · heading: MODEL-ROUTE-037's second clause and MODEL-ROUTE-038 through 049 still have no real second case / Status · hash: sha256:c3f649d60dbc6de904b9601b39204833c832bc9c85c671a7f51065380775a89d*
 
 Accepted. Confirms, by direct measurement against the live workspace rather than
 assumption, that neither deferred piece `OD-PACKAGE-010` named has a real second case yet,
 and that `OD-CORRECTIONS-001`'s agent/interactive-correction trigger has not fired.
-Schedules no work of its own.
+Amended to version 2 by `P13-PACKAGE-011-MODEL-ROUTE-001-036-SURVEY`, which independently
+measured `MODEL-ROUTE-001` through `036` and found the same absence for thirty-four of the
+thirty-six -- all but `012` and `013`, which ground in real
+`Applicability`/`Coverage`/`RuleSelector`/`EvidenceClass`/`AuthorityClass` machinery and
+are assessed `Partial` separately. Schedules no work of its own.
 
 ### docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#1
 
