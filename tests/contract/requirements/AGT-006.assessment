@@ -6,12 +6,15 @@
 # AGT-006: "Neither system shall depend on the other at runtime for its core function;
 # integration shall occur through neutral versioned contracts and MCP tools."
 #
-# 'Neither system shall depend on the other' is true today by construction for the XVPE
-# crossing, and mechanically enforced: `Test_Only_The_Platform_Adapter_May_Name_The_Sibling_Workspace`
-# fails the build if any crate's transitive dependencies leak an `xvpe-` prefix outside the
-# one named adapter. There is no equivalent check scoped to a `kwb-` prefix, so a future
-# crate silently taking on a KWB path dependency would not be caught -- true by absence of
-# opportunity today, not by an enforced rule, for the KWB side specifically.
+# 'Neither system shall depend on the other' is true today by construction for both
+# crossings, and now mechanically enforced for both:
+# `Test_Only_The_Platform_Adapter_May_Name_The_Sibling_Workspace` fails the build if any
+# crate's transitive dependencies leak an `xvpe-` prefix outside the one named adapter.
+# This assessment's own first pass found no equivalent check scoped to a `kwb-` prefix; that
+# gap is closed in the same commit as this entry by
+# `Test_No_Crate_May_Name_The_Sibling_Knowledge_Workbench`, the twin check, with an empty
+# `KNOWLEDGE_ADAPTER` list since no such adapter crate exists yet -- the same pattern
+# `PLATFORM_ADAPTER` already used to pre-name `nomos-platform-xvpe` before it existed.
 #
 # 'Integration through neutral versioned contracts' is real and well-grounded: `nomos-contracts`
 # is band 0, versioned, and its own crate root states directly why no dependency may be added
@@ -28,5 +31,5 @@ verdict: Partial
 site: crates/contracts/nomos-contracts/Cargo.toml#Every type here is copied into a KnowledgeWorkbench
 site: crates/contracts/nomos-contracts/src/identity.rs#KnowledgeReferenceId
 site: tests/contract/tests/boundaries/graph.rs#Test_Only_The_Platform_Adapter_May_Name_The_Sibling_Workspace
-gap: tests/contract/tests/boundaries/graph.rs#Test_Only_The_Platform_Adapter_May_Name_The_Sibling_Workspace
+site: tests/contract/tests/boundaries/graph.rs#Test_No_Crate_May_Name_The_Sibling_Knowledge_Workbench
 gap: crates/host/nomos-api/src/lib.rs#speak MCP's JSON-RPC framing

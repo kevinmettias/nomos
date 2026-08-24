@@ -16,6 +16,14 @@ const CONTRACTS_ALLOWLIST: &[&str] = &["serde", "serde_core", "serde_derive"];
 /// test pass.
 const PLATFORM_ADAPTER: &[&str] = &["nomos-platform-xvpe"];
 
+/// The crates permitted to name the sibling knowledge workspace.
+///
+/// Empty: no such adapter exists yet, and unlike the platform crossing this repository
+/// has not even provisionally named one. When one arrives it belongs here explicitly, the
+/// same way `PLATFORM_ADAPTER` already names `nomos-platform-xvpe` before that crate
+/// exists — AGT-006 names this as the one enforced crossing missing its `kwb-` twin.
+const KNOWLEDGE_ADAPTER: &[&str] = &[];
+
 /// Guards every other test in this suite against passing vacuously.
 ///
 /// If package-id parsing breaks — cargo has changed that format more than once — the
@@ -108,6 +116,41 @@ fn Test_Only_The_Platform_Adapter_May_Name_The_Sibling_Workspace()
             "{} reaches {leaked:?}.\n\
              The sibling workspace is a downward implementation dependency behind the \
              platform port, not something the domain may name directly.",
+            member.name
+        );
+    }
+}
+
+/// Nothing may depend on the sibling knowledge workspace at runtime.
+///
+/// AGT-006 requires neither system depend on the other for its core function; this is
+/// the mechanical half of that for the KWB crossing, the twin of
+/// `Test_Only_The_Platform_Adapter_May_Name_The_Sibling_Workspace` above. There is no
+/// adapter exception yet because `KNOWLEDGE_ADAPTER` is empty — every crate is checked.
+#[test]
+fn Test_No_Crate_May_Name_The_Sibling_Knowledge_Workbench()
+{
+    let workspace = Workspace::Load();
+
+    for member in workspace.Members()
+    {
+        if KNOWLEDGE_ADAPTER.contains(&member.name.as_str())
+        {
+            continue;
+        }
+
+        let leaked: Vec<String> = workspace
+            .Transitive_Dependencies(&member.name)
+            .into_iter()
+            .filter(|dependency| dependency.starts_with("kwb-"))
+            .collect();
+
+        assert!(
+            leaked.is_empty(),
+            "{} reaches {leaked:?}.\n\
+             The sibling knowledge workspace is KWB's, not something Nomos may depend on \
+             at runtime for its core function (AGT-006); integration crosses through \
+             neutral versioned contracts instead.",
             member.name
         );
     }
