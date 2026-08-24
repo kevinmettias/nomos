@@ -1,0 +1,34 @@
+# The assessment of AGT-007 against this build. The requirement identifier is this
+# file's stem and appears nowhere inside it, because a second place to spell the identity
+# is a second place for it to be wrong -- the rule OD-SPEC-007 chose for a record
+# registration, and CHK-003.assessment states for this registry.
+#
+# AGT-007: "Nomos shall expose a read-only PrepareChangeContext operation through API, CLI,
+# MCP, and capable clients. Given a pinned repository snapshot plus a symbol, selected
+# scope, or task description, it shall combine KnowledgeWorkbench architecture context,
+# claims, design decisions, examples, contradictions, and historical evidence with
+# Nomos-resolved applicability, permitted scope, required verification, prohibited actions,
+# evidence gaps, approved capabilities, and task-envelope inputs."
+#
+# No operation named or shaped like PrepareChangeContext exists anywhere -- a repo-wide
+# search returns zero hits, and `nomos-api` (the one crate that projects orchestration seams
+# to a second caller) exposes only `Handle_Gate_Run`/`Handle_Gate_Plan`/`Handle_Gate_Explain`,
+# none of which take a symbol/scope/task description and return a combined context bundle.
+#
+# Several of the seven named "Nomos-resolved" ingredients are real and separately
+# assessable: 'permitted scope' maps to `Territory`, the real, tested unit of
+# mutual-exclusion scope a claimed item is bound to; 'required verification' maps to
+# `LedgerItem`'s own `VerificationPredicate` field, distinct from the prose `done_when`;
+# 'approved capabilities' has a real analog in `nomos_capability::Registry`. 'Prohibited
+# actions' and 'task-envelope inputs' have no real grounding anywhere. The KWB half
+# (architecture context, claims, decisions, examples, contradictions, historical evidence)
+# is unreachable: `KnowledgeReferenceId` exists (D-137) but, by that record's own text,
+# "nothing yet produces or consumes one." Even if every ingredient existed, nothing stitches
+# them into one operation exposed via CLI/API/MCP together -- `nomos-api` explicitly
+# declines MCP.
+verdict: Partial
+site: crates/substrate/nomos-ledger/src/territory.rs#Territory
+site: crates/substrate/nomos-ledger/src/item.rs#LedgerItem
+site: crates/substrate/nomos-capability/src/registry.rs#Registry
+gap: crates/host/nomos-api/src/lib.rs#Handle_Gate_Run
+gap: crates/contracts/nomos-contracts/src/identity.rs#KnowledgeReferenceId

@@ -1,0 +1,36 @@
+# The assessment of AGT-008 against this build. The requirement identifier is this
+# file's stem and appears nowhere inside it, because a second place to spell the identity
+# is a second place for it to be wrong -- the rule OD-SPEC-007 chose for a record
+# registration, and CHK-003.assessment states for this registry.
+#
+# AGT-008: "Nomos shall expose a read-only ContextualizeFinding operation through API, CLI,
+# MCP, and capable clients. Given an immutable Finding occurrence, it shall preserve the
+# finding identity, rule version, evidence, applicability, severity, and gate disposition
+# while attaching KnowledgeWorkbench rationale, motivating defects, accepted exceptions,
+# related decisions and claims, prior false-positive or suppression history, comparable
+# corrections, contradictions, citations, and likely remediation context."
+#
+# No operation named ContextualizeFinding exists, but there is a real, tested, close
+# structural precedent: `Handle_Gate_Explain`/`GateExplainResponse` takes an immutable
+# finding query and returns the finding boxed in full plus `would_block`, calibration,
+# suppression and baseline disposition -- exposed through both `nomos-cli` and `nomos-api`.
+# Of the 'preserve' clause: finding identity, evidence, applicability, and gate disposition
+# (`GateCategory`) are all real fields on `Finding` itself.
+#
+# 'Rule version' is not: `RuleId` is a bare authored-string identity with no version
+# component; a version concept exists nearby but on a different type, `RuleOffer`'s
+# `contract_record_version`, never stamped onto a `Finding` occurrence. 'Severity' is
+# deliberately absent and the divergence is already recorded -- `Finding`'s own doc states
+# "There is no severity field and no is_error," and OD-HOST-003 names the reason: `GateCategory`
+# "is not implied by severity," carrying a richer, gate-specific signal instead. The
+# KnowledgeWorkbench-sourced attachments (rationale, motivating defects, accepted
+# exceptions, contradictions, citations, remediation context) have no site at all --
+# OD-HOST-003 itself says `Finding` "carries no direct pointer to a record id yet," routing
+# that gap to OD-HOST-002's still-open seam families.
+verdict: Partial
+site: crates/host/nomos-api/src/lib.rs#Handle_Gate_Explain
+site: crates/host/nomos-api/src/response.rs#GateExplainResponse
+site: crates/contracts/nomos-contracts/src/finding.rs#Finding
+site: crates/contracts/nomos-contracts/src/enforcement/gate_category.rs#GateCategory
+gap: crates/contracts/nomos-contracts/src/identity.rs#RuleId
+gap: crates/rules/nomos-rules/src/registry/rule_offer.rs#RuleOffer

@@ -1,0 +1,29 @@
+# The assessment of AGT-004 against this build. The requirement identifier is this
+# file's stem and appears nowhere inside it, because a second place to spell the identity
+# is a second place for it to be wrong -- the rule OD-SPEC-007 chose for a record
+# registration, and CHK-003.assessment states for this registry.
+#
+# AGT-004: "Nomos shall expose approved capabilities such as semantic rename and
+# find-callers rather than encouraging arbitrary shell/regex replacements."
+#
+# The general principle -- approved, contract-bound capabilities rather than ad hoc text
+# scripting -- is real and load-bearing architecture here: `nomos_capability::Registry`
+# and `CapabilityContract` are the mechanism, and `nomos-cap-syntax` and `nomos-cap-dependency`
+# are two real, tested capabilities built on it.
+#
+# But the two illustrative capabilities the requirement actually names, semantic rename and
+# find-callers, do not exist under any name -- a workspace-wide search finds both phrases
+# nowhere in real code, only as this requirement's own canonical text in a spec-ingest test
+# fixture. The one real mutation primitive this workspace has, `Edit`, is a whole-file
+# before/after text swap, not a semantic operation -- exactly the un-approved, text-level
+# shape the requirement contrasts against. And the read-side capability architecture that
+# does exist is explicitly capped below what a semantic rename or find-callers would need:
+# `nomos-cap-syntax`'s own declared `Ceiling` stops at `FactVariant::Syntactic` and refuses
+# a provider claiming semantic name resolution (tested).
+verdict: Partial
+site: crates/substrate/nomos-capability/src/registry.rs#Registry
+site: crates/substrate/nomos-capability/src/contract.rs#CapabilityContract
+site: crates/capabilities/nomos-cap-syntax/src/contract.rs#Capability_Contract
+site: crates/capabilities/nomos-cap-dependency/src/contract.rs#Capability_Contract
+gap: crates/corrections/nomos-corrections/src/edit.rs#Edit
+gap: crates/capabilities/nomos-cap-syntax/src/contract.rs#Ceiling

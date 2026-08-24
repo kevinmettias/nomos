@@ -1,0 +1,32 @@
+# The assessment of AGT-013 against this build. The requirement identifier is this
+# file's stem and appears nowhere inside it, because a second place to spell the identity
+# is a second place for it to be wrong -- the rule OD-SPEC-007 chose for a record
+# registration, and CHK-003.assessment states for this registry.
+#
+# AGT-013: "ExternalReference items shall not be represented as repository policy unless an
+# approved decision or RulePackage explicitly adopts them. HistoricalRationale shall not
+# override a current executable contract. RuntimeOrBenchmarkObservation and CodeOrTestEvidence
+# shall not be generalized beyond their recorded repository, build variant, workload,
+# environment, provider, and evidence bounds." Three sentences, three real Nomos-side
+# mechanisms, each covering only part of what is asked; none of the corpus's own nouns exist
+# as Nomos types, so the grounding below is functional, not nominal.
+#
+# First sentence: a sibling suite's content (`SuiteAuthority`) is kept distinguishable from
+# this repository's own policy and can only become binding through a named, explicit-adoption
+# step -- `Ingest_Sibling_Suite`, and the pattern ARC-ECOSYSTEM-001 itself uses ("adopted, as
+# a clause of this record") to adopt D-122 and D-091 from the ingested seeds.
+#
+# Second sentence: a statement resting only on commentary/game-plan lineage is a real, queried
+# defect -- `Statements_Sourced_Only_From_Commentary` -- which is exactly "historical rationale
+# shall not override a current contract."
+#
+# Third sentence: a produced fact's identity bounds (subject/provider/build-variant/config)
+# are real and enforced for ordinary analysis facts via `FactKey`, but the two extra
+# dimensions a genuine runtime/benchmark observation needs -- workload and execution
+# environment -- are named as required and explicitly not yet built (OD-ANALYSIS-006).
+verdict: Partial
+site: crates/spec/nomos-spec-store/src/table/suite_authority.rs#SuiteAuthority
+site: crates/spec/nomos-spec-ingest/src/siblings.rs#Ingest_Sibling_Suite
+site: docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#adopted, as a clause of this record
+site: crates/spec/nomos-spec-ingest/src/siblings/commentary.rs#Statements_Sourced_Only_From_Commentary
+gap: crates/substrate/nomos-analysis/src/fact/key.rs#FactKey

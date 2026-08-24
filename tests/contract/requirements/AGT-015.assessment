@@ -1,0 +1,29 @@
+# The assessment of AGT-015 against this build. The requirement identifier is this
+# file's stem and appears nowhere inside it, because a second place to spell the identity
+# is a second place for it to be wrong -- the rule OD-SPEC-007 chose for a record
+# registration, and CHK-003.assessment states for this registry.
+#
+# AGT-015: "Every Knowledge Integration Adapter request shall declare the subjects or task
+# being contextualized, the identity and version of the consuming Nomos operation, requested
+# KnowledgeSourceRole values, authority and freshness requirements, applicable repository,
+# build, environment, domain, and temporal scope, contradiction handling, result and token
+# budgets, permitted uses, and required provenance. Requests shall use neutral protocol
+# references rather than peer-private storage identifiers."
+#
+# No composed "Knowledge Integration Adapter request" type exists anywhere -- confirmed by
+# D-137's own text, "nothing yet produces or consumes one" -- so most of the eleven
+# enumerated declaration fields have no real site to cite.
+#
+# The requirement's second sentence is a narrower, genuinely satisfied exception:
+# `KnowledgeReferenceId` is real and tested, minted specifically so a citation to an
+# external knowledge system's claim is carried as an opaque, neutral reference rather than
+# reusing an existing Nomos identity or a bare peer-private string -- D-137's "Alternatives
+# Considered" section explicitly rejects reusing `SchemaId` or `String` for exactly this
+# reason. `OperationName` ("the only authoritative name for an operation... a CLI spelling,
+# an MCP tool name... are all projections of this") is the real, tested vocabulary that
+# would carry "the identity and version of the consuming Nomos operation" if a request type
+# existed to hold it.
+verdict: Partial
+site: crates/contracts/nomos-contracts/src/identity.rs#KnowledgeReferenceId
+site: crates/contracts/nomos-contracts/src/identity.rs#OperationName
+gap: docs/records/D-137-knowledgereferenceid-is-the-one-shape-a-kwb-citation-needs.md#Alternatives Considered

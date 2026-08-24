@@ -1,0 +1,34 @@
+# The assessment of MODEL-ROUTE-012 against this build. The requirement identifier is this
+# file's stem and appears nowhere inside it, because a second place to spell the identity
+# is a second place for it to be wrong -- the rule OD-SPEC-007 chose for a record
+# registration, and CHK-003.assessment states for this registry.
+#
+# MODEL-ROUTE-012: "A gate or workflow shall remain valid when no model is selected for
+# deterministic checks. Model configuration shall activate only operations whose contracts
+# permit or require AgentJudgment; it shall not convert deterministic rules into model
+# judgments implicitly." Two clauses.
+#
+# First: genuinely grounded. `Applicability::AgentRequired` is a real, tested seventh state
+# ("the rule binds this subject and no mechanical provider can judge it; reaching a judgment
+# needs a model") that is deliberately neither `Was_Evaluated` nor `Is_Coverage_Debt`, wired
+# all the way through `Coverage::Agent_Required`/`Coverage::Is_Complete` into the CLI's real
+# coverage tally -- exactly the mechanism by which a run stays honestly reportable when a
+# check needing a model has no model behind it. OD-CONTRACTS-002 is explicit, though, that
+# "nothing yields AgentRequired yet" -- no rule in this build actually produces it, since
+# every registered rule is mechanical.
+#
+# Second: the contract vocabulary this needs is real -- `EvidenceClass::AgentJudged` (the
+# floor class) and `WorkflowStep`'s own `evidence: EvidenceClass` field is exactly a
+# per-operation declaration of what class of evidence that operation's contract permits --
+# but nothing reads either to gate whether a model is invoked. OD-WORKFLOW-003 says outright
+# that "nothing wires a WorkflowStep value into Gate, nomos-cli, or nomos-api," and
+# `GateCommand` (the struct that has accreted `ScopeSelector`/`RuleSelector`/policy fields one
+# real increment at a time) carries no model-selection field at all -- the natural landing
+# spot for this clause, unoccupied.
+verdict: Partial
+site: crates/contracts/nomos-contracts/src/finding/applicability.rs#AgentRequired
+site: crates/kernel/nomos-model/src/evidence/coverage.rs#Agent_Required
+site: crates/kernel/nomos-model/src/evidence/coverage.rs#Is_Complete
+site: crates/contracts/nomos-contracts/src/finding/evidence.rs#AgentJudged
+site: crates/contracts/nomos-contracts/src/workflow_step.rs#EvidenceClass
+gap: crates/orchestration/nomos-gate-orchestration/src/command.rs#GateCommand

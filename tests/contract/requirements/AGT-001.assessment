@@ -1,0 +1,32 @@
+# The assessment of AGT-001 against this build. The requirement identifier is this
+# file's stem and appears nowhere inside it, because a second place to spell the identity
+# is a second place for it to be wrong -- the rule OD-SPEC-007 chose for a record
+# registration, and CHK-003.assessment states for this registry.
+#
+# AGT-001: "Before agent work, Nomos shall produce a typed task envelope containing goal,
+# scope, authoritative knowledge context, applicable rules, prohibited changes, available
+# tools, and expected output schema." Seven named parts.
+#
+# 'Authoritative knowledge context' is ARC-ECOSYSTEM-001's own worked example of substance
+# that is genuinely KWB's, not Nomos's -- "What did a source or a decision claim? KWB." --
+# so that clause does not bind this registry and is left out of this verdict rather than
+# forced NotBinding for the whole requirement.
+#
+# Of the remaining six, two are real today: `LedgerItem` is exactly the goal (`title`/`why`)
+# and scope (`territory`) an agent is handed before claiming and working an item, the
+# concrete shape a task already takes here. 'Applicable rules' has a real analog one layer
+# up, in a gate run's `RuleSelector`/`ScopeSelector` -- but nothing wires either onto a
+# per-task envelope. No single typed envelope bundles any of this into one artifact.
+#
+# 'Prohibited changes', 'available tools', and an actual output-schema type (not prose) have
+# no real site: `Claim` carries only who holds an item and when the lease lapses, nothing
+# about what tools that holder may use. `WorkflowStep` does carry a typed `SchemaId`-shaped
+# output schema, but for a workflow step, not a ledger item or an agent task -- nothing
+# connects the two.
+verdict: Partial
+site: crates/substrate/nomos-ledger/src/item.rs#LedgerItem
+site: crates/substrate/nomos-ledger/src/territory.rs#Territory
+site: crates/orchestration/nomos-gate-orchestration/src/rule_selector.rs#RuleSelector
+site: crates/orchestration/nomos-gate-orchestration/src/scope_selector.rs#ScopeSelector
+gap: crates/substrate/nomos-ledger/src/claim.rs#Claim
+gap: crates/contracts/nomos-contracts/src/workflow_step.rs#WorkflowStep

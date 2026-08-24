@@ -1,0 +1,30 @@
+# The assessment of AGT-009 against this build. The requirement identifier is this
+# file's stem and appears nowhere inside it, because a second place to spell the identity
+# is a second place for it to be wrong -- the rule OD-SPEC-007 chose for a record
+# registration, and CHK-003.assessment states for this registry.
+#
+# AGT-009: "KnowledgeWorkbench-assisted composition shall never create, remove, pass, fail,
+# suppress, waive, reprioritize, or change the severity or blocking disposition of a Nomos
+# finding. Any normative policy change shall proceed through the governed RulePackage
+# calibration, review, versioning, publication, and rollout lifecycle."
+#
+# AGT-009's substance is Nomos's own governance of finding disposition, not KWB's knowledge
+# domain, so the whole requirement stays assessable rather than NotBinding.
+#
+# The 'shall never mutate a finding' half is already structurally true by omission: `Finding`
+# carries no severity field at all (disposition derives only from `gate`/`applicability`, set
+# once by the producing rule), and the only real mechanisms that change a finding's blocking
+# disposition -- `SuppressionPolicy`, `AdoptionPolicy`, `BaselineDebt` -- require an authored
+# rationale/owner matched by rule/subject identity, with no composition path (KWB-driven or
+# otherwise) into any of them; by each type's own doc comment, no caller constructs one yet.
+#
+# The second half -- normative policy changes proceeding through a governed RulePackage
+# lifecycle -- is a genuine, real gap: `PackageKind::RulePackage` is declared and, by its own
+# doc comment, "remain[s] genuinely unconsumed"; no code anywhere implements calibration,
+# review, versioning, publication, or rollout for one.
+verdict: Partial
+site: crates/contracts/nomos-contracts/src/finding.rs#Finding
+site: crates/orchestration/nomos-gate-orchestration/src/suppression.rs#SuppressionPolicy
+site: crates/orchestration/nomos-gate-orchestration/src/adoption.rs#AdoptionPolicy
+site: crates/orchestration/nomos-gate-orchestration/src/baseline.rs#BaselineDebt
+gap: crates/contracts/nomos-contracts/src/package.rs#RulePackage

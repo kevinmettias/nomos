@@ -1,0 +1,41 @@
+# The assessment of AGT-EXEC-001 against this build. The requirement identifier is this
+# file's stem and appears nowhere inside it, because a second place to spell the identity
+# is a second place for it to be wrong -- the rule OD-SPEC-007 chose for a record
+# registration, and CHK-003.assessment states for this registry.
+#
+# AGT-EXEC-001: "Agent capabilities shall be partitioned into read, propose, preview,
+# mutate, execute, approve, and publish classes with separate authorization and audit
+# requirements."
+#
+# The prior audit (P13-TRACE-AGT-EXEC-AUDIT) left this Unassessed, finding no legitimate
+# site. Re-checked directly: `AuthorityClass` (`nomos-contracts`) is a real, deliberately
+# designed enum partitioning agent capability into exactly the seven classes this
+# requirement names -- Read, Propose, Preview, Mutate, Execute, Approve, Publish, verbatim
+# -- and `Requires_Explicit_Grant` gives a real, if binary, per-class authorization
+# distinction. It was simply never cited before now.
+#
+# But no operation anywhere in the live workspace actually carries or is checked against
+# `AuthorityClass` -- zero consumers outside its own declaring module -- and no
+# audit-requirement concept of any kind exists tied to authority. `Claim` (`nomos-ledger`,
+# the concrete shape an agent's run already takes here, per AGT-EXEC-002's own committed
+# assessment) carries who holds an item and when the lease lapses, nothing about which class
+# the held work exercises. `VerificationRecord` is the nearest real audit-shaped artifact
+# anywhere (argv, exit code, output tail, timestamp, gate, revision), but it is scoped to one
+# ledger item's finish-predicate verification, never keyed by `AuthorityClass`, and has no
+# counterpart for Propose/Approve/Publish, which have no implemented operation at all.
+# `nomos_corrections::ValidatedPlan::Commit` independently reinvents a state machine
+# (Stage -> Validate -> Commit -> Rollback) that structurally parallels `MutationClass`
+# (Preview -> Validate -> Apply -> Rollback), and OD-CORRECTIONS-002 just added `Evidence` to
+# it -- but `Commit` still takes no `AuthorityClass` and records nothing an auditor could call
+# a per-capability-class trail; that record's own "What This Does Not Do" section states
+# directly it "does not build AGT-EXEC-001's capability-class partitioning or
+# authorization/audit model," corroborating this finding independently. So "partitioned into
+# classes" is met at the type level while "separate authorization and audit requirements" has
+# no operational reality.
+verdict: Partial
+site: crates/contracts/nomos-contracts/src/authority/class.rs#AuthorityClass
+site: crates/contracts/nomos-contracts/src/authority/class.rs#Requires_Explicit_Grant
+site: crates/contracts/nomos-contracts/src/authority/mutation_class.rs#MutationClass
+gap: crates/substrate/nomos-ledger/src/claim.rs#Claim
+gap: crates/substrate/nomos-ledger/src/verification/record.rs#VerificationRecord
+gap: crates/corrections/nomos-corrections/src/validated.rs#Commit

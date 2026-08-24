@@ -26662,6 +26662,242 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-TRACE-AGT-AUDIT-PARTIAL",
+      "title": "AGT-001..009, 011, 013..017 and AGT-EXEC-001 are entered as Partial: real, scattered Nomos-side mechanisms, unassessed until now",
+      "why": "Continuing the mandate to build real AgentExecutor/ModelBackend infrastructure by first exhausting the audit before any build (per OD-PACKAGE-006/008/011, OD-CORRECTIONS-001, and P13-TRACE-AGT-EXEC-AUDIT's own precedent). Fanned 14 agents out over the full remaining AGT-001..018, AGT-EXEC-001/003, and MODEL-ROUTE-001..036 requirement set, each independently grounding findings against the live workspace with real path#symbol citations. Of the AGT family (agent-and-knowledgeworkbench-integration, volume-08.7-8), fifteen requirements (001-009, 011, 013-017) turn out to have real, tested Nomos-side mechanisms partially satisfying them today, scattered across nomos-ledger (LedgerItem/Territory/Claim), nomos-corrections (CorrectionPlan/ChangeSet/Commit/Preview), nomos-contracts (Finding/EvidenceClass/Applicability/GateCategory/KnowledgeReferenceId/PackageKind), nomos-gate-orchestration (RuleSelector/ScopeSelector/SuppressionPolicy/AdoptionPolicy/BaselineDebt/GateExplainResponse), nomos-capability (Registry/CapabilityContract), nomos-spec-store/ingest (SuiteAuthority/Ingest_Sibling_Suite/supersession/StatementDivergence), and nomos-analysis (FactKey) -- never previously cited against these requirements. AGT-EXEC-001 (capability-class partitioning: read/propose/preview/mutate/execute/approve/publish), previously left honestly Unassessed by P13-TRACE-AGT-EXEC-AUDIT for lack of a site, turns out to have one that audit missed: nomos_contracts::AuthorityClass already partitions agent capability into exactly those seven classes, unconsumed by any real caller -- promoted from Unassessed to Partial. Three AGT requirements (010, 012, 018) and AGT-EXEC-003 were independently re-confirmed to have no real case and are deliberately left Unassessed rather than forced. Where a clause is genuinely KWB's own substance per ARC-ECOSYSTEM-001's ownership table (AGT-001's 'authoritative knowledge context', AGT-005's KWB clause), that clause is excluded from the verdict's grounding rather than stretching a Partial or forcing NotBinding onto the whole requirement.",
+      "done_when": "tests/contract/requirements/AGT-001.assessment, AGT-002.assessment, AGT-003.assessment, AGT-004.assessment, AGT-005.assessment, AGT-006.assessment, AGT-007.assessment, AGT-008.assessment, AGT-009.assessment, AGT-011.assessment, AGT-013.assessment, AGT-014.assessment, AGT-015.assessment, AGT-016.assessment, AGT-017.assessment, and AGT-EXEC-001.assessment exist, each verdict Partial with at least one real site and one real gap resolving against actual workspace code. cargo test --no-fail-fast -p nomos-contract-tests passes, including requirement_trace's reader, Assert_Complete, and site/gap resolution checks over all sixteen new entries. AGT-010, AGT-012, AGT-018 and AGT-EXEC-003 stay deliberately Unassessed. FEWEST_ASSESSMENTS is unchanged, since it is a floor. No code in any of the cited crates is touched by this item.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/requirements/AGT-001.assessment",
+          "tests/contract/requirements/AGT-002.assessment",
+          "tests/contract/requirements/AGT-003.assessment",
+          "tests/contract/requirements/AGT-004.assessment",
+          "tests/contract/requirements/AGT-005.assessment",
+          "tests/contract/requirements/AGT-006.assessment",
+          "tests/contract/requirements/AGT-007.assessment",
+          "tests/contract/requirements/AGT-008.assessment",
+          "tests/contract/requirements/AGT-009.assessment",
+          "tests/contract/requirements/AGT-011.assessment",
+          "tests/contract/requirements/AGT-013.assessment",
+          "tests/contract/requirements/AGT-014.assessment",
+          "tests/contract/requirements/AGT-015.assessment",
+          "tests/contract/requirements/AGT-016.assessment",
+          "tests/contract/requirements/AGT-017.assessment",
+          "tests/contract/requirements/AGT-EXEC-001.assessment"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Superseded by a re-add with a correctly-placed --timeout flag; this item's predicate argv is permanently malformed (baked in at add time) and can never pass."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--timeout",
+          "10m"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-continue-dev",
+          "reason": "Added with a malformed verification predicate: --timeout 10m was placed after the -- separator and became part of the cargo argv instead of an add-time flag. Re-adding correctly.",
+          "abandoned_at": 1787558389
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-continue-dev",
+        "declined_at": 1787558389
+      }
+    },
+    {
+      "id": "P13-TRACE-MODEL-ROUTE-012-013-PARTIAL",
+      "title": "MODEL-ROUTE-012 and MODEL-ROUTE-013 are entered as Partial: real Applicability/EvidenceClass/AuthorityClass/RuleSelector machinery, unassessed until now",
+      "why": "Same audit fan-out as P13-TRACE-AGT-AUDIT-PARTIAL, covering MODEL-ROUTE-001 through 036 (OD-PACKAGE-011 already covers 037's second clause and 038-049). 34 of the 36 came back honestly NoRealCase -- no model-execution, routing, or dispatch machinery of any kind exists in this build, confirmed by exhaustive per-requirement grep rather than assumed from OD-PACKAGE-011's prior narrower sweep -- and stay deliberately Unassessed. Two, MODEL-ROUTE-012 and MODEL-ROUTE-013, ground genuinely in real, already-built Nomos machinery that was never checked against them: MODEL-ROUTE-012's 'a gate shall remain valid with no model selected for deterministic checks' clause is met by nomos_contracts::Applicability::AgentRequired, wired through nomos_model::Coverage into the CLI's real coverage tally; its second clause (model configuration shall not implicitly convert deterministic rules into model judgments) has the real contract vocabulary (EvidenceClass::AgentJudged, WorkflowStep::evidence) but nothing reads it to gate a model, and GateCommand carries no model-selection field. MODEL-ROUTE-013's 'routing selectors shall address the exact judgment implementation, not only the owning package' is met at the selector-grain level by the real, tested RuleSelector (matches RuleId, never a package), and its authority/evidence-non-conflation clause is met by the real, tested EvidenceClass/AuthorityClass pair -- but RulePackage itself, the addressee, remains declared and genuinely unconsumed.",
+      "done_when": "tests/contract/requirements/MODEL-ROUTE-012.assessment and MODEL-ROUTE-013.assessment exist, each verdict Partial with at least one real site and one real gap resolving against actual workspace code. cargo test --no-fail-fast -p nomos-contract-tests passes, including requirement_trace's reader, Assert_Complete, and site/gap resolution checks over both new entries. MODEL-ROUTE-001 through 011 and 014 through 036 stay deliberately Unassessed -- confirmed NoRealCase by this audit, not silently skipped. No code in any cited crate is touched by this item.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/requirements/MODEL-ROUTE-012.assessment",
+          "tests/contract/requirements/MODEL-ROUTE-013.assessment"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Superseded by a re-add with a correctly-placed --timeout flag; this item's predicate argv is permanently malformed (baked in at add time) and can never pass."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--timeout",
+          "10m"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-continue-dev",
+          "reason": "Added with a malformed verification predicate: --timeout 10m was placed after the -- separator and became part of the cargo argv instead of an add-time flag. Re-adding correctly.",
+          "abandoned_at": 1787558425
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-continue-dev",
+        "declined_at": 1787558425
+      }
+    },
+    {
+      "id": "P13-TRACE-AGT-AUDIT-PARTIAL-2",
+      "title": "AGT-001..009, 011, 013..017 and AGT-EXEC-001 are entered as Partial: real, scattered Nomos-side mechanisms, unassessed until now",
+      "why": "Continuing the mandate to build real AgentExecutor/ModelBackend infrastructure by first exhausting the audit before any build (per OD-PACKAGE-006/008/011, OD-CORRECTIONS-001, and P13-TRACE-AGT-EXEC-AUDIT's own precedent). Fanned 14 agents out over the full remaining AGT-001..018, AGT-EXEC-001/003, and MODEL-ROUTE-001..036 requirement set, each independently grounding findings against the live workspace with real path#symbol citations. Of the AGT family (agent-and-knowledgeworkbench-integration, volume-08.7-8), fifteen requirements (001-009, 011, 013-017) turn out to have real, tested Nomos-side mechanisms partially satisfying them today, scattered across nomos-ledger (LedgerItem/Territory/Claim), nomos-corrections (CorrectionPlan/ChangeSet/Commit/Preview), nomos-contracts (Finding/EvidenceClass/Applicability/GateCategory/KnowledgeReferenceId/PackageKind), nomos-gate-orchestration (RuleSelector/ScopeSelector/SuppressionPolicy/AdoptionPolicy/BaselineDebt/GateExplainResponse), nomos-capability (Registry/CapabilityContract), nomos-spec-store/ingest (SuiteAuthority/Ingest_Sibling_Suite/supersession/StatementDivergence), and nomos-analysis (FactKey) -- never previously cited against these requirements. AGT-EXEC-001 (capability-class partitioning: read/propose/preview/mutate/execute/approve/publish), previously left honestly Unassessed by P13-TRACE-AGT-EXEC-AUDIT for lack of a site, turns out to have one that audit missed: nomos_contracts::AuthorityClass already partitions agent capability into exactly those seven classes, unconsumed by any real caller -- promoted from Unassessed to Partial. Three AGT requirements (010, 012, 018) and AGT-EXEC-003 were independently re-confirmed to have no real case and are deliberately left Unassessed rather than forced. Where a clause is genuinely KWB's own substance per ARC-ECOSYSTEM-001's ownership table (AGT-001's 'authoritative knowledge context', AGT-005's KWB clause), that clause is excluded from the verdict's grounding rather than stretching a Partial or forcing NotBinding onto the whole requirement.",
+      "done_when": "tests/contract/requirements/AGT-001.assessment, AGT-002.assessment, AGT-003.assessment, AGT-004.assessment, AGT-005.assessment, AGT-006.assessment, AGT-007.assessment, AGT-008.assessment, AGT-009.assessment, AGT-011.assessment, AGT-013.assessment, AGT-014.assessment, AGT-015.assessment, AGT-016.assessment, AGT-017.assessment, and AGT-EXEC-001.assessment exist, each verdict Partial with at least one real site and one real gap resolving against actual workspace code. cargo test --no-fail-fast -p nomos-contract-tests passes, including requirement_trace's reader, Assert_Complete, and site/gap resolution checks over all sixteen new entries. AGT-010, AGT-012, AGT-018 and AGT-EXEC-003 stay deliberately Unassessed. FEWEST_ASSESSMENTS is unchanged, since it is a floor. No code in any of the cited crates is touched by this item.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/requirements/AGT-001.assessment",
+          "tests/contract/requirements/AGT-002.assessment",
+          "tests/contract/requirements/AGT-003.assessment",
+          "tests/contract/requirements/AGT-004.assessment",
+          "tests/contract/requirements/AGT-005.assessment",
+          "tests/contract/requirements/AGT-006.assessment",
+          "tests/contract/requirements/AGT-007.assessment",
+          "tests/contract/requirements/AGT-008.assessment",
+          "tests/contract/requirements/AGT-009.assessment",
+          "tests/contract/requirements/AGT-011.assessment",
+          "tests/contract/requirements/AGT-013.assessment",
+          "tests/contract/requirements/AGT-014.assessment",
+          "tests/contract/requirements/AGT-015.assessment",
+          "tests/contract/requirements/AGT-016.assessment",
+          "tests/contract/requirements/AGT-017.assessment",
+          "tests/contract/requirements/AGT-EXEC-001.assessment"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "Cited_Rule ... ok\ntest Test_Every_Cited_Record_Should_Still_Exist ... ok\ntest Test_Every_Cited_Version_Should_Match_The_Records_Own_Front_Matter ... ok\ntest Test_A_Mismatched_Version_Should_Fail_The_Comparison ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 5 tests\ntest Test_A_Lowered_Declaration_Should_Fail_The_Comparison ... ok\ntest Test_An_Unrelated_Minor_Version_Should_Fail_The_Comparison ... ok\ntest Test_A_Matching_Declaration_Should_Pass_The_Comparison ... ok\ntest Test_The_Real_Workflow_Should_Still_Have_The_Install_Step ... ok\ntest Test_The_Declared_Floor_Should_Match_The_Toolchain_The_Gate_Installs ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.09s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-06ab25b0491e144c.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-4c32ae08be8df958.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-9350d088b8d6ed0d.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-9ca3879aab70176f.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-308fef82df004321.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-f6f7228f8cfa874c.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-ea500c062215f506.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-790c8c5856e63fa5.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-98429b682798ce96.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-c1e906054609f777.exe)\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1787558449,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "08421e500257bf31859acbe4842cbc6c762fe79a"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-TRACE-MODEL-ROUTE-012-013-PARTIAL-2",
+      "title": "MODEL-ROUTE-012 and MODEL-ROUTE-013 are entered as Partial: real Applicability/EvidenceClass/AuthorityClass/RuleSelector machinery, unassessed until now",
+      "why": "Same audit fan-out as P13-TRACE-AGT-AUDIT-PARTIAL-2, covering MODEL-ROUTE-001 through 036 (OD-PACKAGE-011 already covers 037's second clause and 038-049). 34 of the 36 came back honestly NoRealCase -- no model-execution, routing, or dispatch machinery of any kind exists in this build, confirmed by exhaustive per-requirement grep rather than assumed from OD-PACKAGE-011's prior narrower sweep -- and stay deliberately Unassessed. Two, MODEL-ROUTE-012 and MODEL-ROUTE-013, ground genuinely in real, already-built Nomos machinery that was never checked against them: MODEL-ROUTE-012's 'a gate shall remain valid with no model selected for deterministic checks' clause is met by nomos_contracts::Applicability::AgentRequired, wired through nomos_model::Coverage into the CLI's real coverage tally; its second clause (model configuration shall not implicitly convert deterministic rules into model judgments) has the real contract vocabulary (EvidenceClass::AgentJudged, WorkflowStep::evidence) but nothing reads it to gate a model, and GateCommand carries no model-selection field. MODEL-ROUTE-013's 'routing selectors shall address the exact judgment implementation, not only the owning package' is met at the selector-grain level by the real, tested RuleSelector (matches RuleId, never a package), and its authority/evidence-non-conflation clause is met by the real, tested EvidenceClass/AuthorityClass pair -- but RulePackage itself, the addressee, remains declared and genuinely unconsumed.",
+      "done_when": "tests/contract/requirements/MODEL-ROUTE-012.assessment and MODEL-ROUTE-013.assessment exist, each verdict Partial with at least one real site and one real gap resolving against actual workspace code. cargo test --no-fail-fast -p nomos-contract-tests passes, including requirement_trace's reader, Assert_Complete, and site/gap resolution checks over both new entries. MODEL-ROUTE-001 through 011 and 014 through 036 stay deliberately Unassessed -- confirmed NoRealCase by this audit, not silently skipped. No code in any cited crate is touched by this item.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/requirements/MODEL-ROUTE-012.assessment",
+          "tests/contract/requirements/MODEL-ROUTE-013.assessment"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "Cited_Rule ... ok\ntest Test_Every_Cited_Record_Should_Still_Exist ... ok\ntest Test_Every_Cited_Version_Should_Match_The_Records_Own_Front_Matter ... ok\ntest Test_A_Mismatched_Version_Should_Fail_The_Comparison ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 5 tests\ntest Test_A_Lowered_Declaration_Should_Fail_The_Comparison ... ok\ntest Test_An_Unrelated_Minor_Version_Should_Fail_The_Comparison ... ok\ntest Test_A_Matching_Declaration_Should_Pass_The_Comparison ... ok\ntest Test_The_Real_Workflow_Should_Still_Have_The_Install_Step ... ok\ntest Test_The_Declared_Floor_Should_Match_The_Toolchain_The_Gate_Installs ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.10s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-06ab25b0491e144c.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-4c32ae08be8df958.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-9350d088b8d6ed0d.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-9ca3879aab70176f.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-308fef82df004321.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-f6f7228f8cfa874c.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-ea500c062215f506.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-790c8c5856e63fa5.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-98429b682798ce96.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-c1e906054609f777.exe)\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1787558456,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "08421e500257bf31859acbe4842cbc6c762fe79a"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

@@ -1,0 +1,31 @@
+# The assessment of MODEL-ROUTE-013 against this build. The requirement identifier is this
+# file's stem and appears nowhere inside it, because a second place to spell the identity
+# is a second place for it to be wrong -- the rule OD-SPEC-007 chose for a record
+# registration, and CHK-003.assessment states for this registry.
+#
+# MODEL-ROUTE-013: "Routing selectors shall address the exact model-assisted judgment
+# implementation or logical operation, not only the owning RulePackage. A RulePackage may
+# independently route mechanical implementations, lightweight agent reviews, high-authority
+# reviews, explanations, corrections, and other registered implementations without
+# conflating their authority or evidence class."
+#
+# First sentence: `RuleSelector` already selects at exactly that finer grain -- it matches
+# `RuleId` (one check), never a package -- a real, tested precedent for "not only the owning
+# package," though nothing it selects is model-assisted (every registered rule is
+# mechanical).
+#
+# Second sentence: the two distinctness vocabularies this needs are real and tested:
+# `EvidenceClass` (ordered so combination can never manufacture strength) for "evidence
+# class," and `AuthorityClass` (deliberately un-ordered so one class cannot be mistaken for a
+# stronger version of another) for "authority." But `RulePackage` itself, the addressee the
+# requirement names, is declared ("normative rules, their judgments, corrections and
+# fixtures") and, per its own doc comment, "genuinely unconsumed... no installable unit of
+# any of those kinds" exists. There is no registration mechanism for multiple,
+# differently-authorized implementations filed under one rule or package, and no selector
+# operates at that per-implementation granularity -- `RuleSelector`'s grain is "which
+# RuleId," one implementation per rule, today.
+verdict: Partial
+site: crates/orchestration/nomos-gate-orchestration/src/rule_selector.rs#RuleSelector
+site: crates/contracts/nomos-contracts/src/finding/evidence.rs#EvidenceClass
+site: crates/contracts/nomos-contracts/src/authority/class.rs#AuthorityClass
+gap: crates/contracts/nomos-contracts/src/package.rs#RulePackage

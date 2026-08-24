@@ -1,0 +1,39 @@
+# The assessment of AGT-017 against this build. The requirement identifier is this
+# file's stem and appears nowhere inside it, because a second place to spell the identity
+# is a second place for it to be wrong -- the rule OD-SPEC-007 chose for a record
+# registration, and CHK-003.assessment states for this registry.
+#
+# AGT-017 (post-completion knowledge handoff, abridged -- the full statement is long): after
+# a merge/release, Nomos shall be able to produce a provenance-preserving CompletionHandoff
+# (ChangeIntent disposition, semantic/textual changes, findings and their transitions,
+# suppressions/waivers, tests, runtime/benchmark evidence, claim dispositions, approvals,
+# rejected alternatives, package/provider/model/executor/workflow/rule/capability-contract
+# versions, and links to commits/reviews/attestations/capsules/captures), with stable
+# content-addressed identity, idempotent delivery to KWB through a neutral Knowledge
+# Integration Adapter, and versioned correction/supersession records rather than rewritten
+# history.
+#
+# The aggregate the requirement names -- a CompletionHandoff object, its content-addressed
+# identity/version, idempotent delivery, the Knowledge Integration Adapter, and
+# correction/supersession records -- exists nowhere: there is no harness crate, no
+# CompletionHandoff type, and ARC-ECOSYSTEM-001 itself (the record governing exactly this KWB
+# crossing) says plainly "No harness that records a run's observations exists either... so
+# the third crossing above governs a step nothing yet takes."
+#
+# But one specific clause is genuinely grounded for most of its named domains:
+# "package, provider, model, executor, workflow, rule, and capability-contract versions."
+# `PackageVersion` (package release identity, also reused for a provider's tool version),
+# `ContractVersion` (the capability-contract/protocol domain), and `ModelRoutePackage`
+# (which carries `package_version` and `protocol_range` specifically for
+# `PackageKind::ModelBackendPackage`/`AgentExecutorPackage` manifests -- the model and
+# executor domains) are real, tested, load-bearing types, not merely declared and unused.
+# Workflow-version and rule-version tracking were not found anywhere.
+#
+# `KnowledgeReferenceId` is exactly the vocabulary a handoff's cross-system links would
+# need, but D-137 says outright "nothing yet produces or consumes one" -- it grounds nothing
+# itself and is cited only as the nearest real absence-site for the rest of the requirement.
+verdict: Partial
+site: crates/packages/nomos-package/src/version.rs#PackageVersion
+site: crates/contracts/nomos-contracts/src/contract_version.rs#ContractVersion
+site: crates/packages/nomos-model-package/src/manifest.rs#ModelRoutePackage
+gap: crates/contracts/nomos-contracts/src/identity.rs#KnowledgeReferenceId

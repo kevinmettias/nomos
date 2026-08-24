@@ -1,0 +1,32 @@
+# The assessment of AGT-006 against this build. The requirement identifier is this
+# file's stem and appears nowhere inside it, because a second place to spell the identity
+# is a second place for it to be wrong -- the rule OD-SPEC-007 chose for a record
+# registration, and CHK-003.assessment states for this registry.
+#
+# AGT-006: "Neither system shall depend on the other at runtime for its core function;
+# integration shall occur through neutral versioned contracts and MCP tools."
+#
+# 'Neither system shall depend on the other' is true today by construction for the XVPE
+# crossing, and mechanically enforced: `Test_Only_The_Platform_Adapter_May_Name_The_Sibling_Workspace`
+# fails the build if any crate's transitive dependencies leak an `xvpe-` prefix outside the
+# one named adapter. There is no equivalent check scoped to a `kwb-` prefix, so a future
+# crate silently taking on a KWB path dependency would not be caught -- true by absence of
+# opportunity today, not by an enforced rule, for the KWB side specifically.
+#
+# 'Integration through neutral versioned contracts' is real and well-grounded: `nomos-contracts`
+# is band 0, versioned, and its own crate root states directly why no dependency may be added
+# to it -- "Every type here is copied into a KnowledgeWorkbench or XVPE implementation that
+# has never seen this repository; a dependency added here makes the protocol Nomos-shaped and
+# forces a peer to vendor a Rust crate in order to speak it." It already carries
+# `KnowledgeReferenceId` (D-137), a type built specifically for citing an external knowledge
+# system's claim without depending on it.
+#
+# 'MCP tools' is a clean, total gap: `nomos-api`'s own module doc states outright it "does
+# not read argv, listen on a socket, or speak MCP's JSON-RPC framing," and no MCP transport
+# or tool surface exists anywhere in the workspace.
+verdict: Partial
+site: crates/contracts/nomos-contracts/Cargo.toml#Every type here is copied into a KnowledgeWorkbench
+site: crates/contracts/nomos-contracts/src/identity.rs#KnowledgeReferenceId
+site: tests/contract/tests/boundaries/graph.rs#Test_Only_The_Platform_Adapter_May_Name_The_Sibling_Workspace
+gap: tests/contract/tests/boundaries/graph.rs#Test_Only_The_Platform_Adapter_May_Name_The_Sibling_Workspace
+gap: crates/host/nomos-api/src/lib.rs#speak MCP's JSON-RPC framing

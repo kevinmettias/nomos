@@ -1,0 +1,29 @@
+# The assessment of AGT-002 against this build. The requirement identifier is this
+# file's stem and appears nowhere inside it, because a second place to spell the identity
+# is a second place for it to be wrong -- the rule OD-SPEC-007 chose for a record
+# registration, and CHK-003.assessment states for this registry.
+#
+# AGT-002: "Agents shall return structured plans, changes, claims, tests, requested
+# verification, assumptions, and unresolved questions." Seven named return-shape elements.
+#
+# Five of the seven have real, independently-built typed analogs, scattered across separate
+# crates rather than unified in one agent-response type: plans and changes are
+# `CorrectionPlan`/`ChangeSet` in `nomos-corrections`; a claim's evidentiary strength is
+# `Finding`/`EvidenceClass` in `nomos-contracts`; tests and requested verification are
+# `VerificationPredicate`/`VerificationRecord` in `nomos-ledger`, real and tested (a claimed
+# item's own predicate, actually run to completion, not an agent's word).
+#
+# 'Assumptions' and 'unresolved questions' have zero real grounding -- a workspace-wide
+# search finds neither concept in any real type. `CorrectionCandidate` already carries a
+# proposed change's free-text `description` and carries neither; `LedgerItem` already
+# carries free-text `why`/`done_when` and carries neither either. Nothing anywhere returns
+# all seven elements together as one structured response.
+verdict: Partial
+site: crates/corrections/nomos-corrections/src/plan.rs#CorrectionPlan
+site: crates/corrections/nomos-corrections/src/change_set.rs#ChangeSet
+site: crates/contracts/nomos-contracts/src/finding.rs#Finding
+site: crates/contracts/nomos-contracts/src/finding/evidence.rs#EvidenceClass
+site: crates/substrate/nomos-ledger/src/verification/predicate.rs#VerificationPredicate
+site: crates/substrate/nomos-ledger/src/verification/record.rs#VerificationRecord
+gap: crates/corrections/nomos-corrections/src/candidate/correction_candidate.rs#CorrectionCandidate
+gap: crates/substrate/nomos-ledger/src/item.rs#LedgerItem

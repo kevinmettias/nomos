@@ -1,0 +1,32 @@
+# The assessment of AGT-014 against this build. The requirement identifier is this
+# file's stem and appears nowhere inside it, because a second place to spell the identity
+# is a second place for it to be wrong -- the rule OD-SPEC-007 chose for a record
+# registration, and CHK-003.assessment states for this registry.
+#
+# AGT-014: "Contradictory, superseded, stale, and scope-incompatible knowledge items shall
+# remain visible and linked in agent context. The renderer may summarize or prioritize them
+# under explicit budget policy but shall not erase disagreement, collapse source roles, or
+# present an AgentGeneratedInterpretation as authoritative evidence."
+#
+# Two of the four listed knowledge-item states have real, tested handling in the
+# specification store: a superseded record stays visible as a node carrying an explicit
+# bidirectional supersedes/superseded_by edge rather than being dropped
+# (`Test_The_Superseded_Record_Should_Be_A_Visible_Placeholder`), and a statement whose
+# recorded hash disagrees with its recomputed one is reported as a named `StatementDivergence`
+# rather than silently accepted.
+#
+# The final clause -- an agent-generated interpretation must never present as authoritative
+# evidence -- is strongly grounded: `EvidenceClass::AgentJudged` is the type's documented
+# floor, cannot be promoted, and its combinator guarantees it never composes into a mechanical
+# result.
+#
+# What has no real site is the renderer itself: no code in this workspace assembles multiple
+# knowledge sources into "agent context," so there is nothing that could erase disagreement,
+# collapse source roles, or apply a budget policy -- OD-CAPABILITY-004 states plainly that no
+# context builder exists yet and the exposure this requirement worries about is entirely
+# prospective.
+verdict: Partial
+site: crates/spec/nomos-spec-store/tests/governing_records_are_present/supersession.rs#Test_The_Superseded_Record_Should_Be_A_Visible_Placeholder
+site: crates/spec/nomos-spec-ingest/src/content/statement/divergence.rs#StatementDivergence
+site: crates/contracts/nomos-contracts/src/finding/evidence.rs#AgentJudged
+gap: crates/substrate/nomos-capability/src/resolution.rs#Resolution

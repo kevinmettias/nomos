@@ -1,0 +1,27 @@
+# The assessment of AGT-011 against this build. The requirement identifier is this
+# file's stem and appears nowhere inside it, because a second place to spell the identity
+# is a second place for it to be wrong -- the rule OD-SPEC-007 chose for a record
+# registration, and CHK-003.assessment states for this registry.
+#
+# AGT-011: "KnowledgeSourceRole values shall include at minimum NormativeRepositoryPolicy,
+# ApprovedArchitectureDecision, ImplementationDocumentation, CodeOrTestEvidence,
+# RuntimeOrBenchmarkObservation, ExternalReference, HistoricalRationale, and
+# AgentGeneratedInterpretation. Evidence classification, confidence, semantic similarity,
+# and source role shall remain separate dimensions."
+#
+# `KnowledgeSourceRole` and its eight named values do not exist as a real type anywhere --
+# only as corpus/roadmap text in spec-ingest and spec-model test fixtures.
+#
+# The requirement's second sentence -- evidence classification, confidence, and source role
+# shall remain separate dimensions -- is already real and deliberately enforced for the two
+# dimensions Nomos does have: `EvidenceClass`'s own doc comment states it is "deliberately
+# not reducible to one confidence number. A prediction at 0.9 and a measurement at 0.9 are
+# not interchangeable," and its combinator is tested to never manufacture a scalar strength;
+# `Confidence` is a distinct bounded newtype in a different crate and band (`nomos-model`,
+# kernel) from `EvidenceClass` (`nomos-contracts`, band 0), so the two cannot be collapsed
+# into one field by construction. Source role itself is simply absent, not collapsed into
+# either -- there is no third dimension yet to keep separate.
+verdict: Partial
+site: crates/contracts/nomos-contracts/src/finding/evidence.rs#EvidenceClass
+site: crates/kernel/nomos-model/src/confidence.rs#Confidence
+gap: crates/contracts/nomos-contracts/src/finding/evidence.rs#How a claim was come by

@@ -1,0 +1,30 @@
+# The assessment of AGT-005 against this build. The requirement identifier is this
+# file's stem and appears nowhere inside it, because a second place to spell the identity
+# is a second place for it to be wrong -- the rule OD-SPEC-007 chose for a record
+# registration, and CHK-003.assessment states for this registry.
+#
+# AGT-005: "KnowledgeWorkbench shall supply provenance-preserving claims, decisions,
+# contradictions, and context; Nomos shall supply deterministic findings and observations."
+# One clause per product.
+#
+# The KWB clause is genuinely KWB's own build and outside this workspace, per
+# ARC-ECOSYSTEM-001's ownership table ("Why was a design chosen? KWB. What did a source or a
+# decision claim? KWB."), so this verdict assesses only the Nomos clause.
+#
+# 'Findings' is well satisfied: `Finding` (rule, subject identity, `EvidenceClass`,
+# `Applicability`, `GateCategory`) is exactly a deterministic judgment, real and tested,
+# produced by every `nomos gate run` through `Handle_Gate_Run`. `EvidenceClass::Observed`
+# even names "directly observed at runtime" as one of `Finding`'s own evidence classes.
+#
+# 'Observations', in this requirement's own section (agent-and-knowledgeworkbench
+# integration), is really pointing at the harness run-history crossing ARC-ECOSYSTEM-001's
+# third diagram draws (a run's own observations becoming a KWB lesson) -- and
+# ARC-HARNESS-001 states outright that crossing is unbuilt: its own table marks "Run
+# history" unbuilt and its closing section says plainly nothing here is built. `RunId`
+# identifies one execution today but nothing persists a run's outcome across runs as a
+# queryable observation.
+verdict: Partial
+site: crates/contracts/nomos-contracts/src/finding.rs#Finding
+site: crates/contracts/nomos-contracts/src/finding/evidence.rs#EvidenceClass
+site: crates/host/nomos-api/src/lib.rs#Handle_Gate_Run
+gap: crates/contracts/nomos-contracts/src/identity.rs#RunId

@@ -1,0 +1,33 @@
+# The assessment of AGT-016 against this build. The requirement identifier is this
+# file's stem and appears nowhere inside it, because a second place to spell the identity
+# is a second place for it to be wrong -- the rule OD-SPEC-007 chose for a record
+# registration, and CHK-003.assessment states for this registry.
+#
+# AGT-016: "Knowledge retrieval failure, truncation, stale or scope-incompatible results,
+# incompatible protocol versions, unresolved authority, missing provenance, and unavailable
+# knowledge services shall be represented explicitly. These conditions may limit contextual
+# explanation, guidance assembly, or agent preparation but shall not create, remove, pass,
+# fail, suppress, waive, reprioritize, or alter the severity, applicability, gate
+# disposition, or conformance state of a deterministic Nomos result."
+#
+# The core discipline -- a knowledge-side failure must be represented explicitly and must
+# never be laundered into altering a rule's disposition -- is real, tested, and directly on
+# point: OD-CAPABILITY-004 is a closed decision that rules an absent optional knowledge
+# capability out of `Applicability`'s vocabulary entirely, for the identical reason
+# OD-CONTRACTS-002 kept a different absence out of it -- "the run has no verdict to give at
+# all." `Applicability` itself is the general, exhaustively-tested vocabulary that already
+# prevents any capability gap from reading as evaluated, and `Applicability::Unmet`'s
+# `VersionMismatch{offered}` is a real, tested representation of "incompatible protocol
+# versions." `PeerAvailability` is real and purpose-built to distinguish "the peer said
+# nothing exists" from "the peer did not answer."
+#
+# Three of the seven named conditions -- truncation, missing provenance, unresolved
+# authority -- have no representation anywhere, and `PeerAvailability` itself is declared and
+# exported but consumed by no caller in the tree, so nothing today actually retrieves
+# knowledge for any of this machinery to fire on -- OD-CAPABILITY-004 says so explicitly:
+# "Today no run makes the request."
+verdict: Partial
+site: crates/contracts/nomos-contracts/src/finding/applicability.rs#Applicability
+site: crates/substrate/nomos-capability/src/resolution/unmet.rs#Unmet
+site: crates/contracts/nomos-contracts/src/peer/availability.rs#PeerAvailability
+gap: docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#Today no run makes the request
