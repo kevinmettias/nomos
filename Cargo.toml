@@ -70,6 +70,12 @@ members = [
     # `OD-PACKAGE-010`.
     "crates/packages/nomos-model-package",
 
+    # Band 26 — package manifests. The first RulePackage manifest maturity, measured
+    # field by field against four real shipped rules rather than invented. A third peer
+    # of nomos-lang-package and nomos-model-package -- none of the three names another.
+    # `OD-PACKAGE-008`, `OD-ROADMAP-001`.
+    "crates/packages/nomos-rule-package",
+
     # Band 3 — rules. The first thing here that judges code rather than paperwork. A
     # rule is a pure function from source text to findings: it names no language
     # provider and opens no file, so the caller decides what tree is being judged and a
@@ -173,6 +179,7 @@ nomos-lang-rust-cargo = { path = "crates/languages/nomos-lang-rust-cargo" }
 nomos-package = { path = "crates/packages/nomos-package" }
 nomos-lang-package = { path = "crates/packages/nomos-lang-package" }
 nomos-model-package = { path = "crates/packages/nomos-model-package" }
+nomos-rule-package = { path = "crates/packages/nomos-rule-package" }
 nomos-rules = { path = "crates/rules/nomos-rules" }
 nomos-corrections = { path = "crates/corrections/nomos-corrections" }
 nomos-work-orchestration = { path = "crates/orchestration/nomos-work-orchestration" }

@@ -1,0 +1,65 @@
+pub const fn nomos_rule_package::ApplicabilitySemantics::Label(self) -> &'static str
+pub const fn nomos_rule_package::CapabilityRequirement::New(capability: CapabilityId, minimum: Guarantee) -> Self
+pub const fn nomos_rule_package::CorrectionAndSuppressionContract::New(mechanical_correction_available: bool, suppression_supported: bool) -> Self
+pub const fn nomos_rule_package::DiagnosticMapping::New(external_tool: ProviderId, external_code: String, maps_to: RuleId) -> Self
+pub const fn nomos_rule_package::RuleContract::New(record: String, version: u32) -> Self
+pub const nomos_rule_package::SCHEMA_VERSION: u32
+pub enum nomos_rule_package::ApplicabilitySemantics
+pub enum nomos_rule_package::ManifestError
+pub enum variant nomos_rule_package::ApplicabilitySemantics::AlwaysSupported
+pub enum variant nomos_rule_package::ApplicabilitySemantics::StructurallyPartial
+pub enum variant nomos_rule_package::ManifestError::InvertedProtocolRange { at: String, }
+pub enum variant nomos_rule_package::ManifestError::MalformedVersion { at: String, field: String, cause: String, }
+pub enum variant nomos_rule_package::ManifestError::MissingField { at: String, field: String, }
+pub enum variant nomos_rule_package::ManifestError::NotJson { at: String, cause: String, }
+pub enum variant nomos_rule_package::ManifestError::UnknownApplicabilitySemantics { at: String, found: String, }
+pub enum variant nomos_rule_package::ManifestError::UnknownEvidenceClass { at: String, found: String, }
+pub enum variant nomos_rule_package::ManifestError::UnknownGuaranteeValue { at: String, field: String, found: String, }
+pub enum variant nomos_rule_package::ManifestError::UnknownPackageKind { at: String, found: String, }
+pub enum variant nomos_rule_package::ManifestError::UnknownSchema { at: String, understood: u32, found: u32, }
+pub enum variant nomos_rule_package::ManifestError::Unreadable { at: String, cause: String, }
+pub enum variant nomos_rule_package::ManifestError::WrongPackageKind { at: String, found: PackageKind, }
+pub enum variant nomos_rule_package::ManifestError::WrongType { at: String, field: String, expected: String, }
+pub fn nomos_rule_package::ApplicabilitySemantics::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_rule_package::ManifestError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_rule_package::Parse_Manifest(text: &str, at: &str) -> Result<RulePackage, ManifestError>
+pub fn nomos_rule_package::Read_Manifest(path: &Path) -> Result<RulePackage, ManifestError>
+pub impl nomos_rule_package::ApplicabilitySemantics implements core::fmt::Display
+pub impl nomos_rule_package::ManifestError implements core::fmt::Display
+pub struct field nomos_rule_package::CapabilityRequirement::capability: CapabilityId
+pub struct field nomos_rule_package::CapabilityRequirement::minimum: Guarantee
+pub struct field nomos_rule_package::CorrectionAndSuppressionContract::mechanical_correction_available: bool
+pub struct field nomos_rule_package::CorrectionAndSuppressionContract::suppression_supported: bool
+pub struct field nomos_rule_package::DiagnosticMapping::external_code: String
+pub struct field nomos_rule_package::DiagnosticMapping::external_tool: ProviderId
+pub struct field nomos_rule_package::DiagnosticMapping::maps_to: RuleId
+pub struct field nomos_rule_package::RuleContract::record: String
+pub struct field nomos_rule_package::RuleContract::version: u32
+pub struct field nomos_rule_package::RulePackage::agent_guidance: Vec<String>
+pub struct field nomos_rule_package::RulePackage::applicability: ApplicabilitySemantics
+pub struct field nomos_rule_package::RulePackage::conformance_fixtures: Vec<String>
+pub struct field nomos_rule_package::RulePackage::contract: Option<RuleContract>
+pub struct field nomos_rule_package::RulePackage::correction_and_suppression: Option<CorrectionAndSuppressionContract>
+pub struct field nomos_rule_package::RulePackage::counterexamples: Vec<String>
+pub struct field nomos_rule_package::RulePackage::enhanced_implementation: Vec<ProviderRegistration>
+pub struct field nomos_rule_package::RulePackage::evaluation_corpus: Option<String>
+pub struct field nomos_rule_package::RulePackage::evidence_schema: EvidenceClass
+pub struct field nomos_rule_package::RulePackage::examples: Vec<String>
+pub struct field nomos_rule_package::RulePackage::external_diagnostics: Vec<DiagnosticMapping>
+pub struct field nomos_rule_package::RulePackage::package_id: PackageId
+pub struct field nomos_rule_package::RulePackage::package_kind: PackageKind
+pub struct field nomos_rule_package::RulePackage::package_version: PackageVersion
+pub struct field nomos_rule_package::RulePackage::protocol_range: ProtocolRange
+pub struct field nomos_rule_package::RulePackage::required_capabilities: Vec<CapabilityRequirement>
+pub struct field nomos_rule_package::RulePackage::rule_id: RuleId
+pub struct field nomos_rule_package::RulePackage::title: String
+pub struct nomos_rule_package::CapabilityRequirement
+pub struct nomos_rule_package::CorrectionAndSuppressionContract
+pub struct nomos_rule_package::DiagnosticMapping
+pub struct nomos_rule_package::RuleContract
+pub struct nomos_rule_package::RulePackage
+
+# re-exports of items declared outside this crate
+pub use nomos_package::PackageVersion
+pub use nomos_package::ProtocolRange
+pub use nomos_package::ProviderRegistration

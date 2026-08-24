@@ -27068,6 +27068,76 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-PACKAGE-008-RULE-PACKAGE-FIRST-INCREMENT",
+      "title": "nomos-rule-package: the first RulePackage manifest maturity, built from OD-PACKAGE-008's four-rule field measurement",
+      "why": "OD-ROADMAP-001 retires the wait OD-PACKAGE-008 (amended v5) held for a fifth rule or further convergence before scaffolding a RulePackage manifest crate. That record's own four-rule field-by-field measurement is real and precise enough to build from directly: rule identity/contract citation optional (Check_Naming_Convention genuinely lacks one), applicability semantics distinguishing always-Supported from structurally-partial (the real 3-of-4 split), required capabilities as a list of CapabilityRequirement (three distinct Guarantee shapes already observed across four rules), evidence schema as EvidenceClass (convergent as Derived across all four). The five fields OD-PACKAGE-008 found zero real instances for (enhanced implementation, external diagnostic mappings, correction and suppression contract, evaluation corpus, agent-guidance fragments) are typed from ARCH-002's own text and this workspace's nearest real analogs (ProviderRegistration for tool dependencies) rather than left unbuilt, per the standing override. A deliberate third peer of nomos-lang-package and nomos-model-package at band 26, wrapping nomos-package's generic core, naming neither sibling.",
+      "done_when": "crates/packages/nomos-rule-package exists, compiles, and Parse_Manifest resolves a manifest shaped like Check_Completeness_Mirrors's own real properties (D-134 v2, always_supported, nomos.cap.syntax.tree at Syntactic/Sound/Unknown/File, EvidenceClass::Derived) plus refuses every named malformed case, all covered by tests/manifest.rs. Registered in Cargo.toml (workspace members and workspace.dependencies), README.md's band table, tests/contract/tests/boundaries/bands.rs, and crates/rules/nomos-rules/src/dependency/bands.rs, all at band 26. Public surface snapshot exists at tests/contract/surface/nomos-rule-package.txt. nomos_contracts::PackageKind's doc comment no longer claims RulePackage is unconsumed. cargo test --no-fail-fast -p nomos-contract-tests and cargo test -p nomos-rule-package both pass; cargo clippy --workspace --all-targets is clean of new warnings.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/packages/nomos-rule-package/Cargo.toml",
+          "crates/packages/nomos-rule-package/src/applicability_semantics.rs",
+          "crates/packages/nomos-rule-package/src/capability_requirement.rs",
+          "crates/packages/nomos-rule-package/src/correction_and_suppression.rs",
+          "crates/packages/nomos-rule-package/src/diagnostic_mapping.rs",
+          "crates/packages/nomos-rule-package/src/lib.rs",
+          "crates/packages/nomos-rule-package/src/manifest.rs",
+          "crates/packages/nomos-rule-package/src/reader.rs",
+          "crates/packages/nomos-rule-package/src/rule_contract.rs",
+          "crates/packages/nomos-rule-package/tests/manifest.rs",
+          "tests/contract/surface/nomos-rule-package.txt",
+          "Cargo.toml",
+          "Cargo.lock",
+          "README.md",
+          "crates/contracts/nomos-contracts/src/package.rs",
+          "crates/rules/nomos-rules/src/dependency/bands.rs",
+          "tests/contract/tests/boundaries/bands.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "Cited_Rule ... ok\ntest Test_Every_Cited_Record_Should_Still_Exist ... ok\ntest Test_Every_Cited_Version_Should_Match_The_Records_Own_Front_Matter ... ok\ntest Test_A_Mismatched_Version_Should_Fail_The_Comparison ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n\n\nrunning 5 tests\ntest Test_A_Lowered_Declaration_Should_Fail_The_Comparison ... ok\ntest Test_An_Unrelated_Minor_Version_Should_Fail_The_Comparison ... ok\ntest Test_A_Matching_Declaration_Should_Pass_The_Comparison ... ok\ntest Test_The_Real_Workflow_Should_Still_Have_The_Install_Step ... ok\ntest Test_The_Declared_Floor_Should_Match_The_Toolchain_The_Gate_Installs ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.10s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-06ab25b0491e144c.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-4c32ae08be8df958.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-9350d088b8d6ed0d.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-9ca3879aab70176f.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-308fef82df004321.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-f6f7228f8cfa874c.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-ea500c062215f506.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-790c8c5856e63fa5.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-98429b682798ce96.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-c1e906054609f777.exe)\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1787589123,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "0449e7fed3674237d627e7246a587e44130730e1"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

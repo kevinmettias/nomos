@@ -54,20 +54,24 @@ const FEATURE_PACK_LABEL: &str = "FeaturePack";
 /// consistency. `Test_Every_Kind_Should_Carry_The_Label_The_Corpus_Names` pins the
 /// result, and its table is where a seventeenth kind has to be argued for.
 ///
-/// # One kind has a consumer now; the other fifteen still wait
+/// # Four kinds have a consumer now; the other twelve still wait
 ///
 /// `nomos-package`'s reader (`crates/packages/nomos-package/src/reader.rs`) is
 /// `LanguagePackage`'s real consumer: `Package_Kind_Field` deserializes a manifest's
 /// `package_kind` against this enum and the reader returns
 /// `ManifestError::WrongPackageKind` when the resolved kind is anything other than
-/// `PackageKind::LanguagePackage`. That is this enum's first consumer, landed by
-/// `P13-PACKAGE-GENERIC-CORE` (`OD-PACKAGE-007`).
+/// `PackageKind::LanguagePackage`. That was this enum's first consumer, landed by
+/// `P13-PACKAGE-GENERIC-CORE` (`OD-PACKAGE-007`). `nomos-model-package`'s reader is
+/// `ModelBackendPackage`'s and `AgentExecutorPackage`'s real consumer (`OD-PACKAGE-010`),
+/// and `nomos-rule-package`'s reader is `RulePackage`'s (`OD-PACKAGE-008`,
+/// `OD-ROADMAP-001`) — each the same shape: a manifest's `package_kind` resolved and
+/// refused if it names anything the reader does not accept.
 ///
-/// The other fifteen kinds — `RulePackage` included — remain genuinely unconsumed. No
-/// code outside this crate names them, and none is written to make them look used: this
-/// workspace contains no installable unit of any of those kinds for a consumer to be
-/// about, no manifest declaring one exists on disk, and `PackageId` is likewise declared
-/// and never constructed.
+/// The other twelve kinds remain genuinely unconsumed. No code outside this crate names
+/// them, and none is written to make them look used: this workspace contains no
+/// installable unit of any of those kinds for a consumer to be about, no manifest
+/// declaring one exists on disk, and `PackageId` is likewise declared and never
+/// constructed for them.
 ///
 /// `ARCH-001` and `ARCH-002` require a `LanguagePackage` and a `RulePackage` to be
 /// independently versioned, and `PKG-007` requires a package's own version, the Nomos

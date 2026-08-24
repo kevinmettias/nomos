@@ -78,6 +78,10 @@ pub(crate) const BANDS: &[(&str, u32)] = &[
     // nomos-lang-package -- a peer wrapping nomos-package's generic core for a different
     // PackageKind family, not a dependent of it. `OD-PACKAGE-010`.
     ("nomos-model-package", 26),
+    // The first RulePackage manifest maturity. Same band as nomos-lang-package and
+    // nomos-model-package -- a third peer wrapping nomos-package's generic core, not a
+    // dependent of either. `OD-PACKAGE-008`, `OD-ROADMAP-001`.
+    ("nomos-rule-package", 26),
     // The spec system sits beside the kernel, not above it. It reaches the product only
     // through a KnowledgeCapability, so nothing in the product may name it directly.
     ("nomos-spec-model", 11),
