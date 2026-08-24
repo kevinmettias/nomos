@@ -3,7 +3,7 @@ id: OD-PACKAGE-011
 type: decision
 title: MODEL-ROUTE-037's second clause and MODEL-ROUTE-038 through 049 still have no real second case
 status: accepted
-version: 2
+version: 3
 authority: canonical-normative-record
 tags:
   - package
@@ -18,6 +18,8 @@ relations:
   - target: OD-PACKAGE-001
     type: relates-to
   - target: OD-CORRECTIONS-001
+    type: relates-to
+  - target: OD-ROADMAP-001
     type: relates-to
 ---
 
@@ -159,9 +161,70 @@ the same finding to a range this record had never actually looked at, so a futur
 reading `OD-PACKAGE-011` sees the true current boundary of "no real case yet" across the
 whole `MODEL-ROUTE` family rather than the narrower slice this record originally checked.
 
+## Amendment: Reconciled With OD-ROADMAP-001
+
+Added at version 3. The version-2 amendment above (`P13-PACKAGE-011-MODEL-ROUTE-001-036-SURVEY`)
+landed at commit `0fca7d1`, measured against the workspace as it stood at that moment --
+before `OD-ROADMAP-001` (commit `0449e7f`, immediately after) retired the population-of-zero
+caution for this exact cluster. `OD-ROADMAP-001`'s own "The Decision" section names this
+record specifically: "`OD-PACKAGE-011`'s and `OD-PACKAGE-012`'s conclusions that no real
+second case exists yet for model routing, dispatch, or capability-integrated agent/model
+backend routing" are listed among what it supersedes, and its "Status" section states that
+"each of those records is amended in the same change that adds this one, pointing back
+here." That did not happen for this record -- the six sibling records it names
+(`ARC-ROADMAP-001`, `OD-PACKAGE-006`, `OD-PACKAGE-008`, `OD-PACKAGE-010`, `OD-PACKAGE-012`,
+`OD-CORRECTIONS-001`) were each amended to point back to `OD-ROADMAP-001` in that pass;
+this one was missed. This amendment completes it, making `OD-ROADMAP-001`'s own claim
+true rather than leaving a second live session to independently re-derive whether this
+record's "no real case" finding still binds -- which happened on `2026-08-24`, and is the
+proximate cause of this amendment.
+
+**What actually changes, and what does not.** `OD-ROADMAP-001` retires waiting for a
+*consumer* -- it does not license inventing a shape the corpus itself never closes. This
+record's own `RustEdition` counter-example stays exactly the boundary: `MODEL-ROUTE-037`'s
+nine catalog-entry states resolve an *already-existing* `Catalog(Vec<String>)` field into a
+taxonomy with no real provider, catalog, or entitlement service in this workspace to check
+it against, the same way `RustEdition` had a real, externally verifiable four-edition fact
+and this shape does not. `MODEL-ROUTE-038` through `049` presuppose infrastructure (a live
+catalog, a cache, a policy implementation, a release/canary process) this workspace still
+runs none of. Both stay unlicensed under `OD-ROADMAP-001` for the reason `OD-ROADMAP-001`'s
+own "What This Does Not Do" section already preserves: "`MODEL-ROUTE-037`'s nine
+catalog-entry states genuinely naming a design taxonomy rather than transcribing a closed
+fact... all of that stays true."
+
+`MODEL-ROUTE-001` through `036` (excluding `012`/`013`, already `Partial`) are a different
+case: none of them resolve an existing loose field into an invented taxonomy the way `037`
+does. Each is either a brand-new type with no existing stand-in, or genuinely not grounded
+at all. A design-workflow audit (2026-08-24, per-id, each entry citing the specific corpus
+sentence and quoting the field or value list it transcribes, cross-checked against the live
+workspace to rule out anything already built) split the remaining thirty-four this way --
+recorded here as a starting inventory for whoever builds next, not as thirty-four
+already-verified increments:
+
+- **Genuinely narrative, no data shape to transcribe -- stay `no real case` for the reason
+  this record already measured, not the retired one:** `MODEL-ROUTE-006`, `008`, `019`,
+  `020`, `024`, `033`. Each names only a process, a timing, or a validation-input checklist
+  ("shall be validated for," "shall be evaluated at"), never a `shall be`/`shall
+  contain`/`shall enumerate` clause naming a field or a closed value set.
+- **A real closed corpus enumeration, directly transcribable, now licensed to build:**
+  `MODEL-ROUTE-002`, `005`, `007`, `009`, `010`, `011`, `014`, `015`, `016`, `017`, `018`,
+  `021`, `022`, `023`, `025`, `026`, `027`, `028`, `029`, `030`, `031`, `032`, `034`, `035`,
+  `036`. The strongest of these: `MODEL-ROUTE-029`'s `ModelInputAssemblyIdentity` (a
+  twelve-field "shall contain ... that pins" sentence), `MODEL-ROUTE-034`'s
+  `RuntimeCandidateDisqualification` (a dedicated "supported reasons shall include"
+  sentence, explicitly excluding `ProviderUnavailable`/a generic fallback reason by name),
+  and `MODEL-ROUTE-014`'s `FallbackAdmissibility` (a ten-item "whether it may change X, Y,
+  Z" list, no fallback-edge infrastructure required to exist first). None of the twenty-five
+  computes a routing decision, a resolver, or a dispatch mechanism the corpus does not
+  itself specify -- each stays at the declared vocabulary layer `EffortLevel` and
+  `ModelSelector` already established for `MODEL-ROUTE-001`/`003`/`004`.
+
 ## What Would Decide The Next Increment
 
-Unchanged from `OD-PACKAGE-010`, restated because it still has not arrived:
+Scoped, after the version-3 amendment above, to `MODEL-ROUTE-037`'s second clause and
+`038` through `049` only -- the twenty-five now-licensed ids do not wait on either
+condition below; `OD-ROADMAP-001` is what licenses them. Unchanged from `OD-PACKAGE-010`
+for the pieces that still wait, restated because neither has arrived:
 
 - **A real `ModelBackendPackage` or `AgentExecutorPackage` consumer appears** -- something
   in this workspace that actually resolves a `Catalog` entry against a real provider,
@@ -186,4 +249,17 @@ Amended to version 2 by `P13-PACKAGE-011-MODEL-ROUTE-001-036-SURVEY`, which inde
 measured `MODEL-ROUTE-001` through `036` and found the same absence for thirty-four of the
 thirty-six -- all but `012` and `013`, which ground in real
 `Applicability`/`Coverage`/`RuleSelector`/`EvidenceClass`/`AuthorityClass` machinery and
-are assessed `Partial` separately. Schedules no work of its own.
+are assessed `Partial` separately.
+
+Amended to version 3 by `P13-PACKAGE-011-RECONCILE-ROADMAP-001-2`: the version-2 measurement
+predated `OD-ROADMAP-001` by one commit and was never pointed back to it, unlike this
+record's six sibling records, which `OD-ROADMAP-001`'s own text claimed had all been amended
+together. `MODEL-ROUTE-037`'s second clause and `038` through `049` still have no real
+second case, for the reason this record has always given -- resolving an existing loose
+field into a taxonomy the corpus never closes, not merely lacking a consumer -- and
+`OD-ROADMAP-001` does not license that either. Twenty-five of `MODEL-ROUTE-001` through
+`036`'s remaining thirty-four ids, previously folded into the same "no real case" finding for
+lacking a consumer, are split out as directly transcribable from a real closed corpus
+enumeration and now licensed to build under `OD-ROADMAP-001`; six stay `no real case` for
+being genuinely narrative, with no data shape at all. Schedules no work of its own beyond
+this reclassification.
