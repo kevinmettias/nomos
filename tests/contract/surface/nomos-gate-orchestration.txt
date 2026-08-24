@@ -38,6 +38,7 @@ pub struct field nomos_gate_orchestration::FindingQuery::location: String
 pub struct field nomos_gate_orchestration::FindingQuery::rule: RuleId
 pub struct field nomos_gate_orchestration::GateCommand::adoption: AdoptionPolicy
 pub struct field nomos_gate_orchestration::GateCommand::baseline: BaselinePolicy
+pub struct field nomos_gate_orchestration::GateCommand::model: Option<ModelExecutionProfile>
 pub struct field nomos_gate_orchestration::GateCommand::root: PathBuf
 pub struct field nomos_gate_orchestration::GateCommand::rules: RuleSelector
 pub struct field nomos_gate_orchestration::GateCommand::scope: ScopeSelector

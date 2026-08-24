@@ -16,6 +16,7 @@
 //! is simply absent, not stubbed, until an increment gives it a real body.
 
 use crate::{AdoptionPolicy, BaselinePolicy, RuleSelector, ScopeSelector, SuppressionPolicy};
+use nomos_model_package::ModelExecutionProfile;
 use std::path::PathBuf;
 
 /// What to plan, run or explain a gate over.
@@ -55,4 +56,13 @@ pub struct GateCommand
     /// `rules`, `suppressions` and `baseline`. Nothing constructs a non-empty one yet -- see
     /// [`crate::AdoptionPolicy`]'s own doc for what authors one, and what does not yet.
     pub adoption: AdoptionPolicy,
+    /// `MODEL-ROUTE-001`'s declared reference: what an agent-assisted operation running
+    /// under this command should use, when one is selected. Read by nothing yet -- the
+    /// same nothing constructs a non-empty one yet asymmetry `suppressions`, `baseline`
+    /// and `adoption` already have -- because no registered rule yields
+    /// `nomos_contracts::Applicability::AgentRequired` today, so there is no real
+    /// operation for a selected profile to activate. `None` is not a smaller case of
+    /// this field; it is `MODEL-ROUTE-012`'s own first clause: a gate stays valid when no
+    /// model is selected.
+    pub model: Option<ModelExecutionProfile>,
 }

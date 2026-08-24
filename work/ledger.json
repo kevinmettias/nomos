@@ -27614,6 +27614,145 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-MODEL-ROUTE-001-GATE-COMMAND-PROFILE",
+      "title": "GateCommand carries MODEL-ROUTE-001 declared model execution profile, the gate-side referencing surface",
+      "why": "MODEL-ROUTE-001 names gates, phases, workflows, rules/checks and agent task classes as five referencing surfaces for ModelExecutionProfile. P13-MODEL-ROUTE-001-003-004-EXECUTION-PROFILE already built EffortLevel/ModelSelector/ModelExecutionProfile and its own doc comment named GateCommand as one of exactly two real types a reference field could be added to today, and named wiring it as a later, separate increment -- this is that increment, not a new invention. nomos-gate-orchestration is band 41 and nomos-model-package is band 26; band 41 may depend on band 26, so this is band-legal. This also narrows MODEL-ROUTE-012 own named gap directly: its assessment states GateCommand carries no model-selection field at all. Does not build the enforcement half of MODEL-ROUTE-012 (model configuration shall activate only operations whose contracts permit or require AgentJudgment) because nothing yields AgentRequired yet -- no registered rule is agent-required -- so there is no real case for that enforcement to check itself against yet, matching OD-PACKAGE-011 own caution. The new field is declared and read by nothing, the same nothing constructs a non-empty one yet pattern GateCommand already uses for baseline, adoption and suppressions.",
+      "done_when": "GateCommand (crates/orchestration/nomos-gate-orchestration/src/command.rs) gains a public field carrying an optional nomos_model_package::ModelExecutionProfile, documented with the same per-field doc style and asymmetry note its sibling fields already use, Default-derived (None). nomos-gate-orchestration Cargo.toml depends on nomos-model-package. cargo test -p nomos-gate-orchestration passes. cargo test --no-fail-fast -p nomos-contract-tests passes. cargo clippy --workspace --all-targets is clean.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/command.rs",
+          "crates/orchestration/nomos-gate-orchestration/Cargo.toml"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "Cited_Rule ... ok\ntest Test_Every_Cited_Record_Should_Still_Exist ... ok\ntest Test_Every_Cited_Version_Should_Match_The_Records_Own_Front_Matter ... ok\ntest Test_A_Mismatched_Version_Should_Fail_The_Comparison ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 5 tests\ntest Test_A_Lowered_Declaration_Should_Fail_The_Comparison ... ok\ntest Test_An_Unrelated_Minor_Version_Should_Fail_The_Comparison ... ok\ntest Test_A_Matching_Declaration_Should_Pass_The_Comparison ... ok\ntest Test_The_Real_Workflow_Should_Still_Have_The_Install_Step ... ok\ntest Test_The_Declared_Floor_Should_Match_The_Toolchain_The_Gate_Installs ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.10s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-06ab25b0491e144c.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-4c32ae08be8df958.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-9350d088b8d6ed0d.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-9ca3879aab70176f.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-308fef82df004321.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-f6f7228f8cfa874c.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-ea500c062215f506.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-790c8c5856e63fa5.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-98429b682798ce96.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-c1e906054609f777.exe)\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1787593776,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "c00c53690c6edefa8cafbb8045f8c29a2ab25944"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-PACKAGE-011-RECONCILE-ROADMAP-001",
+      "title": "OD-PACKAGE-011 v3: MODEL-ROUTE-001-036's 'no real case' finding predates and was never reconciled with OD-ROADMAP-001",
+      "why": "Commit order confirms OD-PACKAGE-011's v2 amendment (0fca7d1, P13-PACKAGE-011-MODEL-ROUTE-001-036-SURVEY) landed BEFORE OD-ROADMAP-001 (0449e7f, P13-ROADMAP-001-POPULATION-CAUTION-RETIRED). Unlike the six sibling records OD-ROADMAP-001 explicitly amended to point to it (ARC-ROADMAP-001, OD-PACKAGE-006/008/010/012, OD-CORRECTIONS-001), OD-PACKAGE-011 was never touched in that pass -- its 34-of-36 'no real case' finding for MODEL-ROUTE-001 through 036 was reached using the old wait-for-a-consumer methodology (grep for a real ModelExecutionProfile/telemetry/dispatch consumer) the same session's own OD-ROADMAP-001 retires for this exact requirement family. This is the same staleness a fresh corpus re-read already found and corrected for AGT-010/012/018/AGT-EXEC-003 this session (P13-AGT-010-012-018-EXEC-003-KNOWLEDGE-AUTHORITY). A second live session (nomos-b7) independently read OD-PACKAGE-011 v2 and, reasonably, treated its 'no real case' finding as still current and blocking; this amendment settles the question with per-id evidence rather than leaving two sessions to disagree about a record's freshness. The amendment does not simply retire OD-PACKAGE-011's finding wholesale: MODEL-ROUTE-037's nine-state catalog shape and 038-049 genuinely differ (resolving an EXISTING loose Catalog(Vec<String>) field into a taxonomy with no real provider/catalog to check it against -- OD-PACKAGE-011's own RustEdition counter-example), and stay 'no real case' under OD-ROADMAP-001 too, since that override licenses building from real corpus-given shape, not inventing shape the corpus never closes. A per-id review (already run this session via a design-workflow audit over all of MODEL-ROUTE-001-036) separates ids with a genuine closed enumerated list directly transcribable from corpus text (e.g. MODEL-ROUTE-014's ten-item FallbackAdmissibility, MODEL-ROUTE-029's twelve-field ModelInputAssemblyIdentity, MODEL-ROUTE-034's nine-reason RuntimeCandidateDisqualification) from ids that are genuine narrative/process description with no data shape (e.g. MODEL-ROUTE-006/008/019/020/024/033) or that share MODEL-ROUTE-037's resolve-an-existing-loose-field problem.",
+      "done_when": "docs/records/OD-PACKAGE-011-*.md is amended to version 3, adding a section that: (1) states the commit-order finding (v2 predates OD-ROADMAP-001, unlike its six sibling records); (2) reconciles by distinguishing MODEL-ROUTE-037/038-049 (stays no-real-case: resolving an existing loose field into an unverifiable taxonomy, not licensed by OD-ROADMAP-001 either) from MODEL-ROUTE-001-036's remaining ids, which now split into ids with real corpus-given closed shape (licensed to build under OD-ROADMAP-001, listing which) versus ids that are genuinely narrative with no data shape (stay no-real-case for a different, non-consumer reason). crates/spec/nomos-spec-store/records/OD-PACKAGE-011.record stays registered and matches the amended file (version 3). nomos spec preview then commit succeeds with no lost blocks. Rendered diagram-set and domain-specification projections from a clean worktree carrying exactly the published record set, freshness check exits 0, both copied back and committed alongside the record.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "verification predicate was accidentally vacuous: 'cargo test -p nomos-spec-store nomos-contract-tests' filters nomos-spec-store's own tests by a name substring matching none of them (0 tests run, exit 0) instead of also testing the nomos-contract-tests package. Re-adding as -2 with a correct multi-package predicate before any implementation."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-p13-session",
+          "reason": "vacuous verification predicate, re-adding as -2 with a corrected one before any implementation",
+          "abandoned_at": 1787593724
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-p13-session",
+        "declined_at": 1787593724
+      }
+    },
+    {
+      "id": "P13-PACKAGE-011-RECONCILE-ROADMAP-001-2",
+      "title": "OD-PACKAGE-011 v3: MODEL-ROUTE-001-036's 'no real case' finding predates and was never reconciled with OD-ROADMAP-001",
+      "why": "Commit order confirms OD-PACKAGE-011's v2 amendment (0fca7d1, P13-PACKAGE-011-MODEL-ROUTE-001-036-SURVEY) landed BEFORE OD-ROADMAP-001 (0449e7f, P13-ROADMAP-001-POPULATION-CAUTION-RETIRED). Unlike the six sibling records OD-ROADMAP-001 explicitly amended to point to it (ARC-ROADMAP-001, OD-PACKAGE-006/008/010/012, OD-CORRECTIONS-001), OD-PACKAGE-011 was never touched in that pass -- its 34-of-36 'no real case' finding for MODEL-ROUTE-001 through 036 was reached using the old wait-for-a-consumer methodology (grep for a real ModelExecutionProfile/telemetry/dispatch consumer) the same session's own OD-ROADMAP-001 retires for this exact requirement family. This is the same staleness a fresh corpus re-read already found and corrected for AGT-010/012/018/AGT-EXEC-003 this session (P13-AGT-010-012-018-EXEC-003-KNOWLEDGE-AUTHORITY). A second live session (nomos-b7) independently read OD-PACKAGE-011 v2 and, reasonably, treated its 'no real case' finding as still current and blocking; this amendment settles the question with per-id evidence rather than leaving two sessions to disagree about a record's freshness. The amendment does not simply retire OD-PACKAGE-011's finding wholesale: MODEL-ROUTE-037's nine-state catalog shape and 038-049 genuinely differ (resolving an EXISTING loose Catalog(Vec<String>) field into a taxonomy with no real provider/catalog to check it against -- OD-PACKAGE-011's own RustEdition counter-example), and stay 'no real case' under OD-ROADMAP-001 too, since that override licenses building from real corpus-given shape, not inventing shape the corpus never closes. A per-id review (already run this session via a design-workflow audit over all of MODEL-ROUTE-001-036) separates ids with a genuine closed enumerated list directly transcribable from corpus text (e.g. MODEL-ROUTE-014's ten-item FallbackAdmissibility, MODEL-ROUTE-029's twelve-field ModelInputAssemblyIdentity, MODEL-ROUTE-034's nine-reason RuntimeCandidateDisqualification) from ids that are genuine narrative/process description with no data shape (e.g. MODEL-ROUTE-006/008/019/020/024/033) or that share MODEL-ROUTE-037's resolve-an-existing-loose-field problem.",
+      "done_when": "docs/records/OD-PACKAGE-011-*.md is amended to version 3, adding a section that: (1) states the commit-order finding (v2 predates OD-ROADMAP-001, unlike its six sibling records); (2) reconciles by distinguishing MODEL-ROUTE-037/038-049 (stays no-real-case: resolving an existing loose field into an unverifiable taxonomy, not licensed by OD-ROADMAP-001 either) from MODEL-ROUTE-001-036's remaining ids, which now split into ids with real corpus-given closed shape (licensed to build under OD-ROADMAP-001, listing which) versus ids that are genuinely narrative with no data shape (stay no-real-case for a different, non-consumer reason). crates/spec/nomos-spec-store/records/OD-PACKAGE-011.record stays registered and matches the amended file (version 3). nomos spec preview then commit succeeds with no lost blocks. Rendered diagram-set and domain-specification projections from a clean worktree carrying exactly the published record set, freshness check exits 0, both copied back and committed alongside the record.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-p13-session",
+        "acquired_at": 1787593741,
+        "lease_expires_at": 1787604541
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
