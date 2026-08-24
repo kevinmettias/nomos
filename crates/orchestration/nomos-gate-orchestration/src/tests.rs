@@ -671,7 +671,7 @@ fn Test_Explain_Should_Find_A_Real_Blocking_Finding()
 
     let result = Explain_Gate(Some(sources), Test_Variant(), &Command_At(Repository_Root()), &query, &StdProcessLauncher);
 
-    let Explanation::Found { finding, would_block, calibrated_by, suppressed_by, baselined_by } = result.explanation
+    let Explanation::Found { finding, would_block, calibrated_by, suppressed_by, baselined_by, contract } = result.explanation
     else
     {
         panic!("this fixture must produce the finding the query names");
@@ -681,6 +681,7 @@ fn Test_Explain_Should_Find_A_Real_Blocking_Finding()
     assert_eq!(calibrated_by, None);
     assert_eq!(suppressed_by, None);
     assert_eq!(baselined_by, None);
+    assert_eq!(contract, Some(("D-134".to_owned(), 2)), "COMPLETENESS_MIRROR's own real contract citation");
 }
 
 /// A [`Suppression`] matching the queried finding flips `would_block` to `false` and names

@@ -301,7 +301,15 @@ mod tests
 
         let _ignored = std::fs::remove_dir_all(&directory);
 
-        let GateExplainResponse::Found { would_block, calibrated_by, suppressed_by, baselined_by, .. } = response
+        let GateExplainResponse::Found {
+            would_block,
+            calibrated_by,
+            suppressed_by,
+            baselined_by,
+            contract_record,
+            contract_record_version,
+            ..
+        } = response
         else
         {
             panic!("this fixture must produce the finding the query names");
@@ -310,6 +318,8 @@ mod tests
         assert!(calibrated_by.is_none());
         assert!(suppressed_by.is_none());
         assert!(baselined_by.is_none());
+        assert_eq!(contract_record.as_deref(), Some("D-134"));
+        assert_eq!(contract_record_version, Some(2));
     }
 
     /// The response a real `Found` explanation produces is valid JSON, and its outcome

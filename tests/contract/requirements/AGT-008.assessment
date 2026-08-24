@@ -14,23 +14,26 @@
 # structural precedent: `Handle_Gate_Explain`/`GateExplainResponse` takes an immutable
 # finding query and returns the finding boxed in full plus `would_block`, calibration,
 # suppression and baseline disposition -- exposed through both `nomos-cli` and `nomos-api`.
-# Of the 'preserve' clause: finding identity, evidence, applicability, and gate disposition
-# (`GateCategory`) are all real fields on `Finding` itself.
+# Of the 'preserve' clause: finding identity, evidence, applicability, gate disposition
+# (`GateCategory`), and now rule version are all real, on `Finding` itself or on the
+# response that carries it. `Explanation::Found`/`GateExplainResponse::Found` gained
+# `contract`/`contract_record`+`contract_record_version`, looked up from the same rule
+# registry `nomos gate plan` already exposes through `RuleOfferResponse`, closing this
+# assessment's own previously-named gap: `RuleOffer`'s `contract_record_version` is now
+# stamped onto an explained finding, not merely declared nearby and unused.
 #
-# 'Rule version' is not: `RuleId` is a bare authored-string identity with no version
-# component; a version concept exists nearby but on a different type, `RuleOffer`'s
-# `contract_record_version`, never stamped onto a `Finding` occurrence. 'Severity' is
-# deliberately absent and the divergence is already recorded -- `Finding`'s own doc states
-# "There is no severity field and no is_error," and OD-HOST-003 names the reason: `GateCategory`
-# "is not implied by severity," carrying a richer, gate-specific signal instead. The
-# KnowledgeWorkbench-sourced attachments (rationale, motivating defects, accepted
-# exceptions, contradictions, citations, remediation context) have no site at all --
-# OD-HOST-003 itself says `Finding` "carries no direct pointer to a record id yet," routing
-# that gap to OD-HOST-002's still-open seam families.
+# 'Severity' is deliberately absent and the divergence is already recorded --
+# `Finding`'s own doc states "There is no severity field and no is_error," and
+# OD-HOST-003 names the reason: `GateCategory` "is not implied by severity," carrying a
+# richer, gate-specific signal instead. The KnowledgeWorkbench-sourced attachments
+# (rationale, motivating defects, accepted exceptions, contradictions, citations,
+# remediation context) have no site at all -- OD-HOST-003 itself says `Finding` "carries
+# no direct pointer to a record id yet," routing that gap to OD-HOST-002's still-open
+# seam families.
 verdict: Partial
 site: crates/host/nomos-api/src/lib.rs#Handle_Gate_Explain
 site: crates/host/nomos-api/src/response.rs#GateExplainResponse
+site: crates/orchestration/nomos-gate-orchestration/src/explain.rs#Contract_Of
 site: crates/contracts/nomos-contracts/src/finding.rs#Finding
 site: crates/contracts/nomos-contracts/src/enforcement/gate_category.rs#GateCategory
-gap: crates/contracts/nomos-contracts/src/identity.rs#RuleId
-gap: crates/rules/nomos-rules/src/registry/rule_offer.rs#RuleOffer
+gap: docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#carries no direct pointer to a

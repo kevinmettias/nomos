@@ -27260,6 +27260,67 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-AGT-008-RULE-VERSION-STAMPED",
+      "title": "AGT-008's rule-version gap closed: Explanation::Found and GateExplainResponse::Found now carry a finding's rule contract citation",
+      "why": "AGT-008.assessment named a real, precise gap: RuleOffer's contract_record/contract_record_version -- already real and tested, already exposed through nomos gate plan's RuleOfferResponse -- was never stamped onto an explained finding, so ContextualizeFinding's 'preserve rule version' clause had nothing to preserve. Wired Explain_Gate to look up the same registry nomos gate plan already builds (Registered()) by the finding's own RuleId (Offered()), carrying the citation through Explanation::Found -> GateExplainResponse::Found -> nomos-cli's rendered explain output. Uses the same real sentinel convention RuleOffer already established for a rule with no CONTRACT_RECORD (Check_Naming_Convention cites README.md version 0, a real present citation, never an absence) rather than inventing a new one. contract is Option only for the genuinely unreachable case of Registered() itself refusing or a rule the registry does not hold at all -- never the ordinary no-CONTRACT_RECORD case.",
+      "done_when": "nomos_gate_orchestration::Explanation::Found and nomos_api::GateExplainResponse::Found both carry the rule's contract citation. nomos-cli's gate explain output prints it. Tests in all three crates assert the real D-134 v2 citation for COMPLETENESS_MIRROR. tests/contract/requirements/AGT-008.assessment cites the new site and narrows its gap to only the KnowledgeWorkbench-attachment half (routed to OD-HOST-002/OD-HOST-003, unchanged). cargo test --no-fail-fast -p nomos-contract-tests passes with nomos-api.txt and nomos-gate-orchestration.txt reblessed. cargo clippy --workspace --all-targets is clean of new warnings.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-api/src/lib.rs",
+          "crates/host/nomos-api/src/response.rs",
+          "crates/host/nomos-cli/src/gate/report.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/explain.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/tests.rs",
+          "tests/contract/requirements/AGT-008.assessment",
+          "tests/contract/surface/nomos-api.txt",
+          "tests/contract/surface/nomos-gate-orchestration.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "Cited_Rule ... ok\ntest Test_Every_Cited_Record_Should_Still_Exist ... ok\ntest Test_Every_Cited_Version_Should_Match_The_Records_Own_Front_Matter ... ok\ntest Test_A_Mismatched_Version_Should_Fail_The_Comparison ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 5 tests\ntest Test_A_Lowered_Declaration_Should_Fail_The_Comparison ... ok\ntest Test_An_Unrelated_Minor_Version_Should_Fail_The_Comparison ... ok\ntest Test_A_Matching_Declaration_Should_Pass_The_Comparison ... ok\ntest Test_The_Real_Workflow_Should_Still_Have_The_Install_Step ... ok\ntest Test_The_Declared_Floor_Should_Match_The_Toolchain_The_Gate_Installs ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.10s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-06ab25b0491e144c.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-4c32ae08be8df958.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-9350d088b8d6ed0d.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-9ca3879aab70176f.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-308fef82df004321.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-f6f7228f8cfa874c.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-ea500c062215f506.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-790c8c5856e63fa5.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-98429b682798ce96.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-c1e906054609f777.exe)\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1787590727,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "fc092d3d2b4ff3cfbb124758a3ce0bb5bc92912a"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

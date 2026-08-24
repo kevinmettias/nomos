@@ -8,6 +8,7 @@ use nomos_rules::SourceFile;
 use nomos_workspace::BuildVariant;
 use std::path::PathBuf;
 
+use crate::composition::Registered;
 use crate::run_gate::Judged;
 use crate::{AdoptionPolicy, BaselineDebt, BaselinePolicy, GateCommand, RuleCalibration, Suppression, SuppressionPolicy};
 
@@ -53,6 +54,16 @@ pub enum Explanation
         /// once calibration and suppression are both ruled out, the same order
         /// [`crate::Run_Gate`] reduces by.
         baselined_by: Option<BaselineDebt>,
+        /// The governing record `query.rule`'s implementation cites, and the version of
+        /// that record it was written against -- `AGT-008`'s "rule version" clause,
+        /// [`nomos_rules::RuleOffer`]'s own two fields, looked up from the same registry
+        /// `nomos gate plan` already exposes through `RuleOfferResponse`. `None` only if
+        /// the registry itself is contradictory (`Registered`'s own doc: "not reachable
+        /// today") or `query.rule` names a rule this build does not register at all --
+        /// never the ordinary "no `CONTRACT_RECORD`" case, which `Check_Naming_
+        /// Convention` represents as a real, present citation to `README.md` version 0
+        /// rather than an absence.
+        contract: Option<(String, u32)>,
     },
 }
 
@@ -110,6 +121,17 @@ fn Explained(
     return Named(findings, query).map_or(Explanation::NotFound, |finding| return Disposed(finding, adoption, suppressions, baseline));
 }
 
+/// `query.rule`'s contract citation, from the same registry `nomos gate plan` builds --
+/// `None` only for a registry `Registered` itself refuses, or a rule that registry does
+/// not hold at all.
+fn Contract_Of(rule: &RuleId) -> Option<(String, u32)>
+{
+    let registry = Registered().ok()?;
+    let offer = registry.Offered(rule)?;
+
+    return Some((offer.contract_record.clone(), offer.contract_record_version));
+}
+
 /// The one finding `query` names among `findings`, if any.
 fn Named<'a>(findings: &'a [Finding], query: &FindingQuery) -> Option<&'a Finding>
 {
@@ -129,6 +151,7 @@ fn Disposed(finding: &Finding, adoption: &AdoptionPolicy, suppressions: &Suppres
         .then(|| baseline.Tolerating(finding).cloned())
         .flatten();
     let would_block = finding.Can_Fail_A_Build() && calibrated_by.is_none() && suppressed_by.is_none() && baselined_by.is_none();
+    let contract = Contract_Of(&finding.rule);
 
     return Explanation::Found {
         finding: Box::new(finding.clone()),
@@ -136,5 +159,6 @@ fn Disposed(finding: &Finding, adoption: &AdoptionPolicy, suppressions: &Suppres
         calibrated_by,
         suppressed_by,
         baselined_by,
+        contract,
     };
 }

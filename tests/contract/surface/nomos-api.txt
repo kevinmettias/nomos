@@ -16,7 +16,7 @@ pub enum nomos_api::WorkValidateResponse
 pub enum variant nomos_api::Disposition::Failed
 pub enum variant nomos_api::Disposition::Indeterminate
 pub enum variant nomos_api::Disposition::Passed
-pub enum variant nomos_api::GateExplainResponse::Found { finding: Box<Finding>, would_block: bool, calibrated_by: Option<RuleCalibrationResponse>, suppressed_by: Box<Option<SuppressionResponse>>, baselined_by: Option<BaselineDebtResponse>, }
+pub enum variant nomos_api::GateExplainResponse::Found { finding: Box<Finding>, would_block: bool, calibrated_by: Option<RuleCalibrationResponse>, suppressed_by: Box<Option<SuppressionResponse>>, baselined_by: Option<BaselineDebtResponse>, contract_record: Option<String>, contract_record_version: Option<u32>, }
 pub enum variant nomos_api::GateExplainResponse::NotFound
 pub enum variant nomos_api::GatePlanResponse::Contradictory { cause: String, }
 pub enum variant nomos_api::GatePlanResponse::Planned { rules: Vec<RuleOfferResponse>, }

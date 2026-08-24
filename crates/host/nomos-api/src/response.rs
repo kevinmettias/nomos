@@ -197,6 +197,15 @@ pub enum GateExplainResponse
         /// The baseline debt entry that kept it from blocking, when `would_block` is
         /// `false` and both `calibrated_by` and `suppressed_by` are `None`.
         baselined_by: Option<BaselineDebtResponse>,
+        /// The governing record `finding.rule`'s implementation cites, and the version
+        /// of that record it was written against -- `AGT-008`'s "rule version" clause.
+        /// `None` only for a rule this build's registry does not hold; see
+        /// [`nomos_gate_orchestration::Explanation::Found`]'s own doc for why the
+        /// ordinary "no `CONTRACT_RECORD`" case is a real citation, not this.
+        contract_record: Option<String>,
+        /// The version of `contract_record` this rule's implementation was written
+        /// against. Always `Some` exactly when `contract_record` is.
+        contract_record_version: Option<u32>,
     },
 }
 
@@ -207,13 +216,24 @@ impl GateExplainResponse
         return match explanation
         {
             Explanation::NotFound => Self::NotFound,
-            Explanation::Found { finding, would_block, calibrated_by, suppressed_by, baselined_by } => Self::Found {
-                finding,
-                would_block,
-                calibrated_by: calibrated_by.map(RuleCalibrationResponse::From),
-                suppressed_by: Box::new(suppressed_by.map(SuppressionResponse::From)),
-                baselined_by: baselined_by.map(BaselineDebtResponse::From),
-            },
+            Explanation::Found { finding, would_block, calibrated_by, suppressed_by, baselined_by, contract } =>
+            {
+                let (contract_record, contract_record_version) = match contract
+                {
+                    Some((record, version)) => (Some(record), Some(version)),
+                    None => (None, None),
+                };
+
+                Self::Found {
+                    finding,
+                    would_block,
+                    calibrated_by: calibrated_by.map(RuleCalibrationResponse::From),
+                    suppressed_by: Box::new(suppressed_by.map(SuppressionResponse::From)),
+                    baselined_by: baselined_by.map(BaselineDebtResponse::From),
+                    contract_record,
+                    contract_record_version,
+                }
+            }
         };
     }
 }

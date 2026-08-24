@@ -224,7 +224,7 @@ fn Report_Explanation(explanation: &Explanation, stdout: &mut impl Write) -> Exi
 
             ExitCode::Ok
         }
-        Explanation::Found { finding, would_block, calibrated_by, suppressed_by, baselined_by } =>
+        Explanation::Found { finding, would_block, calibrated_by, suppressed_by, baselined_by, contract } =>
         {
             let tolerance = Toleration {
                 calibrated_by: calibrated_by.as_ref(),
@@ -232,7 +232,7 @@ fn Report_Explanation(explanation: &Explanation, stdout: &mut impl Write) -> Exi
                 baselined_by: baselined_by.as_ref(),
             };
 
-            Report_Found(finding, *would_block, tolerance, stdout)
+            Report_Found(finding, *would_block, tolerance, contract.as_ref(), stdout)
         }
     };
 }
@@ -251,10 +251,20 @@ struct Toleration<'a>
 /// Renders one found explanation's finding, block status, and calibration, suppression or
 /// baseline note (if any applies), and reduces it to the [`ExitCode`] a real run would
 /// decide for this one finding.
-fn Report_Found(finding: &Finding, would_block: bool, tolerance: Toleration<'_>, stdout: &mut impl Write) -> ExitCode
+fn Report_Found(
+    finding: &Finding,
+    would_block: bool,
+    tolerance: Toleration<'_>,
+    contract: Option<&(String, u32)>,
+    stdout: &mut impl Write,
+) -> ExitCode
 {
     let _ = writeln!(stdout, "{}", finding.Describe());
     let _ = writeln!(stdout, "would block: {would_block}");
+    if let Some((record, version)) = contract
+    {
+        let _ = writeln!(stdout, "contract: {record} v{version}");
+    }
     if let Some(calibration) = tolerance.calibrated_by
     {
         let _ = writeln!(stdout, "calibrated by: {}", calibration.rationale);
