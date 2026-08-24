@@ -3,7 +3,7 @@ id: ARC-ROADMAP-001
 type: architecture
 title: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - roadmap
@@ -26,6 +26,8 @@ relations:
   - target: OD-TRACE-001
     type: relates-to
   - target: OD-TRACE-002
+    type: relates-to
+  - target: OD-ROADMAP-001
     type: relates-to
 ---
 
@@ -141,35 +143,37 @@ today (`OD-TRACE-002`); 357 remain `Unassessed`, which `OD-TRACE-001` already es
 a state, not a gap. Formal assessment population continues as its own governed, many-hands
 work, unaffected by this record.
 
-### 2. `OD-PACKAGE-008` remains authoritative; no `RulePackage` manifest is scheduled
+### 2. `OD-PACKAGE-008`'s wait is superseded by `OD-ROADMAP-001`; a `RulePackage` manifest is in scope now
 
-`OD-PACKAGE-008` tested its own named trigger — a second rule — and concluded the wait for a
-`RulePackage` manifest crate was load-bearing, not merely cautious. Nothing in this record
-reopens that. "Rule platform" in the near-term list above means scaling what already exists
-— the rule registry, applicability, coverage, execution and related policy surfaces — against
-more real rules, not building `nomos-rule-package` or an install/enable/disable lifecycle.
-That question reopens only on `OD-PACKAGE-008`'s own recorded trigger (a third rule whose
-shape argues the population has changed) or on evidence genuinely independent of rule count.
+At version 1, this constraint held `OD-PACKAGE-008` authoritative and named no
+`RulePackage` manifest as scheduled. `OD-ROADMAP-001` retires that wait, along with the
+matching waits in `OD-PACKAGE-006`, `OD-PACKAGE-010`, `OD-PACKAGE-011`, `OD-PACKAGE-012` and
+`OD-CORRECTIONS-001` — see that record for why a caution requiring the same override once
+per record, once per session, is itself the cost being retired rather than protection worth
+keeping. "Rule platform" in the near-term list above now includes building
+`nomos-rule-package` and a `RulePackage` install/enable/disable lifecycle directly, not only
+scaling what already exists against more real rules. `OD-PACKAGE-008`'s own field-by-field
+measurement of `ARCH-002`'s contents list — which fields converge across the four real
+rules and which do not — stays true and stays the right starting point for what to build;
+only the conclusion that building must wait is superseded.
 
-### 3. EGRAPH is a kernel constraint now, not a kernel construction now
+### 3. EGRAPH stays a kernel constraint, not a kernel construction, on its own footing
 
 The corpus weighs `EGRAPH` at ten requirements and ties it to systems this record defers
 (architecture, feature topology) as well as one that exists (`nomos-corrections`) and two
-that don't yet (workflow, agent execution). That is a population of at most one real
-consumer today. This workspace has twice declined to generalize from that population size —
-`OD-PACKAGE-006` waited for a third provider, `OD-PACKAGE-008` waited for and then tested
-against a second rule, and both found the wait load-bearing once a second real instance
-existed to check field boundaries against.
+that don't yet (workflow, agent execution). `OD-ROADMAP-001` retires the population-of-zero
+wait specifically for the AgentExecutor/ModelBackend/RulePackage/corrections cluster it
+names; `EGRAPH` is not in that list; and unlike that cluster, nothing has asked for `EGRAPH`
+construction ahead of a consumer. So no dedicated relationship-graph crate is scheduled by
+this record, on the same reasoning as before, unrelated to the constraint 2 supersession.
 
-So no dedicated relationship-graph crate is scheduled by this record. What *is* decided:
-kernel, corrections and workflow work must not foreclose a later generalization — identity,
-evidence classification, and typed-relationship vocabulary should be shaped so a future
-`EGRAPH` can be added without redesigning what came before it, the same "must not be
-impossible to add later" bar the architecture/feature tier is held to below. That is a
-weaker, checkable claim ("does not preclude"), not "is first-class and built." Revisit
-construction once a second real consumer exists to check the first one's shape against —
-concretely, once workflow orchestration or agent execution reach the point of needing typed
-cross-entity relationships themselves.
+What *is* decided: kernel, corrections and workflow work must not foreclose a later
+generalization — identity, evidence classification, and typed-relationship vocabulary
+should be shaped so a future `EGRAPH` can be added without redesigning what came before it,
+the same "must not be impossible to add later" bar the architecture/feature tier is held to
+below. That is a weaker, checkable claim ("does not preclude"), not "is first-class and
+built." Revisit construction once a second real consumer exists to check the first one's
+shape against, or once `EGRAPH` itself is named in a scope like `OD-ROADMAP-001`'s.
 
 ### 4. Ecosystem ownership is `ARC-ECOSYSTEM-001`'s, unrepeated here
 
@@ -201,8 +205,9 @@ depend on rather than duplicate.
   authored separately, against this record where relevant.
 - It does not claim the 363-requirement corpus has been reconciled. It is a structural
   survey by family and representative title, not a per-requirement audit.
-- It does not reopen `OD-PACKAGE-008`, restate `ARC-ECOSYSTEM-001`, or redefine what
-  `OD-GATE-004` already did.
+- It does not reopen `OD-PACKAGE-008`'s field-by-field measurement, restate
+  `ARC-ECOSYSTEM-001`, or redefine what `OD-GATE-004` already did — only constraint 2's
+  conclusion is superseded, by `OD-ROADMAP-001`, and named there rather than re-argued here.
 - It does not order the near-term tier internally. Which of those items is built next is a
   separate judgment, informed by this record but not fixed by it.
 - It does not commit to building `EGRAPH`, or any dedicated relationship-graph crate, now.
@@ -211,7 +216,9 @@ depend on rather than duplicate.
 
 Accepted, drawn by `P13-CORE-ROADMAP-RECONCILIATION-3`. It schedules no item and orders
 nothing within either tier, so nothing discharges it as a whole; what would revisit each
-part is named in place instead — constraint 2 on `OD-PACKAGE-008`'s own recorded trigger,
-constraint 3 once workflow orchestration or agent execution reach the point of needing
-typed cross-entity relationships, constraint 4 by an amendment to `ARC-ECOSYSTEM-001`
-rather than to this record.
+part is named in place instead — constraint 3 once workflow orchestration or agent
+execution reach the point of needing typed cross-entity relationships, constraint 4 by an
+amendment to `ARC-ECOSYSTEM-001` rather than to this record. Amended to version 2 by
+`P13-ROADMAP-001-POPULATION-CAUTION-RETIRED`, which retired constraint 2's wait via the new
+anchor record `OD-ROADMAP-001` — see that record for the reasoning and the full list of
+records it supersedes.

@@ -3,7 +3,7 @@ id: OD-PACKAGE-008
 type: decision
 title: Whether RulePackage needs its manifest crate now that nomos-package exists, or stays a bare rule bounded to a population of one
 status: accepted
-version: 4
+version: 5
 authority: canonical-normative-record
 tags:
   - packages
@@ -21,6 +21,8 @@ relations:
   - target: OD-RULES-003
     type: relates-to
   - target: OD-RULES-008
+    type: relates-to
+  - target: OD-ROADMAP-001
     type: relates-to
 ---
 
@@ -144,16 +146,10 @@ itself decide what shape the wait should end in.
 
 ## What Would Decide It
 
-A second rule joining `crates/rules/nomos-rules` — or a second rule crate — is the natural
-trigger, the same role a third provider plays for `OD-PACKAGE-006`, adjusted down by one
-because rules number one today rather than two. At that point either the two rules turn out
-to share enough manifest-shaped structure (applicability semantics, capability requirements,
-evidence schema) that a thin `nomos-rule-package` wrapper over `nomos-package`'s existing core
-is a proportionate build the same way `nomos-lang-package` was, or the second rule's shape
-diverges enough from `Check_Completeness_Mirrors`'s that no single schema built from the first
-alone would have fit it — in which case the wait was load-bearing rather than merely cautious.
-Either outcome also gives `PackageKind::RulePackage` the first consumer `OD-PACKAGE-001` said
-it was waiting for, closing that half of the condition recorded on `PackageKind` itself.
+Historical — see the amendment below for what governs now. A second rule joining
+`crates/rules/nomos-rules` — or a second rule crate — was the trigger this record originally
+named, adjusted down by one from `OD-PACKAGE-006`'s third-provider trigger because rules
+numbered one rather than two at the time.
 
 ## Resolution
 
@@ -266,26 +262,41 @@ agent-guidance fragments — five of `ARCH-002`'s contents-list items with zero 
 a manifest field against anywhere in the workspace today, a caution this record raised from a
 population of one and can now report checked against a population of four rather than assumed.
 
-This does not reverse the resolution above: no `nomos-rule-package` crate is scaffolded now. But
-the reasoning the resolution stands on is corrected rather than merely reaffirmed. One of the two
-original axes — contract-citation instability — is no longer well supported by the real
-population; if it were the only axis, the wait would be over. Two other axes that version 3 could
-not see, because the population was too small to show them, newly diverge as the population grew
-from two rules to four, and roughly a third of `ARCH-002`'s full contents list still has no real
-instance anywhere to shape a schema against. The wait remains load-bearing, on harder evidence
-than it had at version 3, not on the same evidence read twice.
+This does not reverse the resolution above at the time it was written: no `nomos-rule-package`
+crate was scaffolded at version 4. But the reasoning the resolution stood on was corrected
+rather than merely reaffirmed. One of the two original axes — contract-citation instability —
+was no longer well supported by the real population, and two other axes that version 3 could
+not see, because the population was too small to show them, newly diverged as the population
+grew from two rules to four. See the amendment below for what that means now that the wait
+itself, not merely the evidence for it, is retired.
+
+## Amendment: The Wait Is Retired; Build From What Four Rules Actually Show
+
+Added at version 5. `OD-ROADMAP-001` retires waiting for a fifth rule, or for any further
+convergence, before scaffolding `nomos-rule-package`. The population-of-one caution this
+record originally raised, and the population-of-four re-measurement the section above
+performed, stay exactly as useful as they were — they are the actual field-by-field evidence
+for how to shape `RulePackage`'s manifest well, not evidence for whether to build it at all.
+Read together, four real rules already show: `identity/version` should be optional or
+per-rule rather than assumed present, since `Check_Naming_Convention` genuinely lacks it;
+`required canonical capabilities` needs to carry a real `FactVariant`/`Assurance`/
+`IncrementalGranularity` triple per rule, since three distinct ones are already observed;
+`applicability semantics` needs to distinguish a rule that always raises `Supported` from one
+that structurally cannot, since `Check_Unread_Reaches_A_Finding` is the latter; and five of
+`ARCH-002`'s contents-list fields (optional enhanced implementation, external diagnostic
+mapping, correction and suppression contract, evaluation corpus, agent-guidance fragments)
+have no real instance across any of the four rules to shape a field from, and building them
+speculatively is exactly what `OD-ROADMAP-001` now authorizes doing anyway — those fields
+should be built from `ARCH-002`'s own corpus text and this workspace's nearest analogous
+types (`nomos-corrections` for a correction contract, `nomos_contracts::Finding` for
+diagnostic mapping) rather than left unbuilt for want of a fifth rule that exercises them.
 
 ## Status
 
-Accepted. The trigger this record named at version 3 has fired twice — `Check_Dependency_
+Accepted. The trigger this record named at version 3 fired twice — `Check_Dependency_
 Direction` and `Check_Unread_Reaches_A_Finding` both cite a version-bearing contract record —
 and the comparison was redone at the real population of four rather than reaffirmed by count
-alone. `RulePackage` stays a bare rule bounded to what has been observed; no `nomos-rule-package`
-crate is scaffolded. Counting rules is no longer this record's own trigger for revisiting, since
-it has now fired twice without moving the outcome. Revisit again if a rule's real contents
-populate one of the fields with zero instance today — an optional enhanced implementation, an
-external diagnostic mapping, a correction and suppression contract, an evaluation corpus, or
-agent-guidance fragments — for the first time, or if a fifth rule's required-capability shape or
-applicability semantics is found to reconverge with an existing rule rather than adding a third
-variant, or if `ARCH-002`'s contents list is found to need a manifest sooner for a reason
-unrelated to rule count.
+alone. Amended to version 5 by `P13-ROADMAP-001-POPULATION-CAUTION-RETIRED`: the wait for a
+fifth rule or further convergence is retired via `OD-ROADMAP-001`, and `nomos-rule-package`
+is in scope to build now from the four-rule field-by-field measurement this record already
+performed, not from an invented shape.

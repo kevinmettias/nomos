@@ -3,7 +3,7 @@ id: OD-PACKAGE-012
 type: decision
 title: Model and agent backend routing integrates through the existing capability system, not a privileged layer, when it is built
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - package
@@ -19,6 +19,8 @@ relations:
   - target: OD-CAPABILITY-002
     type: relates-to
   - target: ARC-ROADMAP-001
+    type: relates-to
+  - target: OD-ROADMAP-001
     type: relates-to
 ---
 
@@ -70,9 +72,9 @@ statement is consistent with the principle, not a decision against it, and leave
 routing-layer question genuinely open.
 
 Checked against `OD-PACKAGE-011`, landed earlier this session: it confirms no real
-implementation of `MODEL-ROUTE-038` through `049` exists anywhere in this workspace to
-check any shape against -- including this one. So the principle is not yet actionable, and
-this record does not make it so.
+implementation of `MODEL-ROUTE-038` through `049` existed anywhere in this workspace at the
+time to check any shape against -- including this one. So the principle was not yet
+actionable then; `OD-ROADMAP-001` makes it actionable now, see the amendment below.
 
 Checked against `OD-CAPABILITY-002`: this workspace already applied the identical
 principle once, for language providers -- "a capability contract is not a provider's
@@ -84,38 +86,47 @@ and the thing that would route to it) that this workspace has not yet reached.
 
 ## The Finding
 
-**The principle is real, not already stated, not contradicted, and not yet actionable.**
-Naming it now, precisely, means the session that eventually builds `MODEL-ROUTE-038`
-through `049`'s first real increment does not have to independently rediscover it or
-build a routing mechanism that later has to be reconciled with `nomos_capability`'s
-existing provider/evidence split after the fact.
+**The principle is real, not already stated, not contradicted, and now actionable.**
+Naming it precisely means whichever session builds `MODEL-ROUTE-038` through `049`'s real
+increment does not have to independently rediscover it or build a routing mechanism that
+later has to be reconciled with `nomos_capability`'s existing provider/evidence split after
+the fact.
 
-**When `MODEL-ROUTE-038` through `049`'s first real increment is eventually built** --
-the same trigger `OD-PACKAGE-011` already names, unchanged here -- it should be checked
-against `nomos_capability::Registry`/`ProviderOffer` before inventing a separate
-resolution mechanism: does a model or agent executor's selection genuinely fit the
-existing capability/provider/evidence shape (a capability demand, a set of provider
-offers, a resolution bounded by a ceiling), or does it need its own? `OD-CAPABILITY-002`'s
-criterion applies unchanged: shared machinery earns its place when a second real party
-contends for it, not by resemblance alone. This record does not answer that question in
-advance of the real body that would decide it -- it names the question so it is asked
-rather than skipped.
+**When `MODEL-ROUTE-038` through `049` is built** -- no longer deferred, per
+`OD-ROADMAP-001` -- it should be checked against `nomos_capability::Registry`/
+`ProviderOffer` before inventing a separate resolution mechanism: does a model or agent
+executor's selection genuinely fit the existing capability/provider/evidence shape (a
+capability demand, a set of provider offers, a resolution bounded by a ceiling), or does it
+need its own? `OD-CAPABILITY-002`'s criterion -- shared machinery earns its place when a
+second real party contends for it, not by resemblance alone -- still applies to *how* the
+integration is shaped once built; it is no longer a reason to defer building it, the same
+distinction `OD-ROADMAP-001` draws between retiring the wait and retiring engineering
+judgment.
 
 ## What This Does Not Do
 
-It does not touch `crates/packages/nomos-model-package` or any other code. It does not
-build any part of `MODEL-ROUTE-038` through `049`, resolve `MODEL-ROUTE-037`'s
-catalog-entry shape, or decide that model/agent routing *will* use `nomos_capability` --
-only that the question must be asked against that system before an alternative is
-invented, when a real case to check it against finally exists. It does not reopen
-`OD-PACKAGE-010`, which stands exactly as it left the boundary, and does not restate or
-amend `OD-PACKAGE-011`'s finding that no such case exists yet. It does not act on
+At original acceptance, it did not touch `crates/packages/nomos-model-package` or build any
+part of `MODEL-ROUTE-038` through `049`. See the amendment below for what changed. It does
+not decide that model/agent routing *will* use `nomos_capability` -- only that the question
+must be asked against that system before an alternative is invented. It does not reopen
+`OD-PACKAGE-010`, which stands exactly as its own amendment left it. It does not act on
 `nomos plan.txt`, `nomos packages.txt`, or `nomos_spec_and_work_ledger_arch.txt` -- checked
 and confirmed to name nothing in this track's territory, so a future session does not have
 to re-check them for this purpose.
 
+## Amendment: The Trigger Fired By Standing Override, Not By A Real Case
+
+Added at version 2. This record's original "when eventually built" language assumed the
+trigger would be a real case appearing on its own. `OD-ROADMAP-001` retires that wait: the
+real case this record was waiting for is now "the session builds it," not "a real case
+appears first." The constraint this record states -- check `nomos_capability::Registry`
+before inventing a separate resolution mechanism -- binds the build that follows, unchanged
+by how the build came to be authorized.
+
 ## Status
 
 Accepted. Names a design constraint surfaced by external review, checked against this
-workspace's own records and found neither duplicated nor contradicted, for whichever
-future increment `OD-PACKAGE-011` already licenses. Schedules no work of its own.
+workspace's own records and found neither duplicated nor contradicted. Amended to version 2
+by `P13-ROADMAP-001-POPULATION-CAUTION-RETIRED`: the increment this constraint governs is no
+longer deferred, per `OD-ROADMAP-001`, though the constraint itself -- integrate through
+`nomos_capability`, do not build a privileged layer -- is unchanged and still binds.

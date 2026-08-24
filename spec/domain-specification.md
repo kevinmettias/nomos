@@ -15,7 +15,7 @@ profile: domain-specification
 | docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md@authored | docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md | authored | 73 | 15 | sha256:9c180099cbe0676f26fbb605bcf1696c99b2ff6fb542c0d367a429cfeb236d87 |
 | docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md@authored | docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md | authored | 22 | 9 | sha256:617fdf9751303c87338720a7a50927cab3bfa84d19c92ec42cc43a7876566a9e |
 | docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md@authored | docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md | authored | 31 | 8 | sha256:1931b6cbe939acaa26774b46b8533002d2ff588626d1e25834dd6b8f8dc5b802 |
-| docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md@authored | docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md | authored | 29 | 12 | sha256:db0e084fa51ebf7c8d2bee1bf08171f06b0df1a0c12be3ff6d46ed0df0e79429 |
+| docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md@authored | docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md | authored | 29 | 12 | sha256:a078f1decce9e5c5bff51b928ce8fc65aee3e066235f5c7be7dd87c86dda79f8 |
 | docs/records/ARC-SPECDB-001-the-specification-is-a-database.md@authored | docs/records/ARC-SPECDB-001-the-specification-is-a-database.md | authored | 18 | 5 | sha256:795ab3ead8311de8e0f1a93828209d5c1654275417d109a92e491cab9e3b5b45 |
 | docs/records/ARC-SPECDB-002-a-canonical-substrate-is-decided-by-whether-the-schema-precedes-the-content.md@authored | docs/records/ARC-SPECDB-002-a-canonical-substrate-is-decided-by-whether-the-schema-precedes-the-content.md | authored | 33 | 8 | sha256:6345396571caf05ec03eb1d4cf5f6f4b940f8f2f42dce4026dfabd0836faefa9 |
 | docs/records/D-129-the-store-is-the-identity-substrate.md@authored | docs/records/D-129-the-store-is-the-identity-substrate.md | authored | 28 | 7 | sha256:c1f3eeec14e44a3f55d1f71522686a9f695f79060ac32e84aacdd0ff245d7778 |
@@ -54,7 +54,7 @@ profile: domain-specification
 | docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md@authored | docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md | authored | 28 | 9 | sha256:a4d8c71e62610f704811e42757155af8725a195a9b7f6d47a5af13197be33516 |
 | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md@authored | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md | authored | 29 | 9 | sha256:0351be57f7a37c7b7e8965886b9fa29c15f87fe4660ee253dcebcad932fe77a6 |
 | docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md@authored | docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md | authored | 28 | 9 | sha256:9f1c5229277415e49115502a643ecee1e889b80a83acb01e8695fe922761f0c2 |
-| docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md@authored | docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md | authored | 21 | 7 | sha256:1b76256697879186b4f2368f4ca1eb180a8aea16bca5e3fd06a9b74b620116e5 |
+| docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md@authored | docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md | authored | 21 | 8 | sha256:8ad58a92216388e350cbfdf042e5ab75299e97e9e6accef05f6bae9e325fc72a |
 | docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md@authored | docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md | authored | 14 | 6 | sha256:e55bd46b259be4c661ac4bb95475cd427ad66c783465edae129bac816f1ababf |
 | docs/records/OD-DETERMINISM-001-a-declaration-proven-only-behind-a-corpus-gate.md@authored | docs/records/OD-DETERMINISM-001-a-declaration-proven-only-behind-a-corpus-gate.md | authored | 26 | 7 | sha256:b080a464d0e59ac731e8b78eb0104aeed978958713f99969d1506ebbee92802e |
 | docs/records/OD-DETERMINISM-002-the-last-two-rows-declare-and-the-guard-stops-asking-about-facts.md@authored | docs/records/OD-DETERMINISM-002-the-last-two-rows-declare-and-the-guard-stops-asking-about-facts.md | authored | 35 | 10 | sha256:14dba5ba489a39e4b5605d97a5eb1389a55a6f0efa07f1aa076ccd5dece46428 |
@@ -119,17 +119,18 @@ profile: domain-specification
 | docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md@authored | docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md | authored | 42 | 10 | sha256:353b96edd0e3cd1cd8ffaa0fa1f645769af77bc91429d1e32caa3326e8887a6e |
 | docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md@authored | docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md | authored | 27 | 9 | sha256:e94d0c54e1e8ac358fc301df5119ab588054e69c32c0b4abf3420717a7959610 |
 | docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md@authored | docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md | authored | 32 | 10 | sha256:a45ac49574962ff1012b371f9aea9eb2f8fc2a06a11e707f2b1679a355acc555 |
-| docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md@authored | docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md | authored | 16 | 6 | sha256:002bf8b3eb0d2b37459e2db671092341f12b498413eb29078351cc623202f7f6 |
+| docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md@authored | docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md | authored | 18 | 7 | sha256:9ad75a86e6b4e61ea1aa4ee07373fd1671f806826c48c66cc569ea0a27ad5fd7 |
 | docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md@authored | docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md | authored | 16 | 6 | sha256:34a10502da7ccee01b768adbdb67dd71f28209b6bc4ae2afc512b343bf59ebb9 |
-| docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md@authored | docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md | authored | 32 | 8 | sha256:cf9bbe40eeaca57b06ca4a774ba3d2d341aa765886fd321d053f7b6748cafe80 |
+| docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md@authored | docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md | authored | 34 | 9 | sha256:c27a144ff27bd60925ae7b4027314ea780fec54cc1466bcf11a16c2f51d485f0 |
 | docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md@authored | docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md | authored | 14 | 5 | sha256:8e66ebc7fa4c6ee44260128c0f37957605f33a078676edb3c504d701d929362f |
-| docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md@authored | docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md | authored | 14 | 6 | sha256:6e33c1ccc6d608a1f5d45f677aa83fa0f62fb743bf9f653bdef1c7f8ad29f8ed |
+| docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md@authored | docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md | authored | 16 | 7 | sha256:f1b618d3b00c8f61d67c72d952411d52fe9d8520a77db5a8ba0a1a526faed666 |
 | docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md@authored | docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md | authored | 26 | 9 | sha256:26281bd6d828d182bcb95129c9d077521e5db2182a935aebeab526edd9f50441 |
-| docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md@authored | docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md | authored | 17 | 6 | sha256:91c99e209eacfaacbe91a9299652a3e8f89ac7b4e451e24acb882ad7930aee77 |
+| docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md@authored | docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md | authored | 19 | 7 | sha256:6a14772c529dbb5589b38e4fdaec088191dcfbec7c6381e15d216537c6d1e4dd |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md@authored | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md | authored | 34 | 9 | sha256:871e1ada836924e8fad8d9f05a7badd9349eefb18e90e0157a28ac34879555d0 |
 | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md@authored | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md | authored | 28 | 7 | sha256:f98efe7a4dd950df779912722f9deb19ecdc75a81e52d9635900c2f424a8623a |
 | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md@authored | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md | authored | 45 | 10 | sha256:9af1a60d2bc3755845a1d9c3eeae503b2a8f6ec315cfc906d633c7dc2d5f0483 |
 | docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md@authored | docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md | authored | 20 | 7 | sha256:2b44f619674ec26184ee77a2ec05bab8c654b3ab6410d990ecdcbaa93cb4f0fd |
+| docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md@authored | docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md | authored | 14 | 5 | sha256:dc44c7fd6a8db12af37648fc6e34499aca6c2cedf4d0203b3596ac13ea5d2be8 |
 | docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md@authored | docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md | authored | 67 | 12 | sha256:f55068c0987852129b3103770502611bec876fd8c119bc01cd6616b6ecdf7bc6 |
 | docs/records/OD-RULES-002-incompleteness-is-a-property-of-the-claim-and-not-of-the-run.md@authored | docs/records/OD-RULES-002-incompleteness-is-a-property-of-the-claim-and-not-of-the-run.md | authored | 69 | 16 | sha256:d17fccae2b6b9a6002f9cdbdc385dffbe1d4f839820436b89a3c50f09aa2bb8a |
 | docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md@authored | docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md | authored | 30 | 11 | sha256:c3a3b91dbb03f3f2ff52ab3d4d84186b0bb31760a93024fedee02b48a1b8722f |
@@ -227,8 +228,8 @@ profile: domain-specification
 | docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#9 | authored | 2 | The Boundary |
 | docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#14 | authored | 2 | Four Constraints |
 | docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#15 | authored | 3 | 1. The corpus is normative; this record and the game plan are sequencing aids |
-| docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#17 | authored | 3 | 2. `OD-PACKAGE-008` remains authoritative; no `RulePackage` manifest is scheduled |
-| docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#19 | authored | 3 | 3. EGRAPH is a kernel constraint now, not a kernel construction now |
+| docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#17 | authored | 3 | 2. `OD-PACKAGE-008`'s wait is superseded by `OD-ROADMAP-001`; a `RulePackage` manifest is in scope now |
+| docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#19 | authored | 3 | 3. EGRAPH stays a kernel constraint, not a kernel construction, on its own footing |
 | docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#22 | authored | 3 | 4. Ecosystem ownership is `ARC-ECOSYSTEM-001`'s, unrepeated here |
 | docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#24 | authored | 3 | 5. "Gate" here means the product object, not `OD-GATE-004`'s CI step |
 | docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#26 | authored | 2 | What This Record Does Not Do |
@@ -513,8 +514,9 @@ profile: domain-specification
 | docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#2 | authored | 2 | Question |
 | docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#4 | authored | 2 | What Was Measured |
 | docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#9 | authored | 2 | The Finding |
-| docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#14 | authored | 2 | What This Does Not Do |
-| docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#16 | authored | 2 | What Would Decide The Next Increment |
+| docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#13 | authored | 2 | What This Does Not Do |
+| docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#15 | authored | 2 | What Would Decide The Next Increment |
+| docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#18 | authored | 2 | Amendment: The Wait For A Trigger Is Retired |
 | docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#20 | authored | 2 | Status |
 | docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md#1 | authored | 1 | ValidatedPlan::Commit requires attached Evidence, closing AGT-EXEC-004's real gap |
 | docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md#2 | authored | 2 | Question |
@@ -1111,7 +1113,8 @@ profile: domain-specification
 | docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#6 | authored | 2 | Current Position |
 | docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#9 | authored | 2 | What Would Decide It |
 | docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#11 | authored | 2 | Resolution |
-| docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#15 | authored | 2 | Status |
+| docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#15 | authored | 2 | Amendment: The Remaining Third-Provider Wait Is Retired |
+| docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#17 | authored | 2 | Status |
 | docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#1 | authored | 1 | The language-agnostic manifest core is its own crate, so a second language does not depend on Rust to read its own manifest |
 | docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#2 | authored | 2 | Question |
 | docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#6 | authored | 2 | The decision |
@@ -1125,7 +1128,8 @@ profile: domain-specification
 | docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#16 | authored | 2 | What Would Decide It |
 | docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#18 | authored | 2 | Resolution |
 | docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#24 | authored | 2 | A Third And Fourth Rule Arrive: What The Population Now Shows |
-| docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#31 | authored | 2 | Status |
+| docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#31 | authored | 2 | Amendment: The Wait Is Retired; Build From What Four Rules Actually Show |
+| docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#33 | authored | 2 | Status |
 | docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md#1 | authored | 1 | The manifest JSON carries its own schema version, distinct from PKG-007's four content domains |
 | docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md#2 | authored | 2 | Question |
 | docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md#6 | authored | 2 | The Decision |
@@ -1136,7 +1140,8 @@ profile: domain-specification
 | docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#4 | authored | 2 | What Was Measured |
 | docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#8 | authored | 2 | The Decision |
 | docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#11 | authored | 2 | What This Does Not Do |
-| docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#13 | authored | 2 | Status |
+| docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#13 | authored | 2 | Amendment: The Later Maturities Are In Scope Now |
+| docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#15 | authored | 2 | Status |
 | docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#1 | authored | 1 | MODEL-ROUTE-037's second clause and MODEL-ROUTE-038 through 049 still have no real second case |
 | docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#2 | authored | 2 | Question |
 | docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#4 | authored | 2 | What Was Measured |
@@ -1151,7 +1156,8 @@ profile: domain-specification
 | docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#5 | authored | 2 | What Was Measured |
 | docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#11 | authored | 2 | The Finding |
 | docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#14 | authored | 2 | What This Does Not Do |
-| docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#16 | authored | 2 | Status |
+| docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#16 | authored | 2 | Amendment: The Trigger Fired By Standing Override, Not By A Real Case |
+| docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#18 | authored | 2 | Status |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#1 | authored | 1 | A port that names its outcomes says nothing about how they are obtained |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#2 | authored | 2 | Question |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#5 | authored | 2 | What Was Measured |
@@ -1185,6 +1191,11 @@ profile: domain-specification
 | docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#14 | authored | 2 | The Decision |
 | docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#17 | authored | 2 | Controls |
 | docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#19 | authored | 2 | Status |
+| docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#1 | authored | 1 | The population-of-zero caution is retired for AgentExecutor, ModelBackend, RulePackage and corrections; this cluster builds ahead of consumers now |
+| docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#2 | authored | 2 | Question |
+| docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#5 | authored | 2 | The Decision |
+| docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#9 | authored | 2 | What This Does Not Do |
+| docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#13 | authored | 2 | Status |
 | docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md#1 | authored | 1 | A rule states what it needs and is refused an answer beneath it |
 | docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md#2 | authored | 2 | Question |
 | docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md#7 | authored | 2 | The Charge Is Correct |
@@ -3374,53 +3385,55 @@ work, unaffected by this record.
 
 ### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#17
 
-*revision: authored · kind: heading · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Four Constraints / 2. `OD-PACKAGE-008` remains authoritative; no `RulePackage` manifest is scheduled · hash: sha256:01119f1b47a8cf183d5d7680fac0bfda41a7dfd097e070aeb1cd067ff96a076a*
+*revision: authored · kind: heading · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Four Constraints / 2. `OD-PACKAGE-008`'s wait is superseded by `OD-ROADMAP-001`; a `RulePackage` manifest is in scope now · hash: sha256:891e5a9bdecfcad75ca9877811dbe701fb47839a89dc95ab5025ef86dfec3bf5*
 
-### 2. `OD-PACKAGE-008` remains authoritative; no `RulePackage` manifest is scheduled
+### 2. `OD-PACKAGE-008`'s wait is superseded by `OD-ROADMAP-001`; a `RulePackage` manifest is in scope now
 
 ### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#18
 
-*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Four Constraints / 2. `OD-PACKAGE-008` remains authoritative; no `RulePackage` manifest is scheduled · hash: sha256:260a394d988502913e4bf49ea4f282c6e6e4323c22b1d00e608f5887df2d0d09*
+*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Four Constraints / 2. `OD-PACKAGE-008`'s wait is superseded by `OD-ROADMAP-001`; a `RulePackage` manifest is in scope now · hash: sha256:63b716beb84e60dc695dfc84bc1139eee88cd806d81f911cc4a3de661a2a86cf*
 
-`OD-PACKAGE-008` tested its own named trigger — a second rule — and concluded the wait for a
-`RulePackage` manifest crate was load-bearing, not merely cautious. Nothing in this record
-reopens that. "Rule platform" in the near-term list above means scaling what already exists
-— the rule registry, applicability, coverage, execution and related policy surfaces — against
-more real rules, not building `nomos-rule-package` or an install/enable/disable lifecycle.
-That question reopens only on `OD-PACKAGE-008`'s own recorded trigger (a third rule whose
-shape argues the population has changed) or on evidence genuinely independent of rule count.
+At version 1, this constraint held `OD-PACKAGE-008` authoritative and named no
+`RulePackage` manifest as scheduled. `OD-ROADMAP-001` retires that wait, along with the
+matching waits in `OD-PACKAGE-006`, `OD-PACKAGE-010`, `OD-PACKAGE-011`, `OD-PACKAGE-012` and
+`OD-CORRECTIONS-001` — see that record for why a caution requiring the same override once
+per record, once per session, is itself the cost being retired rather than protection worth
+keeping. "Rule platform" in the near-term list above now includes building
+`nomos-rule-package` and a `RulePackage` install/enable/disable lifecycle directly, not only
+scaling what already exists against more real rules. `OD-PACKAGE-008`'s own field-by-field
+measurement of `ARCH-002`'s contents list — which fields converge across the four real
+rules and which do not — stays true and stays the right starting point for what to build;
+only the conclusion that building must wait is superseded.
 
 ### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#19
 
-*revision: authored · kind: heading · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Four Constraints / 3. EGRAPH is a kernel constraint now, not a kernel construction now · hash: sha256:fb6b8dcbcdb1980de879846c8786811638f6eb705def798e775942ae9f4520e3*
+*revision: authored · kind: heading · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Four Constraints / 3. EGRAPH stays a kernel constraint, not a kernel construction, on its own footing · hash: sha256:c93a20dd85f2c7341435a4d05585209ca957797eaee48380c5d5757607f74fd6*
 
-### 3. EGRAPH is a kernel constraint now, not a kernel construction now
+### 3. EGRAPH stays a kernel constraint, not a kernel construction, on its own footing
 
 ### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#20
 
-*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Four Constraints / 3. EGRAPH is a kernel constraint now, not a kernel construction now · hash: sha256:ae3ea05bd49121338d2c471db8a98b5bcf02dd5d6ea871e797f3575c5619667e*
+*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Four Constraints / 3. EGRAPH stays a kernel constraint, not a kernel construction, on its own footing · hash: sha256:ca3e062cfca35f86079111e58fb316c500a60aae6471fdc15a78d5f358817069*
 
 The corpus weighs `EGRAPH` at ten requirements and ties it to systems this record defers
 (architecture, feature topology) as well as one that exists (`nomos-corrections`) and two
-that don't yet (workflow, agent execution). That is a population of at most one real
-consumer today. This workspace has twice declined to generalize from that population size —
-`OD-PACKAGE-006` waited for a third provider, `OD-PACKAGE-008` waited for and then tested
-against a second rule, and both found the wait load-bearing once a second real instance
-existed to check field boundaries against.
+that don't yet (workflow, agent execution). `OD-ROADMAP-001` retires the population-of-zero
+wait specifically for the AgentExecutor/ModelBackend/RulePackage/corrections cluster it
+names; `EGRAPH` is not in that list; and unlike that cluster, nothing has asked for `EGRAPH`
+construction ahead of a consumer. So no dedicated relationship-graph crate is scheduled by
+this record, on the same reasoning as before, unrelated to the constraint 2 supersession.
 
 ### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#21
 
-*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Four Constraints / 3. EGRAPH is a kernel constraint now, not a kernel construction now · hash: sha256:21d52728f757d3512f11b578702632c2408fc114268ebe5ee0827f4327c9e3f0*
+*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Four Constraints / 3. EGRAPH stays a kernel constraint, not a kernel construction, on its own footing · hash: sha256:de8b6da61dc2095797ee30ecc17f523a31853c166835ab3e272bac0c6c8d3106*
 
-So no dedicated relationship-graph crate is scheduled by this record. What *is* decided:
-kernel, corrections and workflow work must not foreclose a later generalization — identity,
-evidence classification, and typed-relationship vocabulary should be shaped so a future
-`EGRAPH` can be added without redesigning what came before it, the same "must not be
-impossible to add later" bar the architecture/feature tier is held to below. That is a
-weaker, checkable claim ("does not preclude"), not "is first-class and built." Revisit
-construction once a second real consumer exists to check the first one's shape against —
-concretely, once workflow orchestration or agent execution reach the point of needing typed
-cross-entity relationships themselves.
+What *is* decided: kernel, corrections and workflow work must not foreclose a later
+generalization — identity, evidence classification, and typed-relationship vocabulary
+should be shaped so a future `EGRAPH` can be added without redesigning what came before it,
+the same "must not be impossible to add later" bar the architecture/feature tier is held to
+below. That is a weaker, checkable claim ("does not preclude"), not "is first-class and
+built." Revisit construction once a second real consumer exists to check the first one's
+shape against, or once `EGRAPH` itself is named in a scope like `OD-ROADMAP-001`'s.
 
 ### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#22
 
@@ -3470,14 +3483,15 @@ depend on rather than duplicate.
 
 ### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#27
 
-*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / What This Record Does Not Do · hash: sha256:1940678addeff306b36101c26ebc12432ac9a49b7ffcedf370eced4e0bd15743*
+*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / What This Record Does Not Do · hash: sha256:b3f81277baca5e9f1348c255141718698ee52d47d827c1eac6050cc6d39bf055*
 
 - It does not schedule work. It draws a boundary; ledger items that build inside it are
   authored separately, against this record where relevant.
 - It does not claim the 363-requirement corpus has been reconciled. It is a structural
   survey by family and representative title, not a per-requirement audit.
-- It does not reopen `OD-PACKAGE-008`, restate `ARC-ECOSYSTEM-001`, or redefine what
-  `OD-GATE-004` already did.
+- It does not reopen `OD-PACKAGE-008`'s field-by-field measurement, restate
+  `ARC-ECOSYSTEM-001`, or redefine what `OD-GATE-004` already did — only constraint 2's
+  conclusion is superseded, by `OD-ROADMAP-001`, and named there rather than re-argued here.
 - It does not order the near-term tier internally. Which of those items is built next is a
   separate judgment, informed by this record but not fixed by it.
 - It does not commit to building `EGRAPH`, or any dedicated relationship-graph crate, now.
@@ -3490,14 +3504,16 @@ depend on rather than duplicate.
 
 ### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#29
 
-*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Status · hash: sha256:2ffb50448c1a0bd55b9f4b762350200e4030ea898fe8665b6d3656a1499110ba*
+*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Status · hash: sha256:849e31968b9d24fb398d8faf5c431541685004bbdc93b5ad5d73468b2e221552*
 
 Accepted, drawn by `P13-CORE-ROADMAP-RECONCILIATION-3`. It schedules no item and orders
 nothing within either tier, so nothing discharges it as a whole; what would revisit each
-part is named in place instead — constraint 2 on `OD-PACKAGE-008`'s own recorded trigger,
-constraint 3 once workflow orchestration or agent execution reach the point of needing
-typed cross-entity relationships, constraint 4 by an amendment to `ARC-ECOSYSTEM-001`
-rather than to this record.
+part is named in place instead — constraint 3 once workflow orchestration or agent
+execution reach the point of needing typed cross-entity relationships, constraint 4 by an
+amendment to `ARC-ECOSYSTEM-001` rather than to this record. Amended to version 2 by
+`P13-ROADMAP-001-POPULATION-CAUTION-RETIRED`, which retired constraint 2's wait via the new
+anchor record `OD-ROADMAP-001` — see that record for the reasoning and the full list of
+records it supersedes.
 
 ### docs/records/ARC-SPECDB-001-the-specification-is-a-database.md#1
 
@@ -12215,10 +12231,10 @@ rerun-and-compare half.
 
 ### docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#10
 
-*revision: authored · kind: prose · heading: Corrections has real staging machinery and zero real callers / The Finding · hash: sha256:ab2680fe7004086b3e6fbd0aaa75219e986b734ffd3374ec3795f6d3ea76a9ac*
+*revision: authored · kind: prose · heading: Corrections has real staging machinery and zero real callers / The Finding · hash: sha256:fc98b3d81b9fb5308cfd2be13f8fa2c5f4545981b2446341b2905fc175fe2687*
 
-**What is missing is not infrastructure this item should build. It is a real trigger --
-and none exists today.**
+At original acceptance: **what was missing was not infrastructure this item should build.
+It was a real trigger -- and none existed then.** See the amendment below for what changed.
 
 ### docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#11
 
@@ -12254,63 +12270,70 @@ with zero real shape to build a manifest field against anywhere in the workspace
 
 ### docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#13
 
-*revision: authored · kind: prose · heading: Corrections has real staging machinery and zero real callers / The Finding · hash: sha256:7817c8477e535427b41d29161c96596a648950a0d8c26b56986ccf439d8a6b4a*
-
-Building a `CorrectionCandidate` generator now would mean inventing either a fix for a
-rule that has none safely available, or the classification/ranking layer (`COR-001`,
-`COR-010`..`COR-013`) that has no real case to check its shape against -- the same
-"no invented shape ahead of a real body" caution this workspace applies repeatedly
-(`OD-PACKAGE-006`, `OD-PACKAGE-008`, `nomos-gate-orchestration`'s own doc on why `compare`
-is not stubbed).
-
-### docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#14
-
 *revision: authored · kind: heading · heading: Corrections has real staging machinery and zero real callers / What This Does Not Do · hash: sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf*
 
 ## What This Does Not Do
 
-### docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#15
+### docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#14
 
-*revision: authored · kind: prose · heading: Corrections has real staging machinery and zero real callers / What This Does Not Do · hash: sha256:901b13a25ab329af5655a47fce9baf3a323adb13fb6ba1cdc19fae44025b285d*
+*revision: authored · kind: prose · heading: Corrections has real staging machinery and zero real callers / What This Does Not Do · hash: sha256:0880a0daf0eb2a7027cf2a2a51d80c6d80a0d3d2d5a3e0abea74681707060ffa*
 
-It does not build a `CorrectionCandidate` generator, a classification or ranking layer,
-`COR-005`'s rerun-and-compare half, or any oscillation detection. It does not add a
-`nomos correct` verb or an orchestration crate for corrections -- there is nothing yet for
-either to compose that isn't already exercised by the crate's own tests. It does not
+At original acceptance, it did not build a `CorrectionCandidate` generator, a
+classification or ranking layer, `COR-005`'s rerun-and-compare half, or any oscillation
+detection, and did not add a `nomos correct` verb or an orchestration crate for
+corrections. See the amendment below for what `OD-ROADMAP-001` now authorizes. It does not
 reopen `OD-PACKAGE-008` or restate `ARC-ROADMAP-001`.
 
-### docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#16
+### docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#15
 
 *revision: authored · kind: heading · heading: Corrections has real staging machinery and zero real callers / What Would Decide The Next Increment · hash: sha256:2a49a3ba679fcfb358fdad9c23368250d14e31320f8c91494208c2e9050a975b*
 
 ## What Would Decide The Next Increment
 
+### docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#16
+
+*revision: authored · kind: prose · heading: Corrections has real staging machinery and zero real callers / What Would Decide The Next Increment · hash: sha256:a98767461f14f4d6b2870d4a4e0b3743cbce9374dd5ff8dcbf2c43fe51698396*
+
+Historical -- superseded by the amendment below, kept for the record of what this record
+originally named as its own trigger. Either of:
+
 ### docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#17
 
-*revision: authored · kind: prose · heading: Corrections has real staging machinery and zero real callers / What Would Decide The Next Increment · hash: sha256:edb612ef0f2179a68df9903b5f417d9c1c4f248c9a7f25f6cef1b07160590397*
-
-Either of:
-
-### docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#18
-
-*revision: authored · kind: prose · heading: Corrections has real staging machinery and zero real callers / What Would Decide The Next Increment · hash: sha256:d3e0234ec6e56a57be348699a19c6042d6f1175228c8532914243a188954402c*
+*revision: authored · kind: prose · heading: Corrections has real staging machinery and zero real callers / What Would Decide The Next Increment · hash: sha256:8eca26c6a5055b946e7b02b6a94edb6c1ae50a4ab36970db7b4762f043635610*
 
 - **A shipped rule gains a genuinely mechanical fix.** A rule whose violation has exactly
   one safe correction with no semantic judgment required -- the same bar `COR-001`'s
-  "mechanical correction" category names -- gives `CorrectionCandidate::New` a real caller
-  and this crate's stage/validate/commit chain a real first exercise.
+  "mechanical correction" category names -- would have given `CorrectionCandidate::New` a
+  real caller and this crate's stage/validate/commit chain a real first exercise.
 - **A real driver for agent- or interactive-class corrections exists.** `ARC-ROADMAP-001`
-  defers `ModelBackend`/`AgentExecutor` infrastructure as its own near-term item; once
-  either is real, `COR-001`'s other three classes (proposed, agent, interactive) have
-  something to be driven by.
+  deferred `ModelBackend`/`AgentExecutor` infrastructure as its own near-term item; once
+  either became real, `COR-001`'s other three classes (proposed, agent, interactive) would
+  have something to be driven by.
+
+### docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#18
+
+*revision: authored · kind: heading · heading: Corrections has real staging machinery and zero real callers / Amendment: The Wait For A Trigger Is Retired · hash: sha256:79328b43356efae5912b2ab2fd444d8fa8dee92787cd38745fdaa57c88df7c63*
+
+## Amendment: The Wait For A Trigger Is Retired
 
 ### docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#19
 
-*revision: authored · kind: prose · heading: Corrections has real staging machinery and zero real callers / What Would Decide The Next Increment · hash: sha256:222b69f2b72218601ec53fdbc983b9f139345585e9a3748dac35e73e85f6a6a6*
+*revision: authored · kind: prose · heading: Corrections has real staging machinery and zero real callers / Amendment: The Wait For A Trigger Is Retired · hash: sha256:f5327b020190958f37cb3231e63bfb2ca51c09f45bad99ca06455b4094077d1f*
 
-Until either arrives, this crate's real, tested half stands as what it is -- a mechanical
-executor with no caller -- rather than an unmeasured "zero consumers" a future session has
-to re-derive from scratch.
+Added at version 2. `OD-ROADMAP-001` retires waiting for either trigger above. Neither a
+shipped rule with a genuinely mechanical fix nor a real agent/interactive driver has
+appeared on its own; the standing instruction is to build `CorrectionCandidate` generation,
+the classification/ranking layer (`COR-001`, `COR-010` through `COR-013`), `COR-005`'s
+rerun-and-compare half, and oscillation detection (`COR-006`) directly from the `COR-*`
+corpus family this record already read, rather than continue waiting for a real caller to
+appear first. The measurements above -- that none of the four shipped rules has a safely
+mechanical fix today, that `ValidatedPlan::Commit` does not rerun rules or compare state
+signatures, that no classification layer exists -- stay true and stay the right starting
+inventory for what to build; only the conclusion that building must wait for a trigger is
+superseded. Where a genuinely mechanical fix is still absent from every shipped rule, a
+`CorrectionCandidate` generator's first real exercise can be its own test suite rather than
+a live rule violation, the same standing this override extends to the rest of the
+AgentExecutor/ModelBackend/RulePackage cluster.
 
 ### docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#20
 
@@ -12320,12 +12343,13 @@ to re-derive from scratch.
 
 ### docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#21
 
-*revision: authored · kind: prose · heading: Corrections has real staging machinery and zero real callers / Status · hash: sha256:5f90ed2c2e12423b27c371f6537d3c2b60446f199ffd748a3d47f216fd2f3e8b*
+*revision: authored · kind: prose · heading: Corrections has real staging machinery and zero real callers / Status · hash: sha256:77f5c88a51a0a838db659a7b12d6263076b40ed12c1c58a3f56742fff3db2cea*
 
-Accepted. Names corrections' real current state precisely, checked against the code and
-the `COR-*` corpus family rather than assumed, and the two conditions that would decide its
-next real increment. Schedules no work of its own, the same restraint `ARC-ROADMAP-001`
-holds for its own boundary.
+Accepted. Named corrections' real state precisely at the time, checked against the code and
+the `COR-*` corpus family rather than assumed, and the two conditions that would have
+decided its next real increment. Amended to version 2 by
+`P13-ROADMAP-001-POPULATION-CAUTION-RETIRED`: those conditions are retired via
+`OD-ROADMAP-001`, and the deferred pieces are in scope to build now.
 
 ### docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md#1
 
@@ -31514,15 +31538,10 @@ against a population of two, with no third provider crate to check the design ag
 
 ### docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#10
 
-*revision: authored · kind: prose · heading: Whether KNOWN_PROVIDERS needs a self-registering mechanism, or stays hand-maintained bounded to additions / What Would Decide It · hash: sha256:e32c88154af714eede0cd008a6e323b9b3d13cf651404bbe16cab8d4c6a5683e*
+*revision: authored · kind: prose · heading: Whether KNOWN_PROVIDERS needs a self-registering mechanism, or stays hand-maintained bounded to additions / What Would Decide It · hash: sha256:8191c2e501a8412a8d9a745b96cfccf170557a4c808ea40aba7be4b2f38cd0b5*
 
-A third real Rust language provider crate joining this workspace is the natural trigger:
-at that point, either "one more line, pulled not retyped" still holds and the array stays
-hand-maintained, or the friction of a person having to notice and extend it by hand becomes
-the cost this record predicted, and a registration mechanism earns its place. `OD-PACKAGE-001`
-governs what such a provider crate would need to be a real `LanguagePackage` participant in
-the first place; this record only covers how `nomos-lang-package` would come to know about
-its `ProviderId`.
+Superseded by `OD-ROADMAP-001` — see the amendment below. This section is left as written
+for the record of what the original trigger was, not because it still governs.
 
 ### docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#11
 
@@ -31582,19 +31601,40 @@ a question this resolution does not reach.
 
 ### docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#15
 
+*revision: authored · kind: heading · heading: Whether KNOWN_PROVIDERS needs a self-registering mechanism, or stays hand-maintained bounded to additions / Amendment: The Remaining Third-Provider Wait Is Retired · hash: sha256:b870c1d486e877179fe7b23b5e9f9619595cb034fa761325053c6ee354b8e212*
+
+## Amendment: The Remaining Third-Provider Wait Is Retired
+
+### docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#16
+
+*revision: authored · kind: prose · heading: Whether KNOWN_PROVIDERS needs a self-registering mechanism, or stays hand-maintained bounded to additions / Amendment: The Remaining Third-Provider Wait Is Retired · hash: sha256:6b5feaf022314308fe782b929ca9ef3c99bf34433e67e749675550e882441fee*
+
+Added at version 3. Version 2's resolution built the generic registration type ahead of a
+second language, but left one narrower question open on its own original trigger: whether a
+same-language *third* Rust provider crate would need anything beyond "one more line, pulled
+not retyped." `OD-ROADMAP-001` retires waiting for that trigger too, as part of the same
+cluster of repeatedly-overridden population cautions it names. If a self-registering
+mechanism for same-language providers turns out to be worth building, it does not need a
+third provider crate to exist first — the same standing instruction that applies to
+`RulePackage`, model routing, and corrections applies here.
+
+### docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#17
+
 *revision: authored · kind: heading · heading: Whether KNOWN_PROVIDERS needs a self-registering mechanism, or stays hand-maintained bounded to additions / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#16
+### docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#18
 
-*revision: authored · kind: prose · heading: Whether KNOWN_PROVIDERS needs a self-registering mechanism, or stays hand-maintained bounded to additions / Status · hash: sha256:cc0d10d4af95614f6d135e92ac1acd7c224231a22f99d3515b948e63b9891e01*
+*revision: authored · kind: prose · heading: Whether KNOWN_PROVIDERS needs a self-registering mechanism, or stays hand-maintained bounded to additions / Status · hash: sha256:131bff3086d6824264344a5b997f4cd6306bd3f13c0d5edd78e7f88788acab16*
 
-Accepted. `OD-PACKAGE-006`'s original trigger — a third Rust language provider crate — remains
-unmet and is explicitly not what resolved this; a separate, explicit product direction to
-build language- and rule-plugin infrastructure ahead of demonstrated same-population need is
-what did. The follow-on capability work this resolution names is tracked on the work ledger,
-not in this record.
+Accepted. `OD-PACKAGE-006`'s original trigger — a third Rust language provider crate —
+remains unmet and was explicitly not what resolved version 2; a separate, explicit product
+direction to build language- and rule-plugin infrastructure ahead of demonstrated
+same-population need is what did. Amended to version 3 by
+`P13-ROADMAP-001-POPULATION-CAUTION-RETIRED`, retiring the remaining third-provider wait via
+`OD-ROADMAP-001`. The follow-on capability work this resolution names is tracked on the work
+ledger, not in this record.
 
 ### docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#1
 
@@ -31936,18 +31976,12 @@ itself decide what shape the wait should end in.
 
 ### docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#17
 
-*revision: authored · kind: prose · heading: Whether RulePackage needs its manifest crate now that nomos-package exists, or stays a bare rule bounded to a population of one / What Would Decide It · hash: sha256:1b58d717f16c34d97057b754991917e5b21c6370110b398846af2d0b4597bc04*
+*revision: authored · kind: prose · heading: Whether RulePackage needs its manifest crate now that nomos-package exists, or stays a bare rule bounded to a population of one / What Would Decide It · hash: sha256:aac20a1b98c52a34802969e172c6bc093e5f1b7cef3e1a0baf6574d8388eb96d*
 
-A second rule joining `crates/rules/nomos-rules` — or a second rule crate — is the natural
-trigger, the same role a third provider plays for `OD-PACKAGE-006`, adjusted down by one
-because rules number one today rather than two. At that point either the two rules turn out
-to share enough manifest-shaped structure (applicability semantics, capability requirements,
-evidence schema) that a thin `nomos-rule-package` wrapper over `nomos-package`'s existing core
-is a proportionate build the same way `nomos-lang-package` was, or the second rule's shape
-diverges enough from `Check_Completeness_Mirrors`'s that no single schema built from the first
-alone would have fit it — in which case the wait was load-bearing rather than merely cautious.
-Either outcome also gives `PackageKind::RulePackage` the first consumer `OD-PACKAGE-001` said
-it was waiting for, closing that half of the condition recorded on `PackageKind` itself.
+Historical — see the amendment below for what governs now. A second rule joining
+`crates/rules/nomos-rules` — or a second rule crate — was the trigger this record originally
+named, adjusted down by one from `OD-PACKAGE-006`'s third-provider trigger because rules
+numbered one rather than two at the time.
 
 ### docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#18
 
@@ -32110,39 +32144,62 @@ population of one and can now report checked against a population of four rather
 
 ### docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#30
 
-*revision: authored · kind: prose · heading: Whether RulePackage needs its manifest crate now that nomos-package exists, or stays a bare rule bounded to a population of one / A Third And Fourth Rule Arrive: What The Population Now Shows · hash: sha256:b05f029e7122bdfb7a2d1497d31231830a84d19078b8efcc8cd8d41337676395*
+*revision: authored · kind: prose · heading: Whether RulePackage needs its manifest crate now that nomos-package exists, or stays a bare rule bounded to a population of one / A Third And Fourth Rule Arrive: What The Population Now Shows · hash: sha256:ee1922eeb26986ae261e12543bb45fa5b36c11d655c097f8ecf23fbe5bab2c16*
 
-This does not reverse the resolution above: no `nomos-rule-package` crate is scaffolded now. But
-the reasoning the resolution stands on is corrected rather than merely reaffirmed. One of the two
-original axes — contract-citation instability — is no longer well supported by the real
-population; if it were the only axis, the wait would be over. Two other axes that version 3 could
-not see, because the population was too small to show them, newly diverge as the population grew
-from two rules to four, and roughly a third of `ARCH-002`'s full contents list still has no real
-instance anywhere to shape a schema against. The wait remains load-bearing, on harder evidence
-than it had at version 3, not on the same evidence read twice.
+This does not reverse the resolution above at the time it was written: no `nomos-rule-package`
+crate was scaffolded at version 4. But the reasoning the resolution stood on was corrected
+rather than merely reaffirmed. One of the two original axes — contract-citation instability —
+was no longer well supported by the real population, and two other axes that version 3 could
+not see, because the population was too small to show them, newly diverged as the population
+grew from two rules to four. See the amendment below for what that means now that the wait
+itself, not merely the evidence for it, is retired.
 
 ### docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#31
+
+*revision: authored · kind: heading · heading: Whether RulePackage needs its manifest crate now that nomos-package exists, or stays a bare rule bounded to a population of one / Amendment: The Wait Is Retired; Build From What Four Rules Actually Show · hash: sha256:c542a76755c169f96d321f27a5a68ccfe74028a19aa5b08eda82642d9b36f4b3*
+
+## Amendment: The Wait Is Retired; Build From What Four Rules Actually Show
+
+### docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#32
+
+*revision: authored · kind: prose · heading: Whether RulePackage needs its manifest crate now that nomos-package exists, or stays a bare rule bounded to a population of one / Amendment: The Wait Is Retired; Build From What Four Rules Actually Show · hash: sha256:3e4b8ad788b79c3b775b81474d85d2a9da808b927626fe933e3e316e0484e8a2*
+
+Added at version 5. `OD-ROADMAP-001` retires waiting for a fifth rule, or for any further
+convergence, before scaffolding `nomos-rule-package`. The population-of-one caution this
+record originally raised, and the population-of-four re-measurement the section above
+performed, stay exactly as useful as they were — they are the actual field-by-field evidence
+for how to shape `RulePackage`'s manifest well, not evidence for whether to build it at all.
+Read together, four real rules already show: `identity/version` should be optional or
+per-rule rather than assumed present, since `Check_Naming_Convention` genuinely lacks it;
+`required canonical capabilities` needs to carry a real `FactVariant`/`Assurance`/
+`IncrementalGranularity` triple per rule, since three distinct ones are already observed;
+`applicability semantics` needs to distinguish a rule that always raises `Supported` from one
+that structurally cannot, since `Check_Unread_Reaches_A_Finding` is the latter; and five of
+`ARCH-002`'s contents-list fields (optional enhanced implementation, external diagnostic
+mapping, correction and suppression contract, evaluation corpus, agent-guidance fragments)
+have no real instance across any of the four rules to shape a field from, and building them
+speculatively is exactly what `OD-ROADMAP-001` now authorizes doing anyway — those fields
+should be built from `ARCH-002`'s own corpus text and this workspace's nearest analogous
+types (`nomos-corrections` for a correction contract, `nomos_contracts::Finding` for
+diagnostic mapping) rather than left unbuilt for want of a fifth rule that exercises them.
+
+### docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#33
 
 *revision: authored · kind: heading · heading: Whether RulePackage needs its manifest crate now that nomos-package exists, or stays a bare rule bounded to a population of one / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#32
+### docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#34
 
-*revision: authored · kind: prose · heading: Whether RulePackage needs its manifest crate now that nomos-package exists, or stays a bare rule bounded to a population of one / Status · hash: sha256:e5603b5f5319d62477c55ed2196694a694ddc358e60e922f5d1b7dc95ec86a24*
+*revision: authored · kind: prose · heading: Whether RulePackage needs its manifest crate now that nomos-package exists, or stays a bare rule bounded to a population of one / Status · hash: sha256:8ec7c4906b0c9a792cb1556ebd395951c4fb942b00692ae31a6bae1d5956ea3d*
 
-Accepted. The trigger this record named at version 3 has fired twice — `Check_Dependency_
+Accepted. The trigger this record named at version 3 fired twice — `Check_Dependency_
 Direction` and `Check_Unread_Reaches_A_Finding` both cite a version-bearing contract record —
 and the comparison was redone at the real population of four rather than reaffirmed by count
-alone. `RulePackage` stays a bare rule bounded to what has been observed; no `nomos-rule-package`
-crate is scaffolded. Counting rules is no longer this record's own trigger for revisiting, since
-it has now fired twice without moving the outcome. Revisit again if a rule's real contents
-populate one of the fields with zero instance today — an optional enhanced implementation, an
-external diagnostic mapping, a correction and suppression contract, an evaluation corpus, or
-agent-guidance fragments — for the first time, or if a fifth rule's required-capability shape or
-applicability semantics is found to reconverge with an existing rule rather than adding a third
-variant, or if `ARCH-002`'s contents list is found to need a manifest sooner for a reason
-unrelated to rule count.
+alone. Amended to version 5 by `P13-ROADMAP-001-POPULATION-CAUTION-RETIRED`: the wait for a
+fifth rule or further convergence is retired via `OD-ROADMAP-001`, and `nomos-rule-package`
+is in scope to build now from the four-rule field-by-field measurement this record already
+performed, not from an invented shape.
 
 ### docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md#1
 
@@ -32311,7 +32368,7 @@ gets built first.
 
 ### docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#5
 
-*revision: authored · kind: prose · heading: ModelBackendPackage and AgentExecutorPackage's first manifest maturity is model selection / What Was Measured · hash: sha256:095ebf0aaa88ddab9d3c2313f85167ea7150860ca313c0d45b26903b24fef88a*
+*revision: authored · kind: prose · heading: ModelBackendPackage and AgentExecutorPackage's first manifest maturity is model selection / What Was Measured · hash: sha256:85efc619fd6d33cbeb5964dea64b93a15243e774b125608a05a7ef570bdc4491*
 
 Read directly from `NOMOS_V14_CORPUS`'s requirements directory: `MODEL-ROUTE-037` through
 `MODEL-ROUTE-049` describe a mature model-routing system, not a manifest alone -- resolution
@@ -32319,10 +32376,11 @@ invalidation on catalog, entitlement or capability change (`044`); a normative
 `RoutingPolicyConformanceSuite` with deterministic selector-precedence, budget-fallback and
 data-boundary fixtures (`045`-`047`); conformance results preserving resolution hashes and
 semantic diffs (`048`); and conformance gating at package publication, engine release and
-canary validation (`049`). None of it has a real implementation anywhere in this workspace
-to check a shape against, so building past a manifest's first maturity now would be
-invention with no second real case -- the override authorizes building *something* now, not
-building all thirteen requirements at once.
+canary validation (`049`). None of it had a real implementation anywhere in this workspace
+to check a shape against at the time this record was first accepted, so building past a
+manifest's first maturity then would have been invention with no second real case -- the
+override authorized building *something* now, not building all thirteen requirements at
+once. `OD-ROADMAP-001` supersedes that limit; see the amendment below.
 
 ### docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#6
 
@@ -32401,34 +32459,53 @@ to distinguish.
 
 ### docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#12
 
-*revision: authored · kind: prose · heading: ModelBackendPackage and AgentExecutorPackage's first manifest maturity is model selection / What This Does Not Do · hash: sha256:289d2caae55032c62db584632726f3b3ce00b7c28d4b0ab8af6a807240102250*
+*revision: authored · kind: prose · heading: ModelBackendPackage and AgentExecutorPackage's first manifest maturity is model selection / What This Does Not Do · hash: sha256:ceb06e8e988ea01faca2993d8f933d5ac3119b14bb2ddd9c74a945a9bb8bdbef*
 
-It does not build `MODEL-ROUTE-038` through `049`: no resolution invalidation, no
-`RoutingPolicyConformanceSuite`, no conformance-result preservation, no publication or
-canary gating. It does not resolve a catalog entry's nine-state shape -- `Catalog` carries
-raw identifiers, not a typed entry, the same way `language_versions: Vec<String>` did before
-`RustEdition` existed to resolve it. It does not reopen `OD-PACKAGE-006` or `OD-PACKAGE-008`
-for `RulePackage`, which stays exactly as deferred as those records left it -- this override
-is scoped to `ModelBackendPackage`/`AgentExecutorPackage` alone. It does not give either
-package kind a real backend or executor implementation; nothing in this workspace registers
-one, and this manifest format is checkable against a fixture, not against a second real
-instance, until one exists.
+At the time of original acceptance: it did not build `MODEL-ROUTE-038` through `049`, resolve
+a catalog entry's nine-state shape, reopen `OD-PACKAGE-006` or `OD-PACKAGE-008` for
+`RulePackage`, or give either package kind a real backend or executor implementation. See
+the amendment below for what `OD-ROADMAP-001` now authorizes past that original boundary.
+This record still does not reopen `OD-PACKAGE-006` or `OD-PACKAGE-008` *for `RulePackage`
+specifically* by its own text -- their own amendments, not this one, are what reopened them.
 
 ### docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#13
+
+*revision: authored · kind: heading · heading: ModelBackendPackage and AgentExecutorPackage's first manifest maturity is model selection / Amendment: The Later Maturities Are In Scope Now · hash: sha256:642fc8dc5ca067d4f89b3d9b10f57221362e716b23dbbd3d6368467474a68588*
+
+## Amendment: The Later Maturities Are In Scope Now
+
+### docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#14
+
+*revision: authored · kind: prose · heading: ModelBackendPackage and AgentExecutorPackage's first manifest maturity is model selection / Amendment: The Later Maturities Are In Scope Now · hash: sha256:e5095557a7ff81814c2050d84f6f818f465a5fcd6c03148f3a5d41f98c6178a8*
+
+Added at version 2. `OD-ROADMAP-001` retires the population-of-zero caution this record's
+original boundary was drawn against. `MODEL-ROUTE-037`'s second clause (the nine-state
+catalog-entry shape) and `MODEL-ROUTE-038` through `049` (resolution invalidation, a
+normative `RoutingPolicyConformanceSuite`, conformance-result preservation, publication/
+canary gating) are in scope to build now, from the corpus requirement text this record
+already read in full and the real types this workspace already has, rather than waiting for
+a live catalog, provider client, or entitlement system to check the shape against. The
+`RustEdition`-vs-invented-taxonomy distinction this record and `OD-PACKAGE-011` both drew --
+whether a typed shape transcribes a closed fact or invents a design taxonomy -- stays useful
+context for how to build the nine-state shape faithfully to the corpus text; it is no longer
+a reason to defer building it.
+
+### docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#15
 
 *revision: authored · kind: heading · heading: ModelBackendPackage and AgentExecutorPackage's first manifest maturity is model selection / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#14
+### docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#16
 
-*revision: authored · kind: prose · heading: ModelBackendPackage and AgentExecutorPackage's first manifest maturity is model selection / Status · hash: sha256:a643a77ebd5e3b3194386f7fd5432ade77c0ed2845133ec5f54ddb17623b27fd*
+*revision: authored · kind: prose · heading: ModelBackendPackage and AgentExecutorPackage's first manifest maturity is model selection / Status · hash: sha256:9e4e77305909cc27fcb9ed73b2103bc69a3ccca2360c0006d521fa8997d3787e*
 
 Accepted. Names the first manifest maturity for `ModelBackendPackage` and
 `AgentExecutorPackage`, under the user's explicit override of the population-of-zero caution
-this workspace otherwise holds, and the two clauses (`MODEL-ROUTE-037`'s catalog-entry
-detail, `038`-`049`'s routing/conformance system) it deliberately leaves for a later
-increment to name against a real case.
+this workspace otherwise held, and the two clauses (`MODEL-ROUTE-037`'s catalog-entry
+detail, `038`-`049`'s routing/conformance system) it originally left for a later increment.
+Amended to version 2 by `P13-ROADMAP-001-POPULATION-CAUTION-RETIRED`: those later
+maturities are retired from deferral via `OD-ROADMAP-001` and are in scope to build now.
 
 ### docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md#1
 
@@ -32782,12 +32859,12 @@ routing-layer question genuinely open.
 
 ### docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#9
 
-*revision: authored · kind: prose · heading: Model and agent backend routing integrates through the existing capability system, not a privileged layer, when it is built / What Was Measured · hash: sha256:57985a415f69878d1b96d1d355c3e44a24e737dbb54dd7d8187eb36d89b243b2*
+*revision: authored · kind: prose · heading: Model and agent backend routing integrates through the existing capability system, not a privileged layer, when it is built / What Was Measured · hash: sha256:d6eb0ef664c692bc12802a6ac5c09993982228af6434c1ebe9894eb24526abb9*
 
 Checked against `OD-PACKAGE-011`, landed earlier this session: it confirms no real
-implementation of `MODEL-ROUTE-038` through `049` exists anywhere in this workspace to
-check any shape against -- including this one. So the principle is not yet actionable, and
-this record does not make it so.
+implementation of `MODEL-ROUTE-038` through `049` existed anywhere in this workspace at the
+time to check any shape against -- including this one. So the principle was not yet
+actionable then; `OD-ROADMAP-001` makes it actionable now, see the amendment below.
 
 ### docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#10
 
@@ -32809,28 +32886,28 @@ and the thing that would route to it) that this workspace has not yet reached.
 
 ### docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#12
 
-*revision: authored · kind: prose · heading: Model and agent backend routing integrates through the existing capability system, not a privileged layer, when it is built / The Finding · hash: sha256:58c45a2b5cf742e81fb7c8821aa89ff73b1a52b252d43ade4bfab388cfe19039*
+*revision: authored · kind: prose · heading: Model and agent backend routing integrates through the existing capability system, not a privileged layer, when it is built / The Finding · hash: sha256:bc3e62681bde34e4e43e0a273ef03621d7c4dca4cb7a7e2b580db3a02d2c22ac*
 
-**The principle is real, not already stated, not contradicted, and not yet actionable.**
-Naming it now, precisely, means the session that eventually builds `MODEL-ROUTE-038`
-through `049`'s first real increment does not have to independently rediscover it or
-build a routing mechanism that later has to be reconciled with `nomos_capability`'s
-existing provider/evidence split after the fact.
+**The principle is real, not already stated, not contradicted, and now actionable.**
+Naming it precisely means whichever session builds `MODEL-ROUTE-038` through `049`'s real
+increment does not have to independently rediscover it or build a routing mechanism that
+later has to be reconciled with `nomos_capability`'s existing provider/evidence split after
+the fact.
 
 ### docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#13
 
-*revision: authored · kind: prose · heading: Model and agent backend routing integrates through the existing capability system, not a privileged layer, when it is built / The Finding · hash: sha256:5d487a7996c8e263079f9d6304bb56e25eeacc575ebd8bd10356a450b88e7fb8*
+*revision: authored · kind: prose · heading: Model and agent backend routing integrates through the existing capability system, not a privileged layer, when it is built / The Finding · hash: sha256:996525570e9d42bf45891d746db6c78bb4135d42e7c006d9d23b79410c77e30b*
 
-**When `MODEL-ROUTE-038` through `049`'s first real increment is eventually built** --
-the same trigger `OD-PACKAGE-011` already names, unchanged here -- it should be checked
-against `nomos_capability::Registry`/`ProviderOffer` before inventing a separate
-resolution mechanism: does a model or agent executor's selection genuinely fit the
-existing capability/provider/evidence shape (a capability demand, a set of provider
-offers, a resolution bounded by a ceiling), or does it need its own? `OD-CAPABILITY-002`'s
-criterion applies unchanged: shared machinery earns its place when a second real party
-contends for it, not by resemblance alone. This record does not answer that question in
-advance of the real body that would decide it -- it names the question so it is asked
-rather than skipped.
+**When `MODEL-ROUTE-038` through `049` is built** -- no longer deferred, per
+`OD-ROADMAP-001` -- it should be checked against `nomos_capability::Registry`/
+`ProviderOffer` before inventing a separate resolution mechanism: does a model or agent
+executor's selection genuinely fit the existing capability/provider/evidence shape (a
+capability demand, a set of provider offers, a resolution bounded by a ceiling), or does it
+need its own? `OD-CAPABILITY-002`'s criterion -- shared machinery earns its place when a
+second real party contends for it, not by resemblance alone -- still applies to *how* the
+integration is shaped once built; it is no longer a reason to defer building it, the same
+distinction `OD-ROADMAP-001` draws between retiring the wait and retiring engineering
+judgment.
 
 ### docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#14
 
@@ -32840,32 +32917,49 @@ rather than skipped.
 
 ### docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#15
 
-*revision: authored · kind: prose · heading: Model and agent backend routing integrates through the existing capability system, not a privileged layer, when it is built / What This Does Not Do · hash: sha256:7b5fa60e7d8f3a77bc2954cfc27b9dee9be3831e414c94d117e579341bc9514f*
+*revision: authored · kind: prose · heading: Model and agent backend routing integrates through the existing capability system, not a privileged layer, when it is built / What This Does Not Do · hash: sha256:261778d0c9470bd5a06acaa64580a60dd819f73c303275435d119c0ba92bd853*
 
-It does not touch `crates/packages/nomos-model-package` or any other code. It does not
-build any part of `MODEL-ROUTE-038` through `049`, resolve `MODEL-ROUTE-037`'s
-catalog-entry shape, or decide that model/agent routing *will* use `nomos_capability` --
-only that the question must be asked against that system before an alternative is
-invented, when a real case to check it against finally exists. It does not reopen
-`OD-PACKAGE-010`, which stands exactly as it left the boundary, and does not restate or
-amend `OD-PACKAGE-011`'s finding that no such case exists yet. It does not act on
+At original acceptance, it did not touch `crates/packages/nomos-model-package` or build any
+part of `MODEL-ROUTE-038` through `049`. See the amendment below for what changed. It does
+not decide that model/agent routing *will* use `nomos_capability` -- only that the question
+must be asked against that system before an alternative is invented. It does not reopen
+`OD-PACKAGE-010`, which stands exactly as its own amendment left it. It does not act on
 `nomos plan.txt`, `nomos packages.txt`, or `nomos_spec_and_work_ledger_arch.txt` -- checked
 and confirmed to name nothing in this track's territory, so a future session does not have
 to re-check them for this purpose.
 
 ### docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#16
 
+*revision: authored · kind: heading · heading: Model and agent backend routing integrates through the existing capability system, not a privileged layer, when it is built / Amendment: The Trigger Fired By Standing Override, Not By A Real Case · hash: sha256:90d2d2cd961e77c97bdd69f27f29939e5fd7f2161da57d5006602c512c490308*
+
+## Amendment: The Trigger Fired By Standing Override, Not By A Real Case
+
+### docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#17
+
+*revision: authored · kind: prose · heading: Model and agent backend routing integrates through the existing capability system, not a privileged layer, when it is built / Amendment: The Trigger Fired By Standing Override, Not By A Real Case · hash: sha256:40c5492a5535a42c95f7b04717526acf27e7533e2a2ad135bb0065509ff73a1e*
+
+Added at version 2. This record's original "when eventually built" language assumed the
+trigger would be a real case appearing on its own. `OD-ROADMAP-001` retires that wait: the
+real case this record was waiting for is now "the session builds it," not "a real case
+appears first." The constraint this record states -- check `nomos_capability::Registry`
+before inventing a separate resolution mechanism -- binds the build that follows, unchanged
+by how the build came to be authorized.
+
+### docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#18
+
 *revision: authored · kind: heading · heading: Model and agent backend routing integrates through the existing capability system, not a privileged layer, when it is built / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#17
+### docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#19
 
-*revision: authored · kind: prose · heading: Model and agent backend routing integrates through the existing capability system, not a privileged layer, when it is built / Status · hash: sha256:4c528b5b14b78f2b56edc601342cdb3e385bcc9e77ca0c60a091d8b0aa69b340*
+*revision: authored · kind: prose · heading: Model and agent backend routing integrates through the existing capability system, not a privileged layer, when it is built / Status · hash: sha256:780c5c597405163ae1aa767c0a60521cd780c9388fef789256be598771b765d9*
 
 Accepted. Names a design constraint surfaced by external review, checked against this
-workspace's own records and found neither duplicated nor contradicted, for whichever
-future increment `OD-PACKAGE-011` already licenses. Schedules no work of its own.
+workspace's own records and found neither duplicated nor contradicted. Amended to version 2
+by `P13-ROADMAP-001-POPULATION-CAUTION-RETIRED`: the increment this constraint governs is no
+longer deferred, per `OD-ROADMAP-001`, though the constraint itself -- integrate through
+`nomos_capability`, do not build a privileged layer -- is unchanged and still binds.
 
 ### docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#1
 
@@ -33940,6 +34034,147 @@ declined to pay, by a mechanism that record did not name.
 Accepted. The full eighteen-profile catalogue remains available through `nomos spec render`
 and `nomos spec sources`; this record is why only two of the eighteen outputs are ever
 checked in.
+
+### docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#1
+
+*revision: authored · kind: heading · heading: The population-of-zero caution is retired for AgentExecutor, ModelBackend, RulePackage and corrections; this cluster builds ahead of consumers now · hash: sha256:4f2cf1d223090da4999585bb227be7d8e02fda74a81eb77abfe8c4e80f19a839*
+
+# The population-of-zero caution is retired for AgentExecutor, ModelBackend, RulePackage and corrections; this cluster builds ahead of consumers now
+
+### docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#2
+
+*revision: authored · kind: heading · heading: The population-of-zero caution is retired for AgentExecutor, ModelBackend, RulePackage and corrections; this cluster builds ahead of consumers now / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#3
+
+*revision: authored · kind: prose · heading: The population-of-zero caution is retired for AgentExecutor, ModelBackend, RulePackage and corrections; this cluster builds ahead of consumers now / Question · hash: sha256:d0fda2186f50e7f5121071fd29ac854d7cf9feb20ae6f31be83f43155c2948e6*
+
+This workspace has repeatedly applied the same caution to the same cluster of decisions:
+before typing a schema for a manifest, a routing shape, a task envelope, or a
+classification layer, wait for a second real instance to check the shape's field
+boundaries against, so the shape is transcribed from something real rather than invented.
+`OD-PACKAGE-006` named it first, for `KNOWN_PROVIDERS`. `OD-PACKAGE-008` tested it against
+a real second and then a real fourth rule and found it load-bearing for `RulePackage`.
+`OD-CORRECTIONS-001` applied it to `CorrectionCandidate` generation and classification.
+`OD-PACKAGE-010` was built only after the user overrode it once, explicitly and narrowly,
+for `ModelBackendPackage`/`AgentExecutorPackage`'s first manifest maturity alone.
+`OD-PACKAGE-011` and `OD-PACKAGE-012` then re-applied the same caution to everything the
+first override did not name — routing, dispatch, task envelopes, capability-class
+authorization — each time correctly, each time requiring the user to intervene again to
+get past it.
+
+### docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#4
+
+*revision: authored · kind: prose · heading: The population-of-zero caution is retired for AgentExecutor, ModelBackend, RulePackage and corrections; this cluster builds ahead of consumers now / Question · hash: sha256:2d6aac3c6e2860e76bf99e426610485c435238b6023ba5653cb53484b92dd184*
+
+That pattern is itself the defect this record exists to end. A caution that has to be
+overridden by the same person for the same cluster of work, one record at a time, on
+every session that reaches it, is not protecting anything the first override did not
+already settle — it is a cost paid repeatedly for a decision made once. The user said so
+directly: this has been a recurring friction, and the standing instruction is to stop
+re-deriving it. This record is that standing instruction, recorded so a future session
+reads it instead of re-litigating the caution from the affected records' own older text.
+
+### docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#5
+
+*revision: authored · kind: heading · heading: The population-of-zero caution is retired for AgentExecutor, ModelBackend, RulePackage and corrections; this cluster builds ahead of consumers now / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#6
+
+*revision: authored · kind: prose · heading: The population-of-zero caution is retired for AgentExecutor, ModelBackend, RulePackage and corrections; this cluster builds ahead of consumers now / The Decision · hash: sha256:2f2dfaf21d5caf89dd9167285dba5d9c590305b1e7941b483194d41b153169ed*
+
+**For the AgentExecutor / ModelBackend / RulePackage / corrections cluster named below, do
+not wait for a second real consumer, a second real instance, or a real case to check a
+shape against before building it.** Build the shapes these records named and deferred —
+task envelopes, `PrepareChangeContext`, `ContextualizeFinding`, model routing profiles and
+selectors, `RulePackage`'s manifest and lifecycle, `CorrectionCandidate` generation and
+classification, capability-class authorization and audit — directly, from the corpus
+requirement text and this workspace's own existing types, the same way every other piece
+of this workspace was built before a population-of-zero caution existed to gate it.
+
+### docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#7
+
+*revision: authored · kind: prose · heading: The population-of-zero caution is retired for AgentExecutor, ModelBackend, RulePackage and corrections; this cluster builds ahead of consumers now / The Decision · hash: sha256:8869db595eb2b36f8074c545d35750fbffbe9f1b8ed631bca5a9505290ba3f05*
+
+This supersedes, specifically:
+
+### docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#8
+
+*revision: authored · kind: prose · heading: The population-of-zero caution is retired for AgentExecutor, ModelBackend, RulePackage and corrections; this cluster builds ahead of consumers now / The Decision · hash: sha256:a5f884b2ffbe765a10e0786285d3b9537481a3a6f3ee14ebae59a15fa92b7df3*
+
+- `ARC-ROADMAP-001` constraint 2 (`OD-PACKAGE-008` remains authoritative; no `RulePackage`
+  manifest scheduled) and constraint 3 (`EGRAPH` waits for a second real consumer).
+- `OD-PACKAGE-006`'s remaining wait for a third same-language provider crate before
+  `KNOWN_PROVIDERS` gains a self-registering mechanism.
+- `OD-PACKAGE-008`'s conclusion that the wait for `RulePackage`'s manifest crate is
+  load-bearing.
+- `OD-PACKAGE-010`'s scope boundary confining the first `ModelBackendPackage`/
+  `AgentExecutorPackage` maturity to model selection alone, and its deferral of
+  `MODEL-ROUTE-037`'s catalog-entry shape and `038` through `049`.
+- `OD-PACKAGE-011`'s and `OD-PACKAGE-012`'s conclusions that no real second case exists yet
+  for model routing, dispatch, or capability-integrated agent/model backend routing.
+- `OD-CORRECTIONS-001`'s conclusion that `CorrectionCandidate` generation, classification/
+  ranking, `COR-005`'s rerun-and-compare half, and oscillation detection wait for a real
+  trigger.
+
+### docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#9
+
+*revision: authored · kind: heading · heading: The population-of-zero caution is retired for AgentExecutor, ModelBackend, RulePackage and corrections; this cluster builds ahead of consumers now / What This Does Not Do · hash: sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf*
+
+## What This Does Not Do
+
+### docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#10
+
+*revision: authored · kind: prose · heading: The population-of-zero caution is retired for AgentExecutor, ModelBackend, RulePackage and corrections; this cluster builds ahead of consumers now / What This Does Not Do · hash: sha256:9dcdc5215f0764a93c62ba7af0b5a1f2d93524f773ffafc7059a3760d24402f1*
+
+It does not retire engineering discipline. Every shape built under this override still
+compiles, still passes its tests, still passes `cargo clippy --workspace --all-targets` and
+the real gate, and still gets a real, tested exercise — a unit test standing in for the
+"real caller" this cluster of records previously required to exist in production code. What
+is retired is specifically the requirement that a second real *external* consumer exist
+before the shape may be typed at all; a shape's own test suite is now sufficient warrant.
+
+### docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#11
+
+*revision: authored · kind: prose · heading: The population-of-zero caution is retired for AgentExecutor, ModelBackend, RulePackage and corrections; this cluster builds ahead of consumers now / What This Does Not Do · hash: sha256:8e426fb4baf0f89b5cedcb2f08142268a6ac73f2939bb78424b7b5e3ed187d43*
+
+It does not touch any decision outside this named cluster. `OD-CAPABILITY-007` and
+`OD-ANALYSIS-007`, which apply an analogous population caution to unrelated subsystems
+(provider-decline semantics, program-semantics capability selection), are untouched — this
+record supersedes what it names, not the pattern wherever it appears.
+
+### docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#12
+
+*revision: authored · kind: prose · heading: The population-of-zero caution is retired for AgentExecutor, ModelBackend, RulePackage and corrections; this cluster builds ahead of consumers now / What This Does Not Do · hash: sha256:2f3f9545446231b6966a883ce9a8966d33db11f627f0106dc838cac11d1abcab*
+
+It does not un-happen the real technical findings these records made. `RulePackage`'s
+contents list genuinely mixing manifest-shaped fields with data corpora and executable
+fixtures, `MODEL-ROUTE-037`'s nine catalog-entry states genuinely naming a design taxonomy
+rather than transcribing a closed fact, `nomos-model-package`'s genuine lack of a real
+backend or executor implementation — all of that stays true and stays useful context for
+*how* to build the deferred shape well. What changes is the answer to "build it now or
+wait," not the measurements that answer informed.
+
+### docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#13
+
+*revision: authored · kind: heading · heading: The population-of-zero caution is retired for AgentExecutor, ModelBackend, RulePackage and corrections; this cluster builds ahead of consumers now / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#14
+
+*revision: authored · kind: prose · heading: The population-of-zero caution is retired for AgentExecutor, ModelBackend, RulePackage and corrections; this cluster builds ahead of consumers now / Status · hash: sha256:babe67922b5b7e1cd375d26771241fbf70b94ae26f4e8ee48ccc0064483d1217*
+
+Accepted. Standing, not scoped to one session — a future session reading `ARC-ROADMAP-001`,
+`OD-PACKAGE-006`, `OD-PACKAGE-008`, `OD-PACKAGE-010`, `OD-PACKAGE-011`, `OD-PACKAGE-012`, or
+`OD-CORRECTIONS-001` should read this record alongside them rather than re-apply the
+caution those records' own older text still describes. Each of those records is amended in
+the same change that adds this one, pointing back here rather than leaving this record as
+the only place the supersession is stated.
 
 ### docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md#1
 

@@ -3,7 +3,7 @@ id: OD-PACKAGE-010
 type: decision
 title: ModelBackendPackage and AgentExecutorPackage's first manifest maturity is model selection
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - package
@@ -18,6 +18,8 @@ relations:
   - target: OD-PACKAGE-007
     type: relates-to
   - target: OD-PACKAGE-008
+    type: relates-to
+  - target: OD-ROADMAP-001
     type: relates-to
 ---
 
@@ -45,10 +47,11 @@ invalidation on catalog, entitlement or capability change (`044`); a normative
 `RoutingPolicyConformanceSuite` with deterministic selector-precedence, budget-fallback and
 data-boundary fixtures (`045`-`047`); conformance results preserving resolution hashes and
 semantic diffs (`048`); and conformance gating at package publication, engine release and
-canary validation (`049`). None of it has a real implementation anywhere in this workspace
-to check a shape against, so building past a manifest's first maturity now would be
-invention with no second real case -- the override authorizes building *something* now, not
-building all thirteen requirements at once.
+canary validation (`049`). None of it had a real implementation anywhere in this workspace
+to check a shape against at the time this record was first accepted, so building past a
+manifest's first maturity then would have been invention with no second real case -- the
+override authorized building *something* now, not building all thirteen requirements at
+once. `OD-ROADMAP-001` supersedes that limit; see the amendment below.
 
 `MODEL-ROUTE-037`'s own opening clause is the one piece with a bounded, statable shape:
 "Every `ModelBackendPackage` and `AgentExecutorPackage` shall expose a versioned discovered
@@ -101,21 +104,32 @@ to distinguish.
 
 ## What This Does Not Do
 
-It does not build `MODEL-ROUTE-038` through `049`: no resolution invalidation, no
-`RoutingPolicyConformanceSuite`, no conformance-result preservation, no publication or
-canary gating. It does not resolve a catalog entry's nine-state shape -- `Catalog` carries
-raw identifiers, not a typed entry, the same way `language_versions: Vec<String>` did before
-`RustEdition` existed to resolve it. It does not reopen `OD-PACKAGE-006` or `OD-PACKAGE-008`
-for `RulePackage`, which stays exactly as deferred as those records left it -- this override
-is scoped to `ModelBackendPackage`/`AgentExecutorPackage` alone. It does not give either
-package kind a real backend or executor implementation; nothing in this workspace registers
-one, and this manifest format is checkable against a fixture, not against a second real
-instance, until one exists.
+At the time of original acceptance: it did not build `MODEL-ROUTE-038` through `049`, resolve
+a catalog entry's nine-state shape, reopen `OD-PACKAGE-006` or `OD-PACKAGE-008` for
+`RulePackage`, or give either package kind a real backend or executor implementation. See
+the amendment below for what `OD-ROADMAP-001` now authorizes past that original boundary.
+This record still does not reopen `OD-PACKAGE-006` or `OD-PACKAGE-008` *for `RulePackage`
+specifically* by its own text -- their own amendments, not this one, are what reopened them.
+
+## Amendment: The Later Maturities Are In Scope Now
+
+Added at version 2. `OD-ROADMAP-001` retires the population-of-zero caution this record's
+original boundary was drawn against. `MODEL-ROUTE-037`'s second clause (the nine-state
+catalog-entry shape) and `MODEL-ROUTE-038` through `049` (resolution invalidation, a
+normative `RoutingPolicyConformanceSuite`, conformance-result preservation, publication/
+canary gating) are in scope to build now, from the corpus requirement text this record
+already read in full and the real types this workspace already has, rather than waiting for
+a live catalog, provider client, or entitlement system to check the shape against. The
+`RustEdition`-vs-invented-taxonomy distinction this record and `OD-PACKAGE-011` both drew --
+whether a typed shape transcribes a closed fact or invents a design taxonomy -- stays useful
+context for how to build the nine-state shape faithfully to the corpus text; it is no longer
+a reason to defer building it.
 
 ## Status
 
 Accepted. Names the first manifest maturity for `ModelBackendPackage` and
 `AgentExecutorPackage`, under the user's explicit override of the population-of-zero caution
-this workspace otherwise holds, and the two clauses (`MODEL-ROUTE-037`'s catalog-entry
-detail, `038`-`049`'s routing/conformance system) it deliberately leaves for a later
-increment to name against a real case.
+this workspace otherwise held, and the two clauses (`MODEL-ROUTE-037`'s catalog-entry
+detail, `038`-`049`'s routing/conformance system) it originally left for a later increment.
+Amended to version 2 by `P13-ROADMAP-001-POPULATION-CAUTION-RETIRED`: those later
+maturities are retired from deferral via `OD-ROADMAP-001` and are in scope to build now.

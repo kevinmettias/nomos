@@ -3,7 +3,7 @@ id: OD-CORRECTIONS-001
 type: decision
 title: Corrections has real staging machinery and zero real callers
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - corrections
@@ -15,6 +15,8 @@ relations:
   - target: OD-PACKAGE-008
     type: relates-to
   - target: OD-PACKAGE-006
+    type: relates-to
+  - target: OD-ROADMAP-001
     type: relates-to
 ---
 
@@ -58,8 +60,8 @@ rerun-and-compare half.
 
 ## The Finding
 
-**What is missing is not infrastructure this item should build. It is a real trigger --
-and none exists today.**
+At original acceptance: **what was missing was not infrastructure this item should build.
+It was a real trigger -- and none existed then.** See the amendment below for what changed.
 
 Checked against `COR-005`'s second half: `ValidatedPlan::Commit` does not call back into
 `nomos-check-orchestration` or `nomos-rules` at all, so nothing reruns affected rules or
@@ -85,41 +87,49 @@ the same absence from a different angle, about `RulePackage`'s manifest fields: 
 complete absence ... of any real instance of ... a correction and suppression contract ...
 with zero real shape to build a manifest field against anywhere in the workspace today."
 
-Building a `CorrectionCandidate` generator now would mean inventing either a fix for a
-rule that has none safely available, or the classification/ranking layer (`COR-001`,
-`COR-010`..`COR-013`) that has no real case to check its shape against -- the same
-"no invented shape ahead of a real body" caution this workspace applies repeatedly
-(`OD-PACKAGE-006`, `OD-PACKAGE-008`, `nomos-gate-orchestration`'s own doc on why `compare`
-is not stubbed).
-
 ## What This Does Not Do
 
-It does not build a `CorrectionCandidate` generator, a classification or ranking layer,
-`COR-005`'s rerun-and-compare half, or any oscillation detection. It does not add a
-`nomos correct` verb or an orchestration crate for corrections -- there is nothing yet for
-either to compose that isn't already exercised by the crate's own tests. It does not
+At original acceptance, it did not build a `CorrectionCandidate` generator, a
+classification or ranking layer, `COR-005`'s rerun-and-compare half, or any oscillation
+detection, and did not add a `nomos correct` verb or an orchestration crate for
+corrections. See the amendment below for what `OD-ROADMAP-001` now authorizes. It does not
 reopen `OD-PACKAGE-008` or restate `ARC-ROADMAP-001`.
 
 ## What Would Decide The Next Increment
 
-Either of:
+Historical -- superseded by the amendment below, kept for the record of what this record
+originally named as its own trigger. Either of:
 
 - **A shipped rule gains a genuinely mechanical fix.** A rule whose violation has exactly
   one safe correction with no semantic judgment required -- the same bar `COR-001`'s
-  "mechanical correction" category names -- gives `CorrectionCandidate::New` a real caller
-  and this crate's stage/validate/commit chain a real first exercise.
+  "mechanical correction" category names -- would have given `CorrectionCandidate::New` a
+  real caller and this crate's stage/validate/commit chain a real first exercise.
 - **A real driver for agent- or interactive-class corrections exists.** `ARC-ROADMAP-001`
-  defers `ModelBackend`/`AgentExecutor` infrastructure as its own near-term item; once
-  either is real, `COR-001`'s other three classes (proposed, agent, interactive) have
-  something to be driven by.
+  deferred `ModelBackend`/`AgentExecutor` infrastructure as its own near-term item; once
+  either became real, `COR-001`'s other three classes (proposed, agent, interactive) would
+  have something to be driven by.
 
-Until either arrives, this crate's real, tested half stands as what it is -- a mechanical
-executor with no caller -- rather than an unmeasured "zero consumers" a future session has
-to re-derive from scratch.
+## Amendment: The Wait For A Trigger Is Retired
+
+Added at version 2. `OD-ROADMAP-001` retires waiting for either trigger above. Neither a
+shipped rule with a genuinely mechanical fix nor a real agent/interactive driver has
+appeared on its own; the standing instruction is to build `CorrectionCandidate` generation,
+the classification/ranking layer (`COR-001`, `COR-010` through `COR-013`), `COR-005`'s
+rerun-and-compare half, and oscillation detection (`COR-006`) directly from the `COR-*`
+corpus family this record already read, rather than continue waiting for a real caller to
+appear first. The measurements above -- that none of the four shipped rules has a safely
+mechanical fix today, that `ValidatedPlan::Commit` does not rerun rules or compare state
+signatures, that no classification layer exists -- stay true and stay the right starting
+inventory for what to build; only the conclusion that building must wait for a trigger is
+superseded. Where a genuinely mechanical fix is still absent from every shipped rule, a
+`CorrectionCandidate` generator's first real exercise can be its own test suite rather than
+a live rule violation, the same standing this override extends to the rest of the
+AgentExecutor/ModelBackend/RulePackage cluster.
 
 ## Status
 
-Accepted. Names corrections' real current state precisely, checked against the code and
-the `COR-*` corpus family rather than assumed, and the two conditions that would decide its
-next real increment. Schedules no work of its own, the same restraint `ARC-ROADMAP-001`
-holds for its own boundary.
+Accepted. Named corrections' real state precisely at the time, checked against the code and
+the `COR-*` corpus family rather than assumed, and the two conditions that would have
+decided its next real increment. Amended to version 2 by
+`P13-ROADMAP-001-POPULATION-CAUTION-RETIRED`: those conditions are retired via
+`OD-ROADMAP-001`, and the deferred pieces are in scope to build now.

@@ -3,7 +3,7 @@ id: OD-PACKAGE-006
 type: decision
 title: Whether KNOWN_PROVIDERS needs a self-registering mechanism, or stays hand-maintained bounded to additions
 status: accepted
-version: 2
+version: 3
 authority: canonical-normative-record
 tags:
   - packages
@@ -17,6 +17,8 @@ relations:
   - target: D-134
     type: relates-to
   - target: OD-PACKAGE-007
+    type: relates-to
+  - target: OD-ROADMAP-001
     type: relates-to
 ---
 
@@ -62,13 +64,8 @@ against a population of two, with no third provider crate to check the design ag
 
 ## What Would Decide It
 
-A third real Rust language provider crate joining this workspace is the natural trigger:
-at that point, either "one more line, pulled not retyped" still holds and the array stays
-hand-maintained, or the friction of a person having to notice and extend it by hand becomes
-the cost this record predicted, and a registration mechanism earns its place. `OD-PACKAGE-001`
-governs what such a provider crate would need to be a real `LanguagePackage` participant in
-the first place; this record only covers how `nomos-lang-package` would come to know about
-its `ProviderId`.
+Superseded by `OD-ROADMAP-001` — see the amendment below. This section is left as written
+for the record of what the original trigger was, not because it still governs.
 
 ## Resolution
 
@@ -110,10 +107,23 @@ that this record's original trigger still leaves genuinely open — should one a
 it needs anything beyond "one more line, pulled not retyped" through the now-generic type is
 a question this resolution does not reach.
 
+## Amendment: The Remaining Third-Provider Wait Is Retired
+
+Added at version 3. Version 2's resolution built the generic registration type ahead of a
+second language, but left one narrower question open on its own original trigger: whether a
+same-language *third* Rust provider crate would need anything beyond "one more line, pulled
+not retyped." `OD-ROADMAP-001` retires waiting for that trigger too, as part of the same
+cluster of repeatedly-overridden population cautions it names. If a self-registering
+mechanism for same-language providers turns out to be worth building, it does not need a
+third provider crate to exist first — the same standing instruction that applies to
+`RulePackage`, model routing, and corrections applies here.
+
 ## Status
 
-Accepted. `OD-PACKAGE-006`'s original trigger — a third Rust language provider crate — remains
-unmet and is explicitly not what resolved this; a separate, explicit product direction to
-build language- and rule-plugin infrastructure ahead of demonstrated same-population need is
-what did. The follow-on capability work this resolution names is tracked on the work ledger,
-not in this record.
+Accepted. `OD-PACKAGE-006`'s original trigger — a third Rust language provider crate —
+remains unmet and was explicitly not what resolved version 2; a separate, explicit product
+direction to build language- and rule-plugin infrastructure ahead of demonstrated
+same-population need is what did. Amended to version 3 by
+`P13-ROADMAP-001-POPULATION-CAUTION-RETIRED`, retiring the remaining third-provider wait via
+`OD-ROADMAP-001`. The follow-on capability work this resolution names is tracked on the work
+ledger, not in this record.

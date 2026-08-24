@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:0e69e4f5cc07f695a7345c522267a4c95c48aa65f291c7c65dad2e31108d189a",
-  "inputs_digest": "sha256:2ffef06a650366f89034d29f4973b7782d17d6647f6eb2182cc975e9e5ebbb09",
+  "content_digest": "sha256:8e842bf74471cf81627182eb95adabc309536e9b09940c63def5405a09188bd5",
+  "inputs_digest": "sha256:252d1f1007cd28669dfd36d649d1840be56531edc5b2519285943963cfee38fc",
   "sections": [
     [
       "Documents",
-      154
+      155
     ],
     [
       "Sections",
-      1316
+      1326
     ],
     [
       "Source blocks",
-      4645
+      4667
     ]
   ],
   "inputs": [
@@ -48,7 +48,7 @@
     {
       "content": "documents",
       "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md@authored",
-      "hash": "sha256:db0e084fa51ebf7c8d2bee1bf08171f06b0df1a0c12be3ff6d46ed0df0e79429"
+      "hash": "sha256:a078f1decce9e5c5bff51b928ce8fc65aee3e066235f5c7be7dd87c86dda79f8"
     },
     {
       "content": "documents",
@@ -243,7 +243,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md@authored",
-      "hash": "sha256:1b76256697879186b4f2368f4ca1eb180a8aea16bca5e3fd06a9b74b620116e5"
+      "hash": "sha256:8ad58a92216388e350cbfdf042e5ab75299e97e9e6accef05f6bae9e325fc72a"
     },
     {
       "content": "documents",
@@ -568,7 +568,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md@authored",
-      "hash": "sha256:002bf8b3eb0d2b37459e2db671092341f12b498413eb29078351cc623202f7f6"
+      "hash": "sha256:9ad75a86e6b4e61ea1aa4ee07373fd1671f806826c48c66cc569ea0a27ad5fd7"
     },
     {
       "content": "documents",
@@ -578,7 +578,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md@authored",
-      "hash": "sha256:cf9bbe40eeaca57b06ca4a774ba3d2d341aa765886fd321d053f7b6748cafe80"
+      "hash": "sha256:c27a144ff27bd60925ae7b4027314ea780fec54cc1466bcf11a16c2f51d485f0"
     },
     {
       "content": "documents",
@@ -588,7 +588,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md@authored",
-      "hash": "sha256:6e33c1ccc6d608a1f5d45f677aa83fa0f62fb743bf9f653bdef1c7f8ad29f8ed"
+      "hash": "sha256:f1b618d3b00c8f61d67c72d952411d52fe9d8520a77db5a8ba0a1a526faed666"
     },
     {
       "content": "documents",
@@ -598,7 +598,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md@authored",
-      "hash": "sha256:91c99e209eacfaacbe91a9299652a3e8f89ac7b4e451e24acb882ad7930aee77"
+      "hash": "sha256:6a14772c529dbb5589b38e4fdaec088191dcfbec7c6381e15d216537c6d1e4dd"
     },
     {
       "content": "documents",
@@ -619,6 +619,11 @@
       "content": "documents",
       "identity": "docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md@authored",
       "hash": "sha256:2b44f619674ec26184ee77a2ec05bab8c654b3ab6410d990ecdcbaa93cb4f0fd"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md@authored",
+      "hash": "sha256:dc44c7fd6a8db12af37648fc6e34499aca6c2cedf4d0203b3596ac13ea5d2be8"
     },
     {
       "content": "documents",
@@ -1083,12 +1088,12 @@
     {
       "content": "headings",
       "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#17",
-      "hash": "sha256:c2d6564c92f14cdec122c9428fa1bdd1af8034c610fe6dd37cca3af618fe5cf9"
+      "hash": "sha256:55314ce0510bebd99ccea9aa5b72d15dd0290014c0fd113a63e85ff26fd24a0b"
     },
     {
       "content": "headings",
       "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#19",
-      "hash": "sha256:4c00b9910733704c1582e20075a97468a434815607118738f7c4b15e91e3d155"
+      "hash": "sha256:ba0946bdf16a56a8676e064943373312f64d5a2d3ab07b21ac10e9847a241d76"
     },
     {
       "content": "headings",
@@ -2512,13 +2517,18 @@
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#14",
-      "hash": "sha256:556cf0ec50714c9b2e8d9ab467975990be4526469830137231ce0f0352303c54"
+      "identity": "docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#13",
+      "hash": "sha256:63a7baca07aa94638c9811a77c06b9e20ce4d3552a58864b576851dfbf7f2613"
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#16",
-      "hash": "sha256:95149f4370c3bf1e6818c8315da47c18249785033927b7d05545e110e70ae11a"
+      "identity": "docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#15",
+      "hash": "sha256:d1200b06ad122dfd57b2428fcff4e859c217b07d076d206d47ed67297f623605"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#18",
+      "hash": "sha256:cdd61d41b483e84fe565ae3ba7d45d4b5b3c8375c509cc2ba42d4b166c5bbe8e"
     },
     {
       "content": "headings",
@@ -5503,7 +5513,12 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#15",
-      "hash": "sha256:c73fb0e80a9ca0de018d43b8bae8fe212bd8baeac7e64eaa8d8cfc582a2881a4"
+      "hash": "sha256:e6ba4a6851d9766c865dc44a6a74f9bef1b1423563533acf2e2f2ca283565be7"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#17",
+      "hash": "sha256:77c68c6088b25db8ffacd7e51940261f5d69a06357908db1de12f1fab701af8d"
     },
     {
       "content": "headings",
@@ -5573,7 +5588,12 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#31",
-      "hash": "sha256:ec589e5148f957e8a2ae65d13b598e7f0e7a1b6bcca1beb47e70629a937965a7"
+      "hash": "sha256:f2c1c38bb75768b493b4160c17f1a2f76aa87e8482882bde03a854490d0a602f"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#33",
+      "hash": "sha256:b5a9b66663d912a9db3e4b2507212854b2b81355fcc2cedc91676ba516555ce2"
     },
     {
       "content": "headings",
@@ -5628,7 +5648,12 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#13",
-      "hash": "sha256:37dafff25897eed00ce00c5b3c8f1d93fa63d261fa4c973d629aa736576166bb"
+      "hash": "sha256:ce8a339612649a7fdb35c69d93ba9c4f32d01a3c812eebfa0cd0936748481f0d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#15",
+      "hash": "sha256:e321fd91f7c2eeaf44f14ce1afd85edc158a713bcc2b6d3ac17217c98dab5392"
     },
     {
       "content": "headings",
@@ -5703,7 +5728,12 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#16",
-      "hash": "sha256:be5a41ec5cad6ef5950f4ca85e2fce04191ee02055eaea1045662021b3762c9a"
+      "hash": "sha256:a5e5343f01e7611e31e571fead6ef42adcc05a9c42372c7b638cc1890fac8ae4"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#18",
+      "hash": "sha256:e84860f379ae857774c788f5325ef0dfbf6103ace36b90f07586ebed16b95987"
     },
     {
       "content": "headings",
@@ -5869,6 +5899,31 @@
       "content": "headings",
       "identity": "docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#19",
       "hash": "sha256:0c15becafecf9dfc14bcd8f9f1efd465d4a0cd6591f55067d8e0d33a6931200d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#1",
+      "hash": "sha256:6f76f909baded083f16924f988899b7dd5df607f91ee711ffbcfbab13b2751ba"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#2",
+      "hash": "sha256:d4335edddf803116e60e90075174eedabd791c0bf129d04ae4d8c51a89288b06"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#5",
+      "hash": "sha256:fdd6d414c167856e505e8986850d448c3b9c26751773f23651f67c49506dff5d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#9",
+      "hash": "sha256:2263ba9dccbb85d2a25100ee226797075bd60a9ecb7fbfc3600d49e1c4251968"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#13",
+      "hash": "sha256:cff588391d632a22b2a44b5c4e465117e73cb0dba04cfa02aa552267647dc7f2"
     },
     {
       "content": "headings",
@@ -8388,27 +8443,27 @@
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#17",
-      "hash": "sha256:01119f1b47a8cf183d5d7680fac0bfda41a7dfd097e070aeb1cd067ff96a076a"
+      "hash": "sha256:891e5a9bdecfcad75ca9877811dbe701fb47839a89dc95ab5025ef86dfec3bf5"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#18",
-      "hash": "sha256:260a394d988502913e4bf49ea4f282c6e6e4323c22b1d00e608f5887df2d0d09"
+      "hash": "sha256:63b716beb84e60dc695dfc84bc1139eee88cd806d81f911cc4a3de661a2a86cf"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#19",
-      "hash": "sha256:fb6b8dcbcdb1980de879846c8786811638f6eb705def798e775942ae9f4520e3"
+      "hash": "sha256:c93a20dd85f2c7341435a4d05585209ca957797eaee48380c5d5757607f74fd6"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#20",
-      "hash": "sha256:ae3ea05bd49121338d2c471db8a98b5bcf02dd5d6ea871e797f3575c5619667e"
+      "hash": "sha256:ca3e062cfca35f86079111e58fb316c500a60aae6471fdc15a78d5f358817069"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#21",
-      "hash": "sha256:21d52728f757d3512f11b578702632c2408fc114268ebe5ee0827f4327c9e3f0"
+      "hash": "sha256:de8b6da61dc2095797ee30ecc17f523a31853c166835ab3e272bac0c6c8d3106"
     },
     {
       "content": "blocks",
@@ -8438,7 +8493,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#27",
-      "hash": "sha256:1940678addeff306b36101c26ebc12432ac9a49b7ffcedf370eced4e0bd15743"
+      "hash": "sha256:b3f81277baca5e9f1348c255141718698ee52d47d827c1eac6050cc6d39bf055"
     },
     {
       "content": "blocks",
@@ -8448,7 +8503,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#29",
-      "hash": "sha256:2ffb50448c1a0bd55b9f4b762350200e4030ea898fe8665b6d3656a1499110ba"
+      "hash": "sha256:849e31968b9d24fb398d8faf5c431541685004bbdc93b5ad5d73468b2e221552"
     },
     {
       "content": "blocks",
@@ -13253,7 +13308,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#10",
-      "hash": "sha256:ab2680fe7004086b3e6fbd0aaa75219e986b734ffd3374ec3795f6d3ea76a9ac"
+      "hash": "sha256:fc98b3d81b9fb5308cfd2be13f8fa2c5f4545981b2446341b2905fc175fe2687"
     },
     {
       "content": "blocks",
@@ -13268,37 +13323,37 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#13",
-      "hash": "sha256:7817c8477e535427b41d29161c96596a648950a0d8c26b56986ccf439d8a6b4a"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#14",
       "hash": "sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#15",
-      "hash": "sha256:901b13a25ab329af5655a47fce9baf3a323adb13fb6ba1cdc19fae44025b285d"
+      "identity": "docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#14",
+      "hash": "sha256:0880a0daf0eb2a7027cf2a2a51d80c6d80a0d3d2d5a3e0abea74681707060ffa"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#16",
+      "identity": "docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#15",
       "hash": "sha256:2a49a3ba679fcfb358fdad9c23368250d14e31320f8c91494208c2e9050a975b"
     },
     {
       "content": "blocks",
+      "identity": "docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#16",
+      "hash": "sha256:a98767461f14f4d6b2870d4a4e0b3743cbce9374dd5ff8dcbf2c43fe51698396"
+    },
+    {
+      "content": "blocks",
       "identity": "docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#17",
-      "hash": "sha256:edb612ef0f2179a68df9903b5f417d9c1c4f248c9a7f25f6cef1b07160590397"
+      "hash": "sha256:8eca26c6a5055b946e7b02b6a94edb6c1ae50a4ab36970db7b4762f043635610"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#18",
-      "hash": "sha256:d3e0234ec6e56a57be348699a19c6042d6f1175228c8532914243a188954402c"
+      "hash": "sha256:79328b43356efae5912b2ab2fd444d8fa8dee92787cd38745fdaa57c88df7c63"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#19",
-      "hash": "sha256:222b69f2b72218601ec53fdbc983b9f139345585e9a3748dac35e73e85f6a6a6"
+      "hash": "sha256:f5327b020190958f37cb3231e63bfb2ca51c09f45bad99ca06455b4094077d1f"
     },
     {
       "content": "blocks",
@@ -13308,7 +13363,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#21",
-      "hash": "sha256:5f90ed2c2e12423b27c371f6537d3c2b60446f199ffd748a3d47f216fd2f3e8b"
+      "hash": "sha256:77f5c88a51a0a838db659a7b12d6263076b40ed12c1c58a3f56742fff3db2cea"
     },
     {
       "content": "blocks",
@@ -24138,7 +24193,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#10",
-      "hash": "sha256:e32c88154af714eede0cd008a6e323b9b3d13cf651404bbe16cab8d4c6a5683e"
+      "hash": "sha256:8191c2e501a8412a8d9a745b96cfccf170557a4c808ea40aba7be4b2f38cd0b5"
     },
     {
       "content": "blocks",
@@ -24163,12 +24218,22 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#15",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:b870c1d486e877179fe7b23b5e9f9619595cb034fa761325053c6ee354b8e212"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#16",
-      "hash": "sha256:cc0d10d4af95614f6d135e92ac1acd7c224231a22f99d3515b948e63b9891e01"
+      "hash": "sha256:6b5feaf022314308fe782b929ca9ef3c99bf34433e67e749675550e882441fee"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#17",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#18",
+      "hash": "sha256:131bff3086d6824264344a5b997f4cd6306bd3f13c0d5edd78e7f88788acab16"
     },
     {
       "content": "blocks",
@@ -24333,7 +24398,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#17",
-      "hash": "sha256:1b58d717f16c34d97057b754991917e5b21c6370110b398846af2d0b4597bc04"
+      "hash": "sha256:aac20a1b98c52a34802969e172c6bc093e5f1b7cef3e1a0baf6574d8388eb96d"
     },
     {
       "content": "blocks",
@@ -24398,17 +24463,27 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#30",
-      "hash": "sha256:b05f029e7122bdfb7a2d1497d31231830a84d19078b8efcc8cd8d41337676395"
+      "hash": "sha256:ee1922eeb26986ae261e12543bb45fa5b36c11d655c097f8ecf23fbe5bab2c16"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#31",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:c542a76755c169f96d321f27a5a68ccfe74028a19aa5b08eda82642d9b36f4b3"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#32",
-      "hash": "sha256:e5603b5f5319d62477c55ed2196694a694ddc358e60e922f5d1b7dc95ec86a24"
+      "hash": "sha256:3e4b8ad788b79c3b775b81474d85d2a9da808b927626fe933e3e316e0484e8a2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#33",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#34",
+      "hash": "sha256:8ec7c4906b0c9a792cb1556ebd395951c4fb942b00692ae31a6bae1d5956ea3d"
     },
     {
       "content": "blocks",
@@ -24503,7 +24578,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#5",
-      "hash": "sha256:095ebf0aaa88ddab9d3c2313f85167ea7150860ca313c0d45b26903b24fef88a"
+      "hash": "sha256:85efc619fd6d33cbeb5964dea64b93a15243e774b125608a05a7ef570bdc4491"
     },
     {
       "content": "blocks",
@@ -24538,17 +24613,27 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#12",
-      "hash": "sha256:289d2caae55032c62db584632726f3b3ce00b7c28d4b0ab8af6a807240102250"
+      "hash": "sha256:ceb06e8e988ea01faca2993d8f933d5ac3119b14bb2ddd9c74a945a9bb8bdbef"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#13",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:642fc8dc5ca067d4f89b3d9b10f57221362e716b23dbbd3d6368467474a68588"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#14",
-      "hash": "sha256:a643a77ebd5e3b3194386f7fd5432ade77c0ed2845133ec5f54ddb17623b27fd"
+      "hash": "sha256:e5095557a7ff81814c2050d84f6f818f465a5fcd6c03148f3a5d41f98c6178a8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#15",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md#16",
+      "hash": "sha256:9e4e77305909cc27fcb9ed73b2103bc69a3ccca2360c0006d521fa8997d3787e"
     },
     {
       "content": "blocks",
@@ -24723,7 +24808,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#9",
-      "hash": "sha256:57985a415f69878d1b96d1d355c3e44a24e737dbb54dd7d8187eb36d89b243b2"
+      "hash": "sha256:d6eb0ef664c692bc12802a6ac5c09993982228af6434c1ebe9894eb24526abb9"
     },
     {
       "content": "blocks",
@@ -24738,12 +24823,12 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#12",
-      "hash": "sha256:58c45a2b5cf742e81fb7c8821aa89ff73b1a52b252d43ade4bfab388cfe19039"
+      "hash": "sha256:bc3e62681bde34e4e43e0a273ef03621d7c4dca4cb7a7e2b580db3a02d2c22ac"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#13",
-      "hash": "sha256:5d487a7996c8e263079f9d6304bb56e25eeacc575ebd8bd10356a450b88e7fb8"
+      "hash": "sha256:996525570e9d42bf45891d746db6c78bb4135d42e7c006d9d23b79410c77e30b"
     },
     {
       "content": "blocks",
@@ -24753,17 +24838,27 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#15",
-      "hash": "sha256:7b5fa60e7d8f3a77bc2954cfc27b9dee9be3831e414c94d117e579341bc9514f"
+      "hash": "sha256:261778d0c9470bd5a06acaa64580a60dd819f73c303275435d119c0ba92bd853"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#16",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:90d2d2cd961e77c97bdd69f27f29939e5fd7f2161da57d5006602c512c490308"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#17",
-      "hash": "sha256:4c528b5b14b78f2b56edc601342cdb3e385bcc9e77ca0c60a091d8b0aa69b340"
+      "hash": "sha256:40c5492a5535a42c95f7b04717526acf27e7533e2a2ad135bb0065509ff73a1e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#18",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#19",
+      "hash": "sha256:780c5c597405163ae1aa767c0a60521cd780c9388fef789256be598771b765d9"
     },
     {
       "content": "blocks",
@@ -25399,6 +25494,76 @@
       "content": "blocks",
       "identity": "docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#20",
       "hash": "sha256:2cb3594275cf5ca2fa68984d266641af0139aeb888caf6649eca8a73c73fdc55"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#1",
+      "hash": "sha256:4f2cf1d223090da4999585bb227be7d8e02fda74a81eb77abfe8c4e80f19a839"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#3",
+      "hash": "sha256:d0fda2186f50e7f5121071fd29ac854d7cf9feb20ae6f31be83f43155c2948e6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#4",
+      "hash": "sha256:2d6aac3c6e2860e76bf99e426610485c435238b6023ba5653cb53484b92dd184"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#5",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#6",
+      "hash": "sha256:2f2dfaf21d5caf89dd9167285dba5d9c590305b1e7941b483194d41b153169ed"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#7",
+      "hash": "sha256:8869db595eb2b36f8074c545d35750fbffbe9f1b8ed631bca5a9505290ba3f05"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#8",
+      "hash": "sha256:a5f884b2ffbe765a10e0786285d3b9537481a3a6f3ee14ebae59a15fa92b7df3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#9",
+      "hash": "sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#10",
+      "hash": "sha256:9dcdc5215f0764a93c62ba7af0b5a1f2d93524f773ffafc7059a3760d24402f1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#11",
+      "hash": "sha256:8e426fb4baf0f89b5cedcb2f08142268a6ac73f2939bb78424b7b5e3ed187d43"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#12",
+      "hash": "sha256:2f3f9545446231b6966a883ce9a8966d33db11f627f0106dc838cac11d1abcab"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#13",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md#14",
+      "hash": "sha256:babe67922b5b7e1cd375d26771241fbf70b94ae26f4e8ee48ccc0064483d1217"
     },
     {
       "content": "blocks",
