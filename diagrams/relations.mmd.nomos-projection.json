@@ -3,16 +3,16 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:242276d8adabefd56a9a9badfb25adc9ff8bef6e1aa505d8a6ee313c319476ca",
-  "inputs_digest": "sha256:2f8f3c4cf9f542caa471a5ab016de18220ad900a0a58957d7a8c4f26a16c7599",
+  "content_digest": "sha256:42fb0bdb8f5b20193f2ddc8460fe5ce5fe5fd65cc187c802111ec090cd1678f7",
+  "inputs_digest": "sha256:fcadcd3bc8323898f1dbeac62c50ea3a02e158bdbdbeea9d67e8d56cb1769f72",
   "sections": [
     [
       "Relations",
-      1048
+      1052
     ],
     [
       "Decisions",
-      145
+      146
     ]
   ],
   "inputs": [
@@ -285,6 +285,11 @@
       "content": "relations",
       "identity": "ARC-ROADMAP-001 relates-to OD-CORRECTIONS-001",
       "hash": "sha256:303dcc0c7e1da14f3b792c520d831b33a7dfb78facc0b18fdbfe3d96d895c02c"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-ROADMAP-001 relates-to OD-CORRECTIONS-002",
+      "hash": "sha256:1f62efa3b5dcd9f62414ecf78f5837e2050d8f106cf763f4afafb053bdb20e6e"
     },
     {
       "content": "relations",
@@ -1748,6 +1753,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-CORRECTIONS-001 relates-to OD-CORRECTIONS-002",
+      "hash": "sha256:e73590b1a36cb3779450f8266f9d2f427e05b3a54cec082a552990643dc84c54"
+    },
+    {
+      "content": "relations",
       "identity": "OD-CORRECTIONS-001 relates-to OD-PACKAGE-006",
       "hash": "sha256:ae8a3d992fb7bf2cd02b3d198188f0251cb9ffce47c453d96db1f2fecef313a3"
     },
@@ -1765,6 +1775,16 @@
       "content": "relations",
       "identity": "OD-CORRECTIONS-001 relates-to OD-WORKFLOW-002",
       "hash": "sha256:b791df0fa01076efc49e541a29bdaf7932389a8e8acc7594d228f5d61564deba"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-CORRECTIONS-002 relates-to ARC-ROADMAP-001",
+      "hash": "sha256:62c8f7acf38a9d5d11ade0f6989f3ee2eed63e50cdd0c9da045ba4991b68d1e2"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-CORRECTIONS-002 relates-to OD-CORRECTIONS-001",
+      "hash": "sha256:03f22fd885aa9dc6a3af7d21f31debfe83e6222146c96e7f562fe219134f48a3"
     },
     {
       "content": "relations",
@@ -5440,6 +5460,11 @@
       "content": "nodes",
       "identity": "OD-CORRECTIONS-001",
       "hash": "sha256:28fc87e69aafc77a1cf1dd1a1414232e2db5fa75da3cdd05ab219cb50adf1c8e"
+    },
+    {
+      "content": "nodes",
+      "identity": "OD-CORRECTIONS-002",
+      "hash": "sha256:01942486f8f47570b769aa44d160b9746605afd7282109a0afda02796422966a"
     },
     {
       "content": "nodes",

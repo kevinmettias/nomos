@@ -57,6 +57,7 @@ graph LR
     arc_roadmap_001 -->|"relates-to"| d_132["D-132"]
     arc_roadmap_001 -->|"relates-to"| od_analysis_008["OD-ANALYSIS-008"]
     arc_roadmap_001 -->|"relates-to"| od_corrections_001["OD-CORRECTIONS-001"]
+    arc_roadmap_001 -->|"relates-to"| od_corrections_002["OD-CORRECTIONS-002"]
     arc_roadmap_001 -->|"relates-to"| od_gate_004["OD-GATE-004"]
     arc_roadmap_001 -->|"relates-to"| od_gate_014["OD-GATE-014"]
     arc_roadmap_001 -->|"relates-to"| od_gate_015["OD-GATE-015"]
@@ -349,10 +350,13 @@ graph LR
     od_contracts_002 -->|"relates-to"| od_trace_002
     od_contracts_002 -->|"relates-to"| od_trace_004["OD-TRACE-004"]
     od_corrections_001 -->|"relates-to"| arc_roadmap_001
+    od_corrections_001 -->|"relates-to"| od_corrections_002
     od_corrections_001 -->|"relates-to"| od_package_006
     od_corrections_001 -->|"relates-to"| od_package_008
     od_corrections_001 -->|"relates-to"| od_package_011
     od_corrections_001 -->|"relates-to"| od_workflow_002
+    od_corrections_002 -->|"relates-to"| arc_roadmap_001
+    od_corrections_002 -->|"relates-to"| od_corrections_001
     od_determinism_001 -->|"affected_by"| od_determinism_002
     od_determinism_001 -->|"affects"| od_gate_001
     od_determinism_001 -->|"relates-to"| arc_specdb_001
@@ -1090,6 +1094,7 @@ graph LR
     od_contracts_001
     od_contracts_002
     od_corrections_001
+    od_corrections_002
     od_determinism_001
     od_determinism_002
     od_gate_001
