@@ -26319,6 +26319,73 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-CORRECTIONS-002-COMMIT-EVIDENCE",
+      "title": "OD-CORRECTIONS-002: ValidatedPlan::Commit requires attached Evidence, closing AGT-EXEC-004's real gap",
+      "why": "The user directed real AgentExecutor infrastructure to be built, not another manifest layer -- an explicit override of the population-of-zero caution this workspace otherwise holds, the same shape OD-PACKAGE-006's wait was overridden once already. P13-TRACE-AGT-EXEC-AUDIT, landed immediately before this item, checked the corpus's own agent-executor threat model (AGT-EXEC-001 through 005) against the live workspace rather than inventing a shape: AGT-EXEC-004 ('agent claims of tests, builds, checks, or measurements require attached tool evidence from the corresponding trusted capability; unsupported claims remain AgentJudged') is real and tested for ledger-item completion (nomos_ledger::work finish's VerificationRecord/Ran_To_Completion actually runs a predicate through a process launcher rather than taking an agent's word) and for EvidenceClass::AgentJudged/Is_Mechanical's floor-of-strength semantics (nomos-contracts, wired into Finding) -- but gapped at the one other real mutation-commit path in this workspace: nomos_corrections::ValidatedPlan::Commit takes no evidence parameter at all, so a correction can be committed with zero attached tool evidence and nothing downgrades an unsubstantiated claim about it to AgentJudged. This is not an invented shape: nomos_model::Evidence/EvidenceClass already exist, tested, and nomos-corrections (band 35) already depends on nomos-model (band 10) -- the dependency edge is real and legal today. What is missing is only the wiring between two already-built systems that were built without knowing about each other, the same kind of gap OD-TRACE-002 closed for CHK-003 and this session closed for MODEL-ROUTE-037, except this time the fix is real code rather than a machine-readable entry. AGT-EXEC-001 (capability-class authorization/audit) and AGT-EXEC-002's remaining seven dimensions (network policy, executable allowlist, secret access, env vars, process limits, model-provider/data-retention policy, max patch size) and AGT-EXEC-003 (untrusted-content handling) are deliberately NOT attempted here -- none has a real second case to check a shape against yet, and inventing one now would be exactly the mistake this workspace has declined to make repeatedly (OD-PACKAGE-006, OD-PACKAGE-008, OD-PACKAGE-011). This item is scoped to the one real, non-speculative gap the audit actually found.",
+      "done_when": "docs/records/OD-CORRECTIONS-002-*.md exists, accepted, authority canonical-normative-record, registered via crates/spec/nomos-spec-store/records/OD-CORRECTIONS-002.record, and decides: nomos_corrections::ValidatedPlan::Commit takes an additional nomos_model::Evidence parameter; CommittedPlan carries it and exposes it via a new Evidence() accessor; no other AGT-EXEC dimension is attempted. Code: validated.rs's Commit signature changes and its own tests construct real Evidence values; committed.rs's CommittedPlan gains the evidence field, an Of(..., evidence) constructor parameter, and an Evidence() accessor, with its own tests updated; lib.rs's crate-level doc comment is corrected to state precisely that Commit's evidence parameter does not let this crate decide what counts as evidence, only requires a caller to say so; tests/integration/tests/determinism/productions.rs's Validated_And_Committed constructs a real, deterministic Evidence value, passes it to Commit, and renders it into the determinism byte stream; tests/contract/surface/nomos-corrections.txt is regenerated (NOMOS_SURFACE_BLESS) and current; README.md's nomos-corrections band-table line is corrected if it overclaims 'no agent' given Evidence's AgentJudged variant now flows through Commit's own signature. cargo test --no-fail-fast -p nomos-corrections -p nomos-integration-tests -p nomos-contract-tests passes. No other AGT-EXEC requirement is assessed differently and no other crate is touched.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/corrections/nomos-corrections",
+          "tests/integration/tests/determinism/productions.rs",
+          "tests/contract/surface/nomos-corrections.txt",
+          "docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md",
+          "crates/spec/nomos-spec-store/records/OD-CORRECTIONS-002.record",
+          "README.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-corrections",
+          "-p",
+          "nomos-integration-tests",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-corrections",
+          "-p",
+          "nomos-integration-tests",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": " ... ok\n\ntest result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.42s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.13s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-55ad3baadee2ff4e.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-56e1c9fba250ca24.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-4d4e16ab50ac70a5.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-35945c6ebc64c902.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-48bfe8d6f3ebf24c.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-ad5f178a2fa55ca5.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-a4b9594685bdc99a.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-0a473518710ef1f1.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-612bfa361c61aabd.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-13810cc2d23617bf.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_corrections-fe616b6ddd99c1ab.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_integration_tests-ed91bfaa443c8962.exe)\n     Running tests\\analysis_slice\\main.rs (target\\debug\\deps\\analysis_slice-257b6e41c529946d.exe)\n     Running tests\\determinism\\main.rs (target\\debug\\deps\\determinism-748a8eb73a77a32f.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_corrections\n   Doc-tests nomos_integration_tests\n",
+        "verified_at": 1787544791,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

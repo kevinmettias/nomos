@@ -3,29 +3,35 @@
 use crate::staged::Assert_Not_Moved;
 use crate::CorrectionError;
 use nomos_contracts::SnapshotId;
+use nomos_model::Evidence;
 use nomos_workspace::{Workspace, WorkspaceChangeSet};
 
 /// A plan whose forward change has been applied to a live workspace.
 ///
 /// Carries the exact reverse of what it applied, built from the same edits at staging
 /// time — not recomputed from whatever the workspace holds when rollback is asked for, so
-/// rollback undoes what this plan did rather than whatever the paths currently say.
+/// rollback undoes what this plan did rather than whatever the paths currently say. Also
+/// carries the evidence [`crate::ValidatedPlan::Commit`] was given for why committing was
+/// warranted — `AGT-EXEC-004`'s own requirement, `OD-CORRECTIONS-002` decided, is that this
+/// claim is never silent, not that it is always strong.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct CommittedPlan
 {
     base: SnapshotId,
     after: SnapshotId,
     reverse: WorkspaceChangeSet,
+    evidence: Evidence,
 }
 
 impl CommittedPlan
 {
-    pub(crate) fn Of(base: SnapshotId, after: SnapshotId, reverse: WorkspaceChangeSet) -> Self
+    pub(crate) fn Of(base: SnapshotId, after: SnapshotId, reverse: WorkspaceChangeSet, evidence: Evidence) -> Self
     {
         return Self {
             base,
             after,
             reverse,
+            evidence,
         };
     }
 
@@ -39,6 +45,13 @@ impl CommittedPlan
     pub const fn After(&self) -> SnapshotId
     {
         return self.after;
+    }
+
+    /// What the committing caller said backed its claim that committing was warranted.
+    #[must_use]
+    pub fn Evidence(&self) -> &Evidence
+    {
+        return &self.evidence;
     }
 
     /// Submits this plan's reverse change through `live`'s one door, undoing it.
@@ -62,9 +75,19 @@ impl CommittedPlan
 mod tests
 {
     use crate::{ChangeSet, CommittedPlan, CorrectionCandidate, CorrectionPlan, Edit};
-    use nomos_contracts::{ConfigurationId, Digest128};
-    use nomos_model::Content_Digest;
+    use nomos_contracts::{ConfigurationId, Digest128, EvidenceClass, ProviderId};
+    use nomos_model::{Content_Digest, Evidence};
     use nomos_workspace::{BuildVariant, ChangeSource, Workspace, WorkspaceChangeSet};
+
+    /// What a caller with nothing stronger than its own judgment supplies.
+    fn Agent_Judged() -> Evidence
+    {
+        return Evidence {
+            class: EvidenceClass::AgentJudged,
+            producer: ProviderId::New("test"),
+            supporting: Vec::new(),
+        };
+    }
 
     fn Base() -> Workspace
     {
@@ -103,7 +126,7 @@ mod tests
             .expect("stages cleanly")
             .Validate(base)
             .expect("validates cleanly")
-            .Commit(base)
+            .Commit(base, Agent_Judged())
             .expect("commits cleanly");
     }
 
@@ -124,6 +147,18 @@ mod tests
         assert_eq!(after_rollback, starting);
         assert_eq!(base.Id(), starting);
         assert_eq!(base.Content_Of("a.rs"), Some(Content_Digest(b"old")));
+    }
+
+    /// `OD-CORRECTIONS-002`'s own reason for existing: a committed plan does not lose what
+    /// backed the claim that committing was warranted.
+    #[test]
+    fn Test_A_Committed_Plan_Should_Carry_Its_Evidence()
+    {
+        let mut base = Base();
+        let plan = Plan_Changing_A(Before("old"), After("new"));
+        let committed = Commit_Plan(&plan, &mut base);
+
+        assert_eq!(committed.Evidence(), &Agent_Judged());
     }
 
     #[test]

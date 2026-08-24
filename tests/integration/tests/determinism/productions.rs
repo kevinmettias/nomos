@@ -7,11 +7,11 @@ use nomos_analysis::{
     Dependency, FactIdentity, FactStore, GenerationCause, MemoryFactStore,
 };
 use nomos_contracts::{
-    BuildVariantId, ConfigurationId, GenerationId, SnapshotId, SubjectId,
+    BuildVariantId, ConfigurationId, EvidenceClass, GenerationId, ProviderId, SnapshotId, SubjectId,
 };
 use nomos_corrections::{ChangeSet, CorrectionCandidate, CorrectionPlan, Edit};
 use nomos_lang_rust::rollup;
-use nomos_model::Content_Digest;
+use nomos_model::{Content_Digest, Evidence};
 use nomos_platform_std::StdProcessLauncher;
 use nomos_workspace::{BuildVariant, ChangeSource, Workspace, WorkspaceChangeSet};
 
@@ -625,11 +625,19 @@ fn Validated_And_Committed(
         .Validate(workspace)
         .expect("nothing has moved the workspace since staging");
 
+    let evidence = Evidence {
+        class: EvidenceClass::AgentJudged,
+        producer: ProviderId::New("nomos-integration-tests.determinism"),
+        supporting: Vec::new(),
+    };
     let committed = validated
-        .Commit(workspace)
+        .Commit(workspace, evidence)
         .expect("the workspace door accepts the forward change");
     rendered.extend_from_slice(format!("committed-base\t{}\n", committed.Base()).as_bytes());
     rendered.extend_from_slice(format!("committed-after\t{}\n", committed.After()).as_bytes());
+    rendered.extend_from_slice(
+        format!("committed-evidence-class\t{}\n", committed.Evidence().class).as_bytes(),
+    );
     assert_ne!(committed.After(), base, "the commit must have changed the workspace");
 
     return committed;

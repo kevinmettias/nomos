@@ -19,6 +19,7 @@ pub fn nomos_corrections::ChangeSet::Empty() -> Self
 pub fn nomos_corrections::ChangeSet::Is_Empty(&self) -> bool
 pub fn nomos_corrections::ChangeSet::Touched(&self) -> BTreeSet<&str>
 pub fn nomos_corrections::ChangeSet::With(mut self, edit: Edit) -> Self
+pub fn nomos_corrections::CommittedPlan::Evidence(&self) -> &Evidence
 pub fn nomos_corrections::CommittedPlan::Rollback(self, live: &mut Workspace) -> Result<SnapshotId, CorrectionError>
 pub fn nomos_corrections::CorrectionCandidate::Description(&self) -> &str
 pub fn nomos_corrections::CorrectionCandidate::New(description: impl Into<String>, change: ChangeSet) -> Self
@@ -37,7 +38,7 @@ pub fn nomos_corrections::Edit::Path(&self) -> &str
 pub fn nomos_corrections::Edit::Reverse(&self) -> Change
 pub fn nomos_corrections::Preview::Rendered(&self) -> &[u8]
 pub fn nomos_corrections::StagedPlan::Validate(&self, live: &Workspace) -> Result<ValidatedPlan, CorrectionError>
-pub fn nomos_corrections::ValidatedPlan::Commit(self, live: &mut Workspace) -> Result<CommittedPlan, CorrectionError>
+pub fn nomos_corrections::ValidatedPlan::Commit(self, live: &mut Workspace, evidence: Evidence) -> Result<CommittedPlan, CorrectionError>
 pub impl nomos_corrections::CorrectionError implements From<WorkspaceError>
 pub impl nomos_corrections::CorrectionError implements core::fmt::Display
 pub impl nomos_corrections::CorrectionError implements std::error::Error
