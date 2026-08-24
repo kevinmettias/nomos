@@ -27380,6 +27380,60 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-README-API-SEAM-COUNT-STALE-3",
+      "title": "README's nomos-api band row is stale a third time: 8 more seams landed since the last correction",
+      "why": "README's nomos-api band-90 row still describes it as a second caller of only Run_Gate plus Work's List/Show/Validate plus Spec's Profiles. Since P13-README-API-SEAM-COUNT-STALE-2 closed, 8 more real seams landed on track-a-nomos-api and merged to dev: Gate gained Plan and Explain (now 3/3), Work gained Audit, Claim, Renew, TakeOver, Abandon, Decline, Finish and Add (now 11/11), and Spec gained Sources (now 2/10, alongside Profiles). The README's own table is the map of what exists; a stale row misdescribes a real, merged seam as absent, the same recurring defect the two prior items already named and closed once each.",
+      "done_when": "The nomos-api band-90 row in README.md names all three Gate verbs (Run_Gate, Plan, Explain), names or counts all eleven WorkCommand verbs nomos-work-orchestration::Run answers, and names Spec's two landed verbs (Profiles, Sources) rather than the stale subset.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "README.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "rg",
+          "-F",
+          "-c",
+          "eleven `WorkCommand` verbs",
+          "README.md"
+        ],
+        "timeout_seconds": 30
+      },
+      "verified": {
+        "argv": [
+          "rg",
+          "-F",
+          "-c",
+          "eleven `WorkCommand` verbs",
+          "README.md"
+        ],
+        "exit_code": 0,
+        "output_tail": "1\n",
+        "verified_at": 1787592960,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
