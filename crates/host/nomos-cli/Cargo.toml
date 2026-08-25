@@ -69,6 +69,11 @@ nomos-gate-orchestration = { workspace = true }
 nomos-spec-model = { workspace = true }
 nomos-spec-project = { workspace = true }
 nomos-spec-store = { workspace = true }
+# The typed input/output shape and first real dispatcher for an agent-assisted operation --
+# `agent.rs` supplies StdProcessLauncher, the same choice `check.rs` and `work.rs` already
+# make for their own subprocesses.
+nomos-agent-contracts = { workspace = true }
+nomos-agent-executor = { workspace = true }
 
 [lints]
 workspace = true

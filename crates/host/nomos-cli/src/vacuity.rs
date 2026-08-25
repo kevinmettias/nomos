@@ -1,5 +1,5 @@
 //! Where every group's no-vacuous-success guarantee is declared, once, in one place a
-//! fifth group cannot skip.
+//! sixth group cannot skip.
 //!
 //! `OD-GATE-003` is the record this module exists to satisfy. `check.rs`'s own doc comment
 //! already argues, correctly, that the guard itself belongs with the caller that chose the
@@ -12,7 +12,7 @@
 //! is a decision the next author does not encounter.
 //!
 //! [`Group`] closes the set of things `main.rs` dispatches to, and [`Stance_Of`] matches it
-//! with no wildcard arm: a sixth group added to [`Group`] without a corresponding arm here
+//! with no wildcard arm: a seventh group added to [`Group`] without a corresponding arm here
 //! fails `cargo test` and the gate's `Lint` step at this match, beside the group it belongs
 //! to, rather than shipping a vacuous-success risk nobody wrote down. The tests below are
 //! the other half — they do not trust a [`Stance::Guarded`] line, they drive the named
@@ -51,29 +51,31 @@ pub(crate) enum Group
     Check,
     Request,
     Gate,
+    Agent,
 }
 
 #[cfg(test)]
 impl Group
 {
     /// Every group, for a test to walk without hand-maintaining a second list.
-    pub(crate) const ALL: [Self; 5] =
-        [Self::Work, Self::Spec, Self::Check, Self::Request, Self::Gate];
+    pub(crate) const ALL: [Self; 6] =
+        [Self::Work, Self::Spec, Self::Check, Self::Request, Self::Gate, Self::Agent];
 }
 
 /// Every group's on-argv spelling, paired with the [`Group`] `Stance_Of` reads.
 ///
 /// `main.rs`'s dispatch matches through [`Named`] rather than comparing strings itself, so
-/// a fifth group has to be spelled here — beside [`Stance_Of`]'s own match — before `main.rs`
+/// a sixth group has to be spelled here — beside [`Stance_Of`]'s own match — before `main.rs`
 /// can route to it at all. That is what makes this module the entry point every group's
 /// dispatch actually passes through, and not merely a place a stance happens to be written
 /// down beside the code it describes.
-pub(crate) const NAMES: [(&str, Group); 5] = [
+pub(crate) const NAMES: [(&str, Group); 6] = [
     ("work", Group::Work),
     ("spec", Group::Spec),
     ("check", Group::Check),
     ("request", Group::Request),
     ("gate", Group::Gate),
+    ("agent", Group::Agent),
 ];
 
 /// The group named on argv, if [`NAMES`] spells it.
@@ -138,6 +140,11 @@ pub(crate) fn Stance_Of(group: Group) -> Stance
         },
         Group::Gate => Stance::Guarded {
             decided_in: "gate::sources::Walked / nomos_check_orchestration::Run",
+        },
+        Group::Agent => Stance::NotApplicable {
+            because: "execute always names exactly one goal the caller typed; there is no \
+                      caller-chosen subject set for it to have walked and found empty the \
+                      way a checked-out tree or a queried record can be",
         },
     };
 }
@@ -220,10 +227,11 @@ mod tests
     /// can be. The reasoning is `Stance_Of`'s `because` field, read by a human, not asserted
     /// by this test.
     #[test]
-    fn Test_Work_And_Request_Are_Declared_Not_Applicable()
+    fn Test_Work_Request_And_Agent_Are_Declared_Not_Applicable()
     {
         assert!(matches!(Stance_Of(Group::Work), Stance::NotApplicable { .. }));
         assert!(matches!(Stance_Of(Group::Request), Stance::NotApplicable { .. }));
+        assert!(matches!(Stance_Of(Group::Agent), Stance::NotApplicable { .. }));
     }
 
     /// `gate run` walks a caller-chosen tree exactly as `check` does, so an empty one must

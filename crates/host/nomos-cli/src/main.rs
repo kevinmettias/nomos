@@ -17,6 +17,7 @@
 
 #![forbid(unsafe_code)]
 
+mod agent;
 mod arguments;
 mod check;
 mod gate;
@@ -53,6 +54,7 @@ fn main() -> std::process::ExitCode
         Some((vacuity::Group::Check, rest)) => Check(rest),
         Some((vacuity::Group::Request, rest)) => Request(rest),
         Some((vacuity::Group::Gate, rest)) => Gate(rest),
+        Some((vacuity::Group::Agent, rest)) => Agent(rest),
         None => Usage(),
     };
 
@@ -129,6 +131,20 @@ fn Gate(rest: &[String]) -> i32
     return gate::Run(&command, &mut stdout, &mut stderr).Value();
 }
 
+/// The agent group: dispatching a task to the first real `AgentExecutor`.
+fn Agent(rest: &[String]) -> i32
+{
+    let mut stdout = std::io::stdout();
+    let mut stderr = std::io::stderr();
+    let Ok(command) = agent::Parse(rest).inspect_err(|message| eprintln!("{message}"))
+    else
+    {
+        return agent::ExitCode::Usage.Value();
+    };
+
+    return agent::Run(&command, &mut stdout, &mut stderr).Value();
+}
+
 /// What the binary answers when it was not told which group it is being asked for.
 fn Usage() -> i32
 {
@@ -138,7 +154,8 @@ fn Usage() -> i32
          spec    read the specification store and render its projections\n  \
          check   run the rules over a tree and report what they find\n  \
          request submit a feature request, design spec or feature result\n  \
-         gate    compose this gate's rule registry and report what it holds"
+         gate    compose this gate's rule registry and report what it holds\n  \
+         agent   dispatch a task to the first real AgentExecutor"
     );
 
     return work::ExitCode::Usage.Value();

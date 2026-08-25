@@ -29852,6 +29852,63 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P14-CLI-AGENT-EXECUTE",
+      "title": "nomos-cli gains an agent group, nomos-agent-executor's first real caller outside its own tests",
+      "why": "nomos-agent-executor has no real caller anywhere in this workspace. nomos agent execute --goal <text> gives it one: parses --goal, dispatches through nomos_agent_executor::Execute with StdProcessLauncher (the same composition-root choice check.rs and work.rs already make), and renders the AgentExecutionOutcome directly rather than assembling a WorkResult or a Finding -- a person's direct question has no RuleId or SubjectId to report a Finding against, and fabricating one would invent a subject nobody named. Validated end-to-end against the real CLI with a genuine judgment task (a doc-comment-vs-code consistency check), not just a ping.",
+      "done_when": "nomos-cli builds a new agent group: ExitCode/Command/Parse/Run/Usage_Text in agent.rs, mirroring request.rs's shape. vacuity::Group gains Agent with a NotApplicable stance, matching Request's reasoning (execute always names exactly one goal, no caller-chosen subject set to walk). main.rs dispatches to it and lists it in Usage(). cargo test -p nomos-cli passes, cargo clippy --workspace --all-targets stays clean, and the full nomos-contract-tests suite (including boundaries/bands) passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/src/agent.rs",
+          "crates/host/nomos-cli/src/main.rs",
+          "crates/host/nomos-cli/src/vacuity.rs",
+          "crates/host/nomos-cli/Cargo.toml"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli",
+          "--no-fail-fast"
+        ],
+        "exit_code": 0,
+        "output_tail": "_Builds ... ok\ntest Test_A_Build_That_Cannot_Read_The_Ledger_Should_Not_Rewrite_It ... ok\ntest Test_A_Build_That_Can_Read_The_Ledger_Should_Still_Write_It ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s\n\n\nrunning 5 tests\ntest Test_Claiming_A_Lapsed_Item_Should_Refuse_And_Name_The_Takeover ... ok\ntest Test_A_Lapsed_Item_Should_List_As_Lapsed_And_Be_Takeable ... ok\ntest Test_Taking_Over_A_Lapsed_Item_Should_Record_The_Claim_It_Displaced ... ok\ntest Test_Show_Should_Report_The_Claim_A_Takeover_Displaced ... ok\ntest Test_Takeover_Should_Exit_Three_When_The_Lease_Is_Live_And_Four_When_It_Is_Not_Held ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.14s\n     Running unittests src\\main.rs (target\\debug\\deps\\nomos-95e9994d60d8be43.exe)\n     Running tests\\abandon_is_readable.rs (target\\debug\\deps\\abandon_is_readable-9eabf42ae5a1d6e4.exe)\n     Running tests\\add_guarantees_what_it_says.rs (target\\debug\\deps\\add_guarantees_what_it_says-1c87201a76dbbba6.exe)\n     Running tests\\authoring_surface.rs (target\\debug\\deps\\authoring_surface-7415b2037e88128c.exe)\n     Running tests\\check_command.rs (target\\debug\\deps\\check_command-8c32745a8fe87f0e.exe)\n     Running tests\\freshness.rs (target\\debug\\deps\\freshness-42149127f9297e2c.exe)\n     Running tests\\gate_step\\main.rs (target\\debug\\deps\\gate_step-0951231848286793.exe)\n     Running tests\\list_tells_the_truth.rs (target\\debug\\deps\\list_tells_the_truth-e96536c990fc1915.exe)\n     Running tests\\read_surface.rs (target\\debug\\deps\\read_surface-7f4e86c9ee1c491e.exe)\n     Running tests\\request_submit.rs (target\\debug\\deps\\request_submit-a2b7c7d52b53397a.exe)\n     Running tests\\stale_writer_is_refused.rs (target\\debug\\deps\\stale_writer_is_refused-1965945e4fa7f5d6.exe)\n     Running tests\\takeover_is_recorded.rs (target\\debug\\deps\\takeover_is_recorded-3f1e7d8ce6074e79.exe)\n",
+        "verified_at": 1787682408,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "f22c21bf2a3cdf4fe3aa7b7b70214b1f6f53d026"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

@@ -392,6 +392,8 @@ dependencies = [
 name = "nomos-cli"
 version = "0.1.0"
 dependencies = [
+ "nomos-agent-contracts",
+ "nomos-agent-executor",
  "nomos-analysis",
  "nomos-cap-syntax",
  "nomos-capability",
