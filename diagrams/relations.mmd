@@ -41,7 +41,6 @@ graph LR
     arc_ecosystem_001 -->|"relates-to"| od_capability_004["OD-CAPABILITY-004"]
     arc_ecosystem_001 -->|"relates-to"| od_contracts_001["OD-CONTRACTS-001"]
     arc_ecosystem_001 -->|"relates-to"| od_ledger_001["OD-LEDGER-001"]
-    arc_ecosystem_001 -->|"relates-to"| od_ledger_036["OD-LEDGER-036"]
     arc_ecosystem_001 -->|"relates-to"| od_package_003["OD-PACKAGE-003"]
     arc_ecosystem_001 -->|"relates-to"| od_package_004["OD-PACKAGE-004"]
     arc_ecosystem_001 -->|"relates-to"| od_package_005["OD-PACKAGE-005"]
@@ -284,6 +283,7 @@ graph LR
     od_capability_002 -->|"relates-to"| od_capability_004
     od_capability_002 -->|"relates-to"| od_capability_006
     od_capability_002 -->|"relates-to"| od_capability_007
+    od_capability_002 -->|"relates-to"| od_capability_010["OD-CAPABILITY-010"]
     od_capability_002 -->|"relates-to"| od_package_012
     od_capability_002 -->|"relates-to"| od_rules_001
     od_capability_002 -->|"relates-to"| od_rules_003
@@ -311,6 +311,7 @@ graph LR
     od_capability_006 -->|"relates-to"| od_capability_002
     od_capability_006 -->|"relates-to"| od_capability_004
     od_capability_006 -->|"relates-to"| od_capability_009
+    od_capability_006 -->|"relates-to"| od_capability_010
     od_capability_006 -->|"relates-to"| od_rules_003
     od_capability_007 -->|"relates-to"| d_135
     od_capability_007 -->|"relates-to"| od_capability_002
@@ -325,9 +326,15 @@ graph LR
     od_capability_008 -->|"relates-to"| od_rules_008
     od_capability_009 -->|"relates-to"| od_capability_001
     od_capability_009 -->|"relates-to"| od_capability_006
+    od_capability_010 -->|"relates-to"| od_capability_002
+    od_capability_010 -->|"relates-to"| od_capability_006
+    od_capability_010 -->|"relates-to"| od_completeness_001
+    od_capability_010 -->|"relates-to"| od_rules_001
+    od_capability_010 -->|"relates-to"| od_syntax_002
     od_completeness_001 -->|"affected_by"| d_134
     od_completeness_001 -->|"affected_by"| od_completeness_002
     od_completeness_001 -->|"affected_by"| od_completeness_004["OD-COMPLETENESS-004"]
+    od_completeness_001 -->|"relates-to"| od_capability_010
     od_completeness_001 -->|"relates-to"| od_contracts_002
     od_completeness_001 -->|"relates-to"| od_determinism_002
     od_completeness_001 -->|"relates-to"| od_gate_001
@@ -590,7 +597,6 @@ graph LR
     od_ledger_001 -->|"relates-to"| od_ledger_018
     od_ledger_001 -->|"relates-to"| od_ledger_019["OD-LEDGER-019"]
     od_ledger_001 -->|"relates-to"| od_ledger_035
-    od_ledger_001 -->|"relates-to"| od_ledger_036
     od_ledger_001 -->|"relates-to"| od_model_001["OD-MODEL-001"]
     od_ledger_002 -->|"relates-to"| d_132
     od_ledger_002 -->|"relates-to"| od_ledger_001
@@ -799,9 +805,6 @@ graph LR
     od_ledger_034 -->|"relates-to"| od_ledger_019
     od_ledger_035 -->|"relates-to"| od_gate_005
     od_ledger_035 -->|"relates-to"| od_ledger_001
-    od_ledger_036 -->|"relates-to"| arc_ecosystem_001
-    od_ledger_036 -->|"relates-to"| od_ledger_001
-    od_ledger_036 -->|"relates-to"| od_workflow_002
     od_model_001 -->|"relates-to"| od_ledger_001
     od_model_001 -->|"relates-to"| od_model_002
     od_model_001 -->|"relates-to"| od_rules_001
@@ -938,6 +941,7 @@ graph LR
     od_rules_001 -->|"relates-to"| arc_roadmap_001
     od_rules_001 -->|"relates-to"| od_capability_002
     od_rules_001 -->|"relates-to"| od_capability_003
+    od_rules_001 -->|"relates-to"| od_capability_010
     od_rules_001 -->|"relates-to"| od_completeness_001
     od_rules_001 -->|"relates-to"| od_completeness_004
     od_rules_001 -->|"relates-to"| od_gate_001
@@ -1102,6 +1106,7 @@ graph LR
     od_syntax_001 -->|"relates-to"| od_syntax_002
     od_syntax_002 -->|"affects"| od_rules_001
     od_syntax_002 -->|"relates-to"| od_analysis_006
+    od_syntax_002 -->|"relates-to"| od_capability_010
     od_syntax_002 -->|"relates-to"| od_completeness_001
     od_syntax_002 -->|"relates-to"| od_syntax_001
     od_trace_001 -->|"relates-to"| arc_roadmap_001
@@ -1152,7 +1157,6 @@ graph LR
     od_workflow_001 -->|"relates-to"| od_workflow_004
     od_workflow_002 -->|"relates-to"| arc_roadmap_001
     od_workflow_002 -->|"relates-to"| od_corrections_001
-    od_workflow_002 -->|"relates-to"| od_ledger_036
     od_workflow_002 -->|"relates-to"| od_workflow_001
     od_workflow_002 -->|"relates-to"| od_workflow_003
     od_workflow_002 -->|"relates-to"| od_workflow_004
@@ -1198,6 +1202,7 @@ graph LR
     od_capability_007
     od_capability_008
     od_capability_009
+    od_capability_010
     od_completeness_001
     od_completeness_002
     od_completeness_004
@@ -1269,7 +1274,6 @@ graph LR
     od_ledger_033
     od_ledger_034
     od_ledger_035
-    od_ledger_036
     od_model_001
     od_model_002
     od_package_001

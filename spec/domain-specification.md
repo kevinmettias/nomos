@@ -49,6 +49,7 @@ profile: domain-specification
 | docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md@authored | docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md | authored | 16 | 6 | sha256:28d369d79f6b9bc16f144ce71796ae80ccae724f627a779891daec3b61fa5b35 |
 | docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md@authored | docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md | authored | 19 | 6 | sha256:4d04815ed763e5dcf94dac93b3ea02bfc1095a5ca15731b5d342e314f8a33fc8 |
 | docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md@authored | docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md | authored | 36 | 10 | sha256:ebe2fe7a455f06f27dc6a52e573aa98fa57e7b1eb29feb90173c84a3ff266dee |
+| docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md@authored | docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md | authored | 22 | 6 | sha256:4f25aba8fc4a56b6b6f806ef0450d492c8688b573f77879698b2617c291179ce |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md@authored | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md | authored | 33 | 9 | sha256:26a4c8c8e217e97e0c147d846441c33d854347e490c3757345f06a4021b6d7ff |
 | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md@authored | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md | authored | 54 | 10 | sha256:fc95b7901fc9e920666e8f04eb01c6436a96d16fc63f94e0599114d5cfa5928b |
 | docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md@authored | docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md | authored | 27 | 8 | sha256:ae576ae44e0cc42f6fd2a44efd4c144eb6e6563fe999ad97a9d074e9037c1d2a |
@@ -120,7 +121,6 @@ profile: domain-specification
 | docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md@authored | docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md | authored | 17 | 5 | sha256:69ab019a45e8742af61dfa35899a6c68c9d29cc11a8c28c52356296a97a114ea |
 | docs/records/OD-LEDGER-034-whether-work-needs-a-typed-reconciliation-outcome-beside-the-free-text-reason-work-decline-already-carries.md@authored | docs/records/OD-LEDGER-034-whether-work-needs-a-typed-reconciliation-outcome-beside-the-free-text-reason-work-decline-already-carries.md | authored | 14 | 5 | sha256:cb61b6f602f2fc7836f03727ce282c5f46da3e5ef3c6f92108dc77cc862577fc |
 | docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md@authored | docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md | authored | 17 | 5 | sha256:e28fcdcd8881a5405bfd5398964764cd59fa6d45e8340359ca94d9df98a0d732 |
-| docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md@authored | docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md | authored | 21 | 7 | sha256:e44db6eb38b3d1a6229b905ffba42be08984541c3407ce66bff74af1b229992a |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md@authored | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md | authored | 29 | 8 | sha256:dea2667f08661d51389468ccb32132d696dd6cb5a0936574b89125c523341962 |
 | docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md@authored | docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md | authored | 24 | 7 | sha256:aba629fefa9d9503489cfcae8626b61030287a2f29e558cf0b775875eb32c5b7 |
 | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md@authored | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md | authored | 54 | 10 | sha256:0a930d2a044d183c00fc821119d1645738cb398a9374b5a6eb3a736cb50764d2 |
@@ -473,6 +473,12 @@ profile: domain-specification
 | docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#23 | authored | 2 | Amendment: The Unblock Plan's Own Call Sites Would Regress `nomos-rules`' Provider-Blindness, And It Named Only One Of Two Prerequisites |
 | docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#30 | authored | 2 | Amendment: Both Named Increments Are Built |
 | docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#35 | authored | 2 | Status |
+| docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md#1 | authored | 1 | The first cross-language capability compares two providers' declared fields against a doc-comment-declared correspondence |
+| docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md#2 | authored | 2 | Question |
+| docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md#5 | authored | 2 | What Was Measured |
+| docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md#9 | authored | 2 | The Decision |
+| docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md#15 | authored | 2 | What This Does Not Do |
+| docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md#21 | authored | 2 | Status |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md#1 | authored | 1 | A completeness guard is only as complete as the universe it quantifies over |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md#2 | authored | 2 | Question |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md#5 | authored | 2 | The Shape, Which Is Not The One The Item Assumed |
@@ -1113,13 +1119,6 @@ profile: domain-specification
 | docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md#4 | authored | 2 | What Was Measured |
 | docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md#13 | authored | 2 | Decision |
 | docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md#16 | authored | 2 | Status |
-| docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#1 | authored | 1 | The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target |
-| docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#2 | authored | 2 | Question |
-| docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#5 | authored | 2 | What Was Measured |
-| docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#11 | authored | 2 | Decision |
-| docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#14 | authored | 2 | What This Record Does Not Do |
-| docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#18 | authored | 2 | What Would Decide It Otherwise |
-| docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#20 | authored | 2 | Status |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#1 | authored | 1 | A claim and a fact address a path by one rule, and the record-identifier fold stays with the ledger |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#2 | authored | 2 | Question |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#8 | authored | 2 | What Was Actually Wrong |
@@ -10876,6 +10875,233 @@ left unchanged). `nomos_capability` needs no subject-scoping mechanism; the fix 
 above the registry, in the call sites that still hold a real path before it is digested away.
 `nomos-lang-go` is registered and, as of the second amendment above, reachable from a real walk:
 both increments this record named as not built here are now built.
+
+### docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md#1
+
+*revision: authored · kind: heading · heading: The first cross-language capability compares two providers' declared fields against a doc-comment-declared correspondence · hash: sha256:5d4c96b3b53f6be7b0fbc6035a091fd132cc311f81d3b6da2ffafd94759e6496*
+
+# The first cross-language capability compares two providers' declared fields against a doc-comment-declared correspondence
+
+### docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md#2
+
+*revision: authored · kind: heading · heading: The first cross-language capability compares two providers' declared fields against a doc-comment-declared correspondence / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md#3
+
+*revision: authored · kind: prose · heading: The first cross-language capability compares two providers' declared fields against a doc-comment-declared correspondence / Question · hash: sha256:954e92b8cee6c529b1b152d7d14c69a060f690a70f6e802a0f15f7eafef6d443*
+
+`OD-CAPABILITY-006` fixed what a cross-language claim is and classified five claim families
+by reachability against the resolution vocabulary this workspace already has. Family 2 —
+producer/consumer serialization format agreement — is "the one family with real reach at
+`Syntactic` today, and only partly": comparing two sides' *spelled* declarations, field
+names and arity, needs no name resolution and no execution. That record explicitly declined
+to build the capability, define the correspondence-declaration shape, or pick which crate it
+lives in, naming all three "the first cross-language capability's own work, judged against
+this record."
+
+### docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md#4
+
+*revision: authored · kind: prose · heading: The first cross-language capability compares two providers' declared fields against a doc-comment-declared correspondence / Question · hash: sha256:66628ca6df7b8053803921cb2f56d94bf768f857290fdc8ff5a6a6956791fadb*
+
+Two things stood in the way of that work existing. First, `nomos.cap.syntax.items` — the one
+capability both `nomos-lang-rust` and `nomos-lang-go` already offer — carries no field-level
+data for a struct: `PayloadItem.shape` is `Observation::Absent` for every `Struct`-kind item
+in both providers today, verified directly against `visit_item_struct`
+(`crates/languages/nomos-lang-rust/src/syntax/walk.rs`) and `Record_Type_Spec`
+(`crates/languages/nomos-lang-go/src/syntax/walk.rs`) before this record was written. A
+field-by-field comparison has nothing to read. Second, no correspondence-declaration
+convention exists to say which Rust struct is claimed to share a wire shape with which Go
+struct — `OD-CAPABILITY-006`'s own criterion is that this must be declared, never inferred,
+because neither provider can see the other's subject.
+
+### docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md#5
+
+*revision: authored · kind: heading · heading: The first cross-language capability compares two providers' declared fields against a doc-comment-declared correspondence / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md#6
+
+*revision: authored · kind: prose · heading: The first cross-language capability compares two providers' declared fields against a doc-comment-declared correspondence / What Was Measured · hash: sha256:4678ef6d9f3e45177071bfcc20de42d1af6af55b70b572b785828b994e31a820*
+
+`nomos.syntax.items.v2`'s own grammar (`crates/capabilities/nomos-cap-syntax/src/payload.rs`)
+already answers the first question without a schema version bump. `shape` is documented as
+"open... meaningful relative to the kind" — `fn/<arity>` for a function, `slice`/`value` for
+a typed declaration, `inherent`/`trait` for an impl block, `.` for "the shape has nothing to
+say about this form." A kind that has said nothing yet saying something now is exactly the
+extension this vocabulary was built to admit, and it is invisible to a build compiled before
+this record: an `Observation::Present` value the shape's own `Escape`/`Unescape` round-trip
+already carries opaquely for any string, tabs and newlines included, whether or not that
+build's `shape`-per-kind table happens to interpret `Struct`'s new content.
+
+### docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md#7
+
+*revision: authored · kind: prose · heading: The first cross-language capability compares two providers' declared fields against a doc-comment-declared correspondence / What Was Measured · hash: sha256:b14488ad48e168eec2bf01b1520c4b82726079af61416cc4e200de9b64d27f9e*
+
+The second question already has a live answer inside this workspace, not merely a candidate
+one: `nomos-rules::universe`'s "declared mirror," read off a doc comment
+(`/// Mirrored by \`Test_Name\`.`) rather than a config file, a Rust attribute, or an IDL.
+`Test_A_Declared_Mirror_Should_Be_Read_Off_The_Doc_Comment` is the worked precedent that a
+`documentation: Observation` field already carries a resolvable name a rule parses out and
+looks up against real source, and that a blind provider reports unobserved rather than
+silently "no mirror" — the identical shape `OD-CAPABILITY-006` requires of a cross-language
+correspondence: declared at the site, not inferred, and honest about a provider that cannot
+see it.
+
+### docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md#8
+
+*revision: authored · kind: prose · heading: The first cross-language capability compares two providers' declared fields against a doc-comment-declared correspondence / What Was Measured · hash: sha256:6bc814d97bc29dac533cbb55706e2d626d02bef84eb3588573191ee99c4d5ffc*
+
+`nomos-lang-rust` depends on `syn` with the `printing` feature deliberately absent —
+"nothing here renders tokens back out," its own `Cargo.toml` states. A field's full,
+generic-aware type spelling is therefore not cheaply reachable from this provider without
+either widening that boundary or hand-rolling a token renderer duplicating what `printing`
+already gives; `Type_Head` (`crates/languages/nomos-lang-rust/src/syntax/shape.rs`) already
+exists as this crate's stated compromise for the identical problem one layer up — a type's
+head, as written, without its generic arguments — and is reused rather than a new renderer
+built to avoid re-deciding a boundary this crate already drew. `nomos-lang-go` faces no such
+constraint: `tree-sitter`'s node API returns exact source bytes for any span, so a Go field's
+type is captured verbatim. The two sides are not symmetric in what they can spell, the same
+way they are not symmetric in `Assurance` today, and the comparison this record licenses is
+bounded by the weaker side.
+
+### docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md#9
+
+*revision: authored · kind: heading · heading: The first cross-language capability compares two providers' declared fields against a doc-comment-declared correspondence / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md#10
+
+*revision: authored · kind: prose · heading: The first cross-language capability compares two providers' declared fields against a doc-comment-declared correspondence / The Decision · hash: sha256:99e507c052f631b75a6d6aa94ba5df6080154956208b47870930a5e96a9f74e3*
+
+**`nomos.syntax.items.v2`'s `shape` gains a real vocabulary entry for `Struct`.** A struct
+with named fields records `shape` as `Observation::Present`, encoding one `name` and one
+`type` per field, tab-separated, one field per line, in declaration order — read and written
+by a shared pair of helpers (`Struct_Shape`/`Struct_Fields`) in `nomos-cap-syntax`, the same
+crate that already owns `Function_Shape`/`Function_Arity` for the identical reason: the
+vocabulary belongs to the contract, not to either provider. A struct with no named fields
+(Rust's unit and tuple forms; Go has no such form) records `Observation::Absent` — observed,
+and there is nothing to say, the same as any other kind's default. Both `nomos-lang-rust` and
+`nomos-lang-go` populate it for a real named-field struct: the second real party is not
+optional groundwork here, it is the whole reason `nomos.cap.syntax.items` is a capability
+contract rather than one provider's own opinion. A field's `type` is `Type_Head`'s answer on
+the Rust side (a type's head as written, generics and references stripped) and the tree's own
+source-text slice on the Go side — carried through into a finding's summary for a person to
+read, never compared to the other side's type spelling as a pass/fail condition, because
+nothing in this workspace declares a mapping between the two languages' type vocabularies and
+inventing one is not this record's question to answer.
+
+### docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md#11
+
+*revision: authored · kind: prose · heading: The first cross-language capability compares two providers' declared fields against a doc-comment-declared correspondence / The Decision · hash: sha256:2ac3f0b62f6f316fd148ca04fc5d86dd82651f1d3c70421fe17a78f6982b12df*
+
+**A cross-language correspondence is declared by a doc comment, on the struct claiming a
+counterpart:** `/// Corresponds to \`<QualifiedName>\`.` — the identical marker shape,
+resolved the identical way, as `universe.rs`'s `Mirrored by`. One-directional: the struct
+that declares the correspondence names the other side; the other side declares nothing back,
+the same asymmetry a mirror's own declaration already has. `<QualifiedName>` is resolved
+against every source's own `nomos.cap.syntax.items` fact by exact match, language-blind by
+construction — the rule does not ask which language a hit came from, only whether one exists,
+because the correspondence names a struct, not a file or a language.
+
+### docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md#12
+
+*revision: authored · kind: prose · heading: The first cross-language capability compares two providers' declared fields against a doc-comment-declared correspondence / The Decision · hash: sha256:8e8f4b99e2a170ad627a85333f8b459bdc8de4b22a5489e5d7fa0f4b480e08f3*
+
+**The rule compares field *names and arity*, set-wise, not declaration order.** `OD-
+CAPABILITY-006`'s own worked example — "side A declares four fields, side B declares three,
+one name differs" — is a claim about which names exist on each side, not about the order they
+were written in; a wire format built from named fields (the shape this family's own text
+scopes to) does not generally require positional agreement the way a tuple would. A name
+present on one side and absent on the other is the finding; a name present on both is not
+reported, the same "clean is silent" convention `Check_Lint_Diagnostics` already holds for a
+tool that already decided.
+
+### docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md#13
+
+*revision: authored · kind: prose · heading: The first cross-language capability compares two providers' declared fields against a doc-comment-declared correspondence / The Decision · hash: sha256:aeb608b817cf071fd61b7387c28d3b20b59975ff3cd47b5b3fef372d44834156*
+
+**A named counterpart nowhere in the sources reports `Applicability::MissingCapability`**,
+naming which side is missing — `OD-CAPABILITY-006`'s own resolution, applied rather than
+re-decided. A counterpart that is found but carries no field data (a Rust tuple or unit
+struct named as a wire counterpart, a struct form neither provider enumerates fields for)
+reports `Applicability::Unparseable`: the fact exists and was read, but it is not the fact
+this comparison needs, which is a different failure than no fact existing at all.
+
+### docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md#14
+
+*revision: authored · kind: prose · heading: The first cross-language capability compares two providers' declared fields against a doc-comment-declared correspondence / The Decision · hash: sha256:382ae788930f4e8e34bf86e06387c510625e1c6d95e1c17bf01b1ee827a35b33*
+
+**No new capability crate.** Both sides of the comparison are already `nomos.cap.syntax.items`
+facts — the rule reads it twice, once per subject, the way any rule already reads one
+capability for one subject, only over a subject *pair* a declared correspondence names rather
+than a subject the walk handed it directly. `OD-CAPABILITY-002`'s contention criterion never
+triggers: there is no second capability contract for a second party to contend over, because
+there is no second capability at all.
+
+### docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md#15
+
+*revision: authored · kind: heading · heading: The first cross-language capability compares two providers' declared fields against a doc-comment-declared correspondence / What This Does Not Do · hash: sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf*
+
+## What This Does Not Do
+
+### docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md#16
+
+*revision: authored · kind: prose · heading: The first cross-language capability compares two providers' declared fields against a doc-comment-declared correspondence / What This Does Not Do · hash: sha256:8288ee8f7c804a0d8e5229a5b99582684949da32cf2b1987e332c3946db6a4c8*
+
+It does not touch the other four families `OD-CAPABILITY-006` named. FFI ownership, runtime
+error propagation, cross-side threading and the `SemanticallyResolved`/`RuntimeObserved`
+halves of family 2 and 3 all still wait on producers this workspace does not have; nothing
+here builds one.
+
+### docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md#17
+
+*revision: authored · kind: prose · heading: The first cross-language capability compares two providers' declared fields against a doc-comment-declared correspondence / What This Does Not Do · hash: sha256:e2630a9c460c8af253d617e32d58ab045c683de1f1c14f511ff881e6af0ef731*
+
+It does not compare the two sides' field types to each other, license a Rust-to-Go type
+mapping, or claim `u32` and `int` are or are not the same wire type. That is a declared
+correspondence of its own kind — `OD-CAPABILITY-006`'s own criterion, applied a second time,
+to a question this record does not reach.
+
+### docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md#18
+
+*revision: authored · kind: prose · heading: The first cross-language capability compares two providers' declared fields against a doc-comment-declared correspondence / What This Does Not Do · hash: sha256:51488dc028036ec517fa2e9bbbee1bfd9d307b3ad12e21f6e08bab352b396db4*
+
+It does not add a `printing` dependency to `nomos-lang-rust`, or otherwise widen what that
+provider renders. `Type_Head`'s existing boundary is reused, not renegotiated, and a future
+record that wants a Rust field's full generic-aware spelling has to make that case on its own
+terms.
+
+### docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md#19
+
+*revision: authored · kind: prose · heading: The first cross-language capability compares two providers' declared fields against a doc-comment-declared correspondence / What This Does Not Do · hash: sha256:c5f43ab62e20589173156bccffe9b4a6aea170aec526d12e8926a143285a1ec1*
+
+It does not change `nomos.syntax.items.v2`'s `SCHEMA` constant or its grammar. `shape`'s
+vocabulary was already open per kind; giving `Struct` a real answer is the extension that
+vocabulary exists to admit, not a new version of it.
+
+### docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md#20
+
+*revision: authored · kind: prose · heading: The first cross-language capability compares two providers' declared fields against a doc-comment-declared correspondence / What This Does Not Do · hash: sha256:14c8b40014b347576577bc5beecccd0f77b80be68a2a9f9b2a9c322a3ba5135d*
+
+It does not decide how this rule is selected by `OD-GATE-017`'s `Wants(selected, ...)`
+mechanism beyond composing it the same way every other unconditional rule already is — that
+is composition, per `OD-HOST-004`, not a question this record reopens.
+
+### docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md#21
+
+*revision: authored · kind: heading · heading: The first cross-language capability compares two providers' declared fields against a doc-comment-declared correspondence / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md#22
+
+*revision: authored · kind: prose · heading: The first cross-language capability compares two providers' declared fields against a doc-comment-declared correspondence / Status · hash: sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3*
+
+Accepted.
 
 ### docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md#1
 
@@ -31062,206 +31288,6 @@ Accepted, drawn by `P13-IMPACT-ACTUAL-QUESTION` against one sampled commit rathe
 survey of the whole board — the sample is small by construction, and the trigger above is
 written so a future reader does not need a larger survey to reopen this if a real incident
 appears.
-
-### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#1
-
-*revision: authored · kind: heading · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target · hash: sha256:95070098ba3f8fbb8cfaa7cd826643367a43a9d8376545059119ccf59300e88f*
-
-# The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target
-
-### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#2
-
-*revision: authored · kind: heading · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
-
-## Question
-
-### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#3
-
-*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / Question · hash: sha256:b8544d5b19d8a16594dad766d3c09bc6912c8a59b8e5199fea321c347ddc4ab8*
-
-An external architecture review asked this directly: is `nomos-ledger`/`nomos-work-
-orchestration` a Nomos product feature that should converge toward the product's general
-`TaskEnvelope`/`Workflow`/`AgentExecutor`/authority/artifacts/verification model, or is it
-this repository's own development infrastructure that should not shape public architecture —
-naming the risk plainly: "do not let the internal agent coordination tool become the
-accidental prototype whose peculiarities define generic workflow semantics."
-
-### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#4
-
-*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / Question · hash: sha256:a7b236a6668e83c2aa0894b15e2d40d69b4a9d58724c2165f7def63a8f5a2e02*
-
-This is not a new question to this workspace. `ARC-ECOSYSTEM-001` already names the work
-ledger as one of three subsystems whose "current placement does not prove ownership," framed
-as an open disjunction it deliberately declined to close: "Territory-based mutual exclusion
-over a committed JSON document is either repository bootstrap machinery or a generic
-coordination primitive; `OD-LEDGER-001` records that its territory is declared rather than
-enforced, which is a bootstrap-shaped compromise. Nothing about it requires the subject to be
-software." That record states plainly that naming the three is "not a plan to move them," and
-moves nothing. This record settles the one disjunction it left open for the ledger
-specifically, against evidence that has accumulated since.
-
-### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#5
-
-*revision: authored · kind: heading · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
-
-## What Was Measured
-
-### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#6
-
-*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / What Was Measured · hash: sha256:336e6b9e543a702b2c055b95c97f2ce47df44bddb254c97132266badcef62b24*
-
-**No product surface depends on `nomos-ledger`.** `nomos check` and `nomos gate` — the two
-verbs an end-user repository actually runs against its own code — never import
-`nomos-ledger` or `nomos-work-orchestration`. Every real dependent is `nomos-work-
-orchestration`, consumed by exactly two callers: `nomos-cli::work`
-(`crates/host/nomos-cli/src/work.rs`) and `nomos-api::work`
-(`crates/host/nomos-api/src/work.rs`) — both dispatch surfaces for this repository's own
-board, `work/ledger.json`, never for a subject an end user's repository would configure.
-
-### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#7
-
-*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / What Was Measured · hash: sha256:0d5ba6c052ee511df00eac01863835986daff2a005eb1d9a5b1a84fe64fbd381*
-
-**The product's own agent vocabulary is declared bundling, not an engine the ledger could
-converge with.** `nomos-agent-contracts`'s `TaskEnvelope`/`WorkResult`
-(`crates/agent/nomos-agent-contracts/src/lib.rs`) compute nothing — a caller fills a
-`TaskEnvelope` in and an agent's own response fills a `WorkResult` in. No real `Workflow` type
-exists anywhere in this workspace; the nearest is `RunId`
-(`crates/contracts/nomos-contracts/src/identity.rs`), an identity with no scheduling,
-authority, artifact, or side-effect model attached to it, and a declared-only `WorkflowStep`
-contract shape (`OD-WORKFLOW-003`) with no engine behind it. There is no live `Workflow`
-machinery for `LedgerItem`/`Territory`/`Claim` to converge toward; converging now would mean
-inventing the product's workflow semantics from this coordination tool's own shape, which is
-exactly the risk the review named.
-
-### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#8
-
-*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / What Was Measured · hash: sha256:8f5cc8a97ec68c4ad554e76a4c12c6a6d9a9e2d2b9e2cc95976f71d35fcbd116*
-
-**The two vocabularies have already collided once, by accident, and been explicitly
-un-conflated twice.** `OD-WORKFLOW-001` corrects "a conflation an earlier draft of this
-paragraph made from a substring grep rather than reading the file" — mistaking `nomos-ledger`'s
-own `Run_Gate_Step` (an internal argv runner `nomos work finish` uses to run the gate's lint
-step) for a call into the product's real `nomos_gate_orchestration::Run_Gate`. `OD-WORKFLOW-
-002` names the same correction again, citing "its false `nomos-ledger` caller claim." Two
-independent instances of the same name-fragment accident, each caught and reversed rather than
-left standing, is evidence the vocabularies need to stay legibly apart, not evidence they are
-converging on their own.
-
-### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#9
-
-*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / What Was Measured · hash: sha256:8673c97c832de6a375bc58751f55bf4d369064adca8363159e4a4dfa4cad422a*
-
-**`nomos-api::work.rs` already exposes the full verb set, but frames itself as a seam
-exercise, not a product surface.** Its own module doc: "A second real caller of
-`nomos_work_orchestration::Run` — `List`, `Show`, `Validate`, `Audit`, `Claim`, `Renew`,
-`TakeOver`, `Abandon`, `Decline`, `Finish` and `Add`, the same 'one verb at a time, not the
-whole command set' scope `Handle_Gate_Run` already uses for Gate's own `run`." It states its
-own purpose as proving the orchestration seam has a second real caller, the identical
-framing `nomos-api`'s `check`/`gate`/`spec` modules already carry for their own verbs — not a
-claim that ledger coordination is itself a capability an end user's repository would want.
-
-### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#10
-
-*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / What Was Measured · hash: sha256:f70b3eab9635fdd47d2e5ab7453e5ab9d53064b7253615cc20cf7588b693eb15*
-
-**README's own wording already reads as internal coordination, not a product capability.**
-Row 20 (`nomos-ledger`): "Territory-based mutual exclusion over `work/ledger.json`." Row 40
-(`nomos-work-orchestration`): runs "a `nomos work` verb against a caller-chosen platform."
-Contrast row 41, `nomos-gate-orchestration`: "The seam for the first-class Gate object
-`ARC-ROADMAP-001` names" — README already marks Gate as a product object in its own words, and
-never uses that language for the ledger.
-
-### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#11
-
-*revision: authored · kind: heading · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / Decision · hash: sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511*
-
-## Decision
-
-### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#12
-
-*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / Decision · hash: sha256:a9e8a1e22ae7c32b5d282c66f00c91f30df77054b3cf0c1877290300cd584ddf*
-
-**The work ledger is repository bootstrap machinery.** `nomos-ledger` and `nomos-work-
-orchestration` exist to coordinate concurrent work on this repository's own tree —
-`LedgerItem`, `Territory`, `Claim`/`Renew`/`TakeOver`, `VerificationPredicate` are shaped
-around that one job and answer to no product surface. They are not a Nomos product feature,
-and do not converge toward `TaskEnvelope`/`Workflow`/`AgentExecutor`. `ARC-ECOSYSTEM-001`'s
-open disjunction — bootstrap machinery or generic XVPE-shaped coordination primitive — is
-settled toward the first: nothing measured above requires the subject under coordination to be
-software, but nothing measured shows a real, exercised generic-primitive shape either; every
-real consumer coordinates work on *this* repository specifically, through `work/ledger.json`
-specifically, which is what "bootstrap machinery" names.
-
-### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#13
-
-*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / Decision · hash: sha256:93bedbe85cd2e88fb9fc590b176602a29428ec211fd8ee8d5a44d7f275196f55*
-
-This settles ownership, not disposal. `OD-LEDGER-001`'s own open question — whether territory
-should stay declared-but-unenforced — is untouched by this record; that is a question about
-the mechanism's own correctness, not about what the mechanism is for.
-
-### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#14
-
-*revision: authored · kind: heading · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
-
-## What This Record Does Not Do
-
-### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#15
-
-*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / What This Record Does Not Do · hash: sha256:5a53ac3b14ae31a807d905d3788179a7ff7d16fbd976fc2aad72e2898708844e*
-
-It does not move any file, rename any crate, or change one line of `nomos-ledger`'s or
-`nomos-work-orchestration`'s code. `ARC-ECOSYSTEM-001` already declined to treat a subsystem's
-location as proof of its ownership; this record answers the ownership question that record
-left open without reopening the location question it explicitly declined to answer.
-
-### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#16
-
-*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / What This Record Does Not Do · hash: sha256:059e95720071ac9b96d93da1a1dc45468e1267d720a9e7d1d21de919ad9444e0*
-
-It does not forbid `nomos-api::work` from existing or from growing more verbs. It names the
-condition under which this record's own answer should be revisited, below.
-
-### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#17
-
-*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / What This Record Does Not Do · hash: sha256:eff7d061e8aeae749f8842fa6e143466cca3634f1169cdb9e9339bf97579fff2*
-
-It does not decide whether the ledger's underlying primitive — territory-based mutual
-exclusion over a committed document — would also be a reasonable generic XVPE capability
-someday. It decides only that nothing in this workspace exercises it as one today, which is
-the only question `ARC-ECOSYSTEM-001` asked this record to settle.
-
-### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#18
-
-*revision: authored · kind: heading · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / What Would Decide It Otherwise · hash: sha256:0dbb85a338ffe192a9a2af143eda6f18cc39e0632a43ad53404ce3f166758649*
-
-## What Would Decide It Otherwise
-
-### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#19
-
-*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / What Would Decide It Otherwise · hash: sha256:e51cf6c6f1192e596a6fef7351aa40cffce1720ef11ee847f086fa11579a35ef*
-
-Named so a reader has a concrete trigger rather than a standing suspicion: if `nomos-api`
-becomes a real, externally-consumed product surface — used by something other than this
-repository's own tooling and this record's own seam-exercise framing — its exposure of the
-full ledger verb set at band 90 stops being an internal coordination detail and starts being a
-public commitment. That is the point to re-examine this record's answer, not before it.
-
-### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#20
-
-*revision: authored · kind: heading · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
-
-## Status
-
-### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#21
-
-*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / Status · hash: sha256:141a5e415cfa82795eb330c0234f67b275e44537b31a0d0fd48a787a1a286b4f*
-
-Accepted. Settles `ARC-ECOSYSTEM-001`'s open disjunction for the work ledger specifically —
-bootstrap machinery, not a generic coordination primitive with a real exercised second
-subject, and not a Nomos product feature converging toward `Workflow`/`TaskEnvelope`. Revisit
-if `nomos-api` becomes a real external product surface rather than a seam-exercise caller.
 
 ### docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#1
 

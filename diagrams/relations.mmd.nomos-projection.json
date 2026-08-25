@@ -3,12 +3,12 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:5c987c938ad0e35c441990db6ae6f43c12e4b5ddf3124fc7c58ca5b1fc11a1e2",
-  "inputs_digest": "sha256:53915012f43e07f64a0881152f41005fd4d642e0220a2188d5fe36a223c08b48",
+  "content_digest": "sha256:f52a97c971d8c605ed7f5ade7a941d8d056097824ddee36985283ccbfaea9640",
+  "inputs_digest": "sha256:9f1c09901e1e7f996bcaccad8c6521614ad993f63844f9379245b1b7bd1a1890",
   "sections": [
     [
       "Relations",
-      1162
+      1166
     ],
     [
       "Decisions",
@@ -205,11 +205,6 @@
       "content": "relations",
       "identity": "ARC-ECOSYSTEM-001 relates-to OD-LEDGER-001",
       "hash": "sha256:8ed0ae34289d169eacb61a39ca62426b9c88dd67d77ffd0538fc19847a1a7237"
-    },
-    {
-      "content": "relations",
-      "identity": "ARC-ECOSYSTEM-001 relates-to OD-LEDGER-036",
-      "hash": "sha256:1066371019f070e7cc2901210e9852360aae676270c07b9b0d665f523d6f0781"
     },
     {
       "content": "relations",
@@ -1423,6 +1418,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-CAPABILITY-002 relates-to OD-CAPABILITY-010",
+      "hash": "sha256:0cf476a4343eadb1ac49656e219a2f3856d94fa6f157d5311e898894308cc689"
+    },
+    {
+      "content": "relations",
       "identity": "OD-CAPABILITY-002 relates-to OD-PACKAGE-012",
       "hash": "sha256:7c69a474793f5e823f372fa8520a40f37bb34270aac424b6f420af196b60d449"
     },
@@ -1558,6 +1558,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-CAPABILITY-006 relates-to OD-CAPABILITY-010",
+      "hash": "sha256:c3c9d4011223a6a90d13a1dbc1d3eedee118be8bd5b1793c817b5460d3ef1e3e"
+    },
+    {
+      "content": "relations",
       "identity": "OD-CAPABILITY-006 relates-to OD-RULES-003",
       "hash": "sha256:93265a2411e22d2db42f7cc2d2e4d3260eaeab645e03d54c0a6148abb9720c8e"
     },
@@ -1628,6 +1633,31 @@
     },
     {
       "content": "relations",
+      "identity": "OD-CAPABILITY-010 relates-to OD-CAPABILITY-002",
+      "hash": "sha256:03c8c08c018dd505723ee055940352c5c127f515c9059c0d9f10875e1ee6401a"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-CAPABILITY-010 relates-to OD-CAPABILITY-006",
+      "hash": "sha256:2015fe93fc8921043c0a2f2b8255ec7b023f759bf21430d2c321f973a25ac174"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-CAPABILITY-010 relates-to OD-COMPLETENESS-001",
+      "hash": "sha256:f771fbfb7298228617cf0487d3d6237cb39e436f700f073e52eebe10d2ec1afc"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-CAPABILITY-010 relates-to OD-RULES-001",
+      "hash": "sha256:5ac72b3e069774edfe7cd99ce8ebd773e3ecaa1e0125a1962e6c289c9fa8e958"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-CAPABILITY-010 relates-to OD-SYNTAX-002",
+      "hash": "sha256:d9c36ef01f3f0f8ae6ba1d9c2950aa4b1f6f84a7c8011f59b784555a0d455862"
+    },
+    {
+      "content": "relations",
       "identity": "OD-COMPLETENESS-001 affected_by D-134",
       "hash": "sha256:ecb46ec97458b1d7fc6c3598d517c311297fc9b73e95e169cb763c59b48bb39d"
     },
@@ -1640,6 +1670,11 @@
       "content": "relations",
       "identity": "OD-COMPLETENESS-001 affected_by OD-COMPLETENESS-004",
       "hash": "sha256:526c79e2bea9ada73f3880d21a1ad9c30f6a30ddf87138016eabc4cbb292d4c9"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-COMPLETENESS-001 relates-to OD-CAPABILITY-010",
+      "hash": "sha256:86b7f253c7773cfeb76c1aade2b30c82e5433249f4c8a1a766f0d66de16334fd"
     },
     {
       "content": "relations",
@@ -2953,11 +2988,6 @@
     },
     {
       "content": "relations",
-      "identity": "OD-LEDGER-001 relates-to OD-LEDGER-036",
-      "hash": "sha256:d921eace36e5162e0df84172f5edfa1342d23aaaa818ee1bb2f166f257edcc5a"
-    },
-    {
-      "content": "relations",
       "identity": "OD-LEDGER-001 relates-to OD-MODEL-001",
       "hash": "sha256:bac795c4c39b856666658bcee9086c4159e45f7e24720507363151806ad4312c"
     },
@@ -3998,21 +4028,6 @@
     },
     {
       "content": "relations",
-      "identity": "OD-LEDGER-036 relates-to ARC-ECOSYSTEM-001",
-      "hash": "sha256:d5a1183eb9e7cfaa3fc54546c3b7fd88661af14f625576d930424f7831006ad6"
-    },
-    {
-      "content": "relations",
-      "identity": "OD-LEDGER-036 relates-to OD-LEDGER-001",
-      "hash": "sha256:eb3fcbd2d023cd130fff13d65876419aa8f587323df5c46a1b61548bfa07cfab"
-    },
-    {
-      "content": "relations",
-      "identity": "OD-LEDGER-036 relates-to OD-WORKFLOW-002",
-      "hash": "sha256:ad52fdf07965328fc6840b4a1f4729c56151139fdb9899f2f5f19b73d8173666"
-    },
-    {
-      "content": "relations",
       "identity": "OD-MODEL-001 relates-to OD-LEDGER-001",
       "hash": "sha256:15edfb86db44e1c4695f8c01358f2ae360e8fa724d95b091d4a727ae688c1cc9"
     },
@@ -4690,6 +4705,11 @@
       "content": "relations",
       "identity": "OD-RULES-001 relates-to OD-CAPABILITY-003",
       "hash": "sha256:f3c9dc19fe99bb31bc09005a18198ca61d032aa7f981f348fdb3f19fe7843f37"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-RULES-001 relates-to OD-CAPABILITY-010",
+      "hash": "sha256:99f437ae17dee126c0b40975c9378cab1def65f55c71e73eef7c316436d8336b"
     },
     {
       "content": "relations",
@@ -5513,6 +5533,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-SYNTAX-002 relates-to OD-CAPABILITY-010",
+      "hash": "sha256:3a8b0b3a314c54f09732bea7e06f83a90ca0aec73f1f2eb7cfc55bbc30fe5d37"
+    },
+    {
+      "content": "relations",
       "identity": "OD-SYNTAX-002 relates-to OD-COMPLETENESS-001",
       "hash": "sha256:10114578a5ea8a05b6ba78d1d45b670d207c02d754b0ae451d66562f553ecbbf"
     },
@@ -5763,11 +5788,6 @@
     },
     {
       "content": "relations",
-      "identity": "OD-WORKFLOW-002 relates-to OD-LEDGER-036",
-      "hash": "sha256:46e1bf7b38ed9c54437b062645d71d6c0253da80a7c97fb7cefd710da535e771"
-    },
-    {
-      "content": "relations",
       "identity": "OD-WORKFLOW-002 relates-to OD-WORKFLOW-001",
       "hash": "sha256:41b9f285beba38dd33f70432d2e1514cbba60c964aef475dd26756c03b213f99"
     },
@@ -5980,6 +6000,11 @@
       "content": "nodes",
       "identity": "OD-CAPABILITY-009",
       "hash": "sha256:3d2eaa8f4f586346eca9b20dca4402fe66697e5b3cc583d604a80b89f4753b48"
+    },
+    {
+      "content": "nodes",
+      "identity": "OD-CAPABILITY-010",
+      "hash": "sha256:05708da31f70714a69965aa7e71a4975dd222eaad0ece09f3df9038366f4264e"
     },
     {
       "content": "nodes",
@@ -6335,11 +6360,6 @@
       "content": "nodes",
       "identity": "OD-LEDGER-035",
       "hash": "sha256:4fd40cf90dbd4602fce80a72ee8f0785f0645c1efa7cb683e3632e666cf2a4b1"
-    },
-    {
-      "content": "nodes",
-      "identity": "OD-LEDGER-036",
-      "hash": "sha256:30daf235b06f16442bf5c4d8361f099ef29706e498006d8719e2eeb9f99b232b"
     },
     {
       "content": "nodes",

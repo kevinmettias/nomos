@@ -32642,14 +32642,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-crosslang-record",
-        "acquired_at": 1787700086,
-        "lease_expires_at": 1787707286
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -32662,7 +32658,30 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-contract-tests v0.1.0 (F:\\repos\\nomos\\tests\\contract)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.09s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-7d91463b8a992888.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-243d59b9d9bb2f35.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-84ce37134e2d0376.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-38def5589111e8b2.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-867b6a59b9eac27d.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-01349e41c84d1df4.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-88944951302bc752.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-d52ad028ff6fb390.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-822766c88f62241d.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-d0f03dac815862fd.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-ee111bd537ecd137.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-2919ec68747ddb5b.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-99272398d303e3e7.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-756fcac740cd78ad.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-259eb839edee86c9.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1787701216,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "340ee23f6a683272eef9f074b6707a127c3308bf"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -32686,14 +32705,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-struct-fields-rust",
-        "acquired_at": 1787700666,
-        "lease_expires_at": 1787707866
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -32706,7 +32721,30 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cap-syntax",
+          "-p",
+          "nomos-lang-rust",
+          "--no-fail-fast"
+        ],
+        "exit_code": 0,
+        "output_tail": ". ok\ntest Test_The_Reading_Should_Not_Depend_On_What_Was_Read_Before ... ok\ntest Test_The_Unexpanded_Count_Should_Be_A_Lower_Bound ... ok\ntest Test_The_Variant_Should_Be_Syntactic_Because_No_Name_Is_Resolved ... ok\ntest Test_The_Granularity_Should_Be_File_Because_A_Reading_Carries_Nothing_Across ... ok\n\ntest result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 10 tests\ntest Test_The_Member_Order_Should_Not_Change_The_Fact ... ok\ntest Test_A_Module_Whose_Members_Changed_Should_Not_Keep_Its_Key ... ok\ntest Test_A_Member_With_No_Fact_Should_Still_Be_An_Edge ... ok\ntest Test_The_Rollup_Should_Broaden_A_File_Granular_Cause ... ok\ntest Test_The_Derived_Fact_Should_Claim_No_More_Than_Its_Inputs ... ok\ntest Test_Editing_A_Member_Should_Reach_The_Rollup_Through_A_Dependency_Edge ... ok\ntest Test_A_Change_To_Nothing_In_The_Module_Should_Reach_Neither ... ok\ntest Test_The_Payload_Should_Decode_Under_This_Schemas_Own_Reader ... ok\ntest Test_Every_Entry_Should_Name_The_Member_That_Declared_It ... ok\ntest Test_The_Store_Should_Return_The_Edges_The_Reader_Recorded ... ok\n\ntest result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.10s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_cap_syntax-96ee468ad4aeb38b.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lang_rust-25d6cbe866f82aaf.exe)\n     Running tests\\corpus\\main.rs (target\\debug\\deps\\corpus-e34530f831f0fb6f.exe)\n     Running tests\\guarantee.rs (target\\debug\\deps\\guarantee-f39aa9dc71680878.exe)\n     Running tests\\rollup.rs (target\\debug\\deps\\rollup-71909a03bd10f839.exe)\n   Doc-tests nomos_cap_syntax\n   Doc-tests nomos_lang_rust\n",
+        "verified_at": 1787701189,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "340ee23f6a683272eef9f074b6707a127c3308bf"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
