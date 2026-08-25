@@ -3,7 +3,7 @@ id: ARC-CONNECTOR-001
 type: architecture
 title: External systems are the ecosystem's third crossing, and four invariants bound it before the first connector decides them by default
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - ecosystem
@@ -13,6 +13,12 @@ relations:
   - target: ARC-ECOSYSTEM-001
     type: relates-to
   - target: D-130
+    type: relates-to
+  - target: OD-MODEL-002
+    type: relates-to
+  - target: D-137
+    type: relates-to
+  - target: OD-ANALYSIS-001
     type: relates-to
 ---
 
@@ -107,31 +113,68 @@ generalize into KWB knowledge is that item's question, not this one's, exactly a
 
 ## The Four Invariants
 
-### 1. External identity is derived from semantic addressing, not minted from a vendor key
+### 1. External artifact identity is an honest mint from the authority's own stable key, distinct from what the artifact bears on
 
-**The rule.** An external item's identity in this workspace must be derived from what the
-item is *about*, not copied from the tracker's own primary key. This is not a new
-principle invented for connectors — it is the same one `crates/substrate/nomos-analysis`
-already applies to a fact (`FactIdentity`/`FactKey`, keyed on what is measured rather than
-on an incidental label) and the same one `D-136`/`ARC-ECOSYSTEM-002` already state for a
-claim and a concept: identity is content-derived. A vendor's issue number is exactly the
-incidental label that pattern already refuses to key on, because it identifies a database
-row in a system this workspace does not own, not the thing the row is about.
+**The rule, corrected.** This invariant originally read: "An external item's identity in this
+workspace must be derived from what the item is *about*, not copied from the tracker's own
+primary key" — one identity slot asked to answer two questions that do not move together:
+which external record this is, and what Nomos currently understands it to concern. Those are
+distinct entities with independent lifetimes — a record's title can change without its
+concern changing, and a correction to what it concerns does not change which record it is —
+and the original wording was also unimplementable as stated: a specific external record must
+be nameable before any semantic meaning has been derived from it, or nothing could recognize
+a record it had already seen.
 
-**What it is waiting on.** The concrete addressing scheme is connector-specific — a GitHub
-issue's semantic address is not shaped like a Jira ticket's or a SharePoint document's — so
-this record settles the principle and leaves the scheme itself to the first connector that
-needs one. That connector's addressing is checked against this rule; it does not get to
-establish the rule by being first.
+The corrected rule: **an external artifact and the Nomos subject it concerns are distinct
+entities.** Where the external authority assigns the artifact a stable identity-bearing key,
+Nomos preserves that key through a canonically constructed, namespaced `Named_Identity` —
+`OD-MODEL-002`'s second identity shape, not its first. This is an honest mint in
+`OD-MODEL-002`'s sense, the same shape `D-137`'s `KnowledgeReferenceId` already licenses:
+Nomos owns the construction — normalization, escaping, namespace and component ordering —
+but does not claim to have derived the externally assigned identity-bearing value, and does
+not disguise the mint as a derived digest by hashing it (`OD-MODEL-002`: "a mint wearing a
+digest's clothes").
 
-### 2. Vendor schemas and authentication stay below the seam
+A location or address for the artifact that can change independently of the artifact itself
+— which repository an issue currently lives in, which URL currently resolves it — is
+provenance recorded beside that identity, not part of it, the same identity/provenance split
+`OD-ANALYSIS-001` already made for a fact's snapshot. A locator change does not by itself
+restamp the artifact's identity. Where the external authority exposes no stable identity
+surviving a transition, Nomos does not fabricate continuity it cannot verify: a new identity
+is minted, and any supported continuity between the old and new identity is represented
+explicitly, not assumed.
 
-**The rule.** No canonical Nomos type may name a vendor. The vendor-to-canonical translation
-layer is the only place a vendor's field names, status enumerations, authentication scheme,
-or API shape may appear in source at all; nothing above that layer may import or reference
-them, directly or in a type name. A `Finding`, an `EvidenceClass` assignment, or any other
-canonical value that mentions "GitHub" or "Jira" in its type has let the translation leak
-past its own layer.
+What the artifact bears on — a feature, a requirement, a finding, any ordinary Nomos subject
+— is represented as a relation from the artifact's identity to that subject's own identity,
+never folded into either endpoint's identity. That relation is independently evidence-bearing:
+its `EvidenceClass` reflects how the correlation itself was established — an explicit
+reference the external record carries and a connector reads, a deterministic mapping rule, an
+agent's inference, a human's assertion — never inherited from the classes of what it joins.
+Two records agreeing to exist does not by itself justify treating what they are about as
+settled.
+
+**What it is waiting on.** The concrete addressing scheme, the canonical spelling syntax, and
+the representation of a correlation (a typed relation type, an eventual `EGRAPH` edge, or
+something else) are connector-specific and representation-specific choices this record leaves
+open — see "What This Record Does Not Do." What is decided now is the shape every connector's
+choices are checked against, not the choices themselves.
+
+### 2. Vendor identity may appear as provenance data; vendor ontology may not appear in canonical schema
+
+**The rule, tightened.** The original wording — "no canonical Nomos type may name a vendor" —
+is too literal once provenance must be able to say which external authority was observed: an
+external artifact's identity necessarily carries a component naming its authority, something
+like `"github"` or `"jira"`. The distinction this invariant actually protects is narrower and
+still holds in full: **vendor identity may appear as canonical data; vendor ontology may
+never appear in canonical schema.** A canonical type's *fields* may hold a value naming the
+external authority a fact or an identity was observed from or minted against. A canonical
+type's *shape* — its variants, its field names, its own type system — may never be built from
+a specific vendor's entity types, field schemas, status enumerations, authentication
+concepts, protocol objects or SDK types. A generic identity whose `system` field holds
+`"github"` is provenance data and satisfies this invariant; a `GitHubIssue` variant, a
+`JiraStatus` enum, or any other canonical type carrying a vendor's own ontology in its shape
+violates it. The vendor-to-canonical translation layer remains the only place that ontology
+may appear in source at all.
 
 **What it is waiting on.** Nothing normative — this is fully decidable now, as a shape
 constraint the first connector's translation layer is checked against. What is not yet
@@ -207,6 +250,19 @@ target. Nothing here is implemented, and this record does not claim any of the f
 invariants above is enforced mechanically today — only that each is now a rule to be checked
 against, rather than a decision the first connector would otherwise make by default.
 
+Invariant 1's correction adds no new machinery either. It does not define a concrete
+`ExternalArtifact` Rust type, a canonical spelling syntax for a minted identity, or how a
+correlation is represented — a typed `Relation<T>`, an `EvidenceEdge`, an eventual `EGRAPH`
+edge, or something else entirely is left to whichever real connector needs one first, the
+same restraint `ARC-ROADMAP-001` constraint 3 already applies to `EGRAPH` generally. It does
+not define correlation-discovery algorithms, a vendor's own definition of a stable key versus
+a locator, or migration/transfer semantics for any specific external system. No GitHub, Jira,
+or SharePoint connector implementation is decided by this amendment any more than it was by
+the original record.
+
 ## Status
 
-Closed by `P12-CONNECTOR-SEAM`.
+Closed by `P12-CONNECTOR-SEAM`. Amended to version 2 by
+`P13-ARC-CONNECTOR-001-IDENTITY-CORRECTION`: invariant 1 corrected and invariant 2 tightened,
+for the reasoning each section now carries inline. Every other invariant, the layering, and
+the ownership boundary are unchanged.

@@ -29162,6 +29162,64 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-ARC-CONNECTOR-001-IDENTITY-CORRECTION",
+      "title": "ARC-CONNECTOR-001 amended: invariant 1 conflated an external artifact's identity with the Nomos subject it concerns",
+      "why": "Invariant 1 said an external item's identity 'must be derived from what the item is about' -- one identity slot answering two questions that do not move together (which external row this is, versus what Nomos currently understands it to concern). It is also unimplementable as stated: a specific external record must be nameable before any semantic meaning has been derived from it, just to track whether it has been seen before. Worked through directly with the user: the external artifact's identity is an honest OD-MODEL-002/D-137-shaped mint from the authority's own stable key, never a derived digest; a locator that can change independently of the artifact is provenance beside that identity, the same split OD-ANALYSIS-001 already made for a fact's snapshot; and what the artifact bears on is a separate, independently evidence-bearing relation to an ordinary Nomos identity, never folded into either endpoint. Invariant 2's 'no canonical type may name a vendor' wording is tightened to distinguish vendor identity as provenance data (allowed) from vendor ontology in canonical schema (forbidden), since provenance must be able to say which external authority was observed.",
+      "done_when": "ARC-CONNECTOR-001 is version 2. Invariant 1 states the corrected rule: external artifact identity is an honest mint from the authority's stable key, canonically constructed by Nomos; a locator is provenance beside that identity, not part of it; what the artifact bears on is a separate, independently evidence-bearing relation to an ordinary Nomos identity. Invariant 2 is tightened to vendor-identity-as-provenance-data (allowed) versus vendor-ontology-in-canonical-schema (forbidden). Invariants 3 and 4 are unchanged. A named non-goals list states explicitly what stays undecided: the concrete ExternalArtifact type, canonical spelling syntax, the eventual correlation representation (Relation<T> / EGRAPH / other), correlation discovery algorithms, vendor-specific stable-key-versus-locator definitions, migration/transfer semantics, and any connector implementation. The record is registered and both required projections are current.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "_Census_Should_Narrow_To_One_Table ... ok\n\ntest result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.13s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-55ad3baadee2ff4e.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-56e1c9fba250ca24.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-4d4e16ab50ac70a5.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-35945c6ebc64c902.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-48bfe8d6f3ebf24c.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-ad5f178a2fa55ca5.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-a4b9594685bdc99a.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-0a473518710ef1f1.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-612bfa361c61aabd.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-13810cc2d23617bf.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-ee111bd537ecd137.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-2919ec68747ddb5b.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-99272398d303e3e7.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-756fcac740cd78ad.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-259eb839edee86c9.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1787675454,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "3e687d952feb917d5df1b35e948bbc85d10bbd6a"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

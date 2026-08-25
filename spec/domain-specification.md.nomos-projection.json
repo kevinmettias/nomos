@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:ab8f0fafc26fe497b3120904fd271746ae0ac3337c6e94869162dca3a4980871",
-  "inputs_digest": "sha256:966245e2aebf1e54be7c9f2983e7c7370927834185cf22b51904c96319915ce5",
+  "content_digest": "sha256:3eb497a8cd0636c5c187f92d427dffff3fac80bd9682aa9f735574811d026662",
+  "inputs_digest": "sha256:56d436552f4a8ddf1b4e11f234deea58fa68af314bd3849694bd3fa8f501a6ab",
   "sections": [
     [
       "Documents",
@@ -16,7 +16,7 @@
     ],
     [
       "Source blocks",
-      4706
+      4710
     ]
   ],
   "inputs": [
@@ -28,7 +28,7 @@
     {
       "content": "documents",
       "identity": "docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md@authored",
-      "hash": "sha256:adc1a21b6db345c299218e596bb0f50a4a705be3f8ec5ca460888e641540aebb"
+      "hash": "sha256:963e9cdbf1905450ef8455935dc914a29fc45b35f5d958d5d94a4b0e002c1a20"
     },
     {
       "content": "documents",
@@ -868,42 +868,42 @@
     {
       "content": "headings",
       "identity": "docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#15",
-      "hash": "sha256:b20ca81be40455daff03a78d85acc044764cfc7892ccc1844e9740ee93930278"
-    },
-    {
-      "content": "headings",
-      "identity": "docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#18",
-      "hash": "sha256:8839453f22af35ffb28d3064a5413aec37583d122a79f8ff6ae56ca6b441cdd2"
+      "hash": "sha256:f8cbb020920ab9ff49f5b9044359b79adbd86d4c30a7bc3b2eb6bd5fd0b1b37e"
     },
     {
       "content": "headings",
       "identity": "docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#21",
-      "hash": "sha256:727a996d84358744404df4e6c2105df6e261d952f439916fc13ccf1e8ff4dbe0"
+      "hash": "sha256:67c12f76b17d10bfe88953f320858d8534401d5759b46f8ec3bbe92cbfa77af0"
     },
     {
       "content": "headings",
       "identity": "docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#24",
-      "hash": "sha256:72d02994b733abb627c4b33ec84456f46187b0f5589a5a58c84c759f06b3bd20"
+      "hash": "sha256:d2d4e8d2b6c748bd8de4408c4609b04cfbb9c6080e9450e4195c42bac812fe1e"
     },
     {
       "content": "headings",
       "identity": "docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#27",
-      "hash": "sha256:2d3c6c170e22feca54082b8b665015a30769f51b9d39b352fb66d875bf9b7417"
+      "hash": "sha256:aeb6ff25becc2eb554b5a065c5daa986710be9a8fd4741e5b7941d4ffbee2141"
     },
     {
       "content": "headings",
-      "identity": "docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#29",
-      "hash": "sha256:b656017c82418332961981219166905eb8f9603ba07a68f4beb95d19a0e2cbfe"
+      "identity": "docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#30",
+      "hash": "sha256:e56f13b8ca91f40e0793fcd970683b5e200f0369761c41efa992b2bee297dba2"
     },
     {
       "content": "headings",
-      "identity": "docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#33",
-      "hash": "sha256:6e3f47b3695dbdb77fbeebbfe27ab7f79f0745d8ef1e756a6941ebaeb619c34c"
+      "identity": "docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#32",
+      "hash": "sha256:9f8af33b7264089490597c744dfd56b4d827d5597b10e33f126911b5e9b3fdc2"
     },
     {
       "content": "headings",
-      "identity": "docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#35",
-      "hash": "sha256:bc1da8cc0522aabbb09a48b207c0705afcb01b655c7e87636993e111b8479d9f"
+      "identity": "docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#36",
+      "hash": "sha256:b0371038713e7067336f4ca03fd74a3812aa8ffd42046356b09ea2f601e3205d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#39",
+      "hash": "sha256:a79980f7b4224991194dbd2238aac2b86399832fd5f26555c5b97b16a63653c8"
     },
     {
       "content": "headings",
@@ -7698,112 +7698,132 @@
     {
       "content": "blocks",
       "identity": "docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#15",
-      "hash": "sha256:6292fbd23efbae7276392b620a8956391b39f4202a1085f94f2b390139e483fa"
+      "hash": "sha256:1366a0ec012d2d719173f518bf772211f0bdc64a2fa8f5a3a38b9f4573694e05"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#16",
-      "hash": "sha256:d3eb43fa1147f0f4b8dcd16516236a1dce3b4b4df0bc125f03e8231bac61732d"
+      "hash": "sha256:3796d2cfaeebaebff055222ef614561ffdffb5c61526feb7fb53ad71c242c46d"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#17",
-      "hash": "sha256:ca79c436f4bc833ac6a39a027aa2ba3d11d849c67658a60b22b58fcd7339dd47"
+      "hash": "sha256:6decd5471a086571e3597f4144d15a1beb48b199adc84739871bd542f11049b6"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#18",
-      "hash": "sha256:600ef3e88561265a938f6b5542679444d0524a44f487e8d6ac7e36a0479f17b6"
+      "hash": "sha256:c2777f25ed40a57284655aa6e369c53508f0edc0486cc7ad7f181a5db899721a"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#19",
-      "hash": "sha256:0c19fee068416983bbe9165d2d5ceb401b03188142fa0020906b3a2323b5cbe2"
+      "hash": "sha256:ee7d0d6a30ff5d85f2d987db0c5b6d0cc186623d330326a4fb00466cade35850"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#20",
-      "hash": "sha256:6a3e08f7dbc430ee599a04dbfca09b2feff251b671ab7c3f266bc32a233a5c09"
+      "hash": "sha256:1bdb44efc78a8ced0893d3deccb0b5f6a37ef960669040d9a5e6dd3bd9025014"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#21",
-      "hash": "sha256:09868649f3b3572620a24ccfc6d8b6e14adb9edbe4d00054575bf04bac4addb3"
+      "hash": "sha256:562b9d6cc8297d40190be1726d24539525a027d54f9fd19784d5150438f45119"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#22",
-      "hash": "sha256:de107c4dc25edc01a77ccce6806922d7ef88037242b979c824b08e8f33dc4055"
+      "hash": "sha256:d53d525280dd2934647439f13cd286fd00e2fc060ede5fde1e799149ab55371a"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#23",
-      "hash": "sha256:82a0abe430c6ff5782c982d52a64c07da1cc273c9efe18735b31021e83f46907"
+      "hash": "sha256:6a3e08f7dbc430ee599a04dbfca09b2feff251b671ab7c3f266bc32a233a5c09"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#24",
-      "hash": "sha256:dae30d07ce5c2a0a326769a97a1c3eae36348a8a3c9cc86597cdc751a1756ffe"
+      "hash": "sha256:09868649f3b3572620a24ccfc6d8b6e14adb9edbe4d00054575bf04bac4addb3"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#25",
-      "hash": "sha256:b3fc4a74bfbd6dd38b216550bb45247aabe60eb554c20a80861fa0b856fdea1f"
+      "hash": "sha256:de107c4dc25edc01a77ccce6806922d7ef88037242b979c824b08e8f33dc4055"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#26",
-      "hash": "sha256:97dcf2e11cb38fe1565aeac45e1de647652314f17b0664e5bef5989e8bd2ee58"
+      "hash": "sha256:82a0abe430c6ff5782c982d52a64c07da1cc273c9efe18735b31021e83f46907"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#27",
-      "hash": "sha256:5b2fe5a17fabe6243268cfc99b48b86638c2722733682152fd2489930dc33311"
+      "hash": "sha256:dae30d07ce5c2a0a326769a97a1c3eae36348a8a3c9cc86597cdc751a1756ffe"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#28",
-      "hash": "sha256:c679e5f5a458380b3a2b75f0cfc02f289d08784ef5cc651b4fbbe0d9bbb5c3e3"
+      "hash": "sha256:b3fc4a74bfbd6dd38b216550bb45247aabe60eb554c20a80861fa0b856fdea1f"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#29",
-      "hash": "sha256:d82b9873f61919b4eb0e1e02ebb95f0690a6acf2dc821f15af549219e10e38e0"
+      "hash": "sha256:97dcf2e11cb38fe1565aeac45e1de647652314f17b0664e5bef5989e8bd2ee58"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#30",
-      "hash": "sha256:93a43a1a0febc57fc27596da73cc83a141fb64ac731df6678acfb81ac476e8bc"
+      "hash": "sha256:5b2fe5a17fabe6243268cfc99b48b86638c2722733682152fd2489930dc33311"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#31",
-      "hash": "sha256:b96b3f68bc972788634a1ab4ab22466201a59989078beabea362b1febf0f0ef5"
+      "hash": "sha256:c679e5f5a458380b3a2b75f0cfc02f289d08784ef5cc651b4fbbe0d9bbb5c3e3"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#32",
-      "hash": "sha256:205299ba4cc57af7e20eb2641216715b91594f71a76cf9e9a0a5a06bc4caf449"
+      "hash": "sha256:d82b9873f61919b4eb0e1e02ebb95f0690a6acf2dc821f15af549219e10e38e0"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#33",
-      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+      "hash": "sha256:93a43a1a0febc57fc27596da73cc83a141fb64ac731df6678acfb81ac476e8bc"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#34",
-      "hash": "sha256:2d224d790a5112a25d277eb03ca077555fa069a327386a0d56d443e838e7dfea"
+      "hash": "sha256:b96b3f68bc972788634a1ab4ab22466201a59989078beabea362b1febf0f0ef5"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#35",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:205299ba4cc57af7e20eb2641216715b91594f71a76cf9e9a0a5a06bc4caf449"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#36",
-      "hash": "sha256:88e24baf41db7103119af423a43106a6e951e9aefc703e5db7747d0238e39da1"
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#37",
+      "hash": "sha256:2d224d790a5112a25d277eb03ca077555fa069a327386a0d56d443e838e7dfea"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#38",
+      "hash": "sha256:b3c48ddda150f008a7337af8bae70d2488a62915094b0f77624241f44838e93b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#39",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#40",
+      "hash": "sha256:5ce6961f122daae00ba614d6aca55340ae4c7bdac2083ed57ef621e31bb9aa66"
     },
     {
       "content": "blocks",
