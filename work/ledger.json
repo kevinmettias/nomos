@@ -29238,10 +29238,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-gate-coverage-policy",
+        "acquired_at": 1787681363,
+        "lease_expires_at": 1787688563
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -29711,6 +29715,63 @@
           "exit_code": 0
         },
         "revision": "2c8cc63d25a59b4854d1463980c47b199682aee2"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P14-CONTRACTS-003-WORK-RESULT-OPTIONAL-PLAN",
+      "title": "OD-CONTRACTS-003: WorkResult.plan becomes Option<CorrectionPlan>, so a judgment-only agent response is representable",
+      "why": "Building nomos-agent-executor found a real defect: WorkResult.plan is a required CorrectionPlan, and CorrectionPlan::New refuses an empty candidate list (CorrectionError::Vacuous). A judgment-only task -- an agent asked to assess something, proposing no code change -- genuinely has no plan to report, and nomos-agent-executor's own module doc names this as the reason it does not assemble a WorkResult at all. WorkResult.requested_verification is already Option<VerificationPredicate> for exactly this 'may legitimately be absent' reason; plan should be the same shape for the same reason. This does not touch CorrectionPlan's own Vacuous refusal, which stays correct for an actual proposed plan -- it only lets WorkResult represent the case where there is no plan to begin with.",
+      "done_when": "WorkResult.plan is Option<CorrectionPlan>. The crate's own test constructs both a Some(plan) and a None case. The one other production/test consumer of WorkResult (its own crate) is updated. cargo test -p nomos-agent-contracts passes, the crate's public-surface snapshot is reblessed, and cargo clippy --workspace --all-targets stays clean. OD-CONTRACTS-003 exists, is registered, and both required projections are current.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/agent/nomos-agent-contracts/src/work_result.rs",
+          "tests/contract/surface/nomos-agent-contracts.txt",
+          "docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md",
+          "crates/spec/nomos-spec-store/records/OD-CONTRACTS-003.record"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-agent-contracts",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-agent-contracts",
+          "--no-fail-fast"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 5 tests\ntest task_envelope::tests::Test_An_Envelope_Carries_Exactly_What_It_Was_Given ... ok\ntest change_context::tests::Test_A_Context_Carries_Exactly_What_It_Was_Given ... ok\ntest change_context::tests::Test_A_Subject_May_Be_A_Symbol_A_Scope_Or_A_Task_Description ... ok\ntest work_result::tests::Test_A_Judgment_Only_Result_Has_No_Plan ... ok\ntest work_result::tests::Test_A_Result_Carries_Exactly_What_It_Was_Given ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.10s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_agent_contracts-89522279ace6cad1.exe)\n   Doc-tests nomos_agent_contracts\n",
+        "verified_at": 1787681452,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "c9f3f3265f03efa034927936206c153d71a3035d"
       },
       "abandoned": [],
       "displaced": [],

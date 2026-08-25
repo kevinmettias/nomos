@@ -55,6 +55,7 @@ profile: domain-specification
 | docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md@authored | docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md | authored | 28 | 9 | sha256:a4d8c71e62610f704811e42757155af8725a195a9b7f6d47a5af13197be33516 |
 | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md@authored | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md | authored | 29 | 9 | sha256:0351be57f7a37c7b7e8965886b9fa29c15f87fe4660ee253dcebcad932fe77a6 |
 | docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md@authored | docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md | authored | 28 | 9 | sha256:9f1c5229277415e49115502a643ecee1e889b80a83acb01e8695fe922761f0c2 |
+| docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md@authored | docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md | authored | 15 | 6 | sha256:a52350f85fcefd9e25749a3f5bc90bd0afccc914f2f3495d8e35464419642400 |
 | docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md@authored | docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md | authored | 21 | 8 | sha256:8ad58a92216388e350cbfdf042e5ab75299e97e9e6accef05f6bae9e325fc72a |
 | docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md@authored | docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md | authored | 14 | 6 | sha256:e55bd46b259be4c661ac4bb95475cd427ad66c783465edae129bac816f1ababf |
 | docs/records/OD-DETERMINISM-001-a-declaration-proven-only-behind-a-corpus-gate.md@authored | docs/records/OD-DETERMINISM-001-a-declaration-proven-only-behind-a-corpus-gate.md | authored | 26 | 7 | sha256:b080a464d0e59ac731e8b78eb0104aeed978958713f99969d1506ebbee92802e |
@@ -519,6 +520,12 @@ profile: domain-specification
 | docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md#21 | authored | 2 | Why DisplayLabel Grows A Variant Too |
 | docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md#23 | authored | 2 | What This Does Not Do |
 | docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md#27 | authored | 2 | Status |
+| docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md#1 | authored | 1 | WorkResult.plan becomes Option<CorrectionPlan>, so a judgment-only agent response is representable |
+| docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md#2 | authored | 2 | Question |
+| docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md#4 | authored | 2 | What Was Measured |
+| docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md#8 | authored | 2 | The Decision |
+| docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md#10 | authored | 2 | What This Does Not Do |
+| docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md#14 | authored | 2 | Status |
 | docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#1 | authored | 1 | Corrections has real staging machinery and zero real callers |
 | docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#2 | authored | 2 | Question |
 | docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#4 | authored | 2 | What Was Measured |
@@ -12412,6 +12419,131 @@ mechanism `OD-TRACE-001` specified.
 *revision: authored · kind: prose · heading: A subject that needs a model is agent-required, rather than a missing provider or nothing at all / Status · hash: sha256:c93d45da64ee180e38d221c24185d7a92cb26f237738ce7cf6e6891c623dc68f*
 
 Closed by `P10-AGENT-REQUIRED`.
+
+### docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md#1
+
+*revision: authored · kind: heading · heading: WorkResult.plan becomes Option<CorrectionPlan>, so a judgment-only agent response is representable · hash: sha256:cfbd956c92010304fda630f27981f5dc0cef6a6f15d4a8f58a0d45268ea2ce69*
+
+# WorkResult.plan becomes Option<CorrectionPlan>, so a judgment-only agent response is representable
+
+### docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md#2
+
+*revision: authored · kind: heading · heading: WorkResult.plan becomes Option<CorrectionPlan>, so a judgment-only agent response is representable / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md#3
+
+*revision: authored · kind: prose · heading: WorkResult.plan becomes Option<CorrectionPlan>, so a judgment-only agent response is representable / Question · hash: sha256:65c022f424787b97f9f83f61592013d95772fe331f121d484534e04cfedac8a5*
+
+`AGT-002` requires an agent's structured response to carry "plans, changes, claims, tests,
+requested verification, assumptions, and unresolved questions." `nomos_agent_contracts::
+WorkResult` bundles these into `plan: CorrectionPlan`, `claims: Vec<Finding>`, `tests:
+Vec<VerificationPredicate>`, `requested_verification: Option<VerificationPredicate>`,
+`assumptions: Vec<String>`, `unresolved_questions: Vec<String>`. Whether `plan`'s required
+cardinality is correct, or whether an agent's response can legitimately have no plan at all,
+was unmeasured until `nomos-agent-executor` — this crate's own first real caller — tried to
+construct one.
+
+### docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md#4
+
+*revision: authored · kind: heading · heading: WorkResult.plan becomes Option<CorrectionPlan>, so a judgment-only agent response is representable / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md#5
+
+*revision: authored · kind: prose · heading: WorkResult.plan becomes Option<CorrectionPlan>, so a judgment-only agent response is representable / What Was Measured · hash: sha256:de71a0e199f9c003e22f45a7769b7aa9f4f4847efbf402d3ecfe0e8b0c8d6fd3*
+
+Verified directly against the real code: `nomos_corrections::CorrectionPlan::New` refuses an
+empty candidate list, returning `CorrectionError::Vacuous`. That refusal is correct for what
+it guards — a *proposed* plan with nothing in it is a defect, the same "silence reads as
+clean" failure `OD-COMPLETENESS-004` names for a different surface, not a real answer.
+
+### docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md#6
+
+*revision: authored · kind: prose · heading: WorkResult.plan becomes Option<CorrectionPlan>, so a judgment-only agent response is representable / What Was Measured · hash: sha256:987175edbad86d77aa9b885cea19eabc9775a45092ca109359d163e35e05ab45*
+
+But a judgment-only task — an agent asked to assess something and report a claim, proposing
+no code change — was never proposing a plan to begin with. `nomos-agent-executor::Execute`
+dispatches exactly this shape: a single, tool-free, judgment-only invocation of Claude Code,
+per `OD-EXECUTOR-001`. Its own module doc states the consequence directly: it cannot
+construct a `WorkResult`, because there is no honest way to fill `plan: CorrectionPlan` for a
+response that proposed nothing — an empty `CorrectionPlan` is refused, and fabricating a
+one-candidate plan with an empty `ChangeSet` just to satisfy the field's type would report a
+correction nobody proposed, the same category of dishonesty `OD-EXECUTOR-001`'s own amendment
+found in trusting a process's free-text self-report over what actually happened.
+
+### docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md#7
+
+*revision: authored · kind: prose · heading: WorkResult.plan becomes Option<CorrectionPlan>, so a judgment-only agent response is representable / What Was Measured · hash: sha256:f344fee4519500e4864f52359480a7af428f138b74b5872b5e3647ce40e75f81*
+
+`requested_verification` already answers the identical question at `Option` cardinality, for
+`WorkResult`'s own stated reason: "the same shape `nomos_ledger::LedgerItem::verification`
+already uses." A submission's own verification predicate may legitimately be absent; a
+submission's own plan can be absent for the same reason, and nothing about `plan`'s previous
+required cardinality reflected a decision that it could not be — only that no caller had yet
+needed it to be.
+
+### docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md#8
+
+*revision: authored · kind: heading · heading: WorkResult.plan becomes Option<CorrectionPlan>, so a judgment-only agent response is representable / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md#9
+
+*revision: authored · kind: prose · heading: WorkResult.plan becomes Option<CorrectionPlan>, so a judgment-only agent response is representable / The Decision · hash: sha256:bddb3aad24957c5364745e2e6816465423c0385b8f9f35257f7032e213e59134*
+
+`WorkResult.plan` is `Option<CorrectionPlan>`. `None` represents a response that proposed no
+change — a judgment, a claim, an answer to the task's `goal`, nothing more. `Some(plan)`
+remains exactly what it always was, and `CorrectionPlan::New`'s own refusal of an empty
+candidate list is untouched: a *present* plan must still be a real one.
+
+### docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md#10
+
+*revision: authored · kind: heading · heading: WorkResult.plan becomes Option<CorrectionPlan>, so a judgment-only agent response is representable / What This Does Not Do · hash: sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf*
+
+## What This Does Not Do
+
+### docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md#11
+
+*revision: authored · kind: prose · heading: WorkResult.plan becomes Option<CorrectionPlan>, so a judgment-only agent response is representable / What This Does Not Do · hash: sha256:de8de175053c9154401752026500ade55ef660578902bb793fecbe066f2d932b*
+
+It does not touch `CorrectionPlan`, `CorrectionCandidate`, or any of `nomos-corrections`'s
+own stage/validate/commit lifecycle. `CorrectionPlan::New`'s `Vacuous` refusal stays exactly
+as strict as it was; this record only lets `WorkResult` say "no plan," rather than forcing a
+plan that does not exist.
+
+### docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md#12
+
+*revision: authored · kind: prose · heading: WorkResult.plan becomes Option<CorrectionPlan>, so a judgment-only agent response is representable / What This Does Not Do · hash: sha256:12ef03463e14cbb59da725ccfbe1b9979eaa1b259fc315988b5b30c392dd321e*
+
+It does not decide how `nomos-agent-executor` or any other caller assembles the rest of a
+`WorkResult` from an executor's free-text response — `claims`, `assumptions`, and
+`unresolved_questions` still have no honest, general mapping from unstructured text, and
+building one is a separate question `TaskEnvelope.expected_output_schema` and Claude Code's
+own `--json-schema` support point toward, not answered here.
+
+### docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md#13
+
+*revision: authored · kind: prose · heading: WorkResult.plan becomes Option<CorrectionPlan>, so a judgment-only agent response is representable / What This Does Not Do · hash: sha256:065002e141d67f210a88a506a93ec8d549c764f6ed624008e733ce048d7e8f44*
+
+It does not retroactively require any existing caller to change. Verified directly: the only
+production or test construction site for `WorkResult` in this workspace is its own crate's
+test, updated alongside this record.
+
+### docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md#14
+
+*revision: authored · kind: heading · heading: WorkResult.plan becomes Option<CorrectionPlan>, so a judgment-only agent response is representable / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md#15
+
+*revision: authored · kind: prose · heading: WorkResult.plan becomes Option<CorrectionPlan>, so a judgment-only agent response is representable / Status · hash: sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3*
+
+Accepted.
 
 ### docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#1
 

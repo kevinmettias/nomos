@@ -366,11 +366,14 @@ graph LR
     od_contracts_002 -->|"relates-to"| od_capability_005
     od_contracts_002 -->|"relates-to"| od_completeness_001
     od_contracts_002 -->|"relates-to"| od_contracts_001
+    od_contracts_002 -->|"relates-to"| od_contracts_003["OD-CONTRACTS-003"]
     od_contracts_002 -->|"relates-to"| od_executor_001
     od_contracts_002 -->|"relates-to"| od_ledger_022
     od_contracts_002 -->|"relates-to"| od_trace_001
     od_contracts_002 -->|"relates-to"| od_trace_002
     od_contracts_002 -->|"relates-to"| od_trace_004["OD-TRACE-004"]
+    od_contracts_003 -->|"relates-to"| od_contracts_002
+    od_contracts_003 -->|"relates-to"| od_executor_001
     od_corrections_001 -->|"relates-to"| arc_roadmap_001
     od_corrections_001 -->|"relates-to"| od_corrections_002
     od_corrections_001 -->|"relates-to"| od_executor_001
@@ -394,6 +397,7 @@ graph LR
     od_executor_001 -->|"relates-to"| arc_connector_001
     od_executor_001 -->|"relates-to"| od_connector_001
     od_executor_001 -->|"relates-to"| od_contracts_002
+    od_executor_001 -->|"relates-to"| od_contracts_003
     od_executor_001 -->|"relates-to"| od_corrections_001
     od_gate_001 -->|"affected_by"| od_determinism_001
     od_gate_001 -->|"affects"| arc_specdb_001
@@ -1146,6 +1150,7 @@ graph LR
     od_connector_002
     od_contracts_001
     od_contracts_002
+    od_contracts_003
     od_corrections_001
     od_corrections_002
     od_determinism_001

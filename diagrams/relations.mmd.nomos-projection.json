@@ -3,16 +3,16 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:a690fbcb4b5c98c97c0bd5e5091ba696ab2b9135e4b6afd90262712b175e205a",
-  "inputs_digest": "sha256:9ca6ff2a3da8913361282314b1c5033955e2287689281c2f7455dfa6c1f5ae9c",
+  "content_digest": "sha256:f64e3616226826402cf3604a0b82b97b63a8da707fcde753f5e3c46984614409",
+  "inputs_digest": "sha256:cd2e0010461b1cb8b400058635c021832270e3ebcc1e539cece78d6b8e553351",
   "sections": [
     [
       "Relations",
-      1104
+      1108
     ],
     [
       "Decisions",
-      150
+      151
     ]
   ],
   "inputs": [
@@ -1833,6 +1833,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-CONTRACTS-002 relates-to OD-CONTRACTS-003",
+      "hash": "sha256:48e6915d3a37ce5ef8d61f5cca857df0aea27b505bf8b6b3c016f28c367c039e"
+    },
+    {
+      "content": "relations",
       "identity": "OD-CONTRACTS-002 relates-to OD-EXECUTOR-001",
       "hash": "sha256:5374e0de8bcebe0f6eefc9e9f4486fe44af9eab7dada689ccca86c432192cebc"
     },
@@ -1855,6 +1860,16 @@
       "content": "relations",
       "identity": "OD-CONTRACTS-002 relates-to OD-TRACE-004",
       "hash": "sha256:158f22ee9a0e17f6f863a04788e4ad53d108c89775e87df2d6361f261867d5b4"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-CONTRACTS-003 relates-to OD-CONTRACTS-002",
+      "hash": "sha256:92e431b5593c4397e03b1a31f14c3ed45dee9a90ae9d937829dbd3790b3fc0c9"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-CONTRACTS-003 relates-to OD-EXECUTOR-001",
+      "hash": "sha256:7c4e1ee91e9a3b440467e2f935201aa0eef693431fd70c5f41e933eb9cdc65e2"
     },
     {
       "content": "relations",
@@ -1970,6 +1985,11 @@
       "content": "relations",
       "identity": "OD-EXECUTOR-001 relates-to OD-CONTRACTS-002",
       "hash": "sha256:0e9366364d44a50364c2ccdd26e1500f1deaf95a7a68d50cc265071b79043c39"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-EXECUTOR-001 relates-to OD-CONTRACTS-003",
+      "hash": "sha256:7495559948feed97155f4f843b8b90325f1f257120d03127720eeabb13ebed23"
     },
     {
       "content": "relations",
@@ -5720,6 +5740,11 @@
       "content": "nodes",
       "identity": "OD-CONTRACTS-002",
       "hash": "sha256:0551b343c45c95219cbf24cb4a8acd851b5bcddb4ea503ae5111441bacdb946e"
+    },
+    {
+      "content": "nodes",
+      "identity": "OD-CONTRACTS-003",
+      "hash": "sha256:f72310e4f97c2328b64e119e6168eb3a0f11c9e106675e8fe4939aa80c069d6e"
     },
     {
       "content": "nodes",

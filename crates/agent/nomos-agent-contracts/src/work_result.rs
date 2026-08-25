@@ -16,10 +16,19 @@ use nomos_ledger::VerificationPredicate;
 /// [`nomos_ledger::LedgerItem::verification`] already uses at `Option` cardinality.
 /// `assumptions`/`unresolved_questions` are the only genuinely new pieces: no existing
 /// type in this workspace covers either concept.
+///
+/// `plan` is `Option`, not required, for the same reason `requested_verification` already
+/// is: an agent's response may legitimately have neither. `CorrectionPlan::New` refuses an
+/// empty candidate list (`CorrectionError::Vacuous`) on purpose -- a *proposed* plan with
+/// nothing in it is a defect, not a real answer -- but a judgment-only task (assess this,
+/// propose nothing) was never proposing a plan at all, and forcing one to exist to satisfy
+/// this field's type would fabricate a correction nobody put forward. `OD-CONTRACTS-003`
+/// found this directly: `nomos-agent-executor`, this crate's own first real caller, could
+/// not construct a `WorkResult` for exactly this reason.
 #[derive(Clone, Debug, PartialEq)]
 pub struct WorkResult
 {
-    pub plan: CorrectionPlan,
+    pub plan: Option<CorrectionPlan>,
     pub claims: Vec<Finding>,
     pub tests: Vec<VerificationPredicate>,
     pub requested_verification: Option<VerificationPredicate>,
@@ -61,7 +70,7 @@ mod tests
     fn Test_A_Result_Carries_Exactly_What_It_Was_Given()
     {
         let result = WorkResult {
-            plan: Example_Plan(),
+            plan: Some(Example_Plan()),
             claims: vec![Example_Finding()],
             tests: vec![VerificationPredicate::New(vec!["cargo".to_owned(), "test".to_owned(), "-p".to_owned(), "nomos-agent-contracts".to_owned()])],
             requested_verification: Some(VerificationPredicate::New(vec!["cargo".to_owned(), "test".to_owned(), "--no-fail-fast".to_owned(), "-p".to_owned(), "nomos-contract-tests".to_owned()])),
@@ -69,10 +78,29 @@ mod tests
             unresolved_questions: vec![],
         };
 
+        assert!(result.plan.is_some());
         assert_eq!(result.claims.len(), 1);
         assert_eq!(result.tests.len(), 1);
         assert!(result.requested_verification.is_some());
         assert_eq!(result.assumptions.len(), 1);
         assert!(result.unresolved_questions.is_empty());
+    }
+
+    /// The case `OD-CONTRACTS-003` exists for: a judgment-only response, proposing no
+    /// change, must be constructible without fabricating a plan to satisfy the type.
+    #[test]
+    fn Test_A_Judgment_Only_Result_Has_No_Plan()
+    {
+        let result = WorkResult {
+            plan: None,
+            claims: vec![Example_Finding()],
+            tests: vec![],
+            requested_verification: None,
+            assumptions: vec![],
+            unresolved_questions: vec!["does this warrant a follow-up correction?".to_owned()],
+        };
+
+        assert!(result.plan.is_none());
+        assert_eq!(result.claims.len(), 1);
     }
 }

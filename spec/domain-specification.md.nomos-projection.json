@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:e3cb35073ba16be47beff80cc1a88ecf3c7f857b8862681b9d48e388c936a483",
-  "inputs_digest": "sha256:54f8beaa24ea09b34c79a26c9a64beb638e7d83b3a78583bad42c4758cfa7a80",
+  "content_digest": "sha256:2aaf03d3e462fbe447cc47d2b51946ea53106dc525dc1980d1877bede982acb4",
+  "inputs_digest": "sha256:75d570a932a44e534051989720c954d0d051059efa9f0c71a1bf7a1d7c54e4b0",
   "sections": [
     [
       "Documents",
-      158
+      159
     ],
     [
       "Sections",
-      1346
+      1352
     ],
     [
       "Source blocks",
-      4737
+      4752
     ]
   ],
   "inputs": [
@@ -244,6 +244,11 @@
       "content": "documents",
       "identity": "docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md@authored",
       "hash": "sha256:9f1c5229277415e49115502a643ecee1e889b80a83acb01e8695fe922761f0c2"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md@authored",
+      "hash": "sha256:a52350f85fcefd9e25749a3f5bc90bd0afccc914f2f3495d8e35464419642400"
     },
     {
       "content": "documents",
@@ -2539,6 +2544,36 @@
       "content": "headings",
       "identity": "docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md#27",
       "hash": "sha256:809c9afbb2422dfcf7bcb50ebd1e6da9f3da71ab25f7d032287f0d9a5fee6e6d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md#1",
+      "hash": "sha256:a2244ff9a0e503348d747293fe47d65f9d07acca78221b3bb0ae2efb600ef921"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md#2",
+      "hash": "sha256:9bd15ebd2d470edfa68c9eada04c943ff1bab073518e0ac96c115e4f9c64a786"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md#4",
+      "hash": "sha256:40e9eb8078f837f77b68676101da9a077630cd9bc1661e2a8c69de321dede816"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md#8",
+      "hash": "sha256:6f539a3f93fefef2a19cd79b88a13089bac03077bef4cfcaa58a4f64c79ea40e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md#10",
+      "hash": "sha256:96411912bf67fa1971256813ed5a5eaeaa31a4f970b492c71a4ec84e9e68e6f8"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md#14",
+      "hash": "sha256:70c80d017a34ba9d559fe3be6b542f978d8e7f07e9e06cd5a4a885ae176b2bb8"
     },
     {
       "content": "headings",
@@ -13474,6 +13509,81 @@
       "content": "blocks",
       "identity": "docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md#28",
       "hash": "sha256:c93d45da64ee180e38d221c24185d7a92cb26f237738ce7cf6e6891c623dc68f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md#1",
+      "hash": "sha256:cfbd956c92010304fda630f27981f5dc0cef6a6f15d4a8f58a0d45268ea2ce69"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md#3",
+      "hash": "sha256:65c022f424787b97f9f83f61592013d95772fe331f121d484534e04cfedac8a5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md#4",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md#5",
+      "hash": "sha256:de71a0e199f9c003e22f45a7769b7aa9f4f4847efbf402d3ecfe0e8b0c8d6fd3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md#6",
+      "hash": "sha256:987175edbad86d77aa9b885cea19eabc9775a45092ca109359d163e35e05ab45"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md#7",
+      "hash": "sha256:f344fee4519500e4864f52359480a7af428f138b74b5872b5e3647ce40e75f81"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md#8",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md#9",
+      "hash": "sha256:bddb3aad24957c5364745e2e6816465423c0385b8f9f35257f7032e213e59134"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md#10",
+      "hash": "sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md#11",
+      "hash": "sha256:de8de175053c9154401752026500ade55ef660578902bb793fecbe066f2d932b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md#12",
+      "hash": "sha256:12ef03463e14cbb59da725ccfbe1b9979eaa1b259fc315988b5b30c392dd321e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md#13",
+      "hash": "sha256:065002e141d67f210a88a506a93ec8d549c764f6ed624008e733ce048d7e8f44"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md#14",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md#15",
+      "hash": "sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3"
     },
     {
       "content": "blocks",
