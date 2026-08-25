@@ -3,7 +3,7 @@ id: OD-RULES-009
 type: decision
 title: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - rules
@@ -151,7 +151,46 @@ this question through the review rather than through them:
   adding a fourth distinct family — `OD-PACKAGE-008`'s own tracked trigger, load-bearing here
   too: a converging population is weaker evidence for a general planner than a diverging one.
 
+## Amendment: The First Named Trigger Fired, And Was Addressed Narrowly
+
+This record's own "What Would Decide It" section named the case exactly: "`OD-GATE-014`'s
+`ScopeSelector`/`RuleSelector` getting built is the concrete case this would arrive through."
+It has. A real caller, `nomos gate run --rule` (`crates/host/nomos-cli/src/gate/parsing.rs`),
+constructs a non-empty `RuleSelector` today, and `OD-GATE-017` measured that `Run` still
+computed every rule regardless of it — selection creating unread work, this record's own
+first-named trigger, fired precisely as predicted.
+
+**It was addressed narrowly, not by building the `RunPlanner` this record declined.**
+`OD-GATE-017` gave `nomos_check_orchestration::Run` a real `&[RuleId]` parameter and a fixed,
+hand-written mapping from each of today's four rules to the fact it needs — the identical
+"composition, not choice" shape this record's own Decision section already approved staying
+with ("`Run` stays a hand-written, unconditional list"), extended to a second axis (whether a
+rule's materialization runs at all) rather than replaced by a generic, declared
+requirement-to-provider resolution. No rule declares a capability requirement a planner reads;
+no fact DAG is deduplicated; no provider is resolved ahead of a hardcoded call list. The
+distinction this record already drew — a real caller narrowing what runs, versus a generalized
+planner built ahead of any caller needing one — is exactly what separates what `OD-GATE-017`
+built from what this record continues to decline.
+
+**The other three named triggers remain unfired, checked directly rather than assumed.** No
+rule's required-capability shape has reconverged with an existing family — a fifth rule
+(`P14-RULES-005-ROLE-SURFACE-AGENT-REQUIRED`, `Check_Declared_Role_Matches_Surface`) arrived
+since this record's first version, but reads plain committed files rather than a `FactReader`,
+states no capability contract, and is additive and unwired into `Run` — a structurally new,
+diverging family if and when it is ever wired in, not a reconverging one. No materialization
+step has been measured to cost real, wasted work for a population where facts are shared and
+reused: `run.rs` still writes every fact into one `MemoryFactStore` through one shared `Reader`,
+and no rule recomputes a fact another rule already produced. Participation still does not vary
+by request beyond the one axis `OD-GATE-017` now covers.
+
+**This record's own decline of the general planner therefore stands, on its remaining,
+still-unfired triggers.** One trigger firing and being answered at the scope the evidence
+actually supported is not evidence the larger artifact is now due; if anything, `OD-GATE-017`'s
+narrow increment satisfying the real caller that existed is itself data that the hand-written
+shape continues to scale to a real, evidenced need without a generalized planner underneath it.
+
 ## Status
 
-Accepted. Revisit on any trigger named above, or when `OD-GATE-014`'s or `OD-RULES-007`'s own
-status next changes.
+Accepted. This record's first named trigger fired and was addressed by `OD-GATE-017`, not by
+building the `RunPlanner` this record declines. Revisit on any of the three remaining triggers
+named above, or when `OD-RULES-007`'s own status next changes.

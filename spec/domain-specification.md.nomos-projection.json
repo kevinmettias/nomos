@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:2a1ce508697dfd3f1d05ca4768faca1c8cf2692a8b9123765b3560adf62f89ec",
-  "inputs_digest": "sha256:e17cb851a93de7ca07373541d20c1c48959e130492bfdf9a893b2151c49b255e",
+  "content_digest": "sha256:7729489c8f1224aa84e6d2ffe4a6c3ff1165f77dd77f01060922789a2266a027",
+  "inputs_digest": "sha256:0b8c5e092b92fa0090186959382ea7b6496070cf210113b078a56a0c40b35e4d",
   "sections": [
     [
       "Documents",
@@ -12,11 +12,11 @@
     ],
     [
       "Sections",
-      1364
+      1366
     ],
     [
       "Source blocks",
-      4788
+      4798
     ]
   ],
   "inputs": [
@@ -358,7 +358,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md@authored",
-      "hash": "sha256:504d603bb325dfc4a0de5fd2b2c60760942f1ac03ce40a6046383e34bc73eade"
+      "hash": "sha256:6b6d9f41076761c1a5af15719547c1b28ab365e7b4e46ba305c59bc4de3a71b5"
     },
     {
       "content": "documents",
@@ -698,7 +698,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md@authored",
-      "hash": "sha256:8b3e9e1c4514f68ddb8e43539acc0e27b77c86c13dae2e4d0d6d23bdfe3cd5fd"
+      "hash": "sha256:b5e1d877a5afeba17463c498b9ed05cca87900528a9883d705c48db279044c66"
     },
     {
       "content": "documents",
@@ -3548,7 +3548,12 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#19",
-      "hash": "sha256:2659317584f982946f660d0e09b68099766861d3d5212bc1dc000ee00f899c60"
+      "hash": "sha256:968b339d751eef84d99ffb3eaf090d0b306f0b0de8e8087ecb8f597d3910919e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#24",
+      "hash": "sha256:6b3714073168bef372e8a2fa6f9e8ee047d8bd5d73cf6669fb50ff041b8f1078"
     },
     {
       "content": "headings",
@@ -6513,7 +6518,12 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#17",
-      "hash": "sha256:30ad4dd4896fa67b76fb21ff4685c0eaf90892a10537a1ecbe454c5090eed0a7"
+      "hash": "sha256:d2622a886cc03b2d5020fcd8bf7af8c2a978761c56786144b695cd2ad0f30368"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#22",
+      "hash": "sha256:675a6f6510f4c810372388be62990bba4ba749d4831837bebf0ccf0db36f56fd"
     },
     {
       "content": "headings",
@@ -16958,12 +16968,37 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#19",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:049d058a868c9682e268e2330dd52b4ce05910fade26ab375f52686a060dc72d"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#20",
-      "hash": "sha256:0ee225e0c1e425a8faac633fc8e5a69b8ab23085b5fa696f2ebe548d2d2cf0cd"
+      "hash": "sha256:6d7a43206808d9185a6ae96ad33c991dbcd47a82df026a00da6b33ef065271c7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#21",
+      "hash": "sha256:a5ffa27d316e000a515bbdd1699c8bd805b7ac6102863e2a627cc57650d7c22f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#22",
+      "hash": "sha256:d88f7fe1d92aa2b56cb3e502066a5ceb63cf9ba51da214484f1549b730f8f81f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#23",
+      "hash": "sha256:0cae5d56e0dbbb3534157418ca79321f427876dfe9c80152c0c66caea5c8dae7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#24",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#25",
+      "hash": "sha256:dd0803705b8dd7b9997548e4dde4d1dea135a498b69a8ceafae30000a6576e5c"
     },
     {
       "content": "blocks",
@@ -27798,12 +27833,37 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#17",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:55a4ffd6f8262b3c2043737fcf317ce1477c3f4b5a04f8e49b185cfa33b3f632"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#18",
-      "hash": "sha256:796343121663f2fadc0c5367e03b9aa1f69a344b48715067015b9dc5a1ad6c0b"
+      "hash": "sha256:0b86114bc81be01f0281154807a334925b83c9f0eb8e35883e608bcd2c54810d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#19",
+      "hash": "sha256:beb515d268890eff458d447b0c8223d4f34d14ecbcc2598e4ed27a371e2c9dfa"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#20",
+      "hash": "sha256:bd99676656a3adb3582783fdfa54e33669bab75227e9df3230ae6afd222c217d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#21",
+      "hash": "sha256:c52e89772ad2fcc889c88b0f75329be985a9fc16c583db630635cf8adbba19bc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#22",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#23",
+      "hash": "sha256:8ebc1012678ed48e702ef4d252ea7a6fa9a76947a8a0d572749d8b8da941cf44"
     },
     {
       "content": "blocks",

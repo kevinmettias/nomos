@@ -3,7 +3,7 @@ id: OD-GATE-017
 type: decision
 title: Whether Run gains a real per-call rule subset now, or waits for a caller that needs one
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - gate
@@ -153,7 +153,41 @@ It does not decide anything about a sixth or later rule's own required-fact mapp
 of that rule existing — each new rule still earns its own line in `Run`'s hand-written mapping
 when it ships, the same as today.
 
+## Built: Verified Directly Against The Real Code
+
+`P14-GATE-017-RUN-RULE-SUBSET-FIRST-INCREMENT-2` built exactly the shape this record decided,
+checked directly at merge rather than assumed from the plan above. `nomos_check_orchestration::
+Run` (`crates/orchestration/nomos-check-orchestration/src/run.rs`) takes a fifth parameter,
+`selected: &[RuleId]`, read through a private `Wants` helper with the same "empty is every
+rule" semantics `RuleSelector::include` already has. `Materialize_Capabilities` calls
+`Materialize_Dependencies` only when `DEPENDENCY_DIRECTION` is wanted and `Materialize_
+Reachability` only when `UNREAD_REACHES_FINDING` is wanted; `Judged` calls each of the four
+`Check_*` functions only when its own `RuleId` is wanted. `nomos-cli::check::Run` passes `&[]`.
+`nomos-gate-orchestration::run_gate::Judged` gained the same parameter and both its callers
+were updated: `Run_Gate` passes `command.rules.include`, and `Explain_Gate` passes `&[]`,
+preserving its documented independence from `command.rules` now that a non-empty selection
+narrows computation and not only disposition.
+
+A counting `ProcessLauncher` test (`Test_A_Deselected_Dependency_Rule_Should_Not_Launch_Cargo_
+Metadata`) proves the skip is structural: zero launches when `DEPENDENCY_DIRECTION` is not
+selected, exactly one when it is. This is the evidence a findings-only test could not give,
+since a healthy repository's `cargo metadata` call raises no finding on success — "deselected"
+and "selected but clean" would otherwise render identically.
+
+One existing test pinned the old, now-superseded behavior. `nomos-gate-orchestration`'s
+`Test_A_Deselected_Rules_Finding_Should_Not_Block` asserted that a deselected rule's finding
+"must still be judged and carried, just not blocking" — exactly the shape this record replaces.
+It is now `Test_A_Deselected_Rules_Finding_Should_Not_Exist`, asserting the finding is absent
+from `check_outcome` entirely, because `Run` was never asked to compute it.
+
+`rule_selector.rs`'s own module doc, which stated in its own words that this exact change would
+be "a separate, larger item, not this one," was corrected by `P14-RULE-SELECTOR-DOC-STALE-2` to
+describe `RuleSelector`'s real, current role: naming the same selection `Run` itself now reads,
+plus the narrower disposition filter it still applies on top for whichever rules did run.
+
 ## Status
 
-Accepted. `P14-GATE-017-RUN-RULE-SUBSET-FIRST-INCREMENT` builds the signature change and both
-callers this record names, verified directly against the real code once merged.
+Accepted, and built. `P14-GATE-017-RUN-RULE-SUBSET-FIRST-INCREMENT-2` (not `-FIRST-INCREMENT`,
+which was declined and re-added once its territory was found to omit a file the change could
+not land without) built the signature change and both callers this record names, verified
+directly against the real code once merged.

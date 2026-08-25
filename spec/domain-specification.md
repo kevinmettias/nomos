@@ -77,7 +77,7 @@ profile: domain-specification
 | docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md@authored | docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md | authored | 21 | 8 | sha256:fde76ddb443213fdd5c253144550e72aa60a127201be1c067156bd52c9a071dd |
 | docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md@authored | docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md | authored | 34 | 12 | sha256:ee64f184602e1bd210eeca6144c88552d97cebce829ccdedea3db6487fc6e36d |
 | docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md@authored | docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md | authored | 17 | 6 | sha256:8b80590869d121dd76fa42950c366543d613d4ba319282b49f28a446cc6af6cd |
-| docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md@authored | docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md | authored | 20 | 6 | sha256:504d603bb325dfc4a0de5fd2b2c60760942f1ac03ce40a6046383e34bc73eade |
+| docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md@authored | docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md | authored | 25 | 7 | sha256:6b6d9f41076761c1a5af15719547c1b28ab365e7b4e46ba305c59bc4de3a71b5 |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md@authored | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md | authored | 16 | 5 | sha256:e3d0afb3cabc0ab33a09a700e110b803806d3c4e063673d8c18ca7adc84c3012 |
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md@authored | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md | authored | 36 | 8 | sha256:3ececaaf506dff6cacf4aa066df5a3fdd61032c1ec291ef9f21e3a4b939d37ef |
 | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md@authored | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md | authored | 19 | 6 | sha256:9237ea74e89c7f49295d2e4bde41ff135c64838767ba17c27b0aad79037ced10 |
@@ -145,7 +145,7 @@ profile: domain-specification
 | docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md@authored | docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md | authored | 18 | 6 | sha256:5e7bde3ad034017040659d44bc4b044696c4a0b33830e8596bd67906a2d2ac4c |
 | docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md@authored | docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md | authored | 19 | 6 | sha256:7f6c05ffa09f693ecfe8e7c14699257a1fe01da3a07c0614b09f227fd5be986b |
 | docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md@authored | docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md | authored | 32 | 6 | sha256:335f2ed03def8b979a66bf55ff3278c706fbc7e1105bc01a4fd5a1a75cedfe0a |
-| docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md@authored | docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md | authored | 18 | 6 | sha256:8b3e9e1c4514f68ddb8e43539acc0e27b77c86c13dae2e4d0d6d23bdfe3cd5fd |
+| docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md@authored | docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md | authored | 23 | 7 | sha256:b5e1d877a5afeba17463c498b9ed05cca87900528a9883d705c48db279044c66 |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md@authored | docs/records/OD-SPEC-001-the-storage-backend-question.md | authored | 11 | 5 | sha256:e4feddab256024ea38e21849120fdd52d0ddf17d4e3f69cfb24eb4c8e766c8ae |
 | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md@authored | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md | authored | 20 | 7 | sha256:2c45051e43390556bfd68865152580e1ae09c2e82dc94bb20e65cdbf60d69a10 |
 | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md@authored | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md | authored | 23 | 7 | sha256:481ffd62b02df705439b4ef914adb21e24894d1d3f0295754fc13f7d95c89c85 |
@@ -720,7 +720,8 @@ profile: domain-specification
 | docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#5 | authored | 2 | What Was Measured |
 | docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#10 | authored | 2 | Decision |
 | docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#14 | authored | 2 | What This Record Does Not Do |
-| docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#19 | authored | 2 | Status |
+| docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#19 | authored | 2 | Built: Verified Directly Against The Real Code |
+| docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#24 | authored | 2 | Status |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#1 | authored | 1 | Choosing a platform, running a verb and rendering its outcome are three crates, not one |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#4 | authored | 2 | The decision |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#8 | authored | 2 | What stayed out, and why |
@@ -1313,7 +1314,8 @@ profile: domain-specification
 | docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#5 | authored | 2 | What Was Measured |
 | docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#11 | authored | 2 | Decision |
 | docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#14 | authored | 2 | What Would Decide It |
-| docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#17 | authored | 2 | Status |
+| docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#17 | authored | 2 | Amendment: The First Named Trigger Fired, And Was Addressed Narrowly |
+| docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#22 | authored | 2 | Status |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#1 | authored | 1 | Whether the specification store gains a second backend, and what would decide it |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#2 | authored | 2 | Question |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#4 | authored | 2 | Current Position |
@@ -18675,16 +18677,70 @@ when it ships, the same as today.
 
 ### docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#19
 
+*revision: authored · kind: heading · heading: Whether Run gains a real per-call rule subset now, or waits for a caller that needs one / Built: Verified Directly Against The Real Code · hash: sha256:049d058a868c9682e268e2330dd52b4ce05910fade26ab375f52686a060dc72d*
+
+## Built: Verified Directly Against The Real Code
+
+### docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#20
+
+*revision: authored · kind: prose · heading: Whether Run gains a real per-call rule subset now, or waits for a caller that needs one / Built: Verified Directly Against The Real Code · hash: sha256:6d7a43206808d9185a6ae96ad33c991dbcd47a82df026a00da6b33ef065271c7*
+
+`P14-GATE-017-RUN-RULE-SUBSET-FIRST-INCREMENT-2` built exactly the shape this record decided,
+checked directly at merge rather than assumed from the plan above. `nomos_check_orchestration::
+Run` (`crates/orchestration/nomos-check-orchestration/src/run.rs`) takes a fifth parameter,
+`selected: &[RuleId]`, read through a private `Wants` helper with the same "empty is every
+rule" semantics `RuleSelector::include` already has. `Materialize_Capabilities` calls
+`Materialize_Dependencies` only when `DEPENDENCY_DIRECTION` is wanted and `Materialize_
+Reachability` only when `UNREAD_REACHES_FINDING` is wanted; `Judged` calls each of the four
+`Check_*` functions only when its own `RuleId` is wanted. `nomos-cli::check::Run` passes `&[]`.
+`nomos-gate-orchestration::run_gate::Judged` gained the same parameter and both its callers
+were updated: `Run_Gate` passes `command.rules.include`, and `Explain_Gate` passes `&[]`,
+preserving its documented independence from `command.rules` now that a non-empty selection
+narrows computation and not only disposition.
+
+### docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#21
+
+*revision: authored · kind: prose · heading: Whether Run gains a real per-call rule subset now, or waits for a caller that needs one / Built: Verified Directly Against The Real Code · hash: sha256:a5ffa27d316e000a515bbdd1699c8bd805b7ac6102863e2a627cc57650d7c22f*
+
+A counting `ProcessLauncher` test (`Test_A_Deselected_Dependency_Rule_Should_Not_Launch_Cargo_
+Metadata`) proves the skip is structural: zero launches when `DEPENDENCY_DIRECTION` is not
+selected, exactly one when it is. This is the evidence a findings-only test could not give,
+since a healthy repository's `cargo metadata` call raises no finding on success — "deselected"
+and "selected but clean" would otherwise render identically.
+
+### docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#22
+
+*revision: authored · kind: prose · heading: Whether Run gains a real per-call rule subset now, or waits for a caller that needs one / Built: Verified Directly Against The Real Code · hash: sha256:d88f7fe1d92aa2b56cb3e502066a5ceb63cf9ba51da214484f1549b730f8f81f*
+
+One existing test pinned the old, now-superseded behavior. `nomos-gate-orchestration`'s
+`Test_A_Deselected_Rules_Finding_Should_Not_Block` asserted that a deselected rule's finding
+"must still be judged and carried, just not blocking" — exactly the shape this record replaces.
+It is now `Test_A_Deselected_Rules_Finding_Should_Not_Exist`, asserting the finding is absent
+from `check_outcome` entirely, because `Run` was never asked to compute it.
+
+### docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#23
+
+*revision: authored · kind: prose · heading: Whether Run gains a real per-call rule subset now, or waits for a caller that needs one / Built: Verified Directly Against The Real Code · hash: sha256:0cae5d56e0dbbb3534157418ca79321f427876dfe9c80152c0c66caea5c8dae7*
+
+`rule_selector.rs`'s own module doc, which stated in its own words that this exact change would
+be "a separate, larger item, not this one," was corrected by `P14-RULE-SELECTOR-DOC-STALE-2` to
+describe `RuleSelector`'s real, current role: naming the same selection `Run` itself now reads,
+plus the narrower disposition filter it still applies on top for whichever rules did run.
+
+### docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#24
+
 *revision: authored · kind: heading · heading: Whether Run gains a real per-call rule subset now, or waits for a caller that needs one / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#20
+### docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#25
 
-*revision: authored · kind: prose · heading: Whether Run gains a real per-call rule subset now, or waits for a caller that needs one / Status · hash: sha256:0ee225e0c1e425a8faac633fc8e5a69b8ab23085b5fa696f2ebe548d2d2cf0cd*
+*revision: authored · kind: prose · heading: Whether Run gains a real per-call rule subset now, or waits for a caller that needs one / Status · hash: sha256:dd0803705b8dd7b9997548e4dde4d1dea135a498b69a8ceafae30000a6576e5c*
 
-Accepted. `P14-GATE-017-RUN-RULE-SUBSET-FIRST-INCREMENT` builds the signature change and both
-callers this record names, verified directly against the real code once merged.
+Accepted, and built. `P14-GATE-017-RUN-RULE-SUBSET-FIRST-INCREMENT-2` (not `-FIRST-INCREMENT`,
+which was declined and re-added once its territory was found to omit a file the change could
+not land without) built the signature change and both callers this record names, verified
+directly against the real code once merged.
 
 ### docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#1
 
@@ -38310,16 +38366,75 @@ this question through the review rather than through them:
 
 ### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#17
 
+*revision: authored · kind: heading · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: The First Named Trigger Fired, And Was Addressed Narrowly · hash: sha256:55a4ffd6f8262b3c2043737fcf317ce1477c3f4b5a04f8e49b185cfa33b3f632*
+
+## Amendment: The First Named Trigger Fired, And Was Addressed Narrowly
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#18
+
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: The First Named Trigger Fired, And Was Addressed Narrowly · hash: sha256:0b86114bc81be01f0281154807a334925b83c9f0eb8e35883e608bcd2c54810d*
+
+This record's own "What Would Decide It" section named the case exactly: "`OD-GATE-014`'s
+`ScopeSelector`/`RuleSelector` getting built is the concrete case this would arrive through."
+It has. A real caller, `nomos gate run --rule` (`crates/host/nomos-cli/src/gate/parsing.rs`),
+constructs a non-empty `RuleSelector` today, and `OD-GATE-017` measured that `Run` still
+computed every rule regardless of it — selection creating unread work, this record's own
+first-named trigger, fired precisely as predicted.
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#19
+
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: The First Named Trigger Fired, And Was Addressed Narrowly · hash: sha256:beb515d268890eff458d447b0c8223d4f34d14ecbcc2598e4ed27a371e2c9dfa*
+
+**It was addressed narrowly, not by building the `RunPlanner` this record declined.**
+`OD-GATE-017` gave `nomos_check_orchestration::Run` a real `&[RuleId]` parameter and a fixed,
+hand-written mapping from each of today's four rules to the fact it needs — the identical
+"composition, not choice" shape this record's own Decision section already approved staying
+with ("`Run` stays a hand-written, unconditional list"), extended to a second axis (whether a
+rule's materialization runs at all) rather than replaced by a generic, declared
+requirement-to-provider resolution. No rule declares a capability requirement a planner reads;
+no fact DAG is deduplicated; no provider is resolved ahead of a hardcoded call list. The
+distinction this record already drew — a real caller narrowing what runs, versus a generalized
+planner built ahead of any caller needing one — is exactly what separates what `OD-GATE-017`
+built from what this record continues to decline.
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#20
+
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: The First Named Trigger Fired, And Was Addressed Narrowly · hash: sha256:bd99676656a3adb3582783fdfa54e33669bab75227e9df3230ae6afd222c217d*
+
+**The other three named triggers remain unfired, checked directly rather than assumed.** No
+rule's required-capability shape has reconverged with an existing family — a fifth rule
+(`P14-RULES-005-ROLE-SURFACE-AGENT-REQUIRED`, `Check_Declared_Role_Matches_Surface`) arrived
+since this record's first version, but reads plain committed files rather than a `FactReader`,
+states no capability contract, and is additive and unwired into `Run` — a structurally new,
+diverging family if and when it is ever wired in, not a reconverging one. No materialization
+step has been measured to cost real, wasted work for a population where facts are shared and
+reused: `run.rs` still writes every fact into one `MemoryFactStore` through one shared `Reader`,
+and no rule recomputes a fact another rule already produced. Participation still does not vary
+by request beyond the one axis `OD-GATE-017` now covers.
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#21
+
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: The First Named Trigger Fired, And Was Addressed Narrowly · hash: sha256:c52e89772ad2fcc889c88b0f75329be985a9fc16c583db630635cf8adbba19bc*
+
+**This record's own decline of the general planner therefore stands, on its remaining,
+still-unfired triggers.** One trigger firing and being answered at the scope the evidence
+actually supported is not evidence the larger artifact is now due; if anything, `OD-GATE-017`'s
+narrow increment satisfying the real caller that existed is itself data that the hand-written
+shape continues to scale to a real, evidenced need without a generalized planner underneath it.
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#22
+
 *revision: authored · kind: heading · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#18
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#23
 
-*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Status · hash: sha256:796343121663f2fadc0c5367e03b9aa1f69a344b48715067015b9dc5a1ad6c0b*
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Status · hash: sha256:8ebc1012678ed48e702ef4d252ea7a6fa9a76947a8a0d572749d8b8da941cf44*
 
-Accepted. Revisit on any trigger named above, or when `OD-GATE-014`'s or `OD-RULES-007`'s own
-status next changes.
+Accepted. This record's first named trigger fired and was addressed by `OD-GATE-017`, not by
+building the `RunPlanner` this record declines. Revisit on any of the three remaining triggers
+named above, or when `OD-RULES-007`'s own status next changes.
 
 ### docs/records/OD-SPEC-001-the-storage-backend-question.md#1
 
