@@ -59,6 +59,7 @@ profile: domain-specification
 | docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md@authored | docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md | authored | 14 | 6 | sha256:e55bd46b259be4c661ac4bb95475cd427ad66c783465edae129bac816f1ababf |
 | docs/records/OD-DETERMINISM-001-a-declaration-proven-only-behind-a-corpus-gate.md@authored | docs/records/OD-DETERMINISM-001-a-declaration-proven-only-behind-a-corpus-gate.md | authored | 26 | 7 | sha256:b080a464d0e59ac731e8b78eb0104aeed978958713f99969d1506ebbee92802e |
 | docs/records/OD-DETERMINISM-002-the-last-two-rows-declare-and-the-guard-stops-asking-about-facts.md@authored | docs/records/OD-DETERMINISM-002-the-last-two-rows-declare-and-the-guard-stops-asking-about-facts.md | authored | 35 | 10 | sha256:14dba5ba489a39e4b5605d97a5eb1389a55a6f0efa07f1aa076ccd5dece46428 |
+| docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md@authored | docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md | authored | 19 | 6 | sha256:5f0c8ecb587bef60ff31504e4e021b5ce3a9ef531f57a7ad139201cf25b22406 |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md@authored | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md | authored | 30 | 8 | sha256:ede1d73ff937b80913dd5c6fd4d7d5cc70cb8158b29e13bfe003ae5cd5f805d5 |
 | docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md@authored | docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md | authored | 32 | 9 | sha256:1027b7b589216b9cbe4598a2a569261111071dce14529a2556e82f61852f74cf |
 | docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md@authored | docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md | authored | 20 | 7 | sha256:eca88bdcb033ae337eed44a34b8e00e16b9c0208f5bec59b8560b4850808de81 |
@@ -549,6 +550,12 @@ profile: domain-specification
 | docs/records/OD-DETERMINISM-002-the-last-two-rows-declare-and-the-guard-stops-asking-about-facts.md#27 | authored | 2 | Controls Confirmed Red |
 | docs/records/OD-DETERMINISM-002-the-last-two-rows-declare-and-the-guard-stops-asking-about-facts.md#31 | authored | 2 | What This Does Not Cover |
 | docs/records/OD-DETERMINISM-002-the-last-two-rows-declare-and-the-guard-stops-asking-about-facts.md#34 | authored | 2 | Status |
+| docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#1 | authored | 1 | An agent executor's capability boundary is structural absence, before the first real executor decides it by default |
+| docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#2 | authored | 2 | Question |
+| docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#5 | authored | 2 | What Was Measured |
+| docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#9 | authored | 2 | The Rule |
+| docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#14 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#18 | authored | 2 | Status |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md#1 | authored | 1 | A skipped test reports ok, so the size of the hole is declared rather than the hole being closed |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md#2 | authored | 2 | Question |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md#5 | authored | 2 | What Was Found |
@@ -13293,6 +13300,184 @@ Accepted, closing `P10-SPEC-DETERMINISM`. Six domains declare, each is checked a
 own behaviour by obligations derived from its own triple, the completeness guard reaches
 domains that produce no facts, and the two rows with no domain in this tree are counted
 rather than assumed.
+
+### docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#1
+
+*revision: authored · kind: heading · heading: An agent executor's capability boundary is structural absence, before the first real executor decides it by default · hash: sha256:062bc284ee7a2156d9cafc9e27a32dd4226e15808677349f5cc868f702d23b22*
+
+# An agent executor's capability boundary is structural absence, before the first real executor decides it by default
+
+### docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#2
+
+*revision: authored · kind: heading · heading: An agent executor's capability boundary is structural absence, before the first real executor decides it by default / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#3
+
+*revision: authored · kind: prose · heading: An agent executor's capability boundary is structural absence, before the first real executor decides it by default / Question · hash: sha256:ca21bbb91a0bba9ad38447d2c05382042d681aee9927c2d534db8b851ac618ce*
+
+`OD-CONNECTOR-001` names its own scope precisely: "It does not decide whether an executor
+invoking a subprocess, a plugin loaded into this workspace, an agent given tool access, or a
+transport under `OD-SPEC-009` carries the same write-omission requirement, and it
+deliberately declines to extend the rule to any of them here... Each is a different boundary
+with its own shape." It also names the specific failure mode this record exists to close:
+"the write-omission rule is assumed to already cover executors, plugins, agents or
+transports" — "a boundary with its own shape is governed by an analogy instead of by its own
+record."
+
+### docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#4
+
+*revision: authored · kind: prose · heading: An agent executor's capability boundary is structural absence, before the first real executor decides it by default / Question · hash: sha256:a18d53d048798e38fbcad43570f7fbbaa2269a50b1e1efb59b074a56938cde3b*
+
+A first real `AgentExecutor` is about to be built: `nomos-agent-contracts::TaskEnvelope` in,
+`WorkResult` out, dispatched to a real subprocess — Claude Code, invoked non-interactively —
+rather than a stub. Nothing in this workspace names what that subprocess is permitted to do
+before this record, and the first implementation would decide it by being the only thing
+that has, the same shape `ARC-CONNECTOR-001` named for connectors before any existed.
+
+### docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#5
+
+*revision: authored · kind: heading · heading: An agent executor's capability boundary is structural absence, before the first real executor decides it by default / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#6
+
+*revision: authored · kind: prose · heading: An agent executor's capability boundary is structural absence, before the first real executor decides it by default / What Was Measured · hash: sha256:34d8aa5b20b801b846f9c5e36770d0a19c6ff4d9ba94763b4f29fda47889ea87*
+
+**`TaskEnvelope` already carries capability-boundary-shaped fields, and nothing reads them.**
+`scope: Territory`, `prohibited_changes: Territory`, and `available_tools: Vec<CapabilityId>`
+are real, typed fields. Verified directly: a workspace-wide search for `TaskEnvelope` finds
+exactly one production construction site — its own crate's test — and no consumer anywhere
+reads `.scope`, `.prohibited_changes`, or `.available_tools` off a real value. A caller
+filling these fields in expresses an intent nothing is yet obligated to honor.
+
+### docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#7
+
+*revision: authored · kind: prose · heading: An agent executor's capability boundary is structural absence, before the first real executor decides it by default / What Was Measured · hash: sha256:54c0b2e16c11fee9c9d6ef412e0f1536aa931457f221a11ee9916ea828cdf9c2*
+
+**`WorkResult`'s only channel into a mutation has no real caller either.** `plan:
+CorrectionPlan` is the sole field through which an agent's output could ever change this
+workspace; every other field (`claims`, `tests`, `requested_verification`, `assumptions`,
+`unresolved_questions`) is report-only. `nomos-corrections`'s own stage/validate/commit chain
+is what would apply a `CorrectionPlan`, and `OD-CORRECTIONS-001` already measured that chain
+has zero real callers anywhere in this workspace. So today, even a maximally adversarial
+`WorkResult` cannot mutate this workspace through the typed path this crate defines — the
+door an agent's output would have to walk through to write anything does not open for anyone
+yet. The risk this record actually addresses is different and prior to that: what capability
+the *subprocess itself* is granted at invocation, independent of what its typed response
+later claims, and independent of whether `WorkResult.plan` is ever read.
+
+### docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#8
+
+*revision: authored · kind: prose · heading: An agent executor's capability boundary is structural absence, before the first real executor decides it by default / What Was Measured · hash: sha256:1b2a1601e1fa6d3f60abc739e33524db614fc69242ad6722565b5a02058d28f5*
+
+**The real CLI's non-interactive flags were checked directly, not assumed.** `claude --help`
+confirms a non-interactive invocation (`-p`/`--print`) supports `--allowedTools`/
+`--disallowedTools`, `--strict-mcp-config` (ignore ambient MCP configuration), and an
+`--output-format json` single-turn response. None of these is the default. An invocation
+built without them inherits whatever tool permissions the *launching* directory's own
+`.claude/settings*` and `CLAUDE.md` auto-discovery grant — for this repository, this
+session's own permissive settings, were a subprocess launched from this working tree.
+
+### docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#9
+
+*revision: authored · kind: heading · heading: An agent executor's capability boundary is structural absence, before the first real executor decides it by default / The Rule · hash: sha256:4865a77f8126915a6ad3e6a258f5af73eefc1b30baeb4938ea003d7b90eeeae5*
+
+## The Rule
+
+### docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#10
+
+*revision: authored · kind: prose · heading: An agent executor's capability boundary is structural absence, before the first real executor decides it by default / The Rule · hash: sha256:f06de7c7b4754f19a66c883dac559c08f8fe76099e3b2096586a7ae6afee206d*
+
+**An executor's capability boundary is structural absence at the invocation site, not a
+permission check inside the invoked process, and not trust in what the process is asked to
+do.** The same mechanism `OD-CONNECTOR-001` already states for a connector's interface — "the
+enforcement is the absence of the capability, not a permission check performed when [it] is
+attempted" — applies here, one layer further out: the invocation itself must omit every
+capability beyond producing a text response, so there is nothing for a compromised or simply
+instruction-following process to reach for, regardless of what the prompt asked it to do.
+
+### docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#11
+
+*revision: authored · kind: prose · heading: An agent executor's capability boundary is structural absence, before the first real executor decides it by default / The Rule · hash: sha256:2fcb912d6b89e5273fb9f6c261675a8eb8a5a87aa7a60d2795f0cfaaa21bbc84*
+
+Concretely, until this record or a successor names a real need otherwise, an invocation of a
+real agent executor:
+
+### docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#12
+
+*revision: authored · kind: prose · heading: An agent executor's capability boundary is structural absence, before the first real executor decides it by default / The Rule · hash: sha256:c88ef1a2c2d9a1e677ebe29192565a681c990d7324e23800fc267f2fed7901ef*
+
+- launches from a freshly created, empty, isolated working directory — never this
+  repository's own tree, never any directory carrying its own `.claude/settings*` or
+  `CLAUDE.md` — so no ambient permission grant or auto-discovered project instruction can
+  reach it;
+- passes no MCP configuration and sets `--strict-mcp-config`, so no MCP-provided tool exists
+  to be reached;
+- denies every built-in tool explicitly, not a subset left unlisted — naming the full current
+  builtin set is defense in depth beneath the isolated-directory guarantee above, not a
+  substitute for it — and never sets `--dangerously-skip-permissions`,
+  `--allow-dangerously-skip-permissions`, or a `--permission-mode` of `bypassPermissions`,
+  `acceptEdits`, or `auto`;
+- requests `--output-format json` over one `--print` turn: one request, one response, no
+  session state, no follow-up turn where an earlier refusal could be renegotiated.
+
+### docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#13
+
+*revision: authored · kind: prose · heading: An agent executor's capability boundary is structural absence, before the first real executor decides it by default / The Rule · hash: sha256:d6c55690e87bafe2dcc3288436986a6cf6e962562b994d40459b3900b70d0bc0*
+
+`TaskEnvelope.available_tools` is not yet a way to grant any of this back. Until a real
+`CapabilityId` names a tool this boundary actually permits, and something enforces the field
+at the invocation this record governs, an empty structural boundary is what every invocation
+gets — the same "nothing enumerated, nothing granted" reading `available_tools: vec![]`
+already has as a value.
+
+### docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#14
+
+*revision: authored · kind: heading · heading: An agent executor's capability boundary is structural absence, before the first real executor decides it by default / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#15
+
+*revision: authored · kind: prose · heading: An agent executor's capability boundary is structural absence, before the first real executor decides it by default / What This Record Does Not Do · hash: sha256:26a4478f8beeaaa2e175f244c781dcbbe433294965793d8ed75d95b7f42f1507*
+
+It does not decide whether a plugin, a transport, or any executor other than the one
+dispatching `TaskEnvelope`/`WorkResult` carries the same rule. `OD-CONNECTOR-001`'s own "each
+is a different boundary with its own shape" stands; this record answers only the question it
+named for an agent executor specifically.
+
+### docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#16
+
+*revision: authored · kind: prose · heading: An agent executor's capability boundary is structural absence, before the first real executor decides it by default / What This Record Does Not Do · hash: sha256:f4189c9aa621b054b999d547454edadca8ab8d332aec761ddb33709cd72f8639*
+
+It does not build a permission-granting mechanism. `TaskEnvelope.available_tools` staying
+unenforced is a real gap this record does not close — when a real task needs a real tool,
+naming what enforces that field and how a grant is checked is a later record's question,
+measured against a real need rather than designed ahead of one.
+
+### docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#17
+
+*revision: authored · kind: prose · heading: An agent executor's capability boundary is structural absence, before the first real executor decides it by default / What This Record Does Not Do · hash: sha256:ece0a7c605894f39ab631704d8be4bf344575ba13c784ac3e9ddcb25ac4abb27*
+
+It does not touch `nomos-corrections`'s own stage/validate/commit chain, `OD-CORRECTIONS-001`,
+or any `AGT-*` contract type. It adds one constraint at one seam: what the subprocess a
+`ProcessLauncher`-based executor starts is permitted to do, decided before its own response is
+ever read rather than inferred from what that response later claims.
+
+### docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#18
+
+*revision: authored · kind: heading · heading: An agent executor's capability boundary is structural absence, before the first real executor decides it by default / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#19
+
+*revision: authored · kind: prose · heading: An agent executor's capability boundary is structural absence, before the first real executor decides it by default / Status · hash: sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3*
+
+Accepted.
 
 ### docs/records/OD-GATE-001-a-skipped-test-reports-ok.md#1
 
