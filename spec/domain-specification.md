@@ -62,6 +62,7 @@ profile: domain-specification
 | docs/records/OD-DETERMINISM-001-a-declaration-proven-only-behind-a-corpus-gate.md@authored | docs/records/OD-DETERMINISM-001-a-declaration-proven-only-behind-a-corpus-gate.md | authored | 26 | 7 | sha256:b080a464d0e59ac731e8b78eb0104aeed978958713f99969d1506ebbee92802e |
 | docs/records/OD-DETERMINISM-002-the-last-two-rows-declare-and-the-guard-stops-asking-about-facts.md@authored | docs/records/OD-DETERMINISM-002-the-last-two-rows-declare-and-the-guard-stops-asking-about-facts.md | authored | 35 | 10 | sha256:14dba5ba489a39e4b5605d97a5eb1389a55a6f0efa07f1aa076ccd5dece46428 |
 | docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md@authored | docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md | authored | 27 | 7 | sha256:95aaab5e010015ba7d2e8e4545a3bf38fcf65ac4eaa2ab7e61814a2618148ff8 |
+| docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md@authored | docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md | authored | 26 | 8 | sha256:8ab68673889fed19383159068abd89c4b4dbbd6a59aaa336cba463bab3dfa96a |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md@authored | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md | authored | 30 | 8 | sha256:ede1d73ff937b80913dd5c6fd4d7d5cc70cb8158b29e13bfe003ae5cd5f805d5 |
 | docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md@authored | docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md | authored | 32 | 9 | sha256:1027b7b589216b9cbe4598a2a569261111071dce14529a2556e82f61852f74cf |
 | docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md@authored | docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md | authored | 20 | 7 | sha256:eca88bdcb033ae337eed44a34b8e00e16b9c0208f5bec59b8560b4850808de81 |
@@ -572,6 +573,14 @@ profile: domain-specification
 | docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#14 | authored | 2 | Amendment: The Deny-List Was Tested Empirically And Found To Leak |
 | docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#22 | authored | 2 | What This Record Does Not Do |
 | docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#26 | authored | 2 | Status |
+| docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#1 | authored | 1 | Generalizing an agent executor's capability boundary to the class OD-CONNECTOR-001 named and OD-EXECUTOR-001 explicitly declined to decide |
+| docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#2 | authored | 2 | Question |
+| docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#5 | authored | 2 | What Was Measured |
+| docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#6 | authored | 3 | An executor invoking a subprocess, for a fixed, non-agentic purpose |
+| docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#12 | authored | 3 | A plugin loaded into this workspace |
+| docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#15 | authored | 3 | A transport under `OD-SPEC-009` |
+| docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#19 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#25 | authored | 2 | Status |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md#1 | authored | 1 | A skipped test reports ok, so the size of the hole is declared rather than the hole being closed |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md#2 | authored | 2 | Question |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md#5 | authored | 2 | What Was Found |
@@ -13861,6 +13870,267 @@ Accepted. Amended to version 2 after the rule's own mechanism was tested empiric
 any Rust was written against it: the deny-list it originally prescribed is replaced with an
 allow-list naming no real tool, and reading a process's structural denials rather than its
 self-reported narration is now part of the rule.
+
+### docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#1
+
+*revision: authored · kind: heading · heading: Generalizing an agent executor's capability boundary to the class OD-CONNECTOR-001 named and OD-EXECUTOR-001 explicitly declined to decide · hash: sha256:ed6a9558b5592eb30ce33a76e0f0ab7606a410a07fe5f4ae07c3b0a9150ae16e*
+
+# Generalizing an agent executor's capability boundary to the class OD-CONNECTOR-001 named and OD-EXECUTOR-001 explicitly declined to decide
+
+### docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#2
+
+*revision: authored · kind: heading · heading: Generalizing an agent executor's capability boundary to the class OD-CONNECTOR-001 named and OD-EXECUTOR-001 explicitly declined to decide / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#3
+
+*revision: authored · kind: prose · heading: Generalizing an agent executor's capability boundary to the class OD-CONNECTOR-001 named and OD-EXECUTOR-001 explicitly declined to decide / Question · hash: sha256:2575e41507142c4f6d4e5e590faab86786baea3975d107c745ba5b02d3a546ce*
+
+`OD-CONNECTOR-001` names four boundary shapes and decides none of them: "an executor invoking
+a subprocess, a plugin loaded into this workspace, an agent given tool access, or a transport
+under `OD-SPEC-009`," stating "each is a different boundary with its own shape" and that
+"deciding all four by extension from the connector case would repeat the mistake `ARC-
+CONNECTOR-001` already named and refused to make." `OD-EXECUTOR-001` later decided exactly one
+of the four — "an agent given tool access," for the real Claude Code `AgentExecutor` — and said
+so explicitly in its own "What This Record Does Not Do": "It does not decide whether a plugin,
+a transport, or any executor other than the one dispatching `TaskEnvelope`/`WorkResult` carries
+the same rule."
+
+### docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#4
+
+*revision: authored · kind: prose · heading: Generalizing an agent executor's capability boundary to the class OD-CONNECTOR-001 named and OD-EXECUTOR-001 explicitly declined to decide / Question · hash: sha256:e565667c9d7d379e0d27026062bee77db2a9262d3be3b5401cf0ec3abba3c10c*
+
+Three of the four remain unmeasured. An external architecture review names this directly: one
+real instance of the class was decided, not the class itself. This record measures each of the
+other three against real code at this repository's current state, the same rigor `OD-EXECUTOR-
+001` applied to the one it decided, rather than deciding by analogy from that single instance —
+the exact failure mode `OD-CONNECTOR-001` itself named and this record is written to avoid
+repeating in the other direction.
+
+### docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#5
+
+*revision: authored · kind: heading · heading: Generalizing an agent executor's capability boundary to the class OD-CONNECTOR-001 named and OD-EXECUTOR-001 explicitly declined to decide / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#6
+
+*revision: authored · kind: heading · heading: Generalizing an agent executor's capability boundary to the class OD-CONNECTOR-001 named and OD-EXECUTOR-001 explicitly declined to decide / What Was Measured / An executor invoking a subprocess, for a fixed, non-agentic purpose · hash: sha256:5dcca690a248e164bef148a3cf0b43305a5175a309d5aa8183ab6c5a3ac2a2f9*
+
+### An executor invoking a subprocess, for a fixed, non-agentic purpose
+
+### docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#7
+
+*revision: authored · kind: prose · heading: Generalizing an agent executor's capability boundary to the class OD-CONNECTOR-001 named and OD-EXECUTOR-001 explicitly declined to decide / What Was Measured / An executor invoking a subprocess, for a fixed, non-agentic purpose · hash: sha256:9f61772cc12f028926c446d3c1a4f7443aae2e6552eb6314e5b8af4bb156289b*
+
+This is not hypothetical. `nomos_platform::ProcessLauncher` — the same trait `nomos-agent-
+executor` dispatches Claude Code through — has three other real callers today, verified
+directly:
+
+### docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#8
+
+*revision: authored · kind: prose · heading: Generalizing an agent executor's capability boundary to the class OD-CONNECTOR-001 named and OD-EXECUTOR-001 explicitly declined to decide / What Was Measured / An executor invoking a subprocess, for a fixed, non-agentic purpose · hash: sha256:1ae77b094d5f45288f494b75f962e0f20c35dbeb7c99e970f8fd80607060825c*
+
+- `nomos-lang-rust-cargo::Discover_Workspace` (`crates/languages/nomos-lang-rust-cargo/src/
+  metadata.rs`) runs `cargo metadata --format-version 1 --no-deps --all-features` over the
+  repository root, invoked from `nomos-check-orchestration::Materialize_Dependencies` on every
+  `nomos check` and `nomos gate run`.
+- `nomos-ledger::finish::running::Runnable_Predicate` (`crates/substrate/nomos-ledger/src/
+  finish/running.rs`) runs an item's own `VerificationPredicate` argv — `cargo test`, `cargo
+  build`, or whatever a `work add --` call named — as part of `nomos work finish`.
+- `nomos-surface-provenance` (`crates/host/nomos-surface-provenance/src/evaluate.rs`) runs `git`
+  to read this repository's own commit history.
+
+### docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#9
+
+*revision: authored · kind: prose · heading: Generalizing an agent executor's capability boundary to the class OD-CONNECTOR-001 named and OD-EXECUTOR-001 explicitly declined to decide / What Was Measured / An executor invoking a subprocess, for a fixed, non-agentic purpose · hash: sha256:261d3d15c5b06f0edc163c7e899f9ac9aea2a2fb3130e1af080d412e2cbcf05e*
+
+Every one of these three shares a property none of `OD-EXECUTOR-001`'s rule addresses because
+none of its four conditions apply to them: **the command line is fully determined by this
+workspace's own code (or, for `nomos-ledger`, by an argv a session already authored into a
+shared, reviewed ledger file) before the process is ever launched, and the invoked program is
+not handed a goal it interprets and decides its own actions from.** `cargo metadata`'s argv is a
+compile-time constant plus the root path; `git`'s argv is the same; a ledger predicate's argv is
+whatever `work add` stored, chosen by a session and visible to every other session and to
+review before it is committed. None of the three ever receives natural-language content, a
+`TaskEnvelope.goal`, or any input an adversary distinct from this workspace's own contributors
+could shape. `OD-EXECUTOR-001`'s rule — isolate the working directory, deny every tool, read
+structural denial rather than self-report — exists because Claude Code is asked to interpret a
+goal and is capable of choosing actions its invocation does not enumerate in advance; the risk
+the rule closes is that latitude. A fixed-argv invocation of a deterministic program has no such
+latitude to close: there is no decision for the process to make that its own argv does not
+already make for it.
+
+### docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#10
+
+*revision: authored · kind: prose · heading: Generalizing an agent executor's capability boundary to the class OD-CONNECTOR-001 named and OD-EXECUTOR-001 explicitly declined to decide / What Was Measured / An executor invoking a subprocess, for a fixed, non-agentic purpose · hash: sha256:c8f595f5780e56c1c50ee84c1c584a9deec8ead0ebc8e53a560c1770271dfaee*
+
+**The rule for this shape is different, and it is not new: this workspace already trusts fixed
+invocations of its own build tooling everywhere else.** `cargo build`, `cargo test`, `cargo
+clippy` and the gate's own predicates all run as ordinary local commands with the ambient
+permissions of the machine running them — the same trust level this repository already extends
+to every other tool its own CI and its own contributors already depend on to build and verify
+it. Requiring `OD-EXECUTOR-001`'s isolation for `cargo metadata` would mean isolating it from
+the very repository root it exists to read, which is not a stricter boundary — it is a
+different function.
+
+### docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#11
+
+*revision: authored · kind: prose · heading: Generalizing an agent executor's capability boundary to the class OD-CONNECTOR-001 named and OD-EXECUTOR-001 explicitly declined to decide / What Was Measured / An executor invoking a subprocess, for a fixed, non-agentic purpose · hash: sha256:e304991c9cc1c4f374568d6cb70913d08a32b0759a59049a5fda5f38fa310963*
+
+**The decision: `OD-EXECUTOR-001`'s structural-absence rule governs a subprocess given an
+open-ended goal it interprets (an agentic invocation). It does not govern, and does not need to
+be extended to, a subprocess invoked with a fixed, fully-predetermined argv and no interpretive
+latitude (a deterministic invocation) — that shape is already governed by the same ordinary
+build-tooling trust this workspace extends to every dependency its own build already requires,
+and no further rule is needed until a real deterministic invocation is shown to accept
+attacker-influenced argument content, which none of the three named above does.**
+
+### docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#12
+
+*revision: authored · kind: heading · heading: Generalizing an agent executor's capability boundary to the class OD-CONNECTOR-001 named and OD-EXECUTOR-001 explicitly declined to decide / What Was Measured / A plugin loaded into this workspace · hash: sha256:0c62ac6438fc7ec494f946eda8623f5d0c6cd0508d1497d9f30a59adcca45a13*
+
+### A plugin loaded into this workspace
+
+### docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#13
+
+*revision: authored · kind: prose · heading: Generalizing an agent executor's capability boundary to the class OD-CONNECTOR-001 named and OD-EXECUTOR-001 explicitly declined to decide / What Was Measured / A plugin loaded into this workspace · hash: sha256:d82a9b23fe160a5000a8f7a7f14fd8cbfe69217400877454e81833083c88a206*
+
+Checked directly, not assumed: a workspace-wide search for `libloading`, `dlopen`, `Library::
+new`, `.dll` and `.so` as a runtime-loaded artifact returns no matches anywhere under `crates/`.
+Every "plugin" this workspace has — `nomos-lang-rust`, and the language/rule/package provider
+shape `.claude/skills/nomos-add-plugin` describes for a future second one — is an ordinary Rust
+crate, compiled and statically linked into the same binary as the code that calls it. There is
+no separate process, no separate address space, and no ABI boundary of any kind between a
+"plugin" and the composition root that calls it — `OD-CONNECTOR-001`'s own reasoning already
+names why this differs in kind from a connector: "a plugin's ABI is not a translation layer
+between a foreign schema and a canonical one." A capability boundary, in the sense `OD-EXECUTOR-
+001` and `ARC-CONNECTOR-001` both use the term, restricts what a separately-invoked, separately-
+trusted thing may do; a statically-linked crate is not a separately-trusted thing, it is this
+program.
+
+### docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#14
+
+*revision: authored · kind: prose · heading: Generalizing an agent executor's capability boundary to the class OD-CONNECTOR-001 named and OD-EXECUTOR-001 explicitly declined to decide / What Was Measured / A plugin loaded into this workspace · hash: sha256:5d3976c184c232f660a348028f44e6abaf23ce4fcd3906bf46fe6eb44e05d2f7*
+
+**The decision: this shape has no real referent today, and the question `OD-CONNECTOR-001`
+deferred does not yet have a case to decide against.** This is not an extension of `OD-EXECUTOR-
+001`'s rule by assumption — it is the opposite: measuring finds no process boundary here to
+extend anything to. The trigger that would fire it is named, not left implicit: a plugin
+mechanism that loads code across a real process, address-space, or ABI boundary — a `.so`/
+`.dll` loaded at runtime, a WASM sandbox, or a plugin invoked as its own subprocess — rather
+than a Rust crate linked into this binary. Should one arrive, it decides this question the way
+`OD-EXECUTOR-001` decided its own: measured against the real mechanism, not inferred from this
+record by analogy.
+
+### docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#15
+
+*revision: authored · kind: heading · heading: Generalizing an agent executor's capability boundary to the class OD-CONNECTOR-001 named and OD-EXECUTOR-001 explicitly declined to decide / What Was Measured / A transport under `OD-SPEC-009` · hash: sha256:950e05a96bffa7971859640775b0e18b94f3391d73f9c9f9b68e91aa74574909*
+
+### A transport under `OD-SPEC-009`
+
+### docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#16
+
+*revision: authored · kind: prose · heading: Generalizing an agent executor's capability boundary to the class OD-CONNECTOR-001 named and OD-EXECUTOR-001 explicitly declined to decide / What Was Measured / A transport under `OD-SPEC-009` · hash: sha256:126c8372fbdc29af9b9993f9f20b1110aba6791ba2d64130d7e5a3edea3718fa*
+
+`OD-SPEC-009` already states a rule for every submission-intake surface — CLI, API, MCP or form
+— shaped identically to the write-omission mechanism `OD-CONNECTOR-001` and `OD-EXECUTOR-001`
+both use: "No surface is that door. A form, a CLI verb, an HTTP endpoint and an MCP tool are
+*transports*: each constructs the typed submission from whatever it collects, hands it to the
+accept function, and renders the verdict it gets back. A transport that validates, defaults or
+persists on its own behalf is a second write door and is a defect, not a variant." That is the
+same shape as `OD-CONNECTOR-001`'s "the enforcement is the absence of the capability, not a
+permission check performed when [it] is attempted": a transport never holds the capability to
+write on its own account, structurally, the same way a connector's interface never holds the
+vendor's write methods and an executor's invocation never holds a granted tool.
+
+### docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#17
+
+*revision: authored · kind: prose · heading: Generalizing an agent executor's capability boundary to the class OD-CONNECTOR-001 named and OD-EXECUTOR-001 explicitly declined to decide / What Was Measured / A transport under `OD-SPEC-009` · hash: sha256:950dda6b8c9e1080ec79fd060c7077309f1eaa7d799ad1d020ac895c791ab4cc*
+
+`OD-CONNECTOR-001` itself flagged the gap precisely: "an MCP transport already answers to
+`OD-SPEC-009` on the inbound side and has not been asked an outbound question." Checked
+directly against `OD-SPEC-009`'s own text: its rule is not direction-scoped — "no surface is
+that door" binds every transport's own persistence capability regardless of which direction
+data is said to move, because a submission transport that persisted directly would be writing
+outward from the surface's own code exactly as an outbound mutation would. There is no second,
+undecided "outbound" question left over — `OD-SPEC-009`'s single-accept-function rule already
+closes it, for the two real transports this workspace has (`nomos-cli`, `nomos-api`) and for any
+future one, the same way it already closes the inbound question it was written for.
+
+### docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#18
+
+*revision: authored · kind: prose · heading: Generalizing an agent executor's capability boundary to the class OD-CONNECTOR-001 named and OD-EXECUTOR-001 explicitly declined to decide / What Was Measured / A transport under `OD-SPEC-009` · hash: sha256:1cd7987d91d79aab6dbb1fc89e2956e63457a04c7c5cb7fb5829d662d04325dd*
+
+**The decision: `OD-SPEC-009` already answers this. No new rule is written; this record
+supplies the citation connecting the two, which neither record made on its own.**
+
+### docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#19
+
+*revision: authored · kind: heading · heading: Generalizing an agent executor's capability boundary to the class OD-CONNECTOR-001 named and OD-EXECUTOR-001 explicitly declined to decide / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#20
+
+*revision: authored · kind: prose · heading: Generalizing an agent executor's capability boundary to the class OD-CONNECTOR-001 named and OD-EXECUTOR-001 explicitly declined to decide / What This Record Does Not Do · hash: sha256:c25a10598ff3e57cd577004aa89f291e182424761696a837217ceb16c25e6ce0*
+
+It does not change `OD-EXECUTOR-001`'s rule, its scope, or the invocation it governs. The Claude
+Code `AgentExecutor` is unaffected.
+
+### docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#21
+
+*revision: authored · kind: prose · heading: Generalizing an agent executor's capability boundary to the class OD-CONNECTOR-001 named and OD-EXECUTOR-001 explicitly declined to decide / What This Record Does Not Do · hash: sha256:52c999cdb5e40401b5d65d8efa01dc79866c2f522f1edeaab2e3d4cd43330331*
+
+It does not build a plugin sandbox, a WASM host, or any dynamic-loading mechanism. It states the
+condition that would make the deferred plugin question real, and builds nothing toward it ahead
+of that condition, the same restraint `OD-HOST-004` and `D-135` both already name for this
+workspace.
+
+### docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#22
+
+*revision: authored · kind: prose · heading: Generalizing an agent executor's capability boundary to the class OD-CONNECTOR-001 named and OD-EXECUTOR-001 explicitly declined to decide / What This Record Does Not Do · hash: sha256:acd57357bebf96b553af8f945290921c4556b3b09bc56ea1f995b045dc77a6aa*
+
+It does not add enforcement to `nomos-lang-rust-cargo`, `nomos-ledger`, or `nomos-surface-
+provenance`. Their existing, unrestricted `ProcessLauncher` use is the shape this record found
+correct, not a gap it closes.
+
+### docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#23
+
+*revision: authored · kind: prose · heading: Generalizing an agent executor's capability boundary to the class OD-CONNECTOR-001 named and OD-EXECUTOR-001 explicitly declined to decide / What This Record Does Not Do · hash: sha256:fafb25ee0f07c90c33c833f71e278e36d2d912a65455575996be0a8885c61a56*
+
+It does not revisit `OD-SPEC-009`'s own rule or extend it — it cites what that record already
+decided rather than restating or amending it.
+
+### docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#24
+
+*revision: authored · kind: prose · heading: Generalizing an agent executor's capability boundary to the class OD-CONNECTOR-001 named and OD-EXECUTOR-001 explicitly declined to decide / What This Record Does Not Do · hash: sha256:bb50f601502a033116f21b5de1fb9667a5638f2b7c33f7288c4f71488410c8a9*
+
+It does not name every possible future subprocess shape this workspace could ever add. The
+criterion it states — agentic (interprets a goal, decides its own actions) versus deterministic
+(fixed argv, no interpretive latitude) — is what a new subprocess caller checks itself against;
+one that is agentic needs `OD-EXECUTOR-001`'s own rule applied to it directly (or a successor
+record, if its shape genuinely differs), not an inference from this one.
+
+### docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#25
+
+*revision: authored · kind: heading · heading: Generalizing an agent executor's capability boundary to the class OD-CONNECTOR-001 named and OD-EXECUTOR-001 explicitly declined to decide / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#26
+
+*revision: authored · kind: prose · heading: Generalizing an agent executor's capability boundary to the class OD-CONNECTOR-001 named and OD-EXECUTOR-001 explicitly declined to decide / Status · hash: sha256:2e9df8a4850da939095a46f03c3f4340ee18a3c84053d23353d9a98efce0eb05*
+
+Accepted. `OD-CONNECTOR-001`'s four-item deferred list is now fully measured: one decided by
+`OD-EXECUTOR-001` (agent given tool access), one decided here as already covered by an existing
+record (`OD-SPEC-009`'s transport), one decided here as governed by ordinary build-tooling trust
+rather than `OD-EXECUTOR-001`'s rule (deterministic subprocess), and one found to have no real
+referent yet (plugin), with its firing condition named. Revisit the plugin case when a real
+out-of-process plugin mechanism is proposed or built; revisit the deterministic-subprocess case
+if any of the three named callers, or a future one, is ever given attacker-influenced argument
+content.
 
 ### docs/records/OD-GATE-001-a-skipped-test-reports-ok.md#1
 

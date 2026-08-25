@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:7729489c8f1224aa84e6d2ffe4a6c3ff1165f77dd77f01060922789a2266a027",
-  "inputs_digest": "sha256:0b8c5e092b92fa0090186959382ea7b6496070cf210113b078a56a0c40b35e4d",
+  "content_digest": "sha256:9b61ac287727932dc7f4c62ac53e3ad857a7f81d2014af9b0404a309e02ce5a0",
+  "inputs_digest": "sha256:0adefc20c5fc2b563912103d2fe4a30f72741f0263bfda17c3df549e54d6f164",
   "sections": [
     [
       "Documents",
-      161
+      162
     ],
     [
       "Sections",
-      1366
+      1374
     ],
     [
       "Source blocks",
-      4798
+      4824
     ]
   ],
   "inputs": [
@@ -279,6 +279,11 @@
       "content": "documents",
       "identity": "docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md@authored",
       "hash": "sha256:95aaab5e010015ba7d2e8e4545a3bf38fcf65ac4eaa2ab7e61814a2618148ff8"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md@authored",
+      "hash": "sha256:8ab68673889fed19383159068abd89c4b4dbbd6a59aaa336cba463bab3dfa96a"
     },
     {
       "content": "documents",
@@ -2804,6 +2809,46 @@
       "content": "headings",
       "identity": "docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#26",
       "hash": "sha256:9eda0b74800bb99654a37e7f820522f9c0d27f2ade5f08cf9bd192ca2a0fce2d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#1",
+      "hash": "sha256:ef81e33d1046ff49c19ad6700d461dae73820f965adf00c617d0417b05e46f33"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#2",
+      "hash": "sha256:82798b65335aec6f36663e013f19532e1910bdffe80246d1c8b0abe0e004bd59"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#5",
+      "hash": "sha256:4f31c5b66209e536893a09e73001c986c03e2f35d557c7412018905f5c7f43c7"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#6",
+      "hash": "sha256:f2d4d7a4179f9b4085e5c380b48c4319317a364f84ddb5d4456000c55383999d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#12",
+      "hash": "sha256:327fdf837d3f1d337bb35346cdb4cb6104edfc2bb290b24b29bf3f2988b11648"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#15",
+      "hash": "sha256:0414a78ea24f5863a5ac8c1e071b98498c349a94f6e9209c82f481e0cde4e8ed"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#19",
+      "hash": "sha256:489892448723e875903835df5027cc2e0ad7ca77dcc7eb63381dd11cfef4bc3e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#25",
+      "hash": "sha256:cdb711ac2f013b40dede5599be0a43ff4061621fd8304e4869c3ddd19e09f356"
     },
     {
       "content": "headings",
@@ -14359,6 +14404,136 @@
       "content": "blocks",
       "identity": "docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#27",
       "hash": "sha256:eabc77b1ef5eb360e0af51219efce4cfe8a3fc91bf5a2dd0776ddbe7effb75bf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#1",
+      "hash": "sha256:ed6a9558b5592eb30ce33a76e0f0ab7606a410a07fe5f4ae07c3b0a9150ae16e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#3",
+      "hash": "sha256:2575e41507142c4f6d4e5e590faab86786baea3975d107c745ba5b02d3a546ce"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#4",
+      "hash": "sha256:e565667c9d7d379e0d27026062bee77db2a9262d3be3b5401cf0ec3abba3c10c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#5",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#6",
+      "hash": "sha256:5dcca690a248e164bef148a3cf0b43305a5175a309d5aa8183ab6c5a3ac2a2f9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#7",
+      "hash": "sha256:9f61772cc12f028926c446d3c1a4f7443aae2e6552eb6314e5b8af4bb156289b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#8",
+      "hash": "sha256:1ae77b094d5f45288f494b75f962e0f20c35dbeb7c99e970f8fd80607060825c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#9",
+      "hash": "sha256:261d3d15c5b06f0edc163c7e899f9ac9aea2a2fb3130e1af080d412e2cbcf05e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#10",
+      "hash": "sha256:c8f595f5780e56c1c50ee84c1c584a9deec8ead0ebc8e53a560c1770271dfaee"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#11",
+      "hash": "sha256:e304991c9cc1c4f374568d6cb70913d08a32b0759a59049a5fda5f38fa310963"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#12",
+      "hash": "sha256:0c62ac6438fc7ec494f946eda8623f5d0c6cd0508d1497d9f30a59adcca45a13"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#13",
+      "hash": "sha256:d82a9b23fe160a5000a8f7a7f14fd8cbfe69217400877454e81833083c88a206"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#14",
+      "hash": "sha256:5d3976c184c232f660a348028f44e6abaf23ce4fcd3906bf46fe6eb44e05d2f7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#15",
+      "hash": "sha256:950e05a96bffa7971859640775b0e18b94f3391d73f9c9f9b68e91aa74574909"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#16",
+      "hash": "sha256:126c8372fbdc29af9b9993f9f20b1110aba6791ba2d64130d7e5a3edea3718fa"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#17",
+      "hash": "sha256:950dda6b8c9e1080ec79fd060c7077309f1eaa7d799ad1d020ac895c791ab4cc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#18",
+      "hash": "sha256:1cd7987d91d79aab6dbb1fc89e2956e63457a04c7c5cb7fb5829d662d04325dd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#19",
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#20",
+      "hash": "sha256:c25a10598ff3e57cd577004aa89f291e182424761696a837217ceb16c25e6ce0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#21",
+      "hash": "sha256:52c999cdb5e40401b5d65d8efa01dc79866c2f522f1edeaab2e3d4cd43330331"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#22",
+      "hash": "sha256:acd57357bebf96b553af8f945290921c4556b3b09bc56ea1f995b045dc77a6aa"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#23",
+      "hash": "sha256:fafb25ee0f07c90c33c833f71e278e36d2d912a65455575996be0a8885c61a56"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#24",
+      "hash": "sha256:bb50f601502a033116f21b5de1fb9667a5638f2b7c33f7288c4f71488410c8a9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#25",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#26",
+      "hash": "sha256:2e9df8a4850da939095a46f03c3f4340ee18a3c84053d23353d9a98efce0eb05"
     },
     {
       "content": "blocks",
