@@ -29813,14 +29813,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-executor-budget",
-        "acquired_at": 1787681551,
-        "lease_expires_at": 1787688751
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -29831,7 +29827,28 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-agent-executor",
+          "--no-fail-fast"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 16 tests\ntest tests::Test_A_Real_Invocation_Cannot_Write_Outside_Its_Own_Boundary_Even_When_Asked_To ... ignored, spends a real, billed Claude Code invocation; run explicitly, not from the gate\ntest response::tests::Test_An_Absent_Permission_Denials_Field_Reads_As_No_Denials ... ok\ntest response::tests::Test_A_Clean_Response_Has_No_Denied_Tool_Uses ... ok\ntest tests::Test_Command_For_Normalizes_Newlines_And_Quotes_In_The_Goal ... ok\ntest response::tests::Test_A_Denied_Write_Is_Reported_Structurally_Even_When_The_Text_Claims_Success ... ok\ntest response::tests::Test_Json_Missing_Result_Is_Unparseable ... ok\ntest tests::Test_Command_For_Ignores_The_Still_Unenforced_Fields ... ok\ntest response::tests::Test_Not_Json_Is_Unparseable ... ok\ntest tests::Test_Command_For_Requests_The_Bounded_Invocation ... ok\ntest tests::Test_Command_For_Never_Sets_A_Permission_Bypass ... ok\ntest tests::Test_Execute_Reads_A_Scripted_Clean_Response ... ok\ntest tests::Test_Execute_Surfaces_A_Non_Zero_Exit_As_Unavailable ... ok\ntest tests::Test_Isolated_Working_Directory_Is_Created_And_Empty ... ok\ntest tests::Test_Execute_Surfaces_A_Timeout_As_Unavailable ... ok\ntest tests::Test_Execute_Reports_A_Denied_Write_Structurally_Even_When_The_Text_Claims_Success ... ok\ntest tests::Test_Two_Isolated_Working_Directories_Never_Collide ... ok\n\ntest result: ok. 15 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-agent-executor v0.1.0 (F:\\repos\\nomos\\crates\\agent\\nomos-agent-executor)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.51s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_agent_executor-a7f1cfdf1827d2fb.exe)\n   Doc-tests nomos_agent_executor\n",
+        "verified_at": 1787682318,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "49b63dade7723bf293d44cb11f0f3e9d0a1b4216"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

@@ -6,13 +6,21 @@
 //! access granted through an allow-list naming no real tool rather than denied through a list
 //! that will always be one release behind the real tool set; one `--print` turn; and a result
 //! read for what it structurally permitted, never for what its own free text claims happened.
-//! [`Execute`] is that record's rule, and nothing more — it does not assemble a
-//! `nomos_agent_contracts::WorkResult`. `WorkResult.plan` is a `CorrectionPlan`, and
-//! `CorrectionPlan::New` refuses an empty candidate list; a judgment-only task genuinely has
-//! no plan to report, and stretching an empty `ChangeSet` into a fabricated "candidate" to fit
-//! the type would be inventing a correction nobody proposed. That gap is real and this crate
-//! does not paper over it — assembling a `WorkResult` is a later increment's question, once a
-//! real caller needs one.
+//! [`Execute`] is that record's rule, and nothing more. A second, distinct concern —
+//! bounding what the dispatch may *cost*, not what it may *touch* — is not that record's
+//! question; `Command_For` requests `--max-budget-usd`, verified empirically to abort before
+//! the expensive model call runs rather than merely reporting overspend afterward, though a
+//! small overshoot bounded by one cheap triage call is still possible and nothing caps turn
+//! count directly.
+//!
+//! It does not assemble a `nomos_agent_contracts::WorkResult`. `OD-CONTRACTS-003` made
+//! `WorkResult.plan` an `Option`, so the type itself can now represent a judgment-only
+//! response — but this crate still does not build one, because a free-text `response` has no
+//! honest, general mapping into `claims`/`assumptions`/`unresolved_questions` either.
+//! `TaskEnvelope.expected_output_schema`, paired with Claude Code's own `--json-schema`
+//! support, is the real shape a future increment would use to have the agent produce a
+//! `WorkResult`-shaped response directly rather than have this crate guess one from prose —
+//! not attempted here.
 //!
 //! Only `TaskEnvelope.goal` is read. `scope`, `prohibited_changes`, `available_tools`,
 //! `knowledge_context` and `applicable_rules` are accepted and ignored, matching
@@ -47,6 +55,15 @@ const TIMEOUT: Duration = Duration::from_secs(300);
 /// itself are chosen so a reader, or a future real tool, can never mistake this for
 /// something meant to match.
 const NO_TOOLS_GRANTED: &str = "__nomos_agent_executor_denies_all_tools__";
+
+/// A starting bound, not a derived one — real invocations this crate has run cost between
+/// under a cent and a few tens of cents. A dollar is generous headroom for a single
+/// judgment-only turn while still being a real, structural ceiling on what a runaway
+/// sequence of denied-tool retries could cost, verified empirically: capped at an
+/// unreachably low budget, `claude` aborted with exit code 1 before its expensive model
+/// call ran, incurring only a small triage-model cost first — the overshoot this default
+/// cannot fully close, only bound.
+const MAX_BUDGET_USD: &str = "1.00";
 
 /// Dispatches `task.goal` to Claude Code as a subprocess, bounded by `OD-EXECUTOR-001`'s
 /// structural capability boundary, and reads back what it reported.
@@ -119,6 +136,38 @@ const CLAUDE_PROGRAM: &str = "claude.cmd";
 #[cfg(not(windows))]
 const CLAUDE_PROGRAM: &str = "claude";
 
+/// A newline (`\n` or `\r`) collapsed to a space and a double quote turned into a single
+/// one, so `task.goal` survives `Command_For` regardless of platform.
+///
+/// Both verified directly against the real CLI, as two distinct failures, not one.
+/// `StdProcessLauncher` spawns `claude.cmd` through Rust's own `std::process::Command`
+/// with no shell, and a goal carrying an embedded newline failed there with "batch file
+/// arguments are invalid" — the Windows-only hardening `std` added for CVE-2024-24576,
+/// which refuses certain argument content when the target is a `.bat`/`.cmd` file rather
+/// than risk it being used to inject a second command when `cmd.exe` re-parses it. Once
+/// that was fixed, a goal carrying an embedded `"` no longer triggered a refusal but
+/// produced a *different* failure — `claude`'s own stdout was not the JSON it promised —
+/// consistent with `cmd.exe`'s own batch-argument tokenizer, a second and separate layer
+/// from `std`'s CVE fix, re-splitting the argument on the quote before `claude.cmd` ever
+/// saw it, rather than passing it through as one value. Routing around either by
+/// hand-escaping would be reproducing the exact class of bug the first fix exists to
+/// close, so this crate does not try; a goal is free text for a model to read, not a
+/// document whose exact punctuation this invocation depends on, and normalizing both is
+/// honest rather than a workaround. Applied on every platform, not only Windows, so
+/// `Command_For`'s output does not depend on which one built it.
+///
+/// The quote substitution has a real, observed cost, named rather than hidden: run
+/// end-to-end against the real CLI with a goal quoting a Rust string literal
+/// (`const X: &str = "1.00";`), the substitution turned it into `'1.00'` — a char literal,
+/// not a string — and the model correctly reported the resulting snippet as broken code.
+/// A goal embedding source code that itself uses double quotes will read differently to
+/// the model than the caller wrote it. No fix for that is attempted here; it is a real
+/// limitation of this invocation path, not a case this crate silently gets right.
+fn Single_Line(goal: &str) -> String
+{
+    return goal.replace(['\n', '\r'], " ").replace('"', "'");
+}
+
 /// The invocation `OD-EXECUTOR-001`'s rule describes, over `task.goal`, run from
 /// `working_directory`.
 fn Command_For(task: &TaskEnvelope, working_directory: &std::path::Path) -> Command
@@ -127,12 +176,14 @@ fn Command_For(task: &TaskEnvelope, working_directory: &std::path::Path) -> Comm
         vec![
             CLAUDE_PROGRAM.to_owned(),
             "--print".to_owned(),
-            task.goal.clone(),
+            Single_Line(&task.goal),
             "--output-format".to_owned(),
             "json".to_owned(),
             "--strict-mcp-config".to_owned(),
             "--allowedTools".to_owned(),
             NO_TOOLS_GRANTED.to_owned(),
+            "--max-budget-usd".to_owned(),
+            MAX_BUDGET_USD.to_owned(),
         ],
         TIMEOUT,
     );

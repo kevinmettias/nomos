@@ -48,6 +48,7 @@ fn Test_Command_For_Requests_The_Bounded_Invocation()
     assert!(command.argv.windows(2).any(|pair| pair == ["--output-format".to_owned(), "json".to_owned()]));
     assert!(command.argv.contains(&"--strict-mcp-config".to_owned()));
     assert!(command.argv.windows(2).any(|pair| pair == ["--allowedTools".to_owned(), NO_TOOLS_GRANTED.to_owned()]));
+    assert!(command.argv.windows(2).any(|pair| pair == ["--max-budget-usd".to_owned(), MAX_BUDGET_USD.to_owned()]));
     assert_eq!(command.working_directory.as_deref(), Some(directory));
 }
 
@@ -71,6 +72,25 @@ fn Test_Command_For_Never_Sets_A_Permission_Bypass()
     {
         assert!(!joined.contains(forbidden), "the invocation must never contain {forbidden:?}: {joined}");
     }
+}
+
+/// A goal carrying an embedded newline or double quote must not reach `argv` with either
+/// intact — two distinct, real, empirically found failures on Windows (`claude.cmd`
+/// spawned with no shell first refuses a newline outright, per `std`'s own CVE-2024-24576
+/// hardening for batch-file targets; once that is fixed, an embedded `"` still causes
+/// `cmd.exe`'s own batch-argument tokenizer to re-split the argument before `claude.cmd`
+/// ever sees it as one value), reproduced here as a fast, no-subprocess assertion rather
+/// than re-discovered only by running the real CLI.
+#[test]
+fn Test_Command_For_Normalizes_Newlines_And_Quotes_In_The_Goal()
+{
+    let task = Bare_Task("line one.\nline two.\r\nsays \"hello\".");
+    let directory = std::path::Path::new("/tmp/does-not-need-to-exist-for-this-test");
+
+    let command = Command_For(&task, directory);
+
+    assert!(command.argv.iter().all(|argument| !argument.contains(['\n', '\r', '"'])));
+    assert!(command.argv.contains(&"line one. line two.  says 'hello'.".to_owned()));
 }
 
 /// `TaskEnvelope.scope`/`prohibited_changes`/`available_tools`/`knowledge_context`/
