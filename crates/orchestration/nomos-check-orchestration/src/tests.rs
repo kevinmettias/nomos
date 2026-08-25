@@ -45,12 +45,31 @@ fn Repository_Root() -> std::path::PathBuf
         .expect("this crate sits three levels below the workspace root");
 }
 
+/// Selected explicitly rather than left to `&[]`'s "everything" default: this repository
+/// keeps its own architecture at zero findings (`COMPLETENESS_MIRROR`, `NAMING_CONVENTION`,
+/// `DEPENDENCY_DIRECTION`, `UNREAD_REACHES_FINDING`), which is what "a clean tree" means
+/// here, but does not keep `LINT_DIAGNOSTICS` at zero -- `cargo clippy`'s own pedantic-level
+/// warnings are tolerated debt this workspace's own gate explicitly does not block on
+/// (`.github/workflows/gate.yml` carries no `-D warnings`), and they fluctuate as concurrent
+/// sessions touch the tree. Selecting `&[]` here would make this test's own pass/fail
+/// depend on the ambient lint-cleanliness of the whole real repository at the moment it
+/// runs, which is not the property this test exists to prove.
+fn Architectural_Rules() -> [RuleId; 4]
+{
+    return [
+        RuleId::New(nomos_rules::COMPLETENESS_MIRROR),
+        RuleId::New(nomos_rules::NAMING_CONVENTION),
+        RuleId::New(nomos_rules::DEPENDENCY_DIRECTION),
+        RuleId::New(nomos_rules::UNREAD_REACHES_FINDING),
+    ];
+}
+
 #[test]
 fn Test_A_Clean_Tree_Should_Be_Judged_Complete_With_No_Findings()
 {
     let sources = vec![Source("a.rs", "pub fn Ok() {}\n")];
 
-    let outcome = Run(&sources, Test_Variant(), &Repository_Root(), &StdProcessLauncher, &[]);
+    let outcome = Run(&sources, Test_Variant(), &Repository_Root(), &StdProcessLauncher, &Architectural_Rules());
 
     let CheckOutcome::Judged { findings, examined, claim } = outcome
     else
@@ -228,6 +247,33 @@ fn Test_Materialize_Dependencies_Should_Return_Real_Workspace_Members()
     );
 }
 
+/// The identical claim [`Test_Materialize_Dependencies_Should_Return_Real_Workspace_Members`]
+/// proves, for `nomos.cap.lint.diagnostics`: real sources flow out of the real `cargo
+/// clippy` provider over the real repository root, not merely "zero findings".
+#[test]
+fn Test_Materialize_Lint_Should_Return_Real_Workspace_Members()
+{
+    let placeholder = [Source("placeholder.rs", "pub fn Placeholder() {}\n")];
+    let registry = crate::composition::Registered().expect("fixture composition");
+    let context = crate::facts::Ingested(&placeholder, &registry, Test_Variant()).expect("a single real file ingests");
+    let mut store = MemoryFactStore::New();
+
+    let crate::facts::LintMaterialization { sources, findings } =
+        crate::facts::Materialize_Lint(&Repository_Root(), &context, &mut store, &StdProcessLauncher);
+
+    assert!(findings.is_empty(), "a real workspace root must not report ProviderUnavailable: {findings:?}");
+    assert!(
+        sources.len() > 10,
+        "this repository has far more than ten workspace members, so {} real sources is too \
+         few to have exercised the provider: {sources:?}",
+        sources.len()
+    );
+    assert!(
+        sources.iter().any(|source| return source.path == "crates/rules/nomos-rules"),
+        "expected nomos-rules among the real sources: {sources:?}"
+    );
+}
+
 /// A launcher that counts how many times it was asked to run something, and refuses every
 /// one -- proving `OD-GATE-017`'s claim that a deselected rule's own materialization does
 /// not run at all, which a real invocation's findings cannot distinguish from "ran and found
@@ -288,6 +334,34 @@ fn Test_A_Deselected_Dependency_Rule_Should_Not_Launch_Cargo_Metadata()
         &[RuleId::New(nomos_rules::DEPENDENCY_DIRECTION)],
     );
     assert_eq!(selected.Count(), 1, "dependency-direction was selected, so cargo metadata must run exactly once");
+}
+
+/// The identical claim [`Test_A_Deselected_Dependency_Rule_Should_Not_Launch_Cargo_Metadata`]
+/// proves, for `LINT_DIAGNOSTICS` and `cargo clippy`.
+#[test]
+fn Test_A_Deselected_Lint_Rule_Should_Not_Launch_Cargo_Clippy()
+{
+    let sources = vec![Source("a.rs", "pub fn Ok() {}\n")];
+
+    let unselected = CountingLauncher::New();
+    let _ = Run(
+        &sources,
+        Test_Variant(),
+        &Repository_Root(),
+        &unselected,
+        &[RuleId::New(nomos_rules::COMPLETENESS_MIRROR)],
+    );
+    assert_eq!(unselected.Count(), 0, "lint-diagnostics was not selected, so cargo clippy must not run");
+
+    let selected = CountingLauncher::New();
+    let _ = Run(
+        &sources,
+        Test_Variant(),
+        &Repository_Root(),
+        &selected,
+        &[RuleId::New(nomos_rules::LINT_DIAGNOSTICS)],
+    );
+    assert_eq!(selected.Count(), 1, "lint-diagnostics was selected, so cargo clippy must run exactly once");
 }
 
 /// Ingests `ingested` into a real fact store and judges `judged` over it -- the split

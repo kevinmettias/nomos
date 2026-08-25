@@ -418,6 +418,65 @@ fn Rendered_Dependency_Facts(mut facts: Vec<nomos_lang_rust_cargo::PackageFact>)
     return rendered;
 }
 
+/// `nomos-lang-rust-clippy`'s facts over this repository's own real workspace.
+///
+/// The identical reasoning [`Dependency_Production`] gives for using the real repository
+/// rather than the shared `FIXTURE`: this provider's whole reason for existing is that it
+/// reads `cargo clippy`'s own real analysis, not bytes a caller already holds.
+pub(crate) fn Lint_Production() -> Vec<u8>
+{
+    let context = Lint_Context();
+    let facts = Discovered_Lint_Facts(context);
+
+    return Rendered_Lint_Facts(facts);
+}
+
+fn Lint_Context() -> nomos_lang_rust_clippy::FactContext
+{
+    return nomos_lang_rust_clippy::FactContext {
+        snapshot: SnapshotId::From_Digest(Content_Digest(b"nomos.determinism.snapshot")),
+        variant: BuildVariantId::From_Digest(Content_Digest(b"nomos.determinism.variant")),
+        configuration: ConfigurationId::From_Digest(Content_Digest(b"nomos.determinism.configuration")),
+        generation: GenerationId::INITIAL,
+    };
+}
+
+/// This repository's own real workspace, materialized through the door this provider
+/// actually reads `cargo clippy`'s own analysis through, and checked to have found enough
+/// of it to have measured something.
+fn Discovered_Lint_Facts(context: nomos_lang_rust_clippy::FactContext) -> Vec<nomos_lang_rust_clippy::DiagnosticsFact>
+{
+    let facts = nomos_lang_rust_clippy::Materialize_Workspace(&Repository_Root(), context, &StdProcessLauncher)
+        .expect("this repository is a real cargo workspace under clippy; a provider that cannot see it verifies nothing");
+
+    assert!(
+        facts.len() > 10,
+        "this repository has far more than ten workspace members, so {} is too few to have \
+         measured much: {facts:?}",
+        facts.len()
+    );
+
+    return facts;
+}
+
+/// The facts in payload-byte order rather than in whatever order `Discover_Workspace`
+/// returned — the identical reasoning [`Rendered_Dependency_Facts`] gives: `LintFactProduction`
+/// declares `State`, not `StateTemporal`, so the final set of facts is the claim, not the
+/// order they arrived in.
+fn Rendered_Lint_Facts(mut facts: Vec<nomos_lang_rust_clippy::DiagnosticsFact>) -> Vec<u8>
+{
+    facts.sort_by(|left, right| return left.fact.payload.bytes.cmp(&right.fact.payload.bytes));
+
+    let mut rendered = Vec::new();
+    for fact in &facts
+    {
+        rendered.extend_from_slice(format!("key\t{}\n", fact.fact.Key().Digest()).as_bytes());
+        rendered.extend_from_slice(&fact.fact.payload.bytes);
+    }
+
+    return rendered;
+}
+
 /// The workspace root, from this crate's own manifest directory.
 fn Repository_Root() -> std::path::PathBuf
 {

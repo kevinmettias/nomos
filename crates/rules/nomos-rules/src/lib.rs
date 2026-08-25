@@ -82,12 +82,21 @@
 //! architecture-standards precedent (`role_surface.rs`'s own module doc names it) rather
 //! than invented. It takes plain data instead of a [`nomos_analysis::FactReader`], and its
 //! own module doc explains why.
+//!
+//! [`Check_Lint_Diagnostics`] is a sixth rule, `OD-RULES-010`'s own first `ToolProvider`
+//! increment: `nomos.cap.lint.diagnostics` facts, materialized by `nomos-lang-rust-clippy`
+//! from a real `cargo clippy` run, relayed 1:1 as `Finding`s rather than judged a second
+//! time — the first rule in this crate whose whole judgment is "the tool already decided,"
+//! stated as its own `Requirement` the same way every other rule states its own floor.
+//! Unwired into `nomos-check-orchestration::Run` until that crate's own item composes it,
+//! the same additive-first shape `Check_Declared_Role_Matches_Surface` already took.
 
 #![forbid(unsafe_code)]
 
 mod declared_universe;
 mod dependency;
 mod facts;
+mod lint;
 mod mirror;
 mod naming;
 mod reachability;
@@ -102,6 +111,7 @@ use nomos_contracts::{Assurance, FactVariant, Guarantee, IncrementalGranularity,
 pub use mirror::{Check_Completeness_Mirrors, COMPLETENESS_MIRROR, CONTRACT_RECORD, CONTRACT_RECORD_VERSION};
 pub use declared_universe::DeclaredUniverse;
 pub use dependency::{Check_Dependency_Direction, DEPENDENCY_CONTRACT_RECORD, DEPENDENCY_CONTRACT_RECORD_VERSION, DEPENDENCY_DIRECTION};
+pub use lint::{Check_Lint_Diagnostics, LINT_DIAGNOSTICS};
 pub use naming::{Check_Naming_Convention, NAMING_CONVENTION};
 pub use reachability::{
     Check_Unread_Reaches_A_Finding, UNREAD_REACHES_FINDING, UNREAD_REACHES_FINDING_CONTRACT_RECORD,

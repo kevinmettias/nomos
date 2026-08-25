@@ -47,6 +47,10 @@ pub(crate) const BANDS: &[(&str, u32)] = &[
     // (nomos-lang-rust) and the rule that reads it (nomos-rules) for the identical
     // reason nomos-cap-dependency states above. `OD-RULES-008`.
     ("nomos-cap-controlflow", 23),
+    // The nomos.cap.lint.diagnostics contract, below both its provider
+    // (nomos-lang-rust-clippy) and the rule that reads it (nomos-rules) for the
+    // identical reason nomos-cap-dependency states above. `OD-RULES-010`.
+    ("nomos-cap-lint", 23),
     // The language-agnostic manifest core PKG-007's four version domains name, minus
     // any typed version-domain abstraction or provider allowlist a specific language
     // would supply. Below the language providers deliberately: it names none of them,
@@ -73,6 +77,11 @@ pub(crate) const BANDS: &[(&str, u32)] = &[
     // the same band, for the same reason: nothing below it may be able to name it and
     // nothing beside it may either.
     ("nomos-lang-rust-cargo", 25),
+    // The one provider of nomos.cap.lint.diagnostics. The same shape and the same
+    // reasoning as nomos-lang-rust-cargo above: a subprocess-backed provider with I/O of
+    // its own, at the same band, naming neither it nor either of its syntax-reading
+    // siblings.
+    ("nomos-lang-rust-clippy", 25),
     // The Rust installable-unit manifest format: PackageId, PackageKind and PKG-007's
     // four version domains, given a reader that refuses what it cannot resolve. Wraps
     // nomos-package's generic core with RustEdition resolution. Above the two language

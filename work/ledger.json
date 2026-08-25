@@ -29424,10 +29424,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-rule-package-roundtrip",
+        "acquired_at": 1787690168,
+        "lease_expires_at": 1787697368
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -30671,7 +30675,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "verification.argv embeds --timeout 10m directly inside the cargo test predicate, which cargo rejects as an unexpected argument -- the same pre-existing authoring mistake documented for other items: a --timeout belongs before work add's own -- separator, setting timeout_seconds, not inside the predicate argv. Superseded by -2 with corrected argv; the record and its registration file are unaffected, already written, and inside this item's original, still-correct territory."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -30690,6 +30698,454 @@
         "timeout_seconds": 600
       },
       "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-capability-009-subject-scope",
+          "reason": "verification.argv embeds --timeout 10m directly inside the predicate, which cargo test rejects as an unexpected argument. Releasing to decline and re-add as -2 with corrected argv.",
+          "abandoned_at": 1787689974
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-capability-009-subject-scope",
+        "declined_at": 1787689990
+      }
+    },
+    {
+      "id": "P14-RULES-010-TOOL-PROVIDER-CLIPPY-FIRST-INCREMENT",
+      "title": "nomos-cap-lint + nomos-lang-rust-clippy: OD-RULES-010's first real ToolProvider, cargo clippy",
+      "why": "OD-RULES-010 decided a ToolProvider's output is a fact a native rule judges. This builds the first real instance: a nomos.cap.lint.diagnostics capability, its one provider (a cargo clippy --message-format=json wrapper, verified against real JSON output from this workspace's own clippy run), and a native nomos-rules function that reads the fact and emits Finding(s) 1:1 at EvidenceClass::Derived, the same Require-then-judge-then-emit shape Check_Dependency_Direction already uses.",
+      "done_when": "nomos-cap-lint (band 23) declares nomos.cap.lint.diagnostics with a real ceiling, schema and payload codec, mirroring nomos-cap-dependency's own contract/payload split. nomos-lang-rust-clippy (band 25) runs cargo clippy --workspace --message-format=json through ProcessLauncher, parses real compiler-message JSON (verified against this workspace's own clippy output empirically, not assumed), filters to first-party package_ids, and materializes one fact per workspace member holding that member's own diagnostics, stamped EvidenceClass::Verified. nomos-rules gains Check_Lint_Diagnostics, reading the fact via FactReader::Require and emitting one Finding per diagnostic at EvidenceClass::Derived, GateCategory::Advisory. nomos-check-orchestration's composition.rs declares and offers the new capability; run.rs/facts/materialize.rs wire Materialize_Lint and Check_Lint_Diagnostics in behind OD-GATE-017's own Wants(selected, LINT_DIAGNOSTICS) gate, the same shape DEPENDENCY_DIRECTION already uses. Both new crates and nomos-rules' surface snapshots reblessed if their exports moved. README.md band table and both bands.rs copies name the two new crates. cargo clippy --workspace --all-targets stays clean and the predicate below passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities/nomos-cap-lint",
+          "crates/languages/nomos-lang-rust-clippy",
+          "crates/rules/nomos-rules/src/lint.rs",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "crates/rules/nomos-rules/src/dependency/bands.rs",
+          "crates/orchestration/nomos-check-orchestration/src/run.rs",
+          "crates/orchestration/nomos-check-orchestration/src/facts/materialize.rs",
+          "crates/orchestration/nomos-check-orchestration/src/composition.rs",
+          "crates/orchestration/nomos-check-orchestration/Cargo.toml",
+          "Cargo.toml",
+          "README.md",
+          "tests/contract/tests/boundaries/bands.rs",
+          "tests/contract/surface/nomos-cap-lint.txt",
+          "tests/contract/surface/nomos-lang-rust-clippy.txt",
+          "tests/contract/surface/nomos-rules.txt",
+          "tests/contract/surface/nomos-check-orchestration.txt"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Territory omitted tests/integration/tests/determinism/{declarations,domains,productions}.rs and tests/integration/Cargo.toml -- discovered before touching any of those files. Superseded by P14-RULES-010-TOOL-PROVIDER-CLIPPY-FIRST-INCREMENT-2 with corrected territory; crates/capabilities/nomos-cap-lint and crates/languages/nomos-lang-rust-clippy's already-written source is unaffected, both fully inside the original, still-correct territory for those directories."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cap-lint",
+          "-p",
+          "nomos-lang-rust-clippy",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 1200
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-tool-provider-clippy",
+          "reason": "Territory omitted tests/integration/tests/determinism/{declarations,domains,productions}.rs and tests/integration/Cargo.toml -- this crate's fact production needs a Strategy declaration registered there, discovered before those files were touched.",
+          "abandoned_at": 1787689291
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-tool-provider-clippy",
+        "declined_at": 1787689291
+      }
+    },
+    {
+      "id": "P14-RULES-010-TOOL-PROVIDER-CLIPPY-FIRST-INCREMENT-2",
+      "title": "nomos-cap-lint + nomos-lang-rust-clippy: OD-RULES-010's first real ToolProvider, cargo clippy",
+      "why": "OD-RULES-010 decided a ToolProvider's output is a fact a native rule judges. This builds the first real instance: a nomos.cap.lint.diagnostics capability, its one provider (a cargo clippy --message-format=json wrapper, verified against real JSON output from this workspace's own clippy run), and a native nomos-rules function that reads the fact and emits Finding(s) 1:1 at EvidenceClass::Derived, the same Require-then-judge-then-emit shape Check_Dependency_Direction already uses.",
+      "done_when": "nomos-cap-lint (band 23) declares nomos.cap.lint.diagnostics with a real ceiling, schema and payload codec, mirroring nomos-cap-dependency's own contract/payload split. nomos-lang-rust-clippy (band 25) runs cargo clippy --workspace --message-format=json through ProcessLauncher, parses real compiler-message JSON (verified against this workspace's own clippy output empirically, not assumed), filters to first-party package_ids, and materializes one fact per workspace member holding that member's own diagnostics, stamped EvidenceClass::Verified. It declares a Strategy for its own fact production, registered in tests/integration/tests/determinism/{declarations,domains,productions}.rs the same way DependencyFactProduction already is. nomos-rules gains Check_Lint_Diagnostics, reading the fact via FactReader::Require and emitting one Finding per diagnostic at EvidenceClass::Derived, GateCategory::Advisory. nomos-check-orchestration's composition.rs declares and offers the new capability; run.rs/facts/materialize.rs wire Materialize_Lint and Check_Lint_Diagnostics in behind OD-GATE-017's own Wants(selected, LINT_DIAGNOSTICS) gate, the same shape DEPENDENCY_DIRECTION already uses. Both new crates and nomos-rules' surface snapshots reblessed if their exports moved. README.md band table and both bands.rs copies name the two new crates. cargo clippy --workspace --all-targets stays clean and the predicate below passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities/nomos-cap-lint",
+          "crates/languages/nomos-lang-rust-clippy",
+          "crates/rules/nomos-rules/src/lint.rs",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "crates/rules/nomos-rules/src/dependency/bands.rs",
+          "crates/orchestration/nomos-check-orchestration/src/run.rs",
+          "crates/orchestration/nomos-check-orchestration/src/facts/materialize.rs",
+          "crates/orchestration/nomos-check-orchestration/src/composition.rs",
+          "crates/orchestration/nomos-check-orchestration/Cargo.toml",
+          "Cargo.toml",
+          "README.md",
+          "tests/contract/tests/boundaries/bands.rs",
+          "tests/contract/surface/nomos-cap-lint.txt",
+          "tests/contract/surface/nomos-lang-rust-clippy.txt",
+          "tests/contract/surface/nomos-rules.txt",
+          "tests/contract/surface/nomos-check-orchestration.txt",
+          "tests/integration/Cargo.toml",
+          "tests/integration/tests/determinism/declarations.rs",
+          "tests/integration/tests/determinism/domains.rs",
+          "tests/integration/tests/determinism/productions.rs"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Territory omitted crates/rules/nomos-rules/Cargo.toml, discovered before touching any file outside the original territory. Superseded by P14-RULES-010-TOOL-PROVIDER-CLIPPY-FIRST-INCREMENT-3 with corrected territory; all previously-written source (nomos-cap-lint, nomos-lang-rust-clippy, crates/rules/nomos-rules/src/lint.rs) is unaffected, fully inside territory that carries forward unchanged."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cap-lint",
+          "-p",
+          "nomos-lang-rust-clippy",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-contract-tests",
+          "-p",
+          "nomos-integration-tests"
+        ],
+        "timeout_seconds": 1200
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-tool-provider-clippy",
+          "reason": "Territory omitted crates/rules/nomos-rules/Cargo.toml -- Check_Lint_Diagnostics needs nomos-cap-lint as a direct dependency, the same way nomos-cap-dependency and nomos-cap-controlflow already are.",
+          "abandoned_at": 1787689806
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-tool-provider-clippy",
+        "declined_at": 1787689806
+      }
+    },
+    {
+      "id": "P14-RULES-010-TOOL-PROVIDER-CLIPPY-FIRST-INCREMENT-3",
+      "title": "nomos-cap-lint + nomos-lang-rust-clippy: OD-RULES-010's first real ToolProvider, cargo clippy",
+      "why": "OD-RULES-010 decided a ToolProvider's output is a fact a native rule judges. This builds the first real instance: a nomos.cap.lint.diagnostics capability, its one provider (a cargo clippy --message-format=json wrapper, verified against real JSON output from this workspace's own clippy run), and a native nomos-rules function that reads the fact and emits Finding(s) 1:1 at EvidenceClass::Derived, the same Require-then-judge-then-emit shape Check_Dependency_Direction already uses.",
+      "done_when": "nomos-cap-lint (band 23) declares nomos.cap.lint.diagnostics with a real ceiling, schema and payload codec, mirroring nomos-cap-dependency's own contract/payload split. nomos-lang-rust-clippy (band 25) runs cargo clippy --workspace --message-format=json through ProcessLauncher, parses real compiler-message JSON (verified against this workspace's own clippy output empirically, not assumed), filters to first-party package_ids, and materializes one fact per workspace member holding that member's own diagnostics, stamped EvidenceClass::Verified. It declares a Strategy for its own fact production, registered in tests/integration/tests/determinism/{declarations,domains,productions}.rs the same way DependencyFactProduction already is. nomos-rules gains Check_Lint_Diagnostics, reading the fact via FactReader::Require and emitting one Finding per diagnostic at EvidenceClass::Derived, GateCategory::Advisory. nomos-check-orchestration's composition.rs declares and offers the new capability; run.rs/facts/materialize.rs wire Materialize_Lint and Check_Lint_Diagnostics in behind OD-GATE-017's own Wants(selected, LINT_DIAGNOSTICS) gate, the same shape DEPENDENCY_DIRECTION already uses. Both new crates and nomos-rules' surface snapshots reblessed if their exports moved. README.md band table and both bands.rs copies name the two new crates. cargo clippy --workspace --all-targets stays clean and the predicate below passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities/nomos-cap-lint",
+          "crates/languages/nomos-lang-rust-clippy",
+          "crates/rules/nomos-rules/src/lint.rs",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "crates/rules/nomos-rules/src/dependency/bands.rs",
+          "crates/rules/nomos-rules/Cargo.toml",
+          "crates/orchestration/nomos-check-orchestration/src/run.rs",
+          "crates/orchestration/nomos-check-orchestration/src/facts/materialize.rs",
+          "crates/orchestration/nomos-check-orchestration/src/composition.rs",
+          "crates/orchestration/nomos-check-orchestration/Cargo.toml",
+          "Cargo.toml",
+          "README.md",
+          "tests/contract/tests/boundaries/bands.rs",
+          "tests/contract/surface/nomos-cap-lint.txt",
+          "tests/contract/surface/nomos-lang-rust-clippy.txt",
+          "tests/contract/surface/nomos-rules.txt",
+          "tests/contract/surface/nomos-check-orchestration.txt",
+          "tests/integration/Cargo.toml",
+          "tests/integration/tests/determinism/declarations.rs",
+          "tests/integration/tests/determinism/domains.rs",
+          "tests/integration/tests/determinism/productions.rs"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Territory omitted crates/orchestration/nomos-check-orchestration/src/facts.rs and src/tests.rs, found via an exhaustive workspace-wide grep before touching either. Superseded by P14-RULES-010-TOOL-PROVIDER-CLIPPY-FIRST-INCREMENT-4 with complete territory; all previously-written source is unaffected."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cap-lint",
+          "-p",
+          "nomos-lang-rust-clippy",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-contract-tests",
+          "-p",
+          "nomos-integration-tests"
+        ],
+        "timeout_seconds": 1200
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-tool-provider-clippy",
+          "reason": "Territory omitted crates/orchestration/nomos-check-orchestration/src/facts.rs (the parent module's own named pub use re-export list) and src/tests.rs (the crate's own real-workspace integration tests, which have a direct DEPENDENCY_DIRECTION-shaped precedent to mirror for LINT_DIAGNOSTICS). Found via an exhaustive workspace-wide grep for every DEPENDENCY_DIRECTION reference, which also confirmed nomos-gate-orchestration's own separate RuleRegistry composition/tests do NOT need touching -- Check_Declared_Role_Matches_Surface, the prior new rule, was not wired there either.",
+          "abandoned_at": 1787690008
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-tool-provider-clippy",
+        "declined_at": 1787690008
+      }
+    },
+    {
+      "id": "P14-CAPABILITY-009-SUBJECT-PARTITIONED-RESOLVE-DECISION-2",
+      "title": "OD-CAPABILITY-009: whether Registry::Resolve owes subject-partitioned same-capability providers a rule beyond guarantee-strength ranking",
+      "why": "Same as the original item, declined only for a malformed predicate: nomos-lang-go offers nomos.cap.syntax.items with Assurance::Sound on both axes -- strictly stronger than nomos-lang-rust's Sound/Unknown -- but answers only about Go files, disjoint from nomos-lang-rust's Rust files. Registering it in nomos-check-orchestration::Declare_Syntax_Capability was tried and reverted: Registry::Resolve ranks purely by guarantee strength with no notion of which subjects a provider can even attempt, and nomos_rules::Syntax_Requirement's own deliberately-unpreferenced resolution silently picked nomos-lang-go to answer for .rs files too. Four real tests in nomos-check-orchestration's own tests.rs went from green to DependencyUnavailable findings -- empirical, not theoretical. Neither OD-CAPABILITY-001 nor OD-CAPABILITY-006 covers this shape.",
+      "done_when": "OD-CAPABILITY-009 exists, is registered, and decides whether nomos_capability needs a subject/domain-scoping mechanism before a second same-capability provider covering disjoint subjects can be safely registered, or whether the fix lives above the registry entirely. The record states its answer against the concrete failure, not hypothetically, and says whether nomos-lang-go's registration is unblocked by it or still waits on a further increment.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-store/records/OD-CAPABILITY-009.record",
+          "diagrams/relations.mmd",
+          "diagrams/relations.mmd.nomos-projection.json",
+          "spec/domain-specification.md",
+          "spec/domain-specification.md.nomos-projection.json",
+          "docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-capability-009-subject-scope",
+        "acquired_at": 1787690020,
+        "lease_expires_at": 1787697220
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P14-RULES-010-TOOL-PROVIDER-CLIPPY-FIRST-INCREMENT-4",
+      "title": "nomos-cap-lint + nomos-lang-rust-clippy: OD-RULES-010's first real ToolProvider, cargo clippy",
+      "why": "OD-RULES-010 decided a ToolProvider's output is a fact a native rule judges. This builds the first real instance: a nomos.cap.lint.diagnostics capability, its one provider (a cargo clippy --message-format=json wrapper, verified against real JSON output from this workspace's own clippy run), and a native nomos-rules function that reads the fact and emits Finding(s) 1:1 at EvidenceClass::Derived, the same Require-then-judge-then-emit shape Check_Dependency_Direction already uses.",
+      "done_when": "nomos-cap-lint (band 23) declares nomos.cap.lint.diagnostics with a real ceiling, schema and payload codec, mirroring nomos-cap-dependency's own contract/payload split. nomos-lang-rust-clippy (band 25) runs cargo clippy --workspace --message-format=json through ProcessLauncher, parses real compiler-message JSON (verified against this workspace's own clippy output empirically, not assumed), filters to first-party package_ids, and materializes one fact per workspace member holding that member's own diagnostics, stamped EvidenceClass::Verified. It declares a Strategy for its own fact production, registered in tests/integration/tests/determinism/{declarations,domains,productions}.rs the same way DependencyFactProduction already is. nomos-rules gains Check_Lint_Diagnostics, reading the fact via FactReader::Require and emitting one Finding per diagnostic at EvidenceClass::Derived, GateCategory::Advisory. nomos-check-orchestration's composition.rs declares and offers the new capability; facts.rs/facts/materialize.rs/run.rs wire Materialize_Lint and Check_Lint_Diagnostics in behind OD-GATE-017's own Wants(selected, LINT_DIAGNOSTICS) gate, the same shape DEPENDENCY_DIRECTION already uses, proven by real tests in tests.rs mirroring Test_Materialize_Dependencies_Should_Return_Real_Workspace_Members and Test_A_Deselected_Dependency_Rule_Should_Not_Launch_Cargo_Metadata. Both new crates and nomos-rules' surface snapshots reblessed if their exports moved. README.md band table and both bands.rs copies name the two new crates. nomos-gate-orchestration's own separate RuleRegistry/plan composition is deliberately not touched, the same precedent Check_Declared_Role_Matches_Surface already set. cargo clippy --workspace --all-targets stays clean and the predicate below passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities/nomos-cap-lint",
+          "crates/languages/nomos-lang-rust-clippy",
+          "crates/rules/nomos-rules/src/lint.rs",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "crates/rules/nomos-rules/src/dependency/bands.rs",
+          "crates/rules/nomos-rules/Cargo.toml",
+          "crates/orchestration/nomos-check-orchestration/src/run.rs",
+          "crates/orchestration/nomos-check-orchestration/src/facts.rs",
+          "crates/orchestration/nomos-check-orchestration/src/facts/materialize.rs",
+          "crates/orchestration/nomos-check-orchestration/src/composition.rs",
+          "crates/orchestration/nomos-check-orchestration/src/tests.rs",
+          "crates/orchestration/nomos-check-orchestration/Cargo.toml",
+          "Cargo.toml",
+          "README.md",
+          "tests/contract/tests/boundaries/bands.rs",
+          "tests/contract/surface/nomos-cap-lint.txt",
+          "tests/contract/surface/nomos-lang-rust-clippy.txt",
+          "tests/contract/surface/nomos-rules.txt",
+          "tests/contract/surface/nomos-check-orchestration.txt",
+          "tests/integration/Cargo.toml",
+          "tests/integration/tests/determinism/declarations.rs",
+          "tests/integration/tests/determinism/domains.rs",
+          "tests/integration/tests/determinism/productions.rs"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Territory omitted tests/integration/tests/determinism/harness.rs, found via an exhaustive grep before touching it. Superseded by P14-RULES-010-TOOL-PROVIDER-CLIPPY-FIRST-INCREMENT-5 with complete territory; all previously-written source is unaffected."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cap-lint",
+          "-p",
+          "nomos-lang-rust-clippy",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-contract-tests",
+          "-p",
+          "nomos-integration-tests"
+        ],
+        "timeout_seconds": 1500
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-tool-provider-clippy",
+          "reason": "Territory omitted tests/integration/tests/determinism/harness.rs -- Test_Name_For is a hand-written domain-name-to-test-name table (for the --exact child-process spawn Check<Strategy> uses), found via an exhaustive grep for every dependency-fact-production reference across the determinism harness before touching harness.rs.",
+          "abandoned_at": 1787690381
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-tool-provider-clippy",
+        "declined_at": 1787690381
+      }
+    },
+    {
+      "id": "P14-RULES-010-TOOL-PROVIDER-CLIPPY-FIRST-INCREMENT-5",
+      "title": "nomos-cap-lint + nomos-lang-rust-clippy: OD-RULES-010's first real ToolProvider, cargo clippy",
+      "why": "OD-RULES-010 decided a ToolProvider's output is a fact a native rule judges. This builds the first real instance: a nomos.cap.lint.diagnostics capability, its one provider (a cargo clippy --message-format=json wrapper, verified against real JSON output from this workspace's own clippy run), and a native nomos-rules function that reads the fact and emits Finding(s) 1:1 at EvidenceClass::Derived, the same Require-then-judge-then-emit shape Check_Dependency_Direction already uses.",
+      "done_when": "nomos-cap-lint (band 23) declares nomos.cap.lint.diagnostics with a real ceiling, schema and payload codec, mirroring nomos-cap-dependency's own contract/payload split. nomos-lang-rust-clippy (band 25) runs cargo clippy --workspace --message-format=json through ProcessLauncher, parses real compiler-message JSON (verified against this workspace's own clippy output empirically, not assumed), filters to first-party package_ids, and materializes one fact per workspace member holding that member's own diagnostics, stamped EvidenceClass::Verified. It declares a Strategy for its own fact production, registered in tests/integration/tests/determinism/{declarations,domains,productions,harness}.rs the same way DependencyFactProduction already is. nomos-rules gains Check_Lint_Diagnostics, reading the fact via FactReader::Require and emitting one Finding per diagnostic at EvidenceClass::Derived, GateCategory::Advisory. nomos-check-orchestration's composition.rs declares and offers the new capability; facts.rs/facts/materialize.rs/run.rs wire Materialize_Lint and Check_Lint_Diagnostics in behind OD-GATE-017's own Wants(selected, LINT_DIAGNOSTICS) gate, the same shape DEPENDENCY_DIRECTION already uses, proven by real tests in tests.rs mirroring Test_Materialize_Dependencies_Should_Return_Real_Workspace_Members and Test_A_Deselected_Dependency_Rule_Should_Not_Launch_Cargo_Metadata. Both new crates and nomos-rules' surface snapshots reblessed if their exports moved. README.md band table and both bands.rs copies name the two new crates. nomos-gate-orchestration's own separate RuleRegistry/plan composition is deliberately not touched, the same precedent Check_Declared_Role_Matches_Surface already set. cargo clippy --workspace --all-targets stays clean and the predicate below passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities/nomos-cap-lint",
+          "crates/languages/nomos-lang-rust-clippy",
+          "crates/rules/nomos-rules/src/lint.rs",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "crates/rules/nomos-rules/src/dependency/bands.rs",
+          "crates/rules/nomos-rules/Cargo.toml",
+          "crates/orchestration/nomos-check-orchestration/src/run.rs",
+          "crates/orchestration/nomos-check-orchestration/src/facts.rs",
+          "crates/orchestration/nomos-check-orchestration/src/facts/materialize.rs",
+          "crates/orchestration/nomos-check-orchestration/src/composition.rs",
+          "crates/orchestration/nomos-check-orchestration/src/tests.rs",
+          "crates/orchestration/nomos-check-orchestration/Cargo.toml",
+          "Cargo.toml",
+          "README.md",
+          "tests/contract/tests/boundaries/bands.rs",
+          "tests/contract/surface/nomos-cap-lint.txt",
+          "tests/contract/surface/nomos-lang-rust-clippy.txt",
+          "tests/contract/surface/nomos-rules.txt",
+          "tests/contract/surface/nomos-check-orchestration.txt",
+          "tests/integration/Cargo.toml",
+          "tests/integration/tests/determinism/declarations.rs",
+          "tests/integration/tests/determinism/domains.rs",
+          "tests/integration/tests/determinism/productions.rs",
+          "tests/integration/tests/determinism/harness.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cap-lint",
+          "-p",
+          "nomos-lang-rust-clippy",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-contract-tests",
+          "-p",
+          "nomos-integration-tests"
+        ],
+        "timeout_seconds": 1500
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cap-lint",
+          "-p",
+          "nomos-lang-rust-clippy",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-contract-tests",
+          "-p",
+          "nomos-integration-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "iled; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.15s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_cap_lint-76e92f3901b10f20.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_check_orchestration-1a4465f6fb16958a.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-7e62a05a80b2a153.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-a7ddd20267ce6c71.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-8b7bde015af4a6d5.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-282419f96d35f8fc.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-cb07077a9de84582.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-04d928e15f53ca9e.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-2d8796877c263c1e.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-4e3a9c9dfd929f43.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-5d30cacc18579715.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-190c42374e8341ed.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_integration_tests-3d3f63f4905c690e.exe)\n     Running tests\\analysis_slice\\main.rs (target\\debug\\deps\\analysis_slice-a09a4de5fd2b6287.exe)\n     Running tests\\determinism\\main.rs (target\\debug\\deps\\determinism-f813493482054f2d.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lang_rust_clippy-b36599db36a45d42.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-64bba3dcdf7bfbaa.exe)\n   Doc-tests nomos_cap_lint\n   Doc-tests nomos_check_orchestration\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_integration_tests\n   Doc-tests nomos_lang_rust_clippy\n   Doc-tests nomos_rules\n",
+        "verified_at": 1787690740,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "9ced9ba95fdf0130f24459accedf62c271039311"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

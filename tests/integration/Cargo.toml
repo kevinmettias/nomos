@@ -19,6 +19,7 @@ nomos-lang-rust = { workspace = true }
 nomos-lang-rust-scan = { workspace = true }
 nomos-lang-go = { workspace = true }
 nomos-lang-rust-cargo = { workspace = true }
+nomos-lang-rust-clippy = { workspace = true }
 nomos-corrections = { workspace = true }
 nomos-platform-std = { workspace = true }
 # The two spec domains this harness holds to their declarations. The spec system sits

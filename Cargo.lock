@@ -365,6 +365,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "nomos-cap-lint"
+version = "0.1.0"
+dependencies = [
+ "nomos-capability",
+ "nomos-contracts",
+]
+
+[[package]]
 name = "nomos-cap-syntax"
 version = "0.1.0"
 dependencies = [
@@ -386,11 +394,13 @@ dependencies = [
  "nomos-analysis",
  "nomos-cap-controlflow",
  "nomos-cap-dependency",
+ "nomos-cap-lint",
  "nomos-cap-syntax",
  "nomos-capability",
  "nomos-contracts",
  "nomos-lang-rust",
  "nomos-lang-rust-cargo",
+ "nomos-lang-rust-clippy",
  "nomos-lang-rust-scan",
  "nomos-model",
  "nomos-platform",
@@ -480,6 +490,7 @@ dependencies = [
  "nomos-lang-go",
  "nomos-lang-rust",
  "nomos-lang-rust-cargo",
+ "nomos-lang-rust-clippy",
  "nomos-lang-rust-scan",
  "nomos-model",
  "nomos-platform-std",
@@ -535,6 +546,20 @@ version = "0.1.0"
 dependencies = [
  "nomos-analysis",
  "nomos-cap-dependency",
+ "nomos-capability",
+ "nomos-contracts",
+ "nomos-model",
+ "nomos-platform",
+ "nomos-platform-std",
+ "serde_json",
+]
+
+[[package]]
+name = "nomos-lang-rust-clippy"
+version = "0.1.0"
+dependencies = [
+ "nomos-analysis",
+ "nomos-cap-lint",
  "nomos-capability",
  "nomos-contracts",
  "nomos-model",
@@ -624,6 +649,7 @@ dependencies = [
  "nomos-analysis",
  "nomos-cap-controlflow",
  "nomos-cap-dependency",
+ "nomos-cap-lint",
  "nomos-cap-syntax",
  "nomos-capability",
  "nomos-contracts",

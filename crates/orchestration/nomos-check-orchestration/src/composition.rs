@@ -27,6 +27,7 @@ pub fn Registered() -> Result<Registry, RegistryError>
     Declare_Syntax_Capability(&mut registry)?;
     Declare_Dependency_Capability(&mut registry)?;
     Declare_Controlflow_Capability(&mut registry)?;
+    Declare_Lint_Capability(&mut registry)?;
 
     return Ok(registry);
 }
@@ -89,6 +90,16 @@ fn Declare_Controlflow_Capability(registry: &mut Registry) -> Result<(), Registr
 {
     registry.Declare(nomos_cap_controlflow::Capability_Contract())?;
     registry.Offer(nomos_lang_rust::reachability::Provider_Offer())?;
+
+    return Ok(());
+}
+
+/// A fourth capability, one offer against it -- `OD-RULES-010`'s design, the first real
+/// `ToolProvider` wired for real.
+fn Declare_Lint_Capability(registry: &mut Registry) -> Result<(), RegistryError>
+{
+    registry.Declare(nomos_cap_lint::Capability_Contract())?;
+    registry.Offer(nomos_lang_rust_clippy::Provider_Offer())?;
 
     return Ok(());
 }

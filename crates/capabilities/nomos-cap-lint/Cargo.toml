@@ -1,0 +1,18 @@
+[package]
+name = "nomos-cap-lint"
+version = "0.1.0"
+description = "Band 23. The nomos.cap.lint.diagnostics contract: one external lint tool's own diagnostics over one workspace member, wrapped behind a capability. OD-RULES-010."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+# nomos-rules is this capability's second real party from day one, the same
+# OD-CAPABILITY-002 contention criterion nomos-cap-dependency and nomos-cap-controlflow
+# were already extracted under.
+[dependencies]
+nomos-capability = { workspace = true }
+nomos-contracts = { workspace = true }
+
+[lints]
+workspace = true
