@@ -81,6 +81,37 @@ fn Test_A_Clean_Tree_Should_Be_Judged_Complete_With_No_Findings()
     assert_eq!(claim, Claim::Complete);
 }
 
+/// `OD-CAPABILITY-009`'s corrected fix, proven end to end: a clean `.go` source is judged
+/// under `nomos_lang_go`'s own identity, the same way the `.rs` test just above is judged
+/// under `nomos_lang_rust`'s -- and both stay green together, which is what proves the fix
+/// does not reintroduce the regression this record's own body describes (`.rs` facts
+/// resolving against `nomos_lang_go`'s stronger, unpreferenced-ranked offer instead of the
+/// provider that actually wrote them).
+///
+/// Selects only `COMPLETENESS_MIRROR` and `NAMING_CONVENTION` -- the two rules
+/// `nomos.cap.syntax.items` actually drives, and the whole of what this item fixes.
+/// `UNREAD_REACHES_FINDING` has no Go provider registered for `nomos.cap.controlflow.
+/// reachability` at all (`Declare_Controlflow_Capability` offers only `nomos_lang_rust`'s),
+/// so selecting it here would report an honest `DependencyUnavailable` for a capability
+/// this item was never asked to extend to Go, not a regression in the one it was.
+#[test]
+fn Test_A_Clean_Go_Source_Should_Be_Judged_Through_Its_Own_Real_Provider()
+{
+    let sources = vec![Source("main.go", "package main\n\nfunc One() {}\n")];
+    let selected = [RuleId::New(nomos_rules::COMPLETENESS_MIRROR), RuleId::New(nomos_rules::NAMING_CONVENTION)];
+
+    let outcome = Run(&sources, Test_Variant(), &Repository_Root(), &StdProcessLauncher, &selected);
+
+    let CheckOutcome::Judged { findings, examined, claim } = outcome
+    else
+    {
+        panic!("a tree the provider can read must be judged");
+    };
+    assert!(findings.is_empty(), "{findings:?}");
+    assert_eq!(examined, crate::Examined { files: 1, facts: 1 });
+    assert_eq!(claim, Claim::Complete);
+}
+
 /// A finding that can fail a build and a finding the run could not resolve a judgment
 /// about are different axes -- `OD-COMPLETENESS-004`'s whole point, restated here because
 /// this crate is now where both axes are actually decided. A phantom mirror is
@@ -366,6 +397,13 @@ fn Test_A_Deselected_Lint_Rule_Should_Not_Launch_Cargo_Clippy()
 
 /// Ingests `ingested` into a real fact store and judges `judged` over it -- the split
 /// [`crate::run::Run`] does not offer, assembled here from the crate's own private pieces.
+///
+/// `judged` is run through [`crate::run::Recognized`] before the rule ever sees it, the
+/// identical enrichment `Run` gives every real caller: `Check_Completeness_Mirrors` narrows
+/// its own `Require` call by `SourceFile::preferred_syntax_provider`, and a fixture built by
+/// hand needs that field populated the same way a real walk's sources would be, or `.rs`
+/// resolves against `nomos_lang_go`'s stronger, unpreferenced-ranked offer instead of the
+/// provider that actually wrote the fact.
 fn Findings_Over(ingested: &[SourceFile], judged: &[SourceFile]) -> Vec<Finding>
 {
     let registry = crate::composition::Registered().expect("the fixture composition is this crate's own");
@@ -373,6 +411,7 @@ fn Findings_Over(ingested: &[SourceFile], judged: &[SourceFile]) -> Vec<Finding>
     let mut store = MemoryFactStore::New();
     let _written = crate::facts::Materialize_Syntax(ingested, &context, &mut store);
 
+    let judged = crate::run::Recognized(judged);
     let mut reader = Reader::On(&store, &registry, context);
-    return Check_Completeness_Mirrors(judged, &mut reader);
+    return Check_Completeness_Mirrors(&judged, &mut reader);
 }

@@ -6,7 +6,7 @@
 //! about how that payload gets found and decoded in the first place — the half no
 //! fixture reaches.
 
-use crate::{SourceFile, Syntax_Requirement};
+use crate::{SourceFile, Syntax_Requirement_For};
 use nomos_analysis::{FactReader, InputDigest, MaterializedFact};
 use nomos_cap_syntax::SyntaxPayload;
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
@@ -28,7 +28,7 @@ pub(super) fn Payload_Of(source: &SourceFile, facts: &mut dyn FactReader) -> Res
 /// finding.
 fn Require_Fact<'a>(source: &SourceFile, facts: &'a mut dyn FactReader) -> Result<&'a MaterializedFact, Finding>
 {
-    let need = Syntax_Requirement();
+    let need = Syntax_Requirement_For(source.preferred_syntax_provider.clone());
     let capability = nomos_cap_syntax::Capability();
     let inputs = InputDigest::Of(&[source.text.as_bytes()]);
 

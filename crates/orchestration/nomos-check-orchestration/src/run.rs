@@ -13,7 +13,7 @@ use nomos_rules::{
 use nomos_workspace::BuildVariant;
 use std::path::Path;
 
-use crate::composition::Registered;
+use crate::composition::{Recognized_Syntax_Provider, Registered};
 use crate::facts::{
     DependencyMaterialization, Ingested, LintMaterialization, Materialize_Dependencies, Materialize_Lint,
     Materialize_Reachability, Materialize_Syntax,
@@ -55,6 +55,9 @@ use crate::CheckOutcome;
 #[must_use]
 pub fn Run<P: ProcessLauncher>(sources: &[SourceFile], variant: BuildVariant, root: &Path, launcher: &P, selected: &[RuleId]) -> CheckOutcome
 {
+    let recognized = Recognized(sources);
+    let sources: &[SourceFile] = &recognized;
+
     let (registry, context) = match Composed(sources, variant)
     {
         Ok(composed) => composed,
@@ -72,6 +75,31 @@ pub fn Run<P: ProcessLauncher>(sources: &[SourceFile], variant: BuildVariant, ro
     let findings = Judged(sources, capabilities, &store, &registry, context, selected);
 
     return Outcome_Of(sources.len(), facts, findings);
+}
+
+/// `sources`, each carrying its own resolved [`nomos_rules::SourceFile::preferred_syntax_provider`]
+/// -- `OD-CAPABILITY-009`'s corrected fix, computed once here because this composition root
+/// is the one place in the call chain allowed to know `nomos_lang_rust` and `nomos_lang_go`
+/// by name; `nomos_rules` itself never does. Every rule this crate composes sees only the
+/// enriched copy, so a subject's syntax provider identity is settled before any of them run,
+/// the same "carried rather than derived" reasoning [`SourceFile::subject`] already states
+/// for the field this one sits beside.
+///
+/// `pub(crate)` rather than private to [`Run`] alone: this crate's own `tests.rs` reaches
+/// past `Run` into `crate::composition` and `crate::facts` directly, by design, to prove the
+/// split-composition guarantee against the store rather than against `Run`'s one call shape
+/// -- and a fixture built that way needs the identical enrichment `Run` gives every other
+/// caller, not a second, differently-behaved copy of it.
+pub(crate) fn Recognized(sources: &[SourceFile]) -> Vec<SourceFile>
+{
+    return sources
+        .iter()
+        .cloned()
+        .map(|mut source| {
+            source.preferred_syntax_provider = Recognized_Syntax_Provider(&source.path);
+            return source;
+        })
+        .collect();
 }
 
 /// Whether `rule` is one `selected` asks for -- every rule when `selected` is empty, the same

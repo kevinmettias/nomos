@@ -1,6 +1,6 @@
 //! Every universe the run could read, indexed by the check that claims to mirror it.
 
-use super::{BTreeSet, DeclaredUniverse, Unread, Shortfall, Applicability, SourceFile, FactReader, Reading, Syntax_Requirement, InputDigest, Check_Names_In, Read_Universes, SubjectId, Content_Digest};
+use super::{BTreeSet, DeclaredUniverse, Unread, Shortfall, Applicability, SourceFile, FactReader, Reading, Syntax_Requirement_For, InputDigest, Check_Names_In, Read_Universes, SubjectId, Content_Digest};
 
 /// Every check name in scope for this run, and every subject that is missing from it.
 ///
@@ -73,7 +73,7 @@ pub(super) fn Declared_By<'source>(
     facts: &mut dyn FactReader,
 ) -> Result<(BTreeSet<String>, Reading), Unread<'source>>
 {
-    let need = Syntax_Requirement();
+    let need = Syntax_Requirement_For(source.preferred_syntax_provider.clone());
     let capability = nomos_cap_syntax::Capability();
     let inputs = InputDigest::Of(&[source.text.as_bytes()]);
 

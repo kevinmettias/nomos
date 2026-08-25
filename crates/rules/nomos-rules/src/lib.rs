@@ -106,7 +106,7 @@ mod role_surface;
 mod universe;
 
 use nomos_capability::Requirement;
-use nomos_contracts::{Assurance, FactVariant, Guarantee, IncrementalGranularity, SubjectId};
+use nomos_contracts::{Assurance, FactVariant, Guarantee, IncrementalGranularity, ProviderId, SubjectId};
 
 pub use mirror::{Check_Completeness_Mirrors, COMPLETENESS_MIRROR, CONTRACT_RECORD, CONTRACT_RECORD_VERSION};
 pub use declared_universe::DeclaredUniverse;
@@ -176,6 +176,34 @@ pub(crate) fn Syntax_Requirement() -> Requirement
     );
 }
 
+/// [`Syntax_Requirement`], narrowed to `preferred` when the caller names one —
+/// `OD-CAPABILITY-009`'s decided fix for a capability whose real offers partition by
+/// subject rather than compete over one.
+///
+/// Takes the preference as data rather than computing it from a path: this crate never
+/// depends on a language-provider crate, and recognizing which language a path belongs to
+/// is exactly that kind of dependency. The composition root already depends on every
+/// registered syntax provider by name — it is the one place allowed to compute
+/// `Recognition::Of_Path`, once, and carry the result here as
+/// [`SourceFile::preferred_syntax_provider`], the same carried-rather-than-derived
+/// convention that field's own sibling `subject` already documents. `None` carries no
+/// preference and falls through to the floor above, unpreferenced — the case of a path
+/// neither registered provider recognizes, which `OD-CAPABILITY-009` names explicitly
+/// rather than leaves implicit. That fallthrough is still safe: nothing materializes a
+/// fact under either provider's identity for a path neither recognizes, so an unrecognized
+/// path still surfaces as an honestly unread subject rather than a wrongly-addressed one.
+#[must_use]
+pub(crate) fn Syntax_Requirement_For(preferred: Option<ProviderId>) -> Requirement
+{
+    let need = Syntax_Requirement();
+
+    return match preferred
+    {
+        Some(provider) => need.Preferring(provider),
+        None => need,
+    };
+}
+
 /// One file of source, as the caller found it.
 ///
 /// `path` is repo-relative with forward slashes, and it is reporting only. Nothing in
@@ -205,11 +233,29 @@ pub struct SourceFile
     pub subject: SubjectId,
     /// The file's full text.
     pub text: String,
+    /// Which `nomos.cap.syntax.items` provider identity to narrow toward when this file's
+    /// syntax fact is required, if any — `OD-CAPABILITY-009`'s fix for a capability whose
+    /// real offers partition by subject rather than compete over one.
+    ///
+    /// Carried rather than derived, for the identical reason [`SourceFile::subject`] is: a
+    /// capability with more than one registered offer over disjoint subjects (today,
+    /// `nomos-lang-rust` over `.rs` and `nomos-lang-go` over `.go`) needs its read side and
+    /// its write side to agree on which provider answers for one file, and computing that
+    /// twice independently is how the two sides drift. The composition root recognizes
+    /// `path` against every provider it registers and sets this once, before any rule ever
+    /// sees the file — this crate itself never depends on a language-provider crate to
+    /// compute it. `None` means either no registered provider recognizes this path, or the
+    /// caller named none; [`Syntax_Requirement_For`] treats both the same way, falling
+    /// through to the subject-agnostic floor.
+    pub preferred_syntax_provider: Option<ProviderId>,
 }
 
 impl SourceFile
 {
     /// Builds one, for callers that have a path, a subject and the text.
+    ///
+    /// `preferred_syntax_provider` starts `None` — a caller that has already resolved one
+    /// sets the field directly, since every field here is public for exactly that reason.
     #[must_use]
     pub fn New(path: impl Into<String>, subject: SubjectId, text: impl Into<String>) -> Self
     {
@@ -217,6 +263,35 @@ impl SourceFile
             path: path.into(),
             subject,
             text: text.into(),
+            preferred_syntax_provider: None,
         };
+    }
+}
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_A_Named_Preference_Should_Narrow_The_Floor()
+    {
+        let preferred = ProviderId::New("nomos.test.provider");
+
+        let need = Syntax_Requirement_For(Some(preferred.clone()));
+
+        assert_eq!(need.preferred, Some(preferred));
+        assert_eq!(need.minimum, Syntax_Requirement().minimum, "the floor itself is untouched");
+    }
+
+    /// The case `OD-CAPABILITY-009` names explicitly: no preference is named, and the
+    /// floor falls through to the registry's own, subject-agnostic ranking — the same as
+    /// before this fix existed.
+    #[test]
+    fn Test_No_Preference_Should_Carry_The_Bare_Floor_Through_Unchanged()
+    {
+        let need = Syntax_Requirement_For(None);
+
+        assert_eq!(need, Syntax_Requirement());
     }
 }

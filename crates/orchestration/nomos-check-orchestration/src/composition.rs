@@ -9,7 +9,7 @@
 //! `published` as a value rather than deriving it.
 
 use nomos_capability::{Registry, RegistryError};
-use nomos_contracts::{CapabilityId, ConfigurationId, Guarantee};
+use nomos_contracts::{CapabilityId, ConfigurationId, Guarantee, ProviderId};
 
 /// The capability this run declares and the providers it admits.
 ///
@@ -32,24 +32,43 @@ pub fn Registered() -> Result<Registry, RegistryError>
     return Ok(registry);
 }
 
-/// The syntax capability, and its two competing offers.
+/// The syntax capability, and its three offers -- two competing, one partitioned.
 ///
-/// No selection mechanism is added alongside the second offer -- `OD-HOST-004` decided a
-/// second offer is composition, not choice, and `nomos_capability::Registry::Resolve` ranks
-/// between the two on its own: the parser's guarantee is strictly stronger on every axis the
-/// scanner differs on, so it remains the offer `Resolve` chooses with no preference named.
+/// No selection mechanism is added between `nomos_lang_rust` and `nomos_lang_rust_scan` --
+/// `OD-HOST-004` decided a second offer is composition, not choice, and
+/// `nomos_capability::Registry::Resolve` ranks between the two on its own: the parser's
+/// guarantee is strictly stronger on every axis the scanner differs on, so it remains the
+/// offer `Resolve` chooses with no preference named.
 ///
-/// `nomos_lang_go` is deliberately *not* a third offer here. `Registry::Resolve` ranks
-/// purely by guarantee strength with no notion of which subjects a provider can even
-/// attempt, and `nomos_lang_go`'s declared guarantee -- `Assurance::Sound` on both axes,
-/// where both Rust providers are weaker on completeness -- is strictly stronger than
-/// either. Offering it here was tried and reverted: `nomos_rules::Syntax_Requirement`'s own
-/// resolution (deliberately unpreferenced, per that function's own doc) then resolved to
-/// `nomos_lang_go` for `.rs` files too, and every `.rs` fact this composition already wrote
-/// under `nomos_lang_rust`'s provider identity stopped matching what the rule's index
-/// believed had answered -- four real tests in this crate's own `tests.rs` went from green
-/// to `DependencyUnavailable` findings, not from a mistake at this call site but from
-/// `ProviderOffer` itself carrying no subject or domain scope for `Resolve` to rank within.
+/// `nomos_lang_go` is a real third offer here, safely, because it is no longer the
+/// unpreferenced ranking `Resolve` performs between the first two that decides which
+/// answers for a `.rs` file. Registering it that way was tried once and reverted: with no
+/// preference named, `Resolve` ranks purely by guarantee strength, `nomos_lang_go`'s
+/// declared guarantee -- `Assurance::Sound` on both axes, where both Rust providers are
+/// weaker on completeness -- is strictly stronger than either, and it was chosen for `.rs`
+/// files too. Every `.rs` fact this composition already wrote under `nomos_lang_rust`'s
+/// provider identity stopped matching what the rule's index believed had answered -- four
+/// real tests in this crate's own `tests.rs` went from green to `DependencyUnavailable`
+/// findings, not from a mistake at this call site but from `ProviderOffer` itself carrying
+/// no subject or domain scope for `Resolve` to rank within.
+///
+/// `OD-CAPABILITY-009` decided what a capability whose real offers partition by subject
+/// rather than compete over one owes `Resolve`: nothing, because `Resolve` never receives a
+/// subject to partition on by the time it is asked -- only the opaque digest `SubjectId`
+/// already is. The caller narrows it instead, and this composition root is that caller --
+/// the one place allowed to know both `nomos_lang_rust` and `nomos_lang_go` by name, unlike
+/// `nomos_rules`, which never depends on a language-provider crate.
+/// [`Recognized_Syntax_Provider`] computes `Recognition::Of_Path` against a real path here,
+/// once, before it is ever digested into a `SubjectId`, and carries the result into
+/// `nomos_rules::SourceFile::preferred_syntax_provider` as data (`crate::run`'s own
+/// enrichment step) for `nomos_rules::Syntax_Requirement_For` to attach via
+/// `.Preferring(...)` -- never computed inside that crate.
+/// [`crate::facts::materialize::Materialize_Syntax`]'s write side calls the identical
+/// [`Recognized_Syntax_Provider`], so the two sides agree on which identity a `.rs` or a
+/// `.go` fact is filed under by construction, not by coincidence. With both sides narrowing
+/// to the same provider by the same function, `Resolve` is never asked to rank
+/// `nomos_lang_go` against the other two for a subject it cannot answer for, and the hazard
+/// that reverted this offer the first time cannot recur.
 ///
 /// This is not `OD-CAPABILITY-006`'s cross-language case -- that record is explicit that it
 /// governs two *different* languages' subjects joined by a declared correspondence, and
@@ -57,19 +76,46 @@ pub fn Registered() -> Result<Registry, RegistryError>
 /// scope: "There is no ranking between a Rust ownership fact and a Python ownership fact...
 /// neither is a weaker or stronger offer of the same fact, because they are not offers of
 /// the same fact." `nomos_lang_rust` and `nomos_lang_go` *are* offers of the same fact,
-/// `nomos.cap.syntax.items` -- the same shape `OD-CAPABILITY-001` already governs -- except
-/// that unlike the parser and the scanner, neither can actually answer for the other's
-/// subjects at all. No existing record states what a caller-unpreferenced `Resolve` owes a
-/// capability whose real offers partition by subject rather than compete over one. Wiring
-/// this provider into the registry waits on that decision; `P14-LANG-GO-SYNTAX-PROVIDER`'s
-/// own follow-up item reserves it.
+/// `nomos.cap.syntax.items` -- the same shape `OD-CAPABILITY-001` already governs, resolved
+/// the way `OD-CAPABILITY-009` decided rather than by widening what `Resolve` ranks.
 fn Declare_Syntax_Capability(registry: &mut Registry) -> Result<(), RegistryError>
 {
     registry.Declare(nomos_cap_syntax::Capability_Contract())?;
     registry.Offer(nomos_lang_rust::Provider_Offer())?;
     registry.Offer(nomos_lang_rust_scan::Provider_Offer())?;
+    registry.Offer(nomos_lang_go::Provider_Offer())?;
 
     return Ok(());
+}
+
+/// Which registered `nomos.cap.syntax.items` provider `path` belongs to, if either does --
+/// `OD-CAPABILITY-009`'s corrected fix, and the one function both halves of the pipeline
+/// consult so they cannot independently drift on the answer.
+///
+/// This crate is the caller `OD-CAPABILITY-009` names: the one place that may know
+/// `nomos_lang_rust` and `nomos_lang_go` by name to answer an applicability question no
+/// [`Registry::Resolve`] call could, because by the time `Resolve` is reached the subject is
+/// already the opaque digest [`nomos_contracts::SubjectId`] carries. `crate::run`'s own
+/// enrichment step calls this to populate `nomos_rules::SourceFile::preferred_syntax_provider`
+/// before any rule ever sees a source, and
+/// [`crate::facts::materialize::Materialize_Syntax`]'s write side calls it again over the
+/// identical path to decide which provider's own `Materialize` to run. Both call sites
+/// reach this one function rather than each recomputing `Recognition::Of_Path` for
+/// themselves, so read and write agree on a subject's provider identity by construction.
+#[must_use]
+pub(crate) fn Recognized_Syntax_Provider(path: &str) -> Option<ProviderId>
+{
+    if nomos_lang_rust::Recognition::Of_Path(path) == nomos_lang_rust::Recognition::Recognized
+    {
+        return Some(ProviderId::New(nomos_lang_rust::PROVIDER));
+    }
+
+    if nomos_lang_go::Recognition::Of_Path(path) == nomos_lang_go::Recognition::Recognized
+    {
+        return Some(ProviderId::New(nomos_lang_go::PROVIDER));
+    }
+
+    return None;
 }
 
 /// A second capability, and its second real offer.

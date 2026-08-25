@@ -5,30 +5,38 @@
 //! module does not build -- not by the capability each one answers; see each function's own
 //! doc for why the three stayed independent steps rather than one generalization.
 
-use nomos_analysis::{Context, MemoryFactStore};
-use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
+use nomos_analysis::{Context, MaterializedFact, MemoryFactStore};
+use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, ProviderId, RuleId};
 use nomos_lang_rust::{FactContext, Materialization};
 use nomos_platform::ProcessLauncher;
 use nomos_rules::SourceFile;
+
+use crate::composition::Recognized_Syntax_Provider;
 
 use std::path::Path;
 
 /// Produces one syntax fact per source and returns how many were written.
 ///
-/// A file the provider refuses materializes nothing and is not dropped silently: the count
-/// returned is the denominator the report prints beside the file count, and the rule's own
-/// unread-subject finding names each one individually. Two independent readings of one
-/// file -- this provider's and `nomos-rules`' own universe parser -- can refuse
-/// independently, and the run is entitled to see which.
+/// A file neither provider recognizes, or one its own recognized provider refuses to
+/// parse, materializes nothing and is not dropped silently: the count returned is the
+/// denominator the report prints beside the file count, and the rule's own unread-subject
+/// finding names each one individually. Two independent readings of one file -- this
+/// provider's and `nomos-rules`' own universe parser -- can refuse independently, and the
+/// run is entitled to see which.
+///
+/// Dispatches per [`Recognized_Syntax_Provider`], `OD-CAPABILITY-009`'s write-side half:
+/// `crate::run`'s own enrichment step narrows the read side to the same provider identity
+/// through the identical function, and the two must agree for `Key_From` to ever find what
+/// this function wrote.
 pub fn Materialize_Syntax(sources: &[SourceFile], context: &Context, store: &mut MemoryFactStore) -> usize
 {
-    let production = Production(context);
+    let rust_production = Rust_Production(context);
+    let go_production = Go_Production(context);
     let mut written = 0_usize;
 
     for source in sources
     {
-        let Materialization::Materialized(fact) =
-            nomos_lang_rust::Materialize(source.subject, &source.text, production)
+        let Some(fact) = Materialized_Syntax_Fact(source, rust_production, go_production)
         else
         {
             continue;
@@ -45,10 +53,65 @@ pub fn Materialize_Syntax(sources: &[SourceFile], context: &Context, store: &mut
     return written;
 }
 
-/// The reading context as the provider takes it.
-fn Production(context: &Context) -> FactContext
+/// One source's syntax fact, from whichever provider [`Recognized_Syntax_Provider`] says
+/// `source.path` belongs to -- `None` for a path neither recognizes or a recognized path
+/// its own provider could not parse.
+///
+/// Dispatches on [`Recognized_Syntax_Provider`] rather than recomputing `Recognition::Of_Path`
+/// itself, the identical function `crate::run`'s own read-side enrichment calls to populate
+/// `nomos_rules::SourceFile::preferred_syntax_provider` -- `OD-CAPABILITY-009`'s corrected
+/// fix, one test both sides consult so they cannot independently drift.
+fn Materialized_Syntax_Fact(
+    source: &SourceFile,
+    rust_production: FactContext,
+    go_production: nomos_lang_go::FactContext,
+) -> Option<Box<MaterializedFact>>
+{
+    let provider = Recognized_Syntax_Provider(&source.path)?;
+
+    if provider == ProviderId::New(nomos_lang_rust::PROVIDER)
+    {
+        let Materialization::Materialized(fact) = nomos_lang_rust::Materialize(source.subject, &source.text, rust_production)
+        else
+        {
+            return None;
+        };
+
+        return Some(fact);
+    }
+
+    if provider == ProviderId::New(nomos_lang_go::PROVIDER)
+    {
+        let nomos_lang_go::Materialization::Materialized(fact) =
+            nomos_lang_go::Materialize(source.subject, &source.text, go_production)
+        else
+        {
+            return None;
+        };
+
+        return Some(fact);
+    }
+
+    return None;
+}
+
+/// The reading context as `nomos_lang_rust`'s own provider takes it.
+fn Rust_Production(context: &Context) -> FactContext
 {
     return FactContext {
+        snapshot: context.snapshot,
+        variant: context.variant,
+        configuration: context.configuration,
+        generation: context.generation,
+    };
+}
+
+/// The reading context as `nomos_lang_go`'s own provider takes it -- the identical fields
+/// [`Rust_Production`] already builds for `nomos_lang_rust`'s own distinct `FactContext`
+/// type, restated as `nomos_lang_go`'s.
+fn Go_Production(context: &Context) -> nomos_lang_go::FactContext
+{
+    return nomos_lang_go::FactContext {
         snapshot: context.snapshot,
         variant: context.variant,
         configuration: context.configuration,
@@ -68,7 +131,7 @@ fn Production(context: &Context) -> FactContext
 /// stayed a second, separate step rather than a generalization of the first.
 pub fn Materialize_Reachability(sources: &[SourceFile], context: &Context, store: &mut MemoryFactStore) -> usize
 {
-    let production = Production(context);
+    let production = Rust_Production(context);
     let mut written = 0_usize;
 
     for source in sources

@@ -31967,14 +31967,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "nomos-b7-syntax-recognition",
-        "acquired_at": 1787697091,
-        "lease_expires_at": 1787704291
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -31984,6 +31980,72 @@
           "nomos-rules",
           "-p",
           "nomos-check-orchestration"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration"
+        ],
+        "exit_code": 0,
+        "output_tail": "mpty_Subject_List_Produces_No_Findings ... ok\ntest role_surface::tests::Test_Every_Subject_Is_Reported_As_Agent_Required ... ok\ntest role_surface::tests::Test_Findings_Are_Sorted_By_Subject_Name ... ok\ntest role_surface::tests::Test_The_Locations_Name_The_Readme_And_The_Surface_Snapshot ... ok\ntest role_surface::tests::Test_The_Rule_Never_Reaches_A_Verdict_Regardless_Of_Content ... ok\ntest tests::Test_A_Named_Preference_Should_Narrow_The_Floor ... ok\ntest tests::Test_No_Preference_Should_Carry_The_Bare_Floor_Through_Unchanged ... ok\ntest universe::tests::Test_A_Constant_Slice_Should_Be_Found ... ok\ntest universe::tests::Test_A_Declared_Mirror_Should_Be_Read_Off_The_Doc_Comment ... ok\ntest universe::tests::Test_A_File_That_Declares_Nothing_Should_Be_Observed_And_Empty ... ok\ntest universe::tests::Test_A_List_With_No_Documentation_Should_Claim_No_Mirror ... ok\ntest universe::tests::Test_A_Payload_From_A_Blind_Provider_Should_Not_Read_As_No_Mirror ... ok\ntest universe::tests::Test_A_Private_List_Should_Not_Be_A_Universe ... ok\ntest universe::tests::Test_A_Scalar_Constant_Should_Not_Be_A_Universe ... ok\ntest universe::tests::Test_A_Trait_Impl_Should_Not_Claim_The_Type ... ok\ntest universe::tests::Test_An_All_Should_Be_Attributed_To_Its_Type ... ok\ntest universe::tests::Test_An_All_That_Takes_A_Receiver_Should_Not_Be_A_Universe ... ok\n\ntest result: ok. 89 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.13s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_check_orchestration-9aa50d4313aa5a97.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-64b00b1b46a8fdea.exe)\n   Doc-tests nomos_check_orchestration\n   Doc-tests nomos_rules\n",
+        "verified_at": 1787697666,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "c0cae680162542d827ef9e35f9f1ffcc23dddcf6"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P14-RULES-010-TOOL-PROVIDER-DENY-2",
+      "title": "nomos-lang-rust-deny: the one provider of nomos.cap.dependency.policy, running cargo deny check bans licenses sources",
+      "why": "P14-RULES-010-TOOL-PROVIDER-DENY-1 gave the capability a home with no provider yet. This item is the provider half: a real subprocess-backed ToolProvider, the same shape nomos-lang-rust-clippy already establishes, wrapping cargo deny --format json check bans licenses sources (advisories deliberately excluded -- it is the one cargo-deny check that fetches the RustSec DB over the network, so including it would make this provider's own run non-hermetic).",
+      "done_when": "nomos-lang-rust-deny exists at band 25, exports PROVIDER/Declared_Guarantee/Provider_Offer/Materialize_Workspace mirroring nomos-lang-rust-clippy's four-export convention, Materialize_Workspace runs the real subprocess through nomos_platform::ProcessLauncher and produces one nomos.cap.dependency.policy fact for the whole workspace (IncrementalGranularity::WholeWorkspace, not one per member), and a real test exercises it against this repository's own deny.toml",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages/nomos-lang-rust-deny",
+          "Cargo.toml",
+          "README.md",
+          "tests/contract/tests/boundaries/bands.rs",
+          "tests/contract/surface/nomos-lang-rust-deny.txt",
+          "tests/integration/tests/determinism/declarations.rs",
+          "tests/integration/tests/determinism/domains.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-deny-provider",
+        "acquired_at": 1787697325,
+        "lease_expires_at": 1787704525
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lang-rust-deny",
+          "--no-fail-fast"
         ],
         "timeout_seconds": 600
       },

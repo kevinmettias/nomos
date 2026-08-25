@@ -89,7 +89,12 @@ use crate::DeclaredUniverse;
 use crate::Reading;
 use crate::universe::Read_Universes;
 use crate::UniverseKind;
-use crate::{SourceFile, Syntax_Requirement};
+use crate::{SourceFile, Syntax_Requirement_For};
+// `provider_floor.rs` reaches this transitively through `tests.rs`'s own `use super::*` --
+// production code here calls `Syntax_Requirement_For` only, never the bare floor, so this
+// import is test-only and would otherwise warn unused in the plain library build.
+#[cfg(test)]
+use crate::Syntax_Requirement;
 use nomos_analysis::{FactReader, InputDigest};
 use nomos_contracts::{
     Applicability, EnforcementBreach, EnforcementReach, EnforcerRef, EvidenceClass, Finding,
