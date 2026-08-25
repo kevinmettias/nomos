@@ -29044,6 +29044,78 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-GATE-016-COVERAGE-POLICY-DECISION",
+      "title": "OD-GATE-016: whether Gate needs a CoveragePolicy that lets unsupported or unanalyzed scope affect disposition",
+      "why": "WF-001's binding clause (quoted in OD-GATE-015) names coverage and unsupported-analysis policy as something a gate shall define, alongside phases/thresholds/approvals -- OD-GATE-015 deliberately scoped itself to only baseline/suppression/adoption and left this fourth concern undecided. An external architecture review independently flagged the same gap: Gate can currently report zero blocking findings without distinguishing a clean, fully-analyzed run from one where scope went unanalyzed or unsupported.",
+      "done_when": "OD-GATE-016 exists and is registered, and either declines to build CoveragePolicy now -- naming why the trigger has not fired, matching OD-GATE-014/015's own pattern -- or names the first real increment to build, the same way OD-GATE-015 did for suppression/baseline/adoption.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md",
+          "crates/spec/nomos-spec-store/records/OD-GATE-016.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-ANALYSIS-009-PERSISTENT-STORE-DECISION",
+      "title": "OD-ANALYSIS-009: whether nomos-check-orchestration's Run should read a persistent fact store instead of constructing MemoryFactStore fresh per invocation",
+      "why": "nomos-analysis's generation/invalidation/dependency-tracking machinery is real and tested, but Run (crates/orchestration/nomos-check-orchestration/src/run.rs) still calls MemoryFactStore::New() fresh on every invocation, so incrementality is never exercised across process boundaries -- edit one file, run check twice, and the second run repeats every materialization the first one already did. No record has weighed in on this either way. An external architecture review independently named this the largest gap between the incremental substrate that exists and what nomos check actually does today.",
+      "done_when": "OD-ANALYSIS-009 exists and is registered, and either declines to build a persistent or cross-invocation fact store now -- naming why, and what would trigger it -- or names the first real increment, following OD-GATE-014/015's own decide-then-build pattern.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md",
+          "crates/spec/nomos-spec-store/records/OD-ANALYSIS-009.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
