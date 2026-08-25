@@ -3,7 +3,7 @@ id: OD-CAPABILITY-009
 type: decision
 title: Resolve never sees a subject to partition on; a subject-partitioned capability is the caller's Preferring to make
 status: accepted
-version: 2
+version: 3
 authority: canonical-normative-record
 tags:
   - capability
@@ -226,6 +226,38 @@ only *where* the caller-side narrowing is computed, and it names, without buildi
 gap alongside the call-site work the original "What Would Unblock" section already named as not
 built here. Both remain a further, real increment.
 
+## Amendment: Both Named Increments Are Built
+
+Both gaps the amendment above named are now built, against the correction it decided, not the
+original text's.
+
+**The corrected call-site fix.** `nomos_rules::SourceFile` gains a
+`preferred_syntax_provider: Option<ProviderId>` field, carried the same way `subject` already
+is. `nomos-check-orchestration::composition::Recognized_Syntax_Provider(path)` is the one
+function that computes `Recognition::Of_Path` against `nomos_lang_rust` and `nomos_lang_go` by
+name; `crate::run::Recognized` calls it once per source before any rule runs, to populate the
+field, and `crate::facts::materialize::Materialize_Syntax`'s write side calls the identical
+function to decide which provider's `Materialize` to run. `nomos_rules::Syntax_Requirement_For`
+takes the field's value directly and never computes recognition itself, so `nomos-rules/
+Cargo.toml` gained no dependency on either language crate. `Declare_Syntax_Capability` registers
+`nomos_lang_go::Provider_Offer()` as a real third offer. An end-to-end test proves a clean
+`.go` source is judged under `nomos_lang_go`'s own identity while the existing `.rs` tests stay
+green -- the regression this record's own body describes does not recur.
+
+**The walker gap.** `nomos-cli::check::sources::Read_Entry`, `nomos-cli::gate::sources::
+Read_Entry` and `nomos-api::sources::Read_Entry` each now admit a path whose extension is `rs`
+*or* `go`, the same hardcoded-literal style each already used for `rs` alone -- not a new
+dependency on either language crate, since a walk decides what is worth reading at all, not
+which registered provider answers for it. A real `nomos check`, `nomos gate run` or API run now
+discovers a `.go` file and judges it through `nomos_lang_go`'s real offer, the first time this
+has been true anywhere in this workspace.
+
+Neither increment changed anything the body above or the first amendment decided:
+`nomos_capability::{ProviderOffer, Registry, Requirement, Selection}` remain untouched,
+`Syntax_Requirement()` still carries no preference, and the walker's extension check is
+unrelated to `Registry::Resolve`'s own ranking. This amendment records that both were built; it
+does not reopen how.
+
 ## Status
 
 Accepted. Decided against the concrete failure recorded in `P14-LANG-GO-SYNTAX-PROVIDER`'s own
@@ -236,6 +268,5 @@ tested, unused-in-production mechanism this decision points call sites at), and
 `Syntax_Requirement`'s own doc (whose "no `Preferring`" stance is correct for the floor and is
 left unchanged). `nomos_capability` needs no subject-scoping mechanism; the fix lives entirely
 above the registry, in the call sites that still hold a real path before it is digested away.
-Registering `nomos-lang-go` waits on that further increment, corrected by the amendment above to
-live in the composition root rather than in `nomos-rules` itself, and on the walker gap the
-amendment names alongside it.
+`nomos-lang-go` is registered and, as of the second amendment above, reachable from a real walk:
+both increments this record named as not built here are now built.
