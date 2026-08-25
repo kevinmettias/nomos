@@ -50,7 +50,46 @@
 //! `sources.rs` already draws for Gate's own walk. Its thirteenth,
 //! [`spec::Handle_Spec_Sources`], moves on to Spec's own remaining verbs: `Sources` is a
 //! unit `SpecCommand` variant, the next-simplest of that crate's nine after `Profiles`, but
-//! the first here to go through `nomos_spec_orchestration::corpus::Assemble` at all.
+//! the first here to go through `nomos_spec_orchestration::corpus::Assemble` at all. Its
+//! fourteenth, [`spec::Handle_Spec_Record`], is the first Spec seam carrying a request
+//! payload of its own rather than a unit variant -- `RecordRequest{id, revision}` -- and the
+//! first whose own outcome needed twin types of its own,
+//! [`spec::DocumentSourceResponse`]/[`spec::NodeSummaryResponse`], because
+//! `nomos_spec_store::DocumentSource`/`NodeSummary` do not derive `Serialize` and are not
+//! this crate's own types to change. Its fifteenth, [`spec::Handle_Spec_Table`], does the
+//! same for `Table`, reusing [`spec::DocumentSourceResponse`] and adding three more twins
+//! for `PathMatch`, `RowCensus` and `TableLine`. Its sixteenth, [`spec::Handle_Spec_Markdown`],
+//! does the same for `Markdown`, reusing `RecordRequest` and collapsing `EditError` -- a
+//! nine-variant error with no `Serialize` but a real `Display` -- to a single `cause` string,
+//! the same shape this crate's `StoreError` handling already uses. Its seventeenth,
+//! [`spec::Handle_Spec_Freshness`], does the same for `Freshness` -- generic over
+//! `nomos-platform`'s `FileSystem` like `Render`, `Preview` and `Commit`, but, unlike those
+//! three, only ever reads through it, so it carries none of their "does a wire call write to
+//! this host's disk" question. Its eighteenth, [`spec::Handle_Spec_Preview`], does the same
+//! for `Preview` -- also generic over `FileSystem`, and also read-only: its one contact with
+//! a filesystem is reading the staged `--from` file the caller already named, never a write.
+//! Its nineteenth, [`spec::Handle_Spec_Render`], is the first Spec seam here that writes:
+//! `run::render::Render` places a built projection's body and its sidecar under a
+//! caller-named `into` root through `Replace_Atomically`, unconditionally overwriting what
+//! was there. This is not a new category of risk for this crate -- [`Handle_Work_Claim`]
+//! already writes a real ledger file at a caller-named directory over an unauthenticated
+//! wire call -- and unlike `Commit`'s vacate step, a rendered projection is a derived,
+//! regenerable artifact, not the governing record itself. Its twentieth,
+//! [`spec::Handle_Spec_Commit`], closes `SpecCommand` entirely: it writes the committed
+//! record's own bytes the same way `Render` writes a projection's, but unlike `Render` it
+//! replaces the governing record itself, and a rename's old path is permanently unlinked via
+//! a raw `std::fs::remove_file` outside `nomos-platform`'s own port -- `run::commit`'s own
+//! documentation names the failure mode directly: "two files now declare this record."
+//! Building both `Render` and `Commit` was an explicit choice, asked of and confirmed by a
+//! person rather than decided here, once the research showed `Freshness` and `Preview` (both
+//! generic over `FileSystem`) never actually write, narrowing the real decision to these two.
+//! With `Commit`, all nine `SpecCommand` verbs are seamed. Its twenty-first,
+//! [`spec::Handle_Spec_Submit`], seams the one verb `SpecCommand` does not carry:
+//! `nomos_spec_orchestration::Submit` is a sibling of `Run`, not one of its cases
+//! (`OD-HOST-005`'s own resolution: a `nomos request submit` invocation is not a `nomos spec`
+//! verb by the CLI's own naming), and takes an already-assembled `&mut Assembly` directly, so
+//! this is the first `Handle_Spec_*` function here that calls `corpus::Assemble` itself
+//! rather than getting it from `Run`.
 //!
 //! [`Handle_Gate_Run`] is a deliberate twin of `nomos-cli`'s `gate.rs`
 //! `GateInvocation::Run` arm: it walks `root` for `.rs` sources
@@ -89,7 +128,18 @@ pub use response::{
     BaselineDebtResponse, Disposition, GateExplainResponse, GatePlanResponse, GateRunResponse, RuleCalibrationResponse,
     RuleOfferResponse, SuppressionDispositionResponse, SuppressionResponse,
 };
-pub use spec::{AbsenceResponse, Handle_Spec_Profiles, Handle_Spec_Sources, ProfilesResponse, SpecSourcesResponse};
+pub use spec::{
+    AbsenceResponse, BlockChangeResponse, CommitReportResponse, CommittedPreviewResponse, DecisionGapResponse,
+    DocumentSourceResponse, FailureResponse, FieldValueResponse, Handle_Spec_Commit, Handle_Spec_Freshness,
+    Handle_Spec_Markdown, Handle_Spec_Preview, Handle_Spec_Profiles, Handle_Spec_Record, Handle_Spec_Render,
+    Handle_Spec_Sources, Handle_Spec_Submit, Handle_Spec_Table, IdentityChangeResponse, NodeSummaryResponse,
+    NormativeMovementResponse, NormativeOutcomeResponse, OriginResponse, PathMatchResponse, ProfileOutcomeResponse,
+    ProfilesResponse, RecordRelationResponse, RefusalResponse, RenderedProjectionResponse, ReproductionResponse,
+    RowCensusResponse, SeverityResponse, SpecCommitResponse, SpecFreshnessResponse, SpecMarkdownResponse,
+    SpecPreviewResponse, SpecRecordResponse, SpecRenderResponse, SpecSourcesResponse, SpecSubmitResponse,
+    SpecTableResponse, SubmissionKindResponse, SubmissionResponse, SubmissionStateResponse, TableLineResponse,
+    VacateOutcomeResponse, VacatedResponse, VerdictResponse,
+};
 pub use work::{
     BlockedItem, Handle_Work_Abandon, Handle_Work_Add, Handle_Work_Audit, Handle_Work_Claim, Handle_Work_Decline,
     Handle_Work_Finish, Handle_Work_List, Handle_Work_Renew, Handle_Work_Show, Handle_Work_TakeOver,

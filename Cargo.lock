@@ -315,6 +315,7 @@ dependencies = [
  "nomos-platform",
  "nomos-platform-std",
  "nomos-rules",
+ "nomos-spec-model",
  "nomos-spec-orchestration",
  "nomos-spec-project",
  "nomos-spec-store",
