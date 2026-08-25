@@ -77,7 +77,7 @@ profile: domain-specification
 | docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md@authored | docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md | authored | 17 | 7 | sha256:db6c652a9e6a7ddad8f6d701642e08c3a91d0f38c07839fdf7b5c5fc9e6ffa50 |
 | docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md@authored | docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md | authored | 21 | 8 | sha256:fde76ddb443213fdd5c253144550e72aa60a127201be1c067156bd52c9a071dd |
 | docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md@authored | docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md | authored | 34 | 12 | sha256:ee64f184602e1bd210eeca6144c88552d97cebce829ccdedea3db6487fc6e36d |
-| docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md@authored | docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md | authored | 17 | 6 | sha256:8b80590869d121dd76fa42950c366543d613d4ba319282b49f28a446cc6af6cd |
+| docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md@authored | docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md | authored | 20 | 7 | sha256:0c813c23245ff0e95b51d6914c67d7ab36ae6d18b05e2bd82bd69892016f969e |
 | docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md@authored | docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md | authored | 25 | 7 | sha256:6b6d9f41076761c1a5af15719547c1b28ab365e7b4e46ba305c59bc4de3a71b5 |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md@authored | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md | authored | 16 | 5 | sha256:e3d0afb3cabc0ab33a09a700e110b803806d3c4e063673d8c18ca7adc84c3012 |
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md@authored | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md | authored | 36 | 8 | sha256:3ececaaf506dff6cacf4aa066df5a3fdd61032c1ec291ef9f21e3a4b939d37ef |
@@ -724,7 +724,8 @@ profile: domain-specification
 | docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#4 | authored | 2 | What Was Measured |
 | docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#11 | authored | 2 | Decision |
 | docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#14 | authored | 2 | What This Does Not Do |
-| docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#16 | authored | 2 | Status |
+| docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#16 | authored | 2 | The First Increment Is Built |
+| docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#19 | authored | 2 | Status |
 | docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#1 | authored | 1 | Whether Run gains a real per-call rule subset now, or waits for a caller that needs one |
 | docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#2 | authored | 2 | Question |
 | docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#5 | authored | 2 | What Was Measured |
@@ -18738,17 +18739,58 @@ coverage-caused `Indeterminate` by name, the same way it already reports `baseli
 
 ### docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#16
 
+*revision: authored · kind: heading · heading: Whether Gate needs a CoveragePolicy that lets unsupported or unanalyzed scope affect disposition / The First Increment Is Built · hash: sha256:0e695e39ab51e016841d50a28edcebbb869f365bacc3e72b9e7b857177266989*
+
+## The First Increment Is Built
+
+### docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#17
+
+*revision: authored · kind: prose · heading: Whether Gate needs a CoveragePolicy that lets unsupported or unanalyzed scope affect disposition / The First Increment Is Built · hash: sha256:6b62b250516a5a74b606b7c98f1ce15837372632d557358f83600c96d618b911*
+
+`P14-GATE-016-COVERAGE-POLICY-FIRST-INCREMENT` built exactly the increment above. Verified
+directly against the real, committed code, not the proposal: `CoveragePolicy`
+(`crates/orchestration/nomos-gate-orchestration/src/coverage.rs`) is a two-variant enum,
+`Unset` (`#[default]`) and `RequireCompleteness`, consulted by a new `GateCommand.coverage`
+field. `Run_Gate`'s own `Reduced` computes `selected` — the rule-and-scope-selected findings,
+exactly the set this record's "What Was Measured" section named as the one `Claim` must be
+recomputed over — and passes both it and `coverage` to a new `Reduced_With_Coverage`, which
+downgrades `GateRunOutcome::Passed` to `GateRunOutcome::Indeterminate` when `coverage` is
+`RequireCompleteness` and `Claim_Of(selected)` is `Claim::Incomplete`. It leaves `Failed`
+untouched: a real blocking finding this run did reach a judgment about is not made any less
+true by a different, unrelated subject the run could not judge, so there is nothing for
+`RequireCompleteness` to downgrade in that case — a narrowing this record's own text did not
+anticipate, decided by the increment itself and stated in `CoveragePolicy`'s own doc rather
+than left implicit. Three tests prove all three paths (unset-unchanged, downgraded-`Passed`,
+untouched-`Failed`) against real judged findings, including one genuinely unparseable source
+file, not a hand-built `Finding`. Unset behavior is unchanged, provably: every construction
+site that predates `CoveragePolicy` still defaults to it, and `cargo clippy --workspace
+--all-targets` and the full contract-test suite stayed green throughout.
+
+### docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#18
+
+*revision: authored · kind: prose · heading: Whether Gate needs a CoveragePolicy that lets unsupported or unanalyzed scope affect disposition / The First Increment Is Built · hash: sha256:d84310020e887ae948f19ac5bf29121723888f9694dc733e096a483b7775034f*
+
+Exactly as scoped: no CLI flag or config file constructs a `RequireCompleteness` policy, and
+`Explain_Gate` does not yet report a coverage-caused `Indeterminate` by name — both remain
+open for a later increment, as this record's own "What This Does Not Do" already said they
+would.
+
+### docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#19
+
 *revision: authored · kind: heading · heading: Whether Gate needs a CoveragePolicy that lets unsupported or unanalyzed scope affect disposition / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#17
+### docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#20
 
-*revision: authored · kind: prose · heading: Whether Gate needs a CoveragePolicy that lets unsupported or unanalyzed scope affect disposition / Status · hash: sha256:ad6016bd9c7e32d8b664c0a0fedcc48a54ac39e4901b20ed822b99989ed2ed36*
+*revision: authored · kind: prose · heading: Whether Gate needs a CoveragePolicy that lets unsupported or unanalyzed scope affect disposition / Status · hash: sha256:9556aa3deaa5db73bb79b455a26746a058facd51c3405ad13465627eb8b976f7*
 
-Accepted. Names the first increment to build; a follow-on capability item builds it and amends
-this record the way `P13-GATE-015-SUPPRESSION-RECORD`, `-BASELINE-RECORD` and `-ADOPTION-RECORD`
-each amended `OD-GATE-015` once their own concern landed.
+Accepted. `CoveragePolicy` exists and is consulted by a real `Run_Gate`, closing what this
+record asked. Nothing further to revisit under this record: any future widening (a
+minimum-`Applicability` threshold, a per-rule or per-scope coverage requirement, a real
+authoring surface, `Explain_Gate` naming coverage by name) is a new question for a new
+record, the same way `OD-GATE-015`'s own acceptance already treats a future narrowing of
+its own three concerns.
 
 ### docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#1
 

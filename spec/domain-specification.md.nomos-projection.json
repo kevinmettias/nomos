@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:e520cd0420c1c608210495005e941a8abef51c56999af3fbe8645124cc51e461",
-  "inputs_digest": "sha256:38c4df4301c6bbbae5bc4322a4978fb4f421fd09fc369b48a69ac47bbac15b1f",
+  "content_digest": "sha256:a13c15e5dc32b90dab8b672eea01f6bd88c5f1b327de7fc3326da43ab161d9db",
+  "inputs_digest": "sha256:3731b8ff6ab264be142d571838508c7c83e525a1bbaf3e8310e52647e7c3c713",
   "sections": [
     [
       "Documents",
@@ -12,11 +12,11 @@
     ],
     [
       "Sections",
-      1380
+      1381
     ],
     [
       "Source blocks",
-      4839
+      4842
     ]
   ],
   "inputs": [
@@ -358,7 +358,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md@authored",
-      "hash": "sha256:8b80590869d121dd76fa42950c366543d613d4ba319282b49f28a446cc6af6cd"
+      "hash": "sha256:0c813c23245ff0e95b51d6914c67d7ab36ae6d18b05e2bd82bd69892016f969e"
     },
     {
       "content": "documents",
@@ -3568,7 +3568,12 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#16",
-      "hash": "sha256:3120077c89661ece48929b7e95aee4f64e31d99477a54dda0f9b9058d6d94265"
+      "hash": "sha256:e80db6e9540a0f0339169451ea2482cb273d10f90261cadbdf1e3169bbba0de5"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#19",
+      "hash": "sha256:06d6eb729e4390cc6906f4ef76f14ec3324f673b53c21b002aafb38fd07f9692"
     },
     {
       "content": "headings",
@@ -17078,12 +17083,27 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#16",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:0e695e39ab51e016841d50a28edcebbb869f365bacc3e72b9e7b857177266989"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#17",
-      "hash": "sha256:ad6016bd9c7e32d8b664c0a0fedcc48a54ac39e4901b20ed822b99989ed2ed36"
+      "hash": "sha256:6b62b250516a5a74b606b7c98f1ce15837372632d557358f83600c96d618b911"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#18",
+      "hash": "sha256:d84310020e887ae948f19ac5bf29121723888f9694dc733e096a483b7775034f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#19",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#20",
+      "hash": "sha256:9556aa3deaa5db73bb79b455a26746a058facd51c3405ad13465627eb8b976f7"
     },
     {
       "content": "blocks",

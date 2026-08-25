@@ -3,7 +3,7 @@ id: OD-GATE-016
 type: decision
 title: Whether Gate needs a CoveragePolicy that lets unsupported or unanalyzed scope affect disposition
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - gate
@@ -130,8 +130,37 @@ coverage-caused `Indeterminate` by name, the same way it already reports `baseli
 - It does not touch `Finding::Can_Fail_A_Build`, `Applicability`, `Claim`, or any rule. Every
   type this record's increment reads already exists and is unchanged by it.
 
+## The First Increment Is Built
+
+`P14-GATE-016-COVERAGE-POLICY-FIRST-INCREMENT` built exactly the increment above. Verified
+directly against the real, committed code, not the proposal: `CoveragePolicy`
+(`crates/orchestration/nomos-gate-orchestration/src/coverage.rs`) is a two-variant enum,
+`Unset` (`#[default]`) and `RequireCompleteness`, consulted by a new `GateCommand.coverage`
+field. `Run_Gate`'s own `Reduced` computes `selected` — the rule-and-scope-selected findings,
+exactly the set this record's "What Was Measured" section named as the one `Claim` must be
+recomputed over — and passes both it and `coverage` to a new `Reduced_With_Coverage`, which
+downgrades `GateRunOutcome::Passed` to `GateRunOutcome::Indeterminate` when `coverage` is
+`RequireCompleteness` and `Claim_Of(selected)` is `Claim::Incomplete`. It leaves `Failed`
+untouched: a real blocking finding this run did reach a judgment about is not made any less
+true by a different, unrelated subject the run could not judge, so there is nothing for
+`RequireCompleteness` to downgrade in that case — a narrowing this record's own text did not
+anticipate, decided by the increment itself and stated in `CoveragePolicy`'s own doc rather
+than left implicit. Three tests prove all three paths (unset-unchanged, downgraded-`Passed`,
+untouched-`Failed`) against real judged findings, including one genuinely unparseable source
+file, not a hand-built `Finding`. Unset behavior is unchanged, provably: every construction
+site that predates `CoveragePolicy` still defaults to it, and `cargo clippy --workspace
+--all-targets` and the full contract-test suite stayed green throughout.
+
+Exactly as scoped: no CLI flag or config file constructs a `RequireCompleteness` policy, and
+`Explain_Gate` does not yet report a coverage-caused `Indeterminate` by name — both remain
+open for a later increment, as this record's own "What This Does Not Do" already said they
+would.
+
 ## Status
 
-Accepted. Names the first increment to build; a follow-on capability item builds it and amends
-this record the way `P13-GATE-015-SUPPRESSION-RECORD`, `-BASELINE-RECORD` and `-ADOPTION-RECORD`
-each amended `OD-GATE-015` once their own concern landed.
+Accepted. `CoveragePolicy` exists and is consulted by a real `Run_Gate`, closing what this
+record asked. Nothing further to revisit under this record: any future widening (a
+minimum-`Applicability` threshold, a per-rule or per-scope coverage requirement, a real
+authoring surface, `Explain_Gate` naming coverage by name) is a new question for a new
+record, the same way `OD-GATE-015`'s own acceptance already treats a future narrowing of
+its own three concerns.
