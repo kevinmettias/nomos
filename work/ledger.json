@@ -30268,9 +30268,9 @@
       "depends_on": [],
       "blocked": null,
       "claim": {
-        "holder": "claude-cli-judge-role",
-        "acquired_at": 1787685619,
-        "lease_expires_at": 1787692819
+        "holder": "claude-cli-judge-role-2",
+        "acquired_at": 1787695793,
+        "lease_expires_at": 1787702993
       },
       "verification": {
         "argv": [
@@ -30284,7 +30284,13 @@
       },
       "verified": null,
       "abandoned": [],
-      "displaced": [],
+      "displaced": [
+        {
+          "holder": "claude-cli-judge-role",
+          "acquired_at": 1787685619,
+          "lease_expires_at": 1787692819
+        }
+      ],
       "declined": null
     },
     {
@@ -31633,6 +31639,64 @@
           "exit_code": 0
         },
         "revision": "68e9c199bbf16c18375c859724342d62cf2f5ed8"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P14-CHECK-GAP-COUNT-STALE",
+      "title": "check_command's admitted-gap test names two findings, and a third real ToolProvider now honestly reports its own",
+      "why": "P14-RULES-010-TOOL-PROVIDER-CLIPPY-FIRST-INCREMENT-5 wired lint-diagnostics in as a real ToolProvider. The test fixture in Test_An_Admitted_Gap_Should_Be_Reported_Without_Failing has no Cargo.toml, so lint-diagnostics now cannot materialize there either and honestly reports its own ProviderUnavailable advisory, exactly the reasoning the test's own doc comment already gives for dependency-direction one capability over. The hardcoded '2 finding(s)' assertion and its doc comment predate that provider and now undercount by one, redenning cargo test -p nomos-cli for reasons unrelated to whatever else touches this crate.",
+      "done_when": "the test's doc comment names all three advisories (completeness-mirror, dependency-direction, lint-diagnostics) and its assertion matches the real finding count cargo test -p nomos-cli --test check_command produces",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/tests/check_command.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli",
+          "--test",
+          "check_command",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli",
+          "--test",
+          "check_command",
+          "--no-fail-fast"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 10 tests\ntest Test_A_Mistyped_Flag_Should_Be_A_Usage_Error ... ok\ntest Test_The_Binary_Should_Name_The_Check_Group ... ok\ntest Test_A_Root_That_Does_Not_Exist_Should_Be_Unreadable ... ok\ntest Test_A_Run_That_Materialised_No_Facts_Should_Not_Exit_Zero ... ok\ntest Test_A_Tree_With_No_Source_Should_Not_Report_Clean ... ok\ntest Test_A_Mirror_That_Exists_Should_Pass_The_Command ... ok\ntest Test_A_Phantom_Should_Fail_The_Command_Though_The_Tree_Holds_A_File_The_Parser_Refuses ... ok\ntest Test_An_Admitted_Gap_Should_Be_Reported_Without_Failing ... ok\ntest Test_A_Mirror_That_Exists_Should_Still_Pass_Beside_A_File_The_Parser_Refuses ... ok\ntest Test_This_Workspace_Should_Have_Nothing_That_Can_Fail_A_Build ... ok\n\ntest result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.26s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.14s\n     Running tests\\check_command.rs (target\\debug\\deps\\check_command-8b055690d4712beb.exe)\n",
+        "verified_at": 1787696123,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "9b17992fe8bf230cfa6e7313a81ea3ed521236ef"
       },
       "abandoned": [],
       "displaced": [],

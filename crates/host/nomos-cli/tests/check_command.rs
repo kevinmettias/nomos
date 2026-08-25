@@ -248,10 +248,11 @@ fn Test_A_Mirror_That_Exists_Should_Still_Pass_Beside_A_File_The_Parser_Refuses(
 /// An admitted gap is honest. Twelve exist in this workspace, and blocking on them
 /// would make a gate that can never be green.
 ///
-/// Two findings, not one: `tree` is a temporary directory with no `Cargo.toml`, so the
-/// dependency-edges provider cannot run there either, and that absence is reported as its
-/// own advisory finding rather than silently producing zero dependency findings -- the same
-/// honesty this test's own name is about, one capability over.
+/// Three findings, not one: `tree` is a temporary directory with no `Cargo.toml`, so
+/// neither the dependency-edges provider nor the lint-diagnostics `ToolProvider` can run
+/// there, and each absence is reported as its own advisory finding rather than silently
+/// producing zero findings for that capability -- the same honesty this test's own name is
+/// about, twice over.
 #[test]
 fn Test_An_Admitted_Gap_Should_Be_Reported_Without_Failing()
 {
@@ -261,7 +262,7 @@ fn Test_An_Admitted_Gap_Should_Be_Reported_Without_Failing()
 
     assert_eq!(code, 0, "{output}");
     assert!(output.contains("Advisory"), "{output}");
-    assert!(output.contains("2 finding(s)"), "{output}");
+    assert!(output.contains("3 finding(s)"), "{output}");
 }
 
 /// A run that judged nothing is not a clean run. The sibling workspace shipped
