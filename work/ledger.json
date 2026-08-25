@@ -31741,14 +31741,14 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": {
+        "Declined": {
+          "reason": "Its own done_when has Syntax_Requirement_For compute Recognition::Of_Path inside nomos-rules, requiring that crate to depend on nomos-lang-rust and nomos-lang-go directly. nomos-rules/Cargo.toml states the identical stance four times over (nomos-cap-syntax and not nomos-lang-rust, nomos-cap-dependency and not nomos-lang-rust-cargo, nomos-cap-controlflow and not nomos-lang-rust's reachability module, nomos-cap-lint and not nomos-lang-rust-clippy): a rule never needs to know a provider's name. The plan as written regresses that stance for the one capability it exists to hold for. A peer session (nomos-8d, P14-CAPABILITY-009-SYNTAX-DISPATCH-CORRECTION) caught this independently and amended OD-CAPABILITY-009 to v2 in this same working tree: the composition root resolves Recognition once (it already depends on both languages) and carries the result to nomos-rules as data, a field beside SourceFile.subject, the same carried-not-derived convention that field already documents. No code was committed under the wrong design. Superseded by a corrected item with SourceFile gaining preferred_syntax_provider: Option<ProviderId>, nomos-rules/Cargo.toml dropped from territory (nomos_contracts::ProviderId is already reachable, no new dependency needed), and nomos-check-orchestration::run.rs added (the enrichment step)."
+        }
+      },
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "nomos-b7-syntax-recognition",
-        "acquired_at": 1787696583,
-        "lease_expires_at": 1787703783
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -31762,9 +31762,18 @@
         "timeout_seconds": 600
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "nomos-b7-syntax-recognition",
+          "reason": "Design correction found mid-flight: done_when requires nomos-rules to depend on language-recognition crates directly, which nomos-rules/Cargo.toml's own stance (stated four times) forbids. Releasing to decline and re-add with the corrected, data-carried design.",
+          "abandoned_at": 1787697008
+        }
+      ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "nomos-b7-syntax-recognition",
+        "declined_at": 1787697017
+      }
     },
     {
       "id": "P14-CAPABILITY-009-SYNTAX-DISPATCH-CORRECTION",
@@ -31844,7 +31853,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -31855,6 +31864,126 @@
           "-p",
           "nomos-cap-dependency-policy",
           "--no-fail-fast"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cap-dependency-policy",
+          "--no-fail-fast"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 14 tests\ntest contract::tests::Test_The_Ceiling_Should_Admit_A_Weaker_Offer ... ok\ntest contract::tests::Test_One_Capability_Should_Admit_One_Contract ... ok\ntest contract::tests::Test_The_Ceiling_Should_Refuse_A_Claim_Of_Runtime_Observation ... ok\ntest contract::tests::Test_The_Contract_Should_Stand_With_No_Provider_At_All ... ok\ntest payload::policy_severity::tests::Test_An_Unrecognized_Label_Should_Resolve_To_Nothing ... ok\ntest payload::tests::Test_A_Payload_Should_Round_Trip_Through_Its_Own_Encoding ... ok\ntest payload::tests::Test_A_Line_Not_Prefixed_Violation_Should_Be_Refused ... ok\ntest payload::tests::Test_A_Message_Containing_A_Tab_Should_Still_Round_Trip ... ok\ntest payload::tests::Test_A_Message_With_An_Embedded_Newline_Should_Not_Split_Its_Line ... ok\ntest payload::policy_severity::tests::Test_Every_Severity_Should_Round_Trip_Through_Its_Label ... ok\ntest payload::tests::Test_An_Empty_Byte_String_Should_Decode_To_A_Clean_Payload ... ok\ntest payload::tests::Test_An_Unrecognized_Severity_Should_Be_Refused ... ok\ntest payload::tests::Test_A_Malformed_Violation_Line_Should_Be_Refused ... ok\ntest payload::tests::Test_The_Encoding_Should_Be_Stable_And_Diffable ... ok\n\ntest result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.10s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_cap_dependency_policy-4bd422cb488a168e.exe)\n   Doc-tests nomos_cap_dependency_policy\n",
+        "verified_at": 1787697171,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "afb17500822ccaf7a5138ad2b841b899907fb8a3"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P14-CAPABILITY-009-SYNTAX-RECOGNITION-DISPATCH-2",
+      "title": "OD-CAPABILITY-009's first increment, corrected: the composition root carries a resolved syntax-provider preference to nomos-rules as data, and nomos-lang-go becomes a real third offer",
+      "why": "OD-CAPABILITY-009 (amended by a peer session in this same tree, P14-CAPABILITY-009-SYNTAX-DISPATCH-CORRECTION) decided the fix must live in the composition root, not inside nomos-rules: nomos-check-orchestration already depends on nomos-lang-rust and nomos-lang-go, so it is the one place allowed to compute Recognition::Of_Path by name, while nomos-rules/Cargo.toml states four times over that this crate never depends on a language-provider crate directly. nomos-rules instead receives the already-resolved provider preference as data -- a field beside SourceFile.subject, the same carried-not-derived convention that field already documents -- so read and write agree on provider identity by construction rather than by two independent recognitions that could drift. Only once both sides dispatch on the same test is registering nomos_lang_go::Provider_Offer() in Declare_Syntax_Capability safe. The amendment also names a second, independent gap this item does not build: nomos-cli::check::sources, nomos-cli::gate::sources and nomos-api::sources all discover only .rs files, so this increment's live effect today is limited to any direct caller of nomos-check-orchestration::Run over Go sources -- its own test suite, and future callers -- not yet a real nomos check, gate run or API run.",
+      "done_when": "SourceFile (nomos-rules) gains preferred_syntax_provider: Option<nomos_contracts::ProviderId>, documented the same carried-not-derived way as subject, defaulted to None by SourceFile::New so no existing caller changes. Syntax_Requirement_For takes that Option<ProviderId> directly rather than computing recognition itself, narrowing Syntax_Requirement() with .Preferring(id) when present and falling through unpreferenced when absent -- both branches tested directly -- and nomos-rules/Cargo.toml gains no nomos-lang-rust or nomos-lang-go dependency. mirror::index::Declared_By and naming::reading::Require_Fact read the field off their own source instead of computing anything themselves. nomos-check-orchestration gains one function that resolves a path's recognized provider against both real language crates, used by both the read-side enrichment in Run and the write-side Materialize_Syntax dispatch so the two cannot independently drift; Run enriches its own sources once before either side consults them, and Materialize_Syntax's write side dispatches on the same test, materializing nothing for a path neither provider recognizes. Declare_Syntax_Capability registers nomos_lang_go::Provider_Offer(), with its doc comment stating why that is now safe. A real end-to-end test proves a clean .go source is Judged with no findings under nomos_lang_go's own identity, alongside the existing .rs tests staying green -- proof the fix does not reintroduce the reverted regression. cargo test --no-fail-fast -p nomos-rules -p nomos-check-orchestration passes and cargo clippy --workspace --all-targets stays clean.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/lib.rs",
+          "crates/rules/nomos-rules/src/mirror.rs",
+          "crates/rules/nomos-rules/src/mirror/index.rs",
+          "crates/rules/nomos-rules/src/naming/reading.rs",
+          "crates/orchestration/nomos-check-orchestration/Cargo.toml",
+          "crates/orchestration/nomos-check-orchestration/src/composition.rs",
+          "crates/orchestration/nomos-check-orchestration/src/facts/materialize.rs",
+          "crates/orchestration/nomos-check-orchestration/src/run.rs",
+          "crates/orchestration/nomos-check-orchestration/src/tests.rs"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Authoring mistake: --depends-on named the declined predecessor, which strands this item permanently since a declined dependency never finishes. Re-adding as -3 with no depends-on -- there is no real dependency relationship here, only supersession, which decline+recreate already records."
+        }
+      },
+      "depends_on": [
+        "P14-CAPABILITY-009-SYNTAX-RECOGNITION-DISPATCH"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "nomos-b7-syntax-recognition",
+        "declined_at": 1787697070
+      }
+    },
+    {
+      "id": "P14-CAPABILITY-009-SYNTAX-RECOGNITION-DISPATCH-3",
+      "title": "OD-CAPABILITY-009's first increment, corrected: the composition root carries a resolved syntax-provider preference to nomos-rules as data, and nomos-lang-go becomes a real third offer",
+      "why": "OD-CAPABILITY-009 (amended by a peer session in this same tree, P14-CAPABILITY-009-SYNTAX-DISPATCH-CORRECTION) decided the fix must live in the composition root, not inside nomos-rules: nomos-check-orchestration already depends on nomos-lang-rust and nomos-lang-go, so it is the one place allowed to compute Recognition::Of_Path by name, while nomos-rules/Cargo.toml states four times over that this crate never depends on a language-provider crate directly. nomos-rules instead receives the already-resolved provider preference as data -- a field beside SourceFile.subject, the same carried-not-derived convention that field already documents -- so read and write agree on provider identity by construction rather than by two independent recognitions that could drift. Only once both sides dispatch on the same test is registering nomos_lang_go::Provider_Offer() in Declare_Syntax_Capability safe. The amendment also names a second, independent gap this item does not build: nomos-cli::check::sources, nomos-cli::gate::sources and nomos-api::sources all discover only .rs files, so this increment's live effect today is limited to any direct caller of nomos-check-orchestration::Run over Go sources -- its own test suite, and future callers -- not yet a real nomos check, gate run or API run.",
+      "done_when": "SourceFile (nomos-rules) gains preferred_syntax_provider: Option<nomos_contracts::ProviderId>, documented the same carried-not-derived way as subject, defaulted to None by SourceFile::New so no existing caller changes. Syntax_Requirement_For takes that Option<ProviderId> directly rather than computing recognition itself, narrowing Syntax_Requirement() with .Preferring(id) when present and falling through unpreferenced when absent -- both branches tested directly -- and nomos-rules/Cargo.toml gains no nomos-lang-rust or nomos-lang-go dependency. mirror::index::Declared_By and naming::reading::Require_Fact read the field off their own source instead of computing anything themselves. nomos-check-orchestration gains one function that resolves a path's recognized provider against both real language crates, used by both the read-side enrichment in Run and the write-side Materialize_Syntax dispatch so the two cannot independently drift; Run enriches its own sources once before either side consults them, and Materialize_Syntax's write side dispatches on the same test, materializing nothing for a path neither provider recognizes. Declare_Syntax_Capability registers nomos_lang_go::Provider_Offer(), with its doc comment stating why that is now safe. A real end-to-end test proves a clean .go source is Judged with no findings under nomos_lang_go's own identity, alongside the existing .rs tests staying green -- proof the fix does not reintroduce the reverted regression. cargo test --no-fail-fast -p nomos-rules -p nomos-check-orchestration passes and cargo clippy --workspace --all-targets stays clean.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/lib.rs",
+          "crates/rules/nomos-rules/src/mirror.rs",
+          "crates/rules/nomos-rules/src/mirror/index.rs",
+          "crates/rules/nomos-rules/src/naming/reading.rs",
+          "crates/orchestration/nomos-check-orchestration/Cargo.toml",
+          "crates/orchestration/nomos-check-orchestration/src/composition.rs",
+          "crates/orchestration/nomos-check-orchestration/src/facts/materialize.rs",
+          "crates/orchestration/nomos-check-orchestration/src/run.rs",
+          "crates/orchestration/nomos-check-orchestration/src/tests.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "nomos-b7-syntax-recognition",
+        "acquired_at": 1787697091,
+        "lease_expires_at": 1787704291
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration"
         ],
         "timeout_seconds": 600
       },

@@ -51,6 +51,11 @@ pub(crate) const BANDS: &[(&str, u32)] = &[
     // (nomos-lang-rust-clippy) and the rule that reads it (nomos-rules) for the
     // identical reason nomos-cap-dependency states above. `OD-RULES-010`.
     ("nomos-cap-lint", 23),
+    // The nomos.cap.dependency.policy contract, below both its provider
+    // (nomos-lang-rust-deny) and the rule that reads it (nomos-rules) for the identical
+    // reason nomos-cap-dependency states above. OD-RULES-010's second real ToolProvider
+    // capability.
+    ("nomos-cap-dependency-policy", 23),
     // The language-agnostic manifest core PKG-007's four version domains name, minus
     // any typed version-domain abstraction or provider allowlist a specific language
     // would supply. Below the language providers deliberately: it names none of them,
