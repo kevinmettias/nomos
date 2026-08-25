@@ -32449,6 +32449,181 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P14-RULES-009-REAUDIT",
+      "title": "OD-RULES-009's three remaining planner triggers re-checked against current HEAD -- still unfired, with fresh disconfirming evidence",
+      "why": "A second round of the same external review repeated OD-RULES-009's original recommendation almost verbatim: build ARC-ROADMAP-001's generalized shared demand planner now, calling Run's hand-written call list this workspace's biggest architectural problem. OD-RULES-009 already measured this exact argument against real code and declined it, naming three still-unfired triggers to revisit on; OD-GATE-017 later closed the fourth narrowly, not by building the planner. Since OD-RULES-009's last amendment, real growth landed that bears directly on the three remaining triggers -- a sixth rule (Check_Dependency_Policy, OD-RULES-010) joined Run using the exact hand-written pattern the review says to stop using, a fifth distinct capability family (nomos-cap-dependency-policy) was created rather than reconverging with an existing one, and a third real-cost (subprocess-launching) materialization step (Materialize_Policy) was added and is already gated by OD-GATE-017's selection mechanism with no observed waste. This is new evidence the record's own 'revisit on any of the three remaining triggers' instruction asks for, not yet checked against it.",
+      "done_when": "OD-RULES-009 amended with a section checking each of its three still-unfired triggers (participation varying by request beyond OD-GATE-017's covered axis; a materialization step costing real, wasted work for a population where not every rule needs every fact; a new rule's required-capability shape reconverging with an existing family) against real code at this item's own HEAD, with file:line citations, the same rigor the record's first version used. States plainly whether each has fired or not, and if any has, names what a narrowly-scoped next increment would build -- matching OD-GATE-017's own precedent of a narrow fix, not the full planner, unless the evidence itself demands the general shape. If none have fired, the amendment says so and the record's decline stands. spec/domain-specification.md and diagrams/relations.mmd re-rendered from a tree whose registered records are exactly the ones this commit publishes.",
+      "kind": "Validation",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "spec/domain-specification.md",
+          "diagrams/relations.mmd",
+          "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-rules009-reaudit",
+        "acquired_at": 1787699939,
+        "lease_expires_at": 1787707139
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 900
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P14-ACCEPTED-FORM-LETTER-2",
+      "title": "Three more records' Status sections are the single word Accepted., a recurrence of P13-ACCEPTED-FORM-LETTER in different records",
+      "why": "cargo test -p nomos-spec-validate --test preservation_holds fails on dev right now: Test_A_Seeded_Store_Should_Pass_Preservation_Non_Vacuously reports '3 section(s) across 3 document(s)... repeats an undeclared template: Accepted.' The three are OD-CONTRACTS-003, OD-CONTRACTS-004 and OD-RULES-010, each closing with a Status section whose entire body is the single word Accepted. -- the identical defect class P13-ACCEPTED-FORM-LETTER already fixed once (2026-08-19) for three different records (ARC-ROADMAP-001, OD-CONNECTOR-001, OD-CONNECTOR-002), for the identical reason: NSV-PRESERVE-004 (SHARED_BY=3) correctly names an undeclared form letter, and that item's own why/done_when already rejected widening FILLER_PATTERNS or SHARED_BY as answering the wrong question. This is a fresh, independent recurrence in different records, not a regression of the prior fix -- the three records the prior item touched are unaffected.",
+      "done_when": "cargo test --no-fail-fast -p nomos-spec-validate is green, and green because each of the three Status sections says something real about the record it closes -- grounded against the real, current code each decision governs (verified directly, not assumed) -- rather than because FILLER_PATTERNS or SHARED_BY was widened (both stay unchanged, matching P13-ACCEPTED-FORM-LETTER's own done_when). domain-specification.md and diagrams/relations.mmd re-rendered from a clean worktree holding exactly the records this commit publishes, freshness reporting both current there.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md",
+          "docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md",
+          "docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-validate"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-validate"
+        ],
+        "exit_code": 0,
+        "output_tail": "A_Complete_Satisfied_Run_Should_Pass ... ok\ntest run::tests::Test_An_Errored_Rule_Should_Fail_The_Run ... ok\ntest run::tests::Test_A_Vacuous_Rule_Should_Be_Visible ... ok\ntest run::tests::Test_An_Empty_Ruleset_Should_Not_Pass ... ok\ntest run::tests::Test_Violations_Should_Fail_The_Run_And_Be_Listed ... ok\ntest run::tests::Test_A_Rule_Nobody_Declared_Should_Fail_The_Run ... ok\n\ntest result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s\n\n\nrunning 11 tests\ntest Test_A_Populated_Store_Should_Not_Report_Vacuous_Block_Rules ... ok\ntest Test_A_Statement_Without_Preserved_Lineage_Should_Violate_Preserve_006 ... ok\ntest Test_A_Declared_Repeated_Body_Should_Satisfy_Preserve_004 ... ok\ntest Test_An_Empty_Store_Should_Report_Vacuous_Rules ... ok\ntest Test_An_Omitted_Block_Should_Satisfy_Preserve_002 ... ok\ntest Test_An_Undeclared_Repeated_Body_Should_Violate_Preserve_004 ... ok\ntest Test_The_Registry_Should_Match_The_Manifest ... ok\ntest Test_An_Undisposed_Block_Should_Violate_Preserve_002 ... ok\ntest Test_Disposed_Blocks_Should_Satisfy_Preserve_002 ... ok\ntest Test_A_Traced_Statement_Should_Satisfy_Preserve_006 ... ok\ntest Test_A_Seeded_Store_Should_Pass_Preservation_Non_Vacuously ... ok\n\ntest result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.64s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-spec-store v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-store)\n   Compiling nomos-spec-ingest v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-ingest)\n   Compiling nomos-spec-validate v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-validate)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.89s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_validate-acd7b674edff1f45.exe)\n     Running tests\\preservation_holds.rs (target\\debug\\deps\\preservation_holds-c1582b858346687e.exe)\n   Doc-tests nomos_spec_validate\n",
+        "verified_at": 1787700195,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "c2a6eccdc8c7c0d5d4799aabe54c4eb7d1219aa3"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P14-LEDGER-036-BOOTSTRAP-QUESTION",
+      "title": "The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target",
+      "why": "An external architecture review asked this exact question explicitly: is nomos-ledger/nomos-work-orchestration a Nomos product feature that should converge toward TaskEnvelope/Workflow/AgentExecutor, or this repository's own development infrastructure that should not shape public architecture. ARC-ECOSYSTEM-001 already names the work ledger as one of three subsystems whose 'current placement does not prove ownership,' framed as an open disjunction -- 'either repository bootstrap machinery or a generic coordination primitive' -- and explicitly declines to settle which, or to move anything. Fresh evidence bears on that disjunction directly: OD-WORKFLOW-001 and OD-WORKFLOW-002 each had to correct an accidental conflation between nomos-ledger's own Run_Gate_Step and the product's real nomos_gate_orchestration::Run_Gate, meaning the two vocabularies have already collided by name-fragment accident and been explicitly un-conflated twice; nomos-api::work.rs's own module doc frames its ledger-verb exposure as 'a second real caller of orchestration seams nomos-cli otherwise has to itself,' an architectural-seam exercise, not a stated product surface, the same framing check/gate/spec verbs get there. This is new evidence ARC-ECOSYSTEM-001's own open disjunction invites, not yet checked against it.",
+      "done_when": "A new record decides the disjunction ARC-ECOSYSTEM-001 left open for the work ledger specifically -- bootstrap machinery or generic coordination primitive, and states which, with the evidence: no product surface (check, gate) depends on nomos-ledger; TaskEnvelope/WorkResult are declared bundling types with no real Workflow engine to converge with; OD-WORKFLOW-001/002's two corrected conflations are evidence the vocabularies must stay apart, not evidence they are converging. Names nomos-api::work.rs's full 11-verb exposure at band 90 as the real trigger to revisit this on, precisely if nomos-api ever becomes a real external product surface rather than a seam-exercise caller. Does not move any file and does not change nomos-ledger's or nomos-work-orchestration's code. spec/domain-specification.md and diagrams/relations.mmd re-rendered from a tree whose registered records are exactly the ones this commit publishes.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md",
+          "crates/spec/nomos-spec-store/records/OD-LEDGER-036.record",
+          "spec/domain-specification.md",
+          "diagrams/relations.mmd"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 900
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P14-CAPABILITY-010-CROSSLANG-RECORD",
+      "title": "OD-CAPABILITY-010: the first cross-language capability compares two providers' declared fields against a doc-comment-declared correspondence",
+      "why": "OD-CAPABILITY-006 fixed what a cross-language claim is and classified five families by reachability, naming family 2 (producer/consumer wire-format field agreement) as the one with real syntactic reach today, but explicitly left the correspondence-declaration shape and the payload extension it needs as the first cross-language capability's own work, judged against that record. This item is that decision: nomos.cap.syntax.items gains field-level struct data (a new schema version, both nomos-lang-rust and nomos-lang-go populate it), and a correspondence between a Rust struct and a Go struct is declared by a doc comment marker, the same idiom nomos-rules::universe already uses for a declared mirror -- not invented fresh.",
+      "done_when": "the record is authored under docs/records/, registered in crates/spec/nomos-spec-store/records/, committed into the spec store via nomos spec preview/commit, and both required projections (diagram-set, domain-specification) are re-rendered from a clean worktree holding exactly the published record set and pass nomos spec freshness",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md",
+          "crates/spec/nomos-spec-store/records/OD-CAPABILITY-010.record"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-crosslang-record",
+        "acquired_at": 1787700086,
+        "lease_expires_at": 1787707286
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

@@ -3,7 +3,7 @@ id: OD-CONTRACTS-003
 type: decision
 title: WorkResult.plan becomes Option<CorrectionPlan>, so a judgment-only agent response is representable
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - agent
@@ -79,4 +79,10 @@ test, updated alongside this record.
 
 ## Status
 
-Accepted.
+Accepted. `WorkResult.plan` is `Option<CorrectionPlan>`, and `TaskEnvelope.effort`
+(`OD-CONTRACTS-004`) has since been read the same "already-specified field, first real
+reader" way -- but the crate that motivated this record, `nomos-agent-executor-claude-code`,
+still does not construct a `WorkResult` at all. Its own module doc names the real path,
+`TaskEnvelope.expected_output_schema` paired with Claude Code's own `--json-schema` support,
+as the future increment this record's own "What This Does Not Do" already anticipated
+rather than built here.

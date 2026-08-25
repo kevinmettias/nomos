@@ -3,7 +3,7 @@ id: OD-RULES-010
 type: decision
 title: A ToolProvider's output is a fact a native rule judges, not a Finding a tool emits directly
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - rules
@@ -109,4 +109,9 @@ automatically.
 
 ## Status
 
-Accepted.
+Accepted. Two real `ToolProvider`s now exist on this shape: `nomos-lang-rust-clippy`
+(`nomos.cap.lint.diagnostics`) and `nomos-lang-rust-deny` (`nomos.cap.dependency.policy`),
+both `Require`-then-judge-then-emit through a native rule at `EvidenceClass::Derived` over a
+`Verified` fact, neither needing a tool-identity attribution axis or a real
+`EvidenceClass::Authoritative` consumer. The second instance confirms this decision rather
+than reopening it.

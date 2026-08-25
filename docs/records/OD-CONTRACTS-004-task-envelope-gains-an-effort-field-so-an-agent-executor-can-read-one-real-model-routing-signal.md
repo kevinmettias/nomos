@@ -3,7 +3,7 @@ id: OD-CONTRACTS-004
 type: decision
 title: TaskEnvelope gains an effort field, so an agent executor can read one real model-routing signal
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - agent
@@ -101,4 +101,9 @@ lands with whichever commit publishes that item's own work, not this record's.
 
 ## Status
 
-Accepted.
+Accepted. `nomos-agent-executor-claude-code::Command_For` reads `TaskEnvelope.effort` and
+appends `--effort` exactly as decided -- `Minimal`/`Low` collapsing to `low`,
+`Medium`/`High`/`Maximum` mapping straight across, `BackendDefault` omitting the flag --
+tested for all six variants including the deliberately unreachable `xhigh` case.
+`ModelSelector` and a real `MODEL-ROUTE-015` `EffortMappingRecord` remain exactly as unbuilt
+as "What This Does Not Do" already said.

@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:3a49208686aed4b9df773894b0440131f936521814eeb9b23ba65319e59fb38f",
-  "inputs_digest": "sha256:27b1079960a85f0529f462e65d8951876307a2a2e0b1a16c4769c8f4bf3112c3",
+  "content_digest": "sha256:b2c7ddd771a579f74a40db9cf01519e043ff6ff50676f196c001a1a5946ded64",
+  "inputs_digest": "sha256:8092b0a7d0139040ca0e3d283ff3c63533719872c85e8385102eaa45aedc63ba",
   "sections": [
     [
       "Documents",
@@ -253,12 +253,12 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md@authored",
-      "hash": "sha256:a52350f85fcefd9e25749a3f5bc90bd0afccc914f2f3495d8e35464419642400"
+      "hash": "sha256:ab9189d05ec02e249414c7a358c58dc965d46acbb87964ef26bd2fea4379fe87"
     },
     {
       "content": "documents",
       "identity": "docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md@authored",
-      "hash": "sha256:19c4610a46c7d14df7864e42dfe27435961870faf5050026c8fd455d2132cc42"
+      "hash": "sha256:eeea4b8c691ee0ca6bf5a71335c2d8c5b5335b8cdf217d2ac7fdc9a1f578ee88"
     },
     {
       "content": "documents",
@@ -713,7 +713,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md@authored",
-      "hash": "sha256:5530123e11eb287694b80cf35ebffd17a5d77ab28e13ad1f231e4f4a2e8cdb9d"
+      "hash": "sha256:a7d5a93cd32ab0b63cbd4218801091e23d8136b7230b0990277a8dcff0f16560"
     },
     {
       "content": "documents",
@@ -14043,7 +14043,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md#15",
-      "hash": "sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3"
+      "hash": "sha256:e03166d290dfe9a3ca032faa6f9a8b0b2ed88a39a85b16168b54bd65507a667d"
     },
     {
       "content": "blocks",
@@ -14123,7 +14123,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md#16",
-      "hash": "sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3"
+      "hash": "sha256:8a791bb7c6d1be46dc69c9d8004585b4f6eaa53e915b40fb739ab8fb51af760c"
     },
     {
       "content": "blocks",
@@ -28533,7 +28533,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#15",
-      "hash": "sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3"
+      "hash": "sha256:8695c30d14efc5702f335eb5ab7273105dbd0c887570774122c042a96a9e27bd"
     },
     {
       "content": "blocks",

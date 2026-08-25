@@ -56,8 +56,8 @@ profile: domain-specification
 | docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md@authored | docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md | authored | 28 | 9 | sha256:a4d8c71e62610f704811e42757155af8725a195a9b7f6d47a5af13197be33516 |
 | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md@authored | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md | authored | 29 | 9 | sha256:0351be57f7a37c7b7e8965886b9fa29c15f87fe4660ee253dcebcad932fe77a6 |
 | docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md@authored | docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md | authored | 28 | 9 | sha256:9f1c5229277415e49115502a643ecee1e889b80a83acb01e8695fe922761f0c2 |
-| docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md@authored | docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md | authored | 15 | 6 | sha256:a52350f85fcefd9e25749a3f5bc90bd0afccc914f2f3495d8e35464419642400 |
-| docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md@authored | docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md | authored | 16 | 6 | sha256:19c4610a46c7d14df7864e42dfe27435961870faf5050026c8fd455d2132cc42 |
+| docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md@authored | docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md | authored | 15 | 6 | sha256:ab9189d05ec02e249414c7a358c58dc965d46acbb87964ef26bd2fea4379fe87 |
+| docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md@authored | docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md | authored | 16 | 6 | sha256:eeea4b8c691ee0ca6bf5a71335c2d8c5b5335b8cdf217d2ac7fdc9a1f578ee88 |
 | docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md@authored | docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md | authored | 21 | 8 | sha256:8ad58a92216388e350cbfdf042e5ab75299e97e9e6accef05f6bae9e325fc72a |
 | docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md@authored | docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md | authored | 14 | 6 | sha256:e55bd46b259be4c661ac4bb95475cd427ad66c783465edae129bac816f1ababf |
 | docs/records/OD-DETERMINISM-001-a-declaration-proven-only-behind-a-corpus-gate.md@authored | docs/records/OD-DETERMINISM-001-a-declaration-proven-only-behind-a-corpus-gate.md | authored | 26 | 7 | sha256:b080a464d0e59ac731e8b78eb0104aeed978958713f99969d1506ebbee92802e |
@@ -148,7 +148,7 @@ profile: domain-specification
 | docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md@authored | docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md | authored | 19 | 6 | sha256:7f6c05ffa09f693ecfe8e7c14699257a1fe01da3a07c0614b09f227fd5be986b |
 | docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md@authored | docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md | authored | 32 | 6 | sha256:335f2ed03def8b979a66bf55ff3278c706fbc7e1105bc01a4fd5a1a75cedfe0a |
 | docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md@authored | docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md | authored | 23 | 7 | sha256:b5e1d877a5afeba17463c498b9ed05cca87900528a9883d705c48db279044c66 |
-| docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md@authored | docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md | authored | 15 | 6 | sha256:5530123e11eb287694b80cf35ebffd17a5d77ab28e13ad1f231e4f4a2e8cdb9d |
+| docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md@authored | docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md | authored | 15 | 6 | sha256:a7d5a93cd32ab0b63cbd4218801091e23d8136b7230b0990277a8dcff0f16560 |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md@authored | docs/records/OD-SPEC-001-the-storage-backend-question.md | authored | 11 | 5 | sha256:e4feddab256024ea38e21849120fdd52d0ddf17d4e3f69cfb24eb4c8e766c8ae |
 | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md@authored | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md | authored | 20 | 7 | sha256:2c45051e43390556bfd68865152580e1ae09c2e82dc94bb20e65cdbf60d69a10 |
 | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md@authored | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md | authored | 23 | 7 | sha256:481ffd62b02df705439b4ef914adb21e24894d1d3f0295754fc13f7d95c89c85 |
@@ -12996,9 +12996,15 @@ test, updated alongside this record.
 
 ### docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md#15
 
-*revision: authored · kind: prose · heading: WorkResult.plan becomes Option<CorrectionPlan>, so a judgment-only agent response is representable / Status · hash: sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3*
+*revision: authored · kind: prose · heading: WorkResult.plan becomes Option<CorrectionPlan>, so a judgment-only agent response is representable / Status · hash: sha256:e03166d290dfe9a3ca032faa6f9a8b0b2ed88a39a85b16168b54bd65507a667d*
 
-Accepted.
+Accepted. `WorkResult.plan` is `Option<CorrectionPlan>`, and `TaskEnvelope.effort`
+(`OD-CONTRACTS-004`) has since been read the same "already-specified field, first real
+reader" way -- but the crate that motivated this record, `nomos-agent-executor-claude-code`,
+still does not construct a `WorkResult` at all. Its own module doc names the real path,
+`TaskEnvelope.expected_output_schema` paired with Claude Code's own `--json-schema` support,
+as the future increment this record's own "What This Does Not Do" already anticipated
+rather than built here.
 
 ### docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md#1
 
@@ -13143,9 +13149,14 @@ lands with whichever commit publishes that item's own work, not this record's.
 
 ### docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md#16
 
-*revision: authored · kind: prose · heading: TaskEnvelope gains an effort field, so an agent executor can read one real model-routing signal / Status · hash: sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3*
+*revision: authored · kind: prose · heading: TaskEnvelope gains an effort field, so an agent executor can read one real model-routing signal / Status · hash: sha256:8a791bb7c6d1be46dc69c9d8004585b4f6eaa53e915b40fb739ab8fb51af760c*
 
-Accepted.
+Accepted. `nomos-agent-executor-claude-code::Command_For` reads `TaskEnvelope.effort` and
+appends `--effort` exactly as decided -- `Minimal`/`Low` collapsing to `low`,
+`Medium`/`High`/`Maximum` mapping straight across, `BackendDefault` omitting the flag --
+tested for all six variants including the deliberately unreachable `xhigh` case.
+`ModelSelector` and a real `MODEL-ROUTE-015` `EffortMappingRecord` remain exactly as unbuilt
+as "What This Does Not Do" already said.
 
 ### docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#1
 
@@ -39490,9 +39501,14 @@ automatically.
 
 ### docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#15
 
-*revision: authored · kind: prose · heading: A ToolProvider's output is a fact a native rule judges, not a Finding a tool emits directly / Status · hash: sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3*
+*revision: authored · kind: prose · heading: A ToolProvider's output is a fact a native rule judges, not a Finding a tool emits directly / Status · hash: sha256:8695c30d14efc5702f335eb5ab7273105dbd0c887570774122c042a96a9e27bd*
 
-Accepted.
+Accepted. Two real `ToolProvider`s now exist on this shape: `nomos-lang-rust-clippy`
+(`nomos.cap.lint.diagnostics`) and `nomos-lang-rust-deny` (`nomos.cap.dependency.policy`),
+both `Require`-then-judge-then-emit through a native rule at `EvidenceClass::Derived` over a
+`Verified` fact, neither needing a tool-identity attribution axis or a real
+`EvidenceClass::Authoritative` consumer. The second instance confirms this decision rather
+than reopening it.
 
 ### docs/records/OD-SPEC-001-the-storage-backend-question.md#1
 
