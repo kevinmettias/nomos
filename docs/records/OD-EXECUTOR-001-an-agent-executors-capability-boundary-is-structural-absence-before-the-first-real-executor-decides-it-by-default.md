@@ -3,7 +3,7 @@ id: OD-EXECUTOR-001
 type: decision
 title: An agent executor's capability boundary is structural absence, before the first real executor decides it by default
 status: accepted
-version: 2
+version: 3
 authority: canonical-normative-record
 tags:
   - agent
@@ -171,9 +171,46 @@ or any `AGT-*` contract type. It adds one constraint at one seam: what the subpr
 `ProcessLauncher`-based executor starts is permitted to do, decided before its own response is
 ever read rather than inferred from what that response later claims.
 
+## Amendment: The Crate Renamed From `nomos-agent-executor` To `nomos-agent-executor-claude-code`
+
+An external architecture review named this directly: the crate this record's rule governs was
+called `nomos-agent-executor`, with no other word in its name saying which executor. Its own
+module doc has always been candid about what it actually is — "a bounded Claude Code subprocess
+dispatched through it" — but the crate list, the band table and every dependent's `use` line
+all read as if this were the canonical `AgentExecutor` subsystem rather than one concrete
+adapter against it.
+
+**What was checked before renaming.** `nomos-agent-contracts` (band 36, `TaskEnvelope`/
+`WorkResult`) already exists as the separate, real contract crate this rule's own type
+vocabulary depends on — the split between "the contract" and "one adapter that satisfies it"
+this record's rule was already written against, `OD-EXECUTOR-002`'s own measured survey of the
+other three boundary shapes confirms this is the only one with a real instance today, and
+nothing elsewhere in this workspace names or depends on a second executor. Renaming costs
+nothing this record's rule relies on: `Execute`, `AgentExecutionOutcome`,
+`AgentExecutionError` and every constant this crate declares keep their own names unchanged:
+only the crate identity — its directory, its package name, and every `use
+nomos_agent_executor::` site — moves to `nomos-agent-executor-claude-code`.
+
+**The decision.** The crate is renamed. A second real executor — a different agent CLI, a
+human-recorded one, a replay adapter — gains an honest name to take rather than inheriting one
+that already claims to be the class. This record's rule is unaffected: it governs the one
+executor's capability boundary regardless of what its crate is called, and nothing about
+`Execute`'s behavior, its structural denial, or its budget bound changed by this amendment.
+
+**What this amendment does not do.** It does not build a second executor, a dispatch trait
+generic over more than one, or a `plugins/executors/` directory — `OD-ROADMAP-001` licenses
+building the *AgentExecutor* cluster ahead of a real second consumer where the corpus already
+specifies a shape; it does not license inventing a multi-executor plugin architecture nobody
+has specified yet, and doing so here would be exactly the shape ahead of a real forcing case
+`OD-HOST-004` and `OD-EXECUTOR-002` both decline elsewhere in this workspace. Should a second
+executor arrive, its own crate earns its own name the same way this one now does; this
+amendment only stops the first one from squatting on the name a class would need.
+
 ## Status
 
 Accepted. Amended to version 2 after the rule's own mechanism was tested empirically, before
 any Rust was written against it: the deny-list it originally prescribed is replaced with an
 allow-list naming no real tool, and reading a process's structural denials rather than its
-self-reported narration is now part of the rule.
+self-reported narration is now part of the rule. Amended to version 3 to rename the crate this
+rule governs from `nomos-agent-executor` to `nomos-agent-executor-claude-code`, per the
+amendment above; the rule itself is unchanged.

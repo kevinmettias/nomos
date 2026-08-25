@@ -38,7 +38,7 @@ pub(super) const BANDS: &[(&str, u32)] = &[
     ("nomos-rules", 30),
     ("nomos-corrections", 35),
     ("nomos-agent-contracts", 36),
-    ("nomos-agent-executor", 37),
+    ("nomos-agent-executor-claude-code", 37),
     ("nomos-work-orchestration", 40),
     ("nomos-check-orchestration", 40),
     ("nomos-spec-orchestration", 40),

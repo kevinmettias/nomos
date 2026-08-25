@@ -62,7 +62,7 @@ profile: domain-specification
 | docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md@authored | docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md | authored | 14 | 6 | sha256:e55bd46b259be4c661ac4bb95475cd427ad66c783465edae129bac816f1ababf |
 | docs/records/OD-DETERMINISM-001-a-declaration-proven-only-behind-a-corpus-gate.md@authored | docs/records/OD-DETERMINISM-001-a-declaration-proven-only-behind-a-corpus-gate.md | authored | 26 | 7 | sha256:b080a464d0e59ac731e8b78eb0104aeed978958713f99969d1506ebbee92802e |
 | docs/records/OD-DETERMINISM-002-the-last-two-rows-declare-and-the-guard-stops-asking-about-facts.md@authored | docs/records/OD-DETERMINISM-002-the-last-two-rows-declare-and-the-guard-stops-asking-about-facts.md | authored | 35 | 10 | sha256:14dba5ba489a39e4b5605d97a5eb1389a55a6f0efa07f1aa076ccd5dece46428 |
-| docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md@authored | docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md | authored | 27 | 7 | sha256:95aaab5e010015ba7d2e8e4545a3bf38fcf65ac4eaa2ab7e61814a2618148ff8 |
+| docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md@authored | docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md | authored | 32 | 8 | sha256:332c3b7ae159ba13d0b1d176726607b8369f9b5af249de17d98d9507254ce7bb |
 | docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md@authored | docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md | authored | 26 | 8 | sha256:8ab68673889fed19383159068abd89c4b4dbbd6a59aaa336cba463bab3dfa96a |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md@authored | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md | authored | 30 | 8 | sha256:ede1d73ff937b80913dd5c6fd4d7d5cc70cb8158b29e13bfe003ae5cd5f805d5 |
 | docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md@authored | docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md | authored | 32 | 9 | sha256:1027b7b589216b9cbe4598a2a569261111071dce14529a2556e82f61852f74cf |
@@ -585,7 +585,8 @@ profile: domain-specification
 | docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#9 | authored | 2 | The Rule |
 | docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#14 | authored | 2 | Amendment: The Deny-List Was Tested Empirically And Found To Leak |
 | docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#22 | authored | 2 | What This Record Does Not Do |
-| docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#26 | authored | 2 | Status |
+| docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#26 | authored | 2 | Amendment: The Crate Renamed From `nomos-agent-executor` To `nomos-agent-executor-claude-code` |
+| docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#31 | authored | 2 | Status |
 | docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#1 | authored | 1 | Generalizing an agent executor's capability boundary to the class OD-CONNECTOR-001 named and OD-EXECUTOR-001 explicitly declined to decide |
 | docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#2 | authored | 2 | Question |
 | docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#5 | authored | 2 | What Was Measured |
@@ -14287,18 +14288,75 @@ ever read rather than inferred from what that response later claims.
 
 ### docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#26
 
+*revision: authored · kind: heading · heading: An agent executor's capability boundary is structural absence, before the first real executor decides it by default / Amendment: The Crate Renamed From `nomos-agent-executor` To `nomos-agent-executor-claude-code` · hash: sha256:4e3c1491d80a2eaa363cdb75732ab9ca6ad69b8a1bef069cc8d0124d7e826d3a*
+
+## Amendment: The Crate Renamed From `nomos-agent-executor` To `nomos-agent-executor-claude-code`
+
+### docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#27
+
+*revision: authored · kind: prose · heading: An agent executor's capability boundary is structural absence, before the first real executor decides it by default / Amendment: The Crate Renamed From `nomos-agent-executor` To `nomos-agent-executor-claude-code` · hash: sha256:7c86e23f2368c376c7866fb6170feced6406806c0e4bfb4a38903621bfeba576*
+
+An external architecture review named this directly: the crate this record's rule governs was
+called `nomos-agent-executor`, with no other word in its name saying which executor. Its own
+module doc has always been candid about what it actually is — "a bounded Claude Code subprocess
+dispatched through it" — but the crate list, the band table and every dependent's `use` line
+all read as if this were the canonical `AgentExecutor` subsystem rather than one concrete
+adapter against it.
+
+### docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#28
+
+*revision: authored · kind: prose · heading: An agent executor's capability boundary is structural absence, before the first real executor decides it by default / Amendment: The Crate Renamed From `nomos-agent-executor` To `nomos-agent-executor-claude-code` · hash: sha256:71c75a64845a21c37c5e6607317b95500c371a7a847d19224f6e2bb3b5753ffb*
+
+**What was checked before renaming.** `nomos-agent-contracts` (band 36, `TaskEnvelope`/
+`WorkResult`) already exists as the separate, real contract crate this rule's own type
+vocabulary depends on — the split between "the contract" and "one adapter that satisfies it"
+this record's rule was already written against, `OD-EXECUTOR-002`'s own measured survey of the
+other three boundary shapes confirms this is the only one with a real instance today, and
+nothing elsewhere in this workspace names or depends on a second executor. Renaming costs
+nothing this record's rule relies on: `Execute`, `AgentExecutionOutcome`,
+`AgentExecutionError` and every constant this crate declares keep their own names unchanged:
+only the crate identity — its directory, its package name, and every `use
+nomos_agent_executor::` site — moves to `nomos-agent-executor-claude-code`.
+
+### docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#29
+
+*revision: authored · kind: prose · heading: An agent executor's capability boundary is structural absence, before the first real executor decides it by default / Amendment: The Crate Renamed From `nomos-agent-executor` To `nomos-agent-executor-claude-code` · hash: sha256:3fb2c743d5dfd3331951a17e27d7afa44a6821482af263f2ac77f7ca555c87d0*
+
+**The decision.** The crate is renamed. A second real executor — a different agent CLI, a
+human-recorded one, a replay adapter — gains an honest name to take rather than inheriting one
+that already claims to be the class. This record's rule is unaffected: it governs the one
+executor's capability boundary regardless of what its crate is called, and nothing about
+`Execute`'s behavior, its structural denial, or its budget bound changed by this amendment.
+
+### docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#30
+
+*revision: authored · kind: prose · heading: An agent executor's capability boundary is structural absence, before the first real executor decides it by default / Amendment: The Crate Renamed From `nomos-agent-executor` To `nomos-agent-executor-claude-code` · hash: sha256:55413009b9a1948864c8202870e3e935312b97533bdc35f0455b9bc0157a0ebd*
+
+**What this amendment does not do.** It does not build a second executor, a dispatch trait
+generic over more than one, or a `plugins/executors/` directory — `OD-ROADMAP-001` licenses
+building the *AgentExecutor* cluster ahead of a real second consumer where the corpus already
+specifies a shape; it does not license inventing a multi-executor plugin architecture nobody
+has specified yet, and doing so here would be exactly the shape ahead of a real forcing case
+`OD-HOST-004` and `OD-EXECUTOR-002` both decline elsewhere in this workspace. Should a second
+executor arrive, its own crate earns its own name the same way this one now does; this
+amendment only stops the first one from squatting on the name a class would need.
+
+### docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#31
+
 *revision: authored · kind: heading · heading: An agent executor's capability boundary is structural absence, before the first real executor decides it by default / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#27
+### docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#32
 
-*revision: authored · kind: prose · heading: An agent executor's capability boundary is structural absence, before the first real executor decides it by default / Status · hash: sha256:eabc77b1ef5eb360e0af51219efce4cfe8a3fc91bf5a2dd0776ddbe7effb75bf*
+*revision: authored · kind: prose · heading: An agent executor's capability boundary is structural absence, before the first real executor decides it by default / Status · hash: sha256:f056a06ebec4bf3bd95010acd869d356fedc2fdea9a76a8efeeb96d5b2cdad28*
 
 Accepted. Amended to version 2 after the rule's own mechanism was tested empirically, before
 any Rust was written against it: the deny-list it originally prescribed is replaced with an
 allow-list naming no real tool, and reading a process's structural denials rather than its
-self-reported narration is now part of the rule.
+self-reported narration is now part of the rule. Amended to version 3 to rename the crate this
+rule governs from `nomos-agent-executor` to `nomos-agent-executor-claude-code`, per the
+amendment above; the rule itself is unchanged.
 
 ### docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#1
 

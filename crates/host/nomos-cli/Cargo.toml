@@ -73,7 +73,7 @@ nomos-spec-store = { workspace = true }
 # `agent.rs` supplies StdProcessLauncher, the same choice `check.rs` and `work.rs` already
 # make for their own subprocesses.
 nomos-agent-contracts = { workspace = true }
-nomos-agent-executor = { workspace = true }
+nomos-agent-executor-claude-code = { workspace = true }
 # TaskEnvelope.effort's type, since OD-CONTRACTS-004 -- `agent.rs` names a value of it
 # directly rather than depending on nomos-agent-contracts alone to re-export one.
 nomos-model-package = { workspace = true }

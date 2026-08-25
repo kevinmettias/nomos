@@ -23,7 +23,7 @@ use nomos_ledger::VerificationPredicate;
 /// nothing in it is a defect, not a real answer -- but a judgment-only task (assess this,
 /// propose nothing) was never proposing a plan at all, and forcing one to exist to satisfy
 /// this field's type would fabricate a correction nobody put forward. `OD-CONTRACTS-003`
-/// found this directly: `nomos-agent-executor`, this crate's own first real caller, could
+/// found this directly: `nomos-agent-executor-claude-code`, this crate's own first real caller, could
 /// not construct a `WorkResult` for exactly this reason.
 #[derive(Clone, Debug, PartialEq)]
 pub struct WorkResult

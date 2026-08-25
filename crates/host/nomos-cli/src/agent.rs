@@ -1,14 +1,14 @@
-//! `nomos agent` — dispatching a task to `nomos-agent-executor`, this workspace's first
+//! `nomos agent` — dispatching a task to `nomos-agent-executor-claude-code`, this workspace's first
 //! real `AgentExecutor`.
 //!
-//! The composition root `nomos-agent-executor` itself cannot be: it depends on
+//! The composition root `nomos-agent-executor-claude-code` itself cannot be: it depends on
 //! `nomos-platform` and not on any concrete implementation of it, the same reason
 //! `nomos-lang-rust-cargo` and every other `ProcessLauncher`-driven crate stays generic. This
 //! module supplies `nomos_platform_std::StdProcessLauncher`, the same choice `check.rs` and
 //! `work.rs` already make for their own subprocesses.
 //!
-//! `execute` is the only real caller `nomos-agent-executor` has anywhere in this workspace
-//! today, other than its own tests. It renders [`nomos_agent_executor::AgentExecutionOutcome`]
+//! `execute` is the only real caller `nomos-agent-executor-claude-code` has anywhere in this workspace
+//! today, other than its own tests. It renders [`nomos_agent_executor_claude_code::AgentExecutionOutcome`]
 //! directly rather than assembling a `nomos_agent_contracts::WorkResult` — `OD-CONTRACTS-003`
 //! made `WorkResult.plan` representable as absent, but this command has no `RuleId` or
 //! `SubjectId` to give a `Finding` either, since nothing dispatched it as a rule's judgment; it
@@ -27,7 +27,7 @@
 
 use crate::arguments::{Name, Named_Value, Required, Usage};
 use nomos_agent_contracts::TaskEnvelope;
-use nomos_agent_executor::{AgentExecutionError, AgentExecutionOutcome};
+use nomos_agent_executor_claude_code::{AgentExecutionError, AgentExecutionOutcome};
 use nomos_contracts::{Finding, SchemaId};
 use nomos_ledger::Territory;
 use nomos_platform_std::StdProcessLauncher;
@@ -154,7 +154,7 @@ fn Task(goal: &str) -> TaskEnvelope
 
 fn Execute(goal: &str, output: &mut impl std::io::Write, notes: &mut impl std::io::Write) -> ExitCode
 {
-    return match nomos_agent_executor::Execute(&Task(goal), &StdProcessLauncher)
+    return match nomos_agent_executor_claude_code::Execute(&Task(goal), &StdProcessLauncher)
     {
         Ok(outcome) => Answered(&outcome, output),
         Err(error) => Unavailable(&error, notes),
@@ -217,7 +217,7 @@ fn Judge_Role(crate_name: &str, root: &Path, output: &mut impl std::io::Write, n
         return ExitCode::NotFound;
     };
 
-    return match nomos_agent_executor::Execute(&Judgment_Task(&pair, finding), &StdProcessLauncher)
+    return match nomos_agent_executor_claude_code::Execute(&Judgment_Task(&pair, finding), &StdProcessLauncher)
     {
         Ok(outcome) => Answered(&outcome, output),
         Err(error) => Unavailable(&error, notes),
@@ -296,7 +296,7 @@ fn Usage_Text() -> String
             \x20 judge-role --crate <name> [--root <path>]\n\
             \n\
             `execute` dispatches --goal to Claude Code as a bounded, tool-free subprocess \
-            through nomos-agent-executor, under the structural capability boundary \
+            through nomos-agent-executor-claude-code, under the structural capability boundary \
             OD-EXECUTOR-001 decided: an isolated working directory, no MCP configuration, an \
             allow-list naming no real tool, a $1 budget cap, one --print turn. It renders the \
             response and, unconditionally, which tool uses (if any) were structurally denied \
@@ -366,7 +366,7 @@ mod tests
 
     /// The one place `--goal ""` reaches this crate's tests without spending a real
     /// invocation: parsing accepts an empty string exactly as it accepts any other, and
-    /// whatever `nomos-agent-executor` or the real CLI does with it is that crate's own
+    /// whatever `nomos-agent-executor-claude-code` or the real CLI does with it is that crate's own
     /// concern, verified there, not re-verified through this transport.
     #[test]
     fn Test_An_Empty_Goal_Still_Parses()
@@ -380,11 +380,11 @@ mod tests
     #[test]
     fn Test_A_Judge_Role_Command_Should_Parse_Its_Crate_And_Default_Root()
     {
-        let arguments = Arguments("judge-role --crate nomos-agent-executor");
+        let arguments = Arguments("judge-role --crate nomos-agent-executor-claude-code");
 
         let Command::JudgeRole { crate_name, root } = Parse(&arguments).expect("parses") else { panic!("wrong variant") };
 
-        assert_eq!(crate_name, "nomos-agent-executor");
+        assert_eq!(crate_name, "nomos-agent-executor-claude-code");
         assert_eq!(root, PathBuf::from("."));
     }
 
@@ -428,7 +428,7 @@ mod tests
     #[test]
     fn Test_Declared_Role_Reads_A_Real_Row_From_This_Repositorys_Own_Readme()
     {
-        let role = Declared_Role(&Repository_Root(), "nomos-agent-executor").expect("this crate has a row");
+        let role = Declared_Role(&Repository_Root(), "nomos-agent-executor-claude-code").expect("this crate has a row");
 
         assert!(role.contains("AgentExecutor"), "{role}");
     }
@@ -442,8 +442,8 @@ mod tests
     #[test]
     fn Test_Crate_Root_Reads_This_Crates_Own_Real_Manifest_Path()
     {
-        let root = Crate_Root(&Repository_Root(), "nomos-agent-executor");
+        let root = Crate_Root(&Repository_Root(), "nomos-agent-executor-claude-code");
 
-        assert_eq!(root, "crates/agent/nomos-agent-executor");
+        assert_eq!(root, "crates/agent/nomos-agent-executor-claude-code");
     }
 }

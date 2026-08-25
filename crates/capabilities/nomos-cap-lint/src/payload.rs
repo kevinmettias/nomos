@@ -51,7 +51,7 @@ pub fn Encode_Payload(payload: &DiagnosticsPayload) -> Vec<u8>
 }
 
 /// A newline collapsed to a space, so a diagnostic's own free-text message can never
-/// split its line in two — the same normalization `nomos-agent-executor::Single_Line`
+/// split its line in two — the same normalization `nomos-agent-executor-claude-code::Single_Line`
 /// applies to a task's own free-text goal, for the identical "one line, one record"
 /// reason.
 fn Single_Line(message: &str) -> String

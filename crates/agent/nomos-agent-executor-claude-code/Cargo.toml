@@ -1,7 +1,7 @@
 [package]
-name = "nomos-agent-executor"
+name = "nomos-agent-executor-claude-code"
 version = "0.1.0"
-description = "Band 37. The first real AgentExecutor: dispatches a TaskEnvelope's goal to Claude Code as a subprocess, bounded by OD-EXECUTOR-001's structural capability boundary, and reads back an AgentExecutionOutcome."
+description = "Band 37. The Claude Code AgentExecutor adapter: dispatches a TaskEnvelope's goal to Claude Code as a subprocess, bounded by OD-EXECUTOR-001's structural capability boundary, and reads back an AgentExecutionOutcome. Renamed from nomos-agent-executor -- OD-EXECUTOR-001's own amendment says why."
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true

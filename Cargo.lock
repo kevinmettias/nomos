@@ -306,7 +306,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "nomos-agent-executor"
+name = "nomos-agent-executor-claude-code"
 version = "0.1.0"
 dependencies = [
  "nomos-agent-contracts",
@@ -426,7 +426,7 @@ name = "nomos-cli"
 version = "0.1.0"
 dependencies = [
  "nomos-agent-contracts",
- "nomos-agent-executor",
+ "nomos-agent-executor-claude-code",
  "nomos-analysis",
  "nomos-cap-syntax",
  "nomos-capability",

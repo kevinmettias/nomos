@@ -32276,6 +32276,179 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P14-AGENT-EXECUTOR-RENAME",
+      "title": "nomos-agent-executor renamed to nomos-agent-executor-claude-code, an external review's naming-clarity finding",
+      "why": "An external architecture review found this crate's name claims more than it is: it dispatches exactly one concrete adapter, a Claude Code subprocess, and OD-EXECUTOR-001's own text already calls it that plainly ('a bounded Claude Code subprocess dispatched through it'). nomos-agent-contracts already exists as the separate, real contract crate (TaskEnvelope, WorkResult) -- the split the review wants between contract and adapter is already real, only this crate's own name still reads as if it were the canonical AgentExecutor subsystem rather than one adapter against it. A second, real executor (Codex, a human-recorded one, a replay adapter) would otherwise have no honest name left to take, and a reader has no way to tell from the crate list alone that only one concrete implementation exists.",
+      "done_when": "crates/agent/nomos-agent-executor renamed to crates/agent/nomos-agent-executor-claude-code (directory, Cargo.toml package name, every use nomos_agent_executor site, the band tables in nomos-rules and tests/contract, the surface snapshot file, README's row, and the illustrative doc-comment citations in nomos-agent-contracts/nomos-cap-lint/nomos-rules that name the old crate by name). OD-EXECUTOR-001 amended with a short section stating the rename and why, without changing its rule. Historical prose in OD-CONTRACTS-003/004 and OD-WORKFLOW-002/004 is left untouched -- a citation accurate at the time it was written, not rewritten for a later rename. spec/domain-specification.md and diagrams/relations.mmd re-rendered from a tree whose registered records are exactly the ones this commit publishes. cargo test -p nomos-agent-executor-claude-code -p nomos-cli -p nomos-rules -p nomos-contract-tests -p nomos-spec-store passes and cargo clippy --workspace --all-targets stays clean.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/agent/nomos-agent-executor/Cargo.toml",
+          "crates/agent/nomos-agent-executor/src/error.rs",
+          "crates/agent/nomos-agent-executor/src/lib.rs",
+          "crates/agent/nomos-agent-executor/src/outcome.rs",
+          "crates/agent/nomos-agent-executor/src/response.rs",
+          "crates/agent/nomos-agent-executor/src/tests.rs",
+          "crates/agent/nomos-agent-executor-claude-code/Cargo.toml",
+          "crates/agent/nomos-agent-executor-claude-code/src/error.rs",
+          "crates/agent/nomos-agent-executor-claude-code/src/lib.rs",
+          "crates/agent/nomos-agent-executor-claude-code/src/outcome.rs",
+          "crates/agent/nomos-agent-executor-claude-code/src/response.rs",
+          "crates/agent/nomos-agent-executor-claude-code/src/tests.rs",
+          "Cargo.toml",
+          "Cargo.lock",
+          "crates/host/nomos-cli/Cargo.toml",
+          "crates/host/nomos-cli/src/agent.rs",
+          "crates/rules/nomos-rules/src/dependency/bands.rs",
+          "crates/rules/nomos-rules/src/role_surface.rs",
+          "tests/contract/tests/boundaries/bands.rs",
+          "tests/contract/surface/nomos-agent-executor.txt",
+          "tests/contract/surface/nomos-agent-executor-claude-code.txt",
+          "README.md",
+          "crates/agent/nomos-agent-contracts/src/work_result.rs",
+          "crates/capabilities/nomos-cap-lint/src/payload.rs",
+          "crates/capabilities/nomos-cap-lint/src/payload/lint_diagnostic.rs",
+          "spec/domain-specification.md",
+          "diagrams/relations.mmd",
+          "docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "predicate argv corrupted by --timeout placed after --; recovering as -2 with the flag correctly placed before the separator"
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-agent-executor-claude-code",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-contract-tests",
+          "-p",
+          "nomos-spec-store",
+          "--timeout",
+          "15m"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-executor-rename",
+          "reason": "authored with --timeout placed after -- by mistake, silently joining the predicate argv",
+          "abandoned_at": 1787699693
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-executor-rename",
+        "declined_at": 1787699693
+      }
+    },
+    {
+      "id": "P14-AGENT-EXECUTOR-RENAME-2",
+      "title": "nomos-agent-executor renamed to nomos-agent-executor-claude-code, an external review's naming-clarity finding",
+      "why": "Recovery of P14-AGENT-EXECUTOR-RENAME, declined only because --timeout landed after -- and corrupted the predicate argv. Same why: an external architecture review found this crate's name claims more than it is -- OD-EXECUTOR-001's own text already calls it 'a bounded Claude Code subprocess dispatched through it.' nomos-agent-contracts already exists as the separate contract crate, so only this crate's own name still reads as canonical rather than as one adapter.",
+      "done_when": "Already built under the declined item and unchanged since: crates/agent/nomos-agent-executor renamed to crates/agent/nomos-agent-executor-claude-code (directory, Cargo.toml package name, every use site, both band tables, the surface snapshot, README's row, and the doc-comment citations naming the old crate). OD-EXECUTOR-001 amended to version 3 with a section stating the rename and why. spec/domain-specification.md and diagrams/relations.mmd already re-rendered. cargo test -p nomos-agent-executor-claude-code -p nomos-cli -p nomos-rules -p nomos-contract-tests -p nomos-spec-store passes and cargo clippy --workspace --all-targets stays clean -- both already verified green under the declined item; this item only carries the ledger transition with a correct predicate.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/agent/nomos-agent-executor-claude-code/Cargo.toml",
+          "crates/agent/nomos-agent-executor-claude-code/src/error.rs",
+          "crates/agent/nomos-agent-executor-claude-code/src/lib.rs",
+          "crates/agent/nomos-agent-executor-claude-code/src/outcome.rs",
+          "crates/agent/nomos-agent-executor-claude-code/src/response.rs",
+          "crates/agent/nomos-agent-executor-claude-code/src/tests.rs",
+          "Cargo.toml",
+          "Cargo.lock",
+          "crates/host/nomos-cli/Cargo.toml",
+          "crates/host/nomos-cli/src/agent.rs",
+          "crates/rules/nomos-rules/src/dependency/bands.rs",
+          "crates/rules/nomos-rules/src/role_surface.rs",
+          "tests/contract/tests/boundaries/bands.rs",
+          "tests/contract/surface/nomos-agent-executor-claude-code.txt",
+          "README.md",
+          "crates/agent/nomos-agent-contracts/src/work_result.rs",
+          "crates/capabilities/nomos-cap-lint/src/payload.rs",
+          "crates/capabilities/nomos-cap-lint/src/payload/lint_diagnostic.rs",
+          "spec/domain-specification.md",
+          "diagrams/relations.mmd",
+          "docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-agent-executor-claude-code",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-contract-tests",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 900
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-agent-executor-claude-code",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-contract-tests",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "exit_code": 0,
+        "output_tail": "bmit.rs (target\\debug\\deps\\request_submit-628eae4bea0ffc48.exe)\n     Running tests\\stale_writer_is_refused.rs (target\\debug\\deps\\stale_writer_is_refused-6f541ae13d585481.exe)\n     Running tests\\takeover_is_recorded.rs (target\\debug\\deps\\takeover_is_recorded-3970a4ea23e42e08.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-3e62ecce571fcc5f.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-771bff50f955755e.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-eae24e29a6e8230e.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-d190445650eda1cd.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-5c05c2d8014d4047.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-37536ade529e2b6b.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-efe55070cccf23ec.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-7a436a5034250264.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-8d707296f5e69ae5.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-7c79eed57d5b4f3e.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-b4ffb6a6f52d3dcf.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-7f6eeb9f724411e2.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-1e7e4a5b93fb1d41.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-f91b522bac265377.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-8a3ca0b783b33ca7.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-d5fbb8c0c64c0700.exe)\n   Doc-tests nomos_agent_executor_claude_code\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_rules\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1787699734,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "c1bdfb6638aca6be25f7ce5ab0074ca194da5f9f"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

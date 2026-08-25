@@ -134,11 +134,13 @@ members = [
     # at a different band, not dependents of this one. `OD-ROADMAP-001`.
     "crates/agent/nomos-agent-contracts",
 
-    # Band 37. The first real AgentExecutor: dispatches a TaskEnvelope's goal to Claude
-    # Code as a subprocess through nomos-platform's ProcessLauncher, bounded by
+    # Band 37. The Claude Code AgentExecutor adapter: dispatches a TaskEnvelope's goal to
+    # Claude Code as a subprocess through nomos-platform's ProcessLauncher, bounded by
     # `OD-EXECUTOR-001`'s structural capability boundary. Above nomos-agent-contracts,
-    # whose TaskEnvelope/WorkResult it depends on; does not assemble a WorkResult.
-    "crates/agent/nomos-agent-executor",
+    # whose TaskEnvelope/WorkResult it depends on; does not assemble a WorkResult. Renamed
+    # from nomos-agent-executor by `OD-EXECUTOR-001`'s own amendment: one concrete adapter
+    # does not get to keep the name a class of them would need.
+    "crates/agent/nomos-agent-executor-claude-code",
 
     # Band 40 — orchestration. Running a `nomos work` verb against a caller-chosen
     # platform, apart from choosing that platform and apart from rendering the answer.
@@ -243,7 +245,7 @@ nomos-lang-go-package = { path = "crates/packages/nomos-lang-go-package" }
 nomos-rules = { path = "crates/rules/nomos-rules" }
 nomos-corrections = { path = "crates/corrections/nomos-corrections" }
 nomos-agent-contracts = { path = "crates/agent/nomos-agent-contracts" }
-nomos-agent-executor = { path = "crates/agent/nomos-agent-executor" }
+nomos-agent-executor-claude-code = { path = "crates/agent/nomos-agent-executor-claude-code" }
 nomos-work-orchestration = { path = "crates/orchestration/nomos-work-orchestration" }
 nomos-check-orchestration = { path = "crates/orchestration/nomos-check-orchestration" }
 nomos-spec-orchestration = { path = "crates/orchestration/nomos-spec-orchestration" }

@@ -18,7 +18,7 @@ pub struct LintDiagnostic
     pub lint: Option<String>,
     /// The tool's own summary, single-line: an embedded newline is collapsed to a space
     /// by whichever provider encodes this, the same normalization
-    /// `nomos-agent-executor::Single_Line` applies for the identical reason — one line,
+    /// `nomos-agent-executor-claude-code::Single_Line` applies for the identical reason — one line,
     /// one record.
     pub message: String,
     /// Repository-relative, forward slashes — the same convention every other subject in

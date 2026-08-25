@@ -9,7 +9,7 @@
 //! review-enforced because they govern semantic truthfulness... in ways automation cannot
 //! fully prove." This rule is that shape, for this workspace's own convention: every crate's
 //! `README.md` band-table row already reads as exactly the "responsible for / explicitly not
-//! responsible for" statement those standards ask for (see `nomos-agent-executor`'s own row:
+//! responsible for" statement those standards ask for (see `nomos-agent-executor-claude-code`'s own row:
 //! "The first real `AgentExecutor`... Does not assemble a `WorkResult`"), and every crate's
 //! committed public-surface snapshot (`tests/contract/surface/<crate>.txt`) already states
 //! exactly what it actually exports. Whether the two agree is a semantic question over prose
@@ -41,7 +41,7 @@
 //! no judgment is reached. Every subject this rule is handed is unconditionally
 //! [`nomos_contracts::Applicability::AgentRequired`], because the question this rule asks —
 //! do a crate's declared role and its actual surface agree — is never answerable by this rule
-//! itself; only by a model. `nomos-agent-executor` is the real, separate dispatch a caller
+//! itself; only by a model. `nomos-agent-executor-claude-code` is the real, separate dispatch a caller
 //! chooses to make against a finding this rule produces, not something this rule invokes.
 
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
@@ -57,7 +57,7 @@ pub const DECLARED_ROLE_MATCHES_SURFACE: &str = "declared-role-matches-surface";
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct RoleSurfacePair
 {
-    /// The crate's manifest-relative root, e.g. `crates/agent/nomos-agent-executor` —
+    /// The crate's manifest-relative root, e.g. `crates/agent/nomos-agent-executor-claude-code` —
     /// addressed the same way `OD-MODEL-002` already derives a subject from a
     /// repository-relative path, so two crates never collide and a crate moved is a
     /// different subject rather than a silently reused one.

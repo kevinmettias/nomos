@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:352284346dd5b72d446af66dea337fd3151af6c0d7dc96359c2dc137f67e587a",
-  "inputs_digest": "sha256:5e44d6d816f5b948ef87e35501c67d6a1a6c4bbcc2d6847cc2b913906b4b74b3",
+  "content_digest": "sha256:3a49208686aed4b9df773894b0440131f936521814eeb9b23ba65319e59fb38f",
+  "inputs_digest": "sha256:27b1079960a85f0529f462e65d8951876307a2a2e0b1a16c4769c8f4bf3112c3",
   "sections": [
     [
       "Documents",
@@ -12,11 +12,11 @@
     ],
     [
       "Sections",
-      1401
+      1402
     ],
     [
       "Source blocks",
-      4903
+      4908
     ]
   ],
   "inputs": [
@@ -283,7 +283,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md@authored",
-      "hash": "sha256:95aaab5e010015ba7d2e8e4545a3bf38fcf65ac4eaa2ab7e61814a2618148ff8"
+      "hash": "sha256:332c3b7ae159ba13d0b1d176726607b8369f9b5af249de17d98d9507254ce7bb"
     },
     {
       "content": "documents",
@@ -2873,7 +2873,12 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#26",
-      "hash": "sha256:9eda0b74800bb99654a37e7f820522f9c0d27f2ade5f08cf9bd192ca2a0fce2d"
+      "hash": "sha256:4e0ef30988903c078c44804e2c1e5aada164e477ef85fb797d2e5bb7b6ae7819"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#31",
+      "hash": "sha256:820a34d0689ece540a87159fe2c7848720f2c269f932e792441dcf0039425669"
     },
     {
       "content": "headings",
@@ -14728,12 +14733,37 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#26",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:4e3c1491d80a2eaa363cdb75732ab9ca6ad69b8a1bef069cc8d0124d7e826d3a"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#27",
-      "hash": "sha256:eabc77b1ef5eb360e0af51219efce4cfe8a3fc91bf5a2dd0776ddbe7effb75bf"
+      "hash": "sha256:7c86e23f2368c376c7866fb6170feced6406806c0e4bfb4a38903621bfeba576"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#28",
+      "hash": "sha256:71c75a64845a21c37c5e6607317b95500c371a7a847d19224f6e2bb3b5753ffb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#29",
+      "hash": "sha256:3fb2c743d5dfd3331951a17e27d7afa44a6821482af263f2ac77f7ca555c87d0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#30",
+      "hash": "sha256:55413009b9a1948864c8202870e3e935312b97533bdc35f0455b9bc0157a0ebd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#31",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#32",
+      "hash": "sha256:f056a06ebec4bf3bd95010acd869d356fedc2fdea9a76a8efeeb96d5b2cdad28"
     },
     {
       "content": "blocks",
