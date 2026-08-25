@@ -147,7 +147,7 @@ profile: domain-specification
 | docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md@authored | docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md | authored | 18 | 6 | sha256:5e7bde3ad034017040659d44bc4b044696c4a0b33830e8596bd67906a2d2ac4c |
 | docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md@authored | docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md | authored | 19 | 6 | sha256:7f6c05ffa09f693ecfe8e7c14699257a1fe01da3a07c0614b09f227fd5be986b |
 | docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md@authored | docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md | authored | 32 | 6 | sha256:335f2ed03def8b979a66bf55ff3278c706fbc7e1105bc01a4fd5a1a75cedfe0a |
-| docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md@authored | docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md | authored | 23 | 7 | sha256:b5e1d877a5afeba17463c498b9ed05cca87900528a9883d705c48db279044c66 |
+| docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md@authored | docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md | authored | 29 | 8 | sha256:0ee7f569323a3dabc535b9cc835883de99c20b70ad348495a1595986b912d60e |
 | docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md@authored | docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md | authored | 15 | 6 | sha256:a7d5a93cd32ab0b63cbd4218801091e23d8136b7230b0990277a8dcff0f16560 |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md@authored | docs/records/OD-SPEC-001-the-storage-backend-question.md | authored | 11 | 5 | sha256:e4feddab256024ea38e21849120fdd52d0ddf17d4e3f69cfb24eb4c8e766c8ae |
 | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md@authored | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md | authored | 20 | 7 | sha256:2c45051e43390556bfd68865152580e1ae09c2e82dc94bb20e65cdbf60d69a10 |
@@ -1341,7 +1341,8 @@ profile: domain-specification
 | docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#11 | authored | 2 | Decision |
 | docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#14 | authored | 2 | What Would Decide It |
 | docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#17 | authored | 2 | Amendment: The First Named Trigger Fired, And Was Addressed Narrowly |
-| docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#22 | authored | 2 | Status |
+| docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#22 | authored | 2 | Amendment: A Third Round Of The Same Review, Re-Checked Against Real Growth Since The Last Amendment |
+| docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#28 | authored | 2 | Status |
 | docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#1 | authored | 1 | A ToolProvider's output is a fact a native rule judges, not a Finding a tool emits directly |
 | docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#2 | authored | 2 | Question |
 | docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#4 | authored | 2 | What Was Measured |
@@ -39343,17 +39344,94 @@ shape continues to scale to a real, evidenced need without a generalized planner
 
 ### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#22
 
+*revision: authored · kind: heading · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: A Third Round Of The Same Review, Re-Checked Against Real Growth Since The Last Amendment · hash: sha256:31d337768b34a748d4afc34e1d56c6214c06ecef6a91d363f16b81c5e6f48cf9*
+
+## Amendment: A Third Round Of The Same Review, Re-Checked Against Real Growth Since The Last Amendment
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#23
+
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: A Third Round Of The Same Review, Re-Checked Against Real Growth Since The Last Amendment · hash: sha256:73ef5f7284d2cc96151a06312322f90701774539f38e047d53ab527bf5b79f20*
+
+A later round of the same external review repeated its original recommendation almost
+verbatim — build the generalized planner now, at P0, calling `Run`'s hand-written call list
+this workspace's biggest architectural problem — without citing new evidence the workspace
+had not already measured. Rather than re-arguing a case this record and `OD-GATE-017` already
+settled, this amendment does what the Status section already invited: checks the three
+remaining named triggers against real growth that landed since the amendment above, at this
+amendment's own HEAD (`e9f171b`, `P14-RULES-010-TOOL-PROVIDER-DENY-3`).
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#24
+
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: A Third Round Of The Same Review, Re-Checked Against Real Growth Since The Last Amendment · hash: sha256:5360150e21685483b2c592cfdcdf96822b54b7ed7ab012345741dcef938ea360*
+
+**"Participation varying by request" — still only the one axis `OD-GATE-017` already
+covers.** A sixth rule, `Check_Dependency_Policy` (`crates/rules/nomos-rules/src/policy.rs:39`,
+`OD-RULES-010`), joined `Run` since the last amendment, wired through the identical `Wants`
+gate every rule before it uses (`crates/orchestration/nomos-check-orchestration/src/run.rs:172-
+178, 250-252`). It varies by request through the same `selected: &[RuleId]` parameter
+`OD-GATE-017` already built, not a second, different axis of variance. Nothing new to fire
+here beyond what is already answered.
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#25
+
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: A Third Round Of The Same Review, Re-Checked Against Real Growth Since The Last Amendment · hash: sha256:d72ed10d8d888fc20092a02dd9f4ca7abd98454731a6ea35fd5fa3938201bb9c*
+
+**"A materialization step measured to cost real, wasted work" — a third real-cost step
+arrived, and it is not wasted.** `Materialize_Policy` (`run.rs:172`) launches its own
+subprocess through `nomos-lang-rust-deny`, the identical shape `Materialize_Dependencies`
+(`cargo metadata`) and `Materialize_Lint` (`cargo clippy`) already have — `run.rs`'s own
+comment states plainly that skipping it "skips its own subprocess launch entirely" (`run.rs:
+143`). It is gated by the same `Wants(selected, DEPENDENCY_POLICY)` check every real-cost step
+already uses. Three real-cost materializations now exist, all three already avoid their own
+cost when unselected, and none is shown recomputing a fact a sibling rule already produced.
+This is data that the hand-written, per-rule gate continues to scale to a growing population of
+real-cost steps without waste, not evidence it has started to fail.
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#26
+
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: A Third Round Of The Same Review, Re-Checked Against Real Growth Since The Last Amendment · hash: sha256:16cf01459e9c83190089d3f1929f2d2159f59c1fb2735055e5dd385b4b321226*
+
+**"A fifth rule's required-capability shape reconverging with an existing family" — the
+population diverged further, not less.** `nomos-cap-dependency-policy`
+(`crates/capabilities/nomos-cap-dependency-policy/src/contract.rs`) is a fifth, structurally
+distinct capability crate — its own `Capability_Contract`, its own `FactVariant`/`Assurance`/
+`IncrementalGranularity` ceiling (`SemanticallyResolved`/`Sound`/`Sound`/`WholeWorkspace`,
+`contract.rs:50-53`) — not a second offer against `nomos.cap.dependency.edges` or any existing
+contract. Five capability families now exist (syntax, dependency-edges, controlflow, lint,
+dependency-policy) where this record's first version measured three. The role-surface rule
+(`Check_Declared_Role_Matches_Surface`) this record's first amendment already found
+non-reconverging remains exactly as it was: unwired into `Run`, no capability contract, reading
+plain committed files.
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#27
+
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: A Third Round Of The Same Review, Re-Checked Against Real Growth Since The Last Amendment · hash: sha256:cf3663408a621f7f801b944adcdcbd182cf04bc2c0b4897162e2f01b809a756c*
+
+**All three remain unfired, with fresh evidence pointing further away from firing, not
+toward it.** A sixth rule joined using the pattern under review, cleanly, using mechanism
+already built for exactly this. A third subprocess-launching materialization step arrived and
+is already covered by the same selection gate with no measured waste. A fifth capability
+family was created rather than converging with a fourth. This record's decline continues to
+hold on the evidence, not merely on precedent — each trigger got a genuine chance to fire
+since the last check and did not.
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#28
+
 *revision: authored · kind: heading · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#23
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#29
 
-*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Status · hash: sha256:8ebc1012678ed48e702ef4d252ea7a6fa9a76947a8a0d572749d8b8da941cf44*
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Status · hash: sha256:830d742835baa1f06d0d206dfb423ce291e493ed4db225afe4f0446ee6df9eea*
 
 Accepted. This record's first named trigger fired and was addressed by `OD-GATE-017`, not by
-building the `RunPlanner` this record declines. Revisit on any of the three remaining triggers
-named above, or when `OD-RULES-007`'s own status next changes.
+building the `RunPlanner` this record declines. Re-checked against a sixth rule, a fifth
+capability family and a third real-cost materialization step, all landed since the amendment
+above: the three remaining triggers still have not fired, and the fresh evidence weighs against
+firing rather than merely failing to confirm it. Revisit on any of the three remaining triggers
+named above, when `OD-RULES-007`'s own status next changes, or when a rule's required-capability
+shape is first measured reconverging with an existing family rather than diverging from it.
 
 ### docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#1
 

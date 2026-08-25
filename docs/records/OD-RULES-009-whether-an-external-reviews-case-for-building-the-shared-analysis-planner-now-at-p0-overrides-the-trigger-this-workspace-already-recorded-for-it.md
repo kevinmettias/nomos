@@ -3,7 +3,7 @@ id: OD-RULES-009
 type: decision
 title: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it
 status: accepted
-version: 2
+version: 3
 authority: canonical-normative-record
 tags:
   - rules
@@ -189,8 +189,61 @@ actually supported is not evidence the larger artifact is now due; if anything, 
 narrow increment satisfying the real caller that existed is itself data that the hand-written
 shape continues to scale to a real, evidenced need without a generalized planner underneath it.
 
+## Amendment: A Third Round Of The Same Review, Re-Checked Against Real Growth Since The Last Amendment
+
+A later round of the same external review repeated its original recommendation almost
+verbatim — build the generalized planner now, at P0, calling `Run`'s hand-written call list
+this workspace's biggest architectural problem — without citing new evidence the workspace
+had not already measured. Rather than re-arguing a case this record and `OD-GATE-017` already
+settled, this amendment does what the Status section already invited: checks the three
+remaining named triggers against real growth that landed since the amendment above, at this
+amendment's own HEAD (`e9f171b`, `P14-RULES-010-TOOL-PROVIDER-DENY-3`).
+
+**"Participation varying by request" — still only the one axis `OD-GATE-017` already
+covers.** A sixth rule, `Check_Dependency_Policy` (`crates/rules/nomos-rules/src/policy.rs:39`,
+`OD-RULES-010`), joined `Run` since the last amendment, wired through the identical `Wants`
+gate every rule before it uses (`crates/orchestration/nomos-check-orchestration/src/run.rs:172-
+178, 250-252`). It varies by request through the same `selected: &[RuleId]` parameter
+`OD-GATE-017` already built, not a second, different axis of variance. Nothing new to fire
+here beyond what is already answered.
+
+**"A materialization step measured to cost real, wasted work" — a third real-cost step
+arrived, and it is not wasted.** `Materialize_Policy` (`run.rs:172`) launches its own
+subprocess through `nomos-lang-rust-deny`, the identical shape `Materialize_Dependencies`
+(`cargo metadata`) and `Materialize_Lint` (`cargo clippy`) already have — `run.rs`'s own
+comment states plainly that skipping it "skips its own subprocess launch entirely" (`run.rs:
+143`). It is gated by the same `Wants(selected, DEPENDENCY_POLICY)` check every real-cost step
+already uses. Three real-cost materializations now exist, all three already avoid their own
+cost when unselected, and none is shown recomputing a fact a sibling rule already produced.
+This is data that the hand-written, per-rule gate continues to scale to a growing population of
+real-cost steps without waste, not evidence it has started to fail.
+
+**"A fifth rule's required-capability shape reconverging with an existing family" — the
+population diverged further, not less.** `nomos-cap-dependency-policy`
+(`crates/capabilities/nomos-cap-dependency-policy/src/contract.rs`) is a fifth, structurally
+distinct capability crate — its own `Capability_Contract`, its own `FactVariant`/`Assurance`/
+`IncrementalGranularity` ceiling (`SemanticallyResolved`/`Sound`/`Sound`/`WholeWorkspace`,
+`contract.rs:50-53`) — not a second offer against `nomos.cap.dependency.edges` or any existing
+contract. Five capability families now exist (syntax, dependency-edges, controlflow, lint,
+dependency-policy) where this record's first version measured three. The role-surface rule
+(`Check_Declared_Role_Matches_Surface`) this record's first amendment already found
+non-reconverging remains exactly as it was: unwired into `Run`, no capability contract, reading
+plain committed files.
+
+**All three remain unfired, with fresh evidence pointing further away from firing, not
+toward it.** A sixth rule joined using the pattern under review, cleanly, using mechanism
+already built for exactly this. A third subprocess-launching materialization step arrived and
+is already covered by the same selection gate with no measured waste. A fifth capability
+family was created rather than converging with a fourth. This record's decline continues to
+hold on the evidence, not merely on precedent — each trigger got a genuine chance to fire
+since the last check and did not.
+
 ## Status
 
 Accepted. This record's first named trigger fired and was addressed by `OD-GATE-017`, not by
-building the `RunPlanner` this record declines. Revisit on any of the three remaining triggers
-named above, or when `OD-RULES-007`'s own status next changes.
+building the `RunPlanner` this record declines. Re-checked against a sixth rule, a fifth
+capability family and a third real-cost materialization step, all landed since the amendment
+above: the three remaining triggers still have not fired, and the fresh evidence weighs against
+firing rather than merely failing to confirm it. Revisit on any of the three remaining triggers
+named above, when `OD-RULES-007`'s own status next changes, or when a rule's required-capability
+shape is first measured reconverging with an existing family rather than diverging from it.
