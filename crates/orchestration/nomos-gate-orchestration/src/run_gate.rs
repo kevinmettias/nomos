@@ -2,7 +2,7 @@
 //! platform, walking a tree or rendering the answer.
 
 use nomos_check_orchestration::{CheckOutcome, Claim, Claim_Of};
-use nomos_contracts::{Finding, RunId};
+use nomos_contracts::{Finding, RuleId, RunId};
 use nomos_platform::ProcessLauncher;
 use nomos_rules::SourceFile;
 use nomos_workspace::BuildVariant;
@@ -23,17 +23,28 @@ use crate::{
 /// [`nomos_check_orchestration::Run`] unchanged; see its own documentation for why each is a
 /// composition-root value this crate cannot compute for itself.
 ///
-/// Shared by [`Run_Gate`] (over a `command.scope`-narrowed walk) and
-/// [`crate::Explain_Gate`] (over the whole one, since explain answers a question about one
-/// named finding, not a scope-narrowed disposition) — factored out so the two do not
-/// duplicate this match.
-pub(crate) fn Judged<P: ProcessLauncher>(walked: Option<Vec<SourceFile>>, variant: BuildVariant, root: &Path, launcher: &P) -> CheckOutcome
+/// Shared by [`Run_Gate`] (over a `command.scope`-narrowed walk, and `command.rules`-selected
+/// per `OD-GATE-017`) and [`crate::Explain_Gate`] (over the whole one and every rule, since
+/// explain answers a question about one named finding, not a scope- or rule-narrowed
+/// disposition) — factored out so the two do not duplicate this match.
+///
+/// `selected` names which rules [`nomos_check_orchestration::Run`] should compute at all --
+/// empty for every rule, the same default `RuleSelector::include` already has. A caller that
+/// must see every rule's findings regardless of `command.rules` (`Explain_Gate`) passes an
+/// empty slice here rather than `command.rules.include`.
+pub(crate) fn Judged<P: ProcessLauncher>(
+    walked: Option<Vec<SourceFile>>,
+    variant: BuildVariant,
+    root: &Path,
+    launcher: &P,
+    selected: &[RuleId],
+) -> CheckOutcome
 {
     return match walked
     {
         None => CheckOutcome::Unreadable,
         Some(sources) if sources.is_empty() => CheckOutcome::NoSource,
-        Some(sources) => nomos_check_orchestration::Run(&sources, variant, root, launcher),
+        Some(sources) => nomos_check_orchestration::Run(&sources, variant, root, launcher, selected),
     };
 }
 
@@ -53,7 +64,7 @@ pub(crate) fn Judged<P: ProcessLauncher>(walked: Option<Vec<SourceFile>>, varian
 pub fn Run_Gate<P: ProcessLauncher>(walked: Option<Vec<SourceFile>>, variant: BuildVariant, command: &GateCommand, launcher: &P, run: RunId) -> GateRunResult
 {
     let scoped = walked.map(|sources| return Scoped(sources, &command.scope));
-    let outcome = Judged(scoped, variant, &command.root, launcher);
+    let outcome = Judged(scoped, variant, &command.root, launcher, &command.rules.include);
 
     let (blocking_findings, calibrated_findings, suppressed_findings, baselined_findings, disposition) =
         Reduced(&outcome, &command.rules, &command.adoption, &command.suppressions, &command.baseline, command.coverage);

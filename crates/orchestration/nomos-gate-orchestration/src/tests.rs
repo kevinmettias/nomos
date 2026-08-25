@@ -494,12 +494,12 @@ fn Test_A_Scoped_Out_Source_Should_Not_Be_Judged()
     assert!(result.blocking_findings.is_empty());
 }
 
-/// [`RuleSelector`] excludes the rule behind the one blocking finding this fixture produces:
-/// the run still judges the source, `check_outcome` still carries the finding in full, but
-/// it can no longer fail the build -- selection of what blocks, honestly short of
-/// selection of what runs.
+/// [`RuleSelector`] excludes the rule behind the one blocking finding this fixture would
+/// otherwise produce: per `OD-GATE-017`, `Run` itself now skips a deselected rule's own
+/// computation, so the finding never exists at all -- real selection of what runs, not only
+/// of what a disposition later discards.
 #[test]
-fn Test_A_Deselected_Rules_Finding_Should_Not_Block()
+fn Test_A_Deselected_Rules_Finding_Should_Not_Exist()
 {
     let sources = vec![Source(
         "a.rs",
@@ -518,8 +518,8 @@ fn Test_A_Deselected_Rules_Finding_Should_Not_Block()
     assert!(
         Judged_Findings(&result.check_outcome)
             .iter()
-            .any(|finding| return finding.rule == RuleId::New(COMPLETENESS_MIRROR)),
-        "the deselected rule's finding must still be judged and carried, just not blocking"
+            .all(|finding| return finding.rule != RuleId::New(COMPLETENESS_MIRROR)),
+        "the deselected rule was never asked to run, so its finding must not exist at all"
     );
 }
 

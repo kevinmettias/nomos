@@ -10,11 +10,13 @@
 
 use crate::{CheckOutcome, Claim, Run};
 use nomos_analysis::{MemoryFactStore, Reader};
-use nomos_contracts::{Finding, GateCategory};
+use nomos_contracts::{Finding, GateCategory, RuleId};
 use nomos_model::Subject_Of_Path;
+use nomos_platform::{Command, ExitOutcome, ProcessLauncher, ProcessOutput};
 use nomos_platform_std::StdProcessLauncher;
 use nomos_rules::{Check_Completeness_Mirrors, SourceFile};
 use nomos_workspace::BuildVariant;
+use std::cell::Cell;
 
 fn Source(path: &str, text: &str) -> SourceFile
 {
@@ -48,7 +50,7 @@ fn Test_A_Clean_Tree_Should_Be_Judged_Complete_With_No_Findings()
 {
     let sources = vec![Source("a.rs", "pub fn Ok() {}\n")];
 
-    let outcome = Run(&sources, Test_Variant(), &Repository_Root(), &StdProcessLauncher);
+    let outcome = Run(&sources, Test_Variant(), &Repository_Root(), &StdProcessLauncher, &[]);
 
     let CheckOutcome::Judged { findings, examined, claim } = outcome
     else
@@ -74,7 +76,7 @@ fn Test_A_Blocking_Finding_Should_Still_Be_Judged_Complete()
         "/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n",
     )];
 
-    let outcome = Run(&sources, Test_Variant(), &Repository_Root(), &StdProcessLauncher);
+    let outcome = Run(&sources, Test_Variant(), &Repository_Root(), &StdProcessLauncher, &[]);
 
     let CheckOutcome::Judged { findings, claim, .. } = outcome
     else
@@ -97,7 +99,7 @@ fn Test_A_Run_That_Materializes_No_Facts_Should_Report_NoFacts()
 {
     let sources = vec![Source("broken.rs", "pub const ??? = ;")];
 
-    let outcome = Run(&sources, Test_Variant(), &Repository_Root(), &StdProcessLauncher);
+    let outcome = Run(&sources, Test_Variant(), &Repository_Root(), &StdProcessLauncher, &[]);
 
     assert!(
         matches!(outcome, CheckOutcome::NoFacts { files: 1 }),
@@ -114,7 +116,7 @@ fn Test_Conflicting_Paths_Should_Be_Unreadable()
 {
     let sources = vec![Source("a.rs", "pub fn one() {}\n"), Source("a.rs", "pub fn two() {}\n")];
 
-    let outcome = Run(&sources, Test_Variant(), &Repository_Root(), &StdProcessLauncher);
+    let outcome = Run(&sources, Test_Variant(), &Repository_Root(), &StdProcessLauncher, &[]);
 
     assert!(matches!(outcome, CheckOutcome::Unreadable), "duplicate paths must not be ingested");
 }
@@ -127,7 +129,7 @@ fn Test_The_Registered_Provider_Should_Satisfy_The_Rules_Floor()
 {
     let sources = vec![Source("a.rs", "pub const T: &[&str] = &[];\n")];
 
-    let outcome = Run(&sources, Test_Variant(), &Repository_Root(), &StdProcessLauncher);
+    let outcome = Run(&sources, Test_Variant(), &Repository_Root(), &StdProcessLauncher, &[]);
 
     let CheckOutcome::Judged { findings, .. } = outcome
     else
@@ -224,6 +226,68 @@ fn Test_Materialize_Dependencies_Should_Return_Real_Workspace_Members()
         sources.iter().any(|source| return source.path == "crates/rules/nomos-rules"),
         "expected nomos-rules among the real sources: {sources:?}"
     );
+}
+
+/// A launcher that counts how many times it was asked to run something, and refuses every
+/// one -- proving `OD-GATE-017`'s claim that a deselected rule's own materialization does
+/// not run at all, which a real invocation's findings cannot distinguish from "ran and found
+/// nothing" on their own.
+struct CountingLauncher
+{
+    calls: Cell<usize>,
+}
+
+impl CountingLauncher
+{
+    fn New() -> Self
+    {
+        return Self { calls: Cell::new(0) };
+    }
+
+    fn Count(&self) -> usize
+    {
+        return self.calls.get();
+    }
+}
+
+impl ProcessLauncher for CountingLauncher
+{
+    fn Run(&self, _command: &Command) -> Result<ProcessOutput, String>
+    {
+        self.calls.set(self.calls.get().saturating_add(1));
+        return Ok(ProcessOutput { outcome: ExitOutcome::Exited { code: 1 }, stdout: String::new(), stderr: String::new() });
+    }
+}
+
+/// `Run`'s `selected` parameter must actually gate computation, not merely gate what a
+/// disposition later discards -- `OD-GATE-017`'s own point. Findings cannot prove this: a
+/// healthy repository's `cargo metadata` call raises no finding on success, so "deselected"
+/// and "selected but clean" would render identically over `findings` alone. Counting real
+/// launches is the only distinguishing evidence.
+#[test]
+fn Test_A_Deselected_Dependency_Rule_Should_Not_Launch_Cargo_Metadata()
+{
+    let sources = vec![Source("a.rs", "pub fn Ok() {}\n")];
+
+    let unselected = CountingLauncher::New();
+    let _ = Run(
+        &sources,
+        Test_Variant(),
+        &Repository_Root(),
+        &unselected,
+        &[RuleId::New(nomos_rules::COMPLETENESS_MIRROR)],
+    );
+    assert_eq!(unselected.Count(), 0, "dependency-direction was not selected, so cargo metadata must not run");
+
+    let selected = CountingLauncher::New();
+    let _ = Run(
+        &sources,
+        Test_Variant(),
+        &Repository_Root(),
+        &selected,
+        &[RuleId::New(nomos_rules::DEPENDENCY_DIRECTION)],
+    );
+    assert_eq!(selected.Count(), 1, "dependency-direction was selected, so cargo metadata must run exactly once");
 }
 
 /// Ingests `ingested` into a real fact store and judges `judged` over it -- the split

@@ -138,7 +138,7 @@ pub fn Run(command: &CheckCommand, stdout: &mut impl Write, stderr: &mut impl Wr
     {
         None => CheckOutcome::Unreadable,
         Some(sources) if sources.is_empty() => CheckOutcome::NoSource,
-        Some(sources) => nomos_check_orchestration::Run(&sources, Host_Variant(), &command.root, &StdProcessLauncher),
+        Some(sources) => nomos_check_orchestration::Run(&sources, Host_Variant(), &command.root, &StdProcessLauncher, &[]),
     };
 
     return Render(&command.root, &outcome, stdout, stderr);

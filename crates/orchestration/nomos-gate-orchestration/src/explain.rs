@@ -88,7 +88,10 @@ pub struct GateExplainResult
 /// rule-narrowed `run` currently see". `command.adoption`, `command.suppressions` and
 /// `command.baseline` are the three fields this does consult, because whether any applies
 /// is part of the finding's own explanation, not part of narrowing which findings a run
-/// counts.
+/// counts. `Judged` is passed an empty rule selection here, not `command.rules.include`, for
+/// the same reason: since `OD-GATE-017`, a non-empty selection also narrows what
+/// [`nomos_check_orchestration::Run`] computes at all, and a query about a rule
+/// `command.rules` excludes must still be answerable.
 #[must_use]
 pub fn Explain_Gate<P: ProcessLauncher>(
     walked: Option<Vec<SourceFile>>,
@@ -98,7 +101,7 @@ pub fn Explain_Gate<P: ProcessLauncher>(
     launcher: &P,
 ) -> GateExplainResult
 {
-    let check_outcome = Judged(walked, variant, &command.root, launcher);
+    let check_outcome = Judged(walked, variant, &command.root, launcher, &[]);
     let explanation = Explained(&check_outcome, query, &command.adoption, &command.suppressions, &command.baseline);
 
     return GateExplainResult { root: command.root.clone(), check_outcome, explanation };
