@@ -56,6 +56,7 @@ profile: domain-specification
 | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md@authored | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md | authored | 29 | 9 | sha256:0351be57f7a37c7b7e8965886b9fa29c15f87fe4660ee253dcebcad932fe77a6 |
 | docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md@authored | docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md | authored | 28 | 9 | sha256:9f1c5229277415e49115502a643ecee1e889b80a83acb01e8695fe922761f0c2 |
 | docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md@authored | docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md | authored | 15 | 6 | sha256:a52350f85fcefd9e25749a3f5bc90bd0afccc914f2f3495d8e35464419642400 |
+| docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md@authored | docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md | authored | 16 | 6 | sha256:51e30dc4a56a3bf30c810637db1322b95f6fe4d423063b09ee2c0f55812f9984 |
 | docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md@authored | docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md | authored | 21 | 8 | sha256:8ad58a92216388e350cbfdf042e5ab75299e97e9e6accef05f6bae9e325fc72a |
 | docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md@authored | docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md | authored | 14 | 6 | sha256:e55bd46b259be4c661ac4bb95475cd427ad66c783465edae129bac816f1ababf |
 | docs/records/OD-DETERMINISM-001-a-declaration-proven-only-behind-a-corpus-gate.md@authored | docs/records/OD-DETERMINISM-001-a-declaration-proven-only-behind-a-corpus-gate.md | authored | 26 | 7 | sha256:b080a464d0e59ac731e8b78eb0104aeed978958713f99969d1506ebbee92802e |
@@ -526,6 +527,12 @@ profile: domain-specification
 | docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md#8 | authored | 2 | The Decision |
 | docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md#10 | authored | 2 | What This Does Not Do |
 | docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md#14 | authored | 2 | Status |
+| docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md#1 | authored | 1 | TaskEnvelope gains an effort field, so an agent executor can read one real model-routing signal |
+| docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md#2 | authored | 2 | Question |
+| docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md#4 | authored | 2 | What Was Measured |
+| docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md#8 | authored | 2 | The Decision |
+| docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md#11 | authored | 2 | What This Does Not Do |
+| docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md#15 | authored | 2 | Status |
 | docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#1 | authored | 1 | Corrections has real staging machinery and zero real callers |
 | docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#2 | authored | 2 | Question |
 | docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#4 | authored | 2 | What Was Measured |
@@ -12542,6 +12549,148 @@ test, updated alongside this record.
 ### docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md#15
 
 *revision: authored · kind: prose · heading: WorkResult.plan becomes Option<CorrectionPlan>, so a judgment-only agent response is representable / Status · hash: sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3*
+
+Accepted.
+
+### docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md#1
+
+*revision: authored · kind: heading · heading: TaskEnvelope gains an effort field, so an agent executor can read one real model-routing signal · hash: sha256:559d73d2cc7e52a0245aa64aabb374d8400ecf2affcb8a88ecdd124ed395aefe*
+
+# TaskEnvelope gains an effort field, so an agent executor can read one real model-routing signal
+
+### docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md#2
+
+*revision: authored · kind: heading · heading: TaskEnvelope gains an effort field, so an agent executor can read one real model-routing signal / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md#3
+
+*revision: authored · kind: prose · heading: TaskEnvelope gains an effort field, so an agent executor can read one real model-routing signal / Question · hash: sha256:c01bc92d770a206717f943135f94bbb09e2e364bac60b274f9d9debaf9926cf4*
+
+`MODEL-ROUTE-001` requires that "gates, phases, workflows, rules/checks, and agent task
+classes shall be able to reference a `ModelExecutionProfile` for every agent-assisted
+operation." `nomos_model_package::ModelExecutionProfile`, its `EffortLevel` and
+`ModelSelector` components, and `MODEL-ROUTE-015`'s `EffortMappingRecord` all exist as
+declared vocabulary, with zero real consumers anywhere in the workspace (`OD-PACKAGE-011`
+v3). `nomos_agent_contracts::TaskEnvelope` -- the one existing, `Serialize`/`Deserialize`
+"what an agent-assisted operation is handed" type `AGT-001` requires -- has no field for
+any of it, and `nomos-agent-executor::Command_For` dispatches every task through one
+hardcoded Claude Code invocation with no model or effort choice at all. Whether
+`TaskEnvelope` is the right place for a first real reader of this vocabulary, and whether
+building one now is premature ahead of a second real executor, is this record's question.
+
+### docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md#4
+
+*revision: authored · kind: heading · heading: TaskEnvelope gains an effort field, so an agent executor can read one real model-routing signal / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md#5
+
+*revision: authored · kind: prose · heading: TaskEnvelope gains an effort field, so an agent executor can read one real model-routing signal / What Was Measured · hash: sha256:ce7b4b8996ec8022d3c1bf4afae0d748a00f30d92dd36bf359a45440a0aa954e*
+
+Verified directly against the installed CLI, not assumed: `claude --help` documents a
+real `--effort <level>` flag, accepting `low`, `medium`, `high`, `xhigh`, `max`.
+`nomos_model_package::EffortLevel` (`MODEL-ROUTE-004`) closes a six-value canonical
+enumeration: `BackendDefault`, `Minimal`, `Low`, `Medium`, `High`, `Maximum`. The two
+vocabularies do not line up one-to-one: `claude`'s `xhigh` has no `EffortLevel`
+counterpart, and `EffortLevel::Minimal` has no native control below `claude`'s own `low`.
+
+### docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md#6
+
+*revision: authored · kind: prose · heading: TaskEnvelope gains an effort field, so an agent executor can read one real model-routing signal / What Was Measured · hash: sha256:f4d41d268feac5d0df5d5508b625ab94cd1d3424704010630fa56029575bed0e*
+
+`OD-PACKAGE-011` v3 and `OD-PACKAGE-012` v2 already close the larger question this record
+does not reopen: no routing/selection taxonomy exists yet (`MODEL-ROUTE-038`-`049`), and
+building one is premature while exactly one real executor (`nomos-agent-executor`,
+dispatching to Claude Code alone) exists -- inventing a selection policy over a single
+candidate would invent a taxonomy nothing yet needs, the same "no real second case" finding
+`OD-PACKAGE-011` already made for the fuller shape. Reading one already-specified field,
+`EffortLevel` alone, is a different, much narrower act: the field is closed and
+corpus-fixed, and `claude --effort` is a real, present control it maps onto today, not a
+resolver this record would have to invent.
+
+### docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md#7
+
+*revision: authored · kind: prose · heading: TaskEnvelope gains an effort field, so an agent executor can read one real model-routing signal / What Was Measured · hash: sha256:e2a6e3312f76c98ebbf6acdf07ef24ae2687d6b9b467d7e23422fb2cc3b41380*
+
+`TaskEnvelope` is the correct place for this field rather than a bare function parameter to
+`Execute`: `TaskEnvelope` is this workspace's one type a peer executor -- API-hosted,
+subscription-agent, human, or recorded-replay, `WF-006`'s own list -- would receive across
+a wire boundary, per its own doc's framing as "the contract a peer executor must agree with
+Nomos about." A function parameter invisible to that type would never reach a real
+out-of-process peer at all, only this one in-process caller.
+
+### docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md#8
+
+*revision: authored · kind: heading · heading: TaskEnvelope gains an effort field, so an agent executor can read one real model-routing signal / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md#9
+
+*revision: authored · kind: prose · heading: TaskEnvelope gains an effort field, so an agent executor can read one real model-routing signal / The Decision · hash: sha256:8c33e14934fd2fc943c61ffe34002939c96044f122873867305c39afa54209fc*
+
+`TaskEnvelope` gains an eighth field, `effort: EffortLevel`, alongside `AGT-001`'s own
+seven. `nomos-agent-executor::Command_For` reads it and appends `--effort <value>` to the
+real `claude` invocation: `Minimal` and `Low` both map to `low` (`Minimal` an
+approximation, `MODEL-ROUTE-015`'s own `MappingQuality::Approximate` shape, since `claude`
+has no distinct control beneath `low`); `Medium`, `High` and `Maximum` map to `medium`,
+`high` and `max` respectively; `BackendDefault` omits the flag entirely rather than passing
+a value naming "the default," which is this crate's own behavior for every caller that
+predates this record. `claude`'s `xhigh` stays unreachable from `EffortLevel` -- this
+record does not fold it into `high` or `max` to manufacture a use for it.
+
+### docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md#10
+
+*revision: authored · kind: prose · heading: TaskEnvelope gains an effort field, so an agent executor can read one real model-routing signal / The Decision · hash: sha256:fd46629b422eae0c11f918a9672ac71154e317874d372a99f80e1f62990b36f4*
+
+This is a correction, not a fresh architectural decision: it gives an already-specified
+requirement (`MODEL-ROUTE-004`) its first real reader, the same shape `OD-CONTRACTS-003`
+already used for `WorkResult.plan`.
+
+### docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md#11
+
+*revision: authored · kind: heading · heading: TaskEnvelope gains an effort field, so an agent executor can read one real model-routing signal / What This Does Not Do · hash: sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf*
+
+## What This Does Not Do
+
+### docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md#12
+
+*revision: authored · kind: prose · heading: TaskEnvelope gains an effort field, so an agent executor can read one real model-routing signal / What This Does Not Do · hash: sha256:592ac7f2c5034c4a2fbbce3fe8ce23e73e45a83756b8eec3fbff589922dd27ff*
+
+It does not build `ModelSelector`, any resolver, or wire `nomos-model-package` into
+`nomos-agent-executor` beyond this one field. `OD-PACKAGE-011`/`012`'s finding that
+selection is premature with one real executor is unchanged and unrevisited here.
+
+### docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md#13
+
+*revision: authored · kind: prose · heading: TaskEnvelope gains an effort field, so an agent executor can read one real model-routing signal / What This Does Not Do · hash: sha256:87fbe60f5741c487a3a864e69941bfd893c53d288295047e378b5947f65add75*
+
+It does not emit a real `MODEL-ROUTE-015` `EffortMappingRecord`. That type already exists
+for exactly this kind of mapping and is the natural next increment once a caller needs the
+resolved-mapping evidence returned, not merely the flag sent -- naming it here rather than
+building it now, the same "found but not yet needed" discipline this workspace already
+applies elsewhere.
+
+### docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md#14
+
+*revision: authored · kind: prose · heading: TaskEnvelope gains an effort field, so an agent executor can read one real model-routing signal / What This Does Not Do · hash: sha256:4f19d93d508183320f2cfaf2e15bbff3b93573befa3938aafbcb43c5c980d14c*
+
+It does not retroactively require every existing caller to change. Verified directly: the
+only production construction sites for `TaskEnvelope` in this workspace before this record
+are this crate's own test and `nomos-cli::agent`'s CLI verb, both updated alongside it.
+
+### docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md#15
+
+*revision: authored · kind: heading · heading: TaskEnvelope gains an effort field, so an agent executor can read one real model-routing signal / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md#16
+
+*revision: authored · kind: prose · heading: TaskEnvelope gains an effort field, so an agent executor can read one real model-routing signal / Status · hash: sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3*
 
 Accepted.
 

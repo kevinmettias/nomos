@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:2aaf03d3e462fbe447cc47d2b51946ea53106dc525dc1980d1877bede982acb4",
-  "inputs_digest": "sha256:75d570a932a44e534051989720c954d0d051059efa9f0c71a1bf7a1d7c54e4b0",
+  "content_digest": "sha256:5ce0adc877d476d3a34044de76ec3ac8978e1797edda37fb92d9fac380a21382",
+  "inputs_digest": "sha256:7c85b2578f6f651288c389b7824a6b7543f6c7267b0e83d987a695221c61f64a",
   "sections": [
     [
       "Documents",
-      159
+      160
     ],
     [
       "Sections",
-      1352
+      1358
     ],
     [
       "Source blocks",
-      4752
+      4768
     ]
   ],
   "inputs": [
@@ -249,6 +249,11 @@
       "content": "documents",
       "identity": "docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md@authored",
       "hash": "sha256:a52350f85fcefd9e25749a3f5bc90bd0afccc914f2f3495d8e35464419642400"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md@authored",
+      "hash": "sha256:51e30dc4a56a3bf30c810637db1322b95f6fe4d423063b09ee2c0f55812f9984"
     },
     {
       "content": "documents",
@@ -2574,6 +2579,36 @@
       "content": "headings",
       "identity": "docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md#14",
       "hash": "sha256:70c80d017a34ba9d559fe3be6b542f978d8e7f07e9e06cd5a4a885ae176b2bb8"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md#1",
+      "hash": "sha256:ee4e99733c8e79076ad649d826698828e5361b26d58b13030c418773fb42309b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md#2",
+      "hash": "sha256:3ec9183d3e75cacece2333c0176464dc31c62c8ca9e846fff5888c878a31c43d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md#4",
+      "hash": "sha256:dbff44e9f03f1ad6eeb917f45a5c929380732e5fcf8bd606f94597b4b7ae54a4"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md#8",
+      "hash": "sha256:d076cc193af19b0bdb082964b1b420fc318ae3db9e52245873064b673798ddec"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md#11",
+      "hash": "sha256:7a86958f462a2b9fa4afba0fc3f715d3a3f8dd97233e890ca129041efcdf1468"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md#15",
+      "hash": "sha256:873650a892b33f540bb84407ef496afe0cc796409a07dbb7f2706d05089d2c9b"
     },
     {
       "content": "headings",
@@ -13583,6 +13618,86 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md#15",
+      "hash": "sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md#1",
+      "hash": "sha256:559d73d2cc7e52a0245aa64aabb374d8400ecf2affcb8a88ecdd124ed395aefe"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md#3",
+      "hash": "sha256:c01bc92d770a206717f943135f94bbb09e2e364bac60b274f9d9debaf9926cf4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md#4",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md#5",
+      "hash": "sha256:ce7b4b8996ec8022d3c1bf4afae0d748a00f30d92dd36bf359a45440a0aa954e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md#6",
+      "hash": "sha256:f4d41d268feac5d0df5d5508b625ab94cd1d3424704010630fa56029575bed0e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md#7",
+      "hash": "sha256:e2a6e3312f76c98ebbf6acdf07ef24ae2687d6b9b467d7e23422fb2cc3b41380"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md#8",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md#9",
+      "hash": "sha256:8c33e14934fd2fc943c61ffe34002939c96044f122873867305c39afa54209fc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md#10",
+      "hash": "sha256:fd46629b422eae0c11f918a9672ac71154e317874d372a99f80e1f62990b36f4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md#11",
+      "hash": "sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md#12",
+      "hash": "sha256:592ac7f2c5034c4a2fbbce3fe8ce23e73e45a83756b8eec3fbff589922dd27ff"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md#13",
+      "hash": "sha256:87fbe60f5741c487a3a864e69941bfd893c53d288295047e378b5947f65add75"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md#14",
+      "hash": "sha256:4f19d93d508183320f2cfaf2e15bbff3b93573befa3938aafbcb43c5c980d14c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md#15",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md#16",
       "hash": "sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3"
     },
     {
