@@ -31718,6 +31718,150 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P14-CAPABILITY-009-SYNTAX-RECOGNITION-DISPATCH",
+      "title": "OD-CAPABILITY-009's first increment: per-path recognition narrows the syntax Requirement on both sides, and nomos-lang-go becomes a real third offer",
+      "why": "OD-CAPABILITY-009 decided the fix but built none of it: nomos_rules::mirror::index and nomos_rules::naming::reading must narrow Syntax_Requirement() with .Preferring(provider) chosen from the real path's own Recognition before it is digested into an opaque SubjectId; nomos-check-orchestration::facts::materialize::Materialize_Syntax must dispatch its write side the same way, generalized from its current hardcoded nomos_lang_rust::Materialize call; only once both sides agree is registering nomos_lang_go::Provider_Offer() in Declare_Syntax_Capability safe. Until this lands nomos-lang-go stays built, tested, and correctly unwired, exactly as the record says. The CLI walker (crates/host/nomos-cli/src/check/sources.rs) still discovers only .rs files, so this increment's live effect today is limited to any direct caller of nomos-check-orchestration::Run over Go sources -- its own test suite, and future callers -- not yet nomos check itself; extending the walker is a separate, later increment this one does not build.",
+      "done_when": "Syntax_Requirement_For(path) exists in nomos-rules, narrowing Syntax_Requirement() with .Preferring(nomos_lang_rust::PROVIDER) for a path nomos_lang_rust::Recognition recognizes, .Preferring(nomos_lang_go::PROVIDER) for one nomos_lang_go::Recognition recognizes, and no preference for a path neither recognizes -- all three branches tested directly. mirror::index::Declared_By and naming::reading::Require_Fact call it with the source's own real path instead of the bare floor. Materialize_Syntax dispatches per-Recognition on the write side, materializing nothing for a path neither provider recognizes. Declare_Syntax_Capability registers nomos_lang_go::Provider_Offer() and its doc comment states why that is now safe rather than why it was withheld. A real end-to-end test proves a clean .go source is Judged with no findings under nomos_lang_go's own identity, alongside the existing .rs tests staying green -- proof the fix does not reintroduce the reverted regression. cargo test --no-fail-fast -p nomos-rules -p nomos-check-orchestration passes and cargo clippy --workspace --all-targets stays clean.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/Cargo.toml",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "crates/rules/nomos-rules/src/mirror.rs",
+          "crates/rules/nomos-rules/src/mirror/index.rs",
+          "crates/rules/nomos-rules/src/naming/reading.rs",
+          "crates/orchestration/nomos-check-orchestration/Cargo.toml",
+          "crates/orchestration/nomos-check-orchestration/src/facts/materialize.rs",
+          "crates/orchestration/nomos-check-orchestration/src/composition.rs",
+          "crates/orchestration/nomos-check-orchestration/src/tests.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "nomos-b7-syntax-recognition",
+        "acquired_at": 1787696583,
+        "lease_expires_at": 1787703783
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P14-CAPABILITY-009-SYNTAX-DISPATCH-CORRECTION",
+      "title": "OD-CAPABILITY-009's own unblock plan would break nomos-rules' provider-blindness, and misses that no walker even collects .go files",
+      "why": "OD-CAPABILITY-009's own \"What Would Unblock nomos-lang-go's Registration\" section says every caller resolving nomos.cap.syntax.items for one concrete subject -- nomos_rules::mirror::index and nomos_rules::naming::reading -- must compute Recognition::Of_Path against nomos_lang_rust and nomos_lang_go directly and attach .Preferring(...). Read against the real Cargo.toml, nomos-rules documents, capability by capability, that it deliberately never depends on a language provider crate (nomos-cap-syntax and not nomos-lang-rust, for the identical reason four more times over) so that a second provider costs it nothing. Implementing the record's own plan literally regresses that boundary for the one capability it was supposed to hold for. Separately, ground-truthing the plan against nomos-cli::check::sources::Read_Entry, nomos-cli::gate::sources and nomos-api::sources found each hard-filters its walk to files whose extension == \"rs\" -- no .go file reaches a SourceFile at all today, in any of the three, regardless of how the registry is wired. The record's plan is necessary but was never sufficient, and named neither gap.",
+      "done_when": "OD-CAPABILITY-009 amended with a section stating: (a) the caller-side preference belongs to the composition root, which already depends on both language crates, carried to nomos_rules::mirror::index and naming::reading as data (an already-resolved ProviderId, e.g. carried on SourceFile the way subject already is) rather than computed inside those functions, so nomos-rules' own documented provider-blindness is preserved; and (b) naming nomos-cli::check::sources, nomos-cli::gate::sources and nomos-api::sources's shared .rs-only walk filter as a further, independent prerequisite the original record's plan did not name -- not closed here, named so it is a plan and not a second oversight. spec/domain-specification.md and diagrams/relations.mmd re-rendered from a tree whose registered records are exactly the ones this commit publishes.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "spec/domain-specification.md",
+          "diagrams/relations.mmd",
+          "docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "Syntax_Requirement`\n  --> crates\\rules\\nomos-rules\\src\\mirror.rs:92:25\n   |\n92 | use crate::{SourceFile, Syntax_Requirement, Syntax_Requirement_For};\n   |                         ^^^^^^^^^^^^^^^^^^\n   |\n   = note: `#[warn(unused_imports)]` on by default\n\nwarning: `nomos-rules` (lib) generated 1 warning (run `cargo fix --lib -p nomos-rules` to apply 1 suggestion)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.15s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-94f554e031cf3504.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-9f66d557496e471b.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-0fbd9ba3a1c5e1a2.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-04514725853b4733.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-4b95ba25319581a8.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-c4bc4fd6ecb67b2e.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-2ecdb1c110163478.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-6c4e8c242675b4cc.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-cdd45e5e94e1e4d4.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-ce9820f7288199fb.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-ee111bd537ecd137.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-2919ec68747ddb5b.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-99272398d303e3e7.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-756fcac740cd78ad.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-259eb839edee86c9.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1787696902,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "def92c454d6b89320afdcb87f34e06a66648889c"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P14-RULES-010-TOOL-PROVIDER-DENY-1",
+      "title": "nomos-cap-dependency-policy: the nomos.cap.dependency.policy contract, OD-RULES-010's second real ToolProvider capability",
+      "why": "OD-RULES-010 decided a ToolProvider's output is a fact a native rule judges, applying so far only to cargo clippy. cargo-deny check bans licenses sources is a second real, hermetic, no-network subprocess tool whose verdict fits the same shape without widening Finding's attribution scheme -- proving the decision generalizes rather than fit exactly one tool. This item is the contract half only: capability id, ceiling, payload schema and its canonical tab-separated encoding, mirroring nomos-cap-lint's own split between contract.rs and payload.rs.",
+      "done_when": "nomos-cap-dependency-policy exists at band 23, declares nomos.cap.dependency.policy with a Ceiling at IncrementalGranularity::WholeWorkspace (cargo-deny's verdict is over the resolved graph as a whole, not one workspace member), and its payload round-trips through Encode_Payload/Parse_Payload; registered in root Cargo.toml, README.md's band table and tests/contract/tests/boundaries/bands.rs, with its own public-surface snapshot",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities/nomos-cap-dependency-policy",
+          "Cargo.toml",
+          "README.md",
+          "tests/contract/tests/boundaries/bands.rs",
+          "tests/contract/surface/nomos-cap-dependency-policy.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cap-dependency-policy",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

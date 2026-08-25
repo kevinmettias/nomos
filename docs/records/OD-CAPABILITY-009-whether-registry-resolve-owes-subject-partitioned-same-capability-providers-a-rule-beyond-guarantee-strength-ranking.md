@@ -3,7 +3,7 @@ id: OD-CAPABILITY-009
 type: decision
 title: Resolve never sees a subject to partition on; a subject-partitioned capability is the caller's Preferring to make
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - capability
@@ -164,6 +164,68 @@ A further, real increment, not built here:
 Until that lands, `nomos-lang-go` remains built, tested, and correctly *not* wired into the
 composed registry. This record decides the shape of the fix; it does not build it.
 
+## Amendment: The Unblock Plan's Own Call Sites Would Regress `nomos-rules`' Provider-Blindness, And It Named Only One Of Two Prerequisites
+
+"What Would Unblock `nomos-lang-go`'s Registration" above says the fix lives in "every caller
+that resolves `nomos.cap.syntax.items` for one concrete subject -- `nomos_rules::mirror::index`
+and `nomos_rules::naming::reading`" -- naming `nomos_lang_rust::recognition::Recognition::Of_Path`
+and `nomos_lang_go::recognition::Recognition::Of_Path` as what each must compute before calling
+`.Preferring(...)`. Read against `nomos-rules`' own `Cargo.toml`, that plan cannot be built as
+written without a real regression.
+
+**What was read.** `nomos-rules/Cargo.toml` states, once per capability, exactly the same
+stance: it depends on `nomos-cap-syntax` and not `nomos-lang-rust`, on `nomos-cap-dependency`
+and not `nomos-lang-rust-cargo`, on `nomos-cap-controlflow` and not `nomos-lang-rust`'s
+reachability module, on `nomos-cap-lint` and not `nomos-lang-rust-clippy` -- each comment
+giving "the identical reasoning" as the one before it: a rule states a floor and the registry
+chooses the provider, so this crate never needs to know a provider's name to add a fourth
+capability, and would not have needed to for a fifth. Computing `Recognition::Of_Path` inside
+`mirror::index` or `naming::reading` requires importing `nomos_lang_rust` and `nomos_lang_go`
+directly -- the exact dependency this crate's own manifest has, four times over, declared it
+does not take. The plan as written would regress that stance for precisely the one capability
+it was written to hold for, in the act of fixing the one gap that stance was blocking.
+
+`SourceFile` (`crates/rules/nomos-rules/src/lib.rs:186`) already carries the correction. Its
+`subject` field is documented as "carried rather than derived... the composition root's own
+convention... carrying it makes rule and root agree by construction," and `path` is documented
+as "reporting only... nothing in this crate keys anything on it." The composition root
+(`nomos-check-orchestration::composition::Declare_Syntax_Capability`) already depends on
+`nomos-lang-rust` today and would gain `nomos-lang-go` the moment its offer is registered --
+it is already the one place in this dependency graph allowed to know both providers by name.
+
+**The correction.** The caller-side preference this record's original text assigns to
+`mirror::index`/`naming::reading` is computed by the composition root, not by those two
+functions -- the same division `subject` already draws. The root resolves each source's
+`Recognition` against both languages once, before the two rule-owning modules ever see it, and
+carries the result to them as already-resolved data (a `ProviderId`, e.g. a field beside
+`subject` on `SourceFile`, populated the same construction-time way `subject` is). `nomos-rules`
+then only needs `nomos_capability::ProviderId` -- already a dependency, via `nomos-capability`
+itself -- to call `.Preferring(id)` when the field is present, never a language crate's
+`recognition` module. This does not touch `Syntax_Requirement()`'s "no `Preferring`" stance,
+which still correctly describes the subject-agnostic floor that function alone states; only the
+*caller* narrows it, exactly as the original decision below already says, just not from inside
+`nomos-rules`.
+
+**The second, independent prerequisite the original text did not name.** Ground-truthed against
+the real walk: `nomos-cli::check::sources::Read_Entry`, `nomos-cli::gate::sources` and
+`nomos-api::sources` (the last two identical by the second's own module doc, "a deliberate twin
+... not a shared dependency") each read a directory entry only `if path.extension().is_some_and(
+|extension| return extension == "rs")`. No `.go` file reaches a `SourceFile` at all today, in
+any of the three, independent of how `nomos_capability::Registry` is composed or how
+`Preferring` is wired. Registering `nomos_lang_go::Provider_Offer()` after the correction above
+still materializes zero Go facts in a real `nomos check`, `nomos gate run` or API run, because
+nothing ever hands a `.go` path to either side of the pipeline. This is not the registry gap
+`OD-CAPABILITY-001`/`OD-CAPABILITY-006` scoped, and it is not the resolution gap this record's
+own body decided either -- it sits earlier, in three walkers this record never read.
+
+**What this amendment does not do.** It does not change what the body above decided:
+`nomos_capability::{ProviderOffer, Registry, Requirement, Selection}` still need no
+subject-scoping mechanism, `Syntax_Requirement()` still correctly carries no preference, and
+the registry still ranks purely by guarantee strength with no notion of subject. It corrects
+only *where* the caller-side narrowing is computed, and it names, without building, the walker
+gap alongside the call-site work the original "What Would Unblock" section already named as not
+built here. Both remain a further, real increment.
+
 ## Status
 
 Accepted. Decided against the concrete failure recorded in `P14-LANG-GO-SYNTAX-PROVIDER`'s own
@@ -174,4 +236,6 @@ tested, unused-in-production mechanism this decision points call sites at), and
 `Syntax_Requirement`'s own doc (whose "no `Preferring`" stance is correct for the floor and is
 left unchanged). `nomos_capability` needs no subject-scoping mechanism; the fix lives entirely
 above the registry, in the call sites that still hold a real path before it is digested away.
-Registering `nomos-lang-go` waits on that further increment.
+Registering `nomos-lang-go` waits on that further increment, corrected by the amendment above to
+live in the composition root rather than in `nomos-rules` itself, and on the walker gap the
+amendment names alongside it.
