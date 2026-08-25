@@ -1,0 +1,12 @@
+pub enum nomos_agent_executor::AgentExecutionError
+pub enum variant nomos_agent_executor::AgentExecutionError::Unavailable(String)
+pub enum variant nomos_agent_executor::AgentExecutionError::Unparseable(String)
+pub fn nomos_agent_executor::AgentExecutionError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_agent_executor::Execute<P: ProcessLauncher>(task: &TaskEnvelope, launcher: &P) -> Result<AgentExecutionOutcome, AgentExecutionError>
+pub impl nomos_agent_executor::AgentExecutionError implements core::fmt::Display
+pub struct field nomos_agent_executor::AgentExecutionOutcome::cost_usd: f64
+pub struct field nomos_agent_executor::AgentExecutionOutcome::denied_tool_uses: Vec<String>
+pub struct field nomos_agent_executor::AgentExecutionOutcome::duration_ms: u64
+pub struct field nomos_agent_executor::AgentExecutionOutcome::is_error: bool
+pub struct field nomos_agent_executor::AgentExecutionOutcome::response: String
+pub struct nomos_agent_executor::AgentExecutionOutcome

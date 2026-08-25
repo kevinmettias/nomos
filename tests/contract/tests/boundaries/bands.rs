@@ -107,6 +107,10 @@ pub(crate) const BANDS: &[(&str, u32)] = &[
     // an agent-assisted operation carries. Depends downward on nomos-ledger,
     // nomos-contracts and nomos-corrections. `OD-ROADMAP-001`.
     ("nomos-agent-contracts", 36),
+    // The first real AgentExecutor: dispatches a TaskEnvelope's goal to Claude Code as a
+    // subprocess through nomos-platform's ProcessLauncher, bounded by OD-EXECUTOR-001's
+    // structural capability boundary. Above nomos-agent-contracts. `OD-EXECUTOR-001`.
+    ("nomos-agent-executor", 37),
     // Runs a `nomos work` verb against a caller-chosen platform and hands back a typed
     // outcome, generic over the traits `nomos-platform` declares rather than over the
     // std implementation of them. Above the ledger it dispatches to; below every
