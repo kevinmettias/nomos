@@ -32031,14 +32031,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-deny-provider",
-        "acquired_at": 1787697325,
-        "lease_expires_at": 1787704525
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -32049,7 +32045,28 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lang-rust-deny",
+          "--no-fail-fast"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 8 tests\ntest guarantee::tests::Test_The_Ceiling_Should_Satisfy_The_Declared_Guarantee ... ok\ntest reading::tests::Test_Canonical_Order_Should_Sort_By_Severity_Then_Code_Then_Message ... ok\ntest provider::tests::Test_A_Fact_Key_Should_Depend_On_The_Guarantee ... ok\ntest reading::tests::Test_A_Diagnostic_With_No_Code_Should_Not_Parse ... ok\ntest reading::tests::Test_A_Summary_Line_Should_Not_Parse_As_A_Violation ... ok\ntest reading::tests::Test_A_Real_Captured_Diagnostic_Should_Parse ... ok\ntest reading::tests::Test_Violations_Of_Should_Skip_Non_Diagnostic_Lines_And_Malformed_Ones ... ok\ntest provider::tests::Test_Materialize_Workspace_Over_This_Repository ... ok\n\ntest result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.29s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.10s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lang_rust_deny-7d95e79b2537890d.exe)\n   Doc-tests nomos_lang_rust_deny\n",
+        "verified_at": 1787697824,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "e1e30c6452b461bc33865347903465c688a93daf"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

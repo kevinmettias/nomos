@@ -87,6 +87,11 @@ pub(crate) const BANDS: &[(&str, u32)] = &[
     // its own, at the same band, naming neither it nor either of its syntax-reading
     // siblings.
     ("nomos-lang-rust-clippy", 25),
+    // The one provider of nomos.cap.dependency.policy. OD-RULES-010's second real
+    // ToolProvider: a subprocess-backed provider with I/O of its own, at the same band as
+    // nomos-lang-rust-cargo and nomos-lang-rust-clippy, naming neither them nor either of
+    // its syntax-reading siblings.
+    ("nomos-lang-rust-deny", 25),
     // A second provider of nomos.cap.dependency.edges, for a Go workspace. Reads
     // go.work/go.mod text directly rather than running a subprocess -- its own module doc
     // says why -- but the same band and the same rule as its three siblings above: none of

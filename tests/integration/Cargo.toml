@@ -20,6 +20,7 @@ nomos-lang-rust-scan = { workspace = true }
 nomos-lang-go = { workspace = true }
 nomos-lang-rust-cargo = { workspace = true }
 nomos-lang-rust-clippy = { workspace = true }
+nomos-lang-rust-deny = { workspace = true }
 nomos-lang-go-modules = { workspace = true }
 nomos-corrections = { workspace = true }
 nomos-platform-std = { workspace = true }

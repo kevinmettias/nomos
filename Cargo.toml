@@ -55,6 +55,12 @@ members = [
     # never naming it -- same band.
     "crates/languages/nomos-lang-rust-clippy",
 
+    # Band 25 — nomos.cap.dependency.policy's one provider. `OD-RULES-010`'s second real
+    # ToolProvider: runs `cargo deny --format json check bans licenses sources` and reads
+    # the filesystem, the same subprocess-backed shape as its siblings above, never naming
+    # any of them -- same band.
+    "crates/languages/nomos-lang-rust-deny",
+
     # Band 25 — a second provider of nomos.cap.dependency.edges, for a Go workspace rather
     # than a Cargo one. Reads go.work/go.mod text directly rather than running a subprocess
     # -- its own module doc says why -- so it names neither of its three siblings above and
@@ -227,6 +233,7 @@ nomos-lang-go = { path = "crates/languages/nomos-lang-go" }
 nomos-lang-rust-scan = { path = "crates/languages/nomos-lang-rust-scan" }
 nomos-lang-rust-cargo = { path = "crates/languages/nomos-lang-rust-cargo" }
 nomos-lang-rust-clippy = { path = "crates/languages/nomos-lang-rust-clippy" }
+nomos-lang-rust-deny = { path = "crates/languages/nomos-lang-rust-deny" }
 nomos-lang-go-modules = { path = "crates/languages/nomos-lang-go-modules" }
 nomos-package = { path = "crates/packages/nomos-package" }
 nomos-lang-package = { path = "crates/packages/nomos-lang-package" }

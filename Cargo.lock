@@ -365,6 +365,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "nomos-cap-dependency-policy"
+version = "0.1.0"
+dependencies = [
+ "nomos-capability",
+ "nomos-contracts",
+]
+
+[[package]]
 name = "nomos-cap-lint"
 version = "0.1.0"
 dependencies = [
@@ -398,6 +406,7 @@ dependencies = [
  "nomos-cap-syntax",
  "nomos-capability",
  "nomos-contracts",
+ "nomos-lang-go",
  "nomos-lang-go-modules",
  "nomos-lang-rust",
  "nomos-lang-rust-cargo",
@@ -493,6 +502,7 @@ dependencies = [
  "nomos-lang-rust",
  "nomos-lang-rust-cargo",
  "nomos-lang-rust-clippy",
+ "nomos-lang-rust-deny",
  "nomos-lang-rust-scan",
  "nomos-model",
  "nomos-platform-std",
@@ -584,6 +594,20 @@ version = "0.1.0"
 dependencies = [
  "nomos-analysis",
  "nomos-cap-lint",
+ "nomos-capability",
+ "nomos-contracts",
+ "nomos-model",
+ "nomos-platform",
+ "nomos-platform-std",
+ "serde_json",
+]
+
+[[package]]
+name = "nomos-lang-rust-deny"
+version = "0.1.0"
+dependencies = [
+ "nomos-analysis",
+ "nomos-cap-dependency-policy",
  "nomos-capability",
  "nomos-contracts",
  "nomos-model",

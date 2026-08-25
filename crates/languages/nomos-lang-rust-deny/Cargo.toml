@@ -1,0 +1,23 @@
+[package]
+name = "nomos-lang-rust-deny"
+version = "0.1.0"
+description = "Band 25. The nomos.cap.dependency.policy capability's one provider: runs cargo deny check bans licenses sources and reads the workspace's own resolved-graph verdict out of it. OD-RULES-010."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+nomos-contracts = { workspace = true }
+nomos-model = { workspace = true }
+nomos-capability = { workspace = true }
+nomos-analysis = { workspace = true }
+nomos-cap-dependency-policy = { workspace = true }
+nomos-platform = { workspace = true }
+serde_json = { workspace = true }
+
+[dev-dependencies]
+nomos-platform-std = { workspace = true }
+
+[lints]
+workspace = true

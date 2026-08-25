@@ -477,6 +477,48 @@ fn Rendered_Lint_Facts(mut facts: Vec<nomos_lang_rust_clippy::DiagnosticsFact>) 
     return rendered;
 }
 
+/// `nomos-lang-rust-deny`'s one fact over this repository's own real workspace.
+///
+/// The identical reasoning [`Lint_Production`] gives for using the real repository rather
+/// than the shared `FIXTURE`: this provider's whole reason for existing is that it reads
+/// `cargo deny`'s own real verdict, not bytes a caller already holds. No sort before
+/// rendering, unlike [`Rendered_Lint_Facts`]: `IncrementalGranularity::WholeWorkspace`
+/// means there is exactly one fact here, not a list whose order needs pinning down.
+pub(crate) fn Dependency_Policy_Production() -> Vec<u8>
+{
+    let context = Dependency_Policy_Context();
+    let fact = Discovered_Dependency_Policy_Fact(context);
+
+    return Rendered_Dependency_Policy_Fact(&fact);
+}
+
+fn Dependency_Policy_Context() -> nomos_lang_rust_deny::FactContext
+{
+    return nomos_lang_rust_deny::FactContext {
+        snapshot: SnapshotId::From_Digest(Content_Digest(b"nomos.determinism.snapshot")),
+        variant: BuildVariantId::From_Digest(Content_Digest(b"nomos.determinism.variant")),
+        configuration: ConfigurationId::From_Digest(Content_Digest(b"nomos.determinism.configuration")),
+        generation: GenerationId::INITIAL,
+    };
+}
+
+/// This repository's own real workspace, materialized through the door this provider
+/// actually reads `cargo deny`'s own verdict through.
+fn Discovered_Dependency_Policy_Fact(context: nomos_lang_rust_deny::FactContext) -> nomos_lang_rust_deny::PolicyFact
+{
+    return nomos_lang_rust_deny::Materialize_Workspace(&Repository_Root(), context, &StdProcessLauncher)
+        .expect("this repository is a real cargo workspace under this repository's own deny.toml; a provider that cannot see it verifies nothing");
+}
+
+fn Rendered_Dependency_Policy_Fact(fact: &nomos_lang_rust_deny::PolicyFact) -> Vec<u8>
+{
+    let mut rendered = Vec::new();
+    rendered.extend_from_slice(format!("key\t{}\n", fact.fact.Key().Digest()).as_bytes());
+    rendered.extend_from_slice(&fact.fact.payload.bytes);
+
+    return rendered;
+}
+
 /// `nomos-lang-go-modules`'s facts over a small, synthetic Go workspace.
 ///
 /// Not this repository's own real tree, unlike [`Dependency_Production`] and

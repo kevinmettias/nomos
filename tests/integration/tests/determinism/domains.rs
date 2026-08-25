@@ -12,9 +12,9 @@ use crate::goldens::{
     SCANNED_GOLDEN, SNAPSHOT_GOLDEN,
 };
 use crate::productions::{
-    Correction_Production, Dependency_Production, Go_Dependency_Production, Go_Production, Lint_Production,
-    Parsed_Production, Reachability_Production, Reuse_Production, Rolled_Production, Scanned_Production,
-    Snapshot_Production,
+    Correction_Production, Dependency_Policy_Production, Dependency_Production, Go_Dependency_Production,
+    Go_Production, Lint_Production, Parsed_Production, Reachability_Production, Reuse_Production,
+    Rolled_Production, Scanned_Production, Snapshot_Production,
 };
 use crate::spec_productions::{Alternating, Bundle_Bytes, Projection_Bytes};
 use nomos_lang_rust::SyntaxFactProduction;
@@ -102,6 +102,20 @@ fn Test_The_Lint_Provider_Should_Meet_Its_Declared_Strategy()
     // No golden, the identical reason `DependencyFactProduction` has none above:
     // `LintFactProduction` declares `CrossRun`.
     Check::<LintFactProduction>("lint-fact-production", &Lint_Production, "");
+}
+
+#[test]
+fn Test_The_Dependency_Policy_Provider_Should_Meet_Its_Declared_Strategy()
+{
+    use nomos_lang_rust_deny::DependencyPolicyFactProduction;
+
+    // No golden, the identical reason `LintFactProduction` has none above:
+    // `DependencyPolicyFactProduction` declares `CrossRun`.
+    Check::<DependencyPolicyFactProduction>(
+        "dependency-policy-fact-production",
+        &Dependency_Policy_Production,
+        "",
+    );
 }
 
 #[test]

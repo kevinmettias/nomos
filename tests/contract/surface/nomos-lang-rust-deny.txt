@@ -1,0 +1,22 @@
+pub const fn nomos_lang_rust_deny::Declared_Guarantee() -> Guarantee
+pub const nomos_lang_rust_deny::DependencyPolicyFactProduction::SCOPE: ReproducibilityScope
+pub const nomos_lang_rust_deny::DependencyPolicyFactProduction::STRENGTH: DeterminismStrength
+pub const nomos_lang_rust_deny::DependencyPolicyFactProduction::TRACE: TraceEquivalence
+pub const nomos_lang_rust_deny::PROVIDER: &str
+pub fn nomos_lang_rust_deny::DenyError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_lang_rust_deny::Discover_Workspace<P: ProcessLauncher>(root: &Path, launcher: &P) -> Result<Vec<PolicyViolation>, DenyError>
+pub fn nomos_lang_rust_deny::Materialize_Workspace<P: ProcessLauncher>(root: &Path, context: FactContext, launcher: &P) -> Result<PolicyFact, DenyError>
+pub fn nomos_lang_rust_deny::Provider_Offer() -> ProviderOffer
+pub impl nomos_lang_rust_deny::DenyError implements core::fmt::Display
+pub impl nomos_lang_rust_deny::DependencyPolicyFactProduction implements Strategy
+pub struct field nomos_lang_rust_deny::DenyError::reason: String
+pub struct field nomos_lang_rust_deny::FactContext::configuration: ConfigurationId
+pub struct field nomos_lang_rust_deny::FactContext::generation: GenerationId
+pub struct field nomos_lang_rust_deny::FactContext::snapshot: SnapshotId
+pub struct field nomos_lang_rust_deny::FactContext::variant: BuildVariantId
+pub struct field nomos_lang_rust_deny::PolicyFact::fact: MaterializedFact
+pub struct field nomos_lang_rust_deny::PolicyFact::subject: SubjectId
+pub struct nomos_lang_rust_deny::DenyError
+pub struct nomos_lang_rust_deny::DependencyPolicyFactProduction
+pub struct nomos_lang_rust_deny::FactContext
+pub struct nomos_lang_rust_deny::PolicyFact

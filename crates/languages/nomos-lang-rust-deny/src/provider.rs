@@ -1,0 +1,158 @@
+//! Turning discovered violations into the one fact this capability answers.
+
+use crate::guarantee::{Declared_Guarantee, PROVIDER};
+use crate::reading::{DenyError, Discover_Workspace};
+use nomos_analysis::{FactKey, FactPayload, GuaranteeDigest, InputDigest, MaterializedFact};
+use nomos_cap_dependency_policy::{Capability, Encode_Payload, Payload_Schema, PolicyPayload, CONTRACT_VERSION};
+use nomos_contracts::{
+    BuildVariantId, ConfigurationId, EvidenceClass, GenerationId, Guarantee, ProviderId, SnapshotId,
+    SubjectId,
+};
+use nomos_platform::ProcessLauncher;
+use std::path::Path;
+
+/// Where in the workspace's history a fact is being produced — the same four-field shape
+/// `nomos_lang_rust_clippy::FactContext` carries, for the identical reason: these four
+/// always travel together.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct FactContext
+{
+    pub snapshot: SnapshotId,
+    pub variant: BuildVariantId,
+    pub configuration: ConfigurationId,
+    pub generation: GenerationId,
+}
+
+/// The one fact this capability's `IncrementalGranularity::WholeWorkspace` ceiling allows,
+/// together with the subject it was filed under — `nomos_model::Subject_Of_Path("")`, the
+/// same whole-tree subject `nomos_check_orchestration`'s own `Lint_Capability_Unavailable`
+/// already attributes a failed materialization to, reused here for a successful one: there
+/// is exactly one subject a workspace-wide answer could honestly be filed under.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct PolicyFact
+{
+    pub subject: SubjectId,
+    pub fact: MaterializedFact,
+}
+
+/// Runs `cargo deny` over `root` and produces the one fact this capability answers for the
+/// workspace as a whole -- a leaf: nothing here reads another fact this or any other
+/// provider produced.
+///
+/// Deliberately not itself a `nomos_analysis::MemoryFactStore` writer, the same division
+/// `nomos_lang_rust_clippy::Materialize_Workspace` draws for the identical reason: a
+/// composition root calls this and writes the returned [`PolicyFact`] into the store it
+/// owns.
+///
+/// # Errors
+///
+/// Whatever [`Discover_Workspace`] returns.
+pub fn Materialize_Workspace<P: ProcessLauncher>(root: &Path, context: FactContext, launcher: &P) -> Result<PolicyFact, DenyError>
+{
+    let violations = Discover_Workspace(root, launcher)?;
+    let payload = PolicyPayload { violations };
+    let subject = nomos_model::Subject_Of_Path("");
+    let guarantee = Declared_Guarantee();
+    let payload_bytes = Encode_Payload(&payload);
+    let key = Keyed(subject, guarantee, context);
+    let fact = MaterializedFact {
+        identity: key.At(context.generation),
+        snapshot: context.snapshot,
+        evidence: EvidenceClass::Verified,
+        guarantee,
+        payload: FactPayload::New(Payload_Schema(), payload_bytes),
+    };
+
+    return Ok(PolicyFact { subject, fact });
+}
+
+/// The key this fact is filed under.
+///
+/// `semantic_inputs` is empty, deliberately, the same choice
+/// `nomos_lang_rust_clippy::provider::Keyed` already makes for the identical reason: this
+/// provider's real input is `cargo deny`'s own analysis, which no caller has
+/// independently, so a caller building a lookup key has nothing to reconstruct it from.
+fn Keyed(subject: SubjectId, guarantee: Guarantee, context: FactContext) -> FactKey
+{
+    return FactKey {
+        contract: Capability(),
+        contract_version: CONTRACT_VERSION,
+        subject,
+        semantic_inputs: InputDigest::Of(&[]),
+        provider: ProviderId::New(PROVIDER),
+        provider_version: CONTRACT_VERSION,
+        guarantee: GuaranteeDigest::Of(&guarantee),
+        variant: context.variant,
+        configuration: context.configuration,
+    };
+}
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use nomos_contracts::Digest128;
+    use nomos_platform_std::StdProcessLauncher;
+
+    fn Repository_Root() -> std::path::PathBuf
+    {
+        let manifest = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+        return manifest
+            .parent()
+            .and_then(std::path::Path::parent)
+            .and_then(std::path::Path::parent)
+            .map(std::path::PathBuf::from)
+            .expect("this crate sits three levels below the workspace root");
+    }
+
+    fn Context() -> FactContext
+    {
+        return FactContext {
+            snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([1; 16])),
+            variant: BuildVariantId::From_Digest(Digest128::From_Bytes([2; 16])),
+            configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([3; 16])),
+            generation: GenerationId::INITIAL,
+        };
+    }
+
+    /// One real, whole-workspace `cargo deny` invocation, checked for every property this
+    /// crate promises at once -- not split across several `#[test]`s the way
+    /// `nomos_lang_rust_cargo::provider::tests` is, because that crate's own `cargo
+    /// metadata` call is a manifest read and this one is a real policy pass over the whole
+    /// resolved graph: cheap to repeat there, not here.
+    #[test]
+    fn Test_Materialize_Workspace_Over_This_Repository()
+    {
+        let PolicyFact { subject, fact } =
+            Materialize_Workspace(&Repository_Root(), Context(), &StdProcessLauncher).expect("this repository is a real workspace under cargo deny's own deny.toml");
+
+        assert_eq!(subject, nomos_model::Subject_Of_Path(""));
+        assert_eq!(fact.guarantee, Declared_Guarantee());
+        assert_eq!(fact.Key().guarantee, GuaranteeDigest::Of(&Declared_Guarantee()));
+        assert_eq!(fact.payload.schema, Payload_Schema());
+
+        let decoded = nomos_cap_dependency_policy::Parse_Payload(&fact.payload.bytes).expect("this crate's own encoding");
+        assert!(
+            decoded.violations.iter().any(|violation| return violation.code == "duplicate"),
+            "this workspace's own deny.toml sets multiple-versions = \"warn\", and this \
+             workspace has at least one duplicated dependency today: {decoded:?}"
+        );
+    }
+
+    #[test]
+    fn Test_A_Fact_Key_Should_Depend_On_The_Guarantee()
+    {
+        let subject = nomos_model::Subject_Of_Path("");
+        let weaker = nomos_contracts::Guarantee::New(
+            nomos_contracts::FactVariant::Syntactic,
+            nomos_contracts::Assurance::Unsound,
+            nomos_contracts::Assurance::Unknown,
+            nomos_contracts::IncrementalGranularity::WholeWorkspace,
+        );
+
+        let strong_key = Keyed(subject, Declared_Guarantee(), Context());
+        let weak_key = Keyed(subject, weaker, Context());
+
+        assert_ne!(strong_key.Digest(), weak_key.Digest(), "two offers of the same subject at different guarantees must file apart");
+    }
+}
