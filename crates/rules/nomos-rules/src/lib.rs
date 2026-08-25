@@ -71,6 +71,17 @@
 //! composition. It is additive and unconsulted — `Run()` still calls each rule directly,
 //! unconditionally, exactly as `OD-HOST-004` decided, and nothing here changes what runs
 //! on any given `nomos check`.
+//!
+//! [`Check_Declared_Role_Matches_Surface`] is a fifth rule, additive and unwired into
+//! `nomos-check-orchestration::Run` the same way [`RuleRegistry`] was before a second rule
+//! existed to check its shape against. It is the first rule in this crate to always resolve
+//! [`nomos_contracts::Applicability::AgentRequired`] — `CHK-003`'s seventh reporting
+//! category, real since `OD-CONTRACTS-002` but produced by no rule until this one — because
+//! whether a crate's declared role and its actual public surface agree is a semantic
+//! judgment no mechanical provider can make, grounded against real, external
+//! architecture-standards precedent (`role_surface.rs`'s own module doc names it) rather
+//! than invented. It takes plain data instead of a [`nomos_analysis::FactReader`], and its
+//! own module doc explains why.
 
 #![forbid(unsafe_code)]
 
@@ -82,6 +93,7 @@ mod naming;
 mod reachability;
 mod reading;
 mod registry;
+mod role_surface;
 mod universe;
 
 use nomos_capability::Requirement;
@@ -97,6 +109,7 @@ pub use reachability::{
 };
 pub use reading::Reading;
 pub use registry::{RuleOffer, RuleRegistry, RuleRegistryError};
+pub use role_surface::{Check_Declared_Role_Matches_Surface, RoleSurfacePair, DECLARED_ROLE_MATCHES_SURFACE};
 pub use universe::{UniverseKind, Universes_In};
 
 /// What this crate needs from a syntax provider before it will believe an answer.

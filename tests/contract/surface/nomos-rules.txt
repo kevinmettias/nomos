@@ -1,6 +1,7 @@
 pub const nomos_rules::COMPLETENESS_MIRROR: &str
 pub const nomos_rules::CONTRACT_RECORD: &str
 pub const nomos_rules::CONTRACT_RECORD_VERSION: u32
+pub const nomos_rules::DECLARED_ROLE_MATCHES_SURFACE: &str
 pub const nomos_rules::DEPENDENCY_CONTRACT_RECORD: &str
 pub const nomos_rules::DEPENDENCY_CONTRACT_RECORD_VERSION: u32
 pub const nomos_rules::DEPENDENCY_DIRECTION: &str
@@ -17,6 +18,7 @@ pub enum variant nomos_rules::RuleRegistryError::AlreadyOffered(RuleId)
 pub enum variant nomos_rules::UniverseKind::Constant
 pub enum variant nomos_rules::UniverseKind::Enumeration
 pub fn nomos_rules::Check_Completeness_Mirrors( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
+pub fn nomos_rules::Check_Declared_Role_Matches_Surface(subjects: &[RoleSurfacePair]) -> Vec<Finding>
 pub fn nomos_rules::Check_Dependency_Direction(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 pub fn nomos_rules::Check_Naming_Convention( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
 pub fn nomos_rules::Check_Unread_Reaches_A_Finding(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
@@ -30,6 +32,10 @@ pub struct field nomos_rules::DeclaredUniverse::claimed_mirror: Option<String>
 pub struct field nomos_rules::DeclaredUniverse::kind: UniverseKind
 pub struct field nomos_rules::DeclaredUniverse::name: String
 pub struct field nomos_rules::DeclaredUniverse::path: String
+pub struct field nomos_rules::RoleSurfacePair::actual_surface: String
+pub struct field nomos_rules::RoleSurfacePair::crate_name: String
+pub struct field nomos_rules::RoleSurfacePair::crate_root: String
+pub struct field nomos_rules::RoleSurfacePair::declared_role: String
 pub struct field nomos_rules::RuleOffer::contract_record: String
 pub struct field nomos_rules::RuleOffer::contract_record_version: u32
 pub struct field nomos_rules::RuleOffer::rule: RuleId
@@ -37,6 +43,7 @@ pub struct field nomos_rules::SourceFile::path: String
 pub struct field nomos_rules::SourceFile::subject: SubjectId
 pub struct field nomos_rules::SourceFile::text: String
 pub struct nomos_rules::DeclaredUniverse
+pub struct nomos_rules::RoleSurfacePair
 pub struct nomos_rules::RuleOffer
 pub struct nomos_rules::RuleRegistry
 pub struct nomos_rules::SourceFile
