@@ -39,6 +39,10 @@ members = [
     # anywhere else.
     "crates/languages/nomos-lang-rust",
     "crates/languages/nomos-lang-rust-scan",
+    # The first real second-language provider: what Go source says on its face, offered
+    # against the same `nomos.cap.syntax.items` contract over `tree-sitter-go` in place of
+    # `syn`. `P14-LANG-GO-SYNTAX-PROVIDER`.
+    "crates/languages/nomos-lang-go",
 
     # Band 25 — nomos.cap.dependency.edges' one provider. Different shape from its two
     # siblings above: it runs `cargo metadata` and reads the filesystem for itself, the
@@ -187,6 +191,7 @@ nomos-cap-syntax = { path = "crates/capabilities/nomos-cap-syntax" }
 nomos-cap-dependency = { path = "crates/capabilities/nomos-cap-dependency" }
 nomos-cap-controlflow = { path = "crates/capabilities/nomos-cap-controlflow" }
 nomos-lang-rust = { path = "crates/languages/nomos-lang-rust" }
+nomos-lang-go = { path = "crates/languages/nomos-lang-go" }
 nomos-lang-rust-scan = { path = "crates/languages/nomos-lang-rust-scan" }
 nomos-lang-rust-cargo = { path = "crates/languages/nomos-lang-rust-cargo" }
 nomos-package = { path = "crates/packages/nomos-package" }

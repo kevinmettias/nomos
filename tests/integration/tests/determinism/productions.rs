@@ -429,6 +429,95 @@ fn Repository_Root() -> std::path::PathBuf
         .expect("tests/integration sits two levels below the workspace root");
 }
 
+/// The fixture `nomos-lang-go`'s production is measured over.
+///
+/// A second, Go-specific fixture rather than the shared `FIXTURE` above — that one is Rust
+/// source, and `nomos_lang_go::Read_Source` would refuse every file in it. Chosen for the
+/// same reason `FIXTURE` was: constructs that have historically been a source of ordering
+/// instability in an item walk. A receiver method (qualifies into its type's own scope, the
+/// way an `impl` member does), an interface's method set (a second item per declaration,
+/// recorded under the interface's name), and a multi-name grouped `const` block (repeats
+/// the shared-field grammar quirk `Named_Field_Children` exists to filter).
+const GO_FIXTURE: &[(&str, &str)] = &[
+    (
+        "held.go",
+        "package held\n\n\
+         // Held names something the package holds.\n\
+         type Held struct {\n\
+         \tfield int\n\
+         }\n\n\
+         func (h *Held) Build() *Held { return h }\n\n\
+         func (h Held) Other() {}\n",
+    ),
+    (
+        "writer.go",
+        "package held\n\n\
+         type Writer interface {\n\
+         \tWrite(p []byte) (n int, err error)\n\
+         \tio.Reader\n\
+         }\n\n\
+         const (\n\
+         \tFirst, Second = 1, 2\n\
+         \t// Third is three.\n\
+         \tThird = 3\n\
+         )\n",
+    ),
+    (
+        "last.go",
+        "package held\n\n\
+         type Kind int\n\n\
+         const (\n\
+         \tFirst Kind = iota\n\
+         \tSecond\n\
+         )\n\n\
+         var Count int\n\n\
+         func last() {}\n",
+    ),
+];
+
+fn Go_Subject_Of(path: &str) -> SubjectId
+{
+    return SubjectId::From_Digest(Content_Digest(path.as_bytes()));
+}
+
+fn Go_Context() -> nomos_lang_go::FactContext
+{
+    let shared = Fact_Context();
+
+    return nomos_lang_go::FactContext {
+        snapshot: shared.snapshot,
+        variant: shared.variant,
+        configuration: shared.configuration,
+        generation: shared.generation,
+    };
+}
+
+/// `nomos-lang-go`'s facts over [`GO_FIXTURE`], rendered the same way [`Parsed_Production`]
+/// renders `nomos-lang-rust`'s.
+pub(crate) fn Go_Production() -> Vec<u8>
+{
+    let context = Go_Context();
+    let mut rendered = Vec::new();
+
+    for (path, source) in GO_FIXTURE
+    {
+        let fact = match nomos_lang_go::Materialize(Go_Subject_Of(path), source, context)
+        {
+            nomos_lang_go::Materialization::Materialized(fact) => fact,
+            nomos_lang_go::Materialization::Unparseable(failure) =>
+            {
+                panic!("the fixture must parse; {path} did not: {failure}");
+            }
+        };
+
+        rendered.extend_from_slice(format!("file\t{path}\n").as_bytes());
+        rendered.extend_from_slice(format!("key\t{}\n", fact.Key().Digest()).as_bytes());
+        rendered.extend_from_slice(&fact.payload.bytes);
+    }
+
+    return rendered;
+}
+
 /// The scanner's facts over the same fixture, rendered the same way.
 pub(crate) fn Scanned_Production() -> Vec<u8>
 {

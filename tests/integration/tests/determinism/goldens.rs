@@ -28,6 +28,10 @@ pub(crate) const ROLLED_GOLDEN: &str = "a9dc834595e753e498f3a981020b2214";
 /// The reachability offer's golden, over the fixture that finds no site to flag.
 pub(crate) const REACHABILITY_GOLDEN: &str = "45ad5b30ad5a0a0299749b362f65fe83";
 pub(crate) const SCANNED_GOLDEN: &str = "e692ad97796279579ca5cd77764e08e5";
+/// `nomos-lang-go`'s golden, over [`crate::productions::GO_FIXTURE`]. Captured on this
+/// platform when `nomos-lang-go` first declared `SyntaxFactProduction`, the same way every
+/// other constant in this file was captured on the platform that first declared its domain.
+pub(crate) const GO_GOLDEN: &str = "e3974d10e3b4065bffc9562fe274cd4c";
 pub(crate) const SNAPSHOT_GOLDEN: &str = "1fb5fb67d666b0bb983f3b71e7e09f93";
 
 /// The bundle's golden, and the one whose scope claim reaches furthest.

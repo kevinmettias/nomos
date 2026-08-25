@@ -37,6 +37,31 @@ pub fn Registered() -> Result<Registry, RegistryError>
 /// second offer is composition, not choice, and `nomos_capability::Registry::Resolve` ranks
 /// between the two on its own: the parser's guarantee is strictly stronger on every axis the
 /// scanner differs on, so it remains the offer `Resolve` chooses with no preference named.
+///
+/// `nomos_lang_go` is deliberately *not* a third offer here. `Registry::Resolve` ranks
+/// purely by guarantee strength with no notion of which subjects a provider can even
+/// attempt, and `nomos_lang_go`'s declared guarantee -- `Assurance::Sound` on both axes,
+/// where both Rust providers are weaker on completeness -- is strictly stronger than
+/// either. Offering it here was tried and reverted: `nomos_rules::Syntax_Requirement`'s own
+/// resolution (deliberately unpreferenced, per that function's own doc) then resolved to
+/// `nomos_lang_go` for `.rs` files too, and every `.rs` fact this composition already wrote
+/// under `nomos_lang_rust`'s provider identity stopped matching what the rule's index
+/// believed had answered -- four real tests in this crate's own `tests.rs` went from green
+/// to `DependencyUnavailable` findings, not from a mistake at this call site but from
+/// `ProviderOffer` itself carrying no subject or domain scope for `Resolve` to rank within.
+///
+/// This is not `OD-CAPABILITY-006`'s cross-language case -- that record is explicit that it
+/// governs two *different* languages' subjects joined by a declared correspondence, and
+/// says so precisely to keep `OD-CAPABILITY-001`'s same-capability ranking out of its own
+/// scope: "There is no ranking between a Rust ownership fact and a Python ownership fact...
+/// neither is a weaker or stronger offer of the same fact, because they are not offers of
+/// the same fact." `nomos_lang_rust` and `nomos_lang_go` *are* offers of the same fact,
+/// `nomos.cap.syntax.items` -- the same shape `OD-CAPABILITY-001` already governs -- except
+/// that unlike the parser and the scanner, neither can actually answer for the other's
+/// subjects at all. No existing record states what a caller-unpreferenced `Resolve` owes a
+/// capability whose real offers partition by subject rather than compete over one. Wiring
+/// this provider into the registry waits on that decision; `P14-LANG-GO-SYNTAX-PROVIDER`'s
+/// own follow-up item reserves it.
 fn Declare_Syntax_Capability(registry: &mut Registry) -> Result<(), RegistryError>
 {
     registry.Declare(nomos_cap_syntax::Capability_Contract())?;

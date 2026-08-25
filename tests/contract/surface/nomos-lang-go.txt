@@ -1,0 +1,67 @@
+pub const fn nomos_lang_go::Declared_Guarantee() -> Guarantee
+pub const fn nomos_lang_go::ItemKind::Label(self) -> &'static str
+pub const nomos_lang_go::GO_EXTENSION: &str
+pub const nomos_lang_go::PROVIDER: &str
+pub const nomos_lang_go::SyntaxFactProduction::SCOPE: ReproducibilityScope
+pub const nomos_lang_go::SyntaxFactProduction::STRENGTH: DeterminismStrength
+pub const nomos_lang_go::SyntaxFactProduction::TRACE: TraceEquivalence
+pub enum nomos_lang_go::ItemKind
+pub enum nomos_lang_go::Materialization
+pub enum nomos_lang_go::Reading
+pub enum nomos_lang_go::Recognition
+pub enum nomos_lang_go::Visibility
+pub enum variant nomos_lang_go::ItemKind::Constant
+pub enum variant nomos_lang_go::ItemKind::Function
+pub enum variant nomos_lang_go::ItemKind::Import
+pub enum variant nomos_lang_go::ItemKind::Interface
+pub enum variant nomos_lang_go::ItemKind::Struct
+pub enum variant nomos_lang_go::ItemKind::TypeAlias
+pub enum variant nomos_lang_go::ItemKind::TypeDefinition
+pub enum variant nomos_lang_go::ItemKind::Variable
+pub enum variant nomos_lang_go::Materialization::Materialized(Box<MaterializedFact>)
+pub enum variant nomos_lang_go::Materialization::Unparseable(ParseFailure)
+pub enum variant nomos_lang_go::Reading::Parsed(SyntaxFacts)
+pub enum variant nomos_lang_go::Reading::Unparseable(ParseFailure)
+pub enum variant nomos_lang_go::Recognition::Recognized
+pub enum variant nomos_lang_go::Recognition::Unrecognized { extension: Option<String>, }
+pub enum variant nomos_lang_go::Visibility::NotApplicable
+pub enum variant nomos_lang_go::Visibility::Private
+pub enum variant nomos_lang_go::Visibility::Public
+pub fn nomos_lang_go::Encode_Payload(facts: &SyntaxFacts) -> Vec<u8>
+pub fn nomos_lang_go::ItemKind::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_lang_go::Materialize(subject: SubjectId, source: &str, context: FactContext) -> Materialization
+pub fn nomos_lang_go::ParseFailure::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_lang_go::Provider_Offer() -> ProviderOffer
+pub fn nomos_lang_go::Read_Source(source: &str) -> Reading
+pub fn nomos_lang_go::Recognition::Of_Path(path: &str) -> Self
+pub fn nomos_lang_go::SyntaxFacts::Declares_Nothing(&self) -> bool
+pub fn nomos_lang_go::SyntaxItem::Qualified_Name(&self) -> String
+pub fn nomos_lang_go::Visibility::Label(&self) -> &'static str
+pub fn nomos_lang_go::Visibility::Of_Name(name: &str) -> Self
+pub fn nomos_lang_go::Visibility::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub impl nomos_lang_go::ItemKind implements core::fmt::Display
+pub impl nomos_lang_go::ParseFailure implements core::fmt::Display
+pub impl nomos_lang_go::ParseFailure implements std::error::Error
+pub impl nomos_lang_go::SyntaxFactProduction implements Strategy
+pub impl nomos_lang_go::Visibility implements core::fmt::Display
+pub struct field nomos_lang_go::FactContext::configuration: ConfigurationId
+pub struct field nomos_lang_go::FactContext::generation: GenerationId
+pub struct field nomos_lang_go::FactContext::snapshot: SnapshotId
+pub struct field nomos_lang_go::FactContext::variant: BuildVariantId
+pub struct field nomos_lang_go::ParseFailure::column: usize
+pub struct field nomos_lang_go::ParseFailure::line: usize
+pub struct field nomos_lang_go::ParseFailure::message: String
+pub struct field nomos_lang_go::SyntaxFacts::items: Vec<SyntaxItem>
+pub struct field nomos_lang_go::SyntaxFacts::unexpanded: u32
+pub struct field nomos_lang_go::SyntaxItem::documentation: Option<String>
+pub struct field nomos_lang_go::SyntaxItem::kind: ItemKind
+pub struct field nomos_lang_go::SyntaxItem::name: String
+pub struct field nomos_lang_go::SyntaxItem::ordinal: u32
+pub struct field nomos_lang_go::SyntaxItem::scope: Vec<String>
+pub struct field nomos_lang_go::SyntaxItem::shape: Option<String>
+pub struct field nomos_lang_go::SyntaxItem::visibility: Visibility
+pub struct nomos_lang_go::FactContext
+pub struct nomos_lang_go::ParseFailure
+pub struct nomos_lang_go::SyntaxFactProduction
+pub struct nomos_lang_go::SyntaxFacts
+pub struct nomos_lang_go::SyntaxItem

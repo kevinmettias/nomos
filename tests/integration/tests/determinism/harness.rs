@@ -106,6 +106,7 @@ pub(crate) fn Test_Name_For(domain: &str) -> &'static str
             "domains::Test_The_Reachability_Offer_Should_Meet_Its_Declared_Strategy"
         }
         "scan-fact-production" => "domains::Test_The_Scanner_Should_Meet_Its_Declared_Strategy",
+        "go-syntax-fact-production" => "domains::Test_The_Go_Provider_Should_Meet_Its_Declared_Strategy",
         "dependency-fact-production" =>
         {
             "domains::Test_The_Dependency_Provider_Should_Meet_Its_Declared_Strategy"

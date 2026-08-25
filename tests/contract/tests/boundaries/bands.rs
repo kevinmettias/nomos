@@ -63,6 +63,11 @@ pub(crate) const BANDS: &[(&str, u32)] = &[
     // crates at one band, which is what stops the second answer from being derived from
     // the first. Two providers that shared a parser could not disagree.
     ("nomos-lang-rust-scan", 25),
+    // The first real second-language provider of the same capability, over tree-sitter-go
+    // in place of syn. Same band as its two Rust-reading siblings, for the same reason:
+    // none of the three may name either of the others, and the registry is what lets a
+    // caller resolve to any of them without knowing which.
+    ("nomos-lang-go", 25),
     // The one provider of nomos.cap.dependency.edges. Different shape from its two
     // siblings here -- it is the only provider in this workspace that performs I/O -- but
     // the same band, for the same reason: nothing below it may be able to name it and

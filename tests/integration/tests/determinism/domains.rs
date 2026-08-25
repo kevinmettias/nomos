@@ -8,11 +8,11 @@
 
 use crate::harness::Check;
 use crate::goldens::{
-    BUNDLE_GOLDEN, PARSED_GOLDEN, PROJECTION_GOLDEN, REACHABILITY_GOLDEN, ROLLED_GOLDEN,
+    BUNDLE_GOLDEN, GO_GOLDEN, PARSED_GOLDEN, PROJECTION_GOLDEN, REACHABILITY_GOLDEN, ROLLED_GOLDEN,
     SCANNED_GOLDEN, SNAPSHOT_GOLDEN,
 };
 use crate::productions::{
-    Correction_Production, Dependency_Production, Parsed_Production, Reachability_Production,
+    Correction_Production, Dependency_Production, Go_Production, Parsed_Production, Reachability_Production,
     Reuse_Production, Rolled_Production, Scanned_Production, Snapshot_Production,
 };
 use crate::spec_productions::{Alternating, Bundle_Bytes, Projection_Bytes};
@@ -60,6 +60,12 @@ fn Test_The_Scanner_Should_Meet_Its_Declared_Strategy()
     use nomos_lang_rust_scan::ScanFactProduction;
 
     Check::<ScanFactProduction>("scan-fact-production", &Scanned_Production, SCANNED_GOLDEN);
+}
+
+#[test]
+fn Test_The_Go_Provider_Should_Meet_Its_Declared_Strategy()
+{
+    Check::<nomos_lang_go::SyntaxFactProduction>("go-syntax-fact-production", &Go_Production, GO_GOLDEN);
 }
 
 #[test]
