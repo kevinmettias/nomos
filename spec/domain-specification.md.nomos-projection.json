@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:4fec4cb40b7022b1f06b062d04626eb3a7a0e7d4f8dcaee4f6595bdb814f3b18",
-  "inputs_digest": "sha256:4ca263ccf6078f18808572c2055da1283e835ddf25a660b0eff345042b80051c",
+  "content_digest": "sha256:ab8f0fafc26fe497b3120904fd271746ae0ac3337c6e94869162dca3a4980871",
+  "inputs_digest": "sha256:966245e2aebf1e54be7c9f2983e7c7370927834185cf22b51904c96319915ce5",
   "sections": [
     [
       "Documents",
-      156
+      157
     ],
     [
       "Sections",
-      1333
+      1339
     ],
     [
       "Source blocks",
-      4689
+      4706
     ]
   ],
   "inputs": [
@@ -334,6 +334,11 @@
       "content": "documents",
       "identity": "docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md@authored",
       "hash": "sha256:ee64f184602e1bd210eeca6144c88552d97cebce829ccdedea3db6487fc6e36d"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md@authored",
+      "hash": "sha256:8b80590869d121dd76fa42950c366543d613d4ba319282b49f28a446cc6af6cd"
     },
     {
       "content": "documents",
@@ -3369,6 +3374,36 @@
       "content": "headings",
       "identity": "docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md#33",
       "hash": "sha256:eed6b3140f360e2f1ab10489191b5e2430e5d97a27ab2086354be897e34506ec"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#1",
+      "hash": "sha256:2b81b7aec33bb44f16ab9445c31331a53c3c9a0e8c43efa8e34a330e4b6f82c8"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#2",
+      "hash": "sha256:1355a5b085003b6dbaeefb47b4101c54e85f8a9f31ba3f3026206e3a690b8b92"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#4",
+      "hash": "sha256:294de007369f094a2f59771ea94cba1dea37e0f9e58504515be57e1c9a5dd222"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#11",
+      "hash": "sha256:64711d66a2eafa8d17498dd24cbfa547c0665df2e2dd222deaadf231c699a2c4"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#14",
+      "hash": "sha256:2e4d0a9ff7fd72902e82b1d184ae204c10f5588076adeb58a4cf6908f3bcdcfe"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#16",
+      "hash": "sha256:3120077c89661ece48929b7e95aee4f64e31d99477a54dda0f9b9058d6d94265"
     },
     {
       "content": "headings",
@@ -16289,6 +16324,91 @@
       "content": "blocks",
       "identity": "docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md#34",
       "hash": "sha256:cd1991797ea3e05e78d3ea094d7b6ddfb3d3d7d83deb02d03c387497cf2cad92"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#1",
+      "hash": "sha256:46af47c6f85348bcd4f84f9519d54815ccf639a13ee817970beb92b1d2186919"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#3",
+      "hash": "sha256:e081c218c7cfc45f3f8a3f3b95bf4eb253aced584e1b56def66f4c9abc959290"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#4",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#5",
+      "hash": "sha256:728b03a755c4404a0895dabb717dfaf282d8930a0ba7f33bd49fe0e0771188fa"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#6",
+      "hash": "sha256:ca8c35942d787f489c17cfee7d878ba44527d4b766f12efcc25b85247a3f8b64"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#7",
+      "hash": "sha256:e3ded4db0f884602a06a05f1937f34c31a35e93ed252863302f0710cafcaf95a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#8",
+      "hash": "sha256:5229dce6f2d3369ee9ddbc09bee797d7247d20e970eab24e9638e0439615398b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#9",
+      "hash": "sha256:57896892f1d22fec7509db4e5d1bb0bd4cf81b652ff9be6565ed4508fd82f206"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#10",
+      "hash": "sha256:6e745f4cee74b27d3e735683e8829b548e88c44c62b2371aba224ca834d1579d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#11",
+      "hash": "sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#12",
+      "hash": "sha256:e1ad49f9396ff0d32349ab11706df0b24f3769bdad906bf37da41647ab3f0a03"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#13",
+      "hash": "sha256:1b40ce1c342e2a204ee2a42127b74219cb5704fd6ea80d3ea87c618716e08c24"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#14",
+      "hash": "sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#15",
+      "hash": "sha256:bf0d94a73be8b5f46654ceaf25b17c5263e48e7bf6fbf4e3d007a5b7dbb94f27"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#16",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#17",
+      "hash": "sha256:ad6016bd9c7e32d8b664c0a0fedcc48a54ac39e4901b20ed822b99989ed2ed36"
     },
     {
       "content": "blocks",

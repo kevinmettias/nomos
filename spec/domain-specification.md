@@ -73,6 +73,7 @@ profile: domain-specification
 | docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md@authored | docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md | authored | 17 | 7 | sha256:db6c652a9e6a7ddad8f6d701642e08c3a91d0f38c07839fdf7b5c5fc9e6ffa50 |
 | docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md@authored | docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md | authored | 21 | 8 | sha256:fde76ddb443213fdd5c253144550e72aa60a127201be1c067156bd52c9a071dd |
 | docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md@authored | docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md | authored | 34 | 12 | sha256:ee64f184602e1bd210eeca6144c88552d97cebce829ccdedea3db6487fc6e36d |
+| docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md@authored | docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md | authored | 17 | 6 | sha256:8b80590869d121dd76fa42950c366543d613d4ba319282b49f28a446cc6af6cd |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md@authored | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md | authored | 16 | 5 | sha256:e3d0afb3cabc0ab33a09a700e110b803806d3c4e063673d8c18ca7adc84c3012 |
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md@authored | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md | authored | 36 | 8 | sha256:3ececaaf506dff6cacf4aa066df5a3fdd61032c1ec291ef9f21e3a4b939d37ef |
 | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md@authored | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md | authored | 19 | 6 | sha256:9237ea74e89c7f49295d2e4bde41ff135c64838767ba17c27b0aad79037ced10 |
@@ -685,6 +686,12 @@ profile: domain-specification
 | docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md#27 | authored | 2 | Two Of Three Are Built, Under Override — Adoption Is Not |
 | docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md#30 | authored | 2 | All Three Are Built, Under Override |
 | docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md#33 | authored | 2 | Status |
+| docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#1 | authored | 1 | Whether Gate needs a CoveragePolicy that lets unsupported or unanalyzed scope affect disposition |
+| docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#2 | authored | 2 | Question |
+| docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#4 | authored | 2 | What Was Measured |
+| docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#11 | authored | 2 | Decision |
+| docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#14 | authored | 2 | What This Does Not Do |
+| docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#16 | authored | 2 | Status |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#1 | authored | 1 | Choosing a platform, running a verb and rendering its outcome are three crates, not one |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#4 | authored | 2 | The decision |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#8 | authored | 2 | What stayed out, and why |
@@ -17650,6 +17657,187 @@ identity-based new-code detection, `ADOPT-CONFIG-*`'s declared phases and a real
 authoring/config surface for any of the three) is a new question for a new record, the same
 way `OD-GATE-014`'s own acceptance already treats a future narrowing of `ScopeSelector`/
 `RuleSelector`.
+
+### docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#1
+
+*revision: authored · kind: heading · heading: Whether Gate needs a CoveragePolicy that lets unsupported or unanalyzed scope affect disposition · hash: sha256:46af47c6f85348bcd4f84f9519d54815ccf639a13ee817970beb92b1d2186919*
+
+# Whether Gate needs a CoveragePolicy that lets unsupported or unanalyzed scope affect disposition
+
+### docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#2
+
+*revision: authored · kind: heading · heading: Whether Gate needs a CoveragePolicy that lets unsupported or unanalyzed scope affect disposition / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#3
+
+*revision: authored · kind: prose · heading: Whether Gate needs a CoveragePolicy that lets unsupported or unanalyzed scope affect disposition / Question · hash: sha256:e081c218c7cfc45f3f8a3f3b95bf4eb253aced584e1b56def66f4c9abc959290*
+
+An external architecture review (read against this workspace rather than accepted on read)
+names Gate's missing `CoveragePolicy` — the inability to distinguish a clean, fully-analyzed
+run from one where scope went unanalyzed or unsupported — as a real, currently-undecided gap.
+`WF-001`'s binding clause names "coverage" and "unsupported-analysis policy" among what "a
+gate shall define," alongside phases, thresholds, waivers, approvals and blocking behavior;
+`ARC-ROADMAP-001` constraint 5 separately lists `CoveragePolicy` by name among the properties
+of the product-level `Gate` object, beside `ScopeSelector`, `RuleSelector`,
+`ApplicabilityPolicy`, `BaselinePolicy` and `SuppressionPolicy`. `OD-GATE-015` measured the
+same `WF-001` clause and its own corpus section structure, and deliberately scoped itself to
+only three of its named concerns — suppression, baseline, adoption — leaving coverage, phases,
+thresholds and approvals untouched; its own "Current Position" section never mentions
+`CoveragePolicy`. Whether coverage should now be decided the way suppression, baseline and
+adoption already were is this record's question.
+
+### docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#4
+
+*revision: authored · kind: heading · heading: Whether Gate needs a CoveragePolicy that lets unsupported or unanalyzed scope affect disposition / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#5
+
+*revision: authored · kind: prose · heading: Whether Gate needs a CoveragePolicy that lets unsupported or unanalyzed scope affect disposition / What Was Measured · hash: sha256:728b03a755c4404a0895dabb717dfaf282d8930a0ba7f33bd49fe0e0771188fa*
+
+**The machinery `CoveragePolicy` would consult already exists and is real.** Verified
+directly: `Applicability::Is_Coverage_Debt()`
+(`crates/contracts/nomos-contracts/src/finding/applicability.rs`) and `Claim`
+(`Claim::Complete`/`Claim::Incomplete`, computed by `Claim_Of` in
+`crates/orchestration/nomos-check-orchestration/src/outcome/claim.rs`) are not missing types —
+they are unconsulted ones, tested and shipped since `OD-COMPLETENESS-004`.
+
+### docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#6
+
+*revision: authored · kind: prose · heading: Whether Gate needs a CoveragePolicy that lets unsupported or unanalyzed scope affect disposition / What Was Measured · hash: sha256:ca8c35942d787f489c17cfee7d878ba44527d4b766f12efcc25b85247a3f8b64*
+
+**Gate's own `Disposition` already names why it does not read `Claim`, and names the decision
+that settled it.** Verified directly:
+`crates/orchestration/nomos-gate-orchestration/src/outcome/gate_run_outcome.rs`'s `Disposition`
+carries a doc comment stating `Claim` "is deliberately not consulted here, the same choice
+`OD-COMPLETENESS-004` already made for `nomos check`'s own exit code: reported, not gated on."
+
+### docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#7
+
+*revision: authored · kind: prose · heading: Whether Gate needs a CoveragePolicy that lets unsupported or unanalyzed scope affect disposition / What Was Measured · hash: sha256:e3ded4db0f884602a06a05f1937f34c31a35e93ed252863302f0710cafcaf95a*
+
+**`OD-COMPLETENESS-004` measured this exact question once already, for a different surface,
+and explicitly left the Gate-layer question open.** Read directly: it settled that `nomos
+check`'s own fixed exit code should report coverage debt (`claim: incomplete` and a per-variant
+breakdown) without failing the build over it, on measured grounds specific to that surface —
+this repository's own `tests/corpus/analysis/gamma/broken.rs` fixture makes every real run
+`Claim::Incomplete` today, so a stricter exit code there would turn this repository's own gate
+permanently red over an admitted, deliberate gap. Its own "What This Does Not Do" section
+states: "It does not give the gate a stricter policy... That is a live, separate decision this
+record declines to make by accident." This record is that decision.
+
+### docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#8
+
+*revision: authored · kind: prose · heading: Whether Gate needs a CoveragePolicy that lets unsupported or unanalyzed scope affect disposition / What Was Measured · hash: sha256:5229dce6f2d3369ee9ddbc09bee797d7247d20e970eab24e9638e0439615398b*
+
+**Gate has no state for it today.** Verified directly: `GateRunOutcome`
+(`outcome/gate_run_outcome.rs`) has exactly three variants — `Passed`, `Failed`,
+`Indeterminate` — and `Indeterminate` is assigned only when the underlying `CheckOutcome` never
+reached `Judged` at all (an unreadable root, no source found, a self-contradictory registry).
+`Run_Gate`'s own `Reduced` function (`run_gate.rs`) never inspects `outcome`'s `claim` field. A
+gate run today reports `Passed` whenever no finding blocks, even when a subject in scope
+carried `Applicability::MissingCapability`, `Unparseable` or another coverage-debt state — the
+same "unknown read as pass" defect `Applicability`'s own module doc names as the product's
+first principle, now open one layer up, at the layer whose disposition a real CI step actually
+gates (`P13-GATE-RUN-CI-CALLER`).
+
+### docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#9
+
+*revision: authored · kind: prose · heading: Whether Gate needs a CoveragePolicy that lets unsupported or unanalyzed scope affect disposition / What Was Measured · hash: sha256:57896892f1d22fec7509db4e5d1bb0bd4cf81b652ff9be6565ed4508fd82f206*
+
+**`Claim` as currently computed does not match what a Gate-layer policy would need to consult.**
+Verified directly: `CheckOutcome::Judged`'s `claim` is computed once, project-wide, over every
+finding the underlying `nomos check` produced — before `Run_Gate`'s own `command.rules` and
+`command.scope` narrow what counts toward disposition. A `CoveragePolicy` consulted correctly
+would need `Claim` recomputed over the rule-and-scope-selected findings, the same "selection
+narrows what counts" shape `Reduced` already applies before computing `blocking_findings`,
+`calibrated_findings`, `suppressed_findings` and `baselined_findings` — reusing the whole-run
+`claim` `check_outcome` already carries would silently answer a different, broader question
+than the one Gate's own `RuleSelector`/`ScopeSelector` say it is judging.
+
+### docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#10
+
+*revision: authored · kind: prose · heading: Whether Gate needs a CoveragePolicy that lets unsupported or unanalyzed scope affect disposition / What Was Measured · hash: sha256:6e745f4cee74b27d3e735683e8829b548e88c44c62b2371aba224ca834d1579d*
+
+**The standing override that built `OD-GATE-014` and `OD-GATE-015`'s three concerns already
+names `CoveragePolicy` by name.** The user's 2026-08-19/20 "proceed with all remaining work"
+directive lists Gate policy as `ScopeSelector`/`RuleSelector`/`CoveragePolicy`/`BaselinePolicy`/
+`SuppressionPolicy` together, the same list `OD-GATE-014` and `OD-GATE-015` were each built
+under, with the explicit instruction to treat every item named as unblocked and not re-raise
+the deferral question for any of them.
+
+### docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#11
+
+*revision: authored · kind: heading · heading: Whether Gate needs a CoveragePolicy that lets unsupported or unanalyzed scope affect disposition / Decision · hash: sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511*
+
+## Decision
+
+### docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#12
+
+*revision: authored · kind: prose · heading: Whether Gate needs a CoveragePolicy that lets unsupported or unanalyzed scope affect disposition / Decision · hash: sha256:e1ad49f9396ff0d32349ab11706df0b24f3769bdad906bf37da41647ab3f0a03*
+
+**Build a first real increment now, under the override — narrower than `WF-001`'s full shape,
+the same discipline each of `OD-GATE-015`'s three concerns followed in turn.** A
+`CoveragePolicy` consulted by `Run_Gate` alongside `command.rules`, `command.adoption`,
+`command.suppressions` and `command.baseline`: when a repository sets it to require
+completeness, `Run_Gate` recomputes `Claim` over the rule-and-scope-selected findings — not the
+whole-run one `check_outcome` already carries — and reports `GateRunOutcome::Indeterminate`,
+never silently `Passed`, whenever that recomputed claim is `Incomplete`. Unset, behavior is
+unchanged: `OD-COMPLETENESS-004`'s "reported, not gated on" default stays the default for a
+repository that never opts in, the same way an empty `SuppressionPolicy`, `BaselineDebt` or
+`AdoptionPolicy` changes nothing today.
+
+### docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#13
+
+*revision: authored · kind: prose · heading: Whether Gate needs a CoveragePolicy that lets unsupported or unanalyzed scope affect disposition / Decision · hash: sha256:1b40ce1c342e2a204ee2a42127b74219cb5704fd6ea80d3ea87c618716e08c24*
+
+This first increment does not attempt `WF-001`'s full shape. Declared phases, thresholds and
+approvals stay exactly as unbuilt as `OD-GATE-015` already found them — this record is about
+coverage alone, the one `WF-001` concern `OD-GATE-015` left unmeasured, not the rest of what
+that clause names. No CLI flag or configuration file constructs a `CoveragePolicy` yet — the
+same absence `SuppressionPolicy`'s, `BaselineDebt`'s and `AdoptionPolicy`'s own first increments
+each declined to fill, for the reason each of them gave: nothing in this workspace has any
+config-file authoring convention at all, so inventing one now, before a real caller needs it,
+would repeat the mistake `OD-GATE-015` already declined once. `Explain_Gate` reporting a
+coverage-caused `Indeterminate` by name, the same way it already reports `baselined_by` and
+`calibrated_by`, is left to the item that builds this increment, not decided here.
+
+### docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#14
+
+*revision: authored · kind: heading · heading: Whether Gate needs a CoveragePolicy that lets unsupported or unanalyzed scope affect disposition / What This Does Not Do · hash: sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf*
+
+## What This Does Not Do
+
+### docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#15
+
+*revision: authored · kind: prose · heading: Whether Gate needs a CoveragePolicy that lets unsupported or unanalyzed scope affect disposition / What This Does Not Do · hash: sha256:bf0d94a73be8b5f46654ceaf25b17c5263e48e7bf6fbf4e3d007a5b7dbb94f27*
+
+- It does not change `nomos check`'s own exit code or `report.rs`. `OD-COMPLETENESS-004`
+  settled that question for that surface; this record settles the separate, Gate-layer question
+  its own text named as live and left open.
+- It does not decide what `CoveragePolicy` looks like beyond the binary require-completeness
+  case measured here. A minimum-`Applicability` threshold, a per-rule or per-scope coverage
+  requirement, or anything `WF-001`'s richer text might eventually support is left to real
+  evidence once a repository has this first shape to react to.
+- It does not touch `Finding::Can_Fail_A_Build`, `Applicability`, `Claim`, or any rule. Every
+  type this record's increment reads already exists and is unchanged by it.
+
+### docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#16
+
+*revision: authored · kind: heading · heading: Whether Gate needs a CoveragePolicy that lets unsupported or unanalyzed scope affect disposition / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#17
+
+*revision: authored · kind: prose · heading: Whether Gate needs a CoveragePolicy that lets unsupported or unanalyzed scope affect disposition / Status · hash: sha256:ad6016bd9c7e32d8b664c0a0fedcc48a54ac39e4901b20ed822b99989ed2ed36*
+
+Accepted. Names the first increment to build; a follow-on capability item builds it and amends
+this record the way `P13-GATE-015-SUPPRESSION-RECORD`, `-BASELINE-RECORD` and `-ADOPTION-RECORD`
+each amended `OD-GATE-015` once their own concern landed.
 
 ### docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#1
 

@@ -3,16 +3,16 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:2f0c50d5685e693d0c0f178c40412f153a99ef0dabafa4785ecad84c954ff05a",
-  "inputs_digest": "sha256:95248055440f6f622909f203d4a085eea7772d2575643879bac00ac8006a21f7",
+  "content_digest": "sha256:86744e7959c218d4280f6cffefab0b032c2654835410e28540bb46b0779d0534",
+  "inputs_digest": "sha256:8f19314b0101e642409bccf860e24d976ea1d2513bcbcacd19c1088eb571cfc8",
   "sections": [
     [
       "Relations",
-      1080
+      1090
     ],
     [
       "Decisions",
-      148
+      149
     ]
   ],
   "inputs": [
@@ -310,6 +310,11 @@
       "content": "relations",
       "identity": "ARC-ROADMAP-001 relates-to OD-GATE-015",
       "hash": "sha256:91fbcc199fad4747c0587b15403624dc6ea95df63fafd65af9410cc6d5973284"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-ROADMAP-001 relates-to OD-GATE-016",
+      "hash": "sha256:f5fa6530fcdf93bbb8be889b56abb4cbbad6cce3b4e989d18fe512ef47ed6e3e"
     },
     {
       "content": "relations",
@@ -1678,6 +1683,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-COMPLETENESS-004 relates-to OD-GATE-016",
+      "hash": "sha256:5be9404cbf15934103e2fb047f9aecf6cbae49ce13a7029983f9a55e53533dc0"
+    },
+    {
+      "content": "relations",
       "identity": "OD-COMPLETENESS-004 relates-to OD-RULES-001",
       "hash": "sha256:f8f280dafa939c8552c58a813e8a179300f10215f0be878c57559904424e1d4c"
     },
@@ -2383,6 +2393,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-GATE-014 relates-to OD-GATE-016",
+      "hash": "sha256:71b0b8a754e5ab7cb11d01135e383ccfb63680b9b09e5b2536451f625d926198"
+    },
+    {
+      "content": "relations",
       "identity": "OD-GATE-014 relates-to OD-HOST-004",
       "hash": "sha256:ab0254230178465078634c38e0bb5c4a64d3f882f866493221faa36327bb06af"
     },
@@ -2415,6 +2430,36 @@
       "content": "relations",
       "identity": "OD-GATE-015 relates-to OD-GATE-014",
       "hash": "sha256:7f6eb23a872217400f5501f9f963a6247ca621fc2888ef7d9a4e2cdb3d4cba5f"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-GATE-015 relates-to OD-GATE-016",
+      "hash": "sha256:931f64f66030c98a50e3b9a1709f9f95b2be74ad5695d708f65b6dcbdc93e94e"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-GATE-016 relates-to ARC-ROADMAP-001",
+      "hash": "sha256:670c52041244d530b7acb06aee1b046d0b48f9d42ffceb904abdd0bf308ae54c"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-GATE-016 relates-to OD-COMPLETENESS-004",
+      "hash": "sha256:4c971c8fcc17313cca3aa93611770349e0ee45260d49ebeda7221775da1ce9cf"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-GATE-016 relates-to OD-GATE-014",
+      "hash": "sha256:7b2633c520cfb62068e4f9cad37e28b5fb7b24fa25acac74495ab0b09cdbb280"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-GATE-016 relates-to OD-GATE-015",
+      "hash": "sha256:3a1dc62469f905467b63707fc81910bcfe7fd51a10da813034a101d7136164d7"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-GATE-016 relates-to OD-RULES-009",
+      "hash": "sha256:ae454b2953a72d7160b8c3bc75b9f1b2ad0082d8f3e3ac60e784d2c6bb314b65"
     },
     {
       "content": "relations",
@@ -4683,6 +4728,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-RULES-009 relates-to OD-GATE-016",
+      "hash": "sha256:d1ef147f77a8b7953c5a194e5eb66e98dd411b9ba916b09b910d6a7fdb46ef79"
+    },
+    {
+      "content": "relations",
       "identity": "OD-RULES-009 relates-to OD-HOST-004",
       "hash": "sha256:2efca0f187948fe91c34a919ea2396743227cb1c74092ec9f8070dae238c753e"
     },
@@ -5690,6 +5740,11 @@
       "content": "nodes",
       "identity": "OD-GATE-015",
       "hash": "sha256:1f79eec8d85916ac7535075eed475770713694f49d03344a6592c63f3ba4e413"
+    },
+    {
+      "content": "nodes",
+      "identity": "OD-GATE-016",
+      "hash": "sha256:870728868ab17622c00323897308f918212f8532dca6e900f6599a57ac7b6be6"
     },
     {
       "content": "nodes",
