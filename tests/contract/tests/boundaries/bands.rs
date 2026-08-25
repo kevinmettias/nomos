@@ -101,6 +101,10 @@ pub(crate) const BANDS: &[(&str, u32)] = &[
     // nomos-model-package -- a third peer wrapping nomos-package's generic core, not a
     // dependent of either. `OD-PACKAGE-008`, `OD-ROADMAP-001`.
     ("nomos-rule-package", 26),
+    // The first real second consumer of nomos-package's generic core: the Go
+    // LanguagePackage manifest format. A fourth peer of the three above -- none of the
+    // four names another. `OD-PACKAGE-006`, `OD-PACKAGE-007`.
+    ("nomos-lang-go-package", 26),
     // The spec system sits beside the kernel, not above it. It reaches the product only
     // through a KnowledgeCapability, so nothing in the product may name it directly.
     ("nomos-spec-model", 11),

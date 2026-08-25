@@ -29532,7 +29532,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Territory omitted packages/nomos.lang.go.json, the real corpus manifest packages/nomos.lang.rust.json's own precedent needs a Go-language sibling for. Discovered before touching any files. Superseded by -2 with the corrected territory."
+        }
+      },
       "depends_on": [
         "P14-LANG-GO-SYNTAX-PROVIDER"
       ],
@@ -29551,9 +29555,18 @@
         "timeout_seconds": 600
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "claude-lang-go-package",
+          "reason": "Discovered before touching any files: nomos-lang-package's own real corpus manifest at packages/nomos.lang.rust.json is what its tests/manifest.rs round-trips against, and this item's territory omits packages/ entirely, so a symmetric packages/nomos.lang.go.json cannot be added inside this item's own territory. Releasing to decline and re-add with the corrected territory.",
+          "abandoned_at": 1787693054
+        }
+      ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-lang-go-package",
+        "declined_at": 1787693054
+      }
     },
     {
       "id": "P14-LANG-GO-DEPENDENCY-EDGES",
@@ -31432,6 +31445,123 @@
           "exit_code": 0
         },
         "revision": "b138a33264630fc0113c084f9ec9b75c4adf9644"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P14-PACKAGE-GO-LANGUAGE-MANIFEST-2",
+      "title": "nomos-lang-go-package: the first real second consumer of nomos-package's generic core",
+      "why": "OD-PACKAGE-006/007 built nomos-package (band 24) as the language-agnostic manifest core specifically so a second language's package crate could depend on it directly rather than on the Rust-specific nomos-lang-package wrapper, and OD-PACKAGE-006's amendment retired waiting for a real second language before trusting that split. Nothing has ever actually built that second consumer. nomos-lang-go existing (P14-LANG-GO-SYNTAX-PROVIDER) supplies the real PROVIDER constant this crate needs to be more than a hypothetical.",
+      "done_when": "A new crate crates/packages/nomos-lang-go-package, band 26 (peer to nomos-lang-package, both wrapping nomos-package's band-24 core), depends on nomos-package directly and never on nomos-lang-package. It invents its own Go version-label domain (mirroring nomos-lang-package's RustEdition, not reusing it), builds its provider allowlist through nomos_package::KnownProviders populated with nomos_lang_go::PROVIDER, and its reader refuses a manifest naming an unlisted provider the same way nomos-lang-package::reader does. A real packages/nomos.lang.go.json manifest exists, the same real corpus role packages/nomos.lang.rust.json already carries, and this crate's own tests round-trip it. README's band table gains its row, bands.rs recognizes band 26 for it, and a fresh public-surface snapshot exists.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/packages/nomos-lang-go-package",
+          "packages/nomos.lang.go.json",
+          "Cargo.toml",
+          "README.md",
+          "tests/contract/tests/boundaries/bands.rs",
+          "tests/contract/surface/nomos-lang-go-package.txt"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Territory omitted tests/contract/tests/completeness_universes/table.rs, needed to classify this crate's own KNOWN_PROVIDERS constant the same way nomos-lang-package's is classified there. Discovered before touching that file. Superseded by -3 with the corrected territory; every other file is already written and unaffected, inside the original, still-correct territory."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-lang-go-package",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 900
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-lang-go-package",
+          "reason": "Discovered before committing any files (already written, still inside the original territory): tests/contract/tests/completeness_universes/table.rs classifies nomos-lang-package::KNOWN_PROVIDERS as a hand-maintained, declared-unmirrored universe, and this crate's own new KNOWN_PROVIDERS constant needs the identical classification row plus UNMIRRORED_TOTAL incremented, which this item's territory omits. Releasing to decline and re-add with the corrected territory.",
+          "abandoned_at": 1787693415
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-lang-go-package",
+        "declined_at": 1787693415
+      }
+    },
+    {
+      "id": "P14-PACKAGE-GO-LANGUAGE-MANIFEST-3",
+      "title": "nomos-lang-go-package: the first real second consumer of nomos-package's generic core",
+      "why": "OD-PACKAGE-006/007 built nomos-package (band 24) as the language-agnostic manifest core specifically so a second language's package crate could depend on it directly rather than on the Rust-specific nomos-lang-package wrapper, and OD-PACKAGE-006's amendment retired waiting for a real second language before trusting that split. Nothing has ever actually built that second consumer. nomos-lang-go existing (P14-LANG-GO-SYNTAX-PROVIDER) supplies the real PROVIDER constant this crate needs to be more than a hypothetical.",
+      "done_when": "A new crate crates/packages/nomos-lang-go-package, band 26 (peer to nomos-lang-package, both wrapping nomos-package's band-24 core), depends on nomos-package directly and never on nomos-lang-package. It invents its own Go version-label domain (mirroring nomos-lang-package's RustEdition, not reusing it), builds its provider allowlist through nomos_package::KnownProviders populated with nomos_lang_go::PROVIDER, and its reader refuses a manifest naming an unlisted provider the same way nomos-lang-package::reader does. A real packages/nomos.lang.go.json manifest exists, the same real corpus role packages/nomos.lang.rust.json already carries, and this crate's own tests round-trip it. This crate's own KNOWN_PROVIDERS constant is classified in tests/contract/tests/completeness_universes/table.rs the same way nomos-lang-package's is. README's band table gains its row, bands.rs recognizes band 26 for it, and a fresh public-surface snapshot exists.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/packages/nomos-lang-go-package",
+          "packages/nomos.lang.go.json",
+          "Cargo.toml",
+          "README.md",
+          "tests/contract/tests/boundaries/bands.rs",
+          "tests/contract/tests/completeness_universes/table.rs",
+          "tests/contract/surface/nomos-lang-go-package.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-lang-go-package",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 900
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-lang-go-package",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "test Test_An_Inverted_Protocol_Range_Should_Be_Refused ... ok\ntest Test_An_Unresolvable_Provider_Should_Be_Refused ... ok\ntest Test_A_Missing_File_Should_Be_Refused_As_Unreadable ... ok\ntest Test_A_Package_Kind_Nothing_Defines_Should_Be_Refused_Differently_From_A_Wrong_One ... ok\ntest Test_The_Sibling_Dependency_Edges_Provider_Should_Be_Refused_Too ... ok\n\ntest result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.11s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-737a2e9a32debde6.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-a9f71bf02ec09b01.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-e2c1c3df52e8692e.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-ea57d6185a8cf34e.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-55f1be2e86577203.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-f35457569362b424.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-60c9758f68514957.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-240579892ed012fc.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-36afdeaddf48974e.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-6b1b5ab97957559f.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lang_go_package-9dec65cb7ac4a295.exe)\n     Running tests\\manifest.rs (target\\debug\\deps\\manifest-4ee8df5c85f8501f.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_lang_go_package\n",
+        "verified_at": 1787693491,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "71059bd147af2bb3f92a2848b10a384ed8e81d2c"
       },
       "abandoned": [],
       "displaced": [],

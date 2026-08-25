@@ -97,6 +97,13 @@ members = [
     # `OD-PACKAGE-008`, `OD-ROADMAP-001`.
     "crates/packages/nomos-rule-package",
 
+    # Band 26 — package manifests. The first real second consumer of nomos-package's
+    # generic core: the Go LanguagePackage manifest format, wrapping it with GoVersion
+    # resolution and nomos-lang-go's own syntax provider in place of RustEdition and
+    # Rust's two. A fourth peer of the three above -- none of the four names another.
+    # `OD-PACKAGE-006`, `OD-PACKAGE-007`.
+    "crates/packages/nomos-lang-go-package",
+
     # Band 3 — rules. The first thing here that judges code rather than paperwork. A
     # rule is a pure function from source text to findings: it names no language
     # provider and opens no file, so the caller decides what tree is being judged and a
@@ -218,6 +225,7 @@ nomos-package = { path = "crates/packages/nomos-package" }
 nomos-lang-package = { path = "crates/packages/nomos-lang-package" }
 nomos-model-package = { path = "crates/packages/nomos-model-package" }
 nomos-rule-package = { path = "crates/packages/nomos-rule-package" }
+nomos-lang-go-package = { path = "crates/packages/nomos-lang-go-package" }
 nomos-rules = { path = "crates/rules/nomos-rules" }
 nomos-corrections = { path = "crates/corrections/nomos-corrections" }
 nomos-agent-contracts = { path = "crates/agent/nomos-agent-contracts" }

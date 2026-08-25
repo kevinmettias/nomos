@@ -49,7 +49,7 @@ pub(crate) struct Universe
 ///
 /// A number somebody chose. Raising it is the deliberate step that adding an unmirrored
 /// universe is meant to cost, and lowering it is what closing one earns.
-pub(crate) const UNMIRRORED_TOTAL: usize = 2;
+pub(crate) const UNMIRRORED_TOTAL: usize = 3;
 
 /// Every declared universe in this workspace, classified by hand.
 ///
@@ -215,6 +215,19 @@ pub(crate) const UNIVERSES: &[Universe] = &[
                    entries it holds today are pulled from nomos-lang-rust's and \
                    nomos-lang-rust-scan's own PROVIDER constants rather than retyped, which \
                    bounds the risk to additions rather than drift on the existing two",
+        },
+    },
+    Universe {
+        path: "crates/packages/nomos-lang-go-package/src/known_providers.rs",
+        name: "KNOWN_PROVIDERS",
+        kind: UniverseKind::Constant,
+        standing: Standing::Unmirrored {
+            risk: "a second Go provider crate this package could register (of the same \
+                   nomos.cap.syntax.items capability, since nomos-lang-go-modules is \
+                   deliberately excluded here) is not added to this list automatically, the \
+                   identical risk nomos-lang-package's own row states — bounded the same way, \
+                   to additions rather than drift on the one entry it holds today, pulled \
+                   from nomos-lang-go's own PROVIDER constant rather than retyped",
         },
     },
 ];
