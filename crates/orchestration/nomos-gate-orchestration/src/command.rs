@@ -15,7 +15,7 @@
 //! ahead of a second real case (`OD-PACKAGE-006`, `OD-RULES-005`, `OD-RULES-006`) -- so it
 //! is simply absent, not stubbed, until an increment gives it a real body.
 
-use crate::{AdoptionPolicy, BaselinePolicy, RuleSelector, ScopeSelector, SuppressionPolicy};
+use crate::{AdoptionPolicy, BaselinePolicy, CoveragePolicy, RuleSelector, ScopeSelector, SuppressionPolicy};
 use nomos_model_package::ModelExecutionProfile;
 use std::path::PathBuf;
 
@@ -56,6 +56,13 @@ pub struct GateCommand
     /// `rules`, `suppressions` and `baseline`. Nothing constructs a non-empty one yet -- see
     /// [`crate::AdoptionPolicy`]'s own doc for what authors one, and what does not yet.
     pub adoption: AdoptionPolicy,
+    /// Whether coverage debt over the rule-and-scope-selected findings should affect a real
+    /// run's disposition, beyond the information-only `Claim` `check_outcome` already
+    /// carries. Read by [`crate::Run_Gate`] only, the same asymmetry as `scope`, `rules`,
+    /// `suppressions`, `baseline` and `adoption`. Nothing constructs a non-[`CoveragePolicy::
+    /// Unset`] one yet -- see [`crate::CoveragePolicy`]'s own doc for what authors one, and
+    /// what does not yet.
+    pub coverage: CoveragePolicy,
     /// `MODEL-ROUTE-001`'s declared reference: what an agent-assisted operation running
     /// under this command should use, when one is selected. Read by nothing yet -- the
     /// same nothing constructs a non-empty one yet asymmetry `suppressions`, `baseline`

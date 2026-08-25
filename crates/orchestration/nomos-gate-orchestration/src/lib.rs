@@ -109,15 +109,27 @@
 //! CLI flag or config file constructs one yet, the same absence [`SuppressionPolicy`]'s and
 //! [`BaselinePolicy`]'s own first increments already declined to fill.
 //!
+//! Its ninth increment, `P14-GATE-016-COVERAGE-POLICY-FIRST-INCREMENT`, gives [`GateCommand`]
+//! a real [`CoveragePolicy`] under `OD-GATE-016`'s decision -- unlike every policy before it,
+//! this one is not addressed by `rule`/`subject` or by `RuleId` at all: it is a single
+//! opt-in switch consulted once, after [`Disposition`] already reduced
+//! [`GateRunResult::blocking_findings`]. Unset (`Default`), `Claim` still rides through
+//! [`GateRunResult::check_outcome`] for information only, unchanged from every increment
+//! before it. Set to [`CoveragePolicy::RequireCompleteness`], `Run_Gate` recomputes `Claim`
+//! over the rule-and-scope-selected findings -- not the whole-run `claim` `check_outcome`
+//! already carries, which `command.rules` and `command.scope` have not yet narrowed -- and
+//! a disposition that would otherwise be [`GateRunOutcome::Passed`] is reported
+//! [`GateRunOutcome::Indeterminate`] instead whenever that recomputed claim is incomplete.
+//! A disposition that would otherwise be `Failed` is left untouched, for the reason
+//! [`CoveragePolicy`]'s own doc gives. No CLI flag or config file constructs a non-default
+//! one yet, the same absence every policy before it also declined to fill first.
+//!
 //! # What no increment is
 //!
 //! None implements `compare` -- that verb has no variant here at all, not a stub one, the
 //! same "no invented shape ahead of a real body" this crate's own [`command`] module
-//! documents. None touches `CoveragePolicy`, declared phases, thresholds or approvals --
-//! every other clause `WF-001` names beyond suppression, baseline and rule calibration.
-//! `Claim` (coverage debt / agent-required subjects) rides through
-//! [`GateRunResult`] for information only and does not affect [`GateRunOutcome`], the same
-//! choice `OD-COMPLETENESS-004` already made for `nomos check`'s own exit code. `GatePlan`
+//! documents. None touches declared phases, thresholds or approvals -- every other clause
+//! `WF-001` names beyond suppression, baseline, rule calibration and coverage. `GatePlan`
 //! still does not vary by [`GateCommand::root`], `scope`, `rules`, `suppressions`,
 //! `baseline` or `adoption` -- it
 //! reports the registry, not a walk, so no selection applies to it yet.
@@ -128,6 +140,7 @@ mod adoption;
 mod baseline;
 mod command;
 mod composition;
+mod coverage;
 mod explain;
 mod outcome;
 mod rule_selector;
@@ -144,6 +157,7 @@ pub use adoption::{AdoptionPolicy, RuleCalibration};
 pub use baseline::{BaselineDebt, BaselinePolicy};
 pub use command::GateCommand;
 pub use composition::Registered;
+pub use coverage::CoveragePolicy;
 pub use explain::{Explain_Gate, Explanation, FindingQuery, GateExplainResult};
 pub use outcome::{Disposition, GateOutcome, GatePlan, GateRunOutcome, GateRunResult};
 pub use rule_selector::RuleSelector;

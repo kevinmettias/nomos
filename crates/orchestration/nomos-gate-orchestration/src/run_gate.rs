@@ -1,14 +1,17 @@
 //! Composing an already-walked tree into a real `nomos gate run`, apart from choosing a
 //! platform, walking a tree or rendering the answer.
 
-use nomos_check_orchestration::CheckOutcome;
+use nomos_check_orchestration::{CheckOutcome, Claim, Claim_Of};
 use nomos_contracts::{Finding, RunId};
 use nomos_platform::ProcessLauncher;
 use nomos_rules::SourceFile;
 use nomos_workspace::BuildVariant;
 use std::path::Path;
 
-use crate::{AdoptionPolicy, BaselinePolicy, Disposition, GateCommand, GateRunOutcome, GateRunResult, RuleSelector, ScopeSelector, SuppressionPolicy};
+use crate::{
+    AdoptionPolicy, BaselinePolicy, CoveragePolicy, Disposition, GateCommand, GateRunOutcome, GateRunResult, RuleSelector, ScopeSelector,
+    SuppressionPolicy,
+};
 
 /// Judges `walked` exactly as `nomos check` would.
 ///
@@ -53,7 +56,7 @@ pub fn Run_Gate<P: ProcessLauncher>(walked: Option<Vec<SourceFile>>, variant: Bu
     let outcome = Judged(scoped, variant, &command.root, launcher);
 
     let (blocking_findings, calibrated_findings, suppressed_findings, baselined_findings, disposition) =
-        Reduced(&outcome, &command.rules, &command.adoption, &command.suppressions, &command.baseline);
+        Reduced(&outcome, &command.rules, &command.adoption, &command.suppressions, &command.baseline, command.coverage);
 
     return GateRunResult {
         root: command.root.clone(),
@@ -82,13 +85,18 @@ fn Scoped(sources: Vec<SourceFile>, scope: &ScopeSelector) -> Vec<SourceFile>
 /// but it still exists in `check_outcome` untouched. `adoption` splits what remains first --
 /// a coarser, rule-wide override rather than a per-finding one -- then `suppressions` splits
 /// what calibration did not match, then `baseline` splits what neither matched: a finding
-/// matched by more than one reports as calibrated, not counted twice.
+/// matched by more than one reports as calibrated, not counted twice. `coverage` is
+/// consulted last, over `rules`' own selection rather than any of the four lists it splits
+/// into -- calibration, suppression and baseline each answer "does this blocking finding
+/// still block," a question about one finding at a time, while `coverage` answers "did this
+/// run reach a judgment about everything it selected," a question about the run as a whole.
 fn Reduced(
     outcome: &CheckOutcome,
     rules: &RuleSelector,
     adoption: &AdoptionPolicy,
     suppressions: &SuppressionPolicy,
     baseline: &BaselinePolicy,
+    coverage: CoveragePolicy,
 ) -> (Vec<Finding>, Vec<Finding>, Vec<Finding>, Vec<Finding>, GateRunOutcome)
 {
     let CheckOutcome::Judged { findings, .. } = outcome
@@ -98,14 +106,28 @@ fn Reduced(
     };
 
     let selected: Vec<Finding> = findings.iter().filter(|finding| return rules.Matches(&finding.rule)).cloned().collect();
-    let blockable: Vec<Finding> = selected.into_iter().filter(|finding| return finding.Can_Fail_A_Build()).collect();
+    let blockable: Vec<Finding> = selected.iter().filter(|finding| return finding.Can_Fail_A_Build()).cloned().collect();
     let (calibrated_findings, uncalibrated): (Vec<Finding>, Vec<Finding>) =
         blockable.into_iter().partition(|finding| return adoption.Calibrating(finding).is_some());
     let (suppressed_findings, remaining): (Vec<Finding>, Vec<Finding>) =
         uncalibrated.into_iter().partition(|finding| return suppressions.Suppressing(finding).is_some());
     let (baselined_findings, blocking_findings): (Vec<Finding>, Vec<Finding>) =
         remaining.into_iter().partition(|finding| return baseline.Tolerating(finding).is_some());
-    let disposition = Disposition(&blocking_findings);
+    let disposition = Reduced_With_Coverage(Disposition(&blocking_findings), coverage, &selected);
 
     return (blocking_findings, calibrated_findings, suppressed_findings, baselined_findings, disposition);
+}
+
+/// `outcome`, downgraded from [`GateRunOutcome::Passed`] to [`GateRunOutcome::Indeterminate`]
+/// when `coverage` requires completeness and `Claim_Of(selected)` is [`Claim::Incomplete`] --
+/// `OD-GATE-016`'s own decision. Leaves every other `outcome` untouched: unset, this is the
+/// identity function, and [`CoveragePolicy::RequireCompleteness`]'s own doc says why a
+/// `Failed` outcome is left alone rather than downgraded the same way.
+fn Reduced_With_Coverage(outcome: GateRunOutcome, coverage: CoveragePolicy, selected: &[Finding]) -> GateRunOutcome
+{
+    return match (coverage, outcome)
+    {
+        (CoveragePolicy::RequireCompleteness, GateRunOutcome::Passed) if Claim_Of(selected) == Claim::Incomplete => GateRunOutcome::Indeterminate,
+        (_, outcome) => outcome,
+    };
 }

@@ -29238,14 +29238,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-gate-coverage-policy",
-        "acquired_at": 1787681363,
-        "lease_expires_at": 1787688563
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -29260,7 +29256,32 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "e.rs (target\\debug\\deps\\authoring_surface-7415b2037e88128c.exe)\n     Running tests\\check_command.rs (target\\debug\\deps\\check_command-8c32745a8fe87f0e.exe)\n     Running tests\\freshness.rs (target\\debug\\deps\\freshness-42149127f9297e2c.exe)\n     Running tests\\gate_step\\main.rs (target\\debug\\deps\\gate_step-0951231848286793.exe)\n     Running tests\\list_tells_the_truth.rs (target\\debug\\deps\\list_tells_the_truth-e96536c990fc1915.exe)\n     Running tests\\read_surface.rs (target\\debug\\deps\\read_surface-7f4e86c9ee1c491e.exe)\n     Running tests\\request_submit.rs (target\\debug\\deps\\request_submit-a2b7c7d52b53397a.exe)\n     Running tests\\stale_writer_is_refused.rs (target\\debug\\deps\\stale_writer_is_refused-1965945e4fa7f5d6.exe)\n     Running tests\\takeover_is_recorded.rs (target\\debug\\deps\\takeover_is_recorded-3f1e7d8ce6074e79.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-95a1aef077b5f9ba.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-ead301eb7c8d8256.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-a61f2bcd75c8d4d9.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-fba07f1fa1c92105.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-2bb84d2d8744d800.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-c2987d8eceda16d3.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-0eeaea7cd309c35b.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-2db99bdd604951c5.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-56e2b70874db076c.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-1204b8c22ecd0b43.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_gate_orchestration-aaa93468f31fe6a8.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_gate_orchestration\n",
+        "verified_at": 1787682056,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "33a6d729fe974d0efad03e936b209d7ccd842274"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -29773,6 +29794,44 @@
         },
         "revision": "c9f3f3265f03efa034927936206c153d71a3035d"
       },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P14-EXECUTOR-002-BUDGET-CAP",
+      "title": "nomos-agent-executor gains --max-budget-usd, closing the unbounded-cost gap OD-EXECUTOR-001 did not cover",
+      "why": "OD-EXECUTOR-001's rule bounds what the subprocess may touch, not what it may cost -- a distinct concern. No --max-turns flag exists, but claude --help names --max-budget-usd, and it was verified empirically: capped at an unreachably low budget, the process aborted with terminal_reason budget_exhausted and exit code 1 before the expensive model call ran, only a small triage-model cost incurred first. Exit 1 already flows through Require_Clean_Exit into AgentExecutionError::Unavailable, so no new error-handling path is needed -- only the flag and a reasoned default.",
+      "done_when": "Command_For passes --max-budget-usd with a named, documented default. A test asserts the flag and value are present in the constructed argv. cargo test -p nomos-agent-executor passes, including the existing suite unchanged in shape. The crate's module doc names the residual gap honestly: a small overshoot bounded by one cheap triage call is possible, and nothing caps turn count directly, only total spend.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/agent/nomos-agent-executor/src/lib.rs",
+          "crates/agent/nomos-agent-executor/src/tests.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-executor-budget",
+        "acquired_at": 1787681551,
+        "lease_expires_at": 1787688751
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-agent-executor",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
       "abandoned": [],
       "displaced": [],
       "declined": null

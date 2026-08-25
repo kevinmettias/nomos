@@ -324,6 +324,7 @@ fn Test_A_Run_Scoped_To_Nothing_Should_Not_Report_Ok()
         suppressions: nomos_gate_orchestration::SuppressionPolicy::default(),
         baseline: nomos_gate_orchestration::BaselinePolicy::default(),
         adoption: nomos_gate_orchestration::AdoptionPolicy::default(),
+        coverage: nomos_gate_orchestration::CoveragePolicy::default(),
         model: None,
     });
     let mut stdout = Vec::new();

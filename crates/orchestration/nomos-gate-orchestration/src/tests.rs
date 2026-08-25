@@ -2,11 +2,11 @@
 //! disposition reduction over an already-judged list of findings.
 
 use crate::{
-    AdoptionPolicy, BaselineDebt, BaselinePolicy, Disposition, Explain_Gate, Explanation, FindingQuery, GateCommand,
+    AdoptionPolicy, BaselineDebt, BaselinePolicy, CoveragePolicy, Disposition, Explain_Gate, Explanation, FindingQuery, GateCommand,
     GateOutcome, GateRunOutcome, GateRunResult, RuleCalibration, RuleSelector, Run, Run_Gate, ScopeSelector, Suppression,
     SuppressionDisposition, SuppressionPolicy,
 };
-use nomos_check_orchestration::CheckOutcome;
+use nomos_check_orchestration::{Claim, CheckOutcome};
 use nomos_contracts::{
     Applicability, Digest128, EvidenceClass, Finding, GateCategory, RuleId, RunId, SubjectId,
 };
@@ -752,4 +752,68 @@ fn Test_Explain_Should_Ignore_Scope()
     let result = Explain_Gate(Some(sources), Test_Variant(), &command, &query, &StdProcessLauncher);
 
     assert!(matches!(result.explanation, Explanation::Found { .. }));
+}
+
+/// A source no provider could materialize a fact for makes this run's own recomputed
+/// `Claim` `Incomplete` -- the fixture every [`CoveragePolicy`] test below builds on.
+/// Proven once here rather than assumed at each call site: `Claim::Incomplete` is the
+/// premise, not the thing under test, for every fixture that reuses this text.
+fn Coverage_Debt_Fixture() -> Vec<SourceFile>
+{
+    return vec![Source("a.rs", "pub fn Ok() {}\n"), Source("broken.rs", "pub const ??? = ;")];
+}
+
+/// [`CoveragePolicy::Unset`] -- `Default`, the state every existing caller is in -- leaves a
+/// run's disposition exactly as it always was: `Passed`, even though the run could not
+/// materialize a fact for `broken.rs` and its own recomputed `Claim` is `Incomplete`. `Claim`
+/// still rides through `check_outcome` for information only, unchanged from every increment
+/// before this one -- `OD-GATE-016`'s own "unset behavior is provably unchanged" clause.
+#[test]
+fn Test_An_Unset_Coverage_Policy_Should_Leave_A_Passed_Disposition_Alone()
+{
+    let command = Command_At(Repository_Root());
+
+    let result = Run_Gate(Some(Coverage_Debt_Fixture()), Test_Variant(), &command, &StdProcessLauncher, Test_Run_Id());
+
+    assert_eq!(result.disposition, GateRunOutcome::Passed);
+    let CheckOutcome::Judged { claim, .. } = result.check_outcome
+    else
+    {
+        panic!("a provider that read at least one file must still be judged");
+    };
+    assert_eq!(claim, Claim::Incomplete, "the fixture must actually be incomplete coverage, or this test proves nothing");
+}
+
+/// The same run under [`CoveragePolicy::RequireCompleteness`] reports [`GateRunOutcome::
+/// Indeterminate`] instead of the `Passed` [`Test_An_Unset_Coverage_Policy_Should_Leave_A_
+/// Passed_Disposition_Alone`] reports for the identical fixture -- `Run_Gate` recomputed
+/// `Claim` over the rule-and-scope-selected findings, found it incomplete, and refused to
+/// let that read as a clean run. `OD-GATE-016`'s own decision.
+#[test]
+fn Test_Required_Completeness_Should_Downgrade_An_Incomplete_Passed_Run()
+{
+    let command = GateCommand { coverage: CoveragePolicy::RequireCompleteness, ..Command_At(Repository_Root()) };
+
+    let result = Run_Gate(Some(Coverage_Debt_Fixture()), Test_Variant(), &command, &StdProcessLauncher, Test_Run_Id());
+
+    assert_eq!(result.disposition, GateRunOutcome::Indeterminate);
+    assert!(result.blocking_findings.is_empty(), "coverage must never manufacture a blocking finding: {:?}", result.blocking_findings);
+}
+
+/// [`CoveragePolicy::RequireCompleteness`] does not touch a run that already reports
+/// [`GateRunOutcome::Failed`]: a real blocking finding this run did reach a judgment about
+/// is not made any less true by `broken.rs`, an unrelated subject the run could not judge --
+/// [`CoveragePolicy::RequireCompleteness`]'s own doc says why this variant leaves `Failed`
+/// alone rather than downgrading it the way it downgrades `Passed`.
+#[test]
+fn Test_Required_Completeness_Should_Not_Touch_A_Failed_Run()
+{
+    let mut sources = Coverage_Debt_Fixture();
+    sources.push(Source("phantom.rs", "/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n"));
+    let command = GateCommand { coverage: CoveragePolicy::RequireCompleteness, ..Command_At(Repository_Root()) };
+
+    let result = Run_Gate(Some(sources), Test_Variant(), &command, &StdProcessLauncher, Test_Run_Id());
+
+    assert_eq!(result.disposition, GateRunOutcome::Failed);
+    assert!(!result.blocking_findings.is_empty());
 }

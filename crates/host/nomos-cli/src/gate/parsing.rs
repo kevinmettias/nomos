@@ -79,6 +79,9 @@ fn Plan_Or_Run_Command(root: PathBuf, rest: &[String]) -> GateCommand
         suppressions: nomos_gate_orchestration::SuppressionPolicy::default(),
         baseline: nomos_gate_orchestration::BaselinePolicy::default(),
         adoption: nomos_gate_orchestration::AdoptionPolicy::default(),
+        // No flag authors a non-default CoveragePolicy yet -- see
+        // `nomos_gate_orchestration::CoveragePolicy`'s own doc for why.
+        coverage: nomos_gate_orchestration::CoveragePolicy::default(),
         // No flag authors a ModelExecutionProfile yet -- see
         // `nomos_gate_orchestration::GateCommand::model`'s own doc for why.
         model: None,
