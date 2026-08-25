@@ -29424,14 +29424,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-rule-package-roundtrip",
-        "acquired_at": 1787690168,
-        "lease_expires_at": 1787697368
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -29442,9 +29438,36 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-rule-package"
+        ],
+        "exit_code": 0,
+        "output_tail": "ics::tests::Test_Labels_Are_Distinct ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 21 tests\ntest Test_A_LanguagePackage_Kind_Is_Refused ... ok\ntest Test_A_Correction_And_Suppression_Contract_Missing_Suppression_Supported_Is_Refused ... ok\ntest Test_A_Missing_Field_Is_Refused ... ok\ntest Test_A_Manifest_Shaped_Like_A_Real_Shipped_Rule_Resolves ... ok\ntest Test_A_Rule_With_Agent_Guidance_Round_Trips ... ok\ntest Test_A_Rule_With_A_Correction_And_Suppression_Contract_Resolves ... ok\ntest Test_A_Rule_With_An_Enhanced_Implementation_Round_Trips ... ok\ntest Test_A_Rule_With_An_Evaluation_Corpus_Round_Trips ... ok\ntest Test_A_Rule_With_No_Contract_Resolves_To_None ... ok\ntest Test_A_Rule_With_External_Diagnostics_Round_Trips ... ok\ntest Test_An_Enhanced_Implementation_Entry_Missing_Its_Provider_Is_Refused ... ok\ntest Test_A_Schema_Newer_Than_This_Build_Understands_Is_Refused ... ok\ntest Test_An_Evaluation_Corpus_Of_The_Wrong_Type_Is_Refused ... ok\ntest Test_A_Structurally_Partial_Rule_Resolves ... ok\ntest Test_A_Package_Kind_Not_Defined_At_All_Is_Refused ... ok\ntest Test_An_External_Diagnostics_Entry_Missing_Its_Code_Is_Refused ... ok\ntest Test_An_Unknown_Applicability_Semantics_Is_Refused ... ok\ntest Test_An_Unknown_Evidence_Class_Is_Refused ... ok\ntest Test_An_Unknown_Guarantee_Variant_Is_Refused ... ok\ntest Test_An_Agent_Guidance_Entry_Of_The_Wrong_Type_Is_Refused ... ok\ntest Test_An_Inverted_Protocol_Range_Is_Refused ... ok\n\ntest result: ok. 21 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.09s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rule_package-2745ac74fee8c1c6.exe)\n     Running tests\\manifest.rs (target\\debug\\deps\\manifest-a5824acc93a405d4.exe)\n   Doc-tests nomos_rule_package\n",
+        "verified_at": 1787699043,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "3dde51c7ef4e737a8854b38e620c5986d095e3d0"
+      },
       "abandoned": [],
-      "displaced": [],
+      "displaced": [
+        {
+          "holder": "claude-rule-package-roundtrip",
+          "acquired_at": 1787690168,
+          "lease_expires_at": 1787697368
+        }
+      ],
       "declined": null
     },
     {
