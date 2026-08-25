@@ -15,13 +15,24 @@
 //! is a person, asking a question directly. Reporting a `Finding` about nothing in particular
 //! would be inventing a subject nobody named, the same category of dishonesty `OD-EXECUTOR-001`
 //! already named for trusting a process's own account of itself.
+//!
+//! `judge-role` is different: it *does* start from a rule's own finding.
+//! `nomos_rules::Check_Declared_Role_Matches_Surface` unconditionally reports
+//! `Applicability::AgentRequired` for a crate, per its own module doc, and never reaches a
+//! verdict — this composition root is the real, separate dispatch `role_surface.rs` names as
+//! deliberately not this rule's own job. It reads exactly the two files that finding's own
+//! `locations` name (`README.md`'s band-table row, the crate's committed surface snapshot),
+//! builds the real `nomos_rules::RoleSurfacePair` the rule was given, and asks Claude Code the
+//! question the rule could not answer.
 
 use crate::arguments::{Name, Named_Value, Required, Usage};
 use nomos_agent_contracts::TaskEnvelope;
 use nomos_agent_executor::{AgentExecutionError, AgentExecutionOutcome};
-use nomos_contracts::SchemaId;
+use nomos_contracts::{Finding, SchemaId};
 use nomos_ledger::Territory;
 use nomos_platform_std::StdProcessLauncher;
+use nomos_rules::RoleSurfacePair;
+use std::path::{Path, PathBuf};
 
 /// What the process exits with.
 ///
@@ -40,6 +51,10 @@ pub(crate) enum ExitCode
     /// The executor could not be started, exited non-zero, timed out or stalled, or
     /// answered with something other than the JSON `--output-format json` promises.
     Unavailable = 5,
+    /// `judge-role` named a crate `README.md`'s band table does not list, or one with no
+    /// committed surface snapshot. `6` already carries "the answer is empty because
+    /// something expected was not there" for `spec`'s `Absent`.
+    NotFound = 6,
 }
 
 impl ExitCode
@@ -58,6 +73,10 @@ pub(crate) enum Command
     Execute
     {
         goal: String
+    },
+    JudgeRole
+    {
+        crate_name: String, root: PathBuf
     },
 }
 
@@ -79,6 +98,7 @@ pub(crate) fn Parse(arguments: &[String]) -> Result<Command, String>
     return match verb.as_str()
     {
         "execute" => Parse_Execute(rest),
+        "judge-role" => Parse_Judge_Role(rest),
         other => Err(format!("unknown command `{other}`.\n\n{}", Usage_Text())),
     };
 }
@@ -91,6 +111,15 @@ fn Parse_Execute(arguments: &[String]) -> Result<Command, String>
     return Ok(Command::Execute { goal });
 }
 
+fn Parse_Judge_Role(arguments: &[String]) -> Result<Command, String>
+{
+    let value = Named_Value(arguments, "--crate");
+    let crate_name = Required(value.as_ref(), Name("--crate"), Usage(&Usage_Text()))?;
+    let root = Named_Value(arguments, "--root").map_or_else(|| return PathBuf::from("."), PathBuf::from);
+
+    return Ok(Command::JudgeRole { crate_name, root });
+}
+
 /// Runs a command, writing content to `output` and everything about it to `notes`.
 ///
 /// Returns the exit code rather than exiting, so the whole surface is testable.
@@ -99,6 +128,7 @@ pub(crate) fn Run(command: &Command, output: &mut impl std::io::Write, notes: &m
     return match command
     {
         Command::Execute { goal } => Execute(goal, output, notes),
+        Command::JudgeRole { crate_name, root } => Judge_Role(crate_name, root, output, notes),
     };
 }
 
@@ -118,6 +148,7 @@ fn Task(goal: &str) -> TaskEnvelope
         prohibited_changes: Territory::Of_Files(Vec::<String>::new()),
         available_tools: Vec::new(),
         expected_output_schema: SchemaId::New("nomos.agent.executor.cli.v1"),
+        effort: nomos_model_package::EffortLevel::BackendDefault,
     };
 }
 
@@ -151,11 +182,118 @@ fn Unavailable(error: &AgentExecutionError, notes: &mut impl std::io::Write) -> 
     return ExitCode::Unavailable;
 }
 
+/// Reads `root`'s `README.md` and `root`'s committed surface snapshot for `crate_name`,
+/// builds the real `nomos_rules::RoleSurfacePair` `Check_Declared_Role_Matches_Surface`
+/// would be handed, runs that rule to get the real `Finding` it produces, and dispatches
+/// the question that finding names — never its own guess — to Claude Code.
+fn Judge_Role(crate_name: &str, root: &Path, output: &mut impl std::io::Write, notes: &mut impl std::io::Write) -> ExitCode
+{
+    let Some(declared_role) = Declared_Role(root, crate_name)
+    else
+    {
+        let _ = writeln!(notes, "`{crate_name}` names no row in {}'s band table", root.join("README.md").display());
+        return ExitCode::NotFound;
+    };
+
+    let surface_path = root.join("tests/contract/surface").join(format!("{crate_name}.txt"));
+    let Ok(actual_surface) = std::fs::read_to_string(&surface_path)
+    else
+    {
+        let _ = writeln!(notes, "no committed surface snapshot at {}", surface_path.display());
+        return ExitCode::NotFound;
+    };
+
+    let pair = RoleSurfacePair {
+        crate_root: Crate_Root(root, crate_name),
+        crate_name: crate_name.to_owned(),
+        declared_role,
+        actual_surface,
+    };
+    let findings = nomos_rules::Check_Declared_Role_Matches_Surface(std::slice::from_ref(&pair));
+    let Some(finding) = findings.first()
+    else
+    {
+        let _ = writeln!(notes, "the rule produced no finding for its own subject");
+        return ExitCode::NotFound;
+    };
+
+    return match nomos_agent_executor::Execute(&Judgment_Task(&pair, finding), &StdProcessLauncher)
+    {
+        Ok(outcome) => Answered(&outcome, output),
+        Err(error) => Unavailable(&error, notes),
+    };
+}
+
+/// `README.md`'s band-table row for `crate_name` — the third pipe-delimited cell of the
+/// row whose second cell, backticks stripped, is `crate_name` exactly. `None` if no row
+/// names it.
+fn Declared_Role(root: &Path, crate_name: &str) -> Option<String>
+{
+    let text = std::fs::read_to_string(root.join("README.md")).ok()?;
+
+    for line in text.lines()
+    {
+        let cells: Vec<&str> = line.split('|').map(str::trim).collect();
+        let (Some(name_cell), Some(role_cell)) = (cells.get(2), cells.get(3))
+        else
+        {
+            continue;
+        };
+        if name_cell.trim_matches('`') == crate_name
+        {
+            return Some((*role_cell).to_owned());
+        }
+    }
+
+    return None;
+}
+
+/// The same manifest-relative root `RoleSurfacePair::crate_root` documents —
+/// `crates/<band-folder>/<crate_name>` is not derivable from the name alone, so this reads
+/// it from `Cargo.toml`'s own `[workspace] members` list rather than guess a layout.
+fn Crate_Root(root: &Path, crate_name: &str) -> String
+{
+    let manifest = std::fs::read_to_string(root.join("Cargo.toml")).unwrap_or_default();
+
+    return manifest
+        .lines()
+        .map(str::trim)
+        .find(|line| return line.trim_matches(['"', ',']).ends_with(crate_name))
+        .map_or_else(|| return crate_name.to_owned(), |line| return line.trim_matches([' ', '"', ',']).to_owned());
+}
+
+/// The judgment `role_surface.rs`'s own module doc says this rule cannot reach itself —
+/// whether `pair`'s declared role and actual surface agree — carrying `finding.summary`
+/// so the dispatched question is traceably the rule's own, not a paraphrase invented here.
+fn Judgment_Task(pair: &RoleSurfacePair, finding: &Finding) -> TaskEnvelope
+{
+    let goal = format!(
+        "A Rust crate's declared role, from its workspace README's band table: {}\n\n\
+         The crate's actual public surface, as a list of every item it exports:\n{}\n\n\
+         {}. Does the declared role accurately and completely describe what the surface \
+         exports? Name anything the role claims that the surface does not show, or anything \
+         the surface exports that the role does not mention, in 2-4 sentences.",
+        pair.declared_role, pair.actual_surface, finding.summary
+    );
+
+    return TaskEnvelope {
+        goal,
+        scope: Territory::Of_Files(Vec::<String>::new()),
+        knowledge_context: Vec::new(),
+        applicable_rules: vec![finding.rule.clone()],
+        prohibited_changes: Territory::Of_Files(Vec::<String>::new()),
+        available_tools: Vec::new(),
+        expected_output_schema: SchemaId::New("nomos.agent.executor.cli.v1"),
+        effort: nomos_model_package::EffortLevel::BackendDefault,
+    };
+}
+
 fn Usage_Text() -> String
 {
     return "usage: nomos agent <command>\n\
             \n\
             \x20 execute --goal <text>\n\
+            \x20 judge-role --crate <name> [--root <path>]\n\
             \n\
             `execute` dispatches --goal to Claude Code as a bounded, tool-free subprocess \
             through nomos-agent-executor, under the structural capability boundary \
@@ -167,7 +305,14 @@ fn Usage_Text() -> String
             question, not a rule's judgment, and there is no subject or rule identity to \
             report one against.\n\
             \n\
-            exit codes: 0 ok, 2 usage, 5 the executor could not run or answer"
+            `judge-role` reads --crate's row in --root's README.md band table and its \
+            committed tests/contract/surface/<crate>.txt, runs the real \
+            nomos_rules::Check_Declared_Role_Matches_Surface rule over them, and dispatches \
+            the AgentRequired finding that rule produces -- never a paraphrase -- to execute. \
+            --root defaults to the current directory.\n\
+            \n\
+            exit codes: 0 ok, 2 usage, 5 the executor could not run or answer, 6 the named \
+            crate has no README row or no committed surface snapshot"
         .to_owned();
 }
 
@@ -186,7 +331,7 @@ mod tests
     {
         let arguments = Arguments("execute --goal hello");
 
-        let Command::Execute { goal } = Parse(&arguments).expect("parses");
+        let Command::Execute { goal } = Parse(&arguments).expect("parses") else { panic!("wrong variant") };
 
         assert_eq!(goal, "hello");
     }
@@ -230,5 +375,75 @@ mod tests
         let error = Parse(&arguments).expect_err("a flag with nothing after it has no value");
 
         assert!(error.contains("--goal"));
+    }
+
+    #[test]
+    fn Test_A_Judge_Role_Command_Should_Parse_Its_Crate_And_Default_Root()
+    {
+        let arguments = Arguments("judge-role --crate nomos-agent-executor");
+
+        let Command::JudgeRole { crate_name, root } = Parse(&arguments).expect("parses") else { panic!("wrong variant") };
+
+        assert_eq!(crate_name, "nomos-agent-executor");
+        assert_eq!(root, PathBuf::from("."));
+    }
+
+    #[test]
+    fn Test_A_Judge_Role_Command_Should_Parse_An_Explicit_Root()
+    {
+        let arguments = Arguments("judge-role --crate nomos-agent-executor --root /some/tree");
+
+        let Command::JudgeRole { root, .. } = Parse(&arguments).expect("parses") else { panic!("wrong variant") };
+
+        assert_eq!(root, PathBuf::from("/some/tree"));
+    }
+
+    #[test]
+    fn Test_A_Missing_Crate_Should_Be_A_Usage_Error()
+    {
+        let arguments = Arguments("judge-role");
+
+        let error = Parse(&arguments).expect_err("must refuse");
+
+        assert!(error.contains("--crate"));
+    }
+
+    /// This repository's own root, three levels above `crates/host/nomos-cli` — the same
+    /// derivation `nomos-lang-rust-cargo`'s own tests use to run against a real tree rather
+    /// than a fixture nobody could have produced.
+    fn Repository_Root() -> PathBuf
+    {
+        let manifest = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+        return manifest
+            .parent()
+            .and_then(Path::parent)
+            .and_then(Path::parent)
+            .map(PathBuf::from)
+            .expect("this crate sits three levels below the workspace root");
+    }
+
+    /// Read against this repository's own real `README.md`, not a fixture — the same
+    /// standard `nomos-lang-rust-cargo`'s own tests already hold themselves to: a reader
+    /// that cannot be checked against a real row is checked against nothing.
+    #[test]
+    fn Test_Declared_Role_Reads_A_Real_Row_From_This_Repositorys_Own_Readme()
+    {
+        let role = Declared_Role(&Repository_Root(), "nomos-agent-executor").expect("this crate has a row");
+
+        assert!(role.contains("AgentExecutor"), "{role}");
+    }
+
+    #[test]
+    fn Test_Declared_Role_Is_None_For_A_Crate_Named_Nowhere()
+    {
+        assert!(Declared_Role(&Repository_Root(), "nomos-does-not-exist").is_none());
+    }
+
+    #[test]
+    fn Test_Crate_Root_Reads_This_Crates_Own_Real_Manifest_Path()
+    {
+        let root = Crate_Root(&Repository_Root(), "nomos-agent-executor");
+
+        assert_eq!(root, "crates/agent/nomos-agent-executor");
     }
 }
