@@ -30369,16 +30369,12 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [
         "P14-GATE-017-RUN-RULE-SUBSET-FIRST-INCREMENT-2"
       ],
       "blocked": null,
-      "claim": {
-        "holder": "claude-session-executor-planning",
-        "acquired_at": 1787686556,
-        "lease_expires_at": 1787693756
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -30389,7 +30385,28 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-gate-orchestration"
+        ],
+        "exit_code": 0,
+        "output_tail": "Finding_Among_Many_Should_Fail ... ok\ntest tests::Test_The_Naming_Rule_Should_Cite_Its_Record_Less_Contract ... ok\ntest tests::Test_The_Mirror_Rule_Should_Carry_Its_Real_Contract_Citation ... ok\ntest tests::Test_The_Dependency_Rule_Should_Carry_Its_Real_Contract_Citation ... ok\ntest tests::Test_The_Plan_Should_Not_Vary_By_Root ... ok\ntest tests::Test_The_Reachability_Rule_Should_Carry_Its_Real_Contract_Citation ... ok\ntest tests::Test_A_Blocking_Finding_Should_Fail_The_Run ... ok\ntest tests::Test_A_Clean_Source_Should_Pass ... ok\ntest tests::Test_An_Unset_Coverage_Policy_Should_Leave_A_Passed_Disposition_Alone ... ok\ntest tests::Test_Explain_Should_Ignore_Scope ... ok\ntest tests::Test_Explain_Should_Find_A_Real_Blocking_Finding ... ok\ntest tests::Test_Explain_Should_Report_Not_Found_For_A_Query_Nothing_Answers ... ok\ntest tests::Test_Required_Completeness_Should_Downgrade_An_Incomplete_Passed_Run ... ok\ntest tests::Test_A_Suppressed_Finding_Should_Not_Block ... ok\ntest tests::Test_A_Calibrated_Suppressed_And_Baselined_Finding_Should_Report_As_Calibrated ... ok\ntest tests::Test_Required_Completeness_Should_Not_Touch_A_Failed_Run ... ok\ntest tests::Test_A_Suppressed_And_Baselined_Finding_Should_Report_As_Suppressed ... ok\ntest tests::Test_A_Baselined_Finding_Should_Not_Block ... ok\ntest tests::Test_Explain_Should_Report_A_Baseline_That_Applies ... ok\ntest tests::Test_A_Calibrated_Finding_Should_Not_Block ... ok\ntest tests::Test_Explain_Should_Report_A_Calibration_That_Applies ... ok\ntest tests::Test_Explain_Should_Report_A_Suppression_That_Applies ... ok\n\ntest result: ok. 50 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.10s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_gate_orchestration-95eda433954aca68.exe)\n   Doc-tests nomos_gate_orchestration\n",
+        "verified_at": 1787686600,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "895e752f084f186c1c68a386641862233cd55ac5"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

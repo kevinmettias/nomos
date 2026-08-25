@@ -4,16 +4,14 @@ use nomos_contracts::RuleId;
 
 /// Which rules' findings a run's disposition is reduced from.
 ///
-/// Deliberately a post-hoc filter over [`nomos_contracts::Finding::rule`], not a change to
-/// what [`nomos_check_orchestration::Run`] executes: that function calls every rule
-/// unconditionally today, and giving it a per-call subset would mean changing its own
-/// signature across every caller (`nomos-cli`'s `check` and `gate`, `nomos-gate-
-/// orchestration::Run_Gate`, `vacuity.rs`) -- a separate, larger item, not this one. A
-/// selected-out rule's findings are still computed and still appear in
-/// [`crate::GateRunResult::check_outcome`] in full; they are excluded only from
-/// [`crate::GateRunResult::blocking_findings`] and the [`crate::GateRunOutcome`] reduced
-/// from them. That is real selection of what can fail a build, honestly short of real
-/// selection of what runs.
+/// `include` is also, since `OD-GATE-017`, the same selection [`crate::run_gate::Judged`]
+/// passes through to [`nomos_check_orchestration::Run`] itself: a selected-out rule's own
+/// materialization does not run at all, and its finding never exists to appear in
+/// [`crate::GateRunResult::check_outcome`] or anywhere else. What this type still does, on
+/// top of that, is what its name says -- filtering which of the rules that *did* run counts
+/// toward [`crate::GateRunResult::blocking_findings`] and the [`crate::GateRunOutcome`]
+/// reduced from them, the layer [`crate::explain::Explain_Gate`] deliberately bypasses by
+/// passing `Run` an empty selection regardless of this type's own value.
 ///
 /// An empty `include` is "select every rule," the state every existing caller is in today:
 /// `Default` gives that state, so CI's `gate run --root .` is unchanged in behavior by this
