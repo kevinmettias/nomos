@@ -29220,6 +29220,325 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P14-GATE-016-COVERAGE-POLICY-FIRST-INCREMENT",
+      "title": "OD-GATE-016's CoveragePolicy: the first real increment, consulted by Run_Gate",
+      "why": "A gate run reports Passed even when scope went unanalyzed or unsupported. OD-GATE-016 names the first real increment to build (a require-completeness CoveragePolicy recomputing Claim over the rule-and-scope-selected findings) but nothing builds it yet, and a fresh language provider is about to make partial coverage a routine, not an edge, case.",
+      "done_when": "A CoveragePolicy type exists in nomos-gate-orchestration, default unset. When a caller sets it to require completeness, Run_Gate recomputes Claim over the rule-and-scope-narrowed findings (not the whole-run check_outcome claim) and returns GateRunOutcome::Indeterminate whenever that recomputed claim is Incomplete, never silently Passed. Unset behavior is provably unchanged from today. Tests cover both the set and unset paths. Public-surface snapshots for nomos-gate-orchestration and nomos-cli are reblessed if their exports move.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src",
+          "crates/host/nomos-cli/src/gate",
+          "tests/contract/surface/nomos-gate-orchestration.txt",
+          "tests/contract/surface/nomos-cli.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P14-GATE-016-COVERAGE-RECORD",
+      "title": "OD-GATE-016 amended: the CoveragePolicy increment is built",
+      "why": "The same pattern OD-GATE-015's three concerns each followed: the code lands under one item, and a separate item amends the governing record to say so against the real, committed shape rather than the proposal. Split from the code item so the two do not compete for the same territory.",
+      "done_when": "OD-GATE-016 amended with a section naming what P14-GATE-016-COVERAGE-POLICY-FIRST-INCREMENT actually built, verified directly against the real code the way every prior GATE-015/016 amendment was. spec/domain-specification.md and diagrams/relations.mmd re-rendered from a tree whose registered records are exactly the ones this commit publishes.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "spec/domain-specification.md",
+          "diagrams/relations.mmd",
+          "docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P14-GATE-016-COVERAGE-POLICY-FIRST-INCREMENT"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P14-GATE-017-RUN-RULE-SUBSET-DECISION",
+      "title": "OD-GATE-017: whether Run gains a real per-call rule subset now, or waits for a caller that needs one",
+      "why": "OD-GATE-014 built ScopeSelector and RuleSelector but was explicit that RuleSelector only narrows disposition after Run returns; nomos_check_orchestration::Run still executes every registered rule unconditionally, and its own text calls a real per-call rule subset a new question for a new record, not a reopening of itself. New rule and language packages are the first real candidate for a rule meant to run only for some invocations, so this measures whether that trigger has actually fired rather than leaving the caveat undecided.",
+      "done_when": "A new accepted decision record, measured against the real code at HEAD, that checks whether any concrete caller (the incoming Go language/rule work, this repository's own CI, or elsewhere) genuinely needs Run to skip a rule's computation rather than the rule self-filtering the SourceFiles it is handed, and decides on that evidence whether to build a Run signature change now or decline with a named future trigger, at the same rigor OD-GATE-014/OD-PACKAGE-006/OD-PACKAGE-008 already apply. Registered as governing via its own spec-store registration file.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md",
+          "crates/spec/nomos-spec-store/records/OD-GATE-017.record",
+          "spec/domain-specification.md",
+          "diagrams/relations.mmd"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P14-RULE-PACKAGE-SPECULATIVE-FIELDS-ROUNDTRIP",
+      "title": "nomos-rule-package's five never-exercised fields get a real round-trip test",
+      "why": "OD-PACKAGE-008's amendment built enhanced-implementation, external-diagnostic-mapping, correction-and-suppression-contract, evaluation-corpus and agent-guidance-fragment fields speculatively, from ARCH-002's corpus text and nearest analogues, because OD-ROADMAP-001 authorizes building ahead of a real rule that needs them. None of the four shipped rules populates any of the five, and today only applicability_semantics.rs carries any #[cfg(test)] coverage in the whole crate. Nothing has ever proven these fields actually round-trip through manifest.rs/reader.rs with real data rather than merely compiling.",
+      "done_when": "For each of the five fields, a realistic synthetic manifest fixture that populates it is proven to parse, to be refused when malformed the way reader.rs refuses everything else, and to round-trip unchanged through manifest.rs/reader.rs. Any field whose shape turns out not to fit real serialization once actually exercised is named in the crate's own module docs rather than silently patched, so a future OD-PACKAGE-008 amendment has real evidence to act on.",
+      "kind": "Validation",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/packages/nomos-rule-package/src",
+          "crates/packages/nomos-rule-package/tests"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-rule-package"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P14-LANG-GO-SYNTAX-PROVIDER",
+      "title": "nomos-lang-go: the first real second-language provider, syntax facts from Go source",
+      "why": "nomos-package's generic core (OD-PACKAGE-006/007) and nomos-cap-syntax's payload shape (kind/visibility/qualified_name all declared as open-vocabulary String, not a Rust AST type) have both been designed for a second language but never exercised by one. Rust remains the only language with a real provider. The sibling xvpe corpus, already this workspace's own real corpus-gate test source, carries a live go.mod alongside its Cargo.toml, and this workspace's own Go-era predecessor (nomos-proto/code-standards) is direct prior art for a per-language check crate's shape -- a real second case rather than an invented one, per the user's explicit direction to build this against Go.",
+      "done_when": "A new crate crates/languages/nomos-lang-go, band 25 (peer to nomos-lang-rust, contending for nomos.cap.syntax.items, never a same-band edge to it), exports PROVIDER, Declared_Guarantee(), Provider_Offer() and Materialize(...) per the nomos-add-plugin skill's section 1 convention. Its own Declared_Guarantee tests prove the guarantee neither vacuously satisfies nor vacuously fails, the same worked example nomos-lang-rust-scan's guarantee.rs sets. Registered() in nomos-check-orchestration's composition root gains one more Registry::Offer line for it. README's band table gains its row, bands.rs recognizes its band, and a fresh public-surface snapshot exists for it.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages/nomos-lang-go",
+          "Cargo.toml",
+          "README.md",
+          "tests/contract/tests/boundaries/bands.rs",
+          "tests/contract/surface/nomos-lang-go.txt",
+          "crates/orchestration/nomos-check-orchestration/src/composition.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-lang-go",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P14-PACKAGE-GO-LANGUAGE-MANIFEST",
+      "title": "nomos-lang-go-package: the first real second consumer of nomos-package's generic core",
+      "why": "OD-PACKAGE-006/007 built nomos-package (band 24) as the language-agnostic manifest core specifically so a second language's package crate could depend on it directly rather than on the Rust-specific nomos-lang-package wrapper, and OD-PACKAGE-006's amendment retired waiting for a real second language before trusting that split. Nothing has ever actually built that second consumer. nomos-lang-go existing (P14-LANG-GO-SYNTAX-PROVIDER) supplies the real PROVIDER constant this crate needs to be more than a hypothetical.",
+      "done_when": "A new crate crates/packages/nomos-lang-go-package, band 26 (peer to nomos-lang-package, both wrapping nomos-package's band-24 core), depends on nomos-package directly and never on nomos-lang-package. It invents its own Go version-label domain (mirroring nomos-lang-package's RustEdition, not reusing it), builds its provider allowlist through nomos_package::KnownProviders populated with nomos_lang_go::PROVIDER, and its reader refuses a manifest naming an unlisted provider the same way nomos-lang-package::reader does. README's band table gains its row, bands.rs recognizes band 26 for it, and a fresh public-surface snapshot exists.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/packages/nomos-lang-go-package",
+          "Cargo.toml",
+          "README.md",
+          "tests/contract/tests/boundaries/bands.rs",
+          "tests/contract/surface/nomos-lang-go-package.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P14-LANG-GO-SYNTAX-PROVIDER"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-lang-go-package",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P14-LANG-GO-DEPENDENCY-EDGES",
+      "title": "nomos-lang-go-modules: the Go provider of nomos.cap.dependency.edges",
+      "why": "nomos-lang-rust-cargo is the one provider of dependency edges for Rust, reading cargo metadata and composed into nomos-check-orchestration::Run so Check_Dependency_Direction sees Rust's real module graph. Without a Go equivalent, a Go-analyzed repository gets syntax facts from nomos-lang-go but no dependency-direction enforcement. This is a stretch beyond what is strictly needed to prove nomos-package's and nomos-cap-syntax's language-agnosticism (that is proven by P14-LANG-GO-SYNTAX-PROVIDER and P14-PACKAGE-GO-LANGUAGE-MANIFEST alone), so it is proposed rather than required, for whichever session has spare capacity.",
+      "done_when": "A new crate reads go.mod and go list -m output through nomos-platform's ProcessLauncher port (never raw std::process::Command, the mistake P13-CARGO-METADATA-PROCESSLAUNCHER named for the Rust side), offers nomos.cap.dependency.edges for Go modules, and is composed into nomos-check-orchestration::Run alongside nomos-lang-rust-cargo so Check_Dependency_Direction runs over both graphs. README's band table gains its row (band 25, peer to nomos-lang-rust-cargo), bands.rs recognizes it, and a fresh public-surface snapshot exists.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages/nomos-lang-go-modules",
+          "Cargo.toml",
+          "README.md",
+          "tests/contract/tests/boundaries/bands.rs",
+          "tests/contract/surface/nomos-lang-go-modules.txt",
+          "crates/orchestration/nomos-check-orchestration/src/run.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P14-LANG-GO-SYNTAX-PROVIDER"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-lang-go-modules",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 1200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P14-LANG-GO-RECORD",
+      "title": "OD-PACKAGE-006 and OD-PACKAGE-007 amended: a real second language landed",
+      "why": "Both records reasoned about a second language's package crate before one existed -- OD-PACKAGE-007 split nomos-package out specifically so a second language would not depend on Rust, and OD-PACKAGE-006's amendment retired waiting for one. Once nomos-lang-go and nomos-lang-go-package are real, this closes the loop the same way OD-PACKAGE-008's own amendment corrected its prediction against a real second and third rule rather than reaffirming it by count alone: name what, if anything, needed adjusting once real Go evidence existed, rather than leaving the claim standing on a population of zero.",
+      "done_when": "OD-PACKAGE-006 and/or OD-PACKAGE-007 amended with a section measured directly against the real nomos-lang-go and nomos-lang-go-package crates, stating plainly whether the generic core held up unchanged or needed a real adjustment, the same honest correction discipline OD-PACKAGE-008's own amendment followed. spec/domain-specification.md and diagrams/relations.mmd re-rendered from a tree whose registered records are exactly the ones this commit publishes.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "spec/domain-specification.md",
+          "diagrams/relations.mmd",
+          "docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md",
+          "docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P14-LANG-GO-SYNTAX-PROVIDER",
+        "P14-PACKAGE-GO-LANGUAGE-MANIFEST"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
