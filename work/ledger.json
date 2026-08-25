@@ -32850,6 +32850,62 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P14-CAPABILITY-010-SYNTAX-STRUCT-FIELDS-2",
+      "title": "nomos-lang-go becomes the second real writer of nomos.cap.syntax.items' struct-field shape",
+      "why": "P14-CAPABILITY-010-SYNTAX-STRUCT-FIELDS-1 gave the shape vocabulary a real Struct entry and one writer. OD-CAPABILITY-010's own criterion for a capability contract's vocabulary is a real second party, the same reason nomos-cap-syntax exists as its own crate at all -- nomos-lang-go's own Record_Type_Spec is that second party, reading a Go struct's real field_declaration nodes rather than assumed grammar shape.",
+      "done_when": "nomos-lang-go's struct handling records a real field list (name, verbatim source text) for a struct with named fields, correctly handles a multi-name field declaration (X, Y int) and skips an embedded field (no name of its own) rather than inventing one, and a real test proves it against tree-sitter-go's real parse tree",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages/nomos-lang-go/src/syntax/walk.rs",
+          "crates/languages/nomos-lang-go/src/syntax/tests.rs",
+          "tests/integration/tests/determinism/goldens.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lang-go",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lang-go",
+          "--no-fail-fast"
+        ],
+        "exit_code": 0,
+        "output_tail": "_Any_Other ... ok\ntest syntax::tests::Test_A_Structs_Fields_Should_Be_Recorded ... ok\ntest syntax::tests::Test_An_Import_Should_Record_The_Name_It_Binds ... ok\ntest syntax::tests::Test_An_Interfaces_Method_Set_Should_Be_Recorded_Under_Its_Name ... ok\ntest recognition::tests::Test_Other_Extensions_Should_Be_Unrecognized_By_Name ... ok\ntest syntax::tests::Test_Ordinals_Should_Be_Dense_And_Zero_Based ... ok\ntest provider::tests::Test_The_Same_Bytes_Should_Reach_The_Same_Semantic_Inputs ... ok\ntest syntax::tests::Test_Documentation_Should_Be_Found_At_Either_Attachment_Point ... ok\ntest syntax::tests::Test_Shared_Type_Parameters_Should_Each_Count_Toward_Arity ... ok\ntest provider::tests::Test_A_Fact_Should_Carry_The_Declared_Guarantee ... ok\ntest syntax::tests::Test_An_Embedded_Field_Should_Not_Be_Recorded ... ok\ntest syntax::visibility::tests::Test_A_Lowercase_Name_Should_Be_Private ... ok\ntest syntax::tests::Test_Visibility_Should_Be_Recorded_From_The_Names_Own_Case ... ok\ntest syntax::visibility::tests::Test_A_Capitalized_Name_Should_Be_Public ... ok\ntest provider::tests::Test_The_Encoding_Should_Carry_What_This_Provider_Observed ... ok\ntest provider::tests::Test_This_Providers_Payload_Should_Decode_Under_The_Schemas_Own_Reader ... ok\ntest syntax::visibility::tests::Test_An_Underscore_Prefixed_Name_Should_Be_Private ... ok\ntest provider::tests::Test_The_Encoding_Should_Be_Stable_And_Not_Empty ... ok\ntest syntax::visibility::tests::Test_Labels_Should_Match_The_Shared_Vocabulary ... ok\ntest syntax::visibility::tests::Test_The_Blank_Identifier_Should_Declare_No_Visibility ... ok\n\ntest result: ok. 39 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.11s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lang_go-71a807e1ed71d732.exe)\n   Doc-tests nomos_lang_go\n",
+        "verified_at": 1787701512,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "7f8de45e34ceb716cdc6dfd7cad234379aa20268"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

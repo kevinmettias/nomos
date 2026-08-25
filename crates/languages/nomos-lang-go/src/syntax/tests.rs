@@ -30,6 +30,91 @@ fn Test_A_Method_Should_Be_Named_By_Its_Receiver_Type()
     assert_eq!(names, vec!["Counter", "Counter::Increment", "Free"]);
 }
 
+/// `OD-CAPABILITY-010`'s extension: a Go struct's own field names and their exact source
+/// text, read back through `nomos_cap_syntax::Struct_Fields` the same way a real consumer
+/// would.
+#[test]
+fn Test_A_Structs_Fields_Should_Be_Recorded()
+{
+    let facts = Parsed("package main\n\ntype Counter struct {\n\tN int\n\tLabel string\n}\n");
+    let item = facts.items.first().expect("one struct");
+
+    let shape = item.shape.clone().map_or(nomos_cap_syntax::Observation::Absent, nomos_cap_syntax::Observation::Present);
+    let fields = nomos_cap_syntax::Struct_Fields(&shape).expect("a struct with named fields records them");
+
+    assert_eq!(
+        fields,
+        vec![("N".to_owned(), "int".to_owned()), ("Label".to_owned(), "string".to_owned())]
+    );
+}
+
+/// A single declaration naming more than one field (`X, Y int`) is one `field_declaration`
+/// node carrying two `name` children in the real grammar — verified directly before this
+/// reader was written, the same discipline `Named_Field_Children`'s own doc already
+/// states for the identical shape one construct over.
+#[test]
+fn Test_A_Multi_Name_Field_Declaration_Should_Record_Each_Name()
+{
+    let facts = Parsed("package main\n\ntype Point struct {\n\tX, Y int\n}\n");
+    let item = facts.items.first().expect("one struct");
+
+    let shape = item.shape.clone().map_or(nomos_cap_syntax::Observation::Absent, nomos_cap_syntax::Observation::Present);
+    let fields = nomos_cap_syntax::Struct_Fields(&shape).expect("a struct with named fields records them");
+
+    assert_eq!(
+        fields,
+        vec![("X".to_owned(), "int".to_owned()), ("Y".to_owned(), "int".to_owned())]
+    );
+}
+
+/// A field's type is recorded exactly as written — this provider has no "no printing"
+/// boundary the way `nomos-lang-rust` does, so a pointer, slice or map type is not reduced
+/// to a head the way `Type_Head` reduces a Rust generic.
+#[test]
+fn Test_A_Fields_Type_Should_Be_Recorded_Verbatim()
+{
+    let facts = Parsed("package main\n\ntype Wide struct {\n\tPtr *Foo\n\tItems []string\n\tM map[string]int\n}\n");
+    let item = facts.items.first().expect("one struct");
+
+    let shape = item.shape.clone().map_or(nomos_cap_syntax::Observation::Absent, nomos_cap_syntax::Observation::Present);
+    let fields = nomos_cap_syntax::Struct_Fields(&shape).expect("a struct with named fields records them");
+
+    assert_eq!(
+        fields,
+        vec![
+            ("Ptr".to_owned(), "*Foo".to_owned()),
+            ("Items".to_owned(), "[]string".to_owned()),
+            ("M".to_owned(), "map[string]int".to_owned()),
+        ]
+    );
+}
+
+/// An embedded field declares no name of its own for this reader to attribute a field
+/// record to — skipped, the same restraint a Rust tuple or unit struct's fields already
+/// get.
+#[test]
+fn Test_An_Embedded_Field_Should_Not_Be_Recorded()
+{
+    let facts = Parsed("package main\n\ntype Wrapper struct {\n\tEmbedded\n\tName string\n}\n");
+    let item = facts.items.first().expect("one struct");
+
+    let shape = item.shape.clone().map_or(nomos_cap_syntax::Observation::Absent, nomos_cap_syntax::Observation::Present);
+    let fields = nomos_cap_syntax::Struct_Fields(&shape).expect("a struct with at least one named field records it");
+
+    assert_eq!(fields, vec![("Name".to_owned(), "string".to_owned())]);
+}
+
+/// A struct with no fields at all (only embedded ones, or genuinely empty) records
+/// absence, the same default a Rust tuple or unit struct already gets.
+#[test]
+fn Test_A_Struct_With_No_Named_Fields_Should_Record_Absence()
+{
+    let facts = Parsed("package main\n\ntype Marker struct{}\n");
+    let item = facts.items.first().expect("one struct");
+
+    assert_eq!(item.shape, None);
+}
+
 #[test]
 fn Test_Ordinals_Should_Be_Dense_And_Zero_Based()
 {

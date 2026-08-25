@@ -35,7 +35,11 @@ pub(crate) const SCANNED_GOLDEN: &str = "e692ad97796279579ca5cd77764e08e5";
 /// `nomos-lang-go`'s golden, over [`crate::productions::GO_FIXTURE`]. Captured on this
 /// platform when `nomos-lang-go` first declared `SyntaxFactProduction`, the same way every
 /// other constant in this file was captured on the platform that first declared its domain.
-pub(crate) const GO_GOLDEN: &str = "e3974d10e3b4065bffc9562fe274cd4c";
+///
+/// Re-addressed by `OD-CAPABILITY-010`: `GO_FIXTURE`'s `Held` struct has a named field, so
+/// its `shape` now carries real data instead of always `.`, the same re-addressing
+/// [`PARSED_GOLDEN`] took for the identical reason on the Rust side.
+pub(crate) const GO_GOLDEN: &str = "42a188d75caad7d13be97610fc619bbe";
 pub(crate) const SNAPSHOT_GOLDEN: &str = "1fb5fb67d666b0bb983f3b71e7e09f93";
 
 /// The bundle's golden, and the one whose scope claim reaches furthest.

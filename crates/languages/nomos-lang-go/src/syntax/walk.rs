@@ -282,6 +282,12 @@ fn Record_Type_Spec(items: &mut Vec<SyntaxItem>, spec: Node, source: &[u8])
         _ => ItemKind::TypeDefinition,
     };
 
+    let shape = match (kind, type_node)
+    {
+        (ItemKind::Struct, Some(struct_type)) => Struct_Shape(struct_type, source),
+        _ => None,
+    };
+
     Push(
         items,
         kind,
@@ -289,7 +295,7 @@ fn Record_Type_Spec(items: &mut Vec<SyntaxItem>, spec: Node, source: &[u8])
         name.to_owned(),
         Visibility::Of_Name(name),
         Documentation(spec, source),
-        None,
+        shape,
     );
 
     if let (ItemKind::Interface, Some(interface)) = (kind, type_node)
@@ -389,6 +395,56 @@ fn Parameter_Arity(list: Node) -> usize
     }
 
     return total;
+}
+
+/// The `shape` a struct's own named fields declare, `OD-CAPABILITY-010`'s extension to
+/// `nomos.cap.syntax.items`' per-kind vocabulary — this provider's own real second writer of
+/// it, alongside `nomos-lang-rust`.
+///
+/// `type` is the field's own source text, verbatim (`tree-sitter`'s node span sliced
+/// straight out of `source`) — unlike `nomos-lang-rust`'s `Type_Head`, this provider has no
+/// "no printing" boundary to respect, since it never renders a type back out of a parse
+/// tree; it reads bytes that were already there. An embedded field (`Embedded`, no `name`
+/// field of its own — Go's field name is then implied by the type) is skipped rather than
+/// given an invented name: this reader records fields it observed a real name for, the same
+/// restraint `nomos-lang-rust` already takes for a tuple or unit struct's fields.
+fn Struct_Shape(struct_type: Node, source: &[u8]) -> Option<String>
+{
+    let mut cursor = struct_type.walk();
+    let list = struct_type
+        .children(&mut cursor)
+        .find(|child| return child.kind() == "field_declaration_list")?;
+    let mut cursor = list.walk();
+    let mut fields = Vec::new();
+
+    for declaration in list.children(&mut cursor)
+    {
+        if declaration.kind() != "field_declaration"
+        {
+            continue;
+        }
+
+        let Some(type_node) = declaration.child_by_field_name("type")
+        else
+        {
+            continue;
+        };
+        let Ok(type_text) = type_node.utf8_text(source)
+        else
+        {
+            continue;
+        };
+
+        for name_node in Named_Field_Children(declaration, "name")
+        {
+            if let Ok(name_text) = name_node.utf8_text(source)
+            {
+                fields.push((name_text.to_owned(), type_text.to_owned()));
+            }
+        }
+    }
+
+    return nomos_cap_syntax::Struct_Shape(&fields);
 }
 
 /// Every child carrying `field`, as an actually-named node.
