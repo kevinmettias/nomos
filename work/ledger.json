@@ -32906,6 +32906,68 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P14-CAPABILITY-010-CROSSLANG-RULE",
+      "title": "Check_Cross_Language_Correspondence wired into nomos-check-orchestration::Run, OD-CAPABILITY-010's first cross-language claim judged for real",
+      "why": "P14-CAPABILITY-010-SYNTAX-STRUCT-FIELDS-1/2 gave both providers real struct-field data with nothing reading it across a language pair yet. This item is the rule OD-CAPABILITY-010 itself specifies: a doc-comment-declared correspondence between a Rust struct and a Go struct, read as two nomos.cap.syntax.items facts and compared field-name-set-wise, wired unconditionally into Run the same way a fourth rule already was (OD-HOST-004).",
+      "done_when": "nomos-rules exports Check_Cross_Language_Correspondence (an eighth rule), it is composed into nomos-check-orchestration::Run behind Wants(selected, CROSS_LANGUAGE_CORRESPONDENCE) with no new materialization, and a real end-to-end test proves it against real Rust and Go source text parsed by their own real providers -- a genuine field mismatch reported, a genuine match silent",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/crosslang.rs",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "crates/orchestration/nomos-check-orchestration/src/run.rs",
+          "crates/orchestration/nomos-check-orchestration/src/tests.rs",
+          "tests/contract/surface/nomos-rules.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration",
+          "--no-fail-fast"
+        ],
+        "exit_code": 0,
+        "output_tail": "pty_Subject_List_Produces_No_Findings ... ok\ntest role_surface::tests::Test_Every_Subject_Is_Reported_As_Agent_Required ... ok\ntest role_surface::tests::Test_Findings_Are_Sorted_By_Subject_Name ... ok\ntest role_surface::tests::Test_The_Locations_Name_The_Readme_And_The_Surface_Snapshot ... ok\ntest role_surface::tests::Test_The_Rule_Never_Reaches_A_Verdict_Regardless_Of_Content ... ok\ntest tests::Test_A_Named_Preference_Should_Narrow_The_Floor ... ok\ntest tests::Test_No_Preference_Should_Carry_The_Bare_Floor_Through_Unchanged ... ok\ntest universe::tests::Test_A_Constant_Slice_Should_Be_Found ... ok\ntest universe::tests::Test_A_Declared_Mirror_Should_Be_Read_Off_The_Doc_Comment ... ok\ntest universe::tests::Test_A_File_That_Declares_Nothing_Should_Be_Observed_And_Empty ... ok\ntest universe::tests::Test_A_List_With_No_Documentation_Should_Claim_No_Mirror ... ok\ntest universe::tests::Test_A_Payload_From_A_Blind_Provider_Should_Not_Read_As_No_Mirror ... ok\ntest universe::tests::Test_A_Private_List_Should_Not_Be_A_Universe ... ok\ntest universe::tests::Test_A_Scalar_Constant_Should_Not_Be_A_Universe ... ok\ntest universe::tests::Test_A_Trait_Impl_Should_Not_Claim_The_Type ... ok\ntest universe::tests::Test_An_All_Should_Be_Attributed_To_Its_Type ... ok\ntest universe::tests::Test_An_All_That_Takes_A_Receiver_Should_Not_Be_A_Universe ... ok\n\ntest result: ok. 100 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.12s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_check_orchestration-90c251dd76727ab2.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-97cc66c3275b20dd.exe)\n   Doc-tests nomos_check_orchestration\n   Doc-tests nomos_rules\n",
+        "verified_at": 1787702234,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "310fc93943a8a989da428cd437ea731f44b64e34"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

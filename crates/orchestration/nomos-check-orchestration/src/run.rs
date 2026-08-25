@@ -6,9 +6,10 @@ use nomos_capability::Registry;
 use nomos_contracts::{Finding, RuleId};
 use nomos_platform::ProcessLauncher;
 use nomos_rules::{
-    Check_Completeness_Mirrors, Check_Dependency_Direction, Check_Dependency_Policy, Check_Lint_Diagnostics,
-    Check_Naming_Convention, Check_Unread_Reaches_A_Finding, SourceFile, COMPLETENESS_MIRROR, DEPENDENCY_DIRECTION,
-    DEPENDENCY_POLICY, LINT_DIAGNOSTICS, NAMING_CONVENTION, UNREAD_REACHES_FINDING,
+    Check_Completeness_Mirrors, Check_Cross_Language_Correspondence, Check_Dependency_Direction, Check_Dependency_Policy,
+    Check_Lint_Diagnostics, Check_Naming_Convention, Check_Unread_Reaches_A_Finding, SourceFile, COMPLETENESS_MIRROR,
+    CROSS_LANGUAGE_CORRESPONDENCE, DEPENDENCY_DIRECTION, DEPENDENCY_POLICY, LINT_DIAGNOSTICS, NAMING_CONVENTION,
+    UNREAD_REACHES_FINDING,
 };
 use nomos_workspace::BuildVariant;
 use std::path::Path;
@@ -255,6 +256,11 @@ fn Judged(
     if Wants(selected, UNREAD_REACHES_FINDING)
     {
         findings.extend(Check_Unread_Reaches_A_Finding(sources, &mut reader));
+    }
+
+    if Wants(selected, CROSS_LANGUAGE_CORRESPONDENCE)
+    {
+        findings.extend(Check_Cross_Language_Correspondence(sources, &mut reader));
     }
 
     findings.extend(capabilities.dependency_findings);

@@ -112,6 +112,50 @@ fn Test_A_Clean_Go_Source_Should_Be_Judged_Through_Its_Own_Real_Provider()
     assert_eq!(claim, Claim::Complete);
 }
 
+/// `OD-CAPABILITY-010`'s own end-to-end proof: a real Rust source and a real Go source,
+/// judged through `Run` together, over a declared correspondence whose two sides
+/// genuinely disagree on fields -- not a synthetic fact built by hand, the real syntax
+/// providers reading real source text.
+#[test]
+fn Test_A_Genuine_Cross_Language_Field_Mismatch_Should_Be_Reported()
+{
+    let sources = vec![
+        Source(
+            "wide.rs",
+            "/// Corresponds to `Wide`.\npub struct Wide { pub A: u32, pub B: u32 }\n",
+        ),
+        Source("wide.go", "package main\n\ntype Wide struct {\n\tA int\n}\n"),
+    ];
+    let selected = [RuleId::New(nomos_rules::CROSS_LANGUAGE_CORRESPONDENCE)];
+
+    let outcome = Run(&sources, Test_Variant(), &Repository_Root(), &StdProcessLauncher, &selected);
+
+    let CheckOutcome::Judged { findings, .. } = outcome else { panic!("a tree the provider can read must be judged") };
+
+    assert_eq!(findings.len(), 1, "{findings:?}");
+    let found = findings.first().expect("asserted len 1 above");
+    assert_eq!(found.applicability, nomos_contracts::Applicability::Supported);
+    assert!(found.summary.contains('B'), "{}", found.summary);
+}
+
+/// The identical pair, this time agreeing on fields -- proving a real match is silent
+/// rather than merely proving a real mismatch is loud.
+#[test]
+fn Test_A_Genuine_Cross_Language_Field_Match_Should_Report_Nothing()
+{
+    let sources = vec![
+        Source("clean.rs", "/// Corresponds to `Clean`.\npub struct Clean { pub A: u32 }\n"),
+        Source("clean.go", "package main\n\ntype Clean struct {\n\tA int\n}\n"),
+    ];
+    let selected = [RuleId::New(nomos_rules::CROSS_LANGUAGE_CORRESPONDENCE)];
+
+    let outcome = Run(&sources, Test_Variant(), &Repository_Root(), &StdProcessLauncher, &selected);
+
+    let CheckOutcome::Judged { findings, .. } = outcome else { panic!("a tree the provider can read must be judged") };
+
+    assert!(findings.is_empty(), "{findings:?}");
+}
+
 /// A finding that can fail a build and a finding the run could not resolve a judgment
 /// about are different axes -- `OD-COMPLETENESS-004`'s whole point, restated here because
 /// this crate is now where both axes are actually decided. A phantom mirror is
@@ -466,3 +510,4 @@ fn Findings_Over(ingested: &[SourceFile], judged: &[SourceFile]) -> Vec<Finding>
     let mut reader = Reader::On(&store, &registry, context);
     return Check_Completeness_Mirrors(&judged, &mut reader);
 }
+

@@ -97,9 +97,17 @@
 //! relayed 1:1 the identical way [`Check_Lint_Diagnostics`] already relays `cargo clippy`'s
 //! own verdict — minus even that rule's own per-member loop, since this capability's one
 //! real provider materializes exactly one fact for the whole workspace.
+//!
+//! [`Check_Cross_Language_Correspondence`] is an eighth rule, `OD-CAPABILITY-010`'s own
+//! work: the first rule in this crate that reads one capability twice for one judgment,
+//! over a subject *pair* a doc-comment-declared correspondence names rather than a subject
+//! the walk handed it directly. No new capability — both sides are already `nomos.cap.
+//! syntax.items` facts — and no new materialization, since every source's syntax fact is
+//! already written before any rule runs.
 
 #![forbid(unsafe_code)]
 
+mod crosslang;
 mod declared_universe;
 mod dependency;
 mod facts;
@@ -121,6 +129,7 @@ pub use declared_universe::DeclaredUniverse;
 pub use dependency::{Check_Dependency_Direction, DEPENDENCY_CONTRACT_RECORD, DEPENDENCY_CONTRACT_RECORD_VERSION, DEPENDENCY_DIRECTION};
 pub use lint::{Check_Lint_Diagnostics, LINT_DIAGNOSTICS};
 pub use policy::{Check_Dependency_Policy, DEPENDENCY_POLICY};
+pub use crosslang::{Check_Cross_Language_Correspondence, CROSS_LANGUAGE_CORRESPONDENCE};
 pub use naming::{Check_Naming_Convention, NAMING_CONVENTION};
 pub use reachability::{
     Check_Unread_Reaches_A_Finding, UNREAD_REACHES_FINDING, UNREAD_REACHES_FINDING_CONTRACT_RECORD,

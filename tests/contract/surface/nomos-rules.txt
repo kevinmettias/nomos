@@ -1,6 +1,7 @@
 pub const nomos_rules::COMPLETENESS_MIRROR: &str
 pub const nomos_rules::CONTRACT_RECORD: &str
 pub const nomos_rules::CONTRACT_RECORD_VERSION: u32
+pub const nomos_rules::CROSS_LANGUAGE_CORRESPONDENCE: &str
 pub const nomos_rules::DECLARED_ROLE_MATCHES_SURFACE: &str
 pub const nomos_rules::DEPENDENCY_CONTRACT_RECORD: &str
 pub const nomos_rules::DEPENDENCY_CONTRACT_RECORD_VERSION: u32
@@ -20,6 +21,7 @@ pub enum variant nomos_rules::RuleRegistryError::AlreadyOffered(RuleId)
 pub enum variant nomos_rules::UniverseKind::Constant
 pub enum variant nomos_rules::UniverseKind::Enumeration
 pub fn nomos_rules::Check_Completeness_Mirrors( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
+pub fn nomos_rules::Check_Cross_Language_Correspondence(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 pub fn nomos_rules::Check_Declared_Role_Matches_Surface(subjects: &[RoleSurfacePair]) -> Vec<Finding>
 pub fn nomos_rules::Check_Dependency_Direction(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 pub fn nomos_rules::Check_Dependency_Policy(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
