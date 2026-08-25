@@ -5,7 +5,49 @@
 
 use super::{Path, PathBuf, SourceFile, Subject_Of_Path};
 
-/// The Rust sources under the root, or `None` if the root is not a directory.
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    /// Removes and recreates `root` under the system temp directory, so a test starts
+    /// from a clean, empty tree regardless of what an earlier run left behind.
+    fn Fresh_Root(name: &str) -> PathBuf
+    {
+        let root = std::env::temp_dir().join(name);
+        let _ignored = std::fs::remove_dir_all(&root);
+        std::fs::create_dir_all(&root).expect("the temporary root is creatable");
+        return root;
+    }
+
+    #[test]
+    fn Test_A_Go_File_Should_Be_Discovered_Alongside_A_Rust_One()
+    {
+        let root = Fresh_Root("nomos-cli-gate-sources-go-discovery");
+        std::fs::write(root.join("a.rs"), "pub fn One() {}\n").expect("writable");
+        std::fs::write(root.join("main.go"), "package main\n\nfunc One() {}\n").expect("writable");
+
+        let sources = Read_Sources(&root);
+
+        let _ignored = std::fs::remove_dir_all(&root);
+        let paths: Vec<&str> = sources.iter().map(|source| return source.path.as_str()).collect();
+        assert_eq!(paths, vec!["a.rs", "main.go"], "{paths:?}");
+    }
+
+    #[test]
+    fn Test_An_Unrelated_Extension_Should_Not_Be_Discovered()
+    {
+        let root = Fresh_Root("nomos-cli-gate-sources-unrelated-extension");
+        std::fs::write(root.join("README.md"), "# not source\n").expect("writable");
+
+        let sources = Read_Sources(&root);
+
+        let _ignored = std::fs::remove_dir_all(&root);
+        assert!(sources.is_empty(), "{sources:?}");
+    }
+}
+
+/// The Rust and Go sources under the root, or `None` if the root is not a directory.
 ///
 /// A directory that is walked and turns out empty is not this function's decision any
 /// more: `nomos_check_orchestration::CheckOutcome` is where "not a directory" and "found
@@ -21,7 +63,8 @@ pub(super) fn Walked(root: &Path) -> Option<Vec<SourceFile>>
     return Some(Read_Sources(root));
 }
 
-/// Every `.rs` file under `root`, with its text and the subject its facts are filed under.
+/// Every `.rs` or `.go` file under `root`, with its text and the subject its facts are
+/// filed under.
 ///
 /// `target` is skipped: it holds generated source that nobody authored, and judging a
 /// build artifact would report findings against code the author cannot edit.
@@ -50,7 +93,14 @@ pub(super) fn Read_Sources(root: &Path) -> Vec<SourceFile>
 }
 
 /// One entry of a walked directory: queued if it is a directory worth descending into,
-/// read if it is a `.rs` file, and ignored otherwise.
+/// read if it is a `.rs` or `.go` file, and ignored otherwise.
+///
+/// The extension check is a literal, the same as `nomos_lang_rust::RUST_EXTENSION` and
+/// `nomos_lang_go::GO_EXTENSION` already state, rather than a dependency on either crate:
+/// this walk decides which bytes are worth reading at all, not which registered provider
+/// answers for them -- `nomos-check-orchestration::composition::Recognized_Syntax_Provider`
+/// is where that second, real question is decided, over a path this function has already
+/// let through.
 pub(super) fn Read_Entry(
     root: &Path,
     path: PathBuf,
@@ -72,7 +122,7 @@ pub(super) fn Read_Entry(
         return;
     }
 
-    if path.extension().is_some_and(|extension| return extension == "rs")
+    if path.extension().is_some_and(|extension| return extension == "rs" || extension == "go")
         && let Ok(text) = std::fs::read_to_string(&path)
     {
         let source = Read_Source(root, &path, text);
@@ -80,7 +130,7 @@ pub(super) fn Read_Entry(
     }
 }
 
-/// One `.rs` file as the rule takes it.
+/// One source file as the rule takes it.
 ///
 /// This root files a fact under the subject and hands the same value to the rule on
 /// `SourceFile::subject`, so the two cannot disagree about addressing. It is the kernel's

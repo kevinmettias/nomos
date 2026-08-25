@@ -32070,6 +32070,134 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P14-RULES-010-TOOL-PROVIDER-DENY-3",
+      "title": "Check_Dependency_Policy wired into nomos-check-orchestration::Run, OD-RULES-010's second real ToolProvider judged for real",
+      "why": "P14-RULES-010-TOOL-PROVIDER-DENY-1 and -2 gave nomos.cap.dependency.policy a contract and a real provider with nothing reading it yet. This item is the rule half OD-RULES-010 requires (a native nomos-rules function judges the fact, never the tool's own Finding directly) and the composition wiring nomos-check-orchestration::Run and composition.rs already do for lint-diagnostics -- the same Wants(selected, ...)-gated materialize-then-judge shape, a fifth capability declared and offered against, applied to a second real ToolProvider rather than invented for it.",
+      "done_when": "nomos-rules exports Check_Dependency_Policy (a fifth rule, judging cargo deny's relayed violations as Findings at EvidenceClass::Derived), nomos-check-orchestration materializes the nomos.cap.dependency.policy fact behind Wants(selected, DEPENDENCY_POLICY) the same way Materialize_Lint does, a failed materialization reports a ProviderUnavailable Finding rather than silently judging nothing, composition.rs declares and offers the capability, and a real end-to-end test exercises the whole path over this repository",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/policy.rs",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "crates/rules/nomos-rules/Cargo.toml",
+          "crates/orchestration/nomos-check-orchestration/src/facts/materialize.rs",
+          "crates/orchestration/nomos-check-orchestration/src/facts.rs",
+          "crates/orchestration/nomos-check-orchestration/src/run.rs",
+          "crates/orchestration/nomos-check-orchestration/src/composition.rs",
+          "crates/orchestration/nomos-check-orchestration/src/tests.rs",
+          "crates/orchestration/nomos-check-orchestration/Cargo.toml",
+          "tests/contract/surface/nomos-rules.txt",
+          "tests/contract/surface/nomos-check-orchestration.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration",
+          "--no-fail-fast"
+        ],
+        "exit_code": 0,
+        "output_tail": "mpty_Subject_List_Produces_No_Findings ... ok\ntest role_surface::tests::Test_Every_Subject_Is_Reported_As_Agent_Required ... ok\ntest role_surface::tests::Test_Findings_Are_Sorted_By_Subject_Name ... ok\ntest role_surface::tests::Test_The_Locations_Name_The_Readme_And_The_Surface_Snapshot ... ok\ntest tests::Test_A_Named_Preference_Should_Narrow_The_Floor ... ok\ntest role_surface::tests::Test_The_Rule_Never_Reaches_A_Verdict_Regardless_Of_Content ... ok\ntest tests::Test_No_Preference_Should_Carry_The_Bare_Floor_Through_Unchanged ... ok\ntest universe::tests::Test_A_Constant_Slice_Should_Be_Found ... ok\ntest universe::tests::Test_A_Declared_Mirror_Should_Be_Read_Off_The_Doc_Comment ... ok\ntest universe::tests::Test_A_File_That_Declares_Nothing_Should_Be_Observed_And_Empty ... ok\ntest universe::tests::Test_A_List_With_No_Documentation_Should_Claim_No_Mirror ... ok\ntest universe::tests::Test_A_Payload_From_A_Blind_Provider_Should_Not_Read_As_No_Mirror ... ok\ntest universe::tests::Test_A_Private_List_Should_Not_Be_A_Universe ... ok\ntest universe::tests::Test_A_Scalar_Constant_Should_Not_Be_A_Universe ... ok\ntest universe::tests::Test_A_Trait_Impl_Should_Not_Claim_The_Type ... ok\ntest universe::tests::Test_An_All_Should_Be_Attributed_To_Its_Type ... ok\ntest universe::tests::Test_An_All_That_Takes_A_Receiver_Should_Not_Be_A_Universe ... ok\n\ntest result: ok. 94 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.13s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_check_orchestration-90c251dd76727ab2.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-97cc66c3275b20dd.exe)\n   Doc-tests nomos_check_orchestration\n   Doc-tests nomos_rules\n",
+        "verified_at": 1787698357,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "befff6ce398a96ed18fe05e89396945cb06bad6d"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P14-CAPABILITY-009-WALKER-GO-DISCOVERY",
+      "title": "The CLI check/gate and API walkers discover .go files, giving nomos-lang-go's registration its first real live effect",
+      "why": "OD-CAPABILITY-009's amendment (P14-CAPABILITY-009-SYNTAX-DISPATCH-CORRECTION) ground-truthed that nomos-cli::check::sources::Read_Entry, nomos-cli::gate::sources::Read_Entry and nomos-api::sources::Read_Entry -- three deliberate twins, duplicated on purpose per OD-HOST-002 family 3, not shared -- each admit only a path whose extension is exactly rs. P14-CAPABILITY-009-SYNTAX-RECOGNITION-DISPATCH-3 made the registry, the read side and the write side all agree correctly on a .go file's provider identity, but no real walk ever hands one to any of them: today a real nomos check, nomos gate run or API run over a tree containing .go files silently never sees them, so the dispatch fix has zero live effect through any real entry point yet. This item is the second, independent prerequisite the amendment named and did not build.",
+      "done_when": "Read_Entry in all three files admits a path whose extension is rs or go (same hardcoded-extension style each already uses for rs, no new dependency on a language crate). Each file's own module doc updated from every .rs file wording to name both. Each sources.rs gains its own small test module (none exists in any of the three today) proving, over a real temp directory in the std::env::temp_dir()/create_dir_all/remove_dir_all pattern check/tests.rs's own tests already use: a .go file is discovered, a .rs file still is, and an unrelated extension (e.g. .md) still is not. cargo test -p nomos-cli -p nomos-api passes and cargo clippy --workspace --all-targets stays clean.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/src/check/sources.rs",
+          "crates/host/nomos-cli/src/gate/sources.rs",
+          "crates/host/nomos-api/src/sources.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-api"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-api"
+        ],
+        "exit_code": 0,
+        "output_tail": "; 0 filtered out; finished in 0.03s\n\n\nrunning 5 tests\ntest Test_Claiming_A_Lapsed_Item_Should_Refuse_And_Name_The_Takeover ... ok\ntest Test_Taking_Over_A_Lapsed_Item_Should_Record_The_Claim_It_Displaced ... ok\ntest Test_A_Lapsed_Item_Should_List_As_Lapsed_And_Be_Takeable ... ok\ntest Test_Show_Should_Report_The_Claim_A_Takeover_Displaced ... ok\ntest Test_Takeover_Should_Exit_Three_When_The_Lease_Is_Live_And_Four_When_It_Is_Not_Held ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.15s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_api-79d47e82da8aaba6.exe)\n     Running unittests src\\main.rs (target\\debug\\deps\\nomos-a2b99d4e43c82b35.exe)\n     Running tests\\abandon_is_readable.rs (target\\debug\\deps\\abandon_is_readable-e5b19ca195a6837d.exe)\n     Running tests\\add_guarantees_what_it_says.rs (target\\debug\\deps\\add_guarantees_what_it_says-6d6fd133b33fa3a5.exe)\n     Running tests\\authoring_surface.rs (target\\debug\\deps\\authoring_surface-8587fe59343a8814.exe)\n     Running tests\\check_command.rs (target\\debug\\deps\\check_command-82fd8efd05939af4.exe)\n     Running tests\\freshness.rs (target\\debug\\deps\\freshness-159479d117180841.exe)\n     Running tests\\gate_step\\main.rs (target\\debug\\deps\\gate_step-00fb89ba0f6554d3.exe)\n     Running tests\\list_tells_the_truth.rs (target\\debug\\deps\\list_tells_the_truth-cfdd42b5b52fa9ce.exe)\n     Running tests\\read_surface.rs (target\\debug\\deps\\read_surface-6a7640a558c4fa84.exe)\n     Running tests\\request_submit.rs (target\\debug\\deps\\request_submit-d2a0dbb0bd917926.exe)\n     Running tests\\stale_writer_is_refused.rs (target\\debug\\deps\\stale_writer_is_refused-b62212ecb0b81a74.exe)\n     Running tests\\takeover_is_recorded.rs (target\\debug\\deps\\takeover_is_recorded-b3efea6c20d8ada1.exe)\n   Doc-tests nomos_api\n",
+        "verified_at": 1787698335,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "befff6ce398a96ed18fe05e89396945cb06bad6d"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
