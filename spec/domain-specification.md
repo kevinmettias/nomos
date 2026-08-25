@@ -147,6 +147,7 @@ profile: domain-specification
 | docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md@authored | docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md | authored | 19 | 6 | sha256:7f6c05ffa09f693ecfe8e7c14699257a1fe01da3a07c0614b09f227fd5be986b |
 | docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md@authored | docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md | authored | 32 | 6 | sha256:335f2ed03def8b979a66bf55ff3278c706fbc7e1105bc01a4fd5a1a75cedfe0a |
 | docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md@authored | docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md | authored | 23 | 7 | sha256:b5e1d877a5afeba17463c498b9ed05cca87900528a9883d705c48db279044c66 |
+| docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md@authored | docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md | authored | 15 | 6 | sha256:5530123e11eb287694b80cf35ebffd17a5d77ab28e13ad1f231e4f4a2e8cdb9d |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md@authored | docs/records/OD-SPEC-001-the-storage-backend-question.md | authored | 11 | 5 | sha256:e4feddab256024ea38e21849120fdd52d0ddf17d4e3f69cfb24eb4c8e766c8ae |
 | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md@authored | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md | authored | 20 | 7 | sha256:2c45051e43390556bfd68865152580e1ae09c2e82dc94bb20e65cdbf60d69a10 |
 | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md@authored | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md | authored | 23 | 7 | sha256:481ffd62b02df705439b4ef914adb21e24894d1d3f0295754fc13f7d95c89c85 |
@@ -1325,6 +1326,12 @@ profile: domain-specification
 | docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#14 | authored | 2 | What Would Decide It |
 | docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#17 | authored | 2 | Amendment: The First Named Trigger Fired, And Was Addressed Narrowly |
 | docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#22 | authored | 2 | Status |
+| docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#1 | authored | 1 | A ToolProvider's output is a fact a native rule judges, not a Finding a tool emits directly |
+| docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#2 | authored | 2 | Question |
+| docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#4 | authored | 2 | What Was Measured |
+| docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#8 | authored | 2 | The Decision |
+| docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#10 | authored | 2 | What This Does Not Do |
+| docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#14 | authored | 2 | Status |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#1 | authored | 1 | Whether the specification store gains a second backend, and what would decide it |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#2 | authored | 2 | Question |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#4 | authored | 2 | Current Position |
@@ -38705,6 +38712,156 @@ shape continues to scale to a real, evidenced need without a generalized planner
 Accepted. This record's first named trigger fired and was addressed by `OD-GATE-017`, not by
 building the `RunPlanner` this record declines. Revisit on any of the three remaining triggers
 named above, or when `OD-RULES-007`'s own status next changes.
+
+### docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#1
+
+*revision: authored · kind: heading · heading: A ToolProvider's output is a fact a native rule judges, not a Finding a tool emits directly · hash: sha256:2e2434df66e0045fa2e7774501b18f69f1a056500b7c7965738a49e09ad15c1d*
+
+# A ToolProvider's output is a fact a native rule judges, not a Finding a tool emits directly
+
+### docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#2
+
+*revision: authored · kind: heading · heading: A ToolProvider's output is a fact a native rule judges, not a Finding a tool emits directly / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#3
+
+*revision: authored · kind: prose · heading: A ToolProvider's output is a fact a native rule judges, not a Finding a tool emits directly / Question · hash: sha256:e249208dc00d2ab84da3d7a058700635825a2137a573775cc1a789b31a8ff625*
+
+`nomos_contracts::PackageKind::ToolProvider` ("an external analysis or transformation
+tool, wrapped behind a capability") is one of twelve still-unconsumed package kinds --
+`package.rs`'s own doc says plainly that no installable unit of any of those twelve kinds
+exists in this workspace, and none is written to make them look used. Whether the first
+real `ToolProvider` -- a wrapper around `cargo clippy`, the workspace's own obvious first
+candidate -- should let the tool's own verdict become a `Finding` directly, or should
+treat the tool's output as raw material a native `nomos-rules` function then judges, is
+undecided, and the two shapes are not interchangeable: one widens `Finding`'s own
+attribution scheme, the other does not.
+
+### docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#4
+
+*revision: authored · kind: heading · heading: A ToolProvider's output is a fact a native rule judges, not a Finding a tool emits directly / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#5
+
+*revision: authored · kind: prose · heading: A ToolProvider's output is a fact a native rule judges, not a Finding a tool emits directly / What Was Measured · hash: sha256:463c0b7b6901f01f9a37b6cc95767d5016c918f47dade9e12421b9a096b70f16*
+
+Verified directly against the real code: every `Finding` this workspace produces today
+traces to exactly one `nomos_contracts::RuleId` (`finding.rs`) -- the rule that judged it.
+There is no second attribution field, and no type anywhere names a tool as the entity that
+rendered a verdict. `nomos_contracts::EvidenceClass::Authoritative` ("Definitional -- true
+because the system defines it so") is declared and has zero real usages anywhere in the
+workspace; every real `Finding`/`MaterializedFact` produced today carries `Verified`
+(a provider's own subprocess output, e.g. `nomos-lang-rust-cargo`'s `cargo metadata`
+materialization) or `Derived` (a native rule's judgment over a materialized fact).
+
+### docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#6
+
+*revision: authored · kind: prose · heading: A ToolProvider's output is a fact a native rule judges, not a Finding a tool emits directly / What Was Measured · hash: sha256:ab52330f2214e8be9b387c4cdcf4504b1d8a1b7c70ca35c3e2744aa43f002ac8*
+
+`Check_Dependency_Direction` (`crates/rules/nomos-rules/src/dependency.rs`) is the
+worked precedent for the only shape that exists today: it calls `FactReader::Require`
+against a capability, and on success judges the decoded payload and emits a `Finding` at
+`Applicability::Supported`, `EvidenceClass::Derived`. `nomos-lang-rust-cargo`
+(`crates/languages/nomos-lang-rust-cargo/src/metadata.rs`) is the worked precedent for a
+subprocess-backed provider: it runs an external tool (`cargo metadata`) through
+`nomos_platform::ProcessLauncher`, parses its output, and returns facts for the
+composition root to materialize into the store via `nomos_capability::Registry::
+Declare_And_Offer` -- it does not itself construct a `Finding`, `Applicability`, or any
+judgment. `cargo clippy`'s own diagnostics are, unlike `cargo metadata`'s package graph,
+already a rendered verdict about specific code -- level, message, location -- which is
+what makes this question real rather than a restatement of the existing precedent: a
+`ToolProvider` wrapping clippy could either mirror `nomos-lang-rust-cargo`'s shape (an
+inert fact) or skip straight to what `Check_Dependency_Direction` produces (a judged
+`Finding`), and nothing already decided which.
+
+### docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#7
+
+*revision: authored · kind: prose · heading: A ToolProvider's output is a fact a native rule judges, not a Finding a tool emits directly / What Was Measured · hash: sha256:cd032542d2e70dfc2074dad0b08a1ff8ab808f1d5631e9ec30ea607983313720*
+
+`OD-PACKAGE-011` v3 and `OD-WORKFLOW-002`/`OD-WORKFLOW-003` each already declined a
+structurally identical move elsewhere: widening a closed vocabulary or a type's shape to
+serve exactly one real case, before a second one exists to prove the wider shape is
+actually needed rather than merely convenient for the first. Widening `Finding`'s
+attribution scheme for one tool, and giving `Authoritative` its first use in the same
+stroke, is the same move.
+
+### docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#8
+
+*revision: authored · kind: heading · heading: A ToolProvider's output is a fact a native rule judges, not a Finding a tool emits directly / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#9
+
+*revision: authored · kind: prose · heading: A ToolProvider's output is a fact a native rule judges, not a Finding a tool emits directly / The Decision · hash: sha256:beaaaf3fcc262b50043e3dd29c8b3655e4f295d7d6d7316501041fa26edfabfd*
+
+The first real `ToolProvider` materializes its tool's output as a fact behind a real
+capability contract, the same shape `nomos-lang-rust-cargo` already establishes for a
+subprocess-backed provider, stamped `EvidenceClass::Verified` (the tool ran and answered),
+never `Authoritative`. A native `nomos-rules` function then reads that fact through
+`FactReader::Require` and emits `Finding`s from it at `EvidenceClass::Derived`, the same
+`Require`-then-judge-then-emit shape `Check_Dependency_Direction` already uses. `Finding`
+gains no new attribution field. This decision's own first increment mirrors
+`nomos-lang-rust-cargo` paired with `nomos_capability::Registry::Declare_And_Offer` for the
+provider half, and `Check_Dependency_Direction`'s own trace for the rule half -- no new
+mechanism, only a new capability and a new provider and rule offering against it.
+
+### docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#10
+
+*revision: authored · kind: heading · heading: A ToolProvider's output is a fact a native rule judges, not a Finding a tool emits directly / What This Does Not Do · hash: sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf*
+
+## What This Does Not Do
+
+### docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#11
+
+*revision: authored · kind: prose · heading: A ToolProvider's output is a fact a native rule judges, not a Finding a tool emits directly / What This Does Not Do · hash: sha256:5913f41fbb083ae39065e5d4f9fec3216185f89428b1913c356a5adad4e28aa0*
+
+It does not widen `Finding` to carry a tool's own identity as a second attribution axis
+beside `RuleId`, and it does not give `EvidenceClass::Authoritative` a real consumer.
+Both would be justified the moment a second real `ToolProvider` needs to report a verdict
+`Finding` cannot already represent honestly through a judging rule -- not before, the same
+"no invented shape ahead of a real second case" discipline `OD-PACKAGE-011` and
+`OD-WORKFLOW-002`/`003` already apply. A native rule that does nothing but relay a tool's
+own diagnostic 1:1, rather than add real judgment of its own, is accepted as an honest
+consequence of this decision, not hidden as a defect: the rule's floor is "this tool
+already decided," stated as its own `Requirement` the way every existing rule states its
+own, and `Check_Dependency_Direction`'s own precedent already accepts a rule whose
+"judgment" is largely pass-through when its capability's own provider already resolved the
+hard part.
+
+### docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#12
+
+*revision: authored · kind: prose · heading: A ToolProvider's output is a fact a native rule judges, not a Finding a tool emits directly / What This Does Not Do · hash: sha256:3bfacdaa6b418e92f5b3b4d75bfbbc901d481bb2c4b18e61705b35e9e7675c5e*
+
+It does not pick which real tool the first `ToolProvider` wraps, name the capability's own
+identifier, or build any code. Those are the first increment's own questions, not this
+record's.
+
+### docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#13
+
+*revision: authored · kind: prose · heading: A ToolProvider's output is a fact a native rule judges, not a Finding a tool emits directly / What This Does Not Do · hash: sha256:e528c4cc1aa5c47cf9149c6e652d218349ee5543ac6ed2cb009f23f1d8fb02e5*
+
+It does not decide anything about `MetricProvider`, `RepositoryProvider` or
+`RuntimeProvider` -- the other package kinds `PackageKind::Hosts_Foreign_Code` groups
+beside `ToolProvider`. Each is a distinct capability shape with its own real first case to
+measure against, not a case this record's reasoning is assumed to generalize to
+automatically.
+
+### docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#14
+
+*revision: authored · kind: heading · heading: A ToolProvider's output is a fact a native rule judges, not a Finding a tool emits directly / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#15
+
+*revision: authored · kind: prose · heading: A ToolProvider's output is a fact a native rule judges, not a Finding a tool emits directly / Status · hash: sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3*
+
+Accepted.
 
 ### docs/records/OD-SPEC-001-the-storage-backend-question.md#1
 

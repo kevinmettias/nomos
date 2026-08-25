@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:9b61ac287727932dc7f4c62ac53e3ad857a7f81d2014af9b0404a309e02ce5a0",
-  "inputs_digest": "sha256:0adefc20c5fc2b563912103d2fe4a30f72741f0263bfda17c3df549e54d6f164",
+  "content_digest": "sha256:e520cd0420c1c608210495005e941a8abef51c56999af3fbe8645124cc51e461",
+  "inputs_digest": "sha256:38c4df4301c6bbbae5bc4322a4978fb4f421fd09fc369b48a69ac47bbac15b1f",
   "sections": [
     [
       "Documents",
-      162
+      163
     ],
     [
       "Sections",
-      1374
+      1380
     ],
     [
       "Source blocks",
-      4824
+      4839
     ]
   ],
   "inputs": [
@@ -704,6 +704,11 @@
       "content": "documents",
       "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md@authored",
       "hash": "sha256:b5e1d877a5afeba17463c498b9ed05cca87900528a9883d705c48db279044c66"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md@authored",
+      "hash": "sha256:5530123e11eb287694b80cf35ebffd17a5d77ab28e13ad1f231e4f4a2e8cdb9d"
     },
     {
       "content": "documents",
@@ -6569,6 +6574,36 @@
       "content": "headings",
       "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#22",
       "hash": "sha256:675a6f6510f4c810372388be62990bba4ba749d4831837bebf0ccf0db36f56fd"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#1",
+      "hash": "sha256:c93fd554519218b0b965d01bc7a2a8bdd6d1eef1be45c1b1b30f2a2c03395e00"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#2",
+      "hash": "sha256:1fc1b1d0f0aa40df1763918e497e0ce607a60fd94f550d0370a44912b13ef2f7"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#4",
+      "hash": "sha256:ea96cfe7ccf1002116215c2ef947f49acccfb3622f26266a7123ecffeb70440c"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#8",
+      "hash": "sha256:8e9d4a90b7839279194f7b7a7717e563118acad1ba1e76f4bb824708b4ffc58c"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#10",
+      "hash": "sha256:66bf240943efd8afd79e88e855d282915a80f410b1b07a3183ab7803a4449aab"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#14",
+      "hash": "sha256:6d16468ae57c18412176323505905b2a6100675cf47b5ca3013317d2e8d6f114"
     },
     {
       "content": "headings",
@@ -28039,6 +28074,81 @@
       "content": "blocks",
       "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#23",
       "hash": "sha256:8ebc1012678ed48e702ef4d252ea7a6fa9a76947a8a0d572749d8b8da941cf44"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#1",
+      "hash": "sha256:2e2434df66e0045fa2e7774501b18f69f1a056500b7c7965738a49e09ad15c1d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#3",
+      "hash": "sha256:e249208dc00d2ab84da3d7a058700635825a2137a573775cc1a789b31a8ff625"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#4",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#5",
+      "hash": "sha256:463c0b7b6901f01f9a37b6cc95767d5016c918f47dade9e12421b9a096b70f16"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#6",
+      "hash": "sha256:ab52330f2214e8be9b387c4cdcf4504b1d8a1b7c70ca35c3e2744aa43f002ac8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#7",
+      "hash": "sha256:cd032542d2e70dfc2074dad0b08a1ff8ab808f1d5631e9ec30ea607983313720"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#8",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#9",
+      "hash": "sha256:beaaaf3fcc262b50043e3dd29c8b3655e4f295d7d6d7316501041fa26edfabfd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#10",
+      "hash": "sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#11",
+      "hash": "sha256:5913f41fbb083ae39065e5d4f9fec3216185f89428b1913c356a5adad4e28aa0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#12",
+      "hash": "sha256:3bfacdaa6b418e92f5b3b4d75bfbbc901d481bb2c4b18e61705b35e9e7675c5e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#13",
+      "hash": "sha256:e528c4cc1aa5c47cf9149c6e652d218349ee5543ac6ed2cb009f23f1d8fb02e5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#14",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#15",
+      "hash": "sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3"
     },
     {
       "content": "blocks",
