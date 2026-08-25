@@ -3,7 +3,7 @@ id: OD-PACKAGE-007
 type: decision
 title: The language-agnostic manifest core is its own crate, so a second language does not depend on Rust to read its own manifest
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - packages
@@ -104,6 +104,52 @@ still pass byte-for-byte: it is the behavior-preservation proof, asserting the e
 for *some* provider set other than the one it was extracted from — not only reproven against
 the one case it already had.
 
+## Amendment: A Real Second Language Landed, And The Core Needed No Adjustment
+
+Added at version 2. This record's own "second language's package crate" was a projection
+against a population of one when it was written; `nomos-lang-go-package`
+(`P14-PACKAGE-GO-LANGUAGE-MANIFEST-3`) is that party, real rather than hypothetical, and this
+amendment measures the projection against it the same honest-correction discipline
+`OD-PACKAGE-008`'s own amendment already models: name what, if anything, needed adjusting once
+real evidence existed, rather than reaffirming the original decision by citation alone.
+
+**The dependency shape held exactly.** Checked directly against
+`crates/packages/nomos-lang-go-package/Cargo.toml`: it depends on `nomos-package`,
+`nomos-contracts`, `nomos-lang-go`, `serde` and `serde_json` — never on `nomos-lang-package`,
+never on any Rust provider crate. Every one of `nomos_package::{PackageVersion, ProtocolRange,
+ProviderRegistration, ManifestError, Parse_Manifest, Read_Manifest}` is used unchanged, byte-
+for-byte the same public surface this record fixed for the split. `nomos-package` itself needed
+zero changes to serve a second, unrelated language — not a line of it is in
+`P14-PACKAGE-GO-LANGUAGE-MANIFEST-3`'s own territory, because none of it needed touching.
+
+**The version-label domain is a real third shape, not one of the two this record named.**
+This record's own text offered two candidates for what a second language's version domain
+might look like: "its own `RustEdition`-shaped enum, or a raw string." What
+`nomos-lang-go-package::GoVersion` actually is is neither: a parsed, validated `{major, minor}`
+pair, checked against `go.mod`'s own grammar, chosen because Go ships a new minor version
+roughly twice a year and a closed enum enumerating them would already be stale, while an
+unvalidated raw string would accept nonsense a `LanguagePackage` should refuse. The real
+population of typed version-label shapes this workspace has evidence for is now three — a
+small closed enum, a raw unvalidated string, and a parsed-and-validated structured value — not
+the two this record anticipated. This is not evidence `nomos_package::PackageManifest::
+language_versions` should have tried to generalize over that shape: leaving it an unresolved
+`Vec<String>`, exactly as this record already decided, is what let a third real shape arrive
+without needing to touch the generic core at all — the design this record made *because* it
+could not know the second language's shape in advance is exactly what absorbed a shape it did
+not specifically predict.
+
+**`KNOWN_PROVIDERS`'s scoping convention repeated independently, not by copying.**
+`nomos-lang-go-package`'s own allowlist carries exactly one provider,
+`nomos_lang_go::PROVIDER`, and excludes `nomos-lang-go-modules` (`nomos.cap.dependency.edges`)
+the same way `nomos-lang-package`'s own allowlist excludes `nomos-lang-rust-cargo` — a
+`LanguagePackage` registers the language's syntax provider, not every capability provider that
+happens to read its ecosystem's files. This was reasoned independently against Go's own real
+provider population, not copied from the Rust crate's file, and landing on the identical
+scoping rule twice is real evidence the rule is a property of what a `LanguagePackage` is
+for, rather than an accident of the first case.
+
 ## Status
 
-Closed by `P13-PACKAGE-GENERIC-CORE`.
+Closed by `P13-PACKAGE-GENERIC-CORE`. Amended to version 2 by
+`P14-LANG-GO-RECORD-2`: measured directly against `nomos-lang-go-package`, the real second
+consumer this record was written for, and found to need no adjustment.

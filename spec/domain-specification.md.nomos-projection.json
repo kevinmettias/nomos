@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:99a1247e244f2810d4fbc9b2708f140db6d9288981e2c11e3e20699aa1d3c952",
-  "inputs_digest": "sha256:f0175be0ccb7ca1bd4c78e9e81f31fb566a7fcb530caf628bad67965c335d0da",
+  "content_digest": "sha256:896c16bd373b65a8befbcfdfa7764e061a7976d35610fc7bcb42575b48b9710c",
+  "inputs_digest": "sha256:220b239031ae5279f22c1c7ebff9ab72907a0a2a25f810780bffa9e9b1fb3e44",
   "sections": [
     [
       "Documents",
@@ -12,11 +12,11 @@
     ],
     [
       "Sections",
-      1397
+      1399
     ],
     [
       "Source blocks",
-      4882
+      4891
     ]
   ],
   "inputs": [
@@ -608,12 +608,12 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md@authored",
-      "hash": "sha256:9ad75a86e6b4e61ea1aa4ee07373fd1671f806826c48c66cc569ea0a27ad5fd7"
+      "hash": "sha256:82a815c8ebfef4326291f80714ff16665a00d6311bcc2ac44be6c1c55f769609"
     },
     {
       "content": "documents",
       "identity": "docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md@authored",
-      "hash": "sha256:34a10502da7ccee01b768adbdb67dd71f28209b6bc4ae2afc512b343bf59ebb9"
+      "hash": "sha256:c8d1f6b93262c4c49c0a4feb2064651754b9aadd43d7e9efa41c11362f08eb68"
     },
     {
       "content": "documents",
@@ -5843,7 +5843,12 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#17",
-      "hash": "sha256:77c68c6088b25db8ffacd7e51940261f5d69a06357908db1de12f1fab701af8d"
+      "hash": "sha256:88fc6395a6ac9cb65e8fa94798a992db94f5da65b1ef88c978d8387476b8403f"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#21",
+      "hash": "sha256:4c25f8ffaf37cf0e88d0615ba57bcf53a768ce3bbe8191e006ef8fa57aee78cc"
     },
     {
       "content": "headings",
@@ -5873,7 +5878,12 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#15",
-      "hash": "sha256:5f5e461e043e46446a741040f609d13626895dae460ee8677dd547128dfa566a"
+      "hash": "sha256:d3d0bc18e5ca06a0c6e7b261a3c11803af0c99fa6a2dc20c5c61c3244b4c4e8c"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#20",
+      "hash": "sha256:26ee2b2b4c78790e4073218da053a7bfa080c7358aff446e4c1db9c6ac8ccbfb"
     },
     {
       "content": "headings",
@@ -25498,12 +25508,32 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#17",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:18ef327f7a0da830539c4f98f5a4f19a072a3ddbdf412df226580444c32ebacc"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#18",
-      "hash": "sha256:131bff3086d6824264344a5b997f4cd6306bd3f13c0d5edd78e7f88788acab16"
+      "hash": "sha256:c8f3b01a73775b9cab428ba9495f52c7acae4d36d7001dd518ca0217e6891332"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#19",
+      "hash": "sha256:f46dfd7694909342804446731be788a21d71f0f2a6eaebf24e81c3b2b5d3ed2b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#20",
+      "hash": "sha256:c022818ac29664fdb04d82cd47b80a20fea9e6d356bbdb58167a48b535203196"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#21",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#22",
+      "hash": "sha256:a3f5efec695c4af20380941bb2e04b0240e4a096e0f774d18d800d4b77bd2b2e"
     },
     {
       "content": "blocks",
@@ -25578,12 +25608,37 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#15",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:027cd95f1ecac87bc43d8cad3a4f60ce676b0bfcc4a8bb8667eee9165ec9f548"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#16",
-      "hash": "sha256:3da7b6c268e2fb338484fcc5d53c3083685b83db13a3abf2a19da544457119e0"
+      "hash": "sha256:f6ccfab6c7c4c22024846681cb12ea9ad2a3d525d5f7af2ab5dcb66f221f9fc3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#17",
+      "hash": "sha256:f4e3fa180dedd63b92cd14473c631501881997488cc9d49dc573bcb05b073b3d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#18",
+      "hash": "sha256:2302e8b6b174a8f9b9e6b579fea6ab7da474a0fac50fe06db26ae4be240443af"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#19",
+      "hash": "sha256:00fa31944418a2f098a50ad53fe464b1780786c0577612c6e2279b83fb7c3159"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#20",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#21",
+      "hash": "sha256:fb42058c228b64e93cd1685a69f899c8af2270090a1b05bfa7f606457a4f01a7"
     },
     {
       "content": "blocks",

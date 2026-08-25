@@ -3,7 +3,7 @@ id: OD-PACKAGE-006
 type: decision
 title: Whether KNOWN_PROVIDERS needs a self-registering mechanism, or stays hand-maintained bounded to additions
 status: accepted
-version: 3
+version: 4
 authority: canonical-normative-record
 tags:
   - packages
@@ -118,6 +118,32 @@ mechanism for same-language providers turns out to be worth building, it does no
 third provider crate to exist first — the same standing instruction that applies to
 `RulePackage`, model routing, and corrections applies here.
 
+## Amendment: The Second Real Consumer Landed, And Needed The Type Unchanged
+
+Added at version 4. Version 2's resolution built `nomos_package::KnownProviders` ahead of a
+second language's package crate, anticipating "a second language's package crate is exactly
+the expected second party ... and it would need a `KNOWN_PROVIDERS`-shaped array of its own the
+moment it existed." `nomos-lang-go-package` (`P14-PACKAGE-GO-LANGUAGE-MANIFEST-3`) is that
+party, real rather than anticipated, and this amendment checks the prediction against it —
+`OD-PACKAGE-008`'s own amendment discipline, applied here rather than merely cited.
+
+**`KnownProviders` needed no change.** `crates/packages/nomos-lang-go-package/src/
+known_providers.rs` builds `KNOWN_PROVIDERS` as `KnownProviders::New(&[nomos_lang_go::
+PROVIDER]).As_Slice()` — the identical construction `nomos-lang-package`'s own
+`known_providers.rs` uses, for a wholly unrelated language's provider constant. Not one line
+of `nomos_package::known_providers` is in `P14-PACKAGE-GO-LANGUAGE-MANIFEST-3`'s own territory,
+because the type served a second real consumer exactly as built.
+
+**The remaining unmirrored-universe cost repeated once, not accumulated.** `nomos-lang-go-
+package::KNOWN_PROVIDERS` is a second hand-maintained, unmirrored universe, classified in
+`tests/contract/tests/completeness_universes/table.rs` beside `nomos-lang-package`'s own row,
+with the identical bounded risk — an addition to the list nothing forces, drift on what exists
+today structurally prevented by pulling each entry from its own crate's `PROVIDER` constant.
+`UNMIRRORED_TOTAL` rose by exactly one for exactly one new hand-maintained list, not by more:
+the generic type did not multiply the cost this record already accepted, it repeated it once
+per real consumer, which is the shape a population-of-N-crates cost was always going to take
+regardless of whether the underlying mechanism were generic or bespoke.
+
 ## Status
 
 Accepted. `OD-PACKAGE-006`'s original trigger — a third Rust language provider crate —
@@ -125,5 +151,7 @@ remains unmet and was explicitly not what resolved version 2; a separate, explic
 direction to build language- and rule-plugin infrastructure ahead of demonstrated
 same-population need is what did. Amended to version 3 by
 `P13-ROADMAP-001-POPULATION-CAUTION-RETIRED`, retiring the remaining third-provider wait via
-`OD-ROADMAP-001`. The follow-on capability work this resolution names is tracked on the work
-ledger, not in this record.
+`OD-ROADMAP-001`. Amended to version 4 by `P14-LANG-GO-RECORD-2`: `nomos-lang-go-package`
+confirms the generic `KnownProviders` type serves a second real consumer, unchanged. The
+follow-on capability work this resolution names is tracked on the work ledger, not in this
+record.

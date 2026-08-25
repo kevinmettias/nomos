@@ -29642,7 +29642,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Depends on P14-PACKAGE-GO-LANGUAGE-MANIFEST, which is Declined and will never finish -- stranded per work audit. Superseded by -2, identical why/done_when/territory, depending on P14-PACKAGE-GO-LANGUAGE-MANIFEST-3 (the item that actually finished) instead."
+        }
+      },
       "depends_on": [
         "P14-LANG-GO-SYNTAX-PROVIDER",
         "P14-PACKAGE-GO-LANGUAGE-MANIFEST"
@@ -29664,7 +29668,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-lang-go-record",
+        "declined_at": 1787693570
+      }
     },
     {
       "id": "P14-EXECUTOR-001-CAPABILITY-BOUNDARY",
@@ -31562,6 +31569,70 @@
           "exit_code": 0
         },
         "revision": "71059bd147af2bb3f92a2848b10a384ed8e81d2c"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P14-LANG-GO-RECORD-2",
+      "title": "OD-PACKAGE-006 and OD-PACKAGE-007 amended: a real second language landed",
+      "why": "Both records reasoned about a second language's package crate before one existed -- OD-PACKAGE-007 split nomos-package out specifically so a second language would not depend on Rust, and OD-PACKAGE-006's amendment retired waiting for one. Once nomos-lang-go and nomos-lang-go-package are real, this closes the loop the same way OD-PACKAGE-008's own amendment corrected its prediction against a real second and third rule rather than reaffirming it by count alone: name what, if anything, needed adjusting once real Go evidence existed, rather than leaving the claim standing on a population of zero.",
+      "done_when": "OD-PACKAGE-006 and/or OD-PACKAGE-007 amended with a section measured directly against the real nomos-lang-go and nomos-lang-go-package crates, stating plainly whether the generic core held up unchanged or needed a real adjustment, the same honest correction discipline OD-PACKAGE-008's own amendment followed. spec/domain-specification.md and diagrams/relations.mmd re-rendered from a tree whose registered records are exactly the ones this commit publishes.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "spec/domain-specification.md",
+          "diagrams/relations.mmd",
+          "docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md",
+          "docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [
+        "P14-LANG-GO-SYNTAX-PROVIDER",
+        "P14-PACKAGE-GO-LANGUAGE-MANIFEST-3"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "_Should_Be_Findable_By_Its_Content ... ok\n\ntest result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.14s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-7e62a05a80b2a153.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-a7ddd20267ce6c71.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-8b7bde015af4a6d5.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-282419f96d35f8fc.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-cb07077a9de84582.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-04d928e15f53ca9e.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-2d8796877c263c1e.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-4e3a9c9dfd929f43.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-5d30cacc18579715.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-190c42374e8341ed.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-ee111bd537ecd137.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-2919ec68747ddb5b.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-99272398d303e3e7.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-756fcac740cd78ad.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-259eb839edee86c9.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1787693878,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "68e9c199bbf16c18375c859724342d62cf2f5ed8"
       },
       "abandoned": [],
       "displaced": [],

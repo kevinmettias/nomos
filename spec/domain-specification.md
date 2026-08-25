@@ -127,8 +127,8 @@ profile: domain-specification
 | docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md@authored | docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md | authored | 42 | 10 | sha256:353b96edd0e3cd1cd8ffaa0fa1f645769af77bc91429d1e32caa3326e8887a6e |
 | docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md@authored | docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md | authored | 27 | 9 | sha256:e94d0c54e1e8ac358fc301df5119ab588054e69c32c0b4abf3420717a7959610 |
 | docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md@authored | docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md | authored | 32 | 10 | sha256:a45ac49574962ff1012b371f9aea9eb2f8fc2a06a11e707f2b1679a355acc555 |
-| docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md@authored | docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md | authored | 18 | 7 | sha256:9ad75a86e6b4e61ea1aa4ee07373fd1671f806826c48c66cc569ea0a27ad5fd7 |
-| docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md@authored | docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md | authored | 16 | 6 | sha256:34a10502da7ccee01b768adbdb67dd71f28209b6bc4ae2afc512b343bf59ebb9 |
+| docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md@authored | docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md | authored | 22 | 8 | sha256:82a815c8ebfef4326291f80714ff16665a00d6311bcc2ac44be6c1c55f769609 |
+| docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md@authored | docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md | authored | 21 | 7 | sha256:c8d1f6b93262c4c49c0a4feb2064651754b9aadd43d7e9efa41c11362f08eb68 |
 | docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md@authored | docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md | authored | 34 | 9 | sha256:c27a144ff27bd60925ae7b4027314ea780fec54cc1466bcf11a16c2f51d485f0 |
 | docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md@authored | docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md | authored | 14 | 5 | sha256:8e66ebc7fa4c6ee44260128c0f37957605f33a078676edb3c504d701d929362f |
 | docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md@authored | docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md | authored | 16 | 7 | sha256:f1b618d3b00c8f61d67c72d952411d52fe9d8520a77db5a8ba0a1a526faed666 |
@@ -1179,13 +1179,15 @@ profile: domain-specification
 | docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#9 | authored | 2 | What Would Decide It |
 | docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#11 | authored | 2 | Resolution |
 | docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#15 | authored | 2 | Amendment: The Remaining Third-Provider Wait Is Retired |
-| docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#17 | authored | 2 | Status |
+| docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#17 | authored | 2 | Amendment: The Second Real Consumer Landed, And Needed The Type Unchanged |
+| docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#21 | authored | 2 | Status |
 | docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#1 | authored | 1 | The language-agnostic manifest core is its own crate, so a second language does not depend on Rust to read its own manifest |
 | docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#2 | authored | 2 | Question |
 | docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#6 | authored | 2 | The decision |
 | docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#10 | authored | 2 | What this does not decide |
 | docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#13 | authored | 2 | What Holds It |
-| docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#15 | authored | 2 | Status |
+| docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#15 | authored | 2 | Amendment: A Real Second Language Landed, And The Core Needed No Adjustment |
+| docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#20 | authored | 2 | Status |
 | docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#1 | authored | 1 | Whether RulePackage needs its manifest crate now that nomos-package exists, or stays a bare rule bounded to a population of one |
 | docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#2 | authored | 2 | Question |
 | docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#6 | authored | 2 | Current Position |
@@ -33483,21 +33485,65 @@ third provider crate to exist first — the same standing instruction that appli
 
 ### docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#17
 
+*revision: authored · kind: heading · heading: Whether KNOWN_PROVIDERS needs a self-registering mechanism, or stays hand-maintained bounded to additions / Amendment: The Second Real Consumer Landed, And Needed The Type Unchanged · hash: sha256:18ef327f7a0da830539c4f98f5a4f19a072a3ddbdf412df226580444c32ebacc*
+
+## Amendment: The Second Real Consumer Landed, And Needed The Type Unchanged
+
+### docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#18
+
+*revision: authored · kind: prose · heading: Whether KNOWN_PROVIDERS needs a self-registering mechanism, or stays hand-maintained bounded to additions / Amendment: The Second Real Consumer Landed, And Needed The Type Unchanged · hash: sha256:c8f3b01a73775b9cab428ba9495f52c7acae4d36d7001dd518ca0217e6891332*
+
+Added at version 4. Version 2's resolution built `nomos_package::KnownProviders` ahead of a
+second language's package crate, anticipating "a second language's package crate is exactly
+the expected second party ... and it would need a `KNOWN_PROVIDERS`-shaped array of its own the
+moment it existed." `nomos-lang-go-package` (`P14-PACKAGE-GO-LANGUAGE-MANIFEST-3`) is that
+party, real rather than anticipated, and this amendment checks the prediction against it —
+`OD-PACKAGE-008`'s own amendment discipline, applied here rather than merely cited.
+
+### docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#19
+
+*revision: authored · kind: prose · heading: Whether KNOWN_PROVIDERS needs a self-registering mechanism, or stays hand-maintained bounded to additions / Amendment: The Second Real Consumer Landed, And Needed The Type Unchanged · hash: sha256:f46dfd7694909342804446731be788a21d71f0f2a6eaebf24e81c3b2b5d3ed2b*
+
+**`KnownProviders` needed no change.** `crates/packages/nomos-lang-go-package/src/
+known_providers.rs` builds `KNOWN_PROVIDERS` as `KnownProviders::New(&[nomos_lang_go::
+PROVIDER]).As_Slice()` — the identical construction `nomos-lang-package`'s own
+`known_providers.rs` uses, for a wholly unrelated language's provider constant. Not one line
+of `nomos_package::known_providers` is in `P14-PACKAGE-GO-LANGUAGE-MANIFEST-3`'s own territory,
+because the type served a second real consumer exactly as built.
+
+### docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#20
+
+*revision: authored · kind: prose · heading: Whether KNOWN_PROVIDERS needs a self-registering mechanism, or stays hand-maintained bounded to additions / Amendment: The Second Real Consumer Landed, And Needed The Type Unchanged · hash: sha256:c022818ac29664fdb04d82cd47b80a20fea9e6d356bbdb58167a48b535203196*
+
+**The remaining unmirrored-universe cost repeated once, not accumulated.** `nomos-lang-go-
+package::KNOWN_PROVIDERS` is a second hand-maintained, unmirrored universe, classified in
+`tests/contract/tests/completeness_universes/table.rs` beside `nomos-lang-package`'s own row,
+with the identical bounded risk — an addition to the list nothing forces, drift on what exists
+today structurally prevented by pulling each entry from its own crate's `PROVIDER` constant.
+`UNMIRRORED_TOTAL` rose by exactly one for exactly one new hand-maintained list, not by more:
+the generic type did not multiply the cost this record already accepted, it repeated it once
+per real consumer, which is the shape a population-of-N-crates cost was always going to take
+regardless of whether the underlying mechanism were generic or bespoke.
+
+### docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#21
+
 *revision: authored · kind: heading · heading: Whether KNOWN_PROVIDERS needs a self-registering mechanism, or stays hand-maintained bounded to additions / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#18
+### docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#22
 
-*revision: authored · kind: prose · heading: Whether KNOWN_PROVIDERS needs a self-registering mechanism, or stays hand-maintained bounded to additions / Status · hash: sha256:131bff3086d6824264344a5b997f4cd6306bd3f13c0d5edd78e7f88788acab16*
+*revision: authored · kind: prose · heading: Whether KNOWN_PROVIDERS needs a self-registering mechanism, or stays hand-maintained bounded to additions / Status · hash: sha256:a3f5efec695c4af20380941bb2e04b0240e4a096e0f774d18d800d4b77bd2b2e*
 
 Accepted. `OD-PACKAGE-006`'s original trigger — a third Rust language provider crate —
 remains unmet and was explicitly not what resolved version 2; a separate, explicit product
 direction to build language- and rule-plugin infrastructure ahead of demonstrated
 same-population need is what did. Amended to version 3 by
 `P13-ROADMAP-001-POPULATION-CAUTION-RETIRED`, retiring the remaining third-provider wait via
-`OD-ROADMAP-001`. The follow-on capability work this resolution names is tracked on the work
-ledger, not in this record.
+`OD-ROADMAP-001`. Amended to version 4 by `P14-LANG-GO-RECORD-2`: `nomos-lang-go-package`
+confirms the generic `KnownProviders` type serves a second real consumer, unchanged. The
+follow-on capability work this resolution names is tracked on the work ledger, not in this
+record.
 
 ### docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#1
 
@@ -33643,15 +33689,81 @@ the one case it already had.
 
 ### docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#15
 
+*revision: authored · kind: heading · heading: The language-agnostic manifest core is its own crate, so a second language does not depend on Rust to read its own manifest / Amendment: A Real Second Language Landed, And The Core Needed No Adjustment · hash: sha256:027cd95f1ecac87bc43d8cad3a4f60ce676b0bfcc4a8bb8667eee9165ec9f548*
+
+## Amendment: A Real Second Language Landed, And The Core Needed No Adjustment
+
+### docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#16
+
+*revision: authored · kind: prose · heading: The language-agnostic manifest core is its own crate, so a second language does not depend on Rust to read its own manifest / Amendment: A Real Second Language Landed, And The Core Needed No Adjustment · hash: sha256:f6ccfab6c7c4c22024846681cb12ea9ad2a3d525d5f7af2ab5dcb66f221f9fc3*
+
+Added at version 2. This record's own "second language's package crate" was a projection
+against a population of one when it was written; `nomos-lang-go-package`
+(`P14-PACKAGE-GO-LANGUAGE-MANIFEST-3`) is that party, real rather than hypothetical, and this
+amendment measures the projection against it the same honest-correction discipline
+`OD-PACKAGE-008`'s own amendment already models: name what, if anything, needed adjusting once
+real evidence existed, rather than reaffirming the original decision by citation alone.
+
+### docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#17
+
+*revision: authored · kind: prose · heading: The language-agnostic manifest core is its own crate, so a second language does not depend on Rust to read its own manifest / Amendment: A Real Second Language Landed, And The Core Needed No Adjustment · hash: sha256:f4e3fa180dedd63b92cd14473c631501881997488cc9d49dc573bcb05b073b3d*
+
+**The dependency shape held exactly.** Checked directly against
+`crates/packages/nomos-lang-go-package/Cargo.toml`: it depends on `nomos-package`,
+`nomos-contracts`, `nomos-lang-go`, `serde` and `serde_json` — never on `nomos-lang-package`,
+never on any Rust provider crate. Every one of `nomos_package::{PackageVersion, ProtocolRange,
+ProviderRegistration, ManifestError, Parse_Manifest, Read_Manifest}` is used unchanged, byte-
+for-byte the same public surface this record fixed for the split. `nomos-package` itself needed
+zero changes to serve a second, unrelated language — not a line of it is in
+`P14-PACKAGE-GO-LANGUAGE-MANIFEST-3`'s own territory, because none of it needed touching.
+
+### docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#18
+
+*revision: authored · kind: prose · heading: The language-agnostic manifest core is its own crate, so a second language does not depend on Rust to read its own manifest / Amendment: A Real Second Language Landed, And The Core Needed No Adjustment · hash: sha256:2302e8b6b174a8f9b9e6b579fea6ab7da474a0fac50fe06db26ae4be240443af*
+
+**The version-label domain is a real third shape, not one of the two this record named.**
+This record's own text offered two candidates for what a second language's version domain
+might look like: "its own `RustEdition`-shaped enum, or a raw string." What
+`nomos-lang-go-package::GoVersion` actually is is neither: a parsed, validated `{major, minor}`
+pair, checked against `go.mod`'s own grammar, chosen because Go ships a new minor version
+roughly twice a year and a closed enum enumerating them would already be stale, while an
+unvalidated raw string would accept nonsense a `LanguagePackage` should refuse. The real
+population of typed version-label shapes this workspace has evidence for is now three — a
+small closed enum, a raw unvalidated string, and a parsed-and-validated structured value — not
+the two this record anticipated. This is not evidence `nomos_package::PackageManifest::
+language_versions` should have tried to generalize over that shape: leaving it an unresolved
+`Vec<String>`, exactly as this record already decided, is what let a third real shape arrive
+without needing to touch the generic core at all — the design this record made *because* it
+could not know the second language's shape in advance is exactly what absorbed a shape it did
+not specifically predict.
+
+### docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#19
+
+*revision: authored · kind: prose · heading: The language-agnostic manifest core is its own crate, so a second language does not depend on Rust to read its own manifest / Amendment: A Real Second Language Landed, And The Core Needed No Adjustment · hash: sha256:00fa31944418a2f098a50ad53fe464b1780786c0577612c6e2279b83fb7c3159*
+
+**`KNOWN_PROVIDERS`'s scoping convention repeated independently, not by copying.**
+`nomos-lang-go-package`'s own allowlist carries exactly one provider,
+`nomos_lang_go::PROVIDER`, and excludes `nomos-lang-go-modules` (`nomos.cap.dependency.edges`)
+the same way `nomos-lang-package`'s own allowlist excludes `nomos-lang-rust-cargo` — a
+`LanguagePackage` registers the language's syntax provider, not every capability provider that
+happens to read its ecosystem's files. This was reasoned independently against Go's own real
+provider population, not copied from the Rust crate's file, and landing on the identical
+scoping rule twice is real evidence the rule is a property of what a `LanguagePackage` is
+for, rather than an accident of the first case.
+
+### docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#20
+
 *revision: authored · kind: heading · heading: The language-agnostic manifest core is its own crate, so a second language does not depend on Rust to read its own manifest / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#16
+### docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#21
 
-*revision: authored · kind: prose · heading: The language-agnostic manifest core is its own crate, so a second language does not depend on Rust to read its own manifest / Status · hash: sha256:3da7b6c268e2fb338484fcc5d53c3083685b83db13a3abf2a19da544457119e0*
+*revision: authored · kind: prose · heading: The language-agnostic manifest core is its own crate, so a second language does not depend on Rust to read its own manifest / Status · hash: sha256:fb42058c228b64e93cd1685a69f899c8af2270090a1b05bfa7f606457a4f01a7*
 
-Closed by `P13-PACKAGE-GENERIC-CORE`.
+Closed by `P13-PACKAGE-GENERIC-CORE`. Amended to version 2 by
+`P14-LANG-GO-RECORD-2`: measured directly against `nomos-lang-go-package`, the real second
+consumer this record was written for, and found to need no adjustment.
 
 ### docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#1
 
