@@ -30369,12 +30369,16 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [
         "P14-GATE-017-RUN-RULE-SUBSET-FIRST-INCREMENT-2"
       ],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-session-executor-planning",
+        "acquired_at": 1787686556,
+        "lease_expires_at": 1787693756
+      },
       "verification": {
         "argv": [
           "cargo",

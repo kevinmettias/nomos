@@ -11,6 +11,7 @@ publish.workspace = true
 nomos-contracts = { workspace = true }
 nomos-corrections = { workspace = true }
 nomos-ledger = { workspace = true }
+nomos-model-package = { workspace = true }
 serde = { workspace = true }
 
 [lints]

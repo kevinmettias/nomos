@@ -56,7 +56,7 @@ profile: domain-specification
 | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md@authored | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md | authored | 29 | 9 | sha256:0351be57f7a37c7b7e8965886b9fa29c15f87fe4660ee253dcebcad932fe77a6 |
 | docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md@authored | docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md | authored | 28 | 9 | sha256:9f1c5229277415e49115502a643ecee1e889b80a83acb01e8695fe922761f0c2 |
 | docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md@authored | docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md | authored | 15 | 6 | sha256:a52350f85fcefd9e25749a3f5bc90bd0afccc914f2f3495d8e35464419642400 |
-| docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md@authored | docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md | authored | 16 | 6 | sha256:51e30dc4a56a3bf30c810637db1322b95f6fe4d423063b09ee2c0f55812f9984 |
+| docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md@authored | docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md | authored | 16 | 6 | sha256:19c4610a46c7d14df7864e42dfe27435961870faf5050026c8fd455d2132cc42 |
 | docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md@authored | docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md | authored | 21 | 8 | sha256:8ad58a92216388e350cbfdf042e5ab75299e97e9e6accef05f6bae9e325fc72a |
 | docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md@authored | docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md | authored | 14 | 6 | sha256:e55bd46b259be4c661ac4bb95475cd427ad66c783465edae129bac816f1ababf |
 | docs/records/OD-DETERMINISM-001-a-declaration-proven-only-behind-a-corpus-gate.md@authored | docs/records/OD-DETERMINISM-001-a-declaration-proven-only-behind-a-corpus-gate.md | authored | 26 | 7 | sha256:b080a464d0e59ac731e8b78eb0104aeed978958713f99969d1506ebbee92802e |
@@ -77,6 +77,7 @@ profile: domain-specification
 | docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md@authored | docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md | authored | 21 | 8 | sha256:fde76ddb443213fdd5c253144550e72aa60a127201be1c067156bd52c9a071dd |
 | docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md@authored | docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md | authored | 34 | 12 | sha256:ee64f184602e1bd210eeca6144c88552d97cebce829ccdedea3db6487fc6e36d |
 | docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md@authored | docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md | authored | 17 | 6 | sha256:8b80590869d121dd76fa42950c366543d613d4ba319282b49f28a446cc6af6cd |
+| docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md@authored | docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md | authored | 20 | 6 | sha256:504d603bb325dfc4a0de5fd2b2c60760942f1ac03ce40a6046383e34bc73eade |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md@authored | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md | authored | 16 | 5 | sha256:e3d0afb3cabc0ab33a09a700e110b803806d3c4e063673d8c18ca7adc84c3012 |
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md@authored | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md | authored | 36 | 8 | sha256:3ececaaf506dff6cacf4aa066df5a3fdd61032c1ec291ef9f21e3a4b939d37ef |
 | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md@authored | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md | authored | 19 | 6 | sha256:9237ea74e89c7f49295d2e4bde41ff135c64838767ba17c27b0aad79037ced10 |
@@ -714,6 +715,12 @@ profile: domain-specification
 | docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#11 | authored | 2 | Decision |
 | docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#14 | authored | 2 | What This Does Not Do |
 | docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#16 | authored | 2 | Status |
+| docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#1 | authored | 1 | Whether Run gains a real per-call rule subset now, or waits for a caller that needs one |
+| docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#2 | authored | 2 | Question |
+| docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#5 | authored | 2 | What Was Measured |
+| docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#10 | authored | 2 | Decision |
+| docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#14 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#19 | authored | 2 | Status |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#1 | authored | 1 | Choosing a platform, running a verb and rendering its outcome are three crates, not one |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#4 | authored | 2 | The decision |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#8 | authored | 2 | What stayed out, and why |
@@ -12676,11 +12683,16 @@ applies elsewhere.
 
 ### docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md#14
 
-*revision: authored · kind: prose · heading: TaskEnvelope gains an effort field, so an agent executor can read one real model-routing signal / What This Does Not Do · hash: sha256:4f19d93d508183320f2cfaf2e15bbff3b93573befa3938aafbcb43c5c980d14c*
+*revision: authored · kind: prose · heading: TaskEnvelope gains an effort field, so an agent executor can read one real model-routing signal / What This Does Not Do · hash: sha256:be5c39402bb13a82339294d298e06a0d83284d9427c351feba56e189423013e6*
 
-It does not retroactively require every existing caller to change. Verified directly: the
-only production construction sites for `TaskEnvelope` in this workspace before this record
-are this crate's own test and `nomos-cli::agent`'s CLI verb, both updated alongside it.
+It does not retroactively require every existing caller to change beyond adding the one new
+field. Verified directly: the only production construction sites for `TaskEnvelope` in this
+workspace before this record are this crate's own test and `nomos-cli::agent`'s CLI verb.
+The latter is not this record's own territory -- `crates/host/nomos-cli/src/agent.rs` is
+held by a concurrent claim (`P14-CLI-AGENT-JUDGE-ROLE`) building an unrelated feature in the
+same file -- so its two literals were given the same one-line, purely additive fix in the
+shared working tree, coordinated directly with that session rather than committed here; it
+lands with whichever commit publishes that item's own work, not this record's.
 
 ### docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md#15
 
@@ -18458,6 +18470,221 @@ coverage-caused `Indeterminate` by name, the same way it already reports `baseli
 Accepted. Names the first increment to build; a follow-on capability item builds it and amends
 this record the way `P13-GATE-015-SUPPRESSION-RECORD`, `-BASELINE-RECORD` and `-ADOPTION-RECORD`
 each amended `OD-GATE-015` once their own concern landed.
+
+### docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#1
+
+*revision: authored · kind: heading · heading: Whether Run gains a real per-call rule subset now, or waits for a caller that needs one · hash: sha256:d6dc5e35347629c5f7b029a6b779e1348ef4d5c8b6e041843c8a4e06c3fee23d*
+
+# Whether Run gains a real per-call rule subset now, or waits for a caller that needs one
+
+### docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#2
+
+*revision: authored · kind: heading · heading: Whether Run gains a real per-call rule subset now, or waits for a caller that needs one / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#3
+
+*revision: authored · kind: prose · heading: Whether Run gains a real per-call rule subset now, or waits for a caller that needs one / Question · hash: sha256:48f763351f11b1b93e996d6729a1720e36233c54770b8925edb347d34f98699b*
+
+`OD-GATE-014` built `ScopeSelector` and `RuleSelector` under a standing user override, but its
+own closing section named a boundary it deliberately left short of: `RuleSelector` filters
+findings by `RuleId` only *after* `nomos_check_orchestration::Run` has already computed every
+one of them, "honestly short of a real narrowing of what runs," because changing that "needs a
+signature change to `Run` itself across every one of its callers, which this increment does not
+attempt." Its last line named the next question directly: "any future narrowing of their shape
+... `Run` itself gaining a per-call rule subset ... is a new question for a new record, not a
+reopening of this one." This record is that one.
+
+### docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#4
+
+*revision: authored · kind: prose · heading: Whether Run gains a real per-call rule subset now, or waits for a caller that needs one / Question · hash: sha256:2b83270da110cadfdf4c2321d3b53ab461ffd846aed3e10f50f8e4e11c7c1be2*
+
+It also answers a trigger from a separate lineage. `OD-RULES-009` measured an external
+architecture review's case for building `ARC-ROADMAP-001`'s full "shared demand planner" —
+rules declare capability requirements, a planner deduplicates them into one fact DAG and
+resolves providers generically, and both `check` and `gate` execute through the planned result
+— and declined to elevate it to P0, on the ground that its own recorded trigger, "selection
+creating unread work," had not fired: `OD-GATE-014` was "still open" at that record's HEAD, and
+"nothing in this workspace today wants to run a subset of rules or a subset of scope."
+`OD-RULES-009`'s own "What Would Decide It" section named the concrete case that would fire it:
+"`OD-GATE-014`'s `ScopeSelector`/`RuleSelector` getting built is the concrete case this would
+arrive through." That has since happened, and a real caller now depends on it on every
+invocation that uses it.
+
+### docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#5
+
+*revision: authored · kind: heading · heading: Whether Run gains a real per-call rule subset now, or waits for a caller that needs one / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#6
+
+*revision: authored · kind: prose · heading: Whether Run gains a real per-call rule subset now, or waits for a caller that needs one / What Was Measured · hash: sha256:a0a60496fc3f73cee632f8a9122460f54a7477d83724348401530ec8531e47d8*
+
+**A real caller already selects fewer than every rule, and `Run` cannot see it.** Verified
+directly against the real code, not assumed: `nomos gate run --rule` (`Named_Values(rest,
+"--rule")`, `crates/host/nomos-cli/src/gate/parsing.rs`) constructs a non-empty `RuleSelector`
+that `Run_Gate` (`crates/orchestration/nomos-gate-orchestration/src/run_gate.rs`) already
+narrows `blocking_findings`, `calibrated_findings`, `suppressed_findings` and
+`baselined_findings` by, through `Reduced`. `Run_Gate`'s own private `Judged` helper calls
+`nomos_check_orchestration::Run` with no rule argument at all — a user who runs `nomos gate run
+--rule naming-convention` today still pays for `cargo metadata`
+(`Materialize_Dependencies`), the reachability heuristic (`Materialize_Reachability`) and all
+four `Check_*` calls, and `check_outcome` still carries dependency-direction and
+unread-reaches-finding findings that no path they took asked for and that `Reduced` discards
+immediately after computing them.
+
+### docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#7
+
+*revision: authored · kind: prose · heading: Whether Run gains a real per-call rule subset now, or waits for a caller that needs one / What Was Measured · hash: sha256:64ceaa6471af1029867b9604d7d5005840982801be0065f04c270b5feefe8814*
+
+**`OD-HOST-004`'s own flip condition has fired.** That record states plainly: "`Run` flips the
+first time a rule ... is meant to run for *some* check invocations and not others — selected by
+something the request states, rather than by whether the crate happens to know about it."
+`--rule` is exactly that: a request-carried property `GateCommand.rules` already holds, not
+something `Run`'s own body decides. This is not a hypothetical future rule or a wish; it is the
+CLI flag as shipped and callable today.
+
+### docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#8
+
+*revision: authored · kind: prose · heading: Whether Run gains a real per-call rule subset now, or waits for a caller that needs one / What Was Measured · hash: sha256:8411295204f6a843ab525da0b8f9a6d5ad963fcdde838a72ab5b77fced9a4101*
+
+**`OD-RULES-009`'s named trigger has fired, and only that one.** Its "What Would Decide It"
+list named four triggers. The first — "selection creating unread work," concretely `OD-GATE-
+014`'s selectors getting built — has fired, exactly as that record predicted it would arrive.
+The other three have not, checked directly at this record's own HEAD rather than assumed:
+`nomos-rules` gained a real fifth rule while this record was being written
+(`P14-RULES-005-ROLE-SURFACE-AGENT-REQUIRED`, `Check_Declared_Role_Matches_Surface`), but its
+own commit states it is "additive and unwired into `Run` — the same first-increment shape
+`RuleRegistry` itself used," the identical two-stage pattern `Check_Unread_Reaches_A_Finding`
+already went through. `Run` (`run.rs`) still calls exactly the same four rules it always has;
+nothing about this fifth rule's arrival changed what `Run` computes. Its shape is also evidence
+against, not for, "a fifth rule's required-capability shape reconverging with an existing one":
+it reads plain committed files rather than a `FactReader`, states no capability contract at all,
+and raises every finding as unconditionally `Applicability::AgentRequired` — a structurally new
+family, not a second instance of `nomos.cap.syntax.items`, `nomos.cap.dependency.edges` or
+`nomos.cap.controlflow.reachability`. Nor has any materialization step been measured to cost
+real, wasted work for a population where facts are shared and reused — verified directly,
+`run.rs` still writes every fact into one `MemoryFactStore` through one shared `Reader`, and no
+rule recomputes a fact another rule already produced. The review's larger claim — that a
+generalized planner should deduplicate fact requirements across a growing, diverging rule
+population and resolve providers generically ahead of a hand-written call list — rests on those
+three still-unfired triggers, not on this one, and this record does not reopen them.
+
+### docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#9
+
+*revision: authored · kind: prose · heading: Whether Run gains a real per-call rule subset now, or waits for a caller that needs one / What Was Measured · hash: sha256:bc6e91d5a1e8db8fc78120809238c38ce2292ca6730ee56d48dc8a546e9da4b7*
+
+**Every existing caller of `Run` is unaffected by an empty selection.** `nomos check`
+(`crates/host/nomos-cli/src/check.rs`) has no rule-selection concept of its own and passes an
+empty selection, preserving today's unconditional behavior exactly — the identical "empty
+`include` is select-everything" default `RuleSelector` already establishes for `Run_Gate`.
+`nomos gate explain` (`Explain_Gate`) deliberately ignores `command.rules` today, by its own
+documented design: "independent of `command.scope` and `command.rules`: those narrow a real
+run's disposition over many findings, and this answers a question about one named finding as
+check would produce it right now." `Explain_Gate` must keep passing an empty selection through
+`Judged`, not `command.rules` — threading the command's own selection through here would
+silently narrow what `explain` can ever answer a query about, which is not this record's
+question to reopen.
+
+### docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#10
+
+*revision: authored · kind: heading · heading: Whether Run gains a real per-call rule subset now, or waits for a caller that needs one / Decision · hash: sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511*
+
+## Decision
+
+### docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#11
+
+*revision: authored · kind: prose · heading: Whether Run gains a real per-call rule subset now, or waits for a caller that needs one / Decision · hash: sha256:b99695470631f467905db9cd21340c9863f0dea823302d5512a0a0b365f08426*
+
+**Build it now.** `nomos_check_orchestration::Run` gains a parameter naming which rules a
+caller wants computed, typed as `&[RuleId]` with the same "empty is every rule" semantics
+`RuleSelector::include` already has, so no existing construction site changes meaning by
+default:
+
+### docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#12
+
+*revision: authored · kind: prose · heading: Whether Run gains a real per-call rule subset now, or waits for a caller that needs one / Decision · hash: sha256:235ba6362409eee7abd0191700b1116cd7ee69cc60577433277746fe9f766e2a*
+
+- `Run`'s internal `Materialize_Capabilities` step calls `Materialize_Dependencies` only when
+  `DEPENDENCY_DIRECTION` is selected, and `Materialize_Reachability` only when
+  `UNREAD_REACHES_FINDING` is selected — the two materializations with a real cost
+  (`cargo metadata`'s process launch; a per-file heuristic pass) that no rule but their own
+  consumer reads.
+- `Run`'s internal `Judged` step calls each of the four `Check_*` functions only when its own
+  `RuleId` is selected.
+- `nomos-cli`'s `check::Run` passes an empty selection (`nomos check` keeps judging everything,
+  unconditionally, exactly as `OD-HOST-004` already requires for a rule with no per-request
+  variance).
+- `nomos-gate-orchestration::run_gate::Judged` passes `command.rules.include` through to `Run`,
+  so `Run_Gate` stops computing what its own caller's `--rule` already said it does not want.
+- `nomos-gate-orchestration::explain::Explain_Gate` passes an empty selection through the same
+  `Judged`, unchanged from today's independence from `command.rules`.
+
+### docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#13
+
+*revision: authored · kind: prose · heading: Whether Run gains a real per-call rule subset now, or waits for a caller that needs one / Decision · hash: sha256:19f51625b96858f5a80a4ae430adadc7bd985b8e26287c073825d77089f36a2e*
+
+This is a fixed, hand-written mapping from each of today's four `RuleId`s to the fact(s) it
+needs — the same "composition, not choice" shape `OD-HOST-004` and `OD-RULES-009` already
+approved for *whether* a rule participates, extended to a second axis (whether its
+materialization runs at all) rather than replaced by a different mechanism. It is not a
+declared, generic requirement-to-provider resolution a planner reads; a fifth rule still needs
+its own hand-written entry in both places, exactly as a fourth rule already did.
+
+### docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#14
+
+*revision: authored · kind: heading · heading: Whether Run gains a real per-call rule subset now, or waits for a caller that needs one / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#15
+
+*revision: authored · kind: prose · heading: Whether Run gains a real per-call rule subset now, or waits for a caller that needs one / What This Record Does Not Do · hash: sha256:e169678ff8aaa0b8d1bc4ead625f8cdaa734cb5b27e36c318a8d69306e2cdf3a*
+
+It does not build `ARC-ROADMAP-001`'s shared demand planner. No rule declares a
+capability requirement a planner reads generically, no fact DAG is deduplicated across an
+arbitrary population, and no provider is resolved ahead of a hardcoded call list. `OD-RULES-
+009`'s decline of that larger artifact stands on its own remaining, still-unfired triggers; this
+record closes only the one trigger that fired, and the amendment naming that is `OD-RULES-009`'s
+own, not rewritten here.
+
+### docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#16
+
+*revision: authored · kind: prose · heading: Whether Run gains a real per-call rule subset now, or waits for a caller that needs one / What This Record Does Not Do · hash: sha256:f6f59a364e5ac2c645607a8fe17a21996868937683a2e3aa2fc209aa58d1f302*
+
+It does not change `RuleSelector`'s own shape, `ScopeSelector`, or any command-line surface —
+`--rule` already exists and is unchanged; only what happens to a source once `Run` is called
+with it changes.
+
+### docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#17
+
+*revision: authored · kind: prose · heading: Whether Run gains a real per-call rule subset now, or waits for a caller that needs one / What This Record Does Not Do · hash: sha256:bd764b3ed0e789662dbb500bd89c7334f137365703dbe48948977c5630a9066c*
+
+It does not touch `Explain_Gate`'s documented independence from `command.rules`, and does not
+give `nomos check` a rule-selection concept it has never had.
+
+### docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#18
+
+*revision: authored · kind: prose · heading: Whether Run gains a real per-call rule subset now, or waits for a caller that needs one / What This Record Does Not Do · hash: sha256:4dc4a5277a836b879d8162803a777c314ce9c19b480e95de7c9cf61c944fb301*
+
+It does not decide anything about a sixth or later rule's own required-fact mapping in advance
+of that rule existing — each new rule still earns its own line in `Run`'s hand-written mapping
+when it ships, the same as today.
+
+### docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#19
+
+*revision: authored · kind: heading · heading: Whether Run gains a real per-call rule subset now, or waits for a caller that needs one / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#20
+
+*revision: authored · kind: prose · heading: Whether Run gains a real per-call rule subset now, or waits for a caller that needs one / Status · hash: sha256:0ee225e0c1e425a8faac633fc8e5a69b8ab23085b5fa696f2ebe548d2d2cf0cd*
+
+Accepted. `P14-GATE-017-RUN-RULE-SUBSET-FIRST-INCREMENT` builds the signature change and both
+callers this record names, verified directly against the real code once merged.
 
 ### docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#1
 

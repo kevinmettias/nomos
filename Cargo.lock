@@ -292,6 +292,7 @@ dependencies = [
  "nomos-contracts",
  "nomos-corrections",
  "nomos-ledger",
+ "nomos-model-package",
  "serde",
 ]
 
@@ -302,6 +303,7 @@ dependencies = [
  "nomos-agent-contracts",
  "nomos-contracts",
  "nomos-ledger",
+ "nomos-model-package",
  "nomos-platform",
  "nomos-platform-std",
  "serde_json",
@@ -403,6 +405,7 @@ dependencies = [
  "nomos-lang-rust",
  "nomos-ledger",
  "nomos-model",
+ "nomos-model-package",
  "nomos-platform",
  "nomos-platform-std",
  "nomos-rules",

@@ -3,16 +3,16 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:975857e43b20579e3689ccb573c977e1bb2fb722432c4225ecec36bad494920a",
-  "inputs_digest": "sha256:731ae1576ecbb3ac516c2f9353839f2e68a4780522b06305b6a0f1ea9d87891a",
+  "content_digest": "sha256:e68ccbcd780eae5deddae41649e07c4c2980d1e1e03c3ff0da53f456d3447ea6",
+  "inputs_digest": "sha256:e36abb6892be93e109ba0a57c10047d76591925a4201e922b81d4920a7cd3c40",
   "sections": [
     [
       "Relations",
-      1116
+      1126
     ],
     [
       "Decisions",
-      152
+      153
     ]
   ],
   "inputs": [
@@ -335,6 +335,11 @@
       "content": "relations",
       "identity": "ARC-ROADMAP-001 relates-to OD-GATE-016",
       "hash": "sha256:f5fa6530fcdf93bbb8be889b56abb4cbbad6cce3b4e989d18fe512ef47ed6e3e"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-ROADMAP-001 relates-to OD-GATE-017",
+      "hash": "sha256:05feb5af5e60252236724c5c59e9eeb002b10af4deb4d3cf2bcbc36291a1b141"
     },
     {
       "content": "relations",
@@ -2513,6 +2518,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-GATE-014 relates-to OD-GATE-017",
+      "hash": "sha256:268873019e030f0309e35391067796aa46ce8182f74f61b7734e1306dfbaf6b6"
+    },
+    {
+      "content": "relations",
       "identity": "OD-GATE-014 relates-to OD-HOST-004",
       "hash": "sha256:ab0254230178465078634c38e0bb5c4a64d3f882f866493221faa36327bb06af"
     },
@@ -2575,6 +2585,31 @@
       "content": "relations",
       "identity": "OD-GATE-016 relates-to OD-RULES-009",
       "hash": "sha256:ae454b2953a72d7160b8c3bc75b9f1b2ad0082d8f3e3ac60e784d2c6bb314b65"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-GATE-017 relates-to ARC-ROADMAP-001",
+      "hash": "sha256:1f3ba0e25b4a7c1413aff420cc1de9cb8d37e1fdddcfcdde5fbf691cdcb1e0a7"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-GATE-017 relates-to OD-GATE-014",
+      "hash": "sha256:59844e609660408cfbab9cdc58b91d725224389fe07782a8a5bf79d9b27182c3"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-GATE-017 relates-to OD-HOST-004",
+      "hash": "sha256:52d894f0a15a82b9ec973a77a749be073389c7a9cd5e816d5baca770564e420b"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-GATE-017 relates-to OD-RULES-008",
+      "hash": "sha256:d7b2edce02179c8017d33df81c0f2904ba659a451e6a66ea3223cc773cfb74ee"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-GATE-017 relates-to OD-RULES-009",
+      "hash": "sha256:0fc9b58c82e197a9e965e1ecfe48205139021f5c44d1ddfcf3ba83b94e44fc38"
     },
     {
       "content": "relations",
@@ -2660,6 +2695,11 @@
       "content": "relations",
       "identity": "OD-HOST-004 relates-to OD-GATE-014",
       "hash": "sha256:274ac78ffbc0f811767253aba54b31c0523a5f5db252c599068c18fddaf7acc6"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-HOST-004 relates-to OD-GATE-017",
+      "hash": "sha256:afe3b0ba8bd06337a49c200689e15dca491f120b6bc508a03ad663632f90c88e"
     },
     {
       "content": "relations",
@@ -4818,6 +4858,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-RULES-008 relates-to OD-GATE-017",
+      "hash": "sha256:864fceec83ed6f5cad9de476b2bcda21a1decfe7dce6992d7f6aa7ea200d6c0e"
+    },
+    {
+      "content": "relations",
       "identity": "OD-RULES-008 relates-to OD-PACKAGE-008",
       "hash": "sha256:153c2ca8e377e5947e53831a10a83ee2c195edf34a30f22d352fab46e05d8e9b"
     },
@@ -4860,6 +4905,11 @@
       "content": "relations",
       "identity": "OD-RULES-009 relates-to OD-GATE-016",
       "hash": "sha256:d1ef147f77a8b7953c5a194e5eb66e98dd411b9ba916b09b910d6a7fdb46ef79"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-RULES-009 relates-to OD-GATE-017",
+      "hash": "sha256:b8c63c198f4568732f8c8671d6828cdd8503e40be7173716e74bab6cca8598b6"
     },
     {
       "content": "relations",
@@ -5890,6 +5940,11 @@
       "content": "nodes",
       "identity": "OD-GATE-016",
       "hash": "sha256:870728868ab17622c00323897308f918212f8532dca6e900f6599a57ac7b6be6"
+    },
+    {
+      "content": "nodes",
+      "identity": "OD-GATE-017",
+      "hash": "sha256:cdb28a55edf6c26839afcd48db57f4f524f173d675b8cd68a8bd6b0fb657853a"
     },
     {
       "content": "nodes",

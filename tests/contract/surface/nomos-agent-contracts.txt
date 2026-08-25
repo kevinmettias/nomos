@@ -12,6 +12,7 @@ pub struct field nomos_agent_contracts::NomosResolvedChangeContext::snapshot: Sn
 pub struct field nomos_agent_contracts::NomosResolvedChangeContext::variant: BuildVariantId
 pub struct field nomos_agent_contracts::TaskEnvelope::applicable_rules: Vec<RuleId>
 pub struct field nomos_agent_contracts::TaskEnvelope::available_tools: Vec<CapabilityId>
+pub struct field nomos_agent_contracts::TaskEnvelope::effort: EffortLevel
 pub struct field nomos_agent_contracts::TaskEnvelope::expected_output_schema: SchemaId
 pub struct field nomos_agent_contracts::TaskEnvelope::goal: String
 pub struct field nomos_agent_contracts::TaskEnvelope::knowledge_context: Vec<KnowledgeReferenceId>

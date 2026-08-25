@@ -4,7 +4,10 @@ use nomos_ledger::Territory;
 use nomos_platform::{ExitOutcome, ProcessOutput};
 
 /// A `TaskEnvelope` naming only a goal — the shape a caller that has not populated the
-/// still-unenforced fields would actually construct.
+/// still-unenforced fields, nor asked for a specific effort, would actually construct.
+/// `effort: EffortLevel::BackendDefault` is deliberate, not arbitrary: it is the one
+/// value `Effort_Flag` maps to "omit the flag entirely," so a bare task's invocation is
+/// byte-identical to every caller that predates `OD-CONTRACTS-004`.
 fn Bare_Task(goal: &str) -> TaskEnvelope
 {
     return TaskEnvelope {
@@ -15,6 +18,7 @@ fn Bare_Task(goal: &str) -> TaskEnvelope
         prohibited_changes: Territory::Of_Files(Vec::<String>::new()),
         available_tools: Vec::new(),
         expected_output_schema: SchemaId::New("nomos.agent.executor.v1"),
+        effort: EffortLevel::BackendDefault,
     };
 }
 
@@ -104,6 +108,53 @@ fn Test_Command_For_Ignores_The_Still_Unenforced_Fields()
     let directory = std::path::Path::new("/tmp/does-not-need-to-exist-for-this-test");
 
     assert_eq!(Command_For(&bare, directory), Command_For(&populated, directory));
+}
+
+/// Every `EffortLevel` `Command_For` can be given maps to the exact `--effort` argv
+/// `Effort_Flag`'s own doc promises, verified against the real `claude --help` output --
+/// `BackendDefault` alone omits the flag, matching `Bare_Task`'s own invocation exactly.
+#[test]
+fn Test_Command_For_Maps_Every_Effort_Level_To_The_Real_Flag()
+{
+    let directory = std::path::Path::new("/tmp/does-not-need-to-exist-for-this-test");
+    let cases = [
+        (EffortLevel::BackendDefault, None),
+        (EffortLevel::Minimal, Some("low")),
+        (EffortLevel::Low, Some("low")),
+        (EffortLevel::Medium, Some("medium")),
+        (EffortLevel::High, Some("high")),
+        (EffortLevel::Maximum, Some("max")),
+    ];
+
+    for (effort, expected) in cases
+    {
+        let mut task = Bare_Task("say hello");
+        task.effort = effort;
+
+        let command = Command_For(&task, directory);
+
+        assert_eq!(Effort_Argument(&command.argv), expected, "{effort:?} did not produce the expected --effort argv");
+    }
+}
+
+/// The value following a `--effort` flag in `argv`, if any -- slice-pattern matched
+/// rather than indexed, since this crate denies `clippy::indexing_slicing`.
+fn Effort_Argument(argv: &[String]) -> Option<&str>
+{
+    for pair in argv.windows(2)
+    {
+        let [flag, value] = pair
+        else
+        {
+            continue;
+        };
+        if flag == "--effort"
+        {
+            return Some(value.as_str());
+        }
+    }
+
+    return None;
 }
 
 // ---- Isolated_Working_Directory ------------------------------------------------------

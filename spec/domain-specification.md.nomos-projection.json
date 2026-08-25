@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:5ce0adc877d476d3a34044de76ec3ac8978e1797edda37fb92d9fac380a21382",
-  "inputs_digest": "sha256:7c85b2578f6f651288c389b7824a6b7543f6c7267b0e83d987a695221c61f64a",
+  "content_digest": "sha256:2a1ce508697dfd3f1d05ca4768faca1c8cf2692a8b9123765b3560adf62f89ec",
+  "inputs_digest": "sha256:e17cb851a93de7ca07373541d20c1c48959e130492bfdf9a893b2151c49b255e",
   "sections": [
     [
       "Documents",
-      160
+      161
     ],
     [
       "Sections",
-      1358
+      1364
     ],
     [
       "Source blocks",
-      4768
+      4788
     ]
   ],
   "inputs": [
@@ -253,7 +253,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md@authored",
-      "hash": "sha256:51e30dc4a56a3bf30c810637db1322b95f6fe4d423063b09ee2c0f55812f9984"
+      "hash": "sha256:19c4610a46c7d14df7864e42dfe27435961870faf5050026c8fd455d2132cc42"
     },
     {
       "content": "documents",
@@ -354,6 +354,11 @@
       "content": "documents",
       "identity": "docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md@authored",
       "hash": "sha256:8b80590869d121dd76fa42950c366543d613d4ba319282b49f28a446cc6af6cd"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md@authored",
+      "hash": "sha256:504d603bb325dfc4a0de5fd2b2c60760942f1ac03ce40a6046383e34bc73eade"
     },
     {
       "content": "documents",
@@ -3514,6 +3519,36 @@
       "content": "headings",
       "identity": "docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#16",
       "hash": "sha256:3120077c89661ece48929b7e95aee4f64e31d99477a54dda0f9b9058d6d94265"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#1",
+      "hash": "sha256:897c66b801c6a4412f10a7dd5f6d1e54085602053f80a12667589a7593c09c9d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#2",
+      "hash": "sha256:a9ecbbb49f92cd914e5022260d78a4a7e9e44064fa8ddbf66dbcfd52b3010644"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#5",
+      "hash": "sha256:4bf198b44efab6c61e41c135f4ccd087c233d3ad9f0f5b596a4bbe3a975dbfa6"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#10",
+      "hash": "sha256:aa9f108bb13ba52f7f50d8cf50285542bfb0b8aa0113f58a75f95f401037fc39"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#14",
+      "hash": "sha256:aa2a21f737e6805797e76bd166d744352a5e9b9bf355f50a2047604388d16fa1"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#19",
+      "hash": "sha256:2659317584f982946f660d0e09b68099766861d3d5212bc1dc000ee00f899c60"
     },
     {
       "content": "headings",
@@ -13688,7 +13723,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md#14",
-      "hash": "sha256:4f19d93d508183320f2cfaf2e15bbff3b93573befa3938aafbcb43c5c980d14c"
+      "hash": "sha256:be5c39402bb13a82339294d298e06a0d83284d9427c351feba56e189423013e6"
     },
     {
       "content": "blocks",
@@ -16829,6 +16864,106 @@
       "content": "blocks",
       "identity": "docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md#17",
       "hash": "sha256:ad6016bd9c7e32d8b664c0a0fedcc48a54ac39e4901b20ed822b99989ed2ed36"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#1",
+      "hash": "sha256:d6dc5e35347629c5f7b029a6b779e1348ef4d5c8b6e041843c8a4e06c3fee23d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#3",
+      "hash": "sha256:48f763351f11b1b93e996d6729a1720e36233c54770b8925edb347d34f98699b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#4",
+      "hash": "sha256:2b83270da110cadfdf4c2321d3b53ab461ffd846aed3e10f50f8e4e11c7c1be2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#5",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#6",
+      "hash": "sha256:a0a60496fc3f73cee632f8a9122460f54a7477d83724348401530ec8531e47d8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#7",
+      "hash": "sha256:64ceaa6471af1029867b9604d7d5005840982801be0065f04c270b5feefe8814"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#8",
+      "hash": "sha256:8411295204f6a843ab525da0b8f9a6d5ad963fcdde838a72ab5b77fced9a4101"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#9",
+      "hash": "sha256:bc6e91d5a1e8db8fc78120809238c38ce2292ca6730ee56d48dc8a546e9da4b7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#10",
+      "hash": "sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#11",
+      "hash": "sha256:b99695470631f467905db9cd21340c9863f0dea823302d5512a0a0b365f08426"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#12",
+      "hash": "sha256:235ba6362409eee7abd0191700b1116cd7ee69cc60577433277746fe9f766e2a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#13",
+      "hash": "sha256:19f51625b96858f5a80a4ae430adadc7bd985b8e26287c073825d77089f36a2e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#14",
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#15",
+      "hash": "sha256:e169678ff8aaa0b8d1bc4ead625f8cdaa734cb5b27e36c318a8d69306e2cdf3a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#16",
+      "hash": "sha256:f6f59a364e5ac2c645607a8fe17a21996868937683a2e3aa2fc209aa58d1f302"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#17",
+      "hash": "sha256:bd764b3ed0e789662dbb500bd89c7334f137365703dbe48948977c5630a9066c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#18",
+      "hash": "sha256:4dc4a5277a836b879d8162803a777c314ce9c19b480e95de7c9cf61c944fb301"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#19",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#20",
+      "hash": "sha256:0ee225e0c1e425a8faac633fc8e5a69b8ab23085b5fa696f2ebe548d2d2cf0cd"
     },
     {
       "content": "blocks",

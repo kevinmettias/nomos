@@ -22,10 +22,11 @@
 //! `WorkResult`-shaped response directly rather than have this crate guess one from prose —
 //! not attempted here.
 //!
-//! Only `TaskEnvelope.goal` is read. `scope`, `prohibited_changes`, `available_tools`,
-//! `knowledge_context` and `applicable_rules` are accepted and ignored, matching
-//! `OD-EXECUTOR-001`'s own finding that nothing in this workspace enforces them yet — this
-//! crate does not pretend otherwise by silently honoring some of them and not others.
+//! `TaskEnvelope.goal` and, since `OD-CONTRACTS-004`, `TaskEnvelope.effort` are read. `scope`,
+//! `prohibited_changes`, `available_tools`, `knowledge_context` and `applicable_rules` are
+//! accepted and ignored, matching `OD-EXECUTOR-001`'s own finding that nothing in this
+//! workspace enforces them yet — this crate does not pretend otherwise by silently honoring
+//! some of them and not others.
 
 #![forbid(unsafe_code)]
 
@@ -37,6 +38,7 @@ pub use error::AgentExecutionError;
 pub use outcome::AgentExecutionOutcome;
 
 use nomos_agent_contracts::TaskEnvelope;
+use nomos_model_package::EffortLevel;
 use nomos_platform::{Command, ExitOutcome, ProcessLauncher};
 use std::path::PathBuf;
 use std::sync::atomic::{AtomicU64, Ordering};
@@ -168,25 +170,55 @@ fn Single_Line(goal: &str) -> String
     return goal.replace(['\n', '\r'], " ").replace('"', "'");
 }
 
+/// `task.effort`, mapped to the real `--effort` value `claude --help` documents today —
+/// verified directly against the installed CLI, not assumed: `low`, `medium`, `high`,
+/// `xhigh`, `max`. `None` for [`EffortLevel::BackendDefault`]: the flag is omitted
+/// entirely rather than passed a value naming "the default," which is exactly this
+/// crate's own behavior for every caller before `OD-CONTRACTS-004` existed to name an
+/// effort at all.
+///
+/// [`EffortLevel::Minimal`] has no distinct native control below `low` — mapped there as
+/// this crate's own approximation, not a claim of an exact match, `MODEL-ROUTE-015`'s own
+/// `MappingQuality::Approximate` shape for exactly this case. `claude`'s own `xhigh` tier
+/// has no `EffortLevel` counterpart: `MODEL-ROUTE-004` closes the canonical enumeration at
+/// six values, so this crate cannot request it, and does not fold it into `high` or `max`
+/// to pretend otherwise.
+#[must_use]
+fn Effort_Flag(effort: EffortLevel) -> Option<&'static str>
+{
+    return match effort
+    {
+        EffortLevel::BackendDefault => None,
+        EffortLevel::Minimal | EffortLevel::Low => Some("low"),
+        EffortLevel::Medium => Some("medium"),
+        EffortLevel::High => Some("high"),
+        EffortLevel::Maximum => Some("max"),
+    };
+}
+
 /// The invocation `OD-EXECUTOR-001`'s rule describes, over `task.goal`, run from
-/// `working_directory`.
+/// `working_directory`, with `task.effort` appended per [`Effort_Flag`].
 fn Command_For(task: &TaskEnvelope, working_directory: &std::path::Path) -> Command
 {
-    let mut command = Command::New(
-        vec![
-            CLAUDE_PROGRAM.to_owned(),
-            "--print".to_owned(),
-            Single_Line(&task.goal),
-            "--output-format".to_owned(),
-            "json".to_owned(),
-            "--strict-mcp-config".to_owned(),
-            "--allowedTools".to_owned(),
-            NO_TOOLS_GRANTED.to_owned(),
-            "--max-budget-usd".to_owned(),
-            MAX_BUDGET_USD.to_owned(),
-        ],
-        TIMEOUT,
-    );
+    let mut argv = vec![
+        CLAUDE_PROGRAM.to_owned(),
+        "--print".to_owned(),
+        Single_Line(&task.goal),
+        "--output-format".to_owned(),
+        "json".to_owned(),
+        "--strict-mcp-config".to_owned(),
+        "--allowedTools".to_owned(),
+        NO_TOOLS_GRANTED.to_owned(),
+        "--max-budget-usd".to_owned(),
+        MAX_BUDGET_USD.to_owned(),
+    ];
+    if let Some(value) = Effort_Flag(task.effort)
+    {
+        argv.push("--effort".to_owned());
+        argv.push(value.to_owned());
+    }
+
+    let mut command = Command::New(argv, TIMEOUT);
     command.working_directory = Some(working_directory.to_path_buf());
 
     return command;
