@@ -30410,6 +30410,106 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P14-GATE-017-BUILT-AND-RULES-009-TRIGGER-FIRED",
+      "title": "OD-GATE-017 amended with what was built; OD-RULES-009 amended that its first trigger fired",
+      "why": "The same pattern OD-GATE-016's own increment/amendment split already follows: the code lands under one item, and a separate item amends the governing records against the real, committed shape. Two records need it here, not one: OD-GATE-017 itself, and OD-RULES-009, whose own 'What Would Decide It' section named exactly this trigger (OD-GATE-014's selectors getting a real caller) and whose Status says to revisit when that fires.",
+      "done_when": "OD-GATE-017 gains a section naming what P14-GATE-017-RUN-RULE-SUBSET-FIRST-INCREMENT-2 actually built, verified directly against the real code. OD-RULES-009 gains a section stating its first named trigger fired, addressed narrowly by OD-GATE-017 rather than by building ARC-ROADMAP-001's full shared demand planner, and that its other three named triggers remain unfired so its own decline of the general planner stands. spec/domain-specification.md and diagrams/relations.mmd re-rendered from a tree whose registered records are exactly the ones this commit publishes.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "spec/domain-specification.md",
+          "diagrams/relations.mmd",
+          "docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md",
+          "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-session-executor-planning",
+        "acquired_at": 1787686635,
+        "lease_expires_at": 1787693835
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P14-CHECK-ORCH-SURFACE-BLESS",
+      "title": "nomos-check-orchestration's public-surface snapshot catches up to Run's new selected parameter",
+      "why": "P14-GATE-017-RUN-RULE-SUBSET-FIRST-INCREMENT-2 widened Run's real signature (a new selected: &[RuleId] parameter) but its own predicate (-p nomos-check-orchestration -p nomos-gate-orchestration -p nomos-cli) never ran nomos-contract-tests, so the public_surface snapshot mismatch was not caught before that item finished. Splitting the fix into its own item rather than reopening a finished one.",
+      "done_when": "tests/contract/surface/nomos-check-orchestration.txt matches Run's real, current signature (NOMOS_SURFACE_BLESS=nomos-check-orchestration), and nomos-contract-tests' public_surface suite passes.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/surface/nomos-check-orchestration.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "public_surface"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "public_surface"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 8 tests\ntest scanner::Test_An_Unfollowable_Re_Export_Should_Be_Reported_While_Its_Siblings_Resolve ... ok\ntest scanner::Test_A_Crate_Visible_Helper_Should_Not_Be_An_Export ... ok\ntest scanner::Test_The_Scanner_Should_Find_Real_Exports_And_Stop_At_Restricted_Ones ... ok\ntest bless::Test_A_Bless_Naming_No_Crate_Should_Be_Refused_Rather_Than_Widened ... ok\ntest bless::Test_Blessing_One_Crate_Should_Leave_Another_Crates_Snapshot_Byte_Identical ... ok\ntest snapshots::Test_Every_Snapshot_Should_Belong_To_A_Crate_That_Has_One ... ok\ntest snapshots::Test_Every_Crates_Public_Surface_Should_Match_Its_Snapshot ... ok\ntest snapshots::Test_Every_Member_Should_Be_Snapshotted_Or_Declared_Library_Less ... ok\n\ntest result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.55s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.11s\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-ea500c062215f506.exe)\n",
+        "verified_at": 1787686912,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "f0b3e2aedabad365a20a46e3407ff55b806502c0"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
