@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:7ad97738cec8ceb6dce613d32fdabe7558bd6adda1914ba1c8671c237feb6f3d",
-  "inputs_digest": "sha256:14c316f9cdcf3fdb72b1947bdd7de3f06ab7d2f2a89e6cb07482bcece5ea062a",
+  "content_digest": "sha256:99a1247e244f2810d4fbc9b2708f140db6d9288981e2c11e3e20699aa1d3c952",
+  "inputs_digest": "sha256:f0175be0ccb7ca1bd4c78e9e81f31fb566a7fcb530caf628bad67965c335d0da",
   "sections": [
     [
       "Documents",
-      164
+      165
     ],
     [
       "Sections",
-      1389
+      1397
     ],
     [
       "Source blocks",
-      4866
+      4882
     ]
   ],
   "inputs": [
@@ -833,12 +833,17 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md@authored",
-      "hash": "sha256:69cde99580f195232f0308209b87341d8195267121d3dadbb332dbe61940f50a"
+      "hash": "sha256:dff87d25df3893a5d66de9f794fdbcf4cd4e3048fe31c0ac06083cd448925062"
     },
     {
       "content": "documents",
       "identity": "docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md@authored",
       "hash": "sha256:e067ed756ffd159cb17a6fdc76092fd0f3ff664bcc77349204ce572497711c6e"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md@authored",
+      "hash": "sha256:5f24f0f0ce8ef0275150de96e69cd897a7273861b87ec2f80769fb30cb24155d"
     },
     {
       "content": "headings",
@@ -7753,7 +7758,12 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#17",
-      "hash": "sha256:6f0513b1e8aa287a4a5f19f2ac39e84498c613c2e151a8e98575959f5b46197d"
+      "hash": "sha256:a35f256aa3ceec89086f04898a6407fd00c1b629d14da03e8b3164ced8f2c1de"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#19",
+      "hash": "sha256:a11d34723bcb613778d828a75176007dcb92a564b1104dd71ee8a520e9865bb7"
     },
     {
       "content": "headings",
@@ -7784,6 +7794,41 @@
       "content": "headings",
       "identity": "docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#14",
       "hash": "sha256:ec83db572bc424afe918e0f85c898592627d6a0bb7dda3581799a608844b5080"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#1",
+      "hash": "sha256:021de84f9f869fb5df640f5c5ccb25ae5dfc9a327fdd5e70447d32f2db3b0176"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#2",
+      "hash": "sha256:8666c778b5eb5f8406069ff0459e46d69549d52d71f62cafb2db60b34e0392ea"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#4",
+      "hash": "sha256:d58ba42402c945497363aaeca7357b44b22750bc9738dfac75433f43f8e97350"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#7",
+      "hash": "sha256:df201b4c9ce35f8ad672824384c3c2ec2b15b8093ddbabb3273072e17555df4e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#9",
+      "hash": "sha256:d469f362c00849bd0e5418015fbd4614a9198af15ae302fcd7033d29e9a67aaf"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#11",
+      "hash": "sha256:ad37ae87c5d8564f77b801bd5b36ebc66b79ae614765ca6c2de9a3356275cfe5"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#13",
+      "hash": "sha256:1ca3dbce64cd8f895a7aff2fb950f482aac031c96088ea008ed59f28ec664763"
     },
     {
       "content": "blocks",
@@ -32033,12 +32078,22 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#17",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:d4199569e4693d30eb4bc8d62a30f5d2ea4002ec129d3660b51c2b231b1b6b25"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#18",
-      "hash": "sha256:3af1e7d7437236587a4d53aa3662210e9db99e98839373a2bdf5637f879e1b20"
+      "hash": "sha256:8b4e332bc65d95088ead16c7bae680b3f5ef0bab9d8dbc9c876473ea13714011"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#19",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#20",
+      "hash": "sha256:d3578c04e1b7c5d58eec6e37fb2b14f1e89ea17bf7d643518612a5fb0ad5677a"
     },
     {
       "content": "blocks",
@@ -32114,6 +32169,76 @@
       "content": "blocks",
       "identity": "docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#15",
       "hash": "sha256:b35f27fc1021167a102904107348d9973c5f7ba99147584c0f5713da839586e0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#1",
+      "hash": "sha256:dca467dd01bf05f2ad7cae3415ab934fdc76b7bcd43800f6fd2f746a836667e4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#3",
+      "hash": "sha256:763b1fd812510daf933b611a515153524175850ad83629cab55cd60633217290"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#4",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#5",
+      "hash": "sha256:883e41b0ca293e1f04857f19bd7bc1ff8a2173b44d04c3fd3fa4e059a57b64c2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#6",
+      "hash": "sha256:29b67f63989dfbbe04ac566bcf31ad6b713ed8047b51f84e991852a46a7ed3e8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#7",
+      "hash": "sha256:b2ec4aa8b7784c9edabcf052da47b8624bf30212b1b531fe2256919d3346b773"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#8",
+      "hash": "sha256:cf9024ef0254542d68df0d970650a73d89f8e62076bc23758fcb041b922ed93a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#9",
+      "hash": "sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#10",
+      "hash": "sha256:5068add186ed535464ad90f5c06466c8f2084327d0817377ae3031689fe55ae1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#11",
+      "hash": "sha256:1a5404ee0df3025616b1e4703f8b71d3f7beca77990c0b0df1d2b9ecfd224306"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#12",
+      "hash": "sha256:0713337a4bdecfe62ac8101f7e685a8fea404bc9aa1f66ca4ba7f9e51f6d1b4d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#13",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#14",
+      "hash": "sha256:f4001ed28bf30c1bb9e04e36083daed237393465a15e0a1f45991b13d0c44b38"
     }
   ]
 }

@@ -3,7 +3,7 @@ id: OD-WORKFLOW-002
 type: decision
 title: The workflow tier's second increment has not arrived since RunId's first consumer shipped
 status: accepted
-version: 2
+version: 3
 authority: canonical-normative-record
 tags:
   - workflow
@@ -18,6 +18,8 @@ relations:
   - target: OD-CORRECTIONS-001
     type: relates-to
   - target: OD-WORKFLOW-003
+    type: relates-to
+  - target: OD-WORKFLOW-004
     type: relates-to
 ---
 
@@ -153,6 +155,19 @@ accordingly: it continues to mean no execution engine, no `WF-009`/`010`/`011`, 
 `RunId`'s one real consumer, the `WF-ORDER-*` phase absence, the three named triggers for a
 next engine increment -- is unchanged.
 
+## Amendment (OD-WORKFLOW-004)
+
+Condition 3 above -- "`ModelBackend`/`AgentExecutor` infrastructure reaches a real executor"
+-- was written before any real executor existed, and read literally it is satisfied by any
+single tool-dispatching executor regardless of whether it ever produces a result.
+`nomos-agent-executor`'s arrival exercised that gap directly: `OD-WORKFLOW-004` found a real
+executor now exists but constructs no real `WorkResult`, so `WF-006`'s task/result protocol
+has a real instance only on its task side, and none of the other three named executor kinds
+has any trace anywhere in this workspace. Condition 3 is narrowed accordingly: it now reads
+as satisfied only when a real executor also constructs a real `WorkResult`, not merely when
+one exists. Conditions 1 and 2, and every other finding in this record, are unchanged --
+`OD-WORKFLOW-004` re-verified both directly and found neither has moved.
+
 ## Status
 
 Accepted. Re-surveys the workflow tier against the live tree and the v14 corpus a second
@@ -160,4 +175,6 @@ time, after `OD-WORKFLOW-001`'s first increment shipped, and finds no genuine se
 increment has arrived -- naming the three conditions that would produce one rather than
 inventing a shape to have something to build. Amended by `OD-WORKFLOW-003` to narrow this
 record's "does not build `WorkflowStep`" clause to the execution-engine question it was
-actually answering; the rest of this record's survey stands.
+actually answering. Amended again by `OD-WORKFLOW-004` to narrow condition 3's wording after
+`nomos-agent-executor`'s arrival satisfied its letter without satisfying its substance; the
+rest of this record's survey stands.

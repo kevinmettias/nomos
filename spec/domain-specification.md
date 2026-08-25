@@ -172,8 +172,9 @@ profile: domain-specification
 | docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md@authored | docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md | authored | 21 | 8 | sha256:20584da07fdc54fcdca104e7137bc67b265954ba3734fc8b2d17a9036b2806b1 |
 | docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md@authored | docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md | authored | 29 | 11 | sha256:de7e7ec53c19ad7a55b98bcef5dadc7f7b1234b80d6dc2f3ce0098b4a1463685 |
 | docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md@authored | docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md | authored | 24 | 8 | sha256:397fcafaea1e57df681cd4fe9f235f3994dfe990cfab99487fc72a91f797ec84 |
-| docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md@authored | docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md | authored | 18 | 8 | sha256:69cde99580f195232f0308209b87341d8195267121d3dadbb332dbe61940f50a |
+| docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md@authored | docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md | authored | 20 | 9 | sha256:dff87d25df3893a5d66de9f794fdbcf4cd4e3048fe31c0ac06083cd448925062 |
 | docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md@authored | docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md | authored | 15 | 6 | sha256:e067ed756ffd159cb17a6fdc76092fd0f3ff664bcc77349204ce572497711c6e |
+| docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md@authored | docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md | authored | 14 | 7 | sha256:5f24f0f0ce8ef0275150de96e69cd897a7273861b87ec2f80769fb30cb24155d |
 
 ## Sections
 
@@ -1561,13 +1562,21 @@ profile: domain-specification
 | docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#9 | authored | 2 | What This Does Not Do |
 | docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#11 | authored | 2 | What Would Decide The Next Increment |
 | docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#15 | authored | 2 | Amendment (OD-WORKFLOW-003) |
-| docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#17 | authored | 2 | Status |
+| docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#17 | authored | 2 | Amendment (OD-WORKFLOW-004) |
+| docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#19 | authored | 2 | Status |
 | docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#1 | authored | 1 | WorkflowStep is admitted to band 0 as WF-008's declared contract, not the engine OD-WORKFLOW-002 declined |
 | docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#2 | authored | 2 | Question |
 | docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#6 | authored | 2 | What Was Measured |
 | docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#9 | authored | 2 | The Decision |
 | docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#12 | authored | 2 | What This Does Not Do |
 | docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#14 | authored | 2 | Status |
+| docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#1 | authored | 1 | The first real agent executor is not yet a real instance of WF-006's task/result protocol |
+| docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#2 | authored | 2 | Question |
+| docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#4 | authored | 2 | What Was Measured |
+| docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#7 | authored | 2 | The Finding |
+| docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#9 | authored | 2 | What This Does Not Do |
+| docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#11 | authored | 2 | Amendment to OD-WORKFLOW-002 |
+| docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#13 | authored | 2 | Status |
 
 ## Source blocks
 
@@ -45561,20 +45570,43 @@ next engine increment -- is unchanged.
 
 ### docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#17
 
+*revision: authored · kind: heading · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped / Amendment (OD-WORKFLOW-004) · hash: sha256:d4199569e4693d30eb4bc8d62a30f5d2ea4002ec129d3660b51c2b231b1b6b25*
+
+## Amendment (OD-WORKFLOW-004)
+
+### docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#18
+
+*revision: authored · kind: prose · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped / Amendment (OD-WORKFLOW-004) · hash: sha256:8b4e332bc65d95088ead16c7bae680b3f5ef0bab9d8dbc9c876473ea13714011*
+
+Condition 3 above -- "`ModelBackend`/`AgentExecutor` infrastructure reaches a real executor"
+-- was written before any real executor existed, and read literally it is satisfied by any
+single tool-dispatching executor regardless of whether it ever produces a result.
+`nomos-agent-executor`'s arrival exercised that gap directly: `OD-WORKFLOW-004` found a real
+executor now exists but constructs no real `WorkResult`, so `WF-006`'s task/result protocol
+has a real instance only on its task side, and none of the other three named executor kinds
+has any trace anywhere in this workspace. Condition 3 is narrowed accordingly: it now reads
+as satisfied only when a real executor also constructs a real `WorkResult`, not merely when
+one exists. Conditions 1 and 2, and every other finding in this record, are unchanged --
+`OD-WORKFLOW-004` re-verified both directly and found neither has moved.
+
+### docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#19
+
 *revision: authored · kind: heading · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#18
+### docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#20
 
-*revision: authored · kind: prose · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped / Status · hash: sha256:3af1e7d7437236587a4d53aa3662210e9db99e98839373a2bdf5637f879e1b20*
+*revision: authored · kind: prose · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped / Status · hash: sha256:d3578c04e1b7c5d58eec6e37fb2b14f1e89ea17bf7d643518612a5fb0ad5677a*
 
 Accepted. Re-surveys the workflow tier against the live tree and the v14 corpus a second
 time, after `OD-WORKFLOW-001`'s first increment shipped, and finds no genuine second
 increment has arrived -- naming the three conditions that would produce one rather than
 inventing a shape to have something to build. Amended by `OD-WORKFLOW-003` to narrow this
 record's "does not build `WorkflowStep`" clause to the execution-engine question it was
-actually answering; the rest of this record's survey stands.
+actually answering. Amended again by `OD-WORKFLOW-004` to narrow condition 3's wording after
+`nomos-agent-executor`'s arrival satisfied its letter without satisfying its substance; the
+rest of this record's survey stands.
 
 ### docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#1
 
@@ -45755,3 +45787,149 @@ exist" test `OD-WORKFLOW-001`/`OD-WORKFLOW-002` correctly applied to the engine.
 is amended to narrow its "does not build `WorkflowStep`" clause to the engine question it was
 actually answering; its survey of the execution-engine tier is otherwise unchanged and this
 record does not reopen it.
+
+### docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#1
+
+*revision: authored · kind: heading · heading: The first real agent executor is not yet a real instance of WF-006's task/result protocol · hash: sha256:dca467dd01bf05f2ad7cae3415ab934fdc76b7bcd43800f6fd2f746a836667e4*
+
+# The first real agent executor is not yet a real instance of WF-006's task/result protocol
+
+### docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#2
+
+*revision: authored · kind: heading · heading: The first real agent executor is not yet a real instance of WF-006's task/result protocol / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#3
+
+*revision: authored · kind: prose · heading: The first real agent executor is not yet a real instance of WF-006's task/result protocol / Question · hash: sha256:763b1fd812510daf933b611a515153524175850ad83629cab55cd60633217290*
+
+`OD-WORKFLOW-002` (v2) named three conditions that would decide the workflow tier's next real
+increment. The third read: "`ModelBackend`/`AgentExecutor` infrastructure reaches a real
+executor ... giving `WF-006`'s 'API-hosted, subscription-agent, human, and recorded-replay
+executors' a first real instance to check a shared task/result protocol against." Since that
+record was accepted, `P14-AGENT-EXECUTOR-CLAUDE-FIRST-INCREMENT` shipped
+`nomos-agent-executor`'s real `Execute` function and `P14-CLI-AGENT-EXECUTE` gave it a real
+CLI caller. An executor now genuinely exists. Whether that satisfies condition 3 in substance,
+not only at the letter of its wording, had not been checked against the live tree before this
+record -- the same discipline `OD-WORKFLOW-002` itself insisted on rather than trusting that
+time passing answers the question.
+
+### docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#4
+
+*revision: authored · kind: heading · heading: The first real agent executor is not yet a real instance of WF-006's task/result protocol / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#5
+
+*revision: authored · kind: prose · heading: The first real agent executor is not yet a real instance of WF-006's task/result protocol / What Was Measured · hash: sha256:883e41b0ca293e1f04857f19bd7bc1ff8a2173b44d04c3fd3fa4e059a57b64c2*
+
+Read directly from the live tree, not assumed from either record's own prior description of
+it:
+
+### docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#6
+
+*revision: authored · kind: prose · heading: The first real agent executor is not yet a real instance of WF-006's task/result protocol / What Was Measured · hash: sha256:29b67f63989dfbbe04ac566bcf31ad6b713ed8047b51f84e991852a46a7ed3e8*
+
+- `nomos-agent-executor`'s own module doc (`crates/agent/nomos-agent-executor/src/lib.rs`)
+  states plainly: "It does not assemble a `nomos_agent_contracts::WorkResult`." `Execute`
+  reads `TaskEnvelope.goal` and, since `OD-CONTRACTS-004`, `TaskEnvelope.effort`, and returns
+  `AgentExecutionOutcome` -- a free-text result, never the `WorkResult` type `WF-006`'s
+  "task/result protocol" names on its result side.
+- `OD-CONTRACTS-003`, accepted the same window `nomos-agent-executor` shipped, already
+  measured this precisely and left it open on purpose: "It does not decide how
+  `nomos-agent-executor` or any other caller assembles the rest of a `WorkResult` from an
+  executor's free-text response -- `claims`, `assumptions`, and `unresolved_questions` still
+  have no honest, general mapping from unstructured text ... not answered here."
+- Grepped across the whole workspace (`crates --include=*.rs`) for every real `WorkResult`
+  construction site: exactly two, both inside `nomos-agent-contracts`' own
+  `#[cfg(test)]` module (`work_result.rs`). Zero production constructors exist anywhere,
+  including in `nomos-cli`'s own two real callers of the executor -- `nomos agent execute`
+  and the in-progress `nomos agent judge-role` -- both of which say directly in their own
+  comments that they do not assemble one ("It does not assemble a `WorkResult` or a
+  `Finding`: this is a person's direct ... question").
+- `WF-006`'s own corpus text (`04-checks-gates-corrections-and-governance.md`) names four
+  executor kinds sharing one protocol: "API-hosted, subscription-agent, human, and
+  recorded-replay executors shall use the same task/result protocol." Grepped for all four
+  terms across `crates` and `docs/records`: the only hits are `WorkflowStep`'s own module doc
+  (`crates/contracts/nomos-contracts/src/workflow_step.rs`) quoting `WF-006`'s list verbatim
+  as part of `OD-WORKFLOW-003`'s vocabulary admission -- not an implementation of any of the
+  four. Exactly one kind, subscription-agent (dispatching to a local Claude Code subprocess),
+  has a real instance, and that instance realizes only the task half of the named protocol.
+- The other two named conditions were re-verified rather than assumed stale. Grepped directly:
+  `nomos_gate_orchestration::Run_Gate` still has exactly the same two real callers
+  `OD-WORKFLOW-002` found -- `nomos-cli`'s `gate.rs`, `nomos-api`'s `lib.rs` -- unchanged. A
+  word-boundary grep for `phase`/`Phase` across
+  `crates/orchestration/nomos-gate-orchestration/src` and
+  `crates/orchestration/nomos-check-orchestration/src` still returns zero matches in either;
+  `Gate` still has no phase concept.
+
+### docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#7
+
+*revision: authored · kind: heading · heading: The first real agent executor is not yet a real instance of WF-006's task/result protocol / The Finding · hash: sha256:b2ec4aa8b7784c9edabcf052da47b8624bf30212b1b531fe2256919d3346b773*
+
+## The Finding
+
+### docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#8
+
+*revision: authored · kind: prose · heading: The first real agent executor is not yet a real instance of WF-006's task/result protocol / The Finding · hash: sha256:cf9024ef0254542d68df0d970650a73d89f8e62076bc23758fcb041b922ed93a*
+
+**Condition 3 is satisfied at the letter of `OD-WORKFLOW-002`'s wording and not at its
+substance.** A real executor exists, but it produces no real result in the `WorkResult` shape
+the protocol names, no second executor kind exists to demonstrate the protocol is actually
+*shared* rather than merely used once, and none of `WF-006`'s other three named kinds has any
+trace anywhere in this workspace. Reading the condition as fired on the strength of one
+tool-dispatching, result-less executor would license starting the `WF-009`..`012` engine on
+evidence that cannot yet answer the question that engine exists to serve. Conditions 1 and 2
+remain exactly as unfired as `OD-WORKFLOW-002` found them. **No genuine second increment for
+the workflow tier has arrived.**
+
+### docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#9
+
+*revision: authored · kind: heading · heading: The first real agent executor is not yet a real instance of WF-006's task/result protocol / What This Does Not Do · hash: sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf*
+
+## What This Does Not Do
+
+### docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#10
+
+*revision: authored · kind: prose · heading: The first real agent executor is not yet a real instance of WF-006's task/result protocol / What This Does Not Do · hash: sha256:5068add186ed535464ad90f5c06466c8f2084327d0817377ae3031689fe55ae1*
+
+It does not build `WorkResult` construction for `nomos-agent-executor` or any CLI caller --
+`OD-CONTRACTS-003` already named that as a separate, unanswered question, and it stays
+unanswered here. It does not build `WorkflowStep`, any part of the `WF-009`..`012` engine, or
+a phase concept for `Gate`. It does not add a second executor kind, real or stubbed, to
+demonstrate sharing -- inventing one to satisfy this record's own question would repeat the
+"no invented shape ahead of a real case" mistake `OD-WORKFLOW-002` itself already declined to
+make. It does not reopen `OD-CONTRACTS-003`, `OD-EXECUTOR-001`, or `OD-WORKFLOW-001`.
+
+### docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#11
+
+*revision: authored · kind: heading · heading: The first real agent executor is not yet a real instance of WF-006's task/result protocol / Amendment to OD-WORKFLOW-002 · hash: sha256:1a5404ee0df3025616b1e4703f8b71d3f7beca77990c0b0df1d2b9ecfd224306*
+
+## Amendment to OD-WORKFLOW-002
+
+### docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#12
+
+*revision: authored · kind: prose · heading: The first real agent executor is not yet a real instance of WF-006's task/result protocol / Amendment to OD-WORKFLOW-002 · hash: sha256:0713337a4bdecfe62ac8101f7e685a8fea404bc9aa1f66ca4ba7f9e51f6d1b4d*
+
+`OD-WORKFLOW-002`'s condition 3 is narrowed by this record to require a real executor that
+also constructs a real `WorkResult` -- not merely a real executor -- before the trigger counts
+as fired. `OD-WORKFLOW-002` is amended in place (version bumped, a relation added, an
+amendment section appended) to carry this narrower wording, the same way `OD-WORKFLOW-003`
+already amended it once for a different clause.
+
+### docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#13
+
+*revision: authored · kind: heading · heading: The first real agent executor is not yet a real instance of WF-006's task/result protocol / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#14
+
+*revision: authored · kind: prose · heading: The first real agent executor is not yet a real instance of WF-006's task/result protocol / Status · hash: sha256:f4001ed28bf30c1bb9e04e36083daed237393465a15e0a1f45991b13d0c44b38*
+
+Accepted. Re-checks `OD-WORKFLOW-002`'s third named condition against the live tree after
+`nomos-agent-executor`'s arrival, finds it fired only at the letter and not the substance of
+its own wording, and sharpens the condition's text with the evidence this audit found rather
+than either declaring victory or leaving a now-misleading condition unchanged.

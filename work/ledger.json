@@ -29574,7 +29574,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "done_when requires composing a second nomos.cap.dependency.edges offer into Declare_Dependency_Capability so Check_Dependency_Direction runs over both graphs, but Dependency_Requirement is unpreferenced and subject-blind exactly like Syntax_Requirement was before it -- OD-CAPABILITY-009 (accepted this session) already measured that registering a second same-capability, subject-partitioned offer without a per-subject Preferring/Recognition dispatch breaks every subject the wrong provider gets picked for, empirically, for the syntax capability. The composition site (composition.rs) and both dispatch sites (nomos-rules/src/dependency/reading.rs, nomos-check-orchestration/src/facts/materialize.rs) are outside this item's declared territory (only run.rs is included), so this item's own done_when cannot be met inside its own territory. Superseded by a provider-only -2 (mirrors nomos-lang-go's own syntax-provider precedent: build and test the provider, do not wire it) plus a separate wiring item carrying the corrected territory for the OD-CAPABILITY-009-shaped dispatch."
+        }
+      },
       "depends_on": [
         "P14-LANG-GO-SYNTAX-PROVIDER"
       ],
@@ -29595,9 +29599,18 @@
         "timeout_seconds": 1200
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "claude-lang-go-dependency-edges",
+          "reason": "Discovered before touching any files: done_when requires registering a second nomos.cap.dependency.edges offer so Check_Dependency_Direction runs over both graphs, but Dependency_Requirement (crates/rules/nomos-rules/src/dependency/reading.rs) is unpreferenced and subject-blind exactly like Syntax_Requirement was -- OD-CAPABILITY-009 (accepted this session) already measured that registering a second same-capability, subject-partitioned offer without a per-subject Preferring/Recognition dispatch breaks every subject the wrong provider gets picked for. The composition site (Declare_Dependency_Capability, crates/orchestration/nomos-check-orchestration/src/composition.rs) and the dispatch sites (nomos-rules/src/dependency/reading.rs, nomos-check-orchestration/src/facts/materialize.rs) are not in this item's territory, only run.rs is. Releasing to decline and re-author as a provider-only item plus a separate wiring item with correct territory.",
+          "abandoned_at": 1787691111
+        }
+      ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-lang-go-dependency-edges",
+        "declined_at": 1787691133
+      }
     },
     {
       "id": "P14-LANG-GO-RECORD",
@@ -31164,6 +31177,238 @@
           "exit_code": 0
         },
         "revision": "9ced9ba95fdf0130f24459accedf62c271039311"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P14-LANG-GO-DEPENDENCY-EDGES-2",
+      "title": "nomos-lang-go-modules: the Go provider of nomos.cap.dependency.edges",
+      "why": "nomos-lang-rust-cargo is the one provider of dependency edges for Rust, reading cargo metadata and composed into nomos-check-orchestration::Declare_Dependency_Capability so Check_Dependency_Direction sees Rust's real module graph. Without a Go equivalent, a Go-analyzed repository gets syntax facts from nomos-lang-go but no dependency-direction enforcement. Registering a second nomos.cap.dependency.edges offer is attempted here against Declare_Dependency_Capability, the same site nomos-lang-go's own syntax offer was tried and reverted at -- OD-CAPABILITY-009 (accepted this session) already measured why a same-capability, subject-partitioned second offer breaks every subject the wrong provider gets picked for, so this item can try the registration knowing the mechanism rather than rediscovering it, and must honestly document whichever way the attempt actually goes.",
+      "done_when": "A new crate crates/languages/nomos-lang-go-modules reads go.mod and go list -m output through nomos-platform's ProcessLauncher port (never raw std::process::Command), exports PROVIDER, Declared_Guarantee(), Provider_Offer() and Materialize(...) per the nomos-add-plugin skill's convention, with its own Declared_Guarantee tests proving the guarantee neither vacuously satisfies nor vacuously fails. README's band table gains its row (band 25, peer to nomos-lang-rust-cargo), bands.rs recognizes it, and a fresh public-surface snapshot exists. Declare_Dependency_Capability (composition.rs) gains a Registry::Offer attempt for it: if nomos-check-orchestration's own tests stay green with it registered, it stays: if OD-CAPABILITY-009's measured hazard reproduces (a subject the wrong provider answers for), the offer is reverted and composition.rs's own doc says so, citing OD-CAPABILITY-009, the same honest-revert shape nomos-lang-go's own syntax offer already carries. Either outcome satisfies this item; silence about which one happened does not.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages/nomos-lang-go-modules",
+          "Cargo.toml",
+          "README.md",
+          "tests/contract/tests/boundaries/bands.rs",
+          "tests/contract/surface/nomos-lang-go-modules.txt",
+          "crates/orchestration/nomos-check-orchestration/src/composition.rs"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Territory omitted crates/orchestration/nomos-check-orchestration/Cargo.toml and the determinism-declaration seam (tests/integration/Cargo.toml, tests/integration/tests/determinism/{declarations,domains,productions,harness}.rs) -- discovered before touching any of those files, by reading P14-RULES-010-TOOL-PROVIDER-CLIPPY-FIRST-INCREMENT's own corrected final territory, which hit and fixed the identical gap. Superseded by -3 with the complete territory; nothing was written under the original, still-correct territory."
+        }
+      },
+      "depends_on": [
+        "P14-LANG-GO-SYNTAX-PROVIDER"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-lang-go-modules",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-lang-go-dependency-edges",
+          "reason": "Discovered before touching any files, by reading the sibling clippy-provider item's own corrected final territory: this item's territory omits crates/orchestration/nomos-check-orchestration/Cargo.toml (a new dependency edge is needed for composition.rs to call the new crate), and the determinism-declaration seam entirely -- tests/integration/Cargo.toml and tests/integration/tests/determinism/{declarations,domains,productions,harness}.rs -- which a Strategy impl must register in per Test_Every_Declaration_Should_Be_Held_To_It_By_The_Harness, the exact same gap P14-RULES-010-TOOL-PROVIDER-CLIPPY-FIRST-INCREMENT hit and fixed in its own -2 through -5. Releasing to decline and re-add as -3 with the complete territory.",
+          "abandoned_at": 1787691306
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-lang-go-dependency-edges",
+        "declined_at": 1787691306
+      }
+    },
+    {
+      "id": "P14-LANG-GO-DEPENDENCY-EDGES-3",
+      "title": "nomos-lang-go-modules: the Go provider of nomos.cap.dependency.edges",
+      "why": "nomos-lang-rust-cargo is the one provider of dependency edges for Rust, reading cargo metadata and composed into nomos-check-orchestration::Declare_Dependency_Capability so Check_Dependency_Direction sees Rust's real module graph. Without a Go equivalent, a Go-analyzed repository gets syntax facts from nomos-lang-go but no dependency-direction enforcement. Registering a second nomos.cap.dependency.edges offer is attempted here against Declare_Dependency_Capability, the same site nomos-lang-go's own syntax offer was tried and reverted at -- OD-CAPABILITY-009 (accepted this session) already measured why a same-capability, subject-partitioned second offer breaks every subject the wrong provider gets picked for, so this item can try the registration knowing the mechanism rather than rediscovering it, and must honestly document whichever way the attempt actually goes.",
+      "done_when": "A new crate crates/languages/nomos-lang-go-modules reads go.mod and go list -m output through nomos-platform's ProcessLauncher port (never raw std::process::Command), exports PROVIDER, Declared_Guarantee(), Provider_Offer() and Materialize(...) per the nomos-add-plugin skill's convention, with its own Declared_Guarantee tests proving the guarantee neither vacuously satisfies nor vacuously fails, and a DependencyFactProduction Strategy declared and registered in tests/integration/tests/determinism so its obligations are discharged against real behaviour. README's band table gains its row (band 25, peer to nomos-lang-rust-cargo), bands.rs recognizes it, and a fresh public-surface snapshot exists. Declare_Dependency_Capability (composition.rs) gains a Registry::Offer attempt for it: if nomos-check-orchestration's own tests stay green with it registered, it stays; if OD-CAPABILITY-009's measured hazard reproduces (a subject the wrong provider answers for), the offer is reverted and composition.rs's own doc says so, citing OD-CAPABILITY-009, the same honest-revert shape nomos-lang-go's own syntax offer already carries. Either outcome satisfies this item; silence about which one happened does not.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages/nomos-lang-go-modules",
+          "Cargo.toml",
+          "README.md",
+          "tests/contract/tests/boundaries/bands.rs",
+          "tests/contract/surface/nomos-lang-go-modules.txt",
+          "crates/orchestration/nomos-check-orchestration/src/composition.rs",
+          "crates/orchestration/nomos-check-orchestration/Cargo.toml",
+          "tests/integration/Cargo.toml",
+          "tests/integration/tests/determinism/declarations.rs",
+          "tests/integration/tests/determinism/domains.rs",
+          "tests/integration/tests/determinism/productions.rs",
+          "tests/integration/tests/determinism/harness.rs"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Predicate argv named the integration test package as tests-integration; the real package name (tests/integration/Cargo.toml) is nomos-integration-tests. Discovered before touching any files. Superseded by -4 with the corrected predicate; territory is unchanged and still correct."
+        }
+      },
+      "depends_on": [
+        "P14-LANG-GO-SYNTAX-PROVIDER"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-lang-go-modules",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-contract-tests",
+          "-p",
+          "tests-integration"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-lang-go-dependency-edges",
+        "declined_at": 1787691351
+      }
+    },
+    {
+      "id": "P14-LANG-GO-DEPENDENCY-EDGES-4",
+      "title": "nomos-lang-go-modules: the Go provider of nomos.cap.dependency.edges",
+      "why": "nomos-lang-rust-cargo is the one provider of dependency edges for Rust, reading cargo metadata and composed into nomos-check-orchestration::Declare_Dependency_Capability so Check_Dependency_Direction sees Rust's real module graph. Without a Go equivalent, a Go-analyzed repository gets syntax facts from nomos-lang-go but no dependency-direction enforcement. Registering a second nomos.cap.dependency.edges offer is attempted here against Declare_Dependency_Capability, the same site nomos-lang-go's own syntax offer was tried and reverted at -- OD-CAPABILITY-009 (accepted this session) already measured why a same-capability, subject-partitioned second offer breaks every subject the wrong provider gets picked for, so this item can try the registration knowing the mechanism rather than rediscovering it, and must honestly document whichever way the attempt actually goes.",
+      "done_when": "A new crate crates/languages/nomos-lang-go-modules reads go.mod and go list -m output through nomos-platform's ProcessLauncher port (never raw std::process::Command), exports PROVIDER, Declared_Guarantee(), Provider_Offer() and Materialize(...) per the nomos-add-plugin skill's convention, with its own Declared_Guarantee tests proving the guarantee neither vacuously satisfies nor vacuously fails, and a DependencyFactProduction Strategy declared and registered in tests/integration/tests/determinism so its obligations are discharged against real behaviour. README's band table gains its row (band 25, peer to nomos-lang-rust-cargo), bands.rs recognizes it, and a fresh public-surface snapshot exists. Declare_Dependency_Capability (composition.rs) gains a Registry::Offer attempt for it: if nomos-check-orchestration's own tests stay green with it registered, it stays; if OD-CAPABILITY-009's measured hazard reproduces (a subject the wrong provider answers for), the offer is reverted and composition.rs's own doc says so, citing OD-CAPABILITY-009, the same honest-revert shape nomos-lang-go's own syntax offer already carries. Either outcome satisfies this item; silence about which one happened does not.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages/nomos-lang-go-modules",
+          "Cargo.toml",
+          "README.md",
+          "tests/contract/tests/boundaries/bands.rs",
+          "tests/contract/surface/nomos-lang-go-modules.txt",
+          "crates/orchestration/nomos-check-orchestration/src/composition.rs",
+          "crates/orchestration/nomos-check-orchestration/Cargo.toml",
+          "tests/integration/Cargo.toml",
+          "tests/integration/tests/determinism/declarations.rs",
+          "tests/integration/tests/determinism/domains.rs",
+          "tests/integration/tests/determinism/productions.rs",
+          "tests/integration/tests/determinism/harness.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [
+        "P14-LANG-GO-SYNTAX-PROVIDER"
+      ],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-lang-go-dependency-edges",
+        "acquired_at": 1787691376,
+        "lease_expires_at": 1787698576
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-lang-go-modules",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-contract-tests",
+          "-p",
+          "nomos-integration-tests"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P14-WORKFLOW-004-AGENT-EXECUTOR-TRIGGER-RECHECK",
+      "title": "OD-WORKFLOW-004: the first real agent executor is not yet a real instance of WF-006's task/result protocol",
+      "why": "OD-WORKFLOW-002 (v2) named three conditions that would decide the workflow tier's next real increment, one being \"ModelBackend/AgentExecutor infrastructure reaches a real executor ... giving WF-006's 'API-hosted, subscription-agent, human, and recorded-replay executors' a first real instance to check a shared task/result protocol against.\" Since that record was accepted, P14-AGENT-EXECUTOR-CLAUDE-FIRST-INCREMENT shipped nomos-agent-executor's real Execute function and P14-CLI-AGENT-EXECUTE gave it a real CLI caller -- an executor now genuinely exists, at the letter of the condition's wording, and the user directing this session's work explicitly asked for exactly this kind of audit: an accepted record's named \"wait until X\" condition checked against the current tree for whether X has actually arrived.\n\nChecked directly rather than assumed. nomos-agent-executor's own module doc (crates/agent/nomos-agent-executor/src/lib.rs) states plainly: \"It does not assemble a nomos_agent_contracts::WorkResult\" -- it reads TaskEnvelope.goal and .effort and returns AgentExecutionOutcome, a free-text result, never the WorkResult type WF-006's \"task/result protocol\" names on its result side. OD-CONTRACTS-003 (accepted the same window nomos-agent-executor shipped) already measured this precisely and left it open on purpose: \"It does not decide how nomos-agent-executor or any other caller assembles the rest of a WorkResult from an executor's free-text response ... not answered here.\" Grepped across the whole workspace (crates --include=*.rs) for every real WorkResult construction site: the only two are nomos-agent-contracts' own unit tests (work_result.rs, both inside #[cfg(test)]); zero production constructors exist anywhere, including in nomos-cli's own two real callers of the executor (agent execute, and the in-progress agent judge-role, both of which say directly in their own comments that they do not assemble one). WF-006's own corpus text names four executor kinds -- API-hosted, subscription-agent, human, recorded-replay -- sharing one protocol; grepped for every one of those four terms across crates and docs/records, the only hits are WorkflowStep's own module doc quoting WF-006's list verbatim (OD-WORKFLOW-003's vocabulary admission), not an implementation of any of the four. Exactly one executor kind (subscription-agent, dispatching to a local Claude Code subprocess) has a real instance, and that instance realizes only the task half of the named protocol.\n\nThe other two conditions were re-verified unchanged rather than assumed stale: nomos_gate_orchestration::Run_Gate still has exactly the same two real callers OD-WORKFLOW-002 found (nomos-cli's gate.rs, nomos-api's lib.rs), grepped directly; and a word-boundary grep for phase/Phase across crates/orchestration/nomos-gate-orchestration/src and crates/orchestration/nomos-check-orchestration/src still returns zero matches in either, so Gate still has no phase concept.\n\nSo the honest finding is not \"the trigger fired, build the engine\" -- it is that condition 3, read at the letter OD-WORKFLOW-002 wrote it, is now trivially satisfiable by any single tool-dispatching executor regardless of whether it ever produces a result, which is not the substance the record's own reasoning was reaching for (a first real instance \"to check a shared task/result protocol against\"). Leaving the condition worded that loosely risks a future session reading \"a real executor exists\" and starting the WF-009..012 engine on the strength of one half-protocol, one-executor-kind instance. This record re-surveys all three conditions against the live tree, finds none has produced a genuine second increment yet, and sharpens condition 3's wording with the evidence this audit found, the same self-correcting discipline OD-WORKFLOW-001 already used twice on its own first-increment plan.",
+      "done_when": "docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md exists, accepted, authority canonical-normative-record, and states: (1) nomos-agent-executor's Execute is a real, shipped executor satisfying condition 3's literal wording, but its own module doc and OD-CONTRACTS-003 both confirm it does not construct a WorkResult, so WF-006's task/result protocol has a real instance only on its task side; (2) grepped directly, WorkResult has zero production construction sites anywhere in the workspace, only its own crate's unit tests; (3) grepped directly, none of WF-006's other three named executor kinds (API-hosted, human, recorded-replay) has any implementation anywhere, only WorkflowStep's own doc comment quoting the list; (4) Run_Gate still has exactly the same two real callers OD-WORKFLOW-002 found, re-verified by grep; (5) Gate still has no phase concept anywhere, re-verified by a word-boundary grep across nomos-gate-orchestration/src and nomos-check-orchestration/src returning zero matches; (6) the finding is therefore that no genuine second increment has yet arrived, and condition 3's wording is sharpened so a future check requires a real WorkResult-producing executor, not merely a real executor, before treating the trigger as fired. crates/spec/nomos-spec-store/records/OD-WORKFLOW-004.record registers the record's path so it is governing. docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md is amended in place: version bumped to 3, a relates-to relation to OD-WORKFLOW-004 added, and an \"Amendment (OD-WORKFLOW-004)\" section appended narrating the sharpened condition 3 text, following the exact precedent OD-WORKFLOW-003's own amendment of this same file already set -- narrowing wording, not reversing the prior finding. diagrams/relations.mmd and spec/domain-specification.md (both halves plus sidecars) are re-rendered from a clean detached worktree carrying exactly this commit's registered records (per OD-GATE-005) and pass nomos spec freshness --require diagram-set --require domain-specification. No code anywhere in the workspace is touched by this item.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md",
+          "crates/spec/nomos-spec-store/records/OD-WORKFLOW-004.record",
+          "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "h_Two_Delimiters_Should_Be_Refused ... ok\n\ntest result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.14s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-7e62a05a80b2a153.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-a7ddd20267ce6c71.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-8b7bde015af4a6d5.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-282419f96d35f8fc.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-cb07077a9de84582.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-04d928e15f53ca9e.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-2d8796877c263c1e.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-4e3a9c9dfd929f43.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-5d30cacc18579715.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-190c42374e8341ed.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-ee111bd537ecd137.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-2919ec68747ddb5b.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-99272398d303e3e7.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-756fcac740cd78ad.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-259eb839edee86c9.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1787691941,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "b138a33264630fc0113c084f9ec9b75c4adf9644"
       },
       "abandoned": [],
       "displaced": [],

@@ -382,6 +382,7 @@ graph LR
     od_contracts_002 -->|"relates-to"| od_trace_004["OD-TRACE-004"]
     od_contracts_003 -->|"relates-to"| od_contracts_002
     od_contracts_003 -->|"relates-to"| od_executor_001
+    od_contracts_003 -->|"relates-to"| od_workflow_004["OD-WORKFLOW-004"]
     od_contracts_004 -->|"relates-to"| od_contracts_001
     od_contracts_004 -->|"relates-to"| od_executor_001
     od_contracts_004 -->|"relates-to"| od_package_011
@@ -413,6 +414,7 @@ graph LR
     od_executor_001 -->|"relates-to"| od_contracts_004
     od_executor_001 -->|"relates-to"| od_corrections_001
     od_executor_001 -->|"relates-to"| od_executor_002
+    od_executor_001 -->|"relates-to"| od_workflow_004
     od_executor_002 -->|"relates-to"| arc_connector_001
     od_executor_002 -->|"relates-to"| od_connector_001
     od_executor_002 -->|"relates-to"| od_executor_001
@@ -1142,14 +1144,20 @@ graph LR
     od_workflow_001 -->|"relates-to"| od_host_002
     od_workflow_001 -->|"relates-to"| od_workflow_002
     od_workflow_001 -->|"relates-to"| od_workflow_003
+    od_workflow_001 -->|"relates-to"| od_workflow_004
     od_workflow_002 -->|"relates-to"| arc_roadmap_001
     od_workflow_002 -->|"relates-to"| od_corrections_001
     od_workflow_002 -->|"relates-to"| od_workflow_001
     od_workflow_002 -->|"relates-to"| od_workflow_003
+    od_workflow_002 -->|"relates-to"| od_workflow_004
     od_workflow_003 -->|"relates-to"| od_contracts_001
     od_workflow_003 -->|"relates-to"| od_package_010
     od_workflow_003 -->|"relates-to"| od_workflow_001
     od_workflow_003 -->|"relates-to"| od_workflow_002
+    od_workflow_004 -->|"relates-to"| od_contracts_003
+    od_workflow_004 -->|"relates-to"| od_executor_001
+    od_workflow_004 -->|"relates-to"| od_workflow_001
+    od_workflow_004 -->|"relates-to"| od_workflow_002
     p10_package_seam -->|"relates-to"| arc_ecosystem_001
   end
   subgraph "Decisions"
@@ -1309,4 +1317,5 @@ graph LR
     od_workflow_001
     od_workflow_002
     od_workflow_003
+    od_workflow_004
   end
