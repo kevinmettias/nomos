@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:a13c15e5dc32b90dab8b672eea01f6bd88c5f1b327de7fc3326da43ab161d9db",
-  "inputs_digest": "sha256:3731b8ff6ab264be142d571838508c7c83e525a1bbaf3e8310e52647e7c3c713",
+  "content_digest": "sha256:7ad97738cec8ceb6dce613d32fdabe7558bd6adda1914ba1c8671c237feb6f3d",
+  "inputs_digest": "sha256:14c316f9cdcf3fdb72b1947bdd7de3f06ab7d2f2a89e6cb07482bcece5ea062a",
   "sections": [
     [
       "Documents",
-      163
+      164
     ],
     [
       "Sections",
-      1381
+      1389
     ],
     [
       "Source blocks",
-      4842
+      4866
     ]
   ],
   "inputs": [
@@ -209,6 +209,11 @@
       "content": "documents",
       "identity": "docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md@authored",
       "hash": "sha256:4d04815ed763e5dcf94dac93b3ea02bfc1095a5ca15731b5d342e314f8a33fc8"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md@authored",
+      "hash": "sha256:d63e52295efd825def469b0faf598b138257b7827ec236b0bad857f046c9f72a"
     },
     {
       "content": "documents",
@@ -2244,6 +2249,46 @@
       "content": "headings",
       "identity": "docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#18",
       "hash": "sha256:83e90fa82d2dbf915892448aaa718200925a00cf740cb2d4c4b90415a805906b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#1",
+      "hash": "sha256:bf5615d19b23c01d3c04830ee53c6c74d4374461e1293b4c7dedc065f73100e5"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#2",
+      "hash": "sha256:c70f70e97d2bac69a714b4ad4848da24e69618a269ac71d715800a5864e3d167"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#5",
+      "hash": "sha256:e023da7e013e231515c92f6417c5cb5960cf976f4ff34d5d5274aba0ceff9da6"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#10",
+      "hash": "sha256:e55033054428ce758f8ad9adce5da9e27789887899db77510cc9995a3e0112f4"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#15",
+      "hash": "sha256:4a24a841b5bf27bc2ef0403587154fcbec63c21461e19675eae4f497c471ef6a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#17",
+      "hash": "sha256:c6cb528cf39bc754fe0526b79a7de3b4ca656005e7a0d710cd7cbcb84893cbfa"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#19",
+      "hash": "sha256:76f3722c62df2a28bfe0b65ad0a6e735d61c9592fc6b2f8d6c2efeb902298957"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#23",
+      "hash": "sha256:4e4a4aa39d7e657455ec921e3a397162ce7c37a32f0311683dc44fb54176be6b"
     },
     {
       "content": "headings",
@@ -12549,6 +12594,126 @@
       "content": "blocks",
       "identity": "docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#19",
       "hash": "sha256:9d86be1e32f0b271eb3bb536ad953f9efde7a061493203da01683e227d07196e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#1",
+      "hash": "sha256:1ec6dddb74adddad0bdb04172537d854224b924e867f1e5bf190675b97a3120a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#3",
+      "hash": "sha256:31dfd6573308e97218e06a62a82c17e91ef7a02bd3fd24e1c9c09702b46ce4ea"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#4",
+      "hash": "sha256:a12b2d4e0ff0947276ad5600fd94ad6cc945adbcd745f9351afbc42fbbd5f69a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#5",
+      "hash": "sha256:cd5ac277d2ea7bc4f11fe446d32d6f220d5907eb2b817ae5752c0244dfab384d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#6",
+      "hash": "sha256:a18e232e7908f35c863728d914c8ce67774f0d15c98b6f4ec729f9cc939c7b0b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#7",
+      "hash": "sha256:e5881152cc6de4a638e92ea2059b1524ef12783bad27b1431955a79218b15ec8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#8",
+      "hash": "sha256:a46936b85ba57055013fe3e46a8759d6183bd9ff9707aac986cfab01d0ed8e2e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#9",
+      "hash": "sha256:b42084b65f07832d4303623dd0d0dd94f18d00252181ae4948865015474303b5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#10",
+      "hash": "sha256:6a7a02ba7bafbb14f503c28189c9eab084dcacbec27f31fcf5c3dac94aaf47f9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#11",
+      "hash": "sha256:eb1731541db3bb3033f1346d979f4206caba098e0773c5a782f1a7d1022413c2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#12",
+      "hash": "sha256:9c0bbb100bbeb13b019e7ab213c78a481a297cba23ab5011b160a598b0c37fcd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#13",
+      "hash": "sha256:c78c662edf4a5e7c7715a463422272db653b5b951b74eafaa244b977962ad750"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#14",
+      "hash": "sha256:756e27cbafb180c7ddaf12263c06ce14f26408effb1712ae9e35b29a90a0cc31"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#15",
+      "hash": "sha256:ce7d7c4c7a095a6374c7add4bbaf9584faaf58a9a5bf1a50a14872d1b7cdad22"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#16",
+      "hash": "sha256:c6a189b44c20f17025e4e5ff323a7fcd1f9fcaf4f6d2c1ee4673c15913c55224"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#17",
+      "hash": "sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#18",
+      "hash": "sha256:9e201cff4042d60567b016a585efb22cd74e0d99841fd87044906bcb1d6e7f0a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#19",
+      "hash": "sha256:18e7a50426cd0d8d38e33cba97764ed91521b7d2acebf590238669f8c5d40865"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#20",
+      "hash": "sha256:b38bf2526bd74ee08ce79519d55c87fe1015da3ac6675a704fcab63339bb3e60"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#21",
+      "hash": "sha256:b5f9d268fb1c70e08ab85bd1adf1b7c3919b3681e64d2223ebb310fd5dbd04e6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#22",
+      "hash": "sha256:71b803c17645f2b6fca5fe73e6e227053707cf7527668d854fb8d0b5cda8aab8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#23",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#24",
+      "hash": "sha256:f69ba7c39168e11986cb3258fbcf136870d77c17455f96b706ab2314ca63c972"
     },
     {
       "content": "blocks",

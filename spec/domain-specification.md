@@ -48,6 +48,7 @@ profile: domain-specification
 | docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md@authored | docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md | authored | 36 | 8 | sha256:6921af0ffee38a77a00c90bb6ebeebcd97e7db786652bdfdb80f9f854577cdfd |
 | docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md@authored | docs/records/OD-CAPABILITY-007-whether-a-provider-needs-a-declared-decline-with-reason-or-waits-for-a-second-capability-contract.md | authored | 16 | 6 | sha256:28d369d79f6b9bc16f144ce71796ae80ccae724f627a779891daec3b61fa5b35 |
 | docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md@authored | docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md | authored | 19 | 6 | sha256:4d04815ed763e5dcf94dac93b3ea02bfc1095a5ca15731b5d342e314f8a33fc8 |
+| docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md@authored | docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md | authored | 24 | 8 | sha256:d63e52295efd825def469b0faf598b138257b7827ec236b0bad857f046c9f72a |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md@authored | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md | authored | 33 | 9 | sha256:26a4c8c8e217e97e0c147d846441c33d854347e490c3757345f06a4021b6d7ff |
 | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md@authored | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md | authored | 54 | 10 | sha256:fc95b7901fc9e920666e8f04eb01c6436a96d16fc63f94e0599114d5cfa5928b |
 | docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md@authored | docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md | authored | 27 | 8 | sha256:ae576ae44e0cc42f6fd2a44efd4c144eb6e6563fe999ad97a9d074e9037c1d2a |
@@ -460,6 +461,14 @@ profile: domain-specification
 | docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#11 | authored | 2 | A Third Provider Joins: What It Reveals |
 | docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#15 | authored | 2 | What Would Decide It |
 | docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md#18 | authored | 2 | Status |
+| docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#1 | authored | 1 | Resolve never sees a subject to partition on; a subject-partitioned capability is the caller's Preferring to make |
+| docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#2 | authored | 2 | Question |
+| docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#5 | authored | 2 | What Was Read |
+| docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#10 | authored | 2 | What Decided It |
+| docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#15 | authored | 2 | Why Not A Subject-Scoping Field On `ProviderOffer` |
+| docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#17 | authored | 2 | What This Does Not Do |
+| docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#19 | authored | 2 | What Would Unblock `nomos-lang-go`'s Registration |
+| docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#23 | authored | 2 | Status |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md#1 | authored | 1 | A completeness guard is only as complete as the universe it quantifies over |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md#2 | authored | 2 | Question |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md#5 | authored | 2 | The Shape, Which Is Not The One The Item Assumed |
@@ -10445,6 +10454,262 @@ narrower three-part trait when a caller needs it enforced rather than inspected 
 "wait for a need, not a wish" discipline `D-135` already names elsewhere), or reopen
 `Materialize`'s own shape when a fourth provider arrives with a third, genuinely distinct
 capability granularity to check the per-file/whole-workspace split against.
+
+### docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#1
+
+*revision: authored · kind: heading · heading: Resolve never sees a subject to partition on; a subject-partitioned capability is the caller's Preferring to make · hash: sha256:1ec6dddb74adddad0bdb04172537d854224b924e867f1e5bf190675b97a3120a*
+
+# Resolve never sees a subject to partition on; a subject-partitioned capability is the caller's Preferring to make
+
+### docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#2
+
+*revision: authored · kind: heading · heading: Resolve never sees a subject to partition on; a subject-partitioned capability is the caller's Preferring to make / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#3
+
+*revision: authored · kind: prose · heading: Resolve never sees a subject to partition on; a subject-partitioned capability is the caller's Preferring to make / Question · hash: sha256:31dfd6573308e97218e06a62a82c17e91ef7a02bd3fd24e1c9c09702b46ce4ea*
+
+`nomos-lang-go` (`P14-LANG-GO-SYNTAX-PROVIDER`) offers `nomos.cap.syntax.items` with
+`Assurance::Sound` on both axes -- strictly stronger than `nomos-lang-rust`'s `Sound/Unknown`
+-- but answers only for Go files, disjoint from `nomos-lang-rust`'s Rust files. Registering it
+as a third offer in `nomos-check-orchestration::Declare_Syntax_Capability` was tried and
+reverted: `nomos_rules::Syntax_Requirement`'s own deliberately-unpreferenced resolution then
+picked `nomos_lang_go` for `.rs` files too, because its guarantee dominates and
+`Registry::Resolve` ranks purely by guarantee strength. Four real tests in
+`nomos-check-orchestration`'s own `tests.rs` went from green to `DependencyUnavailable`
+findings -- empirical, not theoretical.
+
+### docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#4
+
+*revision: authored · kind: prose · heading: Resolve never sees a subject to partition on; a subject-partitioned capability is the caller's Preferring to make / Question · hash: sha256:a12b2d4e0ff0947276ad5600fd94ad6cc945adbcd745f9351afbc42fbbd5f69a*
+
+`OD-CAPABILITY-001` closed with this gap already named under "What This Does Not Do": "the
+registry ranks and does not dispatch... per-subject fallback changes which provider answers for
+which file... stated here so that the gap is a plan and not an oversight." `OD-CAPABILITY-006`
+does not cover it either -- it is explicit that its cross-language case is two *different*
+languages' subjects joined by a declared correspondence, and says plainly that two
+same-capability offers ranked by strength is `OD-CAPABILITY-001`'s case, not its own.
+`nomos-lang-rust` and `nomos-lang-go` are offers of the *same* fact, `nomos.cap.syntax.items`,
+so `OD-CAPABILITY-006` does not answer this either. This record decides what `Resolve` owes a
+capability whose real offers partition by subject rather than compete over one, against the
+concrete failure above, not hypothetically.
+
+### docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#5
+
+*revision: authored · kind: heading · heading: Resolve never sees a subject to partition on; a subject-partitioned capability is the caller's Preferring to make / What Was Read · hash: sha256:cd5ac277d2ea7bc4f11fe446d32d6f220d5907eb2b817ae5752c0244dfab384d*
+
+## What Was Read
+
+### docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#6
+
+*revision: authored · kind: prose · heading: Resolve never sees a subject to partition on; a subject-partitioned capability is the caller's Preferring to make / What Was Read · hash: sha256:a18e232e7908f35c863728d914c8ce67774f0d15c98b6f4ec729f9cc939c7b0b*
+
+**Where the resolved offer's identity actually lands.** `nomos_analysis::Reader::Require`
+calls `self.registry.Resolve(need)` and feeds the result into `Key_For`, which calls
+`Key_From(capability, subject, inputs, resolution.Offer()?)`. `Key_From`'s own doc: "The
+provider and its guarantee are components of the key, which is the reason per-subject fallback
+is admissible at all: two providers answering about one file are two addresses rather than two
+values at one." `FactKey.provider` is `offer.provider.clone()` -- whichever offer `Resolve`
+picked. This is the exact mechanism behind the observed failure: `Resolve` picked
+`nomos_lang_go`, `Key_For` built a key stamped with `nomos_lang_go`'s provider id, and the fact
+in the store -- written by `Materialize_Syntax`, which calls `nomos_lang_rust::Materialize`
+directly and does not consult the registry at all -- was filed under `nomos_lang_rust`'s
+identity. The two addresses never agreed and every lookup missed.
+
+### docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#7
+
+*revision: authored · kind: prose · heading: Resolve never sees a subject to partition on; a subject-partitioned capability is the caller's Preferring to make / What Was Read · hash: sha256:e5881152cc6de4a638e92ea2059b1524ef12783bad27b1431955a79218b15ec8*
+
+**What `SubjectId` actually is.** Every call site constructs it the same way:
+`SubjectId::From_Digest(Content_Digest(path.as_bytes()))`. It is a one-way content digest with
+no recoverable path, extension, or language. `Registry::Resolve(&Requirement)` does not take a
+subject at all; `Reader::Require`/`Require_Any` do receive `subject: &SubjectId`, but by the
+time either reaches the registry, the only thing in hand is the opaque digest. There is no
+"which subjects does this offer recognize" question a subject-scoping field on `ProviderOffer`
+could answer at resolution time, because resolution time never receives anything a domain
+predicate could be evaluated against. A `Domain`/`Recognizes` field on `ProviderOffer` would be
+answering a question `Resolve` is structurally never asked.
+
+### docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#8
+
+*revision: authored · kind: prose · heading: Resolve never sees a subject to partition on; a subject-partitioned capability is the caller's Preferring to make / What Was Read · hash: sha256:a46936b85ba57055013fe3e46a8759d6183bd9ff9707aac986cfab01d0ed8e2e*
+
+**A mechanism for exactly this already exists, built and tested, unused in production.**
+`Requirement::Preferring(provider: ProviderId)` and `Selection::Over`'s honoured-preference
+branch: "The offer that no usable offer is strictly stronger than answers. A named preference
+outranks that, because a caller saying what it wants is not something the registry is in a
+position to overrule." `Selection::Weaker`'s own doc goes further: "What a caller that lowered
+its floor for coverage actually spends... The registry has no subject and so cannot make that
+call." Both are exactly the shape this gap needs. Neither is called from any production code
+path today -- every use of `.Preferring(` in the tree is a test fixture.
+
+### docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#9
+
+*revision: authored · kind: prose · heading: Resolve never sees a subject to partition on; a subject-partitioned capability is the caller's Preferring to make / What Was Read · hash: sha256:b42084b65f07832d4303623dd0d0dd94f18d00252181ae4948865015474303b5*
+
+**Why it is not simply a matter of calling it.** `nomos_rules::Syntax_Requirement`'s own doc is
+explicit and deliberate: "There is deliberately no `Preferring`. Naming a provider would be the
+rule deciding what the registry exists to decide." That stance is correct for what it guards --
+`nomos-lang-rust` and `nomos-lang-rust-scan` are genuine competitors over the same subject
+space, any `.rs` file, and letting a rule pin one by name would let it silently prefer the
+weaker, faster scanner forever regardless of what a stronger parser could answer, defeating the
+reason `OD-CAPABILITY-001` gave the registry that ranking job in the first place. Applying
+`Preferring` naively to unblock `nomos-lang-go` would either contradict this stance outright or
+require deleting it -- and deleting it breaks the genuine competition it protects.
+
+### docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#10
+
+*revision: authored · kind: heading · heading: Resolve never sees a subject to partition on; a subject-partitioned capability is the caller's Preferring to make / What Decided It · hash: sha256:6a7a02ba7bafbb14f503c28189c9eab084dcacbec27f31fcf5c3dac94aaf47f9*
+
+## What Decided It
+
+### docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#11
+
+*revision: authored · kind: prose · heading: Resolve never sees a subject to partition on; a subject-partitioned capability is the caller's Preferring to make / What Decided It · hash: sha256:eb1731541db3bb3033f1346d979f4206caba098e0773c5a782f1a7d1022413c2*
+
+The tension resolves once the two questions `Syntax_Requirement` and its call sites are
+actually asking are told apart, because they are not the same question:
+
+### docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#12
+
+*revision: authored · kind: prose · heading: Resolve never sees a subject to partition on; a subject-partitioned capability is the caller's Preferring to make / What Decided It · hash: sha256:9c0bbb100bbeb13b019e7ab213c78a481a297cba23ab5011b160a598b0c37fcd*
+
+- **"Given this floor, which competing offer is best?"** -- a quality judgment, subject-
+  agnostic, correctly the registry's to rank by guarantee strength, and correctly excluded from
+  needing a name. This is what `Syntax_Requirement()` states today, unchanged, still with no
+  `Preferring` baked in.
+- **"Given this concrete file, which offers can even attempt it?"** -- an applicability fact,
+  not a quality judgment, and one the registry structurally cannot answer because it never
+  receives anything recognizable about the subject -- only a digest already stripped of the
+  path that would answer it.
+
+### docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#13
+
+*revision: authored · kind: prose · heading: Resolve never sees a subject to partition on; a subject-partitioned capability is the caller's Preferring to make / What Decided It · hash: sha256:c78c662edf4a5e7c7715a463422272db653b5b951b74eafaa244b977962ad750*
+
+The second question can only be answered where a real, un-digested path is still in hand: at
+the call site, before `SubjectId::From_Digest` is ever computed. `nomos_lang_rust::recognition`
+and `nomos_lang_go::recognition` both already expose exactly this as `Recognition::Of_Path(path:
+&str)`. So the rule is:
+
+### docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#14
+
+*revision: authored · kind: prose · heading: Resolve never sees a subject to partition on; a subject-partitioned capability is the caller's Preferring to make / What Decided It · hash: sha256:756e27cbafb180c7ddaf12263c06ce14f26408effb1712ae9e35b29a90a0cc31*
+
+**A capability whose real, registered offers partition by subject rather than compete over one
+is not resolved by widening what the registry ranks. It is resolved by the caller, at the point
+it still holds the subject's real path, narrowing the `Requirement` with `.Preferring(provider)`
+chosen from that path's own `Recognition` -- before the path is digested into the `SubjectId`
+`Resolve` will only ever see as opaque.** This does not touch `ProviderOffer`, `Registry::Resolve`,
+or `Selection`'s ranking, all of which stay exactly as `OD-CAPABILITY-001` left them, correctly
+reserved for genuine same-subject competition. It does not touch `Syntax_Requirement()`'s own
+"no `Preferring`" stance either -- that function states a subject-agnostic floor and is right to
+carry no preference. What is missing is not in the floor; it is in every call site that turns a
+floor into a `Require` call for one concrete file, which today discards the very information
+(the real path) that would let it narrow correctly, before the registry ever sees a subject it
+cannot use.
+
+### docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#15
+
+*revision: authored · kind: heading · heading: Resolve never sees a subject to partition on; a subject-partitioned capability is the caller's Preferring to make / Why Not A Subject-Scoping Field On `ProviderOffer` · hash: sha256:ce7d7c4c7a095a6374c7add4bbaf9584faaf58a9a5bf1a50a14872d1b7cdad22*
+
+## Why Not A Subject-Scoping Field On `ProviderOffer`
+
+### docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#16
+
+*revision: authored · kind: prose · heading: Resolve never sees a subject to partition on; a subject-partitioned capability is the caller's Preferring to make / Why Not A Subject-Scoping Field On `ProviderOffer` · hash: sha256:c6a189b44c20f17025e4e5ff323a7fcd1f9fcaf4f6d2c1ee4673c15913c55224*
+
+Considered and rejected, for the reason under "What Was Read" above: `Resolve` and `Selection`
+operate over `ProviderOffer` values and a `Requirement`, and neither carries a subject at the
+point ranking happens. A `Domain` field on `ProviderOffer` would need `Resolve` (or a new
+subject-aware variant of it) to also receive the subject to filter by, and the only subject
+available anywhere near that call is already an opaque digest -- a `Domain` predicate would
+have nothing decidable to test it against without also being handed the pre-digest path, which
+means the caller already has to do the applicability work itself, making a registry-side field
+redundant with the caller-side `Preferring` call it would still need to make. Splitting the
+same decision across two places, one of which cannot act on it alone, is worse than leaving it
+in the one place that can.
+
+### docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#17
+
+*revision: authored · kind: heading · heading: Resolve never sees a subject to partition on; a subject-partitioned capability is the caller's Preferring to make / What This Does Not Do · hash: sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf*
+
+## What This Does Not Do
+
+### docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#18
+
+*revision: authored · kind: prose · heading: Resolve never sees a subject to partition on; a subject-partitioned capability is the caller's Preferring to make / What This Does Not Do · hash: sha256:9e201cff4042d60567b016a585efb22cd74e0d99841fd87044906bcb1d6e7f0a*
+
+It does not register `nomos_lang_go::Provider_Offer()` in
+`nomos-check-orchestration::Declare_Syntax_Capability`. It does not change
+`nomos_capability::{ProviderOffer, Registry, Requirement, Selection}` in any way -- every type
+and every ranking rule `OD-CAPABILITY-001` decided stands untouched. It does not change
+`nomos_rules::Syntax_Requirement()`'s signature or its "no `Preferring`" doc, both of which
+remain correct statements about a subject-agnostic floor.
+
+### docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#19
+
+*revision: authored · kind: heading · heading: Resolve never sees a subject to partition on; a subject-partitioned capability is the caller's Preferring to make / What Would Unblock `nomos-lang-go`'s Registration · hash: sha256:18e7a50426cd0d8d38e33cba97764ed91521b7d2acebf590238669f8c5d40865*
+
+## What Would Unblock `nomos-lang-go`'s Registration
+
+### docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#20
+
+*revision: authored · kind: prose · heading: Resolve never sees a subject to partition on; a subject-partitioned capability is the caller's Preferring to make / What Would Unblock `nomos-lang-go`'s Registration · hash: sha256:b38bf2526bd74ee08ce79519d55c87fe1015da3ac6675a704fcab63339bb3e60*
+
+A further, real increment, not built here:
+
+### docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#21
+
+*revision: authored · kind: prose · heading: Resolve never sees a subject to partition on; a subject-partitioned capability is the caller's Preferring to make / What Would Unblock `nomos-lang-go`'s Registration · hash: sha256:b5f9d268fb1c70e08ab85bd1adf1b7c3919b3681e64d2223ebb310fd5dbd04e6*
+
+- Every caller that resolves `nomos.cap.syntax.items` for one concrete subject --
+  `nomos_rules::mirror::index` and `nomos_rules::naming::reading` today -- must compute
+  `Recognition::Of_Path` against the real path it already holds before that path is digested,
+  and attach `.Preferring(ProviderId::New(nomos_lang_rust::PROVIDER))` or
+  `.Preferring(ProviderId::New(nomos_lang_go::PROVIDER))` to `Syntax_Requirement()` accordingly,
+  falling through to the registry's own ranking only for a path neither recognizes (today,
+  never -- both providers are total over `.rs`/`.go`, so an unrecognized path is a third case
+  this increment must also decide, not silently swallow).
+- `nomos-check-orchestration::facts::materialize::Materialize_Syntax`'s write side must gain the
+  matching per-`Recognition` dispatch, generalized from its current hardcoded
+  `nomos_lang_rust::Materialize` call, so that whichever provider identity the read side
+  requests via `Preferring` is the same identity the write side actually filed the fact under.
+  Read and write already have to agree on provider identity for `Key_From` to find anything;
+  today they agree only because there is one language to hardcode.
+- Only once both sides dispatch on the same `Recognition` does adding
+  `registry.Offer(nomos_lang_go::Provider_Offer())` to `Declare_Syntax_Capability` become safe --
+  at that point it is no longer relying on `Resolve`'s unpreferenced ranking to do work this
+  record found it cannot do.
+
+### docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#22
+
+*revision: authored · kind: prose · heading: Resolve never sees a subject to partition on; a subject-partitioned capability is the caller's Preferring to make / What Would Unblock `nomos-lang-go`'s Registration · hash: sha256:71b803c17645f2b6fca5fe73e6e227053707cf7527668d854fb8d0b5cda8aab8*
+
+Until that lands, `nomos-lang-go` remains built, tested, and correctly *not* wired into the
+composed registry. This record decides the shape of the fix; it does not build it.
+
+### docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#23
+
+*revision: authored · kind: heading · heading: Resolve never sees a subject to partition on; a subject-partitioned capability is the caller's Preferring to make / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md#24
+
+*revision: authored · kind: prose · heading: Resolve never sees a subject to partition on; a subject-partitioned capability is the caller's Preferring to make / Status · hash: sha256:f69ba7c39168e11986cb3258fbcf136870d77c17455f96b706ab2314ca63c972*
+
+Accepted. Decided against the concrete failure recorded in `P14-LANG-GO-SYNTAX-PROVIDER`'s own
+commit, by reading `Reader::Require`/`Key_From` (where a resolved offer's identity becomes a
+lookup key), `SubjectId`'s construction (a one-way digest, never a recognizable path once
+inside the registry's reach), `Selection::Over`/`Requirement::Preferring` (the existing,
+tested, unused-in-production mechanism this decision points call sites at), and
+`Syntax_Requirement`'s own doc (whose "no `Preferring`" stance is correct for the floor and is
+left unchanged). `nomos_capability` needs no subject-scoping mechanism; the fix lives entirely
+above the registry, in the call sites that still hold a real path before it is digested away.
+Registering `nomos-lang-go` waits on that further increment.
 
 ### docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md#1
 

@@ -275,6 +275,7 @@ graph LR
     od_capability_001 -->|"relates-to"| od_capability_005["OD-CAPABILITY-005"]
     od_capability_001 -->|"relates-to"| od_capability_006
     od_capability_001 -->|"relates-to"| od_capability_008
+    od_capability_001 -->|"relates-to"| od_capability_009["OD-CAPABILITY-009"]
     od_capability_001 -->|"relates-to"| od_contracts_002
     od_capability_002 -->|"relates-to"| od_analysis_002
     od_capability_002 -->|"relates-to"| od_analysis_004
@@ -308,6 +309,7 @@ graph LR
     od_capability_006 -->|"relates-to"| od_capability_001
     od_capability_006 -->|"relates-to"| od_capability_002
     od_capability_006 -->|"relates-to"| od_capability_004
+    od_capability_006 -->|"relates-to"| od_capability_009
     od_capability_006 -->|"relates-to"| od_rules_003
     od_capability_007 -->|"relates-to"| d_135
     od_capability_007 -->|"relates-to"| od_capability_002
@@ -320,6 +322,8 @@ graph LR
     od_capability_008 -->|"relates-to"| od_package_006
     od_capability_008 -->|"relates-to"| od_rules_007
     od_capability_008 -->|"relates-to"| od_rules_008
+    od_capability_009 -->|"relates-to"| od_capability_001
+    od_capability_009 -->|"relates-to"| od_capability_006
     od_completeness_001 -->|"affected_by"| d_134
     od_completeness_001 -->|"affected_by"| od_completeness_002
     od_completeness_001 -->|"affected_by"| od_completeness_004["OD-COMPLETENESS-004"]
@@ -1179,6 +1183,7 @@ graph LR
     od_capability_006
     od_capability_007
     od_capability_008
+    od_capability_009
     od_completeness_001
     od_completeness_002
     od_completeness_004
