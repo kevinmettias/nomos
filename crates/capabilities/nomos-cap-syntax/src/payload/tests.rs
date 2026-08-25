@@ -81,6 +81,65 @@ fn Test_A_Function_Shape_Should_Carry_Its_Arity()
     assert_eq!(Function_Arity(&Observation::Present(SLICE.to_owned())), None);
 }
 
+#[test]
+fn Test_A_Struct_Shape_Should_Carry_Its_Fields_In_Order()
+{
+    let fields = vec![("age".to_owned(), "u32".to_owned()), ("name".to_owned(), "String".to_owned())];
+    let shape = Struct_Shape(&fields).map_or(Observation::Absent, Observation::Present);
+
+    assert_eq!(Struct_Fields(&shape), Some(fields));
+}
+
+#[test]
+fn Test_A_Struct_With_No_Named_Fields_Should_Record_Absence()
+{
+    assert_eq!(Struct_Shape(&[]), None);
+    assert_eq!(Struct_Fields(&Observation::Absent), None);
+}
+
+#[test]
+fn Test_Struct_Fields_Should_Be_None_For_A_Shape_That_Is_Not_One()
+{
+    assert_eq!(Struct_Fields(&Observation::NotObserved), None);
+    assert_eq!(Struct_Fields(&Observation::Present(Function_Shape(1))), None);
+    assert_eq!(Struct_Fields(&Observation::Present(SLICE.to_owned())), None);
+}
+
+/// A field's own name or type can carry a tab or a newline (an unlikely but real type
+/// spelling is not this test's concern; the wire mechanics are) — the whole `Struct_Shape`
+/// string is one `Observation::Present` value, escaped and unescaped exactly like any other,
+/// so it survives a real record round trip rather than being assumed to.
+#[test]
+fn Test_A_Struct_Shape_Should_Survive_A_Real_Item_Record_Round_Trip()
+{
+    use crate::PayloadItem;
+    use crate::SyntaxPayload;
+
+    let fields = vec![
+        ("weird\tname".to_owned(), "Vec".to_owned()),
+        ("plain".to_owned(), "Option\n<Boxed>".to_owned()),
+    ];
+    let payload = SyntaxPayload {
+        unexpanded: 0,
+        items: vec![PayloadItem {
+            ordinal: 0,
+            kind: "Struct".to_owned(),
+            visibility: PUBLIC.to_owned(),
+            qualified_name: "Weird".to_owned(),
+            documentation: Observation::Absent,
+            shape: Observation::Present(Struct_Shape(&fields).expect("two fields is not empty")),
+        }],
+    };
+
+    let rendered = Render_Payload(&payload);
+    let decoded = Parse_Payload(&rendered).expect("this module's own encoding");
+
+    assert_eq!(
+        Struct_Fields(&decoded.items.first().expect("one item").shape),
+        Some(fields)
+    );
+}
+
 /// Documentation is prose and arrives with newlines and tabs in it. One field, one
 /// record, and the text a consumer matches against is the text the author wrote.
 #[test]

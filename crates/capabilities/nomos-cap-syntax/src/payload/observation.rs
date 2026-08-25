@@ -33,6 +33,9 @@ pub const TRAIT: &str = "trait";
 /// The `shape` prefix a function's arity is written behind.
 const FUNCTION_SHAPE: &str = "fn/";
 
+/// The `shape` header a struct's field list is written behind.
+const STRUCT_SHAPE_HEADER: &str = "fields";
+
 /// What a provider saw when it looked — including that it could not look.
 ///
 /// Three states rather than an `Option`, because the two empty answers are not the same
@@ -113,6 +116,63 @@ pub fn Function_Arity(shape: &Observation) -> Option<u32>
 pub fn Function_Shape(arity: usize) -> String
 {
     return format!("{FUNCTION_SHAPE}{arity}");
+}
+
+/// A struct's own field list, if the `shape` this rule reads is one — `None` for a struct
+/// with no named fields (`Observation::Absent`) and for anything that is not a struct's
+/// shape at all.
+///
+/// Each pair is `(name, type)`, in declaration order — order is preserved because it is
+/// free (the wire form already carries it), even though `OD-CAPABILITY-010`'s own
+/// comparison reads this set-wise rather than positionally.
+///
+/// `name` and `type` are unescaped a second time here, on top of whatever
+/// `Observation::Decode` already did to the whole value — see [`Struct_Shape`]'s own doc
+/// for why one round is not enough.
+#[must_use]
+pub fn Struct_Fields(shape: &Observation) -> Option<Vec<(String, String)>>
+{
+    let value = shape.Value()?;
+    let body = value.strip_prefix(STRUCT_SHAPE_HEADER)?.strip_prefix('\n')?;
+
+    return body
+        .lines()
+        .map(|line| {
+            return line
+                .split_once('\t')
+                .map(|(name, kind)| return (Unescape(name), Unescape(kind)));
+        })
+        .collect();
+}
+
+/// The `shape` a struct with these named fields declares, in declaration order — the wire
+/// form [`Struct_Fields`] reads back. `None` for an empty field list, the same convention
+/// every provider's own `Declared.shape: Option<String>` already uses for "the form has no
+/// shape to describe": a struct this reader observed to have no named fields (Rust's unit
+/// and tuple forms) has nothing to say, the same default every other kind already has.
+///
+/// `name` and `type` are escaped here, before this function's own tab and newline are laid
+/// down as the field-pair and field-line delimiters — one escaping pass is not enough,
+/// because a field whose own name or type spelling contains a real tab or newline would
+/// otherwise read back as a second, wrongly-split field. `Observation::Encode` escapes the
+/// whole result a second time when this becomes the wire's `shape` column, which is what
+/// protects *this* function's own delimiters from `Observation`'s outer grammar; each
+/// escaping pass protects the delimiters one layer up from it, never its own.
+#[must_use]
+pub fn Struct_Shape(fields: &[(String, String)]) -> Option<String>
+{
+    if fields.is_empty()
+    {
+        return None;
+    }
+
+    let body = fields
+        .iter()
+        .map(|(name, kind)| return format!("{}\t{}", Escape(name), Escape(kind)))
+        .collect::<Vec<_>>()
+        .join("\n");
+
+    return Some(format!("{STRUCT_SHAPE_HEADER}\n{body}"));
 }
 
 /// Reads a field that must be an observation.

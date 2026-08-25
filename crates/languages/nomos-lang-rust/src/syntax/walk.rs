@@ -1,6 +1,6 @@
 //! One pass over a parsed file, recording every declaration it meets.
 
-use super::{SyntaxItem, Documentation, Visibility, Bound_By, ItemKind, Visit, Type_Shape, Function_Shape, Type_Head, Impl_Shape, Path_As_Written};
+use super::{SyntaxItem, Documentation, Visibility, Bound_By, ItemKind, Visit, Type_Shape, Function_Shape, Struct_Shape, Type_Head, Impl_Shape, Path_As_Written};
 
 /// The walk that turns a parsed file into items.
 ///
@@ -262,7 +262,7 @@ impl<'ast> Visit<'ast> for Walk
                 kind: ItemKind::Struct,
                 name: node.ident.to_string(),
                 visibility: Visibility::Of(&node.vis),
-                shape: None,
+                shape: Struct_Shape(&node.fields),
             },
             &node.attrs,
         );

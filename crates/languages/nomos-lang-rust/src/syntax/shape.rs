@@ -53,6 +53,35 @@ pub(super) fn Type_Shape(declared: &syn::Type) -> String
     };
 }
 
+/// The `shape` a struct's own named fields declare, `OD-CAPABILITY-010`'s extension to this
+/// payload's per-kind vocabulary.
+///
+/// `None` for `syn::Fields::Unit` and `syn::Fields::Unnamed` — a tuple or unit struct
+/// declares no name a field-by-field comparison could key on, the same "nothing to say"
+/// default every other kind already has for a form it does not describe. Each named
+/// field's type is [`Type_Head`]'s answer, not a full generic-aware spelling:
+/// `nomos-lang-rust` depends on `syn` with `printing` deliberately absent, and
+/// `OD-CAPABILITY-010` reuses this crate's own existing boundary rather than widening it.
+pub(super) fn Struct_Shape(fields: &syn::Fields) -> Option<String>
+{
+    let syn::Fields::Named(named) = fields
+    else
+    {
+        return None;
+    };
+
+    let pairs: Vec<(String, String)> = named
+        .named
+        .iter()
+        .filter_map(|field| {
+            let name = field.ident.as_ref()?.to_string();
+            return Some((name, Type_Head(&field.ty)));
+        })
+        .collect();
+
+    return nomos_cap_syntax::Struct_Shape(&pairs);
+}
+
 /// The shape a function of this many declared parameters has.
 ///
 /// The receiver counts, because it is a declared parameter and because the distinction a

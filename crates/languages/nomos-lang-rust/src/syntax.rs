@@ -19,7 +19,7 @@ mod documentation;
 mod tests;
 
 pub(crate) use shape::Path_As_Written;
-use shape::{Bound_By, Function_Shape, Impl_Shape, Type_Head, Type_Shape};
+use shape::{Bound_By, Function_Shape, Impl_Shape, Struct_Shape, Type_Head, Type_Shape};
 use documentation::Documentation;
 
 use crate::{ParseFailure, Reading};

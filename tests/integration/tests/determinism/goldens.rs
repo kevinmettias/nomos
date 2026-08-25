@@ -11,10 +11,14 @@
 
 /// The parser's golden.
 ///
-/// Re-addressed once, deliberately, by `P10-SYNTAX-V2`: `nomos.syntax.items.v2` carries two
-/// more fields per item, so every fact keyed under the v1 bytes has a new payload digest.
-/// `OD-SYNTAX-002` is the sentence that had to be read before this diff merged.
-pub(crate) const PARSED_GOLDEN: &str = "6ec4ad9fe9c81ab2358e3c3756a3f1f5";
+/// Re-addressed twice, deliberately. First by `P10-SYNTAX-V2`: `nomos.syntax.items.v2`
+/// carries two more fields per item, so every fact keyed under the v1 bytes has a new
+/// payload digest — `OD-SYNTAX-002` is the sentence that had to be read before that diff
+/// merged. Second by `OD-CAPABILITY-010`: a named-field struct's `shape` now carries its
+/// own field list instead of always `.`, and the shared fixture this golden is captured
+/// over declares one, so every fact for a struct with named fields has a new payload
+/// digest too.
+pub(crate) const PARSED_GOLDEN: &str = "f5e3f679152a9eca336ae37d0315fadb";
 
 /// The rollup's golden.
 ///

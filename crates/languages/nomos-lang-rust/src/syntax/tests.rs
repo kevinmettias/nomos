@@ -60,6 +60,53 @@ fn Test_Ordinals_Should_Be_Dense_And_Zero_Based()
     assert_eq!(ordinals, vec![0, 1, 2]);
 }
 
+/// `OD-CAPABILITY-010`'s extension: a named-field struct's own field names and head types,
+/// read back through `nomos_cap_syntax::Struct_Fields` the same way a real consumer would,
+/// not by inspecting the encoded string directly.
+#[test]
+fn Test_A_Named_Field_Structs_Fields_Should_Be_Recorded()
+{
+    let facts = Parsed("pub struct Counter { pub n: u32, label: String }\n");
+    let item = facts.items.first().expect("one struct");
+
+    let shape = item.shape.clone().map_or(nomos_cap_syntax::Observation::Absent, nomos_cap_syntax::Observation::Present);
+    let fields = nomos_cap_syntax::Struct_Fields(&shape).expect("a named-field struct records its fields");
+
+    assert_eq!(
+        fields,
+        vec![("n".to_owned(), "u32".to_owned()), ("label".to_owned(), "String".to_owned())]
+    );
+}
+
+/// A tuple struct and a unit struct both declare no named field a cross-language
+/// comparison could key on — `Struct_Shape`'s own documented default, exercised here
+/// against this provider's real output rather than assumed from its source.
+#[test]
+fn Test_A_Tuple_Or_Unit_Struct_Should_Record_No_Fields()
+{
+    let facts = Parsed("struct Pair(u32, u32);\nstruct Marker;\n");
+
+    assert_eq!(facts.items.len(), 2, "{facts:?}");
+    for item in &facts.items
+    {
+        assert_eq!(item.shape, None, "{item:?}");
+    }
+}
+
+/// A field's type is its head, not its full generic spelling — `Type_Head`'s own existing
+/// boundary, reused rather than widened.
+#[test]
+fn Test_A_Generic_Fields_Type_Should_Record_Its_Head_Only()
+{
+    let facts = Parsed("pub struct Wrapper { pub inner: Vec<String> }\n");
+    let item = facts.items.first().expect("one struct");
+
+    let shape = item.shape.clone().map_or(nomos_cap_syntax::Observation::Absent, nomos_cap_syntax::Observation::Present);
+    let fields = nomos_cap_syntax::Struct_Fields(&shape).expect("a named-field struct records its fields");
+
+    assert_eq!(fields, vec![("inner".to_owned(), "Vec".to_owned())]);
+}
+
 #[test]
 fn Test_Visibility_Should_Be_Recorded_As_Declared()
 {
