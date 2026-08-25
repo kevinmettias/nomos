@@ -32666,6 +32666,152 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P14-CAPABILITY-010-SYNTAX-STRUCT-FIELDS-1",
+      "title": "nomos.cap.syntax.items' shape gains a real vocabulary entry for Struct, and nomos-lang-rust becomes its first real writer",
+      "why": "OD-CAPABILITY-010 decided a struct with named fields records its field names and head-type spellings in the shape Observation already reserved per-kind vocabulary for exactly this kind of extension (fn/<arity>, slice/value, inherent/trait), with a shared Struct_Shape/Struct_Fields codec living in nomos-cap-syntax the same way Function_Shape/Function_Arity already do. This item is the codec plus its first real writer: nomos-lang-rust's visit_item_struct, reusing Type_Head rather than adding a printing dependency, per the record's own explicit refusal to widen that boundary.",
+      "done_when": "nomos-cap-syntax exports Struct_Shape/Struct_Fields with a documented wire encoding and round-trip tests; nomos-lang-rust's visit_item_struct records a real field list (name, Type_Head) for a named-field struct and Observation::Absent for a unit or tuple struct; a real test proves it against this repository's own real structs, not only synthetic ones",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities/nomos-cap-syntax/src/payload/observation.rs",
+          "crates/capabilities/nomos-cap-syntax/src/payload.rs",
+          "crates/capabilities/nomos-cap-syntax/src/payload/tests.rs",
+          "crates/languages/nomos-lang-rust/src/syntax/walk.rs",
+          "crates/languages/nomos-lang-rust/src/syntax/shape.rs",
+          "crates/languages/nomos-lang-rust/src/syntax/tests.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-struct-fields-rust",
+        "acquired_at": 1787700666,
+        "lease_expires_at": 1787707866
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cap-syntax",
+          "-p",
+          "nomos-lang-rust",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P14-ECOSYSTEM-001-README-MARK",
+      "title": "README's band table marks the four repo-tooling crates ARC-ECOSYSTEM-001 and OD-LEDGER-036 already classify as not product",
+      "why": "An external architecture review found the README gives dev/spec tooling equal visual standing with product crates in the band table, with no marker distinguishing them. ARC-ECOSYSTEM-001 already names the work ledger and the specification system as subsystems whose 'current placement does not prove ownership' and explicitly declines to move anything; OD-LEDGER-036 settles the ledger specifically as repository bootstrap machinery. The nomos-spec-* family already carries this distinction in its own separate table and prose (README.md:76-86), but nomos-ledger, nomos-work-orchestration, nomos-spec-orchestration and nomos-surface-provenance sit in the main product table with zero marker, so a reader has to already know the two governing records exist to reconstruct the classification they state. This is the safe half of the review's ask: making an already-decided classification visible in the navigable document, not the physical crate move ARC-ECOSYSTEM-001 already weighed and declined given work/ledger.json's live territory-string cost.",
+      "done_when": "README.md's band table marks nomos-ledger, nomos-work-orchestration, nomos-spec-orchestration and nomos-surface-provenance with a [repo tooling] tag in their Owns cell (not the crate-name cell, which tests/contract/tests/boundaries/readme.rs and nomos-cli::agent.rs::Declared_Role both parse by exact backtick-quoted match) and a short paragraph before the table cites ARC-ECOSYSTEM-001 and OD-LEDGER-036 for why. No crate moves, no dependency changes, no record is added or amended. cargo test -p nomos-contract-tests -p nomos-cli passes, confirming the band-table parsing tests and the crate-name-cell-dependent agent.rs tests are unaffected.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "README.md"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "recovering with a predicate scoped to what this item's change actually risks, avoiding an unrelated peer's in-flight red surface test"
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "-p",
+          "nomos-cli"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-readme-mark",
+          "reason": "predicate -p nomos-contract-tests -p nomos-cli is red for an unrelated reason -- a peer's in-flight, uncommitted nomos-cap-syntax surface widening (P14-CAPABILITY-010-SYNTAX-STRUCT-FIELDS-1) fails public_surface, a test this item's change never touches. Narrowing predicate to -p nomos-cli, which actually exercises the README-cell-parsing risk this item cares about; tests/contract/tests/boundaries::readme.rs (the band-table structural test) verified green in isolation separately.",
+          "abandoned_at": 1787700801
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-readme-mark",
+        "declined_at": 1787700801
+      }
+    },
+    {
+      "id": "P14-ECOSYSTEM-001-README-MARK-2",
+      "title": "README's band table marks the four repo-tooling crates ARC-ECOSYSTEM-001 and OD-LEDGER-036 already classify as not product",
+      "why": "Recovery of P14-ECOSYSTEM-001-README-MARK, declined only because its predicate (-p nomos-contract-tests -p nomos-cli) went red for an unrelated reason: a peer's in-flight, uncommitted nomos-cap-syntax surface widening (P14-CAPABILITY-010-SYNTAX-STRUCT-FIELDS-1) fails public_surface, a test this change never touches. Same why as the declined item: an external architecture review found the README gives dev/spec tooling equal visual standing with product crates, with no marker; ARC-ECOSYSTEM-001 and OD-LEDGER-036 already classify nomos-ledger, nomos-work-orchestration, nomos-spec-orchestration and nomos-surface-provenance as repository tooling and decline to move anything; this makes that already-decided classification visible in the navigable document.",
+      "done_when": "Already built under the declined item and unchanged since: README.md's band table marks the four crates with a [repo tooling] tag in their Owns cell (not the crate-name cell) and a short paragraph before the table cites ARC-ECOSYSTEM-001 and OD-LEDGER-036 for why. tests/contract/tests/boundaries::readme.rs and nomos-cli::agent.rs's Declared_Role/Crate_Root tests, which parse the crate-name cell by exact backtick match, verified green in isolation already -- both already confirmed unaffected because the marker never touches that cell. cargo test -p nomos-cli passes, scoped away from an unrelated peer's currently-red nomos-cap-syntax surface snapshot.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "README.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli"
+        ],
+        "exit_code": 0,
+        "output_tail": "asured; 0 filtered out; finished in 0.03s\n\n   Compiling nomos-cap-syntax v0.1.0 (F:\\repos\\nomos\\crates\\capabilities\\nomos-cap-syntax)\n   Compiling nomos-lang-rust-scan v0.1.0 (F:\\repos\\nomos\\crates\\languages\\nomos-lang-rust-scan)\n   Compiling nomos-rules v0.1.0 (F:\\repos\\nomos\\crates\\rules\\nomos-rules)\n   Compiling nomos-lang-rust v0.1.0 (F:\\repos\\nomos\\crates\\languages\\nomos-lang-rust)\n   Compiling nomos-lang-go v0.1.0 (F:\\repos\\nomos\\crates\\languages\\nomos-lang-go)\n   Compiling nomos-check-orchestration v0.1.0 (F:\\repos\\nomos\\crates\\orchestration\\nomos-check-orchestration)\n   Compiling nomos-gate-orchestration v0.1.0 (F:\\repos\\nomos\\crates\\orchestration\\nomos-gate-orchestration)\n   Compiling nomos-cli v0.1.0 (F:\\repos\\nomos\\crates\\host\\nomos-cli)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 5.29s\n     Running unittests src\\main.rs (target\\debug\\deps\\nomos-b8ed419afd33b15b.exe)\n     Running tests\\abandon_is_readable.rs (target\\debug\\deps\\abandon_is_readable-6222e571722e84c9.exe)\n     Running tests\\add_guarantees_what_it_says.rs (target\\debug\\deps\\add_guarantees_what_it_says-f9336fd22187bb90.exe)\n     Running tests\\authoring_surface.rs (target\\debug\\deps\\authoring_surface-46fe790908c7924b.exe)\n     Running tests\\check_command.rs (target\\debug\\deps\\check_command-53252ad6b19cfca0.exe)\n     Running tests\\freshness.rs (target\\debug\\deps\\freshness-d4aee6e0997f81d5.exe)\n     Running tests\\gate_step\\main.rs (target\\debug\\deps\\gate_step-4e2afac74f665889.exe)\n     Running tests\\list_tells_the_truth.rs (target\\debug\\deps\\list_tells_the_truth-9a8cc00faf82f800.exe)\n     Running tests\\read_surface.rs (target\\debug\\deps\\read_surface-fa2a879172beed0d.exe)\n     Running tests\\request_submit.rs (target\\debug\\deps\\request_submit-628eae4bea0ffc48.exe)\n     Running tests\\stale_writer_is_refused.rs (target\\debug\\deps\\stale_writer_is_refused-6f541ae13d585481.exe)\n     Running tests\\takeover_is_recorded.rs (target\\debug\\deps\\takeover_is_recorded-3970a4ea23e42e08.exe)\n",
+        "verified_at": 1787700835,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "6d195fe0c09c216f20412381c93f4b8712ed45f7"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

@@ -31,6 +31,16 @@ What is built and what is not is the ledger's answer rather than this paragraph'
 Crates are ordered into bands. A crate may depend only on crates in a strictly lower
 band, and `tests/contract` asserts it.
 
+Four rows below are marked `[repo tooling]`: `nomos-ledger`, `nomos-work-orchestration`,
+`nomos-spec-orchestration` and `nomos-surface-provenance` exist to develop or preserve this
+repository, not to answer a question an end-user repository would ask Nomos.
+`ARC-ECOSYSTEM-001` names why a shared band table does not by itself mean shared product
+ownership, and `OD-LEDGER-036` settles the ledger specifically. The `nomos-spec-*` family
+below the main table carries the identical distinction in its own prose already. The mark
+here does not move a crate, does not change a dependency, and is not itself a decision — it
+only makes a decision two other records already made visible where a reader would otherwise
+have to infer it from band position alone.
+
 | Band | Crate | Owns |
 |---|---|---|
 | 0 | `nomos-contracts` | Protocol truth. What earns a place in it is `OD-CONTRACTS-001`. Depends on `serde` and nothing else. |
@@ -39,7 +49,7 @@ band, and `tests/contract` asserts it.
 | 15 | `nomos-platform` | Port traits: clock, filesystem, cross-process lock, process launcher. |
 | 16 | `nomos-platform-std` | The std implementation of those traits. |
 | 18 | `nomos-workspace` | Snapshots, build variants, and the single change door. |
-| 20 | `nomos-ledger` | Territory-based mutual exclusion over `work/ledger.json`. |
+| 20 | `nomos-ledger` | `[repo tooling]` Territory-based mutual exclusion over `work/ledger.json`. |
 | 21 | `nomos-capability` | The contract registry whose answer is never a bare no. |
 | 22 | `nomos-analysis` | Fact identity, fact readers, the fact store, and invalidation. |
 | 23 | `nomos-cap-syntax` | A capability contract, housed below every provider that offers against it. |
@@ -63,13 +73,13 @@ band, and `tests/contract` asserts it.
 | 35 | `nomos-corrections` | `CorrectionCandidate`, `CorrectionPlan`, and the deterministic preview, stage, validate, commit and rollback lifecycle over a workspace change. No agent or model backend decides anything here; `Commit` takes the caller's `Evidence` but does not judge it. |
 | 36 | `nomos-agent-contracts` | `AGT-001`'s `TaskEnvelope` and `AGT-002`'s `WorkResult` — the typed input and output shape an agent-assisted operation carries, bundling what was scattered across `nomos-ledger`, `nomos-contracts` and `nomos-corrections`. Neither type computes anything; a caller fills a `TaskEnvelope` in and an agent's own response fills a `WorkResult` in. |
 | 37 | `nomos-agent-executor-claude-code` | The first real `AgentExecutor`, and the one concrete implementation this workspace has today — its name says which, so a second one (a different agent CLI, a human, a replay) has an honest name left to take rather than inheriting a canonical-sounding one it never earned. Dispatches a `TaskEnvelope`'s `goal` to Claude Code as a subprocess through `nomos-platform`'s `ProcessLauncher`, bounded by `OD-EXECUTOR-001`'s structural capability boundary — an isolated working directory, no MCP config, an allow-list naming no real tool, one `--print` turn — and reads the result for what it structurally permitted, never for its own free-text claims. Does not assemble a `WorkResult`: `CorrectionPlan::New` refuses an empty candidate list, so a judgment-only task has no plan to report yet. |
-| 40 | `nomos-work-orchestration` | Runs a `nomos work` verb against a caller-chosen platform and hands back a typed outcome — generic over `nomos-platform`'s traits, so a second adapter can depend on it without also depending on `nomos-platform-std` or on how `nomos-cli` renders an answer. |
+| 40 | `nomos-work-orchestration` | `[repo tooling]` Runs a `nomos work` verb against a caller-chosen platform and hands back a typed outcome — generic over `nomos-platform`'s traits, so a second adapter can depend on it without also depending on `nomos-platform-std` or on how `nomos-cli` renders an answer. |
 | 40 | `nomos-check-orchestration` | Composes the capability registry, ingests already-walked source into facts and judges it, and hands back a typed outcome — apart from choosing a platform, walking a tree or rendering the answer. |
-| 40 | `nomos-spec-orchestration` | Assembles the specification store from the embedded governing records and a caller-named corpus, and answers all nine `SpecCommand` verbs plus `nomos request submit`'s `Submit`, generic over `nomos-platform`'s traits where a verb reads or writes — apart from choosing a platform or rendering the answer. |
+| 40 | `nomos-spec-orchestration` | `[repo tooling]` Assembles the specification store from the embedded governing records and a caller-named corpus, and answers all nine `SpecCommand` verbs plus `nomos request submit`'s `Submit`, generic over `nomos-platform`'s traits where a verb reads or writes — apart from choosing a platform or rendering the answer. |
 | 41 | `nomos-gate-orchestration` | The seam for the first-class Gate object `ARC-ROADMAP-001` names: `Plan` composes a real rule registry and reports what it holds, `Run_Gate` composes `nomos-check-orchestration` into a judged disposition — apart from selecting scope, choosing a platform or rendering the answer. Above `nomos-check-orchestration`'s band so it may depend on it. |
 | 90 | `nomos-cli` | The `nomos` binary. |
 | 90 | `nomos-api` | A second real caller of `nomos-gate-orchestration`'s `Run_Gate`, `Plan` and `Explain` (all three Gate verbs), `nomos-work-orchestration`'s `Run` for all eleven `WorkCommand` verbs (`List`, `Show`, `Validate`, `Audit`, `Claim`, `Renew`, `TakeOver`, `Abandon`, `Decline`, `Finish`, `Add`), and `nomos-spec-orchestration`'s `Run` for all nine `SpecCommand` verbs (`Profiles`, `Sources`, `Record`, `Table`, `Markdown`, `Freshness`, `Preview`, `Render`, `Commit`) plus `Submit` — apart from choosing a platform or wiring an actual transport over it. |
-| 91 | `nomos-surface-provenance` | A report over this repository's own git history, run on demand and invoked from nowhere else: `OD-STORE-002`'s Worked Case join between a crate's surface snapshot and `docs/records/`, for a caller-given commit range. Never a gate. |
+| 91 | `nomos-surface-provenance` | `[repo tooling]` A report over this repository's own git history, run on demand and invoked from nowhere else: `OD-STORE-002`'s Worked Case join between a crate's surface snapshot and `docs/records/`, for a caller-given commit range. Never a gate. |
 | 100 | `nomos-contract-tests` | The assertions in `tests/contract`. Observes the workspace; nothing observes it. |
 | 100 | `nomos-integration-tests` | The vertical slice, driving the product through its seams. Its peer, not its layer. |
 
