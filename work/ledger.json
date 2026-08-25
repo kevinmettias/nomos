@@ -30636,6 +30636,44 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P14-CAPABILITY-009-SUBJECT-PARTITIONED-RESOLVE-DECISION",
+      "title": "OD-CAPABILITY-009: whether Registry::Resolve owes subject-partitioned same-capability providers a rule beyond guarantee-strength ranking",
+      "why": "nomos-lang-go offers nomos.cap.syntax.items with Assurance::Sound on both axes -- strictly stronger than nomos-lang-rust's Sound/Unknown -- but answers only about Go files, disjoint from nomos-lang-rust's Rust files. Registering it in nomos-check-orchestration::Declare_Syntax_Capability was tried and reverted: Registry::Resolve ranks purely by guarantee strength with no notion of which subjects a provider can even attempt, and nomos_rules::Syntax_Requirement's own deliberately-unpreferenced resolution silently picked nomos-lang-go to answer for .rs files too, since its guarantee dominates. Four real tests in nomos-check-orchestration's own tests.rs went from green to DependencyUnavailable findings -- empirical, not theoretical. OD-CAPABILITY-006 does not cover this: it is explicit that its cross-language case is two DIFFERENT languages' subjects joined by a declared correspondence, and states plainly that two same-capability offers ranked by strength is OD-CAPABILITY-001's case, not its own. This is neither: one capability, offers that partition by subject rather than compete over one, and no existing record states what Resolve owes that shape.",
+      "done_when": "OD-CAPABILITY-009 exists, is registered, and decides whether nomos_capability needs a subject/domain-scoping mechanism (on ProviderOffer, Requirement, or elsewhere) before a second same-capability provider covering disjoint subjects can be safely registered in one Registry, or whether the real fix lives above the registry entirely -- e.g. a composition root that resolves per-Recognition before ever calling Resolve, leaving the registry's own guarantee-strength ranking untouched and reserved for genuine same-subject competition. The record states its answer against the concrete failure in this item's own why, not hypothetically, and says whether nomos-lang-go's registration is unblocked by it or still waits on a further increment.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md",
+          "crates/spec/nomos-spec-store/records/OD-CAPABILITY-009.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "--timeout",
+          "10m"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
