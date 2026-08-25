@@ -3,16 +3,16 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:31112531413fb6ac152d1692a32d97776688db1b111a5e2eb70c2dea156c2973",
-  "inputs_digest": "sha256:d4d2154882d026fdac01c55a7229f09c82901004bd504358fabd803f30720782",
+  "content_digest": "sha256:5c987c938ad0e35c441990db6ae6f43c12e4b5ddf3124fc7c58ca5b1fc11a1e2",
+  "inputs_digest": "sha256:53915012f43e07f64a0881152f41005fd4d642e0220a2188d5fe36a223c08b48",
   "sections": [
     [
       "Relations",
-      1156
+      1162
     ],
     [
       "Decisions",
-      157
+      158
     ]
   ],
   "inputs": [
@@ -205,6 +205,11 @@
       "content": "relations",
       "identity": "ARC-ECOSYSTEM-001 relates-to OD-LEDGER-001",
       "hash": "sha256:8ed0ae34289d169eacb61a39ca62426b9c88dd67d77ffd0538fc19847a1a7237"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-ECOSYSTEM-001 relates-to OD-LEDGER-036",
+      "hash": "sha256:1066371019f070e7cc2901210e9852360aae676270c07b9b0d665f523d6f0781"
     },
     {
       "content": "relations",
@@ -2948,6 +2953,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-LEDGER-001 relates-to OD-LEDGER-036",
+      "hash": "sha256:d921eace36e5162e0df84172f5edfa1342d23aaaa818ee1bb2f166f257edcc5a"
+    },
+    {
+      "content": "relations",
       "identity": "OD-LEDGER-001 relates-to OD-MODEL-001",
       "hash": "sha256:bac795c4c39b856666658bcee9086c4159e45f7e24720507363151806ad4312c"
     },
@@ -3985,6 +3995,21 @@
       "content": "relations",
       "identity": "OD-LEDGER-035 relates-to OD-LEDGER-001",
       "hash": "sha256:9068433c91d65a6e42c1ab0b59b7593f8319eb9d4332a216aae724057e9e1736"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-LEDGER-036 relates-to ARC-ECOSYSTEM-001",
+      "hash": "sha256:d5a1183eb9e7cfaa3fc54546c3b7fd88661af14f625576d930424f7831006ad6"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-LEDGER-036 relates-to OD-LEDGER-001",
+      "hash": "sha256:eb3fcbd2d023cd130fff13d65876419aa8f587323df5c46a1b61548bfa07cfab"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-LEDGER-036 relates-to OD-WORKFLOW-002",
+      "hash": "sha256:ad52fdf07965328fc6840b4a1f4729c56151139fdb9899f2f5f19b73d8173666"
     },
     {
       "content": "relations",
@@ -5738,6 +5763,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-WORKFLOW-002 relates-to OD-LEDGER-036",
+      "hash": "sha256:46e1bf7b38ed9c54437b062645d71d6c0253da80a7c97fb7cefd710da535e771"
+    },
+    {
+      "content": "relations",
       "identity": "OD-WORKFLOW-002 relates-to OD-WORKFLOW-001",
       "hash": "sha256:41b9f285beba38dd33f70432d2e1514cbba60c964aef475dd26756c03b213f99"
     },
@@ -6305,6 +6335,11 @@
       "content": "nodes",
       "identity": "OD-LEDGER-035",
       "hash": "sha256:4fd40cf90dbd4602fce80a72ee8f0785f0645c1efa7cb683e3632e666cf2a4b1"
+    },
+    {
+      "content": "nodes",
+      "identity": "OD-LEDGER-036",
+      "hash": "sha256:30daf235b06f16442bf5c4d8361f099ef29706e498006d8719e2eeb9f99b232b"
     },
     {
       "content": "nodes",

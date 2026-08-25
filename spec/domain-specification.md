@@ -120,6 +120,7 @@ profile: domain-specification
 | docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md@authored | docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md | authored | 17 | 5 | sha256:69ab019a45e8742af61dfa35899a6c68c9d29cc11a8c28c52356296a97a114ea |
 | docs/records/OD-LEDGER-034-whether-work-needs-a-typed-reconciliation-outcome-beside-the-free-text-reason-work-decline-already-carries.md@authored | docs/records/OD-LEDGER-034-whether-work-needs-a-typed-reconciliation-outcome-beside-the-free-text-reason-work-decline-already-carries.md | authored | 14 | 5 | sha256:cb61b6f602f2fc7836f03727ce282c5f46da3e5ef3c6f92108dc77cc862577fc |
 | docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md@authored | docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md | authored | 17 | 5 | sha256:e28fcdcd8881a5405bfd5398964764cd59fa6d45e8340359ca94d9df98a0d732 |
+| docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md@authored | docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md | authored | 21 | 7 | sha256:e44db6eb38b3d1a6229b905ffba42be08984541c3407ce66bff74af1b229992a |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md@authored | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md | authored | 29 | 8 | sha256:dea2667f08661d51389468ccb32132d696dd6cb5a0936574b89125c523341962 |
 | docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md@authored | docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md | authored | 24 | 7 | sha256:aba629fefa9d9503489cfcae8626b61030287a2f29e558cf0b775875eb32c5b7 |
 | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md@authored | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md | authored | 54 | 10 | sha256:0a930d2a044d183c00fc821119d1645738cb398a9374b5a6eb3a736cb50764d2 |
@@ -1112,6 +1113,13 @@ profile: domain-specification
 | docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md#4 | authored | 2 | What Was Measured |
 | docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md#13 | authored | 2 | Decision |
 | docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md#16 | authored | 2 | Status |
+| docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#1 | authored | 1 | The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target |
+| docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#2 | authored | 2 | Question |
+| docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#5 | authored | 2 | What Was Measured |
+| docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#11 | authored | 2 | Decision |
+| docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#14 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#18 | authored | 2 | What Would Decide It Otherwise |
+| docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#20 | authored | 2 | Status |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#1 | authored | 1 | A claim and a fact address a path by one rule, and the record-identifier fold stays with the ledger |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#2 | authored | 2 | Question |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#8 | authored | 2 | What Was Actually Wrong |
@@ -31054,6 +31062,206 @@ Accepted, drawn by `P13-IMPACT-ACTUAL-QUESTION` against one sampled commit rathe
 survey of the whole board — the sample is small by construction, and the trigger above is
 written so a future reader does not need a larger survey to reopen this if a real incident
 appears.
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#1
+
+*revision: authored · kind: heading · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target · hash: sha256:95070098ba3f8fbb8cfaa7cd826643367a43a9d8376545059119ccf59300e88f*
+
+# The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#2
+
+*revision: authored · kind: heading · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#3
+
+*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / Question · hash: sha256:b8544d5b19d8a16594dad766d3c09bc6912c8a59b8e5199fea321c347ddc4ab8*
+
+An external architecture review asked this directly: is `nomos-ledger`/`nomos-work-
+orchestration` a Nomos product feature that should converge toward the product's general
+`TaskEnvelope`/`Workflow`/`AgentExecutor`/authority/artifacts/verification model, or is it
+this repository's own development infrastructure that should not shape public architecture —
+naming the risk plainly: "do not let the internal agent coordination tool become the
+accidental prototype whose peculiarities define generic workflow semantics."
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#4
+
+*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / Question · hash: sha256:a7b236a6668e83c2aa0894b15e2d40d69b4a9d58724c2165f7def63a8f5a2e02*
+
+This is not a new question to this workspace. `ARC-ECOSYSTEM-001` already names the work
+ledger as one of three subsystems whose "current placement does not prove ownership," framed
+as an open disjunction it deliberately declined to close: "Territory-based mutual exclusion
+over a committed JSON document is either repository bootstrap machinery or a generic
+coordination primitive; `OD-LEDGER-001` records that its territory is declared rather than
+enforced, which is a bootstrap-shaped compromise. Nothing about it requires the subject to be
+software." That record states plainly that naming the three is "not a plan to move them," and
+moves nothing. This record settles the one disjunction it left open for the ledger
+specifically, against evidence that has accumulated since.
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#5
+
+*revision: authored · kind: heading · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#6
+
+*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / What Was Measured · hash: sha256:336e6b9e543a702b2c055b95c97f2ce47df44bddb254c97132266badcef62b24*
+
+**No product surface depends on `nomos-ledger`.** `nomos check` and `nomos gate` — the two
+verbs an end-user repository actually runs against its own code — never import
+`nomos-ledger` or `nomos-work-orchestration`. Every real dependent is `nomos-work-
+orchestration`, consumed by exactly two callers: `nomos-cli::work`
+(`crates/host/nomos-cli/src/work.rs`) and `nomos-api::work`
+(`crates/host/nomos-api/src/work.rs`) — both dispatch surfaces for this repository's own
+board, `work/ledger.json`, never for a subject an end user's repository would configure.
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#7
+
+*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / What Was Measured · hash: sha256:0d5ba6c052ee511df00eac01863835986daff2a005eb1d9a5b1a84fe64fbd381*
+
+**The product's own agent vocabulary is declared bundling, not an engine the ledger could
+converge with.** `nomos-agent-contracts`'s `TaskEnvelope`/`WorkResult`
+(`crates/agent/nomos-agent-contracts/src/lib.rs`) compute nothing — a caller fills a
+`TaskEnvelope` in and an agent's own response fills a `WorkResult` in. No real `Workflow` type
+exists anywhere in this workspace; the nearest is `RunId`
+(`crates/contracts/nomos-contracts/src/identity.rs`), an identity with no scheduling,
+authority, artifact, or side-effect model attached to it, and a declared-only `WorkflowStep`
+contract shape (`OD-WORKFLOW-003`) with no engine behind it. There is no live `Workflow`
+machinery for `LedgerItem`/`Territory`/`Claim` to converge toward; converging now would mean
+inventing the product's workflow semantics from this coordination tool's own shape, which is
+exactly the risk the review named.
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#8
+
+*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / What Was Measured · hash: sha256:8f5cc8a97ec68c4ad554e76a4c12c6a6d9a9e2d2b9e2cc95976f71d35fcbd116*
+
+**The two vocabularies have already collided once, by accident, and been explicitly
+un-conflated twice.** `OD-WORKFLOW-001` corrects "a conflation an earlier draft of this
+paragraph made from a substring grep rather than reading the file" — mistaking `nomos-ledger`'s
+own `Run_Gate_Step` (an internal argv runner `nomos work finish` uses to run the gate's lint
+step) for a call into the product's real `nomos_gate_orchestration::Run_Gate`. `OD-WORKFLOW-
+002` names the same correction again, citing "its false `nomos-ledger` caller claim." Two
+independent instances of the same name-fragment accident, each caught and reversed rather than
+left standing, is evidence the vocabularies need to stay legibly apart, not evidence they are
+converging on their own.
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#9
+
+*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / What Was Measured · hash: sha256:8673c97c832de6a375bc58751f55bf4d369064adca8363159e4a4dfa4cad422a*
+
+**`nomos-api::work.rs` already exposes the full verb set, but frames itself as a seam
+exercise, not a product surface.** Its own module doc: "A second real caller of
+`nomos_work_orchestration::Run` — `List`, `Show`, `Validate`, `Audit`, `Claim`, `Renew`,
+`TakeOver`, `Abandon`, `Decline`, `Finish` and `Add`, the same 'one verb at a time, not the
+whole command set' scope `Handle_Gate_Run` already uses for Gate's own `run`." It states its
+own purpose as proving the orchestration seam has a second real caller, the identical
+framing `nomos-api`'s `check`/`gate`/`spec` modules already carry for their own verbs — not a
+claim that ledger coordination is itself a capability an end user's repository would want.
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#10
+
+*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / What Was Measured · hash: sha256:f70b3eab9635fdd47d2e5ab7453e5ab9d53064b7253615cc20cf7588b693eb15*
+
+**README's own wording already reads as internal coordination, not a product capability.**
+Row 20 (`nomos-ledger`): "Territory-based mutual exclusion over `work/ledger.json`." Row 40
+(`nomos-work-orchestration`): runs "a `nomos work` verb against a caller-chosen platform."
+Contrast row 41, `nomos-gate-orchestration`: "The seam for the first-class Gate object
+`ARC-ROADMAP-001` names" — README already marks Gate as a product object in its own words, and
+never uses that language for the ledger.
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#11
+
+*revision: authored · kind: heading · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / Decision · hash: sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511*
+
+## Decision
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#12
+
+*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / Decision · hash: sha256:a9e8a1e22ae7c32b5d282c66f00c91f30df77054b3cf0c1877290300cd584ddf*
+
+**The work ledger is repository bootstrap machinery.** `nomos-ledger` and `nomos-work-
+orchestration` exist to coordinate concurrent work on this repository's own tree —
+`LedgerItem`, `Territory`, `Claim`/`Renew`/`TakeOver`, `VerificationPredicate` are shaped
+around that one job and answer to no product surface. They are not a Nomos product feature,
+and do not converge toward `TaskEnvelope`/`Workflow`/`AgentExecutor`. `ARC-ECOSYSTEM-001`'s
+open disjunction — bootstrap machinery or generic XVPE-shaped coordination primitive — is
+settled toward the first: nothing measured above requires the subject under coordination to be
+software, but nothing measured shows a real, exercised generic-primitive shape either; every
+real consumer coordinates work on *this* repository specifically, through `work/ledger.json`
+specifically, which is what "bootstrap machinery" names.
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#13
+
+*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / Decision · hash: sha256:93bedbe85cd2e88fb9fc590b176602a29428ec211fd8ee8d5a44d7f275196f55*
+
+This settles ownership, not disposal. `OD-LEDGER-001`'s own open question — whether territory
+should stay declared-but-unenforced — is untouched by this record; that is a question about
+the mechanism's own correctness, not about what the mechanism is for.
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#14
+
+*revision: authored · kind: heading · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#15
+
+*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / What This Record Does Not Do · hash: sha256:5a53ac3b14ae31a807d905d3788179a7ff7d16fbd976fc2aad72e2898708844e*
+
+It does not move any file, rename any crate, or change one line of `nomos-ledger`'s or
+`nomos-work-orchestration`'s code. `ARC-ECOSYSTEM-001` already declined to treat a subsystem's
+location as proof of its ownership; this record answers the ownership question that record
+left open without reopening the location question it explicitly declined to answer.
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#16
+
+*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / What This Record Does Not Do · hash: sha256:059e95720071ac9b96d93da1a1dc45468e1267d720a9e7d1d21de919ad9444e0*
+
+It does not forbid `nomos-api::work` from existing or from growing more verbs. It names the
+condition under which this record's own answer should be revisited, below.
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#17
+
+*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / What This Record Does Not Do · hash: sha256:eff7d061e8aeae749f8842fa6e143466cca3634f1169cdb9e9339bf97579fff2*
+
+It does not decide whether the ledger's underlying primitive — territory-based mutual
+exclusion over a committed document — would also be a reasonable generic XVPE capability
+someday. It decides only that nothing in this workspace exercises it as one today, which is
+the only question `ARC-ECOSYSTEM-001` asked this record to settle.
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#18
+
+*revision: authored · kind: heading · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / What Would Decide It Otherwise · hash: sha256:0dbb85a338ffe192a9a2af143eda6f18cc39e0632a43ad53404ce3f166758649*
+
+## What Would Decide It Otherwise
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#19
+
+*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / What Would Decide It Otherwise · hash: sha256:e51cf6c6f1192e596a6fef7351aa40cffce1720ef11ee847f086fa11579a35ef*
+
+Named so a reader has a concrete trigger rather than a standing suspicion: if `nomos-api`
+becomes a real, externally-consumed product surface — used by something other than this
+repository's own tooling and this record's own seam-exercise framing — its exposure of the
+full ledger verb set at band 90 stops being an internal coordination detail and starts being a
+public commitment. That is the point to re-examine this record's answer, not before it.
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#20
+
+*revision: authored · kind: heading · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#21
+
+*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / Status · hash: sha256:141a5e415cfa82795eb330c0234f67b275e44537b31a0d0fd48a787a1a286b4f*
+
+Accepted. Settles `ARC-ECOSYSTEM-001`'s open disjunction for the work ledger specifically —
+bootstrap machinery, not a generic coordination primitive with a real exercised second
+subject, and not a Nomos product feature converging toward `Workflow`/`TaskEnvelope`. Revisit
+if `nomos-api` becomes a real external product surface rather than a seam-exercise caller.
 
 ### docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#1
 
