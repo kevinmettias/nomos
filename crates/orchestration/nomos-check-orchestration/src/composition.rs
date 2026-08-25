@@ -28,6 +28,7 @@ pub fn Registered() -> Result<Registry, RegistryError>
     Declare_Dependency_Capability(&mut registry)?;
     Declare_Controlflow_Capability(&mut registry)?;
     Declare_Lint_Capability(&mut registry)?;
+    Declare_Dependency_Policy_Capability(&mut registry)?;
 
     return Ok(registry);
 }
@@ -158,6 +159,17 @@ fn Declare_Lint_Capability(registry: &mut Registry) -> Result<(), RegistryError>
 {
     registry.Declare(nomos_cap_lint::Capability_Contract())?;
     registry.Offer(nomos_lang_rust_clippy::Provider_Offer())?;
+
+    return Ok(());
+}
+
+/// A fifth capability, one offer against it -- `OD-RULES-010`'s second real `ToolProvider`
+/// wired for real, the identical shape [`Declare_Lint_Capability`] already has one
+/// capability over.
+fn Declare_Dependency_Policy_Capability(registry: &mut Registry) -> Result<(), RegistryError>
+{
+    registry.Declare(nomos_cap_dependency_policy::Capability_Contract())?;
+    registry.Offer(nomos_lang_rust_deny::Provider_Offer())?;
 
     return Ok(());
 }

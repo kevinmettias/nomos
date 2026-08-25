@@ -6,9 +6,9 @@ use nomos_capability::Registry;
 use nomos_contracts::{Finding, RuleId};
 use nomos_platform::ProcessLauncher;
 use nomos_rules::{
-    Check_Completeness_Mirrors, Check_Dependency_Direction, Check_Lint_Diagnostics, Check_Naming_Convention,
-    Check_Unread_Reaches_A_Finding, SourceFile, COMPLETENESS_MIRROR, DEPENDENCY_DIRECTION, LINT_DIAGNOSTICS,
-    NAMING_CONVENTION, UNREAD_REACHES_FINDING,
+    Check_Completeness_Mirrors, Check_Dependency_Direction, Check_Dependency_Policy, Check_Lint_Diagnostics,
+    Check_Naming_Convention, Check_Unread_Reaches_A_Finding, SourceFile, COMPLETENESS_MIRROR, DEPENDENCY_DIRECTION,
+    DEPENDENCY_POLICY, LINT_DIAGNOSTICS, NAMING_CONVENTION, UNREAD_REACHES_FINDING,
 };
 use nomos_workspace::BuildVariant;
 use std::path::Path;
@@ -16,17 +16,17 @@ use std::path::Path;
 use crate::composition::{Recognized_Syntax_Provider, Registered};
 use crate::facts::{
     DependencyMaterialization, Ingested, LintMaterialization, Materialize_Dependencies, Materialize_Lint,
-    Materialize_Reachability, Materialize_Syntax,
+    Materialize_Policy, Materialize_Reachability, Materialize_Syntax, PolicyMaterialization,
 };
 use crate::outcome::{Claim_Of, Examined};
 use crate::CheckOutcome;
 
 /// Composes the capability registry, ingests `sources` into one workspace state, materializes
 /// a syntax fact per file, and, for each of the completeness, naming-convention,
-/// dependency-direction, lint-diagnostics and unread-reaches-finding rules `selected` asks
-/// for (every one when `selected` is empty, the same "empty is everything" default
-/// `nomos_gate_orchestration::RuleSelector::include` already has), materializes the fact that
-/// rule needs and runs it over the result.
+/// dependency-direction, lint-diagnostics, dependency-policy and unread-reaches-finding
+/// rules `selected` asks for (every one when `selected` is empty, the same "empty is
+/// everything" default `nomos_gate_orchestration::RuleSelector::include` already has),
+/// materializes the fact that rule needs and runs it over the result.
 ///
 /// `selected` is a fixed, hand-written mapping from [`RuleId`] to the fact(s) it needs, per
 /// `OD-GATE-017`: the same "composition, not choice" shape a fourth unconditional rule already
@@ -39,9 +39,10 @@ use crate::CheckOutcome;
 /// stayed in the composition root. `variant` is what that root's own binary was compiled
 /// as, read through `env!` there because that macro resolves against the *compiling*
 /// crate and cannot be read correctly from this one. `root` is the tree `sources` was
-/// walked from -- carried separately because the dependency-edges and lint-diagnostics
-/// providers each run their own subprocess (`cargo metadata`, `cargo clippy`) rather than
-/// reading bytes `sources` already holds; every other provider in this workspace is a
+/// walked from -- carried separately because the dependency-edges, lint-diagnostics and
+/// dependency-policy providers each run their own subprocess (`cargo metadata`, `cargo
+/// clippy`, `cargo deny`) rather than reading bytes `sources` already holds; every other
+/// provider in this workspace is a
 /// pure function over bytes a caller already read. `launcher` is what those subprocess
 /// calls run through -- generic the same way `nomos_work_orchestration::Run` is generic over
 /// [`nomos_platform`]'s traits, so this crate depends on `nomos-platform` and not on any
@@ -130,17 +131,17 @@ fn Outcome_Of(files: usize, facts: usize, findings: Vec<Finding>) -> CheckOutcom
     return CheckOutcome::Judged { findings, examined, claim };
 }
 
-/// The dependency-edges, lint-diagnostics and reachability facts, materialized into
-/// `store` alongside the syntax facts [`Run`] already wrote -- the capabilities beside
-/// `syntax.items` that this crate's registration composes, each with its own
-/// materialization step for the reasons [`Materialize_Dependencies`],
-/// [`Materialize_Lint`] and [`Materialize_Reachability`] give.
+/// The dependency-edges, lint-diagnostics, dependency-policy and reachability facts,
+/// materialized into `store` alongside the syntax facts [`Run`] already wrote -- the
+/// capabilities beside `syntax.items` that this crate's registration composes, each with
+/// its own materialization step for the reasons [`Materialize_Dependencies`],
+/// [`Materialize_Lint`], [`Materialize_Policy`] and [`Materialize_Reachability`] give.
 ///
 /// Each runs only when `selected` asks for the rule it alone feeds -- `DEPENDENCY_DIRECTION`
-/// for the first, `LINT_DIAGNOSTICS` for the second, `UNREAD_REACHES_FINDING` for the
-/// third, per `OD-GATE-017`. Skipping `Materialize_Dependencies` or `Materialize_Lint`
-/// skips its own subprocess launch entirely, not merely its finding's place in a later
-/// disposition.
+/// for the first, `LINT_DIAGNOSTICS` for the second, `DEPENDENCY_POLICY` for the third,
+/// `UNREAD_REACHES_FINDING` for the fourth, per `OD-GATE-017`. Skipping
+/// `Materialize_Dependencies`, `Materialize_Lint` or `Materialize_Policy` skips its own
+/// subprocess launch entirely, not merely its finding's place in a later disposition.
 fn Materialize_Capabilities<P: ProcessLauncher>(
     sources: &[SourceFile],
     root: &Path,
@@ -168,6 +169,15 @@ fn Materialize_Capabilities<P: ProcessLauncher>(
         LintMaterialization { sources: Vec::new(), findings: Vec::new() }
     };
 
+    let policy = if Wants(selected, DEPENDENCY_POLICY)
+    {
+        Materialize_Policy(root, context, store, launcher)
+    }
+    else
+    {
+        PolicyMaterialization { sources: Vec::new(), findings: Vec::new() }
+    };
+
     if Wants(selected, UNREAD_REACHES_FINDING)
     {
         Materialize_Reachability(sources, context, store);
@@ -178,20 +188,24 @@ fn Materialize_Capabilities<P: ProcessLauncher>(
         dependency_findings: dependencies.findings,
         lint_sources: lint.sources,
         lint_findings: lint.findings,
+        policy_sources: policy.sources,
+        policy_findings: policy.findings,
     };
 }
 
-/// What [`Materialize_Capabilities`] produced: the dependency-edges and lint-diagnostics
-/// sources a rule can judge, and any finding materializing either already raised on its
-/// own -- named rather than left as positional pairs, the same reason
-/// [`crate::facts::DependencyMaterialization`] and [`crate::facts::LintMaterialization`]
-/// each exist one layer under it.
+/// What [`Materialize_Capabilities`] produced: the dependency-edges, lint-diagnostics and
+/// dependency-policy sources a rule can judge, and any finding materializing one already
+/// raised on its own -- named rather than left as positional pairs, the same reason
+/// [`crate::facts::DependencyMaterialization`], [`crate::facts::LintMaterialization`] and
+/// [`crate::facts::PolicyMaterialization`] each exist one layer under it.
 struct CapabilityMaterialization
 {
     dependency_sources: Vec<SourceFile>,
     dependency_findings: Vec<Finding>,
     lint_sources: Vec<SourceFile>,
     lint_findings: Vec<Finding>,
+    policy_sources: Vec<SourceFile>,
+    policy_findings: Vec<Finding>,
 }
 
 /// Every finding the completeness, naming-convention, dependency-direction,
@@ -233,6 +247,11 @@ fn Judged(
         findings.extend(Check_Lint_Diagnostics(&capabilities.lint_sources, &mut reader));
     }
 
+    if Wants(selected, DEPENDENCY_POLICY)
+    {
+        findings.extend(Check_Dependency_Policy(&capabilities.policy_sources, &mut reader));
+    }
+
     if Wants(selected, UNREAD_REACHES_FINDING)
     {
         findings.extend(Check_Unread_Reaches_A_Finding(sources, &mut reader));
@@ -240,6 +259,7 @@ fn Judged(
 
     findings.extend(capabilities.dependency_findings);
     findings.extend(capabilities.lint_findings);
+    findings.extend(capabilities.policy_findings);
 
     return findings;
 }

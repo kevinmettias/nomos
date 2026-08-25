@@ -11,8 +11,8 @@
 mod materialize;
 
 pub use materialize::{
-    DependencyMaterialization, LintMaterialization, Materialize_Dependencies, Materialize_Lint, Materialize_Reachability,
-    Materialize_Syntax,
+    DependencyMaterialization, LintMaterialization, Materialize_Dependencies, Materialize_Lint,
+    Materialize_Policy, Materialize_Reachability, Materialize_Syntax, PolicyMaterialization,
 };
 
 use nomos_analysis::Context;

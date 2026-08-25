@@ -90,6 +90,13 @@
 //! stated as its own `Requirement` the same way every other rule states its own floor.
 //! Unwired into `nomos-check-orchestration::Run` until that crate's own item composes it,
 //! the same additive-first shape `Check_Declared_Role_Matches_Surface` already took.
+//!
+//! [`Check_Dependency_Policy`] is a seventh rule, `OD-RULES-010`'s second real
+//! `ToolProvider` instance: `nomos.cap.dependency.policy` facts, materialized by
+//! `nomos-lang-rust-deny` from a real `cargo deny check bans licenses sources` run,
+//! relayed 1:1 the identical way [`Check_Lint_Diagnostics`] already relays `cargo clippy`'s
+//! own verdict — minus even that rule's own per-member loop, since this capability's one
+//! real provider materializes exactly one fact for the whole workspace.
 
 #![forbid(unsafe_code)]
 
@@ -99,6 +106,7 @@ mod facts;
 mod lint;
 mod mirror;
 mod naming;
+mod policy;
 mod reachability;
 mod reading;
 mod registry;
@@ -112,6 +120,7 @@ pub use mirror::{Check_Completeness_Mirrors, COMPLETENESS_MIRROR, CONTRACT_RECOR
 pub use declared_universe::DeclaredUniverse;
 pub use dependency::{Check_Dependency_Direction, DEPENDENCY_CONTRACT_RECORD, DEPENDENCY_CONTRACT_RECORD_VERSION, DEPENDENCY_DIRECTION};
 pub use lint::{Check_Lint_Diagnostics, LINT_DIAGNOSTICS};
+pub use policy::{Check_Dependency_Policy, DEPENDENCY_POLICY};
 pub use naming::{Check_Naming_Convention, NAMING_CONVENTION};
 pub use reachability::{
     Check_Unread_Reaches_A_Finding, UNREAD_REACHES_FINDING, UNREAD_REACHES_FINDING_CONTRACT_RECORD,

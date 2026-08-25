@@ -305,6 +305,29 @@ fn Test_Materialize_Lint_Should_Return_Real_Workspace_Members()
     );
 }
 
+/// The identical claim [`Test_Materialize_Dependencies_Should_Return_Real_Workspace_Members`]
+/// proves, for `nomos.cap.dependency.policy`: the one real fact `Materialize_Policy`
+/// produces flows out of the real `cargo deny` provider over the real repository root, not
+/// merely "zero findings" -- and this repository's own `deny.toml` is known to report at
+/// least one real, non-`deny`-level violation (`multiple-versions = "warn"`, and this
+/// workspace has duplicated dependencies today), so a genuinely absent answer would read
+/// identically to an empty one without checking the payload itself.
+#[test]
+fn Test_Materialize_Policy_Should_Return_The_Real_Workspace_Fact()
+{
+    let placeholder = [Source("placeholder.rs", "pub fn Placeholder() {}\n")];
+    let registry = crate::composition::Registered().expect("fixture composition");
+    let context = crate::facts::Ingested(&placeholder, &registry, Test_Variant()).expect("a single real file ingests");
+    let mut store = MemoryFactStore::New();
+
+    let crate::facts::PolicyMaterialization { sources, findings } =
+        crate::facts::Materialize_Policy(&Repository_Root(), &context, &mut store, &StdProcessLauncher);
+
+    assert!(findings.is_empty(), "a real workspace root must not report ProviderUnavailable: {findings:?}");
+    assert_eq!(sources.len(), 1, "IncrementalGranularity::WholeWorkspace materializes exactly one fact: {sources:?}");
+    assert_eq!(sources.first().expect("asserted len 1 above").path, "workspace");
+}
+
 /// A launcher that counts how many times it was asked to run something, and refuses every
 /// one -- proving `OD-GATE-017`'s claim that a deselected rule's own materialization does
 /// not run at all, which a real invocation's findings cannot distinguish from "ran and found
@@ -393,6 +416,34 @@ fn Test_A_Deselected_Lint_Rule_Should_Not_Launch_Cargo_Clippy()
         &[RuleId::New(nomos_rules::LINT_DIAGNOSTICS)],
     );
     assert_eq!(selected.Count(), 1, "lint-diagnostics was selected, so cargo clippy must run exactly once");
+}
+
+/// The identical claim [`Test_A_Deselected_Dependency_Rule_Should_Not_Launch_Cargo_Metadata`]
+/// proves, for `DEPENDENCY_POLICY` and `cargo deny`.
+#[test]
+fn Test_A_Deselected_Dependency_Policy_Rule_Should_Not_Launch_Cargo_Deny()
+{
+    let sources = vec![Source("a.rs", "pub fn Ok() {}\n")];
+
+    let unselected = CountingLauncher::New();
+    let _ = Run(
+        &sources,
+        Test_Variant(),
+        &Repository_Root(),
+        &unselected,
+        &[RuleId::New(nomos_rules::COMPLETENESS_MIRROR)],
+    );
+    assert_eq!(unselected.Count(), 0, "dependency-policy was not selected, so cargo deny must not run");
+
+    let selected = CountingLauncher::New();
+    let _ = Run(
+        &sources,
+        Test_Variant(),
+        &Repository_Root(),
+        &selected,
+        &[RuleId::New(nomos_rules::DEPENDENCY_POLICY)],
+    );
+    assert_eq!(selected.Count(), 1, "dependency-policy was selected, so cargo deny must run exactly once");
 }
 
 /// Ingests `ingested` into a real fact store and judges `judged` over it -- the split

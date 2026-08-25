@@ -116,6 +116,10 @@ pub(crate) fn Test_Name_For(domain: &str) -> &'static str
             "domains::Test_The_Go_Dependency_Provider_Should_Meet_Its_Declared_Strategy"
         }
         "lint-fact-production" => "domains::Test_The_Lint_Provider_Should_Meet_Its_Declared_Strategy",
+        "dependency-policy-fact-production" =>
+        {
+            "domains::Test_The_Dependency_Policy_Provider_Should_Meet_Its_Declared_Strategy"
+        }
         "fact-reuse" => "domains::Test_The_Fact_Cache_Should_Meet_Its_Declared_Strategy",
         "snapshot-serialization" =>
         {
