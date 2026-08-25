@@ -1,0 +1,3 @@
+# The registration for OD-ANALYSIS-009. Writing the record file does not make a record
+# governing; this file does.
+path: docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md
