@@ -398,6 +398,7 @@ dependencies = [
  "nomos-cap-syntax",
  "nomos-capability",
  "nomos-contracts",
+ "nomos-lang-go-modules",
  "nomos-lang-rust",
  "nomos-lang-rust-cargo",
  "nomos-lang-rust-clippy",
@@ -488,6 +489,7 @@ dependencies = [
  "nomos-contracts",
  "nomos-corrections",
  "nomos-lang-go",
+ "nomos-lang-go-modules",
  "nomos-lang-rust",
  "nomos-lang-rust-cargo",
  "nomos-lang-rust-clippy",
@@ -512,6 +514,17 @@ dependencies = [
  "nomos-model",
  "tree-sitter",
  "tree-sitter-go",
+]
+
+[[package]]
+name = "nomos-lang-go-modules"
+version = "0.1.0"
+dependencies = [
+ "nomos-analysis",
+ "nomos-cap-dependency",
+ "nomos-capability",
+ "nomos-contracts",
+ "nomos-model",
 ]
 
 [[package]]

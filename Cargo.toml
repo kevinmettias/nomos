@@ -55,6 +55,12 @@ members = [
     # never naming it -- same band.
     "crates/languages/nomos-lang-rust-clippy",
 
+    # Band 25 — a second provider of nomos.cap.dependency.edges, for a Go workspace rather
+    # than a Cargo one. Reads go.work/go.mod text directly rather than running a subprocess
+    # -- its own module doc says why -- so it names neither of its three siblings above and
+    # none of them may name it. `OD-CAPABILITY-009`.
+    "crates/languages/nomos-lang-go-modules",
+
     # Band 23 — the nomos.cap.dependency.edges contract, alongside nomos-cap-syntax. Not
     # left beside its provider the way nomos.cap.module.index is: nomos-rules is a real
     # second party to it from the day it was written. `OD-CAPABILITY-002`.
@@ -207,6 +213,7 @@ nomos-lang-go = { path = "crates/languages/nomos-lang-go" }
 nomos-lang-rust-scan = { path = "crates/languages/nomos-lang-rust-scan" }
 nomos-lang-rust-cargo = { path = "crates/languages/nomos-lang-rust-cargo" }
 nomos-lang-rust-clippy = { path = "crates/languages/nomos-lang-rust-clippy" }
+nomos-lang-go-modules = { path = "crates/languages/nomos-lang-go-modules" }
 nomos-package = { path = "crates/packages/nomos-package" }
 nomos-lang-package = { path = "crates/packages/nomos-lang-package" }
 nomos-model-package = { path = "crates/packages/nomos-model-package" }

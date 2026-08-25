@@ -477,6 +477,116 @@ fn Rendered_Lint_Facts(mut facts: Vec<nomos_lang_rust_clippy::DiagnosticsFact>) 
     return rendered;
 }
 
+/// `nomos-lang-go-modules`'s facts over a small, synthetic Go workspace.
+///
+/// Not this repository's own real tree, unlike [`Dependency_Production`] and
+/// [`Lint_Production`] above: this repository is a Cargo workspace with no `go.mod`
+/// anywhere in it, and `nomos-lang-go-modules`'s whole reason for existing is a shape
+/// Cargo's tree does not have to offer. A small, hand-written two-module workspace,
+/// written to a fresh temp directory and removed afterward, is the real subject instead —
+/// real files on a real filesystem, the identical kind of subject
+/// `nomos_lang_go_modules::discovery`'s own tests already read, just built here rather
+/// than committed, for the same reason `GO_FIXTURE` above is a string literal rather than
+/// a committed `.go` file.
+pub(crate) fn Go_Dependency_Production() -> Vec<u8>
+{
+    let workspace = Go_Workspace_Fixture();
+    let context = Go_Dependency_Context();
+    let facts = nomos_lang_go_modules::Materialize_Workspace(&workspace.root, context)
+        .expect("the fixture is a real two-module Go workspace");
+
+    assert_eq!(
+        facts.len(),
+        2,
+        "the fixture declares exactly two modules: {facts:?}"
+    );
+
+    return Rendered_Go_Dependency_Facts(facts);
+}
+
+/// A fresh temp directory holding a two-module `go.work` workspace, one module requiring
+/// the other, removed when it goes out of scope.
+struct GoWorkspaceFixture
+{
+    root: std::path::PathBuf,
+}
+
+impl GoWorkspaceFixture
+{
+    fn Write(&self, relative: &str, content: &str)
+    {
+        let path = self.root.join(relative);
+        if let Some(parent) = path.parent()
+        {
+            std::fs::create_dir_all(parent).expect("the fixture's own parent directory can be created");
+        }
+        std::fs::write(&path, content).expect("the fixture file can be written");
+    }
+}
+
+impl Drop for GoWorkspaceFixture
+{
+    fn drop(&mut self)
+    {
+        let _ = std::fs::remove_dir_all(&self.root);
+    }
+}
+
+fn Go_Workspace_Fixture() -> GoWorkspaceFixture
+{
+    use std::sync::atomic::{AtomicU64, Ordering};
+    static COUNTER: AtomicU64 = AtomicU64::new(0);
+
+    // Unique per call, not merely per process: `Check` can invoke this production more
+    // than once within one process (the parent's own repeat-check, alongside whatever a
+    // spawned child does in its own process), and a name shared across calls would let one
+    // call's `Drop` remove a directory another is still reading.
+    let n = COUNTER.fetch_add(1, Ordering::Relaxed);
+    let root = std::env::temp_dir().join(format!(
+        "nomos-determinism-go-dependency-{}-{n}",
+        std::process::id()
+    ));
+    std::fs::create_dir_all(&root).expect("a fresh temp directory can be created");
+    let fixture = GoWorkspaceFixture { root };
+
+    fixture.Write("go.work", "go 1.21\n\nuse (\n\t./held\n\t./writer\n)\n");
+    fixture.Write(
+        "held/go.mod",
+        "module example.com/held\n\ngo 1.21\n\nrequire (\n\texample.com/writer v0.0.0\n\tgithub.com/external/thing v1.0.0\n)\n",
+    );
+    fixture.Write("writer/go.mod", "module example.com/writer\n\ngo 1.21\n");
+
+    return fixture;
+}
+
+fn Go_Dependency_Context() -> nomos_lang_go_modules::FactContext
+{
+    return nomos_lang_go_modules::FactContext {
+        snapshot: SnapshotId::From_Digest(Content_Digest(b"nomos.determinism.snapshot")),
+        variant: BuildVariantId::From_Digest(Content_Digest(b"nomos.determinism.variant")),
+        configuration: ConfigurationId::From_Digest(Content_Digest(
+            b"nomos.determinism.configuration",
+        )),
+        generation: GenerationId::INITIAL,
+    };
+}
+
+/// The facts in package-name order, the identical reasoning
+/// [`Rendered_Dependency_Facts`] gives for its own sort.
+fn Rendered_Go_Dependency_Facts(mut facts: Vec<nomos_lang_go_modules::ModuleFact>) -> Vec<u8>
+{
+    facts.sort_by(|left, right| return left.fact.payload.bytes.cmp(&right.fact.payload.bytes));
+
+    let mut rendered = Vec::new();
+    for fact in &facts
+    {
+        rendered.extend_from_slice(format!("key\t{}\n", fact.fact.Key().Digest()).as_bytes());
+        rendered.extend_from_slice(&fact.fact.payload.bytes);
+    }
+
+    return rendered;
+}
+
 /// The workspace root, from this crate's own manifest directory.
 fn Repository_Root() -> std::path::PathBuf
 {

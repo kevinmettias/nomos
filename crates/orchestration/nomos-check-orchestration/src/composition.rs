@@ -72,11 +72,23 @@ fn Declare_Syntax_Capability(registry: &mut Registry) -> Result<(), RegistryErro
     return Ok(());
 }
 
-/// A second capability, one offer against it -- `OD-RULES-003`'s design, wired for real.
+/// A second capability, and its second real offer.
+///
+/// `nomos-lang-go-modules` is a genuinely safe second offer here, unlike `nomos-lang-go`'s
+/// own attempt at `Declare_Syntax_Capability` above: its declared completeness
+/// (`Assurance::Unknown`, its own module doc says why) does not clear
+/// `nomos_rules::Dependency_Requirement`'s real floor (`Assurance::Sound` on both axes), so
+/// `nomos_capability::registry::resolving::Usable` filters it out of ranking before
+/// `Registry::Resolve` ever has two comparable offers to choose between for any subject,
+/// Rust or Go. `OD-CAPABILITY-009` measured this directly: the hazard it names is a
+/// wrongly-*chosen* provider, and a provider that never clears a real caller's floor is
+/// never chosen at all. Verified against this crate's own real test suite before this
+/// offer was kept, not assumed.
 fn Declare_Dependency_Capability(registry: &mut Registry) -> Result<(), RegistryError>
 {
     registry.Declare(nomos_cap_dependency::Capability_Contract())?;
     registry.Offer(nomos_lang_rust_cargo::Provider_Offer())?;
+    registry.Offer(nomos_lang_go_modules::Provider_Offer())?;
 
     return Ok(());
 }
