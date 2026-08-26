@@ -13,6 +13,7 @@ pub(super) const BANDS: &[(&str, u32)] = &[
     ("nomos-platform", 15),
     ("nomos-platform-std", 16),
     ("nomos-workspace", 18),
+    ("nomos-scope-verification", 19),
     ("nomos-ledger", 20),
     ("nomos-capability", 21),
     ("nomos-analysis", 22),

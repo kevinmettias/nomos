@@ -45,6 +45,11 @@
 //! overlap predicate, and they do not share persistence.
 //!
 //! [`SubjectSet`]: nomos_model::SubjectSet
+//!
+//! [`Territory`] and [`VerificationPredicate`] are not declared here. `OD-LEDGER-037` found
+//! both ledger-agnostic in their real field shapes, and `nomos-scope-verification` is where
+//! they now live; this crate re-exports them, unchanged, for its own claim/overlap and
+//! finish logic -- a behavior-preserving move, not a redesign.
 
 #![forbid(unsafe_code)]
 
@@ -55,7 +60,6 @@ mod gate;
 mod item;
 mod ledger_error;
 mod store;
-mod territory;
 mod verification;
 
 pub use claim::{Claim, ClaimRefusal, RefusalLayer};
@@ -64,6 +68,6 @@ pub use finish::{Abandonment, Declination, Finish, FinishRefusal, Finishing, Rel
 pub use gate::{Derive_Step, GATE_WORKFLOW, GateOutcome, GateUnknown, LINT_STEP, StepName, Workflow_Path, WorkflowText};
 pub use item::{DEFAULT_LEASE, DeclineReason, Holder, ItemId, ItemKind, ItemOrigin, ItemState, LedgerItem, MAXIMUM_LEASE};
 pub use ledger_error::LedgerError;
+pub use nomos_scope_verification::{Normalize_Path, Territory};
 pub use store::{AddRefusal, Claim_Refusal, Eligible_Items, FileLedger, LOCK_STALE_AFTER, LOCK_WAIT_LIMIT, LedgerDocument, SCHEMA_VERSION, Validate};
-pub use territory::{Normalize_Path, Territory};
 pub use verification::{VerificationPredicate, VerificationRecord};

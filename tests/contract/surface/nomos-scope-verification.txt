@@ -1,0 +1,17 @@
+pub fn nomos_scope_verification::Normalize_Path(path: &str) -> String
+pub fn nomos_scope_verification::Territory::Ambiguous_Paths(&self) -> Vec<(String, String)>
+pub fn nomos_scope_verification::Territory::As_Subject_Set(&self) -> SubjectSet
+pub fn nomos_scope_verification::Territory::Empty() -> Self
+pub fn nomos_scope_verification::Territory::Intersect(&self, other: &Self) -> Intersection
+pub fn nomos_scope_verification::Territory::Is_Empty(&self) -> bool
+pub fn nomos_scope_verification::Territory::Of_Files(paths: impl IntoIterator<Item = impl Into<String>>) -> Self
+pub fn nomos_scope_verification::Territory::With_Pattern(mut self, pattern: impl Into<String>) -> Self
+pub fn nomos_scope_verification::VerificationPredicate::Is_Runnable(&self) -> bool
+pub fn nomos_scope_verification::VerificationPredicate::New(argv: Vec<String>) -> Self
+pub struct field nomos_scope_verification::Territory::paths: Vec<String>
+pub struct field nomos_scope_verification::Territory::patterns: Vec<String>
+pub struct field nomos_scope_verification::Territory::resolution: SetResolution
+pub struct field nomos_scope_verification::VerificationPredicate::argv: Vec<String>
+pub struct field nomos_scope_verification::VerificationPredicate::timeout_seconds: u64
+pub struct nomos_scope_verification::Territory
+pub struct nomos_scope_verification::VerificationPredicate

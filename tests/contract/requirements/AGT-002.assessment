@@ -10,8 +10,9 @@
 # crates rather than unified in one agent-response type: plans and changes are
 # `CorrectionPlan`/`ChangeSet` in `nomos-corrections`; a claim's evidentiary strength is
 # `Finding`/`EvidenceClass` in `nomos-contracts`; tests and requested verification are
-# `VerificationPredicate`/`VerificationRecord` in `nomos-ledger`, real and tested (a claimed
-# item's own predicate, actually run to completion, not an agent's word).
+# `VerificationPredicate` (`nomos-scope-verification`, reused by `nomos-ledger`) and
+# `VerificationRecord` (`nomos-ledger`), real and tested (a claimed item's own predicate,
+# actually run to completion, not an agent's word).
 #
 # 'Assumptions' and 'unresolved questions' have zero real grounding -- a workspace-wide
 # search finds neither concept in any real type. `CorrectionCandidate` already carries a
@@ -23,7 +24,7 @@ site: crates/corrections/nomos-corrections/src/plan.rs#CorrectionPlan
 site: crates/corrections/nomos-corrections/src/change_set.rs#ChangeSet
 site: crates/contracts/nomos-contracts/src/finding.rs#Finding
 site: crates/contracts/nomos-contracts/src/finding/evidence.rs#EvidenceClass
-site: crates/substrate/nomos-ledger/src/verification/predicate.rs#VerificationPredicate
+site: crates/substrate/nomos-scope-verification/src/verification_predicate.rs#VerificationPredicate
 site: crates/substrate/nomos-ledger/src/verification/record.rs#VerificationRecord
 gap: crates/corrections/nomos-corrections/src/candidate/correction_candidate.rs#CorrectionCandidate
 gap: crates/substrate/nomos-ledger/src/item.rs#LedgerItem

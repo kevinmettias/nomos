@@ -2,7 +2,7 @@
 
 use nomos_contracts::Finding;
 use nomos_corrections::CorrectionPlan;
-use nomos_ledger::VerificationPredicate;
+use nomos_scope_verification::VerificationPredicate;
 
 /// `AGT-002`: "Agents shall return structured plans, changes, claims, tests, requested
 /// verification, assumptions, and unresolved questions."
@@ -13,7 +13,9 @@ use nomos_ledger::VerificationPredicate;
 /// reachable through `plan`, not transcribe a distinct one. `tests` is the individual
 /// commands an agent ran or proposes; `requested_verification` is the single predicate
 /// it asks be run to accept the whole submission -- the same shape
-/// [`nomos_ledger::LedgerItem::verification`] already uses at `Option` cardinality.
+/// `nomos_ledger::LedgerItem::verification` already uses at `Option` cardinality (this
+/// crate no longer depends on `nomos-ledger`, so the reference is prose rather than a
+/// link).
 /// `assumptions`/`unresolved_questions` are the only genuinely new pieces: no existing
 /// type in this workspace covers either concept.
 ///

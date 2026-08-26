@@ -300,8 +300,8 @@ version = "0.1.0"
 dependencies = [
  "nomos-contracts",
  "nomos-corrections",
- "nomos-ledger",
  "nomos-model-package",
+ "nomos-scope-verification",
  "serde",
 ]
 
@@ -646,10 +646,10 @@ dependencies = [
 name = "nomos-ledger"
 version = "0.1.0"
 dependencies = [
- "nomos-contracts",
  "nomos-model",
  "nomos-platform",
  "nomos-platform-std",
+ "nomos-scope-verification",
  "serde",
  "serde_json",
 ]
@@ -719,6 +719,16 @@ dependencies = [
  "nomos-contracts",
  "nomos-lang-rust",
  "nomos-model",
+]
+
+[[package]]
+name = "nomos-scope-verification"
+version = "0.1.0"
+dependencies = [
+ "nomos-contracts",
+ "nomos-model",
+ "serde",
+ "serde_json",
 ]
 
 [[package]]

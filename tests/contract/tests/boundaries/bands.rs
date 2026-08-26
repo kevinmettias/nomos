@@ -29,6 +29,10 @@ pub(crate) const BANDS: &[(&str, u32)] = &[
     // What the workspace currently is: above the document store it records into, below
     // everything that keys a fact on a snapshot or a build variant.
     ("nomos-workspace", 18),
+    // Territory and VerificationPredicate, the two ledger-agnostic primitives
+    // `OD-LEDGER-037` found underneath `nomos-agent-contracts`'s reuse of `nomos-ledger`.
+    // Below the ledger and below `nomos-agent-contracts`, so both may depend on it.
+    ("nomos-scope-verification", 19),
     ("nomos-ledger", 20),
     // The product substrate. Capability sits above the model and below everything
     // that resolves a provider through it.
@@ -137,8 +141,8 @@ pub(crate) const BANDS: &[(&str, u32)] = &[
     // produced, and a band below rules would have forbidden that edge.
     ("nomos-corrections", 35),
     // AGT-001's TaskEnvelope and AGT-002's WorkResult, the typed input and output shape
-    // an agent-assisted operation carries. Depends downward on nomos-ledger,
-    // nomos-contracts and nomos-corrections. `OD-ROADMAP-001`.
+    // an agent-assisted operation carries. Depends downward on nomos-scope-verification,
+    // nomos-contracts and nomos-corrections. `OD-ROADMAP-001`, `OD-LEDGER-037`.
     ("nomos-agent-contracts", 36),
     // The first real AgentExecutor: dispatches a TaskEnvelope's goal to Claude Code as a
     // subprocess through nomos-platform's ProcessLauncher, bounded by OD-EXECUTOR-001's

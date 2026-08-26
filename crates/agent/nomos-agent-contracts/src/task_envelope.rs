@@ -1,8 +1,8 @@
 //! What an agent-assisted operation is handed before it starts.
 
 use nomos_contracts::{CapabilityId, KnowledgeReferenceId, RuleId, SchemaId};
-use nomos_ledger::Territory;
 use nomos_model_package::EffortLevel;
+use nomos_scope_verification::Territory;
 use serde::{Deserialize, Serialize};
 
 /// `AGT-001`: "Before agent work, Nomos shall produce a typed task envelope containing

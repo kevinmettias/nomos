@@ -33951,6 +33951,242 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P14-LEDGER-037-SCOPE-VERIFICATION-CRATE",
+      "title": "OD-LEDGER-037's named follow-on: Territory and VerificationPredicate move to their own crate",
+      "why": "OD-LEDGER-037 measured Territory and VerificationPredicate as ledger-agnostic in their real field shapes and named the extraction this item performs, but deliberately did not build it. nomos-agent-contracts (band 36, a product-level agent-safety contract) still depends on nomos-ledger (band 20, marked [repo tooling]) purely to reuse these two general-purpose types.",
+      "done_when": "Territory and VerificationPredicate are defined verbatim in a new crate below both nomos-ledger's and nomos-agent-contracts's bands; nomos-ledger re-exports both, unchanged, for its own claim/overlap and finish logic; nomos-agent-contracts depends on the new crate directly and no longer depends on nomos-ledger; both hand-maintained band tables, root Cargo.toml, README.md's crate table and the surface snapshots for every changed crate reflect the move; nomos-ledger's and nomos-agent-contracts's own test suites still pass byte-for-byte.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-scope-verification",
+          "crates/substrate/nomos-ledger/src/lib.rs",
+          "crates/substrate/nomos-ledger/src/territory.rs",
+          "crates/substrate/nomos-ledger/src/territory/spelling.rs",
+          "crates/substrate/nomos-ledger/src/territory/overlap.rs",
+          "crates/substrate/nomos-ledger/src/territory/tests.rs",
+          "crates/substrate/nomos-ledger/src/verification.rs",
+          "crates/substrate/nomos-ledger/src/verification/predicate.rs",
+          "crates/substrate/nomos-ledger/Cargo.toml",
+          "crates/agent/nomos-agent-contracts/src/task_envelope.rs",
+          "crates/agent/nomos-agent-contracts/src/change_context.rs",
+          "crates/agent/nomos-agent-contracts/src/work_result.rs",
+          "crates/agent/nomos-agent-contracts/Cargo.toml",
+          "Cargo.toml",
+          "README.md",
+          "tests/contract/tests/boundaries/bands.rs",
+          "crates/rules/nomos-rules/src/dependency/bands.rs",
+          "tests/contract/surface/nomos-ledger.txt",
+          "tests/contract/surface/nomos-scope-verification.txt"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Superseded by P14-LEDGER-037-SCOPE-VERIFICATION-CRATE-2, re-authored with the complete territory this item's grep under-scoped."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-scope-verification",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-agent-contracts",
+          "-p",
+          "nomos-contract-tests",
+          "--timeout",
+          "20m"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-followup-a-ledger-types",
+          "reason": "Territory under-scoped: missed four tests/contract/requirements/*.assessment files citing the moved source paths as evidence sites. Re-authoring as -2 with complete territory.",
+          "abandoned_at": 1787786859
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-followup-a-ledger-types",
+        "declined_at": 1787786859
+      }
+    },
+    {
+      "id": "P14-LEDGER-037-SCOPE-VERIFICATION-CRATE-2",
+      "title": "OD-LEDGER-037's named follow-on: Territory and VerificationPredicate move to their own crate",
+      "why": "OD-LEDGER-037 measured Territory and VerificationPredicate as ledger-agnostic in their real field shapes and named the extraction this item performs, but deliberately did not build it. nomos-agent-contracts (band 36, a product-level agent-safety contract) still depends on nomos-ledger (band 20, marked [repo tooling]) purely to reuse these two general-purpose types. Re-authored from the declined -1: that item's territory missed tests/contract/requirements/*.assessment files citing the moved source paths as evidence sites.",
+      "done_when": "Territory and VerificationPredicate are defined verbatim in a new crate below both nomos-ledger's and nomos-agent-contracts's bands; nomos-ledger re-exports both, unchanged, for its own claim/overlap and finish logic; nomos-agent-contracts depends on the new crate directly and no longer depends on nomos-ledger; both hand-maintained band tables, root Cargo.toml, README.md's crate table, the surface snapshots for every changed crate, and every requirement_trace assessment citing a moved site all reflect the move; nomos-ledger's and nomos-agent-contracts's own test suites still pass byte-for-byte.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-scope-verification",
+          "crates/substrate/nomos-ledger/src/lib.rs",
+          "crates/substrate/nomos-ledger/src/territory.rs",
+          "crates/substrate/nomos-ledger/src/territory/spelling.rs",
+          "crates/substrate/nomos-ledger/src/territory/overlap.rs",
+          "crates/substrate/nomos-ledger/src/territory/tests.rs",
+          "crates/substrate/nomos-ledger/src/verification.rs",
+          "crates/substrate/nomos-ledger/src/verification/predicate.rs",
+          "crates/substrate/nomos-ledger/Cargo.toml",
+          "crates/agent/nomos-agent-contracts/src/task_envelope.rs",
+          "crates/agent/nomos-agent-contracts/src/change_context.rs",
+          "crates/agent/nomos-agent-contracts/src/work_result.rs",
+          "crates/agent/nomos-agent-contracts/Cargo.toml",
+          "Cargo.toml",
+          "README.md",
+          "tests/contract/tests/boundaries/bands.rs",
+          "crates/rules/nomos-rules/src/dependency/bands.rs",
+          "tests/contract/surface/nomos-ledger.txt",
+          "tests/contract/surface/nomos-scope-verification.txt",
+          "tests/contract/requirements/AGT-001.assessment",
+          "tests/contract/requirements/AGT-002.assessment",
+          "tests/contract/requirements/AGT-007.assessment",
+          "tests/contract/requirements/AGT-EXEC-002.assessment"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Superseded by P14-LEDGER-037-SCOPE-VERIFICATION-CRATE-3: this item's predicate was malformed (--timeout landed inside the argv after --)."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-scope-verification",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-agent-contracts",
+          "-p",
+          "nomos-contract-tests",
+          "--timeout",
+          "20m"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-followup-a-ledger-types",
+          "reason": "Predicate malformed: --timeout was written after the -- separator and got absorbed into the predicate argv itself, so cargo test rejected it as an unknown flag. Re-authoring as -3 with --timeout correctly placed before --.",
+          "abandoned_at": 1787787125
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-followup-a-ledger-types",
+        "declined_at": 1787787125
+      }
+    },
+    {
+      "id": "P14-LEDGER-037-SCOPE-VERIFICATION-CRATE-3",
+      "title": "OD-LEDGER-037's named follow-on: Territory and VerificationPredicate move to their own crate",
+      "why": "OD-LEDGER-037 measured Territory and VerificationPredicate as ledger-agnostic in their real field shapes and named the extraction this item performs, but deliberately did not build it. nomos-agent-contracts (band 36, a product-level agent-safety contract) still depends on nomos-ledger (band 20, marked [repo tooling]) purely to reuse these two general-purpose types. Re-authored from the declined -1 (territory missed tests/contract/requirements/*.assessment site references) and -2 (predicate malformed: --timeout landed inside the argv after --).",
+      "done_when": "Territory and VerificationPredicate are defined verbatim in a new crate below both nomos-ledger's and nomos-agent-contracts's bands; nomos-ledger re-exports both, unchanged, for its own claim/overlap and finish logic; nomos-agent-contracts depends on the new crate directly and no longer depends on nomos-ledger; both hand-maintained band tables, root Cargo.toml, README.md's crate table, the surface snapshots for every changed crate, and every requirement_trace assessment citing a moved site all reflect the move; nomos-ledger's and nomos-agent-contracts's own test suites still pass byte-for-byte.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-scope-verification",
+          "crates/substrate/nomos-ledger/src/lib.rs",
+          "crates/substrate/nomos-ledger/src/territory.rs",
+          "crates/substrate/nomos-ledger/src/territory/spelling.rs",
+          "crates/substrate/nomos-ledger/src/territory/overlap.rs",
+          "crates/substrate/nomos-ledger/src/territory/tests.rs",
+          "crates/substrate/nomos-ledger/src/verification.rs",
+          "crates/substrate/nomos-ledger/src/verification/predicate.rs",
+          "crates/substrate/nomos-ledger/Cargo.toml",
+          "crates/agent/nomos-agent-contracts/src/task_envelope.rs",
+          "crates/agent/nomos-agent-contracts/src/change_context.rs",
+          "crates/agent/nomos-agent-contracts/src/work_result.rs",
+          "crates/agent/nomos-agent-contracts/Cargo.toml",
+          "Cargo.toml",
+          "README.md",
+          "tests/contract/tests/boundaries/bands.rs",
+          "crates/rules/nomos-rules/src/dependency/bands.rs",
+          "tests/contract/surface/nomos-ledger.txt",
+          "tests/contract/surface/nomos-scope-verification.txt",
+          "tests/contract/requirements/AGT-001.assessment",
+          "tests/contract/requirements/AGT-002.assessment",
+          "tests/contract/requirements/AGT-007.assessment",
+          "tests/contract/requirements/AGT-EXEC-002.assessment"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-scope-verification",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-agent-contracts",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 1200
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-scope-verification",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-agent-contracts",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": " passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.13s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_agent_contracts-1d7c8a7b96a3b0a4.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-425f6760f4c932ed.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-5b9e565fda4ded41.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-ad017fcca31ec54f.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-30962e7072a3fde2.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-84a38c41c01ad5a0.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-9a2e6ffef65afc8e.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-1c093e041bdbd174.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-31651a0a2688c9f8.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-1a54a53657aa674d.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-f1eba95647230440.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_ledger-1735a8129b9e6355.exe)\n     Running tests\\declining_ends_an_item.rs (target\\debug\\deps\\declining_ends_an_item-716cf39c5b5481ac.exe)\n     Running tests\\exclusion_holds\\main.rs (target\\debug\\deps\\exclusion_holds-bd4cf3eff1d87e3a.exe)\n     Running tests\\gate_covers_finish\\main.rs (target\\debug\\deps\\gate_covers_finish-4c3f1e8e950abf6d.exe)\n     Running tests\\records_do_not_serialize\\main.rs (target\\debug\\deps\\records_do_not_serialize-c3e1fa86ccce7153.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_scope_verification-bc52aaa9b57e1887.exe)\n   Doc-tests nomos_agent_contracts\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_ledger\n   Doc-tests nomos_scope_verification\n",
+        "verified_at": 1787787156,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

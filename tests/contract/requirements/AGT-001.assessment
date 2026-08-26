@@ -25,7 +25,7 @@
 # connects the two.
 verdict: Partial
 site: crates/substrate/nomos-ledger/src/item.rs#LedgerItem
-site: crates/substrate/nomos-ledger/src/territory.rs#Territory
+site: crates/substrate/nomos-scope-verification/src/territory.rs#Territory
 site: crates/orchestration/nomos-gate-orchestration/src/rule_selector.rs#RuleSelector
 site: crates/orchestration/nomos-gate-orchestration/src/scope_selector.rs#ScopeSelector
 gap: crates/substrate/nomos-ledger/src/claim.rs#Claim

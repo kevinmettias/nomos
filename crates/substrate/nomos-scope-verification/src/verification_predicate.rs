@@ -1,4 +1,4 @@
-//! The command that decides whether an item is done.
+//! The command that decides whether something is done.
 
 use serde::Deserialize;
 use serde::Serialize;

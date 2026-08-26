@@ -14,6 +14,13 @@ members = [
     "crates/platform/nomos-platform",
     "crates/platform/nomos-platform-std",
 
+    # Band 19 — substrate. Territory and VerificationPredicate, the two ledger-agnostic
+    # primitives `OD-LEDGER-037` found underneath nomos-agent-contracts' reuse of
+    # nomos-ledger. Below the ledger and below nomos-agent-contracts, so both may depend
+    # on it; nomos-ledger re-exports both, unchanged, for its own claim/overlap and
+    # finish logic. `OD-LEDGER-037`.
+    "crates/substrate/nomos-scope-verification",
+
     # Band 2 — substrate. The work ledger and, later, capability and applicability.
     "crates/substrate/nomos-ledger",
     "crates/substrate/nomos-capability",
@@ -129,9 +136,10 @@ members = [
 
     # Band 36 — agent contracts. AGT-001's TaskEnvelope and AGT-002's WorkResult, the
     # typed input and output shape an agent-assisted operation carries. Depends
-    # downward on nomos-ledger, nomos-contracts and nomos-corrections; names none of
-    # nomos-model-package, nomos-rule-package or nomos-lang-rust-package, which are peers
-    # at a different band, not dependents of this one. `OD-ROADMAP-001`.
+    # downward on nomos-scope-verification, nomos-contracts and nomos-corrections; names
+    # none of nomos-model-package, nomos-rule-package or nomos-lang-rust-package, which are
+    # peers at a different band, not dependents of this one. `OD-ROADMAP-001`,
+    # `OD-LEDGER-037`.
     "crates/agent/nomos-agent-contracts",
 
     # Band 37. The Claude Code AgentExecutor adapter: dispatches a TaskEnvelope's goal to
@@ -228,6 +236,7 @@ nomos-model = { path = "crates/kernel/nomos-model" }
 nomos-store = { path = "crates/kernel/nomos-store" }
 nomos-platform = { path = "crates/platform/nomos-platform" }
 nomos-platform-std = { path = "crates/platform/nomos-platform-std" }
+nomos-scope-verification = { path = "crates/substrate/nomos-scope-verification" }
 nomos-ledger = { path = "crates/substrate/nomos-ledger" }
 nomos-capability = { path = "crates/substrate/nomos-capability" }
 nomos-workspace = { path = "crates/substrate/nomos-workspace" }

@@ -3,7 +3,7 @@
 use std::collections::BTreeMap;
 
 use nomos_contracts::{Applicability, BuildVariantId, CapabilityId, RuleId, SnapshotId, SubjectId};
-use nomos_ledger::{Territory, VerificationPredicate};
+use nomos_scope_verification::{Territory, VerificationPredicate};
 use serde::{Deserialize, Serialize};
 
 /// `AGT-007`: "Nomos shall expose a read-only `PrepareChangeContext` operation...
