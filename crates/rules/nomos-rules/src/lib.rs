@@ -88,8 +88,8 @@
 //! from a real `cargo clippy` run, relayed 1:1 as `Finding`s rather than judged a second
 //! time — the first rule in this crate whose whole judgment is "the tool already decided,"
 //! stated as its own `Requirement` the same way every other rule states its own floor.
-//! Unwired into `nomos-check-orchestration::Run` until that crate's own item composes it,
-//! the same additive-first shape `Check_Declared_Role_Matches_Surface` already took.
+//! Composed into `nomos-check-orchestration::Run`, behind `OD-GATE-017`'s own per-call rule
+//! subset, the same `Wants(selected, ...)` gate `DEPENDENCY_DIRECTION` already sits behind.
 //!
 //! [`Check_Dependency_Policy`] is a seventh rule, `OD-RULES-010`'s second real
 //! `ToolProvider` instance: `nomos.cap.dependency.policy` facts, materialized by
