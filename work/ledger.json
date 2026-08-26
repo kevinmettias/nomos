@@ -33022,6 +33022,58 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P14-TRACKB-CLI-AGENT-EFFORT-FLAG",
+      "title": "nomos agent execute/judge-role gain a real --effort flag, TaskEnvelope.effort's first real caller decision",
+      "why": "TaskEnvelope.effort exists (OD-CONTRACTS-004) and nomos-agent-executor-claude-code already maps every EffortLevel to a real 'claude --effort' flag (Effort_Flag/Command_For), but both nomos-cli agent.rs call sites (Task and Judgment_Task) hardcode EffortLevel::BackendDefault -- nothing in this workspace ever chooses a non-default value. This is the smallest honest slice of nomos-model-package's declared-not-computed routing vocabulary reaching a real caller decision, per OD-PACKAGE-011/012's own standard: a mechanical application of an already-decided field, not a new mechanism.",
+      "done_when": "nomos agent execute and nomos agent judge-role accept an optional --effort <BackendDefault|Minimal|Low|Medium|High|Maximum> flag; omitting it preserves today's exact behavior (BackendDefault, no --effort flag reaches the subprocess); an unrecognized value is a usage error naming the six accepted spellings; a real 'nomos agent execute --goal ... --effort high' run is shown reaching the actual claude subprocess invocation with --effort high present.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/src/agent.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli"
+        ],
+        "exit_code": 0,
+        "output_tail": "_Builds ... ok\ntest Test_A_Build_That_Cannot_Read_The_Ledger_Should_Not_Rewrite_It ... ok\ntest Test_A_Build_That_Can_Read_The_Ledger_Should_Still_Write_It ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s\n\n\nrunning 5 tests\ntest Test_Claiming_A_Lapsed_Item_Should_Refuse_And_Name_The_Takeover ... ok\ntest Test_Taking_Over_A_Lapsed_Item_Should_Record_The_Claim_It_Displaced ... ok\ntest Test_A_Lapsed_Item_Should_List_As_Lapsed_And_Be_Takeable ... ok\ntest Test_Show_Should_Report_The_Claim_A_Takeover_Displaced ... ok\ntest Test_Takeover_Should_Exit_Three_When_The_Lease_Is_Live_And_Four_When_It_Is_Not_Held ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.26s\n     Running unittests src\\main.rs (target\\debug\\deps\\nomos-b8ed419afd33b15b.exe)\n     Running tests\\abandon_is_readable.rs (target\\debug\\deps\\abandon_is_readable-6222e571722e84c9.exe)\n     Running tests\\add_guarantees_what_it_says.rs (target\\debug\\deps\\add_guarantees_what_it_says-f9336fd22187bb90.exe)\n     Running tests\\authoring_surface.rs (target\\debug\\deps\\authoring_surface-46fe790908c7924b.exe)\n     Running tests\\check_command.rs (target\\debug\\deps\\check_command-53252ad6b19cfca0.exe)\n     Running tests\\freshness.rs (target\\debug\\deps\\freshness-d4aee6e0997f81d5.exe)\n     Running tests\\gate_step\\main.rs (target\\debug\\deps\\gate_step-4e2afac74f665889.exe)\n     Running tests\\list_tells_the_truth.rs (target\\debug\\deps\\list_tells_the_truth-9a8cc00faf82f800.exe)\n     Running tests\\read_surface.rs (target\\debug\\deps\\read_surface-fa2a879172beed0d.exe)\n     Running tests\\request_submit.rs (target\\debug\\deps\\request_submit-628eae4bea0ffc48.exe)\n     Running tests\\stale_writer_is_refused.rs (target\\debug\\deps\\stale_writer_is_refused-6f541ae13d585481.exe)\n     Running tests\\takeover_is_recorded.rs (target\\debug\\deps\\takeover_is_recorded-3970a4ea23e42e08.exe)\n",
+        "verified_at": 1787728221,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
