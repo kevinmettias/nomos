@@ -319,6 +319,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "nomos-agent-executor-ollama"
+version = "0.1.0"
+dependencies = [
+ "nomos-agent-contracts",
+ "nomos-contracts",
+ "nomos-ledger",
+ "nomos-model-package",
+ "nomos-platform",
+ "nomos-platform-std",
+]
+
+[[package]]
 name = "nomos-analysis"
 version = "0.1.0"
 dependencies = [
