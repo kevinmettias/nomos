@@ -1,18 +1,21 @@
-//! `nomos agent` — dispatching a task to `nomos-agent-executor-claude-code`, this workspace's first
-//! real `AgentExecutor`.
+//! `nomos agent` — dispatching a task to one of this workspace's two real `AgentExecutor`
+//! backends: `nomos-agent-executor-claude-code` (the default) or `nomos-agent-executor-ollama`
+//! (`--backend ollama`), the real caller `OD-EXECUTOR-001`/`OD-EXECUTOR-004` both say a
+//! dispatch trait or selection mechanism should wait for. There is no such trait: `--backend`
+//! is a plain match over two already-independent free functions, each crate's own.
 //!
-//! The composition root `nomos-agent-executor-claude-code` itself cannot be: it depends on
-//! `nomos-platform` and not on any concrete implementation of it, the same reason
-//! `nomos-lang-rust-cargo` and every other `ProcessLauncher`-driven crate stays generic. This
-//! module supplies `nomos_platform_std::StdProcessLauncher`, the same choice `check.rs` and
-//! `work.rs` already make for their own subprocesses.
+//! Neither composition root can supply its own launcher: both depend on `nomos-platform` and
+//! not on any concrete implementation of it, the same reason `nomos-lang-rust-cargo` and every
+//! other `ProcessLauncher`-driven crate stays generic. This module supplies
+//! `nomos_platform_std::StdProcessLauncher`, the same choice `check.rs` and `work.rs` already
+//! make for their own subprocesses.
 //!
-//! `execute` is the only real caller `nomos-agent-executor-claude-code` has anywhere in this workspace
-//! today, other than its own tests. It renders [`nomos_agent_executor_claude_code::AgentExecutionOutcome`]
-//! directly rather than assembling a `nomos_agent_contracts::WorkResult` — `OD-CONTRACTS-003`
-//! made `WorkResult.plan` representable as absent, but this command has no `RuleId` or
-//! `SubjectId` to give a `Finding` either, since nothing dispatched it as a rule's judgment; it
-//! is a person, asking a question directly. Reporting a `Finding` about nothing in particular
+//! `execute` is the only real caller either backend crate has anywhere in this workspace
+//! today, other than their own tests. It renders each backend's own outcome type directly
+//! rather than assembling a `nomos_agent_contracts::WorkResult` — `OD-CONTRACTS-003` made
+//! `WorkResult.plan` representable as absent, but this command has no `RuleId` or `SubjectId`
+//! to give a `Finding` either, since nothing dispatched it as a rule's judgment; it is a
+//! person, asking a question directly. Reporting a `Finding` about nothing in particular
 //! would be inventing a subject nobody named, the same category of dishonesty `OD-EXECUTOR-001`
 //! already named for trusting a process's own account of itself.
 //!
@@ -22,12 +25,11 @@
 //! verdict — this composition root is the real, separate dispatch `role_surface.rs` names as
 //! deliberately not this rule's own job. It reads exactly the two files that finding's own
 //! `locations` name (`README.md`'s band-table row, the crate's committed surface snapshot),
-//! builds the real `nomos_rules::RoleSurfacePair` the rule was given, and asks Claude Code the
-//! question the rule could not answer.
+//! builds the real `nomos_rules::RoleSurfacePair` the rule was given, and asks the chosen
+//! backend the question the rule could not answer.
 
 use crate::arguments::{Name, Named_Value, Required, Usage};
 use nomos_agent_contracts::TaskEnvelope;
-use nomos_agent_executor_claude_code::{AgentExecutionError, AgentExecutionOutcome};
 use nomos_contracts::{Finding, SchemaId};
 use nomos_ledger::Territory;
 use nomos_platform_std::StdProcessLauncher;
@@ -66,17 +68,28 @@ impl ExitCode
     }
 }
 
+/// Which real `AgentExecutor` a call dispatches to. `ClaudeCode` is every caller's default
+/// before this flag existed, and stays the default now: `--backend` absent must reach
+/// `nomos-agent-executor-claude-code` exactly as every invocation did before
+/// `nomos-agent-executor-ollama` existed.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub(crate) enum Backend
+{
+    ClaudeCode,
+    Ollama,
+}
+
 /// What `nomos agent` was asked to do.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub(crate) enum Command
 {
     Execute
     {
-        goal: String
+        goal: String, effort: nomos_model_package::EffortLevel, backend: Backend
     },
     JudgeRole
     {
-        crate_name: String, root: PathBuf
+        crate_name: String, root: PathBuf, effort: nomos_model_package::EffortLevel, backend: Backend
     },
 }
 
@@ -107,8 +120,10 @@ fn Parse_Execute(arguments: &[String]) -> Result<Command, String>
 {
     let value = Named_Value(arguments, "--goal");
     let goal = Required(value.as_ref(), Name("--goal"), Usage(&Usage_Text()))?;
+    let effort = Parse_Effort(arguments)?;
+    let backend = Parse_Backend(arguments)?;
 
-    return Ok(Command::Execute { goal });
+    return Ok(Command::Execute { goal, effort, backend });
 }
 
 fn Parse_Judge_Role(arguments: &[String]) -> Result<Command, String>
@@ -116,8 +131,70 @@ fn Parse_Judge_Role(arguments: &[String]) -> Result<Command, String>
     let value = Named_Value(arguments, "--crate");
     let crate_name = Required(value.as_ref(), Name("--crate"), Usage(&Usage_Text()))?;
     let root = Named_Value(arguments, "--root").map_or_else(|| return PathBuf::from("."), PathBuf::from);
+    let effort = Parse_Effort(arguments)?;
+    let backend = Parse_Backend(arguments)?;
 
-    return Ok(Command::JudgeRole { crate_name, root });
+    return Ok(Command::JudgeRole { crate_name, root, effort, backend });
+}
+
+/// `--backend`'s value, or [`Backend::ClaudeCode`] when the flag is absent -- every caller
+/// before this flag existed reached `nomos-agent-executor-claude-code`, so an absent
+/// `--backend` must keep reaching it, byte-identical.
+///
+/// # Errors
+///
+/// Returns a message naming the two accepted spellings when `--backend`'s value is neither.
+fn Parse_Backend(arguments: &[String]) -> Result<Backend, String>
+{
+    let Some(text) = Named_Value(arguments, "--backend")
+    else
+    {
+        return Ok(Backend::ClaudeCode);
+    };
+
+    return match text.as_str()
+    {
+        "claude-code" => Ok(Backend::ClaudeCode),
+        "ollama" => Ok(Backend::Ollama),
+        other => Err(format!("--backend {other:?} is not one of claude-code, ollama.\n\n{}", Usage_Text())),
+    };
+}
+
+/// `--effort`'s value, or [`EffortLevel::BackendDefault`] when the flag is absent --
+/// `BackendDefault` alone maps to "omit the flag entirely"
+/// (`nomos_agent_executor_claude_code::Effort_Flag`), so an absent `--effort` reaches the
+/// subprocess byte-identical to every invocation that predates this flag. The six spellings
+/// are `MODEL-ROUTE-004`'s own closed enumeration, kebab-cased the same way `--kind` and
+/// `--origin` already kebab-case theirs in `work/parse.rs`.
+///
+/// # Errors
+///
+/// Returns a message naming the six accepted spellings when `--effort`'s value is none of
+/// them.
+fn Parse_Effort(arguments: &[String]) -> Result<nomos_model_package::EffortLevel, String>
+{
+    use nomos_model_package::EffortLevel;
+
+    let Some(text) = Named_Value(arguments, "--effort")
+    else
+    {
+        return Ok(EffortLevel::BackendDefault);
+    };
+
+    return match text.as_str()
+    {
+        "backend-default" => Ok(EffortLevel::BackendDefault),
+        "minimal" => Ok(EffortLevel::Minimal),
+        "low" => Ok(EffortLevel::Low),
+        "medium" => Ok(EffortLevel::Medium),
+        "high" => Ok(EffortLevel::High),
+        "maximum" => Ok(EffortLevel::Maximum),
+        other => Err(format!(
+            "--effort {other:?} is not one of backend-default, minimal, low, medium, high, \
+             maximum.\n\n{}",
+            Usage_Text()
+        )),
+    };
 }
 
 /// Runs a command, writing content to `output` and everything about it to `notes`.
@@ -127,18 +204,18 @@ pub(crate) fn Run(command: &Command, output: &mut impl std::io::Write, notes: &m
 {
     return match command
     {
-        Command::Execute { goal } => Execute(goal, output, notes),
-        Command::JudgeRole { crate_name, root } => Judge_Role(crate_name, root, output, notes),
+        Command::Execute { goal, effort, backend } => Execute(goal, *effort, *backend, output, notes),
+        Command::JudgeRole { crate_name, root, effort, backend } => Judge_Role(crate_name, root, *effort, *backend, output, notes),
     };
 }
 
-/// A bare `TaskEnvelope` naming only `goal`. `scope`, `prohibited_changes` and
+/// A bare `TaskEnvelope` naming only `goal` and `effort`. `scope`, `prohibited_changes` and
 /// `available_tools` are the empty value `OD-EXECUTOR-001` already reads as "nothing
 /// enumerated, nothing granted" — this command has no configuration surface to fill them
 /// from yet, and inventing one ahead of a real need would repeat the mistake this workspace
 /// has already declined to make elsewhere. `expected_output_schema` names this call site
 /// rather than a real schema, since nothing here validates a response against one.
-fn Task(goal: &str) -> TaskEnvelope
+fn Task(goal: &str, effort: nomos_model_package::EffortLevel) -> TaskEnvelope
 {
     return TaskEnvelope {
         goal: goal.to_owned(),
@@ -148,16 +225,35 @@ fn Task(goal: &str) -> TaskEnvelope
         prohibited_changes: Territory::Of_Files(Vec::<String>::new()),
         available_tools: Vec::new(),
         expected_output_schema: SchemaId::New("nomos.agent.executor.cli.v1"),
-        effort: nomos_model_package::EffortLevel::BackendDefault,
+        effort,
     };
 }
 
-fn Execute(goal: &str, output: &mut impl std::io::Write, notes: &mut impl std::io::Write) -> ExitCode
+fn Execute(
+    goal: &str, effort: nomos_model_package::EffortLevel, backend: Backend, output: &mut impl std::io::Write, notes: &mut impl std::io::Write,
+) -> ExitCode
 {
-    return match nomos_agent_executor_claude_code::Execute(&Task(goal), &StdProcessLauncher)
+    return Dispatch(&Task(goal, effort), backend, output, notes);
+}
+
+/// Runs `task` against `backend` and renders whichever of the two outcome shapes it
+/// produces. The two crates share no trait -- `OD-EXECUTOR-001`/`OD-EXECUTOR-004` both
+/// decline to invent one ahead of a real need -- so this match is the entire dispatch, not
+/// a stand-in for one.
+fn Dispatch(task: &TaskEnvelope, backend: Backend, output: &mut impl std::io::Write, notes: &mut impl std::io::Write) -> ExitCode
+{
+    return match backend
     {
-        Ok(outcome) => Answered(&outcome, output),
-        Err(error) => Unavailable(&error, notes),
+        Backend::ClaudeCode => match nomos_agent_executor_claude_code::Execute(task, &StdProcessLauncher)
+        {
+            Ok(outcome) => Answered_Claude_Code(&outcome, output),
+            Err(error) => Unavailable(&error, notes),
+        },
+        Backend::Ollama => match nomos_agent_executor_ollama::Execute(task, &StdProcessLauncher)
+        {
+            Ok(outcome) => Answered_Ollama(&outcome, output),
+            Err(error) => Unavailable(&error, notes),
+        },
     };
 }
 
@@ -166,7 +262,7 @@ fn Execute(goal: &str, output: &mut impl std::io::Write, notes: &mut impl std::i
 /// executor's answer for a person to read. `denied_tool_uses` is printed unconditionally,
 /// empty or not, so its absence is a caller's own observation rather than a line that only
 /// appears when there is bad news to report.
-fn Answered(outcome: &AgentExecutionOutcome, output: &mut impl std::io::Write) -> ExitCode
+fn Answered_Claude_Code(outcome: &nomos_agent_executor_claude_code::AgentExecutionOutcome, output: &mut impl std::io::Write) -> ExitCode
 {
     let _ = writeln!(output, "{}", outcome.response);
     let _ = writeln!(output, "denied tool uses: {:?}", outcome.denied_tool_uses);
@@ -175,7 +271,18 @@ fn Answered(outcome: &AgentExecutionOutcome, output: &mut impl std::io::Write) -
     return ExitCode::Ok;
 }
 
-fn Unavailable(error: &AgentExecutionError, notes: &mut impl std::io::Write) -> ExitCode
+/// `nomos-agent-executor-ollama`'s own outcome carries only `response`, honestly: there is
+/// no `denied_tool_uses` to print because there is no tool subsystem to have denied
+/// anything from, and no dollar cost because inference is local. Printing placeholder
+/// values for fields this backend does not have would claim a signal it never produced.
+fn Answered_Ollama(outcome: &nomos_agent_executor_ollama::AgentExecutionOutcome, output: &mut impl std::io::Write) -> ExitCode
+{
+    let _ = writeln!(output, "{}", outcome.response);
+
+    return ExitCode::Ok;
+}
+
+fn Unavailable(error: &impl std::fmt::Display, notes: &mut impl std::io::Write) -> ExitCode
 {
     let _ = writeln!(notes, "{error}");
 
@@ -186,7 +293,10 @@ fn Unavailable(error: &AgentExecutionError, notes: &mut impl std::io::Write) -> 
 /// builds the real `nomos_rules::RoleSurfacePair` `Check_Declared_Role_Matches_Surface`
 /// would be handed, runs that rule to get the real `Finding` it produces, and dispatches
 /// the question that finding names — never its own guess — to Claude Code.
-fn Judge_Role(crate_name: &str, root: &Path, output: &mut impl std::io::Write, notes: &mut impl std::io::Write) -> ExitCode
+fn Judge_Role(
+    crate_name: &str, root: &Path, effort: nomos_model_package::EffortLevel, backend: Backend, output: &mut impl std::io::Write,
+    notes: &mut impl std::io::Write,
+) -> ExitCode
 {
     let Some(declared_role) = Declared_Role(root, crate_name)
     else
@@ -217,11 +327,7 @@ fn Judge_Role(crate_name: &str, root: &Path, output: &mut impl std::io::Write, n
         return ExitCode::NotFound;
     };
 
-    return match nomos_agent_executor_claude_code::Execute(&Judgment_Task(&pair, finding), &StdProcessLauncher)
-    {
-        Ok(outcome) => Answered(&outcome, output),
-        Err(error) => Unavailable(&error, notes),
-    };
+    return Dispatch(&Judgment_Task(&pair, finding, effort), backend, output, notes);
 }
 
 /// `README.md`'s band-table row for `crate_name` — the third pipe-delimited cell of the
@@ -265,7 +371,7 @@ fn Crate_Root(root: &Path, crate_name: &str) -> String
 /// The judgment `role_surface.rs`'s own module doc says this rule cannot reach itself —
 /// whether `pair`'s declared role and actual surface agree — carrying `finding.summary`
 /// so the dispatched question is traceably the rule's own, not a paraphrase invented here.
-fn Judgment_Task(pair: &RoleSurfacePair, finding: &Finding) -> TaskEnvelope
+fn Judgment_Task(pair: &RoleSurfacePair, finding: &Finding, effort: nomos_model_package::EffortLevel) -> TaskEnvelope
 {
     let goal = format!(
         "A Rust crate's declared role, from its workspace README's band table: {}\n\n\
@@ -284,7 +390,7 @@ fn Judgment_Task(pair: &RoleSurfacePair, finding: &Finding) -> TaskEnvelope
         prohibited_changes: Territory::Of_Files(Vec::<String>::new()),
         available_tools: Vec::new(),
         expected_output_schema: SchemaId::New("nomos.agent.executor.cli.v1"),
-        effort: nomos_model_package::EffortLevel::BackendDefault,
+        effort,
     };
 }
 
@@ -292,24 +398,38 @@ fn Usage_Text() -> String
 {
     return "usage: nomos agent <command>\n\
             \n\
-            \x20 execute --goal <text>\n\
-            \x20 judge-role --crate <name> [--root <path>]\n\
+            \x20 execute --goal <text> [--effort <level>] [--backend <name>]\n\
+            \x20 judge-role --crate <name> [--root <path>] [--effort <level>] [--backend <name>]\n\
             \n\
-            `execute` dispatches --goal to Claude Code as a bounded, tool-free subprocess \
-            through nomos-agent-executor-claude-code, under the structural capability boundary \
-            OD-EXECUTOR-001 decided: an isolated working directory, no MCP configuration, an \
-            allow-list naming no real tool, a $1 budget cap, one --print turn. It renders the \
-            response and, unconditionally, which tool uses (if any) were structurally denied \
-            -- the response text is never evidence of what happened, only of what the process \
-            said. It does not assemble a WorkResult or a Finding: this is a person's direct \
-            question, not a rule's judgment, and there is no subject or rule identity to \
-            report one against.\n\
+            `execute` dispatches --goal to the chosen backend as a bounded, tool-free \
+            subprocess. It renders the response and, unconditionally, which tool uses (if \
+            any) were structurally denied -- the response text is never evidence of what \
+            happened, only of what the process said. It does not assemble a WorkResult or a \
+            Finding: this is a person's direct question, not a rule's judgment, and there is \
+            no subject or rule identity to report one against.\n\
             \n\
             `judge-role` reads --crate's row in --root's README.md band table and its \
             committed tests/contract/surface/<crate>.txt, runs the real \
             nomos_rules::Check_Declared_Role_Matches_Surface rule over them, and dispatches \
             the AgentRequired finding that rule produces -- never a paraphrase -- to execute. \
             --root defaults to the current directory.\n\
+            \n\
+            --backend takes claude-code (default) or ollama. claude-code dispatches through \
+            nomos-agent-executor-claude-code under OD-EXECUTOR-001's structural capability \
+            boundary: an isolated working directory, no MCP configuration, an allow-list \
+            naming no real tool, a $1 budget cap, one --print turn. ollama dispatches through \
+            nomos-agent-executor-ollama, a local model, under OD-EXECUTOR-004's boundary: an \
+            isolated working directory, never --experimental/--experimental-yolo/\
+            --experimental-websearch (the only flags that open any tool-use capability), a \
+            wall-clock timeout in place of a dollar budget. Its own outcome carries only the \
+            response text -- no denied-tool-uses line, since there is no tool subsystem to \
+            have denied anything from.\n\
+            \n\
+            --effort takes backend-default, minimal, low, medium, high or maximum -- \
+            MODEL-ROUTE-004's closed vocabulary, carried on TaskEnvelope.effort. \
+            nomos-agent-executor-claude-code maps it to a real `claude --effort` flag; \
+            nomos-agent-executor-ollama accepts and ignores it, a real, named gap rather than \
+            an invented approximation. Omitting it is backend-default.\n\
             \n\
             exit codes: 0 ok, 2 usage, 5 the executor could not run or answer, 6 the named \
             crate has no README row or no committed surface snapshot"
@@ -331,9 +451,120 @@ mod tests
     {
         let arguments = Arguments("execute --goal hello");
 
-        let Command::Execute { goal } = Parse(&arguments).expect("parses") else { panic!("wrong variant") };
+        let Command::Execute { goal, effort, backend } = Parse(&arguments).expect("parses") else { panic!("wrong variant") };
 
         assert_eq!(goal, "hello");
+        assert_eq!(effort, nomos_model_package::EffortLevel::BackendDefault);
+        assert_eq!(backend, Backend::ClaudeCode);
+    }
+
+    /// The default is `BackendDefault`, the one value `Effort_Flag` maps to "omit the flag
+    /// entirely" -- an `execute` call with no `--effort` must reach the subprocess exactly
+    /// as it did before this flag existed.
+    #[test]
+    fn Test_An_Execute_Command_With_No_Effort_Defaults_To_Backend_Default()
+    {
+        let arguments = Arguments("execute --goal hello");
+
+        let Command::Execute { effort, .. } = Parse(&arguments).expect("parses") else { panic!("wrong variant") };
+
+        assert_eq!(effort, nomos_model_package::EffortLevel::BackendDefault);
+    }
+
+    #[test]
+    fn Test_An_Execute_Command_Should_Parse_Its_Effort()
+    {
+        let arguments = Arguments("execute --goal hello --effort high");
+
+        let Command::Execute { effort, .. } = Parse(&arguments).expect("parses") else { panic!("wrong variant") };
+
+        assert_eq!(effort, nomos_model_package::EffortLevel::High);
+    }
+
+    /// All six of `MODEL-ROUTE-004`'s spellings, not just one -- the same universe-closing
+    /// discipline `nomos-model-package::effort_level`'s own `Test_Every_Value_Is_In_The_Tested_Universe`
+    /// holds itself to.
+    #[test]
+    fn Test_An_Execute_Command_Parses_Every_Effort_Spelling()
+    {
+        use nomos_model_package::EffortLevel;
+
+        let cases = [
+            ("backend-default", EffortLevel::BackendDefault),
+            ("minimal", EffortLevel::Minimal),
+            ("low", EffortLevel::Low),
+            ("medium", EffortLevel::Medium),
+            ("high", EffortLevel::High),
+            ("maximum", EffortLevel::Maximum),
+        ];
+
+        for (spelling, expected) in cases
+        {
+            let arguments = Arguments(&format!("execute --goal hello --effort {spelling}"));
+
+            let Command::Execute { effort, .. } = Parse(&arguments).expect("parses") else { panic!("wrong variant") };
+
+            assert_eq!(effort, expected, "spelling {spelling}");
+        }
+    }
+
+    #[test]
+    fn Test_An_Unrecognized_Effort_Should_Be_A_Usage_Error()
+    {
+        let arguments = Arguments("execute --goal hello --effort superhuman");
+
+        let error = Parse(&arguments).expect_err("must refuse");
+
+        assert!(error.contains("--effort"), "{error}");
+        assert!(error.contains("superhuman"), "{error}");
+    }
+
+    /// The default is `ClaudeCode` -- every caller before `--backend` existed must keep
+    /// reaching `nomos-agent-executor-claude-code`.
+    #[test]
+    fn Test_An_Execute_Command_With_No_Backend_Defaults_To_Claude_Code()
+    {
+        let arguments = Arguments("execute --goal hello");
+
+        let Command::Execute { backend, .. } = Parse(&arguments).expect("parses") else { panic!("wrong variant") };
+
+        assert_eq!(backend, Backend::ClaudeCode);
+    }
+
+    #[test]
+    fn Test_An_Execute_Command_Parses_Both_Backend_Spellings()
+    {
+        let cases = [("claude-code", Backend::ClaudeCode), ("ollama", Backend::Ollama)];
+
+        for (spelling, expected) in cases
+        {
+            let arguments = Arguments(&format!("execute --goal hello --backend {spelling}"));
+
+            let Command::Execute { backend, .. } = Parse(&arguments).expect("parses") else { panic!("wrong variant") };
+
+            assert_eq!(backend, expected, "spelling {spelling}");
+        }
+    }
+
+    #[test]
+    fn Test_An_Unrecognized_Backend_Should_Be_A_Usage_Error()
+    {
+        let arguments = Arguments("execute --goal hello --backend gpt5");
+
+        let error = Parse(&arguments).expect_err("must refuse");
+
+        assert!(error.contains("--backend"), "{error}");
+        assert!(error.contains("gpt5"), "{error}");
+    }
+
+    #[test]
+    fn Test_A_Judge_Role_Command_Should_Parse_Its_Backend()
+    {
+        let arguments = Arguments("judge-role --crate nomos-agent-executor-claude-code --backend ollama");
+
+        let Command::JudgeRole { backend, .. } = Parse(&arguments).expect("parses") else { panic!("wrong variant") };
+
+        assert_eq!(backend, Backend::Ollama);
     }
 
     #[test]
@@ -382,10 +613,12 @@ mod tests
     {
         let arguments = Arguments("judge-role --crate nomos-agent-executor-claude-code");
 
-        let Command::JudgeRole { crate_name, root } = Parse(&arguments).expect("parses") else { panic!("wrong variant") };
+        let Command::JudgeRole { crate_name, root, effort, backend } = Parse(&arguments).expect("parses") else { panic!("wrong variant") };
 
         assert_eq!(crate_name, "nomos-agent-executor-claude-code");
         assert_eq!(root, PathBuf::from("."));
+        assert_eq!(effort, nomos_model_package::EffortLevel::BackendDefault);
+        assert_eq!(backend, Backend::ClaudeCode);
     }
 
     #[test]
@@ -396,6 +629,16 @@ mod tests
         let Command::JudgeRole { root, .. } = Parse(&arguments).expect("parses") else { panic!("wrong variant") };
 
         assert_eq!(root, PathBuf::from("/some/tree"));
+    }
+
+    #[test]
+    fn Test_A_Judge_Role_Command_Should_Parse_Its_Effort()
+    {
+        let arguments = Arguments("judge-role --crate nomos-agent-executor-claude-code --effort low");
+
+        let Command::JudgeRole { effort, .. } = Parse(&arguments).expect("parses") else { panic!("wrong variant") };
+
+        assert_eq!(effort, nomos_model_package::EffortLevel::Low);
     }
 
     #[test]

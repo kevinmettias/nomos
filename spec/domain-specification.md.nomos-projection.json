@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:8d1b3f00ebd2e613158133212bbe50a47c3c5204c003b17c33e475cf6c1e92a6",
-  "inputs_digest": "sha256:74a372337f6561c136743527c1edeaae2f1d525fcf8fc78351daf7a1b7dddfb0",
+  "content_digest": "sha256:21aa429fe380694acba58a7222dcd7b93160327467a7504d382ddc218a18fa00",
+  "inputs_digest": "sha256:a4f2bbe9569ad482cf6e223f0b75bfbaa5f203e9cfdd040dd261f848e48dac9c",
   "sections": [
     [
       "Documents",
-      169
+      168
     ],
     [
       "Sections",
-      1428
+      1425
     ],
     [
       "Source blocks",
-      4993
+      4989
     ]
   ],
   "inputs": [
@@ -172,11 +172,6 @@
     },
     {
       "content": "documents",
-      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md@authored",
-      "hash": "sha256:abebdf2b824324df346b84d0919c8c4d5388d053b4f113e1d93570f0e9e3939a"
-    },
-    {
-      "content": "documents",
       "identity": "docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md@authored",
       "hash": "sha256:f1e0d83250422ce9a01b49549ecadefeb10363f0ac7ac1e0aad7ef647caa2626"
     },
@@ -302,8 +297,8 @@
     },
     {
       "content": "documents",
-      "identity": "docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md@authored",
-      "hash": "sha256:ea763ec0abaa47ca8f8f8c56f0831097b8c0467b7146738054c39b61c9dc8f2f"
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md@authored",
+      "hash": "sha256:5505d057d0aa2bc7662cbfca82c015dd8ef4366f3a6e50d52516638489c4333a"
     },
     {
       "content": "documents",
@@ -1947,36 +1942,6 @@
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#1",
-      "hash": "sha256:3898a1caada3950e9e97be52a5ef355e18714f3a7f8010af1ff678123a228a72"
-    },
-    {
-      "content": "headings",
-      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#2",
-      "hash": "sha256:d0374037c22c4b9b9abd7d3f9730ee7eeb1edb59719257876dc4e40906fe3cca"
-    },
-    {
-      "content": "headings",
-      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#4",
-      "hash": "sha256:5103997e01d2a9644f36d9f760be5a8730a355332ff0988c27df0d97366a17d4"
-    },
-    {
-      "content": "headings",
-      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#9",
-      "hash": "sha256:7c5603e6f7a39ef86f0082373ccd62f5fd0dec69ff565da52b157cb27fedcfa8"
-    },
-    {
-      "content": "headings",
-      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#13",
-      "hash": "sha256:5c8ecd79dc3d30a6a204063d596a3c057be913bac2219fdaad9edbd2729095da"
-    },
-    {
-      "content": "headings",
-      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#15",
-      "hash": "sha256:1ede96a18093b3ee358c643cb4387deb8236faacc6888aa6ff5f005072e073d0"
-    },
-    {
-      "content": "headings",
       "identity": "docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md#1",
       "hash": "sha256:048d736833f31c53c285da5eb9e617ea348b63a830314bd9a16cce2d97081391"
     },
@@ -3002,33 +2967,48 @@
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#1",
-      "hash": "sha256:d8fa95631f84d57f36f006c098eda9b08b81ac31d1e7a3627b56a56ab55e88aa"
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#1",
+      "hash": "sha256:4a59b5f098bbc0cc9c1820838307301ea862274f4614e4d594a1421039c41168"
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#2",
-      "hash": "sha256:b0b568896f70eb450ccd167cc01d2044b255726cc46b0b6b4b36fb9484fa1372"
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#2",
+      "hash": "sha256:82d25333e8d4f35e3d161ac7a1e96f7398fbdfc17662fa0cfef011dac70e05a4"
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#4",
-      "hash": "sha256:f92d13ac9cbd9d45fe1919746381a7cf5841980187c2515adbd0b12cf8c46a74"
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#5",
+      "hash": "sha256:11e8803f94c48706eba102388eb8f11f71dd68b056073a6e0a0691c262976e27"
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#13",
-      "hash": "sha256:bff8e6cb8f7aadde0f698f883b07e6124d951d9ac7090a349112217189d9cbb7"
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#7",
+      "hash": "sha256:71f1e1233097ff36a04ef3c9f2b514bd23a5a79b22586fe2f0226edb0186edae"
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#17",
-      "hash": "sha256:e6d37519fd8faaab3f3f5dfd1cdb5bfd0ab71b24f1d3d96659240f8c06602cea"
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#12",
+      "hash": "sha256:93925f6aeb24729c26e8de542ba8e1c6c39e2626ac1f6858829ccf62bd2c62bc"
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#19",
-      "hash": "sha256:cc16ae532b20cb2dcf8023705692c63b0e777eb42838724e4b62d30b3ed3ed73"
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#14",
+      "hash": "sha256:67568f4b48ccb3005c61f425e79b516dddea2df6e8d511c887d083671e28ee20"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#23",
+      "hash": "sha256:7f4a4dbcc67f09d8943a764aa05fff213323ca11bf02c537ca78d9fef1a23e37"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#26",
+      "hash": "sha256:90e7ebbeb51d4527ff23e72ccd231b2e89a3b77a3e3e5dc56b00c72d3be0d1ad"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#31",
+      "hash": "sha256:0e372b505da9da15e5b5969805939335b42d1313826a9c36a3eb84136979c3e4"
     },
     {
       "content": "headings",
@@ -11737,86 +11717,6 @@
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#1",
-      "hash": "sha256:f08018252b6e7cdca5b4644d76c12ea900ab3609cd801541045c92d810613495"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#2",
-      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#3",
-      "hash": "sha256:5e94e9444ad04a038432d9de88842b0094491b660f885fdcfeaa345ea496ef71"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#4",
-      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#5",
-      "hash": "sha256:b3856fc421b9777609925a9c7c7c6490e8c27e3339529dfdc98d836d4ecfc68d"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#6",
-      "hash": "sha256:59e358d7886a19534738f0dd8f87ab4310a367bc65e6509e5a644a2d8ba6dffb"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#7",
-      "hash": "sha256:afce113842bf0714109d44b5ecfdb066152513990bd9f07dab7251bdc4603705"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#8",
-      "hash": "sha256:a92e3de1dbde6e723f11bccafebd84098cdc13c7008e73978fac7063fc6ffce3"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#9",
-      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#10",
-      "hash": "sha256:cd59688ba1821272d673614214bc402d0ae06e40fc874e0b4c05da4f82603283"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#11",
-      "hash": "sha256:794b03797a4c50808fb6bc078e788c61faa7f6c875f74e2d4ce79b2e63c0a8c0"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#12",
-      "hash": "sha256:61f3aed0cb902bfdfbc8e3e4d44e78b3a3cd6637ddab5de59de5ae793fa8fc88"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#13",
-      "hash": "sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#14",
-      "hash": "sha256:d2ac653c51cf197532965471455b8c881246e37ff293b9ee1cfa880a4a74cf84"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#15",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#16",
-      "hash": "sha256:f87d102ea13bcda0373b3bf59999dfe26afdc5b7b28086ddfc70ce0ed1a4e11f"
-    },
-    {
-      "content": "blocks",
       "identity": "docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md#1",
       "hash": "sha256:18dcad3114315f7e26a620aadc73d352e64d6b61c5e7575f2c31286b431081d6"
     },
@@ -15237,103 +15137,163 @@
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#1",
-      "hash": "sha256:251725de29abad4066dfdcfe9739c5d89969cdec72c965e76ea881a29f3b5ce9"
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#1",
+      "hash": "sha256:6556401acbabd0bdcd7b496cb560c795fd7a4f22752d37978d1499422362baf3"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#2",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#2",
       "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#3",
-      "hash": "sha256:3d93462112f3ffcbc55cd17fcadec93b7d929cb6deb8701f91aea21fc572e8d3"
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#3",
+      "hash": "sha256:73605a375167633e924d492dd83c32014f14f43edd55f49b6b6f661ff6fb510d"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#4",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#4",
+      "hash": "sha256:61aaed0aa3a280f4c115a1e30595a9505caa526b612c3951903891c3bcb309a0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#5",
       "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#5",
-      "hash": "sha256:93c0804c3d68d04203a6aac601f7de6ae1842ac8403f16d0ff35a7d05230d69d"
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#6",
+      "hash": "sha256:345f5e2adb7e890feb280cdfa28ec65d09b68e7f7169027b60354703579b643f"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#6",
-      "hash": "sha256:7eaf5592e64e43a218c5ced585b168346d5754c966f8b2d59565bd28a33d648d"
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#7",
+      "hash": "sha256:cbaf63550be8e520962e1f7474a6e49ed79d98a80186d4a9fcee7ccead75ade7"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#7",
-      "hash": "sha256:0ec77c1e15f32eb689400c5ac98f43e54afd76ba3210a4cbb64253264c8f106b"
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#8",
+      "hash": "sha256:9507bee5be16c72d8df25adb279edaded63e68625d3d6bd9a6ef51495f8b6112"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#8",
-      "hash": "sha256:ce879284fbada3a9187a167f07198a3831711bcd626b624f972edcb19b772aa2"
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#9",
+      "hash": "sha256:6186d1127c270bc2663e2e8a7328005c325e2cbfd1b50da24ed9931f3514df44"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#9",
-      "hash": "sha256:0fe7a80e76f1408950c2fd3b6b778ea1f73c1ccbd90e46ae67a640df7f8f8ce5"
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#10",
+      "hash": "sha256:7abf6f6593f913e15f44aebd0e23fbc242991e84140712de6af024bd571c5851"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#10",
-      "hash": "sha256:6ba09146d72bb90379fcc73fe170b13e88d1c2b9e8c6477bf0c495908b260886"
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#11",
+      "hash": "sha256:274bac7cdd61a572e5800a8020b5dcd82fa6f8418f8f45179469dc92d1747b43"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#11",
-      "hash": "sha256:3b0846ecd7829e0d9bd420883ab87af39ff218285656f40eb62c3476dc831cd9"
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#12",
+      "hash": "sha256:e82b9ec4e1b63e2d575a7ac0b148baed3f67f805a299f38b8faac7d9e3ab887e"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#12",
-      "hash": "sha256:1c799f2747ff98fb8766933d7d35b4aa3e40fb064fff46729e3f6ace1d127a46"
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#13",
+      "hash": "sha256:cb13f369b96404c96bc198b338529c642ff9bb7efd742c2c67af29992e8e569d"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#13",
-      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#14",
+      "hash": "sha256:6f52fcf12a95be3e9ed915d2818ce438c2255ec16b6e983a0424d7491717325c"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#14",
-      "hash": "sha256:f7e93a67c20da9362a3c0f9bd46b8d3c12d5902b23fec99bd9cdf569baf66c2d"
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#15",
+      "hash": "sha256:b353dafbfea9f9c0c07d6a5693b1d884ed637402d0945130211413954cee9af9"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#15",
-      "hash": "sha256:6e630b5409d49a82f7dba50ddd589da47615a49429f0cf7d914382a1fab97ef9"
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#16",
+      "hash": "sha256:869bbdd73929ac551d0669cd6d3caed7166aa6a1d5ead64c8d4375eaa775d96a"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#16",
-      "hash": "sha256:dfdc6dc78d4551bbee5b6d929a421d150149e5becd5c5ec6f783ad98265e4762"
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#17",
+      "hash": "sha256:ccdcf33b86d90c4edeaf3a850688fc178b63c33fb7c8b2a80719559f9bb7daa0"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#17",
-      "hash": "sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf"
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#18",
+      "hash": "sha256:9ef123a9d481baa51b0e6c585ee4b59e22555b2db9405e254bd9f91a0c290606"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#18",
-      "hash": "sha256:9e2993a12070d3f6673c1ca05255c6ae63fbc36e5cb1fa5ef7ce61033078ba31"
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#19",
+      "hash": "sha256:8c45bc1067d711e621064cf7c76efe7aa68095c2ec83d46dad50c6e3f450cd60"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#19",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#20",
+      "hash": "sha256:00dfeff54958823e13c902712c5a2b50eb72e544e395db041e8250bdc3868808"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#21",
+      "hash": "sha256:05cf917f2ef9edd580bf0cd8f6f320ba0d165e251655cc3e8b4e2f54df43a0a3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#22",
+      "hash": "sha256:ee9ede7889ca6a7019cb3b4eb03a8cbc69a18b49239a0868a9b19942716008c2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#23",
+      "hash": "sha256:4865a77f8126915a6ad3e6a258f5af73eefc1b30baeb4938ea003d7b90eeeae5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#24",
+      "hash": "sha256:3e07fcf59940a6ef06d3d0362085c3f9635d5385c520115c6acdcc867929f871"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#25",
+      "hash": "sha256:69f48c84ef9f40e58cf5c1c59f0fe2911391b503b4df51d638fffcdb1c737a02"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#26",
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#27",
+      "hash": "sha256:e0f8c65ee696e85077c58b31543ff3ef6f4d7b9962b60eb427907503d8694b40"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#28",
+      "hash": "sha256:b7cad3ee54e4ea499e8dd507f6ee44ad5f93f240dc1dc0c805794a6de116975c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#29",
+      "hash": "sha256:b47ccabcf7765e4a6d3eb8fc8d80f36c5247e2441bf87da08dee7076c8a77df2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#30",
+      "hash": "sha256:919fc5102c2c4ed956698c617ce483f47dce40bd0c330ba5d6d23f63b7e882c6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#31",
       "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#20",
-      "hash": "sha256:3800b84dd4364056c18937517b78896a646434c1f1c95aa3cf0504fcc81e86b9"
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#32",
+      "hash": "sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3"
     },
     {
       "content": "blocks",

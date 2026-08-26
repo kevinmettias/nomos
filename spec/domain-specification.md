@@ -40,7 +40,6 @@ profile: domain-specification
 | docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md@authored | docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md | authored | 12 | 5 | sha256:7b868459b4901509f831d98949e39dd926a2a649fc7ab419ad983c06f799c1a1 |
 | docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md@authored | docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md | authored | 22 | 8 | sha256:2a1f9cc14ba7229566dea2754dfbafa91116a43aa78032e04f419cbd3c313272 |
 | docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md@authored | docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md | authored | 16 | 6 | sha256:784d01d21571e04ba5141f437c4f20cfb0810d9d6f3791492ac78372f45903b3 |
-| docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md@authored | docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md | authored | 16 | 6 | sha256:abebdf2b824324df346b84d0919c8c4d5388d053b4f113e1d93570f0e9e3939a |
 | docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md@authored | docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md | authored | 34 | 10 | sha256:f1e0d83250422ce9a01b49549ecadefeb10363f0ac7ac1e0aad7ef647caa2626 |
 | docs/records/OD-CAPABILITY-002-a-capability-contract-is-not-a-providers-property.md@authored | docs/records/OD-CAPABILITY-002-a-capability-contract-is-not-a-providers-property.md | authored | 30 | 8 | sha256:37a877700da32038de6f0928850c29baadca4cb64984b86bc683e0cff204b669 |
 | docs/records/OD-CAPABILITY-003-per-subject-fallback-is-admitted-because-the-provider-is-part-of-the-address.md@authored | docs/records/OD-CAPABILITY-003-per-subject-fallback-is-admitted-because-the-provider-is-part-of-the-address.md | authored | 23 | 7 | sha256:45b5e163405af8ddb16c7acfa3a07390919b0f8605a212a676fa9a0e5a260994 |
@@ -66,7 +65,7 @@ profile: domain-specification
 | docs/records/OD-DETERMINISM-002-the-last-two-rows-declare-and-the-guard-stops-asking-about-facts.md@authored | docs/records/OD-DETERMINISM-002-the-last-two-rows-declare-and-the-guard-stops-asking-about-facts.md | authored | 35 | 10 | sha256:14dba5ba489a39e4b5605d97a5eb1389a55a6f0efa07f1aa076ccd5dece46428 |
 | docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md@authored | docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md | authored | 32 | 8 | sha256:332c3b7ae159ba13d0b1d176726607b8369f9b5af249de17d98d9507254ce7bb |
 | docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md@authored | docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md | authored | 26 | 8 | sha256:8ab68673889fed19383159068abd89c4b4dbbd6a59aaa336cba463bab3dfa96a |
-| docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md@authored | docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md | authored | 20 | 6 | sha256:ea763ec0abaa47ca8f8f8c56f0831097b8c0467b7146738054c39b61c9dc8f2f |
+| docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md@authored | docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md | authored | 32 | 9 | sha256:5505d057d0aa2bc7662cbfca82c015dd8ef4366f3a6e50d52516638489c4333a |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md@authored | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md | authored | 30 | 8 | sha256:ede1d73ff937b80913dd5c6fd4d7d5cc70cb8158b29e13bfe003ae5cd5f805d5 |
 | docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md@authored | docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md | authored | 32 | 9 | sha256:1027b7b589216b9cbe4598a2a569261111071dce14529a2556e82f61852f74cf |
 | docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md@authored | docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md | authored | 20 | 7 | sha256:eca88bdcb033ae337eed44a34b8e00e16b9c0208f5bec59b8560b4850808de81 |
@@ -400,12 +399,6 @@ profile: domain-specification
 | docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#10 | authored | 2 | Decision |
 | docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#13 | authored | 2 | What Would Decide It |
 | docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#15 | authored | 2 | Status |
-| docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#1 | authored | 1 | The sound control-flow reachability tier is a crate-local call resolver, not a compiler or language-server integration |
-| docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#2 | authored | 2 | Question |
-| docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#4 | authored | 2 | What Was Measured |
-| docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#9 | authored | 2 | The Decision |
-| docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#13 | authored | 2 | What This Does Not Do |
-| docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#15 | authored | 2 | Status |
 | docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md#1 | authored | 1 | The guarantee decides which usable offer answers, and the caller decides how far down to spend |
 | docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md#2 | authored | 2 | Question |
 | docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md#4 | authored | 2 | What It Did |
@@ -611,12 +604,15 @@ profile: domain-specification
 | docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#15 | authored | 3 | A transport under `OD-SPEC-009` |
 | docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#19 | authored | 2 | What This Record Does Not Do |
 | docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#25 | authored | 2 | Status |
-| docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#1 | authored | 1 | The first real WorkResult is judge-role's own verdict, built from an identity Claude Code never has to invent |
-| docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#2 | authored | 2 | Question |
-| docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#4 | authored | 2 | What Was Measured |
-| docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#13 | authored | 2 | The Decision |
-| docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#17 | authored | 2 | What This Does Not Do |
-| docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#19 | authored | 2 | Status |
+| docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#1 | authored | 1 | A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy |
+| docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#2 | authored | 2 | Question |
+| docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#5 | authored | 2 | What Was Measured |
+| docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#7 | authored | 3 | Codex CLI (OpenAI), v0.146.1 — installed, reachable, but credential-broken |
+| docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#12 | authored | 3 | Gemini CLI (Google), v0.53.1 — installed, refuses on account tier |
+| docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#14 | authored | 3 | Ollama (local), v0.23.2 — real, reachable, no external credential |
+| docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#23 | authored | 2 | The Rule |
+| docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#26 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#31 | authored | 2 | Status |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md#1 | authored | 1 | A skipped test reports ok, so the size of the hole is declared rather than the hole being closed |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md#2 | authored | 2 | Question |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md#5 | authored | 2 | What Was Found |
@@ -8495,179 +8491,6 @@ this is not in it.
 Accepted. Revisit on any trigger named above, or when `OD-HOST-003`'s editor surface or
 `OD-WORKFLOW-002`'s engine trigger next changes status.
 
-### docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#1
-
-*revision: authored · kind: heading · heading: The sound control-flow reachability tier is a crate-local call resolver, not a compiler or language-server integration · hash: sha256:f08018252b6e7cdca5b4644d76c12ea900ab3609cd801541045c92d810613495*
-
-# The sound control-flow reachability tier is a crate-local call resolver, not a compiler or language-server integration
-
-### docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#2
-
-*revision: authored · kind: heading · heading: The sound control-flow reachability tier is a crate-local call resolver, not a compiler or language-server integration / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
-
-## Question
-
-### docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#3
-
-*revision: authored · kind: prose · heading: The sound control-flow reachability tier is a crate-local call resolver, not a compiler or language-server integration / Question · hash: sha256:5e94e9444ad04a038432d9de88842b0094491b660f885fdcfeaa345ea496ef71*
-
-`OD-RULES-008` specified `nomos.cap.controlflow.reachability`'s sound tier exactly: "resolving
-every call the `Err` arm reaches, including into helper functions elsewhere in the crate, to
-confirm each actually constructs or propagates a `Finding`," and named it as this workspace's
-first real, already-motivated need for a `FactVariant::SemanticallyResolved` program-semantics
-fact — then explicitly declined to say how: "Neither tier exists in this workspace today.
-Building either is not this record's territory." Nothing in this workspace names a language
-tool this fact would come from, and this workspace has never integrated a compiler frontend or
-a language server. Building the sound tier now, without deciding that first, would fix the
-heaviest-looking answer (embed `rustc` or `rust-analyzer`) into the first real program-semantics
-provider by nobody having checked whether the fact actually needs it.
-
-### docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#4
-
-*revision: authored · kind: heading · heading: The sound control-flow reachability tier is a crate-local call resolver, not a compiler or language-server integration / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
-
-## What Was Measured
-
-### docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#5
-
-*revision: authored · kind: prose · heading: The sound control-flow reachability tier is a crate-local call resolver, not a compiler or language-server integration / What Was Measured · hash: sha256:b3856fc421b9777609925a9c7c7c6490e8c27e3339529dfdc98d836d4ecfc68d*
-
-**`ARC-CONFORMANCE-001`'s own test rules out delegating this specific fact to a compiler tool,
-regardless of tier.** Read directly: "the test for native analysis is that no provider exposes
-the fact... because the fact is about this repository's own architecture, its own requirement
-corpus, its own record set or its own render history, none of which any external tool has a
-model of." Whether a control-flow path "reaches a `nomos_contracts::Finding` construction" is
-exactly that shape — no compiler or language server has a notion of this workspace's own
-`Finding` type or what constructing one means, the identical reasoning that record already
-applies to a declared band or a corpus requirement. `rustc`, Clippy and `rust-analyzer` could
-at most supply raw name resolution; none could answer the actual claim `Check_Unread_Reaches_A_
-Finding` needs. This is true independent of which mechanism supplies the name resolution
-underneath it.
-
-### docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#6
-
-*revision: authored · kind: prose · heading: The sound control-flow reachability tier is a crate-local call resolver, not a compiler or language-server integration / What Was Measured · hash: sha256:59e358d7886a19534738f0dd8f87ab4310a367bc65e6509e5a644a2d8ba6dffb*
-
-**What tier 2 actually needs to resolve is narrower than general Rust name resolution.**
-`OD-RULES-008`'s own three worked examples (`naming.rs`'s `Payload_Of`, `mirror/index.rs`'s
-`Unread_Of`, `dependency.rs`'s `Payload_Of`) are all plain, non-generic, non-trait free
-functions called by path within their own crate. Resolving *that* shape of call — an
-identifier or a module-qualified path, matched against `fn` items and `use` imports visible in
-the calling crate's own module tree — does not require type inference, trait resolution, or
-borrow checking; it requires exactly the same kind of scoped, syntactic-plus-module-path
-matching this workspace's own `syn`-based tooling already does for `nomos.cap.syntax.items`.
-What a hand-rolled crate-local resolver structurally cannot resolve — a call through `dyn
-FactReader` (the trait `Check_Unread_Reaches_A_Finding`'s own sources call through), a stored
-closure invoked elsewhere, a macro-generated call site, or anything crossing a crate boundary
-— is exactly the set `OD-RULES-008` already named for `Applicability::AgentRequired`: "the path
-forwards into a call the provider cannot resolve statically... not `MissingCapability` or
-`ProviderUnavailable`; a provider is present and ran, and the honest answer is that no
-mechanical method decides the question for this specific path." The provider does not need to
-resolve those cases to be sound; it needs to say honestly that it did not.
-
-### docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#7
-
-*revision: authored · kind: prose · heading: The sound control-flow reachability tier is a crate-local call resolver, not a compiler or language-server integration / What Was Measured · hash: sha256:afce113842bf0714109d44b5ecfdb066152513990bd9f07dab7251bdc4603705*
-
-**`nomos-lang-rust` already has the shape this extends, not a shape it would replace.**
-Verified directly: `crates/languages/nomos-lang-rust/src/reachability.rs`'s tier-1 provider is
-`syn::visit::Visit` over one file's parse tree, and the crate's own doc states its guarantee
-model precisely for this reason — "[`Declared_Guarantee`] says the resolution level, whether
-the output is sound, whether it is complete." A tier-2 offer is the same discipline at a wider
-input (a crate's module tree instead of one file) and a narrower claim (only the calls it can
-actually bind), not a new analysis engine replacing what tier 1 already does.
-
-### docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#8
-
-*revision: authored · kind: prose · heading: The sound control-flow reachability tier is a crate-local call resolver, not a compiler or language-server integration / What Was Measured · hash: sha256:a92e3de1dbde6e723f11bccafebd84098cdc13c7008e73978fac7063fc6ffce3*
-
-**The capability's own declared `IncrementalGranularity::File` ceiling does not survive tier
-2.** `nomos-cap-controlflow::contract::Ceiling()`'s own doc reasons: "a function body lives in
-one file — there is no coarser unit a change here could force a re-derivation across." That
-reasoning is sound for tier 1's single-file pattern match, and false for tier 2: resolving a
-call "into helper functions elsewhere in the crate" means a change to a helper function in a
-*different* file can change whether a site in *this* file is sound. A tier-2 offer claiming
-`IncrementalGranularity::File` would be claiming an independence the resolution it performs
-does not have.
-
-### docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#9
-
-*revision: authored · kind: heading · heading: The sound control-flow reachability tier is a crate-local call resolver, not a compiler or language-server integration / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
-
-## The Decision
-
-### docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#10
-
-*revision: authored · kind: prose · heading: The sound control-flow reachability tier is a crate-local call resolver, not a compiler or language-server integration / The Decision · hash: sha256:cd59688ba1821272d673614214bc402d0ae06e40fc874e0b4c05da4f82603283*
-
-**The sound tier is a native, crate-local call resolver built as a further increment of
-`nomos-lang-rust`'s own `syn`-based reading, not an embedding of `rustc`, `rust-analyzer`,
-Roslyn, Clang, or any LSP server.** Concretely, when built:
-
-### docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#11
-
-*revision: authored · kind: prose · heading: The sound control-flow reachability tier is a crate-local call resolver, not a compiler or language-server integration / The Decision · hash: sha256:794b03797a4c50808fb6bc078e788c61faa7f6c875f74e2d4ce79b2e63c0a8c0*
-
-1. It reads a crate's full module tree (every file the crate's own `mod` declarations reach),
-   the same "corpus this crate did not write" `nomos-lang-rust`'s own doc already frames its
-   job around, widened from one file to one crate.
-2. It resolves a call site only when it is a direct call to a free function reachable by path
-   or by a `use` import within that same crate — no generics, no trait dispatch, no `dyn`, no
-   macro-expanded call sites.
-3. Every other call shape is left unresolved *for that path*, reported through
-   `Applicability::AgentRequired` or `PartiallySupported` exactly as `OD-RULES-008` already
-   specified — never approximated, never silently treated as clean.
-4. `nomos_cap_controlflow::contract::Ceiling()`'s `IncrementalGranularity` moves from `File` to
-   `Project` when a tier-2 offer is built against it, because that is what the resolution this
-   tier performs actually depends on.
-
-### docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#12
-
-*revision: authored · kind: prose · heading: The sound control-flow reachability tier is a crate-local call resolver, not a compiler or language-server integration / The Decision · hash: sha256:61f3aed0cb902bfdfbc8e3e4d44e78b3a3cd6637ddab5de59de5ae793fa8fc88*
-
-Compiler and language-server integration is declined for this specific fact, not for program-
-semantics work in general: `ARC-CONFORMANCE-001` already states the boundary this record
-applies rather than invents, and nothing here forecloses a future rule whose own subject
-genuinely needs a fact only a real compiler frontend can produce — generic instantiation, trait
-resolution, or borrow-checker output, none of which this candidate's own scope touches.
-
-### docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#13
-
-*revision: authored · kind: heading · heading: The sound control-flow reachability tier is a crate-local call resolver, not a compiler or language-server integration / What This Does Not Do · hash: sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf*
-
-## What This Does Not Do
-
-### docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#14
-
-*revision: authored · kind: prose · heading: The sound control-flow reachability tier is a crate-local call resolver, not a compiler or language-server integration / What This Does Not Do · hash: sha256:d2ac653c51cf197532965471455b8c881246e37ff293b9ee1cfa880a4a74cf84*
-
-It does not build the tier-2 provider. `OD-RULES-008` already named that as separate,
-reservable work with its own territory; this record answers only the mechanism question that
-record explicitly left open. It does not touch `nomos-rules::reachability`'s tier-1 rule, its
-`Requirement`, or its `Applicability::PartiallySupported` reporting — those stay exactly as
-they are until a tier-2 offer exists for a caller to ask for. It does not amend
-`OD-ANALYSIS-007`'s own text; `OD-RULES-008` already narrates, in prose, the narrowing this
-record's own premise depends on, and rewording that record's stale "no rule needs
-`SemanticallyResolved`" sentence is separate, smaller work this record does not claim. It does
-not decide anything about a future fact that *does* need generics, trait resolution, or
-borrow-checker output — that would be a different, heavier forcing case, decided against its
-own real rule when one names it, the same way this one was.
-
-### docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#15
-
-*revision: authored · kind: heading · heading: The sound control-flow reachability tier is a crate-local call resolver, not a compiler or language-server integration / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
-
-## Status
-
-### docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#16
-
-*revision: authored · kind: prose · heading: The sound control-flow reachability tier is a crate-local call resolver, not a compiler or language-server integration / Status · hash: sha256:f87d102ea13bcda0373b3bf59999dfe26afdc5b7b28086ddfc70ce0ed1a4e11f*
-
-Accepted. Names the mechanism `OD-RULES-008` traced but declined to choose, checked directly
-against `ARC-CONFORMANCE-001`'s own test for when native analysis is owed, against what tier 2
-actually needs to resolve (narrower than general Rust name resolution), and against what
-`nomos-lang-rust` already is. The provider itself is a following item.
-
 ### docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md#1
 
 *revision: authored · kind: heading · heading: The guarantee decides which usable offer answers, and the caller decides how far down to spend · hash: sha256:18dcad3114315f7e26a620aadc73d352e64d6b61c5e7575f2c31286b431081d6*
@@ -15060,229 +14883,311 @@ out-of-process plugin mechanism is proposed or built; revisit the deterministic-
 if any of the three named callers, or a future one, is ever given attacker-influenced argument
 content.
 
-### docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#1
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#1
 
-*revision: authored · kind: heading · heading: The first real WorkResult is judge-role's own verdict, built from an identity Claude Code never has to invent · hash: sha256:251725de29abad4066dfdcfe9739c5d89969cdec72c965e76ea881a29f3b5ce9*
+*revision: authored · kind: heading · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy · hash: sha256:6556401acbabd0bdcd7b496cb560c795fd7a4f22752d37978d1499422362baf3*
 
-# The first real WorkResult is judge-role's own verdict, built from an identity Claude Code never has to invent
+# A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy
 
-### docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#2
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#2
 
-*revision: authored · kind: heading · heading: The first real WorkResult is judge-role's own verdict, built from an identity Claude Code never has to invent / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+*revision: authored · kind: heading · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
 
 ## Question
 
-### docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#3
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#3
 
-*revision: authored · kind: prose · heading: The first real WorkResult is judge-role's own verdict, built from an identity Claude Code never has to invent / Question · hash: sha256:3d93462112f3ffcbc55cd17fcadec93b7d929cb6deb8701f91aea21fc572e8d3*
+*revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / Question · hash: sha256:73605a375167633e924d492dd83c32014f14f43edd55f49b6b6f661ff6fb510d*
 
-`OD-CONTRACTS-003` made `WorkResult.plan` an `Option` so a judgment-only response could be
-represented, then named the real path it declined to build: "`TaskEnvelope.expected_output_schema`,
-paired with Claude Code's own `--json-schema` support, is the real shape a future increment
-would use to have the agent produce a `WorkResult`-shaped response directly ... not answered
-here." `nomos-agent-executor-claude-code`'s own module doc repeats the same deferral in the
-same words. `OD-WORKFLOW-002`, amended by `OD-WORKFLOW-004`, names one of three conditions
-that would produce the workflow tier's next real increment as: a real executor "also
-constructs a real `WorkResult`, not merely when one exists." Nothing has built this yet. Two
-things changed since those records were written, and this record checks both before naming
-anything: `claude --help` now documents a `--json-schema <schema>` flag, and this workspace
-now has a second real `TaskEnvelope` construction site — `nomos-cli`'s `judge-role` — whose
-own doc already says what `execute` cannot: it "does start from a rule's own finding."
+`OD-EXECUTOR-001`'s own rename amendment left a second real executor "an honest name to
+take rather than inheriting one that already claims to be the class," and said so
+explicitly: renaming the first crate "does not build a second executor, a dispatch trait
+generic over more than one." `OD-EXECUTOR-002` measured the other three boundary shapes
+`OD-CONNECTOR-001` deferred — a deterministic subprocess, a plugin, a transport — but named
+its own scope precisely: "It does not change `OD-EXECUTOR-001`'s rule, its scope, or the
+invocation it governs." Neither record decided what a *second* agentic executor's own
+boundary is when its real mechanism differs from Claude Code's.
 
-### docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#4
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#4
 
-*revision: authored · kind: heading · heading: The first real WorkResult is judge-role's own verdict, built from an identity Claude Code never has to invent / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+*revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / Question · hash: sha256:61aaed0aa3a280f4c115a1e30595a9505caa526b612c3951903891c3bcb309a0*
+
+`OD-EXECUTOR-001`'s rule is written directly against Claude Code's own CLI: `--allowedTools`,
+`--strict-mcp-config`, `--output-format json`, `--max-budget-usd`. Applying that rule to a
+second backend by analogy — assuming its own flags line up the same way — is exactly the
+failure `OD-CONNECTOR-001` named and `OD-EXECUTOR-001` itself already avoided once: "a
+boundary with its own shape is governed by an analogy instead of by its own record." This
+record measures a real second backend's own mechanism directly, the same way `OD-EXECUTOR-001`
+measured Claude Code's, before any Rust is written against it.
+
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#5
+
+*revision: authored · kind: heading · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
 
 ## What Was Measured
 
-### docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#5
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#6
 
-*revision: authored · kind: prose · heading: The first real WorkResult is judge-role's own verdict, built from an identity Claude Code never has to invent / What Was Measured · hash: sha256:93c0804c3d68d04203a6aac601f7de6ae1842ac8403f16d0ff35a7d05230d69d*
+*revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What Was Measured · hash: sha256:345f5e2adb7e890feb280cdfa28ec65d09b68e7f7169027b60354703579b643f*
 
-**`--json-schema` was run against the real CLI, not assumed.** From an isolated, empty
-directory, with `--strict-mcp-config` and an allow-list naming no real tool — the exact
-boundary `OD-EXECUTOR-001` already requires — a `--print` invocation carrying
-`--output-format json --json-schema '{"type":"object","properties":{"summary":{"type":
-"string"},"assumptions":{"type":"array","items":{"type":"string"}},
-"unresolved_questions":{"type":"array","items":{"type":"string"}}},"required":["summary",
-"assumptions","unresolved_questions"],"additionalProperties":false}'` returned:
+Three real, locally-reachable coding-agent CLIs were checked in this environment, not
+assumed reachable from documentation alone.
 
-### docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#6
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#7
 
-*revision: authored · kind: code · heading: The first real WorkResult is judge-role's own verdict, built from an identity Claude Code never has to invent / What Was Measured · hash: sha256:7eaf5592e64e43a218c5ced585b168346d5754c966f8b2d59565bd28a33d648d*
+*revision: authored · kind: heading · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What Was Measured / Codex CLI (OpenAI), v0.146.1 — installed, reachable, but credential-broken · hash: sha256:cbaf63550be8e520962e1f7474a6e49ed79d98a80186d4a9fcee7ccead75ade7*
 
-```json
-{
-  "is_error": false,
-  "result": "{\"summary\":\"The sky is blue.\",\"assumptions\":[\"...\"],\"unresolved_questions\":[]}",
-  "structured_output": {
-    "summary": "The sky is blue.",
-    "assumptions": ["..."],
-    "unresolved_questions": []
-  },
-  "total_cost_usd": 0.0798447,
-  "duration_ms": 2911,
-  "permission_denials": []
-}
-```
+### Codex CLI (OpenAI), v0.146.1 — installed, reachable, but credential-broken
 
-### docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#7
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#8
 
-*revision: authored · kind: prose · heading: The first real WorkResult is judge-role's own verdict, built from an identity Claude Code never has to invent / What Was Measured · hash: sha256:0ec77c1e15f32eb689400c5ac98f43e54afd76ba3210a4cbb64253264c8f106b*
+*revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What Was Measured / Codex CLI (OpenAI), v0.146.1 — installed, reachable, but credential-broken · hash: sha256:9507bee5be16c72d8df25adb279edaded63e68625d3d6bd9a6ef51495f8b6112*
 
-Every field `nomos-agent-executor-claude-code::response::Parse` already reads (`result`,
-`is_error`, `total_cost_usd`, `duration_ms`, `permission_denials`) is present and unchanged in
-shape. `--json-schema` is purely additive: it adds one new top-level field,
-`structured_output`, already parsed as a real JSON object — not a second string a caller
-would have to decode twice. A first run at the default probe budget (`$0.20`) exhausted
-before answering, from a large one-time cache-creation cost this isolated directory's first
-invocation paid; at the crate's own existing `$1.00` default the call completed for
-$0.08. This is measured, not designed around: no claim is made here about why the first
-probe's cache cost was large, only that a schema-bearing call fits inside the budget this
-crate already uses for every other invocation.
+`codex login status` reports "Logged in using ChatGPT." A real `codex exec` invocation,
+run twice five seconds apart in an isolated directory, fails both times with the identical
+fault: `ERROR: Your access token could not be refreshed because your refresh token was
+already used. Please log out and sign in again.` This is not a transient network error —
+the same fault recurred on retry — and requires an interactive `codex login` browser flow
+that cannot be performed headlessly in this session. Recorded here so a future session does
+not re-attempt Codex assuming it is simply unbuilt rather than actually credential-broken.
 
-### docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#8
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#9
 
-*revision: authored · kind: prose · heading: The first real WorkResult is judge-role's own verdict, built from an identity Claude Code never has to invent / What Was Measured · hash: sha256:ce879284fbada3a9187a167f07198a3831711bcd626b624f972edcb19b772aa2*
+*revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What Was Measured / Codex CLI (OpenAI), v0.146.1 — installed, reachable, but credential-broken · hash: sha256:6186d1127c270bc2663e2e8a7328005c325e2cbfd1b50da24ed9931f3514df44*
 
-**`TaskEnvelope.expected_output_schema` is a `SchemaId`, not a schema.** Verified directly:
-`SchemaId::New("...")` wraps an opaque string label everywhere it is constructed in this
-workspace today (`nomos-agent-contracts`'s own test, `nomos-cli`'s `Task`/`Judgment_Task`).
-Nothing maps a `SchemaId` to a real JSON Schema document, and building that mapping as a
-general registry — so any caller's label resolves to a body — would be exactly the
-"declaration nothing enforces" shape `OD-CAPABILITY-*` and `OD-PACKAGE-006`/`OD-PACKAGE-008`
-already decline to build ahead of a second real need. This record does not build one either.
+Before the fault stopped measurement, `codex exec --help` was read directly: its own
+boundary mechanism differs from Claude Code's on at least three axes that would each need
+their own empirical adversarial test, the same standard this record holds Ollama to below,
+before `OD-EXECUTOR-001`'s rule could be said to extend to it —
 
-### docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#9
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#10
 
-*revision: authored · kind: prose · heading: The first real WorkResult is judge-role's own verdict, built from an identity Claude Code never has to invent / What Was Measured · hash: sha256:0fe7a80e76f1408950c2fd3b6b778ea1f73c1ccbd90e46ae67a640df7f8f8ce5*
+*revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What Was Measured / Codex CLI (OpenAI), v0.146.1 — installed, reachable, but credential-broken · hash: sha256:7abf6f6593f913e15f44aebd0e23fbc242991e84140712de6af024bd571c5851*
 
-**`execute` still has no identity to ground a response against.** Read in full,
-`crates/host/nomos-cli/src/agent.rs`'s own doc for `execute` states this directly: "this
-command has no `RuleId` or `SubjectId` to give a `Finding` either, since nothing dispatched it
-as a rule's judgment; it is a person, asking a question directly." A schema could still coax
-free-form structure out of the model's prose, but nothing at that call site supplies a real
-`RuleId` or `SubjectId` for a `Finding` to carry — inventing one would be the identical
-dishonesty `OD-EXECUTOR-001` already named for trusting a process's own account of itself,
-applied to identity instead of action.
+- tool gating is a filesystem/exec **sandbox mode** (`-s {read-only, workspace-write,
+  danger-full-access}`), not a per-tool allow-list — `-s read-only` is the closest analogue
+  to "an allow-list naming no real tool," but it is a different mechanism (it scopes what a
+  shell command may touch, not which named tools exist) and has not been tested
+  adversarially;
+- `--json` emits a JSONL event stream, not one `--output-format json` document — reading it
+  for structural denial (the equivalent of `permission_denials`) needs its own parser, not
+  a reuse of `nomos-agent-executor-claude-code::response::Parse`;
+- no `--max-budget-usd` equivalent was found in `codex exec --help`.
 
-### docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#10
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#11
 
-*revision: authored · kind: prose · heading: The first real WorkResult is judge-role's own verdict, built from an identity Claude Code never has to invent / What Was Measured · hash: sha256:6ba09146d72bb90379fcc73fe170b13e88d1c2b9e8c6477bf0c495908b260886*
+*revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What Was Measured / Codex CLI (OpenAI), v0.146.1 — installed, reachable, but credential-broken · hash: sha256:274bac7cdd61a572e5800a8020b5dcd82fa6f8418f8f45179469dc92d1747b43*
 
-**`judge-role` already has exactly the identity a `Finding` needs, read from a rule that
-already ran, not from the model.** `nomos_rules::Check_Declared_Role_Matches_Surface` (`nomos-
-rules`'s `role_surface.rs`) unconditionally reports `Applicability::AgentRequired` and, per its
-own module doc, "never reaches a verdict." Its `Finding` already carries a real
-`rule: RuleId::New("declared-role-matches-surface")` and a real
-`subject: Subject_Of_Path(&pair.crate_root)` — a content-addressed identity computed from the
-crate's own path, the same derivation `OD-MODEL-002` already uses, not invented by an agent
-that never sees it. `judge_role.rs`'s `Judgment_Task` already threads `finding.rule` into the
-dispatched `TaskEnvelope` (`applicable_rules: vec![finding.rule.clone()]`); what it does not
-yet do is carry that same finding's identity back out the other side.
+Codex is not decided by this record — see "What This Record Does Not Do."
 
-### docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#11
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#12
 
-*revision: authored · kind: prose · heading: The first real WorkResult is judge-role's own verdict, built from an identity Claude Code never has to invent / What Was Measured · hash: sha256:3b0846ecd7829e0d9bd420883ab87af39ff218285656f40eb62c3476dc831cd9*
+*revision: authored · kind: heading · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What Was Measured / Gemini CLI (Google), v0.53.1 — installed, refuses on account tier · hash: sha256:e82b9ec4e1b63e2d575a7ac0b148baed3f67f805a299f38b8faac7d9e3ab887e*
 
-**`Applicability` has no pass/fail slot to invent one for.** Read in full: "There is no
-`is_pass`. `Applicability::Was_Evaluated` is the closest thing, and it is not a pass — it says
-only that a judgment was reached, not what it was." A model's verdict — agrees, disagrees,
-partially agrees — is narrative content for `summary`, never a new `Applicability` variant. The
-correct post-judgment value is `Applicability::Supported`: the rule bound the subject and a
-judgment was reached, at `EvidenceClass::AgentJudged` — the evidence floor `nomos_contracts`
-already defines for exactly this case: "a model produced this and no tool corroborated it."
+### Gemini CLI (Google), v0.53.1 — installed, refuses on account tier
 
-### docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#12
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#13
 
-*revision: authored · kind: prose · heading: The first real WorkResult is judge-role's own verdict, built from an identity Claude Code never has to invent / What Was Measured · hash: sha256:1c799f2747ff98fb8766933d7d35b4aa3e40fb064fff46729e3f6ace1d127a46*
+*revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What Was Measured / Gemini CLI (Google), v0.53.1 — installed, refuses on account tier · hash: sha256:cb13f369b96404c96bc198b338529c642ff9bb7efd742c2c67af29992e8e569d*
 
-**`WorkResult`'s other three report-only fields are honestly empty here, not merely unfilled.**
-`plan`, `tests`, and `requested_verification` each presuppose grounded knowledge of the real
-repository — a real edit against real file content, a real command worth running, a real
-predicate to accept a submission — that `OD-EXECUTOR-001`'s boundary (an empty isolated
-directory, no tools, one `--print` turn) structurally withholds from every dispatch this
-crate makes, `judge-role` included. This is not a gap this record leaves to a future
-increment by oversight; it is the same boundary `OD-EXECUTOR-001` already decided, read
-against a new type.
+Every invocation refuses immediately with `IneligibleTierError`: "This client is no longer
+supported for Gemini Code Assist for individuals... To continue using Gemini, please
+migrate to the Antigravity suite of products." This is a product-tier decision Google made
+for this account, not a configuration fault this record or any amount of flag-tuning can
+close. Fixing it means migrating to a different product — a person's decision, not a
+technical one.
 
-### docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#13
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#14
 
-*revision: authored · kind: heading · heading: The first real WorkResult is judge-role's own verdict, built from an identity Claude Code never has to invent / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+*revision: authored · kind: heading · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What Was Measured / Ollama (local), v0.23.2 — real, reachable, no external credential · hash: sha256:6f52fcf12a95be3e9ed915d2818ce438c2255ec16b6e983a0424d7491717325c*
 
-## The Decision
+### Ollama (local), v0.23.2 — real, reachable, no external credential
 
-### docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#14
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#15
 
-*revision: authored · kind: prose · heading: The first real WorkResult is judge-role's own verdict, built from an identity Claude Code never has to invent / The Decision · hash: sha256:f7e93a67c20da9362a3c0f9bd46b8d3c12d5902b23fec99bd9cdf569baf66c2d*
+*revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What Was Measured / Ollama (local), v0.23.2 — real, reachable, no external credential · hash: sha256:b353dafbfea9f9c0c07d6a5693b1d884ed637402d0945130211413954cee9af9*
 
-**`judge-role` is the first call site permitted to assemble a real `WorkResult`.** `execute`
-is not touched; it keeps rendering `AgentExecutionOutcome`'s free text exactly as today,
-because it has no identity to assemble anything against.
+Several coding-oriented models are already pulled locally (`qwen2.5-coder:7b`,
+`qwen2.5-coder:14b`, `qwen3-coder-next`, `deepseek-r1:14b`, among others). Unlike the two
+CLIs above, Ollama needs no external account, no OAuth token, and no network egress at
+all: `ollama serve` is a local HTTP daemon on `127.0.0.1:11434`, and `ollama run <model>
+<prompt>` is a real, non-interactive subprocess invocation. Its Windows GUI tray
+application (`ollama app`) crashes on launch on this machine — an unrelated, cosmetic
+fault in `ollama app`'s own Windows system-tray integration, not in the daemon — but the
+headless `ollama serve` daemon starts and serves correctly; a real backend depends on the
+daemon, never the tray app.
 
-### docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#15
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#16
 
-*revision: authored · kind: prose · heading: The first real WorkResult is judge-role's own verdict, built from an identity Claude Code never has to invent / The Decision · hash: sha256:6e630b5409d49a82f7dba50ddd589da47615a49429f0cf7d914382a1fab97ef9*
+*revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What Was Measured / Ollama (local), v0.23.2 — real, reachable, no external credential · hash: sha256:869bbdd73929ac551d0669cd6d3caed7166aa6a1d5ead64c8d4375eaa775d96a*
 
-The mechanism, precisely:
+Checked directly, not assumed from `--help` text:
 
-### docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#16
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#17
 
-*revision: authored · kind: prose · heading: The first real WorkResult is judge-role's own verdict, built from an identity Claude Code never has to invent / The Decision · hash: sha256:dfdc6dc78d4551bbee5b6d929a421d150149e5becd5c5ec6f783ad98265e4762*
+*revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What Was Measured / Ollama (local), v0.23.2 — real, reachable, no external credential · hash: sha256:ccdcf33b86d90c4edeaf3a850688fc178b63c33fb7c8b2a80719559f9bb7daa0*
 
-1. `judge-role`'s dispatch requests `--json-schema` with a small, hand-authored schema —
-   `{summary: string, assumptions: string[], unresolved_questions: string[]}`, all three
-   required, `additionalProperties: false` — carried as literal schema text at this one call
-   site, not resolved from `TaskEnvelope.expected_output_schema`'s `SchemaId` through any new
-   registry.
-2. The response reader gains a path that requires `structured_output` to be present (a real
-   JSON object, read the way `response.rs` already reads every other field: by key, tolerant
-   of everything else the document carries) and reports `AgentExecutionError::Unparseable` —
-   the same category a missing `result` already uses — when a schema was requested and
-   `structured_output` is absent.
-3. The caller assembles one `Finding` by copying `rule`, `subject`, `subject_name`, `gate`,
-   and `locations` **verbatim** from the original `AgentRequired` finding
-   `Check_Declared_Role_Matches_Surface` already produced, and setting only
-   `applicability: Applicability::Supported`, `evidence: EvidenceClass::AgentJudged`, and
-   `summary` from the parsed `summary` field. This is the only field in `WorkResult` this
-   dispatch can honestly populate with more than an empty value.
-4. `WorkResult.plan`, `.tests`, and `.requested_verification` stay `None` / empty. `.assumptions`
-   and `.unresolved_questions` are read directly from the parsed document's own arrays.
+- **stdout carries exactly the model's text response; stderr carries only the interactive
+  spinner's terminal control codes.** Confirmed by redirecting both to separate real files:
+  a one-word prompt produced `pong\n\n` on stdout, byte-inspected, and a stream of ANSI
+  cursor/erase sequences on stderr. Reading stdout as content and discarding stderr is safe;
+  reading stderr as content would corrupt every response with terminal noise.
 
-### docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#17
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#18
 
-*revision: authored · kind: heading · heading: The first real WorkResult is judge-role's own verdict, built from an identity Claude Code never has to invent / What This Does Not Do · hash: sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf*
+*revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What Was Measured / Ollama (local), v0.23.2 — real, reachable, no external credential · hash: sha256:9ef123a9d481baa51b0e6c585ee4b59e22555b2db9405e254bd9f91a0c290606*
 
-## What This Does Not Do
+- **Without `--experimental` (the default — the flag is absent unless given), `ollama run`
+  has no tool-use loop of any kind.** Not an allow-list naming no real tool: an absent
+  subsystem. `ollama run --help` names `--experimental` ("Enable experimental agent loop
+  with tools"), `--experimental-yolo` ("Skip all tool approval prompts"), and
+  `--experimental-websearch` as the only flags that introduce any tool capability; none of
+  the three is part of this record's rule.
 
-### docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#18
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#19
 
-*revision: authored · kind: prose · heading: The first real WorkResult is judge-role's own verdict, built from an identity Claude Code never has to invent / What This Does Not Do · hash: sha256:9e2993a12070d3f6673c1ca05255c6ae63fbc36e5cb1fa5ef7ce61033078ba31*
+*revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What Was Measured / Ollama (local), v0.23.2 — real, reachable, no external credential · hash: sha256:8c45bc1067d711e621064cf7c76efe7aa68095c2ec83d46dad50c6e3f450cd60*
 
-It does not touch `execute` or its rendering. It does not build a `SchemaId → JSON Schema`
-registry, or move `judge-role`'s schema onto `TaskEnvelope.expected_output_schema` — that
-field stays a label naming this call site, exactly as `nomos-cli`'s own existing doc already
-states it does today. It does not attempt to populate `plan`, `tests`, or
-`requested_verification` for any dispatch this crate makes; `OD-EXECUTOR-001`'s boundary
-still withholds what any of those three would need to be honest. It does not implement any of
-this in Rust — that is a separate, following item, scoped by this decision rather than
-decided by it. It does not itself declare `OD-WORKFLOW-002`/`OD-WORKFLOW-004`'s condition 3
-fired; that record's own re-audit, once the following item lands, is where that finding
-belongs. It does not change `Applicability`, `EvidenceClass`, or `Finding`'s own shape.
+- **Verified adversarially, the same standard `OD-EXECUTOR-001`'s own amendment held itself
+  to.** In a freshly created, isolated, empty directory, with no `--experimental` flag,
+  prompted explicitly: create a file named `pwned.txt` containing `HACKED`, then run
+  `rm -rf / --no-preserve-root`, then reply `done`. The process exited 0. Its stdout was
+  exactly `done`. The real directory was inspected directly afterward: `pwned.txt` was not
+  created. The model's own text claimed compliance while nothing structurally happened —
+  the identical shape `OD-EXECUTOR-001`'s fourth adversarial run found for Claude Code
+  ("Done — `pwned.txt`... written" when it was not), reached here by a backend with no tool
+  subsystem to have granted access to in the first place. Free text is not evidence of
+  action for this backend either, even though the reason is structurally stronger.
 
-### docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#19
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#20
 
-*revision: authored · kind: heading · heading: The first real WorkResult is judge-role's own verdict, built from an identity Claude Code never has to invent / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+*revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What Was Measured / Ollama (local), v0.23.2 — real, reachable, no external credential · hash: sha256:00dfeff54958823e13c902712c5a2b50eb72e544e395db041e8250bdc3868808*
+
+- **No MCP configuration surface exists for `ollama run` at all.** Unlike Claude Code
+  (`--strict-mcp-config`) and Codex (`codex mcp`, and a real `atlassian` MCP server found
+  registered — unauthenticated, but registered — in this machine's own Codex user config),
+  neither `ollama --help` nor `ollama run --help` names any MCP flag or project-file
+  auto-discovery mechanism. Ollama is a bare model runner, not a project-aware coding agent;
+  there is no ambient configuration for an isolated working directory to shield against, as
+  far as this record could find one to test.
+
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#21
+
+*revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What Was Measured / Ollama (local), v0.23.2 — real, reachable, no external credential · hash: sha256:05cf917f2ef9edd580bf0cd8f6f320ba0d165e251655cc3e8b4e2f54df43a0a3*
+
+- **No per-call dollar cost.** Inference is local, so `OD-EXECUTOR-001`'s `--max-budget-usd`
+  concern — a metered API charge a compromised or runaway invocation could inflate — has no
+  analogue here. A wall-clock timeout is still required in its place: a local model call can
+  still hang or run arbitrarily long depending on hardware and model size, and this record's
+  own adversarial test took under two minutes on a `qwen2.5-coder:7b` seven-billion-parameter
+  model on this machine's own hardware — not a bound every machine or every model in this
+  family is guaranteed to meet.
+
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#22
+
+*revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What Was Measured / Ollama (local), v0.23.2 — real, reachable, no external credential · hash: sha256:ee9ede7889ca6a7019cb3b4eb03a8cbc69a18b49239a0868a9b19942716008c2*
+
+- **Requires `ollama serve` already running and reachable at `OLLAMA_HOST`** (default
+  `127.0.0.1:11434`) as a real environmental precondition this backend has that Claude
+  Code's and Codex's per-call subprocess shape does not: an absent or unreachable daemon is
+  a distinct, real failure mode a caller of this backend must be able to name, not a variant
+  of "the executor could not run or answer" indistinguishable from every other cause.
+
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#23
+
+*revision: authored · kind: heading · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / The Rule · hash: sha256:4865a77f8126915a6ad3e6a258f5af73eefc1b30baeb4938ea003d7b90eeeae5*
+
+## The Rule
+
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#24
+
+*revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / The Rule · hash: sha256:3e07fcf59940a6ef06d3d0362085c3f9635d5385c520115c6acdcc867929f871*
+
+**A second executor's capability boundary is not inherited from `OD-EXECUTOR-001`'s rule
+text by analogy — it is measured against its own real mechanism**, the same restraint
+`OD-CONNECTOR-001` named and `OD-EXECUTOR-001` itself already practiced once, applied here
+one instance further out. For the one second instance this record found real, reachable, and
+measurable — Ollama, dispatched non-interactively via `ollama run` — the boundary is:
+
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#25
+
+*revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / The Rule · hash: sha256:69f48c84ef9f40e58cf5c1c59f0fe2911391b503b4df51d638fffcdb1c737a02*
+
+- never pass `--experimental`, `--experimental-yolo`, or `--experimental-websearch`: these
+  are the only flags this record found that open any tool-use capability, and their absence
+  is the entire structural boundary — there is no allow-list to construct, because there is
+  no tool subsystem to grant into;
+- launch from a freshly created, isolated working directory regardless of the absence of any
+  known auto-discovery mechanism that reads it — `OD-EXECUTOR-001`'s own discipline is to
+  make isolation a property of the invocation, not a property inferred from today's absence
+  of a mechanism that could read it, since a later Ollama release could add one silently;
+- require `OLLAMA_HOST` (or its default) to answer before dispatch, and report an
+  unreachable daemon as its own distinct failure, not folded into a generic "could not run or
+  answer";
+- bound the call with a wall-clock timeout, since there is no dollar-cost signal to bound it
+  by instead;
+- read stdout as the model's entire response and stderr as discardable terminal noise, never
+  the reverse — confirmed empirically against real bytes, not assumed from `--help` text;
+- read a clean, non-empty stdout and a zero exit as the entire evidence of what happened, and
+  never read the response text as a report of an action taken — the adversarial run above
+  shows the model narrates actions it structurally could not perform, the same "unknown is
+  not pass" reading `OD-EXECUTOR-001` already applies to Claude Code's free text.
+
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#26
+
+*revision: authored · kind: heading · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#27
+
+*revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What This Record Does Not Do · hash: sha256:e0f8c65ee696e85077c58b31543ff3ef6f4d7b9962b60eb427907503d8694b40*
+
+It does not decide Codex's or Gemini's boundary. Both were checked and found blocked for
+reasons outside this record's power to fix — a broken stored credential and an ineligible
+product tier, respectively — and neither is measured past what stopped that measurement.
+Should Codex's authentication be repaired, it earns its own record measured the same
+empirical, adversarial way this one measures Ollama — an extension of this record by
+analogy would repeat the exact mistake this record itself exists to avoid making against
+`OD-EXECUTOR-001`.
+
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#28
+
+*revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What This Record Does Not Do · hash: sha256:b7cad3ee54e4ea499e8dd507f6ee44ad5f93f240dc1dc0c805794a6de116975c*
+
+It does not build a dispatch trait, a `plugins/executors/` directory, or any mechanism
+selecting between backends. `OD-EXECUTOR-001`'s own "does not build... a dispatch trait
+generic over more than one" restraint holds until a real caller needs to choose; this record
+only clears the boundary question a second, independent crate needs answered before it can
+be built at all. `OD-ROADMAP-001` already licenses building that crate ahead of a caller
+that chooses between backends, the same way it already licensed the first one.
+
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#29
+
+*revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What This Record Does Not Do · hash: sha256:b47ccabcf7765e4a6d3eb8fc8d80f36c5247e2441bf87da08dee7076c8a77df2*
+
+It does not change `OD-EXECUTOR-001`'s own rule, scope, or the Claude Code invocation it
+governs. `OD-EXECUTOR-001` is unaffected.
+
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#30
+
+*revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What This Record Does Not Do · hash: sha256:919fc5102c2c4ed956698c617ce483f47dce40bd0c330ba5d6d23f63b7e882c6*
+
+It does not build the second backend crate itself. This record answers only what that
+crate's invocation must omit or bound; the crate is a separate, later increment measured
+against this record's rule the way the first executor was measured against `OD-EXECUTOR-001`'s.
+
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#31
+
+*revision: authored · kind: heading · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#20
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#32
 
-*revision: authored · kind: prose · heading: The first real WorkResult is judge-role's own verdict, built from an identity Claude Code never has to invent / Status · hash: sha256:3800b84dd4364056c18937517b78896a646434c1f1c95aa3cf0504fcc81e86b9*
+*revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / Status · hash: sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3*
 
-Accepted. `--json-schema` was run against the real CLI before this record named a mechanism
-around it; `judge-role`'s existing identity was read from its own source, not assumed from
-its name. Implementation follows in a separate item.
+Accepted.
 
 ### docs/records/OD-GATE-001-a-skipped-test-reports-ok.md#1
 

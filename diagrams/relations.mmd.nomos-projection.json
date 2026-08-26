@@ -3,16 +3,16 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:c75e3eb13b8b7a5971fa3443929bab59434273cd61befb2b8cb9a56fc2adf993",
-  "inputs_digest": "sha256:93e6a8c628f231c09cf3fd795ae83d7e8b36c37745862de5a7b276da31f42df3",
+  "content_digest": "sha256:eec260c3bbf48f920b2721e87d6706bec2584b249bbff5f10d3e68e5898a46f1",
+  "inputs_digest": "sha256:1f69f822e7138b75aa92f1db2660656a3c6c43b3afb397924e3ddd3828f3654a",
   "sections": [
     [
       "Relations",
-      1188
+      1178
     ],
     [
       "Decisions",
-      161
+      160
     ]
   ],
   "inputs": [
@@ -40,11 +40,6 @@
       "content": "relations",
       "identity": "ARC-CONFORMANCE-001 relates-to OD-ANALYSIS-006",
       "hash": "sha256:9e0e0e33a2ea563002961a7e7b8ce74853f01917a7c535e82374c56eaecaf6fd"
-    },
-    {
-      "content": "relations",
-      "identity": "ARC-CONFORMANCE-001 relates-to OD-ANALYSIS-010",
-      "hash": "sha256:79b18746c5e3c691048c7966193c4378cb807863d4c6eb158348b5d5a7356550"
     },
     {
       "content": "relations",
@@ -1198,11 +1193,6 @@
     },
     {
       "content": "relations",
-      "identity": "OD-ANALYSIS-004 relates-to OD-ANALYSIS-010",
-      "hash": "sha256:2a942392e6548454fe473a6eaee50ec77a4bf68c62b4036e1f7de4a2ba64df4e"
-    },
-    {
-      "content": "relations",
       "identity": "OD-ANALYSIS-004 relates-to OD-CAPABILITY-002",
       "hash": "sha256:c8500645deec1ffd5dbd37c3cbdb22727b0fea117020471f02aeb752e17ebea1"
     },
@@ -1270,11 +1260,6 @@
       "content": "relations",
       "identity": "OD-ANALYSIS-007 relates-to OD-ANALYSIS-004",
       "hash": "sha256:7b1166948cd6ca5983196c80f0d0097282ffa6ca33335f5078c83879a2b027f4"
-    },
-    {
-      "content": "relations",
-      "identity": "OD-ANALYSIS-007 relates-to OD-ANALYSIS-010",
-      "hash": "sha256:2f08ec5395b8f01e6c9e7004c2a2155d7ce377e9284a2e77f992737127579b8a"
     },
     {
       "content": "relations",
@@ -1355,26 +1340,6 @@
       "content": "relations",
       "identity": "OD-ANALYSIS-009 relates-to OD-RULES-009",
       "hash": "sha256:520266132a2a8fde41d82941747099d87d0c14821015ee8d45623727e4e94574"
-    },
-    {
-      "content": "relations",
-      "identity": "OD-ANALYSIS-010 relates-to ARC-CONFORMANCE-001",
-      "hash": "sha256:6e5a09dbb76de9a7030e80797662b783f78af81a0b2e687e7e770975bc5f960b"
-    },
-    {
-      "content": "relations",
-      "identity": "OD-ANALYSIS-010 relates-to OD-ANALYSIS-004",
-      "hash": "sha256:952420482a58b80e2ec9b22ed63c47596a616cd78a1fb0941431216661aea14b"
-    },
-    {
-      "content": "relations",
-      "identity": "OD-ANALYSIS-010 relates-to OD-ANALYSIS-007",
-      "hash": "sha256:cad511e376dce4174f2a87c66e8e45632b24b7af2352a06fe800cb15424d3a13"
-    },
-    {
-      "content": "relations",
-      "identity": "OD-ANALYSIS-010 relates-to OD-RULES-008",
-      "hash": "sha256:d30e4025993068101524a4c932c6c7d0dac64809cf3dea6f6e25a67f548fa544"
     },
     {
       "content": "relations",
@@ -1858,6 +1823,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-CONNECTOR-001 relates-to OD-EXECUTOR-004",
+      "hash": "sha256:f9705154184633ce10acd337de95d670f9e5ea6addefc1162f46a6a0dcfe0649"
+    },
+    {
+      "content": "relations",
       "identity": "OD-CONNECTOR-001 relates-to OD-SPEC-009",
       "hash": "sha256:53f009b2b86d95f72077ea67f62ba02912b5190e57ccfa8b9369fea978bee5f0"
     },
@@ -1990,11 +1960,6 @@
       "content": "relations",
       "identity": "OD-CONTRACTS-003 relates-to OD-EXECUTOR-001",
       "hash": "sha256:7c4e1ee91e9a3b440467e2f935201aa0eef693431fd70c5f41e933eb9cdc65e2"
-    },
-    {
-      "content": "relations",
-      "identity": "OD-CONTRACTS-003 relates-to OD-EXECUTOR-003",
-      "hash": "sha256:58004650a4c919a13fb1340bcda32cfce8a6b77b18f2e90394571b9d87fc8f8e"
     },
     {
       "content": "relations",
@@ -2158,8 +2123,8 @@
     },
     {
       "content": "relations",
-      "identity": "OD-EXECUTOR-001 relates-to OD-EXECUTOR-003",
-      "hash": "sha256:67f5760736030ce35d804bea1a555f936d2f632be9c26eaae263b2409a604d18"
+      "identity": "OD-EXECUTOR-001 relates-to OD-EXECUTOR-004",
+      "hash": "sha256:9e6fc0c5259b162760c2123068f5b425d632116a1802f8513b15712f6359d0e4"
     },
     {
       "content": "relations",
@@ -2183,6 +2148,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-EXECUTOR-002 relates-to OD-EXECUTOR-004",
+      "hash": "sha256:d399f05c38c4500e7a8e0ebc03ddfeb99b81855b54fe8af395c612e5a28bf310"
+    },
+    {
+      "content": "relations",
       "identity": "OD-EXECUTOR-002 relates-to OD-HOST-004",
       "hash": "sha256:81e8df451e5057ead2c8d35f2fff23b07fef06cd578e30a2b5b210892abd20f1"
     },
@@ -2193,23 +2163,18 @@
     },
     {
       "content": "relations",
-      "identity": "OD-EXECUTOR-003 relates-to OD-CONTRACTS-003",
-      "hash": "sha256:585131bb8dce65915bab1bbecb0a1d8144b950ed166f2d4bbfede7de9a032ccb"
+      "identity": "OD-EXECUTOR-004 relates-to OD-CONNECTOR-001",
+      "hash": "sha256:afb36e6d5acec73bf8da81d43aff4797dfcc0b2bd9b0584e3711fad7145e2a39"
     },
     {
       "content": "relations",
-      "identity": "OD-EXECUTOR-003 relates-to OD-EXECUTOR-001",
-      "hash": "sha256:7bd7e113ca0b92a086ed77a692951a59b3fd17706829c560b9299f006437ca89"
+      "identity": "OD-EXECUTOR-004 relates-to OD-EXECUTOR-001",
+      "hash": "sha256:d68d3ffa4d3a6a1c009948fc3810d74fbf47aa8aa953ddf60752c09ded8759b6"
     },
     {
       "content": "relations",
-      "identity": "OD-EXECUTOR-003 relates-to OD-WORKFLOW-002",
-      "hash": "sha256:137ce19f071319b8d7ebd0e69568e3544c2a58dd74a576c89e32a42e11b8c382"
-    },
-    {
-      "content": "relations",
-      "identity": "OD-EXECUTOR-003 relates-to OD-WORKFLOW-004",
-      "hash": "sha256:d4f1facb156d5a1a6a47102558ca949c9222951646d249229b9dea6a6a505565"
+      "identity": "OD-EXECUTOR-004 relates-to OD-EXECUTOR-002",
+      "hash": "sha256:c67ce3005a244277ff58379ec9230f1a038923cf96cc1b021e4e0a8d313665d4"
     },
     {
       "content": "relations",
@@ -5078,11 +5043,6 @@
     },
     {
       "content": "relations",
-      "identity": "OD-RULES-008 relates-to OD-ANALYSIS-010",
-      "hash": "sha256:a870002dffcd8b1b357843347d698b97a15add84a72b86ddc4924a8c095c882e"
-    },
-    {
-      "content": "relations",
       "identity": "OD-RULES-008 relates-to OD-CAPABILITY-008",
       "hash": "sha256:4f954b1e1389e831bf84f2dbdfd57e49ed5705c542bcf23d99352739416ae640"
     },
@@ -5883,11 +5843,6 @@
     },
     {
       "content": "relations",
-      "identity": "OD-WORKFLOW-002 relates-to OD-EXECUTOR-003",
-      "hash": "sha256:0ad1e0c42fee58264f481e5485301c8b8af717d2a13aa7d57a4c88301f2c6fb3"
-    },
-    {
-      "content": "relations",
       "identity": "OD-WORKFLOW-002 relates-to OD-LEDGER-036",
       "hash": "sha256:46e1bf7b38ed9c54437b062645d71d6c0253da80a7c97fb7cefd710da535e771"
     },
@@ -5935,11 +5890,6 @@
       "content": "relations",
       "identity": "OD-WORKFLOW-004 relates-to OD-EXECUTOR-001",
       "hash": "sha256:4fd13efa9cf03e0d53241c8dd84994c227bf75333415c61be1cb593b920b9c45"
-    },
-    {
-      "content": "relations",
-      "identity": "OD-WORKFLOW-004 relates-to OD-EXECUTOR-003",
-      "hash": "sha256:9e15bc097e76557d106e0f14502142dd32ac196ed9258e5118d0e3e9df4cca3a"
     },
     {
       "content": "relations",
@@ -6068,11 +6018,6 @@
     },
     {
       "content": "nodes",
-      "identity": "OD-ANALYSIS-010",
-      "hash": "sha256:d214e96c53f6e308abf6a0aa9da70b257daae73740b37dbb6da5077d6b266bb0"
-    },
-    {
-      "content": "nodes",
       "identity": "OD-CAPABILITY-001",
       "hash": "sha256:d777e5a5479739f20285bf86199d4320131893f80ffac5e142933e3f3cb6f7c3"
     },
@@ -6198,8 +6143,8 @@
     },
     {
       "content": "nodes",
-      "identity": "OD-EXECUTOR-003",
-      "hash": "sha256:660834a2cb087ac1a15477cfae740ebf094215323bc79905c342989a456e355c"
+      "identity": "OD-EXECUTOR-004",
+      "hash": "sha256:46c4a856ec85d9dfcc88c1a0eab7c18a0e0bdfbb19b91fd1902a6353140c3f1f"
     },
     {
       "content": "nodes",

@@ -1,0 +1,21 @@
+[package]
+name = "nomos-agent-executor-ollama"
+version = "0.1.0"
+description = "Band 37. The second real AgentExecutor adapter: dispatches a TaskEnvelope's goal to a local Ollama model as a subprocess, bounded by OD-EXECUTOR-004's structural capability boundary, and reads back an AgentExecutionOutcome. Independent of nomos-agent-executor-claude-code -- structurally parallel, no shared trait."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+nomos-agent-contracts = { workspace = true }
+nomos-platform = { workspace = true }
+
+[dev-dependencies]
+nomos-contracts = { workspace = true }
+nomos-ledger = { workspace = true }
+nomos-model-package = { workspace = true }
+nomos-platform-std = { workspace = true }
+
+[lints]
+workspace = true

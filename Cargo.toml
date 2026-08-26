@@ -142,6 +142,13 @@ members = [
     # does not get to keep the name a class of them would need.
     "crates/agent/nomos-agent-executor-claude-code",
 
+    # Band 37. The second real AgentExecutor adapter: dispatches a TaskEnvelope's goal to a
+    # local Ollama model as a subprocess through nomos-platform's ProcessLauncher, bounded
+    # by `OD-EXECUTOR-004`'s structural capability boundary -- measured against its own
+    # mechanism, not inherited from `OD-EXECUTOR-001` by analogy. Same band as its sibling;
+    # neither may name the other, and there is no dispatch trait generic over both.
+    "crates/agent/nomos-agent-executor-ollama",
+
     # Band 40 — orchestration. Running a `nomos work` verb against a caller-chosen
     # platform, apart from choosing that platform and apart from rendering the answer.
     # Above the ledger it dispatches to and the platform port it is generic over, below
@@ -246,6 +253,7 @@ nomos-rules = { path = "crates/rules/nomos-rules" }
 nomos-corrections = { path = "crates/corrections/nomos-corrections" }
 nomos-agent-contracts = { path = "crates/agent/nomos-agent-contracts" }
 nomos-agent-executor-claude-code = { path = "crates/agent/nomos-agent-executor-claude-code" }
+nomos-agent-executor-ollama = { path = "crates/agent/nomos-agent-executor-ollama" }
 nomos-work-orchestration = { path = "crates/orchestration/nomos-work-orchestration" }
 nomos-check-orchestration = { path = "crates/orchestration/nomos-check-orchestration" }
 nomos-spec-orchestration = { path = "crates/orchestration/nomos-spec-orchestration" }
