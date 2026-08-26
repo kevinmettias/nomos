@@ -43,7 +43,7 @@
 //!
 //! # What is here
 //!
-//! Eight rules. [`Check_Completeness_Mirrors`] was chosen first because it is the only
+//! Nine rules. [`Check_Completeness_Mirrors`] was chosen first because it is the only
 //! rule in this tree with three recorded historical instances to test a judgment against —
 //! `P10-FIRST-CHECK` shipped with exactly this one and no more, because a single check
 //! that is honest end to end is worth more than three that are nearly wired.
@@ -106,6 +106,16 @@
 //! the walk handed it directly. No new capability — both sides are already `nomos.cap.
 //! syntax.items` facts — and no new materialization, since every source's syntax fact is
 //! already written before any rule runs.
+//!
+//! [`Check_Every_Member_Declares_A_Band`] is a ninth rule, `OD-RULES-003`'s own design
+//! applied a second time: [`Check_Dependency_Direction`] already judges declared
+//! architecture against the observed `nomos.cap.dependency.edges` fact for *direction*,
+//! and `dependency/violations.rs` has always silently skipped a package with no declared
+//! band, naming the gap as `tests/contract`'s own `Test_Every_Member_Should_Declare_A_Band`
+//! subject rather than a rule's. This rule is that subject, promoted to a Finding-producing
+//! *coverage* judgment over the identical fact and the identical band table — no new
+//! capability, no new provider, and no new contract citation, since it is the same design
+//! rather than a second one.
 
 #![forbid(unsafe_code)]
 
@@ -128,7 +138,10 @@ use nomos_contracts::{Assurance, FactVariant, Guarantee, IncrementalGranularity,
 
 pub use mirror::{Check_Completeness_Mirrors, COMPLETENESS_MIRROR, CONTRACT_RECORD, CONTRACT_RECORD_VERSION};
 pub use declared_universe::DeclaredUniverse;
-pub use dependency::{Check_Dependency_Direction, DEPENDENCY_CONTRACT_RECORD, DEPENDENCY_CONTRACT_RECORD_VERSION, DEPENDENCY_DIRECTION};
+pub use dependency::{
+    Check_Dependency_Direction, Check_Every_Member_Declares_A_Band, DEPENDENCY_COMPLETENESS, DEPENDENCY_CONTRACT_RECORD,
+    DEPENDENCY_CONTRACT_RECORD_VERSION, DEPENDENCY_DIRECTION,
+};
 pub use lint::{Check_Lint_Diagnostics, LINT_DIAGNOSTICS};
 pub use policy::{Check_Dependency_Policy, DEPENDENCY_POLICY};
 pub use crosslang::{Check_Cross_Language_Correspondence, CROSS_LANGUAGE_CORRESPONDENCE};

@@ -33951,6 +33951,76 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P14-RULES-DEPENDENCY-COMPLETENESS",
+      "title": "Check_Every_Member_Declares_A_Band: a ninth nomos-rules rule promoting an undeclared band from a contract-test-only gap to a Finding",
+      "why": "External architecture review named 'generalize architecture conformance beyond dependency direction' as the highest-value near-term extension of the rule model. dependency/violations.rs's own comment has always named the real gap: an undeclared package in BANDS silently produces no direction finding, deferred to tests/contract/tests/boundaries/graph.rs's own Test_Every_Member_Should_Declare_A_Band, which only ever runs over this repository's own tree. OD-RULES-003's declared-architecture-vs-observed-fact design already covers this exactly; nothing before this item applied it to coverage instead of direction. Building this also surfaced that nomos-rules' own BANDS copy had drifted 5 real members stale (nomos-agent-executor-ollama, nomos-cap-dependency-policy, nomos-lang-go-modules, nomos-lang-go-package, nomos-lang-rust-deny) since OD-RULES-003 named exactly this drift as the copy's own cost.",
+      "done_when": "Check_Every_Member_Declares_A_Band exists in nomos-rules, reusing the existing BANDS table and nomos.cap.dependency fact with no new capability or provider, cites OD-RULES-003 the same way Check_Dependency_Direction does (same design, not a second one), is composed into nomos-check-orchestration::Run behind its own DEPENDENCY_COMPLETENESS RuleId gate the same way DEPENDENCY_DIRECTION is (including Materialize_Dependencies now running for either rule), and nomos-rules' own BANDS copy is synced to tests/contract/tests/boundaries/bands.rs's current real membership so the new rule's first run over this repository reports zero findings rather than inherited staleness.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/dependency.rs",
+          "crates/rules/nomos-rules/src/dependency/bands.rs",
+          "crates/rules/nomos-rules/src/dependency/completeness.rs",
+          "crates/rules/nomos-rules/src/dependency/reading.rs",
+          "crates/rules/nomos-rules/src/dependency/violations.rs",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "crates/orchestration/nomos-check-orchestration/src/run.rs",
+          "crates/orchestration/nomos-check-orchestration/src/tests.rs",
+          "tests/contract/surface/nomos-rules.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "rait_Impl_Should_Not_Claim_The_Type ... ok\ntest universe::tests::Test_An_All_Should_Be_Attributed_To_Its_Type ... ok\ntest universe::tests::Test_An_All_That_Takes_A_Receiver_Should_Not_Be_A_Universe ... ok\n\ntest result: ok. 106 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.11s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_check_orchestration-90c251dd76727ab2.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-90bb6a5aa5d22443.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-c3efa092d3a048d0.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-a52e503a2b94118e.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-d0eb0280208bfc94.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-9d62339adcadb851.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-15a700f9b7c62ca3.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-91d5119a2af96672.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-ae5e453ea357a163.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-61d2a2df1b5f6a50.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-521fcd41c795f303.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-97cc66c3275b20dd.exe)\n   Doc-tests nomos_check_orchestration\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_rules\n",
+        "verified_at": 1787785969,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "e4e262cfa807ae0f100f2eaf9321fcdce3dd4cf2"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

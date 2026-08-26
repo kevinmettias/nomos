@@ -4,6 +4,14 @@
 //! [`crate::naming::reading`] is: a pure function of an already-decoded payload is testable
 //! against hand-built fixtures, and everything in this file is instead about how that
 //! payload gets found and decoded in the first place — the half no fixture reaches.
+//!
+//! [`Payload_Of`] takes the calling rule's own [`RuleId`] label rather than naming
+//! [`super::DEPENDENCY_DIRECTION`] itself: both [`super::Check_Dependency_Direction`] and
+//! [`super::Check_Every_Member_Declares_A_Band`] read the identical
+//! `nomos.cap.dependency.edges` fact through the identical requirement, and an unread
+//! subject has to be reported under whichever rule actually asked for it, not always the
+//! first rule that needed this reader. Two real callers is what licenses the parameter —
+//! before the second rule existed there was nothing to disambiguate.
 
 use crate::SourceFile;
 use nomos_analysis::{FactReader, InputDigest, MaterializedFact};
@@ -41,17 +49,17 @@ pub(crate) fn Dependency_Requirement() -> Requirement
 }
 
 /// One member's decoded dependency payload, or a finding reporting why it could not be
-/// read.
-pub(super) fn Payload_Of(source: &SourceFile, facts: &mut dyn FactReader) -> Result<DependencyPayload, Finding>
+/// read, filed under `rule` — whichever rule actually asked.
+pub(super) fn Payload_Of(source: &SourceFile, facts: &mut dyn FactReader, rule: &'static str) -> Result<DependencyPayload, Finding>
 {
-    let fact = Require_Fact(source, facts)?;
-    Check_Schema(source, fact)?;
-    return Parse_Fact(source, fact);
+    let fact = Require_Fact(source, facts, rule)?;
+    Check_Schema(source, fact, rule)?;
+    return Parse_Fact(source, fact, rule);
 }
 
 /// Requires this member's dependency fact, turning an inadmissible answer into an
-/// [`Unread`] finding.
-fn Require_Fact<'a>(source: &SourceFile, facts: &'a mut dyn FactReader) -> Result<&'a MaterializedFact, Finding>
+/// [`Unread`] finding under `rule`.
+fn Require_Fact<'a>(source: &SourceFile, facts: &'a mut dyn FactReader, rule: &'static str) -> Result<&'a MaterializedFact, Finding>
 {
     let need = Dependency_Requirement();
     let capability = nomos_cap_dependency::Capability();
@@ -68,19 +76,21 @@ fn Require_Fact<'a>(source: &SourceFile, facts: &'a mut dyn FactReader) -> Resul
         Err(applicability) => Err(Unread(
             source,
             applicability,
+            rule,
             &format!("no admitted provider answered for it ({})", applicability.Label()),
         )),
     };
 }
 
 /// Confirms `fact`'s payload schema is the one this rule knows how to decode.
-fn Check_Schema(source: &SourceFile, fact: &MaterializedFact) -> Result<(), Finding>
+fn Check_Schema(source: &SourceFile, fact: &MaterializedFact, rule: &'static str) -> Result<(), Finding>
 {
     if fact.payload.schema != nomos_cap_dependency::Payload_Schema()
     {
         return Err(Unread(
             source,
             Applicability::Unparseable,
+            rule,
             &format!(
                 "the fact for this member carries payload schema `{}`, which this build \
                  does not read",
@@ -93,22 +103,22 @@ fn Check_Schema(source: &SourceFile, fact: &MaterializedFact) -> Result<(), Find
 }
 
 /// Decodes `fact`'s payload bytes into this rule's own [`DependencyPayload`] shape.
-fn Parse_Fact(source: &SourceFile, fact: &MaterializedFact) -> Result<DependencyPayload, Finding>
+fn Parse_Fact(source: &SourceFile, fact: &MaterializedFact, rule: &'static str) -> Result<DependencyPayload, Finding>
 {
     return nomos_cap_dependency::Parse_Payload(&fact.payload.bytes)
-        .map_err(|refusal| return Unread(source, Applicability::Unparseable, &refusal.to_string()));
+        .map_err(|refusal| return Unread(source, Applicability::Unparseable, rule, &refusal.to_string()));
 }
 
-fn Unread(source: &SourceFile, applicability: Applicability, because: &str) -> Finding
+fn Unread(source: &SourceFile, applicability: Applicability, rule: &'static str, because: &str) -> Finding
 {
     return Finding {
-        rule: RuleId::New(super::DEPENDENCY_DIRECTION),
+        rule: RuleId::New(rule),
         subject: source.subject,
         subject_name: source.path.clone(),
         applicability,
         evidence: EvidenceClass::Derived,
         gate: GateCategory::Advisory,
-        summary: format!("this member's dependency direction could not be judged: {because}"),
+        summary: format!("this member's dependency fact could not be read: {because}"),
         locations: vec![source.path.clone()],
     };
 }

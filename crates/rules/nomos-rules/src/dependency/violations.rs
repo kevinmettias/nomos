@@ -16,10 +16,9 @@ pub(super) fn Violations_In(payload: &DependencyPayload, source: &SourceFile) ->
     let Some(band) = Declared_Band(&payload.package)
     else
     {
-        // Undeclared entirely — a different defect from a wrong-direction edge, and
-        // already `tests/contract`'s own `Test_Every_Member_Should_Declare_A_Band`'s
-        // subject. Judging direction from an unknown starting band would be a guess this
-        // rule is not entitled to make.
+        // Undeclared entirely — a different defect from a wrong-direction edge, judged by
+        // `super::completeness::Violations_In` instead. Judging direction from an unknown
+        // starting band would be a guess this rule is not entitled to make.
         return Vec::new();
     };
 
