@@ -1,6 +1,14 @@
 //! This workspace's own declared architecture, copied from
 //! `tests/contract/tests/boundaries/bands.rs`'s `BANDS` at the time this rule was written.
 //! See [`crate::dependency`]'s own module doc for why a copy and not a shared source.
+//!
+//! Re-synced while building [`crate::dependency::Check_Every_Member_Declares_A_Band`]:
+//! five real members had drifted out of this copy since it was written
+//! (`nomos-agent-executor-ollama`, `nomos-cap-dependency-policy`, `nomos-lang-go-modules`,
+//! `nomos-lang-go-package`, `nomos-lang-rust-deny`), exactly the drift `OD-RULES-003`
+//! named as this copy's own cost. Shipping the coverage rule against a table already
+//! known to be behind reality would have made its first real run misleading rather than
+//! informative.
 
 /// This workspace's own declared architecture, copied from
 /// `tests/contract/tests/boundaries/bands.rs`'s `BANDS` at the time this rule was
@@ -21,13 +29,17 @@ pub(super) const BANDS: &[(&str, u32)] = &[
     ("nomos-cap-dependency", 23),
     ("nomos-cap-controlflow", 23),
     ("nomos-cap-lint", 23),
+    ("nomos-cap-dependency-policy", 23),
     ("nomos-package", 24),
     ("nomos-lang-rust", 25),
     ("nomos-lang-rust-scan", 25),
     ("nomos-lang-go", 25),
+    ("nomos-lang-go-modules", 25),
     ("nomos-lang-rust-cargo", 25),
     ("nomos-lang-rust-clippy", 25),
+    ("nomos-lang-rust-deny", 25),
     ("nomos-lang-rust-package", 26),
+    ("nomos-lang-go-package", 26),
     ("nomos-model-package", 26),
     ("nomos-rule-package", 26),
     ("nomos-spec-model", 11),
@@ -40,6 +52,7 @@ pub(super) const BANDS: &[(&str, u32)] = &[
     ("nomos-corrections", 35),
     ("nomos-agent-contracts", 36),
     ("nomos-agent-executor-claude-code", 37),
+    ("nomos-agent-executor-ollama", 37),
     ("nomos-work-orchestration", 40),
     ("nomos-check-orchestration", 40),
     ("nomos-spec-orchestration", 40),

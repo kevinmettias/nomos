@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:f21b979a06baa0397cc75c9840b8ce6ea4ce4c7497febf0a012b64b11810bcc4",
-  "inputs_digest": "sha256:57ca728a66bd6dcec15270f575d4ea7f0935d1381d0016e13675e77c0fe27f4d",
+  "content_digest": "sha256:91de5e959cfdd5d04914cfee2899e6246e0094fb952abbe45f7881be4ee7b02b",
+  "inputs_digest": "sha256:a0539fe84716ef92337d20c7bde6b741e75867293e17208a4f836fce73a2da16",
   "sections": [
     [
       "Documents",
-      174
+      175
     ],
     [
       "Sections",
-      1463
+      1469
     ],
     [
       "Source blocks",
-      5106
+      5125
     ]
   ],
   "inputs": [
@@ -48,7 +48,7 @@
     {
       "content": "documents",
       "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md@authored",
-      "hash": "sha256:a078f1decce9e5c5bff51b928ce8fc65aee3e066235f5c7be7dd87c86dda79f8"
+      "hash": "sha256:b333cce918ab3abd2faaf20b50cbd64be30d8c5b15c3eb5f81c63e6ed9562723"
     },
     {
       "content": "documents",
@@ -314,6 +314,11 @@
       "content": "documents",
       "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md@authored",
       "hash": "sha256:5f4af371f2667269d82cef40261bbb5887f95e6f17f5c8b6065b68091fa6ae36"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md@authored",
+      "hash": "sha256:0c2b9021270c0e484742945479352a8b2d9d573056158e27d377c6f56433545d"
     },
     {
       "content": "documents",
@@ -3129,6 +3134,36 @@
       "content": "headings",
       "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#16",
       "hash": "sha256:bfec9df5ffcd9a72c2f72cd58f7b34e830e289bd2eb4f968d6cd6eba3bcd3a7b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#1",
+      "hash": "sha256:0f5e4c947208b78de80bc7b0904490d7accda2ef0f44e535d60f91e3629d2b6b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#2",
+      "hash": "sha256:4fcc6cadfcc462e2d418c27cae46e2dfd4a16b518f91f917d022d019528ef0b6"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#5",
+      "hash": "sha256:9e6824bc3f5c3b58ed3c1d2ac5f97efcfff807087c2d57d3cfcad47bae24cdbc"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#10",
+      "hash": "sha256:af895da60c6c75317508d55b8ce43418f72afc151a83256efd664ddae762c288"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#13",
+      "hash": "sha256:4c3ecfc611e623b758eba04794a8c37cef05760d36cb2a8badbe159ed9b5f5f0"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#18",
+      "hash": "sha256:4e041d27514b96db11abf64559b51962f9b78f84b1af3777eb7c4847a24cb561"
     },
     {
       "content": "headings",
@@ -9273,7 +9308,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#23",
-      "hash": "sha256:f1ef98c33024d1d024da224fa74a802f9102ea96d421c39f58e4283913f98179"
+      "hash": "sha256:cf703e6431108c87e2b010ca441de179532a9dbfcf61a8a05385a203b10dc2f6"
     },
     {
       "content": "blocks",
@@ -9303,7 +9338,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#29",
-      "hash": "sha256:849e31968b9d24fb398d8faf5c431541685004bbdc93b5ad5d73468b2e221552"
+      "hash": "sha256:46b1e90810340bc991be682a32f1ca8c6f1d2994032dc1b1d9be520cad85d2bf"
     },
     {
       "content": "blocks",
@@ -15779,6 +15814,101 @@
       "content": "blocks",
       "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#17",
       "hash": "sha256:ca9d496b0e0778d5dd1198e0691d7464312a2e3847c02951284e0254a75ee1a2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#1",
+      "hash": "sha256:b4f7e2dab755104e085d2da5f84782fdfd9a86633176be69cd8201f91a9a9b50"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#3",
+      "hash": "sha256:53a66cde814ba6bae6032d8471a782c15eab096542bf47a950e62eb73bcccae9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#4",
+      "hash": "sha256:c6993775a22f6bc9cd6e4f391de99f8836120930783bc8e336764fb1b026756b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#5",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#6",
+      "hash": "sha256:208a5beb2b2c07529ec53359860e5c5d978738c85412a05bad47525421fc61bb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#7",
+      "hash": "sha256:8b010327b6af3454ef3aead3ab38020d11d606ee3b3e50ea66ccb4064e24a7de"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#8",
+      "hash": "sha256:654225b8885bddc11d5426e3e8794b9c81b878982ab78675d660d5c56c6dcf03"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#9",
+      "hash": "sha256:631084376c609e4b555eda2da79812679ce807f28e14e679227b2b18854169ea"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#10",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#11",
+      "hash": "sha256:8e2301c2f88e5f8b9dbb6af1940c9bd7effd5f6dd115574aa9f33139ea1ceb24"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#12",
+      "hash": "sha256:bd3fce74d521479c20eb89e7ae662426b37332de78487cde186b43d3bd9ab549"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#13",
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#14",
+      "hash": "sha256:024804e9a844af5360e6f38ff6dacdefdf603e036fda60186abc9afa5aba483d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#15",
+      "hash": "sha256:f0370be56886b779588fd5ece746a1793e07d856f2a3fd28a5c5c2d338c8ec4c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#16",
+      "hash": "sha256:a99650db2f6c0d6f287a4dd5136e9649bd87ccf110218b6ca9b8ebf7c4672839"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#17",
+      "hash": "sha256:9203aedff50c4f1209c06af566b6c0e95e1d04534ea6be91d9aad56986e71e81"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#18",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#19",
+      "hash": "sha256:9e1f1bba7473ae1d51568db28cf1853074c501640026b1d95f09b90c302a9cdb"
     },
     {
       "content": "blocks",

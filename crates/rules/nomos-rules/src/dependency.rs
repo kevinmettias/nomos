@@ -36,11 +36,27 @@
 //!
 //! [`bands`] holds this workspace's own declared architecture table and the lookup over it.
 //! [`reading`] requires and decodes one member's dependency fact. [`violations`] judges an
-//! already-decoded payload against the declared bands. This file keeps only what composes
-//! the three: the rule's own identifiers and [`Check_Dependency_Direction`] itself, plus the
-//! end-to-end tests that exercise all three together through a real reader.
+//! already-decoded payload against the declared bands for *direction*; [`completeness`]
+//! judges the same payload for *coverage* — whether its own package has a declared band at
+//! all. This file keeps only what composes the pieces: the rules' own identifiers and
+//! [`Check_Dependency_Direction`]/[`Check_Every_Member_Declares_A_Band`] themselves, plus
+//! the end-to-end tests that exercise each through a real reader.
+//!
+//! # A second rule over the same fact
+//!
+//! `violations.rs`'s own `Violations_In` has always silently produced no findings for a
+//! package with no declared band, naming the gap as a different defect —
+//! `tests/contract/tests/boundaries/graph.rs`'s own `Test_Every_Member_Should_Declare_A_Band`
+//! already enforces it by hand, for this repository alone.
+//! [`Check_Every_Member_Declares_A_Band`] promotes that gap to a Finding-producing judgment
+//! reachable through an ordinary `nomos check` run, over whatever workspace supplies the
+//! fact — the same declared-architecture-vs-observed-fact shape `OD-RULES-003` designed for
+//! direction, applied to coverage instead. No new capability and no new provider: it reads
+//! the identical `nomos.cap.dependency.edges` fact and the identical [`bands::BANDS`] table
+//! [`Check_Dependency_Direction`] already reads.
 
 mod bands;
+mod completeness;
 mod reading;
 mod violations;
 
@@ -52,6 +68,9 @@ use violations::Violations_In;
 
 /// This rule's own identifier.
 pub const DEPENDENCY_DIRECTION: &str = "dependency-direction";
+
+/// [`Check_Every_Member_Declares_A_Band`]'s own identifier.
+pub const DEPENDENCY_COMPLETENESS: &str = "dependency-completeness";
 
 /// The record this implementation's contract is written in.
 ///
@@ -68,6 +87,11 @@ pub const DEPENDENCY_DIRECTION: &str = "dependency-direction";
 /// it was written and is published, and renaming a published constant for symmetry is churn
 /// with no defect behind it. A third cited rule is the point at which extracting a shared
 /// citation shape stops being a generalization from two.
+///
+/// [`Check_Every_Member_Declares_A_Band`] cites this same record rather than a record of its
+/// own: it is `OD-RULES-003`'s identical declared-architecture-vs-observed-fact design,
+/// judging coverage instead of direction, not a second design decision needing a second
+/// citation.
 pub const DEPENDENCY_CONTRACT_RECORD: &str = "OD-RULES-003";
 
 /// The version of [`DEPENDENCY_CONTRACT_RECORD`] this implementation was written against.
@@ -88,7 +112,7 @@ pub fn Check_Dependency_Direction(sources: &[SourceFile], facts: &mut dyn FactRe
 
     for source in sources
     {
-        match Payload_Of(source, facts)
+        match Payload_Of(source, facts, DEPENDENCY_DIRECTION)
         {
             Ok(payload) =>
             {
@@ -103,8 +127,37 @@ pub fn Check_Dependency_Direction(sources: &[SourceFile], facts: &mut dyn FactRe
     return findings;
 }
 
-/// [`Check_Dependency_Direction`] itself, through a real registry, store and reader — the
-/// half [`violations::tests`] does not reach.
+/// Judges whether every workspace member `sources` names has declared where it sits in
+/// this workspace's own band ordering — the coverage half of architecture conformance,
+/// left to `tests/contract`'s own `Test_Every_Member_Should_Declare_A_Band` until now.
+///
+/// Reads the identical fact and requirement [`Check_Dependency_Direction`] does, through
+/// the same [`Payload_Of`], and files an unread subject under its own identifier rather
+/// than direction's.
+#[must_use]
+pub fn Check_Every_Member_Declares_A_Band(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
+{
+    let mut findings = Vec::new();
+
+    for source in sources
+    {
+        match Payload_Of(source, facts, DEPENDENCY_COMPLETENESS)
+        {
+            Ok(payload) =>
+            {
+                findings.extend(completeness::Violations_In(&payload, source));
+            }
+            Err(finding) => findings.push(finding),
+        }
+    }
+
+    findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
+    return findings;
+}
+
+/// [`Check_Dependency_Direction`] and [`Check_Every_Member_Declares_A_Band`] themselves,
+/// through a real registry, store and reader — the half [`violations::tests`] and
+/// [`completeness::tests`] do not reach.
 #[cfg(test)]
 mod tests
 {
@@ -116,7 +169,7 @@ mod tests
     use nomos_capability::{ProviderOffer, Registry};
     use nomos_contracts::{
         Assurance, BuildVariantId, ConfigurationId, Digest128, EvidenceClass, FactVariant, GenerationId,
-        Guarantee, IncrementalGranularity, ProviderId, SnapshotId, SubjectId,
+        Guarantee, IncrementalGranularity, ProviderId, RuleId, SnapshotId, SubjectId,
     };
     use nomos_model::Content_Digest;
 
@@ -245,5 +298,67 @@ mod tests
         let findings = Check_Dependency_Direction(&[source], &mut reader);
 
         assert_eq!(findings.len(), 1, "an unread subject must not render as a clean one: {findings:?}");
+    }
+
+    #[test]
+    fn Test_A_Declared_Package_Should_Produce_No_Completeness_Finding()
+    {
+        let source = Source("nomos-cap-syntax");
+        let TestOffering { mut store, registry, offer } = Offering();
+        Materialize(
+            &mut store,
+            &source,
+            &offer,
+            &DependencyPayload {
+                package: "nomos-cap-syntax".to_owned(),
+                edges: Vec::new(),
+            },
+        );
+
+        let mut reader = Reader::On(&store, &registry, Test_Context());
+        let findings = Check_Every_Member_Declares_A_Band(&[source], &mut reader);
+
+        assert!(findings.is_empty(), "{findings:?}");
+    }
+
+    #[test]
+    fn Test_An_Undeclared_Package_Should_Produce_One_Completeness_Finding()
+    {
+        let source = Source("not-in-bands");
+        let TestOffering { mut store, registry, offer } = Offering();
+        Materialize(
+            &mut store,
+            &source,
+            &offer,
+            &DependencyPayload {
+                package: "not-in-bands".to_owned(),
+                edges: Vec::new(),
+            },
+        );
+
+        let mut reader = Reader::On(&store, &registry, Test_Context());
+        let findings = Check_Every_Member_Declares_A_Band(&[source], &mut reader);
+
+        assert_eq!(findings.len(), 1, "{findings:?}");
+        let found = findings.first().expect("asserted len 1 above");
+        assert_eq!(found.rule, RuleId::New(DEPENDENCY_COMPLETENESS));
+    }
+
+    #[test]
+    fn Test_A_Completeness_Subject_With_No_Fact_Should_Be_Reported_Under_Its_Own_Rule()
+    {
+        let source = Source("nomos-cap-syntax");
+        let TestOffering { store, registry, .. } = Offering();
+
+        let mut reader = Reader::On(&store, &registry, Test_Context());
+        let findings = Check_Every_Member_Declares_A_Band(&[source], &mut reader);
+
+        assert_eq!(findings.len(), 1, "an unread subject must not render as a clean one: {findings:?}");
+        let found = findings.first().expect("asserted len 1 above");
+        assert_eq!(
+            found.rule,
+            RuleId::New(DEPENDENCY_COMPLETENESS),
+            "an unread subject must be filed under whichever rule asked, not always direction's"
+        );
     }
 }

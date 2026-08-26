@@ -99,7 +99,7 @@
     {
       "id": "P2-STORE",
       "title": "nomos-spec-store: schema, migrations, transactions",
-      "why": "The corpus stops being a pile of zips and becomes something queryable. Three identifiers stay distinct here — node_id, uid and content_hash — and conflating them later is expensive.",
+      "why": "The corpus stops being a pile of zips and becomes something queryable. Three identifiers stay distinct here \u00e2\u20ac\u201d node_id, uid and content_hash \u00e2\u20ac\u201d and conflating them later is expensive.",
       "done_when": "The full DDL applies, migrations run forward, and a transaction that fails rolls back every table it touched.",
       "kind": "Capability",
       "origin": "Required",
@@ -712,7 +712,7 @@
       "id": "P7-STORE",
       "title": "nomos-store: content-addressed documents with one write door per authority",
       "why": "Observed facts and authored specification never share a store. The snapshot document is the only door in, so nothing can write a fact by another route and leave the index describing something that was never recorded.",
-      "done_when": "A snapshot written and reread is byte-identical, and the derived index is rebuildable from the documents alone — proven by deleting it and rebuilding to an identical state.",
+      "done_when": "A snapshot written and reread is byte-identical, and the derived index is rebuildable from the documents alone \u00e2\u20ac\u201d proven by deleting it and rebuilding to an identical state.",
       "kind": "Decision",
       "origin": "Required",
       "territory": {
@@ -759,7 +759,7 @@
     {
       "id": "P7-WORKSPACE",
       "title": "nomos-workspace: snapshots, build variants and the single change door",
-      "why": "Every change source — correction, IDE edit, git checkout, agent edit, code generator — enters through one WorkspaceChangeSet and produces one new generation. A second path would be a second answer to what the workspace currently is.",
+      "why": "Every change source \u00e2\u20ac\u201d correction, IDE edit, git checkout, agent edit, code generator \u00e2\u20ac\u201d enters through one WorkspaceChangeSet and produces one new generation. A second path would be a second answer to what the workspace currently is.",
       "done_when": "A portable snapshot over F:/repos/xvpe is interpretable by a process with no access to that tree, and 100 ingestion-order permutations yield byte-identical queries.",
       "kind": "Capability",
       "origin": "Required",
@@ -807,7 +807,7 @@
     {
       "id": "P3-ROWS",
       "title": "Table rows as typed subjects: content and separator",
-      "why": "A block already guarantees byte completeness, so rows are not what makes a document reconstructible. Rows exist so a loss report can name what went missing by identity — the MetricTradeoffProjection row — rather than by count, which is the plan's own stated bar. Typing them keeps 282 and 258 as two queries over one table instead of one number bent to match the other.",
+      "why": "A block already guarantees byte completeness, so rows are not what makes a document reconstructible. Rows exist so a loss report can name what went missing by identity \u00e2\u20ac\u201d the MetricTradeoffProjection row \u00e2\u20ac\u201d rather than by count, which is the plan's own stated bar. Typing them keeps 282 and 258 as two queries over one table instead of one number bent to match the other.",
       "done_when": "Every pipe line in a table block is stored as a typed row. Over the six v14 domain volumes the store answers 282 pipe lines and 258 content rows, both measured rather than asserted. Exactly one separator per table is enforced, so a content row cannot be mistyped out of NSV-PRESERVE-002's view. The bundle exporter carries the new table and P1 byte identity still holds.",
       "kind": "Capability",
       "origin": "Required",
@@ -857,7 +857,7 @@
     {
       "id": "P3-ARCHIVE",
       "title": "Read the versioned archives without unpacking them",
-      "why": "About twenty archives hold every revision. Reading them in memory keeps the corpus out of the working tree, so nothing can mistake an extracted revision for authored source — which is the same barrier that stops generated output becoming source.",
+      "why": "About twenty archives hold every revision. Reading them in memory keeps the corpus out of the working tree, so nothing can mistake an extracted revision for authored source \u00e2\u20ac\u201d which is the same barrier that stops generated output becoming source.",
       "done_when": "Every archive opens and its entries are addressable by path without writing to disk. An archive that cannot be read is an error naming which one, never an empty listing that reads as an archive containing nothing.",
       "kind": "Capability",
       "origin": "Required",
@@ -959,8 +959,8 @@
     {
       "id": "P3-FAMILIES",
       "title": "I5: restore the families v15.0 destroyed",
-      "why": "The 8 roadmap releases, Appendix-D schemas and profiles, 8 worked scenarios, Appendix-H telemetry, 54 service descriptions, the E.1 headless inventory, F.1 IDE profiles and the glossary. Section 5's canonical domain model comes back as one table block plus a concept node per row, each with a lineage row to its originating row — one canonical source, two projections, never two authorities.",
-      "done_when": "Every restored family resolves by identifier, and the reconciled store reports zero NSV-PRESERVE errors over a non-zero subject count. The canonical domain models resolve individually and by name — WorkspaceContext, FindingGeometry, MetricTradeoffProjection through ModelUsageObservation — each tracing to the table row it came from. Counts come from P3-COUNTS with their definitions attached; the plan's figures are recorded as superseded, never asserted.",
+      "why": "The 8 roadmap releases, Appendix-D schemas and profiles, 8 worked scenarios, Appendix-H telemetry, 54 service descriptions, the E.1 headless inventory, F.1 IDE profiles and the glossary. Section 5's canonical domain model comes back as one table block plus a concept node per row, each with a lineage row to its originating row \u00e2\u20ac\u201d one canonical source, two projections, never two authorities.",
+      "done_when": "Every restored family resolves by identifier, and the reconciled store reports zero NSV-PRESERVE errors over a non-zero subject count. The canonical domain models resolve individually and by name \u00e2\u20ac\u201d WorkspaceContext, FindingGeometry, MetricTradeoffProjection through ModelUsageObservation \u00e2\u20ac\u201d each tracing to the table row it came from. Counts come from P3-COUNTS with their definitions attached; the plan's figures are recorded as superseded, never asserted.",
       "kind": "Capability",
       "origin": "Required",
       "territory": {
@@ -1355,8 +1355,8 @@
     {
       "id": "P8-PIN",
       "title": "A fact's identity stops naming a workspace state",
-      "why": "FactKey carries a SnapshotId, and a workspace snapshot is a digest over every member. A fact key that names one therefore changes for every fact in the corpus when any one file is edited: over the six-file precision corpus, editing alpha/one.rs recomputed eight facts where two changed, and at corpus scale that is 9,440 per keystroke. Two components already answer what the snapshot is there for and answer them finer — semantic_inputs says what a fact was computed from, and the generation says which state it is current at. The snapshot is a third answer, it is the coarsest, and it erases both. OD-ANALYSIS-001 records the measurement; tests/integration works around it by pinning, which is why the component currently does no work at all.",
-      "done_when": "FactKey no longer carries a snapshot, and a fact's relation to a workspace state is provenance on MaterializedFact rather than part of what the fact is. GenerationCause::SnapshotReplaced is re-expressed in terms a caller replacing a snapshot actually has — the members that differ — rather than by matching a key component that no longer exists. Component::All and the test that walks every key component agree with the new shape. tests/integration stops pinning: Slice takes the workspace's current snapshot, and the exact-descendants assertion still names exactly two facts. OD-ANALYSIS-001 is closed with what decided it.",
+      "why": "FactKey carries a SnapshotId, and a workspace snapshot is a digest over every member. A fact key that names one therefore changes for every fact in the corpus when any one file is edited: over the six-file precision corpus, editing alpha/one.rs recomputed eight facts where two changed, and at corpus scale that is 9,440 per keystroke. Two components already answer what the snapshot is there for and answer them finer \u00e2\u20ac\u201d semantic_inputs says what a fact was computed from, and the generation says which state it is current at. The snapshot is a third answer, it is the coarsest, and it erases both. OD-ANALYSIS-001 records the measurement; tests/integration works around it by pinning, which is why the component currently does no work at all.",
+      "done_when": "FactKey no longer carries a snapshot, and a fact's relation to a workspace state is provenance on MaterializedFact rather than part of what the fact is. GenerationCause::SnapshotReplaced is re-expressed in terms a caller replacing a snapshot actually has \u00e2\u20ac\u201d the members that differ \u00e2\u20ac\u201d rather than by matching a key component that no longer exists. Component::All and the test that walks every key component agree with the new shape. tests/integration stops pinning: Slice takes the workspace's current snapshot, and the exact-descendants assertion still names exactly two facts. OD-ANALYSIS-001 is closed with what decided it.",
       "kind": "Capability",
       "origin": "Required",
       "territory": {
@@ -1407,8 +1407,8 @@
     {
       "id": "P8-SELECTION",
       "title": "Which of several usable offers wins",
-      "why": "Registry::Resolve picks the first usable offer in provider-name order. With one provider that was invisible; with two it means a caller that lowers its floor to Approximate — to get an answer for the 7 files a parser refuses — is served the scanner for all 7,580, including the 7,573 the parser would have read exactly, and is told Supported. Strongest-wins is the reflex answer and is not free: a Guarantee says how good an answer is and nothing about what it costs, so always reaching for the strongest turns 'I will accept an approximation' into 'give me the best you have'. OD-CAPABILITY-001 states the three candidates and why none is obvious.",
-      "done_when": "Selection among usable offers is decided rather than incidental: Registry::Resolve applies a stated rule, the rule is named in the type or documented at the method with what decided it, and renaming a provider cannot change which one answers. A caller that would have been served a weaker offer than one available can tell — either by the rule making that impossible or by the resolution saying so. OD-CAPABILITY-001 is closed with what decided it, and tests/integration's assertion of the current name-order behaviour is replaced by an assertion of the new rule.",
+      "why": "Registry::Resolve picks the first usable offer in provider-name order. With one provider that was invisible; with two it means a caller that lowers its floor to Approximate \u00e2\u20ac\u201d to get an answer for the 7 files a parser refuses \u00e2\u20ac\u201d is served the scanner for all 7,580, including the 7,573 the parser would have read exactly, and is told Supported. Strongest-wins is the reflex answer and is not free: a Guarantee says how good an answer is and nothing about what it costs, so always reaching for the strongest turns 'I will accept an approximation' into 'give me the best you have'. OD-CAPABILITY-001 states the three candidates and why none is obvious.",
+      "done_when": "Selection among usable offers is decided rather than incidental: Registry::Resolve applies a stated rule, the rule is named in the type or documented at the method with what decided it, and renaming a provider cannot change which one answers. A caller that would have been served a weaker offer than one available can tell \u00e2\u20ac\u201d either by the rule making that impossible or by the resolution saying so. OD-CAPABILITY-001 is closed with what decided it, and tests/integration's assertion of the current name-order behaviour is replaced by an assertion of the new rule.",
       "kind": "Capability",
       "origin": "Required",
       "territory": {
@@ -1478,7 +1478,7 @@
     {
       "id": "P8-CONTRACT-HOME",
       "title": "A capability contract is not a provider's property",
-      "why": "nomos.cap.syntax.items is declared by nomos-lang-rust and offered by both it and nomos-lang-rust-scan. A CapabilityContract is the agreed meaning of a question and the ceiling on what any answer may claim — an agreement is not the property of one party to it. Today the scanner offers against a contract its peer authors, which it cannot even name (same band), so the coupling is by string and invisible. Registry::Declare refusing a second contract is what currently protects the invariant, which is the registry compensating for the layering rather than the layering being right. The contract's home is below both providers and no crate is there.",
+      "why": "nomos.cap.syntax.items is declared by nomos-lang-rust and offered by both it and nomos-lang-rust-scan. A CapabilityContract is the agreed meaning of a question and the ceiling on what any answer may claim \u00e2\u20ac\u201d an agreement is not the property of one party to it. Today the scanner offers against a contract its peer authors, which it cannot even name (same band), so the coupling is by string and invisible. Registry::Declare refusing a second contract is what currently protects the invariant, which is the registry compensating for the layering rather than the layering being right. The contract's home is below both providers and no crate is there.",
       "done_when": "nomos.cap.syntax.items is declared somewhere neither provider owns, both offer against it, and removing either provider from the workspace leaves the contract intact. The band table places that home below both language providers and tests/contract's downward rule passes. nomos-lang-rust no longer exports Capability_Contract, or a decision record states why it still should.",
       "kind": "Capability",
       "origin": "Required",
@@ -1546,7 +1546,7 @@
     {
       "id": "P9-SKIP",
       "title": "A skipped test must not report ok",
-      "why": "Measured: 697 tests pass with no corpus configured, and 68 of them are corpus-gated — they return early and print ok having read nothing. CI (.github/workflows/gate.yml) sets none of NOMOS_V14_CORPUS, NOMOS_SPEC_ARCHIVES or NOMOS_RUST_CORPUS, so the normalizer reproduction, the byte order mark sweep, the 282/258 and 30/28 counts, restoration, the family counts and the ingestion-order determinism claim are all reporting ok on every pull request without touching their subject. Misconfiguration is already loud — every helper asserts root.is_dir() with the reasoning written at the assertion — so the defect is absence, not error. This is exactly what Test_The_Workspace_Should_Not_Appear_Empty exists to prevent one level up: a check that cannot find its subject must fail loudly rather than quietly verify nothing. The repository states the rule and does not apply it to its own gating.",
+      "why": "Measured: 697 tests pass with no corpus configured, and 68 of them are corpus-gated \u00e2\u20ac\u201d they return early and print ok having read nothing. CI (.github/workflows/gate.yml) sets none of NOMOS_V14_CORPUS, NOMOS_SPEC_ARCHIVES or NOMOS_RUST_CORPUS, so the normalizer reproduction, the byte order mark sweep, the 282/258 and 30/28 counts, restoration, the family counts and the ingestion-order determinism claim are all reporting ok on every pull request without touching their subject. Misconfiguration is already loud \u00e2\u20ac\u201d every helper asserts root.is_dir() with the reasoning written at the assertion \u00e2\u20ac\u201d so the defect is absence, not error. This is exactly what Test_The_Workspace_Should_Not_Appear_Empty exists to prevent one level up: a check that cannot find its subject must fail loudly rather than quietly verify nothing. The repository states the rule and does not apply it to its own gating.",
       "done_when": "The set of corpus-gated tests is declared in one place and checked against the source, so a test cannot become gated without appearing in the declaration and a declaration cannot name a test that no longer gates. The three corpus variables are documented together with what each one covers and how many assertions it carries. A run without a corpus reports the count of what it did not check, in a form CI surfaces, rather than leaving 68 ok lines to speak for it. The count is measured rather than estimated, and changing it fails.",
       "kind": "Correction",
       "origin": "Proposed",
@@ -1592,8 +1592,8 @@
     {
       "id": "P9-PHASE-NUMBERS",
       "title": "The ledger's phase numbers are not the plan's",
-      "why": "The ledger carries six P8-* items, all of them Phase 7 follow-ups. The approved plan's Phase 8 is nomos-rules, nomos-applicability, nomos-findings, nomos-gates, a rules core with three checks, and the check and gate commands — none of which exists. A reader of work list in three months concludes Phase 8 is nearly finished. D-132 already rules that the plan is a game plan rather than sole authority, so this is not a contradiction to be resolved in the plan's favour; it is a legend nobody wrote down.",
-      "done_when": "A decision record states that a ledger id's phase number is the ledger's own and maps each prefix in use to what it actually covers, including that P5 and P6 have no items and why the plan's Phase 8 work is unstarted. No completed item is renamed, and the record states why renaming was rejected — five commit messages name these ids and renaming falsifies them. The ledger validates unchanged.",
+      "why": "The ledger carries six P8-* items, all of them Phase 7 follow-ups. The approved plan's Phase 8 is nomos-rules, nomos-applicability, nomos-findings, nomos-gates, a rules core with three checks, and the check and gate commands \u00e2\u20ac\u201d none of which exists. A reader of work list in three months concludes Phase 8 is nearly finished. D-132 already rules that the plan is a game plan rather than sole authority, so this is not a contradiction to be resolved in the plan's favour; it is a legend nobody wrote down.",
+      "done_when": "A decision record states that a ledger id's phase number is the ledger's own and maps each prefix in use to what it actually covers, including that P5 and P6 have no items and why the plan's Phase 8 work is unstarted. No completed item is renamed, and the record states why renaming was rejected \u00e2\u20ac\u201d five commit messages name these ids and renaming falsifies them. The ledger validates unchanged.",
       "kind": "Correction",
       "origin": "Proposed",
       "territory": {
@@ -1644,8 +1644,8 @@
     {
       "id": "P9-PHASE-GAP",
       "title": "Phases 5 and 6 are absent rather than declined, and D-129 promises a surface nobody built",
-      "why": "D-129 is a governing record, validated and in the store, and it says markdown remains the surface people author through via a round trip that reads a record out as markdown and writes the edit back. There is no such round trip. Phases 5 and 6 were never put on the ledger at all — not deferred, absent. Compare P3-RESTORE, which was declined with a stated reason and reads as a decision. Skipping them may well be right; what is wrong is that a record asserts a surface exists and nothing records that it does not.",
-      "done_when": "Either items exist for the two phases or a record declines them in the shape P3-RESTORE used, with the reason stated. D-129's round-trip claim is reconciled with the tree: implemented, or amended to say what is not built and what rests on it. If the record is amended, the copy in the store is amended with it — a governing record that disagrees with its own store is worse than either.",
+      "why": "D-129 is a governing record, validated and in the store, and it says markdown remains the surface people author through via a round trip that reads a record out as markdown and writes the edit back. There is no such round trip. Phases 5 and 6 were never put on the ledger at all \u00e2\u20ac\u201d not deferred, absent. Compare P3-RESTORE, which was declined with a stated reason and reads as a decision. Skipping them may well be right; what is wrong is that a record asserts a surface exists and nothing records that it does not.",
+      "done_when": "Either items exist for the two phases or a record declines them in the shape P3-RESTORE used, with the reason stated. D-129's round-trip claim is reconciled with the tree: implemented, or amended to say what is not built and what rests on it. If the record is amended, the copy in the store is amended with it \u00e2\u20ac\u201d a governing record that disagrees with its own store is worse than either.",
       "kind": "Correction",
       "origin": "Proposed",
       "territory": {
@@ -1693,8 +1693,8 @@
     {
       "id": "P9-DETERMINISM",
       "title": "Nothing in the workspace declares its determinism",
-      "why": "Strategy, DeterminismStrength, ReproducibilityScope and TraceEquivalence are defined in nomos-contracts and implemented by nothing: zero files outside that crate name any of the four. A schema is not a feature is this project's own rule, and it is sitting unenforced in its own contracts crate — the one whose every type is reimplemented by peers that will never compile it, so an unimplemented declaration there is a published protocol commitment accruing cost. The properties are not absent from the code, only from the declarations: Test_A_Hundred_Ingestion_Orders_Should_Yield_Byte_Identical_Queries and Test_Reading_The_Corpus_Twice_Should_Reach_The_Same_Facts already assert determinism that nothing claims.",
-      "done_when": "Every execution domain that produces a fact declares a Strategy, and each declaration is checked against behaviour rather than asserted — a repeated run under the declared scope produces what the declaration claims, and a domain that cannot meet its declared strength fails a test rather than a review. At least one declaration carries a negative control confirmed red: weakening the implementation must fail the test that claims the property. The existing determinism assertions are attached to the declaration they were always about.",
+      "why": "Strategy, DeterminismStrength, ReproducibilityScope and TraceEquivalence are defined in nomos-contracts and implemented by nothing: zero files outside that crate name any of the four. A schema is not a feature is this project's own rule, and it is sitting unenforced in its own contracts crate \u00e2\u20ac\u201d the one whose every type is reimplemented by peers that will never compile it, so an unimplemented declaration there is a published protocol commitment accruing cost. The properties are not absent from the code, only from the declarations: Test_A_Hundred_Ingestion_Orders_Should_Yield_Byte_Identical_Queries and Test_Reading_The_Corpus_Twice_Should_Reach_The_Same_Facts already assert determinism that nothing claims.",
+      "done_when": "Every execution domain that produces a fact declares a Strategy, and each declaration is checked against behaviour rather than asserted \u00e2\u20ac\u201d a repeated run under the declared scope produces what the declaration claims, and a domain that cannot meet its declared strength fails a test rather than a review. At least one declaration carries a negative control confirmed red: weakening the implementation must fail the test that claims the property. The existing determinism assertions are attached to the declaration they were always about.",
       "kind": "Validation",
       "origin": "Proposed",
       "territory": {
@@ -1742,8 +1742,8 @@
     {
       "id": "P9-READ-SURFACE",
       "title": "Four phases of specification system with no way to read it",
-      "why": "nomos has exactly one group: work. Phase 2's stated day-one payoff — ask what the canonical domain model said, verbatim, and get the real rows — is still not answerable from a command line, and Phase 4 shipped fourteen projection profiles and renderers with no command that runs one. The gap was flagged closing P2-BUNDLE and is further away now, because there is more behind it. It also compounds P9-SKIP: the store is built from a corpus that lives outside this repository, so a read command is only as reachable as the corpus, and that has to be said rather than discovered.",
-      "done_when": "A group on the nomos binary answers the query Phase 2 named — a record or table read out verbatim by identifier — and renders at least one Phase 4 profile to a file. A missing or unreadable corpus is reported as an absence with what was expected, never as an empty result. The commands are exercised by a test that runs the built binary rather than calling the library, because the argument parsing is the part that has never run.",
+      "why": "nomos has exactly one group: work. Phase 2's stated day-one payoff \u00e2\u20ac\u201d ask what the canonical domain model said, verbatim, and get the real rows \u00e2\u20ac\u201d is still not answerable from a command line, and Phase 4 shipped fourteen projection profiles and renderers with no command that runs one. The gap was flagged closing P2-BUNDLE and is further away now, because there is more behind it. It also compounds P9-SKIP: the store is built from a corpus that lives outside this repository, so a read command is only as reachable as the corpus, and that has to be said rather than discovered.",
+      "done_when": "A group on the nomos binary answers the query Phase 2 named \u00e2\u20ac\u201d a record or table read out verbatim by identifier \u00e2\u20ac\u201d and renders at least one Phase 4 profile to a file. A missing or unreadable corpus is reported as an absence with what was expected, never as an empty result. The commands are exercised by a test that runs the built binary rather than calling the library, because the argument parsing is the part that has never run.",
       "kind": "Correction",
       "origin": "Proposed",
       "territory": {
@@ -1796,7 +1796,7 @@
     {
       "id": "P9-README",
       "title": "README is hand-maintained where it is supposed to be a profile output",
-      "why": "README, ARCHITECTURE and ARTIFACT_MAP are specified as profile outputs and D-128 is the freshness requirement. P4 is done, README carries no generated marker anywhere in it, and it has been edited by hand — which is the drift the requirement exists to catch, performed by the people who wrote the requirement.",
+      "why": "README, ARCHITECTURE and ARTIFACT_MAP are specified as profile outputs and D-128 is the freshness requirement. P4 is done, README carries no generated marker anywhere in it, and it has been edited by hand \u00e2\u20ac\u201d which is the drift the requirement exists to catch, performed by the people who wrote the requirement.",
       "done_when": "README is produced by a renderer and carries a marker naming what produced it and from what, or a record states that it stays hand-authored and why, naming D-128 and what that costs. Either way a hand edit to a generated file is caught rather than noticed.",
       "kind": "Correction",
       "origin": "Proposed",
@@ -1871,7 +1871,7 @@
       "id": "P9-PUBLIC-API",
       "title": "The public API snapshot test was never built",
       "why": "Five anti-leak tests were named. Three are in boundaries.rs, module reachability shipped, and the transport check is legitimately not applicable with no transports. The cargo-public-api snapshot is simply missing: nothing in the tree mentions public_api at all. Without it, a type that leaks out of a crate's surface is a review question, and the other four assertions exist precisely because review questions are the ones that get answered wrong quietly.",
-      "done_when": "Each crate's public surface is checked in as a snapshot and compared by a test, so an addition fails until the snapshot is updated deliberately. The tool's absence on a machine is a failure or an explicitly declared skip counted by P9-SKIP's mechanism — a check that silently does not run is the defect this whole item is about.",
+      "done_when": "Each crate's public surface is checked in as a snapshot and compared by a test, so an addition fails until the snapshot is updated deliberately. The tool's absence on a machine is a failure or an explicitly declared skip counted by P9-SKIP's mechanism \u00e2\u20ac\u201d a check that silently does not run is the defect this whole item is about.",
       "kind": "Validation",
       "origin": "Proposed",
       "territory": {
@@ -1935,8 +1935,8 @@
     {
       "id": "P9-FALLBACK",
       "title": "Nothing walks the selection the floor bought",
-      "why": "P8-SELECTION made Selection::Weaker reachable and nothing spends it. A caller lowers its floor to Approximate because a parser refuses seven files, the registry hands back the parser and the scanner in order, and Slice::Dispatch asks the parser and degrades the run on refusal — so the coverage the floor admitted is available and unused. The prior question is not the dispatch loop: a FactKey names the provider that answered, so per-subject fallback files one capability's facts under two providers within one run. Whether that is a coherent store or two answers to one question under one address is a decision, and it has to be reached before the loop is written.",
-      "done_when": "The decision is recorded first, against a stated criterion. Then either the run walks the selection per subject — with the store still single-valued for what a file declares at a given generation, and RunReport naming which provider answered for how many subjects — or a record states why per-subject fallback is refused and what a caller should do instead. A negative control confirmed red either way: with fallback, a run where the strong provider refuses must not report the corpus clean.",
+      "why": "P8-SELECTION made Selection::Weaker reachable and nothing spends it. A caller lowers its floor to Approximate because a parser refuses seven files, the registry hands back the parser and the scanner in order, and Slice::Dispatch asks the parser and degrades the run on refusal \u00e2\u20ac\u201d so the coverage the floor admitted is available and unused. The prior question is not the dispatch loop: a FactKey names the provider that answered, so per-subject fallback files one capability's facts under two providers within one run. Whether that is a coherent store or two answers to one question under one address is a decision, and it has to be reached before the loop is written.",
+      "done_when": "The decision is recorded first, against a stated criterion. Then either the run walks the selection per subject \u00e2\u20ac\u201d with the store still single-valued for what a file declares at a given generation, and RunReport naming which provider answered for how many subjects \u00e2\u20ac\u201d or a record states why per-subject fallback is refused and what a caller should do instead. A negative control confirmed red either way: with fallback, a run where the strong provider refuses must not report the corpus clean.",
       "kind": "Decision",
       "origin": "Proposed",
       "territory": {
@@ -2007,7 +2007,7 @@
     {
       "id": "P9-AUTHORING",
       "title": "The markdown round trip D-129 decided and nobody built",
-      "why": "D-129 is a governing record, accepted, in the store, and it says markdown remains the surface people author through via a round trip that reads a record out as markdown and writes the edit back, as a transaction against the store: claim, stage, preview, commit, with the preview mandatory. None of that exists. Nothing reads a record out and nothing writes one back. Amended at version 2 to say so, which makes the gap schedulable and does not close it. What follows is the part that matters: records under docs/records are still the substrate in practice — authored as files, seeded into the store from those files by include_str!, edited as files — so the store holds a copy and the direction of that dependency is the opposite of what D-129 decides.",
+      "why": "D-129 is a governing record, accepted, in the store, and it says markdown remains the surface people author through via a round trip that reads a record out as markdown and writes the edit back, as a transaction against the store: claim, stage, preview, commit, with the preview mandatory. None of that exists. Nothing reads a record out and nothing writes one back. Amended at version 2 to say so, which makes the gap schedulable and does not close it. What follows is the part that matters: records under docs/records are still the substrate in practice \u00e2\u20ac\u201d authored as files, seeded into the store from those files by include_str!, edited as files \u00e2\u20ac\u201d so the store holds a copy and the direction of that dependency is the opposite of what D-129 decides.",
       "done_when": "A record can be read out of the store as markdown byte-identical to what would be seeded from it, and an edit to that markdown can be written back as a transaction that previews what it changes before committing. Identity survives the round trip: the node_id, the blocks and the relations are the same afterwards, and a rename is an ordinary edit. The preview names whether normative wording moved, because D-129 calls that mandatory and a preview that cannot say it is not the preview the record decided. Either docs/records stops being the authoring substrate, or a record states why it remains one and D-129 is amended again to agree with the tree.",
       "kind": "Correction",
       "origin": "Proposed",
@@ -2087,7 +2087,7 @@
     {
       "id": "P9-PREDICATE",
       "title": "An item's verification is weaker than the gate it stands in for",
-      "why": "work finish runs the item's argv and records the item done if it exits zero. Every item's argv is a cargo test invocation. The gate in .github/workflows/gate.yml is clippy with -D warnings and then cargo test, and the workspace denies unwrap_used, indexing_slicing and arithmetic_side_effects — a panic on the analysis path is a determinism defect rather than a bug, which is why they deny. So an item can be recorded verified while the gate that follows it is red. That is not hypothetical: P9-SKIP and P9-PHASE-GAP were both recorded verified with a clippy error in a file the item had just written, caught by running clippy by hand afterwards. Twice in three items, by somebody being careful — which is the arrangement the ledger exists to stop relying on, and the same sentence OD-LEDGER-001 already had to write once.",
+      "why": "work finish runs the item's argv and records the item done if it exits zero. Every item's argv is a cargo test invocation. The gate in .github/workflows/gate.yml is clippy with -D warnings and then cargo test, and the workspace denies unwrap_used, indexing_slicing and arithmetic_side_effects \u00e2\u20ac\u201d a panic on the analysis path is a determinism defect rather than a bug, which is why they deny. So an item can be recorded verified while the gate that follows it is red. That is not hypothetical: P9-SKIP and P9-PHASE-GAP were both recorded verified with a clippy error in a file the item had just written, caught by running clippy by hand afterwards. Twice in three items, by somebody being careful \u00e2\u20ac\u201d which is the arrangement the ledger exists to stop relying on, and the same sentence OD-LEDGER-001 already had to write once.",
       "done_when": "An item cannot be finished by a predicate that checks less than the gate does. Either finish refuses an argv that does not cover the gate, or the ledger derives the predicate rather than taking it from the author, or a record states why a weaker predicate is right and what the author is expected to run instead. Whichever is chosen, the two instances above would have failed under it, and a test says so.",
       "kind": "Validation",
       "origin": "Proposed",
@@ -2150,7 +2150,7 @@
     {
       "id": "P9-DEPENDS-ON",
       "title": "work list calls an item ready when nothing can claim it",
-      "why": "This item was authored on a false premise and is rewritten rather than deleted, because the premise is the interesting part. It said depends_on is unenforced. It is enforced: Claim walks the item's dependencies and returns ClaimRefusal::DependencyUnmet, retryable, exit 3. Verified against the case the item cites — `work claim --item P9-README` answers `refused: P9-README depends on P9-READ-SURFACE, which is Claimed`. The defect is one layer out. `work list` reads the item's state field, which is Ready, and prints the same word it prints for an item anybody can take. An agent picking work off that column burns a round trip per blocked item and learns to distrust the column. Whoever takes this must not add a second enforcement: two guards for one rule is how they come to disagree.",
+      "why": "This item was authored on a false premise and is rewritten rather than deleted, because the premise is the interesting part. It said depends_on is unenforced. It is enforced: Claim walks the item's dependencies and returns ClaimRefusal::DependencyUnmet, retryable, exit 3. Verified against the case the item cites \u00e2\u20ac\u201d `work claim --item P9-README` answers `refused: P9-README depends on P9-READ-SURFACE, which is Claimed`. The defect is one layer out. `work list` reads the item's state field, which is Ready, and prints the same word it prints for an item anybody can take. An agent picking work off that column burns a round trip per blocked item and learns to distrust the column. Whoever takes this must not add a second enforcement: two guards for one rule is how they come to disagree.",
       "done_when": "work list distinguishes an item whose dependencies are unfinished from one that is claimable, without consulting a second source of truth about what blocks a claim. A test covers it over an item with an unfinished dependency, and a negative control covers one with none, so the new label cannot be printed for everything. Claim's refusal is unchanged and still tested.",
       "kind": "Correction",
       "origin": "Proposed",
@@ -10906,7 +10906,7 @@
       "abandoned": [
         {
           "holder": "claude-code-session",
-          "reason": "nomos-store's own three files are fixed, clippy-clean and tested, and are committed. The item cannot Finish because cargo clippy --workspace --all-targets -- -D warnings is red elsewhere too (nomos-analysis, nomos-workspace, and possibly more once those clear) on the identical missing_errors_doc lint — a workspace-wide compliance gap this item's territory does not cover. Left open for whoever takes on the rest, or for a follow-up claim of this same item once the broader gate is separately addressed.",
+          "reason": "nomos-store's own three files are fixed, clippy-clean and tested, and are committed. The item cannot Finish because cargo clippy --workspace --all-targets -- -D warnings is red elsewhere too (nomos-analysis, nomos-workspace, and possibly more once those clear) on the identical missing_errors_doc lint \u00e2\u20ac\u201d a workspace-wide compliance gap this item's territory does not cover. Left open for whoever takes on the rest, or for a follow-up claim of this same item once the broader gate is separately addressed.",
           "abandoned_at": 1786836714
         }
       ],
@@ -11415,7 +11415,7 @@
       "abandoned": [
         {
           "holder": "claude-corrections-s1",
-          "reason": "Territory is short of the work. done_when requires a nomos-corrections crate to occupy the\nCorrection planning and staging row, which requires it to be a real cargo workspace member so\n`-p nomos-corrections` in this item's own predicate resolves — Cargo.toml is reserved and\ncovers that step.\n\nMeasured against the tree at ce05196, holding the claim, nothing written. Adding the member\nmakes tests/contract's Workspace::Load() (crates/spec... tests/contract/src/workspace.rs:31,\nrunning `cargo metadata`) see it, and two assertions in -p nomos-contract-tests then fail:\nTest_Every_Member_Should_Declare_A_Band (tests/contract/tests/boundaries/graph.rs:155, needs\nan entry in BANDS, tests/contract/tests/boundaries/bands.rs:20) and\nTest_The_Readme_Should_List_Every_Member_At_Its_Declared_Band\n(tests/contract/tests/boundaries/readme.rs:77, needs a matching row in README.md's band\ntable). Neither bands.rs nor README.md is in this item's territory, and both are checked by\nthis item's own predicate, so the item cannot pass its own gate from inside its reservation.\nThe public-surface half is fine as authored: tests/contract/surface/nomos-corrections.txt is\nreserved and Test_Every_Crates_Public_Surface_Should_Match_Its_Snapshot derives its file list\nfrom the snapshot directory rather than from a second hand-maintained registry, so no third\ngap exists there.\n\nSuccessor is P13-CORRECTIONS-2, this done_when with tests/contract/tests/boundaries/bands.rs\nand README.md added to territory. Nothing was written to the tree under this claim.",
+          "reason": "Territory is short of the work. done_when requires a nomos-corrections crate to occupy the\nCorrection planning and staging row, which requires it to be a real cargo workspace member so\n`-p nomos-corrections` in this item's own predicate resolves \u00e2\u20ac\u201d Cargo.toml is reserved and\ncovers that step.\n\nMeasured against the tree at ce05196, holding the claim, nothing written. Adding the member\nmakes tests/contract's Workspace::Load() (crates/spec... tests/contract/src/workspace.rs:31,\nrunning `cargo metadata`) see it, and two assertions in -p nomos-contract-tests then fail:\nTest_Every_Member_Should_Declare_A_Band (tests/contract/tests/boundaries/graph.rs:155, needs\nan entry in BANDS, tests/contract/tests/boundaries/bands.rs:20) and\nTest_The_Readme_Should_List_Every_Member_At_Its_Declared_Band\n(tests/contract/tests/boundaries/readme.rs:77, needs a matching row in README.md's band\ntable). Neither bands.rs nor README.md is in this item's territory, and both are checked by\nthis item's own predicate, so the item cannot pass its own gate from inside its reservation.\nThe public-surface half is fine as authored: tests/contract/surface/nomos-corrections.txt is\nreserved and Test_Every_Crates_Public_Surface_Should_Match_Its_Snapshot derives its file list\nfrom the snapshot directory rather than from a second hand-maintained registry, so no third\ngap exists there.\n\nSuccessor is P13-CORRECTIONS-2, this done_when with tests/contract/tests/boundaries/bands.rs\nand README.md added to territory. Nothing was written to the tree under this claim.",
           "abandoned_at": 1786863502
         }
       ],
@@ -23032,7 +23032,7 @@
       },
       "state": {
         "Declined": {
-          "reason": "folded into P13-DECLARETYPES-HOST's own finish to unblock its cargo test -p nomos-cli predicate — same file (gate/tests.rs), fixed under that claim instead of a separate one"
+          "reason": "folded into P13-DECLARETYPES-HOST's own finish to unblock its cargo test -p nomos-cli predicate \u00e2\u20ac\u201d same file (gate/tests.rs), fixed under that claim instead of a separate one"
         }
       },
       "depends_on": [],
@@ -34183,6 +34183,300 @@
           "exit_code": 0
         },
         "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P14-RULES-DEPENDENCY-COMPLETENESS",
+      "title": "Check_Every_Member_Declares_A_Band: a ninth nomos-rules rule promoting an undeclared band from a contract-test-only gap to a Finding",
+      "why": "External architecture review named 'generalize architecture conformance beyond dependency direction' as the highest-value near-term extension of the rule model. dependency/violations.rs's own comment has always named the real gap: an undeclared package in BANDS silently produces no direction finding, deferred to tests/contract/tests/boundaries/graph.rs's own Test_Every_Member_Should_Declare_A_Band, which only ever runs over this repository's own tree. OD-RULES-003's declared-architecture-vs-observed-fact design already covers this exactly; nothing before this item applied it to coverage instead of direction. Building this also surfaced that nomos-rules' own BANDS copy had drifted 5 real members stale (nomos-agent-executor-ollama, nomos-cap-dependency-policy, nomos-lang-go-modules, nomos-lang-go-package, nomos-lang-rust-deny) since OD-RULES-003 named exactly this drift as the copy's own cost.",
+      "done_when": "Check_Every_Member_Declares_A_Band exists in nomos-rules, reusing the existing BANDS table and nomos.cap.dependency fact with no new capability or provider, cites OD-RULES-003 the same way Check_Dependency_Direction does (same design, not a second one), is composed into nomos-check-orchestration::Run behind its own DEPENDENCY_COMPLETENESS RuleId gate the same way DEPENDENCY_DIRECTION is (including Materialize_Dependencies now running for either rule), and nomos-rules' own BANDS copy is synced to tests/contract/tests/boundaries/bands.rs's current real membership so the new rule's first run over this repository reports zero findings rather than inherited staleness.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/dependency.rs",
+          "crates/rules/nomos-rules/src/dependency/bands.rs",
+          "crates/rules/nomos-rules/src/dependency/completeness.rs",
+          "crates/rules/nomos-rules/src/dependency/reading.rs",
+          "crates/rules/nomos-rules/src/dependency/violations.rs",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "crates/orchestration/nomos-check-orchestration/src/run.rs",
+          "crates/orchestration/nomos-check-orchestration/src/tests.rs",
+          "tests/contract/surface/nomos-rules.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "rait_Impl_Should_Not_Claim_The_Type ... ok\ntest universe::tests::Test_An_All_Should_Be_Attributed_To_Its_Type ... ok\ntest universe::tests::Test_An_All_That_Takes_A_Receiver_Should_Not_Be_A_Universe ... ok\n\ntest result: ok. 106 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.11s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_check_orchestration-90c251dd76727ab2.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-90bb6a5aa5d22443.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-c3efa092d3a048d0.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-a52e503a2b94118e.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-d0eb0280208bfc94.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-9d62339adcadb851.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-15a700f9b7c62ca3.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-91d5119a2af96672.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-ae5e453ea357a163.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-61d2a2df1b5f6a50.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-521fcd41c795f303.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-97cc66c3275b20dd.exe)\n   Doc-tests nomos_check_orchestration\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_rules\n",
+        "verified_at": 1787785969,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "e4e262cfa807ae0f100f2eaf9321fcdce3dd4cf2"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P14-EXECUTOR-006-CODERABBIT-SHAPE",
+      "title": "A CodeRabbit-style review adapter takes ToolProvider/connector shape, not AgentExecutor shape",
+      "why": "External review named CodeRabbit as an obvious next integration once nomos-cap-lint's tool-provider seam and nomos-agent-contracts' executor seam were both real, without asking which shape it should take. nomos-connector-github now proves a third real shape (a connector under ARC-CONNECTOR-001) exists alongside AgentExecutor and ToolProvider, and nothing named which of the three a review adapter is before this item.",
+      "done_when": "A record measures AgentExecutor shape (what nomos-agent-contracts actually requires), ToolProvider shape (OD-RULES-010's fact-not-finding split), and connector shape (ARC-CONNECTOR-001/nomos-connector-github's own precedent) against what a CodeRabbit review adapter would actually produce, and decides which shape it takes, naming rather than building the adapter.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "mis-scoped territory (--amends against an unpublished record under-reserved the spec-store registration file); superseded by P14-EXECUTOR-006-CODERABBIT-SHAPE-2 with correct --territory"
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "nomos-main-1",
+          "reason": "territory used --amends against a not-yet-published record, which silently under-reserved; re-adding with explicit --territory for both the record doc and its spec-store registration",
+          "abandoned_at": 1787786115
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "nomos-main-1",
+        "declined_at": 1787786115
+      }
+    },
+    {
+      "id": "P14-EXECUTOR-006-CODERABBIT-SHAPE-2",
+      "title": "A CodeRabbit-style review adapter takes ToolProvider/connector shape, not AgentExecutor shape",
+      "why": "External review named CodeRabbit as an obvious next integration once nomos-cap-lint's tool-provider seam and nomos-agent-contracts' executor seam were both real, without asking which shape it should take. nomos-connector-github now proves a third real shape (a connector under ARC-CONNECTOR-001) exists alongside AgentExecutor and ToolProvider, and nothing named which of the three a review adapter is before this item.",
+      "done_when": "A record measures AgentExecutor shape (what nomos-agent-contracts actually requires), ToolProvider shape (OD-RULES-010's fact-not-finding split), and connector shape (ARC-CONNECTOR-001/nomos-connector-github's own precedent) against what a CodeRabbit review adapter would actually produce, and decides which shape it takes, naming rather than building the adapter.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-store/records/OD-EXECUTOR-006.record",
+          "docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "With_No_Table_Should_Store_No_Rows ... ok\n\ntest result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.14s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-7d91463b8a992888.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-243d59b9d9bb2f35.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-84ce37134e2d0376.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-38def5589111e8b2.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-867b6a59b9eac27d.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-01349e41c84d1df4.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-88944951302bc752.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-d52ad028ff6fb390.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-822766c88f62241d.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-d0f03dac815862fd.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-ee111bd537ecd137.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-2919ec68747ddb5b.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-99272398d303e3e7.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-756fcac740cd78ad.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-259eb839edee86c9.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1787786249,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "cf76f0de4e3bb81bdbba7898da5798c59701dc9f"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P14-ROADMAP-001-ACTIVATION-SEMANTICS-CORRECTION",
+      "title": "ARC-ROADMAP-001 restated ARC-ECOSYSTEM-001's own D-091 adoption wrong: activation semantics stay Nomos's",
+      "why": "External review's package-materialization framing led to reading ARC-ECOSYSTEM-001's adopted D-091 clause directly rather than trusting ARC-ROADMAP-001's own paraphrase of it. ARC-ECOSYSTEM-001 v4's own text: 'Nomos-specific compatibility rules, capability declarations, permission meanings, and package activation semantics remain Nomos's... XVPE, once this clause is implemented, owns the machinery that moves, verifies, and installs one.' ARC-ROADMAP-001 section 4 compresses this into 'package installation and activation is XVPE's, by explicit adoption of D-091, not unfinished Nomos work' -- erasing the mechanism/meaning split the source record itself draws, exactly the restatement failure this workspace's own discipline warns against (a summary of a checked file is an unchecked copy of it).",
+      "done_when": "ARC-ROADMAP-001 section 4 is corrected to state D-091's actual carve-out (package mechanism to XVPE, package meaning including activation semantics staying Nomos's), version bumped and the Status section records the amendment, committed through the spec store (preview then commit, round-trip confirmed), and both diagram-set and domain-specification projections are re-rendered from a worktree holding exactly this commit's record set.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "_Census_Should_Narrow_To_One_Table ... ok\n\ntest result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.14s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-7d91463b8a992888.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-243d59b9d9bb2f35.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-84ce37134e2d0376.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-38def5589111e8b2.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-867b6a59b9eac27d.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-01349e41c84d1df4.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-88944951302bc752.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-d52ad028ff6fb390.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-822766c88f62241d.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-d0f03dac815862fd.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-ee111bd537ecd137.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-2919ec68747ddb5b.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-99272398d303e3e7.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-756fcac740cd78ad.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-259eb839edee86c9.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1787786531,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "0cf557eb4ed7f915ebdc29eaa5106654d9b65be9"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P14-PACKAGE-014-ACTIVATION-SEMANTICS",
+      "title": "A LanguagePackage's activation semantics are a conformance claim, not an installer action",
+      "why": "ARC-ECOSYSTEM-001's adopted D-091 clause keeps package activation semantics on Nomos's side of the seam (fixed onto ARC-ROADMAP-001 by P14-ROADMAP-001-ACTIVATION-SEMANTICS-CORRECTION), but nothing names what that phrase means for the one real manifest type this workspace has, nomos-lang-rust-package::LanguagePackage. OD-PACKAGE-001's own four-step path never mentions activation, so the question is open rather than answered and unnamed.",
+      "done_when": "A record measures whether anything outside the package crates calls Parse_Manifest/Read_Manifest (nothing does), checks OD-HOST-004's no-selection-mechanism decision against the naive reading that a manifest should drive composition (foreclosed), and decides activation means a declared-providers-vs-Registry::Offers conformance claim in Check_Dependency_Direction's own shape, naming rather than building the rule.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-store/records/OD-PACKAGE-014.record",
+          "docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "Block_Should_Store_Every_Pipe_Line ... ok\n\ntest result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.15s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-7d91463b8a992888.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-243d59b9d9bb2f35.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-84ce37134e2d0376.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-38def5589111e8b2.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-867b6a59b9eac27d.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-01349e41c84d1df4.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-88944951302bc752.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-d52ad028ff6fb390.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-822766c88f62241d.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-d0f03dac815862fd.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-ee111bd537ecd137.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-2919ec68747ddb5b.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-99272398d303e3e7.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-756fcac740cd78ad.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-259eb839edee86c9.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1787787003,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "79f413bfcc71eeb4070be20385189b95597ae560"
       },
       "abandoned": [],
       "displaced": [],
