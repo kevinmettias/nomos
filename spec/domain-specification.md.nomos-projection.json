@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:21aa429fe380694acba58a7222dcd7b93160327467a7504d382ddc218a18fa00",
-  "inputs_digest": "sha256:a4f2bbe9569ad482cf6e223f0b75bfbaa5f203e9cfdd040dd261f848e48dac9c",
+  "content_digest": "sha256:a44a2cc2c15e167d39fd9f6e80794f9aa0268c0cb17c7bc0d8836efef0308180",
+  "inputs_digest": "sha256:d90300f9183f682f4c3f788d9d2201c59d61e80b3556712cde33ccd62755de27",
   "sections": [
     [
       "Documents",
-      168
+      170
     ],
     [
       "Sections",
-      1425
+      1437
     ],
     [
       "Source blocks",
-      4989
+      5025
     ]
   ],
   "inputs": [
@@ -172,6 +172,11 @@
     },
     {
       "content": "documents",
+      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md@authored",
+      "hash": "sha256:abebdf2b824324df346b84d0919c8c4d5388d053b4f113e1d93570f0e9e3939a"
+    },
+    {
+      "content": "documents",
       "identity": "docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md@authored",
       "hash": "sha256:f1e0d83250422ce9a01b49549ecadefeb10363f0ac7ac1e0aad7ef647caa2626"
     },
@@ -294,6 +299,11 @@
       "content": "documents",
       "identity": "docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md@authored",
       "hash": "sha256:8ab68673889fed19383159068abd89c4b4dbbd6a59aaa336cba463bab3dfa96a"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md@authored",
+      "hash": "sha256:ea763ec0abaa47ca8f8f8c56f0831097b8c0467b7146738054c39b61c9dc8f2f"
     },
     {
       "content": "documents",
@@ -1942,6 +1952,36 @@
     },
     {
       "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#1",
+      "hash": "sha256:3898a1caada3950e9e97be52a5ef355e18714f3a7f8010af1ff678123a228a72"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#2",
+      "hash": "sha256:d0374037c22c4b9b9abd7d3f9730ee7eeb1edb59719257876dc4e40906fe3cca"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#4",
+      "hash": "sha256:5103997e01d2a9644f36d9f760be5a8730a355332ff0988c27df0d97366a17d4"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#9",
+      "hash": "sha256:7c5603e6f7a39ef86f0082373ccd62f5fd0dec69ff565da52b157cb27fedcfa8"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#13",
+      "hash": "sha256:5c8ecd79dc3d30a6a204063d596a3c057be913bac2219fdaad9edbd2729095da"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#15",
+      "hash": "sha256:1ede96a18093b3ee358c643cb4387deb8236faacc6888aa6ff5f005072e073d0"
+    },
+    {
+      "content": "headings",
       "identity": "docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md#1",
       "hash": "sha256:048d736833f31c53c285da5eb9e617ea348b63a830314bd9a16cce2d97081391"
     },
@@ -2964,6 +3004,36 @@
       "content": "headings",
       "identity": "docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#25",
       "hash": "sha256:cdb711ac2f013b40dede5599be0a43ff4061621fd8304e4869c3ddd19e09f356"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#1",
+      "hash": "sha256:d8fa95631f84d57f36f006c098eda9b08b81ac31d1e7a3627b56a56ab55e88aa"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#2",
+      "hash": "sha256:b0b568896f70eb450ccd167cc01d2044b255726cc46b0b6b4b36fb9484fa1372"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#4",
+      "hash": "sha256:f92d13ac9cbd9d45fe1919746381a7cf5841980187c2515adbd0b12cf8c46a74"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#13",
+      "hash": "sha256:bff8e6cb8f7aadde0f698f883b07e6124d951d9ac7090a349112217189d9cbb7"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#17",
+      "hash": "sha256:e6d37519fd8faaab3f3f5dfd1cdb5bfd0ab71b24f1d3d96659240f8c06602cea"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#19",
+      "hash": "sha256:cc16ae532b20cb2dcf8023705692c63b0e777eb42838724e4b62d30b3ed3ed73"
     },
     {
       "content": "headings",
@@ -11717,6 +11787,86 @@
     },
     {
       "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#1",
+      "hash": "sha256:f08018252b6e7cdca5b4644d76c12ea900ab3609cd801541045c92d810613495"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#3",
+      "hash": "sha256:5e94e9444ad04a038432d9de88842b0094491b660f885fdcfeaa345ea496ef71"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#4",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#5",
+      "hash": "sha256:b3856fc421b9777609925a9c7c7c6490e8c27e3339529dfdc98d836d4ecfc68d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#6",
+      "hash": "sha256:59e358d7886a19534738f0dd8f87ab4310a367bc65e6509e5a644a2d8ba6dffb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#7",
+      "hash": "sha256:afce113842bf0714109d44b5ecfdb066152513990bd9f07dab7251bdc4603705"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#8",
+      "hash": "sha256:a92e3de1dbde6e723f11bccafebd84098cdc13c7008e73978fac7063fc6ffce3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#9",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#10",
+      "hash": "sha256:cd59688ba1821272d673614214bc402d0ae06e40fc874e0b4c05da4f82603283"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#11",
+      "hash": "sha256:794b03797a4c50808fb6bc078e788c61faa7f6c875f74e2d4ce79b2e63c0a8c0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#12",
+      "hash": "sha256:61f3aed0cb902bfdfbc8e3e4d44e78b3a3cd6637ddab5de59de5ae793fa8fc88"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#13",
+      "hash": "sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#14",
+      "hash": "sha256:d2ac653c51cf197532965471455b8c881246e37ff293b9ee1cfa880a4a74cf84"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#15",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#16",
+      "hash": "sha256:f87d102ea13bcda0373b3bf59999dfe26afdc5b7b28086ddfc70ce0ed1a4e11f"
+    },
+    {
+      "content": "blocks",
       "identity": "docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md#1",
       "hash": "sha256:18dcad3114315f7e26a620aadc73d352e64d6b61c5e7575f2c31286b431081d6"
     },
@@ -15134,6 +15284,106 @@
       "content": "blocks",
       "identity": "docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#26",
       "hash": "sha256:2e9df8a4850da939095a46f03c3f4340ee18a3c84053d23353d9a98efce0eb05"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#1",
+      "hash": "sha256:251725de29abad4066dfdcfe9739c5d89969cdec72c965e76ea881a29f3b5ce9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#3",
+      "hash": "sha256:3d93462112f3ffcbc55cd17fcadec93b7d929cb6deb8701f91aea21fc572e8d3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#4",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#5",
+      "hash": "sha256:93c0804c3d68d04203a6aac601f7de6ae1842ac8403f16d0ff35a7d05230d69d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#6",
+      "hash": "sha256:7eaf5592e64e43a218c5ced585b168346d5754c966f8b2d59565bd28a33d648d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#7",
+      "hash": "sha256:0ec77c1e15f32eb689400c5ac98f43e54afd76ba3210a4cbb64253264c8f106b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#8",
+      "hash": "sha256:ce879284fbada3a9187a167f07198a3831711bcd626b624f972edcb19b772aa2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#9",
+      "hash": "sha256:0fe7a80e76f1408950c2fd3b6b778ea1f73c1ccbd90e46ae67a640df7f8f8ce5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#10",
+      "hash": "sha256:6ba09146d72bb90379fcc73fe170b13e88d1c2b9e8c6477bf0c495908b260886"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#11",
+      "hash": "sha256:3b0846ecd7829e0d9bd420883ab87af39ff218285656f40eb62c3476dc831cd9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#12",
+      "hash": "sha256:1c799f2747ff98fb8766933d7d35b4aa3e40fb064fff46729e3f6ace1d127a46"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#13",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#14",
+      "hash": "sha256:f7e93a67c20da9362a3c0f9bd46b8d3c12d5902b23fec99bd9cdf569baf66c2d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#15",
+      "hash": "sha256:6e630b5409d49a82f7dba50ddd589da47615a49429f0cf7d914382a1fab97ef9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#16",
+      "hash": "sha256:dfdc6dc78d4551bbee5b6d929a421d150149e5becd5c5ec6f783ad98265e4762"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#17",
+      "hash": "sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#18",
+      "hash": "sha256:9e2993a12070d3f6673c1ca05255c6ae63fbc36e5cb1fa5ef7ce61033078ba31"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#19",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#20",
+      "hash": "sha256:3800b84dd4364056c18937517b78896a646434c1f1c95aa3cf0504fcc81e86b9"
     },
     {
       "content": "blocks",
