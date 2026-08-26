@@ -34128,6 +34128,64 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P14-ROADMAP-001-ACTIVATION-SEMANTICS-CORRECTION",
+      "title": "ARC-ROADMAP-001 restated ARC-ECOSYSTEM-001's own D-091 adoption wrong: activation semantics stay Nomos's",
+      "why": "External review's package-materialization framing led to reading ARC-ECOSYSTEM-001's adopted D-091 clause directly rather than trusting ARC-ROADMAP-001's own paraphrase of it. ARC-ECOSYSTEM-001 v4's own text: 'Nomos-specific compatibility rules, capability declarations, permission meanings, and package activation semantics remain Nomos's... XVPE, once this clause is implemented, owns the machinery that moves, verifies, and installs one.' ARC-ROADMAP-001 section 4 compresses this into 'package installation and activation is XVPE's, by explicit adoption of D-091, not unfinished Nomos work' -- erasing the mechanism/meaning split the source record itself draws, exactly the restatement failure this workspace's own discipline warns against (a summary of a checked file is an unchecked copy of it).",
+      "done_when": "ARC-ROADMAP-001 section 4 is corrected to state D-091's actual carve-out (package mechanism to XVPE, package meaning including activation semantics staying Nomos's), version bumped and the Status section records the amendment, committed through the spec store (preview then commit, round-trip confirmed), and both diagram-set and domain-specification projections are re-rendered from a worktree holding exactly this commit's record set.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "_Census_Should_Narrow_To_One_Table ... ok\n\ntest result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.14s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-7d91463b8a992888.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-243d59b9d9bb2f35.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-84ce37134e2d0376.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-38def5589111e8b2.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-867b6a59b9eac27d.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-01349e41c84d1df4.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-88944951302bc752.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-d52ad028ff6fb390.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-822766c88f62241d.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-d0f03dac815862fd.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-ee111bd537ecd137.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-2919ec68747ddb5b.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-99272398d303e3e7.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-756fcac740cd78ad.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-259eb839edee86c9.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1787786531,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "0cf557eb4ed7f915ebdc29eaa5106654d9b65be9"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

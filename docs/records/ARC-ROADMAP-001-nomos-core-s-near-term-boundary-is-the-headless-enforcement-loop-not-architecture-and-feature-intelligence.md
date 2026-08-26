@@ -3,7 +3,7 @@ id: ARC-ROADMAP-001
 type: architecture
 title: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence
 status: accepted
-version: 2
+version: 3
 authority: canonical-normative-record
 tags:
   - roadmap
@@ -179,11 +179,16 @@ shape against, or once `EGRAPH` itself is named in a scope like `OD-ROADMAP-001`
 
 `ARC-ECOSYSTEM-001` (version 4) already governs what Nomos, KWB, XVPE, and repository
 tooling each own, including the specific question an earlier draft of this reasoning got
-wrong: package installation and activation is XVPE's, by explicit adoption of `D-091`, not
-unfinished Nomos work. This record governs sequencing inside Nomos's own boundary. It adds
-no ownership claim and restates none; where the two are read together, `ARC-ECOSYSTEM-001`
-is the authority on who owns what, and this record is the authority on what order Nomos
-builds its own share in.
+wrong: package installation is XVPE's, by explicit adoption of `D-091`, not unfinished
+Nomos work. That adoption's own text draws a narrower line than "installation and
+activation" restates: `D-091` names package *mechanism* — envelope, resolution,
+registries, ingestion, transactional installation, rollback and recovery, signatures — and
+`ARC-ECOSYSTEM-001` keeps package *meaning* on this side of the seam, package activation
+semantics named among it explicitly, the same way `D-122`'s adoption kept rule and finding
+semantics on this side of the analysis-mechanism crossing. This record governs sequencing
+inside Nomos's own boundary. It adds no ownership claim and restates none; where the two
+are read together, `ARC-ECOSYSTEM-001` is the authority on who owns what, and this record
+is the authority on what order Nomos builds its own share in.
 
 ### 5. "Gate" here means the product object, not `OD-GATE-004`'s CI step
 
@@ -221,4 +226,9 @@ execution reach the point of needing typed cross-entity relationships, constrain
 amendment to `ARC-ECOSYSTEM-001` rather than to this record. Amended to version 2 by
 `P13-ROADMAP-001-POPULATION-CAUTION-RETIRED`, which retired constraint 2's wait via the new
 anchor record `OD-ROADMAP-001` — see that record for the reasoning and the full list of
-records it supersedes.
+records it supersedes. Amended to version 3 by `P14-ROADMAP-001-ACTIVATION-SEMANTICS-CORRECTION`,
+which corrected constraint 4's own restatement of `ARC-ECOSYSTEM-001`'s adopted `D-091`
+clause: that adoption keeps package *activation semantics* on Nomos's side of the seam, and
+this record's prior text erased that carve-out by compressing "installation" and
+"activation" into one XVPE-owned phrase. Package installation mechanism is unchanged as
+XVPE's; nothing else about either record's ownership table moves.
