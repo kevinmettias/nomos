@@ -2,14 +2,14 @@
 //! malformed shape [`ManifestError`] names.
 
 use nomos_contracts::{ContractVersion, PackageId, PackageKind, ProviderId};
-use nomos_lang_package::{
+use nomos_lang_rust_package::{
     LanguagePackage, ManifestError, PackageVersion, Parse_Manifest, ProtocolRange,
     ProviderRegistration, Read_Manifest, RustEdition,
 };
 use std::path::PathBuf;
 
 /// This crate's own manifest sits three directories below the repository root:
-/// `crates/packages/nomos-lang-package`.
+/// `crates/packages/nomos-lang-rust-package`.
 fn Repository_Root() -> PathBuf
 {
     return PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../..");

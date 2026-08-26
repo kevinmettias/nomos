@@ -68,6 +68,7 @@ profile: domain-specification
 | docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md@authored | docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md | authored | 26 | 8 | sha256:8ab68673889fed19383159068abd89c4b4dbbd6a59aaa336cba463bab3dfa96a |
 | docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md@authored | docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md | authored | 20 | 6 | sha256:ea763ec0abaa47ca8f8f8c56f0831097b8c0467b7146738054c39b61c9dc8f2f |
 | docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md@authored | docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md | authored | 32 | 9 | sha256:5505d057d0aa2bc7662cbfca82c015dd8ef4366f3a6e50d52516638489c4333a |
+| docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md@authored | docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md | authored | 17 | 6 | sha256:5f4af371f2667269d82cef40261bbb5887f95e6f17f5c8b6065b68091fa6ae36 |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md@authored | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md | authored | 30 | 8 | sha256:ede1d73ff937b80913dd5c6fd4d7d5cc70cb8158b29e13bfe003ae5cd5f805d5 |
 | docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md@authored | docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md | authored | 32 | 9 | sha256:1027b7b589216b9cbe4598a2a569261111071dce14529a2556e82f61852f74cf |
 | docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md@authored | docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md | authored | 20 | 7 | sha256:eca88bdcb033ae337eed44a34b8e00e16b9c0208f5bec59b8560b4850808de81 |
@@ -89,6 +90,7 @@ profile: domain-specification
 | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md@authored | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md | authored | 19 | 6 | sha256:9237ea74e89c7f49295d2e4bde41ff135c64838767ba17c27b0aad79037ced10 |
 | docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md@authored | docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md | authored | 15 | 5 | sha256:bcf1bfd865c60493754d4a765742627fd4c18504722d27a065b5201be2ac218f |
 | docs/records/OD-HOST-005-whether-request-commands-seam-is-its-own-crate-or-a-verb-inside-spec-orchestration.md@authored | docs/records/OD-HOST-005-whether-request-commands-seam-is-its-own-crate-or-a-verb-inside-spec-orchestration.md | authored | 15 | 5 | sha256:0cb15b83d0fb7a58f4a2afda083ac512ba0ac344d15ca0556f3446736cbd7ea9 |
+| docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md@authored | docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md | authored | 18 | 6 | sha256:0b57d5901842a1631bb060efc073a695a1adb398a0a938a3f0ec937a14e90a37 |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md@authored | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md | authored | 41 | 9 | sha256:dd08db28191c57f150438f906daae1c7733089e622904118ea906349fb8a5e30 |
 | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md@authored | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md | authored | 23 | 8 | sha256:45ad77676397a486ad7f463e44d50aaea8213377aaa200fe47ee2570fcdfef33 |
 | docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md@authored | docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md | authored | 25 | 6 | sha256:769ce2801152cca166570d3b88ce2f5bc133a3545afa26e0068652357cca5fa2 |
@@ -125,6 +127,7 @@ profile: domain-specification
 | docs/records/OD-LEDGER-034-whether-work-needs-a-typed-reconciliation-outcome-beside-the-free-text-reason-work-decline-already-carries.md@authored | docs/records/OD-LEDGER-034-whether-work-needs-a-typed-reconciliation-outcome-beside-the-free-text-reason-work-decline-already-carries.md | authored | 14 | 5 | sha256:cb61b6f602f2fc7836f03727ce282c5f46da3e5ef3c6f92108dc77cc862577fc |
 | docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md@authored | docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md | authored | 17 | 5 | sha256:e28fcdcd8881a5405bfd5398964764cd59fa6d45e8340359ca94d9df98a0d732 |
 | docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md@authored | docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md | authored | 21 | 7 | sha256:e44db6eb38b3d1a6229b905ffba42be08984541c3407ce66bff74af1b229992a |
+| docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md@authored | docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md | authored | 18 | 6 | sha256:ab5cb902ffef3564343e99f10236808102e5e0f1d3c8374831bc8e8ab0d579ad |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md@authored | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md | authored | 29 | 8 | sha256:dea2667f08661d51389468ccb32132d696dd6cb5a0936574b89125c523341962 |
 | docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md@authored | docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md | authored | 24 | 7 | sha256:aba629fefa9d9503489cfcae8626b61030287a2f29e558cf0b775875eb32c5b7 |
 | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md@authored | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md | authored | 54 | 10 | sha256:0a930d2a044d183c00fc821119d1645738cb398a9374b5a6eb3a736cb50764d2 |
@@ -133,12 +136,13 @@ profile: domain-specification
 | docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md@authored | docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md | authored | 27 | 9 | sha256:e94d0c54e1e8ac358fc301df5119ab588054e69c32c0b4abf3420717a7959610 |
 | docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md@authored | docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md | authored | 32 | 10 | sha256:a45ac49574962ff1012b371f9aea9eb2f8fc2a06a11e707f2b1679a355acc555 |
 | docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md@authored | docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md | authored | 22 | 8 | sha256:82a815c8ebfef4326291f80714ff16665a00d6311bcc2ac44be6c1c55f769609 |
-| docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md@authored | docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md | authored | 21 | 7 | sha256:c8d1f6b93262c4c49c0a4feb2064651754b9aadd43d7e9efa41c11362f08eb68 |
+| docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md@authored | docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md | authored | 25 | 8 | sha256:ef42dde80754c3356dc02c5381de8581d104bef842cf1222901f92d33236c7ca |
 | docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md@authored | docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md | authored | 34 | 9 | sha256:c27a144ff27bd60925ae7b4027314ea780fec54cc1466bcf11a16c2f51d485f0 |
 | docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md@authored | docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md | authored | 14 | 5 | sha256:8e66ebc7fa4c6ee44260128c0f37957605f33a078676edb3c504d701d929362f |
 | docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md@authored | docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md | authored | 16 | 7 | sha256:f1b618d3b00c8f61d67c72d952411d52fe9d8520a77db5a8ba0a1a526faed666 |
 | docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md@authored | docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md | authored | 32 | 10 | sha256:58e12ff46ca519ac9381a1d2f41c5ea5fcc7464661c4ad18234d3cb1f7a3805a |
 | docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md@authored | docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md | authored | 19 | 7 | sha256:6a14772c529dbb5589b38e4fdaec088191dcfbec7c6381e15d216537c6d1e4dd |
+| docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md@authored | docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md | authored | 18 | 6 | sha256:9d244ee2809578351e061c1f8ab5c866345764d66f874044fc439b9f9cc76651 |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md@authored | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md | authored | 34 | 9 | sha256:871e1ada836924e8fad8d9f05a7badd9349eefb18e90e0157a28ac34879555d0 |
 | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md@authored | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md | authored | 28 | 7 | sha256:f98efe7a4dd950df779912722f9deb19ecdc75a81e52d9635900c2f424a8623a |
 | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md@authored | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md | authored | 45 | 10 | sha256:9af1a60d2bc3755845a1d9c3eeae503b2a8f6ec315cfc906d633c7dc2d5f0483 |
@@ -152,7 +156,7 @@ profile: domain-specification
 | docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md@authored | docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md | authored | 18 | 6 | sha256:5e7bde3ad034017040659d44bc4b044696c4a0b33830e8596bd67906a2d2ac4c |
 | docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md@authored | docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md | authored | 19 | 6 | sha256:7f6c05ffa09f693ecfe8e7c14699257a1fe01da3a07c0614b09f227fd5be986b |
 | docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md@authored | docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md | authored | 32 | 6 | sha256:335f2ed03def8b979a66bf55ff3278c706fbc7e1105bc01a4fd5a1a75cedfe0a |
-| docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md@authored | docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md | authored | 29 | 8 | sha256:0ee7f569323a3dabc535b9cc835883de99c20b70ad348495a1595986b912d60e |
+| docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md@authored | docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md | authored | 35 | 9 | sha256:08ba049790ebab78a959ded3cff62e8e04ff89f3e3502a36dd39cdff8d560569 |
 | docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md@authored | docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md | authored | 15 | 6 | sha256:a7d5a93cd32ab0b63cbd4218801091e23d8136b7230b0990277a8dcff0f16560 |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md@authored | docs/records/OD-SPEC-001-the-storage-backend-question.md | authored | 11 | 5 | sha256:e4feddab256024ea38e21849120fdd52d0ddf17d4e3f69cfb24eb4c8e766c8ae |
 | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md@authored | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md | authored | 20 | 7 | sha256:2c45051e43390556bfd68865152580e1ae09c2e82dc94bb20e65cdbf60d69a10 |
@@ -627,6 +631,12 @@ profile: domain-specification
 | docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#23 | authored | 2 | The Rule |
 | docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#26 | authored | 2 | What This Record Does Not Do |
 | docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#31 | authored | 2 | Status |
+| docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#1 | authored | 1 | The --backend flag dispatches an AgentExecutor and a ModelBackend, not two AgentExecutors, so OD-EXECUTOR-004's shared-trait trigger has not fired |
+| docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#2 | authored | 2 | Question |
+| docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#5 | authored | 2 | What Was Measured |
+| docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#10 | authored | 2 | The Decision |
+| docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#13 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#16 | authored | 2 | Status |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md#1 | authored | 1 | A skipped test reports ok, so the size of the hole is declared rather than the hole being closed |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md#2 | authored | 2 | Question |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md#5 | authored | 2 | What Was Found |
@@ -807,6 +817,12 @@ profile: domain-specification
 | docs/records/OD-HOST-005-whether-request-commands-seam-is-its-own-crate-or-a-verb-inside-spec-orchestration.md#8 | authored | 2 | What Would Decide It |
 | docs/records/OD-HOST-005-whether-request-commands-seam-is-its-own-crate-or-a-verb-inside-spec-orchestration.md#10 | authored | 2 | Resolution |
 | docs/records/OD-HOST-005-whether-request-commands-seam-is-its-own-crate-or-a-verb-inside-spec-orchestration.md#14 | authored | 2 | Status |
+| docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md#1 | authored | 1 | nomos-api's exposure of spec-orchestration's editing verbs carries the same named revisit trigger OD-LEDGER-036 gave the ledger verbs, and hasn't fired either |
+| docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md#2 | authored | 2 | Question |
+| docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md#5 | authored | 2 | What Was Measured |
+| docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md#10 | authored | 2 | The Decision |
+| docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md#13 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md#17 | authored | 2 | Status |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#1 | authored | 1 | Territory is declared but not enforced, and nothing yet notices the difference |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#2 | authored | 2 | Question |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#4 | authored | 2 | What Is Actually Enforced |
@@ -1151,6 +1167,12 @@ profile: domain-specification
 | docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#14 | authored | 2 | What This Record Does Not Do |
 | docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#18 | authored | 2 | What Would Decide It Otherwise |
 | docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#20 | authored | 2 | Status |
+| docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md#1 | authored | 1 | Whether nomos-agent-contracts' reuse of nomos-ledger's Territory and VerificationPredicate needs its own product-owned types |
+| docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md#2 | authored | 2 | Question |
+| docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md#5 | authored | 2 | What Was Measured |
+| docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md#10 | authored | 2 | The Decision |
+| docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md#13 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md#17 | authored | 2 | Status |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#1 | authored | 1 | A claim and a fact address a path by one rule, and the record-identifier fold stays with the ledger |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#2 | authored | 2 | Question |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#8 | authored | 2 | What Was Actually Wrong |
@@ -1229,7 +1251,8 @@ profile: domain-specification
 | docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#10 | authored | 2 | What this does not decide |
 | docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#13 | authored | 2 | What Holds It |
 | docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#15 | authored | 2 | Amendment: A Real Second Language Landed, And The Core Needed No Adjustment |
-| docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#20 | authored | 2 | Status |
+| docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#20 | authored | 2 | Amendment: The Wrapper's Own Name Was Never Corrected, And An External Review Named It |
+| docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#24 | authored | 2 | Status |
 | docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#1 | authored | 1 | Whether RulePackage needs its manifest crate now that nomos-package exists, or stays a bare rule bounded to a population of one |
 | docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#2 | authored | 2 | Question |
 | docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#6 | authored | 2 | Current Position |
@@ -1268,6 +1291,12 @@ profile: domain-specification
 | docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#14 | authored | 2 | What This Does Not Do |
 | docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#16 | authored | 2 | Amendment: The Trigger Fired By Standing Override, Not By A Real Case |
 | docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#18 | authored | 2 | Status |
+| docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#1 | authored | 1 | Ollama's real mechanism is ModelBackendPackage's shape, not AgentExecutorPackage's, measured against OD-PACKAGE-010's own two definitions |
+| docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#2 | authored | 2 | Question |
+| docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#5 | authored | 2 | What Was Measured |
+| docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#10 | authored | 2 | The Decision |
+| docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#13 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#17 | authored | 2 | Status |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#1 | authored | 1 | A port that names its outcomes says nothing about how they are obtained |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#2 | authored | 2 | Question |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#5 | authored | 2 | What Was Measured |
@@ -1381,7 +1410,8 @@ profile: domain-specification
 | docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#14 | authored | 2 | What Would Decide It |
 | docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#17 | authored | 2 | Amendment: The First Named Trigger Fired, And Was Addressed Narrowly |
 | docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#22 | authored | 2 | Amendment: A Third Round Of The Same Review, Re-Checked Against Real Growth Since The Last Amendment |
-| docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#28 | authored | 2 | Status |
+| docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#28 | authored | 2 | Amendment: The Fourth Trigger's Named Event Finally Occurred, And Its Own Wording Already Says What It Means |
+| docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#34 | authored | 2 | Status |
 | docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#1 | authored | 1 | A ToolProvider's output is a fact a native rule judges, not a Finding a tool emits directly |
 | docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#2 | authored | 2 | Question |
 | docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#4 | authored | 2 | What Was Measured |
@@ -15600,6 +15630,167 @@ against this record's rule the way the first executor was measured against `OD-E
 
 Accepted.
 
+### docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#1
+
+*revision: authored · kind: heading · heading: The --backend flag dispatches an AgentExecutor and a ModelBackend, not two AgentExecutors, so OD-EXECUTOR-004's shared-trait trigger has not fired · hash: sha256:b789e60364a34747379879aae54dde806b8e7ae982044f3ac83f6dc1e0ef43f9*
+
+# The --backend flag dispatches an AgentExecutor and a ModelBackend, not two AgentExecutors, so OD-EXECUTOR-004's shared-trait trigger has not fired
+
+### docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#2
+
+*revision: authored · kind: heading · heading: The --backend flag dispatches an AgentExecutor and a ModelBackend, not two AgentExecutors, so OD-EXECUTOR-004's shared-trait trigger has not fired / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#3
+
+*revision: authored · kind: prose · heading: The --backend flag dispatches an AgentExecutor and a ModelBackend, not two AgentExecutors, so OD-EXECUTOR-004's shared-trait trigger has not fired / Question · hash: sha256:76162d3502f8bc6db9700a9c8d8f801232bf0662989c3214f1ff71906127597c*
+
+`OD-EXECUTOR-004` declined to build "a dispatch trait generic over more than one" backend,
+naming its own re-fire condition precisely: `OD-EXECUTOR-001`'s restraint "holds until a real
+caller needs to choose." `nomos agent execute`/`judge-role`'s `--backend` flag
+(`P14-TRACKB-CLI-AGENT-BACKEND-FLAG`) is a real caller that chooses, today, between
+`nomos_agent_executor_claude_code::Execute` and `nomos_agent_executor_ollama::Execute` — a
+plain `match` with zero shared trait, its own doc comment stating so explicitly
+(`crates/host/nomos-cli/src/agent.rs`'s `Dispatch`: "The two crates share no trait —
+`OD-EXECUTOR-001`/`OD-EXECUTOR-004` both decline to invent one ahead of a real need — so this
+match is the entire dispatch"). Read at face value, this is the trigger firing: a real caller
+now dispatches between two implementations sharing an identical `Execute<P: ProcessLauncher>`
+signature, near-verbatim-duplicated `Isolated_Working_Directory`/`Command_For`/
+`Require_Clean_Exit` logic, and independently declared, structurally similar outcome and error
+types.
+
+### docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#4
+
+*revision: authored · kind: prose · heading: The --backend flag dispatches an AgentExecutor and a ModelBackend, not two AgentExecutors, so OD-EXECUTOR-004's shared-trait trigger has not fired / Question · hash: sha256:96703182ef6f95e645c9faf8f5dd4bd340a77c380b0fd71af390ac23b75f65ed*
+
+`OD-PACKAGE-013` changes the premise this question was read against: it finds
+`nomos-agent-executor-ollama`'s real mechanism is `ModelBackendPackage`'s shape, not
+`AgentExecutorPackage`'s. If that classification is right, `--backend` is not choosing between
+two `AgentExecutor`s at all — this record checks what that does to `OD-EXECUTOR-004`'s trigger
+before any trait is designed against the wrong premise.
+
+### docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#5
+
+*revision: authored · kind: heading · heading: The --backend flag dispatches an AgentExecutor and a ModelBackend, not two AgentExecutors, so OD-EXECUTOR-004's shared-trait trigger has not fired / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#6
+
+*revision: authored · kind: prose · heading: The --backend flag dispatches an AgentExecutor and a ModelBackend, not two AgentExecutors, so OD-EXECUTOR-004's shared-trait trigger has not fired / What Was Measured · hash: sha256:ead04c1f1af228020389b69fa11fd00f7338fb262618c180a22201c29dd81cf9*
+
+**`OD-EXECUTOR-004`'s trigger names a choice between backends of the same kind.** Its own text:
+"a real caller needs to choose" between `AgentExecutor` implementations — the same restraint
+`OD-EXECUTOR-001` states as "a dispatch trait generic over more than one" `AgentExecutor`.
+Nothing in either record contemplates a caller choosing between an `AgentExecutor` and a
+`ModelBackend` under one flag; that shape did not exist when either was written.
+
+### docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#7
+
+*revision: authored · kind: prose · heading: The --backend flag dispatches an AgentExecutor and a ModelBackend, not two AgentExecutors, so OD-EXECUTOR-004's shared-trait trigger has not fired / What Was Measured · hash: sha256:9e582ac9d787b85ef0643fb21fe3c049235df4092d19993750cf6e05b81c3d82*
+
+**Under `OD-PACKAGE-013`, there is exactly one real `AgentExecutor` in this workspace today:**
+`nomos-agent-executor-claude-code`. Ollama's crate, real and dispatched through the identical
+CLI flag, is a `ModelBackendPackage` instance wearing an `AgentExecutor`-shaped function
+signature — `Execute<P: ProcessLauncher>(&TaskEnvelope, &P) -> Result<...>` — because it was
+built to satisfy `OD-EXECUTOR-004`'s (correctly measured, wrongly classified) capability
+boundary, not because it is structurally the same kind of thing Claude Code's crate is.
+
+### docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#8
+
+*revision: authored · kind: prose · heading: The --backend flag dispatches an AgentExecutor and a ModelBackend, not two AgentExecutors, so OD-EXECUTOR-004's shared-trait trigger has not fired / What Was Measured · hash: sha256:69d468110d366e359be8d348c86fa2ffafb949abd2128c712431e50cf65014f1*
+
+**The structural duplication `OD-EXECUTOR-004`'s trigger would be evidence of — two
+`AgentExecutor`s sharing real, extractable behavior — has a different, weaker explanation
+once the premise is corrected.** `Isolated_Working_Directory`, `Command_For`'s subprocess
+shape, and `Require_Clean_Exit` are duplicated because both crates dispatch a subprocess
+through the same `nomos_platform::ProcessLauncher` seam, not because both are `AgentExecutor`s.
+A `ModelBackend` and an `AgentExecutor` invoked as local subprocesses would share exactly this
+much structure regardless of which package kinds they are — process launch, working-directory
+isolation, exit-code discipline are properties of `ProcessLauncher`-based dispatch, not
+properties `AgentExecutorPackage` specifically confers. `nomos-lang-rust-cargo` and
+`nomos-lang-rust-deny` — two `ToolProvider`s, an entirely different package kind — share the
+identical `Require_Clean_Exit` shape with both agent crates, which is evidence for a possible
+future `ProcessLauncher`-dispatch convenience shared across *all* subprocess-based providers,
+not evidence specific to `AgentExecutor`.
+
+### docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#9
+
+*revision: authored · kind: prose · heading: The --backend flag dispatches an AgentExecutor and a ModelBackend, not two AgentExecutors, so OD-EXECUTOR-004's shared-trait trigger has not fired / What Was Measured · hash: sha256:5e0bc00d5d31a8e3a47919de7954df8bb0587bfd8ca59b3dcad625d6703f3b70*
+
+**No second real `AgentExecutor` exists to justify an `AgentExecutor` trait today.** With
+Ollama correctly read as a `ModelBackend`, `OD-EXECUTOR-004`'s named trigger — a real caller
+choosing between two `AgentExecutor`s — has not fired. What `--backend` actually demonstrates
+is a real caller choosing between a `TaskEnvelope`-consuming `AgentExecutor` and a
+model-request-issuing `ModelBackend`, presented as if they were peers under one CLI flag and
+one Rust function shape. That is a real question, but a different one than the trigger names.
+
+### docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#10
+
+*revision: authored · kind: heading · heading: The --backend flag dispatches an AgentExecutor and a ModelBackend, not two AgentExecutors, so OD-EXECUTOR-004's shared-trait trigger has not fired / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#11
+
+*revision: authored · kind: prose · heading: The --backend flag dispatches an AgentExecutor and a ModelBackend, not two AgentExecutors, so OD-EXECUTOR-004's shared-trait trigger has not fired / The Decision · hash: sha256:aafdab6011ce4a8c2dd1c64ef351556f4c3a6bac323636f686f71abff7b40f03*
+
+**`OD-EXECUTOR-004`'s shared-`AgentExecutor`-trait trigger has not fired.** No `AgentExecutor`
+trait is built. The plain `match` in `crates/host/nomos-cli/src/agent.rs::Dispatch` stays
+exactly as it is with respect to `AgentExecutor` abstraction — `OD-EXECUTOR-001`'s restraint
+continues to hold, because a second real `AgentExecutor` still does not exist.
+
+### docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#12
+
+*revision: authored · kind: prose · heading: The --backend flag dispatches an AgentExecutor and a ModelBackend, not two AgentExecutors, so OD-EXECUTOR-004's shared-trait trigger has not fired / The Decision · hash: sha256:3220182b1ab1169238f974fc6030360c792229a96579072bcb92970329c6ee11*
+
+**The real question `--backend` raises is a naming and framing one, not an abstraction one: it
+presents a `ModelBackend` as a peer `AgentExecutor` choice.** That is `OD-PACKAGE-013`'s
+territory to name as a follow-on correction — a `--backend` flag (or a split
+`--executor`/`--model-backend` pair) that reflects what each value actually dispatches to,
+once `nomos-agent-executor-ollama` is renamed and reclassified — not this record's to build.
+
+### docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#13
+
+*revision: authored · kind: heading · heading: The --backend flag dispatches an AgentExecutor and a ModelBackend, not two AgentExecutors, so OD-EXECUTOR-004's shared-trait trigger has not fired / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#14
+
+*revision: authored · kind: prose · heading: The --backend flag dispatches an AgentExecutor and a ModelBackend, not two AgentExecutors, so OD-EXECUTOR-004's shared-trait trigger has not fired / What This Record Does Not Do · hash: sha256:e5134fe3e4459ace17ba3ffb718cac8e5d037c678d95544eda443ccddbe0a0e6*
+
+It does not decide whether a `ModelBackend` trait, or a lower-level shared
+`ProcessLauncher`-dispatch convenience beneath both package kinds, is warranted — that
+question was not asked here and has its own, separate evidence (`nomos-lang-rust-cargo`,
+`nomos-lang-rust-deny`, both agent crates) that a future record can measure on its own terms,
+should a second real `ModelBackend` or a third `ProcessLauncher`-dispatched crate arrive.
+
+### docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#15
+
+*revision: authored · kind: prose · heading: The --backend flag dispatches an AgentExecutor and a ModelBackend, not two AgentExecutors, so OD-EXECUTOR-004's shared-trait trigger has not fired / What This Record Does Not Do · hash: sha256:2f8b586eced977cb2b1f7b01ea1bf549accde2b933ea5d5d8752765f579f9916*
+
+It does not change `nomos agent execute`/`judge-role`'s CLI surface, rename
+`nomos-agent-executor-ollama`, or touch `crates/host/nomos-cli/src/agent.rs`'s dispatch. It
+answers only whether the trigger fired, and names the real correction as a follow-on's
+territory, alongside the rename `OD-PACKAGE-013` already named.
+
+### docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#16
+
+*revision: authored · kind: heading · heading: The --backend flag dispatches an AgentExecutor and a ModelBackend, not two AgentExecutors, so OD-EXECUTOR-004's shared-trait trigger has not fired / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#17
+
+*revision: authored · kind: prose · heading: The --backend flag dispatches an AgentExecutor and a ModelBackend, not two AgentExecutors, so OD-EXECUTOR-004's shared-trait trigger has not fired / Status · hash: sha256:ca9d496b0e0778d5dd1198e0691d7464312a2e3847c02951284e0254a75ee1a2*
+
+Accepted. `OD-EXECUTOR-004`'s shared-`AgentExecutor`-trait trigger has not fired; the evidence
+that appeared to fire it was a `ModelBackend` misclassified as a second `AgentExecutor`.
+Revisit if a second real `AgentExecutor` — not a `ModelBackend` — is ever dispatched alongside
+Claude Code's.
+
 ### docs/records/OD-GATE-001-a-skipped-test-reports-ok.md#1
 
 *revision: authored · kind: heading · heading: A skipped test reports ok, so the size of the hole is declared rather than the hole being closed · hash: sha256:dcb392829586c5c23018dfc4351909101b128901406caae44797355b6dcaab6c*
@@ -21635,6 +21826,169 @@ decided now, by direct evidence read out of `request.rs` rather than by inspecti
 module doc's description alone. The seam build itself — moving `Submit`'s orchestration
 logic into `nomos-spec-orchestration` and updating that crate's own description — is
 separate work this resolution unblocks rather than performs.
+
+### docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md#1
+
+*revision: authored · kind: heading · heading: nomos-api's exposure of spec-orchestration's editing verbs carries the same named revisit trigger OD-LEDGER-036 gave the ledger verbs, and hasn't fired either · hash: sha256:0697548549411d432f22b13d529cbc1f8e88a6784bfec25919e7133bbdb178d9*
+
+# nomos-api's exposure of spec-orchestration's editing verbs carries the same named revisit trigger OD-LEDGER-036 gave the ledger verbs, and hasn't fired either
+
+### docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md#2
+
+*revision: authored · kind: heading · heading: nomos-api's exposure of spec-orchestration's editing verbs carries the same named revisit trigger OD-LEDGER-036 gave the ledger verbs, and hasn't fired either / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md#3
+
+*revision: authored · kind: prose · heading: nomos-api's exposure of spec-orchestration's editing verbs carries the same named revisit trigger OD-LEDGER-036 gave the ledger verbs, and hasn't fired either / Question · hash: sha256:81ad3e17f9aa99c0a1d53cd8e77555f02daf0dc396f411dbd1c221c3ad97ce66*
+
+An external architecture review named `nomos-api` a product surface mixing genuine end-user
+product functionality with this repository's own development tooling — specifically, that it
+exposes both the full work-ledger verb set and specification editing/commit operations,
+neither of which an end-user repository configuring Nomos would ever call, alongside `check`/
+`gate`/`agent`, which it would.
+
+### docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md#4
+
+*revision: authored · kind: prose · heading: nomos-api's exposure of spec-orchestration's editing verbs carries the same named revisit trigger OD-LEDGER-036 gave the ledger verbs, and hasn't fired either / Question · hash: sha256:3199d23486d712f1abbe01d6ff9e26fc04fd42d693d95dec65a343ad51838e92*
+
+`OD-LEDGER-036` already checked the ledger half of this claim directly and settled it: it
+finds `nomos-api::work.rs` "already exposes the full verb set, but frames itself as a seam
+exercise, not a product surface," decides that framing is currently honest, and names an
+exact, checkable revisit trigger — "if `nomos-api` becomes a real, externally-consumed
+product surface... its exposure of the full ledger verb set at band 90 stops being an
+internal coordination detail and starts being a public commitment." That record's own "What
+This Record Does Not Do" section is explicit that it answers only the ledger's exposure, not
+`nomos-spec-orchestration`'s. `nomos-api::spec.rs` exposes `Preview`, `Render` and `Commit` —
+the same commit-authority shape `OD-LEDGER-036` examined for the ledger's `Claim`/`Finish`
+— and no record checks whether that half crosses the line `OD-LEDGER-036` drew.
+
+### docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md#5
+
+*revision: authored · kind: heading · heading: nomos-api's exposure of spec-orchestration's editing verbs carries the same named revisit trigger OD-LEDGER-036 gave the ledger verbs, and hasn't fired either / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md#6
+
+*revision: authored · kind: prose · heading: nomos-api's exposure of spec-orchestration's editing verbs carries the same named revisit trigger OD-LEDGER-036 gave the ledger verbs, and hasn't fired either / What Was Measured · hash: sha256:af2340b02838e2397b12ccc696913211a595322e64cc65038dc0a6b08fe36ff7*
+
+**`nomos-api::spec.rs` genuinely exposes commit-authority verbs, not just read access.**
+`crates/host/nomos-api/src/spec.rs` defines nine handlers: `Handle_Spec_Profiles`, `_Sources`,
+`_Record`, `_Table`, `_Markdown`, `_Freshness`, `_Preview`, `_Render`, `_Commit`, `_Submit`.
+The first six are read-only (list profiles, list sources, read one record, read a table, render
+markdown, check freshness). `Preview`/`Render`/`Commit` are the same three-step "stage, preview,
+then commit" authority `nomos-spec-change`'s own procedure requires before any specification
+edit lands — `Handle_Spec_Commit` is a second, real caller of the exact commit path that writes
+into the store, parallel to `nomos-cli`'s own `spec commit`.
+
+### docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md#7
+
+*revision: authored · kind: prose · heading: nomos-api's exposure of spec-orchestration's editing verbs carries the same named revisit trigger OD-LEDGER-036 gave the ledger verbs, and hasn't fired either / What Was Measured · hash: sha256:7321f60ad1ce729401d59ee391fef4b6cce53e028e4a7a6113ab88ed16435e6a*
+
+**Its own module doc frames this the identical way `OD-LEDGER-036` found honest for the
+ledger.** `spec.rs:1-6`: "A third real caller of `nomos_spec_orchestration` verbs" — naming
+itself a seam-exercise caller (the orchestration crate's third caller, after `nomos-cli` and
+whichever else), the same "proving the seam has a second real caller" framing `OD-LEDGER-036`
+already accepted for `nomos-api::work.rs` rather than a claim that specification authoring is
+itself a capability an end-user repository would want from Nomos's product API.
+
+### docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md#8
+
+*revision: authored · kind: prose · heading: nomos-api's exposure of spec-orchestration's editing verbs carries the same named revisit trigger OD-LEDGER-036 gave the ledger verbs, and hasn't fired either / What Was Measured · hash: sha256:0b96331520b94ef7704b78f17e3eefacc21ded8ecb81961f90c2edb88e6a8c5e*
+
+**`README.md` marks `nomos-spec-orchestration` the same way it marks the ledger crates.**
+Row for `nomos-spec-orchestration` carries the same `[repo tooling]` marker `OD-LEDGER-036`'s
+own evidence cited for `nomos-ledger`/`nomos-work-orchestration`/`nomos-surface-provenance` —
+this repository's own specification-authoring machinery, not a capability `nomos check`/`nomos
+gate` need or an end-user repository's own specification content would ever touch (the
+distinction `ARC-SPECDB-001` and the `nomos-spec-change` skill both draw between this
+repository's own governing records and anything a user's repository owns).
+
+### docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md#9
+
+*revision: authored · kind: prose · heading: nomos-api's exposure of spec-orchestration's editing verbs carries the same named revisit trigger OD-LEDGER-036 gave the ledger verbs, and hasn't fired either / What Was Measured · hash: sha256:9c0049ce3e3be32c932113607a4ae6e04df2518723f2a7e73e606c47c1f309ec*
+
+**No real external consumer exists yet, the same absence `OD-LEDGER-036` found for the
+ledger.** Nothing in this workspace outside `nomos-cli` and `nomos-api` itself calls
+`nomos-api::spec`'s HTTP-shaped handlers; both are this repository's own tooling calling its
+own seam.
+
+### docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md#10
+
+*revision: authored · kind: heading · heading: nomos-api's exposure of spec-orchestration's editing verbs carries the same named revisit trigger OD-LEDGER-036 gave the ledger verbs, and hasn't fired either / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md#11
+
+*revision: authored · kind: prose · heading: nomos-api's exposure of spec-orchestration's editing verbs carries the same named revisit trigger OD-LEDGER-036 gave the ledger verbs, and hasn't fired either / The Decision · hash: sha256:5dacf19a6c643f902522881f1a37e5c58d41e9ddeb97dd94ef8a6e9160f8ca2d*
+
+**The same settled answer extends to spec-orchestration's exposure, under the same trigger,
+which has not fired.** `nomos-api::spec.rs`'s `Preview`/`Render`/`Commit` verbs are, like the
+ledger verbs, currently an honest seam-exercise — a second real caller proving
+`nomos_spec_orchestration` has one, not yet a public commitment to specification-authoring as
+an end-user product capability. This record extends `OD-LEDGER-036`'s reasoning rather than
+re-deriving it: both crates are marked `[repo tooling]` for the identical reason (this
+repository's own bootstrap/authoring machinery, not something `nomos check`/`nomos gate` or an
+end-user's own repository need), both are exposed through `nomos-api` with the identical
+"proves the seam has a caller" framing, and neither has the one thing that would make the
+exposure a public commitment: a real caller outside this repository's own tooling.
+
+### docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md#12
+
+*revision: authored · kind: prose · heading: nomos-api's exposure of spec-orchestration's editing verbs carries the same named revisit trigger OD-LEDGER-036 gave the ledger verbs, and hasn't fired either / The Decision · hash: sha256:92d488ba81248a57390d2b1050a260e98b9936512ba9bbf92f886022294b74cf*
+
+**The trigger is the same one, stated once so both crates share it rather than drifting into
+two near-identical but separately-worded conditions:** if `nomos-api` becomes a real,
+externally-consumed product surface, its exposure of spec-orchestration's commit-authority
+verbs — like its exposure of the ledger's — stops being an internal coordination detail and
+starts being a public commitment, at which point both halves need re-examining together, not
+separately, since they would cross the line at the same moment for the same reason.
+
+### docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md#13
+
+*revision: authored · kind: heading · heading: nomos-api's exposure of spec-orchestration's editing verbs carries the same named revisit trigger OD-LEDGER-036 gave the ledger verbs, and hasn't fired either / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md#14
+
+*revision: authored · kind: prose · heading: nomos-api's exposure of spec-orchestration's editing verbs carries the same named revisit trigger OD-LEDGER-036 gave the ledger verbs, and hasn't fired either / What This Record Does Not Do · hash: sha256:1fe7de7481ea0c26612f257d93d0a18c46f615aea1a3fe8157fb3d7e741d8c6e*
+
+It does not forbid `nomos-api::spec` from existing or from growing more verbs, the same
+non-prohibition `OD-LEDGER-036` states for the ledger half.
+
+### docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md#15
+
+*revision: authored · kind: prose · heading: nomos-api's exposure of spec-orchestration's editing verbs carries the same named revisit trigger OD-LEDGER-036 gave the ledger verbs, and hasn't fired either / What This Record Does Not Do · hash: sha256:5b00bfe857d5618a42cd55918d6832be84fa00123b17140dc01de3ec249c8281*
+
+It does not move, rename, or gate any code. `nomos-api::spec.rs` is unchanged.
+
+### docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md#16
+
+*revision: authored · kind: prose · heading: nomos-api's exposure of spec-orchestration's editing verbs carries the same named revisit trigger OD-LEDGER-036 gave the ledger verbs, and hasn't fired either / What This Record Does Not Do · hash: sha256:f52c99a028b4270d4829fd948c7cab511563e82056bfb0c93d52f2c3085b6fb7*
+
+It does not decide whether `nomos-spec-orchestration`'s underlying capability — editing and
+committing this repository's own governing records — would also be a reasonable product
+capability for an end-user repository's own specification content someday. Like
+`OD-LEDGER-036`'s equivalent disclaimer, it decides only that nothing in this workspace
+exercises it as one today.
+
+### docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md#17
+
+*revision: authored · kind: heading · heading: nomos-api's exposure of spec-orchestration's editing verbs carries the same named revisit trigger OD-LEDGER-036 gave the ledger verbs, and hasn't fired either / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md#18
+
+*revision: authored · kind: prose · heading: nomos-api's exposure of spec-orchestration's editing verbs carries the same named revisit trigger OD-LEDGER-036 gave the ledger verbs, and hasn't fired either / Status · hash: sha256:d2420d583dfacd7c091eeb75b3e114a10c4ab67ef09abf28fedbde7740a446a0*
+
+Accepted. Extends `OD-LEDGER-036`'s ownership-and-exposure reasoning to
+`nomos-spec-orchestration`'s exposure through `nomos-api`; the shared trigger has not fired for
+either half. Revisit both together if `nomos-api` becomes a real external product surface.
 
 ### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#1
 
@@ -32224,6 +32578,181 @@ bootstrap machinery, not a generic coordination primitive with a real exercised 
 subject, and not a Nomos product feature converging toward `Workflow`/`TaskEnvelope`. Revisit
 if `nomos-api` becomes a real external product surface rather than a seam-exercise caller.
 
+### docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md#1
+
+*revision: authored · kind: heading · heading: Whether nomos-agent-contracts' reuse of nomos-ledger's Territory and VerificationPredicate needs its own product-owned types · hash: sha256:d20dad72ecdb7ecedf9ddc47ff5486b5163e4bc37ab1c14cd3e00a2353b678c5*
+
+# Whether nomos-agent-contracts' reuse of nomos-ledger's Territory and VerificationPredicate needs its own product-owned types
+
+### docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md#2
+
+*revision: authored · kind: heading · heading: Whether nomos-agent-contracts' reuse of nomos-ledger's Territory and VerificationPredicate needs its own product-owned types / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md#3
+
+*revision: authored · kind: prose · heading: Whether nomos-agent-contracts' reuse of nomos-ledger's Territory and VerificationPredicate needs its own product-owned types / Question · hash: sha256:057e6c98dafec458122685ab858177ee9080220163fc49cfb8c7a1d1dce088ce*
+
+An external architecture review named `nomos-agent-contracts`'s dependency on `nomos-ledger`
+a real boundary violation: `TaskEnvelope.scope`/`.prohibited_changes`
+(`crates/agent/nomos-agent-contracts/src/task_envelope.rs`) are `nomos_ledger::Territory`;
+`NomosResolvedChangeContext.permitted_scope`/`.required_verification`
+(`change_context.rs`) are `nomos_ledger::Territory` and `nomos_ledger::VerificationPredicate`;
+`WorkResult` (`work_result.rs`) also imports `VerificationPredicate`. The review's reasoning:
+`nomos-ledger` is repository coordination tooling, not a product concept, so a product-level
+agent-safety contract depending on it looks backward — `nomos-ledger` should adapt product
+primitives, not the other way around.
+
+### docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md#4
+
+*revision: authored · kind: prose · heading: Whether nomos-agent-contracts' reuse of nomos-ledger's Territory and VerificationPredicate needs its own product-owned types / Question · hash: sha256:1b683a8f529d9d1edb7b8988566db7d96c6e7e89af51613e66adb65f5d172f3f*
+
+`OD-LEDGER-036` (accepted one day before this review, citing this same review by name)
+already settled the half of this question it was written to settle: `nomos-ledger` and
+`nomos-work-orchestration` are repository bootstrap machinery, not a Nomos product feature,
+and do not converge toward `TaskEnvelope`/`Workflow`/`AgentExecutor`. Its own "What This
+Record Does Not Do" section is explicit that it leaves the type-reuse question open: it names
+`nomos-agent-contracts`'s `TaskEnvelope`/`WorkResult` as "declared bundling" — a description,
+not a verdict — and does not move a file, rename a crate, or decide whether `Territory`/
+`VerificationPredicate` should stay shared or be split. This record answers the question
+`OD-LEDGER-036` left standing.
+
+### docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md#5
+
+*revision: authored · kind: heading · heading: Whether nomos-agent-contracts' reuse of nomos-ledger's Territory and VerificationPredicate needs its own product-owned types / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md#6
+
+*revision: authored · kind: prose · heading: Whether nomos-agent-contracts' reuse of nomos-ledger's Territory and VerificationPredicate needs its own product-owned types / What Was Measured · hash: sha256:73b9a3c123b5f79ebd4a4adaf7f252d131ad34d91fc591bd109db71b4a06535f*
+
+**The dependency and the two type imports are real**, confirmed directly:
+`crates/agent/nomos-agent-contracts/Cargo.toml` names `nomos-ledger` a direct dependency;
+`task_envelope.rs` imports `Territory`; `change_context.rs` imports `Territory` and
+`VerificationPredicate`; `work_result.rs` imports `VerificationPredicate`.
+
+### docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md#7
+
+*revision: authored · kind: prose · heading: Whether nomos-agent-contracts' reuse of nomos-ledger's Territory and VerificationPredicate needs its own product-owned types / What Was Measured · hash: sha256:0ee2c274e18a1034e22e1baeed76ba74f46d2ef8384520757eb34ea2e005e937*
+
+**Neither type is ledger-shaped once read on its own terms.** `Territory`
+(`crates/substrate/nomos-ledger/src/territory.rs`) is a set of path patterns with
+`Covers`/overlap logic built for one job: deciding whether two ledger claims conflict. Nothing
+about a set of path patterns is specific to work-ledger coordination — `TaskEnvelope.scope`
+uses exactly this shape to say what an agent may touch, a genuinely product-level concept with
+no ledger claim anywhere near it. `VerificationPredicate`
+(`crates/substrate/nomos-ledger/src/verification/predicate.rs`) is a program-and-argv pair the
+ledger runs to decide whether an item is done; `NomosResolvedChangeContext.required_verification`
+uses the identical shape to say what an agent's change must pass. Both types are already
+general-purpose in everything but name and package — they do not encode a ledger claim, a
+lease, a holder, or anything else specific to `work/ledger.json`'s coordination job.
+
+### docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md#8
+
+*revision: authored · kind: prose · heading: Whether nomos-agent-contracts' reuse of nomos-ledger's Territory and VerificationPredicate needs its own product-owned types / What Was Measured · hash: sha256:ff25c231eaa4c112a566ae0a2dba815079a139fc6fb2a7a6de36d0b487778287*
+
+**No band rule is violated, and no test would catch a change either way.** `nomos-ledger` is
+band 20; `nomos-agent-contracts` is band 36 — strictly downward, per README's mechanically
+enforced rule. `README.md`'s `[repo tooling]` marker on `nomos-ledger` is descriptive, per
+`OD-LEDGER-036`'s own text, not a dependency-direction ban. This means the current dependency
+is not a defect a test will surface on its own; it is a design-clarity question this record
+answers by argument, the same way `OD-LEDGER-036` answered ownership by argument rather than
+by a mechanical check finding a violation.
+
+### docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md#9
+
+*revision: authored · kind: prose · heading: Whether nomos-agent-contracts' reuse of nomos-ledger's Territory and VerificationPredicate needs its own product-owned types / What Was Measured · hash: sha256:8fa9112c03317e394bc306e728509d1a3f992df1062573e860cb4459b65a519f*
+
+**The cost of the status quo is legibility, not correctness.** A reader of
+`nomos-agent-contracts`'s public surface who has not read `OD-LEDGER-036` sees a product
+safety contract importing types from a crate README marks `[repo tooling]`, and has no way to
+tell, from the import alone, that the types themselves are ledger-agnostic — only that they
+happen to live there because `nomos-ledger` built them first. `OD-LEDGER-001` already
+establishes that territory is declared, not enforced, which is a property of the *mechanism*
+`Territory` implements, unrelated to which crate owns its Rust definition.
+
+### docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md#10
+
+*revision: authored · kind: heading · heading: Whether nomos-agent-contracts' reuse of nomos-ledger's Territory and VerificationPredicate needs its own product-owned types / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md#11
+
+*revision: authored · kind: prose · heading: Whether nomos-agent-contracts' reuse of nomos-ledger's Territory and VerificationPredicate needs its own product-owned types / The Decision · hash: sha256:e5d16c88b64134c05a3cfdacc9a82b138fbbc905823c04bfe15faba62320ced2*
+
+**The types are ledger-agnostic and belong to `nomos-agent-contracts`'s own dependency level,
+not `nomos-ledger`'s — but this record does not move them now.** Extracting `Territory` and
+`VerificationPredicate` (or product-owned equivalents `nomos-agent-contracts` would define and
+`nomos-ledger` would then depend on instead) is a real, warranted correction in direction. It
+is not built here for the same reason `OD-PACKAGE-007`'s generic-core split was built only once
+a second language made the Rust-specific shape concretely wrong rather than merely aesthetically
+displeasing: moving two widely-used types out from under a crate with a real, working consumer
+(`nomos-work-orchestration`'s claim/overlap logic) and into a new home is a mechanical,
+multi-file change with real regression surface, not a naming correction like `OD-PACKAGE-007`'s
+own rename was. Naming the shape now, so a future session does not have to re-derive it, is
+this record's job; making the move is a follow-on's.
+
+### docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md#12
+
+*revision: authored · kind: prose · heading: Whether nomos-agent-contracts' reuse of nomos-ledger's Territory and VerificationPredicate needs its own product-owned types / The Decision · hash: sha256:361fd1a976852a9535ac9a55a550d2bb29c347ac81835a6203ba1d71cb654353*
+
+**The shape a follow-on item would build:** `Territory` and `VerificationPredicate` (recognizable
+by their real current field shapes, unchanged) move to a crate at or below
+`nomos-agent-contracts`'s own band — either a new lightweight crate both `nomos-ledger` and
+`nomos-agent-contracts` depend on, or directly into `nomos-contracts` if their shape is judged
+general enough to sit beside `RunId` and the other identity/contract primitives already there.
+`nomos-ledger` re-exports or wraps them for its own claim/overlap logic exactly as
+`nomos-lang-rust-package` re-exports `nomos-package`'s domains today (`OD-PACKAGE-007`) — a
+behavior-preserving move, not a redesign.
+
+### docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md#13
+
+*revision: authored · kind: heading · heading: Whether nomos-agent-contracts' reuse of nomos-ledger's Territory and VerificationPredicate needs its own product-owned types / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md#14
+
+*revision: authored · kind: prose · heading: Whether nomos-agent-contracts' reuse of nomos-ledger's Territory and VerificationPredicate needs its own product-owned types / What This Record Does Not Do · hash: sha256:83d7abffdda6b64adfa13fada45a59f121ca5c1e7a3278b1fde58acf453d9714*
+
+It does not move `Territory`, `VerificationPredicate`, or any code. `nomos-agent-contracts`
+keeps depending on `nomos-ledger` exactly as it does today until a follow-on item performs the
+move this record names.
+
+### docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md#15
+
+*revision: authored · kind: prose · heading: Whether nomos-agent-contracts' reuse of nomos-ledger's Territory and VerificationPredicate needs its own product-owned types / What This Record Does Not Do · hash: sha256:bec47f397f85ca5b45bada1c710a476d70df5f84fa656d3db26287b8f6c93e39*
+
+It does not reopen `OD-LEDGER-036`'s ownership decision. `nomos-ledger` remains repository
+bootstrap machinery; this record's finding — that two of its types are themselves
+ledger-agnostic — is consistent with that decision, not a correction to it.
+
+### docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md#16
+
+*revision: authored · kind: prose · heading: Whether nomos-agent-contracts' reuse of nomos-ledger's Territory and VerificationPredicate needs its own product-owned types / What This Record Does Not Do · hash: sha256:0696c9d2c59e0ebded8f82c02e30d930d91577700140a03d0ec50f4d390099a5*
+
+It does not decide whether `ScopeConstraint`/`ArtifactScope`/`MutationBoundary`/
+`VerificationRequirement` — the specific names an external review proposed — are the right
+names or the right granularity for the extracted types. That is design work for whichever item
+performs the move, informed by `Territory`'s and `VerificationPredicate`'s real current shapes
+rather than invented ahead of them.
+
+### docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md#17
+
+*revision: authored · kind: heading · heading: Whether nomos-agent-contracts' reuse of nomos-ledger's Territory and VerificationPredicate needs its own product-owned types / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md#18
+
+*revision: authored · kind: prose · heading: Whether nomos-agent-contracts' reuse of nomos-ledger's Territory and VerificationPredicate needs its own product-owned types / Status · hash: sha256:33251a535bdeae09a6778c4b7eeb2a12589f1e9eccb68133c080917e09f29974*
+
+Accepted. The two types are ledger-agnostic and a follow-on extraction is warranted; the move
+itself is not performed by this record.
+
 ### docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#1
 
 *revision: authored · kind: heading · heading: A claim and a fact address a path by one rule, and the record-identifier fold stays with the ledger · hash: sha256:f8c5c2d9a62f8885a1b5399e69827138d3be4b147693b001857ec8c9172fa72a*
@@ -35137,17 +35666,68 @@ for, rather than an accident of the first case.
 
 ### docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#20
 
+*revision: authored · kind: heading · heading: The language-agnostic manifest core is its own crate, so a second language does not depend on Rust to read its own manifest / Amendment: The Wrapper's Own Name Was Never Corrected, And An External Review Named It · hash: sha256:e7c62ad0694cadd8e670da1cc382a7ae97859ff6bbe43f2066dc2491f2a30a92*
+
+## Amendment: The Wrapper's Own Name Was Never Corrected, And An External Review Named It
+
+### docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#21
+
+*revision: authored · kind: prose · heading: The language-agnostic manifest core is its own crate, so a second language does not depend on Rust to read its own manifest / Amendment: The Wrapper's Own Name Was Never Corrected, And An External Review Named It · hash: sha256:a3af0e956406417711062c53280b5654e935e0d3fb305b9720f915f27d3034f2*
+
+Added at version 3. This record's own text already describes what `nomos-lang-package` is
+without ever calling it what it is: "it is a Rust reader, and its name is the only generic
+thing about it." The generic-core split this record built removed the *dependency* problem —
+a second language no longer needs to depend on Rust's providers — but left the *name*
+unchanged, because nothing forced the question at the time: `nomos-lang-package` was still the
+only `LanguagePackage` manifest crate in the workspace, and a name that happens to be ambiguous
+with a population of one is a latent cost, not yet a demonstrated one.
+
+### docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#22
+
+*revision: authored · kind: prose · heading: The language-agnostic manifest core is its own crate, so a second language does not depend on Rust to read its own manifest / Amendment: The Wrapper's Own Name Was Never Corrected, And An External Review Named It · hash: sha256:4dcca84fe4e4ccddeee2388cbff4ad14d07d3b6b5de13d494848c937063728c4*
+
+An external review, checked directly rather than accepted on read, found the cost is no longer
+latent: `nomos-lang-go-package` is real, and a reader encountering `nomos-lang-package` and
+`nomos-lang-go-package` side by side has no way to tell from either name alone that the first
+is Rust-specific and the second is Go-specific — the generic-sounding name reads as the
+default, and the language-qualified one reads as the exception, backwards from what
+`nomos-lang-go-package`'s own real, symmetric peer relationship to `nomos-package`
+demonstrates. The crate's own `Cargo.toml` description and `README.md`'s own crate table
+already describe it correctly in prose — "The Rust `LanguagePackage` manifest format" — while
+its `[package] name` said otherwise. This is a naming correction with no open design question,
+the same shape `P14-AGENT-EXECUTOR-RENAME-2` already used renaming `nomos-agent-executor` to
+`nomos-agent-executor-claude-code` once a second executor made its unqualified name
+ambiguous.
+
+### docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#23
+
+*revision: authored · kind: prose · heading: The language-agnostic manifest core is its own crate, so a second language does not depend on Rust to read its own manifest / Amendment: The Wrapper's Own Name Was Never Corrected, And An External Review Named It · hash: sha256:ad8513d2108b664c2e59413edb8459d190175fdbedf520198f33960b41ac675e*
+
+**`nomos-lang-package` is renamed to `nomos-lang-rust-package`.** Its public surface, its
+`RustEdition`/`KNOWN_PROVIDERS`/`Is_Known` shape, its dependency on `nomos-package`, and every
+byte of its behavior this record's own "What Holds It" section already pins are unchanged —
+only the crate's own name, its workspace member path, and every file that names it by string
+(both hand-maintained band tables, its surface snapshot, `nomos-add-plugin`'s worked example,
+`completeness_universes`' path reference, and `README.md`'s crate table) move together. Band 26
+is unchanged; `nomos-model-package` and `nomos-rule-package` remain its peers there, and
+neither names the other, exactly as this record's own decision already states.
+
+### docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#24
+
 *revision: authored · kind: heading · heading: The language-agnostic manifest core is its own crate, so a second language does not depend on Rust to read its own manifest / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#21
+### docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#25
 
-*revision: authored · kind: prose · heading: The language-agnostic manifest core is its own crate, so a second language does not depend on Rust to read its own manifest / Status · hash: sha256:fb42058c228b64e93cd1685a69f899c8af2270090a1b05bfa7f606457a4f01a7*
+*revision: authored · kind: prose · heading: The language-agnostic manifest core is its own crate, so a second language does not depend on Rust to read its own manifest / Status · hash: sha256:d0e8f80a2f84ad192daf2075bc2d75828b4a1ccdc6955fc5d9e8b6600c1a3573*
 
-Closed by `P13-PACKAGE-GENERIC-CORE`. Amended to version 2 by
-`P14-LANG-GO-RECORD-2`: measured directly against `nomos-lang-go-package`, the real second
-consumer this record was written for, and found to need no adjustment.
+Closed by `P13-PACKAGE-GENERIC-CORE`. Amended to version 2 by `P14-LANG-GO-RECORD-2`: measured
+directly against `nomos-lang-go-package`, the real second consumer this record was written
+for, and found to need no adjustment. Amended to version 3 by
+`P14-PACKAGE-007-LANG-RUST-PACKAGE-RENAME`: the crate is renamed `nomos-lang-package` →
+`nomos-lang-rust-package`, correcting the one thing the version-2 measurement found unchanged
+that should not have been — its name.
 
 ### docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#1
 
@@ -36417,6 +36997,177 @@ workspace's own records and found neither duplicated nor contradicted. Amended t
 by `P13-ROADMAP-001-POPULATION-CAUTION-RETIRED`: the increment this constraint governs is no
 longer deferred, per `OD-ROADMAP-001`, though the constraint itself -- integrate through
 `nomos_capability`, do not build a privileged layer -- is unchanged and still binds.
+
+### docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#1
+
+*revision: authored · kind: heading · heading: Ollama's real mechanism is ModelBackendPackage's shape, not AgentExecutorPackage's, measured against OD-PACKAGE-010's own two definitions · hash: sha256:cb9de3dc73d4c67ab18d7f746624dea844539857d5a32342c260ef45aafef472*
+
+# Ollama's real mechanism is ModelBackendPackage's shape, not AgentExecutorPackage's, measured against OD-PACKAGE-010's own two definitions
+
+### docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#2
+
+*revision: authored · kind: heading · heading: Ollama's real mechanism is ModelBackendPackage's shape, not AgentExecutorPackage's, measured against OD-PACKAGE-010's own two definitions / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#3
+
+*revision: authored · kind: prose · heading: Ollama's real mechanism is ModelBackendPackage's shape, not AgentExecutorPackage's, measured against OD-PACKAGE-010's own two definitions / Question · hash: sha256:e08929728764deb5b21fb48d19053bbb20e984d01c2dcfa563103492d161076e*
+
+An external architecture review, checked against this workspace's own records rather than
+accepted on read, named `nomos-agent-executor-ollama` — landed as "the second real
+`AgentExecutor`" (`P14-TRACKB-AGENT-EXECUTOR-OLLAMA-FIRST-INCREMENT`) — the biggest
+conceptual drift in the track that built it: mechanically it is "Nomos builds a request →
+local inference runtime → model response," the review's own description of a direct
+`ModelBackendPackage`, not "Nomos hands a `TaskEnvelope` to something that may internally
+choose tools and models," its description of `AgentExecutorPackage`.
+
+### docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#4
+
+*revision: authored · kind: prose · heading: Ollama's real mechanism is ModelBackendPackage's shape, not AgentExecutorPackage's, measured against OD-PACKAGE-010's own two definitions / Question · hash: sha256:7fd7463809c4c7e6ed4f054a7c705f4e7647746c6087da98111844824361a489*
+
+`PackageKind`'s own doc comments (`crates/contracts/nomos-contracts/src/package.rs:115-118`)
+state the same distinction in this workspace's own words: `ModelBackendPackage` is "a model
+inference backend"; `AgentExecutorPackage` is "an agent execution backend." Neither
+`OD-EXECUTOR-003` nor `OD-EXECUTOR-004` — the two records that built and then measured
+Ollama's capability boundary — asked which of these two kinds it actually is. Both inherited
+"AgentExecutor" from `OD-EXECUTOR-001`'s framing by analogy, the same failure mode
+`OD-EXECUTOR-004`'s own text names and avoids for capability-boundary questions but did not
+apply to classification. `OD-PACKAGE-010` and `OD-PACKAGE-012` — the two records that define
+`ModelBackendPackage`/`AgentExecutorPackage` and how routing between them should integrate —
+existed before Ollama's crate was written and were not consulted.
+
+### docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#5
+
+*revision: authored · kind: heading · heading: Ollama's real mechanism is ModelBackendPackage's shape, not AgentExecutorPackage's, measured against OD-PACKAGE-010's own two definitions / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#6
+
+*revision: authored · kind: prose · heading: Ollama's real mechanism is ModelBackendPackage's shape, not AgentExecutorPackage's, measured against OD-PACKAGE-010's own two definitions / What Was Measured · hash: sha256:c56023b3131009fe857f290092e9b18fd2d707e46b45515c14c542c079f90a04*
+
+Read directly, `crates/agent/nomos-agent-executor-ollama/src/lib.rs`, not assumed from its
+crate doc alone.
+
+### docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#7
+
+*revision: authored · kind: prose · heading: Ollama's real mechanism is ModelBackendPackage's shape, not AgentExecutorPackage's, measured against OD-PACKAGE-010's own two definitions / What Was Measured · hash: sha256:ffda2f498cc87a8d0fe46395844ba5f1c08e88a27c0ce67756bdd48f9ea08f17*
+
+**`Command_For` builds exactly one shape of request: a fixed model, a fixed subcommand, and
+one string.** `Command_For` (`lib.rs:134-142`) constructs
+`["ollama", "run", MODEL, task.goal]` — `MODEL` a hardcoded constant
+(`qwen2.5-coder:7b`), never resolved from a catalog, selection policy, or caller choice. This
+is a model inference request assembled by Nomos, dispatched to a local inference runtime —
+`ModelBackendPackage`'s own shape, verbatim.
+
+### docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#8
+
+*revision: authored · kind: prose · heading: Ollama's real mechanism is ModelBackendPackage's shape, not AgentExecutorPackage's, measured against OD-PACKAGE-010's own two definitions / What Was Measured · hash: sha256:4d9fe7d6c4063d3738007f0b090989988768b73ceec1bb105a6e2a05600edd69*
+
+**Every field a `TaskEnvelope`-carrying `AgentExecutor` would need to honor is read, and
+explicitly not honored.** The crate's own module doc (`lib.rs:22-30`) states plainly:
+`task.goal` is read; `scope`, `prohibited_changes`, `available_tools`, `knowledge_context`,
+`applicable_rules` and `effort` are "accepted and ignored." There is no tool-use loop
+(`OD-EXECUTOR-004`'s own measurement: without `--experimental`, absent here, "no tool-use
+loop of any kind"), no MCP configuration surface, no scope-honoring mechanism of any kind —
+not a governed-but-narrow `AgentExecutor`, but the complete absence of the capability class
+`AgentExecutorPackage` names. `OD-EXECUTOR-004`'s own words, read again with this question in
+mind rather than the capability-boundary question it was written to answer: "Ollama is a bare
+model runner, not a project-aware coding agent." That sentence is `ModelBackendPackage`'s own
+doc comment, restated independently by the record that built this crate.
+
+### docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#9
+
+*revision: authored · kind: prose · heading: Ollama's real mechanism is ModelBackendPackage's shape, not AgentExecutorPackage's, measured against OD-PACKAGE-010's own two definitions / What Was Measured · hash: sha256:01ff9c6c08ab0344f3e10e77d020f5271345948a46f32a8a2b57043532a2f98f*
+
+**Nothing about the `TaskEnvelope` parameter itself changes the classification.** Both
+`Execute` functions in this workspace — `nomos_agent_executor_claude_code::Execute` and
+`nomos_agent_executor_ollama::Execute` — take a `TaskEnvelope`. Taking that type as an input
+parameter is not what makes something an `AgentExecutorPackage`; what a `ModelBackendPackage`
+and an `AgentExecutorPackage` each *do* with it is. Claude Code's own crate honors
+`--allowedTools`, `--strict-mcp-config`, `--max-budget-usd` and reports structural tool
+denials (`OD-EXECUTOR-001`) — real evidence of an agent execution backend that may internally
+choose tools. Ollama's honors none of it, by its own admission, and forwards one field.
+
+### docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#10
+
+*revision: authored · kind: heading · heading: Ollama's real mechanism is ModelBackendPackage's shape, not AgentExecutorPackage's, measured against OD-PACKAGE-010's own two definitions / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#11
+
+*revision: authored · kind: prose · heading: Ollama's real mechanism is ModelBackendPackage's shape, not AgentExecutorPackage's, measured against OD-PACKAGE-010's own two definitions / The Decision · hash: sha256:fa97d8b49a5189c06a2ad8d988f38ce23e800aa2445fb98d0ba4ed24f419ce4b*
+
+**`nomos-agent-executor-ollama` is a `ModelBackendPackage` instance, not an
+`AgentExecutorPackage` instance.** The crate's real, measured mechanism — a fixed local model,
+one text field forwarded, every agent-shaped field of `TaskEnvelope` explicitly ignored, no
+tool-use or MCP surface of any kind — matches `PackageKind::ModelBackendPackage`'s own
+definition and does not match `PackageKind::AgentExecutorPackage`'s. `OD-EXECUTOR-004`'s
+measurement of its capability boundary stands unchanged; what this record corrects is the
+class that measurement was filed under, not the measurement itself.
+
+### docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#12
+
+*revision: authored · kind: prose · heading: Ollama's real mechanism is ModelBackendPackage's shape, not AgentExecutorPackage's, measured against OD-PACKAGE-010's own two definitions / The Decision · hash: sha256:f3d97b1edb4e5ebf3d3950419548517f9bc8c5d65f4174062d1d4764ab65183e*
+
+This does not indict `OD-EXECUTOR-003`/`OD-EXECUTOR-004`'s own reasoning — both correctly
+measured what Ollama's real invocation is permitted to do. It indicts only the unexamined
+premise both inherited: that a second backend reachable through `nomos agent execute` must be
+a second `AgentExecutor`, rather than a question `OD-PACKAGE-010`/`OD-PACKAGE-012` — already
+on record, never checked — existed to answer.
+
+### docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#13
+
+*revision: authored · kind: heading · heading: Ollama's real mechanism is ModelBackendPackage's shape, not AgentExecutorPackage's, measured against OD-PACKAGE-010's own two definitions / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#14
+
+*revision: authored · kind: prose · heading: Ollama's real mechanism is ModelBackendPackage's shape, not AgentExecutorPackage's, measured against OD-PACKAGE-010's own two definitions / What This Record Does Not Do · hash: sha256:969443d072642cf0d7998e8a165a611661d8d9cb78d73314e55659f2c292ebd9*
+
+It does not rename the crate, move its code, change `nomos agent execute`'s CLI surface, or
+touch `nomos-agent-executor-claude-code`. Naming what Ollama actually is and building the
+correction that follows are different acts, the same distinction `OD-EXECUTOR-004` itself
+drew between measuring a boundary and building the crate that would be bound by it. A
+follow-on item's territory: a rename (`nomos-agent-executor-ollama` →
+`nomos-model-backend-ollama`, or whatever a real `ModelBackendPackage` naming convention
+settles on), and reconciling `nomos agent execute --backend`'s CLI framing, which currently
+presents Ollama as a peer choice to Claude Code under one flag — see `OD-EXECUTOR-005`, which
+measures what that flag is actually choosing between now that this record answers what Ollama
+is.
+
+### docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#15
+
+*revision: authored · kind: prose · heading: Ollama's real mechanism is ModelBackendPackage's shape, not AgentExecutorPackage's, measured against OD-PACKAGE-010's own two definitions / What This Record Does Not Do · hash: sha256:dc44ac8a7df994ea4ae7173bbac6f74b4abc35491678f6f8061b94920aa0dfe5*
+
+It does not decide whether `ModelBackendPackage`'s first manifest maturity
+(`OD-PACKAGE-010`) or its routing-integration constraint (`OD-PACKAGE-012`, integrate through
+`nomos_capability`, not a privileged layer) should now be built against a real backend. It
+names that Ollama is the real second case those two records were written ahead of, not what
+either should build from it.
+
+### docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#16
+
+*revision: authored · kind: prose · heading: Ollama's real mechanism is ModelBackendPackage's shape, not AgentExecutorPackage's, measured against OD-PACKAGE-010's own two definitions / What This Record Does Not Do · hash: sha256:837ad13cb9d4493011dbcb5271a9fa80af62d22c086d42a14603adb4bd234391*
+
+It does not decide Codex's or Gemini's classification. `OD-EXECUTOR-004` found both blocked
+for reasons outside this workspace's control; this record answers nothing about either.
+
+### docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#17
+
+*revision: authored · kind: heading · heading: Ollama's real mechanism is ModelBackendPackage's shape, not AgentExecutorPackage's, measured against OD-PACKAGE-010's own two definitions / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#18
+
+*revision: authored · kind: prose · heading: Ollama's real mechanism is ModelBackendPackage's shape, not AgentExecutorPackage's, measured against OD-PACKAGE-010's own two definitions / Status · hash: sha256:2d4d0c7c3ad349e20256e5037833d015fef82ecbbcf95d9ef5e2feaf06e7cddf*
+
+Accepted. Ollama's real, measured mechanism is `ModelBackendPackage`'s shape; the crate and
+its CLI framing remain unrenamed pending a follow-on correction item.
 
 ### docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#1
 
@@ -40586,21 +41337,92 @@ since the last check and did not.
 
 ### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#28
 
+*revision: authored · kind: heading · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: The Fourth Trigger's Named Event Finally Occurred, And Its Own Wording Already Says What It Means · hash: sha256:3863f02953dedd90d9f871d5a7b3991a920be74c30936a3d73d3aa613f1e9403*
+
+## Amendment: The Fourth Trigger's Named Event Finally Occurred, And Its Own Wording Already Says What It Means
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#29
+
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: The Fourth Trigger's Named Event Finally Occurred, And Its Own Wording Already Says What It Means · hash: sha256:7585aefe991331b091f87c9b930df3d8a963b029da02dd6417da59c350195dd7*
+
+A fourth round of the same external review repeated its P0 case for the general planner
+again. Rather than re-arguing what the three prior rounds already settled, this amendment
+checks the one trigger this record's own text has never yet seen occur: "a fifth rule's
+required-capability shape reconverging with an existing one, rather than adding a fourth
+distinct family."
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#30
+
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: The Fourth Trigger's Named Event Finally Occurred, And Its Own Wording Already Says What It Means · hash: sha256:22be928688363f17fe582db6eaed37d70519416ec97db7e8f90b976e6b9096e2*
+
+**`Check_Cross_Language_Correspondence` (`OD-CAPABILITY-010`) is that event, for the first
+time since this record began tracking.** Every prior rule this record has checked — through
+five capability families across three amendments — diverged: each added a structurally
+distinct family (syntax, dependency-edges, controlflow, lint, dependency-policy). This one
+does not. Its own module doc (`crates/rules/nomos-rules/src/crosslang.rs:1-11`) states
+plainly: "No new capability: both sides are the same fact, read twice." It reads
+`nomos.cap.syntax.items` — the same fact `Check_Completeness_Mirrors` and
+`Check_Naming_Convention` already consume — over a subject pair a declared correspondence
+names, and needs no new `Materialize_X` step in `run.rs`: "every source's
+`nomos.cap.syntax.items` fact is already written by `Materialize_Syntax` before any rule
+runs." The named event has occurred, literally, for the first time.
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#31
+
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: The Fourth Trigger's Named Event Finally Occurred, And Its Own Wording Already Says What It Means · hash: sha256:b64d11cadef1f9b6fef61f71d7b4f49dfe93b71673681abcdd217a002be86416*
+
+**This trigger's own text already says what a fired instance of it means, and it is not what
+firing the other three meant.** This record's first amendment already read the trigger's
+accompanying reasoning correctly without needing to say so explicitly: "a converging
+population is weaker evidence for a general planner than a diverging one." A rule reconverging
+with an existing capability family is the *cheap* case — no new fact, no new materialization
+step, no new capability crate — and Check_Cross_Language_Correspondence's own zero-new-anything
+shape is direct, first-hand confirmation of exactly that claim, not a counterexample to it. The
+other three named triggers each describe a cost or a demand growing (selection creating unread
+work, participation varying, a materialization step wasting real work); this one describes the
+opposite — a rule arriving that costs *nothing new* to add. Naming its occurrence a reason to
+build a planner would invert the trigger's own stated logic: the planner's case rests on
+managing growing, diverging complexity, and this event is evidence the population is not
+straining under that growth, not evidence that it is.
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#32
+
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: The Fourth Trigger's Named Event Finally Occurred, And Its Own Wording Already Says What It Means · hash: sha256:1d207496770bffc73fd986e2dc096c3ad6c977a8b16329de422d67e15a47cf64*
+
+**The other three triggers remain exactly as the third amendment found them.** No selection
+axis beyond `OD-GATE-017`'s has appeared; no materialization step has been measured wasting
+real work; participation still varies only by the one mechanism already built.
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#33
+
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: The Fourth Trigger's Named Event Finally Occurred, And Its Own Wording Already Says What It Means · hash: sha256:56a809195736b8ab2d82f5c9c93920d7bdb9c14364cebf6b97ed2c0f263d7710*
+
+**All four named triggers have now been checked against a real, occurred instance at least
+once, and none supports building the planner now.** The first fired and was answered
+narrowly (`OD-GATE-017`). The second and third remain unfired. The fourth has now fired,
+literally, and its own accompanying reasoning — read correctly rather than merely quoted —
+argues against the planner it might, misread, appear to argue for. This is the strongest
+disconfirmation this record has recorded yet: not absence of evidence, but a real instance
+whose own shape demonstrates the hand-written approach absorbing a reconverging rule at zero
+marginal cost.
+
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#34
+
 *revision: authored · kind: heading · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#29
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#35
 
-*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Status · hash: sha256:830d742835baa1f06d0d206dfb423ce291e493ed4db225afe4f0446ee6df9eea*
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Status · hash: sha256:1001994bd4c6f07c797d1f726a4b663c8024823a094dcef18c408742a9b00884*
 
 Accepted. This record's first named trigger fired and was addressed by `OD-GATE-017`, not by
-building the `RunPlanner` this record declines. Re-checked against a sixth rule, a fifth
-capability family and a third real-cost materialization step, all landed since the amendment
-above: the three remaining triggers still have not fired, and the fresh evidence weighs against
-firing rather than merely failing to confirm it. Revisit on any of the three remaining triggers
-named above, when `OD-RULES-007`'s own status next changes, or when a rule's required-capability
-shape is first measured reconverging with an existing family rather than diverging from it.
+building the `RunPlanner` this record declines. The fourth trigger has now also fired, for the
+first time, via `Check_Cross_Language_Correspondence` — and its own stated reasoning, checked
+against that real instance, argues against the planner rather than for it. The second and third
+triggers remain unfired. Revisit if a materialization step is measured wasting real work,
+participation varies by a second axis, or a *diverging* rule population resumes growing the
+hand-written list past a point future evidence shows it stops absorbing cleanly.
 
 ### docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#1
 

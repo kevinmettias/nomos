@@ -94,18 +94,18 @@ members = [
     # resolution and this workspace's two Rust providers. Above the language providers it
     # registers, since it names them; below rules, which it does not touch.
     # `OD-PACKAGE-001`, `OD-PACKAGE-007`.
-    "crates/packages/nomos-lang-package",
+    "crates/packages/nomos-lang-rust-package",
 
     # Band 26 — package manifests. The first ModelBackendPackage/AgentExecutorPackage
     # manifest maturity: identity, PackageKind, PKG-007's first two version domains
     # reused from nomos-package unchanged, and ModelSelection replacing the fourth. A
-    # peer of nomos-lang-package, not a dependent of it -- neither names the other.
+    # peer of nomos-lang-rust-package, not a dependent of it -- neither names the other.
     # `OD-PACKAGE-010`.
     "crates/packages/nomos-model-package",
 
     # Band 26 — package manifests. The first RulePackage manifest maturity, measured
     # field by field against four real shipped rules rather than invented. A third peer
-    # of nomos-lang-package and nomos-model-package -- none of the three names another.
+    # of nomos-lang-rust-package and nomos-model-package -- none of the three names another.
     # `OD-PACKAGE-008`, `OD-ROADMAP-001`.
     "crates/packages/nomos-rule-package",
 
@@ -130,7 +130,7 @@ members = [
     # Band 36 — agent contracts. AGT-001's TaskEnvelope and AGT-002's WorkResult, the
     # typed input and output shape an agent-assisted operation carries. Depends
     # downward on nomos-ledger, nomos-contracts and nomos-corrections; names none of
-    # nomos-model-package, nomos-rule-package or nomos-lang-package, which are peers
+    # nomos-model-package, nomos-rule-package or nomos-lang-rust-package, which are peers
     # at a different band, not dependents of this one. `OD-ROADMAP-001`.
     "crates/agent/nomos-agent-contracts",
 
@@ -245,7 +245,7 @@ nomos-lang-rust-clippy = { path = "crates/languages/nomos-lang-rust-clippy" }
 nomos-lang-rust-deny = { path = "crates/languages/nomos-lang-rust-deny" }
 nomos-lang-go-modules = { path = "crates/languages/nomos-lang-go-modules" }
 nomos-package = { path = "crates/packages/nomos-package" }
-nomos-lang-package = { path = "crates/packages/nomos-lang-package" }
+nomos-lang-rust-package = { path = "crates/packages/nomos-lang-rust-package" }
 nomos-model-package = { path = "crates/packages/nomos-model-package" }
 nomos-rule-package = { path = "crates/packages/nomos-rule-package" }
 nomos-lang-go-package = { path = "crates/packages/nomos-lang-go-package" }

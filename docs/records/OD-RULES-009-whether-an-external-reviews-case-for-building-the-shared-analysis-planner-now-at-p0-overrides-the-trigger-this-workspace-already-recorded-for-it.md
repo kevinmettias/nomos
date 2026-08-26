@@ -3,7 +3,7 @@ id: OD-RULES-009
 type: decision
 title: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it
 status: accepted
-version: 3
+version: 4
 authority: canonical-normative-record
 tags:
   - rules
@@ -23,6 +23,8 @@ relations:
   - target: OD-GATE-011
     type: relates-to
   - target: ARC-ROADMAP-001
+    type: relates-to
+  - target: OD-CAPABILITY-010
     type: relates-to
 ---
 
@@ -238,12 +240,59 @@ family was created rather than converging with a fourth. This record's decline c
 hold on the evidence, not merely on precedent — each trigger got a genuine chance to fire
 since the last check and did not.
 
+## Amendment: The Fourth Trigger's Named Event Finally Occurred, And Its Own Wording Already Says What It Means
+
+A fourth round of the same external review repeated its P0 case for the general planner
+again. Rather than re-arguing what the three prior rounds already settled, this amendment
+checks the one trigger this record's own text has never yet seen occur: "a fifth rule's
+required-capability shape reconverging with an existing one, rather than adding a fourth
+distinct family."
+
+**`Check_Cross_Language_Correspondence` (`OD-CAPABILITY-010`) is that event, for the first
+time since this record began tracking.** Every prior rule this record has checked — through
+five capability families across three amendments — diverged: each added a structurally
+distinct family (syntax, dependency-edges, controlflow, lint, dependency-policy). This one
+does not. Its own module doc (`crates/rules/nomos-rules/src/crosslang.rs:1-11`) states
+plainly: "No new capability: both sides are the same fact, read twice." It reads
+`nomos.cap.syntax.items` — the same fact `Check_Completeness_Mirrors` and
+`Check_Naming_Convention` already consume — over a subject pair a declared correspondence
+names, and needs no new `Materialize_X` step in `run.rs`: "every source's
+`nomos.cap.syntax.items` fact is already written by `Materialize_Syntax` before any rule
+runs." The named event has occurred, literally, for the first time.
+
+**This trigger's own text already says what a fired instance of it means, and it is not what
+firing the other three meant.** This record's first amendment already read the trigger's
+accompanying reasoning correctly without needing to say so explicitly: "a converging
+population is weaker evidence for a general planner than a diverging one." A rule reconverging
+with an existing capability family is the *cheap* case — no new fact, no new materialization
+step, no new capability crate — and Check_Cross_Language_Correspondence's own zero-new-anything
+shape is direct, first-hand confirmation of exactly that claim, not a counterexample to it. The
+other three named triggers each describe a cost or a demand growing (selection creating unread
+work, participation varying, a materialization step wasting real work); this one describes the
+opposite — a rule arriving that costs *nothing new* to add. Naming its occurrence a reason to
+build a planner would invert the trigger's own stated logic: the planner's case rests on
+managing growing, diverging complexity, and this event is evidence the population is not
+straining under that growth, not evidence that it is.
+
+**The other three triggers remain exactly as the third amendment found them.** No selection
+axis beyond `OD-GATE-017`'s has appeared; no materialization step has been measured wasting
+real work; participation still varies only by the one mechanism already built.
+
+**All four named triggers have now been checked against a real, occurred instance at least
+once, and none supports building the planner now.** The first fired and was answered
+narrowly (`OD-GATE-017`). The second and third remain unfired. The fourth has now fired,
+literally, and its own accompanying reasoning — read correctly rather than merely quoted —
+argues against the planner it might, misread, appear to argue for. This is the strongest
+disconfirmation this record has recorded yet: not absence of evidence, but a real instance
+whose own shape demonstrates the hand-written approach absorbing a reconverging rule at zero
+marginal cost.
+
 ## Status
 
 Accepted. This record's first named trigger fired and was addressed by `OD-GATE-017`, not by
-building the `RunPlanner` this record declines. Re-checked against a sixth rule, a fifth
-capability family and a third real-cost materialization step, all landed since the amendment
-above: the three remaining triggers still have not fired, and the fresh evidence weighs against
-firing rather than merely failing to confirm it. Revisit on any of the three remaining triggers
-named above, when `OD-RULES-007`'s own status next changes, or when a rule's required-capability
-shape is first measured reconverging with an existing family rather than diverging from it.
+building the `RunPlanner` this record declines. The fourth trigger has now also fired, for the
+first time, via `Check_Cross_Language_Correspondence` — and its own stated reasoning, checked
+against that real instance, argues against the planner rather than for it. The second and third
+triggers remain unfired. Revisit if a materialization step is measured wasting real work,
+participation varies by a second axis, or a *diverging* rule population resumes growing the
+hand-written list past a point future evidence shows it stops absorbing cleanly.

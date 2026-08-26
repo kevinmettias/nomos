@@ -564,18 +564,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "nomos-lang-package"
-version = "0.1.0"
-dependencies = [
- "nomos-contracts",
- "nomos-lang-rust",
- "nomos-lang-rust-scan",
- "nomos-package",
- "serde",
- "serde_json",
-]
-
-[[package]]
 name = "nomos-lang-rust"
 version = "0.1.0"
 dependencies = [
@@ -628,6 +616,18 @@ dependencies = [
  "nomos-model",
  "nomos-platform",
  "nomos-platform-std",
+ "serde_json",
+]
+
+[[package]]
+name = "nomos-lang-rust-package"
+version = "0.1.0"
+dependencies = [
+ "nomos-contracts",
+ "nomos-lang-rust",
+ "nomos-lang-rust-scan",
+ "nomos-package",
+ "serde",
  "serde_json",
 ]
 

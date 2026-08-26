@@ -205,7 +205,7 @@ pub(crate) const UNIVERSES: &[Universe] = &[
         },
     },
     Universe {
-        path: "crates/packages/nomos-lang-package/src/known_providers.rs",
+        path: "crates/packages/nomos-lang-rust-package/src/known_providers.rs",
         name: "KNOWN_PROVIDERS",
         kind: UniverseKind::Constant,
         standing: Standing::Unmirrored {
@@ -225,7 +225,7 @@ pub(crate) const UNIVERSES: &[Universe] = &[
             risk: "a second Go provider crate this package could register (of the same \
                    nomos.cap.syntax.items capability, since nomos-lang-go-modules is \
                    deliberately excluded here) is not added to this list automatically, the \
-                   identical risk nomos-lang-package's own row states — bounded the same way, \
+                   identical risk nomos-lang-rust-package's own row states — bounded the same way, \
                    to additions rather than drift on the one entry it holds today, pulled \
                    from nomos-lang-go's own PROVIDER constant rather than retyped",
         },

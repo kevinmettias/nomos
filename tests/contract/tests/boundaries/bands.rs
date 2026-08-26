@@ -102,12 +102,12 @@ pub(crate) const BANDS: &[(&str, u32)] = &[
     // nomos-package's generic core with RustEdition resolution. Above the two language
     // providers it registers -- it must be able to name them -- and well clear of
     // rules, which it does not touch. `OD-PACKAGE-001`, `OD-PACKAGE-007`.
-    ("nomos-lang-package", 26),
+    ("nomos-lang-rust-package", 26),
     // The first ModelBackendPackage/AgentExecutorPackage manifest maturity. Same band as
-    // nomos-lang-package -- a peer wrapping nomos-package's generic core for a different
+    // nomos-lang-rust-package -- a peer wrapping nomos-package's generic core for a different
     // PackageKind family, not a dependent of it. `OD-PACKAGE-010`.
     ("nomos-model-package", 26),
-    // The first RulePackage manifest maturity. Same band as nomos-lang-package and
+    // The first RulePackage manifest maturity. Same band as nomos-lang-rust-package and
     // nomos-model-package -- a third peer wrapping nomos-package's generic core, not a
     // dependent of either. `OD-PACKAGE-008`, `OD-ROADMAP-001`.
     ("nomos-rule-package", 26),

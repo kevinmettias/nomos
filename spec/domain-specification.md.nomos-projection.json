@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:a44a2cc2c15e167d39fd9f6e80794f9aa0268c0cb17c7bc0d8836efef0308180",
-  "inputs_digest": "sha256:d90300f9183f682f4c3f788d9d2201c59d61e80b3556712cde33ccd62755de27",
+  "content_digest": "sha256:f21b979a06baa0397cc75c9840b8ce6ea4ce4c7497febf0a012b64b11810bcc4",
+  "inputs_digest": "sha256:57ca728a66bd6dcec15270f575d4ea7f0935d1381d0016e13675e77c0fe27f4d",
   "sections": [
     [
       "Documents",
-      170
+      174
     ],
     [
       "Sections",
-      1437
+      1463
     ],
     [
       "Source blocks",
-      5025
+      5106
     ]
   ],
   "inputs": [
@@ -312,6 +312,11 @@
     },
     {
       "content": "documents",
+      "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md@authored",
+      "hash": "sha256:5f4af371f2667269d82cef40261bbb5887f95e6f17f5c8b6065b68091fa6ae36"
+    },
+    {
+      "content": "documents",
       "identity": "docs/records/OD-GATE-001-a-skipped-test-reports-ok.md@authored",
       "hash": "sha256:ede1d73ff937b80913dd5c6fd4d7d5cc70cb8158b29e13bfe003ae5cd5f805d5"
     },
@@ -414,6 +419,11 @@
       "content": "documents",
       "identity": "docs/records/OD-HOST-005-whether-request-commands-seam-is-its-own-crate-or-a-verb-inside-spec-orchestration.md@authored",
       "hash": "sha256:0cb15b83d0fb7a58f4a2afda083ac512ba0ac344d15ca0556f3446736cbd7ea9"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md@authored",
+      "hash": "sha256:0b57d5901842a1631bb060efc073a695a1adb398a0a938a3f0ec937a14e90a37"
     },
     {
       "content": "documents",
@@ -597,6 +607,11 @@
     },
     {
       "content": "documents",
+      "identity": "docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md@authored",
+      "hash": "sha256:ab5cb902ffef3564343e99f10236808102e5e0f1d3c8374831bc8e8ab0d579ad"
+    },
+    {
+      "content": "documents",
       "identity": "docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md@authored",
       "hash": "sha256:dea2667f08661d51389468ccb32132d696dd6cb5a0936574b89125c523341962"
     },
@@ -638,7 +653,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md@authored",
-      "hash": "sha256:c8d1f6b93262c4c49c0a4feb2064651754b9aadd43d7e9efa41c11362f08eb68"
+      "hash": "sha256:ef42dde80754c3356dc02c5381de8581d104bef842cf1222901f92d33236c7ca"
     },
     {
       "content": "documents",
@@ -664,6 +679,11 @@
       "content": "documents",
       "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md@authored",
       "hash": "sha256:6a14772c529dbb5589b38e4fdaec088191dcfbec7c6381e15d216537c6d1e4dd"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md@authored",
+      "hash": "sha256:9d244ee2809578351e061c1f8ab5c866345764d66f874044fc439b9f9cc76651"
     },
     {
       "content": "documents",
@@ -733,7 +753,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md@authored",
-      "hash": "sha256:0ee7f569323a3dabc535b9cc835883de99c20b70ad348495a1595986b912d60e"
+      "hash": "sha256:08ba049790ebab78a959ded3cff62e8e04ff89f3e3502a36dd39cdff8d560569"
     },
     {
       "content": "documents",
@@ -3082,6 +3102,36 @@
     },
     {
       "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#1",
+      "hash": "sha256:14d5ea8adfaa23693c80d3a91186f2c7de4fbce8084a4ddca3705d6e860a5643"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#2",
+      "hash": "sha256:758b2cbc03e8cd6ce9360c846f615e81c91500115c61212e68a8c9d7327b8e40"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#5",
+      "hash": "sha256:a43b4b2a9e60444d35b80a3a65999a00f46316aa18c56b559d94749a6606f0c4"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#10",
+      "hash": "sha256:fa3a0bd7d6007477913ce7bd7ff2c927a3bb75a88162f82b2f444ebec4a911c7"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#13",
+      "hash": "sha256:d3a071f12059213804b3253e1b6905635f4246d728c8b3a8f231f6da310ba7d1"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#16",
+      "hash": "sha256:bfec9df5ffcd9a72c2f72cd58f7b34e830e289bd2eb4f968d6cd6eba3bcd3a7b"
+    },
+    {
+      "content": "headings",
       "identity": "docs/records/OD-GATE-001-a-skipped-test-reports-ok.md#1",
       "hash": "sha256:8ffd36d8a4337cea6d533d1097065ecae5a05e13e28ee9907ad8e5ce8e11138d"
     },
@@ -3979,6 +4029,36 @@
       "content": "headings",
       "identity": "docs/records/OD-HOST-005-whether-request-commands-seam-is-its-own-crate-or-a-verb-inside-spec-orchestration.md#14",
       "hash": "sha256:7a2d90ccc1ccc8d602bc5ec50f5f83c78069c075a065c5aa15e3282919f336c5"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md#1",
+      "hash": "sha256:adb1a0581fa6528262d1594c3324a203d585fd9ad5b8572a5649d1e2638fb35a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md#2",
+      "hash": "sha256:f7165dbb6813cc5e6f2484e077d45994825ace66b71261fca4e7356afa137805"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md#5",
+      "hash": "sha256:f9e80921ea83a9254b9f8c810be1a563cc934b28b16143bd02d352d55547df23"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md#10",
+      "hash": "sha256:21c0b3763a0d802ac52b68951fa301ce2e6bdac3b4c5e039b9afd0f7bbc11ea1"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md#13",
+      "hash": "sha256:d4049355f7123df754ebdb5ddae0f1bf23d1e0aff819f62f0e7ccd943f67f0f6"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md#17",
+      "hash": "sha256:fdbeb0d898682f9dfbbed5dc242f5a3c58d38a4af2f637a3d1862036722f27f6"
     },
     {
       "content": "headings",
@@ -5702,6 +5782,36 @@
     },
     {
       "content": "headings",
+      "identity": "docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md#1",
+      "hash": "sha256:70e8c24caa1641044acd424bed9aee3216f4d1b0afe755ebad905e2af9c73eec"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md#2",
+      "hash": "sha256:e573e3b09efc36a49f54078c69708a4a188d2ccf5c774111f03e4601ba99c491"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md#5",
+      "hash": "sha256:bccff8460959f9864fbd68802a04c3ab869f8dd4d02675663ad81d659afadb7d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md#10",
+      "hash": "sha256:ba6087cdffe0afd8b58e2877c44c4dc4d3b6b795af8a64c88a4ba7573f96f482"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md#13",
+      "hash": "sha256:882422f728bfd9f5bdf96422cc598c6bb0821e9b3c70f2f16bbb3dfe9b3cb8a2"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md#17",
+      "hash": "sha256:415124b652fd7aa5056e822b437d9af9fb641d04935a3fa28b4d80e0ea824aec"
+    },
+    {
+      "content": "headings",
       "identity": "docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#1",
       "hash": "sha256:d854d2d5072c0ba6069567f321d6ae052ea2afa66f7b8e82f62e5aadb302ebf7"
     },
@@ -6093,7 +6203,12 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#20",
-      "hash": "sha256:26ee2b2b4c78790e4073218da053a7bfa080c7358aff446e4c1db9c6ac8ccbfb"
+      "hash": "sha256:d5ea61270beae4c4450ff400edf207f27e877e50e15746a371983c6f0578d1ed"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#24",
+      "hash": "sha256:6e5a0910cb9b669cf6738ee93794ab340b93229ff0b7540bd170455744037854"
     },
     {
       "content": "headings",
@@ -6284,6 +6399,36 @@
       "content": "headings",
       "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#18",
       "hash": "sha256:e84860f379ae857774c788f5325ef0dfbf6103ace36b90f07586ebed16b95987"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#1",
+      "hash": "sha256:03819e2ae6f32fce4cfd97944de7445bb0e2e992c154beef1587b9c41ab7944f"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#2",
+      "hash": "sha256:4867f83a71f6fb954c66a70bb61242ffd1788bfe56f571a5114d824b8e9d832c"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#5",
+      "hash": "sha256:2f76c67b30c97583b67c8f4a3bde973f3877f93376e8a2d8afdc7d9f964c1e01"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#10",
+      "hash": "sha256:89c0053bdd26cb94a728227ee04d2c368e8cc7832715ed2f3b64d63bfbf82aec"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#13",
+      "hash": "sha256:f3f69ab632cadd507c1672dbc5432444bc17e6cba83b181eecc340efd678a242"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#17",
+      "hash": "sha256:ce5bb05f820a1a6229412c5fa93fcdb8f068b2def4ac9594d5e93722bb4c11aa"
     },
     {
       "content": "headings",
@@ -6853,7 +6998,12 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#28",
-      "hash": "sha256:d4c7f2b181f36310765ab92c4701444c3c094699ab83cfec2d5692ca4795cdc6"
+      "hash": "sha256:5e6d083819a16a011063411e45e5e07929ed6e1abd87038016c9fd1600d59273"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#34",
+      "hash": "sha256:02f8ef40949084af76b3c431f29362d0dfba5dc69196b70f9d0c93688d9cb278"
     },
     {
       "content": "headings",
@@ -15547,6 +15697,91 @@
     },
     {
       "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#1",
+      "hash": "sha256:b789e60364a34747379879aae54dde806b8e7ae982044f3ac83f6dc1e0ef43f9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#3",
+      "hash": "sha256:76162d3502f8bc6db9700a9c8d8f801232bf0662989c3214f1ff71906127597c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#4",
+      "hash": "sha256:96703182ef6f95e645c9faf8f5dd4bd340a77c380b0fd71af390ac23b75f65ed"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#5",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#6",
+      "hash": "sha256:ead04c1f1af228020389b69fa11fd00f7338fb262618c180a22201c29dd81cf9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#7",
+      "hash": "sha256:9e582ac9d787b85ef0643fb21fe3c049235df4092d19993750cf6e05b81c3d82"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#8",
+      "hash": "sha256:69d468110d366e359be8d348c86fa2ffafb949abd2128c712431e50cf65014f1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#9",
+      "hash": "sha256:5e0bc00d5d31a8e3a47919de7954df8bb0587bfd8ca59b3dcad625d6703f3b70"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#10",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#11",
+      "hash": "sha256:aafdab6011ce4a8c2dd1c64ef351556f4c3a6bac323636f686f71abff7b40f03"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#12",
+      "hash": "sha256:3220182b1ab1169238f974fc6030360c792229a96579072bcb92970329c6ee11"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#13",
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#14",
+      "hash": "sha256:e5134fe3e4459ace17ba3ffb718cac8e5d037c678d95544eda443ccddbe0a0e6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#15",
+      "hash": "sha256:2f8b586eced977cb2b1f7b01ea1bf549accde2b933ea5d5d8752765f579f9916"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#16",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#17",
+      "hash": "sha256:ca9d496b0e0778d5dd1198e0691d7464312a2e3847c02951284e0254a75ee1a2"
+    },
+    {
+      "content": "blocks",
       "identity": "docs/records/OD-GATE-001-a-skipped-test-reports-ok.md#1",
       "hash": "sha256:dcb392829586c5c23018dfc4351909101b128901406caae44797355b6dcaab6c"
     },
@@ -18704,6 +18939,96 @@
       "content": "blocks",
       "identity": "docs/records/OD-HOST-005-whether-request-commands-seam-is-its-own-crate-or-a-verb-inside-spec-orchestration.md#15",
       "hash": "sha256:6962e58c35ab40fca7d20b53986f30fe06c73f8ae4d26687723083fc2d2149ba"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md#1",
+      "hash": "sha256:0697548549411d432f22b13d529cbc1f8e88a6784bfec25919e7133bbdb178d9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md#3",
+      "hash": "sha256:81ad3e17f9aa99c0a1d53cd8e77555f02daf0dc396f411dbd1c221c3ad97ce66"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md#4",
+      "hash": "sha256:3199d23486d712f1abbe01d6ff9e26fc04fd42d693d95dec65a343ad51838e92"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md#5",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md#6",
+      "hash": "sha256:af2340b02838e2397b12ccc696913211a595322e64cc65038dc0a6b08fe36ff7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md#7",
+      "hash": "sha256:7321f60ad1ce729401d59ee391fef4b6cce53e028e4a7a6113ab88ed16435e6a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md#8",
+      "hash": "sha256:0b96331520b94ef7704b78f17e3eefacc21ded8ecb81961f90c2edb88e6a8c5e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md#9",
+      "hash": "sha256:9c0049ce3e3be32c932113607a4ae6e04df2518723f2a7e73e606c47c1f309ec"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md#10",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md#11",
+      "hash": "sha256:5dacf19a6c643f902522881f1a37e5c58d41e9ddeb97dd94ef8a6e9160f8ca2d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md#12",
+      "hash": "sha256:92d488ba81248a57390d2b1050a260e98b9936512ba9bbf92f886022294b74cf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md#13",
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md#14",
+      "hash": "sha256:1fe7de7481ea0c26612f257d93d0a18c46f615aea1a3fe8157fb3d7e741d8c6e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md#15",
+      "hash": "sha256:5b00bfe857d5618a42cd55918d6832be84fa00123b17140dc01de3ec249c8281"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md#16",
+      "hash": "sha256:f52c99a028b4270d4829fd948c7cab511563e82056bfb0c93d52f2c3085b6fb7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md#17",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md#18",
+      "hash": "sha256:d2420d583dfacd7c091eeb75b3e114a10c4ab67ef09abf28fedbde7740a446a0"
     },
     {
       "content": "blocks",
@@ -24932,6 +25257,96 @@
     },
     {
       "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md#1",
+      "hash": "sha256:d20dad72ecdb7ecedf9ddc47ff5486b5163e4bc37ab1c14cd3e00a2353b678c5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md#3",
+      "hash": "sha256:057e6c98dafec458122685ab858177ee9080220163fc49cfb8c7a1d1dce088ce"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md#4",
+      "hash": "sha256:1b683a8f529d9d1edb7b8988566db7d96c6e7e89af51613e66adb65f5d172f3f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md#5",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md#6",
+      "hash": "sha256:73b9a3c123b5f79ebd4a4adaf7f252d131ad34d91fc591bd109db71b4a06535f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md#7",
+      "hash": "sha256:0ee2c274e18a1034e22e1baeed76ba74f46d2ef8384520757eb34ea2e005e937"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md#8",
+      "hash": "sha256:ff25c231eaa4c112a566ae0a2dba815079a139fc6fb2a7a6de36d0b487778287"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md#9",
+      "hash": "sha256:8fa9112c03317e394bc306e728509d1a3f992df1062573e860cb4459b65a519f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md#10",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md#11",
+      "hash": "sha256:e5d16c88b64134c05a3cfdacc9a82b138fbbc905823c04bfe15faba62320ced2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md#12",
+      "hash": "sha256:361fd1a976852a9535ac9a55a550d2bb29c347ac81835a6203ba1d71cb654353"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md#13",
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md#14",
+      "hash": "sha256:83d7abffdda6b64adfa13fada45a59f121ca5c1e7a3278b1fde58acf453d9714"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md#15",
+      "hash": "sha256:bec47f397f85ca5b45bada1c710a476d70df5f84fa656d3db26287b8f6c93e39"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md#16",
+      "hash": "sha256:0696c9d2c59e0ebded8f82c02e30d930d91577700140a03d0ec50f4d390099a5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md#17",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md#18",
+      "hash": "sha256:33251a535bdeae09a6778c4b7eeb2a12589f1e9eccb68133c080917e09f29974"
+    },
+    {
+      "content": "blocks",
       "identity": "docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#1",
       "hash": "sha256:f8c5c2d9a62f8885a1b5399e69827138d3be4b147693b001857ec8c9172fa72a"
     },
@@ -26488,12 +26903,32 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#20",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:e7c62ad0694cadd8e670da1cc382a7ae97859ff6bbe43f2066dc2491f2a30a92"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#21",
-      "hash": "sha256:fb42058c228b64e93cd1685a69f899c8af2270090a1b05bfa7f606457a4f01a7"
+      "hash": "sha256:a3af0e956406417711062c53280b5654e935e0d3fb305b9720f915f27d3034f2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#22",
+      "hash": "sha256:4dcca84fe4e4ccddeee2388cbff4ad14d07d3b6b5de13d494848c937063728c4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#23",
+      "hash": "sha256:ad8513d2108b664c2e59413edb8459d190175fdbedf520198f33960b41ac675e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#24",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#25",
+      "hash": "sha256:d0e8f80a2f84ad192daf2075bc2d75828b4a1ccdc6955fc5d9e8b6600c1a3573"
     },
     {
       "content": "blocks",
@@ -27069,6 +27504,96 @@
       "content": "blocks",
       "identity": "docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md#19",
       "hash": "sha256:780c5c597405163ae1aa767c0a60521cd780c9388fef789256be598771b765d9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#1",
+      "hash": "sha256:cb9de3dc73d4c67ab18d7f746624dea844539857d5a32342c260ef45aafef472"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#3",
+      "hash": "sha256:e08929728764deb5b21fb48d19053bbb20e984d01c2dcfa563103492d161076e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#4",
+      "hash": "sha256:7fd7463809c4c7e6ed4f054a7c705f4e7647746c6087da98111844824361a489"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#5",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#6",
+      "hash": "sha256:c56023b3131009fe857f290092e9b18fd2d707e46b45515c14c542c079f90a04"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#7",
+      "hash": "sha256:ffda2f498cc87a8d0fe46395844ba5f1c08e88a27c0ce67756bdd48f9ea08f17"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#8",
+      "hash": "sha256:4d9fe7d6c4063d3738007f0b090989988768b73ceec1bb105a6e2a05600edd69"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#9",
+      "hash": "sha256:01ff9c6c08ab0344f3e10e77d020f5271345948a46f32a8a2b57043532a2f98f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#10",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#11",
+      "hash": "sha256:fa97d8b49a5189c06a2ad8d988f38ce23e800aa2445fb98d0ba4ed24f419ce4b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#12",
+      "hash": "sha256:f3d97b1edb4e5ebf3d3950419548517f9bc8c5d65f4174062d1d4764ab65183e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#13",
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#14",
+      "hash": "sha256:969443d072642cf0d7998e8a165a611661d8d9cb78d73314e55659f2c292ebd9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#15",
+      "hash": "sha256:dc44ac8a7df994ea4ae7173bbac6f74b4abc35491678f6f8061b94920aa0dfe5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#16",
+      "hash": "sha256:837ad13cb9d4493011dbcb5271a9fa80af62d22c086d42a14603adb4bd234391"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#17",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#18",
+      "hash": "sha256:2d4d0c7c3ad349e20256e5037833d015fef82ecbbcf95d9ef5e2feaf06e7cddf"
     },
     {
       "content": "blocks",
@@ -29238,12 +29763,42 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#28",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:3863f02953dedd90d9f871d5a7b3991a920be74c30936a3d73d3aa613f1e9403"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#29",
-      "hash": "sha256:830d742835baa1f06d0d206dfb423ce291e493ed4db225afe4f0446ee6df9eea"
+      "hash": "sha256:7585aefe991331b091f87c9b930df3d8a963b029da02dd6417da59c350195dd7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#30",
+      "hash": "sha256:22be928688363f17fe582db6eaed37d70519416ec97db7e8f90b976e6b9096e2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#31",
+      "hash": "sha256:b64d11cadef1f9b6fef61f71d7b4f49dfe93b71673681abcdd217a002be86416"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#32",
+      "hash": "sha256:1d207496770bffc73fd986e2dc096c3ad6c977a8b16329de422d67e15a47cf64"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#33",
+      "hash": "sha256:56a809195736b8ab2d82f5c9c93920d7bdb9c14364cebf6b97ed2c0f263d7710"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#34",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#35",
+      "hash": "sha256:1001994bd4c6f07c797d1f726a4b663c8024823a094dcef18c408742a9b00884"
     },
     {
       "content": "blocks",

@@ -60,7 +60,7 @@ trusting this sentence — it goes stale the moment a new provider lands and nob
 it, which is exactly how it went stale once already.
 
 **Package registration**: if this provider is meant to be selectable through a
-`LanguagePackage`-shaped manifest, its `KNOWN_PROVIDERS` array (`nomos-lang-package`'s
+`LanguagePackage`-shaped manifest, its `KNOWN_PROVIDERS` array (`nomos-lang-rust-package`'s
 today) needs your `PROVIDER` constant added — see §4 for whether that means editing an
 existing package crate or writing a new one.
 
@@ -124,21 +124,21 @@ grows a new export.
 
 ## 4. A second language's package manifest
 
-Depend on `nomos-package` (band 24) directly — never on `nomos-lang-package`, which is the
+Depend on `nomos-package` (band 24) directly — never on `nomos-lang-rust-package`, which is the
 Rust-specific wrapper, not a generic base a second language extends. `OD-PACKAGE-007` is
 why the split exists and what it does and does not provide: `nomos_package::PackageManifest`
 carries `language_versions: Vec<String>` as raw, unresolved labels (there is no typed
-version-domain type to reuse — invent your own, the way `nomos-lang-package::RustEdition`
+version-domain type to reuse — invent your own, the way `nomos-lang-rust-package::RustEdition`
 is Rust's own), and `nomos_package::Parse_Manifest`/`Read_Manifest` take a `known_providers:
 &[&str]` parameter rather than a hardcoded list. Your package crate supplies that list (its
 own providers' `PROVIDER` constants, pulled by reference the same way
-`nomos-lang-package::KNOWN_PROVIDERS` pulls Rust's) and resolves each raw
+`nomos-lang-rust-package::KNOWN_PROVIDERS` pulls Rust's) and resolves each raw
 `language_versions` label against whatever typed domain your language's own version scheme
-actually needs, reusing `nomos-lang-package`'s `reader.rs::Resolved_Editions` as the shape
+actually needs, reusing `nomos-lang-rust-package`'s `reader.rs::Resolved_Editions` as the shape
 to follow rather than as code to call.
 
 **Band**: above your language's own provider crates (so it can name them), the way
-`nomos-lang-package` sits at 26, above `nomos-lang-rust`/`nomos-lang-rust-scan` at 25. It
+`nomos-lang-rust-package` sits at 26, above `nomos-lang-rust`/`nomos-lang-rust-scan` at 25. It
 must never need to be below `nomos-package` (24) or above it in a way that would create a
 same-band or upward edge.
 
@@ -150,7 +150,7 @@ same-band or upward edge.
 `OD-PACKAGE-006` is accepted, not open: `nomos_package::KnownProviders`
 (`crates/packages/nomos-package/src/known_providers.rs`) is the generic
 provider-registration base type the resolution decided, and
-`crates/packages/nomos-lang-package/src/known_providers.rs` is its first real consumer, building
+`crates/packages/nomos-lang-rust-package/src/known_providers.rs` is its first real consumer, building
 `KNOWN_PROVIDERS` through `KnownProviders::New(...).As_Slice()` rather than as a bespoke
 array of its own. §1's "Package registration" step and §4 both describe that shape as it
 stands today.

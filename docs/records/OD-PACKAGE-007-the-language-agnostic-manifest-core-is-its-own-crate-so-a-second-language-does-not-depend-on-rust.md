@@ -3,7 +3,7 @@ id: OD-PACKAGE-007
 type: decision
 title: The language-agnostic manifest core is its own crate, so a second language does not depend on Rust to read its own manifest
 status: accepted
-version: 2
+version: 3
 authority: canonical-normative-record
 tags:
   - packages
@@ -148,8 +148,43 @@ provider population, not copied from the Rust crate's file, and landing on the i
 scoping rule twice is real evidence the rule is a property of what a `LanguagePackage` is
 for, rather than an accident of the first case.
 
+## Amendment: The Wrapper's Own Name Was Never Corrected, And An External Review Named It
+
+Added at version 3. This record's own text already describes what `nomos-lang-package` is
+without ever calling it what it is: "it is a Rust reader, and its name is the only generic
+thing about it." The generic-core split this record built removed the *dependency* problem —
+a second language no longer needs to depend on Rust's providers — but left the *name*
+unchanged, because nothing forced the question at the time: `nomos-lang-package` was still the
+only `LanguagePackage` manifest crate in the workspace, and a name that happens to be ambiguous
+with a population of one is a latent cost, not yet a demonstrated one.
+
+An external review, checked directly rather than accepted on read, found the cost is no longer
+latent: `nomos-lang-go-package` is real, and a reader encountering `nomos-lang-package` and
+`nomos-lang-go-package` side by side has no way to tell from either name alone that the first
+is Rust-specific and the second is Go-specific — the generic-sounding name reads as the
+default, and the language-qualified one reads as the exception, backwards from what
+`nomos-lang-go-package`'s own real, symmetric peer relationship to `nomos-package`
+demonstrates. The crate's own `Cargo.toml` description and `README.md`'s own crate table
+already describe it correctly in prose — "The Rust `LanguagePackage` manifest format" — while
+its `[package] name` said otherwise. This is a naming correction with no open design question,
+the same shape `P14-AGENT-EXECUTOR-RENAME-2` already used renaming `nomos-agent-executor` to
+`nomos-agent-executor-claude-code` once a second executor made its unqualified name
+ambiguous.
+
+**`nomos-lang-package` is renamed to `nomos-lang-rust-package`.** Its public surface, its
+`RustEdition`/`KNOWN_PROVIDERS`/`Is_Known` shape, its dependency on `nomos-package`, and every
+byte of its behavior this record's own "What Holds It" section already pins are unchanged —
+only the crate's own name, its workspace member path, and every file that names it by string
+(both hand-maintained band tables, its surface snapshot, `nomos-add-plugin`'s worked example,
+`completeness_universes`' path reference, and `README.md`'s crate table) move together. Band 26
+is unchanged; `nomos-model-package` and `nomos-rule-package` remain its peers there, and
+neither names the other, exactly as this record's own decision already states.
+
 ## Status
 
-Closed by `P13-PACKAGE-GENERIC-CORE`. Amended to version 2 by
-`P14-LANG-GO-RECORD-2`: measured directly against `nomos-lang-go-package`, the real second
-consumer this record was written for, and found to need no adjustment.
+Closed by `P13-PACKAGE-GENERIC-CORE`. Amended to version 2 by `P14-LANG-GO-RECORD-2`: measured
+directly against `nomos-lang-go-package`, the real second consumer this record was written
+for, and found to need no adjustment. Amended to version 3 by
+`P14-PACKAGE-007-LANG-RUST-PACKAGE-RENAME`: the crate is renamed `nomos-lang-package` →
+`nomos-lang-rust-package`, correcting the one thing the version-2 measurement found unchanged
+that should not have been — its name.
