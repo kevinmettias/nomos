@@ -33191,6 +33191,58 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P14-TRACKB-CLI-AGENT-BACKEND-FLAG",
+      "title": "nomos agent execute/judge-role gain a real --backend flag, the first real caller choosing between two AgentExecutor backends",
+      "why": "nomos-agent-executor-ollama now exists as a real, adversarially-verified second AgentExecutor (OD-EXECUTOR-003) but nothing in this workspace can reach it: nomos-cli only ever calls nomos-agent-executor-claude-code. A --backend claude-code|ollama flag, defaulting to claude-code so existing behavior is byte-identical when omitted, is the real caller OD-EXECUTOR-001/OD-EXECUTOR-003 both say a dispatch trait or selection mechanism should wait for -- a plain match over two already-independent free functions, not a new abstraction invented ahead of this real need.",
+      "done_when": "nomos agent execute and nomos agent judge-role accept an optional --backend <claude-code|ollama> flag; omitting it dispatches to nomos-agent-executor-claude-code exactly as before (byte-identical argv/behavior); --backend ollama dispatches the same TaskEnvelope to nomos-agent-executor-ollama; an unrecognized value is a usage error naming the two accepted spellings; a real nomos agent execute --goal ... --backend ollama run is shown reaching the actual ollama subprocess and rendering its response.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/src/agent.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli"
+        ],
+        "exit_code": 0,
+        "output_tail": "_Builds ... ok\ntest Test_A_Build_That_Cannot_Read_The_Ledger_Should_Not_Rewrite_It ... ok\ntest Test_A_Build_That_Can_Read_The_Ledger_Should_Still_Write_It ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s\n\n\nrunning 5 tests\ntest Test_Claiming_A_Lapsed_Item_Should_Refuse_And_Name_The_Takeover ... ok\ntest Test_Taking_Over_A_Lapsed_Item_Should_Record_The_Claim_It_Displaced ... ok\ntest Test_Show_Should_Report_The_Claim_A_Takeover_Displaced ... ok\ntest Test_A_Lapsed_Item_Should_List_As_Lapsed_And_Be_Takeable ... ok\ntest Test_Takeover_Should_Exit_Three_When_The_Lease_Is_Live_And_Four_When_It_Is_Not_Held ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.23s\n     Running unittests src\\main.rs (target\\debug\\deps\\nomos-fea907ca1d41ff28.exe)\n     Running tests\\abandon_is_readable.rs (target\\debug\\deps\\abandon_is_readable-fd0330570e3fdeae.exe)\n     Running tests\\add_guarantees_what_it_says.rs (target\\debug\\deps\\add_guarantees_what_it_says-f58283d4d14d3ce5.exe)\n     Running tests\\authoring_surface.rs (target\\debug\\deps\\authoring_surface-adc5015e96fc76f3.exe)\n     Running tests\\check_command.rs (target\\debug\\deps\\check_command-ce124072424d9975.exe)\n     Running tests\\freshness.rs (target\\debug\\deps\\freshness-92f56d62352837ef.exe)\n     Running tests\\gate_step\\main.rs (target\\debug\\deps\\gate_step-c4bbbdad3c27e722.exe)\n     Running tests\\list_tells_the_truth.rs (target\\debug\\deps\\list_tells_the_truth-e14f973c0105bb4e.exe)\n     Running tests\\read_surface.rs (target\\debug\\deps\\read_surface-eb40ce2fc5c543ff.exe)\n     Running tests\\request_submit.rs (target\\debug\\deps\\request_submit-149ab5b94d0aea0c.exe)\n     Running tests\\stale_writer_is_refused.rs (target\\debug\\deps\\stale_writer_is_refused-8a5538919820add6.exe)\n     Running tests\\takeover_is_recorded.rs (target\\debug\\deps\\takeover_is_recorded-74e2e29a50ea2c40.exe)\n",
+        "verified_at": 1787729704,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
