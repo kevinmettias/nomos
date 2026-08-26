@@ -40,6 +40,7 @@ profile: domain-specification
 | docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md@authored | docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md | authored | 12 | 5 | sha256:7b868459b4901509f831d98949e39dd926a2a649fc7ab419ad983c06f799c1a1 |
 | docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md@authored | docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md | authored | 22 | 8 | sha256:2a1f9cc14ba7229566dea2754dfbafa91116a43aa78032e04f419cbd3c313272 |
 | docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md@authored | docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md | authored | 16 | 6 | sha256:784d01d21571e04ba5141f437c4f20cfb0810d9d6f3791492ac78372f45903b3 |
+| docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md@authored | docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md | authored | 16 | 6 | sha256:abebdf2b824324df346b84d0919c8c4d5388d053b4f113e1d93570f0e9e3939a |
 | docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md@authored | docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md | authored | 34 | 10 | sha256:f1e0d83250422ce9a01b49549ecadefeb10363f0ac7ac1e0aad7ef647caa2626 |
 | docs/records/OD-CAPABILITY-002-a-capability-contract-is-not-a-providers-property.md@authored | docs/records/OD-CAPABILITY-002-a-capability-contract-is-not-a-providers-property.md | authored | 30 | 8 | sha256:37a877700da32038de6f0928850c29baadca4cb64984b86bc683e0cff204b669 |
 | docs/records/OD-CAPABILITY-003-per-subject-fallback-is-admitted-because-the-provider-is-part-of-the-address.md@authored | docs/records/OD-CAPABILITY-003-per-subject-fallback-is-admitted-because-the-provider-is-part-of-the-address.md | authored | 23 | 7 | sha256:45b5e163405af8ddb16c7acfa3a07390919b0f8605a212a676fa9a0e5a260994 |
@@ -399,6 +400,12 @@ profile: domain-specification
 | docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#10 | authored | 2 | Decision |
 | docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#13 | authored | 2 | What Would Decide It |
 | docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#15 | authored | 2 | Status |
+| docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#1 | authored | 1 | The sound control-flow reachability tier is a crate-local call resolver, not a compiler or language-server integration |
+| docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#2 | authored | 2 | Question |
+| docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#4 | authored | 2 | What Was Measured |
+| docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#9 | authored | 2 | The Decision |
+| docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#13 | authored | 2 | What This Does Not Do |
+| docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#15 | authored | 2 | Status |
 | docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md#1 | authored | 1 | The guarantee decides which usable offer answers, and the caller decides how far down to spend |
 | docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md#2 | authored | 2 | Question |
 | docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md#4 | authored | 2 | What It Did |
@@ -8487,6 +8494,179 @@ this is not in it.
 
 Accepted. Revisit on any trigger named above, or when `OD-HOST-003`'s editor surface or
 `OD-WORKFLOW-002`'s engine trigger next changes status.
+
+### docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#1
+
+*revision: authored · kind: heading · heading: The sound control-flow reachability tier is a crate-local call resolver, not a compiler or language-server integration · hash: sha256:f08018252b6e7cdca5b4644d76c12ea900ab3609cd801541045c92d810613495*
+
+# The sound control-flow reachability tier is a crate-local call resolver, not a compiler or language-server integration
+
+### docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#2
+
+*revision: authored · kind: heading · heading: The sound control-flow reachability tier is a crate-local call resolver, not a compiler or language-server integration / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#3
+
+*revision: authored · kind: prose · heading: The sound control-flow reachability tier is a crate-local call resolver, not a compiler or language-server integration / Question · hash: sha256:5e94e9444ad04a038432d9de88842b0094491b660f885fdcfeaa345ea496ef71*
+
+`OD-RULES-008` specified `nomos.cap.controlflow.reachability`'s sound tier exactly: "resolving
+every call the `Err` arm reaches, including into helper functions elsewhere in the crate, to
+confirm each actually constructs or propagates a `Finding`," and named it as this workspace's
+first real, already-motivated need for a `FactVariant::SemanticallyResolved` program-semantics
+fact — then explicitly declined to say how: "Neither tier exists in this workspace today.
+Building either is not this record's territory." Nothing in this workspace names a language
+tool this fact would come from, and this workspace has never integrated a compiler frontend or
+a language server. Building the sound tier now, without deciding that first, would fix the
+heaviest-looking answer (embed `rustc` or `rust-analyzer`) into the first real program-semantics
+provider by nobody having checked whether the fact actually needs it.
+
+### docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#4
+
+*revision: authored · kind: heading · heading: The sound control-flow reachability tier is a crate-local call resolver, not a compiler or language-server integration / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#5
+
+*revision: authored · kind: prose · heading: The sound control-flow reachability tier is a crate-local call resolver, not a compiler or language-server integration / What Was Measured · hash: sha256:b3856fc421b9777609925a9c7c7c6490e8c27e3339529dfdc98d836d4ecfc68d*
+
+**`ARC-CONFORMANCE-001`'s own test rules out delegating this specific fact to a compiler tool,
+regardless of tier.** Read directly: "the test for native analysis is that no provider exposes
+the fact... because the fact is about this repository's own architecture, its own requirement
+corpus, its own record set or its own render history, none of which any external tool has a
+model of." Whether a control-flow path "reaches a `nomos_contracts::Finding` construction" is
+exactly that shape — no compiler or language server has a notion of this workspace's own
+`Finding` type or what constructing one means, the identical reasoning that record already
+applies to a declared band or a corpus requirement. `rustc`, Clippy and `rust-analyzer` could
+at most supply raw name resolution; none could answer the actual claim `Check_Unread_Reaches_A_
+Finding` needs. This is true independent of which mechanism supplies the name resolution
+underneath it.
+
+### docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#6
+
+*revision: authored · kind: prose · heading: The sound control-flow reachability tier is a crate-local call resolver, not a compiler or language-server integration / What Was Measured · hash: sha256:59e358d7886a19534738f0dd8f87ab4310a367bc65e6509e5a644a2d8ba6dffb*
+
+**What tier 2 actually needs to resolve is narrower than general Rust name resolution.**
+`OD-RULES-008`'s own three worked examples (`naming.rs`'s `Payload_Of`, `mirror/index.rs`'s
+`Unread_Of`, `dependency.rs`'s `Payload_Of`) are all plain, non-generic, non-trait free
+functions called by path within their own crate. Resolving *that* shape of call — an
+identifier or a module-qualified path, matched against `fn` items and `use` imports visible in
+the calling crate's own module tree — does not require type inference, trait resolution, or
+borrow checking; it requires exactly the same kind of scoped, syntactic-plus-module-path
+matching this workspace's own `syn`-based tooling already does for `nomos.cap.syntax.items`.
+What a hand-rolled crate-local resolver structurally cannot resolve — a call through `dyn
+FactReader` (the trait `Check_Unread_Reaches_A_Finding`'s own sources call through), a stored
+closure invoked elsewhere, a macro-generated call site, or anything crossing a crate boundary
+— is exactly the set `OD-RULES-008` already named for `Applicability::AgentRequired`: "the path
+forwards into a call the provider cannot resolve statically... not `MissingCapability` or
+`ProviderUnavailable`; a provider is present and ran, and the honest answer is that no
+mechanical method decides the question for this specific path." The provider does not need to
+resolve those cases to be sound; it needs to say honestly that it did not.
+
+### docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#7
+
+*revision: authored · kind: prose · heading: The sound control-flow reachability tier is a crate-local call resolver, not a compiler or language-server integration / What Was Measured · hash: sha256:afce113842bf0714109d44b5ecfdb066152513990bd9f07dab7251bdc4603705*
+
+**`nomos-lang-rust` already has the shape this extends, not a shape it would replace.**
+Verified directly: `crates/languages/nomos-lang-rust/src/reachability.rs`'s tier-1 provider is
+`syn::visit::Visit` over one file's parse tree, and the crate's own doc states its guarantee
+model precisely for this reason — "[`Declared_Guarantee`] says the resolution level, whether
+the output is sound, whether it is complete." A tier-2 offer is the same discipline at a wider
+input (a crate's module tree instead of one file) and a narrower claim (only the calls it can
+actually bind), not a new analysis engine replacing what tier 1 already does.
+
+### docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#8
+
+*revision: authored · kind: prose · heading: The sound control-flow reachability tier is a crate-local call resolver, not a compiler or language-server integration / What Was Measured · hash: sha256:a92e3de1dbde6e723f11bccafebd84098cdc13c7008e73978fac7063fc6ffce3*
+
+**The capability's own declared `IncrementalGranularity::File` ceiling does not survive tier
+2.** `nomos-cap-controlflow::contract::Ceiling()`'s own doc reasons: "a function body lives in
+one file — there is no coarser unit a change here could force a re-derivation across." That
+reasoning is sound for tier 1's single-file pattern match, and false for tier 2: resolving a
+call "into helper functions elsewhere in the crate" means a change to a helper function in a
+*different* file can change whether a site in *this* file is sound. A tier-2 offer claiming
+`IncrementalGranularity::File` would be claiming an independence the resolution it performs
+does not have.
+
+### docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#9
+
+*revision: authored · kind: heading · heading: The sound control-flow reachability tier is a crate-local call resolver, not a compiler or language-server integration / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#10
+
+*revision: authored · kind: prose · heading: The sound control-flow reachability tier is a crate-local call resolver, not a compiler or language-server integration / The Decision · hash: sha256:cd59688ba1821272d673614214bc402d0ae06e40fc874e0b4c05da4f82603283*
+
+**The sound tier is a native, crate-local call resolver built as a further increment of
+`nomos-lang-rust`'s own `syn`-based reading, not an embedding of `rustc`, `rust-analyzer`,
+Roslyn, Clang, or any LSP server.** Concretely, when built:
+
+### docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#11
+
+*revision: authored · kind: prose · heading: The sound control-flow reachability tier is a crate-local call resolver, not a compiler or language-server integration / The Decision · hash: sha256:794b03797a4c50808fb6bc078e788c61faa7f6c875f74e2d4ce79b2e63c0a8c0*
+
+1. It reads a crate's full module tree (every file the crate's own `mod` declarations reach),
+   the same "corpus this crate did not write" `nomos-lang-rust`'s own doc already frames its
+   job around, widened from one file to one crate.
+2. It resolves a call site only when it is a direct call to a free function reachable by path
+   or by a `use` import within that same crate — no generics, no trait dispatch, no `dyn`, no
+   macro-expanded call sites.
+3. Every other call shape is left unresolved *for that path*, reported through
+   `Applicability::AgentRequired` or `PartiallySupported` exactly as `OD-RULES-008` already
+   specified — never approximated, never silently treated as clean.
+4. `nomos_cap_controlflow::contract::Ceiling()`'s `IncrementalGranularity` moves from `File` to
+   `Project` when a tier-2 offer is built against it, because that is what the resolution this
+   tier performs actually depends on.
+
+### docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#12
+
+*revision: authored · kind: prose · heading: The sound control-flow reachability tier is a crate-local call resolver, not a compiler or language-server integration / The Decision · hash: sha256:61f3aed0cb902bfdfbc8e3e4d44e78b3a3cd6637ddab5de59de5ae793fa8fc88*
+
+Compiler and language-server integration is declined for this specific fact, not for program-
+semantics work in general: `ARC-CONFORMANCE-001` already states the boundary this record
+applies rather than invents, and nothing here forecloses a future rule whose own subject
+genuinely needs a fact only a real compiler frontend can produce — generic instantiation, trait
+resolution, or borrow-checker output, none of which this candidate's own scope touches.
+
+### docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#13
+
+*revision: authored · kind: heading · heading: The sound control-flow reachability tier is a crate-local call resolver, not a compiler or language-server integration / What This Does Not Do · hash: sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf*
+
+## What This Does Not Do
+
+### docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#14
+
+*revision: authored · kind: prose · heading: The sound control-flow reachability tier is a crate-local call resolver, not a compiler or language-server integration / What This Does Not Do · hash: sha256:d2ac653c51cf197532965471455b8c881246e37ff293b9ee1cfa880a4a74cf84*
+
+It does not build the tier-2 provider. `OD-RULES-008` already named that as separate,
+reservable work with its own territory; this record answers only the mechanism question that
+record explicitly left open. It does not touch `nomos-rules::reachability`'s tier-1 rule, its
+`Requirement`, or its `Applicability::PartiallySupported` reporting — those stay exactly as
+they are until a tier-2 offer exists for a caller to ask for. It does not amend
+`OD-ANALYSIS-007`'s own text; `OD-RULES-008` already narrates, in prose, the narrowing this
+record's own premise depends on, and rewording that record's stale "no rule needs
+`SemanticallyResolved`" sentence is separate, smaller work this record does not claim. It does
+not decide anything about a future fact that *does* need generics, trait resolution, or
+borrow-checker output — that would be a different, heavier forcing case, decided against its
+own real rule when one names it, the same way this one was.
+
+### docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#15
+
+*revision: authored · kind: heading · heading: The sound control-flow reachability tier is a crate-local call resolver, not a compiler or language-server integration / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#16
+
+*revision: authored · kind: prose · heading: The sound control-flow reachability tier is a crate-local call resolver, not a compiler or language-server integration / Status · hash: sha256:f87d102ea13bcda0373b3bf59999dfe26afdc5b7b28086ddfc70ce0ed1a4e11f*
+
+Accepted. Names the mechanism `OD-RULES-008` traced but declined to choose, checked directly
+against `ARC-CONFORMANCE-001`'s own test for when native analysis is owed, against what tier 2
+actually needs to resolve (narrower than general Rust name resolution), and against what
+`nomos-lang-rust` already is. The provider itself is a following item.
 
 ### docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md#1
 

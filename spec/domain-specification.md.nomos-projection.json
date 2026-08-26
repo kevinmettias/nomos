@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:8c1366cc60809d0f9181eda0b593b5a098592772f1f20a9574ad52c60191d040",
-  "inputs_digest": "sha256:aaab16fa9d561ae92652eda606e7fc07a80eefe8a039e9b213a6955f6a3e63e2",
+  "content_digest": "sha256:8d1b3f00ebd2e613158133212bbe50a47c3c5204c003b17c33e475cf6c1e92a6",
+  "inputs_digest": "sha256:74a372337f6561c136743527c1edeaae2f1d525fcf8fc78351daf7a1b7dddfb0",
   "sections": [
     [
       "Documents",
-      168
+      169
     ],
     [
       "Sections",
-      1422
+      1428
     ],
     [
       "Source blocks",
-      4977
+      4993
     ]
   ],
   "inputs": [
@@ -169,6 +169,11 @@
       "content": "documents",
       "identity": "docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md@authored",
       "hash": "sha256:784d01d21571e04ba5141f437c4f20cfb0810d9d6f3791492ac78372f45903b3"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md@authored",
+      "hash": "sha256:abebdf2b824324df346b84d0919c8c4d5388d053b4f113e1d93570f0e9e3939a"
     },
     {
       "content": "documents",
@@ -1939,6 +1944,36 @@
       "content": "headings",
       "identity": "docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#15",
       "hash": "sha256:d4c99ec7f7d27741ed480ba87e05ec0a1ba7c9babdb2922af9905c5ba9059dcb"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#1",
+      "hash": "sha256:3898a1caada3950e9e97be52a5ef355e18714f3a7f8010af1ff678123a228a72"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#2",
+      "hash": "sha256:d0374037c22c4b9b9abd7d3f9730ee7eeb1edb59719257876dc4e40906fe3cca"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#4",
+      "hash": "sha256:5103997e01d2a9644f36d9f760be5a8730a355332ff0988c27df0d97366a17d4"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#9",
+      "hash": "sha256:7c5603e6f7a39ef86f0082373ccd62f5fd0dec69ff565da52b157cb27fedcfa8"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#13",
+      "hash": "sha256:5c8ecd79dc3d30a6a204063d596a3c057be913bac2219fdaad9edbd2729095da"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#15",
+      "hash": "sha256:1ede96a18093b3ee358c643cb4387deb8236faacc6888aa6ff5f005072e073d0"
     },
     {
       "content": "headings",
@@ -11699,6 +11734,86 @@
       "content": "blocks",
       "identity": "docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#16",
       "hash": "sha256:964801608c56314ed28f6b23f60446b18a06c4cc73692ce8aec5f187e68dbbb4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#1",
+      "hash": "sha256:f08018252b6e7cdca5b4644d76c12ea900ab3609cd801541045c92d810613495"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#3",
+      "hash": "sha256:5e94e9444ad04a038432d9de88842b0094491b660f885fdcfeaa345ea496ef71"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#4",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#5",
+      "hash": "sha256:b3856fc421b9777609925a9c7c7c6490e8c27e3339529dfdc98d836d4ecfc68d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#6",
+      "hash": "sha256:59e358d7886a19534738f0dd8f87ab4310a367bc65e6509e5a644a2d8ba6dffb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#7",
+      "hash": "sha256:afce113842bf0714109d44b5ecfdb066152513990bd9f07dab7251bdc4603705"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#8",
+      "hash": "sha256:a92e3de1dbde6e723f11bccafebd84098cdc13c7008e73978fac7063fc6ffce3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#9",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#10",
+      "hash": "sha256:cd59688ba1821272d673614214bc402d0ae06e40fc874e0b4c05da4f82603283"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#11",
+      "hash": "sha256:794b03797a4c50808fb6bc078e788c61faa7f6c875f74e2d4ce79b2e63c0a8c0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#12",
+      "hash": "sha256:61f3aed0cb902bfdfbc8e3e4d44e78b3a3cd6637ddab5de59de5ae793fa8fc88"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#13",
+      "hash": "sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#14",
+      "hash": "sha256:d2ac653c51cf197532965471455b8c881246e37ff293b9ee1cfa880a4a74cf84"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#15",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#16",
+      "hash": "sha256:f87d102ea13bcda0373b3bf59999dfe26afdc5b7b28086ddfc70ce0ed1a4e11f"
     },
     {
       "content": "blocks",

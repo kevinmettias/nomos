@@ -3,16 +3,16 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:b0beb11bbd8fa80525cbb90acedd5406669abe934a21ea8ffc3d4e292867f2b9",
-  "inputs_digest": "sha256:7e603a3cbe0907ee9c3417707c2c9efa9b1ba7353513b0a9f5df8f49027fec6c",
+  "content_digest": "sha256:c75e3eb13b8b7a5971fa3443929bab59434273cd61befb2b8cb9a56fc2adf993",
+  "inputs_digest": "sha256:93e6a8c628f231c09cf3fd795ae83d7e8b36c37745862de5a7b276da31f42df3",
   "sections": [
     [
       "Relations",
-      1180
+      1188
     ],
     [
       "Decisions",
-      160
+      161
     ]
   ],
   "inputs": [
@@ -40,6 +40,11 @@
       "content": "relations",
       "identity": "ARC-CONFORMANCE-001 relates-to OD-ANALYSIS-006",
       "hash": "sha256:9e0e0e33a2ea563002961a7e7b8ce74853f01917a7c535e82374c56eaecaf6fd"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-CONFORMANCE-001 relates-to OD-ANALYSIS-010",
+      "hash": "sha256:79b18746c5e3c691048c7966193c4378cb807863d4c6eb158348b5d5a7356550"
     },
     {
       "content": "relations",
@@ -1193,6 +1198,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-ANALYSIS-004 relates-to OD-ANALYSIS-010",
+      "hash": "sha256:2a942392e6548454fe473a6eaee50ec77a4bf68c62b4036e1f7de4a2ba64df4e"
+    },
+    {
+      "content": "relations",
       "identity": "OD-ANALYSIS-004 relates-to OD-CAPABILITY-002",
       "hash": "sha256:c8500645deec1ffd5dbd37c3cbdb22727b0fea117020471f02aeb752e17ebea1"
     },
@@ -1260,6 +1270,11 @@
       "content": "relations",
       "identity": "OD-ANALYSIS-007 relates-to OD-ANALYSIS-004",
       "hash": "sha256:7b1166948cd6ca5983196c80f0d0097282ffa6ca33335f5078c83879a2b027f4"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-ANALYSIS-007 relates-to OD-ANALYSIS-010",
+      "hash": "sha256:2f08ec5395b8f01e6c9e7004c2a2155d7ce377e9284a2e77f992737127579b8a"
     },
     {
       "content": "relations",
@@ -1340,6 +1355,26 @@
       "content": "relations",
       "identity": "OD-ANALYSIS-009 relates-to OD-RULES-009",
       "hash": "sha256:520266132a2a8fde41d82941747099d87d0c14821015ee8d45623727e4e94574"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-ANALYSIS-010 relates-to ARC-CONFORMANCE-001",
+      "hash": "sha256:6e5a09dbb76de9a7030e80797662b783f78af81a0b2e687e7e770975bc5f960b"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-ANALYSIS-010 relates-to OD-ANALYSIS-004",
+      "hash": "sha256:952420482a58b80e2ec9b22ed63c47596a616cd78a1fb0941431216661aea14b"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-ANALYSIS-010 relates-to OD-ANALYSIS-007",
+      "hash": "sha256:cad511e376dce4174f2a87c66e8e45632b24b7af2352a06fe800cb15424d3a13"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-ANALYSIS-010 relates-to OD-RULES-008",
+      "hash": "sha256:d30e4025993068101524a4c932c6c7d0dac64809cf3dea6f6e25a67f548fa544"
     },
     {
       "content": "relations",
@@ -5043,6 +5078,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-RULES-008 relates-to OD-ANALYSIS-010",
+      "hash": "sha256:a870002dffcd8b1b357843347d698b97a15add84a72b86ddc4924a8c095c882e"
+    },
+    {
+      "content": "relations",
       "identity": "OD-RULES-008 relates-to OD-CAPABILITY-008",
       "hash": "sha256:4f954b1e1389e831bf84f2dbdfd57e49ed5705c542bcf23d99352739416ae640"
     },
@@ -6025,6 +6065,11 @@
       "content": "nodes",
       "identity": "OD-ANALYSIS-009",
       "hash": "sha256:dc5663246b85eeebea3b68fae7bd22eb90255778c2c095a88031386242f448cc"
+    },
+    {
+      "content": "nodes",
+      "identity": "OD-ANALYSIS-010",
+      "hash": "sha256:d214e96c53f6e308abf6a0aa9da70b257daae73740b37dbb6da5077d6b266bb0"
     },
     {
       "content": "nodes",
