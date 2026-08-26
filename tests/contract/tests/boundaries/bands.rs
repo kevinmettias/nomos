@@ -153,7 +153,7 @@ pub(crate) const BANDS: &[(&str, u32)] = &[
     // ProcessLauncher, bounded by OD-EXECUTOR-004's structural capability boundary,
     // measured against its own real mechanism. Same band as its sibling; neither may name
     // the other. `OD-EXECUTOR-004`.
-    ("nomos-agent-executor-ollama", 37),
+    ("nomos-model-backend-ollama", 37),
     // Runs a `nomos work` verb against a caller-chosen platform and hands back a typed
     // outcome, generic over the traits `nomos-platform` declares rather than over the
     // std implementation of them. Above the ledger it dispatches to; below every

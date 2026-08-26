@@ -68,7 +68,7 @@ profile: domain-specification
 | docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md@authored | docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md | authored | 26 | 8 | sha256:8ab68673889fed19383159068abd89c4b4dbbd6a59aaa336cba463bab3dfa96a |
 | docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md@authored | docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md | authored | 20 | 6 | sha256:ea763ec0abaa47ca8f8f8c56f0831097b8c0467b7146738054c39b61c9dc8f2f |
 | docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md@authored | docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md | authored | 32 | 9 | sha256:5505d057d0aa2bc7662cbfca82c015dd8ef4366f3a6e50d52516638489c4333a |
-| docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md@authored | docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md | authored | 17 | 6 | sha256:5f4af371f2667269d82cef40261bbb5887f95e6f17f5c8b6065b68091fa6ae36 |
+| docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md@authored | docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md | authored | 23 | 7 | sha256:1f668a9c3b8b790d0935f12b8f3350130ac9c388e0f9c0671ef5d57379f74b47 |
 | docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md@authored | docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md | authored | 19 | 6 | sha256:0c2b9021270c0e484742945479352a8b2d9d573056158e27d377c6f56433545d |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md@authored | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md | authored | 30 | 8 | sha256:ede1d73ff937b80913dd5c6fd4d7d5cc70cb8158b29e13bfe003ae5cd5f805d5 |
 | docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md@authored | docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md | authored | 32 | 9 | sha256:1027b7b589216b9cbe4598a2a569261111071dce14529a2556e82f61852f74cf |
@@ -143,7 +143,8 @@ profile: domain-specification
 | docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md@authored | docs/records/OD-PACKAGE-010-modelbackendpackage-and-agentexecutorpackage-s-first-manifest-maturity-is-model-selection.md | authored | 16 | 7 | sha256:f1b618d3b00c8f61d67c72d952411d52fe9d8520a77db5a8ba0a1a526faed666 |
 | docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md@authored | docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md | authored | 32 | 10 | sha256:58e12ff46ca519ac9381a1d2f41c5ea5fcc7464661c4ad18234d3cb1f7a3805a |
 | docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md@authored | docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md | authored | 19 | 7 | sha256:6a14772c529dbb5589b38e4fdaec088191dcfbec7c6381e15d216537c6d1e4dd |
-| docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md@authored | docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md | authored | 18 | 6 | sha256:9d244ee2809578351e061c1f8ab5c866345764d66f874044fc439b9f9cc76651 |
+| docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md@authored | docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md | authored | 23 | 7 | sha256:dcc46751eb94d3bee57169f30884a606ccba06f0162d77b4587cb383ee7e499e |
+| docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md@authored | docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md | authored | 18 | 6 | sha256:f17c861d194a9cc9d84cd2a1dd636f2d20cf8f6ce02d03d175153c13487a2288 |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md@authored | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md | authored | 34 | 9 | sha256:871e1ada836924e8fad8d9f05a7badd9349eefb18e90e0157a28ac34879555d0 |
 | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md@authored | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md | authored | 28 | 7 | sha256:f98efe7a4dd950df779912722f9deb19ecdc75a81e52d9635900c2f424a8623a |
 | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md@authored | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md | authored | 45 | 10 | sha256:9af1a60d2bc3755845a1d9c3eeae503b2a8f6ec315cfc906d633c7dc2d5f0483 |
@@ -637,7 +638,8 @@ profile: domain-specification
 | docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#5 | authored | 2 | What Was Measured |
 | docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#10 | authored | 2 | The Decision |
 | docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#13 | authored | 2 | What This Record Does Not Do |
-| docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#16 | authored | 2 | Status |
+| docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#16 | authored | 2 | Amendment: `--backend` Splits Into `--executor` And `--model-backend` |
+| docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#22 | authored | 2 | Status |
 | docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#1 | authored | 1 | A CodeRabbit-style review adapter takes ToolProvider/connector shape, not AgentExecutor shape |
 | docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#2 | authored | 2 | Question |
 | docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#5 | authored | 2 | What Was Measured |
@@ -1303,7 +1305,14 @@ profile: domain-specification
 | docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#5 | authored | 2 | What Was Measured |
 | docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#10 | authored | 2 | The Decision |
 | docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#13 | authored | 2 | What This Record Does Not Do |
-| docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#17 | authored | 2 | Status |
+| docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#17 | authored | 2 | Amendment: The Crate Is Renamed To `nomos-model-backend-ollama` |
+| docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#22 | authored | 2 | Status |
+| docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#1 | authored | 1 | A LanguagePackage's activation semantics are a conformance claim, not an installer action |
+| docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#2 | authored | 2 | Question |
+| docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#4 | authored | 2 | What Was Measured |
+| docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#9 | authored | 2 | The Decision |
+| docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#12 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#17 | authored | 2 | Status |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#1 | authored | 1 | A port that names its outcomes says nothing about how they are obtained |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#2 | authored | 2 | Question |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#5 | authored | 2 | What Was Measured |
@@ -15795,18 +15804,100 @@ territory, alongside the rename `OD-PACKAGE-013` already named.
 
 ### docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#16
 
+*revision: authored · kind: heading · heading: The --backend flag dispatches an AgentExecutor and a ModelBackend, not two AgentExecutors, so OD-EXECUTOR-004's shared-trait trigger has not fired / Amendment: `--backend` Splits Into `--executor` And `--model-backend` · hash: sha256:3b4d3ce050aa54f5b64bf5116e1933ee881a9b0546c5a9bf51d3b066dbf2a975*
+
+## Amendment: `--backend` Splits Into `--executor` And `--model-backend`
+
+### docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#17
+
+*revision: authored · kind: prose · heading: The --backend flag dispatches an AgentExecutor and a ModelBackend, not two AgentExecutors, so OD-EXECUTOR-004's shared-trait trigger has not fired / Amendment: `--backend` Splits Into `--executor` And `--model-backend` · hash: sha256:1e0b59c1cc0d62f0d5eeb0f6f3122eb6bb50f5328fc46b501a8f1542d43c292d*
+
+Added at version 2. This record's own "Decision" section named the real question as framing,
+not abstraction, and offered two shapes without choosing between them: "a `--backend` flag
+(or a split `--executor`/`--model-backend` pair) that reflects what each value actually
+dispatches to." This amendment chooses.
+
+### docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#18
+
+*revision: authored · kind: prose · heading: The --backend flag dispatches an AgentExecutor and a ModelBackend, not two AgentExecutors, so OD-EXECUTOR-004's shared-trait trigger has not fired / Amendment: `--backend` Splits Into `--executor` And `--model-backend` · hash: sha256:96f064c2e8fee789f2f68452af0bb0bfb88a5a751479af51aa8246e2748e2e1e*
+
+**What was checked before choosing.** A single `--backend` flag whose two values span two
+different `PackageKind`s cannot be made honest by prose alone: the flag's own shape — one
+name, one value, one slot — asserts that `claude-code` and `ollama` are answers to the same
+question, which this record's own "What Was Measured" section already found they are not.
+`nomos agent execute --backend ollama` reads as "run my goal against the Ollama backend," a
+phrasing indistinguishable from "run my goal against the Claude Code backend" — a caller who
+has not read this record's own reasoning has no way to learn, from the flag alone, that one
+produces a bounded agent's tool-aware judgment and the other a raw model completion with
+every `TaskEnvelope` field but `goal` ignored. This is the same shape this workspace has
+already corrected by renaming rather than re-describing: `OD-EXECUTOR-001`'s own amendment
+(`nomos-agent-executor` → `nomos-agent-executor-claude-code`) and `OD-PACKAGE-007`'s
+version-3 amendment (`nomos-lang-package` → `nomos-lang-rust-package`) both found that a name
+spanning more than it should is fixed by narrowing the name, not by better documenting the
+old one. `--backend` is a name — the one word a caller reads before anything else — and
+narrows the same way.
+
+### docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#19
+
+*revision: authored · kind: prose · heading: The --backend flag dispatches an AgentExecutor and a ModelBackend, not two AgentExecutors, so OD-EXECUTOR-004's shared-trait trigger has not fired / Amendment: `--backend` Splits Into `--executor` And `--model-backend` · hash: sha256:e4327806c94c17c83cc37d200fb1e43f107e7a4c9a3a899fd9ce8853d396874b*
+
+The counter-argument considered and rejected: since `Dispatch` is already "a plain match...
+the entire dispatch" with no trait, a single flag costs nothing structurally, and splitting
+adds a second flag to parse and a mutual-exclusion case to refuse for a population of exactly
+one real value on each side today. This is real, but it prices the wrong cost: the flag is
+not merely a parsing convenience, it is the one place a caller who has not read
+`OD-PACKAGE-013` learns what they are choosing between, and a caller is exactly who this
+workspace's own `PackageKind` misclassification was invisible to in the first place — it
+survived an entire capability-boundary record (`OD-EXECUTOR-004`) and a CLI increment
+(`P14-TRACKB-CLI-AGENT-BACKEND-FLAG`) before an external review caught it. A single flag with
+corrected prose relies on every future reader reading the help text closely enough to notice
+a spelled-out caveat; two flag names make the distinction impossible to skip past.
+
+### docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#20
+
+*revision: authored · kind: prose · heading: The --backend flag dispatches an AgentExecutor and a ModelBackend, not two AgentExecutors, so OD-EXECUTOR-004's shared-trait trigger has not fired / Amendment: `--backend` Splits Into `--executor` And `--model-backend` · hash: sha256:e4107256f37f5736ddbb6d52ec5fac4e42c9f906e3466e862316de14634baf61*
+
+**The decision.** `nomos agent execute`/`judge-role`'s `--backend` flag is replaced by two:
+`--executor <name>` (today, only `claude-code`) selects the one real `AgentExecutor`;
+`--model-backend <name>` (today, only `ollama`) selects the one real `ModelBackend`. Passing
+both is a usage error — a call dispatches to exactly one backend, so naming two is not a
+request either flag alone could satisfy. Passing neither keeps the exact prior default:
+`nomos-agent-executor-claude-code`, byte-identical to every invocation before `--backend` or
+either new flag existed. Internally, both flags parse into the identical two-variant
+`Backend` enum this record's own text already found needs no trait; `Dispatch`'s match is
+untouched. `crates/host/nomos-cli/src/agent.rs`'s `Parse_Backend`, its module doc, its
+`Backend` enum doc, its `Usage_Text`, and its own tests are updated to match; `--backend`
+itself no longer parses.
+
+### docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#21
+
+*revision: authored · kind: prose · heading: The --backend flag dispatches an AgentExecutor and a ModelBackend, not two AgentExecutors, so OD-EXECUTOR-004's shared-trait trigger has not fired / Amendment: `--backend` Splits Into `--executor` And `--model-backend` · hash: sha256:96f7c7365f88a6dada2527d361d45d398a1e8efdc1365538f58c861d9ad03c87*
+
+**What this amendment does not do.** It does not build a `ModelBackend` trait or any other
+abstraction over `Dispatch` — this record's own "Decision" stands: no second real
+`AgentExecutor` exists, so `OD-EXECUTOR-004`'s trigger is still unfired. It does not keep
+`--backend` as a deprecated alias: a repository-wide search before removing it found no
+caller outside `crates/host/nomos-cli/src/agent.rs` itself, so there is no real caller a
+compatibility shim would serve. It does not decide Codex's or Gemini's classification, or
+whether a third backend would need a third flag rather than a widened enum on one of the two
+existing ones — that is a question for whenever a third real backend exists to measure.
+
+### docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#22
+
 *revision: authored · kind: heading · heading: The --backend flag dispatches an AgentExecutor and a ModelBackend, not two AgentExecutors, so OD-EXECUTOR-004's shared-trait trigger has not fired / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#17
+### docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#23
 
-*revision: authored · kind: prose · heading: The --backend flag dispatches an AgentExecutor and a ModelBackend, not two AgentExecutors, so OD-EXECUTOR-004's shared-trait trigger has not fired / Status · hash: sha256:ca9d496b0e0778d5dd1198e0691d7464312a2e3847c02951284e0254a75ee1a2*
+*revision: authored · kind: prose · heading: The --backend flag dispatches an AgentExecutor and a ModelBackend, not two AgentExecutors, so OD-EXECUTOR-004's shared-trait trigger has not fired / Status · hash: sha256:2dc713fc577fb07d4996b69def9b5c58a0b6ba9bb014bdcfb5e20a5e899a0116*
 
 Accepted. `OD-EXECUTOR-004`'s shared-`AgentExecutor`-trait trigger has not fired; the evidence
 that appeared to fire it was a `ModelBackend` misclassified as a second `AgentExecutor`.
 Revisit if a second real `AgentExecutor` — not a `ModelBackend` — is ever dispatched alongside
-Claude Code's.
+Claude Code's. Amended to version 2 by `P14-EXECUTOR-006-OLLAMA-RENAME-AND-BACKEND-FLAG-SPLIT`:
+`--backend` is replaced by `--executor`/`--model-backend`, naming which family a caller
+chooses from rather than presenting one flag whose values silently span two package kinds.
 
 ### docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#1
 
@@ -37366,16 +37457,252 @@ for reasons outside this workspace's control; this record answers nothing about 
 
 ### docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#17
 
+*revision: authored · kind: heading · heading: Ollama's real mechanism is ModelBackendPackage's shape, not AgentExecutorPackage's, measured against OD-PACKAGE-010's own two definitions / Amendment: The Crate Is Renamed To `nomos-model-backend-ollama` · hash: sha256:bd5de888301edb7742b3beced0a73b0307748ebc43ec1c0d7d838042068f98d7*
+
+## Amendment: The Crate Is Renamed To `nomos-model-backend-ollama`
+
+### docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#18
+
+*revision: authored · kind: prose · heading: Ollama's real mechanism is ModelBackendPackage's shape, not AgentExecutorPackage's, measured against OD-PACKAGE-010's own two definitions / Amendment: The Crate Is Renamed To `nomos-model-backend-ollama` · hash: sha256:0edc8aca5a6fb20f50b999998e8fd90605dbe6ffe3be24560762bfa5e6225f02*
+
+Added at version 2. This record's own "What This Record Does Not Do" section already offered
+`nomos-model-backend-ollama` as one candidate, "or whatever a real `ModelBackendPackage`
+naming convention settles on" — a convention this workspace did not yet have. This amendment
+settles it and builds the rename, the same split this record already drew between naming what
+Ollama is and building the correction that follows.
+
+### docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#19
+
+*revision: authored · kind: prose · heading: Ollama's real mechanism is ModelBackendPackage's shape, not AgentExecutorPackage's, measured against OD-PACKAGE-010's own two definitions / Amendment: The Crate Is Renamed To `nomos-model-backend-ollama` · hash: sha256:602dbaf56dbb544b2e645d0c91ef1d0d3741c47692209f30859259e476cf910b*
+
+**What was checked before naming the convention.** `crates/packages/nomos-model-package` is
+the *manifest* crate for both `PackageKind::ModelBackendPackage` and
+`PackageKind::AgentExecutorPackage` — a peer of `nomos-lang-rust-package`, not an adapter, per
+its own module doc and `OD-PACKAGE-010`. It carries no adapter-naming precedent of its own;
+the workspace's only precedent for naming a *concrete adapter* against a package kind is
+`OD-EXECUTOR-001`'s own amendment, which renamed `nomos-agent-executor` to
+`nomos-agent-executor-claude-code` once a second executor made the unqualified class name
+ambiguous — `<package-kind-word>-<adapter-name>`, not `<package-kind-word>-package-
+<adapter-name>`. `nomos-lang-rust-package`/`nomos-lang-go-package` are a different shape
+again: both are manifest-maturity crates, `<domain>-<language>-package`, with no adapter
+beneath either one to distinguish from a manifest reader — not the shape this crate needs,
+since it is the adapter, not a manifest reader.
+
+### docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#20
+
+*revision: authored · kind: prose · heading: Ollama's real mechanism is ModelBackendPackage's shape, not AgentExecutorPackage's, measured against OD-PACKAGE-010's own two definitions / Amendment: The Crate Is Renamed To `nomos-model-backend-ollama` · hash: sha256:0655504537770f90a0fc30e2e417705cb2c40d503126a1b1fa3cc01fe0e5882b*
+
+**The decision.** `nomos-agent-executor-ollama` is renamed to `nomos-model-backend-ollama`,
+applying `OD-EXECUTOR-001`'s own adapter-naming shape (`<package-kind-word>-<adapter-name>`)
+to the package kind this record found Ollama actually is: `ModelBackendPackage` becomes
+"model-backend", `ollama` unchanged. Band 37 is unchanged — a band is dependency depth, not
+package-kind identity, the same reasoning `OD-PACKAGE-007`'s own version-3 amendment already
+gave for keeping `nomos-lang-rust-package` at band 26 through its own rename. Every byte of
+the crate's behavior — `Execute`, `AgentExecutionOutcome`, `AgentExecutionError`,
+`Command_For`'s argv, `OD-EXECUTOR-004`'s structural boundary — is unchanged; only the
+crate's directory, package name, description, and every file naming it by string move
+together: both hand-maintained band tables (`tests/contract/tests/boundaries/bands.rs`; a
+direct check of `crates/rules/nomos-rules/src/dependency/bands.rs` found it carries no
+`nomos-agent-executor-ollama` entry to rename — that copy was never extended to this crate,
+a pre-existing gap this amendment does not create and does not close), its
+`tests/contract/surface` snapshot (renamed, `nomos_agent_executor_ollama::` prefixes fixed),
+`README.md`'s crate table row, root `Cargo.toml`'s workspace members and
+`workspace.dependencies`, and `crates/host/nomos-cli`'s own dependency and `agent.rs`
+dispatch.
+
+### docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#21
+
+*revision: authored · kind: prose · heading: Ollama's real mechanism is ModelBackendPackage's shape, not AgentExecutorPackage's, measured against OD-PACKAGE-010's own two definitions / Amendment: The Crate Is Renamed To `nomos-model-backend-ollama` · hash: sha256:385941bfe620c40592e8ae172fc748fe81d2c95b22869014a4dcf858c98adf8f*
+
+**What this amendment does not do.** It does not rename `AgentExecutionOutcome` or
+`AgentExecutionError`, the crate's own outcome and error types — they stay comparable,
+byte-for-byte, against `nomos-agent-executor-claude-code`'s own outcome shape, useful if a
+future record ever measures whether a shared trait beneath both package kinds is warranted
+(`OD-EXECUTOR-005`'s own open question, not this one's). It does not decide `nomos agent
+execute`'s CLI framing beyond following the rename through call sites that already named the
+crate — see `OD-EXECUTOR-005`'s own amendment for the `--backend` flag question.
+
+### docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#22
+
 *revision: authored · kind: heading · heading: Ollama's real mechanism is ModelBackendPackage's shape, not AgentExecutorPackage's, measured against OD-PACKAGE-010's own two definitions / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#18
+### docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#23
 
-*revision: authored · kind: prose · heading: Ollama's real mechanism is ModelBackendPackage's shape, not AgentExecutorPackage's, measured against OD-PACKAGE-010's own two definitions / Status · hash: sha256:2d4d0c7c3ad349e20256e5037833d015fef82ecbbcf95d9ef5e2feaf06e7cddf*
+*revision: authored · kind: prose · heading: Ollama's real mechanism is ModelBackendPackage's shape, not AgentExecutorPackage's, measured against OD-PACKAGE-010's own two definitions / Status · hash: sha256:20dd4ec9ba8a48a77da6ea16af21850c1823b771ce5975e9e29ddff54b04cba6*
 
-Accepted. Ollama's real, measured mechanism is `ModelBackendPackage`'s shape; the crate and
-its CLI framing remain unrenamed pending a follow-on correction item.
+Accepted. Ollama's real, measured mechanism is `ModelBackendPackage`'s shape. Amended to
+version 2 by `P14-EXECUTOR-006-OLLAMA-RENAME-AND-BACKEND-FLAG-SPLIT`: the crate is renamed
+`nomos-agent-executor-ollama` → `nomos-model-backend-ollama`, settling the naming convention
+this record's own version-1 text left open.
+
+### docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#1
+
+*revision: authored · kind: heading · heading: A LanguagePackage's activation semantics are a conformance claim, not an installer action · hash: sha256:f01f4174ae4107441064130e24e56411a53174a3d70a9394a49fb7514deafaf8*
+
+# A LanguagePackage's activation semantics are a conformance claim, not an installer action
+
+### docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#2
+
+*revision: authored · kind: heading · heading: A LanguagePackage's activation semantics are a conformance claim, not an installer action / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#3
+
+*revision: authored · kind: prose · heading: A LanguagePackage's activation semantics are a conformance claim, not an installer action / Question · hash: sha256:4464a6126388423cbd8d510b90fc92d6314898afd529a8b26adf976b7bc89ca1*
+
+`ARC-ECOSYSTEM-001` v4's adopted `D-091` clause keeps "package activation semantics" on
+Nomos's side of the mechanism/meaning seam — `P14-ROADMAP-001-ACTIVATION-SEMANTICS-
+CORRECTION` fixed `ARC-ROADMAP-001`'s own restatement of exactly this carve-out. Nothing
+before this record says what that phrase means for the one real manifest type this
+workspace has today, `nomos-lang-rust-package::LanguagePackage`. `OD-PACKAGE-001`'s own
+four-step path — an installable manifest exists, something reads and refuses it, the one
+rule this tree has cites a contract version, only then does `publish` arise — never mentions
+activation at all, so this is a genuinely open question rather than one already answered and
+merely unnamed.
+
+### docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#4
+
+*revision: authored · kind: heading · heading: A LanguagePackage's activation semantics are a conformance claim, not an installer action / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#5
+
+*revision: authored · kind: prose · heading: A LanguagePackage's activation semantics are a conformance claim, not an installer action / What Was Measured · hash: sha256:c625a1fe3c1e25dce486db4a09bd79e5dd385b1d1f1f596abf9d0b0712b961d1*
+
+**Nothing calls the reader outside the package crates themselves.** Grepped across every
+`.rs` file in this workspace for `Parse_Manifest`/`Read_Manifest`: every call site is inside
+`nomos-package`, `nomos-lang-rust-package`, `nomos-model-package` or `nomos-rule-package`'s
+own source. No composition root, no CLI verb, nothing under `nomos-check-orchestration` or
+`nomos-cli` ever reads a `LanguagePackage` manifest. A manifest can be parsed and validated
+today, and nothing in this workspace ever does.
+
+### docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#6
+
+*revision: authored · kind: prose · heading: A LanguagePackage's activation semantics are a conformance claim, not an installer action / What Was Measured · hash: sha256:76b574ce4d8376e2c68222d479b0f05c4c5ba385bebb6a600751d7715b365812*
+
+**`LanguagePackage::providers` already carries exactly what would need checking.**
+`ProviderRegistration { provider: ProviderId, tool_version: PackageVersion }` — a manifest's
+own claim about which providers it registers. Composition today is entirely hand-written:
+`crates/orchestration/nomos-check-orchestration/src/composition.rs::Registered()` calls
+`registry.Offer(nomos_lang_rust::Provider_Offer())` and its siblings directly, with no
+manifest anywhere in that path. `nomos_capability::Registry::Offers(&CapabilityId) ->
+&[ProviderOffer]` already exists and already answers, for any capability, exactly what is
+actually registered — the observed half of a comparison a manifest's declared `providers`
+list is the declared half of.
+
+### docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#7
+
+*revision: authored · kind: prose · heading: A LanguagePackage's activation semantics are a conformance claim, not an installer action / What Was Measured · hash: sha256:36b0eaad09b84046d1dbaae1b5b3384075a871c4779d367b91dd32e30f8ee90b*
+
+**`OD-HOST-004` already forecloses "activation drives composition."** It decided composition
+needs no selection mechanism at any provider count: the registry ranks, the caller states a
+`Requirement`, one more hand-written `Offer` call is composition, not choice. A manifest that
+caused `Registered()` to add or omit an `Offer` call would be exactly the selection mechanism
+`OD-HOST-004` declined to build, regardless of how many real cases exist. So "a
+`LanguagePackage`'s activation semantics" cannot mean "the manifest's declared providers
+become the registered ones" — that reading contradicts an already-decided record, not merely
+an unbuilt one.
+
+### docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#8
+
+*revision: authored · kind: prose · heading: A LanguagePackage's activation semantics are a conformance claim, not an installer action / What Was Measured · hash: sha256:4a5ef4ed16dfccc2391c0cbe63bce88fe5ddc98291b2331c0f3f57ed49980b8e*
+
+**The declared-vs-observed shape this workspace already uses elsewhere fits without
+inventing anything.** `OD-RULES-003` designed exactly this composition for architecture:
+declared data compared against an observed fact, judged into a `Finding`. `P14-RULES-
+DEPENDENCY-COMPLETENESS` applied the identical shape a second time, for coverage instead of
+direction. A `LanguagePackage`'s declared `providers` compared against `Registry::Offers`'
+actually-registered set is the same shape a third time: declared package content is data: a
+mismatch — a manifest claiming a provider composition never registered, or a registered
+provider no installed package claims — is a fact worth a `Finding`, not silence and not a
+build failure.
+
+### docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#9
+
+*revision: authored · kind: heading · heading: A LanguagePackage's activation semantics are a conformance claim, not an installer action / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#10
+
+*revision: authored · kind: prose · heading: A LanguagePackage's activation semantics are a conformance claim, not an installer action / The Decision · hash: sha256:b9229f70e2ed14f6e2b0bf514a3ab8b9a4795d7857c5d5decbe8e96b5ebad8e7*
+
+**A `LanguagePackage`'s activation semantics are the conformance claim that its declared
+`providers` match what `nomos_capability::Registry` actually offers for each one's
+capability — checked and reported, never enacted.** Nomos owns judging whether an installed
+package's declared content agrees with the running composition it describes; it does not own
+making the composition agree with the package, which would be the installer/materializer
+mechanism `D-091` already places on XVPE's side of the seam. This is meaning, not mechanism,
+exactly the line `ARC-ECOSYSTEM-001` draws: `PackageKind`'s variant semantics and Nomos's own
+compatibility/capability-declaration/permission rules are what "activation" describes here,
+not a privileged manifest-reading composition step.
+
+### docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#11
+
+*revision: authored · kind: prose · heading: A LanguagePackage's activation semantics are a conformance claim, not an installer action / The Decision · hash: sha256:e72a82063dd5ab2902ba8f5eb94ba438843ba07eab2bfaa11e7a99ec8560d6c7*
+
+Concretely, when this is built, it takes `Check_Dependency_Direction`/`Check_Every_Member_
+Declares_A_Band`'s own shape: a rule reading a manifest's declared `providers` (the "declared
+architecture" half) against `Registry::Offers` (the "observed fact" half), producing a
+`Finding` on mismatch in either direction. It needs no new capability contract — `Registry::
+Offers` is already a public method of an existing, composed type — and no change to `OD-
+HOST-004`'s hand-written composition.
+
+### docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#12
+
+*revision: authored · kind: heading · heading: A LanguagePackage's activation semantics are a conformance claim, not an installer action / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#13
+
+*revision: authored · kind: prose · heading: A LanguagePackage's activation semantics are a conformance claim, not an installer action / What This Record Does Not Do · hash: sha256:810c0d1ece8e2e12a62936908ed1aa1d960610e03a0277914d61f7ee869e7daa*
+
+It does not build the rule, add a capability, or wire anything into `nomos-check-
+orchestration::Run`. It names the shape a future increment takes, the same way `OD-RULES-003`
+named `Check_Dependency_Direction`'s shape before `P13-DEPENDENCY-EDGES-2` built it.
+
+### docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#14
+
+*revision: authored · kind: prose · heading: A LanguagePackage's activation semantics are a conformance claim, not an installer action / What This Record Does Not Do · hash: sha256:da877bcf08c7da23a865eb5b7ec88a1fdddf66418e423a41ebdb2fd8e78ac76b*
+
+It does not read `LanguagePackage`'s `language_versions` or `protocol_range` fields into this
+judgment. Whether those carry their own activation semantics (a package claiming Rust
+editions or a protocol range the running build does not actually satisfy) is a question this
+record leaves open rather than answers by omission — a future item's own measurement, once a
+real manifest exists anywhere outside a test fixture to check either field against.
+
+### docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#15
+
+*revision: authored · kind: prose · heading: A LanguagePackage's activation semantics are a conformance claim, not an installer action / What This Record Does Not Do · hash: sha256:a40632de205932dca5d5d6e0498fe7d651d51301a897754e921ed914567c7b18*
+
+It does not decide where a `LanguagePackage` manifest would be found on a real, installed
+target repository (a path convention, a well-known filename) — that is squarely
+`D-091`'s installation-mechanism half, XVPE's once built, and orthogonal to what activation
+means once a manifest is in hand.
+
+### docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#16
+
+*revision: authored · kind: prose · heading: A LanguagePackage's activation semantics are a conformance claim, not an installer action / What This Record Does Not Do · hash: sha256:41c27c29220e063e8e7285b436dd96d599eed2828c6992f02321c7d5551e49a0*
+
+It does not reopen `OD-PACKAGE-001`, `OD-PACKAGE-007`, or `OD-HOST-004`. It answers a
+question none of the three asked, using conclusions all three already reached.
+
+### docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#17
+
+*revision: authored · kind: heading · heading: A LanguagePackage's activation semantics are a conformance claim, not an installer action / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#18
+
+*revision: authored · kind: prose · heading: A LanguagePackage's activation semantics are a conformance claim, not an installer action / Status · hash: sha256:5412f3bbf2c791c3dc8c92d49c4874ccc1f98a62765f586e4ada579244aa7528*
+
+Accepted. Names what a `LanguagePackage`'s activation semantics are; builds nothing.
 
 ### docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#1
 

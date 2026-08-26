@@ -1,7 +1,0 @@
-pub enum nomos_agent_executor_ollama::AgentExecutionError
-pub enum variant nomos_agent_executor_ollama::AgentExecutionError::Unavailable(String)
-pub fn nomos_agent_executor_ollama::AgentExecutionError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
-pub fn nomos_agent_executor_ollama::Execute<P: ProcessLauncher>(task: &TaskEnvelope, launcher: &P) -> Result<AgentExecutionOutcome, AgentExecutionError>
-pub impl nomos_agent_executor_ollama::AgentExecutionError implements core::fmt::Display
-pub struct field nomos_agent_executor_ollama::AgentExecutionOutcome::response: String
-pub struct nomos_agent_executor_ollama::AgentExecutionOutcome

@@ -3,7 +3,7 @@ id: OD-PACKAGE-013
 type: decision
 title: Ollama's real mechanism is ModelBackendPackage's shape, not AgentExecutorPackage's, measured against OD-PACKAGE-010's own two definitions
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - package
@@ -18,6 +18,10 @@ relations:
   - target: OD-EXECUTOR-003
     type: relates-to
   - target: OD-EXECUTOR-004
+    type: relates-to
+  - target: OD-EXECUTOR-005
+    type: relates-to
+  - target: OD-PACKAGE-007
     type: relates-to
 ---
 
@@ -115,7 +119,56 @@ either should build from it.
 It does not decide Codex's or Gemini's classification. `OD-EXECUTOR-004` found both blocked
 for reasons outside this workspace's control; this record answers nothing about either.
 
+## Amendment: The Crate Is Renamed To `nomos-model-backend-ollama`
+
+Added at version 2. This record's own "What This Record Does Not Do" section already offered
+`nomos-model-backend-ollama` as one candidate, "or whatever a real `ModelBackendPackage`
+naming convention settles on" — a convention this workspace did not yet have. This amendment
+settles it and builds the rename, the same split this record already drew between naming what
+Ollama is and building the correction that follows.
+
+**What was checked before naming the convention.** `crates/packages/nomos-model-package` is
+the *manifest* crate for both `PackageKind::ModelBackendPackage` and
+`PackageKind::AgentExecutorPackage` — a peer of `nomos-lang-rust-package`, not an adapter, per
+its own module doc and `OD-PACKAGE-010`. It carries no adapter-naming precedent of its own;
+the workspace's only precedent for naming a *concrete adapter* against a package kind is
+`OD-EXECUTOR-001`'s own amendment, which renamed `nomos-agent-executor` to
+`nomos-agent-executor-claude-code` once a second executor made the unqualified class name
+ambiguous — `<package-kind-word>-<adapter-name>`, not `<package-kind-word>-package-
+<adapter-name>`. `nomos-lang-rust-package`/`nomos-lang-go-package` are a different shape
+again: both are manifest-maturity crates, `<domain>-<language>-package`, with no adapter
+beneath either one to distinguish from a manifest reader — not the shape this crate needs,
+since it is the adapter, not a manifest reader.
+
+**The decision.** `nomos-agent-executor-ollama` is renamed to `nomos-model-backend-ollama`,
+applying `OD-EXECUTOR-001`'s own adapter-naming shape (`<package-kind-word>-<adapter-name>`)
+to the package kind this record found Ollama actually is: `ModelBackendPackage` becomes
+"model-backend", `ollama` unchanged. Band 37 is unchanged — a band is dependency depth, not
+package-kind identity, the same reasoning `OD-PACKAGE-007`'s own version-3 amendment already
+gave for keeping `nomos-lang-rust-package` at band 26 through its own rename. Every byte of
+the crate's behavior — `Execute`, `AgentExecutionOutcome`, `AgentExecutionError`,
+`Command_For`'s argv, `OD-EXECUTOR-004`'s structural boundary — is unchanged; only the
+crate's directory, package name, description, and every file naming it by string move
+together: both hand-maintained band tables (`tests/contract/tests/boundaries/bands.rs`; a
+direct check of `crates/rules/nomos-rules/src/dependency/bands.rs` found it carries no
+`nomos-agent-executor-ollama` entry to rename — that copy was never extended to this crate,
+a pre-existing gap this amendment does not create and does not close), its
+`tests/contract/surface` snapshot (renamed, `nomos_agent_executor_ollama::` prefixes fixed),
+`README.md`'s crate table row, root `Cargo.toml`'s workspace members and
+`workspace.dependencies`, and `crates/host/nomos-cli`'s own dependency and `agent.rs`
+dispatch.
+
+**What this amendment does not do.** It does not rename `AgentExecutionOutcome` or
+`AgentExecutionError`, the crate's own outcome and error types — they stay comparable,
+byte-for-byte, against `nomos-agent-executor-claude-code`'s own outcome shape, useful if a
+future record ever measures whether a shared trait beneath both package kinds is warranted
+(`OD-EXECUTOR-005`'s own open question, not this one's). It does not decide `nomos agent
+execute`'s CLI framing beyond following the rename through call sites that already named the
+crate — see `OD-EXECUTOR-005`'s own amendment for the `--backend` flag question.
+
 ## Status
 
-Accepted. Ollama's real, measured mechanism is `ModelBackendPackage`'s shape; the crate and
-its CLI framing remain unrenamed pending a follow-on correction item.
+Accepted. Ollama's real, measured mechanism is `ModelBackendPackage`'s shape. Amended to
+version 2 by `P14-EXECUTOR-006-OLLAMA-RENAME-AND-BACKEND-FLAG-SPLIT`: the crate is renamed
+`nomos-agent-executor-ollama` → `nomos-model-backend-ollama`, settling the naming convention
+this record's own version-1 text left open.

@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:91de5e959cfdd5d04914cfee2899e6246e0094fb952abbe45f7881be4ee7b02b",
-  "inputs_digest": "sha256:a0539fe84716ef92337d20c7bde6b741e75867293e17208a4f836fce73a2da16",
+  "content_digest": "sha256:625284793bcd82e6f5d2fc06b2da46c55f2839ce9e721420a18553f5a3d1708c",
+  "inputs_digest": "sha256:6a7e59abedd9712095799eba0aa0338755fe81de4e97024c2717100cc2e91467",
   "sections": [
     [
       "Documents",
-      175
+      176
     ],
     [
       "Sections",
-      1469
+      1477
     ],
     [
       "Source blocks",
-      5125
+      5154
     ]
   ],
   "inputs": [
@@ -313,7 +313,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md@authored",
-      "hash": "sha256:5f4af371f2667269d82cef40261bbb5887f95e6f17f5c8b6065b68091fa6ae36"
+      "hash": "sha256:1f668a9c3b8b790d0935f12b8f3350130ac9c388e0f9c0671ef5d57379f74b47"
     },
     {
       "content": "documents",
@@ -688,7 +688,12 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md@authored",
-      "hash": "sha256:9d244ee2809578351e061c1f8ab5c866345764d66f874044fc439b9f9cc76651"
+      "hash": "sha256:dcc46751eb94d3bee57169f30884a606ccba06f0162d77b4587cb383ee7e499e"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md@authored",
+      "hash": "sha256:f17c861d194a9cc9d84cd2a1dd636f2d20cf8f6ce02d03d175153c13487a2288"
     },
     {
       "content": "documents",
@@ -3133,7 +3138,12 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#16",
-      "hash": "sha256:bfec9df5ffcd9a72c2f72cd58f7b34e830e289bd2eb4f968d6cd6eba3bcd3a7b"
+      "hash": "sha256:795ce1c6cf2c12cbd15152027b2a32c5a66e5eb3833486725a013bec951765eb"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#22",
+      "hash": "sha256:9609763222cafc4f72d276ce9cc39673e3288db37ee1827ebf93498226fa0646"
     },
     {
       "content": "headings",
@@ -6463,7 +6473,42 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#17",
-      "hash": "sha256:ce5bb05f820a1a6229412c5fa93fcdb8f068b2def4ac9594d5e93722bb4c11aa"
+      "hash": "sha256:6ed8e4f6294e0f52e690f0b4e0944744bffe30e970be5a0b9fbd815959206912"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#22",
+      "hash": "sha256:3575a6b5fe1c101a47042872dfbb2e77c96d70194ce806bc7e907a8808698739"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#1",
+      "hash": "sha256:a1800e2a4bb0d764caf937e3de5043c6337c6018f87b2ac5204f8d001adf1114"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#2",
+      "hash": "sha256:010495d4a3d6ccdc23460ee988b410db543e38186b6e225a65bc18a71644f652"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#4",
+      "hash": "sha256:b0ecc9b022256a5983ca2a1b160fe15fac5c03b80b6275b4f37cda11e12cb60d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#9",
+      "hash": "sha256:ebc1e3879d5336465145495688c69c402a40c936287f4b3eb118261c84c7cefd"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#12",
+      "hash": "sha256:f055c7f7bb65f42e3d139ea15ca4cf4594cfbfe8a1875c602d173b99e0a42abd"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#17",
+      "hash": "sha256:7834254d1bd8d6ba92f1a518f595c40bd03e3eaa15ddb26a6801efd837b1a801"
     },
     {
       "content": "headings",
@@ -15808,12 +15853,42 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#16",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:3b4d3ce050aa54f5b64bf5116e1933ee881a9b0546c5a9bf51d3b066dbf2a975"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#17",
-      "hash": "sha256:ca9d496b0e0778d5dd1198e0691d7464312a2e3847c02951284e0254a75ee1a2"
+      "hash": "sha256:1e0b59c1cc0d62f0d5eeb0f6f3122eb6bb50f5328fc46b501a8f1542d43c292d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#18",
+      "hash": "sha256:96f064c2e8fee789f2f68452af0bb0bfb88a5a751479af51aa8246e2748e2e1e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#19",
+      "hash": "sha256:e4327806c94c17c83cc37d200fb1e43f107e7a4c9a3a899fd9ce8853d396874b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#20",
+      "hash": "sha256:e4107256f37f5736ddbb6d52ec5fac4e42c9f906e3466e862316de14634baf61"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#21",
+      "hash": "sha256:96f7c7365f88a6dada2527d361d45d398a1e8efdc1365538f58c861d9ad03c87"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#22",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#23",
+      "hash": "sha256:2dc713fc577fb07d4996b69def9b5c58a0b6ba9bb014bdcfb5e20a5e899a0116"
     },
     {
       "content": "blocks",
@@ -27718,12 +27793,127 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#17",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:bd5de888301edb7742b3beced0a73b0307748ebc43ec1c0d7d838042068f98d7"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#18",
-      "hash": "sha256:2d4d0c7c3ad349e20256e5037833d015fef82ecbbcf95d9ef5e2feaf06e7cddf"
+      "hash": "sha256:0edc8aca5a6fb20f50b999998e8fd90605dbe6ffe3be24560762bfa5e6225f02"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#19",
+      "hash": "sha256:602dbaf56dbb544b2e645d0c91ef1d0d3741c47692209f30859259e476cf910b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#20",
+      "hash": "sha256:0655504537770f90a0fc30e2e417705cb2c40d503126a1b1fa3cc01fe0e5882b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#21",
+      "hash": "sha256:385941bfe620c40592e8ae172fc748fe81d2c95b22869014a4dcf858c98adf8f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#22",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#23",
+      "hash": "sha256:20dd4ec9ba8a48a77da6ea16af21850c1823b771ce5975e9e29ddff54b04cba6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#1",
+      "hash": "sha256:f01f4174ae4107441064130e24e56411a53174a3d70a9394a49fb7514deafaf8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#3",
+      "hash": "sha256:4464a6126388423cbd8d510b90fc92d6314898afd529a8b26adf976b7bc89ca1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#4",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#5",
+      "hash": "sha256:c625a1fe3c1e25dce486db4a09bd79e5dd385b1d1f1f596abf9d0b0712b961d1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#6",
+      "hash": "sha256:76b574ce4d8376e2c68222d479b0f05c4c5ba385bebb6a600751d7715b365812"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#7",
+      "hash": "sha256:36b0eaad09b84046d1dbaae1b5b3384075a871c4779d367b91dd32e30f8ee90b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#8",
+      "hash": "sha256:4a5ef4ed16dfccc2391c0cbe63bce88fe5ddc98291b2331c0f3f57ed49980b8e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#9",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#10",
+      "hash": "sha256:b9229f70e2ed14f6e2b0bf514a3ab8b9a4795d7857c5d5decbe8e96b5ebad8e7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#11",
+      "hash": "sha256:e72a82063dd5ab2902ba8f5eb94ba438843ba07eab2bfaa11e7a99ec8560d6c7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#12",
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#13",
+      "hash": "sha256:810c0d1ece8e2e12a62936908ed1aa1d960610e03a0277914d61f7ee869e7daa"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#14",
+      "hash": "sha256:da877bcf08c7da23a865eb5b7ec88a1fdddf66418e423a41ebdb2fd8e78ac76b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#15",
+      "hash": "sha256:a40632de205932dca5d5d6e0498fe7d651d51301a897754e921ed914567c7b18"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#16",
+      "hash": "sha256:41c27c29220e063e8e7285b436dd96d599eed2828c6992f02321c7d5551e49a0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#17",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#18",
+      "hash": "sha256:5412f3bbf2c791c3dc8c92d49c4874ccc1f98a62765f586e4ada579244aa7528"
     },
     {
       "content": "blocks",

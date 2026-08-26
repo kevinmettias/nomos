@@ -3,7 +3,7 @@ id: OD-EXECUTOR-005
 type: decision
 title: The --backend flag dispatches an AgentExecutor and a ModelBackend, not two AgentExecutors, so OD-EXECUTOR-004's shared-trait trigger has not fired
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - agent
@@ -105,9 +105,67 @@ It does not change `nomos agent execute`/`judge-role`'s CLI surface, rename
 answers only whether the trigger fired, and names the real correction as a follow-on's
 territory, alongside the rename `OD-PACKAGE-013` already named.
 
+## Amendment: `--backend` Splits Into `--executor` And `--model-backend`
+
+Added at version 2. This record's own "Decision" section named the real question as framing,
+not abstraction, and offered two shapes without choosing between them: "a `--backend` flag
+(or a split `--executor`/`--model-backend` pair) that reflects what each value actually
+dispatches to." This amendment chooses.
+
+**What was checked before choosing.** A single `--backend` flag whose two values span two
+different `PackageKind`s cannot be made honest by prose alone: the flag's own shape — one
+name, one value, one slot — asserts that `claude-code` and `ollama` are answers to the same
+question, which this record's own "What Was Measured" section already found they are not.
+`nomos agent execute --backend ollama` reads as "run my goal against the Ollama backend," a
+phrasing indistinguishable from "run my goal against the Claude Code backend" — a caller who
+has not read this record's own reasoning has no way to learn, from the flag alone, that one
+produces a bounded agent's tool-aware judgment and the other a raw model completion with
+every `TaskEnvelope` field but `goal` ignored. This is the same shape this workspace has
+already corrected by renaming rather than re-describing: `OD-EXECUTOR-001`'s own amendment
+(`nomos-agent-executor` → `nomos-agent-executor-claude-code`) and `OD-PACKAGE-007`'s
+version-3 amendment (`nomos-lang-package` → `nomos-lang-rust-package`) both found that a name
+spanning more than it should is fixed by narrowing the name, not by better documenting the
+old one. `--backend` is a name — the one word a caller reads before anything else — and
+narrows the same way.
+
+The counter-argument considered and rejected: since `Dispatch` is already "a plain match...
+the entire dispatch" with no trait, a single flag costs nothing structurally, and splitting
+adds a second flag to parse and a mutual-exclusion case to refuse for a population of exactly
+one real value on each side today. This is real, but it prices the wrong cost: the flag is
+not merely a parsing convenience, it is the one place a caller who has not read
+`OD-PACKAGE-013` learns what they are choosing between, and a caller is exactly who this
+workspace's own `PackageKind` misclassification was invisible to in the first place — it
+survived an entire capability-boundary record (`OD-EXECUTOR-004`) and a CLI increment
+(`P14-TRACKB-CLI-AGENT-BACKEND-FLAG`) before an external review caught it. A single flag with
+corrected prose relies on every future reader reading the help text closely enough to notice
+a spelled-out caveat; two flag names make the distinction impossible to skip past.
+
+**The decision.** `nomos agent execute`/`judge-role`'s `--backend` flag is replaced by two:
+`--executor <name>` (today, only `claude-code`) selects the one real `AgentExecutor`;
+`--model-backend <name>` (today, only `ollama`) selects the one real `ModelBackend`. Passing
+both is a usage error — a call dispatches to exactly one backend, so naming two is not a
+request either flag alone could satisfy. Passing neither keeps the exact prior default:
+`nomos-agent-executor-claude-code`, byte-identical to every invocation before `--backend` or
+either new flag existed. Internally, both flags parse into the identical two-variant
+`Backend` enum this record's own text already found needs no trait; `Dispatch`'s match is
+untouched. `crates/host/nomos-cli/src/agent.rs`'s `Parse_Backend`, its module doc, its
+`Backend` enum doc, its `Usage_Text`, and its own tests are updated to match; `--backend`
+itself no longer parses.
+
+**What this amendment does not do.** It does not build a `ModelBackend` trait or any other
+abstraction over `Dispatch` — this record's own "Decision" stands: no second real
+`AgentExecutor` exists, so `OD-EXECUTOR-004`'s trigger is still unfired. It does not keep
+`--backend` as a deprecated alias: a repository-wide search before removing it found no
+caller outside `crates/host/nomos-cli/src/agent.rs` itself, so there is no real caller a
+compatibility shim would serve. It does not decide Codex's or Gemini's classification, or
+whether a third backend would need a third flag rather than a widened enum on one of the two
+existing ones — that is a question for whenever a third real backend exists to measure.
+
 ## Status
 
 Accepted. `OD-EXECUTOR-004`'s shared-`AgentExecutor`-trait trigger has not fired; the evidence
 that appeared to fire it was a `ModelBackend` misclassified as a second `AgentExecutor`.
 Revisit if a second real `AgentExecutor` — not a `ModelBackend` — is ever dispatched alongside
-Claude Code's.
+Claude Code's. Amended to version 2 by `P14-EXECUTOR-006-OLLAMA-RENAME-AND-BACKEND-FLAG-SPLIT`:
+`--backend` is replaced by `--executor`/`--model-backend`, naming which family a caller
+chooses from rather than presenting one flag whose values silently span two package kinds.
