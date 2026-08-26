@@ -43,7 +43,7 @@
 //!
 //! # What is here
 //!
-//! Four rules. [`Check_Completeness_Mirrors`] was chosen first because it is the only
+//! Eight rules. [`Check_Completeness_Mirrors`] was chosen first because it is the only
 //! rule in this tree with three recorded historical instances to test a judgment against —
 //! `P10-FIRST-CHECK` shipped with exactly this one and no more, because a single check
 //! that is honest end to end is worth more than three that are nearly wired.
@@ -68,9 +68,11 @@
 //! [`RuleRegistry`] is a fourth thing, deliberately not a rule: `OD-RULES-004` extracted a
 //! registration contract ahead of a second rule, so a rule package can be designed and
 //! built against a stated shape rather than by copying this crate's own hand-written
-//! composition. It is additive and unconsulted — `Run()` still calls each rule directly,
-//! unconditionally, exactly as `OD-HOST-004` decided, and nothing here changes what runs
-//! on any given `nomos check`.
+//! composition. It is additive and unconsulted for selection — `Run()` originally called
+//! each rule directly, unconditionally, exactly as `OD-HOST-004` decided; `OD-GATE-017`
+//! superseded that with a real per-call `selected: &[RuleId]` gate, not `RuleRegistry`,
+//! so [`RuleRegistry`] itself still changes nothing about what runs on any given
+//! `nomos check`.
 //!
 //! [`Check_Declared_Role_Matches_Surface`] is a fifth rule, additive and unwired into
 //! `nomos-check-orchestration::Run` the same way [`RuleRegistry`] was before a second rule

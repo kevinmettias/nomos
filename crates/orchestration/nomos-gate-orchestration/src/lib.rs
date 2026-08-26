@@ -10,14 +10,19 @@
 //! policy: required phases, thresholds, coverage, unsupported-analysis policy, waivers,
 //! approvals, and blocking behavior."
 //!
-//! Most of that is still unbuilt. Verified directly, not assumed: `nomos-check-orchestration::
-//! run::Run` calls four rules unconditionally over every source it is handed --
-//! `Check_Completeness_Mirrors`, `Check_Naming_Convention`, (since
+//! Most of that is still unbuilt. Verified directly, not assumed, at this crate's own start:
+//! `nomos-check-orchestration::run::Run` called four rules unconditionally over every source
+//! it was handed -- `Check_Completeness_Mirrors`, `Check_Naming_Convention`, (since
 //! `P13-DEPENDENCY-WIRE-1`) `Check_Dependency_Direction`, and (since
 //! `P13-CONTROLFLOW-REACHABILITY-WIRE`) `Check_Unread_Reaches_A_Finding` -- so no scope or
-//! rule selection exists anywhere today. What does exist, genuinely unused for scope/rule
-//! selection, is [`nomos_rules::RuleRegistry`] (`OD-RULES-004`) -- its own module doc says
-//! plainly that nothing consults it for that. This crate is `Gate`'s own seam, the same
+//! rule selection existed anywhere yet. What existed then, genuinely unused for scope/rule
+//! selection, was [`nomos_rules::RuleRegistry`] (`OD-RULES-004`) -- its own module doc said
+//! plainly that nothing consulted it for that. `OD-GATE-017` has since given `Run` itself a
+//! real per-call `selected: &[RuleId]` gate over every rule it runs, in
+//! `nomos-check-orchestration` directly rather than through this crate or `RuleRegistry` --
+//! see this crate's fourth increment below for the layer of selection this crate built
+//! first, over what a finding can fail the build for rather than over what `Run` executes.
+//! This crate is `Gate`'s own seam, the same
 //! shape `nomos-work-orchestration`, `nomos-check-orchestration` and
 //! `nomos-spec-orchestration` each are for their own verb group. Its first increment gave
 //! `RuleRegistry` a real consumer: [`Run`] composes a real registry from all four of this
@@ -53,12 +58,16 @@
 //! `nomos_rules::SourceFile::path` by textual prefix containment before
 //! `nomos_check_orchestration::Run` is called, so an out-of-scope file is not judged at all.
 //! [`RuleSelector`] filters findings by `nomos_contracts::RuleId` after `Run` returns,
-//! before [`Disposition`] reduces them -- a real selection of what can fail a build, but
-//! honestly short of a real selection of what runs: `Run` still executes every rule
-//! unconditionally, and narrowing that needs a signature change to `Run` itself across
-//! every caller, which is not this increment. Both fields default to select-everything, so
-//! every construction site that predates them and CI's own `gate run --root .` are
-//! unchanged in behavior.
+//! before [`Disposition`] reduces them -- at this increment, a real selection of what can
+//! fail a build, but honestly short of a real selection of what runs: `Run` still executed
+//! every rule unconditionally, and narrowing that needed a signature change to `Run` itself
+//! across every caller, which was not this increment. `OD-GATE-017` has since made that
+//! signature change directly in `nomos-check-orchestration::run::Run` -- its own
+//! `selected: &[RuleId]` gates each rule's materialization, not only its finding -- so
+//! [`RuleSelector`] here now layers a post-hoc, per-caller finding filter over a `Run` that
+//! is already selective on its own. Both fields default to select-everything, so every
+//! construction site that predates them and CI's own `gate run --root .` are unchanged in
+//! behavior.
 //!
 //! Its fifth increment, `P13-GATE-015-SUPPRESSION-FIRST-INCREMENT`, gives [`GateCommand`] a
 //! real [`SuppressionPolicy`] under the same user override, taking only the suppression

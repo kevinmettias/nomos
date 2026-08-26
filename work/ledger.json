@@ -33436,6 +33436,407 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P14-RULES-LIB-RULE-COUNT-DOC-STALE",
+      "title": "nomos-rules/src/lib.rs says Four rules. under a paragraph that documents eight, and still claims Run() calls each rule unconditionally",
+      "why": "crates/rules/nomos-rules/src/lib.rs:46 opens the What is here section with 'Four rules.' but the same block documents a fifth (line 75), sixth (line 86), seventh (line 94) and eighth (line 101) rule as each landed -- the summary line was never revisited. Separately, lines 71-73 say 'Run() still calls each rule directly, unconditionally, exactly as OD-HOST-004 decided,' which line 91 of the same file already contradicts by stating Check_Lint_Diagnostics runs 'behind OD-GATE-017's own per-call rule subset.' Verified directly against crates/orchestration/nomos-check-orchestration/src/run.rs: Run takes selected: &[RuleId] and every rule is gated behind Wants(selected, ...). Same class of defect P14-LINT-DIAGNOSTICS-DOC-STALE already corrected once in this file for a different paragraph.",
+      "done_when": "The What is here summary states the current rule count (eight) and the RuleRegistry paragraph states that Run takes a real per-call selected rule subset via OD-GATE-017 rather than calling every rule unconditionally. cargo test -p nomos-rules --no-fail-fast passes.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/lib.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-rules"
+        ],
+        "exit_code": 0,
+        "output_tail": "ould_Be_Findable_By_Its_Id ... ok\ntest registry::rule_registry::tests::Test_A_Second_Offer_For_One_Rule_Should_Be_Refused ... ok\ntest registry::rule_registry::tests::Test_An_Empty_Registry_Should_Offer_Nothing ... ok\ntest role_surface::tests::Test_An_Empty_Subject_List_Produces_No_Findings ... ok\ntest role_surface::tests::Test_Every_Subject_Is_Reported_As_Agent_Required ... ok\ntest role_surface::tests::Test_Findings_Are_Sorted_By_Subject_Name ... ok\ntest role_surface::tests::Test_The_Locations_Name_The_Readme_And_The_Surface_Snapshot ... ok\ntest role_surface::tests::Test_The_Rule_Never_Reaches_A_Verdict_Regardless_Of_Content ... ok\ntest tests::Test_A_Named_Preference_Should_Narrow_The_Floor ... ok\ntest tests::Test_No_Preference_Should_Carry_The_Bare_Floor_Through_Unchanged ... ok\ntest universe::tests::Test_A_Constant_Slice_Should_Be_Found ... ok\ntest universe::tests::Test_A_Declared_Mirror_Should_Be_Read_Off_The_Doc_Comment ... ok\ntest universe::tests::Test_A_File_That_Declares_Nothing_Should_Be_Observed_And_Empty ... ok\ntest universe::tests::Test_A_List_With_No_Documentation_Should_Claim_No_Mirror ... ok\ntest universe::tests::Test_A_Payload_From_A_Blind_Provider_Should_Not_Read_As_No_Mirror ... ok\ntest universe::tests::Test_A_Private_List_Should_Not_Be_A_Universe ... ok\ntest universe::tests::Test_A_Scalar_Constant_Should_Not_Be_A_Universe ... ok\ntest universe::tests::Test_A_Trait_Impl_Should_Not_Claim_The_Type ... ok\ntest universe::tests::Test_An_All_Should_Be_Attributed_To_Its_Type ... ok\ntest universe::tests::Test_An_All_That_Takes_A_Receiver_Should_Not_Be_A_Universe ... ok\n\ntest result: ok. 100 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.11s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-97cc66c3275b20dd.exe)\n   Doc-tests nomos_rules\n",
+        "verified_at": 1787783090,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "32bacfd749ca3921f1c277bfa4eba39661a9d336"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P14-LEDGER-037-AGENT-CONTRACTS-TYPE-QUESTION",
+      "title": "Whether nomos-agent-contracts reuse of nomos-ledger Territory and VerificationPredicate needs its own product-owned types",
+      "why": "External review found nomos-agent-contracts imports Territory (task_envelope.rs) and Territory plus VerificationPredicate (change_context.rs, work_result.rs) from nomos-ledger, which OD-LEDGER-036 just settled is repository bootstrap machinery, not a product feature. OD-LEDGER-036 explicitly named this type reuse as declared bundling without deciding whether it should be extracted, leaving the question this item settles.",
+      "done_when": "A record measures whether ScopeConstraint or ArtifactScope or MutationBoundary or VerificationRequirement shaped product owned types are warranted now, checked against the two dependents real field usage and OD-LEDGER-001 territory declared not enforced shape, and decides to extract now or names the trigger that would.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md",
+          "crates/spec/nomos-spec-store/records/OD-LEDGER-037.record"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "wrong predicate: hardcoded a personal scratchpad binary path instead of the portable cargo test convention; re-adding as -2"
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/9bc6c84f-6376-47ef-b917-8682c98027ad/scratchpad/bin/nomos.exe",
+          "spec",
+          "freshness",
+          "--into",
+          ".",
+          "--require",
+          "diagram-set",
+          "--require",
+          "domain-specification"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "nomos-7a",
+        "declined_at": 1787783074
+      }
+    },
+    {
+      "id": "P14-GATE-ORCH-LIB-RUN-UNCONDITIONAL-DOC-STALE",
+      "title": "nomos-gate-orchestration/src/lib.rs still says nomos-check-orchestration::run::Run calls rules unconditionally, which OD-GATE-017 makes false",
+      "why": "crates/orchestration/nomos-gate-orchestration/src/lib.rs:13-17 says 'nomos-check-orchestration::run::Run calls four rules unconditionally over every source it is handed' and lines 56-58 say 'Run still executes every rule unconditionally, and narrowing that needs a signature change to Run itself across every caller, which is not this increment.' Both are now false: verified directly against crates/orchestration/nomos-check-orchestration/src/run.rs, Run takes selected: &[RuleId] and every rule (COMPLETENESS_MIRROR, NAMING_CONVENTION, DEPENDENCY_DIRECTION, LINT_DIAGNOSTICS, DEPENDENCY_POLICY, UNREAD_REACHES_FINDING, CROSS_LANGUAGE_CORRESPONDENCE) is gated behind Wants(selected, ...). This crate's own narrative walks every increment through P14-GATE-016-COVERAGE-POLICY-FIRST-INCREMENT but never mentions OD-GATE-017 landing the signature change the file itself says has not happened yet. P14-RULE-SELECTOR-DOC-STALE-2 already fixed the identical stale claim in this crate's rule_selector.rs -- this is the same defect in the crate-root doc, a separate file.",
+      "done_when": "Both stale sentences state current reality: Run takes a real per-call selected rule subset via OD-GATE-017, cited by record id, not 'unconditionally' or 'not this increment.' cargo test -p nomos-gate-orchestration --no-fail-fast passes.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/lib.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-gate-orchestration"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-gate-orchestration"
+        ],
+        "exit_code": 0,
+        "output_tail": "hould_Carry_Its_Real_Contract_Citation ... ok\ntest tests::Test_The_Mirror_Rule_Should_Carry_Its_Real_Contract_Citation ... ok\ntest tests::Test_The_Naming_Rule_Should_Cite_Its_Record_Less_Contract ... ok\ntest tests::Test_A_Walk_That_Found_No_Source_Should_Be_Indeterminate ... ok\ntest tests::Test_The_Plan_Should_Not_Vary_By_Root ... ok\ntest tests::Test_The_Reachability_Rule_Should_Carry_Its_Real_Contract_Citation ... ok\ntest tests::Test_A_Clean_Source_Should_Pass ... ok\ntest tests::Test_An_Unset_Coverage_Policy_Should_Leave_A_Passed_Disposition_Alone ... ok\ntest tests::Test_Explain_Should_Report_Not_Found_For_A_Query_Nothing_Answers ... ok\ntest tests::Test_Required_Completeness_Should_Not_Touch_A_Failed_Run ... ok\ntest tests::Test_Required_Completeness_Should_Downgrade_An_Incomplete_Passed_Run ... ok\ntest tests::Test_Explain_Should_Find_A_Real_Blocking_Finding ... ok\ntest tests::Test_A_Blocking_Finding_Should_Fail_The_Run ... ok\ntest tests::Test_Explain_Should_Ignore_Scope ... ok\ntest tests::Test_A_Calibrated_Finding_Should_Not_Block ... ok\ntest tests::Test_A_Calibrated_Suppressed_And_Baselined_Finding_Should_Report_As_Calibrated ... ok\ntest tests::Test_A_Suppressed_Finding_Should_Not_Block ... ok\ntest tests::Test_A_Suppressed_And_Baselined_Finding_Should_Report_As_Suppressed ... ok\ntest tests::Test_Explain_Should_Report_A_Calibration_That_Applies ... ok\ntest tests::Test_Explain_Should_Report_A_Suppression_That_Applies ... ok\ntest tests::Test_Explain_Should_Report_A_Baseline_That_Applies ... ok\ntest tests::Test_A_Baselined_Finding_Should_Not_Block ... ok\n\ntest result: ok. 50 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 9.57s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.11s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_gate_orchestration-584146809bd7ba7e.exe)\n   Doc-tests nomos_gate_orchestration\n",
+        "verified_at": 1787783182,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "32bacfd749ca3921f1c277bfa4eba39661a9d336"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P14-LEDGER-037-AGENT-CONTRACTS-TYPE-QUESTION-2",
+      "title": "Whether nomos-agent-contracts reuse of nomos-ledger Territory and VerificationPredicate needs its own product-owned types",
+      "why": "External review found nomos-agent-contracts imports Territory (task_envelope.rs) and Territory plus VerificationPredicate (change_context.rs, work_result.rs) from nomos-ledger, which OD-LEDGER-036 just settled is repository bootstrap machinery, not a product feature. OD-LEDGER-036 explicitly named this type reuse as declared bundling without deciding whether it should be extracted, leaving the question this item settles.",
+      "done_when": "A record measures whether ScopeConstraint or ArtifactScope or MutationBoundary or VerificationRequirement shaped product owned types are warranted now, checked against the two dependents real field usage and OD-LEDGER-001 territory declared not enforced shape, and decides to extract now or names the trigger that would.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md",
+          "crates/spec/nomos-spec-store/records/OD-LEDGER-037.record"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "nomos-7a",
+        "acquired_at": 1787783127,
+        "lease_expires_at": 1787797527
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P14-PACKAGE-013-OLLAMA-CLASSIFICATION",
+      "title": "Ollama real mechanism is ModelBackendPackage shape, not AgentExecutorPackage shape, measured against OD-PACKAGE-010 own two definitions",
+      "why": "nomos-agent-executor-ollama own module doc states it reads only TaskEnvelope.goal and explicitly ignores scope, prohibited_changes, available_tools, knowledge_context, applicable_rules and effort, with no tool use loop and no MCP surface, and OD-EXECUTOR-004 own measurement independently concludes Ollama is a bare model runner, not a project aware coding agent, the literal words of PackageKind::ModelBackendPackage own doc comment (a model inference backend), not AgentExecutorPackage (an agent execution backend). OD-EXECUTOR-003 and OD-EXECUTOR-004 measured its capability boundary but never asked the classification question, inheriting AgentExecutor by analogy from OD-EXECUTOR-001 without consulting OD-PACKAGE-010 or OD-PACKAGE-012, which already existed.",
+      "done_when": "A record checks Ollama real verified mechanism (Command_For argv, which TaskEnvelope fields it reads versus ignores) against PackageKind::ModelBackendPackage and PackageKind::AgentExecutorPackage own doc comment definitions and OD-PACKAGE-010 and OD-PACKAGE-012 routing integration constraint, and decides which kind nomos-agent-executor-ollama actually is, naming rather than building whatever correction follows.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md",
+          "crates/spec/nomos-spec-store/records/OD-PACKAGE-013.record"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "nomos-7a",
+        "acquired_at": 1787783127,
+        "lease_expires_at": 1787797527
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P14-EXECUTOR-005-BACKEND-FLAG-TRIGGER-RECHECK",
+      "title": "The backend flag dispatches an AgentExecutor and a ModelBackend, not two AgentExecutors, so OD-EXECUTOR-004 shared trait trigger has not fired",
+      "why": "OD-EXECUTOR-004 named its own re-fire condition for a dispatch trait: until a real caller needs to choose between AgentExecutor backends. nomos agent execute backend flag is exactly that real caller, dispatching a plain match between nomos-agent-executor-claude-code and nomos-agent-executor-ollama with zero shared trait, which reads as the trigger having fired, but OD-PACKAGE-013 finds Ollama is really a ModelBackendPackage, not a second AgentExecutor, which changes what the flag is actually choosing between.",
+      "done_when": "A record re-checks OD-EXECUTOR-004 shared trait trigger against OD-PACKAGE-013 classification finding and decides whether the trigger has genuinely fired now that only one real AgentExecutor exists, or whether a different real question, a ModelBackend to AgentExecutor dispatch seam rather than an AgentExecutor to AgentExecutor trait, is the one the backend flag actually raises.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md",
+          "crates/spec/nomos-spec-store/records/OD-EXECUTOR-005.record"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "nomos-7a",
+        "acquired_at": 1787783127,
+        "lease_expires_at": 1787797527
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P14-RULES-009-CROSSLANG-TRIGGER-CHECK",
+      "title": "OD-RULES-009 fourth named trigger checked against the cross language rule: reconvergence, not divergence, and it argues against the planner",
+      "why": "Check_Cross_Language_Correspondence (OD-CAPABILITY-010) is the first rule since OD-RULES-009 began tracking to reuse an existing capability family, nomos.cap.syntax.items, rather than adding a distinct one, the literal event OD-RULES-009 fourth trigger names, a fifth rule required capability shape reconverging with an existing one. An external review repeat of its RunPlanner argument prompted checking whether this fires the trigger toward building the planner. OD-RULES-009 own text already answers this the other way, a converging population is weaker evidence for a general planner than a diverging one, and this needs to be checked against the real rule own module doc, not assumed.",
+      "done_when": "OD-RULES-009 amended to record the crosslang reconvergence event against its own fourth trigger stated meaning, and states plainly whether this is evidence for, against or neutral to building the planner, checked against crosslang.rs own claim that it added no new capability, both sides are the same fact read twice.",
+      "kind": "Validation",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "nomos-7a",
+        "acquired_at": 1787783127,
+        "lease_expires_at": 1787797527
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P14-HOST-006-API-SPEC-EXPOSURE-QUESTION",
+      "title": "nomos-api exposure of spec-orchestration editing verbs carries the same named revisit trigger OD-LEDGER-036 gave the ledger verbs, and has not fired either",
+      "why": "nomos-api::spec.rs exposes Preview, Render and Commit, the same commit authority verb set OD-LEDGER-036 examined for nomos-api::work.rs, but OD-LEDGER-036 own text and revisit trigger name only the ledger verb set explicitly. No record checks whether spec-orchestration exposure crosses the same line, leaving one un-flagged crate answering two boundary questions with only one of them settled.",
+      "done_when": "A record checks nomos-api::spec.rs real verb set and framing against OD-LEDGER-036 reasoning and revisit trigger, nomos-api becomes a real externally consumed product surface, and decides whether the same settled answer extends to spec-orchestration or whether it needs its own.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-HOST-006-nomos-apis-exposure-of-spec-orchestrations-editing-verbs-carries-od-ledger-036s-own-trigger.md",
+          "crates/spec/nomos-spec-store/records/OD-HOST-006.record"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "nomos-7a",
+        "acquired_at": 1787783128,
+        "lease_expires_at": 1787797528
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P14-PACKAGE-007-LANG-RUST-PACKAGE-RENAME",
+      "title": "nomos-lang-package renamed to nomos-lang-rust-package: an external review naming clarity finding, the same shape as nomos-agent-executor own prior rename",
+      "why": "OD-PACKAGE-007 v2 already extracted nomos-package as the language agnostic core but kept the Rust specific wrapper ambiguous original name. Its own Cargo.toml description already says the Rust LanguagePackage manifest format, and README own crate table says the same, so the rename is a naming correction with no open design question, the same shape P14-AGENT-EXECUTOR-RENAME-2 already used for nomos-agent-executor to nomos-agent-executor-claude-code.",
+      "done_when": "nomos-lang-package renamed to nomos-lang-rust-package end to end: crate directory, Cargo.toml package name, workspace member and workspace dependencies alias, both hand maintained band tables, the surface snapshot file, completeness_universes path reference, nomos-add-plugin worked example, README crate table, and OD-PACKAGE-007 amended to record it. Workspace builds and lints clean.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/packages/nomos-lang-package",
+          "crates/packages/nomos-lang-rust-package",
+          "Cargo.toml",
+          "tests/contract/tests/boundaries/bands.rs",
+          "crates/rules/nomos-rules/src/dependency/bands.rs",
+          "tests/contract/surface/nomos-lang-package.txt",
+          "tests/contract/surface/nomos-lang-rust-package.txt",
+          "tests/contract/tests/completeness_universes/table.rs",
+          ".claude/skills/nomos-add-plugin/SKILL.md",
+          "README.md",
+          "docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "nomos-7a",
+        "acquired_at": 1787783128,
+        "lease_expires_at": 1787797528
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
