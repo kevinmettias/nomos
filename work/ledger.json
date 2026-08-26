@@ -34021,6 +34021,113 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P14-EXECUTOR-006-CODERABBIT-SHAPE",
+      "title": "A CodeRabbit-style review adapter takes ToolProvider/connector shape, not AgentExecutor shape",
+      "why": "External review named CodeRabbit as an obvious next integration once nomos-cap-lint's tool-provider seam and nomos-agent-contracts' executor seam were both real, without asking which shape it should take. nomos-connector-github now proves a third real shape (a connector under ARC-CONNECTOR-001) exists alongside AgentExecutor and ToolProvider, and nothing named which of the three a review adapter is before this item.",
+      "done_when": "A record measures AgentExecutor shape (what nomos-agent-contracts actually requires), ToolProvider shape (OD-RULES-010's fact-not-finding split), and connector shape (ARC-CONNECTOR-001/nomos-connector-github's own precedent) against what a CodeRabbit review adapter would actually produce, and decides which shape it takes, naming rather than building the adapter.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "mis-scoped territory (--amends against an unpublished record under-reserved the spec-store registration file); superseded by P14-EXECUTOR-006-CODERABBIT-SHAPE-2 with correct --territory"
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "nomos-main-1",
+          "reason": "territory used --amends against a not-yet-published record, which silently under-reserved; re-adding with explicit --territory for both the record doc and its spec-store registration",
+          "abandoned_at": 1787786115
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "nomos-main-1",
+        "declined_at": 1787786115
+      }
+    },
+    {
+      "id": "P14-EXECUTOR-006-CODERABBIT-SHAPE-2",
+      "title": "A CodeRabbit-style review adapter takes ToolProvider/connector shape, not AgentExecutor shape",
+      "why": "External review named CodeRabbit as an obvious next integration once nomos-cap-lint's tool-provider seam and nomos-agent-contracts' executor seam were both real, without asking which shape it should take. nomos-connector-github now proves a third real shape (a connector under ARC-CONNECTOR-001) exists alongside AgentExecutor and ToolProvider, and nothing named which of the three a review adapter is before this item.",
+      "done_when": "A record measures AgentExecutor shape (what nomos-agent-contracts actually requires), ToolProvider shape (OD-RULES-010's fact-not-finding split), and connector shape (ARC-CONNECTOR-001/nomos-connector-github's own precedent) against what a CodeRabbit review adapter would actually produce, and decides which shape it takes, naming rather than building the adapter.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-store/records/OD-EXECUTOR-006.record",
+          "docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "With_No_Table_Should_Store_No_Rows ... ok\n\ntest result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.14s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-7d91463b8a992888.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-243d59b9d9bb2f35.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-84ce37134e2d0376.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-38def5589111e8b2.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-867b6a59b9eac27d.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-01349e41c84d1df4.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-88944951302bc752.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-d52ad028ff6fb390.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-822766c88f62241d.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-d0f03dac815862fd.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-ee111bd537ecd137.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-2919ec68747ddb5b.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-99272398d303e3e7.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-756fcac740cd78ad.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-259eb839edee86c9.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1787786249,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "cf76f0de4e3bb81bdbba7898da5798c59701dc9f"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
