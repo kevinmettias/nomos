@@ -33951,6 +33951,87 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P14-EXECUTOR-006-OLLAMA-RENAME-AND-BACKEND-FLAG-SPLIT",
+      "title": "Execute the OD-PACKAGE-013/OD-EXECUTOR-005 follow-on: rename nomos-agent-executor-ollama and reconcile the --backend CLI framing",
+      "why": "OD-PACKAGE-013 found Ollama real mechanism matches ModelBackendPackage shape, not AgentExecutorPackage shape, and named a follow-on territory: a rename and a CLI framing fix, neither built by that record. OD-EXECUTOR-005 confirmed no AgentExecutor trait is warranted and named the same follow-on as a naming and framing question, not an abstraction one. This item decides and builds both: what the crate should be renamed to, and whether nomos agent execute / judge-role --backend should split into two flags or keep one with corrected framing, then executes the chosen rename and CLI change.",
+      "done_when": "crates/agent/nomos-agent-executor-ollama is renamed via git mv to a new crate name reflecting a ModelBackendPackage adapter naming convention this item establishes and justifies in an amended record; its Cargo.toml package name and description, both hand-maintained band tables, its tests/contract/surface snapshot (renamed, prefixes fixed), README.md crate table row, root Cargo.toml workspace members and workspace.dependencies, and every remaining nomos-agent-executor-ollama / nomos_agent_executor_ollama reference this item finds by grep are updated to match; crates/host/nomos-cli/src/agent.rs dispatches per the flag design this item decides, with matching help text and tests; OD-PACKAGE-013 and OD-EXECUTOR-005 are amended in place recording both decisions; diagram-set and domain-specification projections are re-rendered and committed alongside.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "Cargo.toml",
+          "Cargo.lock",
+          "crates/agent/nomos-agent-executor-ollama",
+          "crates/agent/nomos-model-backend-ollama",
+          "crates/host/nomos-cli",
+          "tests/contract/tests/boundaries/bands.rs",
+          "crates/rules/nomos-rules/src/dependency/bands.rs",
+          "tests/contract/surface/nomos-agent-executor-ollama.txt",
+          "tests/contract/surface/nomos-model-backend-ollama.txt",
+          "README.md",
+          "diagrams/relations.mmd",
+          "diagrams/relations.mmd.nomos-projection.json",
+          "spec/domain-specification.md",
+          "spec/domain-specification.md.nomos-projection.json",
+          "docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md",
+          "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-model-backend-ollama",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 1200
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-model-backend-ollama",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "exit_code": 0,
+        "output_tail": "tests\\request_submit.rs (target\\debug\\deps\\request_submit-2f78d7f7d1f51fd0.exe)\n     Running tests\\stale_writer_is_refused.rs (target\\debug\\deps\\stale_writer_is_refused-b32f1b58e124df04.exe)\n     Running tests\\takeover_is_recorded.rs (target\\debug\\deps\\takeover_is_recorded-d94114373a76e83e.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-3e62ecce571fcc5f.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-771bff50f955755e.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-eae24e29a6e8230e.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-d190445650eda1cd.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-5c05c2d8014d4047.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-37536ade529e2b6b.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-efe55070cccf23ec.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-7a436a5034250264.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-8d707296f5e69ae5.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-7c79eed57d5b4f3e.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_model_backend_ollama-0c7b91dc8de614d8.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-7f6eeb9f724411e2.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-1e7e4a5b93fb1d41.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-f91b522bac265377.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-8a3ca0b783b33ca7.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-d5fbb8c0c64c0700.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_model_backend_ollama\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1787786988,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

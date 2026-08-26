@@ -319,18 +319,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "nomos-agent-executor-ollama"
-version = "0.1.0"
-dependencies = [
- "nomos-agent-contracts",
- "nomos-contracts",
- "nomos-ledger",
- "nomos-model-package",
- "nomos-platform",
- "nomos-platform-std",
-]
-
-[[package]]
 name = "nomos-analysis"
 version = "0.1.0"
 dependencies = [
@@ -439,7 +427,6 @@ version = "0.1.0"
 dependencies = [
  "nomos-agent-contracts",
  "nomos-agent-executor-claude-code",
- "nomos-agent-executor-ollama",
  "nomos-analysis",
  "nomos-cap-syntax",
  "nomos-capability",
@@ -449,6 +436,7 @@ dependencies = [
  "nomos-lang-rust",
  "nomos-ledger",
  "nomos-model",
+ "nomos-model-backend-ollama",
  "nomos-model-package",
  "nomos-platform",
  "nomos-platform-std",
@@ -661,6 +649,18 @@ dependencies = [
  "blake3",
  "nomos-contracts",
  "serde",
+]
+
+[[package]]
+name = "nomos-model-backend-ollama"
+version = "0.1.0"
+dependencies = [
+ "nomos-agent-contracts",
+ "nomos-contracts",
+ "nomos-ledger",
+ "nomos-model-package",
+ "nomos-platform",
+ "nomos-platform-std",
 ]
 
 [[package]]

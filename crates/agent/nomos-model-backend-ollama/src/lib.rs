@@ -1,7 +1,14 @@
-//! Band 37 — the second real `AgentExecutor`: `nomos-agent-contracts::TaskEnvelope` in, a
-//! bounded local Ollama model subprocess dispatched through it, [`AgentExecutionOutcome`]
-//! out. Independent of `nomos-agent-executor-claude-code` — structurally parallel, no
-//! shared trait, per `OD-EXECUTOR-001`'s own restraint and `OD-EXECUTOR-004`'s.
+//! Band 37 — the first real `ModelBackend` adapter, not a second `AgentExecutor`
+//! (`OD-PACKAGE-013`): `nomos-agent-contracts::TaskEnvelope` in, a bounded local Ollama
+//! model subprocess dispatched through it, [`AgentExecutionOutcome`] out. This crate was
+//! built and named as "the second real `AgentExecutor`"; `OD-PACKAGE-013` measured its real
+//! mechanism — a fixed model, one forwarded field, every other `TaskEnvelope` field read and
+//! ignored, no tool-use loop, no MCP surface — against `PackageKind::ModelBackendPackage`'s
+//! and `PackageKind::AgentExecutorPackage`'s own doc comments and found it matches the
+//! former, not the latter. It is renamed here to say so; nothing about its behavior changed.
+//! Independent of `nomos-agent-executor-claude-code`, the one real `AgentExecutor` — always
+//! structurally parallel, never sharing a trait, and now also never the same package kind
+//! (`OD-EXECUTOR-005`), per `OD-EXECUTOR-001`'s own restraint and `OD-EXECUTOR-004`'s.
 //!
 //! `OD-EXECUTOR-004` decided what this dispatch is permitted to do before this crate existed
 //! to do it, measured against `ollama run`'s own real mechanism rather than inherited from
@@ -105,7 +112,7 @@ fn Isolated_Working_Directory() -> Result<PathBuf, AgentExecutionError>
     static COUNTER: AtomicU64 = AtomicU64::new(0);
 
     let sequence = COUNTER.fetch_add(1, Ordering::Relaxed);
-    let directory = std::env::temp_dir().join(format!("nomos-agent-executor-ollama-{}-{sequence}", std::process::id()));
+    let directory = std::env::temp_dir().join(format!("nomos-model-backend-ollama-{}-{sequence}", std::process::id()));
 
     std::fs::create_dir_all(&directory).map_err(|error| {
         return AgentExecutionError::Unavailable(format!(

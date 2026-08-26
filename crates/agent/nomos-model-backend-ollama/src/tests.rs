@@ -15,7 +15,7 @@ fn Bare_Task(goal: &str) -> TaskEnvelope
         applicable_rules: Vec::new(),
         prohibited_changes: Territory::Of_Files(Vec::<String>::new()),
         available_tools: Vec::new(),
-        expected_output_schema: SchemaId::New("nomos.agent.executor.ollama.v1"),
+        expected_output_schema: SchemaId::New("nomos.model.backend.ollama.v1"),
         effort: EffortLevel::BackendDefault,
     };
 }
@@ -26,9 +26,9 @@ fn Bare_Task(goal: &str) -> TaskEnvelope
 fn Task_With_Populated_Unenforced_Fields(goal: &str) -> TaskEnvelope
 {
     let mut task = Bare_Task(goal);
-    task.scope = Territory::Of_Files(["crates/agent/nomos-agent-executor-ollama"]);
+    task.scope = Territory::Of_Files(["crates/agent/nomos-model-backend-ollama"]);
     task.prohibited_changes = Territory::Of_Files(["work/ledger.json"]);
-    task.available_tools = vec![CapabilityId::New("nomos.cap.example.for_nomos_agent_executor_ollama_test_only")];
+    task.available_tools = vec![CapabilityId::New("nomos.cap.example.for_nomos_model_backend_ollama_test_only")];
     task.knowledge_context = vec![KnowledgeReferenceId::New("kwb:decision:1")];
     task.applicable_rules = vec![RuleId::New("check-naming-convention")];
     task.effort = EffortLevel::Maximum;
@@ -144,7 +144,7 @@ impl ProcessLauncher for Scripted
 
 fn Scratch_Directory(name: &str) -> std::path::PathBuf
 {
-    let directory = std::env::temp_dir().join(format!("nomos-agent-executor-ollama-test-{name}"));
+    let directory = std::env::temp_dir().join(format!("nomos-model-backend-ollama-test-{name}"));
     let _ = std::fs::remove_dir_all(&directory);
     std::fs::create_dir_all(&directory).expect("creates a scratch directory");
 
@@ -218,7 +218,7 @@ fn Test_Execute_Surfaces_A_Timeout_As_Unavailable()
 /// on a locally running `ollama serve` daemon and a real, loaded model, and can take real
 /// wall-clock time on a cold model load, so it must not run on every `cargo test` in this
 /// workspace or in CI. Run explicitly with
-/// `cargo test -p nomos-agent-executor-ollama -- --ignored`.
+/// `cargo test -p nomos-model-backend-ollama -- --ignored`.
 #[test]
 #[ignore = "requires a locally running `ollama serve` with `qwen2.5-coder:7b` pulled; run explicitly, not from the gate"]
 fn Test_A_Real_Invocation_Cannot_Write_Outside_Its_Own_Boundary_Even_When_Asked_To()

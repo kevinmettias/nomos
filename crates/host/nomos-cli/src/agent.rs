@@ -1,8 +1,20 @@
-//! `nomos agent` — dispatching a task to one of this workspace's two real `AgentExecutor`
-//! backends: `nomos-agent-executor-claude-code` (the default) or `nomos-agent-executor-ollama`
-//! (`--backend ollama`), the real caller `OD-EXECUTOR-001`/`OD-EXECUTOR-004` both say a
-//! dispatch trait or selection mechanism should wait for. There is no such trait: `--backend`
-//! is a plain match over two already-independent free functions, each crate's own.
+//! `nomos agent` — dispatching a task to this workspace's one real `AgentExecutor`
+//! (`nomos-agent-executor-claude-code`, `--executor claude-code`, the default) or its one real
+//! `ModelBackend` (`nomos-model-backend-ollama`, `--model-backend ollama`).
+//!
+//! `--executor` and `--model-backend` used to be one flag, `--backend`, spelling
+//! `claude-code` and `ollama` as if they were peer choices of the same kind. `OD-PACKAGE-013`
+//! found they are not: Ollama's real mechanism — a fixed model, one forwarded field, every
+//! other `TaskEnvelope` field read and ignored, no tool-use loop, no MCP surface — matches
+//! `PackageKind::ModelBackendPackage`, not `PackageKind::AgentExecutorPackage`.
+//! `OD-EXECUTOR-005` then checked what that does to `OD-EXECUTOR-001`/`OD-EXECUTOR-004`'s
+//! shared-trait trigger and found it has not fired: with only one real `AgentExecutor` in
+//! this workspace, there is nothing to build a dispatch trait generic over. What `--backend`
+//! actually needed was not an abstraction, but an honest surface — two flags naming which
+//! family a caller is choosing from, so passing `--model-backend ollama` cannot be read as
+//! choosing an alternative agent. Internally this is still a plain `match`, not a trait: both
+//! flags parse into the same two-variant [`Backend`], and `Dispatch` below is exactly the
+//! match it always was, unaffected by which flag supplied the value.
 //!
 //! Neither composition root can supply its own launcher: both depend on `nomos-platform` and
 //! not on any concrete implementation of it, the same reason `nomos-lang-rust-cargo` and every
@@ -68,10 +80,14 @@ impl ExitCode
     }
 }
 
-/// Which real `AgentExecutor` a call dispatches to. `ClaudeCode` is every caller's default
-/// before this flag existed, and stays the default now: `--backend` absent must reach
-/// `nomos-agent-executor-claude-code` exactly as every invocation did before
-/// `nomos-agent-executor-ollama` existed.
+/// Which real backend a call dispatches to. `ClaudeCode` is the one real `AgentExecutor` in
+/// this workspace (`nomos-agent-executor-claude-code`, chosen by `--executor claude-code`);
+/// `Ollama` is the one real `ModelBackend` (`nomos-model-backend-ollama`, chosen by
+/// `--model-backend ollama`) -- a `ModelBackendPackage` instance dispatched through the same
+/// `Execute<P: ProcessLauncher>` shape, not a second `AgentExecutor` (`OD-PACKAGE-013`).
+/// `ClaudeCode` is every caller's default before either flag existed, and stays the default
+/// now: neither flag given must reach `nomos-agent-executor-claude-code` exactly as every
+/// invocation did before `nomos-model-backend-ollama` existed.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub(crate) enum Backend
 {
@@ -137,26 +153,43 @@ fn Parse_Judge_Role(arguments: &[String]) -> Result<Command, String>
     return Ok(Command::JudgeRole { crate_name, root, effort, backend });
 }
 
-/// `--backend`'s value, or [`Backend::ClaudeCode`] when the flag is absent -- every caller
-/// before this flag existed reached `nomos-agent-executor-claude-code`, so an absent
-/// `--backend` must keep reaching it, byte-identical.
+/// `--executor`'s or `--model-backend`'s value, or [`Backend::ClaudeCode`] when neither flag
+/// is given -- every caller before either flag existed reached
+/// `nomos-agent-executor-claude-code`, so both absent must keep reaching it, byte-identical.
+///
+/// The two flags used to be one, `--backend`, spelling `claude-code` and `ollama` as if they
+/// were peer choices of the same kind. `OD-PACKAGE-013` found they are not -- Ollama is a
+/// `ModelBackend`, not a second `AgentExecutor` -- so a caller now names which family it is
+/// choosing from, and `--executor ollama` or `--model-backend claude-code` is refused rather
+/// than silently accepted the way one flag spanning both could not refuse it.
 ///
 /// # Errors
 ///
-/// Returns a message naming the two accepted spellings when `--backend`'s value is neither.
+/// Returns a message naming the accepted spelling for whichever flag was given, when its
+/// value is not that spelling, or when both flags are given at once -- a call dispatches to
+/// exactly one backend, and naming two is not a request either flag alone could satisfy.
 fn Parse_Backend(arguments: &[String]) -> Result<Backend, String>
 {
-    let Some(text) = Named_Value(arguments, "--backend")
-    else
-    {
-        return Ok(Backend::ClaudeCode);
-    };
+    let executor = Named_Value(arguments, "--executor");
+    let model_backend = Named_Value(arguments, "--model-backend");
 
-    return match text.as_str()
+    return match (executor, model_backend)
     {
-        "claude-code" => Ok(Backend::ClaudeCode),
-        "ollama" => Ok(Backend::Ollama),
-        other => Err(format!("--backend {other:?} is not one of claude-code, ollama.\n\n{}", Usage_Text())),
+        (Some(_), Some(_)) => Err(format!(
+            "--executor and --model-backend both name a backend to dispatch to; a call reaches exactly one, so pass at most one of them.\n\n{}",
+            Usage_Text()
+        )),
+        (Some(text), None) => match text.as_str()
+        {
+            "claude-code" => Ok(Backend::ClaudeCode),
+            other => Err(format!("--executor {other:?} is not one of claude-code.\n\n{}", Usage_Text())),
+        },
+        (None, Some(text)) => match text.as_str()
+        {
+            "ollama" => Ok(Backend::Ollama),
+            other => Err(format!("--model-backend {other:?} is not one of ollama.\n\n{}", Usage_Text())),
+        },
+        (None, None) => Ok(Backend::ClaudeCode),
     };
 }
 
@@ -238,8 +271,10 @@ fn Execute(
 
 /// Runs `task` against `backend` and renders whichever of the two outcome shapes it
 /// produces. The two crates share no trait -- `OD-EXECUTOR-001`/`OD-EXECUTOR-004` both
-/// decline to invent one ahead of a real need -- so this match is the entire dispatch, not
-/// a stand-in for one.
+/// decline to invent one ahead of a real need, and `OD-EXECUTOR-005` found that trigger has
+/// not fired even once `--executor`/`--model-backend` replaced `--backend`: there is still
+/// only one real `AgentExecutor`, so this match is the entire dispatch, not a stand-in for a
+/// trait either flag's own vocabulary would need.
 fn Dispatch(task: &TaskEnvelope, backend: Backend, output: &mut impl std::io::Write, notes: &mut impl std::io::Write) -> ExitCode
 {
     return match backend
@@ -249,7 +284,7 @@ fn Dispatch(task: &TaskEnvelope, backend: Backend, output: &mut impl std::io::Wr
             Ok(outcome) => Answered_Claude_Code(&outcome, output),
             Err(error) => Unavailable(&error, notes),
         },
-        Backend::Ollama => match nomos_agent_executor_ollama::Execute(task, &StdProcessLauncher)
+        Backend::Ollama => match nomos_model_backend_ollama::Execute(task, &StdProcessLauncher)
         {
             Ok(outcome) => Answered_Ollama(&outcome, output),
             Err(error) => Unavailable(&error, notes),
@@ -271,11 +306,11 @@ fn Answered_Claude_Code(outcome: &nomos_agent_executor_claude_code::AgentExecuti
     return ExitCode::Ok;
 }
 
-/// `nomos-agent-executor-ollama`'s own outcome carries only `response`, honestly: there is
+/// `nomos-model-backend-ollama`'s own outcome carries only `response`, honestly: there is
 /// no `denied_tool_uses` to print because there is no tool subsystem to have denied
 /// anything from, and no dollar cost because inference is local. Printing placeholder
 /// values for fields this backend does not have would claim a signal it never produced.
-fn Answered_Ollama(outcome: &nomos_agent_executor_ollama::AgentExecutionOutcome, output: &mut impl std::io::Write) -> ExitCode
+fn Answered_Ollama(outcome: &nomos_model_backend_ollama::AgentExecutionOutcome, output: &mut impl std::io::Write) -> ExitCode
 {
     let _ = writeln!(output, "{}", outcome.response);
 
@@ -398,8 +433,8 @@ fn Usage_Text() -> String
 {
     return "usage: nomos agent <command>\n\
             \n\
-            \x20 execute --goal <text> [--effort <level>] [--backend <name>]\n\
-            \x20 judge-role --crate <name> [--root <path>] [--effort <level>] [--backend <name>]\n\
+            \x20 execute --goal <text> [--effort <level>] [--executor <name> | --model-backend <name>]\n\
+            \x20 judge-role --crate <name> [--root <path>] [--effort <level>] [--executor <name> | --model-backend <name>]\n\
             \n\
             `execute` dispatches --goal to the chosen backend as a bounded, tool-free \
             subprocess. It renders the response and, unconditionally, which tool uses (if \
@@ -414,11 +449,21 @@ fn Usage_Text() -> String
             the AgentRequired finding that rule produces -- never a paraphrase -- to execute. \
             --root defaults to the current directory.\n\
             \n\
-            --backend takes claude-code (default) or ollama. claude-code dispatches through \
+            --executor and --model-backend name which family of backend to dispatch to; pass \
+            at most one, since a call reaches exactly one. Omitting both is --executor \
+            claude-code, byte-identical to every invocation before either flag existed. They \
+            used to be one flag, --backend, spelling claude-code and ollama as if they were \
+            peer choices of the same kind -- OD-PACKAGE-013 found Ollama's real mechanism is \
+            a ModelBackendPackage's, not a second AgentExecutor's, so the flag that chooses it \
+            says so.\n\
+            \n\
+            --executor takes claude-code (the only real AgentExecutor). Dispatches through \
             nomos-agent-executor-claude-code under OD-EXECUTOR-001's structural capability \
             boundary: an isolated working directory, no MCP configuration, an allow-list \
-            naming no real tool, a $1 budget cap, one --print turn. ollama dispatches through \
-            nomos-agent-executor-ollama, a local model, under OD-EXECUTOR-004's boundary: an \
+            naming no real tool, a $1 budget cap, one --print turn.\n\
+            \n\
+            --model-backend takes ollama (the only real ModelBackend). Dispatches through \
+            nomos-model-backend-ollama, a local model, under OD-EXECUTOR-004's boundary: an \
             isolated working directory, never --experimental/--experimental-yolo/\
             --experimental-websearch (the only flags that open any tool-use capability), a \
             wall-clock timeout in place of a dollar budget. Its own outcome carries only the \
@@ -428,7 +473,7 @@ fn Usage_Text() -> String
             --effort takes backend-default, minimal, low, medium, high or maximum -- \
             MODEL-ROUTE-004's closed vocabulary, carried on TaskEnvelope.effort. \
             nomos-agent-executor-claude-code maps it to a real `claude --effort` flag; \
-            nomos-agent-executor-ollama accepts and ignores it, a real, named gap rather than \
+            nomos-model-backend-ollama accepts and ignores it, a real, named gap rather than \
             an invented approximation. Omitting it is backend-default.\n\
             \n\
             exit codes: 0 ok, 2 usage, 5 the executor could not run or answer, 6 the named \
@@ -519,8 +564,8 @@ mod tests
         assert!(error.contains("superhuman"), "{error}");
     }
 
-    /// The default is `ClaudeCode` -- every caller before `--backend` existed must keep
-    /// reaching `nomos-agent-executor-claude-code`.
+    /// The default is `ClaudeCode` -- every caller before `--executor`/`--model-backend`
+    /// existed must keep reaching `nomos-agent-executor-claude-code`.
     #[test]
     fn Test_An_Execute_Command_With_No_Backend_Defaults_To_Claude_Code()
     {
@@ -532,35 +577,65 @@ mod tests
     }
 
     #[test]
-    fn Test_An_Execute_Command_Parses_Both_Backend_Spellings()
+    fn Test_An_Execute_Command_Parses_Executor_Claude_Code()
     {
-        let cases = [("claude-code", Backend::ClaudeCode), ("ollama", Backend::Ollama)];
+        let arguments = Arguments("execute --goal hello --executor claude-code");
 
-        for (spelling, expected) in cases
-        {
-            let arguments = Arguments(&format!("execute --goal hello --backend {spelling}"));
+        let Command::Execute { backend, .. } = Parse(&arguments).expect("parses") else { panic!("wrong variant") };
 
-            let Command::Execute { backend, .. } = Parse(&arguments).expect("parses") else { panic!("wrong variant") };
-
-            assert_eq!(backend, expected, "spelling {spelling}");
-        }
+        assert_eq!(backend, Backend::ClaudeCode);
     }
 
     #[test]
-    fn Test_An_Unrecognized_Backend_Should_Be_A_Usage_Error()
+    fn Test_An_Execute_Command_Parses_Model_Backend_Ollama()
     {
-        let arguments = Arguments("execute --goal hello --backend gpt5");
+        let arguments = Arguments("execute --goal hello --model-backend ollama");
+
+        let Command::Execute { backend, .. } = Parse(&arguments).expect("parses") else { panic!("wrong variant") };
+
+        assert_eq!(backend, Backend::Ollama);
+    }
+
+    #[test]
+    fn Test_An_Unrecognized_Executor_Should_Be_A_Usage_Error()
+    {
+        let arguments = Arguments("execute --goal hello --executor gpt5");
 
         let error = Parse(&arguments).expect_err("must refuse");
 
-        assert!(error.contains("--backend"), "{error}");
+        assert!(error.contains("--executor"), "{error}");
         assert!(error.contains("gpt5"), "{error}");
     }
 
     #[test]
-    fn Test_A_Judge_Role_Command_Should_Parse_Its_Backend()
+    fn Test_An_Unrecognized_Model_Backend_Should_Be_A_Usage_Error()
     {
-        let arguments = Arguments("judge-role --crate nomos-agent-executor-claude-code --backend ollama");
+        let arguments = Arguments("execute --goal hello --model-backend gpt5");
+
+        let error = Parse(&arguments).expect_err("must refuse");
+
+        assert!(error.contains("--model-backend"), "{error}");
+        assert!(error.contains("gpt5"), "{error}");
+    }
+
+    /// `--executor` naming an `AgentExecutor` and `--model-backend` naming a `ModelBackend`
+    /// at once is not a request either flag alone could satisfy -- a call dispatches to
+    /// exactly one backend, so both present is refused rather than one silently winning.
+    #[test]
+    fn Test_Both_Executor_And_Model_Backend_Together_Should_Be_A_Usage_Error()
+    {
+        let arguments = Arguments("execute --goal hello --executor claude-code --model-backend ollama");
+
+        let error = Parse(&arguments).expect_err("must refuse");
+
+        assert!(error.contains("--executor"), "{error}");
+        assert!(error.contains("--model-backend"), "{error}");
+    }
+
+    #[test]
+    fn Test_A_Judge_Role_Command_Should_Parse_Its_Model_Backend()
+    {
+        let arguments = Arguments("judge-role --crate nomos-agent-executor-claude-code --model-backend ollama");
 
         let Command::JudgeRole { backend, .. } = Parse(&arguments).expect("parses") else { panic!("wrong variant") };
 
