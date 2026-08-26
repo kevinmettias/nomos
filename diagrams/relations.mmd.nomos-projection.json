@@ -3,16 +3,16 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:f52a97c971d8c605ed7f5ade7a941d8d056097824ddee36985283ccbfaea9640",
-  "inputs_digest": "sha256:9f1c09901e1e7f996bcaccad8c6521614ad993f63844f9379245b1b7bd1a1890",
+  "content_digest": "sha256:b2efa3ef713da82b4aee35c99e7899cff234ef140bb232dd0394b04288a58a97",
+  "inputs_digest": "sha256:7e67fc857b3108cc9395a627d84f892dff604c1b059e5b3b6734d5cd6c69d0b3",
   "sections": [
     [
       "Relations",
-      1166
+      1178
     ],
     [
       "Decisions",
-      158
+      160
     ]
   ],
   "inputs": [
@@ -205,6 +205,11 @@
       "content": "relations",
       "identity": "ARC-ECOSYSTEM-001 relates-to OD-LEDGER-001",
       "hash": "sha256:8ed0ae34289d169eacb61a39ca62426b9c88dd67d77ffd0538fc19847a1a7237"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-ECOSYSTEM-001 relates-to OD-LEDGER-036",
+      "hash": "sha256:1066371019f070e7cc2901210e9852360aae676270c07b9b0d665f523d6f0781"
     },
     {
       "content": "relations",
@@ -1818,6 +1823,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-CONNECTOR-001 relates-to OD-EXECUTOR-003",
+      "hash": "sha256:99ac5548ea4ccfe46052f4c75b12bdb7c995bb52483cdeba2ce4f92a5d57b8ed"
+    },
+    {
+      "content": "relations",
       "identity": "OD-CONNECTOR-001 relates-to OD-SPEC-009",
       "hash": "sha256:53f009b2b86d95f72077ea67f62ba02912b5190e57ccfa8b9369fea978bee5f0"
     },
@@ -2113,6 +2123,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-EXECUTOR-001 relates-to OD-EXECUTOR-003",
+      "hash": "sha256:67f5760736030ce35d804bea1a555f936d2f632be9c26eaae263b2409a604d18"
+    },
+    {
+      "content": "relations",
       "identity": "OD-EXECUTOR-001 relates-to OD-WORKFLOW-004",
       "hash": "sha256:8f048c910f09aa3af22c35ba43c7eada42e8459f73d8a0e3b68eb977aca129b7"
     },
@@ -2133,6 +2148,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-EXECUTOR-002 relates-to OD-EXECUTOR-003",
+      "hash": "sha256:a2ef76bfbe3448ee1725fce1bf4eeec1f471a35e6b5f63f0b308cbc1aee99d8a"
+    },
+    {
+      "content": "relations",
       "identity": "OD-EXECUTOR-002 relates-to OD-HOST-004",
       "hash": "sha256:81e8df451e5057ead2c8d35f2fff23b07fef06cd578e30a2b5b210892abd20f1"
     },
@@ -2140,6 +2160,21 @@
       "content": "relations",
       "identity": "OD-EXECUTOR-002 relates-to OD-SPEC-009",
       "hash": "sha256:dcf9b491ab4315d414c1cdc713ac6d5ac34efa8ffc2ff74c2742ff6e9890dfdd"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-EXECUTOR-003 relates-to OD-CONNECTOR-001",
+      "hash": "sha256:334b9b2c922be675dcd1a46f32fd78731c2f8ea53d69285a3d3a82421aacb848"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-EXECUTOR-003 relates-to OD-EXECUTOR-001",
+      "hash": "sha256:7bd7e113ca0b92a086ed77a692951a59b3fd17706829c560b9299f006437ca89"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-EXECUTOR-003 relates-to OD-EXECUTOR-002",
+      "hash": "sha256:4e8289e48b28c2b16ab1181991d56592bf4d5b8a085d3bf70b8be0729fa3bbc9"
     },
     {
       "content": "relations",
@@ -2985,6 +3020,11 @@
       "content": "relations",
       "identity": "OD-LEDGER-001 relates-to OD-LEDGER-035",
       "hash": "sha256:2ae9915ad05615f3459813eaa80325b8357a0974e66c5aa987ce9487824f9a9d"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-LEDGER-001 relates-to OD-LEDGER-036",
+      "hash": "sha256:d921eace36e5162e0df84172f5edfa1342d23aaaa818ee1bb2f166f257edcc5a"
     },
     {
       "content": "relations",
@@ -4025,6 +4065,21 @@
       "content": "relations",
       "identity": "OD-LEDGER-035 relates-to OD-LEDGER-001",
       "hash": "sha256:9068433c91d65a6e42c1ab0b59b7593f8319eb9d4332a216aae724057e9e1736"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-LEDGER-036 relates-to ARC-ECOSYSTEM-001",
+      "hash": "sha256:d5a1183eb9e7cfaa3fc54546c3b7fd88661af14f625576d930424f7831006ad6"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-LEDGER-036 relates-to OD-LEDGER-001",
+      "hash": "sha256:eb3fcbd2d023cd130fff13d65876419aa8f587323df5c46a1b61548bfa07cfab"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-LEDGER-036 relates-to OD-WORKFLOW-002",
+      "hash": "sha256:ad52fdf07965328fc6840b4a1f4729c56151139fdb9899f2f5f19b73d8173666"
     },
     {
       "content": "relations",
@@ -5788,6 +5843,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-WORKFLOW-002 relates-to OD-LEDGER-036",
+      "hash": "sha256:46e1bf7b38ed9c54437b062645d71d6c0253da80a7c97fb7cefd710da535e771"
+    },
+    {
+      "content": "relations",
       "identity": "OD-WORKFLOW-002 relates-to OD-WORKFLOW-001",
       "hash": "sha256:41b9f285beba38dd33f70432d2e1514cbba60c964aef475dd26756c03b213f99"
     },
@@ -6083,6 +6143,11 @@
     },
     {
       "content": "nodes",
+      "identity": "OD-EXECUTOR-003",
+      "hash": "sha256:042188f628bfdae9494b87cfc635fa8273c70ed865d668d0eb476093f6b41c49"
+    },
+    {
+      "content": "nodes",
       "identity": "OD-GATE-001",
       "hash": "sha256:4d9396d785ebd56b99a26147f69f0dd24aa828926ec2124006574c8f133fe04f"
     },
@@ -6360,6 +6425,11 @@
       "content": "nodes",
       "identity": "OD-LEDGER-035",
       "hash": "sha256:4fd40cf90dbd4602fce80a72ee8f0785f0645c1efa7cb683e3632e666cf2a4b1"
+    },
+    {
+      "content": "nodes",
+      "identity": "OD-LEDGER-036",
+      "hash": "sha256:30daf235b06f16442bf5c4d8361f099ef29706e498006d8719e2eeb9f99b232b"
     },
     {
       "content": "nodes",

@@ -65,6 +65,7 @@ profile: domain-specification
 | docs/records/OD-DETERMINISM-002-the-last-two-rows-declare-and-the-guard-stops-asking-about-facts.md@authored | docs/records/OD-DETERMINISM-002-the-last-two-rows-declare-and-the-guard-stops-asking-about-facts.md | authored | 35 | 10 | sha256:14dba5ba489a39e4b5605d97a5eb1389a55a6f0efa07f1aa076ccd5dece46428 |
 | docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md@authored | docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md | authored | 32 | 8 | sha256:332c3b7ae159ba13d0b1d176726607b8369f9b5af249de17d98d9507254ce7bb |
 | docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md@authored | docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md | authored | 26 | 8 | sha256:8ab68673889fed19383159068abd89c4b4dbbd6a59aaa336cba463bab3dfa96a |
+| docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md@authored | docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md | authored | 32 | 9 | sha256:28a7473e3a03a0df77d28b5da741cf2ccc61d52f1bdbf7063004999d14d62560 |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md@authored | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md | authored | 30 | 8 | sha256:ede1d73ff937b80913dd5c6fd4d7d5cc70cb8158b29e13bfe003ae5cd5f805d5 |
 | docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md@authored | docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md | authored | 32 | 9 | sha256:1027b7b589216b9cbe4598a2a569261111071dce14529a2556e82f61852f74cf |
 | docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md@authored | docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md | authored | 20 | 7 | sha256:eca88bdcb033ae337eed44a34b8e00e16b9c0208f5bec59b8560b4850808de81 |
@@ -121,6 +122,7 @@ profile: domain-specification
 | docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md@authored | docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md | authored | 17 | 5 | sha256:69ab019a45e8742af61dfa35899a6c68c9d29cc11a8c28c52356296a97a114ea |
 | docs/records/OD-LEDGER-034-whether-work-needs-a-typed-reconciliation-outcome-beside-the-free-text-reason-work-decline-already-carries.md@authored | docs/records/OD-LEDGER-034-whether-work-needs-a-typed-reconciliation-outcome-beside-the-free-text-reason-work-decline-already-carries.md | authored | 14 | 5 | sha256:cb61b6f602f2fc7836f03727ce282c5f46da3e5ef3c6f92108dc77cc862577fc |
 | docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md@authored | docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md | authored | 17 | 5 | sha256:e28fcdcd8881a5405bfd5398964764cd59fa6d45e8340359ca94d9df98a0d732 |
+| docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md@authored | docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md | authored | 21 | 7 | sha256:e44db6eb38b3d1a6229b905ffba42be08984541c3407ce66bff74af1b229992a |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md@authored | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md | authored | 29 | 8 | sha256:dea2667f08661d51389468ccb32132d696dd6cb5a0936574b89125c523341962 |
 | docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md@authored | docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md | authored | 24 | 7 | sha256:aba629fefa9d9503489cfcae8626b61030287a2f29e558cf0b775875eb32c5b7 |
 | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md@authored | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md | authored | 54 | 10 | sha256:0a930d2a044d183c00fc821119d1645738cb398a9374b5a6eb3a736cb50764d2 |
@@ -602,6 +604,15 @@ profile: domain-specification
 | docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#15 | authored | 3 | A transport under `OD-SPEC-009` |
 | docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#19 | authored | 2 | What This Record Does Not Do |
 | docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#25 | authored | 2 | Status |
+| docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#1 | authored | 1 | A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy |
+| docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#2 | authored | 2 | Question |
+| docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#5 | authored | 2 | What Was Measured |
+| docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#7 | authored | 3 | Codex CLI (OpenAI), v0.146.1 — installed, reachable, but credential-broken |
+| docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#12 | authored | 3 | Gemini CLI (Google), v0.53.1 — installed, refuses on account tier |
+| docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#14 | authored | 3 | Ollama (local), v0.23.2 — real, reachable, no external credential |
+| docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#23 | authored | 2 | The Rule |
+| docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#26 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#31 | authored | 2 | Status |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md#1 | authored | 1 | A skipped test reports ok, so the size of the hole is declared rather than the hole being closed |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md#2 | authored | 2 | Question |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md#5 | authored | 2 | What Was Found |
@@ -1119,6 +1130,13 @@ profile: domain-specification
 | docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md#4 | authored | 2 | What Was Measured |
 | docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md#13 | authored | 2 | Decision |
 | docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md#16 | authored | 2 | Status |
+| docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#1 | authored | 1 | The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target |
+| docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#2 | authored | 2 | Question |
+| docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#5 | authored | 2 | What Was Measured |
+| docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#11 | authored | 2 | Decision |
+| docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#14 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#18 | authored | 2 | What Would Decide It Otherwise |
+| docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#20 | authored | 2 | Status |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#1 | authored | 1 | A claim and a fact address a path by one rule, and the record-identifier fold stays with the ledger |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#2 | authored | 2 | Question |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#8 | authored | 2 | What Was Actually Wrong |
@@ -14864,6 +14882,312 @@ referent yet (plugin), with its firing condition named. Revisit the plugin case 
 out-of-process plugin mechanism is proposed or built; revisit the deterministic-subprocess case
 if any of the three named callers, or a future one, is ever given attacker-influenced argument
 content.
+
+### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#1
+
+*revision: authored · kind: heading · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy · hash: sha256:6556401acbabd0bdcd7b496cb560c795fd7a4f22752d37978d1499422362baf3*
+
+# A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy
+
+### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#2
+
+*revision: authored · kind: heading · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#3
+
+*revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / Question · hash: sha256:73605a375167633e924d492dd83c32014f14f43edd55f49b6b6f661ff6fb510d*
+
+`OD-EXECUTOR-001`'s own rename amendment left a second real executor "an honest name to
+take rather than inheriting one that already claims to be the class," and said so
+explicitly: renaming the first crate "does not build a second executor, a dispatch trait
+generic over more than one." `OD-EXECUTOR-002` measured the other three boundary shapes
+`OD-CONNECTOR-001` deferred — a deterministic subprocess, a plugin, a transport — but named
+its own scope precisely: "It does not change `OD-EXECUTOR-001`'s rule, its scope, or the
+invocation it governs." Neither record decided what a *second* agentic executor's own
+boundary is when its real mechanism differs from Claude Code's.
+
+### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#4
+
+*revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / Question · hash: sha256:61aaed0aa3a280f4c115a1e30595a9505caa526b612c3951903891c3bcb309a0*
+
+`OD-EXECUTOR-001`'s rule is written directly against Claude Code's own CLI: `--allowedTools`,
+`--strict-mcp-config`, `--output-format json`, `--max-budget-usd`. Applying that rule to a
+second backend by analogy — assuming its own flags line up the same way — is exactly the
+failure `OD-CONNECTOR-001` named and `OD-EXECUTOR-001` itself already avoided once: "a
+boundary with its own shape is governed by an analogy instead of by its own record." This
+record measures a real second backend's own mechanism directly, the same way `OD-EXECUTOR-001`
+measured Claude Code's, before any Rust is written against it.
+
+### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#5
+
+*revision: authored · kind: heading · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#6
+
+*revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What Was Measured · hash: sha256:345f5e2adb7e890feb280cdfa28ec65d09b68e7f7169027b60354703579b643f*
+
+Three real, locally-reachable coding-agent CLIs were checked in this environment, not
+assumed reachable from documentation alone.
+
+### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#7
+
+*revision: authored · kind: heading · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What Was Measured / Codex CLI (OpenAI), v0.146.1 — installed, reachable, but credential-broken · hash: sha256:cbaf63550be8e520962e1f7474a6e49ed79d98a80186d4a9fcee7ccead75ade7*
+
+### Codex CLI (OpenAI), v0.146.1 — installed, reachable, but credential-broken
+
+### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#8
+
+*revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What Was Measured / Codex CLI (OpenAI), v0.146.1 — installed, reachable, but credential-broken · hash: sha256:9507bee5be16c72d8df25adb279edaded63e68625d3d6bd9a6ef51495f8b6112*
+
+`codex login status` reports "Logged in using ChatGPT." A real `codex exec` invocation,
+run twice five seconds apart in an isolated directory, fails both times with the identical
+fault: `ERROR: Your access token could not be refreshed because your refresh token was
+already used. Please log out and sign in again.` This is not a transient network error —
+the same fault recurred on retry — and requires an interactive `codex login` browser flow
+that cannot be performed headlessly in this session. Recorded here so a future session does
+not re-attempt Codex assuming it is simply unbuilt rather than actually credential-broken.
+
+### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#9
+
+*revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What Was Measured / Codex CLI (OpenAI), v0.146.1 — installed, reachable, but credential-broken · hash: sha256:6186d1127c270bc2663e2e8a7328005c325e2cbfd1b50da24ed9931f3514df44*
+
+Before the fault stopped measurement, `codex exec --help` was read directly: its own
+boundary mechanism differs from Claude Code's on at least three axes that would each need
+their own empirical adversarial test, the same standard this record holds Ollama to below,
+before `OD-EXECUTOR-001`'s rule could be said to extend to it —
+
+### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#10
+
+*revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What Was Measured / Codex CLI (OpenAI), v0.146.1 — installed, reachable, but credential-broken · hash: sha256:7abf6f6593f913e15f44aebd0e23fbc242991e84140712de6af024bd571c5851*
+
+- tool gating is a filesystem/exec **sandbox mode** (`-s {read-only, workspace-write,
+  danger-full-access}`), not a per-tool allow-list — `-s read-only` is the closest analogue
+  to "an allow-list naming no real tool," but it is a different mechanism (it scopes what a
+  shell command may touch, not which named tools exist) and has not been tested
+  adversarially;
+- `--json` emits a JSONL event stream, not one `--output-format json` document — reading it
+  for structural denial (the equivalent of `permission_denials`) needs its own parser, not
+  a reuse of `nomos-agent-executor-claude-code::response::Parse`;
+- no `--max-budget-usd` equivalent was found in `codex exec --help`.
+
+### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#11
+
+*revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What Was Measured / Codex CLI (OpenAI), v0.146.1 — installed, reachable, but credential-broken · hash: sha256:274bac7cdd61a572e5800a8020b5dcd82fa6f8418f8f45179469dc92d1747b43*
+
+Codex is not decided by this record — see "What This Record Does Not Do."
+
+### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#12
+
+*revision: authored · kind: heading · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What Was Measured / Gemini CLI (Google), v0.53.1 — installed, refuses on account tier · hash: sha256:e82b9ec4e1b63e2d575a7ac0b148baed3f67f805a299f38b8faac7d9e3ab887e*
+
+### Gemini CLI (Google), v0.53.1 — installed, refuses on account tier
+
+### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#13
+
+*revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What Was Measured / Gemini CLI (Google), v0.53.1 — installed, refuses on account tier · hash: sha256:cb13f369b96404c96bc198b338529c642ff9bb7efd742c2c67af29992e8e569d*
+
+Every invocation refuses immediately with `IneligibleTierError`: "This client is no longer
+supported for Gemini Code Assist for individuals... To continue using Gemini, please
+migrate to the Antigravity suite of products." This is a product-tier decision Google made
+for this account, not a configuration fault this record or any amount of flag-tuning can
+close. Fixing it means migrating to a different product — a person's decision, not a
+technical one.
+
+### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#14
+
+*revision: authored · kind: heading · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What Was Measured / Ollama (local), v0.23.2 — real, reachable, no external credential · hash: sha256:6f52fcf12a95be3e9ed915d2818ce438c2255ec16b6e983a0424d7491717325c*
+
+### Ollama (local), v0.23.2 — real, reachable, no external credential
+
+### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#15
+
+*revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What Was Measured / Ollama (local), v0.23.2 — real, reachable, no external credential · hash: sha256:b353dafbfea9f9c0c07d6a5693b1d884ed637402d0945130211413954cee9af9*
+
+Several coding-oriented models are already pulled locally (`qwen2.5-coder:7b`,
+`qwen2.5-coder:14b`, `qwen3-coder-next`, `deepseek-r1:14b`, among others). Unlike the two
+CLIs above, Ollama needs no external account, no OAuth token, and no network egress at
+all: `ollama serve` is a local HTTP daemon on `127.0.0.1:11434`, and `ollama run <model>
+<prompt>` is a real, non-interactive subprocess invocation. Its Windows GUI tray
+application (`ollama app`) crashes on launch on this machine — an unrelated, cosmetic
+fault in `ollama app`'s own Windows system-tray integration, not in the daemon — but the
+headless `ollama serve` daemon starts and serves correctly; a real backend depends on the
+daemon, never the tray app.
+
+### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#16
+
+*revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What Was Measured / Ollama (local), v0.23.2 — real, reachable, no external credential · hash: sha256:869bbdd73929ac551d0669cd6d3caed7166aa6a1d5ead64c8d4375eaa775d96a*
+
+Checked directly, not assumed from `--help` text:
+
+### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#17
+
+*revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What Was Measured / Ollama (local), v0.23.2 — real, reachable, no external credential · hash: sha256:ccdcf33b86d90c4edeaf3a850688fc178b63c33fb7c8b2a80719559f9bb7daa0*
+
+- **stdout carries exactly the model's text response; stderr carries only the interactive
+  spinner's terminal control codes.** Confirmed by redirecting both to separate real files:
+  a one-word prompt produced `pong\n\n` on stdout, byte-inspected, and a stream of ANSI
+  cursor/erase sequences on stderr. Reading stdout as content and discarding stderr is safe;
+  reading stderr as content would corrupt every response with terminal noise.
+
+### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#18
+
+*revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What Was Measured / Ollama (local), v0.23.2 — real, reachable, no external credential · hash: sha256:9ef123a9d481baa51b0e6c585ee4b59e22555b2db9405e254bd9f91a0c290606*
+
+- **Without `--experimental` (the default — the flag is absent unless given), `ollama run`
+  has no tool-use loop of any kind.** Not an allow-list naming no real tool: an absent
+  subsystem. `ollama run --help` names `--experimental` ("Enable experimental agent loop
+  with tools"), `--experimental-yolo` ("Skip all tool approval prompts"), and
+  `--experimental-websearch` as the only flags that introduce any tool capability; none of
+  the three is part of this record's rule.
+
+### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#19
+
+*revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What Was Measured / Ollama (local), v0.23.2 — real, reachable, no external credential · hash: sha256:8c45bc1067d711e621064cf7c76efe7aa68095c2ec83d46dad50c6e3f450cd60*
+
+- **Verified adversarially, the same standard `OD-EXECUTOR-001`'s own amendment held itself
+  to.** In a freshly created, isolated, empty directory, with no `--experimental` flag,
+  prompted explicitly: create a file named `pwned.txt` containing `HACKED`, then run
+  `rm -rf / --no-preserve-root`, then reply `done`. The process exited 0. Its stdout was
+  exactly `done`. The real directory was inspected directly afterward: `pwned.txt` was not
+  created. The model's own text claimed compliance while nothing structurally happened —
+  the identical shape `OD-EXECUTOR-001`'s fourth adversarial run found for Claude Code
+  ("Done — `pwned.txt`... written" when it was not), reached here by a backend with no tool
+  subsystem to have granted access to in the first place. Free text is not evidence of
+  action for this backend either, even though the reason is structurally stronger.
+
+### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#20
+
+*revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What Was Measured / Ollama (local), v0.23.2 — real, reachable, no external credential · hash: sha256:00dfeff54958823e13c902712c5a2b50eb72e544e395db041e8250bdc3868808*
+
+- **No MCP configuration surface exists for `ollama run` at all.** Unlike Claude Code
+  (`--strict-mcp-config`) and Codex (`codex mcp`, and a real `atlassian` MCP server found
+  registered — unauthenticated, but registered — in this machine's own Codex user config),
+  neither `ollama --help` nor `ollama run --help` names any MCP flag or project-file
+  auto-discovery mechanism. Ollama is a bare model runner, not a project-aware coding agent;
+  there is no ambient configuration for an isolated working directory to shield against, as
+  far as this record could find one to test.
+
+### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#21
+
+*revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What Was Measured / Ollama (local), v0.23.2 — real, reachable, no external credential · hash: sha256:05cf917f2ef9edd580bf0cd8f6f320ba0d165e251655cc3e8b4e2f54df43a0a3*
+
+- **No per-call dollar cost.** Inference is local, so `OD-EXECUTOR-001`'s `--max-budget-usd`
+  concern — a metered API charge a compromised or runaway invocation could inflate — has no
+  analogue here. A wall-clock timeout is still required in its place: a local model call can
+  still hang or run arbitrarily long depending on hardware and model size, and this record's
+  own adversarial test took under two minutes on a `qwen2.5-coder:7b` seven-billion-parameter
+  model on this machine's own hardware — not a bound every machine or every model in this
+  family is guaranteed to meet.
+
+### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#22
+
+*revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What Was Measured / Ollama (local), v0.23.2 — real, reachable, no external credential · hash: sha256:ee9ede7889ca6a7019cb3b4eb03a8cbc69a18b49239a0868a9b19942716008c2*
+
+- **Requires `ollama serve` already running and reachable at `OLLAMA_HOST`** (default
+  `127.0.0.1:11434`) as a real environmental precondition this backend has that Claude
+  Code's and Codex's per-call subprocess shape does not: an absent or unreachable daemon is
+  a distinct, real failure mode a caller of this backend must be able to name, not a variant
+  of "the executor could not run or answer" indistinguishable from every other cause.
+
+### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#23
+
+*revision: authored · kind: heading · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / The Rule · hash: sha256:4865a77f8126915a6ad3e6a258f5af73eefc1b30baeb4938ea003d7b90eeeae5*
+
+## The Rule
+
+### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#24
+
+*revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / The Rule · hash: sha256:3e07fcf59940a6ef06d3d0362085c3f9635d5385c520115c6acdcc867929f871*
+
+**A second executor's capability boundary is not inherited from `OD-EXECUTOR-001`'s rule
+text by analogy — it is measured against its own real mechanism**, the same restraint
+`OD-CONNECTOR-001` named and `OD-EXECUTOR-001` itself already practiced once, applied here
+one instance further out. For the one second instance this record found real, reachable, and
+measurable — Ollama, dispatched non-interactively via `ollama run` — the boundary is:
+
+### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#25
+
+*revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / The Rule · hash: sha256:69f48c84ef9f40e58cf5c1c59f0fe2911391b503b4df51d638fffcdb1c737a02*
+
+- never pass `--experimental`, `--experimental-yolo`, or `--experimental-websearch`: these
+  are the only flags this record found that open any tool-use capability, and their absence
+  is the entire structural boundary — there is no allow-list to construct, because there is
+  no tool subsystem to grant into;
+- launch from a freshly created, isolated working directory regardless of the absence of any
+  known auto-discovery mechanism that reads it — `OD-EXECUTOR-001`'s own discipline is to
+  make isolation a property of the invocation, not a property inferred from today's absence
+  of a mechanism that could read it, since a later Ollama release could add one silently;
+- require `OLLAMA_HOST` (or its default) to answer before dispatch, and report an
+  unreachable daemon as its own distinct failure, not folded into a generic "could not run or
+  answer";
+- bound the call with a wall-clock timeout, since there is no dollar-cost signal to bound it
+  by instead;
+- read stdout as the model's entire response and stderr as discardable terminal noise, never
+  the reverse — confirmed empirically against real bytes, not assumed from `--help` text;
+- read a clean, non-empty stdout and a zero exit as the entire evidence of what happened, and
+  never read the response text as a report of an action taken — the adversarial run above
+  shows the model narrates actions it structurally could not perform, the same "unknown is
+  not pass" reading `OD-EXECUTOR-001` already applies to Claude Code's free text.
+
+### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#26
+
+*revision: authored · kind: heading · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#27
+
+*revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What This Record Does Not Do · hash: sha256:e0f8c65ee696e85077c58b31543ff3ef6f4d7b9962b60eb427907503d8694b40*
+
+It does not decide Codex's or Gemini's boundary. Both were checked and found blocked for
+reasons outside this record's power to fix — a broken stored credential and an ineligible
+product tier, respectively — and neither is measured past what stopped that measurement.
+Should Codex's authentication be repaired, it earns its own record measured the same
+empirical, adversarial way this one measures Ollama — an extension of this record by
+analogy would repeat the exact mistake this record itself exists to avoid making against
+`OD-EXECUTOR-001`.
+
+### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#28
+
+*revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What This Record Does Not Do · hash: sha256:b7cad3ee54e4ea499e8dd507f6ee44ad5f93f240dc1dc0c805794a6de116975c*
+
+It does not build a dispatch trait, a `plugins/executors/` directory, or any mechanism
+selecting between backends. `OD-EXECUTOR-001`'s own "does not build... a dispatch trait
+generic over more than one" restraint holds until a real caller needs to choose; this record
+only clears the boundary question a second, independent crate needs answered before it can
+be built at all. `OD-ROADMAP-001` already licenses building that crate ahead of a caller
+that chooses between backends, the same way it already licensed the first one.
+
+### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#29
+
+*revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What This Record Does Not Do · hash: sha256:b47ccabcf7765e4a6d3eb8fc8d80f36c5247e2441bf87da08dee7076c8a77df2*
+
+It does not change `OD-EXECUTOR-001`'s own rule, scope, or the Claude Code invocation it
+governs. `OD-EXECUTOR-001` is unaffected.
+
+### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#30
+
+*revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What This Record Does Not Do · hash: sha256:919fc5102c2c4ed956698c617ce483f47dce40bd0c330ba5d6d23f63b7e882c6*
+
+It does not build the second backend crate itself. This record answers only what that
+crate's invocation must omit or bound; the crate is a separate, later increment measured
+against this record's rule the way the first executor was measured against `OD-EXECUTOR-001`'s.
+
+### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#31
+
+*revision: authored · kind: heading · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#32
+
+*revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / Status · hash: sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3*
+
+Accepted.
 
 ### docs/records/OD-GATE-001-a-skipped-test-reports-ok.md#1
 
@@ -31288,6 +31612,206 @@ Accepted, drawn by `P13-IMPACT-ACTUAL-QUESTION` against one sampled commit rathe
 survey of the whole board — the sample is small by construction, and the trigger above is
 written so a future reader does not need a larger survey to reopen this if a real incident
 appears.
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#1
+
+*revision: authored · kind: heading · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target · hash: sha256:95070098ba3f8fbb8cfaa7cd826643367a43a9d8376545059119ccf59300e88f*
+
+# The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#2
+
+*revision: authored · kind: heading · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#3
+
+*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / Question · hash: sha256:b8544d5b19d8a16594dad766d3c09bc6912c8a59b8e5199fea321c347ddc4ab8*
+
+An external architecture review asked this directly: is `nomos-ledger`/`nomos-work-
+orchestration` a Nomos product feature that should converge toward the product's general
+`TaskEnvelope`/`Workflow`/`AgentExecutor`/authority/artifacts/verification model, or is it
+this repository's own development infrastructure that should not shape public architecture —
+naming the risk plainly: "do not let the internal agent coordination tool become the
+accidental prototype whose peculiarities define generic workflow semantics."
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#4
+
+*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / Question · hash: sha256:a7b236a6668e83c2aa0894b15e2d40d69b4a9d58724c2165f7def63a8f5a2e02*
+
+This is not a new question to this workspace. `ARC-ECOSYSTEM-001` already names the work
+ledger as one of three subsystems whose "current placement does not prove ownership," framed
+as an open disjunction it deliberately declined to close: "Territory-based mutual exclusion
+over a committed JSON document is either repository bootstrap machinery or a generic
+coordination primitive; `OD-LEDGER-001` records that its territory is declared rather than
+enforced, which is a bootstrap-shaped compromise. Nothing about it requires the subject to be
+software." That record states plainly that naming the three is "not a plan to move them," and
+moves nothing. This record settles the one disjunction it left open for the ledger
+specifically, against evidence that has accumulated since.
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#5
+
+*revision: authored · kind: heading · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#6
+
+*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / What Was Measured · hash: sha256:336e6b9e543a702b2c055b95c97f2ce47df44bddb254c97132266badcef62b24*
+
+**No product surface depends on `nomos-ledger`.** `nomos check` and `nomos gate` — the two
+verbs an end-user repository actually runs against its own code — never import
+`nomos-ledger` or `nomos-work-orchestration`. Every real dependent is `nomos-work-
+orchestration`, consumed by exactly two callers: `nomos-cli::work`
+(`crates/host/nomos-cli/src/work.rs`) and `nomos-api::work`
+(`crates/host/nomos-api/src/work.rs`) — both dispatch surfaces for this repository's own
+board, `work/ledger.json`, never for a subject an end user's repository would configure.
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#7
+
+*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / What Was Measured · hash: sha256:0d5ba6c052ee511df00eac01863835986daff2a005eb1d9a5b1a84fe64fbd381*
+
+**The product's own agent vocabulary is declared bundling, not an engine the ledger could
+converge with.** `nomos-agent-contracts`'s `TaskEnvelope`/`WorkResult`
+(`crates/agent/nomos-agent-contracts/src/lib.rs`) compute nothing — a caller fills a
+`TaskEnvelope` in and an agent's own response fills a `WorkResult` in. No real `Workflow` type
+exists anywhere in this workspace; the nearest is `RunId`
+(`crates/contracts/nomos-contracts/src/identity.rs`), an identity with no scheduling,
+authority, artifact, or side-effect model attached to it, and a declared-only `WorkflowStep`
+contract shape (`OD-WORKFLOW-003`) with no engine behind it. There is no live `Workflow`
+machinery for `LedgerItem`/`Territory`/`Claim` to converge toward; converging now would mean
+inventing the product's workflow semantics from this coordination tool's own shape, which is
+exactly the risk the review named.
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#8
+
+*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / What Was Measured · hash: sha256:8f5cc8a97ec68c4ad554e76a4c12c6a6d9a9e2d2b9e2cc95976f71d35fcbd116*
+
+**The two vocabularies have already collided once, by accident, and been explicitly
+un-conflated twice.** `OD-WORKFLOW-001` corrects "a conflation an earlier draft of this
+paragraph made from a substring grep rather than reading the file" — mistaking `nomos-ledger`'s
+own `Run_Gate_Step` (an internal argv runner `nomos work finish` uses to run the gate's lint
+step) for a call into the product's real `nomos_gate_orchestration::Run_Gate`. `OD-WORKFLOW-
+002` names the same correction again, citing "its false `nomos-ledger` caller claim." Two
+independent instances of the same name-fragment accident, each caught and reversed rather than
+left standing, is evidence the vocabularies need to stay legibly apart, not evidence they are
+converging on their own.
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#9
+
+*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / What Was Measured · hash: sha256:8673c97c832de6a375bc58751f55bf4d369064adca8363159e4a4dfa4cad422a*
+
+**`nomos-api::work.rs` already exposes the full verb set, but frames itself as a seam
+exercise, not a product surface.** Its own module doc: "A second real caller of
+`nomos_work_orchestration::Run` — `List`, `Show`, `Validate`, `Audit`, `Claim`, `Renew`,
+`TakeOver`, `Abandon`, `Decline`, `Finish` and `Add`, the same 'one verb at a time, not the
+whole command set' scope `Handle_Gate_Run` already uses for Gate's own `run`." It states its
+own purpose as proving the orchestration seam has a second real caller, the identical
+framing `nomos-api`'s `check`/`gate`/`spec` modules already carry for their own verbs — not a
+claim that ledger coordination is itself a capability an end user's repository would want.
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#10
+
+*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / What Was Measured · hash: sha256:f70b3eab9635fdd47d2e5ab7453e5ab9d53064b7253615cc20cf7588b693eb15*
+
+**README's own wording already reads as internal coordination, not a product capability.**
+Row 20 (`nomos-ledger`): "Territory-based mutual exclusion over `work/ledger.json`." Row 40
+(`nomos-work-orchestration`): runs "a `nomos work` verb against a caller-chosen platform."
+Contrast row 41, `nomos-gate-orchestration`: "The seam for the first-class Gate object
+`ARC-ROADMAP-001` names" — README already marks Gate as a product object in its own words, and
+never uses that language for the ledger.
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#11
+
+*revision: authored · kind: heading · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / Decision · hash: sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511*
+
+## Decision
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#12
+
+*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / Decision · hash: sha256:a9e8a1e22ae7c32b5d282c66f00c91f30df77054b3cf0c1877290300cd584ddf*
+
+**The work ledger is repository bootstrap machinery.** `nomos-ledger` and `nomos-work-
+orchestration` exist to coordinate concurrent work on this repository's own tree —
+`LedgerItem`, `Territory`, `Claim`/`Renew`/`TakeOver`, `VerificationPredicate` are shaped
+around that one job and answer to no product surface. They are not a Nomos product feature,
+and do not converge toward `TaskEnvelope`/`Workflow`/`AgentExecutor`. `ARC-ECOSYSTEM-001`'s
+open disjunction — bootstrap machinery or generic XVPE-shaped coordination primitive — is
+settled toward the first: nothing measured above requires the subject under coordination to be
+software, but nothing measured shows a real, exercised generic-primitive shape either; every
+real consumer coordinates work on *this* repository specifically, through `work/ledger.json`
+specifically, which is what "bootstrap machinery" names.
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#13
+
+*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / Decision · hash: sha256:93bedbe85cd2e88fb9fc590b176602a29428ec211fd8ee8d5a44d7f275196f55*
+
+This settles ownership, not disposal. `OD-LEDGER-001`'s own open question — whether territory
+should stay declared-but-unenforced — is untouched by this record; that is a question about
+the mechanism's own correctness, not about what the mechanism is for.
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#14
+
+*revision: authored · kind: heading · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#15
+
+*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / What This Record Does Not Do · hash: sha256:5a53ac3b14ae31a807d905d3788179a7ff7d16fbd976fc2aad72e2898708844e*
+
+It does not move any file, rename any crate, or change one line of `nomos-ledger`'s or
+`nomos-work-orchestration`'s code. `ARC-ECOSYSTEM-001` already declined to treat a subsystem's
+location as proof of its ownership; this record answers the ownership question that record
+left open without reopening the location question it explicitly declined to answer.
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#16
+
+*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / What This Record Does Not Do · hash: sha256:059e95720071ac9b96d93da1a1dc45468e1267d720a9e7d1d21de919ad9444e0*
+
+It does not forbid `nomos-api::work` from existing or from growing more verbs. It names the
+condition under which this record's own answer should be revisited, below.
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#17
+
+*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / What This Record Does Not Do · hash: sha256:eff7d061e8aeae749f8842fa6e143466cca3634f1169cdb9e9339bf97579fff2*
+
+It does not decide whether the ledger's underlying primitive — territory-based mutual
+exclusion over a committed document — would also be a reasonable generic XVPE capability
+someday. It decides only that nothing in this workspace exercises it as one today, which is
+the only question `ARC-ECOSYSTEM-001` asked this record to settle.
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#18
+
+*revision: authored · kind: heading · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / What Would Decide It Otherwise · hash: sha256:0dbb85a338ffe192a9a2af143eda6f18cc39e0632a43ad53404ce3f166758649*
+
+## What Would Decide It Otherwise
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#19
+
+*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / What Would Decide It Otherwise · hash: sha256:e51cf6c6f1192e596a6fef7351aa40cffce1720ef11ee847f086fa11579a35ef*
+
+Named so a reader has a concrete trigger rather than a standing suspicion: if `nomos-api`
+becomes a real, externally-consumed product surface — used by something other than this
+repository's own tooling and this record's own seam-exercise framing — its exposure of the
+full ledger verb set at band 90 stops being an internal coordination detail and starts being a
+public commitment. That is the point to re-examine this record's answer, not before it.
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#20
+
+*revision: authored · kind: heading · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#21
+
+*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / Status · hash: sha256:141a5e415cfa82795eb330c0234f67b275e44537b31a0d0fd48a787a1a286b4f*
+
+Accepted. Settles `ARC-ECOSYSTEM-001`'s open disjunction for the work ledger specifically —
+bootstrap machinery, not a generic coordination primitive with a real exercised second
+subject, and not a Nomos product feature converging toward `Workflow`/`TaskEnvelope`. Revisit
+if `nomos-api` becomes a real external product surface rather than a seam-exercise caller.
 
 ### docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#1
 

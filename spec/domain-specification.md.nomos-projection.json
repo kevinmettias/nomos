@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:e2ed6384999223a6576d8dc1f7dd405615f9135a09e9a08cab62ffb8ccd83329",
-  "inputs_digest": "sha256:f6c9240f3bb9fa9c17d64b0eaa41d128c365769dbf04122c5d96e6060bb0aab4",
+  "content_digest": "sha256:13cba97567059a20c3f72dc73c9ab3b4aeb5a1fb4fe890a1ea0c37007d129bb8",
+  "inputs_digest": "sha256:c065437eac4f6fbe9dc59e48449e71fd86ac78b451bede3c128cd9d5943839c1",
   "sections": [
     [
       "Documents",
-      166
+      168
     ],
     [
       "Sections",
-      1409
+      1425
     ],
     [
       "Source blocks",
-      4936
+      4989
     ]
   ],
   "inputs": [
@@ -297,6 +297,11 @@
     },
     {
       "content": "documents",
+      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md@authored",
+      "hash": "sha256:28a7473e3a03a0df77d28b5da741cf2ccc61d52f1bdbf7063004999d14d62560"
+    },
+    {
+      "content": "documents",
       "identity": "docs/records/OD-GATE-001-a-skipped-test-reports-ok.md@authored",
       "hash": "sha256:ede1d73ff937b80913dd5c6fd4d7d5cc70cb8158b29e13bfe003ae5cd5f805d5"
     },
@@ -574,6 +579,11 @@
       "content": "documents",
       "identity": "docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md@authored",
       "hash": "sha256:e28fcdcd8881a5405bfd5398964764cd59fa6d45e8340359ca94d9df98a0d732"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md@authored",
+      "hash": "sha256:e44db6eb38b3d1a6229b905ffba42be08984541c3407ce66bff74af1b229992a"
     },
     {
       "content": "documents",
@@ -2954,6 +2964,51 @@
       "content": "headings",
       "identity": "docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#25",
       "hash": "sha256:cdb711ac2f013b40dede5599be0a43ff4061621fd8304e4869c3ddd19e09f356"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#1",
+      "hash": "sha256:5546686b890b269dcc4d771a3b1b51acbe750eb78c76a3669b82c15bde81abc6"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#2",
+      "hash": "sha256:34c711031f1750eae9cb92c400daad3bb07579d8fcc14903b33dee5acec3ce30"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#5",
+      "hash": "sha256:c843fa7676ae30af3fc76a613a68d2ec0f0a926b9dc24a2a1df657349a5e8ca2"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#7",
+      "hash": "sha256:59cbe15c163ea53335ac6040db42409b050925583faac68a2f6cf7d9abefd8e5"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#12",
+      "hash": "sha256:062d0deb431d8c2b3d41c48a0058ae61447b80452ad6b4bd322e7ab5b094e66b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#14",
+      "hash": "sha256:05e36814eb5987f04bc6ff371301a851e5965b28a760bf0b4b7fb44fa9dc2775"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#23",
+      "hash": "sha256:1380caeecf79a6b704500daf14db3f41109036223c88ec50527c5fb735071cc9"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#26",
+      "hash": "sha256:c9b3538ef22a9d3eb50f09b6d828007b144f5f5ad46bdf93ef48a1713867137b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#31",
+      "hash": "sha256:7e3f9db9e75ad4644fecec67f5b72fb4523a4cbb12388144c176d3fc09152d8b"
     },
     {
       "content": "headings",
@@ -5539,6 +5594,41 @@
       "content": "headings",
       "identity": "docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md#16",
       "hash": "sha256:a2e8c209d68b116c822853ef33671c00f2cbcf20fc8d3ff029e91288dca6fb9c"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#1",
+      "hash": "sha256:370cc1f9a4572a0f27dc7fcd9402eb76de0c764e0f4e9542b7b04ab6bf1a30f3"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#2",
+      "hash": "sha256:0f344a0f24260531ad23970070e26611da772a97970cda261a60b3a38e4bc404"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#5",
+      "hash": "sha256:707facea0c582134de79a8768107ef395a15e919dbd5a989b08dc60206d8095b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#11",
+      "hash": "sha256:5a4e536cd725c62416f5acba0ed393c6624b36c7715c9b59654b50f9cef917a8"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#14",
+      "hash": "sha256:0a00d3662e51ac69f92e90c090a8ea8969c721442ff65ca682a8807bf7f5fd32"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#18",
+      "hash": "sha256:056e3094cc3eff9bb9b6a88254b46ec5b9b994a29ff230f2ecb6efab0c162523"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#20",
+      "hash": "sha256:a957ffc70d9d12c916455ad1ff93a80bb1e8e373c2f96cba41cd29cb48b3dd1b"
     },
     {
       "content": "headings",
@@ -15047,6 +15137,166 @@
     },
     {
       "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#1",
+      "hash": "sha256:6556401acbabd0bdcd7b496cb560c795fd7a4f22752d37978d1499422362baf3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#3",
+      "hash": "sha256:73605a375167633e924d492dd83c32014f14f43edd55f49b6b6f661ff6fb510d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#4",
+      "hash": "sha256:61aaed0aa3a280f4c115a1e30595a9505caa526b612c3951903891c3bcb309a0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#5",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#6",
+      "hash": "sha256:345f5e2adb7e890feb280cdfa28ec65d09b68e7f7169027b60354703579b643f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#7",
+      "hash": "sha256:cbaf63550be8e520962e1f7474a6e49ed79d98a80186d4a9fcee7ccead75ade7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#8",
+      "hash": "sha256:9507bee5be16c72d8df25adb279edaded63e68625d3d6bd9a6ef51495f8b6112"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#9",
+      "hash": "sha256:6186d1127c270bc2663e2e8a7328005c325e2cbfd1b50da24ed9931f3514df44"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#10",
+      "hash": "sha256:7abf6f6593f913e15f44aebd0e23fbc242991e84140712de6af024bd571c5851"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#11",
+      "hash": "sha256:274bac7cdd61a572e5800a8020b5dcd82fa6f8418f8f45179469dc92d1747b43"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#12",
+      "hash": "sha256:e82b9ec4e1b63e2d575a7ac0b148baed3f67f805a299f38b8faac7d9e3ab887e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#13",
+      "hash": "sha256:cb13f369b96404c96bc198b338529c642ff9bb7efd742c2c67af29992e8e569d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#14",
+      "hash": "sha256:6f52fcf12a95be3e9ed915d2818ce438c2255ec16b6e983a0424d7491717325c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#15",
+      "hash": "sha256:b353dafbfea9f9c0c07d6a5693b1d884ed637402d0945130211413954cee9af9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#16",
+      "hash": "sha256:869bbdd73929ac551d0669cd6d3caed7166aa6a1d5ead64c8d4375eaa775d96a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#17",
+      "hash": "sha256:ccdcf33b86d90c4edeaf3a850688fc178b63c33fb7c8b2a80719559f9bb7daa0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#18",
+      "hash": "sha256:9ef123a9d481baa51b0e6c585ee4b59e22555b2db9405e254bd9f91a0c290606"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#19",
+      "hash": "sha256:8c45bc1067d711e621064cf7c76efe7aa68095c2ec83d46dad50c6e3f450cd60"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#20",
+      "hash": "sha256:00dfeff54958823e13c902712c5a2b50eb72e544e395db041e8250bdc3868808"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#21",
+      "hash": "sha256:05cf917f2ef9edd580bf0cd8f6f320ba0d165e251655cc3e8b4e2f54df43a0a3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#22",
+      "hash": "sha256:ee9ede7889ca6a7019cb3b4eb03a8cbc69a18b49239a0868a9b19942716008c2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#23",
+      "hash": "sha256:4865a77f8126915a6ad3e6a258f5af73eefc1b30baeb4938ea003d7b90eeeae5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#24",
+      "hash": "sha256:3e07fcf59940a6ef06d3d0362085c3f9635d5385c520115c6acdcc867929f871"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#25",
+      "hash": "sha256:69f48c84ef9f40e58cf5c1c59f0fe2911391b503b4df51d638fffcdb1c737a02"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#26",
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#27",
+      "hash": "sha256:e0f8c65ee696e85077c58b31543ff3ef6f4d7b9962b60eb427907503d8694b40"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#28",
+      "hash": "sha256:b7cad3ee54e4ea499e8dd507f6ee44ad5f93f240dc1dc0c805794a6de116975c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#29",
+      "hash": "sha256:b47ccabcf7765e4a6d3eb8fc8d80f36c5247e2441bf87da08dee7076c8a77df2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#30",
+      "hash": "sha256:919fc5102c2c4ed956698c617ce483f47dce40bd0c330ba5d6d23f63b7e882c6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#31",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#32",
+      "hash": "sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3"
+    },
+    {
+      "content": "blocks",
       "identity": "docs/records/OD-GATE-001-a-skipped-test-reports-ok.md#1",
       "hash": "sha256:dcb392829586c5c23018dfc4351909101b128901406caae44797355b6dcaab6c"
     },
@@ -24324,6 +24574,111 @@
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md#17",
       "hash": "sha256:f9a833592ba1c749d278fe8c4301c4ff602bc78296f469dd1707388739e006c8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#1",
+      "hash": "sha256:95070098ba3f8fbb8cfaa7cd826643367a43a9d8376545059119ccf59300e88f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#3",
+      "hash": "sha256:b8544d5b19d8a16594dad766d3c09bc6912c8a59b8e5199fea321c347ddc4ab8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#4",
+      "hash": "sha256:a7b236a6668e83c2aa0894b15e2d40d69b4a9d58724c2165f7def63a8f5a2e02"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#5",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#6",
+      "hash": "sha256:336e6b9e543a702b2c055b95c97f2ce47df44bddb254c97132266badcef62b24"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#7",
+      "hash": "sha256:0d5ba6c052ee511df00eac01863835986daff2a005eb1d9a5b1a84fe64fbd381"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#8",
+      "hash": "sha256:8f5cc8a97ec68c4ad554e76a4c12c6a6d9a9e2d2b9e2cc95976f71d35fcbd116"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#9",
+      "hash": "sha256:8673c97c832de6a375bc58751f55bf4d369064adca8363159e4a4dfa4cad422a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#10",
+      "hash": "sha256:f70b3eab9635fdd47d2e5ab7453e5ab9d53064b7253615cc20cf7588b693eb15"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#11",
+      "hash": "sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#12",
+      "hash": "sha256:a9e8a1e22ae7c32b5d282c66f00c91f30df77054b3cf0c1877290300cd584ddf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#13",
+      "hash": "sha256:93bedbe85cd2e88fb9fc590b176602a29428ec211fd8ee8d5a44d7f275196f55"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#14",
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#15",
+      "hash": "sha256:5a53ac3b14ae31a807d905d3788179a7ff7d16fbd976fc2aad72e2898708844e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#16",
+      "hash": "sha256:059e95720071ac9b96d93da1a1dc45468e1267d720a9e7d1d21de919ad9444e0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#17",
+      "hash": "sha256:eff7d061e8aeae749f8842fa6e143466cca3634f1169cdb9e9339bf97579fff2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#18",
+      "hash": "sha256:0dbb85a338ffe192a9a2af143eda6f18cc39e0632a43ad53404ce3f166758649"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#19",
+      "hash": "sha256:e51cf6c6f1192e596a6fef7351aa40cffce1720ef11ee847f086fa11579a35ef"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#20",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#21",
+      "hash": "sha256:141a5e415cfa82795eb330c0234f67b275e44537b31a0d0fd48a787a1a286b4f"
     },
     {
       "content": "blocks",
