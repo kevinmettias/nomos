@@ -65,6 +65,7 @@ profile: domain-specification
 | docs/records/OD-DETERMINISM-002-the-last-two-rows-declare-and-the-guard-stops-asking-about-facts.md@authored | docs/records/OD-DETERMINISM-002-the-last-two-rows-declare-and-the-guard-stops-asking-about-facts.md | authored | 35 | 10 | sha256:14dba5ba489a39e4b5605d97a5eb1389a55a6f0efa07f1aa076ccd5dece46428 |
 | docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md@authored | docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md | authored | 32 | 8 | sha256:332c3b7ae159ba13d0b1d176726607b8369f9b5af249de17d98d9507254ce7bb |
 | docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md@authored | docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md | authored | 26 | 8 | sha256:8ab68673889fed19383159068abd89c4b4dbbd6a59aaa336cba463bab3dfa96a |
+| docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md@authored | docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md | authored | 20 | 6 | sha256:ea763ec0abaa47ca8f8f8c56f0831097b8c0467b7146738054c39b61c9dc8f2f |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md@authored | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md | authored | 30 | 8 | sha256:ede1d73ff937b80913dd5c6fd4d7d5cc70cb8158b29e13bfe003ae5cd5f805d5 |
 | docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md@authored | docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md | authored | 32 | 9 | sha256:1027b7b589216b9cbe4598a2a569261111071dce14529a2556e82f61852f74cf |
 | docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md@authored | docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md | authored | 20 | 7 | sha256:eca88bdcb033ae337eed44a34b8e00e16b9c0208f5bec59b8560b4850808de81 |
@@ -121,6 +122,7 @@ profile: domain-specification
 | docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md@authored | docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md | authored | 17 | 5 | sha256:69ab019a45e8742af61dfa35899a6c68c9d29cc11a8c28c52356296a97a114ea |
 | docs/records/OD-LEDGER-034-whether-work-needs-a-typed-reconciliation-outcome-beside-the-free-text-reason-work-decline-already-carries.md@authored | docs/records/OD-LEDGER-034-whether-work-needs-a-typed-reconciliation-outcome-beside-the-free-text-reason-work-decline-already-carries.md | authored | 14 | 5 | sha256:cb61b6f602f2fc7836f03727ce282c5f46da3e5ef3c6f92108dc77cc862577fc |
 | docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md@authored | docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md | authored | 17 | 5 | sha256:e28fcdcd8881a5405bfd5398964764cd59fa6d45e8340359ca94d9df98a0d732 |
+| docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md@authored | docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md | authored | 21 | 7 | sha256:e44db6eb38b3d1a6229b905ffba42be08984541c3407ce66bff74af1b229992a |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md@authored | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md | authored | 29 | 8 | sha256:dea2667f08661d51389468ccb32132d696dd6cb5a0936574b89125c523341962 |
 | docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md@authored | docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md | authored | 24 | 7 | sha256:aba629fefa9d9503489cfcae8626b61030287a2f29e558cf0b775875eb32c5b7 |
 | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md@authored | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md | authored | 54 | 10 | sha256:0a930d2a044d183c00fc821119d1645738cb398a9374b5a6eb3a736cb50764d2 |
@@ -602,6 +604,12 @@ profile: domain-specification
 | docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#15 | authored | 3 | A transport under `OD-SPEC-009` |
 | docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#19 | authored | 2 | What This Record Does Not Do |
 | docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#25 | authored | 2 | Status |
+| docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#1 | authored | 1 | The first real WorkResult is judge-role's own verdict, built from an identity Claude Code never has to invent |
+| docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#2 | authored | 2 | Question |
+| docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#4 | authored | 2 | What Was Measured |
+| docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#13 | authored | 2 | The Decision |
+| docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#17 | authored | 2 | What This Does Not Do |
+| docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#19 | authored | 2 | Status |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md#1 | authored | 1 | A skipped test reports ok, so the size of the hole is declared rather than the hole being closed |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md#2 | authored | 2 | Question |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md#5 | authored | 2 | What Was Found |
@@ -1119,6 +1127,13 @@ profile: domain-specification
 | docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md#4 | authored | 2 | What Was Measured |
 | docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md#13 | authored | 2 | Decision |
 | docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md#16 | authored | 2 | Status |
+| docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#1 | authored | 1 | The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target |
+| docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#2 | authored | 2 | Question |
+| docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#5 | authored | 2 | What Was Measured |
+| docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#11 | authored | 2 | Decision |
+| docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#14 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#18 | authored | 2 | What Would Decide It Otherwise |
+| docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#20 | authored | 2 | Status |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#1 | authored | 1 | A claim and a fact address a path by one rule, and the record-identifier fold stays with the ledger |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#2 | authored | 2 | Question |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#8 | authored | 2 | What Was Actually Wrong |
@@ -14864,6 +14879,230 @@ referent yet (plugin), with its firing condition named. Revisit the plugin case 
 out-of-process plugin mechanism is proposed or built; revisit the deterministic-subprocess case
 if any of the three named callers, or a future one, is ever given attacker-influenced argument
 content.
+
+### docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#1
+
+*revision: authored · kind: heading · heading: The first real WorkResult is judge-role's own verdict, built from an identity Claude Code never has to invent · hash: sha256:251725de29abad4066dfdcfe9739c5d89969cdec72c965e76ea881a29f3b5ce9*
+
+# The first real WorkResult is judge-role's own verdict, built from an identity Claude Code never has to invent
+
+### docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#2
+
+*revision: authored · kind: heading · heading: The first real WorkResult is judge-role's own verdict, built from an identity Claude Code never has to invent / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#3
+
+*revision: authored · kind: prose · heading: The first real WorkResult is judge-role's own verdict, built from an identity Claude Code never has to invent / Question · hash: sha256:3d93462112f3ffcbc55cd17fcadec93b7d929cb6deb8701f91aea21fc572e8d3*
+
+`OD-CONTRACTS-003` made `WorkResult.plan` an `Option` so a judgment-only response could be
+represented, then named the real path it declined to build: "`TaskEnvelope.expected_output_schema`,
+paired with Claude Code's own `--json-schema` support, is the real shape a future increment
+would use to have the agent produce a `WorkResult`-shaped response directly ... not answered
+here." `nomos-agent-executor-claude-code`'s own module doc repeats the same deferral in the
+same words. `OD-WORKFLOW-002`, amended by `OD-WORKFLOW-004`, names one of three conditions
+that would produce the workflow tier's next real increment as: a real executor "also
+constructs a real `WorkResult`, not merely when one exists." Nothing has built this yet. Two
+things changed since those records were written, and this record checks both before naming
+anything: `claude --help` now documents a `--json-schema <schema>` flag, and this workspace
+now has a second real `TaskEnvelope` construction site — `nomos-cli`'s `judge-role` — whose
+own doc already says what `execute` cannot: it "does start from a rule's own finding."
+
+### docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#4
+
+*revision: authored · kind: heading · heading: The first real WorkResult is judge-role's own verdict, built from an identity Claude Code never has to invent / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#5
+
+*revision: authored · kind: prose · heading: The first real WorkResult is judge-role's own verdict, built from an identity Claude Code never has to invent / What Was Measured · hash: sha256:93c0804c3d68d04203a6aac601f7de6ae1842ac8403f16d0ff35a7d05230d69d*
+
+**`--json-schema` was run against the real CLI, not assumed.** From an isolated, empty
+directory, with `--strict-mcp-config` and an allow-list naming no real tool — the exact
+boundary `OD-EXECUTOR-001` already requires — a `--print` invocation carrying
+`--output-format json --json-schema '{"type":"object","properties":{"summary":{"type":
+"string"},"assumptions":{"type":"array","items":{"type":"string"}},
+"unresolved_questions":{"type":"array","items":{"type":"string"}}},"required":["summary",
+"assumptions","unresolved_questions"],"additionalProperties":false}'` returned:
+
+### docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#6
+
+*revision: authored · kind: code · heading: The first real WorkResult is judge-role's own verdict, built from an identity Claude Code never has to invent / What Was Measured · hash: sha256:7eaf5592e64e43a218c5ced585b168346d5754c966f8b2d59565bd28a33d648d*
+
+```json
+{
+  "is_error": false,
+  "result": "{\"summary\":\"The sky is blue.\",\"assumptions\":[\"...\"],\"unresolved_questions\":[]}",
+  "structured_output": {
+    "summary": "The sky is blue.",
+    "assumptions": ["..."],
+    "unresolved_questions": []
+  },
+  "total_cost_usd": 0.0798447,
+  "duration_ms": 2911,
+  "permission_denials": []
+}
+```
+
+### docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#7
+
+*revision: authored · kind: prose · heading: The first real WorkResult is judge-role's own verdict, built from an identity Claude Code never has to invent / What Was Measured · hash: sha256:0ec77c1e15f32eb689400c5ac98f43e54afd76ba3210a4cbb64253264c8f106b*
+
+Every field `nomos-agent-executor-claude-code::response::Parse` already reads (`result`,
+`is_error`, `total_cost_usd`, `duration_ms`, `permission_denials`) is present and unchanged in
+shape. `--json-schema` is purely additive: it adds one new top-level field,
+`structured_output`, already parsed as a real JSON object — not a second string a caller
+would have to decode twice. A first run at the default probe budget (`$0.20`) exhausted
+before answering, from a large one-time cache-creation cost this isolated directory's first
+invocation paid; at the crate's own existing `$1.00` default the call completed for
+$0.08. This is measured, not designed around: no claim is made here about why the first
+probe's cache cost was large, only that a schema-bearing call fits inside the budget this
+crate already uses for every other invocation.
+
+### docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#8
+
+*revision: authored · kind: prose · heading: The first real WorkResult is judge-role's own verdict, built from an identity Claude Code never has to invent / What Was Measured · hash: sha256:ce879284fbada3a9187a167f07198a3831711bcd626b624f972edcb19b772aa2*
+
+**`TaskEnvelope.expected_output_schema` is a `SchemaId`, not a schema.** Verified directly:
+`SchemaId::New("...")` wraps an opaque string label everywhere it is constructed in this
+workspace today (`nomos-agent-contracts`'s own test, `nomos-cli`'s `Task`/`Judgment_Task`).
+Nothing maps a `SchemaId` to a real JSON Schema document, and building that mapping as a
+general registry — so any caller's label resolves to a body — would be exactly the
+"declaration nothing enforces" shape `OD-CAPABILITY-*` and `OD-PACKAGE-006`/`OD-PACKAGE-008`
+already decline to build ahead of a second real need. This record does not build one either.
+
+### docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#9
+
+*revision: authored · kind: prose · heading: The first real WorkResult is judge-role's own verdict, built from an identity Claude Code never has to invent / What Was Measured · hash: sha256:0fe7a80e76f1408950c2fd3b6b778ea1f73c1ccbd90e46ae67a640df7f8f8ce5*
+
+**`execute` still has no identity to ground a response against.** Read in full,
+`crates/host/nomos-cli/src/agent.rs`'s own doc for `execute` states this directly: "this
+command has no `RuleId` or `SubjectId` to give a `Finding` either, since nothing dispatched it
+as a rule's judgment; it is a person, asking a question directly." A schema could still coax
+free-form structure out of the model's prose, but nothing at that call site supplies a real
+`RuleId` or `SubjectId` for a `Finding` to carry — inventing one would be the identical
+dishonesty `OD-EXECUTOR-001` already named for trusting a process's own account of itself,
+applied to identity instead of action.
+
+### docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#10
+
+*revision: authored · kind: prose · heading: The first real WorkResult is judge-role's own verdict, built from an identity Claude Code never has to invent / What Was Measured · hash: sha256:6ba09146d72bb90379fcc73fe170b13e88d1c2b9e8c6477bf0c495908b260886*
+
+**`judge-role` already has exactly the identity a `Finding` needs, read from a rule that
+already ran, not from the model.** `nomos_rules::Check_Declared_Role_Matches_Surface` (`nomos-
+rules`'s `role_surface.rs`) unconditionally reports `Applicability::AgentRequired` and, per its
+own module doc, "never reaches a verdict." Its `Finding` already carries a real
+`rule: RuleId::New("declared-role-matches-surface")` and a real
+`subject: Subject_Of_Path(&pair.crate_root)` — a content-addressed identity computed from the
+crate's own path, the same derivation `OD-MODEL-002` already uses, not invented by an agent
+that never sees it. `judge_role.rs`'s `Judgment_Task` already threads `finding.rule` into the
+dispatched `TaskEnvelope` (`applicable_rules: vec![finding.rule.clone()]`); what it does not
+yet do is carry that same finding's identity back out the other side.
+
+### docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#11
+
+*revision: authored · kind: prose · heading: The first real WorkResult is judge-role's own verdict, built from an identity Claude Code never has to invent / What Was Measured · hash: sha256:3b0846ecd7829e0d9bd420883ab87af39ff218285656f40eb62c3476dc831cd9*
+
+**`Applicability` has no pass/fail slot to invent one for.** Read in full: "There is no
+`is_pass`. `Applicability::Was_Evaluated` is the closest thing, and it is not a pass — it says
+only that a judgment was reached, not what it was." A model's verdict — agrees, disagrees,
+partially agrees — is narrative content for `summary`, never a new `Applicability` variant. The
+correct post-judgment value is `Applicability::Supported`: the rule bound the subject and a
+judgment was reached, at `EvidenceClass::AgentJudged` — the evidence floor `nomos_contracts`
+already defines for exactly this case: "a model produced this and no tool corroborated it."
+
+### docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#12
+
+*revision: authored · kind: prose · heading: The first real WorkResult is judge-role's own verdict, built from an identity Claude Code never has to invent / What Was Measured · hash: sha256:1c799f2747ff98fb8766933d7d35b4aa3e40fb064fff46729e3f6ace1d127a46*
+
+**`WorkResult`'s other three report-only fields are honestly empty here, not merely unfilled.**
+`plan`, `tests`, and `requested_verification` each presuppose grounded knowledge of the real
+repository — a real edit against real file content, a real command worth running, a real
+predicate to accept a submission — that `OD-EXECUTOR-001`'s boundary (an empty isolated
+directory, no tools, one `--print` turn) structurally withholds from every dispatch this
+crate makes, `judge-role` included. This is not a gap this record leaves to a future
+increment by oversight; it is the same boundary `OD-EXECUTOR-001` already decided, read
+against a new type.
+
+### docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#13
+
+*revision: authored · kind: heading · heading: The first real WorkResult is judge-role's own verdict, built from an identity Claude Code never has to invent / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#14
+
+*revision: authored · kind: prose · heading: The first real WorkResult is judge-role's own verdict, built from an identity Claude Code never has to invent / The Decision · hash: sha256:f7e93a67c20da9362a3c0f9bd46b8d3c12d5902b23fec99bd9cdf569baf66c2d*
+
+**`judge-role` is the first call site permitted to assemble a real `WorkResult`.** `execute`
+is not touched; it keeps rendering `AgentExecutionOutcome`'s free text exactly as today,
+because it has no identity to assemble anything against.
+
+### docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#15
+
+*revision: authored · kind: prose · heading: The first real WorkResult is judge-role's own verdict, built from an identity Claude Code never has to invent / The Decision · hash: sha256:6e630b5409d49a82f7dba50ddd589da47615a49429f0cf7d914382a1fab97ef9*
+
+The mechanism, precisely:
+
+### docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#16
+
+*revision: authored · kind: prose · heading: The first real WorkResult is judge-role's own verdict, built from an identity Claude Code never has to invent / The Decision · hash: sha256:dfdc6dc78d4551bbee5b6d929a421d150149e5becd5c5ec6f783ad98265e4762*
+
+1. `judge-role`'s dispatch requests `--json-schema` with a small, hand-authored schema —
+   `{summary: string, assumptions: string[], unresolved_questions: string[]}`, all three
+   required, `additionalProperties: false` — carried as literal schema text at this one call
+   site, not resolved from `TaskEnvelope.expected_output_schema`'s `SchemaId` through any new
+   registry.
+2. The response reader gains a path that requires `structured_output` to be present (a real
+   JSON object, read the way `response.rs` already reads every other field: by key, tolerant
+   of everything else the document carries) and reports `AgentExecutionError::Unparseable` —
+   the same category a missing `result` already uses — when a schema was requested and
+   `structured_output` is absent.
+3. The caller assembles one `Finding` by copying `rule`, `subject`, `subject_name`, `gate`,
+   and `locations` **verbatim** from the original `AgentRequired` finding
+   `Check_Declared_Role_Matches_Surface` already produced, and setting only
+   `applicability: Applicability::Supported`, `evidence: EvidenceClass::AgentJudged`, and
+   `summary` from the parsed `summary` field. This is the only field in `WorkResult` this
+   dispatch can honestly populate with more than an empty value.
+4. `WorkResult.plan`, `.tests`, and `.requested_verification` stay `None` / empty. `.assumptions`
+   and `.unresolved_questions` are read directly from the parsed document's own arrays.
+
+### docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#17
+
+*revision: authored · kind: heading · heading: The first real WorkResult is judge-role's own verdict, built from an identity Claude Code never has to invent / What This Does Not Do · hash: sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf*
+
+## What This Does Not Do
+
+### docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#18
+
+*revision: authored · kind: prose · heading: The first real WorkResult is judge-role's own verdict, built from an identity Claude Code never has to invent / What This Does Not Do · hash: sha256:9e2993a12070d3f6673c1ca05255c6ae63fbc36e5cb1fa5ef7ce61033078ba31*
+
+It does not touch `execute` or its rendering. It does not build a `SchemaId → JSON Schema`
+registry, or move `judge-role`'s schema onto `TaskEnvelope.expected_output_schema` — that
+field stays a label naming this call site, exactly as `nomos-cli`'s own existing doc already
+states it does today. It does not attempt to populate `plan`, `tests`, or
+`requested_verification` for any dispatch this crate makes; `OD-EXECUTOR-001`'s boundary
+still withholds what any of those three would need to be honest. It does not implement any of
+this in Rust — that is a separate, following item, scoped by this decision rather than
+decided by it. It does not itself declare `OD-WORKFLOW-002`/`OD-WORKFLOW-004`'s condition 3
+fired; that record's own re-audit, once the following item lands, is where that finding
+belongs. It does not change `Applicability`, `EvidenceClass`, or `Finding`'s own shape.
+
+### docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#19
+
+*revision: authored · kind: heading · heading: The first real WorkResult is judge-role's own verdict, built from an identity Claude Code never has to invent / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#20
+
+*revision: authored · kind: prose · heading: The first real WorkResult is judge-role's own verdict, built from an identity Claude Code never has to invent / Status · hash: sha256:3800b84dd4364056c18937517b78896a646434c1f1c95aa3cf0504fcc81e86b9*
+
+Accepted. `--json-schema` was run against the real CLI before this record named a mechanism
+around it; `judge-role`'s existing identity was read from its own source, not assumed from
+its name. Implementation follows in a separate item.
 
 ### docs/records/OD-GATE-001-a-skipped-test-reports-ok.md#1
 
@@ -31288,6 +31527,206 @@ Accepted, drawn by `P13-IMPACT-ACTUAL-QUESTION` against one sampled commit rathe
 survey of the whole board — the sample is small by construction, and the trigger above is
 written so a future reader does not need a larger survey to reopen this if a real incident
 appears.
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#1
+
+*revision: authored · kind: heading · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target · hash: sha256:95070098ba3f8fbb8cfaa7cd826643367a43a9d8376545059119ccf59300e88f*
+
+# The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#2
+
+*revision: authored · kind: heading · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#3
+
+*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / Question · hash: sha256:b8544d5b19d8a16594dad766d3c09bc6912c8a59b8e5199fea321c347ddc4ab8*
+
+An external architecture review asked this directly: is `nomos-ledger`/`nomos-work-
+orchestration` a Nomos product feature that should converge toward the product's general
+`TaskEnvelope`/`Workflow`/`AgentExecutor`/authority/artifacts/verification model, or is it
+this repository's own development infrastructure that should not shape public architecture —
+naming the risk plainly: "do not let the internal agent coordination tool become the
+accidental prototype whose peculiarities define generic workflow semantics."
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#4
+
+*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / Question · hash: sha256:a7b236a6668e83c2aa0894b15e2d40d69b4a9d58724c2165f7def63a8f5a2e02*
+
+This is not a new question to this workspace. `ARC-ECOSYSTEM-001` already names the work
+ledger as one of three subsystems whose "current placement does not prove ownership," framed
+as an open disjunction it deliberately declined to close: "Territory-based mutual exclusion
+over a committed JSON document is either repository bootstrap machinery or a generic
+coordination primitive; `OD-LEDGER-001` records that its territory is declared rather than
+enforced, which is a bootstrap-shaped compromise. Nothing about it requires the subject to be
+software." That record states plainly that naming the three is "not a plan to move them," and
+moves nothing. This record settles the one disjunction it left open for the ledger
+specifically, against evidence that has accumulated since.
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#5
+
+*revision: authored · kind: heading · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#6
+
+*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / What Was Measured · hash: sha256:336e6b9e543a702b2c055b95c97f2ce47df44bddb254c97132266badcef62b24*
+
+**No product surface depends on `nomos-ledger`.** `nomos check` and `nomos gate` — the two
+verbs an end-user repository actually runs against its own code — never import
+`nomos-ledger` or `nomos-work-orchestration`. Every real dependent is `nomos-work-
+orchestration`, consumed by exactly two callers: `nomos-cli::work`
+(`crates/host/nomos-cli/src/work.rs`) and `nomos-api::work`
+(`crates/host/nomos-api/src/work.rs`) — both dispatch surfaces for this repository's own
+board, `work/ledger.json`, never for a subject an end user's repository would configure.
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#7
+
+*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / What Was Measured · hash: sha256:0d5ba6c052ee511df00eac01863835986daff2a005eb1d9a5b1a84fe64fbd381*
+
+**The product's own agent vocabulary is declared bundling, not an engine the ledger could
+converge with.** `nomos-agent-contracts`'s `TaskEnvelope`/`WorkResult`
+(`crates/agent/nomos-agent-contracts/src/lib.rs`) compute nothing — a caller fills a
+`TaskEnvelope` in and an agent's own response fills a `WorkResult` in. No real `Workflow` type
+exists anywhere in this workspace; the nearest is `RunId`
+(`crates/contracts/nomos-contracts/src/identity.rs`), an identity with no scheduling,
+authority, artifact, or side-effect model attached to it, and a declared-only `WorkflowStep`
+contract shape (`OD-WORKFLOW-003`) with no engine behind it. There is no live `Workflow`
+machinery for `LedgerItem`/`Territory`/`Claim` to converge toward; converging now would mean
+inventing the product's workflow semantics from this coordination tool's own shape, which is
+exactly the risk the review named.
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#8
+
+*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / What Was Measured · hash: sha256:8f5cc8a97ec68c4ad554e76a4c12c6a6d9a9e2d2b9e2cc95976f71d35fcbd116*
+
+**The two vocabularies have already collided once, by accident, and been explicitly
+un-conflated twice.** `OD-WORKFLOW-001` corrects "a conflation an earlier draft of this
+paragraph made from a substring grep rather than reading the file" — mistaking `nomos-ledger`'s
+own `Run_Gate_Step` (an internal argv runner `nomos work finish` uses to run the gate's lint
+step) for a call into the product's real `nomos_gate_orchestration::Run_Gate`. `OD-WORKFLOW-
+002` names the same correction again, citing "its false `nomos-ledger` caller claim." Two
+independent instances of the same name-fragment accident, each caught and reversed rather than
+left standing, is evidence the vocabularies need to stay legibly apart, not evidence they are
+converging on their own.
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#9
+
+*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / What Was Measured · hash: sha256:8673c97c832de6a375bc58751f55bf4d369064adca8363159e4a4dfa4cad422a*
+
+**`nomos-api::work.rs` already exposes the full verb set, but frames itself as a seam
+exercise, not a product surface.** Its own module doc: "A second real caller of
+`nomos_work_orchestration::Run` — `List`, `Show`, `Validate`, `Audit`, `Claim`, `Renew`,
+`TakeOver`, `Abandon`, `Decline`, `Finish` and `Add`, the same 'one verb at a time, not the
+whole command set' scope `Handle_Gate_Run` already uses for Gate's own `run`." It states its
+own purpose as proving the orchestration seam has a second real caller, the identical
+framing `nomos-api`'s `check`/`gate`/`spec` modules already carry for their own verbs — not a
+claim that ledger coordination is itself a capability an end user's repository would want.
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#10
+
+*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / What Was Measured · hash: sha256:f70b3eab9635fdd47d2e5ab7453e5ab9d53064b7253615cc20cf7588b693eb15*
+
+**README's own wording already reads as internal coordination, not a product capability.**
+Row 20 (`nomos-ledger`): "Territory-based mutual exclusion over `work/ledger.json`." Row 40
+(`nomos-work-orchestration`): runs "a `nomos work` verb against a caller-chosen platform."
+Contrast row 41, `nomos-gate-orchestration`: "The seam for the first-class Gate object
+`ARC-ROADMAP-001` names" — README already marks Gate as a product object in its own words, and
+never uses that language for the ledger.
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#11
+
+*revision: authored · kind: heading · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / Decision · hash: sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511*
+
+## Decision
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#12
+
+*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / Decision · hash: sha256:a9e8a1e22ae7c32b5d282c66f00c91f30df77054b3cf0c1877290300cd584ddf*
+
+**The work ledger is repository bootstrap machinery.** `nomos-ledger` and `nomos-work-
+orchestration` exist to coordinate concurrent work on this repository's own tree —
+`LedgerItem`, `Territory`, `Claim`/`Renew`/`TakeOver`, `VerificationPredicate` are shaped
+around that one job and answer to no product surface. They are not a Nomos product feature,
+and do not converge toward `TaskEnvelope`/`Workflow`/`AgentExecutor`. `ARC-ECOSYSTEM-001`'s
+open disjunction — bootstrap machinery or generic XVPE-shaped coordination primitive — is
+settled toward the first: nothing measured above requires the subject under coordination to be
+software, but nothing measured shows a real, exercised generic-primitive shape either; every
+real consumer coordinates work on *this* repository specifically, through `work/ledger.json`
+specifically, which is what "bootstrap machinery" names.
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#13
+
+*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / Decision · hash: sha256:93bedbe85cd2e88fb9fc590b176602a29428ec211fd8ee8d5a44d7f275196f55*
+
+This settles ownership, not disposal. `OD-LEDGER-001`'s own open question — whether territory
+should stay declared-but-unenforced — is untouched by this record; that is a question about
+the mechanism's own correctness, not about what the mechanism is for.
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#14
+
+*revision: authored · kind: heading · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#15
+
+*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / What This Record Does Not Do · hash: sha256:5a53ac3b14ae31a807d905d3788179a7ff7d16fbd976fc2aad72e2898708844e*
+
+It does not move any file, rename any crate, or change one line of `nomos-ledger`'s or
+`nomos-work-orchestration`'s code. `ARC-ECOSYSTEM-001` already declined to treat a subsystem's
+location as proof of its ownership; this record answers the ownership question that record
+left open without reopening the location question it explicitly declined to answer.
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#16
+
+*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / What This Record Does Not Do · hash: sha256:059e95720071ac9b96d93da1a1dc45468e1267d720a9e7d1d21de919ad9444e0*
+
+It does not forbid `nomos-api::work` from existing or from growing more verbs. It names the
+condition under which this record's own answer should be revisited, below.
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#17
+
+*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / What This Record Does Not Do · hash: sha256:eff7d061e8aeae749f8842fa6e143466cca3634f1169cdb9e9339bf97579fff2*
+
+It does not decide whether the ledger's underlying primitive — territory-based mutual
+exclusion over a committed document — would also be a reasonable generic XVPE capability
+someday. It decides only that nothing in this workspace exercises it as one today, which is
+the only question `ARC-ECOSYSTEM-001` asked this record to settle.
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#18
+
+*revision: authored · kind: heading · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / What Would Decide It Otherwise · hash: sha256:0dbb85a338ffe192a9a2af143eda6f18cc39e0632a43ad53404ce3f166758649*
+
+## What Would Decide It Otherwise
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#19
+
+*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / What Would Decide It Otherwise · hash: sha256:e51cf6c6f1192e596a6fef7351aa40cffce1720ef11ee847f086fa11579a35ef*
+
+Named so a reader has a concrete trigger rather than a standing suspicion: if `nomos-api`
+becomes a real, externally-consumed product surface — used by something other than this
+repository's own tooling and this record's own seam-exercise framing — its exposure of the
+full ledger verb set at band 90 stops being an internal coordination detail and starts being a
+public commitment. That is the point to re-examine this record's answer, not before it.
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#20
+
+*revision: authored · kind: heading · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#21
+
+*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / Status · hash: sha256:141a5e415cfa82795eb330c0234f67b275e44537b31a0d0fd48a787a1a286b4f*
+
+Accepted. Settles `ARC-ECOSYSTEM-001`'s open disjunction for the work ledger specifically —
+bootstrap machinery, not a generic coordination primitive with a real exercised second
+subject, and not a Nomos product feature converging toward `Workflow`/`TaskEnvelope`. Revisit
+if `nomos-api` becomes a real external product surface rather than a seam-exercise caller.
 
 ### docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#1
 
