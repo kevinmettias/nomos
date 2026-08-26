@@ -1,5 +1,5 @@
 ---
-id: OD-EXECUTOR-003
+id: OD-EXECUTOR-004
 type: decision
 title: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy
 status: accepted

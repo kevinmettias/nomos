@@ -146,9 +146,9 @@ pub(crate) const BANDS: &[(&str, u32)] = &[
     ("nomos-agent-executor-claude-code", 37),
     // The second real AgentExecutor, independent of its sibling above: dispatches a
     // TaskEnvelope's goal to a local Ollama model as a subprocess through nomos-platform's
-    // ProcessLauncher, bounded by OD-EXECUTOR-003's structural capability boundary,
+    // ProcessLauncher, bounded by OD-EXECUTOR-004's structural capability boundary,
     // measured against its own real mechanism. Same band as its sibling; neither may name
-    // the other. `OD-EXECUTOR-003`.
+    // the other. `OD-EXECUTOR-004`.
     ("nomos-agent-executor-ollama", 37),
     // Runs a `nomos work` verb against a caller-chosen platform and hands back a typed
     // outcome, generic over the traits `nomos-platform` declares rather than over the

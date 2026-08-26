@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:13cba97567059a20c3f72dc73c9ab3b4aeb5a1fb4fe890a1ea0c37007d129bb8",
-  "inputs_digest": "sha256:c065437eac4f6fbe9dc59e48449e71fd86ac78b451bede3c128cd9d5943839c1",
+  "content_digest": "sha256:21aa429fe380694acba58a7222dcd7b93160327467a7504d382ddc218a18fa00",
+  "inputs_digest": "sha256:a4f2bbe9569ad482cf6e223f0b75bfbaa5f203e9cfdd040dd261f848e48dac9c",
   "sections": [
     [
       "Documents",
@@ -297,8 +297,8 @@
     },
     {
       "content": "documents",
-      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md@authored",
-      "hash": "sha256:28a7473e3a03a0df77d28b5da741cf2ccc61d52f1bdbf7063004999d14d62560"
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md@authored",
+      "hash": "sha256:5505d057d0aa2bc7662cbfca82c015dd8ef4366f3a6e50d52516638489c4333a"
     },
     {
       "content": "documents",
@@ -2967,48 +2967,48 @@
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#1",
-      "hash": "sha256:5546686b890b269dcc4d771a3b1b51acbe750eb78c76a3669b82c15bde81abc6"
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#1",
+      "hash": "sha256:4a59b5f098bbc0cc9c1820838307301ea862274f4614e4d594a1421039c41168"
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#2",
-      "hash": "sha256:34c711031f1750eae9cb92c400daad3bb07579d8fcc14903b33dee5acec3ce30"
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#2",
+      "hash": "sha256:82d25333e8d4f35e3d161ac7a1e96f7398fbdfc17662fa0cfef011dac70e05a4"
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#5",
-      "hash": "sha256:c843fa7676ae30af3fc76a613a68d2ec0f0a926b9dc24a2a1df657349a5e8ca2"
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#5",
+      "hash": "sha256:11e8803f94c48706eba102388eb8f11f71dd68b056073a6e0a0691c262976e27"
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#7",
-      "hash": "sha256:59cbe15c163ea53335ac6040db42409b050925583faac68a2f6cf7d9abefd8e5"
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#7",
+      "hash": "sha256:71f1e1233097ff36a04ef3c9f2b514bd23a5a79b22586fe2f0226edb0186edae"
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#12",
-      "hash": "sha256:062d0deb431d8c2b3d41c48a0058ae61447b80452ad6b4bd322e7ab5b094e66b"
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#12",
+      "hash": "sha256:93925f6aeb24729c26e8de542ba8e1c6c39e2626ac1f6858829ccf62bd2c62bc"
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#14",
-      "hash": "sha256:05e36814eb5987f04bc6ff371301a851e5965b28a760bf0b4b7fb44fa9dc2775"
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#14",
+      "hash": "sha256:67568f4b48ccb3005c61f425e79b516dddea2df6e8d511c887d083671e28ee20"
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#23",
-      "hash": "sha256:1380caeecf79a6b704500daf14db3f41109036223c88ec50527c5fb735071cc9"
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#23",
+      "hash": "sha256:7f4a4dbcc67f09d8943a764aa05fff213323ca11bf02c537ca78d9fef1a23e37"
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#26",
-      "hash": "sha256:c9b3538ef22a9d3eb50f09b6d828007b144f5f5ad46bdf93ef48a1713867137b"
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#26",
+      "hash": "sha256:90e7ebbeb51d4527ff23e72ccd231b2e89a3b77a3e3e5dc56b00c72d3be0d1ad"
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#31",
-      "hash": "sha256:7e3f9db9e75ad4644fecec67f5b72fb4523a4cbb12388144c176d3fc09152d8b"
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#31",
+      "hash": "sha256:0e372b505da9da15e5b5969805939335b42d1313826a9c36a3eb84136979c3e4"
     },
     {
       "content": "headings",
@@ -15137,162 +15137,162 @@
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#1",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#1",
       "hash": "sha256:6556401acbabd0bdcd7b496cb560c795fd7a4f22752d37978d1499422362baf3"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#2",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#2",
       "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#3",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#3",
       "hash": "sha256:73605a375167633e924d492dd83c32014f14f43edd55f49b6b6f661ff6fb510d"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#4",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#4",
       "hash": "sha256:61aaed0aa3a280f4c115a1e30595a9505caa526b612c3951903891c3bcb309a0"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#5",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#5",
       "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#6",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#6",
       "hash": "sha256:345f5e2adb7e890feb280cdfa28ec65d09b68e7f7169027b60354703579b643f"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#7",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#7",
       "hash": "sha256:cbaf63550be8e520962e1f7474a6e49ed79d98a80186d4a9fcee7ccead75ade7"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#8",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#8",
       "hash": "sha256:9507bee5be16c72d8df25adb279edaded63e68625d3d6bd9a6ef51495f8b6112"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#9",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#9",
       "hash": "sha256:6186d1127c270bc2663e2e8a7328005c325e2cbfd1b50da24ed9931f3514df44"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#10",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#10",
       "hash": "sha256:7abf6f6593f913e15f44aebd0e23fbc242991e84140712de6af024bd571c5851"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#11",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#11",
       "hash": "sha256:274bac7cdd61a572e5800a8020b5dcd82fa6f8418f8f45179469dc92d1747b43"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#12",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#12",
       "hash": "sha256:e82b9ec4e1b63e2d575a7ac0b148baed3f67f805a299f38b8faac7d9e3ab887e"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#13",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#13",
       "hash": "sha256:cb13f369b96404c96bc198b338529c642ff9bb7efd742c2c67af29992e8e569d"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#14",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#14",
       "hash": "sha256:6f52fcf12a95be3e9ed915d2818ce438c2255ec16b6e983a0424d7491717325c"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#15",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#15",
       "hash": "sha256:b353dafbfea9f9c0c07d6a5693b1d884ed637402d0945130211413954cee9af9"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#16",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#16",
       "hash": "sha256:869bbdd73929ac551d0669cd6d3caed7166aa6a1d5ead64c8d4375eaa775d96a"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#17",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#17",
       "hash": "sha256:ccdcf33b86d90c4edeaf3a850688fc178b63c33fb7c8b2a80719559f9bb7daa0"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#18",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#18",
       "hash": "sha256:9ef123a9d481baa51b0e6c585ee4b59e22555b2db9405e254bd9f91a0c290606"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#19",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#19",
       "hash": "sha256:8c45bc1067d711e621064cf7c76efe7aa68095c2ec83d46dad50c6e3f450cd60"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#20",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#20",
       "hash": "sha256:00dfeff54958823e13c902712c5a2b50eb72e544e395db041e8250bdc3868808"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#21",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#21",
       "hash": "sha256:05cf917f2ef9edd580bf0cd8f6f320ba0d165e251655cc3e8b4e2f54df43a0a3"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#22",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#22",
       "hash": "sha256:ee9ede7889ca6a7019cb3b4eb03a8cbc69a18b49239a0868a9b19942716008c2"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#23",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#23",
       "hash": "sha256:4865a77f8126915a6ad3e6a258f5af73eefc1b30baeb4938ea003d7b90eeeae5"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#24",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#24",
       "hash": "sha256:3e07fcf59940a6ef06d3d0362085c3f9635d5385c520115c6acdcc867929f871"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#25",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#25",
       "hash": "sha256:69f48c84ef9f40e58cf5c1c59f0fe2911391b503b4df51d638fffcdb1c737a02"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#26",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#26",
       "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#27",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#27",
       "hash": "sha256:e0f8c65ee696e85077c58b31543ff3ef6f4d7b9962b60eb427907503d8694b40"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#28",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#28",
       "hash": "sha256:b7cad3ee54e4ea499e8dd507f6ee44ad5f93f240dc1dc0c805794a6de116975c"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#29",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#29",
       "hash": "sha256:b47ccabcf7765e4a6d3eb8fc8d80f36c5247e2441bf87da08dee7076c8a77df2"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#30",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#30",
       "hash": "sha256:919fc5102c2c4ed956698c617ce483f47dce40bd0c330ba5d6d23f63b7e882c6"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#31",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#31",
       "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#32",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#32",
       "hash": "sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3"
     },
     {

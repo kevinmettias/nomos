@@ -1,9 +1,9 @@
 //! Band 37 — the second real `AgentExecutor`: `nomos-agent-contracts::TaskEnvelope` in, a
 //! bounded local Ollama model subprocess dispatched through it, [`AgentExecutionOutcome`]
 //! out. Independent of `nomos-agent-executor-claude-code` — structurally parallel, no
-//! shared trait, per `OD-EXECUTOR-001`'s own restraint and `OD-EXECUTOR-003`'s.
+//! shared trait, per `OD-EXECUTOR-001`'s own restraint and `OD-EXECUTOR-004`'s.
 //!
-//! `OD-EXECUTOR-003` decided what this dispatch is permitted to do before this crate existed
+//! `OD-EXECUTOR-004` decided what this dispatch is permitted to do before this crate existed
 //! to do it, measured against `ollama run`'s own real mechanism rather than inherited from
 //! `OD-EXECUTOR-001`'s Claude-Code-specific rule by analogy: never pass `--experimental`,
 //! `--experimental-yolo` or `--experimental-websearch` — the only flags that open any
@@ -43,7 +43,7 @@ use std::path::PathBuf;
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::time::Duration;
 
-/// `OD-EXECUTOR-003`'s own measured adversarial run took under two minutes on this crate's
+/// `OD-EXECUTOR-004`'s own measured adversarial run took under two minutes on this crate's
 /// own default model on real development hardware; five minutes is headroom for a longer
 /// real task, a colder model load, or slower hardware, without leaving a hung subprocess to
 /// wait out an unbounded timeout. There is no dollar-cost signal to bound instead, unlike
@@ -61,7 +61,7 @@ const TIMEOUT: Duration = Duration::from_secs(300);
 const MODEL: &str = "qwen2.5-coder:7b";
 
 /// Dispatches `task.goal` to a local Ollama model as a subprocess, bounded by
-/// `OD-EXECUTOR-003`'s structural capability boundary, and reads back what it produced.
+/// `OD-EXECUTOR-004`'s structural capability boundary, and reads back what it produced.
 ///
 /// # Errors
 ///
@@ -94,7 +94,7 @@ pub(crate) fn Execute_In<P: ProcessLauncher>(
 }
 
 /// A freshly created, empty directory under the system temp root, never this repository's
-/// own tree — `OD-EXECUTOR-003`'s rule applies this defensively, even though it found no
+/// own tree — `OD-EXECUTOR-004`'s rule applies this defensively, even though it found no
 /// mechanism by which `ollama run` reads its own working directory, on the same "a property
 /// of the invocation, not a property inferred from today's absence of a mechanism that could
 /// read it" reasoning that record states. Named from this process's id and a per-process
@@ -127,7 +127,7 @@ fn Isolated_Working_Directory() -> Result<PathBuf, AgentExecutionError>
 /// assumed absent.
 const OLLAMA_PROGRAM: &str = "ollama";
 
-/// The invocation `OD-EXECUTOR-003`'s rule describes, over `task.goal`, run from
+/// The invocation `OD-EXECUTOR-004`'s rule describes, over `task.goal`, run from
 /// `working_directory`. No `--experimental`, `--experimental-yolo` or
 /// `--experimental-websearch` ever appears — the entire structural boundary is their
 /// absence, verified adversarially (see this crate's real integration test).

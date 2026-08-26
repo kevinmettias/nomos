@@ -65,7 +65,7 @@ profile: domain-specification
 | docs/records/OD-DETERMINISM-002-the-last-two-rows-declare-and-the-guard-stops-asking-about-facts.md@authored | docs/records/OD-DETERMINISM-002-the-last-two-rows-declare-and-the-guard-stops-asking-about-facts.md | authored | 35 | 10 | sha256:14dba5ba489a39e4b5605d97a5eb1389a55a6f0efa07f1aa076ccd5dece46428 |
 | docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md@authored | docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md | authored | 32 | 8 | sha256:332c3b7ae159ba13d0b1d176726607b8369f9b5af249de17d98d9507254ce7bb |
 | docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md@authored | docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md | authored | 26 | 8 | sha256:8ab68673889fed19383159068abd89c4b4dbbd6a59aaa336cba463bab3dfa96a |
-| docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md@authored | docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md | authored | 32 | 9 | sha256:28a7473e3a03a0df77d28b5da741cf2ccc61d52f1bdbf7063004999d14d62560 |
+| docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md@authored | docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md | authored | 32 | 9 | sha256:5505d057d0aa2bc7662cbfca82c015dd8ef4366f3a6e50d52516638489c4333a |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md@authored | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md | authored | 30 | 8 | sha256:ede1d73ff937b80913dd5c6fd4d7d5cc70cb8158b29e13bfe003ae5cd5f805d5 |
 | docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md@authored | docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md | authored | 32 | 9 | sha256:1027b7b589216b9cbe4598a2a569261111071dce14529a2556e82f61852f74cf |
 | docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md@authored | docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md | authored | 20 | 7 | sha256:eca88bdcb033ae337eed44a34b8e00e16b9c0208f5bec59b8560b4850808de81 |
@@ -604,15 +604,15 @@ profile: domain-specification
 | docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#15 | authored | 3 | A transport under `OD-SPEC-009` |
 | docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#19 | authored | 2 | What This Record Does Not Do |
 | docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#25 | authored | 2 | Status |
-| docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#1 | authored | 1 | A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy |
-| docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#2 | authored | 2 | Question |
-| docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#5 | authored | 2 | What Was Measured |
-| docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#7 | authored | 3 | Codex CLI (OpenAI), v0.146.1 — installed, reachable, but credential-broken |
-| docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#12 | authored | 3 | Gemini CLI (Google), v0.53.1 — installed, refuses on account tier |
-| docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#14 | authored | 3 | Ollama (local), v0.23.2 — real, reachable, no external credential |
-| docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#23 | authored | 2 | The Rule |
-| docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#26 | authored | 2 | What This Record Does Not Do |
-| docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#31 | authored | 2 | Status |
+| docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#1 | authored | 1 | A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy |
+| docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#2 | authored | 2 | Question |
+| docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#5 | authored | 2 | What Was Measured |
+| docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#7 | authored | 3 | Codex CLI (OpenAI), v0.146.1 — installed, reachable, but credential-broken |
+| docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#12 | authored | 3 | Gemini CLI (Google), v0.53.1 — installed, refuses on account tier |
+| docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#14 | authored | 3 | Ollama (local), v0.23.2 — real, reachable, no external credential |
+| docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#23 | authored | 2 | The Rule |
+| docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#26 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#31 | authored | 2 | Status |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md#1 | authored | 1 | A skipped test reports ok, so the size of the hole is declared rather than the hole being closed |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md#2 | authored | 2 | Question |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md#5 | authored | 2 | What Was Found |
@@ -14883,19 +14883,19 @@ out-of-process plugin mechanism is proposed or built; revisit the deterministic-
 if any of the three named callers, or a future one, is ever given attacker-influenced argument
 content.
 
-### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#1
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#1
 
 *revision: authored · kind: heading · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy · hash: sha256:6556401acbabd0bdcd7b496cb560c795fd7a4f22752d37978d1499422362baf3*
 
 # A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy
 
-### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#2
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#2
 
 *revision: authored · kind: heading · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
 
 ## Question
 
-### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#3
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#3
 
 *revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / Question · hash: sha256:73605a375167633e924d492dd83c32014f14f43edd55f49b6b6f661ff6fb510d*
 
@@ -14908,7 +14908,7 @@ its own scope precisely: "It does not change `OD-EXECUTOR-001`'s rule, its scope
 invocation it governs." Neither record decided what a *second* agentic executor's own
 boundary is when its real mechanism differs from Claude Code's.
 
-### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#4
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#4
 
 *revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / Question · hash: sha256:61aaed0aa3a280f4c115a1e30595a9505caa526b612c3951903891c3bcb309a0*
 
@@ -14920,26 +14920,26 @@ boundary with its own shape is governed by an analogy instead of by its own reco
 record measures a real second backend's own mechanism directly, the same way `OD-EXECUTOR-001`
 measured Claude Code's, before any Rust is written against it.
 
-### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#5
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#5
 
 *revision: authored · kind: heading · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
 
 ## What Was Measured
 
-### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#6
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#6
 
 *revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What Was Measured · hash: sha256:345f5e2adb7e890feb280cdfa28ec65d09b68e7f7169027b60354703579b643f*
 
 Three real, locally-reachable coding-agent CLIs were checked in this environment, not
 assumed reachable from documentation alone.
 
-### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#7
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#7
 
 *revision: authored · kind: heading · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What Was Measured / Codex CLI (OpenAI), v0.146.1 — installed, reachable, but credential-broken · hash: sha256:cbaf63550be8e520962e1f7474a6e49ed79d98a80186d4a9fcee7ccead75ade7*
 
 ### Codex CLI (OpenAI), v0.146.1 — installed, reachable, but credential-broken
 
-### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#8
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#8
 
 *revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What Was Measured / Codex CLI (OpenAI), v0.146.1 — installed, reachable, but credential-broken · hash: sha256:9507bee5be16c72d8df25adb279edaded63e68625d3d6bd9a6ef51495f8b6112*
 
@@ -14951,7 +14951,7 @@ the same fault recurred on retry — and requires an interactive `codex login` b
 that cannot be performed headlessly in this session. Recorded here so a future session does
 not re-attempt Codex assuming it is simply unbuilt rather than actually credential-broken.
 
-### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#9
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#9
 
 *revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What Was Measured / Codex CLI (OpenAI), v0.146.1 — installed, reachable, but credential-broken · hash: sha256:6186d1127c270bc2663e2e8a7328005c325e2cbfd1b50da24ed9931f3514df44*
 
@@ -14960,7 +14960,7 @@ boundary mechanism differs from Claude Code's on at least three axes that would 
 their own empirical adversarial test, the same standard this record holds Ollama to below,
 before `OD-EXECUTOR-001`'s rule could be said to extend to it —
 
-### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#10
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#10
 
 *revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What Was Measured / Codex CLI (OpenAI), v0.146.1 — installed, reachable, but credential-broken · hash: sha256:7abf6f6593f913e15f44aebd0e23fbc242991e84140712de6af024bd571c5851*
 
@@ -14974,19 +14974,19 @@ before `OD-EXECUTOR-001`'s rule could be said to extend to it —
   a reuse of `nomos-agent-executor-claude-code::response::Parse`;
 - no `--max-budget-usd` equivalent was found in `codex exec --help`.
 
-### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#11
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#11
 
 *revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What Was Measured / Codex CLI (OpenAI), v0.146.1 — installed, reachable, but credential-broken · hash: sha256:274bac7cdd61a572e5800a8020b5dcd82fa6f8418f8f45179469dc92d1747b43*
 
 Codex is not decided by this record — see "What This Record Does Not Do."
 
-### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#12
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#12
 
 *revision: authored · kind: heading · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What Was Measured / Gemini CLI (Google), v0.53.1 — installed, refuses on account tier · hash: sha256:e82b9ec4e1b63e2d575a7ac0b148baed3f67f805a299f38b8faac7d9e3ab887e*
 
 ### Gemini CLI (Google), v0.53.1 — installed, refuses on account tier
 
-### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#13
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#13
 
 *revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What Was Measured / Gemini CLI (Google), v0.53.1 — installed, refuses on account tier · hash: sha256:cb13f369b96404c96bc198b338529c642ff9bb7efd742c2c67af29992e8e569d*
 
@@ -14997,13 +14997,13 @@ for this account, not a configuration fault this record or any amount of flag-tu
 close. Fixing it means migrating to a different product — a person's decision, not a
 technical one.
 
-### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#14
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#14
 
 *revision: authored · kind: heading · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What Was Measured / Ollama (local), v0.23.2 — real, reachable, no external credential · hash: sha256:6f52fcf12a95be3e9ed915d2818ce438c2255ec16b6e983a0424d7491717325c*
 
 ### Ollama (local), v0.23.2 — real, reachable, no external credential
 
-### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#15
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#15
 
 *revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What Was Measured / Ollama (local), v0.23.2 — real, reachable, no external credential · hash: sha256:b353dafbfea9f9c0c07d6a5693b1d884ed637402d0945130211413954cee9af9*
 
@@ -15017,13 +15017,13 @@ fault in `ollama app`'s own Windows system-tray integration, not in the daemon �
 headless `ollama serve` daemon starts and serves correctly; a real backend depends on the
 daemon, never the tray app.
 
-### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#16
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#16
 
 *revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What Was Measured / Ollama (local), v0.23.2 — real, reachable, no external credential · hash: sha256:869bbdd73929ac551d0669cd6d3caed7166aa6a1d5ead64c8d4375eaa775d96a*
 
 Checked directly, not assumed from `--help` text:
 
-### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#17
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#17
 
 *revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What Was Measured / Ollama (local), v0.23.2 — real, reachable, no external credential · hash: sha256:ccdcf33b86d90c4edeaf3a850688fc178b63c33fb7c8b2a80719559f9bb7daa0*
 
@@ -15033,7 +15033,7 @@ Checked directly, not assumed from `--help` text:
   cursor/erase sequences on stderr. Reading stdout as content and discarding stderr is safe;
   reading stderr as content would corrupt every response with terminal noise.
 
-### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#18
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#18
 
 *revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What Was Measured / Ollama (local), v0.23.2 — real, reachable, no external credential · hash: sha256:9ef123a9d481baa51b0e6c585ee4b59e22555b2db9405e254bd9f91a0c290606*
 
@@ -15044,7 +15044,7 @@ Checked directly, not assumed from `--help` text:
   `--experimental-websearch` as the only flags that introduce any tool capability; none of
   the three is part of this record's rule.
 
-### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#19
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#19
 
 *revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What Was Measured / Ollama (local), v0.23.2 — real, reachable, no external credential · hash: sha256:8c45bc1067d711e621064cf7c76efe7aa68095c2ec83d46dad50c6e3f450cd60*
 
@@ -15059,7 +15059,7 @@ Checked directly, not assumed from `--help` text:
   subsystem to have granted access to in the first place. Free text is not evidence of
   action for this backend either, even though the reason is structurally stronger.
 
-### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#20
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#20
 
 *revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What Was Measured / Ollama (local), v0.23.2 — real, reachable, no external credential · hash: sha256:00dfeff54958823e13c902712c5a2b50eb72e544e395db041e8250bdc3868808*
 
@@ -15071,7 +15071,7 @@ Checked directly, not assumed from `--help` text:
   there is no ambient configuration for an isolated working directory to shield against, as
   far as this record could find one to test.
 
-### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#21
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#21
 
 *revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What Was Measured / Ollama (local), v0.23.2 — real, reachable, no external credential · hash: sha256:05cf917f2ef9edd580bf0cd8f6f320ba0d165e251655cc3e8b4e2f54df43a0a3*
 
@@ -15083,7 +15083,7 @@ Checked directly, not assumed from `--help` text:
   model on this machine's own hardware — not a bound every machine or every model in this
   family is guaranteed to meet.
 
-### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#22
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#22
 
 *revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What Was Measured / Ollama (local), v0.23.2 — real, reachable, no external credential · hash: sha256:ee9ede7889ca6a7019cb3b4eb03a8cbc69a18b49239a0868a9b19942716008c2*
 
@@ -15093,13 +15093,13 @@ Checked directly, not assumed from `--help` text:
   a distinct, real failure mode a caller of this backend must be able to name, not a variant
   of "the executor could not run or answer" indistinguishable from every other cause.
 
-### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#23
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#23
 
 *revision: authored · kind: heading · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / The Rule · hash: sha256:4865a77f8126915a6ad3e6a258f5af73eefc1b30baeb4938ea003d7b90eeeae5*
 
 ## The Rule
 
-### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#24
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#24
 
 *revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / The Rule · hash: sha256:3e07fcf59940a6ef06d3d0362085c3f9635d5385c520115c6acdcc867929f871*
 
@@ -15109,7 +15109,7 @@ text by analogy — it is measured against its own real mechanism**, the same re
 one instance further out. For the one second instance this record found real, reachable, and
 measurable — Ollama, dispatched non-interactively via `ollama run` — the boundary is:
 
-### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#25
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#25
 
 *revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / The Rule · hash: sha256:69f48c84ef9f40e58cf5c1c59f0fe2911391b503b4df51d638fffcdb1c737a02*
 
@@ -15133,13 +15133,13 @@ measurable — Ollama, dispatched non-interactively via `ollama run` — the bou
   shows the model narrates actions it structurally could not perform, the same "unknown is
   not pass" reading `OD-EXECUTOR-001` already applies to Claude Code's free text.
 
-### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#26
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#26
 
 *revision: authored · kind: heading · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
 
 ## What This Record Does Not Do
 
-### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#27
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#27
 
 *revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What This Record Does Not Do · hash: sha256:e0f8c65ee696e85077c58b31543ff3ef6f4d7b9962b60eb427907503d8694b40*
 
@@ -15151,7 +15151,7 @@ empirical, adversarial way this one measures Ollama — an extension of this rec
 analogy would repeat the exact mistake this record itself exists to avoid making against
 `OD-EXECUTOR-001`.
 
-### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#28
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#28
 
 *revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What This Record Does Not Do · hash: sha256:b7cad3ee54e4ea499e8dd507f6ee44ad5f93f240dc1dc0c805794a6de116975c*
 
@@ -15162,14 +15162,14 @@ only clears the boundary question a second, independent crate needs answered bef
 be built at all. `OD-ROADMAP-001` already licenses building that crate ahead of a caller
 that chooses between backends, the same way it already licensed the first one.
 
-### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#29
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#29
 
 *revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What This Record Does Not Do · hash: sha256:b47ccabcf7765e4a6d3eb8fc8d80f36c5247e2441bf87da08dee7076c8a77df2*
 
 It does not change `OD-EXECUTOR-001`'s own rule, scope, or the Claude Code invocation it
 governs. `OD-EXECUTOR-001` is unaffected.
 
-### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#30
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#30
 
 *revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / What This Record Does Not Do · hash: sha256:919fc5102c2c4ed956698c617ce483f47dce40bd0c330ba5d6d23f63b7e882c6*
 
@@ -15177,13 +15177,13 @@ It does not build the second backend crate itself. This record answers only what
 crate's invocation must omit or bound; the crate is a separate, later increment measured
 against this record's rule the way the first executor was measured against `OD-EXECUTOR-001`'s.
 
-### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#31
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#31
 
 *revision: authored · kind: heading · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#32
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#32
 
 *revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / Status · hash: sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3*
 

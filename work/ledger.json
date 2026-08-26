@@ -33243,6 +33243,81 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P14-TRACKB-EXECUTOR-003-ID-COLLISION-RENAME",
+      "title": "OD-EXECUTOR-003 (mine) renamed to OD-EXECUTOR-004: dev claimed OD-EXECUTOR-003 for an unrelated record while this branch was in flight",
+      "why": "dev advanced past this branch's fork point to commit 5340e61 (P14-EXECUTOR-003-WORKRESULT-JUDGE-ROLE-RECORD), registering its own OD-EXECUTOR-003 for a WorkResult finding unrelated to this branch's second-AgentExecutor-backend-boundary record. Two records cannot share one identifier; OD-EXECUTOR-004 is the next free id on dev as of this check. This is a real identifier collision discovered before merge, not a hypothetical one -- it must be fixed on this branch before track-b can merge into dev cleanly.",
+      "done_when": "docs/records/OD-EXECUTOR-003-*.md is renamed to OD-EXECUTOR-004-*.md with its own id/title updated to match; crates/spec/nomos-spec-store/records/OD-EXECUTOR-003.record is renamed to OD-EXECUTOR-004.record with its path field updated; every citation of OD-EXECUTOR-003 in this branch's own new/changed files (Cargo.toml x2, nomos-agent-executor-ollama's src/*.rs, nomos-cli/src/agent.rs, README.md, tests/contract/tests/boundaries/bands.rs) reads OD-EXECUTOR-004 instead; diagram-set and domain-specification re-rendered and committed from a tree holding exactly this branch's registered records.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md",
+          "crates/spec/nomos-spec-store/records/OD-EXECUTOR-003.record",
+          "crates/spec/nomos-spec-store/records/OD-EXECUTOR-004.record",
+          "Cargo.toml",
+          "crates/agent/nomos-agent-executor-ollama",
+          "crates/host/nomos-cli/Cargo.toml",
+          "crates/host/nomos-cli/src/agent.rs",
+          "README.md",
+          "tests/contract/tests/boundaries/bands.rs",
+          "docs/records/OD-EXECUTOR-003-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "-p",
+          "nomos-agent-executor-ollama",
+          "-p",
+          "nomos-cli"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "-p",
+          "nomos-agent-executor-ollama",
+          "-p",
+          "nomos-cli"
+        ],
+        "exit_code": 0,
+        "output_tail": "    Running tests\\read_surface.rs (target\\debug\\deps\\read_surface-eb40ce2fc5c543ff.exe)\n     Running tests\\request_submit.rs (target\\debug\\deps\\request_submit-149ab5b94d0aea0c.exe)\n     Running tests\\stale_writer_is_refused.rs (target\\debug\\deps\\stale_writer_is_refused-8a5538919820add6.exe)\n     Running tests\\takeover_is_recorded.rs (target\\debug\\deps\\takeover_is_recorded-74e2e29a50ea2c40.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-3e62ecce571fcc5f.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-771bff50f955755e.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-eae24e29a6e8230e.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-d190445650eda1cd.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-5c05c2d8014d4047.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-37536ade529e2b6b.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-efe55070cccf23ec.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-7a436a5034250264.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-8d707296f5e69ae5.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-7c79eed57d5b4f3e.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-7f6eeb9f724411e2.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-1e7e4a5b93fb1d41.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-f91b522bac265377.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-8a3ca0b783b33ca7.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-d5fbb8c0c64c0700.exe)\n   Doc-tests nomos_agent_executor_ollama\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1787731306,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

@@ -75,7 +75,7 @@ nomos-spec-store = { workspace = true }
 nomos-agent-contracts = { workspace = true }
 nomos-agent-executor-claude-code = { workspace = true }
 # The second real AgentExecutor -- `agent.rs`'s --backend flag is the real caller choosing
-# between the two, per OD-EXECUTOR-003.
+# between the two, per OD-EXECUTOR-004.
 nomos-agent-executor-ollama = { workspace = true }
 # TaskEnvelope.effort's type, since OD-CONTRACTS-004 -- `agent.rs` names a value of it
 # directly rather than depending on nomos-agent-contracts alone to re-export one.

@@ -50,7 +50,7 @@ fn Test_Command_For_Requests_The_Bounded_Invocation()
     assert_eq!(command.working_directory.as_deref(), Some(directory));
 }
 
-/// The negative control `OD-EXECUTOR-003`'s rule names directly: none of these ever
+/// The negative control `OD-EXECUTOR-004`'s rule names directly: none of these ever
 /// appears, or the boundary this crate exists to hold is one flag away from being opened.
 #[test]
 fn Test_Command_For_Never_Opens_The_Tool_Use_Loop()
@@ -162,7 +162,7 @@ fn Test_Execute_Reads_A_Scripted_Clean_Response()
     assert_eq!(outcome.response, "PONG");
 }
 
-/// The same falsely-claims-success shape `OD-EXECUTOR-003`'s own real adversarial test
+/// The same falsely-claims-success shape `OD-EXECUTOR-004`'s own real adversarial test
 /// found: the model's stdout claims an action was taken. This crate has no structural
 /// signal to contradict it with the way `nomos_agent_executor_claude_code` reads
 /// `permission_denials` — the contract this test states is narrower and honestly so: this

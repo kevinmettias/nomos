@@ -2,7 +2,7 @@
 
 /// What one `Execute` call reported.
 ///
-/// `response` is free text and is never evidence of what happened -- `OD-EXECUTOR-003`'s own
+/// `response` is free text and is never evidence of what happened -- `OD-EXECUTOR-004`'s own
 /// adversarial measurement found this backend's model narrating a file write and a shell
 /// command it structurally could not perform, the identical shape
 /// `nomos_agent_executor_claude_code`'s own finding names for Claude Code. There is no

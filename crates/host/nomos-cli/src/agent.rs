@@ -1,6 +1,6 @@
 //! `nomos agent` — dispatching a task to one of this workspace's two real `AgentExecutor`
 //! backends: `nomos-agent-executor-claude-code` (the default) or `nomos-agent-executor-ollama`
-//! (`--backend ollama`), the real caller `OD-EXECUTOR-001`/`OD-EXECUTOR-003` both say a
+//! (`--backend ollama`), the real caller `OD-EXECUTOR-001`/`OD-EXECUTOR-004` both say a
 //! dispatch trait or selection mechanism should wait for. There is no such trait: `--backend`
 //! is a plain match over two already-independent free functions, each crate's own.
 //!
@@ -237,7 +237,7 @@ fn Execute(
 }
 
 /// Runs `task` against `backend` and renders whichever of the two outcome shapes it
-/// produces. The two crates share no trait -- `OD-EXECUTOR-001`/`OD-EXECUTOR-003` both
+/// produces. The two crates share no trait -- `OD-EXECUTOR-001`/`OD-EXECUTOR-004` both
 /// decline to invent one ahead of a real need -- so this match is the entire dispatch, not
 /// a stand-in for one.
 fn Dispatch(task: &TaskEnvelope, backend: Backend, output: &mut impl std::io::Write, notes: &mut impl std::io::Write) -> ExitCode
@@ -418,7 +418,7 @@ fn Usage_Text() -> String
             nomos-agent-executor-claude-code under OD-EXECUTOR-001's structural capability \
             boundary: an isolated working directory, no MCP configuration, an allow-list \
             naming no real tool, a $1 budget cap, one --print turn. ollama dispatches through \
-            nomos-agent-executor-ollama, a local model, under OD-EXECUTOR-003's boundary: an \
+            nomos-agent-executor-ollama, a local model, under OD-EXECUTOR-004's boundary: an \
             isolated working directory, never --experimental/--experimental-yolo/\
             --experimental-websearch (the only flags that open any tool-use capability), a \
             wall-clock timeout in place of a dollar budget. Its own outcome carries only the \

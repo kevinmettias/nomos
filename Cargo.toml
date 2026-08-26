@@ -144,7 +144,7 @@ members = [
 
     # Band 37. The second real AgentExecutor adapter: dispatches a TaskEnvelope's goal to a
     # local Ollama model as a subprocess through nomos-platform's ProcessLauncher, bounded
-    # by `OD-EXECUTOR-003`'s structural capability boundary -- measured against its own
+    # by `OD-EXECUTOR-004`'s structural capability boundary -- measured against its own
     # mechanism, not inherited from `OD-EXECUTOR-001` by analogy. Same band as its sibling;
     # neither may name the other, and there is no dispatch trait generic over both.
     "crates/agent/nomos-agent-executor-ollama",
