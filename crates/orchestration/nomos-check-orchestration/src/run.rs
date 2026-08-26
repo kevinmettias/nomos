@@ -6,9 +6,10 @@ use nomos_capability::Registry;
 use nomos_contracts::{Finding, RuleId};
 use nomos_platform::ProcessLauncher;
 use nomos_rules::{
-    Check_Completeness_Mirrors, Check_Cross_Language_Correspondence, Check_Dependency_Direction, Check_Dependency_Policy,
-    Check_Lint_Diagnostics, Check_Naming_Convention, Check_Unread_Reaches_A_Finding, SourceFile, COMPLETENESS_MIRROR,
-    CROSS_LANGUAGE_CORRESPONDENCE, DEPENDENCY_DIRECTION, DEPENDENCY_POLICY, LINT_DIAGNOSTICS, NAMING_CONVENTION,
+    Check_Completeness_Mirrors, Check_Cross_Language_Correspondence, Check_Dependency_Direction,
+    Check_Dependency_Policy, Check_Every_Member_Declares_A_Band, Check_Lint_Diagnostics, Check_Naming_Convention,
+    Check_Unread_Reaches_A_Finding, SourceFile, COMPLETENESS_MIRROR, CROSS_LANGUAGE_CORRESPONDENCE,
+    DEPENDENCY_COMPLETENESS, DEPENDENCY_DIRECTION, DEPENDENCY_POLICY, LINT_DIAGNOSTICS, NAMING_CONVENTION,
     UNREAD_REACHES_FINDING,
 };
 use nomos_workspace::BuildVariant;
@@ -138,8 +139,9 @@ fn Outcome_Of(files: usize, facts: usize, findings: Vec<Finding>) -> CheckOutcom
 /// its own materialization step for the reasons [`Materialize_Dependencies`],
 /// [`Materialize_Lint`], [`Materialize_Policy`] and [`Materialize_Reachability`] give.
 ///
-/// Each runs only when `selected` asks for the rule it alone feeds -- `DEPENDENCY_DIRECTION`
-/// for the first, `LINT_DIAGNOSTICS` for the second, `DEPENDENCY_POLICY` for the third,
+/// Each runs only when `selected` asks for a rule it feeds -- `DEPENDENCY_DIRECTION` or
+/// `DEPENDENCY_COMPLETENESS` for the first (both judge the same `dependencies.sources`),
+/// `LINT_DIAGNOSTICS` for the second, `DEPENDENCY_POLICY` for the third,
 /// `UNREAD_REACHES_FINDING` for the fourth, per `OD-GATE-017`. Skipping
 /// `Materialize_Dependencies`, `Materialize_Lint` or `Materialize_Policy` skips its own
 /// subprocess launch entirely, not merely its finding's place in a later disposition.
@@ -152,7 +154,7 @@ fn Materialize_Capabilities<P: ProcessLauncher>(
     selected: &[RuleId],
 ) -> CapabilityMaterialization
 {
-    let dependencies = if Wants(selected, DEPENDENCY_DIRECTION)
+    let dependencies = if Wants(selected, DEPENDENCY_DIRECTION) || Wants(selected, DEPENDENCY_COMPLETENESS)
     {
         Materialize_Dependencies(root, context, store, launcher)
     }
@@ -210,8 +212,9 @@ struct CapabilityMaterialization
 }
 
 /// Every finding the completeness, naming-convention, dependency-direction,
-/// lint-diagnostics and unread-reaches-finding rules `selected` asks for produce over
-/// `sources` and `capabilities`' own source lists, plus whatever [`Materialize_Capabilities`]
+/// dependency-completeness, lint-diagnostics and unread-reaches-finding rules `selected`
+/// asks for produce over `sources` and `capabilities`' own source lists, plus whatever
+/// [`Materialize_Capabilities`]
 /// already found on its own (a failed dependency or lint materialization, reported rather
 /// than judged) -- unconditionally, since each such finding already carries its own rule
 /// and a caller that did not select it would never have triggered the materialization
@@ -241,6 +244,11 @@ fn Judged(
     if Wants(selected, DEPENDENCY_DIRECTION)
     {
         findings.extend(Check_Dependency_Direction(&capabilities.dependency_sources, &mut reader));
+    }
+
+    if Wants(selected, DEPENDENCY_COMPLETENESS)
+    {
+        findings.extend(Check_Every_Member_Declares_A_Band(&capabilities.dependency_sources, &mut reader));
     }
 
     if Wants(selected, LINT_DIAGNOSTICS)

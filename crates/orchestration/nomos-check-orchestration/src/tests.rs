@@ -47,19 +47,20 @@ fn Repository_Root() -> std::path::PathBuf
 
 /// Selected explicitly rather than left to `&[]`'s "everything" default: this repository
 /// keeps its own architecture at zero findings (`COMPLETENESS_MIRROR`, `NAMING_CONVENTION`,
-/// `DEPENDENCY_DIRECTION`, `UNREAD_REACHES_FINDING`), which is what "a clean tree" means
-/// here, but does not keep `LINT_DIAGNOSTICS` at zero -- `cargo clippy`'s own pedantic-level
-/// warnings are tolerated debt this workspace's own gate explicitly does not block on
-/// (`.github/workflows/gate.yml` carries no `-D warnings`), and they fluctuate as concurrent
-/// sessions touch the tree. Selecting `&[]` here would make this test's own pass/fail
-/// depend on the ambient lint-cleanliness of the whole real repository at the moment it
-/// runs, which is not the property this test exists to prove.
-fn Architectural_Rules() -> [RuleId; 4]
+/// `DEPENDENCY_DIRECTION`, `DEPENDENCY_COMPLETENESS`, `UNREAD_REACHES_FINDING`), which is
+/// what "a clean tree" means here, but does not keep `LINT_DIAGNOSTICS` at zero --
+/// `cargo clippy`'s own pedantic-level warnings are tolerated debt this workspace's own gate
+/// explicitly does not block on (`.github/workflows/gate.yml` carries no `-D warnings`), and
+/// they fluctuate as concurrent sessions touch the tree. Selecting `&[]` here would make
+/// this test's own pass/fail depend on the ambient lint-cleanliness of the whole real
+/// repository at the moment it runs, which is not the property this test exists to prove.
+fn Architectural_Rules() -> [RuleId; 5]
 {
     return [
         RuleId::New(nomos_rules::COMPLETENESS_MIRROR),
         RuleId::New(nomos_rules::NAMING_CONVENTION),
         RuleId::New(nomos_rules::DEPENDENCY_DIRECTION),
+        RuleId::New(nomos_rules::DEPENDENCY_COMPLETENESS),
         RuleId::New(nomos_rules::UNREAD_REACHES_FINDING),
     ];
 }

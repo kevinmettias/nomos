@@ -15,7 +15,7 @@ profile: domain-specification
 | docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md@authored | docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md | authored | 73 | 15 | sha256:9c180099cbe0676f26fbb605bcf1696c99b2ff6fb542c0d367a429cfeb236d87 |
 | docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md@authored | docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md | authored | 22 | 9 | sha256:617fdf9751303c87338720a7a50927cab3bfa84d19c92ec42cc43a7876566a9e |
 | docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md@authored | docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md | authored | 31 | 8 | sha256:1931b6cbe939acaa26774b46b8533002d2ff588626d1e25834dd6b8f8dc5b802 |
-| docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md@authored | docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md | authored | 29 | 12 | sha256:a078f1decce9e5c5bff51b928ce8fc65aee3e066235f5c7be7dd87c86dda79f8 |
+| docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md@authored | docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md | authored | 29 | 12 | sha256:b333cce918ab3abd2faaf20b50cbd64be30d8c5b15c3eb5f81c63e6ed9562723 |
 | docs/records/ARC-SPECDB-001-the-specification-is-a-database.md@authored | docs/records/ARC-SPECDB-001-the-specification-is-a-database.md | authored | 18 | 5 | sha256:795ab3ead8311de8e0f1a93828209d5c1654275417d109a92e491cab9e3b5b45 |
 | docs/records/ARC-SPECDB-002-a-canonical-substrate-is-decided-by-whether-the-schema-precedes-the-content.md@authored | docs/records/ARC-SPECDB-002-a-canonical-substrate-is-decided-by-whether-the-schema-precedes-the-content.md | authored | 33 | 8 | sha256:6345396571caf05ec03eb1d4cf5f6f4b940f8f2f42dce4026dfabd0836faefa9 |
 | docs/records/D-129-the-store-is-the-identity-substrate.md@authored | docs/records/D-129-the-store-is-the-identity-substrate.md | authored | 28 | 7 | sha256:c1f3eeec14e44a3f55d1f71522686a9f695f79060ac32e84aacdd0ff245d7778 |
@@ -69,6 +69,7 @@ profile: domain-specification
 | docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md@authored | docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md | authored | 20 | 6 | sha256:ea763ec0abaa47ca8f8f8c56f0831097b8c0467b7146738054c39b61c9dc8f2f |
 | docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md@authored | docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md | authored | 32 | 9 | sha256:5505d057d0aa2bc7662cbfca82c015dd8ef4366f3a6e50d52516638489c4333a |
 | docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md@authored | docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md | authored | 23 | 7 | sha256:1f668a9c3b8b790d0935f12b8f3350130ac9c388e0f9c0671ef5d57379f74b47 |
+| docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md@authored | docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md | authored | 19 | 6 | sha256:0c2b9021270c0e484742945479352a8b2d9d573056158e27d377c6f56433545d |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md@authored | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md | authored | 30 | 8 | sha256:ede1d73ff937b80913dd5c6fd4d7d5cc70cb8158b29e13bfe003ae5cd5f805d5 |
 | docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md@authored | docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md | authored | 32 | 9 | sha256:1027b7b589216b9cbe4598a2a569261111071dce14529a2556e82f61852f74cf |
 | docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md@authored | docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md | authored | 20 | 7 | sha256:eca88bdcb033ae337eed44a34b8e00e16b9c0208f5bec59b8560b4850808de81 |
@@ -143,6 +144,7 @@ profile: domain-specification
 | docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md@authored | docs/records/OD-PACKAGE-011-model-route-037-s-second-clause-and-038-through-049-still-have-no-real-second-case.md | authored | 32 | 10 | sha256:58e12ff46ca519ac9381a1d2f41c5ea5fcc7464661c4ad18234d3cb1f7a3805a |
 | docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md@authored | docs/records/OD-PACKAGE-012-model-agent-backend-routing-integrates-through-the-existing-capability-system-not-a-privileged-layer.md | authored | 19 | 7 | sha256:6a14772c529dbb5589b38e4fdaec088191dcfbec7c6381e15d216537c6d1e4dd |
 | docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md@authored | docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md | authored | 23 | 7 | sha256:dcc46751eb94d3bee57169f30884a606ccba06f0162d77b4587cb383ee7e499e |
+| docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md@authored | docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md | authored | 18 | 6 | sha256:f17c861d194a9cc9d84cd2a1dd636f2d20cf8f6ce02d03d175153c13487a2288 |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md@authored | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md | authored | 34 | 9 | sha256:871e1ada836924e8fad8d9f05a7badd9349eefb18e90e0157a28ac34879555d0 |
 | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md@authored | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md | authored | 28 | 7 | sha256:f98efe7a4dd950df779912722f9deb19ecdc75a81e52d9635900c2f424a8623a |
 | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md@authored | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md | authored | 45 | 10 | sha256:9af1a60d2bc3755845a1d9c3eeae503b2a8f6ec315cfc906d633c7dc2d5f0483 |
@@ -638,6 +640,12 @@ profile: domain-specification
 | docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#13 | authored | 2 | What This Record Does Not Do |
 | docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#16 | authored | 2 | Amendment: `--backend` Splits Into `--executor` And `--model-backend` |
 | docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#22 | authored | 2 | Status |
+| docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#1 | authored | 1 | A CodeRabbit-style review adapter takes ToolProvider/connector shape, not AgentExecutor shape |
+| docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#2 | authored | 2 | Question |
+| docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#5 | authored | 2 | What Was Measured |
+| docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#10 | authored | 2 | The Decision |
+| docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#13 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#18 | authored | 2 | Status |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md#1 | authored | 1 | A skipped test reports ok, so the size of the hole is declared rather than the hole being closed |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md#2 | authored | 2 | Question |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md#5 | authored | 2 | What Was Found |
@@ -1299,6 +1307,12 @@ profile: domain-specification
 | docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#13 | authored | 2 | What This Record Does Not Do |
 | docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#17 | authored | 2 | Amendment: The Crate Is Renamed To `nomos-model-backend-ollama` |
 | docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md#22 | authored | 2 | Status |
+| docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#1 | authored | 1 | A LanguagePackage's activation semantics are a conformance claim, not an installer action |
+| docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#2 | authored | 2 | Question |
+| docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#4 | authored | 2 | What Was Measured |
+| docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#9 | authored | 2 | The Decision |
+| docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#12 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#17 | authored | 2 | Status |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#1 | authored | 1 | A port that names its outcomes says nothing about how they are obtained |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#2 | authored | 2 | Question |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#5 | authored | 2 | What Was Measured |
@@ -3667,15 +3681,20 @@ shape against, or once `EGRAPH` itself is named in a scope like `OD-ROADMAP-001`
 
 ### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#23
 
-*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Four Constraints / 4. Ecosystem ownership is `ARC-ECOSYSTEM-001`'s, unrepeated here · hash: sha256:f1ef98c33024d1d024da224fa74a802f9102ea96d421c39f58e4283913f98179*
+*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Four Constraints / 4. Ecosystem ownership is `ARC-ECOSYSTEM-001`'s, unrepeated here · hash: sha256:cf703e6431108c87e2b010ca441de179532a9dbfcf61a8a05385a203b10dc2f6*
 
 `ARC-ECOSYSTEM-001` (version 4) already governs what Nomos, KWB, XVPE, and repository
 tooling each own, including the specific question an earlier draft of this reasoning got
-wrong: package installation and activation is XVPE's, by explicit adoption of `D-091`, not
-unfinished Nomos work. This record governs sequencing inside Nomos's own boundary. It adds
-no ownership claim and restates none; where the two are read together, `ARC-ECOSYSTEM-001`
-is the authority on who owns what, and this record is the authority on what order Nomos
-builds its own share in.
+wrong: package installation is XVPE's, by explicit adoption of `D-091`, not unfinished
+Nomos work. That adoption's own text draws a narrower line than "installation and
+activation" restates: `D-091` names package *mechanism* — envelope, resolution,
+registries, ingestion, transactional installation, rollback and recovery, signatures — and
+`ARC-ECOSYSTEM-001` keeps package *meaning* on this side of the seam, package activation
+semantics named among it explicitly, the same way `D-122`'s adoption kept rule and finding
+semantics on this side of the analysis-mechanism crossing. This record governs sequencing
+inside Nomos's own boundary. It adds no ownership claim and restates none; where the two
+are read together, `ARC-ECOSYSTEM-001` is the authority on who owns what, and this record
+is the authority on what order Nomos builds its own share in.
 
 ### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#24
 
@@ -3728,7 +3747,7 @@ depend on rather than duplicate.
 
 ### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#29
 
-*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Status · hash: sha256:849e31968b9d24fb398d8faf5c431541685004bbdc93b5ad5d73468b2e221552*
+*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Status · hash: sha256:46b1e90810340bc991be682a32f1ca8c6f1d2994032dc1b1d9be520cad85d2bf*
 
 Accepted, drawn by `P13-CORE-ROADMAP-RECONCILIATION-3`. It schedules no item and orders
 nothing within either tier, so nothing discharges it as a whole; what would revisit each
@@ -3737,7 +3756,12 @@ execution reach the point of needing typed cross-entity relationships, constrain
 amendment to `ARC-ECOSYSTEM-001` rather than to this record. Amended to version 2 by
 `P13-ROADMAP-001-POPULATION-CAUTION-RETIRED`, which retired constraint 2's wait via the new
 anchor record `OD-ROADMAP-001` — see that record for the reasoning and the full list of
-records it supersedes.
+records it supersedes. Amended to version 3 by `P14-ROADMAP-001-ACTIVATION-SEMANTICS-CORRECTION`,
+which corrected constraint 4's own restatement of `ARC-ECOSYSTEM-001`'s adopted `D-091`
+clause: that adoption keeps package *activation semantics* on Nomos's side of the seam, and
+this record's prior text erased that carve-out by compressing "installation" and
+"activation" into one XVPE-owned phrase. Package installation mechanism is unchanged as
+XVPE's; nothing else about either record's ownership table moves.
 
 ### docs/records/ARC-SPECDB-001-the-specification-is-a-database.md#1
 
@@ -15874,6 +15898,197 @@ Revisit if a second real `AgentExecutor` — not a `ModelBackend` — is ever di
 Claude Code's. Amended to version 2 by `P14-EXECUTOR-006-OLLAMA-RENAME-AND-BACKEND-FLAG-SPLIT`:
 `--backend` is replaced by `--executor`/`--model-backend`, naming which family a caller
 chooses from rather than presenting one flag whose values silently span two package kinds.
+
+### docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#1
+
+*revision: authored · kind: heading · heading: A CodeRabbit-style review adapter takes ToolProvider/connector shape, not AgentExecutor shape · hash: sha256:b4f7e2dab755104e085d2da5f84782fdfd9a86633176be69cd8201f91a9a9b50*
+
+# A CodeRabbit-style review adapter takes ToolProvider/connector shape, not AgentExecutor shape
+
+### docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#2
+
+*revision: authored · kind: heading · heading: A CodeRabbit-style review adapter takes ToolProvider/connector shape, not AgentExecutor shape / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#3
+
+*revision: authored · kind: prose · heading: A CodeRabbit-style review adapter takes ToolProvider/connector shape, not AgentExecutor shape / Question · hash: sha256:53a66cde814ba6bae6032d8471a782c15eab096542bf47a950e62eb73bcccae9*
+
+An external architecture review named CodeRabbit as an obvious next integration once
+`nomos-cap-lint`'s tool-provider seam and `nomos-agent-contracts`' executor seam were both
+real, without asking which of the two shapes it should take. `nomos-agent-executor-claude-code`
+and `nomos-agent-executor-ollama` are the workspace's only two `AgentExecutor`-shaped crates
+today (`OD-PACKAGE-013` reclassified Ollama as a `ModelBackendPackage`, leaving exactly one
+real `AgentExecutor`); `nomos-cap-lint` plus `nomos-lang-rust-clippy`/`nomos-lang-rust-deny`
+are the workspace's real `ToolProvider` instances; `nomos-connector-github` is a real, separate
+third shape, a connector under `ARC-CONNECTOR-001`. A CodeRabbit adapter could plausibly be
+built as any of the three, and nothing before this record asked which.
+
+### docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#4
+
+*revision: authored · kind: prose · heading: A CodeRabbit-style review adapter takes ToolProvider/connector shape, not AgentExecutor shape / Question · hash: sha256:c6993775a22f6bc9cd6e4f391de99f8836120930783bc8e336764fb1b026756b*
+
+Two live decisions sit adjacent to this question and are checked rather than assumed:
+`OD-LEDGER-037` (whether `nomos-agent-contracts`' reuse of `nomos-ledger`'s `Territory`/
+`VerificationPredicate` needs its own product-owned types) and `OD-EXECUTOR-005` (whether the
+`--backend` flag dispatching an `AgentExecutor` and a `ModelBackend` means `OD-EXECUTOR-004`'s
+shared-trait trigger has fired). Neither touches `TaskEnvelope`'s or `WorkResult`'s shape, and
+`OD-LEDGER-037`'s own question is a future relocation of two field types, not a change to
+either. A third `AgentExecutor` implementation started today reads the identical
+`TaskEnvelope` regardless of how either question resolves, so this record does not wait on
+them.
+
+### docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#5
+
+*revision: authored · kind: heading · heading: A CodeRabbit-style review adapter takes ToolProvider/connector shape, not AgentExecutor shape / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#6
+
+*revision: authored · kind: prose · heading: A CodeRabbit-style review adapter takes ToolProvider/connector shape, not AgentExecutor shape / What Was Measured · hash: sha256:208a5beb2b2c07529ec53359860e5c5d978738c85412a05bad47525421fc61bb*
+
+**What `AgentExecutor` shape actually requires.** `nomos-agent-contracts` exports no trait —
+`TaskEnvelope`, `WorkResult`, `NomosResolvedChangeContext`, nothing else. Both real
+implementations independently supply their own free function,
+`Execute<P: ProcessLauncher>(&TaskEnvelope, &P) -> Result<AgentExecutionOutcome,
+AgentExecutionError>`, each with its own outcome and error types, each doc comment stating
+plainly that no shared trait exists. `AgentExecutor` shape means: accept a bounded task
+description, act on the repository on the caller's behalf (possibly choosing tools and
+models internally), and return a structured account of what happened. It is a shape for
+*doing work*.
+
+### docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#7
+
+*revision: authored · kind: prose · heading: A CodeRabbit-style review adapter takes ToolProvider/connector shape, not AgentExecutor shape / What Was Measured · hash: sha256:8b010327b6af3454ef3aead3ab38020d11d606ee3b3e50ea66ccb4064e24a7de*
+
+**What `ToolProvider` shape actually is.** `OD-RULES-010` states it precisely: a tool's
+output becomes a fact a native rule judges, never a `Finding` the tool emits directly.
+`nomos-lang-rust-clippy::provider::Materialize_Workspace` runs `cargo clippy` and produces
+`DiagnosticsFact`s at `EvidenceClass::Verified`, filed under a `FactKey`; `nomos_rules::
+Check_Lint_Diagnostics` reads that fact and relays it as `Finding`s at `EvidenceClass::
+Derived`. It is a shape for *establishing evidence about code that already exists*, with
+Nomos keeping the judgment.
+
+### docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#8
+
+*revision: authored · kind: prose · heading: A CodeRabbit-style review adapter takes ToolProvider/connector shape, not AgentExecutor shape / What Was Measured · hash: sha256:654225b8885bddc11d5426e3e8794b9c81b878982ab78675d660d5c56c6dcf03*
+
+**What CodeRabbit actually produces.** A CodeRabbit review returns comments about an existing
+diff — findings a third party made about code, not new code and not an action taken on the
+repository. It does not choose tools, does not act with `scope`/`prohibited_changes`
+boundaries the way `AgentExecutor` shape requires, and has nothing resembling `TaskEnvelope`'s
+input contract: there is no task to hand it, only a diff to hand it and a review to get back.
+That is evidence about code, produced externally, exactly `ToolProvider`'s own shape — not a
+bounded actor doing work on Nomos's behalf.
+
+### docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#9
+
+*revision: authored · kind: prose · heading: A CodeRabbit-style review adapter takes ToolProvider/connector shape, not AgentExecutor shape / What Was Measured · hash: sha256:631084376c609e4b555eda2da79812679ce807f28e14e679227b2b18854169ea*
+
+**Why it is closer to a connector than a same-band `ToolProvider`.** `nomos-lang-rust-clippy`
+runs a local subprocess the caller's own `ProcessLauncher` controls end to end. CodeRabbit is
+a genuine external peer system reached over its own API/webhook surface, carrying vendor
+identity and vendor-shaped payloads that need translation before Nomos can read them —
+`nomos-connector-github`'s own shape, not `nomos-lang-rust-clippy`'s. `ARC-CONNECTOR-001`
+already binds this shape with four invariants, and `OD-CONNECTOR-001`/`OD-CONNECTOR-002`
+already settle two of the mechanics a review connector would need regardless of which peer:
+an outward mutation (posting a reply, resolving a thread) is a command through a canonical
+service, never a raw peer write, and identity/absence/replay are governed the identical way
+`nomos-connector-github` already proves end to end, with a real fixture-below-translation
+test and one opt-in live-network test. A CodeRabbit adapter's own fact contract would sit
+beside its one provider, per `OD-CAPABILITY-002`'s real criterion, the same way `nomos.cap.
+connector.artifact` does today for `nomos-connector-github` — extracting a shared contract
+ahead of a second connector needing it would be designing from a population of one.
+
+### docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#10
+
+*revision: authored · kind: heading · heading: A CodeRabbit-style review adapter takes ToolProvider/connector shape, not AgentExecutor shape / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#11
+
+*revision: authored · kind: prose · heading: A CodeRabbit-style review adapter takes ToolProvider/connector shape, not AgentExecutor shape / The Decision · hash: sha256:8e2301c2f88e5f8b9dbb6af1940c9bd7effd5f6dd115574aa9f33139ea1ceb24*
+
+**A CodeRabbit-style review adapter takes connector/`ToolProvider` shape: it establishes
+review evidence as a fact, and a native Nomos rule judges it into a `Finding`. It does not
+take `AgentExecutor` shape.** The concrete mechanism is `nomos-connector-github`'s own
+precedent, not `nomos-lang-rust-clippy`'s: a peer system reached over a real transport,
+requiring vendor-to-canonical translation and its own identity/evidence handling under
+`ARC-CONNECTOR-001`, rather than a local subprocess a `ProcessLauncher` runs directly. What
+it shares with `nomos-lang-rust-clippy` is the boundary that actually matters here —
+`OD-RULES-010`'s fact-not-finding split — not the transport.
+
+### docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#12
+
+*revision: authored · kind: prose · heading: A CodeRabbit-style review adapter takes ToolProvider/connector shape, not AgentExecutor shape / The Decision · hash: sha256:bd3fce74d521479c20eb89e7ae662426b37332de78487cde186b43d3bd9ab549*
+
+This is not a preference between two equally valid shapes. `AgentExecutor` shape presumes a
+bounded actor that does work; CodeRabbit does not do work on the repository, it produces
+evidence about work already done. Building it as a third `AgentExecutor` would mean
+inventing a `TaskEnvelope` with nothing for CodeRabbit to read and a `WorkResult` describing
+an action that never happened, the same undifferentiated-bucket failure `OD-PACKAGE-003`
+names for a package kind carrying content that belongs to a different kind entirely.
+
+### docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#13
+
+*revision: authored · kind: heading · heading: A CodeRabbit-style review adapter takes ToolProvider/connector shape, not AgentExecutor shape / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#14
+
+*revision: authored · kind: prose · heading: A CodeRabbit-style review adapter takes ToolProvider/connector shape, not AgentExecutor shape / What This Record Does Not Do · hash: sha256:024804e9a844af5360e6f38ff6dacdefdf603e036fda60186abc9afa5aba483d*
+
+It does not build `nomos-connector-coderabbit` or any crate. No new capability contract is
+declared, no band is reserved, and no `Cargo.toml` or `README.md` entry changes. It does not
+decide CodeRabbit's own review-comment schema, its authentication mechanism, or which of its
+API surfaces (REST, webhook, GitHub Check) a real adapter would read — those are the first
+real adapter's own measurement, the same way `nomos-connector-github`'s own `fetching.rs` and
+`translation.rs` measured GitHub's issue shape rather than this record inventing one in
+advance of a subject.
+
+### docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#15
+
+*revision: authored · kind: prose · heading: A CodeRabbit-style review adapter takes ToolProvider/connector shape, not AgentExecutor shape / What This Record Does Not Do · hash: sha256:f0370be56886b779588fd5ece746a1793e07d856f2a3fd28a5c5c2d338c8ec4c*
+
+It does not decide whether a review connector's fact contract is `nomos.cap.connector.
+artifact` reused, or a `nomos.cap.review.*` contract of its own — that is a second-party
+question `OD-CAPABILITY-002`'s criterion answers only once a second connector exists to
+compare against the first, exactly as `nomos-connector-github`'s own contract.rs notes for
+itself.
+
+### docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#16
+
+*revision: authored · kind: prose · heading: A CodeRabbit-style review adapter takes ToolProvider/connector shape, not AgentExecutor shape / What This Record Does Not Do · hash: sha256:a99650db2f6c0d6f287a4dd5136e9649bd87ccf110218b6ca9b8ebf7c4672839*
+
+It does not reopen `OD-LEDGER-037` or `OD-EXECUTOR-005`, and nothing in either record's own
+question bears on this one: both are about `AgentExecutor`-shaped crates' internal typing and
+CLI framing, and this record's answer is that CodeRabbit is not `AgentExecutor`-shaped at all.
+
+### docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#17
+
+*revision: authored · kind: prose · heading: A CodeRabbit-style review adapter takes ToolProvider/connector shape, not AgentExecutor shape / What This Record Does Not Do · hash: sha256:9203aedff50c4f1209c06af566b6c0e95e1d04534ea6be91d9aad56986e71e81*
+
+It does not decide Clay's shape. An executor that genuinely takes a `TaskEnvelope` and acts
+on a repository — choosing tools, respecting `scope` and `prohibited_changes` — would be
+measured against `AgentExecutor` shape the way this record measured CodeRabbit against it and
+found no match; a future record makes that measurement when a real candidate exists to check,
+not this one in advance of it.
+
+### docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#18
+
+*revision: authored · kind: heading · heading: A CodeRabbit-style review adapter takes ToolProvider/connector shape, not AgentExecutor shape / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#19
+
+*revision: authored · kind: prose · heading: A CodeRabbit-style review adapter takes ToolProvider/connector shape, not AgentExecutor shape / Status · hash: sha256:9e1f1bba7473ae1d51568db28cf1853074c501640026b1d95f09b90c302a9cdb*
+
+Accepted. Names the shape a future CodeRabbit-style adapter takes; builds nothing.
 
 ### docs/records/OD-GATE-001-a-skipped-test-reports-ok.md#1
 
@@ -37321,6 +37536,173 @@ Accepted. Ollama's real, measured mechanism is `ModelBackendPackage`'s shape. Am
 version 2 by `P14-EXECUTOR-006-OLLAMA-RENAME-AND-BACKEND-FLAG-SPLIT`: the crate is renamed
 `nomos-agent-executor-ollama` → `nomos-model-backend-ollama`, settling the naming convention
 this record's own version-1 text left open.
+
+### docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#1
+
+*revision: authored · kind: heading · heading: A LanguagePackage's activation semantics are a conformance claim, not an installer action · hash: sha256:f01f4174ae4107441064130e24e56411a53174a3d70a9394a49fb7514deafaf8*
+
+# A LanguagePackage's activation semantics are a conformance claim, not an installer action
+
+### docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#2
+
+*revision: authored · kind: heading · heading: A LanguagePackage's activation semantics are a conformance claim, not an installer action / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#3
+
+*revision: authored · kind: prose · heading: A LanguagePackage's activation semantics are a conformance claim, not an installer action / Question · hash: sha256:4464a6126388423cbd8d510b90fc92d6314898afd529a8b26adf976b7bc89ca1*
+
+`ARC-ECOSYSTEM-001` v4's adopted `D-091` clause keeps "package activation semantics" on
+Nomos's side of the mechanism/meaning seam — `P14-ROADMAP-001-ACTIVATION-SEMANTICS-
+CORRECTION` fixed `ARC-ROADMAP-001`'s own restatement of exactly this carve-out. Nothing
+before this record says what that phrase means for the one real manifest type this
+workspace has today, `nomos-lang-rust-package::LanguagePackage`. `OD-PACKAGE-001`'s own
+four-step path — an installable manifest exists, something reads and refuses it, the one
+rule this tree has cites a contract version, only then does `publish` arise — never mentions
+activation at all, so this is a genuinely open question rather than one already answered and
+merely unnamed.
+
+### docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#4
+
+*revision: authored · kind: heading · heading: A LanguagePackage's activation semantics are a conformance claim, not an installer action / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#5
+
+*revision: authored · kind: prose · heading: A LanguagePackage's activation semantics are a conformance claim, not an installer action / What Was Measured · hash: sha256:c625a1fe3c1e25dce486db4a09bd79e5dd385b1d1f1f596abf9d0b0712b961d1*
+
+**Nothing calls the reader outside the package crates themselves.** Grepped across every
+`.rs` file in this workspace for `Parse_Manifest`/`Read_Manifest`: every call site is inside
+`nomos-package`, `nomos-lang-rust-package`, `nomos-model-package` or `nomos-rule-package`'s
+own source. No composition root, no CLI verb, nothing under `nomos-check-orchestration` or
+`nomos-cli` ever reads a `LanguagePackage` manifest. A manifest can be parsed and validated
+today, and nothing in this workspace ever does.
+
+### docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#6
+
+*revision: authored · kind: prose · heading: A LanguagePackage's activation semantics are a conformance claim, not an installer action / What Was Measured · hash: sha256:76b574ce4d8376e2c68222d479b0f05c4c5ba385bebb6a600751d7715b365812*
+
+**`LanguagePackage::providers` already carries exactly what would need checking.**
+`ProviderRegistration { provider: ProviderId, tool_version: PackageVersion }` — a manifest's
+own claim about which providers it registers. Composition today is entirely hand-written:
+`crates/orchestration/nomos-check-orchestration/src/composition.rs::Registered()` calls
+`registry.Offer(nomos_lang_rust::Provider_Offer())` and its siblings directly, with no
+manifest anywhere in that path. `nomos_capability::Registry::Offers(&CapabilityId) ->
+&[ProviderOffer]` already exists and already answers, for any capability, exactly what is
+actually registered — the observed half of a comparison a manifest's declared `providers`
+list is the declared half of.
+
+### docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#7
+
+*revision: authored · kind: prose · heading: A LanguagePackage's activation semantics are a conformance claim, not an installer action / What Was Measured · hash: sha256:36b0eaad09b84046d1dbaae1b5b3384075a871c4779d367b91dd32e30f8ee90b*
+
+**`OD-HOST-004` already forecloses "activation drives composition."** It decided composition
+needs no selection mechanism at any provider count: the registry ranks, the caller states a
+`Requirement`, one more hand-written `Offer` call is composition, not choice. A manifest that
+caused `Registered()` to add or omit an `Offer` call would be exactly the selection mechanism
+`OD-HOST-004` declined to build, regardless of how many real cases exist. So "a
+`LanguagePackage`'s activation semantics" cannot mean "the manifest's declared providers
+become the registered ones" — that reading contradicts an already-decided record, not merely
+an unbuilt one.
+
+### docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#8
+
+*revision: authored · kind: prose · heading: A LanguagePackage's activation semantics are a conformance claim, not an installer action / What Was Measured · hash: sha256:4a5ef4ed16dfccc2391c0cbe63bce88fe5ddc98291b2331c0f3f57ed49980b8e*
+
+**The declared-vs-observed shape this workspace already uses elsewhere fits without
+inventing anything.** `OD-RULES-003` designed exactly this composition for architecture:
+declared data compared against an observed fact, judged into a `Finding`. `P14-RULES-
+DEPENDENCY-COMPLETENESS` applied the identical shape a second time, for coverage instead of
+direction. A `LanguagePackage`'s declared `providers` compared against `Registry::Offers`'
+actually-registered set is the same shape a third time: declared package content is data: a
+mismatch — a manifest claiming a provider composition never registered, or a registered
+provider no installed package claims — is a fact worth a `Finding`, not silence and not a
+build failure.
+
+### docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#9
+
+*revision: authored · kind: heading · heading: A LanguagePackage's activation semantics are a conformance claim, not an installer action / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#10
+
+*revision: authored · kind: prose · heading: A LanguagePackage's activation semantics are a conformance claim, not an installer action / The Decision · hash: sha256:b9229f70e2ed14f6e2b0bf514a3ab8b9a4795d7857c5d5decbe8e96b5ebad8e7*
+
+**A `LanguagePackage`'s activation semantics are the conformance claim that its declared
+`providers` match what `nomos_capability::Registry` actually offers for each one's
+capability — checked and reported, never enacted.** Nomos owns judging whether an installed
+package's declared content agrees with the running composition it describes; it does not own
+making the composition agree with the package, which would be the installer/materializer
+mechanism `D-091` already places on XVPE's side of the seam. This is meaning, not mechanism,
+exactly the line `ARC-ECOSYSTEM-001` draws: `PackageKind`'s variant semantics and Nomos's own
+compatibility/capability-declaration/permission rules are what "activation" describes here,
+not a privileged manifest-reading composition step.
+
+### docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#11
+
+*revision: authored · kind: prose · heading: A LanguagePackage's activation semantics are a conformance claim, not an installer action / The Decision · hash: sha256:e72a82063dd5ab2902ba8f5eb94ba438843ba07eab2bfaa11e7a99ec8560d6c7*
+
+Concretely, when this is built, it takes `Check_Dependency_Direction`/`Check_Every_Member_
+Declares_A_Band`'s own shape: a rule reading a manifest's declared `providers` (the "declared
+architecture" half) against `Registry::Offers` (the "observed fact" half), producing a
+`Finding` on mismatch in either direction. It needs no new capability contract — `Registry::
+Offers` is already a public method of an existing, composed type — and no change to `OD-
+HOST-004`'s hand-written composition.
+
+### docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#12
+
+*revision: authored · kind: heading · heading: A LanguagePackage's activation semantics are a conformance claim, not an installer action / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#13
+
+*revision: authored · kind: prose · heading: A LanguagePackage's activation semantics are a conformance claim, not an installer action / What This Record Does Not Do · hash: sha256:810c0d1ece8e2e12a62936908ed1aa1d960610e03a0277914d61f7ee869e7daa*
+
+It does not build the rule, add a capability, or wire anything into `nomos-check-
+orchestration::Run`. It names the shape a future increment takes, the same way `OD-RULES-003`
+named `Check_Dependency_Direction`'s shape before `P13-DEPENDENCY-EDGES-2` built it.
+
+### docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#14
+
+*revision: authored · kind: prose · heading: A LanguagePackage's activation semantics are a conformance claim, not an installer action / What This Record Does Not Do · hash: sha256:da877bcf08c7da23a865eb5b7ec88a1fdddf66418e423a41ebdb2fd8e78ac76b*
+
+It does not read `LanguagePackage`'s `language_versions` or `protocol_range` fields into this
+judgment. Whether those carry their own activation semantics (a package claiming Rust
+editions or a protocol range the running build does not actually satisfy) is a question this
+record leaves open rather than answers by omission — a future item's own measurement, once a
+real manifest exists anywhere outside a test fixture to check either field against.
+
+### docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#15
+
+*revision: authored · kind: prose · heading: A LanguagePackage's activation semantics are a conformance claim, not an installer action / What This Record Does Not Do · hash: sha256:a40632de205932dca5d5d6e0498fe7d651d51301a897754e921ed914567c7b18*
+
+It does not decide where a `LanguagePackage` manifest would be found on a real, installed
+target repository (a path convention, a well-known filename) — that is squarely
+`D-091`'s installation-mechanism half, XVPE's once built, and orthogonal to what activation
+means once a manifest is in hand.
+
+### docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#16
+
+*revision: authored · kind: prose · heading: A LanguagePackage's activation semantics are a conformance claim, not an installer action / What This Record Does Not Do · hash: sha256:41c27c29220e063e8e7285b436dd96d599eed2828c6992f02321c7d5551e49a0*
+
+It does not reopen `OD-PACKAGE-001`, `OD-PACKAGE-007`, or `OD-HOST-004`. It answers a
+question none of the three asked, using conclusions all three already reached.
+
+### docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#17
+
+*revision: authored · kind: heading · heading: A LanguagePackage's activation semantics are a conformance claim, not an installer action / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md#18
+
+*revision: authored · kind: prose · heading: A LanguagePackage's activation semantics are a conformance claim, not an installer action / Status · hash: sha256:5412f3bbf2c791c3dc8c92d49c4874ccc1f98a62765f586e4ada579244aa7528*
+
+Accepted. Names what a `LanguagePackage`'s activation semantics are; builds nothing.
 
 ### docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#1
 
