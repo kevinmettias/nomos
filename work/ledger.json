@@ -34693,6 +34693,419 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P15-DECOMPOSEFILE-HOST-API",
+      "title": "decompose-file's structural checks report findings across crates/host/nomos-api",
+      "why": "OD-GATE-018's decompose-file phase (2 of 9), run against the whole workspace: check-one-public-type fires 47 times in nomos-api (response.rs 9 types, spec.rs 38 types); check-responsibility-extraction fires on lib.rs (Handle_Gate_Explain/Plan/Run prefix cluster), response.rs (Gate prefix cluster + 9-decl facade excess), spec.rs (Handle_Spec_* prefix cluster, 48-decl facade excess, module-scale 2198-line finding, Submission prefix cluster), and work.rs (Handle_Work_* prefix cluster, 22-decl facade excess, module-scale 1396-line finding); check-file-size fires on spec.rs and work.rs. AGT-005 and AGT-008's assessments cite Handle_Gate_Run/Handle_Gate_Explain in lib.rs and GateExplainResponse in response.rs by file#symbol.",
+      "done_when": "check-one-public-type, check-responsibility-extraction and check-file-size report zero findings under crates/host/nomos-api, run via code-standards' check.exe against crates tests from the repo root. cargo build --workspace and cargo test -p nomos-api stay green. tests/contract/surface/nomos-api.txt is reblessed (NOMOS_SURFACE_BLESS=nomos-api cargo test -p nomos-contract-tests --test public_surface, then re-run without the var) if the crate's resolvable public surface changed. Every tests/contract/requirements/*.assessment site: line naming a symbol that moved to a new file is updated to its new path; Test_Every_Assessment_Should_Name_A_Site_That_Exists stays green. No function or type's visibility changes from private/pub(crate) to pub.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-api",
+          "tests/contract/surface/nomos-api.txt",
+          "tests/contract/requirements/AGT-005.assessment",
+          "tests/contract/requirements/AGT-008.assessment"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-host-api",
+        "acquired_at": 1787800829,
+        "lease_expires_at": 1787811629
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-api"
+        ],
+        "timeout_seconds": 1200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P15-DECOMPOSEFILE-HOST-CLI",
+      "title": "decompose-file's structural checks report findings across crates/host/nomos-cli",
+      "why": "OD-GATE-018's decompose-file phase: check-responsibility-extraction and check-file-size both fire on nomos-cli/src/agent.rs (834 lines, 56 behavior declarations, past the module-scale threshold). nomos-cli is a binary crate with no src/lib.rs, so it has no tests/contract/surface snapshot to keep in step.",
+      "done_when": "check-one-public-type, check-responsibility-extraction, check-class-size, check-extractable-subset and check-file-size report zero findings under crates/host/nomos-cli, run via code-standards' check.exe against crates tests from the repo root. cargo build --workspace and cargo test -p nomos-cli stay green. No function's visibility changes from private/pub(crate) to pub.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-host-cli",
+        "acquired_at": 1787800920,
+        "lease_expires_at": 1787811720
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli"
+        ],
+        "timeout_seconds": 900
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P15-DECOMPOSEFILE-AGENT",
+      "title": "decompose-file's structural checks report findings across crates/agent/nomos-agent-contracts",
+      "why": "OD-GATE-018's decompose-file phase: check-one-public-type fires once, nomos-agent-contracts/src/change_context.rs declares 2 types (ChangeContextSubject is the extra one).",
+      "done_when": "check-one-public-type, check-responsibility-extraction, check-class-size, check-extractable-subset and check-file-size report zero findings under crates/agent/nomos-agent-contracts, run via code-standards' check.exe against crates tests from the repo root. cargo build --workspace and cargo test -p nomos-agent-contracts stay green. tests/contract/surface/nomos-agent-contracts.txt is reblessed if the crate's resolvable public surface changed.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/agent/nomos-agent-contracts",
+          "tests/contract/surface/nomos-agent-contracts.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-agent-contracts"
+        ],
+        "timeout_seconds": 900
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-agent-contracts"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 5 tests\ntest change_context::change_context_subject::tests::Test_A_Subject_May_Be_A_Symbol_A_Scope_Or_A_Task_Description ... ok\ntest change_context::tests::Test_A_Context_Carries_Exactly_What_It_Was_Given ... ok\ntest work_result::tests::Test_A_Result_Carries_Exactly_What_It_Was_Given ... ok\ntest work_result::tests::Test_A_Judgment_Only_Result_Has_No_Plan ... ok\ntest task_envelope::tests::Test_An_Envelope_Carries_Exactly_What_It_Was_Given ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Blocking waiting for file lock on build directory\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.47s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_agent_contracts-ede7a8575ee47fa1.exe)\n   Doc-tests nomos_agent_contracts\n",
+        "verified_at": 1787801074,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "026bbf8346f037aab36fd489361d6fbd6dd38d88"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P15-DECOMPOSEFILE-CONTRACTS",
+      "title": "decompose-file's structural checks report findings across crates/contracts/nomos-contracts",
+      "why": "OD-GATE-018's decompose-file phase: check-one-public-type fires three times in nomos-contracts -- authority/semantic_change_class.rs (extra: SemanticChangeAuthorityResolution), authority/untrusted_prompt_content.rs (extra: UntrustedPromptContent), knowledge.rs (extra: KnowledgeContextItem) -- each a 2-type file.",
+      "done_when": "check-one-public-type, check-responsibility-extraction, check-class-size, check-extractable-subset and check-file-size report zero findings under crates/contracts/nomos-contracts, run via code-standards' check.exe against crates tests from the repo root. cargo build --workspace and cargo test -p nomos-contracts stay green. tests/contract/surface/nomos-contracts.txt is reblessed if the crate's resolvable public surface changed.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/contracts/nomos-contracts",
+          "tests/contract/surface/nomos-contracts.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-contracts",
+        "acquired_at": 1787800953,
+        "lease_expires_at": 1787811753
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contracts"
+        ],
+        "timeout_seconds": 900
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P15-DECOMPOSEFILE-CORRECTIONS",
+      "title": "decompose-file's structural checks report findings across crates/corrections/nomos-corrections",
+      "why": "OD-GATE-018's decompose-file phase: check-one-public-type fires on correction_decision.rs (extra: ReviewReason, 2 types) and read_write_set.rs (extra: DerivedProvenance, then ReadWriteSet, 3 types). COR-EXEC-001's assessment cites read_write_set.rs#ReadWriteSet by file#symbol.",
+      "done_when": "check-one-public-type, check-responsibility-extraction, check-class-size, check-extractable-subset and check-file-size report zero findings under crates/corrections/nomos-corrections, run via code-standards' check.exe against crates tests from the repo root. cargo build --workspace and cargo test -p nomos-corrections stay green. tests/contract/surface/nomos-corrections.txt is reblessed if the crate's resolvable public surface changed. tests/contract/requirements/COR-EXEC-001.assessment's site: line is updated if ReadWriteSet moves to a new file; Test_Every_Assessment_Should_Name_A_Site_That_Exists stays green.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/corrections/nomos-corrections",
+          "tests/contract/surface/nomos-corrections.txt",
+          "tests/contract/requirements/COR-EXEC-001.assessment"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-corrections",
+        "acquired_at": 1787800968,
+        "lease_expires_at": 1787811768
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-corrections"
+        ],
+        "timeout_seconds": 900
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P15-DECOMPOSEFILE-LANGUAGES",
+      "title": "decompose-file's structural checks report findings across crates/languages",
+      "why": "OD-GATE-018's decompose-file phase: check-one-public-type fires in nomos-lang-go-modules (discovery.rs extra: DiscoveredModule; provider.rs extra: ModuleFact) and nomos-lang-rust-deny (provider.rs extra: PolicyFact), each a 2-type file. check-responsibility-extraction and check-file-size both fire on nomos-lang-go/src/syntax/walk.rs (641 lines, 41 behavior declarations, module-scale).",
+      "done_when": "check-one-public-type, check-responsibility-extraction, check-class-size, check-extractable-subset and check-file-size report zero findings under crates/languages/nomos-lang-go-modules, crates/languages/nomos-lang-rust-deny and crates/languages/nomos-lang-go, run via code-standards' check.exe against crates tests from the repo root. cargo build --workspace and cargo test -p nomos-lang-go-modules -p nomos-lang-rust-deny -p nomos-lang-go stay green. Each crate's tests/contract/surface snapshot is reblessed if its resolvable public surface changed.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages/nomos-lang-go-modules",
+          "crates/languages/nomos-lang-rust-deny",
+          "crates/languages/nomos-lang-go",
+          "tests/contract/surface/nomos-lang-go-modules.txt",
+          "tests/contract/surface/nomos-lang-rust-deny.txt",
+          "tests/contract/surface/nomos-lang-go.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-languages",
+        "acquired_at": 1787800986,
+        "lease_expires_at": 1787811786
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lang-go-modules",
+          "-p",
+          "nomos-lang-rust-deny",
+          "-p",
+          "nomos-lang-go"
+        ],
+        "timeout_seconds": 1200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P15-DECOMPOSEFILE-ORCHESTRATION",
+      "title": "decompose-file's structural checks report findings across crates/orchestration",
+      "why": "OD-GATE-018's decompose-file phase: check-one-public-type fires in nomos-check-orchestration (facts/materialize.rs, extra: LintMaterialization then PolicyMaterialization, 3 types), nomos-gate-orchestration (adoption.rs extra: AdoptionPolicy; baseline.rs extra: BaselinePolicy -- BaselineDebt is the primary type and stays; explain.rs extra: Explanation then GateExplainResult, 3 types -- FindingQuery is primary and stays, Contract_Of is a private fn and stays; suppression.rs extra: SuppressionPolicy), and nomos-spec-orchestration (outcome/commit/commit_refusal.rs extra: CommitRefusalKind then CommitRefusalError, 3 types). check-responsibility-extraction also fires on commit_refusal.rs's Commit-prefixed 3-member cluster (CommitRefusal, CommitRefusalError, CommitRefusalKind). AGT-009's assessment cites suppression.rs#SuppressionPolicy and adoption.rs#AdoptionPolicy by file#symbol; baseline.rs#BaselineDebt is unaffected since BaselineDebt is not moving.",
+      "done_when": "check-one-public-type, check-responsibility-extraction, check-class-size, check-extractable-subset and check-file-size report zero findings under crates/orchestration/nomos-check-orchestration, crates/orchestration/nomos-gate-orchestration and crates/orchestration/nomos-spec-orchestration, run via code-standards' check.exe against crates tests from the repo root. cargo build --workspace and cargo test -p nomos-check-orchestration -p nomos-gate-orchestration -p nomos-spec-orchestration stay green. Each crate's tests/contract/surface snapshot is reblessed if its resolvable public surface changed. tests/contract/requirements/AGT-009.assessment's site: lines for AdoptionPolicy and SuppressionPolicy are updated to their new paths; Test_Every_Assessment_Should_Name_A_Site_That_Exists stays green.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-check-orchestration",
+          "crates/orchestration/nomos-gate-orchestration",
+          "crates/orchestration/nomos-spec-orchestration",
+          "tests/contract/surface/nomos-check-orchestration.txt",
+          "tests/contract/surface/nomos-gate-orchestration.txt",
+          "tests/contract/surface/nomos-spec-orchestration.txt",
+          "tests/contract/requirements/AGT-009.assessment"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-orchestration",
+        "acquired_at": 1787801010,
+        "lease_expires_at": 1787811810
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-spec-orchestration"
+        ],
+        "timeout_seconds": 1200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P15-DECOMPOSEFILE-RULES",
+      "title": "decompose-file's structural checks report findings across crates/rules/nomos-rules",
+      "why": "OD-GATE-018's decompose-file phase: check-responsibility-extraction and check-file-size both fire on nomos-rules/src/crosslang.rs (535 lines, 34 behavior declarations, module-scale).",
+      "done_when": "check-one-public-type, check-responsibility-extraction, check-class-size, check-extractable-subset and check-file-size report zero findings under crates/rules/nomos-rules, run via code-standards' check.exe against crates tests from the repo root. cargo build --workspace and cargo test -p nomos-rules stay green. tests/contract/surface/nomos-rules.txt is reblessed if the crate's resolvable public surface changed.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules",
+          "tests/contract/surface/nomos-rules.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-rules",
+        "acquired_at": 1787801027,
+        "lease_expires_at": 1787811827
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 900
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P15-DECOMPOSEFILE-SPEC",
+      "title": "decompose-file's structural checks report findings across crates/spec/nomos-spec-project and nomos-spec-store",
+      "why": "OD-GATE-018's decompose-file phase: check-one-public-type fires in nomos-spec-project (projection/item.rs, extra: Value then Item, 3 types) and nomos-spec-store (addressing.rs extra: DocumentRevision, 2 types; store/relation.rs extra: ToNodeId, RelationTypeName, RelationTier, InverseRelationType, RelationConstraint, 6 types; table/suite_authority.rs extra: SuiteTitle then SuiteAuthority, 3 types -- SuiteId is primary and stays). check-responsibility-extraction also fires on suite_authority.rs's Suite-prefixed 3-member cluster (SuiteAuthority, SuiteId, SuiteTitle). AGT-013's assessment cites suite_authority.rs#SuiteAuthority by file#symbol.",
+      "done_when": "check-one-public-type, check-responsibility-extraction, check-class-size, check-extractable-subset and check-file-size report zero findings under crates/spec/nomos-spec-project and crates/spec/nomos-spec-store, run via code-standards' check.exe against crates tests from the repo root. cargo build --workspace and cargo test -p nomos-spec-project -p nomos-spec-store stay green. Each crate's tests/contract/surface snapshot is reblessed if its resolvable public surface changed. tests/contract/requirements/AGT-013.assessment's site: line for SuiteAuthority is updated to its new path; Test_Every_Assessment_Should_Name_A_Site_That_Exists stays green.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-project",
+          "crates/spec/nomos-spec-store",
+          "tests/contract/surface/nomos-spec-project.txt",
+          "tests/contract/surface/nomos-spec-store.txt",
+          "tests/contract/requirements/AGT-013.assessment"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-spec",
+        "acquired_at": 1787801046,
+        "lease_expires_at": 1787811846
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-project",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 1200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P15-DECOMPOSEFILE-SUBSTRATE",
+      "title": "decompose-file's structural checks report findings across crates/substrate/nomos-ledger",
+      "why": "OD-GATE-018's decompose-file phase: check-one-public-type fires on gate.rs (extra: WorkflowText then StepName, 3 types) and item.rs (extra: DeclineReason then LedgerItem, 3 types -- Holder is primary and stays). AGT-001, AGT-007 and WORK-LEDGER-001's assessments cite item.rs#LedgerItem, and WORK-LEDGER-001 also cites item.rs#priority (LedgerItem's own doc comment on its deferred priority field), by file#symbol.",
+      "done_when": "check-one-public-type, check-responsibility-extraction, check-class-size, check-extractable-subset and check-file-size report zero findings under crates/substrate/nomos-ledger, run via code-standards' check.exe against crates tests from the repo root. cargo build --workspace and cargo test -p nomos-ledger stay green. tests/contract/surface/nomos-ledger.txt is reblessed if the crate's resolvable public surface changed. tests/contract/requirements/AGT-001.assessment, AGT-007.assessment and WORK-LEDGER-001.assessment's site: lines for LedgerItem (and priority) are updated to their new path; Test_Every_Assessment_Should_Name_A_Site_That_Exists stays green.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger",
+          "tests/contract/surface/nomos-ledger.txt",
+          "tests/contract/requirements/AGT-001.assessment",
+          "tests/contract/requirements/AGT-007.assessment",
+          "tests/contract/requirements/WORK-LEDGER-001.assessment"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-substrate",
+        "acquired_at": 1787801073,
+        "lease_expires_at": 1787811873
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-ledger"
+        ],
+        "timeout_seconds": 900
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
