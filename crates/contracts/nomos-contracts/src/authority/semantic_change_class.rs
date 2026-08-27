@@ -1,7 +1,9 @@
-use serde::{Deserialize, Serialize};
+// The policy-resolved decision this classification feeds, kept in its own file.
+mod resolution;
 
-use super::{AuthorityClass, MutationClass};
-use crate::BuildVariantId;
+pub use resolution::SemanticChangeAuthorityResolution;
+
+use serde::{Deserialize, Serialize};
 
 const LOCAL_IMPLEMENTATION_LABEL: &str = "LocalImplementation";
 const CONTRACT_COMPATIBLE_EXTENSION_LABEL: &str = "ContractCompatibleExtension";
@@ -22,10 +24,10 @@ const DESTRUCTIVE_REMOVAL_LABEL: &str = "DestructiveRemoval";
 /// obligation change, policy or configuration change, rule change, generated-artifact
 /// change, and destructive removal."
 ///
-/// Eleven variants, in the corpus's own order. Distinct from [`AuthorityClass`] (who may
-/// invoke an operation) and [`MutationClass`] (what an operation does to workspace
-/// state, `Preview -> Validate -> Apply -> Rollback`): this classifies what an
-/// agent-originated change *means*, the axis `SemanticChangeAuthorityResolution`
+/// Eleven variants, in the corpus's own order. Distinct from [`crate::AuthorityClass`]
+/// (who may invoke an operation) and [`crate::MutationClass`] (what an operation does to
+/// workspace state, `Preview -> Validate -> Apply -> Rollback`): this classifies what an
+/// agent-originated change *means*, the axis [`SemanticChangeAuthorityResolution`]
 /// resolves an authority and mode against.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum SemanticChangeClass
@@ -74,37 +76,6 @@ impl core::fmt::Display for SemanticChangeClass
     }
 }
 
-/// `AGT-018`: "Organization and repository policy shall resolve every applicable class
-/// to an allowed authority level, required approver role, evidence obligations,
-/// permitted mutation mode, rollback boundary, validation scope, and
-/// autonomous-execution disposition. ... Nomos shall expose a user-visible projection of
-/// the resolved decision that states the classified effects, governing policy, trust
-/// evidence where used, required validation, approver roles, and the reason the
-/// operation is autonomous, preview-only, proposal-only, review-required, or
-/// prohibited."
-///
-/// Same glossary entry (5.6): "An immutable, policy-resolved authorization record for an
-/// agent-originated or agent-assisted mutation." `governing ChangeIntent` is
-/// deliberately not a field: `ChangeIntent` itself is not built anywhere in this
-/// workspace, so naming it here would type a field against an identity that does not
-/// exist yet rather than reuse one.
-#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
-pub struct SemanticChangeAuthorityResolution
-{
-    pub predicted_class: SemanticChangeClass,
-    pub observed_class: Option<SemanticChangeClass>,
-    pub required_authority: AuthorityClass,
-    pub approver_role: Option<String>,
-    pub permitted_mutation_mode: MutationClass,
-    pub autonomous_execution: bool,
-    pub evidence_obligations: Vec<String>,
-    pub rollback_boundary: Option<String>,
-    pub unresolved_effects: Vec<String>,
-    pub scope_expansion: bool,
-    pub decision_rationale: String,
-    pub affected_build_variants: Vec<BuildVariantId>,
-}
-
 #[cfg(test)]
 mod tests
 {
@@ -133,28 +104,5 @@ mod tests
         labels.dedup();
 
         assert_eq!(labels.len(), count, "two classes share a wire spelling");
-    }
-
-    #[test]
-    fn Test_A_Resolution_Carries_Exactly_What_It_Was_Given()
-    {
-        let resolution = SemanticChangeAuthorityResolution {
-            predicted_class: SemanticChangeClass::LocalImplementation,
-            observed_class: None,
-            required_authority: AuthorityClass::Mutate,
-            approver_role: None,
-            permitted_mutation_mode: MutationClass::Apply,
-            autonomous_execution: true,
-            evidence_obligations: vec![],
-            rollback_boundary: None,
-            unresolved_effects: vec![],
-            scope_expansion: false,
-            decision_rationale: "no cross-boundary effect predicted".to_owned(),
-            affected_build_variants: vec![],
-        };
-
-        assert_eq!(resolution.predicted_class, SemanticChangeClass::LocalImplementation);
-        assert_eq!(resolution.required_authority, AuthorityClass::Mutate);
-        assert!(resolution.autonomous_execution);
     }
 }

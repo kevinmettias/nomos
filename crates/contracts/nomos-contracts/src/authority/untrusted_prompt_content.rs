@@ -1,3 +1,8 @@
+// The content wrapper this vocabulary marks as untrusted, kept in its own file.
+mod content;
+
+pub use content::UntrustedPromptContent;
+
 use serde::{Deserialize, Serialize};
 
 const REPOSITORY_FILE_LABEL: &str = "RepositoryFile";
@@ -54,17 +59,6 @@ impl core::fmt::Display for UntrustedPromptOrigin
     {
         return formatter.write_str(self.Label());
     }
-}
-
-/// Content from one of `UntrustedPromptOrigin`'s five sources. A marker wrapper,
-/// deliberately without any method that turns its text into an authorization -- the
-/// type carries no way to satisfy `AGT-EXEC-003`'s negative constraint, which is the
-/// constraint enforced.
-#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
-pub struct UntrustedPromptContent
-{
-    pub origin: UntrustedPromptOrigin,
-    pub text: String,
 }
 
 #[cfg(test)]
