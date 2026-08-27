@@ -1,5 +1,11 @@
 //! Why `nomos spec commit` did not produce a [`CommitAnswer`].
 
+mod commit_refusal_error;
+mod commit_refusal_kind;
+
+pub use commit_refusal_error::CommitRefusalError;
+pub use commit_refusal_kind::CommitRefusalKind;
+
 use nomos_platform::FileSystemError;
 use nomos_spec_store::{CommitReport, EditError, EditPreview};
 use std::path::PathBuf;
@@ -20,44 +26,6 @@ pub struct CommitRefusal
 {
     pub kind: CommitRefusalKind,
     pub error: CommitRefusalError,
-}
-
-/// What each way [`CommitRefusal`] can happen carries beyond its shared `error`.
-#[derive(Debug)]
-pub enum CommitRefusalKind
-{
-    /// `--from` could not be read.
-    Unreadable
-    {
-        path: PathBuf,
-    },
-    /// Staging or previewing the edit was refused, before there was anything to commit.
-    Edit,
-    /// The edit previewed cleanly and the store refused to commit it.
-    ///
-    /// Carries the preview: a caller that already described it to an author does not have to
-    /// decide whether to describe it again from a bare [`EditError`].
-    Refused
-    {
-        preview: EditPreview,
-    },
-    /// The store accepted the transaction and its bytes could not be written where the
-    /// record belongs.
-    Unwritable
-    {
-        preview: EditPreview,
-        report: CommitReport,
-        path: PathBuf,
-    },
-}
-
-/// Which of the two places a [`CommitRefusal`] originated: the filesystem, or the store's
-/// own edit staging.
-#[derive(Debug)]
-pub enum CommitRefusalError
-{
-    FileSystem(FileSystemError),
-    Edit(EditError),
 }
 
 impl CommitRefusal

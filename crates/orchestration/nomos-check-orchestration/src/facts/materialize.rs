@@ -5,6 +5,12 @@
 //! module does not build -- not by the capability each one answers; see each function's own
 //! doc for why the three stayed independent steps rather than one generalization.
 
+mod lint_materialization;
+mod policy_materialization;
+
+pub use lint_materialization::LintMaterialization;
+pub use policy_materialization::PolicyMaterialization;
+
 use nomos_analysis::{Context, MaterializedFact, MemoryFactStore};
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, ProviderId, RuleId};
 use nomos_lang_rust::{FactContext, Materialization};
@@ -261,15 +267,6 @@ pub fn Materialize_Lint<P: ProcessLauncher>(
     return LintMaterialization { sources, findings: Vec::new() };
 }
 
-/// What materializing `lint.diagnostics` facts produced: the sources a rule can judge them
-/// under, and any finding the materialization itself already raised -- the identical shape
-/// [`DependencyMaterialization`] already has for the identical reason.
-pub struct LintMaterialization
-{
-    pub sources: Vec<SourceFile>,
-    pub findings: Vec<Finding>,
-}
-
 /// The reading context as `nomos_lang_rust_clippy`'s provider takes it.
 fn Clippy_Production(context: &Context) -> nomos_lang_rust_clippy::FactContext
 {
@@ -352,15 +349,6 @@ pub fn Materialize_Policy<P: ProcessLauncher>(
     let sources = Materialized_Policy_Sources(fact, store);
 
     return PolicyMaterialization { sources, findings: Vec::new() };
-}
-
-/// What materializing the `dependency.policy` fact produced: the sources a rule can judge
-/// it under, and any finding the materialization itself already raised -- the identical
-/// shape [`LintMaterialization`] already has for the identical reason.
-pub struct PolicyMaterialization
-{
-    pub sources: Vec<SourceFile>,
-    pub findings: Vec<Finding>,
 }
 
 /// The reading context as `nomos_lang_rust_deny`'s provider takes it.

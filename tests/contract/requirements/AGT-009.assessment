@@ -24,7 +24,7 @@
 # review, versioning, publication, or rollout for one.
 verdict: Partial
 site: crates/contracts/nomos-contracts/src/finding.rs#Finding
-site: crates/orchestration/nomos-gate-orchestration/src/suppression.rs#SuppressionPolicy
-site: crates/orchestration/nomos-gate-orchestration/src/adoption.rs#AdoptionPolicy
+site: crates/orchestration/nomos-gate-orchestration/src/suppression/suppression_policy.rs#SuppressionPolicy
+site: crates/orchestration/nomos-gate-orchestration/src/adoption/adoption_policy.rs#AdoptionPolicy
 site: crates/orchestration/nomos-gate-orchestration/src/baseline.rs#BaselineDebt
 gap: crates/contracts/nomos-contracts/src/package.rs#RulePackage

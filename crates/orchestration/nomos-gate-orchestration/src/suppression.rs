@@ -1,6 +1,10 @@
 //! A single disposition over one rule's finding on one subject.
 
-use nomos_contracts::{Finding, RuleId, SubjectId};
+mod suppression_entry;
+mod suppression_policy;
+
+pub use suppression_entry::Suppression;
+pub use suppression_policy::SuppressionPolicy;
 
 /// The six dispositions `SUP-*` (the v14 corpus's `05.7-2-2 suppression and waiver
 /// governance` section) names, not one generic "suppressed" bit -- a repository's reason
@@ -22,66 +26,6 @@ pub enum SuppressionDisposition
     FalsePositiveDisposition,
     /// A deliberate, owned decision to accept the risk the finding names.
     FormalRiskAcceptance,
-}
-
-/// One disposition over one rule's finding on one subject.
-///
-/// `owner`/`approver`/dates/revalidation triggers are `SUP-*`'s other required fields and
-/// are deliberately not here yet -- this increment's own crate doc says why: no caller
-/// constructs a `Suppression` at all today, so enforcing fields nothing populates would be
-/// validating against nothing. Adding them is a later increment once something authors one
-/// for real.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct Suppression
-{
-    /// The rule this disposition applies to.
-    pub rule: RuleId,
-    /// The subject this disposition applies to.
-    pub subject: SubjectId,
-    /// Which of `SUP-*`'s six dispositions this is.
-    pub disposition: SuppressionDisposition,
-    /// Why -- required, because a disposition with no stated reason is not distinguishable
-    /// from silence.
-    pub rationale: String,
-    /// Who is accountable for this disposition.
-    pub owner: String,
-}
-
-impl Suppression
-{
-    /// Whether this disposition applies to `finding` -- the same `rule`/`subject` identity
-    /// `Finding` already carries, so matching invents no addressing scheme of its own.
-    #[must_use]
-    pub fn Matches(&self, finding: &Finding) -> bool
-    {
-        return self.rule == finding.rule && self.subject == finding.subject;
-    }
-}
-
-/// Every disposition a run should honor.
-///
-/// Empty is "nothing is suppressed," the state every caller is in today: `Default` gives
-/// that state, so every construction site that predates this type and CI's own `gate run
-/// --root .` are unchanged in behavior.
-#[derive(Clone, Debug, Default, PartialEq, Eq)]
-pub struct SuppressionPolicy
-{
-    /// The dispositions this policy holds, in authoring order.
-    pub suppressions: Vec<Suppression>,
-}
-
-impl SuppressionPolicy
-{
-    /// The first disposition that applies to `finding`, if any.
-    ///
-    /// First rather than every match: two dispositions naming the same rule and subject is
-    /// an authoring question this increment does not referee, the same "no invented rule
-    /// nothing needs yet" discipline the rest of this crate already keeps.
-    #[must_use]
-    pub fn Suppressing<'a>(&'a self, finding: &Finding) -> Option<&'a Suppression>
-    {
-        return self.suppressions.iter().find(|suppression| return suppression.Matches(finding));
-    }
 }
 
 #[cfg(test)]

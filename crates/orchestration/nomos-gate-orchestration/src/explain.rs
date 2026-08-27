@@ -1,16 +1,21 @@
 //! `nomos gate explain` -- what one named finding looks like right now, and whether it
 //! would keep a real run from passing.
 
+mod explanation;
+mod gate_explain_result;
+
+pub use explanation::Explanation;
+pub use gate_explain_result::GateExplainResult;
+
 use nomos_check_orchestration::CheckOutcome;
 use nomos_contracts::{Finding, RuleId};
 use nomos_platform::ProcessLauncher;
 use nomos_rules::SourceFile;
 use nomos_workspace::BuildVariant;
-use std::path::PathBuf;
 
 use crate::composition::Registered;
 use crate::run_gate::{JudgeContext, Judged};
-use crate::{AdoptionPolicy, BaselineDebt, BaselinePolicy, GateCommand, RuleCalibration, Suppression, SuppressionPolicy};
+use crate::{AdoptionPolicy, BaselinePolicy, GateCommand, SuppressionPolicy};
 
 /// Which finding to explain: the rule that produced it, and one of the locations it names --
 /// the same human-visible `Finding::locations` a reader of `nomos gate run`'s own output
@@ -22,61 +27,6 @@ pub struct FindingQuery
     pub rule: RuleId,
     /// One location the finding names.
     pub location: String,
-}
-
-/// What `explain` answered about a [`FindingQuery`].
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub enum Explanation
-{
-    /// No finding from `query.rule` names `query.location` among its locations, in this
-    /// judgment.
-    NotFound,
-    /// The finding `query` names, and what it would do to a real run's disposition.
-    Found
-    {
-        /// The finding itself, in full. Boxed: `NotFound` carries nothing, and a `Finding`
-        /// inline here would make every `Explanation` pay `Found`'s size regardless of
-        /// which variant it holds.
-        finding: Box<Finding>,
-        /// Whether this finding, on its own, could fail a build a real `run` reduces it
-        /// into -- `Finding::Can_Fail_A_Build` and no [`RuleCalibration`] or [`Suppression`]
-        /// matched it.
-        would_block: bool,
-        /// The calibration that kept it from blocking, when `would_block` is `false` because
-        /// of one -- checked first, the same order [`crate::Run_Gate`] reduces by, since
-        /// calibration is a coarser, rule-wide override.
-        calibrated_by: Option<RuleCalibration>,
-        /// The suppression that kept it from blocking, when `would_block` is `false`,
-        /// `calibrated_by` is `None`, and a suppression matched.
-        suppressed_by: Option<Suppression>,
-        /// The baseline debt entry that kept it from blocking, when `would_block` is
-        /// `false` and both `calibrated_by` and `suppressed_by` are `None` -- checked only
-        /// once calibration and suppression are both ruled out, the same order
-        /// [`crate::Run_Gate`] reduces by.
-        baselined_by: Option<BaselineDebt>,
-        /// The governing record `query.rule`'s implementation cites, and the version of
-        /// that record it was written against -- `AGT-008`'s "rule version" clause,
-        /// [`nomos_rules::RuleOffer`]'s own two fields, looked up from the same registry
-        /// `nomos gate plan` already exposes through `RuleOfferResponse`. `None` only if
-        /// the registry itself is contradictory (`Registered`'s own doc: "not reachable
-        /// today") or `query.rule` names a rule this build does not register at all --
-        /// never the ordinary "no `CONTRACT_RECORD`" case, which `Check_Naming_
-        /// Convention` represents as a real, present citation to `README.md` version 0
-        /// rather than an absence.
-        contract: Option<(String, u32)>,
-    },
-}
-
-/// What a real `nomos gate explain` produced.
-pub struct GateExplainResult
-{
-    /// The tree this judgment was over.
-    pub root: PathBuf,
-    /// What [`nomos_check_orchestration::Run`] (or the walk decision made before it was
-    /// ever called) produced.
-    pub check_outcome: CheckOutcome,
-    /// The answer to `query`.
-    pub explanation: Explanation,
 }
 
 /// Judges `walked` exactly as [`crate::Run_Gate`] would, then answers `query` against what
