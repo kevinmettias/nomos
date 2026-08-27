@@ -12,13 +12,13 @@
 //! owned field (`&record.path`) or a borrowed literal converts the same way a plain `&str`
 //! parameter always did — the newtype costs the callers already writing `&str` nothing.
 
+mod document_revision;
+
+pub use document_revision::DocumentRevision;
+
 /// Where a document lives, as a repository-relative path.
 #[derive(Clone, Copy, Debug)]
 pub struct DocumentPath<'a>(pub &'a str);
-
-/// Which revision of the corpus (or [`crate::AUTHORED`]) a document was read at.
-#[derive(Clone, Copy, Debug)]
-pub struct DocumentRevision<'a>(pub &'a str);
 
 impl<'a> From<&'a str> for DocumentPath<'a>
 {
@@ -29,22 +29,6 @@ impl<'a> From<&'a str> for DocumentPath<'a>
 }
 
 impl<'a> From<&'a String> for DocumentPath<'a>
-{
-    fn from(value: &'a String) -> Self
-    {
-        return Self(value.as_str());
-    }
-}
-
-impl<'a> From<&'a str> for DocumentRevision<'a>
-{
-    fn from(value: &'a str) -> Self
-    {
-        return Self(value);
-    }
-}
-
-impl<'a> From<&'a String> for DocumentRevision<'a>
 {
     fn from(value: &'a String) -> Self
     {

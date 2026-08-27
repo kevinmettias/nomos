@@ -2,31 +2,26 @@
 
 use crate::StoreError;
 
+mod inverse_relation_type;
+mod relation_constraint;
+mod relation_tier;
+mod relation_type_name;
+mod to_node_id;
+
+pub use inverse_relation_type::InverseRelationType;
+pub use relation_constraint::RelationConstraint;
+pub use relation_tier::RelationTier;
+pub use relation_type_name::RelationTypeName;
+pub use to_node_id::ToNodeId;
+
 /// The identifier of a relation edge's source node.
 ///
-/// Distinct from [`ToNodeId`] even though both carry a node identifier, because the two
+/// Distinct from `ToNodeId` even though both carry a node identifier, because the two
 /// sit next to each other at every edge-writing call site — `Write_Relation(from, type, to)`
 /// — and a position is not a name. Naming the role rather than leaving both `&str` is what
 /// keeps a transposed pair a compile error instead of a silently reversed edge.
 #[derive(Clone, Copy, Debug)]
 pub struct FromNodeId<'a>(pub &'a str);
-
-/// The identifier of a relation edge's target node.
-#[derive(Clone, Copy, Debug)]
-pub struct ToNodeId<'a>(pub &'a str);
-
-/// The name of a relation type: what an edge is registered under, what a type is declared
-/// as, or which type a pairing names as the one gaining an inverse.
-#[derive(Clone, Copy, Debug)]
-pub struct RelationTypeName<'a>(pub &'a str);
-
-/// The tier a relation type is declared at (`seed`, `core`, `extended`, ...).
-#[derive(Clone, Copy, Debug)]
-pub struct RelationTier<'a>(pub &'a str);
-
-/// The relation type a [`RelationTypeName`] is paired with as its inverse.
-#[derive(Clone, Copy, Debug)]
-pub struct InverseRelationType<'a>(pub &'a str);
 
 impl<'a> From<&'a str> for FromNodeId<'a>
 {
@@ -42,85 +37,6 @@ impl<'a> From<&'a String> for FromNodeId<'a>
     {
         return Self(value.as_str());
     }
-}
-
-impl<'a> From<&'a str> for ToNodeId<'a>
-{
-    fn from(value: &'a str) -> Self
-    {
-        return Self(value);
-    }
-}
-
-impl<'a> From<&'a String> for ToNodeId<'a>
-{
-    fn from(value: &'a String) -> Self
-    {
-        return Self(value.as_str());
-    }
-}
-
-impl<'a> From<&'a str> for RelationTypeName<'a>
-{
-    fn from(value: &'a str) -> Self
-    {
-        return Self(value);
-    }
-}
-
-impl<'a> From<&'a String> for RelationTypeName<'a>
-{
-    fn from(value: &'a String) -> Self
-    {
-        return Self(value.as_str());
-    }
-}
-
-impl<'a> From<&'a str> for RelationTier<'a>
-{
-    fn from(value: &'a str) -> Self
-    {
-        return Self(value);
-    }
-}
-
-impl<'a> From<&'a String> for RelationTier<'a>
-{
-    fn from(value: &'a String) -> Self
-    {
-        return Self(value.as_str());
-    }
-}
-
-impl<'a> From<&'a str> for InverseRelationType<'a>
-{
-    fn from(value: &'a str) -> Self
-    {
-        return Self(value);
-    }
-}
-
-impl<'a> From<&'a String> for InverseRelationType<'a>
-{
-    fn from(value: &'a String) -> Self
-    {
-        return Self(value.as_str());
-    }
-}
-
-/// What a relation type constrains: the node kinds it may join at each end, and how many
-/// edges of it one node may carry.
-///
-/// Grouped because `OD-SPEC-012` requires all three together — a relation type that
-/// declares domain and range but not cardinality, or the reverse, is not a lighter-weight
-/// registration, it is the absence of the thing
-/// [`SpecificationStore::Put_Relation_Type`](super::SpecificationStore::Put_Relation_Type)
-/// exists to record.
-pub struct RelationConstraint<'a>
-{
-    pub domain: &'a [&'a str],
-    pub range: &'a [&'a str],
-    pub max_per_node: u32,
 }
 
 /// The constraint declares something at every end, or the refusal names the type that
