@@ -11,6 +11,10 @@ use nomos_contracts::{
 use nomos_platform::ProcessLauncher;
 use std::path::Path;
 
+mod policy_fact;
+
+pub use policy_fact::PolicyFact;
+
 /// Where in the workspace's history a fact is being produced — the same four-field shape
 /// `nomos_lang_rust_clippy::FactContext` carries, for the identical reason: these four
 /// always travel together.
@@ -21,18 +25,6 @@ pub struct FactContext
     pub variant: BuildVariantId,
     pub configuration: ConfigurationId,
     pub generation: GenerationId,
-}
-
-/// The one fact this capability's `IncrementalGranularity::WholeWorkspace` ceiling allows,
-/// together with the subject it was filed under — `nomos_model::Subject_Of_Path("")`, the
-/// same whole-tree subject `nomos_check_orchestration`'s own `Lint_Capability_Unavailable`
-/// already attributes a failed materialization to, reused here for a successful one: there
-/// is exactly one subject a workspace-wide answer could honestly be filed under.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct PolicyFact
-{
-    pub subject: SubjectId,
-    pub fact: MaterializedFact,
 }
 
 /// Runs `cargo deny` over `root` and produces the one fact this capability answers for the

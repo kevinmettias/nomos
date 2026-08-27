@@ -34837,14 +34837,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-contracts",
-        "acquired_at": 1787800953,
-        "lease_expires_at": 1787811753
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -34854,7 +34850,27 @@
         ],
         "timeout_seconds": 900
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contracts"
+        ],
+        "exit_code": 0,
+        "output_tail": "uire_An_Authorized_Decision ... ok\ntest peer::synchronization_state::tests::Test_Unavailable_Should_Not_Read_As_Current ... ok\ntest workflow_step::cacheability::tests::Test_Cacheable_Should_Report_So ... ok\ntest workflow_step::cacheability::tests::Test_Not_Cacheable_Should_Report_So ... ok\ntest workflow_step::cancellation_behavior::tests::Test_The_Other_Two_Should_Be_Cancellable ... ok\ntest workflow_step::cancellation_behavior::tests::Test_Uncancellable_Should_Not_Be_Cancellable ... ok\ntest workflow_step::compensation::tests::Test_None_Should_Not_Exist ... ok\ntest workflow_step::compensation::tests::Test_The_Other_Two_Should_Exist ... ok\ntest workflow_step::retry_policy::tests::Test_No_Retry_Should_Not_Be_Retryable ... ok\ntest workflow_step::retry_policy::tests::Test_Retry_Should_Be_Retryable ... ok\ntest workflow_step::tests::Test_A_Compensation_Should_Cover_A_Non_Idempotent_Retry ... ok\ntest workflow_step::tests::Test_A_Deduplication_Token_Should_Cover_A_Non_Idempotent_Retry ... ok\ntest workflow_step::tests::Test_A_Pure_Step_May_Retry_Freely ... ok\ntest workflow_step::tests::Test_An_Idempotent_Step_May_Retry_Freely ... ok\ntest workflow_step::tests::Test_An_Incoherent_Determinism_Declaration_Should_Make_The_Step_Incoherent ... ok\ntest workflow_step::tests::Test_An_Uncovered_Retry_Of_A_Non_Idempotent_Side_Effecting_Step_Should_Be_Incoherent ... ok\ntest workflow_step::tests::Test_No_Retry_Should_Always_Be_Coherent ... ok\ntest workflow_step::timeout::tests::Test_Seconds_Should_Be_Bounded ... ok\ntest workflow_step::timeout::tests::Test_Unbounded_Should_Not_Be_Bounded ... ok\n\ntest result: ok. 88 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.10s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contracts-8a61c7a28e29334f.exe)\n   Doc-tests nomos_contracts\n",
+        "verified_at": 1787801507,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "5600d97d0103675a27632568677c709181b19d1c"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -34916,14 +34932,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-languages",
-        "acquired_at": 1787800986,
-        "lease_expires_at": 1787811786
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -34937,7 +34949,31 @@
         ],
         "timeout_seconds": 1200
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lang-go-modules",
+          "-p",
+          "nomos-lang-rust-deny",
+          "-p",
+          "nomos-lang-go"
+        ],
+        "exit_code": 0,
+        "output_tail": "er::tests::Test_A_Fact_Should_Carry_The_Declared_Guarantee ... ok\ntest discovery::tests::Test_A_Workspace_Member_Requiring_Another_Should_Carry_The_Edge ... ok\ntest discovery::tests::Test_Manifest_Relative_Root_Should_Be_Repository_Relative_And_Forward_Sloshed ... ok\ntest discovery::tests::Test_Edges_Should_Be_In_Canonical_Order ... ok\n\ntest result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s\n\n\nrunning 8 tests\ntest guarantee::tests::Test_The_Ceiling_Should_Satisfy_The_Declared_Guarantee ... ok\ntest reading::tests::Test_A_Diagnostic_With_No_Code_Should_Not_Parse ... ok\ntest reading::tests::Test_A_Real_Captured_Diagnostic_Should_Parse ... ok\ntest reading::tests::Test_A_Summary_Line_Should_Not_Parse_As_A_Violation ... ok\ntest provider::tests::Test_A_Fact_Key_Should_Depend_On_The_Guarantee ... ok\ntest reading::tests::Test_Canonical_Order_Should_Sort_By_Severity_Then_Code_Then_Message ... ok\ntest reading::tests::Test_Violations_Of_Should_Skip_Non_Diagnostic_Lines_And_Malformed_Ones ... ok\ntest provider::tests::Test_Materialize_Workspace_Over_This_Repository ... ok\n\ntest result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.29s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.12s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lang_go-2395968b45f91726.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lang_go_modules-c177354ff4834988.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lang_rust_deny-7d95e79b2537890d.exe)\n   Doc-tests nomos_lang_go\n   Doc-tests nomos_lang_go_modules\n   Doc-tests nomos_lang_rust_deny\n",
+        "verified_at": 1787801456,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "5600d97d0103675a27632568677c709181b19d1c"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -35003,14 +35039,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-rules",
-        "acquired_at": 1787801027,
-        "lease_expires_at": 1787811827
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -35020,7 +35052,27 @@
         ],
         "timeout_seconds": 900
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "exit_code": 0,
+        "output_tail": "registry::tests::Test_A_Second_Offer_For_One_Rule_Should_Be_Refused ... ok\ntest registry::rule_registry::tests::Test_An_Empty_Registry_Should_Offer_Nothing ... ok\ntest role_surface::tests::Test_An_Empty_Subject_List_Produces_No_Findings ... ok\ntest role_surface::tests::Test_Every_Subject_Is_Reported_As_Agent_Required ... ok\ntest role_surface::tests::Test_Findings_Are_Sorted_By_Subject_Name ... ok\ntest role_surface::tests::Test_The_Locations_Name_The_Readme_And_The_Surface_Snapshot ... ok\ntest role_surface::tests::Test_The_Rule_Never_Reaches_A_Verdict_Regardless_Of_Content ... ok\ntest tests::Test_A_Named_Preference_Should_Narrow_The_Floor ... ok\ntest universe::tests::Test_A_Constant_Slice_Should_Be_Found ... ok\ntest tests::Test_No_Preference_Should_Carry_The_Bare_Floor_Through_Unchanged ... ok\ntest universe::tests::Test_A_Declared_Mirror_Should_Be_Read_Off_The_Doc_Comment ... ok\ntest universe::tests::Test_A_File_That_Declares_Nothing_Should_Be_Observed_And_Empty ... ok\ntest universe::tests::Test_A_List_With_No_Documentation_Should_Claim_No_Mirror ... ok\ntest universe::tests::Test_A_Payload_From_A_Blind_Provider_Should_Not_Read_As_No_Mirror ... ok\ntest universe::tests::Test_A_Private_List_Should_Not_Be_A_Universe ... ok\ntest universe::tests::Test_A_Scalar_Constant_Should_Not_Be_A_Universe ... ok\ntest universe::tests::Test_A_Trait_Impl_Should_Not_Claim_The_Type ... ok\ntest universe::tests::Test_An_All_Should_Be_Attributed_To_Its_Type ... ok\ntest universe::tests::Test_An_All_That_Takes_A_Receiver_Should_Not_Be_A_Universe ... ok\n\ntest result: ok. 106 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Blocking waiting for file lock on build directory\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.58s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-97cc66c3275b20dd.exe)\n   Doc-tests nomos_rules\n",
+        "verified_at": 1787801507,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "5600d97d0103675a27632568677c709181b19d1c"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

@@ -10,6 +10,10 @@ use nomos_contracts::{
 };
 use std::path::Path;
 
+mod module_fact;
+
+pub use module_fact::ModuleFact;
+
 /// Where in the workspace's history a fact is being produced.
 ///
 /// The same shape `nomos_lang_rust_cargo::FactContext` carries, for the same reason: these
@@ -21,22 +25,6 @@ pub struct FactContext
     pub variant: BuildVariantId,
     pub configuration: ConfigurationId,
     pub generation: GenerationId,
-}
-
-/// One module's fact, together with the subject it was filed under and the
-/// repository-relative path that subject addresses.
-///
-/// The same shape `nomos_lang_rust_cargo::PackageFact` carries, for the same reason: a
-/// caller building a rule's subject list needs a reporting path without decoding this
-/// capability's payload schema.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct ModuleFact
-{
-    pub subject: SubjectId,
-    /// Repository-relative, forward slashes — the same path `Subject_Of_Path` addressed
-    /// to produce `subject`.
-    pub path: String,
-    pub fact: MaterializedFact,
 }
 
 /// Reads `root`'s own Go workspace and produces one fact per module, each a leaf: nothing

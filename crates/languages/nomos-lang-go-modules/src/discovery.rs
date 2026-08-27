@@ -8,6 +8,10 @@ use nomos_cap_dependency::{DependencyEdge, DependencyKind, DependencyPayload};
 use std::collections::BTreeSet;
 use std::path::{Path, PathBuf};
 
+mod discovered_module;
+
+pub use discovered_module::DiscoveredModule;
+
 /// A `go.work`/`go.mod` file could not be read, or did not declare what this reader
 /// expects.
 ///
@@ -26,18 +30,6 @@ impl core::fmt::Display for ModuleError
     {
         return write!(formatter, "{}", self.reason);
     }
-}
-
-/// One Go module as this reader found it: its own dependency payload, and the
-/// repository-relative directory its `go.mod` lives in.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct DiscoveredModule
-{
-    pub payload: DependencyPayload,
-    /// Repository-relative, forward slashes — the same convention
-    /// `nomos_lang_rust_cargo::DiscoveredPackage::manifest_relative_root` takes, because
-    /// this is what a caller derives this module's subject from.
-    pub manifest_relative_root: String,
 }
 
 /// Every first-party module in a Go workspace rooted at `root`, restricted to edges that
