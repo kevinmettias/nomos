@@ -86,6 +86,7 @@ profile: domain-specification
 | docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md@authored | docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md | authored | 34 | 12 | sha256:ee64f184602e1bd210eeca6144c88552d97cebce829ccdedea3db6487fc6e36d |
 | docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md@authored | docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md | authored | 20 | 7 | sha256:0c813c23245ff0e95b51d6914c67d7ab36ae6d18b05e2bd82bd69892016f969e |
 | docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md@authored | docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md | authored | 25 | 7 | sha256:6b6d9f41076761c1a5af15719547c1b28ab365e7b4e46ba305c59bc4de3a71b5 |
+| docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md@authored | docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md | authored | 19 | 6 | sha256:630c8ef1cff23ab5ed96b9c51d8bafd63a584c5d5bec5f75119ef2564a8369b9 |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md@authored | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md | authored | 16 | 5 | sha256:e3d0afb3cabc0ab33a09a700e110b803806d3c4e063673d8c18ca7adc84c3012 |
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md@authored | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md | authored | 36 | 8 | sha256:3ececaaf506dff6cacf4aa066df5a3fdd61032c1ec291ef9f21e3a4b939d37ef |
 | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md@authored | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md | authored | 19 | 6 | sha256:9237ea74e89c7f49295d2e4bde41ff135c64838767ba17c27b0aad79037ced10 |
@@ -797,6 +798,12 @@ profile: domain-specification
 | docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#14 | authored | 2 | What This Record Does Not Do |
 | docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#19 | authored | 2 | Built: Verified Directly Against The Real Code |
 | docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#24 | authored | 2 | Status |
+| docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#1 | authored | 1 | Adopting code-standards' waiver mechanism for a nine-phase remediation campaign |
+| docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#2 | authored | 2 | Question |
+| docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#4 | authored | 2 | What Was Measured |
+| docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#8 | authored | 2 | Decision |
+| docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#13 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#18 | authored | 2 | Status |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#1 | authored | 1 | Choosing a platform, running a verb and rendering its outcome are three crates, not one |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#4 | authored | 2 | The decision |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#8 | authored | 2 | What stayed out, and why |
@@ -21010,6 +21017,191 @@ Accepted, and built. `P14-GATE-017-RUN-RULE-SUBSET-FIRST-INCREMENT-2` (not `-FIR
 which was declined and re-added once its territory was found to omit a file the change could
 not land without) built the signature change and both callers this record names, verified
 directly against the real code once merged.
+
+### docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#1
+
+*revision: authored · kind: heading · heading: Adopting code-standards' waiver mechanism for a nine-phase remediation campaign · hash: sha256:642e84c5db98561f8060ea8acd8d47b54fcdaf3835bb688dd58ce10cee0d4089*
+
+# Adopting code-standards' waiver mechanism for a nine-phase remediation campaign
+
+### docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#2
+
+*revision: authored · kind: heading · heading: Adopting code-standards' waiver mechanism for a nine-phase remediation campaign / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#3
+
+*revision: authored · kind: prose · heading: Adopting code-standards' waiver mechanism for a nine-phase remediation campaign / Question · hash: sha256:73fe8ab77043de4ab64e676d7cf7419dc43ccc76aef8323fe478bb4ffa551a67*
+
+A user-directed campaign runs `kevinmettias/code-standards`' `formatting`, `numerics`,
+`placement`, `clean-file`, `code-shape`, `concurrency-and-unsafe`, `declare-types`,
+`decompose-file` and `errors` rust gate phases against this workspace and drives each to
+zero reported findings, with suppressions minimized. Two things stand in the way of doing
+that honestly: `check-visibility-scope` refuses to judge this repository at all without a
+`standards.json` at the root, and a large share of the raw findings across every phase are
+not defects — they are test code the repository already governs differently, or two
+confirmed gaps in the checker's own front end. Neither can be resolved by editing Rust.
+This record is the one-time governance decision both need, so ninety-one per-check
+judgment calls do not each re-litigate it.
+
+### docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#4
+
+*revision: authored · kind: heading · heading: Adopting code-standards' waiver mechanism for a nine-phase remediation campaign / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#5
+
+*revision: authored · kind: prose · heading: Adopting code-standards' waiver mechanism for a nine-phase remediation campaign / What Was Measured · hash: sha256:8590a0e4af3958cabbcfbb309ab4b2671d63526a32adf8eebe35219e69bc3c02*
+
+**The raw counts are dominated by test code.** A finding was classified as test code when
+its line falls inside a `#[cfg(test)] mod … { }` span (found by a stateful scan that blanks
+string/char literal contents first — a naive per-line brace count misreads the JSON
+fixtures embedded as backslash-continued Rust string literals in, for example,
+`crates/host/nomos-api/src/work.rs`, the same class of misread this repository's own
+`docs/records` already knows `check-allman-braces`/`check-closing-brace` suffer from).
+Measured against the default (non-`--include-tests`) run over `crates/` and `tests/`:
+`check-presumption` drops from 159 raw findings to zero once its 159 `#[cfg(test)]`
+findings are set aside; `check-literals` drops from 290 to 9 once 257 `#[cfg(test)]`
+findings and 24 enum-discriminant misreads (below) are set aside. The same pattern recurs,
+at smaller volume, in `check-interfile-duplication`, `check-vertical-organization`,
+`check-tuple-return`, `check-error-info`, `check-transposable-parameters`,
+`check-responsibility-extraction`, `check-glob-imports`, `check-allman-braces` and
+`check-closing-brace`. `clippy.toml` already permits `unwrap()`/`expect()` in test code
+repository-wide, and `P12-NAMED-LITERALS`'s own `done_when` already excludes `#[cfg(test)]
+mod tests` blocks from what a named-literal defect counts as — this record generalizes
+that same governance choice across every check in the nine phases rather than deciding it
+once per check.
+
+### docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#6
+
+*revision: authored · kind: prose · heading: Adopting code-standards' waiver mechanism for a nine-phase remediation campaign / What Was Measured · hash: sha256:aabb7165ca3903f04e93f8f82a45a5a99db90949de396066bd2db4b65ccf7b42*
+
+**Two front-end gaps recur, unchanged from prior measurement.** `check-literals` still
+misjudges an enum variant's discriminant (`Usage = 2,`) as a magic number in logic —
+confirmed present in the ExitCode-shaped enums (`nomos-cli`'s `agent`, `check`, `gate`,
+`request`, `spec`, `work` modules, and `nomos-surface-provenance`'s `exit_code.rs`) that
+prior work already found this gap against. Naming a constant per discriminant is what the
+checker's own source comment warns against, so these are adopted as findings this
+repository does not act on, not fixed.
+
+### docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#7
+
+*revision: authored · kind: prose · heading: Adopting code-standards' waiver mechanism for a nine-phase remediation campaign / What Was Measured · hash: sha256:358be20b73389aafb9c2641d0c591c17b9f2075d7cbe854e1f3f6a764299da31*
+
+**`check-visibility-scope` requires the whole repository as its argument, not `crates/` and
+`tests/`, and this working tree currently holds four other agents' worktrees under
+`.claude/worktrees/` with real, un-merged commits of their own.** A repository-rooted run
+during this campaign is measured against a corpus that includes those branches' code, which
+this record does not treat as ground truth for this check. `check-visibility-scope`'s real
+remediation is deferred to when the shared tree does not carry live, divergent worktrees —
+noted here so a future session does not read a repository-root run's count as settled.
+
+### docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#8
+
+*revision: authored · kind: heading · heading: Adopting code-standards' waiver mechanism for a nine-phase remediation campaign / Decision · hash: sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511*
+
+## Decision
+
+### docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#9
+
+*revision: authored · kind: prose · heading: Adopting code-standards' waiver mechanism for a nine-phase remediation campaign / Decision · hash: sha256:c3106a9e51c418640ffa3f35c4ed51951b55718fda641cbdc3d56898fc73649a*
+
+**Adopt the mechanism, minimally.** `standards.json` is added at the repository root with
+only `suppression.max_horizon_days` set (180, the shipped default, stated explicitly rather
+than left to imply no opinion was formed); `suppression.markers` is left at its default
+(`safety-only`), so the thirteen safety-critical checks — `check-panic-primitives` and
+`check-atomic-ordering` among the findings this campaign touches — continue to be argued
+with an in-code `// check: allow <reason>` marker beside the code, which is the mechanism
+this tool's own design intends for a reader who meets the code without the justification.
+Every other exemption this campaign needs routes through `suppressions.json`, populated with
+`check waive --adopt` against a filtered, keep-going run so that one categorical decision
+(this record) produces the waiver ledger's many mechanical entries, rather than a person
+arguing each fingerprint by hand.
+
+### docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#10
+
+*revision: authored · kind: prose · heading: Adopting code-standards' waiver mechanism for a nine-phase remediation campaign / Decision · hash: sha256:8f10b4e5b6c1bc0c43f71c206abffed76e98b0d5a5769800c78b43472cd03b1c*
+
+**Two categories are pre-decided by this record, not re-argued per finding:**
+
+### docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#11
+
+*revision: authored · kind: prose · heading: Adopting code-standards' waiver mechanism for a nine-phase remediation campaign / Decision · hash: sha256:73a6dc5a92554cec4bb9310aa593d24858eb9c37e2c843a0df258243d884f826*
+
+1. A finding inside `#[cfg(test)]`-gated code, for a check whose concern is test-only
+   ergonomics this repository's own `clippy.toml` already permits (`check-presumption`,
+   `check-literals`, and the same class in `check-interfile-duplication`,
+   `check-vertical-organization`, `check-tuple-return`, `check-error-info`,
+   `check-transposable-parameters`, `check-responsibility-extraction`,
+   `check-glob-imports`, `check-allman-braces`, `check-closing-brace`) is adopted via
+   `check waive --adopt --reason "test code; see OD-GATE-018" --owner @kmettias`, not
+   hand-fixed.
+2. `check-literals`' enum-discriminant misreads and any array-length-in-type-position
+   misread matching the `Digest128`-style public-surface case this repository's own prior
+   work already found unfixable are individually waived, citing this record, not fixed.
+
+### docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#12
+
+*revision: authored · kind: prose · heading: Adopting code-standards' waiver mechanism for a nine-phase remediation campaign / Decision · hash: sha256:dc24d87b259dc9ac5bc4e4be80b086658392549b984c8da152e9ad3dde2c43a2*
+
+**What is not pre-decided:** every other finding across the nine phases — the genuine
+literals, the real `.expect()` presumption calls in production code, every formatting,
+placement, decompose-file, declare-types, concurrency and errors finding not matching one
+of the two categories above — is triaged and fixed (or, if a specific case turns out to be
+its own structural exception, waived individually with its own stated reason) phase by
+phase, in the order: `clean-file`, `decompose-file`, everything else, `placement` last.
+
+### docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#13
+
+*revision: authored · kind: heading · heading: Adopting code-standards' waiver mechanism for a nine-phase remediation campaign / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#14
+
+*revision: authored · kind: prose · heading: Adopting code-standards' waiver mechanism for a nine-phase remediation campaign / What This Record Does Not Do · hash: sha256:99e002c55aa290abe34e6fa0b9cd0732e9b4da55bd105d68491ce2d197889f08*
+
+It does not waive every finding a check reports; only the two named, general categories
+above are pre-decided. Every other finding is a real candidate for a code fix and is
+triaged on its own merits in the item that closes its phase.
+
+### docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#15
+
+*revision: authored · kind: prose · heading: Adopting code-standards' waiver mechanism for a nine-phase remediation campaign / What This Record Does Not Do · hash: sha256:5e78ba08839d342ade740f3659104c92bf605b1780b1d5681be342b6ada56ab3*
+
+It does not change `suppression.markers` from the shipped safety-only default, and does not
+grant any check outside the shipped thirteen an in-code marker.
+
+### docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#16
+
+*revision: authored · kind: prose · heading: Adopting code-standards' waiver mechanism for a nine-phase remediation campaign / What This Record Does Not Do · hash: sha256:13443f242748a43a18cfe69739a3b8c026a5411e8ddd7a27dfc0edaad3ffc316*
+
+It does not resolve `check-visibility-scope` against this repository; that check's real
+count is deferred until the working tree is not sharing live, divergent worktrees, per the
+measurement above.
+
+### docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#17
+
+*revision: authored · kind: prose · heading: Adopting code-standards' waiver mechanism for a nine-phase remediation campaign / What This Record Does Not Do · hash: sha256:da80fd9e70def86fcf0d890f0ad6701d4cc822cf8c1bcbca4be1545309144f1b*
+
+It does not adopt any of `standards.json`'s other configuration blocks (naming overrides,
+duplication thresholds, language-specific calibration, a standards-tree policy, and so on).
+Every field left absent takes the shipped default, which this record deliberately does not
+re-argue.
+
+### docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#18
+
+*revision: authored · kind: heading · heading: Adopting code-standards' waiver mechanism for a nine-phase remediation campaign / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#19
+
+*revision: authored · kind: prose · heading: Adopting code-standards' waiver mechanism for a nine-phase remediation campaign / Status · hash: sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3*
+
+Accepted.
 
 ### docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#1
 

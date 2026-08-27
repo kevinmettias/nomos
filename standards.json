@@ -1,0 +1,5 @@
+{
+  "suppression": {
+    "max_horizon_days": 180
+  }
+}

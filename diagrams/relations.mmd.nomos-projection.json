@@ -3,16 +3,16 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:9c33f35c9cd85053d8af3c2c2af1f76cfb15ccdf0bb231afa7dac8ab964d5187",
-  "inputs_digest": "sha256:5acc03b2f67e204b7daf6369442c485669b4189508f0dac43f3518e44b3d3dff",
+  "content_digest": "sha256:3e7d1a927b97797e12736078e5cd26ce8491f042c6a39ea6646948efdb97070d",
+  "inputs_digest": "sha256:3559de3308c57ebb59f1b5a9b5715bd6a4dd40ab93851da5b39b2b4441d409a8",
   "sections": [
     [
       "Relations",
-      1246
+      1248
     ],
     [
       "Decisions",
-      168
+      169
     ]
   ],
   "inputs": [
@@ -1948,6 +1948,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-CONTRACTS-001 relates-to OD-GATE-018",
+      "hash": "sha256:f97a5ee80bc12776052c7822b8d681221c24cde03bb31858693a5142d2418e52"
+    },
+    {
+      "content": "relations",
       "identity": "OD-CONTRACTS-001 relates-to OD-WORKFLOW-001",
       "hash": "sha256:83a18cfd3aba3213d8eb4087eb8bb545fc3f90e15b213e850397b81842222190"
     },
@@ -2925,6 +2930,11 @@
       "content": "relations",
       "identity": "OD-GATE-017 relates-to OD-RULES-009",
       "hash": "sha256:0fc9b58c82e197a9e965e1ecfe48205139021f5c44d1ddfcf3ba83b94e44fc38"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-GATE-018 relates-to OD-CONTRACTS-001",
+      "hash": "sha256:207a6f2ff7d2fc3924dec79443f7cbe2bf255e76f303d992d1bb28389f629c45"
     },
     {
       "content": "relations",
@@ -6585,6 +6595,11 @@
       "content": "nodes",
       "identity": "OD-GATE-017",
       "hash": "sha256:cdb28a55edf6c26839afcd48db57f4f524f173d675b8cd68a8bd6b0fb657853a"
+    },
+    {
+      "content": "nodes",
+      "identity": "OD-GATE-018",
+      "hash": "sha256:a541ff4347d7cc5d8ee7048b2f3126a8dbc11fc38a8683126401e4c8b5c67407"
     },
     {
       "content": "nodes",
