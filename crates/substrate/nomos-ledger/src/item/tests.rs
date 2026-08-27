@@ -2,6 +2,12 @@
 
 use super::*;
 
+use crate::Blocker;
+use crate::Claim;
+use crate::Territory;
+use crate::VerificationPredicate;
+use nomos_platform::Timestamp;
+
 fn Item(id: &str) -> LedgerItem
 {
     return LedgerItem {

@@ -28,7 +28,7 @@
 # declines MCP.
 verdict: Partial
 site: crates/substrate/nomos-scope-verification/src/territory.rs#Territory
-site: crates/substrate/nomos-ledger/src/item.rs#LedgerItem
+site: crates/substrate/nomos-ledger/src/item/ledger_item.rs#LedgerItem
 site: crates/substrate/nomos-capability/src/registry.rs#Registry
 gap: crates/host/nomos-api/src/lib.rs#Handle_Gate_Run
 gap: crates/contracts/nomos-contracts/src/identity.rs#KnowledgeReferenceId

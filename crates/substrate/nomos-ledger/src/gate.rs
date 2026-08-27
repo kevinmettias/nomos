@@ -15,6 +15,14 @@ mod outcome;
 
 pub use outcome::GateOutcome;
 
+// The workflow's whole text, and a step's name within it — kept apart purely by type, and
+// each large enough on its own to want a file of its own.
+mod workflow_text;
+mod step_name;
+
+pub use workflow_text::WorkflowText;
+pub use step_name::StepName;
+
 use std::path::Path;
 
 /// Where the gate is defined, relative to the tree the predicate runs in.
@@ -98,74 +106,6 @@ impl GateUnknown
 pub fn Workflow_Path(tree: &Path) -> std::path::PathBuf
 {
     return tree.join(GATE_WORKFLOW);
-}
-
-/// The text of a whole GitHub Actions workflow file, distinguished from [`StepName`] purely
-/// by type.
-///
-/// [`Derive_Step`] takes one of each as adjacent parameters, and two parameters that both
-/// read as `&str` there let a caller swap the workflow for the step name and have the
-/// compiler accept it. `From<&str>` and `From<&String>` both convert into this, so no
-/// existing call site needs to change shape to adopt it — every one already passes a
-/// borrowed string.
-#[derive(Clone, Copy, Debug)]
-pub struct WorkflowText<'a>(&'a str);
-
-impl<'a> From<&'a str> for WorkflowText<'a>
-{
-    fn from(value: &'a str) -> Self
-    {
-        return WorkflowText(value);
-    }
-}
-
-impl<'a> From<&'a String> for WorkflowText<'a>
-{
-    fn from(value: &'a String) -> Self
-    {
-        return WorkflowText(value.as_str());
-    }
-}
-
-impl<'a> WorkflowText<'a>
-{
-    /// The workflow's text as a plain string.
-    #[must_use]
-    pub fn As_Str(&self) -> &'a str
-    {
-        return self.0;
-    }
-}
-
-/// The name of one step within a workflow, distinguished from [`WorkflowText`] for the
-/// reason given on that type.
-#[derive(Clone, Copy, Debug)]
-pub struct StepName<'a>(&'a str);
-
-impl<'a> From<&'a str> for StepName<'a>
-{
-    fn from(value: &'a str) -> Self
-    {
-        return StepName(value);
-    }
-}
-
-impl<'a> From<&'a String> for StepName<'a>
-{
-    fn from(value: &'a String) -> Self
-    {
-        return StepName(value.as_str());
-    }
-}
-
-impl<'a> StepName<'a>
-{
-    /// The step name as a plain string.
-    #[must_use]
-    pub fn As_Str(&self) -> &'a str
-    {
-        return self.0;
-    }
 }
 
 /// The argv of a named step in a GitHub Actions workflow.
