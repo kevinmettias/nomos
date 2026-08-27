@@ -35014,14 +35014,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-orchestration",
-        "acquired_at": 1787801010,
-        "lease_expires_at": 1787811810
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -35035,7 +35031,31 @@
         ],
         "timeout_seconds": 1200
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-spec-orchestration"
+        ],
+        "exit_code": 0,
+        "output_tail": "_Render_A_Governing_Record_Back_Out ... ok\ntest tests::Test_Run_Of_Record_Should_Resolve_A_Governing_Record_With_No_Corpus ... ok\ntest tests::Test_Run_Of_Sources_Should_Report_The_Corpus_As_Absent_When_None_Is_Named ... ok\ntest tests::Test_Run_Of_Freshness_Should_Report_An_Empty_Build_Root_As_Absent ... ok\ntest corpus::tests::Test_An_Unset_Corpus_Should_Be_An_Absence_That_Names_What_Was_Expected ... ok\ntest tests::Test_Run_Of_Freshness_Should_Refuse_An_Unexamined_Requirement ... ok\ntest tests::Test_Run_Of_Table_Should_Refuse_An_Address_Nothing_Matches ... ok\ntest tests::Test_Run_Of_Render_Should_Refuse_An_Unknown_Profile ... ok\ntest tests::Test_Run_Of_Render_Should_Place_A_Projection_Built_With_No_Corpus ... ok\ntest tests::Test_Run_Of_Commit_Should_Write_The_Record_And_Close_The_Round_Trip ... ok\ntest tests::Test_Run_Of_Record_Should_Tell_An_Unsourced_Node_From_An_Unknown_One ... ok\ntest tests::Test_Run_Of_Preview_Should_Describe_A_Staged_Edit_And_Write_Nothing ... ok\ntest tests::Test_Run_Of_Freshness_Should_Report_A_Freshly_Rendered_Output_As_Current ... ok\n\ntest result: ok. 23 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.54s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.21s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_check_orchestration-9e99e7d64b4c5c06.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_gate_orchestration-3fa45ab85953ef02.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_orchestration-f10cea549c7c8481.exe)\n   Doc-tests nomos_check_orchestration\n   Doc-tests nomos_gate_orchestration\n   Doc-tests nomos_spec_orchestration\n",
+        "verified_at": 1787801570,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "5bb98e22c5dde11711a9488e0eb4ed1952fc85f1"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
