@@ -34711,14 +34711,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-host-api",
-        "acquired_at": 1787800829,
-        "lease_expires_at": 1787811629
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -34728,7 +34724,27 @@
         ],
         "timeout_seconds": 1200
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-api"
+        ],
+        "exit_code": 0,
+        "output_tail": "pec::submit::tests::Test_A_Real_Submission_With_Into_Should_Place_Its_Subject_Dossier_Projection ... ok\ntest spec::submit::tests::Test_An_Incomplete_Submission_Should_Be_Refused_And_Write_Nothing ... ok\ntest spec::table::tests::Test_A_Real_Call_For_An_Unknown_Document_Should_Report_No_Such_Document ... ok\ntest spec::table::tests::Test_A_No_Such_Document_Response_Should_Round_Trip_As_Json ... ok\ntest spec::markdown::tests::Test_A_Real_Resolved_Markdown_Response_Should_Round_Trip_As_Json ... ok\ntest spec::commit::tests::Test_A_Missing_Staged_Commit_File_Should_Report_Unreadable ... ok\ntest spec::freshness::tests::Test_An_Unknown_Required_Profile_Should_Report_No_Such_Profile ... ok\ntest spec::freshness::tests::Test_A_Real_Call_Over_An_Empty_Root_Should_Examine_Every_Profile_As_Absent ... ok\ntest spec::markdown::tests::Test_An_Unknown_Identifier_Should_Report_Refused ... ok\ntest spec::freshness::tests::Test_A_Real_Examined_Response_Should_Round_Trip_As_Json ... ok\ntest spec::markdown::tests::Test_A_Real_Governing_Record_Should_Render_As_Markdown ... ok\ntest spec::render::tests::Test_A_Real_Render_Should_Place_Both_Files_On_Disk ... ok\ntest spec::render::tests::Test_A_Real_Placed_Response_Should_Round_Trip_As_Json ... ok\ntest spec::preview::tests::Test_A_Real_Heading_Rename_Should_Preview_Wording_Moved ... ok\ntest spec::preview::tests::Test_A_Real_Previewed_Response_Should_Round_Trip_As_Json ... ok\ntest spec::commit::tests::Test_A_Real_Commit_Should_Write_The_Record_And_Close_The_Round_Trip ... ok\ntest spec::commit::tests::Test_A_Real_Committed_Response_Should_Round_Trip_As_Json ... ok\n\ntest result: ok. 65 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.94s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.15s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_api-4fe503a28bf04b3a.exe)\n   Doc-tests nomos_api\n",
+        "verified_at": 1787802595,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "f379a91f68bfb5142d1caaf6bbb2d1880a8ff468"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

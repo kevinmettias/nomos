@@ -1,0 +1,25 @@
+//! [`VacatedResponse`], carried only by [`super::commit::SpecCommitResponse`].
+
+use nomos_spec_orchestration::Vacated;
+use serde::Serialize;
+use std::path::PathBuf;
+
+use super::VacateOutcomeResponse;
+
+/// A serializable twin of [`nomos_spec_orchestration::Vacated`], which does not derive
+/// `Serialize`.
+#[derive(Debug, Serialize)]
+pub struct VacatedResponse
+{
+    /// The path the rename moved the record away from.
+    pub path: PathBuf,
+    pub outcome: VacateOutcomeResponse,
+}
+
+impl VacatedResponse
+{
+    pub(crate) fn From(vacated: Vacated) -> Self
+    {
+        return Self { path: vacated.path, outcome: VacateOutcomeResponse::From(vacated.outcome) };
+    }
+}
