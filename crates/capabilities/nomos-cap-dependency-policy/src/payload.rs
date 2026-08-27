@@ -80,6 +80,17 @@ pub fn Parse_Payload(bytes: &[u8]) -> Result<PolicyPayload, PayloadRefusal>
 
 fn Violation_Line(line: &str) -> Result<PolicyViolation, PayloadRefusal>
 {
+    let rest = Violation_Body(line)?;
+    let [severity, code, message] = Violation_Fields(line, rest)?;
+    let severity = Parse_Severity(severity)?;
+
+    return Ok(Build_Violation(severity, code, message));
+}
+
+/// `line` with its `"violation\t"` prefix stripped, or a refusal naming the line that was
+/// not one.
+fn Violation_Body(line: &str) -> Result<&str, PayloadRefusal>
+{
     let Some(rest) = line.strip_prefix("violation\t")
     else
     {
@@ -88,6 +99,13 @@ fn Violation_Line(line: &str) -> Result<PolicyViolation, PayloadRefusal>
         });
     };
 
+    return Ok(rest);
+}
+
+/// `rest` split into exactly [`VIOLATION_FIELDS`] tab-separated fields, or a refusal naming
+/// the original `line` that did not have that many.
+fn Violation_Fields<'a>(line: &str, rest: &'a str) -> Result<[&'a str; VIOLATION_FIELDS], PayloadRefusal>
+{
     let fields: Vec<&str> = rest.splitn(VIOLATION_FIELDS, '\t').collect();
     let [severity, code, message] = fields.as_slice()
     else
@@ -97,13 +115,16 @@ fn Violation_Line(line: &str) -> Result<PolicyViolation, PayloadRefusal>
         });
     };
 
-    let severity = Parse_Severity(severity)?;
+    return Ok([*severity, *code, *message]);
+}
 
-    return Ok(PolicyViolation {
+fn Build_Violation(severity: PolicySeverity, code: &str, message: &str) -> PolicyViolation
+{
+    return PolicyViolation {
         severity,
-        code: (*code).to_owned(),
-        message: (*message).to_owned(),
-    });
+        code: code.to_owned(),
+        message: message.to_owned(),
+    };
 }
 
 fn Parse_Severity(severity: &str) -> Result<PolicySeverity, PayloadRefusal>

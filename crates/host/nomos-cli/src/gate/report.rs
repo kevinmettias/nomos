@@ -231,8 +231,9 @@ fn Report_Explanation(explanation: &Explanation, stdout: &mut impl Write) -> Exi
                 suppressed_by: suppressed_by.as_ref(),
                 baselined_by: baselined_by.as_ref(),
             };
+            let found = FoundExplanation { finding, would_block: *would_block, contract: contract.as_ref() };
 
-            Report_Found(finding, *would_block, tolerance, contract.as_ref(), stdout)
+            Report_Found(found, tolerance, stdout)
         }
     };
 }
@@ -241,6 +242,9 @@ fn Report_Explanation(explanation: &Explanation, stdout: &mut impl Write) -> Exi
 /// explanation's block status -- never more than one at once, since `Explain_Gate` checks
 /// them in that order and stops at the first match, but grouped as a triple rather than
 /// three parameters: what a found explanation was tolerated by is one fact, not three.
+#[derive(Clone, Copy)]
+#[allow(clippy::struct_field_names)] // each field answers "tolerated by ___"; the shared
+                                      // suffix is the point, not an accident to rename away
 struct Toleration<'a>
 {
     calibrated_by: Option<&'a RuleCalibration>,
@@ -248,20 +252,25 @@ struct Toleration<'a>
     baselined_by: Option<&'a BaselineDebt>,
 }
 
+/// A found explanation's finding, block status and contract -- grouped separately from
+/// [`Toleration`] because these three come directly off [`Explanation::Found`], while
+/// `Toleration` is the one of at most three ways that finding was tolerated.
+#[derive(Clone, Copy)]
+struct FoundExplanation<'a>
+{
+    finding: &'a Finding,
+    would_block: bool,
+    contract: Option<&'a (String, u32)>,
+}
+
 /// Renders one found explanation's finding, block status, and calibration, suppression or
 /// baseline note (if any applies), and reduces it to the [`ExitCode`] a real run would
 /// decide for this one finding.
-fn Report_Found(
-    finding: &Finding,
-    would_block: bool,
-    tolerance: Toleration<'_>,
-    contract: Option<&(String, u32)>,
-    stdout: &mut impl Write,
-) -> ExitCode
+fn Report_Found(found: FoundExplanation<'_>, tolerance: Toleration<'_>, stdout: &mut impl Write) -> ExitCode
 {
-    let _ = writeln!(stdout, "{}", finding.Describe());
-    let _ = writeln!(stdout, "would block: {would_block}");
-    if let Some((record, version)) = contract
+    let _ = writeln!(stdout, "{}", found.finding.Describe());
+    let _ = writeln!(stdout, "would block: {}", found.would_block);
+    if let Some((record, version)) = found.contract
     {
         let _ = writeln!(stdout, "contract: {record} v{version}");
     }
@@ -282,5 +291,5 @@ fn Report_Found(
         let _ = writeln!(stdout, "baselined by: {}", debt.rationale);
     }
 
-    return if would_block { ExitCode::Violations } else { ExitCode::Ok };
+    return if found.would_block { ExitCode::Violations } else { ExitCode::Ok };
 }

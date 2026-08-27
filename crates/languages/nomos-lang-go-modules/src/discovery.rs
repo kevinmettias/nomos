@@ -110,7 +110,8 @@ fn Read_Modules(members: &[PathBuf], root: &Path) -> Result<Vec<ReadModule>, Mod
     let mut modules = Vec::with_capacity(members.len());
     for member in members
     {
-        modules.push(Read_Module(member, root)?);
+        let module = Read_Module(member, root)?;
+        modules.push(module);
     }
 
     return Ok(modules);
@@ -166,28 +167,56 @@ fn Directive_Entries(text: &str, keyword: &str) -> Vec<String>
 
     while let Some(line) = lines.next()
     {
-        let stripped = Strip_Comment(line).trim();
-
-        if let Some(rest) = stripped.strip_prefix(keyword)
-            && rest.starts_with(char::is_whitespace)
+        let Some(rest) = Directive_Rest(line, keyword)
+        else
         {
-            let rest = rest.trim();
-            if let Some(block) = rest.strip_prefix('(')
-            {
-                if !block.trim().is_empty()
-                {
-                    entries.push(First_Field(block.trim()));
-                }
-                Read_Block(&mut lines, &mut entries);
-            }
-            else if !rest.is_empty()
-            {
-                entries.push(First_Field(rest));
-            }
+            continue;
+        };
+
+        match rest.strip_prefix('(')
+        {
+            Some(block) => Record_Block_Entries(block, &mut lines, &mut entries),
+            None => Record_Single_Entry(rest, &mut entries),
         }
     }
 
     return entries;
+}
+
+/// `line`'s own directive body, if it opens with `keyword` followed by whitespace — `None`
+/// for any other line, including one this same keyword merely appears inside.
+fn Directive_Rest<'a>(line: &'a str, keyword: &str) -> Option<&'a str>
+{
+    let stripped = Strip_Comment(line).trim();
+    let rest = stripped.strip_prefix(keyword)?;
+
+    if !rest.starts_with(char::is_whitespace)
+    {
+        return None;
+    }
+
+    return Some(rest.trim());
+}
+
+/// The single entry a non-block directive line names, if it names one at all.
+fn Record_Single_Entry(rest: &str, entries: &mut Vec<String>)
+{
+    if !rest.is_empty()
+    {
+        entries.push(First_Field(rest));
+    }
+}
+
+/// A `(...)` block's entries: whatever the opening line itself names, plus the rest of the
+/// block, read until its closing `)`.
+fn Record_Block_Entries<'a>(block: &str, lines: &mut impl Iterator<Item = &'a str>, entries: &mut Vec<String>)
+{
+    if !block.trim().is_empty()
+    {
+        entries.push(First_Field(block.trim()));
+    }
+
+    Read_Block(lines, entries);
 }
 
 /// Reads a `(...)` block's remaining lines, one entry per line, until the closing `)`.
@@ -195,28 +224,46 @@ fn Read_Block<'a>(lines: &mut impl Iterator<Item = &'a str>, entries: &mut Vec<S
 {
     for line in lines.by_ref()
     {
-        let stripped = Strip_Comment(line).trim();
-        if stripped == ")"
+        if Block_Line(line, entries)
         {
             return;
         }
-        if stripped.is_empty()
-        {
-            continue;
-        }
-        if let Some(rest) = stripped.strip_suffix(')')
-        {
-            // A closing paren sharing a line with the last entry — not seen in practice,
-            // handled anyway rather than left to read past the block's own end.
-            let entry = rest.trim();
-            if !entry.is_empty()
-            {
-                entries.push(First_Field(entry));
-            }
-            return;
-        }
+    }
+}
 
-        entries.push(First_Field(stripped));
+/// One line inside a `(...)` block: records whatever entry it names, if any, and reports
+/// whether it also closed the block.
+fn Block_Line(line: &str, entries: &mut Vec<String>) -> bool
+{
+    let stripped = Strip_Comment(line).trim();
+    if stripped == ")"
+    {
+        return true;
+    }
+    if stripped.is_empty()
+    {
+        return false;
+    }
+    if let Some(rest) = stripped.strip_suffix(')')
+    {
+        Closing_Line_Entry(rest, entries);
+        return true;
+    }
+
+    entries.push(First_Field(stripped));
+
+    return false;
+}
+
+/// The entry a closing line names before its `)`, pushed if there is one -- a closing paren
+/// sharing a line with the last entry is not seen in practice, but handled anyway rather
+/// than left to read past the block's own end.
+fn Closing_Line_Entry(rest_before_paren: &str, entries: &mut Vec<String>)
+{
+    let entry = rest_before_paren.trim();
+    if !entry.is_empty()
+    {
+        entries.push(First_Field(entry));
     }
 }
 
@@ -276,6 +323,15 @@ fn Module_Paths(modules: &[ReadModule]) -> BTreeSet<String>
 /// workspace member.
 fn Discovered(module: ReadModule, module_paths: &BTreeSet<String>) -> DiscoveredModule
 {
+    let edges = First_Party_Edges(&module, module_paths);
+
+    return Discovered_Module(module, edges);
+}
+
+/// Every edge `module` declares that names another workspace member, mapped into this
+/// capability's payload shape and put in canonical order.
+fn First_Party_Edges(module: &ReadModule, module_paths: &BTreeSet<String>) -> Vec<DependencyEdge>
+{
     let mut edges: Vec<DependencyEdge> = module
         .requires
         .iter()
@@ -296,6 +352,11 @@ fn Discovered(module: ReadModule, module_paths: &BTreeSet<String>) -> Discovered
     // `nomos_lang_rust_cargo::metadata::Dependency_Edges` sorts for.
     edges.sort_by(|left, right| left.target.cmp(&right.target));
 
+    return edges;
+}
+
+fn Discovered_Module(module: ReadModule, edges: Vec<DependencyEdge>) -> DiscoveredModule
+{
     return DiscoveredModule {
         payload: DependencyPayload {
             package: module.module_path,

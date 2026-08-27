@@ -186,35 +186,67 @@ fn Unresolved_Citation(
     let field = field.0;
     let wanted = wanted.0;
 
-    let Some(cited) = submission.Current(field)
+    let Some(target) = Cited_Target(submission, field)
     else
     {
         return Ok(None);
     };
-    let target = cited.value.trim();
-    let found = Cited_State(store, target)?;
-    let remedy = match found
+
+    let Some(remedy) = Citation_Remedy(store, target, field, wanted)?
+    else
     {
-        None => format!(
-            "no submission is filed under `{target}`; cite one that exists, and one that is \
-             a {wanted}"
-        ),
-        Some((kind, _)) if kind != wanted =>
-        {
-            format!("`{target}` is a {kind} and `{field}` must name a {wanted}")
-        }
-        Some((_, state)) if state != SubmissionState::Accepted.Label() => format!(
-            "`{target}` is a {state}; accept it first, because work built against a draft is \
-             work whose target may still change under it"
-        ),
-        Some(_) => return Ok(None),
+        return Ok(None);
     };
 
-    return Ok(Some(Failure {
+    return Ok(Some(Citation_Failure(field, remedy)));
+}
+
+/// The value a citation field names, trimmed — `None` when the submission carries no
+/// citation in that field at all.
+fn Cited_Target<'a>(submission: &'a Submission, field: &str) -> Option<&'a str>
+{
+    let cited = submission.Current(field)?;
+
+    return Some(cited.value.trim());
+}
+
+/// Why a cited target does not resolve to an accepted submission of the required kind —
+/// `None` when it does.
+fn Citation_Remedy(
+    store: &SpecificationStore,
+    target: &str,
+    field: &str,
+    wanted: &str,
+) -> Result<Option<String>, StoreError>
+{
+    let found = Cited_State(store, target)?;
+
+    return Ok(match found
+    {
+        None => Some(format!(
+            "no submission is filed under `{target}`; cite one that exists, and one that is \
+             a {wanted}"
+        )),
+        Some((kind, _)) if kind != wanted =>
+        {
+            Some(format!("`{target}` is a {kind} and `{field}` must name a {wanted}"))
+        }
+        Some((_, state)) if state != SubmissionState::Accepted.Label() => Some(format!(
+            "`{target}` is a {state}; accept it first, because work built against a draft is \
+             work whose target may still change under it"
+        )),
+        Some(_) => None,
+    });
+}
+
+/// Bundles a citation rule's field and remedy into the [`Failure`] shape callers expect.
+fn Citation_Failure(field: &str, remedy: String) -> Failure
+{
+    return Failure {
         field: field.to_owned(),
         rule: "citation-resolves-to-an-accepted-submission".to_owned(),
         remedy,
-    }));
+    };
 }
 
 /// The kind and state of the submission filed under `node_id`, if one is.

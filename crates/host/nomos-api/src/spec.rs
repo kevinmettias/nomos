@@ -31,6 +31,19 @@ use std::path::PathBuf;
 /// choice, not a shared dependency.
 const CORPUS_VARIABLE: &str = "NOMOS_V14_CORPUS";
 
+/// The `CorpusRequest` composition every `Handle_Spec_*` function in this file builds from
+/// the environment alone -- factored out once enough of them needed exactly the same three
+/// fields the first already had inline. Mirrors `crates/host/nomos-api/src/work.rs`'s own
+/// `Ledger_At`.
+fn Build_Corpus_Request() -> CorpusRequest
+{
+    return CorpusRequest {
+        variable: CORPUS_VARIABLE.to_owned(),
+        root: std::env::var_os(CORPUS_VARIABLE).map(PathBuf::from),
+        revision: DEFAULT_REVISION.to_owned(),
+    };
+}
+
 /// Lists every shipped projection profile, exactly as `nomos spec profiles` would, and
 /// hands back a JSON-serializable response.
 #[must_use]
@@ -92,11 +105,7 @@ impl ProfilesResponse
 #[must_use]
 pub fn Handle_Spec_Sources() -> SpecSourcesResponse
 {
-    let request = CorpusRequest {
-        variable: CORPUS_VARIABLE.to_owned(),
-        root: std::env::var_os(CORPUS_VARIABLE).map(PathBuf::from),
-        revision: DEFAULT_REVISION.to_owned(),
-    };
+    let request = Build_Corpus_Request();
 
     let outcome = nomos_spec_orchestration::Run(&SpecCommand::Sources, &request, &StdFileSystem);
 
@@ -187,11 +196,7 @@ impl AbsenceResponse
 #[must_use]
 pub fn Handle_Spec_Record(request: &RecordRequest) -> SpecRecordResponse
 {
-    let corpus_request = CorpusRequest {
-        variable: CORPUS_VARIABLE.to_owned(),
-        root: std::env::var_os(CORPUS_VARIABLE).map(PathBuf::from),
-        revision: DEFAULT_REVISION.to_owned(),
-    };
+    let corpus_request = Build_Corpus_Request();
 
     let outcome =
         nomos_spec_orchestration::Run(&SpecCommand::Record(request.clone()), &corpus_request, &StdFileSystem);
@@ -326,11 +331,7 @@ impl NodeSummaryResponse
 #[must_use]
 pub fn Handle_Spec_Table(request: &TableRequest) -> SpecTableResponse
 {
-    let corpus_request = CorpusRequest {
-        variable: CORPUS_VARIABLE.to_owned(),
-        root: std::env::var_os(CORPUS_VARIABLE).map(PathBuf::from),
-        revision: DEFAULT_REVISION.to_owned(),
-    };
+    let corpus_request = Build_Corpus_Request();
 
     let outcome =
         nomos_spec_orchestration::Run(&SpecCommand::Table(request.clone()), &corpus_request, &StdFileSystem);
@@ -504,11 +505,7 @@ impl TableLineResponse
 #[must_use]
 pub fn Handle_Spec_Markdown(request: &RecordRequest) -> SpecMarkdownResponse
 {
-    let corpus_request = CorpusRequest {
-        variable: CORPUS_VARIABLE.to_owned(),
-        root: std::env::var_os(CORPUS_VARIABLE).map(PathBuf::from),
-        revision: DEFAULT_REVISION.to_owned(),
-    };
+    let corpus_request = Build_Corpus_Request();
 
     let outcome =
         nomos_spec_orchestration::Run(&SpecCommand::Markdown(request.clone()), &corpus_request, &StdFileSystem);
@@ -588,11 +585,7 @@ impl SpecMarkdownResponse
 #[must_use]
 pub fn Handle_Spec_Freshness(request: &FreshnessRequest) -> SpecFreshnessResponse
 {
-    let corpus_request = CorpusRequest {
-        variable: CORPUS_VARIABLE.to_owned(),
-        root: std::env::var_os(CORPUS_VARIABLE).map(PathBuf::from),
-        revision: DEFAULT_REVISION.to_owned(),
-    };
+    let corpus_request = Build_Corpus_Request();
 
     let outcome =
         nomos_spec_orchestration::Run(&SpecCommand::Freshness(request.clone()), &corpus_request, &StdFileSystem);
@@ -747,11 +740,7 @@ impl VerdictResponse
 #[must_use]
 pub fn Handle_Spec_Preview(request: &EditRequest) -> SpecPreviewResponse
 {
-    let corpus_request = CorpusRequest {
-        variable: CORPUS_VARIABLE.to_owned(),
-        root: std::env::var_os(CORPUS_VARIABLE).map(PathBuf::from),
-        revision: DEFAULT_REVISION.to_owned(),
-    };
+    let corpus_request = Build_Corpus_Request();
 
     let outcome =
         nomos_spec_orchestration::Run(&SpecCommand::Preview(request.clone()), &corpus_request, &StdFileSystem);
@@ -1002,11 +991,7 @@ impl NormativeOutcomeResponse
 #[must_use]
 pub fn Handle_Spec_Render(request: &RenderRequest) -> SpecRenderResponse
 {
-    let corpus_request = CorpusRequest {
-        variable: CORPUS_VARIABLE.to_owned(),
-        root: std::env::var_os(CORPUS_VARIABLE).map(PathBuf::from),
-        revision: DEFAULT_REVISION.to_owned(),
-    };
+    let corpus_request = Build_Corpus_Request();
 
     let outcome =
         nomos_spec_orchestration::Run(&SpecCommand::Render(request.clone()), &corpus_request, &StdFileSystem);
@@ -1093,11 +1078,7 @@ impl SpecRenderResponse
 #[must_use]
 pub fn Handle_Spec_Commit(request: &CommitRequest) -> SpecCommitResponse
 {
-    let corpus_request = CorpusRequest {
-        variable: CORPUS_VARIABLE.to_owned(),
-        root: std::env::var_os(CORPUS_VARIABLE).map(PathBuf::from),
-        revision: DEFAULT_REVISION.to_owned(),
-    };
+    let corpus_request = Build_Corpus_Request();
 
     let outcome =
         nomos_spec_orchestration::Run(&SpecCommand::Commit(request.clone()), &corpus_request, &StdFileSystem);
@@ -1383,11 +1364,7 @@ impl ReproductionResponse
 #[must_use]
 pub fn Handle_Spec_Submit(request: &SubmitRequest) -> SpecSubmitResponse
 {
-    let corpus_request = CorpusRequest {
-        variable: CORPUS_VARIABLE.to_owned(),
-        root: std::env::var_os(CORPUS_VARIABLE).map(PathBuf::from),
-        revision: DEFAULT_REVISION.to_owned(),
-    };
+    let corpus_request = Build_Corpus_Request();
 
     let mut assembly = match Assemble(&corpus_request)
     {
@@ -1395,7 +1372,8 @@ pub fn Handle_Spec_Submit(request: &SubmitRequest) -> SpecSubmitResponse
         Err(error) => return SpecSubmitResponse::Unreadable { cause: error.to_string() },
     };
 
-    return SpecSubmitResponse::From(nomos_spec_orchestration::Submit(&mut assembly, request, &StdFileSystem));
+    let submitted = nomos_spec_orchestration::Submit(&mut assembly, request, &StdFileSystem);
+    return SpecSubmitResponse::From(submitted);
 }
 
 /// What a real `nomos request submit` produced, in a shape `serde_json` can hand across a

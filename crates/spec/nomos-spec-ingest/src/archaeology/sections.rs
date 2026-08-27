@@ -105,24 +105,32 @@ impl Later
         let mut strongest: Option<Body> = None;
         for block in Keyable(body)
         {
-            let shape = self.Shape(SectionText(&block.text), SectionTitle(title));
-            let counted = self.bodies.entry(path.to_owned()).or_default();
-            counted.blocks = counted.blocks.saturating_add(1);
-            if matches!(shape, Body::Template { .. })
-            {
-                counted.filler = counted.filler.saturating_add(1);
-            }
-            strongest = Some(match (strongest.take(), shape)
-            {
-                (Some(Body::Narrative), _) | (_, Body::Narrative) => Body::Narrative,
-                (_, other) => other,
-            });
+            strongest = Some(self.Fold_Block(path, title, block, strongest));
         }
 
         self.authored.entry(title.to_owned()).or_default().push(Position::Heading {
             document: path.to_owned(),
             body: strongest,
         });
+    }
+
+    /// Judges one block's shape, tallies it into the section's block/filler counts, and
+    /// folds it into the strongest body seen so far for that section.
+    fn Fold_Block(&mut self, path: &str, title: &str, block: &SourceBlock, strongest: Option<Body>) -> Body
+    {
+        let shape = self.Shape(SectionText(&block.text), SectionTitle(title));
+        let counted = self.bodies.entry(path.to_owned()).or_default();
+        counted.blocks = counted.blocks.saturating_add(1);
+        if matches!(shape, Body::Template { .. })
+        {
+            counted.filler = counted.filler.saturating_add(1);
+        }
+
+        return match (strongest, shape)
+        {
+            (Some(Body::Narrative), _) | (_, Body::Narrative) => Body::Narrative,
+            (_, other) => other,
+        };
     }
 
     fn Shape(&self, text: SectionText<'_>, title: SectionTitle<'_>) -> Body

@@ -47,9 +47,21 @@ const CORRESPONDS_TO_MARKER: &str = "Corresponds to ";
 pub fn Check_Cross_Language_Correspondence(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 {
     let index = Struct_Index(sources, facts);
+    let mut findings = Findings_Over_Index(&index);
+
+    Sort_Findings(&mut findings);
+    return findings;
+}
+
+/// Every struct among `index`'s own entries that declares a correspondence, judged against
+/// whichever other struct among `index` its declared name resolves to — the middle section
+/// of [`Check_Cross_Language_Correspondence`], factored out on its own so that function reads
+/// as index, judge, sort rather than one longer body.
+fn Findings_Over_Index(index: &[(&SourceFile, SyntaxPayload)]) -> Vec<Finding>
+{
     let mut findings = Vec::new();
 
-    for (source, payload) in &index
+    for (source, payload) in index
     {
         for item in &payload.items
         {
@@ -60,15 +72,19 @@ pub fn Check_Cross_Language_Correspondence(sources: &[SourceFile], facts: &mut d
 
             let Some(target_name) = Declared_Correspondence(item.documentation.Value()) else { continue };
 
-            if let Some(finding) = Judged(source, item, &target_name, &index)
+            if let Some(finding) = Judged(source, item, &target_name, index)
             {
                 findings.push(finding);
             }
         }
     }
 
-    findings.sort_by(|left, right| return (&left.subject_name, &left.summary).cmp(&(&right.subject_name, &right.summary)));
     return findings;
+}
+
+fn Sort_Findings(findings: &mut [Finding])
+{
+    findings.sort_by(|left, right| return (&left.subject_name, &left.summary).cmp(&(&right.subject_name, &right.summary)));
 }
 
 /// Every source's decoded `nomos.cap.syntax.items` payload, for the sources whose fact
@@ -148,7 +164,15 @@ fn Judged(source: &SourceFile, item: &PayloadItem, target_name: &str, index: &[(
         ));
     };
 
-    return Drift(source, item, target_name, &own_fields, &target_fields);
+    return Drift(source, item, target_name, &FieldSets { own: &own_fields, target: &target_fields });
+}
+
+/// The two sides of a declared correspondence's field sets, compared as a pair — grouped so
+/// [`Drift`] takes one thing to compare rather than two separate slices.
+struct FieldSets<'a>
+{
+    own: &'a [(String, String)],
+    target: &'a [(String, String)],
 }
 
 /// The one struct anywhere in `index` named `target_name`, other than `declaring` itself —
@@ -212,10 +236,10 @@ fn Unparseable(source: &SourceFile, declaring_name: &str, because: &str) -> Find
 /// both sides name exactly the same fields — arity and order are read as a consequence of
 /// the name sets agreeing or not, never compared positionally: `OD-CAPABILITY-010`'s own
 /// worked example is a claim about which names exist on each side.
-fn Drift(source: &SourceFile, item: &PayloadItem, target_name: &str, own: &[(String, String)], target: &[(String, String)]) -> Option<Finding>
+fn Drift(source: &SourceFile, item: &PayloadItem, target_name: &str, fields: &FieldSets<'_>) -> Option<Finding>
 {
-    let own_names: BTreeSet<&str> = own.iter().map(|(name, _)| return name.as_str()).collect();
-    let target_names: BTreeSet<&str> = target.iter().map(|(name, _)| return name.as_str()).collect();
+    let own_names: BTreeSet<&str> = fields.own.iter().map(|(name, _)| return name.as_str()).collect();
+    let target_names: BTreeSet<&str> = fields.target.iter().map(|(name, _)| return name.as_str()).collect();
 
     let missing_on_target: Vec<&str> = own_names.difference(&target_names).copied().collect();
     let missing_on_own: Vec<&str> = target_names.difference(&own_names).copied().collect();

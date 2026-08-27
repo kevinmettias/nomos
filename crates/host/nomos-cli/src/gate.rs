@@ -101,19 +101,7 @@ pub fn Run(invocation: &GateInvocation, stdout: &mut impl Write, stderr: &mut im
             let outcome = nomos_gate_orchestration::Run(command);
             Render_Plan(&outcome, stdout, stderr)
         }
-        GateInvocation::Run(command) =>
-        {
-            let walked = sources::Walked(&command.root);
-            let run = nomos_gate_orchestration::Fresh_Run_Id(SystemClock.Now());
-            let result = nomos_gate_orchestration::Run_Gate(
-                walked,
-                composition::Host_Variant(),
-                command,
-                &StdProcessLauncher,
-                run,
-            );
-            Render_Run(&result, stdout, stderr)
-        }
+        GateInvocation::Run(command) => Run_Verb(command, stdout, stderr),
         GateInvocation::Explain(command, query) =>
         {
             let walked = sources::Walked(&command.root);
@@ -127,4 +115,15 @@ pub fn Run(invocation: &GateInvocation, stdout: &mut impl Write, stderr: &mut im
             Render_Explain(&result, stdout, stderr)
         }
     };
+}
+
+/// Walks `command.root`, runs `Run_Gate` over it under a freshly minted `RunId`, and
+/// renders what came back -- the self-contained unit `GateInvocation::Run`'s own arm was.
+fn Run_Verb(command: &GateCommand, stdout: &mut impl Write, stderr: &mut impl Write) -> ExitCode
+{
+    let walked = sources::Walked(&command.root);
+    let run = nomos_gate_orchestration::Fresh_Run_Id(SystemClock.Now());
+    let result = nomos_gate_orchestration::Run_Gate(walked, composition::Host_Variant(), command, &StdProcessLauncher, run);
+
+    return Render_Run(&result, stdout, stderr);
 }

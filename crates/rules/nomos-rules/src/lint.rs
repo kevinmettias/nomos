@@ -44,7 +44,11 @@ pub fn Check_Lint_Diagnostics(sources: &[SourceFile], facts: &mut dyn FactReader
     {
         match Payload_Of(source, facts)
         {
-            Ok(payload) => findings.extend(Findings_Of(source, &payload)),
+            Ok(payload) =>
+            {
+                let source_findings = Findings_Of(source, &payload);
+                findings.extend(source_findings);
+            }
             Err(finding) => findings.push(finding),
         }
     }

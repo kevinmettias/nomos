@@ -148,15 +148,19 @@ pub(super) fn Commanded(argv: Vec<String>, runner: Runner<'_>) -> Command
     return command;
 }
 
+/// The fraction of the wall bound given to the idle bound: one half. See [`Commanded`] for
+/// why half and not some other fraction.
+const IDLE_TIMEOUT_DIVISOR: u32 = 2;
+
 /// Half the wall bound, rounded down. See [`Commanded`] for why half and not some other
 /// fraction.
 ///
-/// `checked_div` rather than `/`: dividing by the constant `2` cannot itself fail, but this
-/// workspace denies raw arithmetic (`arithmetic_side_effects`) uniformly rather than judging
-/// each call site's safety by eye, so the fallback -- unreachable, since division by a
-/// nonzero constant always succeeds -- is the wall bound itself, never a shorter idle bound
-/// silently produced by a wrapped or truncated calculation.
+/// `checked_div` rather than `/`: dividing by [`IDLE_TIMEOUT_DIVISOR`] cannot itself fail,
+/// but this workspace denies raw arithmetic (`arithmetic_side_effects`) uniformly rather
+/// than judging each call site's safety by eye, so the fallback -- unreachable, since
+/// division by a nonzero constant always succeeds -- is the wall bound itself, never a
+/// shorter idle bound silently produced by a wrapped or truncated calculation.
 fn Idle_Timeout(timeout: std::time::Duration) -> std::time::Duration
 {
-    return timeout.checked_div(2).unwrap_or(timeout);
+    return timeout.checked_div(IDLE_TIMEOUT_DIVISOR).unwrap_or(timeout);
 }

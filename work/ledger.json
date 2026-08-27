@@ -34614,6 +34614,85 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P14-CLEANFILE-PHASE-REMEDIATION",
+      "title": "Drive code-standards' clean-file rust gate phase to zero against nomos",
+      "why": "User-directed nine-phase campaign (OD-GATE-018), phase 1 of 4 (clean-file, decompose-file, everything else, placement last). clean-file's six checks (nested-call, nesting-depth, function-size, literals, parameter-count, intrafile-duplication) report 76 real findings across 29 files once test code and the two OD-GATE-018-decided categories are set aside; four more parameter-count findings sit on pub fn signatures (nomos-corrections::New, nomos-check-orchestration::Run, nomos-gate-orchestration::Explain_Gate/Run_Gate) whose surface-snapshot and cross-crate caller impact this item defers to its own follow-on rather than risking under this item's territory.",
+      "done_when": "check-nested-call, check-nesting-depth, check-function-size, check-parameter-count and check-intrafile-duplication report zero findings against crates/ and tests/ (default run) except the four named pub-fn parameter-count findings this item explicitly defers; check-literals reports zero findings against crates/ and tests/ except any the agent determines are their own new structural exception, waived individually with a stated reason; every #[cfg(test)] and enum-discriminant check-literals finding is adopted into suppressions.json citing OD-GATE-018 rather than hand-fixed; cargo build --workspace and cargo test --workspace -p <every changed crate> stay green; no function's visibility changes from private/pub(crate) to pub.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities/nomos-cap-dependency-policy/src/payload.rs",
+          "crates/capabilities/nomos-cap-lint/src/payload.rs",
+          "crates/host/nomos-api/src/spec.rs",
+          "crates/host/nomos-api/src/work.rs",
+          "crates/host/nomos-cli/src/agent.rs",
+          "crates/host/nomos-cli/src/check/report.rs",
+          "crates/host/nomos-cli/src/gate.rs",
+          "crates/host/nomos-cli/src/gate/report.rs",
+          "crates/host/nomos-cli/src/request.rs",
+          "crates/host/nomos-surface-provenance/src/arguments.rs",
+          "crates/host/nomos-surface-provenance/src/report.rs",
+          "crates/languages/nomos-lang-go-modules/src/discovery.rs",
+          "crates/languages/nomos-lang-go/src/syntax/documentation.rs",
+          "crates/languages/nomos-lang-go/src/syntax/walk.rs",
+          "crates/languages/nomos-lang-rust-clippy/src/reading.rs",
+          "crates/orchestration/nomos-check-orchestration/src/facts/materialize.rs",
+          "crates/orchestration/nomos-check-orchestration/src/run.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/explain.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/run_gate.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/run_id.rs",
+          "crates/rules/nomos-rules/src/crosslang.rs",
+          "crates/rules/nomos-rules/src/dependency.rs",
+          "crates/rules/nomos-rules/src/lint.rs",
+          "crates/rules/nomos-rules/src/policy.rs",
+          "crates/spec/nomos-spec-ingest/src/archaeology/sections.rs",
+          "crates/spec/nomos-spec-store/src/registration.rs",
+          "crates/spec/nomos-spec-store/src/submission.rs",
+          "crates/spec/nomos-spec-validate/src/rule/no_undeclared_filler_template.rs",
+          "crates/substrate/nomos-ledger/src/finish/running.rs",
+          "suppressions.json"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Users\\kmett\\bin\\nomos.exe",
+          "work",
+          "validate"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "C:\\Users\\kmett\\bin\\nomos.exe",
+          "work",
+          "validate"
+        ],
+        "exit_code": 0,
+        "output_tail": "ledger is valid (schema 5, and this build understands 5)\n",
+        "verified_at": 1787797990,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "a00c5cd35bed386bcdef0816ea4f8bd2b8e1d54b"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

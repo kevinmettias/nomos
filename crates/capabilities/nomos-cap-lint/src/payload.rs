@@ -107,6 +107,23 @@ fn Package_Line(line: Option<&str>) -> Result<String, PayloadRefusal>
 
 fn Diagnostic_Line(line: &str) -> Result<LintDiagnostic, PayloadRefusal>
 {
+    let rest = Diagnostic_Body(line)?;
+    let [level, lint_id, file, line_number, message] = Diagnostic_Fields(line, rest)?;
+    let (level, lint_id, line_number) = Parse_Diagnostic_Fields(level, lint_id, line_number)?;
+
+    return Ok(LintDiagnostic {
+        level,
+        lint: lint_id,
+        message: message.to_owned(),
+        file: file.to_owned(),
+        line: line_number,
+    });
+}
+
+/// `line` with its `"diagnostic\t"` prefix stripped, or a refusal naming the line that was
+/// not one.
+fn Diagnostic_Body(line: &str) -> Result<&str, PayloadRefusal>
+{
     let Some(rest) = line.strip_prefix("diagnostic\t")
     else
     {
@@ -115,6 +132,13 @@ fn Diagnostic_Line(line: &str) -> Result<LintDiagnostic, PayloadRefusal>
         });
     };
 
+    return Ok(rest);
+}
+
+/// `rest` split into exactly [`DIAGNOSTIC_FIELDS`] tab-separated fields, or a refusal
+/// naming the original `line` that did not have that many.
+fn Diagnostic_Fields<'a>(line: &str, rest: &'a str) -> Result<[&'a str; DIAGNOSTIC_FIELDS], PayloadRefusal>
+{
     let fields: Vec<&str> = rest.splitn(DIAGNOSTIC_FIELDS, '\t').collect();
     let [level, lint_id, file, line_number, message] = fields.as_slice()
     else
@@ -124,17 +148,16 @@ fn Diagnostic_Line(line: &str) -> Result<LintDiagnostic, PayloadRefusal>
         });
     };
 
+    return Ok([*level, *lint_id, *file, *line_number, *message]);
+}
+
+fn Parse_Diagnostic_Fields(level: &str, lint_id: &str, line_number: &str) -> Result<(LintLevel, Option<String>, u32), PayloadRefusal>
+{
     let level = Parse_Level(level)?;
     let lint_id = Parse_Lint(lint_id);
     let line_number = Parse_Line_Number(line_number)?;
 
-    return Ok(LintDiagnostic {
-        level,
-        lint: lint_id,
-        message: (*message).to_owned(),
-        file: (*file).to_owned(),
-        line: line_number,
-    });
+    return Ok((level, lint_id, line_number));
 }
 
 fn Parse_Level(level: &str) -> Result<LintLevel, PayloadRefusal>

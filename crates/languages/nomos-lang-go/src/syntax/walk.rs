@@ -31,39 +31,57 @@ use tree_sitter::Node;
 #[must_use]
 pub fn Read_Source(source: &str) -> Reading
 {
-    let mut parser = tree_sitter::Parser::new();
-    parser
-        .set_language(&tree_sitter_go::LANGUAGE.into())
-        .expect("the Go grammar is compiled into this crate");
-
-    let Some(tree) = parser.parse(source, None)
+    let Some(tree) = Parsed_Tree(source)
     else
     {
-        return Reading::Unparseable(ParseFailure {
-            line: 0,
-            column: 0,
-            message: "tree-sitter produced no tree at all".to_owned(),
-        });
+        return Reading::Unparseable(No_Tree_Failure());
     };
 
     let root = tree.root_node();
 
-    if root.has_error()
+    if let Some(failure) = Root_Error(root)
     {
-        let failure = First_Error(root).unwrap_or_else(|| {
-            return ParseFailure {
-                line: 0,
-                column: 0,
-                message: "the file is not well-formed Go source".to_owned(),
-            };
-        });
-
         return Reading::Unparseable(failure);
     }
 
     let items = Walk_Source_File(root, source.as_bytes());
 
     return Reading::Parsed(SyntaxFacts { items, unexpanded: 0 });
+}
+
+fn Parsed_Tree(source: &str) -> Option<tree_sitter::Tree>
+{
+    let mut parser = tree_sitter::Parser::new();
+    parser
+        .set_language(&tree_sitter_go::LANGUAGE.into())
+        .expect("the Go grammar is compiled into this crate");
+
+    return parser.parse(source, None);
+}
+
+fn No_Tree_Failure() -> ParseFailure
+{
+    return ParseFailure {
+        line: 0,
+        column: 0,
+        message: "tree-sitter produced no tree at all".to_owned(),
+    };
+}
+
+fn Root_Error(root: Node) -> Option<ParseFailure>
+{
+    if !root.has_error()
+    {
+        return None;
+    }
+
+    return Some(First_Error(root).unwrap_or_else(|| {
+        return ParseFailure {
+            line: 0,
+            column: 0,
+            message: "the file is not well-formed Go source".to_owned(),
+        };
+    }));
 }
 
 /// The first place recovery left a mark, depth-first in source order.
@@ -143,43 +161,70 @@ fn Record_Declaration_Body(items: &mut Vec<SyntaxItem>, node: Node, source: &[u8
 
 fn Record_Function(items: &mut Vec<SyntaxItem>, node: Node, source: &[u8])
 {
-    let Some(name_node) = node.child_by_field_name("name")
-    else
-    {
-        return;
-    };
-    let Ok(name) = name_node.utf8_text(source)
+    let Some(name) = Function_Name(node, source)
     else
     {
         return;
     };
 
     let arity = node.child_by_field_name("parameters").map_or(0, Parameter_Arity);
+    let documentation = Documentation(node, source);
 
     Push(
         items,
-        ItemKind::Function,
-        Vec::new(),
-        name.to_owned(),
-        Visibility::Of_Name(name),
-        Documentation(node, source),
-        Some(nomos_cap_syntax::Function_Shape(arity)),
+        ItemRecord {
+            kind: ItemKind::Function,
+            scope: Vec::new(),
+            visibility: Visibility::Of_Name(&name),
+            name,
+            documentation,
+            shape: Some(nomos_cap_syntax::Function_Shape(arity)),
+        },
     );
+}
+
+fn Function_Name(node: Node, source: &[u8]) -> Option<String>
+{
+    let name_node = node.child_by_field_name("name")?;
+    let name = name_node.utf8_text(source).ok()?;
+
+    return Some(name.to_owned());
 }
 
 fn Record_Method(items: &mut Vec<SyntaxItem>, node: Node, source: &[u8])
 {
-    let Some(name_node) = node.child_by_field_name("name")
-    else
-    {
-        return;
-    };
-    let Ok(name) = name_node.utf8_text(source)
+    let Some(name) = Method_Name(node, source)
     else
     {
         return;
     };
 
+    let (scope, arity) = Method_Scope_And_Arity(node, source);
+    let documentation = Documentation(node, source);
+
+    Push(
+        items,
+        ItemRecord {
+            kind: ItemKind::Function,
+            scope,
+            visibility: Visibility::Of_Name(&name),
+            name,
+            documentation,
+            shape: Some(nomos_cap_syntax::Function_Shape(arity)),
+        },
+    );
+}
+
+fn Method_Name(node: Node, source: &[u8]) -> Option<String>
+{
+    let name_node = node.child_by_field_name("name")?;
+    let name = name_node.utf8_text(source).ok()?;
+
+    return Some(name.to_owned());
+}
+
+fn Method_Scope_And_Arity(node: Node, source: &[u8]) -> (Vec<String>, usize)
+{
     let receiver = node.child_by_field_name("receiver");
     let scope = receiver
         .and_then(|found| return Receiver_Type_Name(found, source))
@@ -187,15 +232,7 @@ fn Record_Method(items: &mut Vec<SyntaxItem>, node: Node, source: &[u8])
     let receiver_arity = usize::from(receiver.is_some());
     let parameter_arity = node.child_by_field_name("parameters").map_or(0, Parameter_Arity);
 
-    Push(
-        items,
-        ItemKind::Function,
-        scope,
-        name.to_owned(),
-        Visibility::Of_Name(name),
-        Documentation(node, source),
-        Some(nomos_cap_syntax::Function_Shape(receiver_arity.saturating_add(parameter_arity))),
-    );
+    return (scope, receiver_arity.saturating_add(parameter_arity));
 }
 
 fn Record_Const_Or_Var_Spec(items: &mut Vec<SyntaxItem>, spec: Node, source: &[u8], kind: ItemKind)
@@ -214,12 +251,14 @@ fn Record_Const_Or_Var_Spec(items: &mut Vec<SyntaxItem>, spec: Node, source: &[u
 
         Push(
             items,
-            kind,
-            Vec::new(),
-            name.to_owned(),
-            Visibility::Of_Name(name),
-            documentation.clone(),
-            shape.clone(),
+            ItemRecord {
+                kind,
+                scope: Vec::new(),
+                name: name.to_owned(),
+                visibility: Visibility::Of_Name(name),
+                documentation: documentation.clone(),
+                shape: shape.clone(),
+            },
         );
     }
 }
@@ -230,78 +269,119 @@ fn Record_Const_Or_Var_Spec(items: &mut Vec<SyntaxItem>, spec: Node, source: &[u
 /// aliased import (`import x "path"`) states its binding directly and is read from there.
 fn Record_Import_Spec(items: &mut Vec<SyntaxItem>, spec: Node, source: &[u8])
 {
-    let Some(path_node) = spec.child_by_field_name("path")
+    let Some(path) = Import_Path(spec, source)
     else
     {
         return;
     };
-    let Ok(raw_path) = path_node.utf8_text(source)
-    else
-    {
-        return;
-    };
-    let path = raw_path.trim_matches('"');
 
-    let name = match spec.child_by_field_name("name")
-    {
-        Some(alias) => alias.utf8_text(source).unwrap_or(path).to_owned(),
-        None => path.rsplit('/').next().unwrap_or(path).to_owned(),
-    };
+    let name = Import_Name(spec, source, &path);
+    let documentation = Documentation(spec, source);
 
     // An import declares no visibility of its own — Go has no `pub import`, and unlike
     // Rust's `pub use`, an imported name cannot be re-exported at all.
     Push(
         items,
-        ItemKind::Import,
-        Vec::new(),
-        name,
-        Visibility::NotApplicable,
-        Documentation(spec, source),
-        None,
+        ItemRecord {
+            kind: ItemKind::Import,
+            scope: Vec::new(),
+            name,
+            visibility: Visibility::NotApplicable,
+            documentation,
+            shape: None,
+        },
     );
+}
+
+fn Import_Path(spec: Node, source: &[u8]) -> Option<String>
+{
+    let path_node = spec.child_by_field_name("path")?;
+    let raw_path = path_node.utf8_text(source).ok()?;
+
+    return Some(raw_path.trim_matches('"').to_owned());
+}
+
+fn Import_Name(spec: Node, source: &[u8], path: &str) -> String
+{
+    return match spec.child_by_field_name("name")
+    {
+        Some(alias) => alias.utf8_text(source).unwrap_or(path).to_owned(),
+        None => path.rsplit('/').next().unwrap_or(path).to_owned(),
+    };
 }
 
 fn Record_Type_Spec(items: &mut Vec<SyntaxItem>, spec: Node, source: &[u8])
 {
-    let Some(name_node) = spec.child_by_field_name("name")
-    else
-    {
-        return;
-    };
-    let Ok(name) = name_node.utf8_text(source)
+    let Some(name) = Type_Spec_Name(spec, source)
     else
     {
         return;
     };
 
     let type_node = spec.child_by_field_name("type");
-    let kind = match type_node.map(|found| return found.kind())
+    let (kind, shape, documentation) = Type_Spec_Fields(type_node, spec, source);
+
+    Push(
+        items,
+        ItemRecord {
+            kind,
+            scope: Vec::new(),
+            name: name.clone(),
+            visibility: Visibility::Of_Name(&name),
+            documentation,
+            shape,
+        },
+    );
+
+    Record_Interface_Methods_If_Interface(items, (kind, type_node), &name, source);
+}
+
+/// `type_node`'s kind and shape, alongside `spec`'s own documentation -- [`Record_Type_Spec`]'s
+/// own gathering step, named so its body reads as "gather the fields, then push them."
+fn Type_Spec_Fields(type_node: Option<Node>, spec: Node, source: &[u8]) -> (ItemKind, Option<String>, Option<String>)
+{
+    let kind = Type_Spec_Kind(type_node);
+    let shape = Type_Spec_Shape(kind, type_node, source);
+    let documentation = Documentation(spec, source);
+
+    return (kind, shape, documentation);
+}
+
+/// `type_node`'s methods, recorded when [`Record_Type_Spec`] just built an interface --
+/// its own trailing, conditional step, named so the parent's body ends at "record it."
+fn Record_Interface_Methods_If_Interface(items: &mut Vec<SyntaxItem>, kind_and_type: (ItemKind, Option<Node>), name: &str, source: &[u8])
+{
+    if let (ItemKind::Interface, Some(interface)) = kind_and_type
+    {
+        Record_Interface_Methods(items, interface, name, source);
+    }
+}
+
+fn Type_Spec_Name(spec: Node, source: &[u8]) -> Option<String>
+{
+    let name_node = spec.child_by_field_name("name")?;
+    let name = name_node.utf8_text(source).ok()?;
+
+    return Some(name.to_owned());
+}
+
+fn Type_Spec_Kind(type_node: Option<Node>) -> ItemKind
+{
+    return match type_node.map(|found| return found.kind())
     {
         Some("struct_type") => ItemKind::Struct,
         Some("interface_type") => ItemKind::Interface,
         _ => ItemKind::TypeDefinition,
     };
+}
 
-    let shape = match (kind, type_node)
+fn Type_Spec_Shape(kind: ItemKind, type_node: Option<Node>, source: &[u8]) -> Option<String>
+{
+    return match (kind, type_node)
     {
         (ItemKind::Struct, Some(struct_type)) => Struct_Shape(struct_type, source),
         _ => None,
     };
-
-    Push(
-        items,
-        kind,
-        Vec::new(),
-        name.to_owned(),
-        Visibility::Of_Name(name),
-        Documentation(spec, source),
-        shape,
-    );
-
-    if let (ItemKind::Interface, Some(interface)) = (kind, type_node)
-    {
-        Record_Interface_Methods(items, interface, name, source);
-    }
 }
 
 /// A method an interface's method set declares.
@@ -324,52 +404,54 @@ fn Record_Interface_Methods(items: &mut Vec<SyntaxItem>, interface: Node, interf
             continue;
         }
 
-        let Some(name_node) = member.child_by_field_name("name")
-        else
-        {
-            continue;
-        };
-        let Ok(name) = name_node.utf8_text(source)
-        else
-        {
-            continue;
-        };
-
-        let arity = member.child_by_field_name("parameters").map_or(0, Parameter_Arity);
-
-        Push(
-            items,
-            ItemKind::Function,
-            vec![interface_name.to_owned()],
-            name.to_owned(),
-            Visibility::Of_Name(name),
-            Documentation(member, source),
-            Some(nomos_cap_syntax::Function_Shape(arity)),
-        );
+        Record_Interface_Method(items, member, interface_name, source);
     }
+}
+
+fn Record_Interface_Method(items: &mut Vec<SyntaxItem>, member: Node, interface_name: &str, source: &[u8])
+{
+    let Some(name) = Function_Name(member, source)
+    else
+    {
+        return;
+    };
+
+    let arity = member.child_by_field_name("parameters").map_or(0, Parameter_Arity);
+    let documentation = Documentation(member, source);
+
+    Push(
+        items,
+        ItemRecord {
+            kind: ItemKind::Function,
+            scope: vec![interface_name.to_owned()],
+            visibility: Visibility::Of_Name(&name),
+            name,
+            documentation,
+            shape: Some(nomos_cap_syntax::Function_Shape(arity)),
+        },
+    );
 }
 
 fn Record_Type_Alias(items: &mut Vec<SyntaxItem>, spec: Node, source: &[u8])
 {
-    let Some(name_node) = spec.child_by_field_name("name")
-    else
-    {
-        return;
-    };
-    let Ok(name) = name_node.utf8_text(source)
+    let Some(name) = Function_Name(spec, source)
     else
     {
         return;
     };
 
+    let documentation = Documentation(spec, source);
+
     Push(
         items,
-        ItemKind::TypeAlias,
-        Vec::new(),
-        name.to_owned(),
-        Visibility::Of_Name(name),
-        Documentation(spec, source),
-        None,
+        ItemRecord {
+            kind: ItemKind::TypeAlias,
+            scope: Vec::new(),
+            visibility: Visibility::Of_Name(&name),
+            name,
+            documentation,
+            shape: None,
+        },
     );
 }
 
@@ -424,27 +506,32 @@ fn Struct_Shape(struct_type: Node, source: &[u8]) -> Option<String>
             continue;
         }
 
-        let Some(type_node) = declaration.child_by_field_name("type")
-        else
-        {
-            continue;
-        };
-        let Ok(type_text) = type_node.utf8_text(source)
-        else
-        {
-            continue;
-        };
-
-        for name_node in Named_Field_Children(declaration, "name")
-        {
-            if let Ok(name_text) = name_node.utf8_text(source)
-            {
-                fields.push((name_text.to_owned(), type_text.to_owned()));
-            }
-        }
+        Push_Struct_Field(declaration, source, &mut fields);
     }
 
     return nomos_cap_syntax::Struct_Shape(&fields);
+}
+
+fn Push_Struct_Field(declaration: Node, source: &[u8], fields: &mut Vec<(String, String)>)
+{
+    let Some(type_node) = declaration.child_by_field_name("type")
+    else
+    {
+        return;
+    };
+    let Ok(type_text) = type_node.utf8_text(source)
+    else
+    {
+        return;
+    };
+
+    for name_node in Named_Field_Children(declaration, "name")
+    {
+        if let Ok(name_text) = name_node.utf8_text(source)
+        {
+            fields.push((name_text.to_owned(), type_text.to_owned()));
+        }
+    }
 }
 
 /// Every child carrying `field`, as an actually-named node.
@@ -521,22 +608,34 @@ fn Type_Shape(node: Node) -> String
     };
 }
 
-/// Records one declaration, with what this provider observed about it.
-///
-/// `shape` is `None` where the form has no shape to describe rather than where none could be
-/// seen. This provider parses, so everything it does not record is an absence it looked for
-/// — the distinction the payload spells `.` rather than `-`.
-fn Push(
-    items: &mut Vec<SyntaxItem>,
+/// The fields one recorded declaration needs, grouped so [`Push`] takes a small, fixed
+/// number of parameters regardless of how many facts a declaration carries.
+struct ItemRecord
+{
     kind: ItemKind,
     scope: Vec<String>,
     name: String,
     visibility: Visibility,
     documentation: Option<String>,
     shape: Option<String>,
-)
+}
+
+/// Records one declaration, with what this provider observed about it.
+///
+/// `shape` is `None` where the form has no shape to describe rather than where none could be
+/// seen. This provider parses, so everything it does not record is an absence it looked for
+/// — the distinction the payload spells `.` rather than `-`.
+fn Push(items: &mut Vec<SyntaxItem>, record: ItemRecord)
 {
     let ordinal = u32::try_from(items.len()).unwrap_or(u32::MAX);
 
-    items.push(SyntaxItem { ordinal, kind, scope, name, visibility, documentation, shape });
+    items.push(SyntaxItem {
+        ordinal,
+        kind: record.kind,
+        scope: record.scope,
+        name: record.name,
+        visibility: record.visibility,
+        documentation: record.documentation,
+        shape: record.shape,
+    });
 }

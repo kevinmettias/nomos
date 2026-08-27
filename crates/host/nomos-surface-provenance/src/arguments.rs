@@ -60,6 +60,10 @@ fn Named_Value(arguments: &[String], name: &str) -> Option<String>
     return arguments.get(position.saturating_add(1)).cloned();
 }
 
+/// How many argv slots a recognized `--name value` pair occupies: the flag itself and the
+/// value right after it — so a match skips both before looking for the next flag.
+const FLAG_AND_VALUE_WIDTH: usize = 2;
+
 /// Every value given for a repeatable flag.
 fn Named_Values(arguments: &[String], name: &str) -> Vec<String>
 {
@@ -72,7 +76,7 @@ fn Named_Values(arguments: &[String], name: &str) -> Vec<String>
             && let Some(value) = arguments.get(index.saturating_add(1))
         {
             values.push(value.clone());
-            index = index.saturating_add(2);
+            index = index.saturating_add(FLAG_AND_VALUE_WIDTH);
             continue;
         }
         index = index.saturating_add(1);

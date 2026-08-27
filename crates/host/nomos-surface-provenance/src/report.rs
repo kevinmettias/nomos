@@ -68,11 +68,15 @@ fn Append_Finding(text: &mut String, finding: &CrateFinding)
     text.push('\n');
 }
 
+/// How many characters of a commit hash [`Short`] keeps: enough for a person to
+/// recognize, short enough not to dominate the line.
+const SHORT_HASH_LENGTH: usize = 8;
+
 /// The first eight characters of a commit hash — enough for a person to recognize,
 /// short enough not to dominate the line.
 fn Short(hash: &str) -> &str
 {
-    return hash.get(..8).unwrap_or(hash);
+    return hash.get(..SHORT_HASH_LENGTH).unwrap_or(hash);
 }
 
 #[cfg(test)]

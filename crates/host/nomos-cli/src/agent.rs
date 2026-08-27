@@ -237,9 +237,23 @@ pub(crate) fn Run(command: &Command, output: &mut impl std::io::Write, notes: &m
 {
     return match command
     {
-        Command::Execute { goal, effort, backend } => Execute(goal, *effort, *backend, output, notes),
-        Command::JudgeRole { crate_name, root, effort, backend } => Judge_Role(crate_name, root, *effort, *backend, output, notes),
+        Command::Execute { goal, effort, backend } => Execute(goal, DispatchConfig { effort: *effort, backend: *backend }, output, notes),
+        Command::JudgeRole { crate_name, root, effort, backend } => Judge_Role(
+            RoleRequest { crate_name, root },
+            DispatchConfig { effort: *effort, backend: *backend },
+            output,
+            notes,
+        ),
     };
+}
+
+/// The effort and backend a dispatched call carries -- grouped because every caller of
+/// [`Dispatch`] threads them together, never one without the other.
+#[derive(Clone, Copy)]
+struct DispatchConfig
+{
+    effort: nomos_model_package::EffortLevel,
+    backend: Backend,
 }
 
 /// A bare `TaskEnvelope` naming only `goal` and `effort`. `scope`, `prohibited_changes` and
@@ -262,11 +276,11 @@ fn Task(goal: &str, effort: nomos_model_package::EffortLevel) -> TaskEnvelope
     };
 }
 
-fn Execute(
-    goal: &str, effort: nomos_model_package::EffortLevel, backend: Backend, output: &mut impl std::io::Write, notes: &mut impl std::io::Write,
-) -> ExitCode
+fn Execute(goal: &str, config: DispatchConfig, output: &mut impl std::io::Write, notes: &mut impl std::io::Write) -> ExitCode
 {
-    return Dispatch(&Task(goal, effort), backend, output, notes);
+    let task = Task(goal, config.effort);
+
+    return Dispatch(&task, config.backend, output, notes);
 }
 
 /// Runs `task` against `backend` and renders whichever of the two outcome shapes it
@@ -324,45 +338,95 @@ fn Unavailable(error: &impl std::fmt::Display, notes: &mut impl std::io::Write) 
     return ExitCode::Unavailable;
 }
 
+/// `--crate` and `--root` together -- the subject `judge-role` was asked to judge, as
+/// distinct from `DispatchConfig`'s question of how to ask it.
+#[derive(Clone, Copy)]
+struct RoleRequest<'a>
+{
+    crate_name: &'a str,
+    root: &'a Path,
+}
+
 /// Reads `root`'s `README.md` and `root`'s committed surface snapshot for `crate_name`,
 /// builds the real `nomos_rules::RoleSurfacePair` `Check_Declared_Role_Matches_Surface`
 /// would be handed, runs that rule to get the real `Finding` it produces, and dispatches
 /// the question that finding names — never its own guess — to Claude Code.
-fn Judge_Role(
-    crate_name: &str, root: &Path, effort: nomos_model_package::EffortLevel, backend: Backend, output: &mut impl std::io::Write,
-    notes: &mut impl std::io::Write,
-) -> ExitCode
+fn Judge_Role(request: RoleRequest<'_>, config: DispatchConfig, output: &mut impl std::io::Write, notes: &mut impl std::io::Write) -> ExitCode
+{
+    let pair = match Role_Surface_Pair(request, notes)
+    {
+        Ok(pair) => pair,
+        Err(code) => return code,
+    };
+
+    let finding = match Judged_Finding(&pair, notes)
+    {
+        Ok(finding) => finding,
+        Err(code) => return code,
+    };
+
+    let task = Judgment_Task(&pair, &finding, config.effort);
+
+    return Dispatch(&task, config.backend, output, notes);
+}
+
+/// `request`'s declared role and actual surface, read and paired -- [`Judge_Role`]'s own
+/// first two steps, named so its body reads as "build the pair, judge it, dispatch it."
+fn Role_Surface_Pair(request: RoleRequest<'_>, notes: &mut impl std::io::Write) -> Result<RoleSurfacePair, ExitCode>
+{
+    let declared_role = Resolve_Declared_Role(request.root, request.crate_name, notes)?;
+    let actual_surface = Read_Surface_Snapshot(request.root, request.crate_name, notes)?;
+
+    return Ok(RoleSurfacePair {
+        crate_root: Crate_Root(request.root, request.crate_name),
+        crate_name: request.crate_name.to_owned(),
+        declared_role,
+        actual_surface,
+    });
+}
+
+/// `declared_role`'s own row, or `NotFound` noted against `crate_name`'s absence from
+/// `root`'s band table.
+fn Resolve_Declared_Role(root: &Path, crate_name: &str, notes: &mut impl std::io::Write) -> Result<String, ExitCode>
 {
     let Some(declared_role) = Declared_Role(root, crate_name)
     else
     {
         let _ = writeln!(notes, "`{crate_name}` names no row in {}'s band table", root.join("README.md").display());
-        return ExitCode::NotFound;
+        return Err(ExitCode::NotFound);
     };
 
+    return Ok(declared_role);
+}
+
+/// `crate_name`'s committed `tests/contract/surface` snapshot, or `NotFound` noted against
+/// its absence.
+fn Read_Surface_Snapshot(root: &Path, crate_name: &str, notes: &mut impl std::io::Write) -> Result<String, ExitCode>
+{
     let surface_path = root.join("tests/contract/surface").join(format!("{crate_name}.txt"));
     let Ok(actual_surface) = std::fs::read_to_string(&surface_path)
     else
     {
         let _ = writeln!(notes, "no committed surface snapshot at {}", surface_path.display());
-        return ExitCode::NotFound;
+        return Err(ExitCode::NotFound);
     };
 
-    let pair = RoleSurfacePair {
-        crate_root: Crate_Root(root, crate_name),
-        crate_name: crate_name.to_owned(),
-        declared_role,
-        actual_surface,
-    };
-    let findings = nomos_rules::Check_Declared_Role_Matches_Surface(std::slice::from_ref(&pair));
+    return Ok(actual_surface);
+}
+
+/// Runs `Check_Declared_Role_Matches_Surface` over `pair` and takes its own finding, or
+/// `NotFound` noted when the rule produced none.
+fn Judged_Finding(pair: &RoleSurfacePair, notes: &mut impl std::io::Write) -> Result<Finding, ExitCode>
+{
+    let findings = nomos_rules::Check_Declared_Role_Matches_Surface(std::slice::from_ref(pair));
     let Some(finding) = findings.first()
     else
     {
         let _ = writeln!(notes, "the rule produced no finding for its own subject");
-        return ExitCode::NotFound;
+        return Err(ExitCode::NotFound);
     };
 
-    return Dispatch(&Judgment_Task(&pair, finding, effort), backend, output, notes);
+    return Ok(finding.clone());
 }
 
 /// `README.md`'s band-table row for `crate_name` — the third pipe-delimited cell of the
@@ -370,12 +434,15 @@ fn Judge_Role(
 /// names it.
 fn Declared_Role(root: &Path, crate_name: &str) -> Option<String>
 {
+    const README_TABLE_CRATE_NAME_COLUMN: usize = 2;
+    const README_TABLE_ROLE_COLUMN: usize = 3;
+
     let text = std::fs::read_to_string(root.join("README.md")).ok()?;
 
     for line in text.lines()
     {
         let cells: Vec<&str> = line.split('|').map(str::trim).collect();
-        let (Some(name_cell), Some(role_cell)) = (cells.get(2), cells.get(3))
+        let (Some(name_cell), Some(role_cell)) = (cells.get(README_TABLE_CRATE_NAME_COLUMN), cells.get(README_TABLE_ROLE_COLUMN))
         else
         {
             continue;

@@ -17,6 +17,10 @@ use std::sync::atomic::{AtomicU64, Ordering};
 /// A process-local sequence, so two calls within the same wall-clock second still diverge.
 static NEXT_SEQUENCE: AtomicU64 = AtomicU64::new(0);
 
+/// How many byte slices [`Fresh_Run_Id`] digests together: the wall-clock seconds, the
+/// process id, and the process-local sequence counter.
+const DIGEST_PART_COUNT: usize = 3;
+
 /// A `RunId` for an execution starting now.
 ///
 /// Not collision-proof, and this does not pretend otherwise. It combines `now`, this
@@ -37,7 +41,7 @@ pub fn Fresh_Run_Id(now: Timestamp) -> RunId
     let process = std::process::id().to_be_bytes();
     let counter = sequence.to_be_bytes();
 
-    let parts: [&[u8]; 3] = [&seconds, &process, &counter];
+    let parts: [&[u8]; DIGEST_PART_COUNT] = [&seconds, &process, &counter];
 
     return RunId::From_Digest(Digest_Of_Parts(&parts));
 }

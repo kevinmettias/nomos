@@ -1,0 +1,1557 @@
+{
+  "schema": 1,
+  "waivers": [
+    {
+      "check": "check-literals",
+      "path": "crates/agent/nomos-agent-contracts/src/change_context.rs",
+      "fingerprint": "c22427a295df8b19",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/agent/nomos-agent-contracts/src/change_context.rs",
+      "fingerprint": "d14c2e8813024927",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/agent/nomos-agent-contracts/src/change_context.rs",
+      "fingerprint": "c9ef9d28d72fe719",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/agent/nomos-agent-contracts/src/work_result.rs",
+      "fingerprint": "fa5c82f81ff24ec7",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/agent/nomos-agent-executor-claude-code/src/response.rs",
+      "fingerprint": "410a33e858439132",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/agent/nomos-agent-executor-claude-code/src/response.rs",
+      "fingerprint": "43898ba3fb65d467",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/capabilities/nomos-cap-lint/src/payload.rs",
+      "fingerprint": "07b6743d98876894",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/capabilities/nomos-cap-lint/src/payload.rs",
+      "fingerprint": "7057683f64a03919",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/contracts/nomos-contracts/src/contract_version.rs",
+      "message": "magic number literal `3` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/contracts/nomos-contracts/src/contract_version.rs",
+      "fingerprint": "76326e7bcbeb1033",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/contracts/nomos-contracts/src/contract_version.rs",
+      "fingerprint": "652dfc49dd30b403",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/contracts/nomos-contracts/src/contract_version.rs",
+      "fingerprint": "a725c4f275226f95",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/contracts/nomos-contracts/src/enforcement/breach.rs",
+      "fingerprint": "71e0af4f6aaed37c",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/contracts/nomos-contracts/src/finding.rs",
+      "fingerprint": "44569265ec49b442",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/contracts/nomos-contracts/src/identity.rs",
+      "fingerprint": "28a525f3cf1186f8",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/contracts/nomos-contracts/src/identity.rs",
+      "fingerprint": "3bf1487e87b9e990",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/contracts/nomos-contracts/src/identity.rs",
+      "fingerprint": "acb51cfc8b818622",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/contracts/nomos-contracts/src/workflow_step.rs",
+      "message": "magic number literal `3` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/contracts/nomos-contracts/src/workflow_step/retry_policy.rs",
+      "fingerprint": "ac1ee4f19549ed80",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/contracts/nomos-contracts/src/workflow_step/timeout.rs",
+      "fingerprint": "70735fc2b11a9993",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/corrections/nomos-corrections/src/change_set.rs",
+      "fingerprint": "956577b7006fb380",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/corrections/nomos-corrections/src/committed.rs",
+      "fingerprint": "a181507f6aa6fc27",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/corrections/nomos-corrections/src/committed.rs",
+      "fingerprint": "6046a9ff6ba4a019",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/corrections/nomos-corrections/src/correction_choice.rs",
+      "message": "magic number literal `3` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/corrections/nomos-corrections/src/plan.rs",
+      "fingerprint": "9a97cf785516f9bd",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/corrections/nomos-corrections/src/staged.rs",
+      "fingerprint": "d2cd618f9981fb62",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/corrections/nomos-corrections/src/staged.rs",
+      "fingerprint": "7de94a9353dd5580",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/corrections/nomos-corrections/src/validated.rs",
+      "fingerprint": "9f17ab767da7d3f0",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/corrections/nomos-corrections/src/validated.rs",
+      "fingerprint": "d42df45c97e08f45",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-api/src/lib.rs",
+      "fingerprint": "5f9a193abe447b27",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-api/src/work.rs",
+      "message": "magic number literal `3600` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/agent.rs",
+      "fingerprint": "7d0210d87148120e",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/agent.rs",
+      "fingerprint": "511a1f1920497778",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/agent.rs",
+      "fingerprint": "1c0bfb8a3d74673f",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/check/exit_code.rs",
+      "fingerprint": "7d0210d87148120e",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/check/exit_code.rs",
+      "fingerprint": "8f8d807b4ce0162b",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/check/exit_code.rs",
+      "fingerprint": "0dbdca23b1cdbf57",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/check/report.rs",
+      "fingerprint": "60bece97e44b0328",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/check/report.rs",
+      "fingerprint": "62ed3e0fc5bc0e2c",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/check/report.rs",
+      "fingerprint": "96577b4a39aea77f",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/gate/exit_code.rs",
+      "fingerprint": "7d0210d87148120e",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/gate/exit_code.rs",
+      "fingerprint": "07ef0246a375cd07",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/gate/exit_code.rs",
+      "fingerprint": "0dbdca23b1cdbf57",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/request.rs",
+      "fingerprint": "7d0210d87148120e",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/request.rs",
+      "fingerprint": "4694e8bb50d0a2fa",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/request.rs",
+      "fingerprint": "083e338c7e4de5da",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/request.rs",
+      "fingerprint": "10f06bac4d04dca2",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/spec/exit_code.rs",
+      "fingerprint": "7d0210d87148120e",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/spec/exit_code.rs",
+      "fingerprint": "4694e8bb50d0a2fa",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/spec/exit_code.rs",
+      "fingerprint": "8a7aec95ab0791c8",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/spec/exit_code.rs",
+      "fingerprint": "083e338c7e4de5da",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/spec/exit_code.rs",
+      "fingerprint": "0e85222a5719b3d6",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/spec/exit_code.rs",
+      "fingerprint": "10f06bac4d04dca2",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/work/exit_code.rs",
+      "fingerprint": "7d0210d87148120e",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/work/exit_code.rs",
+      "fingerprint": "0a19c316be8d04a8",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/work/exit_code.rs",
+      "fingerprint": "2fd19503f4523948",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/work/exit_code.rs",
+      "fingerprint": "4694e8bb50d0a2fa",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-surface-provenance/src/evaluate.rs",
+      "fingerprint": "94347ab801c8a411",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-surface-provenance/src/exit_code.rs",
+      "fingerprint": "7d0210d87148120e",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/kernel/nomos-model/src/confidence.rs",
+      "fingerprint": "a0a84c3dca52aaad",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/kernel/nomos-model/src/confidence.rs",
+      "fingerprint": "6d9497907e09efd2",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/kernel/nomos-model/src/confidence.rs",
+      "fingerprint": "dbe0abad98271390",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/kernel/nomos-model/src/evidence/coverage.rs",
+      "message": "magic number literal `3` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/kernel/nomos-model/src/evidence/coverage.rs",
+      "fingerprint": "d4ae809676d281b9",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/kernel/nomos-model/src/subject/set.rs",
+      "fingerprint": "98c5a15358b43504",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/kernel/nomos-model/src/transition.rs",
+      "fingerprint": "1a82c3ad7d47d638",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/kernel/nomos-store/src/document/kind.rs",
+      "fingerprint": "439a02f75e989913",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/kernel/nomos-store/src/document/kind.rs",
+      "fingerprint": "741f7773fca36b52",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/kernel/nomos-store/src/document/kind.rs",
+      "fingerprint": "4882528748e5727f",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/kernel/nomos-store/src/document/kind.rs",
+      "fingerprint": "95fcce0513625b95",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/kernel/nomos-store/src/document/kind.rs",
+      "fingerprint": "beef4ab905d13e8d",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/languages/nomos-lang-go-modules/src/provider.rs",
+      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/languages/nomos-lang-go-modules/src/provider.rs",
+      "fingerprint": "ac6413bf920b423a",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/languages/nomos-lang-go-modules/src/provider.rs",
+      "fingerprint": "1dcc211384a6b054",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/languages/nomos-lang-go/src/provider.rs",
+      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/languages/nomos-lang-go/src/provider.rs",
+      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/languages/nomos-lang-go/src/provider.rs",
+      "message": "magic number literal `3` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/languages/nomos-lang-rust-cargo/src/provider.rs",
+      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/languages/nomos-lang-rust-cargo/src/provider.rs",
+      "fingerprint": "ac6413bf920b423a",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/languages/nomos-lang-rust-cargo/src/provider.rs",
+      "fingerprint": "1dcc211384a6b054",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/languages/nomos-lang-rust-clippy/src/provider.rs",
+      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/languages/nomos-lang-rust-clippy/src/provider.rs",
+      "fingerprint": "ac6413bf920b423a",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/languages/nomos-lang-rust-clippy/src/provider.rs",
+      "fingerprint": "1dcc211384a6b054",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/languages/nomos-lang-rust-clippy/src/provider.rs",
+      "fingerprint": "fffa4d20ae46bc59",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/languages/nomos-lang-rust-clippy/src/reading.rs",
+      "message": "magic number literal `113` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/languages/nomos-lang-rust-clippy/src/reading.rs",
+      "fingerprint": "889ecfa45d33eae7",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/languages/nomos-lang-rust-clippy/src/reading.rs",
+      "fingerprint": "452c1e2d9b1730ac",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/languages/nomos-lang-rust-clippy/src/reading.rs",
+      "fingerprint": "03e5dcf3b7c6da2a",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/languages/nomos-lang-rust-deny/src/provider.rs",
+      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/languages/nomos-lang-rust-deny/src/provider.rs",
+      "fingerprint": "ac6413bf920b423a",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/languages/nomos-lang-rust-deny/src/provider.rs",
+      "fingerprint": "1dcc211384a6b054",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/languages/nomos-lang-rust-scan/src/provider.rs",
+      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/languages/nomos-lang-rust-scan/src/provider.rs",
+      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/languages/nomos-lang-rust-scan/src/provider.rs",
+      "fingerprint": "1dcc211384a6b054",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/languages/nomos-lang-rust-scan/src/scan.rs",
+      "fingerprint": "e518fc737cc5248d",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/languages/nomos-lang-rust-scan/src/scan.rs",
+      "fingerprint": "a5131337f12062df",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/languages/nomos-lang-rust/src/provider.rs",
+      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/languages/nomos-lang-rust/src/provider.rs",
+      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/languages/nomos-lang-rust/src/provider.rs",
+      "message": "magic number literal `3` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/languages/nomos-lang-rust/src/reachability/provider.rs",
+      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/languages/nomos-lang-rust/src/reachability/provider.rs",
+      "fingerprint": "ac6413bf920b423a",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/languages/nomos-lang-rust/src/reachability/provider.rs",
+      "fingerprint": "1dcc211384a6b054",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/orchestration/nomos-gate-orchestration/src/adoption.rs",
+      "fingerprint": "15984fc40cb7155b",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/orchestration/nomos-gate-orchestration/src/baseline.rs",
+      "fingerprint": "8714e76c36bc6f9f",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/orchestration/nomos-gate-orchestration/src/run_id.rs",
+      "fingerprint": "4ad06a1c1b1d1d60",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/orchestration/nomos-gate-orchestration/src/run_id.rs",
+      "fingerprint": "3da698d50afb512e",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/orchestration/nomos-gate-orchestration/src/suppression.rs",
+      "fingerprint": "8714e76c36bc6f9f",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/platform/nomos-platform/src/clock.rs",
+      "message": "magic number literal `1_000` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/platform/nomos-platform/src/clock.rs",
+      "message": "magic number literal `30` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/platform/nomos-platform/src/clock.rs",
+      "fingerprint": "298224c2219eeafb",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/platform/nomos-platform/src/clock.rs",
+      "fingerprint": "8ad94e96f628e362",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/platform/nomos-platform/src/launcher/exit_outcome.rs",
+      "message": "magic number literal `30` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/rules/nomos-rules/src/crosslang.rs",
+      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/rules/nomos-rules/src/crosslang.rs",
+      "fingerprint": "ac6413bf920b423a",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/rules/nomos-rules/src/crosslang.rs",
+      "fingerprint": "1dcc211384a6b054",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/rules/nomos-rules/src/dependency.rs",
+      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/rules/nomos-rules/src/dependency.rs",
+      "fingerprint": "ac6413bf920b423a",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/rules/nomos-rules/src/dependency.rs",
+      "fingerprint": "1dcc211384a6b054",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/rules/nomos-rules/src/lint.rs",
+      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/rules/nomos-rules/src/lint.rs",
+      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/rules/nomos-rules/src/lint.rs",
+      "fingerprint": "1dcc211384a6b054",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/rules/nomos-rules/src/lint.rs",
+      "fingerprint": "00cf2af1a5622643",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/rules/nomos-rules/src/naming.rs",
+      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/rules/nomos-rules/src/naming.rs",
+      "fingerprint": "ac6413bf920b423a",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/rules/nomos-rules/src/naming.rs",
+      "fingerprint": "1dcc211384a6b054",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/rules/nomos-rules/src/policy.rs",
+      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/rules/nomos-rules/src/policy.rs",
+      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/rules/nomos-rules/src/policy.rs",
+      "fingerprint": "1dcc211384a6b054",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/rules/nomos-rules/src/reachability.rs",
+      "message": "magic number literal `3` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/rules/nomos-rules/src/reachability.rs",
+      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/rules/nomos-rules/src/reachability.rs",
+      "fingerprint": "ac6413bf920b423a",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/rules/nomos-rules/src/registry/rule_registry.rs",
+      "fingerprint": "ef36b84331362f3f",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/rules/nomos-rules/src/role_surface.rs",
+      "fingerprint": "68dfe9110365c3aa",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/spec/nomos-spec-bundle/src/bundle.rs",
+      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/spec/nomos-spec-ingest/src/family.rs",
+      "fingerprint": "26d6d4f23e20586e",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/spec/nomos-spec-ingest/src/phases/gate.rs",
+      "fingerprint": "28e56b15494038c0",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/spec/nomos-spec-ingest/src/reconciliation/overlay/artifact.rs",
+      "fingerprint": "13f2557cc942d376",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/spec/nomos-spec-ingest/src/reconciliation/restored.rs",
+      "fingerprint": "618873db2b9516b0",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/spec/nomos-spec-ingest/src/reconciliation/restored.rs",
+      "fingerprint": "1447a9064c727227",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/spec/nomos-spec-ingest/src/reconciliation/restored.rs",
+      "fingerprint": "6d518c3c8e8e5b56",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/spec/nomos-spec-ingest/src/reconciliation/restored.rs",
+      "fingerprint": "c904a96c5bd104bc",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/spec/nomos-spec-ingest/src/reconciliation/restored.rs",
+      "fingerprint": "30a944e163cc50b6",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/spec/nomos-spec-ingest/src/reconciliation/restored.rs",
+      "fingerprint": "cba9e03787f6ed7a",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/spec/nomos-spec-ingest/src/reconciliation/restored.rs",
+      "fingerprint": "223410dccfd97dee",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/spec/nomos-spec-model/src/block.rs",
+      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/spec/nomos-spec-model/src/block.rs",
+      "message": "magic number literal `3` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/spec/nomos-spec-model/src/block.rs",
+      "fingerprint": "48193a401116918f",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/spec/nomos-spec-model/src/render.rs",
+      "fingerprint": "01b43e49ec8f43c1",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/spec/nomos-spec-model/src/table.rs",
+      "message": "magic number literal `3` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/spec/nomos-spec-model/src/table.rs",
+      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/spec/nomos-spec-model/src/table.rs",
+      "message": "magic number literal `4` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/spec/nomos-spec-project/src/projection/content.rs",
+      "fingerprint": "a174cfa1bc078e8c",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/spec/nomos-spec-project/src/projection/content.rs",
+      "fingerprint": "a35e1ab41d247ab9",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/spec/nomos-spec-project/src/projection/content.rs",
+      "fingerprint": "3d9e39c745a64db4",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/spec/nomos-spec-project/src/projection/content.rs",
+      "fingerprint": "73930d5129310b1b",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/spec/nomos-spec-project/src/projection/content.rs",
+      "fingerprint": "af234a7e198ed2db",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/spec/nomos-spec-project/src/projection/content.rs",
+      "fingerprint": "95fa1295a669d999",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/spec/nomos-spec-project/src/projection/content.rs",
+      "fingerprint": "16a01fbb4edbfe8c",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/spec/nomos-spec-project/src/projection/content.rs",
+      "fingerprint": "8fa5566ac32f0016",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/spec/nomos-spec-project/src/projection/format.rs",
+      "fingerprint": "0a2443586b5bcfd5",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/spec/nomos-spec-project/src/projection/format.rs",
+      "fingerprint": "5c0012288a37fe45",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/spec/nomos-spec-project/src/projection/format.rs",
+      "fingerprint": "cefb34ea3cee5284",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/spec/nomos-spec-project/src/projection/format.rs",
+      "fingerprint": "7bd724cc6337f59d",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/spec/nomos-spec-store/src/read.rs",
+      "fingerprint": "ec65ec4229e064ff",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/spec/nomos-spec-store/src/read.rs",
+      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/spec/nomos-spec-store/src/store/relation.rs",
+      "message": "magic number literal `4` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/spec/nomos-spec-store/src/table/rows.rs",
+      "fingerprint": "e80e215723fe6aa0",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/spec/nomos-spec-validate/src/run.rs",
+      "message": "magic number literal `10` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/substrate/nomos-analysis/src/propagation.rs",
+      "fingerprint": "3799036472921ecf",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/substrate/nomos-analysis/src/propagation.rs",
+      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/substrate/nomos-analysis/src/propagation.rs",
+      "message": "magic number literal `3` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/substrate/nomos-capability/src/resolution/selection.rs",
+      "fingerprint": "8b29cf9dbf4fbc4b",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/substrate/nomos-ledger/src/exclusion.rs",
+      "fingerprint": "489fc54d0cf5f7f8",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/substrate/nomos-ledger/src/exclusion.rs",
+      "message": "magic number literal `2_000` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/substrate/nomos-ledger/src/exclusion.rs",
+      "fingerprint": "6a5ddff6ca593f8c",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/substrate/nomos-ledger/src/exclusion.rs",
+      "fingerprint": "2f279d4c5afdf22f",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/substrate/nomos-ledger/src/gate.rs",
+      "fingerprint": "2f279d4c5afdf22f",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/substrate/nomos-ledger/src/store/refusal.rs",
+      "fingerprint": "8a01d25421974db2",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/substrate/nomos-ledger/src/store/refusal.rs",
+      "fingerprint": "9b844e69b67964c4",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/substrate/nomos-ledger/src/store/refusal.rs",
+      "message": "magic number literal `2_000` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/substrate/nomos-workspace/src/change.rs",
+      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/substrate/nomos-workspace/src/change.rs",
+      "fingerprint": "83f299211a1c5b13",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/substrate/nomos-workspace/src/change.rs",
+      "fingerprint": "dfdbd5e4214f9e91",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/substrate/nomos-workspace/src/snapshot.rs",
+      "fingerprint": "acf4b05946e06fc1",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/substrate/nomos-workspace/src/snapshot.rs",
+      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/substrate/nomos-workspace/src/snapshot.rs",
+      "fingerprint": "fb96e44f552344b8",
+      "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-intrafile-duplication",
+      "path": "crates/corrections/nomos-corrections/src/candidate/correction_candidate.rs",
+      "fingerprint": "bb3ccb94f10e14e5",
+      "reason": "test code; same class OD-GATE-018 describes for check-literals/check-presumption/etc, generalized to check-intrafile-duplication's own repeated-assertion pattern across near-identical test functions",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-intrafile-duplication",
+      "path": "crates/host/nomos-api/src/spec.rs",
+      "fingerprint": "5cec4215f3ae427b",
+      "reason": "test code; same class OD-GATE-018 describes for check-literals/check-presumption/etc, generalized to check-intrafile-duplication's own repeated-assertion pattern across near-identical test functions",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-intrafile-duplication",
+      "path": "crates/host/nomos-api/src/work.rs",
+      "message": "duplicated logic (structural); first at line 829; encapsulate the concept",
+      "reason": "test code; same class OD-GATE-018 describes for check-literals/check-presumption/etc, generalized to check-intrafile-duplication's own repeated-assertion pattern across near-identical test functions",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-intrafile-duplication",
+      "path": "crates/host/nomos-api/src/work.rs",
+      "message": "duplicated logic (structural); first at line 1106; encapsulate the concept",
+      "reason": "test code; same class OD-GATE-018 describes for check-literals/check-presumption/etc, generalized to check-intrafile-duplication's own repeated-assertion pattern across near-identical test functions",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-intrafile-duplication",
+      "path": "crates/host/nomos-api/src/work.rs",
+      "message": "duplicated logic (structural); first at line 896; encapsulate the concept",
+      "reason": "test code; same class OD-GATE-018 describes for check-literals/check-presumption/etc, generalized to check-intrafile-duplication's own repeated-assertion pattern across near-identical test functions",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-intrafile-duplication",
+      "path": "crates/host/nomos-api/src/work.rs",
+      "fingerprint": "26427084b4793048",
+      "reason": "test code; same class OD-GATE-018 describes for check-literals/check-presumption/etc, generalized to check-intrafile-duplication's own repeated-assertion pattern across near-identical test functions",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-function-size",
+      "path": "crates/host/nomos-cli/src/agent.rs",
+      "fingerprint": "0c86a0488c455d6e",
+      "reason": "one cohesive help-text literal with no natural seam; the checker's own message agrees (\"no obvious split -- confirm it is one cohesive algorithm\"), and forcing a split would only wrap the one format-string block in a same-sized wrapper function",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    },
+    {
+      "check": "check-function-size",
+      "path": "crates/orchestration/nomos-check-orchestration/src/run.rs",
+      "fingerprint": "c3da12b82fa9559b",
+      "reason": "already the DRY, table-driven form (one array of the 8 rule/check pairs, one loop) that replaced 8 near-identical wrapper functions specifically to clear check-intrafile-duplication and check-nested-call; further splitting would only move the same 8-entry table into a second function of the same length",
+      "owner": "@kmettias",
+      "expires": "2026-11-24"
+    }
+  ]
+}

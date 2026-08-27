@@ -145,7 +145,8 @@ pub fn Check_Every_Member_Declares_A_Band(sources: &[SourceFile], facts: &mut dy
         {
             Ok(payload) =>
             {
-                findings.extend(completeness::Violations_In(&payload, source));
+                let violations = completeness::Violations_In(&payload, source);
+                findings.extend(violations);
             }
             Err(finding) => findings.push(finding),
         }

@@ -26,38 +26,8 @@ use tree_sitter::Node;
 pub(super) fn Documentation(declaration: Node, source: &[u8]) -> Option<String>
 {
     let anchor = Search_Anchor(declaration);
-    let mut lines: Vec<String> = Vec::new();
-    let mut boundary_row = anchor.start_position().row.checked_sub(1)?;
-    let mut cursor = anchor;
-
-    while let Some(previous) = cursor.prev_sibling()
-    {
-        if previous.kind() != "comment"
-        {
-            break;
-        }
-
-        if previous.end_position().row != boundary_row
-        {
-            break;
-        }
-
-        let Ok(text) = previous.utf8_text(source)
-        else
-        {
-            break;
-        };
-
-        lines.push(Stripped(text));
-        cursor = previous;
-
-        let Some(above) = previous.start_position().row.checked_sub(1)
-        else
-        {
-            break;
-        };
-        boundary_row = above;
-    }
+    let boundary_row = anchor.start_position().row.checked_sub(1)?;
+    let mut lines = Contiguous_Comment_Lines(anchor, boundary_row, source);
 
     if lines.is_empty()
     {
@@ -66,6 +36,49 @@ pub(super) fn Documentation(declaration: Node, source: &[u8]) -> Option<String>
 
     lines.reverse();
     return Some(lines.join("\n"));
+}
+
+/// Every contiguous comment line above `anchor`, nearest first -- [`Documentation`]'s own
+/// walk, named so its body reads as "collect the run, then reverse it into source order."
+fn Contiguous_Comment_Lines(anchor: Node, mut boundary_row: usize, source: &[u8]) -> Vec<String>
+{
+    let mut lines = Vec::new();
+    let mut cursor = anchor;
+
+    while let Some(previous) = cursor.prev_sibling()
+    {
+        let Some((text, next_boundary_row)) = Comment_Line(previous, boundary_row, source)
+        else
+        {
+            break;
+        };
+
+        lines.push(text);
+        cursor = previous;
+        boundary_row = next_boundary_row;
+    }
+
+    return lines;
+}
+
+/// One comment line eligible to join the run, and the boundary row the next candidate above
+/// it must end on — or `None` when `previous` is not a contiguous comment at all.
+fn Comment_Line(previous: Node, boundary_row: usize, source: &[u8]) -> Option<(String, usize)>
+{
+    if previous.kind() != "comment"
+    {
+        return None;
+    }
+
+    if previous.end_position().row != boundary_row
+    {
+        return None;
+    }
+
+    let text = previous.utf8_text(source).ok()?;
+    let above = previous.start_position().row.checked_sub(1)?;
+
+    return Some((Stripped(text), above));
 }
 
 /// Climbs from a spec to the outermost ancestor with nothing but grammar punctuation before
@@ -82,30 +95,32 @@ fn Search_Anchor(node: Node) -> Node
 {
     let mut anchor = node;
 
-    loop
+    while let Some(next) = Next_Anchor(anchor)
     {
-        let blocked_by_real_content = anchor.prev_sibling().is_some_and(|previous| return previous.is_named());
-
-        if blocked_by_real_content
-        {
-            break;
-        }
-
-        let Some(parent) = anchor.parent()
-        else
-        {
-            break;
-        };
-
-        if parent.kind() == "source_file"
-        {
-            break;
-        }
-
-        anchor = parent;
+        anchor = next;
     }
 
     return anchor;
+}
+
+/// The next ancestor to climb to, or `None` when the climb should stop at `anchor` itself.
+fn Next_Anchor(anchor: Node) -> Option<Node>
+{
+    let blocked_by_real_content = anchor.prev_sibling().is_some_and(|previous| return previous.is_named());
+
+    if blocked_by_real_content
+    {
+        return None;
+    }
+
+    let parent = anchor.parent()?;
+
+    if parent.kind() == "source_file"
+    {
+        return None;
+    }
+
+    return Some(parent);
 }
 
 /// One comment's text with its `//` or `/* ... */` marker removed and the result trimmed.

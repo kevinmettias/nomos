@@ -364,12 +364,30 @@ fn Path_Line(
     held: Option<&str>,
 ) -> Result<Option<String>, RegistrationError>
 {
-    let at = at.0;
-
-    if line.is_empty() || line.starts_with('#')
+    if Is_Blank_Or_Comment(line)
     {
         return Ok(None);
     }
+
+    let value = Path_Key_Value(line, at)?;
+
+    Check_Not_Repeated(held, at)?;
+
+    return Ok(Some(value.trim().to_owned()));
+}
+
+/// Whether a line carries nothing worth parsing: blank, or a comment.
+fn Is_Blank_Or_Comment(line: &str) -> bool
+{
+    return line.is_empty() || line.starts_with('#');
+}
+
+/// The line's value, once its key is confirmed to be `PATH_KEY` — refused if the line does
+/// not split into `key: value` at all, or if the key is anything else.
+fn Path_Key_Value<'a>(line: &'a str, at: At<'_>) -> Result<&'a str, RegistrationError>
+{
+    let at = at.0;
+
     let Some((key, value)) = line.split_once(':')
     else
     {
@@ -385,15 +403,22 @@ fn Path_Line(
             key: key.trim().to_owned(),
         });
     }
+
+    return Ok(value);
+}
+
+/// Refuses a second `path:` line rather than resolving it by taking one of the two.
+fn Check_Not_Repeated(held: Option<&str>, at: At<'_>) -> Result<(), RegistrationError>
+{
     if held.is_some()
     {
         return Err(RegistrationError::RepeatedKey {
-            at: at.to_owned(),
+            at: at.0.to_owned(),
             key: PATH_KEY.to_owned(),
         });
     }
 
-    return Ok(Some(value.trim().to_owned()));
+    return Ok(());
 }
 
 /// The two halves [`Check_Is_A_Record`] computes about a named path, bundled rather than

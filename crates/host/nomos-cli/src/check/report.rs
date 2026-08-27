@@ -40,6 +40,10 @@ pub(super) struct Coverage
     agent_required: usize,
 }
 
+/// How many variants [`Applicability`] has -- and so how many buckets [`Coverage::All`]
+/// reports, one per variant.
+const APPLICABILITY_VARIANT_COUNT: usize = 11;
+
 impl Coverage
 {
     /// Buckets every finding's applicability, once each.
@@ -102,7 +106,7 @@ impl Coverage
     /// Nothing here prevents composing a second grouping later — [`Finding::rule`] is
     /// already a capability's proxy — but a grouping that answers nothing at the current
     /// scale is not the one to ship first. `OD-COMPLETENESS-004` records the choice.
-    fn All(&self) -> [(Applicability, usize); 11]
+    fn All(&self) -> [(Applicability, usize); APPLICABILITY_VARIANT_COUNT]
     {
         return [
             (Applicability::Supported, self.supported),

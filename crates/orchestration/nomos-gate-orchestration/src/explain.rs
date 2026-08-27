@@ -9,7 +9,7 @@ use nomos_workspace::BuildVariant;
 use std::path::PathBuf;
 
 use crate::composition::Registered;
-use crate::run_gate::Judged;
+use crate::run_gate::{JudgeContext, Judged};
 use crate::{AdoptionPolicy, BaselineDebt, BaselinePolicy, GateCommand, RuleCalibration, Suppression, SuppressionPolicy};
 
 /// Which finding to explain: the rule that produced it, and one of the locations it names --
@@ -101,19 +101,29 @@ pub fn Explain_Gate<P: ProcessLauncher>(
     launcher: &P,
 ) -> GateExplainResult
 {
-    let check_outcome = Judged(walked, variant, &command.root, launcher, &[]);
-    let explanation = Explained(&check_outcome, query, &command.adoption, &command.suppressions, &command.baseline);
+    let check_outcome = Judged(walked, launcher, JudgeContext { variant, root: &command.root, selected: &[] });
+    let explanation = Explained(
+        &check_outcome,
+        query,
+        DispositionPolicies { adoption: &command.adoption, suppressions: &command.suppressions, baseline: &command.baseline },
+    );
 
     return GateExplainResult { root: command.root.clone(), check_outcome, explanation };
 }
 
-fn Explained(
-    outcome: &CheckOutcome,
-    query: &FindingQuery,
-    adoption: &AdoptionPolicy,
-    suppressions: &SuppressionPolicy,
-    baseline: &BaselinePolicy,
-) -> Explanation
+/// The three per-finding overrides [`Explained`] and [`Disposed`] check, grouped into one
+/// value so [`Explained`] stays within this crate's own parameter-count limit -- `adoption`
+/// checked first (a coarser, rule-wide override), then `suppressions`, then `baseline`, the
+/// same order [`crate::Run_Gate`] reduces by.
+#[derive(Clone, Copy)]
+struct DispositionPolicies<'a>
+{
+    adoption: &'a AdoptionPolicy,
+    suppressions: &'a SuppressionPolicy,
+    baseline: &'a BaselinePolicy,
+}
+
+fn Explained(outcome: &CheckOutcome, query: &FindingQuery, policies: DispositionPolicies<'_>) -> Explanation
 {
     let CheckOutcome::Judged { findings, .. } = outcome
     else
@@ -121,7 +131,8 @@ fn Explained(
         return Explanation::NotFound;
     };
 
-    return Named(findings, query).map_or(Explanation::NotFound, |finding| return Disposed(finding, adoption, suppressions, baseline));
+    return Named(findings, query)
+        .map_or(Explanation::NotFound, |finding| return Disposed(finding, policies.adoption, policies.suppressions, policies.baseline));
 }
 
 /// `query.rule`'s contract citation, from the same registry `nomos gate plan` builds --

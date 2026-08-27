@@ -139,32 +139,7 @@ fn Grouped_By_Package(stdout: &str, root: &Path) -> Vec<DiscoveredDiagnostics>
 
     for line in stdout.lines()
     {
-        let Ok(value) = serde_json::from_str::<serde_json::Value>(line)
-        else
-        {
-            continue;
-        };
-
-        let Some(package_id) = value.get("package_id").and_then(serde_json::Value::as_str)
-        else
-        {
-            continue;
-        };
-        let Some(relative_root) = First_Party_Relative_Root(package_id, root)
-        else
-        {
-            continue;
-        };
-
-        let name = Package_Name(&relative_root);
-        let entry = members.entry(relative_root).or_insert_with(|| return (name, Vec::new()));
-
-        if value.get("reason").and_then(serde_json::Value::as_str) == Some("compiler-message")
-            && let Some(message) = value.get("message")
-            && let Some(diagnostic) = Diagnostic_Of(message)
-        {
-            entry.1.push(diagnostic);
-        }
+        Record_Line(line, root, &mut members);
     }
 
     return members
@@ -176,6 +151,50 @@ fn Grouped_By_Package(stdout: &str, root: &Path) -> Vec<DiscoveredDiagnostics>
             };
         })
         .collect();
+}
+
+/// One line of `cargo clippy`'s own JSON-lines stream, folded into `members` if it names a
+/// first-party workspace package.
+fn Record_Line(line: &str, root: &Path, members: &mut BTreeMap<String, (String, Vec<LintDiagnostic>)>)
+{
+    let Ok(value) = serde_json::from_str::<serde_json::Value>(line)
+    else
+    {
+        return;
+    };
+
+    let Some(relative_root) = First_Party_Relative_Root_Of(&value, root)
+    else
+    {
+        return;
+    };
+
+    let name = Package_Name(&relative_root);
+    let entry = members.entry(relative_root).or_insert_with(|| return (name, Vec::new()));
+
+    Record_Compiler_Diagnostic(&value, entry);
+}
+
+/// `value`'s `package_id`, resolved to a first-party workspace member's root -- [`Record_Line`]'s
+/// own first two guard clauses, named so its body reads as one decision per line.
+fn First_Party_Relative_Root_Of(value: &serde_json::Value, root: &Path) -> Option<String>
+{
+    let package_id = value.get("package_id").and_then(serde_json::Value::as_str)?;
+
+    return First_Party_Relative_Root(package_id, root);
+}
+
+/// `value`'s compiler-message diagnostic, appended to `entry` if it is one -- [`Record_Line`]'s
+/// own trailing step, named so a message that is not a compiler diagnostic reads as "nothing
+/// to append" rather than as a condition guarding the whole function.
+fn Record_Compiler_Diagnostic(value: &serde_json::Value, entry: &mut (String, Vec<LintDiagnostic>))
+{
+    if value.get("reason").and_then(serde_json::Value::as_str) == Some("compiler-message")
+        && let Some(message) = value.get("message")
+        && let Some(diagnostic) = Diagnostic_Of(message)
+    {
+        entry.1.push(diagnostic);
+    }
 }
 
 /// `diagnostics`, deduplicated and in a stable order — `--all-targets` compiles a member's

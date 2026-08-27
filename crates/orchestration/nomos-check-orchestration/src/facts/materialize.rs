@@ -71,28 +71,41 @@ fn Materialized_Syntax_Fact(
 
     if provider == ProviderId::New(nomos_lang_rust::PROVIDER)
     {
-        let Materialization::Materialized(fact) = nomos_lang_rust::Materialize(source.subject, &source.text, rust_production)
-        else
-        {
-            return None;
-        };
-
-        return Some(fact);
+        return Rust_Syntax_Fact(source, rust_production);
     }
 
     if provider == ProviderId::New(nomos_lang_go::PROVIDER)
     {
-        let nomos_lang_go::Materialization::Materialized(fact) =
-            nomos_lang_go::Materialize(source.subject, &source.text, go_production)
-        else
-        {
-            return None;
-        };
-
-        return Some(fact);
+        return Go_Syntax_Fact(source, go_production);
     }
 
     return None;
+}
+
+/// `source`'s syntax fact from `nomos_lang_rust`'s own provider, or `None` if it refused to
+/// parse.
+fn Rust_Syntax_Fact(source: &SourceFile, rust_production: FactContext) -> Option<Box<MaterializedFact>>
+{
+    let Materialization::Materialized(fact) = nomos_lang_rust::Materialize(source.subject, &source.text, rust_production)
+    else
+    {
+        return None;
+    };
+
+    return Some(fact);
+}
+
+/// `source`'s syntax fact from `nomos_lang_go`'s own provider, or `None` if it refused to
+/// parse.
+fn Go_Syntax_Fact(source: &SourceFile, go_production: nomos_lang_go::FactContext) -> Option<Box<MaterializedFact>>
+{
+    let nomos_lang_go::Materialization::Materialized(fact) = nomos_lang_go::Materialize(source.subject, &source.text, go_production)
+    else
+    {
+        return None;
+    };
+
+    return Some(fact);
 }
 
 /// The reading context as `nomos_lang_rust`'s own provider takes it.

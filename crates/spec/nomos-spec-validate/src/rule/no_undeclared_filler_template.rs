@@ -106,9 +106,11 @@ fn Template_Rows(store: &SpecificationStore) -> Result<Vec<(u32, u32, String)>, 
     let mut statement = connection.prepare(TEMPLATES).map_err(|error| return error.to_string())?;
     let rows = statement
         .query_map([SHARED_BY], |row| {
+            const SAMPLE_COLUMN: usize = 2;
+
             let sections: u32 = row.get(0)?;
             let documents: u32 = row.get(1)?;
-            let sample: String = row.get(2)?;
+            let sample: String = row.get(SAMPLE_COLUMN)?;
             return Ok((sections, documents, sample));
         })
         .map_err(|error| return error.to_string())?;

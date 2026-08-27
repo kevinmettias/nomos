@@ -212,11 +212,14 @@ fn Parse_Gap(entry: &str) -> Result<DecisionGap, String>
     });
 }
 
+/// How many pipe-separated fields `--gap` accepts: question, blocks, severity, closed-by.
+const GAP_FIELD_COUNT: usize = 4;
+
 /// Splits one `--gap` entry into its pipe-separated fields, refusing when either of the two
 /// required ones is missing.
 fn Gap_Fields(entry: &str) -> Result<(&str, &str, &str, Option<&str>), String>
 {
-    let mut parts = entry.splitn(4, '|');
+    let mut parts = entry.splitn(GAP_FIELD_COUNT, '|');
     let question = parts.next().unwrap_or_default();
     let blocks = parts.next();
     let severity = parts.next();

@@ -25,12 +25,7 @@ use std::path::Path;
 #[must_use]
 pub fn Handle_Work_List(directory: &Path) -> WorkListResponse
 {
-    let mut ledger = FileLedger::At(
-        directory.join("ledger.json"),
-        StdFileSystem,
-        SystemClock,
-        FileLock::At(directory.join("ledger.lock")),
-    );
+    let mut ledger = Ledger_At(directory);
 
     let outcome = nomos_work_orchestration::Run(
         &WorkCommand::List { state: None },
@@ -98,12 +93,7 @@ impl WorkListResponse
 #[must_use]
 pub fn Handle_Work_Show(directory: &Path, item: &ItemId) -> WorkShowResponse
 {
-    let mut ledger = FileLedger::At(
-        directory.join("ledger.json"),
-        StdFileSystem,
-        SystemClock,
-        FileLock::At(directory.join("ledger.lock")),
-    );
+    let mut ledger = Ledger_At(directory);
 
     let outcome = nomos_work_orchestration::Run(
         &WorkCommand::Show { item: item.clone() },
@@ -189,12 +179,7 @@ impl WorkShowResponse
 #[must_use]
 pub fn Handle_Work_Validate(directory: &Path) -> WorkValidateResponse
 {
-    let mut ledger = FileLedger::At(
-        directory.join("ledger.json"),
-        StdFileSystem,
-        SystemClock,
-        FileLock::At(directory.join("ledger.lock")),
-    );
+    let mut ledger = Ledger_At(directory);
 
     let outcome = nomos_work_orchestration::Run(
         &WorkCommand::Validate,
@@ -268,12 +253,7 @@ impl WorkValidateResponse
 #[must_use]
 pub fn Handle_Work_Audit(directory: &Path) -> WorkAuditResponse
 {
-    let mut ledger = FileLedger::At(
-        directory.join("ledger.json"),
-        StdFileSystem,
-        SystemClock,
-        FileLock::At(directory.join("ledger.lock")),
-    );
+    let mut ledger = Ledger_At(directory);
 
     let outcome = nomos_work_orchestration::Run(
         &WorkCommand::Audit,
@@ -420,9 +400,7 @@ pub fn Handle_Work_TakeOver(directory: &Path, request: &ClaimRequest) -> WorkRes
     return WorkReservationResponse::From(taken_over);
 }
 
-/// The `FileLedger` composition every `Handle_Work_*` function in this module builds --
-/// factored out once a third function ([`Handle_Work_Claim`]) needed exactly the same four
-/// lines the first two already had inline.
+/// The `FileLedger` composition every `Handle_Work_*` function in this module builds.
 fn Ledger_At(directory: &Path) -> FileLedger<StdFileSystem, SystemClock, FileLock>
 {
     return FileLedger::At(

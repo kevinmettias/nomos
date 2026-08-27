@@ -68,16 +68,51 @@ pub fn Run<P: ProcessLauncher>(sources: &[SourceFile], variant: BuildVariant, ro
     };
 
     let mut store = MemoryFactStore::New();
-    let facts = Materialize_Syntax(sources, &context, &mut store);
-    if facts == 0
+    let facts = match Materialized_Syntax_Facts(sources, &context, &mut store)
     {
-        return CheckOutcome::NoFacts { files: sources.len() };
-    }
+        Some(facts) => facts,
+        None => return CheckOutcome::NoFacts { files: sources.len() },
+    };
 
-    let capabilities = Materialize_Capabilities(sources, root, &context, &mut store, launcher, selected);
-    let findings = Judged(sources, capabilities, &store, &registry, context, selected);
+    let environment = RunEnvironment { root, launcher, registry: &registry, context };
+    let findings = Judged_Over(sources, environment, &mut store, selected);
 
     return Outcome_Of(sources.len(), facts, findings);
+}
+
+/// The syntax facts materialized into `store`, or `None` when there were none to judge --
+/// [`Run`]'s own first early exit, given a name so its body reads as one decision per line.
+fn Materialized_Syntax_Facts(sources: &[SourceFile], context: &Context, store: &mut MemoryFactStore) -> Option<usize>
+{
+    let facts = Materialize_Syntax(sources, context, store);
+    if facts == 0
+    {
+        return None;
+    }
+
+    return Some(facts);
+}
+
+/// [`Run`]'s own root, launcher, registry and composed context -- everything [`Judged_Over`]
+/// needs beside the sources and store it is handed separately, grouped so that function's
+/// parameter list names one environment instead of four loose values.
+struct RunEnvironment<'a, P: ProcessLauncher>
+{
+    root: &'a Path,
+    launcher: &'a P,
+    registry: &'a Registry,
+    context: Context,
+}
+
+/// Every capability [`Run`] can materialize, judged -- the two steps [`Run`] itself used to
+/// inline, composed here so its own body names one step instead of four.
+fn Judged_Over<P: ProcessLauncher>(sources: &[SourceFile], environment: RunEnvironment<'_, P>, store: &mut MemoryFactStore, selected: &[RuleId]) -> Vec<Finding>
+{
+    let mut materialization_env = MaterializationEnv { root: environment.root, context: &environment.context, store, launcher: environment.launcher };
+    let capabilities = Materialize_Capabilities(sources, &mut materialization_env, selected);
+
+    let judge_env = JudgeEnv { store, registry: environment.registry, context: environment.context };
+    return Judged(sources, capabilities, judge_env, selected);
 }
 
 /// `sources`, each carrying its own resolved [`nomos_rules::SourceFile::preferred_syntax_provider`]
@@ -147,45 +182,97 @@ fn Outcome_Of(files: usize, facts: usize, findings: Vec<Finding>) -> CheckOutcom
 /// subprocess launch entirely, not merely its finding's place in a later disposition.
 fn Materialize_Capabilities<P: ProcessLauncher>(
     sources: &[SourceFile],
-    root: &Path,
-    context: &Context,
-    store: &mut MemoryFactStore,
-    launcher: &P,
+    env: &mut MaterializationEnv<'_, P>,
     selected: &[RuleId],
 ) -> CapabilityMaterialization
 {
-    let dependencies = if Wants(selected, DEPENDENCY_DIRECTION) || Wants(selected, DEPENDENCY_COMPLETENESS)
-    {
-        Materialize_Dependencies(root, context, store, launcher)
-    }
-    else
-    {
-        DependencyMaterialization { sources: Vec::new(), findings: Vec::new() }
-    };
+    let dependencies = Materialize_Dependency_Section(env, selected);
+    let lint = Materialize_Lint_Section(env, selected);
+    let policy = Materialize_Policy_Section(env, selected);
+    Materialize_Reachability_Section(sources, env, selected);
 
-    let lint = if Wants(selected, LINT_DIAGNOSTICS)
-    {
-        Materialize_Lint(root, context, store, launcher)
-    }
-    else
-    {
-        LintMaterialization { sources: Vec::new(), findings: Vec::new() }
-    };
+    return Capability_Materialization_Of(dependencies, lint, policy);
+}
 
-    let policy = if Wants(selected, DEPENDENCY_POLICY)
-    {
-        Materialize_Policy(root, context, store, launcher)
-    }
-    else
-    {
-        PolicyMaterialization { sources: Vec::new(), findings: Vec::new() }
-    };
+/// The `root`, `context`, `store` and `launcher` every [`Materialize_Capabilities`] section
+/// reads or writes through -- grouped into one value so that function takes those four as
+/// one parameter rather than four.
+struct MaterializationEnv<'a, P: ProcessLauncher>
+{
+    root: &'a Path,
+    context: &'a Context,
+    store: &'a mut MemoryFactStore,
+    launcher: &'a P,
+}
 
+/// The dependency-edges section: [`Materialize_Dependencies`] when `selected` feeds on it,
+/// an empty result otherwise.
+fn Materialize_Dependency_Section<P: ProcessLauncher>(
+    env: &mut MaterializationEnv<'_, P>,
+    selected: &[RuleId],
+) -> DependencyMaterialization
+{
+    if Wants(selected, DEPENDENCY_DIRECTION) || Wants(selected, DEPENDENCY_COMPLETENESS)
+    {
+        return Materialize_Dependencies(env.root, env.context, env.store, env.launcher);
+    }
+
+    return DependencyMaterialization { sources: Vec::new(), findings: Vec::new() };
+}
+
+/// The lint-diagnostics section: [`Materialize_Lint`] when `selected` feeds on it, an empty
+/// result otherwise.
+fn Materialize_Lint_Section<P: ProcessLauncher>(
+    env: &mut MaterializationEnv<'_, P>,
+    selected: &[RuleId],
+) -> LintMaterialization
+{
+    if Wants(selected, LINT_DIAGNOSTICS)
+    {
+        return Materialize_Lint(env.root, env.context, env.store, env.launcher);
+    }
+
+    return LintMaterialization { sources: Vec::new(), findings: Vec::new() };
+}
+
+/// The dependency-policy section: [`Materialize_Policy`] when `selected` feeds on it, an
+/// empty result otherwise.
+fn Materialize_Policy_Section<P: ProcessLauncher>(
+    env: &mut MaterializationEnv<'_, P>,
+    selected: &[RuleId],
+) -> PolicyMaterialization
+{
+    if Wants(selected, DEPENDENCY_POLICY)
+    {
+        return Materialize_Policy(env.root, env.context, env.store, env.launcher);
+    }
+
+    return PolicyMaterialization { sources: Vec::new(), findings: Vec::new() };
+}
+
+/// The reachability section: [`Materialize_Reachability`] when `selected` feeds on it --
+/// writes into `env.store` directly and produces no return value of its own, the same shape
+/// the call it wraps already has.
+fn Materialize_Reachability_Section<P: ProcessLauncher>(
+    sources: &[SourceFile],
+    env: &mut MaterializationEnv<'_, P>,
+    selected: &[RuleId],
+)
+{
     if Wants(selected, UNREAD_REACHES_FINDING)
     {
-        Materialize_Reachability(sources, context, store);
+        Materialize_Reachability(sources, env.context, env.store);
     }
+}
 
+/// The assembly section: what the three source-and-finding materializations produced,
+/// gathered into one [`CapabilityMaterialization`].
+fn Capability_Materialization_Of(
+    dependencies: DependencyMaterialization,
+    lint: LintMaterialization,
+    policy: PolicyMaterialization,
+) -> CapabilityMaterialization
+{
     return CapabilityMaterialization {
         dependency_sources: dependencies.sources,
         dependency_findings: dependencies.findings,
@@ -211,67 +298,74 @@ struct CapabilityMaterialization
     policy_findings: Vec<Finding>,
 }
 
-/// Every finding the completeness, naming-convention, dependency-direction,
-/// dependency-completeness, lint-diagnostics and unread-reaches-finding rules `selected`
-/// asks for produce over `sources` and `capabilities`' own source lists, plus whatever
-/// [`Materialize_Capabilities`]
-/// already found on its own (a failed dependency or lint materialization, reported rather
+/// Every finding [`Rule_Findings`] produces over `sources` and `capabilities`' own source
+/// lists, plus whatever [`Materialize_Capabilities`] already found on its own via
+/// [`Capability_Findings`] (a failed dependency or lint materialization, reported rather
 /// than judged) -- unconditionally, since each such finding already carries its own rule
 /// and a caller that did not select it would never have triggered the materialization
 /// that raises it.
-fn Judged(
-    sources: &[SourceFile],
-    capabilities: CapabilityMaterialization,
-    store: &MemoryFactStore,
-    registry: &Registry,
+fn Judged(sources: &[SourceFile], capabilities: CapabilityMaterialization, env: JudgeEnv<'_>, selected: &[RuleId]) -> Vec<Finding>
+{
+    let mut reader = Reader::On(env.store, env.registry, env.context);
+
+    let mut findings = Rule_Findings(sources, &capabilities, &mut reader, selected);
+    findings.extend(Capability_Findings(capabilities));
+
+    return findings;
+}
+
+/// The `store`, `registry` and `context` [`Judged`] reads the [`Reader`] from -- grouped
+/// into one value so that function takes those three as one parameter rather than three.
+struct JudgeEnv<'a>
+{
+    store: &'a MemoryFactStore,
+    registry: &'a Registry,
     context: Context,
+}
+
+/// Every finding the completeness, naming-convention, dependency-direction,
+/// dependency-completeness, lint-diagnostics, dependency-policy, unread-reaches-finding and
+/// cross-language-correspondence rules `selected` asks for produce over `sources` and
+/// `capabilities`' own source lists.
+fn Rule_Findings(
+    sources: &[SourceFile],
+    capabilities: &CapabilityMaterialization,
+    reader: &mut Reader<'_, '_>,
     selected: &[RuleId],
 ) -> Vec<Finding>
 {
-    let mut reader = Reader::On(store, registry, context);
+    const RULE_COUNT: usize = 8;
+    let rules: [(&str, &dyn Fn(&mut Reader<'_, '_>) -> Vec<Finding>); RULE_COUNT] = [
+        (COMPLETENESS_MIRROR, &|reader| return Check_Completeness_Mirrors(sources, reader)),
+        (NAMING_CONVENTION, &|reader| return Check_Naming_Convention(sources, reader)),
+        (DEPENDENCY_DIRECTION, &|reader| return Check_Dependency_Direction(&capabilities.dependency_sources, reader)),
+        (DEPENDENCY_COMPLETENESS, &|reader| return Check_Every_Member_Declares_A_Band(&capabilities.dependency_sources, reader)),
+        (LINT_DIAGNOSTICS, &|reader| return Check_Lint_Diagnostics(&capabilities.lint_sources, reader)),
+        (DEPENDENCY_POLICY, &|reader| return Check_Dependency_Policy(&capabilities.policy_sources, reader)),
+        (UNREAD_REACHES_FINDING, &|reader| return Check_Unread_Reaches_A_Finding(sources, reader)),
+        (CROSS_LANGUAGE_CORRESPONDENCE, &|reader| return Check_Cross_Language_Correspondence(sources, reader)),
+    ];
+
     let mut findings = Vec::new();
-
-    if Wants(selected, COMPLETENESS_MIRROR)
+    for (rule, check) in rules
     {
-        findings.extend(Check_Completeness_Mirrors(sources, &mut reader));
+        if Wants(selected, rule)
+        {
+            let rule_findings = check(reader);
+            findings.extend(rule_findings);
+        }
     }
 
-    if Wants(selected, NAMING_CONVENTION)
-    {
-        findings.extend(Check_Naming_Convention(sources, &mut reader));
-    }
+    return findings;
+}
 
-    if Wants(selected, DEPENDENCY_DIRECTION)
-    {
-        findings.extend(Check_Dependency_Direction(&capabilities.dependency_sources, &mut reader));
-    }
-
-    if Wants(selected, DEPENDENCY_COMPLETENESS)
-    {
-        findings.extend(Check_Every_Member_Declares_A_Band(&capabilities.dependency_sources, &mut reader));
-    }
-
-    if Wants(selected, LINT_DIAGNOSTICS)
-    {
-        findings.extend(Check_Lint_Diagnostics(&capabilities.lint_sources, &mut reader));
-    }
-
-    if Wants(selected, DEPENDENCY_POLICY)
-    {
-        findings.extend(Check_Dependency_Policy(&capabilities.policy_sources, &mut reader));
-    }
-
-    if Wants(selected, UNREAD_REACHES_FINDING)
-    {
-        findings.extend(Check_Unread_Reaches_A_Finding(sources, &mut reader));
-    }
-
-    if Wants(selected, CROSS_LANGUAGE_CORRESPONDENCE)
-    {
-        findings.extend(Check_Cross_Language_Correspondence(sources, &mut reader));
-    }
-
-    findings.extend(capabilities.dependency_findings);
+/// What [`Materialize_Capabilities`] already found on its own -- a failed dependency, lint
+/// or policy materialization, reported rather than judged -- unconditionally, since each
+/// such finding already carries its own rule and a caller that did not select it would
+/// never have triggered the materialization that raises it.
+fn Capability_Findings(capabilities: CapabilityMaterialization) -> Vec<Finding>
+{
+    let mut findings = capabilities.dependency_findings;
     findings.extend(capabilities.lint_findings);
     findings.extend(capabilities.policy_findings);
 
