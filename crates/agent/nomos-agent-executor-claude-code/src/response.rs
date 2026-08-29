@@ -59,11 +59,6 @@ fn Field_U64(document: &serde_json::Value, field: &str) -> Result<u64, AgentExec
     return document.get(field).and_then(serde_json::Value::as_u64).ok_or_else(|| return Missing(field));
 }
 
-fn Missing(field: &str) -> AgentExecutionError
-{
-    return AgentExecutionError::Unparseable(format!("claude's response document has no {field:?}"));
-}
-
 /// Every tool name a `permission_denials` entry names, in the order the document lists
 /// them. An absent or malformed `permission_denials` reads as no denials rather than a
 /// parse failure — the field's absence would mean the invocation attempted nothing, which
@@ -80,6 +75,11 @@ fn Denied_Tool_Uses(document: &serde_json::Value) -> Vec<String>
         .filter_map(|denial| return denial.get("tool_name").and_then(serde_json::Value::as_str))
         .map(str::to_owned)
         .collect();
+}
+
+fn Missing(field: &str) -> AgentExecutionError
+{
+    return AgentExecutionError::Unparseable(format!("claude's response document has no {field:?}"));
 }
 
 #[cfg(test)]

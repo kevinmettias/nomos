@@ -55,17 +55,6 @@ pub fn Freshness<F: FileSystem>(
     return Ok(FreshnessAnswer { examined, required });
 }
 
-/// The shipped profile that identifier names, or the refusal saying which ones exist.
-fn Resolved<'a>(catalogue: &'a Catalogue, profile: &str) -> Result<&'a Profile, FreshnessRefusal>
-{
-    return catalogue.Named(profile).ok_or_else(|| {
-        return FreshnessRefusal::NoSuchProfile {
-            requested: profile.to_owned(),
-            known: catalogue.Profiles().iter().map(|shipped| return shipped.id.clone()).collect(),
-        };
-    });
-}
-
 /// The profiles a run was told it must find, resolved before any disk is read.
 ///
 /// Resolving first is what keeps an unknown `--require` a question about a profile rather
@@ -79,6 +68,17 @@ fn Required_Profiles(catalogue: &Catalogue, require: &[String]) -> Result<Vec<St
     }
 
     return Ok(required);
+}
+
+/// The shipped profile that identifier names, or the refusal saying which ones exist.
+fn Resolved<'a>(catalogue: &'a Catalogue, profile: &str) -> Result<&'a Profile, FreshnessRefusal>
+{
+    return catalogue.Named(profile).ok_or_else(|| {
+        return FreshnessRefusal::NoSuchProfile {
+            requested: profile.to_owned(),
+            known: catalogue.Profiles().iter().map(|shipped| return shipped.id.clone()).collect(),
+        };
+    });
 }
 
 /// Which profiles this run will look at.

@@ -80,6 +80,16 @@ pub fn Run<P: ProcessLauncher>(sources: &[SourceFile], variant: BuildVariant, ro
     return Outcome_Of(sources.len(), facts, findings);
 }
 
+/// The registry composed and `sources` ingested through it, or the [`CheckOutcome`] that
+/// already answers the run when either step refuses.
+fn Composed(sources: &[SourceFile], variant: BuildVariant) -> Result<(Registry, Context), CheckOutcome>
+{
+    let registry = Registered().map_err(CheckOutcome::Contradictory)?;
+    let context = Ingested(sources, &registry, variant).map_err(|_error| return CheckOutcome::Unreadable)?;
+
+    return Ok((registry, context));
+}
+
 /// The syntax facts materialized into `store`, or `None` when there were none to judge --
 /// [`Run`]'s own first early exit, given a name so its body reads as one decision per line.
 fn Materialized_Syntax_Facts(sources: &[SourceFile], context: &Context, store: &mut MemoryFactStore) -> Option<usize>
@@ -113,59 +123,6 @@ fn Judged_Over<P: ProcessLauncher>(sources: &[SourceFile], environment: RunEnvir
 
     let judge_env = JudgeEnv { store, registry: environment.registry, context: environment.context };
     return Judged(sources, capabilities, judge_env, selected);
-}
-
-/// `sources`, each carrying its own resolved [`nomos_rules::SourceFile::preferred_syntax_provider`]
-/// -- `OD-CAPABILITY-009`'s corrected fix, computed once here because this composition root
-/// is the one place in the call chain allowed to know `nomos_lang_rust` and `nomos_lang_go`
-/// by name; `nomos_rules` itself never does. Every rule this crate composes sees only the
-/// enriched copy, so a subject's syntax provider identity is settled before any of them run,
-/// the same "carried rather than derived" reasoning [`SourceFile::subject`] already states
-/// for the field this one sits beside.
-///
-/// `pub(crate)` rather than private to [`Run`] alone: this crate's own `tests.rs` reaches
-/// past `Run` into `crate::composition` and `crate::facts` directly, by design, to prove the
-/// split-composition guarantee against the store rather than against `Run`'s one call shape
-/// -- and a fixture built that way needs the identical enrichment `Run` gives every other
-/// caller, not a second, differently-behaved copy of it.
-pub(crate) fn Recognized(sources: &[SourceFile]) -> Vec<SourceFile>
-{
-    return sources
-        .iter()
-        .cloned()
-        .map(|mut source| {
-            source.preferred_syntax_provider = Recognized_Syntax_Provider(&source.path);
-            return source;
-        })
-        .collect();
-}
-
-/// Whether `rule` is one `selected` asks for -- every rule when `selected` is empty, the same
-/// "empty is everything" default `nomos_gate_orchestration::RuleSelector::include` already
-/// has.
-fn Wants(selected: &[RuleId], rule: &str) -> bool
-{
-    return selected.is_empty() || selected.iter().any(|id| return id.As_Str() == rule);
-}
-
-/// The registry composed and `sources` ingested through it, or the [`CheckOutcome`] that
-/// already answers the run when either step refuses.
-fn Composed(sources: &[SourceFile], variant: BuildVariant) -> Result<(Registry, Context), CheckOutcome>
-{
-    let registry = Registered().map_err(CheckOutcome::Contradictory)?;
-    let context = Ingested(sources, &registry, variant).map_err(|_error| return CheckOutcome::Unreadable)?;
-
-    return Ok((registry, context));
-}
-
-/// The whole run, once judging is done -- how many files and facts it examined, and the
-/// claim its own findings support.
-fn Outcome_Of(files: usize, facts: usize, findings: Vec<Finding>) -> CheckOutcome
-{
-    let examined = Examined { files, facts };
-    let claim = Claim_Of(&findings);
-
-    return CheckOutcome::Judged { findings, examined, claim };
 }
 
 /// The dependency-edges, lint-diagnostics, dependency-policy and reachability facts,
@@ -370,4 +327,47 @@ fn Capability_Findings(capabilities: CapabilityMaterialization) -> Vec<Finding>
     findings.extend(capabilities.policy_findings);
 
     return findings;
+}
+
+/// The whole run, once judging is done -- how many files and facts it examined, and the
+/// claim its own findings support.
+fn Outcome_Of(files: usize, facts: usize, findings: Vec<Finding>) -> CheckOutcome
+{
+    let examined = Examined { files, facts };
+    let claim = Claim_Of(&findings);
+
+    return CheckOutcome::Judged { findings, examined, claim };
+}
+
+/// `sources`, each carrying its own resolved [`nomos_rules::SourceFile::preferred_syntax_provider`]
+/// -- `OD-CAPABILITY-009`'s corrected fix, computed once here because this composition root
+/// is the one place in the call chain allowed to know `nomos_lang_rust` and `nomos_lang_go`
+/// by name; `nomos_rules` itself never does. Every rule this crate composes sees only the
+/// enriched copy, so a subject's syntax provider identity is settled before any of them run,
+/// the same "carried rather than derived" reasoning [`SourceFile::subject`] already states
+/// for the field this one sits beside.
+///
+/// `pub(crate)` rather than private to [`Run`] alone: this crate's own `tests.rs` reaches
+/// past `Run` into `crate::composition` and `crate::facts` directly, by design, to prove the
+/// split-composition guarantee against the store rather than against `Run`'s one call shape
+/// -- and a fixture built that way needs the identical enrichment `Run` gives every other
+/// caller, not a second, differently-behaved copy of it.
+pub(crate) fn Recognized(sources: &[SourceFile]) -> Vec<SourceFile>
+{
+    return sources
+        .iter()
+        .cloned()
+        .map(|mut source| {
+            source.preferred_syntax_provider = Recognized_Syntax_Provider(&source.path);
+            return source;
+        })
+        .collect();
+}
+
+/// Whether `rule` is one `selected` asks for -- every rule when `selected` is empty, the same
+/// "empty is everything" default `nomos_gate_orchestration::RuleSelector::include` already
+/// has.
+fn Wants(selected: &[RuleId], rule: &str) -> bool
+{
+    return selected.is_empty() || selected.iter().any(|id| return id.As_Str() == rule);
 }

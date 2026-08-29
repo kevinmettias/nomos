@@ -89,36 +89,6 @@ fn Declare_Syntax_Capability(registry: &mut Registry) -> Result<(), RegistryErro
     return Ok(());
 }
 
-/// Which registered `nomos.cap.syntax.items` provider `path` belongs to, if either does --
-/// `OD-CAPABILITY-009`'s corrected fix, and the one function both halves of the pipeline
-/// consult so they cannot independently drift on the answer.
-///
-/// This crate is the caller `OD-CAPABILITY-009` names: the one place that may know
-/// `nomos_lang_rust` and `nomos_lang_go` by name to answer an applicability question no
-/// [`Registry::Resolve`] call could, because by the time `Resolve` is reached the subject is
-/// already the opaque digest [`nomos_contracts::SubjectId`] carries. `crate::run`'s own
-/// enrichment step calls this to populate `nomos_rules::SourceFile::preferred_syntax_provider`
-/// before any rule ever sees a source, and
-/// [`crate::facts::materialize::Materialize_Syntax`]'s write side calls it again over the
-/// identical path to decide which provider's own `Materialize` to run. Both call sites
-/// reach this one function rather than each recomputing `Recognition::Of_Path` for
-/// themselves, so read and write agree on a subject's provider identity by construction.
-#[must_use]
-pub(crate) fn Recognized_Syntax_Provider(path: &str) -> Option<ProviderId>
-{
-    if nomos_lang_rust::Recognition::Of_Path(path) == nomos_lang_rust::Recognition::Recognized
-    {
-        return Some(ProviderId::New(nomos_lang_rust::PROVIDER));
-    }
-
-    if nomos_lang_go::Recognition::Of_Path(path) == nomos_lang_go::Recognition::Recognized
-    {
-        return Some(ProviderId::New(nomos_lang_go::PROVIDER));
-    }
-
-    return None;
-}
-
 /// A second capability, and its second real offer.
 ///
 /// `nomos-lang-go-modules` is a genuinely safe second offer here, unlike `nomos-lang-go`'s
@@ -172,6 +142,36 @@ fn Declare_Dependency_Policy_Capability(registry: &mut Registry) -> Result<(), R
     registry.Offer(nomos_lang_rust_deny::Provider_Offer())?;
 
     return Ok(());
+}
+
+/// Which registered `nomos.cap.syntax.items` provider `path` belongs to, if either does --
+/// `OD-CAPABILITY-009`'s corrected fix, and the one function both halves of the pipeline
+/// consult so they cannot independently drift on the answer.
+///
+/// This crate is the caller `OD-CAPABILITY-009` names: the one place that may know
+/// `nomos_lang_rust` and `nomos_lang_go` by name to answer an applicability question no
+/// [`Registry::Resolve`] call could, because by the time `Resolve` is reached the subject is
+/// already the opaque digest [`nomos_contracts::SubjectId`] carries. `crate::run`'s own
+/// enrichment step calls this to populate `nomos_rules::SourceFile::preferred_syntax_provider`
+/// before any rule ever sees a source, and
+/// [`crate::facts::materialize::Materialize_Syntax`]'s write side calls it again over the
+/// identical path to decide which provider's own `Materialize` to run. Both call sites
+/// reach this one function rather than each recomputing `Recognition::Of_Path` for
+/// themselves, so read and write agree on a subject's provider identity by construction.
+#[must_use]
+pub(crate) fn Recognized_Syntax_Provider(path: &str) -> Option<ProviderId>
+{
+    if nomos_lang_rust::Recognition::Of_Path(path) == nomos_lang_rust::Recognition::Recognized
+    {
+        return Some(ProviderId::New(nomos_lang_rust::PROVIDER));
+    }
+
+    if nomos_lang_go::Recognition::Of_Path(path) == nomos_lang_go::Recognition::Recognized
+    {
+        return Some(ProviderId::New(nomos_lang_go::PROVIDER));
+    }
+
+    return None;
 }
 
 /// The identity of this run's effective policy.

@@ -118,15 +118,6 @@ fn Violation_Fields<'a>(line: &str, rest: &'a str) -> Result<[&'a str; VIOLATION
     return Ok([*severity, *code, *message]);
 }
 
-fn Build_Violation(severity: PolicySeverity, code: &str, message: &str) -> PolicyViolation
-{
-    return PolicyViolation {
-        severity,
-        code: code.to_owned(),
-        message: message.to_owned(),
-    };
-}
-
 fn Parse_Severity(severity: &str) -> Result<PolicySeverity, PayloadRefusal>
 {
     let Some(severity) = PolicySeverity::From_Label(severity)
@@ -138,6 +129,15 @@ fn Parse_Severity(severity: &str) -> Result<PolicySeverity, PayloadRefusal>
     };
 
     return Ok(severity);
+}
+
+fn Build_Violation(severity: PolicySeverity, code: &str, message: &str) -> PolicyViolation
+{
+    return PolicyViolation {
+        severity,
+        code: code.to_owned(),
+        message: message.to_owned(),
+    };
 }
 
 #[cfg(test)]

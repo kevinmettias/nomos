@@ -83,24 +83,6 @@ pub fn Execute<P: ProcessLauncher>(task: &TaskEnvelope, launcher: &P) -> Result<
     return Execute_In(task, launcher, &working_directory);
 }
 
-/// [`Execute`], over a caller-chosen `working_directory` rather than a freshly generated
-/// one — the seam this crate's own real, adversarial integration test uses to inspect
-/// that directory afterward, since `Execute`'s own isolated directory is otherwise
-/// generated and discarded where no caller could ever name it.
-pub(crate) fn Execute_In<P: ProcessLauncher>(
-    task: &TaskEnvelope,
-    launcher: &P,
-    working_directory: &std::path::Path,
-) -> Result<AgentExecutionOutcome, AgentExecutionError>
-{
-    let command = Command_For(task, working_directory);
-    let output = launcher.Run(&command).map_err(AgentExecutionError::Unavailable)?;
-
-    Require_Clean_Exit(&output.outcome, &output.stderr)?;
-
-    return response::Parse(&output.stdout);
-}
-
 /// A freshly created, empty directory under the system temp root, never this repository's
 /// own tree and never one carrying its own `.claude/settings*` or `CLAUDE.md` — the first
 /// clause of `OD-EXECUTOR-001`'s rule. Named from this process's id and a per-process
@@ -125,20 +107,100 @@ fn Isolated_Working_Directory() -> Result<PathBuf, AgentExecutionError>
     return Ok(directory);
 }
 
-/// `claude` on every platform this workspace's own `StdProcessLauncher` runs on but
-/// Windows, where the real entry point on `PATH` is an npm-generated `claude.cmd` shim
-/// (confirmed directly against this machine: `where claude` names both an extensionless
-/// POSIX shell script and `claude.cmd`, in that order). `StdProcessLauncher` spawns
-/// `argv[0]` through `CreateProcess` directly, by its own deliberate "no shell, ever"
-/// design — the same reason it does not attempt `PATHEXT` resolution a shell would do
-/// silently, so the correct name is this crate's own responsibility to supply, once, here,
-/// rather than a capability every caller of the shared launcher would otherwise need.
-#[cfg(windows)]
-const CLAUDE_PROGRAM: &str = "claude.cmd";
+/// [`Execute`], over a caller-chosen `working_directory` rather than a freshly generated
+/// one — the seam this crate's own real, adversarial integration test uses to inspect
+/// that directory afterward, since `Execute`'s own isolated directory is otherwise
+/// generated and discarded where no caller could ever name it.
+pub(crate) fn Execute_In<P: ProcessLauncher>(
+    task: &TaskEnvelope,
+    launcher: &P,
+    working_directory: &std::path::Path,
+) -> Result<AgentExecutionOutcome, AgentExecutionError>
+{
+    let command = Command_For(task, working_directory);
+    let output = launcher.Run(&command).map_err(AgentExecutionError::Unavailable)?;
 
-/// See [`CLAUDE_PROGRAM`]'s Windows doc.
-#[cfg(not(windows))]
-const CLAUDE_PROGRAM: &str = "claude";
+    Require_Clean_Exit(&output.outcome, &output.stderr)?;
+
+    return response::Parse(&output.stdout);
+}
+
+/// The invocation `OD-EXECUTOR-001`'s rule describes, over `task.goal`, run from
+/// `working_directory`, with `task.effort` appended per [`Effort_Flag`].
+fn Command_For(task: &TaskEnvelope, working_directory: &std::path::Path) -> Command
+{
+    let mut argv = vec![
+        CLAUDE_PROGRAM.to_owned(),
+        "--print".to_owned(),
+        Single_Line(&task.goal),
+        "--output-format".to_owned(),
+        "json".to_owned(),
+        "--strict-mcp-config".to_owned(),
+        "--allowedTools".to_owned(),
+        NO_TOOLS_GRANTED.to_owned(),
+        "--max-budget-usd".to_owned(),
+        MAX_BUDGET_USD.to_owned(),
+    ];
+    if let Some(value) = Effort_Flag(task.effort)
+    {
+        argv.push("--effort".to_owned());
+        argv.push(value.to_owned());
+    }
+
+    let mut command = Command::New(argv, TIMEOUT);
+    command.working_directory = Some(working_directory.to_path_buf());
+
+    return command;
+}
+
+/// `task.effort`, mapped to the real `--effort` value `claude --help` documents today —
+/// verified directly against the installed CLI, not assumed: `low`, `medium`, `high`,
+/// `xhigh`, `max`. `None` for [`EffortLevel::BackendDefault`]: the flag is omitted
+/// entirely rather than passed a value naming "the default," which is exactly this
+/// crate's own behavior for every caller before `OD-CONTRACTS-004` existed to name an
+/// effort at all.
+///
+/// [`EffortLevel::Minimal`] has no distinct native control below `low` — mapped there as
+/// this crate's own approximation, not a claim of an exact match, `MODEL-ROUTE-015`'s own
+/// `MappingQuality::Approximate` shape for exactly this case. `claude`'s own `xhigh` tier
+/// has no `EffortLevel` counterpart: `MODEL-ROUTE-004` closes the canonical enumeration at
+/// six values, so this crate cannot request it, and does not fold it into `high` or `max`
+/// to pretend otherwise.
+#[must_use]
+fn Effort_Flag(effort: EffortLevel) -> Option<&'static str>
+{
+    return match effort
+    {
+        EffortLevel::BackendDefault => None,
+        EffortLevel::Minimal | EffortLevel::Low => Some("low"),
+        EffortLevel::Medium => Some("medium"),
+        EffortLevel::High => Some("high"),
+        EffortLevel::Maximum => Some("max"),
+    };
+}
+
+/// Refuses every outcome a launched process can report other than a clean, zero exit —
+/// the same shape `nomos_lang_rust_cargo`'s own `Require_Clean_Exit` uses for the one
+/// other subprocess this workspace ever runs through `ProcessLauncher`.
+fn Require_Clean_Exit(outcome: &ExitOutcome, stderr: &str) -> Result<(), AgentExecutionError>
+{
+    return match outcome
+    {
+        ExitOutcome::Exited { code: 0 } => Ok(()),
+        ExitOutcome::Exited { code } => {
+            Err(AgentExecutionError::Unavailable(format!("claude exited {code}: {stderr}")))
+        }
+        ExitOutcome::TimedOut => {
+            Err(AgentExecutionError::Unavailable(format!("claude was still running after {TIMEOUT:?} and was killed")))
+        }
+        ExitOutcome::Stalled { idle_elapsed } => Err(AgentExecutionError::Unavailable(format!(
+            "claude produced no output for {idle_elapsed:?} and was judged stalled"
+        ))),
+        ExitOutcome::Terminated => {
+            Err(AgentExecutionError::Unavailable("claude was terminated before it could finish".to_owned()))
+        }
+    };
+}
 
 /// A newline (`\n` or `\r`) collapsed to a space and a double quote turned into a single
 /// one, so `task.goal` survives `Command_For` regardless of platform.
@@ -172,82 +234,20 @@ fn Single_Line(goal: &str) -> String
     return goal.replace(['\n', '\r'], " ").replace('"', "'");
 }
 
-/// `task.effort`, mapped to the real `--effort` value `claude --help` documents today —
-/// verified directly against the installed CLI, not assumed: `low`, `medium`, `high`,
-/// `xhigh`, `max`. `None` for [`EffortLevel::BackendDefault`]: the flag is omitted
-/// entirely rather than passed a value naming "the default," which is exactly this
-/// crate's own behavior for every caller before `OD-CONTRACTS-004` existed to name an
-/// effort at all.
-///
-/// [`EffortLevel::Minimal`] has no distinct native control below `low` — mapped there as
-/// this crate's own approximation, not a claim of an exact match, `MODEL-ROUTE-015`'s own
-/// `MappingQuality::Approximate` shape for exactly this case. `claude`'s own `xhigh` tier
-/// has no `EffortLevel` counterpart: `MODEL-ROUTE-004` closes the canonical enumeration at
-/// six values, so this crate cannot request it, and does not fold it into `high` or `max`
-/// to pretend otherwise.
-#[must_use]
-fn Effort_Flag(effort: EffortLevel) -> Option<&'static str>
-{
-    return match effort
-    {
-        EffortLevel::BackendDefault => None,
-        EffortLevel::Minimal | EffortLevel::Low => Some("low"),
-        EffortLevel::Medium => Some("medium"),
-        EffortLevel::High => Some("high"),
-        EffortLevel::Maximum => Some("max"),
-    };
-}
+/// `claude` on every platform this workspace's own `StdProcessLauncher` runs on but
+/// Windows, where the real entry point on `PATH` is an npm-generated `claude.cmd` shim
+/// (confirmed directly against this machine: `where claude` names both an extensionless
+/// POSIX shell script and `claude.cmd`, in that order). `StdProcessLauncher` spawns
+/// `argv[0]` through `CreateProcess` directly, by its own deliberate "no shell, ever"
+/// design — the same reason it does not attempt `PATHEXT` resolution a shell would do
+/// silently, so the correct name is this crate's own responsibility to supply, once, here,
+/// rather than a capability every caller of the shared launcher would otherwise need.
+#[cfg(windows)]
+const CLAUDE_PROGRAM: &str = "claude.cmd";
 
-/// The invocation `OD-EXECUTOR-001`'s rule describes, over `task.goal`, run from
-/// `working_directory`, with `task.effort` appended per [`Effort_Flag`].
-fn Command_For(task: &TaskEnvelope, working_directory: &std::path::Path) -> Command
-{
-    let mut argv = vec![
-        CLAUDE_PROGRAM.to_owned(),
-        "--print".to_owned(),
-        Single_Line(&task.goal),
-        "--output-format".to_owned(),
-        "json".to_owned(),
-        "--strict-mcp-config".to_owned(),
-        "--allowedTools".to_owned(),
-        NO_TOOLS_GRANTED.to_owned(),
-        "--max-budget-usd".to_owned(),
-        MAX_BUDGET_USD.to_owned(),
-    ];
-    if let Some(value) = Effort_Flag(task.effort)
-    {
-        argv.push("--effort".to_owned());
-        argv.push(value.to_owned());
-    }
-
-    let mut command = Command::New(argv, TIMEOUT);
-    command.working_directory = Some(working_directory.to_path_buf());
-
-    return command;
-}
-
-/// Refuses every outcome a launched process can report other than a clean, zero exit —
-/// the same shape `nomos_lang_rust_cargo`'s own `Require_Clean_Exit` uses for the one
-/// other subprocess this workspace ever runs through `ProcessLauncher`.
-fn Require_Clean_Exit(outcome: &ExitOutcome, stderr: &str) -> Result<(), AgentExecutionError>
-{
-    return match outcome
-    {
-        ExitOutcome::Exited { code: 0 } => Ok(()),
-        ExitOutcome::Exited { code } => {
-            Err(AgentExecutionError::Unavailable(format!("claude exited {code}: {stderr}")))
-        }
-        ExitOutcome::TimedOut => {
-            Err(AgentExecutionError::Unavailable(format!("claude was still running after {TIMEOUT:?} and was killed")))
-        }
-        ExitOutcome::Stalled { idle_elapsed } => Err(AgentExecutionError::Unavailable(format!(
-            "claude produced no output for {idle_elapsed:?} and was judged stalled"
-        ))),
-        ExitOutcome::Terminated => {
-            Err(AgentExecutionError::Unavailable("claude was terminated before it could finish".to_owned()))
-        }
-    };
-}
+/// See [`CLAUDE_PROGRAM`]'s Windows doc.
+#[cfg(not(windows))]
+const CLAUDE_PROGRAM: &str = "claude";
 
 #[cfg(test)]
 mod tests;

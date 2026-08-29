@@ -16,6 +16,20 @@ use nomos_contracts::Digest128;
 /// same panic at the same step, and one that depends on a digest width would not.
 const _: () = assert!(blake3::OUT_LEN >= Digest128::BYTE_LENGTH);
 
+/// The digest of a byte sequence.
+///
+/// BLAKE3 with a fixed configuration, truncated to 128 bits. The fixed configuration is
+/// the part that matters: a hash whose seed varies per process — which is what Rust's
+/// default hasher does, deliberately — would make every identity in the system
+/// unreproducible across runs, and the failure would show up as a cache that never hits
+/// rather than as an error.
+#[must_use]
+pub fn Content_Digest(bytes: &[u8]) -> Digest128
+{
+    let full = blake3::hash(bytes);
+    return Digest128::From_Bytes(Truncate(full.as_bytes()));
+}
+
 /// Takes the leading [`Digest128::BYTE_LENGTH`] bytes of a full-width digest.
 ///
 /// Written as a zip rather than a slice or a chunk so that no length is asserted here at
@@ -31,20 +45,6 @@ fn Truncate(full: &[u8; blake3::OUT_LEN]) -> [u8; Digest128::BYTE_LENGTH]
     }
 
     return truncated;
-}
-
-/// The digest of a byte sequence.
-///
-/// BLAKE3 with a fixed configuration, truncated to 128 bits. The fixed configuration is
-/// the part that matters: a hash whose seed varies per process — which is what Rust's
-/// default hasher does, deliberately — would make every identity in the system
-/// unreproducible across runs, and the failure would show up as a cache that never hits
-/// rather than as an error.
-#[must_use]
-pub fn Content_Digest(bytes: &[u8]) -> Digest128
-{
-    let full = blake3::hash(bytes);
-    return Digest128::From_Bytes(Truncate(full.as_bytes()));
 }
 
 /// The digest of an ordered sequence of parts.

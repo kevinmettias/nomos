@@ -59,6 +59,19 @@ pub fn Materialize_Syntax(sources: &[SourceFile], context: &Context, store: &mut
     return written;
 }
 
+/// The reading context as `nomos_lang_go`'s own provider takes it -- the identical fields
+/// [`Rust_Production`] already builds for `nomos_lang_rust`'s own distinct `FactContext`
+/// type, restated as `nomos_lang_go`'s.
+fn Go_Production(context: &Context) -> nomos_lang_go::FactContext
+{
+    return nomos_lang_go::FactContext {
+        snapshot: context.snapshot,
+        variant: context.variant,
+        configuration: context.configuration,
+        generation: context.generation,
+    };
+}
+
 /// One source's syntax fact, from whichever provider [`Recognized_Syntax_Provider`] says
 /// `source.path` belongs to -- `None` for a path neither recognizes or a recognized path
 /// its own provider could not parse.
@@ -112,30 +125,6 @@ fn Go_Syntax_Fact(source: &SourceFile, go_production: nomos_lang_go::FactContext
     };
 
     return Some(fact);
-}
-
-/// The reading context as `nomos_lang_rust`'s own provider takes it.
-fn Rust_Production(context: &Context) -> FactContext
-{
-    return FactContext {
-        snapshot: context.snapshot,
-        variant: context.variant,
-        configuration: context.configuration,
-        generation: context.generation,
-    };
-}
-
-/// The reading context as `nomos_lang_go`'s own provider takes it -- the identical fields
-/// [`Rust_Production`] already builds for `nomos_lang_rust`'s own distinct `FactContext`
-/// type, restated as `nomos_lang_go`'s.
-fn Go_Production(context: &Context) -> nomos_lang_go::FactContext
-{
-    return nomos_lang_go::FactContext {
-        snapshot: context.snapshot,
-        variant: context.variant,
-        configuration: context.configuration,
-        generation: context.generation,
-    };
 }
 
 /// Produces one `nomos.cap.controlflow.reachability` fact per source and returns how many
@@ -231,6 +220,26 @@ fn Cargo_Production(context: &Context) -> nomos_lang_rust_cargo::FactContext
         configuration: context.configuration,
         generation: context.generation,
     };
+}
+
+/// Every `dependency.edges` fact the store accepted, as the source list `Check_Dependency_
+/// Direction` can judge -- one per workspace member `store.Materialize` did not refuse.
+fn Materialized_Dependency_Sources(
+    facts: Vec<nomos_lang_rust_cargo::PackageFact>,
+    store: &mut MemoryFactStore,
+) -> Vec<SourceFile>
+{
+    let mut sources = Vec::new();
+    for package in facts
+    {
+        if store.Materialize(package.fact, &[]).is_ok()
+        {
+            let source = SourceFile::New(package.path, package.subject, String::new());
+            sources.push(source);
+        }
+    }
+
+    return sources;
 }
 
 /// Runs `cargo clippy --workspace --message-format=json` over `root` through `launcher`,
@@ -398,26 +407,6 @@ fn Policy_Capability_Unavailable(error: &nomos_lang_rust_deny::DenyError) -> Fin
     };
 }
 
-/// Every `dependency.edges` fact the store accepted, as the source list `Check_Dependency_
-/// Direction` can judge -- one per workspace member `store.Materialize` did not refuse.
-fn Materialized_Dependency_Sources(
-    facts: Vec<nomos_lang_rust_cargo::PackageFact>,
-    store: &mut MemoryFactStore,
-) -> Vec<SourceFile>
-{
-    let mut sources = Vec::new();
-    for package in facts
-    {
-        if store.Materialize(package.fact, &[]).is_ok()
-        {
-            let source = SourceFile::New(package.path, package.subject, String::new());
-            sources.push(source);
-        }
-    }
-
-    return sources;
-}
-
 /// The one finding a failed [`nomos_lang_rust_cargo::Materialize_Workspace`] call produces.
 ///
 /// Attributed to the whole tree (`Subject_Of_Path("")`, the root's own subject per
@@ -440,5 +429,16 @@ fn Dependency_Capability_Unavailable(error: &nomos_lang_rust_cargo::MetadataErro
              direction was not judged for anything in this run: {error}"
         ),
         locations: Vec::new(),
+    };
+}
+
+/// The reading context as `nomos_lang_rust`'s own provider takes it.
+fn Rust_Production(context: &Context) -> FactContext
+{
+    return FactContext {
+        snapshot: context.snapshot,
+        variant: context.variant,
+        configuration: context.configuration,
+        generation: context.generation,
     };
 }

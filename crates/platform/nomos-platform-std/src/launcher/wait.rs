@@ -70,18 +70,6 @@ fn Polled(
     }
 }
 
-/// How many bytes have been captured on either stream so far, without copying them.
-///
-/// The sum is what "progress" means here: a process writing only to `stderr`, or only
-/// to `stdout`, is still a process that is producing something, and the idle bound
-/// exists to catch the process that is producing neither.
-fn Combined_Len(streams: &Streams<'_>) -> usize
-{
-    let stderr_len = streams.stderr.map_or(0, Drain::Len);
-
-    return streams.stdout.map_or(0, Drain::Len).saturating_add(stderr_len);
-}
-
 /// Whether the child has already exited, and with what outcome if so.
 ///
 /// `None` means still running; the wait itself failing is the one case worth reporting
@@ -123,21 +111,6 @@ struct Progress
     at: Instant,
 }
 
-/// Advances `progress` to `current_len` if the child produced more since the last poll,
-/// resetting the idle clock; otherwise leaves it exactly as it was.
-fn Advanced(progress: Progress, current_len: usize) -> Progress
-{
-    if current_len > progress.len
-    {
-        return Progress {
-            len: current_len,
-            at: Instant::now(),
-        };
-    }
-
-    return progress;
-}
-
 /// Updates `progress` against what has arrived since the last poll, and reports whether
 /// either bound has now run out.
 fn Progressed(
@@ -152,6 +125,21 @@ fn Progressed(
     let elapsed = Elapsed_Since(progress, context.started);
 
     return Bound_Exceeded(child, program, context.command, elapsed);
+}
+
+/// Advances `progress` to `current_len` if the child produced more since the last poll,
+/// resetting the idle clock; otherwise leaves it exactly as it was.
+fn Advanced(progress: Progress, current_len: usize) -> Progress
+{
+    if current_len > progress.len
+    {
+        return Progress {
+            len: current_len,
+            at: Instant::now(),
+        };
+    }
+
+    return progress;
 }
 
 /// How long a child has been silent, and how long it has run in total, as of one poll.
@@ -197,4 +185,16 @@ fn Bound_Exceeded(
     }
 
     return Ok(None);
+}
+
+/// How many bytes have been captured on either stream so far, without copying them.
+///
+/// The sum is what "progress" means here: a process writing only to `stderr`, or only
+/// to `stdout`, is still a process that is producing something, and the idle bound
+/// exists to catch the process that is producing neither.
+fn Combined_Len(streams: &Streams<'_>) -> usize
+{
+    let stderr_len = streams.stderr.map_or(0, Drain::Len);
+
+    return streams.stdout.map_or(0, Drain::Len).saturating_add(stderr_len);
 }

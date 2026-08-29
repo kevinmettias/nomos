@@ -32,23 +32,27 @@ impl DocumentStore
         return self.authority;
     }
 
-    /// A document this store's authority does not hold.
+    /// Writes every record in `commit`, then a manifest naming them, as one document each.
     ///
-    /// Checked for the manifest as well as for the records it names, because a store that
-    /// admitted the manifest and not its contents — or the reverse — would hold half a
-    /// commit and answer as if it held all of it.
-    fn Refuse_Unadmitted(&self, kind: DocumentKind) -> Result<(), StoreError>
+    /// # Errors
+    ///
+    /// Returns [`StoreError`] if this store's authority does not admit a record's kind or the
+    /// commit's own manifest kind, or if `commit` records nothing.
+    pub fn Commit(&mut self, commit: &Commit) -> Result<DocumentId, StoreError>
     {
-        if self.authority.Admits(kind)
+        let manifest = self.Admitted(commit)?;
+
+        for record in &commit.records
         {
-            return Ok(());
+            let document = record.Document();
+            self.documents.insert(document.Id(), document);
         }
 
-        return Err(StoreError::WrongAuthority {
-            store: self.authority,
-            kind,
-            document: kind.Authority(),
-        });
+        let id = manifest.Id();
+        self.documents.insert(id, manifest);
+        self.index = None;
+
+        return Ok(id);
     }
 
     /// The manifest a commit would write, once the whole commit has been shown admissible.
@@ -82,27 +86,23 @@ impl DocumentStore
         return Ok(manifest);
     }
 
-    /// Writes every record in `commit`, then a manifest naming them, as one document each.
+    /// A document this store's authority does not hold.
     ///
-    /// # Errors
-    ///
-    /// Returns [`StoreError`] if this store's authority does not admit a record's kind or the
-    /// commit's own manifest kind, or if `commit` records nothing.
-    pub fn Commit(&mut self, commit: &Commit) -> Result<DocumentId, StoreError>
+    /// Checked for the manifest as well as for the records it names, because a store that
+    /// admitted the manifest and not its contents — or the reverse — would hold half a
+    /// commit and answer as if it held all of it.
+    fn Refuse_Unadmitted(&self, kind: DocumentKind) -> Result<(), StoreError>
     {
-        let manifest = self.Admitted(commit)?;
-
-        for record in &commit.records
+        if self.authority.Admits(kind)
         {
-            let document = record.Document();
-            self.documents.insert(document.Id(), document);
+            return Ok(());
         }
 
-        let id = manifest.Id();
-        self.documents.insert(id, manifest);
-        self.index = None;
-
-        return Ok(id);
+        return Err(StoreError::WrongAuthority {
+            store: self.authority,
+            kind,
+            document: kind.Authority(),
+        });
     }
 
     /// # Errors

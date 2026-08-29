@@ -83,23 +83,6 @@ pub fn Execute<P: ProcessLauncher>(task: &TaskEnvelope, launcher: &P) -> Result<
     return Execute_In(task, launcher, &working_directory);
 }
 
-/// [`Execute`], over a caller-chosen `working_directory` rather than a freshly generated
-/// one — the same seam `nomos_agent_executor_claude_code::Execute_In` offers its own real
-/// adversarial integration test.
-pub(crate) fn Execute_In<P: ProcessLauncher>(
-    task: &TaskEnvelope,
-    launcher: &P,
-    working_directory: &std::path::Path,
-) -> Result<AgentExecutionOutcome, AgentExecutionError>
-{
-    let command = Command_For(task, working_directory);
-    let output = launcher.Run(&command).map_err(AgentExecutionError::Unavailable)?;
-
-    Require_Clean_Exit(&output.outcome, &output.stderr)?;
-
-    return Ok(AgentExecutionOutcome { response: output.stdout.trim().to_owned() });
-}
-
 /// A freshly created, empty directory under the system temp root, never this repository's
 /// own tree — `OD-EXECUTOR-004`'s rule applies this defensively, even though it found no
 /// mechanism by which `ollama run` reads its own working directory, on the same "a property
@@ -124,6 +107,23 @@ fn Isolated_Working_Directory() -> Result<PathBuf, AgentExecutionError>
     })?;
 
     return Ok(directory);
+}
+
+/// [`Execute`], over a caller-chosen `working_directory` rather than a freshly generated
+/// one — the same seam `nomos_agent_executor_claude_code::Execute_In` offers its own real
+/// adversarial integration test.
+pub(crate) fn Execute_In<P: ProcessLauncher>(
+    task: &TaskEnvelope,
+    launcher: &P,
+    working_directory: &std::path::Path,
+) -> Result<AgentExecutionOutcome, AgentExecutionError>
+{
+    let command = Command_For(task, working_directory);
+    let output = launcher.Run(&command).map_err(AgentExecutionError::Unavailable)?;
+
+    Require_Clean_Exit(&output.outcome, &output.stderr)?;
+
+    return Ok(AgentExecutionOutcome { response: output.stdout.trim().to_owned() });
 }
 
 /// `ollama` resolves to a native `.exe` on every platform this workspace's own

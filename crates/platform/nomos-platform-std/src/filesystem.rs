@@ -10,24 +10,6 @@ pub struct StdFileSystem;
 
 impl StdFileSystem
 {
-    fn Classify(path: &Path, error: &std::io::Error) -> FileSystemError
-    {
-        let displayed = path.display().to_string();
-
-        return match error.kind()
-        {
-            std::io::ErrorKind::NotFound => FileSystemError::NotFound { path: displayed },
-            std::io::ErrorKind::PermissionDenied => FileSystemError::Denied {
-                path: displayed,
-                cause: error.to_string(),
-            },
-            _ => FileSystemError::Other {
-                path: displayed,
-                cause: error.to_string(),
-            },
-        };
-    }
-
     /// Leaving a stray temporary behind after a failed rename would accumulate one file per
     /// failure next to the real one, so it is cleaned up.
     ///
@@ -48,6 +30,24 @@ impl StdFileSystem
                 "{error}, and the temporary {} it left could not be removed either: {stray}",
                 temporary.display()
             ),
+        };
+    }
+
+    fn Classify(path: &Path, error: &std::io::Error) -> FileSystemError
+    {
+        let displayed = path.display().to_string();
+
+        return match error.kind()
+        {
+            std::io::ErrorKind::NotFound => FileSystemError::NotFound { path: displayed },
+            std::io::ErrorKind::PermissionDenied => FileSystemError::Denied {
+                path: displayed,
+                cause: error.to_string(),
+            },
+            _ => FileSystemError::Other {
+                path: displayed,
+                cause: error.to_string(),
+            },
         };
     }
 }

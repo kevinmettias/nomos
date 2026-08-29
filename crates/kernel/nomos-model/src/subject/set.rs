@@ -104,6 +104,27 @@ impl SubjectSet
         return self.members.len();
     }
 
+    #[must_use]
+    pub fn Intersect(&self, other: &Self) -> Intersection
+    {
+        if let Some(reason) = self.Incomparable(other)
+        {
+            return Intersection::Unknown(reason);
+        }
+
+        let shared: Vec<SubjectId> = self
+            .members
+            .intersection(&other.members)
+            .copied()
+            .collect();
+        if shared.is_empty()
+        {
+            return Intersection::Disjoint;
+        }
+
+        return Intersection::Overlaps(shared);
+    }
+
     /// Whether two sets share a member.
     ///
     /// Answers [`Intersection::Unknown`] rather than guessing whenever an honest answer
@@ -135,27 +156,6 @@ impl SubjectSet
         }
 
         return None;
-    }
-
-    #[must_use]
-    pub fn Intersect(&self, other: &Self) -> Intersection
-    {
-        if let Some(reason) = self.Incomparable(other)
-        {
-            return Intersection::Unknown(reason);
-        }
-
-        let shared: Vec<SubjectId> = self
-            .members
-            .intersection(&other.members)
-            .copied()
-            .collect();
-        if shared.is_empty()
-        {
-            return Intersection::Disjoint;
-        }
-
-        return Intersection::Overlaps(shared);
     }
 }
 

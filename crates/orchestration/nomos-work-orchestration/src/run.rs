@@ -64,6 +64,61 @@ where
     };
 }
 
+/// The board and the moment it was read, for `list` and `audit` alike.
+fn Board_View<F: FileSystem, C: Clock, L: CrossProcessLock>(
+    ledger: &FileLedger<F, C, L>,
+) -> Result<BoardView, LedgerError>
+{
+    let document = ledger.Load()?;
+    let now = ledger.Now();
+
+    return Ok(BoardView { document, now });
+}
+
+/// The board, the moment, and this tree's revision, for `show`.
+fn Show_View<F: FileSystem, C: Clock, L: CrossProcessLock>(
+    ledger: &FileLedger<F, C, L>,
+) -> Result<ShowView, LedgerError>
+{
+    let document = ledger.Load()?;
+    let now = ledger.Now();
+    let current_revision = Current_Revision(ledger);
+
+    return Ok(ShowView {
+        document,
+        now,
+        current_revision,
+    });
+}
+
+/// This tree's revision right now, read the same way [`nomos_ledger::Finish`] reads it when
+/// it stamps a [`nomos_ledger::VerificationRecord`] — `.git/HEAD`, following one loose ref.
+///
+/// A second reading rather than a shared one: the resolution `nomos_ledger::Finish` uses to
+/// stamp a record is private to that crate's `finish` module. `docs/records/OD-LEDGER-027-
+/// ...md` says so, for the reading this moved from.
+///
+/// `None` on any failure — no `.git` here, a packed ref this build does not chase, or any
+/// other read error. `show`'s staleness line treats that as its own case rather than as
+/// agreement with a recorded revision.
+fn Current_Revision<F: FileSystem, C: Clock, L: CrossProcessLock>(
+    ledger: &FileLedger<F, C, L>,
+) -> Option<String>
+{
+    let head = ledger.Read_File(Path::new(".git/HEAD")).ok()?;
+    let head = head.trim();
+
+    if let Some(ref_path) = head.strip_prefix("ref: ")
+    {
+        return ledger
+            .Read_File(&Path::new(".git").join(ref_path))
+            .ok()
+            .map(|contents| return contents.trim().to_owned());
+    }
+
+    return Some(head.to_owned());
+}
+
 /// The outcome of adding `item` to the board under `amending`, for [`WorkCommand::Add`].
 fn Add_Outcome<F: FileSystem, C: Clock, L: CrossProcessLock>(
     ledger: &mut FileLedger<F, C, L>,
@@ -151,33 +206,6 @@ fn Decline_Outcome<F: FileSystem, C: Clock, L: CrossProcessLock>(
     return WorkOutcome::Decline(declined);
 }
 
-/// The board and the moment it was read, for `list` and `audit` alike.
-fn Board_View<F: FileSystem, C: Clock, L: CrossProcessLock>(
-    ledger: &FileLedger<F, C, L>,
-) -> Result<BoardView, LedgerError>
-{
-    let document = ledger.Load()?;
-    let now = ledger.Now();
-
-    return Ok(BoardView { document, now });
-}
-
-/// The board, the moment, and this tree's revision, for `show`.
-fn Show_View<F: FileSystem, C: Clock, L: CrossProcessLock>(
-    ledger: &FileLedger<F, C, L>,
-) -> Result<ShowView, LedgerError>
-{
-    let document = ledger.Load()?;
-    let now = ledger.Now();
-    let current_revision = Current_Revision(ledger);
-
-    return Ok(ShowView {
-        document,
-        now,
-        current_revision,
-    });
-}
-
 /// The board, once it is known to satisfy its own invariants.
 fn Validated<F: FileSystem, C: Clock, L: CrossProcessLock>(
     ledger: &FileLedger<F, C, L>,
@@ -191,32 +219,4 @@ fn Validated<F: FileSystem, C: Clock, L: CrossProcessLock>(
     }
 
     return Ok(document);
-}
-
-/// This tree's revision right now, read the same way [`nomos_ledger::Finish`] reads it when
-/// it stamps a [`nomos_ledger::VerificationRecord`] — `.git/HEAD`, following one loose ref.
-///
-/// A second reading rather than a shared one: the resolution `nomos_ledger::Finish` uses to
-/// stamp a record is private to that crate's `finish` module. `docs/records/OD-LEDGER-027-
-/// ...md` says so, for the reading this moved from.
-///
-/// `None` on any failure — no `.git` here, a packed ref this build does not chase, or any
-/// other read error. `show`'s staleness line treats that as its own case rather than as
-/// agreement with a recorded revision.
-fn Current_Revision<F: FileSystem, C: Clock, L: CrossProcessLock>(
-    ledger: &FileLedger<F, C, L>,
-) -> Option<String>
-{
-    let head = ledger.Read_File(Path::new(".git/HEAD")).ok()?;
-    let head = head.trim();
-
-    if let Some(ref_path) = head.strip_prefix("ref: ")
-    {
-        return ledger
-            .Read_File(&Path::new(".git").join(ref_path))
-            .ok()
-            .map(|contents| return contents.trim().to_owned());
-    }
-
-    return Some(head.to_owned());
 }

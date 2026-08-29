@@ -85,17 +85,6 @@ fn Explained(outcome: &CheckOutcome, query: &FindingQuery, policies: Disposition
         .map_or(Explanation::NotFound, |finding| return Disposed(finding, policies.adoption, policies.suppressions, policies.baseline));
 }
 
-/// `query.rule`'s contract citation, from the same registry `nomos gate plan` builds --
-/// `None` only for a registry `Registered` itself refuses, or a rule that registry does
-/// not hold at all.
-fn Contract_Of(rule: &RuleId) -> Option<(String, u32)>
-{
-    let registry = Registered().ok()?;
-    let offer = registry.Offered(rule)?;
-
-    return Some((offer.contract_record.clone(), offer.contract_record_version));
-}
-
 /// The one finding `query` names among `findings`, if any.
 fn Named<'a>(findings: &'a [Finding], query: &FindingQuery) -> Option<&'a Finding>
 {
@@ -125,4 +114,15 @@ fn Disposed(finding: &Finding, adoption: &AdoptionPolicy, suppressions: &Suppres
         baselined_by,
         contract,
     };
+}
+
+/// `query.rule`'s contract citation, from the same registry `nomos gate plan` builds --
+/// `None` only for a registry `Registered` itself refuses, or a rule that registry does
+/// not hold at all.
+fn Contract_Of(rule: &RuleId) -> Option<(String, u32)>
+{
+    let registry = Registered().ok()?;
+    let offer = registry.Offered(rule)?;
+
+    return Some((offer.contract_record.clone(), offer.contract_record_version));
 }

@@ -41,6 +41,27 @@ pub fn Table(assembly: &Assembly, request: &TableRequest) -> Result<TableAnswer,
     });
 }
 
+/// The one document `request.document` names, or the refusal saying why it names none or
+/// several.
+fn Addressed(assembly: &Assembly, request: &TableRequest) -> Result<(i64, PathMatch), TableRefusal>
+{
+    let revision = request.revision.as_deref();
+    let (matched, tier) = assembly
+        .store
+        .Documents_Named(&request.document, revision)
+        .map_err(TableRefusal::Store)?;
+
+    return match matched.as_slice()
+    {
+        [uid] => Ok((*uid, tier)),
+        [] => Err(TableRefusal::NoSuchDocument),
+        many => Err(TableRefusal::AmbiguousDocument {
+            matched: many.len(),
+            tier,
+        }),
+    };
+}
+
 /// A document, the rows the narrowing selected from it, and the census of the whole of it.
 ///
 /// The census counts the document rather than the selection deliberately: it is what lets a
@@ -71,27 +92,6 @@ fn Read_Table(assembly: &Assembly, uid: i64, request: &TableRequest) -> Result<R
         .map_err(TableRefusal::Store)?;
 
     return Ok(ReadTable { document, lines, census });
-}
-
-/// The one document `request.document` names, or the refusal saying why it names none or
-/// several.
-fn Addressed(assembly: &Assembly, request: &TableRequest) -> Result<(i64, PathMatch), TableRefusal>
-{
-    let revision = request.revision.as_deref();
-    let (matched, tier) = assembly
-        .store
-        .Documents_Named(&request.document, revision)
-        .map_err(TableRefusal::Store)?;
-
-    return match matched.as_slice()
-    {
-        [uid] => Ok((*uid, tier)),
-        [] => Err(TableRefusal::NoSuchDocument),
-        many => Err(TableRefusal::AmbiguousDocument {
-            matched: many.len(),
-            tier,
-        }),
-    };
 }
 
 /// A document that resolved and then could not be read back.
