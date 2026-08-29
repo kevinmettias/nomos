@@ -4352,6 +4352,422 @@
       "reason": "lib.rs is the crate root and every crate needs one as its entry point; renaming it to follow a type it happens to declare is not a real option.",
       "owner": "@claude-p19-campaign",
       "expires": "2026-11-27"
+    },
+    {
+      "check": "check-scope-discipline",
+      "path": "crates/host/nomos-api/src/response/gate_explain_response.rs",
+      "fingerprint": "2b6789fe8b9dfe48",
+      "reason": "This is a process-lifetime disambiguator, not owned state -- it exists only so concurrent test threads building/naming a scratch directory from the same label never race on the same path or filename. Nothing else synchronizes on it, reads memory ordered by it, or depends on its value beyond producing a distinct suffix per call within this process.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-scope-discipline",
+      "path": "crates/host/nomos-api/src/spec/spec_commit_response.rs",
+      "fingerprint": "1681764fb7ab6d83",
+      "reason": "This is a process-lifetime disambiguator, not owned state -- it exists only so concurrent test threads building/naming a scratch directory from the same label never race on the same path or filename. Nothing else synchronizes on it, reads memory ordered by it, or depends on its value beyond producing a distinct suffix per call within this process.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-scope-discipline",
+      "path": "crates/host/nomos-api/src/spec/spec_freshness_response.rs",
+      "fingerprint": "1681764fb7ab6d83",
+      "reason": "This is a process-lifetime disambiguator, not owned state -- it exists only so concurrent test threads building/naming a scratch directory from the same label never race on the same path or filename. Nothing else synchronizes on it, reads memory ordered by it, or depends on its value beyond producing a distinct suffix per call within this process.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-scope-discipline",
+      "path": "crates/host/nomos-api/src/spec/spec_preview_response.rs",
+      "fingerprint": "1681764fb7ab6d83",
+      "reason": "This is a process-lifetime disambiguator, not owned state -- it exists only so concurrent test threads building/naming a scratch directory from the same label never race on the same path or filename. Nothing else synchronizes on it, reads memory ordered by it, or depends on its value beyond producing a distinct suffix per call within this process.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-scope-discipline",
+      "path": "crates/host/nomos-api/src/spec/spec_render_response.rs",
+      "fingerprint": "1681764fb7ab6d83",
+      "reason": "This is a process-lifetime disambiguator, not owned state -- it exists only so concurrent test threads building/naming a scratch directory from the same label never race on the same path or filename. Nothing else synchronizes on it, reads memory ordered by it, or depends on its value beyond producing a distinct suffix per call within this process.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-scope-discipline",
+      "path": "crates/host/nomos-api/src/spec/spec_submit_response.rs",
+      "fingerprint": "1681764fb7ab6d83",
+      "reason": "This is a process-lifetime disambiguator, not owned state -- it exists only so concurrent test threads building/naming a scratch directory from the same label never race on the same path or filename. Nothing else synchronizes on it, reads memory ordered by it, or depends on its value beyond producing a distinct suffix per call within this process.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-scope-discipline",
+      "path": "crates/host/nomos-api/src/work/tests_support.rs",
+      "fingerprint": "2b6789fe8b9dfe48",
+      "reason": "This is a process-lifetime disambiguator, not owned state -- it exists only so concurrent test threads building/naming a scratch directory from the same label never race on the same path or filename. Nothing else synchronizes on it, reads memory ordered by it, or depends on its value beyond producing a distinct suffix per call within this process.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/orchestration/nomos-check-orchestration/src/examined/claim.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "mandated by the std::fmt::Display trait; fmt is not a name this crate chose.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-scope-discipline",
+      "path": "crates/orchestration/nomos-gate-orchestration/src/run_id.rs",
+      "fingerprint": "8b0cf7dec592cfe7",
+      "reason": "process-lifetime atomic counter; sole purpose is disambiguating same-second calls to Fresh_Run_Id process-wide -- no single caller can own it without threading a counter through every crates/host call site.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/languages/nomos-lang-go-modules/src/module_error.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fn fmt is the method name mandated by the foreign std::fmt::Display/Debug trait signature; renaming it would break the trait implementation. No code fix is possible.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/languages/nomos-lang-go/src/parse_failure.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fn fmt is the method name mandated by the foreign std::fmt::Display/Debug trait signature; renaming it would break the trait implementation. No code fix is possible.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/languages/nomos-lang-go/src/syntax/item_kind.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fn fmt is the method name mandated by the foreign std::fmt::Display/Debug trait signature; renaming it would break the trait implementation. No code fix is possible.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/languages/nomos-lang-go/src/syntax/visibility.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fn fmt is the method name mandated by the foreign std::fmt::Display/Debug trait signature; renaming it would break the trait implementation. No code fix is possible.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/languages/nomos-lang-rust-cargo/src/metadata_error.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fn fmt is the method name mandated by the foreign std::fmt::Display/Debug trait signature; renaming it would break the trait implementation. No code fix is possible.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/languages/nomos-lang-rust-clippy/src/clippy_error.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fn fmt is the method name mandated by the foreign std::fmt::Display/Debug trait signature; renaming it would break the trait implementation. No code fix is possible.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/languages/nomos-lang-rust-deny/src/deny_error.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fn fmt is the method name mandated by the foreign std::fmt::Display/Debug trait signature; renaming it would break the trait implementation. No code fix is possible.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/languages/nomos-lang-rust/src/parse_failure.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fn fmt is the method name mandated by the foreign std::fmt::Display/Debug trait signature; renaming it would break the trait implementation. No code fix is possible.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/languages/nomos-lang-rust/src/syntax/item_kind.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fn fmt is the method name mandated by the foreign std::fmt::Display/Debug trait signature; renaming it would break the trait implementation. No code fix is possible.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/languages/nomos-lang-rust/src/syntax/visibility.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fn fmt is the method name mandated by the foreign std::fmt::Display/Debug trait signature; renaming it would break the trait implementation. No code fix is possible.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/platform/nomos-platform/src/cross_process_lock/lock_error.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fn fmt is the method name mandated by the foreign std::fmt::Display/Debug trait signature; renaming it would break the trait implementation. No code fix is possible.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/platform/nomos-platform/src/file_system/file_system_error.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fn fmt is the method name mandated by the foreign std::fmt::Display/Debug trait signature; renaming it would break the trait implementation. No code fix is possible.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/kernel/nomos-model/src/entity/entity_id.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fn fmt is the method name mandated by the foreign std::fmt::Display/Debug trait signature; renaming it would break the trait implementation. No code fix is possible.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/kernel/nomos-model/src/subject/set_resolution.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fn fmt is the method name mandated by the foreign std::fmt::Display/Debug trait signature; renaming it would break the trait implementation. No code fix is possible.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/kernel/nomos-store/src/document/document_id.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fn fmt is the method name mandated by the foreign std::fmt::Display/Debug trait signature; renaming it would break the trait implementation. No code fix is possible.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/kernel/nomos-store/src/store_error.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fn fmt is the method name mandated by the foreign std::fmt::Display/Debug trait signature; renaming it would break the trait implementation. No code fix is possible.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/corrections/nomos-corrections/src/candidate_label.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fn fmt is the method name mandated by the foreign std::fmt::Display/Debug trait signature; renaming it would break the trait implementation. No code fix is possible.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/corrections/nomos-corrections/src/correction_class.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fn fmt is the method name mandated by the foreign std::fmt::Display/Debug trait signature; renaming it would break the trait implementation. No code fix is possible.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/corrections/nomos-corrections/src/correction_decision/review_reason.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fn fmt is the method name mandated by the foreign std::fmt::Display/Debug trait signature; renaming it would break the trait implementation. No code fix is possible.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/corrections/nomos-corrections/src/correction_error.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fn fmt is the method name mandated by the foreign std::fmt::Display/Debug trait signature; renaming it would break the trait implementation. No code fix is possible.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/corrections/nomos-corrections/src/correction_id.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fn fmt is the method name mandated by the foreign std::fmt::Display/Debug trait signature; renaming it would break the trait implementation. No code fix is possible.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/corrections/nomos-corrections/src/ranking_criterion.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fn fmt is the method name mandated by the foreign std::fmt::Display/Debug trait signature; renaming it would break the trait implementation. No code fix is possible.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/corrections/nomos-corrections/src/read_write_resolution.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fn fmt is the method name mandated by the foreign std::fmt::Display/Debug trait signature; renaming it would break the trait implementation. No code fix is possible.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/corrections/nomos-corrections/src/rollback_boundary.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fn fmt is the method name mandated by the foreign std::fmt::Display/Debug trait signature; renaming it would break the trait implementation. No code fix is possible.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/agent/nomos-agent-executor-claude-code/src/agent_execution_error.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fn fmt is the method name mandated by the foreign std::fmt::Display/Debug trait signature; renaming it would break the trait implementation. No code fix is possible.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/agent/nomos-model-backend-ollama/src/agent_execution_error.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fn fmt is the method name mandated by the foreign std::fmt::Display/Debug trait signature; renaming it would break the trait implementation. No code fix is possible.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/capabilities/nomos-cap-controlflow/src/arm_shape/payload_refusal.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fn fmt is the method name mandated by the foreign std::fmt::Display/Debug trait signature; renaming it would break the trait implementation. No code fix is possible.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/capabilities/nomos-cap-dependency-policy/src/payload/payload_refusal.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fn fmt is the method name mandated by the foreign std::fmt::Display/Debug trait signature; renaming it would break the trait implementation. No code fix is possible.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/capabilities/nomos-cap-dependency-policy/src/payload/policy_severity.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fn fmt is the method name mandated by the foreign std::fmt::Display/Debug trait signature; renaming it would break the trait implementation. No code fix is possible.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/capabilities/nomos-cap-dependency/src/dependency_kind/payload_refusal.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fn fmt is the method name mandated by the foreign std::fmt::Display/Debug trait signature; renaming it would break the trait implementation. No code fix is possible.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/capabilities/nomos-cap-lint/src/payload/lint_level.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fn fmt is the method name mandated by the foreign std::fmt::Display/Debug trait signature; renaming it would break the trait implementation. No code fix is possible.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/capabilities/nomos-cap-lint/src/payload/payload_refusal.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fn fmt is the method name mandated by the foreign std::fmt::Display/Debug trait signature; renaming it would break the trait implementation. No code fix is possible.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/platform/nomos-platform-std",
+      "fingerprint": "281c11521514f37e",
+      "reason": "StdFileSystem/StdProcessLauncher (and their std_*.rs files / nomos-platform-std folder) are real platform-adapter names distinguishing the real-filesystem/real-process implementation from test doubles, with ~65 call sites across host/, orchestration/, languages/, nomos-ledger and tests/. A rename here is legitimate but large enough to warrant its own tracked item rather than folding into this mechanical sweep.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/platform/nomos-platform-std/src/std_file_system.rs",
+      "fingerprint": "391c4af4dff6e9a6",
+      "reason": "StdFileSystem/StdProcessLauncher (and their std_*.rs files / nomos-platform-std folder) are real platform-adapter names distinguishing the real-filesystem/real-process implementation from test doubles, with ~65 call sites across host/, orchestration/, languages/, nomos-ledger and tests/. A rename here is legitimate but large enough to warrant its own tracked item rather than folding into this mechanical sweep.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/platform/nomos-platform-std/src/std_file_system.rs",
+      "fingerprint": "892cbc2890136a36",
+      "reason": "StdFileSystem/StdProcessLauncher (and their std_*.rs files / nomos-platform-std folder) are real platform-adapter names distinguishing the real-filesystem/real-process implementation from test doubles, with ~65 call sites across host/, orchestration/, languages/, nomos-ledger and tests/. A rename here is legitimate but large enough to warrant its own tracked item rather than folding into this mechanical sweep.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/platform/nomos-platform-std/src/std_process_launcher.rs",
+      "fingerprint": "c8a803b2225b5f9e",
+      "reason": "StdFileSystem/StdProcessLauncher (and their std_*.rs files / nomos-platform-std folder) are real platform-adapter names distinguishing the real-filesystem/real-process implementation from test doubles, with ~65 call sites across host/, orchestration/, languages/, nomos-ledger and tests/. A rename here is legitimate but large enough to warrant its own tracked item rather than folding into this mechanical sweep.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/platform/nomos-platform-std/src/std_process_launcher.rs",
+      "fingerprint": "634fbb5650772c12",
+      "reason": "StdFileSystem/StdProcessLauncher (and their std_*.rs files / nomos-platform-std folder) are real platform-adapter names distinguishing the real-filesystem/real-process implementation from test doubles, with ~65 call sites across host/, orchestration/, languages/, nomos-ledger and tests/. A rename here is legitimate but large enough to warrant its own tracked item rather than folding into this mechanical sweep.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-scope-discipline",
+      "path": "crates/agent/nomos-agent-executor-claude-code/src/lib.rs",
+      "fingerprint": "354cf86d007cdbec",
+      "reason": "This is a process-lifetime disambiguator, not owned state -- it exists only so concurrent test threads building/naming a scratch directory from the same label never race on the same path or filename. Nothing else synchronizes on it, reads memory ordered by it, or depends on its value beyond producing a distinct suffix per call within this process.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-scope-discipline",
+      "path": "crates/agent/nomos-model-backend-ollama/src/lib.rs",
+      "fingerprint": "354cf86d007cdbec",
+      "reason": "This is a process-lifetime disambiguator, not owned state -- it exists only so concurrent test threads building/naming a scratch directory from the same label never race on the same path or filename. Nothing else synchronizes on it, reads memory ordered by it, or depends on its value beyond producing a distinct suffix per call within this process.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/substrate/nomos-analysis/src/fact/fact_error.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fn fmt is the method name mandated by the foreign std::fmt::Display/Debug trait signature; renaming it would break the trait implementation. No code fix is possible.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/substrate/nomos-analysis/src/fact/guarantee_digest.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fn fmt is the method name mandated by the foreign std::fmt::Display/Debug trait signature; renaming it would break the trait implementation. No code fix is possible.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/substrate/nomos-analysis/src/fact/fact_identity.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fn fmt is the method name mandated by the foreign std::fmt::Display/Debug trait signature; renaming it would break the trait implementation. No code fix is possible.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/substrate/nomos-analysis/src/input_digest.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fn fmt is the method name mandated by the foreign std::fmt::Display/Debug trait signature; renaming it would break the trait implementation. No code fix is possible.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
     }
   ]
 }
