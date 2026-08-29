@@ -34,7 +34,7 @@
 //! registry merely existing.
 //!
 //! Its second increment, `P13-GATE-RUN-FIRST-INCREMENT-2`, is [`GateRunOutcome`] and
-//! [`Disposition`]: `OD-GATE-014` and `OD-GATE-015` both name the same trigger for the
+//! [`Disposition_Of_Findings`]: `OD-GATE-014` and `OD-GATE-015` both name the same trigger for the
 //! policy types this crate still does not build -- `Gate` gaining a `run` verb that
 //! actually executes rules, rather than `plan`'s report-only shape. At that increment,
 //! `nomos-cli`'s `gate` module owned the actual running -- it walked a tree, called
@@ -58,7 +58,7 @@
 //! `nomos_rules::SourceFile::path` by textual prefix containment before
 //! `nomos_check_orchestration::Run` is called, so an out-of-scope file is not judged at all.
 //! [`RuleSelector`] filters findings by `nomos_contracts::RuleId` after `Run` returns,
-//! before [`Disposition`] reduces them -- at this increment, a real selection of what can
+//! before [`Disposition_Of_Findings`] reduces them -- at this increment, a real selection of what can
 //! fail a build, but honestly short of a real selection of what runs: `Run` still executed
 //! every rule unconditionally, and narrowing that needed a signature change to `Run` itself
 //! across every caller, which was not this increment. `OD-GATE-017` has since made that
@@ -81,7 +81,7 @@
 //!
 //! Its sixth increment, `P13-GATE-EXPLAIN-FIRST-INCREMENT`, gives `explain` its first real
 //! body: [`Explain_Gate`] judges a tree exactly as [`Run_Gate`] does (through a shared
-//! [`run_gate::Judged`] helper, so the two do not duplicate the walk/empty/unreadable
+//! [`gate_environment::Judged_Sources`] helper, so the two do not duplicate the walk/empty/unreadable
 //! match) and answers a [`FindingQuery`] -- a rule and one of a finding's own human-visible
 //! locations, not a digest -- with an [`Explanation`]. Deliberately independent of
 //! `GateCommand::scope`/`rules`: `explain` answers what one named finding looks like right
@@ -121,7 +121,7 @@
 //! Its ninth increment, `P14-GATE-016-COVERAGE-POLICY-FIRST-INCREMENT`, gives [`GateCommand`]
 //! a real [`CoveragePolicy`] under `OD-GATE-016`'s decision -- unlike every policy before it,
 //! this one is not addressed by `rule`/`subject` or by `RuleId` at all: it is a single
-//! opt-in switch consulted once, after [`Disposition`] already reduced
+//! opt-in switch consulted once, after [`Disposition_Of_Findings`] already reduced
 //! [`GateFindings::blocking_findings`]. Unset (`Default`), `Claim` still rides through
 //! [`GateRunResult::check_outcome`] for information only, unchanged from every increment
 //! before it. Set to [`CoveragePolicy::RequireCompleteness`], `Run_Gate` recomputes `Claim`
@@ -145,33 +145,33 @@
 
 #![forbid(unsafe_code)]
 
-mod adoption;
-mod baseline;
-mod command;
+mod baseline_debt;
 mod composition;
-mod coverage;
-mod explain;
-mod outcome;
+mod coverage_policy;
+mod finding_query;
+mod gate_command;
+mod gate_environment;
+mod gate_plan;
+mod rule_calibration;
 mod rule_selector;
 mod run;
-mod run_gate;
 mod run_id;
 mod scope_selector;
-mod suppression;
+mod suppression_disposition;
 
 #[cfg(test)]
 mod tests;
 
-pub use adoption::{AdoptionPolicy, RuleCalibration};
-pub use baseline::{BaselineDebt, BaselinePolicy};
-pub use command::GateCommand;
+pub use baseline_debt::{BaselineDebt, BaselinePolicy};
 pub use composition::Registered;
-pub use coverage::CoveragePolicy;
-pub use explain::{Explain_Gate, Explanation, FindingQuery, GateExplainResult};
-pub use outcome::{Disposition, GateFindings, GateOutcome, GatePlan, GateRunOutcome, GateRunResult};
+pub use coverage_policy::CoveragePolicy;
+pub use finding_query::{Explain_Gate, Explanation, FindingQuery, GateExplainResult};
+pub use gate_command::GateCommand;
+pub use gate_environment::{GateEnvironment, Run_Gate};
+pub use gate_plan::{Disposition_Of_Findings, GateFindings, GateOutcome, GatePlan, GateRunOutcome, GateRunResult};
+pub use rule_calibration::{AdoptionPolicy, RuleCalibration};
 pub use rule_selector::RuleSelector;
 pub use run::Run;
-pub use run_gate::{GateEnvironment, Run_Gate};
 pub use run_id::Fresh_Run_Id;
 pub use scope_selector::ScopeSelector;
-pub use suppression::{Suppression, SuppressionDisposition, SuppressionPolicy};
+pub use suppression_disposition::{Suppression, SuppressionDisposition, SuppressionPolicy};

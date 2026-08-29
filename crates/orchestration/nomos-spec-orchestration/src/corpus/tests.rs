@@ -20,7 +20,7 @@ fn Request(root: Option<PathBuf>) -> CorpusRequest
 #[test]
 fn Test_With_No_Corpus_The_Governing_Records_Should_Still_Be_There()
 {
-    let assembly = Assemble(&Request(None)).expect("assembles");
+    let assembly = Assemble_Corpus(&Request(None)).expect("assembles");
 
     assert!(
         assembly.store.Node_Summary("D-129").expect("queries").is_some(),
@@ -36,7 +36,7 @@ fn Test_An_Unset_Corpus_Should_Be_An_Absence_That_Names_What_Was_Expected()
     use super::roots::CATALOG;
     use super::roots::STATEMENTS;
 
-    let assembly = Assemble(&Request(None)).expect("assembles");
+    let assembly = Assemble_Corpus(&Request(None)).expect("assembles");
 
     assert!(!assembly.Is_Complete());
     let described = assembly.Describe_Absences();
@@ -52,7 +52,7 @@ fn Test_A_Corpus_Pointed_At_Nothing_Should_Name_The_Path_It_Was_Pointed_At()
 {
     let root = PathBuf::from("no/such/corpus/anywhere");
 
-    let assembly = Assemble(&Request(Some(root))).expect("assembles");
+    let assembly = Assemble_Corpus(&Request(Some(root))).expect("assembles");
 
     assert!(!assembly.Is_Complete());
     assert!(
@@ -71,7 +71,7 @@ fn Test_An_Empty_Corpus_Root_Should_Account_For_Each_Input_Separately()
     let root = std::env::temp_dir().join("nomos-spec-orchestration-empty-corpus-root");
     std::fs::create_dir_all(&root).expect("creates");
 
-    let assembly = Assemble(&Request(Some(root))).expect("assembles");
+    let assembly = Assemble_Corpus(&Request(Some(root))).expect("assembles");
 
     assert_eq!(
         assembly.absent.len(),
@@ -85,7 +85,7 @@ fn Test_An_Empty_Corpus_Root_Should_Account_For_Each_Input_Separately()
 fn Test_A_Readable_Volume_Should_Reach_The_Store_And_Not_Be_Reported_Absent()
 {
     let root = A_Corpus_With_One_Volume();
-    let assembly = Assemble(&Request(Some(root))).expect("assembles");
+    let assembly = Assemble_Corpus(&Request(Some(root))).expect("assembles");
     let (found, _) = assembly
         .store
         .Documents_Named("05_domain_model.md", None)

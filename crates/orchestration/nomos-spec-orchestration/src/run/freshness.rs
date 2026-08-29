@@ -11,7 +11,7 @@ use nomos_spec_project::{Catalogue, Check, Profile, SIDECAR_SUFFIX};
 use std::path::Path;
 
 use crate::corpus::Assembly;
-use crate::outcome::{FreshnessAnswer, FreshnessRefusal, ProfileOutcome, Verdict};
+use crate::spec_outcome::{FreshnessAnswer, FreshnessRefusal, ProfileOutcome, Verdict};
 use crate::request::FreshnessRequest;
 
 /// Every profile `request` names, compared against what `filesystem` holds under
@@ -30,16 +30,16 @@ use crate::request::FreshnessRequest;
 /// identifier the catalogue does not carry, [`FreshnessRefusal::RequirementUnexamined`] when
 /// `--require` names a profile `--profile` narrowed this run away from, and
 /// [`FreshnessRefusal::Project`] when the embedded catalogue itself fails to parse.
-pub fn Freshness<F: FileSystem>(
+pub fn Freshness_Of_Render<Filesystem: FileSystem>(
     assembly: &Assembly,
     request: &FreshnessRequest,
-    filesystem: &F,
+    filesystem: &Filesystem,
 ) -> Result<FreshnessAnswer, FreshnessRefusal>
 {
     let catalogue = Catalogue::Shipped().map_err(FreshnessRefusal::Project)?;
     let only = request.profile.as_deref();
     let required = Required_Profiles(&catalogue, &request.require)?;
-    let wanted = Wanted(&catalogue, only)?;
+    let wanted = Wanted_Profiles(&catalogue, only)?;
     Every_Requirement_Examined(&required, &wanted, only)?;
 
     let examined = wanted
@@ -64,14 +64,14 @@ fn Required_Profiles(catalogue: &Catalogue, require: &[String]) -> Result<Vec<St
     let mut required = Vec::new();
     for id in require
     {
-        required.push(Resolved(catalogue, id)?.id.clone());
+        required.push(Resolved_Profile(catalogue, id)?.id.clone());
     }
 
     return Ok(required);
 }
 
 /// The shipped profile that identifier names, or the refusal saying which ones exist.
-fn Resolved<'a>(catalogue: &'a Catalogue, profile: &str) -> Result<&'a Profile, FreshnessRefusal>
+fn Resolved_Profile<'a>(catalogue: &'a Catalogue, profile: &str) -> Result<&'a Profile, FreshnessRefusal>
 {
     return catalogue.Named(profile).ok_or_else(|| {
         return FreshnessRefusal::NoSuchProfile {
@@ -82,11 +82,11 @@ fn Resolved<'a>(catalogue: &'a Catalogue, profile: &str) -> Result<&'a Profile, 
 }
 
 /// Which profiles this run will look at.
-fn Wanted<'a>(catalogue: &'a Catalogue, only: Option<&str>) -> Result<Vec<&'a Profile>, FreshnessRefusal>
+fn Wanted_Profiles<'a>(catalogue: &'a Catalogue, only: Option<&str>) -> Result<Vec<&'a Profile>, FreshnessRefusal>
 {
     return match only
     {
-        Some(id) => Ok(vec![Resolved(catalogue, id)?]),
+        Some(id) => Ok(vec![Resolved_Profile(catalogue, id)?]),
         None => Ok(catalogue.Profiles().iter().collect()),
     };
 }
@@ -117,11 +117,11 @@ fn Every_Requirement_Examined(
 
 /// One profile's answer, read off `filesystem` and compared against the store when both
 /// halves are there.
-fn Verdict_Of<F: FileSystem>(
+fn Verdict_Of<Filesystem: FileSystem>(
     assembly: &Assembly,
     profile: &Profile,
     into: &Path,
-    filesystem: &F,
+    filesystem: &Filesystem,
 ) -> Verdict
 {
     let body_path = into.join(&profile.output);

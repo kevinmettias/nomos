@@ -17,7 +17,7 @@ use nomos_spec_store::EditPreview;
 use std::path::Path;
 
 use crate::corpus::Assembly;
-use crate::outcome::PreviewRefusal;
+use crate::spec_outcome::PreviewRefusal;
 use crate::request::EditRequest;
 
 /// What committing `request` would change, without writing anything.
@@ -29,19 +29,19 @@ use crate::request::EditRequest;
 ///
 /// Returns [`PreviewRefusal::Unreadable`] when `request.from` could not be read, and
 /// [`PreviewRefusal::Edit`] when the store refuses the staged edit.
-pub fn Preview<F: FileSystem>(
+pub fn Preview_Staged_Edit<Filesystem: FileSystem>(
     assembly: &Assembly,
     request: &EditRequest,
-    filesystem: &F,
+    filesystem: &Filesystem,
 ) -> Result<EditPreview, PreviewRefusal>
 {
     let staged = Staged_Text(&request.from, filesystem)?;
 
-    return Previewed(assembly, request, &staged);
+    return Preview_Of_Staged_Text(assembly, request, &staged);
 }
 
 /// The bytes an author staged at `from`, read through `filesystem`.
-fn Staged_Text<F: FileSystem>(from: &Path, filesystem: &F) -> Result<String, PreviewRefusal>
+fn Staged_Text<Filesystem: FileSystem>(from: &Path, filesystem: &Filesystem) -> Result<String, PreviewRefusal>
 {
     return filesystem
         .Read_To_String(from)
@@ -49,7 +49,7 @@ fn Staged_Text<F: FileSystem>(from: &Path, filesystem: &F) -> Result<String, Pre
 }
 
 /// The staged text, checked against the store and turned into a preview.
-fn Previewed(assembly: &Assembly, request: &EditRequest, staged: &str) -> Result<EditPreview, PreviewRefusal>
+fn Preview_Of_Staged_Text(assembly: &Assembly, request: &EditRequest, staged: &str) -> Result<EditPreview, PreviewRefusal>
 {
     let rename = request.rename.as_deref();
 

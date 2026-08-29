@@ -10,10 +10,13 @@
 //! leaving each composition root to invent its own.
 
 use nomos_contracts::RunId;
-use nomos_model::Digest_Of_Parts;
 use nomos_platform::Timestamp;
 use std::sync::atomic::{AtomicU64, Ordering};
 
+// This must stay a mutable, process-lifetime counter -- its whole job is to disambiguate
+// two calls to `Fresh_Run_Id` within the same wall-clock second, which a `const` cannot do
+// (a `const` has no shared state to increment) and no single call site can own, since every
+// caller across the process needs the same monotonic sequence.
 /// A process-local sequence, so two calls within the same wall-clock second still diverge.
 static NEXT_SEQUENCE: AtomicU64 = AtomicU64::new(0);
 
@@ -36,15 +39,17 @@ const DIGEST_PART_COUNT: usize = 3;
 #[must_use]
 pub fn Fresh_Run_Id(now: Timestamp) -> RunId
 {
+    use nomos_model::Digest_Of_Parts;
+
     // atomic-ordering: allow: only used to give two calls in this process different numbers
     // (the doc comment above already covers the uniqueness this buys); nothing else
     // synchronizes on it or reads memory ordered by this counter.
     let sequence = NEXT_SEQUENCE.fetch_add(1, Ordering::Relaxed);
     let seconds = now.Unix_Seconds().to_be_bytes();
-    let process = std::process::id().to_be_bytes();
+    let execution_identifier = std::process::id().to_be_bytes();
     let counter = sequence.to_be_bytes();
 
-    let parts: [&[u8]; DIGEST_PART_COUNT] = [&seconds, &process, &counter];
+    let parts: [&[u8]; DIGEST_PART_COUNT] = [&seconds, &execution_identifier, &counter];
 
     return RunId::From_Digest(Digest_Of_Parts(&parts));
 }

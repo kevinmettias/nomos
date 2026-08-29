@@ -18,7 +18,7 @@ use crate::request::RecordRequest;
 ///
 /// Returns [`EditError`] naming why no single record answered -- see
 /// [`nomos_spec_store::SpecificationStore::Record_Markdown`].
-pub fn Markdown(assembly: &Assembly, request: &RecordRequest) -> Result<RecordProjection, EditError>
+pub fn Rendered_Markdown(assembly: &Assembly, request: &RecordRequest) -> Result<RecordProjection, EditError>
 {
     let revision = request.revision.as_deref();
 

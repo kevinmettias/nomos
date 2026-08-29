@@ -1,6 +1,6 @@
 //! Reading the domain volumes off disk and putting them in.
 
-use super::{Assembly, Path, BTreeMap, Absence, Expected, Ingest_Source_Document, Refused, Subject};
+use super::{Assembly, Path, BTreeMap, Absence, Expected, Ingest_Source_Document, Refused_Absence, Subject};
 
 pub(super) fn Ingest_Volumes(assembly: &mut Assembly, root: &Path, revision: &str)
 {
@@ -172,7 +172,7 @@ pub(super) fn Ingest_Each(
             Ok(written) => blocks = blocks.saturating_add(written),
             Err(error) =>
             {
-                let refusal = Refused(
+                let refusal = Refused_Absence(
                     Subject(&format!("the domain volume {name}")),
                     Expected(&directory.join(name).display().to_string()),
                     &error,

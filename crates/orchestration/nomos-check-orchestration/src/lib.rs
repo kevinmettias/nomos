@@ -14,9 +14,9 @@
 //! `check.rs`, or accept whatever `nomos-cli` computed as fact.
 //!
 //! This crate is the middle one, the same shape `nomos-work-orchestration` is for `work`.
-//! [`command::CheckCommand`] is the request vocabulary. [`Run`] does the composing and the
-//! judging: it takes source already walked and the build variant already read, and hands
-//! back [`outcome::CheckOutcome`], a typed value naming the pipeline's real branches.
+//! [`check_command::CheckCommand`] is the request vocabulary. [`Run`] does the composing and
+//! the judging: it takes source already walked and the build variant already read, and hands
+//! back [`examined::CheckOutcome`], a typed value naming the pipeline's real branches.
 //! Nothing here writes a line of output or picks an exit code.
 //!
 //! # What stays out
@@ -36,16 +36,16 @@
 
 #![forbid(unsafe_code)]
 
-mod command;
+mod check_command;
 mod composition;
+mod examined;
 mod facts;
-mod outcome;
-mod run;
+mod run_context;
 
 #[cfg(test)]
 mod tests;
 
-pub use command::CheckCommand;
+pub use check_command::CheckCommand;
 pub use composition::{Registered, Resolved_Configuration};
-pub use outcome::{Claim, Claim_Of, CheckOutcome, Examined};
-pub use run::{Run, RunContext};
+pub use examined::{Claim, Claim_Of, CheckOutcome, Examined};
+pub use run_context::{Run, RunContext};

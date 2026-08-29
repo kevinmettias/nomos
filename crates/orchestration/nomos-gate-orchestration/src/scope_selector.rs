@@ -27,7 +27,7 @@ impl ScopeSelector
     /// Whether `path` is in scope: included (or nothing was named, so everything is) and
     /// not excluded.
     #[must_use]
-    pub fn Matches(&self, path: &str) -> bool
+    pub fn Is_In_Scope(&self, path: &str) -> bool
     {
         let included = self.include.is_empty() || self.include.iter().any(|prefix| return Is_Under(Prefix(prefix), path));
         let excluded = self.exclude.iter().any(|prefix| return Is_Under(Prefix(prefix), path));
@@ -58,8 +58,8 @@ mod tests
     {
         let selector = ScopeSelector::default();
 
-        assert!(selector.Matches("crates/rules/nomos-rules/src/lib.rs"));
-        assert!(selector.Matches("README.md"));
+        assert!(selector.Is_In_Scope("crates/rules/nomos-rules/src/lib.rs"));
+        assert!(selector.Is_In_Scope("README.md"));
     }
 
     #[test]
@@ -67,8 +67,8 @@ mod tests
     {
         let selector = ScopeSelector { include: vec!["crates/rules".to_owned()], exclude: Vec::new() };
 
-        assert!(selector.Matches("crates/rules/nomos-rules/src/lib.rs"));
-        assert!(!selector.Matches("crates/host/nomos-cli/src/gate.rs"));
+        assert!(selector.Is_In_Scope("crates/rules/nomos-rules/src/lib.rs"));
+        assert!(!selector.Is_In_Scope("crates/host/nomos-cli/src/gate.rs"));
     }
 
     #[test]
@@ -76,8 +76,8 @@ mod tests
     {
         let selector = ScopeSelector { include: vec!["README.md".to_owned()], exclude: Vec::new() };
 
-        assert!(selector.Matches("README.md"));
-        assert!(!selector.Matches("README.md.bak"));
+        assert!(selector.Is_In_Scope("README.md"));
+        assert!(!selector.Is_In_Scope("README.md.bak"));
     }
 
     #[test]
@@ -88,7 +88,7 @@ mod tests
             exclude: vec!["crates/rules/nomos-rules/tests".to_owned()],
         };
 
-        assert!(selector.Matches("crates/rules/nomos-rules/src/lib.rs"));
-        assert!(!selector.Matches("crates/rules/nomos-rules/tests/corpus.rs"));
+        assert!(selector.Is_In_Scope("crates/rules/nomos-rules/src/lib.rs"));
+        assert!(!selector.Is_In_Scope("crates/rules/nomos-rules/tests/corpus.rs"));
     }
 }

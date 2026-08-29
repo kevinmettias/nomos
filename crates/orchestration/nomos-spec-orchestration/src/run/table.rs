@@ -3,7 +3,7 @@
 use nomos_spec_store::{DocumentSource, PathMatch, RowCensus, RowScope, StoreError, TableLine};
 
 use crate::corpus::Assembly;
-use crate::outcome::{TableAnswer, TableRefusal};
+use crate::spec_outcome::{TableAnswer, TableRefusal};
 use crate::request::TableRequest;
 
 /// The rows `request` selects, or why none answered.
@@ -19,9 +19,9 @@ use crate::request::TableRequest;
 /// [`TableRefusal::AmbiguousDocument`] when it matches more than one document,
 /// [`TableRefusal::NoRows`] when the document resolved and `request`'s own narrowing
 /// selected no row, and [`TableRefusal::Store`] when the store could not be read at all.
-pub fn Table(assembly: &Assembly, request: &TableRequest) -> Result<TableAnswer, TableRefusal>
+pub fn Resolved_Table(assembly: &Assembly, request: &TableRequest) -> Result<TableAnswer, TableRefusal>
 {
-    let (uid, tier) = Addressed(assembly, request)?;
+    let (uid, tier) = Addressed_Document(assembly, request)?;
     let read = Read_Table(assembly, uid, request)?;
 
     if read.lines.is_empty()
@@ -43,7 +43,7 @@ pub fn Table(assembly: &Assembly, request: &TableRequest) -> Result<TableAnswer,
 
 /// The one document `request.document` names, or the refusal saying why it names none or
 /// several.
-fn Addressed(assembly: &Assembly, request: &TableRequest) -> Result<(i64, PathMatch), TableRefusal>
+fn Addressed_Document(assembly: &Assembly, request: &TableRequest) -> Result<(i64, PathMatch), TableRefusal>
 {
     let revision = request.revision.as_deref();
     let (matched, tier) = assembly
@@ -79,7 +79,7 @@ fn Read_Table(assembly: &Assembly, uid: i64, request: &TableRequest) -> Result<R
     let document = match assembly.store.Document(uid)
     {
         Ok(Some(document)) => document,
-        Ok(None) => return Err(TableRefusal::Store(Vanished(uid))),
+        Ok(None) => return Err(TableRefusal::Store(Vanished_Document(uid))),
         Err(error) => return Err(TableRefusal::Store(error)),
     };
     let lines = assembly
@@ -98,7 +98,7 @@ fn Read_Table(assembly: &Assembly, uid: i64, request: &TableRequest) -> Result<R
 ///
 /// Its own function because the situation is a store defect rather than a caller's mistake:
 /// the surrogate came out of a query against the same connection.
-fn Vanished(uid: i64) -> StoreError
+fn Vanished_Document(uid: i64) -> StoreError
 {
     return StoreError::Sql(format!(
         "document {uid} resolved and then could not be read back from the same connection"

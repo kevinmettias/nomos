@@ -7,26 +7,26 @@
 //! Grouped rather than flat because these six were the largest single thing at this level
 //! and they are all the same thing: the argument shape of one subcommand.
 //!
-//! Moved verbatim from `nomos-cli::spec::request`, alongside [`crate::command::SpecCommand`]
-//! that carries them. [`submit::SubmitRequest`] is the exception: it moved from
+//! Moved verbatim from `nomos-cli::spec::request`, alongside [`crate::spec_command::SpecCommand`]
+//! that carries them. [`submit_request::SubmitRequest`] is the exception: it moved from
 //! `nomos-cli::request` rather than `nomos-cli::spec::request`, and [`crate::run::Submit`]
-//! that carries it is not a [`crate::command::SpecCommand`] variant -- `OD-HOST-005`'s own
+//! that carries it is not a [`crate::spec_command::SpecCommand`] variant -- `OD-HOST-005`'s own
 //! resolution says a `nomos request submit` invocation is not a `nomos spec` verb by the
 //! CLI's own naming, so it stays a sibling verb this crate answers rather than a tenth case
 //! of [`SpecCommand`]'s own enum.
 
-mod commit;
-mod edit;
-mod freshness;
-mod record;
-mod render;
-mod submit;
-mod table;
+mod commit_request;
+mod edit_request;
+mod freshness_request;
+mod record_request;
+mod render_request;
+mod submit_request;
+mod table_request;
 
-pub use commit::CommitRequest;
-pub use edit::EditRequest;
-pub use freshness::FreshnessRequest;
-pub use record::RecordRequest;
-pub use render::RenderRequest;
-pub use submit::SubmitRequest;
-pub use table::TableRequest;
+pub use commit_request::CommitRequest;
+pub use edit_request::EditRequest;
+pub use freshness_request::FreshnessRequest;
+pub use record_request::RecordRequest;
+pub use render_request::RenderRequest;
+pub use submit_request::SubmitRequest;
+pub use table_request::TableRequest;

@@ -1,8 +1,6 @@
 //! Planning one gate, apart from choosing a platform, selecting scope or rendering the
 //! answer.
 
-use crate::composition::Registered;
-use crate::outcome::GatePlan;
 use crate::{GateCommand, GateOutcome};
 
 /// Composes this gate's rule registry and reports what it holds.
@@ -13,6 +11,9 @@ use crate::{GateCommand, GateOutcome};
 #[must_use]
 pub fn Run(_command: &GateCommand) -> GateOutcome
 {
+    use crate::composition::Registered;
+    use crate::gate_plan::GatePlan;
+
     let registry = match Registered()
     {
         Ok(registry) => registry,

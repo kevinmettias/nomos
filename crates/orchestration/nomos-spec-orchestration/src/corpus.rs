@@ -29,14 +29,14 @@ mod layer;
 mod tests;
 
 pub use roots::DEFAULT_REVISION;
-use layer::{Expected, Ingest_Catalog_File, Ingest_Statement_File, Refused, Subject};
+use layer::{Expected, Ingest_Catalog_File, Ingest_Statement_File, Refused_Absence, Subject};
 
 mod absence;
-mod request;
+mod corpus_request;
 mod assembly;
 
 pub use absence::Absence;
-pub use request::CorpusRequest;
+pub use corpus_request::CorpusRequest;
 pub use assembly::Assembly;
 
 use nomos_spec_ingest::{
@@ -58,7 +58,7 @@ use std::path::{Path, PathBuf};
 /// Returns [`StoreError`] if the database cannot be opened or the embedded records cannot
 /// be seeded. A corpus that cannot be read is not an error: it is an absence, because the
 /// commands over this store still have a true answer to give without it.
-pub fn Assemble(request: &CorpusRequest) -> Result<Assembly, StoreError>
+pub fn Assemble_Corpus(request: &CorpusRequest) -> Result<Assembly, StoreError>
 {
     use roots::Corpus_Root;
     use volumes::Ingest_Volumes;

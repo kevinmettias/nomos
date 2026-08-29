@@ -2,7 +2,7 @@
 //! disposition reduction over an already-judged list of findings.
 
 use crate::{
-    AdoptionPolicy, BaselineDebt, BaselinePolicy, CoveragePolicy, Disposition, Explain_Gate, Explanation, FindingQuery, GateCommand,
+    AdoptionPolicy, BaselineDebt, BaselinePolicy, CoveragePolicy, Disposition_Of_Findings, Explain_Gate, Explanation, FindingQuery, GateCommand,
     GateEnvironment, GateOutcome, GateRunOutcome, GateRunResult, RuleCalibration, RuleSelector, Run, Run_Gate, ScopeSelector, Suppression,
     SuppressionDisposition, SuppressionPolicy,
 };
@@ -343,7 +343,7 @@ fn Test_The_Plan_Should_Not_Vary_By_Root()
 }
 
 /// One finding, built so `gate` and `applicability` are the only knobs a caller of
-/// [`Disposition`] cares about -- everything else here is filler a reader can ignore.
+/// [`Disposition_Of_Findings`] cares about -- everything else here is filler a reader can ignore.
 fn Finding_With(gate: GateCategory, applicability: Applicability) -> Finding
 {
     return Finding {
@@ -363,7 +363,7 @@ fn Finding_With(gate: GateCategory, applicability: Applicability) -> Finding
 #[test]
 fn Test_No_Findings_Should_Pass()
 {
-    assert_eq!(Disposition(&[]), GateRunOutcome::Passed);
+    assert_eq!(Disposition_Of_Findings(&[]), GateRunOutcome::Passed);
 }
 
 /// A finding that cannot fail a build -- advisory, unreachable, or review -- must not flip
@@ -379,7 +379,7 @@ fn Test_A_Non_Blocking_Finding_Should_Pass()
         Finding_With(GateCategory::Blocking, Applicability::NotApplicable),
     ];
 
-    assert_eq!(Disposition(&findings), GateRunOutcome::Passed);
+    assert_eq!(Disposition_Of_Findings(&findings), GateRunOutcome::Passed);
 }
 
 /// The one condition that must flip the disposition: a rule whose enforcer is honored,
@@ -389,7 +389,7 @@ fn Test_A_Blocking_Finding_Should_Fail()
 {
     let findings = vec![Finding_With(GateCategory::Blocking, Applicability::Supported)];
 
-    assert_eq!(Disposition(&findings), GateRunOutcome::Failed);
+    assert_eq!(Disposition_Of_Findings(&findings), GateRunOutcome::Failed);
 }
 
 /// Any blocking finding fails the run, even beside findings that would not have.
@@ -402,7 +402,7 @@ fn Test_One_Blocking_Finding_Among_Many_Should_Fail()
         Finding_With(GateCategory::Review, Applicability::Supported),
     ];
 
-    assert_eq!(Disposition(&findings), GateRunOutcome::Failed);
+    assert_eq!(Disposition_Of_Findings(&findings), GateRunOutcome::Failed);
 }
 
 /// A root that was never walked -- the composition root's own `None`, the same case

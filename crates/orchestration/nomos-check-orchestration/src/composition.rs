@@ -61,10 +61,10 @@ pub fn Registered() -> Result<Registry, RegistryError>
 /// `nomos_rules`, which never depends on a language-provider crate.
 /// [`Recognized_Syntax_Provider`] computes `Recognition::Of_Path` against a real path here,
 /// once, before it is ever digested into a `SubjectId`, and carries the result into
-/// `nomos_rules::SourceFile::preferred_syntax_provider` as data (`crate::run`'s own
+/// `nomos_rules::SourceFile::preferred_syntax_provider` as data (`crate::run_context`'s own
 /// enrichment step) for `nomos_rules::Syntax_Requirement_For` to attach via
 /// `.Preferring(...)` -- never computed inside that crate.
-/// [`crate::facts::materialize::Materialize_Syntax`]'s write side calls the identical
+/// [`crate::facts::dependency_materialization::Materialize_Syntax`]'s write side calls the identical
 /// [`Recognized_Syntax_Provider`], so the two sides agree on which identity a `.rs` or a
 /// `.go` fact is filed under by construction, not by coincidence. With both sides narrowing
 /// to the same provider by the same function, `Resolve` is never asked to rank
@@ -151,11 +151,11 @@ fn Declare_Dependency_Policy_Capability(registry: &mut Registry) -> Result<(), R
 /// This crate is the caller `OD-CAPABILITY-009` names: the one place that may know
 /// `nomos_lang_rust` and `nomos_lang_go` by name to answer an applicability question no
 /// [`Registry::Resolve`] call could, because by the time `Resolve` is reached the subject is
-/// already the opaque digest [`nomos_contracts::SubjectId`] carries. `crate::run`'s own
+/// already the opaque digest [`nomos_contracts::SubjectId`] carries. `crate::run_context`'s own
 /// enrichment step calls this to populate `nomos_rules::SourceFile::preferred_syntax_provider`
 /// before any rule ever sees a source, and
-/// [`crate::facts::materialize::Materialize_Syntax`]'s write side calls it again over the
-/// identical path to decide which provider's own `Materialize` to run. Both call sites
+/// [`crate::facts::dependency_materialization::Materialize_Syntax`]'s write side calls it again over the
+/// identical path to decide which provider's own `Materialize_Syntax_Fact` to run. Both call sites
 /// reach this one function rather than each recomputing `Recognition::Of_Path` for
 /// themselves, so read and write agree on a subject's provider identity by construction.
 #[must_use]

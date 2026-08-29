@@ -8,9 +8,9 @@
 //! [`crate::CheckOutcome::Contradictory`], so there is no longer an intermediate `ExitCode`
 //! for this module to produce).
 
-mod materialize;
+mod dependency_materialization;
 
-pub use materialize::{
+pub use dependency_materialization::{
     DependencyMaterialization, LintMaterialization, Materialize_Dependencies, Materialize_Lint,
     Materialize_Policy, Materialize_Reachability, Materialize_Syntax, PolicyMaterialization,
 };
@@ -19,8 +19,6 @@ use nomos_analysis::Context;
 use nomos_capability::Registry;
 use nomos_rules::SourceFile;
 use nomos_workspace::{BuildVariant, ChangeSource, Workspace, WorkspaceChangeSet, WorkspaceError};
-
-use crate::composition::Resolved_Configuration;
 
 /// The walk applied to an empty workspace, and the context every fact is filed under.
 ///
@@ -35,12 +33,14 @@ use crate::composition::Resolved_Configuration;
 /// [`WorkspaceError`] if the walk cannot be ingested -- in practice only reachable if
 /// `sources` is empty, which the composition root has already refused before calling this
 /// (`CheckOutcome::NoSource`), or if two entries name the same workspace-relative path.
-pub fn Ingested(
+pub fn Ingested_Workspace(
     sources: &[SourceFile],
     registry: &Registry,
     variant: BuildVariant,
 ) -> Result<Context, WorkspaceError>
 {
+    use crate::composition::Resolved_Configuration;
+
     let configuration = Resolved_Configuration(registry);
     let variant_id = variant.Id();
     let mut workspace = Workspace::Empty(variant, configuration);

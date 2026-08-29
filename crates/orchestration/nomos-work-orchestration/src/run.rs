@@ -1,16 +1,14 @@
 //! Running one [`WorkCommand`] against a ledger, generic over the platform it was built
 //! with.
 
-use std::path::Path;
-
 use nomos_ledger::{
-    ExclusionLedger, FileLedger, Finish, Finishing, ItemId, LedgerDocument, LedgerError,
-    LedgerItem, ReleaseOutcome, Territory, Validate,
+    ExclusionLedger, FileLedger, Finish_Item, Finishing, ItemId, LedgerDocument, LedgerError,
+    LedgerItem, ReleaseOutcome, Territory, Validate_Document,
 };
 use nomos_platform::{Clock, CrossProcessLock, FileSystem, ProcessLauncher};
 
-use crate::command::WorkCommand;
-use crate::outcome::{BoardView, ShowView, WorkOutcome};
+use crate::board_view::{BoardView, ShowView, WorkOutcome};
+use crate::work_command::WorkCommand;
 use crate::{ClaimRequest, EndingRequest};
 
 /// Runs one command against `ledger` and hands back what happened, choosing nothing about
@@ -20,8 +18,9 @@ use crate::{ClaimRequest, EndingRequest};
 /// implementation of them: a composition root builds `ledger` and `launcher` from whatever
 /// it has — `nomos-cli` from `nomos-platform-std` today — and this function runs the same
 /// way regardless. That is the seam `OD-HOST-001` asked for: a second composition root can
-/// depend on this crate, build its own `F`, `C`, `L` and `P`, and call [`Run`] without also
-/// taking on how `nomos-cli` chooses those four or how it prints an answer.
+/// depend on this crate, build its own `Filesystem`, `ClockSource`, `Lock` and `Launcher`,
+/// and call [`Run`] without also taking on how `nomos-cli` chooses those four or how it
+/// prints an answer.
 ///
 /// `published` is asked for lazily and only reached by [`WorkCommand::Add`]. The territory
 /// this repository's own records already occupy is not answerable through [`FileSystem`] —
@@ -36,17 +35,17 @@ use crate::{ClaimRequest, EndingRequest};
 /// field off `command`, so each hands off to a per-command function below that owns both the
 /// single ledger call and the [`WorkOutcome`] wrap -- naming what that arm already was,
 /// rather than leaving `Run` itself carry every arm's own ledger call inline.
-pub fn Run<F, C, L, P>(
+pub fn Run<Filesystem, ClockSource, Lock, Launcher>(
     command: &WorkCommand,
-    ledger: &mut FileLedger<F, C, L>,
-    launcher: &P,
+    ledger: &mut FileLedger<Filesystem, ClockSource, Lock>,
+    launcher: &Launcher,
     published: impl FnOnce() -> Territory,
 ) -> WorkOutcome
 where
-    F: FileSystem,
-    C: Clock,
-    L: CrossProcessLock,
-    P: ProcessLauncher,
+    Filesystem: FileSystem,
+    ClockSource: Clock,
+    Lock: CrossProcessLock,
+    Launcher: ProcessLauncher,
 {
     return match command
     {
@@ -59,14 +58,14 @@ where
         WorkCommand::TakeOver(request) => TakeOver_Outcome(ledger, request),
         WorkCommand::Abandon(request) => Abandon_Outcome(ledger, request),
         WorkCommand::Decline(request) => Decline_Outcome(ledger, request),
-        WorkCommand::Validate => WorkOutcome::Validate(Validated(ledger)),
+        WorkCommand::Validate => WorkOutcome::Validate(Validated_Board(ledger)),
         WorkCommand::Audit => WorkOutcome::Audit(Board_View(ledger)),
     };
 }
 
 /// The board and the moment it was read, for `list` and `audit` alike.
-fn Board_View<F: FileSystem, C: Clock, L: CrossProcessLock>(
-    ledger: &FileLedger<F, C, L>,
+fn Board_View<Filesystem: FileSystem, ClockSource: Clock, Lock: CrossProcessLock>(
+    ledger: &FileLedger<Filesystem, ClockSource, Lock>,
 ) -> Result<BoardView, LedgerError>
 {
     let document = ledger.Load()?;
@@ -76,8 +75,8 @@ fn Board_View<F: FileSystem, C: Clock, L: CrossProcessLock>(
 }
 
 /// The board, the moment, and this tree's revision, for `show`.
-fn Show_View<F: FileSystem, C: Clock, L: CrossProcessLock>(
-    ledger: &FileLedger<F, C, L>,
+fn Show_View<Filesystem: FileSystem, ClockSource: Clock, Lock: CrossProcessLock>(
+    ledger: &FileLedger<Filesystem, ClockSource, Lock>,
 ) -> Result<ShowView, LedgerError>
 {
     let document = ledger.Load()?;
@@ -91,20 +90,22 @@ fn Show_View<F: FileSystem, C: Clock, L: CrossProcessLock>(
     });
 }
 
-/// This tree's revision right now, read the same way [`nomos_ledger::Finish`] reads it when
+/// This tree's revision right now, read the same way [`nomos_ledger::Finish_Item`] reads it when
 /// it stamps a [`nomos_ledger::VerificationRecord`] — `.git/HEAD`, following one loose ref.
 ///
-/// A second reading rather than a shared one: the resolution `nomos_ledger::Finish` uses to
+/// A second reading rather than a shared one: the resolution `nomos_ledger::Finish_Item` uses to
 /// stamp a record is private to that crate's `finish` module. `docs/records/OD-LEDGER-027-
 /// ...md` says so, for the reading this moved from.
 ///
 /// `None` on any failure — no `.git` here, a packed ref this build does not chase, or any
 /// other read error. `show`'s staleness line treats that as its own case rather than as
 /// agreement with a recorded revision.
-fn Current_Revision<F: FileSystem, C: Clock, L: CrossProcessLock>(
-    ledger: &FileLedger<F, C, L>,
+fn Current_Revision<Filesystem: FileSystem, ClockSource: Clock, Lock: CrossProcessLock>(
+    ledger: &FileLedger<Filesystem, ClockSource, Lock>,
 ) -> Option<String>
 {
+    use std::path::Path;
+
     let head = ledger.Read_File(Path::new(".git/HEAD")).ok()?;
     let head = head.trim();
 
@@ -120,8 +121,8 @@ fn Current_Revision<F: FileSystem, C: Clock, L: CrossProcessLock>(
 }
 
 /// The outcome of adding `item` to the board under `amending`, for [`WorkCommand::Add`].
-fn Add_Outcome<F: FileSystem, C: Clock, L: CrossProcessLock>(
-    ledger: &mut FileLedger<F, C, L>,
+fn Add_Outcome<Filesystem: FileSystem, ClockSource: Clock, Lock: CrossProcessLock>(
+    ledger: &mut FileLedger<Filesystem, ClockSource, Lock>,
     item: &LedgerItem,
     amending: &Territory,
     published: impl FnOnce() -> Territory,
@@ -134,22 +135,22 @@ fn Add_Outcome<F: FileSystem, C: Clock, L: CrossProcessLock>(
 
 /// The outcome of running `item`'s verification predicate as `holder` claims it, for
 /// [`WorkCommand::Finish`].
-fn Finish_Outcome<F: FileSystem, C: Clock, L: CrossProcessLock, P: ProcessLauncher>(
-    ledger: &mut FileLedger<F, C, L>,
-    launcher: &P,
+fn Finish_Outcome<Filesystem: FileSystem, ClockSource: Clock, Lock: CrossProcessLock, Launcher: ProcessLauncher>(
+    ledger: &mut FileLedger<Filesystem, ClockSource, Lock>,
+    launcher: &Launcher,
     item: &ItemId,
     holder: &str,
 ) -> WorkOutcome
 {
     let finishing = Finishing { item, holder };
-    let finished = Finish(ledger, launcher, &finishing, None);
+    let finished = Finish_Item(ledger, launcher, &finishing, None);
 
     return WorkOutcome::Finish(finished);
 }
 
 /// The outcome of granting `request`, for [`WorkCommand::Claim`].
-fn Claim_Outcome<F: FileSystem, C: Clock, L: CrossProcessLock>(
-    ledger: &mut FileLedger<F, C, L>,
+fn Claim_Outcome<Filesystem: FileSystem, ClockSource: Clock, Lock: CrossProcessLock>(
+    ledger: &mut FileLedger<Filesystem, ClockSource, Lock>,
     request: &ClaimRequest,
 ) -> WorkOutcome
 {
@@ -159,8 +160,8 @@ fn Claim_Outcome<F: FileSystem, C: Clock, L: CrossProcessLock>(
 }
 
 /// The outcome of extending `request`'s lease, for [`WorkCommand::Renew`].
-fn Renew_Outcome<F: FileSystem, C: Clock, L: CrossProcessLock>(
-    ledger: &mut FileLedger<F, C, L>,
+fn Renew_Outcome<Filesystem: FileSystem, ClockSource: Clock, Lock: CrossProcessLock>(
+    ledger: &mut FileLedger<Filesystem, ClockSource, Lock>,
     request: &ClaimRequest,
 ) -> WorkOutcome
 {
@@ -170,8 +171,8 @@ fn Renew_Outcome<F: FileSystem, C: Clock, L: CrossProcessLock>(
 }
 
 /// The outcome of taking over `request`'s lapsed claim, for [`WorkCommand::TakeOver`].
-fn TakeOver_Outcome<F: FileSystem, C: Clock, L: CrossProcessLock>(
-    ledger: &mut FileLedger<F, C, L>,
+fn TakeOver_Outcome<Filesystem: FileSystem, ClockSource: Clock, Lock: CrossProcessLock>(
+    ledger: &mut FileLedger<Filesystem, ClockSource, Lock>,
     request: &ClaimRequest,
 ) -> WorkOutcome
 {
@@ -182,8 +183,8 @@ fn TakeOver_Outcome<F: FileSystem, C: Clock, L: CrossProcessLock>(
 
 /// The outcome of giving up `request`'s claim without finishing it, for
 /// [`WorkCommand::Abandon`].
-fn Abandon_Outcome<F: FileSystem, C: Clock, L: CrossProcessLock>(
-    ledger: &mut FileLedger<F, C, L>,
+fn Abandon_Outcome<Filesystem: FileSystem, ClockSource: Clock, Lock: CrossProcessLock>(
+    ledger: &mut FileLedger<Filesystem, ClockSource, Lock>,
     request: &EndingRequest,
 ) -> WorkOutcome
 {
@@ -196,8 +197,8 @@ fn Abandon_Outcome<F: FileSystem, C: Clock, L: CrossProcessLock>(
 }
 
 /// The outcome of ending `request`'s item as not being work, for [`WorkCommand::Decline`].
-fn Decline_Outcome<F: FileSystem, C: Clock, L: CrossProcessLock>(
-    ledger: &mut FileLedger<F, C, L>,
+fn Decline_Outcome<Filesystem: FileSystem, ClockSource: Clock, Lock: CrossProcessLock>(
+    ledger: &mut FileLedger<Filesystem, ClockSource, Lock>,
     request: &EndingRequest,
 ) -> WorkOutcome
 {
@@ -207,12 +208,12 @@ fn Decline_Outcome<F: FileSystem, C: Clock, L: CrossProcessLock>(
 }
 
 /// The board, once it is known to satisfy its own invariants.
-fn Validated<F: FileSystem, C: Clock, L: CrossProcessLock>(
-    ledger: &FileLedger<F, C, L>,
+fn Validated_Board<Filesystem: FileSystem, ClockSource: Clock, Lock: CrossProcessLock>(
+    ledger: &FileLedger<Filesystem, ClockSource, Lock>,
 ) -> Result<LedgerDocument, LedgerError>
 {
     let document = ledger.Load()?;
-    let violations = Validate(&document, ledger.Now());
+    let violations = Validate_Document(&document, ledger.Now());
     if !violations.is_empty()
     {
         return Err(LedgerError::Invalid { violations });

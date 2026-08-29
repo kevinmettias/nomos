@@ -6,7 +6,7 @@
 //! `CheckCommand` each have one. This crate is that seam, built over four increments and now
 //! complete: the [`SpecCommand`] vocabulary and its `*Request` types moved here verbatim from
 //! `nomos-cli::spec::command` and `nomos-cli::spec::request`, the corpus-assembly plumbing
-//! every verb needs ([`corpus::Assemble`], moved from `nomos-cli::corpus`) moved with them,
+//! every verb needs ([`corpus::Assemble_Corpus`], moved from `nomos-cli::corpus`) moved with them,
 //! and all nine verbs are wired all the way through: [`SpecCommand::Profiles`] and
 //! [`SpecCommand::Sources`] (increment 1); [`SpecCommand::Record`], [`SpecCommand::Table`]
 //! and [`SpecCommand::Markdown`] (increment 2), the three read-only verbs that resolve an
@@ -22,13 +22,13 @@
 //! `OD-HOST-002` named a fourth control-command group, `request::Command`, that family 9 left
 //! open. `OD-HOST-005` decided its one verb, `Submit`, is not a fourth peer crate at some band
 //! above 40: reading `nomos-cli::request` whole showed its real work was already three calls
-//! into this crate's own domain -- [`corpus::Assemble`], `nomos-spec-store`'s
+//! into this crate's own domain -- [`corpus::Assemble_Corpus`], `nomos-spec-store`'s
 //! `Accept_Submission`, and, through `--into`, the same `subject-dossier` render
-//! [`SpecCommand::Render`] already wraps. [`Submit`] is that verb, added here at no new band
+//! [`SpecCommand::Render`] already wraps. [`Submit_Corpus_Request`] is that verb, added here at no new band
 //! and no new crate -- but it is not a tenth [`SpecCommand`] variant, because that record's
 //! own resolution is explicit that "a `nomos request submit` invocation is not a `nomos spec`
 //! verb by the CLI's own naming": `SpecCommand` and [`SpecOutcome`] stay exactly the nine
-//! verbs `nomos spec` answers, and [`Submit`] is a sibling of [`Run`] over its own
+//! verbs `nomos spec` answers, and [`Submit_Corpus_Request`] is a sibling of [`Run`] over its own
 //! [`SubmitRequest`] and [`SubmitAnswer`]/[`SubmitRefusal`] pair instead. `nomos request
 //! submit` is still its own CLI surface -- `nomos-cli::request` keeps its own argument
 //! parsing, exit codes and text rendering, exactly as `nomos-cli::spec` does for `SpecCommand`
@@ -40,7 +40,7 @@
 //! Both verbs' old homes in `nomos-cli::spec::verb::{render,freshness}` read and wrote a
 //! rendered body and its sidecar through raw `std::fs`, unlike `nomos-work-orchestration`'s
 //! `Run`, which is generic over [`nomos_platform`]'s traits throughout. This crate matched
-//! that seam for these two verbs specifically: [`run::Render`] and [`run::Freshness`] take
+//! that seam for these two verbs specifically: [`run::Rendered_Projection`] and [`run::Freshness_Of_Render`] take
 //! `filesystem: &F where F: nomos_platform::FileSystem`, and [`Run`] itself carries the type
 //! parameter for all nine verbs even though five of them never touch it — the same shape
 //! `nomos_work_orchestration::Run` already has for `F`, `C`, `L` and `P`.
@@ -49,7 +49,7 @@
 //! single-file operations at paths this crate already knows before it opens either one --
 //! exactly [`nomos_platform::FileSystem`]'s shape (read, atomically-replace, exists), and
 //! nothing like the directory listing that port deliberately does not cover (why
-//! [`corpus::Assemble`]'s own walk and `nomos-cli::work::Published_Records` both stay
+//! [`corpus::Assemble_Corpus`]'s own walk and `nomos-cli::work::Published_Records` both stay
 //! client-side instead). Going through it is also a strict improvement, not a neutral
 //! rewrite: the code it replaces wrote with `std::fs::write` after `std::fs::create_dir_all`,
 //! a truncating write with a window in which the file is empty or half-written --
@@ -67,14 +67,14 @@
 //! [`nomos_platform::FileSystem::Read_To_String`] reads one whole file and does not care who
 //! chose the path — an author-staged `--from` file is still exactly one file, read whole, the
 //! same operation `Render` already performs on paths it computes itself. [`run::preview`]
-//! goes through it: [`run::Preview`] takes `filesystem: &F` and reads `--from` with
+//! goes through it: [`run::Preview_Staged_Edit`] takes `filesystem: &F` and reads `--from` with
 //! [`nomos_platform::FileSystem::Read_To_String`]. The benefit is the same one increment 3
 //! already banked for `Render` — a caller can hand `Preview` a fake `FileSystem` and exercise
 //! a missing `--from` without touching a real disk.
 //!
 //! `Commit` follows for the same reason on its write half: the record's committed bytes land
 //! at `into.join(&report.path)`, a caller-known root joined with a store-produced relative
-//! path — exactly [`run::Render`]'s own shape, through
+//! path — exactly [`run::Rendered_Projection`]'s own shape, through
 //! [`nomos_platform::FileSystem::Replace_Atomically`] for the same durability reason. See
 //! [`run::commit`] for that half.
 //!
@@ -84,29 +84,29 @@
 //! port method for this crate to route through even if the reasoning above otherwise applied.
 //! Extending `nomos-platform` is out of this crate's territory, so [`run::commit`] calls
 //! `std::fs::remove_file` directly for that one step — the same arrangement
-//! [`corpus::Assemble`]'s own directory walk already has for an operation the port does not
+//! [`corpus::Assemble_Corpus`]'s own directory walk already has for an operation the port does not
 //! cover, not a departure from the pattern.
 //!
 //! Argument parsing (`spec/parsing.rs`), exit-code mapping (`spec/exit_code.rs`) and text
 //! rendering (`spec/reporting.rs`, and `Note_Absences`'s own decision about *whether* to
 //! print an absence) all stay in `nomos-cli`, the same discipline
 //! `nomos-check-orchestration` already set: this crate returns typed data and writes only
-//! the files a verb's own job is to write ([`run::Render`]'s projection,
-//! [`run::Commit`]'s committed record) — never a line of commentary about either one.
+//! the files a verb's own job is to write ([`run::Rendered_Projection`]'s projection,
+//! [`run::Commit_Staged_Edit`]'s committed record) — never a line of commentary about either one.
 
 #![forbid(unsafe_code)]
 
 pub mod corpus;
-mod command;
-mod outcome;
+mod spec_command;
+mod spec_outcome;
 mod request;
 mod run;
 
 #[cfg(test)]
 mod tests;
 
-pub use command::SpecCommand;
-pub use outcome::{
+pub use spec_command::SpecCommand;
+pub use spec_outcome::{
     CommitAnswer, CommitRefusal, CommitRefusalError, CommitRefusalKind, FreshnessAnswer, FreshnessRefusal,
     PreviewRefusal, ProfileOutcome, RecordAnswer, RecordRefusal, RenderAnswer, RenderRefusal, Reproduction,
     SourcesAnswer, SpecOutcome, SubmitAnswer, SubmitRefusal, TableAnswer, TableRefusal, VacateOutcome, Vacated,
@@ -115,4 +115,7 @@ pub use outcome::{
 pub use request::{
     CommitRequest, EditRequest, FreshnessRequest, RecordRequest, RenderRequest, SubmitRequest, TableRequest,
 };
-pub use run::{Commit, Freshness, Markdown, Preview, Profiles, Record, Render, Run, Sources, Submit, Table};
+pub use run::{
+    Commit_Staged_Edit, Enumerated_Sources, Freshness_Of_Render, Preview_Staged_Edit, Profiles, Rendered_Markdown,
+    Rendered_Projection, Resolved_Record, Resolved_Table, Run, Submit_Corpus_Request,
+};

@@ -1,7 +1,7 @@
 //! Resolving `nomos spec record`'s request against an assembled store.
 
 use crate::corpus::Assembly;
-use crate::outcome::{RecordAnswer, RecordRefusal};
+use crate::spec_outcome::{RecordAnswer, RecordRefusal};
 use crate::request::RecordRequest;
 
 /// The one document behind `request.id`, or why none answered.
@@ -22,7 +22,7 @@ use crate::request::RecordRequest;
 // variant past `clippy::result_large_err`'s default threshold without there being a smaller
 // type that says the same thing.
 #[allow(clippy::result_large_err)]
-pub fn Record(assembly: &Assembly, request: &RecordRequest) -> Result<RecordAnswer, RecordRefusal>
+pub fn Resolved_Record(assembly: &Assembly, request: &RecordRequest) -> Result<RecordAnswer, RecordRefusal>
 {
     let revision = request.revision.as_deref();
     let documents = assembly

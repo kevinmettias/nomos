@@ -304,7 +304,7 @@ fn Test_Materialize_Dependencies_Should_Return_Real_Workspace_Members()
     // is enough to build a real one, the same way `Findings_Over`'s own fixtures do.
     let placeholder = [Source("placeholder.rs", "pub fn Placeholder() {}\n")];
     let registry = crate::composition::Registered().expect("fixture composition");
-    let context = crate::facts::Ingested(&placeholder, &registry, Test_Variant()).expect("a single real file ingests");
+    let context = crate::facts::Ingested_Workspace(&placeholder, &registry, Test_Variant()).expect("a single real file ingests");
     let mut store = MemoryFactStore::New();
 
     let crate::facts::DependencyMaterialization { sources, findings } =
@@ -331,7 +331,7 @@ fn Test_Materialize_Lint_Should_Return_Real_Workspace_Members()
 {
     let placeholder = [Source("placeholder.rs", "pub fn Placeholder() {}\n")];
     let registry = crate::composition::Registered().expect("fixture composition");
-    let context = crate::facts::Ingested(&placeholder, &registry, Test_Variant()).expect("a single real file ingests");
+    let context = crate::facts::Ingested_Workspace(&placeholder, &registry, Test_Variant()).expect("a single real file ingests");
     let mut store = MemoryFactStore::New();
 
     let crate::facts::LintMaterialization { sources, findings } =
@@ -362,7 +362,7 @@ fn Test_Materialize_Policy_Should_Return_The_Real_Workspace_Fact()
 {
     let placeholder = [Source("placeholder.rs", "pub fn Placeholder() {}\n")];
     let registry = crate::composition::Registered().expect("fixture composition");
-    let context = crate::facts::Ingested(&placeholder, &registry, Test_Variant()).expect("a single real file ingests");
+    let context = crate::facts::Ingested_Workspace(&placeholder, &registry, Test_Variant()).expect("a single real file ingests");
     let mut store = MemoryFactStore::New();
 
     let crate::facts::PolicyMaterialization { sources, findings } =
@@ -480,9 +480,9 @@ fn Test_A_Deselected_Dependency_Policy_Rule_Should_Not_Launch_Cargo_Deny()
 }
 
 /// Ingests `ingested` into a real fact store and judges `judged` over it -- the split
-/// [`crate::run::Run`] does not offer, assembled here from the crate's own private pieces.
+/// [`crate::run_context::Run`] does not offer, assembled here from the crate's own private pieces.
 ///
-/// `judged` is run through [`crate::run::Recognized`] before the rule ever sees it, the
+/// `judged` is run through [`crate::run_context::Recognized_Sources`] before the rule ever sees it, the
 /// identical enrichment `Run` gives every real caller: `Check_Completeness_Mirrors` narrows
 /// its own `Require` call by `SourceFile::preferred_syntax_provider`, and a fixture built by
 /// hand needs that field populated the same way a real walk's sources would be, or `.rs`
@@ -491,11 +491,11 @@ fn Test_A_Deselected_Dependency_Policy_Rule_Should_Not_Launch_Cargo_Deny()
 fn Findings_Over(ingested: &[SourceFile], judged: &[SourceFile]) -> Vec<Finding>
 {
     let registry = crate::composition::Registered().expect("the fixture composition is this crate's own");
-    let context = crate::facts::Ingested(ingested, &registry, Test_Variant()).expect("the fixture is a valid tree");
+    let context = crate::facts::Ingested_Workspace(ingested, &registry, Test_Variant()).expect("the fixture is a valid tree");
     let mut store = MemoryFactStore::New();
     let _written = crate::facts::Materialize_Syntax(ingested, &context, &mut store);
 
-    let judged = crate::run::Recognized(judged);
+    let judged = crate::run_context::Recognized_Sources(judged);
     let mut reader = Reader::On(&store, &registry, context);
     return Check_Completeness_Mirrors(&judged, &mut reader);
 }

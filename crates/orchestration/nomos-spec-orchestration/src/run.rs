@@ -14,22 +14,22 @@ use nomos_platform::FileSystem;
 use nomos_spec_project::{Catalogue, Profile, ProjectError};
 use nomos_spec_store::StoreError;
 
-use crate::command::SpecCommand;
-use crate::corpus::{Assemble, Assembly, CorpusRequest};
-use crate::outcome::{
+use crate::spec_command::SpecCommand;
+use crate::corpus::{Assemble_Corpus, Assembly, CorpusRequest};
+use crate::spec_outcome::{
     CommitRefusal, FreshnessRefusal, PreviewRefusal, RecordRefusal, RenderRefusal, SourcesAnswer, SpecOutcome,
     TableRefusal,
 };
 use crate::request::{CommitRequest, EditRequest, FreshnessRequest, RecordRequest, RenderRequest, TableRequest};
 
-pub use commit::Commit;
-pub use freshness::Freshness;
-pub use markdown::Markdown;
-pub use preview::Preview;
-pub use record::Record;
-pub use render::Render;
-pub use submit::Submit;
-pub use table::Table;
+pub use commit::Commit_Staged_Edit;
+pub use freshness::Freshness_Of_Render;
+pub use markdown::Rendered_Markdown;
+pub use preview::Preview_Staged_Edit;
+pub use record::Resolved_Record;
+pub use render::Rendered_Projection;
+pub use submit::Submit_Corpus_Request;
+pub use table::Resolved_Table;
 
 /// The shipped projection catalogue.
 ///
@@ -55,7 +55,7 @@ pub fn Profiles() -> Result<Vec<Profile>, ProjectError>
 /// in the same invocation may already have paid for the assembly, and re-paying it here
 /// would read the corpus twice for one answer.
 #[must_use]
-pub fn Sources(assembly: &Assembly) -> SourcesAnswer
+pub fn Enumerated_Sources(assembly: &Assembly) -> SourcesAnswer
 {
     return SourcesAnswer {
         read: assembly.read.clone(),
@@ -74,7 +74,7 @@ pub fn Sources(assembly: &Assembly) -> SourcesAnswer
 /// takes `F`, `C`, `L` and `P` for every [`nomos_ledger`] verb even the ones that touch none
 /// of them, because one generic `Run` a caller can depend on without also depending on
 /// `nomos-platform-std` is worth more than sparing the five that do not need `F` a type
-/// parameter. [`Submit`] is generic over [`FileSystem`] the same way, for the same reason
+/// parameter. [`Submit_Corpus_Request`] is generic over [`FileSystem`] the same way, for the same reason
 /// [`crate::run::render`] gives -- it just is not one of this function's nine cases, per
 /// [`SpecCommand`]'s own module documentation.
 ///
@@ -83,14 +83,14 @@ pub fn Sources(assembly: &Assembly) -> SourcesAnswer
 /// a caller asking `nomos-spec-orchestration` for any of them fails on the same
 /// store-assembly error every other verb would rather than a bespoke one.
 #[must_use]
-pub fn Run<F: FileSystem>(command: &SpecCommand, request: &CorpusRequest, filesystem: &F) -> SpecOutcome
+pub fn Run<Filesystem: FileSystem>(command: &SpecCommand, request: &CorpusRequest, filesystem: &Filesystem) -> SpecOutcome
 {
     if let SpecCommand::Profiles = command
     {
         return SpecOutcome::Profiles(Profiles());
     }
 
-    let assembly = match Assemble(request)
+    let assembly = match Assemble_Corpus(request)
     {
         Ok(assembly) => assembly,
         Err(error) => return Outcome_For(command, Err(error), filesystem),
@@ -106,10 +106,10 @@ pub fn Run<F: FileSystem>(command: &SpecCommand, request: &CorpusRequest, filesy
 /// inline: each helper is the answer to "what does `nomos spec <verb>` do with an assembly,"
 /// nameable on its own, and this function is left as exactly the dispatch its own doc
 /// comment already promises -- match the verb, hand the assembly to the verb's own outcome.
-fn Outcome_For<F: FileSystem>(
+fn Outcome_For<Filesystem: FileSystem>(
     command: &SpecCommand,
     assembled: Result<Assembly, StoreError>,
-    filesystem: &F,
+    filesystem: &Filesystem,
 ) -> SpecOutcome
 {
     return match command
@@ -128,7 +128,7 @@ fn Outcome_For<F: FileSystem>(
 
 fn Sources_Outcome(assembled: Result<Assembly, StoreError>) -> SpecOutcome
 {
-    return SpecOutcome::Sources(assembled.map(|assembly| return Sources(&assembly)));
+    return SpecOutcome::Sources(assembled.map(|assembly| return Enumerated_Sources(&assembly)));
 }
 
 fn Record_Outcome(assembled: Result<Assembly, StoreError>, request: &RecordRequest) -> SpecOutcome
@@ -136,7 +136,7 @@ fn Record_Outcome(assembled: Result<Assembly, StoreError>, request: &RecordReque
     return SpecOutcome::Record(
         assembled
             .map_err(RecordRefusal::Store)
-            .and_then(|assembly| return Record(&assembly, request)),
+            .and_then(|assembly| return Resolved_Record(&assembly, request)),
     );
 }
 
@@ -145,33 +145,33 @@ fn Table_Outcome(assembled: Result<Assembly, StoreError>, request: &TableRequest
     return SpecOutcome::Table(
         assembled
             .map_err(TableRefusal::Store)
-            .and_then(|assembly| return Table(&assembly, request)),
+            .and_then(|assembly| return Resolved_Table(&assembly, request)),
     );
 }
 
-fn Render_Outcome<F: FileSystem>(
+fn Render_Outcome<Filesystem: FileSystem>(
     assembled: Result<Assembly, StoreError>,
     request: &RenderRequest,
-    filesystem: &F,
+    filesystem: &Filesystem,
 ) -> SpecOutcome
 {
     return SpecOutcome::Render(
         assembled
             .map_err(RenderRefusal::Store)
-            .and_then(|assembly| return Render(&assembly, request, filesystem)),
+            .and_then(|assembly| return Rendered_Projection(&assembly, request, filesystem)),
     );
 }
 
-fn Freshness_Outcome<F: FileSystem>(
+fn Freshness_Outcome<Filesystem: FileSystem>(
     assembled: Result<Assembly, StoreError>,
     request: &FreshnessRequest,
-    filesystem: &F,
+    filesystem: &Filesystem,
 ) -> SpecOutcome
 {
     return SpecOutcome::Freshness(
         assembled
             .map_err(FreshnessRefusal::Store)
-            .and_then(|assembly| return Freshness(&assembly, request, filesystem)),
+            .and_then(|assembly| return Freshness_Of_Render(&assembly, request, filesystem)),
     );
 }
 
@@ -180,28 +180,28 @@ fn Markdown_Outcome(assembled: Result<Assembly, StoreError>, request: &RecordReq
     return SpecOutcome::Markdown(
         assembled
             .map_err(nomos_spec_store::EditError::Store)
-            .and_then(|assembly| return Markdown(&assembly, request)),
+            .and_then(|assembly| return Rendered_Markdown(&assembly, request)),
     );
 }
 
-fn Preview_Outcome<F: FileSystem>(
+fn Preview_Outcome<Filesystem: FileSystem>(
     assembled: Result<Assembly, StoreError>,
     request: &EditRequest,
-    filesystem: &F,
+    filesystem: &Filesystem,
 ) -> SpecOutcome
 {
     return SpecOutcome::Preview(
         assembled
             .map_err(nomos_spec_store::EditError::Store)
             .map_err(PreviewRefusal::Edit)
-            .and_then(|assembly| return Preview(&assembly, request, filesystem)),
+            .and_then(|assembly| return Preview_Staged_Edit(&assembly, request, filesystem)),
     );
 }
 
-fn Commit_Outcome<F: FileSystem>(
+fn Commit_Outcome<Filesystem: FileSystem>(
     assembled: Result<Assembly, StoreError>,
     request: &CommitRequest,
-    filesystem: &F,
+    filesystem: &Filesystem,
 ) -> SpecOutcome
 {
     return SpecOutcome::Commit(
@@ -209,6 +209,6 @@ fn Commit_Outcome<F: FileSystem>(
             .map_err(nomos_spec_store::EditError::Store)
             .map_err(PreviewRefusal::Edit)
             .map_err(CommitRefusal::from)
-            .and_then(|mut assembly| return Commit(&mut assembly, request, filesystem)),
+            .and_then(|mut assembly| return Commit_Staged_Edit(&mut assembly, request, filesystem)),
     );
 }

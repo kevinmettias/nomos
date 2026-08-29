@@ -6,16 +6,16 @@ use nomos_platform_std::StdFileSystem;
 
 use nomos_spec_model::{Origin, SubmissionKind, SubmissionState};
 
-use crate::corpus::{Assemble, CorpusRequest};
-use crate::command::SpecCommand;
-use crate::outcome::{
+use crate::corpus::{Assemble_Corpus, CorpusRequest};
+use crate::spec_command::SpecCommand;
+use crate::spec_outcome::{
     CommitAnswer, FreshnessRefusal, PreviewRefusal, RecordRefusal, RenderRefusal, Reproduction, SpecOutcome,
     SubmitRefusal, TableRefusal, Verdict,
 };
 use crate::request::{
     CommitRequest, EditRequest, FreshnessRequest, RecordRequest, RenderRequest, SubmitRequest, TableRequest,
 };
-use crate::run::{Profiles, Run, Submit};
+use crate::run::{Profiles, Run, Submit_Corpus_Request};
 
 /// A corpus request naming no corpus at all, so every test below runs on a machine that
 /// has never heard of the v14 corpus.
@@ -505,10 +505,11 @@ fn Complete_Feature_Request(id: &str, into: Option<PathBuf>) -> SubmitRequest
 #[test]
 fn Test_Submit_Should_Accept_A_Complete_Submission_With_Submitted_Origin()
 {
-    let mut assembly = Assemble(&No_Corpus()).expect("assembles from the embedded records alone");
+    let mut assembly = Assemble_Corpus(&No_Corpus()).expect("assembles from the embedded records alone");
 
     let request = Complete_Feature_Request("FR-ORCH-001", None);
-    let answer = Submit(&mut assembly, &request, &StdFileSystem).expect("a complete feature request is accepted");
+    let answer =
+        Submit_Corpus_Request(&mut assembly, &request, &StdFileSystem).expect("a complete feature request is accepted");
 
     assert_eq!(answer.submission.submitted_through, "test");
     assert!(answer.submission.values.iter().all(|value| return value.origin == Origin::Submitted));
@@ -519,10 +520,11 @@ fn Test_Submit_Should_Accept_A_Complete_Submission_With_Submitted_Origin()
 fn Test_Submit_Should_Place_Its_Subject_Dossier_Projection_When_Into_Is_Given()
 {
     let into = Scratch("submit");
-    let mut assembly = Assemble(&No_Corpus()).expect("assembles from the embedded records alone");
+    let mut assembly = Assemble_Corpus(&No_Corpus()).expect("assembles from the embedded records alone");
 
     let request = Complete_Feature_Request("FR-ORCH-002", Some(into));
-    let answer = Submit(&mut assembly, &request, &StdFileSystem).expect("a complete feature request is accepted");
+    let answer =
+        Submit_Corpus_Request(&mut assembly, &request, &StdFileSystem).expect("a complete feature request is accepted");
     let written = answer.written.expect("--into was given");
 
     assert_eq!(written.id, "subject-dossier");
@@ -535,10 +537,10 @@ fn Test_Submit_Should_Refuse_An_Incomplete_Submission_And_Write_Nothing()
 {
     let mut request = Complete_Feature_Request("FR-ORCH-003", None);
     request.fields.truncate(1);
-    let mut assembly = Assemble(&No_Corpus()).expect("assembles from the embedded records alone");
+    let mut assembly = Assemble_Corpus(&No_Corpus()).expect("assembles from the embedded records alone");
 
-    let SubmitRefusal::Refused(refusal) =
-        Submit(&mut assembly, &request, &StdFileSystem).expect_err("an incomplete submission must be refused")
+    let SubmitRefusal::Refused(refusal) = Submit_Corpus_Request(&mut assembly, &request, &StdFileSystem)
+        .expect_err("an incomplete submission must be refused")
     else
     {
         panic!("an incomplete submission must refuse SubmitRefusal::Refused");

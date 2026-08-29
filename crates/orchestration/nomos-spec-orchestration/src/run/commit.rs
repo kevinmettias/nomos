@@ -15,7 +15,7 @@
 //! atomically replace, and check existence -- and deletion, by its own documentation, is
 //! deliberately not a fourth. That is not a gap this crate's territory can close (extending
 //! `nomos-platform` is out of scope here), so vacating stays a direct `std::fs::remove_file`
-//! call, the same way [`crate::corpus::Assemble`]'s own directory walk stays outside the port
+//! call, the same way [`crate::corpus::Assemble_Corpus`]'s own directory walk stays outside the port
 //! for an operation it does not cover either.
 
 use nomos_platform::FileSystem;
@@ -23,9 +23,8 @@ use nomos_spec_store::EditPreview;
 use std::path::Path;
 
 use crate::corpus::Assembly;
-use crate::outcome::{CommitAnswer, CommitRefusal, Reproduction, VacateOutcome, Vacated};
+use crate::spec_outcome::{CommitAnswer, CommitRefusal, Reproduction};
 use crate::request::CommitRequest;
-use crate::run::preview::Preview;
 
 /// Previews `request.edit`, commits it to the store, and writes it where its own path says.
 ///
@@ -44,16 +43,18 @@ use crate::run::preview::Preview;
 /// bytes could not be written where the record belongs.
 // `CommitRefusal::Refused` and `::Unwritable` each carry the `EditPreview` a caller already
 // has to be shown, for the reason `run::preview`'s own module documentation gives for reusing
-// `EditPreview` at all -- the same trade `outcome::record`'s own `Record` already made and
+// `EditPreview` at all -- the same trade `spec_outcome::record_answer`'s own `Record` already made and
 // documented for `RecordRefusal::NotFound`'s unboxed `NodeSummary`.
 #[allow(clippy::result_large_err)]
-pub fn Commit<F: FileSystem>(
+pub fn Commit_Staged_Edit<Filesystem: FileSystem>(
     assembly: &mut Assembly,
     request: &CommitRequest,
-    filesystem: &F,
+    filesystem: &Filesystem,
 ) -> Result<CommitAnswer, CommitRefusal>
 {
-    let preview = Preview(assembly, &request.edit, filesystem)?;
+    use crate::run::preview::Preview_Staged_Edit;
+
+    let preview = Preview_Staged_Edit(assembly, &request.edit, filesystem)?;
     let renamed = preview.Rename().map(|(before, _)| return before.to_owned());
 
     let report = match assembly.store.Commit_Edit(&preview)
@@ -68,8 +69,8 @@ pub fn Commit<F: FileSystem>(
         return Err(CommitRefusal::Unwritable(preview, report, destination, error));
     }
 
-    let vacated = renamed.map(|old| return Vacate(&destination, &request.into.join(old)));
-    let reproduction = Reproduced(assembly, &preview);
+    let vacated = renamed.map(|old| return Vacate_Renamed_Path(&destination, &request.into.join(old)));
+    let reproduction = Reproduction_Of(assembly, &preview);
 
     return Ok(CommitAnswer { preview, report, destination, vacated, reproduction });
 }
@@ -78,8 +79,10 @@ pub fn Commit<F: FileSystem>(
 ///
 /// A failure here is carried and not fatal: the new file is already written, so the commit
 /// succeeded at the edit and only the tidying failed.
-fn Vacate(destination: &Path, old: &Path) -> Vacated
+fn Vacate_Renamed_Path(destination: &Path, old: &Path) -> crate::spec_outcome::Vacated
 {
+    use crate::spec_outcome::{VacateOutcome, Vacated};
+
     let outcome = match std::fs::remove_file(old)
     {
         Ok(()) => VacateOutcome::Removed,
@@ -97,7 +100,7 @@ fn Vacate(destination: &Path, old: &Path) -> Vacated
 
 /// The round trip, closed on the way out: the store is asked to render what was just
 /// committed, and the answer is compared with it.
-fn Reproduced(assembly: &Assembly, preview: &EditPreview) -> Result<Reproduction, nomos_spec_store::EditError>
+fn Reproduction_Of(assembly: &Assembly, preview: &EditPreview) -> Result<Reproduction, nomos_spec_store::EditError>
 {
     let projection = assembly.store.Record_Markdown(preview.Node_Id(), None)?;
 

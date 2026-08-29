@@ -40,9 +40,9 @@ pub(super) fn Text_Of(assembly: &mut Assembly, input: &Layered<'_>) -> Option<St
 }
 
 /// Records an input that was found and would not go in.
-pub(super) fn Refuse(assembly: &mut Assembly, input: &Layered<'_>, error: &IngestError)
+pub(super) fn Refuse_Input(assembly: &mut Assembly, input: &Layered<'_>, error: &IngestError)
 {
-    let refusal = Refused(
+    let refusal = Refused_Absence(
         Subject(input.subject),
         Expected(&input.path.display().to_string()),
         error,
@@ -57,12 +57,12 @@ pub(super) fn Refuse(assembly: &mut Assembly, input: &Layered<'_>, error: &Inges
 /// around those two is the same: the file may not be there, it may not read, and it may not
 /// go in. Written out twice, the two carried six copies of four strings between them and
 /// were one edit away from disagreeing about what an absence costs.
-pub(super) fn Layer<P, R>(
+pub(super) fn Ingest_Optional_Layer<Parsed, Report>(
     assembly: &mut Assembly,
     input: &Layered<'_>,
-    parse: impl FnOnce(&str) -> Result<P, IngestError>,
-    ingest: impl FnOnce(&mut SpecificationStore, &P) -> Result<R, IngestError>,
-) -> Option<R>
+    parse: impl FnOnce(&str) -> Result<Parsed, IngestError>,
+    ingest: impl FnOnce(&mut SpecificationStore, &Parsed) -> Result<Report, IngestError>,
+) -> Option<Report>
 {
     let text = Text_Of(assembly, input)?;
     let parsed = match parse(&text)
@@ -70,7 +70,7 @@ pub(super) fn Layer<P, R>(
         Ok(parsed) => parsed,
         Err(error) =>
         {
-            Refuse(assembly, input, &error);
+            Refuse_Input(assembly, input, &error);
 
             return None;
         }
@@ -79,14 +79,14 @@ pub(super) fn Layer<P, R>(
     match ingest(&mut assembly.store, &parsed)
     {
         Ok(report) => return Some(report),
-        Err(error) => Refuse(assembly, input, &error),
+        Err(error) => Refuse_Input(assembly, input, &error),
     }
 
     return None;
 }
 
 /// Records what an input contributed.
-pub(super) fn Note(assembly: &mut Assembly, input: &Layered<'_>, count: u32, noun: &str)
+pub(super) fn Note_Contribution(assembly: &mut Assembly, input: &Layered<'_>, count: u32, noun: &str)
 {
     assembly.read.push(format!("{count} {noun} from {}", input.path.display()));
 }
@@ -102,13 +102,13 @@ pub(super) fn Ingest_Statement_File(assembly: &mut Assembly, root: &Path)
                  statements has nothing to project",
         refused: "no normative statement is in this store",
     };
-    let Some(report) = Layer(assembly, &input, Parse_Statements, Ingest_Statements)
+    let Some(report) = Ingest_Optional_Layer(assembly, &input, Parse_Statements, Ingest_Statements)
     else
     {
         return;
     };
 
-    Note(assembly, &input, report.ingested, "normative statement(s)");
+    Note_Contribution(assembly, &input, report.ingested, "normative statement(s)");
 }
 
 pub(super) fn Ingest_Catalog_File(assembly: &mut Assembly, root: &Path)
@@ -122,17 +122,17 @@ pub(super) fn Ingest_Catalog_File(assembly: &mut Assembly, root: &Path)
                  resolves to nothing",
         refused: "the corpus contributes no node to this store",
     };
-    let Some(report) = Layer(assembly, &input, Parse_Catalog, |store, entities| return Ingest_Catalog(store, entities))
+    let Some(report) = Ingest_Optional_Layer(assembly, &input, Parse_Catalog, |store, entities| return Ingest_Catalog(store, entities))
     else
     {
         return;
     };
 
-    Note(assembly, &input, report.nodes, "catalog node(s)");
+    Note_Contribution(assembly, &input, report.nodes, "catalog node(s)");
 }
 
 /// What an absence calls the input that refused -- distinct from [`Expected`] so the two
-/// adjacent `&str` positions in [`Refused`] cannot be passed in the wrong order.
+/// adjacent `&str` positions in [`Refused_Absence`] cannot be passed in the wrong order.
 pub(super) struct Subject<'a>(pub &'a str);
 
 /// Where the refused input was expected -- distinct from [`Subject`] for the same reason.
@@ -144,7 +144,7 @@ pub(super) struct Expected<'a>(pub &'a str);
 /// of view a corpus that will not parse and a corpus that is missing cost exactly the same
 /// rows, and a reader who is told only that something failed will read the shortfall in
 /// the answer as the answer.
-pub(super) fn Refused(subject: Subject<'_>, path: Expected<'_>, error: &IngestError, cost: &str) -> Absence
+pub(super) fn Refused_Absence(subject: Subject<'_>, path: Expected<'_>, error: &IngestError, cost: &str) -> Absence
 {
     return Absence {
         subject: subject.0.to_owned(),

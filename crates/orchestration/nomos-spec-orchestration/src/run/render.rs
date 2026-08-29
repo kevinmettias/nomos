@@ -1,12 +1,12 @@
 //! Resolving `nomos spec render`'s request against an assembled store, and placing the
 //! projection it builds.
 //!
-//! # Why this is generic over [`FileSystem`], and `corpus::Assemble`'s walk is not
+//! # Why this is generic over [`FileSystem`], and `corpus::Assemble_Corpus`'s walk is not
 //!
 //! Writing a projection's body and its sidecar is two single-file writes at paths this crate
 //! already knows -- exactly [`FileSystem::Replace_Atomically`]'s shape, the same port
 //! `nomos_work_orchestration::Run` already threads through for the ledger. It is not a
-//! directory listing (no port exists for that, which is why [`crate::corpus::Assemble`]'s own
+//! directory listing (no port exists for that, which is why [`crate::corpus::Assemble_Corpus`]'s own
 //! walk and `nomos-cli::work::Published_Records` both stay client-side), and it is not read
 //! from a caller-named arbitrary path outside this crate's control (which is why `Preview`'s
 //! and `Commit`'s `--from` file, staged by an author, is deliberately left as future work
@@ -25,7 +25,7 @@ use nomos_spec_project::{Build, Catalogue, Output, Profile};
 use std::path::Path;
 
 use crate::corpus::Assembly;
-use crate::outcome::{RenderAnswer, RenderRefusal};
+use crate::spec_outcome::{RenderAnswer, RenderRefusal};
 use crate::request::RenderRequest;
 
 /// Builds the profile `request` names and writes both halves of it under `request.into`.
@@ -40,17 +40,17 @@ use crate::request::RenderRequest;
 /// profile, [`RenderRefusal::Project`] when resolving the subject or building the projection
 /// fails, and [`RenderRefusal::Unwritable`] when a built projection could not be placed on
 /// disk.
-pub fn Render<F: FileSystem>(
+pub fn Rendered_Projection<Filesystem: FileSystem>(
     assembly: &Assembly,
     request: &RenderRequest,
-    filesystem: &F,
+    filesystem: &Filesystem,
 ) -> Result<RenderAnswer, RenderRefusal>
 {
     let catalogue = Catalogue::Shipped().map_err(RenderRefusal::Project)?;
-    let declared = Declared(&catalogue, request)?;
+    let declared = Declared_Profile(&catalogue, request)?;
     let built = Build(&assembly.store, &declared).map_err(RenderRefusal::Project)?;
 
-    return Placed(filesystem, &built, &declared.id, &request.into);
+    return Placed_Projection(filesystem, &built, &declared.id, &request.into);
 }
 
 /// The shipped profile a run names, resolved against the subject it was given.
@@ -58,15 +58,15 @@ pub fn Render<F: FileSystem>(
 /// Resolved before the store is touched. A profile that names a subject and a run that does
 /// not supply one disagree about what is being built, and the disagreement is answerable
 /// without reading a single row.
-fn Declared(catalogue: &Catalogue, request: &RenderRequest) -> Result<Profile, RenderRefusal>
+fn Declared_Profile(catalogue: &Catalogue, request: &RenderRequest) -> Result<Profile, RenderRefusal>
 {
-    let declared = Resolved(catalogue, &request.profile)?;
+    let declared = Resolved_Profile(catalogue, &request.profile)?;
 
     return declared.For(request.subject.as_deref()).map_err(RenderRefusal::Project);
 }
 
 /// The shipped profile that identifier names, or the refusal saying which ones exist.
-fn Resolved<'a>(catalogue: &'a Catalogue, profile: &str) -> Result<&'a Profile, RenderRefusal>
+fn Resolved_Profile<'a>(catalogue: &'a Catalogue, profile: &str) -> Result<&'a Profile, RenderRefusal>
 {
     return catalogue.Named(profile).ok_or_else(|| {
         return RenderRefusal::NoSuchProfile {
@@ -77,8 +77,8 @@ fn Resolved<'a>(catalogue: &'a Catalogue, profile: &str) -> Result<&'a Profile, 
 }
 
 /// Both halves of a built projection, written where the run asked for them.
-fn Placed<F: FileSystem>(
-    filesystem: &F,
+fn Placed_Projection<Filesystem: FileSystem>(
+    filesystem: &Filesystem,
     built: &Output,
     id: &str,
     into: &Path,
