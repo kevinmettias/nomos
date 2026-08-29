@@ -74,7 +74,7 @@ mod tests
     #[test]
     fn Test_Every_Content_Should_Be_Matched_Exhaustively()
     {
-        fn Ordinal(content: Content) -> usize
+        fn Ordinal_Of_Content(content: Content) -> usize
         {
             return match content
             {
@@ -94,7 +94,7 @@ mod tests
         for (index, content) in Content::All().iter().enumerate()
         {
             assert_eq!(
-                Ordinal(*content),
+                Ordinal_Of_Content(*content),
                 index,
                 "{} is not matched at the position Content::All() puts it, so the \
                  exhaustive match and the universe have drifted apart",

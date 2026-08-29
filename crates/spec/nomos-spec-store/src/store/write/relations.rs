@@ -3,7 +3,6 @@
 
 use rusqlite::{Connection, OptionalExtension, params};
 
-use crate::EXTERNAL;
 use crate::StoreError;
 use crate::read::columns::Columns;
 use crate::store::relation::{FromNodeId, RelationTypeName, ToNodeId};
@@ -135,6 +134,8 @@ fn Enforce_Constraint(
     to: &Endpoint,
 ) -> Result<(), StoreError>
 {
+    use crate::EXTERNAL;
+
     let Some(constraint) = Fetch_Constraint(connection, relation_type)?
     else
     {

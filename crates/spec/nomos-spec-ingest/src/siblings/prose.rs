@@ -1,6 +1,6 @@
 //! Ingesting a sibling suite's prose documents.
 
-use super::{NodeRow, SpecificationStore, Archive, Suite, SuiteReport, IngestError, Text, Ingest_Document, Sibling, Qualified, Stem, Parse_Record, Claim};
+use super::{NodeRow, SpecificationStore, Archive, Suite, SuiteReport, IngestError, Read_Text, Ingest_Document, Sibling, Qualified_Node_Id, Path_Stem, Parse_Record, Claim_Node_Id};
 
 /// A markdown entry's location in the archive, as opposed to the [`Sibling`] it came from
 /// or the text it holds — the two `&str`-shaped things `Declared_By` sits next to.
@@ -35,9 +35,9 @@ pub(super) fn Ingest_Prose(
 {
     for entry in archive.Listing().Ending_With(".md")
     {
-        let text = Text(archive, &entry)?;
+        let text = Read_Text(archive, &entry)?;
         let declared = Declared_By(suite.sibling, EntryAt(&entry), EntryText(&text))?;
-        let node = Take(store, &declared, suite, report)?;
+        let node = Take_Node(store, &declared, suite, report)?;
 
         let sourced = Sourced {
             entry: &entry,
@@ -64,10 +64,10 @@ pub(super) fn Declared_By(sibling: Sibling, entry: EntryAt<'_>, text: EntryText<
     if !entry.contains("/records/")
     {
         return Ok(Declared {
-            id: Qualified(sibling, entry),
+            id: Qualified_Node_Id(sibling, entry),
             kind: "document".to_owned(),
             authority: "canonical".to_owned(),
-            title: Stem(entry).to_owned(),
+            title: Path_Stem(entry).to_owned(),
         });
     }
 
@@ -83,7 +83,7 @@ pub(super) fn Declared_By(sibling: Sibling, entry: EntryAt<'_>, text: EntryText<
 }
 
 /// Mints the node, and records whether this suite got to keep the identifier.
-pub(super) fn Take(
+pub(super) fn Take_Node(
     store: &mut SpecificationStore,
     declared: &Declared,
     suite: Suite,
@@ -98,7 +98,7 @@ pub(super) fn Take(
         title: &declared.title,
     })?;
 
-    if Claim(store, &declared.id, node, suite)?
+    if Claim_Node_Id(store, &declared.id, node, suite)?
     {
         report.records.push(declared.id.clone());
     }

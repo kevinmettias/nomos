@@ -69,7 +69,7 @@ impl ClaimedRecord
     {
         use crate::authoring::Why_Not_Canonical;
         use nomos_spec_model::Parse_Record;
-        use nomos_spec_model::Round_Trips;
+        use nomos_spec_model::Is_Round_Trip;
 
         let record = Parse_Record(markdown)
             .map_err(|error| return EditError::Unreadable { cause: error.to_string() })?;
@@ -81,7 +81,7 @@ impl ClaimedRecord
                 staged: record.front_matter.id,
             });
         }
-        if !Round_Trips(markdown)
+        if !Is_Round_Trip(markdown)
         {
             return Err(EditError::NotCanonical {
                 cause: Why_Not_Canonical(markdown, &record),

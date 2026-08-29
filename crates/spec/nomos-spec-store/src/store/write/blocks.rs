@@ -83,8 +83,8 @@ fn Insert_Blocks(
             crate::record::Kind_Label(block.kind),
             block.heading_path.join(" / "),
             block.text,
-            block.Content_Hash().As_Str(),
-            block.Normalized_Hash().As_Str(),
+            block.Content_Hash().As_String_Slice(),
+            block.Normalized_Hash().As_String_Slice(),
         ])?;
     }
 
@@ -190,8 +190,8 @@ fn Insert_Rows_Under(
             row.kind.Label(),
             cells,
             row.text,
-            row.Content_Hash().As_Str(),
-            row.Normalized_Hash().As_Str(),
+            row.Content_Hash().As_String_Slice(),
+            row.Normalized_Hash().As_String_Slice(),
         ])?;
     }
 

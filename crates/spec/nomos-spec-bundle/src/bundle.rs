@@ -50,7 +50,7 @@ impl Bundle
         let manifest = Manifest {
             records: u32::try_from(records.len()).unwrap_or(u32::MAX),
             counts,
-            digest: ContentHash::Of(&covered).As_Str().to_owned(),
+            digest: ContentHash::Of(&covered).As_String_Slice().to_owned(),
         };
 
         return Ok(Self {
@@ -214,14 +214,14 @@ impl Bundle
     fn Assert_Untampered(covered: &str, manifest: &Manifest) -> Result<(), BundleError>
     {
         let computed = ContentHash::Of(&format!("{covered}\n"));
-        if computed.As_Str() == manifest.digest
+        if computed.As_String_Slice() == manifest.digest
         {
             return Ok(());
         }
 
         return Err(BundleError::Tampered {
             declared: manifest.digest.clone(),
-            computed: computed.As_Str().to_owned(),
+            computed: computed.As_String_Slice().to_owned(),
         });
     }
 

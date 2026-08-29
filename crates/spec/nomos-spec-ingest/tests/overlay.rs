@@ -10,8 +10,8 @@
 //! estimates that motivated the work, not readings.
 
 use nomos_spec_ingest::{
-    Archive, Disposition, Family, Ingest_Overlay_Document, Ingest_V15_Record, Is_Filler, Overlaid,
-    OverlayReport, Parse_Artifact, Reconcile, ReconciliationReport, Statements_In,
+    Archive, Disposition, Family, Ingest_Overlay_Document, Ingest_V15_Record, Get_Filler_Pattern, Overlaid,
+    OverlayReport, Parse_Artifact, Reconcile_Artifacts, ReconciliationReport, Statements_In,
 };
 use nomos_spec_store::{SpecificationStore, Table};
 use std::collections::BTreeMap;
@@ -127,7 +127,7 @@ fn Test_Every_Identifier_Should_Reconcile_By_Name()
     };
     let v14 = V14_Artifacts(&corpus);
     let v15 = V15_Statements(&mut archive);
-    let report: ReconciliationReport = Reconcile(&v14, &v15);
+    let report: ReconciliationReport = Reconcile_Artifacts(&v14, &v15);
     let absent = report.Absent_In(Family::Acceptance);
 
     assert_eq!(v14.len(), 689, "the v14 artifact count changed");
@@ -167,7 +167,7 @@ fn Test_The_Report_Should_Name_What_It_Lost()
     {
         return;
     };
-    let report = Reconcile(&V14_Artifacts(&corpus), &V15_Statements(&mut archive));
+    let report = Reconcile_Artifacts(&V14_Artifacts(&corpus), &V15_Statements(&mut archive));
 
     let spelled = report.Summary();
     assert!(spelled.contains("acceptance"), "{spelled}");
@@ -222,7 +222,7 @@ fn Assert_Every_Judgement_Names_Its_Pattern(report: &OverlayReport)
     for block in &report.filler
     {
         assert!(
-            Is_Filler(block.pattern).is_some(),
+            Get_Filler_Pattern(block.pattern).is_some(),
             "{} block {} was judged by a pattern that is not one",
             block.document,
             block.ordinal
@@ -384,13 +384,13 @@ fn Test_Absent_And_Reworded_Should_Not_Collapse()
     )
     .expect("reads");
 
-    let absent = Reconcile(std::slice::from_ref(&artifact), &BTreeMap::new());
+    let absent = Reconcile_Artifacts(std::slice::from_ref(&artifact), &BTreeMap::new());
     assert_eq!(absent.Absent().len(), 1);
     assert!(absent.Reworded().is_empty());
 
     let mut changed = BTreeMap::new();
     changed.insert("X-001".to_owned(), "X-001 A different thing shall hold.".to_owned());
-    let reworded = Reconcile(std::slice::from_ref(&artifact), &changed);
+    let reworded = Reconcile_Artifacts(std::slice::from_ref(&artifact), &changed);
     assert!(reworded.Absent().is_empty());
     assert_eq!(reworded.Reworded().len(), 1);
     assert!(matches!(

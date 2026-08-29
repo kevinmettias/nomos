@@ -28,7 +28,6 @@ mod difference;
 mod write;
 
 pub(crate) use difference::{Block_Changes, Identity_Changes, Relation_Changes, Why_Not_Canonical};
-pub(crate) use write::Write_Record;
 
 use nomos_spec_model::{
     BlockKind, ContentHash, Parse_Record, RecordFrontMatter, RecordRelation,
@@ -48,7 +47,7 @@ use crate::NormativeMovement;
 use crate::RecordProjection;
 use crate::RecordWrite;
 use crate::store::{
-    Collected, SpecificationStore,
+    Collected_Rows, SpecificationStore,
 };
 use crate::StoreError;
 
@@ -82,6 +81,8 @@ impl SpecificationStore
         markdown: &str,
     ) -> Result<RecordWrite, StoreError>
     {
+        use write::Write_Record;
+
         let path = path.into().0;
         let revision = revision.into().0;
         let record = Parse_Record(markdown).map_err(|error| {
@@ -159,9 +160,9 @@ impl SpecificationStore
     /// on any SQL failure. Nothing is written if anything fails.
     pub fn Commit_Edit(&mut self, preview: &EditPreview) -> Result<CommitReport, EditError>
     {
-        use commit::Apply;
+        use commit::Apply_Preview;
 
-        return self.In_Transaction(|transaction| return Apply(transaction, preview));
+        return self.In_Transaction(|transaction| return Apply_Preview(transaction, preview));
     }
 
     /// The blocks of one document, in the order they were authored.
@@ -191,7 +192,7 @@ impl SpecificationStore
             });
         })?;
 
-        return Collected(rows);
+        return Collected_Rows(rows);
     }
 
     /// The front matter a document declared, as it declared it.
@@ -255,7 +256,7 @@ impl SpecificationStore
             });
         })?;
 
-        return Collected(rows);
+        return Collected_Rows(rows);
     }
 
     /// What became of each normative statement recorded against this record.
@@ -266,7 +267,7 @@ impl SpecificationStore
         after: &[SourceBlock],
     ) -> Result<Vec<NormativeMovement>, StoreError>
     {
-        use difference::Located;
+        use difference::Located_Statement;
 
         let mut movements = Vec::new();
         for (statement_id, canonical_text, canonical_hash) in self.Recorded_Statements(node_id)?
@@ -274,7 +275,7 @@ impl SpecificationStore
             movements.push(NormativeMovement {
                 statement_id,
                 canonical_hash,
-                outcome: Located(&canonical_text, before, after),
+                outcome: Located_Statement(&canonical_text, before, after),
             });
         }
 
@@ -297,7 +298,7 @@ impl SpecificationStore
             return Ok((columns.Next()?, columns.Next()?, columns.Next()?));
         })?;
 
-        return Collected(rows);
+        return Collected_Rows(rows);
     }
 
     /// The one document behind an identifier, or why there is not exactly one.
@@ -354,7 +355,7 @@ impl SpecificationStore
             node_id: front_matter.id,
             path: document.path.clone(),
             revision: document.revision.clone(),
-            projected_hash: ContentHash::Of(&markdown).As_Str().to_owned(),
+            projected_hash: ContentHash::Of(&markdown).As_String_Slice().to_owned(),
             source_hash: document.content_hash.clone(),
             markdown,
         });

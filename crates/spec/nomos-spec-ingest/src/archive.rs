@@ -1,8 +1,8 @@
 pub(crate) mod artifact;
 pub(crate) mod catalog_entity;
 pub(crate) mod catalog_report;
-pub(crate) mod error;
-pub(crate) mod error_kind;
+pub(crate) mod archive_error;
+pub(crate) mod archive_error_kind;
 pub(crate) mod listing;
 pub(crate) mod member;
 pub(crate) mod template;
@@ -17,7 +17,7 @@ use std::path::{Path, PathBuf};
 ///
 /// Both failures answer with the archive path rather than the underlying message alone,
 /// because a caller walking twenty archives cannot tell from "invalid zip" which one it was.
-fn Opened(path: &Path) -> Result<zip::ZipArchive<std::io::BufReader<std::fs::File>>, ArchiveError>
+fn Opened_Zip(path: &Path) -> Result<zip::ZipArchive<std::io::BufReader<std::fs::File>>, ArchiveError>
 {
     let file = std::fs::File::open(path).map_err(|error| ArchiveError {
         archive: path.to_path_buf(),
@@ -38,7 +38,7 @@ fn Opened(path: &Path) -> Result<zip::ZipArchive<std::io::BufReader<std::fs::Fil
 
 /// The files an archive holds, sorted so an iteration order never depends on how the
 /// archive was written.
-fn Entries(inner: &zip::ZipArchive<std::io::BufReader<std::fs::File>>) -> Vec<String>
+fn Entries_Of(inner: &zip::ZipArchive<std::io::BufReader<std::fs::File>>) -> Vec<String>
 {
     let mut paths: Vec<String> = inner
         .file_names()
@@ -70,8 +70,8 @@ impl Archive
     /// [`ArchiveErrorKind::Empty`] if it holds no files.
     pub fn Open(path: &Path) -> Result<Self, ArchiveError>
     {
-        let inner = Opened(path)?;
-        let paths = Entries(&inner);
+        let inner = Opened_Zip(path)?;
+        let paths = Entries_Of(&inner);
 
         if paths.is_empty()
         {
@@ -208,7 +208,7 @@ mod tests
     /// Discards the archive so a refusal can be asserted on. `Archive` is not `Debug`,
     /// and deriving it purely for `expect_err` would put a zip reader's internals into a
     /// public trait impl.
-    fn Refusal(path: &str) -> ArchiveError
+    fn Refusal_For(path: &str) -> ArchiveError
     {
         return match Archive::Open(Path::new(path))
         {
@@ -223,7 +223,7 @@ mod tests
     #[test]
     fn Test_A_Missing_Archive_Should_Name_Itself()
     {
-        let refusal = Refusal("no-such-file.zip");
+        let refusal = Refusal_For("no-such-file.zip");
 
         assert!(matches!(refusal.kind, ArchiveErrorKind::Unreadable { .. }), "{refusal}");
         assert!(
@@ -235,7 +235,7 @@ mod tests
     #[test]
     fn Test_A_File_That_Is_Not_An_Archive_Should_Be_Refused()
     {
-        let refusal = Refusal("Cargo.toml");
+        let refusal = Refusal_For("Cargo.toml");
 
         assert!(matches!(refusal.kind, ArchiveErrorKind::Unreadable { .. }), "{refusal}");
     }

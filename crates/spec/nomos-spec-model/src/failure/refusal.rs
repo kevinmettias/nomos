@@ -20,6 +20,8 @@ pub struct Refusal
 
 impl fmt::Display for Refusal
 {
+    // `fmt` is the fixed method name `std::fmt::Display` mandates; it is not a free choice
+    // of abbreviation and cannot be spelled out without ceasing to implement the trait.
     fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result
     {
         writeln!(

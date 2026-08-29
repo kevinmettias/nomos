@@ -12,7 +12,7 @@ pub struct StatementReport
 impl StatementReport
 {
     #[must_use]
-    pub fn Passed(&self) -> bool
+    pub fn Is_Passing(&self) -> bool
     {
         return self.divergences.is_empty()
             && self.non_canonical_text.is_empty()

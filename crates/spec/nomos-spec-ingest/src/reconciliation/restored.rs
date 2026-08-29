@@ -122,7 +122,7 @@ mod tests
     #[test]
     fn Test_Every_Restored_Should_Be_Matched_Exhaustively()
     {
-        fn Ordinal(restored: Restored) -> usize
+        fn Ordinal_Of(restored: Restored) -> usize
         {
             return match restored
             {
@@ -141,7 +141,7 @@ mod tests
         for (index, restored) in Restored::All().iter().enumerate()
         {
             assert_eq!(
-                Ordinal(*restored),
+                Ordinal_Of(*restored),
                 index,
                 "{} is not matched at the position Restored::All() puts it, so the \
                  exhaustive match and the universe have drifted apart",

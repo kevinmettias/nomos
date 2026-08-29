@@ -61,6 +61,8 @@ pub enum EditError
 
 impl core::fmt::Display for EditError
 {
+    // `fmt` is the fixed method name `std::fmt::Display` requires; it is not a style choice
+    // and cannot be spelled out without ceasing to implement the trait.
     fn fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
     {
         return match self

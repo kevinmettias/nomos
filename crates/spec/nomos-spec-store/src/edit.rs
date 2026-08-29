@@ -10,7 +10,7 @@ pub(crate) mod normative_outcome;
 
 pub(crate) mod block_change;
 pub(crate) mod commit_report;
-pub(crate) mod error;
+pub(crate) mod edit_error;
+pub(crate) mod edit_preview;
 pub(crate) mod identity_change;
-pub(crate) mod preview;
-pub(crate) mod staged;
+pub(crate) mod staged_edit;

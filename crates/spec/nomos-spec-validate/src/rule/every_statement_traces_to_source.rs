@@ -37,10 +37,10 @@ impl Rule for EveryStatementTracesToSource
 
     fn Evaluate(&self, store: &SpecificationStore) -> RuleOutcome
     {
-        use crate::offending::Offending;
+        use crate::offending::Offending_Outcome;
         use crate::Violation;
 
-        return Offending(store, Table::NormativeStatements, UNTRACED, |row| {
+        return Offending_Outcome(store, Table::NormativeStatements, UNTRACED, |row| {
             let id: String = row.get(0)?;
             return Ok(Violation {
                 subject: id,

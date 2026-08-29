@@ -1,6 +1,5 @@
 //! Writing blobs, documents and nodes through a caller's transaction.
 
-use nomos_spec_model::ContentHash;
 use rusqlite::{Connection, OptionalExtension, params};
 
 use crate::DocumentPath;
@@ -15,11 +14,13 @@ use crate::StoreError;
 /// Returns [`StoreError`] on any SQL failure.
 pub(crate) fn Write_Blob(connection: &Connection, content: &[u8]) -> Result<i64, StoreError>
 {
+    use nomos_spec_model::ContentHash;
+
     let digest = ContentHash::Of_Bytes(content);
     let existing: Option<i64> = connection
         .query_row(
             "SELECT uid FROM blobs WHERE sha256 = ?1",
-            params![digest.As_Str()],
+            params![digest.As_String_Slice()],
             |row| row.get(0),
         )
         .optional()?;
@@ -30,7 +31,7 @@ pub(crate) fn Write_Blob(connection: &Connection, content: &[u8]) -> Result<i64,
     connection.execute(
         "INSERT INTO blobs (sha256, byte_length, content) VALUES (?1, ?2, ?3)",
         params![
-            digest.As_Str(),
+            digest.As_String_Slice(),
             i64::try_from(content.len()).unwrap_or(i64::MAX),
             content
         ],

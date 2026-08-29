@@ -1,8 +1,11 @@
 mod query;
 mod sections;
 
-use query::{Columns, FirstColumn, Gather, Narrow_To_Nodes, Query, SecondColumn};
-use sections::{Blocks, Documents, Headings, Lineage, Nodes, Omissions, Relations, Rows, Statements, Suites};
+use query::{Columns, FirstColumn, Gather_Items, Narrow_To_Nodes, Query, SecondColumn};
+use sections::{
+    Gather_Blocks, Gather_Documents, Gather_Headings, Gather_Lineage, Gather_Nodes, Gather_Omissions, Gather_Relations,
+    Gather_Rows, Gather_Statements, Gather_Suites,
+};
 
 use crate::Content;
 use crate::Filter;
@@ -102,7 +105,7 @@ impl Content
     }
 }
 
-pub fn Select(store: &SpecificationStore, profile: &Profile) -> Result<Projection, ProjectError>
+pub fn Select_Projection(store: &SpecificationStore, profile: &Profile) -> Result<Projection, ProjectError>
 {
     let connection = store.Connection();
     let mut sections = Vec::new();
@@ -110,7 +113,7 @@ pub fn Select(store: &SpecificationStore, profile: &Profile) -> Result<Projectio
 
     for declared in &profile.sections
     {
-        let section = Selected(connection, profile, declared)?;
+        let section = Selected_Section(connection, profile, declared)?;
         let contributed = Inputs_Of(declared.content, &section.items);
         inputs.extend(contributed);
         sections.push(section);
@@ -130,14 +133,14 @@ pub fn Select(store: &SpecificationStore, profile: &Profile) -> Result<Projectio
 ///
 /// Both refusals come before the rows are used, because a section that cannot be honoured
 /// or that came back empty is a defect in the profile rather than a thin projection.
-fn Selected(
+fn Selected_Section(
     connection: &Connection,
     profile: &Profile,
     declared: &crate::ProfileSection,
 ) -> Result<Section, ProjectError>
 {
     Refuse_Unhonoured(profile, declared.content, &declared.filter)?;
-    let items = Gather(connection, declared.content, &declared.filter)?;
+    let items = Gather_Items(connection, declared.content, &declared.filter)?;
     Refuse_Empty(profile, declared, &items)?;
 
     return Ok(Section {

@@ -1,39 +1,15 @@
 // What kind of block this is, beneath the block it describes.
-mod kind;
+mod block_kind;
+mod source_block;
 
-pub use kind::BlockKind;
-
-use crate::ContentHash;
-
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct SourceBlock
-{
-    pub ordinal: u32,
-    pub kind: BlockKind,
-    pub heading_path: Vec<String>,
-    pub text: String,
-}
-
-impl SourceBlock
-{
-    #[must_use]
-    pub fn Content_Hash(&self) -> ContentHash
-    {
-        return ContentHash::Of(&self.text);
-    }
-
-    #[must_use]
-    pub fn Normalized_Hash(&self) -> ContentHash
-    {
-        return ContentHash::Of_Normalized(&self.text);
-    }
-}
+pub use block_kind::BlockKind;
+pub use source_block::SourceBlock;
 
 /// Splits an authored markdown document into the blocks the preservation ledger tracks.
 ///
 /// Reproduces v14's segmentation exactly; verified against all 2533 recorded blocks.
 #[must_use]
-pub fn Segment(markdown: &str) -> Vec<SourceBlock>
+pub fn Segment_Markdown(markdown: &str) -> Vec<SourceBlock>
 {
     let lines: Vec<&str> = markdown.split('\n').map(|line| line.trim_end_matches('\r')).collect();
     let mut index = Skip_Front_Matter(&lines);
@@ -44,17 +20,17 @@ pub fn Segment(markdown: &str) -> Vec<SourceBlock>
     {
         if line.starts_with('#')
         {
-            Flush(&mut blocks, &mut paragraph, &heading_path);
+            Flush_Paragraph(&mut blocks, &mut paragraph, &heading_path);
             Push_A_Heading(&mut blocks, &mut heading_path, line);
         }
         else if line.starts_with("```")
         {
-            Flush(&mut blocks, &mut paragraph, &heading_path);
+            Flush_Paragraph(&mut blocks, &mut paragraph, &heading_path);
             index = Push_A_Fence(&mut blocks, &heading_path, &lines, index);
         }
         else if line.trim().is_empty()
         {
-            Flush(&mut blocks, &mut paragraph, &heading_path);
+            Flush_Paragraph(&mut blocks, &mut paragraph, &heading_path);
         }
         else
         {
@@ -64,9 +40,16 @@ pub fn Segment(markdown: &str) -> Vec<SourceBlock>
         index = index.saturating_add(1);
     }
 
-    Flush(&mut blocks, &mut paragraph, &heading_path);
+    Flush_Paragraph(&mut blocks, &mut paragraph, &heading_path);
     return blocks;
 }
+
+// Renamed from the vague `Segment` for check-naming-clarity (it took a parameter without
+// saying what it segments). The public name stays `Segment` through this alias: it is called
+// from roughly 30 sites across every crate in `crates/spec` plus
+// `tests/integration/tests/determinism/spec_productions.rs`, which sits outside this
+// campaign's `crates/spec` territory and so cannot be edited from here.
+pub use self::Segment_Markdown as Segment;
 
 /// v14's readers consume this as part of the opening front matter fence.
 ///
@@ -107,7 +90,7 @@ fn Skip_Front_Matter(lines: &[&str]) -> usize
     return 0;
 }
 
-fn Flush(blocks: &mut Vec<SourceBlock>, paragraph: &mut Vec<&str>, heading_path: &[String])
+fn Flush_Paragraph(blocks: &mut Vec<SourceBlock>, paragraph: &mut Vec<&str>, heading_path: &[String])
 {
     if paragraph.is_empty()
     {
@@ -160,7 +143,7 @@ fn Push_A_Fence(
     index: usize,
 ) -> usize
 {
-    let span = Fence(lines, index);
+    let span = Fenced_Lines(lines, index);
     let block = A_Fence(blocks, heading_path, &span.lines);
 
     blocks.push(block);
@@ -182,7 +165,7 @@ struct FenceSpan<'a>
 ///
 /// An unterminated fence runs to the end of the document rather than being refused, which
 /// is what v14's readers do and therefore what reproducing their segmentation requires.
-fn Fence<'a>(lines: &[&'a str], index: usize) -> FenceSpan<'a>
+fn Fenced_Lines<'a>(lines: &[&'a str], index: usize) -> FenceSpan<'a>
 {
     let mut fence: Vec<&str> = Vec::new();
     let mut cursor = index;

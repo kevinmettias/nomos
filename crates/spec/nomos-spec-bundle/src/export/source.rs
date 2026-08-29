@@ -7,9 +7,9 @@ use crate::SourceTableRow;
 use base64::Engine as _;
 use rusqlite::Connection;
 
-use super::{Collect, Columns, Decoded};
+use super::{Collect_Rows, Columns, Decode_Json_Column};
 
-pub(super) fn Blobs(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
+pub(super) fn Collect_Blobs(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
 {
     let mut statement =
         connection.prepare("SELECT sha256, byte_length, content FROM blobs ORDER BY sha256")?;
@@ -59,7 +59,7 @@ pub(super) fn Source_Documents(connection: &Connection, records: &mut Vec<Record
 {
     use crate::SourceDocument;
 
-    return Collect(
+    return Collect_Rows(
         connection,
         records,
         "SELECT d.path, d.revision, b.sha256
@@ -80,7 +80,7 @@ pub(super) fn Source_Headings(connection: &Connection, records: &mut Vec<Record>
 {
     use crate::SourceHeading;
 
-    return Collect(
+    return Collect_Rows(
         connection,
         records,
         "SELECT d.path, d.revision, h.ordinal, h.depth, h.title
@@ -105,7 +105,7 @@ pub(super) fn Source_Blocks(connection: &Connection, records: &mut Vec<Record>) 
 {
     use crate::SourceBlock;
 
-    return Collect(
+    return Collect_Rows(
         connection,
         records,
         "SELECT d.path, d.revision, b.ordinal, b.kind, b.heading_path, b.text,
@@ -147,7 +147,7 @@ pub(super) fn Source_Table_Rows(connection: &Connection, records: &mut Vec<Recor
         .collect::<Result<Vec<_>, _>>()?;
     for (mut record, cells) in rows
     {
-        record.cells = Decoded(&cells)?;
+        record.cells = Decode_Json_Column(&cells)?;
         records.push(Record::SourceTableRow(record));
     }
 

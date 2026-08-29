@@ -11,14 +11,16 @@
 
 mod labels;
 mod fingerprint;
+mod revision_fingerprint;
 mod walk;
 #[cfg(test)]
 mod tests;
 
-pub use labels::{Gaps, Revisions_In};
+pub use labels::{Label_Gaps, Revisions_In};
 pub(crate) use fingerprint::Fingerprint_Of;
-pub use fingerprint::Fingerprint;
-pub use walk::Walk;
+pub use fingerprint::Fingerprint_Revision;
+pub use revision_fingerprint::RevisionFingerprint;
+pub use walk::Walk_Revisions;
 
 use crate::KindCensus;
 use crate::Scope;
@@ -28,21 +30,10 @@ use crate::IngestError;
 use nomos_spec_model::{BlockKind, ContentHash, RowKind, Segment, SourceBlock, Table_Rows};
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::{Path, PathBuf};
-pub(crate) use fingerprint::Within;
+pub(crate) use fingerprint::Within_Revision;
 
 /// Where the v14 tree keeps the volumes the regression headline is measured over.
 pub const DOMAIN_VOLUMES: &str = "01_authoring/domain_volumes/";
-
-/// One revision, reduced to what the four sets need.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct RevisionFingerprint
-{
-    pub label: String,
-    /// Path within the revision, with the archive's own top directory removed, against the
-    /// normalized hash of the document. Normalized rather than verbatim, so a reflow
-    /// nobody can see is not reported as a change in place.
-    pub documents: BTreeMap<String, String>,
-}
 
 /// Counts one revision's content kinds within a scope.
 ///
@@ -51,13 +42,13 @@ pub struct RevisionFingerprint
 /// Returns [`IngestError::Parse`] if the scope matches no document. A revision that
 /// reorganised the tree away has no such directory, and reporting that as zero rows would
 /// be the same defect as a check that walks a missing path and reports clean.
-pub fn Census(archive: &mut Archive, scope: Scope) -> Result<KindCensus, IngestError>
+pub fn Census_Kinds(archive: &mut Archive, scope: Scope) -> Result<KindCensus, IngestError>
 {
     let mut census = KindCensus::default();
 
     for entry in archive.Listing().Ending_With(".md")
     {
-        if !scope.Covers(&entry)
+        if !scope.Is_Covering(&entry)
         {
             continue;
         }
@@ -91,7 +82,7 @@ fn Count_Document(census: &mut KindCensus, text: &str)
     let mut carries_a_table = false;
     for block in Segment(text)
     {
-        carries_a_table |= Count_Block(census, &block);
+        carries_a_table |= Has_A_Table(census, &block);
     }
 
     if carries_a_table
@@ -104,7 +95,7 @@ fn Count_Document(census: &mut KindCensus, text: &str)
 ///
 /// The table answer is returned rather than counted here, because carrying a table is a
 /// fact about the document and this sees one block of it.
-fn Count_Block(census: &mut KindCensus, block: &SourceBlock) -> bool
+fn Has_A_Table(census: &mut KindCensus, block: &SourceBlock) -> bool
 {
     if block.kind == BlockKind::Code
     {

@@ -13,10 +13,10 @@
 
 use nomos_spec_ingest::{
     BlockLineage, Ingest_Block_Dispositions, Ingest_Section_Lineage, Ingest_Source_Document,
-    Parse_Block_Lineage, Parse_Section_Lineage, Resolve, RestorationReport, Restore, Restored,
+    Parse_Block_Lineage, Parse_Section_Lineage, Resolve_Model_Uid, RestorationReport, Restore_Members, Restored,
 };
 use nomos_spec_store::{SpecificationStore, Table};
-use nomos_spec_validate::{RuleOutcome, Validate, ValidationRun};
+use nomos_spec_validate::{RuleOutcome, Validate_Rules, ValidationRun};
 use serde::Deserialize;
 use std::collections::BTreeMap;
 use std::path::{Path, PathBuf};
@@ -155,7 +155,7 @@ fn Restored_Store(root: &Path) -> RestoredStore
         // Every test in this file reads the report this call returns — the family counts, the
         // resolutions, the preservation run. A restoration that refused leaves nothing to examine,
         // and the restorer's own words about why are the only thing left worth printing.
-        Restore(&mut store, REVISION, &documents).unwrap_or_else(|error| panic!("{error}"));
+        Restore_Members(&mut store, REVISION, &documents).unwrap_or_else(|error| panic!("{error}"));
 
     Assert_The_Restoration_Owns_Its_Names(&report);
 
@@ -237,7 +237,7 @@ fn Test_Every_Restored_Member_Should_Resolve_By_Its_Identifier()
     let unresolved: Vec<&str> = report
         .members
         .iter()
-        .filter(|member| return Resolve(&store, &member.id).expect("resolves").is_none())
+        .filter(|member| return Resolve_Model_Uid(&store, &member.id).expect("resolves").is_none())
         .map(|member| return member.id.as_str())
         .collect();
 
@@ -293,7 +293,7 @@ fn Assert_Resolves_By_Its_Own_Name(
 
     assert_eq!(member.family, Restored::CanonicalDomainModel, "{name}");
     assert!(
-        Resolve(store, name).expect("resolves").is_some(),
+        Resolve_Model_Uid(store, name).expect("resolves").is_some(),
         "{name} resolves only by the identifier this build minted"
     );
     assert!(
@@ -373,7 +373,7 @@ fn Test_The_Reconciled_Store_Should_Report_No_Preservation_Errors()
     } = Restored_Store(&root);
     Ingest_The_Lineage(&mut store, &root);
 
-    let run = Validate(&store, &nomos_spec_validate::Registered());
+    let run = Validate_Rules(&store, &nomos_spec_validate::Registered());
     assert!(run.Errors().is_empty(), "{:?}", run.Errors());
     assert!(
         run.Violations().is_empty(),
@@ -381,7 +381,7 @@ fn Test_The_Reconciled_Store_Should_Report_No_Preservation_Errors()
         run.Summary(),
         run.Violations().iter().take(5).collect::<Vec<_>>()
     );
-    assert!(run.Passed(), "{}", run.Summary());
+    assert!(run.Is_Passed(), "{}", run.Summary());
     Assert_The_Preservation_Rules_Examined_Something(&run);
     // The two statement rules examined nothing, and this store is why: I2 is not part of
     // the restoration, so it holds no statements. Asserted rather than left to the vacuity
@@ -404,7 +404,7 @@ fn Ingest_The_Lineage(store: &mut SpecificationStore, root: &Path)
     let block_lineage = Read(root, "01_authoring/source_lineage/source-block-lineage.yaml");
     let manifest = Parse_Block_Lineage(&block_lineage).expect("the block manifest parses");
 
-    assert!(headings.Passed(), "{:?}", headings.unknown_documents);
+    assert!(headings.Is_Passed(), "{:?}", headings.unknown_documents);
     for (document, dispositions) in Per_Document(&manifest)
     {
         Ingest_Block_Dispositions(store, &document, REVISION, &dispositions)
@@ -468,7 +468,7 @@ fn Test_Restoring_The_Whole_Corpus_Twice_Should_Change_Nothing()
     let lineage = store.Count(Table::Lineage).expect("counts");
     let aliases = store.Count(Table::NodeAliases).expect("counts");
 
-    let again = Restore(&mut store, REVISION, &Volumes(&root)).expect("restores again");
+    let again = Restore_Members(&mut store, REVISION, &Volumes(&root)).expect("restores again");
     assert!(again.contested_aliases.is_empty(), "{:?}", again.contested_aliases);
 
     assert!(nodes > 0 && lineage > 0 && aliases > 0, "the first run wrote nothing");

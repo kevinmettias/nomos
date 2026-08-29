@@ -118,7 +118,7 @@ fn Test_A_Stamp_Rewritten_To_Agree_With_An_Edited_Body_Should_Still_Be_Refused()
     let built = Build(&store, &profile).expect("builds");
     let tampered = format!("{}\nhand written\n", built.body);
     let mut agreeing = built.stamp.clone();
-    agreeing.content_digest = ContentHash::Of(&tampered).As_Str().to_owned();
+    agreeing.content_digest = ContentHash::Of(&tampered).As_String_Slice().to_owned();
     let freshness = Checked(&store, &profile, &tampered, &agreeing.Render().expect("stamps"));
 
     assert!(

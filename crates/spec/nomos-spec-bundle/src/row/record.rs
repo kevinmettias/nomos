@@ -1,7 +1,7 @@
 //! One row, carrying its own table name and only natural keys.
 
-pub(crate) mod front_matter;
-pub(crate) mod relation;
+pub(crate) mod record_front_matter;
+pub(crate) mod record_relation;
 
 use serde::{Deserialize, Serialize};
 
@@ -21,8 +21,8 @@ use crate::SourceDocument;
 use crate::SourceHeading;
 use crate::SourceTableRow;
 use crate::row::submission::Submission;
-use crate::row::submission::gap::SubmissionGap;
-use crate::row::submission::value::SubmissionValue;
+use crate::row::submission::submission_gap::SubmissionGap;
+use crate::row::submission::submission_value::SubmissionValue;
 use crate::Suite;
 
 /// One row, carrying its own table name and only natural keys.

@@ -1,6 +1,6 @@
 //! Ingesting a sibling suite's machine-readable schemas.
 
-use super::{Deserialize, NodeRow, SpecificationStore, Archive, Suite, SuiteReport, IngestError, Text, Declared, Claim, Sibling, Qualified};
+use super::{Deserialize, NodeRow, SpecificationStore, Archive, Suite, SuiteReport, IngestError, Read_Text, Declared, Claim_Node_Id, Sibling, Qualified_Node_Id};
 
 /// What a schema file declares about itself.
 #[derive(Debug, Deserialize)]
@@ -22,7 +22,7 @@ pub(super) fn Ingest_Machine(
 {
     for entry in archive.Listing().Ending_With(".json")
     {
-        let text = Text(archive, &entry)?;
+        let text = Read_Text(archive, &entry)?;
         let header: SchemaHeader = serde_json::from_str(&text)
             .map_err(|error| IngestError::Parse(format!("{entry}: {error}")))?;
         let declared = Machine_Declared(suite.sibling, &entry, &header);
@@ -48,7 +48,7 @@ pub(super) fn Record_Machine(
         title: &declared.title,
     })?;
 
-    if !Claim(store, &declared.id, node, suite)?
+    if !Claim_Node_Id(store, &declared.id, node, suite)?
     {
         report.contested.push(declared.id);
 
@@ -72,7 +72,7 @@ pub(super) fn Machine_Declared(sibling: Sibling, entry: &str, header: &SchemaHea
     let kind = if Is_Schema(entry) { "schema" } else { "machine_document" };
 
     return Declared {
-        id: Qualified(sibling, entry),
+        id: Qualified_Node_Id(sibling, entry),
         kind: kind.to_owned(),
         authority: "canonical".to_owned(),
         title: title.clone(),

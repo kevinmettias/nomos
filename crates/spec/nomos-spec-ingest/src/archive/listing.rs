@@ -29,7 +29,7 @@ impl Listing
 
     /// Whether the archive holds a file at exactly this path.
     #[must_use]
-    pub fn Contains(&self, entry: &str) -> bool
+    pub fn Has_Path(&self, entry: &str) -> bool
     {
         return self.paths.iter().any(|name| name == entry);
     }

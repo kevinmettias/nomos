@@ -14,7 +14,7 @@
 //! reader.
 
 use crate::store::{Profile_Named, Shipped};
-use nomos_spec_project::{Build, Content, Format, Profile, Select};
+use nomos_spec_project::{Build, Content, Format, Profile, Select_Projection};
 use nomos_spec_store::SpecificationStore;
 use std::collections::BTreeSet;
 
@@ -93,7 +93,7 @@ fn Named(ids: &[&str]) -> BTreeSet<String>
 fn Answered_Items(store: &SpecificationStore, content: Content) -> usize
 {
     let probe = Probe(content);
-    let projection = Select(store, &probe).expect("a may_be_empty probe never refuses");
+    let projection = Select_Projection(store, &probe).expect("a may_be_empty probe never refuses");
 
     return projection
         .sections
@@ -151,7 +151,7 @@ fn Screen_The_Shipped_Profiles(store: &SpecificationStore) -> Outcomes
         // A subject profile refuses for a reason that is not about the corpus, so it would
         // report a false disagreement. Excluded, and the exclusion is asserted below so it
         // cannot quietly grow.
-        if profile.Names_A_Subject()
+        if profile.Is_Per_Subject()
         {
             screened.skipped.insert(profile.id.clone());
         }

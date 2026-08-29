@@ -5,7 +5,7 @@
 //! The algorithm was recovered from the corpus rather than chosen, because the tool
 //! that produced these values does not ship with it.
 
-use nomos_spec_model::{BlockKind, ContentHash, Is_Normalized, Normalize, Segment, SourceBlock};
+use nomos_spec_model::{BlockKind, ContentHash, Is_Normalized, Normalize_Whitespace, Segment, SourceBlock};
 use serde::Deserialize;
 use std::path::{Path, PathBuf};
 
@@ -93,13 +93,13 @@ fn Assert_The_Block_Matches(block: &SourceBlock, want: &BlockRecord)
     assert_eq!(block.ordinal, want.ordinal);
     assert_eq!(Kind_Label(block.kind), want.kind, "block {} kind", want.ordinal);
     assert_eq!(
-        block.Content_Hash().As_Str(),
+        block.Content_Hash().As_String_Slice(),
         want.content_hash,
         "block {} content_hash",
         want.ordinal
     );
     assert_eq!(
-        block.Normalized_Hash().As_Str(),
+        block.Normalized_Hash().As_String_Slice(),
         want.normalized_hash,
         "block {} normalized_hash",
         want.ordinal
@@ -137,14 +137,14 @@ fn Assert_It_Discriminates(block: &DiscriminatingBlock)
         block.source_document, block.ordinal
     );
     assert_eq!(
-        ContentHash::Of(&block.text).As_Str(),
+        ContentHash::Of(&block.text).As_String_Slice(),
         block.content_hash,
         "{}#{} content_hash",
         block.source_document,
         block.ordinal
     );
     assert_eq!(
-        ContentHash::Of_Normalized(&block.text).As_Str(),
+        ContentHash::Of_Normalized(&block.text).As_String_Slice(),
         block.normalized_hash,
         "{}#{} normalized_hash",
         block.source_document,
@@ -167,7 +167,7 @@ fn Test_Sampled_Statements_Should_Reproduce_Their_Canonical_Hash()
     for statement in &statements
     {
         assert_eq!(
-            ContentHash::Of(&statement.canonical_text).As_Str(),
+            ContentHash::Of(&statement.canonical_text).As_String_Slice(),
             statement.canonical_hash,
             "{} canonical_hash",
             statement.id
@@ -209,7 +209,7 @@ fn Test_Every_Canonical_Text_Should_Be_A_Fixed_Point()
             "{} is not a fixed point of the normalizer",
             statement.id
         );
-        assert_eq!(Normalize(&statement.canonical_text), statement.canonical_text);
+        assert_eq!(Normalize_Whitespace(&statement.canonical_text), statement.canonical_text);
     }
 }
 

@@ -6,8 +6,6 @@ use nomos_spec_model::{
 use rusqlite::{Connection, params};
 
 use crate::Disposition;
-use crate::DocumentPath;
-use crate::DocumentRevision;
 use crate::RecordWrite;
 use crate::store::{
     Write_Node,
@@ -37,6 +35,9 @@ pub(crate) fn Write_Record(
     record: &Record,
 ) -> Result<RecordWrite, StoreError>
 {
+    use crate::DocumentPath;
+    use crate::DocumentRevision;
+
     let Authored { path, revision, markdown } = authored;
     let front_matter = &record.front_matter;
 

@@ -54,7 +54,7 @@ impl Origin
     /// has origin `submitted`, `clarified` or `decided`. `Decided` qualifies because a
     /// decision is answerable to something; an inference is not.
     #[must_use]
-    pub const fn Satisfies_Acceptance(self) -> bool
+    pub const fn Can_Satisfy_Acceptance(self) -> bool
     {
         return !matches!(self, Self::Inferred);
     }

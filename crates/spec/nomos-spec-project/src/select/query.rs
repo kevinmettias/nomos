@@ -1,8 +1,9 @@
 //! Building one filtered query, and reading its rows back.
 
 use super::{
-    Blocks, Connection, Content, Documents, Filter, Headings, Item, Lineage, Nodes, Omissions, params_from_iter,
-    ProjectError, Relations, Row, Rows, Statements, Suites,
+    Connection, Content, Filter, Gather_Blocks, Gather_Documents, Gather_Headings, Gather_Lineage, Gather_Nodes,
+    Gather_Omissions, Gather_Relations, Gather_Rows, Gather_Statements, Gather_Suites, Item, params_from_iter,
+    ProjectError, Row,
 };
 use core::fmt::Write as _;
 
@@ -77,9 +78,9 @@ impl Query
         return self;
     }
 
-    pub(super) fn Run<F>(&self, connection: &Connection, read: F) -> Result<Vec<Item>, ProjectError>
+    pub(super) fn Run<RowReader>(&self, connection: &Connection, read: RowReader) -> Result<Vec<Item>, ProjectError>
     where
-        F: Fn(&Row<'_>) -> rusqlite::Result<Item>,
+        RowReader: Fn(&Row<'_>) -> rusqlite::Result<Item>,
     {
         let mut statement = connection.prepare(&self.sql)?;
         let rows = statement.query_map(params_from_iter(self.values.iter()), |row| return read(row))?;
@@ -94,7 +95,7 @@ impl Query
     }
 }
 
-pub(super) fn Gather(
+pub(super) fn Gather_Items(
     connection: &Connection,
     content: Content,
     filter: &Filter,
@@ -102,16 +103,16 @@ pub(super) fn Gather(
 {
     return match content
     {
-        Content::Suites => Suites(connection, filter),
-        Content::Documents => Documents(connection, filter),
-        Content::Headings => Headings(connection, filter),
-        Content::Blocks => Blocks(connection, filter),
-        Content::Rows => Rows(connection, filter),
-        Content::Nodes => Nodes(connection, filter),
-        Content::Statements => Statements(connection, filter),
-        Content::Relations => Relations(connection, filter),
-        Content::Lineage => Lineage(connection, filter),
-        Content::Omissions => Omissions(connection, filter),
+        Content::Suites => Gather_Suites(connection, filter),
+        Content::Documents => Gather_Documents(connection, filter),
+        Content::Headings => Gather_Headings(connection, filter),
+        Content::Blocks => Gather_Blocks(connection, filter),
+        Content::Rows => Gather_Rows(connection, filter),
+        Content::Nodes => Gather_Nodes(connection, filter),
+        Content::Statements => Gather_Statements(connection, filter),
+        Content::Relations => Gather_Relations(connection, filter),
+        Content::Lineage => Gather_Lineage(connection, filter),
+        Content::Omissions => Gather_Omissions(connection, filter),
     };
 }
 

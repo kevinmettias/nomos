@@ -1,6 +1,6 @@
 pub(crate) mod artifact;
 pub(crate) mod identifiers;
-pub(crate) mod ingest;
+pub(crate) mod overlay_report;
 pub(crate) mod overlaid;
 pub(crate) mod pair_change;
 pub(crate) mod reconcile;
@@ -28,7 +28,7 @@ pub const FILLER_PATTERNS: &[&str] = &[
 /// Returns which pattern rather than a bool, so a lineage row can name why a block was
 /// judged filler instead of asserting it.
 #[must_use]
-pub fn Is_Filler(text: &str) -> Option<&'static str>
+pub fn Get_Filler_Pattern(text: &str) -> Option<&'static str>
 {
     return FILLER_PATTERNS
         .iter()
@@ -44,7 +44,7 @@ mod tests
     #[test]
     fn Test_Filler_Should_Name_The_Pattern_That_Judged_It()
     {
-        let judged = Is_Filler(
+        let judged = Get_Filler_Pattern(
             "This section preserves the reference or explanatory material for Contents.",
         );
 
@@ -52,6 +52,6 @@ mod tests
             judged,
             Some("This section preserves the reference or explanatory material for")
         );
-        assert_eq!(Is_Filler("Nomos uses a small identity kernel."), None);
+        assert_eq!(Get_Filler_Pattern("Nomos uses a small identity kernel."), None);
     }
 }

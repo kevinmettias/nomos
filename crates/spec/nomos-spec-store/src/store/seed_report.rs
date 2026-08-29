@@ -391,6 +391,9 @@ mod tests
         let StoreError::Record { path, cause } = refusal
         else
         {
+            // This is test-only fixture code: any other refusal variant here means the seed
+            // data itself is broken, not a case a caller can recover from, so it panics loudly
+            // rather than returning a `RecordRefusal` with nothing real to report.
             panic!("an unknown relation type is a defect in a record: {refusal:?}");
         };
 

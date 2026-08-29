@@ -47,12 +47,12 @@ pub(super) fn Note_Divergence(statement: &RecordedStatement, report: &mut Statem
     let recomputed = ContentHash::Of(&statement.canonical_text);
     let canonical = Is_Normalized(&statement.canonical_text);
 
-    if recomputed.As_Str() != statement.canonical_hash
+    if recomputed.As_String_Slice() != statement.canonical_hash
     {
         report.divergences.push(StatementDivergence {
             id: statement.id.clone(),
             recorded: statement.canonical_hash.clone(),
-            recomputed: recomputed.As_Str().to_owned(),
+            recomputed: recomputed.As_String_Slice().to_owned(),
             text_is_canonical: canonical,
         });
     }

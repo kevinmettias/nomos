@@ -9,10 +9,10 @@
 mod offending;
 mod preserve;
 mod rule;
-mod run;
+mod validation_run;
 mod violation;
 
 pub use preserve::Registered;
 pub use rule::{Rule, RuleOutcome, RuleResult};
-pub use run::{DECLARED_RULES, Validate, ValidationRun};
+pub use validation_run::{DECLARED_RULES, Validate_Rules, ValidationRun};
 pub use violation::Violation;

@@ -1,7 +1,7 @@
 use crate::Item;
 use crate::Projection;
 use crate::Section;
-use crate::DO_NOT_EDIT;
+use crate::GENERATED_FILE_NOTICE;
 use crate::ProjectError;
 use core::fmt::Write as _;
 use serde::Serialize;
@@ -23,27 +23,27 @@ struct Generated<'a>
     projection: &'a Projection,
 }
 
-pub fn Render(projection: &Projection) -> Result<String, ProjectError>
+pub fn Render_Projection(projection: &Projection) -> Result<String, ProjectError>
 {
     use crate::Format;
 
     return match projection.format
     {
-        Format::Markdown => Ok(Markdown(projection)),
-        Format::Html => Ok(Html(projection)),
-        Format::Mermaid => Ok(Mermaid(projection)),
-        Format::Json => Json(projection),
-        Format::Yaml => Yaml(projection),
-        Format::Contextpack => Contextpack(projection),
+        Format::Markdown => Ok(Render_Markdown(projection)),
+        Format::Html => Ok(Render_Html(projection)),
+        Format::Mermaid => Ok(Render_Mermaid(projection)),
+        Format::Json => Render_Json(projection),
+        Format::Yaml => Render_Yaml(projection),
+        Format::Contextpack => Render_Contextpack(projection),
     };
 }
 
-fn Markdown(projection: &Projection) -> String
+fn Render_Markdown(projection: &Projection) -> String
 {
     let mut out = String::new();
     let _ = writeln!(
         out,
-        "---\nnomos_generated: true\ndo_not_edit: {DO_NOT_EDIT}\nprofile: {}\n---\n\n# {}",
+        "---\nnomos_generated: true\ndo_not_edit: {GENERATED_FILE_NOTICE}\nprofile: {}\n---\n\n# {}",
         projection.profile, projection.title
     );
 
@@ -62,14 +62,14 @@ fn Markdown(projection: &Projection) -> String
 /// become a bare list. A table of one empty column is not a better answer than a list.
 fn Section_Body(out: &mut String, section: &Section)
 {
-    if Carries_A_Body(section)
+    if Has_A_Body(section)
     {
-        Bodies(out, section);
+        Write_Bodies(out, section);
 
         return;
     }
 
-    let columns = Columns(section);
+    let columns = Table_Columns(section);
     if columns.is_empty()
     {
         for item in &section.items
@@ -80,21 +80,21 @@ fn Section_Body(out: &mut String, section: &Section)
         return;
     }
 
-    Table(out, section, &columns);
+    Write_Table(out, section, &columns);
 }
 
-fn Carries_A_Body(section: &Section) -> bool
+fn Has_A_Body(section: &Section) -> bool
 {
     return section.items.iter().any(|item| return item.body.is_some());
 }
 
 /// A section whose items carry prose, written as headed bodies rather than table rows.
-fn Bodies(out: &mut String, section: &Section)
+fn Write_Bodies(out: &mut String, section: &Section)
 {
     for item in &section.items
     {
         let _ = writeln!(out, "\n### {}", item.identity);
-        let stated = Stated(item);
+        let stated = Stated_Fields(item);
         if !stated.is_empty()
         {
             let _ = writeln!(out, "\n{stated}");
@@ -106,7 +106,7 @@ fn Bodies(out: &mut String, section: &Section)
     }
 }
 
-fn Stated(item: &Item) -> String
+fn Stated_Fields(item: &Item) -> String
 {
     let stated: Vec<String> = item
         .fields
@@ -123,7 +123,7 @@ fn Stated(item: &Item) -> String
     return format!("*{}*", stated.join(" \u{b7} "));
 }
 
-fn Columns(section: &Section) -> Vec<String>
+fn Table_Columns(section: &Section) -> Vec<String>
 {
     let mut columns: Vec<String> = Vec::new();
     for item in &section.items
@@ -141,7 +141,7 @@ fn Columns(section: &Section) -> Vec<String>
 }
 
 /// A section's items as a markdown table, one column per field any item states.
-fn Table(out: &mut String, section: &Section, columns: &[String])
+fn Write_Table(out: &mut String, section: &Section, columns: &[String])
 {
     let _ = writeln!(out, "\n| identity | {} |", columns.join(" | "));
     let _ = writeln!(out, "| --- |{}", " --- |".repeat(columns.len()));
@@ -150,18 +150,18 @@ fn Table(out: &mut String, section: &Section, columns: &[String])
     {
         let cells: Vec<String> = columns
             .iter()
-            .map(|column| return Cell(item.Field(column).unwrap_or_default()))
+            .map(|column| return Table_Cell(item.Field(column).unwrap_or_default()))
             .collect();
-        let _ = writeln!(out, "| {} | {} |", Cell(&item.identity), cells.join(" | "));
+        let _ = writeln!(out, "| {} | {} |", Table_Cell(&item.identity), cells.join(" | "));
     }
 }
 
-fn Cell(value: &str) -> String
+fn Table_Cell(value: &str) -> String
 {
     return value.replace('|', "\\|").replace(['\n', '\r'], " ");
 }
 
-fn Html(projection: &Projection) -> String
+fn Render_Html(projection: &Projection) -> String
 {
     let mut out = Html_Head(projection);
 
@@ -170,13 +170,13 @@ fn Html(projection: &Projection) -> String
         let _ = writeln!(
             out,
             "<section id=\"{}\">\n<h2>{}</h2>",
-            Slug(&section.title),
-            Escaped(&section.title)
+            Slug_Of_Text(&section.title),
+            Escape_Html(&section.title)
         );
 
         for item in &section.items
         {
-            Article(&mut out, item);
+            Write_Article(&mut out, item);
         }
 
         out.push_str("</section>\n");
@@ -197,39 +197,39 @@ fn Html_Head(projection: &Projection) -> String
          <meta charset=\"utf-8\">\n<meta name=\"nomos-profile\" content=\"{}\">\n\
          <meta name=\"nomos-do-not-edit\" content=\"{}\">\n<title>{}</title>\n</head>\n<body>\n\
          <h1>{}</h1>",
-        Escaped(&projection.profile),
-        Escaped(DO_NOT_EDIT),
-        Escaped(&projection.title),
-        Escaped(&projection.title)
+        Escape_Html(&projection.profile),
+        Escape_Html(GENERATED_FILE_NOTICE),
+        Escape_Html(&projection.title),
+        Escape_Html(&projection.title)
     );
 
     return out;
 }
 
 /// One item as an article: its identity, the fields it states, and its body.
-fn Article(out: &mut String, item: &Item)
+fn Write_Article(out: &mut String, item: &Item)
 {
-    let _ = writeln!(out, "<article>\n<h3>{}</h3>", Escaped(&item.identity));
+    let _ = writeln!(out, "<article>\n<h3>{}</h3>", Escape_Html(&item.identity));
     if !item.fields.is_empty()
     {
         out.push_str("<dl>\n");
         for (name, value) in &item.fields
         {
-            let _ = writeln!(out, "<dt>{}</dt><dd>{}</dd>", Escaped(name), Escaped(value));
+            let _ = writeln!(out, "<dt>{}</dt><dd>{}</dd>", Escape_Html(name), Escape_Html(value));
         }
         out.push_str("</dl>\n");
     }
     if let Some(body) = &item.body
     {
-        let _ = writeln!(out, "<pre>{}</pre>", Escaped(body.trim_end()));
+        let _ = writeln!(out, "<pre>{}</pre>", Escape_Html(body.trim_end()));
     }
     out.push_str("</article>\n");
 }
 
-fn Mermaid(projection: &Projection) -> String
+fn Render_Mermaid(projection: &Projection) -> String
 {
     let mut out = format!(
-        "%% nomos_generated: true\n%% do_not_edit: {DO_NOT_EDIT}\n%% profile: {}\ngraph LR\n",
+        "%% nomos_generated: true\n%% do_not_edit: {GENERATED_FILE_NOTICE}\n%% profile: {}\ngraph LR\n",
         projection.profile
     );
     // One name table across every section, because an edge in one subgraph routinely names
@@ -242,16 +242,16 @@ fn Mermaid(projection: &Projection) -> String
 
     for section in &projection.sections
     {
-        Subgraph(&mut out, &mut names, section);
+        Write_Subgraph(&mut out, &mut names, section);
     }
 
     return out;
 }
 
 /// One section as a subgraph.
-fn Subgraph(out: &mut String, names: &mut Names, section: &Section)
+fn Write_Subgraph(out: &mut String, names: &mut Names, section: &Section)
 {
-    let _ = writeln!(out, "  subgraph {}", Quoted(&section.title));
+    let _ = writeln!(out, "  subgraph {}", Quoted_For_Mermaid(&section.title));
 
     for item in &section.items
     {
@@ -280,14 +280,14 @@ fn Node_Or_Edge(out: &mut String, names: &mut Names, item: &Item)
     let relation = item.Field("relation").unwrap_or("relates");
     let tail = names.Declared(Identity(from), Label(from));
     let head = names.Declared(Identity(to), Label(to));
-    let _ = writeln!(out, "    {tail} -->|{}| {head}", Quoted(relation));
+    let _ = writeln!(out, "    {tail} -->|{}| {head}", Quoted_For_Mermaid(relation));
 }
 
-fn Json(projection: &Projection) -> Result<String, ProjectError>
+fn Render_Json(projection: &Projection) -> Result<String, ProjectError>
 {
     let generated = Generated {
         nomos_generated: true,
-        do_not_edit: DO_NOT_EDIT,
+        do_not_edit: GENERATED_FILE_NOTICE,
         projection,
     };
     let mut rendered = serde_json::to_string_pretty(&generated)
@@ -297,11 +297,11 @@ fn Json(projection: &Projection) -> Result<String, ProjectError>
     return Ok(rendered);
 }
 
-fn Yaml(projection: &Projection) -> Result<String, ProjectError>
+fn Render_Yaml(projection: &Projection) -> Result<String, ProjectError>
 {
     let generated = Generated {
         nomos_generated: true,
-        do_not_edit: DO_NOT_EDIT,
+        do_not_edit: GENERATED_FILE_NOTICE,
         projection,
     };
 
@@ -309,15 +309,15 @@ fn Yaml(projection: &Projection) -> Result<String, ProjectError>
         .map_err(|error| return ProjectError::Malformed(error.to_string()));
 }
 
-fn Contextpack(projection: &Projection) -> Result<String, ProjectError>
+fn Render_Contextpack(projection: &Projection) -> Result<String, ProjectError>
 {
     let pack = Pack {
         nomos_generated: true,
-        do_not_edit: DO_NOT_EDIT,
+        do_not_edit: GENERATED_FILE_NOTICE,
         profile: &projection.profile,
         title: &projection.title,
         inputs_digest: projection.Inputs_Digest(),
-        sections: projection.sections.iter().map(Packed).collect(),
+        sections: projection.sections.iter().map(Packed_Section).collect(),
     };
 
     let mut rendered = serde_json::to_string_pretty(&pack)
@@ -327,7 +327,7 @@ fn Contextpack(projection: &Projection) -> Result<String, ProjectError>
     return Ok(rendered);
 }
 
-fn Escaped(value: &str) -> String
+fn Escape_Html(value: &str) -> String
 {
     return value
         .replace('&', "&amp;")
@@ -336,7 +336,7 @@ fn Escaped(value: &str) -> String
         .replace('"', "&quot;");
 }
 
-fn Slug(value: &str) -> String
+fn Slug_Of_Text(value: &str) -> String
 {
     let mut slug = String::new();
     let mut pending = false;
@@ -361,7 +361,7 @@ fn Slug(value: &str) -> String
     return slug;
 }
 
-fn Quoted(value: &str) -> String
+fn Quoted_For_Mermaid(value: &str) -> String
 {
     return format!("\"{}\"", value.replace('"', "'").replace(['\n', '\r'], " "));
 }
@@ -398,7 +398,7 @@ struct PackItem<'a>
 ///
 /// The other fields are dropped on purpose. A pack is read by something with a budget, and
 /// a field that only a table renderer uses costs that budget without answering anything.
-fn Packed(section: &Section) -> PackSection<'_>
+fn Packed_Section(section: &Section) -> PackSection<'_>
 {
     return PackSection {
         title: &section.title,
@@ -445,7 +445,7 @@ impl Names
         }
         self.labelled.push(named.clone());
 
-        return format!("{named}[{}]", Quoted(label));
+        return format!("{named}[{}]", Quoted_For_Mermaid(label));
     }
 
     fn For(&mut self, identity: &str) -> String
@@ -455,7 +455,7 @@ impl Names
             return known.clone();
         }
 
-        let candidate = match Slug(identity).replace('-', "_")
+        let candidate = match Slug_Of_Text(identity).replace('-', "_")
         {
             slug if slug.is_empty() => "n".to_owned(),
             slug => slug,

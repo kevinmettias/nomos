@@ -224,7 +224,7 @@ fn Test_A_Whole_Store_Profile_Should_Render_Exactly_What_It_Did_Before()
     {
         let declared = Profile_Named(id);
 
-        assert!(!declared.Names_A_Subject(), "{id} unexpectedly names a subject");
+        assert!(!declared.Is_Per_Subject(), "{id} unexpectedly names a subject");
         assert_eq!(
             Build(&store, &declared).expect("builds").body,
             Build(&store, &declared.For(None).expect("resolves"))

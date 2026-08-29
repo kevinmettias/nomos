@@ -4,14 +4,14 @@ use crate::BundleError;
 use crate::Record;
 use rusqlite::Connection;
 
-use super::{Collect, Columns};
+use super::{Collect_Rows, Columns};
 
 /// The submissions, ordered by the node they are.
-pub(super) fn Submissions(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
+pub(super) fn Collect_Submissions(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
 {
     use crate::row::submission::Submission;
 
-    return Collect(
+    return Collect_Rows(
         connection,
         records,
         "SELECT n.node_id, s.kind, s.form_contract_version, s.state, s.submitted_by,
@@ -46,9 +46,9 @@ pub(super) fn Submission_Values(connection: &Connection, records: &mut Vec<Recor
 /// Every submission value row, in the order that makes the last one the current reading.
 fn Submission_Value_Rows(
     connection: &Connection,
-) -> Result<Vec<crate::row::submission::value::SubmissionValue>, BundleError>
+) -> Result<Vec<crate::row::submission::submission_value::SubmissionValue>, BundleError>
 {
-    use crate::row::submission::value::SubmissionValue;
+    use crate::row::submission::submission_value::SubmissionValue;
 
     let mut statement = connection.prepare(
         "SELECT n.node_id, v.field, v.ordinal, v.origin, v.value, v.value_hash,
@@ -81,9 +81,9 @@ fn Submission_Value_Rows(
 /// a bundle that dropped them would lose the record that a question was ever asked.
 pub(super) fn Submission_Gaps(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
 {
-    use crate::row::submission::gap::SubmissionGap;
+    use crate::row::submission::submission_gap::SubmissionGap;
 
-    return Collect(
+    return Collect_Rows(
         connection,
         records,
 "SELECT n.node_id, g.ordinal, g.question, g.blocks, g.severity, g.closed_by

@@ -75,7 +75,7 @@ mod tests
     #[test]
     fn Test_Every_Format_Should_Be_Matched_Exhaustively()
     {
-        fn Ordinal(format: Format) -> usize
+        fn Ordinal_Of_Format(format: Format) -> usize
         {
             return match format
             {
@@ -91,7 +91,7 @@ mod tests
         for (index, format) in Format::All().iter().enumerate()
         {
             assert_eq!(
-                Ordinal(*format),
+                Ordinal_Of_Format(*format),
                 index,
                 "{} is not matched at the position Format::All() puts it, so the exhaustive \
                  match and the universe have drifted apart",

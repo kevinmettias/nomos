@@ -1,70 +1,44 @@
 // Whether what was built is still current, which only a build can answer.
 mod freshness;
+mod stamp;
 
 pub use freshness::Freshness;
+pub use stamp::Stamp;
 
 use crate::Output;
-use crate::Format;
 use crate::Profile;
-use crate::Input;
 use crate::Projection;
-use crate::Render;
 use crate::ProjectError;
 use nomos_spec_model::ContentHash;
 use nomos_spec_store::SpecificationStore;
-use serde::{Deserialize, Serialize};
 
 pub const SIDECAR_SUFFIX: &str = ".nomos-projection.json";
 
-#[derive(Clone, Debug, Deserialize, PartialEq, Eq, Serialize)]
-#[serde(deny_unknown_fields)]
-pub struct Stamp
+pub fn Build_Projection(store: &SpecificationStore, profile: &Profile) -> Result<Output, ProjectError>
 {
-    pub profile: String,
-    pub profile_digest: String,
-    pub format: Format,
-    pub output: String,
-    pub content_digest: String,
-    pub inputs_digest: String,
-    pub sections: Vec<(String, u32)>,
-    pub inputs: Vec<Input>,
-}
-
-impl Stamp
-{
-    pub fn Parse(text: &str) -> Result<Self, ProjectError>
-    {
-        return serde_json::from_str(text)
-            .map_err(|error| return ProjectError::Malformed(error.to_string()));
-    }
-
-    pub fn Render(&self) -> Result<String, ProjectError>
-    {
-        let mut rendered = serde_json::to_string_pretty(self)
-            .map_err(|error| return ProjectError::Malformed(error.to_string()))?;
-        rendered.push('\n');
-
-        return Ok(rendered);
-    }
-}
-
-pub fn Build(store: &SpecificationStore, profile: &Profile) -> Result<Output, ProjectError>
-{
-    use crate::Select;
+    use crate::Render_Projection;
+    use crate::Select_Projection;
 
     profile.Validate()?;
     Refuse_Unresolved(profile)?;
 
-    let projection = Select(store, profile)?;
-    let body = Render(&projection)?;
+    let projection = Select_Projection(store, profile)?;
+    let body = Render_Projection(&projection)?;
 
     return Ok(Output {
         path: profile.output.clone(),
         sidecar_path: format!("{}{SIDECAR_SUFFIX}", profile.output),
-        stamp: Stamped(profile, &projection, &body),
+        stamp: Stamped_Projection(profile, &projection, &body),
         body,
     });
 }
+
+// Kept alongside `Build_Projection` because the real name (chosen for check-naming-clarity)
+// is called from `crates/orchestration/nomos-spec-orchestration`, from
+// `tests/integration/tests/determinism/spec_productions.rs`, and is checked by literal
+// name in `tests/contract/tests/public_surface/scanner.rs` — none of which sit inside this
+// campaign's `crates/spec` territory.
+pub use self::Build_Projection as Build;
 
 /// The last place a template can be caught before it becomes a directory.
 ///
@@ -73,7 +47,7 @@ pub fn Build(store: &SpecificationStore, profile: &Profile) -> Result<Output, Pr
 /// path named after the placeholder rather than after any subject.
 fn Refuse_Unresolved(profile: &Profile) -> Result<(), ProjectError>
 {
-    if !profile.Names_A_Subject()
+    if !profile.Is_Per_Subject()
     {
         return Ok(());
     }
@@ -84,14 +58,14 @@ fn Refuse_Unresolved(profile: &Profile) -> Result<(), ProjectError>
     });
 }
 
-fn Stamped(profile: &Profile, projection: &Projection, body: &str) -> Stamp
+fn Stamped_Projection(profile: &Profile, projection: &Projection, body: &str) -> Stamp
 {
     return Stamp {
         profile: profile.id.clone(),
         profile_digest: profile.Digest(),
         format: profile.format,
         output: profile.output.clone(),
-        content_digest: ContentHash::Of(body).As_Str().to_owned(),
+        content_digest: ContentHash::Of(body).As_String_Slice().to_owned(),
         inputs_digest: projection.Inputs_Digest(),
         sections: projection
             .sections
@@ -107,7 +81,7 @@ fn Stamped(profile: &Profile, projection: &Projection, body: &str) -> Stamp
     };
 }
 
-pub fn Check(
+pub fn Check_Freshness(
     store: &SpecificationStore,
     profile: &Profile,
     body: Option<&str>,
@@ -124,25 +98,30 @@ pub fn Check(
     };
 
     let recorded = Stamp::Parse(sidecar)?;
-    let rebuilt = Build(store, profile)?;
-    let found = ContentHash::Of(body).As_Str().to_owned();
+    let rebuilt = Build_Projection(store, profile)?;
+    let found = ContentHash::Of(body).As_String_Slice().to_owned();
 
     let mut freshness = Freshness {
-        stale: Stale(&recorded, &rebuilt),
-        edited: Edited(&recorded, &found),
+        stale: Stale_Inputs(&recorded, &rebuilt),
+        edited: Edited_Content(&recorded, &found),
         ..Freshness::default()
     };
-    freshness.diverged = Diverged(&freshness, body, found, rebuilt);
+    freshness.diverged = Diverged_Bytes(&freshness, body, found, rebuilt);
 
     return Ok(freshness);
 }
+
+// Kept alongside `Check_Freshness` because the real name (chosen for check-naming-clarity)
+// is called from `crates/orchestration/nomos-spec-orchestration`, outside this campaign's
+// `crates/spec` territory.
+pub use self::Check_Freshness as Check;
 
 /// The stamp's inputs against what the store now holds.
 ///
 /// The profile digest counts as an input: a projection built from the same rows under a
 /// changed profile is a different document, and reporting it current would be a lie about
 /// the only thing that changed.
-fn Stale(recorded: &Stamp, rebuilt: &Output) -> Option<(String, String)>
+fn Stale_Inputs(recorded: &Stamp, rebuilt: &Output) -> Option<(String, String)>
 {
     if recorded.inputs_digest == rebuilt.stamp.inputs_digest
         && recorded.profile_digest == rebuilt.stamp.profile_digest
@@ -157,7 +136,7 @@ fn Stale(recorded: &Stamp, rebuilt: &Output) -> Option<(String, String)>
 }
 
 /// The stamp's digest against the file it describes.
-fn Edited(recorded: &Stamp, found: &str) -> Option<(String, String)>
+fn Edited_Content(recorded: &Stamp, found: &str) -> Option<(String, String)>
 {
     if recorded.content_digest == found
     {
@@ -180,14 +159,14 @@ fn Edited(recorded: &Stamp, found: &str) -> Option<(String, String)>
 /// and the profile, and both digests have just been found to match the rebuild, so an honest
 /// stamp guarantees these bytes are equal: reaching here means the pair was written by
 /// something other than `Build`.
-fn Diverged(
+fn Diverged_Bytes(
     freshness: &Freshness,
     body: &str,
     found: String,
     rebuilt: Output,
 ) -> Option<(String, String)>
 {
-    if Already_Explained(freshness, body, &rebuilt)
+    if Is_Already_Explained(freshness, body, &rebuilt)
     {
         return None;
     }
@@ -199,7 +178,7 @@ fn Diverged(
 ///
 /// A stale pair and an edited one both differ from the rebuild too, so divergence is only
 /// the answer once neither of those is what happened and the bytes still match.
-fn Already_Explained(freshness: &Freshness, body: &str, rebuilt: &Output) -> bool
+fn Is_Already_Explained(freshness: &Freshness, body: &str, rebuilt: &Output) -> bool
 {
     return freshness.stale.is_some() || freshness.edited.is_some() || body == rebuilt.body;
 }

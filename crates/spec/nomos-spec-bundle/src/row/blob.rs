@@ -1,6 +1,6 @@
 //! One blob's bytes, addressed by the digest of what they are.
 
-pub(crate) mod encoding;
+pub(crate) mod blob_encoding;
 
 use serde::{Deserialize, Serialize};
 

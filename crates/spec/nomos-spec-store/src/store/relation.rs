@@ -2,42 +2,19 @@
 
 use crate::StoreError;
 
+mod from_node_id;
 mod inverse_relation_type;
 mod relation_constraint;
 mod relation_tier;
 mod relation_type_name;
 mod to_node_id;
 
+pub use from_node_id::FromNodeId;
 pub use inverse_relation_type::InverseRelationType;
 pub use relation_constraint::RelationConstraint;
 pub use relation_tier::RelationTier;
 pub use relation_type_name::RelationTypeName;
 pub use to_node_id::ToNodeId;
-
-/// The identifier of a relation edge's source node.
-///
-/// Distinct from `ToNodeId` even though both carry a node identifier, because the two
-/// sit next to each other at every edge-writing call site — `Write_Relation(from, type, to)`
-/// — and a position is not a name. Naming the role rather than leaving both `&str` is what
-/// keeps a transposed pair a compile error instead of a silently reversed edge.
-#[derive(Clone, Copy, Debug)]
-pub struct FromNodeId<'a>(pub &'a str);
-
-impl<'a> From<&'a str> for FromNodeId<'a>
-{
-    fn from(value: &'a str) -> Self
-    {
-        return Self(value);
-    }
-}
-
-impl<'a> From<&'a String> for FromNodeId<'a>
-{
-    fn from(value: &'a String) -> Self
-    {
-        return Self(value.as_str());
-    }
-}
 
 /// The constraint declares something at every end, or the refusal names the type that
 /// declared nothing.
@@ -77,7 +54,7 @@ mod tests
     struct TestNodeId<'a>(&'a str);
     struct TestNodeKind<'a>(&'a str);
 
-    fn Node(store: &mut SpecificationStore, node_id: TestNodeId<'_>, kind: TestNodeKind<'_>)
+    fn Insert_Node(store: &mut SpecificationStore, node_id: TestNodeId<'_>, kind: TestNodeKind<'_>)
     {
         store
             .Upsert_Node(NodeRow {
@@ -146,8 +123,8 @@ mod tests
     fn Test_An_Edge_Whose_Endpoint_Kind_Is_Not_Admitted_Should_Be_Refused_By_Name()
     {
         let mut store = SpecificationStore::In_Memory().expect("opens");
-        Node(&mut store, TestNodeId("A"), TestNodeKind("widget"));
-        Node(&mut store, TestNodeId("B"), TestNodeKind("gadget"));
+        Insert_Node(&mut store, TestNodeId("A"), TestNodeKind("widget"));
+        Insert_Node(&mut store, TestNodeId("B"), TestNodeKind("gadget"));
         Put_Joins_Relation_Type(&mut store, 4);
 
         let error = store.Put_Relation("A", "joins", "B").expect_err("B is a gadget, not a widget");
@@ -155,6 +132,9 @@ mod tests
         let StoreError::RelationEndpoint { relation_type, role, node_id, kind, admits } = error
         else
         {
+            // Test-only: the refusal must be this exact variant for the assertions below to
+            // check anything, so a different variant is a defect in the fixture, not a case
+            // the test needs to keep running for.
             panic!("wrong variant: {error:?}");
         };
         assert_eq!(relation_type, "joins", "which type");
@@ -169,9 +149,9 @@ mod tests
     fn Test_An_Edge_Past_The_Declared_Cardinality_Should_Be_Refused_By_Name()
     {
         let mut store = SpecificationStore::In_Memory().expect("opens");
-        Node(&mut store, TestNodeId("A"), TestNodeKind("widget"));
-        Node(&mut store, TestNodeId("B"), TestNodeKind("widget"));
-        Node(&mut store, TestNodeId("C"), TestNodeKind("widget"));
+        Insert_Node(&mut store, TestNodeId("A"), TestNodeKind("widget"));
+        Insert_Node(&mut store, TestNodeId("B"), TestNodeKind("widget"));
+        Insert_Node(&mut store, TestNodeId("C"), TestNodeKind("widget"));
         Put_Joins_Relation_Type(&mut store, 1);
         store.Put_Relation("A", "joins", "B").expect("the first edge fits the cap of 1");
 
@@ -181,6 +161,9 @@ mod tests
         let StoreError::RelationCardinality { relation_type, node_id, max_per_node } = error
         else
         {
+            // Test-only: the refusal must be this exact variant for the assertions below to
+            // check anything, so a different variant is a defect in the fixture, not a case
+            // the test needs to keep running for.
             panic!("wrong variant: {error:?}");
         };
         assert_eq!(relation_type, "joins", "which type");
@@ -194,8 +177,8 @@ mod tests
     fn Test_Re_Writing_The_Same_Edge_Should_Not_Count_Against_Cardinality()
     {
         let mut store = SpecificationStore::In_Memory().expect("opens");
-        Node(&mut store, TestNodeId("A"), TestNodeKind("widget"));
-        Node(&mut store, TestNodeId("B"), TestNodeKind("widget"));
+        Insert_Node(&mut store, TestNodeId("A"), TestNodeKind("widget"));
+        Insert_Node(&mut store, TestNodeId("B"), TestNodeKind("widget"));
         Put_Joins_Relation_Type(&mut store, 1);
         store.Put_Relation("A", "joins", "B").expect("first write");
 
@@ -208,7 +191,7 @@ mod tests
     fn Test_A_Placeholder_Endpoint_Should_Be_Exempt_From_The_Kind_Check()
     {
         let mut store = SpecificationStore::In_Memory().expect("opens");
-        Node(&mut store, TestNodeId("A"), TestNodeKind("widget"));
+        Insert_Node(&mut store, TestNodeId("A"), TestNodeKind("widget"));
         store.Reference_Node("B").expect("mints a placeholder");
         Put_Joins_Relation_Type(&mut store, 4);
 

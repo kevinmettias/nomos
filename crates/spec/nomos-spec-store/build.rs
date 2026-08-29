@@ -43,13 +43,13 @@ fn main() -> Result<(), String>
 
     let directory = manifest.join("records");
     let root = Repository_Root(&manifest)?;
-    let registrations = Registered(&directory, &root)?;
+    let registrations = Registered_Records(&directory, &root)?;
 
     let identifiers = Identifier_Table(&registrations)?;
-    Written(&out.join("governing_record_ids.rs"), &identifiers)?;
+    Written_Table(&out.join("governing_record_ids.rs"), &identifiers)?;
 
     let records = Record_Table(&registrations, &root)?;
-    Written(&out.join("governing_records.rs"), &records)?;
+    Written_Table(&out.join("governing_records.rs"), &records)?;
 
     Rerun_Triggers(&directory, &root, &registrations);
 
@@ -101,7 +101,7 @@ fn Repository_Root(manifest: &Path) -> Result<PathBuf, String>
 /// the `Err` and fails the build, so the stop is the same one and the reader of it is the
 /// same reader — the difference is that every frame between here and there had to say what
 /// it does with a failure.
-fn Registered(directory: &Path, root: &Path) -> Result<Vec<Registration>, String>
+fn Registered_Records(directory: &Path, root: &Path) -> Result<Vec<Registration>, String>
 {
     return Registrations_In(directory, root).map_err(|error| return error.Describe());
 }
@@ -114,7 +114,7 @@ fn Identifier_Table(registrations: &[Registration]) -> Result<String, String>
     for registration in registrations
     {
         // `{:?}` so the string literal is escaped by the formatter rather than by hand.
-        writeln!(table, "    {:?},", registration.id).map_err(Unwritable)?;
+        writeln!(table, "    {:?},", registration.id).map_err(Unwritable_Table)?;
     }
 
     table.push_str("]\n");
@@ -122,7 +122,7 @@ fn Identifier_Table(registrations: &[Registration]) -> Result<String, String>
 }
 
 /// One generated table, written where `governing.rs` will `include!` it.
-fn Written(path: &Path, table: &str) -> Result<(), String>
+fn Written_Table(path: &Path, table: &str) -> Result<(), String>
 {
     return std::fs::write(path, table)
         .map_err(|error| return format!("{} must be writable: {error}", path.display()));
@@ -143,13 +143,13 @@ fn Record_Table(registrations: &[Registration], root: &Path) -> Result<String, S
 
     for registration in registrations
     {
-        let absolute = Absolute(root, &registration.path);
+        let absolute = Absolute_Path(root, &registration.path);
         writeln!(
             table,
             "    (\n        {:?},\n        include_str!({absolute:?}),\n    ),",
             registration.path
         )
-        .map_err(Unwritable)?;
+        .map_err(Unwritable_Table)?;
     }
 
     table.push_str("]\n");
@@ -158,7 +158,7 @@ fn Record_Table(registrations: &[Registration], root: &Path) -> Result<String, S
 
 /// A repository-relative record path as an absolute one, in the spelling rustc accepts on
 /// every platform this builds on.
-fn Absolute(root: &Path, path: &str) -> String
+fn Absolute_Path(root: &Path, path: &str) -> String
 {
     return root.join(path).display().to_string().replace('\\', "/");
 }
@@ -177,7 +177,7 @@ fn Rerun_Triggers(directory: &Path, root: &Path, registrations: &[Registration])
     {
         let file = directory.join(format!("{}.record", registration.id));
         println!("cargo::rerun-if-changed={}", file.display());
-        println!("cargo::rerun-if-changed={}", Absolute(root, &registration.path));
+        println!("cargo::rerun-if-changed={}", Absolute_Path(root, &registration.path));
     }
 }
 
@@ -186,7 +186,7 @@ fn Rerun_Triggers(directory: &Path, root: &Path, registrations: &[Registration])
 /// `String`'s `fmt::Write` does not fail, so this is a `Result` the trait requires and not
 /// a condition. It is still returned: a boundary nobody can reach is cheaper to propagate
 /// than to argue about at every site.
-fn Unwritable(error: core::fmt::Error) -> String
+fn Unwritable_Table(error: core::fmt::Error) -> String
 {
     return format!("the generated table could not be assembled: {error}");
 }

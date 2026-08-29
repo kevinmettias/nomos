@@ -19,7 +19,7 @@ pub(super) struct Suite
 /// `false` where another suite already holds it. The node is left where it is: two suites
 /// declaring one identifier is an ecosystem problem, and reassigning would make the last
 /// ingest right rather than making the conflict visible.
-pub(super) fn Claim(
+pub(super) fn Claim_Node_Id(
     store: &mut SpecificationStore,
     node_id: &str,
     node: i64,
@@ -54,13 +54,13 @@ pub(super) fn Ingest_Document(
 
     for block in &blocks
     {
-        Dispose(store, document_uid, block.ordinal, node_uid)?;
+        Dispose_Block(store, document_uid, block.ordinal, node_uid)?;
     }
 
     return Ok(u32::try_from(blocks.len()).unwrap_or(u32::MAX));
 }
 
-pub(super) fn Dispose(
+pub(super) fn Dispose_Block(
     store: &mut SpecificationStore,
     document_uid: i64,
     ordinal: u32,
@@ -73,12 +73,12 @@ pub(super) fn Dispose(
          WHERE document_uid = ?1 AND ordinal = ?2",
         rusqlite::params![document_uid, ordinal, node_uid],
     );
-    Sql(disposed)?;
+    Wrap_Sql_Result(disposed)?;
 
     return Ok(());
 }
 
-pub(super) fn Text(archive: &mut Archive, entry: &str) -> Result<String, IngestError>
+pub(super) fn Read_Text(archive: &mut Archive, entry: &str) -> Result<String, IngestError>
 {
     return archive
         .Read_Text(entry)
@@ -86,18 +86,18 @@ pub(super) fn Text(archive: &mut Archive, entry: &str) -> Result<String, IngestE
 }
 
 /// `xvpe-spec-seed:target-adapter.schema.json` — the suite, then the name inside it.
-pub(super) fn Qualified(sibling: Sibling, entry: &str) -> String
+pub(super) fn Qualified_Node_Id(sibling: Sibling, entry: &str) -> String
 {
-    return format!("{}:{}", sibling.Suite_Id(), Stem(entry));
+    return format!("{}:{}", sibling.Suite_Id(), Path_Stem(entry));
 }
 
 /// The entry's file name, without the archive's top-level directory.
-pub(super) fn Stem(entry: &str) -> &str
+pub(super) fn Path_Stem(entry: &str) -> &str
 {
     return entry.rsplit('/').next().unwrap_or(entry);
 }
 
-pub(super) fn Slug(name: &str) -> String
+pub(super) fn Slug_Of_Name(name: &str) -> String
 {
     let mut slug = String::new();
     let mut pending = false;
@@ -122,7 +122,7 @@ pub(super) fn Slug(name: &str) -> String
     return slug;
 }
 
-pub(super) fn Sql<T>(result: rusqlite::Result<T>) -> Result<T, IngestError>
+pub(super) fn Wrap_Sql_Result<Value>(result: rusqlite::Result<Value>) -> Result<Value, IngestError>
 {
     return result.map_err(|error| IngestError::Store(StoreError::Sql(error.to_string())));
 }

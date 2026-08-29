@@ -11,21 +11,28 @@ use crate::Violation;
 use nomos_spec_store::{SpecificationStore, Table};
 /// Every rule here has the same shape: count a table, run a query naming the rows that
 /// offend, and report those rows. The counting, the two failure paths and the
-/// satisfied-or-violated decision are answered once, in [`Offending`], because a rule that
-/// swallowed a SQL error would report satisfied over a query that never ran.
-pub(crate) fn Offending(
+/// satisfied-or-violated decision are answered once, in [`Offending_Outcome`], because a
+/// rule that swallowed a SQL error would report satisfied over a query that never ran.
+pub(crate) fn Offending_Outcome(
     store: &SpecificationStore,
     counted: Table,
     offenders: &'static str,
     violation: impl Fn(&Row<'_>) -> rusqlite::Result<Violation>,
 ) -> RuleOutcome
 {
-    let total = match Counted(store, counted)
+    // `total` is bound here, ahead of the violations check below, on purpose rather than by
+    // oversight: it runs the count query unconditionally so a broken count is `Errored`
+    // regardless of whether `Found_Violations` later reports any rows. Binding it inside the
+    // `if violations.is_empty()` block below would make the count query run only when there
+    // are no violations, so a rule with real violations and a broken count would report
+    // `Violated` over a count query that never ran -- the same silent swallow this function's
+    // own doc comment exists to rule out.
+    let total = match Counted_Rows(store, counted)
     {
         Ok(count) => count,
         Err(error) => return RuleOutcome::Errored(error),
     };
-    let violations = match Found(store, offenders, violation)
+    let violations = match Found_Violations(store, offenders, violation)
     {
         Ok(found) => found,
         Err(error) => return RuleOutcome::Errored(error),
@@ -43,7 +50,7 @@ pub(crate) fn Offending(
 ///
 /// Reported alongside a satisfied verdict, because a rule that examined nothing and a rule
 /// that examined four hundred rows both pass and only one of them means anything.
-pub(crate) fn Counted(store: &SpecificationStore, table: Table) -> Result<u32, String>
+pub(crate) fn Counted_Rows(store: &SpecificationStore, table: Table) -> Result<u32, String>
 {
     return store
         .Connection()
@@ -52,7 +59,7 @@ pub(crate) fn Counted(store: &SpecificationStore, table: Table) -> Result<u32, S
 }
 
 /// Every row the offending query returned, as the rule words it.
-pub(crate) fn Found(
+pub(crate) fn Found_Violations(
     store: &SpecificationStore,
     offenders: &'static str,
     violation: impl Fn(&Row<'_>) -> rusqlite::Result<Violation>,
@@ -123,7 +130,7 @@ const ORDINAL: usize = 2;
 ///
 /// Both are checked, because either one accounts for a row: a disposition says what became
 /// of it and an omission says why nothing did. A row with neither was dropped silently.
-pub(crate) fn Undisposed(store: &SpecificationStore, traced: &Traced) -> RuleOutcome
+pub(crate) fn Undisposed_Outcome(store: &SpecificationStore, traced: &Traced) -> RuleOutcome
 {
     let Traced {
         table,
@@ -131,7 +138,7 @@ pub(crate) fn Undisposed(store: &SpecificationStore, traced: &Traced) -> RuleOut
         label,
     } = *traced;
 
-    return Offending(store, table, offenders, |row| {
+    return Offending_Outcome(store, table, offenders, |row| {
         let uid: i64 = row.get(UID)?;
         let document: String = row.get(DOCUMENT)?;
         let ordinal: i64 = row.get(ORDINAL)?;

@@ -18,9 +18,9 @@ mod tests;
 use coverage::{COVERAGE, Carried};
 
 use crate::BundleError;
-use crate::ColumnName;
 use crate::Record;
-use crate::TableName;
+use crate::bundle_error::ColumnName;
+use crate::bundle_error::TableName;
 use nomos_spec_store::Table;
 use rusqlite::Connection;
 use std::collections::BTreeSet;
@@ -44,7 +44,7 @@ pub(crate) fn Assert_Columns_Covered(
             .map_or(&[] as &[(&str, Carried)], |coverage| coverage.columns);
 
         let present = Schema_Columns(connection, name)?;
-        Compare(name, &present, declared)?;
+        Compare_Schema_To_Declaration(name, &present, declared)?;
         Assert_Fields_Exist(name, declared, records)?;
     }
 
@@ -72,7 +72,7 @@ fn Schema_Columns(connection: &Connection, table: &str) -> Result<Vec<String>, B
 
 /// Both directions. A missing declaration is a column nobody exports; a stale one is a
 /// declaration that stopped describing anything and would go on satisfying the guard.
-fn Compare(
+fn Compare_Schema_To_Declaration(
     table: &str,
     schema: &[String],
     declared: &[(&str, Carried)],
@@ -144,7 +144,7 @@ fn Assert_Fields_Exist(
         return Ok(());
     };
 
-    let fields = Fields(sample)?;
+    let fields = Record_Fields(sample)?;
     for (column, carried) in declared
     {
         Assert_The_Field_Is_Carried(TableName(table), ColumnName(column), carried, &fields)?;
@@ -153,7 +153,7 @@ fn Assert_Fields_Exist(
     return Ok(());
 }
 
-fn Fields(record: &Record) -> Result<BTreeSet<String>, BundleError>
+fn Record_Fields(record: &Record) -> Result<BTreeSet<String>, BundleError>
 {
     let value = serde_json::to_value(record)?;
     let Some(serde_json::Value::Object(payload)) = value.get("record")

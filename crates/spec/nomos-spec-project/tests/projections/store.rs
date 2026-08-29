@@ -240,7 +240,7 @@ const SUBJECT_IN_FIXTURE: &str = "AGT-EXEC-001";
 pub(crate) fn For_Building(profile: &Profile) -> Profile
 {
     return profile
-        .For(profile.Names_A_Subject().then_some(SUBJECT_IN_FIXTURE))
+        .For(profile.Is_Per_Subject().then_some(SUBJECT_IN_FIXTURE))
         // `For` refuses a subject a whole-store profile has nowhere to put and refuses a
         // template given none, and the line above is what decides which of the two this
         // profile is. A refusal means that decision was wrong — and the doc above says why

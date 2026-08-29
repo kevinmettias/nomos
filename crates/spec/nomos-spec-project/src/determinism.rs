@@ -15,7 +15,7 @@ use nomos_contracts::{DeterminismStrength, ReproducibilityScope, Strategy, Trace
 
 /// Rendering a [`crate::Projection`] into the bytes of a generated document.
 ///
-/// The domain is [`crate::Select`] followed by [`crate::Render`], taken together, which is
+/// The domain is [`crate::Select_Projection`] followed by [`crate::Render_Projection`], taken together, which is
 /// what [`crate::Build`] is. Selection decides which items a profile reaches and in what
 /// order; rendering decides how each is spelled. The promise that matters spans both,
 /// because a generated document is checked into a tree and compared against a rebuild —

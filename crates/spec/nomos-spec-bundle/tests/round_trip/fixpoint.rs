@@ -1,7 +1,7 @@
 //! The round trip is a fixpoint, and it is one for reasons other than luck.
 
 use crate::populated::{BINARY, Populated, Populated_In_Reverse};
-use nomos_spec_bundle::{Bundle, Export, Import};
+use nomos_spec_bundle::{Bundle, Export, Import_Bundle};
 use nomos_spec_store::{SpecificationStore, Table};
 
 /// The guard against a vacuous round trip.
@@ -30,7 +30,7 @@ fn Test_A_Bundle_Should_Survive_A_Database_Round_Trip_Byte_For_Byte()
     let first = Export(&source).expect("exports").Write().expect("writes");
 
     let mut rebuilt = SpecificationStore::In_Memory().expect("opens");
-    let report = Import(&mut rebuilt, &Bundle::Parse(&first).expect("parses")).expect("imports");
+    let report = Import_Bundle(&mut rebuilt, &Bundle::Parse(&first).expect("parses")).expect("imports");
 
     let second = Export(&rebuilt).expect("re-exports").Write().expect("writes");
 
@@ -84,7 +84,7 @@ fn Test_Import_Should_Land_Every_Row_The_Bundle_Declared()
     let bundle = Export(&source).expect("exports");
 
     let mut rebuilt = SpecificationStore::In_Memory().expect("opens");
-    Import(&mut rebuilt, &bundle).expect("imports");
+    Import_Bundle(&mut rebuilt, &bundle).expect("imports");
 
     for table in Table::All()
     {
@@ -108,7 +108,7 @@ fn Test_A_Relation_Types_Constraint_Should_Survive_The_Round_Trip()
     let bundle = Export(&source).expect("exports");
 
     let mut rebuilt = SpecificationStore::In_Memory().expect("opens");
-    Import(&mut rebuilt, &bundle).expect("imports");
+    Import_Bundle(&mut rebuilt, &bundle).expect("imports");
 
     let (domain, range, max_per_node): (String, String, i64) = rebuilt
         .Connection()
@@ -134,7 +134,7 @@ fn Test_Binary_Blobs_Should_Survive_As_Bytes()
     assert!(text.contains("\"base64\""), "the binary blob took the utf8 arm");
 
     let mut rebuilt = SpecificationStore::In_Memory().expect("opens");
-    Import(&mut rebuilt, &Bundle::Parse(&text).expect("parses")).expect("imports");
+    Import_Bundle(&mut rebuilt, &Bundle::Parse(&text).expect("parses")).expect("imports");
 
     let restored: Vec<u8> = rebuilt
         .Connection()

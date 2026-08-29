@@ -14,12 +14,14 @@ mod prose;
 mod machine;
 mod commentary;
 mod document;
+mod sibling;
 #[cfg(test)]
 mod tests;
 
 use prose::{Declared, Sourced, Ingest_Prose};
 pub use commentary::{Prepare_Commentary_View, Statements_Sourced_Only_From_Commentary};
-use document::{Suite, Text, Ingest_Document, Qualified, Stem, Claim, Sql, Slug, Dispose};
+use document::{Suite, Read_Text, Ingest_Document, Qualified_Node_Id, Path_Stem, Claim_Node_Id, Wrap_Sql_Result, Slug_Of_Name, Dispose_Block};
+pub use sibling::Sibling;
 
 use crate::SuiteReport;
 use crate::Archive;
@@ -40,63 +42,6 @@ pub const COMMENTARY: &str = "commentary";
 
 /// The suite this repository's own specification belongs to.
 pub const ROOT_SUITE: &str = "nomos";
-
-/// A specification that is not this repository's.
-#[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
-pub enum Sibling
-{
-    Xvpe,
-    Kwb,
-    Ecosystem,
-}
-
-impl Sibling
-{
-    #[must_use]
-    pub const fn Suite_Id(self) -> &'static str
-    {
-        return match self
-        {
-            Self::Xvpe => "xvpe-spec-seed",
-            Self::Kwb => "kwb-spec-seed",
-            Self::Ecosystem => "ecosystem-contracts",
-        };
-    }
-
-    #[must_use]
-    pub const fn Title(self) -> &'static str
-    {
-        return match self
-        {
-            Self::Xvpe => "XVPE specification seed",
-            Self::Kwb => "KnowledgeWorkbench specification seed",
-            Self::Ecosystem => "Ecosystem contracts",
-        };
-    }
-
-    #[must_use]
-    pub const fn Archive(self) -> &'static str
-    {
-        return match self
-        {
-            Self::Xvpe => "xvpe-spec-seed-v0.1.zip",
-            Self::Kwb => "kwb-spec-seed-v0.1.zip",
-            Self::Ecosystem => "ecosystem-contracts-v0.1.zip",
-        };
-    }
-
-    /// Every specification not this repository's own.
-    ///
-    /// Mirrored by `Test_Every_Sibling_Should_Be_Matched_Exhaustively`, an exhaustive
-    /// match over every variant with no wildcard arm, in
-    /// `crates/spec/nomos-spec-ingest/src/siblings/tests.rs`. It fails to compile, not
-    /// merely to pass, if a variant is added here without being added there.
-    #[must_use]
-    pub const fn All() -> &'static [Self]
-    {
-        return &[Self::Xvpe, Self::Kwb, Self::Ecosystem];
-    }
-}
 
 /// I6 — one sibling suite, as a non-root suite.
 ///
@@ -144,13 +89,13 @@ pub fn Ingest_Game_Plan<'a>(
 ) -> Result<String, IngestError>
 {
     let path = path.into().0;
-    let node_id = format!("PLAN-{}", Slug(Stem(path)));
+    let node_id = format!("PLAN-{}", Slug_Of_Name(Path_Stem(path)));
     let node = store.Upsert_Node(NodeRow {
         node_id: &node_id,
         kind: "game_plan",
         authority: COMMENTARY,
         representation: "document",
-        title: Stem(path),
+        title: Path_Stem(path),
     })?;
     store.Assign_Suite(node, suite_uid)?;
 
@@ -160,7 +105,7 @@ pub fn Ingest_Game_Plan<'a>(
 
     for block in &blocks
     {
-        Dispose(store, document_uid, block.ordinal, node)?;
+        Dispose_Block(store, document_uid, block.ordinal, node)?;
     }
 
     return Ok(node_id);

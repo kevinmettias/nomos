@@ -44,14 +44,14 @@ fn Test_The_Gate_Should_Pass_Against_Real_Recorded_Blocks()
             .collect::<Vec<String>>()
             .join("\n  ")
     );
-    assert!(report.Passed());
+    assert!(report.Is_Passing());
     assert_eq!(report.blocks_checked, 46, "{}", report.Summary());
     assert_eq!(report.documents_checked, 1);
 }
 
 /// This slice contains no table, so it verifies hashing and segmentation and *not*
 /// normalization. The report has to say so rather than reporting an unqualified pass —
-/// which is the whole reason `Exercised_The_Normalizer` is separate from `Passed`.
+/// which is the whole reason `Has_Exercised_The_Normalizer` is separate from `Is_Passing`.
 #[test]
 fn Test_This_Slice_Should_Not_Claim_To_Exercise_The_Normalizer()
 {
@@ -59,9 +59,9 @@ fn Test_This_Slice_Should_Not_Claim_To_Exercise_The_Normalizer()
 
     let report = Check_Against_Manifest(&lineage, &Documents());
 
-    assert!(report.Passed());
+    assert!(report.Is_Passing());
     assert!(
-        !report.Exercised_The_Normalizer(),
+        !report.Has_Exercised_The_Normalizer(),
         "no block in this slice discriminates, so the run must not claim normalization \
          was verified"
     );
@@ -81,7 +81,7 @@ fn Test_An_Altered_Source_Should_Fail_The_Gate()
         &BTreeMap::from([("00-suite-index.md".to_owned(), altered)]),
     );
 
-    assert!(!report.Passed(), "an altered source must not pass the gate");
+    assert!(!report.Is_Passing(), "an altered source must not pass the gate");
     assert!(
         report
             .mismatches
@@ -112,7 +112,7 @@ fn Test_Front_Matter_Should_Be_Outside_The_Gate()
     );
 
     assert!(
-        report.Passed(),
+        report.Is_Passing(),
         "front matter is outside the block manifest by construction"
     );
 }
@@ -127,7 +127,7 @@ fn Test_Real_Statements_Should_Ingest_Without_Divergence()
 
     let report = Ingest_Statements(&mut store, &file).expect("ingests");
 
-    assert!(report.Passed(), "{report:?}");
+    assert!(report.Is_Passing(), "{report:?}");
     assert_eq!(report.ingested, 16);
 }
 

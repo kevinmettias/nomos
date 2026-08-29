@@ -20,15 +20,14 @@ pub use field_value::FieldValue;
 pub use origin::Origin;
 
 // What a submission is of, and where it stands.
-mod kind;
-mod state;
+mod submission_kind;
+mod submission_state;
 
-pub use kind::SubmissionKind;
-pub use state::SubmissionState;
+pub use submission_kind::SubmissionKind;
+pub use submission_state::SubmissionState;
 
 use crate::DecisionGap;
 use crate::Failure;
-use crate::Severity;
 
 /// What a transport hands to the accept function.
 ///
@@ -95,7 +94,7 @@ impl Submission
 /// and `answers` to an accepted request — is deliberately absent, because it reads a second
 /// row and cannot be a function of one submission; it runs where the store is.
 #[must_use]
-pub fn Validate(submission: &Submission) -> Vec<Failure>
+pub fn Validate_Submission(submission: &Submission) -> Vec<Failure>
 {
     let mut failures = Vec::new();
 
@@ -171,7 +170,7 @@ fn Check_Alternatives(submission: &Submission, failures: &mut Vec<Failure>)
     {
         return;
     };
-    let entries: Vec<&str> = Entries(&alternatives.value);
+    let entries: Vec<&str> = Entries_Of_Value(&alternatives.value);
 
     Check_At_Least_Two_Were_Weighed(&entries, failures);
 
@@ -242,7 +241,7 @@ fn Check_Deviations(submission: &Submission, failures: &mut Vec<Failure>)
         return;
     };
 
-    for (index, entry) in Entries(&deviations.value).iter().enumerate()
+    for (index, entry) in Entries_Of_Value(&deviations.value).iter().enumerate()
     {
         Check_One_Deviation(entry, index, failures);
     }
@@ -277,7 +276,7 @@ fn Check_One_Deviation(entry: &str, index: usize, failures: &mut Vec<Failure>)
 /// above runs in both states. These are the three that acceptance adds.
 fn Check_Acceptance(submission: &Submission, failures: &mut Vec<Failure>)
 {
-    if submission.kind == SubmissionKind::FeatureResult && Lacks_Evidence(submission)
+    if submission.kind == SubmissionKind::FeatureResult && Has_No_Evidence(submission)
     {
         failures.push(Failure {
             field: "evidence".to_owned(),
@@ -294,7 +293,7 @@ fn Check_Acceptance(submission: &Submission, failures: &mut Vec<Failure>)
 }
 
 /// Whether an accepted submission still has no evidence recorded against it.
-fn Lacks_Evidence(submission: &Submission) -> bool
+fn Has_No_Evidence(submission: &Submission) -> bool
 {
     return submission.Current("evidence").is_none();
 }
@@ -309,7 +308,7 @@ fn Check_Nothing_Required_Was_Inferred(submission: &Submission, failures: &mut V
         {
             continue;
         };
-        if current.origin.Satisfies_Acceptance()
+        if current.origin.Can_Satisfy_Acceptance()
         {
             continue;
         }
@@ -333,6 +332,8 @@ fn Check_No_Blocking_Gap_Is_Open(submission: &Submission, failures: &mut Vec<Fai
 {
     use std::collections::BTreeSet;
 
+    use crate::Severity;
+
     let open: BTreeSet<&str> = submission
         .gaps
         .iter()
@@ -355,7 +356,7 @@ fn Check_No_Blocking_Gap_Is_Open(submission: &Submission, failures: &mut Vec<Fai
 }
 
 /// The entries of a multi-entry value: its non-empty lines.
-fn Entries(value: &str) -> Vec<&str>
+fn Entries_Of_Value(value: &str) -> Vec<&str>
 {
     return value
         .lines()

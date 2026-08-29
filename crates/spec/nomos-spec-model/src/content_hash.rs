@@ -26,7 +26,7 @@ impl ContentHash
     #[must_use]
     pub fn Of_Normalized(text: &str) -> Self
     {
-        return Self::Of(&Normalize(text));
+        return Self::Of(&Normalize_Whitespace(text));
     }
 
     /// A SHA-256 digest spelled in lowercase hexadecimal.
@@ -44,7 +44,7 @@ impl ContentHash
     }
 
     #[must_use]
-    pub fn As_Str(&self) -> &str
+    pub fn As_String_Slice(&self) -> &str
     {
         return &self.0;
     }
@@ -61,6 +61,8 @@ fn Is_Lowercase_Hex(text: &str) -> bool
 
 impl core::fmt::Display for ContentHash
 {
+    // `fmt` is the fixed method name `std::fmt::Display` mandates; it is not a free choice
+    // of abbreviation and cannot be spelled out without ceasing to implement the trait.
     fn fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
     {
         return formatter.pad(&self.0);
@@ -73,7 +75,7 @@ impl core::fmt::Display for ContentHash
 /// reproduces all 2533 recorded `normalized_hash` values, and it is also the function
 /// every stored `canonical_text` is already a fixed point of.
 #[must_use]
-pub fn Normalize(text: &str) -> String
+pub fn Normalize_Whitespace(text: &str) -> String
 {
     let mut out = String::with_capacity(text.len());
     let mut pending_space = false;
@@ -99,7 +101,7 @@ pub fn Normalize(text: &str) -> String
 #[must_use]
 pub fn Is_Normalized(text: &str) -> bool
 {
-    return Normalize(text) == text;
+    return Normalize_Whitespace(text) == text;
 }
 
 #[cfg(test)]
@@ -110,10 +112,10 @@ mod tests
     #[test]
     fn Test_Whitespace_Runs_Should_Collapse()
     {
-        assert_eq!(Normalize("a  b\t\tc"), "a b c");
-        assert_eq!(Normalize("a\nb"), "a b");
-        assert_eq!(Normalize("  a  "), "a");
-        assert_eq!(Normalize("a\r\n\r\nb"), "a b");
+        assert_eq!(Normalize_Whitespace("a  b\t\tc"), "a b c");
+        assert_eq!(Normalize_Whitespace("a\nb"), "a b");
+        assert_eq!(Normalize_Whitespace("  a  "), "a");
+        assert_eq!(Normalize_Whitespace("a\r\n\r\nb"), "a b");
     }
 
     #[test]
@@ -121,8 +123,8 @@ mod tests
     {
         for text in ["a  b", "\n\na\tb\n", "", "   ", "one"]
         {
-            let once = Normalize(text);
-            assert_eq!(Normalize(&once), once);
+            let once = Normalize_Whitespace(text);
+            assert_eq!(Normalize_Whitespace(&once), once);
             assert!(Is_Normalized(&once));
         }
     }
@@ -130,15 +132,15 @@ mod tests
     #[test]
     fn Test_Non_Ascii_Should_Survive()
     {
-        assert_eq!(Normalize("a — b"), "a — b");
-        assert_eq!(Normalize("Nomos’s  rule"), "Nomos’s rule");
+        assert_eq!(Normalize_Whitespace("a — b"), "a — b");
+        assert_eq!(Normalize_Whitespace("Nomos’s  rule"), "Nomos’s rule");
     }
 
     #[test]
     fn Test_A_Known_Digest_Should_Be_Pinned()
     {
         assert_eq!(
-            ContentHash::Of("# Nomos Domain-Owned Specification Suite").As_Str(),
+            ContentHash::Of("# Nomos Domain-Owned Specification Suite").As_String_Slice(),
             "sha256:11fab7648eb13872bb5c78990b206a7bc3e25465a54d277edb730ca9eb72bd5d"
         );
     }

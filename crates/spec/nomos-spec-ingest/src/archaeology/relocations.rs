@@ -3,7 +3,7 @@
 use super::{BTreeMap, BTreeSet, DocumentFate, PairChange, Relocation, RevisionFingerprint};
 
 #[must_use]
-pub(crate) fn Relocations(
+pub(crate) fn Relocations_Between(
     pair: &PairChange,
     from: &RevisionFingerprint,
     to: &RevisionFingerprint,

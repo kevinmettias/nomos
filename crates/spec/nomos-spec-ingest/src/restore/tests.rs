@@ -1,7 +1,7 @@
 //! What this module promises, exercised.
 
 use super::*;
-use super::extract::{Milestone, Numbering};
+use super::extract::{Milestone_Numbering, Numbering_In};
 use nomos_spec_store::DocumentPath;
 
 const CORE: &str = "# Core\n\n## 5. Canonical domain model\n\n\
@@ -63,7 +63,7 @@ fn Core() -> Built
 #[test]
 fn Test_A_Domain_Model_Row_Should_Become_A_Concept_Named_After_Itself()
 {
-    let members = Extract(DocumentPath("02-core.md"), CORE).expect("extracts");
+    let members = Extract_Members(DocumentPath("02-core.md"), CORE).expect("extracts");
     let models: Vec<&Member> = members
         .iter()
         .filter(|member| return member.family == Restored::CanonicalDomainModel)
@@ -80,7 +80,7 @@ fn Test_A_Domain_Model_Row_Should_Become_A_Concept_Named_After_Itself()
 #[test]
 fn Test_The_Column_Titles_Should_Not_Become_A_Concept()
 {
-    let members = Extract(DocumentPath("02-core.md"), CORE).expect("extracts");
+    let members = Extract_Members(DocumentPath("02-core.md"), CORE).expect("extracts");
 
     assert!(
         !members.iter().any(|member| return member.name == "Model"),
@@ -91,7 +91,7 @@ fn Test_The_Column_Titles_Should_Not_Become_A_Concept()
 #[test]
 fn Test_Only_A_Leaf_Naming_A_Service_Should_Become_One()
 {
-    let members = Extract(DocumentPath("02-core.md"), CORE).expect("extracts");
+    let members = Extract_Members(DocumentPath("02-core.md"), CORE).expect("extracts");
     let services: Vec<&str> = members
         .iter()
         .filter(|member| return member.family == Restored::Service)
@@ -105,7 +105,7 @@ fn Test_Only_A_Leaf_Naming_A_Service_Should_Become_One()
 #[test]
 fn Test_A_Catalog_Section_Should_Not_Become_A_Scenario()
 {
-    let members = Extract(DocumentPath("09-reference.md"), REFERENCE).expect("extracts");
+    let members = Extract_Members(DocumentPath("09-reference.md"), REFERENCE).expect("extracts");
     let scenarios: Vec<&str> = members
         .iter()
         .filter(|member| return member.family == Restored::Scenario)
@@ -118,7 +118,7 @@ fn Test_A_Catalog_Section_Should_Not_Become_A_Scenario()
 #[test]
 fn Test_The_Glossary_Should_Restore_Both_Of_Its_Shapes()
 {
-    let members = Extract(DocumentPath("09-reference.md"), REFERENCE).expect("extracts");
+    let members = Extract_Members(DocumentPath("09-reference.md"), REFERENCE).expect("extracts");
     let terms: Vec<&str> = members
         .iter()
         .filter(|member| return member.family == Restored::GlossaryTerm)
@@ -133,7 +133,7 @@ fn Test_The_Glossary_Should_Restore_Both_Of_Its_Shapes()
 #[test]
 fn Test_A_Family_Should_Not_Be_Recognised_Outside_Its_Volume()
 {
-    assert!(Extract(DocumentPath("07-clients.md"), CORE).expect("extracts").is_empty());
+    assert!(Extract_Members(DocumentPath("07-clients.md"), CORE).expect("extracts").is_empty());
 }
 
 #[test]
@@ -142,7 +142,7 @@ fn Test_Two_Members_Taking_One_Identifier_Should_Be_Refused()
     let doubled = "# X\n\n## Glossary\n\n| Term | Definition |\n| --- | --- |\n\
                    | Applicability | One. |\n| applicability | Two. |\n";
 
-    let refusal = Extract(DocumentPath("09-reference.md"), doubled).expect_err("must refuse");
+    let refusal = Extract_Members(DocumentPath("09-reference.md"), doubled).expect_err("must refuse");
 
     assert!(format!("{refusal}").contains("GLS-APPLICABILITY"), "{refusal}");
 }
@@ -150,19 +150,19 @@ fn Test_Two_Members_Taking_One_Identifier_Should_Be_Refused()
 #[test]
 fn Test_Milestones_Should_Number_Themselves_As_The_Roadmap_Does()
 {
-    assert_eq!(Milestone("Foundation 0 — Protocol"), Some("F.0".to_owned()));
-    assert_eq!(Milestone("Release 7 — Advanced"), Some("R.7".to_owned()));
-    assert_eq!(Milestone("Release notes"), None);
-    assert_eq!(Milestone("11.1 First usable product boundary"), None);
+    assert_eq!(Milestone_Numbering("Foundation 0 — Protocol"), Some("F.0".to_owned()));
+    assert_eq!(Milestone_Numbering("Release 7 — Advanced"), Some("R.7".to_owned()));
+    assert_eq!(Milestone_Numbering("Release notes"), None);
+    assert_eq!(Milestone_Numbering("11.1 First usable product boundary"), None);
 }
 
 #[test]
 fn Test_Numbering_Should_Require_Exactly_Its_Depth()
 {
-    assert_eq!(Numbering("D.7 Profiles", 'D', 1), Some("D.7".to_owned()));
-    assert_eq!(Numbering("D.7 Profiles", 'D', 2), None);
-    assert_eq!(Numbering("D.7.1 atlas", 'D', 2), Some("D.7.1".to_owned()));
-    assert_eq!(Numbering("Design notes", 'D', 1), None);
+    assert_eq!(Numbering_In("D.7 Profiles", 'D', 1), Some("D.7".to_owned()));
+    assert_eq!(Numbering_In("D.7 Profiles", 'D', 2), None);
+    assert_eq!(Numbering_In("D.7.1 atlas", 'D', 2), Some("D.7.1".to_owned()));
+    assert_eq!(Numbering_In("Design notes", 'D', 1), None);
 }
 
 #[test]
@@ -173,7 +173,7 @@ fn Test_A_Restored_Concept_Should_Trace_To_Its_Own_Row()
         documents,
     } = Core();
 
-    let report = Restore(&mut store, "v14.36", &documents).expect("restores");
+    let report = Restore_Members(&mut store, "v14.36", &documents).expect("restores");
 
     assert!(report.contested_aliases.is_empty(), "{:?}", report.contested_aliases);
     let traced: String = store
@@ -199,14 +199,14 @@ fn Test_A_Restored_Concept_Should_Resolve_By_Its_Authored_Name()
         mut store,
         documents,
     } = Core();
-    Restore(&mut store, "v14.36", &documents).expect("restores");
+    Restore_Members(&mut store, "v14.36", &documents).expect("restores");
 
-    assert!(Resolve(&store, "CDM-WORKSPACECONTEXT").expect("resolves").is_some());
+    assert!(Resolve_Model_Uid(&store, "CDM-WORKSPACECONTEXT").expect("resolves").is_some());
     assert!(
-        Resolve(&store, "WorkspaceContext").expect("resolves").is_some(),
+        Resolve_Model_Uid(&store, "WorkspaceContext").expect("resolves").is_some(),
         "the name the corpus uses resolves to nothing"
     );
-    assert!(Resolve(&store, "NoSuchModel").expect("resolves").is_none());
+    assert!(Resolve_Model_Uid(&store, "NoSuchModel").expect("resolves").is_none());
 }
 
 /// A name two members carry belongs to neither. Handing it to whichever volume was
@@ -220,18 +220,18 @@ fn Test_A_Name_Two_Members_Carry_Should_Resolve_To_Neither()
         documents,
     } = Corpus(&[("02-core.md", CORE), ("09-reference.md", SHARED)]);
 
-    let report = Restore(&mut store, "v14.36", &documents).expect("restores");
+    let report = Restore_Members(&mut store, "v14.36", &documents).expect("restores");
 
     assert_eq!(report.ambiguous_names, vec!["WorkspaceContext".to_owned()]);
     assert!(
-        Resolve(&store, "WorkspaceContext").expect("resolves").is_none(),
+        Resolve_Model_Uid(&store, "WorkspaceContext").expect("resolves").is_none(),
         "an ambiguous name answered anyway"
     );
     assert!(
-        Resolve(&store, "CDM-WORKSPACECONTEXT").expect("resolves").is_some(),
+        Resolve_Model_Uid(&store, "CDM-WORKSPACECONTEXT").expect("resolves").is_some(),
         "both nodes must still resolve by identifier"
     );
-    assert!(Resolve(&store, "GLS-WORKSPACECONTEXT").expect("resolves").is_some());
+    assert!(Resolve_Model_Uid(&store, "GLS-WORKSPACECONTEXT").expect("resolves").is_some());
 }
 
 #[test]
@@ -242,10 +242,10 @@ fn Test_Restoring_Twice_Should_Change_Nothing()
         documents,
     } = Core();
 
-    let first = Restore(&mut store, "v14.36", &documents).expect("restores");
+    let first = Restore_Members(&mut store, "v14.36", &documents).expect("restores");
     let nodes = store.Count(nomos_spec_store::Table::Nodes).expect("counts");
     let lineage = store.Count(nomos_spec_store::Table::Lineage).expect("counts");
-    let second = Restore(&mut store, "v14.36", &documents).expect("restores again");
+    let second = Restore_Members(&mut store, "v14.36", &documents).expect("restores again");
 
     assert_eq!(first.members, second.members);
     assert_eq!(store.Count(nomos_spec_store::Table::Nodes).expect("counts"), nodes);
@@ -262,7 +262,7 @@ fn Test_Restoring_A_Document_The_Store_Does_Not_Hold_Should_Be_Refused()
     let mut documents = BTreeMap::new();
     documents.insert("02-core.md".to_owned(), CORE.to_owned());
 
-    let refusal = Restore(&mut store, "v14.36", &documents).expect_err("must refuse");
+    let refusal = Restore_Members(&mut store, "v14.36", &documents).expect_err("must refuse");
 
     assert!(format!("{refusal}").contains("not in the store"), "{refusal}");
 }
@@ -291,11 +291,11 @@ fn Test_A_Contested_Alias_Should_Be_Reported_Rather_Than_Silently_Repointed()
             rusqlite::params![other],
         )
         .expect("takes the alias");
-    let report = Restore(&mut store, "v14.36", &documents).expect("restores");
+    let report = Restore_Members(&mut store, "v14.36", &documents).expect("restores");
 
     assert_eq!(report.contested_aliases, vec!["WorkspaceContext".to_owned()]);
     assert_eq!(
-        Resolve(&store, "WorkspaceContext").expect("resolves"),
+        Resolve_Model_Uid(&store, "WorkspaceContext").expect("resolves"),
         Some(other),
         "the contested alias was silently repointed"
     );
@@ -308,7 +308,7 @@ fn Test_The_Summary_Should_Name_Members_Rather_Than_Only_Count_Them()
         mut store,
         documents,
     } = Core();
-    let report = Restore(&mut store, "v14.36", &documents).expect("restores");
+    let report = Restore_Members(&mut store, "v14.36", &documents).expect("restores");
 
     assert!(report.Summary().contains("WorkspaceContext"), "{}", report.Summary());
 }

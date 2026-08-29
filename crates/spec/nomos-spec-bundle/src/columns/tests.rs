@@ -12,7 +12,7 @@ fn Test_A_Fully_Declared_Table_Should_Pass()
 {
     let declared = &[("uid", Carried::Surrogate), ("path", Carried::Field("path"))];
 
-    assert!(Compare("t", &Schema(&["uid", "path"]), declared).is_ok());
+    assert!(Compare_Schema_To_Declaration("t", &Schema(&["uid", "path"]), declared).is_ok());
 }
 
 /// The failure the guard exists for: a column joins the schema and nothing carries it.
@@ -21,7 +21,7 @@ fn Test_An_Undeclared_Column_Should_Be_Refused()
 {
     let declared = &[("uid", Carried::Surrogate)];
 
-    let refusal = Compare("t", &Schema(&["uid", "note"]), declared)
+    let refusal = Compare_Schema_To_Declaration("t", &Schema(&["uid", "note"]), declared)
         .expect_err("an undeclared column must be refused");
 
     assert!(
@@ -36,7 +36,7 @@ fn Test_A_Declaration_The_Schema_Dropped_Should_Be_Refused()
 {
     let declared = &[("uid", Carried::Surrogate), ("gone", Carried::Field("gone"))];
 
-    let refusal = Compare("t", &Schema(&["uid"]), declared)
+    let refusal = Compare_Schema_To_Declaration("t", &Schema(&["uid"]), declared)
         .expect_err("a stale declaration must be refused");
 
     assert!(
@@ -51,7 +51,7 @@ fn Test_A_Declared_Field_The_Record_Lacks_Should_Be_Refused()
     let record = Record::Blob(crate::row::blob::Blob {
         sha256: "sha256:aa".to_owned(),
         byte_length: 2,
-        encoding: crate::row::blob::encoding::BlobEncoding::Utf8,
+        encoding: crate::row::blob::blob_encoding::BlobEncoding::Utf8,
         content: "hi".to_owned(),
     });
     let declared = &[("sha256", Carried::Field("digest"))];

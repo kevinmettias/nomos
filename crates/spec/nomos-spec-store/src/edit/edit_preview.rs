@@ -95,7 +95,7 @@ impl EditPreview
     {
         use crate::NormativeOutcome;
 
-        return self.blocks.iter().any(BlockChange::Disturbs_Wording)
+        return self.blocks.iter().any(BlockChange::Is_Disturbing_Wording)
             || self.statements.iter().any(|movement| {
                 return matches!(
                     movement.outcome,

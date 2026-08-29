@@ -43,7 +43,7 @@ fn Anchored_In(line: &str) -> Option<(&str, &str)>
 /// Whether an identifier is spelled the way an anchor spells one.
 fn Is_Anchor_Id(id: &str) -> bool
 {
-    return !id.is_empty() && id.bytes().all(|b| return b.is_ascii_alphanumeric() || b == b'-');
+    return !id.is_empty() && id.bytes().all(|byte| return byte.is_ascii_alphanumeric() || byte == b'-');
 }
 
 #[cfg(test)]

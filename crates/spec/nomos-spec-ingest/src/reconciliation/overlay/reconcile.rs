@@ -2,15 +2,15 @@
 
 use crate::Artifact;
 use crate::Disposition;
-use crate::IdentifierOutcome;
 use crate::ReconciliationReport;
-use nomos_spec_model::ContentHash;
 use std::collections::BTreeMap;
 
 /// Compares every v14 identifier against what v15 carries.
 #[must_use]
-pub fn Reconcile(v14: &[Artifact], v15: &BTreeMap<String, String>) -> ReconciliationReport
+pub fn Reconcile_Artifacts(v14: &[Artifact], v15: &BTreeMap<String, String>) -> ReconciliationReport
 {
+    use crate::IdentifierOutcome;
+
     let mut outcomes: Vec<IdentifierOutcome> = Vec::new();
 
     for artifact in v14
@@ -18,7 +18,7 @@ pub fn Reconcile(v14: &[Artifact], v15: &BTreeMap<String, String>) -> Reconcilia
         outcomes.push(IdentifierOutcome {
             id: artifact.id.clone(),
             family: artifact.family,
-            disposition: Judged(artifact, v15),
+            disposition: Disposition_Of(artifact, v15),
         });
     }
 
@@ -32,8 +32,10 @@ pub fn Reconcile(v14: &[Artifact], v15: &BTreeMap<String, String>) -> Reconcilia
 /// Both sides are normalized, because v14 stores a statement as folded YAML and v15 stores
 /// it as one line of prose. Comparing the raw text would report every identifier reworded
 /// on a difference no reader could see.
-fn Judged(artifact: &Artifact, v15: &BTreeMap<String, String>) -> Disposition
+fn Disposition_Of(artifact: &Artifact, v15: &BTreeMap<String, String>) -> Disposition
 {
+    use nomos_spec_model::ContentHash;
+
     let mine = ContentHash::Of_Normalized(&artifact.statement);
     let Some(text) = v15.get(&artifact.id)
     else
@@ -74,7 +76,7 @@ mod tests
             "MODEL-001  Artifact represents\npersisted objects.".to_owned(),
         );
 
-        let report = Reconcile(&v14, &v15);
+        let report = Reconcile_Artifacts(&v14, &v15);
 
         assert_eq!(report.Preserved_In(Family::Requirement), 1, "{}", report.Summary());
         assert!(report.Absent().is_empty());
@@ -85,7 +87,7 @@ mod tests
     {
         let v14 = vec![Parse_Artifact(ARTIFACT, Family::Requirement).expect("reads")];
 
-        let report = Reconcile(&v14, &BTreeMap::new());
+        let report = Reconcile_Artifacts(&v14, &BTreeMap::new());
 
         assert_eq!(report.Absent_In(Family::Requirement), vec!["MODEL-001"]);
         assert!(report.Reworded().is_empty(), "a disappearance was reported as an edit");
@@ -99,7 +101,7 @@ mod tests
         let mut v15 = BTreeMap::new();
         v15.insert("MODEL-001".to_owned(), "MODEL-001 Something else entirely.".to_owned());
 
-        let report = Reconcile(&v14, &v15);
+        let report = Reconcile_Artifacts(&v14, &v15);
 
         let reworded = report.Reworded();
         let Some(outcome) = reworded.first()

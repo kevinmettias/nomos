@@ -25,7 +25,7 @@ pub(super) fn Insert_Blobs(transaction: &Transaction<'_>, bundle: &Bundle) -> Re
             {
                 return Ok(());
             };
-            let bytes = Decoded(blob)?;
+            let bytes = Decode_Blob_Bytes(blob)?;
             Assert_Declared(blob, &bytes)?;
             insert.execute(params![blob.sha256, blob.byte_length, bytes])?;
 
@@ -35,7 +35,7 @@ pub(super) fn Insert_Blobs(transaction: &Transaction<'_>, bundle: &Bundle) -> Re
 }
 
 /// A blob's bytes, in whichever form the bundle carried them.
-fn Decoded(blob: &Blob) -> Result<Vec<u8>, BundleError>
+fn Decode_Blob_Bytes(blob: &Blob) -> Result<Vec<u8>, BundleError>
 {
     use crate::BlobEncoding;
     use base64::engine::general_purpose::STANDARD;
@@ -60,11 +60,11 @@ fn Assert_Declared(blob: &Blob, bytes: &[u8]) -> Result<(), BundleError>
 
     let digest = ContentHash::Of_Bytes(bytes);
 
-    if digest.As_Str() != blob.sha256
+    if digest.As_String_Slice() != blob.sha256
     {
         return Err(BundleError::Tampered {
             declared: blob.sha256.clone(),
-            computed: digest.As_Str().to_owned(),
+            computed: digest.As_String_Slice().to_owned(),
         });
     }
     if i64::try_from(bytes.len()).unwrap_or(i64::MAX) != blob.byte_length

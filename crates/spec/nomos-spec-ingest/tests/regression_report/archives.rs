@@ -9,7 +9,7 @@
 use crate::rows::{Entry, Family, Fates, Register, V14_LAST, V14_PREVIOUS, V15};
 use crate::measure::{Is_Record, Measure};
 use nomos_spec_ingest::{
-    Archive, Fate, Regression, RegressionReport, Restored, Revision, Revisions_In, Tally,
+    Archive, Fate, Regression_Between_Revisions, RegressionReport, Restored, Revision, Revisions_In, Tally,
 };
 use std::path::{Path, PathBuf};
 
@@ -53,11 +53,11 @@ fn Headline(root: &Path) -> RegressionReport
     let before = Read(root, V14_LAST);
     let after = Read(root, V15);
 
-    // `Regression` refuses a pair whose earlier revision carries no domain volumes, and
+    // `Regression_Between_Revisions` refuses a pair whose earlier revision carries no domain volumes, and
     // `Test_A_Revision_Without_The_Volumes_Should_Be_Refused` asserts that refusal on
     // purpose. Reaching it from the headline pair means v14.36 is not the v14.36 the
     // register was measured over, so every figure taken from this report would be wrong.
-    return Regression(&before, &after).unwrap_or_else(|error| panic!("{error}"));
+    return Regression_Between_Revisions(&before, &after).unwrap_or_else(|error| panic!("{error}"));
 }
 
 #[test]
@@ -290,7 +290,7 @@ fn Test_An_Ordinary_Pair_Should_Preserve_Every_Member()
     };
     let before = Read(&root, V14_PREVIOUS);
     let after = Read(&root, V14_LAST);
-    let report = Regression(&before, &after).expect("reports");
+    let report = Regression_Between_Revisions(&before, &after).expect("reports");
     for family in Restored::All()
     {
         let tally = report.Tally(*family);
@@ -320,7 +320,7 @@ fn Test_A_Revision_Without_The_Volumes_Should_Be_Refused()
     };
     let before = Read(&root, V15);
     let after = Read(&root, V14_LAST);
-    let refusal = Regression(&before, &after)
+    let refusal = Regression_Between_Revisions(&before, &after)
         .expect_err("v15.0 has no domain volumes and must not report every family gone");
 
     assert!(format!("{refusal}").contains("no family to ask after"), "{refusal}");

@@ -2,7 +2,7 @@
 
 use super::{
     BlockKind, BTreeMap, Collision, DOMAIN_MODEL, EXTENDED_TERMS, GLOSSARY, IngestError, Member, Origin, Restored,
-    RowKind, Segment, SERVICES, SourceBlock, Table_Rows, TableRow,
+    RowKind, Segment, SYSTEMS_HEADING, SourceBlock, Table_Rows, TableRow,
 };
 use nomos_spec_store::DocumentPath;
 
@@ -14,7 +14,7 @@ use nomos_spec_store::DocumentPath;
 /// # Errors
 ///
 /// Returns [`IngestError::Parse`] naming both members when two would take one identifier.
-pub(crate) fn Extract(document: DocumentPath<'_>, markdown: &str) -> Result<Vec<Member>, IngestError>
+pub(crate) fn Extract_Members(document: DocumentPath<'_>, markdown: &str) -> Result<Vec<Member>, IngestError>
 {
     let document = document.0;
     let mut members: Vec<Member> = Vec::new();
@@ -66,14 +66,14 @@ pub(super) fn From_Heading(document: &str, block: &SourceBlock, members: &mut Ve
     let title = block.text.trim_start_matches('#').trim();
     let origin = Origin::Block { ordinal: block.ordinal };
 
-    for (family, key, alias) in Recognized(block, title)
+    for (family, key, alias) in Recognized_In_Heading(block, title)
     {
         if !document.starts_with(family.Volume())
         {
             continue;
         }
         members.push(Member {
-            id: Identify(family, &key),
+            id: Identify_Member(family, &key),
             family,
             name: title.to_owned(),
             document: document.to_owned(),
@@ -91,7 +91,7 @@ pub(super) type Recognition = (Restored, String, Option<String>);
 ///
 /// Depth is what separates a family member from a section that merely mentions one, so a
 /// heading at any other level names nothing at all.
-pub(super) fn Recognized(block: &SourceBlock, title: &str) -> Vec<Recognition>
+pub(super) fn Recognized_In_Heading(block: &SourceBlock, title: &str) -> Vec<Recognition>
 {
     let depth = block.text.chars().take_while(|character| return *character == '#').count();
 
@@ -122,13 +122,13 @@ const DEPTH_4: &[(char, Restored)] = &[
 ];
 
 /// Every family in `series` whose letter this title carries at `parts` levels of numbering.
-pub(super) fn Numbered(title: &str, parts: usize, series: &[(char, Restored)]) -> Vec<Recognition>
+pub(super) fn Numbered_Families(title: &str, parts: usize, series: &[(char, Restored)]) -> Vec<Recognition>
 {
     let mut found = Vec::new();
 
     for (letter, family) in series
     {
-        if let Some(numbering) = Numbering(title, *letter, parts)
+        if let Some(numbering) = Numbering_In(title, *letter, parts)
         {
             found.push((*family, numbering, None));
         }
@@ -143,13 +143,13 @@ pub(super) fn Numbered(title: &str, parts: usize, series: &[(char, Restored)]) -
 /// its prose sections in the same series as its scenarios.
 pub(super) fn At_Depth_3(title: &str) -> Vec<Recognition>
 {
-    let mut found = Numbered(title, 1, DEPTH_3);
+    let mut found = Numbered_Families(title, 1, DEPTH_3);
 
-    if let Some(numbering) = Milestone(title)
+    if let Some(numbering) = Milestone_Numbering(title)
     {
         found.push((Restored::RoadmapMilestone, numbering, None));
     }
-    if let Some(numbering) = Numbering(title, 'G', 1)
+    if let Some(numbering) = Numbering_In(title, 'G', 1)
         && title.contains("End-to-end scenario:")
     {
         found.push((Restored::Scenario, numbering, None));
@@ -165,13 +165,13 @@ pub(super) fn At_Depth_3(title: &str) -> Vec<Recognition>
 /// service from any other level-4 heading in the same volume.
 pub(super) fn At_Depth_4(title: &str, path: &[String]) -> Vec<Recognition>
 {
-    let mut found = Numbered(title, PARTS_AT_DEPTH_4, DEPTH_4);
+    let mut found = Numbered_Families(title, PARTS_AT_DEPTH_4, DEPTH_4);
 
-    if Under(path, SERVICES) && Names_A_Service(title)
+    if Has_Ancestor(path, SYSTEMS_HEADING) && Has_The_Word_Service(title)
     {
         found.push((Restored::Service, title.to_owned(), None));
     }
-    if Under(path, EXTENDED_TERMS)
+    if Has_Ancestor(path, EXTENDED_TERMS)
     {
         found.push((Restored::GlossaryTerm, title.to_owned(), Some(title.to_owned())));
     }
@@ -180,7 +180,7 @@ pub(super) fn At_Depth_4(title: &str, path: &[String]) -> Vec<Recognition>
 }
 
 /// Whether a heading calls its subject a service in so many words.
-fn Names_A_Service(title: &str) -> bool
+fn Has_The_Word_Service(title: &str) -> bool
 {
     return title.split_whitespace().any(|word| return word == "Service");
 }
@@ -205,7 +205,7 @@ pub(super) fn From_Rows(document: &str, block: &SourceBlock, members: &mut Vec<M
         };
         for name in Named_By(row, family)
         {
-            let member = Tabled(document, family, name, origin);
+            let member = Tabled_Member(document, family, name, origin);
             members.push(member);
         }
     }
@@ -226,10 +226,10 @@ pub(super) fn Tabled_Family(block: &SourceBlock) -> Option<Restored>
 ///
 /// It carries an alias where a heading may not: a row's first cell is the name the rest of
 /// the corpus refers to it by, whereas a heading's text is a sentence about it.
-pub(super) fn Tabled(document: &str, family: Restored, name: &str, origin: Origin) -> Member
+pub(super) fn Tabled_Member(document: &str, family: Restored, name: &str, origin: Origin) -> Member
 {
     return Member {
-        id: Identify(family, name),
+        id: Identify_Member(family, name),
         family,
         name: name.to_owned(),
         document: document.to_owned(),
@@ -290,7 +290,7 @@ pub(super) fn First_Cell(row: &TableRow) -> Option<&str>
         .find(|cell| return !cell.is_empty());
 }
 
-pub(super) fn Under(path: &[String], heading: &str) -> bool
+pub(super) fn Has_Ancestor(path: &[String], heading: &str) -> bool
 {
     return path.iter().any(|step| return step == heading);
 }
@@ -299,7 +299,7 @@ pub(super) fn Under(path: &[String], heading: &str) -> bool
 ///
 /// Both are milestones; only seven of the eight are Releases, which is why the family is
 /// named for the milestone and not for the release.
-pub(super) fn Milestone(title: &str) -> Option<String>
+pub(super) fn Milestone_Numbering(title: &str) -> Option<String>
 {
     let mut words = title.split_whitespace();
     let word = words.next()?;
@@ -309,7 +309,7 @@ pub(super) fn Milestone(title: &str) -> Option<String>
     {
         return None;
     }
-    if !All_Digits(number)
+    if !Is_All_Digits(number)
     {
         return None;
     }
@@ -319,7 +319,7 @@ pub(super) fn Milestone(title: &str) -> Option<String>
 }
 
 /// `D.7.1` from `D.7.1 atlas-profile.build-cost`, when it has exactly `parts` numbers.
-pub(super) fn Numbering(title: &str, letter: char, parts: usize) -> Option<String>
+pub(super) fn Numbering_In(title: &str, letter: char, parts: usize) -> Option<String>
 {
     let rest = title.strip_prefix(letter)?;
     let (numbering, _) = rest.split_once(' ')?;
@@ -333,7 +333,7 @@ pub(super) fn Numbering(title: &str, letter: char, parts: usize) -> Option<Strin
     {
         return None;
     }
-    if !segments.iter().skip(1).all(|segment| return All_Digits(segment))
+    if !segments.iter().skip(1).all(|segment| return Is_All_Digits(segment))
     {
         return None;
     }
@@ -342,12 +342,12 @@ pub(super) fn Numbering(title: &str, letter: char, parts: usize) -> Option<Strin
 }
 
 /// The identifier, minted from the family's prefix and what the document already says.
-pub(super) fn Identify(family: Restored, name: &str) -> String
+pub(super) fn Identify_Member(family: Restored, name: &str) -> String
 {
-    return format!("{}-{}", family.Prefix(), Slug(name));
+    return format!("{}-{}", family.Prefix(), Slug_Of(name));
 }
 
-pub(super) fn Slug(name: &str) -> String
+pub(super) fn Slug_Of(name: &str) -> String
 {
     let mut slug = String::new();
     let mut pending = false;
@@ -373,7 +373,7 @@ pub(super) fn Slug(name: &str) -> String
 }
 
 /// A non-empty run of ASCII digits and nothing else.
-fn All_Digits(text: &str) -> bool
+fn Is_All_Digits(text: &str) -> bool
 {
     return !text.is_empty() && text.bytes().all(|byte| return byte.is_ascii_digit());
 }

@@ -2,6 +2,7 @@
 
 use super::*;
 use crate::Origin;
+use crate::Severity;
 
 /// The first failure, named rather than indexed.
 fn First(failures: &[Failure]) -> &Failure
@@ -48,7 +49,7 @@ fn Test_A_Complete_Request_Should_Fail_Nothing()
 {
     let submission = Request(SubmissionState::Accepted, Complete_Request_Values());
 
-    assert_eq!(Validate(&submission), Vec::new());
+    assert_eq!(Validate_Submission(&submission), Vec::new());
 }
 
 #[test]
@@ -60,7 +61,7 @@ fn Test_A_Refusal_Should_Name_Every_Missing_Field_Rather_Than_The_First()
         Origin::Submitted,
     )]);
 
-    let failures = Validate(&submission);
+    let failures = Validate_Submission(&submission);
     let fields: Vec<&str> = failures
         .iter()
         .map(|failure| return failure.field.as_str())
@@ -79,8 +80,8 @@ fn Test_A_Draft_Should_Be_Refused_For_Incompleteness_Exactly_As_An_Accepted_One_
 
     let as_draft = Request(SubmissionState::Draft, missing.clone());
     let as_accepted = Request(SubmissionState::Accepted, missing);
-    let draft = Validate(&as_draft);
-    let accepted = Validate(&as_accepted);
+    let draft = Validate_Submission(&as_draft);
+    let accepted = Validate_Submission(&as_accepted);
 
     let draft_fields: Vec<&String> = draft.iter().map(|f| return &f.field).collect();
     let accepted_fields: Vec<&String> = accepted
@@ -99,7 +100,7 @@ fn Test_A_Stated_Absence_Should_Satisfy_A_Required_Field()
     let submission = Request(SubmissionState::Accepted, Complete_Request_Values());
 
     assert_eq!(submission.Current("invariants").map(|v| return v.value.as_str()), Some("none"));
-    assert_eq!(Validate(&submission), Vec::new());
+    assert_eq!(Validate_Submission(&submission), Vec::new());
 }
 
 #[test]
@@ -111,8 +112,8 @@ fn Test_An_Inferred_Value_Should_Be_Readable_And_Never_Sufficient()
 
     let as_draft = Request(SubmissionState::Draft, values.clone());
     let as_accepted = Request(SubmissionState::Accepted, values);
-    let draft = Validate(&as_draft);
-    let accepted = Validate(&as_accepted);
+    let draft = Validate_Submission(&as_draft);
+    let accepted = Validate_Submission(&as_accepted);
 
     assert_eq!(draft, Vec::new(), "a draft may carry an inferred value");
     assert_eq!(accepted.len(), 1);
@@ -155,10 +156,10 @@ fn Test_An_Open_Blocking_Gap_Should_Refuse_Acceptance_And_Allow_A_Draft()
     let mut submission = Request(SubmissionState::Draft, Complete_Request_Values());
     submission.gaps = vec![gap];
 
-    assert_eq!(Validate(&submission), Vec::new());
+    assert_eq!(Validate_Submission(&submission), Vec::new());
 
     submission.state = SubmissionState::Accepted;
-    let failures = Validate(&submission);
+    let failures = Validate_Submission(&submission);
 
     assert_eq!(failures.len(), 1);
     assert_eq!(First(&failures).rule, "no-open-blocking-gap");
@@ -175,7 +176,7 @@ fn Test_A_Gap_Closed_By_A_Citation_Should_Stop_Blocking()
         closed_by: Some("OD-SPEC-008".to_owned()),
     }];
 
-    assert_eq!(Validate(&submission), Vec::new());
+    assert_eq!(Validate_Submission(&submission), Vec::new());
 }
 
 #[test]
@@ -189,7 +190,7 @@ fn Test_A_Non_Blocking_Gap_Should_Survive_Acceptance()
         closed_by: None,
     }];
 
-    assert_eq!(Validate(&submission), Vec::new());
+    assert_eq!(Validate_Submission(&submission), Vec::new());
     assert!(
         submission.gaps.first().expect("a gap").Is_Open(),
         "and it is still open"
@@ -221,7 +222,7 @@ fn Design(alternatives: &str, selected: &str) -> Submission
 fn Test_A_Design_With_One_Alternative_Should_Be_Refused()
 {
     let design = Design("a new verb", "a new verb");
-    let failures = Validate(&design);
+    let failures = Validate_Submission(&design);
 
     assert_eq!(failures.len(), 1);
     assert_eq!(First(&failures).rule, "at-least-two-alternatives");
@@ -232,14 +233,14 @@ fn Test_Do_Nothing_Should_Be_An_Admissible_Alternative()
 {
     let design = Design("a new verb\ndo nothing", "a new verb");
 
-    assert_eq!(Validate(&design), Vec::new());
+    assert_eq!(Validate_Submission(&design), Vec::new());
 }
 
 #[test]
 fn Test_A_Selected_Option_Absent_From_The_Alternatives_Should_Be_Refused()
 {
     let design = Design("a new verb\ndo nothing", "a third thing");
-    let failures = Validate(&design);
+    let failures = Validate_Submission(&design);
 
     assert_eq!(failures.len(), 1);
     assert_eq!(First(&failures).rule, "selected-names-an-alternative");
@@ -275,7 +276,7 @@ fn Result_Submission(deviations: &str, evidence: Option<&str>) -> Submission
 fn Test_A_Deviation_Naming_No_Clause_Should_Be_Refused()
 {
     let submission = Result_Submission("we did it differently", Some("cargo test: 0"));
-    let failures = Validate(&submission);
+    let failures = Validate_Submission(&submission);
 
     assert_eq!(failures.len(), 1);
     assert_eq!(First(&failures).rule, "deviation-names-its-clause");
@@ -287,7 +288,7 @@ fn Test_A_Deviation_Naming_Its_Clause_Should_Pass()
     let submission =
         Result_Submission("section 3: used one table, not two", Some("cargo test: 0"));
 
-    assert_eq!(Validate(&submission), Vec::new());
+    assert_eq!(Validate_Submission(&submission), Vec::new());
 }
 
 #[test]
@@ -295,12 +296,12 @@ fn Test_Evidence_Should_Be_Required_For_An_Accepted_Result_And_Not_For_A_Draft()
 {
     let mut submission = Result_Submission("section 3: a departure", None);
 
-    let accepted = Validate(&submission);
+    let accepted = Validate_Submission(&submission);
     assert_eq!(accepted.len(), 1);
     assert_eq!(First(&accepted).rule, "accepted-result-carries-evidence");
 
     submission.state = SubmissionState::Draft;
-    assert_eq!(Validate(&submission), Vec::new());
+    assert_eq!(Validate_Submission(&submission), Vec::new());
 }
 
 #[test]

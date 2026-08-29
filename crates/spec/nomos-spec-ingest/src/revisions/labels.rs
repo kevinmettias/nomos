@@ -26,7 +26,7 @@ pub fn Revisions_In(directory: &Path) -> Result<Vec<(String, PathBuf)>, IngestEr
         )));
     }
 
-    found.sort_by_key(|(label, _)| return Order(label));
+    found.sort_by_key(|(label, _)| return Order_Of(label));
     return Ok(found);
 }
 
@@ -59,7 +59,7 @@ pub(super) fn Label_Of(name: &str) -> Option<String>
         .strip_prefix("nomos-spec-internal-artifacts-")
         .or_else(|| return stem.strip_prefix("nomos-spec-"))?;
 
-    return Version(label).map(|_| return label.to_owned());
+    return Version_Of(label).map(|_| return label.to_owned());
 }
 
 /// A revision label read as the two numbers it is.
@@ -75,7 +75,7 @@ pub(super) struct Numbered
 }
 
 /// `v14.36` as two numbers, so `v14.9` sorts before `v14.10`.
-pub(super) fn Version(label: &str) -> Option<Numbered>
+pub(super) fn Version_Of(label: &str) -> Option<Numbered>
 {
     let (major, minor) = label.strip_prefix('v')?.split_once('.')?;
 
@@ -86,9 +86,9 @@ pub(super) fn Version(label: &str) -> Option<Numbered>
 }
 
 /// The sort key of a label, with an unreadable one sorting last rather than first.
-pub(super) fn Order(label: &str) -> Numbered
+pub(super) fn Order_Of(label: &str) -> Numbered
 {
-    return Version(label).unwrap_or(Numbered {
+    return Version_Of(label).unwrap_or(Numbered {
         major: u32::MAX,
         minor: u32::MAX,
     });
@@ -100,9 +100,9 @@ pub(super) fn Order(label: &str) -> Numbered
 /// which is not the same as adjacent in the corpus's own numbering, and a pair spanning a
 /// missing revision attributes two revisions' worth of change to one.
 #[must_use]
-pub fn Gaps(labels: &[String]) -> Vec<String>
+pub fn Label_Gaps(labels: &[String]) -> Vec<String>
 {
-    let numbered: Vec<Numbered> = labels.iter().filter_map(|label| return Version(label)).collect();
+    let numbered: Vec<Numbered> = labels.iter().filter_map(|label| return Version_Of(label)).collect();
     let mut missing = Vec::new();
 
     for pair in numbered.windows(ADJACENT_PAIR)
@@ -112,7 +112,7 @@ pub fn Gaps(labels: &[String]) -> Vec<String>
         {
             continue;
         };
-        let skipped = Between(*before, *after);
+        let skipped = Missing_Between(*before, *after);
         missing.extend(skipped);
     }
 
@@ -123,7 +123,7 @@ pub fn Gaps(labels: &[String]) -> Vec<String>
 ///
 /// Only within one major version. A major bump is a renumbering rather than a run, so
 /// counting from `v14.36` to `v15.0` would report thirty-six revisions nobody ever cut.
-pub(super) fn Between(before: Numbered, after: Numbered) -> Vec<String>
+pub(super) fn Missing_Between(before: Numbered, after: Numbered) -> Vec<String>
 {
     if before.major != after.major
     {

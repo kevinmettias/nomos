@@ -59,7 +59,7 @@ mod tests
     #[test]
     fn Test_Every_Family_Should_Be_Matched_Exhaustively()
     {
-        fn Ordinal(family: Family) -> usize
+        fn Ordinal_Of(family: Family) -> usize
         {
             return match family
             {
@@ -72,7 +72,7 @@ mod tests
         for (index, family) in Family::All().iter().enumerate()
         {
             assert_eq!(
-                Ordinal(*family),
+                Ordinal_Of(*family),
                 index,
                 "{} is not matched at the position Family::All() puts it, so the exhaustive \
                  match and the universe have drifted apart",

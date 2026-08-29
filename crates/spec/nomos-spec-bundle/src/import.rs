@@ -2,10 +2,13 @@
 
 mod disjoint;
 mod graph;
+mod import_report;
 mod reference;
 mod resolve;
 mod source;
 mod submission;
+
+pub use import_report::ImportReport;
 
 use graph::{
     Insert_Lineage, Insert_Node_Aliases, Insert_Node_History, Insert_Nodes, Insert_Normative_Statements,
@@ -27,18 +30,11 @@ use crate::BundleError;
 use crate::Bundle;
 use crate::Record;
 
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct ImportReport
-{
-    pub records: u32,
-    pub counts: BTreeMap<String, u32>,
-}
-
 /// Places a bundle's content in a store, beside whatever that store already holds.
 ///
 /// It is not a merge and must never become one by accident. What guarantees that used to be
 /// that the store was empty, which is a guarantee no store this build assembles can offer:
-/// `Assemble` seeds the governing records first and unconditionally, so demanding emptiness
+/// `Assemble_Corpus` seeds the governing records first and unconditionally, so demanding emptiness
 /// put the durable text form `OD-SPEC-008` names beyond the reach of the only stores that
 /// exist. The guarantee is now stated over content instead — the bundle and the store must
 /// name nothing in common, and the bundle must resolve its own references — which is the
@@ -50,7 +46,7 @@ pub struct ImportReport
 /// carries, [`BundleError::Unresolved`] if a record names something the bundle does not
 /// carry, and [`BundleError::Incomplete`] if the import does not place exactly what the
 /// bundle declared.
-pub fn Import(store: &mut SpecificationStore, bundle: &Bundle) -> Result<ImportReport, BundleError>
+pub fn Import_Bundle(store: &mut SpecificationStore, bundle: &Bundle) -> Result<ImportReport, BundleError>
 {
     use disjoint::Assert_Disjoint;
     use resolve::Assert_Self_Contained;
@@ -64,7 +60,7 @@ pub fn Import(store: &mut SpecificationStore, bundle: &Bundle) -> Result<ImportR
     Assert_Self_Contained(bundle)?;
     Assert_Disjoint(store, bundle)?;
 
-    let before = Census(store)?;
+    let before = Table_Counts(store)?;
 
     return store.In_Transaction(|transaction| return Insert_All(transaction, bundle, &before));
 }
@@ -102,7 +98,7 @@ fn Assert_Same_Schema(store: &SpecificationStore, bundle: &Bundle) -> Result<(),
 /// Taken rather than assumed zero. Once a store may already hold content, "the table is
 /// empty afterwards" and "the import placed nothing" stopped being the same sentence, and
 /// the completeness guard below is only a guard if it measures the difference.
-fn Census(store: &SpecificationStore) -> Result<BTreeMap<&'static str, u32>, BundleError>
+fn Table_Counts(store: &SpecificationStore) -> Result<BTreeMap<&'static str, u32>, BundleError>
 {
     let mut census: BTreeMap<&'static str, u32> = BTreeMap::new();
     for table in Table::All()
@@ -198,7 +194,7 @@ fn Assert_Landed(
 
     for table in Table::All()
     {
-        let landed = Added(&after, before, table.Name());
+        let landed = Added_Rows(&after, before, table.Name());
         let declared = bundle.Manifest().counts.get(table.Name()).copied().unwrap_or(0);
 
         if landed != declared
@@ -255,7 +251,7 @@ fn Tally_Statement() -> String
 }
 
 /// How many rows this import added to one table.
-fn Added(
+fn Added_Rows(
     after: &BTreeMap<&'static str, u32>,
     before: &BTreeMap<&'static str, u32>,
     table: &'static str,

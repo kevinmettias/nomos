@@ -14,7 +14,7 @@ pub(super) fn Assert_Disjoint(store: &SpecificationStore, bundle: &Bundle) -> Re
 
     for record in bundle.Records()
     {
-        let Some(identity) = Collides(connection, record)?
+        let Some(identity) = Collides_With_Store(connection, record)?
         else
         {
             continue;
@@ -30,14 +30,14 @@ pub(super) fn Assert_Disjoint(store: &SpecificationStore, bundle: &Bundle) -> Re
 }
 
 /// What this record would arrive on top of, if the store already holds it.
-fn Collides(connection: &Connection, record: &Record) -> Result<Option<String>, BundleError>
+fn Collides_With_Store(connection: &Connection, record: &Record) -> Result<Option<String>, BundleError>
 {
     let Some(stated) = Stated_Identity(record)
     else
     {
         return Ok(None);
     };
-    let held = Already_Holds(connection, stated.sql, &stated.arguments)?;
+    let held = Already_Holds_From_String_Arguments(connection, stated.sql, &stated.arguments)?;
 
     return Ok(held.then(|| return stated.identity));
 }
@@ -110,7 +110,7 @@ fn By_One<'a>(sql: &'static str, key: &'a str) -> Stated<'a>
 /// `sql` is `&'static str` so that the statement cannot be built at runtime. Every collision
 /// query is a literal written here, and the identity being tested is bound as an argument; the
 /// type is what keeps it that way rather than a convention a later edit could quietly drop.
-fn Already_Holds(
+fn Already_Holds_From_String_Arguments(
     connection: &Connection,
     sql: &'static str,
     arguments: &[&str],

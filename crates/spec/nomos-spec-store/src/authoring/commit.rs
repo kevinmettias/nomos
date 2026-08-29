@@ -22,7 +22,7 @@ use super::write::{
 };
 
 /// Writes a previewed edit through a caller's transaction.
-pub(super) fn Apply(connection: &Connection, preview: &EditPreview) -> Result<CommitReport, EditError>
+pub(super) fn Apply_Preview(connection: &Connection, preview: &EditPreview) -> Result<CommitReport, EditError>
 {
     let claimed = &preview.staged.claimed;
     let document_uid = claimed.document_uid;
@@ -40,7 +40,7 @@ pub(super) fn Apply(connection: &Connection, preview: &EditPreview) -> Result<Co
     Write_Declared_Relations(connection, document_uid, &front_matter.relations)?;
     Update_Graph(connection, &front_matter.id, preview)?;
 
-    return Ok(Reported(preview, blocks.len(), blocks_removed));
+    return Ok(Reported_Commit(preview, blocks.len(), blocks_removed));
 }
 
 /// Moves a document to a new path, keeping its surrogate.
@@ -315,7 +315,7 @@ fn Delete_Relation(
 }
 
 /// What the commit did, as the caller reads it back.
-fn Reported(preview: &EditPreview, blocks: usize, blocks_removed: usize) -> CommitReport
+fn Reported_Commit(preview: &EditPreview, blocks: usize, blocks_removed: usize) -> CommitReport
 {
     return CommitReport {
         node_id: preview.staged.record.front_matter.id.clone(),

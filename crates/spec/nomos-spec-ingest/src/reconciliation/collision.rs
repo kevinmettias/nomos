@@ -14,6 +14,8 @@ pub(crate) struct Collision
 
 impl core::fmt::Display for Collision
 {
+    // `fmt` is the method name the `std::fmt::Display` trait mandates; it is not a style
+    // choice available to rename here.
     fn fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
     {
         return write!(

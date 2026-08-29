@@ -71,6 +71,6 @@ impl Item
             material.push_str(body);
         }
 
-        return ContentHash::Of(&material).As_Str().to_owned();
+        return ContentHash::Of(&material).As_String_Slice().to_owned();
     }
 }

@@ -81,7 +81,7 @@ fn Note_Filler(
     report: &mut OverlayReport,
 ) -> Result<(), IngestError>
 {
-    let Some(pattern) = super::Is_Filler(&block.text)
+    let Some(pattern) = super::Get_Filler_Pattern(&block.text)
     else
     {
         return Ok(());

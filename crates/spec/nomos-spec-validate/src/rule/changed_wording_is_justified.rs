@@ -30,10 +30,10 @@ impl Rule for ChangedWordingIsJustified
 
     fn Evaluate(&self, store: &SpecificationStore) -> RuleOutcome
     {
-        use crate::offending::Offending;
+        use crate::offending::Offending_Outcome;
         use crate::Violation;
 
-        return Offending(store, Table::NormativeStatements, UNJUSTIFIED, |row| {
+        return Offending_Outcome(store, Table::NormativeStatements, UNJUSTIFIED, |row| {
             let id: String = row.get(0)?;
             return Ok(Violation {
                 subject: id,

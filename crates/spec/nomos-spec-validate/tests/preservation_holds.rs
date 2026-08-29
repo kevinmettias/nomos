@@ -2,7 +2,7 @@
 
 use nomos_spec_ingest::{Ingest_Block_Dispositions, Ingest_Source_Document};
 use nomos_spec_store::SpecificationStore;
-use nomos_spec_validate::{DECLARED_RULES, Registered, RuleOutcome, Validate};
+use nomos_spec_validate::{DECLARED_RULES, Registered, RuleOutcome, Validate_Rules};
 
 const DOCUMENT: &str = "---\nid: X\n---\n# Title\n\nOne.\n\n## Section\n\nTwo.\n";
 
@@ -27,13 +27,13 @@ fn Dispose_All(store: &mut SpecificationStore)
 /// in both directions: a declared rule nothing builds and a built rule nothing declares are
 /// each a failure here.
 ///
-/// Renaming this test breaks the claim in `run.rs`, and `nomos check` reports a claim that
+/// Renaming this test breaks the claim in `validation_run.rs`, and `nomos check` reports a claim that
 /// resolves to nothing as a phantom mirror — Blocking, which is the severity ordering
 /// `mirror.rs` sets. Rename both or neither.
 #[test]
 fn Test_The_Registry_Should_Match_The_Manifest()
 {
-    let run = Validate(&SpecificationStore::In_Memory().expect("opens"), &Registered());
+    let run = Validate_Rules(&SpecificationStore::In_Memory().expect("opens"), &Registered());
 
     // Two empty lists reconcile perfectly. Without these the assertions below would pass
     // having compared nothing, which is the defect this test is now the declared mirror
@@ -60,9 +60,9 @@ fn Test_An_Undisposed_Block_Should_Violate_Preserve_002()
 {
     let store = Ingested();
 
-    let run = Validate(&store, &Registered());
+    let run = Validate_Rules(&store, &Registered());
 
-    assert!(!run.Passed(), "blocks with no disposition must not pass");
+    assert!(!run.Is_Passed(), "blocks with no disposition must not pass");
     let violations = run.Violations();
     assert!(
         violations.iter().any(|violation| violation.subject.contains("a.md#")),
@@ -77,7 +77,7 @@ fn Test_Disposed_Blocks_Should_Satisfy_Preserve_002()
     let mut store = Ingested();
     Dispose_All(&mut store);
 
-    let run = Validate(&store, &Registered());
+    let run = Validate_Rules(&store, &Registered());
 
     let block_rule = run
         .results
@@ -102,7 +102,7 @@ fn Test_An_Omitted_Block_Should_Satisfy_Preserve_002()
 
     Omit_Every_Block(&store);
 
-    let run = Validate(&store, &Registered());
+    let run = Validate_Rules(&store, &Registered());
     let block_rule = run
         .results
         .iter()
@@ -178,9 +178,9 @@ fn Test_A_Statement_Without_Preserved_Lineage_Should_Violate_Preserve_006()
     Dispose_All(&mut store);
     Put_An_Untraced_Statement(&store);
 
-    let run = Validate(&store, &Registered());
+    let run = Validate_Rules(&store, &Registered());
 
-    assert!(!run.Passed());
+    assert!(!run.Is_Passed());
     assert!(
         run.Violations()
             .iter()
@@ -198,9 +198,9 @@ fn Test_A_Traced_Statement_Should_Satisfy_Preserve_006()
     Put_An_Untraced_Statement(&store);
     Trace_It_To_Its_Block(&store);
 
-    let run = Validate(&store, &Registered());
+    let run = Validate_Rules(&store, &Registered());
 
-    assert!(run.Passed(), "{}\n{:?}", run.Summary(), run.Violations());
+    assert!(run.Is_Passed(), "{}\n{:?}", run.Summary(), run.Violations());
 }
 
 /// A rule that examined nothing must be visible as such. "0 violations over 0 subjects"
@@ -208,9 +208,9 @@ fn Test_A_Traced_Statement_Should_Satisfy_Preserve_006()
 #[test]
 fn Test_An_Empty_Store_Should_Report_Vacuous_Rules()
 {
-    let run = Validate(&SpecificationStore::In_Memory().expect("opens"), &Registered());
+    let run = Validate_Rules(&SpecificationStore::In_Memory().expect("opens"), &Registered());
 
-    assert!(run.Passed(), "an empty store has nothing to violate");
+    assert!(run.Is_Passed(), "an empty store has nothing to violate");
     assert_eq!(
         run.Vacuous_Rules().len(),
         DECLARED_RULES.len(),
@@ -226,7 +226,7 @@ fn Test_A_Populated_Store_Should_Not_Report_Vacuous_Block_Rules()
     let mut store = Ingested();
     Dispose_All(&mut store);
 
-    let run = Validate(&store, &Registered());
+    let run = Validate_Rules(&store, &Registered());
 
     assert!(
         !run.Vacuous_Rules().contains(&"NSV-PRESERVE-002"),
@@ -244,9 +244,9 @@ fn Test_A_Seeded_Store_Should_Pass_Preservation_Non_Vacuously()
     let mut store = SpecificationStore::In_Memory().expect("opens");
     nomos_spec_store::Seed_Governing_Records(&mut store).expect("seeds");
 
-    let run = Validate(&store, &Registered());
+    let run = Validate_Rules(&store, &Registered());
 
-    assert!(run.Passed(), "{}\n{:?}", run.Summary(), run.Violations());
+    assert!(run.Is_Passed(), "{}\n{:?}", run.Summary(), run.Violations());
 
     let vacuous = run.Vacuous_Rules();
     assert!(!vacuous.contains(&"NSV-PRESERVE-001"), "the heading rule examined nothing");
@@ -269,9 +269,9 @@ fn Test_An_Undeclared_Repeated_Body_Should_Violate_Preserve_004()
     let mut store = SpecificationStore::In_Memory().expect("opens");
     Ingest_Source_Document(&mut store, "a.md", "v14.36", REPEATED_UNDECLARED).expect("ingests");
 
-    let run = Validate(&store, &Registered());
+    let run = Validate_Rules(&store, &Registered());
 
-    assert!(!run.Passed(), "an undeclared template must not pass");
+    assert!(!run.Is_Passed(), "an undeclared template must not pass");
     let violations = run.Violations();
     assert!(
         violations.iter().any(|violation| violation.detail.contains("Repeated body.")),
@@ -287,7 +287,7 @@ fn Test_A_Declared_Repeated_Body_Should_Satisfy_Preserve_004()
     let mut store = SpecificationStore::In_Memory().expect("opens");
     Ingest_Source_Document(&mut store, "a.md", "v14.36", REPEATED_DECLARED).expect("ingests");
 
-    let run = Validate(&store, &Registered());
+    let run = Validate_Rules(&store, &Registered());
 
     let template_rule = run
         .results

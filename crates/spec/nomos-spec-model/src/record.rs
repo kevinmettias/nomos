@@ -1,13 +1,13 @@
 //! An authored record: its declared identity and its body.
 
 // A record's front matter, the relations it declares, and the refusals parsing one raises.
-mod error;
-mod front_matter;
-mod relation;
+mod record_error;
+mod record_front_matter;
+mod record_relation;
 
-pub use error::RecordError;
-pub use front_matter::RecordFrontMatter;
-pub use relation::RecordRelation;
+pub use record_error::RecordError;
+pub use record_front_matter::RecordFrontMatter;
+pub use record_relation::RecordRelation;
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Record
@@ -77,7 +77,7 @@ fn Assert_The_Heading_Corroborates(
             id: front_matter.id.clone(),
         });
     };
-    if Corroborates(Heading(&heading), Id(&front_matter.id), Title(&front_matter.title))
+    if Is_Heading_Corroborated(Heading(&heading), Id(&front_matter.id), Title(&front_matter.title))
     {
         return Ok(());
     }
@@ -108,8 +108,8 @@ fn First_Heading(body: &str) -> Option<String>
 /// is what the refusal exists for. Widening it here rather than adding a second reader is
 /// deliberate: two readers for one format is how the two come to disagree.
 /// The heading a document opens with, kept distinct from [`Id`] and [`Title`] so the three
-/// positions of [`Corroborates`] cannot be swapped at its call site: all three are plain
-/// strings and nothing else would tell them apart.
+/// positions of [`Is_Heading_Corroborated`] cannot be swapped at its call site: all three are
+/// plain strings and nothing else would tell them apart.
 struct Heading<'a>(&'a str);
 
 /// A record's declared identifier, kept distinct from [`Heading`] and [`Title`].
@@ -118,7 +118,7 @@ struct Id<'a>(&'a str);
 /// A record's declared title, kept distinct from [`Heading`] and [`Id`].
 struct Title<'a>(&'a str);
 
-fn Corroborates(heading: Heading<'_>, id: Id<'_>, title: Title<'_>) -> bool
+fn Is_Heading_Corroborated(heading: Heading<'_>, id: Id<'_>, title: Title<'_>) -> bool
 {
     let heading = heading.0;
     let id = id.0;

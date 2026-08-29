@@ -17,7 +17,7 @@
 //!
 //! A document that is *not* a fixed point is not thereby wrong — a v14 corpus record
 //! carrying a byte order mark (`D-131`), or spelling a relation key `relation` rather than
-//! `type`, is a legitimate record this layout cannot reproduce. [`Round_Trips`] is how a
+//! `type`, is a legitimate record this layout cannot reproduce. [`Is_Round_Trip`] is how a
 //! caller finds out before an edit rather than after, and the authoring transaction refuses
 //! such a document rather than silently rewriting it into this shape.
 
@@ -45,6 +45,8 @@ pub enum RenderError
 
 impl core::fmt::Display for RenderError
 {
+    // `fmt` is the fixed method name `std::fmt::Display` mandates; it is not a free choice
+    // of abbreviation and cannot be spelled out without ceasing to implement the trait.
     fn fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
     {
         return match self
@@ -97,7 +99,7 @@ fn Render_Identity(text: &mut String, front_matter: &RecordFrontMatter) -> Resul
         ("status", &front_matter.status),
     ]
     {
-        let scalar = Scalar(Field(field), Value(value))?;
+        let scalar = Render_Scalar_Field(Field(field), Value(value))?;
         text.push_str(&scalar);
     }
 
@@ -105,25 +107,25 @@ fn Render_Identity(text: &mut String, front_matter: &RecordFrontMatter) -> Resul
     text.push_str(&front_matter.version.to_string());
     text.push('\n');
 
-    let authority = Scalar(Field("authority"), Value(&front_matter.authority))?;
+    let authority = Render_Scalar_Field(Field("authority"), Value(&front_matter.authority))?;
     text.push_str(&authority);
 
     return Ok(());
 }
 
-/// A front matter key, kept distinct from [`Value`] so [`Scalar`]'s two positions cannot be
+/// A front matter key, kept distinct from [`Value`] so [`Render_Scalar_Field`]'s two positions cannot be
 /// swapped at a call site.
 struct Field<'a>(&'a str);
 
 /// A front matter scalar's value, kept distinct from [`Field`] for the same reason.
 struct Value<'a>(&'a str);
 
-fn Scalar(field: Field<'_>, value: Value<'_>) -> Result<String, RenderError>
+fn Render_Scalar_Field(field: Field<'_>, value: Value<'_>) -> Result<String, RenderError>
 {
     let field = field.0;
     let value = value.0;
 
-    return Ok(format!("{field}: {}\n", Plain(field, value)?));
+    return Ok(format!("{field}: {}\n", Plain_Scalar(field, value)?));
 }
 
 /// The tag sequence, omitted entirely when there is none.
@@ -137,7 +139,7 @@ fn Render_Tags(text: &mut String, tags: &[String]) -> Result<(), RenderError>
     text.push_str("tags:\n");
     for tag in tags
     {
-        let plain = Plain("tags", tag)?;
+        let plain = Plain_Scalar("tags", tag)?;
         text.push_str("  - ");
         text.push_str(plain);
         text.push('\n');
@@ -157,8 +159,8 @@ fn Render_Relations(text: &mut String, relations: &[crate::RecordRelation]) -> R
     text.push_str("relations:\n");
     for relation in relations
     {
-        let target = Plain("relations.target", &relation.target)?;
-        let kind = Plain("relations.type", &relation.relation)?;
+        let target = Plain_Scalar("relations.target", &relation.target)?;
+        let kind = Plain_Scalar("relations.type", &relation.relation)?;
         text.push_str("  - target: ");
         text.push_str(target);
         text.push_str("\n    type: ");
@@ -189,7 +191,7 @@ fn Render_Blocks(text: &mut String, blocks: &[SourceBlock])
 /// answers `false` can still be read, hashed, segmented and preserved; what it cannot be is
 /// written back without changing bytes nobody asked to change.
 #[must_use]
-pub fn Round_Trips(markdown: &str) -> bool
+pub fn Is_Round_Trip(markdown: &str) -> bool
 {
     let Ok(record) = Parse_Record(markdown)
     else
@@ -206,7 +208,7 @@ pub fn Round_Trips(markdown: &str) -> bool
 /// Conservative on purpose. Every refusal here is a document this surface declines to
 /// author, which is recoverable; every case wrongly allowed is a record whose meaning
 /// changed on the way out, which is the failure the preservation ledger exists to prevent.
-fn Plain<'value>(field: &str, value: &'value str) -> Result<&'value str, RenderError>
+fn Plain_Scalar<'value>(field: &str, value: &'value str) -> Result<&'value str, RenderError>
 {
     let Some(cause) = Why_It_Cannot_Be_Plain(value)
     else
@@ -236,7 +238,7 @@ fn Why_It_Cannot_Be_Plain(value: &str) -> Option<&'static str>
     {
         return Some("it spans lines");
     }
-    if Opens_With_An_Indicator(value)
+    if Has_A_Leading_Indicator(value)
     {
         return Some("it opens with a YAML indicator");
     }
@@ -250,7 +252,7 @@ fn Why_It_Cannot_Be_Plain(value: &str) -> Option<&'static str>
 /// `?`, `:` and `,` are indicators only in flow context but are refused too, because a reader
 /// that has to know the context to know what a record says is the ambiguity this format exists
 /// without.
-fn Opens_With_An_Indicator(value: &str) -> bool
+fn Has_A_Leading_Indicator(value: &str) -> bool
 {
     return value.starts_with([
         '-', '?', ':', ',', '[', ']', '{', '}', '#', '&', '*', '!', '|', '>', '\'', '"', '%',
@@ -292,7 +294,7 @@ mod tests
                           \x20 - two\nrelations:\n  - target: ADR-DOC-001\n    type: supersedes\n\
                           ---\n\n# A title\n\nBody.\n\n## Section\n\nMore.\n";
 
-    fn Rendered(markdown: &str) -> String
+    fn Rendered_Record(markdown: &str) -> String
     {
         let record = Parse_Record(markdown).expect("reads");
 
@@ -302,8 +304,8 @@ mod tests
     #[test]
     fn Test_A_Record_Should_Render_To_The_Bytes_It_Was_Read_From()
     {
-        assert_eq!(Rendered(RECORD), RECORD);
-        assert!(Round_Trips(RECORD));
+        assert_eq!(Rendered_Record(RECORD), RECORD);
+        assert!(Is_Round_Trip(RECORD));
     }
 
     /// The point of rendering from blocks rather than from the retained body. If this
@@ -330,8 +332,8 @@ mod tests
         let bare = "---\nid: D-1\ntype: decision\ntitle: A title\nstatus: accepted\nversion: 1\n\
                     authority: canonical-normative-record\n---\n\n# A title\n\nBody.\n";
 
-        assert_eq!(Rendered(bare), bare);
-        assert!(!Rendered(bare).contains("tags"));
+        assert_eq!(Rendered_Record(bare), bare);
+        assert!(!Rendered_Record(bare).contains("tags"));
     }
 
     /// A code block carries its own blank lines, and joining blocks on a blank line would
@@ -343,7 +345,7 @@ mod tests
                       authority: canonical-normative-record\n---\n\n# A title\n\n```rust\n\
                       let a = 1;\n\nlet b = 2;\n```\n\nAfter.\n";
 
-        assert_eq!(Rendered(fenced), fenced);
+        assert_eq!(Rendered_Record(fenced), fenced);
     }
 
     /// `D-131` decided the mark belongs to the front matter fence, so the parser drops it
@@ -354,8 +356,8 @@ mod tests
     {
         let marked = format!("\u{feff}{RECORD}");
 
-        assert!(!Round_Trips(&marked));
-        assert!(Round_Trips(RECORD), "the negative control changed nothing");
+        assert!(!Is_Round_Trip(&marked));
+        assert!(Is_Round_Trip(RECORD), "the negative control changed nothing");
     }
 
     /// v15's `spec-governance` records spell the relation key `relation`. The reader accepts
@@ -368,7 +370,7 @@ mod tests
         assert_ne!(spelled, RECORD, "the negative control changed nothing");
 
         assert!(Parse_Record(&spelled).is_ok(), "it is still a readable record");
-        assert!(!Round_Trips(&spelled));
+        assert!(!Is_Round_Trip(&spelled));
     }
 
     #[test]

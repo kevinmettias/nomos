@@ -105,9 +105,9 @@ fn Test_I1_Should_Reproduce_Every_Recorded_Block()
             .collect::<Vec<String>>()
             .join("\n  ")
     );
-    assert!(report.Passed(), "{}", report.Summary());
+    assert!(report.Is_Passing(), "{}", report.Summary());
     assert!(
-        report.Exercised_The_Normalizer(),
+        report.Has_Exercised_The_Normalizer(),
         "no block in this run discriminates the normalizer, so the run verified hashing \
          and not normalization: {}",
         report.Summary()

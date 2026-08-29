@@ -8,13 +8,13 @@ use crate::RecordFrontMatter;
 use crate::TableRowRef;
 use rusqlite::Connection;
 
-use super::{Collect, Columns, Decoded};
+use super::{Collect_Rows, Columns, Decode_Json_Column};
 
-pub(super) fn Suites(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
+pub(super) fn Collect_Suites(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
 {
     use crate::Suite;
 
-    return Collect(
+    return Collect_Rows(
         connection,
         records,
         "SELECT suite_id, title, authority_root FROM suites ORDER BY suite_id",
@@ -33,11 +33,11 @@ pub(super) fn Suites(connection: &Connection, records: &mut Vec<Record>) -> Resu
     );
 }
 
-pub(super) fn Nodes(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
+pub(super) fn Collect_Nodes(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
 {
     use crate::Node;
 
-    return Collect(
+    return Collect_Rows(
         connection,
         records,
         "SELECT n.node_id, n.kind, n.authority, n.representation, n.title, n.deleted_at,
@@ -63,7 +63,7 @@ pub(super) fn Node_Aliases(connection: &Connection, records: &mut Vec<Record>) -
 {
     use crate::NodeAlias;
 
-    return Collect(
+    return Collect_Rows(
         connection,
         records,
         "SELECT a.alias, n.node_id
@@ -83,7 +83,7 @@ pub(super) fn Node_Histories(connection: &Connection, records: &mut Vec<Record>)
 {
     use crate::NodeHistory;
 
-    return Collect(
+    return Collect_Rows(
         connection,
         records,
         "SELECT n.node_id, h.ordinal, h.event, h.reason, h.previous_event_hash,
@@ -150,19 +150,19 @@ fn Push_Relation_Type(records: &mut Vec<Record>, row: RawRelationTypeRow) -> Res
         name,
         tier,
         inverse_of,
-        domain: Decoded(&domain_json)?,
-        range: Decoded(&range_json)?,
+        domain: Decode_Json_Column(&domain_json)?,
+        range: Decode_Json_Column(&range_json)?,
         max_per_node,
     }));
 
     return Ok(());
 }
 
-pub(super) fn Relations(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
+pub(super) fn Collect_Relations(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
 {
     use crate::Relation;
 
-    return Collect(
+    return Collect_Rows(
         connection,
         records,
         "SELECT f.node_id, r.relation_type, t.node_id
@@ -188,7 +188,7 @@ pub(super) fn Normative_Statements(
 {
     use crate::NormativeStatement;
 
-    return Collect(
+    return Collect_Rows(
         connection,
         records,
         "SELECT s.statement_id, n.node_id, s.kind, s.canonical_text, s.canonical_hash,
@@ -212,11 +212,11 @@ pub(super) fn Normative_Statements(
 /// Every join here is a LEFT JOIN because both source references are nullable. An inner
 /// join would drop exactly the rows that record a disposition and nothing else, which is
 /// the same silent-loss shape this crate exists to make impossible.
-pub(super) fn Lineages(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
+pub(super) fn Collect_Lineages(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
 {
     use crate::Lineage;
 
-    return Collect(
+    return Collect_Rows(
         connection,
         records,
         "SELECT bd.path, bd.revision, b.ordinal,
@@ -265,7 +265,7 @@ fn Table_Row_Reference(columns: &mut Columns<'_, '_>) -> rusqlite::Result<Option
     });
 }
 
-pub(super) fn Omissions(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
+pub(super) fn Collect_Omissions(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
 {
     let rows = Omission_Rows(connection)?;
 
@@ -324,7 +324,7 @@ pub(super) fn Record_Front_Matter(
         .collect::<Result<Vec<_>, _>>()?;
     for (mut record, tags) in rows
     {
-        record.tags = Decoded(&tags)?;
+        record.tags = Decode_Json_Column(&tags)?;
         records.push(Record::RecordFrontMatter(record));
     }
 

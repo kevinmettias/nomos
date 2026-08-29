@@ -1,7 +1,7 @@
 //! The four things a bundle refuses rather than carries quietly.
 
 use crate::populated::Populated;
-use nomos_spec_bundle::{Bundle, BundleError, Export, Import, Record};
+use nomos_spec_bundle::{Bundle, BundleError, Export, Import_Bundle, Record};
 use nomos_spec_store::{SpecificationStore, Table};
 
 /// Import places a bundle beside what a store holds and never merges into it. A store
@@ -14,7 +14,7 @@ fn Test_Importing_Into_A_Store_That_Already_Holds_The_Content_Should_Be_Refused(
     let bundle = Export(&Populated()).expect("exports");
     let mut occupied = Populated();
 
-    let refusal = Import(&mut occupied, &bundle).expect_err("a colliding store must be refused");
+    let refusal = Import_Bundle(&mut occupied, &bundle).expect_err("a colliding store must be refused");
 
     assert!(matches!(refusal, BundleError::Occupied { .. }), "{refusal}");
 }
@@ -37,7 +37,7 @@ fn Test_An_Unresolvable_Reference_Should_Be_Refused()
     // and pinning the number here makes every migration fail it for the wrong reason.
     let broken = Bundle::New(complete.Header().schema_version, salvaged).expect("builds");
     let mut rebuilt = SpecificationStore::In_Memory().expect("opens");
-    let refusal = Import(&mut rebuilt, &broken).expect_err("a dangling reference must be refused");
+    let refusal = Import_Bundle(&mut rebuilt, &broken).expect_err("a dangling reference must be refused");
 
     assert!(matches!(refusal, BundleError::Unresolved { .. }), "{refusal}");
     assert_eq!(

@@ -31,7 +31,7 @@ pub struct GateReport
 impl GateReport
 {
     #[must_use]
-    pub fn Passed(&self) -> bool
+    pub fn Is_Passing(&self) -> bool
     {
         return self.mismatches.is_empty() && self.blocks_checked > 0;
     }
@@ -42,7 +42,7 @@ impl GateReport
     /// there are thirty, all tables. A run that checked none of them has verified
     /// hashing and not normalization, and must not be reported as having verified both.
     #[must_use]
-    pub fn Exercised_The_Normalizer(&self) -> bool
+    pub fn Has_Exercised_The_Normalizer(&self) -> bool
     {
         return self.discriminating_blocks > 0;
     }
@@ -142,11 +142,11 @@ fn Check_Document(
         {
             report.discriminating_blocks = report.discriminating_blocks.saturating_add(1);
         }
-        Compare(name, want, got, &mut report.mismatches);
+        Compare_Block(name, want, got, &mut report.mismatches);
     }
 }
 
-fn Compare(
+fn Compare_Block(
     document: &str,
     want: &RecordedBlock,
     got: &SourceBlock,
@@ -190,7 +190,7 @@ fn Compare_Content(
 )
 {
     let content = ContentHash::Of(&got.text);
-    if content.As_Str() != want.content_hash
+    if content.As_String_Slice() != want.content_hash
     {
         mismatches.push(BlockMismatch {
             document: document.to_owned(),
@@ -198,7 +198,7 @@ fn Compare_Content(
                 ordinal: want.block_ordinal,
                 field: BlockField::ContentHash,
                 recorded: want.content_hash.clone(),
-                recomputed: content.As_Str().to_owned(),
+                recomputed: content.As_String_Slice().to_owned(),
             },
         });
     }
@@ -217,7 +217,7 @@ fn Compare_Normalized(
 )
 {
     let normalized = ContentHash::Of_Normalized(&got.text);
-    if normalized.As_Str() != want.normalized_hash
+    if normalized.As_String_Slice() != want.normalized_hash
     {
         mismatches.push(BlockMismatch {
             document: document.to_owned(),
@@ -225,7 +225,7 @@ fn Compare_Normalized(
                 ordinal: want.block_ordinal,
                 field: BlockField::NormalizedHash,
                 recorded: want.normalized_hash.clone(),
-                recomputed: normalized.As_Str().to_owned(),
+                recomputed: normalized.As_String_Slice().to_owned(),
             },
         });
     }
@@ -236,7 +236,7 @@ mod tests
 {
     use super::*;
 
-    fn Manifest(yaml: &str) -> BlockLineage
+    fn Parsed_Manifest(yaml: &str) -> BlockLineage
     {
         return Parse_Block_Lineage(yaml).expect("valid");
     }
@@ -264,9 +264,9 @@ mod tests
     #[test]
     fn Test_A_Matching_Corpus_Should_Pass()
     {
-        let report = Check_Against_Manifest(&Manifest(&Recorded()), &Documents());
+        let report = Check_Against_Manifest(&Parsed_Manifest(&Recorded()), &Documents());
 
-        assert!(report.Passed(), "{:?}", report.mismatches);
+        assert!(report.Is_Passing(), "{:?}", report.mismatches);
         assert_eq!(report.blocks_checked, 2);
     }
 
@@ -275,9 +275,9 @@ mod tests
     #[test]
     fn Test_An_Empty_Manifest_Should_Not_Pass()
     {
-        let report = Check_Against_Manifest(&Manifest("blocks: []"), &Documents());
+        let report = Check_Against_Manifest(&Parsed_Manifest("blocks: []"), &Documents());
 
-        assert!(!report.Passed(), "checking zero blocks is not a pass");
+        assert!(!report.Is_Passing(), "checking zero blocks is not a pass");
     }
 
     #[test]
@@ -285,9 +285,9 @@ mod tests
     {
         let documents = BTreeMap::from([("a.md".to_owned(), "# Title\n\nAltered.\n".to_owned())]);
 
-        let report = Check_Against_Manifest(&Manifest(&Recorded()), &documents);
+        let report = Check_Against_Manifest(&Parsed_Manifest(&Recorded()), &documents);
 
-        assert!(!report.Passed());
+        assert!(!report.Is_Passing());
         assert!(
             report
                 .mismatches
@@ -301,9 +301,9 @@ mod tests
     #[test]
     fn Test_A_Missing_Document_Should_Be_Reported()
     {
-        let report = Check_Against_Manifest(&Manifest(&Recorded()), &BTreeMap::new());
+        let report = Check_Against_Manifest(&Parsed_Manifest(&Recorded()), &BTreeMap::new());
 
-        assert!(!report.Passed());
+        assert!(!report.Is_Passing());
         assert!(matches!(
             report.mismatches.first(),
             Some(BlockMismatch {
@@ -318,10 +318,10 @@ mod tests
     #[test]
     fn Test_A_Manifest_Without_Tables_Should_Not_Claim_To_Exercise_The_Normalizer()
     {
-        let report = Check_Against_Manifest(&Manifest(&Recorded()), &Documents());
+        let report = Check_Against_Manifest(&Parsed_Manifest(&Recorded()), &Documents());
 
-        assert!(report.Passed());
-        assert!(!report.Exercised_The_Normalizer());
+        assert!(report.Is_Passing());
+        assert!(!report.Has_Exercised_The_Normalizer());
     }
 
     #[test]
@@ -336,10 +336,10 @@ mod tests
             ContentHash::Of_Normalized(table)
         );
 
-        let report = Check_Against_Manifest(&Manifest(&yaml), &documents);
+        let report = Check_Against_Manifest(&Parsed_Manifest(&yaml), &documents);
 
-        assert!(report.Passed(), "{:?}", report.mismatches);
+        assert!(report.Is_Passing(), "{:?}", report.mismatches);
         assert_eq!(report.discriminating_blocks, 1);
-        assert!(report.Exercised_The_Normalizer());
+        assert!(report.Has_Exercised_The_Normalizer());
     }
 }

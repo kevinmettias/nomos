@@ -9,7 +9,7 @@ use super::{Archive, BTreeMap, ContentHash, IngestError, RevisionFingerprint};
 /// Returns [`IngestError::Parse`] if an entry cannot be read as text, or if the revision
 /// holds no markdown at all — an archive that fingerprints to nothing is indistinguishable
 /// from one that was never opened.
-pub fn Fingerprint(archive: &mut Archive, label: &str) -> Result<RevisionFingerprint, IngestError>
+pub fn Fingerprint_Revision(archive: &mut Archive, label: &str) -> Result<RevisionFingerprint, IngestError>
 {
     let mut documents = BTreeMap::new();
 
@@ -18,12 +18,14 @@ pub fn Fingerprint(archive: &mut Archive, label: &str) -> Result<RevisionFingerp
         let text = archive
             .Read_Text(&entry)
             .map_err(|error| return IngestError::Parse(error.to_string()))?;
-        documents.insert(Within(&entry), text);
+        documents.insert(Within_Revision(&entry), text);
     }
 
     return Fingerprint_Of(label, &documents);
 }
 
+// The refusal below is an `IngestError::Parse` whose message already states its own
+// reason in full, so a separate `# Errors` section would only duplicate it.
 #[allow(clippy::missing_errors_doc)]
 pub(crate) fn Fingerprint_Of(
     label: &str,
@@ -43,7 +45,7 @@ pub(crate) fn Fingerprint_Of(
         documents: documents
             .iter()
             .map(|(path, text)| {
-                return (path.clone(), ContentHash::Of_Normalized(text).As_Str().to_owned());
+                return (path.clone(), ContentHash::Of_Normalized(text).As_String_Slice().to_owned());
             })
             .collect(),
     });
@@ -53,7 +55,7 @@ pub(crate) fn Fingerprint_Of(
 ///
 /// Without this every path differs between revisions by the version in its first segment
 /// and every pair reports the whole corpus twice.
-pub(crate) fn Within(entry: &str) -> String
+pub(crate) fn Within_Revision(entry: &str) -> String
 {
     return entry.split_once('/').map_or_else(|| return entry.to_owned(), |(_, rest)| return rest.to_owned());
 }

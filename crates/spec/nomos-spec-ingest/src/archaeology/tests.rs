@@ -58,7 +58,7 @@ fn Fate_Of(report: &RegressionReport, name: &str) -> Fate
 
 fn Reported(later: &[(&str, &str)]) -> RegressionReport
 {
-    return Regression(&Earlier(), &Later_Than(later)).expect("reports");
+    return Regression_Between_Revisions(&Earlier(), &Later_Than(later)).expect("reports");
 }
 
 #[test]
@@ -175,7 +175,7 @@ fn Test_A_Moved_Document_Should_Be_Relocated_Rather_Than_Both_Sets()
     let earlier = Earlier_With("old/record.md", "# Record\n\nA decision.\n");
     let later = Later_Than(&[("new/record.md", "# Record\n\nA decision.\n")]);
 
-    let report = Regression(&earlier, &later).expect("reports");
+    let report = Regression_Between_Revisions(&earlier, &later).expect("reports");
 
     assert_eq!(report.documents.relocated.len(), 1);
     assert_eq!(
@@ -199,7 +199,7 @@ fn Test_A_Relocation_With_Two_Origins_Should_Name_Both()
         .insert("old/two.md".to_owned(), "# Record\n\nA decision.\n".to_owned());
     let later = Later_Than(&[("new/record.md", "# Record\n\nA decision.\n")]);
 
-    let report = Regression(&earlier, &later).expect("reports");
+    let report = Regression_Between_Revisions(&earlier, &later).expect("reports");
 
     assert_eq!(
         report.documents.relocated.first().map(|moved| return moved.from.clone()),
@@ -213,7 +213,7 @@ fn Test_An_Edited_Move_Should_Not_Be_A_Relocation()
     let earlier = Earlier_With("old/record.md", "# Record\n\nA decision.\n");
     let later = Later_Than(&[("new/record.md", "# Record\n\nA different decision.\n")]);
 
-    let report = Regression(&earlier, &later).expect("reports");
+    let report = Regression_Between_Revisions(&earlier, &later).expect("reports");
 
     assert!(report.documents.relocated.is_empty());
     assert_eq!(report.documents.appeared, vec!["new/record.md".to_owned()]);
@@ -228,7 +228,7 @@ fn Test_A_Revision_Without_The_Volumes_Should_Be_Refused()
         documents: Documents(&[("records/one.md", "# Record\n\nA decision.\n")]),
     };
 
-    let refusal = Regression(&earlier, &Later_Than(&[("a.md", "# A\n\nText.\n")]))
+    let refusal = Regression_Between_Revisions(&earlier, &Later_Than(&[("a.md", "# A\n\nText.\n")]))
         .expect_err("must refuse");
 
     assert!(format!("{refusal}").contains("no family to ask after"), "{refusal}");

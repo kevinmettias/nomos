@@ -18,7 +18,7 @@ use rusqlite::Connection;
 /// # Errors
 ///
 /// Returns [`StoreError`] on any SQL failure.
-pub fn Census(connection: &Connection, scope: RowScope) -> Result<RowCensus, StoreError>
+pub fn Counted_Rows(connection: &Connection, scope: RowScope) -> Result<RowCensus, StoreError>
 {
     use crate::read::columns::Columns;
 

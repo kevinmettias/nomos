@@ -1,12 +1,12 @@
 // A section as a profile declares it, beneath the profile that declares it.
-mod section;
+mod profile_section;
 
-pub use section::ProfileSection;
+pub use profile_section::ProfileSection;
 
 use crate::Format;
-use crate::OutputPath;
-use crate::ProfileName;
 use crate::ProjectError;
+use crate::project_error::OutputPath;
+use crate::project_error::ProfileName;
 use serde::{Deserialize, Serialize};
 
 /// Whether a field says nothing once its surrounding space is discounted.
@@ -81,7 +81,7 @@ impl Profile
 
         let canonical = serde_json::to_string(self).unwrap_or_default();
 
-        return ContentHash::Of(&canonical).As_Str().to_owned();
+        return ContentHash::Of(&canonical).As_String_Slice().to_owned();
     }
 
     /// Whether this profile projects one subject rather than the whole store.
@@ -91,7 +91,7 @@ impl Profile
     /// it, or use one and forget to say so, and the placeholder is the thing that actually
     /// decides what the run needs.
     #[must_use]
-    pub fn Names_A_Subject(&self) -> bool
+    pub fn Is_Per_Subject(&self) -> bool
     {
         return self.output.contains(SUBJECT)
             || self.sections.iter().any(|section| {
@@ -111,7 +111,7 @@ impl Profile
     /// named `{subject}`. Both read as success.
     pub fn For(&self, subject: Option<&str>) -> Result<Self, ProjectError>
     {
-        return match (self.Names_A_Subject(), subject)
+        return match (self.Is_Per_Subject(), subject)
         {
             (true, Some(subject)) => Ok(self.Resolved_For(subject)),
             (false, None) => Ok(self.clone()),
@@ -165,7 +165,6 @@ pub const SUBJECT: &str = "{subject}";
 
 fn Path_Is_Relative(profile: ProfileName<'_>, output: OutputPath<'_>) -> Result<(), ProjectError>
 {
-    let profile = profile.0;
     let output = output.0;
 
     let refused = output.trim().is_empty()
@@ -177,6 +176,8 @@ fn Path_Is_Relative(profile: ProfileName<'_>, output: OutputPath<'_>) -> Result<
 
     if refused
     {
+        let profile = profile.0;
+
         return Err(ProjectError::NotRelative {
             profile: profile.to_owned(),
             output: output.to_owned(),

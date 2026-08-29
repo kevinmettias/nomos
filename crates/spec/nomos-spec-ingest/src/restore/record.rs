@@ -1,7 +1,7 @@
 //! Writing what was recognised into the store, and finding it again by name.
 
 use super::{
-    BTreeMap, Extract, IngestError, Member, NodeRow, Origin, Refuse_Collisions, RestorationReport,
+    BTreeMap, Extract_Members, IngestError, Member, NodeRow, Origin, Refuse_Collisions, RestorationReport,
     SpecificationStore, StoreError,
 };
 use nomos_spec_store::{DocumentPath, DocumentRevision};
@@ -23,23 +23,23 @@ use nomos_spec_store::{DocumentPath, DocumentRevision};
 ///
 /// Returns [`IngestError::Parse`] if a document is not in the store at that revision or
 /// two members collide, and [`IngestError::Store`] on any store failure.
-pub fn Restore(
+pub fn Restore_Members(
     store: &mut SpecificationStore,
     revision: &str,
     documents: &BTreeMap<String, String>,
 ) -> Result<RestorationReport, IngestError>
 {
-    let located = Located(store, revision, documents)?;
+    let located = Located_Members(store, revision, documents)?;
     let members: Vec<Member> = located.iter().map(|(_, member)| return member.clone()).collect();
     Refuse_Collisions(&members)?;
 
     let mut report = RestorationReport {
-        ambiguous_names: Ambiguous(&members),
+        ambiguous_names: Ambiguous_Names(&members),
         ..RestorationReport::default()
     };
     for (document_uid, member) in located
     {
-        Record(store, document_uid, member, &mut report)?;
+        Record_Member(store, document_uid, member, &mut report)?;
     }
 
     return Ok(report);
@@ -49,7 +49,7 @@ pub fn Restore(
 ///
 /// Read in full before anything is written, because a collision is only visible across
 /// documents and half a restoration is harder to undo than none.
-pub(super) fn Located(
+pub(super) fn Located_Members(
     store: &mut SpecificationStore,
     revision: &str,
     documents: &BTreeMap<String, String>,
@@ -60,7 +60,7 @@ pub(super) fn Located(
     for (document, markdown) in documents
     {
         let document_uid = Document_Uid(store, DocumentRevision(revision), DocumentPath(document))?;
-        for member in Extract(DocumentPath(document), markdown)?
+        for member in Extract_Members(DocumentPath(document), markdown)?
         {
             located.push((document_uid, member));
         }
@@ -70,7 +70,7 @@ pub(super) fn Located(
 }
 
 /// Mints one member's node, ties it to its text, and gives it its name.
-pub(super) fn Record(
+pub(super) fn Record_Member(
     store: &mut SpecificationStore,
     document_uid: i64,
     member: Member,
@@ -85,7 +85,7 @@ pub(super) fn Record(
         title: &member.name,
     })?;
 
-    Trace(store, document_uid, &member, node_uid)?;
+    Trace_Member(store, document_uid, &member, node_uid)?;
     Claim_Alias(store, &member, node_uid, report)?;
     report.members.push(member);
 
@@ -105,7 +105,7 @@ pub(super) struct RowAt
 }
 
 /// Ties a node to the text it was minted from.
-pub(super) fn Trace(
+pub(super) fn Trace_Member(
     store: &mut SpecificationStore,
     document_uid: i64,
     member: &Member,
@@ -180,7 +180,7 @@ pub(super) fn Claim_Alias(
         return Ok(());
     }
 
-    if !Alias(store, alias, node_uid)?
+    if !Alias_Resolves_To(store, alias, node_uid)?
     {
         report.contested_aliases.push(alias.clone());
     }
@@ -192,7 +192,7 @@ pub(super) fn Claim_Alias(
 ///
 /// Reported and withheld rather than resolved by a rule such as "the domain model wins".
 /// Two nodes really do carry the name; picking one is an answer the corpus does not give.
-pub(super) fn Ambiguous(members: &[Member]) -> Vec<String>
+pub(super) fn Ambiguous_Names(members: &[Member]) -> Vec<String>
 {
     let mut claims: BTreeMap<&str, u32> = BTreeMap::new();
     for alias in members.iter().filter_map(|member| return member.alias.as_deref())
@@ -252,7 +252,7 @@ pub(super) fn Dispose_Block(
          WHERE document_uid = ?1 AND ordinal = ?2",
         rusqlite::params![document_uid, ordinal, node_uid],
     );
-    Sql(disposed)?;
+    Sql_Result(disposed)?;
 
     return Ok(());
 }
@@ -262,20 +262,20 @@ pub(super) fn Dispose_Block(
 /// `false` where something else already owns it. Reported rather than ignored: an alias
 /// silently pointing at another node makes "resolve by name" answer confidently and
 /// wrongly, which is worse than not resolving at all.
-pub(super) fn Alias(store: &SpecificationStore, alias: &str, node_uid: i64) -> Result<bool, IngestError>
+pub(super) fn Alias_Resolves_To(store: &SpecificationStore, alias: &str, node_uid: i64) -> Result<bool, IngestError>
 {
     let inserted = store.Connection().execute(
         "INSERT OR IGNORE INTO node_aliases (alias, node_uid) VALUES (?1, ?2)",
         rusqlite::params![alias, node_uid],
     );
-    Sql(inserted)?;
+    Sql_Result(inserted)?;
 
     let selected_owner = store.Connection().query_row(
         "SELECT node_uid FROM node_aliases WHERE alias = ?1",
         rusqlite::params![alias],
         |row| row.get(0),
     );
-    let owner: i64 = Sql(selected_owner)?;
+    let owner: i64 = Sql_Result(selected_owner)?;
 
     return Ok(owner == node_uid);
 }
@@ -289,14 +289,14 @@ pub(super) fn Alias(store: &SpecificationStore, alias: &str, node_uid: i64) -> R
 /// # Errors
 ///
 /// Returns [`IngestError::Store`] on any store failure.
-pub fn Resolve(store: &SpecificationStore, name: &str) -> Result<Option<i64>, IngestError>
+pub fn Resolve_Model_Uid(store: &SpecificationStore, name: &str) -> Result<Option<i64>, IngestError>
 {
     if let Some(uid) = store.Node_Uid(name)?
     {
         return Ok(Some(uid));
     }
 
-    return Sql(store
+    return Sql_Result(store
         .Connection()
         .query_row(
             "SELECT node_uid FROM node_aliases WHERE alias = ?1",
@@ -313,7 +313,7 @@ pub fn Resolve(store: &SpecificationStore, name: &str) -> Result<Option<i64>, In
         }));
 }
 
-pub(super) fn Sql<T>(result: rusqlite::Result<T>) -> Result<T, IngestError>
+pub(super) fn Sql_Result<Value>(result: rusqlite::Result<Value>) -> Result<Value, IngestError>
 {
     return result.map_err(|error| IngestError::Store(StoreError::Sql(error.to_string())));
 }

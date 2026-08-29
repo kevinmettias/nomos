@@ -1,7 +1,7 @@
 //! What became of one block between two revisions.
 
-pub(crate) mod document;
-pub(crate) mod member;
+pub(crate) mod document_fate;
+pub(crate) mod member_fate;
 
 use crate::Hollow;
 #[derive(Clone, Debug, PartialEq, Eq)]

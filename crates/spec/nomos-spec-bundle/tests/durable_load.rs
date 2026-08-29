@@ -11,7 +11,7 @@
 //! over content, and it refuses two things emptiness never had to name: content the store
 //! already holds, and a reference the bundle makes to a row only the store holds.
 
-use nomos_spec_bundle::{Bundle, BundleError, Export, Import, Record, Relation};
+use nomos_spec_bundle::{Bundle, BundleError, Export, Import_Bundle, Record, Relation};
 use nomos_spec_store::{Seed_Governing_Records, SpecificationStore, Table};
 use std::collections::BTreeMap;
 
@@ -55,7 +55,7 @@ fn Test_A_Bundle_Should_Load_Into_A_Store_That_Already_Holds_The_Governing_Recor
     let mut store = Seeded();
     let bundle = Foreign_Bundle();
 
-    let report = Import(&mut store, &bundle).expect("a disjoint bundle must load");
+    let report = Import_Bundle(&mut store, &bundle).expect("a disjoint bundle must load");
 
     assert_eq!(report.records, bundle.Manifest().records);
     let (found, _) = store
@@ -80,7 +80,7 @@ fn Test_The_Seeded_Rows_Should_Be_Left_Untouched_By_The_Load()
         .map(|table| return (table.Name(), store.Count(*table).expect("counts")))
         .collect();
 
-    Import(&mut store, &bundle).expect("a disjoint bundle must load");
+    Import_Bundle(&mut store, &bundle).expect("a disjoint bundle must load");
 
     for table in Table::All()
     {
@@ -120,7 +120,7 @@ fn Test_A_Bundle_Naming_Content_The_Store_Already_Holds_Should_Be_Refused_By_Nam
     let bundle = Export(&Seeded()).expect("exports the seeded store");
     let mut store = Seeded();
 
-    let refusal = Import(&mut store, &bundle).expect_err("colliding content must be refused");
+    let refusal = Import_Bundle(&mut store, &bundle).expect_err("colliding content must be refused");
 
     let BundleError::Occupied { table, identity } = refusal
     else
@@ -161,7 +161,7 @@ fn Test_A_Bundle_Referencing_A_Row_Only_The_Store_Holds_Should_Not_Bind_To_It()
     )
     .expect("builds");
 
-    let refusal = Import(&mut store, &stitched).expect_err("a dangling reference must be refused");
+    let refusal = Import_Bundle(&mut store, &stitched).expect_err("a dangling reference must be refused");
 
     assert!(matches!(refusal, BundleError::Unresolved { .. }), "{refusal}");
 }

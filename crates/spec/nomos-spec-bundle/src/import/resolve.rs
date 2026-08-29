@@ -53,32 +53,32 @@ impl Identities
     {
         match record
         {
-            Record::Blob(blob) => Keep(&mut self.blobs, blob.sha256.clone()),
+            Record::Blob(blob) => Keep_Identity(&mut self.blobs, blob.sha256.clone()),
             Record::SourceDocument(document) =>
             {
                 let key = Document_Key_Of(Path(&document.path), Revision(&document.revision));
-                Keep(&mut self.documents, key);
+                Keep_Identity(&mut self.documents, key);
             }
             Record::SourceHeading(heading) =>
             {
                 let key = Ordinal_Key(&heading.document, heading.ordinal);
-                Keep(&mut self.headings, key);
+                Keep_Identity(&mut self.headings, key);
             }
             Record::SourceBlock(block) =>
             {
                 let key = Ordinal_Key(&block.document, block.ordinal);
-                Keep(&mut self.blocks, key);
+                Keep_Identity(&mut self.blocks, key);
             }
             Record::SourceTableRow(row) =>
             {
                 let key = Row_Key(&row.block, row.ordinal);
-                Keep(&mut self.rows, key);
+                Keep_Identity(&mut self.rows, key);
             }
-            Record::Suite(suite) => Keep(&mut self.suites, suite.suite_id.clone()),
-            Record::Node(node) => Keep(&mut self.nodes, node.node_id.clone()),
-            Record::RelationType(kind) => Keep(&mut self.relation_types, kind.name.clone()),
-            Record::NormativeStatement(one) => Keep(&mut self.statements, one.statement_id.clone()),
-            Record::Submission(submission) => Keep(&mut self.submissions, submission.node_id.clone()),
+            Record::Suite(suite) => Keep_Identity(&mut self.suites, suite.suite_id.clone()),
+            Record::Node(node) => Keep_Identity(&mut self.nodes, node.node_id.clone()),
+            Record::RelationType(kind) => Keep_Identity(&mut self.relation_types, kind.name.clone()),
+            Record::NormativeStatement(one) => Keep_Identity(&mut self.statements, one.statement_id.clone()),
+            Record::Submission(submission) => Keep_Identity(&mut self.submissions, submission.node_id.clone()),
             Record::NodeAlias(_) | Record::NodeHistory(_) | Record::Relation(_)
             | Record::Lineage(_) | Record::Omission(_) | Record::RecordFrontMatter(_)
             | Record::RecordRelation(_) | Record::SubmissionValue(_)
@@ -149,22 +149,22 @@ fn Assert_Source_Record_Resolves(record: &Record, carried: &Identities)
     {
         Record::SourceDocument(document) =>
         {
-            Carried(&carried.blobs, Key(&document.blob_sha256), Kind("blob"))?;
+            Assert_Carried(&carried.blobs, Key(&document.blob_sha256), Kind("blob"))?;
         }
         Record::SourceHeading(heading) =>
         {
             let key = Document_Key(&heading.document);
-            Carried(&carried.documents, Key(&key), Kind("source document"))?;
+            Assert_Carried(&carried.documents, Key(&key), Kind("source document"))?;
         }
         Record::SourceBlock(block) =>
         {
             let key = Document_Key(&block.document);
-            Carried(&carried.documents, Key(&key), Kind("source document"))?;
+            Assert_Carried(&carried.documents, Key(&key), Kind("source document"))?;
         }
         Record::SourceTableRow(row) =>
         {
             let key = Ordinal_Key(&row.block.document, row.block.ordinal);
-            Carried(&carried.blocks, Key(&key), Kind("source block"))?;
+            Assert_Carried(&carried.blocks, Key(&key), Kind("source block"))?;
         }
         _ =>
         {}
@@ -184,27 +184,27 @@ fn Assert_Graph_Record_Resolves(record: &Record, carried: &Identities)
         {
             if let Some(suite_id) = node.suite_id.as_deref()
             {
-                Carried(&carried.suites, Key(suite_id), Kind("suite"))?;
+                Assert_Carried(&carried.suites, Key(suite_id), Kind("suite"))?;
             }
         }
-        Record::NodeAlias(alias) => Carried(&carried.nodes, Key(&alias.node_id), Kind("node"))?,
-        Record::NodeHistory(entry) => Carried(&carried.nodes, Key(&entry.node_id), Kind("node"))?,
+        Record::NodeAlias(alias) => Assert_Carried(&carried.nodes, Key(&alias.node_id), Kind("node"))?,
+        Record::NodeHistory(entry) => Assert_Carried(&carried.nodes, Key(&entry.node_id), Kind("node"))?,
         Record::RelationType(relation_type) =>
         {
             if let Some(inverse) = relation_type.inverse_of.as_deref()
             {
-                Carried(&carried.relation_types, Key(inverse), Kind("relation type"))?;
+                Assert_Carried(&carried.relation_types, Key(inverse), Kind("relation type"))?;
             }
         }
         Record::Relation(relation) =>
         {
-            Carried(&carried.nodes, Key(&relation.from_node_id), Kind("node"))?;
-            Carried(&carried.nodes, Key(&relation.to_node_id), Kind("node"))?;
-            Carried(&carried.relation_types, Key(&relation.relation_type), Kind("relation type"))?;
+            Assert_Carried(&carried.nodes, Key(&relation.from_node_id), Kind("node"))?;
+            Assert_Carried(&carried.nodes, Key(&relation.to_node_id), Kind("node"))?;
+            Assert_Carried(&carried.relation_types, Key(&relation.relation_type), Kind("relation type"))?;
         }
         Record::NormativeStatement(statement) =>
         {
-            Carried(&carried.nodes, Key(&statement.node_id), Kind("node"))?;
+            Assert_Carried(&carried.nodes, Key(&statement.node_id), Kind("node"))?;
         }
         _ =>
         {}
@@ -222,13 +222,13 @@ fn Assert_Declared_Resolves(record: &Record, carried: &Identities) -> Result<(),
         Record::RecordFrontMatter(front_matter) =>
         {
             let key = Document_Key(&front_matter.document);
-            Carried(&carried.documents, Key(&key), Kind("source document"))?;
-            Carried(&carried.nodes, Key(&front_matter.node_id), Kind("node"))?;
+            Assert_Carried(&carried.documents, Key(&key), Kind("source document"))?;
+            Assert_Carried(&carried.nodes, Key(&front_matter.node_id), Kind("node"))?;
         }
         Record::RecordRelation(relation) =>
         {
             let key = Document_Key(&relation.document);
-            Carried(&carried.documents, Key(&key), Kind("source document"))?;
+            Assert_Carried(&carried.documents, Key(&key), Kind("source document"))?;
         }
         _ =>
         {}
@@ -248,15 +248,15 @@ fn Assert_Submission_Resolves(record: &Record, carried: &Identities) -> Result<(
         // A submission is a node, so the node is what it must resolve against.
         Record::Submission(submission) =>
         {
-            Carried(&carried.nodes, Key(&submission.node_id), Kind("node"))?;
+            Assert_Carried(&carried.nodes, Key(&submission.node_id), Kind("node"))?;
         }
         Record::SubmissionValue(value) =>
         {
-            Carried(&carried.submissions, Key(&value.node_id), Kind("submission"))?;
+            Assert_Carried(&carried.submissions, Key(&value.node_id), Kind("submission"))?;
         }
         Record::SubmissionGap(gap) =>
         {
-            Carried(&carried.submissions, Key(&gap.node_id), Kind("submission"))?;
+            Assert_Carried(&carried.submissions, Key(&gap.node_id), Kind("submission"))?;
         }
         _ =>
         {}
@@ -279,15 +279,15 @@ fn Assert_Lineage_Resolves(
     if let Some(row) = lineage.source_table_row.as_ref()
     {
         let key = Row_Key(&row.block, row.ordinal);
-        Carried(&carried.rows, Key(&key), Kind("source table row"))?;
+        Assert_Carried(&carried.rows, Key(&key), Kind("source table row"))?;
     }
     if let Some(node_id) = lineage.target_node_id.as_deref()
     {
-        Carried(&carried.nodes, Key(node_id), Kind("node"))?;
+        Assert_Carried(&carried.nodes, Key(node_id), Kind("node"))?;
     }
     if let Some(statement_id) = lineage.target_statement_id.as_deref()
     {
-        Carried(&carried.statements, Key(statement_id), Kind("normative statement"))?;
+        Assert_Carried(&carried.statements, Key(statement_id), Kind("normative statement"))?;
     }
 
     return Ok(());
@@ -299,7 +299,7 @@ fn Row_Key(block: &OrdinalRef, ordinal: i64) -> String
 }
 
 /// Files one identity under the set that states it.
-fn Keep(identities: &mut BTreeSet<String>, key: String)
+fn Keep_Identity(identities: &mut BTreeSet<String>, key: String)
 {
     identities.insert(key);
 }
@@ -329,12 +329,12 @@ fn Assert_Source_Resolves(
     if let Some(block) = block
     {
         let key = Ordinal_Key(&block.document, block.ordinal);
-        Carried(&carried.blocks, Key(&key), Kind("source block"))?;
+        Assert_Carried(&carried.blocks, Key(&key), Kind("source block"))?;
     }
     if let Some(heading) = heading
     {
         let key = Ordinal_Key(&heading.document, heading.ordinal);
-        Carried(&carried.headings, Key(&key), Kind("source heading"))?;
+        Assert_Carried(&carried.headings, Key(&key), Kind("source heading"))?;
     }
 
     return Ok(());
@@ -348,7 +348,7 @@ struct Key<'a>(&'a str);
 /// that did not resolve.
 struct Kind<'a>(&'a str);
 
-fn Carried(carried: &BTreeSet<String>, key: Key<'_>, kind: Kind<'_>) -> Result<(), BundleError>
+fn Assert_Carried(carried: &BTreeSet<String>, key: Key<'_>, kind: Kind<'_>) -> Result<(), BundleError>
 {
     if carried.contains(key.0)
     {

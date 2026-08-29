@@ -5,7 +5,7 @@
 //! [`super::fixpoint::Test_Every_Table_Should_Be_Exercised`] fails if one of them is ever
 //! empty.
 
-use nomos_spec_bundle::{Bundle, Import};
+use nomos_spec_bundle::{Bundle, Import_Bundle};
 use nomos_spec_model::{
     DecisionGap, FieldValue, Origin, Segment, Severity, Submission, SubmissionKind,
     SubmissionState,
@@ -153,7 +153,7 @@ fn A_Gap() -> DecisionGap
 pub(crate) fn Rebuilt_From(bundle: &Bundle) -> SpecificationStore
 {
     let mut rebuilt = SpecificationStore::In_Memory().expect("opens");
-    Import(&mut rebuilt, bundle).expect("imports");
+    Import_Bundle(&mut rebuilt, bundle).expect("imports");
 
     return rebuilt;
 }

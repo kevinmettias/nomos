@@ -24,11 +24,11 @@ fn Statements(text: &str, hash: &str) -> StatementFile
 fn Test_A_Matching_Statement_Should_Ingest_Cleanly()
 {
     let text = "Nomos shall do the thing.";
-    let file = Statements(text, ContentHash::Of(text).As_Str());
+    let file = Statements(text, ContentHash::Of(text).As_String_Slice());
 
     let report = Ingest_Statements(&mut Store(), &file).expect("ingests");
 
-    assert!(report.Passed());
+    assert!(report.Is_Passing());
     assert_eq!(report.ingested, 1);
 }
 
@@ -41,7 +41,7 @@ fn Test_A_Divergent_Hash_Should_Be_Reported_By_Id()
 
     let report = Ingest_Statements(&mut Store(), &file).expect("ingests");
 
-    assert!(!report.Passed());
+    assert!(!report.Is_Passing());
     assert_eq!(
         report.divergences.first().map(|d| d.id.as_str()),
         Some("AGT-001")
@@ -54,11 +54,11 @@ fn Test_A_Divergent_Hash_Should_Be_Reported_By_Id()
 fn Test_Non_Canonical_Text_Should_Be_Reported()
 {
     let text = "Nomos  shall\ndo the thing.";
-    let file = Statements(text, ContentHash::Of(text).As_Str());
+    let file = Statements(text, ContentHash::Of(text).As_String_Slice());
 
     let report = Ingest_Statements(&mut Store(), &file).expect("ingests");
 
-    assert!(!report.Passed(), "the hash matches but the text is not canonical");
+    assert!(!report.Is_Passing(), "the hash matches but the text is not canonical");
     assert!(report.divergences.is_empty());
     assert_eq!(report.non_canonical_text, vec!["AGT-001".to_owned()]);
 }
@@ -69,7 +69,7 @@ fn Test_An_Empty_Statement_File_Should_Not_Pass()
     let report = Ingest_Statements(&mut Store(), &StatementFile { statements: Vec::new() })
         .expect("ingests");
 
-    assert!(!report.Passed(), "ingesting nothing is not a clean ingest");
+    assert!(!report.Is_Passing(), "ingesting nothing is not a clean ingest");
 }
 
 #[test]
@@ -96,7 +96,7 @@ fn Test_A_Statements_Node_Kind_Should_Match_The_Catalogs_Vocabulary()
 {
     let mut store = Store();
     let text = "Nomos shall do the thing.";
-    let file = Statements(text, ContentHash::Of(text).As_Str());
+    let file = Statements(text, ContentHash::Of(text).As_String_Slice());
 
     Ingest_Statements(&mut store, &file).expect("ingests");
 

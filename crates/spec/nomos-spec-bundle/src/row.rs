@@ -8,7 +8,7 @@
 //! shapes each had a group already spelled in their name prefixes.
 //!
 //! Declared `pub(crate) mod` rather than re-exported name by name, so a reader of
-//! `crate::row::source::heading::SourceHeading` sees which table it is a row of.
+//! `crate::row::source::source_heading::SourceHeading` sees which table it is a row of.
 
 pub(crate) mod blob;
 pub(crate) mod node;

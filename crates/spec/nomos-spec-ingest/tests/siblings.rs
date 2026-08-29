@@ -11,7 +11,7 @@ use nomos_spec_ingest::{
     Statements_Sourced_Only_From_Commentary,
 };
 use nomos_spec_store::{NodeRow, SpecificationStore, SuiteAuthority, Table};
-use nomos_spec_validate::{Registered, Validate};
+use nomos_spec_validate::{Registered, Validate_Rules};
 use std::path::{Path, PathBuf};
 
 /// One counted answer, for a query that binds nothing.
@@ -479,7 +479,7 @@ fn Test_The_Ecosystem_Store_Should_Report_No_Preservation_Errors()
             [],
         )
         .expect("disposes them");
-    let run = Validate(&store, &Registered());
+    let run = Validate_Rules(&store, &Registered());
 
     assert!(run.Errors().is_empty(), "{:?}", run.Errors());
     assert!(
@@ -488,7 +488,7 @@ fn Test_The_Ecosystem_Store_Should_Report_No_Preservation_Errors()
         run.Summary(),
         run.Violations().iter().take(5).collect::<Vec<_>>()
     );
-    assert!(run.Passed(), "{}", run.Summary());
+    assert!(run.Is_Passed(), "{}", run.Summary());
 }
 
 #[test]

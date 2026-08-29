@@ -1,13 +1,13 @@
 //! How much of a revision says nothing, counted rather than sampled.
 
-use super::{Later, FillerCensus, Template, SHARED_BY, Repetition, Is_Filler};
+use super::{Later, FillerCensus, Template, SHARED_BY, Repetition, Get_Filler_Pattern};
 
-pub(super) fn Census(later: &Later) -> FillerCensus
+pub(super) fn Census_Fillers(later: &Later) -> FillerCensus
 {
     return FillerCensus {
         declared: later.declared.iter().cloned().collect(),
         templates: Shared_Templates(later),
-        stubs: Stubs(later),
+        stubs: Stubs_Of(later),
     };
 }
 
@@ -21,7 +21,7 @@ pub(super) fn Shared_Templates(later: &Later) -> Vec<Template>
         .templates
         .iter()
         .filter(|(_, repetition)| return repetition.sections >= SHARED_BY)
-        .map(|(key, repetition)| return Described(key, repetition))
+        .map(|(key, repetition)| return Described_Template(key, repetition))
         .collect();
     templates.sort_by(|first, second| {
         return second
@@ -34,13 +34,13 @@ pub(super) fn Shared_Templates(later: &Later) -> Vec<Template>
 }
 
 /// One repeated block as the census reports it.
-pub(super) fn Described(key: &str, repetition: &Repetition) -> Template
+pub(super) fn Described_Template(key: &str, repetition: &Repetition) -> Template
 {
     return Template {
         text: key.to_owned(),
         sections: repetition.sections,
         documents: repetition.documents.iter().cloned().collect(),
-        declared: Is_Filler(key),
+        declared: Get_Filler_Pattern(key),
     };
 }
 
@@ -48,7 +48,7 @@ pub(super) fn Described(key: &str, repetition: &Repetition) -> Template
 ///
 /// A document with no blocks at all is not one of them: it is empty, which is a different
 /// complaint and one the reader can already see.
-pub(super) fn Stubs(later: &Later) -> Vec<String>
+pub(super) fn Stubs_Of(later: &Later) -> Vec<String>
 {
     let mut stubs: Vec<String> = Vec::new();
 

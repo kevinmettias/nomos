@@ -1,6 +1,6 @@
 //! Reading a revision into sections, and counting what repeats across them.
 
-use super::{SourceBlock, BTreeSet, BTreeMap, Is_Filler, SHARED_BY, Segment, BlockKind, Table_Rows, RowKind, TableRow, Models_In};
+use super::{SourceBlock, BTreeSet, BTreeMap, Get_Filler_Pattern, SHARED_BY, Segment, BlockKind, Table_Rows, RowKind, TableRow, Models_In};
 
 /// Where a section sits: which document, under what heading.
 #[derive(Clone, Copy)]
@@ -101,7 +101,7 @@ impl Later
     fn Note_Section(&mut self, path: SectionPath<'_>, title: SectionTitle<'_>, body: &[SourceBlock])
     {
         let mut strongest: Option<Body> = None;
-        for block in Keyable(body)
+        for block in Keyable_Blocks(body)
         {
             strongest = Some(self.Fold_Block(path, title, block, strongest));
         }
@@ -135,7 +135,7 @@ impl Later
     {
         let text = text.0;
         let title = title.0;
-        let declared = Is_Filler(text);
+        let declared = Get_Filler_Pattern(text);
         let key = Template_Key(SectionText(text), SectionTitle(title));
         let shared = self
             .templates
@@ -191,7 +191,7 @@ pub(super) fn Cut_At_Headings(path: SectionPath<'_>, markdown: SectionText<'_>, 
             continue;
         }
 
-        let heading = Title(&block);
+        let heading = Title_Of(&block);
         Close_Section(path, title.replace(heading), &mut body, sections);
     }
 
@@ -226,7 +226,7 @@ pub(super) fn Repetitions_In(sections: &[(String, String, Vec<SourceBlock>)]) ->
 
     for (path, title, body) in sections
     {
-        for block in Keyable(body)
+        for block in Keyable_Blocks(body)
         {
             let key = Template_Key(SectionText(&block.text), SectionTitle(title));
             let repetition = templates.entry(key).or_default();
@@ -242,7 +242,7 @@ pub(super) fn Repetitions_In(sections: &[(String, String, Vec<SourceBlock>)]) ->
 /// filler, and every subject its content rows name.
 pub(super) fn Note_Block(later: &mut Later, path: &str, block: &SourceBlock)
 {
-    if Is_Filler(&block.text).is_some()
+    if Get_Filler_Pattern(&block.text).is_some()
     {
         later.declared.insert(path.to_owned());
     }
@@ -282,7 +282,7 @@ pub(super) fn Note_Row(later: &mut Later, path: &str, row: &TableRow)
     }
 }
 
-pub(super) fn Keyable(body: &[SourceBlock]) -> Vec<&SourceBlock>
+pub(super) fn Keyable_Blocks(body: &[SourceBlock]) -> Vec<&SourceBlock>
 {
     return body
         .iter()
@@ -322,7 +322,7 @@ pub(super) fn Template_Key(text: SectionText<'_>, title: SectionTitle<'_>) -> St
     return flattened.replace(&elided, "{}");
 }
 
-pub(super) fn Title(block: &SourceBlock) -> String
+pub(super) fn Title_Of(block: &SourceBlock) -> String
 {
     return block.text.trim_start_matches('#').trim().to_owned();
 }

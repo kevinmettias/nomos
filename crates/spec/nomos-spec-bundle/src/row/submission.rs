@@ -1,7 +1,7 @@
 //! A born-structured submission, addressed by the node it is.
 
-pub(crate) mod gap;
-pub(crate) mod value;
+pub(crate) mod submission_gap;
+pub(crate) mod submission_value;
 
 use serde::{Deserialize, Serialize};
 

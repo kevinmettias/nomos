@@ -1,4 +1,4 @@
-use crate::offending::{Traced, Undisposed, Undisposed_Statement};
+use crate::offending::{Traced, Undisposed_Outcome, Undisposed_Statement};
 use crate::Rule;
 use crate::RuleOutcome;
 use nomos_spec_store::SpecificationStore;
@@ -21,7 +21,7 @@ impl Rule for EveryHeadingHasADisposition
     {
         use nomos_spec_store::Table;
 
-        return Undisposed(
+        return Undisposed_Outcome(
             store,
             &Traced {
                 table: Table::SourceHeadings,
@@ -39,7 +39,7 @@ impl Rule for EveryHeadingHasADisposition
 #[must_use]
 // Five unrelated types in one vector, and the set is meant to stay open: `DECLARED_RULES`
 // closes it at run time, in both directions, so that a rule implemented and never listed here
-// is a value `Validate` can be handed and report. Making the ruleset a tuple of types would
+// is a value `Validate_Rules` can be handed and report. Making the ruleset a tuple of types would
 // put that disagreement beyond expressing.
 pub fn Registered() -> Vec<Box<dyn Rule>>
 {

@@ -52,7 +52,7 @@ impl ValidationRun
     /// indistinguishable from a failing one.** v15.0 is what the other choice looks
     /// like — the checks existed, none ran, and the publication was clean.
     #[must_use]
-    pub fn Passed(&self) -> bool
+    pub fn Is_Passed(&self) -> bool
     {
         return self.unregistered.is_empty()
             && self.undeclared.is_empty()
@@ -139,13 +139,13 @@ impl ValidationRun
 // below exists so the registered rules may disagree with `DECLARED_RULES` and be reported
 // saying how. A generic parameter would make the ruleset part of this function's signature,
 // and then "a declared rule nobody registered" could not be a value it is handed.
-pub fn Validate(store: &SpecificationStore, rules: &[Box<dyn Rule>]) -> ValidationRun
+pub fn Validate_Rules(store: &SpecificationStore, rules: &[Box<dyn Rule>]) -> ValidationRun
 {
     let registered: Vec<&'static str> = rules.iter().map(|rule| rule.Id()).collect();
     let Reconciliation {
         unregistered,
         undeclared,
-    } = Reconciled(&registered);
+    } = Reconciled_Registry(&registered);
 
     let results = rules
         .iter()
@@ -168,7 +168,7 @@ pub fn Validate(store: &SpecificationStore, rules: &[Box<dyn Rule>]) -> Validati
 /// A rule declared and not registered would be reported nowhere, and one registered and not
 /// declared would run without the manifest naming it. Checking one direction only leaves
 /// half of a disagreement invisible, which is the failure this reconciliation exists for.
-fn Reconciled(registered: &[&'static str]) -> Reconciliation
+fn Reconciled_Registry(registered: &[&'static str]) -> Reconciliation
 {
     let unregistered: Vec<String> = DECLARED_RULES
         .iter()
@@ -265,9 +265,9 @@ mod tests
     {
         let rules = All_Declared(&RuleOutcome::Satisfied { checked: 10 });
 
-        let run = Validate(&Store(), &rules);
+        let run = Validate_Rules(&Store(), &rules);
 
-        assert!(run.Passed(), "{}", run.Summary());
+        assert!(run.Is_Passed(), "{}", run.Summary());
         assert!(run.Vacuous_Rules().is_empty());
     }
 
@@ -279,9 +279,9 @@ mod tests
         let mut rules = All_Declared(&RuleOutcome::Satisfied { checked: 10 });
         rules.pop();
 
-        let run = Validate(&Store(), &rules);
+        let run = Validate_Rules(&Store(), &rules);
 
-        assert!(!run.Passed(), "a missing rule must not read as a clean run");
+        assert!(!run.Is_Passed(), "a missing rule must not read as a clean run");
         assert_eq!(run.unregistered.len(), 1);
     }
 
@@ -297,9 +297,9 @@ mod tests
         );
         rules.push(Box::new(errored));
 
-        let run = Validate(&Store(), &rules);
+        let run = Validate_Rules(&Store(), &rules);
 
-        assert!(!run.Passed());
+        assert!(!run.Is_Passed());
         assert_eq!(run.Errors().len(), 1);
         assert!(run.unregistered.is_empty(), "the rule ran; it failed");
     }
@@ -311,9 +311,9 @@ mod tests
         let undeclared = Fake("NSV-INVENTED-001", RuleOutcome::Satisfied { checked: 1 });
         rules.push(Box::new(undeclared));
 
-        let run = Validate(&Store(), &rules);
+        let run = Validate_Rules(&Store(), &rules);
 
-        assert!(!run.Passed(), "the manifest must describe what ran");
+        assert!(!run.Is_Passed(), "the manifest must describe what ran");
         assert_eq!(run.undeclared, vec!["NSV-INVENTED-001".to_owned()]);
     }
 
@@ -321,9 +321,9 @@ mod tests
     #[test]
     fn Test_An_Empty_Ruleset_Should_Not_Pass()
     {
-        let run = Validate(&Store(), &[]);
+        let run = Validate_Rules(&Store(), &[]);
 
-        assert!(!run.Passed());
+        assert!(!run.Is_Passed());
     }
 
     /// "0 violations over 0 subjects" must be distinguishable from a real clean result.
@@ -332,9 +332,9 @@ mod tests
     {
         let rules = All_Declared(&RuleOutcome::Satisfied { checked: 0 });
 
-        let run = Validate(&Store(), &rules);
+        let run = Validate_Rules(&Store(), &rules);
 
-        assert!(run.Passed(), "an empty store legitimately has nothing to check");
+        assert!(run.Is_Passed(), "an empty store legitimately has nothing to check");
         assert_eq!(run.Vacuous_Rules().len(), DECLARED_RULES.len());
     }
 
@@ -346,9 +346,9 @@ mod tests
             detail: "no preserved lineage".to_owned(),
         }]));
 
-        let run = Validate(&Store(), &rules);
+        let run = Validate_Rules(&Store(), &rules);
 
-        assert!(!run.Passed());
+        assert!(!run.Is_Passed());
         assert_eq!(run.Violations().len(), DECLARED_RULES.len());
     }
 

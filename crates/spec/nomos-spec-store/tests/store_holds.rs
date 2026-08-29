@@ -270,7 +270,7 @@ fn Test_Block_Hashes_Should_Survive_Storage()
             )
             .expect("reads back");
 
-        assert_eq!(stored, block.Content_Hash().As_Str());
+        assert_eq!(stored, block.Content_Hash().As_String_Slice());
     }
 }
 
@@ -314,6 +314,6 @@ fn Test_An_Unjustified_Omission_Should_Be_Refused()
 #[test]
 fn Test_Filler_Should_Never_Count_As_Preservation()
 {
-    assert!(!Disposition::RegressionFiller.Preserves_Content());
-    assert!(Disposition::PreservedVerbatim.Preserves_Content());
+    assert!(!Disposition::RegressionFiller.Is_Preserving_Content());
+    assert!(Disposition::PreservedVerbatim.Is_Preserving_Content());
 }

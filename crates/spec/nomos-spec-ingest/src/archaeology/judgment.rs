@@ -2,14 +2,14 @@
 
 use super::{Member, Later, BTreeMap, MemberFate, Fate, Restored, Position, Body, Hollow};
 
-pub(super) fn Judge(member: &Member, later: &Later, documents: &BTreeMap<String, String>) -> MemberFate
+pub(super) fn Judge_Member(member: &Member, later: &Later, documents: &BTreeMap<String, String>) -> MemberFate
 {
     return MemberFate {
         id: member.id.clone(),
         family: member.family,
         name: member.name.clone(),
         was: member.document.clone(),
-        fate: Still(member, later).unwrap_or_else(|| return Mentions(&member.name, documents)),
+        fate: Still_In_Later(member, later).unwrap_or_else(|| return Mentions_In_Documents(&member.name, documents)),
     };
 }
 
@@ -18,7 +18,7 @@ pub(super) fn Judge(member: &Member, later: &Later, documents: &BTreeMap<String,
 /// A single preserving position settles it, so the walk returns on the first one and keeps
 /// a hollowed position only as the answer of last resort. A member preserved in one document
 /// and hollow in another is preserved.
-pub(super) fn Still(member: &Member, later: &Later) -> Option<Fate>
+pub(super) fn Still_In_Later(member: &Member, later: &Later) -> Option<Fate>
 {
     if let Some(named) = Named_In_Row(member, later)
     {
@@ -30,7 +30,7 @@ pub(super) fn Still(member: &Member, later: &Later) -> Option<Fate>
 
     for position in positions
     {
-        match At(position)
+        match Fate_Of_Position(position)
         {
             preserved @ Fate::Preserved { .. } => return Some(preserved),
             hollowed =>
@@ -62,7 +62,7 @@ pub(super) fn Named_In_Row(member: &Member, later: &Later) -> Option<Fate>
 }
 
 /// What one position amounts to on its own.
-pub(super) fn At(position: &Position) -> Fate
+pub(super) fn Fate_Of_Position(position: &Position) -> Fate
 {
     return match position
     {
@@ -95,7 +95,7 @@ pub(super) fn At(position: &Position) -> Fate
     };
 }
 
-pub(super) fn Mentions(name: &str, documents: &BTreeMap<String, String>) -> Fate
+pub(super) fn Mentions_In_Documents(name: &str, documents: &BTreeMap<String, String>) -> Fate
 {
     let found: Vec<String> = documents
         .iter()

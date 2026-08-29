@@ -27,7 +27,7 @@ impl Scope
     /// Crate-visible rather than public: it is how the census walk decides what to count,
     /// and a caller outside that walk asking it would be deciding for itself what a scope
     /// means.
-    pub(crate) fn Covers(self, path: &str) -> bool
+    pub(crate) fn Is_Covering(self, path: &str) -> bool
     {
         use crate::DOMAIN_VOLUMES;
 

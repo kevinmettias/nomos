@@ -5,7 +5,7 @@ use super::{
     SecondColumn, Value,
 };
 
-pub(super) fn Suites(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
+pub(super) fn Gather_Suites(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
 {
     let mut query = Query::On(
         "SELECT suite_id, title, authority_root FROM suites WHERE 1 = 1",
@@ -24,7 +24,7 @@ pub(super) fn Suites(connection: &Connection, filter: &Filter) -> Result<Vec<Ite
     });
 }
 
-pub(super) fn Documents(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
+pub(super) fn Gather_Documents(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
 {
     let mut query = Query::On(
         "SELECT d.path, d.revision, b.sha256,
@@ -53,7 +53,7 @@ pub(super) fn Documents(connection: &Connection, filter: &Filter) -> Result<Vec<
     });
 }
 
-pub(super) fn Headings(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
+pub(super) fn Gather_Headings(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
 {
     let mut query = Query::On(
         "SELECT d.path, d.revision, h.ordinal, h.depth, h.title
@@ -80,7 +80,7 @@ pub(super) fn Headings(connection: &Connection, filter: &Filter) -> Result<Vec<I
         });
 }
 
-pub(super) fn Blocks(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
+pub(super) fn Gather_Blocks(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
 {
     let mut query = Query::On(
         "SELECT d.path, d.revision, b.ordinal, b.kind, b.heading_path, b.text, b.content_hash
@@ -112,7 +112,7 @@ pub(super) fn Blocks(connection: &Connection, filter: &Filter) -> Result<Vec<Ite
         });
 }
 
-pub(super) fn Rows(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
+pub(super) fn Gather_Rows(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
 {
     let mut query = Query::On(
         "SELECT d.path, d.revision, b.ordinal, r.ordinal, r.table_ordinal, r.kind,
@@ -151,7 +151,7 @@ pub(super) fn Rows(connection: &Connection, filter: &Filter) -> Result<Vec<Item>
         });
 }
 
-pub(super) fn Nodes(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
+pub(super) fn Gather_Nodes(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
 {
     let mut query = Query::On(
         "SELECT n.node_id, n.kind, n.authority, n.representation, n.title, s.suite_id
@@ -178,7 +178,7 @@ pub(super) fn Nodes(connection: &Connection, filter: &Filter) -> Result<Vec<Item
     });
 }
 
-pub(super) fn Statements(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
+pub(super) fn Gather_Statements(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
 {
     let mut query = Query::On(
         "SELECT s.statement_id, s.kind, n.node_id, s.canonical_text, s.canonical_hash,
@@ -208,7 +208,7 @@ pub(super) fn Statements(connection: &Connection, filter: &Filter) -> Result<Vec
     });
 }
 
-pub(super) fn Relations(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
+pub(super) fn Gather_Relations(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
 {
     let mut query = Query::On(
         "SELECT f.node_id, r.relation_type, t.node_id, y.tier, s.suite_id
@@ -272,7 +272,7 @@ const LINEAGE_ORDER: &str = "coalesce(d.path, hd.path, rd.path, ''), coalesce(b.
      coalesce(r.ordinal, -1), l.disposition, coalesce(n.node_id, ''), \
      coalesce(st.statement_id, '')";
 
-pub(super) fn Lineage(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
+pub(super) fn Gather_Lineage(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
 {
     let mut query = Query::On(LINEAGE_ROWS);
     query.Equal("l.disposition", filter.disposition.as_ref());
@@ -283,13 +283,20 @@ pub(super) fn Lineage(connection: &Connection, filter: &Filter) -> Result<Vec<It
         .Run(connection, |row| {
             let mut columns = Columns::Of(row);
             let disposition = columns.Text()?;
-            let source = Cited(&mut columns)?;
+            let source = Cited_Source(&mut columns)?;
+            // `node` is read before `statement` because the query names them in that order
+            // and `Columns` reads positionally; both are read unconditionally regardless of
+            // which one `target` below turns out to need.
             let node = columns.Text()?;
             let statement = columns.Text()?;
             // A statement is the more specific of the two and wins where both are present:
             // saying which node a block preserved is true but answers a coarser question
             // than the one the lineage was recorded to answer.
-            let target = if statement.is_empty() { node } else { statement };
+            let target = match statement.is_empty()
+            {
+                true => node,
+                false => statement,
+            };
 
             return Ok(Item::Of(&format!("{source} -> {disposition}"))
                 .With(Name("source"), Value(&source))
@@ -303,7 +310,7 @@ pub(super) fn Lineage(connection: &Connection, filter: &Filter) -> Result<Vec<It
 /// A row addresses a table row, a block, or a heading, and `-1` is the sentinel each join
 /// leaves behind when it matched nothing. Citing the block for a row-level disposition
 /// would make thirty rows of one table cite the same place.
-pub(super) fn Cited(columns: &mut Columns<'_, '_>) -> rusqlite::Result<String>
+pub(super) fn Cited_Source(columns: &mut Columns<'_, '_>) -> rusqlite::Result<String>
 {
     let path = columns.Text()?;
     let block: i64 = columns.Next()?;
@@ -336,7 +343,7 @@ const OMISSION_ROWS: &str = "SELECT coalesce(d.path, hd.path, ''), coalesce(b.or
 const OMISSION_ORDER: &str =
     "o.decision_record, coalesce(d.path, hd.path, ''), coalesce(b.ordinal, -1), o.reason";
 
-pub(super) fn Omissions(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
+pub(super) fn Gather_Omissions(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
 {
     let mut query = Query::On(OMISSION_ROWS);
     query.Equal("coalesce(d.path, hd.path, '')", filter.document.as_ref());

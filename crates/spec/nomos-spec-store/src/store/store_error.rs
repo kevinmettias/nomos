@@ -60,6 +60,8 @@ pub enum StoreError
 
 impl core::fmt::Display for StoreError
 {
+    // `fmt` is the fixed method name `std::fmt::Display` requires; it is not a style choice
+    // and cannot be spelled out without ceasing to implement the trait.
     fn fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
     {
         return match self

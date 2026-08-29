@@ -70,8 +70,8 @@ fn Test_An_Archive_Should_List_Its_Files_Sorted()
             "suite/nested/01-core.md".to_owned()
         ]
     );
-    assert!(archive.Listing().Contains("suite/nested/01-core.md"));
-    assert!(!archive.Listing().Contains("suite/absent.md"));
+    assert!(archive.Listing().Has_Path("suite/nested/01-core.md"));
+    assert!(!archive.Listing().Has_Path("suite/absent.md"));
     assert_eq!(archive.Listing().Ending_With(".md").len(), 2);
     assert_eq!(
         archive.Read_Text("suite/00-index.md").expect("reads"),
@@ -255,7 +255,7 @@ fn Test_The_V15_Archive_Should_Yield_Its_Records()
 
     assert_eq!(archive.Listing().Paths().len(), 273, "the v15.0 file count changed");
     assert!(records >= 60, "only {records} records under records/");
-    assert!(archive.Listing().Contains(decision), "the v15 decision records are not where I4 expects");
+    assert!(archive.Listing().Has_Path(decision), "the v15 decision records are not where I4 expects");
     assert!(
         archive.Read_Text(decision).expect("reads").starts_with("---\nid: D-045"),
         "the record did not read as its own front matter"

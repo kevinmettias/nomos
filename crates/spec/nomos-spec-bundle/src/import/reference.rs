@@ -14,7 +14,7 @@ pub(super) fn Optional_Suite_Uid(
 {
     return suite_id
         .map(|id| {
-            return Resolve(
+            return Resolve_Uid_From_Sql_Arguments(
                 transaction,
                 "SELECT uid FROM suites WHERE suite_id = ?1",
                 &[&id],
@@ -41,7 +41,7 @@ pub(super) struct Referenced<'a>
 /// `sql` is `&'static str` so that the statement cannot be built at runtime, and
 /// `prepare_cached` so that resolving N references parses and plans the lookup once rather
 /// than once per reference — these resolvers are called from inside the insert loops.
-pub(super) fn Resolve(
+pub(super) fn Resolve_Uid_From_Sql_Arguments(
     transaction: &Transaction<'_>,
     sql: &'static str,
     // The lookups differ in both the number and the type of their keys — a path and a revision
@@ -68,7 +68,7 @@ pub(super) fn Resolve(
 
 pub(super) fn Blob_Uid(transaction: &Transaction<'_>, sha256: &str) -> Result<i64, BundleError>
 {
-    return Resolve(
+    return Resolve_Uid_From_Sql_Arguments(
         transaction,
         "SELECT uid FROM blobs WHERE sha256 = ?1",
         &[&sha256],
@@ -81,7 +81,7 @@ pub(super) fn Blob_Uid(transaction: &Transaction<'_>, sha256: &str) -> Result<i6
 
 pub(super) fn Document_Uid(transaction: &Transaction<'_>, document: &DocumentRef) -> Result<i64, BundleError>
 {
-    return Resolve(
+    return Resolve_Uid_From_Sql_Arguments(
         transaction,
         "SELECT uid FROM source_documents WHERE path = ?1 AND revision = ?2",
         &[&document.path, &document.revision],
@@ -94,7 +94,7 @@ pub(super) fn Document_Uid(transaction: &Transaction<'_>, document: &DocumentRef
 
 pub(super) fn Node_Uid(transaction: &Transaction<'_>, node_id: &str) -> Result<i64, BundleError>
 {
-    return Resolve(
+    return Resolve_Uid_From_Sql_Arguments(
         transaction,
         "SELECT uid FROM nodes WHERE node_id = ?1",
         &[&node_id],
@@ -120,7 +120,7 @@ pub(super) fn Optional_Statement_Uid(
 {
     return statement_id
         .map(|id| {
-            return Resolve(
+            return Resolve_Uid_From_Sql_Arguments(
                 transaction,
                 "SELECT uid FROM normative_statements WHERE statement_id = ?1",
                 &[&id],
@@ -135,7 +135,7 @@ pub(super) fn Optional_Statement_Uid(
 
 pub(super) fn Block_Uid(transaction: &Transaction<'_>, reference: &OrdinalRef) -> Result<i64, BundleError>
 {
-    return Resolve(
+    return Resolve_Uid_From_Sql_Arguments(
         transaction,
         "SELECT b.uid FROM source_blocks b
          JOIN source_documents d ON d.uid = b.document_uid
@@ -162,7 +162,7 @@ pub(super) fn Optional_Table_Row_Uid(
 {
     return reference
         .map(|reference| {
-            return Resolve(
+            return Resolve_Uid_From_Sql_Arguments(
                 transaction,
                 "SELECT r.uid FROM source_table_rows r
                  JOIN source_blocks b ON b.uid = r.source_block_uid
@@ -206,7 +206,7 @@ pub(super) fn Optional_Heading_Uid(
 {
     return reference
         .map(|reference| {
-            return Resolve(
+            return Resolve_Uid_From_Sql_Arguments(
                 transaction,
                 "SELECT h.uid FROM source_headings h
                  JOIN source_documents d ON d.uid = h.document_uid

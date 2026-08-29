@@ -10,7 +10,7 @@ const ADJACENT_PAIR: usize = 2;
 /// `reappeared` is computed against every revision before `from`, which is why this takes
 /// the whole sequence rather than two revisions: a pairwise diff cannot see it.
 #[must_use]
-pub fn Walk(revisions: &[RevisionFingerprint]) -> Vec<PairChange>
+pub fn Walk_Revisions(revisions: &[RevisionFingerprint]) -> Vec<PairChange>
 {
     let mut pairs = Vec::new();
     let mut seen_before: BTreeSet<&str> = BTreeSet::new();

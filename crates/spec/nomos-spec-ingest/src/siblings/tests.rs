@@ -182,7 +182,7 @@ fn Test_Suite_Identifiers_Should_Be_Distinct()
 fn Test_A_Qualified_Identifier_Should_Name_Its_Suite()
 {
     assert_eq!(
-        Qualified(Sibling::Xvpe, "xvpe-spec-seed-v0.1/machine/target-adapter.schema.json"),
+        Qualified_Node_Id(Sibling::Xvpe, "xvpe-spec-seed-v0.1/machine/target-adapter.schema.json"),
         "xvpe-spec-seed:target-adapter.schema.json"
     );
 }

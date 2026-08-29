@@ -1,29 +1,13 @@
 pub(crate) mod origin;
 pub(crate) mod relocation;
+mod section_report;
 
 use crate::RecordedSection;
 use crate::SectionLineage;
 use crate::IngestError;
 use nomos_spec_store::{DocumentPath, DocumentRevision, SpecificationStore, StoreError};
 
-#[derive(Debug, Default)]
-pub struct SectionReport
-{
-    pub headings: u32,
-    pub lineage_rows: u32,
-    /// Sections naming a document that was never ingested, per section rather than
-    /// counted.
-    pub unknown_documents: Vec<String>,
-}
-
-impl SectionReport
-{
-    #[must_use]
-    pub fn Passed(&self) -> bool
-    {
-        return self.unknown_documents.is_empty() && self.headings > 0;
-    }
-}
+pub use section_report::SectionReport;
 
 /// # Errors
 ///
@@ -105,7 +89,7 @@ fn Record_Section(
         "INSERT OR IGNORE INTO lineage (source_heading_uid, disposition) VALUES (?1, ?2)",
         rusqlite::params![heading_uid, section.disposition],
     );
-    Sql(inserted_lineage)?;
+    Wrap_Sql_Result(inserted_lineage)?;
     report.lineage_rows = report.lineage_rows.saturating_add(1);
 
     return Ok(());
@@ -132,7 +116,7 @@ fn Upsert_Heading(
             section.source_heading
         ],
     );
-    Sql(inserted)?;
+    Wrap_Sql_Result(inserted)?;
 
     let selected = store.Connection().query_row(
         "SELECT uid FROM source_headings
@@ -141,7 +125,7 @@ fn Upsert_Heading(
         |row| row.get(0),
     );
 
-    return Sql(selected);
+    return Wrap_Sql_Result(selected);
 }
 
 /// Records a disposition for every source block of a document.
@@ -166,7 +150,7 @@ pub fn Ingest_Block_Dispositions<'a>(
         rusqlite::params![document, revision],
         |row| row.get(0),
     );
-    let document_uid: i64 = Sql(selected_document)?;
+    let document_uid: i64 = Wrap_Sql_Result(selected_document)?;
 
     let mut written = 0_u32;
     for (ordinal, disposition) in dispositions
@@ -211,12 +195,12 @@ fn Record_Block(
         "INSERT OR IGNORE INTO lineage (source_block_uid, disposition) VALUES (?1, ?2)",
         rusqlite::params![block_uid, disposition],
     );
-    Sql(inserted)?;
+    Wrap_Sql_Result(inserted)?;
 
     return Ok(true);
 }
 
-fn Sql<T>(result: rusqlite::Result<T>) -> Result<T, IngestError>
+fn Wrap_Sql_Result<Value>(result: rusqlite::Result<Value>) -> Result<Value, IngestError>
 {
     return result.map_err(|error| IngestError::Store(StoreError::Sql(error.to_string())));
 }
@@ -246,7 +230,7 @@ mod tests
 
         let report = Ingest_Section_Lineage(&mut store, &lineage, "v14.36").expect("ingests");
 
-        assert!(report.Passed());
+        assert!(report.Is_Passed());
         assert_eq!(report.headings, 1);
         assert_eq!(report.lineage_rows, 1);
     }
@@ -265,7 +249,7 @@ mod tests
 
         let report = Ingest_Section_Lineage(&mut store, &lineage, "v14.36").expect("ingests");
 
-        assert!(!report.Passed());
+        assert!(!report.Is_Passed());
         assert_eq!(report.unknown_documents.len(), 1);
     }
 

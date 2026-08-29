@@ -1,6 +1,6 @@
 //! The commentary view, and the question only it can answer.
 
-use super::{SpecificationStore, IngestError, Sql};
+use super::{SpecificationStore, IngestError, Wrap_Sql_Result};
 
 /// Statements whose only preserved source is commentary.
 ///
@@ -17,7 +17,7 @@ pub fn Statements_Sourced_Only_From_Commentary(
     store: &SpecificationStore,
 ) -> Result<Vec<String>, IngestError>
 {
-    let mut statement = Sql(store.Connection().prepare(
+    let mut statement = Wrap_Sql_Result(store.Connection().prepare(
         "SELECT s.statement_id FROM normative_statements s
          WHERE EXISTS (
              SELECT 1 FROM lineage l
@@ -35,9 +35,9 @@ pub fn Statements_Sourced_Only_From_Commentary(
     ))?;
 
     let rows = statement.query_map(rusqlite::params![], |row| row.get(0));
-    let found = Sql(rows)?;
+    let found = Wrap_Sql_Result(rows)?;
 
-    return Sql(found.collect());
+    return Wrap_Sql_Result(found.collect());
 }
 
 /// The blocks a commentary node owns, as a view the query above reads twice.
@@ -56,6 +56,6 @@ const COMMENTARY_BLOCKS: &str = "CREATE TEMP VIEW IF NOT EXISTS commentary_block
 /// Returns [`IngestError`] on any store failure.
 pub fn Prepare_Commentary_View(store: &SpecificationStore) -> Result<(), IngestError>
 {
-    Sql(store.Connection().execute_batch(COMMENTARY_BLOCKS))?;
+    Wrap_Sql_Result(store.Connection().execute_batch(COMMENTARY_BLOCKS))?;
     return Ok(());
 }

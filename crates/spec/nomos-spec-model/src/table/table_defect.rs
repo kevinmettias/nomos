@@ -23,6 +23,8 @@ pub enum TableDefect
 
 impl core::fmt::Display for TableDefect
 {
+    // `fmt` is the fixed method name `std::fmt::Display` mandates; it is not a free choice
+    // of abbreviation and cannot be spelled out without ceasing to implement the trait.
     fn fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
     {
         return match self

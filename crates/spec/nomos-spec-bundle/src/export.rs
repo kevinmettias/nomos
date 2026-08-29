@@ -5,11 +5,14 @@ mod source;
 mod submission;
 
 use graph::{
-    Lineages, Node_Aliases, Node_Histories, Nodes, Normative_Statements, Omissions,
-    Record_Front_Matter, Record_Relations, Relation_Types, Relations, Suites,
+    Collect_Lineages, Collect_Nodes, Collect_Omissions, Collect_Relations, Collect_Suites,
+    Node_Aliases, Node_Histories, Normative_Statements, Record_Front_Matter, Record_Relations,
+    Relation_Types,
 };
-use source::{Blobs, Source_Blocks, Source_Documents, Source_Headings, Source_Table_Rows};
-use submission::{Submission_Gaps, Submission_Values, Submissions};
+use source::{
+    Collect_Blobs, Source_Blocks, Source_Documents, Source_Headings, Source_Table_Rows,
+};
+use submission::{Collect_Submissions, Submission_Gaps, Submission_Values};
 
 use crate::BundleError;
 use crate::Bundle;
@@ -32,7 +35,7 @@ use rusqlite::Connection;
 /// Returns [`BundleError::Incomplete`] if any table holds rows this function did not
 /// emit, [`BundleError::UncoveredColumn`] if the schema holds a column the exporter does
 /// not carry, and [`BundleError::Sql`] on any query failure.
-pub fn Export(store: &SpecificationStore) -> Result<Bundle, BundleError>
+pub fn Export_Store(store: &SpecificationStore) -> Result<Bundle, BundleError>
 {
     use crate::columns::Assert_Columns_Covered;
 
@@ -44,6 +47,12 @@ pub fn Export(store: &SpecificationStore) -> Result<Bundle, BundleError>
 
     return Bundle::New(store.Version(), records);
 }
+
+// Renamed from the vague `Export` for check-naming-clarity (it takes a parameter without
+// saying what it exports). The public name stays `Export` through this alias because
+// `lib.rs`'s `pub use export::Export;` is on this campaign's central-exclusion list — the
+// orchestrating session owns that file, not this crate-scoped worker.
+pub use self::Export_Store as Export;
 
 /// Every table, in the order the bundle carries them. The order is the bundle's identity, so
 /// moving a call here changes the bytes every store exports.
@@ -61,7 +70,7 @@ fn Every_Record(connection: &Connection) -> Result<Vec<Record>, BundleError>
 /// The corpus as it was read: the blobs, the documents, and everything segmented out of them.
 fn The_Source_Corpus(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
 {
-    Blobs(connection, records)?;
+    Collect_Blobs(connection, records)?;
     Source_Documents(connection, records)?;
     Source_Headings(connection, records)?;
     Source_Blocks(connection, records)?;
@@ -73,15 +82,15 @@ fn The_Source_Corpus(connection: &Connection, records: &mut Vec<Record>) -> Resu
 /// The graph the corpus was turned into, and the preservation ledger tying the two together.
 fn The_Graph(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
 {
-    Suites(connection, records)?;
-    Nodes(connection, records)?;
+    Collect_Suites(connection, records)?;
+    Collect_Nodes(connection, records)?;
     Node_Aliases(connection, records)?;
     Node_Histories(connection, records)?;
     Relation_Types(connection, records)?;
-    Relations(connection, records)?;
+    Collect_Relations(connection, records)?;
     Normative_Statements(connection, records)?;
-    Lineages(connection, records)?;
-    Omissions(connection, records)?;
+    Collect_Lineages(connection, records)?;
+    Collect_Omissions(connection, records)?;
     Record_Front_Matter(connection, records)?;
     Record_Relations(connection, records)?;
 
@@ -91,7 +100,7 @@ fn The_Graph(connection: &Connection, records: &mut Vec<Record>) -> Result<(), B
 /// What arrived through the submission door.
 fn The_Submissions(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
 {
-    Submissions(connection, records)?;
+    Collect_Submissions(connection, records)?;
     Submission_Values(connection, records)?;
     Submission_Gaps(connection, records)?;
 
@@ -136,9 +145,9 @@ fn Assert_Complete(store: &SpecificationStore, records: &[Record]) -> Result<(),
 /// the two that differ, and the SQL was the hardest thing on the screen to find.
 ///
 /// The exporters that are not uniform keep their own bodies. `Source_Table_Rows` decodes a
-/// JSON column after the query and `Relations` reads two, so folding them in would mean a
+/// JSON column after the query and `Collect_Relations` reads two, so folding them in would mean a
 /// helper with a hole in it rather than one concept.
-pub(super) fn Collect<Read>(
+pub(super) fn Collect_Rows<Read>(
     connection: &Connection,
     records: &mut Vec<Record>,
     sql: &str,
@@ -186,7 +195,7 @@ impl<'row, 'statement> Columns<'row, 'statement>
 }
 
 /// A JSON column decoded, reported as a SQL failure because that is where it came from.
-pub(super) fn Decoded<Value: serde::de::DeserializeOwned>(json: &str) -> Result<Value, BundleError>
+pub(super) fn Decode_Json_Column<Value: serde::de::DeserializeOwned>(json: &str) -> Result<Value, BundleError>
 {
     return serde_json::from_str(json).map_err(|error| BundleError::Sql(error.to_string()));
 }

@@ -1,6 +1,6 @@
 //! Every block carried into v15 says what became of it.
 
-use crate::offending::{Traced, Undisposed, Undisposed_Statement};
+use crate::offending::{Traced, Undisposed_Outcome, Undisposed_Statement};
 use crate::RuleOutcome;
 use crate::Rule;
 use nomos_spec_store::{SpecificationStore, Table};
@@ -23,7 +23,7 @@ impl Rule for EveryBlockHasADisposition
 
     fn Evaluate(&self, store: &SpecificationStore) -> RuleOutcome
     {
-        return Undisposed(
+        return Undisposed_Outcome(
             store,
             &Traced {
                 table: Table::SourceBlocks,

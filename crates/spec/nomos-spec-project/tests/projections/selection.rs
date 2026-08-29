@@ -5,7 +5,7 @@
 //! unless a profile declares it expected.
 
 use crate::store::{Populated, Profile_Named, Rendered};
-use nomos_spec_project::{Build, Catalogue, Profile, Select};
+use nomos_spec_project::{Build, Catalogue, Profile, Select_Projection};
 
 #[test]
 fn Test_A_Soft_Deleted_Node_Should_Not_Be_Projected()
@@ -102,7 +102,7 @@ fn Test_Two_Profiles_Writing_One_Output_Should_Be_Refused()
 fn Test_A_Selection_Should_Order_By_Identity_Rather_Than_By_Arrival()
 {
     let store = Populated();
-    let projection = Select(&store, &Profile_Named("mcp-resource")).expect("selects");
+    let projection = Select_Projection(&store, &Profile_Named("mcp-resource")).expect("selects");
 
     for section in &projection.sections
     {

@@ -1,7 +1,7 @@
 //! Working out what an edit changed, before anything is written.
 
 use nomos_spec_model::{
-    ContentHash, Normalize, Record, RecordFrontMatter, RecordRelation,
+    ContentHash, Normalize_Whitespace, Record, RecordFrontMatter, RecordRelation,
     Render_Record, Segment, SourceBlock,
 };
 
@@ -31,15 +31,15 @@ pub(crate) fn Block_Changes(before: &[SourceBlock], after: &[SourceBlock]) -> Ve
 
     for block in after
     {
-        match Claimed(before, &mut taken, block)
+        match Claimed_Block(before, &mut taken, block)
         {
             Match::Held(change) => changes.extend(change),
             Match::New => added.push(block),
         }
     }
 
-    let removed = Untaken(before, &taken);
-    let paired = Paired(&added, &removed);
+    let removed = Untaken_Blocks(before, &taken);
+    let paired = Paired_Changes(&added, &removed);
 
     changes.extend(paired);
     changes.sort_by_key(Position_Of);
@@ -49,21 +49,21 @@ pub(crate) fn Block_Changes(before: &[SourceBlock], after: &[SourceBlock]) -> Ve
 
 /// Claims the block this staged one is — verbatim first, then under the normalizer — so that
 /// no earlier block is matched twice, and says what became of it.
-fn Claimed(before: &[SourceBlock], taken: &mut [bool], block: &SourceBlock) -> Match
+fn Claimed_Block(before: &[SourceBlock], taken: &mut [bool], block: &SourceBlock) -> Match
 {
-    if let Some(index) = Unmatched(before, taken, |candidate| return candidate.text == block.text)
+    if let Some(index) = Unmatched_Index(before, taken, |candidate| return candidate.text == block.text)
     {
-        Take(taken, index);
+        Mark_Taken(taken, index);
         let found = before.get(index);
-        let moved = Displaced(found, block.ordinal);
+        let moved = Displaced_Block(found, block.ordinal);
 
         return Match::Held(moved);
     }
-    if let Some(index) = Unmatched(before, taken, |candidate| {
-        return Normalize(&candidate.text) == Normalize(&block.text);
+    if let Some(index) = Unmatched_Index(before, taken, |candidate| {
+        return Normalize_Whitespace(&candidate.text) == Normalize_Whitespace(&block.text);
     })
     {
-        Take(taken, index);
+        Mark_Taken(taken, index);
 
         return Match::Held(Some(BlockChange::Reflowed {
             ordinal: block.ordinal,
@@ -73,7 +73,7 @@ fn Claimed(before: &[SourceBlock], taken: &mut [bool], block: &SourceBlock) -> M
     return Match::New;
 }
 
-fn Unmatched(
+fn Unmatched_Index(
     before: &[SourceBlock],
     taken: &[bool],
     predicate: impl Fn(&SourceBlock) -> bool,
@@ -90,7 +90,7 @@ fn Unmatched(
     return None;
 }
 
-fn Take(taken: &mut [bool], index: usize)
+fn Mark_Taken(taken: &mut [bool], index: usize)
 {
     if let Some(slot) = taken.get_mut(index)
     {
@@ -100,7 +100,7 @@ fn Take(taken: &mut [bool], index: usize)
 
 /// The same wording at a different ordinal moved. At the same ordinal, nothing happened to
 /// it, and reporting that would be noise in a preview an author has to read every time.
-fn Displaced(found: Option<&SourceBlock>, to: u32) -> Option<BlockChange>
+fn Displaced_Block(found: Option<&SourceBlock>, to: u32) -> Option<BlockChange>
 {
     return found
         .filter(|block| return block.ordinal != to)
@@ -113,7 +113,7 @@ fn Displaced(found: Option<&SourceBlock>, to: u32) -> Option<BlockChange>
 }
 
 /// The blocks no staged block claimed, which are the ones the edit removed.
-fn Untaken<'a>(before: &'a [SourceBlock], taken: &[bool]) -> Vec<&'a SourceBlock>
+fn Untaken_Blocks<'a>(before: &'a [SourceBlock], taken: &[bool]) -> Vec<&'a SourceBlock>
 {
     return before
         .iter()
@@ -125,7 +125,7 @@ fn Untaken<'a>(before: &'a [SourceBlock], taken: &[bool]) -> Vec<&'a SourceBlock
 
 /// An addition and a removal at one ordinal are a rewording, and saying so is more use to a
 /// reader than two lines that do not mention each other.
-fn Paired(added: &[&SourceBlock], removed: &[&SourceBlock]) -> Vec<BlockChange>
+fn Paired_Changes(added: &[&SourceBlock], removed: &[&SourceBlock]) -> Vec<BlockChange>
 {
     let mut changes = Vec::new();
 
@@ -162,8 +162,8 @@ fn Added_Or_Reworded(block: &SourceBlock, removed: &[&SourceBlock]) -> BlockChan
 
     return BlockChange::Reworded {
         ordinal: block.ordinal,
-        before: ContentHash::Of(&gone.text).As_Str().to_owned(),
-        after: ContentHash::Of(&block.text).As_Str().to_owned(),
+        before: ContentHash::Of(&gone.text).As_String_Slice().to_owned(),
+        after: ContentHash::Of(&block.text).As_String_Slice().to_owned(),
     };
 }
 
@@ -227,13 +227,13 @@ pub(crate) fn Relation_Changes(before: &[RecordRelation], after: &[RecordRelatio
 /// Compared under the normalizer, because that is what decides whether two spellings are one
 /// statement everywhere else in this system. A statement whose block was merely reflowed is
 /// held, not moved.
-pub(crate) fn Located(canonical_text: &str, before: &[SourceBlock], after: &[SourceBlock]) -> NormativeOutcome
+pub(crate) fn Located_Statement(canonical_text: &str, before: &[SourceBlock], after: &[SourceBlock]) -> NormativeOutcome
 {
-    let needle = Normalize(canonical_text);
+    let needle = Normalize_Whitespace(canonical_text);
     let carrying = |blocks: &[SourceBlock]| {
         return blocks
             .iter()
-            .find(|block| return Normalize(&block.text).contains(&needle))
+            .find(|block| return Normalize_Whitespace(&block.text).contains(&needle))
             .map(|block| return block.ordinal);
     };
 

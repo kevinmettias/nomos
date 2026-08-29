@@ -43,7 +43,7 @@ impl BlockChange
 {
     /// Whether this change moves, rewrites or removes wording that was already there.
     #[must_use]
-    pub const fn Disturbs_Wording(&self) -> bool
+    pub const fn Is_Disturbing_Wording(&self) -> bool
     {
         return matches!(
             self,

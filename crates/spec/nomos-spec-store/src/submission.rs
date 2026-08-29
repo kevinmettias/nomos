@@ -8,51 +8,21 @@
 //! `OD-SPEC-013` decided what it writes: a submission is a node, a field is a sequence of
 //! attributed rows in `submission_values`, and a decision gap is a row in `submission_gaps`.
 
+mod accept_error;
+
+pub use accept_error::AcceptError;
+
 use crate::SpecificationStore;
 use crate::StoreError;
 use nomos_spec_model::{
-    ContentHash, Failure, FieldValue, Origin, Refusal, Submission, SubmissionState, Validate,
+    ContentHash, Failure, FieldValue, Origin, Refusal, Submission, SubmissionState, Validate_Submission,
 };
 use rusqlite::{OptionalExtension, Transaction};
-
-/// Why a submission did not become durable.
-///
-/// Two arms and not one, because they send the caller to different places. A [`Refusal`] is
-/// a fact about the submission and the submitter can act on it; a [`StoreError`] is a fact
-/// about the database and they cannot.
-#[derive(Debug)]
-pub enum AcceptError
-{
-    /// The submission failed the rule set. Nothing was written.
-    Refused(Refusal),
-    /// The store could not be used.
-    Store(StoreError),
-}
-
-impl From<StoreError> for AcceptError
-{
-    fn from(error: StoreError) -> Self
-    {
-        return Self::Store(error);
-    }
-}
-
-impl std::fmt::Display for AcceptError
-{
-    fn fmt(&self, formatter: &mut std::fmt::Formatter<'_>) -> std::fmt::Result
-    {
-        return match self
-        {
-            Self::Refused(refusal) => write!(formatter, "{refusal}"),
-            Self::Store(error) => write!(formatter, "{error}"),
-        };
-    }
-}
 
 /// Validates `submission` and persists it, or refuses it and stores nothing.
 ///
 /// The whole of `OD-SPEC-010` runs here: the rules that are a function of the submission come
-/// from [`Validate`], and rule 4 — `implements` resolving to an accepted design and `answers`
+/// from [`Validate_Submission`], and rule 4 — `implements` resolving to an accepted design and `answers`
 /// to an accepted request — runs below, because it reads a second row and cannot be a function
 /// of one submission.
 ///
@@ -86,7 +56,7 @@ pub fn Accept_Submission(
 /// The submission passes every rule, or the refusal names every one it fails.
 fn Assert_No_Refusals(store: &SpecificationStore, submission: &Submission) -> Result<(), AcceptError>
 {
-    let failures = Refusals(store, submission)?;
+    let failures = Failed_Rules(store, submission)?;
     if !failures.is_empty()
     {
         return Err(AcceptError::Refused(Refusal {
@@ -100,12 +70,12 @@ fn Assert_No_Refusals(store: &SpecificationStore, submission: &Submission) -> Re
 
 /// Every rule this submission fails: the ones about its shape and the ones about what it
 /// cites, gathered so a refusal names all of them at once.
-fn Refusals(
+fn Failed_Rules(
     store: &SpecificationStore,
     submission: &Submission,
 ) -> Result<Vec<Failure>, StoreError>
 {
-    let mut failures = Validate(submission);
+    let mut failures = Validate_Submission(submission);
     let unresolved = Unresolved_Citations(store, submission)?;
 
     failures.extend(unresolved);
@@ -359,7 +329,7 @@ fn Insert_Value(
 ) -> Result<(), StoreError>
 {
     let field = value.field.clone();
-    let hash = ContentHash::Of(&value.value).As_Str().to_owned();
+    let hash = ContentHash::Of(&value.value).As_String_Slice().to_owned();
     let ordinal = sequence.ordinals.entry(field.clone()).or_insert(0);
 
     insert

@@ -24,19 +24,19 @@
 #![forbid(unsafe_code)]
 
 mod block;
+mod content_hash;
 mod failure;
-mod normalize;
 mod record;
-mod render;
+mod render_error;
 mod statement;
 mod submission;
 mod table;
 
 pub use block::{BlockKind, Segment, SourceBlock};
+pub use content_hash::{ContentHash, HASH_PREFIX, Is_Normalized, Normalize_Whitespace};
 pub use failure::{DecisionGap, Failure, Refusal, Severity};
-pub use normalize::{ContentHash, HASH_PREFIX, Is_Normalized, Normalize};
 pub use record::{Parse_Record, Record, RecordError, RecordFrontMatter, RecordRelation};
-pub use render::{Render_Record, RenderError, Round_Trips};
+pub use render_error::{Is_Round_Trip, Render_Record, RenderError};
 pub use statement::{NormativeStatement, StatementId, StatementKind};
-pub use submission::{FieldValue, Origin, Submission, SubmissionKind, SubmissionState, Validate};
+pub use submission::{FieldValue, Origin, Submission, SubmissionKind, SubmissionState, Validate_Submission};
 pub use table::{RowKind, TableDefect, TableRow, Table_Defects, Table_Rows};

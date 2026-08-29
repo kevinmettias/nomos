@@ -1,13 +1,13 @@
 //! Reading the table rows a block carries.
 
 // A table's rows, what kind each row is, and the defects a table carries.
-mod defect;
-mod row;
 mod row_kind;
+mod table_defect;
+mod table_row;
 
-pub use defect::TableDefect;
-pub use row::TableRow;
 pub use row_kind::RowKind;
+pub use table_defect::TableDefect;
+pub use table_row::TableRow;
 
 use crate::SourceBlock;
 
@@ -244,7 +244,7 @@ mod tests
     use super::*;
     use crate::Segment;
 
-    fn Rows(markdown: &str) -> Vec<TableRow>
+    fn Rows_From_Markdown(markdown: &str) -> Vec<TableRow>
     {
         let blocks = Segment(markdown);
         return blocks.iter().flat_map(Table_Rows).collect();
@@ -258,7 +258,7 @@ mod tests
     #[test]
     fn Test_A_Table_Should_Yield_Every_Pipe_Line_Typed()
     {
-        let rows = Rows("| Model | Responsibility |\n| --- | --- |\n| WorkspaceContext | Repository. |\n");
+        let rows = Rows_From_Markdown("| Model | Responsibility |\n| --- | --- |\n| WorkspaceContext | Repository. |\n");
 
         assert_eq!(rows.len(), 3);
         assert_eq!(rows.first().map(|row| row.kind), Some(RowKind::Header));
@@ -271,7 +271,7 @@ mod tests
     #[test]
     fn Test_The_Three_Counts_Should_Partition_The_Pipe_Lines()
     {
-        let rows = Rows("| Model | Owns |\n| --- | --- |\n| A | one |\n| B | two |\n");
+        let rows = Rows_From_Markdown("| Model | Owns |\n| --- | --- |\n| A | one |\n| B | two |\n");
 
         assert_eq!(rows.len(), 4, "pipe lines");
         assert_eq!(Of_Kind(&rows, RowKind::Header), 1);
@@ -288,7 +288,7 @@ mod tests
     #[test]
     fn Test_Every_Line_Before_The_Delimiter_Should_Be_Header()
     {
-        let rows = Rows("| Model | Owns |\n| (id) | (scope) |\n| --- | --- |\n| A | one |\n");
+        let rows = Rows_From_Markdown("| Model | Owns |\n| (id) | (scope) |\n| --- | --- |\n| A | one |\n");
 
         assert_eq!(Of_Kind(&rows, RowKind::Header), 2);
         assert_eq!(Of_Kind(&rows, RowKind::Content), 1);
@@ -299,7 +299,7 @@ mod tests
     #[test]
     fn Test_A_Table_Without_A_Delimiter_Should_Type_Nothing_As_Header()
     {
-        let rows = Rows("| a | b |\n| 1 | 2 |\n");
+        let rows = Rows_From_Markdown("| a | b |\n| 1 | 2 |\n");
 
         assert_eq!(Of_Kind(&rows, RowKind::Header), 0);
         assert_eq!(Of_Kind(&rows, RowKind::Content), 2);
@@ -339,7 +339,7 @@ mod tests
     #[test]
     fn Test_Every_RowKind_Should_Be_Matched_Exhaustively()
     {
-        fn Ordinal(kind: RowKind) -> usize
+        fn Expected_Ordinal(kind: RowKind) -> usize
         {
             return match kind
             {
@@ -352,7 +352,7 @@ mod tests
         for (index, kind) in RowKind::All().iter().enumerate()
         {
             assert_eq!(
-                Ordinal(*kind),
+                Expected_Ordinal(*kind),
                 index,
                 "{} is not matched at the position RowKind::All() puts it, so the exhaustive \
                  match and the universe have drifted apart",
@@ -364,7 +364,7 @@ mod tests
     #[test]
     fn Test_Cells_Should_Split_And_Trim()
     {
-        let rows = Rows("| a | b |\n| --- | --- |\n| 1 | 2 |\n");
+        let rows = Rows_From_Markdown("| a | b |\n| --- | --- |\n| 1 | 2 |\n");
 
         assert_eq!(
             rows.first().map(|row| row.cells.clone()),
@@ -376,7 +376,7 @@ mod tests
     #[test]
     fn Test_An_Escaped_Pipe_Should_Not_Split_A_Cell()
     {
-        let rows = Rows("| Counted as | Value |\n| --- | --- |\n| Lines with \\| | 282 |\n");
+        let rows = Rows_From_Markdown("| Counted as | Value |\n| --- | --- |\n| Lines with \\| | 282 |\n");
 
         assert_eq!(rows.get(2).map(|row| row.cells.len()), Some(2));
         assert_eq!(
@@ -388,13 +388,13 @@ mod tests
     #[test]
     fn Test_A_Block_With_No_Table_Should_Yield_No_Rows()
     {
-        assert!(Rows("Just a paragraph.\n\nAnd another.\n").is_empty());
+        assert!(Rows_From_Markdown("Just a paragraph.\n\nAnd another.\n").is_empty());
     }
 
     #[test]
     fn Test_The_Row_Text_Should_Be_The_Line_As_Authored()
     {
-        let rows = Rows("| a | b |\n| --- | --- |\n");
+        let rows = Rows_From_Markdown("| a | b |\n| --- | --- |\n");
 
         assert_eq!(rows.first().map(|row| row.text.as_str()), Some("| a | b |"));
     }
@@ -402,13 +402,13 @@ mod tests
     #[test]
     fn Test_A_Well_Formed_Table_Should_Have_No_Defects()
     {
-        assert!(Table_Defects(&Rows("| a |\n| --- |\n| 1 |\n")).is_empty());
+        assert!(Table_Defects(&Rows_From_Markdown("| a |\n| --- |\n| 1 |\n")).is_empty());
     }
 
     #[test]
     fn Test_A_Table_Without_A_Delimiter_Should_Be_A_Defect()
     {
-        let defects = Table_Defects(&Rows("| a |\n| 1 |\n"));
+        let defects = Table_Defects(&Rows_From_Markdown("| a |\n| 1 |\n"));
 
         assert!(
             matches!(defects.first(), Some(TableDefect::NoSeparator { rows: 2, .. })),
@@ -419,7 +419,7 @@ mod tests
     #[test]
     fn Test_A_Table_With_Two_Delimiters_Should_Be_A_Defect()
     {
-        let defects = Table_Defects(&Rows("| a |\n| --- |\n| --- |\n| 1 |\n"));
+        let defects = Table_Defects(&Rows_From_Markdown("| a |\n| --- |\n| --- |\n| 1 |\n"));
 
         assert!(
             matches!(
@@ -450,7 +450,7 @@ mod tests
     #[test]
     fn Test_Alignment_Markers_Should_Still_Read_As_A_Delimiter()
     {
-        let rows = Rows("| a | b |\n|:--- | ---:|\n| 1 | 2 |\n");
+        let rows = Rows_From_Markdown("| a | b |\n|:--- | ---:|\n| 1 | 2 |\n");
 
         assert_eq!(rows.get(1).map(|row| row.kind), Some(RowKind::Separator));
     }
