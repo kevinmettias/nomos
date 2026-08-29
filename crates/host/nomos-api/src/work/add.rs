@@ -26,6 +26,8 @@ pub fn Handle_Work_Add(directory: &Path, item: &LedgerItem, amending: &Territory
     let nomos_work_orchestration::WorkOutcome::Add(added) = outcome
     else
     {
+        // rust-panic: allow: Run's own contract guarantees it returns the WorkOutcome variant
+        // naming the WorkCommand it was given -- any other outcome means Run itself is broken.
         unreachable!("Run always returns the WorkOutcome variant naming the WorkCommand it was given")
     };
 

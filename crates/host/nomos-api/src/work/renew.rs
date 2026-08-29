@@ -26,6 +26,8 @@ pub fn Handle_Work_Renew(directory: &Path, request: &ClaimRequest) -> WorkReserv
     let nomos_work_orchestration::WorkOutcome::Renew(renewed) = outcome
     else
     {
+        // rust-panic: allow: Run's own contract guarantees it returns the WorkOutcome variant
+        // naming the WorkCommand it was given -- any other outcome means Run itself is broken.
         unreachable!("Run always returns the WorkOutcome variant naming the WorkCommand it was given")
     };
 

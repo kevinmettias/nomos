@@ -33,6 +33,8 @@ pub fn Handle_Work_List(directory: &Path) -> WorkListResponse
     let nomos_work_orchestration::WorkOutcome::List(listed) = outcome
     else
     {
+        // rust-panic: allow: Run's own contract guarantees it returns the WorkOutcome variant
+        // naming the WorkCommand it was given -- any other outcome means Run itself is broken.
         unreachable!("Run always returns the WorkOutcome variant naming the WorkCommand it was given")
     };
 

@@ -32,6 +32,8 @@ pub fn Handle_Spec_Preview(request: &EditRequest) -> SpecPreviewResponse
     let nomos_spec_orchestration::SpecOutcome::Preview(result) = outcome
     else
     {
+        // rust-panic: allow: Run's own contract guarantees it returns the SpecOutcome variant
+        // naming the SpecCommand it was given -- any other outcome means Run itself is broken.
         unreachable!("Run always returns the SpecOutcome variant naming the SpecCommand it was given")
     };
 

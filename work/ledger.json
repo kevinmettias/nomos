@@ -35588,6 +35588,80 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P16-EVERYTHINGELSE-PANICPRIMITIVES",
+      "title": "OD-GATE-018 phase 3: close check-panic-primitives, finishing concurrency-and-unsafe",
+      "why": "check-panic-primitives (24 findings, one of the thirteen safety-critical checks whose in-code marker this repository's safety-only policy honours) flagged every unreachable!/panic! this workspace has in production reach, and every single one already carried its invariant in prose -- 19 nomos-api handlers share one unreachable!(\"Run always returns the ... variant naming the ... it was given\") after destructuring WorkOutcome/SpecOutcome, and the remaining five (tests/contract's module_tree.rs, tests/integration's slice.rs x2, slice/dispatch.rs, slice/edit.rs) already had a full explanatory comment right beside the panic. None needed a code change: check-panic-primitives does not read a panic!'s own message string or a plain comment as satisfying it, only the // rust-panic: allow: <reason> marker syntax, so each site's existing reasoning was promoted into that marker (word-for-word where a comment already existed, restated concisely for the 19 handlers whose reasoning lived only inside the unreachable! string). This closes concurrency-and-unsafe (check-borrowing/move-out-of-mut/closure-bounds/lifetime-discipline/smart-pointer/channels/async-blocking/lock-across-await/blocking-under-lock/atomic-ordering/panic-primitives/drop-panics/unsafe-justification/unsafe-send-sync/ffi/sql-injection/secret-in-url/hardcoded-secret/tls-verification/boundary-in-loop all now report zero).",
+      "done_when": "check-panic-primitives reports zero findings against crates tests (default run). cargo build --workspace --all-targets stays green. cargo test -p nomos-api, -p nomos-contract-tests and -p nomos-integration-tests all pass. No production behavior changes -- every edit is a comment.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-api/src/spec/commit.rs",
+          "crates/host/nomos-api/src/spec/freshness.rs",
+          "crates/host/nomos-api/src/spec/markdown.rs",
+          "crates/host/nomos-api/src/spec/preview.rs",
+          "crates/host/nomos-api/src/spec/record.rs",
+          "crates/host/nomos-api/src/spec/render.rs",
+          "crates/host/nomos-api/src/spec/sources.rs",
+          "crates/host/nomos-api/src/spec/table.rs",
+          "crates/host/nomos-api/src/work/abandon.rs",
+          "crates/host/nomos-api/src/work/add.rs",
+          "crates/host/nomos-api/src/work/audit.rs",
+          "crates/host/nomos-api/src/work/claim.rs",
+          "crates/host/nomos-api/src/work/decline.rs",
+          "crates/host/nomos-api/src/work/finish.rs",
+          "crates/host/nomos-api/src/work/list.rs",
+          "crates/host/nomos-api/src/work/renew.rs",
+          "crates/host/nomos-api/src/work/show.rs",
+          "crates/host/nomos-api/src/work/take_over.rs",
+          "crates/host/nomos-api/src/work/validate.rs",
+          "tests/contract/src/reading/module_tree.rs",
+          "tests/integration/src/slice.rs",
+          "tests/integration/src/slice/dispatch.rs",
+          "tests/integration/src/slice/edit.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "exit_code": 0,
+        "output_tail": "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.18s\n",
+        "verified_at": 1788026209,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "614b68fc74974c0b746278f24763ae38a8ab0938"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

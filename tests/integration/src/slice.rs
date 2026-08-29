@@ -119,9 +119,10 @@ impl Slice
         }
 
         let applied = slice.workspace.Apply(&checkout).unwrap_or_else(|error| {
-            // A slice built over a workspace that refused the corpus holds no members, so
-            // every provider below materializes nothing and the run reports a clean corpus it
-            // never read. That is the exact shape of failure this crate exists to rule out.
+            // rust-panic: allow: a slice built over a workspace that refused the corpus holds
+            // no members, so every provider below materializes nothing and the run reports a
+            // clean corpus it never read. That is the exact shape of failure this crate exists
+            // to rule out.
             panic!(
                 "the corpus at {} could not be ingested: {error}",
                 corpus.root.display()
@@ -233,9 +234,9 @@ impl Slice
         } = resolution
         else
         {
-            // Nothing satisfies the floor, so there is no provider to ask and no weaker answer
-            // to give: the caller wants a `Selection`, and a made-up one would send the run on
-            // to file facts under a provider that never offered them.
+            // rust-panic: allow: nothing satisfies the floor, so there is no provider to ask and
+            // no weaker answer to give: the caller wants a `Selection`, and a made-up one would
+            // send the run on to file facts under a provider that never offered them.
             panic!("no provider offers {} at this run's floor: {resolution:?}", syntax::CAPABILITY)
         };
 

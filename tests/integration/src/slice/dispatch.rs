@@ -51,10 +51,11 @@ impl Slice
             return self.Scanned(file);
         }
 
-        // Reached only when a provider was registered with the registry and never given a
-        // call here. Those two lists are maintained in different places and this line is the
-        // only thing that ever compares them, so a silent skip would produce no facts for a
-        // provider the run had already selected and reported as its answer's provenance.
+        // rust-panic: allow: reached only when a provider was registered with the registry and
+        // never given a call here. Those two lists are maintained in different places and this
+        // line is the only thing that ever compares them, so a silent skip would produce no
+        // facts for a provider the run had already selected and reported as its answer's
+        // provenance.
         panic!("{provider} was resolved and this composition cannot call it");
     }
 

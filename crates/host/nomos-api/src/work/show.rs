@@ -32,6 +32,8 @@ pub fn Handle_Work_Show(directory: &Path, item: &ItemId) -> WorkShowResponse
     let nomos_work_orchestration::WorkOutcome::Show(shown) = outcome
     else
     {
+        // rust-panic: allow: Run's own contract guarantees it returns the WorkOutcome variant
+        // naming the WorkCommand it was given -- any other outcome means Run itself is broken.
         unreachable!("Run always returns the WorkOutcome variant naming the WorkCommand it was given")
     };
 

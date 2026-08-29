@@ -26,6 +26,8 @@ pub fn Handle_Spec_Record(request: &RecordRequest) -> SpecRecordResponse
     let nomos_spec_orchestration::SpecOutcome::Record(result) = outcome
     else
     {
+        // rust-panic: allow: Run's own contract guarantees it returns the SpecOutcome variant
+        // naming the SpecCommand it was given -- any other outcome means Run itself is broken.
         unreachable!("Run always returns the SpecOutcome variant naming the SpecCommand it was given")
     };
 

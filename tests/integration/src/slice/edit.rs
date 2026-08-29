@@ -26,6 +26,10 @@ impl Slice
         return self
             .workspace
             .Apply(&presented)
+            // rust-panic: allow: a refused edit absorbed here would leave the caller asserting
+            // that changing nothing invalidated nothing (this function's own doc comment) --
+            // every invalidation test downstream would pass over a workspace that never moved,
+            // and read that as the engine being conservative.
             .unwrap_or_else(|error| panic!("`{path}` could not be edited: {error}"));
     }
 
