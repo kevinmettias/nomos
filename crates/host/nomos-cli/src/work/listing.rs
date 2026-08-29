@@ -93,7 +93,7 @@ pub(super) fn Print_Claim(found: &LedgerItem, now: Timestamp, output: &mut impl 
 /// the next line's holder, or the live claim above.
 ///
 /// `current_revision` is this tree's revision *right now*, read by the caller the same way
-/// `nomos_ledger::Finish` read it when it stamped the record — `OD-LEDGER-027`'s staleness
+/// `nomos_ledger::Finish_Item` read it when it stamped the record — `OD-LEDGER-027`'s staleness
 /// half. `None` when it could not be read, which `Print_Verification` reports as its own
 /// case rather than silently treating as agreement.
 pub(super) fn Print_History(found: &LedgerItem, current_revision: Option<&str>, output: &mut impl std::io::Write)

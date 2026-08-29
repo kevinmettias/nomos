@@ -17,7 +17,7 @@
 //! caller is proposing right now — so it is `EvidenceClass::Derived` at best, and
 //! `Derived` evidence is read "alongside a live check, never substituted for one, and
 //! never wired to a mechanism — a gate, a lint, an auto-block." Concretely: this process
-//! exits `0` whenever it finished running, whether or not [`report::Render`] printed a
+//! exits `0` whenever it finished running, whether or not [`report::Render_Report`] printed a
 //! finding, and nothing in `.github/workflows/gate.yml` or any other crate's `cargo test`
 //! invokes it.
 //!
@@ -58,15 +58,16 @@ mod exit_code;
 
 use exit_code::ExitCode;
 use nomos_platform::ProcessLauncher;
-use nomos_platform_std::StdProcessLauncher;
 
 fn main() -> std::process::ExitCode
 {
+    use nomos_platform_std::StdProcessLauncher;
+
     let arguments: Vec<String> = std::env::args().skip(1).collect();
     let mut stdout = std::io::stdout();
     let mut stderr = std::io::stderr();
 
-    let code = Run(&arguments, &StdProcessLauncher, &mut stdout, &mut stderr);
+    let code = Run_From_String_Arguments(&arguments, &StdProcessLauncher, &mut stdout, &mut stderr);
 
     return std::process::ExitCode::from(u8::try_from(code.Value()).unwrap_or(1));
 }
@@ -78,14 +79,14 @@ fn main() -> std::process::ExitCode
 /// [`main`] is the only caller that needs a real `git` and a real `stdout`, and a test
 /// that wants either replaced should not have to reach through a process boundary to do
 /// it — the same shape `nomos-cli::check::Run` already uses for the `Write` half.
-fn Run(
+fn Run_From_String_Arguments(
     arguments: &[String],
     launcher: &impl ProcessLauncher,
     stdout: &mut impl std::io::Write,
     stderr: &mut impl std::io::Write,
 ) -> ExitCode
 {
-    return match Report_Text(arguments, launcher, stderr)
+    return match Report_Text_From_String_Arguments(arguments, launcher, stderr)
     {
         Ok(text) =>
         {
@@ -96,15 +97,15 @@ fn Run(
     };
 }
 
-/// Everything [`Run`] does before it has anywhere to write the answer: parse, select,
-/// query, render.
-fn Report_Text(
+/// Everything [`Run_From_String_Arguments`] does before it has anywhere to write the
+/// answer: parse, select, query, render.
+fn Report_Text_From_String_Arguments(
     arguments: &[String],
     launcher: &impl ProcessLauncher,
     stderr: &mut impl std::io::Write,
 ) -> Result<String, ExitCode>
 {
-    let parsed = match self::arguments::Parse(arguments)
+    let parsed = match self::arguments::Parsed_From_String_Arguments(arguments)
     {
         Ok(parsed) => parsed,
         Err(message) =>
@@ -115,9 +116,9 @@ fn Report_Text(
     };
 
     let selected = Selected_Crates(&parsed, stderr)?;
-    let findings = Findings(launcher, &parsed, &selected, stderr)?;
+    let findings = Findings_For_Selected_Crates(launcher, &parsed, &selected, stderr)?;
 
-    return Ok(report::Render(git::Since(&parsed.since), git::Until(&parsed.until), &findings));
+    return Ok(report::Render_Report(git::Since(&parsed.since), git::Until(&parsed.until), &findings));
 }
 
 /// Which crates to check: every name `--crate` named, or every crate with a snapshot when
@@ -162,7 +163,7 @@ fn Known_Names(wanted: &[String], known: &[String], stderr: &mut impl std::io::W
 
 /// Whether `docs/records/` was touched in this range, then the finding for every selected
 /// crate given that answer.
-fn Findings(
+fn Findings_For_Selected_Crates(
     launcher: &impl ProcessLauncher,
     parsed: &self::arguments::Parsed,
     selected: &[String],
@@ -233,7 +234,7 @@ mod tests
 
     /// The `--since a --until b --root <root>` every test below needs, plus whatever else
     /// it wants to name.
-    fn Arguments(root: &std::path::Path, extra: &[&str]) -> Vec<String>
+    fn Arguments_With_Extra(root: &std::path::Path, extra: &[&str]) -> Vec<String>
     {
         let mut arguments = vec![
             "--since".to_owned(),
@@ -257,7 +258,7 @@ mod tests
         let mut stdout = Vec::new();
         let mut stderr = Vec::new();
 
-        let code = Run(&["--until".to_owned(), "HEAD".to_owned()], &launcher, &mut stdout, &mut stderr);
+        let code = Run_From_String_Arguments(&["--until".to_owned(), "HEAD".to_owned()], &launcher, &mut stdout, &mut stderr);
 
         assert_eq!(code, ExitCode::Usage);
         assert!(stdout.is_empty());
@@ -279,9 +280,9 @@ mod tests
             .Answer("log a..b --format=%H\t%s --", 0, Stdout("deadbeef\treblessed\n"), Stderr(""));
         let mut stdout = Vec::new();
         let mut stderr = Vec::new();
-        let arguments = Arguments(&root, &[]);
+        let arguments = Arguments_With_Extra(&root, &[]);
 
-        let code = Run(&arguments, &launcher, &mut stdout, &mut stderr);
+        let code = Run_From_String_Arguments(&arguments, &launcher, &mut stdout, &mut stderr);
 
         assert_eq!(code, ExitCode::Ok, "stderr: {}", String::from_utf8_lossy(&stderr));
         let text = String::from_utf8(stdout).expect("report is text");
@@ -302,9 +303,9 @@ mod tests
         let launcher = Scripted::New();
         let mut stdout = Vec::new();
         let mut stderr = Vec::new();
-        let arguments = Arguments(&root, &["--crate", "no-such-crate"]);
+        let arguments = Arguments_With_Extra(&root, &["--crate", "no-such-crate"]);
 
-        let code = Run(&arguments, &launcher, &mut stdout, &mut stderr);
+        let code = Run_From_String_Arguments(&arguments, &launcher, &mut stdout, &mut stderr);
 
         assert_eq!(code, ExitCode::Usage);
         assert!(String::from_utf8_lossy(&stderr).contains("no-such-crate"));

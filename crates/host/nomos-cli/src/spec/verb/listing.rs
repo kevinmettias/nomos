@@ -1,6 +1,6 @@
 //! What this build can render, and what it was assembled from.
 //!
-//! `Profiles` and `Sources` compute nothing themselves any more -- both delegate to
+//! `Profiles` and `Enumerated_Sources` compute nothing themselves any more -- both delegate to
 //! `nomos-spec-orchestration`, `OD-HOST-002`'s family-9 seam, and keep only the text
 //! formatting and the `ExitCode` a rendering layer is responsible for.
 
@@ -52,7 +52,7 @@ pub(in crate::spec) fn Empty_Section(
     return ExitCode::Absent;
 }
 
-pub(in crate::spec) fn Profiles(channels: &mut Channels<'_>) -> ExitCode
+pub(in crate::spec) fn List_Profiles(channels: &mut Channels<'_>) -> ExitCode
 {
     let profiles = match nomos_spec_orchestration::Profiles()
     {
@@ -68,14 +68,14 @@ pub(in crate::spec) fn Profiles(channels: &mut Channels<'_>) -> ExitCode
             profile.id,
             profile.format.Label(),
             profile.output,
-            Sections(profile)
+            Section_Labels(profile)
         );
     }
 
     return ExitCode::Ok;
 }
 
-pub(super) fn Sections(profile: &Profile) -> String
+pub(super) fn Section_Labels(profile: &Profile) -> String
 {
     return profile
         .sections
@@ -89,9 +89,9 @@ pub(super) fn Sections(profile: &Profile) -> String
 ///
 /// Exits [`ExitCode::Absent`] when anything is missing, so this is a check rather than a
 /// description: a script can ask whether the store it is about to read is whole.
-pub(in crate::spec) fn Sources(assembly: &Assembly, output: &mut dyn std::io::Write) -> ExitCode
+pub(in crate::spec) fn List_Sources(assembly: &Assembly, output: &mut dyn std::io::Write) -> ExitCode
 {
-    let answer = nomos_spec_orchestration::Sources(assembly);
+    let answer = nomos_spec_orchestration::Enumerated_Sources(assembly);
 
     for line in &answer.read
     {

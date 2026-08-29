@@ -52,8 +52,8 @@ mod tests
 /// A directory that is walked and turns out empty is not this function's decision any
 /// more: `nomos_check_orchestration::CheckOutcome` is where "not a directory" and "found
 /// nothing" become distinguishable typed answers, the same division `check::sources::
-/// Walked` already draws.
-pub(super) fn Walked(root: &Path) -> Option<Vec<SourceFile>>
+/// Walked_Sources` already draws.
+pub(super) fn Walked_Sources(root: &Path) -> Option<Vec<SourceFile>>
 {
     if !root.is_dir()
     {
@@ -138,7 +138,7 @@ pub(super) fn Read_Entry(
 /// see `OD-MODEL-001`.
 pub(super) fn Read_Source(root: &Path, path: &Path, text: String) -> SourceFile
 {
-    let relative = Relative(root, path);
+    let relative = Relative_Path(root, path);
     let subject = Subject_Of_Path(&relative);
 
     return SourceFile::New(relative, subject, text);
@@ -148,7 +148,7 @@ pub(super) fn Read_Source(root: &Path, path: &Path, text: String) -> SourceFile
 ///
 /// Forward slashes on every platform, because a finding's location appears in output that
 /// gets pasted between machines, and the same file must not render two ways.
-pub(super) fn Relative(root: &Path, path: &Path) -> String
+pub(super) fn Relative_Path(root: &Path, path: &Path) -> String
 {
     return path
         .strip_prefix(root)

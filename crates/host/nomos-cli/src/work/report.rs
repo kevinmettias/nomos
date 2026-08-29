@@ -85,7 +85,7 @@ pub(super) fn Report_Finish(
             // A failing predicate is a validation error: the work was judged and found
             // incomplete. Everything else prevented the judgment, and reporting that as
             // the same thing would send an author to fix code that may be fine.
-            if refusal.Judged_The_Work()
+            if refusal.Has_Judged_The_Work()
             {
                 ExitCode::ValidationError
             }

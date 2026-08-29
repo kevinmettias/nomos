@@ -33,7 +33,7 @@ use std::path::PathBuf;
 /// The same variable the corpus-gated tests read, and named here for the same reason they
 /// name it: the corpus is a tree this repository does not contain, so nothing can be
 /// inferred about where it is. It is spelled once, in the composition root, and passed to
-/// [`nomos_spec_orchestration::corpus::Assemble`] as data — which is what lets the whole
+/// [`nomos_spec_orchestration::corpus::Assemble_Corpus`] as data — which is what lets the whole
 /// read surface be exercised on a machine that has no corpus at all.
 const CORPUS_VARIABLE: &str = "NOMOS_V14_CORPUS";
 
@@ -46,15 +46,15 @@ fn main() -> std::process::ExitCode
     // this binary does not yet know how to run cannot be added here without also being
     // named there.
     let code = match arguments.split_first().and_then(|(group, rest)| {
-        return vacuity::Named(group).map(|group| return (group, rest));
+        return vacuity::Group_Named(group).map(|group| return (group, rest));
     })
     {
-        Some((vacuity::Group::Work, rest)) => Work(rest),
-        Some((vacuity::Group::Spec, rest)) => Spec(rest),
-        Some((vacuity::Group::Check, rest)) => Check(rest),
-        Some((vacuity::Group::Request, rest)) => Request(rest),
-        Some((vacuity::Group::Gate, rest)) => Gate(rest),
-        Some((vacuity::Group::Agent, rest)) => Agent(rest),
+        Some((vacuity::Group::Work, rest)) => Run_Work_Group(rest),
+        Some((vacuity::Group::Spec, rest)) => Run_Spec_Group(rest),
+        Some((vacuity::Group::Check, rest)) => Run_Check_Group(rest),
+        Some((vacuity::Group::Request, rest)) => Run_Request_Group(rest),
+        Some((vacuity::Group::Gate, rest)) => Run_Gate_Group(rest),
+        Some((vacuity::Group::Agent, rest)) => Run_Agent_Group(rest),
         None => Usage(),
     };
 
@@ -62,10 +62,10 @@ fn main() -> std::process::ExitCode
 }
 
 /// The work group: the ledger verbs, over this repository's board.
-fn Work(rest: &[String]) -> i32
+fn Run_Work_Group(rest: &[String]) -> i32
 {
     let mut stdout = std::io::stdout();
-    let Ok(command) = work::Parse(rest).inspect_err(|message| eprintln!("{message}"))
+    let Ok(command) = work::Work_Command_From_String_Arguments(rest).inspect_err(|message| eprintln!("{message}"))
     else
     {
         return work::ExitCode::Usage.Value();
@@ -85,11 +85,11 @@ fn Work_Directory() -> PathBuf
 }
 
 /// The spec group: reading the specification store and rendering its projections.
-fn Spec(rest: &[String]) -> i32
+fn Run_Spec_Group(rest: &[String]) -> i32
 {
     let mut stdout = std::io::stdout();
     let mut stderr = std::io::stderr();
-    let Ok(command) = spec::Parse(rest).inspect_err(|message| eprintln!("{message}"))
+    let Ok(command) = spec::Spec_Command_From_String_Arguments(rest).inspect_err(|message| eprintln!("{message}"))
     else
     {
         return spec::ExitCode::Usage.Value();
@@ -99,11 +99,11 @@ fn Spec(rest: &[String]) -> i32
 }
 
 /// The check group: running the rules over a tree and reporting what they find.
-fn Check(rest: &[String]) -> i32
+fn Run_Check_Group(rest: &[String]) -> i32
 {
     let mut stdout = std::io::stdout();
     let mut stderr = std::io::stderr();
-    let Ok(command) = check::Parse(rest).inspect_err(|message| eprintln!("{message}"))
+    let Ok(command) = check::Check_Command_From_String_Arguments(rest).inspect_err(|message| eprintln!("{message}"))
     else
     {
         return check::ExitCode::Usage.Value();
@@ -114,11 +114,11 @@ fn Check(rest: &[String]) -> i32
 
 /// The request group: submitting a feature request, design spec or feature result through the
 /// one accept function `OD-SPEC-009` decided.
-fn Request(rest: &[String]) -> i32
+fn Run_Request_Group(rest: &[String]) -> i32
 {
     let mut stdout = std::io::stdout();
     let mut stderr = std::io::stderr();
-    let Ok(command) = request::Parse(rest).inspect_err(|message| eprintln!("{message}"))
+    let Ok(command) = request::Command_From_String_Arguments(rest).inspect_err(|message| eprintln!("{message}"))
     else
     {
         return request::ExitCode::Usage.Value();
@@ -128,11 +128,11 @@ fn Request(rest: &[String]) -> i32
 }
 
 /// The gate group: composing this repository's rule registry and reporting what it holds.
-fn Gate(rest: &[String]) -> i32
+fn Run_Gate_Group(rest: &[String]) -> i32
 {
     let mut stdout = std::io::stdout();
     let mut stderr = std::io::stderr();
-    let Ok(command) = gate::Parse(rest).inspect_err(|message| eprintln!("{message}"))
+    let Ok(command) = gate::Gate_Invocation_From_String_Arguments(rest).inspect_err(|message| eprintln!("{message}"))
     else
     {
         return gate::ExitCode::Usage.Value();
@@ -142,11 +142,11 @@ fn Gate(rest: &[String]) -> i32
 }
 
 /// The agent group: dispatching a task to the first real `AgentExecutor`.
-fn Agent(rest: &[String]) -> i32
+fn Run_Agent_Group(rest: &[String]) -> i32
 {
     let mut stdout = std::io::stdout();
     let mut stderr = std::io::stderr();
-    let Ok(command) = agent::Parse(rest).inspect_err(|message| eprintln!("{message}"))
+    let Ok(command) = agent::Command_From_String_Arguments(rest).inspect_err(|message| eprintln!("{message}"))
     else
     {
         return agent::ExitCode::Usage.Value();
@@ -182,10 +182,10 @@ fn Corpus_Request(rest: &[String]) -> nomos_spec_orchestration::corpus::CorpusRe
 {
     return nomos_spec_orchestration::corpus::CorpusRequest {
         variable: CORPUS_VARIABLE.to_owned(),
-        root: arguments::Named_Value(rest, "--corpus")
+        root: arguments::Named_Value_From_String_Arguments(rest, "--corpus")
             .map(PathBuf::from)
             .or_else(|| return std::env::var_os(CORPUS_VARIABLE).map(PathBuf::from)),
-        revision: arguments::Named_Value(rest, "--corpus-revision")
+        revision: arguments::Named_Value_From_String_Arguments(rest, "--corpus-revision")
             .unwrap_or_else(|| return nomos_spec_orchestration::corpus::DEFAULT_REVISION.to_owned()),
     };
 }

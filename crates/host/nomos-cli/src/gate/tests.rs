@@ -106,7 +106,7 @@ fn Root_Of(invocation: &GateInvocation) -> &PathBuf
 #[test]
 fn Test_A_Root_Should_Default_To_Here()
 {
-    let invocation = Parse(&["plan".to_owned()]).expect("plan with no root is valid");
+    let invocation = Gate_Invocation_From_String_Arguments(&["plan".to_owned()]).expect("plan with no root is valid");
 
     assert_eq!(Root_Of(&invocation), &PathBuf::from("."));
 }
@@ -115,7 +115,7 @@ fn Test_A_Root_Should_Default_To_Here()
 fn Test_A_Given_Root_Should_Win()
 {
     let arguments = vec!["plan".to_owned(), "--root".to_owned(), "somewhere".to_owned()];
-    let invocation = Parse(&arguments).expect("plan --root is valid");
+    let invocation = Gate_Invocation_From_String_Arguments(&arguments).expect("plan --root is valid");
 
     assert_eq!(Root_Of(&invocation), &PathBuf::from("somewhere"));
 }
@@ -124,16 +124,16 @@ fn Test_A_Given_Root_Should_Win()
 #[test]
 fn Test_No_Verb_Should_Refuse()
 {
-    let error = Parse(&[]).expect_err("must refuse");
+    let error = Gate_Invocation_From_String_Arguments(&[]).expect_err("must refuse");
 
     assert!(error.contains("usage"), "{error}");
 }
 
 /// `run` is a real verb now -- `plan` and `run` must both parse.
 #[test]
-fn Test_Run_Should_Parse()
+fn Test_Run_Should_Gate_Invocation_From_String_Arguments()
 {
-    let invocation = Parse(&["run".to_owned()]).expect("run with no root is valid");
+    let invocation = Gate_Invocation_From_String_Arguments(&["run".to_owned()]).expect("run with no root is valid");
 
     assert!(matches!(invocation, GateInvocation::Run(_)), "run must not parse as Plan");
     assert_eq!(Root_Of(&invocation), &PathBuf::from("."));
@@ -147,7 +147,7 @@ fn Test_Run_Should_Parse()
 #[test]
 fn Test_An_Unimplemented_Verb_Should_Refuse()
 {
-    let error = Parse(&["compare".to_owned()]).expect_err("must refuse");
+    let error = Gate_Invocation_From_String_Arguments(&["compare".to_owned()]).expect_err("must refuse");
 
     assert!(error.contains("compare"), "{error}");
     assert!(error.contains("usage"), "{error}");
@@ -159,7 +159,7 @@ fn Test_An_Unknown_Flag_Should_Refuse()
 {
     let arguments = vec!["plan".to_owned(), "--rooot".to_owned(), "x".to_owned()];
 
-    let error = Parse(&arguments).expect_err("must refuse");
+    let error = Gate_Invocation_From_String_Arguments(&arguments).expect_err("must refuse");
 
     assert!(error.contains("--rooot"), "{error}");
     assert!(error.contains("usage"), "{error}");
@@ -282,7 +282,7 @@ fn Test_Include_And_Exclude_Should_Repeat()
         "--exclude".to_owned(),
         "crates/rules/nomos-rules/tests".to_owned(),
     ];
-    let invocation = Parse(&arguments).expect("plan with include/exclude is valid");
+    let invocation = Gate_Invocation_From_String_Arguments(&arguments).expect("plan with include/exclude is valid");
 
     let GateInvocation::Plan(command) = invocation
     else
@@ -298,7 +298,7 @@ fn Test_Include_And_Exclude_Should_Repeat()
 fn Test_Rule_Should_Repeat()
 {
     let arguments = vec!["run".to_owned(), "--rule".to_owned(), "naming-convention".to_owned()];
-    let invocation = Parse(&arguments).expect("run with --rule is valid");
+    let invocation = Gate_Invocation_From_String_Arguments(&arguments).expect("run with --rule is valid");
 
     let GateInvocation::Run(command) = invocation
     else
@@ -346,7 +346,7 @@ fn Test_Explain_Should_Parse_With_Rule_And_Location()
         "--location".to_owned(),
         "a.rs".to_owned(),
     ];
-    let invocation = Parse(&arguments).expect("explain with --rule and --location is valid");
+    let invocation = Gate_Invocation_From_String_Arguments(&arguments).expect("explain with --rule and --location is valid");
 
     let GateInvocation::Explain { query, .. } = invocation
     else
@@ -363,7 +363,7 @@ fn Test_Explain_Should_Require_Rule()
 {
     let arguments = vec!["explain".to_owned(), "--location".to_owned(), "a.rs".to_owned()];
 
-    let error = Parse(&arguments).expect_err("must refuse");
+    let error = Gate_Invocation_From_String_Arguments(&arguments).expect_err("must refuse");
 
     assert!(error.contains("--rule"), "{error}");
 }
@@ -374,7 +374,7 @@ fn Test_Explain_Should_Require_Location()
 {
     let arguments = vec!["explain".to_owned(), "--rule".to_owned(), "naming-convention".to_owned()];
 
-    let error = Parse(&arguments).expect_err("must refuse");
+    let error = Gate_Invocation_From_String_Arguments(&arguments).expect_err("must refuse");
 
     assert!(error.contains("--location"), "{error}");
 }

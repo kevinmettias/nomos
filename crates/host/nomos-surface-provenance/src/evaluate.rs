@@ -56,9 +56,9 @@ pub(crate) fn Records_Touched(
 ) -> Result<bool, String>
 {
     let command = git::Records_Touched_In_Range(root, since, until);
-    let stdout = Ran(launcher, &command)?;
+    let stdout = Ran_Command(launcher, &command)?;
 
-    return Ok(Nonempty(&stdout));
+    return Ok(Has_Nonblank_Content(&stdout));
 }
 
 /// The commit range and repository root every per-crate query needs.
@@ -94,8 +94,8 @@ pub(crate) fn Finding_For(launcher: &impl ProcessLauncher, query: &Query<'_>, kr
     let range = &query.range;
 
     let diff_command = git::Endpoint_Diff(range.root, git::Since(range.since), git::Until(range.until), &path);
-    let diff = Ran(launcher, &diff_command)?;
-    let surface_changed = Nonempty(&diff);
+    let diff = Ran_Command(launcher, &diff_command)?;
+    let surface_changed = Has_Nonblank_Content(&diff);
 
     let surface_commits = Surface_Commits(launcher, range, &path, surface_changed.into())?;
 
@@ -141,7 +141,7 @@ fn Surface_Commits(
     }
 
     let history_command = git::Path_History(range.root, git::Since(range.since), git::Until(range.until), path);
-    let history = Ran(launcher, &history_command)?;
+    let history = Ran_Command(launcher, &history_command)?;
 
     return Ok(Parse_Commits(&history));
 }
@@ -172,7 +172,7 @@ fn Parse_Commits(text: &str) -> Vec<CommitRef>
 /// A non-zero exit and a timeout are both "no answer" here — the same distinction
 /// `nomos_platform::ExitOutcome` draws generally: this report can state a finding only
 /// from a query that actually completed and said yes or no.
-fn Ran(launcher: &impl ProcessLauncher, command: &Command) -> Result<String, String>
+fn Ran_Command(launcher: &impl ProcessLauncher, command: &Command) -> Result<String, String>
 {
     let output = launcher.Run(command)?;
 
@@ -189,7 +189,7 @@ fn Ran(launcher: &impl ProcessLauncher, command: &Command) -> Result<String, Str
 }
 
 /// Whether `text` holds anything but whitespace.
-fn Nonempty(text: &str) -> bool
+fn Has_Nonblank_Content(text: &str) -> bool
 {
     return !text.trim().is_empty();
 }
@@ -204,7 +204,7 @@ mod tests
     /// `Finding_For`, both expected to succeed. Every test below wants exactly this
     /// sequence and differs only in what `launcher` answers, so they share it rather than
     /// each repeating the two-call join.
-    fn Joined(launcher: &Scripted, range: CommitRange<'_>, krate: &str) -> CrateFinding
+    fn Joined_Finding(launcher: &Scripted, range: CommitRange<'_>, krate: &str) -> CrateFinding
     {
         let records_touched =
             Records_Touched(launcher, range.root, git::Since(range.since), git::Until(range.until)).expect("must run");
@@ -216,7 +216,7 @@ mod tests
     /// The range and root every test in this module scripts a launcher against -- the git
     /// coordinates themselves are never the fact under test, only what `launcher` answers
     /// for them.
-    fn Repo_Range() -> CommitRange<'static>
+    fn Repository_Range() -> CommitRange<'static>
     {
         return CommitRange { root: Path::new("/repo"), since: "a", until: "b" };
     }
@@ -227,7 +227,7 @@ mod tests
         let launcher = Scripted::New()
             .Answer("diff", 0, Stdout(""), Stderr(""))
             .Answer("log a..b --format=%H --", 0, Stdout(""), Stderr(""));
-        let finding = Joined(&launcher, Repo_Range(), "nomos-model");
+        let finding = Joined_Finding(&launcher, Repository_Range(), "nomos-model");
 
         assert!(!finding.surface_changed);
         assert!(!finding.Is_A_Finding());
@@ -249,7 +249,7 @@ mod tests
     fn Test_A_Changed_Surface_With_No_Records_Commit_Is_A_Finding()
     {
         let launcher = Changed_Surface_Launcher("", "deadbeef\treblessed\n");
-        let finding = Joined(&launcher, Repo_Range(), "nomos-model");
+        let finding = Joined_Finding(&launcher, Repository_Range(), "nomos-model");
 
         assert!(finding.surface_changed);
         assert!(!finding.records_touched);
@@ -262,7 +262,7 @@ mod tests
     fn Test_A_Changed_Surface_With_A_Records_Commit_Is_Not_A_Finding()
     {
         let launcher = Changed_Surface_Launcher("cafef00d\n", "deadbeef\treal change\n");
-        let finding = Joined(&launcher, Repo_Range(), "nomos-model");
+        let finding = Joined_Finding(&launcher, Repository_Range(), "nomos-model");
 
         assert!(finding.surface_changed);
         assert!(finding.records_touched);

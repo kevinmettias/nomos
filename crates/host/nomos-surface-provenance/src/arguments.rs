@@ -32,17 +32,17 @@ pub(crate) struct Parsed
 /// # Errors
 ///
 /// Returns [`USAGE`] when `--since` or `--until` is missing.
-pub(crate) fn Parse(arguments: &[String]) -> Result<Parsed, String>
+pub(crate) fn Parsed_From_String_Arguments(arguments: &[String]) -> Result<Parsed, String>
 {
-    let since = Named_Value(arguments, "--since").ok_or(USAGE)?;
-    let until = Named_Value(arguments, "--until").ok_or(USAGE)?;
-    let root = Named_Value(arguments, "--root")
+    let since = Named_Value_From_String_Arguments(arguments, "--since").ok_or(USAGE)?;
+    let until = Named_Value_From_String_Arguments(arguments, "--until").ok_or(USAGE)?;
+    let root = Named_Value_From_String_Arguments(arguments, "--root")
         .map(PathBuf::from)
         .map_or_else(
             || std::env::current_dir().map_err(|error| format!("{USAGE}\n\ncannot read the current directory: {error}")),
             Ok,
         )?;
-    let crates = Named_Values(arguments, "--crate");
+    let crates = Named_Values_From_String_Arguments(arguments, "--crate");
 
     return Ok(Parsed {
         since,
@@ -53,7 +53,7 @@ pub(crate) fn Parse(arguments: &[String]) -> Result<Parsed, String>
 }
 
 /// The value following `name`, if it is present.
-fn Named_Value(arguments: &[String], name: &str) -> Option<String>
+fn Named_Value_From_String_Arguments(arguments: &[String], name: &str) -> Option<String>
 {
     let position = arguments.iter().position(|argument| return argument == name)?;
 
@@ -65,7 +65,7 @@ fn Named_Value(arguments: &[String], name: &str) -> Option<String>
 const FLAG_AND_VALUE_WIDTH: usize = 2;
 
 /// Every value given for a repeatable flag.
-fn Named_Values(arguments: &[String], name: &str) -> Vec<String>
+fn Named_Values_From_String_Arguments(arguments: &[String], name: &str) -> Vec<String>
 {
     let mut values = Vec::new();
     let mut index = 0_usize;
@@ -90,7 +90,7 @@ mod tests
 {
     use super::*;
 
-    fn Arguments(text: &str) -> Vec<String>
+    fn Arguments_From_Text(text: &str) -> Vec<String>
     {
         return text.split_whitespace().map(str::to_owned).collect();
     }
@@ -98,14 +98,14 @@ mod tests
     #[test]
     fn Test_Since_And_Until_Are_Required()
     {
-        assert!(Parse(&Arguments("--until HEAD")).is_err());
-        assert!(Parse(&Arguments("--since HEAD~5")).is_err());
+        assert!(Parsed_From_String_Arguments(&Arguments_From_Text("--until HEAD")).is_err());
+        assert!(Parsed_From_String_Arguments(&Arguments_From_Text("--since HEAD~5")).is_err());
     }
 
     #[test]
     fn Test_A_Minimal_Line_Parses_With_No_Crates_Named()
     {
-        let parsed = Parse(&Arguments("--since a --until b")).expect("must parse");
+        let parsed = Parsed_From_String_Arguments(&Arguments_From_Text("--since a --until b")).expect("must parse");
 
         assert_eq!(parsed.since, "a");
         assert_eq!(parsed.until, "b");
@@ -115,7 +115,7 @@ mod tests
     #[test]
     fn Test_Crate_Repeats_And_Root_Are_Read()
     {
-        let parsed = Parse(&Arguments(
+        let parsed = Parsed_From_String_Arguments(&Arguments_From_Text(
             "--since a --until b --root /work --crate nomos-model --crate nomos-store",
         ))
         .expect("must parse");

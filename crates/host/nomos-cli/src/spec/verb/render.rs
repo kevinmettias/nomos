@@ -1,31 +1,32 @@
 //! Rendering `nomos spec render`'s answer, or the refusal saying why it has none.
 //!
-//! Building the profile and placing its two files is `nomos-spec-orchestration::Render`'s
+//! Building the profile and placing its two files is `nomos-spec-orchestration::Rendered_Projection`'s
 //! job now, through `nomos-platform-std::StdFileSystem` -- the same composition-root choice
 //! `nomos-cli::work` already makes for the ledger. This module keeps only the writing and
 //! the `ExitCode` a rendering layer is responsible for.
 
 use crate::spec::{Assembly, RenderRequest, Channels, ExitCode, Report_Project_Error, Report_Store_Error, Path, EmptySection, Empty_Section, SIDECAR_SUFFIX, Stamp};
 use nomos_platform::FileSystemError;
-use nomos_platform_std::StdFileSystem;
 use nomos_spec_orchestration::{RenderAnswer, RenderRefusal};
 use nomos_spec_project::ProjectError;
 
 /// Phase 4's renderers, run.
-pub(in crate::spec) fn Render(assembly: &Assembly, request: &RenderRequest, channels: &mut Channels<'_>) -> ExitCode
+pub(in crate::spec) fn Render_Profile(assembly: &Assembly, request: &RenderRequest, channels: &mut Channels<'_>) -> ExitCode
 {
-    return match nomos_spec_orchestration::Render(assembly, request, &StdFileSystem)
+    use nomos_platform_std::StdFileSystem;
+
+    return match nomos_spec_orchestration::Rendered_Projection(assembly, request, &StdFileSystem)
     {
-        Ok(answer) => Placed(&answer, channels),
+        Ok(answer) => Placed_Render(&answer, channels),
         Err(RenderRefusal::Store(error)) => Report_Store_Error(&error, channels.notes),
         Err(RenderRefusal::NoSuchProfile { requested, known }) => No_Such_Profile(&requested, &known, channels.notes),
         Err(RenderRefusal::Project(error)) => Report_Build_Error(assembly, &error, channels.notes),
-        Err(RenderRefusal::Unwritable { path, error }) => Unwritable(&path, &error, channels.notes),
+        Err(RenderRefusal::Unwritable { path, error }) => Unwritable_Render(&path, &error, channels.notes),
     };
 }
 
 /// Both halves of a rendered output, already placed -- reported, and the stamp beside it.
-fn Placed(answer: &RenderAnswer, channels: &mut Channels<'_>) -> ExitCode
+fn Placed_Render(answer: &RenderAnswer, channels: &mut Channels<'_>) -> ExitCode
 {
     Report_Render(&answer.id, &answer.body, &answer.sidecar, channels.output);
     Report_Stamp(&answer.stamp, channels.output);
@@ -34,7 +35,7 @@ fn Placed(answer: &RenderAnswer, channels: &mut Channels<'_>) -> ExitCode
 }
 
 /// A built projection this build could not place where it was asked to go.
-fn Unwritable(path: &Path, error: &FileSystemError, notes: &mut dyn std::io::Write) -> ExitCode
+fn Unwritable_Render(path: &Path, error: &FileSystemError, notes: &mut dyn std::io::Write) -> ExitCode
 {
     let _ = writeln!(notes, "cannot write {}: {error}", path.display());
 

@@ -16,10 +16,10 @@ mod record;
 mod render;
 mod table;
 
-pub(super) use editing::{Commit, Preview, Report_Edit_Error};
+pub(super) use editing::{Commit_Edit, Preview_Edit, Report_Edit_Error};
 pub(super) use freshness::Freshness_Of;
-pub(super) use listing::{Empty_Section, EmptySection, Profiles, Sources};
-pub(super) use markdown::Markdown;
-pub(super) use record::Record;
-pub(super) use render::{No_Such_Profile, Render, Report_Build_Error};
-pub(super) use table::Table;
+pub(super) use listing::{Empty_Section, EmptySection, List_Profiles, List_Sources};
+pub(super) use markdown::Render_Markdown;
+pub(super) use record::Read_Record;
+pub(super) use render::{No_Such_Profile, Render_Profile, Report_Build_Error};
+pub(super) use table::Read_Table;

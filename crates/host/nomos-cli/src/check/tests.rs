@@ -114,7 +114,7 @@ fn Test_The_Documented_Exit_Codes_Should_Be_The_Ones_This_Group_Can_Exit_With()
 #[test]
 fn Test_A_Root_Should_Default_To_Here()
 {
-    assert_eq!(Parse(&[]).expect("no arguments is valid").root, PathBuf::from("."));
+    assert_eq!(Check_Command_From_String_Arguments(&[]).expect("no arguments is valid").root, PathBuf::from("."));
 }
 
 #[test]
@@ -123,7 +123,7 @@ fn Test_A_Given_Root_Should_Win()
     let arguments = vec!["--root".to_owned(), "somewhere".to_owned()];
 
     assert_eq!(
-        Parse(&arguments).expect("--root is valid").root,
+        Check_Command_From_String_Arguments(&arguments).expect("--root is valid").root,
         PathBuf::from("somewhere")
     );
 }
@@ -136,7 +136,7 @@ fn Test_An_Unknown_Flag_Should_Refuse()
 {
     let arguments = vec!["--rooot".to_owned(), "x".to_owned()];
 
-    let error = Parse(&arguments).expect_err("must refuse");
+    let error = Check_Command_From_String_Arguments(&arguments).expect_err("must refuse");
 
     assert!(error.contains("--rooot"), "{error}");
     assert!(error.contains("usage"), "{error}");

@@ -1,4 +1,4 @@
-//! [`GateFindings`], the finding groups [`super::run::GateRunResponse`] carries.
+//! [`GateFindings`], the finding groups [`super::gate_run_response::GateRunResponse`] carries.
 
 use nomos_contracts::Finding;
 use serde::Serialize;

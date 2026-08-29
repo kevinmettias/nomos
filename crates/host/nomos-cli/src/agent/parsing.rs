@@ -1,15 +1,14 @@
 //! What `nomos agent` was asked to do.
 
 use super::{Backend, Command};
-use crate::arguments::{Name, Named_Value, Required, Usage};
-use std::path::PathBuf;
+use crate::arguments::{Name, Named_Value_From_String_Arguments, Required_Value, Usage};
 
 /// Parses `nomos agent` arguments.
 ///
 /// # Errors
 ///
 /// Returns a message naming what was wrong and what was expected.
-pub(crate) fn Parse(arguments: &[String]) -> Result<Command, String>
+pub(crate) fn Command_From_String_Arguments(arguments: &[String]) -> Result<Command, String>
 {
     let Some(verb) = arguments.first()
     else
@@ -21,29 +20,31 @@ pub(crate) fn Parse(arguments: &[String]) -> Result<Command, String>
 
     return match verb.as_str()
     {
-        "execute" => Parse_Execute(rest),
-        "judge-role" => Parse_Judge_Role(rest),
+        "execute" => Execute_Command_From_String_Arguments(rest),
+        "judge-role" => Judge_Role_Command_From_String_Arguments(rest),
         other => Err(format!("unknown command `{other}`.\n\n{}", Usage_Text())),
     };
 }
 
-fn Parse_Execute(arguments: &[String]) -> Result<Command, String>
+fn Execute_Command_From_String_Arguments(arguments: &[String]) -> Result<Command, String>
 {
-    let value = Named_Value(arguments, "--goal");
-    let goal = Required(value.as_ref(), Name("--goal"), Usage(&Usage_Text()))?;
-    let effort = Parse_Effort(arguments)?;
-    let backend = Parse_Backend(arguments)?;
+    let value = Named_Value_From_String_Arguments(arguments, "--goal");
+    let goal = Required_Value(value.as_ref(), Name("--goal"), Usage(&Usage_Text()))?;
+    let effort = Effort_From_String_Arguments(arguments)?;
+    let backend = Backend_From_String_Arguments(arguments)?;
 
     return Ok(Command::Execute { goal, effort, backend });
 }
 
-fn Parse_Judge_Role(arguments: &[String]) -> Result<Command, String>
+fn Judge_Role_Command_From_String_Arguments(arguments: &[String]) -> Result<Command, String>
 {
-    let value = Named_Value(arguments, "--crate");
-    let crate_name = Required(value.as_ref(), Name("--crate"), Usage(&Usage_Text()))?;
-    let root = Named_Value(arguments, "--root").map_or_else(|| return PathBuf::from("."), PathBuf::from);
-    let effort = Parse_Effort(arguments)?;
-    let backend = Parse_Backend(arguments)?;
+    use std::path::PathBuf;
+
+    let value = Named_Value_From_String_Arguments(arguments, "--crate");
+    let crate_name = Required_Value(value.as_ref(), Name("--crate"), Usage(&Usage_Text()))?;
+    let root = Named_Value_From_String_Arguments(arguments, "--root").map_or_else(|| return PathBuf::from("."), PathBuf::from);
+    let effort = Effort_From_String_Arguments(arguments)?;
+    let backend = Backend_From_String_Arguments(arguments)?;
 
     return Ok(Command::JudgeRole { crate_name, root, effort, backend });
 }
@@ -63,10 +64,10 @@ fn Parse_Judge_Role(arguments: &[String]) -> Result<Command, String>
 /// Returns a message naming the accepted spelling for whichever flag was given, when its
 /// value is not that spelling, or when both flags are given at once -- a call dispatches to
 /// exactly one backend, and naming two is not a request either flag alone could satisfy.
-fn Parse_Backend(arguments: &[String]) -> Result<Backend, String>
+fn Backend_From_String_Arguments(arguments: &[String]) -> Result<Backend, String>
 {
-    let executor = Named_Value(arguments, "--executor");
-    let model_backend = Named_Value(arguments, "--model-backend");
+    let executor = Named_Value_From_String_Arguments(arguments, "--executor");
+    let model_backend = Named_Value_From_String_Arguments(arguments, "--model-backend");
 
     return match (executor, model_backend)
     {
@@ -99,11 +100,11 @@ fn Parse_Backend(arguments: &[String]) -> Result<Backend, String>
 ///
 /// Returns a message naming the six accepted spellings when `--effort`'s value is none of
 /// them.
-fn Parse_Effort(arguments: &[String]) -> Result<nomos_model_package::EffortLevel, String>
+fn Effort_From_String_Arguments(arguments: &[String]) -> Result<nomos_model_package::EffortLevel, String>
 {
     use nomos_model_package::EffortLevel;
 
-    let Some(text) = Named_Value(arguments, "--effort")
+    let Some(text) = Named_Value_From_String_Arguments(arguments, "--effort")
     else
     {
         return Ok(EffortLevel::BackendDefault);

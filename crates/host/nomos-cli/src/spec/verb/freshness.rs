@@ -2,7 +2,7 @@
 //!
 //! `D-128`'s check, run over what `nomos-platform-std::StdFileSystem` holds. Resolving which
 //! profiles to look at and comparing each one against the store is
-//! `nomos-spec-orchestration::Freshness`'s job now; this module keeps the census over the
+//! `nomos-spec-orchestration::Freshness_Of_Render`'s job now; this module keeps the census over the
 //! answer -- how many were checked, which requirements were kept -- and the `ExitCode` a
 //! rendering layer is responsible for.
 //!
@@ -12,7 +12,6 @@
 //! person who trips over it.
 
 use crate::spec::{Assembly, Profile, FreshnessRequest, Channels, ExitCode, Report_Store_Error, Path, SIDECAR_SUFFIX, Report_Build_Error, No_Such_Profile};
-use nomos_platform_std::StdFileSystem;
 use nomos_spec_orchestration::{FreshnessAnswer, FreshnessRefusal, ProfileOutcome, Verdict};
 
 /// `D-128`'s check, run.
@@ -22,21 +21,23 @@ pub(in crate::spec) fn Freshness_Of(
     channels: &mut Channels<'_>,
 ) -> ExitCode
 {
-    return match nomos_spec_orchestration::Freshness(assembly, request, &StdFileSystem)
+    use nomos_platform_std::StdFileSystem;
+
+    return match nomos_spec_orchestration::Freshness_Of_Render(assembly, request, &StdFileSystem)
     {
-        Ok(answer) => Reported(assembly, &answer, request, channels),
+        Ok(answer) => Reported_Freshness(assembly, &answer, request, channels),
         Err(FreshnessRefusal::Store(error)) => Report_Store_Error(&error, channels.notes),
         Err(FreshnessRefusal::NoSuchProfile { requested, known }) => No_Such_Profile(&requested, &known, channels.notes),
         Err(FreshnessRefusal::RequirementUnexamined { requested, only }) =>
         {
-            Unexamined(&requested, only.as_deref(), channels.notes)
+            Unexamined_Requirement(&requested, only.as_deref(), channels.notes)
         }
         Err(FreshnessRefusal::Project(error)) => Report_Build_Error(assembly, &error, channels.notes),
     };
 }
 
 /// Every profile the run examined, and what this repository was promised.
-fn Reported(
+fn Reported_Freshness(
     assembly: &Assembly,
     answer: &FreshnessAnswer,
     request: &FreshnessRequest,
@@ -48,7 +49,7 @@ fn Reported(
     for outcome in &answer.examined
     {
         let code = census.Record(outcome, assembly, channels);
-        census.worst = Worse(census.worst, code);
+        census.worst = Worse_Of(census.worst, code);
     }
 
     return census.Report(&request.into, request.profile.as_deref(), channels.output);
@@ -59,7 +60,7 @@ fn Reported(
 /// [`ExitCode::Stale`] beats [`ExitCode::Absent`] deliberately: a definite finding about
 /// one output is more actionable than a machine that could not check another, and the
 /// text above has already said both.
-const fn Worse(carried: ExitCode, found: ExitCode) -> ExitCode
+const fn Worse_Of(carried: ExitCode, found: ExitCode) -> ExitCode
 {
     return match (carried, found)
     {
@@ -76,7 +77,7 @@ const fn Worse(carried: ExitCode, found: ExitCode) -> ExitCode
 /// guaranteed. Answering it would mean reporting success over a requirement nothing
 /// checked, which is the shape this flag exists against -- so it is a usage error and not a
 /// quiet pass.
-fn Unexamined(unexamined: &str, only: Option<&str>, notes: &mut dyn std::io::Write) -> ExitCode
+fn Unexamined_Requirement(unexamined: &str, only: Option<&str>, notes: &mut dyn std::io::Write) -> ExitCode
 {
     let _ = writeln!(
         notes,
@@ -93,14 +94,14 @@ fn Unexamined(unexamined: &str, only: Option<&str>, notes: &mut dyn std::io::Wri
 ///
 /// `None` for [`Verdict::Absent`] -- printed only once its promise is known, by
 /// [`Census::Record`].
-fn Printed(assembly: &Assembly, outcome: &ProfileOutcome, channels: &mut Channels<'_>) -> Option<ExitCode>
+fn Printed_Verdict(assembly: &Assembly, outcome: &ProfileOutcome, channels: &mut Channels<'_>) -> Option<ExitCode>
 {
     return match &outcome.verdict
     {
         Verdict::Absent => None,
-        Verdict::Unstamped => Some(Unstamped(&outcome.profile, channels.output)),
-        Verdict::Unbodied => Some(Unbodied(&outcome.profile, channels.output)),
-        Verdict::Compared(result) => Some(Compared(assembly, &outcome.profile, result, channels)),
+        Verdict::Unstamped => Some(Unstamped_Profile(&outcome.profile, channels.output)),
+        Verdict::Unbodied => Some(Unbodied_Profile(&outcome.profile, channels.output)),
+        Verdict::Compared(result) => Some(Compared_Profile(assembly, &outcome.profile, result, channels)),
     };
 }
 
@@ -109,7 +110,7 @@ fn Printed(assembly: &Assembly, outcome: &ProfileOutcome, channels: &mut Channel
 /// A failure rather than something skipped, because otherwise deleting the sidecar is how
 /// an edit stops being caught, and a check that skipped it would teach that trick to the
 /// first person who tripped over it.
-fn Unstamped(profile: &Profile, output: &mut dyn std::io::Write) -> ExitCode
+fn Unstamped_Profile(profile: &Profile, output: &mut dyn std::io::Write) -> ExitCode
 {
     let _ = writeln!(
         output,
@@ -122,7 +123,7 @@ fn Unstamped(profile: &Profile, output: &mut dyn std::io::Write) -> ExitCode
 }
 
 /// A stamp with no body beside it: a governed output was deleted or never written.
-fn Unbodied(profile: &Profile, output: &mut dyn std::io::Write) -> ExitCode
+fn Unbodied_Profile(profile: &Profile, output: &mut dyn std::io::Write) -> ExitCode
 {
     let _ = writeln!(
         output,
@@ -135,7 +136,7 @@ fn Unbodied(profile: &Profile, output: &mut dyn std::io::Write) -> ExitCode
 }
 
 /// The comparison itself, already computed -- printed, with a store that may not be whole.
-fn Compared(
+fn Compared_Profile(
     assembly: &Assembly,
     profile: &Profile,
     result: &Result<nomos_spec_project::Freshness, nomos_spec_project::ProjectError>,
@@ -233,7 +234,7 @@ impl<'a> Census<'a>
     fn Record(&mut self, outcome: &'a ProfileOutcome, assembly: &Assembly, channels: &mut Channels<'_>) -> ExitCode
     {
         let promise = Promise::Of(self.required.iter().any(|id| return *id == outcome.profile.id));
-        let found = Printed(assembly, outcome, channels);
+        let found = Printed_Verdict(assembly, outcome, channels);
 
         let Some(code) = found
         else

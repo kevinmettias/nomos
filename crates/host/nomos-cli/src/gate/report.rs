@@ -130,6 +130,9 @@ fn Exit_Code_For(disposition: GateRunOutcome) -> ExitCode
     {
         GateRunOutcome::Failed => ExitCode::Violations,
         GateRunOutcome::Passed => ExitCode::Ok,
+        // Run_Gate only produces Indeterminate for a CheckOutcome that never reached Judged,
+        // and this function is only ever called from the Judged arm of Render_Run, so that
+        // disposition cannot arrive here.
         GateRunOutcome::Indeterminate => unreachable!(
             "nomos_gate_orchestration::Disposition never returns Indeterminate; \
              Run_Gate only assigns it for a CheckOutcome that never reached Judged, \

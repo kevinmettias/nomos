@@ -4,7 +4,7 @@
 //! `OD-GATE-003` is the record this module exists to satisfy. `check.rs`'s own doc comment
 //! already argues, correctly, that the guard itself belongs with the caller that chose the
 //! subject — "did I see a plausible amount of the world" is a question only that caller can
-//! answer, and this module does not move it: `check::sources::Walked` and
+//! answer, and this module does not move it: `check::sources::Walked_Sources` and
 //! `nomos_check_orchestration::Run` still decide `check`'s answer, and
 //! `spec::reporting::Absent_Or` still decides `spec`'s. What was missing was not the guard,
 //! it was a place the guard's *existence* is recorded where the next author is standing —
@@ -79,7 +79,7 @@ pub(crate) const NAMES: [(&str, Group); 6] = [
 ];
 
 /// The group named on argv, if [`NAMES`] spells it.
-pub(crate) fn Named(text: &str) -> Option<Group>
+pub(crate) fn Group_Named(text: &str) -> Option<Group>
 {
     for (name, group) in NAMES
     {
@@ -124,7 +124,7 @@ pub(crate) fn Stance_Of(group: Group) -> Stance
     return match group
     {
         Group::Check => Stance::Guarded {
-            decided_in: "check::sources::Walked / nomos_check_orchestration::Run",
+            decided_in: "check::sources::Walked_Sources / nomos_check_orchestration::Run",
         },
         Group::Spec => Stance::Guarded {
             decided_in: "spec::reporting::Absent_Or",
@@ -139,7 +139,7 @@ pub(crate) fn Stance_Of(group: Group) -> Stance
                       way a checked-out tree or a queried record can be",
         },
         Group::Gate => Stance::Guarded {
-            decided_in: "gate::sources::Walked / nomos_check_orchestration::Run",
+            decided_in: "gate::sources::Walked_Sources / nomos_check_orchestration::Run",
         },
         Group::Agent => Stance::NotApplicable {
             because: "execute always names exactly one goal the caller typed; there is no \
@@ -205,7 +205,7 @@ mod tests
             "--id".to_owned(),
             "OD-GATE-003-VACUITY-GUARD-TEST-NONEXISTENT".to_owned(),
         ];
-        let command = crate::spec::Parse(&arguments).expect("parses");
+        let command = crate::spec::Spec_Command_From_String_Arguments(&arguments).expect("parses");
         let request = nomos_spec_orchestration::corpus::CorpusRequest {
             variable: "NOMOS_VACUITY_GUARD_TEST_CORPUS_UNSET".to_owned(),
             root: None,

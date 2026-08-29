@@ -1,9 +1,12 @@
 //! What `nomos gate` was asked for.
 
-use super::{FindingQuery, GateCommand, GateInvocation, Named_Value, PathBuf};
-use crate::arguments::{Name, Named_Values, Required, Usage};
+use super::{FindingQuery, GateCommand, GateInvocation, Named_Value_From_String_Arguments, PathBuf};
+use crate::arguments::{Name, Named_Values_From_String_Arguments, Required_Value, Usage};
 use nomos_contracts::RuleId;
 use nomos_gate_orchestration::{RuleSelector, ScopeSelector};
+
+/// The flags this group accepts besides `--root`, `--rule` and `--location`.
+const KNOWN_ARGUMENTS: [&str; 5] = ["--root", "--include", "--exclude", "--rule", "--location"];
 
 pub(super) const USAGE: &str = "usage: nomos gate plan    [--root <path>] [--include <path>]… \
 [--exclude <path>]… [--rule <id>]…\n       \
@@ -39,7 +42,7 @@ materialized for any of it";
 ///
 /// Returns the usage message when the verb is missing or unrecognized, `explain` is
 /// missing `--rule` or `--location`, or an argument is not understood.
-pub fn Parse(arguments: &[String]) -> Result<GateInvocation, String>
+pub fn Gate_Invocation_From_String_Arguments(arguments: &[String]) -> Result<GateInvocation, String>
 {
     let Some((verb, rest)) = arguments.split_first()
     else
@@ -50,7 +53,7 @@ pub fn Parse(arguments: &[String]) -> Result<GateInvocation, String>
     Known_Verb(verb)?;
     No_Unknown_Argument(rest)?;
 
-    let root = Named_Value(rest, "--root").map_or_else(|| return PathBuf::from("."), PathBuf::from);
+    let root = Named_Value_From_String_Arguments(rest, "--root").map_or_else(|| return PathBuf::from("."), PathBuf::from);
 
     if verb == "explain"
     {
@@ -77,11 +80,9 @@ fn Known_Verb(verb: &str) -> Result<(), String>
 /// Refuses any flag but `--root`, `--include`, `--exclude`, `--rule` and `--location`.
 fn No_Unknown_Argument(rest: &[String]) -> Result<(), String>
 {
-    const KNOWN: [&str; 5] = ["--root", "--include", "--exclude", "--rule", "--location"];
-
     if let Some(unknown) = rest
         .iter()
-        .find(|argument| return argument.starts_with('-') && !KNOWN.contains(&argument.as_str()))
+        .find(|argument| return argument.starts_with('-') && !KNOWN_ARGUMENTS.contains(&argument.as_str()))
     {
         return Err(format!("unknown argument `{unknown}`.\n\n{USAGE}"));
     }
@@ -96,8 +97,8 @@ fn No_Unknown_Argument(rest: &[String]) -> Result<(), String>
 /// would read as a selector nobody asked for.
 fn Explain_Invocation(rest: &[String], root: PathBuf) -> Result<GateInvocation, String>
 {
-    let rule = Required(Named_Value(rest, "--rule").as_ref(), Name("--rule"), Usage(USAGE))?;
-    let location = Required(Named_Value(rest, "--location").as_ref(), Name("--location"), Usage(USAGE))?;
+    let rule = Required_Value(Named_Value_From_String_Arguments(rest, "--rule").as_ref(), Name("--rule"), Usage(USAGE))?;
+    let location = Required_Value(Named_Value_From_String_Arguments(rest, "--location").as_ref(), Name("--location"), Usage(USAGE))?;
 
     let command = GateCommand { root, ..GateCommand::default() };
     let query = FindingQuery { rule: RuleId::New(rule), location };
@@ -112,10 +113,10 @@ fn Plan_Or_Run_Command(root: PathBuf, rest: &[String]) -> GateCommand
     return GateCommand {
         root,
         scope: ScopeSelector {
-            include: Named_Values(rest, "--include"),
-            exclude: Named_Values(rest, "--exclude"),
+            include: Named_Values_From_String_Arguments(rest, "--include"),
+            exclude: Named_Values_From_String_Arguments(rest, "--exclude"),
         },
-        rules: RuleSelector { include: Named_Values(rest, "--rule").into_iter().map(RuleId::New).collect() },
+        rules: RuleSelector { include: Named_Values_From_String_Arguments(rest, "--rule").into_iter().map(RuleId::New).collect() },
         // No flag authors a Suppression, a BaselineDebt or a RuleCalibration yet -- see
         // `nomos_gate_orchestration::SuppressionPolicy`'s own doc for why inventing one now
         // would be premature.

@@ -11,14 +11,14 @@ fn Arguments(text: &str) -> Vec<String>
 fn Test_Record_Should_Parse_With_And_Without_A_Revision()
 {
     assert_eq!(
-        Parse(&Arguments("record --id D-129")).expect("parses"),
+        Spec_Command_From_String_Arguments(&Arguments("record --id D-129")).expect("parses"),
         SpecCommand::Record(RecordRequest {
             id: "D-129".to_owned(),
             revision: None,
         })
     );
     assert_eq!(
-        Parse(&Arguments("record --id D-129 --revision authored")).expect("parses"),
+        Spec_Command_From_String_Arguments(&Arguments("record --id D-129 --revision authored")).expect("parses"),
         SpecCommand::Record(RecordRequest {
             id: "D-129".to_owned(),
             revision: Some("authored".to_owned()),
@@ -29,7 +29,7 @@ fn Test_Record_Should_Parse_With_And_Without_A_Revision()
 #[test]
 fn Test_A_Missing_Argument_Should_Name_Itself()
 {
-    let error = Parse(&Arguments("record")).expect_err("must refuse");
+    let error = Spec_Command_From_String_Arguments(&Arguments("record")).expect_err("must refuse");
 
     assert!(error.contains("--id"), "{error}");
     assert!(error.contains("usage"), "{error}");
@@ -40,7 +40,7 @@ fn Test_A_Missing_Argument_Should_Name_Itself()
 #[test]
 fn Test_A_Non_Numeric_Ordinal_Should_Be_Refused()
 {
-    let error = Parse(&Arguments("table --document x.md --block seven"))
+    let error = Spec_Command_From_String_Arguments(&Arguments("table --document x.md --block seven"))
         .expect_err("must refuse");
 
     assert!(error.contains("--block"), "{error}");
@@ -50,10 +50,10 @@ fn Test_A_Non_Numeric_Ordinal_Should_Be_Refused()
 #[test]
 fn Test_Render_Should_Require_Both_A_Profile_And_A_Destination()
 {
-    assert!(Parse(&Arguments("render --profile github-markdown")).is_err());
-    assert!(Parse(&Arguments("render --into build")).is_err());
+    assert!(Spec_Command_From_String_Arguments(&Arguments("render --profile github-markdown")).is_err());
+    assert!(Spec_Command_From_String_Arguments(&Arguments("render --into build")).is_err());
     assert_eq!(
-        Parse(&Arguments("render --profile github-markdown --into build")).expect("parses"),
+        Spec_Command_From_String_Arguments(&Arguments("render --profile github-markdown --into build")).expect("parses"),
         SpecCommand::Render(RenderRequest {
             profile: "github-markdown".to_owned(),
             into: PathBuf::from("build"),
@@ -68,7 +68,7 @@ fn Test_Render_Should_Require_Both_A_Profile_And_A_Destination()
 fn Test_Freshness_Should_Take_A_Destination_And_An_Optional_Profile()
 {
     assert_eq!(
-        Parse(&Arguments("freshness --into build")).expect("parses"),
+        Spec_Command_From_String_Arguments(&Arguments("freshness --into build")).expect("parses"),
         SpecCommand::Freshness(FreshnessRequest {
             into: PathBuf::from("build"),
             profile: None,
@@ -76,14 +76,14 @@ fn Test_Freshness_Should_Take_A_Destination_And_An_Optional_Profile()
         })
     );
     assert_eq!(
-        Parse(&Arguments("freshness --into build --profile mcp-resource")).expect("parses"),
+        Spec_Command_From_String_Arguments(&Arguments("freshness --into build --profile mcp-resource")).expect("parses"),
         SpecCommand::Freshness(FreshnessRequest {
             into: PathBuf::from("build"),
             profile: Some("mcp-resource".to_owned()),
             require: Vec::new(),
         })
     );
-    assert!(Parse(&Arguments("freshness --profile mcp-resource")).is_err());
+    assert!(Spec_Command_From_String_Arguments(&Arguments("freshness --profile mcp-resource")).is_err());
 }
 
 /// `--subject` is optional at the parse, and required by the profile.
@@ -95,7 +95,7 @@ fn Test_Freshness_Should_Take_A_Destination_And_An_Optional_Profile()
 fn Test_Render_Should_Carry_A_Subject_When_One_Is_Given()
 {
     assert_eq!(
-        Parse(&Arguments("render --profile subject-dossier --into . --subject D-129"))
+        Spec_Command_From_String_Arguments(&Arguments("render --profile subject-dossier --into . --subject D-129"))
             .expect("parses"),
         SpecCommand::Render(RenderRequest {
             profile: "subject-dossier".to_owned(),
@@ -104,7 +104,7 @@ fn Test_Render_Should_Carry_A_Subject_When_One_Is_Given()
         })
     );
     assert_eq!(
-        Parse(&Arguments("render --profile diagram-set --into .")).expect("parses"),
+        Spec_Command_From_String_Arguments(&Arguments("render --profile diagram-set --into .")).expect("parses"),
         SpecCommand::Render(RenderRequest {
             profile: "diagram-set".to_owned(),
             into: PathBuf::from("."),
@@ -119,7 +119,7 @@ fn Test_Render_Should_Carry_A_Subject_When_One_Is_Given()
 fn Test_Freshness_Should_Collect_Every_Requirement()
 {
     assert_eq!(
-        Parse(&Arguments(
+        Spec_Command_From_String_Arguments(&Arguments(
             "freshness --into . --require diagram-set --require html-site"
         ))
         .expect("parses"),
@@ -134,7 +134,7 @@ fn Test_Freshness_Should_Collect_Every_Requirement()
 #[test]
 fn Test_An_Unknown_Command_Should_Be_A_Usage_Error()
 {
-    let error = Parse(&Arguments("frobnicate")).expect_err("must refuse");
+    let error = Spec_Command_From_String_Arguments(&Arguments("frobnicate")).expect_err("must refuse");
 
     assert!(error.contains("frobnicate"), "{error}");
 }
@@ -203,7 +203,7 @@ fn Test_The_Usage_Text_Should_Name_Every_Command()
 fn Test_Commit_Should_Parse_With_A_Default_Tree_And_An_Optional_Rename()
 {
     assert_eq!(
-        Parse(&Arguments("commit --id D-129 --from staged.md")).expect("parses"),
+        Spec_Command_From_String_Arguments(&Arguments("commit --id D-129 --from staged.md")).expect("parses"),
         SpecCommand::Commit(CommitRequest {
             edit: EditRequest {
                 id: "D-129".to_owned(),
@@ -214,7 +214,7 @@ fn Test_Commit_Should_Parse_With_A_Default_Tree_And_An_Optional_Rename()
         })
     );
     assert_eq!(
-        Parse(&Arguments(
+        Spec_Command_From_String_Arguments(&Arguments(
             "commit --id D-129 --from staged.md --rename docs/records/moved.md --into build"
         ))
         .expect("parses"),
@@ -227,28 +227,28 @@ fn Test_Commit_Should_Parse_With_A_Default_Tree_And_An_Optional_Rename()
             into: PathBuf::from("build"),
         })
     );
-    assert!(Parse(&Arguments("commit --id D-129")).is_err());
+    assert!(Spec_Command_From_String_Arguments(&Arguments("commit --id D-129")).is_err());
 }
 
 #[test]
-fn Test_Markdown_And_Preview_Should_Parse()
+fn Test_Markdown_And_Preview_Should_Spec_Command_From_String_Arguments()
 {
     assert_eq!(
-        Parse(&Arguments("markdown --id D-129")).expect("parses"),
+        Spec_Command_From_String_Arguments(&Arguments("markdown --id D-129")).expect("parses"),
         SpecCommand::Markdown(RecordRequest {
             id: "D-129".to_owned(),
             revision: None,
         })
     );
     assert_eq!(
-        Parse(&Arguments("preview --id D-129 --from staged.md")).expect("parses"),
+        Spec_Command_From_String_Arguments(&Arguments("preview --id D-129 --from staged.md")).expect("parses"),
         SpecCommand::Preview(EditRequest {
             id: "D-129".to_owned(),
             from: PathBuf::from("staged.md"),
             rename: None,
         })
     );
-    assert!(Parse(&Arguments("preview --from staged.md")).is_err());
+    assert!(Spec_Command_From_String_Arguments(&Arguments("preview --from staged.md")).is_err());
 }
 
 /// `markdown` is not `record` with a flag, and the parse is where that stays true.
@@ -256,7 +256,7 @@ fn Test_Markdown_And_Preview_Should_Parse()
 fn Test_Reading_Bytes_And_Rendering_Markdown_Should_Be_Different_Commands()
 {
     assert_ne!(
-        Parse(&Arguments("record --id D-129")).expect("parses"),
-        Parse(&Arguments("markdown --id D-129")).expect("parses")
+        Spec_Command_From_String_Arguments(&Arguments("record --id D-129")).expect("parses"),
+        Spec_Command_From_String_Arguments(&Arguments("markdown --id D-129")).expect("parses")
     );
 }

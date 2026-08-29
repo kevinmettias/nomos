@@ -41,7 +41,7 @@
 //! opposite of `ClaimRequest`'s: `abandon` and `decline` share only their argument shape, not
 //! what they mean. Its eleventh, [`work::Handle_Work_Finish`], does the same for `Finish` --
 //! `nomos_work_orchestration::Run`'s own `Finish` arm always passes `working_directory: None`
-//! to `nomos_ledger::Finish`, so the gate's own lint step resolves relative to the calling
+//! to `nomos_ledger::Finish_Item`, so the gate's own lint step resolves relative to the calling
 //! process's own directory, not anything this crate's caller supplies. Its twelfth,
 //! [`work::Handle_Work_Add`], does the same for `Add`, closing `WorkCommand` entirely -- the
 //! one verb needing a real, walked `published` `Territory`, computed by a private
@@ -50,7 +50,7 @@
 //! `sources.rs` already draws for Gate's own walk. Its thirteenth,
 //! [`spec::Handle_Spec_Sources`], moves on to Spec's own remaining verbs: `Sources` is a
 //! unit `SpecCommand` variant, the next-simplest of that crate's nine after `Profiles`, but
-//! the first here to go through `nomos_spec_orchestration::corpus::Assemble` at all. Its
+//! the first here to go through `nomos_spec_orchestration::corpus::Assemble_Corpus` at all. Its
 //! fourteenth, [`spec::Handle_Spec_Record`], is the first Spec seam carrying a request
 //! payload of its own rather than a unit variant -- `RecordRequest{id, revision}` -- and the
 //! first whose own outcome needed twin types of its own,
@@ -69,7 +69,7 @@
 //! for `Preview` -- also generic over `FileSystem`, and also read-only: its one contact with
 //! a filesystem is reading the staged `--from` file the caller already named, never a write.
 //! Its nineteenth, [`spec::Handle_Spec_Render`], is the first Spec seam here that writes:
-//! `run::render::Render` places a built projection's body and its sidecar under a
+//! `run::render::Rendered_Projection` places a built projection's body and its sidecar under a
 //! caller-named `into` root through `Replace_Atomically`, unconditionally overwriting what
 //! was there. This is not a new category of risk for this crate -- [`Handle_Work_Claim`]
 //! already writes a real ledger file at a caller-named directory over an unauthenticated
@@ -85,15 +85,15 @@
 //! generic over `FileSystem`) never actually write, narrowing the real decision to these two.
 //! With `Commit`, all nine `SpecCommand` verbs are seamed. Its twenty-first,
 //! [`spec::Handle_Spec_Submit`], seams the one verb `SpecCommand` does not carry:
-//! `nomos_spec_orchestration::Submit` is a sibling of `Run`, not one of its cases
+//! `nomos_spec_orchestration::Submit_Corpus_Request` is a sibling of `Run`, not one of its cases
 //! (`OD-HOST-005`'s own resolution: a `nomos request submit` invocation is not a `nomos spec`
 //! verb by the CLI's own naming), and takes an already-assembled `&mut Assembly` directly, so
-//! this is the first `Handle_Spec_*` function here that calls `corpus::Assemble` itself
+//! this is the first `Handle_Spec_*` function here that calls `corpus::Assemble_Corpus` itself
 //! rather than getting it from `Run`.
 //!
 //! [`Handle_Gate_Run`] is a deliberate twin of `nomos-cli`'s `gate.rs`
 //! `GateInvocation::Run` arm: it walks `root` for `.rs` sources
-//! ([`sources::Walked`] -- a twin of `crates/host/nomos-cli/src/gate/sources.rs`, since a
+//! ([`sources::Walked_Sources`] -- a twin of `crates/host/nomos-cli/src/gate/sources.rs`, since a
 //! walk is a composition-root concern `OD-HOST-002` does not seam), reads this crate's own
 //! build variant ([`composition::Host_Variant`] -- `env!` resolves against the crate that
 //! calls it, so this cannot be shared either), and calls `Run_Gate` with the default

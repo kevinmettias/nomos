@@ -11,30 +11,30 @@
 //! shape, owned in this crate and built by conversion from the borrowed or owned result, so
 //! neither orchestration crate changes.
 //!
-//! Every handler and its own response type share one file below -- [`run`] pairs
-//! [`Handle_Gate_Run`] with [`GateRunResponse`], [`plan`] pairs [`Handle_Gate_Plan`] with
-//! [`GatePlanResponse`], [`explain`] pairs [`Handle_Gate_Explain`] with
+//! Every handler and its own response type share one file below -- [`gate_run_response`] pairs
+//! [`Handle_Gate_Run`] with [`GateRunResponse`], [`gate_plan_response`] pairs [`Handle_Gate_Plan`] with
+//! [`GatePlanResponse`], [`gate_explain_response`] pairs [`Handle_Gate_Explain`] with
 //! [`GateExplainResponse`] -- and every twin type that exists only to serialize one of their
 //! own fields gets a file of its own beside them.
 
-mod baseline_debt;
+mod baseline_debt_response;
 mod disposition;
-mod explain;
+mod gate_explain_response;
 mod gate_findings;
-mod plan;
-mod rule_calibration;
-mod rule_offer;
-mod run;
-mod suppression;
-mod suppression_disposition;
+mod gate_plan_response;
+mod gate_run_response;
+mod rule_calibration_response;
+mod rule_offer_response;
+mod suppression_disposition_response;
+mod suppression_response;
 
-pub use baseline_debt::BaselineDebtResponse;
+pub use baseline_debt_response::BaselineDebtResponse;
 pub use disposition::Disposition;
-pub use explain::{GateExplainResponse, Handle_Gate_Explain};
+pub use gate_explain_response::{GateExplainResponse, Handle_Gate_Explain};
 pub use gate_findings::GateFindings;
-pub use plan::{GatePlanResponse, Handle_Gate_Plan};
-pub use rule_calibration::RuleCalibrationResponse;
-pub use rule_offer::RuleOfferResponse;
-pub use run::{GateRunResponse, Handle_Gate_Run};
-pub use suppression::SuppressionResponse;
-pub use suppression_disposition::SuppressionDispositionResponse;
+pub use gate_plan_response::{GatePlanResponse, Handle_Gate_Plan};
+pub use gate_run_response::{GateRunResponse, Handle_Gate_Run};
+pub use rule_calibration_response::RuleCalibrationResponse;
+pub use rule_offer_response::RuleOfferResponse;
+pub use suppression_disposition_response::SuppressionDispositionResponse;
+pub use suppression_response::SuppressionResponse;

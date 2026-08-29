@@ -3,7 +3,7 @@
 //!
 //! Staging the edit, checking it against the store and -- for a commit -- applying the
 //! transaction and writing its bytes where the record belongs is
-//! `nomos-spec-orchestration::{Preview, Commit}`'s job now, through
+//! `nomos-spec-orchestration::{Preview_Staged_Edit, Commit_Staged_Edit}`'s job now, through
 //! `nomos-platform-std::StdFileSystem` -- the same composition-root choice `nomos-cli::work`
 //! already makes for the ledger. This module keeps only the writing of *text about* what
 //! happened and the `ExitCode` a rendering layer is responsible for.
@@ -17,18 +17,18 @@ use nomos_spec_orchestration::{
 };
 
 /// The preview, printed, changing nothing.
-pub(in crate::spec) fn Preview(assembly: &Assembly, request: &EditRequest, channels: &mut Channels<'_>) -> ExitCode
+pub(in crate::spec) fn Preview_Edit(assembly: &Assembly, request: &EditRequest, channels: &mut Channels<'_>) -> ExitCode
 {
-    return match nomos_spec_orchestration::Preview(assembly, request, &StdFileSystem)
+    return match nomos_spec_orchestration::Preview_Staged_Edit(assembly, request, &StdFileSystem)
     {
-        Ok(preview) => Described(&preview, channels),
-        Err(PreviewRefusal::Unreadable { path, error }) => Unreadable(&path, &error, channels.notes),
+        Ok(preview) => Described_Preview(&preview, channels),
+        Err(PreviewRefusal::Unreadable { path, error }) => Unreadable_Source(&path, &error, channels.notes),
         Err(PreviewRefusal::Edit(error)) => Report_Edit_Error(assembly, &error, channels.notes),
     };
 }
 
 /// What committing this edit would change, printed, with nothing yet written.
-fn Described(preview: &EditPreview, channels: &mut Channels<'_>) -> ExitCode
+fn Described_Preview(preview: &EditPreview, channels: &mut Channels<'_>) -> ExitCode
 {
     let _ = writeln!(channels.output, "{}", preview.Describe());
     let _ = writeln!(channels.notes, "nothing was written. {EPHEMERAL}");
@@ -37,15 +37,15 @@ fn Described(preview: &EditPreview, channels: &mut Channels<'_>) -> ExitCode
 }
 
 /// The preview and then the commit, in that order, because the other order is not available.
-pub(in crate::spec) fn Commit(
+pub(in crate::spec) fn Commit_Edit(
     assembly: &mut Assembly,
     request: &CommitRequest,
     channels: &mut Channels<'_>,
 ) -> ExitCode
 {
-    return match nomos_spec_orchestration::Commit(assembly, request, &StdFileSystem)
+    return match nomos_spec_orchestration::Commit_Staged_Edit(assembly, request, &StdFileSystem)
     {
-        Ok(answer) => Reported(assembly, &answer, channels),
+        Ok(answer) => Reported_Commit(assembly, &answer, channels),
         Err(CommitRefusal { kind: CommitRefusalKind::Unreadable { path }, error }) =>
         {
             Report_Unreadable_Refusal(&path, error, channels.notes)
@@ -66,7 +66,7 @@ pub(in crate::spec) fn Commit(
 }
 
 /// What committing changed, once the store accepted the transaction and its bytes landed.
-fn Reported(assembly: &Assembly, answer: &CommitAnswer, channels: &mut Channels<'_>) -> ExitCode
+fn Reported_Commit(assembly: &Assembly, answer: &CommitAnswer, channels: &mut Channels<'_>) -> ExitCode
 {
     let _ = writeln!(channels.output, "{}", answer.preview.Describe());
     Report_Commit(&answer.report, channels.output);
@@ -146,7 +146,7 @@ fn Report_Unreadable_Refusal(path: &Path, error: CommitRefusalError, notes: &mut
         unreachable!("CommitRefusalKind::Unreadable always carries a filesystem CommitRefusalError")
     };
 
-    return Unreadable(path, &error, notes);
+    return Unreadable_Source(path, &error, notes);
 }
 
 /// `CommitRefusalKind::Edit`'s own error is always [`CommitRefusalError::Edit`].
@@ -179,7 +179,7 @@ fn Report_Refused_Refusal(
         unreachable!("CommitRefusalKind::Refused always carries an edit CommitRefusalError")
     };
 
-    return Refused(assembly, preview, &error, channels);
+    return Refused_Edit(assembly, preview, &error, channels);
 }
 
 /// An edit that previewed cleanly, printed, ahead of the store's own refusal to commit it.
@@ -187,7 +187,7 @@ fn Report_Refused_Refusal(
 /// The preview is shown regardless: an author who has already seen what their edit would
 /// change should not lose that view because the store found a reason, after the fact, not to
 /// apply it.
-fn Refused(assembly: &Assembly, preview: &EditPreview, error: &EditError, channels: &mut Channels<'_>) -> ExitCode
+fn Refused_Edit(assembly: &Assembly, preview: &EditPreview, error: &EditError, channels: &mut Channels<'_>) -> ExitCode
 {
     let _ = writeln!(channels.output, "{}", preview.Describe());
 
@@ -211,12 +211,12 @@ fn Report_Unwritable_Refusal(
     };
     let _ = writeln!(channels.output, "{}", preview.Describe());
 
-    return Unwritable(path, &error, channels.notes);
+    return Unwritable_Commit(path, &error, channels.notes);
 }
 
 /// The store accepted the transaction and its bytes could not be written where the record
 /// belongs.
-fn Unwritable(path: &Path, error: &FileSystemError, notes: &mut dyn std::io::Write) -> ExitCode
+fn Unwritable_Commit(path: &Path, error: &FileSystemError, notes: &mut dyn std::io::Write) -> ExitCode
 {
     let _ = writeln!(notes, "cannot write {}: {error}", path.display());
 
@@ -253,7 +253,7 @@ pub(in crate::spec) fn Report_Edit_Error(
 }
 
 /// `--from` named a file this build could not read.
-fn Unreadable(path: &Path, error: &FileSystemError, notes: &mut dyn std::io::Write) -> ExitCode
+fn Unreadable_Source(path: &Path, error: &FileSystemError, notes: &mut dyn std::io::Write) -> ExitCode
 {
     let _ = writeln!(notes, "cannot read {}: {error}", path.display());
 

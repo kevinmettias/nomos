@@ -2,7 +2,6 @@
 //! function that touches the store builds from the environment alone.
 
 use nomos_spec_orchestration::corpus::{CorpusRequest, DEFAULT_REVISION};
-use std::path::PathBuf;
 
 /// Which environment variable names the corpus root -- the same constant `nomos-cli`'s own
 /// `main.rs` keeps privately, ported here rather than shared for the reason every other
@@ -15,6 +14,8 @@ const CORPUS_VARIABLE: &str = "NOMOS_V14_CORPUS";
 /// same three fields the first already had inline. Mirrors `crate::work::Ledger_At`.
 pub(crate) fn Build_Corpus_Request() -> CorpusRequest
 {
+    use std::path::PathBuf;
+
     return CorpusRequest {
         variable: CORPUS_VARIABLE.to_owned(),
         root: std::env::var_os(CORPUS_VARIABLE).map(PathBuf::from),

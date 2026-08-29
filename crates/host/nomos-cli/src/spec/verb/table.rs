@@ -1,6 +1,6 @@
 //! Rendering `nomos spec table`'s answer, or the refusal saying why it has none.
 //!
-//! Resolving the address and reading the rows is `nomos-spec-orchestration::Table`'s job
+//! Resolving the address and reading the rows is `nomos-spec-orchestration::Resolved_Table`'s job
 //! now. This module keeps only the writing and the `ExitCode` a rendering layer is
 //! responsible for.
 
@@ -8,9 +8,9 @@ use crate::spec::{Assembly, TableRequest, Channels, ExitCode, DocumentSource, Ta
 use nomos_spec_orchestration::{TableAnswer, TableRefusal};
 
 /// Phase 2's other half: the real rows.
-pub(in crate::spec) fn Table(assembly: &Assembly, request: &TableRequest, channels: &mut Channels<'_>) -> ExitCode
+pub(in crate::spec) fn Read_Table(assembly: &Assembly, request: &TableRequest, channels: &mut Channels<'_>) -> ExitCode
 {
-    return match nomos_spec_orchestration::Table(assembly, request)
+    return match nomos_spec_orchestration::Resolved_Table(assembly, request)
     {
         Ok(answer) => Printed_Answer(request, &answer, channels),
         Err(TableRefusal::Store(error)) => Report_Store_Error(&error, channels.notes),
@@ -22,7 +22,7 @@ pub(in crate::spec) fn Table(assembly: &Assembly, request: &TableRequest, channe
         Err(TableRefusal::NoRows { document, tier, census }) =>
         {
             let resolved = ResolvedDocument { document: &document, census, tier };
-            Unselected(assembly, request, &resolved, channels.notes)
+            Unselected_Rows(assembly, request, &resolved, channels.notes)
         }
     };
 }
@@ -44,11 +44,11 @@ pub(super) fn Printed_Answer(request: &TableRequest, answer: &TableAnswer, chann
     let resolved = ResolvedDocument { document: &answer.document, census: answer.census, tier: answer.tier };
     Note_Document(&resolved, &request.document, channels.notes);
 
-    return Printed(&answer.lines, request, channels);
+    return Printed_Rows(&answer.lines, request, channels);
 }
 
 /// A document that resolved and was read, and the request's own narrowing selected no rows.
-pub(super) fn Unselected(
+pub(super) fn Unselected_Rows(
     assembly: &Assembly,
     request: &TableRequest,
     resolved: &ResolvedDocument<'_>,
@@ -61,7 +61,7 @@ pub(super) fn Unselected(
         notes,
         "{} carries no table row{}.",
         resolved.document.path,
-        Narrowed(request.block, request.table)
+        Narrowed_Description(request.block, request.table)
     );
 
     // The document was read, so this is an answer rather than a shortfall — unless the
@@ -136,7 +136,7 @@ pub(super) fn Nothing_Selected(
 }
 
 /// The rows themselves, and a note saying which blocks they came from.
-pub(super) fn Printed(
+pub(super) fn Printed_Rows(
     lines: &[TableLine],
     request: &TableRequest,
     channels: &mut Channels<'_>,
@@ -151,14 +151,14 @@ pub(super) fn Printed(
         channels.notes,
         "printed {} row(s){} — block(s) {}",
         lines.len(),
-        Narrowed(request.block, request.table),
-        Ordinals(lines)
+        Narrowed_Description(request.block, request.table),
+        Block_Ordinals(lines)
     );
 
     return ExitCode::Ok;
 }
 
-pub(super) fn Narrowed(block: Option<u32>, table: Option<u32>) -> String
+pub(super) fn Narrowed_Description(block: Option<u32>, table: Option<u32>) -> String
 {
     return match (block, table)
     {
@@ -169,7 +169,7 @@ pub(super) fn Narrowed(block: Option<u32>, table: Option<u32>) -> String
     };
 }
 
-pub(super) fn Ordinals(lines: &[nomos_spec_store::TableLine]) -> String
+pub(super) fn Block_Ordinals(lines: &[nomos_spec_store::TableLine]) -> String
 {
     let mut seen: Vec<u32> = Vec::new();
     for line in lines

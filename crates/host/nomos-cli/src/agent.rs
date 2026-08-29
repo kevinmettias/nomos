@@ -57,7 +57,7 @@ mod parsing;
 mod tests;
 
 pub(crate) use exit_code::ExitCode;
-pub(crate) use parsing::Parse;
+pub(crate) use parsing::Command_From_String_Arguments;
 
 use std::path::PathBuf;
 
@@ -106,7 +106,7 @@ pub(crate) fn Run(command: &Command, output: &mut impl std::io::Write, notes: &m
 {
     return match command
     {
-        Command::Execute { goal, effort, backend } => dispatch::Execute(goal, DispatchConfig { effort: *effort, backend: *backend }, output, notes),
+        Command::Execute { goal, effort, backend } => dispatch::Execute_Goal(goal, DispatchConfig { effort: *effort, backend: *backend }, output, notes),
         Command::JudgeRole { crate_name, root, effort, backend } => judge_role::Judge_Role(
             judge_role::RoleRequest { crate_name, root },
             DispatchConfig { effort: *effort, backend: *backend },

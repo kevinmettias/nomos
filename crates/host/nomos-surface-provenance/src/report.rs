@@ -5,7 +5,7 @@ use crate::git::{Since, Until};
 use std::fmt::Write as _;
 
 /// The whole report for one run: every crate checked, in the order it was checked.
-pub(crate) fn Render(since: Since<'_>, until: Until<'_>, findings: &[CrateFinding]) -> String
+pub(crate) fn Render_Report(since: Since<'_>, until: Until<'_>, findings: &[CrateFinding]) -> String
 {
     let mut text = format!(
         "OD-STORE-002 surface/records report -- range {}..{}\n\n\
@@ -53,7 +53,7 @@ fn Append_Finding(text: &mut String, finding: &CrateFinding)
     text.push_str("  commits touching the surface snapshot:\n");
     for commit in &finding.surface_commits
     {
-        let _ = writeln!(text, "    {}  {}", Short(&commit.hash), commit.subject);
+        let _ = writeln!(text, "    {}  {}", Short_Hash(&commit.hash), commit.subject);
     }
     text.push('\n');
 }
@@ -74,7 +74,7 @@ const SHORT_HASH_LENGTH: usize = 8;
 
 /// The first eight characters of a commit hash — enough for a person to recognize,
 /// short enough not to dominate the line.
-fn Short(hash: &str) -> &str
+fn Short_Hash(hash: &str) -> &str
 {
     return hash.get(..SHORT_HASH_LENGTH).unwrap_or(hash);
 }
@@ -85,16 +85,16 @@ mod tests
     use super::*;
     use crate::evaluate::CommitRef;
 
-    /// What [`Finding`] needs beyond the crate's name -- bundled into one value rather
-    /// than passed as two adjacent `bool` parameters, which a call site like
-    /// `Finding("nomos-model", true, false)` cannot tell apart without counting.
+    /// What [`Finding_With_State`] needs beyond the crate's name -- bundled into one value
+    /// rather than passed as two adjacent `bool` parameters, which a call site like
+    /// `Finding_With_State("nomos-model", true, false)` cannot tell apart without counting.
     struct FindingState
     {
         surface_changed: bool,
         records_touched: bool,
     }
 
-    fn Finding(krate: &str, state: FindingState) -> CrateFinding
+    fn Finding_With_State(krate: &str, state: FindingState) -> CrateFinding
     {
         return CrateFinding {
             krate: krate.to_owned(),
@@ -110,12 +110,12 @@ mod tests
     #[test]
     fn Test_A_Finding_Is_Named_With_Its_Commits()
     {
-        let findings = vec![Finding(
+        let findings = vec![Finding_With_State(
             "nomos-model",
             FindingState { surface_changed: true, records_touched: false },
         )];
 
-        let text = Render(Since("a"), Until("b"), &findings);
+        let text = Render_Report(Since("a"), Until("b"), &findings);
 
         assert!(text.contains("FINDING nomos-model"));
         assert!(text.contains("deadbeef"));
@@ -126,12 +126,12 @@ mod tests
     #[test]
     fn Test_A_Clean_Crate_Is_Named_But_Not_Flagged()
     {
-        let findings = vec![Finding(
+        let findings = vec![Finding_With_State(
             "nomos-model",
             FindingState { surface_changed: true, records_touched: true },
         )];
 
-        let text = Render(Since("a"), Until("b"), &findings);
+        let text = Render_Report(Since("a"), Until("b"), &findings);
 
         assert!(!text.contains("FINDING"));
         assert!(text.contains("checked and clean: nomos-model"));

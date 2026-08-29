@@ -2,7 +2,7 @@
 //! one accept door `OD-SPEC-009` decided.
 //!
 //! This is a transport and nothing else, per that record: it parses arguments into a
-//! [`SubmitRequest`] and dispatches to [`nomos_spec_orchestration::Submit`], which constructs
+//! [`SubmitRequest`] and dispatches to [`nomos_spec_orchestration::Submit_Corpus_Request`], which constructs
 //! the `Submission` and calls `Accept_Submission` itself -- `OD-HOST-005`'s resolution that
 //! this verb's real work is `nomos-spec-orchestration`'s `SpecCommand::Submit`, the same
 //! store `nomos spec`'s other nine verbs already share. This module keeps only what
@@ -22,15 +22,12 @@
 //! `ARC-SPECDB-002` charges a born-structured object with: a stamp taken now, over a store that
 //! will not exist a moment later, is still a true stamp of what this store held.
 
-use crate::arguments::{Name, Named_Value, Named_Values, Required, Usage};
-use nomos_platform_std::StdFileSystem;
-use nomos_spec_orchestration::corpus::{Assemble, CorpusRequest};
+use crate::arguments::{Name, Named_Value_From_String_Arguments, Named_Values_From_String_Arguments, Required_Value, Usage};
+use nomos_spec_orchestration::corpus::{Assemble_Corpus, CorpusRequest};
 use nomos_spec_orchestration::{RenderRefusal, SubmitAnswer, SubmitRefusal, SubmitRequest};
 
 use nomos_spec_model::{DecisionGap, Severity, SubmissionKind, SubmissionState};
 use nomos_spec_project::SIDECAR_SUFFIX;
-
-use std::path::PathBuf;
 
 /// What the process exits with.
 ///
@@ -75,7 +72,7 @@ pub(crate) enum Command
 /// # Errors
 ///
 /// Returns a message naming what was wrong and what was expected.
-pub(crate) fn Parse(arguments: &[String]) -> Result<Command, String>
+pub(crate) fn Command_From_String_Arguments(arguments: &[String]) -> Result<Command, String>
 {
     let Some(verb) = arguments.first()
     else
@@ -87,23 +84,25 @@ pub(crate) fn Parse(arguments: &[String]) -> Result<Command, String>
 
     return match verb.as_str()
     {
-        "submit" => Parse_Submit(rest),
+        "submit" => Submit_Command_From_String_Arguments(rest),
         other => Err(format!("unknown command `{other}`.\n\n{}", Usage_Text())),
     };
 }
 
-fn Parse_Submit(arguments: &[String]) -> Result<Command, String>
+fn Submit_Command_From_String_Arguments(arguments: &[String]) -> Result<Command, String>
 {
-    let kind_text = Required_Value(arguments, "--kind")?;
+    use std::path::PathBuf;
+
+    let kind_text = Required_Value_From_String_Arguments(arguments, "--kind")?;
     let kind = Parse_Kind(&kind_text)?;
-    let id = Required_Value(arguments, "--id")?;
-    let by = Required_Value(arguments, "--by")?;
-    let state = Parse_State(Named_Value(arguments, "--state").as_deref())?;
+    let id = Required_Value_From_String_Arguments(arguments, "--id")?;
+    let by = Required_Value_From_String_Arguments(arguments, "--by")?;
+    let state = Parse_State(Named_Value_From_String_Arguments(arguments, "--state").as_deref())?;
     let contract_version =
-        Parse_Contract_Version(Named_Value(arguments, "--contract-version").as_deref())?;
-    let fields = Parse_Fields(arguments)?;
-    let gaps = Parse_Gaps(arguments)?;
-    let into = Named_Value(arguments, "--into").map(PathBuf::from);
+        Parse_Contract_Version(Named_Value_From_String_Arguments(arguments, "--contract-version").as_deref())?;
+    let fields = Fields_From_String_Arguments(arguments)?;
+    let gaps = Gaps_From_String_Arguments(arguments)?;
+    let into = Named_Value_From_String_Arguments(arguments, "--into").map(PathBuf::from);
 
     return Ok(Command::Submit(SubmitRequest {
         kind,
@@ -118,11 +117,11 @@ fn Parse_Submit(arguments: &[String]) -> Result<Command, String>
     }));
 }
 
-fn Required_Value(arguments: &[String], name: &str) -> Result<String, String>
+fn Required_Value_From_String_Arguments(arguments: &[String], name: &str) -> Result<String, String>
 {
-    let value = Named_Value(arguments, name);
+    let value = Named_Value_From_String_Arguments(arguments, name);
 
-    return Required(value.as_ref(), Name(name), Usage(&Usage_Text()));
+    return Required_Value(value.as_ref(), Name(name), Usage(&Usage_Text()));
 }
 
 fn Parse_Kind(text: &str) -> Result<SubmissionKind, String>
@@ -166,11 +165,11 @@ fn Parse_Contract_Version(text: Option<&str>) -> Result<u32, String>
 }
 
 /// Every `--field name=value`, in the order they were given.
-fn Parse_Fields(arguments: &[String]) -> Result<Vec<(String, String)>, String>
+fn Fields_From_String_Arguments(arguments: &[String]) -> Result<Vec<(String, String)>, String>
 {
     let mut fields = Vec::new();
 
-    for entry in Named_Values(arguments, "--field")
+    for entry in Named_Values_From_String_Arguments(arguments, "--field")
     {
         let Some((name, value)) = entry.split_once('=')
         else
@@ -187,11 +186,11 @@ fn Parse_Fields(arguments: &[String]) -> Result<Vec<(String, String)>, String>
 }
 
 /// Every `--gap question|blocked-fields|severity[|closed-by]`.
-fn Parse_Gaps(arguments: &[String]) -> Result<Vec<DecisionGap>, String>
+fn Gaps_From_String_Arguments(arguments: &[String]) -> Result<Vec<DecisionGap>, String>
 {
     let mut gaps = Vec::new();
 
-    for entry in Named_Values(arguments, "--gap")
+    for entry in Named_Values_From_String_Arguments(arguments, "--gap")
     {
         gaps.push(Parse_Gap(&entry)?);
     }
@@ -272,22 +271,24 @@ pub(crate) fn Run(
 {
     return match command
     {
-        Command::Submit(submit) => Submit(submit, request, output, notes),
+        Command::Submit(submit) => Assemble_And_Submit(submit, request, output, notes),
     };
 }
 
 /// Assembles the store `request` names, and dispatches `submit` against it through
-/// `nomos-spec-orchestration::Submit` -- the same composition-root choice `nomos-cli::spec`
+/// `nomos-spec-orchestration::Submit_Corpus_Request` -- the same composition-root choice `nomos-cli::spec`
 /// already makes for the other nine `SpecCommand` verbs, `nomos_platform_std::StdFileSystem`
 /// as the concrete platform.
-fn Submit(
+fn Assemble_And_Submit(
     submit: &SubmitRequest,
     request: &CorpusRequest,
     output: &mut impl std::io::Write,
     notes: &mut impl std::io::Write,
 ) -> ExitCode
 {
-    let mut assembly = match Assemble(request)
+    use nomos_platform_std::StdFileSystem;
+
+    let mut assembly = match Assemble_Corpus(request)
     {
         Ok(assembly) => assembly,
         Err(error) =>
@@ -297,9 +298,9 @@ fn Submit(
         }
     };
 
-    return match nomos_spec_orchestration::Submit(&mut assembly, submit, &StdFileSystem)
+    return match nomos_spec_orchestration::Submit_Corpus_Request(&mut assembly, submit, &StdFileSystem)
     {
-        Ok(answer) => Accepted(&answer, output),
+        Ok(answer) => Report_Accepted(&answer, output),
         Err(SubmitRefusal::Refused(refusal)) =>
         {
             let _ = writeln!(notes, "{refusal}");
@@ -310,12 +311,12 @@ fn Submit(
             let _ = writeln!(notes, "{error}");
             ExitCode::StoreError
         }
-        Err(SubmitRefusal::Written(refusal)) => Unwritten(&refusal, notes),
+        Err(SubmitRefusal::Written(refusal)) => Report_Unwritten(&refusal, notes),
     };
 }
 
 /// A submission accepted, and its `subject-dossier` projection reported if one was written.
-fn Accepted(answer: &SubmitAnswer, output: &mut impl std::io::Write) -> ExitCode
+fn Report_Accepted(answer: &SubmitAnswer, output: &mut impl std::io::Write) -> ExitCode
 {
     let _ = writeln!(
         output,
@@ -342,7 +343,7 @@ fn Accepted(answer: &SubmitAnswer, output: &mut impl std::io::Write) -> ExitCode
 
 /// The submission was accepted and its `subject-dossier` projection could not be built or
 /// placed.
-fn Unwritten(refusal: &RenderRefusal, notes: &mut impl std::io::Write) -> ExitCode
+fn Report_Unwritten(refusal: &RenderRefusal, notes: &mut impl std::io::Write) -> ExitCode
 {
     return match refusal
     {
@@ -404,7 +405,7 @@ mod tests
 {
     use super::*;
 
-    fn Arguments(text: &str) -> Vec<String>
+    fn Arguments_From_Text(text: &str) -> Vec<String>
     {
         return text.split_whitespace().map(str::to_owned).collect();
     }
@@ -412,12 +413,12 @@ mod tests
     #[test]
     fn Test_A_Submit_Command_Should_Parse_Its_Fields_And_Default_State_And_Version()
     {
-        let arguments = Arguments(
+        let arguments = Arguments_From_Text(
             "submit --kind feature-request --id FR-100 --by kevin \
              --field title=t --field goal=g",
         );
 
-        let Command::Submit(request) = Parse(&arguments).expect("parses");
+        let Command::Submit(request) = Command_From_String_Arguments(&arguments).expect("parses");
 
         assert_eq!(request.kind, SubmissionKind::FeatureRequest);
         assert_eq!(request.id, "FR-100");
@@ -434,9 +435,9 @@ mod tests
     fn Test_A_Field_With_No_Equals_Should_Be_A_Usage_Error()
     {
         let arguments =
-            Arguments("submit --kind feature-request --id FR-101 --by kevin --field oops");
+            Arguments_From_Text("submit --kind feature-request --id FR-101 --by kevin --field oops");
 
-        let error = Parse(&arguments).expect_err("must refuse");
+        let error = Command_From_String_Arguments(&arguments).expect_err("must refuse");
 
         assert!(error.contains("--field"), "{error}");
     }
@@ -444,9 +445,9 @@ mod tests
     #[test]
     fn Test_An_Unrecognised_Kind_Should_Be_A_Usage_Error()
     {
-        let arguments = Arguments("submit --kind nonsense --id FR-102 --by kevin");
+        let arguments = Arguments_From_Text("submit --kind nonsense --id FR-102 --by kevin");
 
-        let error = Parse(&arguments).expect_err("must refuse");
+        let error = Command_From_String_Arguments(&arguments).expect_err("must refuse");
 
         assert!(error.contains("--kind"), "{error}");
     }
@@ -454,12 +455,12 @@ mod tests
     #[test]
     fn Test_A_Gap_Should_Parse_Its_Blocked_Fields_And_Severity()
     {
-        let arguments = Arguments(
+        let arguments = Arguments_From_Text(
             "submit --kind feature-request --id FR-103 --by kevin \
              --gap which-substrate|behaviour,goal|blocking",
         );
 
-        let Command::Submit(request) = Parse(&arguments).expect("parses");
+        let Command::Submit(request) = Command_From_String_Arguments(&arguments).expect("parses");
 
         assert_eq!(request.gaps.len(), 1);
         let gap = request.gaps.first().expect("one gap");
@@ -472,11 +473,11 @@ mod tests
     #[test]
     fn Test_A_Parsed_Submission_Should_Carry_This_Transport_Name()
     {
-        let arguments = Arguments(
+        let arguments = Arguments_From_Text(
             "submit --kind feature-request --id FR-104 --by kevin --field title=t",
         );
 
-        let Command::Submit(request) = Parse(&arguments).expect("parses");
+        let Command::Submit(request) = Command_From_String_Arguments(&arguments).expect("parses");
 
         assert_eq!(request.submitted_through, "cli");
     }

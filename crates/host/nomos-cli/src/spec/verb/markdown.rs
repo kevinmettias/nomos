@@ -9,13 +9,13 @@ use crate::spec::{Assembly, RecordRequest, Channels, ExitCode, Report_Edit_Error
 /// store can write back out*, which is an authoring one. A flag would make the two look like
 /// two formats of one answer, and the whole point of `P9-AUTHORING` is that they were not the
 /// same answer until now.
-pub(in crate::spec) fn Markdown(
+pub(in crate::spec) fn Render_Markdown(
     assembly: &Assembly,
     request: &RecordRequest,
     channels: &mut Channels<'_>,
 ) -> ExitCode
 {
-    let projection = match nomos_spec_orchestration::Markdown(assembly, request)
+    let projection = match nomos_spec_orchestration::Rendered_Markdown(assembly, request)
     {
         Ok(projection) => projection,
         Err(error) => return Report_Edit_Error(assembly, &error, channels.notes),
@@ -28,11 +28,11 @@ pub(in crate::spec) fn Markdown(
         request.id, projection.path, projection.revision, projection.projected_hash
     );
 
-    return Reproducible(&projection, channels.notes);
+    return Reproducible_Projection(&projection, channels.notes);
 }
 
 /// Whether the store can write back the bytes it was given, said out loud when it cannot.
-pub(super) fn Reproducible(projection: &RecordProjection, notes: &mut dyn std::io::Write) -> ExitCode
+pub(super) fn Reproducible_Projection(projection: &RecordProjection, notes: &mut dyn std::io::Write) -> ExitCode
 {
     if projection.Matches_Source()
     {

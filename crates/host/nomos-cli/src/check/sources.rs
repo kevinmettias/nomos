@@ -51,7 +51,7 @@ mod tests
 /// nothing" become distinguishable typed answers, so this stays the walk and nothing else
 /// -- the same division `nomos-cli::work::Published_Records` draws around the directory
 /// listing `nomos_platform::FileSystem` has no port for.
-pub(super) fn Walked(root: &Path) -> Option<Vec<SourceFile>>
+pub(super) fn Walked_Sources(root: &Path) -> Option<Vec<SourceFile>>
 {
     if !root.is_dir()
     {
@@ -136,7 +136,7 @@ pub(super) fn Read_Entry(
 /// see `OD-MODEL-001`.
 pub(super) fn Read_Source(root: &Path, path: &Path, text: String) -> SourceFile
 {
-    let relative = Relative(root, path);
+    let relative = Relative_Path(root, path);
     let subject = Subject_Of_Path(&relative);
 
     return SourceFile::New(relative, subject, text);
@@ -146,7 +146,7 @@ pub(super) fn Read_Source(root: &Path, path: &Path, text: String) -> SourceFile
 ///
 /// Forward slashes on every platform, because a finding's location appears in output that
 /// gets pasted between machines, and the same file must not render two ways.
-pub(super) fn Relative(root: &Path, path: &Path) -> String
+pub(super) fn Relative_Path(root: &Path, path: &Path) -> String
 {
     return path
         .strip_prefix(root)

@@ -7,7 +7,7 @@
 
 /// The value following `name`, if it is present.
 #[must_use]
-pub(crate) fn Named_Value(arguments: &[String], name: &str) -> Option<String>
+pub(crate) fn Named_Value_From_String_Arguments(arguments: &[String], name: &str) -> Option<String>
 {
     let position = arguments.iter().position(|argument| return argument == name)?;
 
@@ -22,7 +22,7 @@ pub(crate) fn Named_Value(arguments: &[String], name: &str) -> Option<String>
 const NAME_AND_VALUE: usize = 2;
 
 #[must_use]
-pub(crate) fn Named_Values(arguments: &[String], name: &str) -> Vec<String>
+pub(crate) fn Named_Values_From_String_Arguments(arguments: &[String], name: &str) -> Vec<String>
 {
     let mut values = Vec::new();
     let mut index = 0_usize;
@@ -57,7 +57,7 @@ pub(crate) struct Usage<'a>(pub(crate) &'a str);
 /// # Errors
 ///
 /// Returns the message when the value is absent.
-pub(crate) fn Required(value: Option<&String>, name: Name<'_>, usage: Usage<'_>) -> Result<String, String>
+pub(crate) fn Required_Value(value: Option<&String>, name: Name<'_>, usage: Usage<'_>) -> Result<String, String>
 {
     return value
         .cloned()
@@ -69,7 +69,7 @@ mod tests
 {
     use super::*;
 
-    fn Arguments(text: &str) -> Vec<String>
+    fn Arguments_From_Text(text: &str) -> Vec<String>
     {
         return text.split_whitespace().map(str::to_owned).collect();
     }
@@ -77,10 +77,10 @@ mod tests
     #[test]
     fn Test_A_Repeated_Flag_Should_Yield_Every_Value()
     {
-        let arguments = Arguments("--path a --path b --other c --path d");
+        let arguments = Arguments_From_Text("--path a --path b --other c --path d");
 
-        assert_eq!(Named_Values(&arguments, "--path"), vec!["a", "b", "d"]);
-        assert_eq!(Named_Value(&arguments, "--path").as_deref(), Some("a"));
+        assert_eq!(Named_Values_From_String_Arguments(&arguments, "--path"), vec!["a", "b", "d"]);
+        assert_eq!(Named_Value_From_String_Arguments(&arguments, "--path").as_deref(), Some("a"));
     }
 
     /// A flag at the end of the line has no value. Reading past it would take the next
@@ -89,16 +89,16 @@ mod tests
     #[test]
     fn Test_A_Flag_With_No_Value_Should_Be_Absent()
     {
-        let arguments = Arguments("--profile github-markdown --into");
+        let arguments = Arguments_From_Text("--profile github-markdown --into");
 
-        assert_eq!(Named_Value(&arguments, "--into"), None);
-        assert!(Named_Values(&arguments, "--into").is_empty());
+        assert_eq!(Named_Value_From_String_Arguments(&arguments, "--into"), None);
+        assert!(Named_Values_From_String_Arguments(&arguments, "--into").is_empty());
     }
 
     #[test]
     fn Test_A_Missing_Required_Value_Should_Name_Itself()
     {
-        let error = Required(None, Name("--item"), Usage("usage: nomos work")).expect_err("must refuse");
+        let error = Required_Value(None, Name("--item"), Usage("usage: nomos work")).expect_err("must refuse");
 
         assert!(error.contains("--item"));
         assert!(error.contains("usage"));

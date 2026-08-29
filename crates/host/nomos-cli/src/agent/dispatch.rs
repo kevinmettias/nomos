@@ -3,15 +3,12 @@
 
 use super::{Backend, DispatchConfig, ExitCode};
 use nomos_agent_contracts::TaskEnvelope;
-use nomos_contracts::SchemaId;
-use nomos_ledger::Territory;
-use nomos_platform_std::StdProcessLauncher;
 
-pub(super) fn Execute(goal: &str, config: DispatchConfig, output: &mut impl std::io::Write, notes: &mut impl std::io::Write) -> ExitCode
+pub(super) fn Execute_Goal(goal: &str, config: DispatchConfig, output: &mut impl std::io::Write, notes: &mut impl std::io::Write) -> ExitCode
 {
-    let task = Task(goal, config.effort);
+    let task = Execute_Task(goal, config.effort);
 
-    return Dispatch(&task, config.backend, output, notes);
+    return Dispatch_Task(&task, config.backend, output, notes);
 }
 
 /// A bare `TaskEnvelope` naming only `goal` and `effort`. `scope`, `prohibited_changes` and
@@ -20,8 +17,11 @@ pub(super) fn Execute(goal: &str, config: DispatchConfig, output: &mut impl std:
 /// from yet, and inventing one ahead of a real need would repeat the mistake this workspace
 /// has already declined to make elsewhere. `expected_output_schema` names this call site
 /// rather than a real schema, since nothing here validates a response against one.
-fn Task(goal: &str, effort: nomos_model_package::EffortLevel) -> TaskEnvelope
+fn Execute_Task(goal: &str, effort: nomos_model_package::EffortLevel) -> TaskEnvelope
 {
+    use nomos_contracts::SchemaId;
+    use nomos_ledger::Territory;
+
     return TaskEnvelope {
         goal: goal.to_owned(),
         scope: Territory::Of_Files(Vec::<String>::new()),
@@ -40,19 +40,21 @@ fn Task(goal: &str, effort: nomos_model_package::EffortLevel) -> TaskEnvelope
 /// not fired even once `--executor`/`--model-backend` replaced `--backend`: there is still
 /// only one real `AgentExecutor`, so this match is the entire dispatch, not a stand-in for a
 /// trait either flag's own vocabulary would need.
-pub(super) fn Dispatch(task: &TaskEnvelope, backend: Backend, output: &mut impl std::io::Write, notes: &mut impl std::io::Write) -> ExitCode
+pub(super) fn Dispatch_Task(task: &TaskEnvelope, backend: Backend, output: &mut impl std::io::Write, notes: &mut impl std::io::Write) -> ExitCode
 {
+    use nomos_platform_std::StdProcessLauncher;
+
     return match backend
     {
-        Backend::ClaudeCode => match nomos_agent_executor_claude_code::Execute(task, &StdProcessLauncher)
+        Backend::ClaudeCode => match nomos_agent_executor_claude_code::Execute_Task(task, &StdProcessLauncher)
         {
             Ok(outcome) => Answered_Claude_Code(&outcome, output),
-            Err(error) => Unavailable(&error, notes),
+            Err(error) => Backend_Unavailable(&error, notes),
         },
-        Backend::Ollama => match nomos_model_backend_ollama::Execute(task, &StdProcessLauncher)
+        Backend::Ollama => match nomos_model_backend_ollama::Execute_Task(task, &StdProcessLauncher)
         {
             Ok(outcome) => Answered_Ollama(&outcome, output),
-            Err(error) => Unavailable(&error, notes),
+            Err(error) => Backend_Unavailable(&error, notes),
         },
     };
 }
@@ -71,7 +73,7 @@ fn Answered_Claude_Code(outcome: &nomos_agent_executor_claude_code::AgentExecuti
     return ExitCode::Ok;
 }
 
-fn Unavailable(error: &impl std::fmt::Display, notes: &mut impl std::io::Write) -> ExitCode
+fn Backend_Unavailable(error: &impl std::fmt::Display, notes: &mut impl std::io::Write) -> ExitCode
 {
     let _ = writeln!(notes, "{error}");
 

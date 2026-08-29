@@ -1,20 +1,20 @@
 //! Rendering `nomos spec record`'s answer, or the refusal saying why it has none.
 //!
 //! The resolution itself -- which document answers, or why none does -- is
-//! `nomos-spec-orchestration::Record`'s job now. This module keeps only the writing and the
+//! `nomos-spec-orchestration::Resolved_Record`'s job now. This module keeps only the writing and the
 //! `ExitCode` a rendering layer is responsible for.
 
 use crate::spec::{Assembly, RecordRequest, Channels, ExitCode, Report_Store_Error, DocumentSource, Absent_Or, NodeSummary};
 use nomos_spec_orchestration::{RecordAnswer, RecordRefusal};
 
 /// Phase 2's question: what did this record say?
-pub(in crate::spec) fn Record(
+pub(in crate::spec) fn Read_Record(
     assembly: &Assembly,
     request: &RecordRequest,
     channels: &mut Channels<'_>,
 ) -> ExitCode
 {
-    return match nomos_spec_orchestration::Record(assembly, request)
+    return match nomos_spec_orchestration::Resolved_Record(assembly, request)
     {
         Ok(answer) => Printed_Record(&answer, channels),
         Err(RecordRefusal::Store(error)) => Report_Store_Error(&error, channels.notes),

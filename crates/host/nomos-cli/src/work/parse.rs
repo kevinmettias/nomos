@@ -7,7 +7,7 @@ use nomos_ledger::{
     VerificationPredicate,
 };
 
-use crate::arguments::{Named_Value, Named_Values};
+use crate::arguments::{Named_Value_From_String_Arguments, Named_Values_From_String_Arguments};
 
 use super::{ClaimRequest, EndingRequest, WorkCommand};
 
@@ -16,14 +16,14 @@ use super::{ClaimRequest, EndingRequest, WorkCommand};
 /// # Errors
 ///
 /// Returns a message naming what was wrong and what was expected.
-pub fn Parse(arguments: &[String]) -> Result<WorkCommand, String>
+pub fn Work_Command_From_String_Arguments(arguments: &[String]) -> Result<WorkCommand, String>
 {
     let Some(verb) = arguments.first()
     else
     {
         return Err(Usage_Text());
     };
-    let Split { named, predicate_argv } = Split_At_Separator(arguments);
+    let Split { named, predicate_argv } = Split_From_String_Arguments(arguments);
 
     return match verb.as_str()
     {
@@ -56,7 +56,7 @@ struct Split<'a>
 /// Everything after the separator is the predicate's own argv, so a predicate carrying its
 /// own flags needs no quoting and no escaping. The split happens once here rather than
 /// per-command.
-fn Split_At_Separator(arguments: &[String]) -> Split<'_>
+fn Split_From_String_Arguments(arguments: &[String]) -> Split<'_>
 {
     let Some(index) = arguments.iter().position(|argument| return argument == "--")
     else
@@ -80,7 +80,7 @@ fn Split_At_Separator(arguments: &[String]) -> Split<'_>
 fn Parse_List(named: &[String]) -> WorkCommand
 {
     return WorkCommand::List {
-        state: Named_Value(named, "--state"),
+        state: Named_Value_From_String_Arguments(named, "--state"),
     };
 }
 
@@ -98,10 +98,10 @@ fn Parse_Show(named: &[String]) -> Result<WorkCommand, String>
 /// the one that silently opts out of the exclusion the ledger exists to provide.
 fn Parse_Add(named: &[String], predicate_argv: &[String]) -> Result<WorkCommand, String>
 {
-    let amended = Named_Values(named, "--amends");
+    let amended = Named_Values_From_String_Arguments(named, "--amends");
     let amending = Territory::Of_Files(amended);
     let territory = Parse_Territory(named, &amending)?;
-    let verification = Timed(Parse_Predicate(predicate_argv), named)?;
+    let verification = Timed_Predicate(Parse_Predicate(predicate_argv), named)?;
     let item = New_Item(named, territory, verification)?;
 
     return Ok(WorkCommand::Add {
@@ -119,12 +119,12 @@ fn Parse_Add(named: &[String], predicate_argv: &[String]) -> Result<WorkCommand,
 /// the easy mistake instead of an impossible one.
 fn Parse_Territory(named: &[String], amending: &Territory) -> Result<Territory, String>
 {
-    if let Some(pattern) = Named_Values(named, "--territory-pattern").first()
+    if let Some(pattern) = Named_Values_From_String_Arguments(named, "--territory-pattern").first()
     {
         return Err(Refuse_A_Pattern(pattern));
     }
 
-    let mut paths = Named_Values(named, "--territory");
+    let mut paths = Named_Values_From_String_Arguments(named, "--territory");
     paths.extend(amending.paths.iter().cloned());
 
     if paths.is_empty()
@@ -169,15 +169,15 @@ fn Refuse_A_Pattern(pattern: &str) -> String
 /// Applies `--timeout` to a parsed predicate, or refuses it when there is no predicate to
 /// bound.
 ///
-/// `VerificationPredicate::New` always starts a predicate at its own ten-minute default,
+/// `VerificationPredicate::From_String_Arguments` always starts a predicate at its own ten-minute default,
 /// which is too short for a territory that legitimately runs quiet for a while — a
 /// corpus-backed crate's determinism test, for one, which can stay silent for several
 /// minutes before printing anything and trips `nomos-ledger`'s idle bound (half the wall
 /// bound) long before the wall bound itself would. Without this flag no author could ever
 /// declare a predicate patient enough for that territory, on any item, ever.
-fn Timed(predicate: Option<VerificationPredicate>, named: &[String]) -> Result<Option<VerificationPredicate>, String>
+fn Timed_Predicate(predicate: Option<VerificationPredicate>, named: &[String]) -> Result<Option<VerificationPredicate>, String>
 {
-    let Some(text) = Named_Value(named, "--timeout")
+    let Some(text) = Named_Value_From_String_Arguments(named, "--timeout")
     else
     {
         return Ok(predicate);
@@ -206,7 +206,7 @@ fn Parse_Predicate(predicate_argv: &[String]) -> Option<VerificationPredicate>
         return None;
     }
 
-    return Some(VerificationPredicate::New(predicate_argv.to_vec()));
+    return Some(VerificationPredicate::From_String_Arguments(predicate_argv.to_vec()));
 }
 
 /// The item itself, from the arguments describing it.
@@ -216,14 +216,14 @@ fn New_Item(
     verification: Option<VerificationPredicate>,
 ) -> Result<LedgerItem, String>
 {
-    let value_of = |name: &str| Named_Value(named, name);
-    let depends_on = Named_Values(named, "--depends-on").into_iter().map(ItemId::New);
+    let value_of = |name: &str| Named_Value_From_String_Arguments(named, name);
+    let depends_on = Named_Values_From_String_Arguments(named, "--depends-on").into_iter().map(ItemId::New);
 
     return Ok(LedgerItem {
         id: Item_Of(named)?,
-        title: Required(value_of("--title").as_ref(), "--title")?,
-        why: Required(value_of("--why").as_ref(), "--why")?,
-        done_when: Required(value_of("--done-when").as_ref(), "--done-when")?,
+        title: Required_Value(value_of("--title").as_ref(), "--title")?,
+        why: Required_Value(value_of("--why").as_ref(), "--why")?,
+        done_when: Required_Value(value_of("--done-when").as_ref(), "--done-when")?,
         kind: Kind_Of(named)?,
         origin: Origin_Of(named)?,
         territory,
@@ -245,7 +245,7 @@ fn New_Item(
 /// work it is is exactly the row that record exists to stop being written.
 fn Kind_Of(named: &[String]) -> Result<ItemKind, String>
 {
-    let text = Required(Named_Value(named, "--kind").as_ref(), "--kind")?;
+    let text = Required_Value(Named_Value_From_String_Arguments(named, "--kind").as_ref(), "--kind")?;
 
     return match text.as_str()
     {
@@ -267,7 +267,7 @@ fn Kind_Of(named: &[String]) -> Result<ItemKind, String>
 /// Required, for the reason [`Kind_Of`] is.
 fn Origin_Of(named: &[String]) -> Result<ItemOrigin, String>
 {
-    let text = Required(Named_Value(named, "--origin").as_ref(), "--origin")?;
+    let text = Required_Value(Named_Value_From_String_Arguments(named, "--origin").as_ref(), "--origin")?;
 
     return match text.as_str()
     {
@@ -300,7 +300,7 @@ fn Parse_Finish(named: &[String]) -> Result<WorkCommand, String>
 /// fallthrough it would displace a holder instead.
 fn Parse_Reservation(verb: &str, named: &[String]) -> Result<WorkCommand, String>
 {
-    let lease = Named_Value(named, "--lease")
+    let lease = Named_Value_From_String_Arguments(named, "--lease")
         .map_or(Ok(DEFAULT_LEASE), |text| return Parse_Duration(&text))?;
     let request = ClaimRequest {
         item: Item_Of(named)?,
@@ -426,7 +426,7 @@ const NOTES: &str = "\neverything after `--` is the verification predicate, run 
 /// The item an argument list names.
 fn Item_Of(named: &[String]) -> Result<ItemId, String>
 {
-    let text = Required(Named_Value(named, "--item").as_ref(), "--item")?;
+    let text = Required_Value(Named_Value_From_String_Arguments(named, "--item").as_ref(), "--item")?;
 
     return Ok(ItemId::New(text));
 }
@@ -434,13 +434,13 @@ fn Item_Of(named: &[String]) -> Result<ItemId, String>
 /// The holder an argument list names.
 fn Holder_Of(named: &[String]) -> Result<String, String>
 {
-    return Required(Named_Value(named, "--holder").as_ref(), "--holder");
+    return Required_Value(Named_Value_From_String_Arguments(named, "--holder").as_ref(), "--holder");
 }
 
 /// The reason an argument list gives.
 fn Reason_Of(named: &[String]) -> Result<String, String>
 {
-    return Required(Named_Value(named, "--reason").as_ref(), "--reason");
+    return Required_Value(Named_Value_From_String_Arguments(named, "--reason").as_ref(), "--reason");
 }
 
 /// The three words `abandon` and `decline` both take.
@@ -453,7 +453,7 @@ fn Ending_Request(named: &[String]) -> Result<EndingRequest, String>
     });
 }
 
-fn Required(value: Option<&String>, name: &str) -> Result<String, String>
+fn Required_Value(value: Option<&String>, name: &str) -> Result<String, String>
 {
-    return crate::arguments::Required(value, crate::arguments::Name(name), crate::arguments::Usage(&Usage_Text()));
+    return crate::arguments::Required_Value(value, crate::arguments::Name(name), crate::arguments::Usage(&Usage_Text()));
 }

@@ -6,7 +6,6 @@
 //! composition-root concern (`OD-HOST-002`'s family 3), and this crate is a second,
 //! independent composition root, not a caller of `nomos-cli`'s.
 
-use nomos_model::Subject_Of_Path;
 use nomos_rules::SourceFile;
 use std::path::{Path, PathBuf};
 
@@ -53,7 +52,7 @@ mod tests
 }
 
 /// The Rust and Go sources under `root`, or `None` if `root` is not a directory.
-pub(crate) fn Walked(root: &Path) -> Option<Vec<SourceFile>>
+pub(crate) fn Walked_Sources(root: &Path) -> Option<Vec<SourceFile>>
 {
     if !root.is_dir()
     {
@@ -128,14 +127,16 @@ fn Read_Entry(root: &Path, path: PathBuf, pending: &mut Vec<PathBuf>, sources: &
 /// One source file as the rule takes it.
 fn Read_Source(root: &Path, path: &Path, text: String) -> SourceFile
 {
-    let relative = Relative(root, path);
+    use nomos_model::Subject_Of_Path;
+
+    let relative = Relative_Path(root, path);
     let subject = Subject_Of_Path(&relative);
 
     return SourceFile::New(relative, subject, text);
 }
 
 /// A path as it should be reported: relative to the tree, forward slashes.
-fn Relative(root: &Path, path: &Path) -> String
+fn Relative_Path(root: &Path, path: &Path) -> String
 {
     return path
         .strip_prefix(root)

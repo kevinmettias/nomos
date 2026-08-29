@@ -2,11 +2,9 @@
 //! `nomos_rules::Check_Declared_Role_Matches_Surface`, and dispatching the finding it
 //! produces.
 
-use super::dispatch::Dispatch;
 use super::{DispatchConfig, ExitCode};
 use nomos_agent_contracts::TaskEnvelope;
 use nomos_contracts::{Finding, SchemaId};
-use nomos_ledger::Territory;
 use nomos_rules::RoleSurfacePair;
 use std::path::Path;
 
@@ -33,6 +31,8 @@ pub(super) fn Judge_Role(
     notes: &mut impl std::io::Write,
 ) -> ExitCode
 {
+    use super::dispatch::Dispatch_Task;
+
     let pair = match Role_Surface_Pair(request, notes)
     {
         Ok(pair) => pair,
@@ -47,7 +47,7 @@ pub(super) fn Judge_Role(
 
     let task = Judgment_Task(&pair, &finding, config.effort);
 
-    return Dispatch(&task, config.backend, output, notes);
+    return Dispatch_Task(&task, config.backend, output, notes);
 }
 
 /// `request`'s declared role and actual surface, read and paired -- [`Judge_Role`]'s own
@@ -114,6 +114,8 @@ fn Judged_Finding(pair: &RoleSurfacePair, notes: &mut impl std::io::Write) -> Re
 /// so the dispatched question is traceably the rule's own, not a paraphrase invented here.
 fn Judgment_Task(pair: &RoleSurfacePair, finding: &Finding, effort: nomos_model_package::EffortLevel) -> TaskEnvelope
 {
+    use nomos_ledger::Territory;
+
     let goal = format!(
         "A Rust crate's declared role, from its workspace README's band table: {}\n\n\
          The crate's actual public surface, as a list of every item it exports:\n{}\n\n\
@@ -135,14 +137,17 @@ fn Judgment_Task(pair: &RoleSurfacePair, finding: &Finding, effort: nomos_model_
     };
 }
 
+/// Which pipe-delimited cell of a `README.md` band-table row holds a crate's name.
+const README_TABLE_CRATE_NAME_COLUMN: usize = 2;
+
+/// Which pipe-delimited cell of a `README.md` band-table row holds the crate's declared role.
+const README_TABLE_ROLE_COLUMN: usize = 3;
+
 /// `README.md`'s band-table row for `crate_name` — the third pipe-delimited cell of the
 /// row whose second cell, backticks stripped, is `crate_name` exactly. `None` if no row
 /// names it.
 pub(super) fn Declared_Role(root: &Path, crate_name: &str) -> Option<String>
 {
-    const README_TABLE_CRATE_NAME_COLUMN: usize = 2;
-    const README_TABLE_ROLE_COLUMN: usize = 3;
-
     let text = std::fs::read_to_string(root.join("README.md")).ok()?;
 
     for line in text.lines()

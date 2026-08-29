@@ -1,6 +1,6 @@
 //! What `nomos check` was asked for.
 
-use super::{CheckCommand, Named_Value, PathBuf};
+use super::{CheckCommand, Named_Value_From_String_Arguments, PathBuf};
 
 pub(super) const USAGE: &str = "usage: nomos check [--root <path>]\n\n\
      Runs every rule over the tree and reports what they find.\n\n\
@@ -16,7 +16,7 @@ pub(super) const USAGE: &str = "usage: nomos check [--root <path>]\n\n\
 /// # Errors
 ///
 /// Returns the usage message when an argument is not understood.
-pub fn Parse(arguments: &[String]) -> Result<CheckCommand, String>
+pub fn Check_Command_From_String_Arguments(arguments: &[String]) -> Result<CheckCommand, String>
 {
     if let Some(unknown) = arguments
         .iter()
@@ -26,6 +26,6 @@ pub fn Parse(arguments: &[String]) -> Result<CheckCommand, String>
     }
 
     return Ok(CheckCommand {
-        root: Named_Value(arguments, "--root").map_or_else(|| return PathBuf::from("."), PathBuf::from),
+        root: Named_Value_From_String_Arguments(arguments, "--root").map_or_else(|| return PathBuf::from("."), PathBuf::from),
     });
 }

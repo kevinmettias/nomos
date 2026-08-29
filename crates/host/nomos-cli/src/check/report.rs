@@ -136,7 +136,7 @@ impl Coverage
 
 /// Turns what [`nomos_check_orchestration::Run`] produced — or a walk decision the
 /// composition root made before ever calling it — into text and an [`ExitCode`].
-pub(super) fn Render(root: &Path, outcome: &CheckOutcome, stdout: &mut impl Write, stderr: &mut impl Write) -> ExitCode
+pub(super) fn Render_Outcome(root: &Path, outcome: &CheckOutcome, stdout: &mut impl Write, stderr: &mut impl Write) -> ExitCode
 {
     return match outcome
     {
@@ -144,7 +144,7 @@ pub(super) fn Render(root: &Path, outcome: &CheckOutcome, stdout: &mut impl Writ
         CheckOutcome::Contradictory(error) => Render_Contradictory(error, stderr),
         CheckOutcome::NoSource => Render_No_Source(root, stderr),
         CheckOutcome::NoFacts { files } => Render_No_Facts(root, *files, stderr),
-        CheckOutcome::Judged { findings, examined, claim } => Report(findings, *examined, *claim, stdout),
+        CheckOutcome::Judged { findings, examined, claim } => Report_Findings(findings, *examined, *claim, stdout),
     };
 }
 
@@ -202,7 +202,7 @@ fn Render_No_Facts(root: &Path, files: usize, stderr: &mut impl Write) -> ExitCo
 }
 
 /// Renders the findings and decides the exit code.
-fn Report(findings: &[Finding], examined: Examined, claim: Claim, stdout: &mut impl Write) -> ExitCode
+fn Report_Findings(findings: &[Finding], examined: Examined, claim: Claim, stdout: &mut impl Write) -> ExitCode
 {
     for finding in findings
     {
@@ -213,7 +213,7 @@ fn Report(findings: &[Finding], examined: Examined, claim: Claim, stdout: &mut i
         .iter()
         .filter(|finding| return finding.Can_Fail_A_Build())
         .count();
-    Counts(findings, examined, claim, stdout);
+    Print_Counts(findings, examined, claim, stdout);
 
     if blocking > 0
     {
@@ -231,7 +231,7 @@ fn Report(findings: &[Finding], examined: Examined, claim: Claim, stdout: &mut i
 /// reached a judgment about everything and "0 findings" over a run that could not judge a
 /// third of it are a third pair a reader must not be left to conflate, which is what the
 /// claim line and the coverage breakdown below say.
-fn Counts(findings: &[Finding], examined: Examined, claim: Claim, stdout: &mut impl Write)
+fn Print_Counts(findings: &[Finding], examined: Examined, claim: Claim, stdout: &mut impl Write)
 {
     let found = findings.len();
     let blocking = findings
@@ -362,7 +362,7 @@ mod tests
     {
         let mut stdout = Vec::new();
 
-        let _code = Report(&[], Examined { files: 41, facts: 39 }, Claim::Complete, &mut stdout);
+        let _code = Report_Findings(&[], Examined { files: 41, facts: 39 }, Claim::Complete, &mut stdout);
 
         let rendered = String::from_utf8(stdout).expect("output is utf-8");
 
@@ -378,13 +378,13 @@ mod tests
     {
         let clean_examined = Examined { files: 1, facts: 1 };
         let mut clean_stdout = Vec::new();
-        let _clean_code = Report(&[], clean_examined, Claim_Of(&[]), &mut clean_stdout);
+        let _clean_code = Report_Findings(&[], clean_examined, Claim_Of(&[]), &mut clean_stdout);
         let clean_rendered = String::from_utf8(clean_stdout).expect("utf-8");
 
         let debt = vec![Finding_With(Applicability::DependencyUnavailable)];
         let debt_examined = Examined { files: 1, facts: 0 };
         let mut debt_stdout = Vec::new();
-        let _debt_code = Report(&debt, debt_examined, Claim_Of(&debt), &mut debt_stdout);
+        let _debt_code = Report_Findings(&debt, debt_examined, Claim_Of(&debt), &mut debt_stdout);
         let debt_rendered = String::from_utf8(debt_stdout).expect("utf-8");
 
         assert_ne!(

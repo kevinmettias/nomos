@@ -1,9 +1,8 @@
 //! [`Handle_Work_Renew`]. Its own response type, [`super::WorkReservationResponse`], lives in
-//! [`super::reservation`] -- see that module's own doc for why it cannot live beside this
-//! function, [`super::claim::Handle_Work_Claim`] or [`super::take_over::Handle_Work_TakeOver`].
+//! [`super::work_reservation_response`] -- see that module's own doc for why it cannot live
+//! beside this function, [`super::claim::Handle_Work_Claim`] or
+//! [`super::take_over::Handle_Work_TakeOver`].
 
-use nomos_ledger::Territory;
-use nomos_platform_std::StdProcessLauncher;
 use nomos_work_orchestration::{ClaimRequest, WorkCommand};
 use std::path::Path;
 
@@ -14,6 +13,9 @@ use super::{Ledger_At, WorkReservationResponse};
 #[must_use]
 pub fn Handle_Work_Renew(directory: &Path, request: &ClaimRequest) -> WorkReservationResponse
 {
+    use nomos_ledger::Territory;
+    use nomos_platform_std::StdProcessLauncher;
+
     let mut ledger = Ledger_At(directory);
 
     let outcome = nomos_work_orchestration::Run(
@@ -53,6 +55,10 @@ mod tests
         let WorkReservationResponse::Reserved { reservation } = response
         else
         {
+            // This fixture claims the item as "test-holder" and then renews it as the same
+            // holder, so a grant is the only correct outcome -- reaching a refusal here means
+            // the renewal path itself regressed, not a condition this test should assert
+            // around.
             panic!("renewing a claim this holder already has grants a reservation");
         };
         assert_eq!(reservation.item, id);

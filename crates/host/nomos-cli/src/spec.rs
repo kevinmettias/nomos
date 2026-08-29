@@ -25,7 +25,7 @@
 //! # What moved to `nomos-spec-orchestration`
 //!
 //! [`SpecCommand`], its six `*Request` types and the corpus-assembly plumbing
-//! ([`Assemble`], [`Assembly`], [`CorpusRequest`]) all moved verbatim to
+//! ([`Assemble_Corpus`], [`Assembly`], [`CorpusRequest`]) all moved verbatim to
 //! `nomos-spec-orchestration` — `OD-HOST-002`'s family-9 seam, the same shape
 //! `nomos-check-orchestration` already built for `nomos check`. All nine verbs are wired
 //! through that crate's own [`nomos_spec_orchestration::Run`], built over four increments:
@@ -48,11 +48,12 @@ mod verb;
 #[cfg(test)]
 mod tests;
 
-pub use parsing::Parse;
+pub use parsing::Spec_Command_From_String_Arguments;
 use reporting::{Absent_Or, Report_Project_Error, Report_Store_Error};
 use verb::{
-    Commit, Empty_Section, EmptySection, Freshness_Of, Markdown, No_Such_Profile, Preview,
-    Profiles, Record, Render, Report_Build_Error, Report_Edit_Error, Sources, Table,
+    Commit_Edit, Empty_Section, EmptySection, Freshness_Of, List_Profiles, List_Sources,
+    No_Such_Profile, Preview_Edit, Read_Record, Read_Table, Render_Markdown, Render_Profile,
+    Report_Build_Error, Report_Edit_Error,
 };
 
 mod exit_code;
@@ -63,8 +64,8 @@ pub(crate) use nomos_spec_orchestration::{
     TableRequest,
 };
 
-use crate::arguments::{Name, Named_Value, Named_Values, Required, Usage};
-use nomos_spec_orchestration::corpus::{Assemble, Assembly, CorpusRequest};
+use crate::arguments::{Name, Named_Value_From_String_Arguments, Named_Values_From_String_Arguments, Required_Value, Usage};
+use nomos_spec_orchestration::corpus::{Assemble_Corpus, Assembly, CorpusRequest};
 use nomos_spec_project::{Profile, ProjectError, SIDECAR_SUFFIX, Stamp};
 use nomos_spec_store::{
     CommitReport, DocumentSource, EditError, EditPreview, NodeSummary, PathMatch, RecordProjection, RowCensus,
@@ -99,12 +100,12 @@ pub fn Run(
     {
         // The catalogue is embedded and answers without a store, so building one would
         // make listing the profiles fail on a machine that cannot open a database.
-        return Profiles(&mut Channels { output, notes });
+        return List_Profiles(&mut Channels { output, notes });
     }
 
     let mut channels = Channels { output, notes };
 
-    let mut assembly = match Assemble(request)
+    let mut assembly = match Assemble_Corpus(request)
     {
         Ok(assembly) => assembly,
         Err(error) => return Report_Store_Error(&error, channels.notes),
@@ -112,7 +113,7 @@ pub fn Run(
 
     Note_Absences(command, &assembly, channels.notes);
 
-    return Dispatch(command, &mut assembly, &mut channels);
+    return Dispatch_Command(command, &mut assembly, &mut channels);
 }
 
 /// What the store was missing, said on the way through.
@@ -131,20 +132,20 @@ fn Note_Absences(command: &SpecCommand, assembly: &Assembly, notes: &mut dyn std
 }
 
 /// The verb itself, against a store that is already assembled and already reported on.
-fn Dispatch(command: &SpecCommand, assembly: &mut Assembly, channels: &mut Channels<'_>)
+fn Dispatch_Command(command: &SpecCommand, assembly: &mut Assembly, channels: &mut Channels<'_>)
     -> ExitCode
 {
     return match command
     {
-        SpecCommand::Record(request) => Record(assembly, request, channels),
-        SpecCommand::Table(request) => Table(assembly, request, channels),
-        SpecCommand::Render(request) => Render(assembly, request, channels),
+        SpecCommand::Record(request) => Read_Record(assembly, request, channels),
+        SpecCommand::Table(request) => Read_Table(assembly, request, channels),
+        SpecCommand::Render(request) => Render_Profile(assembly, request, channels),
         SpecCommand::Freshness(request) => Freshness_Of(assembly, request, channels),
-        SpecCommand::Markdown(request) => Markdown(assembly, request, channels),
-        SpecCommand::Preview(request) => Preview(assembly, request, channels),
-        SpecCommand::Commit(request) => Commit(assembly, request, channels),
-        SpecCommand::Profiles => Profiles(channels),
-        SpecCommand::Sources => Sources(assembly, channels.output),
+        SpecCommand::Markdown(request) => Render_Markdown(assembly, request, channels),
+        SpecCommand::Preview(request) => Preview_Edit(assembly, request, channels),
+        SpecCommand::Commit(request) => Commit_Edit(assembly, request, channels),
+        SpecCommand::Profiles => List_Profiles(channels),
+        SpecCommand::Sources => List_Sources(assembly, channels.output),
     };
 }
 

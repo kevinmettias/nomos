@@ -14,7 +14,7 @@ fn Test_An_Execute_Command_Should_Parse_Its_Goal()
 {
     let arguments = Arguments("execute --goal hello");
 
-    let Command::Execute { goal, effort, backend } = Parse(&arguments).expect("parses") else { panic!("wrong variant") };
+    let Command::Execute { goal, effort, backend } = Command_From_String_Arguments(&arguments).expect("parses") else { panic!("wrong variant") };
 
     assert_eq!(goal, "hello");
     assert_eq!(effort, nomos_model_package::EffortLevel::BackendDefault);
@@ -29,7 +29,7 @@ fn Test_An_Execute_Command_With_No_Effort_Defaults_To_Backend_Default()
 {
     let arguments = Arguments("execute --goal hello");
 
-    let Command::Execute { effort, .. } = Parse(&arguments).expect("parses") else { panic!("wrong variant") };
+    let Command::Execute { effort, .. } = Command_From_String_Arguments(&arguments).expect("parses") else { panic!("wrong variant") };
 
     assert_eq!(effort, nomos_model_package::EffortLevel::BackendDefault);
 }
@@ -39,7 +39,7 @@ fn Test_An_Execute_Command_Should_Parse_Its_Effort()
 {
     let arguments = Arguments("execute --goal hello --effort high");
 
-    let Command::Execute { effort, .. } = Parse(&arguments).expect("parses") else { panic!("wrong variant") };
+    let Command::Execute { effort, .. } = Command_From_String_Arguments(&arguments).expect("parses") else { panic!("wrong variant") };
 
     assert_eq!(effort, nomos_model_package::EffortLevel::High);
 }
@@ -65,7 +65,7 @@ fn Test_An_Execute_Command_Parses_Every_Effort_Spelling()
     {
         let arguments = Arguments(&format!("execute --goal hello --effort {spelling}"));
 
-        let Command::Execute { effort, .. } = Parse(&arguments).expect("parses") else { panic!("wrong variant") };
+        let Command::Execute { effort, .. } = Command_From_String_Arguments(&arguments).expect("parses") else { panic!("wrong variant") };
 
         assert_eq!(effort, expected, "spelling {spelling}");
     }
@@ -76,7 +76,7 @@ fn Test_An_Unrecognized_Effort_Should_Be_A_Usage_Error()
 {
     let arguments = Arguments("execute --goal hello --effort superhuman");
 
-    let error = Parse(&arguments).expect_err("must refuse");
+    let error = Command_From_String_Arguments(&arguments).expect_err("must refuse");
 
     assert!(error.contains("--effort"), "{error}");
     assert!(error.contains("superhuman"), "{error}");
@@ -89,7 +89,7 @@ fn Test_An_Execute_Command_With_No_Backend_Defaults_To_Claude_Code()
 {
     let arguments = Arguments("execute --goal hello");
 
-    let Command::Execute { backend, .. } = Parse(&arguments).expect("parses") else { panic!("wrong variant") };
+    let Command::Execute { backend, .. } = Command_From_String_Arguments(&arguments).expect("parses") else { panic!("wrong variant") };
 
     assert_eq!(backend, Backend::ClaudeCode);
 }
@@ -99,7 +99,7 @@ fn Test_An_Execute_Command_Parses_Executor_Claude_Code()
 {
     let arguments = Arguments("execute --goal hello --executor claude-code");
 
-    let Command::Execute { backend, .. } = Parse(&arguments).expect("parses") else { panic!("wrong variant") };
+    let Command::Execute { backend, .. } = Command_From_String_Arguments(&arguments).expect("parses") else { panic!("wrong variant") };
 
     assert_eq!(backend, Backend::ClaudeCode);
 }
@@ -109,7 +109,7 @@ fn Test_An_Execute_Command_Parses_Model_Backend_Ollama()
 {
     let arguments = Arguments("execute --goal hello --model-backend ollama");
 
-    let Command::Execute { backend, .. } = Parse(&arguments).expect("parses") else { panic!("wrong variant") };
+    let Command::Execute { backend, .. } = Command_From_String_Arguments(&arguments).expect("parses") else { panic!("wrong variant") };
 
     assert_eq!(backend, Backend::Ollama);
 }
@@ -119,7 +119,7 @@ fn Test_An_Unrecognized_Executor_Should_Be_A_Usage_Error()
 {
     let arguments = Arguments("execute --goal hello --executor gpt5");
 
-    let error = Parse(&arguments).expect_err("must refuse");
+    let error = Command_From_String_Arguments(&arguments).expect_err("must refuse");
 
     assert!(error.contains("--executor"), "{error}");
     assert!(error.contains("gpt5"), "{error}");
@@ -130,7 +130,7 @@ fn Test_An_Unrecognized_Model_Backend_Should_Be_A_Usage_Error()
 {
     let arguments = Arguments("execute --goal hello --model-backend gpt5");
 
-    let error = Parse(&arguments).expect_err("must refuse");
+    let error = Command_From_String_Arguments(&arguments).expect_err("must refuse");
 
     assert!(error.contains("--model-backend"), "{error}");
     assert!(error.contains("gpt5"), "{error}");
@@ -144,7 +144,7 @@ fn Test_Both_Executor_And_Model_Backend_Together_Should_Be_A_Usage_Error()
 {
     let arguments = Arguments("execute --goal hello --executor claude-code --model-backend ollama");
 
-    let error = Parse(&arguments).expect_err("must refuse");
+    let error = Command_From_String_Arguments(&arguments).expect_err("must refuse");
 
     assert!(error.contains("--executor"), "{error}");
     assert!(error.contains("--model-backend"), "{error}");
@@ -155,7 +155,7 @@ fn Test_A_Judge_Role_Command_Should_Parse_Its_Model_Backend()
 {
     let arguments = Arguments("judge-role --crate nomos-agent-executor-claude-code --model-backend ollama");
 
-    let Command::JudgeRole { backend, .. } = Parse(&arguments).expect("parses") else { panic!("wrong variant") };
+    let Command::JudgeRole { backend, .. } = Command_From_String_Arguments(&arguments).expect("parses") else { panic!("wrong variant") };
 
     assert_eq!(backend, Backend::Ollama);
 }
@@ -165,7 +165,7 @@ fn Test_A_Missing_Goal_Should_Be_A_Usage_Error()
 {
     let arguments = Arguments("execute");
 
-    let error = Parse(&arguments).expect_err("must refuse");
+    let error = Command_From_String_Arguments(&arguments).expect_err("must refuse");
 
     assert!(error.contains("--goal"));
 }
@@ -175,7 +175,7 @@ fn Test_An_Unknown_Verb_Should_Be_A_Usage_Error()
 {
     let arguments = Arguments("dance");
 
-    let error = Parse(&arguments).expect_err("must refuse");
+    let error = Command_From_String_Arguments(&arguments).expect_err("must refuse");
 
     assert!(error.contains("dance"));
 }
@@ -183,7 +183,7 @@ fn Test_An_Unknown_Verb_Should_Be_A_Usage_Error()
 #[test]
 fn Test_No_Verb_At_All_Should_Be_A_Usage_Error()
 {
-    let error = Parse(&[]).expect_err("must refuse");
+    let error = Command_From_String_Arguments(&[]).expect_err("must refuse");
 
     assert!(error.contains("usage"));
 }
@@ -196,7 +196,7 @@ fn Test_No_Verb_At_All_Should_Be_A_Usage_Error()
 fn Test_An_Empty_Goal_Still_Parses()
 {
     let arguments = Arguments("execute --goal");
-    let error = Parse(&arguments).expect_err("a flag with nothing after it has no value");
+    let error = Command_From_String_Arguments(&arguments).expect_err("a flag with nothing after it has no value");
 
     assert!(error.contains("--goal"));
 }
@@ -206,7 +206,7 @@ fn Test_A_Judge_Role_Command_Should_Parse_Its_Crate_And_Default_Root()
 {
     let arguments = Arguments("judge-role --crate nomos-agent-executor-claude-code");
 
-    let Command::JudgeRole { crate_name, root, effort, backend } = Parse(&arguments).expect("parses") else { panic!("wrong variant") };
+    let Command::JudgeRole { crate_name, root, effort, backend } = Command_From_String_Arguments(&arguments).expect("parses") else { panic!("wrong variant") };
 
     assert_eq!(crate_name, "nomos-agent-executor-claude-code");
     assert_eq!(root, PathBuf::from("."));
@@ -219,7 +219,7 @@ fn Test_A_Judge_Role_Command_Should_Parse_An_Explicit_Root()
 {
     let arguments = Arguments("judge-role --crate nomos-agent-executor --root /some/tree");
 
-    let Command::JudgeRole { root, .. } = Parse(&arguments).expect("parses") else { panic!("wrong variant") };
+    let Command::JudgeRole { root, .. } = Command_From_String_Arguments(&arguments).expect("parses") else { panic!("wrong variant") };
 
     assert_eq!(root, PathBuf::from("/some/tree"));
 }
@@ -229,7 +229,7 @@ fn Test_A_Judge_Role_Command_Should_Parse_Its_Effort()
 {
     let arguments = Arguments("judge-role --crate nomos-agent-executor-claude-code --effort low");
 
-    let Command::JudgeRole { effort, .. } = Parse(&arguments).expect("parses") else { panic!("wrong variant") };
+    let Command::JudgeRole { effort, .. } = Command_From_String_Arguments(&arguments).expect("parses") else { panic!("wrong variant") };
 
     assert_eq!(effort, nomos_model_package::EffortLevel::Low);
 }
@@ -239,7 +239,7 @@ fn Test_A_Missing_Crate_Should_Be_A_Usage_Error()
 {
     let arguments = Arguments("judge-role");
 
-    let error = Parse(&arguments).expect_err("must refuse");
+    let error = Command_From_String_Arguments(&arguments).expect_err("must refuse");
 
     assert!(error.contains("--crate"));
 }

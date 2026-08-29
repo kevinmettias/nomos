@@ -36,7 +36,7 @@ pub(crate) struct Until<'a>(pub(crate) &'a str);
 /// names `git diff` prints. Nonempty output means yes.
 pub(crate) fn Endpoint_Diff(root: &Path, since: Since<'_>, until: Until<'_>, path: &str) -> Command
 {
-    return In(
+    return Command_From_Arguments_In(
         root,
         vec![
             "git".to_owned(),
@@ -55,7 +55,7 @@ pub(crate) fn Endpoint_Diff(root: &Path, since: Since<'_>, until: Until<'_>, pat
 /// itself.
 pub(crate) fn Path_History(root: &Path, since: Since<'_>, until: Until<'_>, path: &str) -> Command
 {
-    return In(
+    return Command_From_Arguments_In(
         root,
         vec![
             "git".to_owned(),
@@ -74,7 +74,7 @@ pub(crate) fn Path_History(root: &Path, since: Since<'_>, until: Until<'_>, path
 /// run checks, and `docs/records/` is not scoped to any one of them.
 pub(crate) fn Records_Touched_In_Range(root: &Path, since: Since<'_>, until: Until<'_>) -> Command
 {
-    return In(
+    return Command_From_Arguments_In(
         root,
         vec![
             "git".to_owned(),
@@ -87,7 +87,7 @@ pub(crate) fn Records_Touched_In_Range(root: &Path, since: Since<'_>, until: Unt
     );
 }
 
-fn In(root: &Path, argv: Vec<String>) -> Command
+fn Command_From_Arguments_In(root: &Path, argv: Vec<String>) -> Command
 {
     let mut command = Command::New(argv, TIMEOUT);
     command.working_directory = Some(root.to_path_buf());
@@ -113,7 +113,7 @@ mod tests
     }
 
     #[test]
-    fn Test_Records_Touched_Scopes_To_Docs_Records_Only()
+    fn Test_Records_Touched_Scopes_To_Documentation_Records_Only()
     {
         let command = Records_Touched_In_Range(Path::new("/repo"), Since("a"), Until("b"));
 

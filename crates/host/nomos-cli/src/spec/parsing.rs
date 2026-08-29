@@ -1,13 +1,13 @@
 //! What `nomos spec` was asked for, and the usage it prints when it cannot tell.
 
-use super::{SpecCommand, Name, Named_Value, Required, PathBuf, RecordRequest, EditRequest, TableRequest, RenderRequest, FreshnessRequest, Named_Values, CommitRequest, Usage};
+use super::{SpecCommand, Name, Named_Value_From_String_Arguments, Required_Value, PathBuf, RecordRequest, EditRequest, TableRequest, RenderRequest, FreshnessRequest, Named_Values_From_String_Arguments, CommitRequest, Usage};
 
 /// Parses `nomos spec` arguments.
 ///
 /// # Errors
 ///
 /// Returns a message naming what was wrong and what was expected.
-pub fn Parse(arguments: &[String]) -> Result<SpecCommand, String>
+pub fn Spec_Command_From_String_Arguments(arguments: &[String]) -> Result<SpecCommand, String>
 {
     let Some(verb) = arguments.first()
     else
@@ -17,13 +17,13 @@ pub fn Parse(arguments: &[String]) -> Result<SpecCommand, String>
 
     return match verb.as_str()
     {
-        "record" => Parse_Record(arguments),
-        "table" => Parse_Table(arguments),
-        "render" => Parse_Render(arguments),
-        "freshness" => Parse_Freshness(arguments),
-        "markdown" => Parse_Markdown(arguments),
-        "preview" => Parse_Preview(arguments),
-        "commit" => Parse_Commit(arguments),
+        "record" => Record_Command_From_String_Arguments(arguments),
+        "table" => Table_Command_From_String_Arguments(arguments),
+        "render" => Render_Command_From_String_Arguments(arguments),
+        "freshness" => Freshness_Command_From_String_Arguments(arguments),
+        "markdown" => Markdown_Command_From_String_Arguments(arguments),
+        "preview" => Preview_Command_From_String_Arguments(arguments),
+        "commit" => Commit_Command_From_String_Arguments(arguments),
         "profiles" => Ok(SpecCommand::Profiles),
         "sources" => Ok(SpecCommand::Sources),
         other => Err(format!("unknown command `{other}`.\n\n{}", Usage_Text())),
@@ -31,96 +31,96 @@ pub fn Parse(arguments: &[String]) -> Result<SpecCommand, String>
 }
 
 /// A flag with no default, or a message naming it beside the usage.
-pub(super) fn Required_Value(arguments: &[String], name: &str) -> Result<String, String>
+pub(super) fn Required_Value_From_String_Arguments(arguments: &[String], name: &str) -> Result<String, String>
 {
-    let value = Named_Value(arguments, name);
+    let value = Named_Value_From_String_Arguments(arguments, name);
 
-    return Required(value.as_ref(), Name(name), Usage(&Usage_Text()));
+    return Required_Value(value.as_ref(), Name(name), Usage(&Usage_Text()));
 }
 
 /// A flag with no default, read as a path.
-pub(super) fn Required_Path(arguments: &[String], name: &str) -> Result<PathBuf, String>
+pub(super) fn Required_Path_From_String_Arguments(arguments: &[String], name: &str) -> Result<PathBuf, String>
 {
-    let value = Required_Value(arguments, name)?;
+    let value = Required_Value_From_String_Arguments(arguments, name)?;
 
     return Ok(PathBuf::from(value));
 }
 
 /// Which record a `record` or `markdown` run is about.
-pub(super) fn Parse_Record_Request(arguments: &[String]) -> Result<RecordRequest, String>
+pub(super) fn Record_Request_From_String_Arguments(arguments: &[String]) -> Result<RecordRequest, String>
 {
     return Ok(RecordRequest {
-        id: Required_Value(arguments, "--id")?,
-        revision: Named_Value(arguments, "--revision"),
+        id: Required_Value_From_String_Arguments(arguments, "--id")?,
+        revision: Named_Value_From_String_Arguments(arguments, "--revision"),
     });
 }
 
 /// The edit a `preview` or `commit` run carries.
-pub(super) fn Parse_Edit_Request(arguments: &[String]) -> Result<EditRequest, String>
+pub(super) fn Edit_Request_From_String_Arguments(arguments: &[String]) -> Result<EditRequest, String>
 {
     return Ok(EditRequest {
-        id: Required_Value(arguments, "--id")?,
-        from: Required_Path(arguments, "--from")?,
-        rename: Named_Value(arguments, "--rename"),
+        id: Required_Value_From_String_Arguments(arguments, "--id")?,
+        from: Required_Path_From_String_Arguments(arguments, "--from")?,
+        rename: Named_Value_From_String_Arguments(arguments, "--rename"),
     });
 }
 
-pub(super) fn Parse_Record(arguments: &[String]) -> Result<SpecCommand, String>
+pub(super) fn Record_Command_From_String_Arguments(arguments: &[String]) -> Result<SpecCommand, String>
 {
-    let request = Parse_Record_Request(arguments)?;
+    let request = Record_Request_From_String_Arguments(arguments)?;
 
     return Ok(SpecCommand::Record(request));
 }
 
-pub(super) fn Parse_Table(arguments: &[String]) -> Result<SpecCommand, String>
+pub(super) fn Table_Command_From_String_Arguments(arguments: &[String]) -> Result<SpecCommand, String>
 {
-    let block = Named_Value(arguments, "--block");
-    let table = Named_Value(arguments, "--table");
+    let block = Named_Value_From_String_Arguments(arguments, "--block");
+    let table = Named_Value_From_String_Arguments(arguments, "--table");
 
     return Ok(SpecCommand::Table(TableRequest {
-        document: Required_Value(arguments, "--document")?,
-        block: Ordinal(block.as_ref(), "--block")?,
-        table: Ordinal(table.as_ref(), "--table")?,
-        revision: Named_Value(arguments, "--revision"),
+        document: Required_Value_From_String_Arguments(arguments, "--document")?,
+        block: Parsed_Ordinal(block.as_ref(), "--block")?,
+        table: Parsed_Ordinal(table.as_ref(), "--table")?,
+        revision: Named_Value_From_String_Arguments(arguments, "--revision"),
     }));
 }
 
-pub(super) fn Parse_Render(arguments: &[String]) -> Result<SpecCommand, String>
+pub(super) fn Render_Command_From_String_Arguments(arguments: &[String]) -> Result<SpecCommand, String>
 {
     return Ok(SpecCommand::Render(RenderRequest {
-        profile: Required_Value(arguments, "--profile")?,
-        into: Required_Path(arguments, "--into")?,
-        subject: Named_Value(arguments, "--subject"),
+        profile: Required_Value_From_String_Arguments(arguments, "--profile")?,
+        into: Required_Path_From_String_Arguments(arguments, "--into")?,
+        subject: Named_Value_From_String_Arguments(arguments, "--subject"),
     }));
 }
 
-pub(super) fn Parse_Freshness(arguments: &[String]) -> Result<SpecCommand, String>
+pub(super) fn Freshness_Command_From_String_Arguments(arguments: &[String]) -> Result<SpecCommand, String>
 {
     return Ok(SpecCommand::Freshness(FreshnessRequest {
-        into: Required_Path(arguments, "--into")?,
-        profile: Named_Value(arguments, "--profile"),
-        require: Named_Values(arguments, "--require"),
+        into: Required_Path_From_String_Arguments(arguments, "--into")?,
+        profile: Named_Value_From_String_Arguments(arguments, "--profile"),
+        require: Named_Values_From_String_Arguments(arguments, "--require"),
     }));
 }
 
-pub(super) fn Parse_Markdown(arguments: &[String]) -> Result<SpecCommand, String>
+pub(super) fn Markdown_Command_From_String_Arguments(arguments: &[String]) -> Result<SpecCommand, String>
 {
-    let request = Parse_Record_Request(arguments)?;
+    let request = Record_Request_From_String_Arguments(arguments)?;
 
     return Ok(SpecCommand::Markdown(request));
 }
 
-pub(super) fn Parse_Preview(arguments: &[String]) -> Result<SpecCommand, String>
+pub(super) fn Preview_Command_From_String_Arguments(arguments: &[String]) -> Result<SpecCommand, String>
 {
-    let request = Parse_Edit_Request(arguments)?;
+    let request = Edit_Request_From_String_Arguments(arguments)?;
 
     return Ok(SpecCommand::Preview(request));
 }
 
-pub(super) fn Parse_Commit(arguments: &[String]) -> Result<SpecCommand, String>
+pub(super) fn Commit_Command_From_String_Arguments(arguments: &[String]) -> Result<SpecCommand, String>
 {
-    let edit = Parse_Edit_Request(arguments)?;
-    let into = Named_Value(arguments, "--into");
+    let edit = Edit_Request_From_String_Arguments(arguments)?;
+    let into = Named_Value_From_String_Arguments(arguments, "--into");
 
     return Ok(SpecCommand::Commit(CommitRequest {
         edit,
@@ -129,7 +129,7 @@ pub(super) fn Parse_Commit(arguments: &[String]) -> Result<SpecCommand, String>
 }
 
 /// A whole-number flag, or a message saying what was given instead.
-pub(super) fn Ordinal(value: Option<&String>, name: &str) -> Result<Option<u32>, String>
+pub(super) fn Parsed_Ordinal(value: Option<&String>, name: &str) -> Result<Option<u32>, String>
 {
     let Some(text) = value
     else

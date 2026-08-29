@@ -13,7 +13,7 @@ fn Arguments(text: &str) -> Vec<String>
 #[test]
 fn Test_Claim_Should_Parse_With_A_Default_Lease()
 {
-    let parsed = Parse(&Arguments("claim --item T-1 --holder agent-a")).unwrap();
+    let parsed = Work_Command_From_String_Arguments(&Arguments("claim --item T-1 --holder agent-a")).unwrap();
 
     assert_eq!(
         parsed,
@@ -31,7 +31,7 @@ fn Test_Claim_Should_Parse_With_A_Default_Lease()
 #[test]
 fn Test_Takeover_Should_Parse_With_A_Default_Lease()
 {
-    let parsed = Parse(&Arguments("takeover --item T-1 --holder agent-b")).unwrap();
+    let parsed = Work_Command_From_String_Arguments(&Arguments("takeover --item T-1 --holder agent-b")).unwrap();
 
     assert_eq!(
         parsed,
@@ -52,15 +52,15 @@ fn Test_Takeover_Should_Parse_With_A_Default_Lease()
 #[test]
 fn Test_Takeover_Should_Not_Parse_As_A_Claim()
 {
-    let parsed = Parse(&Arguments("takeover --item T-1 --holder agent-b --lease 30m")).unwrap();
+    let parsed = Work_Command_From_String_Arguments(&Arguments("takeover --item T-1 --holder agent-b --lease 30m")).unwrap();
 
     assert!(matches!(parsed, WorkCommand::TakeOver { .. }), "{parsed:?}");
-    assert!(Parse(&Arguments("takeover --holder agent-b")).is_err());
-    assert!(Parse(&Arguments("takeover --item T-1")).is_err());
+    assert!(Work_Command_From_String_Arguments(&Arguments("takeover --holder agent-b")).is_err());
+    assert!(Work_Command_From_String_Arguments(&Arguments("takeover --item T-1")).is_err());
 }
 
 #[test]
-fn Test_Lease_Units_Should_Parse()
+fn Test_Lease_Units_Should_Work_Command_From_String_Arguments()
 {
     use std::time::Duration;
 
@@ -83,7 +83,7 @@ fn Test_A_Unitless_Lease_Should_Be_Refused()
 #[test]
 fn Test_A_Missing_Argument_Should_Name_Itself()
 {
-    let error = Parse(&Arguments("claim --holder agent-a")).unwrap_err();
+    let error = Work_Command_From_String_Arguments(&Arguments("claim --holder agent-a")).unwrap_err();
 
     assert!(error.contains("--item"));
 }
@@ -91,7 +91,7 @@ fn Test_A_Missing_Argument_Should_Name_Itself()
 #[test]
 fn Test_An_Unknown_Command_Should_Be_A_Usage_Error()
 {
-    let error = Parse(&Arguments("frobnicate")).unwrap_err();
+    let error = Work_Command_From_String_Arguments(&Arguments("frobnicate")).unwrap_err();
 
     assert!(error.contains("frobnicate"));
     assert!(error.contains("usage"));
@@ -106,7 +106,7 @@ fn Test_An_Unknown_Command_Should_Be_A_Usage_Error()
 #[test]
 fn Test_Decline_Should_Not_Parse_As_An_Abandon()
 {
-    let parsed = Parse(&Arguments("decline --item T-1 --holder agent-a --reason done"))
+    let parsed = Work_Command_From_String_Arguments(&Arguments("decline --item T-1 --holder agent-a --reason done"))
         .unwrap();
 
     assert_eq!(
@@ -126,11 +126,11 @@ fn Test_Decline_Should_Not_Parse_As_An_Abandon()
 fn Test_Decline_Should_Require_A_Reason()
 {
     let error =
-        Parse(&Arguments("decline --item T-1 --holder agent-a")).unwrap_err();
+        Work_Command_From_String_Arguments(&Arguments("decline --item T-1 --holder agent-a")).unwrap_err();
 
     assert!(error.contains("--reason"), "{error}");
-    assert!(Parse(&Arguments("decline --holder agent-a --reason r")).is_err());
-    assert!(Parse(&Arguments("decline --item T-1 --reason r")).is_err());
+    assert!(Work_Command_From_String_Arguments(&Arguments("decline --holder agent-a --reason r")).is_err());
+    assert!(Work_Command_From_String_Arguments(&Arguments("decline --item T-1 --reason r")).is_err());
 }
 
 /// The usage text is what an agent reads at exit 2, so a verb missing from it is a verb
@@ -147,7 +147,7 @@ fn Test_The_Usage_Text_Should_Name_Every_Verb_It_Accepts()
     {
         assert!(usage.contains(verb), "the usage text does not name `{verb}`");
         assert!(
-            Parse(&Arguments(verb)).is_ok() || !Parse(&Arguments(verb)).unwrap_err().contains("unknown command"),
+            Work_Command_From_String_Arguments(&Arguments(verb)).is_ok() || !Work_Command_From_String_Arguments(&Arguments(verb)).unwrap_err().contains("unknown command"),
             "the usage text names `{verb}` and the parser does not accept it"
         );
     }
@@ -156,7 +156,7 @@ fn Test_The_Usage_Text_Should_Name_Every_Verb_It_Accepts()
 /// A board holding one declined item and nothing else.
 fn Board_With_A_Declined_Item() -> LedgerDocument
 {
-    let mut item = match Parse(&Arguments(
+    let mut item = match Work_Command_From_String_Arguments(&Arguments(
         "add --item T-1 --title t --why w --done-when d --kind correction --origin proposed \
          --territory src/a.rs",
     ))
@@ -216,7 +216,7 @@ fn Test_Audit_Should_Not_Answer_For_A_Declined_Item()
 
 fn Added(text: &str) -> LedgerItem
 {
-    return match Parse(&Arguments(text)).unwrap()
+    return match Work_Command_From_String_Arguments(&Arguments(text)).unwrap()
     {
         WorkCommand::Add { item, .. } => *item,
         // Every call site hands this an `add` line, so the variant is fixed by construction
@@ -249,7 +249,7 @@ struct AddedItem
 /// The command and the declaration it carries beside the item.
 fn Add_Of(text: &str) -> AddedItem
 {
-    return match Parse(&Arguments(text)).unwrap()
+    return match Work_Command_From_String_Arguments(&Arguments(text)).unwrap()
     {
         WorkCommand::Add { item, amending } => AddedItem {
             item: *item,
@@ -297,7 +297,7 @@ fn Test_Amends_Should_Reserve_The_Record_It_Declares()
 fn Test_An_Item_That_Only_Amends_Should_Not_Be_Refused_As_Reserving_Nothing()
 {
     assert!(
-        Parse(&Arguments(
+        Work_Command_From_String_Arguments(&Arguments(
             "add --item T-1 --title t --why w --done-when d --kind correction --origin proposed \
              --amends docs/records/ARC-HARNESS-001-a-slug.md",
         ))
@@ -371,7 +371,7 @@ fn Test_Timeout_Should_Bound_The_Predicate()
     );
 }
 
-/// Left unset, the predicate keeps the ten-minute default `VerificationPredicate::New`
+/// Left unset, the predicate keeps the ten-minute default `VerificationPredicate::From_String_Arguments`
 /// gives it — `--timeout` overrides, it does not replace, the construction.
 #[test]
 fn Test_Timeout_Should_Default_When_Omitted()
@@ -395,7 +395,7 @@ fn Test_Timeout_Should_Default_When_Omitted()
 #[test]
 fn Test_Timeout_Without_A_Predicate_Should_Be_Refused()
 {
-    let error = Parse(&Arguments(
+    let error = Work_Command_From_String_Arguments(&Arguments(
         "add --item T-1 --title t --why w --done-when d --kind correction --origin proposed \
          --territory src/a.rs --timeout 40m",
     ))
@@ -428,7 +428,7 @@ fn Test_Arguments_After_The_Separator_Should_Not_Be_Read_As_Options()
 fn Test_Add_Should_Refuse_An_Item_With_No_Territory()
 {
     let error =
-        Parse(&Arguments("add --item T-1 --title t --why w --done-when d")).unwrap_err();
+        Work_Command_From_String_Arguments(&Arguments("add --item T-1 --title t --why w --done-when d")).unwrap_err();
 
     assert!(error.contains("--territory"));
 }
@@ -446,7 +446,7 @@ fn Test_Add_Should_Refuse_An_Item_With_No_Territory()
 #[test]
 fn Test_Add_Should_Refuse_A_Territory_Pattern()
 {
-    let error = Parse(&Arguments(
+    let error = Work_Command_From_String_Arguments(&Arguments(
         "add --item T-1 --title t --why w --done-when d \
          --territory src/a.rs --territory-pattern crates/spec/**",
     ))
@@ -471,7 +471,7 @@ fn Test_Add_Should_Refuse_A_Territory_Pattern()
 #[test]
 fn Test_A_Pattern_Alone_Should_Be_Refused_As_A_Pattern()
 {
-    let error = Parse(&Arguments(
+    let error = Work_Command_From_String_Arguments(&Arguments(
         "add --item T-1 --title t --why w --done-when d --territory-pattern crates/**",
     ))
     .unwrap_err();
@@ -497,10 +497,10 @@ fn Test_The_Usage_Text_Should_Not_Advertise_A_Territory_Pattern()
 }
 
 #[test]
-fn Test_Finish_Should_Parse()
+fn Test_Finish_Should_Work_Command_From_String_Arguments()
 {
     assert_eq!(
-        Parse(&Arguments("finish --item T-1 --holder agent-a")).unwrap(),
+        Work_Command_From_String_Arguments(&Arguments("finish --item T-1 --holder agent-a")).unwrap(),
         WorkCommand::Finish {
             item: ItemId::New("T-1"),
             holder: "agent-a".to_owned(),

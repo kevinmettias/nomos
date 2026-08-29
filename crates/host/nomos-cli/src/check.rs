@@ -13,7 +13,7 @@
 //! Three things now, since composing the registry, ingesting the walk and judging it live
 //! in `nomos-check-orchestration`:
 //!
-//! 1. walk the tree — [`sources::Walked`] — because no [`nomos_platform::FileSystem`]
+//! 1. walk the tree — [`sources::Walked_Sources`] — because no [`nomos_platform::FileSystem`]
 //!    directory-listing port exists, the same exception `nomos-cli::work::
 //!    Published_Records` already has;
 //! 2. read what this binary was compiled as — [`composition::Host_Variant`] — because
@@ -111,22 +111,17 @@ mod report;
 #[cfg(test)]
 mod tests;
 
-pub use parsing::Parse;
-use sources::Walked;
-use composition::Host_Variant;
-use report::Render;
+pub use parsing::Check_Command_From_String_Arguments;
 
 mod exit_code;
 
 pub(crate) use exit_code::ExitCode;
 pub(crate) use nomos_check_orchestration::CheckCommand;
 
-use crate::arguments::Named_Value;
-use nomos_check_orchestration::CheckOutcome;
+use crate::arguments::Named_Value_From_String_Arguments;
 use nomos_contracts::Finding;
 use nomos_rules::SourceFile;
 use nomos_model::Subject_Of_Path;
-use nomos_platform_std::StdProcessLauncher;
 use nomos_workspace::BuildVariant;
 use std::io::Write;
 use std::path::{Path, PathBuf};
@@ -134,7 +129,13 @@ use std::path::{Path, PathBuf};
 /// Runs the rules and renders what they say.
 pub fn Run(command: &CheckCommand, stdout: &mut impl Write, stderr: &mut impl Write) -> ExitCode
 {
-    let outcome = match Walked(&command.root)
+    use sources::Walked_Sources;
+    use composition::Host_Variant;
+    use report::Render_Outcome;
+    use nomos_check_orchestration::CheckOutcome;
+    use nomos_platform_std::StdProcessLauncher;
+
+    let outcome = match Walked_Sources(&command.root)
     {
         None => CheckOutcome::Unreadable,
         Some(sources) if sources.is_empty() => CheckOutcome::NoSource,
@@ -145,5 +146,5 @@ pub fn Run(command: &CheckCommand, stdout: &mut impl Write, stderr: &mut impl Wr
         ),
     };
 
-    return Render(&command.root, &outcome, stdout, stderr);
+    return Render_Outcome(&command.root, &outcome, stdout, stderr);
 }

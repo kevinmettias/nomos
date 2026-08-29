@@ -20,7 +20,7 @@ mod report;
 #[cfg(test)]
 mod tests;
 
-pub use parse::Parse;
+pub use parse::Work_Command_From_String_Arguments;
 
 pub(crate) use exit_code::ExitCode;
 pub(crate) use nomos_work_orchestration::{ClaimRequest, EndingRequest, WorkCommand};
@@ -56,7 +56,7 @@ pub fn Run(
         || Published_Records(directory),
     );
 
-    return Render(command, outcome, output);
+    return Render_Outcome(command, outcome, output);
 }
 
 /// Every record this repository has already published, as repository-relative paths.
@@ -136,7 +136,7 @@ const RECORD_DIRECTORY: &str = "docs/records";
 /// because Rust cannot see that invariant from the two enums' shapes alone —
 /// `nomos_work_orchestration::Run` always returns the one `WorkOutcome` variant naming the
 /// `WorkCommand` variant it was given.
-fn Render(command: &WorkCommand, outcome: WorkOutcome, output: &mut impl std::io::Write) -> ExitCode
+fn Render_Outcome(command: &WorkCommand, outcome: WorkOutcome, output: &mut impl std::io::Write) -> ExitCode
 {
     return match (command, outcome)
     {

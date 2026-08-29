@@ -4,7 +4,7 @@
 //! `P13-GATE-ORCHESTRATION-1` gave `Gate` its own crate and a real, already-implemented
 //! `Run(&GateCommand) -> GateOutcome` -- but that crate cannot read argv, choose a platform
 //! or write to a terminal, and until this module existed nothing called it. This is the
-//! same seam `OD-HOST-002` already built for `check`/`work`/`spec`: `Parse` turns argv into
+//! same seam `OD-HOST-002` already built for `check`/`work`/`spec`: `Gate_Invocation_From_String_Arguments` turns argv into
 //! a typed [`GateInvocation`], [`Run`] below dispatches to either the orchestration crate's
 //! own `Run` (`plan`) or `Run_Gate` (`run`), and [`report`] turns what came back into text
 //! and an [`ExitCode`].
@@ -17,7 +17,7 @@
 //! were both band 40 and a band may not depend on its own band
 //! (`tests/contract/tests/boundaries/graph.rs`); `nomos-gate-orchestration` moved to band 41
 //! to depend on it instead. What stays here is exactly what `check.rs` also keeps for the
-//! same reason: the directory walk ([`sources::Walked`] -- no
+//! same reason: the directory walk ([`sources::Walked_Sources`] -- no
 //! [`nomos_platform::FileSystem`] directory-listing port exists) and the host build variant
 //! ([`composition::Host_Variant`] -- `env!` resolves against the crate that calls it). Both
 //! cross into `Run_Gate` as arguments; nothing about judging or reducing lives in this crate
@@ -25,7 +25,7 @@
 //!
 //! # `--include` / `--exclude` / `--rule`, after `P13-GATE-014-SCOPE-RULE-SELECTORS`
 //!
-//! [`parsing::Parse`] reads these repeatable flags into [`GateCommand::scope`] and
+//! [`parsing::Gate_Invocation_From_String_Arguments`] reads these repeatable flags into [`GateCommand::scope`] and
 //! [`GateCommand::rules`] for every verb; `Run_Gate` is what actually consults them for
 //! `run`, and `nomos_gate_orchestration::Run` (`plan`) still does not, the same asymmetry
 //! `root` already had. See `nomos_gate_orchestration`'s own `lib.rs` doc for what
@@ -35,17 +35,18 @@
 //!
 //! [`GateInvocation::Explain`] carries a [`GateCommand`] and a
 //! `nomos_gate_orchestration::FindingQuery` -- `--rule <id> --location <path>` --
-//! [`parsing::Parse`] now recognizes as a third verb. `Explain_Gate` is what actually
+//! [`parsing::Gate_Invocation_From_String_Arguments`] now recognizes as a third verb. `Explain_Gate` is what actually
 //! answers it; this module still owns only the walk and the host build variant, the same
 //! division `run` already has.
 //!
 //! # What this module still does not do
 //!
-//! It does not implement `compare`: [`parsing::Parse`] refuses it as usage, the same "no
+//! It does not implement `compare`: [`parsing::Gate_Invocation_From_String_Arguments`] refuses it as usage, the same "no
 //! invented shape ahead of a real body" discipline the orchestration crate's own
 //! `command.rs` already documents.
 
 mod composition;
+mod gate_invocation;
 mod parsing;
 mod report;
 mod sources;
@@ -53,7 +54,8 @@ mod sources;
 #[cfg(test)]
 mod tests;
 
-pub use parsing::Parse;
+pub use gate_invocation::GateInvocation;
+pub use parsing::Gate_Invocation_From_String_Arguments;
 use report::{Render_Explain, Render_Plan, Render_Run};
 
 mod exit_code;
@@ -63,37 +65,12 @@ pub(crate) use nomos_gate_orchestration::{FindingQuery, GateCommand};
 use nomos_platform::Clock;
 use nomos_platform_std::{StdProcessLauncher, SystemClock};
 
-use crate::arguments::Named_Value;
+use crate::arguments::Named_Value_From_String_Arguments;
 use nomos_model::Subject_Of_Path;
 use nomos_rules::SourceFile;
 use nomos_workspace::BuildVariant;
 use std::io::Write;
 use std::path::{Path, PathBuf};
-
-/// What `nomos gate` was asked to do -- which verb, over which command.
-///
-/// A struct-per-verb enum rather than `GateCommand` itself growing a variant:
-/// [`GateInvocation::Plan`]'s real computation lives entirely inside
-/// `nomos-gate-orchestration`; [`GateInvocation::Run`]'s cannot, for the band reason this
-/// module's own doc gives. The two verbs do not share a downstream function to route
-/// through, so there is nothing for a single command enum inside
-/// `nomos-gate-orchestration` to gain by carrying the verb itself.
-#[derive(Debug)]
-pub enum GateInvocation
-{
-    /// Compose this gate's rule registry and report what it holds.
-    Plan(GateCommand),
-    /// Walk the tree, judge it exactly as `nomos check` would, and report a real
-    /// disposition.
-    Run(GateCommand),
-    /// Walk the tree, judge it, and answer what one named finding looks like and whether
-    /// it would block.
-    Explain
-    {
-        command: GateCommand,
-        query: FindingQuery,
-    },
-}
 
 /// Runs the requested verb and renders what it says.
 pub fn Run(invocation: &GateInvocation, stdout: &mut impl Write, stderr: &mut impl Write) -> ExitCode
@@ -108,7 +85,7 @@ pub fn Run(invocation: &GateInvocation, stdout: &mut impl Write, stderr: &mut im
         GateInvocation::Run(command) => Run_Verb(command, stdout, stderr),
         GateInvocation::Explain { command, query } =>
         {
-            let walked = sources::Walked(&command.root);
+            let walked = sources::Walked_Sources(&command.root);
             let result = nomos_gate_orchestration::Explain_Gate(
                 walked,
                 nomos_gate_orchestration::GateEnvironment { variant: composition::Host_Variant(), launcher: &StdProcessLauncher },
@@ -124,7 +101,7 @@ pub fn Run(invocation: &GateInvocation, stdout: &mut impl Write, stderr: &mut im
 /// renders what came back -- the self-contained unit `GateInvocation::Run`'s own arm was.
 fn Run_Verb(command: &GateCommand, stdout: &mut impl Write, stderr: &mut impl Write) -> ExitCode
 {
-    let walked = sources::Walked(&command.root);
+    let walked = sources::Walked_Sources(&command.root);
     let run = nomos_gate_orchestration::Fresh_Run_Id(SystemClock.Now());
     let result = nomos_gate_orchestration::Run_Gate(
         walked,

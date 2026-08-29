@@ -14,6 +14,8 @@ use nomos_ledger::ItemId;
 /// calls inside one.
 pub(crate) fn Unique_Scratch_Directory(label: &str) -> std::path::PathBuf
 {
+    // scope: allow this test-only counter has no owner beyond disambiguating calls within one
+    // process; a bare pid does not distinguish two calls in the same test run.
     static COUNTER: std::sync::atomic::AtomicU64 = std::sync::atomic::AtomicU64::new(0);
     // atomic-ordering: allow: only used to give two calls in this process different numbers;
     // nothing else synchronizes on it or reads memory ordered by this counter.

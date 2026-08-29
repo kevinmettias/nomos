@@ -1,4 +1,4 @@
-//! [`Disposition`], the reduced verdict [`super::run::GateRunResponse`] carries.
+//! [`Disposition`], the reduced verdict [`super::gate_run_response::GateRunResponse`] carries.
 
 use nomos_gate_orchestration::GateRunOutcome;
 use serde::Serialize;
