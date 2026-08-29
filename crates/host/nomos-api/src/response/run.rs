@@ -3,45 +3,14 @@
 //! other endpoint file in this crate keeps.
 
 use crate::{composition, sources};
-use nomos_contracts::{Finding, RunId};
+use nomos_contracts::RunId;
 use nomos_gate_orchestration::{GateCommand, GateRunResult};
 use nomos_platform::Clock;
 use nomos_platform_std::{StdProcessLauncher, SystemClock};
 use serde::Serialize;
 use std::path::{Path, PathBuf};
 
-use super::Disposition;
-
-/// A serializable twin of [`nomos_gate_orchestration::GateFindings`].
-///
-/// A twin rather than a re-export because the type it mirrors does not derive `Serialize`,
-/// for the reason `crate::response`'s own doc gives.
-#[derive(Debug, Serialize)]
-pub struct GateFindings
-{
-    /// Exactly the findings that failed this build. Empty whenever `disposition` is not
-    /// [`Disposition::Failed`].
-    pub blocking_findings: Vec<Finding>,
-    /// Findings an `AdoptionPolicy` calibration kept from blocking.
-    pub calibrated_findings: Vec<Finding>,
-    /// Findings a `Suppression` kept from blocking.
-    pub suppressed_findings: Vec<Finding>,
-    /// Findings a `BaselineDebt` kept from blocking.
-    pub baselined_findings: Vec<Finding>,
-}
-
-impl GateFindings
-{
-    fn From(findings: nomos_gate_orchestration::GateFindings) -> Self
-    {
-        return Self {
-            blocking_findings: findings.blocking_findings,
-            calibrated_findings: findings.calibrated_findings,
-            suppressed_findings: findings.suppressed_findings,
-            baselined_findings: findings.baselined_findings,
-        };
-    }
-}
+use super::{Disposition, GateFindings};
 
 /// Walks `root` and judges it exactly as `nomos gate run` would, over the default
 /// [`GateCommand`] -- every rule, every file, no baseline, no suppression, no adoption

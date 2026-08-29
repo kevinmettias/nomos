@@ -20,6 +20,7 @@
 mod baseline_debt;
 mod disposition;
 mod explain;
+mod gate_findings;
 mod plan;
 mod rule_calibration;
 mod rule_offer;
@@ -30,6 +31,7 @@ mod suppression_disposition;
 pub use baseline_debt::BaselineDebtResponse;
 pub use disposition::Disposition;
 pub use explain::{GateExplainResponse, Handle_Gate_Explain};
+pub use gate_findings::GateFindings;
 pub use plan::{GatePlanResponse, Handle_Gate_Plan};
 pub use rule_calibration::RuleCalibrationResponse;
 pub use rule_offer::RuleOfferResponse;

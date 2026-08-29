@@ -36589,6 +36589,69 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P16-EVERYTHINGELSE-FINALSWEEP",
+      "title": "OD-GATE-018 phase 3: fix 4 regressions surfaced by a full 76-check sweep",
+      "why": "A comprehensive re-run of all 76 checks across the 8 non-placement phase files, after every other phase-3 item landed, found four small regressions the campaign's own record already warned are not theoretical: check-vertical-organization (1, nomos-gate-orchestration::run_gate.rs -- a concurrent session's own check-function-size fix extracted Partitioned/Unjudged but placed them out of DFS order relative to Reduced), check-one-public-type (3, decompose-file phase -- nomos-api's response/run.rs and nomos-gate-orchestration's outcome/gate_run_result.rs each gained a second type when this item's own GateFindings sub-struct landed beside GateRunResponse/GateRunResult, and nomos-corrections' correction_choice.rs gained ChoiceRecord from a concurrent session's own check-parameter-count fix), and check-allman-braces/check-closing-brace (1 each, nomos-lang-go-modules::discovery.rs -- a Directive enum this item's own check-transposable-parameters fix added sat beside a pre-existing backslash-continued string, the same confirmed front-end gap already waived elsewhere; the accompanying doc-comment placement mistake -- the enum's new doc glued onto Directive_Entries's pre-existing one with no separator, silently reassigning the function's own documentation to the enum -- is fixed too). Every GateFindings/ChoiceRecord fix follows this crate's own documented convention of one type per file (nomos-api's response.rs doc literally states it: 'every twin type that exists only to serialize one of their own fields gets a file of its own').",
+      "done_when": "check-vertical-organization, check-one-public-type, check-allman-braces and check-closing-brace all report zero findings against crates tests (default run). cargo build --workspace --all-targets stays green. cargo test -p nomos-gate-orchestration -p nomos-api -p nomos-corrections -p nomos-lang-go-modules -p nomos-cli and the public_surface suite (no bless needed) all pass.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/run_gate.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/outcome.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/outcome/gate_run_result.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/outcome/gate_findings.rs",
+          "crates/host/nomos-api/src/response.rs",
+          "crates/host/nomos-api/src/response/run.rs",
+          "crates/host/nomos-api/src/response/gate_findings.rs",
+          "crates/corrections/nomos-corrections/src/lib.rs",
+          "crates/corrections/nomos-corrections/src/correction_choice.rs",
+          "crates/corrections/nomos-corrections/src/choice_record.rs",
+          "crates/languages/nomos-lang-go-modules/src/discovery.rs",
+          "suppressions.json"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "exit_code": 0,
+        "output_tail": "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.17s\n",
+        "verified_at": 1788033698,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "2e4d08cc07f3459937d093659459ed2dddcbc3cd"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

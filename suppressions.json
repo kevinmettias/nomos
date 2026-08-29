@@ -4088,6 +4088,22 @@
       "reason": "OD-GATE-018 category-2: enum discriminant value, the confirmed check-literals front-end gap (rust_Literal_Context has no case for a variant discriminant) -- the README exempts enum members, and this file's own doc comment states why each number reuses a cross-group meaning",
       "owner": "@kmettias",
       "expires": "2027-02-25"
+    },
+    {
+      "check": "check-allman-braces",
+      "path": "crates/languages/nomos-lang-go-modules/src/discovery.rs",
+      "fingerprint": "9c94ad1c368062f6",
+      "reason": "this file's backslash-continued string literal at line 226 causes the same confirmed check-allman-braces/check-closing-brace front-end gap already waived elsewhere in this campaign: the opening quote pairs with an unrelated later quote, blanking everything between and corrupting the brace-alignment judgment that follows. Verified with a token-aware scanner that this brace genuinely aligns with its match arm's own indentation (8/8).",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-closing-brace",
+      "path": "crates/languages/nomos-lang-go-modules/src/discovery.rs",
+      "fingerprint": "00d6019076901da8",
+      "reason": "this file's backslash-continued string literal at line 226 causes the same confirmed check-allman-braces/check-closing-brace front-end gap already waived elsewhere in this campaign: the opening quote pairs with an unrelated later quote, blanking everything between and corrupting the brace-alignment judgment that follows. Verified with a token-aware scanner that this brace genuinely aligns with its match arm's own indentation (8/8).",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
     }
   ]
 }

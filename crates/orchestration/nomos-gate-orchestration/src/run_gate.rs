@@ -119,38 +119,6 @@ struct Reduction
     disposition: GateRunOutcome,
 }
 
-/// `selected`, split into the calibrated, suppressed, baselined and still-blocking findings
-/// `policies` implies -- [`Reduced`]'s own middle section, named so that function reads as
-/// one decision per line.
-fn Partitioned(selected: &[Finding], policies: DispositionPolicies<'_>) -> GateFindings
-{
-    let blockable: Vec<Finding> = selected.iter().filter(|finding| return finding.Can_Fail_A_Build()).cloned().collect();
-    let (calibrated_findings, uncalibrated): (Vec<Finding>, Vec<Finding>) =
-        blockable.into_iter().partition(|finding| return policies.adoption.Calibrating(finding).is_some());
-    let (suppressed_findings, remaining): (Vec<Finding>, Vec<Finding>) =
-        uncalibrated.into_iter().partition(|finding| return policies.suppressions.Suppressing(finding).is_some());
-    let (baselined_findings, blocking_findings): (Vec<Finding>, Vec<Finding>) =
-        remaining.into_iter().partition(|finding| return policies.baseline.Tolerating(finding).is_some());
-
-    return GateFindings { blocking_findings, calibrated_findings, suppressed_findings, baselined_findings };
-}
-
-/// [`Reduced`]'s own result when `outcome` was never judged -- nothing was found, so nothing
-/// can block, calibrate, suppress or baseline, and [`GateRunOutcome::Indeterminate`] is the
-/// only disposition an unjudged run can support.
-fn Unjudged() -> Reduction
-{
-    return Reduction {
-        findings: GateFindings {
-            blocking_findings: Vec::new(),
-            calibrated_findings: Vec::new(),
-            suppressed_findings: Vec::new(),
-            baselined_findings: Vec::new(),
-        },
-        disposition: GateRunOutcome::Indeterminate,
-    };
-}
-
 /// The blocking findings, the findings an `AdoptionPolicy` calibration kept from blocking,
 /// the findings a `Suppression` kept from blocking, the findings a `BaselineDebt` kept from
 /// blocking, and the disposition they imply, read off a [`CheckOutcome`] this function does
@@ -184,6 +152,38 @@ fn Reduced(
     let disposition = Reduced_With_Coverage(Disposition(&findings.blocking_findings), coverage, &selected);
 
     return Reduction { findings, disposition };
+}
+
+/// [`Reduced`]'s own result when `outcome` was never judged -- nothing was found, so nothing
+/// can block, calibrate, suppress or baseline, and [`GateRunOutcome::Indeterminate`] is the
+/// only disposition an unjudged run can support.
+fn Unjudged() -> Reduction
+{
+    return Reduction {
+        findings: GateFindings {
+            blocking_findings: Vec::new(),
+            calibrated_findings: Vec::new(),
+            suppressed_findings: Vec::new(),
+            baselined_findings: Vec::new(),
+        },
+        disposition: GateRunOutcome::Indeterminate,
+    };
+}
+
+/// `selected`, split into the calibrated, suppressed, baselined and still-blocking findings
+/// `policies` implies -- [`Reduced`]'s own middle section, named so that function reads as
+/// one decision per line.
+fn Partitioned(selected: &[Finding], policies: DispositionPolicies<'_>) -> GateFindings
+{
+    let blockable: Vec<Finding> = selected.iter().filter(|finding| return finding.Can_Fail_A_Build()).cloned().collect();
+    let (calibrated_findings, uncalibrated): (Vec<Finding>, Vec<Finding>) =
+        blockable.into_iter().partition(|finding| return policies.adoption.Calibrating(finding).is_some());
+    let (suppressed_findings, remaining): (Vec<Finding>, Vec<Finding>) =
+        uncalibrated.into_iter().partition(|finding| return policies.suppressions.Suppressing(finding).is_some());
+    let (baselined_findings, blocking_findings): (Vec<Finding>, Vec<Finding>) =
+        remaining.into_iter().partition(|finding| return policies.baseline.Tolerating(finding).is_some());
+
+    return GateFindings { blocking_findings, calibrated_findings, suppressed_findings, baselined_findings };
 }
 
 /// The three per-finding overrides [`Reduced`] checks, grouped into one value so [`Reduced`]

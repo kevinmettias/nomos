@@ -5,13 +5,15 @@
 //! themselves -- an outcome variant with nothing yet to carry would be exactly the empty seam
 //! this workspace has learned not to build ahead of a second real case.
 
+mod gate_findings;
 mod gate_outcome;
 mod gate_run_outcome;
 mod gate_run_result;
 
+pub use gate_findings::GateFindings;
 pub use gate_outcome::GateOutcome;
 pub use gate_run_outcome::{Disposition, GateRunOutcome};
-pub use gate_run_result::{GateFindings, GateRunResult};
+pub use gate_run_result::GateRunResult;
 
 use nomos_rules::RuleOffer;
 

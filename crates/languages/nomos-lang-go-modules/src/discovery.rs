@@ -232,13 +232,6 @@ fn Require_Nonempty(discovered: Vec<DiscoveredModule>) -> Result<Vec<DiscoveredM
     return Ok(discovered);
 }
 
-/// Every entry a named block or single-line directive declares.
-///
-/// `go.mod`'s `require` and `go.work`'s `use` share one grammar: `<keyword> <entry>` on
-/// one line, or `<keyword> (` opening a block of one entry per line until a lone `)`.
-/// Reading both through this one function is not folding two different questions into
-/// one — it is the same question (every entry one keyword declares) asked of two files
-/// that happen to use the identical shape to answer it.
 /// The two directive keywords [`Directive_Entries`] reads -- named rather than passed as an
 /// adjacent `&str` alongside the text being scanned, so a caller cannot transpose the two.
 #[derive(Clone, Copy)]
@@ -260,6 +253,13 @@ impl Directive
     }
 }
 
+/// Every entry a named block or single-line directive declares.
+///
+/// `go.mod`'s `require` and `go.work`'s `use` share one grammar: `<keyword> <entry>` on
+/// one line, or `<keyword> (` opening a block of one entry per line until a lone `)`.
+/// Reading both through this one function is not folding two different questions into
+/// one — it is the same question (every entry one keyword declares) asked of two files
+/// that happen to use the identical shape to answer it.
 fn Directive_Entries(text: &str, directive: Directive) -> Vec<String>
 {
     let keyword = directive.Keyword();

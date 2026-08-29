@@ -1,6 +1,6 @@
 //! What was recorded about choosing one correction candidate over its alternatives.
 
-use crate::{CorrectionId, RankingCriterion};
+use crate::{ChoiceRecord, CorrectionId, RankingCriterion};
 
 /// `COR-012`: "Correction choice shall record the selected objective weights, rejected
 /// alternatives, predicted side effects, unresolved tradeoffs, and verification
@@ -21,17 +21,6 @@ pub struct CorrectionChoice
     predicted_side_effects: Vec<String>,
     unresolved_tradeoffs: Vec<String>,
     verification_obligations: Vec<String>,
-}
-
-/// `COR-012`'s own five recorded fields, apart from `selected` itself -- grouped into one
-/// value so [`CorrectionChoice::New`] stays within this crate's own parameter-count limit.
-pub struct ChoiceRecord
-{
-    pub objective_weights: Vec<(RankingCriterion, u32)>,
-    pub rejected_alternatives: Vec<CorrectionId>,
-    pub predicted_side_effects: Vec<String>,
-    pub unresolved_tradeoffs: Vec<String>,
-    pub verification_obligations: Vec<String>,
 }
 
 impl CorrectionChoice
