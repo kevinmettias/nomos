@@ -4808,6 +4808,262 @@
       "reason": "fn fmt is the method name mandated by the foreign std::fmt::Display/Debug trait signature; renaming it would break the trait implementation. No code fix is possible.",
       "owner": "@claude-p19-campaign",
       "expires": "2026-11-27"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/spec/nomos-spec-ingest/src/restore/extract.rs",
+      "fingerprint": "4d4d9525f8d3bd66",
+      "reason": "\"service\" is genuine v14 domain vocabulary here (the function tests whether a heading title names one of the corpus's documented services); no synonym exists that isn't itself vague or wrong, and the vague-word heuristic matches the substring regardless of context.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-file-name",
+      "path": "crates/spec/nomos-spec-bundle/src/determinism.rs",
+      "fingerprint": "dc497012f4e44ca7",
+      "reason": "determinism.rs is a load-bearing structural filename, not an incidental one -- it's read by name by tests/contract/tests/determinism_declarations.rs and by multiple *_fact_production.rs dependency-fact scanners, and is the subject of governing records OD-DETERMINISM-001 and OD-DETERMINISM-002. Renaming it would desynchronize those scanners/tests from every crate that carries a determinism declaration, which is out of scope for a naming/attributes campaign.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-file-name",
+      "path": "crates/spec/nomos-spec-project/src/determinism.rs",
+      "fingerprint": "ea4bab32770232d3",
+      "reason": "determinism.rs is a load-bearing structural filename, not an incidental one -- it's read by name by tests/contract/tests/determinism_declarations.rs and by multiple *_fact_production.rs dependency-fact scanners, and is the subject of governing records OD-DETERMINISM-001 and OD-DETERMINISM-002. Renaming it would desynchronize those scanners/tests from every crate that carries a determinism declaration, which is out of scope for a naming/attributes campaign.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/spec/nomos-spec-bundle/src/bundle_error.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fn fmt is the method name mandated by the foreign std::fmt::Display/Debug trait signature; renaming it would break the trait implementation. No code fix is possible.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/spec/nomos-spec-ingest/src/archive/archive_error.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fn fmt is the method name mandated by the foreign std::fmt::Display/Debug trait signature; renaming it would break the trait implementation. No code fix is possible.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/spec/nomos-spec-ingest/src/phases/ingest_error.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fn fmt is the method name mandated by the foreign std::fmt::Display/Debug trait signature; renaming it would break the trait implementation. No code fix is possible.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/spec/nomos-spec-ingest/src/reconciliation/collision.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fn fmt is the method name mandated by the foreign std::fmt::Display/Debug trait signature; renaming it would break the trait implementation. No code fix is possible.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/spec/nomos-spec-model/src/content_hash.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fn fmt is the method name mandated by the foreign std::fmt::Display/Debug trait signature; renaming it would break the trait implementation. No code fix is possible.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/spec/nomos-spec-model/src/failure/refusal.rs",
+      "fingerprint": "b61560c16d6a87ea",
+      "reason": "fn fmt is the method name mandated by the foreign std::fmt::Display/Debug trait signature; renaming it would break the trait implementation. No code fix is possible.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/spec/nomos-spec-model/src/record/record_error.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fn fmt is the method name mandated by the foreign std::fmt::Display/Debug trait signature; renaming it would break the trait implementation. No code fix is possible.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/spec/nomos-spec-model/src/render_error.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fn fmt is the method name mandated by the foreign std::fmt::Display/Debug trait signature; renaming it would break the trait implementation. No code fix is possible.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/spec/nomos-spec-model/src/statement/statement_id.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fn fmt is the method name mandated by the foreign std::fmt::Display/Debug trait signature; renaming it would break the trait implementation. No code fix is possible.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/spec/nomos-spec-model/src/table/table_defect.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fn fmt is the method name mandated by the foreign std::fmt::Display/Debug trait signature; renaming it would break the trait implementation. No code fix is possible.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/spec/nomos-spec-project/src/project_error.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fn fmt is the method name mandated by the foreign std::fmt::Display/Debug trait signature; renaming it would break the trait implementation. No code fix is possible.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/spec/nomos-spec-store/src/edit/edit_error.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fn fmt is the method name mandated by the foreign std::fmt::Display/Debug trait signature; renaming it would break the trait implementation. No code fix is possible.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/spec/nomos-spec-store/src/store/store_error.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fn fmt is the method name mandated by the foreign std::fmt::Display/Debug trait signature; renaming it would break the trait implementation. No code fix is possible.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/spec/nomos-spec-store/src/submission/accept_error.rs",
+      "fingerprint": "5278eecdb05c0973",
+      "reason": "fn fmt is the method name mandated by the foreign std::fmt::Display/Debug trait signature; renaming it would break the trait implementation. No code fix is possible.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-boolean-predicate",
+      "path": "crates/spec/nomos-spec-store/src/edit/edit_preview.rs",
+      "fingerprint": "0f4c2b19b9508b21",
+      "reason": "Real external callers outside crates/spec (in already-closed nomos-spec-orchestration, nomos-api, nomos-cli bands); renaming here would require a coordinated cross-crate edit this mechanical sweep did not scope for. Deferred as its own future increment rather than reopening closed bands.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-boolean-predicate",
+      "path": "crates/spec/nomos-spec-store/src/edit/edit_preview.rs",
+      "fingerprint": "9ac0bad155eda1e7",
+      "reason": "Real external callers outside crates/spec (in already-closed nomos-spec-orchestration, nomos-api, nomos-cli bands); renaming here would require a coordinated cross-crate edit this mechanical sweep did not scope for. Deferred as its own future increment rather than reopening closed bands.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-boolean-predicate",
+      "path": "crates/spec/nomos-spec-store/src/record/record_projection.rs",
+      "fingerprint": "ad1f04aa57280325",
+      "reason": "Real external callers outside crates/spec (in already-closed nomos-spec-orchestration, nomos-api, nomos-cli bands); renaming here would require a coordinated cross-crate edit this mechanical sweep did not scope for. Deferred as its own future increment rather than reopening closed bands.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-binding-scope",
+      "path": "crates/spec/nomos-spec-validate/src/offending.rs",
+      "fingerprint": "cd762385f17c909d",
+      "reason": "total is incremented across every iteration of the enclosing loop (including iterations that don't satisfy the inner condition), then read once after the loop ends. Moving it into the inner conditional block would silently reset/undercount it -- it must stay at its current scope for correctness, not just style.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-binding-scope",
+      "path": "crates/spec/nomos-spec-validate/src/rule/no_undeclared_filler_template.rs",
+      "fingerprint": "0ddfdce576ef6ca2",
+      "reason": "total is incremented across every iteration of the enclosing loop (including iterations that don't satisfy the inner condition), then read once after the loop ends. Moving it into the inner conditional block would silently reset/undercount it -- it must stay at its current scope for correctness, not just style.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-reference-parameter",
+      "path": "crates/spec/nomos-spec-store/src/addressing/document_path.rs",
+      "fingerprint": "408aed039fe7e893",
+      "reason": "the \u0026String parameter is the concrete type argument of impl From\u003c\u0026'a String\u003e, kept beside a sibling impl From\u003c\u0026'a str\u003e so a generic impl Into\u003cT\u003e bound accepts a borrowed String too -- retyping this parameter to \u0026str would collide with (duplicate) that sibling impl.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-reference-parameter",
+      "path": "crates/spec/nomos-spec-store/src/addressing/document_revision.rs",
+      "fingerprint": "408aed039fe7e893",
+      "reason": "the \u0026String parameter is the concrete type argument of impl From\u003c\u0026'a String\u003e, kept beside a sibling impl From\u003c\u0026'a str\u003e so a generic impl Into\u003cT\u003e bound accepts a borrowed String too -- retyping this parameter to \u0026str would collide with (duplicate) that sibling impl.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-reference-parameter",
+      "path": "crates/spec/nomos-spec-store/src/store/relation/from_node_id.rs",
+      "fingerprint": "408aed039fe7e893",
+      "reason": "the \u0026String parameter is the concrete type argument of impl From\u003c\u0026'a String\u003e, kept beside a sibling impl From\u003c\u0026'a str\u003e so a generic impl Into\u003cT\u003e bound accepts a borrowed String too -- retyping this parameter to \u0026str would collide with (duplicate) that sibling impl.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-reference-parameter",
+      "path": "crates/spec/nomos-spec-store/src/store/relation/inverse_relation_type.rs",
+      "fingerprint": "408aed039fe7e893",
+      "reason": "the \u0026String parameter is the concrete type argument of impl From\u003c\u0026'a String\u003e, kept beside a sibling impl From\u003c\u0026'a str\u003e so a generic impl Into\u003cT\u003e bound accepts a borrowed String too -- retyping this parameter to \u0026str would collide with (duplicate) that sibling impl.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-reference-parameter",
+      "path": "crates/spec/nomos-spec-store/src/store/relation/relation_tier.rs",
+      "fingerprint": "408aed039fe7e893",
+      "reason": "the \u0026String parameter is the concrete type argument of impl From\u003c\u0026'a String\u003e, kept beside a sibling impl From\u003c\u0026'a str\u003e so a generic impl Into\u003cT\u003e bound accepts a borrowed String too -- retyping this parameter to \u0026str would collide with (duplicate) that sibling impl.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-reference-parameter",
+      "path": "crates/spec/nomos-spec-store/src/store/relation/relation_type_name.rs",
+      "fingerprint": "408aed039fe7e893",
+      "reason": "the \u0026String parameter is the concrete type argument of impl From\u003c\u0026'a String\u003e, kept beside a sibling impl From\u003c\u0026'a str\u003e so a generic impl Into\u003cT\u003e bound accepts a borrowed String too -- retyping this parameter to \u0026str would collide with (duplicate) that sibling impl.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-reference-parameter",
+      "path": "crates/spec/nomos-spec-store/src/store/relation/to_node_id.rs",
+      "fingerprint": "408aed039fe7e893",
+      "reason": "the \u0026String parameter is the concrete type argument of impl From\u003c\u0026'a String\u003e, kept beside a sibling impl From\u003c\u0026'a str\u003e so a generic impl Into\u003cT\u003e bound accepts a borrowed String too -- retyping this parameter to \u0026str would collide with (duplicate) that sibling impl.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-reference-parameter",
+      "path": "crates/spec/nomos-spec-store/src/table/suite_authority/suite_id.rs",
+      "fingerprint": "408aed039fe7e893",
+      "reason": "the \u0026String parameter is the concrete type argument of impl From\u003c\u0026'a String\u003e, kept beside a sibling impl From\u003c\u0026'a str\u003e so a generic impl Into\u003cT\u003e bound accepts a borrowed String too -- retyping this parameter to \u0026str would collide with (duplicate) that sibling impl.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-reference-parameter",
+      "path": "crates/spec/nomos-spec-store/src/table/suite_authority/suite_title.rs",
+      "fingerprint": "408aed039fe7e893",
+      "reason": "the \u0026String parameter is the concrete type argument of impl From\u003c\u0026'a String\u003e, kept beside a sibling impl From\u003c\u0026'a str\u003e so a generic impl Into\u003cT\u003e bound accepts a borrowed String too -- retyping this parameter to \u0026str would collide with (duplicate) that sibling impl.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-import-scope",
+      "path": "crates/spec/nomos-spec-model/src/statement.rs",
+      "fingerprint": "e31e987fb9489655",
+      "reason": "this is a pub use re-export forming part of the crate's public API surface (nomos_spec_model::StatementKind), not a private import for internal convenience -- the checker can't distinguish the two and doesn't see that external crates depend on this path. Moving a pub use into a function body would remove the crate-level export entirely, not narrow its scope.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
     }
   ]
 }
