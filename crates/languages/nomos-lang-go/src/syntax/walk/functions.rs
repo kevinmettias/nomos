@@ -37,18 +37,18 @@ pub(super) fn Record_Method(items: &mut Vec<SyntaxItem>, node: Node, source: &[u
         return;
     };
 
-    let (scope, arity) = Method_Scope_And_Arity(node, source);
+    let found = Method_Scope_And_Arity(node, source);
     let documentation = Documentation(node, source);
 
     Push(
         items,
         ItemRecord {
             kind: ItemKind::Function,
-            scope,
+            scope: found.scope,
             visibility: Visibility::Of_Name(&name),
             name,
             documentation,
-            shape: Some(nomos_cap_syntax::Function_Shape(arity)),
+            shape: Some(nomos_cap_syntax::Function_Shape(found.arity)),
         },
     );
 }
@@ -61,7 +61,15 @@ fn Method_Name(node: Node, source: &[u8]) -> Option<String>
     return Some(name.to_owned());
 }
 
-fn Method_Scope_And_Arity(node: Node, source: &[u8]) -> (Vec<String>, usize)
+/// [`Method_Scope_And_Arity`]'s own result, named so the caller reads `found.scope` and
+/// `found.arity` rather than an unnamed pair whose order is only a convention.
+struct MethodScopeAndArity
+{
+    scope: Vec<String>,
+    arity: usize,
+}
+
+fn Method_Scope_And_Arity(node: Node, source: &[u8]) -> MethodScopeAndArity
 {
     let receiver = node.child_by_field_name("receiver");
     let scope = receiver
@@ -70,7 +78,10 @@ fn Method_Scope_And_Arity(node: Node, source: &[u8]) -> (Vec<String>, usize)
     let receiver_arity = usize::from(receiver.is_some());
     let parameter_arity = node.child_by_field_name("parameters").map_or(0, Parameter_Arity);
 
-    return (scope, receiver_arity.saturating_add(parameter_arity));
+    return MethodScopeAndArity {
+        scope,
+        arity: receiver_arity.saturating_add(parameter_arity),
+    };
 }
 
 /// The receiver's type name, unwrapped through the pointer and generic-instantiation forms

@@ -88,7 +88,11 @@ pub enum GateInvocation
     Run(GateCommand),
     /// Walk the tree, judge it, and answer what one named finding looks like and whether
     /// it would block.
-    Explain(GateCommand, FindingQuery),
+    Explain
+    {
+        command: GateCommand,
+        query: FindingQuery,
+    },
 }
 
 /// Runs the requested verb and renders what it says.
@@ -102,7 +106,7 @@ pub fn Run(invocation: &GateInvocation, stdout: &mut impl Write, stderr: &mut im
             Render_Plan(&outcome, stdout, stderr)
         }
         GateInvocation::Run(command) => Run_Verb(command, stdout, stderr),
-        GateInvocation::Explain(command, query) =>
+        GateInvocation::Explain { command, query } =>
         {
             let walked = sources::Walked(&command.root);
             let result = nomos_gate_orchestration::Explain_Gate(

@@ -99,7 +99,7 @@ fn Root_Of(invocation: &GateInvocation) -> &PathBuf
 {
     return match invocation
     {
-        GateInvocation::Plan(command) | GateInvocation::Run(command) | GateInvocation::Explain(command, _) => &command.root,
+        GateInvocation::Plan(command) | GateInvocation::Run(command) | GateInvocation::Explain { command, .. } => &command.root,
     };
 }
 
@@ -348,7 +348,7 @@ fn Test_Explain_Should_Parse_With_Rule_And_Location()
     ];
     let invocation = Parse(&arguments).expect("explain with --rule and --location is valid");
 
-    let GateInvocation::Explain(_, query) = invocation
+    let GateInvocation::Explain { query, .. } = invocation
     else
     {
         panic!("explain must parse as Explain");
@@ -385,13 +385,13 @@ fn Test_Explain_Should_Require_Location()
 #[test]
 fn Test_A_Real_Explain_Should_Report_Not_Found_Over_A_Clean_Tree()
 {
-    let invocation = GateInvocation::Explain(
-        GateCommand { root: PathBuf::from("."), ..Default::default() },
-        nomos_gate_orchestration::FindingQuery {
+    let invocation = GateInvocation::Explain {
+        command: GateCommand { root: PathBuf::from("."), ..Default::default() },
+        query: nomos_gate_orchestration::FindingQuery {
             rule: nomos_contracts::RuleId::New("naming-convention"),
             location: "does/not/exist.rs".to_owned(),
         },
-    );
+    };
     let mut stdout = Vec::new();
     let mut stderr = Vec::new();
 

@@ -35529,6 +35529,65 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P16-EVERYTHINGELSE-DECLARETYPES-1",
+      "title": "OD-GATE-018 phase 3: close check-tuple-return, check-error-values and check-tuple-variant",
+      "why": "declare-types' check-tuple-return (4 real findings after P16-EVERYTHINGELSE-FILESCOPED-TESTCODE's correction) each had exactly one call site: Method_Scope_And_Arity and Type_Spec_Fields (nomos-lang-go's Go syntax walker), Reduced (nomos-gate-orchestration::run_gate, a same-shaped 5-tuple already named field-for-field by its own doc comment), and Walked (nomos-analysis's invalidation propagation) all now return a small named struct instead of an unnamed tuple. check-error-values' last finding (nomos-lang-go's Parsed_Tree, .expect() on set_language) is waived: the only way it can fail is a build-time ABI mismatch between the tree_sitter runtime and its grammar crate, identical for every call regardless of the source being parsed, so it is a build-configuration invariant rather than a per-input runtime failure this file's existing Reading::Unparseable path should absorb. check-tuple-variant's one finding (nomos-cli's GateInvocation::Explain) is now a struct variant naming its GateCommand and FindingQuery fields.",
+      "done_when": "check-tuple-return, check-error-values and check-tuple-variant all report zero findings against crates tests (default run). cargo build --workspace --all-targets stays green. cargo test -p nomos-cli, -p nomos-gate-orchestration, -p nomos-analysis and -p nomos-lang-go all pass.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/src/gate.rs",
+          "crates/host/nomos-cli/src/gate/parsing.rs",
+          "crates/host/nomos-cli/src/gate/tests.rs",
+          "crates/languages/nomos-lang-go/src/syntax/walk/functions.rs",
+          "crates/languages/nomos-lang-go/src/syntax/walk/types.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/run_gate.rs",
+          "crates/substrate/nomos-analysis/src/fact/memory_store/invalidation.rs",
+          "suppressions.json"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "exit_code": 0,
+        "output_tail": "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.17s\n",
+        "verified_at": 1788025859,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "d29af8fef169c8232661e5a9f82b6b377ee1df76"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

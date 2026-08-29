@@ -74,7 +74,7 @@ pub fn Run_Gate<P: ProcessLauncher>(walked: Option<Vec<SourceFile>>, variant: Bu
     let scoped = walked.map(|sources| return Scoped(sources, &command.scope));
     let outcome = Judged(scoped, launcher, JudgeContext { variant, root: &command.root, selected: &command.rules.include });
 
-    let (blocking_findings, calibrated_findings, suppressed_findings, baselined_findings, disposition) = Reduced(
+    let reduced = Reduced(
         &outcome,
         &command.rules,
         DispositionPolicies { adoption: &command.adoption, suppressions: &command.suppressions, baseline: &command.baseline },
@@ -85,11 +85,11 @@ pub fn Run_Gate<P: ProcessLauncher>(walked: Option<Vec<SourceFile>>, variant: Bu
         root: command.root.clone(),
         run,
         check_outcome: outcome,
-        blocking_findings,
-        calibrated_findings,
-        suppressed_findings,
-        baselined_findings,
-        disposition,
+        blocking_findings: reduced.blocking_findings,
+        calibrated_findings: reduced.calibrated_findings,
+        suppressed_findings: reduced.suppressed_findings,
+        baselined_findings: reduced.baselined_findings,
+        disposition: reduced.disposition,
     };
 }
 
@@ -114,17 +114,34 @@ fn Scoped(sources: Vec<SourceFile>, scope: &ScopeSelector) -> Vec<SourceFile>
 /// "does this blocking finding still block," a question about one finding at a time, while
 /// `coverage` answers "did this run reach a judgment about everything it selected," a
 /// question about the run as a whole.
+/// [`Reduced`]'s own result -- named so its caller assigns each list and the disposition by
+/// field rather than by position across five same-shaped slots.
+struct Reduction
+{
+    blocking_findings: Vec<Finding>,
+    calibrated_findings: Vec<Finding>,
+    suppressed_findings: Vec<Finding>,
+    baselined_findings: Vec<Finding>,
+    disposition: GateRunOutcome,
+}
+
 fn Reduced(
     outcome: &CheckOutcome,
     rules: &RuleSelector,
     policies: DispositionPolicies<'_>,
     coverage: CoveragePolicy,
-) -> (Vec<Finding>, Vec<Finding>, Vec<Finding>, Vec<Finding>, GateRunOutcome)
+) -> Reduction
 {
     let CheckOutcome::Judged { findings, .. } = outcome
     else
     {
-        return (Vec::new(), Vec::new(), Vec::new(), Vec::new(), GateRunOutcome::Indeterminate);
+        return Reduction {
+            blocking_findings: Vec::new(),
+            calibrated_findings: Vec::new(),
+            suppressed_findings: Vec::new(),
+            baselined_findings: Vec::new(),
+            disposition: GateRunOutcome::Indeterminate,
+        };
     };
 
     let selected: Vec<Finding> = findings.iter().filter(|finding| return rules.Matches(&finding.rule)).cloned().collect();
@@ -137,7 +154,13 @@ fn Reduced(
         remaining.into_iter().partition(|finding| return policies.baseline.Tolerating(finding).is_some());
     let disposition = Reduced_With_Coverage(Disposition(&blocking_findings), coverage, &selected);
 
-    return (blocking_findings, calibrated_findings, suppressed_findings, baselined_findings, disposition);
+    return Reduction {
+        blocking_findings,
+        calibrated_findings,
+        suppressed_findings,
+        baselined_findings,
+        disposition,
+    };
 }
 
 /// The three per-finding overrides [`Reduced`] checks, grouped into one value so [`Reduced`]

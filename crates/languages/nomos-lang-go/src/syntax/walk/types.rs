@@ -14,32 +14,41 @@ pub(super) fn Record_Type_Spec(items: &mut Vec<SyntaxItem>, spec: Node, source: 
     };
 
     let type_node = spec.child_by_field_name("type");
-    let (kind, shape, documentation) = Type_Spec_Fields(type_node, spec, source);
+    let fields = Type_Spec_Fields(type_node, spec, source);
 
     Push(
         items,
         ItemRecord {
-            kind,
+            kind: fields.kind,
             scope: Vec::new(),
             name: name.clone(),
             visibility: Visibility::Of_Name(&name),
-            documentation,
-            shape,
+            documentation: fields.documentation,
+            shape: fields.shape,
         },
     );
 
-    Record_Interface_Methods_If_Interface(items, (kind, type_node), &name, source);
+    Record_Interface_Methods_If_Interface(items, (fields.kind, type_node), &name, source);
 }
 
 /// `type_node`'s kind and shape, alongside `spec`'s own documentation -- [`Record_Type_Spec`]'s
 /// own gathering step, named so its body reads as "gather the fields, then push them."
-fn Type_Spec_Fields(type_node: Option<Node>, spec: Node, source: &[u8]) -> (ItemKind, Option<String>, Option<String>)
+/// [`Type_Spec_Fields`]'s own result, named so the caller reads `fields.kind` and the rest
+/// rather than an unnamed triple whose order is only a convention.
+struct TypeSpecFields
+{
+    kind: ItemKind,
+    shape: Option<String>,
+    documentation: Option<String>,
+}
+
+fn Type_Spec_Fields(type_node: Option<Node>, spec: Node, source: &[u8]) -> TypeSpecFields
 {
     let kind = Type_Spec_Kind(type_node);
     let shape = Type_Spec_Shape(kind, type_node, source);
     let documentation = Documentation(spec, source);
 
-    return (kind, shape, documentation);
+    return TypeSpecFields { kind, shape, documentation };
 }
 
 /// `type_node`'s methods, recorded when [`Record_Type_Spec`] just built an interface --

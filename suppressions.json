@@ -3552,6 +3552,14 @@
       "reason": "this file (or the module it is nested under) is declared #[cfg(test)] mod X; from its parent, so the whole file compiles only under cargo test -- the same governance OD-GATE-018 category 1 already gives an inline #[cfg(test)] mod tests { } block, extended to a file-level test module.",
       "owner": "@kmettias",
       "expires": "2026-11-27"
+    },
+    {
+      "check": "check-error-values",
+      "path": "crates/languages/nomos-lang-go/src/syntax/walk.rs",
+      "fingerprint": "57de0e8c878e855f",
+      "reason": "parser.set_language(\u0026tree_sitter_go::LANGUAGE.into()) can only fail from a build-time ABI mismatch between the tree_sitter runtime and the tree_sitter_go grammar crate, not from anything about the source file being parsed -- every call would fail identically, so it is a build-configuration invariant, not a per-input runtime failure. Routing it through Reading::Unparseable (the per-file failure path this function already has) would misrepresent a systemic problem as a single source's own defect.",
+      "owner": "@kmettias",
+      "expires": "2027-02-25"
     }
   ]
 }

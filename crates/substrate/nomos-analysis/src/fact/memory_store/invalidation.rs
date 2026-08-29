@@ -155,21 +155,29 @@ fn Propagate(
 ) -> BTreeSet<Digest128>
 {
     let propagation = Taken_Propagation(store);
-    let (seen, reached) = Walked(store, propagation.as_ref(), roots);
+    let walk = Walked(store, propagation.as_ref(), roots);
     store.propagation = Some(propagation);
 
-    for consumer in reached
+    for consumer in walk.reached
     {
         Apply(store, consumer, invalidating, report);
     }
 
-    return seen;
+    return walk.seen;
 }
 
-/// The first pass of [`Propagate`]'s walk: every digest visited (`seen`, roots included),
-/// and, in visit order, those reached but not yet invalidated (`reached`) -- the frontier
-/// the second pass still has to apply.
-fn Walked(store: &MemoryFactStore, propagation: &dyn DependencyPropagation, roots: Vec<Digest128>) -> (BTreeSet<Digest128>, Vec<Digest128>)
+/// [`Walked`]'s own result: every digest visited (`seen`, roots included), and, in visit
+/// order, those reached but not yet invalidated (`reached`) -- the frontier the second pass
+/// still has to apply. Named so the two `BTreeSet`/`Vec` results are not told apart only by
+/// position.
+struct Walk
+{
+    seen: BTreeSet<Digest128>,
+    reached: Vec<Digest128>,
+}
+
+/// The first pass of [`Propagate`]'s walk.
+fn Walked(store: &MemoryFactStore, propagation: &dyn DependencyPropagation, roots: Vec<Digest128>) -> Walk
 {
     let mut seen: BTreeSet<Digest128> = roots.iter().copied().collect();
     let mut reached: Vec<Digest128> = Vec::new();
@@ -185,7 +193,7 @@ fn Walked(store: &MemoryFactStore, propagation: &dyn DependencyPropagation, root
         return true;
     });
 
-    return (seen, reached);
+    return Walk { seen, reached };
 }
 
 /// Takes `store.propagation` out so the first pass in [`Propagate`] can call it under an

@@ -101,7 +101,7 @@ fn Explain_Invocation(rest: &[String], root: PathBuf) -> Result<GateInvocation, 
     let command = GateCommand { root, ..GateCommand::default() };
     let query = FindingQuery { rule: RuleId::New(rule), location };
 
-    return Ok(GateInvocation::Explain(command, query));
+    return Ok(GateInvocation::Explain { command, query });
 }
 
 /// Refuses anything but the three verbs this group implements today.
