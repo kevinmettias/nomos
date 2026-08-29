@@ -4016,6 +4016,78 @@
       "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect.",
       "owner": "@kmettias",
       "expires": "2026-11-27"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/agent/nomos-agent-contracts/src/change_context/change_context_subject.rs",
+      "fingerprint": "c9ef9d28d72fe719",
+      "reason": "OD-GATE-018 category-1: value sits inside test code (a #[cfg(test)] mod block or its own file-scoped test module) -- clippy.toml already permits this test-only ergonomics repository-wide",
+      "owner": "@kmettias",
+      "expires": "2027-02-25"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-api/src/response/explain.rs",
+      "fingerprint": "5f9a193abe447b27",
+      "reason": "OD-GATE-018 category-1: value sits inside test code (a #[cfg(test)] mod block or its own file-scoped test module) -- clippy.toml already permits this test-only ergonomics repository-wide",
+      "owner": "@kmettias",
+      "expires": "2027-02-25"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-api/src/work/claim.rs",
+      "fingerprint": "f348e735bf900da0",
+      "reason": "OD-GATE-018 category-1: value sits inside test code (a #[cfg(test)] mod block or its own file-scoped test module) -- clippy.toml already permits this test-only ergonomics repository-wide",
+      "owner": "@kmettias",
+      "expires": "2027-02-25"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-api/src/work/claim.rs",
+      "message": "magic number literal `3600` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
+      "reason": "OD-GATE-018 category-1: value sits inside test code (a #[cfg(test)] mod block or its own file-scoped test module) -- clippy.toml already permits this test-only ergonomics repository-wide",
+      "owner": "@kmettias",
+      "expires": "2027-02-25"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-api/src/work/renew.rs",
+      "fingerprint": "f348e735bf900da0",
+      "reason": "OD-GATE-018 category-1: value sits inside test code (a #[cfg(test)] mod block or its own file-scoped test module) -- clippy.toml already permits this test-only ergonomics repository-wide",
+      "owner": "@kmettias",
+      "expires": "2027-02-25"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-api/src/work/take_over.rs",
+      "fingerprint": "2543d2b119ecdde9",
+      "reason": "OD-GATE-018 category-1: value sits inside test code (a #[cfg(test)] mod block or its own file-scoped test module) -- clippy.toml already permits this test-only ergonomics repository-wide",
+      "owner": "@kmettias",
+      "expires": "2027-02-25"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/agent/exit_code.rs",
+      "fingerprint": "7d0210d87148120e",
+      "reason": "OD-GATE-018 category-2: enum discriminant value, the confirmed check-literals front-end gap (rust_Literal_Context has no case for a variant discriminant) -- the README exempts enum members, and this file's own doc comment states why each number reuses a cross-group meaning",
+      "owner": "@kmettias",
+      "expires": "2027-02-25"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/agent/exit_code.rs",
+      "fingerprint": "511a1f1920497778",
+      "reason": "OD-GATE-018 category-2: enum discriminant value, the confirmed check-literals front-end gap (rust_Literal_Context has no case for a variant discriminant) -- the README exempts enum members, and this file's own doc comment states why each number reuses a cross-group meaning",
+      "owner": "@kmettias",
+      "expires": "2027-02-25"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/agent/exit_code.rs",
+      "fingerprint": "1c0bfb8a3d74673f",
+      "reason": "OD-GATE-018 category-2: enum discriminant value, the confirmed check-literals front-end gap (rust_Literal_Context has no case for a variant discriminant) -- the README exempts enum members, and this file's own doc comment states why each number reuses a cross-group meaning",
+      "owner": "@kmettias",
+      "expires": "2027-02-25"
     }
   ]
 }

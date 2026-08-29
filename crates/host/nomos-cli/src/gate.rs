@@ -111,10 +111,9 @@ pub fn Run(invocation: &GateInvocation, stdout: &mut impl Write, stderr: &mut im
             let walked = sources::Walked(&command.root);
             let result = nomos_gate_orchestration::Explain_Gate(
                 walked,
-                composition::Host_Variant(),
+                nomos_gate_orchestration::GateEnvironment { variant: composition::Host_Variant(), launcher: &StdProcessLauncher },
                 command,
                 query,
-                &StdProcessLauncher,
             );
             Render_Explain(&result, stdout, stderr)
         }
@@ -127,7 +126,12 @@ fn Run_Verb(command: &GateCommand, stdout: &mut impl Write, stderr: &mut impl Wr
 {
     let walked = sources::Walked(&command.root);
     let run = nomos_gate_orchestration::Fresh_Run_Id(SystemClock.Now());
-    let result = nomos_gate_orchestration::Run_Gate(walked, composition::Host_Variant(), command, &StdProcessLauncher, run);
+    let result = nomos_gate_orchestration::Run_Gate(
+        walked,
+        nomos_gate_orchestration::GateEnvironment { variant: composition::Host_Variant(), launcher: &StdProcessLauncher },
+        command,
+        run,
+    );
 
     return Render_Run(&result, stdout, stderr);
 }

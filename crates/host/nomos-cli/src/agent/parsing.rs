@@ -125,54 +125,60 @@ fn Parse_Effort(arguments: &[String]) -> Result<nomos_model_package::EffortLevel
     };
 }
 
+/// [`Usage_Text`]'s content -- a `const` rather than a literal inside that function's own
+/// body, so the function measures as one line under this crate's clean-file line-count
+/// limit instead of as this whole block: it is one cohesive piece of user-facing text, not
+/// sectioned logic, so splitting it into helper functions would fragment a single string
+/// for no reader's benefit.
+const USAGE_TEXT: &str = "usage: nomos agent <command>\n\
+        \n\
+        \x20 execute --goal <text> [--effort <level>] [--executor <name> | --model-backend <name>]\n\
+        \x20 judge-role --crate <name> [--root <path>] [--effort <level>] [--executor <name> | --model-backend <name>]\n\
+        \n\
+        `execute` dispatches --goal to the chosen backend as a bounded, tool-free \
+        subprocess. It renders the response and, unconditionally, which tool uses (if \
+        any) were structurally denied -- the response text is never evidence of what \
+        happened, only of what the process said. It does not assemble a WorkResult or a \
+        Finding: this is a person's direct question, not a rule's judgment, and there is \
+        no subject or rule identity to report one against.\n\
+        \n\
+        `judge-role` reads --crate's row in --root's README.md band table and its \
+        committed tests/contract/surface/<crate>.txt, runs the real \
+        nomos_rules::Check_Declared_Role_Matches_Surface rule over them, and dispatches \
+        the AgentRequired finding that rule produces -- never a paraphrase -- to execute. \
+        --root defaults to the current directory.\n\
+        \n\
+        --executor and --model-backend name which family of backend to dispatch to; pass \
+        at most one, since a call reaches exactly one. Omitting both is --executor \
+        claude-code, byte-identical to every invocation before either flag existed. They \
+        used to be one flag, --backend, spelling claude-code and ollama as if they were \
+        peer choices of the same kind -- OD-PACKAGE-013 found Ollama's real mechanism is \
+        a ModelBackendPackage's, not a second AgentExecutor's, so the flag that chooses it \
+        says so.\n\
+        \n\
+        --executor takes claude-code (the only real AgentExecutor). Dispatches through \
+        nomos-agent-executor-claude-code under OD-EXECUTOR-001's structural capability \
+        boundary: an isolated working directory, no MCP configuration, an allow-list \
+        naming no real tool, a $1 budget cap, one --print turn.\n\
+        \n\
+        --model-backend takes ollama (the only real ModelBackend). Dispatches through \
+        nomos-model-backend-ollama, a local model, under OD-EXECUTOR-004's boundary: an \
+        isolated working directory, never --experimental/--experimental-yolo/\
+        --experimental-websearch (the only flags that open any tool-use capability), a \
+        wall-clock timeout in place of a dollar budget. Its own outcome carries only the \
+        response text -- no denied-tool-uses line, since there is no tool subsystem to \
+        have denied anything from.\n\
+        \n\
+        --effort takes backend-default, minimal, low, medium, high or maximum -- \
+        MODEL-ROUTE-004's closed vocabulary, carried on TaskEnvelope.effort. \
+        nomos-agent-executor-claude-code maps it to a real `claude --effort` flag; \
+        nomos-model-backend-ollama accepts and ignores it, a real, named gap rather than \
+        an invented approximation. Omitting it is backend-default.\n\
+        \n\
+        exit codes: 0 ok, 2 usage, 5 the executor could not run or answer, 6 the named \
+        crate has no README row or no committed surface snapshot";
+
 fn Usage_Text() -> String
 {
-    return "usage: nomos agent <command>\n\
-            \n\
-            \x20 execute --goal <text> [--effort <level>] [--executor <name> | --model-backend <name>]\n\
-            \x20 judge-role --crate <name> [--root <path>] [--effort <level>] [--executor <name> | --model-backend <name>]\n\
-            \n\
-            `execute` dispatches --goal to the chosen backend as a bounded, tool-free \
-            subprocess. It renders the response and, unconditionally, which tool uses (if \
-            any) were structurally denied -- the response text is never evidence of what \
-            happened, only of what the process said. It does not assemble a WorkResult or a \
-            Finding: this is a person's direct question, not a rule's judgment, and there is \
-            no subject or rule identity to report one against.\n\
-            \n\
-            `judge-role` reads --crate's row in --root's README.md band table and its \
-            committed tests/contract/surface/<crate>.txt, runs the real \
-            nomos_rules::Check_Declared_Role_Matches_Surface rule over them, and dispatches \
-            the AgentRequired finding that rule produces -- never a paraphrase -- to execute. \
-            --root defaults to the current directory.\n\
-            \n\
-            --executor and --model-backend name which family of backend to dispatch to; pass \
-            at most one, since a call reaches exactly one. Omitting both is --executor \
-            claude-code, byte-identical to every invocation before either flag existed. They \
-            used to be one flag, --backend, spelling claude-code and ollama as if they were \
-            peer choices of the same kind -- OD-PACKAGE-013 found Ollama's real mechanism is \
-            a ModelBackendPackage's, not a second AgentExecutor's, so the flag that chooses it \
-            says so.\n\
-            \n\
-            --executor takes claude-code (the only real AgentExecutor). Dispatches through \
-            nomos-agent-executor-claude-code under OD-EXECUTOR-001's structural capability \
-            boundary: an isolated working directory, no MCP configuration, an allow-list \
-            naming no real tool, a $1 budget cap, one --print turn.\n\
-            \n\
-            --model-backend takes ollama (the only real ModelBackend). Dispatches through \
-            nomos-model-backend-ollama, a local model, under OD-EXECUTOR-004's boundary: an \
-            isolated working directory, never --experimental/--experimental-yolo/\
-            --experimental-websearch (the only flags that open any tool-use capability), a \
-            wall-clock timeout in place of a dollar budget. Its own outcome carries only the \
-            response text -- no denied-tool-uses line, since there is no tool subsystem to \
-            have denied anything from.\n\
-            \n\
-            --effort takes backend-default, minimal, low, medium, high or maximum -- \
-            MODEL-ROUTE-004's closed vocabulary, carried on TaskEnvelope.effort. \
-            nomos-agent-executor-claude-code maps it to a real `claude --effort` flag; \
-            nomos-model-backend-ollama accepts and ignores it, a real, named gap rather than \
-            an invented approximation. Omitting it is backend-default.\n\
-            \n\
-            exit codes: 0 ok, 2 usage, 5 the executor could not run or answer, 6 the named \
-            crate has no README row or no committed surface snapshot"
-        .to_owned();
+    return USAGE_TEXT.to_owned();
 }

@@ -114,10 +114,10 @@ fn Report_Judged(findings: &[Finding], result: &GateRunResult, stdout: &mut impl
         stdout,
         "\n{} finding(s), {} of which can fail a build, {} calibrated, {} suppressed, {} baselined",
         findings.len(),
-        result.blocking_findings.len(),
-        result.calibrated_findings.len(),
-        result.suppressed_findings.len(),
-        result.baselined_findings.len()
+        result.findings.blocking_findings.len(),
+        result.findings.calibrated_findings.len(),
+        result.findings.suppressed_findings.len(),
+        result.findings.baselined_findings.len()
     );
 
     return Exit_Code_For(result.disposition);

@@ -12,6 +12,37 @@ use std::path::{Path, PathBuf};
 
 use super::Disposition;
 
+/// A serializable twin of [`nomos_gate_orchestration::GateFindings`].
+///
+/// A twin rather than a re-export because the type it mirrors does not derive `Serialize`,
+/// for the reason `crate::response`'s own doc gives.
+#[derive(Debug, Serialize)]
+pub struct GateFindings
+{
+    /// Exactly the findings that failed this build. Empty whenever `disposition` is not
+    /// [`Disposition::Failed`].
+    pub blocking_findings: Vec<Finding>,
+    /// Findings an `AdoptionPolicy` calibration kept from blocking.
+    pub calibrated_findings: Vec<Finding>,
+    /// Findings a `Suppression` kept from blocking.
+    pub suppressed_findings: Vec<Finding>,
+    /// Findings a `BaselineDebt` kept from blocking.
+    pub baselined_findings: Vec<Finding>,
+}
+
+impl GateFindings
+{
+    fn From(findings: nomos_gate_orchestration::GateFindings) -> Self
+    {
+        return Self {
+            blocking_findings: findings.blocking_findings,
+            calibrated_findings: findings.calibrated_findings,
+            suppressed_findings: findings.suppressed_findings,
+            baselined_findings: findings.baselined_findings,
+        };
+    }
+}
+
 /// Walks `root` and judges it exactly as `nomos gate run` would, over the default
 /// [`GateCommand`] -- every rule, every file, no baseline, no suppression, no adoption
 /// calibration -- and hands back a JSON-serializable [`GateRunResponse`].
@@ -23,9 +54,8 @@ pub fn Handle_Gate_Run(root: &Path) -> GateRunResponse
     let run = nomos_gate_orchestration::Fresh_Run_Id(SystemClock.Now());
     let result = nomos_gate_orchestration::Run_Gate(
         walked,
-        composition::Host_Variant(),
+        nomos_gate_orchestration::GateEnvironment { variant: composition::Host_Variant(), launcher: &StdProcessLauncher },
         &command,
-        &StdProcessLauncher,
         run,
     );
 
@@ -44,15 +74,8 @@ pub struct GateRunResponse
     pub root: PathBuf,
     /// The reduced verdict.
     pub disposition: Disposition,
-    /// Exactly the findings that failed this build. Empty whenever `disposition` is not
-    /// [`Disposition::Failed`].
-    pub blocking_findings: Vec<Finding>,
-    /// Findings an `AdoptionPolicy` calibration kept from blocking.
-    pub calibrated_findings: Vec<Finding>,
-    /// Findings a `Suppression` kept from blocking.
-    pub suppressed_findings: Vec<Finding>,
-    /// Findings a `BaselineDebt` kept from blocking.
-    pub baselined_findings: Vec<Finding>,
+    /// Every finding this run reduced, grouped by why it does or does not block.
+    pub findings: GateFindings,
 }
 
 impl GateRunResponse
@@ -63,10 +86,7 @@ impl GateRunResponse
             run: result.run,
             root: result.root,
             disposition: Disposition::From(result.disposition),
-            blocking_findings: result.blocking_findings,
-            calibrated_findings: result.calibrated_findings,
-            suppressed_findings: result.suppressed_findings,
-            baselined_findings: result.baselined_findings,
+            findings: GateFindings::From(result.findings),
         };
     }
 }
@@ -106,7 +126,7 @@ mod tests
         let _ignored = std::fs::remove_dir_all(&empty);
 
         assert_eq!(response.disposition, Disposition::Indeterminate);
-        assert!(response.blocking_findings.is_empty());
+        assert!(response.findings.blocking_findings.is_empty());
     }
 
     /// The whole point of this crate: the response a real run produces is valid JSON, and

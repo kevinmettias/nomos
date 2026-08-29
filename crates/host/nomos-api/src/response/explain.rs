@@ -22,8 +22,12 @@ pub fn Handle_Gate_Explain(root: &Path, query: &FindingQuery) -> GateExplainResp
 {
     let command = GateCommand { root: root.to_path_buf(), ..Default::default() };
     let walked = sources::Walked(root);
-    let result =
-        nomos_gate_orchestration::Explain_Gate(walked, composition::Host_Variant(), &command, query, &StdProcessLauncher);
+    let result = nomos_gate_orchestration::Explain_Gate(
+        walked,
+        nomos_gate_orchestration::GateEnvironment { variant: composition::Host_Variant(), launcher: &StdProcessLauncher },
+        &command,
+        query,
+    );
 
     return GateExplainResponse::From(result.explanation);
 }

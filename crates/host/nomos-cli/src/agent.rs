@@ -108,8 +108,7 @@ pub(crate) fn Run(command: &Command, output: &mut impl std::io::Write, notes: &m
     {
         Command::Execute { goal, effort, backend } => dispatch::Execute(goal, DispatchConfig { effort: *effort, backend: *backend }, output, notes),
         Command::JudgeRole { crate_name, root, effort, backend } => judge_role::Judge_Role(
-            crate_name,
-            root,
+            judge_role::RoleRequest { crate_name, root },
             DispatchConfig { effort: *effort, backend: *backend },
             output,
             notes,

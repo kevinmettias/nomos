@@ -11,12 +11,15 @@ use nomos_rules::RoleSurfacePair;
 use std::path::Path;
 
 /// `--crate` and `--root` together -- the subject `judge-role` was asked to judge, as
-/// distinct from `DispatchConfig`'s question of how to ask it.
+/// distinct from `DispatchConfig`'s question of how to ask it. `pub(super)` rather than
+/// private: [`Judge_Role`] takes this directly now, grouping its own former `crate_name`
+/// and `root` parameters into the same value this module already builds them into
+/// internally, so [`super::Run`] constructs it at the one real call site.
 #[derive(Clone, Copy)]
-struct RoleRequest<'a>
+pub(super) struct RoleRequest<'a>
 {
-    crate_name: &'a str,
-    root: &'a Path,
+    pub(super) crate_name: &'a str,
+    pub(super) root: &'a Path,
 }
 
 /// Reads `root`'s `README.md` and `root`'s committed surface snapshot for `crate_name`,
@@ -24,15 +27,12 @@ struct RoleRequest<'a>
 /// would be handed, runs that rule to get the real `Finding` it produces, and dispatches
 /// the question that finding names — never its own guess — to Claude Code.
 pub(super) fn Judge_Role(
-    crate_name: &str,
-    root: &Path,
+    request: RoleRequest<'_>,
     config: DispatchConfig,
     output: &mut impl std::io::Write,
     notes: &mut impl std::io::Write,
 ) -> ExitCode
 {
-    let request = RoleRequest { crate_name, root };
-
     let pair = match Role_Surface_Pair(request, notes)
     {
         Ok(pair) => pair,
