@@ -37,7 +37,7 @@ impl Outcome
     /// Whether the member contributed entries. `Approximate` did; it says how good they
     /// are, not whether they are there.
     #[must_use]
-    pub const fn Answered(self) -> bool
+    pub const fn Is_Answered(self) -> bool
     {
         return matches!(self, Self::Read | Self::Approximate);
     }

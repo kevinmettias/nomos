@@ -33,7 +33,7 @@ pub(crate) fn Syntax_Inputs(source: &str) -> InputDigest
 
 /// Produces the syntax-items fact for one file.
 #[must_use]
-pub fn Materialize(subject: SubjectId, source: &str, context: FactContext) -> Materialization
+pub fn Materialize_Syntax_Fact(subject: SubjectId, source: &str, context: FactContext) -> Materialization
 {
     use crate::Read_Source;
     use crate::Reading;
@@ -46,14 +46,14 @@ pub fn Materialize(subject: SubjectId, source: &str, context: FactContext) -> Ma
 
     let payload = Encode_Payload(&facts);
     let guarantee = Declared_Guarantee();
-    let key = Keyed(subject, source, guarantee, context);
+    let key = Compute_Fact_Key(subject, source, guarantee, context);
 
-    let fact = Fact(key, guarantee, payload, context);
+    let fact = Assembled_Fact(key, guarantee, payload, context);
 
     return Materialization::Materialized(Box::new(fact));
 }
 
-fn Keyed(
+fn Compute_Fact_Key(
     subject: SubjectId,
     source: &str,
     guarantee: Guarantee,
@@ -78,7 +78,7 @@ fn Keyed(
 /// The evidence is `Verified`, not `Derived`: a parser either found the item in the tree or
 /// it did not, and this provider's own [`Assurance::Sound`](nomos_contracts::Assurance::Sound)
 /// claim on both axes is exactly the claim that there is no inference step in between.
-fn Fact(
+fn Assembled_Fact(
     key: nomos_analysis::FactKey,
     guarantee: Guarantee,
     payload: Vec<u8>,
@@ -126,16 +126,16 @@ fn Encode_Item(encoded: &mut String, item: &SyntaxItem)
     encoded.push('\t');
     encoded.push_str(&item.Qualified_Name());
     encoded.push('\t');
-    encoded.push_str(&Observed(item.documentation.as_deref()));
+    encoded.push_str(&Encode_Observed_Field(item.documentation.as_deref()));
     encoded.push('\t');
-    encoded.push_str(&Observed(item.shape.as_deref()));
+    encoded.push_str(&Encode_Observed_Field(item.shape.as_deref()));
     encoded.push('\n');
 }
 
 /// One observed field, in the schema's spelling. `NotObserved` — `-` — is unreachable from
 /// here for the same reason it is unreachable from `nomos-lang-rust`'s encoder: this provider
 /// parses, so every field it does not write is an absence it looked for.
-fn Observed(value: Option<&str>) -> String
+fn Encode_Observed_Field(value: Option<&str>) -> String
 {
     return match value
     {
@@ -152,7 +152,7 @@ mod tests
     use nomos_contracts::Digest128;
     use nomos_model::Content_Digest;
 
-    fn Subject(path: &str) -> SubjectId
+    fn Subject_Of_Path(path: &str) -> SubjectId
     {
         return SubjectId::From_Digest(Content_Digest(path.as_bytes()));
     }
@@ -167,11 +167,16 @@ mod tests
         };
     }
 
-    fn Fact(source: &str) -> MaterializedFact
+    fn Fact_From_Source(source: &str) -> MaterializedFact
     {
-        return match Materialize(Subject("a.go"), source, Context())
+        return match Materialize_Syntax_Fact(Subject_Of_Path("a.go"), source, Context())
         {
             Materialization::Materialized(fact) => *fact,
+            // Every source passed to this helper is Go its author wrote to be parseable, so
+            // a refusal is a broken fixture and not a reading worth handing back to the
+            // tests below, which compare two facts to each other and would pass vacuously
+            // if a provider that had begun refusing everything made both sides equally
+            // absent. The parser's own message is printed because it names what stopped it.
             Materialization::Unparseable(failure) => panic!("expected a fact: {failure}"),
         };
     }
@@ -179,7 +184,7 @@ mod tests
     #[test]
     fn Test_A_Fact_Should_Carry_The_Declared_Guarantee()
     {
-        let fact = Fact("package main\n\nfunc One() {}\n");
+        let fact = Fact_From_Source("package main\n\nfunc One() {}\n");
 
         assert_eq!(fact.guarantee, Declared_Guarantee());
         assert_eq!(fact.Key().guarantee, GuaranteeDigest::Of(&Declared_Guarantee()));
@@ -191,8 +196,8 @@ mod tests
     {
         let source = "package main\n\ntype S struct{}\n\nfunc (s S) New() S { return s }\n";
 
-        let first = Fact(source);
-        let second = Fact(source);
+        let first = Fact_From_Source(source);
+        let second = Fact_From_Source(source);
 
         assert_eq!(first.Key().semantic_inputs, second.Key().semantic_inputs);
         assert_eq!(first.Key().Digest(), second.Key().Digest());
@@ -202,8 +207,8 @@ mod tests
     #[test]
     fn Test_Different_Bytes_Should_Reach_Different_Semantic_Inputs()
     {
-        let first = Fact("package main\n\nfunc One() {}\n");
-        let second = Fact("package main\n\nfunc Two() {}\n");
+        let first = Fact_From_Source("package main\n\nfunc One() {}\n");
+        let second = Fact_From_Source("package main\n\nfunc Two() {}\n");
 
         assert_ne!(first.Key().semantic_inputs, second.Key().semantic_inputs);
         assert_ne!(first.payload.Digest(), second.payload.Digest());
@@ -212,7 +217,7 @@ mod tests
     #[test]
     fn Test_An_Unparseable_File_Should_Produce_No_Fact()
     {
-        let outcome = Materialize(Subject("broken.go"), "func unclosed( {", Context());
+        let outcome = Materialize_Syntax_Fact(Subject_Of_Path("broken.go"), "func unclosed( {", Context());
 
         assert!(matches!(outcome, Materialization::Unparseable(_)), "got {outcome:?}");
     }
@@ -222,7 +227,7 @@ mod tests
     #[test]
     fn Test_The_Encoding_Should_Be_Stable_And_Not_Empty()
     {
-        let fact = Fact(
+        let fact = Fact_From_Source(
             "package main\n\n\
              func One() {}\n\n\
              type Inner struct{}\n\n\
@@ -244,7 +249,7 @@ mod tests
     #[test]
     fn Test_The_Encoding_Should_Carry_What_This_Provider_Observed()
     {
-        let fact = Fact(
+        let fact = Fact_From_Source(
             "package main\n\n\
              // Tables lists every table.\n\
              // Mirrored by Test_Every_Row.\n\
@@ -267,7 +272,7 @@ mod tests
     #[test]
     fn Test_This_Providers_Payload_Should_Decode_Under_The_Schemas_Own_Reader()
     {
-        let fact = Fact("package main\n\nfunc One() {}\n\ntype Inner struct{}\n\nfunc (i Inner) Two() {}\n");
+        let fact = Fact_From_Source("package main\n\nfunc One() {}\n\ntype Inner struct{}\n\nfunc (i Inner) Two() {}\n");
 
         let payload = nomos_cap_syntax::Parse_Payload(&fact.payload.bytes).expect("this provider writes nomos.syntax.items.v2");
 
@@ -288,7 +293,7 @@ mod tests
     #[test]
     fn Test_The_Blank_Identifier_Should_Carry_The_Mark_The_Schema_Reserves()
     {
-        let fact = Fact("package main\n\ntype Writer interface{}\n\nvar _ Writer = nil\n\nvar Free int\n");
+        let fact = Fact_From_Source("package main\n\ntype Writer interface{}\n\nvar _ Writer = nil\n\nvar Free int\n");
 
         let payload = nomos_cap_syntax::Parse_Payload(&fact.payload.bytes).expect("well formed");
 

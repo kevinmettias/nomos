@@ -1,8 +1,6 @@
 //! What this provider offers, and at what guarantee.
 
 use nomos_cap_dependency::{Capability, CONTRACT_VERSION};
-#[cfg(test)]
-use nomos_cap_dependency::Ceiling;
 use nomos_capability::ProviderOffer;
 use nomos_contracts::{
     Assurance, FactVariant, Guarantee, IncrementalGranularity, ProviderId,
@@ -71,6 +69,8 @@ mod tests
     #[test]
     fn Test_The_Declared_Guarantee_Should_Satisfy_The_Contract_Ceiling()
     {
+        use nomos_cap_dependency::Ceiling;
+
         assert!(Declared_Guarantee().Satisfies(&Ceiling()));
     }
 }

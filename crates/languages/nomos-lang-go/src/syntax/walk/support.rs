@@ -4,8 +4,8 @@
 use super::super::{ItemKind, SyntaxItem, Visibility};
 use tree_sitter::Node;
 
-/// The fields one recorded declaration needs, grouped so [`Push`] takes a small, fixed
-/// number of parameters regardless of how many facts a declaration carries.
+/// The fields one recorded declaration needs, grouped so [`Push_Item_Record`] takes a small,
+/// fixed number of parameters regardless of how many facts a declaration carries.
 pub(super) struct ItemRecord
 {
     pub(super) kind: ItemKind,
@@ -21,7 +21,7 @@ pub(super) struct ItemRecord
 /// `shape` is `None` where the form has no shape to describe rather than where none could be
 /// seen. This provider parses, so everything it does not record is an absence it looked for
 /// — the distinction the payload spells `.` rather than `-`.
-pub(super) fn Push(items: &mut Vec<SyntaxItem>, record: ItemRecord)
+pub(super) fn Push_Item_Record(items: &mut Vec<SyntaxItem>, record: ItemRecord)
 {
     let ordinal = u32::try_from(items.len()).unwrap_or(u32::MAX);
 

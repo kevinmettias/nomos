@@ -168,7 +168,7 @@ fn Test_A_File_That_Declares_Nothing_Should_Parse()
     {
         let facts = Parsed(source);
 
-        assert!(facts.Declares_Nothing(), "`{source:?}` declares nothing");
+        assert!(facts.Has_No_Declarations(), "`{source:?}` declares nothing");
         assert_eq!(facts.unexpanded, 0);
     }
 }
@@ -200,7 +200,7 @@ fn Test_Broken_Source_Should_Be_Unparseable_Rather_Than_Empty()
                 // a reading of one is the provider claiming to have understood text rustc
                 // rejects. The item count is printed rather than a bare failure because it
                 // separates a reader that salvaged part of the file from one that read it as
-                // empty, and only the second could be mistaken for `Declares_Nothing`.
+                // empty, and only the second could be mistaken for `Has_No_Declarations`.
                 panic!("`{source}` parsed to {} items", facts.items.len())
             }
         }

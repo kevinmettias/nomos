@@ -2,7 +2,9 @@
 
 // What a read of a source file yields: the facts, the items in them, and the two
 // properties an item carries.
+#[path = "syntax/syntax_facts.rs"]
 mod facts;
+#[path = "syntax/syntax_item.rs"]
 mod item;
 mod item_kind;
 mod visibility;
@@ -20,11 +22,10 @@ mod tests;
 
 pub(crate) use shape::Path_As_Written;
 use shape::{Bound_By, Function_Shape, Impl_Shape, Struct_Shape, Type_Head, Type_Shape};
-use documentation::Documentation;
+use documentation::Documentation_Of_Attributes;
 
 use crate::{ParseFailure, Reading};
 use syn::visit::Visit;
-use walk::Walk;
 
 /// Reads Rust source.
 ///
@@ -59,6 +60,8 @@ fn Parse_Failure(error: &syn::Error) -> ParseFailure
 /// Every item and unexpanded construct a full walk of an already-parsed file records.
 fn Walk_File(file: &syn::File) -> SyntaxFacts
 {
+    use walk::Walk;
+
     let mut walk = Walk::New();
     walk.visit_file(file);
 

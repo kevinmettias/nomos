@@ -297,7 +297,7 @@ fn Test_A_File_That_Declares_Nothing_Should_Parse()
     {
         let facts = Parsed(source);
 
-        assert!(facts.Declares_Nothing(), "`{source:?}` declares nothing");
+        assert!(facts.Has_No_Declarations(), "`{source:?}` declares nothing");
         assert_eq!(facts.unexpanded, 0);
     }
 }

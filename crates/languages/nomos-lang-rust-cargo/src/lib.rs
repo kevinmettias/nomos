@@ -37,9 +37,12 @@
 
 #![forbid(unsafe_code)]
 
+#[path = "dependency_fact_production.rs"]
 mod determinism;
 mod guarantee;
+#[path = "metadata_error.rs"]
 mod metadata;
+#[path = "fact_context.rs"]
 mod provider;
 
 pub use determinism::DependencyFactProduction;

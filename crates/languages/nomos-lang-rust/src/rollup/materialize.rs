@@ -24,7 +24,7 @@ pub fn Materialize_Index(
     module: &Module,
 ) -> Result<Rolled, FactError>
 {
-    let members = Canonical(&module.members);
+    let members = Canonical_Members(&module.members);
     let key = Index_Key(module.subject, &members, against.context);
 
     // The read borrows the store immutably and the write needs it mutably, so the reader
@@ -74,7 +74,7 @@ pub fn Index_Key(module: SubjectId, members: &[ModuleMember], context: FactConte
         contract: Capability(),
         contract_version: CONTRACT_VERSION,
         subject: module,
-        semantic_inputs: Index_Inputs(&Canonical(members)),
+        semantic_inputs: Index_Inputs(&Canonical_Members(members)),
         provider: ProviderId::New(PROVIDER),
         provider_version: CONTRACT_VERSION,
         guarantee: GuaranteeDigest::Of(&Declared_Guarantee()),
@@ -84,7 +84,7 @@ pub fn Index_Key(module: SubjectId, members: &[ModuleMember], context: FactConte
 }
 
 /// The members in the one order this provider reads them in.
-pub(super) fn Canonical(members: &[ModuleMember]) -> Vec<ModuleMember>
+pub(super) fn Canonical_Members(members: &[ModuleMember]) -> Vec<ModuleMember>
 {
     let mut ordered = members.to_vec();
     ordered.sort_by_key(|member| {

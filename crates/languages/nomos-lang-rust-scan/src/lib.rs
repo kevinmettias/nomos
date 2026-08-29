@@ -35,18 +35,21 @@
 
 #![forbid(unsafe_code)]
 
+#[path = "scan_fact_production.rs"]
 mod determinism;
 mod guarantee;
 mod item_kind;
+#[path = "fact_context.rs"]
 mod provider;
+#[path = "scanned_item.rs"]
 mod scan;
 mod scanned_file;
 mod visibility;
 
 pub use determinism::ScanFactProduction;
 pub use guarantee::{Declared_Guarantee, PROVIDER, Provider_Offer};
-pub use provider::{Encode_Payload, FactContext, Materialize};
+pub use provider::{Encode_Payload, FactContext, Materialize_Syntax_Fact};
 pub use item_kind::ItemKind;
-pub use scan::{Scan, ScannedItem};
+pub use scan::{Scan_Source, ScannedItem};
 pub use scanned_file::ScannedFile;
 pub use visibility::Visibility;

@@ -23,7 +23,7 @@ use tree_sitter::Node;
 /// `var_spec` inside it. A spec further into a grouped block (`const ( A = 1\n// B\nB = 2 )`)
 /// needs no such climb — its own comment is already its own immediate prior sibling — and
 /// [`Search_Anchor`] leaves it exactly where it was for that case.
-pub(super) fn Documentation(declaration: Node, source: &[u8]) -> Option<String>
+pub(super) fn Documentation_Of_Declaration(declaration: Node, source: &[u8]) -> Option<String>
 {
     let anchor = Search_Anchor(declaration);
     let boundary_row = anchor.start_position().row.checked_sub(1)?;
@@ -80,8 +80,8 @@ fn Next_Anchor(anchor: Node) -> Option<Node>
     return Some(parent);
 }
 
-/// Every contiguous comment line above `anchor`, nearest first -- [`Documentation`]'s own
-/// walk, named so its body reads as "collect the run, then reverse it into source order."
+/// Every contiguous comment line above `anchor`, nearest first -- [`Documentation_Of_Declaration`]'s
+/// own walk, named so its body reads as "collect the run, then reverse it into source order."
 fn Contiguous_Comment_Lines(anchor: Node, mut boundary_row: usize, source: &[u8]) -> Vec<String>
 {
     let mut lines = Vec::new();
@@ -120,14 +120,14 @@ fn Comment_Line(previous: Node, boundary_row: usize, source: &[u8]) -> Option<(S
     let text = previous.utf8_text(source).ok()?;
     let above = previous.start_position().row.checked_sub(1)?;
 
-    return Some((Stripped(text), above));
+    return Some((Stripped_Comment_Text(text), above));
 }
 
 /// One comment's text with its `//` or `/* ... */` marker removed and the result trimmed.
 ///
 /// A block comment spanning several lines keeps its interior newlines — stripping only the
 /// delimiters preserves whatever paragraph the author wrote rather than flattening it.
-fn Stripped(raw: &str) -> String
+fn Stripped_Comment_Text(raw: &str) -> String
 {
     if let Some(body) = raw.strip_prefix("//")
     {

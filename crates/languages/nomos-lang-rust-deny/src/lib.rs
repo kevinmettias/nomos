@@ -32,9 +32,12 @@
 
 #![forbid(unsafe_code)]
 
+#[path = "dependency_policy_fact_production.rs"]
 mod determinism;
 mod guarantee;
+#[path = "fact_context.rs"]
 mod provider;
+#[path = "deny_error.rs"]
 mod reading;
 
 pub use determinism::DependencyPolicyFactProduction;

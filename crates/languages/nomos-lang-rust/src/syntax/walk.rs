@@ -1,6 +1,6 @@
 //! One pass over a parsed file, recording every declaration it meets.
 
-use super::{SyntaxItem, Documentation, Visibility, Bound_By, ItemKind, Visit, Type_Shape, Function_Shape, Struct_Shape, Type_Head, Impl_Shape, Path_As_Written};
+use super::{SyntaxItem, Documentation_Of_Attributes, Visibility, Bound_By, ItemKind, Visit, Type_Shape, Function_Shape, Struct_Shape, Type_Head, Impl_Shape, Path_As_Written};
 
 /// The walk that turns a parsed file into items.
 ///
@@ -42,7 +42,7 @@ impl Walk
             scope: self.scope.clone(),
             name: declared.name,
             visibility: declared.visibility,
-            documentation: Documentation(attributes),
+            documentation: Documentation_Of_Attributes(attributes),
             shape: declared.shape,
         });
     }

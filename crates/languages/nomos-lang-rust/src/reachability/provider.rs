@@ -23,7 +23,7 @@ pub(crate) fn Reachability_Inputs(source: &str) -> InputDigest
 
 /// Produces the reachability fact for one file.
 #[must_use]
-pub fn Materialize(subject: SubjectId, source: &str, context: FactContext) -> Materialization
+pub fn Materialize_Reachability_Fact(subject: SubjectId, source: &str, context: FactContext) -> Materialization
 {
     let sites = match Read_Reachability(source)
     {
@@ -33,14 +33,14 @@ pub fn Materialize(subject: SubjectId, source: &str, context: FactContext) -> Ma
 
     let payload = Encode_Payload(&ReachabilityPayload { sites });
     let guarantee = Declared_Guarantee();
-    let key = Keyed(subject, source, guarantee, context);
+    let key = Compute_Fact_Key(subject, source, guarantee, context);
 
-    let fact = Fact(key, guarantee, payload, context);
+    let fact = Assembled_Fact(key, guarantee, payload, context);
 
     return Materialization::Materialized(Box::new(fact));
 }
 
-fn Keyed(
+fn Compute_Fact_Key(
     subject: SubjectId,
     source: &str,
     guarantee: Guarantee,
@@ -61,9 +61,9 @@ fn Keyed(
 }
 
 /// The fact itself, once its identity is settled — evidence `Verified`, the identical
-/// argument `crate::provider::Fact` gives: a pattern either matched the token stream or it
-/// did not, with no inference step between.
-fn Fact(
+/// argument `crate::provider::Assembled_Fact` gives: a pattern either matched the token
+/// stream or it did not, with no inference step between.
+fn Assembled_Fact(
     key: nomos_analysis::FactKey,
     guarantee: Guarantee,
     payload: Vec<u8>,
@@ -87,7 +87,7 @@ mod tests
     use nomos_contracts::{BuildVariantId, ConfigurationId, Digest128, GenerationId, SnapshotId};
     use nomos_model::Content_Digest;
 
-    fn Subject(path: &str) -> SubjectId
+    fn Subject_Of_Path(path: &str) -> SubjectId
     {
         return SubjectId::From_Digest(Content_Digest(path.as_bytes()));
     }
@@ -102,11 +102,15 @@ mod tests
         };
     }
 
-    fn Fact(source: &str) -> MaterializedFact
+    fn Fact_From_Source(source: &str) -> MaterializedFact
     {
-        return match Materialize(Subject("a.rs"), source, Context())
+        return match Materialize_Reachability_Fact(Subject_Of_Path("a.rs"), source, Context())
         {
             Materialization::Materialized(fact) => *fact,
+            // Every source passed to this helper is Rust its author wrote to be parseable,
+            // so a refusal is a broken fixture and not a reading worth handing back to the
+            // tests below, which compare a rendered fact against an expected string and
+            // would need something to compare in the first place.
             Materialization::Unparseable(failure) => panic!("expected a fact: {failure}"),
         };
     }
@@ -114,7 +118,7 @@ mod tests
     #[test]
     fn Test_A_Fact_Should_Carry_The_Declared_Guarantee()
     {
-        let fact = Fact("pub fn one() {}\n");
+        let fact = Fact_From_Source("pub fn one() {}\n");
 
         assert_eq!(fact.guarantee, Declared_Guarantee());
         assert_eq!(fact.Key().guarantee, GuaranteeDigest::Of(&Declared_Guarantee()));
@@ -124,7 +128,7 @@ mod tests
     #[test]
     fn Test_An_Unparseable_File_Should_Produce_No_Fact()
     {
-        let outcome = Materialize(Subject("broken.rs"), "fn unclosed( {", Context());
+        let outcome = Materialize_Reachability_Fact(Subject_Of_Path("broken.rs"), "fn unclosed( {", Context());
 
         assert!(
             matches!(outcome, Materialization::Unparseable(_)),
@@ -144,7 +148,7 @@ mod tests
                        }\n\
                        }\n";
 
-        let fact = Fact(source);
+        let fact = Fact_From_Source(source);
         let rendered = String::from_utf8(fact.payload.bytes.clone()).expect("ASCII and tabs");
 
         assert_eq!(rendered, "", "a real, correctly written arm must flag nothing");
@@ -160,7 +164,7 @@ mod tests
                        }\n\
                        }\n";
 
-        let fact = Fact(source);
+        let fact = Fact_From_Source(source);
         let rendered = String::from_utf8(fact.payload.bytes.clone()).expect("ASCII and tabs");
 
         assert_eq!(rendered, "site\tPayload_Of\tapplicability\tempty\n");

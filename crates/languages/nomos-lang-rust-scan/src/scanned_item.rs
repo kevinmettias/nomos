@@ -45,7 +45,7 @@ pub struct ScannedItem
 /// `Unknown`: it will answer for input a parser rejects, and some of those answers are
 /// wrong.
 #[must_use]
-pub fn Scan(source: &str) -> ScannedFile
+pub fn Scan_Source(source: &str) -> ScannedFile
 {
     let mut scanned = ScannedFile::default();
     let mut ordinal = 0_u32;
@@ -80,7 +80,7 @@ fn Declared_On(raw: &str, line: u32, ordinal: u32) -> Option<ScannedItem>
     }
 
     let Declared { visibility, rest } = Visibility_Of(trimmed);
-    let (kind, name) = Declaration(rest)?;
+    let (kind, name) = Declaration_In_Line(rest)?;
 
     return Some(ScannedItem {
         ordinal,
@@ -117,7 +117,7 @@ fn Visibility_Of(line: &str) -> Declared<'_>
     let Some(rest) = line.strip_prefix("pub")
     else
     {
-        return Undeclared(line);
+        return Undeclared_Visibility(line);
     };
     if let Some(restricted) = Restriction_On(rest)
     {
@@ -128,7 +128,7 @@ fn Visibility_Of(line: &str) -> Declared<'_>
     let Some(after) = rest.strip_prefix(' ')
     else
     {
-        return Undeclared(line);
+        return Undeclared_Visibility(line);
     };
 
     return Declared {
@@ -138,7 +138,7 @@ fn Visibility_Of(line: &str) -> Declared<'_>
 }
 
 /// A line that declares no visibility at all, which is private and keeps every byte it had.
-fn Undeclared(line: &str) -> Declared<'_>
+fn Undeclared_Visibility(line: &str) -> Declared<'_>
 {
     return Declared {
         visibility: Visibility::Private,
@@ -166,7 +166,7 @@ fn Restriction_On(rest: &str) -> Option<Declared<'_>>
 }
 
 /// Matches a declaration keyword and the name that follows it.
-fn Declaration(line: &str) -> Option<(ItemKind, String)>
+fn Declaration_In_Line(line: &str) -> Option<(ItemKind, String)>
 {
     for (keyword, kind) in ItemKind::Table()
     {
@@ -208,9 +208,9 @@ mod tests
     use super::*;
     use crate::ItemKind;
 
-    fn Kinds(source: &str) -> Vec<(ItemKind, String, String)>
+    fn Scanned_Kinds(source: &str) -> Vec<(ItemKind, String, String)>
     {
-        return Scan(source)
+        return Scan_Source(source)
             .items
             .into_iter()
             .map(|item| return (item.kind, item.visibility.Label(), item.name))
@@ -221,7 +221,7 @@ mod tests
     fn Test_A_Declaration_Should_Be_Found_With_Its_Kind_And_Visibility()
     {
         assert_eq!(
-            Kinds(
+            Scanned_Kinds(
                 "pub fn one() {}\n\
                  fn two() {}\n\
                  pub struct Three;\n\
@@ -245,7 +245,7 @@ mod tests
     {
         let damaged = "use super::*;\n\n\u{feff}//! A stray mark, mid-file.\n\npub fn Answered() {}\n";
 
-        let scanned = Scan(damaged);
+        let scanned = Scan_Source(damaged);
 
         assert_eq!(scanned.items.len(), 2, "{:?}", scanned.items);
         assert_eq!(
@@ -259,7 +259,7 @@ mod tests
     fn Test_A_Marked_Declaration_Should_Still_Be_A_Declaration()
     {
         assert_eq!(
-            Kinds("\u{feff}pub fn Marked() {}\n"),
+            Scanned_Kinds("\u{feff}pub fn Marked() {}\n"),
             vec![(ItemKind::Function, "Public".to_owned(), "Marked".to_owned())]
         );
     }
@@ -271,22 +271,22 @@ mod tests
     fn Test_The_Declared_Unsoundness_Should_Be_Demonstrable()
     {
         assert_eq!(
-            Kinds("/*\npub fn Commented() {}\n*/\n").len(),
+            Scanned_Kinds("/*\npub fn Commented() {}\n*/\n").len(),
             1,
             "a declaration inside a block comment is reported"
         );
         assert_eq!(
-            Kinds("#[cfg(never)]\npub fn Disabled() {}\n").len(),
+            Scanned_Kinds("#[cfg(never)]\npub fn Disabled() {}\n").len(),
             1,
             "a declaration behind a cfg that is off is reported"
         );
         assert_eq!(
-            Kinds("mod inner { fn two() {} }\n"),
+            Scanned_Kinds("mod inner { fn two() {} }\n"),
             vec![(ItemKind::Module, "Private".to_owned(), "inner".to_owned())],
             "nesting is invisible, so an inner item on the same line is missed entirely"
         );
         assert_eq!(
-            Kinds("pub\nfn Split() {}\n"),
+            Scanned_Kinds("pub\nfn Split() {}\n"),
             vec![(ItemKind::Function, "Private".to_owned(), "Split".to_owned())],
             "a declaration written across two lines loses its visibility"
         );
@@ -296,7 +296,7 @@ mod tests
     #[test]
     fn Test_A_Commented_Line_Should_Not_Be_A_Declaration()
     {
-        assert!(Kinds("// pub fn Renamed_Away() {}\n/// pub struct Documented;\n").is_empty());
+        assert!(Scanned_Kinds("// pub fn Renamed_Away() {}\n/// pub struct Documented;\n").is_empty());
     }
 
     /// A keyword must be a whole word. Prefix matching without this makes every identifier
@@ -305,9 +305,9 @@ mod tests
     fn Test_A_Keyword_Prefix_Should_Not_Be_A_Keyword()
     {
         assert!(
-            Kinds("    fnord();\n    using(x);\n    pubfn();\n    constant = 1;\n").is_empty(),
+            Scanned_Kinds("    fnord();\n    using(x);\n    pubfn();\n    constant = 1;\n").is_empty(),
             "{:?}",
-            Kinds("    fnord();\n    using(x);\n    pubfn();\n    constant = 1;\n")
+            Scanned_Kinds("    fnord();\n    using(x);\n    pubfn();\n    constant = 1;\n")
         );
     }
 
@@ -316,8 +316,8 @@ mod tests
     #[test]
     fn Test_A_Scan_Should_Count_The_Lines_It_Read()
     {
-        assert_eq!(Scan("one\ntwo\nthree\n").lines, 3);
-        assert_eq!(Scan("").lines, 0, "an empty file has no lines and is not a failure");
+        assert_eq!(Scan_Source("one\ntwo\nthree\n").lines, 3);
+        assert_eq!(Scan_Source("").lines, 0, "an empty file has no lines and is not a failure");
     }
 
     /// `const fn` is a function, not a constant. The keyword table is ordered so the longer
@@ -327,7 +327,7 @@ mod tests
     fn Test_A_Longer_Keyword_Should_Win_Over_A_Prefix_Of_It()
     {
         assert_eq!(
-            Kinds("pub const fn Computed() -> u8 { 0 }\npub const VALUE: u8 = 0;\n"),
+            Scanned_Kinds("pub const fn Computed() -> u8 { 0 }\npub const VALUE: u8 = 0;\n"),
             vec![
                 (ItemKind::Function, "Public".to_owned(), "Computed".to_owned()),
                 (ItemKind::Constant, "Public".to_owned(), "VALUE".to_owned()),
@@ -342,7 +342,7 @@ mod tests
     fn Test_An_Impl_Should_Report_The_Type_It_Follows_And_Not_A_Name()
     {
         assert_eq!(
-            Kinds("impl Display for Thing {}\n"),
+            Scanned_Kinds("impl Display for Thing {}\n"),
             vec![(ItemKind::Implementation, "Private".to_owned(), "Display".to_owned())],
             "the first type after the keyword is what a line-reader sees, and it is not \
              the name of the impl"

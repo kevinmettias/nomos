@@ -28,7 +28,7 @@ impl SyntaxFacts
     /// for a file that failed to parse — that is [`Reading::Unparseable`], a different
     /// variant reached by a different path.
     #[must_use]
-    pub fn Declares_Nothing(&self) -> bool
+    pub fn Has_No_Declarations(&self) -> bool
     {
         return self.items.is_empty();
     }

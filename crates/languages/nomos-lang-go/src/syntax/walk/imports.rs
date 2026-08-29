@@ -1,7 +1,7 @@
 //! Recording Go `import` declarations.
 
-use super::super::{Documentation, ItemKind, SyntaxItem, Visibility};
-use super::support::{ItemRecord, Push};
+use super::super::{Documentation_Of_Declaration, ItemKind, SyntaxItem, Visibility};
+use super::support::{ItemRecord, Push_Item_Record};
 use tree_sitter::Node;
 
 /// `import "path"` binds the package's own name, as declared at `path`'s own `package`
@@ -17,11 +17,11 @@ pub(super) fn Record_Import_Spec(items: &mut Vec<SyntaxItem>, spec: Node, source
     };
 
     let name = Import_Name(spec, source, &path);
-    let documentation = Documentation(spec, source);
+    let documentation = Documentation_Of_Declaration(spec, source);
 
     // An import declares no visibility of its own — Go has no `pub import`, and unlike
     // Rust's `pub use`, an imported name cannot be re-exported at all.
-    Push(
+    Push_Item_Record(
         items,
         ItemRecord {
             kind: ItemKind::Import,

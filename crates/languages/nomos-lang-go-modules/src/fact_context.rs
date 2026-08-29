@@ -10,6 +10,7 @@ use nomos_contracts::{
 };
 use std::path::Path;
 
+#[path = "provider/module_fact.rs"]
 mod module_fact;
 
 pub use module_fact::ModuleFact;
@@ -52,7 +53,7 @@ fn Fact_Of(module: DiscoveredModule, context: FactContext) -> ModuleFact
     let subject = nomos_model::Subject_Of_Path(&module.manifest_relative_root);
     let guarantee = Declared_Guarantee();
     let payload_bytes = Encode_Payload(&module.payload);
-    let key = Keyed(subject, guarantee, context);
+    let key = Compute_Fact_Key(subject, guarantee, context);
     let fact = MaterializedFact {
         identity: key.At(context.generation),
         snapshot: context.snapshot,
@@ -71,11 +72,11 @@ fn Fact_Of(module: DiscoveredModule, context: FactContext) -> ModuleFact
 /// The key this module's fact is filed under.
 ///
 /// `semantic_inputs` is empty, the identical reasoning
-/// `nomos_lang_rust_cargo::provider::Keyed` gives for its own capability: this provider's
+/// `nomos_lang_rust_cargo::fact_context::Compute_Fact_Key` gives for its own capability: this provider's
 /// real input is what `go.work`/`go.mod` declare, which no caller has independently, so a
 /// lookup key built from `Encode_Payload`'s own output could only ever reproduce a key by
 /// already knowing the answer.
-fn Keyed(subject: SubjectId, guarantee: Guarantee, context: FactContext) -> FactKey
+fn Compute_Fact_Key(subject: SubjectId, guarantee: Guarantee, context: FactContext) -> FactKey
 {
     return FactKey {
         contract: Capability(),
@@ -95,27 +96,34 @@ mod tests
 {
     use super::*;
     use nomos_contracts::Digest128;
-    use std::sync::atomic::{AtomicU64, Ordering};
 
-    static COUNTER: AtomicU64 = AtomicU64::new(0);
-
-    struct TempWorkspace
+    struct TemporaryWorkspace
     {
         root: std::path::PathBuf,
     }
 
-    impl TempWorkspace
+    impl TemporaryWorkspace
     {
         /// A fresh, uniquely-named directory per call, not merely per process: these
         /// tests run concurrently within one process, and a name shared across them would
         /// let one test's `Drop` remove a directory a sibling test is still reading from
         /// or writing to.
+        ///
+        /// Named from the thread id and a wall-clock timestamp rather than a shared
+        /// counter, so uniqueness needs no global mutable state with an owner to name: two
+        /// concurrently live threads never share a `ThreadId`, and two calls on one reused
+        /// worker thread never land on the same nanosecond, so the pair together can never
+        /// collide the way two calls racing a shared counter's read-modify-write could.
         fn New() -> Self
         {
-            let n = COUNTER.fetch_add(1, Ordering::Relaxed);
+            let stamp = std::time::SystemTime::now()
+                .duration_since(std::time::UNIX_EPOCH)
+                .unwrap_or_default()
+                .as_nanos();
             let root = std::env::temp_dir().join(format!(
-                "nomos-lang-go-modules-provider-test-{}-{n}",
-                std::process::id()
+                "nomos-lang-go-modules-provider-test-{}-{:?}-{stamp}",
+                std::process::id(),
+                std::thread::current().id()
             ));
             std::fs::create_dir_all(&root).expect("a fresh temp directory can be created");
 
@@ -133,7 +141,7 @@ mod tests
         }
     }
 
-    impl Drop for TempWorkspace
+    impl Drop for TemporaryWorkspace
     {
         fn drop(&mut self)
         {
@@ -154,7 +162,7 @@ mod tests
     #[test]
     fn Test_Every_Module_Should_Produce_One_Fact()
     {
-        let workspace = TempWorkspace::New();
+        let workspace = TemporaryWorkspace::New();
         workspace.Write("go.mod", "module example.com/solo\n");
 
         let facts = Materialize_Workspace(&workspace.root, Context()).expect("a real workspace");
@@ -167,7 +175,7 @@ mod tests
     #[test]
     fn Test_A_Facts_Subject_Should_Match_Subject_Of_Its_Own_Path()
     {
-        let workspace = TempWorkspace::New();
+        let workspace = TemporaryWorkspace::New();
         workspace.Write("go.mod", "module example.com/solo\n");
 
         let facts = Materialize_Workspace(&workspace.root, Context()).expect("a real workspace");
@@ -180,7 +188,7 @@ mod tests
     #[test]
     fn Test_A_Fact_Should_Carry_The_Declared_Guarantee()
     {
-        let workspace = TempWorkspace::New();
+        let workspace = TemporaryWorkspace::New();
         workspace.Write("go.mod", "module example.com/solo\n");
 
         let facts = Materialize_Workspace(&workspace.root, Context()).expect("a real workspace");
@@ -196,7 +204,7 @@ mod tests
     #[test]
     fn Test_Two_Runs_Over_The_Same_Tree_Should_Reach_The_Same_Semantic_Inputs()
     {
-        let workspace = TempWorkspace::New();
+        let workspace = TemporaryWorkspace::New();
         workspace.Write("go.mod", "module example.com/solo\n");
 
         let first = Materialize_Workspace(&workspace.root, Context()).expect("a real workspace");

@@ -7,7 +7,7 @@ use crate::SyntaxFacts;
 ///
 /// Two variants and no third — see `nomos-lang-rust`'s own [`Reading`] for why: there is
 /// deliberately no `Reading::Empty`, so "the file has no items" is a sentence that can only
-/// be said about a file that was successfully read, through [`SyntaxFacts::Declares_Nothing`].
+/// be said about a file that was successfully read, through [`SyntaxFacts::Has_No_Declarations`].
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum Reading
 {

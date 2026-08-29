@@ -43,10 +43,10 @@
 //!
 //! # Three capabilities, and why the second and third are here
 //!
-//! [`Materialize`] answers `nomos-cap-syntax`'s capability about one file, from its bytes.
+//! [`Materialize_Syntax_Fact`] answers `nomos-cap-syntax`'s capability about one file, from its bytes.
 //! [`rollup`] answers a second one about a *module*, from the first one's facts — the only
 //! producer in this workspace that derives a fact from other facts, and therefore the only
-//! one that declares a dependency edge. [`reachability::Materialize`] answers a third,
+//! one that declares a dependency edge. [`reachability::Materialize_Reachability_Fact`] answers a third,
 //! `nomos-cap-controlflow`'s, about one file, from its bytes — the same shape as the
 //! first, and housed here for the identical reason `nomos-cap-controlflow`'s own crate doc
 //! gives: this crate is a real second party to `nomos.cap.syntax.items` from the day this
@@ -62,11 +62,14 @@
 
 #![forbid(unsafe_code)]
 
+#[path = "syntax_fact_production.rs"]
 mod determinism;
 mod guarantee;
 mod materialization;
 mod parse_failure;
+#[path = "fact_context.rs"]
 mod provider;
+#[path = "reachability_reading.rs"]
 pub mod reachability;
 mod reading;
 mod recognition;
@@ -77,7 +80,7 @@ pub use determinism::SyntaxFactProduction;
 pub use guarantee::{Declared_Guarantee, PROVIDER, Provider_Offer};
 pub use materialization::Materialization;
 pub use parse_failure::ParseFailure;
-pub use provider::{Encode_Payload, FactContext, Materialize};
+pub use provider::{Encode_Payload, FactContext, Materialize_Syntax_Fact};
 pub use reading::Reading;
 pub use recognition::{Recognition, RUST_EXTENSION};
 pub use syntax::{ItemKind, Read_Source, SyntaxFacts, SyntaxItem, Visibility};

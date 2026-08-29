@@ -361,7 +361,7 @@ fn Assert_It_Parses_And_Declares_Nothing(source: &str)
     match Read_Source(source)
     {
         Reading::Parsed(facts) => assert!(
-            facts.Declares_Nothing(),
+            facts.Has_No_Declarations(),
             "`{source:?}` declares nothing and parses"
         ),
         Reading::Unparseable(failure) =>

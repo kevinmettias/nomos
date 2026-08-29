@@ -17,12 +17,15 @@
 //! sound, `SemanticallyResolved` provider would need to close — `OD-RULES-008`'s own tier
 //! 2 — and neither is silently claimed here.
 
+#[path = "reachability/guarantee.rs"]
 mod guarantee;
+#[path = "reachability/provider.rs"]
 mod provider;
+#[path = "reachability/walk.rs"]
 mod walk;
 
 pub use guarantee::{Declared_Guarantee, Provider_Offer};
-pub use provider::Materialize;
+pub use provider::Materialize_Reachability_Fact;
 
 use crate::ParseFailure;
 use nomos_cap_controlflow::ReachabilitySite;

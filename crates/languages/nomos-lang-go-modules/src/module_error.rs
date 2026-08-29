@@ -8,6 +8,7 @@ use nomos_cap_dependency::{DependencyEdge, DependencyKind, DependencyPayload};
 use std::collections::BTreeSet;
 use std::path::{Path, PathBuf};
 
+#[path = "discovery/discovered_module.rs"]
 mod discovered_module;
 
 pub use discovered_module::DiscoveredModule;
@@ -52,7 +53,7 @@ pub fn Discover_Workspace(root: &Path) -> Result<Vec<DiscoveredModule>, ModuleEr
     let module_paths = Module_Paths(&modules);
     let discovered = modules
         .into_iter()
-        .map(|module| Discovered(module, &module_paths))
+        .map(|module| Discover_Module(module, &module_paths))
         .collect();
 
     return Require_Nonempty(discovered);
@@ -171,7 +172,7 @@ fn Module_Paths(modules: &[ReadModule]) -> BTreeSet<String>
 
 /// One module's own dependency payload, its edges restricted to the ones naming another
 /// workspace member.
-fn Discovered(module: ReadModule, module_paths: &BTreeSet<String>) -> DiscoveredModule
+fn Discover_Module(module: ReadModule, module_paths: &BTreeSet<String>) -> DiscoveredModule
 {
     let edges = First_Party_Edges(&module, module_paths);
 
@@ -325,7 +326,7 @@ fn Read_Block<'a>(lines: &mut impl Iterator<Item = &'a str>, entries: &mut Vec<S
 {
     for line in lines.by_ref()
     {
-        if Block_Line(line, entries)
+        if Has_Closed_Block(line, entries)
         {
             return;
         }
@@ -334,7 +335,7 @@ fn Read_Block<'a>(lines: &mut impl Iterator<Item = &'a str>, entries: &mut Vec<S
 
 /// One line inside a `(...)` block: records whatever entry it names, if any, and reports
 /// whether it also closed the block.
-fn Block_Line(line: &str, entries: &mut Vec<String>) -> bool
+fn Has_Closed_Block(line: &str, entries: &mut Vec<String>) -> bool
 {
     let stripped = Strip_Comment(line).trim();
     if stripped == ")"
@@ -397,4 +398,5 @@ fn Read_To_String(path: &Path) -> Result<String, ModuleError>
 }
 
 #[cfg(test)]
+#[path = "discovery/tests.rs"]
 mod tests;

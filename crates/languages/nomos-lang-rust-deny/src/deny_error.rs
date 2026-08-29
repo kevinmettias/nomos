@@ -62,14 +62,14 @@ impl core::fmt::Display for DenyError
 /// or going idle for that long, is terminated before finishing, or produces no stderr at
 /// all — the one signal this reader treats as a genuine failure to answer rather than an
 /// answer it does not like.
-pub fn Discover_Workspace<P: ProcessLauncher>(root: &Path, launcher: &P) -> Result<Vec<PolicyViolation>, DenyError>
+pub fn Discover_Workspace<Launcher: ProcessLauncher>(root: &Path, launcher: &Launcher) -> Result<Vec<PolicyViolation>, DenyError>
 {
     let stream = Run_Cargo_Deny(root, launcher)?;
 
     return Ok(Canonical_Order(Violations_Of(&stream)));
 }
 
-fn Run_Cargo_Deny<P: ProcessLauncher>(root: &Path, launcher: &P) -> Result<String, DenyError>
+fn Run_Cargo_Deny<Launcher: ProcessLauncher>(root: &Path, launcher: &Launcher) -> Result<String, DenyError>
 {
     let command = Cargo_Deny_Command(root);
     let output = launcher.Run(&command).map_err(|error| DenyError {
@@ -266,6 +266,10 @@ mod tests
         let [first, second, third] = ordered.as_slice()
         else
         {
+            // The vector above is a three-element literal a line up; a length mismatch
+            // here would mean `Canonical_Order` dropped or duplicated an entry, which is
+            // exactly the defect this test exists to catch, not a condition to recover
+            // from and report past.
             panic!("asserted three violations above");
         };
 

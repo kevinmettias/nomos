@@ -10,6 +10,7 @@ use std::collections::BTreeMap;
 use std::path::{Path, PathBuf};
 use std::time::Duration;
 
+#[path = "reading/discovered_diagnostics.rs"]
 mod discovered_diagnostics;
 
 pub use discovered_diagnostics::DiscoveredDiagnostics;
@@ -50,7 +51,7 @@ impl core::fmt::Display for ClippyError
 /// [`ClippyError`] if the `cargo` binary cannot be run, exits non-zero, is killed for
 /// exceeding [`TIMEOUT`] or going idle for that long, or its stdout could not be read as
 /// the newline-delimited JSON stream `--message-format json` promises.
-pub fn Discover_Workspace<P: ProcessLauncher>(root: &Path, launcher: &P) -> Result<Vec<DiscoveredDiagnostics>, ClippyError>
+pub fn Discover_Workspace<Launcher: ProcessLauncher>(root: &Path, launcher: &Launcher) -> Result<Vec<DiscoveredDiagnostics>, ClippyError>
 {
     let stdout = Run_Cargo_Clippy(root, launcher)?;
     let discovered = Grouped_By_Package(&stdout, root);
@@ -58,7 +59,7 @@ pub fn Discover_Workspace<P: ProcessLauncher>(root: &Path, launcher: &P) -> Resu
     return Require_Nonempty(discovered);
 }
 
-fn Run_Cargo_Clippy<P: ProcessLauncher>(root: &Path, launcher: &P) -> Result<String, ClippyError>
+fn Run_Cargo_Clippy<Launcher: ProcessLauncher>(root: &Path, launcher: &Launcher) -> Result<String, ClippyError>
 {
     let command = Cargo_Clippy_Command(root);
     let output = launcher.Run(&command).map_err(|error| ClippyError {

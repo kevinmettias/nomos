@@ -11,6 +11,7 @@ use nomos_contracts::{
 use nomos_platform::ProcessLauncher;
 use std::path::Path;
 
+#[path = "provider/package_fact.rs"]
 mod package_fact;
 
 pub use package_fact::PackageFact;
@@ -31,7 +32,7 @@ pub struct FactContext
 /// Runs `cargo metadata` over `root` and produces one fact per workspace member, each a
 /// leaf: nothing here reads another fact this or any other provider produced, so every
 /// call to `store.Materialize` a caller makes from this function's output should pass no
-/// dependency edges, the same shape `nomos_lang_rust::Materialize`'s own doc comment
+/// dependency edges, the same shape `nomos_lang_rust::Materialize_Syntax_Fact`'s own doc comment
 /// states for the identical reason.
 ///
 /// Deliberately not itself a `nomos_analysis::MemoryFactStore` writer: this crate is
@@ -46,10 +47,10 @@ pub struct FactContext
 /// # Errors
 ///
 /// Whatever [`Discover_Workspace`] returns.
-pub fn Materialize_Workspace<P: ProcessLauncher>(
+pub fn Materialize_Workspace<Launcher: ProcessLauncher>(
     root: &Path,
     context: FactContext,
-    launcher: &P,
+    launcher: &Launcher,
 ) -> Result<Vec<PackageFact>, MetadataError>
 {
     let discovered = Discover_Workspace(root, launcher)?;
@@ -60,7 +61,7 @@ pub fn Materialize_Workspace<P: ProcessLauncher>(
             let subject = nomos_model::Subject_Of_Path(&package.manifest_relative_root);
             let guarantee = Declared_Guarantee();
             let payload_bytes = Encode_Payload(&package.payload);
-            let key = Keyed(subject, guarantee, context);
+            let key = Compute_Fact_Key(subject, guarantee, context);
             let fact = MaterializedFact {
                 identity: key.At(context.generation),
                 snapshot: context.snapshot,
@@ -80,7 +81,7 @@ pub fn Materialize_Workspace<P: ProcessLauncher>(
 
 /// The key this package's fact is filed under.
 ///
-/// `semantic_inputs` is empty, deliberately, unlike `nomos_lang_rust::Materialize`'s own
+/// `semantic_inputs` is empty, deliberately, unlike `nomos_lang_rust::Materialize_Syntax_Fact`'s own
 /// key -- that provider's semantic input is `source.text`, bytes the *caller* already
 /// holds and can recompute the identical digest from without asking the provider anything.
 /// This provider's real input is Cargo's own resolution of a manifest, which no caller has
@@ -91,7 +92,7 @@ pub fn Materialize_Workspace<P: ProcessLauncher>(
 /// whole package" to distinguish, so `subject` alone carries what this key needs to
 /// address; a change in what cargo resolves is a new run's fact, addressed by generation,
 /// not by a second axis this capability has no independent input to compute one from.
-fn Keyed(subject: SubjectId, guarantee: Guarantee, context: FactContext) -> FactKey
+fn Compute_Fact_Key(subject: SubjectId, guarantee: Guarantee, context: FactContext) -> FactKey
 {
     return FactKey {
         contract: Capability(),

@@ -40,7 +40,7 @@ impl Walk
             return;
         }
 
-        let Some(shape) = Classify(&arm.body)
+        let Some(shape) = Classify_Arm_Body(&arm.body)
         else
         {
             return;
@@ -102,7 +102,7 @@ fn Err_Binding(pattern: &syn::Pat) -> Option<String>
 /// Which of [`ArmShape`]'s four obvious wrong shapes `body` is, or `None` for anything
 /// else — including a body this walker cannot see past, which is not the same claim as a
 /// body it looked at and found correct.
-fn Classify(body: &syn::Expr) -> Option<ArmShape>
+fn Classify_Arm_Body(body: &syn::Expr) -> Option<ArmShape>
 {
     if let syn::Expr::Block(block) = body
     {

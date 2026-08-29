@@ -86,7 +86,7 @@ fn Materialize_Leaf(
     context: FactContext,
 ) -> nomos_analysis::FactKey
 {
-    let Materialization::Materialized(fact) = nomos_lang_rust::Materialize(Subject(path), source, context)
+    let Materialization::Materialized(fact) = nomos_lang_rust::Materialize_Syntax_Fact(Subject(path), source, context)
     else
     {
         // The leaf is the thing this file rolls up, and the function's whole job is to hand

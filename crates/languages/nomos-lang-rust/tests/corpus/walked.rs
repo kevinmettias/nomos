@@ -63,7 +63,7 @@ impl Walked
         self.items = self.items.saturating_add(facts.items.len());
         self.unexpanded = self.unexpanded.saturating_add(u64::from(facts.unexpanded));
 
-        if facts.Declares_Nothing()
+        if facts.Has_No_Declarations()
         {
             self.declaring_nothing = self.declaring_nothing.saturating_add(1);
         }

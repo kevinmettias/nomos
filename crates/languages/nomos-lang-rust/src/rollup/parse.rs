@@ -22,7 +22,7 @@ pub fn Parse_Index(payload: &[u8]) -> Result<ModuleIndex, String>
     })?;
 
     let mut lines = text.lines().enumerate();
-    let mut index = Opened(&mut lines)?;
+    let mut index = Opened_Module_Index(&mut lines)?;
 
     for (offset, line) in lines
     {
@@ -71,7 +71,7 @@ impl<'record, 'text> Fields<'record, 'text>
 /// It appears exactly once and first. That is what makes an index over a module with no
 /// members a payload rather than the empty byte string — a module nothing was read for and
 /// a module that declares nothing are two answers and must not share an encoding.
-pub(super) fn Opened(lines: &mut core::iter::Enumerate<core::str::Lines<'_>>) -> Result<ModuleIndex, String>
+pub(super) fn Opened_Module_Index(lines: &mut core::iter::Enumerate<core::str::Lines<'_>>) -> Result<ModuleIndex, String>
 {
     let Some((_, header)) = lines.next()
     else
@@ -228,7 +228,7 @@ pub(super) fn Subject_From(hexadecimal: &str, line: usize) -> Result<SubjectId, 
     }
 
     let mut bytes = [0_u8; Digest128::BYTE_LENGTH];
-    for (slot, pair) in bytes.iter_mut().zip(Pairs(hexadecimal))
+    for (slot, pair) in bytes.iter_mut().zip(Hexadecimal_Byte_Pairs(hexadecimal))
     {
         *slot = u8::from_str_radix(pair, HEXADECIMAL)
             .map_err(|cause| return format!("`{pair}` on line {line} is not hexadecimal: {cause}"))?;
@@ -244,7 +244,7 @@ const HEXADECIMAL: u32 = 16;
 const PER_BYTE: usize = 2;
 
 /// The two-character slices of an even-length ASCII hexadecimal string.
-pub(super) fn Pairs(hexadecimal: &str) -> impl Iterator<Item = &str>
+pub(super) fn Hexadecimal_Byte_Pairs(hexadecimal: &str) -> impl Iterator<Item = &str>
 {
     return (0..hexadecimal.len())
         .step_by(PER_BYTE)

@@ -11,6 +11,7 @@ use nomos_contracts::{
 use nomos_platform::ProcessLauncher;
 use std::path::Path;
 
+#[path = "provider/policy_fact.rs"]
 mod policy_fact;
 
 pub use policy_fact::PolicyFact;
@@ -39,14 +40,14 @@ pub struct FactContext
 /// # Errors
 ///
 /// Whatever [`Discover_Workspace`] returns.
-pub fn Materialize_Workspace<P: ProcessLauncher>(root: &Path, context: FactContext, launcher: &P) -> Result<PolicyFact, DenyError>
+pub fn Materialize_Workspace<Launcher: ProcessLauncher>(root: &Path, context: FactContext, launcher: &Launcher) -> Result<PolicyFact, DenyError>
 {
     let violations = Discover_Workspace(root, launcher)?;
     let payload = PolicyPayload { violations };
     let subject = nomos_model::Subject_Of_Path("");
     let guarantee = Declared_Guarantee();
     let payload_bytes = Encode_Payload(&payload);
-    let key = Keyed(subject, guarantee, context);
+    let key = Compute_Fact_Key(subject, guarantee, context);
     let fact = MaterializedFact {
         identity: key.At(context.generation),
         snapshot: context.snapshot,
@@ -61,10 +62,10 @@ pub fn Materialize_Workspace<P: ProcessLauncher>(root: &Path, context: FactConte
 /// The key this fact is filed under.
 ///
 /// `semantic_inputs` is empty, deliberately, the same choice
-/// `nomos_lang_rust_clippy::provider::Keyed` already makes for the identical reason: this
+/// `nomos_lang_rust_clippy::fact_context::Compute_Fact_Key` already makes for the identical reason: this
 /// provider's real input is `cargo deny`'s own analysis, which no caller has
 /// independently, so a caller building a lookup key has nothing to reconstruct it from.
-fn Keyed(subject: SubjectId, guarantee: Guarantee, context: FactContext) -> FactKey
+fn Compute_Fact_Key(subject: SubjectId, guarantee: Guarantee, context: FactContext) -> FactKey
 {
     return FactKey {
         contract: Capability(),
@@ -142,8 +143,8 @@ mod tests
             nomos_contracts::IncrementalGranularity::WholeWorkspace,
         );
 
-        let strong_key = Keyed(subject, Declared_Guarantee(), Context());
-        let weak_key = Keyed(subject, weaker, Context());
+        let strong_key = Compute_Fact_Key(subject, Declared_Guarantee(), Context());
+        let weak_key = Compute_Fact_Key(subject, weaker, Context());
 
         assert_ne!(strong_key.Digest(), weak_key.Digest(), "two offers of the same subject at different guarantees must file apart");
     }

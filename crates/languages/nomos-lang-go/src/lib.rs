@@ -53,10 +53,12 @@
 
 #![forbid(unsafe_code)]
 
+#[path = "syntax_fact_production.rs"]
 mod determinism;
 mod guarantee;
 mod materialization;
 mod parse_failure;
+#[path = "fact_context.rs"]
 mod provider;
 mod reading;
 mod recognition;
@@ -66,7 +68,7 @@ pub use determinism::SyntaxFactProduction;
 pub use guarantee::{Declared_Guarantee, PROVIDER, Provider_Offer};
 pub use materialization::Materialization;
 pub use parse_failure::ParseFailure;
-pub use provider::{Encode_Payload, FactContext, Materialize};
+pub use provider::{Encode_Payload, FactContext, Materialize_Syntax_Fact};
 pub use reading::Reading;
 pub use recognition::{GO_EXTENSION, Recognition};
 pub use syntax::{ItemKind, Read_Source, SyntaxFacts, SyntaxItem, Visibility};

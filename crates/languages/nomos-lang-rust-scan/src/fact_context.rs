@@ -38,13 +38,13 @@ pub struct FactContext
 /// That asymmetry is the capability's whole point of interest: the two providers do not
 /// merely differ in quality, they differ in which inputs they can answer for at all.
 #[must_use]
-pub fn Materialize(subject: SubjectId, source: &str, context: FactContext) -> MaterializedFact
+pub fn Materialize_Syntax_Fact(subject: SubjectId, source: &str, context: FactContext) -> MaterializedFact
 {
-    use crate::Scan;
+    use crate::Scan_Source;
 
-    let scanned = Scan(source);
+    let scanned = Scan_Source(source);
     let guarantee = Declared_Guarantee();
-    let key = Keyed(subject, source, guarantee, context);
+    let key = Compute_Fact_Key(subject, source, guarantee, context);
 
     return MaterializedFact {
         identity: key.At(context.generation),
@@ -64,7 +64,7 @@ pub fn Materialize(subject: SubjectId, source: &str, context: FactContext) -> Ma
 ///
 /// The semantic inputs are the file text and only the file text, by the same rule and for
 /// the same reason as the parser: two copies of one file are one computation.
-fn Keyed(
+fn Compute_Fact_Key(
     subject: SubjectId,
     source: &str,
     guarantee: Guarantee,
@@ -137,7 +137,7 @@ mod tests
     use nomos_contracts::Digest128;
     use nomos_model::Content_Digest;
 
-    fn Subject(path: &str) -> SubjectId
+    fn Subject_Of_Path(path: &str) -> SubjectId
     {
         return SubjectId::From_Digest(Content_Digest(path.as_bytes()));
     }
@@ -155,7 +155,7 @@ mod tests
     #[test]
     fn Test_The_Encoding_Should_Be_The_Format_The_Other_Provider_Writes()
     {
-        let fact = Materialize(Subject("a.rs"), "pub fn one() {}\nfn two() {}\n", Context());
+        let fact = Materialize_Syntax_Fact(Subject_Of_Path("a.rs"), "pub fn one() {}\nfn two() {}\n", Context());
         let rendered = String::from_utf8(fact.payload.bytes.clone()).expect("ASCII and identifiers");
 
         assert_eq!(
@@ -176,7 +176,7 @@ mod tests
     #[test]
     fn Test_This_Providers_Payload_Should_Decode_Under_The_Schemas_Own_Reader()
     {
-        let fact = Materialize(Subject("a.rs"), "pub fn one() {}\nfn two() {}\n", Context());
+        let fact = Materialize_Syntax_Fact(Subject_Of_Path("a.rs"), "pub fn one() {}\nfn two() {}\n", Context());
 
         let payload = nomos_cap_syntax::Parse_Payload(&fact.payload.bytes)
             .expect("this provider writes nomos.syntax.items.v1");
@@ -197,8 +197,8 @@ mod tests
     #[test]
     fn Test_A_Trait_Member_Should_Not_Be_Marked_By_A_Reader_That_Cannot_See_The_Trait()
     {
-        let fact = Materialize(
-            Subject("a.rs"),
+        let fact = Materialize_Syntax_Fact(
+            Subject_Of_Path("a.rs"),
             "pub trait Judged\n{\n    fn Check(&self);\n}\n",
             Context(),
         );
@@ -221,7 +221,7 @@ mod tests
     #[test]
     fn Test_A_Fact_Should_Name_This_Provider_And_Its_Guarantee()
     {
-        let fact = Materialize(Subject("a.rs"), "pub fn one() {}\n", Context());
+        let fact = Materialize_Syntax_Fact(Subject_Of_Path("a.rs"), "pub fn one() {}\n", Context());
 
         assert_eq!(fact.Key().provider, ProviderId::New(PROVIDER));
         assert_eq!(fact.guarantee, Declared_Guarantee());
@@ -236,8 +236,8 @@ mod tests
         let source = "pub struct S;\npub fn f() {}\n";
 
         assert_eq!(
-            Materialize(Subject("a.rs"), source, Context()).Key().Digest(),
-            Materialize(Subject("a.rs"), source, Context()).Key().Digest()
+            Materialize_Syntax_Fact(Subject_Of_Path("a.rs"), source, Context()).Key().Digest(),
+            Materialize_Syntax_Fact(Subject_Of_Path("a.rs"), source, Context()).Key().Digest()
         );
     }
 
@@ -246,8 +246,8 @@ mod tests
     fn Test_Different_Bytes_Should_Reach_Different_Keys()
     {
         assert_ne!(
-            Materialize(Subject("a.rs"), "pub fn one() {}\n", Context()).Key().Digest(),
-            Materialize(Subject("a.rs"), "pub fn two() {}\n", Context()).Key().Digest()
+            Materialize_Syntax_Fact(Subject_Of_Path("a.rs"), "pub fn one() {}\n", Context()).Key().Digest(),
+            Materialize_Syntax_Fact(Subject_Of_Path("a.rs"), "pub fn two() {}\n", Context()).Key().Digest()
         );
     }
 
@@ -257,7 +257,7 @@ mod tests
     #[test]
     fn Test_An_Empty_File_Should_Still_Produce_A_Payload()
     {
-        let fact = Materialize(Subject("empty.rs"), "", Context());
+        let fact = Materialize_Syntax_Fact(Subject_Of_Path("empty.rs"), "", Context());
 
         assert_eq!(fact.payload.bytes, b"unexpanded\t0\n");
     }

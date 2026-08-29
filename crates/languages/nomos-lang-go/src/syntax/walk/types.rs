@@ -1,8 +1,8 @@
 //! Recording Go type declarations: a struct, an interface (with its own method set), a
 //! plain type definition, and a type alias.
 
-use super::super::{Documentation, ItemKind, SyntaxItem, Visibility};
-use super::support::{Function_Name, ItemRecord, Named_Field_Children, Parameter_Arity, Push};
+use super::super::{Documentation_Of_Declaration, ItemKind, SyntaxItem, Visibility};
+use super::support::{Function_Name, ItemRecord, Named_Field_Children, Parameter_Arity, Push_Item_Record};
 use tree_sitter::Node;
 
 pub(super) fn Record_Type_Spec(items: &mut Vec<SyntaxItem>, spec: Node, source: &[u8])
@@ -16,7 +16,7 @@ pub(super) fn Record_Type_Spec(items: &mut Vec<SyntaxItem>, spec: Node, source: 
     let type_node = spec.child_by_field_name("type");
     let fields = Type_Spec_Fields(type_node, spec, source);
 
-    Push(
+    Push_Item_Record(
         items,
         ItemRecord {
             kind: fields.kind,
@@ -54,7 +54,7 @@ fn Type_Spec_Fields(type_node: Option<Node>, spec: Node, source: &[u8]) -> TypeS
 {
     let kind = Type_Spec_Kind(type_node);
     let shape = Type_Spec_Shape(kind, type_node, source);
-    let documentation = Documentation(spec, source);
+    let documentation = Documentation_Of_Declaration(spec, source);
 
     return TypeSpecFields { kind, shape, documentation };
 }
@@ -121,9 +121,9 @@ fn Record_Interface_Method(items: &mut Vec<SyntaxItem>, member: Node, interface_
     };
 
     let arity = member.child_by_field_name("parameters").map_or(0, Parameter_Arity);
-    let documentation = Documentation(member, source);
+    let documentation = Documentation_Of_Declaration(member, source);
 
-    Push(
+    Push_Item_Record(
         items,
         ItemRecord {
             kind: ItemKind::Function,
@@ -144,9 +144,9 @@ pub(super) fn Record_Type_Alias(items: &mut Vec<SyntaxItem>, spec: Node, source:
         return;
     };
 
-    let documentation = Documentation(spec, source);
+    let documentation = Documentation_Of_Declaration(spec, source);
 
-    Push(
+    Push_Item_Record(
         items,
         ItemRecord {
             kind: ItemKind::TypeAlias,

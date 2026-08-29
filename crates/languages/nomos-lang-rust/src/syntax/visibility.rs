@@ -47,14 +47,13 @@ impl Visibility
             syn::Visibility::Inherited => Self::Private,
             syn::Visibility::Restricted(restricted) =>
             {
-                let path = Path_As_Written(&restricted.path);
                 let scope = if restricted.in_token.is_some()
                 {
-                    format!("in {path}")
+                    format!("in {}", Path_As_Written(&restricted.path))
                 }
                 else
                 {
-                    path
+                    Path_As_Written(&restricted.path)
                 };
 
                 Self::Restricted { scope }

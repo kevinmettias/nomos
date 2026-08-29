@@ -11,6 +11,7 @@ use nomos_contracts::{
 use nomos_platform::ProcessLauncher;
 use std::path::Path;
 
+#[path = "provider/diagnostics_fact.rs"]
 mod diagnostics_fact;
 
 pub use diagnostics_fact::DiagnosticsFact;
@@ -39,10 +40,10 @@ pub struct FactContext
 /// # Errors
 ///
 /// Whatever [`Discover_Workspace`] returns.
-pub fn Materialize_Workspace<P: ProcessLauncher>(
+pub fn Materialize_Workspace<Launcher: ProcessLauncher>(
     root: &Path,
     context: FactContext,
-    launcher: &P,
+    launcher: &Launcher,
 ) -> Result<Vec<DiagnosticsFact>, ClippyError>
 {
     let discovered = Discover_Workspace(root, launcher)?;
@@ -53,7 +54,7 @@ pub fn Materialize_Workspace<P: ProcessLauncher>(
             let subject = nomos_model::Subject_Of_Path(&member.manifest_relative_root);
             let guarantee = Declared_Guarantee();
             let payload_bytes = Encode_Payload(&member.payload);
-            let key = Keyed(subject, guarantee, context);
+            let key = Compute_Fact_Key(subject, guarantee, context);
             let fact = MaterializedFact {
                 identity: key.At(context.generation),
                 snapshot: context.snapshot,
@@ -70,13 +71,13 @@ pub fn Materialize_Workspace<P: ProcessLauncher>(
 /// The key this member's fact is filed under.
 ///
 /// `semantic_inputs` is empty, deliberately, the same choice
-/// `nomos_lang_rust_cargo::provider::Keyed` already makes for the identical reason: this
+/// `nomos_lang_rust_cargo::fact_context::Compute_Fact_Key` already makes for the identical reason: this
 /// provider's real input is `cargo clippy`'s own analysis, which no caller has
 /// independently, so a caller building a lookup key has nothing to reconstruct it from —
 /// `subject` alone addresses what this key needs, and a change in what `cargo clippy`
 /// reports is a new run's fact, addressed by generation, not by a second axis this
 /// capability has no independent input to compute one from.
-fn Keyed(subject: SubjectId, guarantee: Guarantee, context: FactContext) -> FactKey
+fn Compute_Fact_Key(subject: SubjectId, guarantee: Guarantee, context: FactContext) -> FactKey
 {
     return FactKey {
         contract: Capability(),
@@ -155,8 +156,8 @@ mod tests
             nomos_contracts::IncrementalGranularity::WholeWorkspace,
         );
 
-        let strong_key = Keyed(subject, Declared_Guarantee(), Context());
-        let weak_key = Keyed(subject, weaker, Context());
+        let strong_key = Compute_Fact_Key(subject, Declared_Guarantee(), Context());
+        let weak_key = Compute_Fact_Key(subject, weaker, Context());
 
         assert_ne!(strong_key.Digest(), weak_key.Digest(), "two offers of the same subject at different guarantees must file apart");
     }

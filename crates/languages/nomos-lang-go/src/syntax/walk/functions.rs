@@ -1,8 +1,8 @@
 //! Recording Go function and method declarations — a top-level `func`, and a method bound
 //! to a receiver type.
 
-use super::super::{Documentation, ItemKind, SyntaxItem, Visibility};
-use super::support::{Function_Name, ItemRecord, Parameter_Arity, Push};
+use super::super::{Documentation_Of_Declaration, ItemKind, SyntaxItem, Visibility};
+use super::support::{Function_Name, ItemRecord, Parameter_Arity, Push_Item_Record};
 use tree_sitter::Node;
 
 pub(super) fn Record_Function(items: &mut Vec<SyntaxItem>, node: Node, source: &[u8])
@@ -14,9 +14,9 @@ pub(super) fn Record_Function(items: &mut Vec<SyntaxItem>, node: Node, source: &
     };
 
     let arity = node.child_by_field_name("parameters").map_or(0, Parameter_Arity);
-    let documentation = Documentation(node, source);
+    let documentation = Documentation_Of_Declaration(node, source);
 
-    Push(
+    Push_Item_Record(
         items,
         ItemRecord {
             kind: ItemKind::Function,
@@ -38,9 +38,9 @@ pub(super) fn Record_Method(items: &mut Vec<SyntaxItem>, node: Node, source: &[u
     };
 
     let found = Method_Scope_And_Arity(node, source);
-    let documentation = Documentation(node, source);
+    let documentation = Documentation_Of_Declaration(node, source);
 
-    Push(
+    Push_Item_Record(
         items,
         ItemRecord {
             kind: ItemKind::Function,

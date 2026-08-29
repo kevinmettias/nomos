@@ -52,7 +52,7 @@ pub(crate) fn Syntax_Inputs(source: &str) -> InputDigest
 /// which is what makes [`nomos_contracts::IncrementalGranularity::File`] true rather than
 /// asserted.
 #[must_use]
-pub fn Materialize(subject: SubjectId, source: &str, context: FactContext) -> Materialization
+pub fn Materialize_Syntax_Fact(subject: SubjectId, source: &str, context: FactContext) -> Materialization
 {
     use crate::Read_Source;
     use crate::Reading;
@@ -65,9 +65,9 @@ pub fn Materialize(subject: SubjectId, source: &str, context: FactContext) -> Ma
 
     let payload = Encode_Payload(&facts);
     let guarantee = Declared_Guarantee();
-    let key = Keyed(subject, source, guarantee, context);
+    let key = Compute_Fact_Key(subject, source, guarantee, context);
 
-    let fact = Fact(key, guarantee, payload, context);
+    let fact = Assembled_Fact(key, guarantee, payload, context);
 
     return Materialization::Materialized(Box::new(fact));
 }
@@ -77,7 +77,7 @@ pub fn Materialize(subject: SubjectId, source: &str, context: FactContext) -> Ma
 /// Every component is either the capability being served, the provider serving it, or an
 /// input it was computed over. The snapshot is deliberately not among them — it is
 /// provenance rather than identity, per `OD-ANALYSIS-001`.
-fn Keyed(
+fn Compute_Fact_Key(
     subject: SubjectId,
     source: &str,
     guarantee: Guarantee,
@@ -106,7 +106,7 @@ fn Keyed(
 /// not, and there is no inference step by which this could report something the text does
 /// not contain. Not `Derived`, which is for conclusions drawn from other facts — the source
 /// is not a fact, it is the territory.
-fn Fact(
+fn Assembled_Fact(
     key: nomos_analysis::FactKey,
     guarantee: Guarantee,
     payload: Vec<u8>,
@@ -166,9 +166,9 @@ fn Encode_Item(encoded: &mut String, item: &SyntaxItem)
     encoded.push('\t');
     encoded.push_str(&item.Qualified_Name());
     encoded.push('\t');
-    encoded.push_str(&Observed(item.documentation.as_deref()));
+    encoded.push_str(&Encode_Observed_Field(item.documentation.as_deref()));
     encoded.push('\t');
-    encoded.push_str(&Observed(item.shape.as_deref()));
+    encoded.push_str(&Encode_Observed_Field(item.shape.as_deref()));
     encoded.push('\n');
 }
 
@@ -178,7 +178,7 @@ fn Encode_Item(encoded: &mut String, item: &SyntaxItem)
 /// spelling — not observed — is deliberately unreachable from here: writing it would be
 /// this provider claiming a blindness it does not have, and a consumer would then refuse an
 /// answer that was available.
-fn Observed(value: Option<&str>) -> String
+fn Encode_Observed_Field(value: Option<&str>) -> String
 {
     return match value
     {
@@ -195,7 +195,7 @@ mod tests
     use nomos_contracts::Digest128;
     use nomos_model::Content_Digest;
 
-    fn Subject(path: &str) -> SubjectId
+    fn Subject_Of_Path(path: &str) -> SubjectId
     {
         return SubjectId::From_Digest(Content_Digest(path.as_bytes()));
     }
@@ -210,9 +210,9 @@ mod tests
         };
     }
 
-    fn Fact(source: &str) -> MaterializedFact
+    fn Fact_From_Source(source: &str) -> MaterializedFact
     {
-        return match Materialize(Subject("a.rs"), source, Context())
+        return match Materialize_Syntax_Fact(Subject_Of_Path("a.rs"), source, Context())
         {
             Materialization::Materialized(fact) => *fact,
             // Every source passed to this helper is Rust its author wrote to be parseable, so
@@ -228,7 +228,7 @@ mod tests
     #[test]
     fn Test_A_Fact_Should_Carry_The_Declared_Guarantee()
     {
-        let fact = Fact("pub fn one() {}\n");
+        let fact = Fact_From_Source("pub fn one() {}\n");
 
         assert_eq!(fact.guarantee, Declared_Guarantee());
         assert_eq!(fact.Key().guarantee, GuaranteeDigest::Of(&Declared_Guarantee()));
@@ -242,8 +242,8 @@ mod tests
     {
         let source = "pub struct S;\nimpl S { pub fn new() -> Self { Self } }\n";
 
-        let first = Fact(source);
-        let second = Fact(source);
+        let first = Fact_From_Source(source);
+        let second = Fact_From_Source(source);
 
         assert_eq!(first.Key().semantic_inputs, second.Key().semantic_inputs);
         assert_eq!(first.Key().Digest(), second.Key().Digest());
@@ -256,8 +256,8 @@ mod tests
     #[test]
     fn Test_Different_Bytes_Should_Reach_Different_Semantic_Inputs()
     {
-        let first = Fact("pub fn one() {}\n");
-        let second = Fact("pub fn two() {}\n");
+        let first = Fact_From_Source("pub fn one() {}\n");
+        let second = Fact_From_Source("pub fn two() {}\n");
 
         assert_ne!(first.Key().semantic_inputs, second.Key().semantic_inputs);
         assert_ne!(first.payload.Digest(), second.payload.Digest());
@@ -274,8 +274,8 @@ mod tests
         let context = Context();
 
         let (Materialization::Materialized(left), Materialization::Materialized(right)) = (
-            Materialize(Subject("a.rs"), source, context),
-            Materialize(Subject("b.rs"), source, context),
+            Materialize_Syntax_Fact(Subject_Of_Path("a.rs"), source, context),
+            Materialize_Syntax_Fact(Subject_Of_Path("b.rs"), source, context),
         )
         else
         {
@@ -295,7 +295,7 @@ mod tests
     #[test]
     fn Test_An_Unparseable_File_Should_Produce_No_Fact()
     {
-        let outcome = Materialize(Subject("broken.rs"), "fn unclosed( {", Context());
+        let outcome = Materialize_Syntax_Fact(Subject_Of_Path("broken.rs"), "fn unclosed( {", Context());
 
         assert!(
             matches!(outcome, Materialization::Unparseable(_)),
@@ -309,7 +309,7 @@ mod tests
     #[test]
     fn Test_The_Encoding_Should_Be_Stable_And_Not_Empty()
     {
-        let fact = Fact("pub fn one() {}\nmod inner { fn two() {} }\n");
+        let fact = Fact_From_Source("pub fn one() {}\nmod inner { fn two() {} }\n");
         let rendered = String::from_utf8(fact.payload.bytes.clone())
             .expect("the encoding is ASCII tabs around UTF-8 identifiers");
 
@@ -332,7 +332,7 @@ mod tests
     #[test]
     fn Test_The_Encoding_Should_Carry_What_This_Provider_Observed()
     {
-        let fact = Fact(
+        let fact = Fact_From_Source(
             "/// A list.\n\
              /// Mirrored by `Test_Every_Row`.\n\
              pub const TABLES: &[&str] = &[];\n\
@@ -364,7 +364,7 @@ mod tests
     #[test]
     fn Test_This_Providers_Payload_Should_Decode_Under_The_Schemas_Own_Reader()
     {
-        let fact = Fact("pub fn one() {}\nmod inner { fn two() {} }\n");
+        let fact = Fact_From_Source("pub fn one() {}\nmod inner { fn two() {} }\n");
 
         let payload = nomos_cap_syntax::Parse_Payload(&fact.payload.bytes)
             .expect("this provider writes nomos.syntax.items.v1");
@@ -389,7 +389,7 @@ mod tests
     #[test]
     fn Test_A_Trait_Member_Should_Carry_The_Mark_The_Schema_Reserves()
     {
-        let fact = Fact("pub trait Judged { fn Check(&self); }\npub fn Free() {}\n");
+        let fact = Fact_From_Source("pub trait Judged { fn Check(&self); }\npub fn Free() {}\n");
 
         let payload = nomos_cap_syntax::Parse_Payload(&fact.payload.bytes).expect("well formed");
 

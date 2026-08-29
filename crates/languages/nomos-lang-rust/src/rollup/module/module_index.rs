@@ -22,7 +22,7 @@ impl ModuleIndex
         return self
             .members
             .iter()
-            .filter(|member| return member.outcome.Answered())
+            .filter(|member| return member.outcome.Is_Answered())
             .count();
     }
 

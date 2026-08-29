@@ -6,9 +6,9 @@
 /// recognised as text. The lines are joined with newlines rather than flattened: a consumer
 /// matching a claim written on one line of a paragraph needs the paragraph as the author
 /// wrote it, and the payload escapes the newlines rather than losing them.
-pub(super) fn Documentation(attributes: &[syn::Attribute]) -> Option<String>
+pub(super) fn Documentation_Of_Attributes(attributes: &[syn::Attribute]) -> Option<String>
 {
-    let lines: Vec<String> = attributes.iter().filter_map(Doc_Line).collect();
+    let lines: Vec<String> = attributes.iter().filter_map(Documentation_Line).collect();
 
     if lines.is_empty()
     {
@@ -19,7 +19,7 @@ pub(super) fn Documentation(attributes: &[syn::Attribute]) -> Option<String>
 }
 
 /// One `#[doc = "..."]` attribute's text, or nothing when the attribute is something else.
-pub(super) fn Doc_Line(attribute: &syn::Attribute) -> Option<String>
+pub(super) fn Documentation_Line(attribute: &syn::Attribute) -> Option<String>
 {
     if !attribute.path().is_ident("doc")
     {

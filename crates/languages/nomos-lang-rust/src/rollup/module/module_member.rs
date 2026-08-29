@@ -1,6 +1,5 @@
 //! One member a module declares.
 
-use crate::provider::Syntax_Inputs;
 use nomos_analysis::InputDigest;
 use nomos_contracts::SubjectId;
 /// One file a module is made of.
@@ -22,6 +21,8 @@ impl ModuleMember
     #[must_use]
     pub fn Of(subject: SubjectId, source: &str) -> Self
     {
+        use crate::provider::Syntax_Inputs;
+
         return Self {
             subject,
             inputs: Syntax_Inputs(source),

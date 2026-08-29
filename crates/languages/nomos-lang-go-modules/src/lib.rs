@@ -53,9 +53,12 @@
 
 #![forbid(unsafe_code)]
 
+#[path = "dependency_fact_production.rs"]
 mod determinism;
+#[path = "module_error.rs"]
 mod discovery;
 mod guarantee;
+#[path = "fact_context.rs"]
 mod provider;
 
 pub use determinism::DependencyFactProduction;

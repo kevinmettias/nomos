@@ -26,9 +26,12 @@
 
 #![forbid(unsafe_code)]
 
+#[path = "lint_fact_production.rs"]
 mod determinism;
 mod guarantee;
+#[path = "fact_context.rs"]
 mod provider;
+#[path = "clippy_error.rs"]
 mod reading;
 
 pub use determinism::LintFactProduction;

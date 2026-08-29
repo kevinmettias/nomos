@@ -30,9 +30,7 @@ mod types;
 mod values;
 
 use functions::{Record_Function, Record_Method};
-use imports::Record_Import_Spec;
 use types::{Record_Type_Alias, Record_Type_Spec};
-use values::Record_Const_Or_Var_Spec;
 
 /// Parses `source` and records every package-level declaration it finds.
 ///
@@ -160,6 +158,9 @@ fn First_Error(node: Node) -> Option<ParseFailure>
 /// it does not. Stops at `block` and `func_literal`; see the module doc.
 fn Record_Declaration_Body(items: &mut Vec<SyntaxItem>, node: Node, source: &[u8])
 {
+    use imports::Record_Import_Spec;
+    use values::Record_Const_Or_Var_Spec;
+
     let mut cursor = node.walk();
 
     for child in node.children(&mut cursor)

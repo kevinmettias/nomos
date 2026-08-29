@@ -22,7 +22,7 @@ pub struct DependencyFactProduction;
 
 impl Strategy for DependencyFactProduction
 {
-    /// `State`, not `StateTemporal`. `discovery::Discovered` sorts every module's edges
+    /// `State`, not `StateTemporal`. `discovery::Discover_Module` sorts every module's edges
     /// canonically before this provider ever encodes them, so two runs that read the same
     /// `require` lines in a different order — which nothing here promises against, since a
     /// `go.mod`'s own line order is an authoring detail — reach identical bytes.

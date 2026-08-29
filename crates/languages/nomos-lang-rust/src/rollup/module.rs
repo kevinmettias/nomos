@@ -2,8 +2,10 @@
 
 // What a rolled module is made of: the index over it, the members in it, an entry of that
 // index, and how one member was read.
+#[path = "module/module_index.rs"]
 mod index;
 mod index_entry;
+#[path = "module/module_member.rs"]
 mod member;
 mod member_reading;
 

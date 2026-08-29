@@ -24,6 +24,7 @@ use std::collections::BTreeSet;
 use std::path::{Path, PathBuf};
 use std::time::Duration;
 
+#[path = "metadata/discovered_package.rs"]
 mod discovered_package;
 
 pub use discovered_package::DiscoveredPackage;
@@ -70,7 +71,7 @@ impl core::fmt::Display for MetadataError
 /// [`MetadataError`] if the `cargo` binary cannot be run, exits non-zero, is killed for
 /// exceeding [`TIMEOUT`] or going idle for that long, or its stdout is not the JSON
 /// document `--format-version 1` promises.
-pub fn Discover_Workspace<P: ProcessLauncher>(root: &Path, launcher: &P) -> Result<Vec<DiscoveredPackage>, MetadataError>
+pub fn Discover_Workspace<Launcher: ProcessLauncher>(root: &Path, launcher: &Launcher) -> Result<Vec<DiscoveredPackage>, MetadataError>
 {
     let document = Run_Cargo_Metadata(root, launcher)?;
     let members = Member_Ids(&document)?;
@@ -81,7 +82,7 @@ pub fn Discover_Workspace<P: ProcessLauncher>(root: &Path, launcher: &P) -> Resu
     return Require_Nonempty(discovered);
 }
 
-fn Run_Cargo_Metadata<P: ProcessLauncher>(root: &Path, launcher: &P) -> Result<serde_json::Value, MetadataError>
+fn Run_Cargo_Metadata<Launcher: ProcessLauncher>(root: &Path, launcher: &Launcher) -> Result<serde_json::Value, MetadataError>
 {
     let command = Cargo_Metadata_Command(root);
     let output = launcher.Run(&command).map_err(|error| MetadataError {
@@ -297,7 +298,7 @@ fn Read_Dependency(dependency: &serde_json::Value, member_names: &BTreeSet<Strin
     }
 
     let kind = Dependency_Kind(dependency)?;
-    let optional = Dependency_Optional(dependency);
+    let optional = Is_Dependency_Optional(dependency);
 
     return Some(DependencyEdge {
         target: target.to_owned(),
@@ -318,7 +319,7 @@ fn Dependency_Kind(dependency: &serde_json::Value) -> Option<DependencyKind>
     };
 }
 
-fn Dependency_Optional(dependency: &serde_json::Value) -> bool
+fn Is_Dependency_Optional(dependency: &serde_json::Value) -> bool
 {
     return dependency
         .get("optional")
