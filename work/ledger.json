@@ -36704,6 +36704,357 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P19-NAMING-ATTRS-SPEC",
+      "title": "naming/attributes mechanical findings across crates/spec",
+      "why": "code-standards' naming.json and attributes.json rust gate phases report mechanical findings (naming-clarity, file-name, generic-parameter-name, abbreviations, boolean-predicate, import-scope, and related smaller checks) across crates/spec, following the user-directed continuation of the OD-GATE-018 waiver-mechanism campaign into these two phases",
+      "done_when": "the 12 non-doc naming/attributes checks report zero findings scoped to crates/spec, and cargo build --workspace --all-targets passes",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-p19-naming-attrs-spec",
+        "acquired_at": 1788038777,
+        "lease_expires_at": 1788045977
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P19-NAMING-ATTRS-HOST",
+      "title": "naming/attributes mechanical findings across crates/host",
+      "why": "same campaign continuation as P19-NAMING-ATTRS-SPEC, scoped to crates/host (nomos-api, nomos-cli, nomos-surface-provenance)",
+      "done_when": "the 12 non-doc naming/attributes checks report zero findings scoped to crates/host, and cargo build --workspace --all-targets passes",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-p19-naming-attrs-host",
+        "acquired_at": 1788038777,
+        "lease_expires_at": 1788045977
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P19-NAMING-ATTRS-SUBSTRATE",
+      "title": "naming/attributes mechanical findings across crates/substrate",
+      "why": "same campaign continuation as P19-NAMING-ATTRS-SPEC, scoped to crates/substrate",
+      "done_when": "the 12 non-doc naming/attributes checks report zero findings scoped to crates/substrate, and cargo build --workspace --all-targets passes",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-p19-naming-attrs-substrate",
+        "acquired_at": 1788038777,
+        "lease_expires_at": 1788045977
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P19-NAMING-ATTRS-ORCHESTRATION",
+      "title": "naming/attributes mechanical findings across crates/orchestration",
+      "why": "same campaign continuation as P19-NAMING-ATTRS-SPEC, scoped to crates/orchestration",
+      "done_when": "the 12 non-doc naming/attributes checks report zero findings scoped to crates/orchestration, and cargo build --workspace --all-targets passes",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-p19-naming-attrs-orchestration",
+        "acquired_at": 1788038777,
+        "lease_expires_at": 1788045977
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P19-NAMING-ATTRS-LANGUAGES",
+      "title": "naming/attributes mechanical findings across crates/languages",
+      "why": "same campaign continuation as P19-NAMING-ATTRS-SPEC, scoped to crates/languages",
+      "done_when": "the 12 non-doc naming/attributes checks report zero findings scoped to crates/languages, and cargo build --workspace --all-targets passes",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-p19-naming-attrs-languages",
+        "acquired_at": 1788038777,
+        "lease_expires_at": 1788045977
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P19-NAMING-ATTRS-RULES-CONTRACTS",
+      "title": "naming/attributes mechanical findings across crates/rules and crates/contracts",
+      "why": "same campaign continuation as P19-NAMING-ATTRS-SPEC, scoped to crates/rules and crates/contracts",
+      "done_when": "the 12 non-doc naming/attributes checks report zero findings scoped to crates/rules and crates/contracts, and cargo build --workspace --all-targets passes",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules",
+          "crates/contracts"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-p19-naming-attrs-rules-contracts",
+        "acquired_at": 1788038777,
+        "lease_expires_at": 1788045977
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P19-NAMING-ATTRS-MISC",
+      "title": "naming/attributes mechanical findings across crates/platform, kernel, corrections, agent, capabilities",
+      "why": "same campaign continuation as P19-NAMING-ATTRS-SPEC, scoped to the smaller remaining crate groups",
+      "done_when": "the 12 non-doc naming/attributes checks report zero findings scoped to crates/platform, crates/kernel, crates/corrections, crates/agent, crates/capabilities, and cargo build --workspace --all-targets passes",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/platform",
+          "crates/kernel",
+          "crates/corrections",
+          "crates/agent",
+          "crates/capabilities"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-p19-naming-attrs-misc",
+        "acquired_at": 1788038777,
+        "lease_expires_at": 1788045977
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P19-NAMING-ATTRS-DEPS",
+      "title": "check-speculative-dependency: remove unused crate dependencies",
+      "why": "check-speculative-dependency reports 14 declared-but-unused dependencies in nomos-cli, tests/contract and tests/integration",
+      "done_when": "check-speculative-dependency reports zero findings against crates/host/nomos-cli, tests/contract and tests/integration, and cargo build --workspace --all-targets passes",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/Cargo.toml",
+          "tests/contract/Cargo.toml",
+          "tests/integration/Cargo.toml"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "territory overlaps P19-NAMING-ATTRS-HOST; nomos-cli's 2 findings folded into that band, splitting off a tests-only item instead"
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-cleanup",
+        "declined_at": 1788038790
+      }
+    },
+    {
+      "id": "P19-NAMING-ATTRS-DEPS-TESTS",
+      "title": "check-speculative-dependency: remove unused crate dependencies in tests/",
+      "why": "check-speculative-dependency reports 11 declared-but-unused dependencies across tests/contract and tests/integration",
+      "done_when": "check-speculative-dependency reports zero findings against tests/contract and tests/integration, and cargo build --workspace --all-targets passes",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/Cargo.toml",
+          "tests/integration/Cargo.toml"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "exit_code": 0,
+        "output_tail": "   Compiling nomos-cli v0.1.0 (F:\\repos\\nomos\\crates\\host\\nomos-cli)\n   Compiling nomos-api v0.1.0 (F:\\repos\\nomos\\crates\\host\\nomos-api)\n   Compiling nomos-integration-tests v0.1.0 (F:\\repos\\nomos\\tests\\integration)\n    Finished `dev` profile [unoptimized + debuginfo] target(s) in 5.72s\n",
+        "verified_at": 1788039369,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "e5ca28e7f841ff28fb4a2bcfcafac71a6ecb99be"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
