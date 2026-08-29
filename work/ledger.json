@@ -35477,6 +35477,58 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P16-EVERYTHINGELSE-FILESCOPED-TESTCODE",
+      "title": "OD-GATE-018 category 1 extended to file-scoped #[cfg(test)] mod X; test-only files",
+      "why": "P16-EVERYTHINGELSE-CATEGORY1-WAIVERS's test-code classification only recognized an inline #[cfg(test)] mod tests { } block in the same file as the finding. This workspace also declares whole sibling files as test-only via #[cfg(test)] mod X; in a parent file (38 such declarations found under crates/, e.g. nomos-api's src/work.rs declaring #[cfg(test)] mod tests_support;, or nomos-spec-store's lib.rs declaring #[cfg(test)] mod registration; over a file whose own doc comment says 'the library itself never calls' it). A finding whose file compiles only under one of these declarations is exactly as much test code as one inside an inline block, under the same clippy.toml governance OD-GATE-018 already generalized. Re-running the five checks phase 3 has already measured against this corrected file set found 23 findings that were counted as production remainder but are actually file-scoped test code: check-vertical-organization 93->92, check-allman-braces 55->50, check-closing-brace 45->40, check-tuple-return 9->4, check-error-values 8->1 (7 of those 8 were nomos-api's tests_support.rs, the same file already read while triaging check-error-info).",
+      "done_when": "check-vertical-organization, check-allman-braces, check-closing-brace, check-tuple-return and check-error-values each report their corrected remainder (92, 50, 40, 4, 1) against crates tests (default run), with the 23 file-scoped-test findings waived in suppressions.json citing this same extended category-1 reasoning. cargo build --workspace --all-targets stays green (suppressions.json is the only file this item touches).",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "suppressions.json"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "exit_code": 0,
+        "output_tail": "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.23s\n",
+        "verified_at": 1788025376,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "29b024d9b6f4c086f870ccbebf32c3f21ba230cb"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

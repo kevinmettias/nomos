@@ -3416,6 +3416,142 @@
       "reason": "Send is required by std::thread::scope(..).spawn(..), which runs this closure on another thread -- not a habitual bound. check-closure-bounds is not one of the safety-critical checks an in-code marker still argues under this repository's safety-only policy, so this moves here per OD-GATE-018's own remedy for an unhonoured marker.",
       "owner": "@kmettias",
       "expires": "2027-02-25"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/spec/nomos-spec-store/src/registration.rs",
+      "fingerprint": "5cc6c5b18e7cdcc4",
+      "reason": "this file (or the module it is nested under) is declared #[cfg(test)] mod X; from its parent, so the whole file compiles only under cargo test -- the same governance OD-GATE-018 category 1 already gives an inline #[cfg(test)] mod tests { } block, extended to a file-level test module.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-allman-braces",
+      "path": "crates/spec/nomos-spec-store/src/registration.rs",
+      "fingerprint": "72ac5c97fced2499",
+      "reason": "this file (or the module it is nested under) is declared #[cfg(test)] mod X; from its parent, so the whole file compiles only under cargo test -- the same governance OD-GATE-018 category 1 already gives an inline #[cfg(test)] mod tests { } block, extended to a file-level test module.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-closing-brace",
+      "path": "crates/spec/nomos-spec-store/src/registration.rs",
+      "fingerprint": "00d6019076901da8",
+      "reason": "this file (or the module it is nested under) is declared #[cfg(test)] mod X; from its parent, so the whole file compiles only under cargo test -- the same governance OD-GATE-018 category 1 already gives an inline #[cfg(test)] mod tests { } block, extended to a file-level test module.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-allman-braces",
+      "path": "crates/host/nomos-cli/src/gate/tests.rs",
+      "fingerprint": "12d6d1db2fa0b1c3",
+      "reason": "this file (or the module it is nested under) is declared #[cfg(test)] mod X; from its parent, so the whole file compiles only under cargo test -- the same governance OD-GATE-018 category 1 already gives an inline #[cfg(test)] mod tests { } block, extended to a file-level test module.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-closing-brace",
+      "path": "crates/host/nomos-cli/src/gate/tests.rs",
+      "fingerprint": "688a15fd715c6862",
+      "reason": "this file (or the module it is nested under) is declared #[cfg(test)] mod X; from its parent, so the whole file compiles only under cargo test -- the same governance OD-GATE-018 category 1 already gives an inline #[cfg(test)] mod tests { } block, extended to a file-level test module.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-allman-braces",
+      "path": "crates/host/nomos-cli/src/work/tests.rs",
+      "message": "this opening brace sits at a different column from the keyword that opens the block. Align the two -- the brace column is the block's left edge, and an indented brace hides where the block begins.",
+      "reason": "this file (or the module it is nested under) is declared #[cfg(test)] mod X; from its parent, so the whole file compiles only under cargo test -- the same governance OD-GATE-018 category 1 already gives an inline #[cfg(test)] mod tests { } block, extended to a file-level test module.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-closing-brace",
+      "path": "crates/host/nomos-cli/src/work/tests.rs",
+      "message": "this closing brace sits at a different column from the keyword that opened the block. Align the two -- a brace that drifts from its keyword makes the reader count braces to find out what just ended.",
+      "reason": "this file (or the module it is nested under) is declared #[cfg(test)] mod X; from its parent, so the whole file compiles only under cargo test -- the same governance OD-GATE-018 category 1 already gives an inline #[cfg(test)] mod tests { } block, extended to a file-level test module.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-allman-braces",
+      "path": "crates/spec/nomos-spec-ingest/src/siblings/tests.rs",
+      "fingerprint": "e3e8a926a0288da0",
+      "reason": "this file (or the module it is nested under) is declared #[cfg(test)] mod X; from its parent, so the whole file compiles only under cargo test -- the same governance OD-GATE-018 category 1 already gives an inline #[cfg(test)] mod tests { } block, extended to a file-level test module.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-closing-brace",
+      "path": "crates/spec/nomos-spec-ingest/src/siblings/tests.rs",
+      "fingerprint": "f652bb398b393c11",
+      "reason": "this file (or the module it is nested under) is declared #[cfg(test)] mod X; from its parent, so the whole file compiles only under cargo test -- the same governance OD-GATE-018 category 1 already gives an inline #[cfg(test)] mod tests { } block, extended to a file-level test module.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-tuple-return",
+      "path": "crates/host/nomos-api/src/work/tests_support.rs",
+      "fingerprint": "7d1633632d316107",
+      "reason": "this file (or the module it is nested under) is declared #[cfg(test)] mod X; from its parent, so the whole file compiles only under cargo test -- the same governance OD-GATE-018 category 1 already gives an inline #[cfg(test)] mod tests { } block, extended to a file-level test module.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-tuple-return",
+      "path": "crates/host/nomos-api/src/work/tests_support.rs",
+      "fingerprint": "ae1ee739baf7512f",
+      "reason": "this file (or the module it is nested under) is declared #[cfg(test)] mod X; from its parent, so the whole file compiles only under cargo test -- the same governance OD-GATE-018 category 1 already gives an inline #[cfg(test)] mod tests { } block, extended to a file-level test module.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-tuple-return",
+      "path": "crates/host/nomos-api/src/work/tests_support.rs",
+      "fingerprint": "7fd61ff1ee409a08",
+      "reason": "this file (or the module it is nested under) is declared #[cfg(test)] mod X; from its parent, so the whole file compiles only under cargo test -- the same governance OD-GATE-018 category 1 already gives an inline #[cfg(test)] mod tests { } block, extended to a file-level test module.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-tuple-return",
+      "path": "crates/host/nomos-api/src/work/tests_support.rs",
+      "fingerprint": "15ab7e7b36661945",
+      "reason": "this file (or the module it is nested under) is declared #[cfg(test)] mod X; from its parent, so the whole file compiles only under cargo test -- the same governance OD-GATE-018 category 1 already gives an inline #[cfg(test)] mod tests { } block, extended to a file-level test module.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-tuple-return",
+      "path": "crates/host/nomos-api/src/work/tests_support.rs",
+      "fingerprint": "109d2eb436c4d7e5",
+      "reason": "this file (or the module it is nested under) is declared #[cfg(test)] mod X; from its parent, so the whole file compiles only under cargo test -- the same governance OD-GATE-018 category 1 already gives an inline #[cfg(test)] mod tests { } block, extended to a file-level test module.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-error-values",
+      "path": "crates/host/nomos-api/src/work/tests_support.rs",
+      "fingerprint": "f192a98d684ad9e9",
+      "reason": "this file (or the module it is nested under) is declared #[cfg(test)] mod X; from its parent, so the whole file compiles only under cargo test -- the same governance OD-GATE-018 category 1 already gives an inline #[cfg(test)] mod tests { } block, extended to a file-level test module.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-error-values",
+      "path": "crates/host/nomos-api/src/work/tests_support.rs",
+      "fingerprint": "67e6baf19f5c1e11",
+      "reason": "this file (or the module it is nested under) is declared #[cfg(test)] mod X; from its parent, so the whole file compiles only under cargo test -- the same governance OD-GATE-018 category 1 already gives an inline #[cfg(test)] mod tests { } block, extended to a file-level test module.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-error-values",
+      "path": "crates/host/nomos-api/src/work/tests_support.rs",
+      "message": "`.expect()` signals a recoverable failure by unwinding the stack; return an error value the caller has to handle (`// error-type: allow \u003creason\u003e` for a genuine boundary)",
+      "reason": "this file (or the module it is nested under) is declared #[cfg(test)] mod X; from its parent, so the whole file compiles only under cargo test -- the same governance OD-GATE-018 category 1 already gives an inline #[cfg(test)] mod tests { } block, extended to a file-level test module.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
     }
   ]
 }
