@@ -145,6 +145,93 @@ fn Parse_Module_Line(text: &str) -> Option<String>
     return None;
 }
 
+/// A `require` entry's own module path, `Directive_Entries`' `First_Field` unchanged —
+/// named at the call site so a reader does not have to re-derive what the first field of
+/// a `require` line means from a function that also serves `use`.
+fn Require_Module_Path(entry: &str) -> String
+{
+    return entry.to_owned();
+}
+
+/// `path`, made relative to `root` and normalized to forward slashes — the same
+/// convention every other subject in this workspace is addressed by.
+fn Relative_To(path: &Path, root: &Path) -> String
+{
+    let relative = path.strip_prefix(root).unwrap_or(path);
+
+    return relative.to_string_lossy().replace('\\', "/");
+}
+
+/// Every workspace member's own declared module path, for matching a `require` entry
+/// against.
+fn Module_Paths(modules: &[ReadModule]) -> BTreeSet<String>
+{
+    return modules.iter().map(|module| module.module_path.clone()).collect();
+}
+
+/// One module's own dependency payload, its edges restricted to the ones naming another
+/// workspace member.
+fn Discovered(module: ReadModule, module_paths: &BTreeSet<String>) -> DiscoveredModule
+{
+    let edges = First_Party_Edges(&module, module_paths);
+
+    return Discovered_Module(module, edges);
+}
+
+/// Every edge `module` declares that names another workspace member, mapped into this
+/// capability's payload shape and put in canonical order.
+fn First_Party_Edges(module: &ReadModule, module_paths: &BTreeSet<String>) -> Vec<DependencyEdge>
+{
+    let mut edges: Vec<DependencyEdge> = module
+        .requires
+        .iter()
+        .filter(|required| required.as_str() != module.module_path && module_paths.contains(required.as_str()))
+        .map(|target| DependencyEdge {
+            target: target.clone(),
+            // Go's module system has no dev/build dependency tables and no optional,
+            // feature-gated requirement — every `require` line is this one kind, the
+            // crate's own module doc states why.
+            kind: DependencyKind::Normal,
+            optional: false,
+        })
+        .collect();
+
+    // Canonical order: the fact's bytes must not depend on the order this file's own
+    // `require` lines happened to be written in, which is an authoring detail rather
+    // than anything this fact is about — the identical reasoning
+    // `nomos_lang_rust_cargo::metadata::Dependency_Edges` sorts for.
+    edges.sort_by(|left, right| left.target.cmp(&right.target));
+
+    return edges;
+}
+
+fn Discovered_Module(module: ReadModule, edges: Vec<DependencyEdge>) -> DiscoveredModule
+{
+    return DiscoveredModule {
+        payload: DependencyPayload {
+            package: module.module_path,
+            edges,
+        },
+        manifest_relative_root: module.manifest_relative_root,
+    };
+}
+
+/// Refuses an empty result: a workspace resolving to no members means this reader saw
+/// nothing, not that a real workspace has no modules.
+fn Require_Nonempty(discovered: Vec<DiscoveredModule>) -> Result<Vec<DiscoveredModule>, ModuleError>
+{
+    if discovered.is_empty()
+    {
+        return Err(ModuleError {
+            reason: "the workspace resolved to no modules; refusing to report a clean \
+                     result over an empty graph"
+                .to_owned(),
+        });
+    }
+
+    return Ok(discovered);
+}
+
 /// Every entry a named block or single-line directive declares.
 ///
 /// `go.mod`'s `require` and `go.work`'s `use` share one grammar: `<keyword> <entry>` on
@@ -270,14 +357,6 @@ fn First_Field(entry: &str) -> String
     return entry.split_whitespace().next().unwrap_or(entry).to_owned();
 }
 
-/// A `require` entry's own module path, `Directive_Entries`' `First_Field` unchanged —
-/// named at the call site so a reader does not have to re-derive what the first field of
-/// a `require` line means from a function that also serves `use`.
-fn Require_Module_Path(entry: &str) -> String
-{
-    return entry.to_owned();
-}
-
 /// Strips a `//` comment from a line, if it has one.
 ///
 /// Splitting on the first `//` is sufficient here: neither a `go.work`/`go.mod` module
@@ -288,90 +367,11 @@ fn Strip_Comment(line: &str) -> &str
     return line.find("//").map_or(line, |at| &line[..at]);
 }
 
-/// `path`, made relative to `root` and normalized to forward slashes — the same
-/// convention every other subject in this workspace is addressed by.
-fn Relative_To(path: &Path, root: &Path) -> String
-{
-    let relative = path.strip_prefix(root).unwrap_or(path);
-
-    return relative.to_string_lossy().replace('\\', "/");
-}
-
 fn Read_To_String(path: &Path) -> Result<String, ModuleError>
 {
     return std::fs::read_to_string(path).map_err(|error| ModuleError {
         reason: format!("could not read {}: {error}", path.display()),
     });
-}
-
-/// Every workspace member's own declared module path, for matching a `require` entry
-/// against.
-fn Module_Paths(modules: &[ReadModule]) -> BTreeSet<String>
-{
-    return modules.iter().map(|module| module.module_path.clone()).collect();
-}
-
-/// One module's own dependency payload, its edges restricted to the ones naming another
-/// workspace member.
-fn Discovered(module: ReadModule, module_paths: &BTreeSet<String>) -> DiscoveredModule
-{
-    let edges = First_Party_Edges(&module, module_paths);
-
-    return Discovered_Module(module, edges);
-}
-
-/// Every edge `module` declares that names another workspace member, mapped into this
-/// capability's payload shape and put in canonical order.
-fn First_Party_Edges(module: &ReadModule, module_paths: &BTreeSet<String>) -> Vec<DependencyEdge>
-{
-    let mut edges: Vec<DependencyEdge> = module
-        .requires
-        .iter()
-        .filter(|required| required.as_str() != module.module_path && module_paths.contains(required.as_str()))
-        .map(|target| DependencyEdge {
-            target: target.clone(),
-            // Go's module system has no dev/build dependency tables and no optional,
-            // feature-gated requirement — every `require` line is this one kind, the
-            // crate's own module doc states why.
-            kind: DependencyKind::Normal,
-            optional: false,
-        })
-        .collect();
-
-    // Canonical order: the fact's bytes must not depend on the order this file's own
-    // `require` lines happened to be written in, which is an authoring detail rather
-    // than anything this fact is about — the identical reasoning
-    // `nomos_lang_rust_cargo::metadata::Dependency_Edges` sorts for.
-    edges.sort_by(|left, right| left.target.cmp(&right.target));
-
-    return edges;
-}
-
-fn Discovered_Module(module: ReadModule, edges: Vec<DependencyEdge>) -> DiscoveredModule
-{
-    return DiscoveredModule {
-        payload: DependencyPayload {
-            package: module.module_path,
-            edges,
-        },
-        manifest_relative_root: module.manifest_relative_root,
-    };
-}
-
-/// Refuses an empty result: a workspace resolving to no members means this reader saw
-/// nothing, not that a real workspace has no modules.
-fn Require_Nonempty(discovered: Vec<DiscoveredModule>) -> Result<Vec<DiscoveredModule>, ModuleError>
-{
-    if discovered.is_empty()
-    {
-        return Err(ModuleError {
-            reason: "the workspace resolved to no modules; refusing to report a clean \
-                     result over an empty graph"
-                .to_owned(),
-        });
-    }
-
-    return Ok(discovered);
 }
 
 #[cfg(test)]

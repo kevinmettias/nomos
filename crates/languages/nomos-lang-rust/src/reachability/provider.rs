@@ -40,25 +40,6 @@ pub fn Materialize(subject: SubjectId, source: &str, context: FactContext) -> Ma
     return Materialization::Materialized(Box::new(fact));
 }
 
-/// The fact itself, once its identity is settled — evidence `Verified`, the identical
-/// argument `crate::provider::Fact` gives: a pattern either matched the token stream or it
-/// did not, with no inference step between.
-fn Fact(
-    key: nomos_analysis::FactKey,
-    guarantee: Guarantee,
-    payload: Vec<u8>,
-    context: FactContext,
-) -> MaterializedFact
-{
-    return MaterializedFact {
-        identity: key.At(context.generation),
-        snapshot: context.snapshot,
-        evidence: EvidenceClass::Verified,
-        guarantee,
-        payload: FactPayload::New(Payload_Schema(), payload),
-    };
-}
-
 fn Keyed(
     subject: SubjectId,
     source: &str,
@@ -76,6 +57,25 @@ fn Keyed(
         guarantee: GuaranteeDigest::Of(&guarantee),
         variant: context.variant,
         configuration: context.configuration,
+    };
+}
+
+/// The fact itself, once its identity is settled — evidence `Verified`, the identical
+/// argument `crate::provider::Fact` gives: a pattern either matched the token stream or it
+/// did not, with no inference step between.
+fn Fact(
+    key: nomos_analysis::FactKey,
+    guarantee: Guarantee,
+    payload: Vec<u8>,
+    context: FactContext,
+) -> MaterializedFact
+{
+    return MaterializedFact {
+        identity: key.At(context.generation),
+        snapshot: context.snapshot,
+        evidence: EvidenceClass::Verified,
+        guarantee,
+        payload: FactPayload::New(Payload_Schema(), payload),
     };
 }
 

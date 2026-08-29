@@ -25,27 +25,6 @@ impl Walk
         };
     }
 
-    fn Record(&mut self, binding: &str, shape: ArmShape)
-    {
-        // A site outside any function has nowhere to name. `syn` never hands a `match`
-        // arm to this visitor at file scope — a `match` is an expression, and Rust has no
-        // free-standing expression outside a function body — so this is unreachable in
-        // practice and left as a silent no-op rather than a panic, the same caution
-        // `crate::syntax::walk::Walk::Record_Use_Tree` takes for shapes its own grammar
-        // does not admit.
-        let Some(function) = self.current_function.clone()
-        else
-        {
-            return;
-        };
-
-        self.sites.push(ReachabilitySite {
-            function,
-            binding: binding.to_owned(),
-            shape,
-        });
-    }
-
     /// One `match` arm's own contribution: recorded only if its pattern binds
     /// `Err(applicability)` and its body is one of [`ArmShape`]'s four obvious wrong shapes.
     fn Visit_Match_Arm(&mut self, arm: &syn::Arm)
@@ -68,6 +47,27 @@ impl Walk
         };
 
         self.Record(&binding, shape);
+    }
+
+    fn Record(&mut self, binding: &str, shape: ArmShape)
+    {
+        // A site outside any function has nowhere to name. `syn` never hands a `match`
+        // arm to this visitor at file scope — a `match` is an expression, and Rust has no
+        // free-standing expression outside a function body — so this is unreachable in
+        // practice and left as a silent no-op rather than a panic, the same caution
+        // `crate::syntax::walk::Walk::Record_Use_Tree` takes for shapes its own grammar
+        // does not admit.
+        let Some(function) = self.current_function.clone()
+        else
+        {
+            return;
+        };
+
+        self.sites.push(ReachabilitySite {
+            function,
+            binding: binding.to_owned(),
+            shape,
+        });
     }
 }
 
@@ -99,24 +99,6 @@ fn Err_Binding(pattern: &syn::Pat) -> Option<String>
     return Some(bound.ident.to_string());
 }
 
-/// One arm body, unwrapped past a single-statement block down to the expression that
-/// actually decides its shape.
-///
-/// `{ continue; }` and `continue` are the same arm to a reader of this rule's own three
-/// real instances — none of them write the bare form — so both must classify alike.
-fn Tail_Expression(expression: &syn::Expr) -> &syn::Expr
-{
-    if let syn::Expr::Block(block) = expression
-    {
-        if let [syn::Stmt::Expr(inner, _)] = block.block.stmts.as_slice()
-        {
-            return Tail_Expression(inner);
-        }
-    }
-
-    return expression;
-}
-
 /// Which of [`ArmShape`]'s four obvious wrong shapes `body` is, or `None` for anything
 /// else — including a body this walker cannot see past, which is not the same claim as a
 /// body it looked at and found correct.
@@ -144,6 +126,24 @@ fn Classify(body: &syn::Expr) -> Option<ArmShape>
         },
         _ => None,
     };
+}
+
+/// One arm body, unwrapped past a single-statement block down to the expression that
+/// actually decides its shape.
+///
+/// `{ continue; }` and `continue` are the same arm to a reader of this rule's own three
+/// real instances — none of them write the bare form — so both must classify alike.
+fn Tail_Expression(expression: &syn::Expr) -> &syn::Expr
+{
+    if let syn::Expr::Block(block) = expression
+    {
+        if let [syn::Stmt::Expr(inner, _)] = block.block.stmts.as_slice()
+        {
+            return Tail_Expression(inner);
+        }
+    }
+
+    return expression;
 }
 
 impl<'ast> Visit<'ast> for Walk

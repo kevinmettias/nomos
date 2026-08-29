@@ -38,6 +38,48 @@ pub(super) fn Documentation(declaration: Node, source: &[u8]) -> Option<String>
     return Some(lines.join("\n"));
 }
 
+/// Climbs from a spec to the outermost ancestor with nothing but grammar punctuation before
+/// it.
+///
+/// `var Tables []string`'s `var_spec` has a prior sibling — the `var` keyword itself, an
+/// *unnamed* token rather than a real declaration. Climbing only while there is no sibling
+/// at all would stop right there and never reach `var_declaration`, whose own prior sibling
+/// is the comment. A node with a real, *named* prior sibling — another spec, or a comment —
+/// stops the climb immediately: there is live content directly above it, and anything
+/// further up belongs to that content rather than to this one. `source_file` is never
+/// climbed past, since above it there is nothing.
+fn Search_Anchor(node: Node) -> Node
+{
+    let mut anchor = node;
+
+    while let Some(next) = Next_Anchor(anchor)
+    {
+        anchor = next;
+    }
+
+    return anchor;
+}
+
+/// The next ancestor to climb to, or `None` when the climb should stop at `anchor` itself.
+fn Next_Anchor(anchor: Node) -> Option<Node>
+{
+    let blocked_by_real_content = anchor.prev_sibling().is_some_and(|previous| return previous.is_named());
+
+    if blocked_by_real_content
+    {
+        return None;
+    }
+
+    let parent = anchor.parent()?;
+
+    if parent.kind() == "source_file"
+    {
+        return None;
+    }
+
+    return Some(parent);
+}
+
 /// Every contiguous comment line above `anchor`, nearest first -- [`Documentation`]'s own
 /// walk, named so its body reads as "collect the run, then reverse it into source order."
 fn Contiguous_Comment_Lines(anchor: Node, mut boundary_row: usize, source: &[u8]) -> Vec<String>
@@ -79,48 +121,6 @@ fn Comment_Line(previous: Node, boundary_row: usize, source: &[u8]) -> Option<(S
     let above = previous.start_position().row.checked_sub(1)?;
 
     return Some((Stripped(text), above));
-}
-
-/// Climbs from a spec to the outermost ancestor with nothing but grammar punctuation before
-/// it.
-///
-/// `var Tables []string`'s `var_spec` has a prior sibling — the `var` keyword itself, an
-/// *unnamed* token rather than a real declaration. Climbing only while there is no sibling
-/// at all would stop right there and never reach `var_declaration`, whose own prior sibling
-/// is the comment. A node with a real, *named* prior sibling — another spec, or a comment —
-/// stops the climb immediately: there is live content directly above it, and anything
-/// further up belongs to that content rather than to this one. `source_file` is never
-/// climbed past, since above it there is nothing.
-fn Search_Anchor(node: Node) -> Node
-{
-    let mut anchor = node;
-
-    while let Some(next) = Next_Anchor(anchor)
-    {
-        anchor = next;
-    }
-
-    return anchor;
-}
-
-/// The next ancestor to climb to, or `None` when the climb should stop at `anchor` itself.
-fn Next_Anchor(anchor: Node) -> Option<Node>
-{
-    let blocked_by_real_content = anchor.prev_sibling().is_some_and(|previous| return previous.is_named());
-
-    if blocked_by_real_content
-    {
-        return None;
-    }
-
-    let parent = anchor.parent()?;
-
-    if parent.kind() == "source_file"
-    {
-        return None;
-    }
-
-    return Some(parent);
 }
 
 /// One comment's text with its `//` or `/* ... */` marker removed and the result trimmed.

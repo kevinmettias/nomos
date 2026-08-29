@@ -72,31 +72,6 @@ pub fn Materialize(subject: SubjectId, source: &str, context: FactContext) -> Ma
     return Materialization::Materialized(Box::new(fact));
 }
 
-/// The fact itself, once its identity is settled.
-///
-/// The snapshot is provenance and not identity — the tree this file was read from, recorded
-/// beside the fact rather than folded into what it is, per `OD-ANALYSIS-001`.
-///
-/// The evidence is `Verified`: a parser either found the item in the token stream or it did
-/// not, and there is no inference step by which this could report something the text does
-/// not contain. Not `Derived`, which is for conclusions drawn from other facts — the source
-/// is not a fact, it is the territory.
-fn Fact(
-    key: nomos_analysis::FactKey,
-    guarantee: Guarantee,
-    payload: Vec<u8>,
-    context: FactContext,
-) -> MaterializedFact
-{
-    return MaterializedFact {
-        identity: key.At(context.generation),
-        snapshot: context.snapshot,
-        evidence: EvidenceClass::Verified,
-        guarantee,
-        payload: FactPayload::New(Payload_Schema(), payload),
-    };
-}
-
 /// What this fact is, as against where it came from.
 ///
 /// Every component is either the capability being served, the provider serving it, or an
@@ -119,6 +94,31 @@ fn Keyed(
         guarantee: GuaranteeDigest::Of(&guarantee),
         variant: context.variant,
         configuration: context.configuration,
+    };
+}
+
+/// The fact itself, once its identity is settled.
+///
+/// The snapshot is provenance and not identity — the tree this file was read from, recorded
+/// beside the fact rather than folded into what it is, per `OD-ANALYSIS-001`.
+///
+/// The evidence is `Verified`: a parser either found the item in the token stream or it did
+/// not, and there is no inference step by which this could report something the text does
+/// not contain. Not `Derived`, which is for conclusions drawn from other facts — the source
+/// is not a fact, it is the territory.
+fn Fact(
+    key: nomos_analysis::FactKey,
+    guarantee: Guarantee,
+    payload: Vec<u8>,
+    context: FactContext,
+) -> MaterializedFact
+{
+    return MaterializedFact {
+        identity: key.At(context.generation),
+        snapshot: context.snapshot,
+        evidence: EvidenceClass::Verified,
+        guarantee,
+        payload: FactPayload::New(Payload_Schema(), payload),
     };
 }
 

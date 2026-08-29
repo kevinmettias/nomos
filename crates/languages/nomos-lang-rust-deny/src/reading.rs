@@ -138,6 +138,18 @@ fn Require_Ran(outcome: &ExitOutcome) -> Result<(), DenyError>
     }
 }
 
+/// `violations`, in a stable order -- neither `cargo deny`'s own internal iteration over
+/// the resolved graph nor `serde_json`'s object representation promises one, the same
+/// reason `nomos_lang_rust_clippy::reading::Canonical_Order` sorts before encoding.
+fn Canonical_Order(mut violations: Vec<PolicyViolation>) -> Vec<PolicyViolation>
+{
+    violations.sort_by(|left, right| {
+        return (left.severity.Label(), &left.code, &left.message).cmp(&(right.severity.Label(), &right.code, &right.message));
+    });
+
+    return violations;
+}
+
 /// `stderr`'s own JSON-lines stream, folded into every `"type": "diagnostic"` entry it
 /// named -- silently skipping a malformed line, a `"type": "summary"` line, and anything
 /// missing the three fields every real diagnostic carries, the same tolerance
@@ -181,18 +193,6 @@ fn Violation_Of(diagnostic: &serde_json::Value) -> Option<PolicyViolation>
     let message = fields.get("message")?.as_str()?.to_owned();
 
     return Some(PolicyViolation { severity, code, message });
-}
-
-/// `violations`, in a stable order -- neither `cargo deny`'s own internal iteration over
-/// the resolved graph nor `serde_json`'s object representation promises one, the same
-/// reason `nomos_lang_rust_clippy::reading::Canonical_Order` sorts before encoding.
-fn Canonical_Order(mut violations: Vec<PolicyViolation>) -> Vec<PolicyViolation>
-{
-    violations.sort_by(|left, right| {
-        return (left.severity.Label(), &left.code, &left.message).cmp(&(right.severity.Label(), &right.code, &right.message));
-    });
-
-    return violations;
 }
 
 #[cfg(test)]

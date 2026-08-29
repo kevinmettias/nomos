@@ -184,36 +184,6 @@ fn First_Party_Relative_Root_Of(value: &serde_json::Value, root: &Path) -> Optio
     return First_Party_Relative_Root(package_id, root);
 }
 
-/// `value`'s compiler-message diagnostic, appended to `entry` if it is one -- [`Record_Line`]'s
-/// own trailing step, named so a message that is not a compiler diagnostic reads as "nothing
-/// to append" rather than as a condition guarding the whole function.
-fn Record_Compiler_Diagnostic(value: &serde_json::Value, entry: &mut (String, Vec<LintDiagnostic>))
-{
-    if value.get("reason").and_then(serde_json::Value::as_str) == Some("compiler-message")
-        && let Some(message) = value.get("message")
-        && let Some(diagnostic) = Diagnostic_Of(message)
-    {
-        entry.1.push(diagnostic);
-    }
-}
-
-/// `diagnostics`, deduplicated and in a stable order — `--all-targets` compiles a member's
-/// own library crate more than once (its plain build, its own test binary), and a real
-/// warning at one line is reported once per compilation that reaches it, which is the same
-/// diagnostic reported twice rather than two diagnostics. Sorting first is what makes
-/// `Vec::dedup`'s consecutive-equality rule catch every duplicate rather than only
-/// adjacent ones the stream happened to emit next to each other.
-fn Canonical_Order(mut diagnostics: Vec<LintDiagnostic>) -> Vec<LintDiagnostic>
-{
-    diagnostics.sort_by(|left, right| {
-        return (&left.file, left.line, left.level.Label(), &left.lint, &left.message)
-            .cmp(&(&right.file, right.line, right.level.Label(), &right.lint, &right.message));
-    });
-    diagnostics.dedup();
-
-    return diagnostics;
-}
-
 /// This package's manifest directory, relative to `root` and normalized to forward
 /// slashes — the same convention `nomos_lang_rust_cargo::metadata::Manifest_Relative_Root`
 /// derives from `cargo metadata`'s own `manifest_path`, derived here instead from `cargo
@@ -261,6 +231,19 @@ fn Package_Name(relative_root: &str) -> String
     return relative_root.rsplit('/').next().unwrap_or(relative_root).to_owned();
 }
 
+/// `value`'s compiler-message diagnostic, appended to `entry` if it is one -- [`Record_Line`]'s
+/// own trailing step, named so a message that is not a compiler diagnostic reads as "nothing
+/// to append" rather than as a condition guarding the whole function.
+fn Record_Compiler_Diagnostic(value: &serde_json::Value, entry: &mut (String, Vec<LintDiagnostic>))
+{
+    if value.get("reason").and_then(serde_json::Value::as_str) == Some("compiler-message")
+        && let Some(message) = value.get("message")
+        && let Some(diagnostic) = Diagnostic_Of(message)
+    {
+        entry.1.push(diagnostic);
+    }
+}
+
 /// One diagnostic out of `cargo clippy`'s own top-level `"message"` object — never a
 /// `note`/`help` child, which describes a diagnostic rather than being one. `None` for a
 /// level this schema does not recognize, or a message with no primary span: this reader
@@ -291,6 +274,23 @@ fn Primary_Span(message: &serde_json::Value) -> Option<&serde_json::Value>
     return spans
         .iter()
         .find(|span| return span.get("is_primary").and_then(serde_json::Value::as_bool) == Some(true));
+}
+
+/// `diagnostics`, deduplicated and in a stable order — `--all-targets` compiles a member's
+/// own library crate more than once (its plain build, its own test binary), and a real
+/// warning at one line is reported once per compilation that reaches it, which is the same
+/// diagnostic reported twice rather than two diagnostics. Sorting first is what makes
+/// `Vec::dedup`'s consecutive-equality rule catch every duplicate rather than only
+/// adjacent ones the stream happened to emit next to each other.
+fn Canonical_Order(mut diagnostics: Vec<LintDiagnostic>) -> Vec<LintDiagnostic>
+{
+    diagnostics.sort_by(|left, right| {
+        return (&left.file, left.line, left.level.Label(), &left.lint, &left.message)
+            .cmp(&(&right.file, right.line, right.level.Label(), &right.lint, &right.message));
+    });
+    diagnostics.dedup();
+
+    return diagnostics;
 }
 
 /// Refuses an empty result: `cargo clippy` reporting no first-party package at all means

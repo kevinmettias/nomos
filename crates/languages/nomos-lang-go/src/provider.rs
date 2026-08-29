@@ -53,6 +53,26 @@ pub fn Materialize(subject: SubjectId, source: &str, context: FactContext) -> Ma
     return Materialization::Materialized(Box::new(fact));
 }
 
+fn Keyed(
+    subject: SubjectId,
+    source: &str,
+    guarantee: Guarantee,
+    context: FactContext,
+) -> nomos_analysis::FactKey
+{
+    return nomos_analysis::FactKey {
+        contract: Capability(),
+        contract_version: CONTRACT_VERSION,
+        subject,
+        semantic_inputs: Syntax_Inputs(source),
+        provider: ProviderId::New(PROVIDER),
+        provider_version: CONTRACT_VERSION,
+        guarantee: GuaranteeDigest::Of(&guarantee),
+        variant: context.variant,
+        configuration: context.configuration,
+    };
+}
+
 /// The fact itself, once its identity is settled.
 ///
 /// The evidence is `Verified`, not `Derived`: a parser either found the item in the tree or
@@ -71,26 +91,6 @@ fn Fact(
         evidence: EvidenceClass::Verified,
         guarantee,
         payload: FactPayload::New(Payload_Schema(), payload),
-    };
-}
-
-fn Keyed(
-    subject: SubjectId,
-    source: &str,
-    guarantee: Guarantee,
-    context: FactContext,
-) -> nomos_analysis::FactKey
-{
-    return nomos_analysis::FactKey {
-        contract: Capability(),
-        contract_version: CONTRACT_VERSION,
-        subject,
-        semantic_inputs: Syntax_Inputs(source),
-        provider: ProviderId::New(PROVIDER),
-        provider_version: CONTRACT_VERSION,
-        guarantee: GuaranteeDigest::Of(&guarantee),
-        variant: context.variant,
-        configuration: context.configuration,
     };
 }
 

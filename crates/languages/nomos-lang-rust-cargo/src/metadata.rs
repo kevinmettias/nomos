@@ -81,68 +81,6 @@ pub fn Discover_Workspace<P: ProcessLauncher>(root: &Path, launcher: &P) -> Resu
     return Require_Nonempty(discovered);
 }
 
-/// The "packages" array `cargo metadata`'s document promises alongside `workspace_members`.
-fn Packages_Array(document: &serde_json::Value) -> Result<&Vec<serde_json::Value>, MetadataError>
-{
-    return document
-        .get("packages")
-        .and_then(serde_json::Value::as_array)
-        .ok_or_else(|| MetadataError {
-            reason: "cargo metadata's document has no \"packages\" array".to_owned(),
-        });
-}
-
-/// Every workspace member's own package name — the set `Read_Dependency` checks a
-/// dependency's target against to decide whether it names another workspace member.
-fn Member_Names(packages: &[serde_json::Value], members: &BTreeSet<String>) -> BTreeSet<String>
-{
-    return packages
-        .iter()
-        .filter(|package| Is_Member(package, members))
-        .filter_map(Package_Name)
-        .collect();
-}
-
-/// Each workspace member's own package, read into a [`DiscoveredPackage`]; a package that
-/// is not a workspace member is skipped rather than read.
-fn Discovered_Packages(
-    packages: &[serde_json::Value],
-    members: &BTreeSet<String>,
-    member_names: &BTreeSet<String>,
-    root: &Path,
-) -> Result<Vec<DiscoveredPackage>, MetadataError>
-{
-    let mut discovered = Vec::new();
-    for package in packages
-    {
-        if !Is_Member(package, members)
-        {
-            continue;
-        }
-
-        let read = Read_Package(package, member_names, root)?;
-        discovered.push(read);
-    }
-
-    return Ok(discovered);
-}
-
-/// Refuses an empty result: `cargo metadata` reporting no workspace members means this
-/// reader saw nothing, not that the workspace's own graph is empty.
-fn Require_Nonempty(discovered: Vec<DiscoveredPackage>) -> Result<Vec<DiscoveredPackage>, MetadataError>
-{
-    if discovered.is_empty()
-    {
-        return Err(MetadataError {
-            reason: "cargo metadata reported no workspace members; refusing to report a \
-                     clean result over an empty graph"
-                .to_owned(),
-        });
-    }
-
-    return Ok(discovered);
-}
-
 fn Run_Cargo_Metadata<P: ProcessLauncher>(root: &Path, launcher: &P) -> Result<serde_json::Value, MetadataError>
 {
     let command = Cargo_Metadata_Command(root);
@@ -233,20 +171,50 @@ fn Member_Ids(document: &serde_json::Value) -> Result<BTreeSet<String>, Metadata
         .collect());
 }
 
-fn Is_Member(package: &serde_json::Value, members: &BTreeSet<String>) -> bool
+/// The "packages" array `cargo metadata`'s document promises alongside `workspace_members`.
+fn Packages_Array(document: &serde_json::Value) -> Result<&Vec<serde_json::Value>, MetadataError>
 {
-    return package
-        .get("id")
-        .and_then(serde_json::Value::as_str)
-        .is_some_and(|id| members.contains(id));
+    return document
+        .get("packages")
+        .and_then(serde_json::Value::as_array)
+        .ok_or_else(|| MetadataError {
+            reason: "cargo metadata's document has no \"packages\" array".to_owned(),
+        });
 }
 
-fn Package_Name(package: &serde_json::Value) -> Option<String>
+/// Every workspace member's own package name — the set `Read_Dependency` checks a
+/// dependency's target against to decide whether it names another workspace member.
+fn Member_Names(packages: &[serde_json::Value], members: &BTreeSet<String>) -> BTreeSet<String>
 {
-    return package
-        .get("name")
-        .and_then(serde_json::Value::as_str)
-        .map(str::to_owned);
+    return packages
+        .iter()
+        .filter(|package| Is_Member(package, members))
+        .filter_map(Package_Name)
+        .collect();
+}
+
+/// Each workspace member's own package, read into a [`DiscoveredPackage`]; a package that
+/// is not a workspace member is skipped rather than read.
+fn Discovered_Packages(
+    packages: &[serde_json::Value],
+    members: &BTreeSet<String>,
+    member_names: &BTreeSet<String>,
+    root: &Path,
+) -> Result<Vec<DiscoveredPackage>, MetadataError>
+{
+    let mut discovered = Vec::new();
+    for package in packages
+    {
+        if !Is_Member(package, members)
+        {
+            continue;
+        }
+
+        let read = Read_Package(package, member_names, root)?;
+        discovered.push(read);
+    }
+
+    return Ok(discovered);
 }
 
 fn Read_Package(
@@ -269,6 +237,14 @@ fn Read_Package(
         },
         manifest_relative_root,
     });
+}
+
+fn Package_Name(package: &serde_json::Value) -> Option<String>
+{
+    return package
+        .get("name")
+        .and_then(serde_json::Value::as_str)
+        .map(str::to_owned);
 }
 
 /// This package's manifest directory, relative to `root` and normalized to forward
@@ -348,6 +324,30 @@ fn Dependency_Optional(dependency: &serde_json::Value) -> bool
         .get("optional")
         .and_then(serde_json::Value::as_bool)
         .unwrap_or(false);
+}
+
+/// Refuses an empty result: `cargo metadata` reporting no workspace members means this
+/// reader saw nothing, not that the workspace's own graph is empty.
+fn Require_Nonempty(discovered: Vec<DiscoveredPackage>) -> Result<Vec<DiscoveredPackage>, MetadataError>
+{
+    if discovered.is_empty()
+    {
+        return Err(MetadataError {
+            reason: "cargo metadata reported no workspace members; refusing to report a \
+                     clean result over an empty graph"
+                .to_owned(),
+        });
+    }
+
+    return Ok(discovered);
+}
+
+fn Is_Member(package: &serde_json::Value, members: &BTreeSet<String>) -> bool
+{
+    return package
+        .get("id")
+        .and_then(serde_json::Value::as_str)
+        .is_some_and(|id| members.contains(id));
 }
 
 #[cfg(test)]

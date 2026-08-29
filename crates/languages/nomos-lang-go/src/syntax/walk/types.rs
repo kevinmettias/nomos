@@ -31,6 +31,14 @@ pub(super) fn Record_Type_Spec(items: &mut Vec<SyntaxItem>, spec: Node, source: 
     Record_Interface_Methods_If_Interface(items, (fields.kind, type_node), &name, source);
 }
 
+fn Type_Spec_Name(spec: Node, source: &[u8]) -> Option<String>
+{
+    let name_node = spec.child_by_field_name("name")?;
+    let name = name_node.utf8_text(source).ok()?;
+
+    return Some(name.to_owned());
+}
+
 /// `type_node`'s kind and shape, alongside `spec`'s own documentation -- [`Record_Type_Spec`]'s
 /// own gathering step, named so its body reads as "gather the fields, then push them."
 /// [`Type_Spec_Fields`]'s own result, named so the caller reads `fields.kind` and the rest
@@ -51,24 +59,6 @@ fn Type_Spec_Fields(type_node: Option<Node>, spec: Node, source: &[u8]) -> TypeS
     return TypeSpecFields { kind, shape, documentation };
 }
 
-/// `type_node`'s methods, recorded when [`Record_Type_Spec`] just built an interface --
-/// its own trailing, conditional step, named so the parent's body ends at "record it."
-fn Record_Interface_Methods_If_Interface(items: &mut Vec<SyntaxItem>, kind_and_type: (ItemKind, Option<Node>), name: &str, source: &[u8])
-{
-    if let (ItemKind::Interface, Some(interface)) = kind_and_type
-    {
-        Record_Interface_Methods(items, interface, name, source);
-    }
-}
-
-fn Type_Spec_Name(spec: Node, source: &[u8]) -> Option<String>
-{
-    let name_node = spec.child_by_field_name("name")?;
-    let name = name_node.utf8_text(source).ok()?;
-
-    return Some(name.to_owned());
-}
-
 fn Type_Spec_Kind(type_node: Option<Node>) -> ItemKind
 {
     return match type_node.map(|found| return found.kind())
@@ -86,6 +76,16 @@ fn Type_Spec_Shape(kind: ItemKind, type_node: Option<Node>, source: &[u8]) -> Op
         (ItemKind::Struct, Some(struct_type)) => Struct_Shape(struct_type, source),
         _ => None,
     };
+}
+
+/// `type_node`'s methods, recorded when [`Record_Type_Spec`] just built an interface --
+/// its own trailing, conditional step, named so the parent's body ends at "record it."
+fn Record_Interface_Methods_If_Interface(items: &mut Vec<SyntaxItem>, kind_and_type: (ItemKind, Option<Node>), name: &str, source: &[u8])
+{
+    if let (ItemKind::Interface, Some(interface)) = kind_and_type
+    {
+        Record_Interface_Methods(items, interface, name, source);
+    }
 }
 
 /// A method an interface's method set declares.
@@ -132,6 +132,29 @@ fn Record_Interface_Method(items: &mut Vec<SyntaxItem>, member: Node, interface_
             name,
             documentation,
             shape: Some(nomos_cap_syntax::Function_Shape(arity)),
+        },
+    );
+}
+
+pub(super) fn Record_Type_Alias(items: &mut Vec<SyntaxItem>, spec: Node, source: &[u8])
+{
+    let Some(name) = Function_Name(spec, source)
+    else
+    {
+        return;
+    };
+
+    let documentation = Documentation(spec, source);
+
+    Push(
+        items,
+        ItemRecord {
+            kind: ItemKind::TypeAlias,
+            scope: Vec::new(),
+            visibility: Visibility::Of_Name(&name),
+            name,
+            documentation,
+            shape: None,
         },
     );
 }
@@ -189,27 +212,4 @@ fn Push_Struct_Field(declaration: Node, source: &[u8], fields: &mut Vec<(String,
             fields.push((name_text.to_owned(), type_text.to_owned()));
         }
     }
-}
-
-pub(super) fn Record_Type_Alias(items: &mut Vec<SyntaxItem>, spec: Node, source: &[u8])
-{
-    let Some(name) = Function_Name(spec, source)
-    else
-    {
-        return;
-    };
-
-    let documentation = Documentation(spec, source);
-
-    Push(
-        items,
-        ItemRecord {
-            kind: ItemKind::TypeAlias,
-            scope: Vec::new(),
-            visibility: Visibility::Of_Name(&name),
-            name,
-            documentation,
-            shape: None,
-        },
-    );
 }

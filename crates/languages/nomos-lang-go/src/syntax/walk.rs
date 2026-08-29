@@ -103,6 +103,29 @@ fn Root_Error(root: Node) -> Option<ParseFailure>
     }));
 }
 
+fn Walk_Source_File(root: Node, source: &[u8]) -> Vec<SyntaxItem>
+{
+    let mut items = Vec::new();
+    let mut cursor = root.walk();
+
+    for child in root.children(&mut cursor)
+    {
+        match child.kind()
+        {
+            "function_declaration" => Record_Function(&mut items, child, source),
+            "method_declaration" => Record_Method(&mut items, child, source),
+            "const_declaration" | "var_declaration" | "import_declaration" | "type_declaration" =>
+            {
+                Record_Declaration_Body(&mut items, child, source);
+            }
+            _ =>
+            {}
+        }
+    }
+
+    return items;
+}
+
 /// The first place recovery left a mark, depth-first in source order.
 fn First_Error(node: Node) -> Option<ParseFailure>
 {
@@ -128,29 +151,6 @@ fn First_Error(node: Node) -> Option<ParseFailure>
     }
 
     return None;
-}
-
-fn Walk_Source_File(root: Node, source: &[u8]) -> Vec<SyntaxItem>
-{
-    let mut items = Vec::new();
-    let mut cursor = root.walk();
-
-    for child in root.children(&mut cursor)
-    {
-        match child.kind()
-        {
-            "function_declaration" => Record_Function(&mut items, child, source),
-            "method_declaration" => Record_Method(&mut items, child, source),
-            "const_declaration" | "var_declaration" | "import_declaration" | "type_declaration" =>
-            {
-                Record_Declaration_Body(&mut items, child, source);
-            }
-            _ =>
-            {}
-        }
-    }
-
-    return items;
 }
 
 /// Searches one `_declaration` node's subtree for the spec kinds it can contain, recording
