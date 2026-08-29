@@ -36719,14 +36719,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-p19-naming-attrs-spec",
-        "acquired_at": 1788038777,
-        "lease_expires_at": 1788045977
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -36736,7 +36732,27 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "exit_code": 0,
+        "output_tail": "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.18s\n",
+        "verified_at": 1788045205,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "343e03d9af0f9b9c58428ff684c5bf1209e6e1e8"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -36755,14 +36771,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-p19-naming-attrs-host",
-        "acquired_at": 1788038777,
-        "lease_expires_at": 1788045977
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -36772,7 +36784,27 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "exit_code": 0,
+        "output_tail": "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.17s\n",
+        "verified_at": 1788045206,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "343e03d9af0f9b9c58428ff684c5bf1209e6e1e8"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -36791,14 +36823,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-p19-naming-attrs-substrate",
-        "acquired_at": 1788038777,
-        "lease_expires_at": 1788045977
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -36808,7 +36836,27 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "exit_code": 0,
+        "output_tail": "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.17s\n",
+        "verified_at": 1788045207,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "343e03d9af0f9b9c58428ff684c5bf1209e6e1e8"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -36827,14 +36875,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-p19-naming-attrs-orchestration",
-        "acquired_at": 1788038777,
-        "lease_expires_at": 1788045977
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -36844,7 +36888,27 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "exit_code": 0,
+        "output_tail": "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.17s\n",
+        "verified_at": 1788045208,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "343e03d9af0f9b9c58428ff684c5bf1209e6e1e8"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -36863,14 +36927,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-p19-naming-attrs-languages",
-        "acquired_at": 1788038777,
-        "lease_expires_at": 1788045977
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -36880,7 +36940,27 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "exit_code": 0,
+        "output_tail": "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.17s\n",
+        "verified_at": 1788045209,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "343e03d9af0f9b9c58428ff684c5bf1209e6e1e8"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -36900,14 +36980,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-p19-naming-attrs-rules-contracts",
-        "acquired_at": 1788038777,
-        "lease_expires_at": 1788045977
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -36917,7 +36993,27 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "exit_code": 0,
+        "output_tail": "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.17s\n",
+        "verified_at": 1788045210,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "343e03d9af0f9b9c58428ff684c5bf1209e6e1e8"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -36940,14 +37036,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-p19-naming-attrs-misc",
-        "acquired_at": 1788038777,
-        "lease_expires_at": 1788045977
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -36957,7 +37049,27 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "exit_code": 0,
+        "output_tail": "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.17s\n",
+        "verified_at": 1788045211,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "343e03d9af0f9b9c58428ff684c5bf1209e6e1e8"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
