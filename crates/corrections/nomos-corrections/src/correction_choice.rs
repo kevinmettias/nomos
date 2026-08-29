@@ -23,27 +23,31 @@ pub struct CorrectionChoice
     verification_obligations: Vec<String>,
 }
 
+/// `COR-012`'s own five recorded fields, apart from `selected` itself -- grouped into one
+/// value so [`CorrectionChoice::New`] stays within this crate's own parameter-count limit.
+pub struct ChoiceRecord
+{
+    pub objective_weights: Vec<(RankingCriterion, u32)>,
+    pub rejected_alternatives: Vec<CorrectionId>,
+    pub predicted_side_effects: Vec<String>,
+    pub unresolved_tradeoffs: Vec<String>,
+    pub verification_obligations: Vec<String>,
+}
+
 impl CorrectionChoice
 {
-    /// Records a choice. `selected` is the winning candidate's identity; the remaining
-    /// parameters are `COR-012`'s own five recorded fields, declared by the caller.
+    /// Records a choice. `selected` is the winning candidate's identity; `record` is
+    /// `COR-012`'s own five recorded fields, declared by the caller.
     #[must_use]
-    pub fn New(
-        selected: CorrectionId,
-        objective_weights: Vec<(RankingCriterion, u32)>,
-        rejected_alternatives: Vec<CorrectionId>,
-        predicted_side_effects: Vec<String>,
-        unresolved_tradeoffs: Vec<String>,
-        verification_obligations: Vec<String>,
-    ) -> Self
+    pub fn New(selected: CorrectionId, record: ChoiceRecord) -> Self
     {
         return Self {
             selected,
-            objective_weights,
-            rejected_alternatives,
-            predicted_side_effects,
-            unresolved_tradeoffs,
-            verification_obligations,
+            objective_weights: record.objective_weights,
+            rejected_alternatives: record.rejected_alternatives,
+            predicted_side_effects: record.predicted_side_effects,
+            unresolved_tradeoffs: record.unresolved_tradeoffs,
+            verification_obligations: record.verification_obligations,
         };
     }
 
@@ -105,11 +109,13 @@ mod tests
 
         let choice = CorrectionChoice::New(
             selected,
-            vec![(RankingCriterion::BehaviorPreservation, 3)],
-            vec![rejected],
-            vec!["may slow the hot path".to_owned()],
-            vec!["unclear whether callers rely on the old error message".to_owned()],
-            vec!["run the integration suite".to_owned()],
+            ChoiceRecord {
+                objective_weights: vec![(RankingCriterion::BehaviorPreservation, 3)],
+                rejected_alternatives: vec![rejected],
+                predicted_side_effects: vec!["may slow the hot path".to_owned()],
+                unresolved_tradeoffs: vec!["unclear whether callers rely on the old error message".to_owned()],
+                verification_obligations: vec!["run the integration suite".to_owned()],
+            },
         );
 
         assert_eq!(choice.Selected(), selected);

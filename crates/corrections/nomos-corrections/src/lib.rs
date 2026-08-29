@@ -36,7 +36,7 @@ mod validated;
 pub use candidate::{CorrectionCandidate, CorrectionId};
 pub use candidate_label::CandidateLabel;
 pub use change_set::ChangeSet;
-pub use correction_choice::CorrectionChoice;
+pub use correction_choice::{ChoiceRecord, CorrectionChoice};
 pub use correction_class::CorrectionClass;
 pub use correction_decision::{CorrectionDecision, ReviewReason};
 pub use committed::CommittedPlan;

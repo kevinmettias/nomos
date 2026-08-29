@@ -32,7 +32,7 @@ pub enum CorrectionDecision
 mod tests
 {
     use super::*;
-    use crate::{ChangeSet, CorrectionCandidate, CorrectionClass, Edit};
+    use crate::{ChangeSet, ChoiceRecord, CorrectionCandidate, CorrectionClass, Edit};
 
     fn Candidate(description: &str) -> CorrectionCandidate
     {
@@ -45,7 +45,16 @@ mod tests
     fn Test_An_Automatic_Decision_Carries_Its_Choice()
     {
         let selected = Candidate("winner").Id();
-        let choice = CorrectionChoice::New(selected, vec![], vec![], vec![], vec![], vec![]);
+        let choice = CorrectionChoice::New(
+            selected,
+            ChoiceRecord {
+                objective_weights: vec![],
+                rejected_alternatives: vec![],
+                predicted_side_effects: vec![],
+                unresolved_tradeoffs: vec![],
+                verification_obligations: vec![],
+            },
+        );
 
         let decision = CorrectionDecision::Automatic(choice.clone());
 
