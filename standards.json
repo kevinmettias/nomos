@@ -1,5 +1,9 @@
 {
   "suppression": {
     "max_horizon_days": 180
+  },
+  "naming": {
+    "function": "upper-snake",
+    "method": "upper-snake"
   }
 }

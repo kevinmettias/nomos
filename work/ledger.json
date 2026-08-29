@@ -36652,6 +36652,58 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P18-NAMING-CASE-CONVENTION",
+      "title": "check-naming: declare nomos's Pascal_Snake_Case function/method convention in standards.json",
+      "why": "check-naming's default Rust convention (lower-snake) reported 3209 findings against nomos's own long-established, Cargo.toml-documented Pascal_Snake_Case function-naming house style; the check's own per-repository naming-override mechanism exists for exactly this disagreement",
+      "done_when": "standards.json declares function and method as upper-snake, and check-naming reports zero findings against crates and tests",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "standards.json"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:/Users/kmett/source/repos/kevinmettias/code-standards/check.exe",
+          "check-naming",
+          "crates",
+          "tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "C:/Users/kmett/source/repos/kevinmettias/code-standards/check.exe",
+          "check-naming",
+          "crates",
+          "tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "check-naming: no findings.\ncheck-naming: 844 file(s) judged.\ncheck-naming: 42 file(s) not analyzed (this language offers no such surface, AND HAS DECLARED NO REASON — this is an unwritten gap, not a decision).\ncheck-naming: 23 file(s) not analyzed (this language declines this surface deliberately).\ncheck-naming: json declines this surface, and says why: JSON declares no symbols. This surface is the set of names a FILE declares -- its types, its functions, their parameters -- which is what the rules built on it count, split and place. A JSON document declares none of them: an object member is data under a key, not a declaration the file exports.\ncheck-naming: yaml declines this surface, and says why: YAML declares no symbols. This surface is the set of names a FILE declares -- its types, its functions, their parameters. A YAML key names a value for whoever reads the document; it is not a declaration the file exports.\n",
+        "verified_at": 1788038602,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "6594d9eb71a2810fce9fe1939dd225fcb0ce9760"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
