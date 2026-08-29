@@ -36013,14 +36013,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-loop-session",
-        "acquired_at": 1788029370,
-        "lease_expires_at": 1788036570
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -36032,7 +36028,29 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-api"
+        ],
+        "exit_code": 0,
+        "output_tail": ": ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-lang-go-modules v0.1.0 (F:\\repos\\nomos\\crates\\languages\\nomos-lang-go-modules)\n   Compiling nomos-check-orchestration v0.1.0 (F:\\repos\\nomos\\crates\\orchestration\\nomos-check-orchestration)\n   Compiling nomos-gate-orchestration v0.1.0 (F:\\repos\\nomos\\crates\\orchestration\\nomos-gate-orchestration)\n   Compiling nomos-api v0.1.0 (F:\\repos\\nomos\\crates\\host\\nomos-api)\n   Compiling nomos-cli v0.1.0 (F:\\repos\\nomos\\crates\\host\\nomos-cli)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.93s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_api-4fe503a28bf04b3a.exe)\n     Running unittests src\\main.rs (target\\debug\\deps\\nomos-b79713dea79f3cb6.exe)\n     Running tests\\abandon_is_readable.rs (target\\debug\\deps\\abandon_is_readable-95b9d3f72f9ba8ba.exe)\n     Running tests\\add_guarantees_what_it_says.rs (target\\debug\\deps\\add_guarantees_what_it_says-bded7078a7f1229a.exe)\n     Running tests\\authoring_surface.rs (target\\debug\\deps\\authoring_surface-0fc1776b63b5f221.exe)\n     Running tests\\check_command.rs (target\\debug\\deps\\check_command-432b9c0624994395.exe)\n     Running tests\\freshness.rs (target\\debug\\deps\\freshness-beba0603c2550afc.exe)\n     Running tests\\gate_step\\main.rs (target\\debug\\deps\\gate_step-e488d4b9eac24916.exe)\n     Running tests\\list_tells_the_truth.rs (target\\debug\\deps\\list_tells_the_truth-f0e431cca1a6f11c.exe)\n     Running tests\\read_surface.rs (target\\debug\\deps\\read_surface-978946563a994eae.exe)\n     Running tests\\request_submit.rs (target\\debug\\deps\\request_submit-024f0d37b54ffc68.exe)\n     Running tests\\stale_writer_is_refused.rs (target\\debug\\deps\\stale_writer_is_refused-c727c5e923a6c7c9.exe)\n     Running tests\\takeover_is_recorded.rs (target\\debug\\deps\\takeover_is_recorded-ac4d9b9b75b685d5.exe)\n   Doc-tests nomos_api\n",
+        "verified_at": 1788032055,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "7d41f54b96f3eaec0e582da9e34a72a7e36cabee"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -36279,6 +36297,46 @@
         },
         "revision": "7517a90aae2dc92234cf2d59fbd6301e292d7a18"
       },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P16-EVERYTHINGELSE-FIELDGROUPING",
+      "title": "OD-GATE-018 phase 3: close check-field-grouping via a shared GateFindings sub-struct",
+      "why": "declare-types' check-field-grouping flagged nomos-gate-orchestration::GateRunResult and nomos-api::GateRunResponse for the identical 4-field group (blocking_findings, calibrated_findings, suppressed_findings, baselined_findings). A third, private copy of the same shape (run_gate.rs's own Partition struct) already existed internally. Consolidated into one public nomos_gate_orchestration::GateFindings, used directly by GateRunResult and by run_gate.rs's internal Reduced/Partitioned (replacing Partition and folding Reduction's four fields into one), plus a serializable nomos_api::response::run::GateFindings twin (the same twin-not-re-export pattern crate::response::Disposition already uses, since the orchestration type does not derive Serialize) for GateRunResponse. This is a real JSON wire-shape change for nomos-api's gate-run endpoint: the four finding lists move from top-level keys to nested under a findings key. tests/contract/surface/nomos-api.txt and nomos-gate-orchestration.txt reblessed for exactly these two crates (NOMOS_SURFACE_BLESS=nomos-api,nomos-gate-orchestration), confirmed by re-running the suite afterward with the diff showing neither crate any longer, only two unrelated crates (nomos-check-orchestration, nomos-corrections) that a different, concurrent session is mid-editing.",
+      "done_when": "check-field-grouping reports zero findings against crates tests (default run). cargo build --workspace --all-targets and cargo test -p nomos-gate-orchestration -p nomos-api -p nomos-cli all stay green. tests/contract/surface/nomos-api.txt and nomos-gate-orchestration.txt reflect the new GateFindings shape (verified via a scoped NOMOS_SURFACE_BLESS run whose diff no longer names either crate) -- the whole-suite public_surface test is not required green here, since two other crates in it are a different session's own in-flight, uncommitted work.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/lib.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/outcome.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/outcome/gate_run_result.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/run_gate.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/tests.rs",
+          "crates/host/nomos-api/src/response/run.rs",
+          "crates/host/nomos-cli/src/gate/report.rs",
+          "tests/contract/surface/nomos-api.txt",
+          "tests/contract/surface/nomos-gate-orchestration.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
       "abandoned": [],
       "displaced": [],
       "declined": null
