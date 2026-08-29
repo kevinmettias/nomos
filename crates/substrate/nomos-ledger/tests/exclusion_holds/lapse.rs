@@ -26,7 +26,7 @@ fn Test_A_Lapsed_Lease_Should_Not_Stop_The_Rest_Of_The_Board()
     ]);
     Take(&mut ledger, "T-1", "dead-agent");
 
-    let mut after = After_The_Lapse(&directory);
+    let mut after = After_The_Lapse(directory.As_Path());
 
     // One: the document is not called invalid because time passed.
     assert_eq!(
@@ -74,7 +74,7 @@ fn Test_A_Lapsed_Item_Should_Refuse_A_Plain_Claim_And_Name_The_Takeover()
     let (directory, mut ledger) = Board_At("lapse-takeover", vec![Item("T-1", &["src/a.rs"])]);
     Take(&mut ledger, "T-1", "dead-agent");
 
-    let mut after = After_The_Lapse(&directory);
+    let mut after = After_The_Lapse(directory.As_Path());
 
     let refusal = Refused(&mut after, "T-1", "agent-b");
     Says_The_Item_Is_Lapsed_And_Names_The_Verb(&refusal);
@@ -123,7 +123,7 @@ fn Test_The_Holder_Should_Still_Recover_Its_Own_Lapsed_Claim()
     let (directory, mut ledger) = Board_At("lapse-recover", vec![Item("T-1", &["src/a.rs"])]);
     Take(&mut ledger, "T-1", "agent-a");
 
-    let mut after = After_The_Lapse(&directory);
+    let mut after = After_The_Lapse(directory.As_Path());
 
     after
         .Renew(&ItemId::New("T-1"), "agent-a", Duration::from_secs(3_600))
@@ -162,7 +162,7 @@ fn Test_A_Lapsed_Item_Should_Be_Taken_Over_And_Still_Name_Its_Previous_Holder()
     let (directory, mut ledger) = Board_At("takeover-keeps-predecessor", vec![Item("T-1", &["src/a.rs"])]);
     Take(&mut ledger, "T-1", "dead-agent");
 
-    let mut after = After_The_Lapse(&directory);
+    let mut after = After_The_Lapse(directory.As_Path());
 
     let reservation = Take_Over_In(&mut after, "T-1", "agent-b").unwrap_or_else(|refusal| {
         panic!(

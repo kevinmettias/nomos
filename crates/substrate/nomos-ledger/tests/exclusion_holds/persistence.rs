@@ -13,9 +13,9 @@ use crate::board::*;
 fn Test_A_Corrupt_Ledger_Should_Be_An_Error_Not_An_Empty_One()
 {
     let directory = Temp_Dir("corrupt");
-    let ledger = Ledger_At(&directory, &AT_NOW);
+    let ledger = Ledger_At(directory.As_Path(), &AT_NOW);
 
-    std::fs::write(directory.join("ledger.json"), "{ this is not json").expect("write");
+    std::fs::write(directory.As_Path().join("ledger.json"), "{ this is not json").expect("write");
 
     let error = ledger.Load().expect_err("a corrupt ledger must not read as empty");
 
@@ -26,7 +26,7 @@ fn Test_A_Corrupt_Ledger_Should_Be_An_Error_Not_An_Empty_One()
 fn Test_A_Missing_Ledger_Should_Read_As_Empty()
 {
     let directory = Temp_Dir("missing");
-    let ledger = Ledger_At(&directory, &AT_NOW);
+    let ledger = Ledger_At(directory.As_Path(), &AT_NOW);
 
     let document = ledger.Load().expect("a missing ledger is not an error");
 
@@ -40,7 +40,7 @@ fn Test_A_Missing_Ledger_Should_Read_As_Empty()
 fn Test_Saving_An_Invalid_Ledger_Should_Be_Refused_Before_The_Write()
 {
     let directory = Temp_Dir("refuse-invalid");
-    let ledger = Ledger_At(&directory, &AT_NOW);
+    let ledger = Ledger_At(directory.As_Path(), &AT_NOW);
 
     let mut blocked = Item("T-1", &["src/a.rs"]);
     blocked.state = ItemState::Blocked;
@@ -51,7 +51,7 @@ fn Test_Saving_An_Invalid_Ledger_Should_Be_Refused_Before_The_Write()
 
     assert!(matches!(error, LedgerError::Invalid { .. }));
     assert!(
-        !directory.join("ledger.json").exists(),
+        !directory.As_Path().join("ledger.json").exists(),
         "nothing may be written when validation fails"
     );
 }
@@ -62,7 +62,7 @@ fn Test_Saving_An_Invalid_Ledger_Should_Be_Refused_Before_The_Write()
 fn Test_The_Ledger_Should_Round_Trip_Losslessly()
 {
     let directory = Temp_Dir("round-trip");
-    let ledger = Ledger_At(&directory, &AT_NOW);
+    let ledger = Ledger_At(directory.As_Path(), &AT_NOW);
 
     let original = Document(vec![
         Held_By(Item("T-1", &["src/a.rs", "src/b.rs"]), "agent-a", NOW + 3_600),
@@ -112,13 +112,13 @@ fn Raw_Ledger(schema_version: u32, extra: &str) -> String
 fn Test_A_Ledger_Carrying_An_Undeclared_Key_Should_Not_Load()
 {
     let directory = Temp_Dir("undeclared-key");
-    let ledger = Ledger_At(&directory, &AT_NOW);
+    let ledger = Ledger_At(directory.As_Path(), &AT_NOW);
 
     let raw = Raw_Ledger(
         SCHEMA_VERSION,
         ",\"a_field_this_build_does_not_know\":{\"holder\":\"agent-a\"}",
     );
-    std::fs::write(directory.join("ledger.json"), raw).expect("write");
+    std::fs::write(directory.As_Path().join("ledger.json"), raw).expect("write");
 
     let error = ledger
         .Load()
@@ -296,9 +296,9 @@ fn Names_The_Versions_And_The_Remedy(said: &str)
 fn Load_Failure(name: &str, raw: &str) -> LedgerError
 {
     let directory = Temp_Dir(name);
-    std::fs::write(directory.join("ledger.json"), raw).expect("write");
+    std::fs::write(directory.As_Path().join("ledger.json"), raw).expect("write");
 
-    return Ledger_At(&directory, &AT_NOW)
+    return Ledger_At(directory.As_Path(), &AT_NOW)
         .Load()
         .expect_err("this document must not load");
 }
@@ -313,9 +313,9 @@ fn Load_Failure(name: &str, raw: &str) -> LedgerError
 fn Test_A_Ledger_That_Is_Merely_Broken_Should_Still_Be_Malformed()
 {
     let directory = Temp_Dir("merely-broken");
-    let ledger = Ledger_At(&directory, &AT_NOW);
+    let ledger = Ledger_At(directory.As_Path(), &AT_NOW);
 
-    std::fs::write(directory.join("ledger.json"), "{ this is not json").expect("write");
+    std::fs::write(directory.As_Path().join("ledger.json"), "{ this is not json").expect("write");
 
     let error = ledger.Load().expect_err("a broken document must not load");
 
@@ -339,7 +339,7 @@ fn Test_A_Ledger_That_Is_Merely_Broken_Should_Still_Be_Malformed()
 fn Test_Saving_Should_Stamp_The_Version_This_Build_Understands()
 {
     let directory = Temp_Dir("stamps-version");
-    let ledger = Ledger_At(&directory, &AT_NOW);
+    let ledger = Ledger_At(directory.As_Path(), &AT_NOW);
 
     ledger
         .Save(&LedgerDocument {
@@ -348,7 +348,7 @@ fn Test_Saving_Should_Stamp_The_Version_This_Build_Understands()
         })
         .expect("valid");
 
-    let written = std::fs::read_to_string(directory.join("ledger.json")).expect("readable");
+    let written = std::fs::read_to_string(directory.As_Path().join("ledger.json")).expect("readable");
 
     assert!(
         written.contains(&format!("\"schema_version\": {SCHEMA_VERSION}")),
@@ -368,7 +368,7 @@ fn Test_A_Document_Written_Before_A_Field_Existed_Should_Still_Load()
 {
     let directory = Temp_Dir("older-than-build");
     std::fs::write(
-        directory.join("ledger.json"),
+        directory.As_Path().join("ledger.json"),
         "{\n  \"schema_version\": 1,\n  \"items\": [\
          {\"id\":\"T-1\",\"title\":\"item T-1\",\"why\":\"because\",\
          \"done_when\":\"the tests pass\",\
@@ -380,7 +380,7 @@ fn Test_A_Document_Written_Before_A_Field_Existed_Should_Still_Load()
     )
     .expect("write");
 
-    let document = Ledger_At(&directory, &AT_NOW)
+    let document = Ledger_At(directory.As_Path(), &AT_NOW)
         .Load()
         .expect("a document written before a field existed must still read");
     assert_eq!(document.items.len(), 1);

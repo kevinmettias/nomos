@@ -18,7 +18,7 @@ fn Test_Finishing_Should_Be_Refused_When_The_Predicate_Fails()
     )]);
     Take(&mut ledger, "T-1", "agent-a");
 
-    let refusal = Finish_In(&mut ledger, &directory, "T-1", "agent-a")
+    let refusal = Finish_In(&mut ledger, directory.As_Path(), "T-1", "agent-a")
     .expect_err("a predicate that exits non-zero must refuse the completion");
 
     assert!(matches!(refusal, FinishRefusal::PredicateFailed { .. }));
@@ -44,7 +44,7 @@ fn Test_Finishing_Should_Succeed_When_The_Predicate_Passes()
     )]);
     Take(&mut ledger, "T-1", "agent-a");
 
-    let record = Finish_In(&mut ledger, &directory, "T-1", "agent-a")
+    let record = Finish_In(&mut ledger, directory.As_Path(), "T-1", "agent-a")
     .expect("a passing predicate must finish the item");
 
     assert_eq!(record.exit_code, 0);
@@ -69,7 +69,7 @@ fn Test_Finishing_Should_Be_Refused_Without_A_Predicate()
     let (directory, mut ledger) = Board_At("finish-no-predicate", vec![Item("T-1", &["src/a.rs"])]);
     Take(&mut ledger, "T-1", "agent-a");
 
-    let refusal = Finish_In(&mut ledger, &directory, "T-1", "agent-a")
+    let refusal = Finish_In(&mut ledger, directory.As_Path(), "T-1", "agent-a")
     .expect_err("an item with no predicate cannot be finished");
 
     assert!(matches!(refusal, FinishRefusal::NoPredicate { .. }));
@@ -91,7 +91,7 @@ fn Test_An_Unstartable_Predicate_Should_Not_Judge_The_Work()
     )]);
     Take(&mut ledger, "T-1", "agent-a");
 
-    let refusal = Finish_In(&mut ledger, &directory, "T-1", "agent-a")
+    let refusal = Finish_In(&mut ledger, directory.As_Path(), "T-1", "agent-a")
     .expect_err("a missing program is not a verdict");
 
     assert!(matches!(refusal, FinishRefusal::CouldNotRun { .. }));
@@ -214,7 +214,7 @@ fn Test_A_Lapsed_Claim_Should_Stay_Visible_And_Invent_No_Reason()
     let (directory, mut ledger) = Board_At("abandon-lapse", vec![Item("T-1", &["src/a.rs"])]);
     Take(&mut ledger, "T-1", "agent-a");
 
-    let lapsed = After_The_Lapse(&directory);
+    let lapsed = After_The_Lapse(directory.As_Path());
     let item = Only_Item(&lapsed);
 
     assert!(

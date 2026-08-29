@@ -36397,6 +36397,90 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P16-DEREFNEWTYPE-EXCLUSIONHOLDS",
+      "title": "check-deref-newtype: remove Scratch's Deref impl in nomos-ledger's exclusion_holds test crate",
+      "why": "check-deref-newtype flags crates/substrate/nomos-ledger/tests/exclusion_holds/board.rs's Scratch(pub(crate) PathBuf) for exposing its inner PathBuf through std::ops::Deref, letting every Path method appear on Scratch silently. ~60 call sites across claiming.rs, dependencies.rs, finishing.rs, interleaving.rs, lapse.rs, persistence.rs, records.rs and takeover.rs rely on that coercion.",
+      "done_when": "check-deref-newtype reports zero findings under crates/substrate/nomos-ledger/tests/exclusion_holds. cargo build --workspace --all-targets and cargo test -p nomos-ledger stay green. Scratch's own Deref impl is gone, replaced by a named accessor method; every call site that relied on coercion now calls it explicitly.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger/tests/exclusion_holds"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-ledger"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-ledger"
+        ],
+        "exit_code": 0,
+        "output_tail": "d_Should_Still_Collide ... ok\ntest identifier_and_file::Test_Every_Record_On_Disk_Should_Be_One_Subject_With_Its_Identifier ... ok\ntest serializers::Test_Every_Universal_Reservation_Should_Be_Declared ... ok\ntest serializers::Test_A_Run_Should_Report_Whether_The_Board_Is_Parallel ... ok\ntest record_directory::Test_An_Item_Reserving_The_Whole_Record_Directory_Should_Be_Found ... ok\ntest serializers::Test_The_Old_Authoring_Should_Offer_No_Concurrent_Pair ... ok\ntest serializers::Test_An_Undeclared_Serializer_Should_Be_Found ... ok\ntest snapshot_grain::Test_Two_Items_Widening_Different_Crates_Should_Be_Held_At_Once ... ok\ntest snapshot_grain::Test_Restoring_The_Snapshot_Directory_Should_Refuse_The_Pair ... ok\ntest serializers::Test_Every_Declared_Serializer_Should_Still_Serialize ... ok\ntest record_directory::Test_No_Open_Item_Should_Reserve_The_Whole_Record_Directory ... ok\ntest identifier_and_file::Test_An_Item_Naming_A_Records_File_Should_Be_Refused_By_Its_Identifiers_Holder ... ok\ntest sharing_a_record::Test_Two_Items_Writing_One_Record_Should_Still_Be_Refused ... ok\ntest record_exclusion::Test_A_Record_Should_Exclude_Nobody_But_Its_Own_Writer ... ok\n\ntest result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.15s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.10s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_ledger-88a6c5fe6073cb0b.exe)\n     Running tests\\declining_ends_an_item.rs (target\\debug\\deps\\declining_ends_an_item-93192cf81d1c9610.exe)\n     Running tests\\exclusion_holds\\main.rs (target\\debug\\deps\\exclusion_holds-98133f494148dc2a.exe)\n     Running tests\\gate_covers_finish\\main.rs (target\\debug\\deps\\gate_covers_finish-bf5c5263ffdaee25.exe)\n     Running tests\\records_do_not_serialize\\main.rs (target\\debug\\deps\\records_do_not_serialize-5e772560a64d99e0.exe)\n   Doc-tests nomos_ledger\n",
+        "verified_at": 1788032787,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "d40403ff91f6072b842bd064cef1c4d19aad6aa2"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P16-DEREFNEWTYPE-RECORDSDONOTSERIALIZE",
+      "title": "check-deref-newtype: remove Scratch's Deref impl in nomos-ledger's records_do_not_serialize test crate",
+      "why": "check-deref-newtype flags crates/substrate/nomos-ledger/tests/records_do_not_serialize/board.rs's Scratch(PathBuf) for exposing its inner PathBuf through std::ops::Deref, letting every Path method appear on Scratch silently. ~36 call sites across board.rs, identifier_and_file.rs, main.rs, record_directory.rs, serializers.rs and snapshot_grain.rs rely on that coercion.",
+      "done_when": "check-deref-newtype reports zero findings under crates/substrate/nomos-ledger/tests/records_do_not_serialize. cargo build --workspace --all-targets and cargo test -p nomos-ledger stay green. Scratch's own Deref impl is gone, replaced by a named accessor method; every call site that relied on coercion now calls it explicitly.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger/tests/records_do_not_serialize"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-ledger"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

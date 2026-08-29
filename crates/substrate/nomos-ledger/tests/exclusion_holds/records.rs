@@ -302,7 +302,7 @@ fn Test_A_Published_Identifier_And_A_Reserved_One_Should_Be_Different_Refusals()
 fn Test_A_Closed_Items_Record_Reservation_Should_Not_Reserve_Anything()
 {
     let directory = Temp_Dir("add-record-closed");
-    let mut ledger = Ledger_At(&directory, &AT_NOW);
+    let mut ledger = Ledger_At(directory.As_Path(), &AT_NOW);
 
     let closed_states = [
         ItemState::Done,

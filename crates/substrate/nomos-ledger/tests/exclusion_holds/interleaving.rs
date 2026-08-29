@@ -199,12 +199,12 @@ pub(crate) fn Two_Writers(
 ) -> LedgerDocument
 {
     let directory = Contended(name, items);
-    let filesystem = Interleaving::Over(directory.join("ledger.json"));
+    let filesystem = Interleaving::Over(directory.As_Path().join("ledger.json"));
 
     let over = Harness {
         shared: &filesystem,
         finished: &Gate::New(),
-        directory: &directory,
+        directory: directory.As_Path(),
     };
 
     Interleaved(over, first, second);
@@ -213,7 +213,7 @@ pub(crate) fn Two_Writers(
         "the seam never fired, so nothing was interleaved and this run proves nothing"
     );
 
-    return Written(&directory);
+    return Written(directory.As_Path());
 }
 
 /// The apparatus both writers share: the filesystem carrying the seam, the gate the second
@@ -261,7 +261,7 @@ pub(crate) fn Interleaved(
 pub(crate) fn Contended(name: &str, items: Vec<LedgerItem>) -> Scratch
 {
     let directory = Temp_Dir(name);
-    Ledger_At(&directory, &AT_NOW)
+    Ledger_At(directory.As_Path(), &AT_NOW)
         .Save(&Document(items))
         .expect("a fresh ledger is valid");
 

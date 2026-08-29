@@ -118,11 +118,9 @@ impl Drop for Scratch
     }
 }
 
-impl std::ops::Deref for Scratch
+impl Scratch
 {
-    type Target = Path;
-
-    fn deref(&self) -> &Path
+    pub(crate) fn As_Path(&self) -> &Path
     {
         return &self.0;
     }
@@ -411,7 +409,7 @@ pub(crate) fn Board_At(
 ) -> (Scratch, FileLedger<StdFileSystem, &'static FixedClock, FileLock>)
 {
     let directory = Temp_Dir(name);
-    let ledger = Ledger_At(&directory, &AT_NOW);
+    let ledger = Ledger_At(directory.As_Path(), &AT_NOW);
     ledger.Save(&Document(items)).expect("a fresh ledger is valid");
 
     return (directory, ledger);
@@ -435,8 +433,8 @@ pub(crate) fn Board_Written_By_Hand(
 {
     let directory = Temp_Dir(name);
     let text = serde_json::to_string_pretty(&Document(items)).expect("a document serializes");
-    std::fs::write(directory.join("ledger.json"), text).expect("test needs to write the ledger");
-    let ledger = Ledger_At(&directory, &AT_NOW);
+    std::fs::write(directory.As_Path().join("ledger.json"), text).expect("test needs to write the ledger");
+    let ledger = Ledger_At(directory.As_Path(), &AT_NOW);
 
     return (directory, ledger);
 }
