@@ -42,7 +42,7 @@ impl IdentityTransitionKind
     /// reviewed, and carrying one across an unresolved link would do so on the strength
     /// of a guess.
     #[must_use]
-    pub const fn Preserves_History(self) -> bool
+    pub const fn Is_History_Preserving(self) -> bool
     {
         return matches!(
             self,
@@ -63,18 +63,18 @@ mod tests
     #[test]
     fn Test_Recreation_Should_Not_Preserve_History()
     {
-        assert!(!IdentityTransitionKind::Recreated.Preserves_History());
-        assert!(!IdentityTransitionKind::Unresolved.Preserves_History());
-        assert!(!IdentityTransitionKind::SplitInto.Preserves_History());
-        assert!(!IdentityTransitionKind::MergedFrom.Preserves_History());
+        assert!(!IdentityTransitionKind::Recreated.Is_History_Preserving());
+        assert!(!IdentityTransitionKind::Unresolved.Is_History_Preserving());
+        assert!(!IdentityTransitionKind::SplitInto.Is_History_Preserving());
+        assert!(!IdentityTransitionKind::MergedFrom.Is_History_Preserving());
     }
 
     #[test]
     fn Test_Renames_And_Moves_Should_Preserve_History()
     {
-        assert!(IdentityTransitionKind::ExactContinuity.Preserves_History());
-        assert!(IdentityTransitionKind::ProbableRename.Preserves_History());
-        assert!(IdentityTransitionKind::ProbableMove.Preserves_History());
-        assert!(IdentityTransitionKind::SignatureEvolution.Preserves_History());
+        assert!(IdentityTransitionKind::ExactContinuity.Is_History_Preserving());
+        assert!(IdentityTransitionKind::ProbableRename.Is_History_Preserving());
+        assert!(IdentityTransitionKind::ProbableMove.Is_History_Preserving());
+        assert!(IdentityTransitionKind::SignatureEvolution.Is_History_Preserving());
     }
 }

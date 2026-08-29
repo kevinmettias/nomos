@@ -137,10 +137,10 @@ pub use observation::{
     FUNCTION, Function_Arity, Function_Shape, IMPLEMENTATION, INHERENT, NOT_APPLICABLE, Observation, PUBLIC, SLICE,
     Struct_Fields, Struct_Shape, TRAIT, VALUE,
 };
-use observation::Observed;
+use observation::Observed_Field;
 pub use parse::Parse_Payload;
 pub use render::Escape;
-pub(crate) use render::Unescape;
+pub(crate) use render::Unescape_Field;
 pub use render::Render_Payload;
 
 use crate::PayloadItem;

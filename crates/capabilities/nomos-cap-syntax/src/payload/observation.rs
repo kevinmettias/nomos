@@ -1,6 +1,6 @@
 //! What a provider observed about one declaration, and the words it says it in.
 
-use super::{Escape, PayloadRefusal, PayloadRefusalKind, Unescape};
+use super::{Escape, PayloadRefusal, PayloadRefusalKind, Unescape_Field};
 
 /// The `kind` label every provider writes for a function form.
 pub const FUNCTION: &str = "Function";
@@ -96,7 +96,7 @@ impl Observation
         {
             "-" => Some(Self::NotObserved),
             "." => Some(Self::Absent),
-            _ => field.strip_prefix('+').map(|value| return Self::Present(Unescape(value))),
+            _ => field.strip_prefix('+').map(|value| return Self::Present(Unescape_Field(value))),
         };
     }
 }
@@ -140,7 +140,7 @@ pub fn Struct_Fields(shape: &Observation) -> Option<Vec<(String, String)>>
         .map(|line| {
             return line
                 .split_once('\t')
-                .map(|(name, kind)| return (Unescape(name), Unescape(kind)));
+                .map(|(name, kind)| return (Unescape_Field(name), Unescape_Field(kind)));
         })
         .collect();
 }
@@ -176,7 +176,7 @@ pub fn Struct_Shape(fields: &[(String, String)]) -> Option<String>
 }
 
 /// Reads a field that must be an observation.
-pub(super) fn Observed(value: &str, field: &'static str, line: usize) -> Result<Observation, PayloadRefusal>
+pub(super) fn Observed_Field(value: &str, field: &'static str, line: usize) -> Result<Observation, PayloadRefusal>
 {
     return Observation::Decode(value).ok_or_else(|| {
         return PayloadRefusal::At(

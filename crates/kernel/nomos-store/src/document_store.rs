@@ -93,7 +93,7 @@ impl DocumentStore
     /// commit and answer as if it held all of it.
     fn Refuse_Unadmitted(&self, kind: DocumentKind) -> Result<(), StoreError>
     {
-        if self.authority.Admits(kind)
+        if self.authority.Can_Admit(kind)
         {
             return Ok(());
         }
@@ -123,7 +123,7 @@ impl DocumentStore
     }
 
     #[must_use]
-    pub fn Len(&self) -> usize
+    pub fn Length(&self) -> usize
     {
         return self.documents.len();
     }

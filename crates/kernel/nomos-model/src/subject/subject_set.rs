@@ -99,7 +99,7 @@ impl SubjectSet
 
     /// The number of known members.
     #[must_use]
-    pub fn Len(&self) -> usize
+    pub fn Length(&self) -> usize
     {
         return self.members.len();
     }
@@ -165,7 +165,7 @@ mod tests
     use super::*;
     use crate::Content_Digest;
 
-    fn Subject(name: &str) -> SubjectId
+    fn Subject_Named(name: &str) -> SubjectId
     {
         return SubjectId::From_Digest(Content_Digest(name.as_bytes()));
     }
@@ -173,8 +173,8 @@ mod tests
     #[test]
     fn Test_Disjoint_Sets_Should_Permit_Concurrency()
     {
-        let left = SubjectSet::Of(SetResolution::File, [Subject("a.rs")]);
-        let right = SubjectSet::Of(SetResolution::File, [Subject("b.rs")]);
+        let left = SubjectSet::Of(SetResolution::File, [Subject_Named("a.rs")]);
+        let right = SubjectSet::Of(SetResolution::File, [Subject_Named("b.rs")]);
 
         assert_eq!(left.Intersect(&right), Intersection::Disjoint);
         assert!(left.Intersect(&right).Permits_Concurrency());
@@ -183,13 +183,13 @@ mod tests
     #[test]
     fn Test_Overlapping_Sets_Should_Report_The_Shared_Members()
     {
-        let left = SubjectSet::Of(SetResolution::File, [Subject("a.rs"), Subject("b.rs")]);
-        let right = SubjectSet::Of(SetResolution::File, [Subject("b.rs"), Subject("c.rs")]);
+        let left = SubjectSet::Of(SetResolution::File, [Subject_Named("a.rs"), Subject_Named("b.rs")]);
+        let right = SubjectSet::Of(SetResolution::File, [Subject_Named("b.rs"), Subject_Named("c.rs")]);
 
         let result = left.Intersect(&right);
 
         assert!(!result.Permits_Concurrency());
-        assert_eq!(result.Conflicting(), &[Subject("b.rs")]);
+        assert_eq!(result.Conflicting(), &[Subject_Named("b.rs")]);
     }
 
     /// The property the whole type exists for. If this ever passes, two agents can be
@@ -226,8 +226,8 @@ mod tests
     #[test]
     fn Test_Mismatched_Resolutions_Should_Be_Unknown_Not_Disjoint()
     {
-        let by_file = SubjectSet::Of(SetResolution::File, [Subject("a.rs")]);
-        let by_symbol = SubjectSet::Of(SetResolution::Symbol, [Subject("a.rs::foo")]);
+        let by_file = SubjectSet::Of(SetResolution::File, [Subject_Named("a.rs")]);
+        let by_symbol = SubjectSet::Of(SetResolution::Symbol, [Subject_Named("a.rs::foo")]);
 
         let result = by_file.Intersect(&by_symbol);
 
@@ -242,7 +242,7 @@ mod tests
     {
         let wildcard =
             SubjectSet::Empty(SetResolution::File).With_Unexpanded_Pattern("src/**/*.rs");
-        let concrete = SubjectSet::Of(SetResolution::File, [Subject("src/main.rs")]);
+        let concrete = SubjectSet::Of(SetResolution::File, [Subject_Named("src/main.rs")]);
 
         assert!(!wildcard.Intersect(&concrete).Permits_Concurrency());
         assert!(
@@ -266,8 +266,8 @@ mod tests
     #[test]
     fn Test_Intersection_Should_Be_Symmetric()
     {
-        let left = SubjectSet::Of(SetResolution::File, [Subject("a.rs"), Subject("b.rs")]);
-        let right = SubjectSet::Of(SetResolution::File, [Subject("b.rs")]);
+        let left = SubjectSet::Of(SetResolution::File, [Subject_Named("a.rs"), Subject_Named("b.rs")]);
+        let right = SubjectSet::Of(SetResolution::File, [Subject_Named("b.rs")]);
 
         assert_eq!(
             left.Intersect(&right).Permits_Concurrency(),
@@ -284,7 +284,7 @@ mod tests
     #[test]
     fn Test_A_Nonempty_Set_Should_Overlap_Itself()
     {
-        let set = SubjectSet::Of(SetResolution::File, [Subject("a.rs")]);
+        let set = SubjectSet::Of(SetResolution::File, [Subject_Named("a.rs")]);
 
         assert!(!set.Intersect(&set).Permits_Concurrency());
     }
@@ -297,11 +297,11 @@ mod tests
     {
         let forward = SubjectSet::Of(
             SetResolution::File,
-            [Subject("a.rs"), Subject("b.rs"), Subject("c.rs")],
+            [Subject_Named("a.rs"), Subject_Named("b.rs"), Subject_Named("c.rs")],
         );
         let reverse = SubjectSet::Of(
             SetResolution::File,
-            [Subject("c.rs"), Subject("b.rs"), Subject("a.rs")],
+            [Subject_Named("c.rs"), Subject_Named("b.rs"), Subject_Named("a.rs")],
         );
 
         let forward_order: Vec<&SubjectId> = forward.Members().collect();

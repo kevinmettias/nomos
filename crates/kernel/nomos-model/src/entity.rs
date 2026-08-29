@@ -8,13 +8,13 @@
 //! schedules.
 
 // An entity as one snapshot saw it.
-mod snapshot;
+mod snapshot_entity;
 
-pub use snapshot::SnapshotEntity;
+pub use snapshot_entity::SnapshotEntity;
 
 mod artifact;
 mod artifact_kind;
-mod id;
+mod entity_id;
 mod resource;
 mod resource_kind;
 mod symbol;
@@ -22,7 +22,7 @@ mod symbol_kind;
 
 pub use artifact::Artifact;
 pub use artifact_kind::ArtifactKind;
-pub use id::EntityId;
+pub use entity_id::EntityId;
 pub use resource::Resource;
 pub use resource_kind::ResourceKind;
 pub use symbol::Symbol;

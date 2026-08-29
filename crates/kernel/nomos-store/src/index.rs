@@ -148,12 +148,12 @@ impl Index
         for (kind, ids) in &self.kinds
         {
             parts.push(kind.Label().as_bytes().to_vec());
-            parts.push(Joined(ids));
+            parts.push(Joined_Ids(ids));
         }
         for (schema, ids) in &self.schemas
         {
             parts.push(schema.as_bytes().to_vec());
-            parts.push(Joined(ids));
+            parts.push(Joined_Ids(ids));
         }
         Digest_By_Snapshot(&mut parts, &self.reachable);
         Digest_By_Snapshot(&mut parts, &self.commits);
@@ -174,11 +174,11 @@ fn Digest_By_Snapshot(parts: &mut Vec<Vec<u8>>, by_snapshot: &BTreeMap<SnapshotI
     for (snapshot, ids) in by_snapshot
     {
         parts.push(snapshot.to_string().into_bytes());
-        parts.push(Joined(ids));
+        parts.push(Joined_Ids(ids));
     }
 }
 
-fn Joined(ids: &BTreeSet<DocumentId>) -> Vec<u8>
+fn Joined_Ids(ids: &BTreeSet<DocumentId>) -> Vec<u8>
 {
     let mut joined = Vec::new();
     for id in ids

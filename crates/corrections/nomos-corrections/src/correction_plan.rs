@@ -3,7 +3,6 @@
 
 use crate::{CorrectionCandidate, CorrectionError, Preview, StagedPlan};
 use nomos_workspace::Workspace;
-use std::collections::BTreeSet;
 
 /// One or more candidates meant to be staged, validated, committed and rolled back
 /// together.
@@ -71,6 +70,8 @@ impl CorrectionPlan
 /// Every path touched by more than one candidate, in a stable order.
 fn Overlapping_Paths(candidates: &[CorrectionCandidate]) -> Vec<String>
 {
+    use std::collections::BTreeSet;
+
     let mut seen: BTreeSet<&str> = BTreeSet::new();
     let mut overlapping: BTreeSet<&str> = BTreeSet::new();
 
@@ -97,7 +98,7 @@ mod tests
     struct Description<'a>(&'a str);
     struct Path<'a>(&'a str);
 
-    fn Candidate(description: Description<'_>, path: Path<'_>) -> CorrectionCandidate
+    fn Candidate_Touching(description: Description<'_>, path: Path<'_>) -> CorrectionCandidate
     {
         let edit = Edit::New(path.0, None, Some("x".to_owned()));
 
@@ -116,8 +117,8 @@ mod tests
     fn Test_Two_Candidates_Touching_The_Same_Path_Should_Be_Refused()
     {
         let refusal = CorrectionPlan::New(vec![
-            Candidate(Description("first"), Path("a.rs")),
-            Candidate(Description("second"), Path("a.rs")),
+            Candidate_Touching(Description("first"), Path("a.rs")),
+            Candidate_Touching(Description("second"), Path("a.rs")),
         ])
         .expect_err("two candidates on one path conflict");
 
@@ -133,8 +134,8 @@ mod tests
     fn Test_Candidates_Touching_Different_Paths_Should_Be_Accepted()
     {
         let plan = CorrectionPlan::New(vec![
-            Candidate(Description("first"), Path("a.rs")),
-            Candidate(Description("second"), Path("b.rs")),
+            Candidate_Touching(Description("first"), Path("a.rs")),
+            Candidate_Touching(Description("second"), Path("b.rs")),
         ])
             .expect("disjoint candidates form a plan");
 

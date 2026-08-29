@@ -18,7 +18,7 @@ use crate::AgentExecutionOutcome;
 ///
 /// [`AgentExecutionError::Unparseable`] if `stdout` is not JSON, or is JSON missing one of
 /// the fields this reader requires.
-pub(crate) fn Parse(stdout: &str) -> Result<AgentExecutionOutcome, AgentExecutionError>
+pub(crate) fn Parse_Response(stdout: &str) -> Result<AgentExecutionOutcome, AgentExecutionError>
 {
     let document: serde_json::Value = serde_json::from_str(stdout).map_err(|error| {
         return AgentExecutionError::Unparseable(format!(
@@ -26,7 +26,7 @@ pub(crate) fn Parse(stdout: &str) -> Result<AgentExecutionOutcome, AgentExecutio
         ));
     })?;
 
-    let response = Field_Str(&document, "result")?;
+    let response = Field_String(&document, "result")?;
     let is_error = Field_Bool(&document, "is_error")?;
     let cost_usd = Field_F64(&document, "total_cost_usd")?;
     let duration_ms = Field_U64(&document, "duration_ms")?;
@@ -35,28 +35,28 @@ pub(crate) fn Parse(stdout: &str) -> Result<AgentExecutionOutcome, AgentExecutio
     return Ok(AgentExecutionOutcome { response, denied_tool_uses, is_error, cost_usd, duration_ms });
 }
 
-fn Field_Str(document: &serde_json::Value, field: &str) -> Result<String, AgentExecutionError>
+fn Field_String(document: &serde_json::Value, field: &str) -> Result<String, AgentExecutionError>
 {
     return document
         .get(field)
         .and_then(serde_json::Value::as_str)
         .map(str::to_owned)
-        .ok_or_else(|| return Missing(field));
+        .ok_or_else(|| return Missing_Field(field));
 }
 
 fn Field_Bool(document: &serde_json::Value, field: &str) -> Result<bool, AgentExecutionError>
 {
-    return document.get(field).and_then(serde_json::Value::as_bool).ok_or_else(|| return Missing(field));
+    return document.get(field).and_then(serde_json::Value::as_bool).ok_or_else(|| return Missing_Field(field));
 }
 
 fn Field_F64(document: &serde_json::Value, field: &str) -> Result<f64, AgentExecutionError>
 {
-    return document.get(field).and_then(serde_json::Value::as_f64).ok_or_else(|| return Missing(field));
+    return document.get(field).and_then(serde_json::Value::as_f64).ok_or_else(|| return Missing_Field(field));
 }
 
 fn Field_U64(document: &serde_json::Value, field: &str) -> Result<u64, AgentExecutionError>
 {
-    return document.get(field).and_then(serde_json::Value::as_u64).ok_or_else(|| return Missing(field));
+    return document.get(field).and_then(serde_json::Value::as_u64).ok_or_else(|| return Missing_Field(field));
 }
 
 /// Every tool name a `permission_denials` entry names, in the order the document lists
@@ -77,7 +77,7 @@ fn Denied_Tool_Uses(document: &serde_json::Value) -> Vec<String>
         .collect();
 }
 
-fn Missing(field: &str) -> AgentExecutionError
+fn Missing_Field(field: &str) -> AgentExecutionError
 {
     return AgentExecutionError::Unparseable(format!("claude's response document has no {field:?}"));
 }
@@ -122,7 +122,7 @@ mod tests
     #[test]
     fn Test_A_Clean_Response_Has_No_Denied_Tool_Uses()
     {
-        let outcome = Parse(CLEAN).expect("valid document");
+        let outcome = Parse_Response(CLEAN).expect("valid document");
 
         assert_eq!(outcome.response, "PONG");
         assert!(!outcome.is_error);
@@ -137,7 +137,7 @@ mod tests
     #[test]
     fn Test_A_Denied_Write_Is_Reported_Structurally_Even_When_The_Text_Claims_Success()
     {
-        let outcome = Parse(FALSELY_CLAIMS_SUCCESS).expect("valid document");
+        let outcome = Parse_Response(FALSELY_CLAIMS_SUCCESS).expect("valid document");
 
         assert!(outcome.response.contains("Done"), "the fixture's own false claim is still surfaced as text");
         assert_eq!(outcome.denied_tool_uses, ["Write".to_owned()]);
@@ -146,7 +146,7 @@ mod tests
     #[test]
     fn Test_Not_Json_Is_Unparseable()
     {
-        let error = Parse("not json").expect_err("not JSON at all");
+        let error = Parse_Response("not json").expect_err("not JSON at all");
 
         assert!(matches!(error, AgentExecutionError::Unparseable(_)));
     }
@@ -154,7 +154,7 @@ mod tests
     #[test]
     fn Test_Json_Missing_Result_Is_Unparseable()
     {
-        let error = Parse(r#"{"is_error": false, "total_cost_usd": 0.0, "duration_ms": 0}"#).expect_err("no \"result\" field");
+        let error = Parse_Response(r#"{"is_error": false, "total_cost_usd": 0.0, "duration_ms": 0}"#).expect_err("no \"result\" field");
 
         assert!(matches!(error, AgentExecutionError::Unparseable(_)));
     }
@@ -164,7 +164,7 @@ mod tests
     {
         let minimal = r#"{"result": "ok", "is_error": false, "total_cost_usd": 0.0, "duration_ms": 1}"#;
 
-        let outcome = Parse(minimal).expect("valid document without permission_denials");
+        let outcome = Parse_Response(minimal).expect("valid document without permission_denials");
 
         assert!(outcome.denied_tool_uses.is_empty());
     }

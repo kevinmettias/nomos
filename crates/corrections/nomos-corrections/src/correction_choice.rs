@@ -83,7 +83,7 @@ mod tests
     use super::*;
     use crate::{ChangeSet, CorrectionCandidate, CorrectionClass, Edit};
 
-    fn Candidate(description: &str) -> CorrectionCandidate
+    fn Candidate_Named(description: &str) -> CorrectionCandidate
     {
         let edit = Edit::New("a.rs", None, Some(description.to_owned()));
         let change = ChangeSet::Empty().With(edit);
@@ -93,8 +93,8 @@ mod tests
     #[test]
     fn Test_A_Choice_Carries_Exactly_What_It_Was_Given()
     {
-        let selected = Candidate("winner").Id();
-        let rejected = Candidate("loser").Id();
+        let selected = Candidate_Named("winner").Id();
+        let rejected = Candidate_Named("loser").Id();
 
         let choice = CorrectionChoice::New(
             selected,

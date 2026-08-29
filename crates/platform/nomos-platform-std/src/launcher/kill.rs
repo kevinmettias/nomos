@@ -16,7 +16,7 @@
 ///
 /// A wait that fails leaves the zombie this exists to avoid, so it is reported rather than
 /// dropped.
-pub(super) fn Stopped(child: &mut std::process::Child, program: &str) -> Result<(), String>
+pub(super) fn Killed_And_Reaped(child: &mut std::process::Child, program: &str) -> Result<(), String>
 {
     if let Err(cause) = Kill_Tree(child)
         && cause.kind() != std::io::ErrorKind::InvalidInput

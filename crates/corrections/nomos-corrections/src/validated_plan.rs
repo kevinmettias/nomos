@@ -1,6 +1,5 @@
 //! A plan checked once more, immediately before it is submitted through the door.
 
-use crate::staged::Assert_Not_Moved;
 use crate::{CommittedPlan, CorrectionError};
 use nomos_contracts::{MutationClass, SnapshotId};
 use nomos_model::Evidence;
@@ -37,7 +36,7 @@ impl ValidatedPlan
     /// belongs to. `Self::Commit`, below, is the actual `MutationClass::Apply` step;
     /// this value's own class is what produced it, not what it goes on to do.
     #[must_use]
-    pub const fn Mutation_Class(&self) -> MutationClass
+    pub const fn Mutation_Class() -> MutationClass
     {
         return MutationClass::Validate;
     }
@@ -59,6 +58,8 @@ impl ValidatedPlan
     /// the change.
     pub fn Commit(self, live: &mut Workspace, evidence: Evidence) -> Result<CommittedPlan, CorrectionError>
     {
+        use crate::staged_plan::Assert_Not_Moved;
+
         Assert_Not_Moved(self.base, live)?;
 
         live.Apply(&self.forward)?;
@@ -70,7 +71,7 @@ impl ValidatedPlan
 #[cfg(test)]
 mod tests
 {
-    use crate::{ChangeSet, CorrectionCandidate, CorrectionClass, CorrectionError, CorrectionPlan, Edit};
+    use crate::{ChangeSet, CorrectionCandidate, CorrectionClass, CorrectionError, CorrectionPlan, Edit, ValidatedPlan};
     use nomos_contracts::{ConfigurationId, Digest128, EvidenceClass, MutationClass, ProviderId};
     use nomos_model::{Content_Digest, Evidence};
     use nomos_workspace::{BuildVariant, ChangeSource, Workspace, WorkspaceChangeSet};
@@ -153,16 +154,6 @@ mod tests
     #[test]
     fn Test_A_Validated_Plan_Belongs_To_The_Validate_Mutation_Class()
     {
-        let base = Base();
-        let plan = CorrectionPlan::New(vec![CorrectionCandidate::New(
-            "fix a",
-            ChangeSet::Empty().With(Edit::New("a.rs", Some("old".to_owned()), Some("new".to_owned()))),
-            CorrectionClass::Mechanical,
-            vec![],
-        )])
-        .expect("a single candidate is a valid plan");
-        let validated = plan.Stage(&base).expect("stages cleanly").Validate(&base).expect("validates cleanly");
-
-        assert_eq!(validated.Mutation_Class(), MutationClass::Validate);
+        assert_eq!(ValidatedPlan::Mutation_Class(), MutationClass::Validate);
     }
 }

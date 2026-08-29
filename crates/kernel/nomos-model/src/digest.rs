@@ -27,7 +27,7 @@ const _: () = assert!(blake3::OUT_LEN >= Digest128::BYTE_LENGTH);
 pub fn Content_Digest(bytes: &[u8]) -> Digest128
 {
     let full = blake3::hash(bytes);
-    return Digest128::From_Bytes(Truncate(full.as_bytes()));
+    return Digest128::From_Bytes(Truncate_To_Digest_Width(full.as_bytes()));
 }
 
 /// Takes the leading [`Digest128::BYTE_LENGTH`] bytes of a full-width digest.
@@ -35,7 +35,7 @@ pub fn Content_Digest(bytes: &[u8]) -> Digest128
 /// Written as a zip rather than a slice or a chunk so that no length is asserted here at
 /// all. `zip` stops at the shorter of the two, the shorter is the output by its own type,
 /// and the assertion above is what makes "the shorter" a fact rather than a hope.
-fn Truncate(full: &[u8; blake3::OUT_LEN]) -> [u8; Digest128::BYTE_LENGTH]
+fn Truncate_To_Digest_Width(full: &[u8; blake3::OUT_LEN]) -> [u8; Digest128::BYTE_LENGTH]
 {
     let mut truncated = [0_u8; Digest128::BYTE_LENGTH];
 

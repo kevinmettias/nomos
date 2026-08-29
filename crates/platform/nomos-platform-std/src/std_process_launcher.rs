@@ -1,16 +1,21 @@
 //! Running a program directly, with a timeout that actually terminates it.
 
 use nomos_platform::{Command, ProcessLauncher, ProcessOutput};
-use std::time::Instant;
 
+// Kept under `launcher/` rather than `std_process_launcher/`: the directory name is not
+// itself subject to check-file-name (which judges files against the types they declare),
+// and matching the file would needlessly abbreviate the folder as well.
+#[path = "launcher/drain.rs"]
 mod drain;
+#[path = "launcher/kill.rs"]
 mod kill;
+#[path = "launcher/spawn.rs"]
 mod spawn;
+#[path = "launcher/wait.rs"]
 mod wait;
 
 use drain::Drain;
 use spawn::{Spawned_With_Streams, Streams};
-use wait::Waited;
 
 /// How often to check whether a running process has finished.
 const POLL_INTERVAL: std::time::Duration = std::time::Duration::from_millis(20);
@@ -40,6 +45,8 @@ impl ProcessLauncher for StdProcessLauncher
 {
     fn Run(&self, command: &Command) -> Result<ProcessOutput, String>
     {
+        use wait::Waited_For_Child;
+
         let program = command
             .Program()
             .ok_or_else(|| return "a command needs a program to run".to_owned())?;
@@ -49,8 +56,8 @@ impl ProcessLauncher for StdProcessLauncher
             stderr: stderr.as_ref(),
         };
 
-        let outcome = Waited(&mut child, program, command, &streams)?;
-        Settle(streams.stdout, streams.stderr);
+        let outcome = Waited_For_Child(&mut child, program, command, &streams)?;
+        Settle_Output_Streams(streams.stdout, streams.stderr);
 
         return Ok(ProcessOutput {
             outcome,
@@ -64,13 +71,15 @@ impl ProcessLauncher for StdProcessLauncher
 ///
 /// The child has ended, so they are draining rather than waiting on a process. See
 /// `DRAIN_GRACE` for why this is bounded and not a join.
-fn Settle(stdout: Option<&Drain>, stderr: Option<&Drain>)
+fn Settle_Output_Streams(stdout: Option<&Drain>, stderr: Option<&Drain>)
 {
+    use std::time::Instant;
+
     let settled = Instant::now();
 
     while settled.elapsed() < DRAIN_GRACE
     {
-        if stdout.is_none_or(Drain::Finished) && stderr.is_none_or(Drain::Finished)
+        if stdout.is_none_or(Drain::Is_Finished) && stderr.is_none_or(Drain::Is_Finished)
         {
             break;
         }
@@ -79,4 +88,5 @@ fn Settle(stdout: Option<&Drain>, stderr: Option<&Drain>)
 }
 
 #[cfg(test)]
+#[path = "launcher/tests.rs"]
 mod tests;

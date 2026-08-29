@@ -40,11 +40,11 @@
 // name. Flat, this level was thirteen files a reader had to sort into ports by opening
 // them; the ports are the crate's whole structure and the tree now says so.
 mod clock;
-mod filesystem;
-mod launcher;
-mod lock;
+mod file_system;
+mod process_launcher;
+mod cross_process_lock;
 
 pub use clock::{Clock, Timestamp};
-pub use filesystem::{FileSystem, FileSystemError};
-pub use launcher::{Command, ExitOutcome, ProcessLauncher, ProcessOutput};
-pub use lock::{CrossProcessLock, LockAcquisition, LockError, StaleTakeover};
+pub use file_system::{FileSystem, FileSystemError};
+pub use process_launcher::{Command, ExitOutcome, ProcessLauncher, ProcessOutput};
+pub use cross_process_lock::{CrossProcessLock, LockAcquisition, LockError, StaleTakeover};

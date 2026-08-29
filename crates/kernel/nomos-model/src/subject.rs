@@ -11,13 +11,13 @@ pub use set_resolution::SetResolution;
 pub use unknown_reason::UnknownReason;
 
 // What a subject is of, what set of them a rule reaches, and what one points at.
-mod kind;
-mod set;
-mod target;
+mod subject_kind;
+mod subject_set;
+mod subject_target;
 
-pub use kind::SubjectKind;
-pub use set::SubjectSet;
-pub use target::SubjectTarget;
+pub use subject_kind::SubjectKind;
+pub use subject_set::SubjectSet;
+pub use subject_target::SubjectTarget;
 
 use nomos_contracts::{SnapshotEntityId, SubjectId};
 use serde::{Deserialize, Serialize};

@@ -38,11 +38,11 @@
 
 #![forbid(unsafe_code)]
 
-mod error;
-mod outcome;
+mod agent_execution_error;
+mod agent_execution_outcome;
 
-pub use error::AgentExecutionError;
-pub use outcome::AgentExecutionOutcome;
+pub use agent_execution_error::AgentExecutionError;
+pub use agent_execution_outcome::AgentExecutionOutcome;
 
 use nomos_agent_contracts::TaskEnvelope;
 use nomos_platform::{Command, ExitOutcome, ProcessLauncher};
@@ -76,7 +76,7 @@ const MODEL: &str = "qwen2.5-coder:7b";
 /// created, the process could not be started, exited non-zero (including when the `ollama
 /// serve` daemon this backend requires is unreachable), or was killed for timing out or
 /// stalling.
-pub fn Execute<P: ProcessLauncher>(task: &TaskEnvelope, launcher: &P) -> Result<AgentExecutionOutcome, AgentExecutionError>
+pub fn Execute_Task<Launcher: ProcessLauncher>(task: &TaskEnvelope, launcher: &Launcher) -> Result<AgentExecutionOutcome, AgentExecutionError>
 {
     let working_directory = Isolated_Working_Directory()?;
 
@@ -109,12 +109,12 @@ fn Isolated_Working_Directory() -> Result<PathBuf, AgentExecutionError>
     return Ok(directory);
 }
 
-/// [`Execute`], over a caller-chosen `working_directory` rather than a freshly generated
+/// [`Execute_Task`], over a caller-chosen `working_directory` rather than a freshly generated
 /// one — the same seam `nomos_agent_executor_claude_code::Execute_In` offers its own real
 /// adversarial integration test.
-pub(crate) fn Execute_In<P: ProcessLauncher>(
+pub(crate) fn Execute_In<Launcher: ProcessLauncher>(
     task: &TaskEnvelope,
-    launcher: &P,
+    launcher: &Launcher,
     working_directory: &std::path::Path,
 ) -> Result<AgentExecutionOutcome, AgentExecutionError>
 {

@@ -1,11 +1,11 @@
 //! Mutual exclusion between processes that cannot see each other.
 
-mod acquisition;
-mod error;
+mod lock_acquisition;
+mod lock_error;
 mod stale_takeover;
 
-pub use acquisition::LockAcquisition;
-pub use error::LockError;
+pub use lock_acquisition::LockAcquisition;
+pub use lock_error::LockError;
 pub use stale_takeover::StaleTakeover;
 
 use std::time::Duration;

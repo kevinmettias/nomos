@@ -6,7 +6,7 @@
 //! access granted through an allow-list naming no real tool rather than denied through a list
 //! that will always be one release behind the real tool set; one `--print` turn; and a result
 //! read for what it structurally permitted, never for what its own free text claims happened.
-//! [`Execute`] is that record's rule, and nothing more. A second, distinct concern —
+//! [`Execute_Task`] is that record's rule, and nothing more. A second, distinct concern —
 //! bounding what the dispatch may *cost*, not what it may *touch* — is not that record's
 //! question; `Command_For` requests `--max-budget-usd`, verified empirically to abort before
 //! the expensive model call runs rather than merely reporting overspend afterward, though a
@@ -30,12 +30,12 @@
 
 #![forbid(unsafe_code)]
 
-mod error;
-mod outcome;
+mod agent_execution_error;
+mod agent_execution_outcome;
 mod response;
 
-pub use error::AgentExecutionError;
-pub use outcome::AgentExecutionOutcome;
+pub use agent_execution_error::AgentExecutionError;
+pub use agent_execution_outcome::AgentExecutionOutcome;
 
 use nomos_agent_contracts::TaskEnvelope;
 use nomos_model_package::EffortLevel;
@@ -76,7 +76,7 @@ const MAX_BUDGET_USD: &str = "1.00";
 /// created, the process could not be started, exited non-zero, or was killed for timing
 /// out or stalling. [`AgentExecutionError::Unparseable`] if its stdout was not the JSON
 /// document `--output-format json` promises.
-pub fn Execute<P: ProcessLauncher>(task: &TaskEnvelope, launcher: &P) -> Result<AgentExecutionOutcome, AgentExecutionError>
+pub fn Execute_Task<Launcher: ProcessLauncher>(task: &TaskEnvelope, launcher: &Launcher) -> Result<AgentExecutionOutcome, AgentExecutionError>
 {
     let working_directory = Isolated_Working_Directory()?;
 
@@ -107,13 +107,13 @@ fn Isolated_Working_Directory() -> Result<PathBuf, AgentExecutionError>
     return Ok(directory);
 }
 
-/// [`Execute`], over a caller-chosen `working_directory` rather than a freshly generated
+/// [`Execute_Task`], over a caller-chosen `working_directory` rather than a freshly generated
 /// one — the seam this crate's own real, adversarial integration test uses to inspect
-/// that directory afterward, since `Execute`'s own isolated directory is otherwise
+/// that directory afterward, since `Execute_Task`'s own isolated directory is otherwise
 /// generated and discarded where no caller could ever name it.
-pub(crate) fn Execute_In<P: ProcessLauncher>(
+pub(crate) fn Execute_In<Launcher: ProcessLauncher>(
     task: &TaskEnvelope,
-    launcher: &P,
+    launcher: &Launcher,
     working_directory: &std::path::Path,
 ) -> Result<AgentExecutionOutcome, AgentExecutionError>
 {
@@ -122,7 +122,7 @@ pub(crate) fn Execute_In<P: ProcessLauncher>(
 
     Require_Clean_Exit(&output.outcome, &output.stderr)?;
 
-    return response::Parse(&output.stdout);
+    return response::Parse_Response(&output.stdout);
 }
 
 /// The invocation `OD-EXECUTOR-001`'s rule describes, over `task.goal`, run from

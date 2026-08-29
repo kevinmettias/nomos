@@ -106,11 +106,11 @@ mod tests
     use super::*;
     use std::path::PathBuf;
 
-    fn Temp_Path(name: &str) -> PathBuf
+    fn Temporary_Path(name: &str) -> PathBuf
     {
         let mut path = std::env::temp_dir();
         path.push(format!("nomos-fs-test-{name}-{}", std::process::id()));
-        Cleared(&path);
+        Removed_If_Present(&path);
         return path;
     }
 
@@ -120,7 +120,7 @@ mod tests
     /// Anything else is said out loud rather than discarded: a teardown that quietly cannot
     /// delete leaves one file per run in the temporary directory and never reports it, and a
     /// setup that quietly cannot delete hands the test a fixture a previous run wrote.
-    fn Cleared(path: &Path)
+    fn Removed_If_Present(path: &Path)
     {
         if let Err(cause) = std::fs::remove_file(path)
             && cause.kind() != std::io::ErrorKind::NotFound
@@ -132,7 +132,7 @@ mod tests
     #[test]
     fn Test_Replace_Should_Round_Trip_Contents()
     {
-        let path = Temp_Path("round-trip");
+        let path = Temporary_Path("round-trip");
         let filesystem = StdFileSystem;
 
         filesystem.Replace_Atomically(&path, "first").unwrap();
@@ -141,7 +141,7 @@ mod tests
         filesystem.Replace_Atomically(&path, "second").unwrap();
         assert_eq!(filesystem.Read_To_String(&path).unwrap(), "second");
 
-        Cleared(&path);
+        Removed_If_Present(&path);
     }
 
     /// A replace must not leave the temporary file behind. One stray file per write
@@ -149,13 +149,13 @@ mod tests
     #[test]
     fn Test_Replace_Should_Not_Leave_A_Temporary_Behind()
     {
-        let path = Temp_Path("no-temp");
+        let path = Temporary_Path("no-temp");
         let filesystem = StdFileSystem;
 
         filesystem.Replace_Atomically(&path, "contents").unwrap();
 
         assert!(!path.with_extension("tmp").exists());
-        Cleared(&path);
+        Removed_If_Present(&path);
     }
 
     /// A missing file must be distinguishable from an empty one, because the ledger
@@ -164,7 +164,7 @@ mod tests
     #[test]
     fn Test_A_Missing_File_Should_Be_Reported_As_Not_Found()
     {
-        let path = Temp_Path("absent");
+        let path = Temporary_Path("absent");
         let filesystem = StdFileSystem;
 
         let error = filesystem.Read_To_String(&path).unwrap_err();
@@ -176,7 +176,7 @@ mod tests
     #[test]
     fn Test_Replace_Should_Create_Missing_Parent_Directories()
     {
-        let mut path = Temp_Path("nested-parent");
+        let mut path = Temporary_Path("nested-parent");
         path.push("inner");
         path.push("ledger.json");
         let filesystem = StdFileSystem;

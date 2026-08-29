@@ -25,10 +25,10 @@
 #![forbid(unsafe_code)]
 
 mod contract;
-mod payload;
+mod dependency_kind;
 
 pub use contract::{Capability, Capability_Contract, Ceiling, CAPABILITY, CONTRACT_VERSION, Payload_Schema, SCHEMA};
-pub use payload::{DependencyKind, Encode_Payload, Parse_Payload};
-pub use payload::dependency_edge::DependencyEdge;
-pub use payload::dependency_payload::DependencyPayload;
-pub use payload::payload_refusal::PayloadRefusal;
+pub use dependency_kind::{DependencyKind, Encode_Payload, Parse_Payload};
+pub use dependency_kind::dependency_edge::DependencyEdge;
+pub use dependency_kind::dependency_payload::DependencyPayload;
+pub use dependency_kind::payload_refusal::PayloadRefusal;

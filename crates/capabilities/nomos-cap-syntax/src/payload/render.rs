@@ -66,7 +66,7 @@ pub fn Escape(value: &str) -> String
 /// An escape this build does not know keeps its backslash rather than being swallowed,
 /// because dropping it would quietly change the text a consumer then matches against.
 #[must_use]
-pub(crate) fn Unescape(value: &str) -> String
+pub(crate) fn Unescape_Field(value: &str) -> String
 {
     let mut plain = String::with_capacity(value.len());
     let mut characters = value.chars();

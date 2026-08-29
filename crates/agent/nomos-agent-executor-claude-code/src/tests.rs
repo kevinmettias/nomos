@@ -186,7 +186,7 @@ fn Test_Two_Isolated_Working_Directories_Never_Collide()
 // ---- Execute, scripted -----------------------------------------------------------------
 
 /// A launcher whose one answer was written down by the test that built it — this crate
-/// only ever runs one command per `Execute` call, so one scripted answer is enough,
+/// only ever runs one command per `Execute_Task` call, so one scripted answer is enough,
 /// unlike `nomos-surface-provenance`'s own substring-matched `Scripted` launcher.
 struct Scripted
 {

@@ -15,7 +15,7 @@ pub(super) fn Spawned_With_Streams(
     program: &str,
 ) -> Result<(std::process::Child, Option<Drain>, Option<Drain>), String>
 {
-    let mut child = Spawned(command, program)?;
+    let mut child = Spawned_Program(command, program)?;
     let stdout = child.stdout.take().map(Drain::Reading);
     let stderr = child.stderr.take().map(Drain::Reading);
 
@@ -37,7 +37,7 @@ pub(super) struct Streams<'a>
 ///
 /// `stdin` is null rather than inherited, because a predicate that stops to read from a
 /// terminal nobody is at would hang until the timeout and report as slow work.
-fn Spawned(command: &Command, program: &str) -> Result<std::process::Child, String>
+fn Spawned_Program(command: &Command, program: &str) -> Result<std::process::Child, String>
 {
     use std::process::Stdio;
 

@@ -3,8 +3,6 @@
 use nomos_platform::{Command, ExitOutcome};
 use std::time::Instant;
 
-use super::drain::Drain;
-use super::kill::Stopped;
 use super::spawn::Streams;
 
 /// Waits for the child, and kills it if it outstays its wall bound or goes silent for
@@ -22,22 +20,23 @@ use super::spawn::Streams;
 /// distinguished for a genuinely silent-from-the-start process gets that distinction
 /// for free; a caller that wants to catch a stall *before* the wall bound would otherwise
 /// expire has to ask for a shorter idle bound with [`Command::With_Idle_Timeout`].
-pub(super) fn Waited(
+pub(super) fn Waited_For_Child(
     child: &mut std::process::Child,
     program: &str,
     command: &Command,
     streams: &Streams<'_>,
 ) -> Result<ExitOutcome, String>
 {
-    return Polled(child, program, command, streams);
+    return Polled_Until_Settled(child, program, command, streams);
 }
 
 /// Polls the child once per [`super::POLL_INTERVAL`] until it exits on its own, goes silent
 /// past its idle bound, or outruns its wall bound.
 ///
-/// This is the loop [`Waited`] hands off to. Each pass asks [`Exited`] whether the child
-/// is already done, then [`Progressed`] whether either bound has now run out.
-fn Polled(
+/// This is the loop [`Waited_For_Child`] hands off to. Each pass asks [`Already_Exited`]
+/// whether the child is already done, then [`Progressed_Since_Last_Poll`] whether either
+/// bound has now run out.
+fn Polled_Until_Settled(
     child: &mut std::process::Child,
     program: &str,
     command: &Command,
@@ -50,18 +49,18 @@ fn Polled(
         started: Instant::now(),
     };
     let mut progress = Progress {
-        len: Combined_Len(streams),
+        len: Combined_Length(streams),
         at: context.started,
     };
 
     loop
     {
-        if let Some(outcome) = Exited(child, program)?
+        if let Some(outcome) = Already_Exited(child, program)?
         {
             return Ok(outcome);
         }
 
-        if let Some(outcome) = Progressed(child, program, &context, &mut progress)?
+        if let Some(outcome) = Progressed_Since_Last_Poll(child, program, &context, &mut progress)?
         {
             return Ok(outcome);
         }
@@ -74,7 +73,7 @@ fn Polled(
 ///
 /// `None` means still running; the wait itself failing is the one case worth reporting
 /// as an error rather than folding into either outcome.
-fn Exited(child: &mut std::process::Child, program: &str) -> Result<Option<ExitOutcome>, String>
+fn Already_Exited(child: &mut std::process::Child, program: &str) -> Result<Option<ExitOutcome>, String>
 {
     match child.try_wait()
     {
@@ -90,8 +89,8 @@ fn Exited(child: &mut std::process::Child, program: &str) -> Result<Option<ExitO
 }
 
 /// What every poll of a still-running child needs, aside from the child itself and how
-/// much progress has been seen so far — grouped so [`Progressed`] takes one reference
-/// instead of three positional parameters.
+/// much progress has been seen so far — grouped so [`Progressed_Since_Last_Poll`] takes
+/// one reference instead of three positional parameters.
 struct PollContext<'a>
 {
     command: &'a Command,
@@ -113,15 +112,15 @@ struct Progress
 
 /// Updates `progress` against what has arrived since the last poll, and reports whether
 /// either bound has now run out.
-fn Progressed(
+fn Progressed_Since_Last_Poll(
     child: &mut std::process::Child,
     program: &str,
     context: &PollContext<'_>,
     progress: &mut Progress,
 ) -> Result<Option<ExitOutcome>, String>
 {
-    let current_len = Combined_Len(context.streams);
-    *progress = Advanced(*progress, current_len);
+    let current_len = Combined_Length(context.streams);
+    *progress = Advanced_Progress(*progress, current_len);
     let elapsed = Elapsed_Since(progress, context.started);
 
     return Bound_Exceeded(child, program, context.command, elapsed);
@@ -129,7 +128,7 @@ fn Progressed(
 
 /// Advances `progress` to `current_len` if the child produced more since the last poll,
 /// resetting the idle clock; otherwise leaves it exactly as it was.
-fn Advanced(progress: Progress, current_len: usize) -> Progress
+fn Advanced_Progress(progress: Progress, current_len: usize) -> Progress
 {
     if current_len > progress.len
     {
@@ -159,8 +158,8 @@ fn Elapsed_Since(progress: &Progress, started: Instant) -> Elapsed
 }
 
 /// Checks the idle bound and then the wall bound against `elapsed`, killing the child and
-/// reporting which bound gave out first — idle before wall, for the reason [`Waited`]
-/// documents. `None` means neither bound has expired yet.
+/// reporting which bound gave out first — idle before wall, for the reason
+/// [`Waited_For_Child`] documents. `None` means neither bound has expired yet.
 fn Bound_Exceeded(
     child: &mut std::process::Child,
     program: &str,
@@ -168,9 +167,11 @@ fn Bound_Exceeded(
     elapsed: Elapsed,
 ) -> Result<Option<ExitOutcome>, String>
 {
+    use super::kill::Killed_And_Reaped;
+
     if elapsed.idle >= command.idle_timeout
     {
-        Stopped(child, program)?;
+        Killed_And_Reaped(child, program)?;
 
         return Ok(Some(ExitOutcome::Stalled {
             idle_elapsed: elapsed.idle,
@@ -179,7 +180,7 @@ fn Bound_Exceeded(
 
     if elapsed.total >= command.timeout
     {
-        Stopped(child, program)?;
+        Killed_And_Reaped(child, program)?;
 
         return Ok(Some(ExitOutcome::TimedOut));
     }
@@ -192,9 +193,11 @@ fn Bound_Exceeded(
 /// The sum is what "progress" means here: a process writing only to `stderr`, or only
 /// to `stdout`, is still a process that is producing something, and the idle bound
 /// exists to catch the process that is producing neither.
-fn Combined_Len(streams: &Streams<'_>) -> usize
+fn Combined_Length(streams: &Streams<'_>) -> usize
 {
-    let stderr_len = streams.stderr.map_or(0, Drain::Len);
+    use super::drain::Drain;
 
-    return streams.stdout.map_or(0, Drain::Len).saturating_add(stderr_len);
+    let stderr_len = streams.stderr.map_or(0, Drain::Length);
+
+    return streams.stdout.map_or(0, Drain::Length).saturating_add(stderr_len);
 }

@@ -34,7 +34,7 @@ mod tests
     use super::*;
     use crate::{ChangeSet, ChoiceRecord, CorrectionCandidate, CorrectionClass, Edit};
 
-    fn Candidate(description: &str) -> CorrectionCandidate
+    fn Candidate_Named(description: &str) -> CorrectionCandidate
     {
         let edit = Edit::New("a.rs", None, Some(description.to_owned()));
         let change = ChangeSet::Empty().With(edit);
@@ -44,7 +44,7 @@ mod tests
     #[test]
     fn Test_An_Automatic_Decision_Carries_Its_Choice()
     {
-        let selected = Candidate("winner").Id();
+        let selected = Candidate_Named("winner").Id();
         let choice = CorrectionChoice::New(
             selected,
             ChoiceRecord {
@@ -64,7 +64,7 @@ mod tests
     #[test]
     fn Test_A_Reviewed_Proposal_Carries_Its_Candidates_And_Reason()
     {
-        let candidate = Candidate("either could work").Id();
+        let candidate = Candidate_Named("either could work").Id();
 
         let decision = CorrectionDecision::ReviewedProposal {
             candidates: vec![candidate],
@@ -78,6 +78,8 @@ mod tests
                 assert_eq!(candidates, [candidate]);
                 assert_eq!(reason, ReviewReason::NoDominantCandidate);
             }
+            // A test assertion, not production control flow: any other arm here is this
+            // test's own failure mode, and panicking is how a test reports one.
             CorrectionDecision::Automatic(_) => panic!("expected a reviewed proposal"),
         }
     }

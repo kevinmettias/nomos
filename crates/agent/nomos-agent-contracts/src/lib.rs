@@ -12,10 +12,10 @@
 
 #![forbid(unsafe_code)]
 
-mod change_context;
+mod nomos_resolved_change_context;
 mod task_envelope;
 mod work_result;
 
-pub use change_context::{ChangeContextSubject, NomosResolvedChangeContext};
+pub use nomos_resolved_change_context::{ChangeContextSubject, NomosResolvedChangeContext};
 pub use task_envelope::TaskEnvelope;
 pub use work_result::WorkResult;

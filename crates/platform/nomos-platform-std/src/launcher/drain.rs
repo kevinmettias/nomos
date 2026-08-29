@@ -32,7 +32,7 @@ pub(super) struct Drain
 /// A read error ends the drain exactly as end of file does. There is nothing useful to
 /// report from here — the outcome belongs to the process, not to its pipe — and what was
 /// read before the error is still worth keeping.
-fn Drain_Into<R: Read>(source: &mut R, sink: &Mutex<Vec<u8>>)
+fn Drain_Into<Source: Read>(source: &mut Source, sink: &Mutex<Vec<u8>>)
 {
     let mut chunk = [0_u8; CHUNK_SIZE];
 
@@ -64,7 +64,7 @@ impl Drain
     // still argues under this repository's safety-only policy). The reader is moved onto a
     // detached thread that outlives this call, so no borrow of the caller can reach it and
     // `'static` is the bound the standard library demands rather than one chosen here.
-    pub(super) fn Reading<R: Read + Send + 'static>(mut source: R) -> Self
+    pub(super) fn Reading<Source: Read + Send + 'static>(mut source: Source) -> Self
     {
         let collected = Arc::new(Mutex::new(Vec::new()));
         let finished = Arc::new(AtomicBool::new(false));
@@ -73,7 +73,7 @@ impl Drain
 
         std::thread::spawn(move || {
             Drain_Into(&mut source, &sink);
-            // atomic-ordering: allow: pairs with the `Acquire` load in `Finished`. Every write
+            // atomic-ordering: allow: pairs with the `Acquire` load in `Is_Finished`. Every write
             // `Drain_Into` made into `collected` through the mutex happens before this store, so a
             // reader that observes `true` is guaranteed to observe the drained bytes as well. A
             // `Relaxed` store would publish the flag without the buffer behind it.
@@ -87,7 +87,7 @@ impl Drain
     }
 
     /// Whether the reader reached end of file.
-    pub(super) fn Finished(&self) -> bool
+    pub(super) fn Is_Finished(&self) -> bool
     {
         // atomic-ordering: allow: pairs with the `Release` store in `Reading`. Reading `true` here
         // establishes happens-before against the draining thread, so the caller that then takes
@@ -101,7 +101,7 @@ impl Drain
     /// process runs, to notice whether it is still producing anything. Copying the whole
     /// buffer that often to answer a question only its length can answer would make the
     /// idle check itself the thing slowing a loud process down.
-    pub(super) fn Len(&self) -> usize
+    pub(super) fn Length(&self) -> usize
     {
         return self.collected.lock().map_or(0, |buffer| return buffer.len());
     }

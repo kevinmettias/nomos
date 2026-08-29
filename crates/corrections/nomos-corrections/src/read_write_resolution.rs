@@ -1,10 +1,10 @@
 //! `COR-EXEC-001`'s seven named resolution tiers a read/write set can be stated at.
 
 mod derived_provenance;
-mod set;
+mod read_write_set;
 
 pub use derived_provenance::DerivedProvenance;
-pub use set::ReadWriteSet;
+pub use read_write_set::ReadWriteSet;
 
 /// `COR-EXEC-001`'s seven named resolution tiers, in the corpus's own order.
 ///

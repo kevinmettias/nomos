@@ -1,6 +1,6 @@
 //! Reading a payload back, and refusing one that does not say what it claims.
 
-use super::{SyntaxPayload, PayloadRefusal, PayloadRefusalKind, PayloadItem, Observed};
+use super::{SyntaxPayload, PayloadRefusal, PayloadRefusalKind, PayloadItem, Observed_Field};
 
 /// Fields in an `item` record, tag included.
 const ITEM_FIELDS: usize = 7;
@@ -112,7 +112,7 @@ pub(super) fn Read_Record(line: &str, at: usize, read: &mut Reading) -> Result<(
     let tag = fields.first().copied().unwrap_or_default();
     match tag
     {
-        "unexpanded" => read.unexpanded = Some(Header(&fields, at, read.unexpanded)?),
+        "unexpanded" => read.unexpanded = Some(Header_Count(&fields, at, read.unexpanded)?),
         "item" =>
         {
             let item = Read_Item(&fields, at, read.unexpanded)?;
@@ -152,14 +152,14 @@ pub(super) fn Read_Item(
     }
     Expect_Fields("item", fields, ITEM_FIELDS, at)?;
 
-    return Item(fields, at);
+    return Item_Record(fields, at);
 }
 
 /// The header's count, refusing a second one.
 ///
 /// A payload carrying two headers does not say which count is its own, and taking either
 /// would be inventing an answer the bytes do not give.
-pub(super) fn Header(fields: &[&str], at: usize, already: Option<u32>) -> Result<u32, PayloadRefusal>
+pub(super) fn Header_Count(fields: &[&str], at: usize, already: Option<u32>) -> Result<u32, PayloadRefusal>
 {
     if already.is_some()
     {
@@ -169,21 +169,21 @@ pub(super) fn Header(fields: &[&str], at: usize, already: Option<u32>) -> Result
 
     let mut record = Fields::After_The_Tag(fields);
 
-    return Number(record.Next(), "unexpanded", at);
+    return Parsed_Number(record.Next(), "unexpanded", at);
 }
 
 /// One item record, with both observation-bearing fields read as observations.
-pub(super) fn Item(fields: &[&str], at: usize) -> Result<PayloadItem, PayloadRefusal>
+pub(super) fn Item_Record(fields: &[&str], at: usize) -> Result<PayloadItem, PayloadRefusal>
 {
     let mut record = Fields::After_The_Tag(fields);
 
     return Ok(PayloadItem {
-        ordinal: Number(record.Next(), "ordinal", at)?,
+        ordinal: Parsed_Number(record.Next(), "ordinal", at)?,
         kind: record.Next().to_owned(),
         visibility: record.Next().to_owned(),
         qualified_name: record.Next().to_owned(),
-        documentation: Observed(record.Next(), "documentation", at)?,
-        shape: Observed(record.Next(), "shape", at)?,
+        documentation: Observed_Field(record.Next(), "documentation", at)?,
+        shape: Observed_Field(record.Next(), "shape", at)?,
     });
 }
 
@@ -211,7 +211,7 @@ pub(super) fn Expect_Fields(
 }
 
 /// Reads a field that must be a number.
-pub(super) fn Number(value: &str, field: &'static str, line: usize) -> Result<u32, PayloadRefusal>
+pub(super) fn Parsed_Number(value: &str, field: &'static str, line: usize) -> Result<u32, PayloadRefusal>
 {
     return value.parse::<u32>().map_err(|cause| {
         return PayloadRefusal::At(

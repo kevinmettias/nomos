@@ -57,14 +57,14 @@ impl ExitOutcome
     /// [`ExitOutcome::TimedOut`] and [`ExitOutcome::Terminated`] are not successes and
     /// are not failures of what was being checked. They are the absence of a result.
     #[must_use]
-    pub const fn Succeeded(self) -> bool
+    pub const fn Is_Successful(self) -> bool
     {
         return matches!(self, Self::Exited { code: 0 });
     }
 
     /// Whether anything was actually learned about the thing being checked.
     #[must_use]
-    pub const fn Produced_A_Verdict(self) -> bool
+    pub const fn Has_A_Verdict(self) -> bool
     {
         return matches!(self, Self::Exited { .. });
     }
@@ -78,14 +78,14 @@ mod tests
     #[test]
     fn Test_Only_A_Zero_Exit_Should_Succeed()
     {
-        assert!(ExitOutcome::Exited { code: 0 }.Succeeded());
-        assert!(!ExitOutcome::Exited { code: 1 }.Succeeded());
-        assert!(!ExitOutcome::TimedOut.Succeeded());
-        assert!(!ExitOutcome::Terminated.Succeeded());
+        assert!(ExitOutcome::Exited { code: 0 }.Is_Successful());
+        assert!(!ExitOutcome::Exited { code: 1 }.Is_Successful());
+        assert!(!ExitOutcome::TimedOut.Is_Successful());
+        assert!(!ExitOutcome::Terminated.Is_Successful());
         assert!(!ExitOutcome::Stalled {
             idle_elapsed: std::time::Duration::from_secs(1)
         }
-        .Succeeded());
+        .Is_Successful());
     }
 
     /// The distinction the enum exists for. A timeout must not be recorded as the
@@ -93,9 +93,9 @@ mod tests
     #[test]
     fn Test_A_Timeout_Should_Not_Count_As_A_Verdict()
     {
-        assert!(!ExitOutcome::TimedOut.Produced_A_Verdict());
-        assert!(!ExitOutcome::Terminated.Produced_A_Verdict());
-        assert!(ExitOutcome::Exited { code: 1 }.Produced_A_Verdict());
+        assert!(!ExitOutcome::TimedOut.Has_A_Verdict());
+        assert!(!ExitOutcome::Terminated.Has_A_Verdict());
+        assert!(ExitOutcome::Exited { code: 1 }.Has_A_Verdict());
     }
 
     /// A stall is no more a verdict than a wall-bound timeout is, and it must stay that
@@ -107,8 +107,8 @@ mod tests
             idle_elapsed: std::time::Duration::from_secs(30),
         };
 
-        assert!(!stalled.Produced_A_Verdict());
-        assert!(!stalled.Succeeded());
+        assert!(!stalled.Has_A_Verdict());
+        assert!(!stalled.Is_Successful());
     }
 
     /// The two non-verdicts this type exists to keep apart must actually be different

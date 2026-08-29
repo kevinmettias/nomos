@@ -2,11 +2,11 @@ use nomos_contracts::SchemaId;
 use serde::{Deserialize, Serialize};
 
 // A document's identity and its kind are parts of a document, not peers of one.
-mod id;
-mod kind;
+mod document_id;
+mod document_kind;
 
-pub use id::DocumentId;
-pub use kind::DocumentKind;
+pub use document_id::DocumentId;
+pub use document_kind::DocumentKind;
 
 use crate::Authority;
 

@@ -4,7 +4,7 @@ use super::*;
 use nomos_platform::ExitOutcome;
 use std::fmt::Write as _;
 use std::path::{Path, PathBuf};
-use std::time::Duration;
+use std::time::{Duration, Instant};
 
 /// A command that exits with the given code, on either platform family.
 fn Exit_With(code: i32) -> Command
@@ -31,7 +31,7 @@ fn Test_A_Successful_Program_Should_Report_A_Zero_Exit()
     let output = StdProcessLauncher.Run(&Exit_With(0)).unwrap();
 
     assert_eq!(output.outcome, ExitOutcome::Exited { code: 0 });
-    assert!(output.outcome.Succeeded());
+    assert!(output.outcome.Is_Successful());
 }
 
 /// A failing predicate must be distinguishable from one that could not be asked.
@@ -41,9 +41,9 @@ fn Test_A_Failing_Program_Should_Report_Its_Exit_Code()
     let output = StdProcessLauncher.Run(&Exit_With(3)).unwrap();
 
     assert_eq!(output.outcome, ExitOutcome::Exited { code: 3 });
-    assert!(!output.outcome.Succeeded());
+    assert!(!output.outcome.Is_Successful());
     assert!(
-        output.outcome.Produced_A_Verdict(),
+        output.outcome.Has_A_Verdict(),
         "a non-zero exit is still an answer"
     );
 }
@@ -177,7 +177,7 @@ fn Test_A_Loud_Program_Should_Be_Judged_On_Its_Result_Not_Its_Volume()
         "a program that answered in {:?} was recorded as never having answered",
         command.timeout
     );
-    assert!(output.outcome.Produced_A_Verdict());
+    assert!(output.outcome.Has_A_Verdict());
 }
 
 /// The control that stops the fix from trading one lie for another.
@@ -220,7 +220,7 @@ fn Test_A_Program_That_Exceeds_Its_Timeout_Should_Still_Time_Out()
     let output = StdProcessLauncher.Run(&slow).unwrap();
 
     assert_eq!(output.outcome, ExitOutcome::TimedOut);
-    assert!(!output.outcome.Produced_A_Verdict());
+    assert!(!output.outcome.Has_A_Verdict());
     assert!(
         started.elapsed() < Duration::from_secs(7),
         "the timeout did not terminate the program, it waited for it"
@@ -265,7 +265,7 @@ fn Test_A_Silent_Program_Should_Report_Stalled_Rather_Than_Timed_Out()
         "a program producing nothing for its idle bound should report Stalled, not {:?}",
         output.outcome
     );
-    assert!(!output.outcome.Produced_A_Verdict());
+    assert!(!output.outcome.Has_A_Verdict());
     assert!(
         started.elapsed() < Duration::from_secs(10),
         "the idle bound did not terminate the program — it waited nearly the full 30-second \
@@ -383,7 +383,7 @@ fn Nested_Ping_Command(marker: &Path) -> Command
 fn Assert_Killed_Before_Completion(output: &ProcessOutput)
 {
     assert!(
-        !output.outcome.Produced_A_Verdict(),
+        !output.outcome.Has_A_Verdict(),
         "the wait must have ended at a bound, not at the program's own completion"
     );
 }

@@ -1,6 +1,5 @@
 //! A plan that has been submitted through the door, and the reverse that undoes it.
 
-use crate::staged::Assert_Not_Moved;
 use crate::{CorrectionError, RollbackBoundary};
 use nomos_contracts::{MutationClass, SnapshotId};
 use nomos_model::Evidence;
@@ -60,7 +59,7 @@ impl CommittedPlan
     /// [`Self::ROLLBACK_MUTATION_CLASS`] is the separate answer for `Self::Rollback`,
     /// the operation this value is the *receiver* of rather than the *result* of.
     #[must_use]
-    pub const fn Mutation_Class(&self) -> MutationClass
+    pub const fn Mutation_Class() -> MutationClass
     {
         return MutationClass::Apply;
     }
@@ -78,7 +77,7 @@ impl CommittedPlan
     /// `Test_Committing_Then_Rolling_Back_Should_Return_To_The_Base_Snapshot`, below, is
     /// what makes that a fact about this implementation rather than an aspiration.
     #[must_use]
-    pub const fn Rollback_Boundary(&self) -> RollbackBoundary
+    pub const fn Rollback_Boundary() -> RollbackBoundary
     {
         return RollbackBoundary::Exact;
     }
@@ -92,6 +91,8 @@ impl CommittedPlan
     /// the reverse change.
     pub fn Rollback(self, live: &mut Workspace) -> Result<SnapshotId, CorrectionError>
     {
+        use crate::staged_plan::Assert_Not_Moved;
+
         Assert_Not_Moved(self.after, live)?;
 
         live.Apply(&self.reverse)?;
@@ -213,21 +214,13 @@ mod tests
     #[test]
     fn Test_A_Committed_Plan_Belongs_To_The_Apply_Mutation_Class_And_Names_Rollbacks_Class()
     {
-        let mut base = Base();
-        let plan = Plan_Changing_A(Before("old"), After("new"));
-        let committed = Commit_Plan(&plan, &mut base);
-
-        assert_eq!(committed.Mutation_Class(), MutationClass::Apply);
+        assert_eq!(CommittedPlan::Mutation_Class(), MutationClass::Apply);
         assert_eq!(CommittedPlan::ROLLBACK_MUTATION_CLASS, MutationClass::Rollback);
     }
 
     #[test]
     fn Test_A_Committed_Plan_Declares_An_Exact_Rollback_Boundary()
     {
-        let mut base = Base();
-        let plan = Plan_Changing_A(Before("old"), After("new"));
-        let committed = Commit_Plan(&plan, &mut base);
-
-        assert_eq!(committed.Rollback_Boundary(), crate::RollbackBoundary::Exact);
+        assert_eq!(CommittedPlan::Rollback_Boundary(), crate::RollbackBoundary::Exact);
     }
 }

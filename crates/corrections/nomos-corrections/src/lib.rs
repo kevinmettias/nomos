@@ -15,40 +15,40 @@
 //! nothing stronger is offered.
 #![forbid(unsafe_code)]
 
-mod candidate;
+mod correction_id;
 mod candidate_label;
 mod change_set;
 mod choice_record;
-mod committed;
+mod committed_plan;
 mod correction_choice;
 mod correction_class;
 mod correction_decision;
-mod determinism;
+mod correction_staging;
 mod edit;
-mod error;
-mod plan;
+mod correction_error;
+mod correction_plan;
 mod preview;
 mod ranking_criterion;
-mod read_write_set;
+mod read_write_resolution;
 mod rollback_boundary;
-mod staged;
-mod validated;
+mod staged_plan;
+mod validated_plan;
 
-pub use candidate::{CorrectionCandidate, CorrectionId};
+pub use correction_id::{CorrectionCandidate, CorrectionId};
 pub use candidate_label::CandidateLabel;
 pub use change_set::ChangeSet;
 pub use choice_record::ChoiceRecord;
 pub use correction_choice::CorrectionChoice;
 pub use correction_class::CorrectionClass;
 pub use correction_decision::{CorrectionDecision, ReviewReason};
-pub use committed::CommittedPlan;
-pub use determinism::CorrectionStaging;
+pub use committed_plan::CommittedPlan;
+pub use correction_staging::CorrectionStaging;
 pub use edit::Edit;
-pub use error::CorrectionError;
-pub use plan::CorrectionPlan;
+pub use correction_error::CorrectionError;
+pub use correction_plan::CorrectionPlan;
 pub use preview::Preview;
 pub use ranking_criterion::RankingCriterion;
-pub use read_write_set::{DerivedProvenance, ReadWriteResolution, ReadWriteSet};
+pub use read_write_resolution::{DerivedProvenance, ReadWriteResolution, ReadWriteSet};
 pub use rollback_boundary::RollbackBoundary;
-pub use staged::StagedPlan;
-pub use validated::ValidatedPlan;
+pub use staged_plan::StagedPlan;
+pub use validated_plan::ValidatedPlan;

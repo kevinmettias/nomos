@@ -24,7 +24,7 @@ impl Authority
     }
 
     #[must_use]
-    pub const fn Admits(self, kind: DocumentKind) -> bool
+    pub const fn Can_Admit(self, kind: DocumentKind) -> bool
     {
         return kind.Authority() as u8 == self as u8;
     }

@@ -74,8 +74,8 @@ mod tests
         let result = WorkResult {
             plan: Some(Example_Plan()),
             claims: vec![Example_Finding()],
-            tests: vec![VerificationPredicate::New(vec!["cargo".to_owned(), "test".to_owned(), "-p".to_owned(), "nomos-agent-contracts".to_owned()])],
-            requested_verification: Some(VerificationPredicate::New(vec!["cargo".to_owned(), "test".to_owned(), "--no-fail-fast".to_owned(), "-p".to_owned(), "nomos-contract-tests".to_owned()])),
+            tests: vec![VerificationPredicate::From_String_Arguments(vec!["cargo".to_owned(), "test".to_owned(), "-p".to_owned(), "nomos-agent-contracts".to_owned()])],
+            requested_verification: Some(VerificationPredicate::From_String_Arguments(vec!["cargo".to_owned(), "test".to_owned(), "--no-fail-fast".to_owned(), "-p".to_owned(), "nomos-contract-tests".to_owned()])),
             assumptions: vec!["the module is wired into lib.rs before this runs".to_owned()],
             unresolved_questions: vec![],
         };

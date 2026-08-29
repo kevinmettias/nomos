@@ -23,7 +23,7 @@ pub struct Commit
 ///
 /// The document identity is computed here rather than carried, because it is a function of
 /// the bytes and a manifest that stated a stale one would name a document nobody holds.
-fn Referenced(record: &Recorded) -> Reference
+fn Reference_For(record: &Recorded) -> Reference
 {
     return Reference {
         kind: record.kind,
@@ -70,7 +70,7 @@ impl Commit
             variant: self.variant,
             configuration: self.configuration,
             generation: self.generation,
-            records: self.records.iter().map(Referenced).collect(),
+            records: self.records.iter().map(Reference_For).collect(),
         };
 
         let mut encoded = serde_json::to_vec(&manifest)

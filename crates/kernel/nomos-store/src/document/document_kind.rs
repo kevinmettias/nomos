@@ -76,7 +76,7 @@ mod tests
     #[test]
     fn Test_Every_DocumentKind_Should_Be_Matched_Exhaustively()
     {
-        fn Ordinal(kind: DocumentKind) -> usize
+        fn Expected_Ordinal(kind: DocumentKind) -> usize
         {
             return match kind
             {
@@ -93,7 +93,7 @@ mod tests
         for (index, kind) in DocumentKind::All().iter().enumerate()
         {
             assert_eq!(
-                Ordinal(*kind),
+                Expected_Ordinal(*kind),
                 index,
                 "{} is not matched at the position DocumentKind::All() puts it, so the \
                  exhaustive match and the universe have drifted apart",

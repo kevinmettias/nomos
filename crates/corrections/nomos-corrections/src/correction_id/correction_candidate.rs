@@ -2,7 +2,6 @@
 
 use super::CorrectionId;
 use crate::{CandidateLabel, ChangeSet, CorrectionClass};
-use nomos_model::Digest_Of_Parts;
 
 /// A proposed correction: a description of why, and the [`ChangeSet`] that would carry it
 /// out.
@@ -79,6 +78,8 @@ impl CorrectionCandidate
 /// boundary cannot be mistaken for another's.
 fn Identity_Of(description: &str, change: &ChangeSet) -> CorrectionId
 {
+    use nomos_model::Digest_Of_Parts;
+
     let mut parts: Vec<&[u8]> = vec![description.as_bytes()];
 
     for edit in change.Edits()

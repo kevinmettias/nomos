@@ -74,7 +74,7 @@ mod tests
             requested: ChangeContextSubject::TaskDescription("close AGT-007's gap".to_owned()),
             applicability,
             permitted_scope: Territory::Of_Files(["crates/agent/nomos-agent-contracts"]),
-            required_verification: vec![VerificationPredicate::New(vec!["cargo".to_owned(), "test".to_owned(), "-p".to_owned(), "nomos-agent-contracts".to_owned()])],
+            required_verification: vec![VerificationPredicate::From_String_Arguments(vec!["cargo".to_owned(), "test".to_owned(), "-p".to_owned(), "nomos-agent-contracts".to_owned()])],
             prohibited_actions: vec!["removing existing strategies".to_owned()],
             approved_capabilities: vec![CapabilityId::New("nomos.cap.example.change_context_test_only")],
         };

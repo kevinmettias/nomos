@@ -244,7 +244,7 @@ mod tests
 {
     use super::*;
 
-    fn Temp_Path(name: &str) -> PathBuf
+    fn Temporary_Path(name: &str) -> PathBuf
     {
         let mut path = std::env::temp_dir();
         path.push(format!("nomos-lock-test-{name}-{}", std::process::id()));
@@ -271,7 +271,7 @@ mod tests
     #[test]
     fn Test_An_Uncontended_Lock_Should_Be_Acquired_Cleanly()
     {
-        let path = Temp_Path("uncontended");
+        let path = Temporary_Path("uncontended");
         let lock = FileLock::At(&path);
 
         let acquisition = lock.Acquire("agent-a", NO_WAIT, NEVER_STALE).unwrap();
@@ -287,7 +287,7 @@ mod tests
     #[test]
     fn Test_A_Held_Lock_Should_Refuse_A_Second_Holder()
     {
-        let path = Temp_Path("contended");
+        let path = Temporary_Path("contended");
         let lock = FileLock::At(&path);
 
         let _held = lock.Acquire("agent-a", NO_WAIT, NEVER_STALE).unwrap();
@@ -300,7 +300,7 @@ mod tests
     #[test]
     fn Test_A_Refusal_Should_Name_The_Current_Holder()
     {
-        let path = Temp_Path("named-holder");
+        let path = Temporary_Path("named-holder");
         let lock = FileLock::At(&path);
 
         let _held = lock.Acquire("agent-a", NO_WAIT, NEVER_STALE).unwrap();
@@ -308,6 +308,8 @@ mod tests
         match lock.Acquire("agent-b", NO_WAIT, NEVER_STALE)
         {
             Err(LockError::Held { holder, .. }) => assert_eq!(holder, "agent-a"),
+            // A test assertion, not production control flow: any other outcome here is this
+            // test's own failure mode, and panicking is how a test reports one.
             other => panic!("expected a Held refusal naming agent-a, got {other:?}"),
         }
     }
@@ -318,10 +320,13 @@ mod tests
     #[test]
     fn Test_A_Stale_Lock_Should_Be_Broken_And_Reported()
     {
-        let path = Temp_Path("stale");
+        let path = Temporary_Path("stale");
         let lock = FileLock::At(&path);
 
         let abandoned = lock.Acquire("agent-a", NO_WAIT, NEVER_STALE).unwrap();
+        // Simulates a crashed holder: a killed process never runs the guard's destructor, so
+        // forgetting it here (rather than dropping it) is what leaves the lock file behind for
+        // the takeover this test is about to exercise.
         std::mem::forget(abandoned);
 
         let taken_over = lock.Acquire("agent-b", NO_WAIT, ALWAYS_STALE).unwrap();
@@ -343,7 +348,7 @@ mod tests
     #[test]
     fn Test_A_Fresh_Lock_Should_Not_Be_Broken()
     {
-        let path = Temp_Path("fresh");
+        let path = Temporary_Path("fresh");
         let lock = FileLock::At(&path);
 
         let held = lock.Acquire("agent-a", NO_WAIT, NEVER_STALE).unwrap();
@@ -362,7 +367,7 @@ mod tests
     #[test]
     fn Test_A_Clean_Acquisition_Should_Not_Report_A_Takeover()
     {
-        let path = Temp_Path("clean");
+        let path = Temporary_Path("clean");
         let lock = FileLock::At(&path);
 
         let first = lock.Acquire("agent-a", NO_WAIT, ALWAYS_STALE).unwrap();

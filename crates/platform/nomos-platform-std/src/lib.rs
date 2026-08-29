@@ -5,14 +5,14 @@
 
 #![forbid(unsafe_code)]
 
-mod clock;
+mod system_clock;
 mod file_lock_guard;
-mod filesystem;
-mod launcher;
-mod lock;
+mod std_file_system;
+mod std_process_launcher;
+mod file_lock;
 
-pub use clock::SystemClock;
-pub use filesystem::StdFileSystem;
-pub use launcher::StdProcessLauncher;
+pub use system_clock::SystemClock;
+pub use std_file_system::StdFileSystem;
+pub use std_process_launcher::StdProcessLauncher;
 pub use file_lock_guard::FileLockGuard;
-pub use lock::FileLock;
+pub use file_lock::FileLock;

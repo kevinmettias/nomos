@@ -45,7 +45,7 @@ impl Confidence
 
     /// Whether this confidence is at least `threshold`.
     #[must_use]
-    pub fn Meets(self, threshold: Self) -> bool
+    pub fn Is_At_Least(self, threshold: Self) -> bool
     {
         return self.0 >= threshold.0;
     }
@@ -70,6 +70,6 @@ mod tests
     fn Test_Nan_Confidence_Should_Become_None()
     {
         assert!(Confidence::Of(f64::NAN).Value() <= 0.0);
-        assert!(!Confidence::Of(f64::NAN).Meets(Confidence::Of(0.1)));
+        assert!(!Confidence::Of(f64::NAN).Is_At_Least(Confidence::Of(0.1)));
     }
 }

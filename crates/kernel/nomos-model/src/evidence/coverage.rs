@@ -77,7 +77,7 @@ mod tests
     use super::*;
     use crate::Content_Digest;
 
-    fn Subject(name: &str) -> SubjectId
+    fn Subject_Named(name: &str) -> SubjectId
     {
         return SubjectId::From_Digest(Content_Digest(name.as_bytes()));
     }
@@ -98,9 +98,9 @@ mod tests
             evaluated: 3,
             excluded: 2,
             gaps: vec![
-                Gap("a.rs", Applicability::NotApplicable),
-                Gap("b.rs", Applicability::ConfigurationDisabled),
-                Gap("c.rs", Applicability::MissingCapability),
+                Gap_For_Subject("a.rs", Applicability::NotApplicable),
+                Gap_For_Subject("b.rs", Applicability::ConfigurationDisabled),
+                Gap_For_Subject("c.rs", Applicability::MissingCapability),
             ],
         };
 
@@ -115,10 +115,10 @@ mod tests
     }
 
     /// One subject the run did not evaluate, and why.
-    fn Gap(subject: &str, reason: Applicability) -> CoverageGap
+    fn Gap_For_Subject(subject: &str, reason: Applicability) -> CoverageGap
     {
         return CoverageGap {
-            subject: Subject(subject),
+            subject: Subject_Named(subject),
             reason,
         };
     }
@@ -132,7 +132,7 @@ mod tests
             evaluated: 3,
             excluded: 1,
             gaps: vec![CoverageGap {
-                subject: Subject("a.rs"),
+                subject: Subject_Named("a.rs"),
                 reason: Applicability::NotApplicable,
             }],
         };
@@ -150,7 +150,7 @@ mod tests
             evaluated: 3,
             excluded: 1,
             gaps: vec![CoverageGap {
-                subject: Subject("a.rs"),
+                subject: Subject_Named("a.rs"),
                 reason: Applicability::AgentRequired,
             }],
         };
@@ -175,15 +175,15 @@ mod tests
             excluded: 0,
             gaps: vec![
                 CoverageGap {
-                    subject: Subject("a.rs"),
+                    subject: Subject_Named("a.rs"),
                     reason: Applicability::MissingCapability,
                 },
                 CoverageGap {
-                    subject: Subject("b.rs"),
+                    subject: Subject_Named("b.rs"),
                     reason: Applicability::AgentRequired,
                 },
                 CoverageGap {
-                    subject: Subject("c.rs"),
+                    subject: Subject_Named("c.rs"),
                     reason: Applicability::NotApplicable,
                 },
             ],

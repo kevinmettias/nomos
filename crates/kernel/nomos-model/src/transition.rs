@@ -11,10 +11,10 @@ use crate::Confidence;
 /// *how sure* we are, and *what makes us think so*. Three copies of that shape would be
 /// three places for the evidence field to be forgotten.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
-pub struct Transition<K>
+pub struct Transition<ChangeKind>
 {
     /// What kind of change this is.
-    pub kind: K,
+    pub kind: ChangeKind,
     /// How sure we are.
     pub confidence: Confidence,
     /// What supports the conclusion. An inference with nothing behind it is a guess,
@@ -22,7 +22,7 @@ pub struct Transition<K>
     pub evidence: Vec<crate::EvidenceRef>,
 }
 
-impl<K> Transition<K>
+impl<ChangeKind> Transition<ChangeKind>
 {
     /// A transition asserted without supporting evidence.
     ///
@@ -30,7 +30,7 @@ impl<K> Transition<K>
     /// change is the evidence. Anything else constructed this way is an assertion, and
     /// the empty evidence list is what says so.
     #[must_use]
-    pub const fn Asserted(kind: K, confidence: Confidence) -> Self
+    pub const fn Asserted(kind: ChangeKind, confidence: Confidence) -> Self
     {
         return Self {
             kind,

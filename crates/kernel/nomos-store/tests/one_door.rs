@@ -93,11 +93,11 @@ fn Test_Committing_The_Same_Snapshot_Twice_Should_Address_The_Same_Document()
     let mut store = Observed();
 
     let first = store.Commit(&Taken(1)).expect("commits");
-    let documents = store.Len();
+    let documents = store.Length();
     let second = store.Commit(&Taken(1)).expect("commits again");
 
     assert_eq!(first, second, "content addressing produced two addresses for one content");
-    assert_eq!(store.Len(), documents, "a re-commit duplicated every document");
+    assert_eq!(store.Length(), documents, "a re-commit duplicated every document");
 }
 
 #[test]
@@ -254,7 +254,7 @@ fn Test_Every_Document_Should_Be_Reachable_From_A_Snapshot()
         "a document is in the store that no snapshot records, so something wrote by another \
          route"
     );
-    assert!(store.Len() >= 4, "the store holds too little for that to mean anything");
+    assert!(store.Length() >= 4, "the store holds too little for that to mean anything");
 }
 
 #[test]
@@ -275,7 +275,7 @@ fn Test_An_Authored_Document_Should_Not_Enter_An_Observed_Store()
         "{refusal}"
     );
     assert!(format!("{refusal}").contains("never share a store"), "{refusal}");
-    assert_eq!(store.Len(), 0, "the refused snapshot wrote documents anyway");
+    assert_eq!(store.Length(), 0, "the refused snapshot wrote documents anyway");
 }
 
 #[test]
@@ -295,7 +295,7 @@ fn Test_Every_Document_Kind_Should_Belong_To_Exactly_One_Authority()
     {
         let admitting: Vec<Authority> = [Authority::Observed, Authority::Authored]
             .into_iter()
-            .filter(|authority| return authority.Admits(*kind))
+            .filter(|authority| return authority.Can_Admit(*kind))
             .collect();
 
         assert_eq!(
@@ -321,7 +321,7 @@ fn Test_A_Snapshot_That_Records_Nothing_Should_Be_Refused()
     let refusal = store.Commit(&empty).expect_err("must refuse");
 
     assert!(format!("{refusal}").contains("never happened"), "{refusal}");
-    assert_eq!(store.Len(), 0);
+    assert_eq!(store.Length(), 0);
 }
 
 #[test]

@@ -41,7 +41,7 @@ impl Preview
     /// belongs to. `Self::Mutation_Class().Required_Authority()` is the
     /// `nomos_contracts::AuthorityClass` an actor would need to have called it.
     #[must_use]
-    pub const fn Mutation_Class(&self) -> MutationClass
+    pub const fn Mutation_Class() -> MutationClass
     {
         return MutationClass::Preview;
     }
@@ -82,7 +82,7 @@ fn Render_Edit(rendered: &mut Vec<u8>, edit: &Edit)
 #[cfg(test)]
 mod tests
 {
-    use crate::{ChangeSet, CorrectionCandidate, CorrectionClass, CorrectionPlan, Edit};
+    use crate::{ChangeSet, CorrectionCandidate, CorrectionClass, CorrectionPlan, Edit, Preview};
     use nomos_contracts::{AuthorityClass, MutationClass};
 
     #[test]
@@ -119,17 +119,9 @@ mod tests
     #[test]
     fn Test_A_Preview_Belongs_To_The_Preview_Mutation_Class()
     {
-        let plan = CorrectionPlan::New(vec![CorrectionCandidate::New(
-            "fix a",
-            ChangeSet::Empty().With(Edit::New("a.rs", None, Some("new".to_owned()))),
-            CorrectionClass::Mechanical,
-            vec![],
-        )])
-        .expect("one candidate is a valid plan");
-
-        assert_eq!(plan.Preview().Mutation_Class(), MutationClass::Preview);
+        assert_eq!(Preview::Mutation_Class(), MutationClass::Preview);
         assert_eq!(
-            plan.Preview().Mutation_Class().Required_Authority(),
+            Preview::Mutation_Class().Required_Authority(),
             AuthorityClass::Preview,
             "previewing must never require Mutate authority, or callers skip it"
         );
