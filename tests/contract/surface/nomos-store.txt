@@ -1,4 +1,4 @@
-pub const fn nomos_store::Authority::Admits(self, kind: DocumentKind) -> bool
+pub const fn nomos_store::Authority::Can_Admit(self, kind: DocumentKind) -> bool
 pub const fn nomos_store::Authority::Label(self) -> &'static str
 pub const fn nomos_store::DocumentId::Digest(self) -> Digest128
 pub const fn nomos_store::DocumentId::From_Digest(digest: Digest128) -> Self
@@ -37,7 +37,7 @@ pub fn nomos_store::DocumentStore::Drop_Index(&mut self)
 pub fn nomos_store::DocumentStore::For(authority: Authority) -> Self
 pub fn nomos_store::DocumentStore::Has_Index(&self) -> bool
 pub fn nomos_store::DocumentStore::Index(&mut self) -> Result<&Index, StoreError>
-pub fn nomos_store::DocumentStore::Len(&self) -> usize
+pub fn nomos_store::DocumentStore::Length(&self) -> usize
 pub fn nomos_store::DocumentStore::Read(&self, id: DocumentId) -> Result<&Document, StoreError>
 pub fn nomos_store::DocumentStore::Unreachable(&mut self) -> Result<Vec<DocumentId>, StoreError>
 pub fn nomos_store::Index::Commits_Under(&self, snapshot: SnapshotId) -> Vec<DocumentId>

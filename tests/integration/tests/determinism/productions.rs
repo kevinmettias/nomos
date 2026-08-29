@@ -120,7 +120,7 @@ pub(crate) fn Parsed_Production() -> Vec<u8>
 /// One fixture file's fact: the path it came from, the key it landed under, and its payload.
 fn Rendered_Fact(path: &str, source: &str, context: nomos_lang_rust::FactContext) -> Vec<u8>
 {
-    let fact = match nomos_lang_rust::Materialize(Subject_Of(path), source, context)
+    let fact = match nomos_lang_rust::Materialize_Syntax_Fact(Subject_Of(path), source, context)
     {
         nomos_lang_rust::Materialization::Materialized(fact) => fact,
         nomos_lang_rust::Materialization::Unparseable(failure) =>
@@ -168,7 +168,7 @@ pub(crate) fn Reachability_Production() -> Vec<u8>
 /// and its payload.
 fn Rendered_Reachability_Fact(path: &str, source: &str, context: nomos_lang_rust::FactContext) -> Vec<u8>
 {
-    let fact = match nomos_lang_rust::reachability::Materialize(Subject_Of(path), source, context)
+    let fact = match nomos_lang_rust::reachability::Materialize_Reachability_Fact(Subject_Of(path), source, context)
     {
         nomos_lang_rust::Materialization::Materialized(fact) => fact,
         nomos_lang_rust::Materialization::Unparseable(failure) =>
@@ -279,7 +279,7 @@ fn Fill_With_Fixture(
     for (path, source) in FIXTURE
     {
         let nomos_lang_rust::Materialization::Materialized(fact) =
-            nomos_lang_rust::Materialize(Subject_Of(path), source, context)
+            nomos_lang_rust::Materialize_Syntax_Fact(Subject_Of(path), source, context)
         else
         {
             // The keys returned from here are what the fact-reuse domain replays against the
@@ -712,7 +712,7 @@ pub(crate) fn Go_Production() -> Vec<u8>
 
     for (path, source) in GO_FIXTURE
     {
-        let fact = match nomos_lang_go::Materialize(Go_Subject_Of(path), source, context)
+        let fact = match nomos_lang_go::Materialize_Syntax_Fact(Go_Subject_Of(path), source, context)
         {
             nomos_lang_go::Materialization::Materialized(fact) => fact,
             nomos_lang_go::Materialization::Unparseable(failure) =>
@@ -737,7 +737,7 @@ pub(crate) fn Scanned_Production() -> Vec<u8>
 
     for (path, source) in FIXTURE
     {
-        let fact = nomos_lang_rust_scan::Materialize(Subject_Of(path), source, context);
+        let fact = nomos_lang_rust_scan::Materialize_Syntax_Fact(Subject_Of(path), source, context);
         rendered.extend_from_slice(format!("file\t{path}\n").as_bytes());
         rendered.extend_from_slice(format!("key\t{}\n", fact.Key().Digest()).as_bytes());
         rendered.extend_from_slice(&fact.payload.bytes);

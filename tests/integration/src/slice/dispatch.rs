@@ -62,7 +62,7 @@ impl Slice
     /// The parser's answer, which may be a refusal.
     pub(super) fn Parsed(&self, file: &SourceFile) -> rust::Materialization
     {
-        return rust::Materialize(
+        return rust::Materialize_Syntax_Fact(
             file.subject,
             &file.source,
             rust::FactContext {
@@ -81,7 +81,7 @@ impl Slice
     /// all.
     pub(super) fn Scanned(&self, file: &SourceFile) -> rust::Materialization
     {
-        let materialized = scan::Materialize(
+        let materialized = scan::Materialize_Syntax_Fact(
             file.subject,
             &file.source,
             scan::FactContext {

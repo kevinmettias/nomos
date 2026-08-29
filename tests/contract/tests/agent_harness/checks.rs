@@ -304,7 +304,7 @@ fn Assert_Hazard_Sentence_Still_Present(file: &str, item: &str)
 /// one arrangement nobody can retire.
 fn Board_Entry_For<'a>(board: &'a LedgerDocument, file: &str, item: &str) -> &'a LedgerItem
 {
-    let Some(entry) = board.items.iter().find(|entry| return entry.id.As_Str() == item)
+    let Some(entry) = board.items.iter().find(|entry| return entry.id.As_Text() == item)
     else
     {
         panic!("{file} names {item}, which is on no board. A hazard pointing at an \

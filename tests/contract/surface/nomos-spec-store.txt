@@ -1,6 +1,6 @@
-pub const fn nomos_spec_store::BlockChange::Disturbs_Wording(&self) -> bool
+pub const fn nomos_spec_store::BlockChange::Is_Disturbing_Wording(&self) -> bool
+pub const fn nomos_spec_store::Disposition::Is_Preserving_Content(self) -> bool
 pub const fn nomos_spec_store::Disposition::Label(self) -> &'static str
-pub const fn nomos_spec_store::Disposition::Preserves_Content(self) -> bool
 pub const fn nomos_spec_store::Kind_Label(kind: BlockKind) -> &'static str
 pub const fn nomos_spec_store::PathMatch::Label(self) -> &'static str
 pub const fn nomos_spec_store::Table::All() -> &'static [Self]
@@ -126,7 +126,7 @@ pub fn nomos_spec_store::SpecificationStore::Assign_Suite(&mut self, node_uid: i
 pub fn nomos_spec_store::SpecificationStore::Connection(&self) -> &Connection
 pub fn nomos_spec_store::SpecificationStore::Count(&self, table: Table) -> Result<u32, StoreError>
 pub fn nomos_spec_store::SpecificationStore::In_Memory() -> Result<Self, StoreError>
-pub fn nomos_spec_store::SpecificationStore::In_Transaction<T, E>( &mut self, work: impl FnOnce(&rusqlite::Transaction<'_>) -> Result<T, E>, ) -> Result<T, E> where E: From<StoreError>,
+pub fn nomos_spec_store::SpecificationStore::In_Transaction<Value, Error>( &mut self, work: impl FnOnce(&rusqlite::Transaction<'_>) -> Result<Value, Error>, ) -> Result<Value, Error> where Error: From<StoreError>,
 pub fn nomos_spec_store::SpecificationStore::Node_Uid(&self, node_id: &str) -> Result<Option<i64>, StoreError>
 pub fn nomos_spec_store::SpecificationStore::Open(path: &Path) -> Result<Self, StoreError>
 pub fn nomos_spec_store::SpecificationStore::Pair_Relation_Type<'a>( &mut self, name: impl Into<relation::RelationTypeName<'a>>, inverse: impl Into<relation::InverseRelationType<'a>>, ) -> Result<(), StoreError>

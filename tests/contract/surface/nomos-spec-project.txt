@@ -4,7 +4,7 @@ pub const fn nomos_spec_project::Format::All() -> &'static [Self]
 pub const fn nomos_spec_project::Format::Extension(self) -> &'static str
 pub const fn nomos_spec_project::Format::Label(self) -> &'static str
 pub const fn nomos_spec_project::Freshness::Is_Fresh(&self) -> bool
-pub const nomos_spec_project::DO_NOT_EDIT: &str
+pub const nomos_spec_project::GENERATED_FILE_NOTICE: &str
 pub const nomos_spec_project::ProjectionOutput::SCOPE: ReproducibilityScope
 pub const nomos_spec_project::ProjectionOutput::STRENGTH: DeterminismStrength
 pub const nomos_spec_project::ProjectionOutput::TRACE: TraceEquivalence
@@ -56,7 +56,7 @@ pub fn nomos_spec_project::Item::With(mut self, name: Name<'_>, value: Value<'_>
 pub fn nomos_spec_project::Output::Sidecar(&self) -> Result<String, ProjectError>
 pub fn nomos_spec_project::Profile::Digest(&self) -> String
 pub fn nomos_spec_project::Profile::For(&self, subject: Option<&str>) -> Result<Self, ProjectError>
-pub fn nomos_spec_project::Profile::Names_A_Subject(&self) -> bool
+pub fn nomos_spec_project::Profile::Is_Per_Subject(&self) -> bool
 pub fn nomos_spec_project::Profile::Parse(text: &str) -> Result<Self, ProjectError>
 pub fn nomos_spec_project::Profile::Resolved_For(&self, subject: &str) -> Self
 pub fn nomos_spec_project::Profile::Validate(&self) -> Result<(), ProjectError>
@@ -65,8 +65,8 @@ pub fn nomos_spec_project::ProjectError::from(error: nomos_spec_store::StoreErro
 pub fn nomos_spec_project::ProjectError::from(error: rusqlite::Error) -> Self
 pub fn nomos_spec_project::Projection::Inputs_Digest(&self) -> String
 pub fn nomos_spec_project::Projection::Items(&self) -> usize
-pub fn nomos_spec_project::Render(projection: &Projection) -> Result<String, ProjectError>
-pub fn nomos_spec_project::Select(store: &SpecificationStore, profile: &Profile) -> Result<Projection, ProjectError>
+pub fn nomos_spec_project::Render_Projection(projection: &Projection) -> Result<String, ProjectError>
+pub fn nomos_spec_project::Select_Projection(store: &SpecificationStore, profile: &Profile) -> Result<Projection, ProjectError>
 pub fn nomos_spec_project::Shipped() -> Result<Catalogue, ProjectError>
 pub fn nomos_spec_project::Stamp::Parse(text: &str) -> Result<Self, ProjectError>
 pub fn nomos_spec_project::Stamp::Render(&self) -> Result<String, ProjectError>

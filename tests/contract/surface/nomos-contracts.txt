@@ -5,17 +5,17 @@ pub const fn nomos_contracts::Applicability::Requires_Agent(self) -> bool
 pub const fn nomos_contracts::Applicability::Was_Evaluated(self) -> bool
 pub const fn nomos_contracts::Assurance::Label(self) -> &'static str
 pub const fn nomos_contracts::Assurance::Satisfies_Requirement(self) -> bool
+pub const fn nomos_contracts::AuthorityClass::Is_Explicit_Grant_Required(self) -> bool
 pub const fn nomos_contracts::AuthorityClass::Label(self) -> &'static str
-pub const fn nomos_contracts::AuthorityClass::Requires_Explicit_Grant(self) -> bool
 pub const fn nomos_contracts::Cacheability::Is_Cacheable(&self) -> bool
-pub const fn nomos_contracts::CancellationBehavior::Cancellable(self) -> bool
+pub const fn nomos_contracts::CancellationBehavior::Is_Cancellable(self) -> bool
 pub const fn nomos_contracts::CancellationBehavior::Label(self) -> &'static str
-pub const fn nomos_contracts::Compensation::Exists(self) -> bool
+pub const fn nomos_contracts::Compensation::Is_Present(self) -> bool
 pub const fn nomos_contracts::Compensation::Label(self) -> &'static str
 pub const fn nomos_contracts::ContractVersion::Can_Read(self, other: Self) -> bool
 pub const fn nomos_contracts::ContractVersion::New(major: u16, minor: u16) -> Self
 pub const fn nomos_contracts::Declaration_Is_Coherent( strength: DeterminismStrength, trace: TraceEquivalence, ) -> bool
-pub const fn nomos_contracts::DeterminismStrength::Claims_Reproducibility(self) -> bool
+pub const fn nomos_contracts::DeterminismStrength::Can_Claim_Reproducibility(self) -> bool
 pub const fn nomos_contracts::DeterminismStrength::Label(self) -> &'static str
 pub const fn nomos_contracts::Digest128::Bytes(&self) -> &[u8; Self::BYTE_LENGTH]
 pub const fn nomos_contracts::Digest128::From_Bytes(bytes: [u8; Self::BYTE_LENGTH]) -> Self
@@ -33,26 +33,26 @@ pub const fn nomos_contracts::GenerationId::Raw(self) -> u64
 pub const fn nomos_contracts::Guarantee::New( variant: FactVariant, soundness: Assurance, completeness: Assurance, incremental: IncrementalGranularity, ) -> Self
 pub const fn nomos_contracts::IncrementalGranularity::Label(self) -> &'static str
 pub const fn nomos_contracts::KnowledgeContextItem::Is_Unresolved(&self) -> bool
+pub const fn nomos_contracts::KnowledgeSourceRole::Can_Constrain(self) -> bool
 pub const fn nomos_contracts::KnowledgeSourceRole::Label(self) -> &'static str
-pub const fn nomos_contracts::KnowledgeSourceRole::May_Constrain(self) -> bool
+pub const fn nomos_contracts::MutationClass::Is_Write(self) -> bool
 pub const fn nomos_contracts::MutationClass::Label(self) -> &'static str
 pub const fn nomos_contracts::MutationClass::Required_Authority(self) -> AuthorityClass
-pub const fn nomos_contracts::MutationClass::Writes(self) -> bool
-pub const fn nomos_contracts::PackageKind::Hosts_Foreign_Code(self) -> bool
+pub const fn nomos_contracts::PackageKind::Can_Host_Foreign_Code(self) -> bool
 pub const fn nomos_contracts::PackageKind::Is_Optional(self) -> bool
 pub const fn nomos_contracts::PackageKind::Label(self) -> &'static str
 pub const fn nomos_contracts::PeerAvailability::Is_Knowledge(&self) -> bool
+pub const fn nomos_contracts::ReproducibilityScope::Is_Cross_Environment_Verification_Required(self) -> bool
 pub const fn nomos_contracts::ReproducibilityScope::Label(self) -> &'static str
-pub const fn nomos_contracts::ReproducibilityScope::Requires_Cross_Environment_Verification(self) -> bool
-pub const fn nomos_contracts::RetryPolicy::Retryable(self) -> bool
+pub const fn nomos_contracts::RetryPolicy::Is_Retryable(self) -> bool
 pub const fn nomos_contracts::SemanticChangeClass::Label(self) -> &'static str
+pub const fn nomos_contracts::SynchronizationState::Is_Authorized_Resolution_Required(self) -> bool
 pub const fn nomos_contracts::SynchronizationState::Label(self) -> &'static str
-pub const fn nomos_contracts::SynchronizationState::Requires_Authorized_Resolution(self) -> bool
 pub const fn nomos_contracts::Timeout::Is_Bounded(self) -> bool
 pub const fn nomos_contracts::TraceEquivalence::Label(self) -> &'static str
 pub const fn nomos_contracts::TraceEquivalence::Weaker_Of(self, other: Self) -> Self
+pub const fn nomos_contracts::UntrustedPromptOrigin::Can_Solely_Authorize() -> bool
 pub const fn nomos_contracts::UntrustedPromptOrigin::Label(self) -> &'static str
-pub const fn nomos_contracts::UntrustedPromptOrigin::May_Solely_Authorize(self) -> bool
 pub const nomos_contracts::Digest128::BYTE_LENGTH: usize
 pub const nomos_contracts::Digest128::HEX_LENGTH: usize
 pub const nomos_contracts::GenerationId::INITIAL: Self
@@ -346,16 +346,16 @@ pub struct nomos_contracts::WorkflowStep
 pub trait nomos_contracts::Strategy
 
 # re-exports of items declared outside this crate
-pub use identity::BuildVariantId
-pub use identity::CapabilityId
-pub use identity::ConfigurationId
-pub use identity::KnowledgeReferenceId
-pub use identity::OperationName
-pub use identity::PackageId
-pub use identity::ProviderId
-pub use identity::RuleId
-pub use identity::RunId
-pub use identity::SchemaId
-pub use identity::SnapshotEntityId
-pub use identity::SnapshotId
-pub use identity::SubjectId
+pub use digest128::BuildVariantId
+pub use digest128::CapabilityId
+pub use digest128::ConfigurationId
+pub use digest128::KnowledgeReferenceId
+pub use digest128::OperationName
+pub use digest128::PackageId
+pub use digest128::ProviderId
+pub use digest128::RuleId
+pub use digest128::RunId
+pub use digest128::SchemaId
+pub use digest128::SnapshotEntityId
+pub use digest128::SnapshotId
+pub use digest128::SubjectId

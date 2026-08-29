@@ -2,7 +2,7 @@ pub enum nomos_agent_executor_claude_code::AgentExecutionError
 pub enum variant nomos_agent_executor_claude_code::AgentExecutionError::Unavailable(String)
 pub enum variant nomos_agent_executor_claude_code::AgentExecutionError::Unparseable(String)
 pub fn nomos_agent_executor_claude_code::AgentExecutionError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
-pub fn nomos_agent_executor_claude_code::Execute<P: ProcessLauncher>(task: &TaskEnvelope, launcher: &P) -> Result<AgentExecutionOutcome, AgentExecutionError>
+pub fn nomos_agent_executor_claude_code::Execute_Task<Launcher: ProcessLauncher>(task: &TaskEnvelope, launcher: &Launcher) -> Result<AgentExecutionOutcome, AgentExecutionError>
 pub impl nomos_agent_executor_claude_code::AgentExecutionError implements core::fmt::Display
 pub struct field nomos_agent_executor_claude_code::AgentExecutionOutcome::cost_usd: f64
 pub struct field nomos_agent_executor_claude_code::AgentExecutionOutcome::denied_tool_uses: Vec<String>

@@ -59,7 +59,7 @@ fn Declared_Domains() -> [(&'static str, DeterminismStrength); 13]
         // promise — and a promise covering more than one producer has to be run over each,
         // or the rest are covered by a sentence and measured by nothing.
         ("module-index-rollup", SyntaxFactProduction::STRENGTH),
-        // The reachability offer's Materialize is the identical shape: one file's bytes in,
+        // The reachability offer's Materialize_Reachability_Fact is the identical shape: one file's bytes in,
         // deterministic bytes out, `syn`'s own source-order traversal. `SyntaxFactProduction`
         // is reused rather than a fourth Strategy type declared for it, per its own module
         // doc's stated policy for a producer holding the same triple.

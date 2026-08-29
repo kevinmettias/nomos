@@ -1,5 +1,5 @@
-pub const fn nomos_platform::ExitOutcome::Produced_A_Verdict(self) -> bool
-pub const fn nomos_platform::ExitOutcome::Succeeded(self) -> bool
+pub const fn nomos_platform::ExitOutcome::Has_A_Verdict(self) -> bool
+pub const fn nomos_platform::ExitOutcome::Is_Successful(self) -> bool
 pub const fn nomos_platform::Timestamp::From_Unix_Seconds(seconds: i64) -> Self
 pub const fn nomos_platform::Timestamp::Unix_Seconds(self) -> i64
 pub enum nomos_platform::ExitOutcome
@@ -37,14 +37,14 @@ pub struct field nomos_platform::Command::idle_timeout: std::time::Duration
 pub struct field nomos_platform::Command::timeout: std::time::Duration
 pub struct field nomos_platform::Command::working_directory: Option<PathBuf>
 pub struct field nomos_platform::LockAcquisition::broke_stale: Option<StaleTakeover>
-pub struct field nomos_platform::LockAcquisition::guard: G
+pub struct field nomos_platform::LockAcquisition::guard: Guard
 pub struct field nomos_platform::ProcessOutput::outcome: ExitOutcome
 pub struct field nomos_platform::ProcessOutput::stderr: String
 pub struct field nomos_platform::ProcessOutput::stdout: String
 pub struct field nomos_platform::StaleTakeover::age: Duration
 pub struct field nomos_platform::StaleTakeover::previous_holder: String
 pub struct nomos_platform::Command
-pub struct nomos_platform::LockAcquisition<G>
+pub struct nomos_platform::LockAcquisition<Guard>
 pub struct nomos_platform::ProcessOutput
 pub struct nomos_platform::StaleTakeover
 pub struct nomos_platform::Timestamp(i64)

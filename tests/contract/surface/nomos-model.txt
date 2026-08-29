@@ -3,7 +3,7 @@ pub const fn nomos_model::Coverage::Has_Effective_Coverage(&self) -> bool
 pub const fn nomos_model::EntityId::Digest(&self) -> Digest128
 pub const fn nomos_model::EntityId::From_Digest(digest: Digest128) -> Self
 pub const fn nomos_model::Evidence::Is_Mechanical(&self) -> bool
-pub const fn nomos_model::IdentityTransitionKind::Preserves_History(self) -> bool
+pub const fn nomos_model::IdentityTransitionKind::Is_History_Preserving(self) -> bool
 pub const fn nomos_model::Intersection::Permits_Concurrency(&self) -> bool
 pub const fn nomos_model::SetResolution::Label(self) -> &'static str
 pub const fn nomos_model::StructuralFingerprint::Digest(&self) -> Digest128
@@ -11,7 +11,7 @@ pub const fn nomos_model::StructuralFingerprint::From_Digest(digest: Digest128) 
 pub const fn nomos_model::Subject::Kind(&self) -> SubjectKind
 pub const fn nomos_model::SubjectSet::Resolution(&self) -> SetResolution
 pub const fn nomos_model::SubjectTarget::Kind(&self) -> SubjectKind
-pub const fn nomos_model::Transition::Asserted(kind: K, confidence: Confidence) -> Self
+pub const fn nomos_model::Transition::Asserted(kind: ChangeKind, confidence: Confidence) -> Self
 pub const nomos_model::Confidence::CERTAIN: Self
 pub const nomos_model::Confidence::NONE: Self
 pub const nomos_model::IdentityPolicy::STRICT: Self
@@ -73,7 +73,7 @@ pub enum variant nomos_model::UnknownReason::IncomparableSnapshots
 pub enum variant nomos_model::UnknownReason::ResolutionUnavailable { requested: SetResolution, }
 pub enum variant nomos_model::UnknownReason::UnexpandedPattern { pattern: String, }
 pub fn nomos_model::CompositeIdentity::Entity_Id(&self) -> EntityId
-pub fn nomos_model::Confidence::Meets(self, threshold: Self) -> bool
+pub fn nomos_model::Confidence::Is_At_Least(self, threshold: Self) -> bool
 pub fn nomos_model::Confidence::Of(value: f64) -> Self
 pub fn nomos_model::Content_Digest(bytes: &[u8]) -> Digest128
 pub fn nomos_model::Coverage::Agent_Required(&self) -> impl Iterator<Item = &CoverageGap>
@@ -88,7 +88,7 @@ pub fn nomos_model::SubjectSet::Empty(resolution: SetResolution) -> Self
 pub fn nomos_model::SubjectSet::Insert(&mut self, subject: SubjectId)
 pub fn nomos_model::SubjectSet::Intersect(&self, other: &Self) -> Intersection
 pub fn nomos_model::SubjectSet::Is_Empty(&self) -> bool
-pub fn nomos_model::SubjectSet::Len(&self) -> usize
+pub fn nomos_model::SubjectSet::Length(&self) -> usize
 pub fn nomos_model::SubjectSet::Members(&self) -> impl Iterator<Item = &SubjectId>
 pub fn nomos_model::SubjectSet::Of(resolution: SetResolution, members: impl IntoIterator<Item = SubjectId>) -> Self
 pub fn nomos_model::SubjectSet::With_Unexpanded_Pattern(mut self, pattern: impl Into<String>) -> Self
@@ -143,7 +143,7 @@ pub struct field nomos_model::Symbol::identity: crate::CompositeIdentity
 pub struct field nomos_model::Symbol::kind: SymbolKind
 pub struct field nomos_model::Transition::confidence: Confidence
 pub struct field nomos_model::Transition::evidence: Vec<crate::EvidenceRef>
-pub struct field nomos_model::Transition::kind: K
+pub struct field nomos_model::Transition::kind: ChangeKind
 pub struct nomos_model::Artifact
 pub struct nomos_model::CompositeIdentity
 pub struct nomos_model::Confidence(f64)
@@ -160,5 +160,5 @@ pub struct nomos_model::StructuralFingerprint(Digest128)
 pub struct nomos_model::Subject
 pub struct nomos_model::SubjectSet
 pub struct nomos_model::Symbol
-pub struct nomos_model::Transition<K>
+pub struct nomos_model::Transition<ChangeKind>
 pub type nomos_model::IdentityTransition

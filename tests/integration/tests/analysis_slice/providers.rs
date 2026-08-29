@@ -325,7 +325,7 @@ fn Answered_Despite_Its_Name(selection: &nomos_capability::Selection)
         selection.chosen.provider
     );
     assert!(
-        !selection.Passed_Over_Stronger(),
+        !selection.Has_Passed_Over_Stronger(),
         "nothing usable was stronger than what answered, which is the rule"
     );
     assert!(

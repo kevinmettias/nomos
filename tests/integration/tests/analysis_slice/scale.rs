@@ -65,7 +65,7 @@ fn Test_Facts_Should_Materialize_Over_The_Real_Corpus()
     Report_The_Run(&slice, &corpus, &first);
     Read_The_Whole_Corpus(&first);
     assert_eq!(
-        slice.Workspace().Snapshot().Len(),
+        slice.Workspace().Snapshot().Length(),
         first.files_seen,
         "the ingested workspace and the walked corpus must be the same tree"
     );
@@ -82,7 +82,7 @@ fn Report_The_Run(slice: &Slice, corpus: &Corpus, first: &RunReport)
          {}: {} files, {} syntax facts materialized, {} refused, {} groups, {} rollups, \
          {} degraded",
         corpus.root.display(),
-        slice.Workspace().Snapshot().Len(),
+        slice.Workspace().Snapshot().Length(),
         slice.Workspace().Id(),
         slice.Workspace().Snapshot().Variant(),
         corpus.root.display(),

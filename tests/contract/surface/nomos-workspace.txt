@@ -1,88 +1,39 @@
 pub const fn nomos_workspace::Applied::Generation(&self) -> GenerationId
 pub const fn nomos_workspace::Applied::Snapshot(&self) -> SnapshotId
-pub const fn nomos_workspace::ChangeSource::All() -> &'static [Self]
-pub const fn nomos_workspace::ChangeSource::Label(self) -> &'static str
-pub const fn nomos_workspace::Effect::Altered(&self) -> bool
-pub const fn nomos_workspace::EffectKind::Altered(self) -> bool
+pub const fn nomos_workspace::Effect::Is_Altered(&self) -> bool
 pub const fn nomos_workspace::Workspace::Authority() -> Authority
 pub const fn nomos_workspace::Workspace::Generation(&self) -> GenerationId
 pub const fn nomos_workspace::Workspace::Snapshot(&self) -> &WorkspaceSnapshot
-pub const fn nomos_workspace::WorkspaceChangeSet::From(source: ChangeSource) -> Self
-pub const fn nomos_workspace::WorkspaceChangeSet::Source(&self) -> ChangeSource
-pub const fn nomos_workspace::WorkspaceSnapshot::Configuration(&self) -> ConfigurationId
-pub const fn nomos_workspace::WorkspaceSnapshot::Variant(&self) -> &BuildVariant
-pub const nomos_workspace::SNAPSHOT_SCHEMA: &str
-pub const nomos_workspace::SnapshotSerialization::SCOPE: ReproducibilityScope
-pub const nomos_workspace::SnapshotSerialization::STRENGTH: DeterminismStrength
-pub const nomos_workspace::SnapshotSerialization::TRACE: TraceEquivalence
 pub enum nomos_workspace::Applied
 pub enum nomos_workspace::Change
-pub enum nomos_workspace::ChangeSource
-pub enum nomos_workspace::EffectKind
-pub enum nomos_workspace::WorkspaceError
 pub enum variant nomos_workspace::Applied::Advanced { generation: GenerationId, snapshot: SnapshotId, effects: Vec<Effect>, }
 pub enum variant nomos_workspace::Applied::Unchanged { generation: GenerationId, snapshot: SnapshotId, effects: Vec<Effect>, }
 pub enum variant nomos_workspace::Change::Absent { path: String, }
 pub enum variant nomos_workspace::Change::Present { path: String, content: String, }
-pub enum variant nomos_workspace::ChangeSource::AgentEdit
-pub enum variant nomos_workspace::ChangeSource::CodeGenerator
-pub enum variant nomos_workspace::ChangeSource::Correction
-pub enum variant nomos_workspace::ChangeSource::GitCheckout
-pub enum variant nomos_workspace::ChangeSource::IdeEdit
-pub enum variant nomos_workspace::EffectKind::Added
-pub enum variant nomos_workspace::EffectKind::AlreadyAbsent
-pub enum variant nomos_workspace::EffectKind::Modified
-pub enum variant nomos_workspace::EffectKind::Redundant
-pub enum variant nomos_workspace::EffectKind::Removed
-pub enum variant nomos_workspace::WorkspaceError::Conflicting { path: String, }
-pub enum variant nomos_workspace::WorkspaceError::Store(StoreError)
-pub enum variant nomos_workspace::WorkspaceError::Unnamed { path: String, reason: String, }
-pub enum variant nomos_workspace::WorkspaceError::Vacuous
 pub fn nomos_workspace::Applied::Effects(&self) -> &[Effect]
-pub fn nomos_workspace::BuildVariant::Id(&self) -> BuildVariantId
-pub fn nomos_workspace::BuildVariant::New( target: impl Into<String>, profile: impl Into<String>, toolchain: impl Into<String>, features: impl IntoIterator<Item = impl Into<String>>, ) -> Self
-pub fn nomos_workspace::BuildVariant::Rendered(&self) -> String
 pub fn nomos_workspace::Change::Content_Digest(&self) -> Option<Digest128>
 pub fn nomos_workspace::Change::Path(&self) -> &str
-pub fn nomos_workspace::ChangeSource::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_workspace::Effect::Path(&self) -> &str
 pub fn nomos_workspace::Workspace::Apply(&mut self, changes: &WorkspaceChangeSet) -> Result<Applied, WorkspaceError>
 pub fn nomos_workspace::Workspace::Content_Of(&self, path: &str) -> Option<Digest128>
 pub fn nomos_workspace::Workspace::Empty(variant: BuildVariant, configuration: ConfigurationId) -> Self
 pub fn nomos_workspace::Workspace::Id(&self) -> SnapshotId
 pub fn nomos_workspace::Workspace::Record(&self, store: &mut DocumentStore) -> Result<(), WorkspaceError>
-pub fn nomos_workspace::WorkspaceChangeSet::Absent(mut self, path: impl Into<String>) -> Self
-pub fn nomos_workspace::WorkspaceChangeSet::Changes(&self) -> &[Change]
-pub fn nomos_workspace::WorkspaceChangeSet::Is_Empty(&self) -> bool
-pub fn nomos_workspace::WorkspaceChangeSet::Present(mut self, path: impl Into<String>, content: impl Into<String>) -> Self
-pub fn nomos_workspace::WorkspaceError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
-pub fn nomos_workspace::WorkspaceError::from(error: StoreError) -> Self
-pub fn nomos_workspace::WorkspaceSnapshot::Content_Of(&self, path: &str) -> Option<Digest128>
-pub fn nomos_workspace::WorkspaceSnapshot::Decode(bytes: &[u8]) -> Result<Self, StoreError>
-pub fn nomos_workspace::WorkspaceSnapshot::Encode(&self) -> Vec<u8>
-pub fn nomos_workspace::WorkspaceSnapshot::Id(&self) -> SnapshotId
-pub fn nomos_workspace::WorkspaceSnapshot::Is_Empty(&self) -> bool
-pub fn nomos_workspace::WorkspaceSnapshot::Len(&self) -> usize
-pub fn nomos_workspace::WorkspaceSnapshot::Members(&self) -> Vec<Member>
-pub fn nomos_workspace::WorkspaceSnapshot::Of(variant: BuildVariant, configuration: ConfigurationId) -> Self
-pub impl nomos_workspace::ChangeSource implements core::fmt::Display
-pub impl nomos_workspace::SnapshotSerialization implements Strategy
-pub impl nomos_workspace::WorkspaceError implements From<StoreError>
-pub impl nomos_workspace::WorkspaceError implements core::fmt::Display
-pub impl nomos_workspace::WorkspaceError implements std::error::Error
-pub struct field nomos_workspace::BuildVariant::features: BTreeSet<String>
-pub struct field nomos_workspace::BuildVariant::profile: String
-pub struct field nomos_workspace::BuildVariant::target: String
-pub struct field nomos_workspace::BuildVariant::toolchain: String
 pub struct field nomos_workspace::Effect::kind: EffectKind
 pub struct field nomos_workspace::Effect::path: String
 pub struct field nomos_workspace::Member::content: Digest128
 pub struct field nomos_workspace::Member::path: String
-pub struct nomos_workspace::BuildVariant
 pub struct nomos_workspace::Effect
 pub struct nomos_workspace::Member
-pub struct nomos_workspace::SnapshotSerialization
 pub struct nomos_workspace::Workspace
-pub struct nomos_workspace::WorkspaceChangeSet
-pub struct nomos_workspace::WorkspaceSnapshot
-pub type nomos_workspace::ChangeSet
+
+# re-exports of items declared outside this crate
+pub use change::ChangeSet
+pub use change::ChangeSource
+pub use determinism::SnapshotSerialization
+pub use effect::EffectKind
+pub use snapshot::SNAPSHOT_SCHEMA
+pub use snapshot::WorkspaceSnapshot
+pub use variant::BuildVariant
+pub use workspace::WorkspaceChangeSet
+pub use workspace::WorkspaceError

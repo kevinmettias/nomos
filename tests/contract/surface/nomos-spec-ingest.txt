@@ -81,15 +81,15 @@ pub fn nomos_spec_ingest::Archive::Read_Text(&mut self, entry: &str) -> Result<S
 pub fn nomos_spec_ingest::ArchiveError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_spec_ingest::Archives_In(directory: &Path) -> Result<Vec<PathBuf>, ArchiveError>
 pub fn nomos_spec_ingest::BlockMismatch::Describe(&self) -> String
-pub fn nomos_spec_ingest::Census(archive: &mut Archive, scope: Scope) -> Result<KindCensus, IngestError>
+pub fn nomos_spec_ingest::Census_Kinds(archive: &mut Archive, scope: Scope) -> Result<KindCensus, IngestError>
 pub fn nomos_spec_ingest::Check_Against_Manifest( lineage: &BlockLineage, documents: &BTreeMap<String, String>, ) -> GateReport
 pub fn nomos_spec_ingest::FillerCensus::Undeclared(&self) -> Vec<&Template>
 pub fn nomos_spec_ingest::FillerCensus::Widest_Undeclared(&self) -> Option<&Template>
-pub fn nomos_spec_ingest::Fingerprint(archive: &mut Archive, label: &str) -> Result<RevisionFingerprint, IngestError>
-pub fn nomos_spec_ingest::Gaps(labels: &[String]) -> Vec<String>
-pub fn nomos_spec_ingest::GateReport::Exercised_The_Normalizer(&self) -> bool
-pub fn nomos_spec_ingest::GateReport::Passed(&self) -> bool
+pub fn nomos_spec_ingest::Fingerprint_Revision(archive: &mut Archive, label: &str) -> Result<RevisionFingerprint, IngestError>
+pub fn nomos_spec_ingest::GateReport::Has_Exercised_The_Normalizer(&self) -> bool
+pub fn nomos_spec_ingest::GateReport::Is_Passing(&self) -> bool
 pub fn nomos_spec_ingest::GateReport::Summary(&self) -> String
+pub fn nomos_spec_ingest::Get_Filler_Pattern(text: &str) -> Option<&'static str>
 pub fn nomos_spec_ingest::IngestError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_spec_ingest::IngestError::from(error: StoreError) -> Self
 pub fn nomos_spec_ingest::Ingest_Blob(store: &mut SpecificationStore, content: &[u8]) -> Result<i64, IngestError>
@@ -102,9 +102,9 @@ pub fn nomos_spec_ingest::Ingest_Sibling_Suite( store: &mut SpecificationStore, 
 pub fn nomos_spec_ingest::Ingest_Source_Document<'a>( store: &mut SpecificationStore, path: impl Into<DocumentPath<'a>>, revision: impl Into<DocumentRevision<'a>>, markdown: &str, ) -> Result<u32, IngestError>
 pub fn nomos_spec_ingest::Ingest_Statements( store: &mut SpecificationStore, file: &StatementFile, ) -> Result<StatementReport, IngestError>
 pub fn nomos_spec_ingest::Ingest_V15_Record<'a>( store: &mut SpecificationStore, path: impl Into<DocumentPath<'a>>, markdown: &str, ) -> Result<String, IngestError>
-pub fn nomos_spec_ingest::Is_Filler(text: &str) -> Option<&'static str>
-pub fn nomos_spec_ingest::Listing::Contains(&self, entry: &str) -> bool
+pub fn nomos_spec_ingest::Label_Gaps(labels: &[String]) -> Vec<String>
 pub fn nomos_spec_ingest::Listing::Ending_With(&self, suffix: &str) -> Vec<String>
+pub fn nomos_spec_ingest::Listing::Has_Path(&self, entry: &str) -> bool
 pub fn nomos_spec_ingest::Listing::Paths(&self) -> &[String]
 pub fn nomos_spec_ingest::Models_In(cell: &str) -> Vec<&str>
 pub fn nomos_spec_ingest::PairChange::Summary(&self) -> String
@@ -114,32 +114,32 @@ pub fn nomos_spec_ingest::Parse_Catalog(json: &str) -> Result<Vec<CatalogEntity>
 pub fn nomos_spec_ingest::Parse_Section_Lineage(yaml: &str) -> Result<SectionLineage, IngestError>
 pub fn nomos_spec_ingest::Parse_Statements(yaml: &str) -> Result<StatementFile, IngestError>
 pub fn nomos_spec_ingest::Prepare_Commentary_View(store: &SpecificationStore) -> Result<(), IngestError>
-pub fn nomos_spec_ingest::Reconcile(v14: &[Artifact], v15: &BTreeMap<String, String>) -> ReconciliationReport
+pub fn nomos_spec_ingest::Reconcile_Artifacts(v14: &[Artifact], v15: &BTreeMap<String, String>) -> ReconciliationReport
 pub fn nomos_spec_ingest::ReconciliationReport::Absent(&self) -> Vec<&IdentifierOutcome>
 pub fn nomos_spec_ingest::ReconciliationReport::Absent_In(&self, family: Family) -> Vec<&str>
 pub fn nomos_spec_ingest::ReconciliationReport::Declared_In(&self, family: Family) -> usize
 pub fn nomos_spec_ingest::ReconciliationReport::Preserved_In(&self, family: Family) -> usize
 pub fn nomos_spec_ingest::ReconciliationReport::Reworded(&self) -> Vec<&IdentifierOutcome>
 pub fn nomos_spec_ingest::ReconciliationReport::Summary(&self) -> String
-pub fn nomos_spec_ingest::Regression(from: &Revision, to: &Revision) -> Result<RegressionReport, IngestError>
 pub fn nomos_spec_ingest::RegressionReport::In(&self, family: Restored) -> Vec<&MemberFate>
 pub fn nomos_spec_ingest::RegressionReport::Named(&self, name: &str) -> Option<&MemberFate>
 pub fn nomos_spec_ingest::RegressionReport::Summary(&self) -> String
 pub fn nomos_spec_ingest::RegressionReport::Tally(&self, family: Restored) -> Tally
-pub fn nomos_spec_ingest::Resolve(store: &SpecificationStore, name: &str) -> Result<Option<i64>, IngestError>
+pub fn nomos_spec_ingest::Regression_Between_Revisions(from: &Revision, to: &Revision) -> Result<RegressionReport, IngestError>
+pub fn nomos_spec_ingest::Resolve_Model_Uid(store: &SpecificationStore, name: &str) -> Result<Option<i64>, IngestError>
 pub fn nomos_spec_ingest::RestorationReport::In(&self, family: Restored) -> Vec<&Member>
 pub fn nomos_spec_ingest::RestorationReport::Named(&self, name: &str) -> Option<&Member>
 pub fn nomos_spec_ingest::RestorationReport::Summary(&self) -> String
-pub fn nomos_spec_ingest::Restore( store: &mut SpecificationStore, revision: &str, documents: &BTreeMap<String, String>, ) -> Result<RestorationReport, IngestError>
+pub fn nomos_spec_ingest::Restore_Members( store: &mut SpecificationStore, revision: &str, documents: &BTreeMap<String, String>, ) -> Result<RestorationReport, IngestError>
 pub fn nomos_spec_ingest::Revision::Fingerprint(&self) -> Result<RevisionFingerprint, IngestError>
 pub fn nomos_spec_ingest::Revision::Read(archive: &mut Archive, label: &str) -> Result<Self, IngestError>
 pub fn nomos_spec_ingest::Revision::Volumes(&self) -> BTreeMap<String, String>
 pub fn nomos_spec_ingest::Revisions_In(directory: &Path) -> Result<Vec<(String, PathBuf)>, IngestError>
-pub fn nomos_spec_ingest::SectionReport::Passed(&self) -> bool
-pub fn nomos_spec_ingest::StatementReport::Passed(&self) -> bool
+pub fn nomos_spec_ingest::SectionReport::Is_Passed(&self) -> bool
+pub fn nomos_spec_ingest::StatementReport::Is_Passing(&self) -> bool
 pub fn nomos_spec_ingest::Statements_In(markdown: &str) -> BTreeMap<String, String>
 pub fn nomos_spec_ingest::Statements_Sourced_Only_From_Commentary( store: &SpecificationStore, ) -> Result<Vec<String>, IngestError>
-pub fn nomos_spec_ingest::Walk(revisions: &[RevisionFingerprint]) -> Vec<PairChange>
+pub fn nomos_spec_ingest::Walk_Revisions(revisions: &[RevisionFingerprint]) -> Vec<PairChange>
 pub impl nomos_spec_ingest::ArchiveError implements core::fmt::Display
 pub impl nomos_spec_ingest::ArchiveError implements std::error::Error
 pub impl nomos_spec_ingest::IngestError implements From<StoreError>

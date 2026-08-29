@@ -69,7 +69,7 @@ fn Every_Component_Is_Derived(slice: &Slice, corpus: &Corpus)
 {
     let snapshot = slice.Workspace().Snapshot();
 
-    assert_eq!(snapshot.Len(), corpus.files.len(), "one member per file");
+    assert_eq!(snapshot.Length(), corpus.files.len(), "one member per file");
     assert_eq!(
         slice.Snapshot(),
         slice.Workspace().Id(),

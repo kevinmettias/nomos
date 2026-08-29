@@ -117,7 +117,7 @@ impl Slice
         return applied
             .Effects()
             .iter()
-            .filter(|effect| return effect.Altered())
+            .filter(|effect| return effect.Is_Altered())
             .map(|effect| return Subject_Of_Path(effect.Path()))
             .collect();
     }

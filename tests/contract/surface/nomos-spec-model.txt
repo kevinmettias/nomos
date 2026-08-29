@@ -1,6 +1,6 @@
 pub const fn nomos_spec_model::DecisionGap::Is_Open(&self) -> bool
+pub const fn nomos_spec_model::Origin::Can_Satisfy_Acceptance(self) -> bool
 pub const fn nomos_spec_model::Origin::Label(self) -> &'static str
-pub const fn nomos_spec_model::Origin::Satisfies_Acceptance(self) -> bool
 pub const fn nomos_spec_model::RowKind::All() -> &'static [Self]
 pub const fn nomos_spec_model::RowKind::Label(self) -> &'static str
 pub const fn nomos_spec_model::Severity::Label(self) -> &'static str
@@ -48,30 +48,30 @@ pub enum variant nomos_spec_model::SubmissionState::Accepted
 pub enum variant nomos_spec_model::SubmissionState::Draft
 pub enum variant nomos_spec_model::TableDefect::ManySeparators { table_ordinal: u32, separators: u32, }
 pub enum variant nomos_spec_model::TableDefect::NoSeparator { table_ordinal: u32, rows: u32, }
-pub fn nomos_spec_model::ContentHash::As_Str(&self) -> &str
+pub fn nomos_spec_model::ContentHash::As_String_Slice(&self) -> &str
 pub fn nomos_spec_model::ContentHash::Of(text: &str) -> Self
 pub fn nomos_spec_model::ContentHash::Of_Bytes(content: &[u8]) -> Self
 pub fn nomos_spec_model::ContentHash::Of_Normalized(text: &str) -> Self
 pub fn nomos_spec_model::ContentHash::Parse(text: &str) -> Option<Self>
 pub fn nomos_spec_model::ContentHash::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_spec_model::Is_Normalized(text: &str) -> bool
-pub fn nomos_spec_model::Normalize(text: &str) -> String
+pub fn nomos_spec_model::Is_Round_Trip(markdown: &str) -> bool
+pub fn nomos_spec_model::Normalize_Whitespace(text: &str) -> String
 pub fn nomos_spec_model::NormativeStatement::Canonical_Hash(&self) -> ContentHash
 pub fn nomos_spec_model::NormativeStatement::Canonicalized(mut self) -> Self
-pub fn nomos_spec_model::NormativeStatement::Text_Is_Canonical(&self) -> bool
+pub fn nomos_spec_model::NormativeStatement::Is_Text_Canonical(&self) -> bool
 pub fn nomos_spec_model::Origin::Parse(label: &str) -> Option<Self>
 pub fn nomos_spec_model::Parse_Record(markdown: &str) -> Result<Record, RecordError>
 pub fn nomos_spec_model::RecordError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_spec_model::Refusal::fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result
 pub fn nomos_spec_model::RenderError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_spec_model::Render_Record( front_matter: &RecordFrontMatter, blocks: &[SourceBlock], ) -> Result<String, RenderError>
-pub fn nomos_spec_model::Round_Trips(markdown: &str) -> bool
 pub fn nomos_spec_model::RowKind::Parse(label: &str) -> Option<Self>
 pub fn nomos_spec_model::Segment(markdown: &str) -> Vec<SourceBlock>
 pub fn nomos_spec_model::Severity::Parse(label: &str) -> Option<Self>
 pub fn nomos_spec_model::SourceBlock::Content_Hash(&self) -> ContentHash
 pub fn nomos_spec_model::SourceBlock::Normalized_Hash(&self) -> ContentHash
-pub fn nomos_spec_model::StatementId::As_Str(&self) -> &str
+pub fn nomos_spec_model::StatementId::As_String_Slice(&self) -> &str
 pub fn nomos_spec_model::StatementId::Parse(text: &str) -> Option<Self>
 pub fn nomos_spec_model::StatementId::Prefix(&self) -> &str
 pub fn nomos_spec_model::StatementId::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
@@ -84,7 +84,7 @@ pub fn nomos_spec_model::TableRow::Content_Hash(&self) -> ContentHash
 pub fn nomos_spec_model::TableRow::Normalized_Hash(&self) -> ContentHash
 pub fn nomos_spec_model::Table_Defects(rows: &[TableRow]) -> Vec<TableDefect>
 pub fn nomos_spec_model::Table_Rows(block: &SourceBlock) -> Vec<TableRow>
-pub fn nomos_spec_model::Validate(submission: &Submission) -> Vec<Failure>
+pub fn nomos_spec_model::Validate_Submission(submission: &Submission) -> Vec<Failure>
 pub impl nomos_spec_model::ContentHash implements core::fmt::Display
 pub impl nomos_spec_model::RecordError implements core::fmt::Display
 pub impl nomos_spec_model::RecordError implements std::error::Error

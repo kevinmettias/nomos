@@ -53,7 +53,7 @@ pub fn nomos_spec_bundle::BundleError::from(error: nomos_spec_store::StoreError)
 pub fn nomos_spec_bundle::BundleError::from(error: rusqlite::Error) -> Self
 pub fn nomos_spec_bundle::BundleError::from(error: serde_json::Error) -> Self
 pub fn nomos_spec_bundle::Export(store: &SpecificationStore) -> Result<Bundle, BundleError>
-pub fn nomos_spec_bundle::Import(store: &mut SpecificationStore, bundle: &Bundle) -> Result<ImportReport, BundleError>
+pub fn nomos_spec_bundle::Import_Bundle(store: &mut SpecificationStore, bundle: &Bundle) -> Result<ImportReport, BundleError>
 pub impl nomos_spec_bundle::BundleError implements From<nomos_spec_store::StoreError>
 pub impl nomos_spec_bundle::BundleError implements From<rusqlite::Error>
 pub impl nomos_spec_bundle::BundleError implements From<serde_json::Error>
