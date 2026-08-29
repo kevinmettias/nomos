@@ -159,24 +159,6 @@ pub fn Check_Completeness_Mirrors(
     return findings;
 }
 
-/// A finding for every declared universe that is not mirrored.
-///
-/// Deduplicated first, because one universe declared in two files is one claim and two
-/// findings about it would double-count the same defect.
-fn Judged(index: &CheckIndex<'_>) -> Vec<Finding>
-{
-    use verdict::Judge;
-
-    let mut universes: Vec<DeclaredUniverse> = index.universes.clone();
-    universes.sort();
-    universes.dedup();
-
-    return universes
-        .iter()
-        .filter_map(|universe| return Judge(universe, index))
-        .collect();
-}
-
 /// One finding per file whose provider could not see doc comments.
 ///
 /// Reported rather than skipped: folding it into "no universe here" is the
@@ -195,4 +177,22 @@ fn Unobserved_Findings(sources: &[SourceFile], index: &CheckIndex<'_>) -> Vec<Fi
     }
 
     return findings;
+}
+
+/// A finding for every declared universe that is not mirrored.
+///
+/// Deduplicated first, because one universe declared in two files is one claim and two
+/// findings about it would double-count the same defect.
+fn Judged(index: &CheckIndex<'_>) -> Vec<Finding>
+{
+    use verdict::Judge;
+
+    let mut universes: Vec<DeclaredUniverse> = index.universes.clone();
+    universes.sort();
+    universes.dedup();
+
+    return universes
+        .iter()
+        .filter_map(|universe| return Judge(universe, index))
+        .collect();
 }

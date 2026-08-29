@@ -49,6 +49,20 @@ struct FieldSets<'a>
     target: &'a [(String, String)],
 }
 
+fn Unparseable(source: &SourceFile, declaring_name: &str, because: &str) -> Finding
+{
+    return Finding {
+        rule: RuleId::New(CROSS_LANGUAGE_CORRESPONDENCE),
+        subject: source.subject,
+        subject_name: source.path.clone(),
+        applicability: Applicability::Unparseable,
+        evidence: EvidenceClass::Derived,
+        gate: GateCategory::Advisory,
+        summary: format!("`{declaring_name}`'s declared correspondence could not be judged: {because}"),
+        locations: vec![source.path.clone()],
+    };
+}
+
 /// The one struct anywhere in `index` named `target_name`, other than `declaring` itself —
 /// a correspondence may legitimately name a struct that shares its own qualified name (the
 /// common case: a Rust `Wide` and a Go `Wide`), so the search must not let a struct resolve
@@ -88,20 +102,6 @@ fn Missing(source: &SourceFile, item: &PayloadItem, target_name: &str) -> Findin
             "`{}` declares a correspondence to `{target_name}`, but no struct named that was found among the sources this run judged",
             item.qualified_name
         ),
-        locations: vec![source.path.clone()],
-    };
-}
-
-fn Unparseable(source: &SourceFile, declaring_name: &str, because: &str) -> Finding
-{
-    return Finding {
-        rule: RuleId::New(CROSS_LANGUAGE_CORRESPONDENCE),
-        subject: source.subject,
-        subject_name: source.path.clone(),
-        applicability: Applicability::Unparseable,
-        evidence: EvidenceClass::Derived,
-        gate: GateCategory::Advisory,
-        summary: format!("`{declaring_name}`'s declared correspondence could not be judged: {because}"),
         locations: vec![source.path.clone()],
     };
 }

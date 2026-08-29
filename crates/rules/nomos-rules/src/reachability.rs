@@ -169,20 +169,6 @@ fn Parse_Fact(source: &SourceFile, fact: &MaterializedFact) -> Result<Reachabili
         .map_err(|refusal| return Unread(source, Applicability::Unparseable, &refusal.to_string()));
 }
 
-fn Unread(source: &SourceFile, applicability: Applicability, because: &str) -> Finding
-{
-    return Finding {
-        rule: RuleId::New(UNREAD_REACHES_FINDING),
-        subject: source.subject,
-        subject_name: source.path.clone(),
-        applicability,
-        evidence: EvidenceClass::Derived,
-        gate: GateCategory::Advisory,
-        summary: format!("this source's reachability could not be judged: {because}"),
-        locations: vec![source.path.clone()],
-    };
-}
-
 /// Every flagged site `payload` carries, as findings.
 ///
 /// A pure function of an already-decoded payload, testable against hand-built fixtures —
@@ -226,6 +212,20 @@ fn Shape_Description(shape: ArmShape) -> &'static str
         ArmShape::BareContinue => "a bare `continue` with no other effect",
         ArmShape::BareReturn => "a bare `return` with no value",
         ArmShape::TailOk => "a tail call to `Ok(...)`, treating the failure as success",
+    };
+}
+
+fn Unread(source: &SourceFile, applicability: Applicability, because: &str) -> Finding
+{
+    return Finding {
+        rule: RuleId::New(UNREAD_REACHES_FINDING),
+        subject: source.subject,
+        subject_name: source.path.clone(),
+        applicability,
+        evidence: EvidenceClass::Derived,
+        gate: GateCategory::Advisory,
+        summary: format!("this source's reachability could not be judged: {because}"),
+        locations: vec![source.path.clone()],
     };
 }
 

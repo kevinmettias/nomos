@@ -57,24 +57,6 @@ pub fn Check_Dependency_Policy(sources: &[SourceFile], facts: &mut dyn FactReade
     return findings;
 }
 
-/// What this rule needs from `nomos.cap.dependency.policy` before it will believe an
-/// answer — the same "nothing weaker could be trusted" reasoning
-/// `crate::lint::Lint_Requirement` gives: a violation this rule cannot attribute to the
-/// real, resolved dependency graph is not one it should relay as if `cargo deny` itself
-/// vouched for it.
-#[must_use]
-fn Policy_Requirement() -> Requirement
-{
-    let guarantee = Guarantee::New(
-        FactVariant::SemanticallyResolved,
-        Assurance::Sound,
-        Assurance::Unknown,
-        IncrementalGranularity::WholeWorkspace,
-    );
-
-    return Requirement::New(nomos_cap_dependency_policy::Capability(), nomos_cap_dependency_policy::CONTRACT_VERSION, guarantee);
-}
-
 /// The workspace's decoded policy payload, or a finding reporting why it could not be
 /// read.
 fn Payload_Of(source: &SourceFile, facts: &mut dyn FactReader) -> Result<PolicyPayload, Finding>
@@ -103,6 +85,24 @@ fn Require_Fact<'a>(source: &SourceFile, facts: &'a mut dyn FactReader) -> Resul
     };
 }
 
+/// What this rule needs from `nomos.cap.dependency.policy` before it will believe an
+/// answer — the same "nothing weaker could be trusted" reasoning
+/// `crate::lint::Lint_Requirement` gives: a violation this rule cannot attribute to the
+/// real, resolved dependency graph is not one it should relay as if `cargo deny` itself
+/// vouched for it.
+#[must_use]
+fn Policy_Requirement() -> Requirement
+{
+    let guarantee = Guarantee::New(
+        FactVariant::SemanticallyResolved,
+        Assurance::Sound,
+        Assurance::Unknown,
+        IncrementalGranularity::WholeWorkspace,
+    );
+
+    return Requirement::New(nomos_cap_dependency_policy::Capability(), nomos_cap_dependency_policy::CONTRACT_VERSION, guarantee);
+}
+
 /// Confirms `fact`'s payload schema is the one this rule knows how to decode.
 fn Check_Schema(source: &SourceFile, fact: &MaterializedFact) -> Result<(), Finding>
 {
@@ -127,20 +127,6 @@ fn Parse_Fact(source: &SourceFile, fact: &MaterializedFact) -> Result<PolicyPayl
 {
     return nomos_cap_dependency_policy::Parse_Payload(&fact.payload.bytes)
         .map_err(|refusal| return Unread(source, Applicability::Unparseable, &refusal.to_string()));
-}
-
-fn Unread(source: &SourceFile, applicability: Applicability, because: &str) -> Finding
-{
-    return Finding {
-        rule: RuleId::New(DEPENDENCY_POLICY),
-        subject: source.subject,
-        subject_name: source.path.clone(),
-        applicability,
-        evidence: EvidenceClass::Derived,
-        gate: GateCategory::Advisory,
-        summary: format!("the workspace's dependency policy could not be judged: {because}"),
-        locations: vec![source.path.clone()],
-    };
 }
 
 /// `payload`'s own violations, each relayed as a `Finding` — never judged a second time,
@@ -172,6 +158,20 @@ fn Relayed(source: &SourceFile, violation: &PolicyViolation) -> Finding
 fn Summary_Of(violation: &PolicyViolation) -> String
 {
     return format!("{} [{}]: {}", violation.severity, violation.code, violation.message);
+}
+
+fn Unread(source: &SourceFile, applicability: Applicability, because: &str) -> Finding
+{
+    return Finding {
+        rule: RuleId::New(DEPENDENCY_POLICY),
+        subject: source.subject,
+        subject_name: source.path.clone(),
+        applicability,
+        evidence: EvidenceClass::Derived,
+        gate: GateCategory::Advisory,
+        summary: format!("the workspace's dependency policy could not be judged: {because}"),
+        locations: vec![source.path.clone()],
+    };
 }
 
 #[cfg(test)]

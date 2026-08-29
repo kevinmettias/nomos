@@ -100,6 +100,28 @@ pub(crate) fn Read_Universes(path: &str, payload: &SyntaxPayload) -> Reading
     return Reading::Observed(found);
 }
 
+/// The first field discovery needs that the provider did not observe.
+///
+/// A payload with no items at all is not unobserved — a provider that saw nothing to
+/// report about a file that declares nothing has observed exactly as much as one that
+/// parsed it, and refusing there would report every empty file as unread.
+fn Unobserved_Field(payload: &SyntaxPayload) -> Option<&'static str>
+{
+    for item in &payload.items
+    {
+        if !item.documentation.Was_Observed()
+        {
+            return Some("documentation");
+        }
+        if !item.shape.Was_Observed()
+        {
+            return Some("declared shape");
+        }
+    }
+
+    return None;
+}
+
 /// A provider that answered without observing what a universe is read from.
 ///
 /// Named as unobserved rather than reported as no universe, because a file the reader could
@@ -132,43 +154,6 @@ fn Declared_By(
     }
 
     return Enumeration_Universe(path, payload, index, item);
-}
-
-/// The universes one file declares, or none when the provider could not observe them.
-///
-/// The convenience form, for callers with nothing useful to do with the difference. The
-/// rule itself does not use it: reporting an unobserved file as a clean one is the defect
-/// this workspace keeps finding.
-#[must_use]
-pub fn Universes_In(path: &str, payload: &SyntaxPayload) -> Vec<DeclaredUniverse>
-{
-    return match Read_Universes(path, payload)
-    {
-        Reading::Observed(universes) => universes,
-        Reading::Unobserved { .. } => Vec::new(),
-    };
-}
-
-/// The first field discovery needs that the provider did not observe.
-///
-/// A payload with no items at all is not unobserved — a provider that saw nothing to
-/// report about a file that declares nothing has observed exactly as much as one that
-/// parsed it, and refusing there would report every empty file as unread.
-fn Unobserved_Field(payload: &SyntaxPayload) -> Option<&'static str>
-{
-    for item in &payload.items
-    {
-        if !item.documentation.Was_Observed()
-        {
-            return Some("documentation");
-        }
-        if !item.shape.Was_Observed()
-        {
-            return Some("declared shape");
-        }
-    }
-
-    return None;
 }
 
 /// A public constant whose declared type is a list.
@@ -208,24 +193,6 @@ fn Declares_A_Constant_Universe(item: &PayloadItem) -> bool
     return item.kind == "Constant" && item.Is_Public() && item.shape.Value() == Some(SLICE);
 }
 
-/// An `All()` in an inherent implementation names the type's own variant list.
-///
-/// Inherent implementations only. `impl Display for Table` does not own the variant list,
-/// and attributing an `All()` found there to `Table` would name the wrong universe — a
-/// distinction that survives into the payload only because the schema carries an
-/// implementation's shape and the items are in source order.
-///
-/// Arity zero, for the same reason it always was: `All(&self)` is an accessor on an
-/// instance and not the type's list of itself.
-/// Whether an item is the zero-argument `All()` that names a type's variants.
-///
-/// Arity zero is part of the shape rather than a detail: `All(&self)` is an accessor on an
-/// instance, and it does not enumerate the type.
-fn Is_The_Variant_List(item: &PayloadItem) -> bool
-{
-    return item.kind == FUNCTION && item.Own_Name() == ALL && Function_Arity(&item.shape) == Some(0);
-}
-
 fn Enumeration_Universe(
     path: &str,
     payload: &SyntaxPayload,
@@ -253,6 +220,39 @@ fn Enumeration_Universe(
         kind: UniverseKind::Enumeration,
         claimed_mirror: Claimed_Mirror(item.documentation.Value()),
     });
+}
+
+/// An `All()` in an inherent implementation names the type's own variant list.
+///
+/// Inherent implementations only. `impl Display for Table` does not own the variant list,
+/// and attributing an `All()` found there to `Table` would name the wrong universe — a
+/// distinction that survives into the payload only because the schema carries an
+/// implementation's shape and the items are in source order.
+///
+/// Arity zero, for the same reason it always was: `All(&self)` is an accessor on an
+/// instance and not the type's list of itself.
+/// Whether an item is the zero-argument `All()` that names a type's variants.
+///
+/// Arity zero is part of the shape rather than a detail: `All(&self)` is an accessor on an
+/// instance, and it does not enumerate the type.
+fn Is_The_Variant_List(item: &PayloadItem) -> bool
+{
+    return item.kind == FUNCTION && item.Own_Name() == ALL && Function_Arity(&item.shape) == Some(0);
+}
+
+/// The universes one file declares, or none when the provider could not observe them.
+///
+/// The convenience form, for callers with nothing useful to do with the difference. The
+/// rule itself does not use it: reporting an unobserved file as a clean one is the defect
+/// this workspace keeps finding.
+#[must_use]
+pub fn Universes_In(path: &str, payload: &SyntaxPayload) -> Vec<DeclaredUniverse>
+{
+    return match Read_Universes(path, payload)
+    {
+        Reading::Observed(universes) => universes,
+        Reading::Unobserved { .. } => Vec::new(),
+    };
 }
 
 /// The mirror named in an item's documentation, if one is named.

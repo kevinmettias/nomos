@@ -35662,6 +35662,261 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P16-VERTORG-HOST",
+      "title": "check-vertical-organization: DFS call-order across crates/host",
+      "why": "check-vertical-organization flags 18 findings across nomos-cli (15), nomos-surface-provenance (2) and nomos-api (1): a private helper function defined out of the DFS call order from its entry point. Each finding's own message already states the full correct order (N functions: A, B, C, ...). Purely a within-file function reordering -- no signature, body or behavior changes.",
+      "done_when": "check-vertical-organization reports zero findings under crates/host/nomos-cli, crates/host/nomos-surface-provenance and crates/host/nomos-api (run via code-standards check.exe against crates tests from the repo root). cargo build --workspace --all-targets and cargo test -p nomos-cli -p nomos-surface-provenance -p nomos-api stay green. No function signature, body, or doc comment content changes -- only definition order within each file.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli",
+          "crates/host/nomos-surface-provenance",
+          "crates/host/nomos-api"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-loop-session",
+        "acquired_at": 1788028051,
+        "lease_expires_at": 1788035251
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P16-VERTORG-SPEC",
+      "title": "check-vertical-organization: DFS call-order across crates/spec",
+      "why": "check-vertical-organization flags 29 findings across nomos-spec-store (8), nomos-spec-ingest (6), nomos-spec-bundle (5), nomos-spec-model (5) and nomos-spec-project (5): a private helper function defined out of the DFS call order from its entry point. Each finding's own message already states the full correct order (N functions: A, B, C, ...). Purely a within-file function reordering -- no signature, body or behavior changes.",
+      "done_when": "check-vertical-organization reports zero findings under crates/spec/nomos-spec-store, crates/spec/nomos-spec-ingest, crates/spec/nomos-spec-bundle, crates/spec/nomos-spec-model and crates/spec/nomos-spec-project (run via code-standards check.exe against crates tests from the repo root). cargo build --workspace --all-targets and cargo test -p nomos-spec-store -p nomos-spec-ingest -p nomos-spec-bundle -p nomos-spec-model -p nomos-spec-project stay green. No function signature, body, or doc comment content changes -- only definition order within each file.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-store",
+          "crates/spec/nomos-spec-ingest",
+          "crates/spec/nomos-spec-bundle",
+          "crates/spec/nomos-spec-model",
+          "crates/spec/nomos-spec-project"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-loop-session",
+        "acquired_at": 1788028051,
+        "lease_expires_at": 1788035251
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P16-VERTORG-RULES",
+      "title": "check-vertical-organization: DFS call-order across crates/rules/nomos-rules",
+      "why": "check-vertical-organization flags 6 findings in nomos-rules: a private helper function defined out of the DFS call order from its entry point. Each finding's own message already states the full correct order (N functions: A, B, C, ...). Purely a within-file function reordering -- no signature, body or behavior changes.",
+      "done_when": "check-vertical-organization reports zero findings under crates/rules/nomos-rules (run via code-standards check.exe against crates tests from the repo root). cargo build --workspace --all-targets and cargo test -p nomos-rules stay green. No function signature, body, or doc comment content changes -- only definition order within each file.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "exit_code": 0,
+        "output_tail": "mos\\crates\\languages\\nomos-lang-rust-cargo)\n   Compiling nomos-lang-rust-clippy v0.1.0 (F:\\repos\\nomos\\crates\\languages\\nomos-lang-rust-clippy)\n   Compiling nomos-lang-rust-deny v0.1.0 (F:\\repos\\nomos\\crates\\languages\\nomos-lang-rust-deny)\n   Compiling nomos-lang-go-modules v0.1.0 (F:\\repos\\nomos\\crates\\languages\\nomos-lang-go-modules)\n   Compiling nomos-spec-project v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-project)\n   Compiling nomos-spec-bundle v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-bundle)\n   Compiling nomos-lang-rust-package v0.1.0 (F:\\repos\\nomos\\crates\\packages\\nomos-lang-rust-package)\n   Compiling nomos-work-orchestration v0.1.0 (F:\\repos\\nomos\\crates\\orchestration\\nomos-work-orchestration)\n   Compiling nomos-corrections v0.1.0 (F:\\repos\\nomos\\crates\\corrections\\nomos-corrections)\n   Compiling nomos-contract-tests v0.1.0 (F:\\repos\\nomos\\tests\\contract)\n   Compiling nomos-check-orchestration v0.1.0 (F:\\repos\\nomos\\crates\\orchestration\\nomos-check-orchestration)\n   Compiling nomos-lang-go-package v0.1.0 (F:\\repos\\nomos\\crates\\packages\\nomos-lang-go-package)\n   Compiling nomos-agent-contracts v0.1.0 (F:\\repos\\nomos\\crates\\agent\\nomos-agent-contracts)\n   Compiling nomos-spec-validate v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-validate)\n   Compiling nomos-spec-orchestration v0.1.0 (F:\\repos\\nomos\\crates\\orchestration\\nomos-spec-orchestration)\n   Compiling nomos-gate-orchestration v0.1.0 (F:\\repos\\nomos\\crates\\orchestration\\nomos-gate-orchestration)\n   Compiling nomos-model-backend-ollama v0.1.0 (F:\\repos\\nomos\\crates\\agent\\nomos-model-backend-ollama)\n   Compiling nomos-agent-executor-claude-code v0.1.0 (F:\\repos\\nomos\\crates\\agent\\nomos-agent-executor-claude-code)\n   Compiling nomos-integration-tests v0.1.0 (F:\\repos\\nomos\\tests\\integration)\n   Compiling nomos-api v0.1.0 (F:\\repos\\nomos\\crates\\host\\nomos-api)\n   Compiling nomos-cli v0.1.0 (F:\\repos\\nomos\\crates\\host\\nomos-cli)\n    Finished `dev` profile [unoptimized + debuginfo] target(s) in 29.63s\n",
+        "verified_at": 1788028537,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "6ebda1af0a1b2ef148c1477c7262a523e18986e7"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P16-VERTORG-LANGUAGES",
+      "title": "check-vertical-organization: DFS call-order across crates/languages",
+      "why": "check-vertical-organization flags 12 findings across nomos-lang-go (4), nomos-lang-rust (4), nomos-lang-go-modules (1), nomos-lang-rust-cargo (1), nomos-lang-rust-clippy (1) and nomos-lang-rust-deny (1): a private helper function defined out of the DFS call order from its entry point. Each finding's own message already states the full correct order. Purely a within-file function reordering -- no signature, body or behavior changes.",
+      "done_when": "check-vertical-organization reports zero findings under crates/languages/nomos-lang-go, crates/languages/nomos-lang-rust, crates/languages/nomos-lang-go-modules, crates/languages/nomos-lang-rust-cargo, crates/languages/nomos-lang-rust-clippy and crates/languages/nomos-lang-rust-deny (run via code-standards check.exe against crates tests from the repo root). cargo build --workspace --all-targets and cargo test -p nomos-lang-go -p nomos-lang-rust -p nomos-lang-go-modules -p nomos-lang-rust-cargo -p nomos-lang-rust-clippy -p nomos-lang-rust-deny stay green. No function signature, body, or doc comment content changes -- only definition order within each file.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages/nomos-lang-go",
+          "crates/languages/nomos-lang-rust",
+          "crates/languages/nomos-lang-go-modules",
+          "crates/languages/nomos-lang-rust-cargo",
+          "crates/languages/nomos-lang-rust-clippy",
+          "crates/languages/nomos-lang-rust-deny"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-loop-session",
+        "acquired_at": 1788028051,
+        "lease_expires_at": 1788035251
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P16-VERTORG-SUBSTRATE",
+      "title": "check-vertical-organization: DFS call-order across crates/substrate",
+      "why": "check-vertical-organization flags 11 findings across nomos-ledger (4), nomos-analysis (3), nomos-capability (2) and nomos-workspace (2): a private helper function defined out of the DFS call order from its entry point. Each finding's own message already states the full correct order. Purely a within-file function reordering -- no signature, body or behavior changes.",
+      "done_when": "check-vertical-organization reports zero findings under crates/substrate/nomos-ledger, crates/substrate/nomos-analysis, crates/substrate/nomos-capability and crates/substrate/nomos-workspace (run via code-standards check.exe against crates tests from the repo root). cargo build --workspace --all-targets and cargo test -p nomos-ledger -p nomos-analysis -p nomos-capability -p nomos-workspace stay green. No function signature, body, or doc comment content changes -- only definition order within each file.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger",
+          "crates/substrate/nomos-analysis",
+          "crates/substrate/nomos-capability",
+          "crates/substrate/nomos-workspace"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-loop-session",
+        "acquired_at": 1788028051,
+        "lease_expires_at": 1788035251
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P16-VERTORG-MISC",
+      "title": "check-vertical-organization: DFS call-order across orchestration, agent, platform, capabilities, kernel",
+      "why": "check-vertical-organization flags 16 findings across nomos-check-orchestration (3), nomos-gate-orchestration (1), nomos-spec-orchestration (2), nomos-work-orchestration (1), nomos-agent-executor-claude-code (2), nomos-model-backend-ollama (1), nomos-platform-std (2), nomos-cap-dependency-policy (1), nomos-model (2) and nomos-store (1): a private helper function defined out of the DFS call order from its entry point. Each finding's own message already states the full correct order. Purely a within-file function reordering -- no signature, body or behavior changes.",
+      "done_when": "check-vertical-organization reports zero findings under crates/orchestration/nomos-check-orchestration, crates/orchestration/nomos-gate-orchestration, crates/orchestration/nomos-spec-orchestration, crates/orchestration/nomos-work-orchestration, crates/agent/nomos-agent-executor-claude-code, crates/agent/nomos-model-backend-ollama, crates/platform/nomos-platform-std, crates/capabilities/nomos-cap-dependency-policy, crates/kernel/nomos-model and crates/kernel/nomos-store (run via code-standards check.exe against crates tests from the repo root). cargo build --workspace --all-targets stays green and cargo test -p nomos-check-orchestration -p nomos-gate-orchestration -p nomos-spec-orchestration -p nomos-work-orchestration -p nomos-agent-executor-claude-code -p nomos-model-backend-ollama -p nomos-platform-std -p nomos-cap-dependency-policy -p nomos-model -p nomos-store all pass. No function signature, body, or doc comment content changes -- only definition order within each file.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-check-orchestration",
+          "crates/orchestration/nomos-gate-orchestration",
+          "crates/orchestration/nomos-spec-orchestration",
+          "crates/orchestration/nomos-work-orchestration",
+          "crates/agent/nomos-agent-executor-claude-code",
+          "crates/agent/nomos-model-backend-ollama",
+          "crates/platform/nomos-platform-std",
+          "crates/capabilities/nomos-cap-dependency-policy",
+          "crates/kernel/nomos-model",
+          "crates/kernel/nomos-store"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-loop-session",
+        "acquired_at": 1788028052,
+        "lease_expires_at": 1788035252
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

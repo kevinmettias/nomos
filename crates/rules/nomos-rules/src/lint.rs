@@ -57,24 +57,6 @@ pub fn Check_Lint_Diagnostics(sources: &[SourceFile], facts: &mut dyn FactReader
     return findings;
 }
 
-/// What this rule needs from `nomos.cap.lint.diagnostics` before it will believe an
-/// answer — the ceiling itself, the same "nothing weaker could be trusted" reasoning
-/// `crate::dependency::reading::Dependency_Requirement` gives: a diagnostic this rule
-/// cannot attribute to real, resolved code is not one it should relay as if `cargo
-/// clippy` itself vouched for it.
-#[must_use]
-fn Lint_Requirement() -> Requirement
-{
-    let guarantee = Guarantee::New(
-        FactVariant::SemanticallyResolved,
-        Assurance::Sound,
-        Assurance::Unknown,
-        IncrementalGranularity::Project,
-    );
-
-    return Requirement::New(nomos_cap_lint::Capability(), nomos_cap_lint::CONTRACT_VERSION, guarantee);
-}
-
 /// One member's decoded diagnostics payload, or a finding reporting why it could not be
 /// read.
 fn Payload_Of(source: &SourceFile, facts: &mut dyn FactReader) -> Result<DiagnosticsPayload, Finding>
@@ -103,6 +85,24 @@ fn Require_Fact<'a>(source: &SourceFile, facts: &'a mut dyn FactReader) -> Resul
     };
 }
 
+/// What this rule needs from `nomos.cap.lint.diagnostics` before it will believe an
+/// answer — the ceiling itself, the same "nothing weaker could be trusted" reasoning
+/// `crate::dependency::reading::Dependency_Requirement` gives: a diagnostic this rule
+/// cannot attribute to real, resolved code is not one it should relay as if `cargo
+/// clippy` itself vouched for it.
+#[must_use]
+fn Lint_Requirement() -> Requirement
+{
+    let guarantee = Guarantee::New(
+        FactVariant::SemanticallyResolved,
+        Assurance::Sound,
+        Assurance::Unknown,
+        IncrementalGranularity::Project,
+    );
+
+    return Requirement::New(nomos_cap_lint::Capability(), nomos_cap_lint::CONTRACT_VERSION, guarantee);
+}
+
 /// Confirms `fact`'s payload schema is the one this rule knows how to decode.
 fn Check_Schema(source: &SourceFile, fact: &MaterializedFact) -> Result<(), Finding>
 {
@@ -127,20 +127,6 @@ fn Parse_Fact(source: &SourceFile, fact: &MaterializedFact) -> Result<Diagnostic
 {
     return nomos_cap_lint::Parse_Payload(&fact.payload.bytes)
         .map_err(|refusal| return Unread(source, Applicability::Unparseable, &refusal.to_string()));
-}
-
-fn Unread(source: &SourceFile, applicability: Applicability, because: &str) -> Finding
-{
-    return Finding {
-        rule: RuleId::New(LINT_DIAGNOSTICS),
-        subject: source.subject,
-        subject_name: source.path.clone(),
-        applicability,
-        evidence: EvidenceClass::Derived,
-        gate: GateCategory::Advisory,
-        summary: format!("this member's lint diagnostics could not be judged: {because}"),
-        locations: vec![source.path.clone()],
-    };
 }
 
 /// `payload`'s own diagnostics, each relayed as a `Finding` — never judged a second time,
@@ -174,6 +160,20 @@ fn Summary_Of(diagnostic: &LintDiagnostic) -> String
     {
         Some(lint) => format!("{} [{lint}]: {} ({}:{})", diagnostic.level, diagnostic.message, diagnostic.file, diagnostic.line),
         None => format!("{}: {} ({}:{})", diagnostic.level, diagnostic.message, diagnostic.file, diagnostic.line),
+    };
+}
+
+fn Unread(source: &SourceFile, applicability: Applicability, because: &str) -> Finding
+{
+    return Finding {
+        rule: RuleId::New(LINT_DIAGNOSTICS),
+        subject: source.subject,
+        subject_name: source.path.clone(),
+        applicability,
+        evidence: EvidenceClass::Derived,
+        gate: GateCategory::Advisory,
+        summary: format!("this member's lint diagnostics could not be judged: {because}"),
+        locations: vec![source.path.clone()],
     };
 }
 
