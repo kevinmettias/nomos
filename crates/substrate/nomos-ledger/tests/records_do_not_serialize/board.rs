@@ -83,11 +83,9 @@ impl Drop for Scratch
     }
 }
 
-impl std::ops::Deref for Scratch
+impl Scratch
 {
-    type Target = Path;
-
-    fn deref(&self) -> &Path
+    pub(crate) fn As_Path(&self) -> &Path
     {
         return &self.0;
     }
@@ -109,7 +107,7 @@ pub(crate) type Board = FileLedger<StdFileSystem, &'static FixedClock, FileLock>
 pub(crate) fn Saved(name: &str, document: &LedgerDocument) -> (Scratch, Board)
 {
     let directory = Temp_Dir(name);
-    let ledger = Ledger_At(&directory, &AT_NOW);
+    let ledger = Ledger_At(directory.As_Path(), &AT_NOW);
 
     ledger.Save(document).expect("the doctored board is still a valid ledger");
 

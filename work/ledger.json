@@ -36126,14 +36126,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-loop-session",
-        "acquired_at": 1788029897,
-        "lease_expires_at": 1788037097
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -36143,7 +36139,27 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-agent-contracts"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 5 tests\ntest change_context::change_context_subject::tests::Test_A_Subject_May_Be_A_Symbol_A_Scope_Or_A_Task_Description ... ok\ntest task_envelope::tests::Test_An_Envelope_Carries_Exactly_What_It_Was_Given ... ok\ntest change_context::tests::Test_A_Context_Carries_Exactly_What_It_Was_Given ... ok\ntest work_result::tests::Test_A_Judgment_Only_Result_Has_No_Plan ... ok\ntest work_result::tests::Test_A_Result_Carries_Exactly_What_It_Was_Given ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.09s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_agent_contracts-ede7a8575ee47fa1.exe)\n   Doc-tests nomos_agent_contracts\n",
+        "verified_at": 1788032908,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "fc6224a0429de69c559d2a93ee6ad89c0bc3cf5e"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -36163,14 +36179,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-loop-session",
-        "acquired_at": 1788029897,
-        "lease_expires_at": 1788037097
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -36180,7 +36192,27 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-corrections"
+        ],
+        "exit_code": 0,
+        "output_tail": "everse_To_A_Restoration ... ok\ntest read_write_set::set::tests::Test_A_Derived_Set_Carries_Exactly_The_Provenance_It_Was_Given ... ok\ntest read_write_set::tests::Test_Labels_Are_Distinct ... ok\ntest plan::tests::Test_Two_Candidates_Touching_The_Same_Path_Should_Be_Refused ... ok\ntest preview::tests::Test_A_Preview_Belongs_To_The_Preview_Mutation_Class ... ok\ntest preview::tests::Test_A_Preview_Names_Every_Candidate_And_Edit ... ok\ntest ranking_criterion::tests::Test_Labels_Are_Distinct ... ok\ntest correction_decision::tests::Test_An_Automatic_Decision_Carries_Its_Choice ... ok\ntest read_write_set::set::tests::Test_A_Declared_Set_Carries_No_Provenance ... ok\ntest correction_decision::tests::Test_A_Reviewed_Proposal_Carries_Its_Candidates_And_Reason ... ok\ntest rollback_boundary::tests::Test_Labels_Are_Distinct ... ok\ntest staged::tests::Test_A_Staged_Plan_Belongs_To_The_Validate_Mutation_Class ... ok\ntest staged::tests::Test_Staging_Against_Stale_Content_Should_Be_Refused ... ok\ntest preview::tests::Test_Previewing_The_Same_Plan_Twice_Should_Agree ... ok\ntest staged::tests::Test_Staging_Against_The_Content_It_Was_Built_Over_Should_Succeed ... ok\ntest staged::tests::Test_Validating_An_Unmoved_Workspace_Should_Succeed ... ok\ntest staged::tests::Test_Validating_A_Moved_Workspace_Should_Be_Refused ... ok\ntest validated::tests::Test_A_Validated_Plan_Belongs_To_The_Validate_Mutation_Class ... ok\ntest validated::tests::Test_Committing_After_The_Workspace_Moved_Should_Be_Refused ... ok\ntest validated::tests::Test_Committing_A_Validated_Plan_Should_Change_The_Workspace ... ok\n\ntest result: ok. 40 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.09s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_corrections-d0fc0ae09ec504ab.exe)\n   Doc-tests nomos_corrections\n",
+        "verified_at": 1788032916,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "fc6224a0429de69c559d2a93ee6ad89c0bc3cf5e"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -36500,7 +36532,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -36513,7 +36545,27 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-ledger"
+        ],
+        "exit_code": 0,
+        "output_tail": "d_Should_Still_Collide ... ok\ntest identifier_and_file::Test_Every_Record_On_Disk_Should_Be_One_Subject_With_Its_Identifier ... ok\ntest snapshot_grain::Test_Two_Items_Widening_Different_Crates_Should_Be_Held_At_Once ... ok\ntest serializers::Test_A_Run_Should_Report_Whether_The_Board_Is_Parallel ... ok\ntest serializers::Test_Every_Declared_Serializer_Should_Still_Serialize ... ok\ntest snapshot_grain::Test_Restoring_The_Snapshot_Directory_Should_Refuse_The_Pair ... ok\ntest serializers::Test_The_Old_Authoring_Should_Offer_No_Concurrent_Pair ... ok\ntest serializers::Test_An_Undeclared_Serializer_Should_Be_Found ... ok\ntest record_directory::Test_An_Item_Reserving_The_Whole_Record_Directory_Should_Be_Found ... ok\ntest serializers::Test_Every_Universal_Reservation_Should_Be_Declared ... ok\ntest identifier_and_file::Test_An_Item_Naming_A_Records_File_Should_Be_Refused_By_Its_Identifiers_Holder ... ok\ntest record_directory::Test_No_Open_Item_Should_Reserve_The_Whole_Record_Directory ... ok\ntest sharing_a_record::Test_Two_Items_Writing_One_Record_Should_Still_Be_Refused ... ok\ntest record_exclusion::Test_A_Record_Should_Exclude_Nobody_But_Its_Own_Writer ... ok\n\ntest result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.15s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.09s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_ledger-88a6c5fe6073cb0b.exe)\n     Running tests\\declining_ends_an_item.rs (target\\debug\\deps\\declining_ends_an_item-93192cf81d1c9610.exe)\n     Running tests\\exclusion_holds\\main.rs (target\\debug\\deps\\exclusion_holds-98133f494148dc2a.exe)\n     Running tests\\gate_covers_finish\\main.rs (target\\debug\\deps\\gate_covers_finish-bf5c5263ffdaee25.exe)\n     Running tests\\records_do_not_serialize\\main.rs (target\\debug\\deps\\records_do_not_serialize-5e772560a64d99e0.exe)\n   Doc-tests nomos_ledger\n",
+        "verified_at": 1788032954,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "fc6224a0429de69c559d2a93ee6ad89c0bc3cf5e"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
