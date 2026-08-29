@@ -26,7 +26,7 @@ impl EffectKind
 {
     /// Whether an outcome of this kind changed what the workspace is.
     #[must_use]
-    pub const fn Altered(self) -> bool
+    pub const fn Is_Altered(self) -> bool
     {
         return matches!(self, Self::Added | Self::Modified | Self::Removed);
     }

@@ -40,12 +40,12 @@ fn Test_Only_A_Failing_Predicate_Should_Judge_The_Work()
 
     for judging in Refusals_That_Judged_The_Work(&item)
     {
-        assert!(judging.Judged_The_Work(), "{} is a statement about the work", judging.Describe());
+        assert!(judging.Has_Judged_The_Work(), "{} is a statement about the work", judging.Describe());
     }
     for prevented in Refusals_That_Judged_Nothing(&item)
     {
         assert!(
-            !prevented.Judged_The_Work(),
+            !prevented.Has_Judged_The_Work(),
             "{} is not a statement about the work",
             prevented.Describe()
         );
@@ -160,7 +160,7 @@ fn Every_Refusal(item: ItemId) -> Vec<FinishRefusal>
     ];
 }
 
-/// [`Commanded`] must give every predicate it builds an idle bound of its own, or a real
+/// [`Command_From_Argv`] must give every predicate it builds an idle bound of its own, or a real
 /// `nomos-ledger` stall is indistinguishable from honest work until the wall bound -- the
 /// gap `OD-PLATFORM-001` left open for whichever item wired a default in.
 #[test]
@@ -171,7 +171,7 @@ fn Test_Commanded_Should_Give_The_Predicate_An_Idle_Bound_Shorter_Than_The_Wall_
         timeout: std::time::Duration::from_secs(600),
     };
 
-    let command = Commanded(vec!["a-predicate".to_owned()], runner);
+    let command = Command_From_Argv(vec!["a-predicate".to_owned()], runner);
 
     assert!(command.idle_timeout < command.timeout, "an idle bound equal to the wall bound can never fire first");
     assert_eq!(command.idle_timeout, std::time::Duration::from_secs(300));
@@ -197,7 +197,7 @@ impl ProcessLauncher for &Simulated
         {
             // Progress keeps resetting the idle clock, so only the wall bound can ever
             // catch this one -- exactly today's behaviour, unaffected by the idle bound
-            // `Commanded` now sets.
+            // `Command_From_Argv` now sets.
             ExitOutcome::TimedOut
         }
         else if command.idle_timeout < command.timeout
@@ -225,7 +225,7 @@ impl ProcessLauncher for &Simulated
 
 /// The property this item exists for: a predicate that goes silent well before its wall
 /// timeout is reported as `Stalled`, not eventually `TimedOut`, once it runs through
-/// `Commanded`'s wiring.
+/// `Command_From_Argv`'s wiring.
 #[test]
 fn Test_A_Silent_Predicate_Should_Surface_As_Stalled_Not_Timed_Out()
 {
@@ -234,7 +234,7 @@ fn Test_A_Silent_Predicate_Should_Surface_As_Stalled_Not_Timed_Out()
         working_directory: None,
         timeout: std::time::Duration::from_secs(600),
     };
-    let command = Commanded(vec!["a-predicate".to_owned()], runner);
+    let command = Command_From_Argv(vec!["a-predicate".to_owned()], runner);
     let launcher = Simulated { keeps_producing: false };
 
     let result = Ran_To_Completion(&&launcher, &command, &item);
@@ -263,7 +263,7 @@ fn Test_A_Predicate_That_Keeps_Producing_Should_Still_Report_Timed_Out()
         working_directory: None,
         timeout: std::time::Duration::from_secs(600),
     };
-    let command = Commanded(vec!["a-predicate".to_owned()], runner);
+    let command = Command_From_Argv(vec!["a-predicate".to_owned()], runner);
     let launcher = Simulated { keeps_producing: true };
 
     let result = Ran_To_Completion(&&launcher, &command, &item);
@@ -307,7 +307,7 @@ fn Test_A_Predicate_That_Exits_Promptly_Should_Still_Reach_A_Verdict()
         working_directory: None,
         timeout: std::time::Duration::from_secs(600),
     };
-    let command = Commanded(vec!["a-predicate".to_owned()], runner);
+    let command = Command_From_Argv(vec!["a-predicate".to_owned()], runner);
 
     let ran = Ran_To_Completion(&&ExitsPromptly, &command, &item).expect("a zero exit is a verdict");
 

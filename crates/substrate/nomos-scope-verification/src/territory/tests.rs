@@ -1,6 +1,7 @@
 //! What this module promises, exercised.
 
 use super::*;
+use super::spelling::{Normalize_Path, Subject_Of};
 use nomos_model::Intersection;
 
 /// The property the normalization exists for. Two spellings of one file must be one

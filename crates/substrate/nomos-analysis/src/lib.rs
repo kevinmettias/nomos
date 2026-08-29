@@ -3,13 +3,13 @@
 mod invalidation;
 mod component;
 mod context;
-mod determinism;
-mod fact;
-mod identity;
+#[path = "fact_reuse.rs"] mod determinism;
+#[path = "fact_payload.rs"] mod fact;
+#[path = "input_digest.rs"] mod identity;
 mod propagation;
-mod reader;
-mod reading;
-mod store;
+#[path = "read_outcome.rs"] mod reader;
+#[path = "reader.rs"] mod reading;
+#[path = "generation_cause.rs"] mod store;
 
 pub use component::Component;
 pub use context::Context;

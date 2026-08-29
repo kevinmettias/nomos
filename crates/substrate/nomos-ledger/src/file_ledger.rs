@@ -1,35 +1,46 @@
 //! The durable ledger: a JSON file, a lock beside it, and the rules it must satisfy.
 
 // The ledger file as a document, beside the reader that parses one.
+#[path = "store/ledger_document.rs"]
 mod ledger_document;
 
 pub use ledger_document::LedgerDocument;
 pub(crate) use ledger_document::VersionProbe;
 
 // Why an add was refused, beside the guard in store.rs that refuses it.
+#[path = "store/add_refusal.rs"]
 mod add_refusal;
 
 pub use add_refusal::AddRefusal;
 
+#[path = "store/claiming.rs"]
 mod claiming;
+#[path = "store/document.rs"]
 mod document;
+#[path = "store/file.rs"]
 mod file;
+#[path = "store/refusal.rs"]
 mod refusal;
+#[path = "store/reservation.rs"]
 mod reservation;
+#[path = "store/rendering.rs"]
 mod rendering;
+#[path = "store/validation.rs"]
 mod validation;
+#[path = "store/verbs.rs"]
 mod verbs;
 
 // The lock timing and schema version numbers are their own responsibility, tunable
 // independent of everything else this file does.
+#[path = "store/constants.rs"]
 mod constants;
 
 use claiming::{Install_Claim, With_Own_Claim};
-use file::{Decide_Under_Lock, Load, Save};
-use verbs::{Add, Decline, Take_Over, Validate_Current};
+use file::{Decide_Under_Lock, Load_Document, Save_Document};
+use verbs::{Add_Item, Decline_Item, Take_Over, Validate_Current};
 
 pub use refusal::{Claim_Refusal, Eligible_Items};
-pub use validation::Validate;
+pub use validation::Validate_Document;
 pub use constants::{LOCK_STALE_AFTER, LOCK_WAIT_LIMIT, SCHEMA_VERSION};
 
 use std::path::{Path, PathBuf};
@@ -57,18 +68,18 @@ use crate::Territory;
 /// how a person sees what the agents did to the roadmap. A row in a database has no
 /// such review surface. This is a deliberate trade of query power for legibility, and
 /// it holds only while the ledger stays small enough to read.
-pub struct FileLedger<F, C, L>
+pub struct FileLedger<Files, TimeSource, Lock>
 {
     path: PathBuf,
-    filesystem: F,
-    clock: C,
-    lock: L,
+    filesystem: Files,
+    clock: TimeSource,
+    lock: Lock,
 }
 
-impl<F: FileSystem, C: Clock, L: CrossProcessLock> FileLedger<F, C, L>
+impl<Files: FileSystem, TimeSource: Clock, Lock: CrossProcessLock> FileLedger<Files, TimeSource, Lock>
 {
     /// A ledger at the given path.
-    pub fn At(path: impl Into<PathBuf>, filesystem: F, clock: C, lock: L) -> Self
+    pub fn At(path: impl Into<PathBuf>, filesystem: Files, clock: TimeSource, lock: Lock) -> Self
     {
         return Self {
             path: path.into(),
@@ -139,7 +150,7 @@ impl<F: FileSystem, C: Clock, L: CrossProcessLock> FileLedger<F, C, L>
     /// this build, and [`LedgerError::Unreadable`] when it cannot be read at all.
     pub fn Load(&self) -> Result<LedgerDocument, LedgerError>
     {
-        return Load(self);
+        return Load_Document(self);
     }
 
     /// Writes the ledger, refusing to persist one that violates its own invariants.
@@ -168,7 +179,7 @@ impl<F: FileSystem, C: Clock, L: CrossProcessLock> FileLedger<F, C, L>
     /// [`LedgerError::Unreadable`] if it cannot be written.
     pub fn Save(&self, document: &LedgerDocument) -> Result<(), LedgerError>
     {
-        return Save(self, document);
+        return Save_Document(self, document);
     }
 
     /// Reads, modifies and writes the ledger while holding the lock.
@@ -208,11 +219,11 @@ impl<F: FileSystem, C: Clock, L: CrossProcessLock> FileLedger<F, C, L>
     ///
     /// Returns [`LedgerError::Locked`] if the lock cannot be taken, and whatever the
     /// modification or the write returns otherwise.
-    pub fn With_Lock<T>(
+    pub fn With_Lock<Outcome>(
         &self,
         holder: &str,
-        modify: impl FnOnce(&mut LedgerDocument) -> Result<T, LedgerError>,
-    ) -> Result<(T, Option<StaleTakeover>), LedgerError>
+        modify: impl FnOnce(&mut LedgerDocument) -> Result<Outcome, LedgerError>,
+    ) -> Result<(Outcome, Option<StaleTakeover>), LedgerError>
     {
         let acquisition = self
             .lock
@@ -311,7 +322,7 @@ impl<F: FileSystem, C: Clock, L: CrossProcessLock> FileLedger<F, C, L>
         reason: impl Into<DeclineReason<'a>>,
     ) -> Result<(), ClaimRefusal>
     {
-        return Decline(self, item, holder.into(), reason.into());
+        return Decline_Item(self, item, holder.into(), reason.into());
     }
 
     /// Puts a new item on the board.
@@ -370,7 +381,7 @@ impl<F: FileSystem, C: Clock, L: CrossProcessLock> FileLedger<F, C, L>
     {
         use reservation::RecordDeclaration;
 
-        return Add(
+        return Add_Item(
             self,
             item,
             holder,
@@ -392,7 +403,7 @@ impl<F: FileSystem, C: Clock, L: CrossProcessLock> FileLedger<F, C, L>
     }
 }
 
-impl<F: FileSystem, C: Clock, L: CrossProcessLock> ExclusionLedger for FileLedger<F, C, L>
+impl<Files: FileSystem, TimeSource: Clock, Lock: CrossProcessLock> ExclusionLedger for FileLedger<Files, TimeSource, Lock>
 {
     fn Claim(
         &mut self,

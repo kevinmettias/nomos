@@ -4,7 +4,7 @@
 //! the prototype's ledger accumulated items marked complete whose work had not been
 //! done: nothing stood between the claim of completion and the record of it.
 //!
-//! [`Finish`] is what stands there. It runs the item's [`VerificationPredicate`] and
+//! [`Finish_Item`] is what stands there. It runs the item's [`VerificationPredicate`] and
 //! writes the result into the item, so `Done` is a state the ledger arrives at by
 //! observation.
 
@@ -18,12 +18,12 @@ pub use finishing::Finishing;
 // reader would have had to tell apart from this one by opening both.
 mod abandonment;
 mod declination;
-mod release_outcome;
+pub(super) mod release_outcome;
 
 pub use abandonment::Abandonment;
 pub use declination::Declination;
-pub use release_outcome::ReleaseOutcome;
 
+#[path = "finish/finish_refusal.rs"]
 mod refusal;
 mod running;
 mod gate_step;
@@ -32,7 +32,7 @@ mod tests;
 
 pub use refusal::FinishRefusal;
 use refusal::Tail_Of;
-use running::{Commanded, Ran, Ran_To_Completion, Refuse_Nonzero, Runnable_Predicate, Runner};
+use running::{Command_From_Argv, Ran, Ran_To_Completion, Refuse_Nonzero, Runnable_Predicate, Runner};
 
 use crate::ClaimRefusal;
 use crate::ExclusionLedger;
@@ -61,15 +61,17 @@ use std::path::Path;
 ///
 /// Returns a [`FinishRefusal`] naming what stopped it, and in particular distinguishing
 /// a failing predicate from one that could not be asked.
-pub fn Finish<F: FileSystem, C: Clock, L: CrossProcessLock>(
-    ledger: &mut FileLedger<F, C, L>,
+pub fn Finish_Item<Files: FileSystem, TimeSource: Clock, Lock: CrossProcessLock>(
+    ledger: &mut FileLedger<Files, TimeSource, Lock>,
     launcher: &impl ProcessLauncher,
     finishing: &Finishing<'_>,
     working_directory: Option<&Path>,
 ) -> Result<VerificationRecord, FinishRefusal>
 {
+    use release_outcome::ReleaseOutcome;
+
     let item = finishing.item;
-    let document = Loaded(ledger)?;
+    let document = Loaded_Document(ledger)?;
     let predicate = Runnable_Predicate(&document, item)?;
     let runner = Runner {
         working_directory,
@@ -79,7 +81,7 @@ pub fn Finish<F: FileSystem, C: Clock, L: CrossProcessLock>(
     let (gate, ran) = Verify_Predicate(ledger, launcher, item, PredicateRun { predicate, runner })?;
 
     let revision = Current_Revision(ledger, working_directory);
-    let record = Verified(&predicate.argv, &ran, gate, RecordContext { at: ledger.Now(), revision });
+    let record = Record_From_Argv(&predicate.argv, &ran, gate, RecordContext { at: ledger.Now(), revision });
     ledger
         .Release(item, finishing.holder, ReleaseOutcome::Finished(record.clone()))
         .map_err(|refusal| FinishRefusal::NotHeld { refusal })?;
@@ -101,8 +103,8 @@ struct PredicateRun<'a>
 /// A ledger that will not load is `NotRecorded` rather than `NotHeld`: nothing was found
 /// out about the claim, and reporting it as unheld would send the author to re-claim an
 /// item they may well still hold.
-fn Loaded<F: FileSystem, C: Clock, L: CrossProcessLock>(
-    ledger: &FileLedger<F, C, L>,
+fn Loaded_Document<Files: FileSystem, TimeSource: Clock, Lock: CrossProcessLock>(
+    ledger: &FileLedger<Files, TimeSource, Lock>,
 ) -> Result<LedgerDocument, FinishRefusal>
 {
     return ledger.Load().map_err(|error| {
@@ -116,8 +118,8 @@ fn Loaded<F: FileSystem, C: Clock, L: CrossProcessLock>(
 ///
 /// The gate's own step runs first and short-circuits: an author told "your tests passed"
 /// and "you cannot land" in one breath reads only the first sentence.
-fn Verify_Predicate<F: FileSystem, C: Clock, L: CrossProcessLock>(
-    ledger: &mut FileLedger<F, C, L>,
+fn Verify_Predicate<Files: FileSystem, TimeSource: Clock, Lock: CrossProcessLock>(
+    ledger: &mut FileLedger<Files, TimeSource, Lock>,
     launcher: &impl ProcessLauncher,
     item: &ItemId,
     run: PredicateRun<'_>,
@@ -125,7 +127,7 @@ fn Verify_Predicate<F: FileSystem, C: Clock, L: CrossProcessLock>(
 {
     let gate = gate_step::Run_Gate_Step(ledger, launcher, item, run.runner)?;
 
-    let command = Commanded(run.predicate.argv.clone(), run.runner);
+    let command = Command_From_Argv(run.predicate.argv.clone(), run.runner);
     let ran = Ran_To_Completion(launcher, &command, item)?;
     Refuse_Nonzero(item, ran.code, &ran.tail)?;
 
@@ -133,7 +135,7 @@ fn Verify_Predicate<F: FileSystem, C: Clock, L: CrossProcessLock>(
 }
 
 /// When, and against which tree revision, a predicate was verified — grouped so
-/// [`Verified`] stays under this crate's own parameter-count ceiling.
+/// [`Record_From_Argv`] stays under this crate's own parameter-count ceiling.
 struct RecordContext
 {
     at: Timestamp,
@@ -147,8 +149,8 @@ struct RecordContext
 /// [`FileLedger::Read_File`], and follows one loose ref if `HEAD` names one rather than
 /// naming a commit directly. `None` on any failure along the way -- see
 /// [`VerificationRecord::revision`] for why that is not distinguished further.
-fn Current_Revision<F: FileSystem, C: Clock, L: CrossProcessLock>(
-    ledger: &FileLedger<F, C, L>,
+fn Current_Revision<Files: FileSystem, TimeSource: Clock, Lock: CrossProcessLock>(
+    ledger: &FileLedger<Files, TimeSource, Lock>,
     working_directory: Option<&Path>,
 ) -> Option<String>
 {
@@ -171,7 +173,7 @@ fn Current_Revision<F: FileSystem, C: Clock, L: CrossProcessLock>(
 ///
 /// It carries the gate's outcome as well as its own, because "this item was verified" is
 /// only true of a tree the gate also accepted.
-fn Verified(argv: &[String], ran: &Ran, gate: GateOutcome, context: RecordContext) -> VerificationRecord
+fn Record_From_Argv(argv: &[String], ran: &Ran, gate: GateOutcome, context: RecordContext) -> VerificationRecord
 {
     return VerificationRecord {
         argv: argv.to_vec(),

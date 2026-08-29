@@ -49,7 +49,7 @@ fn Test_An_Item_Reserving_The_Whole_Record_Directory_Should_Be_Found()
 
     assert_eq!(
         found,
-        vec![offender.As_Str().to_owned()],
+        vec![offender.As_Text().to_owned()],
         "an item reserving `{RECORD_DIRECTORY}` outright must be reported by the search the \
          assertion above makes, or that assertion is green because it looks at nothing"
     );
@@ -73,6 +73,6 @@ fn Directory_Reservers(document: &nomos_ledger::LedgerDocument) -> Vec<String>
                 .iter()
                 .any(|path| Normalize_Path(path) == RECORD_DIRECTORY)
         })
-        .map(|item| item.id.As_Str().to_owned())
+        .map(|item| item.id.As_Text().to_owned())
         .collect();
 }

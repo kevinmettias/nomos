@@ -21,5 +21,6 @@
 mod territory;
 mod verification_predicate;
 
-pub use territory::{Normalize_Path, Territory};
+pub use territory::spelling::Normalize_Path;
+pub use territory::Territory;
 pub use verification_predicate::VerificationPredicate;

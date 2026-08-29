@@ -36,7 +36,7 @@ pub(crate) fn Snapshot_Of_One_Order(members: &[(String, String)], permutation: u
 
     return Taken {
         bytes: workspace.Snapshot().Encode(),
-        members: workspace.Snapshot().Len(),
+        members: workspace.Snapshot().Length(),
         stride,
     };
 }

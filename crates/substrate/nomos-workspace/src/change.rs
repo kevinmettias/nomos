@@ -6,7 +6,9 @@
 //! after something has been built on the first.
 
 // A change set and the source a change came from are parts of a change.
+#[path = "change/change_set.rs"]
 mod set;
+#[path = "change/change_source.rs"]
 mod source;
 
 pub use set::ChangeSet;
@@ -139,7 +141,7 @@ mod tests
     #[test]
     fn Test_Every_ChangeSource_Should_Be_Matched_Exhaustively()
     {
-        fn Ordinal(source: ChangeSource) -> usize
+        fn Ordinal_Of_Source(source: ChangeSource) -> usize
         {
             return match source
             {
@@ -154,7 +156,7 @@ mod tests
         for (index, source) in ChangeSource::All().iter().enumerate()
         {
             assert_eq!(
-                Ordinal(*source),
+                Ordinal_Of_Source(*source),
                 index,
                 "{} is not matched at the position ChangeSource::All() puts it, so the \
                  exhaustive match and the universe have drifted apart",

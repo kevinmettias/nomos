@@ -40,7 +40,7 @@ fn Assert_Nobody_Found_Out(refusal: &FinishRefusal)
         refusal.Describe()
     );
     assert!(
-        !refusal.Judged_The_Work(),
+        !refusal.Has_Judged_The_Work(),
         "nobody found out whether the work passes the gate, so this must not read as \
          the work being wrong"
     );

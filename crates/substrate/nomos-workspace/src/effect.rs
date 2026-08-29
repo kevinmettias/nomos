@@ -1,6 +1,7 @@
 //! One consequence of applying a change.
 
 // What kind of effect this is, beneath the effect it describes.
+#[path = "effect/effect_kind.rs"]
 mod kind;
 
 pub use kind::EffectKind;
@@ -39,8 +40,8 @@ impl Effect
 
     /// Whether this effect changed what the workspace is.
     #[must_use]
-    pub const fn Altered(&self) -> bool
+    pub const fn Is_Altered(&self) -> bool
     {
-        return self.kind.Altered();
+        return self.kind.Is_Altered();
     }
 }

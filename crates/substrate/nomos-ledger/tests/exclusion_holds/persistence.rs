@@ -195,7 +195,7 @@ fn Fully_Populated() -> LedgerItem
     });
     item.depends_on = vec![ItemId::New("T-0")];
     item.territory = ItemTerritory::Of_Files(["src/a.rs"]).With_Pattern("src/**");
-    item.verification = Some(VerificationPredicate::New(vec!["cargo".to_owned()]));
+    item.verification = Some(VerificationPredicate::From_String_Arguments(vec!["cargo".to_owned()]));
     item.verified = Some(VerificationRecord {
         argv: vec!["cargo".to_owned()],
         exit_code: 0,

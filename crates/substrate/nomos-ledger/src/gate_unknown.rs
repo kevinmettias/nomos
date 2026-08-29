@@ -11,13 +11,16 @@
 //! for one rule is how they come to disagree. This module reads the workflow.
 
 // What running the gate produced.
+#[path = "gate/gate_outcome.rs"]
 mod outcome;
 
 pub use outcome::GateOutcome;
 
 // The workflow's whole text, and a step's name within it — kept apart purely by type, and
 // each large enough on its own to want a file of its own.
+#[path = "gate/workflow_text.rs"]
 mod workflow_text;
+#[path = "gate/step_name.rs"]
 mod step_name;
 
 pub use workflow_text::WorkflowText;
@@ -122,11 +125,11 @@ pub fn Derive_Step<'a>(workflow: impl Into<WorkflowText<'a>>, step: impl Into<St
     let workflow = workflow.into();
     let step = step.into();
 
-    let Some(run) = Find_Run(workflow.As_Str(), step.As_Str())
+    let Some(run) = Find_Run(workflow.As_Text(), step.As_Text())
     else
     {
         return Err(GateUnknown::NoSuchStep {
-            step: step.As_Str().to_owned(),
+            step: step.As_Text().to_owned(),
         });
     };
 
@@ -183,7 +186,7 @@ fn Argv_Of(run: &str, step: StepName<'_>) -> Result<Vec<String>, GateUnknown>
     if run.is_empty() || run.contains(SHELL_METACHARACTERS)
     {
         return Err(GateUnknown::NotASingleCommand {
-            step: step.As_Str().to_owned(),
+            step: step.As_Text().to_owned(),
             run: run.to_owned(),
         });
     }

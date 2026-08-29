@@ -140,7 +140,7 @@ fn Test_The_Strongest_Usable_Offer_Should_Answer()
     let selection = Selected(&registry, &Admitting_Everything());
 
     assert_eq!(selection.chosen.provider, ProviderId::New("z.parse"));
-    assert!(!selection.Passed_Over_Stronger());
+    assert!(!selection.Has_Passed_Over_Stronger());
     assert!(selection.Unranked().is_empty(), "the guarantee ranked these two");
 }
 
@@ -243,13 +243,13 @@ fn Test_An_Honoured_Preference_Should_Report_What_It_Passed_Over()
         "the caller asked for this one and got it"
     );
     assert!(
-        selection.Passed_Over_Stronger(),
+        selection.Has_Passed_Over_Stronger(),
         "and the parse was available and stronger, which is what the preference cost"
     );
 
     // The control. Without a preference the rule chooses, and then nothing stronger can
     // have been passed over — if this reads true, the rule is not choosing a maximal offer.
-    assert!(!Selected(&registry, &Admitting_Everything()).Passed_Over_Stronger());
+    assert!(!Selected(&registry, &Admitting_Everything()).Has_Passed_Over_Stronger());
 }
 
 /// Where the guarantee ranks nothing, the registry says so rather than implying it decided.
@@ -296,7 +296,7 @@ fn Test_Two_Equal_Offers_Should_Be_Equivalent_Rather_Than_Incomparable()
         "each reaches everything the other does; nobody has to look for a tiebreak that \
          would tell them apart, because there is nothing to tell apart"
     );
-    assert!(!Standing::Equivalent.Decided());
-    assert!(!Standing::Incomparable.Decided());
-    assert!(Standing::Stronger.Decided());
+    assert!(!Standing::Equivalent.Is_Decided());
+    assert!(!Standing::Incomparable.Is_Decided());
+    assert!(Standing::Stronger.Is_Decided());
 }

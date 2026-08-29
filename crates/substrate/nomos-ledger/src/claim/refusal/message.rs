@@ -73,7 +73,7 @@ pub(super) fn Unknown_Independence(against: &ItemId, reason: &UnknownReason) -> 
 }
 
 /// A claim whose lease has run out, and what replaces it.
-pub(super) fn Lapsed(item: &ItemId, holder: &str, since: Timestamp) -> String
+pub(super) fn Lapsed_Claim(item: &ItemId, holder: &str, since: Timestamp) -> String
 {
     return format!(
         "{item} was held by {holder} and the lease ran out at unix {}; `nomos work takeover` \

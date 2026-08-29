@@ -30,7 +30,7 @@ fn Test_A_Lapsed_Lease_Should_Not_Stop_The_Rest_Of_The_Board()
 
     // One: the document is not called invalid because time passed.
     assert_eq!(
-        Validate(&after.Load().expect("the file is still readable"), At(NOW + 7_200)),
+        Validate_Document(&after.Load().expect("the file is still readable"), At(NOW + 7_200)),
         Vec::<String>::new(),
         "a lapsed lease made the whole document invalid, so nothing can be written to it"
     );

@@ -11,19 +11,13 @@
 #[derive(Clone, Copy, Debug)]
 pub struct WorkflowText<'a>(&'a str);
 
-impl<'a> From<&'a str> for WorkflowText<'a>
+impl<'a, Text> From<&'a Text> for WorkflowText<'a>
+where
+    Text: AsRef<str> + ?Sized,
 {
-    fn from(value: &'a str) -> Self
+    fn from(value: &'a Text) -> Self
     {
-        return WorkflowText(value);
-    }
-}
-
-impl<'a> From<&'a String> for WorkflowText<'a>
-{
-    fn from(value: &'a String) -> Self
-    {
-        return WorkflowText(value.as_str());
+        return WorkflowText(value.as_ref());
     }
 }
 
@@ -31,7 +25,7 @@ impl<'a> WorkflowText<'a>
 {
     /// The workflow's text as a plain string.
     #[must_use]
-    pub fn As_Str(&self) -> &'a str
+    pub fn As_Text(&self) -> &'a str
     {
         return self.0;
     }

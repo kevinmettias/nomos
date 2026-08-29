@@ -127,6 +127,8 @@ fn Two_Fact_Store(propagation: Box<dyn DependencyPropagation>) -> (MemoryFactSto
 #[test]
 fn Test_An_Alternate_Propagation_Implementation_Should_Produce_The_Same_Report()
 {
+    use crate::propagation::LocalGraphPropagation;
+
     let (mut default_store, upstream, _) = Two_Fact_Store(Box::new(LocalGraphPropagation));
     let (mut alternate_store, _, _) = Two_Fact_Store(Box::new(QueueOrderPropagation));
     let next = GenerationId::INITIAL.Next();

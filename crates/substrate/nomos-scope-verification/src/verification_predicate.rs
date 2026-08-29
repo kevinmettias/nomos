@@ -29,7 +29,7 @@ impl VerificationPredicate
 {
     /// A predicate running the given argument vector.
     #[must_use]
-    pub fn New(argv: Vec<String>) -> Self
+    pub fn From_String_Arguments(argv: Vec<String>) -> Self
     {
         return Self {
             argv,

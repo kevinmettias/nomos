@@ -64,7 +64,7 @@ impl Selection
     /// selection and the caller has a different thing to report.
     pub(crate) fn Over(usable: Vec<ProviderOffer>, preferred: Option<&ProviderId>) -> Option<Self>
     {
-        let mut ranked = Ranked(usable);
+        let mut ranked = Ranked_Offers(usable);
 
         if ranked.is_empty()
         {
@@ -101,7 +101,7 @@ impl Selection
     /// rule chooses anything but a maximal offer. A caller that named no preference and
     /// reads `true` here is reading a defect in this module.
     #[must_use]
-    pub fn Passed_Over_Stronger(&self) -> bool
+    pub fn Has_Passed_Over_Stronger(&self) -> bool
     {
         return self
             .alternatives
@@ -136,7 +136,7 @@ impl Selection
         return self
             .alternatives
             .iter()
-            .filter(|offer| return !self.Standing_Of(offer).Decided())
+            .filter(|offer| return !self.Standing_Of(offer).Is_Decided())
             .collect();
     }
 }
@@ -151,7 +151,7 @@ impl Selection
 /// The inner scan is correct because the strict part of a preorder is transitive: the
 /// running best only ever moves up, so anything strictly stronger than the final best would
 /// have displaced it when it was scanned.
-fn Ranked(mut offers: Vec<ProviderOffer>) -> Vec<ProviderOffer>
+fn Ranked_Offers(mut offers: Vec<ProviderOffer>) -> Vec<ProviderOffer>
 {
     let mut ranked = Vec::with_capacity(offers.len());
 
@@ -184,7 +184,7 @@ mod tests
         Assurance, CapabilityId, ContractVersion, FactVariant, IncrementalGranularity,
     };
 
-    fn Offer(provider: &str, guarantee: Guarantee) -> ProviderOffer
+    fn Offer_With_Guarantee(provider: &str, guarantee: Guarantee) -> ProviderOffer
     {
         return ProviderOffer {
             provider: ProviderId::New(provider),
@@ -195,7 +195,7 @@ mod tests
     }
 
     /// Provider names in order, which is what every ranking assertion here is about.
-    fn Named(offers: &[ProviderOffer]) -> Vec<String>
+    fn Named_Providers(offers: &[ProviderOffer]) -> Vec<String>
     {
         return offers
             .iter()
@@ -248,9 +248,9 @@ mod tests
              other"
         );
 
-        assert!(Standing::Of(&Parse(), &Scan()).Decided());
-        assert!(!Standing::Of(&Parse(), &Parse()).Decided());
-        assert!(!Standing::Of(&Coarse_Semantic(), &Parse()).Decided());
+        assert!(Standing::Of(&Parse(), &Scan()).Is_Decided());
+        assert!(!Standing::Of(&Parse(), &Parse()).Is_Decided());
+        assert!(!Standing::Of(&Coarse_Semantic(), &Parse()).Is_Decided());
     }
 
     /// The name that sorts first is the weaker one, which is the shape the real registry
@@ -258,7 +258,10 @@ mod tests
     #[test]
     fn Test_Ranking_Should_Put_The_Strongest_First_Whatever_The_Names_Are()
     {
-        let ranked = Named(&Ranked(vec![Offer("a.scan", Scan()), Offer("z.parse", Parse())]));
+        let ranked = Named_Providers(&Ranked_Offers(vec![
+            Offer_With_Guarantee("a.scan", Scan()),
+            Offer_With_Guarantee("z.parse", Parse()),
+        ]));
 
         assert_eq!(ranked, vec!["z.parse", "a.scan"]);
     }
@@ -268,13 +271,13 @@ mod tests
     #[test]
     fn Test_Ranking_Should_Keep_Input_Order_Where_The_Guarantee_Does_Not_Rank()
     {
-        let ranked = Named(&Ranked(vec![
-            Offer("first", Parse()),
-            Offer("second", Coarse_Semantic()),
+        let ranked = Named_Providers(&Ranked_Offers(vec![
+            Offer_With_Guarantee("first", Parse()),
+            Offer_With_Guarantee("second", Coarse_Semantic()),
         ]));
-        let reversed = Named(&Ranked(vec![
-            Offer("second", Coarse_Semantic()),
-            Offer("first", Parse()),
+        let reversed = Named_Providers(&Ranked_Offers(vec![
+            Offer_With_Guarantee("second", Coarse_Semantic()),
+            Offer_With_Guarantee("first", Parse()),
         ]));
 
         assert_eq!(ranked, vec!["first", "second"]);
@@ -295,10 +298,10 @@ mod tests
     #[test]
     fn Test_Ranking_Should_Return_Every_Offer_It_Was_Given()
     {
-        let ranked = Named(&Ranked(vec![
-            Offer("scan", Scan()),
-            Offer("parse", Parse()),
-            Offer("semantic", Coarse_Semantic()),
+        let ranked = Named_Providers(&Ranked_Offers(vec![
+            Offer_With_Guarantee("scan", Scan()),
+            Offer_With_Guarantee("parse", Parse()),
+            Offer_With_Guarantee("semantic", Coarse_Semantic()),
         ]));
 
         let at = |provider: &str| {
@@ -317,14 +320,14 @@ mod tests
     fn Test_A_Selection_Should_Account_For_Every_Usable_Offer()
     {
         let selection = Selection::Over(
-            vec![Offer("a.scan", Scan()), Offer("z.parse", Parse())],
+            vec![Offer_With_Guarantee("a.scan", Scan()), Offer_With_Guarantee("z.parse", Parse())],
             None,
         )
         .expect("two usable offers");
 
         assert_eq!(selection.chosen.provider, ProviderId::New("z.parse"));
         assert_eq!(selection.alternatives.len(), 1);
-        assert!(!selection.Passed_Over_Stronger());
+        assert!(!selection.Has_Passed_Over_Stronger());
         assert_eq!(selection.Weaker().len(), 1);
         assert!(selection.Unranked().is_empty());
     }
@@ -335,14 +338,14 @@ mod tests
     fn Test_An_Honoured_Preference_Should_Keep_The_Stronger_Offer_Visible()
     {
         let selection = Selection::Over(
-            vec![Offer("a.scan", Scan()), Offer("z.parse", Parse())],
+            vec![Offer_With_Guarantee("a.scan", Scan()), Offer_With_Guarantee("z.parse", Parse())],
             Some(&ProviderId::New("a.scan")),
         )
         .expect("two usable offers");
 
         assert_eq!(selection.chosen.provider, ProviderId::New("a.scan"));
         assert!(
-            selection.Passed_Over_Stronger(),
+            selection.Has_Passed_Over_Stronger(),
             "the parser was available and stronger, and a caller that cannot see that \
              cannot record what its preference cost"
         );

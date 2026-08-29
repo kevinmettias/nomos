@@ -13,7 +13,7 @@ fn Test_Validate_Should_Refuse_Two_Active_Claims_On_Overlapping_Territory()
         Held_By(Item("T-2", &["src/b.rs", "src/c.rs"]), "agent-b", NOW + 3_600),
     ]);
 
-    let violations = Validate(&document, At(NOW));
+    let violations = Validate_Document(&document, At(NOW));
 
     assert!(
         violations.iter().any(|violation| violation.contains("overlapping")),
@@ -32,7 +32,7 @@ fn Test_Validate_Should_Accept_Two_Active_Claims_On_Disjoint_Territory()
     ]);
 
     assert_eq!(
-        Validate(&document, At(NOW)),
+        Validate_Document(&document, At(NOW)),
         Vec::<String>::new(),
         "disjoint territory must not be reported as a conflict"
     );
@@ -48,7 +48,7 @@ fn Test_A_Lapsed_Claim_Should_Not_Conflict()
         Held_By(Item("T-2", &["src/b.rs"]), "agent-b", NOW + 3_600),
     ]);
 
-    let violations = Validate(&document, At(NOW));
+    let violations = Validate_Document(&document, At(NOW));
 
     assert!(
         !violations.iter().any(|violation| violation.contains("overlapping")),
@@ -69,7 +69,7 @@ fn Test_Incomparable_Territory_Should_Be_Reported_Not_Ignored()
         Held_By(second, "agent-b", NOW + 3_600),
     ]);
 
-    let violations = Validate(&document, At(NOW));
+    let violations = Validate_Document(&document, At(NOW));
 
     assert!(
         violations
@@ -81,14 +81,14 @@ fn Test_Incomparable_Territory_Should_Be_Reported_Not_Ignored()
 
 /// `OD-LEDGER-013` withdrew the only authoring surface that put a value in
 /// `territory.patterns` and kept the field so a hand-edited document still fails closed.
-/// `Validate` is the completeness gap the record named and left open: a pattern must be
+/// `Validate_Document` is the completeness gap the record named and left open: a pattern must be
 /// refused wherever it is authored, not just where a claim tries to compare against it.
 #[test]
 fn Test_Validate_Should_Refuse_A_Territory_Carrying_A_Pattern()
 {
     let document = Document(vec![Patterned("T-1", &["src/a.rs"], "crates/spec/**")]);
 
-    let violations = Validate(&document, At(NOW));
+    let violations = Validate_Document(&document, At(NOW));
 
     assert!(
         violations
@@ -105,7 +105,7 @@ fn Test_Validate_Should_Accept_A_Territory_With_No_Pattern()
 {
     let document = Document(vec![Item("T-1", &["src/a.rs"])]);
 
-    let violations = Validate(&document, At(NOW));
+    let violations = Validate_Document(&document, At(NOW));
 
     assert!(
         !violations.iter().any(|violation| violation.contains("pattern")),
@@ -123,7 +123,7 @@ fn Test_A_Done_Item_Should_Require_Recorded_Verification()
     let mut finished = Item("T-1", &["src/a.rs"]);
     finished.state = ItemState::Done;
 
-    let violations = Validate(&Document(vec![finished]), At(NOW));
+    let violations = Validate_Document(&Document(vec![finished]), At(NOW));
 
     assert!(
         violations
@@ -148,16 +148,16 @@ fn Test_A_Verified_Done_Item_Should_Be_Accepted()
         revision: None,
     });
 
-    assert_eq!(Validate(&Document(vec![finished]), At(NOW)), Vec::<String>::new());
+    assert_eq!(Validate_Document(&Document(vec![finished]), At(NOW)), Vec::<String>::new());
 }
 
 #[test]
 fn Test_An_Unrunnable_Predicate_Should_Be_Refused()
 {
     let mut item = Item("T-1", &["src/a.rs"]);
-    item.verification = Some(VerificationPredicate::New(Vec::new()));
+    item.verification = Some(VerificationPredicate::From_String_Arguments(Vec::new()));
 
-    let violations = Validate(&Document(vec![item]), At(NOW));
+    let violations = Validate_Document(&Document(vec![item]), At(NOW));
 
     assert!(
         violations
@@ -173,7 +173,7 @@ fn Test_A_Blocked_Item_Should_Say_Why()
     let mut item = Item("T-1", &["src/a.rs"]);
     item.state = ItemState::Blocked;
 
-    let violations = Validate(&Document(vec![item]), At(NOW));
+    let violations = Validate_Document(&Document(vec![item]), At(NOW));
 
     assert!(
         violations
@@ -194,7 +194,7 @@ fn Test_Validation_Should_Report_Every_Violation_At_Once()
     let mut dangling = Item("T-3", &["src/c.rs"]);
     dangling.depends_on = vec![ItemId::New("T-99")];
 
-    let violations = Validate(&Document(vec![blocked, done, dangling]), At(NOW));
+    let violations = Validate_Document(&Document(vec![blocked, done, dangling]), At(NOW));
 
     assert!(
         violations.len() >= 3,

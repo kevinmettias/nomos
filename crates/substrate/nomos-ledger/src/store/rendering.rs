@@ -8,7 +8,7 @@ use crate::LedgerError;
 /// Stamped here rather than taken from the document read in: a file that keeps whatever
 /// version it arrived with is a file a build without a field can rewrite while still
 /// claiming to speak the newer schema.
-pub(super) fn Rendered(document: &LedgerDocument) -> Result<String, LedgerError>
+pub(super) fn Rendered_Document(document: &LedgerDocument) -> Result<String, LedgerError>
 {
     use super::SCHEMA_VERSION;
 

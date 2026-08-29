@@ -15,7 +15,7 @@ use nomos_contracts::ProviderId;
 use super::Registry;
 
 /// The body of [`Registry::Declare`].
-pub(super) fn Declare(registry: &mut Registry, contract: CapabilityContract) -> Result<(), RegistryError>
+pub(super) fn Declare_Contract(registry: &mut Registry, contract: CapabilityContract) -> Result<(), RegistryError>
 {
     if registry.declared.contains_key(&contract.id)
     {
@@ -30,14 +30,14 @@ pub(super) fn Declare(registry: &mut Registry, contract: CapabilityContract) -> 
 }
 
 /// The body of [`Registry::Offer`].
-pub(super) fn Offer(registry: &mut Registry, offer: ProviderOffer) -> Result<(), RegistryError>
+pub(super) fn Register_Offer(registry: &mut Registry, offer: ProviderOffer) -> Result<(), RegistryError>
 {
     Refuse_Unofferable(registry, &offer)?;
 
     let against = registry.offers.entry(offer.capability.clone()).or_default();
     if against.iter().any(|existing| existing.provider == offer.provider)
     {
-        return Err(Refused(&offer.capability, &offer.provider, OfferRefusal::Duplicate));
+        return Err(Refused_Offer(&offer.capability, &offer.provider, OfferRefusal::Duplicate));
     }
 
     against.push(offer);
@@ -59,18 +59,18 @@ fn Refuse_Unofferable(registry: &Registry, offer: &ProviderOffer) -> Result<(), 
     let Some(contract) = registry.declared.get(&offer.capability)
     else
     {
-        return Err(Refused(&offer.capability, &offer.provider, OfferRefusal::ForUndeclared));
+        return Err(Refused_Offer(&offer.capability, &offer.provider, OfferRefusal::ForUndeclared));
     };
     if !contract.ceiling.Satisfies(&offer.guarantee)
     {
-        return Err(Refused(&offer.capability, &offer.provider, OfferRefusal::ExceedsCeiling));
+        return Err(Refused_Offer(&offer.capability, &offer.provider, OfferRefusal::ExceedsCeiling));
     }
 
     return Ok(());
 }
 
 /// One provider's offer, refused for a named reason.
-fn Refused(capability: &CapabilityId, provider: &ProviderId, refusal: OfferRefusal) -> RegistryError
+fn Refused_Offer(capability: &CapabilityId, provider: &ProviderId, refusal: OfferRefusal) -> RegistryError
 {
     return RegistryError {
         capability: capability.clone(),

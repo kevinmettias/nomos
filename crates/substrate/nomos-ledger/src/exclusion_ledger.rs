@@ -1,7 +1,9 @@
 //! Taking and holding territory.
 
 // What one item reserves, and what stands between another item and claiming it.
+#[path = "exclusion/blocker.rs"]
 mod blocker;
+#[path = "exclusion/reservation.rs"]
 mod reservation;
 
 pub use blocker::Blocker;
@@ -114,7 +116,7 @@ mod tests
     use nomos_model::UnknownReason;
     use nomos_model::SetResolution;
 
-    fn At(seconds: i64) -> Timestamp
+    fn Timestamp_At_Seconds(seconds: i64) -> Timestamp
     {
         return Timestamp::From_Unix_Seconds(seconds);
     }
@@ -142,7 +144,7 @@ mod tests
             &Intersection::Disjoint,
             &ItemId::New("T-1"),
             "agent-a",
-            At(2_000),
+            Timestamp_At_Seconds(2_000),
         );
 
         assert!(refusal.is_none());
@@ -158,7 +160,7 @@ mod tests
             right: SetResolution::Symbol,
         });
 
-        let refusal = Refusal_From(&unknown, &ItemId::New("T-1"), "agent-a", At(2_000))
+        let refusal = Refusal_From(&unknown, &ItemId::New("T-1"), "agent-a", Timestamp_At_Seconds(2_000))
             .expect("unknown independence must refuse");
 
         assert!(matches!(refusal, ClaimRefusal::UnknownIndependence { .. }));
@@ -175,7 +177,7 @@ mod tests
     {
         let overlaps = Intersection::Overlaps(Vec::new());
 
-        let refusal = Refusal_From(&overlaps, &ItemId::New("T-1"), "agent-b", At(2_000))
+        let refusal = Refusal_From(&overlaps, &ItemId::New("T-1"), "agent-b", Timestamp_At_Seconds(2_000))
             .expect("an overlap must refuse");
 
         assert!(refusal.Is_Retryable());
@@ -194,7 +196,7 @@ mod tests
         let refusal = ClaimRefusal::Lapsed {
             item: ItemId::New("T-1"),
             holder: "dead-agent".to_owned(),
-            since: At(2_000),
+            since: Timestamp_At_Seconds(2_000),
         };
 
         let said = refusal.Describe();
@@ -213,7 +215,7 @@ mod tests
         let refusals = [
             ClaimRefusal::HeldBy {
                 holder: "agent-a".to_owned(),
-                until: At(2_000),
+                until: Timestamp_At_Seconds(2_000),
                 item: ItemId::New("T-1"),
             },
             ClaimRefusal::UnknownIndependence {
@@ -231,7 +233,7 @@ mod tests
             ClaimRefusal::Lapsed {
                 item: ItemId::New("T-5"),
                 holder: "dead-agent".to_owned(),
-                since: At(2_000),
+                since: Timestamp_At_Seconds(2_000),
             },
             ClaimRefusal::NoSuchItem {
                 item: ItemId::New("T-4"),

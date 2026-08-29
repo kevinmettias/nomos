@@ -1,6 +1,7 @@
 //! Whether two territories reserve any of the same ground.
 
-use super::{SubjectId, Subject_Of, Normalize_Path};
+use super::SubjectId;
+use super::spelling::{Normalize_Path, Subject_Of};
 
 /// Every subject two path sets both reach, named once each.
 ///
@@ -15,12 +16,12 @@ pub(super) fn Shared_Subjects(mine: &[String], theirs: &[String]) -> Vec<Subject
     {
         for right in theirs
         {
-            if !Contains_Or_Equals(Mine(left), Theirs(right))
+            if !Is_Overlapping(Mine(left), Theirs(right))
             {
                 continue;
             }
 
-            let narrower = Narrower(left, right);
+            let narrower = Narrower_Path(left, right);
             let subject = Subject_Of(narrower);
             if !shared.contains(&subject)
             {
@@ -36,7 +37,7 @@ pub(super) fn Shared_Subjects(mine: &[String], theirs: &[String]) -> Vec<Subject
 ///
 /// It names the conflict most usefully: a report saying `crates/a` overlaps is less
 /// actionable than one saying `crates/a/src/lib.rs` does.
-pub(super) fn Narrower<'a>(left: &'a str, right: &'a str) -> &'a str
+pub(super) fn Narrower_Path<'a>(left: &'a str, right: &'a str) -> &'a str
 {
     if Normalize_Path(left).len() >= Normalize_Path(right).len()
     {
@@ -48,7 +49,7 @@ pub(super) fn Narrower<'a>(left: &'a str, right: &'a str) -> &'a str
 
 /// One side of an overlap check: a path from the territory asking whether it overlaps
 /// another's. Distinguished from [`Theirs`] purely by type, so the two positions of
-/// [`Contains_Or_Equals`] cannot be swapped and still compile — the relation this function
+/// [`Is_Overlapping`] cannot be swapped and still compile — the relation this function
 /// computes happens to be symmetric, but its one call site still has a `mine`/`theirs`
 /// distinction worth keeping visible at the call.
 pub(super) struct Mine<'a>(&'a str);
@@ -61,7 +62,7 @@ pub(super) struct Theirs<'a>(&'a str);
 /// Purely textual, on normalized segments. `a/b` contains `a/b/c`; it does not contain
 /// `a/bc`, which is why the comparison appends a separator rather than using a bare
 /// `starts_with`.
-pub(super) fn Contains_Or_Equals(left: Mine<'_>, right: Theirs<'_>) -> bool
+pub(super) fn Is_Overlapping(left: Mine<'_>, right: Theirs<'_>) -> bool
 {
     let left = Normalize_Path(left.0);
     let right = Normalize_Path(right.0);

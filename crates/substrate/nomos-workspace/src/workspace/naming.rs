@@ -9,13 +9,13 @@ use super::{WorkspaceChangeSet, Change, WorkspaceError};
 /// workspace exactly as it was — a half-applied checkout is not a state anybody should be
 /// able to ask questions about. Normalizing here rather than at each use is also what makes
 /// the conflict check see `src/a.rs` and `./src/A.rs` as one path.
-pub(super) fn Normalized(changes: &WorkspaceChangeSet) -> Result<Vec<(String, &Change)>, WorkspaceError>
+pub(super) fn Normalized_Changes(changes: &WorkspaceChangeSet) -> Result<Vec<(String, &Change)>, WorkspaceError>
 {
     let mut normalized: Vec<(String, &Change)> = Vec::new();
 
     for change in changes.Changes()
     {
-        let path = Named(change.Path())?;
+        let path = Named_Path(change.Path())?;
         if normalized.iter().any(|(seen, _)| return *seen == path)
         {
             return Err(WorkspaceError::Conflicting { path });
@@ -27,12 +27,12 @@ pub(super) fn Normalized(changes: &WorkspaceChangeSet) -> Result<Vec<(String, &C
 }
 
 /// Validates and normalizes a submitted path.
-pub(super) fn Named(path: &str) -> Result<String, WorkspaceError>
+pub(super) fn Named_Path(path: &str) -> Result<String, WorkspaceError>
 {
     let unified = path.trim().replace('\\', "/");
     let segments = Segments_Of(&unified);
 
-    if let Some(reason) = Unnameable(&unified, &segments)
+    if let Some(reason) = Unnameable_Path(&unified, &segments)
     {
         return Err(WorkspaceError::Unnamed {
             path: path.to_owned(),
@@ -47,7 +47,7 @@ pub(super) fn Named(path: &str) -> Result<String, WorkspaceError>
 ///
 /// `..` would let a member address something outside the workspace, and two spellings of
 /// one file would be two members.
-pub(super) fn Unnameable(unified: &str, segments: &[&str]) -> Option<&'static str>
+pub(super) fn Unnameable_Path(unified: &str, segments: &[&str]) -> Option<&'static str>
 {
     if Is_Absolute(unified)
     {
@@ -94,7 +94,7 @@ pub(super) fn Is_Absolute(unified: &str) -> bool
 }
 
 /// The same normalization, for lookups that have already been validated elsewhere.
-pub(super) fn Normalize(path: &str) -> String
+pub(super) fn Normalize_Path(path: &str) -> String
 {
-    return Named(path).unwrap_or_else(|_| return path.to_owned());
+    return Named_Path(path).unwrap_or_else(|_| return path.to_owned());
 }

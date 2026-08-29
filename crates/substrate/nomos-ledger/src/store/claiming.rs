@@ -41,14 +41,14 @@ pub(super) fn With_Own_Claim(
     {
         return Err(ClaimRefusal::NoSuchItem { item: item.clone() });
     };
-    Entitled(candidate, holder)?;
+    Holder_Entitled(candidate, holder)?;
     act(candidate);
 
     return Ok(());
 }
 
 /// Whether `holder` may change this item's claim.
-fn Entitled(candidate: &LedgerItem, holder: &str) -> Result<(), ClaimRefusal>
+fn Holder_Entitled(candidate: &LedgerItem, holder: &str) -> Result<(), ClaimRefusal>
 {
     let Some(claim) = &candidate.claim
     else
@@ -73,7 +73,7 @@ fn Entitled(candidate: &LedgerItem, holder: &str) -> Result<(), ClaimRefusal>
 
 /// Moves a lapsed claim aside and installs the replacement, as one operation.
 ///
-/// `Replace_Lapsed_Claim` and not two statements at the call site: the move of the old claim
+/// `Try_Replace_Lapsed_Claim` and not two statements at the call site: the move of the old claim
 /// and the install of the new one are one operation precisely so that no caller can perform
 /// half of it.
 pub(super) fn Replace_Lapsed(
@@ -88,7 +88,7 @@ pub(super) fn Replace_Lapsed(
     {
         if &candidate.id == item
         {
-            taken = candidate.Replace_Lapsed_Claim(replacement.clone(), now);
+            taken = candidate.Try_Replace_Lapsed_Claim(replacement.clone(), now);
         }
     }
 

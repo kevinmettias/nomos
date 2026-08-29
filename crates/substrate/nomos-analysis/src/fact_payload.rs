@@ -1,13 +1,13 @@
 // Everything a fact is addressed, stored and read by. Eight files whose only relationship
 // was a shared name prefix now say it in the tree instead.
-mod error;
-mod guarantee_digest;
-mod identity;
-mod key;
-mod materialized;
-mod memory_store;
-mod reader;
-mod store;
+#[path = "fact/fact_error.rs"] mod error;
+#[path = "fact/guarantee_digest.rs"] mod guarantee_digest;
+#[path = "fact/fact_identity.rs"] mod identity;
+#[path = "fact/fact_key.rs"] mod key;
+#[path = "fact/materialized_fact.rs"] mod materialized;
+#[path = "fact/memory_fact_store.rs"] mod memory_store;
+#[path = "fact/fact_reader.rs"] mod reader;
+#[path = "fact/fact_store.rs"] mod store;
 
 pub use error::FactError;
 pub use guarantee_digest::GuaranteeDigest;

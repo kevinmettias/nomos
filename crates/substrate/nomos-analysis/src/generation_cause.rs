@@ -8,7 +8,7 @@ use std::collections::BTreeSet;
 // The condensation walk (`RematerializationGroup` and the Tarjan condensation it is built
 // from) is its own public type and its own responsibility, so it keeps its own file rather
 // than sharing this one with `GenerationCause`.
-mod condensation;
+#[path = "store/rematerialization_group.rs"] mod condensation;
 
 pub use condensation::{Condensation_Of, RematerializationGroup};
 
@@ -112,7 +112,7 @@ impl GenerationCause
     /// Crate-visible rather than public: the store asks it while spreading an
     /// invalidation, and a caller outside that walk asking it would be deciding for
     /// itself what a change reaches.
-    pub(crate) fn Names(&self, key: &FactKey) -> bool
+    pub(crate) fn Is_Naming(&self, key: &FactKey) -> bool
     {
         return match self
         {

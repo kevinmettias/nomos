@@ -10,6 +10,7 @@
 //! [`Territory`](crate::Territory). This module keeps the record half, which genuinely is
 //! the ledger's own -- what a run of a predicate left behind against one held item.
 
+#[path = "verification/verification_record.rs"]
 mod record;
 
 pub use nomos_scope_verification::VerificationPredicate;

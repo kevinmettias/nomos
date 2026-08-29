@@ -72,7 +72,7 @@ fn Test_Require_Should_Refuse_A_Provider_Below_The_Requirement()
             &Needing(semantic),
         )
         .expect_err("must refuse");
-    let answered = reader.Dependencies().iter().any(|edge| return edge.outcome.Answered());
+    let answered = reader.Dependencies().iter().any(|edge| return edge.outcome.Is_Answered());
 
     assert_eq!(refusal, Applicability::MissingCapability);
     assert!(!answered, "a fact was returned for a requirement no provider reaches");

@@ -151,7 +151,7 @@ impl LedgerItem
     /// The lapse is re-checked here rather than trusted from the caller, so the method is
     /// still safe standing alone if a second caller ever appears.
     #[must_use]
-    pub fn Replace_Lapsed_Claim(&mut self, replacement: Claim, now: Timestamp) -> bool
+    pub fn Try_Replace_Lapsed_Claim(&mut self, replacement: Claim, now: Timestamp) -> bool
     {
         let Some(previous) = self.claim.as_ref()
         else
@@ -172,7 +172,7 @@ impl LedgerItem
 
     /// Ends this item, keeping who ended it and when.
     ///
-    /// One operation, for the reason [`LedgerItem::Replace_Lapsed_Claim`] and
+    /// One operation, for the reason [`LedgerItem::Try_Replace_Lapsed_Claim`] and
     /// [`crate::ReleaseOutcome::Record_On`] are each one: spelled out at a call site, an
     /// implementation is free to write the state and not the [`Declination`], and that is
     /// precisely the half this whole change exists to stop being lost. There is no ordering
@@ -187,10 +187,10 @@ impl LedgerItem
         let holder = holder.into();
 
         self.state = ItemState::Declined {
-            reason: reason.As_Str().to_owned(),
+            reason: reason.As_Text().to_owned(),
         };
         self.declined = Some(Declination {
-            holder: holder.As_Str().to_owned(),
+            holder: holder.As_Text().to_owned(),
             declined_at: at,
         });
     }

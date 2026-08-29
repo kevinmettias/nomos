@@ -12,7 +12,7 @@ use crate::LedgerDocument;
 /// Returns all violations rather than the first. An author fixing one at a time and
 /// re-running is an author who stops running it.
 #[must_use]
-pub fn Validate(document: &LedgerDocument, now: Timestamp) -> Vec<String>
+pub fn Validate_Document(document: &LedgerDocument, now: Timestamp) -> Vec<String>
 {
     let mut violations = Duplicate_Identifiers(document);
     let declared: Vec<&ItemId> = document.items.iter().map(|item| return &item.id).collect();
@@ -152,7 +152,7 @@ fn Check_Territory(item: &LedgerItem, violations: &mut Vec<String>)
 /// surface — still fails closed: every comparison touching a pattern answers
 /// [`nomos_model::Intersection::Unknown`] rather than comparing as excluding nothing. That
 /// guard covers claiming, but a pattern sitting in a `Ready` or `Claimed` item was never
-/// refused by `Validate` itself, which is the gap the record named and left open. This closes
+/// refused by `Validate_Document` itself, which is the gap the record named and left open. This closes
 /// it: any non-empty `patterns` is reported, regardless of state, because the field is only
 /// ever non-empty by a hand edit that this check exists to catch.
 fn Check_Pattern(item: &LedgerItem, violations: &mut Vec<String>)

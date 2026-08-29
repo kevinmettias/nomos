@@ -13,6 +13,7 @@
 // The registry's errors sit under the registry and resolution's parts under resolution.
 // Flat, this level was twelve files whose grouping a reader had to reconstruct from the
 // names; the two that have parts now say so in the tree.
+#[path = "capability_contract.rs"]
 mod contract;
 mod offer_refusal;
 mod provider_offer;

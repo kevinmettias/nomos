@@ -7,7 +7,6 @@
 //! arrived in a different order.
 
 use nomos_contracts::BuildVariantId;
-use nomos_model::Digest_Of_Parts;
 use std::collections::BTreeSet;
 
 /// A configured program variant.
@@ -54,6 +53,8 @@ impl BuildVariant
     #[must_use]
     pub fn Id(&self) -> BuildVariantId
     {
+        use nomos_model::Digest_Of_Parts;
+
         let mut parts: Vec<&[u8]> = vec![
             self.target.as_bytes(),
             self.profile.as_bytes(),

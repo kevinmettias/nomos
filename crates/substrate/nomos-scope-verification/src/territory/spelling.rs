@@ -109,7 +109,7 @@ pub(crate) fn Subject_Of(path: &str) -> SubjectId
 /// subject.** A record has two spellings — the identifier it was allocated and the file it
 /// became — and folding the second onto the first is what makes them one. Containment is
 /// deliberately *not* where this lives. The identifier does not contain the record; it is
-/// the record, and saying so here leaves [`Contains_Or_Equals`] the pure path relation it
+/// the record, and saying so here leaves [`Is_Overlapping`] the pure path relation it
 /// has always been, and fixes [`Subject_Of`] — and so [`Territory::As_Subject_Set`] — at
 /// the same time. A rule written into containment would have left the identity form still
 /// answering that the two are unrelated.
@@ -119,7 +119,7 @@ pub(crate) fn Subject_Of(path: &str) -> SubjectId
 /// Because the general version of it destroys the ledger. "A name contains the names that
 /// extend it with a hyphen" would make `crates/nomos-spec` contain
 /// `crates/nomos-spec-model`, and the whole repository would serialize — the exact case
-/// [`Contains_Or_Equals`] appends a separator to avoid, and
+/// [`Is_Overlapping`] appends a separator to avoid, and
 /// `Test_A_Sibling_With_A_Shared_Prefix_Should_Not_Be_Contained` is the guard on it.
 ///
 /// So the rule is confined to the one directory where the identifier-to-filename relation

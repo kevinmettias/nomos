@@ -6,19 +6,13 @@
 #[derive(Clone, Copy, Debug)]
 pub struct StepName<'a>(&'a str);
 
-impl<'a> From<&'a str> for StepName<'a>
+impl<'a, Text> From<&'a Text> for StepName<'a>
+where
+    Text: AsRef<str> + ?Sized,
 {
-    fn from(value: &'a str) -> Self
+    fn from(value: &'a Text) -> Self
     {
-        return StepName(value);
-    }
-}
-
-impl<'a> From<&'a String> for StepName<'a>
-{
-    fn from(value: &'a String) -> Self
-    {
-        return StepName(value.as_str());
+        return StepName(value.as_ref());
     }
 }
 
@@ -26,7 +20,7 @@ impl<'a> StepName<'a>
 {
     /// The step name as a plain string.
     #[must_use]
-    pub fn As_Str(&self) -> &'a str
+    pub fn As_Text(&self) -> &'a str
     {
         return self.0;
     }

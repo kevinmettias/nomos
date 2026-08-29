@@ -4,8 +4,6 @@ use std::path::Path;
 
 use crate::LedgerError;
 
-use super::SCHEMA_VERSION;
-
 /// Which of the two parse failures this is.
 ///
 /// A file newer than this build and a file that is simply broken both fail
@@ -15,8 +13,9 @@ use super::SCHEMA_VERSION;
 ///
 /// A forgotten bump therefore degrades this to [`LedgerError::Malformed`] and costs a sentence.
 /// It cannot cost a field.
-pub(super) fn Explain(path: &Path, text: &str, error: &serde_json::Error) -> LedgerError
+pub(super) fn Explain_Parse_Failure(path: &Path, text: &str, error: &serde_json::Error) -> LedgerError
 {
+    use super::SCHEMA_VERSION;
     use crate::store::VersionProbe;
 
     if let Ok(probe) = serde_json::from_str::<VersionProbe>(text)

@@ -130,13 +130,13 @@ mod tests
         }
     }
 
-    fn Digest(byte: u8) -> Digest128
+    fn Digest_From_Byte(byte: u8) -> Digest128
     {
         return Digest128::From_Bytes([byte; 16]);
     }
 
     /// A dependents adjacency map built from `(from, to)` edges, one insertion per edge.
-    fn Graph(edges: &[(Digest128, Digest128)]) -> BTreeMap<Digest128, BTreeSet<Digest128>>
+    fn Graph_From_Edges(edges: &[(Digest128, Digest128)]) -> BTreeMap<Digest128, BTreeSet<Digest128>>
     {
         let mut dependents: BTreeMap<Digest128, BTreeSet<Digest128>> = BTreeMap::new();
         for (from, to) in edges.iter().copied()
@@ -147,7 +147,7 @@ mod tests
         return dependents;
     }
 
-    fn Spread(
+    fn Spread_Collecting_Reached(
         dependents: &BTreeMap<Digest128, BTreeSet<Digest128>>,
         roots: Vec<Digest128>,
         mut on_reach: impl FnMut(Digest128) -> bool,
@@ -167,13 +167,13 @@ mod tests
     #[test]
     fn Test_Spread_Should_Reach_Every_Downstream_Node_Once()
     {
-        let a = Digest(1);
-        let b = Digest(2);
-        let c = Digest(3);
+        let a = Digest_From_Byte(1);
+        let b = Digest_From_Byte(2);
+        let c = Digest_From_Byte(3);
 
-        let dependents = Graph(&[(a, b), (b, c)]);
+        let dependents = Graph_From_Edges(&[(a, b), (b, c)]);
 
-        let reached = Spread(&dependents, vec![a], |_| return true);
+        let reached = Spread_Collecting_Reached(&dependents, vec![a], |_| return true);
 
         assert_eq!(reached, vec![b, c]);
     }
@@ -181,12 +181,12 @@ mod tests
     #[test]
     fn Test_Spread_Should_Terminate_On_A_Cycle()
     {
-        let a = Digest(1);
-        let b = Digest(2);
+        let a = Digest_From_Byte(1);
+        let b = Digest_From_Byte(2);
 
-        let dependents = Graph(&[(a, b), (b, a)]);
+        let dependents = Graph_From_Edges(&[(a, b), (b, a)]);
 
-        let reached = Spread(&dependents, vec![a], |_| return true);
+        let reached = Spread_Collecting_Reached(&dependents, vec![a], |_| return true);
 
         assert_eq!(reached, vec![b]);
     }
@@ -194,13 +194,13 @@ mod tests
     #[test]
     fn Test_Declining_A_Node_Should_Stop_The_Walk_There()
     {
-        let a = Digest(1);
-        let b = Digest(2);
-        let c = Digest(3);
+        let a = Digest_From_Byte(1);
+        let b = Digest_From_Byte(2);
+        let c = Digest_From_Byte(3);
 
-        let dependents = Graph(&[(a, b), (b, c)]);
+        let dependents = Graph_From_Edges(&[(a, b), (b, c)]);
 
-        let reached = Spread(&dependents, vec![a], |digest| return digest != b);
+        let reached = Spread_Collecting_Reached(&dependents, vec![a], |digest| return digest != b);
 
         assert_eq!(reached, vec![b]);
     }

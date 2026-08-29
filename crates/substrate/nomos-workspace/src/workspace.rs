@@ -1,7 +1,9 @@
 //! The workspace, and the only thing that changes it.
 
 // A change set over a workspace, and the refusals a workspace raises.
+#[path = "workspace/workspace_change_set.rs"]
 mod change_set;
+#[path = "workspace/workspace_error.rs"]
 mod error;
 
 pub use change_set::WorkspaceChangeSet;
@@ -11,7 +13,7 @@ mod naming;
 #[cfg(test)]
 mod tests;
 
-use naming::{Normalize, Normalized};
+use naming::{Normalize_Path, Normalized_Changes};
 
 use crate::Effect;
 use crate::EffectKind;
@@ -77,7 +79,7 @@ impl Workspace
     #[must_use]
     pub fn Content_Of(&self, path: &str) -> Option<Digest128>
     {
-        return self.snapshot.Content_Of(&Normalize(path));
+        return self.snapshot.Content_Of(&Normalize_Path(path));
     }
 
     /// The one door.
@@ -99,7 +101,7 @@ impl Workspace
             return Err(WorkspaceError::Vacuous);
         }
 
-        let Outcome { effects, altered } = self.Apply_Each(Normalized(changes)?);
+        let Outcome { effects, altered } = self.Apply_Each(Normalized_Changes(changes)?);
         if !altered
         {
             return Ok(Applied::Unchanged {
@@ -131,7 +133,7 @@ impl Workspace
         for (path, change) in normalized
         {
             let effect = self.Applied_One(path, change);
-            altered = altered || effect.Altered();
+            altered = altered || effect.Is_Altered();
             effects.push(effect);
         }
         effects.sort();

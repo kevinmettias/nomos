@@ -73,12 +73,12 @@ fn Test_A_Snapshot_Of_The_Real_Corpus_Should_Name_Nothing_Outside_Itself()
     eprintln!(
         "{}: {} members, {} bytes of snapshot, identity {}",
         root.display(),
-        workspace.Snapshot().Len(),
+        workspace.Snapshot().Length(),
         encoded.len(),
         workspace.Id()
     );
     assert_eq!(
-        workspace.Snapshot().Len(),
+        workspace.Snapshot().Length(),
         members.len(),
         "every file in the corpus is a member"
     );
@@ -142,7 +142,7 @@ fn Assert_Decoded_Answers_As_The_Original(
 )
 {
     assert_eq!(elsewhere.Id(), workspace.Id());
-    assert_eq!(elsewhere.Len(), workspace.Snapshot().Len());
+    assert_eq!(elsewhere.Length(), workspace.Snapshot().Length());
     assert_eq!(elsewhere.Variant(), &Variant());
     assert_eq!(elsewhere.Configuration(), Configuration());
     assert_eq!(
@@ -189,7 +189,7 @@ fn Test_A_Recorded_Snapshot_Should_Be_Readable_From_The_Store_Alone()
     let from_store = The_One_Recorded_Snapshot(&store);
 
     assert_eq!(from_store.Id(), workspace.Id());
-    assert_eq!(from_store.Len(), members.len());
+    assert_eq!(from_store.Length(), members.len());
     Assert_The_Index_Still_Derives(&mut store, &workspace);
 }
 

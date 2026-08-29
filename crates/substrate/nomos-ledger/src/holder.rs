@@ -19,9 +19,13 @@
 //! populated document and probes every object node it finds.
 
 // An item's identity, the state it is in, what kind of work it is, and where it came from.
+#[path = "item/item_id.rs"]
 mod id;
+#[path = "item/item_kind.rs"]
 mod kind;
+#[path = "item/item_origin.rs"]
 mod origin;
+#[path = "item/item_state.rs"]
 mod state;
 
 pub use id::ItemId;
@@ -31,13 +35,16 @@ pub use state::ItemState;
 
 // Why an item is being declined, and the item schema itself — each its own single public
 // type, and the second large enough on its own to want a file of its own.
+#[path = "item/decline_reason.rs"]
 mod decline_reason;
+#[path = "item/ledger_item.rs"]
 mod ledger_item;
 
 pub use decline_reason::DeclineReason;
 pub use ledger_item::LedgerItem;
 
 #[cfg(test)]
+#[path = "item/tests.rs"]
 mod tests;
 
 use std::time::Duration;
@@ -53,19 +60,13 @@ use std::time::Duration;
 #[derive(Clone, Copy, Debug)]
 pub struct Holder<'a>(&'a str);
 
-impl<'a> From<&'a str> for Holder<'a>
+impl<'a, Text> From<&'a Text> for Holder<'a>
+where
+    Text: AsRef<str> + ?Sized,
 {
-    fn from(value: &'a str) -> Self
+    fn from(value: &'a Text) -> Self
     {
-        return Holder(value);
-    }
-}
-
-impl<'a> From<&'a String> for Holder<'a>
-{
-    fn from(value: &'a String) -> Self
-    {
-        return Holder(value.as_str());
+        return Holder(value.as_ref());
     }
 }
 
@@ -73,7 +74,7 @@ impl<'a> Holder<'a>
 {
     /// The holder's identifier as a plain string.
     #[must_use]
-    pub fn As_Str(&self) -> &'a str
+    pub fn As_Text(&self) -> &'a str
     {
         return self.0;
     }

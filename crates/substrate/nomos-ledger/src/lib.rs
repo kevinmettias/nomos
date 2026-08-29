@@ -54,20 +54,25 @@
 #![forbid(unsafe_code)]
 
 mod claim;
+#[path = "exclusion_ledger.rs"]
 mod exclusion;
 mod finish;
+#[path = "gate_unknown.rs"]
 mod gate;
+#[path = "holder.rs"]
 mod item;
 mod ledger_error;
+#[path = "file_ledger.rs"]
 mod store;
 mod verification;
 
 pub use claim::{Claim, ClaimRefusal, RefusalLayer};
 pub use exclusion::{Blocker, ExclusionLedger, Reservation};
-pub use finish::{Abandonment, Declination, Finish, FinishRefusal, Finishing, ReleaseOutcome};
+pub use finish::{Abandonment, Declination, Finish_Item, FinishRefusal, Finishing};
+pub use finish::release_outcome::ReleaseOutcome;
 pub use gate::{Derive_Step, GATE_WORKFLOW, GateOutcome, GateUnknown, LINT_STEP, StepName, Workflow_Path, WorkflowText};
 pub use item::{DEFAULT_LEASE, DeclineReason, Holder, ItemId, ItemKind, ItemOrigin, ItemState, LedgerItem, MAXIMUM_LEASE};
 pub use ledger_error::LedgerError;
 pub use nomos_scope_verification::{Normalize_Path, Territory};
-pub use store::{AddRefusal, Claim_Refusal, Eligible_Items, FileLedger, LOCK_STALE_AFTER, LOCK_WAIT_LIMIT, LedgerDocument, SCHEMA_VERSION, Validate};
+pub use store::{AddRefusal, Claim_Refusal, Eligible_Items, FileLedger, LOCK_STALE_AFTER, LOCK_WAIT_LIMIT, LedgerDocument, SCHEMA_VERSION, Validate_Document};
 pub use verification::{VerificationPredicate, VerificationRecord};

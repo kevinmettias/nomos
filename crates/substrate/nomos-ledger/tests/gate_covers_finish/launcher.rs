@@ -3,7 +3,7 @@
 
 use nomos_ledger::{
     Finishing,
-    Claim, FileLedger, Finish, FinishRefusal, ItemId, ItemKind, ItemOrigin, ItemState,
+    Claim, FileLedger, Finish_Item, FinishRefusal, ItemId, ItemKind, ItemOrigin, ItemState,
     LedgerDocument, LedgerItem, Territory, VerificationPredicate, VerificationRecord,
 };
 use nomos_platform::{
@@ -144,7 +144,7 @@ fn A_Claimed_Item() -> LedgerItem
             acquired_at: Timestamp::From_Unix_Seconds(NOW),
             lease_expires_at: Timestamp::From_Unix_Seconds(NOW + 3_600),
         }),
-        verification: Some(VerificationPredicate::New(vec![
+        verification: Some(VerificationPredicate::From_String_Arguments(vec![
             "cargo".to_owned(),
             "test".to_owned(),
             "-p".to_owned(),
@@ -233,7 +233,7 @@ pub(crate) fn Finish_In(
     item: &str,
 ) -> Result<VerificationRecord, FinishRefusal>
 {
-    return Finish(
+    return Finish_Item(
         ledger,
         &launcher,
         &Finishing {

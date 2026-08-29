@@ -361,12 +361,12 @@ mod tests
     use crate::ItemOrigin;
     use crate::Territory;
 
-    fn At(seconds: i64) -> Timestamp
+    fn Timestamp_At_Seconds(seconds: i64) -> Timestamp
     {
         return Timestamp::From_Unix_Seconds(seconds);
     }
 
-    fn Item(id: &str) -> LedgerItem
+    fn Item_Named(id: &str) -> LedgerItem
     {
         return LedgerItem {
             id: ItemId::New(id),
@@ -388,7 +388,7 @@ mod tests
         };
     }
 
-    fn Document(items: Vec<LedgerItem>) -> LedgerDocument
+    fn Document_Of(items: Vec<LedgerItem>) -> LedgerDocument
     {
         return LedgerDocument {
             schema_version: crate::SCHEMA_VERSION,
@@ -412,19 +412,19 @@ mod tests
 
     fn Held_Contested_And_Free() -> Fixture
     {
-        let mut held = Item("P1-HELD");
+        let mut held = Item_Named("P1-HELD");
         held.territory = Territory::Of_Files(["a/shared.rs"]);
         held.state = ItemState::Claimed;
         held.claim = Some(Claim {
             holder: "agent-a".to_owned(),
-            acquired_at: At(1_000),
-            lease_expires_at: At(9_000),
+            acquired_at: Timestamp_At_Seconds(1_000),
+            lease_expires_at: Timestamp_At_Seconds(9_000),
         });
 
-        let mut contested = Item("P2-CONTESTED");
+        let mut contested = Item_Named("P2-CONTESTED");
         contested.territory = Territory::Of_Files(["a/shared.rs"]);
 
-        let mut free = Item("P3-FREE");
+        let mut free = Item_Named("P3-FREE");
         free.territory = Territory::Of_Files(["b/other.rs"]);
 
         return Fixture { held, contested, free };
@@ -437,11 +437,11 @@ mod tests
     fn Test_Eligible_Items_Should_Exclude_What_Claim_Refusal_Would_Refuse()
     {
         let Fixture { held, contested, free } = Held_Contested_And_Free();
-        let document = Document(vec![held, contested, free]);
+        let document = Document_Of(vec![held, contested, free]);
 
-        let eligible: Vec<&str> = Eligible_Items(&document, At(2_000))
+        let eligible: Vec<&str> = Eligible_Items(&document, Timestamp_At_Seconds(2_000))
             .into_iter()
-            .map(|item| return item.id.As_Str())
+            .map(|item| return item.id.As_Text())
             .collect();
 
         assert_eq!(
@@ -458,11 +458,11 @@ mod tests
     #[test]
     fn Test_Eligible_Items_Should_Order_By_Id_Rather_Than_Document_Order()
     {
-        let document = Document(vec![Item("P9-LATER"), Item("P1-EARLIER"), Item("P5-MIDDLE")]);
+        let document = Document_Of(vec![Item_Named("P9-LATER"), Item_Named("P1-EARLIER"), Item_Named("P5-MIDDLE")]);
 
-        let eligible: Vec<&str> = Eligible_Items(&document, At(2_000))
+        let eligible: Vec<&str> = Eligible_Items(&document, Timestamp_At_Seconds(2_000))
             .into_iter()
-            .map(|item| return item.id.As_Str())
+            .map(|item| return item.id.As_Text())
             .collect();
 
         assert_eq!(eligible, vec!["P1-EARLIER", "P5-MIDDLE", "P9-LATER"]);
@@ -471,8 +471,8 @@ mod tests
     #[test]
     fn Test_Eligible_Items_Should_Be_Empty_Over_An_Empty_Board()
     {
-        let document = Document(Vec::new());
+        let document = Document_Of(Vec::new());
 
-        assert!(Eligible_Items(&document, At(2_000)).is_empty());
+        assert!(Eligible_Items(&document, Timestamp_At_Seconds(2_000)).is_empty());
     }
 }

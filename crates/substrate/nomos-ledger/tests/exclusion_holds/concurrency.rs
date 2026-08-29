@@ -220,7 +220,7 @@ fn Test_Two_Concurrent_Adds_Of_One_Identifier_Should_Not_Both_Be_Accepted()
         "one identifier is on the board twice, so the board no longer loads for anybody"
     );
     assert!(
-        Validate(&after, At(NOW)).is_empty(),
+        Validate_Document(&after, At(NOW)).is_empty(),
         "the board two accepted adds left behind is one the ledger itself calls invalid"
     );
 }

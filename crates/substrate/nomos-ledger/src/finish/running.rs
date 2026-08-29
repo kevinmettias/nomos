@@ -140,7 +140,7 @@ pub(super) fn Ran_To_Completion(
 /// 300 rather than 600, without the gate step (bounded by the same `runner.timeout`, see
 /// [`Runner`]) or the predicate itself ever waiting longer than before for the case that
 /// actually finishes.
-pub(super) fn Commanded(argv: Vec<String>, runner: Runner<'_>) -> Command
+pub(super) fn Command_From_Argv(argv: Vec<String>, runner: Runner<'_>) -> Command
 {
     let mut command = Command::New(argv, runner.timeout).With_Idle_Timeout(Idle_Timeout(runner.timeout));
     command.working_directory = runner.working_directory.map(std::path::Path::to_path_buf);
@@ -148,11 +148,11 @@ pub(super) fn Commanded(argv: Vec<String>, runner: Runner<'_>) -> Command
     return command;
 }
 
-/// The fraction of the wall bound given to the idle bound: one half. See [`Commanded`] for
+/// The fraction of the wall bound given to the idle bound: one half. See [`Command_From_Argv`] for
 /// why half and not some other fraction.
 const IDLE_TIMEOUT_DIVISOR: u32 = 2;
 
-/// Half the wall bound, rounded down. See [`Commanded`] for why half and not some other
+/// Half the wall bound, rounded down. See [`Command_From_Argv`] for why half and not some other
 /// fraction.
 ///
 /// `checked_div` rather than `/`: dividing by [`IDLE_TIMEOUT_DIVISOR`] cannot itself fail,

@@ -6,7 +6,7 @@
 
 // What an invalidation reached, where it had to widen, and the replacement it recorded.
 mod broadening;
-mod report;
+#[path = "invalidation/invalidation_report.rs"] mod report;
 mod supersession;
 
 pub use broadening::Broadening;

@@ -19,13 +19,10 @@
 //! navigation, identities are identity.* This type is the one place the first becomes
 //! the second, which is also the one place the normalization rules can be stated once.
 
-mod spelling;
+pub(crate) mod spelling;
 mod overlap;
 #[cfg(test)]
 mod tests;
-
-pub use spelling::Normalize_Path;
-pub(crate) use spelling::Subject_Of;
 
 // The one place this crate names band 0, and check-dependency-placement reports the edge
 // for it. A SubjectId is the shared identity a territory is a territory *of*; it is
@@ -64,7 +61,7 @@ pub struct Territory
     /// `work add --territory-pattern` used to put a value here and is now a usage error. The
     /// justification this field originally carried — an item may honestly say "this touches
     /// everything under `crates/spec/`" before anyone can enumerate that — turned out to be
-    /// already satisfied by an ordinary path: [`Contains_Or_Equals`] decides containment from
+    /// already satisfied by an ordinary path: [`Is_Overlapping`] decides containment from
     /// the text, so `crates/spec` *does* reserve everything beneath it, with no filesystem
     /// access and no `Unknown`. What the flag added was not expressiveness. It was the only
     /// documented way to reach a state in which an item is unclaimable by everyone including
@@ -134,6 +131,8 @@ impl Territory
     #[must_use]
     pub fn As_Subject_Set(&self) -> SubjectSet
     {
+        use spelling::Subject_Of;
+
         let mut set =
             SubjectSet::Of(self.resolution, self.paths.iter().map(|path| Subject_Of(path)));
 
@@ -209,6 +208,8 @@ impl Territory
     #[must_use]
     pub fn Ambiguous_Paths(&self) -> Vec<(String, String)>
     {
+        use spelling::Normalize_Path;
+
         let mut duplicates = Vec::new();
 
         for (index, path) in self.paths.iter().enumerate()

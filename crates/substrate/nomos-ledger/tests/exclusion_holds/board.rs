@@ -6,9 +6,9 @@
 
 pub(crate) use nomos_ledger::{
     Finishing,
-    Abandonment, AddRefusal, Blocker, Claim, ClaimRefusal, Declination, ExclusionLedger, FileLedger, Finish,
+    Abandonment, AddRefusal, Blocker, Claim, ClaimRefusal, Declination, ExclusionLedger, FileLedger, Finish_Item,
     FinishRefusal, GateOutcome, ItemId, ItemKind, ItemOrigin, ItemState, LedgerDocument, LedgerError, LedgerItem,
-    ReleaseOutcome, Reservation, SCHEMA_VERSION, Territory as ItemTerritory, Validate, VerificationPredicate,
+    ReleaseOutcome, Reservation, SCHEMA_VERSION, Territory as ItemTerritory, Validate_Document, VerificationPredicate,
     VerificationRecord,
 };
 pub(crate) use nomos_model::SetResolution;
@@ -286,7 +286,7 @@ pub(crate) fn Finish_In(
     holder: &str,
 ) -> Result<VerificationRecord, FinishRefusal>
 {
-    return Finish(
+    return Finish_Item(
         ledger,
         &StdProcessLauncher,
         &Finishing {
@@ -417,7 +417,7 @@ pub(crate) fn Board_At(
 
 /// A board written straight to disk, bypassing `Save`'s own validation gate.
 ///
-/// `Validate` now refuses a territory carrying a pattern — `P13-VALIDATE-PATTERN-REFUSAL`
+/// `Validate_Document` now refuses a territory carrying a pattern — `P13-VALIDATE-PATTERN-REFUSAL`
 /// closing the completeness gap `OD-LEDGER-013` named — so `Save` refuses to write a document
 /// [`Patterned`] appears in, the same way it already refuses one with any other violation.
 /// That is the correct behaviour for the store's own write path, but the two tests this
@@ -484,6 +484,6 @@ pub(crate) fn Exits_With(code: i32) -> Vec<String>
 pub(crate) fn Item_Verified_By(id: &str, files: &[&str], argv: Vec<String>) -> LedgerItem
 {
     let mut item = Item(id, files);
-    item.verification = Some(VerificationPredicate::New(argv));
+    item.verification = Some(VerificationPredicate::From_String_Arguments(argv));
     return item;
 }

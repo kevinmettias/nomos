@@ -64,7 +64,7 @@ pub fn Condensation_Of(report: &InvalidationReport, store: &MemoryFactStore) -> 
     let nodes = Named_Nodes(report);
     let edges = Dependency_Edges(&nodes, store);
 
-    return Condense(&nodes, &edges);
+    return Condense_Into_Groups(&nodes, &edges);
 }
 
 /// Every fact `report` named, keyed by digest.
@@ -103,7 +103,7 @@ fn Dependency_Edges(
 
 /// Runs Tarjan's SCC algorithm over `nodes`/`edges` and resolves the components it finds
 /// into rematerialization groups, each with its members sorted for a deterministic order.
-fn Condense(
+fn Condense_Into_Groups(
     nodes: &BTreeMap<Digest128, FactKey>,
     edges: &BTreeMap<Digest128, BTreeSet<Digest128>>,
 ) -> Vec<RematerializationGroup>
@@ -224,11 +224,11 @@ impl Tarjan<'_>
     /// caller to push. The part of the original recursive `Visit` that ran once per edge.
     fn Advance(&mut self, frame: &mut Frame, target: Digest128) -> Option<Frame>
     {
-        let node = frame.node;
         frame.next = frame.next.saturating_add(1);
 
         if self.indices.contains_key(&target)
         {
+            let node = frame.node;
             self.Fold_If_On_Stack(node, target);
             return None;
         }

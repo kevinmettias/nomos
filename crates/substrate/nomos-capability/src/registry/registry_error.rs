@@ -21,14 +21,14 @@ impl core::fmt::Display for RegistryError
 {
     fn fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
     {
-        return write!(formatter, "{}", Message(&self.capability, &self.kind));
+        return write!(formatter, "{}", Refusal_Message(&self.capability, &self.kind));
     }
 }
 
 /// The one human-readable sentence for `capability`'s refusal, gathered here rather than
 /// assembled across several `write!` calls sharing one `Formatter` — a `RegistryError` is
 /// one sentence, not several fragments.
-fn Message(capability: &CapabilityId, kind: &RegistryErrorKind) -> String
+fn Refusal_Message(capability: &CapabilityId, kind: &RegistryErrorKind) -> String
 {
     use crate::OfferRefusal;
 

@@ -44,10 +44,13 @@
 // files whose grouping was spelled only in their name prefixes.
 mod applied;
 mod change;
+#[path = "snapshot_serialization.rs"]
 mod determinism;
 mod effect;
 mod member;
+#[path = "workspace_snapshot.rs"]
 mod snapshot;
+#[path = "build_variant.rs"]
 mod variant;
 mod workspace;
 

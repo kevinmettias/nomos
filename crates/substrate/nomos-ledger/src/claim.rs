@@ -1,6 +1,7 @@
 //! Somebody holding an item, until when.
 
 // Why a claim was refused, beneath the claim it would have been.
+#[path = "claim/claim_refusal.rs"]
 mod refusal;
 
 pub use refusal::{ClaimRefusal, RefusalLayer};
@@ -38,7 +39,7 @@ impl Claim
     ///
     /// Taking a lapsed item over is therefore a different operation from claiming a free
     /// one, and `OD-LEDGER-012` is where it became one: [`crate::FileLedger::Take_Over`]
-    /// installs the new claim and [`LedgerItem::Replace_Lapsed_Claim`] moves the claim it
+    /// installs the new claim and [`LedgerItem::Try_Replace_Lapsed_Claim`] moves the claim it
     /// replaced onto [`LedgerItem::displaced`], so what a lapse recorded survives the thing
     /// that ends it.
     #[must_use]

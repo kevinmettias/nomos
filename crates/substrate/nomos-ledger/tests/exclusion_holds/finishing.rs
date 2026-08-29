@@ -22,7 +22,7 @@ fn Test_Finishing_Should_Be_Refused_When_The_Predicate_Fails()
     .expect_err("a predicate that exits non-zero must refuse the completion");
 
     assert!(matches!(refusal, FinishRefusal::PredicateFailed { .. }));
-    assert!(refusal.Judged_The_Work());
+    assert!(refusal.Has_Judged_The_Work());
 
     let after = ledger.Load().expect("readable");
     assert_eq!(
@@ -74,7 +74,7 @@ fn Test_Finishing_Should_Be_Refused_Without_A_Predicate()
 
     assert!(matches!(refusal, FinishRefusal::NoPredicate { .. }));
     assert!(
-        !refusal.Judged_The_Work(),
+        !refusal.Has_Judged_The_Work(),
         "nothing was learned about the work"
     );
 }
@@ -95,7 +95,7 @@ fn Test_An_Unstartable_Predicate_Should_Not_Judge_The_Work()
     .expect_err("a missing program is not a verdict");
 
     assert!(matches!(refusal, FinishRefusal::CouldNotRun { .. }));
-    assert!(!refusal.Judged_The_Work());
+    assert!(!refusal.Has_Judged_The_Work());
 }
 
 /// The state transition to `Done` carries its own evidence, so an item cannot arrive

@@ -17,7 +17,7 @@ impl ItemId
 
     /// The identifier as authored.
     #[must_use]
-    pub fn As_Str(&self) -> &str
+    pub fn As_Text(&self) -> &str
     {
         return &self.0;
     }

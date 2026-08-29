@@ -41,7 +41,7 @@ fn Test_A_Predicate_Should_Carry_A_Timeout()
     use nomos_ledger::VerificationPredicate;
     use std::time::Duration;
 
-    let predicate = VerificationPredicate::New(vec!["cargo".to_owned()]);
+    let predicate = VerificationPredicate::From_String_Arguments(vec!["cargo".to_owned()]);
 
     assert!(Duration::from_secs(predicate.timeout_seconds) > Duration::ZERO);
 }

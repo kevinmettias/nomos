@@ -15,21 +15,21 @@ use crate::LedgerError;
 use super::{FileLedger, SCHEMA_VERSION};
 
 /// The body of [`FileLedger::Save`], which keeps the documentation and the signature.
-pub(super) fn Save<F: FileSystem, C: Clock, L: CrossProcessLock>(
-    ledger: &FileLedger<F, C, L>,
+pub(super) fn Save_Document<Files: FileSystem, TimeSource: Clock, Lock: CrossProcessLock>(
+    ledger: &FileLedger<Files, TimeSource, Lock>,
     document: &LedgerDocument,
 ) -> Result<(), LedgerError>
 {
-    use super::rendering::Rendered;
-    use super::validation::Validate;
+    use super::rendering::Rendered_Document;
+    use super::validation::Validate_Document;
 
-    let violations = Validate(document, ledger.clock.Now());
+    let violations = Validate_Document(document, ledger.clock.Now());
     if !violations.is_empty()
     {
         return Err(LedgerError::Invalid { violations });
     }
 
-    let rendered = Rendered(document)?;
+    let rendered = Rendered_Document(document)?;
 
     return ledger
         .filesystem
@@ -69,13 +69,13 @@ pub(super) fn Save<F: FileSystem, C: Clock, L: CrossProcessLock>(
 /// taken after the wait for the lock. Read before, a claim that waited on a contended
 /// lock would be granted a lease shortened by however long it waited, and would judge
 /// other holders' leases against a time that had already passed.
-pub(super) fn Decide_Under_Lock<F: FileSystem, C: Clock, L: CrossProcessLock, T, E>(
-    ledger: &FileLedger<F, C, L>,
+pub(super) fn Decide_Under_Lock<Files: FileSystem, TimeSource: Clock, Lock: CrossProcessLock, Outcome, Error>(
+    ledger: &FileLedger<Files, TimeSource, Lock>,
     holder: &str,
-    decide: impl FnOnce(&mut LedgerDocument, Timestamp) -> Result<T, E>,
-) -> Result<T, E>
+    decide: impl FnOnce(&mut LedgerDocument, Timestamp) -> Result<Outcome, Error>,
+) -> Result<Outcome, Error>
 where
-    for<'error> E: From<&'error LedgerError>,
+    for<'error> Error: From<&'error LedgerError>,
 {
     // The stale takeover is dropped here, deliberately and visibly. None of the three
     // verbs' return types can carry one — `Reservation` and `ClaimRefusal` are public
@@ -89,17 +89,17 @@ where
 
             return Ok(decide(document, now));
         })
-        .map_err(|error| return E::from(&error))?;
+        .map_err(|error| return Error::from(&error))?;
 
     return outcome;
 }
 
 /// The body of [`FileLedger::Load`], which keeps the documentation and the signature.
-pub(super) fn Load<F: FileSystem, C: Clock, L: CrossProcessLock>(
-    ledger: &FileLedger<F, C, L>,
+pub(super) fn Load_Document<Files: FileSystem, TimeSource: Clock, Lock: CrossProcessLock>(
+    ledger: &FileLedger<Files, TimeSource, Lock>,
 ) -> Result<LedgerDocument, LedgerError>
 {
-    use super::document::Explain;
+    use super::document::Explain_Parse_Failure;
 
     if !ledger.filesystem.Exists(&ledger.path)
     {
@@ -117,5 +117,5 @@ pub(super) fn Load<F: FileSystem, C: Clock, L: CrossProcessLock>(
         })?;
 
     return serde_json::from_str::<LedgerDocument>(&text)
-        .map_err(|error| return Explain(&ledger.path, &text, &error));
+        .map_err(|error| return Explain_Parse_Failure(&ledger.path, &text, &error));
 }

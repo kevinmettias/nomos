@@ -1,6 +1,8 @@
 // The two error types are the registry's own vocabulary and nobody else raises them, so
 // they live beneath it rather than beside it.
+#[path = "registry/registry_error.rs"]
 mod error;
+#[path = "registry/registry_error_kind.rs"]
 mod error_kind;
 
 pub use error::RegistryError;
@@ -51,7 +53,7 @@ impl Registry
     /// contract. Two contracts for one capability is two meanings for one name.
     pub fn Declare(&mut self, contract: CapabilityContract) -> Result<(), RegistryError>
     {
-        return declaring::Declare(self, contract);
+        return declaring::Declare_Contract(self, contract);
     }
 
     /// # Errors
@@ -60,7 +62,7 @@ impl Registry
     /// offers it, or the offer claims more than the contract's ceiling.
     pub fn Offer(&mut self, offer: ProviderOffer) -> Result<(), RegistryError>
     {
-        return declaring::Offer(self, offer);
+        return declaring::Register_Offer(self, offer);
     }
 
     /// Declares `contract` and registers `offer` against it, in that order.
@@ -111,7 +113,7 @@ impl Registry
     #[must_use]
     pub fn Resolve(&self, requirement: &Requirement) -> Resolution
     {
-        return resolving::Resolve(self, requirement);
+        return resolving::Resolve_Requirement(self, requirement);
     }
 
     /// Answers a requirement whose named provider is required rather than preferred.

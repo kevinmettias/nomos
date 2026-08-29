@@ -33,9 +33,9 @@ use super::required_unmet::RequiredUnmet;
 /// This used to be `offers.find(usable)` over a name-sorted list, which resolved to
 /// whichever provider sorted first. `docs/records/OD-CAPABILITY-001` records what
 /// decided it.
-pub(super) fn Resolve(registry: &Registry, requirement: &Requirement) -> Resolution
+pub(super) fn Resolve_Requirement(registry: &Registry, requirement: &Requirement) -> Resolution
 {
-    let selection = match Selected(registry, requirement)
+    let selection = match Selected_Offer(registry, requirement)
     {
         Ok(selection) => selection,
         Err(reason) => return Resolution::Unsatisfied {
@@ -43,7 +43,7 @@ pub(super) fn Resolve(registry: &Registry, requirement: &Requirement) -> Resolut
             reason,
         },
     };
-    let applicability = Honoured(requirement, &selection);
+    let applicability = Honoured_Preference(requirement, &selection);
 
     return Resolution::Satisfied {
         selection,
@@ -60,7 +60,7 @@ pub(super) fn Resolve(registry: &Registry, requirement: &Requirement) -> Resolut
 /// Compared against who actually answered rather than against a second search for the
 /// preference, because those are the same question and asking it twice is how the two
 /// answers come to disagree.
-fn Honoured(requirement: &Requirement, selection: &Selection) -> Applicability
+fn Honoured_Preference(requirement: &Requirement, selection: &Selection) -> Applicability
 {
     let Some(preferred) = &requirement.preferred
     else
@@ -100,7 +100,7 @@ pub(super) fn Resolve_Requiring(
 {
     let scoped = Scoped_To(requirement, required);
 
-    let selection = match Selected(registry, &scoped)
+    let selection = match Selected_Offer(registry, &scoped)
     {
         Ok(selection) => selection,
         Err(reason) => return RequiredResolution::Unsatisfied {
@@ -147,9 +147,9 @@ fn Settle_Required(requirement: &Requirement, required: &ProviderId, selection: 
 /// this caller cannot read, nobody offers it, and everyone who offers it is below the
 /// floor. Collapsing any two of them would leave a caller unable to tell a composition
 /// mistake from a missing dependency.
-fn Selected(registry: &Registry, requirement: &Requirement) -> Result<Selection, Unmet>
+fn Selected_Offer(registry: &Registry, requirement: &Requirement) -> Result<Selection, Unmet>
 {
-    if let Some(reason) = Unreadable(registry, requirement)
+    if let Some(reason) = Unreadable_Contract(registry, requirement)
     {
         return Err(reason);
     }
@@ -161,7 +161,7 @@ fn Selected(registry: &Registry, requirement: &Requirement) -> Result<Selection,
         return Err(Unmet::NoProvider);
     };
 
-    let usable = Usable(offers, requirement);
+    let usable = Usable_Offers(offers, requirement);
 
     return Selection::Over(usable, requirement.preferred.as_ref()).ok_or_else(|| {
         return Unmet::BelowRequirement {
@@ -188,7 +188,7 @@ fn Offers_For<'registry>(registry: &'registry Registry, requirement: &Requiremen
 /// Both answers are about the capability rather than about any offer: it was never
 /// declared, or it was declared at a version this caller cannot read. Neither depends
 /// on who is offering, which is why they are asked before the offers are looked at.
-fn Unreadable(registry: &Registry, requirement: &Requirement) -> Option<Unmet>
+fn Unreadable_Contract(registry: &Registry, requirement: &Requirement) -> Option<Unmet>
 {
     let Some(contract) = registry.declared.get(&requirement.capability)
     else
@@ -218,7 +218,7 @@ fn Unreadable(registry: &Registry, requirement: &Requirement) -> Option<Unmet>
 /// carries that argument and says where the combined distinction lives instead.
 /// Every offer this requirement could actually use: readable at its version, and at or
 /// above its floor.
-fn Usable(offers: &[ProviderOffer], requirement: &Requirement) -> Vec<ProviderOffer>
+fn Usable_Offers(offers: &[ProviderOffer], requirement: &Requirement) -> Vec<ProviderOffer>
 {
     return offers
         .iter()

@@ -4,7 +4,7 @@
 // broadened guarantees, and settling the report -- is its own responsibility, split out of
 // this file. It stays a sibling rather than a trait implementation's second home because
 // none of it is part of this type's public surface.
-mod invalidation;
+#[path = "memory_store/invalidation.rs"] mod invalidation;
 
 use crate::fact::sealed;
 use std::collections::BTreeSet;
@@ -21,7 +21,6 @@ use crate::FactKey;
 use crate::Dependency;
 use crate::MaterializedFact;
 use crate::propagation::DependencyPropagation;
-use crate::propagation::LocalGraphPropagation;
 #[derive(Clone, Debug)]
 struct Entry
 {
@@ -39,10 +38,14 @@ pub struct MemoryFactStore
     materializations: u32,
     /// Held as `Option` rather than bare `Box<dyn DependencyPropagation>` so `Invalidate`
     /// can take it out with [`Option::take`] before the walk: the walk's callback needs
-    /// `&mut self` for `Invalidate_One` and `self.keys`, which cannot coexist with a borrow
+    /// `&mut self` for `Try_Invalidate_One` and `self.keys`, which cannot coexist with a borrow
     /// of this field for the call that runs it. Always `Some` between calls; taking it and
     /// never restoring it is the one invariant this field asks a caller inside this file to
     /// keep.
+    // Boxed as `dyn DependencyPropagation` rather than a generic parameter on `MemoryFactStore`
+    // itself, because a type parameter here would spread into every public signature that
+    // names this store; a swappable implementation behind one boxed trait object keeps that
+    // seam local to this one field, which is exactly what `With_Propagation` below needs.
     propagation: Option<Box<dyn DependencyPropagation>>,
 }
 
@@ -51,6 +54,8 @@ impl MemoryFactStore
     #[must_use]
     pub fn New() -> Self
     {
+        use crate::propagation::LocalGraphPropagation;
+
         return Self {
             entries: BTreeMap::new(),
             dependents: BTreeMap::new(),
@@ -174,7 +179,7 @@ impl MemoryFactStore
         return self.Latest(key.Digest()).and_then(|entry| return entry.invalidated_at);
     }
 
-    fn Invalidate_One(&mut self, digest: Digest128, from: GenerationId, cause: &str) -> bool
+    fn Try_Invalidate_One(&mut self, digest: Digest128, from: GenerationId, cause: &str) -> bool
     {
         let Some(entry) = self.entries.get_mut(&digest).and_then(|history| return history.last_mut())
         else
@@ -193,11 +198,11 @@ impl MemoryFactStore
     }
 
     /// Whether `digest`'s latest entry is already invalidated, without mutating it -- the
-    /// read-only half of what [`Self::Invalidate_One`] checks before it mutates, split out
+    /// read-only half of what [`Self::Try_Invalidate_One`] checks before it mutates, split out
     /// so a walk can decide whether to keep spreading past a node under an immutable
     /// borrow, before any mutation happens. `OD-ANALYSIS-008` is why this exists as its own
-    /// method rather than staying folded into `Invalidate_One`.
-    fn Already_Invalidated(&self, digest: Digest128) -> bool
+    /// method rather than staying folded into `Try_Invalidate_One`.
+    fn Is_Already_Invalidated(&self, digest: Digest128) -> bool
     {
         return self
             .entries
@@ -238,7 +243,7 @@ impl FactStore for MemoryFactStore
 
     fn Invalidate(&mut self, cause: &GenerationCause, from: GenerationId) -> InvalidationReport
     {
-        return invalidation::Invalidate(self, cause, from);
+        return invalidation::Invalidate_Reached(self, cause, from);
     }
 }
 
@@ -255,6 +260,9 @@ impl MemoryFactStore
     /// promises: a test can substitute an alternate implementation and observe
     /// `FactStore::Invalidate` produce the same `InvalidationReport` without this type or
     /// `FactStore` changing.
+    // Accepts the substitute boxed as `dyn DependencyPropagation`, the same trait-object form
+    // the `propagation` field stores, so a test can hand in any implementation without adding
+    // a generic parameter to `MemoryFactStore`.
     pub(crate) fn With_Propagation(propagation: Box<dyn DependencyPropagation>) -> Self
     {
         return Self {
@@ -268,4 +276,4 @@ impl MemoryFactStore
 }
 
 #[cfg(test)]
-mod tests;
+#[path = "memory_store/tests.rs"] mod tests;

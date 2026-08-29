@@ -5,19 +5,13 @@
 #[derive(Clone, Copy, Debug)]
 pub struct DeclineReason<'a>(&'a str);
 
-impl<'a> From<&'a str> for DeclineReason<'a>
+impl<'a, Text> From<&'a Text> for DeclineReason<'a>
+where
+    Text: AsRef<str> + ?Sized,
 {
-    fn from(value: &'a str) -> Self
+    fn from(value: &'a Text) -> Self
     {
-        return DeclineReason(value);
-    }
-}
-
-impl<'a> From<&'a String> for DeclineReason<'a>
-{
-    fn from(value: &'a String) -> Self
-    {
-        return DeclineReason(value.as_str());
+        return DeclineReason(value.as_ref());
     }
 }
 
@@ -25,7 +19,7 @@ impl<'a> DeclineReason<'a>
 {
     /// The reason as a plain string.
     #[must_use]
-    pub fn As_Str(&self) -> &'a str
+    pub fn As_Text(&self) -> &'a str
     {
         return self.0;
     }

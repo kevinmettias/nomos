@@ -237,7 +237,7 @@ fn Test_A_Claimed_Item_Recording_No_Claim_Should_Still_Be_Invalid()
     item.state = ItemState::Claimed;
     item.claim = None;
 
-    let violations = Validate(&Document(vec![item]), At(NOW));
+    let violations = Validate_Document(&Document(vec![item]), At(NOW));
 
     assert!(
         violations
@@ -255,7 +255,7 @@ fn Test_A_Lapsed_Claim_Should_Not_Be_Reported_As_A_Violation()
     let document = Document(vec![Held_By(Item("T-1", &["src/a.rs"]), "agent-a", NOW - 1)]);
 
     assert_eq!(
-        Validate(&document, At(NOW)),
+        Validate_Document(&document, At(NOW)),
         Vec::<String>::new(),
         "a lease that ran out is the normal end of an agent that died, not a broken file"
     );

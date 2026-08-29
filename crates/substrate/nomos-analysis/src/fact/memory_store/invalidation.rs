@@ -22,23 +22,23 @@ use super::MemoryFactStore;
 
 /// The body of [`super::MemoryFactStore::Invalidate`], which keeps the trait's documentation
 /// and signature.
-pub(super) fn Invalidate(store: &mut MemoryFactStore, cause: &GenerationCause, from: GenerationId) -> InvalidationReport
+pub(super) fn Invalidate_Reached(store: &mut MemoryFactStore, cause: &GenerationCause, from: GenerationId) -> InvalidationReport
 {
     let described = cause.Describe();
     let invalidating = Invalidating { from, described: &described };
-    let mut report = Opened(cause, from);
+    let mut report = Opened_Report(cause, from);
     let roots = Invalidate_Named(store, cause, invalidating, &mut report);
 
-    let seen = Propagate(store, roots, invalidating, &mut report);
+    let seen = Propagate_To_Dependents(store, roots, invalidating, &mut report);
 
     Note_Broadening(store, cause.Granularity(), &seen, &mut report);
-    Settle(store, &mut report);
+    Settle_Report(store, &mut report);
 
     return report;
 }
 
 /// An empty report of what this cause is about to invalidate.
-fn Opened(cause: &GenerationCause, from: GenerationId) -> InvalidationReport
+fn Opened_Report(cause: &GenerationCause, from: GenerationId) -> InvalidationReport
 {
     return InvalidationReport {
         cause: cause.clone(),
@@ -61,14 +61,14 @@ fn Invalidate_Named(
     let named: Vec<Digest128> = store
         .keys
         .iter()
-        .filter(|(_, key)| return cause.Names(key))
+        .filter(|(_, key)| return cause.Is_Naming(key))
         .map(|(digest, _)| return *digest)
         .collect();
 
     let mut frontier: Vec<Digest128> = Vec::new();
     for digest in named
     {
-        if !store.Invalidate_One(digest, invalidating.from, invalidating.described)
+        if !store.Try_Invalidate_One(digest, invalidating.from, invalidating.described)
         {
             continue;
         }
@@ -89,19 +89,19 @@ fn Invalidate_Named(
 /// than cloning it first (`OD-ANALYSIS-008`, whose cost was `O(the whole store's
 /// dependents map)` on every call, not just what a given invalidation's frontier actually
 /// reaches). The first pass borrows `store` immutably to walk `dependents` and decide,
-/// through [`MemoryFactStore::Already_Invalidated`] -- the read-only half of what
-/// [`MemoryFactStore::Invalidate_One`] checks before it mutates -- which nodes to keep
+/// through [`MemoryFactStore::Is_Already_Invalidated`] -- the read-only half of what
+/// [`MemoryFactStore::Try_Invalidate_One`] checks before it mutates -- which nodes to keep
 /// spreading past and to collect. Nothing mutates during that pass, so the immutable
 /// borrow `Spread` needs for `dependents` coexists with the immutable reads
-/// `Already_Invalidated` needs; neither coexists with the mutation `Invalidate_One` needs,
+/// `Is_Already_Invalidated` needs; neither coexists with the mutation `Try_Invalidate_One` needs,
 /// which is exactly why the original clone existed. Only the second pass, after the walk
-/// and its borrow have ended, calls `Invalidate_One` and writes into `report`.
+/// and its borrow have ended, calls `Try_Invalidate_One` and writes into `report`.
 ///
 /// The split is sound because a digest is visited exactly once per call -- the trait's own
-/// invariant, pinned by `propagation.rs`'s own suite -- so no digest's `Already_Invalidated`
+/// invariant, pinned by `propagation.rs`'s own suite -- so no digest's `Is_Already_Invalidated`
 /// read in the first pass can be stale from a mutation this same call made to a *different*
 /// digest: invalidating one digest's entry never touches another digest's entry.
-fn Propagate(
+fn Propagate_To_Dependents(
     store: &mut MemoryFactStore,
     roots: Vec<Digest128>,
     invalidating: Invalidating<'_>,
@@ -109,20 +109,23 @@ fn Propagate(
 ) -> BTreeSet<Digest128>
 {
     let propagation = Taken_Propagation(store);
-    let walk = Walked(store, propagation.as_ref(), roots);
+    let walk = Walked_Dependents(store, propagation.as_ref(), roots);
     store.propagation = Some(propagation);
 
     for consumer in walk.reached
     {
-        Apply(store, consumer, invalidating, report);
+        Apply_To_Consumer(store, consumer, invalidating, report);
     }
 
     return walk.seen;
 }
 
-/// Takes `store.propagation` out so the first pass in [`Propagate`] can call it under an
+/// Takes `store.propagation` out so the first pass in [`Propagate_To_Dependents`] can call it under an
 /// immutable borrow of `store` without a live mutable borrow of this one field left behind
 /// to conflict with it.
+// Returns the boxed `dyn DependencyPropagation` unchanged from how `store.propagation` already
+// holds it -- this function only relocates ownership of that trait object for the duration of
+// the walk, it does not itself choose dynamic dispatch over a generic parameter.
 fn Taken_Propagation(store: &mut MemoryFactStore) -> Box<dyn DependencyPropagation>
 {
     // `store.propagation` is `Some` between any two calls into this type — see the field's
@@ -142,15 +145,18 @@ fn Taken_Propagation(store: &mut MemoryFactStore) -> Box<dyn DependencyPropagati
     return propagation;
 }
 
-/// The first pass of [`Propagate`]'s walk.
-fn Walked(store: &MemoryFactStore, propagation: &dyn DependencyPropagation, roots: Vec<Digest128>) -> Walk
+/// The first pass of [`Propagate_To_Dependents`]'s walk.
+// Takes the propagation strategy as `&dyn DependencyPropagation`, matching how `MemoryFactStore`
+// stores it boxed, so the walk runs against whichever implementation the store was built with
+// (`LocalGraphPropagation` by default, or a test's substitute) rather than one fixed here.
+fn Walked_Dependents(store: &MemoryFactStore, propagation: &dyn DependencyPropagation, roots: Vec<Digest128>) -> Walk
 {
     let mut seen: BTreeSet<Digest128> = roots.iter().copied().collect();
     let mut reached: Vec<Digest128> = Vec::new();
 
     propagation.Spread(&store.dependents, roots, &mut |consumer| {
         seen.insert(consumer);
-        if store.Already_Invalidated(consumer)
+        if store.Is_Already_Invalidated(consumer)
         {
             return false;
         }
@@ -174,9 +180,9 @@ struct Walk
 
 /// One node the first pass decided to keep: invalidated for real, and — if it was live —
 /// named in `report`.
-fn Apply(store: &mut MemoryFactStore, consumer: Digest128, invalidating: Invalidating<'_>, report: &mut InvalidationReport)
+fn Apply_To_Consumer(store: &mut MemoryFactStore, consumer: Digest128, invalidating: Invalidating<'_>, report: &mut InvalidationReport)
 {
-    if !store.Invalidate_One(consumer, invalidating.from, invalidating.described)
+    if !store.Try_Invalidate_One(consumer, invalidating.from, invalidating.described)
     {
         return;
     }
@@ -224,7 +230,7 @@ fn Note_Broadening(
 ///
 /// The retained count is taken last, after everything the cause reaches has been
 /// invalidated, because it is the answer to "what survived" and not to "what was here".
-fn Settle(store: &MemoryFactStore, report: &mut InvalidationReport)
+fn Settle_Report(store: &MemoryFactStore, report: &mut InvalidationReport)
 {
     report.direct.sort();
     report.dependent.sort();

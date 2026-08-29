@@ -1,14 +1,14 @@
 //! Running the shared gate step the predicate does not cover.
 
-use super::{FileSystem, Clock, CrossProcessLock, FileLedger, ItemId, Path, FinishRefusal, Workflow_Path, GateUnknown, Derive_Step, LINT_STEP, ProcessLauncher, Runner, GateOutcome, Commanded, Ran_To_Completion};
+use super::{FileSystem, Clock, CrossProcessLock, FileLedger, ItemId, Path, FinishRefusal, Workflow_Path, GateUnknown, Derive_Step, LINT_STEP, ProcessLauncher, Runner, GateOutcome, Command_From_Argv, Ran_To_Completion};
 
 /// The gate's lint step, read out of the workflow rather than written here.
 ///
 /// Both failures are `GateUndetermined` rather than a licence to run the predicate alone:
 /// a workflow nobody could read and a workflow with no such step both leave the question
 /// "would this land" unanswered, and that is not the same as answering it yes.
-pub(super) fn Gate_Argv<F: FileSystem, C: Clock, L: CrossProcessLock>(
-    ledger: &FileLedger<F, C, L>,
+pub(super) fn Gate_Argv<Files: FileSystem, TimeSource: Clock, Lock: CrossProcessLock>(
+    ledger: &FileLedger<Files, TimeSource, Lock>,
     item: &ItemId,
     working_directory: Option<&Path>,
 ) -> Result<Vec<String>, FinishRefusal>
@@ -43,15 +43,15 @@ pub(super) fn Gate_Argv<F: FileSystem, C: Clock, L: CrossProcessLock>(
 /// Returns [`FinishRefusal::GateUndetermined`] when what the gate checks cannot be
 /// established — which is a refusal, not a licence to run the predicate alone — and
 /// [`FinishRefusal::GateFailed`] when the step ran and the answer was no.
-pub(super) fn Run_Gate_Step<F: FileSystem, C: Clock, L: CrossProcessLock>(
-    ledger: &FileLedger<F, C, L>,
+pub(super) fn Run_Gate_Step<Files: FileSystem, TimeSource: Clock, Lock: CrossProcessLock>(
+    ledger: &FileLedger<Files, TimeSource, Lock>,
     launcher: &impl ProcessLauncher,
     item: &ItemId,
     runner: Runner<'_>,
 ) -> Result<GateOutcome, FinishRefusal>
 {
     let argv = Gate_Argv(ledger, item, runner.working_directory)?;
-    let command = Commanded(argv.clone(), runner);
+    let command = Command_From_Argv(argv.clone(), runner);
     let ran = Ran_To_Completion(launcher, &command, item)?;
 
     if ran.code != 0

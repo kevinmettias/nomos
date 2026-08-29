@@ -42,7 +42,7 @@ impl Standing
     /// The question a composition root asks when it wants its provider choice to be a
     /// decision rather than a coincidence.
     #[must_use]
-    pub const fn Decided(self) -> bool
+    pub const fn Is_Decided(self) -> bool
     {
         return matches!(self, Self::Stronger | Self::Weaker);
     }

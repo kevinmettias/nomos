@@ -26,13 +26,13 @@ use super::reservation::{RecordDeclaration, Refuse_A_Spent_Record};
 use super::FileLedger;
 
 /// The body of [`FileLedger::Validate_Current`], which keeps the documentation and the signature.
-pub(super) fn Validate_Current<F: FileSystem, C: Clock, L: CrossProcessLock>(
-    ledger: &FileLedger<F, C, L>,
+pub(super) fn Validate_Current<Files: FileSystem, TimeSource: Clock, Lock: CrossProcessLock>(
+    ledger: &FileLedger<Files, TimeSource, Lock>,
 ) -> Result<(), LedgerError>
 {
-    use super::validation::Validate;
+    use super::validation::Validate_Document;
 
-    let violations = Validate(&ledger.Load()?, ledger.clock.Now());
+    let violations = Validate_Document(&ledger.Load()?, ledger.clock.Now());
 
     return if violations.is_empty()
     {
@@ -45,8 +45,8 @@ pub(super) fn Validate_Current<F: FileSystem, C: Clock, L: CrossProcessLock>(
 }
 
 /// The body of [`FileLedger::Add`], which keeps the documentation and the signature.
-pub(super) fn Add<F: FileSystem, C: Clock, L: CrossProcessLock>(
-    ledger: &mut FileLedger<F, C, L>,
+pub(super) fn Add_Item<Files: FileSystem, TimeSource: Clock, Lock: CrossProcessLock>(
+    ledger: &mut FileLedger<Files, TimeSource, Lock>,
     item: &LedgerItem,
     holder: &str,
     declared: &RecordDeclaration,
@@ -72,14 +72,14 @@ pub(super) fn Add<F: FileSystem, C: Clock, L: CrossProcessLock>(
 }
 
 /// The body of [`FileLedger::Decline`], which keeps the documentation and the signature.
-pub(super) fn Decline<F: FileSystem, C: Clock, L: CrossProcessLock>(
-    ledger: &mut FileLedger<F, C, L>,
+pub(super) fn Decline_Item<Files: FileSystem, TimeSource: Clock, Lock: CrossProcessLock>(
+    ledger: &mut FileLedger<Files, TimeSource, Lock>,
     item: &ItemId,
     holder: Holder<'_>,
     reason: DeclineReason<'_>,
 ) -> Result<(), ClaimRefusal>
 {
-    return Decide_Under_Lock(ledger, holder.As_Str(), |document, now| {
+    return Decide_Under_Lock(ledger, holder.As_Text(), |document, now| {
         if let Some(refusal) = Decline_Refusal(document, item, now)
         {
             return Err(refusal);
@@ -90,7 +90,7 @@ pub(super) fn Decline<F: FileSystem, C: Clock, L: CrossProcessLock>(
             if &candidate.id == item
             {
                 // `LedgerItem::Decline` and not two statements here, for the reason
-                // `Replace_Lapsed_Claim` is one call: a call site that wrote the state
+                // `Try_Replace_Lapsed_Claim` is one call: a call site that wrote the state
                 // itself would be free to write it and not the declination, and the
                 // declination is the half this verb was added to keep.
                 candidate.Decline(reason, holder, now);
@@ -102,8 +102,8 @@ pub(super) fn Decline<F: FileSystem, C: Clock, L: CrossProcessLock>(
 }
 
 /// The body of [`FileLedger::Take_Over`], which keeps the documentation and the signature.
-pub(super) fn Take_Over<F: FileSystem, C: Clock, L: CrossProcessLock>(
-    ledger: &mut FileLedger<F, C, L>,
+pub(super) fn Take_Over<Files: FileSystem, TimeSource: Clock, Lock: CrossProcessLock>(
+    ledger: &mut FileLedger<Files, TimeSource, Lock>,
     item: &ItemId,
     holder: &str,
     lease: Duration,

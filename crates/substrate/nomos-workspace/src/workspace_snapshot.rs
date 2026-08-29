@@ -65,7 +65,7 @@ impl WorkspaceSnapshot
     }
 
     #[must_use]
-    pub fn Len(&self) -> usize
+    pub fn Length(&self) -> usize
     {
         return self.members.len();
     }

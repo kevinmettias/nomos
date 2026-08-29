@@ -3,7 +3,9 @@
 // `RefusalLayer` is its own public type and keeps its own file. The one-line renderings
 // behind `Describe` are private and keep theirs too, split out by responsibility; neither
 // is part of the crate's public surface, so only `ClaimRefusal` itself stays here.
+#[path = "refusal/refusal_layer.rs"]
 mod layer;
+#[path = "refusal/message.rs"]
 mod message;
 
 pub use layer::RefusalLayer;
@@ -195,7 +197,7 @@ impl ClaimRefusal
                 item,
                 holder,
                 since,
-            } => message::Lapsed(item, holder, *since),
+            } => message::Lapsed_Claim(item, holder, *since),
             Self::StillHeld {
                 item,
                 holder,
@@ -297,4 +299,5 @@ impl ClaimRefusal
 }
 
 #[cfg(test)]
+#[path = "refusal/tests.rs"]
 mod tests;

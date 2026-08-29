@@ -270,7 +270,7 @@ fn Test_Replacing_A_Lapsed_Claim_Should_Keep_The_Claim_It_Replaced()
     item.state = ItemState::Claimed;
     item.claim = Some(Claimed_By("dead-agent", 2_000));
 
-    assert!(item.Replace_Lapsed_Claim(Claimed_By("agent-b", 9_000), At(2_001)));
+    assert!(item.Try_Replace_Lapsed_Claim(Claimed_By("agent-b", 9_000), At(2_001)));
 
     assert_eq!(
         item.claim.as_ref().map(|claim| return claim.holder.clone()),
@@ -299,7 +299,7 @@ fn Test_Replacing_Should_Refuse_A_Live_Claim_And_An_Absent_One()
     live.state = ItemState::Claimed;
     live.claim = Some(Claimed_By("agent-a", 2_000));
 
-    assert!(!live.Replace_Lapsed_Claim(Claimed_By("agent-b", 9_000), At(1_999)));
+    assert!(!live.Try_Replace_Lapsed_Claim(Claimed_By("agent-b", 9_000), At(1_999)));
     assert_eq!(
         live.claim.as_ref().map(|claim| return claim.holder.clone()),
         Some("agent-a".to_owned()),
@@ -310,7 +310,7 @@ fn Test_Replacing_Should_Refuse_A_Live_Claim_And_An_Absent_One()
     let mut hollow = Item("T-2");
     hollow.state = ItemState::Claimed;
 
-    assert!(!hollow.Replace_Lapsed_Claim(Claimed_By("agent-b", 9_000), At(2_001)));
+    assert!(!hollow.Try_Replace_Lapsed_Claim(Claimed_By("agent-b", 9_000), At(2_001)));
     assert!(
         hollow.claim.is_none(),
         "a claim was written over an item that recorded none"
@@ -323,9 +323,9 @@ fn Test_Replacing_Should_Refuse_A_Live_Claim_And_An_Absent_One()
 #[test]
 fn Test_An_Empty_Predicate_Should_Not_Be_Runnable()
 {
-    assert!(!VerificationPredicate::New(Vec::new()).Is_Runnable());
-    assert!(!VerificationPredicate::New(vec![String::new()]).Is_Runnable());
-    assert!(VerificationPredicate::New(vec!["cargo".to_owned(), "test".to_owned()]).Is_Runnable());
+    assert!(!VerificationPredicate::From_String_Arguments(Vec::new()).Is_Runnable());
+    assert!(!VerificationPredicate::From_String_Arguments(vec![String::new()]).Is_Runnable());
+    assert!(VerificationPredicate::From_String_Arguments(vec!["cargo".to_owned(), "test".to_owned()]).Is_Runnable());
 }
 
 /// A listing is columns, and columns need the width the caller asked for. A `Display`

@@ -124,7 +124,7 @@ impl FinishRefusal
                 argv,
                 exit_code,
                 output_tail,
-            } => Gate_Failed(item, argv, *exit_code, output_tail),
+            } => Gate_Failed_From_Argv(item, argv, *exit_code, output_tail),
             Self::NotRecorded { cause } =>
             {
                 format!("the predicate passed but the result could not be recorded: {cause}")
@@ -143,7 +143,7 @@ impl FinishRefusal
     /// found out whether the work passes the gate, and reporting that as failing work
     /// would be the same conflation one arm further down.
     #[must_use]
-    pub const fn Judged_The_Work(&self) -> bool
+    pub const fn Has_Judged_The_Work(&self) -> bool
     {
         return matches!(self, Self::PredicateFailed { .. } | Self::GateFailed { .. });
     }
@@ -193,7 +193,7 @@ pub(super) fn Gate_Undetermined(item: &ItemId, cause: &GateUnknown) -> String
 }
 
 /// A gate that ran and said no, before the item's own predicate was asked.
-pub(super) fn Gate_Failed(item: &ItemId, argv: &[String], exit_code: i32, output_tail: &str) -> String
+pub(super) fn Gate_Failed_From_Argv(item: &ItemId, argv: &[String], exit_code: i32, output_tail: &str) -> String
 {
     return format!(
         "{item}'s work may be right and still cannot land: the gate's own step `{}` exited \
