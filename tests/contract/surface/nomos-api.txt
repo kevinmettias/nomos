@@ -197,13 +197,10 @@ pub struct field nomos_api::FailureResponse::rule: String
 pub struct field nomos_api::FieldValueResponse::field: String
 pub struct field nomos_api::FieldValueResponse::origin: OriginResponse
 pub struct field nomos_api::FieldValueResponse::value: String
-pub struct field nomos_api::GateRunResponse::baselined_findings: Vec<Finding>
-pub struct field nomos_api::GateRunResponse::blocking_findings: Vec<Finding>
-pub struct field nomos_api::GateRunResponse::calibrated_findings: Vec<Finding>
 pub struct field nomos_api::GateRunResponse::disposition: Disposition
+pub struct field nomos_api::GateRunResponse::findings: GateFindings
 pub struct field nomos_api::GateRunResponse::root: PathBuf
 pub struct field nomos_api::GateRunResponse::run: RunId
-pub struct field nomos_api::GateRunResponse::suppressed_findings: Vec<Finding>
 pub struct field nomos_api::IdentityChangeResponse::after: String
 pub struct field nomos_api::IdentityChangeResponse::before: String
 pub struct field nomos_api::IdentityChangeResponse::field: String
