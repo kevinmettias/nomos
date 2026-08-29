@@ -6,7 +6,6 @@
 
 use nomos_cap_syntax::{PayloadItem, SyntaxPayload, FUNCTION, IMPLEMENTATION, TRAIT};
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId, SubjectId};
-use nomos_model::Content_Digest;
 
 /// The one literal exemption: every binary's entry point is spelled `main`, fixed by the
 /// language rather than by this workspace's naming choice.
@@ -28,7 +27,7 @@ pub(super) fn Violations_In(payload: &SyntaxPayload, path: &str) -> Vec<Finding>
 
         if !Is_Pascal_Snake_Case(item.Own_Name())
         {
-            let violation = Violation(path, item);
+            let violation = Violation_Finding(path, item);
             findings.push(violation);
         }
     }
@@ -41,7 +40,7 @@ pub(super) fn Violations_In(payload: &SyntaxPayload, path: &str) -> Vec<Finding>
 /// Its name is fixed by the trait it implements — often a foreign one, such as `Display`
 /// or `Iterator` — and the compiler forces an exact match regardless of this workspace's
 /// own convention. The same [`SyntaxPayload::Enclosing`] and shape check
-/// `crate::universe::Enumeration_Universe` already uses to tell an inherent `impl` from a
+/// `crate::universe_kind::Enumeration_Universe` already uses to tell an inherent `impl` from a
 /// trait one.
 fn Is_Trait_Method(payload: &SyntaxPayload, ordinal: usize) -> bool
 {
@@ -87,8 +86,10 @@ fn Is_Pascal_Snake_Case(name: &str) -> bool
 }
 
 /// A finding for one function whose name does not conform.
-fn Violation(path: &str, item: &PayloadItem) -> Finding
+fn Violation_Finding(path: &str, item: &PayloadItem) -> Finding
 {
+    use nomos_model::Content_Digest;
+
     let qualified = format!("{path}::{}", item.qualified_name);
 
     return Finding {
@@ -172,7 +173,7 @@ mod tests
     {
         use super::*;
 
-        fn Payload(text: &str) -> SyntaxPayload
+        fn Payload_From_Text(text: &str) -> SyntaxPayload
         {
             return nomos_cap_syntax::Parse_Payload(text.as_bytes())
                 .expect("this fixture payload is well formed");
@@ -181,7 +182,7 @@ mod tests
         #[test]
         fn Test_A_Conforming_Function_Should_Produce_No_Finding()
         {
-            let payload = Payload(
+            let payload = Payload_From_Text(
                 "unexpanded\t0\n\
                  item\t0\tFunction\tPublic\tGood_Name\t.\t+fn/0\n",
             );
@@ -194,7 +195,7 @@ mod tests
         #[test]
         fn Test_A_Non_Conforming_Function_Should_Produce_One_Finding()
         {
-            let payload = Payload(
+            let payload = Payload_From_Text(
                 "unexpanded\t0\n\
                  item\t0\tFunction\tPublic\tbad_name\t.\t+fn/0\n",
             );
@@ -210,7 +211,7 @@ mod tests
         #[test]
         fn Test_Main_Should_Be_Exempt()
         {
-            let payload = Payload(
+            let payload = Payload_From_Text(
                 "unexpanded\t0\n\
                  item\t0\tFunction\tPrivate\tmain\t.\t+fn/0\n",
             );
@@ -223,7 +224,7 @@ mod tests
         #[test]
         fn Test_A_Trait_Methods_Non_Conforming_Name_Should_Be_Exempt()
         {
-            let payload = Payload(
+            let payload = Payload_From_Text(
                 "unexpanded\t0\n\
                  item\t0\tImplementation\tNotApplicable\tDisplay\t.\t+trait\n\
                  item\t1\tFunction\tPublic\tDisplay::fmt\t.\t+fn/1\n",
@@ -237,7 +238,7 @@ mod tests
         #[test]
         fn Test_An_Inherent_Methods_Non_Conforming_Name_Should_Not_Be_Exempt()
         {
-            let payload = Payload(
+            let payload = Payload_From_Text(
                 "unexpanded\t0\n\
                  item\t0\tImplementation\tNotApplicable\tTable\t.\t+inherent\n\
                  item\t1\tFunction\tPublic\tTable::bad_name\t.\t+fn/1\n",
@@ -251,7 +252,7 @@ mod tests
         #[test]
         fn Test_A_File_Declaring_Nothing_Should_Produce_No_Finding()
         {
-            let payload = Payload("unexpanded\t0\n");
+            let payload = Payload_From_Text("unexpanded\t0\n");
 
             assert!(Violations_In(&payload, "src/lib.rs").is_empty());
         }

@@ -41,7 +41,7 @@ impl CancellationBehavior
 
     /// Whether cancellation is ever honored, at any point.
     #[must_use]
-    pub const fn Cancellable(self) -> bool
+    pub const fn Is_Cancellable(self) -> bool
     {
         return !matches!(self, Self::Uncancellable);
     }
@@ -63,13 +63,13 @@ mod tests
     #[test]
     fn Test_Uncancellable_Should_Not_Be_Cancellable()
     {
-        assert!(!CancellationBehavior::Uncancellable.Cancellable());
+        assert!(!CancellationBehavior::Uncancellable.Is_Cancellable());
     }
 
     #[test]
     fn Test_The_Other_Two_Should_Be_Cancellable()
     {
-        assert!(CancellationBehavior::CancellableBeforeSideEffects.Cancellable());
-        assert!(CancellationBehavior::CancellableWithCompensation.Cancellable());
+        assert!(CancellationBehavior::CancellableBeforeSideEffects.Is_Cancellable());
+        assert!(CancellationBehavior::CancellableWithCompensation.Is_Cancellable());
     }
 }

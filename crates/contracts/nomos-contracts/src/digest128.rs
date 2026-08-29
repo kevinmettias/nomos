@@ -76,6 +76,10 @@ impl core::fmt::Debug for Digest128
 /// carried a `Waiver { Check: path, Path: check }` that compiled, ran, and suppressed
 /// nothing for as long as it existed — the fields were both `string`, so nothing could
 /// have caught it.
+// A macro, not a shared generic wrapper: a generic `Identity<Digest128, Marker>` would
+// let two identities differ only by a phantom type a caller could still get wrong, while
+// a macro-generated struct is a genuinely distinct compile-time type with no such escape
+// — the property this whole module exists for.
 macro_rules! Digest_Identity
 {
     ($(#[$attribute:meta])* $name:ident) =>
@@ -158,6 +162,9 @@ Digest_Identity!
 }
 
 /// Declares a newtype over an authored, human-readable identifier.
+// Same reasoning as `Digest_Identity`, applied to the string-backed identities: a macro
+// mints a distinct concrete type per identity so two authored identifiers cannot be
+// swapped for each other by the compiler, which a shared generic wrapper would allow.
 macro_rules! Named_Identity
 {
     ($(#[$attribute:meta])* $name:ident) =>

@@ -143,7 +143,7 @@ fn Assert_The_Unread_Subject_Is_Advisory(findings: &[Finding])
 
 /// The unsound half of the scoping, in the direction it is allowed to be unsound.
 ///
-/// `Could_Have_Declared` is a substring test over a text no parser read, so a name
+/// `Can_Have_Declared` is a substring test over a text no parser read, so a name
 /// spelled only in a comment counts as "could have declared it". That is a false
 /// positive and it *withholds* a block, which is the safe direction and the reason an
 /// unsound signal is admissible here at all: `Check_Index_Of` may not use text as a

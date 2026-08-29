@@ -83,7 +83,7 @@ mod tests
 {
     use super::*;
 
-    fn Reach(
+    fn Reach_Fixture(
         declared: Vec<EnforcerRef>,
         expected: GateCategory,
         computed: GateCategory,
@@ -109,7 +109,7 @@ mod tests
     fn Test_Review_Declaration_Should_Be_Truthful_When_Nothing_Enforces_It()
     {
         assert!(
-            Reach(
+            Reach_Fixture(
                 vec![EnforcerRef::Review],
                 GateCategory::Review,
                 GateCategory::Review
@@ -125,7 +125,7 @@ mod tests
     #[test]
     fn Test_Declaring_A_Check_That_Nothing_Invokes_Should_Not_Be_Truthful()
     {
-        let overclaimed = Reach(
+        let overclaimed = Reach_Fixture(
             vec![Named_Check("check-strategy-docs")],
             GateCategory::Blocking,
             GateCategory::Unreachable,
@@ -142,7 +142,7 @@ mod tests
     #[test]
     fn Test_Honestly_Declared_Unreachable_Should_Be_Truthful()
     {
-        let honest = Reach(
+        let honest = Reach_Fixture(
             vec![Named_Check("check-strategy-docs")],
             GateCategory::Unreachable,
             GateCategory::Unreachable,
@@ -158,7 +158,7 @@ mod tests
     fn Test_Declaring_Review_While_A_Gate_Enforces_It_Should_Not_Be_Truthful()
     {
         assert!(
-            !Reach(
+            !Reach_Fixture(
                 vec![EnforcerRef::Review],
                 GateCategory::Blocking,
                 GateCategory::Blocking
@@ -174,7 +174,7 @@ mod tests
     fn Test_Naming_A_Check_While_Claiming_Review_Should_Not_Be_Truthful()
     {
         assert!(
-            !Reach(
+            !Reach_Fixture(
                 vec![Named_Check("check-orphan-modules")],
                 GateCategory::Review,
                 GateCategory::Review
@@ -186,7 +186,7 @@ mod tests
     #[test]
     fn Test_A_Breach_Should_Make_A_Rule_Untruthful_Even_When_Blocking()
     {
-        let mut reach = Reach(
+        let mut reach = Reach_Fixture(
             vec![Named_Check("check-cohesion")],
             GateCategory::Blocking,
             GateCategory::Blocking,

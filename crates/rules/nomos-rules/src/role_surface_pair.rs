@@ -45,7 +45,6 @@
 //! chooses to make against a finding this rule produces, not something this rule invokes.
 
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
-use nomos_model::Subject_Of_Path;
 
 /// This rule's own identifier.
 pub const DECLARED_ROLE_MATCHES_SURFACE: &str = "declared-role-matches-surface";
@@ -85,6 +84,8 @@ pub fn Check_Declared_Role_Matches_Surface(subjects: &[RoleSurfacePair]) -> Vec<
 
 fn Agent_Required_Finding(subject: &RoleSurfacePair) -> Finding
 {
+    use nomos_model::Subject_Of_Path;
+
     return Finding {
         rule: RuleId::New(DECLARED_ROLE_MATCHES_SURFACE),
         subject: Subject_Of_Path(&subject.crate_root),
@@ -105,7 +106,7 @@ mod tests
 {
     use super::*;
 
-    fn Pair(crate_name: &str, declared_role: &str, actual_surface: &str) -> RoleSurfacePair
+    fn Role_Surface_Pair(crate_name: &str, declared_role: &str, actual_surface: &str) -> RoleSurfacePair
     {
         return RoleSurfacePair {
             crate_root: format!("crates/example/{crate_name}"),
@@ -119,8 +120,8 @@ mod tests
     fn Test_Every_Subject_Is_Reported_As_Agent_Required()
     {
         let subjects = vec![
-            Pair("nomos-example-a", "Reads files.", "pub fn Read() -> String"),
-            Pair("nomos-example-b", "Writes files.", "pub fn Write(text: &str)"),
+            Role_Surface_Pair("nomos-example-a", "Reads files.", "pub fn Read() -> String"),
+            Role_Surface_Pair("nomos-example-b", "Writes files.", "pub fn Write(text: &str)"),
         ];
 
         let findings = Check_Declared_Role_Matches_Surface(&subjects);
@@ -141,8 +142,8 @@ mod tests
     #[test]
     fn Test_The_Rule_Never_Reaches_A_Verdict_Regardless_Of_Content()
     {
-        let agrees = Pair("nomos-consistent", "Reads files.", "pub fn Read() -> String");
-        let conflicts = Pair("nomos-inconsistent", "Reads files.", "pub fn Delete_Everything()");
+        let agrees = Role_Surface_Pair("nomos-consistent", "Reads files.", "pub fn Read() -> String");
+        let conflicts = Role_Surface_Pair("nomos-inconsistent", "Reads files.", "pub fn Delete_Everything()");
 
         let findings = Check_Declared_Role_Matches_Surface(&[agrees, conflicts]);
         let (first, second) = (findings.first().expect("two findings"), findings.get(1).expect("two findings"));
@@ -154,7 +155,7 @@ mod tests
     #[test]
     fn Test_Findings_Are_Sorted_By_Subject_Name()
     {
-        let subjects = vec![Pair("nomos-z", "z", "z"), Pair("nomos-a", "a", "a")];
+        let subjects = vec![Role_Surface_Pair("nomos-z", "z", "z"), Role_Surface_Pair("nomos-a", "a", "a")];
 
         let findings = Check_Declared_Role_Matches_Surface(&subjects);
 
@@ -171,7 +172,7 @@ mod tests
     #[test]
     fn Test_The_Locations_Name_The_Readme_And_The_Surface_Snapshot()
     {
-        let subjects = vec![Pair("nomos-example-a", "Reads files.", "pub fn Read() -> String")];
+        let subjects = vec![Role_Surface_Pair("nomos-example-a", "Reads files.", "pub fn Read() -> String")];
 
         let findings = Check_Declared_Role_Matches_Surface(&subjects);
 

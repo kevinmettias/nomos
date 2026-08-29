@@ -33,7 +33,7 @@ impl RetryPolicy
 {
     /// Whether this policy permits any retry at all.
     #[must_use]
-    pub const fn Retryable(self) -> bool
+    pub const fn Is_Retryable(self) -> bool
     {
         return matches!(self, Self::Retry { .. });
     }
@@ -47,7 +47,7 @@ mod tests
     #[test]
     fn Test_No_Retry_Should_Not_Be_Retryable()
     {
-        assert!(!RetryPolicy::NoRetry.Retryable());
+        assert!(!RetryPolicy::NoRetry.Is_Retryable());
     }
 
     #[test]
@@ -58,6 +58,6 @@ mod tests
             deduplication_token_required: false,
         };
 
-        assert!(policy.Retryable());
+        assert!(policy.Is_Retryable());
     }
 }

@@ -82,7 +82,7 @@ pub(crate) fn Read_Universes(path: &str, payload: &SyntaxPayload) -> Reading
 {
     if let Some(field) = Unobserved_Field(payload)
     {
-        return Unobserved(field);
+        return Unobserved_Reading(field);
     }
 
     let mut found = Vec::new();
@@ -126,7 +126,7 @@ fn Unobserved_Field(payload: &SyntaxPayload) -> Option<&'static str>
 ///
 /// Named as unobserved rather than reported as no universe, because a file the reader could
 /// not see the doc comments of is not a file that declares nothing.
-fn Unobserved(field: &str) -> Reading
+fn Unobserved_Reading(field: &str) -> Reading
 {
     return Reading::Unobserved {
         because: format!(
@@ -171,7 +171,7 @@ fn Declared_By(
 /// matched anything measurable.
 fn Constant_Universe(path: &str, item: &PayloadItem) -> Option<DeclaredUniverse>
 {
-    if !Declares_A_Constant_Universe(item)
+    if !Is_Constant_Universe_Declaration(item)
     {
         return None;
     }
@@ -188,7 +188,7 @@ fn Constant_Universe(path: &str, item: &PayloadItem) -> Option<DeclaredUniverse>
 ///
 /// The three together are the whole of what a declared constant universe is: a private one
 /// is out of scope by the narrowing above, and a scalar constant is not a list of anything.
-fn Declares_A_Constant_Universe(item: &PayloadItem) -> bool
+fn Is_Constant_Universe_Declaration(item: &PayloadItem) -> bool
 {
     return item.kind == "Constant" && item.Is_Public() && item.shape.Value() == Some(SLICE);
 }
@@ -299,7 +299,7 @@ mod tests
     use nomos_cap_syntax::Parse_Payload;
 
     /// A payload built from item records, so a fixture reads as the bytes a provider wrote.
-    fn Payload(records: &str) -> SyntaxPayload
+    fn Payload_From_Records(records: &str) -> SyntaxPayload
     {
         return Parse_Payload(format!("unexpanded\t0\n{records}").as_bytes())
             .expect("the fixture is written in the schema");
@@ -310,7 +310,7 @@ mod tests
     {
         let found = Universes_In(
             "a.rs",
-            &Payload("item\t0\tConstant\tPublic\tGOVERNING_RECORD_IDS\t.\t+slice\n"),
+            &Payload_From_Records("item\t0\tConstant\tPublic\tGOVERNING_RECORD_IDS\t.\t+slice\n"),
         );
 
         assert_eq!(found.len(), 1);
@@ -325,7 +325,7 @@ mod tests
     {
         let found = Universes_In(
             "a.rs",
-            &Payload(
+            &Payload_From_Records(
                 "item\t0\tImplementation\tNotApplicable\tTable\t.\t+inherent\n\
                  item\t1\tFunction\tPublic\tTable::All\t.\t+fn/0\n",
             ),
@@ -349,7 +349,7 @@ mod tests
     {
         let found = Universes_In(
             "a.rs",
-            &Payload(
+            &Payload_From_Records(
                 "item\t0\tImplementation\tNotApplicable\tTable\t.\t+inherent\n\
                  item\t1\tImplementation\tNotApplicable\tOther\t.\t+trait\n\
                  item\t2\tFunction\tNotApplicable\tOther::All\t.\t+fn/0\n",
@@ -365,7 +365,7 @@ mod tests
     {
         let found = Universes_In(
             "a.rs",
-            &Payload(
+            &Payload_From_Records(
                 "item\t0\tImplementation\tNotApplicable\tTable\t.\t+inherent\n\
                  item\t1\tFunction\tPublic\tTable::All\t.\t+fn/1\n",
             ),
@@ -380,7 +380,7 @@ mod tests
     {
         assert!(Universes_In(
             "a.rs",
-            &Payload("item\t0\tConstant\tPublic\tLIMIT\t.\t+value\n")
+            &Payload_From_Records("item\t0\tConstant\tPublic\tLIMIT\t.\t+value\n")
         )
         .is_empty());
     }
@@ -391,17 +391,17 @@ mod tests
     {
         assert!(Universes_In(
             "a.rs",
-            &Payload("item\t0\tConstant\tPrivate\tTABLES\t.\t+slice\n")
+            &Payload_From_Records("item\t0\tConstant\tPrivate\tTABLES\t.\t+slice\n")
         )
         .is_empty());
     }
 
     #[test]
-    fn Test_A_Declared_Mirror_Should_Be_Read_Off_The_Doc_Comment()
+    fn Test_A_Declared_Mirror_Should_Be_Read_Off_The_Documentation_Comment()
     {
         let found = Universes_In(
             "a.rs",
-            &Payload(
+            &Payload_From_Records(
                 "item\t0\tConstant\tPublic\tTABLES\t+ A list.\\n Mirrored by `Test_Every_Row`.\t+slice\n",
             ),
         );
@@ -419,7 +419,7 @@ mod tests
     {
         let found = Universes_In(
             "a.rs",
-            &Payload("item\t0\tConstant\tPublic\tTABLES\t.\t+slice\n"),
+            &Payload_From_Records("item\t0\tConstant\tPublic\tTABLES\t.\t+slice\n"),
         );
 
         assert_eq!(found.first().and_then(|universe| universe.claimed_mirror.clone()), None);
@@ -433,7 +433,7 @@ mod tests
     #[test]
     fn Test_A_Payload_From_A_Blind_Provider_Should_Not_Read_As_No_Mirror()
     {
-        let blind = Payload("item\t0\tConstant\tPublic\tTABLES\t-\t-\n");
+        let blind = Payload_From_Records("item\t0\tConstant\tPublic\tTABLES\t-\t-\n");
 
         let reading = Read_Universes("a.rs", &blind);
 
@@ -451,6 +451,6 @@ mod tests
     #[test]
     fn Test_A_File_That_Declares_Nothing_Should_Be_Observed_And_Empty()
     {
-        assert_eq!(Read_Universes("a.rs", &Payload("")), Reading::Observed(Vec::new()));
+        assert_eq!(Read_Universes("a.rs", &Payload_From_Records("")), Reading::Observed(Vec::new()));
     }
 }

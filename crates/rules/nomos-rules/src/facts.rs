@@ -81,7 +81,7 @@ mod tests
 {
     use super::*;
 
-    fn Names(payload: &str) -> BTreeSet<String>
+    fn Names_In_Payload_Text(payload: &str) -> BTreeSet<String>
     {
         let decoded = nomos_cap_syntax::Parse_Payload(payload.as_bytes())
             .expect("this payload is well formed");
@@ -95,7 +95,7 @@ mod tests
     #[test]
     fn Test_A_Test_Function_In_A_Test_Module_Should_Be_A_Check()
     {
-        let names = Names(
+        let names = Names_In_Payload_Text(
             "unexpanded\t0\n\
              item\t0\tModule\tPrivate\ttests\t.\t.\n\
              item\t1\tFunction\tPrivate\ttests::Test_Something_Should_Hold\t.\t+fn/0\n",
@@ -112,7 +112,7 @@ mod tests
     fn Test_A_Check_In_An_Implementation_Should_Be_Found_By_Its_Own_Name()
     {
         let names =
-            Names("unexpanded\t0\nitem\t0\tFunction\tPublic\tTable::Test_Every_Row\t.\t+fn/0\n");
+            Names_In_Payload_Text("unexpanded\t0\nitem\t0\tFunction\tPublic\tTable::Test_Every_Row\t.\t+fn/0\n");
 
         assert!(names.contains("Test_Every_Row"), "{names:?}");
     }
@@ -122,7 +122,7 @@ mod tests
     #[test]
     fn Test_A_Trait_Method_Signature_Should_Not_Be_A_Check()
     {
-        let names = Names(
+        let names = Names_In_Payload_Text(
             "unexpanded\t0\n\
              item\t0\tTrait\tPublic\tJudged\t.\t.\n\
              item\t1\tFunction\tNotApplicable\tJudged::Test_Declared_Only\t.\t+fn/1\n",
@@ -136,7 +136,7 @@ mod tests
     #[test]
     fn Test_A_File_That_Declares_Nothing_Should_Decode_To_No_Names()
     {
-        assert!(Names("unexpanded\t0\n").is_empty());
+        assert!(Names_In_Payload_Text("unexpanded\t0\n").is_empty());
     }
 
     /// A check name is the item's own name and never the qualified one, whatever the item
@@ -144,7 +144,7 @@ mod tests
     #[test]
     fn Test_A_Check_Nested_Twice_Should_Still_Be_Found_By_Its_Own_Name()
     {
-        let names = Names(
+        let names = Names_In_Payload_Text(
             "unexpanded\t0\n\
              item\t0\tFunction\tPrivate\ttests::Table::Test_Every_Row\t.\t+fn/0\n",
         );

@@ -45,10 +45,10 @@ pub const fn Declaration_Is_Coherent(
 {
     return match trace
     {
-        TraceEquivalence::NotApplicable => !strength.Claims_Reproducibility(),
+        TraceEquivalence::NotApplicable => !strength.Can_Claim_Reproducibility(),
         TraceEquivalence::BehaviorallyEquivalent | TraceEquivalence::BitIdentical =>
         {
-            strength.Claims_Reproducibility()
+            strength.Can_Claim_Reproducibility()
         }
     };
 }

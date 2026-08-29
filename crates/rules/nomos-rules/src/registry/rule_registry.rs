@@ -57,7 +57,7 @@ mod tests
 {
     use super::*;
 
-    fn Offer(id: &str) -> RuleOffer
+    fn Rule_Offer(id: &str) -> RuleOffer
     {
         return RuleOffer {
             rule: RuleId::New(id),
@@ -70,20 +70,20 @@ mod tests
     fn Test_A_Rule_Should_Be_Findable_By_Its_Id()
     {
         let mut registry = RuleRegistry::New();
-        registry.Offer(Offer("completeness-mirror")).expect("first offer");
+        registry.Offer(Rule_Offer("completeness-mirror")).expect("first offer");
 
         let found = registry.Offered(&RuleId::New("completeness-mirror"));
 
-        assert_eq!(found, Some(&Offer("completeness-mirror")));
+        assert_eq!(found, Some(&Rule_Offer("completeness-mirror")));
     }
 
     #[test]
     fn Test_A_Second_Offer_For_One_Rule_Should_Be_Refused()
     {
         let mut registry = RuleRegistry::New();
-        registry.Offer(Offer("completeness-mirror")).expect("first offer");
+        registry.Offer(Rule_Offer("completeness-mirror")).expect("first offer");
 
-        let refused = registry.Offer(Offer("completeness-mirror"));
+        let refused = registry.Offer(Rule_Offer("completeness-mirror"));
 
         assert_eq!(
             refused,

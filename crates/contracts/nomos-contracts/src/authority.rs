@@ -5,12 +5,12 @@
 //! authority than making one. [`MutationClass::Required_Authority`] is the only place the
 //! two meet, and it is a default rather than a definition.
 
-mod class;
+mod authority_class;
 mod mutation_class;
 mod semantic_change_class;
-mod untrusted_prompt_content;
+mod untrusted_prompt_origin;
 
-pub use class::AuthorityClass;
+pub use authority_class::AuthorityClass;
 pub use mutation_class::MutationClass;
 pub use semantic_change_class::{SemanticChangeAuthorityResolution, SemanticChangeClass};
-pub use untrusted_prompt_content::{UntrustedPromptContent, UntrustedPromptOrigin};
+pub use untrusted_prompt_origin::{UntrustedPromptContent, UntrustedPromptOrigin};

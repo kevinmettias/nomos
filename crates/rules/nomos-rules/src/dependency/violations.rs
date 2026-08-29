@@ -82,11 +82,11 @@ fn Violation_If_Wrong_Direction(source: &SourceFile, violation: &EdgeViolation<'
         return None;
     }
 
-    let finding = Violation(source, violation);
+    let finding = Violation_Finding(source, violation);
     return Some(finding);
 }
 
-fn Violation(source: &SourceFile, violation: &EdgeViolation<'_>) -> Finding
+fn Violation_Finding(source: &SourceFile, violation: &EdgeViolation<'_>) -> Finding
 {
     return Finding {
         rule: RuleId::New(super::DEPENDENCY_DIRECTION),
@@ -112,12 +112,12 @@ mod tests
     use nomos_contracts::SubjectId;
     use nomos_model::Content_Digest;
 
-    fn Source(package: &str) -> SourceFile
+    fn Source_File(package: &str) -> SourceFile
     {
         return SourceFile::New(package, SubjectId::From_Digest(Content_Digest(package.as_bytes())), String::new());
     }
 
-    fn Edge(target: &str) -> DependencyEdge
+    fn Dependency_Edge(target: &str) -> DependencyEdge
     {
         return DependencyEdge {
             target: target.to_owned(),
@@ -140,10 +140,10 @@ mod tests
     {
         let payload = DependencyPayload {
             package: "nomos-rules".to_owned(),
-            edges: vec![Edge("nomos-cap-syntax")],
+            edges: vec![Dependency_Edge("nomos-cap-syntax")],
         };
 
-        let findings = Violations_In(&payload, &Source("nomos-rules"));
+        let findings = Violations_In(&payload, &Source_File("nomos-rules"));
 
         assert!(findings.is_empty(), "{findings:?}");
     }
@@ -153,10 +153,10 @@ mod tests
     {
         let payload = DependencyPayload {
             package: "nomos-cap-syntax".to_owned(),
-            edges: vec![Edge("nomos-rules")],
+            edges: vec![Dependency_Edge("nomos-rules")],
         };
 
-        let findings = Violations_In(&payload, &Source("nomos-cap-syntax"));
+        let findings = Violations_In(&payload, &Source_File("nomos-cap-syntax"));
 
         assert_eq!(findings.len(), 1, "{findings:?}");
         let found = findings.first().expect("asserted len 1 above");
@@ -169,10 +169,10 @@ mod tests
     {
         let payload = DependencyPayload {
             package: "nomos-lang-rust".to_owned(),
-            edges: vec![Edge("nomos-lang-rust-scan")],
+            edges: vec![Dependency_Edge("nomos-lang-rust-scan")],
         };
 
-        let findings = Violations_In(&payload, &Source("nomos-lang-rust"));
+        let findings = Violations_In(&payload, &Source_File("nomos-lang-rust"));
 
         assert_eq!(
             findings.len(),
@@ -193,7 +193,7 @@ mod tests
             edges: vec![Dev_Edge("nomos-spec-validate")],
         };
 
-        let findings = Violations_In(&payload, &Source("nomos-spec-ingest"));
+        let findings = Violations_In(&payload, &Source_File("nomos-spec-ingest"));
 
         assert!(
             findings.is_empty(),
@@ -207,10 +207,10 @@ mod tests
     {
         let payload = DependencyPayload {
             package: "not-in-bands".to_owned(),
-            edges: vec![Edge("nomos-rules")],
+            edges: vec![Dependency_Edge("nomos-rules")],
         };
 
-        let findings = Violations_In(&payload, &Source("not-in-bands"));
+        let findings = Violations_In(&payload, &Source_File("not-in-bands"));
 
         assert!(
             findings.is_empty(),
@@ -223,10 +223,10 @@ mod tests
     {
         let payload = DependencyPayload {
             package: "nomos-rules".to_owned(),
-            edges: vec![Edge("not-in-bands")],
+            edges: vec![Dependency_Edge("not-in-bands")],
         };
 
-        let findings = Violations_In(&payload, &Source("nomos-rules"));
+        let findings = Violations_In(&payload, &Source_File("nomos-rules"));
 
         assert!(findings.is_empty(), "{findings:?}");
     }
@@ -239,7 +239,7 @@ mod tests
             edges: Vec::new(),
         };
 
-        let findings = Violations_In(&payload, &Source("nomos-contracts"));
+        let findings = Violations_In(&payload, &Source_File("nomos-contracts"));
 
         assert!(findings.is_empty(), "{findings:?}");
     }

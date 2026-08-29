@@ -61,7 +61,7 @@ impl AuthorityClass
     /// Reading and proposing are ordinary. Everything that changes the world, runs
     /// something, blesses someone else's work or makes a thing durable is not.
     #[must_use]
-    pub const fn Requires_Explicit_Grant(self) -> bool
+    pub const fn Is_Explicit_Grant_Required(self) -> bool
     {
         return matches!(
             self,
@@ -86,8 +86,8 @@ mod tests
     #[test]
     fn Test_Reading_Should_Not_Require_An_Explicit_Grant()
     {
-        assert!(!AuthorityClass::Read.Requires_Explicit_Grant());
-        assert!(!AuthorityClass::Propose.Requires_Explicit_Grant());
-        assert!(!AuthorityClass::Preview.Requires_Explicit_Grant());
+        assert!(!AuthorityClass::Read.Is_Explicit_Grant_Required());
+        assert!(!AuthorityClass::Propose.Is_Explicit_Grant_Required());
+        assert!(!AuthorityClass::Preview.Is_Explicit_Grant_Required());
     }
 }

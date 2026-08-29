@@ -8,7 +8,7 @@ use super::{SourceFile, Finding, RuleId, COMPLETENESS_MIRROR, SubjectId, Content
 /// not be parsed is this text — the same path holding different bytes is a different
 /// fact, and a finding keyed on the name would look unchanged after an edit that fixed
 /// it.
-pub(super) fn Unreadable(source: &SourceFile, because: &str) -> Finding
+pub(super) fn Unreadable_Finding(source: &SourceFile, because: &str) -> Finding
 {
     return Finding {
         rule: RuleId::New(COMPLETENESS_MIRROR),
@@ -36,14 +36,14 @@ pub(super) struct Unread<'source>
     ///
     /// Not a second source of check names, and it must never become one — the floor
     /// [`crate::Syntax_Requirement`] states exists to stop exactly that, and
-    /// [`Unread::Could_Have_Declared`] is the only thing that reads this field.
+    /// [`Unread::Can_Have_Declared`] is the only thing that reads this field.
     pub(super) text: &'source str,
     /// The digest of the text the answer was asked about.
     ///
     /// The finding's identity. Not the [`SubjectId`] the fact was requested under: that is
     /// a digest of a path, and `identity.rs` states the rule for the whole system — a
     /// finding keyed on where something lives closes and reopens every time somebody moves
-    /// a file. What could not be read is *these bytes*, which is what [`Unreadable`] keys
+    /// a file. What could not be read is *these bytes*, which is what [`Unreadable_Finding`] keys
     /// on for the same reason one paragraph up.
     pub(super) inputs: SubjectId,
     /// What the reader said, in the vocabulary a run reports in.
@@ -66,6 +66,9 @@ impl Unread<'_>
     /// direction is sound, and it is the direction this function is used in: it decides when
     /// the index is short **of something that could have resolved this claim**.
     ///
+    /// Named `Can_Have_Declared` rather than `Could_Have_Declared`: the modal is about
+    /// present possibility given the text on hand, not a hypothetical past.
+    ///
     /// The converse is not claimed and is not needed. A substring match means only that the
     /// name is spelled somewhere in the file — in a comment, in a string literal, inside a
     /// `Test_X_And_More` — and every one of those is a false positive on "could have
@@ -85,7 +88,7 @@ impl Unread<'_>
     /// equally reported as a phantom today. The guarantee is therefore exact with respect to
     /// what the source spells and no better, which is the same bound the rest of the rule
     /// carries rather than a new one.
-    pub(super) fn Could_Have_Declared(&self, name: &str) -> bool
+    pub(super) fn Can_Have_Declared(&self, name: &str) -> bool
     {
         return self.text.contains(name);
     }

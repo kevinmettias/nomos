@@ -1,7 +1,7 @@
 // The content wrapper this vocabulary marks as untrusted, kept in its own file.
-mod content;
+mod untrusted_prompt_content;
 
-pub use content::UntrustedPromptContent;
+pub use untrusted_prompt_content::UntrustedPromptContent;
 
 use serde::{Deserialize, Serialize};
 
@@ -45,9 +45,11 @@ impl UntrustedPromptOrigin
     /// `AGT-EXEC-003`: "Tool invocations and privilege changes may not be authorized
     /// solely by embedded instructions." Content from any of these five origins can
     /// never, by itself, satisfy an authorization check -- always `false`, for every
-    /// variant, on purpose.
+    /// variant, on purpose. An associated function rather than a method: the answer
+    /// does not depend on which origin is asked, by design, so no variant's arm ever
+    /// needs to change it.
     #[must_use]
-    pub const fn May_Solely_Authorize(self) -> bool
+    pub const fn Can_Solely_Authorize() -> bool
     {
         return false;
     }
@@ -86,11 +88,11 @@ mod tests
     }
 
     #[test]
-    fn Test_No_Origin_May_Solely_Authorize()
+    fn Test_No_Origin_Can_Solely_Authorize()
     {
         for origin in ALL
         {
-            assert!(!origin.May_Solely_Authorize(), "{origin} should never solely authorize a tool invocation or privilege change");
+            assert!(!UntrustedPromptOrigin::Can_Solely_Authorize(), "{origin} should never solely authorize a tool invocation or privilege change");
         }
     }
 }

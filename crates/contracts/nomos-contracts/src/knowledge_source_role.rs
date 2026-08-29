@@ -3,9 +3,9 @@
 //! Nomos must carry about it without owning its content.
 
 // A borrowed context item's own citation shape, kept in its own file.
-mod context_item;
+mod knowledge_context_item;
 
-pub use context_item::KnowledgeContextItem;
+pub use knowledge_context_item::KnowledgeContextItem;
 
 use serde::{Deserialize, Serialize};
 
@@ -26,7 +26,7 @@ const AGENT_GENERATED_INTERPRETATION_LABEL: &str = "AgentGeneratedInterpretation
 /// Declared in the corpus's own listed order: `AGT-012` ranks knowledge "according to
 /// role" before other dimensions, and a derived [`Ord`] over this declaration order is
 /// a direct transcription of that ranking for the role dimension alone -- see
-/// [`KnowledgeSourceRole::May_Constrain`] for the one further distinction `AGT-012`
+/// [`KnowledgeSourceRole::Can_Constrain`] for the one further distinction `AGT-012`
 /// draws.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, Serialize, Deserialize)]
 pub enum KnowledgeSourceRole
@@ -65,7 +65,7 @@ impl KnowledgeSourceRole
     /// motivate, or support bounded claims but shall not silently override current
     /// contracts."
     #[must_use]
-    pub const fn May_Constrain(self) -> bool
+    pub const fn Can_Constrain(self) -> bool
     {
         return matches!(self, Self::NormativeRepositoryPolicy);
     }
@@ -109,13 +109,13 @@ mod tests
     #[test]
     fn Test_Only_Normative_Repository_Policy_May_Constrain()
     {
-        assert!(KnowledgeSourceRole::NormativeRepositoryPolicy.May_Constrain());
+        assert!(KnowledgeSourceRole::NormativeRepositoryPolicy.Can_Constrain());
 
         for role in ALL
         {
             if role != KnowledgeSourceRole::NormativeRepositoryPolicy
             {
-                assert!(!role.May_Constrain(), "{role} should not be able to constrain work");
+                assert!(!role.Can_Constrain(), "{role} should not be able to constrain work");
             }
         }
     }

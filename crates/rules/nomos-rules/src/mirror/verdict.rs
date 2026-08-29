@@ -1,12 +1,13 @@
 //! Deciding what one declared universe is owed, and saying it in a finding.
 
-use super::{DeclaredUniverse, CheckIndex, Finding, Reach_Of, Applicability, GateCategory, RuleId, COMPLETENESS_MIRROR, SubjectId, Content_Digest, EvidenceClass, EnforcementReach, EnforcementBreach, UniverseKind};
+use super::{CheckIndex, Finding, Reach_Of, Applicability, GateCategory, RuleId, COMPLETENESS_MIRROR, SubjectId, Content_Digest, EvidenceClass, EnforcementReach, EnforcementBreach, UniverseKind};
+use crate::DeclaredUniverse;
 
 /// What one universe's declaration amounts to, and what is really true of it.
 ///
 /// Returns `None` when the universe is mirrored, because a rule that emits a finding per
 /// subject it approves of produces a report in which the defects cannot be found.
-pub(super) fn Judge(universe: &DeclaredUniverse, index: &CheckIndex<'_>) -> Option<Finding>
+pub(super) fn Judgment_For_Universe(universe: &DeclaredUniverse, index: &CheckIndex<'_>) -> Option<Finding>
 {
     let reach = Reach_Of(universe, &index.names);
 
@@ -15,9 +16,9 @@ pub(super) fn Judge(universe: &DeclaredUniverse, index: &CheckIndex<'_>) -> Opti
         return None;
     }
 
-    let verdict = Verdict(universe, &reach, index);
+    let verdict = Verdict_For_Reach(universe, &reach, index);
 
-    return Some(Shortcoming(universe, verdict));
+    return Some(Shortcoming_Finding(universe, verdict));
 }
 
 /// A universe's shortfall as a finding.
@@ -31,7 +32,7 @@ pub(super) fn Judge(universe: &DeclaredUniverse, index: &CheckIndex<'_>) -> Opti
 /// Two universes named alike in two different crates are two different subjects; without
 /// the qualifier they would hash to the same one and be indistinguishable in every finding,
 /// suppression, or history keyed on it.
-pub(super) fn Shortcoming(universe: &DeclaredUniverse, verdict: Judgment) -> Finding
+pub(super) fn Shortcoming_Finding(universe: &DeclaredUniverse, verdict: Judgment) -> Finding
 {
     let Judgment {
         applicability,
@@ -60,7 +61,7 @@ pub(super) fn Shortcoming(universe: &DeclaredUniverse, verdict: Judgment) -> Fin
 /// The crate or test-suite directory a universe's path belongs to, if the path names one.
 ///
 /// A pure function of the path string — no filesystem access and no `Cargo.toml` read.
-/// `universe.rs`'s module doc explains why this crate carries no parser and reads no
+/// `universe_kind.rs`'s module doc explains why this crate carries no parser and reads no
 /// files; the same discipline applies here. This workspace's real paths are
 /// `crates/<band>/<crate-name>/src/...` or `<suite-root>/src/...` /
 /// `<suite-root>/tests/...` (`tests/contract/tests/completeness_universes/table.rs`'s
@@ -102,8 +103,8 @@ fn Qualifier_Of(path: &str) -> Option<&str>
 /// is `Some` and none in the arm where it is `None`, so the `unwrap_or_default` below is
 /// unreachable rather than a fallback with a meaning. An empty name matches every text,
 /// which would downgrade rather than block — the safe direction, for the reason
-/// [`Unread::Could_Have_Declared`] gives.
-pub(super) fn Verdict(
+/// [`Unread::Can_Have_Declared`] gives.
+pub(super) fn Verdict_For_Reach(
     universe: &DeclaredUniverse,
     reach: &EnforcementReach,
     index: &CheckIndex<'_>,
@@ -201,8 +202,8 @@ pub(super) fn Admitted_Gap(universe: &DeclaredUniverse) -> Judgment
 /// about it, and what it says.
 ///
 /// Named rather than a triple. At three members a caller is counting positions, and these
-/// three travel together through four functions — [`Verdict`], [`Unresolved_Claim`],
-/// [`Admitted_Gap`] and [`Shortcoming`] — which is four places for a position to slip.
+/// three travel together through four functions — [`Verdict_For_Reach`], [`Unresolved_Claim`],
+/// [`Admitted_Gap`] and [`Shortcoming_Finding`] — which is four places for a position to slip.
 pub(super) struct Judgment
 {
     pub(super) applicability: Applicability,

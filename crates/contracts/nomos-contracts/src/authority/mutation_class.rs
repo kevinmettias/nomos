@@ -47,7 +47,7 @@ impl MutationClass
 
     /// Whether this operation changes workspace state.
     #[must_use]
-    pub const fn Writes(self) -> bool
+    pub const fn Is_Write(self) -> bool
     {
         return matches!(self, Self::Apply | Self::Rollback);
     }
@@ -81,11 +81,11 @@ mod tests
     #[test]
     fn Test_Only_Apply_And_Rollback_Should_Write()
     {
-        assert!(MutationClass::Apply.Writes());
-        assert!(MutationClass::Rollback.Writes());
-        assert!(!MutationClass::Read.Writes());
-        assert!(!MutationClass::Preview.Writes());
-        assert!(!MutationClass::Validate.Writes());
+        assert!(MutationClass::Apply.Is_Write());
+        assert!(MutationClass::Rollback.Is_Write());
+        assert!(!MutationClass::Read.Is_Write());
+        assert!(!MutationClass::Preview.Is_Write());
+        assert!(!MutationClass::Validate.Is_Write());
     }
 
     /// A preview that needed write authority would push callers to skip previewing,
@@ -108,7 +108,7 @@ mod tests
     {
         for class in [MutationClass::Apply, MutationClass::Rollback]
         {
-            assert!(class.Required_Authority().Requires_Explicit_Grant());
+            assert!(class.Required_Authority().Is_Explicit_Grant_Required());
         }
     }
 }

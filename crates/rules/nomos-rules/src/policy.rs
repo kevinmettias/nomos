@@ -77,7 +77,7 @@ fn Require_Fact<'a>(source: &SourceFile, facts: &'a mut dyn FactReader) -> Resul
     return match facts.Require(&capability, &source.subject, inputs, &need)
     {
         Ok(fact) => Ok(fact),
-        Err(applicability) => Err(Unread(
+        Err(applicability) => Err(Unread_Finding(
             source,
             applicability,
             &format!("no admitted provider answered for it ({})", applicability.Label()),
@@ -108,7 +108,7 @@ fn Check_Schema(source: &SourceFile, fact: &MaterializedFact) -> Result<(), Find
 {
     if fact.payload.schema != nomos_cap_dependency_policy::Payload_Schema()
     {
-        return Err(Unread(
+        return Err(Unread_Finding(
             source,
             Applicability::Unparseable,
             &format!(
@@ -126,7 +126,7 @@ fn Check_Schema(source: &SourceFile, fact: &MaterializedFact) -> Result<(), Find
 fn Parse_Fact(source: &SourceFile, fact: &MaterializedFact) -> Result<PolicyPayload, Finding>
 {
     return nomos_cap_dependency_policy::Parse_Payload(&fact.payload.bytes)
-        .map_err(|refusal| return Unread(source, Applicability::Unparseable, &refusal.to_string()));
+        .map_err(|refusal| return Unread_Finding(source, Applicability::Unparseable, &refusal.to_string()));
 }
 
 /// `payload`'s own violations, each relayed as a `Finding` — never judged a second time,
@@ -134,10 +134,10 @@ fn Parse_Fact(source: &SourceFile, fact: &MaterializedFact) -> Result<PolicyPayl
 /// rule reports.
 fn Findings_Of(source: &SourceFile, payload: &PolicyPayload) -> Vec<Finding>
 {
-    return payload.violations.iter().map(|violation| return Relayed(source, violation)).collect();
+    return payload.violations.iter().map(|violation| return Finding_For_Violation(source, violation)).collect();
 }
 
-fn Relayed(source: &SourceFile, violation: &PolicyViolation) -> Finding
+fn Finding_For_Violation(source: &SourceFile, violation: &PolicyViolation) -> Finding
 {
     return Finding {
         rule: RuleId::New(DEPENDENCY_POLICY),
@@ -160,7 +160,7 @@ fn Summary_Of(violation: &PolicyViolation) -> String
     return format!("{} [{}]: {}", violation.severity, violation.code, violation.message);
 }
 
-fn Unread(source: &SourceFile, applicability: Applicability, because: &str) -> Finding
+fn Unread_Finding(source: &SourceFile, applicability: Applicability, because: &str) -> Finding
 {
     return Finding {
         rule: RuleId::New(DEPENDENCY_POLICY),
@@ -237,7 +237,7 @@ mod tests
         return TestOffering { store: MemoryFactStore::New(), registry, offer };
     }
 
-    fn Materialize(store: &mut MemoryFactStore, source: &SourceFile, offer: &ProviderOffer, payload: &PolicyPayload)
+    fn Materialize_Policy_Fact(store: &mut MemoryFactStore, source: &SourceFile, offer: &ProviderOffer, payload: &PolicyPayload)
     {
         let context = Test_Context();
         let bytes = nomos_cap_dependency_policy::Encode_Payload(payload);
@@ -272,7 +272,7 @@ mod tests
     {
         let source = Source();
         let TestOffering { mut store, registry, offer } = Offering();
-        Materialize(
+        Materialize_Policy_Fact(
             &mut store,
             &source,
             &offer,
@@ -302,7 +302,7 @@ mod tests
     {
         let source = Source();
         let TestOffering { mut store, registry, offer } = Offering();
-        Materialize(&mut store, &source, &offer, &PolicyPayload { violations: Vec::new() });
+        Materialize_Policy_Fact(&mut store, &source, &offer, &PolicyPayload { violations: Vec::new() });
 
         let mut reader = Reader::On(&store, &registry, Test_Context());
         let findings = Check_Dependency_Policy(&[source], &mut reader);
@@ -339,7 +339,7 @@ mod tests
     {
         let source = Source();
         let TestOffering { mut store, registry, offer } = Offering();
-        Materialize(
+        Materialize_Policy_Fact(
             &mut store,
             &source,
             &offer,

@@ -135,7 +135,7 @@ fn Require_Fact<'a>(source: &SourceFile, facts: &'a mut dyn FactReader) -> Resul
     return match facts.Require(&capability, &source.subject, inputs, &need)
     {
         Ok(fact) => Ok(fact),
-        Err(applicability) => Err(Unread(
+        Err(applicability) => Err(Unread_Finding(
             source,
             applicability,
             &format!("no admitted provider answered for it ({})", applicability.Label()),
@@ -148,7 +148,7 @@ fn Check_Schema(source: &SourceFile, fact: &MaterializedFact) -> Result<(), Find
 {
     if fact.payload.schema != nomos_cap_controlflow::Payload_Schema()
     {
-        return Err(Unread(
+        return Err(Unread_Finding(
             source,
             Applicability::Unparseable,
             &format!(
@@ -166,7 +166,7 @@ fn Check_Schema(source: &SourceFile, fact: &MaterializedFact) -> Result<(), Find
 fn Parse_Fact(source: &SourceFile, fact: &MaterializedFact) -> Result<ReachabilityPayload, Finding>
 {
     return nomos_cap_controlflow::Parse_Payload(&fact.payload.bytes)
-        .map_err(|refusal| return Unread(source, Applicability::Unparseable, &refusal.to_string()));
+        .map_err(|refusal| return Unread_Finding(source, Applicability::Unparseable, &refusal.to_string()));
 }
 
 /// Every flagged site `payload` carries, as findings.
@@ -176,10 +176,10 @@ fn Parse_Fact(source: &SourceFile, fact: &MaterializedFact) -> Result<Reachabili
 /// [`crate::dependency::Violations_In`] both draw for the same reason.
 fn Violations_In(payload: &ReachabilityPayload, source: &SourceFile) -> Vec<Finding>
 {
-    return payload.sites.iter().map(|site| return Violation(source, site)).collect();
+    return payload.sites.iter().map(|site| return Violation_For_Site(source, site)).collect();
 }
 
-fn Violation(source: &SourceFile, site: &ReachabilitySite) -> Finding
+fn Violation_For_Site(source: &SourceFile, site: &ReachabilitySite) -> Finding
 {
     return Finding {
         rule: RuleId::New(UNREAD_REACHES_FINDING),
@@ -215,7 +215,7 @@ fn Shape_Description(shape: ArmShape) -> &'static str
     };
 }
 
-fn Unread(source: &SourceFile, applicability: Applicability, because: &str) -> Finding
+fn Unread_Finding(source: &SourceFile, applicability: Applicability, because: &str) -> Finding
 {
     return Finding {
         rule: RuleId::New(UNREAD_REACHES_FINDING),
@@ -236,12 +236,12 @@ mod tests
     use nomos_model::Content_Digest;
     use nomos_contracts::SubjectId;
 
-    fn Source(path: &str) -> SourceFile
+    fn Source_File(path: &str) -> SourceFile
     {
         return SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), String::new());
     }
 
-    fn Site(function: &str, shape: ArmShape) -> ReachabilitySite
+    fn Reachability_Site(function: &str, shape: ArmShape) -> ReachabilitySite
     {
         return ReachabilitySite {
             function: function.to_owned(),
@@ -259,7 +259,7 @@ mod tests
         {
             let payload = ReachabilityPayload { sites: Vec::new() };
 
-            let findings = Violations_In(&payload, &Source("a.rs"));
+            let findings = Violations_In(&payload, &Source_File("a.rs"));
 
             assert!(findings.is_empty(), "{findings:?}");
         }
@@ -268,10 +268,10 @@ mod tests
         fn Test_One_Flagged_Site_Should_Produce_One_Finding()
         {
             let payload = ReachabilityPayload {
-                sites: vec![Site("Payload_Of", ArmShape::Empty)],
+                sites: vec![Reachability_Site("Payload_Of", ArmShape::Empty)],
             };
 
-            let findings = Violations_In(&payload, &Source("a.rs"));
+            let findings = Violations_In(&payload, &Source_File("a.rs"));
 
             assert_eq!(findings.len(), 1, "{findings:?}");
             let found = findings.first().expect("asserted len 1 above");
@@ -285,13 +285,13 @@ mod tests
         {
             let payload = ReachabilityPayload {
                 sites: vec![
-                    Site("One", ArmShape::BareContinue),
-                    Site("Two", ArmShape::BareReturn),
-                    Site("Three", ArmShape::TailOk),
+                    Reachability_Site("One", ArmShape::BareContinue),
+                    Reachability_Site("Two", ArmShape::BareReturn),
+                    Reachability_Site("Three", ArmShape::TailOk),
                 ],
             };
 
-            let findings = Violations_In(&payload, &Source("a.rs"));
+            let findings = Violations_In(&payload, &Source_File("a.rs"));
 
             assert_eq!(findings.len(), 3, "{findings:?}");
         }
@@ -352,7 +352,7 @@ mod tests
             return TestOffering { store: MemoryFactStore::New(), registry, offer };
         }
 
-        fn Materialize(store: &mut MemoryFactStore, source: &SourceFile, offer: &ProviderOffer, payload: &ReachabilityPayload)
+        fn Materialize_Reachability_Fact(store: &mut MemoryFactStore, source: &SourceFile, offer: &ProviderOffer, payload: &ReachabilityPayload)
         {
             let context = Test_Context();
             let bytes = nomos_cap_controlflow::Encode_Payload(payload);
@@ -385,14 +385,14 @@ mod tests
         #[test]
         fn Test_A_Real_Fact_Should_Be_Read_And_Judged()
         {
-            let source = Source("a.rs");
+            let source = Source_File("a.rs");
             let TestOffering { mut store, registry, offer } = Offering();
-            Materialize(
+            Materialize_Reachability_Fact(
                 &mut store,
                 &source,
                 &offer,
                 &ReachabilityPayload {
-                    sites: vec![Site("Payload_Of", ArmShape::Empty)],
+                    sites: vec![Reachability_Site("Payload_Of", ArmShape::Empty)],
                 },
             );
 
@@ -406,7 +406,7 @@ mod tests
         #[test]
         fn Test_A_Subject_With_No_Fact_Should_Be_Reported_Rather_Than_Silently_Clean()
         {
-            let source = Source("a.rs");
+            let source = Source_File("a.rs");
             let TestOffering { store, registry, .. } = Offering();
 
             let mut reader = Reader::On(&store, &registry, Test_Context());
@@ -418,9 +418,9 @@ mod tests
         #[test]
         fn Test_A_Source_With_No_Flagged_Sites_Should_Produce_No_Finding()
         {
-            let source = Source("a.rs");
+            let source = Source_File("a.rs");
             let TestOffering { mut store, registry, offer } = Offering();
-            Materialize(&mut store, &source, &offer, &ReachabilityPayload { sites: Vec::new() });
+            Materialize_Reachability_Fact(&mut store, &source, &offer, &ReachabilityPayload { sites: Vec::new() });
 
             let mut reader = Reader::On(&store, &registry, Test_Context());
             let findings = Check_Unread_Reaches_A_Finding(&[source], &mut reader);

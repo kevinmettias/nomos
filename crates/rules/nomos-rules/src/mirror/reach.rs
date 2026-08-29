@@ -1,6 +1,7 @@
 //! What a universe's claimed mirror amounts to against the checks that exist.
 
-use super::{DeclaredUniverse, BTreeSet, EnforcementReach, EnforcerRef, RuleId, COMPLETENESS_MIRROR, GateCategory, EnforcementBreach};
+use super::{BTreeSet, EnforcementReach, EnforcerRef, RuleId, COMPLETENESS_MIRROR, GateCategory, EnforcementBreach};
+use crate::DeclaredUniverse;
 
 /// The enforcement claim a universe makes, and what the source says of it.
 ///
@@ -21,7 +22,7 @@ pub(super) fn Reach_Of(universe: &DeclaredUniverse, checks: &BTreeSet<String>) -
         name: claimed.clone(),
     };
     let Resolved { computed, breaches } =
-        Resolution(claimed, Claim::Of(checks.contains(claimed)));
+        Resolution_Of_Claim(claimed, Claim::Of(checks.contains(claimed)));
 
     return EnforcementReach {
         rule: RuleId::New(COMPLETENESS_MIRROR),
@@ -61,7 +62,7 @@ pub(super) struct Resolved
 
 /// Whether the index holds the name a universe claimed.
 ///
-/// Named rather than a bool. `Resolution(claimed, true)` said nothing at the call site
+/// Named rather than a bool. `Resolution_Of_Claim(claimed, true)` said nothing at the call site
 /// about what `true` was true of, and the two outcomes are a build that fails and one
 /// that does not.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -88,7 +89,7 @@ impl Claim
 }
 
 /// What a claimed name amounts to, given whether the index holds it.
-pub(super) fn Resolution(claimed: &str, claim: Claim) -> Resolved
+pub(super) fn Resolution_Of_Claim(claimed: &str, claim: Claim) -> Resolved
 {
     if claim == Claim::Resolves
     {

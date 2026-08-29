@@ -44,7 +44,7 @@
 //! *supposed* to refuse, so the flag was set on every run. The downgrade stays and its
 //! reasoning stays; what changes is that the index is asked whether it is short **of
 //! something that could have resolved this name**, and the test for that is
-//! [`Unread::Could_Have_Declared`].
+//! [`Unread::Can_Have_Declared`].
 //!
 //! # Where the check names come from
 //!
@@ -54,7 +54,7 @@
 //! reason — replayability — that proves a rule takes its subject as an argument and does
 //! not prove that the argument is text. `OD-RULES-001` withdraws the inference and moves
 //! this half of the rule onto the fact layer. Universe discovery keeps its parser, for a
-//! measured reason `universe.rs` states.
+//! measured reason `universe_kind.rs` states.
 //!
 //! What that buys is not caching and not incrementality; this rule spends neither. It
 //! spends [`nomos_contracts::Guarantee::Satisfies`]: the floor is the rule's own, a
@@ -82,12 +82,11 @@ mod tests;
 use index::{CheckIndex, Check_Index_Of};
 use reach::Reach_Of;
 use shortfall::Shortfall;
-use unread::{Unread, Unread_Subject, Unreadable};
+use unread::{Unread, Unread_Subject, Unreadable_Finding};
 
 use crate::facts::Check_Names_In;
-use crate::DeclaredUniverse;
 use crate::Reading;
-use crate::universe::Read_Universes;
+use crate::universe_kind::Read_Universes;
 use crate::UniverseKind;
 use crate::{SourceFile, Syntax_Requirement_For};
 // `provider_floor.rs` reaches this transitively through `tests.rs`'s own `use super::*` --
@@ -153,7 +152,7 @@ pub fn Check_Completeness_Mirrors(
     // property has to hold whether or not the tree happens to declare a universe.
     findings.extend(index.unread.iter().map(Unread_Subject));
 
-    findings.extend(Judged(&index));
+    findings.extend(Findings_Over_Universes(&index));
     findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
 
     return findings;
@@ -171,7 +170,7 @@ fn Unobserved_Findings(sources: &[SourceFile], index: &CheckIndex<'_>) -> Vec<Fi
     {
         if let Some(source) = sources.iter().find(|candidate| return &candidate.path == path)
         {
-            let finding = Unreadable(source, because);
+            let finding = Unreadable_Finding(source, because);
             findings.push(finding);
         }
     }
@@ -183,9 +182,10 @@ fn Unobserved_Findings(sources: &[SourceFile], index: &CheckIndex<'_>) -> Vec<Fi
 ///
 /// Deduplicated first, because one universe declared in two files is one claim and two
 /// findings about it would double-count the same defect.
-fn Judged(index: &CheckIndex<'_>) -> Vec<Finding>
+fn Findings_Over_Universes(index: &CheckIndex<'_>) -> Vec<Finding>
 {
-    use verdict::Judge;
+    use crate::DeclaredUniverse;
+    use verdict::Judgment_For_Universe;
 
     let mut universes: Vec<DeclaredUniverse> = index.universes.clone();
     universes.sort();
@@ -193,6 +193,6 @@ fn Judged(index: &CheckIndex<'_>) -> Vec<Finding>
 
     return universes
         .iter()
-        .filter_map(|universe| return Judge(universe, index))
+        .filter_map(|universe| return Judgment_For_Universe(universe, index))
         .collect();
 }

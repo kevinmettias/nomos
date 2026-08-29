@@ -35,7 +35,7 @@ fn Require_Fact<'a>(source: &SourceFile, facts: &'a mut dyn FactReader) -> Resul
     return match facts.Require(&capability, &source.subject, inputs, &need)
     {
         Ok(fact) => Ok(fact),
-        Err(applicability) => Err(Unread(
+        Err(applicability) => Err(Unread_Finding(
             source,
             applicability,
             &format!("no admitted provider answered for it ({})", applicability.Label()),
@@ -48,7 +48,7 @@ fn Check_Schema(source: &SourceFile, fact: &MaterializedFact) -> Result<(), Find
 {
     if fact.payload.schema != nomos_cap_syntax::Payload_Schema()
     {
-        return Err(Unread(
+        return Err(Unread_Finding(
             source,
             Applicability::Unparseable,
             &format!(
@@ -66,11 +66,11 @@ fn Check_Schema(source: &SourceFile, fact: &MaterializedFact) -> Result<(), Find
 fn Parse_Fact(source: &SourceFile, fact: &MaterializedFact) -> Result<SyntaxPayload, Finding>
 {
     return nomos_cap_syntax::Parse_Payload(&fact.payload.bytes)
-        .map_err(|refusal| return Unread(source, Applicability::Unparseable, &refusal.Describe()));
+        .map_err(|refusal| return Unread_Finding(source, Applicability::Unparseable, &refusal.Describe()));
 }
 
 /// A finding for a subject whose fact this rule could not read.
-fn Unread(source: &SourceFile, applicability: Applicability, because: &str) -> Finding
+fn Unread_Finding(source: &SourceFile, applicability: Applicability, because: &str) -> Finding
 {
     return Finding {
         rule: RuleId::New(super::NAMING_CONVENTION),

@@ -11,15 +11,14 @@ use super::CROSS_LANGUAGE_CORRESPONDENCE;
 use crate::SourceFile;
 use nomos_cap_syntax::{PayloadItem, Struct_Fields, SyntaxPayload};
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
-use std::collections::BTreeSet;
 
 /// One declared correspondence, judged — `None` for a clean match, the same "clean is
 /// silent" convention `Check_Lint_Diagnostics` already holds for a tool that already
 /// decided.
-pub(super) fn Judged(source: &SourceFile, item: &PayloadItem, target_name: &str, index: &[(&SourceFile, SyntaxPayload)]) -> Option<Finding>
+pub(super) fn Judged_Correspondence(source: &SourceFile, item: &PayloadItem, target_name: &str, index: &[(&SourceFile, SyntaxPayload)]) -> Option<Finding>
 {
     let Some(own_fields) = Struct_Fields(&item.shape) else {
-        return Some(Unparseable(
+        return Some(Unparseable_Finding(
             source,
             DeclaringName(&item.qualified_name),
             Reason(&format!("`{}` declares a correspondence to `{target_name}` but has no named fields of its own to compare", item.qualified_name)),
@@ -27,18 +26,18 @@ pub(super) fn Judged(source: &SourceFile, item: &PayloadItem, target_name: &str,
     };
 
     let Some(target) = Find_Struct(source, item, target_name, index) else {
-        return Some(Missing(source, item, target_name));
+        return Some(Missing_Finding(source, item, target_name));
     };
 
     let Some(target_fields) = Struct_Fields(&target.shape) else {
-        return Some(Unparseable(
+        return Some(Unparseable_Finding(
             source,
             DeclaringName(&item.qualified_name),
             Reason(&format!("`{target_name}` has no named fields to compare `{}` against", item.qualified_name)),
         ));
     };
 
-    return Drift(source, item, target_name, &FieldSets { own: &own_fields, target: &target_fields });
+    return Field_Drift(source, item, target_name, &FieldSets { own: &own_fields, target: &target_fields });
 }
 
 /// The two sides of a declared correspondence's field sets, compared as a pair — grouped so
@@ -58,7 +57,7 @@ struct DeclaringName<'a>(&'a str);
 /// for the struct name beside it.
 struct Reason<'a>(&'a str);
 
-fn Unparseable(source: &SourceFile, declaring_name: DeclaringName<'_>, because: Reason<'_>) -> Finding
+fn Unparseable_Finding(source: &SourceFile, declaring_name: DeclaringName<'_>, because: Reason<'_>) -> Finding
 {
     return Finding {
         rule: RuleId::New(CROSS_LANGUAGE_CORRESPONDENCE),
@@ -98,7 +97,7 @@ fn Find_Struct<'a>(declaring_source: &SourceFile, declaring: &PayloadItem, targe
     return None;
 }
 
-fn Missing(source: &SourceFile, item: &PayloadItem, target_name: &str) -> Finding
+fn Missing_Finding(source: &SourceFile, item: &PayloadItem, target_name: &str) -> Finding
 {
     return Finding {
         rule: RuleId::New(CROSS_LANGUAGE_CORRESPONDENCE),
@@ -119,8 +118,10 @@ fn Missing(source: &SourceFile, item: &PayloadItem, target_name: &str) -> Findin
 /// both sides name exactly the same fields — arity and order are read as a consequence of
 /// the name sets agreeing or not, never compared positionally: `OD-CAPABILITY-010`'s own
 /// worked example is a claim about which names exist on each side.
-fn Drift(source: &SourceFile, item: &PayloadItem, target_name: &str, fields: &FieldSets<'_>) -> Option<Finding>
+fn Field_Drift(source: &SourceFile, item: &PayloadItem, target_name: &str, fields: &FieldSets<'_>) -> Option<Finding>
 {
+    use std::collections::BTreeSet;
+
     let own_names: BTreeSet<&str> = fields.own.iter().map(|(name, _)| return name.as_str()).collect();
     let target_names: BTreeSet<&str> = fields.target.iter().map(|(name, _)| return name.as_str()).collect();
 

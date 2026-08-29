@@ -50,7 +50,7 @@ impl SynchronizationState
 
     /// Whether this state requires a human decision before synchronization proceeds.
     #[must_use]
-    pub const fn Requires_Authorized_Resolution(self) -> bool
+    pub const fn Is_Authorized_Resolution_Required(self) -> bool
     {
         return matches!(self, Self::Diverged | Self::Rejected);
     }
@@ -72,10 +72,10 @@ mod tests
     #[test]
     fn Test_Divergence_Should_Require_An_Authorized_Decision()
     {
-        assert!(SynchronizationState::Diverged.Requires_Authorized_Resolution());
-        assert!(SynchronizationState::Rejected.Requires_Authorized_Resolution());
-        assert!(!SynchronizationState::Current.Requires_Authorized_Resolution());
-        assert!(!SynchronizationState::SourceNewer.Requires_Authorized_Resolution());
+        assert!(SynchronizationState::Diverged.Is_Authorized_Resolution_Required());
+        assert!(SynchronizationState::Rejected.Is_Authorized_Resolution_Required());
+        assert!(!SynchronizationState::Current.Is_Authorized_Resolution_Required());
+        assert!(!SynchronizationState::SourceNewer.Is_Authorized_Resolution_Required());
     }
 
     /// `Unavailable` is not agreement, and it is not divergence either — it is the
@@ -84,6 +84,6 @@ mod tests
     fn Test_Unavailable_Should_Not_Read_As_Current()
     {
         assert_ne!(SynchronizationState::Unavailable, SynchronizationState::Current);
-        assert!(!SynchronizationState::Unavailable.Requires_Authorized_Resolution());
+        assert!(!SynchronizationState::Unavailable.Is_Authorized_Resolution_Required());
     }
 }

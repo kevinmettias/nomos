@@ -73,7 +73,7 @@ fn Require_Fact<'a>(source: &SourceFile, facts: &'a mut dyn FactReader, rule: &'
     return match facts.Require(&capability, &source.subject, inputs, &need)
     {
         Ok(fact) => Ok(fact),
-        Err(applicability) => Err(Unread(
+        Err(applicability) => Err(Unread_Finding(
             source,
             applicability,
             rule,
@@ -87,7 +87,7 @@ fn Check_Schema(source: &SourceFile, fact: &MaterializedFact, rule: &'static str
 {
     if fact.payload.schema != nomos_cap_dependency::Payload_Schema()
     {
-        return Err(Unread(
+        return Err(Unread_Finding(
             source,
             Applicability::Unparseable,
             rule,
@@ -106,10 +106,10 @@ fn Check_Schema(source: &SourceFile, fact: &MaterializedFact, rule: &'static str
 fn Parse_Fact(source: &SourceFile, fact: &MaterializedFact, rule: &'static str) -> Result<DependencyPayload, Finding>
 {
     return nomos_cap_dependency::Parse_Payload(&fact.payload.bytes)
-        .map_err(|refusal| return Unread(source, Applicability::Unparseable, rule, &refusal.to_string()));
+        .map_err(|refusal| return Unread_Finding(source, Applicability::Unparseable, rule, &refusal.to_string()));
 }
 
-fn Unread(source: &SourceFile, applicability: Applicability, rule: &'static str, because: &str) -> Finding
+fn Unread_Finding(source: &SourceFile, applicability: Applicability, rule: &'static str, because: &str) -> Finding
 {
     return Finding {
         rule: RuleId::New(rule),

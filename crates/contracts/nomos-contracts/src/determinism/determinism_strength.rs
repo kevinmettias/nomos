@@ -46,7 +46,7 @@ impl DeterminismStrength
     /// [`DeterminismStrength::None`] may not also claim a meaningful trace, and a
     /// strategy claiming `State` or stronger may not decline to define one.
     #[must_use]
-    pub const fn Claims_Reproducibility(self) -> bool
+    pub const fn Can_Claim_Reproducibility(self) -> bool
     {
         return matches!(self, Self::State | Self::StateTemporal);
     }
@@ -68,9 +68,9 @@ mod tests
     #[test]
     fn Test_None_Should_Not_Claim_Reproducibility()
     {
-        assert!(!DeterminismStrength::None.Claims_Reproducibility());
-        assert!(DeterminismStrength::State.Claims_Reproducibility());
-        assert!(DeterminismStrength::StateTemporal.Claims_Reproducibility());
+        assert!(!DeterminismStrength::None.Can_Claim_Reproducibility());
+        assert!(DeterminismStrength::State.Can_Claim_Reproducibility());
+        assert!(DeterminismStrength::StateTemporal.Can_Claim_Reproducibility());
     }
 
     /// The ordering is load-bearing: a hierarchical strategy must declare the

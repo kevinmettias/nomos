@@ -1,7 +1,7 @@
 // The policy-resolved decision this classification feeds, kept in its own file.
-mod resolution;
+mod semantic_change_authority_resolution;
 
-pub use resolution::SemanticChangeAuthorityResolution;
+pub use semantic_change_authority_resolution::SemanticChangeAuthorityResolution;
 
 use serde::{Deserialize, Serialize};
 

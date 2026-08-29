@@ -82,7 +82,7 @@ fn Findings_Over_Index(index: &[(&SourceFile, SyntaxPayload)]) -> Vec<Finding>
 
             let Some(target_name) = declaration::Declared_Correspondence(item.documentation.Value()) else { continue };
 
-            if let Some(finding) = comparison::Judged(source, item, &target_name, index)
+            if let Some(finding) = comparison::Judged_Correspondence(source, item, &target_name, index)
             {
                 findings.push(finding);
             }
@@ -113,7 +113,7 @@ mod tests
 
     const PROVIDER: &str = "nomos.test.crosslang.resolves";
 
-    fn Source(path: &str) -> SourceFile
+    fn Source_File(path: &str) -> SourceFile
     {
         return SourceFile::New(path, nomos_model::Subject_Of_Path(path), String::new());
     }
@@ -156,7 +156,7 @@ mod tests
         return TestOffering { store: MemoryFactStore::New(), registry, offer };
     }
 
-    fn Materialize(store: &mut MemoryFactStore, source: &SourceFile, offer: &ProviderOffer, payload: &SyntaxPayload)
+    fn Materialize_Syntax_Fact(store: &mut MemoryFactStore, source: &SourceFile, offer: &ProviderOffer, payload: &SyntaxPayload)
     {
         let context = Test_Context();
         let bytes = nomos_cap_syntax::Render_Payload(payload);
@@ -188,7 +188,7 @@ mod tests
 
     fn Struct_Item(ordinal: u32, qualified_name: &str, documentation: Observation, fields: &[(&str, &str)]) -> PayloadItem
     {
-        let owned: Vec<(String, String)> = fields.iter().map(|(n, t)| return ((*n).to_owned(), (*t).to_owned())).collect();
+        let owned: Vec<(String, String)> = fields.iter().map(|(field_name, t)| return ((*field_name).to_owned(), (*t).to_owned())).collect();
         let shape = nomos_cap_syntax::Struct_Shape(&owned).map_or(Observation::Absent, Observation::Present);
 
         return PayloadItem {
@@ -204,11 +204,11 @@ mod tests
     #[test]
     fn Test_Two_Structs_With_The_Same_Fields_Should_Produce_No_Finding()
     {
-        let rust_source = Source("counter.rs");
-        let go_source = Source("counter.go");
+        let rust_source = Source_File("counter.rs");
+        let go_source = Source_File("counter.go");
         let TestOffering { mut store, registry, offer } = Offering();
 
-        Materialize(
+        Materialize_Syntax_Fact(
             &mut store,
             &rust_source,
             &offer,
@@ -222,7 +222,7 @@ mod tests
                 )],
             },
         );
-        Materialize(
+        Materialize_Syntax_Fact(
             &mut store,
             &go_source,
             &offer,
@@ -238,11 +238,11 @@ mod tests
     #[test]
     fn Test_A_Missing_Field_On_One_Side_Should_Be_Reported()
     {
-        let rust_source = Source("wide.rs");
-        let go_source = Source("wide.go");
+        let rust_source = Source_File("wide.rs");
+        let go_source = Source_File("wide.go");
         let TestOffering { mut store, registry, offer } = Offering();
 
-        Materialize(
+        Materialize_Syntax_Fact(
             &mut store,
             &rust_source,
             &offer,
@@ -256,7 +256,7 @@ mod tests
                 )],
             },
         );
-        Materialize(
+        Materialize_Syntax_Fact(
             &mut store,
             &go_source,
             &offer,
@@ -275,10 +275,10 @@ mod tests
     #[test]
     fn Test_A_Correspondence_Naming_Nothing_Should_Report_Missing_Capability()
     {
-        let source = Source("lonely.rs");
+        let source = Source_File("lonely.rs");
         let TestOffering { mut store, registry, offer } = Offering();
 
-        Materialize(
+        Materialize_Syntax_Fact(
             &mut store,
             &source,
             &offer,
@@ -298,11 +298,11 @@ mod tests
     #[test]
     fn Test_A_Target_With_No_Fields_Should_Report_Unparseable()
     {
-        let rust_source = Source("wrapper.rs");
-        let go_source = Source("marker.go");
+        let rust_source = Source_File("wrapper.rs");
+        let go_source = Source_File("marker.go");
         let TestOffering { mut store, registry, offer } = Offering();
 
-        Materialize(
+        Materialize_Syntax_Fact(
             &mut store,
             &rust_source,
             &offer,
@@ -311,7 +311,7 @@ mod tests
                 items: vec![Struct_Item(0, "Wrapper", Observation::Present("Corresponds to `Marker`.".to_owned()), &[("x", "u32")])],
             },
         );
-        Materialize(
+        Materialize_Syntax_Fact(
             &mut store,
             &go_source,
             &offer,
@@ -328,10 +328,10 @@ mod tests
     #[test]
     fn Test_A_Struct_With_No_Correspondence_Should_Produce_No_Finding()
     {
-        let source = Source("plain.rs");
+        let source = Source_File("plain.rs");
         let TestOffering { mut store, registry, offer } = Offering();
 
-        Materialize(
+        Materialize_Syntax_Fact(
             &mut store,
             &source,
             &offer,

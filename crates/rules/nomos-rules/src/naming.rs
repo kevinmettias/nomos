@@ -42,8 +42,6 @@ mod violations;
 use crate::SourceFile;
 use nomos_analysis::FactReader;
 use nomos_contracts::Finding;
-use reading::Payload_Of;
-use violations::Violations_In;
 
 /// This rule's own identifier.
 pub const NAMING_CONVENTION: &str = "function-naming-convention";
@@ -60,6 +58,9 @@ pub fn Check_Naming_Convention(
     facts: &mut dyn FactReader,
 ) -> Vec<Finding>
 {
+    use reading::Payload_Of;
+    use violations::Violations_In;
+
     let mut findings = Vec::new();
 
     for source in sources
@@ -109,13 +110,13 @@ mod tests
     }
 
     /// `path` and `text` are both `&str`; without a distinct type per position a call site
-    /// like `Source("src/lib.rs", "fn bad_name() {}")` reads as two interchangeable
+    /// like `Source_File("src/lib.rs", "fn bad_name() {}")` reads as two interchangeable
     /// strings and a swap compiles silently. These wrappers give each position a type the
     /// other cannot satisfy.
     struct Path<'a>(&'a str);
     struct Text<'a>(&'a str);
 
-    fn Source(path: Path<'_>, text: Text<'_>) -> SourceFile
+    fn Source_File(path: Path<'_>, text: Text<'_>) -> SourceFile
     {
         return SourceFile::New(path.0, SubjectId::From_Digest(Content_Digest(path.0.as_bytes())), text.0);
     }
@@ -157,7 +158,7 @@ mod tests
         return TestOffering { store: MemoryFactStore::New(), registry, offer };
     }
 
-    fn Materialize(store: &mut MemoryFactStore, source: &SourceFile, offer: &ProviderOffer, payload: &str)
+    fn Materialize_Syntax_Fact(store: &mut MemoryFactStore, source: &SourceFile, offer: &ProviderOffer, payload: &str)
     {
         let context = Test_Context();
         let key = FactKey {
@@ -192,9 +193,9 @@ mod tests
     #[test]
     fn Test_A_Real_Fact_Should_Be_Read_And_Judged()
     {
-        let source = Source(Path("src/lib.rs"), Text("fn bad_name() {}"));
+        let source = Source_File(Path("src/lib.rs"), Text("fn bad_name() {}"));
         let TestOffering { mut store, registry, offer } = Offering();
-        Materialize(
+        Materialize_Syntax_Fact(
             &mut store,
             &source,
             &offer,
@@ -211,7 +212,7 @@ mod tests
     #[test]
     fn Test_A_Subject_With_No_Fact_Should_Be_Reported_Rather_Than_Silently_Clean()
     {
-        let source = Source(Path("src/lib.rs"), Text("fn bad_name() {}"));
+        let source = Source_File(Path("src/lib.rs"), Text("fn bad_name() {}"));
         let TestOffering { store, registry, .. } = Offering();
 
         let mut reader = Reader::On(&store, &registry, Test_Context());

@@ -176,12 +176,12 @@ mod tests
 
     const PROVIDER: &str = "nomos.test.dependency.resolves";
 
-    fn Source(package: &str) -> SourceFile
+    fn Source_File(package: &str) -> SourceFile
     {
         return SourceFile::New(package, SubjectId::From_Digest(Content_Digest(package.as_bytes())), String::new());
     }
 
-    fn Edge(target: &str) -> DependencyEdge
+    fn Dependency_Edge(target: &str) -> DependencyEdge
     {
         return DependencyEdge {
             target: target.to_owned(),
@@ -237,7 +237,7 @@ mod tests
         return TestOffering { store: MemoryFactStore::New(), registry, offer };
     }
 
-    fn Materialize(store: &mut MemoryFactStore, source: &SourceFile, offer: &ProviderOffer, payload: &DependencyPayload)
+    fn Materialize_Dependency_Fact(store: &mut MemoryFactStore, source: &SourceFile, offer: &ProviderOffer, payload: &DependencyPayload)
     {
         let context = Test_Context();
         let bytes = nomos_cap_dependency::Encode_Payload(payload);
@@ -270,15 +270,15 @@ mod tests
     #[test]
     fn Test_A_Real_Fact_Should_Be_Read_And_Judged()
     {
-        let source = Source("nomos-cap-syntax");
+        let source = Source_File("nomos-cap-syntax");
         let TestOffering { mut store, registry, offer } = Offering();
-        Materialize(
+        Materialize_Dependency_Fact(
             &mut store,
             &source,
             &offer,
             &DependencyPayload {
                 package: "nomos-cap-syntax".to_owned(),
-                edges: vec![Edge("nomos-rules")],
+                edges: vec![Dependency_Edge("nomos-rules")],
             },
         );
 
@@ -292,7 +292,7 @@ mod tests
     #[test]
     fn Test_A_Subject_With_No_Fact_Should_Be_Reported_Rather_Than_Silently_Clean()
     {
-        let source = Source("nomos-cap-syntax");
+        let source = Source_File("nomos-cap-syntax");
         let TestOffering { store, registry, .. } = Offering();
 
         let mut reader = Reader::On(&store, &registry, Test_Context());
@@ -304,9 +304,9 @@ mod tests
     #[test]
     fn Test_A_Declared_Package_Should_Produce_No_Completeness_Finding()
     {
-        let source = Source("nomos-cap-syntax");
+        let source = Source_File("nomos-cap-syntax");
         let TestOffering { mut store, registry, offer } = Offering();
-        Materialize(
+        Materialize_Dependency_Fact(
             &mut store,
             &source,
             &offer,
@@ -325,9 +325,9 @@ mod tests
     #[test]
     fn Test_An_Undeclared_Package_Should_Produce_One_Completeness_Finding()
     {
-        let source = Source("not-in-bands");
+        let source = Source_File("not-in-bands");
         let TestOffering { mut store, registry, offer } = Offering();
-        Materialize(
+        Materialize_Dependency_Fact(
             &mut store,
             &source,
             &offer,
@@ -348,7 +348,7 @@ mod tests
     #[test]
     fn Test_A_Completeness_Subject_With_No_Fact_Should_Be_Reported_Under_Its_Own_Rule()
     {
-        let source = Source("nomos-cap-syntax");
+        let source = Source_File("nomos-cap-syntax");
         let TestOffering { store, registry, .. } = Offering();
 
         let mut reader = Reader::On(&store, &registry, Test_Context());

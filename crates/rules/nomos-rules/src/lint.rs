@@ -77,7 +77,7 @@ fn Require_Fact<'a>(source: &SourceFile, facts: &'a mut dyn FactReader) -> Resul
     return match facts.Require(&capability, &source.subject, inputs, &need)
     {
         Ok(fact) => Ok(fact),
-        Err(applicability) => Err(Unread(
+        Err(applicability) => Err(Unread_Finding(
             source,
             applicability,
             &format!("no admitted provider answered for it ({})", applicability.Label()),
@@ -108,7 +108,7 @@ fn Check_Schema(source: &SourceFile, fact: &MaterializedFact) -> Result<(), Find
 {
     if fact.payload.schema != nomos_cap_lint::Payload_Schema()
     {
-        return Err(Unread(
+        return Err(Unread_Finding(
             source,
             Applicability::Unparseable,
             &format!(
@@ -126,7 +126,7 @@ fn Check_Schema(source: &SourceFile, fact: &MaterializedFact) -> Result<(), Find
 fn Parse_Fact(source: &SourceFile, fact: &MaterializedFact) -> Result<DiagnosticsPayload, Finding>
 {
     return nomos_cap_lint::Parse_Payload(&fact.payload.bytes)
-        .map_err(|refusal| return Unread(source, Applicability::Unparseable, &refusal.to_string()));
+        .map_err(|refusal| return Unread_Finding(source, Applicability::Unparseable, &refusal.to_string()));
 }
 
 /// `payload`'s own diagnostics, each relayed as a `Finding` — never judged a second time,
@@ -134,10 +134,10 @@ fn Parse_Fact(source: &SourceFile, fact: &MaterializedFact) -> Result<Diagnostic
 /// rule reports.
 fn Findings_Of(source: &SourceFile, payload: &DiagnosticsPayload) -> Vec<Finding>
 {
-    return payload.diagnostics.iter().map(|diagnostic| return Relayed(source, diagnostic)).collect();
+    return payload.diagnostics.iter().map(|diagnostic| return Finding_For_Diagnostic(source, diagnostic)).collect();
 }
 
-fn Relayed(source: &SourceFile, diagnostic: &LintDiagnostic) -> Finding
+fn Finding_For_Diagnostic(source: &SourceFile, diagnostic: &LintDiagnostic) -> Finding
 {
     return Finding {
         rule: RuleId::New(LINT_DIAGNOSTICS),
@@ -163,7 +163,7 @@ fn Summary_Of(diagnostic: &LintDiagnostic) -> String
     };
 }
 
-fn Unread(source: &SourceFile, applicability: Applicability, because: &str) -> Finding
+fn Unread_Finding(source: &SourceFile, applicability: Applicability, because: &str) -> Finding
 {
     return Finding {
         rule: RuleId::New(LINT_DIAGNOSTICS),
@@ -193,7 +193,7 @@ mod tests
 
     const PROVIDER: &str = "nomos.test.lint.resolves";
 
-    fn Source(package: &str) -> SourceFile
+    fn Source_File(package: &str) -> SourceFile
     {
         return SourceFile::New(package, SubjectId::From_Digest(Content_Digest(package.as_bytes())), String::new());
     }
@@ -243,7 +243,7 @@ mod tests
         return TestOffering { store: MemoryFactStore::New(), registry, offer };
     }
 
-    fn Materialize(store: &mut MemoryFactStore, source: &SourceFile, offer: &ProviderOffer, payload: &DiagnosticsPayload)
+    fn Materialize_Diagnostics_Fact(store: &mut MemoryFactStore, source: &SourceFile, offer: &ProviderOffer, payload: &DiagnosticsPayload)
     {
         let context = Test_Context();
         let bytes = nomos_cap_lint::Encode_Payload(payload);
@@ -276,9 +276,9 @@ mod tests
     #[test]
     fn Test_A_Real_Fact_With_A_Diagnostic_Should_Be_Read_And_Relayed()
     {
-        let source = Source("nomos-cap-syntax");
+        let source = Source_File("nomos-cap-syntax");
         let TestOffering { mut store, registry, offer } = Offering();
-        Materialize(
+        Materialize_Diagnostics_Fact(
             &mut store,
             &source,
             &offer,
@@ -310,9 +310,9 @@ mod tests
     #[test]
     fn Test_A_Clean_Members_Fact_Should_Produce_No_Finding()
     {
-        let source = Source("nomos-contracts");
+        let source = Source_File("nomos-contracts");
         let TestOffering { mut store, registry, offer } = Offering();
-        Materialize(
+        Materialize_Diagnostics_Fact(
             &mut store,
             &source,
             &offer,
@@ -328,7 +328,7 @@ mod tests
     #[test]
     fn Test_A_Subject_With_No_Fact_Should_Be_Reported_Rather_Than_Silently_Clean()
     {
-        let source = Source("nomos-cap-syntax");
+        let source = Source_File("nomos-cap-syntax");
         let TestOffering { store, registry, .. } = Offering();
 
         let mut reader = Reader::On(&store, &registry, Test_Context());
@@ -341,9 +341,9 @@ mod tests
     #[test]
     fn Test_Multiple_Diagnostics_On_One_Member_Should_Each_Become_A_Finding()
     {
-        let source = Source("nomos-rules");
+        let source = Source_File("nomos-rules");
         let TestOffering { mut store, registry, offer } = Offering();
-        Materialize(
+        Materialize_Diagnostics_Fact(
             &mut store,
             &source,
             &offer,

@@ -39,7 +39,7 @@
 //! *Discovering which declarations are universes* still reads the text it is handed,
 //! because the payload carries neither doc comments nor declared types and no version of
 //! it exists that would. That is a measurement rather than a preference, and it names its
-//! own end condition — see `universe.rs` and `OD-RULES-001`.
+//! own end condition — see `universe_kind.rs` and `OD-RULES-001`.
 //!
 //! # What is here
 //!
@@ -81,7 +81,7 @@
 //! category, real since `OD-CONTRACTS-002` but produced by no rule until this one — because
 //! whether a crate's declared role and its actual public surface agree is a semantic
 //! judgment no mechanical provider can make, grounded against real, external
-//! architecture-standards precedent (`role_surface.rs`'s own module doc names it) rather
+//! architecture-standards precedent (`role_surface_pair.rs`'s own module doc names it) rather
 //! than invented. It takes plain data instead of a [`nomos_analysis::FactReader`], and its
 //! own module doc explains why.
 //!
@@ -130,8 +130,8 @@ mod policy;
 mod reachability;
 mod reading;
 mod registry;
-mod role_surface;
-mod universe;
+mod role_surface_pair;
+mod universe_kind;
 
 use nomos_capability::Requirement;
 use nomos_contracts::{Assurance, FactVariant, Guarantee, IncrementalGranularity, ProviderId, SubjectId};
@@ -152,8 +152,8 @@ pub use reachability::{
 };
 pub use reading::Reading;
 pub use registry::{RuleOffer, RuleRegistry, RuleRegistryError};
-pub use role_surface::{Check_Declared_Role_Matches_Surface, RoleSurfacePair, DECLARED_ROLE_MATCHES_SURFACE};
-pub use universe::{UniverseKind, Universes_In};
+pub use role_surface_pair::{Check_Declared_Role_Matches_Surface, RoleSurfacePair, DECLARED_ROLE_MATCHES_SURFACE};
+pub use universe_kind::{UniverseKind, Universes_In};
 
 /// What this crate needs from a syntax provider before it will believe an answer.
 ///
@@ -243,6 +243,10 @@ pub(crate) fn Syntax_Requirement_For(preferred: Option<ProviderId>) -> Requireme
 /// this crate keys anything on it: `identity.rs` states the rule for the whole system,
 /// and a finding identified by its path is a finding that closes and reopens every time
 /// somebody moves a file.
+///
+/// `check-file-name` names this file for not matching this type. `lib.rs` is the crate
+/// root every crate needs as its entry point, so renaming it to follow a type it declares
+/// is not a real option — a structural exception this file cannot resolve on its own.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct SourceFile
 {

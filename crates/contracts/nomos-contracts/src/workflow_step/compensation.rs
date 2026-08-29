@@ -43,7 +43,7 @@ impl Compensation
 
     /// Whether a compensation of either shape exists.
     #[must_use]
-    pub const fn Exists(self) -> bool
+    pub const fn Is_Present(self) -> bool
     {
         return !matches!(self, Self::None);
     }
@@ -65,13 +65,13 @@ mod tests
     #[test]
     fn Test_None_Should_Not_Exist()
     {
-        assert!(!Compensation::None.Exists());
+        assert!(!Compensation::None.Is_Present());
     }
 
     #[test]
     fn Test_The_Other_Two_Should_Exist()
     {
-        assert!(Compensation::SelfCompensating.Exists());
-        assert!(Compensation::ExternallyCompensated.Exists());
+        assert!(Compensation::SelfCompensating.Is_Present());
+        assert!(Compensation::ExternallyCompensated.Is_Present());
     }
 }

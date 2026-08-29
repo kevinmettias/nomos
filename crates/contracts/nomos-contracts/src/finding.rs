@@ -21,11 +21,11 @@
 // backs it, and how each of those is labelled for a reader.
 mod applicability;
 mod display_label;
-mod evidence;
+mod evidence_class;
 
 pub use applicability::Applicability;
 pub use display_label::DisplayLabel;
-pub use evidence::EvidenceClass;
+pub use evidence_class::EvidenceClass;
 
 use crate::GateCategory;
 use crate::{RuleId, SubjectId};
@@ -137,7 +137,7 @@ mod tests
     use super::*;
     use crate::Digest128;
 
-    fn Example(applicability: Applicability, gate: GateCategory) -> Finding
+    fn Example_Finding(applicability: Applicability, gate: GateCategory) -> Finding
     {
         return Finding {
             rule: RuleId::New("completeness-mirror"),
@@ -154,7 +154,7 @@ mod tests
     #[test]
     fn Test_A_Blocking_Finding_That_Was_Evaluated_Should_Fail_A_Build()
     {
-        assert!(Example(Applicability::Supported, GateCategory::Blocking).Can_Fail_A_Build());
+        assert!(Example_Finding(Applicability::Supported, GateCategory::Blocking).Can_Fail_A_Build());
     }
 
     /// The one that gets forgotten. A rule that could not read what it binds has
@@ -172,7 +172,7 @@ mod tests
         ]
         {
             assert!(
-                !Example(unreached, GateCategory::Blocking).Can_Fail_A_Build(),
+                !Example_Finding(unreached, GateCategory::Blocking).Can_Fail_A_Build(),
                 "{} reached nothing and must not fail a build",
                 unreached.Label()
             );
@@ -184,7 +184,7 @@ mod tests
     fn Test_A_Partial_Judgment_Should_Still_Fail_A_Build()
     {
         assert!(
-            Example(Applicability::PartiallySupported, GateCategory::Blocking).Can_Fail_A_Build()
+            Example_Finding(Applicability::PartiallySupported, GateCategory::Blocking).Can_Fail_A_Build()
         );
     }
 
@@ -199,7 +199,7 @@ mod tests
             GateCategory::Review,
         ]
         {
-            assert!(!Example(Applicability::Supported, toothless).Can_Fail_A_Build());
+            assert!(!Example_Finding(Applicability::Supported, toothless).Can_Fail_A_Build());
         }
     }
 
@@ -207,7 +207,7 @@ mod tests
     #[test]
     fn Test_A_Description_Should_Name_The_Gate_The_Rule_And_The_Place()
     {
-        let described = Example(Applicability::Supported, GateCategory::Blocking).Describe();
+        let described = Example_Finding(Applicability::Supported, GateCategory::Blocking).Describe();
 
         assert!(described.contains("Blocking"), "{described}");
         assert!(described.contains("completeness-mirror"), "{described}");
@@ -220,7 +220,7 @@ mod tests
     #[test]
     fn Test_A_Finding_With_No_Location_Should_Say_So()
     {
-        let mut nowhere = Example(Applicability::Supported, GateCategory::Blocking);
+        let mut nowhere = Example_Finding(Applicability::Supported, GateCategory::Blocking);
         nowhere.locations.clear();
 
         assert!(nowhere.Describe().contains("no location"));

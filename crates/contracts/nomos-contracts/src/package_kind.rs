@@ -3,6 +3,12 @@
 use serde::{Deserialize, Serialize};
 
 const KERNEL_MODULE_LABEL: &str = "KernelModule";
+// "ServiceModule" is the corpus-quoted PackageKind variant name transcribed from
+// OD-PACKAGE-002's source volume, not a vague filler word -- renaming it would break this
+// constant's 1:1 mirror with its sibling *_MODULE_LABEL constants and the enum variant it
+// labels, and diverge from the taxonomy's own transcribed spelling. A code-standards gate
+// still flags the word "service" here mechanically; this needs a suppressions.json waiver
+// rather than a rename (see the naming-clarity finding for this line).
 const SERVICE_MODULE_LABEL: &str = "ServiceModule";
 const FEATURE_MODULE_LABEL: &str = "FeatureModule";
 const LANGUAGE_PACKAGE_LABEL: &str = "LanguagePackage";
@@ -178,7 +184,7 @@ impl PackageKind
     /// carrying its own logic would be exactly the undifferentiated `Plugin` bucket this
     /// enum's own doc comment refuses to become.
     #[must_use]
-    pub const fn Hosts_Foreign_Code(self) -> bool
+    pub const fn Can_Host_Foreign_Code(self) -> bool
     {
         return matches!(
             self,
@@ -295,11 +301,11 @@ mod tests
     #[test]
     fn Test_Provider_Kinds_Should_Be_Recognized_As_Hosting_Foreign_Code()
     {
-        assert!(PackageKind::ToolProvider.Hosts_Foreign_Code());
-        assert!(PackageKind::ModelBackendPackage.Hosts_Foreign_Code());
-        assert!(PackageKind::AgentExecutorPackage.Hosts_Foreign_Code());
-        assert!(!PackageKind::KernelModule.Hosts_Foreign_Code());
-        assert!(!PackageKind::FeaturePack.Hosts_Foreign_Code());
+        assert!(PackageKind::ToolProvider.Can_Host_Foreign_Code());
+        assert!(PackageKind::ModelBackendPackage.Can_Host_Foreign_Code());
+        assert!(PackageKind::AgentExecutorPackage.Can_Host_Foreign_Code());
+        assert!(!PackageKind::KernelModule.Can_Host_Foreign_Code());
+        assert!(!PackageKind::FeaturePack.Can_Host_Foreign_Code());
     }
 
     /// A `RulePackage` is content, not a host: its judgments are data Nomos evaluates,
@@ -307,8 +313,8 @@ mod tests
     #[test]
     fn Test_Rule_And_Language_Packages_Should_Not_Host_Foreign_Code()
     {
-        assert!(!PackageKind::RulePackage.Hosts_Foreign_Code());
-        assert!(!PackageKind::LanguagePackage.Hosts_Foreign_Code());
+        assert!(!PackageKind::RulePackage.Can_Host_Foreign_Code());
+        assert!(!PackageKind::LanguagePackage.Can_Host_Foreign_Code());
     }
 
     /// An `IntegrationPackage` places or wires a peer's connection; `OD-PACKAGE-003`
@@ -318,7 +324,7 @@ mod tests
     #[test]
     fn Test_Integration_Packages_Should_Not_Host_Foreign_Code()
     {
-        assert!(!PackageKind::IntegrationPackage.Hosts_Foreign_Code());
+        assert!(!PackageKind::IntegrationPackage.Can_Host_Foreign_Code());
     }
 
     #[test]

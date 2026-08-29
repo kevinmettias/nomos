@@ -1,6 +1,7 @@
 //! Every universe the run could read, indexed by the check that claims to mirror it.
 
-use super::{BTreeSet, DeclaredUniverse, Unread, Shortfall, Applicability, SourceFile, FactReader, Reading, Syntax_Requirement_For, InputDigest, Check_Names_In, Read_Universes, SubjectId, Content_Digest};
+use super::{BTreeSet, Unread, Shortfall, Applicability, SourceFile, FactReader, Reading, Syntax_Requirement_For, InputDigest, Check_Names_In, Read_Universes, SubjectId, Content_Digest};
+use crate::DeclaredUniverse;
 
 /// Every check name in scope for this run, and every subject that is missing from it.
 ///
@@ -38,7 +39,7 @@ impl CheckIndex<'_>
     /// This is the function `OD-RULES-002` replaces a whole-run flag with. The counter it
     /// has to answer is that any unread file might have held the check, and the answer is
     /// that "any" is doing the work: a file whose bytes do not spell the name held nothing
-    /// named that. [`Unread::Could_Have_Declared`] states the bound and where it stops.
+    /// named that. [`Unread::Can_Have_Declared`] states the bound and where it stops.
     pub(super) fn Shortfall_For(&self, claimed: &str) -> Option<Shortfall<'_>>
     {
         if self
@@ -52,7 +53,7 @@ impl CheckIndex<'_>
         let bearing: Vec<&Unread<'_>> = self
             .unread
             .iter()
-            .filter(|subject| return subject.Could_Have_Declared(claimed))
+            .filter(|subject| return subject.Can_Have_Declared(claimed))
             .collect();
         let first = bearing.first()?;
         let subjects = bearing.iter().map(|subject| return subject.path.as_str()).collect();
@@ -79,7 +80,7 @@ pub(super) fn Declared_By<'source>(
 
     let read = match facts.Require(&capability, &source.subject, inputs, &need)
     {
-        Ok(fact) => Decoded(fact, &source.path),
+        Ok(fact) => Decoded_Syntax_Payload(fact, &source.path),
         Err(applicability) =>
         {
             let because =
@@ -99,7 +100,7 @@ pub(super) fn Declared_By<'source>(
 ///
 /// Decoded once. Two decodes of one fact would be two answers to what the bytes say, which
 /// is the objection `OD-SYNTAX-001` settled for the whole tree.
-pub(super) fn Decoded(
+pub(super) fn Decoded_Syntax_Payload(
     fact: &nomos_analysis::MaterializedFact,
     path: &str,
 ) -> Result<(BTreeSet<String>, Reading), String>

@@ -51,7 +51,7 @@ impl ReproducibilityScope
     /// [`ReproducibilityScope::SingleRun`] has nothing to compare across environments;
     /// everything above it does, and the verification owed grows with the scope.
     #[must_use]
-    pub const fn Requires_Cross_Environment_Verification(self) -> bool
+    pub const fn Is_Cross_Environment_Verification_Required(self) -> bool
     {
         return !matches!(self, Self::SingleRun);
     }
@@ -81,9 +81,9 @@ mod tests
     #[test]
     fn Test_Only_Single_Run_Should_Skip_Cross_Environment_Verification()
     {
-        assert!(!ReproducibilityScope::SingleRun.Requires_Cross_Environment_Verification());
-        assert!(ReproducibilityScope::CrossRun.Requires_Cross_Environment_Verification());
-        assert!(ReproducibilityScope::CrossPlatform.Requires_Cross_Environment_Verification());
-        assert!(ReproducibilityScope::CrossBinary.Requires_Cross_Environment_Verification());
+        assert!(!ReproducibilityScope::SingleRun.Is_Cross_Environment_Verification_Required());
+        assert!(ReproducibilityScope::CrossRun.Is_Cross_Environment_Verification_Required());
+        assert!(ReproducibilityScope::CrossPlatform.Is_Cross_Environment_Verification_Required());
+        assert!(ReproducibilityScope::CrossBinary.Is_Cross_Environment_Verification_Required());
     }
 }
