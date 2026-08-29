@@ -21,8 +21,8 @@ pub(super) fn Judged(source: &SourceFile, item: &PayloadItem, target_name: &str,
     let Some(own_fields) = Struct_Fields(&item.shape) else {
         return Some(Unparseable(
             source,
-            &item.qualified_name,
-            &format!("`{}` declares a correspondence to `{target_name}` but has no named fields of its own to compare", item.qualified_name),
+            DeclaringName(&item.qualified_name),
+            Reason(&format!("`{}` declares a correspondence to `{target_name}` but has no named fields of its own to compare", item.qualified_name)),
         ));
     };
 
@@ -33,8 +33,8 @@ pub(super) fn Judged(source: &SourceFile, item: &PayloadItem, target_name: &str,
     let Some(target_fields) = Struct_Fields(&target.shape) else {
         return Some(Unparseable(
             source,
-            &item.qualified_name,
-            &format!("`{target_name}` has no named fields to compare `{}` against", item.qualified_name),
+            DeclaringName(&item.qualified_name),
+            Reason(&format!("`{target_name}` has no named fields to compare `{}` against", item.qualified_name)),
         ));
     };
 
@@ -49,7 +49,16 @@ struct FieldSets<'a>
     target: &'a [(String, String)],
 }
 
-fn Unparseable(source: &SourceFile, declaring_name: &str, because: &str) -> Finding
+/// The struct declaring a correspondence, by its own qualified name -- named so a caller
+/// cannot transpose it with the struct it names a correspondence to, since both are
+/// otherwise identically-shaped `&str`s.
+struct DeclaringName<'a>(&'a str);
+
+/// Why a correspondence could not be judged -- named so [`Unparseable`] cannot mistake it
+/// for the struct name beside it.
+struct Reason<'a>(&'a str);
+
+fn Unparseable(source: &SourceFile, declaring_name: DeclaringName<'_>, because: Reason<'_>) -> Finding
 {
     return Finding {
         rule: RuleId::New(CROSS_LANGUAGE_CORRESPONDENCE),
@@ -58,7 +67,7 @@ fn Unparseable(source: &SourceFile, declaring_name: &str, because: &str) -> Find
         applicability: Applicability::Unparseable,
         evidence: EvidenceClass::Derived,
         gate: GateCategory::Advisory,
-        summary: format!("`{declaring_name}`'s declared correspondence could not be judged: {because}"),
+        summary: format!("`{}`'s declared correspondence could not be judged: {}", declaring_name.0, because.0),
         locations: vec![source.path.clone()],
     };
 }
@@ -130,13 +139,19 @@ fn Drift(source: &SourceFile, item: &PayloadItem, target_name: &str, fields: &Fi
         applicability: Applicability::Supported,
         evidence: EvidenceClass::Derived,
         gate: GateCategory::Advisory,
-        summary: Drift_Summary(&item.qualified_name, target_name, &missing_on_target, &missing_on_own),
+        summary: Drift_Summary(DeclaringName(&item.qualified_name), TargetName(target_name), &missing_on_target, &missing_on_own),
         locations: vec![source.path.clone()],
     });
 }
 
-fn Drift_Summary(declaring_name: &str, target_name: &str, missing_on_target: &[&str], missing_on_own: &[&str]) -> String
+/// The struct a correspondence names, on the other side from [`DeclaringName`] -- its own
+/// type for the identical reason.
+struct TargetName<'a>(&'a str);
+
+fn Drift_Summary(declaring_name: DeclaringName<'_>, target_name: TargetName<'_>, missing_on_target: &[&str], missing_on_own: &[&str]) -> String
 {
+    let declaring_name = declaring_name.0;
+    let target_name = target_name.0;
     let mut parts = Vec::new();
 
     if !missing_on_target.is_empty()

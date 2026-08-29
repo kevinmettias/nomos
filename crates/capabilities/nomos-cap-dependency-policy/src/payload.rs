@@ -84,7 +84,7 @@ fn Violation_Line(line: &str) -> Result<PolicyViolation, PayloadRefusal>
     let [severity, code, message] = Violation_Fields(line, rest)?;
     let severity = Parse_Severity(severity)?;
 
-    return Ok(Build_Violation(severity, code, message));
+    return Ok(PolicyViolation { severity, code: code.to_owned(), message: message.to_owned() });
 }
 
 /// `line` with its `"violation\t"` prefix stripped, or a refusal naming the line that was
@@ -129,15 +129,6 @@ fn Parse_Severity(severity: &str) -> Result<PolicySeverity, PayloadRefusal>
     };
 
     return Ok(severity);
-}
-
-fn Build_Violation(severity: PolicySeverity, code: &str, message: &str) -> PolicyViolation
-{
-    return PolicyViolation {
-        severity,
-        code: code.to_owned(),
-        message: message.to_owned(),
-    };
 }
 
 #[cfg(test)]

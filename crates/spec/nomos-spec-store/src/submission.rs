@@ -140,8 +140,10 @@ fn Unresolved_Citations(
 }
 
 /// The submission field a citation rule checks (`answers`, `implements`).
+#[derive(Clone, Copy)]
 struct CitedField<'a>(&'a str);
 /// The kind of submission a citation rule requires (`feature-request`, `design-spec`).
+#[derive(Clone, Copy)]
 struct WantedKind<'a>(&'a str);
 
 /// Why one cited field does not resolve to an accepted submission of the kind it must name.
@@ -152,10 +154,7 @@ fn Unresolved_Citation(
     wanted: WantedKind<'_>,
 ) -> Result<Option<Failure>, StoreError>
 {
-    let field = field.0;
-    let wanted = wanted.0;
-
-    let Some(target) = Cited_Target(submission, field)
+    let Some(target) = Cited_Target(submission, field.0)
     else
     {
         return Ok(None);
@@ -167,7 +166,7 @@ fn Unresolved_Citation(
         return Ok(None);
     };
 
-    return Ok(Some(Citation_Failure(field, remedy)));
+    return Ok(Some(Citation_Failure(field.0, remedy)));
 }
 
 /// The value a citation field names, trimmed — `None` when the submission carries no
@@ -184,10 +183,12 @@ fn Cited_Target<'a>(submission: &'a Submission, field: &str) -> Option<&'a str>
 fn Citation_Remedy(
     store: &SpecificationStore,
     target: &str,
-    field: &str,
-    wanted: &str,
+    field: CitedField<'_>,
+    wanted: WantedKind<'_>,
 ) -> Result<Option<String>, StoreError>
 {
+    let field = field.0;
+    let wanted = wanted.0;
     let found = Cited_State(store, target)?;
 
     return Ok(match found

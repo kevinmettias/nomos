@@ -93,7 +93,7 @@ fn Member_Directories(root: &Path) -> Result<Vec<PathBuf>, ModuleError>
 /// either the single-line `use <dir>` form or the block `use (\n <dir>\n ... )` form.
 fn Parse_Use_Directives(text: &str) -> Vec<String>
 {
-    return Directive_Entries(text, "use");
+    return Directive_Entries(text, Directive::Use);
 }
 
 /// Every module `root`'s own members declare, read from each one's own `go.mod`.
@@ -118,7 +118,7 @@ fn Read_Module(member: &Path, root: &Path) -> Result<ReadModule, ModuleError>
     let module_path = Parse_Module_Line(&text).ok_or_else(|| ModuleError {
         reason: format!("{} has no `module` line", mod_path.display()),
     })?;
-    let requires = Directive_Entries(&text, "require")
+    let requires = Directive_Entries(&text, Directive::Require)
         .into_iter()
         .map(|entry| Require_Module_Path(&entry))
         .collect();
@@ -239,8 +239,30 @@ fn Require_Nonempty(discovered: Vec<DiscoveredModule>) -> Result<Vec<DiscoveredM
 /// Reading both through this one function is not folding two different questions into
 /// one — it is the same question (every entry one keyword declares) asked of two files
 /// that happen to use the identical shape to answer it.
-fn Directive_Entries(text: &str, keyword: &str) -> Vec<String>
+/// The two directive keywords [`Directive_Entries`] reads -- named rather than passed as an
+/// adjacent `&str` alongside the text being scanned, so a caller cannot transpose the two.
+#[derive(Clone, Copy)]
+enum Directive
 {
+    Use,
+    Require,
+}
+
+impl Directive
+{
+    fn Keyword(self) -> &'static str
+    {
+        return match self
+        {
+            Directive::Use => "use",
+            Directive::Require => "require",
+        };
+    }
+}
+
+fn Directive_Entries(text: &str, directive: Directive) -> Vec<String>
+{
+    let keyword = directive.Keyword();
     let mut entries = Vec::new();
     let mut lines = text.lines();
 

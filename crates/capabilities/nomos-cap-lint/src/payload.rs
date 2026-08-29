@@ -109,7 +109,9 @@ fn Diagnostic_Line(line: &str) -> Result<LintDiagnostic, PayloadRefusal>
 {
     let rest = Diagnostic_Body(line)?;
     let [level, lint_id, file, line_number, message] = Diagnostic_Fields(line, rest)?;
-    let (level, lint_id, line_number) = Parse_Diagnostic_Fields(level, lint_id, line_number)?;
+    let level = Parse_Level(level)?;
+    let lint_id = Parse_Lint(lint_id);
+    let line_number = Parse_Line_Number(line_number)?;
 
     return Ok(LintDiagnostic {
         level,
@@ -149,15 +151,6 @@ fn Diagnostic_Fields<'a>(line: &str, rest: &'a str) -> Result<[&'a str; DIAGNOST
     };
 
     return Ok([*level, *lint_id, *file, *line_number, *message]);
-}
-
-fn Parse_Diagnostic_Fields(level: &str, lint_id: &str, line_number: &str) -> Result<(LintLevel, Option<String>, u32), PayloadRefusal>
-{
-    let level = Parse_Level(level)?;
-    let lint_id = Parse_Lint(lint_id);
-    let line_number = Parse_Line_Number(line_number)?;
-
-    return Ok((level, lint_id, line_number));
 }
 
 fn Parse_Level(level: &str) -> Result<LintLevel, PayloadRefusal>

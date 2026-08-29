@@ -100,26 +100,24 @@ impl Later
     /// What one section contributes: how much of it is filler, and where its heading stands.
     fn Note_Section(&mut self, path: SectionPath<'_>, title: SectionTitle<'_>, body: &[SourceBlock])
     {
-        let path = path.0;
-        let title = title.0;
         let mut strongest: Option<Body> = None;
         for block in Keyable(body)
         {
             strongest = Some(self.Fold_Block(path, title, block, strongest));
         }
 
-        self.authored.entry(title.to_owned()).or_default().push(Position::Heading {
-            document: path.to_owned(),
+        self.authored.entry(title.0.to_owned()).or_default().push(Position::Heading {
+            document: path.0.to_owned(),
             body: strongest,
         });
     }
 
     /// Judges one block's shape, tallies it into the section's block/filler counts, and
     /// folds it into the strongest body seen so far for that section.
-    fn Fold_Block(&mut self, path: &str, title: &str, block: &SourceBlock, strongest: Option<Body>) -> Body
+    fn Fold_Block(&mut self, path: SectionPath<'_>, title: SectionTitle<'_>, block: &SourceBlock, strongest: Option<Body>) -> Body
     {
-        let shape = self.Shape(SectionText(&block.text), SectionTitle(title));
-        let counted = self.bodies.entry(path.to_owned()).or_default();
+        let shape = self.Shape(SectionText(&block.text), title);
+        let counted = self.bodies.entry(path.0.to_owned()).or_default();
         counted.blocks = counted.blocks.saturating_add(1);
         if matches!(shape, Body::Template { .. })
         {

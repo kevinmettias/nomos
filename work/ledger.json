@@ -36340,6 +36340,63 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P16-EVERYTHINGELSE-TRANSPOSABLE-1",
+      "title": "OD-GATE-018 phase 3: close 7 of 8 check-transposable-parameters findings",
+      "why": "declare-types' advisory check-transposable-parameters flagged 8 private, single-call-site helpers taking 2-3 adjacent same-typed &str parameters. Two (nomos-cap-dependency-policy::Build_Violation, nomos-cap-lint::Parse_Diagnostic_Fields) were trivial wrappers around a struct literal or independent single-argument parses -- inlined at their one call site, eliminating the transposition risk entirely rather than adding a type just to carry it. nomos-lang-go-modules::Directive_Entries's keyword parameter became a Directive enum (Use/Require), the real domain concept its two call sites already only ever passed as one of two literals. nomos-spec-ingest::Fold_Block and nomos-spec-store::Citation_Remedy already had SectionPath/SectionTitle and CitedField/WantedKind newtypes in scope one call up (Note_Section, Unresolved_Citation) that were being unwrapped to raw &str before the flagged call -- threading the existing wrapper through instead (adding Clone+Copy to CitedField/WantedKind, which lacked it) closed both with no new types. nomos-rules::crosslang::comparison.rs's Unparseable and Drift_Summary got new DeclaringName/TargetName/Reason wrapper types, since declaring_name and target_name are both genuinely struct names a caller could otherwise transpose. The eighth finding, nomos-gate-orchestration::scope_selector::Is_Under, is deferred to the same item as check-field-grouping since that file's crate is currently held by a concurrent session's P17-CLEANFILE-ORCHESTRATION claim.",
+      "done_when": "check-transposable-parameters reports exactly 1 remaining finding (nomos-gate-orchestration::scope_selector::Is_Under) against crates tests (default run). cargo build --workspace --all-targets stays green. cargo test -p nomos-cap-dependency-policy -p nomos-cap-lint -p nomos-lang-go-modules -p nomos-rules -p nomos-spec-ingest -p nomos-spec-store all pass.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities/nomos-cap-dependency-policy/src/payload.rs",
+          "crates/capabilities/nomos-cap-lint/src/payload.rs",
+          "crates/languages/nomos-lang-go-modules/src/discovery.rs",
+          "crates/rules/nomos-rules/src/crosslang/comparison.rs",
+          "crates/spec/nomos-spec-ingest/src/archaeology/sections.rs",
+          "crates/spec/nomos-spec-store/src/submission.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "exit_code": 0,
+        "output_tail": "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.14s\n",
+        "verified_at": 1788032379,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "bffb998531be90776b2aff2e132d93bfe13f2ad3"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
