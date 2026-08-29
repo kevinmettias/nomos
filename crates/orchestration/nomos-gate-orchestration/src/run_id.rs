@@ -36,6 +36,9 @@ const DIGEST_PART_COUNT: usize = 3;
 #[must_use]
 pub fn Fresh_Run_Id(now: Timestamp) -> RunId
 {
+    // atomic-ordering: allow: only used to give two calls in this process different numbers
+    // (the doc comment above already covers the uniqueness this buys); nothing else
+    // synchronizes on it or reads memory ordered by this counter.
     let sequence = NEXT_SEQUENCE.fetch_add(1, Ordering::Relaxed);
     let seconds = now.Unix_Seconds().to_be_bytes();
     let process = std::process::id().to_be_bytes();

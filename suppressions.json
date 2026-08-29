@@ -3304,6 +3304,22 @@
       "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
       "owner": "@kmettias",
       "expires": "2026-11-27"
+    },
+    {
+      "check": "check-error-info",
+      "path": "crates/rules/nomos-rules/src/crosslang/reading.rs",
+      "fingerprint": "81dab60706af2871",
+      "reason": "crosslang.rs's own doc comment (Check_Cross_Language_Correspondence, lines 47-51) documents that a source whose fact cannot be read is deliberately silent/absent from this rule's index -- reporting it is Check_Completeness_Mirrors/Check_Naming_Convention's job, not this rule's. Threading a Finding through Payload_Of here would fabricate diagnostic content this rule intentionally never emits.",
+      "owner": "@kmettias",
+      "expires": "2027-02-25"
+    },
+    {
+      "check": "check-error-info",
+      "path": "crates/rules/nomos-rules/src/crosslang/reading.rs",
+      "fingerprint": "12848977b27acf46",
+      "reason": "crosslang.rs's own doc comment (Check_Cross_Language_Correspondence, lines 47-51) documents that a source whose fact cannot be read is deliberately silent/absent from this rule's index -- reporting it is Check_Completeness_Mirrors/Check_Naming_Convention's job, not this rule's. Threading a Finding through Payload_Of here would fabricate diagnostic content this rule intentionally never emits.",
+      "owner": "@kmettias",
+      "expires": "2027-02-25"
     }
   ]
 }

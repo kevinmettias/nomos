@@ -20,7 +20,8 @@ pub(super) fn Violations_In(payload: &SyntaxPayload, path: &str) -> Vec<Finding>
 
     for (index, item) in payload.items.iter().enumerate()
     {
-        if item.kind != FUNCTION || item.Own_Name() == MAIN || Is_Trait_Method(payload, index)
+        let is_out_of_scope = item.kind != FUNCTION || item.Own_Name() == MAIN || Is_Trait_Method(payload, index);
+        if is_out_of_scope
         {
             continue;
         }

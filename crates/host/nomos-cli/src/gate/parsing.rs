@@ -107,7 +107,8 @@ fn Explain_Invocation(rest: &[String], root: PathBuf) -> Result<GateInvocation, 
 /// Refuses anything but the three verbs this group implements today.
 fn Known_Verb(verb: &str) -> Result<(), String>
 {
-    if verb != "plan" && verb != "run" && verb != "explain"
+    let is_unknown_verb = verb != "plan" && verb != "run" && verb != "explain";
+    if is_unknown_verb
     {
         return Err(format!("unknown verb `{verb}`.\n\n{USAGE}"));
     }

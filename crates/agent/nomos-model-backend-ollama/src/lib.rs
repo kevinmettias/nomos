@@ -111,6 +111,8 @@ fn Isolated_Working_Directory() -> Result<PathBuf, AgentExecutionError>
 {
     static COUNTER: AtomicU64 = AtomicU64::new(0);
 
+    // atomic-ordering: allow: only used to give two calls in this process different numbers;
+    // nothing else synchronizes on it or reads memory ordered by this counter.
     let sequence = COUNTER.fetch_add(1, Ordering::Relaxed);
     let directory = std::env::temp_dir().join(format!("nomos-model-backend-ollama-{}-{sequence}", std::process::id()));
 

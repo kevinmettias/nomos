@@ -43,7 +43,8 @@ impl<'a> From<&'a String> for FromNodeId<'a>
 /// declared nothing.
 pub(super) fn Assert_Constraint_Is_Declared(name: &str, constraint: &RelationConstraint<'_>) -> Result<(), StoreError>
 {
-    if constraint.domain.is_empty() || constraint.range.is_empty() || constraint.max_per_node == 0
+    let is_unconstrained = constraint.domain.is_empty() || constraint.range.is_empty() || constraint.max_per_node == 0;
+    if is_unconstrained
     {
         return Err(StoreError::UnconstrainedRelationType { name: name.to_owned() });
     }

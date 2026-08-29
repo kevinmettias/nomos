@@ -15,6 +15,8 @@ use nomos_ledger::ItemId;
 pub(crate) fn Unique_Scratch_Directory(label: &str) -> std::path::PathBuf
 {
     static COUNTER: std::sync::atomic::AtomicU64 = std::sync::atomic::AtomicU64::new(0);
+    // atomic-ordering: allow: only used to give two calls in this process different numbers;
+    // nothing else synchronizes on it or reads memory ordered by this counter.
     let unique = COUNTER.fetch_add(1, std::sync::atomic::Ordering::Relaxed);
 
     let directory = std::env::temp_dir().join(format!("nomos-api-work-{label}-{}-{unique}", std::process::id()));

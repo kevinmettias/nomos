@@ -35310,6 +35310,65 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P16-EVERYTHINGELSE-QUICKFIXES-1",
+      "title": "OD-GATE-018 phase 3: real fixes for check-condition-shape, check-atomic-ordering, and check-error-info's structural exception",
+      "why": "Following P16-EVERYTHINGELSE-CATEGORY1-WAIVERS's test-code sweep, three of phase 3's checks had small, fully-scoped production remainders. check-condition-shape (3, code-shape phase) each named the whole && / || chain as a local predicate -- a caller-invisible extraction. check-atomic-ordering (4, concurrency-and-unsafe phase, one of the thirteen safety-critical checks) are all a per-process AtomicU64 counter used only to make two calls pick different numbers, the exact 'statistics-only counter' case the check's own message names as legitimate -- justified with the in-code // atomic-ordering: allow marker this check honours under the shipped safety-only policy, matching the precedent already in nomos-platform-std/src/launcher/drain.rs. check-error-info's 2 remaining findings (errors phase) are crosslang/reading.rs's Payload_Of, whose caller silently drops an unreadable source by crosslang.rs's own documented design (lines 47-51: reporting an unreadable source is Check_Completeness_Mirrors/Check_Naming_Convention's job, not this rule's) -- threading a Finding through would fabricate diagnostic content this rule intentionally never emits, so it is waived individually citing that design rather than forced into the sibling Payload_Of shape.",
+      "done_when": "check-condition-shape, check-atomic-ordering and check-error-info all report zero findings against crates tests (default run). cargo build --workspace --all-targets stays green. The two check-error-info waivers in suppressions.json name their own reason (crosslang.rs's documented silent-absence design), not the OD-GATE-018 category-1 test-code reason.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/src/gate/parsing.rs",
+          "crates/rules/nomos-rules/src/naming/violations.rs",
+          "crates/spec/nomos-spec-store/src/store/relation.rs",
+          "crates/agent/nomos-agent-executor-claude-code/src/lib.rs",
+          "crates/agent/nomos-model-backend-ollama/src/lib.rs",
+          "crates/host/nomos-api/src/work/tests_support.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/run_id.rs",
+          "suppressions.json"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "exit_code": 0,
+        "output_tail": "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.18s\n",
+        "verified_at": 1788024337,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "9dc3fba32f6e34c2d9b1f3eb54905ca9d726ce36"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
