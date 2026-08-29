@@ -11,10 +11,9 @@ use nomos_check_orchestration::CheckOutcome;
 use nomos_contracts::{Finding, RuleId};
 use nomos_platform::ProcessLauncher;
 use nomos_rules::SourceFile;
-use nomos_workspace::BuildVariant;
 
 use crate::composition::Registered;
-use crate::run_gate::{JudgeContext, Judged};
+use crate::run_gate::{GateEnvironment, JudgeContext, Judged};
 use crate::{AdoptionPolicy, BaselinePolicy, GateCommand, SuppressionPolicy};
 
 /// Which finding to explain: the rule that produced it, and one of the locations it names --
@@ -45,12 +44,12 @@ pub struct FindingQuery
 #[must_use]
 pub fn Explain_Gate<P: ProcessLauncher>(
     walked: Option<Vec<SourceFile>>,
-    variant: BuildVariant,
+    environment: GateEnvironment<'_, P>,
     command: &GateCommand,
     query: &FindingQuery,
-    launcher: &P,
 ) -> GateExplainResult
 {
+    let GateEnvironment { variant, launcher } = environment;
     let check_outcome = Judged(walked, launcher, JudgeContext { variant, root: &command.root, selected: &[] });
     let explanation = Explained(
         &check_outcome,

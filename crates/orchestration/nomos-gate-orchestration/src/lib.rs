@@ -74,7 +74,7 @@
 //! concern of `OD-GATE-015`'s three -- `SuppressionPolicy` matches a [`nomos_contracts::
 //! Finding`] by `rule` and `subject`, the identity `Finding` already carries, and a matched
 //! finding cannot fail the build but still appears in [`GateRunResult::check_outcome`] and
-//! [`GateRunResult::suppressed_findings`], never silently. No CLI flag or config file
+//! [`GateFindings::suppressed_findings`], never silently. No CLI flag or config file
 //! constructs a [`crate::Suppression`] yet -- inventing an authoring surface before a real
 //! caller needs one would repeat the mistake `OD-GATE-015` already declined, so this
 //! increment is the type and its consultation only.
@@ -94,7 +94,7 @@
 //! three concerns -- [`BaselinePolicy`] matches a [`nomos_contracts::Finding`] by `rule` and
 //! `subject`, the same identity [`SuppressionPolicy`] already matches by, and a matched
 //! finding cannot fail the build but still appears in [`GateRunResult::check_outcome`] and
-//! [`GateRunResult::baselined_findings`], never silently. Deliberately narrower than
+//! [`GateFindings::baselined_findings`], never silently. Deliberately narrower than
 //! `BASELINE-*`'s full shape: no new-code/diff/identity detection distinguishes tolerated
 //! debt from a reintroduced or genuinely new finding, and no scope beyond the named
 //! `rule`/`subject` pairs an entry lists -- `BaselineDebt`'s own doc says why. `Run_Gate`
@@ -112,7 +112,7 @@
 //! regardless of which subject triggered it; `Run_Gate` checks calibration before
 //! suppression and baseline, so a finding matched by more than one reports as calibrated,
 //! and it still appears in [`GateRunResult::check_outcome`] and
-//! [`GateRunResult::calibrated_findings`], never silently. Deliberately narrower than
+//! [`GateFindings::calibrated_findings`], never silently. Deliberately narrower than
 //! `ADOPT-CONFIG-*`'s full corpus shape: no declared phases, thresholds or approvals, and no
 //! separate consumer-owned configuration file -- [`RuleCalibration`]'s own doc says why. No
 //! CLI flag or config file constructs one yet, the same absence [`SuppressionPolicy`]'s and
@@ -122,7 +122,7 @@
 //! a real [`CoveragePolicy`] under `OD-GATE-016`'s decision -- unlike every policy before it,
 //! this one is not addressed by `rule`/`subject` or by `RuleId` at all: it is a single
 //! opt-in switch consulted once, after [`Disposition`] already reduced
-//! [`GateRunResult::blocking_findings`]. Unset (`Default`), `Claim` still rides through
+//! [`GateFindings::blocking_findings`]. Unset (`Default`), `Claim` still rides through
 //! [`GateRunResult::check_outcome`] for information only, unchanged from every increment
 //! before it. Set to [`CoveragePolicy::RequireCompleteness`], `Run_Gate` recomputes `Claim`
 //! over the rule-and-scope-selected findings -- not the whole-run `claim` `check_outcome`
@@ -168,10 +168,10 @@ pub use command::GateCommand;
 pub use composition::Registered;
 pub use coverage::CoveragePolicy;
 pub use explain::{Explain_Gate, Explanation, FindingQuery, GateExplainResult};
-pub use outcome::{Disposition, GateOutcome, GatePlan, GateRunOutcome, GateRunResult};
+pub use outcome::{Disposition, GateFindings, GateOutcome, GatePlan, GateRunOutcome, GateRunResult};
 pub use rule_selector::RuleSelector;
 pub use run::Run;
-pub use run_gate::Run_Gate;
+pub use run_gate::{GateEnvironment, Run_Gate};
 pub use run_id::Fresh_Run_Id;
 pub use scope_selector::ScopeSelector;
 pub use suppression::{Suppression, SuppressionDisposition, SuppressionPolicy};

@@ -24,6 +24,17 @@ pub struct GateRunResult
     /// What [`nomos_check_orchestration::Run`] (or the walk decision made before it was
     /// ever called) produced.
     pub check_outcome: CheckOutcome,
+    /// Every finding this run reduced, grouped by why it does or does not block.
+    pub findings: GateFindings,
+    /// The reduced verdict.
+    pub disposition: GateRunOutcome,
+}
+
+/// A run's findings, grouped by why each one does or does not block the build -- named so a
+/// caller reads `findings.blocking_findings` and the rest by field rather than telling four
+/// same-shaped lists apart only by which struct they sat in.
+pub struct GateFindings
+{
     /// Exactly the findings for which `Finding::Can_Fail_A_Build` is true and no
     /// calibration, `Suppression` or baseline debt matched. Empty whenever `disposition` is
     /// not [`GateRunOutcome::Failed`].
@@ -48,6 +59,4 @@ pub struct GateRunResult
     /// and from `calibrated_findings`: a finding matched by more than one is reported once,
     /// under the earliest of calibration, suppression, then baseline.
     pub baselined_findings: Vec<Finding>,
-    /// The reduced verdict.
-    pub disposition: GateRunOutcome,
 }

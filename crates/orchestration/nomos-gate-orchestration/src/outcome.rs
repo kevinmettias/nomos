@@ -11,7 +11,7 @@ mod gate_run_result;
 
 pub use gate_outcome::GateOutcome;
 pub use gate_run_outcome::{Disposition, GateRunOutcome};
-pub use gate_run_result::GateRunResult;
+pub use gate_run_result::{GateFindings, GateRunResult};
 
 use nomos_rules::RuleOffer;
 

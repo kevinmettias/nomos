@@ -23,6 +23,17 @@ use crate::facts::{
 use crate::outcome::{Claim_Of, Examined};
 use crate::CheckOutcome;
 
+/// [`Run`]'s build variant, its subprocess root, and the launcher those subprocesses run
+/// through -- grouped into one value so [`Run`] stays within this crate's own
+/// parameter-count limit. See [`Run`]'s own documentation for why each is a
+/// composition-root value this crate cannot compute for itself.
+pub struct RunContext<'a, P: ProcessLauncher>
+{
+    pub variant: BuildVariant,
+    pub root: &'a Path,
+    pub launcher: &'a P,
+}
+
 /// Composes the capability registry, ingests `sources` into one workspace state, materializes
 /// a syntax fact per file, and, for each of the completeness, naming-convention,
 /// dependency-direction, lint-diagnostics, dependency-policy and unread-reaches-finding
@@ -38,17 +49,18 @@ use crate::CheckOutcome;
 ///
 /// `sources` is the walk, already done -- this crate has no [`nomos_platform::FileSystem`]
 /// port to walk a directory through, the same reason `nomos-cli::check::sources::Walked`
-/// stayed in the composition root. `variant` is what that root's own binary was compiled
-/// as, read through `env!` there because that macro resolves against the *compiling*
-/// crate and cannot be read correctly from this one. `root` is the tree `sources` was
-/// walked from -- carried separately because the dependency-edges, lint-diagnostics and
-/// dependency-policy providers each run their own subprocess (`cargo metadata`, `cargo
-/// clippy`, `cargo deny`) rather than reading bytes `sources` already holds; every other
-/// provider in this workspace is a
-/// pure function over bytes a caller already read. `launcher` is what those subprocess
-/// calls run through -- generic the same way `nomos_work_orchestration::Run` is generic over
-/// [`nomos_platform`]'s traits, so this crate depends on `nomos-platform` and not on any
-/// concrete implementation of it; the composition root supplies one.
+/// stayed in the composition root. `context.variant` is what that root's own binary was
+/// compiled as, read through `env!` there because that macro resolves against the
+/// *compiling* crate and cannot be read correctly from this one. `context.root` is the
+/// tree `sources` was walked from -- carried separately because the dependency-edges,
+/// lint-diagnostics and dependency-policy providers each run their own subprocess (`cargo
+/// metadata`, `cargo clippy`, `cargo deny`) rather than reading bytes `sources` already
+/// holds; every other provider in this workspace is a pure function over bytes a caller
+/// already read. `context.launcher` is what those subprocess calls run through -- generic
+/// the same way `nomos_work_orchestration::Run` is generic over [`nomos_platform`]'s
+/// traits, so this crate depends on `nomos-platform` and not on any concrete implementation
+/// of it; the composition root supplies one. The three are grouped into [`RunContext`] so
+/// this function stays within this crate's own parameter-count limit.
 ///
 /// Writes nothing and never exits: [`CheckOutcome`] is the whole answer, the same
 /// division `nomos_work_orchestration::Run` draws around [`nomos_work_orchestration`]'s own
@@ -56,8 +68,10 @@ use crate::CheckOutcome;
 /// (`CheckOutcome::NoSource`) made before this function is ever called, not a case this
 /// function classifies.
 #[must_use]
-pub fn Run<P: ProcessLauncher>(sources: &[SourceFile], variant: BuildVariant, root: &Path, launcher: &P, selected: &[RuleId]) -> CheckOutcome
+pub fn Run<P: ProcessLauncher>(sources: &[SourceFile], context: RunContext<'_, P>, selected: &[RuleId]) -> CheckOutcome
 {
+    let RunContext { variant, root, launcher } = context;
+
     let recognized = Recognized(sources);
     let sources: &[SourceFile] = &recognized;
 

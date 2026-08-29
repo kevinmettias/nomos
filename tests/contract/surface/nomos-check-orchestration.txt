@@ -11,10 +11,14 @@ pub fn nomos_check_orchestration::Claim::fmt(&self, formatter: &mut core::fmt::F
 pub fn nomos_check_orchestration::Claim_Of(findings: &[Finding]) -> Claim
 pub fn nomos_check_orchestration::Registered() -> Result<Registry, RegistryError>
 pub fn nomos_check_orchestration::Resolved_Configuration(registry: &Registry) -> ConfigurationId
-pub fn nomos_check_orchestration::Run<P: ProcessLauncher>(sources: &[SourceFile], variant: BuildVariant, root: &Path, launcher: &P, selected: &[RuleId]) -> CheckOutcome
+pub fn nomos_check_orchestration::Run<P: ProcessLauncher>(sources: &[SourceFile], context: RunContext<'_, P>, selected: &[RuleId]) -> CheckOutcome
 pub impl nomos_check_orchestration::Claim implements core::fmt::Display
 pub struct field nomos_check_orchestration::CheckCommand::root: PathBuf
 pub struct field nomos_check_orchestration::Examined::facts: usize
 pub struct field nomos_check_orchestration::Examined::files: usize
+pub struct field nomos_check_orchestration::RunContext::launcher: &'a P
+pub struct field nomos_check_orchestration::RunContext::root: &'a Path
+pub struct field nomos_check_orchestration::RunContext::variant: BuildVariant
 pub struct nomos_check_orchestration::CheckCommand
 pub struct nomos_check_orchestration::Examined
+pub struct nomos_check_orchestration::RunContext<'a, P: ProcessLauncher>

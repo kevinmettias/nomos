@@ -9,8 +9,8 @@ use nomos_workspace::BuildVariant;
 use std::path::Path;
 
 use crate::{
-    AdoptionPolicy, BaselinePolicy, CoveragePolicy, Disposition, GateCommand, GateRunOutcome, GateRunResult, RuleSelector, ScopeSelector,
-    SuppressionPolicy,
+    AdoptionPolicy, BaselinePolicy, CoveragePolicy, Disposition, GateCommand, GateFindings, GateRunOutcome, GateRunResult, RuleSelector,
+    ScopeSelector, SuppressionPolicy,
 };
 
 /// Judges `walked` exactly as `nomos check` would.
@@ -38,8 +38,22 @@ pub(crate) fn Judged<P: ProcessLauncher>(walked: Option<Vec<SourceFile>>, launch
     {
         None => CheckOutcome::Unreadable,
         Some(sources) if sources.is_empty() => CheckOutcome::NoSource,
-        Some(sources) => nomos_check_orchestration::Run(&sources, context.variant, context.root, launcher, context.selected),
+        Some(sources) => nomos_check_orchestration::Run(
+            &sources,
+            nomos_check_orchestration::RunContext { variant: context.variant, root: context.root, launcher },
+            context.selected,
+        ),
     };
+}
+
+/// The build variant and process launcher [`Run_Gate`] and [`crate::Explain_Gate`] both need
+/// but neither computes -- grouped into one value so each stays within this crate's own
+/// parameter-count limit. `command` and `walked`/`query`/`run` stay separate parameters:
+/// this groups only the two values every gate entry point shares.
+pub struct GateEnvironment<'a, P: ProcessLauncher>
+{
+    pub variant: BuildVariant,
+    pub launcher: &'a P,
 }
 
 /// What [`Judged`] judges a walked tree against, apart from the walk itself and the platform
@@ -69,8 +83,9 @@ pub(crate) struct JudgeContext<'a>
 /// The composition root supplies one, typically [`crate::Fresh_Run_Id`] over a real clock
 /// reading.
 #[must_use]
-pub fn Run_Gate<P: ProcessLauncher>(walked: Option<Vec<SourceFile>>, variant: BuildVariant, command: &GateCommand, launcher: &P, run: RunId) -> GateRunResult
+pub fn Run_Gate<P: ProcessLauncher>(walked: Option<Vec<SourceFile>>, environment: GateEnvironment<'_, P>, command: &GateCommand, run: RunId) -> GateRunResult
 {
+    let GateEnvironment { variant, launcher } = environment;
     let scoped = walked.map(|sources| return Scoped(sources, &command.scope));
     let outcome = Judged(scoped, launcher, JudgeContext { variant, root: &command.root, selected: &command.rules.include });
 
@@ -85,10 +100,7 @@ pub fn Run_Gate<P: ProcessLauncher>(walked: Option<Vec<SourceFile>>, variant: Bu
         root: command.root.clone(),
         run,
         check_outcome: outcome,
-        blocking_findings: reduced.blocking_findings,
-        calibrated_findings: reduced.calibrated_findings,
-        suppressed_findings: reduced.suppressed_findings,
-        baselined_findings: reduced.baselined_findings,
+        findings: reduced.findings,
         disposition: reduced.disposition,
     };
 }
@@ -97,6 +109,46 @@ pub fn Run_Gate<P: ProcessLauncher>(walked: Option<Vec<SourceFile>>, variant: Bu
 fn Scoped(sources: Vec<SourceFile>, scope: &ScopeSelector) -> Vec<SourceFile>
 {
     return sources.into_iter().filter(|source| return scope.Matches(&source.path)).collect();
+}
+
+/// [`Reduced`]'s own result -- named so its caller assigns [`GateFindings`] and the
+/// disposition by field rather than by position.
+struct Reduction
+{
+    findings: GateFindings,
+    disposition: GateRunOutcome,
+}
+
+/// `selected`, split into the calibrated, suppressed, baselined and still-blocking findings
+/// `policies` implies -- [`Reduced`]'s own middle section, named so that function reads as
+/// one decision per line.
+fn Partitioned(selected: &[Finding], policies: DispositionPolicies<'_>) -> GateFindings
+{
+    let blockable: Vec<Finding> = selected.iter().filter(|finding| return finding.Can_Fail_A_Build()).cloned().collect();
+    let (calibrated_findings, uncalibrated): (Vec<Finding>, Vec<Finding>) =
+        blockable.into_iter().partition(|finding| return policies.adoption.Calibrating(finding).is_some());
+    let (suppressed_findings, remaining): (Vec<Finding>, Vec<Finding>) =
+        uncalibrated.into_iter().partition(|finding| return policies.suppressions.Suppressing(finding).is_some());
+    let (baselined_findings, blocking_findings): (Vec<Finding>, Vec<Finding>) =
+        remaining.into_iter().partition(|finding| return policies.baseline.Tolerating(finding).is_some());
+
+    return GateFindings { blocking_findings, calibrated_findings, suppressed_findings, baselined_findings };
+}
+
+/// [`Reduced`]'s own result when `outcome` was never judged -- nothing was found, so nothing
+/// can block, calibrate, suppress or baseline, and [`GateRunOutcome::Indeterminate`] is the
+/// only disposition an unjudged run can support.
+fn Unjudged() -> Reduction
+{
+    return Reduction {
+        findings: GateFindings {
+            blocking_findings: Vec::new(),
+            calibrated_findings: Vec::new(),
+            suppressed_findings: Vec::new(),
+            baselined_findings: Vec::new(),
+        },
+        disposition: GateRunOutcome::Indeterminate,
+    };
 }
 
 /// The blocking findings, the findings an `AdoptionPolicy` calibration kept from blocking,
@@ -114,17 +166,6 @@ fn Scoped(sources: Vec<SourceFile>, scope: &ScopeSelector) -> Vec<SourceFile>
 /// "does this blocking finding still block," a question about one finding at a time, while
 /// `coverage` answers "did this run reach a judgment about everything it selected," a
 /// question about the run as a whole.
-/// [`Reduced`]'s own result -- named so its caller assigns each list and the disposition by
-/// field rather than by position across five same-shaped slots.
-struct Reduction
-{
-    blocking_findings: Vec<Finding>,
-    calibrated_findings: Vec<Finding>,
-    suppressed_findings: Vec<Finding>,
-    baselined_findings: Vec<Finding>,
-    disposition: GateRunOutcome,
-}
-
 fn Reduced(
     outcome: &CheckOutcome,
     rules: &RuleSelector,
@@ -135,32 +176,14 @@ fn Reduced(
     let CheckOutcome::Judged { findings, .. } = outcome
     else
     {
-        return Reduction {
-            blocking_findings: Vec::new(),
-            calibrated_findings: Vec::new(),
-            suppressed_findings: Vec::new(),
-            baselined_findings: Vec::new(),
-            disposition: GateRunOutcome::Indeterminate,
-        };
+        return Unjudged();
     };
 
     let selected: Vec<Finding> = findings.iter().filter(|finding| return rules.Matches(&finding.rule)).cloned().collect();
-    let blockable: Vec<Finding> = selected.iter().filter(|finding| return finding.Can_Fail_A_Build()).cloned().collect();
-    let (calibrated_findings, uncalibrated): (Vec<Finding>, Vec<Finding>) =
-        blockable.into_iter().partition(|finding| return policies.adoption.Calibrating(finding).is_some());
-    let (suppressed_findings, remaining): (Vec<Finding>, Vec<Finding>) =
-        uncalibrated.into_iter().partition(|finding| return policies.suppressions.Suppressing(finding).is_some());
-    let (baselined_findings, blocking_findings): (Vec<Finding>, Vec<Finding>) =
-        remaining.into_iter().partition(|finding| return policies.baseline.Tolerating(finding).is_some());
-    let disposition = Reduced_With_Coverage(Disposition(&blocking_findings), coverage, &selected);
+    let findings = Partitioned(&selected, policies);
+    let disposition = Reduced_With_Coverage(Disposition(&findings.blocking_findings), coverage, &selected);
 
-    return Reduction {
-        blocking_findings,
-        calibrated_findings,
-        suppressed_findings,
-        baselined_findings,
-        disposition,
-    };
+    return Reduction { findings, disposition };
 }
 
 /// The three per-finding overrides [`Reduced`] checks, grouped into one value so [`Reduced`]

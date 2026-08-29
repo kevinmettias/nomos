@@ -29,18 +29,23 @@ impl ScopeSelector
     #[must_use]
     pub fn Matches(&self, path: &str) -> bool
     {
-        let included = self.include.is_empty() || self.include.iter().any(|prefix| return Is_Under(prefix, path));
-        let excluded = self.exclude.iter().any(|prefix| return Is_Under(prefix, path));
+        let included = self.include.is_empty() || self.include.iter().any(|prefix| return Is_Under(Prefix(prefix), path));
+        let excluded = self.exclude.iter().any(|prefix| return Is_Under(Prefix(prefix), path));
 
         return included && !excluded;
     }
 }
 
+/// One entry from [`ScopeSelector::include`] or [`ScopeSelector::exclude`] -- named so
+/// [`Is_Under`] cannot mistake the containing prefix for the path being tested, since both
+/// are otherwise identically-shaped `&str`s.
+struct Prefix<'a>(&'a str);
+
 /// Whether `path` is `prefix` itself or lives under it, textually -- the same containment
 /// `README.md`'s territory rules already use, not a filesystem check.
-fn Is_Under(prefix: &str, path: &str) -> bool
+fn Is_Under(prefix: Prefix<'_>, path: &str) -> bool
 {
-    return path == prefix || path.starts_with(&format!("{prefix}/"));
+    return path == prefix.0 || path.starts_with(&format!("{}/", prefix.0));
 }
 
 #[cfg(test)]
