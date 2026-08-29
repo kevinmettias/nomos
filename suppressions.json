@@ -1552,6 +1552,1758 @@
       "reason": "already the DRY, table-driven form (one array of the 8 rule/check pairs, one loop) that replaced 8 near-identical wrapper functions specifically to clear check-intrafile-duplication and check-nested-call; further splitting would only move the same 8-entry table into a second function of the same length",
       "owner": "@kmettias",
       "expires": "2026-11-24"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/corrections/nomos-corrections/src/committed.rs",
+      "message": "`workspace.Apply(\u0026initial).expect(\"a fresh present is always accepted\")` promises the compiler that this value is present, on your authority, and the reason it gives -- `a fresh present is always accepted` -- restates the problem rather than naming the invariant. The promise may well be true; what is missing is what MAKES it true. Name the invariant -- what has already validated this, and where -- so the next reader can check whether it still holds. A promise with a reason is an invariant; a promise without one is a bet, and the way you find out you lost it is a crash that explains nothing",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/corrections/nomos-corrections/src/preview.rs",
+      "fingerprint": "9a320da3b4ee0c0c",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-api/src/response/explain.rs",
+      "fingerprint": "93f28c6ee2af774a",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-api/src/response/explain.rs",
+      "fingerprint": "d2db54d4c5f810ef",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-api/src/response/plan.rs",
+      "fingerprint": "e67362677240c73f",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-api/src/response/plan.rs",
+      "fingerprint": "21ca327164c2f0f1",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-api/src/response/run.rs",
+      "fingerprint": "cef849104c74b6e3",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-api/src/response/run.rs",
+      "fingerprint": "7b94edbdfa431fa3",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-api/src/sources.rs",
+      "message": "`std::fs::write(root.join(\"a.rs\"), \"pub fn One() {}\\n\").expect(\"writable\")` promises the compiler that this value is present, on your authority, and the reason it gives -- `writable` -- restates the problem rather than naming the invariant. The promise may well be true; what is missing is what MAKES it true. Name the invariant -- what has already validated this, and where -- so the next reader can check whether it still holds. A promise with a reason is an invariant; a promise without one is a bet, and the way you find out you lost it is a crash that explains nothing",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-api/src/sources.rs",
+      "message": "`std::fs::write(root.join(\"main.go\"), \"package main\\n\\nfunc One() {}\\n\").expect(\"writable\")` promises the compiler that this value is present, on your authority, and the reason it gives -- `writable` -- restates the problem rather than naming the invariant. The promise may well be true; what is missing is what MAKES it true. Name the invariant -- what has already validated this, and where -- so the next reader can check whether it still holds. A promise with a reason is an invariant; a promise without one is a bet, and the way you find out you lost it is a crash that explains nothing",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-api/src/sources.rs",
+      "message": "`std::fs::write(root.join(\"README.md\"), \"# not source\\n\").expect(\"writable\")` promises the compiler that this value is present, on your authority, and the reason it gives -- `writable` -- restates the problem rather than naming the invariant. The promise may well be true; what is missing is what MAKES it true. Name the invariant -- what has already validated this, and where -- so the next reader can check whether it still holds. A promise with a reason is an invariant; a promise without one is a bet, and the way you find out you lost it is a crash that explains nothing",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-api/src/spec/commit.rs",
+      "message": "`std::fs::create_dir_all(\u0026directory).expect(\"a fresh scratch directory can always be created\")` promises the compiler that this value is present, on your authority, and the reason it gives -- `a fresh scratch directory can always be created` -- restates the problem rather than naming the invariant. The promise may well be true; what is missing is what MAKES it true. Name the invariant -- what has already validated this, and where -- so the next reader can check whether it still holds. A promise with a reason is an invariant; a promise without one is a bet, and the way you find out you lost it is a crash that explains nothing",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-api/src/spec/commit.rs",
+      "fingerprint": "6728068c1c20ba5f",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-api/src/spec/commit.rs",
+      "fingerprint": "4ef08e5c1d91f3fd",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-api/src/spec/freshness.rs",
+      "fingerprint": "b6c94213f68488ab",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-api/src/spec/freshness.rs",
+      "fingerprint": "ce4ab4837a14ec94",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-api/src/spec/markdown.rs",
+      "fingerprint": "f38cc81d280e3203",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-api/src/spec/markdown.rs",
+      "fingerprint": "30ecf8eb75b5dad4",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-api/src/spec/preview.rs",
+      "fingerprint": "50b5fb168861c9fc",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-api/src/spec/preview.rs",
+      "fingerprint": "bec11eeaf000fe9c",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-api/src/spec/profiles.rs",
+      "fingerprint": "e8c43d39edf600e7",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-api/src/spec/profiles.rs",
+      "fingerprint": "667ab378da8b9a4f",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-api/src/spec/record.rs",
+      "fingerprint": "7ae29282018af3c8",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-api/src/spec/record.rs",
+      "fingerprint": "417b6d61f4b48ae4",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-api/src/spec/render.rs",
+      "fingerprint": "932eeb94170a141d",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-api/src/spec/render.rs",
+      "fingerprint": "d09905cce536dd33",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-api/src/spec/sources.rs",
+      "fingerprint": "bedfdead83266c5b",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-api/src/spec/sources.rs",
+      "fingerprint": "1485cb3ea31d5b76",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-api/src/spec/submit.rs",
+      "fingerprint": "158193d2f879700c",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-api/src/spec/submit.rs",
+      "fingerprint": "eadcf42964388218",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-api/src/spec/table.rs",
+      "fingerprint": "e8405a336d65c269",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-api/src/spec/table.rs",
+      "fingerprint": "da71fd998f55b1eb",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-api/src/work/add.rs",
+      "fingerprint": "c450807458c67024",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-api/src/work/add.rs",
+      "fingerprint": "9d4c3197c0b2c000",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-api/src/work/audit.rs",
+      "fingerprint": "ffc65bdcd4454262",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-api/src/work/audit.rs",
+      "fingerprint": "339c08dbb8235c8d",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-api/src/work/claim.rs",
+      "fingerprint": "8642d75c0bf6ddfc",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-api/src/work/claim.rs",
+      "fingerprint": "9542080a3dcaed89",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-api/src/work/decline.rs",
+      "fingerprint": "af8e23e0256a0a36",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-api/src/work/decline.rs",
+      "fingerprint": "d2ae126ae5d1f1e0",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-api/src/work/finish.rs",
+      "fingerprint": "82bdfd814b02f8a7",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-api/src/work/finish.rs",
+      "fingerprint": "cee5bbb41cc654f9",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-api/src/work/list.rs",
+      "fingerprint": "eae622988aa804c6",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-api/src/work/list.rs",
+      "fingerprint": "df2cc24a0b7db14b",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-api/src/work/show.rs",
+      "fingerprint": "72333d607ac8f9f4",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-api/src/work/show.rs",
+      "fingerprint": "1394ae69b350ed06",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-api/src/work/validate.rs",
+      "fingerprint": "c53f7016e3da7ba6",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-api/src/work/validate.rs",
+      "fingerprint": "26b88ec59f8c6b6a",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-cli/src/check/report.rs",
+      "fingerprint": "f11b1756f607ddad",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-cli/src/check/report.rs",
+      "fingerprint": "8a2db01e43c30b7c",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-cli/src/request.rs",
+      "message": "`Parse(\u0026arguments).expect(\"parses\")` promises the compiler that this value is present, on your authority, and the reason it gives -- `parses` -- restates the problem rather than naming the invariant. The promise may well be true; what is missing is what MAKES it true. Name the invariant -- what has already validated this, and where -- so the next reader can check whether it still holds. A promise with a reason is an invariant; a promise without one is a bet, and the way you find out you lost it is a crash that explains nothing",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-cli/src/request.rs",
+      "fingerprint": "948bd1c962e6f89c",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-cli/src/vacuity.rs",
+      "fingerprint": "9b3da70efe57f3e1",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-surface-provenance/src/arguments.rs",
+      "fingerprint": "8e0fa21844ac34bc",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-surface-provenance/src/arguments.rs",
+      "fingerprint": "87b850e9f1e5cbad",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-surface-provenance/src/evaluate.rs",
+      "fingerprint": "8eed1b1612c114f1",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-surface-provenance/src/evaluate.rs",
+      "fingerprint": "116d15fdadbde928",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/languages/nomos-lang-go/src/provider.rs",
+      "fingerprint": "5a5f4f8fe643af91",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/languages/nomos-lang-go/src/provider.rs",
+      "message": "`nomos_cap_syntax::Parse_Payload(\u0026fact.payload.bytes).expect(\"well formed\")` promises the compiler that this value is present, on your authority, and the reason it gives -- `well formed` -- restates the problem rather than naming the invariant. The promise may well be true; what is missing is what MAKES it true. Name the invariant -- what has already validated this, and where -- so the next reader can check whether it still holds. A promise with a reason is an invariant; a promise without one is a bet, and the way you find out you lost it is a crash that explains nothing",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/languages/nomos-lang-rust/src/provider.rs",
+      "fingerprint": "a17f001778959f88",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/platform/nomos-platform-std/src/filesystem.rs",
+      "fingerprint": "dc8e3cf635d10954",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/platform/nomos-platform-std/src/filesystem.rs",
+      "fingerprint": "8b99eac01e9fa845",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/platform/nomos-platform-std/src/filesystem.rs",
+      "fingerprint": "5fe026b65957211d",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/platform/nomos-platform-std/src/filesystem.rs",
+      "fingerprint": "0f7ec6c642fea5ad",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/platform/nomos-platform-std/src/lock.rs",
+      "fingerprint": "524759f6d8e7224c",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/platform/nomos-platform-std/src/lock.rs",
+      "message": "`lock.Acquire(\"agent-a\", NO_WAIT, NEVER_STALE).unwrap()` promises the compiler that this value is present, on your authority, and says nothing about why. The promise may well be true; what is missing is what MAKES it true. Name the invariant -- what has already validated this, and where -- so the next reader can check whether it still holds. A promise with a reason is an invariant; a promise without one is a bet, and the way you find out you lost it is a crash that explains nothing",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/platform/nomos-platform-std/src/lock.rs",
+      "fingerprint": "f71fc5df095026d3",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/platform/nomos-platform-std/src/lock.rs",
+      "fingerprint": "a3390a6f59ded691",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/platform/nomos-platform-std/src/lock.rs",
+      "fingerprint": "8339cd752d71dc25",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/platform/nomos-platform-std/src/lock.rs",
+      "fingerprint": "2b5a28f01ca7b9dc",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/platform/nomos-platform-std/src/lock.rs",
+      "fingerprint": "4c84dcce341ca020",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/rules/nomos-rules/src/registry/rule_registry.rs",
+      "message": "`registry.Offer(Offer(\"completeness-mirror\")).expect(\"first offer\")` promises the compiler that this value is present, on your authority, and the reason it gives -- `first offer` -- restates the problem rather than naming the invariant. The promise may well be true; what is missing is what MAKES it true. Name the invariant -- what has already validated this, and where -- so the next reader can check whether it still holds. A promise with a reason is an invariant; a promise without one is a bet, and the way you find out you lost it is a crash that explains nothing",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/spec/nomos-spec-bundle/src/bundle.rs",
+      "message": "`Bundle::New(1, One_Blob()).expect(\"builds\")` promises the compiler that this value is present, on your authority, and the reason it gives -- `builds` -- restates the problem rather than naming the invariant. The promise may well be true; what is missing is what MAKES it true. Name the invariant -- what has already validated this, and where -- so the next reader can check whether it still holds. A promise with a reason is an invariant; a promise without one is a bet, and the way you find out you lost it is a crash that explains nothing",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/spec/nomos-spec-bundle/src/bundle.rs",
+      "message": "`bundle.Write().expect(\"writes\")` promises the compiler that this value is present, on your authority, and the reason it gives -- `writes` -- restates the problem rather than naming the invariant. The promise may well be true; what is missing is what MAKES it true. Name the invariant -- what has already validated this, and where -- so the next reader can check whether it still holds. A promise with a reason is an invariant; a promise without one is a bet, and the way you find out you lost it is a crash that explains nothing",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/spec/nomos-spec-bundle/src/bundle.rs",
+      "fingerprint": "c2113e640f7fe2d6",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/spec/nomos-spec-bundle/src/bundle.rs",
+      "message": "`Bundle::New(1, One_Blob())\n            .expect(\"builds\")\n            .Write()\n            .expect(\"writes\")` promises the compiler that this value is present, on your authority, and the reason it gives -- `writes` -- restates the problem rather than naming the invariant. The promise may well be true; what is missing is what MAKES it true. Name the invariant -- what has already validated this, and where -- so the next reader can check whether it still holds. A promise with a reason is an invariant; a promise without one is a bet, and the way you find out you lost it is a crash that explains nothing",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/spec/nomos-spec-bundle/src/bundle.rs",
+      "message": "`Bundle::New(1, One_Blob())\n            .expect(\"builds\")` promises the compiler that this value is present, on your authority, and the reason it gives -- `builds` -- restates the problem rather than naming the invariant. The promise may well be true; what is missing is what MAKES it true. Name the invariant -- what has already validated this, and where -- so the next reader can check whether it still holds. A promise with a reason is an invariant; a promise without one is a bet, and the way you find out you lost it is a crash that explains nothing",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/spec/nomos-spec-bundle/src/bundle.rs",
+      "fingerprint": "c9c1f93082992a0e",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/spec/nomos-spec-bundle/src/bundle.rs",
+      "fingerprint": "b76d741704804e8e",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/spec/nomos-spec-bundle/src/bundle.rs",
+      "fingerprint": "dd736626a4d93b68",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/spec/nomos-spec-ingest/src/phases/gate.rs",
+      "fingerprint": "3b9e6cd68e58d463",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/spec/nomos-spec-ingest/src/reconciliation/lineage.rs",
+      "message": "`SpecificationStore::In_Memory().expect(\"opens\")` promises the compiler that this value is present, on your authority, and the reason it gives -- `opens` -- restates the problem rather than naming the invariant. The promise may well be true; what is missing is what MAKES it true. Name the invariant -- what has already validated this, and where -- so the next reader can check whether it still holds. A promise with a reason is an invariant; a promise without one is a bet, and the way you find out you lost it is a crash that explains nothing",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/spec/nomos-spec-ingest/src/reconciliation/lineage.rs",
+      "fingerprint": "68ce5398b195de1d",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/spec/nomos-spec-ingest/src/reconciliation/lineage.rs",
+      "message": "`Parse_Section_Lineage(SECTIONS).expect(\"parses\")` promises the compiler that this value is present, on your authority, and the reason it gives -- `parses` -- restates the problem rather than naming the invariant. The promise may well be true; what is missing is what MAKES it true. Name the invariant -- what has already validated this, and where -- so the next reader can check whether it still holds. A promise with a reason is an invariant; a promise without one is a bet, and the way you find out you lost it is a crash that explains nothing",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/spec/nomos-spec-ingest/src/reconciliation/lineage.rs",
+      "message": "`Ingest_Section_Lineage(\u0026mut store, \u0026lineage, \"v14.36\").expect(\"ingests\")` promises the compiler that this value is present, on your authority, and the reason it gives -- `ingests` -- restates the problem rather than naming the invariant. The promise may well be true; what is missing is what MAKES it true. Name the invariant -- what has already validated this, and where -- so the next reader can check whether it still holds. A promise with a reason is an invariant; a promise without one is a bet, and the way you find out you lost it is a crash that explains nothing",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/spec/nomos-spec-ingest/src/reconciliation/lineage.rs",
+      "fingerprint": "88accd135082f809",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/spec/nomos-spec-ingest/src/reconciliation/lineage.rs",
+      "fingerprint": "4cbb91eac6020e7f",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/spec/nomos-spec-ingest/src/reconciliation/lineage.rs",
+      "fingerprint": "486a79a46a9fb9ee",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/spec/nomos-spec-ingest/src/reconciliation/overlay/artifact.rs",
+      "fingerprint": "21920ea87318464f",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/spec/nomos-spec-ingest/src/reconciliation/overlay/artifact.rs",
+      "fingerprint": "c8a9d144cf59f14b",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/spec/nomos-spec-ingest/src/reconciliation/overlay/artifact.rs",
+      "fingerprint": "9dad85300c6e5b7e",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/spec/nomos-spec-model/src/record.rs",
+      "message": "`Parse_Record(RECORD).expect(\"reads\")` promises the compiler that this value is present, on your authority, and the reason it gives -- `reads` -- restates the problem rather than naming the invariant. The promise may well be true; what is missing is what MAKES it true. Name the invariant -- what has already validated this, and where -- so the next reader can check whether it still holds. A promise with a reason is an invariant; a promise without one is a bet, and the way you find out you lost it is a crash that explains nothing",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/spec/nomos-spec-model/src/render.rs",
+      "fingerprint": "9cdcff255c5bf3d2",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/spec/nomos-spec-model/src/render.rs",
+      "fingerprint": "7d6eb84f9fc2ef44",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/spec/nomos-spec-model/src/statement.rs",
+      "fingerprint": "6660e4ae2761cdc8",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/spec/nomos-spec-project/src/profile.rs",
+      "message": "`Profile::Parse(MINIMAL).expect(\"parses\")` promises the compiler that this value is present, on your authority, and the reason it gives -- `parses` -- restates the problem rather than naming the invariant. The promise may well be true; what is missing is what MAKES it true. Name the invariant -- what has already validated this, and where -- so the next reader can check whether it still holds. A promise with a reason is an invariant; a promise without one is a bet, and the way you find out you lost it is a crash that explains nothing",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/spec/nomos-spec-project/src/profile.rs",
+      "fingerprint": "91d6b44b43692567",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/spec/nomos-spec-store/src/read.rs",
+      "fingerprint": "413f0f1e12401cfb",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/spec/nomos-spec-store/src/read.rs",
+      "fingerprint": "b5a80041c17ef0c8",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/spec/nomos-spec-store/src/read.rs",
+      "fingerprint": "320bc2396b97b5e3",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/spec/nomos-spec-store/src/read.rs",
+      "fingerprint": "f63a1942eb9251f2",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/spec/nomos-spec-store/src/read.rs",
+      "fingerprint": "26e3238c3e6cd990",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/spec/nomos-spec-store/src/read.rs",
+      "fingerprint": "b03ecaa201d2ebe6",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/spec/nomos-spec-store/src/read.rs",
+      "fingerprint": "ca4d99f0f37c1fa1",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/spec/nomos-spec-store/src/read.rs",
+      "fingerprint": "743c274dfa27ff0a",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/spec/nomos-spec-store/src/read.rs",
+      "fingerprint": "bfdab7d544f606f1",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/spec/nomos-spec-store/src/read.rs",
+      "fingerprint": "ac0009376a6dc57f",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/spec/nomos-spec-store/src/read.rs",
+      "fingerprint": "fd0784ed971da566",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/spec/nomos-spec-store/src/store/relation.rs",
+      "fingerprint": "3f8d6d99dafa0b9a",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/spec/nomos-spec-store/src/store/relation.rs",
+      "fingerprint": "dc44dce7ddfebd72",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/spec/nomos-spec-validate/src/run.rs",
+      "fingerprint": "42fbf4f5030bb18f",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/corrections/nomos-corrections/src/staged.rs",
+      "fingerprint": "8f138008bf5403d4",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/corrections/nomos-corrections/src/validated.rs",
+      "fingerprint": "8f138008bf5403d4",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-api/src/spec/freshness.rs",
+      "fingerprint": "74b5b1df29610882",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-api/src/spec/preview.rs",
+      "fingerprint": "74b5b1df29610882",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-api/src/spec/render.rs",
+      "fingerprint": "74b5b1df29610882",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-api/src/spec/submit.rs",
+      "fingerprint": "74b5b1df29610882",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-cli/src/check/sources.rs",
+      "fingerprint": "d601f0a17a4f6c6d",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-cli/src/check/sources.rs",
+      "fingerprint": "df8cbca79db71629",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-cli/src/check/sources.rs",
+      "fingerprint": "954a814e01ff07a1",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-cli/src/gate/sources.rs",
+      "fingerprint": "d601f0a17a4f6c6d",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-cli/src/gate/sources.rs",
+      "fingerprint": "df8cbca79db71629",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-cli/src/gate/sources.rs",
+      "fingerprint": "954a814e01ff07a1",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/languages/nomos-lang-rust-scan/src/provider.rs",
+      "fingerprint": "5b21c7c95e3945e9",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/languages/nomos-lang-rust/src/provider.rs",
+      "fingerprint": "5b21c7c95e3945e9",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/spec/nomos-spec-model/src/render.rs",
+      "message": "`Parse_Record(RECORD).expect(\"reads\")` promises the compiler that this value is present, on your authority, and the reason it gives -- `reads` -- restates the problem rather than naming the invariant. The promise may well be true; what is missing is what MAKES it true. Name the invariant -- what has already validated this, and where -- so the next reader can check whether it still holds. A promise with a reason is an invariant; a promise without one is a bet, and the way you find out you lost it is a crash that explains nothing",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/spec/nomos-spec-store/src/read.rs",
+      "message": "`SpecificationStore::In_Memory().expect(\"opens\")` promises the compiler that this value is present, on your authority, and the reason it gives -- `opens` -- restates the problem rather than naming the invariant. The promise may well be true; what is missing is what MAKES it true. Name the invariant -- what has already validated this, and where -- so the next reader can check whether it still holds. A promise with a reason is an invariant; a promise without one is a bet, and the way you find out you lost it is a crash that explains nothing",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/spec/nomos-spec-store/src/store/relation.rs",
+      "message": "`SpecificationStore::In_Memory().expect(\"opens\")` promises the compiler that this value is present, on your authority, and the reason it gives -- `opens` -- restates the problem rather than naming the invariant. The promise may well be true; what is missing is what MAKES it true. Name the invariant -- what has already validated this, and where -- so the next reader can check whether it still holds. A promise with a reason is an invariant; a promise without one is a bet, and the way you find out you lost it is a crash that explains nothing",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-glob-imports",
+      "path": "crates/rules/nomos-rules/src/naming/violations.rs",
+      "message": "glob import `super::*` hides where every name it brings in came from; name what you import (a curated prelude, or a test reaching for the very package it exercises, are the exceptions)",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-glob-imports",
+      "path": "crates/rules/nomos-rules/src/reachability.rs",
+      "message": "glob import `super::*` hides where every name it brings in came from; name what you import (a curated prelude, or a test reaching for the very package it exercises, are the exceptions)",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-error-info",
+      "path": "crates/host/nomos-api/src/spec/commit.rs",
+      "fingerprint": "4e37c12a3d7de773",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-error-info",
+      "path": "crates/host/nomos-api/src/spec/freshness.rs",
+      "fingerprint": "4e37c12a3d7de773",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-error-info",
+      "path": "crates/host/nomos-api/src/spec/preview.rs",
+      "fingerprint": "4e37c12a3d7de773",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-error-info",
+      "path": "crates/host/nomos-api/src/spec/render.rs",
+      "fingerprint": "4e37c12a3d7de773",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-error-info",
+      "path": "crates/host/nomos-api/src/spec/submit.rs",
+      "fingerprint": "4e37c12a3d7de773",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-error-info",
+      "path": "crates/host/nomos-surface-provenance/src/main.rs",
+      "message": "`let _ = ...` discards an error; handle it, report it, or return it (`// error-info: allow \u003creason\u003e` if the failure genuinely changes nothing)",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-error-info",
+      "path": "crates/languages/nomos-lang-go-modules/src/provider.rs",
+      "fingerprint": "b00601f93e01e349",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/agent/nomos-agent-contracts/src/work_result.rs",
+      "fingerprint": "97523089d9bbe383",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/capabilities/nomos-cap-controlflow/src/payload.rs",
+      "fingerprint": "7e1be80e6dcd107a",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/capabilities/nomos-cap-dependency-policy/src/payload.rs",
+      "fingerprint": "0672601bd80fc968",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/capabilities/nomos-cap-dependency/src/payload.rs",
+      "fingerprint": "296e584e229461ed",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/capabilities/nomos-cap-lint/src/payload.rs",
+      "fingerprint": "4cb8630e15b60dee",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/contracts/nomos-contracts/src/enforcement/reach.rs",
+      "fingerprint": "e0c22c510a8aa2d3",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/contracts/nomos-contracts/src/finding.rs",
+      "fingerprint": "6de533cd5ff699ce",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/contracts/nomos-contracts/src/workflow_step.rs",
+      "fingerprint": "53df5be130646eb9",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/corrections/nomos-corrections/src/committed.rs",
+      "fingerprint": "14e1953cf31c4410",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/corrections/nomos-corrections/src/correction_choice.rs",
+      "fingerprint": "759a5ea526a92dc3",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/corrections/nomos-corrections/src/correction_decision.rs",
+      "fingerprint": "65b5ba679e630c59",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/corrections/nomos-corrections/src/staged.rs",
+      "fingerprint": "5364f9cf84b2b5a2",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/corrections/nomos-corrections/src/validated.rs",
+      "fingerprint": "1b7f2324dd3d9706",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/host/nomos-api/src/response/explain.rs",
+      "fingerprint": "f57c07df208e057a",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/host/nomos-api/src/sources.rs",
+      "fingerprint": "4c680ca15093d347",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/host/nomos-api/src/spec/commit.rs",
+      "fingerprint": "6c3cd8430d2cca35",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/host/nomos-api/src/spec/freshness.rs",
+      "fingerprint": "9f9fa05bf8e75371",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/host/nomos-api/src/spec/preview.rs",
+      "fingerprint": "edf008578ef7b5c8",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/host/nomos-api/src/spec/render.rs",
+      "fingerprint": "2144fc4479f56aba",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/host/nomos-api/src/spec/submit.rs",
+      "fingerprint": "3fdc2a73d91ea92e",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/host/nomos-api/src/work/add.rs",
+      "fingerprint": "4695ddb68319032a",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/host/nomos-cli/src/arguments.rs",
+      "fingerprint": "7866d132b858d9c7",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/host/nomos-cli/src/check/sources.rs",
+      "fingerprint": "4c680ca15093d347",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/host/nomos-cli/src/gate/sources.rs",
+      "fingerprint": "4c680ca15093d347",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/host/nomos-cli/src/request.rs",
+      "fingerprint": "e40f0277919360b5",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/host/nomos-surface-provenance/src/arguments.rs",
+      "fingerprint": "093c84f6dceb0777",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/host/nomos-surface-provenance/src/discovery.rs",
+      "fingerprint": "9595e0c7c097bb89",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/host/nomos-surface-provenance/src/evaluate.rs",
+      "fingerprint": "6f623ad0283546f9",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/host/nomos-surface-provenance/src/main.rs",
+      "fingerprint": "d788cdd53257ed75",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/kernel/nomos-model/src/evidence/coverage.rs",
+      "fingerprint": "e0b5f1efce4fae78",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/kernel/nomos-model/src/identity/composite_identity.rs",
+      "fingerprint": "1c003fae2b9c9d2e",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/kernel/nomos-model/src/subject/set.rs",
+      "fingerprint": "20e37d191fe64bb6",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/languages/nomos-lang-go-modules/src/provider.rs",
+      "fingerprint": "9758bd0c6c4a88f0",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/languages/nomos-lang-go/src/provider.rs",
+      "fingerprint": "d1cab0e8f13cd41b",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/languages/nomos-lang-rust-cargo/src/metadata.rs",
+      "fingerprint": "172530b184d8c63e",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/languages/nomos-lang-rust-cargo/src/provider.rs",
+      "fingerprint": "bbdade617af97b5a",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/languages/nomos-lang-rust-clippy/src/provider.rs",
+      "fingerprint": "df4edd7d4cd3ae9e",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/languages/nomos-lang-rust-clippy/src/reading.rs",
+      "fingerprint": "1333667b4b45bc4b",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/languages/nomos-lang-rust-deny/src/provider.rs",
+      "fingerprint": "df4edd7d4cd3ae9e",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/languages/nomos-lang-rust-scan/src/provider.rs",
+      "fingerprint": "5db2eb0b14c8fc4e",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/languages/nomos-lang-rust/src/guarantee.rs",
+      "fingerprint": "1c66014412c26f50",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/languages/nomos-lang-rust/src/provider.rs",
+      "fingerprint": "63dff71e2fb2b117",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/languages/nomos-lang-rust/src/reachability/provider.rs",
+      "fingerprint": "602b8ab649aa9594",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/orchestration/nomos-gate-orchestration/src/adoption.rs",
+      "fingerprint": "802f7e550628c1fe",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/orchestration/nomos-gate-orchestration/src/baseline.rs",
+      "fingerprint": "c0f55b81d4cf1633",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/orchestration/nomos-gate-orchestration/src/suppression.rs",
+      "fingerprint": "a6973b74164306b5",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/platform/nomos-platform-std/src/filesystem.rs",
+      "fingerprint": "98dedf0acb92ae0b",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/platform/nomos-platform-std/src/lock.rs",
+      "fingerprint": "ee24d4b6bb6b8c6f",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/rules/nomos-rules/src/crosslang.rs",
+      "fingerprint": "9dc63071d50de43e",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/rules/nomos-rules/src/dependency.rs",
+      "fingerprint": "a37cae809fe434ed",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/rules/nomos-rules/src/dependency/completeness.rs",
+      "fingerprint": "35f6365e4c8cea33",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/rules/nomos-rules/src/dependency/violations.rs",
+      "fingerprint": "ea2abdc7ecc53652",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/rules/nomos-rules/src/facts.rs",
+      "fingerprint": "4f833e4d70fa0f06",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/rules/nomos-rules/src/lint.rs",
+      "fingerprint": "e637af146dfe0114",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/rules/nomos-rules/src/naming.rs",
+      "fingerprint": "180c4023d508de53",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/rules/nomos-rules/src/naming/violations.rs",
+      "fingerprint": "641fee7d92084c2f",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/rules/nomos-rules/src/policy.rs",
+      "fingerprint": "4906c58bd6c611dd",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/rules/nomos-rules/src/reachability.rs",
+      "fingerprint": "efadc222513830b5",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/rules/nomos-rules/src/registry/rule_registry.rs",
+      "fingerprint": "eac2b2ee070c792f",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/rules/nomos-rules/src/role_surface.rs",
+      "fingerprint": "379cec3c5bfb99f6",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/rules/nomos-rules/src/universe.rs",
+      "fingerprint": "7eacc2766da9b3c1",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/spec/nomos-spec-bundle/src/bundle.rs",
+      "fingerprint": "7b15ecded1283cc8",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/spec/nomos-spec-ingest/src/archive.rs",
+      "fingerprint": "ab9709bac3865f34",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/spec/nomos-spec-ingest/src/phases/gate.rs",
+      "fingerprint": "ede53a0fc253af95",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/spec/nomos-spec-ingest/src/reconciliation/lineage.rs",
+      "fingerprint": "deb7e519d49baf3a",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/spec/nomos-spec-model/src/statement.rs",
+      "fingerprint": "6f3e37193a5f18fb",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/spec/nomos-spec-model/src/table.rs",
+      "fingerprint": "73a11856449eb6d2",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/spec/nomos-spec-store/src/read.rs",
+      "fingerprint": "5683aaa28a6c1b52",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/spec/nomos-spec-store/src/store/relation.rs",
+      "fingerprint": "902406ab627f1c67",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/spec/nomos-spec-validate/src/run.rs",
+      "fingerprint": "42c19f5727777a33",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/substrate/nomos-analysis/src/propagation.rs",
+      "fingerprint": "8f37fc569493962b",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/substrate/nomos-capability/src/resolution/selection.rs",
+      "fingerprint": "aa6e163195030a2b",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/substrate/nomos-ledger/src/exclusion.rs",
+      "fingerprint": "cba03afe4a831b3a",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/substrate/nomos-ledger/src/store/refusal.rs",
+      "fingerprint": "511fbf9901a5fe25",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/substrate/nomos-workspace/src/snapshot.rs",
+      "fingerprint": "8b669a115f6a555d",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-vertical-organization",
+      "path": "crates/substrate/nomos-workspace/src/variant.rs",
+      "fingerprint": "78729b37bb65498e",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-transposable-parameters",
+      "path": "crates/host/nomos-api/src/response/explain.rs",
+      "fingerprint": "4866e2056c35cab0",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-transposable-parameters",
+      "path": "crates/host/nomos-surface-provenance/src/evaluate.rs",
+      "fingerprint": "2a04b23532f4d7b0",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-transposable-parameters",
+      "path": "crates/languages/nomos-lang-go-modules/src/provider.rs",
+      "fingerprint": "da8e9c271ba14026",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-transposable-parameters",
+      "path": "crates/rules/nomos-rules/src/role_surface.rs",
+      "fingerprint": "348a0e2553ed16ca",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-allman-braces",
+      "path": "crates/host/nomos-api/src/response/run.rs",
+      "fingerprint": "996f233bd3bfdc20",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-closing-brace",
+      "path": "crates/host/nomos-api/src/response/run.rs",
+      "fingerprint": "00d6019076901da8",
+      "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
     }
   ]
 }

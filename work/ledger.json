@@ -35260,6 +35260,56 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P16-EVERYTHINGELSE-CATEGORY1-WAIVERS",
+      "title": "OD-GATE-018 phase 3: adopt category-1 test-code waivers across code-shape, declare-types, errors and formatting",
+      "why": "OD-GATE-018's phase 3 ('everything else': code-shape, concurrency-and-unsafe, declare-types, errors, formatting, numerics) opens with the same category-1 test-code sweep clean-file and decompose-file already ran per-check. Measured against crates/ and tests/ (default run, suppressions.json as of commit 39785ca): check-presumption 152 raw findings, check-glob-imports 4, check-vertical-organization 169, check-transposable-parameters 12 (advisory), check-allman-braces 56, check-closing-brace 46, check-error-info 10. check-presumption and check-glob-imports are confirmed 100 percent test code; the other five are mixed, at the smaller volumes OD-GATE-018 itself predicted. numerics (check-scalar-range, check-float-equality) already reports zero and needs no waiver.",
+      "done_when": "check-presumption and check-glob-imports report zero findings against crates tests (default run via code-standards check.exe). check-vertical-organization, check-transposable-parameters, check-allman-braces, check-closing-brace and check-error-info each have every finding whose line sits inside a #[cfg(test)] mod block adopted into suppressions.json citing OD-GATE-018 category 1, leaving exactly their production findings open (93, 8, 55, 45 and 2 respectively) for later phase items. No production-code finding is waived by this item. Every added waiver has an owner, a reason citing OD-GATE-018, and an expiry within standards.json's 180-day max_horizon_days.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "suppressions.json"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Users\\kmett\\bin\\nomos.exe",
+          "work",
+          "validate"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "C:\\Users\\kmett\\bin\\nomos.exe",
+          "work",
+          "validate"
+        ],
+        "exit_code": 0,
+        "output_tail": "ledger is valid (schema 5, and this build understands 5)\n",
+        "verified_at": 1788023907,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "39785cad8a723d0759d60f1161646909e0956147"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
