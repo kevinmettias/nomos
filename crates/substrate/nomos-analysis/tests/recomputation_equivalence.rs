@@ -146,8 +146,14 @@ fn Recompute_Incrementally(
 ) -> (MaterializedFact, MaterializedFact)
 {
     let mut store = MemoryFactStore::New();
-    let dependency_edges: Vec<Dependency> =
-        if record_dependency { vec![Downstream_Dependency()] } else { Vec::new() };
+    let dependency_edges: Vec<Dependency> = if record_dependency
+    {
+        vec![Downstream_Dependency()]
+    }
+    else
+    {
+        Vec::new()
+    };
 
     Materialize_Pair(&mut store, initial_upstream, GenerationId::INITIAL, &dependency_edges);
 

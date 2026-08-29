@@ -36075,6 +36075,213 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P17-CLEANFILE-AGENT",
+      "title": "clean-file phase regressed in crates/agent: close check-literals drift",
+      "why": "The same OD-GATE-018 interaction that regressed crates/host and crates/orchestration reintroduced one check-literals finding under crates/agent/nomos-agent-contracts.",
+      "done_when": "check-literals reports zero unwaived findings against crates/agent/nomos-agent-contracts: change_context_subject.rs:29's magic 5 is inside a #[cfg(test)] mod block and gets the campaign's established category-1 test-code waiver, not a code change.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/agent/nomos-agent-contracts"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-loop-session",
+        "acquired_at": 1788029897,
+        "lease_expires_at": 1788037097
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-agent-contracts"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P17-CLEANFILE-CORRECTIONS",
+      "title": "clean-file phase: close nomos-corrections' previously-deferred check-parameter-count finding",
+      "why": "OD-GATE-018's phase-1 remediation deferred CorrectionChoice::New's 6-parameter finding as touching territory outside its item. Both of its call sites are test-only, so grouping COR-012's five recorded fields into one value is now a contained, real fix rather than a deferral.",
+      "done_when": "check-parameter-count reports zero unwaived findings against crates/corrections/nomos-corrections: CorrectionChoice::New takes selected plus one grouped ChoiceRecord value instead of 6 loose parameters, its own public-surface snapshot re-blessed to match.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/corrections/nomos-corrections",
+          "tests/contract/surface/nomos-corrections.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-loop-session",
+        "acquired_at": 1788029897,
+        "lease_expires_at": 1788037097
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-corrections"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P17-CLEANFILE-ORCHESTRATION-SURFACE",
+      "title": "re-bless nomos-gate-orchestration and nomos-check-orchestration public-surface snapshots after their clean-file parameter-count fixes",
+      "why": "P17-CLEANFILE-ORCHESTRATION's Run/Run_Gate/Explain_Gate parameter-grouping fixes change pub fn signatures the surface snapshot records textually, but that item's own territory did not reserve the two snapshot files.",
+      "done_when": "tests/contract/surface/nomos-gate-orchestration.txt and tests/contract/surface/nomos-check-orchestration.txt match the crates' real public surface after P17-CLEANFILE-ORCHESTRATION's fixes land.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/surface/nomos-gate-orchestration.txt",
+          "tests/contract/surface/nomos-check-orchestration.txt"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "predicate named a nonexistent package/test target (tests-contract / surface); re-adding as -2 with the real nomos-contract-tests/public_surface names"
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "tests-contract",
+          "--test",
+          "surface"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-loop-session",
+        "declined_at": 1788029883
+      }
+    },
+    {
+      "id": "P17-CLEANFILE-ORCHESTRATION-SURFACE-2",
+      "title": "re-bless nomos-gate-orchestration and nomos-check-orchestration public-surface snapshots after their clean-file parameter-count fixes",
+      "why": "P17-CLEANFILE-ORCHESTRATION's Run/Run_Gate/Explain_Gate parameter-grouping fixes change pub fn signatures the surface snapshot records textually, but that item's own territory did not reserve the two snapshot files.",
+      "done_when": "tests/contract/surface/nomos-gate-orchestration.txt and tests/contract/surface/nomos-check-orchestration.txt match the crates' real public surface after P17-CLEANFILE-ORCHESTRATION's fixes land.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/surface/nomos-gate-orchestration.txt",
+          "tests/contract/surface/nomos-check-orchestration.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-loop-session",
+        "acquired_at": 1788029897,
+        "lease_expires_at": 1788037097
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "public_surface"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P16-EVERYTHINGELSE-FORMATTING-BRACES",
+      "title": "OD-GATE-018 phase 3: close check-allman-braces and check-closing-brace, finishing formatting",
+      "why": "formatting's last two open checks, check-allman-braces (51) and check-closing-brace (41), were measured against a token-aware scanner that correctly handles Rust backslash-continued string literals (the same class of front-end gap already documented for these two checks: they blank string contents with a scan that cannot see a string wrapped across lines with a trailing backslash, so the opening quote pairs with an unrelated later quote and every line between reads as blanked whitespace, corrupting the brace-column judgment that follows). 89 of the 90 raw findings verified as genuinely aligned once read correctly -- confirmed both systematically (a Python script mirroring each check's own alignment rule: allman compares a brace's line indentation to the previous non-blank line's; closing compares it to its true matching opening brace's line, found by depth-counted brace matching over correctly-masked text) and by hand-inspecting three samples across three different crates. The one exception, crates/substrate/nomos-analysis/tests/recomputation_equivalence.rs:150, carried a distinct message ('this opening brace trails the line that introduces the block', not 'sits at a different column') for a genuinely single-line collapsed if/else-as-value-expression -- a real finding, fixed by reformatting to this workspace's Allman convention.",
+      "done_when": "check-allman-braces and check-closing-brace both report zero findings against crates tests (default run). cargo build --workspace --all-targets and cargo test -p nomos-analysis stay green. The 89 phantom findings are waived in suppressions.json citing the confirmed front-end gap; only recomputation_equivalence.rs's code changed.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-analysis/tests/recomputation_equivalence.rs",
+          "suppressions.json"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "exit_code": 0,
+        "output_tail": "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.19s\n",
+        "verified_at": 1788031050,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "7517a90aae2dc92234cf2d59fbd6301e292d7a18"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

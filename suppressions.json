@@ -3560,6 +3560,462 @@
       "reason": "parser.set_language(\u0026tree_sitter_go::LANGUAGE.into()) can only fail from a build-time ABI mismatch between the tree_sitter runtime and the tree_sitter_go grammar crate, not from anything about the source file being parsed -- every call would fail identically, so it is a build-configuration invariant, not a per-input runtime failure. Routing it through Reading::Unparseable (the per-file failure path this function already has) would misrepresent a systemic problem as a single source's own defect.",
       "owner": "@kmettias",
       "expires": "2027-02-25"
+    },
+    {
+      "check": "check-allman-braces",
+      "path": "crates/host/nomos-cli/src/gate/parsing.rs",
+      "message": "this opening brace trails the line that introduces the block. Put it on its own line, at the column of the keyword that opens the block -- the brace column is the block's left edge, and a reader finds the end of a block by scanning one column rather than by parsing line ends.",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-allman-braces",
+      "path": "crates/host/nomos-cli/src/gate/report.rs",
+      "message": "this opening brace sits at a different column from the keyword that opens the block. Align the two -- the brace column is the block's left edge, and an indented brace hides where the block begins.",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-closing-brace",
+      "path": "crates/host/nomos-cli/src/gate/report.rs",
+      "message": "this closing brace sits at a different column from the keyword that opened the block. Align the two -- a brace that drifts from its keyword makes the reader count braces to find out what just ended.",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-allman-braces",
+      "path": "crates/host/nomos-cli/src/request.rs",
+      "message": "this opening brace sits at a different column from the keyword that opens the block. Align the two -- the brace column is the block's left edge, and an indented brace hides where the block begins.",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-closing-brace",
+      "path": "crates/host/nomos-cli/src/request.rs",
+      "message": "this closing brace sits at a different column from the keyword that opened the block. Align the two -- a brace that drifts from its keyword makes the reader count braces to find out what just ended.",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-allman-braces",
+      "path": "crates/host/nomos-cli/src/spec/verb/editing.rs",
+      "fingerprint": "a69d614f89bd1a56",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-closing-brace",
+      "path": "crates/host/nomos-cli/src/spec/verb/editing.rs",
+      "fingerprint": "0c44dc203404b360",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-allman-braces",
+      "path": "crates/host/nomos-cli/src/spec/verb/freshness.rs",
+      "message": "this opening brace sits at a different column from the keyword that opens the block. Align the two -- the brace column is the block's left edge, and an indented brace hides where the block begins.",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-closing-brace",
+      "path": "crates/host/nomos-cli/src/spec/verb/freshness.rs",
+      "message": "this closing brace sits at a different column from the keyword that opened the block. Align the two -- a brace that drifts from its keyword makes the reader count braces to find out what just ended.",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-allman-braces",
+      "path": "crates/host/nomos-cli/src/spec/verb/listing.rs",
+      "fingerprint": "5ee29525f57b4ff6",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-closing-brace",
+      "path": "crates/host/nomos-cli/src/spec/verb/listing.rs",
+      "fingerprint": "00d6019076901da8",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-allman-braces",
+      "path": "crates/host/nomos-cli/src/spec/verb/table.rs",
+      "fingerprint": "17748871e0672241",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-closing-brace",
+      "path": "crates/host/nomos-cli/src/spec/verb/table.rs",
+      "fingerprint": "00d6019076901da8",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-allman-braces",
+      "path": "crates/host/nomos-cli/src/work/parse.rs",
+      "message": "this opening brace sits at a different column from the keyword that opens the block. Align the two -- the brace column is the block's left edge, and an indented brace hides where the block begins.",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-closing-brace",
+      "path": "crates/host/nomos-cli/src/work/parse.rs",
+      "message": "this closing brace sits at a different column from the keyword that opened the block. Align the two -- a brace that drifts from its keyword makes the reader count braces to find out what just ended.",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-closing-brace",
+      "path": "crates/host/nomos-cli/src/work/parse.rs",
+      "fingerprint": "ad0d944cf4f47999",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-allman-braces",
+      "path": "crates/languages/nomos-lang-go/src/syntax/walk/imports.rs",
+      "fingerprint": "5ee29525f57b4ff6",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-closing-brace",
+      "path": "crates/languages/nomos-lang-go/src/syntax/walk/imports.rs",
+      "fingerprint": "00d6019076901da8",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-allman-braces",
+      "path": "crates/languages/nomos-lang-rust/src/rollup/parse.rs",
+      "fingerprint": "17748871e0672241",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-closing-brace",
+      "path": "crates/languages/nomos-lang-rust/src/rollup/parse.rs",
+      "fingerprint": "00d6019076901da8",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-allman-braces",
+      "path": "crates/orchestration/nomos-check-orchestration/src/facts/materialize.rs",
+      "fingerprint": "d0e97447260e4b69",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-closing-brace",
+      "path": "crates/orchestration/nomos-check-orchestration/src/facts/materialize.rs",
+      "fingerprint": "dfd3fbe69adf9ace",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-allman-braces",
+      "path": "crates/rules/nomos-rules/src/lint.rs",
+      "fingerprint": "e3e8a926a0288da0",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-closing-brace",
+      "path": "crates/rules/nomos-rules/src/lint.rs",
+      "fingerprint": "5eeeaf8f0ed38724",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-allman-braces",
+      "path": "crates/rules/nomos-rules/src/reachability.rs",
+      "fingerprint": "e3e8a926a0288da0",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-closing-brace",
+      "path": "crates/rules/nomos-rules/src/reachability.rs",
+      "fingerprint": "5eeeaf8f0ed38724",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-allman-braces",
+      "path": "crates/rules/nomos-rules/src/universe.rs",
+      "fingerprint": "72ac5c97fced2499",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-closing-brace",
+      "path": "crates/rules/nomos-rules/src/universe.rs",
+      "fingerprint": "00d6019076901da8",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-allman-braces",
+      "path": "crates/spec/nomos-spec-ingest/tests/family_counts/measurement.rs",
+      "message": "this opening brace sits at a different column from the keyword that opens the block. Align the two -- the brace column is the block's left edge, and an indented brace hides where the block begins.",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-closing-brace",
+      "path": "crates/spec/nomos-spec-ingest/tests/family_counts/measurement.rs",
+      "message": "this closing brace sits at a different column from the keyword that opened the block. Align the two -- a brace that drifts from its keyword makes the reader count braces to find out what just ended.",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-allman-braces",
+      "path": "crates/spec/nomos-spec-ingest/tests/overlay.rs",
+      "fingerprint": "f746f785fb0d5273",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-allman-braces",
+      "path": "crates/spec/nomos-spec-ingest/tests/overlay.rs",
+      "fingerprint": "eb030e73aab025ed",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-allman-braces",
+      "path": "crates/spec/nomos-spec-project/src/render.rs",
+      "fingerprint": "2b0b6aba2098c5cf",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-closing-brace",
+      "path": "crates/spec/nomos-spec-project/src/render.rs",
+      "fingerprint": "0c44dc203404b360",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-allman-braces",
+      "path": "crates/spec/nomos-spec-project/src/select/sections.rs",
+      "message": "this opening brace sits at a different column from the keyword that opens the block. Align the two -- the brace column is the block's left edge, and an indented brace hides where the block begins.",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-allman-braces",
+      "path": "crates/spec/nomos-spec-project/src/select/sections.rs",
+      "fingerprint": "3cc47cc082186514",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-closing-brace",
+      "path": "crates/spec/nomos-spec-project/src/select/sections.rs",
+      "fingerprint": "89505c1a324d0240",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-allman-braces",
+      "path": "crates/spec/nomos-spec-store/src/read.rs",
+      "fingerprint": "0230d842cde2203f",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-closing-brace",
+      "path": "crates/spec/nomos-spec-store/src/read.rs",
+      "fingerprint": "688a15fd715c6862",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-allman-braces",
+      "path": "crates/spec/nomos-spec-validate/src/rule/no_undeclared_filler_template.rs",
+      "message": "this opening brace sits at a different column from the keyword that opens the block. Align the two -- the brace column is the block's left edge, and an indented brace hides where the block begins.",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-closing-brace",
+      "path": "crates/spec/nomos-spec-validate/src/rule/no_undeclared_filler_template.rs",
+      "message": "this closing brace sits at a different column from the keyword that opened the block. Align the two -- a brace that drifts from its keyword makes the reader count braces to find out what just ended.",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-allman-braces",
+      "path": "crates/substrate/nomos-ledger/src/gate.rs",
+      "fingerprint": "bd3d01b4c6d6ebfa",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-closing-brace",
+      "path": "crates/substrate/nomos-ledger/src/gate.rs",
+      "fingerprint": "f652bb398b393c11",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-allman-braces",
+      "path": "crates/substrate/nomos-ledger/src/store/validation.rs",
+      "fingerprint": "476aca8c50587297",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-closing-brace",
+      "path": "crates/substrate/nomos-ledger/src/store/validation.rs",
+      "fingerprint": "f652bb398b393c11",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-allman-braces",
+      "path": "crates/substrate/nomos-ledger/tests/gate_covers_finish/launcher.rs",
+      "message": "this opening brace sits at a different column from the keyword that opens the block. Align the two -- the brace column is the block's left edge, and an indented brace hides where the block begins.",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-allman-braces",
+      "path": "tests/contract/tests/completeness_universes/claims.rs",
+      "fingerprint": "57621639514bc99c",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-closing-brace",
+      "path": "tests/contract/tests/completeness_universes/claims.rs",
+      "fingerprint": "f652bb398b393c11",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-allman-braces",
+      "path": "tests/contract/tests/determinism_declarations.rs",
+      "message": "this opening brace sits at a different column from the keyword that opens the block. Align the two -- the brace column is the block's left edge, and an indented brace hides where the block begins.",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-closing-brace",
+      "path": "tests/contract/tests/determinism_declarations.rs",
+      "fingerprint": "704a2049e1b2c1c5",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-closing-brace",
+      "path": "tests/contract/tests/determinism_declarations.rs",
+      "fingerprint": "00d6019076901da8",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-allman-braces",
+      "path": "tests/contract/tests/public_surface/bless.rs",
+      "fingerprint": "476aca8c50587297",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-closing-brace",
+      "path": "tests/contract/tests/public_surface/bless.rs",
+      "fingerprint": "f652bb398b393c11",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-allman-braces",
+      "path": "tests/integration/tests/determinism/harness.rs",
+      "fingerprint": "bd3d01b4c6d6ebfa",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-closing-brace",
+      "path": "tests/integration/tests/determinism/harness.rs",
+      "fingerprint": "00d6019076901da8",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-allman-braces",
+      "path": "tests/integration/tests/determinism/productions.rs",
+      "message": "this opening brace sits at a different column from the keyword that opens the block. Align the two -- the brace column is the block's left edge, and an indented brace hides where the block begins.",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-closing-brace",
+      "path": "tests/integration/tests/determinism/productions.rs",
+      "message": "this closing brace sits at a different column from the keyword that opened the block. Align the two -- a brace that drifts from its keyword makes the reader count braces to find out what just ended.",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect.",
+      "owner": "@kmettias",
+      "expires": "2026-11-27"
     }
   ]
 }
