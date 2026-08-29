@@ -66,30 +66,36 @@ pub(super) fn Refuse_A_Spent_Record(
     return Ok(());
 }
 
-/// Refuses a declared amendment of a record this repository has not published.
+/// The authored paths in a territory that name a record identifier rather than a file.
 ///
-/// Checked before the reservations rather than among them, because it is a statement about
-/// the declaration itself and holds whether or not the territory reserves anything. An author
-/// who declared the wrong identifier is told that here, once, instead of being told nothing
-/// and getting an item that allocates while claiming to amend.
-pub(super) fn Refuse_An_Unpublished_Amendment(
-    amending: &Territory,
-    published: &Territory,
-) -> Result<(), AddRefusal>
+/// Scoped deliberately. `add` does not refuse overlapping territory in general and must not
+/// start: items overlap constantly and claims are what serialize them. What is being guarded
+/// is the one reservation an author cannot recover from mid-claim, because there is no
+/// `work edit` to move a record identifier once somebody else has published it.
+///
+/// Recognised through [`Normalize_Path`] rather than by re-reading the grammar here. A path
+/// names an identifier when folding lands it directly inside the record directory: both
+/// `docs/records/OD-LEDGER-025` and `docs/records/OD-LEDGER-025-a-slug.md` fold to
+/// `docs/records/od-ledger-025`, and anything nested deeper is some other thing that happens
+/// to live there. The directory itself is not an identifier — reserving all of it is a
+/// different problem, and `P10-RECORD-LOCK` is where it was answered.
+fn Record_Reservations(territory: &Territory) -> Vec<String>
 {
-    for declared in &amending.paths
-    {
-        let mine = Territory::Of_Files([declared.clone()]);
+    return territory
+        .paths
+        .iter()
+        .filter(|path| {
+            let folded = Normalize_Path(path);
+            let Some(within) = folded.strip_prefix(RECORD_DIRECTORY_PREFIX)
+            else
+            {
+                return false;
+            };
 
-        if !matches!(mine.Intersect(published), Intersection::Overlaps(_))
-        {
-            return Err(AddRefusal::AmendmentNotPublished {
-                identifier: Normalize_Path(declared),
-            });
-        }
-    }
-
-    return Ok(());
+            return !within.is_empty() && !within.contains('/');
+        })
+        .cloned()
+        .collect();
 }
 
 /// Refuses an identifier some committed record already carries.
@@ -151,36 +157,30 @@ fn Refuse_If_Reserved(
     return Ok(());
 }
 
-/// The authored paths in a territory that name a record identifier rather than a file.
+/// Refuses a declared amendment of a record this repository has not published.
 ///
-/// Scoped deliberately. `add` does not refuse overlapping territory in general and must not
-/// start: items overlap constantly and claims are what serialize them. What is being guarded
-/// is the one reservation an author cannot recover from mid-claim, because there is no
-/// `work edit` to move a record identifier once somebody else has published it.
-///
-/// Recognised through [`Normalize_Path`] rather than by re-reading the grammar here. A path
-/// names an identifier when folding lands it directly inside the record directory: both
-/// `docs/records/OD-LEDGER-025` and `docs/records/OD-LEDGER-025-a-slug.md` fold to
-/// `docs/records/od-ledger-025`, and anything nested deeper is some other thing that happens
-/// to live there. The directory itself is not an identifier — reserving all of it is a
-/// different problem, and `P10-RECORD-LOCK` is where it was answered.
-fn Record_Reservations(territory: &Territory) -> Vec<String>
+/// Checked before the reservations rather than among them, because it is a statement about
+/// the declaration itself and holds whether or not the territory reserves anything. An author
+/// who declared the wrong identifier is told that here, once, instead of being told nothing
+/// and getting an item that allocates while claiming to amend.
+pub(super) fn Refuse_An_Unpublished_Amendment(
+    amending: &Territory,
+    published: &Territory,
+) -> Result<(), AddRefusal>
 {
-    return territory
-        .paths
-        .iter()
-        .filter(|path| {
-            let folded = Normalize_Path(path);
-            let Some(within) = folded.strip_prefix(RECORD_DIRECTORY_PREFIX)
-            else
-            {
-                return false;
-            };
+    for declared in &amending.paths
+    {
+        let mine = Territory::Of_Files([declared.clone()]);
 
-            return !within.is_empty() && !within.contains('/');
-        })
-        .cloned()
-        .collect();
+        if !matches!(mine.Intersect(published), Intersection::Overlaps(_))
+        {
+            return Err(AddRefusal::AmendmentNotPublished {
+                identifier: Normalize_Path(declared),
+            });
+        }
+    }
+
+    return Ok(());
 }
 
 /// The folded record directory, with its separator, as [`Normalize_Path`] leaves it.

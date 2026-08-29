@@ -167,33 +167,6 @@ impl Workspace
         return self.Put(path, digest);
     }
 
-    /// Writes one member, saying whether the write added it, changed it, or said nothing.
-    fn Put(&mut self, path: String, digest: nomos_contracts::Digest128) -> Effect
-    {
-        let held = self.snapshot.Content_Of(&path);
-        if held == Some(digest)
-        {
-            return Effect {
-                path,
-                kind: EffectKind::Redundant,
-            };
-        }
-        self.snapshot.Put(path.clone(), digest);
-
-        if held.is_some()
-        {
-            return Effect {
-                path,
-                kind: EffectKind::Modified,
-            };
-        }
-
-        return Effect {
-            path,
-            kind: EffectKind::Added,
-        };
-    }
-
     /// Records this state in a document store.
     ///
     /// The workspace's own bytes are the only thing written, and they carry no reference
@@ -250,5 +223,32 @@ impl Workspace
     pub const fn Authority() -> Authority
     {
         return Authority::Observed;
+    }
+
+    /// Writes one member, saying whether the write added it, changed it, or said nothing.
+    fn Put(&mut self, path: String, digest: nomos_contracts::Digest128) -> Effect
+    {
+        let held = self.snapshot.Content_Of(&path);
+        if held == Some(digest)
+        {
+            return Effect {
+                path,
+                kind: EffectKind::Redundant,
+            };
+        }
+        self.snapshot.Put(path.clone(), digest);
+
+        if held.is_some()
+        {
+            return Effect {
+                path,
+                kind: EffectKind::Modified,
+            };
+        }
+
+        return Effect {
+            path,
+            kind: EffectKind::Added,
+        };
     }
 }

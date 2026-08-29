@@ -82,52 +82,6 @@ fn Invalidate_Named(
     return frontier;
 }
 
-/// Puts the report into the one order two runs over one store both produce.
-///
-/// The retained count is taken last, after everything the cause reaches has been
-/// invalidated, because it is the answer to "what survived" and not to "what was here".
-fn Settle(store: &MemoryFactStore, report: &mut InvalidationReport)
-{
-    report.direct.sort();
-    report.dependent.sort();
-    report.broadened.sort_by(|first, second| return first.key.cmp(&second.key));
-    report.retained = u32::try_from(store.Live()).unwrap_or(u32::MAX);
-}
-
-/// Every invalidated fact whose own guarantee is coarser than the cause was.
-///
-/// Reported rather than silently applied: a provider that can only answer at whole-
-/// workspace granularity turns a one-file edit into a full rebuild, and the caller is
-/// entitled to know which provider did that and to how many facts.
-fn Note_Broadening(
-    store: &MemoryFactStore,
-    requested: IncrementalGranularity,
-    seen: &BTreeSet<Digest128>,
-    report: &mut InvalidationReport,
-)
-{
-    use crate::Broadening;
-
-    for digest in seen
-    {
-        let (Some(key), Some(entry)) = (store.keys.get(digest), store.Latest(*digest))
-        else
-        {
-            continue;
-        };
-
-        let applied = requested.Broadened_To(entry.fact.guarantee.incremental);
-        if applied != requested
-        {
-            report.broadened.push(Broadening {
-                key: key.clone(),
-                requested,
-                applied,
-            });
-        }
-    }
-}
-
 /// Spreads invalidation from `roots` through `store.dependents`, recording each reached
 /// dependent's key into `report`. Returns every digest visited, roots included.
 ///
@@ -166,36 +120,6 @@ fn Propagate(
     return walk.seen;
 }
 
-/// [`Walked`]'s own result: every digest visited (`seen`, roots included), and, in visit
-/// order, those reached but not yet invalidated (`reached`) -- the frontier the second pass
-/// still has to apply. Named so the two `BTreeSet`/`Vec` results are not told apart only by
-/// position.
-struct Walk
-{
-    seen: BTreeSet<Digest128>,
-    reached: Vec<Digest128>,
-}
-
-/// The first pass of [`Propagate`]'s walk.
-fn Walked(store: &MemoryFactStore, propagation: &dyn DependencyPropagation, roots: Vec<Digest128>) -> Walk
-{
-    let mut seen: BTreeSet<Digest128> = roots.iter().copied().collect();
-    let mut reached: Vec<Digest128> = Vec::new();
-
-    propagation.Spread(&store.dependents, roots, &mut |consumer| {
-        seen.insert(consumer);
-        if store.Already_Invalidated(consumer)
-        {
-            return false;
-        }
-        reached.push(consumer);
-
-        return true;
-    });
-
-    return Walk { seen, reached };
-}
-
 /// Takes `store.propagation` out so the first pass in [`Propagate`] can call it under an
 /// immutable borrow of `store` without a live mutable borrow of this one field left behind
 /// to conflict with it.
@@ -218,6 +142,36 @@ fn Taken_Propagation(store: &mut MemoryFactStore) -> Box<dyn DependencyPropagati
     return propagation;
 }
 
+/// The first pass of [`Propagate`]'s walk.
+fn Walked(store: &MemoryFactStore, propagation: &dyn DependencyPropagation, roots: Vec<Digest128>) -> Walk
+{
+    let mut seen: BTreeSet<Digest128> = roots.iter().copied().collect();
+    let mut reached: Vec<Digest128> = Vec::new();
+
+    propagation.Spread(&store.dependents, roots, &mut |consumer| {
+        seen.insert(consumer);
+        if store.Already_Invalidated(consumer)
+        {
+            return false;
+        }
+        reached.push(consumer);
+
+        return true;
+    });
+
+    return Walk { seen, reached };
+}
+
+/// [`Walked`]'s own result: every digest visited (`seen`, roots included), and, in visit
+/// order, those reached but not yet invalidated (`reached`) -- the frontier the second pass
+/// still has to apply. Named so the two `BTreeSet`/`Vec` results are not told apart only by
+/// position.
+struct Walk
+{
+    seen: BTreeSet<Digest128>,
+    reached: Vec<Digest128>,
+}
+
 /// One node the first pass decided to keep: invalidated for real, and — if it was live —
 /// named in `report`.
 fn Apply(store: &mut MemoryFactStore, consumer: Digest128, invalidating: Invalidating<'_>, report: &mut InvalidationReport)
@@ -230,6 +184,52 @@ fn Apply(store: &mut MemoryFactStore, consumer: Digest128, invalidating: Invalid
     {
         report.dependent.push(key.clone());
     }
+}
+
+/// Every invalidated fact whose own guarantee is coarser than the cause was.
+///
+/// Reported rather than silently applied: a provider that can only answer at whole-
+/// workspace granularity turns a one-file edit into a full rebuild, and the caller is
+/// entitled to know which provider did that and to how many facts.
+fn Note_Broadening(
+    store: &MemoryFactStore,
+    requested: IncrementalGranularity,
+    seen: &BTreeSet<Digest128>,
+    report: &mut InvalidationReport,
+)
+{
+    use crate::Broadening;
+
+    for digest in seen
+    {
+        let (Some(key), Some(entry)) = (store.keys.get(digest), store.Latest(*digest))
+        else
+        {
+            continue;
+        };
+
+        let applied = requested.Broadened_To(entry.fact.guarantee.incremental);
+        if applied != requested
+        {
+            report.broadened.push(Broadening {
+                key: key.clone(),
+                requested,
+                applied,
+            });
+        }
+    }
+}
+
+/// Puts the report into the one order two runs over one store both produce.
+///
+/// The retained count is taken last, after everything the cause reaches has been
+/// invalidated, because it is the answer to "what survived" and not to "what was here".
+fn Settle(store: &MemoryFactStore, report: &mut InvalidationReport)
+{
+    report.direct.sort();
+    report.dependent.sort();
+    report.broadened.sort_by(|first, second| return first.key.cmp(&second.key));
+    report.retained = u32::try_from(store.Live()).unwrap_or(u32::MAX);
 }
 
 /// The generation and description a walk is invalidating under, threaded through

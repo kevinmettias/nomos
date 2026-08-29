@@ -242,35 +242,6 @@ fn Decode_Field(line: &str, read: &mut Read) -> Result<(), StoreError>
     return Ok(());
 }
 
-/// The configuration a snapshot was taken under.
-fn Decode_Configuration(rest: &str) -> Result<ConfigurationId, StoreError>
-{
-    let digest = Decode_Digest(rest)?;
-
-    return Ok(ConfigurationId::From_Digest(digest));
-}
-
-/// A field this build does not know.
-fn Unknown_Field(field: &str) -> StoreError
-{
-    return StoreError::Malformed(format!("`{field}` is not a snapshot field"));
-}
-
-/// One member: a path and the digest of what stood at it.
-fn Decode_Member(rest: &str, members: &mut BTreeMap<String, Digest128>) -> Result<(), StoreError>
-{
-    let Some((path, content)) = rest.split_once('\t')
-    else
-    {
-        return Err(StoreError::Malformed(format!(
-            "`{rest}` is not a path and a digest"
-        )));
-    };
-    members.insert(path.to_owned(), Decode_Digest(content)?);
-
-    return Ok(());
-}
-
 fn Decode_Variant(rendered: &str) -> Result<BuildVariant, StoreError>
 {
     let fields: Vec<&str> = rendered.split('\t').collect();
@@ -290,6 +261,35 @@ fn Decode_Variant(rendered: &str) -> Result<BuildVariant, StoreError>
         *toolchain,
         features.split(',').filter(|feature| return !feature.is_empty()),
     ));
+}
+
+/// The configuration a snapshot was taken under.
+fn Decode_Configuration(rest: &str) -> Result<ConfigurationId, StoreError>
+{
+    let digest = Decode_Digest(rest)?;
+
+    return Ok(ConfigurationId::From_Digest(digest));
+}
+
+/// One member: a path and the digest of what stood at it.
+fn Decode_Member(rest: &str, members: &mut BTreeMap<String, Digest128>) -> Result<(), StoreError>
+{
+    let Some((path, content)) = rest.split_once('\t')
+    else
+    {
+        return Err(StoreError::Malformed(format!(
+            "`{rest}` is not a path and a digest"
+        )));
+    };
+    members.insert(path.to_owned(), Decode_Digest(content)?);
+
+    return Ok(());
+}
+
+/// A field this build does not know.
+fn Unknown_Field(field: &str) -> StoreError
+{
+    return StoreError::Malformed(format!("`{field}` is not a snapshot field"));
 }
 
 /// The base a digest is spelled in.

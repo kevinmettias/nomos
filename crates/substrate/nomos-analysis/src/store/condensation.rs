@@ -219,30 +219,6 @@ impl Tarjan<'_>
         }
     }
 
-    /// Pops the finished top frame named `node`, closes it, and — if a parent frame is still
-    /// open beneath it — folds its lowlink into that parent's.
-    fn Finish_Frame(&mut self, frames: &mut Vec<Frame>, node: Digest128)
-    {
-        frames.pop();
-        self.Finish(node);
-
-        let Some(parent) = frames.last()
-        else
-        {
-            return;
-        };
-        let parent_node = parent.node;
-        let Some(child_low) = self.lowlink.get(&node).copied()
-        else
-        {
-            return;
-        };
-        if let Some(entry) = self.lowlink.get_mut(&parent_node)
-        {
-            *entry = (*entry).min(child_low);
-        }
-    }
-
     /// Advances `frame` past `target`: folds `target`'s lowlink into `frame`'s node if it
     /// is already discovered and still on the SCC stack, or opens it as a new frame for the
     /// caller to push. The part of the original recursive `Visit` that ran once per edge.
@@ -258,6 +234,27 @@ impl Tarjan<'_>
         }
 
         return Some(self.Opened(target));
+    }
+
+    /// Lowers `node`'s lowlink against a back edge to `target`, an already-indexed node —
+    /// only if `target` is still on the SCC stack, meaning it is part of an in-progress
+    /// component rather than a finished, unrelated one.
+    fn Fold_If_On_Stack(&mut self, node: Digest128, target: Digest128)
+    {
+        if !self.on_stack.contains(&target)
+        {
+            return;
+        }
+
+        let Some(target_index) = self.indices.get(&target).copied()
+        else
+        {
+            return;
+        };
+        if let Some(entry) = self.lowlink.get_mut(&node)
+        {
+            *entry = (*entry).min(target_index);
+        }
     }
 
     /// Assigns `node` its index and lowlink, places it on the SCC stack, and reads its edge
@@ -281,24 +278,27 @@ impl Tarjan<'_>
         return Frame { node, targets, next: 0 };
     }
 
-    /// Lowers `node`'s lowlink against a back edge to `target`, an already-indexed node —
-    /// only if `target` is still on the SCC stack, meaning it is part of an in-progress
-    /// component rather than a finished, unrelated one.
-    fn Fold_If_On_Stack(&mut self, node: Digest128, target: Digest128)
+    /// Pops the finished top frame named `node`, closes it, and — if a parent frame is still
+    /// open beneath it — folds its lowlink into that parent's.
+    fn Finish_Frame(&mut self, frames: &mut Vec<Frame>, node: Digest128)
     {
-        if !self.on_stack.contains(&target)
-        {
-            return;
-        }
+        frames.pop();
+        self.Finish(node);
 
-        let Some(target_index) = self.indices.get(&target).copied()
+        let Some(parent) = frames.last()
         else
         {
             return;
         };
-        if let Some(entry) = self.lowlink.get_mut(&node)
+        let parent_node = parent.node;
+        let Some(child_low) = self.lowlink.get(&node).copied()
+        else
         {
-            *entry = (*entry).min(target_index);
+            return;
+        };
+        if let Some(entry) = self.lowlink.get_mut(&parent_node)
+        {
+            *entry = (*entry).min(child_low);
         }
     }
 

@@ -222,6 +222,15 @@ struct Claimant<'a>
     holder: &'a str,
 }
 
+/// Who holds a claim, for a message that has to name somebody either way.
+fn Holder_Of(item: &LedgerItem) -> &str
+{
+    return item
+        .claim
+        .as_ref()
+        .map_or("someone", |claim| return claim.holder.as_str());
+}
+
 /// Two claimants whose territory provably shares `shared_count` subject(s).
 fn Overlap_Message(first: Claimant<'_>, second: Claimant<'_>, shared_count: usize) -> String
 {
@@ -242,13 +251,4 @@ fn Unknown_Message(first: Claimant<'_>, second: Claimant<'_>, reason: &nomos_mod
         second.holder,
         reason.Describe()
     );
-}
-
-/// Who holds a claim, for a message that has to name somebody either way.
-fn Holder_Of(item: &LedgerItem) -> &str
-{
-    return item
-        .claim
-        .as_ref()
-        .map_or("someone", |claim| return claim.holder.as_str());
 }

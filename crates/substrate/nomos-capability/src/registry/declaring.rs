@@ -49,18 +49,6 @@ pub(super) fn Offer(registry: &mut Registry, offer: ProviderOffer) -> Result<(),
     return Ok(());
 }
 
-/// One provider's offer, refused for a named reason.
-fn Refused(capability: &CapabilityId, provider: &ProviderId, refusal: OfferRefusal) -> RegistryError
-{
-    return RegistryError {
-        capability: capability.clone(),
-        kind: RegistryErrorKind::Offer {
-            provider: provider.clone(),
-            refusal,
-        },
-    };
-}
-
 /// An offer against a capability that will not take it.
 ///
 /// The ceiling is checked here rather than at resolution because it is a statement about
@@ -79,4 +67,16 @@ fn Refuse_Unofferable(registry: &Registry, offer: &ProviderOffer) -> Result<(), 
     }
 
     return Ok(());
+}
+
+/// One provider's offer, refused for a named reason.
+fn Refused(capability: &CapabilityId, provider: &ProviderId, refusal: OfferRefusal) -> RegistryError
+{
+    return RegistryError {
+        capability: capability.clone(),
+        kind: RegistryErrorKind::Offer {
+            provider: provider.clone(),
+            refusal,
+        },
+    };
 }

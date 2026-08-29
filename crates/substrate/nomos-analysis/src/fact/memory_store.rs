@@ -174,11 +174,6 @@ impl MemoryFactStore
         return self.Latest(key.Digest()).and_then(|entry| return entry.invalidated_at);
     }
 
-    fn Latest(&self, digest: Digest128) -> Option<&Entry>
-    {
-        return self.entries.get(&digest).and_then(|history| return history.last());
-    }
-
     fn Invalidate_One(&mut self, digest: Digest128, from: GenerationId, cause: &str) -> bool
     {
         let Some(entry) = self.entries.get_mut(&digest).and_then(|history| return history.last_mut())
@@ -209,6 +204,11 @@ impl MemoryFactStore
             .get(&digest)
             .and_then(|history| return history.last())
             .is_some_and(|entry| return entry.invalidated_at.is_some());
+    }
+
+    fn Latest(&self, digest: Digest128) -> Option<&Entry>
+    {
+        return self.entries.get(&digest).and_then(|history| return history.last());
     }
 }
 

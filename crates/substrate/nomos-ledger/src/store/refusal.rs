@@ -86,35 +86,6 @@ pub fn Eligible_Items(document: &LedgerDocument, now: Timestamp) -> Vec<&LedgerI
     return eligible;
 }
 
-/// The refusal a lapsed item earns, if it is one.
-///
-/// One implementation, two callers, for the reason [`Claim_Refusal`] itself is a function:
-/// this predicate now decides both what `claim` refuses with *and* whether
-/// [`FileLedger::Take_Over`] will succeed, and a second copy of it would eventually let a
-/// listing say `lapsed` about an item the takeover then declined.
-///
-/// `now` comes from the caller for the same reason every other judgment here takes it: a
-/// second clock read would decide half of one answer against a different instant.
-fn Lapse_Refusal(target: &LedgerItem, now: Timestamp) -> Option<ClaimRefusal>
-{
-    if target.state != ItemState::Claimed
-    {
-        return None;
-    }
-
-    let claim = target.claim.as_ref()?;
-    if !claim.Has_Lapsed(now)
-    {
-        return None;
-    }
-
-    return Some(ClaimRefusal::Lapsed {
-        item: target.id.clone(),
-        holder: claim.holder.clone(),
-        since: claim.lease_expires_at,
-    });
-}
-
 /// Why an item may not be declined, if it may not.
 ///
 /// Only a `Ready` item can be ended, and the three refusals below are the three ways of not
@@ -173,6 +144,90 @@ fn Held_Or_Unready(target: &LedgerItem) -> Option<ClaimRefusal>
     }
 
     return None;
+}
+
+/// What refuses a takeover of `item` as of `now`, if anything.
+///
+/// The mirror of [`Claim_Refusal`], differing in exactly one clause: a claim needs the item to
+/// be free and this needs it to be lapsed. Everything after that question is the same code,
+/// which is the point — [`Contested_By`] is called and not copied, so a takeover cannot come to
+/// disagree with a claim about whether two territories are independent.
+pub(super) fn Takeover_Refusal(
+    document: &LedgerDocument,
+    item: &ItemId,
+    now: Timestamp,
+) -> Option<ClaimRefusal>
+{
+    let Some(target) = document
+        .items
+        .iter()
+        .find(|candidate| &candidate.id == item)
+    else
+    {
+        return Some(ClaimRefusal::NoSuchItem { item: item.clone() });
+    };
+
+    // A takeover answers a lapse and nothing else. An item with a live claim is a queue, and
+    // everything else is the caller reaching for the wrong verb.
+    if Lapse_Refusal(target, now).is_none()
+    {
+        return Some(Wrong_Verb(target, now));
+    }
+
+    return Contested_By(document, target, now);
+}
+
+/// What to say to a caller that used `takeover` on an item that has not lapsed.
+///
+/// A live claim is [`ClaimRefusal::HeldBy`] — retryable, because the lease running out is what
+/// resolves it, and telling an agent to wait is the honest answer when somebody is working.
+/// Everything else is the state word, so that `takeover` against a `Ready` or `Done` item reads
+/// as the wrong verb rather than as a queue that will never clear.
+fn Wrong_Verb(target: &LedgerItem, now: Timestamp) -> ClaimRefusal
+{
+    if let Some(claim) = &target.claim
+        && !claim.Has_Lapsed(now)
+    {
+        return ClaimRefusal::HeldBy {
+            holder: claim.holder.clone(),
+            until: claim.lease_expires_at,
+            item: target.id.clone(),
+        };
+    }
+
+    return ClaimRefusal::NotClaimable {
+        item: target.id.clone(),
+        state: target.state.Describe(),
+    };
+}
+
+/// The refusal a lapsed item earns, if it is one.
+///
+/// One implementation, two callers, for the reason [`Claim_Refusal`] itself is a function:
+/// this predicate now decides both what `claim` refuses with *and* whether
+/// [`FileLedger::Take_Over`] will succeed, and a second copy of it would eventually let a
+/// listing say `lapsed` about an item the takeover then declined.
+///
+/// `now` comes from the caller for the same reason every other judgment here takes it: a
+/// second clock read would decide half of one answer against a different instant.
+fn Lapse_Refusal(target: &LedgerItem, now: Timestamp) -> Option<ClaimRefusal>
+{
+    if target.state != ItemState::Claimed
+    {
+        return None;
+    }
+
+    let claim = target.claim.as_ref()?;
+    if !claim.Has_Lapsed(now)
+    {
+        return None;
+    }
+
+    return Some(ClaimRefusal::Lapsed {
+        item: target.id.clone(),
+        holder: claim.holder.clone(),
+        since: claim.lease_expires_at,
+    });
 }
 
 /// Everything that refuses an item for a reason outside the item's own state: an unfinished
@@ -273,61 +328,6 @@ fn Refused_By(target: &LedgerItem, other: &LedgerItem) -> Option<ClaimRefusal>
     let overlap = target.territory.Intersect(&other.territory);
 
     return Refusal_From(&overlap, &other.id, &claim.holder, claim.lease_expires_at);
-}
-
-/// What refuses a takeover of `item` as of `now`, if anything.
-///
-/// The mirror of [`Claim_Refusal`], differing in exactly one clause: a claim needs the item to
-/// be free and this needs it to be lapsed. Everything after that question is the same code,
-/// which is the point — [`Contested_By`] is called and not copied, so a takeover cannot come to
-/// disagree with a claim about whether two territories are independent.
-pub(super) fn Takeover_Refusal(
-    document: &LedgerDocument,
-    item: &ItemId,
-    now: Timestamp,
-) -> Option<ClaimRefusal>
-{
-    let Some(target) = document
-        .items
-        .iter()
-        .find(|candidate| &candidate.id == item)
-    else
-    {
-        return Some(ClaimRefusal::NoSuchItem { item: item.clone() });
-    };
-
-    // A takeover answers a lapse and nothing else. An item with a live claim is a queue, and
-    // everything else is the caller reaching for the wrong verb.
-    if Lapse_Refusal(target, now).is_none()
-    {
-        return Some(Wrong_Verb(target, now));
-    }
-
-    return Contested_By(document, target, now);
-}
-
-/// What to say to a caller that used `takeover` on an item that has not lapsed.
-///
-/// A live claim is [`ClaimRefusal::HeldBy`] — retryable, because the lease running out is what
-/// resolves it, and telling an agent to wait is the honest answer when somebody is working.
-/// Everything else is the state word, so that `takeover` against a `Ready` or `Done` item reads
-/// as the wrong verb rather than as a queue that will never clear.
-fn Wrong_Verb(target: &LedgerItem, now: Timestamp) -> ClaimRefusal
-{
-    if let Some(claim) = &target.claim
-        && !claim.Has_Lapsed(now)
-    {
-        return ClaimRefusal::HeldBy {
-            holder: claim.holder.clone(),
-            until: claim.lease_expires_at,
-            item: target.id.clone(),
-        };
-    }
-
-    return ClaimRefusal::NotClaimable {
-        item: target.id.clone(),
-        state: target.state.Describe(),
-    };
 }
 
 /// A store failure, reported as itself rather than as a missing item.

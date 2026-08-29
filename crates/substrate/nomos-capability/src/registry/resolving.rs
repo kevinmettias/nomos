@@ -51,6 +51,31 @@ pub(super) fn Resolve(registry: &Registry, requirement: &Requirement) -> Resolut
     };
 }
 
+/// Whether the answer came from the provider the caller asked for.
+///
+/// A named preference that was not honoured is what makes this a fallback. The judgment
+/// still stands; its provenance is not what was asked for, and a caller that cannot tell
+/// cannot record why.
+///
+/// Compared against who actually answered rather than against a second search for the
+/// preference, because those are the same question and asking it twice is how the two
+/// answers come to disagree.
+fn Honoured(requirement: &Requirement, selection: &Selection) -> Applicability
+{
+    let Some(preferred) = &requirement.preferred
+    else
+    {
+        return Applicability::Supported;
+    };
+
+    if *preferred == selection.chosen.provider
+    {
+        return Applicability::Supported;
+    }
+
+    return Applicability::SupportedWithFallback;
+}
+
 /// The body of [`Registry::Resolve_Requiring`].
 ///
 /// `Resolve` treats a name as a preference: an answer from anybody else still satisfies
@@ -85,6 +110,35 @@ pub(super) fn Resolve_Requiring(
     };
 
     return Settle_Required(requirement, required, selection);
+}
+
+/// `requirement`, with its preference pinned to `required` — `Resolve_Requiring`'s way of
+/// reusing `Selected`'s own ranking rather than searching a second time.
+fn Scoped_To(requirement: &Requirement, required: &ProviderId) -> Requirement
+{
+    return Requirement {
+        preferred: Some(required.clone()),
+        ..requirement.clone()
+    };
+}
+
+/// Whether `selection` answered from `required` itself, or from somebody else — the
+/// distinction `Resolve_Requiring` exists to draw once `Selected` has already ranked the
+/// offers.
+fn Settle_Required(requirement: &Requirement, required: &ProviderId, selection: Selection) -> RequiredResolution
+{
+    if &selection.chosen.provider == required
+    {
+        return RequiredResolution::Satisfied { selection };
+    }
+
+    return RequiredResolution::Unsatisfied {
+        capability: requirement.capability.clone(),
+        reason: RequiredUnmet::AnsweredByOther {
+            required: required.clone(),
+            answered: selection.chosen.provider.clone(),
+        },
+    };
 }
 
 /// Which offer answers, or which of the four things was missing.
@@ -174,58 +228,4 @@ fn Usable(offers: &[ProviderOffer], requirement: &Requirement) -> Vec<ProviderOf
         })
         .cloned()
         .collect();
-}
-
-/// Whether the answer came from the provider the caller asked for.
-///
-/// A named preference that was not honoured is what makes this a fallback. The judgment
-/// still stands; its provenance is not what was asked for, and a caller that cannot tell
-/// cannot record why.
-///
-/// Compared against who actually answered rather than against a second search for the
-/// preference, because those are the same question and asking it twice is how the two
-/// answers come to disagree.
-fn Honoured(requirement: &Requirement, selection: &Selection) -> Applicability
-{
-    let Some(preferred) = &requirement.preferred
-    else
-    {
-        return Applicability::Supported;
-    };
-
-    if *preferred == selection.chosen.provider
-    {
-        return Applicability::Supported;
-    }
-
-    return Applicability::SupportedWithFallback;
-}
-
-/// `requirement`, with its preference pinned to `required` — `Resolve_Requiring`'s way of
-/// reusing `Selected`'s own ranking rather than searching a second time.
-fn Scoped_To(requirement: &Requirement, required: &ProviderId) -> Requirement
-{
-    return Requirement {
-        preferred: Some(required.clone()),
-        ..requirement.clone()
-    };
-}
-
-/// Whether `selection` answered from `required` itself, or from somebody else — the
-/// distinction `Resolve_Requiring` exists to draw once `Selected` has already ranked the
-/// offers.
-fn Settle_Required(requirement: &Requirement, required: &ProviderId, selection: Selection) -> RequiredResolution
-{
-    if &selection.chosen.provider == required
-    {
-        return RequiredResolution::Satisfied { selection };
-    }
-
-    return RequiredResolution::Unsatisfied {
-        capability: requirement.capability.clone(),
-        reason: RequiredUnmet::AnsweredByOther {
-            required: required.clone(),
-            answered: selection.chosen.provider.clone(),
-        },
-    };
 }

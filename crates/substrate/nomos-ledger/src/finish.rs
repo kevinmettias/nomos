@@ -96,6 +96,22 @@ struct PredicateRun<'a>
     runner: Runner<'a>,
 }
 
+/// The ledger as it stands, or the reason it could not be read.
+///
+/// A ledger that will not load is `NotRecorded` rather than `NotHeld`: nothing was found
+/// out about the claim, and reporting it as unheld would send the author to re-claim an
+/// item they may well still hold.
+fn Loaded<F: FileSystem, C: Clock, L: CrossProcessLock>(
+    ledger: &FileLedger<F, C, L>,
+) -> Result<LedgerDocument, FinishRefusal>
+{
+    return ledger.Load().map_err(|error| {
+        return FinishRefusal::NotRecorded {
+            cause: error.to_string(),
+        };
+    });
+}
+
 /// Runs the gate's step, then the item's own predicate, refusing on either's failure.
 ///
 /// The gate's own step runs first and short-circuits: an author told "your tests passed"
@@ -116,44 +132,12 @@ fn Verify_Predicate<F: FileSystem, C: Clock, L: CrossProcessLock>(
     return Ok((gate, ran));
 }
 
-/// The ledger as it stands, or the reason it could not be read.
-///
-/// A ledger that will not load is `NotRecorded` rather than `NotHeld`: nothing was found
-/// out about the claim, and reporting it as unheld would send the author to re-claim an
-/// item they may well still hold.
-fn Loaded<F: FileSystem, C: Clock, L: CrossProcessLock>(
-    ledger: &FileLedger<F, C, L>,
-) -> Result<LedgerDocument, FinishRefusal>
-{
-    return ledger.Load().map_err(|error| {
-        return FinishRefusal::NotRecorded {
-            cause: error.to_string(),
-        };
-    });
-}
-
 /// When, and against which tree revision, a predicate was verified — grouped so
 /// [`Verified`] stays under this crate's own parameter-count ceiling.
 struct RecordContext
 {
     at: Timestamp,
     revision: Option<String>,
-}
-
-/// The record a passing predicate leaves behind.
-///
-/// It carries the gate's outcome as well as its own, because "this item was verified" is
-/// only true of a tree the gate also accepted.
-fn Verified(argv: &[String], ran: &Ran, gate: GateOutcome, context: RecordContext) -> VerificationRecord
-{
-    return VerificationRecord {
-        argv: argv.to_vec(),
-        exit_code: ran.code,
-        output_tail: ran.tail.clone(),
-        verified_at: context.at,
-        gate: Some(gate),
-        revision: context.revision,
-    };
 }
 
 /// The tree's current revision, read directly rather than shelled out to `git`.
@@ -181,4 +165,20 @@ fn Current_Revision<F: FileSystem, C: Clock, L: CrossProcessLock>(
     }
 
     return Some(head.to_owned());
+}
+
+/// The record a passing predicate leaves behind.
+///
+/// It carries the gate's outcome as well as its own, because "this item was verified" is
+/// only true of a tree the gate also accepted.
+fn Verified(argv: &[String], ran: &Ran, gate: GateOutcome, context: RecordContext) -> VerificationRecord
+{
+    return VerificationRecord {
+        argv: argv.to_vec(),
+        exit_code: ran.code,
+        output_tail: ran.tail.clone(),
+        verified_at: context.at,
+        gate: Some(gate),
+        revision: context.revision,
+    };
 }
