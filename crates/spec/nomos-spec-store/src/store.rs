@@ -63,58 +63,6 @@ impl SpecificationStore
         return Self::From_Connection(Connection::open_in_memory()?);
     }
 
-    fn From_Connection(connection: Connection) -> Result<Self, StoreError>
-    {
-        connection.pragma_update(None, "foreign_keys", "ON")?;
-        let mut store = Self { connection };
-        store.Migrate()?;
-        return Ok(store);
-    }
-
-    fn Migrate(&mut self) -> Result<(), StoreError>
-    {
-        let current: u32 = self
-            .connection
-            .pragma_query_value(None, "user_version", |row| row.get(0))?;
-
-        if current > Latest_Version()
-        {
-            return Err(StoreError::TooNew {
-                found: current,
-                supported: Latest_Version(),
-            });
-        }
-
-        for migration in MIGRATIONS.iter().filter(|m| m.version > current)
-        {
-            self.Apply(migration, current)?;
-        }
-
-        return Ok(());
-    }
-
-    /// One migration, in a transaction of its own, stamping the version it reached.
-    ///
-    /// The version is written inside the transaction that ran the statements, so a store
-    /// cannot come back claiming a version whose statements did not commit.
-    fn Apply(&mut self, migration: &Migration, from: u32) -> Result<(), StoreError>
-    {
-        let transaction = self.connection.transaction()?;
-
-        for statement in migration.statements
-        {
-            transaction
-                .execute_batch(statement)
-                .map_err(|error| StoreError::Migration {
-                    from,
-                    cause: format!("{}: {error}", migration.name),
-                })?;
-        }
-        transaction.pragma_update(None, "user_version", migration.version)?;
-
-        return Ok(transaction.commit()?);
-    }
-
     #[must_use]
     pub fn Version(&self) -> u32
     {
@@ -185,6 +133,58 @@ impl SpecificationStore
         transaction.commit()?;
 
         return Ok(written);
+    }
+
+    fn From_Connection(connection: Connection) -> Result<Self, StoreError>
+    {
+        connection.pragma_update(None, "foreign_keys", "ON")?;
+        let mut store = Self { connection };
+        store.Migrate()?;
+        return Ok(store);
+    }
+
+    fn Migrate(&mut self) -> Result<(), StoreError>
+    {
+        let current: u32 = self
+            .connection
+            .pragma_query_value(None, "user_version", |row| row.get(0))?;
+
+        if current > Latest_Version()
+        {
+            return Err(StoreError::TooNew {
+                found: current,
+                supported: Latest_Version(),
+            });
+        }
+
+        for migration in MIGRATIONS.iter().filter(|m| m.version > current)
+        {
+            self.Apply(migration, current)?;
+        }
+
+        return Ok(());
+    }
+
+    /// One migration, in a transaction of its own, stamping the version it reached.
+    ///
+    /// The version is written inside the transaction that ran the statements, so a store
+    /// cannot come back claiming a version whose statements did not commit.
+    fn Apply(&mut self, migration: &Migration, from: u32) -> Result<(), StoreError>
+    {
+        let transaction = self.connection.transaction()?;
+
+        for statement in migration.statements
+        {
+            transaction
+                .execute_batch(statement)
+                .map_err(|error| StoreError::Migration {
+                    from,
+                    cause: format!("{}: {error}", migration.name),
+                })?;
+        }
+        transaction.pragma_update(None, "user_version", migration.version)?;
+
+        return Ok(transaction.commit()?);
     }
 
 }

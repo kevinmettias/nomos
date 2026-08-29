@@ -97,6 +97,22 @@ fn Assert_Same_Schema(store: &SpecificationStore, bundle: &Bundle) -> Result<(),
     return Ok(());
 }
 
+/// How many rows each table held before the import.
+///
+/// Taken rather than assumed zero. Once a store may already hold content, "the table is
+/// empty afterwards" and "the import placed nothing" stopped being the same sentence, and
+/// the completeness guard below is only a guard if it measures the difference.
+fn Census(store: &SpecificationStore) -> Result<BTreeMap<&'static str, u32>, BundleError>
+{
+    let mut census: BTreeMap<&'static str, u32> = BTreeMap::new();
+    for table in Table::All()
+    {
+        census.insert(table.Name(), store.Count(*table)?);
+    }
+
+    return Ok(census);
+}
+
 /// Everything the bundle carries, in one transaction, and the guard that all of it landed.
 fn Insert_All(
     transaction: &Transaction<'_>,
@@ -166,22 +182,6 @@ fn Insert_Submission_Rows(
     return Insert_Submission_Gaps(transaction, bundle);
 }
 
-/// How many rows each table held before the import.
-///
-/// Taken rather than assumed zero. Once a store may already hold content, "the table is
-/// empty afterwards" and "the import placed nothing" stopped being the same sentence, and
-/// the completeness guard below is only a guard if it measures the difference.
-fn Census(store: &SpecificationStore) -> Result<BTreeMap<&'static str, u32>, BundleError>
-{
-    let mut census: BTreeMap<&'static str, u32> = BTreeMap::new();
-    for table in Table::All()
-    {
-        census.insert(table.Name(), store.Count(*table)?);
-    }
-
-    return Ok(census);
-}
-
 /// The import placed exactly what the bundle said it would.
 ///
 /// The mirror of the exporter's completeness guard: an insert that collapsed rows, or a
@@ -214,32 +214,6 @@ fn Assert_Landed(
     return Ok(());
 }
 
-/// How many rows this import added to one table.
-fn Added(
-    after: &BTreeMap<&'static str, u32>,
-    before: &BTreeMap<&'static str, u32>,
-    table: &'static str,
-) -> u32
-{
-    let now = after.get(table).copied().unwrap_or(0);
-
-    return now.saturating_sub(before.get(table).copied().unwrap_or(0));
-}
-
-/// Every table's tally in one statement.
-///
-/// Every arm is a `&'static str` the table itself carries, joined rather than assembled: no
-/// value is woven into the statement text at any point, so there is nothing here for a caller
-/// to reach.
-fn Tally_Statement() -> String
-{
-    return Table::All()
-        .iter()
-        .map(|table| return table.Tally_Sql())
-        .collect::<Vec<&'static str>>()
-        .join(" UNION ALL ");
-}
-
 /// Every table's row count, in one crossing rather than one per table.
 ///
 /// The counts are compared against the manifest afterwards, in memory. Asking each table
@@ -264,6 +238,32 @@ fn Landed_Counts(transaction: &Transaction<'_>) -> Result<BTreeMap<&'static str,
     }
 
     return Ok(counts);
+}
+
+/// Every table's tally in one statement.
+///
+/// Every arm is a `&'static str` the table itself carries, joined rather than assembled: no
+/// value is woven into the statement text at any point, so there is nothing here for a caller
+/// to reach.
+fn Tally_Statement() -> String
+{
+    return Table::All()
+        .iter()
+        .map(|table| return table.Tally_Sql())
+        .collect::<Vec<&'static str>>()
+        .join(" UNION ALL ");
+}
+
+/// How many rows this import added to one table.
+fn Added(
+    after: &BTreeMap<&'static str, u32>,
+    before: &BTreeMap<&'static str, u32>,
+    table: &'static str,
+) -> u32
+{
+    let now = after.get(table).copied().unwrap_or(0);
+
+    return now.saturating_sub(before.get(table).copied().unwrap_or(0));
 }
 
 /// Prepares one insert and offers every record the bundle carries to it.

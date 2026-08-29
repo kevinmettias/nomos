@@ -180,15 +180,6 @@ fn Edited(recorded: &Stamp, found: &str) -> Option<(String, String)>
 /// and the profile, and both digests have just been found to match the rebuild, so an honest
 /// stamp guarantees these bytes are equal: reaching here means the pair was written by
 /// something other than `Build`.
-/// Whether another verdict already accounts for these bytes.
-///
-/// A stale pair and an edited one both differ from the rebuild too, so divergence is only
-/// the answer once neither of those is what happened and the bytes still match.
-fn Already_Explained(freshness: &Freshness, body: &str, rebuilt: &Output) -> bool
-{
-    return freshness.stale.is_some() || freshness.edited.is_some() || body == rebuilt.body;
-}
-
 fn Diverged(
     freshness: &Freshness,
     body: &str,
@@ -202,4 +193,13 @@ fn Diverged(
     }
 
     return Some((found, rebuilt.stamp.content_digest));
+}
+
+/// Whether another verdict already accounts for these bytes.
+///
+/// A stale pair and an edited one both differ from the rebuild too, so divergence is only
+/// the answer once neither of those is what happened and the bytes still match.
+fn Already_Explained(freshness: &Freshness, body: &str, rebuilt: &Output) -> bool
+{
+    return freshness.stale.is_some() || freshness.edited.is_some() || body == rebuilt.body;
 }

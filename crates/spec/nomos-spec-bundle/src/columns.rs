@@ -51,6 +51,25 @@ pub(crate) fn Assert_Columns_Covered(
     return Ok(());
 }
 
+fn Schema_Columns(connection: &Connection, table: &str) -> Result<Vec<String>, BundleError>
+{
+    // `table` comes from `Table::All()`, which is an enum, so this is not a hole through
+    // which arbitrary SQL reaches the database.
+    let mut statement = connection.prepare(&format!("PRAGMA table_info({table})"))?;
+    let names = statement
+        .query_map([], |row| return row.get::<_, String>(1))?
+        .collect::<Result<Vec<String>, _>>()?;
+
+    if names.is_empty()
+    {
+        return Err(BundleError::Malformed(format!(
+            "the store has no table named {table}, so its columns cannot be checked"
+        )));
+    }
+
+    return Ok(names);
+}
+
 /// Both directions. A missing declaration is a column nobody exports; a stale one is a
 /// declaration that stopped describing anything and would go on satisfying the guard.
 fn Compare(
@@ -134,6 +153,21 @@ fn Assert_Fields_Exist(
     return Ok(());
 }
 
+fn Fields(record: &Record) -> Result<BTreeSet<String>, BundleError>
+{
+    let value = serde_json::to_value(record)?;
+    let Some(serde_json::Value::Object(payload)) = value.get("record")
+    else
+    {
+        return Err(BundleError::Malformed(format!(
+            "a {} record does not serialize as a payload object",
+            record.Table()
+        )));
+    };
+
+    return Ok(payload.keys().cloned().collect());
+}
+
 /// One declared column, and the field the record has to have for it.
 fn Assert_The_Field_Is_Carried(
     table: TableName<'_>,
@@ -160,38 +194,4 @@ fn Assert_The_Field_Is_Carried(
         column: column.to_owned(),
         field: (*field).to_owned(),
     });
-}
-
-fn Fields(record: &Record) -> Result<BTreeSet<String>, BundleError>
-{
-    let value = serde_json::to_value(record)?;
-    let Some(serde_json::Value::Object(payload)) = value.get("record")
-    else
-    {
-        return Err(BundleError::Malformed(format!(
-            "a {} record does not serialize as a payload object",
-            record.Table()
-        )));
-    };
-
-    return Ok(payload.keys().cloned().collect());
-}
-
-fn Schema_Columns(connection: &Connection, table: &str) -> Result<Vec<String>, BundleError>
-{
-    // `table` comes from `Table::All()`, which is an enum, so this is not a hole through
-    // which arbitrary SQL reaches the database.
-    let mut statement = connection.prepare(&format!("PRAGMA table_info({table})"))?;
-    let names = statement
-        .query_map([], |row| return row.get::<_, String>(1))?
-        .collect::<Result<Vec<String>, _>>()?;
-
-    if names.is_empty()
-    {
-        return Err(BundleError::Malformed(format!(
-            "the store has no table named {table}, so its columns cannot be checked"
-        )));
-    }
-
-    return Ok(names);
 }

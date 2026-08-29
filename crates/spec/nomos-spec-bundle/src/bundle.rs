@@ -69,18 +69,6 @@ impl Bundle
             .collect();
     }
 
-    /// Everything the manifest's digest is taken over: the header and every record.
-    fn Covered_Text(header: &Header, records: &[Record]) -> Result<String, BundleError>
-    {
-        let mut covered = Self::Line_Text(&Line::Header(header.clone()))?;
-        for record in records
-        {
-            covered.push_str(&Self::Line_Text(&Line::Record(record.clone()))?);
-        }
-
-        return Ok(covered);
-    }
-
     #[must_use]
     pub const fn Header(&self) -> &Header
     {
@@ -259,19 +247,6 @@ impl Bundle
         return Ok(());
     }
 
-    /// How many records of each table the bundle actually carries.
-    fn Counts_Present(records: &[Record]) -> BTreeMap<&str, u32>
-    {
-        let mut present: BTreeMap<&str, u32> = BTreeMap::new();
-        for record in records
-        {
-            let counter = present.entry(record.Table()).or_insert(0);
-            *counter = counter.saturating_add(1);
-        }
-
-        return present;
-    }
-
     /// A table the manifest declares a count for that the records do not meet.
     fn Assert_Every_Declared_Count_Is_Met(&self, present: &BTreeMap<&str, u32>)
         -> Result<(), BundleError>
@@ -310,6 +285,31 @@ impl Bundle
             declared: 0,
             present: *found,
         });
+    }
+
+    /// Everything the manifest's digest is taken over: the header and every record.
+    fn Covered_Text(header: &Header, records: &[Record]) -> Result<String, BundleError>
+    {
+        let mut covered = Self::Line_Text(&Line::Header(header.clone()))?;
+        for record in records
+        {
+            covered.push_str(&Self::Line_Text(&Line::Record(record.clone()))?);
+        }
+
+        return Ok(covered);
+    }
+
+    /// How many records of each table the bundle actually carries.
+    fn Counts_Present(records: &[Record]) -> BTreeMap<&str, u32>
+    {
+        let mut present: BTreeMap<&str, u32> = BTreeMap::new();
+        for record in records
+        {
+            let counter = present.entry(record.Table()).or_insert(0);
+            *counter = counter.saturating_add(1);
+        }
+
+        return present;
     }
 
     fn Line_Text(line: &Line) -> Result<String, BundleError>

@@ -111,6 +111,21 @@ fn Render_Identity(text: &mut String, front_matter: &RecordFrontMatter) -> Resul
     return Ok(());
 }
 
+/// A front matter key, kept distinct from [`Value`] so [`Scalar`]'s two positions cannot be
+/// swapped at a call site.
+struct Field<'a>(&'a str);
+
+/// A front matter scalar's value, kept distinct from [`Field`] for the same reason.
+struct Value<'a>(&'a str);
+
+fn Scalar(field: Field<'_>, value: Value<'_>) -> Result<String, RenderError>
+{
+    let field = field.0;
+    let value = value.0;
+
+    return Ok(format!("{field}: {}\n", Plain(field, value)?));
+}
+
 /// The tag sequence, omitted entirely when there is none.
 fn Render_Tags(text: &mut String, tags: &[String]) -> Result<(), RenderError>
 {
@@ -184,21 +199,6 @@ pub fn Round_Trips(markdown: &str) -> bool
 
     return Render_Record(&record.front_matter, &Segment(&record.body))
         .is_ok_and(|rendered| return rendered == markdown);
-}
-
-/// A front matter key, kept distinct from [`Value`] so [`Scalar`]'s two positions cannot be
-/// swapped at a call site.
-struct Field<'a>(&'a str);
-
-/// A front matter scalar's value, kept distinct from [`Field`] for the same reason.
-struct Value<'a>(&'a str);
-
-fn Scalar(field: Field<'_>, value: Value<'_>) -> Result<String, RenderError>
-{
-    let field = field.0;
-    let value = value.0;
-
-    return Ok(format!("{field}: {}\n", Plain(field, value)?));
 }
 
 /// A scalar that means the same thing after being written plainly and read back.

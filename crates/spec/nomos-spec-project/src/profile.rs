@@ -45,20 +45,6 @@ impl Profile
         return Path_Is_Relative(ProfileName(&self.id), OutputPath(&self.output));
     }
 
-    /// A profile has to say what it is and what it renders as a heading.
-    fn Named(&self) -> Result<(), ProjectError>
-    {
-        if !Is_Blank(&self.id) && !Is_Blank(&self.title)
-        {
-            return Ok(());
-        }
-
-        return Err(ProjectError::Malformed(format!(
-            "a profile needs an identifier and a title; {:?} has {:?}",
-            self.id, self.title
-        )));
-    }
-
     /// Every section is present and titled.
     ///
     /// A profile with no section at all renders a title and nothing under it, and a section
@@ -157,6 +143,20 @@ impl Profile
         }
 
         return resolved;
+    }
+
+    /// A profile has to say what it is and what it renders as a heading.
+    fn Named(&self) -> Result<(), ProjectError>
+    {
+        if !Is_Blank(&self.id) && !Is_Blank(&self.title)
+        {
+            return Ok(());
+        }
+
+        return Err(ProjectError::Malformed(format!(
+            "a profile needs an identifier and a title; {:?} has {:?}",
+            self.id, self.title
+        )));
     }
 }
 

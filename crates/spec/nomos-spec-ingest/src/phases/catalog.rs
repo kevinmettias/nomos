@@ -40,22 +40,6 @@ pub(super) fn Record_Aliases(
     return Ok(());
 }
 
-/// I3 — the node graph.
-///
-/// The authority a catalog entity claims, or the word for claiming none.
-///
-/// An empty string in the catalog is an entity that said nothing about who decided it, and
-/// storing that as an empty authority would read as an authority nobody has named yet.
-fn Stated_Authority(entity: &CatalogEntity) -> &str
-{
-    if entity.authority.is_empty()
-    {
-        return "unstated";
-    }
-
-    return &entity.authority;
-}
-
 /// # Errors
 ///
 /// Returns [`IngestError`] on any store failure.
@@ -81,4 +65,20 @@ pub fn Ingest_Catalog(
     }
 
     return Ok(report);
+}
+
+/// I3 — the node graph.
+///
+/// The authority a catalog entity claims, or the word for claiming none.
+///
+/// An empty string in the catalog is an entity that said nothing about who decided it, and
+/// storing that as an empty authority would read as an authority nobody has named yet.
+fn Stated_Authority(entity: &CatalogEntity) -> &str
+{
+    if entity.authority.is_empty()
+    {
+        return "unstated";
+    }
+
+    return &entity.authority;
 }

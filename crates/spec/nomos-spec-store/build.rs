@@ -68,13 +68,6 @@ fn Cargo_Variable(name: &str) -> Result<String, String>
     });
 }
 
-/// One generated table, written where `governing.rs` will `include!` it.
-fn Written(path: &Path, table: &str) -> Result<(), String>
-{
-    return std::fs::write(path, table)
-        .map_err(|error| return format!("{} must be writable: {error}", path.display()));
-}
-
 /// `crates/spec/nomos-spec-store` -> the repository.
 ///
 /// Used only to check that a named record is on disk and to spell the `include_str!`
@@ -128,14 +121,11 @@ fn Identifier_Table(registrations: &[Registration]) -> Result<String, String>
     return Ok(table);
 }
 
-/// A `fmt::Error` from a `String` sink, said out loud rather than unwound past.
-///
-/// `String`'s `fmt::Write` does not fail, so this is a `Result` the trait requires and not
-/// a condition. It is still returned: a boundary nobody can reach is cheaper to propagate
-/// than to argue about at every site.
-fn Unwritable(error: core::fmt::Error) -> String
+/// One generated table, written where `governing.rs` will `include!` it.
+fn Written(path: &Path, table: &str) -> Result<(), String>
 {
-    return format!("the generated table could not be assembled: {error}");
+    return std::fs::write(path, table)
+        .map_err(|error| return format!("{} must be writable: {error}", path.display()));
 }
 
 /// The initializer for `RECORDS`.
@@ -189,4 +179,14 @@ fn Rerun_Triggers(directory: &Path, root: &Path, registrations: &[Registration])
         println!("cargo::rerun-if-changed={}", file.display());
         println!("cargo::rerun-if-changed={}", Absolute(root, &registration.path));
     }
+}
+
+/// A `fmt::Error` from a `String` sink, said out loud rather than unwound past.
+///
+/// `String`'s `fmt::Write` does not fail, so this is a `Result` the trait requires and not
+/// a condition. It is still returned: a boundary nobody can reach is cheaper to propagate
+/// than to argue about at every site.
+fn Unwritable(error: core::fmt::Error) -> String
+{
+    return format!("the generated table could not be assembled: {error}");
 }

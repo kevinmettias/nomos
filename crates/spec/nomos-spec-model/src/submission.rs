@@ -111,18 +111,6 @@ pub fn Validate(submission: &Submission) -> Vec<Failure>
     return failures;
 }
 
-/// Whether this field's requiredness turns on state rather than on kind.
-///
-/// Exactly one field does, and `OD-SPEC-010` says so in as many words: `evidence` is required
-/// for an accepted result and not for a draft one, because evidence is the thing acceptance is
-/// acceptance *of*. It stays in [`SubmissionKind::Required_Fields`] because it is still a field
-/// of its kind — the origin rule below reads that list and must see it — and the completeness
-/// check skips it in `draft`, which is the whole of what rule 5 asks for.
-fn Is_Conditional_On_State(kind: SubmissionKind, field: &str) -> bool
-{
-    return matches!(kind, SubmissionKind::FeatureResult) && field == "evidence";
-}
-
 /// Every required field carries a value.
 ///
 /// A required field is satisfied by content or by an explicit statement that there is none,
@@ -152,6 +140,18 @@ fn Check_Required_Fields(submission: &Submission, failures: &mut Vec<Failure>)
             });
         }
     }
+}
+
+/// Whether this field's requiredness turns on state rather than on kind.
+///
+/// Exactly one field does, and `OD-SPEC-010` says so in as many words: `evidence` is required
+/// for an accepted result and not for a draft one, because evidence is the thing acceptance is
+/// acceptance *of*. It stays in [`SubmissionKind::Required_Fields`] because it is still a field
+/// of its kind — the origin rule below reads that list and must see it — and the completeness
+/// check skips it in `draft`, which is the whole of what rule 5 asks for.
+fn Is_Conditional_On_State(kind: SubmissionKind, field: &str) -> bool
+{
+    return matches!(kind, SubmissionKind::FeatureResult) && field == "evidence";
 }
 
 /// `alternatives` carries at least two entries and `selected` names one of them.
@@ -293,6 +293,12 @@ fn Check_Acceptance(submission: &Submission, failures: &mut Vec<Failure>)
     Check_No_Blocking_Gap_Is_Open(submission, failures);
 }
 
+/// Whether an accepted submission still has no evidence recorded against it.
+fn Lacks_Evidence(submission: &Submission) -> bool
+{
+    return submission.Current("evidence").is_none();
+}
+
 /// A system that accepts its own inferences accepts them as what somebody wanted.
 fn Check_Nothing_Required_Was_Inferred(submission: &Submission, failures: &mut Vec<Failure>)
 {
@@ -346,12 +352,6 @@ fn Check_No_Blocking_Gap_Is_Open(submission: &Submission, failures: &mut Vec<Fai
             ),
         });
     }
-}
-
-/// Whether an accepted submission still has no evidence recorded against it.
-fn Lacks_Evidence(submission: &Submission) -> bool
-{
-    return submission.Current("evidence").is_none();
 }
 
 /// The entries of a multi-entry value: its non-empty lines.

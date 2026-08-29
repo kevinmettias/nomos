@@ -258,6 +258,48 @@ impl SpecificationStore
         return Collected(rows);
     }
 
+    /// What became of each normative statement recorded against this record.
+    pub(crate) fn Statement_Movements(
+        &self,
+        node_id: &str,
+        before: &[SourceBlock],
+        after: &[SourceBlock],
+    ) -> Result<Vec<NormativeMovement>, StoreError>
+    {
+        use difference::Located;
+
+        let mut movements = Vec::new();
+        for (statement_id, canonical_text, canonical_hash) in self.Recorded_Statements(node_id)?
+        {
+            movements.push(NormativeMovement {
+                statement_id,
+                canonical_hash,
+                outcome: Located(&canonical_text, before, after),
+            });
+        }
+
+        return Ok(movements);
+    }
+
+    /// Every normative statement recorded against a record: its identifier, its canonical
+    /// text, and what that text hashes to.
+    fn Recorded_Statements(&self, node_id: &str) -> Result<Vec<Recorded>, StoreError>
+    {
+        let mut statement = self.Connection().prepare(
+            "SELECT s.statement_id, s.canonical_text, s.canonical_hash
+             FROM normative_statements s
+             JOIN nodes n ON n.uid = s.node_uid
+             WHERE n.node_id = ?1
+             ORDER BY s.statement_id",
+        )?;
+        let rows = statement.query_map(params![node_id], |row| {
+            let mut columns = Columns::Of(row);
+            return Ok((columns.Next()?, columns.Next()?, columns.Next()?));
+        })?;
+
+        return Collected(rows);
+    }
+
     /// The one document behind an identifier, or why there is not exactly one.
     fn Sole_Document(
         &self,
@@ -316,48 +358,6 @@ impl SpecificationStore
             source_hash: document.content_hash.clone(),
             markdown,
         });
-    }
-
-    /// What became of each normative statement recorded against this record.
-    pub(crate) fn Statement_Movements(
-        &self,
-        node_id: &str,
-        before: &[SourceBlock],
-        after: &[SourceBlock],
-    ) -> Result<Vec<NormativeMovement>, StoreError>
-    {
-        use difference::Located;
-
-        let mut movements = Vec::new();
-        for (statement_id, canonical_text, canonical_hash) in self.Recorded_Statements(node_id)?
-        {
-            movements.push(NormativeMovement {
-                statement_id,
-                canonical_hash,
-                outcome: Located(&canonical_text, before, after),
-            });
-        }
-
-        return Ok(movements);
-    }
-
-    /// Every normative statement recorded against a record: its identifier, its canonical
-    /// text, and what that text hashes to.
-    fn Recorded_Statements(&self, node_id: &str) -> Result<Vec<Recorded>, StoreError>
-    {
-        let mut statement = self.Connection().prepare(
-            "SELECT s.statement_id, s.canonical_text, s.canonical_hash
-             FROM normative_statements s
-             JOIN nodes n ON n.uid = s.node_uid
-             WHERE n.node_id = ?1
-             ORDER BY s.statement_id",
-        )?;
-        let rows = statement.query_map(params![node_id], |row| {
-            let mut columns = Columns::Of(row);
-            return Ok((columns.Next()?, columns.Next()?, columns.Next()?));
-        })?;
-
-        return Collected(rows);
     }
 }
 

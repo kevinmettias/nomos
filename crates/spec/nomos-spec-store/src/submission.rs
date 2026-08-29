@@ -98,25 +98,6 @@ fn Assert_No_Refusals(store: &SpecificationStore, submission: &Submission) -> Re
     return Ok(());
 }
 
-/// The submission's own node, and its row — with its values and gaps — under a caller's
-/// transaction.
-fn Persist_Submission(store: &mut SpecificationStore, submission: &Submission) -> Result<i64, StoreError>
-{
-    use crate::NodeRow;
-
-    let node_uid = store.Upsert_Node(NodeRow {
-        node_id: &submission.id,
-        kind: submission.kind.Label(),
-        authority: crate::store::AUTHORED,
-        representation: "structured",
-        title: Title_Of(submission),
-    })?;
-
-    return store.In_Transaction(|transaction| {
-        return Write_Submission(transaction, node_uid, submission);
-    });
-}
-
 /// Every rule this submission fails: the ones about its shape and the ones about what it
 /// cites, gathered so a refusal names all of them at once.
 fn Refusals(
@@ -130,18 +111,6 @@ fn Refusals(
     failures.extend(unresolved);
 
     return Ok(failures);
-}
-
-/// The title a submission is filed under.
-///
-/// `title` is a `submission_values` row rather than a column, because somebody may rewrite it.
-/// `nodes.title` is the current reading of it, which is what every reader of the graph wants;
-/// the sequence is what the request preserves.
-fn Title_Of(submission: &Submission) -> &str
-{
-    return submission
-        .Current("title")
-        .map_or("", |value| return value.value.as_str());
 }
 
 /// Rule 4: `implements` resolves to an accepted design, and `answers` to an accepted request.
@@ -239,16 +208,6 @@ fn Citation_Remedy(
     });
 }
 
-/// Bundles a citation rule's field and remedy into the [`Failure`] shape callers expect.
-fn Citation_Failure(field: &str, remedy: String) -> Failure
-{
-    return Failure {
-        field: field.to_owned(),
-        rule: "citation-resolves-to-an-accepted-submission".to_owned(),
-        remedy,
-    };
-}
-
 /// The kind and state of the submission filed under `node_id`, if one is.
 fn Cited_State(
     store: &SpecificationStore,
@@ -269,6 +228,47 @@ fn Cited_State(
         .map_err(|error| return StoreError::Sql(error.to_string()))?;
 
     return Ok(found);
+}
+
+/// Bundles a citation rule's field and remedy into the [`Failure`] shape callers expect.
+fn Citation_Failure(field: &str, remedy: String) -> Failure
+{
+    return Failure {
+        field: field.to_owned(),
+        rule: "citation-resolves-to-an-accepted-submission".to_owned(),
+        remedy,
+    };
+}
+
+/// The submission's own node, and its row — with its values and gaps — under a caller's
+/// transaction.
+fn Persist_Submission(store: &mut SpecificationStore, submission: &Submission) -> Result<i64, StoreError>
+{
+    use crate::NodeRow;
+
+    let node_uid = store.Upsert_Node(NodeRow {
+        node_id: &submission.id,
+        kind: submission.kind.Label(),
+        authority: crate::store::AUTHORED,
+        representation: "structured",
+        title: Title_Of(submission),
+    })?;
+
+    return store.In_Transaction(|transaction| {
+        return Write_Submission(transaction, node_uid, submission);
+    });
+}
+
+/// The title a submission is filed under.
+///
+/// `title` is a `submission_values` row rather than a column, because somebody may rewrite it.
+/// `nodes.title` is the current reading of it, which is what every reader of the graph wants;
+/// the sequence is what the request preserves.
+fn Title_Of(submission: &Submission) -> &str
+{
+    return submission
+        .Current("title")
+        .map_or("", |value| return value.value.as_str());
 }
 
 /// Writes the submission, its values and its gaps under one transaction.

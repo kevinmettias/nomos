@@ -31,6 +31,27 @@ pub fn Parse_Artifact(markdown: &str, family: Family) -> Result<Artifact, Ingest
     });
 }
 
+/// The front matter body, tolerating a byte order mark exactly as v14's readers did.
+///
+/// See D-131. The mark belongs to the opening fence and leaves with it.
+fn Front_Matter(markdown: &str) -> Option<&str>
+{
+    let text = markdown.strip_prefix('\u{feff}').unwrap_or(markdown);
+    let after = text.strip_prefix("---\n").or_else(|| return text.strip_prefix("---\r\n"))?;
+
+    let mut offset = 0_usize;
+    for line in after.split_inclusive('\n')
+    {
+        if line.trim_end() == "---"
+        {
+            return after.get(..offset);
+        }
+        offset = offset.checked_add(line.len())?;
+    }
+
+    return None;
+}
+
 /// What an artifact says, from its statement or from the criteria standing in for one.
 ///
 /// v14 let an artifact carry criteria and no statement, and the criteria are what it says
@@ -64,27 +85,6 @@ fn Criteria_As_Statement(front: &ArtifactFrontMatter) -> String
         .map(|criterion| return format!("{} {}", criterion.id, criterion.statement))
         .collect::<Vec<String>>()
         .join("\n");
-}
-
-/// The front matter body, tolerating a byte order mark exactly as v14's readers did.
-///
-/// See D-131. The mark belongs to the opening fence and leaves with it.
-fn Front_Matter(markdown: &str) -> Option<&str>
-{
-    let text = markdown.strip_prefix('\u{feff}').unwrap_or(markdown);
-    let after = text.strip_prefix("---\n").or_else(|| return text.strip_prefix("---\r\n"))?;
-
-    let mut offset = 0_usize;
-    for line in after.split_inclusive('\n')
-    {
-        if line.trim_end() == "---"
-        {
-            return after.get(..offset);
-        }
-        offset = offset.checked_add(line.len())?;
-    }
-
-    return None;
 }
 
 #[cfg(test)]

@@ -87,12 +87,6 @@ impl Identities
     }
 }
 
-/// Files one identity under the set that states it.
-fn Keep(identities: &mut BTreeSet<String>, key: String)
-{
-    identities.insert(key);
-}
-
 fn Carried_By(bundle: &Bundle) -> Identities
 {
     let mut carried = Identities::default();
@@ -103,34 +97,6 @@ fn Carried_By(bundle: &Bundle) -> Identities
     }
 
     return carried;
-}
-
-/// The three submission records' references.
-///
-/// One of the families [`Assert_Resolves`] dispatches to. The rule is the same one every arm
-/// there states: a record may only name what the bundle carries.
-fn Assert_Submission_Resolves(record: &Record, carried: &Identities) -> Result<(), BundleError>
-{
-    match record
-    {
-        // A submission is a node, so the node is what it must resolve against.
-        Record::Submission(submission) =>
-        {
-            Carried(&carried.nodes, Key(&submission.node_id), Kind("node"))?;
-        }
-        Record::SubmissionValue(value) =>
-        {
-            Carried(&carried.submissions, Key(&value.node_id), Kind("submission"))?;
-        }
-        Record::SubmissionGap(gap) =>
-        {
-            Carried(&carried.submissions, Key(&gap.node_id), Kind("submission"))?;
-        }
-        _ =>
-        {}
-    }
-
-    return Ok(());
 }
 
 /// One record's references, each against what the bundle carries.
@@ -271,6 +237,34 @@ fn Assert_Declared_Resolves(record: &Record, carried: &Identities) -> Result<(),
     return Ok(());
 }
 
+/// The three submission records' references.
+///
+/// One of the families [`Assert_Resolves`] dispatches to. The rule is the same one every arm
+/// there states: a record may only name what the bundle carries.
+fn Assert_Submission_Resolves(record: &Record, carried: &Identities) -> Result<(), BundleError>
+{
+    match record
+    {
+        // A submission is a node, so the node is what it must resolve against.
+        Record::Submission(submission) =>
+        {
+            Carried(&carried.nodes, Key(&submission.node_id), Kind("node"))?;
+        }
+        Record::SubmissionValue(value) =>
+        {
+            Carried(&carried.submissions, Key(&value.node_id), Kind("submission"))?;
+        }
+        Record::SubmissionGap(gap) =>
+        {
+            Carried(&carried.submissions, Key(&gap.node_id), Kind("submission"))?;
+        }
+        _ =>
+        {}
+    }
+
+    return Ok(());
+}
+
 fn Assert_Lineage_Resolves(
     lineage: &crate::bundle::lineage::Lineage,
     carried: &Identities,
@@ -297,6 +291,31 @@ fn Assert_Lineage_Resolves(
     }
 
     return Ok(());
+}
+
+fn Row_Key(block: &OrdinalRef, ordinal: i64) -> String
+{
+    return format!("{}.{ordinal}", Ordinal_Key(&block.document, block.ordinal));
+}
+
+/// Files one identity under the set that states it.
+fn Keep(identities: &mut BTreeSet<String>, key: String)
+{
+    identities.insert(key);
+}
+
+/// A document's path, kept distinct from [`Revision`] so the two positions of
+/// [`Document_Key_Of`] cannot be swapped at a call site.
+pub(super) struct Path<'a>(pub(super) &'a str);
+
+/// A document's revision, kept distinct from [`Path`] for the same reason.
+pub(super) struct Revision<'a>(pub(super) &'a str);
+
+/// The same key from the two parts a [`SourceDocument`] carries loose rather than as a
+/// [`DocumentRef`]. One spelling of the key, so the set and its lookups cannot drift.
+pub(super) fn Document_Key_Of(path: Path<'_>, revision: Revision<'_>) -> String
+{
+    return format!("{}@{}", path.0, revision.0);
 }
 
 /// The block and heading a lineage row and an omission row point at, which they spell
@@ -347,26 +366,7 @@ fn Document_Key(document: &DocumentRef) -> String
     return Document_Key_Of(Path(&document.path), Revision(&document.revision));
 }
 
-/// A document's path, kept distinct from [`Revision`] so the two positions of
-/// [`Document_Key_Of`] cannot be swapped at a call site.
-pub(super) struct Path<'a>(pub(super) &'a str);
-
-/// A document's revision, kept distinct from [`Path`] for the same reason.
-pub(super) struct Revision<'a>(pub(super) &'a str);
-
-/// The same key from the two parts a [`SourceDocument`] carries loose rather than as a
-/// [`DocumentRef`]. One spelling of the key, so the set and its lookups cannot drift.
-pub(super) fn Document_Key_Of(path: Path<'_>, revision: Revision<'_>) -> String
-{
-    return format!("{}@{}", path.0, revision.0);
-}
-
 fn Ordinal_Key(document: &DocumentRef, ordinal: i64) -> String
 {
     return format!("{}#{ordinal}", Document_Key(document));
-}
-
-fn Row_Key(block: &OrdinalRef, ordinal: i64) -> String
-{
-    return format!("{}.{ordinal}", Ordinal_Key(&block.document, block.ordinal));
 }

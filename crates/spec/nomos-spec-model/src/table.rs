@@ -41,6 +41,14 @@ pub fn Table_Rows(block: &SourceBlock) -> Vec<TableRow>
     return rows;
 }
 
+/// The opening and closing pipes, which a line cannot be shorter than and still carry both.
+const BOTH_PIPES: usize = 2;
+
+fn Is_Pipe_Line(trimmed: &str) -> bool
+{
+    return trimmed.len() >= BOTH_PIPES && trimmed.starts_with('|') && trimmed.ends_with('|');
+}
+
 /// A pipe line exactly as authored, kept distinct from [`Trimmed`] so the two cannot be
 /// swapped at a call site: both are the same line, one carries whitespace the other has
 /// already cut.
@@ -66,91 +74,6 @@ fn One_Row(line: RawLine<'_>, trimmed: Trimmed<'_>, table_ordinal: u32, already:
         cells,
         text: line.0.to_owned(),
     };
-}
-
-/// Everything a table places before its delimiter is header.
-///
-/// A second pass rather than a decision taken while reading, because a line cannot be
-/// known to precede the delimiter until the delimiter has been seen. A table carrying no
-/// delimiter keeps every line as content and is refused by [`Table_Defects`] — guessing
-/// where its header stopped would be inventing the answer the defect exists to report.
-fn Retype_Headers(rows: &mut [TableRow])
-{
-    let tables = rows.iter().map(|row| row.table_ordinal).max().unwrap_or(0);
-
-    for table_ordinal in 1..=tables
-    {
-        let Some(delimiter) = rows
-            .iter()
-            .find(|row| row.table_ordinal == table_ordinal && row.kind == RowKind::Separator)
-            .map(|row| row.ordinal)
-        else
-        {
-            continue;
-        };
-
-        for row in rows
-            .iter_mut()
-            .filter(|row| row.table_ordinal == table_ordinal && row.ordinal < delimiter)
-        {
-            row.kind = RowKind::Header;
-        }
-    }
-}
-
-/// Exactly one delimiter per table.
-///
-/// Without this, typing a row is a way out of `NSV-PRESERVE-002`'s view that does not
-/// involve leaving the table.
-#[must_use]
-pub fn Table_Defects(rows: &[TableRow]) -> Vec<TableDefect>
-{
-    let mut defects = Vec::new();
-    let tables = rows.iter().map(|row| row.table_ordinal).max().unwrap_or(0);
-    for table_ordinal in 1..=tables
-    {
-        let defect = Defect_Of(rows, table_ordinal);
-
-        defects.extend(defect);
-    }
-
-    return defects;
-}
-
-/// One table's delimiter count, and what is wrong with it if anything is.
-fn Defect_Of(rows: &[TableRow], table_ordinal: u32) -> Option<TableDefect>
-{
-    let mut total = 0_u32;
-    let mut separators = 0_u32;
-    for row in rows.iter().filter(|row| row.table_ordinal == table_ordinal)
-    {
-        total = total.saturating_add(1);
-        separators = separators.saturating_add(u32::from(row.kind == RowKind::Separator));
-    }
-    if separators == 0
-    {
-        return Some(TableDefect::NoSeparator {
-            table_ordinal,
-            rows: total,
-        });
-    }
-    if separators == 1
-    {
-        return None;
-    }
-
-    return Some(TableDefect::ManySeparators {
-        table_ordinal,
-        separators,
-    });
-}
-
-/// The opening and closing pipes, which a line cannot be shorter than and still carry both.
-const BOTH_PIPES: usize = 2;
-
-fn Is_Pipe_Line(trimmed: &str) -> bool
-{
-    return trimmed.len() >= BOTH_PIPES && trimmed.starts_with('|') && trimmed.ends_with('|');
 }
 
 /// Splits on unescaped pipes, so a cell may contain a literal `\|`.
@@ -236,6 +159,83 @@ fn Is_Dashes(cell: &str) -> bool
     let body = body.strip_suffix(':').unwrap_or(body);
 
     return body.len() >= SHORTEST_DASH_RUN && body.bytes().all(|byte| byte == b'-');
+}
+
+/// Everything a table places before its delimiter is header.
+///
+/// A second pass rather than a decision taken while reading, because a line cannot be
+/// known to precede the delimiter until the delimiter has been seen. A table carrying no
+/// delimiter keeps every line as content and is refused by [`Table_Defects`] — guessing
+/// where its header stopped would be inventing the answer the defect exists to report.
+fn Retype_Headers(rows: &mut [TableRow])
+{
+    let tables = rows.iter().map(|row| row.table_ordinal).max().unwrap_or(0);
+
+    for table_ordinal in 1..=tables
+    {
+        let Some(delimiter) = rows
+            .iter()
+            .find(|row| row.table_ordinal == table_ordinal && row.kind == RowKind::Separator)
+            .map(|row| row.ordinal)
+        else
+        {
+            continue;
+        };
+
+        for row in rows
+            .iter_mut()
+            .filter(|row| row.table_ordinal == table_ordinal && row.ordinal < delimiter)
+        {
+            row.kind = RowKind::Header;
+        }
+    }
+}
+
+/// Exactly one delimiter per table.
+///
+/// Without this, typing a row is a way out of `NSV-PRESERVE-002`'s view that does not
+/// involve leaving the table.
+#[must_use]
+pub fn Table_Defects(rows: &[TableRow]) -> Vec<TableDefect>
+{
+    let mut defects = Vec::new();
+    let tables = rows.iter().map(|row| row.table_ordinal).max().unwrap_or(0);
+    for table_ordinal in 1..=tables
+    {
+        let defect = Defect_Of(rows, table_ordinal);
+
+        defects.extend(defect);
+    }
+
+    return defects;
+}
+
+/// One table's delimiter count, and what is wrong with it if anything is.
+fn Defect_Of(rows: &[TableRow], table_ordinal: u32) -> Option<TableDefect>
+{
+    let mut total = 0_u32;
+    let mut separators = 0_u32;
+    for row in rows.iter().filter(|row| row.table_ordinal == table_ordinal)
+    {
+        total = total.saturating_add(1);
+        separators = separators.saturating_add(u32::from(row.kind == RowKind::Separator));
+    }
+    if separators == 0
+    {
+        return Some(TableDefect::NoSeparator {
+            table_ordinal,
+            rows: total,
+        });
+    }
+    if separators == 1
+    {
+        return None;
+    }
+
+    return Some(TableDefect::ManySeparators {
+        table_ordinal,
+        separators,
+    });
 }
 
 #[cfg(test)]

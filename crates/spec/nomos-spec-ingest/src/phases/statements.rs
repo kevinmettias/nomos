@@ -63,17 +63,6 @@ pub(super) fn Note_Divergence(statement: &RecordedStatement, report: &mut Statem
     }
 }
 
-/// The catalog's `kind` vocabulary is lowercase and underscore-separated — `requirement`,
-/// `user_story` — because it is machine-generated. The statements file is authored for a
-/// human reader instead, as `Requirement` and `User Story`, and a project section's
-/// `filter: { kind: "requirement" }` is an exact match against whatever a node's row holds.
-/// Storing the statement's own spelling would put one concept behind two spellings, and
-/// every section that filters a statement by kind would silently select nothing.
-fn Normalized_Kind(kind: &str) -> String
-{
-    return kind.to_lowercase().replace(' ', "_");
-}
-
 /// Writes the statement's node and the recorded text hanging off it.
 pub(super) fn Store_Statement(
     store: &mut SpecificationStore,
@@ -90,4 +79,15 @@ pub(super) fn Store_Statement(
     })?;
 
     return Store_Text(store, statement, &kind, node_uid);
+}
+
+/// The catalog's `kind` vocabulary is lowercase and underscore-separated — `requirement`,
+/// `user_story` — because it is machine-generated. The statements file is authored for a
+/// human reader instead, as `Requirement` and `User Story`, and a project section's
+/// `filter: { kind: "requirement" }` is an exact match against whatever a node's row holds.
+/// Storing the statement's own spelling would put one concept behind two spellings, and
+/// every section that filters a statement by kind would silently select nothing.
+fn Normalized_Kind(kind: &str) -> String
+{
+    return kind.to_lowercase().replace(' ', "_");
 }

@@ -341,12 +341,6 @@ pub(super) fn Numbering(title: &str, letter: char, parts: usize) -> Option<Strin
     return Some(format!("{letter}{numbering}"));
 }
 
-/// A non-empty run of ASCII digits and nothing else.
-fn All_Digits(text: &str) -> bool
-{
-    return !text.is_empty() && text.bytes().all(|byte| return byte.is_ascii_digit());
-}
-
 /// The identifier, minted from the family's prefix and what the document already says.
 pub(super) fn Identify(family: Restored, name: &str) -> String
 {
@@ -376,4 +370,10 @@ pub(super) fn Slug(name: &str) -> String
     }
 
     return slug;
+}
+
+/// A non-empty run of ASCII digits and nothing else.
+fn All_Digits(text: &str) -> bool
+{
+    return !text.is_empty() && text.bytes().all(|byte| return byte.is_ascii_digit());
 }

@@ -34,42 +34,6 @@ pub fn Parse_Section_Lineage(yaml: &str) -> Result<SectionLineage, IngestError>
         .map_err(|error| IngestError::Parse(format!("section lineage: {error}")));
 }
 
-/// Records one block's disposition, saying whether there was a block to record it against.
-///
-/// A manifest ordinal the store does not hold is skipped rather than refused: the manifest
-/// covers revisions this store may only hold part of, and a missing block is that rather
-/// than a corruption.
-fn Record_Block(
-    store: &mut SpecificationStore,
-    document_uid: i64,
-    ordinal: u32,
-    disposition: &str,
-) -> Result<bool, IngestError>
-{
-    let found: Option<i64> = store
-        .Connection()
-        .query_row(
-            "SELECT uid FROM source_blocks WHERE document_uid = ?1 AND ordinal = ?2",
-            rusqlite::params![document_uid, ordinal],
-            |row| row.get(0),
-        )
-        .ok();
-
-    let Some(block_uid) = found
-    else
-    {
-        return Ok(false);
-    };
-
-    let inserted = store.Connection().execute(
-        "INSERT OR IGNORE INTO lineage (source_block_uid, disposition) VALUES (?1, ?2)",
-        rusqlite::params![block_uid, disposition],
-    );
-    Sql(inserted)?;
-
-    return Ok(true);
-}
-
 /// I2 — headings and their dispositions.
 ///
 /// # Errors
@@ -214,6 +178,42 @@ pub fn Ingest_Block_Dispositions<'a>(
     }
 
     return Ok(written);
+}
+
+/// Records one block's disposition, saying whether there was a block to record it against.
+///
+/// A manifest ordinal the store does not hold is skipped rather than refused: the manifest
+/// covers revisions this store may only hold part of, and a missing block is that rather
+/// than a corruption.
+fn Record_Block(
+    store: &mut SpecificationStore,
+    document_uid: i64,
+    ordinal: u32,
+    disposition: &str,
+) -> Result<bool, IngestError>
+{
+    let found: Option<i64> = store
+        .Connection()
+        .query_row(
+            "SELECT uid FROM source_blocks WHERE document_uid = ?1 AND ordinal = ?2",
+            rusqlite::params![document_uid, ordinal],
+            |row| row.get(0),
+        )
+        .ok();
+
+    let Some(block_uid) = found
+    else
+    {
+        return Ok(false);
+    };
+
+    let inserted = store.Connection().execute(
+        "INSERT OR IGNORE INTO lineage (source_block_uid, disposition) VALUES (?1, ?2)",
+        rusqlite::params![block_uid, disposition],
+    );
+    Sql(inserted)?;
+
+    return Ok(true);
 }
 
 fn Sql<T>(result: rusqlite::Result<T>) -> Result<T, IngestError>

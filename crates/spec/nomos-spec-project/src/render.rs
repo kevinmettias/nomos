@@ -38,28 +38,6 @@ pub fn Render(projection: &Projection) -> Result<String, ProjectError>
     };
 }
 
-fn Carries_A_Body(section: &Section) -> bool
-{
-    return section.items.iter().any(|item| return item.body.is_some());
-}
-
-fn Columns(section: &Section) -> Vec<String>
-{
-    let mut columns: Vec<String> = Vec::new();
-    for item in &section.items
-    {
-        for (name, _) in &item.fields
-        {
-            if !columns.contains(name)
-            {
-                columns.push(name.clone());
-            }
-        }
-    }
-
-    return columns;
-}
-
 fn Markdown(projection: &Projection) -> String
 {
     let mut out = String::new();
@@ -105,20 +83,9 @@ fn Section_Body(out: &mut String, section: &Section)
     Table(out, section, &columns);
 }
 
-/// A section's items as a markdown table, one column per field any item states.
-fn Table(out: &mut String, section: &Section, columns: &[String])
+fn Carries_A_Body(section: &Section) -> bool
 {
-    let _ = writeln!(out, "\n| identity | {} |", columns.join(" | "));
-    let _ = writeln!(out, "| --- |{}", " --- |".repeat(columns.len()));
-
-    for item in &section.items
-    {
-        let cells: Vec<String> = columns
-            .iter()
-            .map(|column| return Cell(item.Field(column).unwrap_or_default()))
-            .collect();
-        let _ = writeln!(out, "| {} | {} |", Cell(&item.identity), cells.join(" | "));
-    }
+    return section.items.iter().any(|item| return item.body.is_some());
 }
 
 /// A section whose items carry prose, written as headed bodies rather than table rows.
@@ -154,6 +121,39 @@ fn Stated(item: &Item) -> String
     }
 
     return format!("*{}*", stated.join(" \u{b7} "));
+}
+
+fn Columns(section: &Section) -> Vec<String>
+{
+    let mut columns: Vec<String> = Vec::new();
+    for item in &section.items
+    {
+        for (name, _) in &item.fields
+        {
+            if !columns.contains(name)
+            {
+                columns.push(name.clone());
+            }
+        }
+    }
+
+    return columns;
+}
+
+/// A section's items as a markdown table, one column per field any item states.
+fn Table(out: &mut String, section: &Section, columns: &[String])
+{
+    let _ = writeln!(out, "\n| identity | {} |", columns.join(" | "));
+    let _ = writeln!(out, "| --- |{}", " --- |".repeat(columns.len()));
+
+    for item in &section.items
+    {
+        let cells: Vec<String> = columns
+            .iter()
+            .map(|column| return Cell(item.Field(column).unwrap_or_default()))
+            .collect();
+        let _ = writeln!(out, "| {} | {} |", Cell(&item.identity), cells.join(" | "));
+    }
 }
 
 fn Cell(value: &str) -> String
@@ -226,99 +226,6 @@ fn Article(out: &mut String, item: &Item)
     out.push_str("</article>\n");
 }
 
-fn Escaped(value: &str) -> String
-{
-    return value
-        .replace('&', "&amp;")
-        .replace('<', "&lt;")
-        .replace('>', "&gt;")
-        .replace('"', "&quot;");
-}
-
-fn Slug(value: &str) -> String
-{
-    let mut slug = String::new();
-    let mut pending = false;
-
-    for character in value.chars()
-    {
-        if character.is_ascii_alphanumeric()
-        {
-            if pending && !slug.is_empty()
-            {
-                slug.push('-');
-            }
-            pending = false;
-            slug.extend(character.to_lowercase());
-        }
-        else
-        {
-            pending = true;
-        }
-    }
-
-    return slug;
-}
-
-/// A node's identity, kept distinct from [`Label`] so [`Names::Declared`]'s two positions
-/// cannot be swapped at a call site — both are plain strings and nothing else would tell
-/// them apart.
-struct Identity<'a>(&'a str);
-
-/// A node's rendered label, kept distinct from [`Identity`] for the same reason.
-struct Label<'a>(&'a str);
-
-struct Names
-{
-    known: BTreeMap<String, String>,
-    taken: Vec<String>,
-    labelled: Vec<String>,
-}
-
-impl Names
-{
-    fn For(&mut self, identity: &str) -> String
-    {
-        if let Some(known) = self.known.get(identity)
-        {
-            return known.clone();
-        }
-
-        let candidate = match Slug(identity).replace('-', "_")
-        {
-            slug if slug.is_empty() => "n".to_owned(),
-            slug => slug,
-        };
-        let mut unique = candidate.clone();
-        let mut ordinal = 1_u32;
-        while self.taken.contains(&unique)
-        {
-            ordinal = ordinal.saturating_add(1);
-            unique = format!("{candidate}_{ordinal}");
-        }
-
-        self.taken.push(unique.clone());
-        self.known.insert(identity.to_owned(), unique.clone());
-
-        return unique;
-    }
-
-    fn Declared(&mut self, identity: Identity<'_>, label: Label<'_>) -> String
-    {
-        let identity = identity.0;
-        let label = label.0;
-
-        let named = self.For(identity);
-        if self.labelled.contains(&named)
-        {
-            return named;
-        }
-        self.labelled.push(named.clone());
-
-        return format!("{named}[{}]", Quoted(label));
-    }
-}
-
 fn Mermaid(projection: &Projection) -> String
 {
     let mut out = format!(
@@ -376,11 +283,6 @@ fn Node_Or_Edge(out: &mut String, names: &mut Names, item: &Item)
     let _ = writeln!(out, "    {tail} -->|{}| {head}", Quoted(relation));
 }
 
-fn Quoted(value: &str) -> String
-{
-    return format!("\"{}\"", value.replace('"', "'").replace(['\n', '\r'], " "));
-}
-
 fn Json(projection: &Projection) -> Result<String, ProjectError>
 {
     let generated = Generated {
@@ -405,6 +307,63 @@ fn Yaml(projection: &Projection) -> Result<String, ProjectError>
 
     return serde_yaml_ng::to_string(&generated)
         .map_err(|error| return ProjectError::Malformed(error.to_string()));
+}
+
+fn Contextpack(projection: &Projection) -> Result<String, ProjectError>
+{
+    let pack = Pack {
+        nomos_generated: true,
+        do_not_edit: DO_NOT_EDIT,
+        profile: &projection.profile,
+        title: &projection.title,
+        inputs_digest: projection.Inputs_Digest(),
+        sections: projection.sections.iter().map(Packed).collect(),
+    };
+
+    let mut rendered = serde_json::to_string_pretty(&pack)
+        .map_err(|error| return ProjectError::Malformed(error.to_string()))?;
+    rendered.push('\n');
+
+    return Ok(rendered);
+}
+
+fn Escaped(value: &str) -> String
+{
+    return value
+        .replace('&', "&amp;")
+        .replace('<', "&lt;")
+        .replace('>', "&gt;")
+        .replace('"', "&quot;");
+}
+
+fn Slug(value: &str) -> String
+{
+    let mut slug = String::new();
+    let mut pending = false;
+
+    for character in value.chars()
+    {
+        if character.is_ascii_alphanumeric()
+        {
+            if pending && !slug.is_empty()
+            {
+                slug.push('-');
+            }
+            pending = false;
+            slug.extend(character.to_lowercase());
+        }
+        else
+        {
+            pending = true;
+        }
+    }
+
+    return slug;
+}
+
+fn Quoted(value: &str) -> String
+{
+    return format!("\"{}\"", value.replace('"', "'").replace(['\n', '\r'], " "));
 }
 
 #[derive(Serialize)]
@@ -457,20 +416,61 @@ fn Packed(section: &Section) -> PackSection<'_>
     };
 }
 
-fn Contextpack(projection: &Projection) -> Result<String, ProjectError>
+/// A node's identity, kept distinct from [`Label`] so [`Names::Declared`]'s two positions
+/// cannot be swapped at a call site — both are plain strings and nothing else would tell
+/// them apart.
+struct Identity<'a>(&'a str);
+
+/// A node's rendered label, kept distinct from [`Identity`] for the same reason.
+struct Label<'a>(&'a str);
+
+struct Names
 {
-    let pack = Pack {
-        nomos_generated: true,
-        do_not_edit: DO_NOT_EDIT,
-        profile: &projection.profile,
-        title: &projection.title,
-        inputs_digest: projection.Inputs_Digest(),
-        sections: projection.sections.iter().map(Packed).collect(),
-    };
+    known: BTreeMap<String, String>,
+    taken: Vec<String>,
+    labelled: Vec<String>,
+}
 
-    let mut rendered = serde_json::to_string_pretty(&pack)
-        .map_err(|error| return ProjectError::Malformed(error.to_string()))?;
-    rendered.push('\n');
+impl Names
+{
+    fn Declared(&mut self, identity: Identity<'_>, label: Label<'_>) -> String
+    {
+        let identity = identity.0;
+        let label = label.0;
 
-    return Ok(rendered);
+        let named = self.For(identity);
+        if self.labelled.contains(&named)
+        {
+            return named;
+        }
+        self.labelled.push(named.clone());
+
+        return format!("{named}[{}]", Quoted(label));
+    }
+
+    fn For(&mut self, identity: &str) -> String
+    {
+        if let Some(known) = self.known.get(identity)
+        {
+            return known.clone();
+        }
+
+        let candidate = match Slug(identity).replace('-', "_")
+        {
+            slug if slug.is_empty() => "n".to_owned(),
+            slug => slug,
+        };
+        let mut unique = candidate.clone();
+        let mut ordinal = 1_u32;
+        while self.taken.contains(&unique)
+        {
+            ordinal = ordinal.saturating_add(1);
+            unique = format!("{candidate}_{ordinal}");
+        }
+
+        self.taken.push(unique.clone());
+        self.known.insert(identity.to_owned(), unique.clone());
+
+        return unique;
+    }
 }

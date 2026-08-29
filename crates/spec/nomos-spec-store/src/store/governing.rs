@@ -171,49 +171,6 @@ fn Admissible_Relations() -> String
         .join(", ");
 }
 
-/// The refusal for a relation type the seeded vocabulary does not contain, if it is one.
-///
-/// # Why this is checked here rather than left to the foreign key
-///
-/// `relations.relation_type` references `relation_types`, so an unknown term was already
-/// refused — the mechanism working, and `RELATION_TYPES` above says so. What it was not is
-/// diagnosable. The refusal arrived as `StoreError::Sql("FOREIGN KEY constraint failed")`,
-/// which is the same eleven words for every cause the schema has, and names neither the
-/// record that carried the term nor the term itself. Measured while landing `OD-LEDGER-014`:
-/// one record declaring `amends` failed the whole seed, and because every test in this crate
-/// seeds first, it read as eighteen unrelated failures across two suites with nothing in any
-/// of them pointing at the record or the word.
-///
-/// So the check is raised where the record is known, which the database layer cannot be — by
-/// the time `SQLite` refuses, the path has been out of scope for two call frames. It reports
-/// all three things the author's next three questions are: which record stopped the seed,
-/// which term it used, and what it could have said instead.
-///
-/// This deliberately does **not** admit unknown terms. `ADR-ARTIFACT-GRAPH-002`'s vocabulary
-/// arrives with the corpus, and widening the seed table now would put an invented answer
-/// where a recorded one belongs. The defect was the diagnosis, not the refusal.
-fn Refuse_Unknown_Relation(path: DocumentPath<'_>, term: RelationTypeName<'_>) -> Option<StoreError>
-{
-    let path = path.0;
-    let term = term.0;
-
-    if RELATION_TYPES.iter().any(|seed| return seed.name == term)
-    {
-        return None;
-    }
-
-    return Some(StoreError::Record {
-        path: path.to_owned(),
-        cause: format!(
-            "declares the relation type `{term}`, which the seeded vocabulary does not \
-             contain. It admits {}. The vocabulary is deliberately short — the real one is \
-             ADR-ARTIFACT-GRAPH-002's and arrives with the corpus — so the fix is to use an \
-             existing term where that is honest, and not to widen the table here",
-            Admissible_Relations()
-        ),
-    });
-}
-
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct SeedReport
 {
@@ -298,21 +255,6 @@ fn Put_The_Record(
     return Ok(());
 }
 
-/// Checked before anything is written, so a record with a bad term does not leave a
-/// placeholder node behind on its way out.
-fn Refuse_Unknown_Terms(path: &str, record: &nomos_spec_model::Record) -> Result<(), StoreError>
-{
-    for relation in &record.front_matter.relations
-    {
-        if let Some(refusal) = Refuse_Unknown_Relation(DocumentPath(path), RelationTypeName(&relation.relation))
-        {
-            return Err(refusal);
-        }
-    }
-
-    return Ok(());
-}
-
 /// Every edge one record declares, and the placeholder nodes they needed.
 fn Put_The_Relations_Of(
     store: &mut SpecificationStore,
@@ -343,6 +285,64 @@ fn Put_The_Relations_Of(
     }
 
     return Ok(());
+}
+
+/// Checked before anything is written, so a record with a bad term does not leave a
+/// placeholder node behind on its way out.
+fn Refuse_Unknown_Terms(path: &str, record: &nomos_spec_model::Record) -> Result<(), StoreError>
+{
+    for relation in &record.front_matter.relations
+    {
+        if let Some(refusal) = Refuse_Unknown_Relation(DocumentPath(path), RelationTypeName(&relation.relation))
+        {
+            return Err(refusal);
+        }
+    }
+
+    return Ok(());
+}
+
+/// The refusal for a relation type the seeded vocabulary does not contain, if it is one.
+///
+/// # Why this is checked here rather than left to the foreign key
+///
+/// `relations.relation_type` references `relation_types`, so an unknown term was already
+/// refused — the mechanism working, and `RELATION_TYPES` above says so. What it was not is
+/// diagnosable. The refusal arrived as `StoreError::Sql("FOREIGN KEY constraint failed")`,
+/// which is the same eleven words for every cause the schema has, and names neither the
+/// record that carried the term nor the term itself. Measured while landing `OD-LEDGER-014`:
+/// one record declaring `amends` failed the whole seed, and because every test in this crate
+/// seeds first, it read as eighteen unrelated failures across two suites with nothing in any
+/// of them pointing at the record or the word.
+///
+/// So the check is raised where the record is known, which the database layer cannot be — by
+/// the time `SQLite` refuses, the path has been out of scope for two call frames. It reports
+/// all three things the author's next three questions are: which record stopped the seed,
+/// which term it used, and what it could have said instead.
+///
+/// This deliberately does **not** admit unknown terms. `ADR-ARTIFACT-GRAPH-002`'s vocabulary
+/// arrives with the corpus, and widening the seed table now would put an invented answer
+/// where a recorded one belongs. The defect was the diagnosis, not the refusal.
+fn Refuse_Unknown_Relation(path: DocumentPath<'_>, term: RelationTypeName<'_>) -> Option<StoreError>
+{
+    let path = path.0;
+    let term = term.0;
+
+    if RELATION_TYPES.iter().any(|seed| return seed.name == term)
+    {
+        return None;
+    }
+
+    return Some(StoreError::Record {
+        path: path.to_owned(),
+        cause: format!(
+            "declares the relation type `{term}`, which the seeded vocabulary does not \
+             contain. It admits {}. The vocabulary is deliberately short — the real one is \
+             ADR-ARTIFACT-GRAPH-002's and arrives with the corpus — so the fix is to use an \
+             existing term where that is honest, and not to widen the table here",
+            Admissible_Relations()
+        ),
+    });
 }
 
 #[cfg(test)]

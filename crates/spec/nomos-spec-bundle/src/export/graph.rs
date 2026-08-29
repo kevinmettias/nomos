@@ -252,6 +252,19 @@ pub(super) fn Lineages(connection: &Connection, records: &mut Vec<Record>) -> Re
     );
 }
 
+/// The four columns a table-row reference spans, taken in the order a query names them.
+fn Table_Row_Reference(columns: &mut Columns<'_, '_>) -> rusqlite::Result<Option<TableRowRef>>
+{
+    let block = Ordinal_Reference(columns)?;
+    let ordinal: Option<i64> = columns.Next()?;
+
+    return Ok(match (block, ordinal)
+    {
+        (Some(block), Some(ordinal)) => Some(TableRowRef { block, ordinal }),
+        _ => None,
+    });
+}
+
 pub(super) fn Omissions(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
 {
     let rows = Omission_Rows(connection)?;
@@ -290,36 +303,6 @@ fn Omission_Rows(connection: &Connection) -> Result<Vec<crate::Omission>, Bundle
             });
         })?
         .collect::<Result<Vec<_>, _>>()?);
-}
-
-/// The four columns a table-row reference spans, taken in the order a query names them.
-fn Table_Row_Reference(columns: &mut Columns<'_, '_>) -> rusqlite::Result<Option<TableRowRef>>
-{
-    let block = Ordinal_Reference(columns)?;
-    let ordinal: Option<i64> = columns.Next()?;
-
-    return Ok(match (block, ordinal)
-    {
-        (Some(block), Some(ordinal)) => Some(TableRowRef { block, ordinal }),
-        _ => None,
-    });
-}
-
-/// The three columns an ordinal reference spans, taken in the order a query names them.
-fn Ordinal_Reference(columns: &mut Columns<'_, '_>) -> rusqlite::Result<Option<OrdinalRef>>
-{
-    let path: Option<String> = columns.Next()?;
-    let revision: Option<String> = columns.Next()?;
-    let ordinal: Option<i64> = columns.Next()?;
-
-    return Ok(match (path, revision, ordinal)
-    {
-        (Some(path), Some(revision), Some(ordinal)) => Some(OrdinalRef {
-            document: DocumentRef { path, revision },
-            ordinal,
-        }),
-        _ => None,
-    });
 }
 
 /// The declared front matter, addressed by the document that declared it.
@@ -401,4 +384,21 @@ fn Record_Relation_Rows(connection: &Connection) -> Result<Vec<crate::RecordRela
             });
         })?
         .collect::<Result<Vec<_>, _>>()?);
+}
+
+/// The three columns an ordinal reference spans, taken in the order a query names them.
+fn Ordinal_Reference(columns: &mut Columns<'_, '_>) -> rusqlite::Result<Option<OrdinalRef>>
+{
+    let path: Option<String> = columns.Next()?;
+    let revision: Option<String> = columns.Next()?;
+    let ordinal: Option<i64> = columns.Next()?;
+
+    return Ok(match (path, revision, ordinal)
+    {
+        (Some(path), Some(revision), Some(ordinal)) => Some(OrdinalRef {
+            document: DocumentRef { path, revision },
+            ordinal,
+        }),
+        _ => None,
+    });
 }

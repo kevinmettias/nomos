@@ -41,24 +41,42 @@ pub(crate) fn Write_Relation(
     return Ok(());
 }
 
-/// The inverse a relation type declares, if it declares one.
+/// One edge, checked against its relation type's declared constraint and then written.
 ///
-/// # Errors
-///
-/// Returns [`StoreError`] on any SQL failure.
-pub(crate) fn Inverse_Of(
+/// A placeholder endpoint (`authority = EXTERNAL`, minted by `Reference_Node` for a target
+/// nothing has ingested yet) is exempt from the domain/range check at its own end: its kind
+/// is the sentinel `unknown`, which is not a fact about the node yet, and `OD-SPEC-012`
+/// records that the check is deferred rather than widened to admit the sentinel as if it
+/// were a real kind. Cardinality is not exempted the same way, because it counts edges from
+/// a real endpoint (the `from` side always resolves to a concrete node by the time this
+/// runs) rather than judging the placeholder's kind.
+fn Write_One_Relation(
     connection: &Connection,
-    relation_type: &str,
-) -> Result<Option<String>, StoreError>
+    from_node_id: FromNodeId<'_>,
+    relation_type: RelationTypeName<'_>,
+    to_node_id: ToNodeId<'_>,
+) -> Result<(), StoreError>
 {
-    return Ok(connection
-        .query_row(
-            "SELECT inverse_of FROM relation_types WHERE name = ?1",
-            params![relation_type],
-            |row| row.get(0),
-        )
-        .optional()?
-        .flatten());
+    let Some(from) = Fetch_Endpoint(connection, from_node_id.0)?
+    else
+    {
+        return Ok(());
+    };
+    let Some(to) = Fetch_Endpoint(connection, to_node_id.0)?
+    else
+    {
+        return Ok(());
+    };
+
+    Enforce_Constraint(connection, relation_type.0, &from, &to)?;
+
+    connection.execute(
+        "INSERT OR IGNORE INTO relations (from_node_uid, relation_type, to_node_uid)
+         VALUES (?1, ?2, ?3)",
+        params![from.uid, relation_type.0, to.uid],
+    )?;
+
+    return Ok(());
 }
 
 /// One node, as an edge's endpoint: its own identifier, its surrogate, its kind, and
@@ -100,21 +118,42 @@ fn Fetch_Endpoint(connection: &Connection, node_id: &str) -> Result<Option<Endpo
         .optional()?);
 }
 
-/// What one relation type declares: the node kinds it admits at each end, and how many
-/// edges of it a node may carry.
-struct Constraint
+/// The edge is checked against its relation type's declared constraint, if the type
+/// declares one.
+///
+/// A placeholder endpoint (`authority = EXTERNAL`, minted by `Reference_Node` for a target
+/// nothing has ingested yet) is exempt from the domain/range check at its own end: its kind
+/// is the sentinel `unknown`, which is not a fact about the node yet, and `OD-SPEC-012`
+/// records that the check is deferred rather than widened to admit the sentinel as if it
+/// were a real kind. Cardinality is not exempted the same way, because it counts edges from
+/// a real endpoint (the `from` side always resolves to a concrete node by the time this
+/// runs) rather than judging the placeholder's kind.
+fn Enforce_Constraint(
+    connection: &Connection,
+    relation_type: &str,
+    from: &Endpoint,
+    to: &Endpoint,
+) -> Result<(), StoreError>
 {
-    domain: Vec<String>,
-    range: Vec<String>,
-    max_per_node: u32,
-}
+    let Some(constraint) = Fetch_Constraint(connection, relation_type)?
+    else
+    {
+        return Ok(());
+    };
 
-/// A constraint row, read in the order its `SELECT` names: domain kinds, range kinds,
-/// max per node.
-fn Read_Constraint_Row(row: &rusqlite::Row<'_>) -> rusqlite::Result<(String, String, i64)>
-{
-    let mut columns = Columns::Of(row);
-    return Ok((columns.Next()?, columns.Next()?, columns.Next()?));
+    if from.authority != EXTERNAL
+    {
+        Assert_Admits(&AdmissionCheck { relation_type, role: "domain", endpoint: from, admits: &constraint.domain })?;
+    }
+    if to.authority != EXTERNAL
+    {
+        Assert_Admits(&AdmissionCheck { relation_type, role: "range", endpoint: to, admits: &constraint.range })?;
+    }
+
+    return Assert_Within_Cardinality(
+        connection,
+        &CardinalityCheck { relation_type, from, to_uid: to.uid, max_per_node: constraint.max_per_node },
+    );
 }
 
 /// The declared constraint for a relation type, if the type is registered.
@@ -156,82 +195,6 @@ fn Fetch_Constraint(
 fn Decoded_Kinds(json: &str) -> Result<Vec<String>, StoreError>
 {
     return serde_json::from_str(json).map_err(|error| return StoreError::Sql(error.to_string()));
-}
-
-/// One edge, checked against its relation type's declared constraint and then written.
-///
-/// A placeholder endpoint (`authority = EXTERNAL`, minted by `Reference_Node` for a target
-/// nothing has ingested yet) is exempt from the domain/range check at its own end: its kind
-/// is the sentinel `unknown`, which is not a fact about the node yet, and `OD-SPEC-012`
-/// records that the check is deferred rather than widened to admit the sentinel as if it
-/// were a real kind. Cardinality is not exempted the same way, because it counts edges from
-/// a real endpoint (the `from` side always resolves to a concrete node by the time this
-/// runs) rather than judging the placeholder's kind.
-fn Write_One_Relation(
-    connection: &Connection,
-    from_node_id: FromNodeId<'_>,
-    relation_type: RelationTypeName<'_>,
-    to_node_id: ToNodeId<'_>,
-) -> Result<(), StoreError>
-{
-    let Some(from) = Fetch_Endpoint(connection, from_node_id.0)?
-    else
-    {
-        return Ok(());
-    };
-    let Some(to) = Fetch_Endpoint(connection, to_node_id.0)?
-    else
-    {
-        return Ok(());
-    };
-
-    Enforce_Constraint(connection, relation_type.0, &from, &to)?;
-
-    connection.execute(
-        "INSERT OR IGNORE INTO relations (from_node_uid, relation_type, to_node_uid)
-         VALUES (?1, ?2, ?3)",
-        params![from.uid, relation_type.0, to.uid],
-    )?;
-
-    return Ok(());
-}
-
-/// The edge is checked against its relation type's declared constraint, if the type
-/// declares one.
-///
-/// A placeholder endpoint (`authority = EXTERNAL`, minted by `Reference_Node` for a target
-/// nothing has ingested yet) is exempt from the domain/range check at its own end: its kind
-/// is the sentinel `unknown`, which is not a fact about the node yet, and `OD-SPEC-012`
-/// records that the check is deferred rather than widened to admit the sentinel as if it
-/// were a real kind. Cardinality is not exempted the same way, because it counts edges from
-/// a real endpoint (the `from` side always resolves to a concrete node by the time this
-/// runs) rather than judging the placeholder's kind.
-fn Enforce_Constraint(
-    connection: &Connection,
-    relation_type: &str,
-    from: &Endpoint,
-    to: &Endpoint,
-) -> Result<(), StoreError>
-{
-    let Some(constraint) = Fetch_Constraint(connection, relation_type)?
-    else
-    {
-        return Ok(());
-    };
-
-    if from.authority != EXTERNAL
-    {
-        Assert_Admits(&AdmissionCheck { relation_type, role: "domain", endpoint: from, admits: &constraint.domain })?;
-    }
-    if to.authority != EXTERNAL
-    {
-        Assert_Admits(&AdmissionCheck { relation_type, role: "range", endpoint: to, admits: &constraint.range })?;
-    }
-
-    return Assert_Within_Cardinality(
-        connection,
-        &CardinalityCheck { relation_type, from, to_uid: to.uid, max_per_node: constraint.max_per_node },
-    );
 }
 
 /// What one endpoint's admission into a relation type's declared role is checked against.
@@ -319,4 +282,41 @@ fn Assert_Cap_Not_Exceeded(connection: &Connection, check: &CardinalityCheck<'_>
     }
 
     return Ok(());
+}
+
+/// The inverse a relation type declares, if it declares one.
+///
+/// # Errors
+///
+/// Returns [`StoreError`] on any SQL failure.
+pub(crate) fn Inverse_Of(
+    connection: &Connection,
+    relation_type: &str,
+) -> Result<Option<String>, StoreError>
+{
+    return Ok(connection
+        .query_row(
+            "SELECT inverse_of FROM relation_types WHERE name = ?1",
+            params![relation_type],
+            |row| row.get(0),
+        )
+        .optional()?
+        .flatten());
+}
+
+/// What one relation type declares: the node kinds it admits at each end, and how many
+/// edges of it a node may carry.
+struct Constraint
+{
+    domain: Vec<String>,
+    range: Vec<String>,
+    max_per_node: u32,
+}
+
+/// A constraint row, read in the order its `SELECT` names: domain kinds, range kinds,
+/// max per node.
+fn Read_Constraint_Row(row: &rusqlite::Row<'_>) -> rusqlite::Result<(String, String, i64)>
+{
+    let mut columns = Columns::Of(row);
+    return Ok((columns.Next()?, columns.Next()?, columns.Next()?));
 }

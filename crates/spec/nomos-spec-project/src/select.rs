@@ -147,23 +147,25 @@ fn Selected(
     });
 }
 
-/// What a section's items contribute to the projection's input set.
-///
-/// An item's own hash where it has one, a digest of its fields where it has none. The
-/// freshness check compares this set, so an item that carries no hash still has to move the
-/// set when its content changes or the output would report itself current over stale rows.
-fn Inputs_Of(content: Content, items: &[Item]) -> Vec<Input>
+fn Refuse_Unhonoured(
+    profile: &Profile,
+    content: Content,
+    filter: &Filter,
+) -> Result<(), ProjectError>
 {
-    return items
-        .iter()
-        .map(|item| {
-            return Input {
-                content,
-                identity: item.identity.clone(),
-                hash: item.Field("hash").map_or_else(|| return item.Digest(), str::to_owned),
-            };
-        })
-        .collect();
+    for (name, _) in filter.Named()
+    {
+        if !content.Honours().contains(&name)
+        {
+            return Err(ProjectError::UnsupportedFilter {
+                profile: profile.id.clone(),
+                content: content.Label(),
+                filter: name,
+            });
+        }
+    }
+
+    return Ok(());
 }
 
 /// A section that gathered nothing and did not say it might.
@@ -189,23 +191,21 @@ fn Refuse_Empty(
     });
 }
 
-fn Refuse_Unhonoured(
-    profile: &Profile,
-    content: Content,
-    filter: &Filter,
-) -> Result<(), ProjectError>
+/// What a section's items contribute to the projection's input set.
+///
+/// An item's own hash where it has one, a digest of its fields where it has none. The
+/// freshness check compares this set, so an item that carries no hash still has to move the
+/// set when its content changes or the output would report itself current over stale rows.
+fn Inputs_Of(content: Content, items: &[Item]) -> Vec<Input>
 {
-    for (name, _) in filter.Named()
-    {
-        if !content.Honours().contains(&name)
-        {
-            return Err(ProjectError::UnsupportedFilter {
-                profile: profile.id.clone(),
-                content: content.Label(),
-                filter: name,
-            });
-        }
-    }
-
-    return Ok(());
+    return items
+        .iter()
+        .map(|item| {
+            return Input {
+                content,
+                identity: item.identity.clone(),
+                hash: item.Field("hash").map_or_else(|| return item.Digest(), str::to_owned),
+            };
+        })
+        .collect();
 }

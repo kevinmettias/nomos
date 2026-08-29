@@ -46,6 +46,24 @@ pub fn Parse_Record(markdown: &str) -> Result<Record, RecordError>
     });
 }
 
+fn Split_At_Closing_Fence(text: &str) -> Option<(&str, &str)>
+{
+    let mut offset = 0_usize;
+
+    for line in text.split_inclusive('\n')
+    {
+        if line.trim_end() == "---"
+        {
+            let yaml = text.get(..offset)?;
+            let body = text.get(offset.checked_add(line.len())?..)?;
+            return Some((yaml, body));
+        }
+        offset = offset.checked_add(line.len())?;
+    }
+
+    return None;
+}
+
 /// A record that names itself two different things is refused rather than reconciled.
 fn Assert_The_Heading_Corroborates(
     front_matter: &RecordFrontMatter,
@@ -71,22 +89,12 @@ fn Assert_The_Heading_Corroborates(
     });
 }
 
-fn Split_At_Closing_Fence(text: &str) -> Option<(&str, &str)>
+fn First_Heading(body: &str) -> Option<String>
 {
-    let mut offset = 0_usize;
-
-    for line in text.split_inclusive('\n')
-    {
-        if line.trim_end() == "---"
-        {
-            let yaml = text.get(..offset)?;
-            let body = text.get(offset.checked_add(line.len())?..)?;
-            return Some((yaml, body));
-        }
-        offset = offset.checked_add(line.len())?;
-    }
-
-    return None;
+    return body
+        .lines()
+        .find(|line| line.starts_with("# "))
+        .map(|line| line.trim_start_matches("# ").trim().to_owned());
 }
 
 /// Whether a heading says the same thing the front matter does.
@@ -129,14 +137,6 @@ fn Corroborates(heading: Heading<'_>, id: Id<'_>, title: Title<'_>) -> bool
     let separated = rest.trim_start_matches([' ', '-', '\u{2013}', '\u{2014}', ':']);
 
     return !separated.eq(rest) && separated == title;
-}
-
-fn First_Heading(body: &str) -> Option<String>
-{
-    return body
-        .lines()
-        .find(|line| line.starts_with("# "))
-        .map(|line| line.trim_start_matches("# ").trim().to_owned());
 }
 
 #[cfg(test)]

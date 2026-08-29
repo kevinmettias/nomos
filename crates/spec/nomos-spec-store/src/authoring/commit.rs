@@ -43,73 +43,6 @@ pub(super) fn Apply(connection: &Connection, preview: &EditPreview) -> Result<Co
     return Ok(Reported(preview, blocks.len(), blocks_removed));
 }
 
-/// Replaces the document's stored bytes with the ones the author staged.
-fn Rewrite_Bytes(connection: &Connection, document_uid: i64, markdown: &str)
-    -> Result<(), StoreError>
-{
-    let blob_uid = Write_Blob(connection, markdown.as_bytes())?;
-
-    connection.execute(
-        "UPDATE source_documents SET blob_uid = ?2 WHERE uid = ?1",
-        params![document_uid, blob_uid],
-    )?;
-
-    return Ok(());
-}
-
-/// Moves the title and the kind with the author's own edit.
-///
-/// `Write_Node` refuses to overwrite a real node deliberately — the first writer of a record
-/// is its author and a later ingest pass must not restate it — and this is that author,
-/// arriving through the door the record decided they would use.
-fn Restate_Node(connection: &Connection, front_matter: &RecordFrontMatter)
-    -> Result<i64, StoreError>
-{
-    let node_uid = Node_Uid_Of(connection, &front_matter.id)?;
-
-    connection.execute(
-        "UPDATE nodes SET kind = ?2, authority = ?3, title = ?4 WHERE uid = ?1",
-        params![
-            node_uid,
-            front_matter.kind,
-            front_matter.authority,
-            front_matter.title
-        ],
-    )?;
-
-    return Ok(node_uid);
-}
-
-/// Replaces the document's blocks with the staged ones, and reports how many the edit
-/// shortened it past.
-fn Rewrite_Blocks(
-    connection: &Connection,
-    document_uid: i64,
-    node_uid: i64,
-    blocks: &[SourceBlock],
-) -> Result<usize, EditError>
-{
-    Write_Source_Blocks(connection, document_uid, blocks)?;
-    Write_Headings(connection, document_uid, node_uid, blocks)?;
-    Dispose_Blocks(connection, document_uid, node_uid, blocks)?;
-
-    return Prune_Blocks_Beyond(connection, document_uid, blocks.len());
-}
-
-/// What the commit did, as the caller reads it back.
-fn Reported(preview: &EditPreview, blocks: usize, blocks_removed: usize) -> CommitReport
-{
-    return CommitReport {
-        node_id: preview.staged.record.front_matter.id.clone(),
-        path: preview.staged.path.clone(),
-        blocks,
-        blocks_removed,
-        relations_added: preview.relations_added.len(),
-        relations_removed: preview.relations_removed.len(),
-        renamed: preview.Rename().is_some(),
-    };
-}
-
 /// Moves a document to a new path, keeping its surrogate.
 ///
 /// `UPDATE` rather than insert-and-delete, because `uid` is what every block, lineage and
@@ -153,6 +86,68 @@ fn Document_At(connection: &Connection, path: DocumentPath<'_>, revision: Docume
             |row| row.get(0),
         )
         .optional()?);
+}
+
+/// Replaces the document's stored bytes with the ones the author staged.
+fn Rewrite_Bytes(connection: &Connection, document_uid: i64, markdown: &str)
+    -> Result<(), StoreError>
+{
+    let blob_uid = Write_Blob(connection, markdown.as_bytes())?;
+
+    connection.execute(
+        "UPDATE source_documents SET blob_uid = ?2 WHERE uid = ?1",
+        params![document_uid, blob_uid],
+    )?;
+
+    return Ok(());
+}
+
+/// Moves the title and the kind with the author's own edit.
+///
+/// `Write_Node` refuses to overwrite a real node deliberately — the first writer of a record
+/// is its author and a later ingest pass must not restate it — and this is that author,
+/// arriving through the door the record decided they would use.
+fn Restate_Node(connection: &Connection, front_matter: &RecordFrontMatter)
+    -> Result<i64, StoreError>
+{
+    let node_uid = Node_Uid_Of(connection, &front_matter.id)?;
+
+    connection.execute(
+        "UPDATE nodes SET kind = ?2, authority = ?3, title = ?4 WHERE uid = ?1",
+        params![
+            node_uid,
+            front_matter.kind,
+            front_matter.authority,
+            front_matter.title
+        ],
+    )?;
+
+    return Ok(node_uid);
+}
+
+fn Node_Uid_Of(connection: &Connection, node_id: &str) -> Result<i64, StoreError>
+{
+    return Optional_Node_Uid(connection, node_id)?.ok_or_else(|| {
+        return StoreError::Sql(format!(
+            "{node_id} was read out of this store and is no longer in it"
+        ));
+    });
+}
+
+/// Replaces the document's blocks with the staged ones, and reports how many the edit
+/// shortened it past.
+fn Rewrite_Blocks(
+    connection: &Connection,
+    document_uid: i64,
+    node_uid: i64,
+    blocks: &[SourceBlock],
+) -> Result<usize, EditError>
+{
+    Write_Source_Blocks(connection, document_uid, blocks)?;
+    Write_Headings(connection, document_uid, node_uid, blocks)?;
+    Dispose_Blocks(connection, document_uid, node_uid, blocks)?;
+
+    return Prune_Blocks_Beyond(connection, document_uid, blocks.len());
 }
 
 /// Removes the blocks an edit shortened the document past.
@@ -319,13 +314,18 @@ fn Delete_Relation(
     return Ok(());
 }
 
-fn Node_Uid_Of(connection: &Connection, node_id: &str) -> Result<i64, StoreError>
+/// What the commit did, as the caller reads it back.
+fn Reported(preview: &EditPreview, blocks: usize, blocks_removed: usize) -> CommitReport
 {
-    return Optional_Node_Uid(connection, node_id)?.ok_or_else(|| {
-        return StoreError::Sql(format!(
-            "{node_id} was read out of this store and is no longer in it"
-        ));
-    });
+    return CommitReport {
+        node_id: preview.staged.record.front_matter.id.clone(),
+        path: preview.staged.path.clone(),
+        blocks,
+        blocks_removed,
+        relations_added: preview.relations_added.len(),
+        relations_removed: preview.relations_removed.len(),
+        renamed: preview.Rename().is_some(),
+    };
 }
 
 fn Optional_Node_Uid(connection: &Connection, node_id: &str) -> Result<Option<i64>, StoreError>

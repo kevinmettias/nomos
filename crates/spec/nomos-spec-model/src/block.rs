@@ -29,38 +29,6 @@ impl SourceBlock
     }
 }
 
-/// The lines of a fenced block, and the index of its last line.
-///
-/// Named rather than an unnamed pair, so the two positions cannot be swapped at a call site
-/// without a type error: both are ordinary values a tuple would give no names at all.
-struct FenceSpan<'a>
-{
-    lines: Vec<&'a str>,
-    closing: usize,
-}
-
-/// The lines of the fenced block opening at `index`, and the index of its last line.
-///
-/// An unterminated fence runs to the end of the document rather than being refused, which
-/// is what v14's readers do and therefore what reproducing their segmentation requires.
-fn Fence<'a>(lines: &[&'a str], index: usize) -> FenceSpan<'a>
-{
-    let mut fence: Vec<&str> = Vec::new();
-    let mut cursor = index;
-
-    while let Some(inner) = lines.get(cursor)
-    {
-        fence.push(inner);
-        if cursor > index && inner.starts_with("```")
-        {
-            break;
-        }
-        cursor = cursor.saturating_add(1);
-    }
-
-    return FenceSpan { lines: fence, closing: cursor };
-}
-
 /// Splits an authored markdown document into the blocks the preservation ledger tracks.
 ///
 /// Reproduces v14's segmentation exactly; verified against all 2533 recorded blocks.
@@ -98,53 +66,6 @@ pub fn Segment(markdown: &str) -> Vec<SourceBlock>
 
     Flush(&mut blocks, &mut paragraph, &heading_path);
     return blocks;
-}
-
-/// A heading extends the path it will then be filed under.
-fn Push_A_Heading(blocks: &mut Vec<SourceBlock>, heading_path: &mut Vec<String>, line: &str)
-{
-    Push_Heading_Path(heading_path, line);
-
-    let block = A_Heading(blocks, heading_path, line);
-    blocks.push(block);
-}
-
-/// A fenced block, answering with the index of its closing fence.
-fn Push_A_Fence(
-    blocks: &mut Vec<SourceBlock>,
-    heading_path: &[String],
-    lines: &[&str],
-    index: usize,
-) -> usize
-{
-    let span = Fence(lines, index);
-    let block = A_Fence(blocks, heading_path, &span.lines);
-
-    blocks.push(block);
-
-    return span.closing;
-}
-
-/// One heading line as a block, under the path it has just extended.
-fn A_Heading(blocks: &[SourceBlock], heading_path: &[String], line: &str) -> SourceBlock
-{
-    return SourceBlock {
-        ordinal: Next_Ordinal(blocks),
-        kind: BlockKind::Heading,
-        heading_path: heading_path.to_vec(),
-        text: line.to_owned(),
-    };
-}
-
-/// A fenced block, from its opening fence to its closing one.
-fn A_Fence(blocks: &[SourceBlock], heading_path: &[String], fence: &[&str]) -> SourceBlock
-{
-    return SourceBlock {
-        ordinal: Next_Ordinal(blocks),
-        kind: BlockKind::Code,
-        heading_path: heading_path.to_vec(),
-        text: fence.join("\n"),
-    };
 }
 
 /// v14's readers consume this as part of the opening front matter fence.
@@ -186,11 +107,6 @@ fn Skip_Front_Matter(lines: &[&str]) -> usize
     return 0;
 }
 
-fn Next_Ordinal(blocks: &[SourceBlock]) -> u32
-{
-    return u32::try_from(blocks.len()).unwrap_or(u32::MAX).saturating_add(1);
-}
-
 fn Flush(blocks: &mut Vec<SourceBlock>, paragraph: &mut Vec<&str>, heading_path: &[String])
 {
     if paragraph.is_empty()
@@ -207,6 +123,15 @@ fn Flush(blocks: &mut Vec<SourceBlock>, paragraph: &mut Vec<&str>, heading_path:
     paragraph.clear();
 }
 
+/// A heading extends the path it will then be filed under.
+fn Push_A_Heading(blocks: &mut Vec<SourceBlock>, heading_path: &mut Vec<String>, line: &str)
+{
+    Push_Heading_Path(heading_path, line);
+
+    let block = A_Heading(blocks, heading_path, line);
+    blocks.push(block);
+}
+
 fn Push_Heading_Path(path: &mut Vec<String>, line: &str)
 {
     let depth = line.chars().take_while(|character| *character == '#').count();
@@ -214,6 +139,81 @@ fn Push_Heading_Path(path: &mut Vec<String>, line: &str)
 
     path.truncate(depth.saturating_sub(1).min(path.len()));
     path.push(title);
+}
+
+/// One heading line as a block, under the path it has just extended.
+fn A_Heading(blocks: &[SourceBlock], heading_path: &[String], line: &str) -> SourceBlock
+{
+    return SourceBlock {
+        ordinal: Next_Ordinal(blocks),
+        kind: BlockKind::Heading,
+        heading_path: heading_path.to_vec(),
+        text: line.to_owned(),
+    };
+}
+
+/// A fenced block, answering with the index of its closing fence.
+fn Push_A_Fence(
+    blocks: &mut Vec<SourceBlock>,
+    heading_path: &[String],
+    lines: &[&str],
+    index: usize,
+) -> usize
+{
+    let span = Fence(lines, index);
+    let block = A_Fence(blocks, heading_path, &span.lines);
+
+    blocks.push(block);
+
+    return span.closing;
+}
+
+/// The lines of a fenced block, and the index of its last line.
+///
+/// Named rather than an unnamed pair, so the two positions cannot be swapped at a call site
+/// without a type error: both are ordinary values a tuple would give no names at all.
+struct FenceSpan<'a>
+{
+    lines: Vec<&'a str>,
+    closing: usize,
+}
+
+/// The lines of the fenced block opening at `index`, and the index of its last line.
+///
+/// An unterminated fence runs to the end of the document rather than being refused, which
+/// is what v14's readers do and therefore what reproducing their segmentation requires.
+fn Fence<'a>(lines: &[&'a str], index: usize) -> FenceSpan<'a>
+{
+    let mut fence: Vec<&str> = Vec::new();
+    let mut cursor = index;
+
+    while let Some(inner) = lines.get(cursor)
+    {
+        fence.push(inner);
+        if cursor > index && inner.starts_with("```")
+        {
+            break;
+        }
+        cursor = cursor.saturating_add(1);
+    }
+
+    return FenceSpan { lines: fence, closing: cursor };
+}
+
+/// A fenced block, from its opening fence to its closing one.
+fn A_Fence(blocks: &[SourceBlock], heading_path: &[String], fence: &[&str]) -> SourceBlock
+{
+    return SourceBlock {
+        ordinal: Next_Ordinal(blocks),
+        kind: BlockKind::Code,
+        heading_path: heading_path.to_vec(),
+        text: fence.join("\n"),
+    };
+}
+
+fn Next_Ordinal(blocks: &[SourceBlock]) -> u32
+{
+    return u32::try_from(blocks.len()).unwrap_or(u32::MAX).saturating_add(1);
 }
 
 #[cfg(test)]

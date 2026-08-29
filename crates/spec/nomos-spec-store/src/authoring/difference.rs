@@ -73,6 +73,31 @@ fn Claimed(before: &[SourceBlock], taken: &mut [bool], block: &SourceBlock) -> M
     return Match::New;
 }
 
+fn Unmatched(
+    before: &[SourceBlock],
+    taken: &[bool],
+    predicate: impl Fn(&SourceBlock) -> bool,
+) -> Option<usize>
+{
+    for (index, block) in before.iter().enumerate()
+    {
+        if Is_Free(taken, index) && predicate(block)
+        {
+            return Some(index);
+        }
+    }
+
+    return None;
+}
+
+fn Take(taken: &mut [bool], index: usize)
+{
+    if let Some(slot) = taken.get_mut(index)
+    {
+        *slot = true;
+    }
+}
+
 /// The same wording at a different ordinal moved. At the same ordinal, nothing happened to
 /// it, and reporting that would be noise in a preview an author has to read every time.
 fn Displaced(found: Option<&SourceBlock>, to: u32) -> Option<BlockChange>
@@ -152,40 +177,6 @@ const fn Position_Of(change: &BlockChange) -> u32
         | BlockChange::Reflowed { ordinal } => *ordinal,
         BlockChange::Moved { to, .. } => *to,
     };
-}
-
-fn Unmatched(
-    before: &[SourceBlock],
-    taken: &[bool],
-    predicate: impl Fn(&SourceBlock) -> bool,
-) -> Option<usize>
-{
-    for (index, block) in before.iter().enumerate()
-    {
-        if Is_Free(taken, index) && predicate(block)
-        {
-            return Some(index);
-        }
-    }
-
-    return None;
-}
-
-/// Whether the block at this index is still unclaimed.
-///
-/// An index past the end reads as taken, so a walk that runs off the slice matches nothing
-/// rather than pairing a change with a block that is not there.
-fn Is_Free(taken: &[bool], index: usize) -> bool
-{
-    return !taken.get(index).copied().unwrap_or(true);
-}
-
-fn Take(taken: &mut [bool], index: usize)
-{
-    if let Some(slot) = taken.get_mut(index)
-    {
-        *slot = true;
-    }
 }
 
 /// Which front matter fields the edit changes.
@@ -294,4 +285,13 @@ fn First_Difference(expected: Expected<'_>, found: Found<'_>) -> String
 
     return "every line matches, so the difference is in the leading or trailing whitespace"
         .to_owned();
+}
+
+/// Whether the block at this index is still unclaimed.
+///
+/// An index past the end reads as taken, so a walk that runs off the slice matches nothing
+/// rather than pairing a change with a block that is not there.
+fn Is_Free(taken: &[bool], index: usize) -> bool
+{
+    return !taken.get(index).copied().unwrap_or(true);
 }
