@@ -3320,6 +3320,54 @@
       "reason": "crosslang.rs's own doc comment (Check_Cross_Language_Correspondence, lines 47-51) documents that a source whose fact cannot be read is deliberately silent/absent from this rule's index -- reporting it is Check_Completeness_Mirrors/Check_Naming_Convention's job, not this rule's. Threading a Finding through Payload_Of here would fabricate diagnostic content this rule intentionally never emits.",
       "owner": "@kmettias",
       "expires": "2027-02-25"
+    },
+    {
+      "check": "check-explicit-return",
+      "path": "crates/languages/nomos-lang-rust-cargo/src/metadata.rs",
+      "fingerprint": "61cceae4ff50a9dd",
+      "reason": "this function's tail expression is a match/loop where every reachable arm already exits via its own explicit return -- the construct as a whole diverges, so wrapping it in an outer return produces a genuine rustc unreachable_code warning rather than a real fix (confirmed by applying --fix and rebuilding). Each arm's own explicit return already gives the 'visual landmark' this check exists for.",
+      "owner": "@kmettias",
+      "expires": "2027-02-25"
+    },
+    {
+      "check": "check-explicit-return",
+      "path": "crates/platform/nomos-platform-std/src/launcher/wait.rs",
+      "fingerprint": "418e8210d5017dde",
+      "reason": "this function's tail expression is a match/loop where every reachable arm already exits via its own explicit return -- the construct as a whole diverges, so wrapping it in an outer return produces a genuine rustc unreachable_code warning rather than a real fix (confirmed by applying --fix and rebuilding). Each arm's own explicit return already gives the 'visual landmark' this check exists for.",
+      "owner": "@kmettias",
+      "expires": "2027-02-25"
+    },
+    {
+      "check": "check-explicit-return",
+      "path": "crates/platform/nomos-platform-std/src/launcher/wait.rs",
+      "fingerprint": "e4a3ce8befdb0ec3",
+      "reason": "this function's tail expression is a match/loop where every reachable arm already exits via its own explicit return -- the construct as a whole diverges, so wrapping it in an outer return produces a genuine rustc unreachable_code warning rather than a real fix (confirmed by applying --fix and rebuilding). Each arm's own explicit return already gives the 'visual landmark' this check exists for.",
+      "owner": "@kmettias",
+      "expires": "2027-02-25"
+    },
+    {
+      "check": "check-explicit-return",
+      "path": "tests/contract/src/reading/source_files.rs",
+      "fingerprint": "c086a8f3093dd299",
+      "reason": "this function's tail expression is a match/loop where every reachable arm already exits via its own explicit return -- the construct as a whole diverges, so wrapping it in an outer return produces a genuine rustc unreachable_code warning rather than a real fix (confirmed by applying --fix and rebuilding). Each arm's own explicit return already gives the 'visual landmark' this check exists for.",
+      "owner": "@kmettias",
+      "expires": "2027-02-25"
+    },
+    {
+      "check": "check-explicit-return",
+      "path": "crates/languages/nomos-lang-rust-clippy/src/reading.rs",
+      "fingerprint": "61cceae4ff50a9dd",
+      "reason": "this function's tail expression is a match/loop where every reachable arm already exits via its own explicit return -- the construct as a whole diverges, so wrapping it in an outer return produces a genuine rustc unreachable_code warning rather than a real fix (confirmed by applying --fix and rebuilding). Each arm's own explicit return already gives the 'visual landmark' this check exists for.",
+      "owner": "@kmettias",
+      "expires": "2027-02-25"
+    },
+    {
+      "check": "check-explicit-return",
+      "path": "crates/languages/nomos-lang-rust-deny/src/reading.rs",
+      "fingerprint": "61cceae4ff50a9dd",
+      "reason": "this function's tail expression is a match/loop where every reachable arm already exits via its own explicit return -- the construct as a whole diverges, so wrapping it in an outer return produces a genuine rustc unreachable_code warning rather than a real fix (confirmed by applying --fix and rebuilding). Each arm's own explicit return already gives the 'visual landmark' this check exists for.",
+      "owner": "@kmettias",
+      "expires": "2027-02-25"
     }
   ]
 }

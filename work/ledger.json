@@ -35369,6 +35369,59 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P16-EVERYTHINGELSE-QUICKFIXES-2",
+      "title": "OD-GATE-018 phase 3: check-trailing-whitespace fixed and check-explicit-return's divergent-tail false positive waived",
+      "why": "formatting phase's check-trailing-whitespace (2 findings, both in crates/spec/nomos-spec-bundle/src/row.rs) took the tool's own --fix cleanly. check-explicit-return (6 findings) all turned out to be the same shape: a tail-position match or loop where every reachable arm already exits via its own explicit return, so the construct as a whole diverges. Applying the tool's own --fix (wrapping each in an outer return) and rebuilding produced five real rustc unreachable_code warnings -- confirmed, then reverted -- because an outer return over an already-fully-divergent match/loop is redundant, not a fix. All six are waived individually with that reasoning; per-arm return already gives this check's own stated goal (a visible return-point landmark).",
+      "done_when": "check-trailing-whitespace and check-explicit-return both report zero findings against crates tests (default run). cargo build --workspace --all-targets produces no new warnings relative to before this item (in particular, no unreachable_code warnings). git diff for crates/spec/nomos-spec-bundle/src/row.rs touches only trailing whitespace.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-bundle/src/row.rs",
+          "suppressions.json"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "exit_code": 0,
+        "output_tail": "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.19s\n",
+        "verified_at": 1788024586,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "50bf2124cad86f89e2b72e09169978070eac2c64"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
