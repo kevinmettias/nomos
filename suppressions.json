@@ -5064,6 +5064,142 @@
       "reason": "this is a pub use re-export forming part of the crate's public API surface (nomos_spec_model::StatementKind), not a private import for internal convenience -- the checker can't distinguish the two and doesn't see that external crates depend on this path. Moving a pub use into a function body would remove the crate-level export entirely, not narrow its scope.",
       "owner": "@claude-p19-campaign",
       "expires": "2026-11-27"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/capabilities/nomos-cap-syntax/src/payload/render.rs",
+      "fingerprint": "29cdccead203ca09",
+      "reason": "ProcessLauncher/ProcessOutput/CrossProcessLock/StdProcessLauncher/Command::New/FileSystem::Exists/Intersection::Permits_Concurrency/Observation::Was_Observed/PayloadItem::Declares_No_Visibility/Escape all have real external callers spread across host/, orchestration/, languages/, nomos-ledger and tests/ (up to ~65 call sites for the largest). A rename here is legitimate but large enough to warrant its own tracked item rather than folding into this mechanical sweep.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/platform/nomos-platform-std/src/std_process_launcher.rs",
+      "fingerprint": "c3de846cce983bca",
+      "reason": "ProcessLauncher/ProcessOutput/CrossProcessLock/StdProcessLauncher/Command::New/FileSystem::Exists/Intersection::Permits_Concurrency/Observation::Was_Observed/PayloadItem::Declares_No_Visibility/Escape all have real external callers spread across host/, orchestration/, languages/, nomos-ledger and tests/ (up to ~65 call sites for the largest). A rename here is legitimate but large enough to warrant its own tracked item rather than folding into this mechanical sweep.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/platform/nomos-platform/src/cross_process_lock.rs",
+      "fingerprint": "32e0b9044437fcff",
+      "reason": "ProcessLauncher/ProcessOutput/CrossProcessLock/StdProcessLauncher/Command::New/FileSystem::Exists/Intersection::Permits_Concurrency/Observation::Was_Observed/PayloadItem::Declares_No_Visibility/Escape all have real external callers spread across host/, orchestration/, languages/, nomos-ledger and tests/ (up to ~65 call sites for the largest). A rename here is legitimate but large enough to warrant its own tracked item rather than folding into this mechanical sweep.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/platform/nomos-platform/src/process_launcher.rs",
+      "fingerprint": "38de862b7568267a",
+      "reason": "ProcessLauncher/ProcessOutput/CrossProcessLock/StdProcessLauncher/Command::New/FileSystem::Exists/Intersection::Permits_Concurrency/Observation::Was_Observed/PayloadItem::Declares_No_Visibility/Escape all have real external callers spread across host/, orchestration/, languages/, nomos-ledger and tests/ (up to ~65 call sites for the largest). A rename here is legitimate but large enough to warrant its own tracked item rather than folding into this mechanical sweep.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/platform/nomos-platform/src/process_launcher/command.rs",
+      "fingerprint": "f018bfac7f6373cb",
+      "reason": "ProcessLauncher/ProcessOutput/CrossProcessLock/StdProcessLauncher/Command::New/FileSystem::Exists/Intersection::Permits_Concurrency/Observation::Was_Observed/PayloadItem::Declares_No_Visibility/Escape all have real external callers spread across host/, orchestration/, languages/, nomos-ledger and tests/ (up to ~65 call sites for the largest). A rename here is legitimate but large enough to warrant its own tracked item rather than folding into this mechanical sweep.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/platform/nomos-platform/src/process_launcher/process_output.rs",
+      "fingerprint": "4eadb5f5c7607525",
+      "reason": "ProcessLauncher/ProcessOutput/CrossProcessLock/StdProcessLauncher/Command::New/FileSystem::Exists/Intersection::Permits_Concurrency/Observation::Was_Observed/PayloadItem::Declares_No_Visibility/Escape all have real external callers spread across host/, orchestration/, languages/, nomos-ledger and tests/ (up to ~65 call sites for the largest). A rename here is legitimate but large enough to warrant its own tracked item rather than folding into this mechanical sweep.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-boolean-predicate",
+      "path": "crates/capabilities/nomos-cap-syntax/src/payload/observation.rs",
+      "fingerprint": "21b4e5d3772c97df",
+      "reason": "ProcessLauncher/ProcessOutput/CrossProcessLock/StdProcessLauncher/Command::New/FileSystem::Exists/Intersection::Permits_Concurrency/Observation::Was_Observed/PayloadItem::Declares_No_Visibility/Escape all have real external callers spread across host/, orchestration/, languages/, nomos-ledger and tests/ (up to ~65 call sites for the largest). A rename here is legitimate but large enough to warrant its own tracked item rather than folding into this mechanical sweep.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-boolean-predicate",
+      "path": "crates/capabilities/nomos-cap-syntax/src/payload_item.rs",
+      "fingerprint": "e16e254e4e6fb173",
+      "reason": "ProcessLauncher/ProcessOutput/CrossProcessLock/StdProcessLauncher/Command::New/FileSystem::Exists/Intersection::Permits_Concurrency/Observation::Was_Observed/PayloadItem::Declares_No_Visibility/Escape all have real external callers spread across host/, orchestration/, languages/, nomos-ledger and tests/ (up to ~65 call sites for the largest). A rename here is legitimate but large enough to warrant its own tracked item rather than folding into this mechanical sweep.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-boolean-predicate",
+      "path": "crates/kernel/nomos-model/src/subject/intersection.rs",
+      "fingerprint": "5ea882dbc3ef1387",
+      "reason": "ProcessLauncher/ProcessOutput/CrossProcessLock/StdProcessLauncher/Command::New/FileSystem::Exists/Intersection::Permits_Concurrency/Observation::Was_Observed/PayloadItem::Declares_No_Visibility/Escape all have real external callers spread across host/, orchestration/, languages/, nomos-ledger and tests/ (up to ~65 call sites for the largest). A rename here is legitimate but large enough to warrant its own tracked item rather than folding into this mechanical sweep.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-boolean-predicate",
+      "path": "crates/platform/nomos-platform/src/file_system.rs",
+      "fingerprint": "8ccbbef49176d115",
+      "reason": "ProcessLauncher/ProcessOutput/CrossProcessLock/StdProcessLauncher/Command::New/FileSystem::Exists/Intersection::Permits_Concurrency/Observation::Was_Observed/PayloadItem::Declares_No_Visibility/Escape all have real external callers spread across host/, orchestration/, languages/, nomos-ledger and tests/ (up to ~65 call sites for the largest). A rename here is legitimate but large enough to warrant its own tracked item rather than folding into this mechanical sweep.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-import-scope",
+      "path": "crates/orchestration/nomos-spec-orchestration/src/run.rs",
+      "fingerprint": "4940532994168ea6",
+      "reason": "this pub use forms part of the crate's real public API surface -- nomos_spec_orchestration::Commit_Staged_Edit (and its siblings) is called directly by that qualified path from crates/host/nomos-cli, so this is a load-bearing re-export chain, not a private import for internal convenience. The checker can't distinguish a pub use from a movable one and doesn't see the external caller.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-import-scope",
+      "path": "crates/orchestration/nomos-spec-orchestration/src/run.rs",
+      "fingerprint": "68336b661525bfc3",
+      "reason": "this pub use forms part of the crate's real public API surface -- nomos_spec_orchestration::Commit_Staged_Edit (and its siblings) is called directly by that qualified path from crates/host/nomos-cli, so this is a load-bearing re-export chain, not a private import for internal convenience. The checker can't distinguish a pub use from a movable one and doesn't see the external caller.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-import-scope",
+      "path": "crates/orchestration/nomos-spec-orchestration/src/run.rs",
+      "fingerprint": "dee6e9d1efbe4a72",
+      "reason": "this pub use forms part of the crate's real public API surface -- nomos_spec_orchestration::Commit_Staged_Edit (and its siblings) is called directly by that qualified path from crates/host/nomos-cli, so this is a load-bearing re-export chain, not a private import for internal convenience. The checker can't distinguish a pub use from a movable one and doesn't see the external caller.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-import-scope",
+      "path": "crates/orchestration/nomos-spec-orchestration/src/run.rs",
+      "fingerprint": "d124db8e1623cdbd",
+      "reason": "this pub use forms part of the crate's real public API surface -- nomos_spec_orchestration::Commit_Staged_Edit (and its siblings) is called directly by that qualified path from crates/host/nomos-cli, so this is a load-bearing re-export chain, not a private import for internal convenience. The checker can't distinguish a pub use from a movable one and doesn't see the external caller.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-import-scope",
+      "path": "crates/orchestration/nomos-spec-orchestration/src/run.rs",
+      "fingerprint": "bf206271cd66221b",
+      "reason": "this pub use forms part of the crate's real public API surface -- nomos_spec_orchestration::Commit_Staged_Edit (and its siblings) is called directly by that qualified path from crates/host/nomos-cli, so this is a load-bearing re-export chain, not a private import for internal convenience. The checker can't distinguish a pub use from a movable one and doesn't see the external caller.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-import-scope",
+      "path": "crates/orchestration/nomos-spec-orchestration/src/run.rs",
+      "fingerprint": "649fd5753e95024a",
+      "reason": "this pub use forms part of the crate's real public API surface -- nomos_spec_orchestration::Commit_Staged_Edit (and its siblings) is called directly by that qualified path from crates/host/nomos-cli, so this is a load-bearing re-export chain, not a private import for internal convenience. The checker can't distinguish a pub use from a movable one and doesn't see the external caller.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-import-scope",
+      "path": "crates/orchestration/nomos-spec-orchestration/src/run.rs",
+      "fingerprint": "b632e102c8e41ed8",
+      "reason": "this pub use forms part of the crate's real public API surface -- nomos_spec_orchestration::Commit_Staged_Edit (and its siblings) is called directly by that qualified path from crates/host/nomos-cli, so this is a load-bearing re-export chain, not a private import for internal convenience. The checker can't distinguish a pub use from a movable one and doesn't see the external caller.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
     }
   ]
 }
