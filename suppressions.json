@@ -4768,6 +4768,46 @@
       "reason": "fn fmt is the method name mandated by the foreign std::fmt::Display/Debug trait signature; renaming it would break the trait implementation. No code fix is possible.",
       "owner": "@claude-p19-campaign",
       "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/substrate/nomos-capability/src/registry/registry_error.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fn fmt is the method name mandated by the foreign std::fmt::Display/Debug trait signature; renaming it would break the trait implementation. No code fix is possible.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/substrate/nomos-ledger/src/item/item_id.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fn fmt is the method name mandated by the foreign std::fmt::Display/Debug trait signature; renaming it would break the trait implementation. No code fix is possible.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/substrate/nomos-ledger/src/ledger_error.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fn fmt is the method name mandated by the foreign std::fmt::Display/Debug trait signature; renaming it would break the trait implementation. No code fix is possible.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/substrate/nomos-workspace/src/change/change_source.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fn fmt is the method name mandated by the foreign std::fmt::Display/Debug trait signature; renaming it would break the trait implementation. No code fix is possible.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/substrate/nomos-workspace/src/workspace/workspace_error.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fn fmt is the method name mandated by the foreign std::fmt::Display/Debug trait signature; renaming it would break the trait implementation. No code fix is possible.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
     }
   ]
 }
