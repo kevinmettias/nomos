@@ -57,10 +57,12 @@ pub struct Verification
 /// mismatch is a build failure resolved by fixing the implementation or lowering the
 /// declaration, never by marking the test flaky.
 #[must_use]
-// rust-closure: allow: `Fn` is the minimal bound here and not merely the habitual one. The
-// producer is invoked once per repetition through a shared reference, so `FnOnce` cannot
-// express it; `FnMut` could, and is refused deliberately, because a producer carrying
-// mutable state between repetitions is exactly the thing this verifier exists to rule out.
+// `Fn` is the minimal bound here and not merely the habitual one (waived in suppressions.json,
+// since check-closure-bounds is not one of the safety-critical checks an in-code marker
+// still argues under this repository's safety-only policy). The producer is invoked once per
+// repetition through a shared reference, so `FnOnce` cannot express it; `FnMut` could, and is
+// refused deliberately, because a producer carrying mutable state between repetitions is
+// exactly the thing this verifier exists to rule out.
 pub fn Verify<S: Strategy>(domain: &str, produce: &dyn Fn() -> Vec<u8>) -> Verification
 {
     Assert_The_Declaration_Is_Coherent::<S>(domain);

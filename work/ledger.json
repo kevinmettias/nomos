@@ -35422,6 +35422,61 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P16-EVERYTHINGELSE-CONCURRENCY-1",
+      "title": "OD-GATE-018 phase 3: close check-closure-bounds and check-lifetime-discipline",
+      "why": "concurrency-and-unsafe's check-closure-bounds (5) and check-lifetime-discipline (1) are neither test code nor one of the thirteen safety-critical checks whose in-code marker this repository's safety-only policy honours -- two of the six findings already carried an in-code // rust-closure: allow / // rust-lifetime: allow marker that check.exe reported as not honoured. All six bounds are structurally required (Send by std::thread::scope(..).spawn(..) in nomos-ledger's interleaving test harness and by std::thread::spawn in nomos-platform-std's Drain::Reading; Fn as the minimal, deliberately-chosen bound in tests/integration/src/verification.rs's Verify), so each is waived in suppressions.json with its own reason, per OD-GATE-018's stated remedy for an unhonoured marker (move it to the ledger). The two ineffective in-code markers were reworded as plain comments pointing at the waiver, so a reader does not mistake them for working suppressions.",
+      "done_when": "check-closure-bounds and check-lifetime-discipline both report zero findings against crates tests (default run). cargo build --workspace --all-targets stays green with no new warnings. No // rust-closure: allow or // rust-lifetime: allow marker remains in the tree (check.exe's own claim is that neither is honoured under this repository's safety-only policy).",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/platform/nomos-platform-std/src/launcher/drain.rs",
+          "crates/substrate/nomos-ledger/tests/exclusion_holds/interleaving.rs",
+          "tests/integration/src/verification.rs",
+          "suppressions.json"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "exit_code": 0,
+        "output_tail": "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.19s\n",
+        "verified_at": 1788024845,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "44af9785ed3e35780c5d3198e39224a1133476d5"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

@@ -187,6 +187,10 @@ pub(crate) fn Ledger_Over<'shared>(
 /// arrangements look like from outside: without exclusion `second` completes inside the
 /// window and `first` then writes over it; with exclusion `second` is still waiting for the
 /// lock when the window closes, and it reads `first`'s write when it finally gets in.
+// `Send` on both closures is required by `Interleaved`, which runs each through
+// `std::thread::scope(..).spawn(..)` (waived in suppressions.json, since check-closure-bounds
+// is not one of the safety-critical checks an in-code marker still argues under this
+// repository's safety-only policy).
 pub(crate) fn Two_Writers(
     name: &str,
     items: Vec<LedgerItem>,
@@ -224,6 +228,9 @@ pub(crate) struct Harness<'a>
 
 /// The scope itself: `second` starts once `first` has read, and `first` writes once `second`
 /// has either finished or been kept waiting for [`SECOND_WRITER_LIMIT`].
+// `Send` on both closures is required by `std::thread::scope(..).spawn(..)` below (waived in
+// suppressions.json, since check-closure-bounds is not one of the safety-critical checks an
+// in-code marker still argues under this repository's safety-only policy).
 pub(crate) fn Interleaved(
     over: Harness<'_>,
     first: impl FnOnce(&mut InterleavedLedger<'_>) + Send,

@@ -3368,6 +3368,54 @@
       "reason": "this function's tail expression is a match/loop where every reachable arm already exits via its own explicit return -- the construct as a whole diverges, so wrapping it in an outer return produces a genuine rustc unreachable_code warning rather than a real fix (confirmed by applying --fix and rebuilding). Each arm's own explicit return already gives the 'visual landmark' this check exists for.",
       "owner": "@kmettias",
       "expires": "2027-02-25"
+    },
+    {
+      "check": "check-closure-bounds",
+      "path": "tests/integration/src/verification.rs",
+      "fingerprint": "3d68d4d1a7215e69",
+      "reason": "Fn is the minimal bound: the producer is invoked once per repetition through a shared reference (rules out FnOnce), and FnMut is refused deliberately since mutable state across repetitions is exactly what this verifier exists to rule out. check-closure-bounds is not one of the safety-critical checks an in-code marker still argues under this repository's safety-only policy, so this moves here per OD-GATE-018's own remedy for an unhonoured marker.",
+      "owner": "@kmettias",
+      "expires": "2027-02-25"
+    },
+    {
+      "check": "check-lifetime-discipline",
+      "path": "crates/platform/nomos-platform-std/src/launcher/drain.rs",
+      "fingerprint": "ee93784c82f23dbb",
+      "reason": "'static is required by std::thread::spawn, which moves the reader onto a detached thread that outlives this call -- not a bound chosen here. check-lifetime-discipline is not one of the safety-critical checks an in-code marker still argues under this repository's safety-only policy, so this moves here per OD-GATE-018's own remedy for an unhonoured marker.",
+      "owner": "@kmettias",
+      "expires": "2027-02-25"
+    },
+    {
+      "check": "check-closure-bounds",
+      "path": "crates/substrate/nomos-ledger/tests/exclusion_holds/interleaving.rs",
+      "fingerprint": "9730566a4eff1eb3",
+      "reason": "Send is required by std::thread::scope(..).spawn(..), which runs this closure on another thread -- not a habitual bound. check-closure-bounds is not one of the safety-critical checks an in-code marker still argues under this repository's safety-only policy, so this moves here per OD-GATE-018's own remedy for an unhonoured marker.",
+      "owner": "@kmettias",
+      "expires": "2027-02-25"
+    },
+    {
+      "check": "check-closure-bounds",
+      "path": "crates/substrate/nomos-ledger/tests/exclusion_holds/interleaving.rs",
+      "fingerprint": "7b4b62ef2bcce807",
+      "reason": "Send is required by std::thread::scope(..).spawn(..), which runs this closure on another thread -- not a habitual bound. check-closure-bounds is not one of the safety-critical checks an in-code marker still argues under this repository's safety-only policy, so this moves here per OD-GATE-018's own remedy for an unhonoured marker.",
+      "owner": "@kmettias",
+      "expires": "2027-02-25"
+    },
+    {
+      "check": "check-closure-bounds",
+      "path": "crates/substrate/nomos-ledger/tests/exclusion_holds/interleaving.rs",
+      "fingerprint": "5dddefc6a59d4112",
+      "reason": "Send is required by std::thread::scope(..).spawn(..), which runs this closure on another thread -- not a habitual bound. check-closure-bounds is not one of the safety-critical checks an in-code marker still argues under this repository's safety-only policy, so this moves here per OD-GATE-018's own remedy for an unhonoured marker.",
+      "owner": "@kmettias",
+      "expires": "2027-02-25"
+    },
+    {
+      "check": "check-closure-bounds",
+      "path": "crates/substrate/nomos-ledger/tests/exclusion_holds/interleaving.rs",
+      "fingerprint": "3df057a7db61e9c7",
+      "reason": "Send is required by std::thread::scope(..).spawn(..), which runs this closure on another thread -- not a habitual bound. check-closure-bounds is not one of the safety-critical checks an in-code marker still argues under this repository's safety-only policy, so this moves here per OD-GATE-018's own remedy for an unhonoured marker.",
+      "owner": "@kmettias",
+      "expires": "2027-02-25"
     }
   ]
 }
