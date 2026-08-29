@@ -59,6 +59,74 @@ pub fn Run(
     return Render(command, outcome, output);
 }
 
+/// Every record this repository has already published, as repository-relative paths.
+///
+/// Read here rather than in the store, and that division is the point rather than a
+/// convenience. `OD-LEDGER-021` put the *decision* behind the ledger's lock and left the
+/// command layer its input and its reporting; enumerating a repository is input. A general
+/// exclusion ledger that learned to walk a source tree would be answering a question about
+/// this repository's conventions, and `nomos-ledger` already stretches as far as it should
+/// by knowing what a record filename folds to.
+///
+/// The same reason this stayed here rather than moving into `nomos-work-orchestration` with
+/// everything else `WorkCommand::Add` needs: [`nomos_platform::FileSystem`] is read,
+/// atomically-replace and exists, not a directory listing, so a generic dispatch function
+/// has no port to reach this through. `nomos_work_orchestration::Run`'s `published`
+/// parameter is where this value is handed across that boundary.
+///
+/// An unreadable or absent directory yields nothing rather than refusing. That is the one
+/// judgement here worth stating, because this repository's usual rule is the opposite: a
+/// check that cannot find its subject must fail loudly. It does not apply, because this is
+/// not the check — the open-item comparison still runs, and it is the half that races. A
+/// tree with no `docs/records` is a ledger being used somewhere that has no records, and
+/// refusing every `add` in it would be this repository's convention refusing everybody
+/// else's.
+fn Published_Records(directory: &Path) -> Territory
+{
+    // The ledger lives in `work/`, so the repository is its parent. A `work/` at the root of
+    // nothing has no records, which the walk below reports as none.
+    let Some(root) = directory.parent()
+    else
+    {
+        return Territory::Empty();
+    };
+
+    let mut published = Record_Files(root);
+    // Sorted so that an item colliding with two records is refused against the same one
+    // every run. A refusal that names a different file each time reads as two defects.
+    published.sort();
+
+    return Territory::Of_Files(published);
+}
+
+/// Every file directly under the repository's record directory, as a territory is spelled.
+///
+/// Repository-relative and forward-slashed, which is the spelling a territory is authored
+/// in. `Normalize_Path` would accept either, and handing it the shape it documents keeps the
+/// refusal's text readable by whoever has to act on it.
+fn Record_Files(root: &Path) -> Vec<String>
+{
+    let Ok(entries) = std::fs::read_dir(root.join(RECORD_DIRECTORY))
+    else
+    {
+        return Vec::new();
+    };
+
+    let mut published = Vec::new();
+    for entry in entries.flatten()
+    {
+        if let Some(name) = entry.file_name().to_str()
+        {
+            published.push(format!("{RECORD_DIRECTORY}/{name}"));
+        }
+    }
+
+    return published;
+}
+
+/// Where this repository authors its decision records, relative to the repository root.
+const RECORD_DIRECTORY: &str = "docs/records";
+
 /// Turns what [`nomos_work_orchestration::Run`] produced into text and an [`ExitCode`].
 ///
 /// One `match` over `(command, outcome)` rather than a second dispatch on `command` alone:
@@ -263,71 +331,3 @@ fn Print_Audit(document: &LedgerDocument, now: nomos_platform::Timestamp, output
         let _ = writeln!(output, "nothing claimable is blocked");
     }
 }
-
-/// Every record this repository has already published, as repository-relative paths.
-///
-/// Read here rather than in the store, and that division is the point rather than a
-/// convenience. `OD-LEDGER-021` put the *decision* behind the ledger's lock and left the
-/// command layer its input and its reporting; enumerating a repository is input. A general
-/// exclusion ledger that learned to walk a source tree would be answering a question about
-/// this repository's conventions, and `nomos-ledger` already stretches as far as it should
-/// by knowing what a record filename folds to.
-///
-/// The same reason this stayed here rather than moving into `nomos-work-orchestration` with
-/// everything else `WorkCommand::Add` needs: [`nomos_platform::FileSystem`] is read,
-/// atomically-replace and exists, not a directory listing, so a generic dispatch function
-/// has no port to reach this through. `nomos_work_orchestration::Run`'s `published`
-/// parameter is where this value is handed across that boundary.
-///
-/// An unreadable or absent directory yields nothing rather than refusing. That is the one
-/// judgement here worth stating, because this repository's usual rule is the opposite: a
-/// check that cannot find its subject must fail loudly. It does not apply, because this is
-/// not the check — the open-item comparison still runs, and it is the half that races. A
-/// tree with no `docs/records` is a ledger being used somewhere that has no records, and
-/// refusing every `add` in it would be this repository's convention refusing everybody
-/// else's.
-fn Published_Records(directory: &Path) -> Territory
-{
-    // The ledger lives in `work/`, so the repository is its parent. A `work/` at the root of
-    // nothing has no records, which the walk below reports as none.
-    let Some(root) = directory.parent()
-    else
-    {
-        return Territory::Empty();
-    };
-
-    let mut published = Record_Files(root);
-    // Sorted so that an item colliding with two records is refused against the same one
-    // every run. A refusal that names a different file each time reads as two defects.
-    published.sort();
-
-    return Territory::Of_Files(published);
-}
-
-/// Every file directly under the repository's record directory, as a territory is spelled.
-///
-/// Repository-relative and forward-slashed, which is the spelling a territory is authored
-/// in. `Normalize_Path` would accept either, and handing it the shape it documents keeps the
-/// refusal's text readable by whoever has to act on it.
-fn Record_Files(root: &Path) -> Vec<String>
-{
-    let Ok(entries) = std::fs::read_dir(root.join(RECORD_DIRECTORY))
-    else
-    {
-        return Vec::new();
-    };
-
-    let mut published = Vec::new();
-    for entry in entries.flatten()
-    {
-        if let Some(name) = entry.file_name().to_str()
-        {
-            published.push(format!("{RECORD_DIRECTORY}/{name}"));
-        }
-    }
-
-    return published;
-}
-
-/// Where this repository authors its decision records, relative to the repository root.
-const RECORD_DIRECTORY: &str = "docs/records";

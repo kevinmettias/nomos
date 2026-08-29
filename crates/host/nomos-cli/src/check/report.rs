@@ -98,6 +98,16 @@ impl Coverage
         }
     }
 
+    /// The buckets this run actually put something in.
+    ///
+    /// Zero buckets are omitted from the rendering rather than printed at zero: eleven lines
+    /// on every run, ten of them reading `: 0`, is the kind of output a reader learns to skip
+    /// past, which is exactly how a silent omission stayed silent the first time.
+    fn Nonzero(&self) -> Vec<(Applicability, usize)>
+    {
+        return self.All().into_iter().filter(|&(_, count)| return count > 0).collect();
+    }
+
     /// All eleven buckets, labelled, in the order [`Applicability`] declares them.
     ///
     /// Grouped by variant rather than by capability or by language, because this build
@@ -121,16 +131,6 @@ impl Coverage
             (Applicability::AnalysisFailed, self.analysis_failed),
             (Applicability::AgentRequired, self.agent_required),
         ];
-    }
-
-    /// The buckets this run actually put something in.
-    ///
-    /// Zero buckets are omitted from the rendering rather than printed at zero: eleven lines
-    /// on every run, ten of them reading `: 0`, is the kind of output a reader learns to skip
-    /// past, which is exactly how a silent omission stayed silent the first time.
-    fn Nonzero(&self) -> Vec<(Applicability, usize)>
-    {
-        return self.All().into_iter().filter(|&(_, count)| return count > 0).collect();
     }
 }
 

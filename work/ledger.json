@@ -35679,14 +35679,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-loop-session",
-        "acquired_at": 1788028051,
-        "lease_expires_at": 1788035251
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -35696,7 +35692,27 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "exit_code": 0,
+        "output_tail": "   Compiling nomos-spec-store v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-store)\n   Compiling nomos-spec-model v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-model)\n   Compiling nomos-work-orchestration v0.1.0 (F:\\repos\\nomos\\crates\\orchestration\\nomos-work-orchestration)\n   Compiling nomos-spec-ingest v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-ingest)\n   Compiling nomos-spec-project v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-project)\n   Compiling nomos-spec-bundle v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-bundle)\n   Compiling nomos-spec-orchestration v0.1.0 (F:\\repos\\nomos\\crates\\orchestration\\nomos-spec-orchestration)\n   Compiling nomos-spec-validate v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-validate)\n   Compiling nomos-integration-tests v0.1.0 (F:\\repos\\nomos\\tests\\integration)\n   Compiling nomos-api v0.1.0 (F:\\repos\\nomos\\crates\\host\\nomos-api)\n   Compiling nomos-cli v0.1.0 (F:\\repos\\nomos\\crates\\host\\nomos-cli)\n    Finished `dev` profile [unoptimized + debuginfo] target(s) in 12.89s\n",
+        "verified_at": 1788028849,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "6a3d7dadb249db1132447bd7d3b3eeb95403960c"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -35910,6 +35926,76 @@
           "build",
           "--workspace",
           "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P17-CLEANFILE-HOST",
+      "title": "clean-file phase regressed in crates/host: close function-size, literals, parameter-count drift",
+      "why": "OD-GATE-018 drove the clean-file phase to zero at 026bbf8, but concurrent phase-3 edits under crates/host reintroduced findings in three of its checks -- the campaign's own recorded warning that these checks interact and must be re-run after any fix, now observed for real.",
+      "done_when": "check-function-size, check-literals and check-parameter-count report zero unwaived findings against crates/host/nomos-cli and crates/host/nomos-api: nomos-cli/src/agent/parsing.rs's Usage_Text (49 lines), agent/exit_code.rs's three magic numbers, agent/judge_role.rs's Judge_Role (5 params), and nomos-api/src/work/take_over.rs's 3600-second literal. Any suppression carries a genuine structural reason in suppressions.json, not one added just to zero the count.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli",
+          "crates/host/nomos-api"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-api"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P17-CLEANFILE-ORCHESTRATION",
+      "title": "clean-file phase regressed in crates/orchestration: close function-size, parameter-count drift",
+      "why": "OD-GATE-018 drove the clean-file phase to zero at 026bbf8, but concurrent phase-3 edits under crates/orchestration reintroduced findings in two of its checks -- the campaign's own recorded warning that these checks interact and must be re-run after any fix, now observed for real.",
+      "done_when": "check-function-size and check-parameter-count report zero unwaived findings against crates/orchestration/nomos-gate-orchestration and crates/orchestration/nomos-check-orchestration: run_gate.rs's Reduced (30 lines) and Run_Gate (5 params), explain.rs's Explain_Gate (5 params), and check-orchestration's run.rs's Run (5 params). Any suppression carries a genuine structural reason in suppressions.json, not one added just to zero the count.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration",
+          "crates/orchestration/nomos-check-orchestration"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-check-orchestration"
         ],
         "timeout_seconds": 600
       },

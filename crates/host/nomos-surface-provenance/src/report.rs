@@ -42,16 +42,6 @@ fn Render_Flagged(text: &mut String, flagged: &[&CrateFinding])
     }
 }
 
-/// The one summary line naming every crate that checked out clean, when any did.
-fn Render_Clean(text: &mut String, clean: &[&CrateFinding])
-{
-    if !clean.is_empty()
-    {
-        let names: Vec<&str> = clean.iter().map(|finding| finding.krate.as_str()).collect();
-        let _ = writeln!(text, "checked and clean: {}\n", names.join(", "));
-    }
-}
-
 /// One `FINDING` block: the crate's name, why, and every commit that touched its
 /// snapshot in this range.
 fn Append_Finding(text: &mut String, finding: &CrateFinding)
@@ -66,6 +56,16 @@ fn Append_Finding(text: &mut String, finding: &CrateFinding)
         let _ = writeln!(text, "    {}  {}", Short(&commit.hash), commit.subject);
     }
     text.push('\n');
+}
+
+/// The one summary line naming every crate that checked out clean, when any did.
+fn Render_Clean(text: &mut String, clean: &[&CrateFinding])
+{
+    if !clean.is_empty()
+    {
+        let names: Vec<&str> = clean.iter().map(|finding| finding.krate.as_str()).collect();
+        let _ = writeln!(text, "checked and clean: {}\n", names.join(", "));
+    }
 }
 
 /// How many characters of a commit hash [`Short`] keeps: enough for a person to

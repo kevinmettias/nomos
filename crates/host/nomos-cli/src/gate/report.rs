@@ -57,21 +57,6 @@ pub(super) fn Render_Run(result: &GateRunResult, stdout: &mut impl Write, stderr
     };
 }
 
-/// The root does not exist, is not a directory, or its walk could not be ingested -- the
-/// same message whether the caller was `run` or `explain`, since neither verb's own
-/// question ever got asked.
-fn Render_Check_Unreadable(root: &Path, stderr: &mut impl Write) -> ExitCode
-{
-    let _ = writeln!(
-        stderr,
-        "cannot judge `{}`: not a directory, or its walk could not be ingested as a \
-         workspace state",
-        root.display()
-    );
-
-    return ExitCode::Contradictory;
-}
-
 /// The check layer beneath this gate run has its own composition contradictory.
 fn Render_Run_Contradictory(error: &RegistryError, stderr: &mut impl Write) -> ExitCode
 {
@@ -292,4 +277,19 @@ fn Report_Found(found: FoundExplanation<'_>, tolerance: Toleration<'_>, stdout: 
     }
 
     return if found.would_block { ExitCode::Violations } else { ExitCode::Ok };
+}
+
+/// The root does not exist, is not a directory, or its walk could not be ingested -- the
+/// same message whether the caller was `run` or `explain`, since neither verb's own
+/// question ever got asked.
+fn Render_Check_Unreadable(root: &Path, stderr: &mut impl Write) -> ExitCode
+{
+    let _ = writeln!(
+        stderr,
+        "cannot judge `{}`: not a directory, or its walk could not be ingested as a \
+         workspace state",
+        root.display()
+    );
+
+    return ExitCode::Contradictory;
 }

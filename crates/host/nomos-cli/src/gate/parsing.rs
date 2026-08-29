@@ -62,48 +62,6 @@ pub fn Parse(arguments: &[String]) -> Result<GateInvocation, String>
     return Ok(if verb == "run" { GateInvocation::Run(command) } else { GateInvocation::Plan(command) });
 }
 
-/// Builds `plan`/`run`'s shared command from `rest`'s flags, now that the verb and its
-/// argument shape are already known.
-fn Plan_Or_Run_Command(root: PathBuf, rest: &[String]) -> GateCommand
-{
-    return GateCommand {
-        root,
-        scope: ScopeSelector {
-            include: Named_Values(rest, "--include"),
-            exclude: Named_Values(rest, "--exclude"),
-        },
-        rules: RuleSelector { include: Named_Values(rest, "--rule").into_iter().map(RuleId::New).collect() },
-        // No flag authors a Suppression, a BaselineDebt or a RuleCalibration yet -- see
-        // `nomos_gate_orchestration::SuppressionPolicy`'s own doc for why inventing one now
-        // would be premature.
-        suppressions: nomos_gate_orchestration::SuppressionPolicy::default(),
-        baseline: nomos_gate_orchestration::BaselinePolicy::default(),
-        adoption: nomos_gate_orchestration::AdoptionPolicy::default(),
-        // No flag authors a non-default CoveragePolicy yet -- see
-        // `nomos_gate_orchestration::CoveragePolicy`'s own doc for why.
-        coverage: nomos_gate_orchestration::CoveragePolicy::default(),
-        // No flag authors a ModelExecutionProfile yet -- see
-        // `nomos_gate_orchestration::GateCommand::model`'s own doc for why.
-        model: None,
-    };
-}
-
-/// `explain`'s own required `--rule`/`--location`, read as single values rather than
-/// `plan`/`run`'s repeatable `--rule`: naming one finding needs exactly one rule, not a
-/// selector, so this does not populate `GateCommand::rules` at all -- `Explain_Gate`
-/// ignores it regardless, and populating it from the same flag that also names the query
-/// would read as a selector nobody asked for.
-fn Explain_Invocation(rest: &[String], root: PathBuf) -> Result<GateInvocation, String>
-{
-    let rule = Required(Named_Value(rest, "--rule").as_ref(), Name("--rule"), Usage(USAGE))?;
-    let location = Required(Named_Value(rest, "--location").as_ref(), Name("--location"), Usage(USAGE))?;
-
-    let command = GateCommand { root, ..GateCommand::default() };
-    let query = FindingQuery { rule: RuleId::New(rule), location };
-
-    return Ok(GateInvocation::Explain { command, query });
-}
-
 /// Refuses anything but the three verbs this group implements today.
 fn Known_Verb(verb: &str) -> Result<(), String>
 {
@@ -129,4 +87,46 @@ fn No_Unknown_Argument(rest: &[String]) -> Result<(), String>
     }
 
     return Ok(());
+}
+
+/// `explain`'s own required `--rule`/`--location`, read as single values rather than
+/// `plan`/`run`'s repeatable `--rule`: naming one finding needs exactly one rule, not a
+/// selector, so this does not populate `GateCommand::rules` at all -- `Explain_Gate`
+/// ignores it regardless, and populating it from the same flag that also names the query
+/// would read as a selector nobody asked for.
+fn Explain_Invocation(rest: &[String], root: PathBuf) -> Result<GateInvocation, String>
+{
+    let rule = Required(Named_Value(rest, "--rule").as_ref(), Name("--rule"), Usage(USAGE))?;
+    let location = Required(Named_Value(rest, "--location").as_ref(), Name("--location"), Usage(USAGE))?;
+
+    let command = GateCommand { root, ..GateCommand::default() };
+    let query = FindingQuery { rule: RuleId::New(rule), location };
+
+    return Ok(GateInvocation::Explain { command, query });
+}
+
+/// Builds `plan`/`run`'s shared command from `rest`'s flags, now that the verb and its
+/// argument shape are already known.
+fn Plan_Or_Run_Command(root: PathBuf, rest: &[String]) -> GateCommand
+{
+    return GateCommand {
+        root,
+        scope: ScopeSelector {
+            include: Named_Values(rest, "--include"),
+            exclude: Named_Values(rest, "--exclude"),
+        },
+        rules: RuleSelector { include: Named_Values(rest, "--rule").into_iter().map(RuleId::New).collect() },
+        // No flag authors a Suppression, a BaselineDebt or a RuleCalibration yet -- see
+        // `nomos_gate_orchestration::SuppressionPolicy`'s own doc for why inventing one now
+        // would be premature.
+        suppressions: nomos_gate_orchestration::SuppressionPolicy::default(),
+        baseline: nomos_gate_orchestration::BaselinePolicy::default(),
+        adoption: nomos_gate_orchestration::AdoptionPolicy::default(),
+        // No flag authors a non-default CoveragePolicy yet -- see
+        // `nomos_gate_orchestration::CoveragePolicy`'s own doc for why.
+        coverage: nomos_gate_orchestration::CoveragePolicy::default(),
+        // No flag authors a ModelExecutionProfile yet -- see
+        // `nomos_gate_orchestration::GateCommand::model`'s own doc for why.
+        model: None,
+    };
 }

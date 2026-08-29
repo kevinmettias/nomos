@@ -7,6 +7,13 @@ use nomos_contracts::SchemaId;
 use nomos_ledger::Territory;
 use nomos_platform_std::StdProcessLauncher;
 
+pub(super) fn Execute(goal: &str, config: DispatchConfig, output: &mut impl std::io::Write, notes: &mut impl std::io::Write) -> ExitCode
+{
+    let task = Task(goal, config.effort);
+
+    return Dispatch(&task, config.backend, output, notes);
+}
+
 /// A bare `TaskEnvelope` naming only `goal` and `effort`. `scope`, `prohibited_changes` and
 /// `available_tools` are the empty value `OD-EXECUTOR-001` already reads as "nothing
 /// enumerated, nothing granted" — this command has no configuration surface to fill them
@@ -25,13 +32,6 @@ fn Task(goal: &str, effort: nomos_model_package::EffortLevel) -> TaskEnvelope
         expected_output_schema: SchemaId::New("nomos.agent.executor.cli.v1"),
         effort,
     };
-}
-
-pub(super) fn Execute(goal: &str, config: DispatchConfig, output: &mut impl std::io::Write, notes: &mut impl std::io::Write) -> ExitCode
-{
-    let task = Task(goal, config.effort);
-
-    return Dispatch(&task, config.backend, output, notes);
 }
 
 /// Runs `task` against `backend` and renders whichever of the two outcome shapes it
@@ -71,6 +71,13 @@ fn Answered_Claude_Code(outcome: &nomos_agent_executor_claude_code::AgentExecuti
     return ExitCode::Ok;
 }
 
+fn Unavailable(error: &impl std::fmt::Display, notes: &mut impl std::io::Write) -> ExitCode
+{
+    let _ = writeln!(notes, "{error}");
+
+    return ExitCode::Unavailable;
+}
+
 /// `nomos-model-backend-ollama`'s own outcome carries only `response`, honestly: there is
 /// no `denied_tool_uses` to print because there is no tool subsystem to have denied
 /// anything from, and no dollar cost because inference is local. Printing placeholder
@@ -80,11 +87,4 @@ fn Answered_Ollama(outcome: &nomos_model_backend_ollama::AgentExecutionOutcome, 
     let _ = writeln!(output, "{}", outcome.response);
 
     return ExitCode::Ok;
-}
-
-fn Unavailable(error: &impl std::fmt::Display, notes: &mut impl std::io::Write) -> ExitCode
-{
-    let _ = writeln!(notes, "{error}");
-
-    return ExitCode::Unavailable;
 }

@@ -33,6 +33,14 @@ fn Placed(answer: &RenderAnswer, channels: &mut Channels<'_>) -> ExitCode
     return ExitCode::Ok;
 }
 
+/// A built projection this build could not place where it was asked to go.
+fn Unwritable(path: &Path, error: &FileSystemError, notes: &mut dyn std::io::Write) -> ExitCode
+{
+    let _ = writeln!(notes, "cannot write {}: {error}", path.display());
+
+    return ExitCode::Unwritable;
+}
+
 /// An identifier the shipped catalogue does not carry.
 pub(in crate::spec) fn No_Such_Profile(requested: &str, known: &[String], notes: &mut dyn std::io::Write) -> ExitCode
 {
@@ -74,14 +82,6 @@ pub(in crate::spec) fn Report_Build_Error(
     };
 
     return Empty_Section(assembly, &empty, notes);
-}
-
-/// A built projection this build could not place where it was asked to go.
-fn Unwritable(path: &Path, error: &FileSystemError, notes: &mut dyn std::io::Write) -> ExitCode
-{
-    let _ = writeln!(notes, "cannot write {}: {error}", path.display());
-
-    return ExitCode::Unwritable;
 }
 
 /// Where the two halves of a projection landed.

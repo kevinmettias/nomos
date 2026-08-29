@@ -146,6 +146,26 @@ fn Surface_Commits(
     return Ok(Parse_Commits(&history));
 }
 
+/// Parses `git log --format=%H\t%s` output into commit references, skipping any line
+/// that does not carry both halves — defensive rather than load-bearing, since a real
+/// `git` never emits a partial line from this format string.
+fn Parse_Commits(text: &str) -> Vec<CommitRef>
+{
+    let mut commits = Vec::new();
+    for line in text.lines()
+    {
+        if let Some((hash, subject)) = line.split_once('\t')
+        {
+            commits.push(CommitRef {
+                hash: hash.to_owned(),
+                subject: subject.to_owned(),
+            });
+        }
+    }
+
+    return commits;
+}
+
 /// Runs `command` and returns its stdout, or a message describing why no answer came
 /// back.
 ///
@@ -172,26 +192,6 @@ fn Ran(launcher: &impl ProcessLauncher, command: &Command) -> Result<String, Str
 fn Nonempty(text: &str) -> bool
 {
     return !text.trim().is_empty();
-}
-
-/// Parses `git log --format=%H\t%s` output into commit references, skipping any line
-/// that does not carry both halves — defensive rather than load-bearing, since a real
-/// `git` never emits a partial line from this format string.
-fn Parse_Commits(text: &str) -> Vec<CommitRef>
-{
-    let mut commits = Vec::new();
-    for line in text.lines()
-    {
-        if let Some((hash, subject)) = line.split_once('\t')
-        {
-            commits.push(CommitRef {
-                hash: hash.to_owned(),
-                subject: subject.to_owned(),
-            });
-        }
-    }
-
-    return commits;
 }
 
 #[cfg(test)]

@@ -74,6 +74,16 @@ fn Work(rest: &[String]) -> i32
     return work::Run(&command, &Work_Directory(), &mut stdout).Value();
 }
 
+/// Where the ledger lives.
+///
+/// Overridable so that tests and tools can point at a scratch ledger without changing
+/// directory, which is what makes the whole surface testable from one process.
+fn Work_Directory() -> PathBuf
+{
+    return std::env::var_os("NOMOS_WORK_DIR")
+        .map_or_else(|| PathBuf::from("work"), PathBuf::from);
+}
+
 /// The spec group: reading the specification store and rendering its projections.
 fn Spec(rest: &[String]) -> i32
 {
@@ -159,16 +169,6 @@ fn Usage() -> i32
     );
 
     return work::ExitCode::Usage.Value();
-}
-
-/// Where the ledger lives.
-///
-/// Overridable so that tests and tools can point at a scratch ledger without changing
-/// directory, which is what makes the whole surface testable from one process.
-fn Work_Directory() -> PathBuf
-{
-    return std::env::var_os("NOMOS_WORK_DIR")
-        .map_or_else(|| PathBuf::from("work"), PathBuf::from);
 }
 
 /// Which corpus to assemble the specification store from.

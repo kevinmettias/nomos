@@ -23,15 +23,6 @@ fn main() -> Result<(), String>
     return Ok(());
 }
 
-/// Absent outside rustup -- a direct rustc invocation, a distribution toolchain, a vendored
-/// compiler. Named as unstated rather than defaulted to a version, because a variant claiming
-/// `1.85` on a toolchain nobody identified is a false statement about which compiler produced
-/// the facts.
-fn Toolchain() -> String
-{
-    return std::env::var("RUSTUP_TOOLCHAIN").unwrap_or_else(|_| return "unstated".to_owned());
-}
-
 /// One variable cargo sets for every build script.
 ///
 /// Returned rather than unwound. A build script's caller is cargo, which prints the `Err`
@@ -42,6 +33,15 @@ fn Cargo_Variable(name: &str) -> Result<String, String>
     return std::env::var(name).map_err(|cause| {
         return format!("cargo sets {name} for every build script, and did not: {cause}");
     });
+}
+
+/// Absent outside rustup -- a direct rustc invocation, a distribution toolchain, a vendored
+/// compiler. Named as unstated rather than defaulted to a version, because a variant claiming
+/// `1.85` on a toolchain nobody identified is a false statement about which compiler produced
+/// the facts.
+fn Toolchain() -> String
+{
+    return std::env::var("RUSTUP_TOOLCHAIN").unwrap_or_else(|_| return "unstated".to_owned());
 }
 
 /// The enabled features as one comma-separated field.

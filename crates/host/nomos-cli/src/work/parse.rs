@@ -73,26 +73,6 @@ fn Split_At_Separator(arguments: &[String]) -> Split<'_>
     };
 }
 
-/// The item an argument list names.
-fn Item_Of(named: &[String]) -> Result<ItemId, String>
-{
-    let text = Required(Named_Value(named, "--item").as_ref(), "--item")?;
-
-    return Ok(ItemId::New(text));
-}
-
-/// The holder an argument list names.
-fn Holder_Of(named: &[String]) -> Result<String, String>
-{
-    return Required(Named_Value(named, "--holder").as_ref(), "--holder");
-}
-
-/// The reason an argument list gives.
-fn Reason_Of(named: &[String]) -> Result<String, String>
-{
-    return Required(Named_Value(named, "--reason").as_ref(), "--reason");
-}
-
 /// Listing takes no argument that can be wrong, so it does not return a `Result`.
 ///
 /// Every other verb here can refuse its arguments and this one cannot, and a `Result` that
@@ -108,71 +88,6 @@ fn Parse_Show(named: &[String]) -> Result<WorkCommand, String>
 {
     return Ok(WorkCommand::Show {
         item: Item_Of(named)?,
-    });
-}
-
-fn Parse_Finish(named: &[String]) -> Result<WorkCommand, String>
-{
-    return Ok(WorkCommand::Finish {
-        item: Item_Of(named)?,
-        holder: Holder_Of(named)?,
-    });
-}
-
-/// `abandon` and `decline` take one shape of argument list, and are deliberately not one
-/// parse.
-///
-/// `claim`, `renew` and `takeover` share theirs because they do the same thing to the same
-/// subject with a different policy; these two do different things to different subjects and
-/// merely take the same three words, so a shared parse would be a similarity of spelling
-/// standing in for a similarity of meaning — which is the conflation `OD-LEDGER-019`
-/// refuses at the verb level.
-fn Parse_Abandon(named: &[String]) -> Result<WorkCommand, String>
-{
-    return Ok(WorkCommand::Abandon(Ending_Request(named)?));
-}
-
-/// The other half of the pair [`Parse_Abandon`] documents.
-fn Parse_Decline(named: &[String]) -> Result<WorkCommand, String>
-{
-    return Ok(WorkCommand::Decline(Ending_Request(named)?));
-}
-
-/// The three words `abandon` and `decline` both take.
-fn Ending_Request(named: &[String]) -> Result<EndingRequest, String>
-{
-    return Ok(EndingRequest {
-        item: Item_Of(named)?,
-        holder: Holder_Of(named)?,
-        reason: Reason_Of(named)?,
-    });
-}
-
-/// One parse for three verbs.
-///
-/// `claim`, `renew` and `takeover` take exactly the same three arguments and default the
-/// lease the same way, so sharing this is what stops them drifting apart in what they
-/// accept — which they would be free to do while being documented as identical.
-///
-/// The two that do something unusual are named and `claim` is the fallthrough,
-/// deliberately. A fourth verb added to the caller's pattern and forgotten here becomes a
-/// plain claim, which refuses anything that is not `Ready`; had `takeover` been the
-/// fallthrough it would displace a holder instead.
-fn Parse_Reservation(verb: &str, named: &[String]) -> Result<WorkCommand, String>
-{
-    let lease = Named_Value(named, "--lease")
-        .map_or(Ok(DEFAULT_LEASE), |text| return Parse_Duration(&text))?;
-    let request = ClaimRequest {
-        item: Item_Of(named)?,
-        holder: Holder_Of(named)?,
-        lease,
-    };
-
-    return Ok(match verb
-    {
-        "takeover" => WorkCommand::TakeOver(request),
-        "renew" => WorkCommand::Renew(request),
-        _ => WorkCommand::Claim(request),
     });
 }
 
@@ -193,6 +108,62 @@ fn Parse_Add(named: &[String], predicate_argv: &[String]) -> Result<WorkCommand,
         item: Box::new(item),
         amending,
     });
+}
+
+/// What the item reserves, or the message saying why what was given cannot reserve.
+///
+/// `--amends` reserves as well as declares, and is folded in here rather than being a second
+/// thing an author has to remember to also pass to `--territory`. An amendment edits the
+/// record it names, so an item that declared one without reserving it would be editing a file
+/// nothing keeps a second writer off — and requiring both spellings would make that omission
+/// the easy mistake instead of an impossible one.
+fn Parse_Territory(named: &[String], amending: &Territory) -> Result<Territory, String>
+{
+    if let Some(pattern) = Named_Values(named, "--territory-pattern").first()
+    {
+        return Err(Refuse_A_Pattern(pattern));
+    }
+
+    let mut paths = Named_Values(named, "--territory");
+    paths.extend(amending.paths.iter().cloned());
+
+    if paths.is_empty()
+    {
+        return Err(format!(
+            "--territory is required: an item that reserves nothing excludes nobody. \
+             `--amends <record>` reserves too, and says the item edits that record rather \
+             than allocating it.\n\n{}",
+            Usage_Text()
+        ));
+    }
+
+    return Ok(Territory::Of_Files(paths));
+}
+
+/// Why `--territory-pattern` is withdrawn rather than supported.
+///
+/// Refused before `--territory` is even checked, because it is the more specific answer:
+/// somebody who passed only a pattern needs to be told the pattern is the problem, not that
+/// they reserved nothing. See `OD-LEDGER-013`.
+///
+/// A pattern is recorded unexpanded, and `Territory::Intersect` answers `Unknown` for every
+/// comparison involving one. That is the correct answer to a question the comparison cannot
+/// decide, and it is not correct as the *outcome of a flag*: the item becomes unclaimable by
+/// anyone including its own author, every other claim on the board is refused against it,
+/// and the refusal is non-retryable, which by the exit-code contract tells an agent to stop
+/// and fetch a person. So the flag is withdrawn rather than the refusal weakened.
+fn Refuse_A_Pattern(pattern: &str) -> String
+{
+    return format!(
+        "--territory-pattern is not supported: a pattern is never expanded, so every \
+         comparison against `{pattern}` answers that independence cannot be established — \
+         which makes the item unclaimable and refuses every other claim on the board.\n\
+         \n\
+         Reserve a directory instead. Territory is compared by containment, so \
+         `--territory crates/spec` already reserves everything beneath it, and it is \
+         decided from the text with no filesystem access.\n\n{}",
+        Usage_Text()
+    );
 }
 
 /// Applies `--timeout` to a parsed predicate, or refuses it when there is no predicate to
@@ -225,6 +196,17 @@ fn Timed(predicate: Option<VerificationPredicate>, named: &[String]) -> Result<O
     predicate.timeout_seconds = Parse_Duration(&text)?.as_secs();
 
     return Ok(Some(predicate));
+}
+
+/// The predicate an item is verified by, when one was given after `--`.
+fn Parse_Predicate(predicate_argv: &[String]) -> Option<VerificationPredicate>
+{
+    if predicate_argv.is_empty()
+    {
+        return None;
+    }
+
+    return Some(VerificationPredicate::New(predicate_argv.to_vec()));
 }
 
 /// The item itself, from the arguments describing it.
@@ -298,76 +280,59 @@ fn Origin_Of(named: &[String]) -> Result<ItemOrigin, String>
     };
 }
 
-/// What the item reserves, or the message saying why what was given cannot reserve.
-///
-/// `--amends` reserves as well as declares, and is folded in here rather than being a second
-/// thing an author has to remember to also pass to `--territory`. An amendment edits the
-/// record it names, so an item that declared one without reserving it would be editing a file
-/// nothing keeps a second writer off — and requiring both spellings would make that omission
-/// the easy mistake instead of an impossible one.
-fn Parse_Territory(named: &[String], amending: &Territory) -> Result<Territory, String>
+fn Parse_Finish(named: &[String]) -> Result<WorkCommand, String>
 {
-    if let Some(pattern) = Named_Values(named, "--territory-pattern").first()
-    {
-        return Err(Refuse_A_Pattern(pattern));
-    }
-
-    let mut paths = Named_Values(named, "--territory");
-    paths.extend(amending.paths.iter().cloned());
-
-    if paths.is_empty()
-    {
-        return Err(format!(
-            "--territory is required: an item that reserves nothing excludes nobody. \
-             `--amends <record>` reserves too, and says the item edits that record rather \
-             than allocating it.\n\n{}",
-            Usage_Text()
-        ));
-    }
-
-    return Ok(Territory::Of_Files(paths));
+    return Ok(WorkCommand::Finish {
+        item: Item_Of(named)?,
+        holder: Holder_Of(named)?,
+    });
 }
 
-/// Why `--territory-pattern` is withdrawn rather than supported.
+/// One parse for three verbs.
 ///
-/// Refused before `--territory` is even checked, because it is the more specific answer:
-/// somebody who passed only a pattern needs to be told the pattern is the problem, not that
-/// they reserved nothing. See `OD-LEDGER-013`.
+/// `claim`, `renew` and `takeover` take exactly the same three arguments and default the
+/// lease the same way, so sharing this is what stops them drifting apart in what they
+/// accept — which they would be free to do while being documented as identical.
 ///
-/// A pattern is recorded unexpanded, and `Territory::Intersect` answers `Unknown` for every
-/// comparison involving one. That is the correct answer to a question the comparison cannot
-/// decide, and it is not correct as the *outcome of a flag*: the item becomes unclaimable by
-/// anyone including its own author, every other claim on the board is refused against it,
-/// and the refusal is non-retryable, which by the exit-code contract tells an agent to stop
-/// and fetch a person. So the flag is withdrawn rather than the refusal weakened.
-fn Refuse_A_Pattern(pattern: &str) -> String
+/// The two that do something unusual are named and `claim` is the fallthrough,
+/// deliberately. A fourth verb added to the caller's pattern and forgotten here becomes a
+/// plain claim, which refuses anything that is not `Ready`; had `takeover` been the
+/// fallthrough it would displace a holder instead.
+fn Parse_Reservation(verb: &str, named: &[String]) -> Result<WorkCommand, String>
 {
-    return format!(
-        "--territory-pattern is not supported: a pattern is never expanded, so every \
-         comparison against `{pattern}` answers that independence cannot be established — \
-         which makes the item unclaimable and refuses every other claim on the board.\n\
-         \n\
-         Reserve a directory instead. Territory is compared by containment, so \
-         `--territory crates/spec` already reserves everything beneath it, and it is \
-         decided from the text with no filesystem access.\n\n{}",
-        Usage_Text()
-    );
-}
+    let lease = Named_Value(named, "--lease")
+        .map_or(Ok(DEFAULT_LEASE), |text| return Parse_Duration(&text))?;
+    let request = ClaimRequest {
+        item: Item_Of(named)?,
+        holder: Holder_Of(named)?,
+        lease,
+    };
 
-/// The predicate an item is verified by, when one was given after `--`.
-fn Parse_Predicate(predicate_argv: &[String]) -> Option<VerificationPredicate>
-{
-    if predicate_argv.is_empty()
+    return Ok(match verb
     {
-        return None;
-    }
-
-    return Some(VerificationPredicate::New(predicate_argv.to_vec()));
+        "takeover" => WorkCommand::TakeOver(request),
+        "renew" => WorkCommand::Renew(request),
+        _ => WorkCommand::Claim(request),
+    });
 }
 
-fn Required(value: Option<&String>, name: &str) -> Result<String, String>
+/// `abandon` and `decline` take one shape of argument list, and are deliberately not one
+/// parse.
+///
+/// `claim`, `renew` and `takeover` share theirs because they do the same thing to the same
+/// subject with a different policy; these two do different things to different subjects and
+/// merely take the same three words, so a shared parse would be a similarity of spelling
+/// standing in for a similarity of meaning — which is the conflation `OD-LEDGER-019`
+/// refuses at the verb level.
+fn Parse_Abandon(named: &[String]) -> Result<WorkCommand, String>
 {
-    return crate::arguments::Required(value, crate::arguments::Name(name), crate::arguments::Usage(&Usage_Text()));
+    return Ok(WorkCommand::Abandon(Ending_Request(named)?));
+}
+
+/// The other half of the pair [`Parse_Abandon`] documents.
+fn Parse_Decline(named: &[String]) -> Result<WorkCommand, String>
+{
+    return Ok(WorkCommand::Decline(Ending_Request(named)?));
 }
 
 /// Parses a lease such as `2h`, `30m` or `45s`.
@@ -457,3 +422,38 @@ const NOTES: &str = "\neverything after `--` is the verification predicate, run 
      \n\
      exit codes: 0 ok, 1 validation error, 2 usage, 3 claim unavailable (retryable), \
      4 conflict, 5 store error";
+
+/// The item an argument list names.
+fn Item_Of(named: &[String]) -> Result<ItemId, String>
+{
+    let text = Required(Named_Value(named, "--item").as_ref(), "--item")?;
+
+    return Ok(ItemId::New(text));
+}
+
+/// The holder an argument list names.
+fn Holder_Of(named: &[String]) -> Result<String, String>
+{
+    return Required(Named_Value(named, "--holder").as_ref(), "--holder");
+}
+
+/// The reason an argument list gives.
+fn Reason_Of(named: &[String]) -> Result<String, String>
+{
+    return Required(Named_Value(named, "--reason").as_ref(), "--reason");
+}
+
+/// The three words `abandon` and `decline` both take.
+fn Ending_Request(named: &[String]) -> Result<EndingRequest, String>
+{
+    return Ok(EndingRequest {
+        item: Item_Of(named)?,
+        holder: Holder_Of(named)?,
+        reason: Reason_Of(named)?,
+    });
+}
+
+fn Required(value: Option<&String>, name: &str) -> Result<String, String>
+{
+    return crate::arguments::Required(value, crate::arguments::Name(name), crate::arguments::Usage(&Usage_Text()));
+}

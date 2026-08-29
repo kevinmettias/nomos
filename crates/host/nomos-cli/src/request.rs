@@ -92,13 +92,6 @@ pub(crate) fn Parse(arguments: &[String]) -> Result<Command, String>
     };
 }
 
-fn Required_Value(arguments: &[String], name: &str) -> Result<String, String>
-{
-    let value = Named_Value(arguments, name);
-
-    return Required(value.as_ref(), Name(name), Usage(&Usage_Text()));
-}
-
 fn Parse_Submit(arguments: &[String]) -> Result<Command, String>
 {
     let kind_text = Required_Value(arguments, "--kind")?;
@@ -123,6 +116,13 @@ fn Parse_Submit(arguments: &[String]) -> Result<Command, String>
         submitted_through: "cli".to_owned(),
         into,
     }));
+}
+
+fn Required_Value(arguments: &[String], name: &str) -> Result<String, String>
+{
+    let value = Named_Value(arguments, name);
+
+    return Required(value.as_ref(), Name(name), Usage(&Usage_Text()));
 }
 
 fn Parse_Kind(text: &str) -> Result<SubmissionKind, String>

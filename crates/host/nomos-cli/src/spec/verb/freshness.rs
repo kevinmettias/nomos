@@ -35,25 +35,6 @@ pub(in crate::spec) fn Freshness_Of(
     };
 }
 
-/// A requirement outside the profile a run was narrowed to.
-///
-/// `--profile a --require b` asks for one profile to be examined and a different one to be
-/// guaranteed. Answering it would mean reporting success over a requirement nothing
-/// checked, which is the shape this flag exists against -- so it is a usage error and not a
-/// quiet pass.
-fn Unexamined(unexamined: &str, only: Option<&str>, notes: &mut dyn std::io::Write) -> ExitCode
-{
-    let _ = writeln!(
-        notes,
-        "--require {unexamined} cannot hold while --profile {} narrows this run to one \
-         other profile: the requirement would be reported as met by a run that never \
-         looked for it",
-        only.unwrap_or("<none>")
-    );
-
-    return ExitCode::Usage;
-}
-
 /// Every profile the run examined, and what this repository was promised.
 fn Reported(
     assembly: &Assembly,
@@ -71,6 +52,41 @@ fn Reported(
     }
 
     return census.Report(&request.into, request.profile.as_deref(), channels.output);
+}
+
+/// The code a run reports when its profiles disagreed about what happened.
+///
+/// [`ExitCode::Stale`] beats [`ExitCode::Absent`] deliberately: a definite finding about
+/// one output is more actionable than a machine that could not check another, and the
+/// text above has already said both.
+const fn Worse(carried: ExitCode, found: ExitCode) -> ExitCode
+{
+    return match (carried, found)
+    {
+        (ExitCode::StoreError, _) | (_, ExitCode::StoreError) => ExitCode::StoreError,
+        (ExitCode::Stale, _) | (_, ExitCode::Stale) => ExitCode::Stale,
+        (ExitCode::Absent, _) | (_, ExitCode::Absent) => ExitCode::Absent,
+        _ => ExitCode::Ok,
+    };
+}
+
+/// A requirement outside the profile a run was narrowed to.
+///
+/// `--profile a --require b` asks for one profile to be examined and a different one to be
+/// guaranteed. Answering it would mean reporting success over a requirement nothing
+/// checked, which is the shape this flag exists against -- so it is a usage error and not a
+/// quiet pass.
+fn Unexamined(unexamined: &str, only: Option<&str>, notes: &mut dyn std::io::Write) -> ExitCode
+{
+    let _ = writeln!(
+        notes,
+        "--require {unexamined} cannot hold while --profile {} narrows this run to one \
+         other profile: the requirement would be reported as met by a run that never \
+         looked for it",
+        only.unwrap_or("<none>")
+    );
+
+    return ExitCode::Usage;
 }
 
 /// One profile's verdict, printed, and the code it contributes to the run.
@@ -275,6 +291,32 @@ impl<'a> Census<'a>
         return self.Outcome(into, only, output);
     }
 
+    /// What this run was promised, named whether or not it was kept.
+    ///
+    /// The satisfied case prints too. A gate step whose green output does not say which
+    /// outputs it enforced is indistinguishable from one that enforced nothing, and this
+    /// whole flag exists because `checked 0 of 14` already exits zero.
+    fn Requirements(&self, output: &mut dyn std::io::Write)
+    {
+        if self.required.is_empty()
+        {
+            return;
+        }
+
+        if self.unmet.is_empty()
+        {
+            let _ = writeln!(output, "required and current: {}", self.required.join(", "));
+
+            return;
+        }
+
+        let _ = writeln!(
+            output,
+            "required and not current: {}",
+            self.unmet.join(", ")
+        );
+    }
+
     /// The code the run reports, once everything it looked at has been named.
     ///
     /// Asking about one profile that is not there is a question about a named file, and
@@ -303,46 +345,4 @@ impl<'a> Census<'a>
 
         return ExitCode::NotFound;
     }
-
-    /// What this run was promised, named whether or not it was kept.
-    ///
-    /// The satisfied case prints too. A gate step whose green output does not say which
-    /// outputs it enforced is indistinguishable from one that enforced nothing, and this
-    /// whole flag exists because `checked 0 of 14` already exits zero.
-    fn Requirements(&self, output: &mut dyn std::io::Write)
-    {
-        if self.required.is_empty()
-        {
-            return;
-        }
-
-        if self.unmet.is_empty()
-        {
-            let _ = writeln!(output, "required and current: {}", self.required.join(", "));
-
-            return;
-        }
-
-        let _ = writeln!(
-            output,
-            "required and not current: {}",
-            self.unmet.join(", ")
-        );
-    }
-}
-
-/// The code a run reports when its profiles disagreed about what happened.
-///
-/// [`ExitCode::Stale`] beats [`ExitCode::Absent`] deliberately: a definite finding about
-/// one output is more actionable than a machine that could not check another, and the
-/// text above has already said both.
-const fn Worse(carried: ExitCode, found: ExitCode) -> ExitCode
-{
-    return match (carried, found)
-    {
-        (ExitCode::StoreError, _) | (_, ExitCode::StoreError) => ExitCode::StoreError,
-        (ExitCode::Stale, _) | (_, ExitCode::Stale) => ExitCode::Stale,
-        (ExitCode::Absent, _) | (_, ExitCode::Absent) => ExitCode::Absent,
-        _ => ExitCode::Ok,
-    };
 }

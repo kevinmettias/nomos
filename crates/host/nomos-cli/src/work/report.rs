@@ -241,32 +241,6 @@ pub(super) fn Report_Release(result: Result<(), ClaimRefusal>, output: &mut impl
     };
 }
 
-/// The exit code a refusal earns.
-///
-/// The distinction `3` versus `5` is the one the README says earns its own code: an agent
-/// told the item is taken picks up something else, and an agent told the ledger is broken
-/// stops and fetches a person. [`ClaimRefusal::LedgerUnusable`] is the second of those and
-/// used to arrive as `4` — a conflict a human resolves — after arriving as "no such item",
-/// which sent them to check a spelling. Three answers, one of them right.
-const fn Code_For(refusal: &ClaimRefusal) -> ExitCode
-{
-    return match refusal
-    {
-        ClaimRefusal::LedgerUnusable { .. } => ExitCode::StoreError,
-        other =>
-        {
-            if other.Is_Retryable()
-            {
-                ExitCode::ClaimUnavailable
-            }
-            else
-            {
-                ExitCode::Conflict
-            }
-        }
-    };
-}
-
 /// Whether the ledger is valid, and whether the executable asking is current.
 ///
 /// The second half is what makes this the one command an operator can answer "is the `nomos.exe`
@@ -359,5 +333,31 @@ pub(super) fn Report_Error(error: &LedgerError, output: &mut impl std::io::Write
         | LedgerError::Malformed { .. }
         | LedgerError::Unrecognized { .. }
         | LedgerError::Locked { .. } => ExitCode::StoreError,
+    };
+}
+
+/// The exit code a refusal earns.
+///
+/// The distinction `3` versus `5` is the one the README says earns its own code: an agent
+/// told the item is taken picks up something else, and an agent told the ledger is broken
+/// stops and fetches a person. [`ClaimRefusal::LedgerUnusable`] is the second of those and
+/// used to arrive as `4` — a conflict a human resolves — after arriving as "no such item",
+/// which sent them to check a spelling. Three answers, one of them right.
+const fn Code_For(refusal: &ClaimRefusal) -> ExitCode
+{
+    return match refusal
+    {
+        ClaimRefusal::LedgerUnusable { .. } => ExitCode::StoreError,
+        other =>
+        {
+            if other.Is_Retryable()
+            {
+                ExitCode::ClaimUnavailable
+            }
+            else
+            {
+                ExitCode::Conflict
+            }
+        }
     };
 }

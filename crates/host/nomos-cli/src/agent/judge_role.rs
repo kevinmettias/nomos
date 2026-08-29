@@ -109,6 +109,32 @@ fn Judged_Finding(pair: &RoleSurfacePair, notes: &mut impl std::io::Write) -> Re
     return Ok(finding.clone());
 }
 
+/// The judgment `role_surface.rs`'s own module doc says this rule cannot reach itself —
+/// whether `pair`'s declared role and actual surface agree — carrying `finding.summary`
+/// so the dispatched question is traceably the rule's own, not a paraphrase invented here.
+fn Judgment_Task(pair: &RoleSurfacePair, finding: &Finding, effort: nomos_model_package::EffortLevel) -> TaskEnvelope
+{
+    let goal = format!(
+        "A Rust crate's declared role, from its workspace README's band table: {}\n\n\
+         The crate's actual public surface, as a list of every item it exports:\n{}\n\n\
+         {}. Does the declared role accurately and completely describe what the surface \
+         exports? Name anything the role claims that the surface does not show, or anything \
+         the surface exports that the role does not mention, in 2-4 sentences.",
+        pair.declared_role, pair.actual_surface, finding.summary
+    );
+
+    return TaskEnvelope {
+        goal,
+        scope: Territory::Of_Files(Vec::<String>::new()),
+        knowledge_context: Vec::new(),
+        applicable_rules: vec![finding.rule.clone()],
+        prohibited_changes: Territory::Of_Files(Vec::<String>::new()),
+        available_tools: Vec::new(),
+        expected_output_schema: SchemaId::New("nomos.agent.executor.cli.v1"),
+        effort,
+    };
+}
+
 /// `README.md`'s band-table row for `crate_name` — the third pipe-delimited cell of the
 /// row whose second cell, backticks stripped, is `crate_name` exactly. `None` if no row
 /// names it.
@@ -148,30 +174,4 @@ pub(super) fn Crate_Root(root: &Path, crate_name: &str) -> String
         .map(str::trim)
         .find(|line| return line.trim_matches(['"', ',']).ends_with(crate_name))
         .map_or_else(|| return crate_name.to_owned(), |line| return line.trim_matches([' ', '"', ',']).to_owned());
-}
-
-/// The judgment `role_surface.rs`'s own module doc says this rule cannot reach itself —
-/// whether `pair`'s declared role and actual surface agree — carrying `finding.summary`
-/// so the dispatched question is traceably the rule's own, not a paraphrase invented here.
-fn Judgment_Task(pair: &RoleSurfacePair, finding: &Finding, effort: nomos_model_package::EffortLevel) -> TaskEnvelope
-{
-    let goal = format!(
-        "A Rust crate's declared role, from its workspace README's band table: {}\n\n\
-         The crate's actual public surface, as a list of every item it exports:\n{}\n\n\
-         {}. Does the declared role accurately and completely describe what the surface \
-         exports? Name anything the role claims that the surface does not show, or anything \
-         the surface exports that the role does not mention, in 2-4 sentences.",
-        pair.declared_role, pair.actual_surface, finding.summary
-    );
-
-    return TaskEnvelope {
-        goal,
-        scope: Territory::Of_Files(Vec::<String>::new()),
-        knowledge_context: Vec::new(),
-        applicable_rules: vec![finding.rule.clone()],
-        prohibited_changes: Territory::Of_Files(Vec::<String>::new()),
-        available_tools: Vec::new(),
-        expected_output_schema: SchemaId::New("nomos.agent.executor.cli.v1"),
-        effort,
-    };
 }
