@@ -99,27 +99,6 @@ mod tests
     use nomos_contracts::Digest128;
     use nomos_platform_std::StdProcessLauncher;
 
-    fn Repository_Root() -> std::path::PathBuf
-    {
-        let manifest = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"));
-        return manifest
-            .parent()
-            .and_then(std::path::Path::parent)
-            .and_then(std::path::Path::parent)
-            .map(std::path::PathBuf::from)
-            .expect("this crate sits three levels below the workspace root");
-    }
-
-    fn Context() -> FactContext
-    {
-        return FactContext {
-            snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([1; 16])),
-            variant: BuildVariantId::From_Digest(Digest128::From_Bytes([2; 16])),
-            configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([3; 16])),
-            generation: GenerationId::INITIAL,
-        };
-    }
-
     /// One real, whole-workspace `cargo clippy` invocation, checked for every property this
     /// crate promises at once -- not split across several `#[test]`s the way
     /// `nomos_lang_rust_cargo::provider::tests` is, because that crate's own `cargo
@@ -128,9 +107,15 @@ mod tests
     #[test]
     fn Test_Materialize_Workspace_Over_This_Repository()
     {
+        const MANY_WORKSPACE_MEMBERS: usize = 10;
+
         let facts = Materialize_Workspace(&Repository_Root(), Context(), &StdProcessLauncher).expect("this repository is a real cargo workspace under clippy");
 
-        assert!(facts.len() > 10, "this repository has far more than ten workspace members: {}", facts.len());
+        assert!(
+            facts.len() > MANY_WORKSPACE_MEMBERS,
+            "this repository has far more than ten workspace members: {}",
+            facts.len()
+        );
 
         let rules = facts
             .iter()
@@ -143,6 +128,17 @@ mod tests
 
         let decoded = nomos_cap_lint::Parse_Payload(&rules.fact.payload.bytes).expect("this crate's own encoding");
         assert_eq!(decoded.package, "nomos-rules");
+    }
+
+    fn Repository_Root() -> std::path::PathBuf
+    {
+        let manifest = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+        return manifest
+            .parent()
+            .and_then(std::path::Path::parent)
+            .and_then(std::path::Path::parent)
+            .map(std::path::PathBuf::from)
+            .expect("this crate sits three levels below the workspace root");
     }
 
     #[test]
@@ -160,5 +156,23 @@ mod tests
         let weak_key = Compute_Fact_Key(subject, weaker, Context());
 
         assert_ne!(strong_key.Digest(), weak_key.Digest(), "two offers of the same subject at different guarantees must file apart");
+    }
+
+    /// Fill bytes distinct enough that `Context()`'s three digests differ from one
+    /// another; each value carries no meaning beyond "not equal to the others".
+    const VARIANT_DIGEST_FILL: u8 = 2;
+    const CONFIGURATION_DIGEST_FILL: u8 = 3;
+
+    fn Context() -> FactContext
+    {
+        return FactContext {
+            snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([1; Digest128::BYTE_LENGTH])),
+            variant: BuildVariantId::From_Digest(Digest128::From_Bytes([VARIANT_DIGEST_FILL; Digest128::BYTE_LENGTH])),
+            configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([
+                CONFIGURATION_DIGEST_FILL;
+                Digest128::BYTE_LENGTH
+            ])),
+            generation: GenerationId::INITIAL,
+        };
     }
 }

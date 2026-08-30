@@ -118,32 +118,22 @@ fn Cargo_Metadata_Command(root: &Path) -> Command
 /// Refuses every outcome a launched process can report other than a clean, zero exit.
 fn Require_Clean_Exit(outcome: &ExitOutcome, stderr: &str) -> Result<(), MetadataError>
 {
-    match outcome
+    return match outcome
     {
-        ExitOutcome::Exited { code: 0 } => return Ok(()),
-        ExitOutcome::Exited { code } => {
-            return Err(MetadataError {
-                reason: format!("cargo metadata failed (exit {code}): {stderr}"),
-            });
-        }
-        ExitOutcome::TimedOut => {
-            return Err(MetadataError {
-                reason: format!("cargo metadata was still running after {TIMEOUT:?} and was killed"),
-            });
-        }
-        ExitOutcome::Stalled { idle_elapsed } => {
-            return Err(MetadataError {
-                reason: format!(
-                    "cargo metadata produced no output for {idle_elapsed:?} and was judged stalled"
-                ),
-            });
-        }
-        ExitOutcome::Terminated => {
-            return Err(MetadataError {
-                reason: "cargo metadata was terminated before it could finish".to_owned(),
-            });
-        }
-    }
+        ExitOutcome::Exited { code: 0 } => Ok(()),
+        ExitOutcome::Exited { code } => Err(MetadataError {
+            reason: format!("cargo metadata failed (exit {code}): {stderr}"),
+        }),
+        ExitOutcome::TimedOut => Err(MetadataError {
+            reason: format!("cargo metadata was still running after {TIMEOUT:?} and was killed"),
+        }),
+        ExitOutcome::Stalled { idle_elapsed } => Err(MetadataError {
+            reason: format!("cargo metadata produced no output for {idle_elapsed:?} and was judged stalled"),
+        }),
+        ExitOutcome::Terminated => Err(MetadataError {
+            reason: "cargo metadata was terminated before it could finish".to_owned(),
+        }),
+    };
 }
 
 /// `cargo metadata`'s stdout, parsed as the JSON document `--format-version 1` promises.
@@ -357,20 +347,6 @@ mod tests
     use super::*;
     use nomos_platform_std::StdProcessLauncher;
 
-    /// Run over this workspace's own real root, the same standard `tests/contract`
-    /// already holds this exact invocation to: a boundary reader that cannot be checked
-    /// against a real graph is checked against nothing.
-    fn Repository_Root() -> PathBuf
-    {
-        let manifest = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
-        return manifest
-            .parent()
-            .and_then(Path::parent)
-            .and_then(Path::parent)
-            .map(PathBuf::from)
-            .expect("this crate sits three levels below the workspace root");
-    }
-
     #[test]
     fn Test_This_Crate_Should_Depend_On_Nomos_Contracts()
     {
@@ -436,5 +412,19 @@ mod tests
             sorted.sort_by(|left, right| (&left.target, left.kind.Label(), left.optional).cmp(&(&right.target, right.kind.Label(), right.optional)));
             assert_eq!(package.payload.edges, sorted, "{}", package.payload.package);
         }
+    }
+
+    /// Run over this workspace's own real root, the same standard `tests/contract`
+    /// already holds this exact invocation to: a boundary reader that cannot be checked
+    /// against a real graph is checked against nothing.
+    fn Repository_Root() -> PathBuf
+    {
+        let manifest = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+        return manifest
+            .parent()
+            .and_then(Path::parent)
+            .and_then(Path::parent)
+            .map(PathBuf::from)
+            .expect("this crate sits three levels below the workspace root");
     }
 }

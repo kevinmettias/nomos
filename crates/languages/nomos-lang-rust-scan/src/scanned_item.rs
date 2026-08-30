@@ -247,7 +247,9 @@ mod tests
 
         let scanned = Scan_Source(damaged);
 
-        assert_eq!(scanned.items.len(), 2, "{:?}", scanned.items);
+        const EXPECTED_ITEM_COUNT: usize = 2;
+
+        assert_eq!(scanned.items.len(), EXPECTED_ITEM_COUNT, "{:?}", scanned.items);
         assert_eq!(
             scanned.items.last().map(|item| return item.name.clone()),
             Some("Answered".to_owned())
@@ -316,7 +318,9 @@ mod tests
     #[test]
     fn Test_A_Scan_Should_Count_The_Lines_It_Read()
     {
-        assert_eq!(Scan_Source("one\ntwo\nthree\n").lines, 3);
+        const EXPECTED_LINE_COUNT: u32 = 3;
+
+        assert_eq!(Scan_Source("one\ntwo\nthree\n").lines, EXPECTED_LINE_COUNT);
         assert_eq!(Scan_Source("").lines, 0, "an empty file has no lines and is not a failure");
     }
 

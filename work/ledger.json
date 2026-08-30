@@ -37167,6 +37167,683 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P20-REGRESSION-LANGUAGES",
+      "title": "P20: regression sweep across crates/languages",
+      "why": "OD-GATE-018 phase-1/3 regression sweep: P19-NAMING-ATTRS's cross-crate rename reintroduced findings in previously-closed checks (vertical-organization, literals, explicit-return, error-info, allman-braces, closing-brace, function-size, intrafile-duplication, responsibility-extraction) for this crate band.",
+      "done_when": "check-vertical-organization, check-literals, check-explicit-return, check-error-info, check-allman-braces, check-closing-brace, check-function-size, check-intrafile-duplication and check-responsibility-extraction each report zero real findings for this band's crates, and cargo build --workspace --all-targets is clean.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "exit_code": 0,
+        "output_tail": "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.20s\n",
+        "verified_at": 1788052922,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "f6e6b62e56ad392eae170df91ea15037a527bf8f"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P20-REGRESSION-RULES",
+      "title": "P20: regression sweep across crates/rules",
+      "why": "OD-GATE-018 phase-1/3 regression sweep: P19-NAMING-ATTRS's cross-crate rename reintroduced findings in previously-closed checks (vertical-organization, literals, explicit-return, error-info, allman-braces, closing-brace, function-size, intrafile-duplication, responsibility-extraction) for this crate band.",
+      "done_when": "check-vertical-organization, check-literals, check-explicit-return, check-error-info, check-allman-braces, check-closing-brace, check-function-size, check-intrafile-duplication and check-responsibility-extraction each report zero real findings for this band's crates, and cargo build --workspace --all-targets is clean.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "exit_code": 0,
+        "output_tail": "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.17s\n",
+        "verified_at": 1788052923,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "f6e6b62e56ad392eae170df91ea15037a527bf8f"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P20-REGRESSION-HOST",
+      "title": "P20: regression sweep across crates/host",
+      "why": "OD-GATE-018 phase-1/3 regression sweep: P19-NAMING-ATTRS's cross-crate rename reintroduced findings in previously-closed checks (vertical-organization, literals, explicit-return, error-info, allman-braces, closing-brace, function-size, intrafile-duplication, responsibility-extraction) for this crate band.",
+      "done_when": "check-vertical-organization, check-literals, check-explicit-return, check-error-info, check-allman-braces, check-closing-brace, check-function-size, check-intrafile-duplication and check-responsibility-extraction each report zero real findings for this band's crates, and cargo build --workspace --all-targets is clean.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "exit_code": 0,
+        "output_tail": "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.18s\n",
+        "verified_at": 1788052925,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "f6e6b62e56ad392eae170df91ea15037a527bf8f"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P20-REGRESSION-SUBSTRATE",
+      "title": "P20: regression sweep across crates/substrate",
+      "why": "OD-GATE-018 phase-1/3 regression sweep: P19-NAMING-ATTRS's cross-crate rename reintroduced findings in previously-closed checks (vertical-organization, literals, explicit-return, error-info, allman-braces, closing-brace, function-size, intrafile-duplication, responsibility-extraction) for this crate band.",
+      "done_when": "check-vertical-organization, check-literals, check-explicit-return, check-error-info, check-allman-braces, check-closing-brace, check-function-size, check-intrafile-duplication and check-responsibility-extraction each report zero real findings for this band's crates, and cargo build --workspace --all-targets is clean.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "exit_code": 0,
+        "output_tail": "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.17s\n",
+        "verified_at": 1788052926,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "f6e6b62e56ad392eae170df91ea15037a527bf8f"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P20-REGRESSION-SPEC",
+      "title": "P20: regression sweep across crates/spec",
+      "why": "OD-GATE-018 phase-1/3 regression sweep: P19-NAMING-ATTRS's cross-crate rename reintroduced findings in previously-closed checks (vertical-organization, literals, explicit-return, error-info, allman-braces, closing-brace, function-size, intrafile-duplication, responsibility-extraction) for this crate band.",
+      "done_when": "check-vertical-organization, check-literals, check-explicit-return, check-error-info, check-allman-braces, check-closing-brace, check-function-size, check-intrafile-duplication and check-responsibility-extraction each report zero real findings for this band's crates, and cargo build --workspace --all-targets is clean.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "exit_code": 0,
+        "output_tail": "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.18s\n",
+        "verified_at": 1788052927,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "f6e6b62e56ad392eae170df91ea15037a527bf8f"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P20-REGRESSION-MISC",
+      "title": "P20: regression sweep across orchestration, corrections, contracts, capabilities, kernel, platform",
+      "why": "OD-GATE-018 phase-1/3 regression sweep: P19-NAMING-ATTRS's cross-crate rename reintroduced findings in previously-closed checks (vertical-organization, literals, explicit-return, error-info, allman-braces, closing-brace, function-size, intrafile-duplication, responsibility-extraction) for this crate band.",
+      "done_when": "check-vertical-organization, check-literals, check-explicit-return, check-error-info, check-allman-braces, check-closing-brace, check-function-size, check-intrafile-duplication and check-responsibility-extraction each report zero real findings for this band's crates, and cargo build --workspace --all-targets is clean.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration",
+          "crates/corrections",
+          "crates/contracts",
+          "crates/capabilities",
+          "crates/kernel",
+          "crates/platform"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "exit_code": 0,
+        "output_tail": "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.18s\n",
+        "verified_at": 1788052928,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "f6e6b62e56ad392eae170df91ea15037a527bf8f"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P21-DOCS-CAPCONTROLFLOW-PILOT",
+      "title": "P21: doc-schema pilot for nomos-cap-controlflow",
+      "why": "OD-GATE-018 attributes phase: check-public-api-docs/check-doc-placement/check-doc-schema need a validated, working pattern before a workspace-wide parallel dispatch. This crate was the pilot, chosen small and self-contained.",
+      "done_when": "check-public-api-docs, check-doc-placement and check-doc-schema each report zero findings for crates/capabilities/nomos-cap-controlflow, and cargo build -p nomos-cap-controlflow succeeds.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities/nomos-cap-controlflow"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "-p",
+          "nomos-cap-controlflow"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P21-OBSERVABILITY-TELEMETRY-NONE",
+      "title": "P21: declare telemetry.none for the observability phase",
+      "why": "check-telemetry-declared was the observability phase's only open finding: this repository has never declared whether it carries in-house telemetry, so all nine dependent rules report a no-op SUCCESS instead of a real verdict. nomos genuinely has zero tracing/logging instrumentation (verified: no tracing::/log::/opentelemetry usage anywhere in crates/), so the honest answer is telemetry.none with a real reason, not telemetry.sinks.",
+      "done_when": "check-telemetry-declared reports zero findings against crates and tests, and the reason in standards.json truthfully describes why this repository has no instrumentation.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "standards.json"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-p21-telemetry",
+        "acquired_at": 1788051041,
+        "lease_expires_at": 1788058241
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P20-PLACEMENT-SPEC",
+      "title": "placement.json findings across crates/spec",
+      "why": "code-standards' rust placement.json phase reports architectural findings (tree-legibility type-name stutter, dependency-placement, facade-surface, folder-organization) across crates/spec, continuing the user-directed code-standards conformance work after naming.json/attributes.json",
+      "done_when": "the 5 in-scope placement checks report zero findings scoped to crates/spec, and cargo build --workspace --all-targets passes",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-p20-placement-spec",
+        "acquired_at": 1788052959,
+        "lease_expires_at": 1788060159
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P20-PLACEMENT-HOST",
+      "title": "placement.json findings across crates/host",
+      "why": "same campaign continuation as P20-PLACEMENT-SPEC, scoped to crates/host (nomos-api, nomos-cli, nomos-surface-provenance) -- includes the largest interfile-duplication cluster",
+      "done_when": "the 5 in-scope placement checks report zero findings scoped to crates/host, and cargo build --workspace --all-targets passes",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-p20-placement-host",
+        "acquired_at": 1788052959,
+        "lease_expires_at": 1788060159
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P20-PLACEMENT-SUBSTRATE",
+      "title": "placement.json findings across crates/substrate",
+      "why": "same campaign continuation as P20-PLACEMENT-SPEC, scoped to crates/substrate",
+      "done_when": "the 5 in-scope placement checks report zero findings scoped to crates/substrate, and cargo build --workspace --all-targets passes",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-p20-placement-substrate",
+        "acquired_at": 1788052959,
+        "lease_expires_at": 1788060159
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P20-PLACEMENT-LANGUAGES",
+      "title": "placement.json findings across crates/languages",
+      "why": "same campaign continuation as P20-PLACEMENT-SPEC, scoped to crates/languages",
+      "done_when": "the 5 in-scope placement checks report zero findings scoped to crates/languages, and cargo build --workspace --all-targets passes",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-p20-placement-languages",
+        "acquired_at": 1788052959,
+        "lease_expires_at": 1788060159
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P20-PLACEMENT-ORCHESTRATION",
+      "title": "placement.json findings across crates/orchestration",
+      "why": "same campaign continuation as P20-PLACEMENT-SPEC, scoped to crates/orchestration -- includes the largest facade-surface cluster",
+      "done_when": "the 5 in-scope placement checks report zero findings scoped to crates/orchestration, and cargo build --workspace --all-targets passes",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-p20-placement-orchestration",
+        "acquired_at": 1788052959,
+        "lease_expires_at": 1788060159
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P20-PLACEMENT-CAPABILITIES",
+      "title": "placement.json findings across crates/capabilities",
+      "why": "same campaign continuation as P20-PLACEMENT-SPEC, scoped to crates/capabilities -- includes the 5-crate nomos-cap-* contract.rs duplication cluster",
+      "done_when": "the 5 in-scope placement checks report zero findings scoped to crates/capabilities, and cargo build --workspace --all-targets passes",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-p20-placement-capabilities",
+        "acquired_at": 1788052959,
+        "lease_expires_at": 1788060159
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P20-PLACEMENT-RULES-CONTRACTS",
+      "title": "placement.json findings across crates/rules and crates/contracts",
+      "why": "same campaign continuation as P20-PLACEMENT-SPEC, scoped to crates/rules and crates/contracts",
+      "done_when": "the 5 in-scope placement checks report zero findings scoped to crates/rules and crates/contracts, and cargo build --workspace --all-targets passes",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules",
+          "crates/contracts"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-p20-placement-rules-contracts",
+        "acquired_at": 1788052959,
+        "lease_expires_at": 1788060159
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P20-PLACEMENT-MISC",
+      "title": "placement.json findings across crates/kernel, corrections, agent, platform",
+      "why": "same campaign continuation as P20-PLACEMENT-SPEC, scoped to the smaller remaining crate groups",
+      "done_when": "the 5 in-scope placement checks report zero findings scoped to crates/kernel, crates/corrections, crates/agent, crates/platform, and cargo build --workspace --all-targets passes",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/kernel",
+          "crates/corrections",
+          "crates/agent",
+          "crates/platform"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-p20-placement-misc",
+        "acquired_at": 1788052959,
+        "lease_expires_at": 1788060159
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

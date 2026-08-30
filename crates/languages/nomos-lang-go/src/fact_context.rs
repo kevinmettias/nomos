@@ -152,34 +152,10 @@ mod tests
     use nomos_contracts::Digest128;
     use nomos_model::Content_Digest;
 
-    fn Subject_Of_Path(path: &str) -> SubjectId
-    {
-        return SubjectId::From_Digest(Content_Digest(path.as_bytes()));
-    }
-
-    fn Context() -> FactContext
-    {
-        return FactContext {
-            snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([1; 16])),
-            variant: BuildVariantId::From_Digest(Digest128::From_Bytes([2; 16])),
-            configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([3; 16])),
-            generation: GenerationId::INITIAL,
-        };
-    }
-
-    fn Fact_From_Source(source: &str) -> MaterializedFact
-    {
-        return match Materialize_Syntax_Fact(Subject_Of_Path("a.go"), source, Context())
-        {
-            Materialization::Materialized(fact) => *fact,
-            // Every source passed to this helper is Go its author wrote to be parseable, so
-            // a refusal is a broken fixture and not a reading worth handing back to the
-            // tests below, which compare two facts to each other and would pass vacuously
-            // if a provider that had begun refusing everything made both sides equally
-            // absent. The parser's own message is printed because it names what stopped it.
-            Materialization::Unparseable(failure) => panic!("expected a fact: {failure}"),
-        };
-    }
+    /// Fill bytes distinct enough that `Context()`'s three digests differ from one
+    /// another; each value carries no meaning beyond "not equal to the others".
+    const VARIANT_DIGEST_FILL: u8 = 2;
+    const CONFIGURATION_DIGEST_FILL: u8 = 3;
 
     #[test]
     fn Test_A_Fact_Should_Carry_The_Declared_Guarantee()
@@ -276,11 +252,15 @@ mod tests
 
         let payload = nomos_cap_syntax::Parse_Payload(&fact.payload.bytes).expect("this provider writes nomos.syntax.items.v2");
 
-        assert_eq!(payload.unexpanded, 0);
-        assert_eq!(payload.items.len(), 3);
+        const EXPECTED_ITEM_COUNT: usize = 3;
+        const THIRD_ITEM_INDEX: usize = 2;
+        const THIRD_ITEM_ORDINAL: u32 = 2;
 
-        let third = payload.items.get(2).expect("three items");
-        assert_eq!(third.ordinal, 2);
+        assert_eq!(payload.unexpanded, 0);
+        assert_eq!(payload.items.len(), EXPECTED_ITEM_COUNT);
+
+        let third = payload.items.get(THIRD_ITEM_INDEX).expect("three items");
+        assert_eq!(third.ordinal, THIRD_ITEM_ORDINAL);
         assert_eq!(third.kind, nomos_cap_syntax::FUNCTION);
         assert_eq!(third.qualified_name, "Inner::Two");
         assert_eq!(third.Own_Name(), "Two");
@@ -310,5 +290,37 @@ mod tests
             .find(|item| return item.Own_Name() == "Free")
             .expect("the free variable is an item");
         assert!(free.Is_Public(), "{free:?}");
+    }
+
+    fn Subject_Of_Path(path: &str) -> SubjectId
+    {
+        return SubjectId::From_Digest(Content_Digest(path.as_bytes()));
+    }
+
+    fn Context() -> FactContext
+    {
+        return FactContext {
+            snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([1; Digest128::BYTE_LENGTH])),
+            variant: BuildVariantId::From_Digest(Digest128::From_Bytes([VARIANT_DIGEST_FILL; Digest128::BYTE_LENGTH])),
+            configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([
+                CONFIGURATION_DIGEST_FILL;
+                Digest128::BYTE_LENGTH
+            ])),
+            generation: GenerationId::INITIAL,
+        };
+    }
+
+    fn Fact_From_Source(source: &str) -> MaterializedFact
+    {
+        return match Materialize_Syntax_Fact(Subject_Of_Path("a.go"), source, Context())
+        {
+            Materialization::Materialized(fact) => *fact,
+            // Every source passed to this helper is Go its author wrote to be parseable, so
+            // a refusal is a broken fixture and not a reading worth handing back to the
+            // tests below, which compare two facts to each other and would pass vacuously
+            // if a provider that had begun refusing everything made both sides equally
+            // absent. The parser's own message is printed because it names what stopped it.
+            Materialization::Unparseable(failure) => panic!("expected a fact: {failure}"),
+        };
     }
 }

@@ -114,26 +114,10 @@ mod tests
     use nomos_contracts::Digest128;
     use nomos_platform_std::StdProcessLauncher;
 
-    fn Repository_Root() -> std::path::PathBuf
-    {
-        let manifest = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"));
-        return manifest
-            .parent()
-            .and_then(std::path::Path::parent)
-            .and_then(std::path::Path::parent)
-            .map(std::path::PathBuf::from)
-            .expect("this crate sits three levels below the workspace root");
-    }
-
-    fn Context() -> FactContext
-    {
-        return FactContext {
-            snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([1; 16])),
-            variant: BuildVariantId::From_Digest(Digest128::From_Bytes([2; 16])),
-            configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([3; 16])),
-            generation: GenerationId::INITIAL,
-        };
-    }
+    /// Fill bytes distinct enough that `Context()`'s three digests differ from one
+    /// another; each value carries no meaning beyond "not equal to the others".
+    const VARIANT_DIGEST_FILL: u8 = 2;
+    const CONFIGURATION_DIGEST_FILL: u8 = 3;
 
     #[test]
     fn Test_Every_Workspace_Member_Should_Produce_One_Fact()
@@ -202,5 +186,29 @@ mod tests
             assert_eq!(left.fact.Key().semantic_inputs, right.fact.Key().semantic_inputs);
             assert_eq!(left.fact.Key().Digest(), right.fact.Key().Digest());
         }
+    }
+
+    fn Repository_Root() -> std::path::PathBuf
+    {
+        let manifest = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+        return manifest
+            .parent()
+            .and_then(std::path::Path::parent)
+            .and_then(std::path::Path::parent)
+            .map(std::path::PathBuf::from)
+            .expect("this crate sits three levels below the workspace root");
+    }
+
+    fn Context() -> FactContext
+    {
+        return FactContext {
+            snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([1; Digest128::BYTE_LENGTH])),
+            variant: BuildVariantId::From_Digest(Digest128::From_Bytes([VARIANT_DIGEST_FILL; Digest128::BYTE_LENGTH])),
+            configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([
+                CONFIGURATION_DIGEST_FILL;
+                Digest128::BYTE_LENGTH
+            ])),
+            generation: GenerationId::INITIAL,
+        };
     }
 }

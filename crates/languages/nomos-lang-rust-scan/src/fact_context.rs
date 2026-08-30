@@ -137,20 +137,10 @@ mod tests
     use nomos_contracts::Digest128;
     use nomos_model::Content_Digest;
 
-    fn Subject_Of_Path(path: &str) -> SubjectId
-    {
-        return SubjectId::From_Digest(Content_Digest(path.as_bytes()));
-    }
-
-    fn Context() -> FactContext
-    {
-        return FactContext {
-            snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([1; 16])),
-            variant: BuildVariantId::From_Digest(Digest128::From_Bytes([2; 16])),
-            configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([3; 16])),
-            generation: GenerationId::INITIAL,
-        };
-    }
+    /// Fill bytes distinct enough that `Context()`'s three digests differ from one
+    /// another; each value carries no meaning beyond "not equal to the others".
+    const VARIANT_DIGEST_FILL: u8 = 2;
+    const CONFIGURATION_DIGEST_FILL: u8 = 3;
 
     #[test]
     fn Test_The_Encoding_Should_Be_The_Format_The_Other_Provider_Writes()
@@ -181,8 +171,10 @@ mod tests
         let payload = nomos_cap_syntax::Parse_Payload(&fact.payload.bytes)
             .expect("this provider writes nomos.syntax.items.v1");
 
+        const EXPECTED_ITEM_COUNT: usize = 2;
+
         assert_eq!(payload.unexpanded, 0);
-        assert_eq!(payload.items.len(), 2);
+        assert_eq!(payload.items.len(), EXPECTED_ITEM_COUNT);
         assert!(payload.items.first().expect("two items").Is_Public());
     }
 
@@ -260,5 +252,23 @@ mod tests
         let fact = Materialize_Syntax_Fact(Subject_Of_Path("empty.rs"), "", Context());
 
         assert_eq!(fact.payload.bytes, b"unexpanded\t0\n");
+    }
+
+    fn Subject_Of_Path(path: &str) -> SubjectId
+    {
+        return SubjectId::From_Digest(Content_Digest(path.as_bytes()));
+    }
+
+    fn Context() -> FactContext
+    {
+        return FactContext {
+            snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([1; Digest128::BYTE_LENGTH])),
+            variant: BuildVariantId::From_Digest(Digest128::From_Bytes([VARIANT_DIGEST_FILL; Digest128::BYTE_LENGTH])),
+            configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([
+                CONFIGURATION_DIGEST_FILL;
+                Digest128::BYTE_LENGTH
+            ])),
+            generation: GenerationId::INITIAL,
+        };
     }
 }

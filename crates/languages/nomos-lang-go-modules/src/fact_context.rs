@@ -143,21 +143,22 @@ mod tests
 
     impl Drop for TemporaryWorkspace
     {
+        /// Drop cannot propagate a failure, so a failed removal is reported rather than
+        /// silently discarded; each root is uniquely named, so the worst case is one
+        /// leaked directory, not a sibling test's fixture disappearing out from under it.
         fn drop(&mut self)
         {
-            let _ = std::fs::remove_dir_all(&self.root);
+            if let Err(error) = std::fs::remove_dir_all(&self.root)
+            {
+                eprintln!("failed to remove temporary workspace {}: {error}", self.root.display());
+            }
         }
     }
 
-    fn Context() -> FactContext
-    {
-        return FactContext {
-            snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([1; 16])),
-            variant: BuildVariantId::From_Digest(Digest128::From_Bytes([2; 16])),
-            configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([3; 16])),
-            generation: GenerationId::INITIAL,
-        };
-    }
+    /// Fill bytes distinct enough that `Context()`'s three digests differ from one
+    /// another; each value carries no meaning beyond "not equal to the others".
+    const VARIANT_DIGEST_FILL: u8 = 2;
+    const CONFIGURATION_DIGEST_FILL: u8 = 3;
 
     #[test]
     fn Test_Every_Module_Should_Produce_One_Fact()
@@ -216,5 +217,18 @@ mod tests
             assert_eq!(left.fact.Key().semantic_inputs, right.fact.Key().semantic_inputs);
             assert_eq!(left.fact.Key().Digest(), right.fact.Key().Digest());
         }
+    }
+
+    fn Context() -> FactContext
+    {
+        return FactContext {
+            snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([1; Digest128::BYTE_LENGTH])),
+            variant: BuildVariantId::From_Digest(Digest128::From_Bytes([VARIANT_DIGEST_FILL; Digest128::BYTE_LENGTH])),
+            configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([
+                CONFIGURATION_DIGEST_FILL;
+                Digest128::BYTE_LENGTH
+            ])),
+            generation: GenerationId::INITIAL,
+        };
     }
 }

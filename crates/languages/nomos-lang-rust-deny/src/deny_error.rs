@@ -114,28 +114,19 @@ fn Cargo_Deny_Command(root: &Path) -> Command
 /// judged here; [`Discover_Workspace`]'s own doc explains why.
 fn Require_Ran(outcome: &ExitOutcome) -> Result<(), DenyError>
 {
-    match outcome
+    return match outcome
     {
-        ExitOutcome::Exited { .. } => return Ok(()),
-        ExitOutcome::TimedOut =>
-        {
-            return Err(DenyError {
-                reason: format!("cargo deny was still running after {TIMEOUT:?} and was killed"),
-            });
-        }
-        ExitOutcome::Stalled { idle_elapsed } =>
-        {
-            return Err(DenyError {
-                reason: format!("cargo deny produced no output for {idle_elapsed:?} and was judged stalled"),
-            });
-        }
-        ExitOutcome::Terminated =>
-        {
-            return Err(DenyError {
-                reason: "cargo deny was terminated before it could finish".to_owned(),
-            });
-        }
-    }
+        ExitOutcome::Exited { .. } => Ok(()),
+        ExitOutcome::TimedOut => Err(DenyError {
+            reason: format!("cargo deny was still running after {TIMEOUT:?} and was killed"),
+        }),
+        ExitOutcome::Stalled { idle_elapsed } => Err(DenyError {
+            reason: format!("cargo deny produced no output for {idle_elapsed:?} and was judged stalled"),
+        }),
+        ExitOutcome::Terminated => Err(DenyError {
+            reason: "cargo deny was terminated before it could finish".to_owned(),
+        }),
+    };
 }
 
 /// `violations`, in a stable order -- neither `cargo deny`'s own internal iteration over

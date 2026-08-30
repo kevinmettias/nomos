@@ -195,35 +195,10 @@ mod tests
     use nomos_contracts::Digest128;
     use nomos_model::Content_Digest;
 
-    fn Subject_Of_Path(path: &str) -> SubjectId
-    {
-        return SubjectId::From_Digest(Content_Digest(path.as_bytes()));
-    }
-
-    fn Context() -> FactContext
-    {
-        return FactContext {
-            snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([1; 16])),
-            variant: BuildVariantId::From_Digest(Digest128::From_Bytes([2; 16])),
-            configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([3; 16])),
-            generation: GenerationId::INITIAL,
-        };
-    }
-
-    fn Fact_From_Source(source: &str) -> MaterializedFact
-    {
-        return match Materialize_Syntax_Fact(Subject_Of_Path("a.rs"), source, Context())
-        {
-            Materialization::Materialized(fact) => *fact,
-            // Every source passed to this helper is Rust its author wrote to be parseable, so
-            // a refusal is a broken fixture and not a reading worth handing back. Returning an
-            // error instead would be worse in the one direction this module is written to
-            // catch: the tests below compare two facts to each other, and a provider that had
-            // begun refusing everything would make both sides equally absent and pass. The
-            // parser's own message is printed because it names which literal it stopped on.
-            Materialization::Unparseable(failure) => panic!("expected a fact: {failure}"),
-        };
-    }
+    /// Fill bytes distinct enough that `Context()`'s three digests differ from one
+    /// another; each value carries no meaning beyond "not equal to the others".
+    const VARIANT_DIGEST_FILL: u8 = 2;
+    const CONFIGURATION_DIGEST_FILL: u8 = 3;
 
     #[test]
     fn Test_A_Fact_Should_Carry_The_Declared_Guarantee()
@@ -369,11 +344,15 @@ mod tests
         let payload = nomos_cap_syntax::Parse_Payload(&fact.payload.bytes)
             .expect("this provider writes nomos.syntax.items.v1");
 
-        assert_eq!(payload.unexpanded, 0);
-        assert_eq!(payload.items.len(), 3);
+        const EXPECTED_ITEM_COUNT: usize = 3;
+        const THIRD_ITEM_INDEX: usize = 2;
+        const THIRD_ITEM_ORDINAL: u32 = 2;
 
-        let second = payload.items.get(2).expect("three items");
-        assert_eq!(second.ordinal, 2);
+        assert_eq!(payload.unexpanded, 0);
+        assert_eq!(payload.items.len(), EXPECTED_ITEM_COUNT);
+
+        let second = payload.items.get(THIRD_ITEM_INDEX).expect("three items");
+        assert_eq!(second.ordinal, THIRD_ITEM_ORDINAL);
         assert_eq!(second.kind, nomos_cap_syntax::FUNCTION);
         assert_eq!(second.qualified_name, "inner::two");
         assert_eq!(second.Own_Name(), "two");
@@ -409,5 +388,38 @@ mod tests
             .find(|item| return item.Own_Name() == "Free")
             .expect("the free function is an item");
         assert!(free.Is_Public(), "{free:?}");
+    }
+
+    fn Subject_Of_Path(path: &str) -> SubjectId
+    {
+        return SubjectId::From_Digest(Content_Digest(path.as_bytes()));
+    }
+
+    fn Context() -> FactContext
+    {
+        return FactContext {
+            snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([1; Digest128::BYTE_LENGTH])),
+            variant: BuildVariantId::From_Digest(Digest128::From_Bytes([VARIANT_DIGEST_FILL; Digest128::BYTE_LENGTH])),
+            configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([
+                CONFIGURATION_DIGEST_FILL;
+                Digest128::BYTE_LENGTH
+            ])),
+            generation: GenerationId::INITIAL,
+        };
+    }
+
+    fn Fact_From_Source(source: &str) -> MaterializedFact
+    {
+        return match Materialize_Syntax_Fact(Subject_Of_Path("a.rs"), source, Context())
+        {
+            Materialization::Materialized(fact) => *fact,
+            // Every source passed to this helper is Rust its author wrote to be parseable, so
+            // a refusal is a broken fixture and not a reading worth handing back. Returning an
+            // error instead would be worse in the one direction this module is written to
+            // catch: the tests below compare two facts to each other, and a provider that had
+            // begun refusing everything would make both sides equally absent and pass. The
+            // parser's own message is printed because it names which literal it stopped on.
+            Materialization::Unparseable(failure) => panic!("expected a fact: {failure}"),
+        };
     }
 }

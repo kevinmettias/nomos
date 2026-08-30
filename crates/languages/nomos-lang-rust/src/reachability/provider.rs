@@ -87,34 +87,6 @@ mod tests
     use nomos_contracts::{BuildVariantId, ConfigurationId, Digest128, GenerationId, SnapshotId};
     use nomos_model::Content_Digest;
 
-    fn Subject_Of_Path(path: &str) -> SubjectId
-    {
-        return SubjectId::From_Digest(Content_Digest(path.as_bytes()));
-    }
-
-    fn Context() -> FactContext
-    {
-        return FactContext {
-            snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([1; 16])),
-            variant: BuildVariantId::From_Digest(Digest128::From_Bytes([2; 16])),
-            configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([3; 16])),
-            generation: GenerationId::INITIAL,
-        };
-    }
-
-    fn Fact_From_Source(source: &str) -> MaterializedFact
-    {
-        return match Materialize_Reachability_Fact(Subject_Of_Path("a.rs"), source, Context())
-        {
-            Materialization::Materialized(fact) => *fact,
-            // Every source passed to this helper is Rust its author wrote to be parseable,
-            // so a refusal is a broken fixture and not a reading worth handing back to the
-            // tests below, which compare a rendered fact against an expected string and
-            // would need something to compare in the first place.
-            Materialization::Unparseable(failure) => panic!("expected a fact: {failure}"),
-        };
-    }
-
     #[test]
     fn Test_A_Fact_Should_Carry_The_Declared_Guarantee()
     {
@@ -168,5 +140,33 @@ mod tests
         let rendered = String::from_utf8(fact.payload.bytes.clone()).expect("ASCII and tabs");
 
         assert_eq!(rendered, "site\tPayload_Of\tapplicability\tempty\n");
+    }
+
+    fn Subject_Of_Path(path: &str) -> SubjectId
+    {
+        return SubjectId::From_Digest(Content_Digest(path.as_bytes()));
+    }
+
+    fn Context() -> FactContext
+    {
+        return FactContext {
+            snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([1; 16])),
+            variant: BuildVariantId::From_Digest(Digest128::From_Bytes([2; 16])),
+            configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([3; 16])),
+            generation: GenerationId::INITIAL,
+        };
+    }
+
+    fn Fact_From_Source(source: &str) -> MaterializedFact
+    {
+        return match Materialize_Reachability_Fact(Subject_Of_Path("a.rs"), source, Context())
+        {
+            Materialization::Materialized(fact) => *fact,
+            // Every source passed to this helper is Rust its author wrote to be parseable,
+            // so a refusal is a broken fixture and not a reading worth handing back to the
+            // tests below, which compare a rendered fact against an expected string and
+            // would need something to compare in the first place.
+            Materialization::Unparseable(failure) => panic!("expected a fact: {failure}"),
+        };
     }
 }

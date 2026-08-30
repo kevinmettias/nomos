@@ -101,34 +101,22 @@ fn Cargo_Clippy_Command(root: &Path) -> Command
 /// `-D warnings`.
 fn Require_Clean_Exit(outcome: &ExitOutcome, stderr: &str) -> Result<(), ClippyError>
 {
-    match outcome
+    return match outcome
     {
-        ExitOutcome::Exited { code: 0 } => return Ok(()),
-        ExitOutcome::Exited { code } =>
-        {
-            return Err(ClippyError {
-                reason: format!("cargo clippy failed (exit {code}): {stderr}"),
-            });
-        }
-        ExitOutcome::TimedOut =>
-        {
-            return Err(ClippyError {
-                reason: format!("cargo clippy was still running after {TIMEOUT:?} and was killed"),
-            });
-        }
-        ExitOutcome::Stalled { idle_elapsed } =>
-        {
-            return Err(ClippyError {
-                reason: format!("cargo clippy produced no output for {idle_elapsed:?} and was judged stalled"),
-            });
-        }
-        ExitOutcome::Terminated =>
-        {
-            return Err(ClippyError {
-                reason: "cargo clippy was terminated before it could finish".to_owned(),
-            });
-        }
-    }
+        ExitOutcome::Exited { code: 0 } => Ok(()),
+        ExitOutcome::Exited { code } => Err(ClippyError {
+            reason: format!("cargo clippy failed (exit {code}): {stderr}"),
+        }),
+        ExitOutcome::TimedOut => Err(ClippyError {
+            reason: format!("cargo clippy was still running after {TIMEOUT:?} and was killed"),
+        }),
+        ExitOutcome::Stalled { idle_elapsed } => Err(ClippyError {
+            reason: format!("cargo clippy produced no output for {idle_elapsed:?} and was judged stalled"),
+        }),
+        ExitOutcome::Terminated => Err(ClippyError {
+            reason: "cargo clippy was terminated before it could finish".to_owned(),
+        }),
+    };
 }
 
 /// `stdout`'s own JSON-lines stream, folded into one entry per first-party workspace
@@ -315,6 +303,13 @@ mod tests
 {
     use super::*;
 
+    /// The primary span line/column `Real_Compiler_Message`'s fixture reproduces from the
+    /// real capture, and the value `Test_A_Real_Captured_Diagnostic_Should_Parse` checks
+    /// its parsed `line` against — one constant, so the two can never independently drift.
+    const CAPTURED_LINE_START: u32 = 113;
+    const CAPTURED_COLUMN_START: u32 = 9;
+    const CAPTURED_COLUMN_END: u32 = 12;
+
     #[test]
     fn Test_A_Registry_Package_Id_Should_Not_Resolve()
     {
@@ -354,12 +349,33 @@ mod tests
         assert_eq!(Package_Name("crates/substrate/nomos-ledger"), "nomos-ledger");
     }
 
+    #[test]
+    fn Test_A_Real_Captured_Diagnostic_Should_Parse()
+    {
+        let message = Real_Compiler_Message();
+        let diagnostic = Diagnostic_Of(message.get("message").expect("captured fixture has a message"))
+            .expect("a real compiler-message with a primary span must parse");
+
+        assert_eq!(diagnostic.level, LintLevel::Warning);
+        assert_eq!(diagnostic.lint.as_deref(), Some("clippy::similar_names"));
+        assert_eq!(diagnostic.message, "binding's name is too similar to existing binding");
+        assert_eq!(diagnostic.file, "crates/substrate/nomos-ledger/src/finish.rs");
+        assert_eq!(diagnostic.line, CAPTURED_LINE_START);
+    }
+
     /// A real, captured `cargo clippy --message-format=json` diagnostic, from this
     /// workspace's own output over `nomos-ledger` before this reader existed to parse it —
     /// not invented, so a change to `rustc`'s own JSON shape is caught here rather than
     /// only against a fixture written to already agree with this code.
+    ///
+    /// The primary span's bounds are the exact ones that capture recorded; naming them
+    /// keeps `Test_A_Real_Captured_Diagnostic_Should_Parse`'s own assertion honest about
+    /// comparing against the same fixture value rather than a second, independently typed
+    /// `113`.
     fn Real_Compiler_Message() -> serde_json::Value
     {
+        const CAPTURED_LINE_END: u32 = CAPTURED_LINE_START;
+
         return serde_json::json!({
             "reason": "compiler-message",
             "package_id": "path+file:///F:/repos/nomos/crates/substrate/nomos-ledger#0.1.0",
@@ -373,29 +389,15 @@ mod tests
                 "spans": [
                     {
                         "file_name": "crates\\substrate\\nomos-ledger\\src\\finish.rs",
-                        "line_start": 113,
-                        "line_end": 113,
-                        "column_start": 9,
-                        "column_end": 12,
+                        "line_start": CAPTURED_LINE_START,
+                        "line_end": CAPTURED_LINE_END,
+                        "column_start": CAPTURED_COLUMN_START,
+                        "column_end": CAPTURED_COLUMN_END,
                         "is_primary": true
                     }
                 ]
             }
         });
-    }
-
-    #[test]
-    fn Test_A_Real_Captured_Diagnostic_Should_Parse()
-    {
-        let message = Real_Compiler_Message();
-        let diagnostic = Diagnostic_Of(message.get("message").expect("captured fixture has a message"))
-            .expect("a real compiler-message with a primary span must parse");
-
-        assert_eq!(diagnostic.level, LintLevel::Warning);
-        assert_eq!(diagnostic.lint.as_deref(), Some("clippy::similar_names"));
-        assert_eq!(diagnostic.message, "binding's name is too similar to existing binding");
-        assert_eq!(diagnostic.file, "crates/substrate/nomos-ledger/src/finish.rs");
-        assert_eq!(diagnostic.line, 113);
     }
 
     #[test]
@@ -457,6 +459,8 @@ mod tests
     #[test]
     fn Test_Duplicate_Diagnostics_From_Two_Target_Compiles_Should_Collapse_To_One()
     {
+        const DUPLICATE_MESSAGE_LINE: u32 = 5;
+
         let root = Path::new("F:/repos/nomos");
         let one_message = |package_id: &str| {
             return serde_json::json!({
@@ -466,7 +470,7 @@ mod tests
                     "level": "warning",
                     "message": "unneeded return statement",
                     "code": { "code": "clippy::needless_return" },
-                    "spans": [{ "file_name": "src/lib.rs", "line_start": 5, "is_primary": true }]
+                    "spans": [{ "file_name": "src/lib.rs", "line_start": DUPLICATE_MESSAGE_LINE, "is_primary": true }]
                 }
             })
             .to_string();
