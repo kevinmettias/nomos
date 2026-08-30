@@ -36,3 +36,33 @@ impl TableLineResponse
         };
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_From_Should_Copy_Every_Field_Of_The_Domain_Table_Line()
+    {
+        let line = TableLine {
+            block_ordinal: 2,
+            table_ordinal: 1,
+            row_ordinal: 3,
+            kind: "content".to_owned(),
+            cells: vec!["a".to_owned(), "b".to_owned()],
+            text: "| a | b |".to_owned(),
+            content_hash: "abc123".to_owned(),
+        };
+
+        let response = TableLineResponse::From(line.clone());
+
+        assert_eq!(response.block_ordinal, line.block_ordinal);
+        assert_eq!(response.table_ordinal, line.table_ordinal);
+        assert_eq!(response.row_ordinal, line.row_ordinal);
+        assert_eq!(response.kind, line.kind);
+        assert_eq!(response.cells, line.cells);
+        assert_eq!(response.text, line.text);
+        assert_eq!(response.content_hash, line.content_hash);
+    }
+}

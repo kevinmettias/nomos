@@ -86,7 +86,7 @@ mod tests
     /// than refusing -- so this asserts only the outcome variant, never a specific
     /// read/absent count a local environment would make flaky.
     #[test]
-    fn Test_A_Real_Call_Should_Assemble_Not_Refuse()
+    fn Test_Handle_Spec_Sources_Should_Assemble_Not_Refuse()
     {
         let response = Handle_Spec_Sources();
 
@@ -94,7 +94,7 @@ mod tests
     }
 
     #[test]
-    fn Test_A_Real_Assembled_Response_Should_Round_Trip_As_Json()
+    fn Test_From_Should_Round_Trip_As_Json()
     {
         let response = Handle_Spec_Sources();
 

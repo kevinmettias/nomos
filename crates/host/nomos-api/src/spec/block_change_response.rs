@@ -51,3 +51,38 @@ impl BlockChangeResponse
         };
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_From_Should_Map_Every_Domain_Variant_To_Its_Own_Response_Variant()
+    {
+        assert!(matches!(
+            BlockChangeResponse::From(BlockChange::Added { ordinal: 3, kind: "table".to_owned() }),
+            BlockChangeResponse::Added { ordinal: 3, kind } if kind == "table"
+        ));
+        assert!(matches!(
+            BlockChangeResponse::From(BlockChange::Removed { ordinal: 4, kind: "list".to_owned() }),
+            BlockChangeResponse::Removed { ordinal: 4, kind } if kind == "list"
+        ));
+        assert!(matches!(
+            BlockChangeResponse::From(BlockChange::Reworded {
+                ordinal: 5,
+                before: "old".to_owned(),
+                after: "new".to_owned(),
+            }),
+            BlockChangeResponse::Reworded { ordinal: 5, before, after } if before == "old" && after == "new"
+        ));
+        assert!(matches!(
+            BlockChangeResponse::From(BlockChange::Moved { from: 1, to: 2 }),
+            BlockChangeResponse::Moved { from: 1, to: 2 }
+        ));
+        assert!(matches!(
+            BlockChangeResponse::From(BlockChange::Reflowed { ordinal: 6 }),
+            BlockChangeResponse::Reflowed { ordinal: 6 }
+        ));
+    }
+}

@@ -78,7 +78,7 @@ mod tests
     use crate::work::tests_support::{Scratch_Board, Scratch_Board_With_One_Item};
 
     #[test]
-    fn Test_Validating_A_Real_Well_Formed_Board_Should_Be_Valid()
+    fn Test_Handle_Work_Validate_Should_Report_A_Real_Well_Formed_Board_As_Valid()
     {
         let directory = Scratch_Board();
 
@@ -98,7 +98,7 @@ mod tests
     }
 
     #[test]
-    fn Test_Validating_A_Board_With_A_Real_Violation_Should_Be_Invalid()
+    fn Test_Scratch_Board_With_One_Item_Should_Be_Invalid_For_Reserving_Nothing()
     {
         // `Scratch_Board_With_One_Item`'s item is `Ready` with an empty territory --
         // `nomos_ledger::store::validation::Check_Territory`'s own "workable but reserves
@@ -122,7 +122,7 @@ mod tests
     }
 
     #[test]
-    fn Test_A_Real_Valid_Response_Should_Round_Trip_As_Json()
+    fn Test_From_Should_Produce_A_Valid_Response_That_Round_Trips_As_Json()
     {
         let directory = Scratch_Board();
 

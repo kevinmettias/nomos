@@ -29,3 +29,23 @@ impl RowCensusResponse
         };
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_From_Should_Copy_Every_Field_Of_The_Domain_Row_Census()
+    {
+        let census = RowCensus { lines: 10, header: 1, content: 7, separator: 1, non_separator: 8 };
+
+        let response = RowCensusResponse::From(census);
+
+        assert_eq!(response.lines, census.lines);
+        assert_eq!(response.header, census.header);
+        assert_eq!(response.content, census.content);
+        assert_eq!(response.separator, census.separator);
+        assert_eq!(response.non_separator, census.non_separator);
+    }
+}

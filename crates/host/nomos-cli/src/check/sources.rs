@@ -18,7 +18,7 @@ mod tests
     }
 
     #[test]
-    fn Test_A_Go_File_Should_Be_Discovered_Alongside_A_Rust_One()
+    fn Test_Read_Sources_Should_Discover_A_Go_File_Alongside_A_Rust_One()
     {
         let root = Fresh_Root("nomos-cli-check-sources-go-discovery");
         std::fs::write(root.join("a.rs"), "pub fn One() {}\n").expect("writable");
@@ -32,7 +32,7 @@ mod tests
     }
 
     #[test]
-    fn Test_An_Unrelated_Extension_Should_Not_Be_Discovered()
+    fn Test_Read_Entry_Should_Not_Discover_An_Unrelated_Extension()
     {
         let root = Fresh_Root("nomos-cli-check-sources-unrelated-extension");
         std::fs::write(root.join("README.md"), "# not source\n").expect("writable");
@@ -41,6 +41,73 @@ mod tests
 
         let _ignored = std::fs::remove_dir_all(&root);
         assert!(sources.is_empty(), "{sources:?}");
+    }
+
+    /// `Walked_Sources` wraps `Read_Sources` with one guard of its own: a root that is not a
+    /// directory at all reports `None` rather than an empty list, so a caller can tell "there
+    /// was nothing to read" from "there was nowhere to read".
+    #[test]
+    fn Test_Walked_Sources_Should_Be_None_When_The_Root_Is_Not_A_Directory()
+    {
+        let root = std::env::temp_dir().join("nomos-cli-check-sources-walked-sources-missing");
+        let _ignored = std::fs::remove_dir_all(&root);
+
+        assert!(Walked_Sources(&root).is_none());
+    }
+
+    /// The positive control for the guard above: a real directory reports `Some`, carrying
+    /// exactly what `Read_Sources` would have found.
+    #[test]
+    fn Test_Walked_Sources_Should_Return_Sources_For_A_Real_Directory()
+    {
+        let root = Fresh_Root("nomos-cli-check-sources-walked-sources-present");
+        std::fs::write(root.join("a.rs"), "pub fn One() {}\n").expect("writable");
+
+        let sources = Walked_Sources(&root).expect("a directory returns Some");
+
+        let _ignored = std::fs::remove_dir_all(&root);
+        assert_eq!(sources.len(), 1);
+    }
+
+    /// `Read_Source` files a `SourceFile` under the path relative to `root` -- the same
+    /// value `Relative_Path` computes -- rather than the absolute path it was read from.
+    #[test]
+    fn Test_Read_Source_Should_File_The_Relative_Path()
+    {
+        let root = Fresh_Root("nomos-cli-check-sources-read-source");
+        let path = root.join("a.rs");
+
+        let source = Read_Source(&root, &path, "pub fn One() {}\n".to_owned());
+
+        let _ignored = std::fs::remove_dir_all(&root);
+        assert_eq!(source.path, "a.rs");
+    }
+
+    /// Forward slashes on every platform, because a finding's location is pasted between
+    /// machines and the same file must not render two ways -- the property this function
+    /// exists for, checked directly against a nested path rather than only observed as a
+    /// side effect of a walk.
+    #[test]
+    fn Test_Relative_Path_Should_Use_Forward_Slashes_On_Every_Platform()
+    {
+        let root = PathBuf::from("root");
+        let path = root.join("nested").join("file.rs");
+
+        assert_eq!(Relative_Path(&root, &path), "nested/file.rs");
+    }
+
+    /// The one place a walked file's own address and text come together into a
+    /// `SourceFile` -- checked directly, not only observed as a side effect of a walk.
+    #[test]
+    fn Test_Read_Source_Should_Build_A_Source_File_Carrying_What_It_Was_Given()
+    {
+        let root = PathBuf::from("root");
+        let path = root.join("nested").join("file.rs");
+
+        let source = Read_Source(&root, &path, "fn Main() {}".to_owned());
+
+        assert_eq!(source.path, "nested/file.rs");
+        assert_eq!(source.text, "fn Main() {}");
     }
 }
 

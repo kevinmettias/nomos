@@ -144,7 +144,7 @@ mod tests
     use nomos_spec_orchestration::EditRequest;
 
     #[test]
-    fn Test_A_Real_Commit_Should_Write_The_Record_And_Close_The_Round_Trip()
+    fn Test_Handle_Spec_Commit_Should_Write_The_Record_And_Close_The_Round_Trip()
     {
         let into = Unique_Scratch_Directory("spec-commit", "commit");
         let staged = Staged_Heading_Rename("D-132", &into);
@@ -186,7 +186,7 @@ mod tests
     }
 
     #[test]
-    fn Test_A_Real_Committed_Response_Should_Round_Trip_As_Json()
+    fn Test_From_Should_Round_Trip_As_Json()
     {
         let into = Unique_Scratch_Directory("spec-commit", "commit-json");
         let staged = Staged_Heading_Rename("D-132", &into);

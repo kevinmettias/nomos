@@ -59,6 +59,44 @@ pub(crate) fn Run(
     };
 }
 
+#[cfg(test)]
+mod run_coverage
+{
+    use super::*;
+    use nomos_spec_model::{SubmissionKind, SubmissionState};
+
+    /// `Run` driven end to end with an incomplete submission (no `fields` at all), so the
+    /// rule set refuses it before anything is stored -- deterministic, no corpus needed,
+    /// the same safe path `tests/request_submit.rs`'s own broader `Run` coverage uses.
+    #[test]
+    fn Test_Run_Should_Refuse_A_Submission_Missing_Its_Required_Fields()
+    {
+        let submit = SubmitRequest {
+            kind: SubmissionKind::FeatureRequest,
+            id: "FR-RUN-COVERAGE-TEST".to_owned(),
+            by: "test".to_owned(),
+            state: SubmissionState::Draft,
+            contract_version: 1,
+            fields: Vec::new(),
+            gaps: Vec::new(),
+            submitted_through: "cli".to_owned(),
+            into: None,
+        };
+        let command = Command::Submit(submit);
+        let request = CorpusRequest {
+            variable: "NOMOS_REQUEST_RUN_COVERAGE_TEST_CORPUS_UNSET".to_owned(),
+            root: None,
+            revision: "v14.36".to_owned(),
+        };
+        let mut output = Vec::new();
+        let mut notes = Vec::new();
+
+        let code = Run(&command, &request, &mut output, &mut notes);
+
+        assert_eq!(code, ExitCode::Refused, "{}", String::from_utf8_lossy(&notes));
+    }
+}
+
 /// Assembles the store `request` names, and dispatches `submit` against it through
 /// `nomos-spec-orchestration::Submit_Corpus_Request` -- the same composition-root choice `nomos-cli::spec`
 /// already makes for the other nine `SpecCommand` verbs, `nomos_platform_std::StdFileSystem`

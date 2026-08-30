@@ -91,10 +91,24 @@ mod tests
     use super::*;
 
     #[test]
-    fn Test_Since_And_Until_Are_Required()
+    fn Test_Parsed_From_String_Arguments_Should_Require_Since_And_Until()
     {
-        assert!(Parsed_From_String_Arguments(&Arguments_From_Text("--until HEAD")).is_err());
-        assert!(Parsed_From_String_Arguments(&Arguments_From_Text("--since HEAD~5")).is_err());
+        let missing_since = match Parsed_From_String_Arguments(&Arguments_From_Text("--until HEAD"))
+        {
+            Err(error) => error,
+            Ok(_) => panic!("missing --since must refuse"),
+        };
+        let missing_until = match Parsed_From_String_Arguments(&Arguments_From_Text("--since HEAD~5"))
+        {
+            Err(error) => error,
+            Ok(_) => panic!("missing --until must refuse"),
+        };
+
+        // `USAGE` is the one message either branch of this refusal can produce -- the root
+        // path's own errors append text past it, so an exact match here also rules out
+        // this test passing because a later stage refused for an unrelated reason.
+        assert_eq!(missing_since, USAGE);
+        assert_eq!(missing_until, USAGE);
     }
 
     #[test]

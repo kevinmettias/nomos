@@ -302,24 +302,27 @@ fn Test_A_Run_That_Materialised_No_Facts_Should_Not_Exit_Zero()
     );
 }
 
-/// A tree that is not there is a different failure from a tree that is clean, and from
-/// one that judged nothing.
-#[test]
-fn Test_A_Root_That_Does_Not_Exist_Should_Be_Unreadable()
+/// Arguments the invocation refuses before any tree is walked, paired with the exit code
+/// each refusal reports, and why: a missing root is a different failure from a tree that is
+/// clean or one that judged nothing, and a mistyped flag must not fall back to walking the
+/// current directory and reporting on the wrong tree.
+fn Refused_Before_Any_Tree_Is_Walked() -> Vec<(&'static [&'static str], i32, &'static str)>
 {
-    let Ran { code, .. } = Run(&["check", "--root", "no-such-tree-anywhere-at-all"]);
-
-    assert_eq!(code, 5);
+    return vec![
+        (&["check", "--root", "no-such-tree-anywhere-at-all"], 5, "a tree that is not there"),
+        (&["check", "--rooot", "."], 2, "a mistyped flag"),
+    ];
 }
 
-/// A mistyped flag must not fall back to walking the current directory and reporting on
-/// the wrong tree.
 #[test]
-fn Test_A_Mistyped_Flag_Should_Be_A_Usage_Error()
+fn Test_An_Invocation_Refused_Before_Walking_Should_Report_Its_Own_Code()
 {
-    let Ran { code, .. } = Run(&["check", "--rooot", "."]);
+    for (arguments, expected_code, why) in Refused_Before_Any_Tree_Is_Walked()
+    {
+        let Ran { code, .. } = Run(arguments);
 
-    assert_eq!(code, 2);
+        assert_eq!(code, expected_code, "{why}: {arguments:?}");
+    }
 }
 
 /// The gate step, one layer earlier: this workspace has nothing that can fail a build.

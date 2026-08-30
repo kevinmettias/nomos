@@ -28,3 +28,29 @@ impl NodeSummaryResponse
         };
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_From_Should_Copy_Every_Field_Of_The_Domain_Node_Summary()
+    {
+        let node = NodeSummary {
+            node_id: "D-132".to_owned(),
+            kind: "record".to_owned(),
+            authority: "governing".to_owned(),
+            representation: "markdown".to_owned(),
+            title: "Example Record".to_owned(),
+        };
+
+        let response = NodeSummaryResponse::From(node.clone());
+
+        assert_eq!(response.node_id, node.node_id);
+        assert_eq!(response.kind, node.kind);
+        assert_eq!(response.authority, node.authority);
+        assert_eq!(response.representation, node.representation);
+        assert_eq!(response.title, node.title);
+    }
+}

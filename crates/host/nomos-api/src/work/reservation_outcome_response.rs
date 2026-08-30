@@ -50,3 +50,44 @@ impl ReservationOutcomeResponse
         };
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use nomos_ledger::ItemId;
+    use nomos_platform::Timestamp;
+
+    #[test]
+    fn Test_From_Should_Map_A_Granted_Reservation_Into_Reserved()
+    {
+        let reservation = Reservation {
+            item: ItemId::New("SCRATCH-OUTCOME-RESERVED"),
+            holder: "test-holder".to_owned(),
+            expires_at: Timestamp::From_Unix_Seconds(42),
+        };
+
+        let response = ReservationOutcomeResponse::From(Ok(reservation));
+
+        assert!(matches!(response, ReservationOutcomeResponse::Reserved { .. }), "{response:?}");
+    }
+
+    #[test]
+    fn Test_From_Should_Map_A_Held_By_Refusal_Into_Refused_And_Retryable()
+    {
+        let refusal = ClaimRefusal::HeldBy {
+            holder: "someone-else".to_owned(),
+            until: Timestamp::From_Unix_Seconds(2_000),
+            item: ItemId::New("SCRATCH-OUTCOME-HELD"),
+        };
+
+        let response = ReservationOutcomeResponse::From(Err(refusal));
+
+        let ReservationOutcomeResponse::Refused { retryable, .. } = response
+        else
+        {
+            panic!("a HeldBy refusal must map to Refused")
+        };
+        assert!(retryable);
+    }
+}

@@ -42,3 +42,26 @@ impl ReproductionResponse
         };
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_From_Should_Map_Every_Outcome_Of_The_Domain_Result()
+    {
+        assert!(matches!(
+            ReproductionResponse::From(Ok(Reproduction::Matched { hash: "abc".to_owned() })),
+            ReproductionResponse::Matched { hash } if hash == "abc"
+        ));
+        assert!(matches!(
+            ReproductionResponse::From(Ok(Reproduction::Mismatched { hash: "def".to_owned() })),
+            ReproductionResponse::Mismatched { hash } if hash == "def"
+        ));
+        assert!(matches!(
+            ReproductionResponse::From(Err(EditError::Unreadable { cause: "no such record".to_owned() })),
+            ReproductionResponse::Unverifiable { .. }
+        ));
+    }
+}

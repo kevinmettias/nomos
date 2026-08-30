@@ -132,17 +132,27 @@ fn Test_Freshness_Should_Collect_Every_Requirement()
 }
 
 #[test]
-fn Test_An_Unknown_Command_Should_Be_A_Usage_Error()
+fn Test_Spec_Command_From_String_Arguments_Should_Refuse_An_Unknown_Command()
 {
     let error = Spec_Command_From_String_Arguments(&Arguments("frobnicate")).expect_err("must refuse");
 
     assert!(error.contains("frobnicate"), "{error}");
 }
 
+/// Every code `work` already spends on a claim outcome, so a second test can point at it
+/// without repeating the pair inline.
+fn Works_Claim_Codes() -> [i32; 2]
+{
+    return [
+        crate::work::ExitCode::ClaimUnavailable.Value(),
+        crate::work::ExitCode::Conflict.Value(),
+    ];
+}
+
 /// The codes are a contract, and they are the binary's rather than the group's. `3`
 /// and `4` belong to `work`'s claim refusals and must not acquire a second meaning.
 #[test]
-fn Test_Exit_Codes_Should_Be_Stable_And_Not_Collide_With_Works()
+fn Test_Value_Should_Be_Stable_And_Not_Collide_With_Works_Claim_Codes()
 {
     assert_eq!(ExitCode::Ok.Value(), crate::work::ExitCode::Ok.Value());
     assert_eq!(ExitCode::Usage.Value(), crate::work::ExitCode::Usage.Value());
@@ -153,10 +163,7 @@ fn Test_Exit_Codes_Should_Be_Stable_And_Not_Collide_With_Works()
     assert_eq!(ExitCode::Stale.Value(), 8);
     assert_eq!(ExitCode::Refused.Value(), 9);
 
-    for taken in [
-        crate::work::ExitCode::ClaimUnavailable.Value(),
-        crate::work::ExitCode::Conflict.Value(),
-    ]
+    for taken in Works_Claim_Codes()
     {
         assert!(
             ![
@@ -173,14 +180,10 @@ fn Test_Exit_Codes_Should_Be_Stable_And_Not_Collide_With_Works()
     }
 }
 
-#[test]
-fn Test_The_Usage_Text_Should_Name_Every_Command()
+/// Every `nomos spec` command name the usage text must mention.
+fn Every_Spec_Command_Name() -> [&'static str; 9]
 {
-    use super::parsing::Usage_Text;
-
-    let usage = Usage_Text();
-
-    for command in [
+    return [
         "record",
         "table",
         "render",
@@ -190,7 +193,17 @@ fn Test_The_Usage_Text_Should_Name_Every_Command()
         "commit",
         "profiles",
         "sources",
-    ]
+    ];
+}
+
+#[test]
+fn Test_Usage_Text_Should_Name_Every_Command()
+{
+    use super::parsing::Usage_Text;
+
+    let usage = Usage_Text();
+
+    for command in Every_Spec_Command_Name()
     {
         assert!(usage.contains(command), "usage does not mention {command}");
     }

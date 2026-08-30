@@ -53,3 +53,26 @@ impl ExitCode
         return self as i32;
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    /// Every variant's discriminant, as declared above. `spec::tests::
+    /// Test_Value_Should_Be_Stable_And_Not_Collide_With_Works_Claim_Codes` is the cross-cutting half
+    /// of this claim -- that these numbers also do not collide with `work`'s own claim codes; this
+    /// test's concern is narrower and stays with the declaration it reads.
+    #[test]
+    fn Test_Value_Should_Return_The_Declared_Discriminant()
+    {
+        assert_eq!(ExitCode::Ok.Value(), 0);
+        assert_eq!(ExitCode::NotFound.Value(), 1);
+        assert_eq!(ExitCode::Usage.Value(), 2);
+        assert_eq!(ExitCode::StoreError.Value(), 5);
+        assert_eq!(ExitCode::Absent.Value(), 6);
+        assert_eq!(ExitCode::Unwritable.Value(), 7);
+        assert_eq!(ExitCode::Stale.Value(), 8);
+        assert_eq!(ExitCode::Refused.Value(), 9);
+    }
+}

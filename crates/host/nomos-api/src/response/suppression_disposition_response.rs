@@ -40,3 +40,38 @@ impl SuppressionDispositionResponse
         };
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_From_Should_Map_Every_Suppression_Disposition_Variant_To_Its_Own_Response_Variant()
+    {
+        assert_eq!(
+            SuppressionDispositionResponse::From(SuppressionDisposition::InlineSuppression),
+            SuppressionDispositionResponse::InlineSuppression
+        );
+        assert_eq!(
+            SuppressionDispositionResponse::From(SuppressionDisposition::RepositoryPolicyException),
+            SuppressionDispositionResponse::RepositoryPolicyException
+        );
+        assert_eq!(
+            SuppressionDispositionResponse::From(SuppressionDisposition::TemporaryWaiver),
+            SuppressionDispositionResponse::TemporaryWaiver
+        );
+        assert_eq!(
+            SuppressionDispositionResponse::From(SuppressionDisposition::AcceptedBaselineDebt),
+            SuppressionDispositionResponse::AcceptedBaselineDebt
+        );
+        assert_eq!(
+            SuppressionDispositionResponse::From(SuppressionDisposition::FalsePositiveDisposition),
+            SuppressionDispositionResponse::FalsePositiveDisposition
+        );
+        assert_eq!(
+            SuppressionDispositionResponse::From(SuppressionDisposition::FormalRiskAcceptance),
+            SuppressionDispositionResponse::FormalRiskAcceptance
+        );
+    }
+}

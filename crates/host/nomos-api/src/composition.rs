@@ -21,3 +21,22 @@ pub(crate) fn Host_Variant() -> BuildVariant
             .filter(|feature| return !feature.is_empty()),
     );
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    /// The four `env!` components `build.rs` captures are non-empty in a real build --
+    /// proving this crate was actually compiled with them set, not linked against a stale
+    /// or placeholder capture.
+    #[test]
+    fn Test_Host_Variant_Should_Carry_A_Real_Non_Empty_Target_Profile_And_Toolchain()
+    {
+        let variant = Host_Variant();
+
+        assert!(!variant.target.is_empty(), "{variant:?}");
+        assert!(!variant.profile.is_empty(), "{variant:?}");
+        assert!(!variant.toolchain.is_empty(), "{variant:?}");
+    }
+}

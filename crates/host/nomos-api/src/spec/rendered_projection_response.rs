@@ -32,3 +32,38 @@ impl RenderedProjectionResponse
         return Self { id: answer.id, body: answer.body, sidecar: answer.sidecar, stamp: answer.stamp };
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use nomos_spec_project::Format;
+
+    #[test]
+    fn Test_From_Should_Copy_Every_Field_Of_The_Domain_Render_Answer()
+    {
+        let stamp = Stamp {
+            profile: "subject-dossier".to_owned(),
+            profile_digest: "digest".to_owned(),
+            format: Format::Markdown,
+            output: "subject-dossier.md".to_owned(),
+            content_digest: "content".to_owned(),
+            inputs_digest: "inputs".to_owned(),
+            sections: Vec::new(),
+            inputs: Vec::new(),
+        };
+        let answer = RenderAnswer {
+            id: "subject-dossier".to_owned(),
+            body: PathBuf::from("into/subject-dossier.md"),
+            sidecar: PathBuf::from("into/subject-dossier.stamp.json"),
+            stamp: stamp.clone(),
+        };
+
+        let response = RenderedProjectionResponse::From(answer.clone());
+
+        assert_eq!(response.id, answer.id);
+        assert_eq!(response.body, answer.body);
+        assert_eq!(response.sidecar, answer.sidecar);
+        assert_eq!(response.stamp.profile, stamp.profile);
+    }
+}

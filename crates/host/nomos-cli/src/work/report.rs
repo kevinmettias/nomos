@@ -361,3 +361,346 @@ const fn Code_For(refusal: &ClaimRefusal) -> ExitCode
         }
     };
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    /// A minimal, ready item: enough to give [`Print_Blocked`] something to print.
+    fn Item(id: &str) -> LedgerItem
+    {
+        return LedgerItem {
+            id: ItemId::New(id),
+            title: format!("item {id}"),
+            why: "because".to_owned(),
+            done_when: "it prints".to_owned(),
+            kind: nomos_ledger::ItemKind::Correction,
+            origin: nomos_ledger::ItemOrigin::Proposed,
+            territory: Territory::Of_Files(vec!["src/a.rs".to_owned()]),
+            state: ItemState::Ready,
+            depends_on: Vec::new(),
+            blocked: None,
+            claim: None,
+            verification: None,
+            verified: None,
+            abandoned: Vec::new(),
+            displaced: Vec::new(),
+            declined: None,
+        };
+    }
+
+    /// `work audit` answers for items somebody could act on, and nobody can act on a declined
+    /// one.
+    ///
+    /// `P10-AUDIT-STATE` settled that once: an audit that reported blockers for finished work
+    /// made forty-four lines nobody could do anything about. A newly reachable terminal state
+    /// is the obvious way to reopen it.
+    #[test]
+    fn Test_Blocking_Refusal_Should_Answer_Nothing_For_A_Declined_Item()
+    {
+        let mut item = Item("T-1");
+        item.Decline("superseded by T-2", "agent-a", Timestamp::From_Unix_Seconds(1));
+        let document = LedgerDocument {
+            schema_version: SCHEMA_VERSION,
+            items: vec![item],
+        };
+        let found = document.items.first().expect("the fixture has an item");
+
+        assert!(
+            Blocking_Refusal(&document, found, Timestamp::From_Unix_Seconds(2)).is_none(),
+            "audit answered for an item nobody can act on"
+        );
+    }
+
+    #[test]
+    fn Test_Amendment_Note_Should_Be_Empty_When_Nothing_Is_Amended()
+    {
+        assert_eq!(Amendment_Note(&Territory::Of_Files(Vec::<String>::new())), "");
+    }
+
+    #[test]
+    fn Test_Amendment_Note_Should_Name_Every_Amended_Path()
+    {
+        let amending = Territory::Of_Files(vec![
+            "docs/records/A.md".to_owned(),
+            "docs/records/B.md".to_owned(),
+        ]);
+
+        assert_eq!(
+            Amendment_Note(&amending),
+            ", amending docs/records/A.md, docs/records/B.md"
+        );
+    }
+
+    #[test]
+    fn Test_Code_For_Refusal_Should_Map_Each_Refusal_To_Its_Own_Exit_Code()
+    {
+        assert_eq!(
+            Code_For_Refusal(&AddRefusal::AlreadyPresent { item: ItemId::New("T-1") }),
+            ExitCode::Conflict,
+            "a taken identifier is a conflict, not a retryable one"
+        );
+        assert_eq!(
+            Code_For_Refusal(&AddRefusal::RecordPublished {
+                identifier: "OD-X-001".to_owned(),
+                file: "docs/records/OD-X-001-a.md".to_owned(),
+            }),
+            ExitCode::Conflict,
+            "a record already spent is a conflict too"
+        );
+        assert_eq!(
+            Code_For_Refusal(&AddRefusal::WouldBeInvalid {
+                violations: vec!["reserves nothing".to_owned()],
+            }),
+            ExitCode::ValidationError,
+            "an item's own declaration is the caller's to correct"
+        );
+        assert_eq!(
+            Code_For_Refusal(&AddRefusal::LedgerUnusable { cause: "disk full".to_owned() }),
+            ExitCode::StoreError,
+            "a ledger that cannot be used at all stops an agent rather than sending it to retry"
+        );
+    }
+
+    #[test]
+    fn Test_Report_Finish_Should_Print_The_Verified_Command_On_Success()
+    {
+        let mut output = Vec::new();
+
+        let code = Report_Finish(
+            Ok(nomos_ledger::VerificationRecord {
+                argv: vec!["cargo".to_owned(), "test".to_owned()],
+                exit_code: 0,
+                output_tail: String::new(),
+                verified_at: Timestamp::From_Unix_Seconds(5),
+                gate: None,
+                revision: None,
+            }),
+            &mut output,
+        );
+
+        assert_eq!(code, ExitCode::Ok);
+        assert!(
+            String::from_utf8(output).unwrap().contains("verified by `cargo test`"),
+            "success must name what was run"
+        );
+    }
+
+    #[test]
+    fn Test_Report_Finish_Should_Report_A_Validation_Error_When_The_Predicate_Judged_The_Work()
+    {
+        let mut output = Vec::new();
+
+        let code = Report_Finish(
+            Err(FinishRefusal::PredicateFailed {
+                item: ItemId::New("T-1"),
+                exit_code: 1,
+                output_tail: "assertion failed".to_owned(),
+            }),
+            &mut output,
+        );
+
+        assert_eq!(
+            code,
+            ExitCode::ValidationError,
+            "a predicate that ran and said no judged the work, not the tooling"
+        );
+        assert!(String::from_utf8(output).unwrap().contains("not finished"));
+    }
+
+    #[test]
+    fn Test_Refusal_Label_Should_Name_Each_Refusal_By_Its_Own_Word()
+    {
+        assert_eq!(
+            Refusal_Label(&ClaimRefusal::DependencyUnmet {
+                item: ItemId::New("T-1"),
+                dependency: ItemId::New("T-0"),
+                state: "Ready".to_owned(),
+            }),
+            "waiting"
+        );
+        assert_eq!(
+            Refusal_Label(&ClaimRefusal::DependencyDeclined {
+                item: ItemId::New("T-1"),
+                dependency: ItemId::New("T-0"),
+                state: "Declined".to_owned(),
+            }),
+            "stranded"
+        );
+        assert_eq!(
+            Refusal_Label(&ClaimRefusal::HeldBy {
+                holder: "agent-a".to_owned(),
+                until: Timestamp::From_Unix_Seconds(10),
+                item: ItemId::New("T-2"),
+            }),
+            "held"
+        );
+        assert_eq!(
+            Refusal_Label(&ClaimRefusal::Lapsed {
+                item: ItemId::New("T-1"),
+                holder: "agent-a".to_owned(),
+                since: Timestamp::From_Unix_Seconds(10),
+            }),
+            "lapsed"
+        );
+        assert_eq!(
+            Refusal_Label(&ClaimRefusal::NoSuchItem { item: ItemId::New("T-9") }),
+            "snagged",
+            "everything the four named words do not cover falls to the catch-all"
+        );
+    }
+
+    #[test]
+    fn Test_Report_Claim_Should_Print_Who_Holds_It_Until_When_On_Success()
+    {
+        let mut output = Vec::new();
+
+        let code = Report_Claim(
+            Ok(nomos_ledger::Reservation {
+                item: ItemId::New("T-1"),
+                holder: "agent-a".to_owned(),
+                expires_at: Timestamp::From_Unix_Seconds(100),
+            }),
+            &mut output,
+        );
+
+        assert_eq!(code, ExitCode::Ok);
+        assert_eq!(
+            String::from_utf8(output).unwrap(),
+            "T-1 held by agent-a until unix 100\n"
+        );
+    }
+
+    #[test]
+    fn Test_Report_Claim_Should_Report_A_Retryable_Refusal_As_Claim_Unavailable()
+    {
+        let mut output = Vec::new();
+
+        let code = Report_Claim(
+            Err(ClaimRefusal::HeldBy {
+                holder: "agent-a".to_owned(),
+                until: Timestamp::From_Unix_Seconds(10),
+                item: ItemId::New("T-1"),
+            }),
+            &mut output,
+        );
+
+        assert_eq!(code, ExitCode::ClaimUnavailable);
+        assert!(String::from_utf8(output).unwrap().starts_with("refused:"));
+    }
+
+    #[test]
+    fn Test_Report_Decline_Should_Name_The_Item_On_Success()
+    {
+        let mut output = Vec::new();
+
+        let code = Report_Decline(&ItemId::New("T-1"), Ok(()), &mut output);
+
+        assert_eq!(code, ExitCode::Ok);
+        assert_eq!(String::from_utf8(output).unwrap(), "T-1 declined\n");
+    }
+
+    #[test]
+    fn Test_Report_Decline_Should_Report_A_Non_Retryable_Refusal_As_A_Conflict()
+    {
+        let mut output = Vec::new();
+
+        let code = Report_Decline(
+            &ItemId::New("T-1"),
+            Err(ClaimRefusal::NotClaimable {
+                item: ItemId::New("T-1"),
+                state: "Done".to_owned(),
+            }),
+            &mut output,
+        );
+
+        assert_eq!(code, ExitCode::Conflict);
+        assert!(String::from_utf8(output).unwrap().starts_with("refused:"));
+    }
+
+    #[test]
+    fn Test_Report_Release_Should_Say_Released_On_Success()
+    {
+        let mut output = Vec::new();
+
+        let code = Report_Release(Ok(()), &mut output);
+
+        assert_eq!(code, ExitCode::Ok);
+        assert_eq!(String::from_utf8(output).unwrap(), "released\n");
+    }
+
+    #[test]
+    fn Test_Report_Validation_Should_Print_Both_Schema_Versions_On_Success()
+    {
+        let mut output = Vec::new();
+        let document = LedgerDocument {
+            schema_version: SCHEMA_VERSION,
+            items: Vec::new(),
+        };
+
+        let code = Report_Validation(Ok(document), &mut output);
+
+        assert_eq!(code, ExitCode::Ok);
+        assert!(String::from_utf8(output).unwrap().contains("ledger is valid"));
+    }
+
+    #[test]
+    fn Test_Report_Validation_Should_Report_A_Malformed_Ledger_As_A_Store_Error()
+    {
+        let mut output = Vec::new();
+
+        let code = Report_Validation(
+            Err(LedgerError::Malformed { cause: "not json".to_owned() }),
+            &mut output,
+        );
+
+        assert_eq!(code, ExitCode::StoreError);
+    }
+
+    #[test]
+    fn Test_Print_Blocked_Should_Print_The_Items_Identifier_Label_And_The_Refusals_Description()
+    {
+        let item = Item("T-1");
+        let refusal = ClaimRefusal::HeldBy {
+            holder: "agent-a".to_owned(),
+            until: Timestamp::From_Unix_Seconds(10),
+            item: ItemId::New("T-2"),
+        };
+        let mut output = Vec::new();
+
+        Print_Blocked(&item, &refusal, &mut output);
+
+        let printed = String::from_utf8(output).unwrap();
+        assert!(printed.contains("T-1"), "{printed}");
+        assert!(printed.contains("held"), "{printed}");
+        assert!(printed.contains(&refusal.Describe()), "{printed}");
+    }
+
+    #[test]
+    fn Test_Report_Error_Should_Map_An_Invalid_Ledger_To_A_Validation_Error()
+    {
+        let mut output = Vec::new();
+
+        let code = Report_Error(
+            &LedgerError::Invalid { violations: vec!["dup".to_owned()] },
+            &mut output,
+        );
+
+        assert_eq!(code, ExitCode::ValidationError);
+        assert!(String::from_utf8(output).unwrap().contains("ledger is invalid"));
+    }
+
+    #[test]
+    fn Test_Report_Error_Should_Map_An_Unreadable_Ledger_To_A_Store_Error()
+    {
+        let mut output = Vec::new();
+
+        let code = Report_Error(
+            &LedgerError::Unreadable { cause: "permission denied".to_owned() },
+            &mut output,
+        );
+
+        assert_eq!(code, ExitCode::StoreError);
+    }
+}

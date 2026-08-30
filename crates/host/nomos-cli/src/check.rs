@@ -148,3 +148,25 @@ pub fn Run(command: &CheckCommand, stdout: &mut impl Write, stderr: &mut impl Wr
 
     return Render_Outcome(&command.root, &outcome, stdout, stderr);
 }
+
+#[cfg(test)]
+mod run_coverage
+{
+    use super::*;
+    use nomos_check_orchestration::CheckCommand;
+
+    /// `Run` driven end to end over a root that does not exist, so `Walked_Sources` fails
+    /// before any rule ever runs — the same safe, fast path `check/tests.rs`'s own broader
+    /// `Run` coverage uses.
+    #[test]
+    fn Test_Run_Should_Report_Unreadable_For_A_Root_That_Does_Not_Exist()
+    {
+        let command = CheckCommand { root: PathBuf::from("no-such-tree-anywhere-for-run-coverage-test") };
+        let mut stdout = Vec::new();
+        let mut stderr = Vec::new();
+
+        let code = Run(&command, &mut stdout, &mut stderr);
+
+        assert_eq!(code, ExitCode::Unreadable);
+    }
+}

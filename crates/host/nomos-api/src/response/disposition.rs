@@ -33,3 +33,17 @@ impl Disposition
         };
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_From_Should_Map_Every_Gate_Run_Outcome_Variant_To_Its_Own_Disposition()
+    {
+        assert_eq!(Disposition::From(GateRunOutcome::Passed), Disposition::Passed);
+        assert_eq!(Disposition::From(GateRunOutcome::Failed), Disposition::Failed);
+        assert_eq!(Disposition::From(GateRunOutcome::Indeterminate), Disposition::Indeterminate);
+    }
+}

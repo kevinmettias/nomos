@@ -105,7 +105,7 @@ mod tests
     /// directory and no `NOMOS_V14_CORPUS` to be set, the same zero-setup shape every other
     /// test in this file already has.
     #[test]
-    fn Test_A_Real_Governing_Record_Should_Resolve()
+    fn Test_Handle_Spec_Record_Should_Resolve_A_Real_Governing_Record()
     {
         let request = RecordRequest { id: "D-132".to_owned(), revision: None };
 
@@ -134,7 +134,7 @@ mod tests
     }
 
     #[test]
-    fn Test_A_Real_Resolved_Response_Should_Round_Trip_As_Json()
+    fn Test_From_Should_Round_Trip_As_Json()
     {
         let request = RecordRequest { id: "D-132".to_owned(), revision: None };
 

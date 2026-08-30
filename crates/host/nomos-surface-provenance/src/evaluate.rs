@@ -226,7 +226,7 @@ mod tests
     }
 
     #[test]
-    fn Test_A_Changed_Surface_With_A_Records_Commit_Is_Not_A_Finding()
+    fn Test_Records_Touched_Should_Suppress_A_Finding_Despite_A_Changed_Surface()
     {
         let launcher = Changed_Surface_Launcher("cafef00d\n", "deadbeef\treal change\n");
         let finding = Joined_Finding(&launcher, Repository_Range(), "nomos-model");
@@ -237,7 +237,7 @@ mod tests
     }
 
     #[test]
-    fn Test_A_Bad_Revision_Is_An_Error_Not_A_Finding()
+    fn Test_Finding_For_Should_Fail_On_A_Bad_Revision_Rather_Than_Report_A_Finding()
     {
         let launcher = Scripted::New().Answer("diff", 128, Stdout(""), Stderr("fatal: bad revision 'nonsense'"));
         let query = Query {
@@ -247,7 +247,17 @@ mod tests
 
         let result = Finding_For(&launcher, &query, "nomos-model");
 
-        assert!(result.is_err());
+        // Names the failure rather than just its presence: a malformed input, an
+        // out-of-range index, or a typo in the fixture would all still be `is_err()`, but
+        // only `git diff` itself refusing a revision produces `git`'s own "exited 128"
+        // and "bad revision" text.
+        let error = match result
+        {
+            Err(error) => error,
+            Ok(_) => panic!("a bad revision must fail the diff query, not report a finding"),
+        };
+        assert!(error.contains("exited 128"), "{error}");
+        assert!(error.contains("bad revision"), "{error}");
     }
 
     /// Runs the whole join a real invocation performs -- `Records_Touched` then

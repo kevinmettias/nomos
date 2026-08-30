@@ -254,3 +254,47 @@ pub(super) fn Usage_Text() -> String
             9 the submission was refused"
         .to_owned();
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Command_From_String_Arguments_Should_Parse_A_Complete_Submit()
+    {
+        let arguments: Vec<String> = [
+            "submit", "--kind", "feature-request", "--id", "FR-1", "--by", "kevin", "--field", "title=hello",
+        ]
+        .iter()
+        .map(|value| return (*value).to_owned())
+        .collect();
+
+        let Command::Submit(submit) = Command_From_String_Arguments(&arguments).expect("parses");
+
+        assert_eq!(submit.kind, SubmissionKind::FeatureRequest);
+        assert_eq!(submit.id, "FR-1");
+        assert_eq!(submit.by, "kevin");
+        assert_eq!(submit.state, SubmissionState::Draft);
+        assert_eq!(submit.contract_version, 1);
+        assert_eq!(submit.fields, vec![("title".to_owned(), "hello".to_owned())]);
+    }
+
+    #[test]
+    fn Test_Command_From_String_Arguments_Should_Refuse_An_Empty_Argument_List()
+    {
+        let error = Command_From_String_Arguments(&[]).expect_err("no verb at all");
+
+        assert!(error.starts_with("usage: nomos request"), "{error}");
+    }
+
+    #[test]
+    fn Test_Command_From_String_Arguments_Should_Refuse_An_Unknown_Verb()
+    {
+        let arguments = vec!["not-a-real-verb".to_owned()];
+
+        let error = Command_From_String_Arguments(&arguments).expect_err("no such verb");
+
+        assert!(error.contains("unknown command"), "{error}");
+    }
+}

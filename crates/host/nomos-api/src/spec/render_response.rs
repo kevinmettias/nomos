@@ -111,7 +111,7 @@ mod tests
     const EMBEDDED_PROFILE: &str = "domain-specification";
 
     #[test]
-    fn Test_A_Real_Render_Should_Place_Both_Files_On_Disk()
+    fn Test_Handle_Spec_Render_Should_Place_Both_Files_On_Disk()
     {
         let into = Unique_Scratch_Directory("spec-render", "render");
         let request = RenderRequest { profile: EMBEDDED_PROFILE.to_owned(), into: into.clone(), subject: None };
@@ -148,7 +148,7 @@ mod tests
     }
 
     #[test]
-    fn Test_A_Real_Placed_Response_Should_Round_Trip_As_Json()
+    fn Test_From_Should_Round_Trip_As_Json()
     {
         let request = RenderRequest {
             profile: EMBEDDED_PROFILE.to_owned(),

@@ -332,6 +332,13 @@ fn Test_A_Profile_That_Needs_The_Corpus_Should_Fail_As_An_Absence()
     );
 }
 
+/// A sample of the shipped profiles this test spot-checks by name, rather than every one
+/// `nomos_spec_project::SHIPPED` names.
+fn Sampled_Shipped_Profile_Names() -> Vec<&'static str>
+{
+    return vec!["domain-specification", "github-markdown", "offline-bundle"];
+}
+
 #[test]
 fn Test_Every_Shipped_Profile_Should_Be_Listed()
 {
@@ -340,7 +347,7 @@ fn Test_Every_Shipped_Profile_Should_Be_Listed()
     assert_eq!(Code(&output), 0, "{}", Err_Text(&output));
     let listed = Out_Text(&output);
     assert_eq!(listed.lines().count(), nomos_spec_project::SHIPPED.len(), "{listed}");
-    for named in ["domain-specification", "github-markdown", "offline-bundle"]
+    for named in Sampled_Shipped_Profile_Names()
     {
         assert!(listed.contains(named), "{named} is not listed:\n{listed}");
     }

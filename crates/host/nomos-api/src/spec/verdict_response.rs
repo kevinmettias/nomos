@@ -58,3 +58,30 @@ impl VerdictResponse
         };
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use nomos_spec_project::ProjectError;
+
+    #[test]
+    fn Test_From_Should_Map_Every_Domain_Variant_To_Its_Own_Response_Variant()
+    {
+        assert!(matches!(VerdictResponse::From(Verdict::Absent), VerdictResponse::Absent));
+        assert!(matches!(VerdictResponse::From(Verdict::Unstamped), VerdictResponse::Unstamped));
+        assert!(matches!(VerdictResponse::From(Verdict::Unbodied), VerdictResponse::Unbodied));
+
+        let compared = VerdictResponse::From(Verdict::Compared(Ok(Freshness::default())));
+        assert!(
+            matches!(
+                compared,
+                VerdictResponse::Compared { fresh: true, stale: None, edited: None, diverged: None }
+            ),
+            "a default Freshness has nothing to report, so it must compare as fresh"
+        );
+
+        let failed = VerdictResponse::From(Verdict::Compared(Err(ProjectError::Malformed("bad json".to_owned()))));
+        assert!(matches!(failed, VerdictResponse::BuildFailed { .. }));
+    }
+}

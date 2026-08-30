@@ -113,7 +113,7 @@ mod tests
     }
 
     #[test]
-    fn Test_Records_Touched_Scopes_To_Documentation_Records_Only()
+    fn Test_Records_Touched_In_Range_Should_Scope_To_Documentation_Records_Only()
     {
         let command = Records_Touched_In_Range(Path::new("/repo"), Since("a"), Until("b"));
 

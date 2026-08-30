@@ -57,7 +57,7 @@ impl ExitCode
 /// costs a row in `tests/contract/tests/completeness_universes/table.rs` -- a file outside
 /// this item's own territory, the same reason `check::ExitCode`'s own census once stayed a
 /// private array under this same name before `OD-GATE-004` paid that cost on purpose.
-/// Mirrored by `Test_Every_ExitCode_Should_Be_Matched_Exhaustively` in `gate/tests.rs`.
+/// Mirrored by `Test_Every_Exit_Code_Should_Be_Matched_Exhaustively` in `gate/tests.rs`.
 #[cfg(test)]
 pub(super) const fn Every_Exit_Code() -> &'static [ExitCode]
 {
@@ -68,4 +68,22 @@ pub(super) const fn Every_Exit_Code() -> &'static [ExitCode]
         ExitCode::Contradictory,
         ExitCode::Vacuous,
     ];
+}
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    /// `Every_Exit_Code`'s own count and order, independent of `gate/tests.rs`'s
+    /// exhaustiveness match over it (a different file, so a different Unit for coverage
+    /// purposes).
+    #[test]
+    fn Test_Every_Exit_Code_Should_Name_Every_Declared_Variant_In_Declaration_Order()
+    {
+        assert_eq!(
+            Every_Exit_Code(),
+            &[ExitCode::Ok, ExitCode::Violations, ExitCode::Usage, ExitCode::Contradictory, ExitCode::Vacuous]
+        );
+    }
 }

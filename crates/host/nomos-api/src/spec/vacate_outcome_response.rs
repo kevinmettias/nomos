@@ -32,3 +32,23 @@ impl VacateOutcomeResponse
         };
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_From_Should_Map_Every_Domain_Variant_To_Its_Own_Response_Variant()
+    {
+        assert!(matches!(VacateOutcomeResponse::From(VacateOutcome::Removed), VacateOutcomeResponse::Removed));
+        assert!(matches!(
+            VacateOutcomeResponse::From(VacateOutcome::AlreadyGone),
+            VacateOutcomeResponse::AlreadyGone
+        ));
+        assert!(matches!(
+            VacateOutcomeResponse::From(VacateOutcome::Failed("two files now declare this record".to_owned())),
+            VacateOutcomeResponse::Failed { message } if message == "two files now declare this record"
+        ));
+    }
+}

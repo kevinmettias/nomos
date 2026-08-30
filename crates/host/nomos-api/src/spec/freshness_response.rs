@@ -96,7 +96,7 @@ mod tests
     use crate::test_support::{Assert_Round_Trips_As_Json, Unique_Scratch_Directory};
 
     #[test]
-    fn Test_A_Real_Call_Over_An_Empty_Root_Should_Examine_Every_Profile_As_Absent()
+    fn Test_Handle_Spec_Freshness_Should_Examine_Every_Profile_As_Absent_Over_An_Empty_Root()
     {
         let request = FreshnessRequest {
             into: Unique_Scratch_Directory("spec-freshness", "empty-root"),
@@ -136,7 +136,7 @@ mod tests
     }
 
     #[test]
-    fn Test_A_Real_Examined_Response_Should_Round_Trip_As_Json()
+    fn Test_From_Should_Round_Trip_As_Json()
     {
         let request = FreshnessRequest {
             into: Unique_Scratch_Directory("spec-freshness", "round-trip"),

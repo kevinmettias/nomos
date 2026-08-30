@@ -24,3 +24,19 @@ impl SubmissionStateResponse
         };
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_From_Should_Map_Every_Domain_Variant_To_Its_Own_Response_Variant()
+    {
+        assert!(matches!(SubmissionStateResponse::From(SubmissionState::Draft), SubmissionStateResponse::Draft));
+        assert!(matches!(
+            SubmissionStateResponse::From(SubmissionState::Accepted),
+            SubmissionStateResponse::Accepted
+        ));
+    }
+}

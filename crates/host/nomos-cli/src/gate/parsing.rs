@@ -131,3 +131,44 @@ fn Plan_Or_Run_Command(root: PathBuf, rest: &[String]) -> GateCommand
         model: None,
     };
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Gate_Invocation_From_String_Arguments_Should_Default_To_Plan_With_The_Current_Directory()
+    {
+        let arguments = vec!["plan".to_owned()];
+
+        let invocation = Gate_Invocation_From_String_Arguments(&arguments).expect("parses");
+
+        let Invocation::Plan(command) = invocation
+        else
+        {
+            panic!("expected Plan, got {invocation:?}");
+        };
+        assert_eq!(command.root, PathBuf::from("."));
+    }
+
+    #[test]
+    fn Test_Gate_Invocation_From_String_Arguments_Should_Parse_A_Run_Verb()
+    {
+        let arguments = vec!["run".to_owned(), "--root".to_owned(), "some/tree".to_owned()];
+
+        let invocation = Gate_Invocation_From_String_Arguments(&arguments).expect("parses");
+
+        assert!(matches!(invocation, Invocation::Run(_)), "{invocation:?}");
+    }
+
+    #[test]
+    fn Test_Gate_Invocation_From_String_Arguments_Should_Refuse_An_Unknown_Verb()
+    {
+        let arguments = vec!["compare".to_owned()];
+
+        let error = Gate_Invocation_From_String_Arguments(&arguments).expect_err("compare has no real implementation");
+
+        assert!(error.contains("unknown verb"), "{error}");
+    }
+}

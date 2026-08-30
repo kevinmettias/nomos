@@ -4,6 +4,12 @@
 use super::{Backend, DispatchConfig, ExitCode};
 use nomos_agent_contracts::TaskEnvelope;
 
+// check-test-coverage: allow-untested unconditionally reaches Dispatch_Task, which itself
+// unconditionally spawns the real `claude` or `ollama` subprocess through StdProcessLauncher
+// (fixed at this composition root, not generic -- see the module doc above and Dispatch_Task's
+// own allow-untested reason). A test that actually calls this function would either depend on
+// which binaries happen to be on the running machine's PATH, or risk a real, costly invocation
+// of a live external tool; neither is safe or deterministic to exercise here.
 pub(super) fn Execute_Goal(goal: &str, config: DispatchConfig, output: &mut impl std::io::Write, notes: &mut impl std::io::Write) -> ExitCode
 {
     let task = Execute_Task(goal, config.effort);
@@ -17,6 +23,14 @@ pub(super) fn Execute_Goal(goal: &str, config: DispatchConfig, output: &mut impl
 /// not fired even once `--executor`/`--model-backend` replaced `--backend`: there is still
 /// only one real `AgentExecutor`, so this match is the entire dispatch, not a stand-in for a
 /// trait either flag's own vocabulary would need.
+// check-test-coverage: allow-untested both match arms launch a real external subprocess (the
+// `claude` or `ollama` CLI) through `nomos_platform_std::StdProcessLauncher`, fixed here rather
+// than generic over `ProcessLauncher` -- the same composition-root choice `check.rs` and
+// `work.rs` make for their own subprocesses, per this module's own doc comment. Injecting a fake
+// launcher would mean making this function generic against that established convention; calling
+// it as-is would spawn a live process whose presence on PATH this test suite does not control,
+// risking a real, costly invocation. `Answered_Claude_Code`, `Answered_Ollama` and
+// `Backend_Unavailable` below are the pure, already-testable pieces this function assembles.
 pub(super) fn Dispatch_Task(task: &TaskEnvelope, backend: Backend, output: &mut impl std::io::Write, notes: &mut impl std::io::Write) -> ExitCode
 {
     use nomos_platform_std::StdProcessLauncher;

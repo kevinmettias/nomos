@@ -79,11 +79,28 @@ mod tests
     }
 
     #[test]
-    fn Test_A_Missing_Directory_Refuses_Rather_Than_Reporting_Empty()
+    fn Test_Every_Snapshotted_Crate_Should_Refuse_A_Missing_Directory_Rather_Than_Reporting_Empty()
     {
-        let result = Every_Snapshotted_Crate(Path::new("no-such-directory-at-all"));
+        let missing_root = Path::new("no-such-directory-at-all");
+        let result = Every_Snapshotted_Crate(missing_root);
 
-        assert!(result.is_err());
+        let error = result.expect_err("a missing directory must refuse rather than report empty");
+        let expected_directory = Snapshot_Directory(missing_root);
+
+        // Names both the message shape this function actually produces and the exact
+        // directory it tried to read -- a malformed input, an out-of-range index, or a
+        // typo in the fixture would all still be `is_err()`, but none of them would name
+        // this directory under this message.
+        assert!(error.contains("cannot read"), "{error}");
+        assert!(error.contains(&expected_directory.display().to_string()), "{error}");
+    }
+
+    #[test]
+    fn Test_Snapshot_Directory_Should_Join_Tests_Contract_Surface_Under_The_Given_Root()
+    {
+        let root = Path::new("/repo");
+
+        assert_eq!(Snapshot_Directory(root), root.join("tests").join("contract").join("surface"));
     }
 
     #[test]

@@ -21,3 +21,25 @@ impl IdentityChangeResponse
         return Self { field: change.field, before: change.before, after: change.after };
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_From_Should_Copy_Every_Field_Of_The_Domain_Identity_Change()
+    {
+        let change = IdentityChange {
+            field: "id".to_owned(),
+            before: "D-131".to_owned(),
+            after: "D-132".to_owned(),
+        };
+
+        let response = IdentityChangeResponse::From(change.clone());
+
+        assert_eq!(response.field, change.field);
+        assert_eq!(response.before, change.before);
+        assert_eq!(response.after, change.after);
+    }
+}

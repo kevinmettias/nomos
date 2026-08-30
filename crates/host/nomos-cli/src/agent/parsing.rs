@@ -183,3 +183,44 @@ fn Usage_Text() -> String
 {
     return USAGE_TEXT.to_owned();
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Command_From_String_Arguments_Should_Parse_An_Execute_Command()
+    {
+        let arguments: Vec<String> = ["execute", "--goal", "say hello"].iter().map(|value| return (*value).to_owned()).collect();
+
+        let command = Command_From_String_Arguments(&arguments).expect("parses");
+
+        assert_eq!(
+            command,
+            Command::Execute {
+                goal: "say hello".to_owned(),
+                effort: nomos_model_package::EffortLevel::BackendDefault,
+                backend: Backend::ClaudeCode,
+            }
+        );
+    }
+
+    #[test]
+    fn Test_Command_From_String_Arguments_Should_Refuse_An_Empty_Argument_List()
+    {
+        let error = Command_From_String_Arguments(&[]).expect_err("no verb at all");
+
+        assert!(error.starts_with("usage: nomos agent"), "{error}");
+    }
+
+    #[test]
+    fn Test_Command_From_String_Arguments_Should_Refuse_An_Unknown_Verb()
+    {
+        let arguments: Vec<String> = ["not-a-real-verb"].iter().map(|value| return (*value).to_owned()).collect();
+
+        let error = Command_From_String_Arguments(&arguments).expect_err("no such verb");
+
+        assert!(error.contains("unknown command"), "{error}");
+    }
+}

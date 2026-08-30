@@ -296,3 +296,219 @@ fn Render_Check_Unreadable(root: &Path, stderr: &mut impl Write) -> ExitCode
 
     return ExitCode::Contradictory;
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use nomos_check_orchestration::{Claim, Examined};
+    use nomos_contracts::{Applicability, Digest128, EvidenceClass, GateCategory, RuleId, SubjectId};
+    use nomos_gate_orchestration::{Fresh_Run_Id, GateFindings};
+    use nomos_platform::Timestamp;
+    use std::path::PathBuf;
+
+    /// One real finding, distinguishable from another only by the gate category a caller
+    /// passes in -- everything else about it is incidental to what these tests check.
+    fn Example_Finding(gate: GateCategory) -> Finding
+    {
+        return Finding {
+            rule: RuleId::New("unread-reaches-finding"),
+            subject: SubjectId::From_Digest(Digest128::From_Bytes([9; Digest128::BYTE_LENGTH])),
+            subject_name: "Example::Subject".to_owned(),
+            applicability: Applicability::Supported,
+            evidence: EvidenceClass::Derived,
+            gate,
+            summary: "reaches an unread item".to_owned(),
+            locations: vec!["a.rs".to_owned()],
+        };
+    }
+
+    /// No finding blocked, calibrated, suppressed or baselined -- the starting point every
+    /// test below that does not care about one of these buckets builds on.
+    fn Empty_Findings() -> GateFindings
+    {
+        return GateFindings {
+            blocking_findings: Vec::new(),
+            calibrated_findings: Vec::new(),
+            suppressed_findings: Vec::new(),
+            baselined_findings: Vec::new(),
+        };
+    }
+
+    /// A check outcome that never reached `Judged` must render as `Vacuous`, the same claim
+    /// `Render_Check_Unreadable`'s siblings already make for `run`'s own non-judged arms --
+    /// `Render_Run` picks the same arm for `explain`'s `NoSource`.
+    #[test]
+    fn Test_Render_Run_Should_Report_Vacuous_When_The_Check_Outcome_Never_Reached_Judged()
+    {
+        let result = GateRunResult {
+            run: Fresh_Run_Id(Timestamp::From_Unix_Seconds(0)),
+            root: PathBuf::from("does/not/matter"),
+            check_outcome: CheckOutcome::NoSource,
+            findings: Empty_Findings(),
+            disposition: GateRunOutcome::Indeterminate,
+        };
+        let mut stdout = Vec::new();
+        let mut stderr = Vec::new();
+
+        let code = Render_Run(&result, &mut stdout, &mut stderr);
+
+        let rendered_stderr = String::from_utf8_lossy(&stderr).into_owned();
+        assert_eq!(code, ExitCode::Vacuous, "{rendered_stderr}");
+        assert!(rendered_stderr.contains("nothing was judged"), "{rendered_stderr}");
+        assert!(String::from_utf8_lossy(&stdout).is_empty());
+    }
+
+    /// A judged run with nothing blocking reports `Ok` and names its own `RunId` -- the
+    /// "real work" arm `Report_Judged` does, end to end at this function's own boundary.
+    #[test]
+    fn Test_Render_Run_Should_Report_The_RunId_And_Ok_When_Nothing_Blocks()
+    {
+        let run = Fresh_Run_Id(Timestamp::From_Unix_Seconds(0));
+        let result = GateRunResult {
+            run,
+            root: PathBuf::from("."),
+            check_outcome: CheckOutcome::Judged {
+                findings: Vec::new(),
+                examined: Examined { files: 1, facts: 1 },
+                claim: Claim::Complete,
+            },
+            findings: Empty_Findings(),
+            disposition: GateRunOutcome::Passed,
+        };
+        let mut stdout = Vec::new();
+        let mut stderr = Vec::new();
+
+        let code = Render_Run(&result, &mut stdout, &mut stderr);
+
+        let rendered = String::from_utf8_lossy(&stdout).into_owned();
+        assert_eq!(code, ExitCode::Ok, "{rendered}");
+        assert!(rendered.contains(&format!("run: {run}")), "{rendered}");
+        assert!(rendered.contains("0 finding(s), 0 of which can fail a build"), "{rendered}");
+        assert!(String::from_utf8_lossy(&stderr).is_empty());
+    }
+
+    /// A judged run with one blocking finding reports `Violations` and names the finding --
+    /// `Exit_Code_For`'s `Failed` arm, only reachable through `Report_Judged`.
+    #[test]
+    fn Test_Render_Run_Should_Report_Violations_When_A_Finding_Blocks()
+    {
+        let finding = Example_Finding(GateCategory::Blocking);
+        let result = GateRunResult {
+            run: Fresh_Run_Id(Timestamp::From_Unix_Seconds(0)),
+            root: PathBuf::from("."),
+            check_outcome: CheckOutcome::Judged {
+                findings: vec![finding.clone()],
+                examined: Examined { files: 1, facts: 1 },
+                claim: Claim::Complete,
+            },
+            findings: GateFindings { blocking_findings: vec![finding.clone()], ..Empty_Findings() },
+            disposition: GateRunOutcome::Failed,
+        };
+        let mut stdout = Vec::new();
+        let mut stderr = Vec::new();
+
+        let code = Render_Run(&result, &mut stdout, &mut stderr);
+
+        let rendered = String::from_utf8_lossy(&stdout).into_owned();
+        assert_eq!(code, ExitCode::Violations, "{rendered}");
+        assert!(rendered.contains(&finding.Describe()), "{rendered}");
+        assert!(rendered.contains("1 finding(s), 1 of which can fail a build"), "{rendered}");
+    }
+
+    /// `explain` shares `run`'s own non-judged rendering, so a check outcome that never
+    /// reached `Judged` must report `Vacuous` here too, regardless of what `explanation`
+    /// carries.
+    #[test]
+    fn Test_Render_Explain_Should_Report_Vacuous_When_The_Check_Outcome_Never_Reached_Judged()
+    {
+        let result = GateExplainResult {
+            root: PathBuf::from("does/not/matter"),
+            check_outcome: CheckOutcome::NoSource,
+            explanation: Explanation::NotFound,
+        };
+        let mut stdout = Vec::new();
+        let mut stderr = Vec::new();
+
+        let code = Render_Explain(&result, &mut stdout, &mut stderr);
+
+        let rendered_stderr = String::from_utf8_lossy(&stderr).into_owned();
+        assert_eq!(code, ExitCode::Vacuous, "{rendered_stderr}");
+        assert!(rendered_stderr.contains("the query cannot be answered"), "{rendered_stderr}");
+    }
+
+    /// A judged tree in which no finding names the query's location answers `not found` and
+    /// exits clean.
+    #[test]
+    fn Test_Render_Explain_Should_Report_Not_Found_When_Judged_And_No_Finding_Matches()
+    {
+        let result = GateExplainResult {
+            root: PathBuf::from("."),
+            check_outcome: CheckOutcome::Judged {
+                findings: Vec::new(),
+                examined: Examined { files: 1, facts: 1 },
+                claim: Claim::Complete,
+            },
+            explanation: Explanation::NotFound,
+        };
+        let mut stdout = Vec::new();
+        let mut stderr = Vec::new();
+
+        let code = Render_Explain(&result, &mut stdout, &mut stderr);
+
+        let rendered = String::from_utf8_lossy(&stdout).into_owned();
+        assert_eq!(code, ExitCode::Ok, "{rendered}");
+        assert!(rendered.contains("not found"), "{rendered}");
+        assert!(String::from_utf8_lossy(&stderr).is_empty());
+    }
+
+    /// A found finding that would block a real run reports `Violations` and names both the
+    /// finding and its block status -- `Report_Found`'s own "real work" arm.
+    #[test]
+    fn Test_Render_Explain_Should_Report_Would_Block_For_A_Found_Blocking_Finding()
+    {
+        let finding = Example_Finding(GateCategory::Blocking);
+        let result = GateExplainResult {
+            root: PathBuf::from("."),
+            check_outcome: CheckOutcome::Judged {
+                findings: vec![finding.clone()],
+                examined: Examined { files: 1, facts: 1 },
+                claim: Claim::Complete,
+            },
+            explanation: Explanation::Found {
+                finding: Box::new(finding.clone()),
+                would_block: true,
+                calibrated_by: None,
+                suppressed_by: None,
+                baselined_by: None,
+                contract: None,
+            },
+        };
+        let mut stdout = Vec::new();
+        let mut stderr = Vec::new();
+
+        let code = Render_Explain(&result, &mut stdout, &mut stderr);
+
+        let rendered = String::from_utf8_lossy(&stdout).into_owned();
+        assert_eq!(code, ExitCode::Violations, "{rendered}");
+        assert!(rendered.contains("would block: true"), "{rendered}");
+        assert!(rendered.contains(&finding.Describe()), "{rendered}");
+    }
+
+    /// A real, composed registry -- `nomos_gate_orchestration::Run` never touches a
+    /// filesystem or a subprocess for `plan`, so this drives `Render_Plan` against a
+    /// genuine `GateOutcome` rather than a hand-built one.
+    #[test]
+    fn Test_Render_Plan_Should_Report_Ok_And_List_Every_Registered_Rule()
+    {
+        let outcome = nomos_gate_orchestration::Run(&nomos_gate_orchestration::GateCommand::default());
+        let mut stdout = Vec::new();
+        let mut stderr = Vec::new();
+
+        let code = Render_Plan(&outcome, &mut stdout, &mut stderr);
+
+        let rendered = String::from_utf8_lossy(&stdout).into_owned();
+        assert_eq!(code, ExitCode::Ok, "{rendered}{}", String::from_utf8_lossy(&stderr));
+        assert!(rendered.starts_with("rules: "), "{rendered}");
+    }
+}

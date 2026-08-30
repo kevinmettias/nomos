@@ -68,7 +68,7 @@ mod tests
     /// A real plan composes this workspace's own real rule registry, not an empty one --
     /// proving this crate, not `nomos-cli`, can produce a real `GatePlanResponse::Planned`.
     #[test]
-    fn Test_A_Real_Plan_Should_Compose_This_Workspaces_Own_Registry()
+    fn Test_Handle_Gate_Plan_Should_Compose_This_Workspaces_Own_Registry()
     {
         let response = Handle_Gate_Plan();
 
@@ -86,7 +86,7 @@ mod tests
     /// The response a real plan produces is valid JSON, and its outcome round-trips through
     /// `serde_json` under the field name a wire caller would actually read.
     #[test]
-    fn Test_A_Real_Planned_Response_Should_Round_Trip_As_Json()
+    fn Test_From_Should_Produce_A_Planned_Response_That_Round_Trips_As_Json()
     {
         let response = Handle_Gate_Plan();
 

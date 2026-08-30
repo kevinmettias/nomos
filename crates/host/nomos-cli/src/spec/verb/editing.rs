@@ -259,3 +259,100 @@ fn Unreadable_Source(path: &Path, error: &FileSystemError, notes: &mut dyn std::
 
     return ExitCode::Usage;
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use nomos_spec_orchestration::corpus::{Assemble_Corpus, CorpusRequest, DEFAULT_REVISION};
+
+    /// A store with the embedded governing records seeded and no corpus, so
+    /// [`Assembly::Is_Complete`] is deterministically `false` -- `root: None` records an
+    /// absence unconditionally, regardless of what any real environment variable holds.
+    fn Corpus_Unset_Assembly() -> Assembly
+    {
+        let request = CorpusRequest {
+            variable: "NOMOS_SPEC_EDITING_TEST_CORPUS_UNSET".to_owned(),
+            root: None,
+            revision: DEFAULT_REVISION.to_owned(),
+        };
+
+        return Assemble_Corpus(&request).expect("the embedded governing records always seed");
+    }
+
+    /// A real file on disk, so `Preview_Staged_Edit`/`Commit_Staged_Edit` get past reading
+    /// `--from` and reach the store lookup this test is actually about.
+    fn Staged_File(name: &str) -> std::path::PathBuf
+    {
+        let path = std::env::temp_dir().join(name);
+        std::fs::write(&path, "irrelevant staged text").expect("writes a temp file");
+
+        return path;
+    }
+
+    #[test]
+    fn Test_Preview_Edit_Should_Report_Absent_For_A_Record_The_Store_Never_Had()
+    {
+        let assembly = Corpus_Unset_Assembly();
+        let staged = Staged_File("nomos-cli-spec-editing-test-preview-staged.md");
+        let request = EditRequest {
+            id: "P23-TESTING-HOST-NONEXISTENT-RECORD".to_owned(),
+            from: staged.clone(),
+            rename: None,
+        };
+        let mut output = Vec::new();
+        let mut notes = Vec::new();
+        let mut channels = Channels { output: &mut output, notes: &mut notes };
+
+        let code = Preview_Edit(&assembly, &request, &mut channels);
+
+        let _ignored = std::fs::remove_file(&staged);
+
+        assert_eq!(code, ExitCode::Absent);
+    }
+
+    #[test]
+    fn Test_Commit_Edit_Should_Report_Absent_For_A_Record_The_Store_Never_Had()
+    {
+        let mut assembly = Corpus_Unset_Assembly();
+        let staged = Staged_File("nomos-cli-spec-editing-test-commit-staged.md");
+        let request = CommitRequest {
+            edit: EditRequest {
+                id: "P23-TESTING-HOST-NONEXISTENT-RECORD".to_owned(),
+                from: staged.clone(),
+                rename: None,
+            },
+            into: std::env::temp_dir(),
+        };
+        let mut output = Vec::new();
+        let mut notes = Vec::new();
+        let mut channels = Channels { output: &mut output, notes: &mut notes };
+
+        let code = Commit_Edit(&mut assembly, &request, &mut channels);
+
+        let _ignored = std::fs::remove_file(&staged);
+
+        assert_eq!(code, ExitCode::Absent);
+    }
+
+    #[test]
+    fn Test_Report_Edit_Error_Should_Map_Each_Error_Kind_To_Its_Own_Exit_Code()
+    {
+        let assembly = Corpus_Unset_Assembly();
+
+        let mut notes = Vec::new();
+        let absent = EditError::NoSuchRecord { node_id: "P23-TESTING-HOST-NONE".to_owned() };
+        assert_eq!(Report_Edit_Error(&assembly, &absent, &mut notes), ExitCode::Absent);
+
+        let mut notes = Vec::new();
+        let ambiguous = EditError::Ambiguous {
+            node_id: "D-1".to_owned(),
+            revisions: vec!["a".to_owned(), "b".to_owned()],
+        };
+        assert_eq!(Report_Edit_Error(&assembly, &ambiguous, &mut notes), ExitCode::NotFound);
+
+        let mut notes = Vec::new();
+        let refused = EditError::NotCanonical { cause: "would change bytes".to_owned() };
+        assert_eq!(Report_Edit_Error(&assembly, &refused, &mut notes), ExitCode::Refused);
+    }
+}

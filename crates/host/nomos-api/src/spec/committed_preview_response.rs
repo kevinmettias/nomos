@@ -49,3 +49,40 @@ impl CommittedPreviewResponse
         };
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use crate::test_support::{Staged_Heading_Rename, Unique_Scratch_Directory};
+    use nomos_platform_std::StdFileSystem;
+    use nomos_spec_orchestration::{EditRequest, SpecCommand};
+
+    /// Mirrors [`crate::spec::preview_response::Handle_Spec_Preview`]'s own fixture: a real
+    /// heading rename staged against `D-132`, a real embedded governing record, so this needs
+    /// no corpus. `EditPreview`'s own fields are `pub(crate)` to `nomos-spec-store`, so this is
+    /// the only way to hand this function a real one from outside that crate.
+    #[test]
+    fn Test_From_Should_Carry_Wording_Moved_For_A_Real_Heading_Rename()
+    {
+        let staged = Staged_Heading_Rename("D-132", &Unique_Scratch_Directory("committed-preview-response", "from"));
+        let request = EditRequest { id: "D-132".to_owned(), from: staged, rename: None };
+        let corpus_request = crate::spec::Build_Corpus_Request();
+
+        let outcome = nomos_spec_orchestration::Run(&SpecCommand::Preview(request), &corpus_request, &StdFileSystem);
+
+        let nomos_spec_orchestration::SpecOutcome::Preview(Ok(preview)) = outcome
+        else
+        {
+            // A canonical heading rename against a real, freshly staged file has nothing to
+            // refuse: reaching any other variant here means the preview path itself
+            // regressed, not a condition this test should assert around.
+            panic!("a canonical heading rename previews cleanly");
+        };
+
+        let response = CommittedPreviewResponse::From(&preview);
+
+        assert_eq!(response.node_id, "D-132");
+        assert!(response.wording_moved, "a heading rename must count as wording moved");
+    }
+}

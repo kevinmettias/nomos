@@ -87,7 +87,7 @@ mod tests
     use crate::work::tests_support::Scratch_Board;
 
     #[test]
-    fn Test_Listing_A_Real_Empty_Board_Should_Read_It_Not_Refuse_It()
+    fn Test_Handle_Work_List_Should_Read_A_Real_Empty_Board_Not_Refuse_It()
     {
         let directory = Scratch_Board();
 
@@ -107,7 +107,7 @@ mod tests
     }
 
     #[test]
-    fn Test_A_Real_Listings_Response_Should_Round_Trip_As_Json()
+    fn Test_From_Should_Produce_A_Listed_Response_That_Round_Trips_As_Json()
     {
         let directory = Scratch_Board();
 

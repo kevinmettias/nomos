@@ -42,7 +42,7 @@ impl ExitCode
     /// over every variant with no wildcard arm, in `crates/host/nomos-cli/src/check/tests.rs`.
     /// It fails to compile, not merely to pass, if a variant is added here without being added
     /// there. It is also what `Test_Only_Ok_Should_Carry_The_Passing_Exit_Code` and
-    /// `Test_The_Documented_Exit_Codes_Should_Be_The_Ones_This_Group_Can_Exit_With` iterate in
+    /// `Test_All_Should_Match_The_Documented_Exit_Codes` iterate in
     /// that same file — the gate step's whole exit-code policy rests on this list.
     #[cfg(test)]
     #[must_use]
@@ -55,5 +55,22 @@ impl ExitCode
             Self::Unreadable,
             Self::Vacuous,
         ];
+    }
+}
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    /// `All`'s own count and order, independent of `check/tests.rs`'s exhaustiveness match
+    /// over it (a different file, so a different Unit for coverage purposes).
+    #[test]
+    fn Test_All_Should_Name_Every_Declared_Variant_In_Declaration_Order()
+    {
+        assert_eq!(
+            ExitCode::All(),
+            &[ExitCode::Ok, ExitCode::Violations, ExitCode::Usage, ExitCode::Unreadable, ExitCode::Vacuous]
+        );
     }
 }

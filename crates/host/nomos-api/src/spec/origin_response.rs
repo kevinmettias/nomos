@@ -27,3 +27,18 @@ impl OriginResponse
         };
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_From_Should_Map_Every_Domain_Variant_To_Its_Own_Response_Variant()
+    {
+        assert!(matches!(OriginResponse::From(Origin::Submitted), OriginResponse::Submitted));
+        assert!(matches!(OriginResponse::From(Origin::Clarified), OriginResponse::Clarified));
+        assert!(matches!(OriginResponse::From(Origin::Inferred), OriginResponse::Inferred));
+        assert!(matches!(OriginResponse::From(Origin::Decided), OriginResponse::Decided));
+    }
+}

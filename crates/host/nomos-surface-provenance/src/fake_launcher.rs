@@ -75,3 +75,48 @@ impl ProcessLauncher for Scripted
         });
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use std::time::Duration;
+
+    /// Every other test in this crate builds a [`Scripted`] only to give it answers
+    /// immediately, so nothing else exercises the empty state on its own: a launcher
+    /// nobody scripted anything for must refuse rather than invent an answer.
+    #[test]
+    fn Test_New_Should_Start_With_No_Scripted_Answers()
+    {
+        let launcher = Scripted::New();
+        let command = Command::New(vec!["git".to_owned(), "diff".to_owned()], Duration::from_secs(1));
+
+        let result = launcher.Run(&command);
+
+        assert!(
+            result.is_err(),
+            "a launcher scripted with nothing must refuse rather than invent an answer"
+        );
+    }
+
+    /// The dispatch every other test in this crate relies on without ever proving it
+    /// directly: an answer is chosen by whether its `matching` fragment is a substring of
+    /// the joined argv, not by the order `Answer` was called in.
+    #[test]
+    fn Test_Answer_Should_Match_By_Argv_Substring_Not_By_The_Order_Answers_Were_Added()
+    {
+        let launcher = Scripted::New()
+            .Answer("log", 1, Stdout(""), Stderr("boom"))
+            .Answer("diff", 0, Stdout("clean\n"), Stderr(""));
+        let command = Command::New(
+            vec!["git".to_owned(), "diff".to_owned(), "a".to_owned(), "b".to_owned()],
+            Duration::from_secs(1),
+        );
+
+        let output = launcher.Run(&command).expect("the second scripted answer's substring matches this argv");
+
+        assert_eq!(output.outcome, ExitOutcome::Exited { code: 0 });
+        assert_eq!(output.stdout, "clean\n");
+        assert_eq!(output.stderr, "");
+    }
+}

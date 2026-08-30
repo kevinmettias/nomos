@@ -36,7 +36,7 @@ mod tests
     };
 
     #[test]
-    fn Test_Claiming_A_Real_Ready_Item_Should_Grant_A_Reservation()
+    fn Test_Handle_Work_Claim_Should_Grant_A_Reservation_For_A_Real_Ready_Item()
     {
         let (directory, id) = Scratch_Board_With_A_Claimable_Item();
         let request = Claim_Request(id.clone(), "test-holder");
@@ -59,7 +59,7 @@ mod tests
     }
 
     #[test]
-    fn Test_Claiming_An_Item_Whose_Territory_Another_Live_Claim_Holds_Should_Be_Refused_And_Retryable()
+    fn Test_Scratch_Board_With_A_Held_Territory_Conflict_Should_Refuse_A_Claim_And_Mark_It_Retryable()
     {
         let (directory, id) = Scratch_Board_With_A_Held_Territory_Conflict();
         let request = Claim_Request(id, "test-holder");
@@ -81,7 +81,7 @@ mod tests
     }
 
     #[test]
-    fn Test_A_Real_Reserved_Response_Should_Round_Trip_As_Json()
+    fn Test_From_Should_Produce_A_Reserved_Response_That_Round_Trips_As_Json()
     {
         let (directory, id) = Scratch_Board_With_A_Claimable_Item();
         let request = Claim_Request(id, "test-holder");

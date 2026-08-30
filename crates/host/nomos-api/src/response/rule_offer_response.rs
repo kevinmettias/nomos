@@ -30,3 +30,26 @@ impl RuleOfferResponse
         };
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use nomos_rules::COMPLETENESS_MIRROR;
+
+    #[test]
+    fn Test_From_Should_Carry_The_Offers_Rule_And_Contract_Record()
+    {
+        let offer = RuleOffer {
+            rule: RuleId::New(COMPLETENESS_MIRROR),
+            contract_record: "D-134".to_owned(),
+            contract_record_version: 2,
+        };
+
+        let response = RuleOfferResponse::From(offer.clone());
+
+        assert_eq!(response.rule, offer.rule);
+        assert_eq!(response.contract_record, offer.contract_record);
+        assert_eq!(response.contract_record_version, offer.contract_record_version);
+    }
+}

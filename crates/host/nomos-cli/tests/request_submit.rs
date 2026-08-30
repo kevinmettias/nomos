@@ -116,6 +116,13 @@ fn Test_An_Incomplete_Submission_Should_Be_Refused_With_Exit_Nine()
     assert!(said.contains("nothing was stored"), "{said}");
 }
 
+/// Every field `title=only a title` leaves unset for a `feature-request`, which the refusal
+/// this test drives must name all of, not just the first.
+fn Fields_Left_Unset_By_Title_Only() -> Vec<&'static str>
+{
+    return vec!["goal", "behaviour", "acceptance", "invariants"];
+}
+
 #[test]
 fn Test_A_Refusal_Should_Name_Every_Failing_Field_Rather_Than_The_First()
 {
@@ -134,7 +141,7 @@ fn Test_A_Refusal_Should_Name_Every_Failing_Field_Rather_Than_The_First()
 
     assert_eq!(Code(&output), 9, "{}", Out_Text(&output));
     let said = Err_Text(&output);
-    for field in ["goal", "behaviour", "acceptance", "invariants"]
+    for field in Fields_Left_Unset_By_Title_Only()
     {
         assert!(said.contains(field), "refusal did not name {field}: {said}");
     }

@@ -31,3 +31,28 @@ impl DocumentSourceResponse
         };
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_From_Should_Copy_Every_Field_Except_The_Never_Exported_Uid()
+    {
+        let document = DocumentSource {
+            uid: 99,
+            path: "docs/records/d-132.md".to_owned(),
+            revision: "1".to_owned(),
+            content_hash: "abc123".to_owned(),
+            text: "---\nid: D-132\n---\n".to_owned(),
+        };
+
+        let response = DocumentSourceResponse::From(document.clone());
+
+        assert_eq!(response.path, document.path);
+        assert_eq!(response.revision, document.revision);
+        assert_eq!(response.content_hash, document.content_hash);
+        assert_eq!(response.text, document.text);
+    }
+}

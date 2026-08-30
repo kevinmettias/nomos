@@ -84,7 +84,7 @@ mod tests
     use crate::work::tests_support::{Scratch_Board, Scratch_Board_With_A_Claimable_Item};
 
     #[test]
-    fn Test_Finishing_An_Id_Absent_From_A_Real_Readable_Board_Should_Be_Refused_And_Not_Judged()
+    fn Test_Handle_Work_Finish_Should_Refuse_And_Not_Judge_An_Id_Absent_From_A_Real_Readable_Board()
     {
         let directory = Scratch_Board();
         let absent = ItemId::New("NO-SUCH-ITEM");
@@ -106,7 +106,7 @@ mod tests
     }
 
     #[test]
-    fn Test_Finishing_A_Real_Item_With_No_Verification_Predicate_Should_Be_Refused_And_Not_Judged()
+    fn Test_Scratch_Board_With_A_Claimable_Item_Should_Be_Refused_And_Not_Judged_When_Finished_With_No_Verification_Predicate()
     {
         let (directory, id) = Scratch_Board_With_A_Claimable_Item();
 
@@ -127,7 +127,7 @@ mod tests
     }
 
     #[test]
-    fn Test_A_Real_Refused_Finish_Response_Should_Round_Trip_As_Json()
+    fn Test_From_Should_Produce_A_Refused_Finish_Response_That_Round_Trips_As_Json()
     {
         let directory = Scratch_Board();
         let absent = ItemId::New("NO-SUCH-ITEM");

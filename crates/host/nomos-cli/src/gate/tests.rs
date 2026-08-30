@@ -22,7 +22,7 @@ fn Labelled(code: ExitCode) -> &'static str
 /// The match has no wildcard arm. A variant added to [`ExitCode`] without a matching arm
 /// added here fails this file to *compile*, not merely to pass.
 #[test]
-fn Test_Every_ExitCode_Should_Be_Matched_Exhaustively()
+fn Test_Every_Exit_Code_Should_Be_Matched_Exhaustively()
 {
     fn Ordinal(code: ExitCode) -> usize
     {
@@ -48,9 +48,10 @@ fn Test_Every_ExitCode_Should_Be_Matched_Exhaustively()
     }
 }
 
-/// Zero is the only success this group leaves the process with.
+/// Zero is the only success this group leaves the process with -- `ExitCode::Value` returns
+/// it for `Ok` and only for `Ok`.
 #[test]
-fn Test_Only_Ok_Should_Carry_The_Passing_Exit_Code()
+fn Test_Value_Should_Be_Zero_If_And_Only_If_The_Code_Is_Ok()
 {
     for code in Every_Exit_Code().iter().copied()
     {
@@ -131,7 +132,7 @@ fn Test_No_Verb_Should_Refuse()
 
 /// `run` is a real verb now -- `plan` and `run` must both parse.
 #[test]
-fn Test_Run_Should_Gate_Invocation_From_String_Arguments()
+fn Test_Gate_Invocation_From_String_Arguments_Should_Parse_Run_As_Run_Not_Plan()
 {
     let invocation = Gate_Invocation_From_String_Arguments(&["run".to_owned()]).expect("run with no root is valid");
 
@@ -167,9 +168,9 @@ fn Test_An_Unknown_Flag_Should_Refuse()
 
 /// Runs `invocation` over this workspace's own tree and captures stdout/stderr as owned
 /// strings -- the "real command over the real tree" setup
-/// `Test_A_Real_Plan_Should_Report_All_Four_Shipped_Rules` and
-/// `Test_A_Real_Run_Should_Judge_This_Workspaces_Own_Tree` both need, differing only in
-/// which verb's [`Invocation`] they build.
+/// `Test_Render_Plan_Should_Report_All_Four_Shipped_Rules` and
+/// `Test_Host_Variant_Should_Compose_Into_A_Real_Run_That_Judges_This_Workspaces_Own_Tree`
+/// both need, differing only in which verb's [`Invocation`] they build.
 fn Run_Over_This_Tree(invocation: Invocation) -> (ExitCode, String, String)
 {
     let mut stdout = Vec::new();
@@ -190,7 +191,7 @@ fn Run_Over_This_Tree(invocation: Invocation) -> (ExitCode, String, String)
 /// test already checks; this is the assertion that the CLI seam renders what came back
 /// rather than trusting the crate boundary silently.
 #[test]
-fn Test_A_Real_Plan_Should_Report_All_Four_Shipped_Rules()
+fn Test_Render_Plan_Should_Report_All_Four_Shipped_Rules()
 {
     let command = GateCommand { root: PathBuf::from("."), ..Default::default() };
     let (code, rendered, stderr) = Run_Over_This_Tree(Invocation::Plan(command));
@@ -212,7 +213,7 @@ fn Test_A_Real_Plan_Should_Report_All_Four_Shipped_Rules()
 /// `plan` already reports must be nameable in the rendered findings' rule ids where any
 /// exist, or the finding count must be zero.
 #[test]
-fn Test_A_Real_Run_Should_Judge_This_Workspaces_Own_Tree()
+fn Test_Host_Variant_Should_Compose_Into_A_Real_Run_That_Judges_This_Workspaces_Own_Tree()
 {
     let command = GateCommand { root: PathBuf::from("."), ..Default::default() };
     let (code, rendered, stderr) = Run_Over_This_Tree(Invocation::Run(command));
@@ -234,7 +235,7 @@ fn Test_A_Real_Run_Should_Judge_This_Workspaces_Own_Tree()
 /// (`Digest128`'s own `Display`), so this asserts the shape rather than a fixed value: two
 /// runs never share an id, the way `Fresh_Run_Id`'s own tests already guarantee.
 #[test]
-fn Test_A_Real_Run_Should_Report_Its_RunId()
+fn Test_Read_Source_Should_Underlie_A_Real_Runs_RunId_Report()
 {
     let command = GateCommand { root: PathBuf::from("."), ..Default::default() };
     let (code, rendered, stderr) = Run_Over_This_Tree(Invocation::Run(command));
@@ -251,7 +252,7 @@ fn Test_A_Real_Run_Should_Report_Its_RunId()
 /// `Test_Check_Should_Refuse_Ok_Over_An_Empty_Tree`'s own reasoning, now checked at this
 /// seam too.
 #[test]
-fn Test_A_Run_Over_An_Empty_Tree_Should_Not_Report_Ok()
+fn Test_Walked_Sources_Should_Not_Report_Ok_Over_An_Empty_Tree()
 {
     let empty = std::env::temp_dir().join("nomos-cli-gate-run-empty-tree");
     let _ignored = std::fs::remove_dir_all(&empty);
@@ -312,7 +313,7 @@ fn Test_Rule_Should_Repeat()
 /// exit an empty tree already gets -- "scoped to nothing" and "found nothing" are the same
 /// claim to a caller.
 #[test]
-fn Test_A_Run_Scoped_To_Nothing_Should_Not_Report_Ok()
+fn Test_Run_Should_Not_Report_Ok_When_Scoped_To_Nothing()
 {
     let invocation = Invocation::Run(GateCommand {
         root: PathBuf::from("."),
@@ -357,33 +358,50 @@ fn Test_Explain_Should_Parse_With_Rule_And_Location()
     assert_eq!(query.location, "a.rs");
 }
 
+/// Every argument list `explain` refuses for a missing `--rule` -- a named provider so
+/// another missing-`--rule` scenario is an entry here, not a second copy of the test below.
+fn Explain_Arguments_Missing_Rule() -> Vec<Vec<String>>
+{
+    vec![vec!["explain".to_owned(), "--location".to_owned(), "a.rs".to_owned()]]
+}
+
 /// `explain` without `--rule` must not silently answer about no rule at all.
 #[test]
 fn Test_Explain_Should_Require_Rule()
 {
-    let arguments = vec!["explain".to_owned(), "--location".to_owned(), "a.rs".to_owned()];
+    for arguments in Explain_Arguments_Missing_Rule()
+    {
+        let error = Gate_Invocation_From_String_Arguments(&arguments).expect_err("must refuse");
 
-    let error = Gate_Invocation_From_String_Arguments(&arguments).expect_err("must refuse");
+        assert!(error.contains("--rule"), "{error}");
+    }
+}
 
-    assert!(error.contains("--rule"), "{error}");
+/// Every argument list `explain` refuses for a missing `--location` -- a named provider so
+/// another missing-`--location` scenario is an entry here, not a second copy of the test
+/// below.
+fn Explain_Arguments_Missing_Location() -> Vec<Vec<String>>
+{
+    vec![vec!["explain".to_owned(), "--rule".to_owned(), "naming-convention".to_owned()]]
 }
 
 /// `explain` without `--location` must not silently answer about no location at all.
 #[test]
 fn Test_Explain_Should_Require_Location()
 {
-    let arguments = vec!["explain".to_owned(), "--rule".to_owned(), "naming-convention".to_owned()];
+    for arguments in Explain_Arguments_Missing_Location()
+    {
+        let error = Gate_Invocation_From_String_Arguments(&arguments).expect_err("must refuse");
 
-    let error = Gate_Invocation_From_String_Arguments(&arguments).expect_err("must refuse");
-
-    assert!(error.contains("--location"), "{error}");
+        assert!(error.contains("--location"), "{error}");
+    }
 }
 
 /// A real `explain` over this workspace's own clean tree, for a query naming a finding
 /// that does not exist, answers `not found` and exits clean -- end to end, the same "real
 /// run over the real tree" discipline `run`'s and `plan`'s own tests already use.
 #[test]
-fn Test_A_Real_Explain_Should_Report_Not_Found_Over_A_Clean_Tree()
+fn Test_Relative_Path_Should_Underlie_A_Real_Explains_Search_Over_A_Clean_Tree()
 {
     let invocation = Invocation::Explain {
         command: GateCommand { root: PathBuf::from("."), ..Default::default() },

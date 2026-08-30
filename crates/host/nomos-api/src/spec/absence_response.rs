@@ -31,3 +31,27 @@ impl AbsenceResponse
         };
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_From_Should_Copy_Every_Field_Of_The_Domain_Absence()
+    {
+        let absence = Absence {
+            subject: "a source document".to_owned(),
+            expected: "under crates/spec".to_owned(),
+            cause: "NOMOS_V14_CORPUS is not set".to_owned(),
+            cost: "no absences can be reported for it".to_owned(),
+        };
+
+        let response = AbsenceResponse::From(absence.clone());
+
+        assert_eq!(response.subject, absence.subject);
+        assert_eq!(response.expected, absence.expected);
+        assert_eq!(response.cause, absence.cause);
+        assert_eq!(response.cost, absence.cost);
+    }
+}

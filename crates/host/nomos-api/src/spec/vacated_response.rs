@@ -23,3 +23,22 @@ impl VacatedResponse
         return Self { path: vacated.path, outcome: VacateOutcomeResponse::From(vacated.outcome) };
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use nomos_spec_orchestration::VacateOutcome;
+
+    #[test]
+    fn Test_From_Should_Copy_The_Path_And_Map_The_Nested_Outcome()
+    {
+        let expected_path = PathBuf::from("docs/records/old-name.md");
+        let vacated = Vacated { path: expected_path.clone(), outcome: VacateOutcome::Removed };
+
+        let response = VacatedResponse::From(vacated);
+
+        assert_eq!(response.path, expected_path);
+        assert!(matches!(response.outcome, VacateOutcomeResponse::Removed));
+    }
+}

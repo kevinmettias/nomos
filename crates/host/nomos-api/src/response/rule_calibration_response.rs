@@ -23,3 +23,21 @@ impl RuleCalibrationResponse
         return Self { rule: calibration.rule, rationale: calibration.rationale };
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use nomos_rules::COMPLETENESS_MIRROR;
+
+    #[test]
+    fn Test_From_Should_Carry_The_Calibrations_Rule_And_Rationale()
+    {
+        let calibration = RuleCalibration { rule: RuleId::New(COMPLETENESS_MIRROR), rationale: "a real rationale".to_owned() };
+
+        let response = RuleCalibrationResponse::From(calibration.clone());
+
+        assert_eq!(response.rule, calibration.rule);
+        assert_eq!(response.rationale, calibration.rationale);
+    }
+}

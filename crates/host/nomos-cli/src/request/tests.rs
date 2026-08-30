@@ -4,7 +4,7 @@ use super::*;
 use nomos_spec_model::{Severity, SubmissionKind, SubmissionState};
 
 #[test]
-fn Test_A_Submit_Command_Should_Parse_Its_Fields_And_Default_State_And_Version()
+fn Test_Command_From_String_Arguments_Should_Parse_Its_Fields_And_Default_State_And_Version()
 {
     let arguments = Arguments_From_Text(
         "submit --kind feature-request --id FR-100 --by kevin \
@@ -24,25 +24,46 @@ fn Test_A_Submit_Command_Should_Parse_Its_Fields_And_Default_State_And_Version()
     );
 }
 
-#[test]
-fn Test_A_Field_With_No_Equals_Should_Be_A_Usage_Error()
+/// Every `--field` command line this crate refuses as a usage error -- a named provider so
+/// another malformed `--field` scenario is an entry here, not a second copy of the test
+/// below.
+fn Malformed_Field_Command_Lines() -> Vec<&'static str>
 {
-    let arguments =
-        Arguments_From_Text("submit --kind feature-request --id FR-101 --by kevin --field oops");
-
-    let error = Command_From_String_Arguments(&arguments).expect_err("must refuse");
-
-    assert!(error.contains("--field"), "{error}");
+    vec!["submit --kind feature-request --id FR-101 --by kevin --field oops"]
 }
 
 #[test]
-fn Test_An_Unrecognised_Kind_Should_Be_A_Usage_Error()
+fn Test_A_Field_With_No_Equals_Should_Be_A_Usage_Error()
 {
-    let arguments = Arguments_From_Text("submit --kind nonsense --id FR-102 --by kevin");
+    for text in Malformed_Field_Command_Lines()
+    {
+        let arguments = Arguments_From_Text(text);
 
-    let error = Command_From_String_Arguments(&arguments).expect_err("must refuse");
+        let error = Command_From_String_Arguments(&arguments).expect_err("must refuse");
 
-    assert!(error.contains("--kind"), "{error}");
+        assert!(error.contains("--field"), "{error}");
+    }
+}
+
+/// Every `--kind` command line this crate refuses as a usage error -- a named provider so
+/// another unrecognised `--kind` scenario is an entry here, not a second copy of the test
+/// below.
+fn Unrecognised_Kind_Command_Lines() -> Vec<&'static str>
+{
+    vec!["submit --kind nonsense --id FR-102 --by kevin"]
+}
+
+#[test]
+fn Test_Usage_Text_Should_Be_Appended_To_An_Unrecognised_Kinds_Refusal()
+{
+    for text in Unrecognised_Kind_Command_Lines()
+    {
+        let arguments = Arguments_From_Text(text);
+
+        let error = Command_From_String_Arguments(&arguments).expect_err("must refuse");
+
+        assert!(error.contains("--kind"), "{error}");
+    }
 }
 
 #[test]

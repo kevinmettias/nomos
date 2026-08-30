@@ -276,25 +276,28 @@ mod tests
         };
     }
 
+    /// Every [`Applicability`] variant, in no particular order -- the domain
+    /// [`Test_Every_Applicability_Should_Land_In_Its_Own_Bucket`] iterates. Named once so a
+    /// twelfth variant is a diff to this list, not to the test that reads it.
+    const EVERY_APPLICABILITY: [Applicability; APPLICABILITY_VARIANT_COUNT] = [
+        Applicability::Supported,
+        Applicability::SupportedWithFallback,
+        Applicability::PartiallySupported,
+        Applicability::NotApplicable,
+        Applicability::MissingCapability,
+        Applicability::ProviderUnavailable,
+        Applicability::DependencyUnavailable,
+        Applicability::ConfigurationDisabled,
+        Applicability::Unparseable,
+        Applicability::AnalysisFailed,
+        Applicability::AgentRequired,
+    ];
+
     /// All eleven variants land in a bucket, and no two variants share one.
     #[test]
     fn Test_Every_Applicability_Should_Land_In_Its_Own_Bucket()
     {
-        let all = [
-            Applicability::Supported,
-            Applicability::SupportedWithFallback,
-            Applicability::PartiallySupported,
-            Applicability::NotApplicable,
-            Applicability::MissingCapability,
-            Applicability::ProviderUnavailable,
-            Applicability::DependencyUnavailable,
-            Applicability::ConfigurationDisabled,
-            Applicability::Unparseable,
-            Applicability::AnalysisFailed,
-            Applicability::AgentRequired,
-        ];
-
-        for applicability in all
+        for applicability in EVERY_APPLICABILITY
         {
             let findings = vec![Finding_With(applicability)];
             let nonzero = Coverage::Of(&findings).Nonzero();
@@ -305,6 +308,28 @@ mod tests
                 "{applicability} did not land in exactly its own bucket"
             );
         }
+    }
+
+    /// The dispatcher itself, not only the outcomes it dispatches to -- a root that cannot
+    /// be judged at all renders the `Unreadable` message and exit code, driven through
+    /// `Render_Outcome`'s own top-level match rather than only observed indirectly through
+    /// `check::Run`.
+    #[test]
+    fn Test_Render_Outcome_Should_Report_Unreadable_For_A_Root_That_Cannot_Be_Judged()
+    {
+        let root = Path::new("no-such-directory-for-render-outcome-test");
+        let mut stdout = Vec::new();
+        let mut stderr = Vec::new();
+
+        let code = Render_Outcome(root, &CheckOutcome::Unreadable, &mut stdout, &mut stderr);
+
+        assert_eq!(code, ExitCode::Unreadable);
+        assert!(stdout.is_empty(), "{}", String::from_utf8_lossy(&stdout));
+        assert!(
+            String::from_utf8_lossy(&stderr).contains("cannot judge"),
+            "{}",
+            String::from_utf8_lossy(&stderr)
+        );
     }
 
     /// A run that judged nothing at all — the empty case — has no nonzero bucket, and is

@@ -180,3 +180,75 @@ pub(super) fn Crate_Root(root: &Path, crate_name: &str) -> String
         .find(|line| return line.trim_matches(['"', ',']).ends_with(crate_name))
         .map_or_else(|| return crate_name.to_owned(), |line| return line.trim_matches([' ', '"', ',']).to_owned());
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use super::super::Backend;
+
+    /// `Judge_Role`'s own first step, `Role_Surface_Pair`, fails at `Resolve_Declared_Role`
+    /// before this ever reaches `Dispatch_Task` -- a root with no `README.md` at all names no
+    /// row for any crate. This drives the real, top-level function end to end without ever
+    /// touching a live backend subprocess, the same way `Run`'s own judge-role test (in
+    /// `agent/tests.rs`) stays safe by failing before dispatch.
+    #[test]
+    fn Test_Judge_Role_Should_Report_Not_Found_When_The_Root_Has_No_Readme()
+    {
+        let request = RoleRequest {
+            crate_name: "nomos-does-not-exist",
+            root: Path::new("no-such-directory-anywhere-for-judge-role-test"),
+        };
+        let config = DispatchConfig {
+            effort: nomos_model_package::EffortLevel::BackendDefault,
+            backend: Backend::ClaudeCode,
+        };
+        let mut output = Vec::new();
+        let mut notes = Vec::new();
+
+        let code = Judge_Role(request, config, &mut output, &mut notes);
+
+        assert_eq!(code, ExitCode::NotFound);
+        assert!(
+            String::from_utf8_lossy(&notes).contains("names no row"),
+            "{}",
+            String::from_utf8_lossy(&notes)
+        );
+    }
+
+    /// The pipe-delimited band-table row this parses directly, rather than through
+    /// `Judge_Role`'s own end-to-end path above.
+    #[test]
+    fn Test_Declared_Role_Should_Read_The_Crates_Own_Table_Row()
+    {
+        let directory = std::env::temp_dir().join("judge-role-declared-role-test");
+        std::fs::create_dir_all(&directory).expect("creates a scratch directory");
+        std::fs::write(
+            directory.join("README.md"),
+            "| Band | Crate | Role |\n|---|---|---|\n| 1 | `nomos-example` | Provider |\n",
+        )
+        .expect("writes a fixture README");
+
+        assert_eq!(Declared_Role(&directory, "nomos-example"), Some("Provider".to_owned()));
+        assert_eq!(Declared_Role(&directory, "nomos-not-in-the-table"), None);
+    }
+
+    /// The `Cargo.toml` member line this parses directly, rather than through `Judge_Role`'s
+    /// own end-to-end path above.
+    #[test]
+    fn Test_Crate_Root_Should_Read_The_Members_Manifest_Relative_Path()
+    {
+        let directory = std::env::temp_dir().join("judge-role-crate-root-test");
+        std::fs::create_dir_all(&directory).expect("creates a scratch directory");
+        std::fs::write(
+            directory.join("Cargo.toml"),
+            "[workspace]\nmembers = [\n    \"crates/example/nomos-example\",\n]\n",
+        )
+        .expect("writes a fixture manifest");
+
+        assert_eq!(Crate_Root(&directory, "nomos-example"), "crates/example/nomos-example");
+        // No matching member line: falls back to the bare crate name rather than guessing a
+        // layout.
+        assert_eq!(Crate_Root(&directory, "nomos-not-a-member"), "nomos-not-a-member");
+    }
+}

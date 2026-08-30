@@ -457,3 +457,60 @@ fn Required_Value(value: Option<&String>, name: &str) -> Result<String, String>
 {
     return crate::arguments::Required_Value(value, crate::arguments::Name(name), crate::arguments::Usage(&Usage_Text()));
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    fn Arguments(text: &str) -> Vec<String>
+    {
+        return text.split_whitespace().map(str::to_owned).collect();
+    }
+
+    #[test]
+    fn Test_Work_Command_From_String_Arguments_Should_Refuse_An_Unknown_Verb()
+    {
+        let error = Work_Command_From_String_Arguments(&Arguments("frobnicate")).unwrap_err();
+
+        assert!(error.contains("frobnicate"));
+        assert!(error.contains("usage"));
+    }
+
+    #[test]
+    fn Test_Parse_Duration_Should_Convert_Hour_Minute_And_Second_Units()
+    {
+        assert_eq!(Parse_Duration("2h").unwrap(), Duration::from_secs(7_200));
+        assert_eq!(Parse_Duration("30m").unwrap(), Duration::from_secs(1_800));
+        assert_eq!(Parse_Duration("45s").unwrap(), Duration::from_secs(45));
+    }
+
+    /// Every verb `nomos work` accepts.
+    fn Every_Verb() -> Vec<&'static str>
+    {
+        return vec![
+            "list", "show", "add", "claim", "renew", "takeover", "finish", "abandon",
+            "decline", "validate", "audit",
+        ];
+    }
+
+    /// The usage text is what an agent reads at exit 2, so a verb missing from it is a verb
+    /// that does not exist as far as the next session is concerned.
+    #[test]
+    fn Test_Usage_Text_Should_Name_Every_Verb_It_Accepts()
+    {
+        let usage = Usage_Text();
+
+        for verb in Every_Verb()
+        {
+            assert!(usage.contains(verb), "the usage text does not name `{verb}`");
+            assert!(
+                Work_Command_From_String_Arguments(&Arguments(verb)).is_ok()
+                    || !Work_Command_From_String_Arguments(&Arguments(verb))
+                        .unwrap_err()
+                        .contains("unknown command"),
+                "the usage text names `{verb}` and the parser does not accept it"
+            );
+        }
+    }
+}

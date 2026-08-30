@@ -82,6 +82,19 @@ fn Test_Only_Ok_Should_Carry_The_Passing_Exit_Code()
     }
 }
 
+/// The numeric codes `check`'s own usage text documents (see [`USAGE`]'s "exit codes"
+/// line): 0 nothing blocking, 1 findings that can fail a build, 2 usage, 5 unreadable
+/// tree, 6 nothing was judged.
+#[test]
+fn Test_Value_Should_Return_The_Documented_Exit_Code_Number()
+{
+    assert_eq!(ExitCode::Ok.Value(), 0);
+    assert_eq!(ExitCode::Violations.Value(), 1);
+    assert_eq!(ExitCode::Usage.Value(), 2);
+    assert_eq!(ExitCode::Unreadable.Value(), 5);
+    assert_eq!(ExitCode::Vacuous.Value(), 6);
+}
+
 /// The codes this file documents are the codes this group can exit with.
 ///
 /// `P10-CHECK-GATE`'s `done_when` asks that the codes the gate rests on be "the ones
@@ -91,7 +104,7 @@ fn Test_Only_Ok_Should_Carry_The_Passing_Exit_Code()
 /// what the process returns, the two were written separately, and a code added or
 /// renumbered in one of them and not the other is the failure that actually happens.
 #[test]
-fn Test_The_Documented_Exit_Codes_Should_Be_The_Ones_This_Group_Can_Exit_With()
+fn Test_All_Should_Match_The_Documented_Exit_Codes()
 {
     let (_, spelled) = USAGE
         .split_once("exit codes:")
@@ -132,7 +145,7 @@ fn Test_A_Given_Root_Should_Win()
 /// walking the current directory instead would report on the wrong tree and say
 /// nothing about it.
 #[test]
-fn Test_An_Unknown_Flag_Should_Refuse()
+fn Test_Check_Command_From_String_Arguments_Should_Refuse_An_Unknown_Flag()
 {
     let arguments = vec!["--rooot".to_owned(), "x".to_owned()];
 
@@ -144,7 +157,7 @@ fn Test_An_Unknown_Flag_Should_Refuse()
 
 /// A tree that is not there is not a clean tree.
 #[test]
-fn Test_A_Missing_Root_Should_Be_Unreadable()
+fn Test_Run_Should_Report_Unreadable_For_A_Missing_Root()
 {
     let command = CheckCommand {
         root: PathBuf::from("no-such-directory-anywhere"),

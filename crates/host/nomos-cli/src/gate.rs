@@ -112,3 +112,26 @@ fn Run_Verb(command: &GateCommand, stdout: &mut impl Write, stderr: &mut impl Wr
 
     return Render_Run(&result, stdout, stderr);
 }
+
+#[cfg(test)]
+mod run_coverage
+{
+    use super::*;
+
+    /// `Run` dispatched through its `Plan` arm, driving the real top-level function end to
+    /// end. `Plan` composes and reports this gate's own rule registry -- it never walks
+    /// `command.root` -- so this is the fast, side-effect-free arm; `Run_Verb` (the `run`
+    /// arm) and `Explain_Gate` (the `explain` arm) are exercised through `gate/tests.rs`'s
+    /// own broader coverage.
+    #[test]
+    fn Test_Run_Should_Dispatch_A_Plan_Invocation_And_Report_Ok()
+    {
+        let invocation = Invocation::Plan(GateCommand::default());
+        let mut stdout = Vec::new();
+        let mut stderr = Vec::new();
+
+        let code = Run(&invocation, &mut stdout, &mut stderr);
+
+        assert_eq!(code, ExitCode::Ok);
+    }
+}

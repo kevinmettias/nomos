@@ -331,3 +331,56 @@ fn Print_Audit(document: &LedgerDocument, now: nomos_platform::Timestamp, output
         let _ = writeln!(output, "nothing claimable is blocked");
     }
 }
+
+/// This module's own composition-root test.
+///
+/// `Run` is not generic over the platform traits the way `nomos_work_orchestration::Run` is --
+/// it always chooses `StdFileSystem`, `SystemClock` and `FileLock`, which is the whole point of
+/// this file (`OD-HOST-001`). Proving that wiring holds together means running it against a
+/// real directory on disk rather than a fake, because a fake is exactly the thing this
+/// composition root does not accept.
+#[cfg(test)]
+mod run_test
+{
+    use super::*;
+
+    /// A scratch ledger directory, real enough for `Run` to open with `StdFileSystem`.
+    ///
+    /// Named with the process id so two suites running at once do not collide, and cleared
+    /// first in case a previous run of this same test was killed before its own cleanup ran.
+    fn Scratch_Directory(name: &str) -> std::path::PathBuf
+    {
+        let root = std::env::temp_dir().join(format!(
+            "nomos-work-run-test-{name}-{}",
+            std::process::id()
+        ));
+        let _ignored = std::fs::remove_dir_all(&root);
+        std::fs::create_dir_all(&root).expect("a scratch directory");
+        std::fs::write(
+            root.join("ledger.json"),
+            format!(
+                "{{\"schema_version\":{},\"items\":[]}}",
+                nomos_ledger::SCHEMA_VERSION
+            ),
+        )
+        .expect("a scratch ledger");
+        return root;
+    }
+
+    #[test]
+    fn Test_Run_Should_Validate_A_Real_Ledger_Through_The_Chosen_Platform()
+    {
+        let directory = Scratch_Directory("validate");
+        let mut output = Vec::new();
+
+        let code = Run(&WorkCommand::Validate, &directory, &mut output);
+
+        let _ignored = std::fs::remove_dir_all(&directory);
+
+        assert_eq!(code, ExitCode::Ok);
+        assert!(
+            String::from_utf8(output).unwrap().contains("ledger is valid"),
+            "Run must wire the real FileLedger through to Report_Validation"
+        );
+    }
+}

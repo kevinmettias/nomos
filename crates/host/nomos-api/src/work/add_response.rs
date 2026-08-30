@@ -127,7 +127,7 @@ mod tests
     use nomos_ledger::{ItemId, ItemKind, ItemOrigin, ItemState};
 
     #[test]
-    fn Test_Adding_A_Real_Well_Formed_Item_To_A_Fresh_Board_Should_Record_It()
+    fn Test_Handle_Work_Add_Should_Record_A_Real_Well_Formed_Item_On_A_Fresh_Board()
     {
         let directory = Scratch_Board();
         let item = Real_New_Item(ItemId::New("SCRATCH-NEW"), "a");
@@ -140,7 +140,7 @@ mod tests
     }
 
     #[test]
-    fn Test_Adding_An_Item_Whose_Id_Is_Already_On_The_Board_Should_Be_Refused()
+    fn Test_From_Should_Refuse_An_Item_Whose_Id_Is_Already_On_The_Board()
     {
         let (directory, id) = Scratch_Board_With_A_Claimable_Item();
         let item = Real_New_Item(id, "b");
@@ -161,7 +161,7 @@ mod tests
     }
 
     #[test]
-    fn Test_A_Real_Added_Response_Should_Round_Trip_As_Json()
+    fn Test_Assert_Round_Trips_As_Json_Should_Accept_A_Real_Added_Response()
     {
         let directory = Scratch_Board();
         let item = Real_New_Item(ItemId::New("SCRATCH-NEW"), "a");

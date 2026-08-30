@@ -69,7 +69,7 @@ mod tests
     /// [`Disposition::Indeterminate`], the state a walk that never became a judged check
     /// outcome carries -- proving this crate, not `nomos-cli`, can produce one.
     #[test]
-    fn Test_A_Real_Run_Should_Reach_A_Judgment()
+    fn Test_Handle_Gate_Run_And_Walked_Sources_Should_Reach_A_Judgment_Over_A_Real_Tree()
     {
         let response = Handle_Gate_Run(Path::new("."));
 
@@ -84,7 +84,7 @@ mod tests
     /// An empty tree cannot be judged, the same distinction `nomos_check_orchestration::
     /// CheckOutcome::NoSource` already keeps apart from a clean judged run.
     #[test]
-    fn Test_An_Empty_Tree_Should_Be_Indeterminate()
+    fn Test_Host_Variant_Should_Compose_Into_A_Working_Environment_For_An_Empty_Tree()
     {
         let empty = std::env::temp_dir().join("nomos-api-gate-run-empty-tree");
         let _ignored = std::fs::remove_dir_all(&empty);
@@ -102,7 +102,7 @@ mod tests
     /// its disposition round-trips through `serde_json` under the field name a wire caller
     /// would actually read.
     #[test]
-    fn Test_A_Real_Runs_Response_Should_Round_Trip_As_Json()
+    fn Test_From_Should_Produce_A_Response_That_Round_Trips_As_Json()
     {
         let response = Handle_Gate_Run(Path::new("."));
         let expected = match response.disposition

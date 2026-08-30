@@ -125,7 +125,7 @@ mod tests
     use crate::test_support::{Assert_Round_Trips_As_Json, Staged_Heading_Rename, Unique_Scratch_Directory};
 
     #[test]
-    fn Test_A_Real_Heading_Rename_Should_Preview_Wording_Moved()
+    fn Test_Handle_Spec_Preview_Should_Report_Wording_Moved_For_A_Heading_Rename()
     {
         let staged = Staged_Heading_Rename("D-132", &Unique_Scratch_Directory("spec-preview", "preview"));
         let request = EditRequest { id: "D-132".to_owned(), from: staged, rename: None };
@@ -158,7 +158,7 @@ mod tests
     }
 
     #[test]
-    fn Test_A_Real_Previewed_Response_Should_Round_Trip_As_Json()
+    fn Test_From_Should_Round_Trip_As_Json()
     {
         let staged = Staged_Heading_Rename("D-132", &Unique_Scratch_Directory("spec-preview", "preview-json"));
         let request = EditRequest { id: "D-132".to_owned(), from: staged, rename: None };

@@ -25,3 +25,32 @@ impl RefusalResponse
         };
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use nomos_spec_model::Failure;
+
+    #[test]
+    fn Test_From_Should_Copy_The_Submission_And_Map_Every_Nested_Failure()
+    {
+        let refusal = Refusal {
+            submission: "FR-API-003".to_owned(),
+            failures: vec![Failure {
+                field: "goal".to_owned(),
+                rule: "required-field".to_owned(),
+                remedy: "give goal a value".to_owned(),
+            }],
+        };
+
+        let response = RefusalResponse::From(refusal.clone());
+
+        assert_eq!(response.submission, refusal.submission);
+        assert_eq!(response.failures.len(), 1);
+        assert_eq!(
+            response.failures.first().expect("asserted above to contain exactly one failure").field,
+            "goal"
+        );
+    }
+}

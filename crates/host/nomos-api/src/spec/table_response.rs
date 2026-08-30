@@ -106,7 +106,7 @@ mod tests
     /// session's own `NOMOS_V14_CORPUS` happens to be set -- `Assemble_Corpus`'s own contract is
     /// that an absent corpus reports real absences rather than refusing.
     #[test]
-    fn Test_A_Real_Call_For_An_Unknown_Document_Should_Report_No_Such_Document()
+    fn Test_Handle_Spec_Table_Should_Report_No_Such_Document_For_An_Unknown_Document()
     {
         let request = TableRequest {
             document: "definitely-nonexistent-table-document-xyz".to_owned(),
@@ -121,7 +121,7 @@ mod tests
     }
 
     #[test]
-    fn Test_A_No_Such_Document_Response_Should_Round_Trip_As_Json()
+    fn Test_From_Should_Round_Trip_As_Json()
     {
         let request = TableRequest {
             document: "definitely-nonexistent-table-document-xyz".to_owned(),

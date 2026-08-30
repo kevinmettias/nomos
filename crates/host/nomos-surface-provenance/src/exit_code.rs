@@ -26,3 +26,20 @@ impl ExitCode
         return self as i32;
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    /// `main()` feeds this straight into `u8::try_from`, so a code that silently drifted
+    /// from the discriminant it was declared with would arrive as the wrong process exit
+    /// rather than as a compile error.
+    #[test]
+    fn Test_Value_Should_Return_The_Declared_Numeric_Discriminant()
+    {
+        assert_eq!(ExitCode::Ok.Value(), 0);
+        assert_eq!(ExitCode::QueryFailed.Value(), 1);
+        assert_eq!(ExitCode::Usage.Value(), 2);
+    }
+}

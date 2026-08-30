@@ -138,7 +138,7 @@ mod tests
     /// nomos-gate-orchestration/src/tests.rs`'s own `Test_Explain_Should_Report_Not_Found_
     /// For_A_Query_Nothing_Answers` already proves at the orchestration layer.
     #[test]
-    fn Test_Explaining_A_Query_Nothing_Answers_Should_Be_Not_Found()
+    fn Test_Handle_Gate_Explain_Should_Report_Not_Found_For_A_Query_Nothing_Answers()
     {
         let directory = Scratch_Source_Tree("not-found", "a.rs", "pub fn Ok() {}\n");
         let query = FindingQuery { rule: RuleId::New(COMPLETENESS_MIRROR), location: "nowhere.rs".to_owned() };
@@ -157,7 +157,7 @@ mod tests
     /// directory by this crate's own `sources::Walked_Sources` rather than handed to `Explain_Gate`
     /// as a synthetic `SourceFile` list.
     #[test]
-    fn Test_Explaining_A_Real_Trigger_Should_Find_A_Real_Blocking_Finding()
+    fn Test_From_Should_Map_A_Real_Blocking_Finding_Into_A_Found_Explanation()
     {
         let directory =
             Scratch_Source_Tree("found", "a.rs", "/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n");
@@ -196,7 +196,7 @@ mod tests
     /// round-trips through `serde_json` under the field name a wire caller would actually
     /// read.
     #[test]
-    fn Test_A_Real_Found_Explanation_Should_Round_Trip_As_Json()
+    fn Test_Unique_Scratch_Directory_Should_Let_A_Real_Explanation_Round_Trip_As_Json()
     {
         let directory =
             Scratch_Source_Tree("json", "a.rs", "/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n");

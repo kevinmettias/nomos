@@ -105,7 +105,7 @@ mod tests
     use crate::work::tests_support::{Scratch_Board, Scratch_Board_With_A_Blocked_Item};
 
     #[test]
-    fn Test_Auditing_A_Board_With_A_Real_Dependency_Should_Name_The_Blocked_Item_Not_Its_Dependency()
+    fn Test_Handle_Work_Audit_And_Scratch_Board_With_A_Blocked_Item_Should_Name_The_Blocked_Item_Not_Its_Dependency()
     {
         let (directory, dependency, blocked) = Scratch_Board_With_A_Blocked_Item();
 
@@ -128,7 +128,7 @@ mod tests
     }
 
     #[test]
-    fn Test_Auditing_A_Board_With_No_Ready_Items_Should_Report_Nothing_Blocked()
+    fn Test_Scratch_Board_And_Unique_Scratch_Directory_Should_Report_Nothing_Blocked_On_An_Empty_Board()
     {
         let directory = Scratch_Board();
 
@@ -148,7 +148,7 @@ mod tests
     }
 
     #[test]
-    fn Test_A_Real_Audited_Response_Should_Round_Trip_As_Json()
+    fn Test_From_Should_Produce_An_Audited_Response_That_Round_Trips_As_Json()
     {
         let (directory, _dependency, _blocked) = Scratch_Board_With_A_Blocked_Item();
 

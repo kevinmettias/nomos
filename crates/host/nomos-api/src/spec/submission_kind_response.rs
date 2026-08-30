@@ -26,3 +26,26 @@ impl SubmissionKindResponse
         };
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_From_Should_Map_Every_Domain_Variant_To_Its_Own_Response_Variant()
+    {
+        assert!(matches!(
+            SubmissionKindResponse::From(SubmissionKind::FeatureRequest),
+            SubmissionKindResponse::FeatureRequest
+        ));
+        assert!(matches!(
+            SubmissionKindResponse::From(SubmissionKind::DesignSpec),
+            SubmissionKindResponse::DesignSpec
+        ));
+        assert!(matches!(
+            SubmissionKindResponse::From(SubmissionKind::FeatureResult),
+            SubmissionKindResponse::FeatureResult
+        ));
+    }
+}

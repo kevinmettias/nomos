@@ -115,3 +115,30 @@ pub(crate) fn Run(command: &Command, output: &mut impl std::io::Write, notes: &m
         ),
     };
 }
+
+#[cfg(test)]
+mod run_coverage
+{
+    use super::*;
+
+    /// `Run` dispatched through its `JudgeRole` arm, driving the real top-level function
+    /// end to end. A root with no `README.md` fails inside `Judge_Role` before either arm
+    /// ever reaches a live backend subprocess, the same safe path `agent/tests.rs`'s own
+    /// `Run` coverage and `judge_role.rs`'s own test both use.
+    #[test]
+    fn Test_Run_Should_Dispatch_A_Judge_Role_Command_To_Judge_Role()
+    {
+        let command = Command::JudgeRole {
+            crate_name: "nomos-does-not-exist".to_owned(),
+            root: PathBuf::from("no-such-directory-anywhere-for-run-coverage-test"),
+            effort: nomos_model_package::EffortLevel::BackendDefault,
+            backend: Backend::ClaudeCode,
+        };
+        let mut output = Vec::new();
+        let mut notes = Vec::new();
+
+        let code = Run(&command, &mut output, &mut notes);
+
+        assert_eq!(code, ExitCode::NotFound);
+    }
+}

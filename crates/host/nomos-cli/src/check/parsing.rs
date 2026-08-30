@@ -29,3 +29,37 @@ pub fn Check_Command_From_String_Arguments(arguments: &[String]) -> Result<Check
         root: Named_Value_From_String_Arguments(arguments, "--root").map_or_else(|| return PathBuf::from("."), PathBuf::from),
     });
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Check_Command_From_String_Arguments_Should_Default_Root_To_The_Current_Directory()
+    {
+        let command = Check_Command_From_String_Arguments(&[]).expect("parses");
+
+        assert_eq!(command.root, PathBuf::from("."));
+    }
+
+    #[test]
+    fn Test_Check_Command_From_String_Arguments_Should_Read_An_Explicit_Root()
+    {
+        let arguments = vec!["--root".to_owned(), "some/tree".to_owned()];
+
+        let command = Check_Command_From_String_Arguments(&arguments).expect("parses");
+
+        assert_eq!(command.root, PathBuf::from("some/tree"));
+    }
+
+    #[test]
+    fn Test_Check_Command_From_String_Arguments_Should_Refuse_An_Unknown_Flag()
+    {
+        let arguments = vec!["--not-a-real-flag".to_owned()];
+
+        let error = Check_Command_From_String_Arguments(&arguments).expect_err("unknown flag");
+
+        assert!(error.contains("unknown argument"), "{error}");
+    }
+}

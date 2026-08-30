@@ -2,8 +2,7 @@
 
 use super::*;
 use super::parse::{Parse_Duration, Usage_Text};
-use nomos_ledger::{DEFAULT_LEASE, ItemState, LedgerDocument};
-use nomos_platform::Timestamp;
+use nomos_ledger::{DEFAULT_LEASE, ItemState};
 
 fn Arguments(text: &str) -> Vec<String>
 {
@@ -59,42 +58,64 @@ fn Test_Takeover_Should_Not_Parse_As_A_Claim()
     assert!(Work_Command_From_String_Arguments(&Arguments("takeover --item T-1")).is_err());
 }
 
-#[test]
-fn Test_Lease_Units_Should_Work_Command_From_String_Arguments()
-{
-    use std::time::Duration;
-
-    assert_eq!(Parse_Duration("2h").unwrap(), Duration::from_secs(7_200));
-    assert_eq!(Parse_Duration("30m").unwrap(), Duration::from_secs(1_800));
-    assert_eq!(Parse_Duration("45s").unwrap(), Duration::from_secs(45));
-}
-
 /// A lease with no unit is ambiguous. Guessing seconds would silently give an agent
 /// a two-second lease when it asked for two hours.
+///
+/// Each input fails inside `Parse_Duration` for a different reason, and the assertion
+/// names which: `"2"` and `""` both leave nothing before the character `split_at`
+/// carves off as the unit, so the *number* fails to parse; `"2d"` parses a number fine
+/// and fails because `d` is not a unit `Parse_Duration` recognises. A bare `.is_err()`
+/// would keep passing the day either message stopped naming its own reason — including
+/// the day the two swapped, which is exactly the confusion a shared "it failed" hides.
 #[test]
 fn Test_A_Unitless_Lease_Should_Be_Refused()
 {
-    assert!(Parse_Duration("2").is_err());
-    assert!(Parse_Duration("").is_err());
-    assert!(Parse_Duration("2d").is_err());
+    let no_digits = Parse_Duration("2").unwrap_err();
+    assert!(
+        no_digits.contains("is not a duration"),
+        "a single character leaves nothing before the unit to parse as a number: {no_digits}"
+    );
+
+    let empty = Parse_Duration("").unwrap_err();
+    assert!(
+        empty.contains("is not a duration"),
+        "an empty string leaves nothing to parse as a number either: {empty}"
+    );
+
+    let unrecognized_unit = Parse_Duration("2d").unwrap_err();
+    assert!(
+        unrecognized_unit.contains("has no unit"),
+        "a number with an unrecognized unit character must name the unit as the problem: \
+         {unrecognized_unit}"
+    );
+}
+
+/// Every verb's own required arguments, and the flag missing from each.
+fn Missing_Required_Arguments() -> Vec<(&'static str, &'static str)>
+{
+    return vec![
+        ("claim --holder agent-a", "--item"),
+        ("claim --item T-1", "--holder"),
+        ("show", "--item"),
+        ("finish --item T-1", "--holder"),
+        ("finish --holder agent-a", "--item"),
+        ("abandon --item T-1 --holder agent-a", "--reason"),
+    ];
 }
 
 /// A missing required argument must name what is missing, not just print usage.
 #[test]
 fn Test_A_Missing_Argument_Should_Name_Itself()
 {
-    let error = Work_Command_From_String_Arguments(&Arguments("claim --holder agent-a")).unwrap_err();
+    for (arguments, flag) in Missing_Required_Arguments()
+    {
+        let error = Work_Command_From_String_Arguments(&Arguments(arguments)).unwrap_err();
 
-    assert!(error.contains("--item"));
-}
-
-#[test]
-fn Test_An_Unknown_Command_Should_Be_A_Usage_Error()
-{
-    let error = Work_Command_From_String_Arguments(&Arguments("frobnicate")).unwrap_err();
-
-    assert!(error.contains("frobnicate"));
-    assert!(error.contains("usage"));
+        assert!(
+            error.contains(flag),
+            "`{arguments}` is missing {flag} and the refusal does not name it: {error}"
+        );
+    }
 }
 
 /// One word, no hyphen, matching the other ten verbs — and not a spelling of `abandon`.
@@ -131,87 +152,6 @@ fn Test_Decline_Should_Require_A_Reason()
     assert!(error.contains("--reason"), "{error}");
     assert!(Work_Command_From_String_Arguments(&Arguments("decline --holder agent-a --reason r")).is_err());
     assert!(Work_Command_From_String_Arguments(&Arguments("decline --item T-1 --reason r")).is_err());
-}
-
-/// The usage text is what an agent reads at exit 2, so a verb missing from it is a verb
-/// that does not exist as far as the next session is concerned.
-#[test]
-fn Test_The_Usage_Text_Should_Name_Every_Verb_It_Accepts()
-{
-    let usage = Usage_Text();
-
-    for verb in [
-        "list", "show", "add", "claim", "renew", "takeover", "finish", "abandon",
-        "decline", "validate", "audit",
-    ]
-    {
-        assert!(usage.contains(verb), "the usage text does not name `{verb}`");
-        assert!(
-            Work_Command_From_String_Arguments(&Arguments(verb)).is_ok() || !Work_Command_From_String_Arguments(&Arguments(verb)).unwrap_err().contains("unknown command"),
-            "the usage text names `{verb}` and the parser does not accept it"
-        );
-    }
-}
-
-/// A board holding one declined item and nothing else.
-fn Board_With_A_Declined_Item() -> LedgerDocument
-{
-    let mut item = match Work_Command_From_String_Arguments(&Arguments(
-        "add --item T-1 --title t --why w --done-when d --kind correction --origin proposed \
-         --territory src/a.rs",
-    ))
-    .unwrap()
-    {
-        WorkCommand::Add { item, .. } => *item,
-        // The argument is a literal written two lines up, so another variant here is the
-        // parser having started routing `add` somewhere else rather than a caller's mistake.
-        // Nothing below could carry on from it: the two declined-item tests need an item to
-        // decline, and a fixture that silently produced none would leave them asserting
-        // about a board they never built.
-        other => panic!("expected an add, got {other:?}"),
-    };
-
-    item.Decline("superseded by T-2", "agent-a", Timestamp::From_Unix_Seconds(1));
-
-    return LedgerDocument {
-        schema_version: nomos_ledger::SCHEMA_VERSION,
-        items: vec![item],
-    };
-}
-
-/// The column an agent reads before claiming has to say the item is over.
-///
-/// This is the whole of what the state buys at the surface. `P10-REQUIRABLE-DECLARED` was
-/// superseded twice and read `ready` both times, with the reason behind `work show` where
-/// nobody looks first — so the second session claimed it and spent its run establishing
-/// that the first one was right.
-#[test]
-fn Test_A_Declined_Item_Should_Be_Listed_As_Declined()
-{
-    let document = Board_With_A_Declined_Item();
-    let item = document.items.first().expect("the fixture has an item");
-
-    assert_eq!(
-        Listing_Label(&document, item, Timestamp::From_Unix_Seconds(2)),
-        "declined"
-    );
-}
-
-/// `work audit` answers for items somebody could act on, and nobody can act on this one.
-///
-/// `P10-AUDIT-STATE` settled that once: an audit that reported blockers for finished work
-/// made forty-four lines nobody could do anything about. A newly reachable terminal state
-/// is the obvious way to reopen it.
-#[test]
-fn Test_Audit_Should_Not_Answer_For_A_Declined_Item()
-{
-    let document = Board_With_A_Declined_Item();
-    let item = document.items.first().expect("the fixture has an item");
-
-    assert!(
-        Blocking_Refusal(&document, item, Timestamp::From_Unix_Seconds(2)).is_none(),
-        "audit answered for an item nobody can act on"
-    );
 }
 
 fn Added(text: &str) -> LedgerItem
@@ -388,6 +328,19 @@ fn Test_Timeout_Should_Default_When_Omitted()
     );
 }
 
+/// `add` lines that name `--timeout` with no predicate after `--` to bound.
+fn Timeouts_With_No_Predicate_To_Bound() -> Vec<&'static str>
+{
+    return vec![
+        "add --item T-1 --title t --why w --done-when d --kind correction --origin proposed \
+         --territory src/a.rs --timeout 40m",
+        "add --item T-1 --title t --why w --done-when d --kind correction --origin proposed \
+         --territory src/a.rs --timeout 2h",
+        "add --item T-1 --title t --why w --done-when d --kind correction --origin proposed \
+         --territory src/a.rs --timeout 10s",
+    ];
+}
+
 /// A bound with nothing to bound is a mistake, not a no-op: an author who typed
 /// `--timeout` meant to give the predicate a longer wall bound, and silently discarding it
 /// because there is no predicate would leave that author believing the item is more
@@ -395,16 +348,15 @@ fn Test_Timeout_Should_Default_When_Omitted()
 #[test]
 fn Test_Timeout_Without_A_Predicate_Should_Be_Refused()
 {
-    let error = Work_Command_From_String_Arguments(&Arguments(
-        "add --item T-1 --title t --why w --done-when d --kind correction --origin proposed \
-         --territory src/a.rs --timeout 40m",
-    ))
-    .unwrap_err();
+    for arguments in Timeouts_With_No_Predicate_To_Bound()
+    {
+        let error = Work_Command_From_String_Arguments(&Arguments(arguments)).unwrap_err();
 
-    assert!(
-        error.contains("--timeout"),
-        "the refusal must name the flag that has nothing to bound: {error}"
-    );
+        assert!(
+            error.contains("--timeout"),
+            "the refusal must name the flag that has nothing to bound: {error}"
+        );
+    }
 }
 
 /// A flag that looks like a named argument but sits after the separator belongs to
@@ -422,15 +374,27 @@ fn Test_Arguments_After_The_Separator_Should_Not_Be_Read_As_Options()
     assert_eq!(item.title, "t");
 }
 
+/// `add` lines that name no territory at all, by any route.
+fn Adds_That_Reserve_Nothing() -> Vec<&'static str>
+{
+    return vec![
+        "add --item T-1 --title t --why w --done-when d",
+        "add --item T-1 --title t --why w --done-when d --kind correction --origin proposed",
+        "add --item T-1 --title t --why w --done-when d --depends-on T-0",
+    ];
+}
+
 /// An item that reserves nothing excludes nobody, so the ledger would hand two
 /// agents the same files and call it disjoint.
 #[test]
 fn Test_Add_Should_Refuse_An_Item_With_No_Territory()
 {
-    let error =
-        Work_Command_From_String_Arguments(&Arguments("add --item T-1 --title t --why w --done-when d")).unwrap_err();
+    for arguments in Adds_That_Reserve_Nothing()
+    {
+        let error = Work_Command_From_String_Arguments(&Arguments(arguments)).unwrap_err();
 
-    assert!(error.contains("--territory"));
+        assert!(error.contains("--territory"), "`{arguments}`: {error}");
+    }
 }
 
 /// The flag `OD-LEDGER-013` withdrew.
@@ -462,6 +426,16 @@ fn Test_Add_Should_Refuse_A_Territory_Pattern()
     );
 }
 
+/// `add` lines naming only a `--territory-pattern`, with no `--territory` beside it.
+fn Territory_Patterns_Given_Alone() -> Vec<&'static str>
+{
+    return vec![
+        "add --item T-1 --title t --why w --done-when d --territory-pattern crates/**",
+        "add --item T-1 --title t --why w --done-when d --territory-pattern crates/spec/**",
+        "add --item T-1 --title t --why w --done-when d --territory-pattern docs/**",
+    ];
+}
+
 /// The pattern is refused even when it is the only territory given.
 ///
 /// The ordering control. `--territory` was checked first before this item, so a pattern
@@ -471,15 +445,15 @@ fn Test_Add_Should_Refuse_A_Territory_Pattern()
 #[test]
 fn Test_A_Pattern_Alone_Should_Be_Refused_As_A_Pattern()
 {
-    let error = Work_Command_From_String_Arguments(&Arguments(
-        "add --item T-1 --title t --why w --done-when d --territory-pattern crates/**",
-    ))
-    .unwrap_err();
+    for arguments in Territory_Patterns_Given_Alone()
+    {
+        let error = Work_Command_From_String_Arguments(&Arguments(arguments)).unwrap_err();
 
-    assert!(
-        error.contains("--territory-pattern is not supported"),
-        "a pattern alone must be refused for being a pattern: {error}"
-    );
+        assert!(
+            error.contains("--territory-pattern is not supported"),
+            "a pattern alone must be refused for being a pattern: {error}"
+        );
+    }
 }
 
 /// The flag is gone from the usage text as well as from the parser.
@@ -506,16 +480,4 @@ fn Test_Finish_Should_Work_Command_From_String_Arguments()
             holder: "agent-a".to_owned(),
         }
     );
-}
-
-/// The exit codes are a contract agents branch on, so their values are pinned.
-#[test]
-fn Test_Exit_Codes_Should_Be_Stable()
-{
-    assert_eq!(ExitCode::Ok.Value(), 0);
-    assert_eq!(ExitCode::ValidationError.Value(), 1);
-    assert_eq!(ExitCode::Usage.Value(), 2);
-    assert_eq!(ExitCode::ClaimUnavailable.Value(), 3);
-    assert_eq!(ExitCode::Conflict.Value(), 4);
-    assert_eq!(ExitCode::StoreError.Value(), 5);
 }

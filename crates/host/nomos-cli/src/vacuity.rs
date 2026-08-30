@@ -152,18 +152,40 @@ pub(crate) fn Stance_Of(group: Group) -> Stance
 #[cfg(test)]
 mod tests
 {
-    use super::{Group, Stance, Stance_Of};
+    use super::{Group, Group_Named, Stance, Stance_Of, NAMES};
 
-    /// Every declared group has a stance, and calling it does not panic. Mostly load-bearing
-    /// for the match arm itself: the real guarantee below is that a declared
-    /// [`Stance::Guarded`] is checked against the group's actual `Run`, not trusted.
+    /// Every declared group has a stance, and every stance carries real reasoning text --
+    /// not merely "did this call panic". Mostly load-bearing for the match arm itself: the
+    /// real guarantee below is that a declared [`Stance::Guarded`] is checked against the
+    /// group's actual `Run`, not trusted.
     #[test]
     fn Test_Every_Group_Should_Have_A_Declared_Stance()
     {
         for group in Group::ALL
         {
-            let _stance = Stance_Of(group);
+            match Stance_Of(group)
+            {
+                Stance::Guarded { decided_in } => assert!(!decided_in.is_empty(), "{group:?} names no decision site"),
+                Stance::NotApplicable { because } => assert!(!because.is_empty(), "{group:?} names no reason"),
+            }
         }
+    }
+
+    /// Every name [`NAMES`] spells resolves to the [`Group`] it is paired with -- and a name
+    /// nothing spells resolves to nothing.
+    #[test]
+    fn Test_Group_Named_Should_Resolve_Every_Declared_Name()
+    {
+        for (name, group) in NAMES
+        {
+            assert_eq!(Group_Named(name), Some(group), "{name}");
+        }
+    }
+
+    #[test]
+    fn Test_Group_Named_Should_Be_None_For_An_Unknown_Name()
+    {
+        assert_eq!(Group_Named("not-a-real-group"), None);
     }
 
     /// `check` walks a caller-chosen tree, so an empty one must not report `Ok`.
@@ -227,7 +249,7 @@ mod tests
     /// can be. The reasoning is `Stance_Of`'s `because` field, read by a human, not asserted
     /// by this test.
     #[test]
-    fn Test_Work_Request_And_Agent_Are_Declared_Not_Applicable()
+    fn Test_Stance_Of_Should_Declare_Work_Request_And_Agent_Not_Applicable()
     {
         assert!(matches!(Stance_Of(Group::Work), Stance::NotApplicable { .. }));
         assert!(matches!(Stance_Of(Group::Request), Stance::NotApplicable { .. }));

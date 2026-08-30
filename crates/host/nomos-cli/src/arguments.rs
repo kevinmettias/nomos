@@ -70,7 +70,7 @@ mod tests
     use super::*;
 
     #[test]
-    fn Test_A_Repeated_Flag_Should_Yield_Every_Value()
+    fn Test_Named_Values_From_String_Arguments_Should_Yield_Every_Value_For_A_Repeated_Flag()
     {
         let arguments = Arguments_From_Text("--path a --path b --other c --path d");
 
@@ -82,7 +82,7 @@ mod tests
     /// flag as its value, which is how `--into --profile x` becomes a directory named
     /// `--profile`.
     #[test]
-    fn Test_A_Flag_With_No_Value_Should_Be_Absent()
+    fn Test_Named_Value_From_String_Arguments_Should_Be_Absent_When_The_Flag_Has_No_Value()
     {
         let arguments = Arguments_From_Text("--profile github-markdown --into");
 

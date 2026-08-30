@@ -33,7 +33,7 @@ mod tests
     use crate::work::tests_support::{Claim_Request, Scratch_Board_With_A_Claimed_Item};
 
     #[test]
-    fn Test_Taking_Over_A_Real_Lapsed_Claim_Should_Grant_A_Reservation()
+    fn Test_Run_Reservation_Command_Should_Let_Handle_Work_TakeOver_Grant_A_Reservation_For_A_Real_Lapsed_Claim()
     {
         let (directory, id) = Scratch_Board_With_A_Claimed_Item("old-holder", 1);
         let request = Claim_Request(id.clone(), "new-holder");

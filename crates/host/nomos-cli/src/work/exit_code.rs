@@ -34,3 +34,29 @@ impl ExitCode
         return self as i32;
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    /// The exit codes are a contract agents branch on, so their values are pinned.
+    ///
+    /// Named to avoid a false address: this file's `exit_code` unit is shared, by bare file
+    /// stem, with five sibling `exit_code.rs` files under `check/`, `gate/`, `agent/`,
+    /// `request/` and `spec/` — the coverage rule keys a Rust unit by file name alone, not by
+    /// path. A name ending `..._For_Every_Exit_Code` tokenizes into `every_exit_code`, which
+    /// is `gate::exit_code::Every_Exit_Code`'s own already-covered address and is LONGER than
+    /// `value` — so the longest-match rule silently attributed this test to that function
+    /// instead, and `Value` stayed unaddressed. `Discriminant` carries no such collision.
+    #[test]
+    fn Test_Value_Should_Return_The_Variants_Own_Discriminant()
+    {
+        assert_eq!(ExitCode::Ok.Value(), 0);
+        assert_eq!(ExitCode::ValidationError.Value(), 1);
+        assert_eq!(ExitCode::Usage.Value(), 2);
+        assert_eq!(ExitCode::ClaimUnavailable.Value(), 3);
+        assert_eq!(ExitCode::Conflict.Value(), 4);
+        assert_eq!(ExitCode::StoreError.Value(), 5);
+    }
+}

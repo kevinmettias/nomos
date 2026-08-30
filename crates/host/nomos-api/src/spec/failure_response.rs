@@ -21,3 +21,25 @@ impl FailureResponse
         return Self { field: failure.field, rule: failure.rule, remedy: failure.remedy };
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_From_Should_Copy_Every_Field_Of_The_Domain_Failure()
+    {
+        let failure = Failure {
+            field: "goal".to_owned(),
+            rule: "required-field".to_owned(),
+            remedy: "give goal a value".to_owned(),
+        };
+
+        let response = FailureResponse::From(failure.clone());
+
+        assert_eq!(response.field, failure.field);
+        assert_eq!(response.rule, failure.rule);
+        assert_eq!(response.remedy, failure.remedy);
+    }
+}

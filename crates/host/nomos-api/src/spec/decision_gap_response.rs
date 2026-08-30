@@ -28,3 +28,28 @@ impl DecisionGapResponse
         };
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use nomos_spec_model::Severity;
+
+    #[test]
+    fn Test_From_Should_Copy_Every_Field_And_Map_The_Nested_Severity()
+    {
+        let gap = DecisionGap {
+            question: "who owns this rule".to_owned(),
+            blocks: vec!["owner".to_owned()],
+            severity: Severity::Blocking,
+            closed_by: Some("D-132".to_owned()),
+        };
+
+        let response = DecisionGapResponse::From(gap.clone());
+
+        assert_eq!(response.question, gap.question);
+        assert_eq!(response.blocks, gap.blocks);
+        assert!(matches!(response.severity, SeverityResponse::Blocking));
+        assert_eq!(response.closed_by, gap.closed_by);
+    }
+}

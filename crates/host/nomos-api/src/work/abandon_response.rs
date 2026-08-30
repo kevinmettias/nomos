@@ -76,7 +76,7 @@ mod tests
     use crate::work::tests_support::{Ending_Request, Scratch_Board_With_A_Claimed_Item};
 
     #[test]
-    fn Test_Abandoning_A_Real_Claim_This_Holder_Actually_Has_Should_Release_It()
+    fn Test_Handle_Work_Abandon_And_Scratch_Board_With_A_Claimed_Item_Should_Release_A_Real_Claim_This_Holder_Actually_Has()
     {
         let (directory, id) = Scratch_Board_With_A_Claimed_Item("test-holder", i64::from(u32::MAX));
         let request = Ending_Request(id, "test fixture");
@@ -89,7 +89,7 @@ mod tests
     }
 
     #[test]
-    fn Test_Abandoning_A_Claim_A_Different_Holder_Actually_Has_Should_Be_Refused_And_Retryable()
+    fn Test_From_Should_Refuse_And_Mark_Retryable_A_Claim_A_Different_Holder_Actually_Has()
     {
         let (directory, id) = Scratch_Board_With_A_Claimed_Item("someone-else", i64::from(u32::MAX));
         let request = Ending_Request(id, "test fixture");

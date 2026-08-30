@@ -110,7 +110,7 @@ mod tests
     use crate::work::tests_support::Scratch_Board_With_One_Item;
 
     #[test]
-    fn Test_Showing_An_Item_On_The_Board_Should_Find_It()
+    fn Test_Handle_Work_Show_Should_Find_An_Item_On_The_Board()
     {
         let (directory, id) = Scratch_Board_With_One_Item();
 
@@ -130,7 +130,7 @@ mod tests
     }
 
     #[test]
-    fn Test_Showing_An_Absent_Id_On_A_Readable_Board_Should_Be_Not_Found_Not_Unreadable()
+    fn Test_Ledger_At_Should_Read_Cleanly_Even_When_An_Absent_Id_Is_Not_Found()
     {
         let (directory, _id) = Scratch_Board_With_One_Item();
         let absent = ItemId::New("NO-SUCH-ITEM");
@@ -151,7 +151,7 @@ mod tests
     }
 
     #[test]
-    fn Test_A_Real_Found_Response_Should_Round_Trip_As_Json()
+    fn Test_From_Should_Produce_A_Found_Response_That_Round_Trips_As_Json()
     {
         let (directory, id) = Scratch_Board_With_One_Item();
 

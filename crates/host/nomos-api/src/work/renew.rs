@@ -33,7 +33,7 @@ mod tests
     use crate::work::tests_support::{Claim_Request, Scratch_Board_With_A_Claimed_Item};
 
     #[test]
-    fn Test_Renewing_This_Holders_Own_Claim_Should_Extend_The_Lease()
+    fn Test_Claim_Request_Should_Let_Handle_Work_Renew_Extend_This_Holders_Own_Lease()
     {
         let (directory, id) = Scratch_Board_With_A_Claimed_Item("test-holder", i64::from(u32::MAX));
         let request = Claim_Request(id.clone(), "test-holder");

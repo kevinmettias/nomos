@@ -96,7 +96,7 @@ mod tests
     /// `D-132` is a real, embedded governing record with declared front matter --
     /// `nomos_spec_orchestration`'s own `tests.rs` already renders it with no corpus present.
     #[test]
-    fn Test_A_Real_Governing_Record_Should_Render_As_Markdown()
+    fn Test_Handle_Spec_Markdown_Should_Render_A_Real_Governing_Record_As_Markdown()
     {
         let request = RecordRequest { id: "D-132".to_owned(), revision: None };
 
@@ -125,7 +125,7 @@ mod tests
     }
 
     #[test]
-    fn Test_A_Real_Resolved_Markdown_Response_Should_Round_Trip_As_Json()
+    fn Test_From_Should_Round_Trip_As_Json()
     {
         let request = RecordRequest { id: "D-132".to_owned(), revision: None };
 

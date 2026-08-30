@@ -61,7 +61,7 @@ mod tests
     /// this workspace's own shipped profiles -- no fixture, no scratch directory, the same
     /// zero-setup shape `Profiles()` itself has.
     #[test]
-    fn Test_This_Workspaces_Own_Shipped_Profiles_Should_List()
+    fn Test_Handle_Spec_Profiles_Should_List_This_Workspaces_Own_Shipped_Profiles()
     {
         let response = Handle_Spec_Profiles();
 
@@ -78,7 +78,7 @@ mod tests
     }
 
     #[test]
-    fn Test_A_Real_Profiles_Response_Should_Round_Trip_As_Json()
+    fn Test_From_Should_Round_Trip_As_Json()
     {
         let response = Handle_Spec_Profiles();
 

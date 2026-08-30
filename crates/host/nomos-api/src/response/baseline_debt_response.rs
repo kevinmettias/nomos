@@ -25,3 +25,26 @@ impl BaselineDebtResponse
         return Self { rule: debt.rule, subject: debt.subject, rationale: debt.rationale };
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use nomos_rules::COMPLETENESS_MIRROR;
+
+    #[test]
+    fn Test_From_Should_Carry_The_Debts_Rule_Subject_And_Rationale()
+    {
+        let debt = BaselineDebt {
+            rule: RuleId::New(COMPLETENESS_MIRROR),
+            subject: nomos_model::Subject_Of_Path("a.rs"),
+            rationale: "a real rationale".to_owned(),
+        };
+
+        let response = BaselineDebtResponse::From(debt.clone());
+
+        assert_eq!(response.rule, debt.rule);
+        assert_eq!(response.subject, debt.subject);
+        assert_eq!(response.rationale, debt.rationale);
+    }
+}

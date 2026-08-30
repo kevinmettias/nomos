@@ -116,7 +116,7 @@ mod tests
     use nomos_spec_model::{SubmissionKind, SubmissionState};
 
     #[test]
-    fn Test_A_Real_Complete_Submission_Should_Be_Accepted_With_Submitted_Origin()
+    fn Test_Handle_Spec_Submit_Should_Accept_A_Complete_Submission_With_Submitted_Origin()
     {
         let request = Complete_Feature_Request("FR-API-001", None);
 
@@ -185,7 +185,7 @@ mod tests
     }
 
     #[test]
-    fn Test_A_Real_Accepted_Response_Should_Round_Trip_As_Json()
+    fn Test_From_Should_Round_Trip_As_Json()
     {
         let request = Complete_Feature_Request("FR-API-004", None);
 

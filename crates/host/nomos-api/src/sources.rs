@@ -49,6 +49,23 @@ mod tests
         let _ignored = std::fs::remove_dir_all(&root);
         assert!(sources.is_empty(), "{sources:?}");
     }
+
+    /// `Walked_Sources` is `Read_Sources` plus the one judgement call the two share: whether
+    /// `root` is even a directory worth walking.
+    #[test]
+    fn Test_Walked_Sources_Should_Discover_Real_Files_And_Return_None_For_A_Non_Directory()
+    {
+        let root = Fresh_Root("nomos-api-sources-walked-sources");
+        std::fs::write(root.join("a.rs"), "pub fn One() {}\n").expect("writable");
+
+        let discovered = Walked_Sources(&root).expect("root is a real directory");
+        let not_a_directory = Walked_Sources(&root.join("a.rs"));
+
+        let _ignored = std::fs::remove_dir_all(&root);
+
+        assert_eq!(discovered.len(), 1, "{discovered:?}");
+        assert!(not_a_directory.is_none(), "{not_a_directory:?}");
+    }
 }
 
 /// The Rust and Go sources under `root`, or `None` if `root` is not a directory.

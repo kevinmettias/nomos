@@ -38,3 +38,41 @@ pub(crate) fn Run_Reservation_Command(directory: &Path, command: WorkCommand) ->
         || Territory::Of_Files(std::iter::empty::<String>()),
     );
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use crate::work::tests_support::{Claim_Request, Scratch_Board_With_A_Claimable_Item};
+
+    #[test]
+    fn Test_Ledger_At_Should_Compose_A_File_Ledger_That_Loads_A_Real_Boards_Own_File()
+    {
+        let (directory, _id) = Scratch_Board_With_A_Claimable_Item();
+
+        let ledger = Ledger_At(&directory);
+        let loaded = ledger.Load().expect("loads the ledger this fixture just wrote");
+
+        let _ignored = std::fs::remove_dir_all(&directory);
+
+        assert_eq!(loaded.items.len(), 1, "{loaded:?}");
+    }
+
+    #[test]
+    fn Test_Run_Reservation_Command_Should_Run_A_Real_Claim_Against_The_Board_At_Directory()
+    {
+        let (directory, id) = Scratch_Board_With_A_Claimable_Item();
+        let request = Claim_Request(id, "test-holder");
+
+        let outcome = Run_Reservation_Command(&directory, WorkCommand::Claim(request));
+
+        let _ignored = std::fs::remove_dir_all(&directory);
+
+        let WorkOutcome::Claim(claimed) = outcome
+        else
+        {
+            panic!("Run_Reservation_Command must return the WorkOutcome variant naming the WorkCommand it was given")
+        };
+        assert!(claimed.is_ok(), "{claimed:?}");
+    }
+}

@@ -50,3 +50,59 @@ pub(super) fn Reproducible_Projection(projection: &RecordProjection, notes: &mut
 
     return ExitCode::Stale;
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use nomos_spec_orchestration::corpus::{Assemble_Corpus, CorpusRequest, DEFAULT_REVISION};
+
+    /// A store with the embedded governing records seeded and no corpus, so
+    /// [`Assembly::Is_Complete`] is deterministically `false` -- `root: None` records an
+    /// absence unconditionally, regardless of what any real environment variable holds.
+    fn Corpus_Unset_Assembly() -> Assembly
+    {
+        let request = CorpusRequest {
+            variable: "NOMOS_SPEC_MARKDOWN_TEST_CORPUS_UNSET".to_owned(),
+            root: None,
+            revision: DEFAULT_REVISION.to_owned(),
+        };
+
+        return Assemble_Corpus(&request).expect("the embedded governing records always seed");
+    }
+
+    #[test]
+    fn Test_Render_Markdown_Should_Report_Absent_For_A_Record_The_Store_Never_Had()
+    {
+        let assembly = Corpus_Unset_Assembly();
+        let request = RecordRequest { id: "P23-TESTING-HOST-NONEXISTENT-RECORD".to_owned(), revision: None };
+        let mut output = Vec::new();
+        let mut notes = Vec::new();
+        let mut channels = Channels { output: &mut output, notes: &mut notes };
+
+        let code = Render_Markdown(&assembly, &request, &mut channels);
+
+        assert_eq!(code, ExitCode::Absent);
+    }
+
+    #[test]
+    fn Test_Reproducible_Projection_Should_Turn_A_Hash_Mismatch_Into_Stale()
+    {
+        let matching = RecordProjection {
+            node_id: "D-1".to_owned(),
+            path: "docs/records/d-1.md".to_owned(),
+            revision: "authored".to_owned(),
+            markdown: "text".to_owned(),
+            source_hash: "abc".to_owned(),
+            projected_hash: "abc".to_owned(),
+        };
+        let mut notes = Vec::new();
+        assert_eq!(Reproducible_Projection(&matching, &mut notes), ExitCode::Ok);
+        assert!(notes.is_empty());
+
+        let mismatched = RecordProjection { projected_hash: "def".to_owned(), ..matching };
+        let mut notes = Vec::new();
+        assert_eq!(Reproducible_Projection(&mismatched, &mut notes), ExitCode::Stale);
+        assert!(!notes.is_empty());
+    }
+}

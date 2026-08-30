@@ -114,3 +114,75 @@ pub(in crate::spec) fn List_Sources(assembly: &Assembly, output: &mut dyn std::i
 
     return ExitCode::Absent;
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use nomos_spec_orchestration::corpus::{Assemble_Corpus, CorpusRequest, DEFAULT_REVISION};
+
+    /// A store with the embedded governing records seeded and no corpus, so
+    /// [`Assembly::Is_Complete`] is deterministically `false` -- `root: None` records an
+    /// absence unconditionally, regardless of what any real environment variable holds.
+    fn Corpus_Unset_Assembly() -> Assembly
+    {
+        let request = CorpusRequest {
+            variable: "NOMOS_SPEC_LISTING_TEST_CORPUS_UNSET".to_owned(),
+            root: None,
+            revision: DEFAULT_REVISION.to_owned(),
+        };
+
+        return Assemble_Corpus(&request).expect("the embedded governing records always seed");
+    }
+
+    #[test]
+    fn Test_Empty_Section_Should_Report_Absent_Over_A_Store_Missing_Its_Corpus()
+    {
+        let assembly = Corpus_Unset_Assembly();
+        let empty = EmptySection { profile: "diagram-set", section: "records", content: "record" };
+        let mut notes = Vec::new();
+
+        let code = Empty_Section(&assembly, &empty, &mut notes);
+
+        assert_eq!(code, ExitCode::Absent);
+        assert!(!notes.is_empty());
+    }
+
+    #[test]
+    fn Test_List_Profiles_Should_Print_A_Line_Per_Shipped_Profile()
+    {
+        let mut output = Vec::new();
+        let mut notes = Vec::new();
+        let mut channels = Channels { output: &mut output, notes: &mut notes };
+
+        let code = List_Profiles(&mut channels);
+
+        assert_eq!(code, ExitCode::Ok);
+        let expected = nomos_spec_orchestration::Profiles().expect("the embedded catalogue always loads").len();
+        assert_eq!(String::from_utf8_lossy(&output).lines().count(), expected);
+    }
+
+    #[test]
+    fn Test_Section_Labels_Should_Join_Every_Sections_Content_Label_With_A_Plus()
+    {
+        let profiles = nomos_spec_orchestration::Profiles().expect("the embedded catalogue always loads");
+        let profile = profiles.first().expect("the catalogue ships at least one profile");
+
+        let labels = Section_Labels(profile);
+
+        assert!(!labels.is_empty());
+        assert_eq!(labels.matches('+').count() + 1, profile.sections.len());
+    }
+
+    #[test]
+    fn Test_List_Sources_Should_Report_Absent_When_The_Corpus_Was_Never_Configured()
+    {
+        let assembly = Corpus_Unset_Assembly();
+        let mut output = Vec::new();
+
+        let code = List_Sources(&assembly, &mut output);
+
+        assert_eq!(code, ExitCode::Absent);
+        assert!(!output.is_empty());
+    }
+}

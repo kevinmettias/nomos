@@ -108,7 +108,7 @@ mod tests
     }
 
     #[test]
-    fn Test_A_Finding_Is_Named_With_Its_Commits()
+    fn Test_Render_Report_Should_Name_A_Finding_With_Its_Commits()
     {
         let findings = vec![Finding_With_State(
             "nomos-model",

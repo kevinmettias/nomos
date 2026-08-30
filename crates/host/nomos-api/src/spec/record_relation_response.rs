@@ -20,3 +20,20 @@ impl RecordRelationResponse
         return Self { target: relation.target, relation: relation.relation };
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_From_Should_Copy_Every_Field_Of_The_Domain_Record_Relation()
+    {
+        let relation = RecordRelation { target: "D-129".to_owned(), relation: "implements".to_owned() };
+
+        let response = RecordRelationResponse::From(relation.clone());
+
+        assert_eq!(response.target, relation.target);
+        assert_eq!(response.relation, relation.relation);
+    }
+}

@@ -42,3 +42,30 @@ impl NormativeOutcomeResponse
         };
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_From_Should_Map_Every_Domain_Variant_To_Its_Own_Response_Variant()
+    {
+        assert!(matches!(
+            NormativeOutcomeResponse::From(NormativeOutcome::Held { block: 3 }),
+            NormativeOutcomeResponse::Held { block: 3 }
+        ));
+        assert!(matches!(
+            NormativeOutcomeResponse::From(NormativeOutcome::Moved { from: 1, to: 2 }),
+            NormativeOutcomeResponse::Moved { from: 1, to: 2 }
+        ));
+        assert!(matches!(
+            NormativeOutcomeResponse::From(NormativeOutcome::Gone { from: 4 }),
+            NormativeOutcomeResponse::Gone { from: 4 }
+        ));
+        assert!(matches!(
+            NormativeOutcomeResponse::From(NormativeOutcome::Unlocatable),
+            NormativeOutcomeResponse::Unlocatable
+        ));
+    }
+}

@@ -63,3 +63,80 @@ pub(crate) fn Staged_Heading_Rename(id: &str, into: &Path) -> PathBuf
 
     return staged;
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Unique_Scratch_Directory_Should_Give_Two_Calls_In_One_Area_Different_Directories()
+    {
+        let first = Unique_Scratch_Directory("test-support", "same-label");
+        let second = Unique_Scratch_Directory("test-support", "same-label");
+
+        assert_ne!(first, second);
+        assert!(first.is_dir());
+        assert!(second.is_dir());
+
+        let _ignored = std::fs::remove_dir_all(&first);
+        let _ignored = std::fs::remove_dir_all(&second);
+    }
+
+    #[derive(Debug, Serialize)]
+    #[serde(tag = "outcome", rename_all = "snake_case")]
+    enum Sample
+    {
+        Accepted,
+        Completed,
+        Rejected,
+    }
+
+    /// Every `Sample` variant paired with the exact snake_case address `serde`'s own
+    /// `rename_all = "snake_case"` gives it -- the one outcome name `Assert_Round_Trips_As_Json`
+    /// must accept for each, and every other name it must reject.
+    fn Sample_Outcomes() -> Vec<(Sample, &'static str)>
+    {
+        return vec![
+            (Sample::Accepted, "accepted"),
+            (Sample::Completed, "completed"),
+            (Sample::Rejected, "rejected"),
+        ];
+    }
+
+    #[test]
+    fn Test_Assert_Round_Trips_As_Json_Should_Accept_Every_Tagged_Values_Own_Outcome_Name()
+    {
+        for (value, outcome) in Sample_Outcomes()
+        {
+            Assert_Round_Trips_As_Json(&value, outcome);
+        }
+    }
+
+    #[test]
+    fn Test_Assert_Round_Trips_As_Json_Should_Panic_When_The_Outcome_Field_Does_Not_Match()
+    {
+        for (value, _outcome) in Sample_Outcomes()
+        {
+            let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+                Assert_Round_Trips_As_Json(&value, "not-a-real-outcome");
+            }));
+
+            assert!(result.is_err(), "{value:?} must panic when checked against the wrong outcome");
+        }
+    }
+
+    #[test]
+    fn Test_Staged_Heading_Rename_Should_Replace_The_Decision_Heading_In_A_Real_Record()
+    {
+        let into = Unique_Scratch_Directory("test-support", "staged-heading-rename");
+
+        let staged = Staged_Heading_Rename("D-132", &into);
+        let content = std::fs::read_to_string(&staged).expect("reads the staged file back");
+
+        let _ignored = std::fs::remove_dir_all(&into);
+
+        assert!(content.contains("## The decision"), "{content}");
+        assert!(!content.contains("## Decision\n"), "{content}");
+    }
+}

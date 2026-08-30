@@ -186,3 +186,189 @@ pub(super) fn Block_Ordinals(lines: &[nomos_spec_store::TableLine]) -> String
         .collect::<Vec<String>>()
         .join(", ");
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use nomos_spec_orchestration::corpus::{Assemble_Corpus, CorpusRequest, DEFAULT_REVISION};
+
+    /// A store with the embedded governing records seeded and no corpus, so
+    /// [`Assembly::Is_Complete`] is deterministically `false` -- `root: None` records an
+    /// absence unconditionally, regardless of what any real environment variable holds.
+    fn Corpus_Unset_Assembly() -> Assembly
+    {
+        let request = CorpusRequest {
+            variable: "NOMOS_SPEC_TABLE_TEST_CORPUS_UNSET".to_owned(),
+            root: None,
+            revision: DEFAULT_REVISION.to_owned(),
+        };
+
+        return Assemble_Corpus(&request).expect("the embedded governing records always seed");
+    }
+
+    fn Sample_Line(block_ordinal: u32, kind: &str) -> TableLine
+    {
+        return TableLine {
+            block_ordinal,
+            table_ordinal: 1,
+            row_ordinal: 1,
+            kind: kind.to_owned(),
+            cells: vec!["x".to_owned()],
+            text: "| x |".to_owned(),
+            content_hash: "h".to_owned(),
+        };
+    }
+
+    fn Sample_Document() -> DocumentSource
+    {
+        return DocumentSource {
+            uid: 1,
+            path: "docs/records/a.md".to_owned(),
+            revision: "authored".to_owned(),
+            content_hash: "h".to_owned(),
+            text: String::new(),
+        };
+    }
+
+    #[test]
+    fn Test_Read_Table_Should_Report_Absent_For_A_Document_The_Store_Never_Had()
+    {
+        let assembly = Corpus_Unset_Assembly();
+        let request = TableRequest {
+            document: "does-not-exist-p23-testing-host.md".to_owned(),
+            block: None,
+            table: None,
+            revision: None,
+        };
+        let mut output = Vec::new();
+        let mut notes = Vec::new();
+        let mut channels = Channels { output: &mut output, notes: &mut notes };
+
+        let code = Read_Table(&assembly, &request, &mut channels);
+
+        assert_eq!(code, ExitCode::Absent);
+    }
+
+    #[test]
+    fn Test_Printed_Answer_Should_Note_The_Document_And_Print_Its_Rows()
+    {
+        let answer = TableAnswer {
+            document: Sample_Document(),
+            tier: PathMatch::Exact,
+            census: RowCensus { lines: 1, header: 0, content: 1, separator: 0, non_separator: 1 },
+            lines: vec![Sample_Line(1, "content")],
+        };
+        let request = TableRequest { document: "a.md".to_owned(), block: None, table: None, revision: None };
+        let mut output = Vec::new();
+        let mut notes = Vec::new();
+        let mut channels = Channels { output: &mut output, notes: &mut notes };
+
+        let code = Printed_Answer(&request, &answer, &mut channels);
+
+        assert_eq!(code, ExitCode::Ok);
+        assert!(!output.is_empty());
+        assert!(String::from_utf8_lossy(&notes).contains("1 pipe line"));
+    }
+
+    #[test]
+    fn Test_Unselected_Rows_Should_Note_The_Document_And_Yield_No_Rows()
+    {
+        let assembly = Corpus_Unset_Assembly();
+        let document = Sample_Document();
+        let census = RowCensus { lines: 0, header: 0, content: 0, separator: 0, non_separator: 0 };
+        let resolved = ResolvedDocument { document: &document, census, tier: PathMatch::Exact };
+        let request = TableRequest { document: "a.md".to_owned(), block: None, table: None, revision: None };
+        let mut notes = Vec::new();
+
+        let code = Unselected_Rows(&assembly, &request, &resolved, &mut notes);
+
+        assert_eq!(code, ExitCode::Absent);
+        assert!(String::from_utf8_lossy(&notes).contains("carries no table row"));
+    }
+
+    #[test]
+    fn Test_Note_Document_Should_Note_A_Fragment_Match_And_Always_Note_The_Line_Census()
+    {
+        let document = Sample_Document();
+        let census = RowCensus { lines: 4, header: 1, content: 2, separator: 1, non_separator: 3 };
+        let resolved = ResolvedDocument { document: &document, census, tier: PathMatch::Fragment };
+        let mut notes = Vec::new();
+
+        Note_Document(&resolved, "a.md", &mut notes);
+
+        let text = String::from_utf8_lossy(&notes);
+        assert!(text.contains("a.md matched docs/records/a.md by"));
+        assert!(text.contains("4 pipe line"));
+    }
+
+    #[test]
+    fn Test_No_Such_Document_Should_Report_Absent_Over_A_Store_Missing_Its_Corpus()
+    {
+        let assembly = Corpus_Unset_Assembly();
+        let mut notes = Vec::new();
+
+        let code = No_Such_Document(&assembly, "does-not-exist.md", &mut notes);
+
+        assert_eq!(code, ExitCode::Absent);
+        assert!(String::from_utf8_lossy(&notes).contains("does-not-exist.md"));
+    }
+
+    #[test]
+    fn Test_Several_Documents_Should_Report_How_Many_Matched_And_By_What()
+    {
+        let mut notes = Vec::new();
+
+        let code = Several_Documents("record", 3, PathMatch::FileName, &mut notes);
+
+        assert_eq!(code, ExitCode::NotFound);
+        assert!(String::from_utf8_lossy(&notes).contains("record matches 3 documents by file name"));
+    }
+
+    #[test]
+    fn Test_Nothing_Selected_Should_Prefer_Absent_Only_When_The_Document_Itself_Had_No_Lines()
+    {
+        let assembly = Corpus_Unset_Assembly();
+
+        let mut notes = Vec::new();
+        assert_eq!(Nothing_Selected(&assembly, 0, &mut notes), ExitCode::Absent);
+
+        let mut notes = Vec::new();
+        assert_eq!(Nothing_Selected(&assembly, 5, &mut notes), ExitCode::NotFound);
+    }
+
+    #[test]
+    fn Test_Printed_Rows_Should_Print_Every_Line_And_A_Row_Count_Summary()
+    {
+        let lines = vec![Sample_Line(1, "content"), Sample_Line(1, "content")];
+        let request = TableRequest { document: "x.md".to_owned(), block: Some(1), table: None, revision: None };
+        let mut output = Vec::new();
+        let mut notes = Vec::new();
+        let mut channels = Channels { output: &mut output, notes: &mut notes };
+
+        let code = Printed_Rows(&lines, &request, &mut channels);
+
+        assert_eq!(code, ExitCode::Ok);
+        assert_eq!(String::from_utf8_lossy(&output).lines().count(), 2);
+        let summary = String::from_utf8_lossy(&notes);
+        assert!(summary.contains("printed 2 row"));
+        assert!(summary.contains("in block 1"));
+    }
+
+    #[test]
+    fn Test_Narrowed_Description_Should_Describe_Each_Combination_Of_Block_And_Table()
+    {
+        assert_eq!(Narrowed_Description(None, None), "");
+        assert_eq!(Narrowed_Description(Some(2), None), " in block 2");
+        assert_eq!(Narrowed_Description(None, Some(1)), " in table 1 of any block");
+        assert_eq!(Narrowed_Description(Some(2), Some(1)), " in table 1 of block 2");
+    }
+
+    #[test]
+    fn Test_Block_Ordinals_Should_List_Each_Distinct_Block_Once_In_First_Seen_Order()
+    {
+        let lines = vec![Sample_Line(2, "header"), Sample_Line(2, "content"), Sample_Line(1, "content")];
+
+        assert_eq!(Block_Ordinals(&lines), "2, 1");
+    }
+}

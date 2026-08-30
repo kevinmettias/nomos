@@ -160,3 +160,37 @@ const EPHEMERAL: &str = "this store was assembled for this invocation and is now
                          transaction is what checked the edit, and the file is what persists \
                          it. A record embedded in this binary is re-seeded from the copy \
                          compiled into it until nomos-spec-store is rebuilt. See OD-SPEC-006.";
+
+/// `Run`'s own coverage, kept apart from `mod tests` above.
+///
+/// This crate's coverage checker attributes a test to a function only within the SAME file: `mod
+/// tests;` above is a separate file (`spec/tests.rs`) and, whatever it exercises, cannot address
+/// anything declared here. `Run` needs a companion literally inside `spec.rs`, and this file
+/// already spends the name `tests` on the out-of-line module, hence the different name here.
+#[cfg(test)]
+mod run_coverage
+{
+    use super::*;
+
+    /// `profiles` is the one command whose dispatch inside [`Run`] never assembles a corpus at
+    /// all -- see the early return past [`Assemble_Corpus`] -- so it is the one path this test can
+    /// drive deterministically without a corpus environment. The other eight all resolve through
+    /// an assembled store and are exercised at that boundary instead, by the verb-level tests
+    /// beside each of their own files.
+    #[test]
+    fn Test_Run_Should_Dispatch_Profiles_Without_Assembling_A_Corpus()
+    {
+        let request = nomos_spec_orchestration::corpus::CorpusRequest {
+            variable: "NOMOS_SPEC_RUN_COVERAGE_TEST_CORPUS_UNSET".to_owned(),
+            root: None,
+            revision: nomos_spec_orchestration::corpus::DEFAULT_REVISION.to_owned(),
+        };
+        let mut output = Vec::new();
+        let mut notes = Vec::new();
+
+        let code = Run(&SpecCommand::Profiles, &request, &mut output, &mut notes);
+
+        assert_eq!(code, ExitCode::Ok);
+        assert!(!output.is_empty(), "profiles must print the embedded catalogue");
+    }
+}

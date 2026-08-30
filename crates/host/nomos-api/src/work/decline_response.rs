@@ -71,7 +71,7 @@ mod tests
     use crate::work::tests_support::{Ending_Request, Scratch_Board_With_A_Claimable_Item, Scratch_Board_With_A_Claimed_Item};
 
     #[test]
-    fn Test_Declining_A_Real_Unclaimed_Ready_Item_Should_End_It()
+    fn Test_Handle_Work_Decline_Should_End_A_Real_Unclaimed_Ready_Item()
     {
         let (directory, id) = Scratch_Board_With_A_Claimable_Item();
         let request = Ending_Request(id, "superseded");
@@ -84,7 +84,7 @@ mod tests
     }
 
     #[test]
-    fn Test_Declining_An_Item_A_Real_Active_Claim_Still_Holds_Should_Be_Refused_And_Retryable()
+    fn Test_Ending_Request_Should_Be_Refused_And_Retryable_When_A_Real_Active_Claim_Still_Holds_The_Item()
     {
         let (directory, id) = Scratch_Board_With_A_Claimed_Item("someone-else", i64::from(u32::MAX));
         let request = Ending_Request(id, "superseded");
@@ -106,7 +106,7 @@ mod tests
     }
 
     #[test]
-    fn Test_A_Real_Declined_Response_Should_Round_Trip_As_Json()
+    fn Test_From_Should_Produce_A_Declined_Response_That_Round_Trips_As_Json()
     {
         let (directory, id) = Scratch_Board_With_A_Claimable_Item();
         let request = Ending_Request(id, "superseded");

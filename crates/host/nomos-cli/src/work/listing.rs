@@ -235,3 +235,202 @@ fn State_Label(state: &ItemState) -> &'static str
         ItemState::Declined { .. } => "declined",
     };
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use nomos_ledger::{ItemId, ItemKind, ItemOrigin, Territory};
+
+    /// A minimal, ready item: enough to exercise the listing surface without a claim, a
+    /// history or a territory that matters to any test here.
+    fn Item(id: &str) -> LedgerItem
+    {
+        return LedgerItem {
+            id: ItemId::New(id),
+            title: format!("item {id}"),
+            why: "because".to_owned(),
+            done_when: "it prints".to_owned(),
+            kind: ItemKind::Correction,
+            origin: ItemOrigin::Proposed,
+            territory: Territory::Of_Files(vec!["src/a.rs".to_owned()]),
+            state: ItemState::Ready,
+            depends_on: Vec::new(),
+            blocked: None,
+            claim: None,
+            verification: None,
+            verified: None,
+            abandoned: Vec::new(),
+            displaced: Vec::new(),
+            declined: None,
+        };
+    }
+
+    fn Board_With(item: LedgerItem) -> LedgerDocument
+    {
+        return LedgerDocument {
+            schema_version: nomos_ledger::SCHEMA_VERSION,
+            items: vec![item],
+        };
+    }
+
+    /// The column an agent reads before claiming has to say the item is over.
+    ///
+    /// This is the whole of what the state buys at the surface. `P10-REQUIRABLE-DECLARED` was
+    /// superseded twice and read `ready` both times, with the reason behind `work show` where
+    /// nobody looks first — so the second session claimed it and spent its run establishing
+    /// that the first one was right.
+    #[test]
+    fn Test_Listing_Label_Should_Report_Declined_For_A_Declined_Item()
+    {
+        let mut item = Item("T-1");
+        item.Decline("superseded by T-2", "agent-a", Timestamp::From_Unix_Seconds(1));
+        let document = Board_With(item);
+        let found = document.items.first().expect("the fixture has an item");
+
+        assert_eq!(
+            Listing_Label(&document, found, Timestamp::From_Unix_Seconds(2)),
+            "declined"
+        );
+    }
+
+    #[test]
+    fn Test_Listed_As_Should_Report_The_Items_Label_When_No_Filter_Is_Given()
+    {
+        let document = Board_With(Item("T-1"));
+        let item = document.items.first().expect("the fixture has an item");
+
+        assert_eq!(
+            Listed_As(&document, item, None, Timestamp::From_Unix_Seconds(0)),
+            Some("ready")
+        );
+    }
+
+    #[test]
+    fn Test_Listed_As_Should_Exclude_An_Item_Whose_Label_Does_Not_Match_The_Filter()
+    {
+        let document = Board_With(Item("T-1"));
+        let item = document.items.first().expect("the fixture has an item");
+
+        assert_eq!(
+            Listed_As(&document, item, Some("claimed"), Timestamp::From_Unix_Seconds(0)),
+            None,
+            "a ready item filtered by `--state claimed` must not be listed"
+        );
+    }
+
+    #[test]
+    fn Test_Nothing_Listed_Should_Name_The_Filter_That_Matched_Nothing()
+    {
+        let mut output = Vec::new();
+
+        Nothing_Listed(Some("blocked"), &mut output);
+
+        assert_eq!(String::from_utf8(output).unwrap(), "no items are blocked\n");
+    }
+
+    #[test]
+    fn Test_Nothing_Listed_Should_Say_The_Ledger_Is_Empty_When_No_Filter_Was_Given()
+    {
+        let mut output = Vec::new();
+
+        Nothing_Listed(None, &mut output);
+
+        assert_eq!(String::from_utf8(output).unwrap(), "the ledger has no items\n");
+    }
+
+    #[test]
+    fn Test_Print_Listing_Should_Print_The_Items_Identifier_Label_And_Title()
+    {
+        let item = Item("T-1");
+        let mut output = Vec::new();
+
+        Print_Listing(&item, "ready", &mut output);
+
+        let printed = String::from_utf8(output).unwrap();
+        assert!(printed.contains("T-1"), "{printed}");
+        assert!(printed.contains("ready"), "{printed}");
+        assert!(printed.contains("item T-1"), "{printed}");
+    }
+
+    #[test]
+    fn Test_Print_Listing_Should_Show_The_Holder_Of_A_Claimed_Item()
+    {
+        let mut item = Item("T-1");
+        item.claim = Some(nomos_ledger::Claim {
+            holder: "agent-a".to_owned(),
+            acquired_at: Timestamp::From_Unix_Seconds(1),
+            lease_expires_at: Timestamp::From_Unix_Seconds(1_000),
+        });
+        let mut output = Vec::new();
+
+        Print_Listing(&item, "claimed", &mut output);
+
+        assert!(
+            String::from_utf8(output).unwrap().contains("[agent-a]"),
+            "a claimed item's line must name its holder"
+        );
+    }
+
+    #[test]
+    fn Test_Print_Claim_Should_Print_Nothing_For_An_Item_With_No_Claim()
+    {
+        let item = Item("T-1");
+        let mut output = Vec::new();
+
+        Print_Claim(&item, Timestamp::From_Unix_Seconds(0), &mut output);
+
+        assert!(output.is_empty(), "an unclaimed item has no claim line to print");
+    }
+
+    #[test]
+    fn Test_Print_Claim_Should_Mark_A_Lapsed_Claim()
+    {
+        let mut item = Item("T-1");
+        item.claim = Some(nomos_ledger::Claim {
+            holder: "agent-a".to_owned(),
+            acquired_at: Timestamp::From_Unix_Seconds(0),
+            lease_expires_at: Timestamp::From_Unix_Seconds(10),
+        });
+        let mut output = Vec::new();
+
+        Print_Claim(&item, Timestamp::From_Unix_Seconds(20), &mut output);
+
+        let printed = String::from_utf8(output).unwrap();
+        assert!(printed.contains("agent-a"), "{printed}");
+        assert!(printed.contains("(lapsed)"), "{printed}");
+    }
+
+    #[test]
+    fn Test_Print_History_Should_Print_Every_Displacement_Abandonment_And_Verification()
+    {
+        let mut item = Item("T-1");
+        item.displaced.push(nomos_ledger::Claim {
+            holder: "agent-a".to_owned(),
+            acquired_at: Timestamp::From_Unix_Seconds(0),
+            lease_expires_at: Timestamp::From_Unix_Seconds(10),
+        });
+        item.abandoned.push(nomos_ledger::Abandonment {
+            holder: "agent-b".to_owned(),
+            reason: "superseded".to_owned(),
+            abandoned_at: Timestamp::From_Unix_Seconds(20),
+        });
+        item.verified = Some(VerificationRecord {
+            argv: vec!["cargo".to_owned(), "test".to_owned()],
+            exit_code: 0,
+            output_tail: String::new(),
+            verified_at: Timestamp::From_Unix_Seconds(30),
+            gate: None,
+            revision: Some("abc123".to_owned()),
+        });
+        let mut output = Vec::new();
+
+        Print_History(&item, Some("abc123"), &mut output);
+
+        let printed = String::from_utf8(output).unwrap();
+        assert!(printed.contains("taken over from agent-a"), "{printed}");
+        assert!(printed.contains("abandoned by agent-b"), "{printed}");
+        assert!(printed.contains("verified by `cargo test`"), "{printed}");
+        assert!(printed.contains("still describes this tree"), "{printed}");
+    }
+}

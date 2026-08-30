@@ -333,6 +333,16 @@ fn Test_An_Unknown_Record_Should_Report_The_Absence_It_Might_Be()
 /// Every run says what it did and did not persist. The store is assembled per invocation, so a
 /// commit that said only "committed" would leave a reader believing a database somewhere now
 /// holds their edit.
+/// The authoring verbs whose run says what it persisted, given the staged/committed paths
+/// this test seeds beforehand.
+fn Authoring_Runs<'a>(from: &'a str, root: &'a str) -> Vec<Vec<&'a str>>
+{
+    return vec![
+        vec!["spec", "preview", "--id", RECORD, "--from", from],
+        vec!["spec", "commit", "--id", RECORD, "--from", from, "--into", root],
+    ];
+}
+
 #[test]
 fn Test_Every_Authoring_Run_Should_Say_What_Persists()
 {
@@ -341,12 +351,7 @@ fn Test_Every_Authoring_Run_Should_Say_What_Persists()
     let from = staged.display().to_string();
     let root = into.display().to_string();
 
-    for arguments in [
-        vec!["spec", "preview", "--id", RECORD, "--from", &from],
-        vec![
-            "spec", "commit", "--id", RECORD, "--from", &from, "--into", &root,
-        ],
-    ]
+    for arguments in Authoring_Runs(&from, &root)
     {
         let output = Nomos(&arguments);
 

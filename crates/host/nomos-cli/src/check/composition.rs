@@ -24,3 +24,23 @@ pub(super) fn Host_Variant() -> BuildVariant
             .filter(|feature| return !feature.is_empty()),
     );
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    /// Every component `build.rs` captures from cargo's own environment survives into the
+    /// compiled program non-empty -- `target`, `profile` and `toolchain` are read straight
+    /// off `env!`, which fails the build at compile time were any of them absent, so a
+    /// runner that cannot supply them never reaches this test at all.
+    #[test]
+    fn Test_Host_Variant_Should_Read_Every_Non_Feature_Component_Baked_In_By_Build_Rs()
+    {
+        let variant = Host_Variant();
+
+        assert!(!variant.target.is_empty());
+        assert!(!variant.profile.is_empty());
+        assert!(!variant.toolchain.is_empty());
+    }
+}

@@ -33,3 +33,27 @@ impl GateFindings
         };
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_From_Should_Preserve_Each_Findings_Group_By_Name()
+    {
+        let findings = nomos_gate_orchestration::GateFindings {
+            blocking_findings: vec![],
+            calibrated_findings: vec![],
+            suppressed_findings: vec![],
+            baselined_findings: vec![],
+        };
+
+        let response = GateFindings::From(findings);
+
+        assert!(response.blocking_findings.is_empty());
+        assert!(response.calibrated_findings.is_empty());
+        assert!(response.suppressed_findings.is_empty());
+        assert!(response.baselined_findings.is_empty());
+    }
+}

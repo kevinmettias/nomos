@@ -21,7 +21,7 @@ mod tests
     }
 
     #[test]
-    fn Test_A_Go_File_Should_Be_Discovered_Alongside_A_Rust_One()
+    fn Test_Read_Sources_Should_Discover_A_Go_File_Alongside_A_Rust_One()
     {
         let root = Fresh_Root("nomos-cli-gate-sources-go-discovery");
         std::fs::write(root.join("a.rs"), "pub fn One() {}\n").expect("writable");
@@ -35,7 +35,7 @@ mod tests
     }
 
     #[test]
-    fn Test_An_Unrelated_Extension_Should_Not_Be_Discovered()
+    fn Test_Read_Entry_Should_Not_Discover_An_Unrelated_Extension()
     {
         let root = Fresh_Root("nomos-cli-gate-sources-unrelated-extension");
         std::fs::write(root.join("README.md"), "# not source\n").expect("writable");
@@ -44,6 +44,20 @@ mod tests
 
         let _ignored = std::fs::remove_dir_all(&root);
         assert!(sources.is_empty(), "{sources:?}");
+    }
+
+    /// The one place a walked file's own address and text come together into a
+    /// `SourceFile` -- checked directly, not only observed as a side effect of a walk.
+    #[test]
+    fn Test_Read_Source_Should_Build_A_Source_File_Carrying_What_It_Was_Given()
+    {
+        let root = PathBuf::from("root");
+        let path = root.join("nested").join("file.rs");
+
+        let source = Read_Source(&root, &path, "fn Main() {}".to_owned());
+
+        assert_eq!(source.path, "nested/file.rs");
+        assert_eq!(source.text, "fn Main() {}");
     }
 }
 

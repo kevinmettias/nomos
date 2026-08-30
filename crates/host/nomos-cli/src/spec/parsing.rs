@@ -183,3 +183,213 @@ pub(super) fn Usage_Text() -> String
             was refused"
         .to_owned();
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    fn Arguments(text: &str) -> Vec<String>
+    {
+        return text.split_whitespace().map(str::to_owned).collect();
+    }
+
+    /// The dispatcher itself: routing by verb, and its own fallback for one nothing names.
+    ///
+    /// `spec::tests` carries the fuller behavioral suite over every verb's own parse (one test per
+    /// verb, each asserting what that verb's request looks like); this test stays with the
+    /// declaration and covers only the dispatch this file's own top-level function performs.
+    #[test]
+    fn Test_Spec_Command_From_String_Arguments_Should_Dispatch_By_Verb()
+    {
+        assert_eq!(
+            Spec_Command_From_String_Arguments(&Arguments("record --id D-129")).expect("parses"),
+            SpecCommand::Record(RecordRequest { id: "D-129".to_owned(), revision: None })
+        );
+        assert_eq!(
+            Spec_Command_From_String_Arguments(&Arguments("sources")).expect("parses"),
+            SpecCommand::Sources
+        );
+        let error = Spec_Command_From_String_Arguments(&Arguments("frobnicate")).expect_err("must refuse");
+        assert!(error.contains("frobnicate"), "{error}");
+    }
+
+    #[test]
+    fn Test_Usage_Text_Should_Name_Every_Command()
+    {
+        let usage = Usage_Text();
+
+        assert!(usage.contains("record"));
+        assert!(usage.contains("table"));
+        assert!(usage.contains("render"));
+        assert!(usage.contains("freshness"));
+        assert!(usage.contains("markdown"));
+        assert!(usage.contains("preview"));
+        assert!(usage.contains("commit"));
+        assert!(usage.contains("profiles"));
+        assert!(usage.contains("sources"));
+    }
+
+    #[test]
+    fn Test_Required_Value_From_String_Arguments_Should_Return_The_Flag_Or_Name_Itself_Missing()
+    {
+        assert_eq!(
+            Required_Value_From_String_Arguments(&Arguments("--id D-129"), "--id").expect("present"),
+            "D-129"
+        );
+
+        let error = Required_Value_From_String_Arguments(&Arguments(""), "--id").expect_err("must refuse");
+        assert!(error.contains("--id"), "{error}");
+        assert!(error.contains("usage"), "{error}");
+    }
+
+    #[test]
+    fn Test_Required_Path_From_String_Arguments_Should_Read_The_Flags_Value_As_A_Path()
+    {
+        assert_eq!(
+            Required_Path_From_String_Arguments(&Arguments("--into build"), "--into").expect("present"),
+            PathBuf::from("build")
+        );
+        assert!(Required_Path_From_String_Arguments(&Arguments(""), "--into").is_err());
+    }
+
+    #[test]
+    fn Test_Record_Request_From_String_Arguments_Should_Read_An_Optional_Revision()
+    {
+        assert_eq!(
+            Record_Request_From_String_Arguments(&Arguments("--id D-129")).expect("parses"),
+            RecordRequest { id: "D-129".to_owned(), revision: None }
+        );
+        assert_eq!(
+            Record_Request_From_String_Arguments(&Arguments("--id D-129 --revision authored")).expect("parses"),
+            RecordRequest { id: "D-129".to_owned(), revision: Some("authored".to_owned()) }
+        );
+    }
+
+    #[test]
+    fn Test_Edit_Request_From_String_Arguments_Should_Read_An_Optional_Rename()
+    {
+        assert_eq!(
+            Edit_Request_From_String_Arguments(&Arguments("--id D-129 --from staged.md")).expect("parses"),
+            EditRequest { id: "D-129".to_owned(), from: PathBuf::from("staged.md"), rename: None }
+        );
+        assert_eq!(
+            Edit_Request_From_String_Arguments(&Arguments("--id D-129 --from staged.md --rename moved.md"))
+                .expect("parses"),
+            EditRequest {
+                id: "D-129".to_owned(),
+                from: PathBuf::from("staged.md"),
+                rename: Some("moved.md".to_owned())
+            }
+        );
+    }
+
+    #[test]
+    fn Test_Record_Command_From_String_Arguments_Should_Wrap_The_Request_In_SpecCommand_Record()
+    {
+        assert_eq!(
+            Record_Command_From_String_Arguments(&Arguments("--id D-129")).expect("parses"),
+            SpecCommand::Record(RecordRequest { id: "D-129".to_owned(), revision: None })
+        );
+    }
+
+    #[test]
+    fn Test_Table_Command_From_String_Arguments_Should_Parse_The_Optional_Block_And_Table_Ordinals()
+    {
+        assert_eq!(
+            Table_Command_From_String_Arguments(&Arguments("--document x.md --block 2 --table 1")).expect("parses"),
+            SpecCommand::Table(TableRequest {
+                document: "x.md".to_owned(),
+                block: Some(2),
+                table: Some(1),
+                revision: None
+            })
+        );
+        assert!(Table_Command_From_String_Arguments(&Arguments("--document x.md --block seven")).is_err());
+    }
+
+    #[test]
+    fn Test_Render_Command_From_String_Arguments_Should_Wrap_The_Request_In_SpecCommand_Render()
+    {
+        assert_eq!(
+            Render_Command_From_String_Arguments(&Arguments("--profile github-markdown --into build"))
+                .expect("parses"),
+            SpecCommand::Render(RenderRequest {
+                profile: "github-markdown".to_owned(),
+                into: PathBuf::from("build"),
+                subject: None
+            })
+        );
+        assert!(Render_Command_From_String_Arguments(&Arguments("--into build")).is_err());
+    }
+
+    #[test]
+    fn Test_Freshness_Command_From_String_Arguments_Should_Collect_Every_Requirement()
+    {
+        assert_eq!(
+            Freshness_Command_From_String_Arguments(&Arguments(
+                "--into build --require diagram-set --require html-site"
+            ))
+            .expect("parses"),
+            SpecCommand::Freshness(FreshnessRequest {
+                into: PathBuf::from("build"),
+                profile: None,
+                require: vec!["diagram-set".to_owned(), "html-site".to_owned()]
+            })
+        );
+    }
+
+    #[test]
+    fn Test_Markdown_Command_From_String_Arguments_Should_Wrap_The_Request_In_SpecCommand_Markdown()
+    {
+        assert_eq!(
+            Markdown_Command_From_String_Arguments(&Arguments("--id D-129")).expect("parses"),
+            SpecCommand::Markdown(RecordRequest { id: "D-129".to_owned(), revision: None })
+        );
+    }
+
+    #[test]
+    fn Test_Preview_Command_From_String_Arguments_Should_Wrap_The_Request_In_SpecCommand_Preview()
+    {
+        assert_eq!(
+            Preview_Command_From_String_Arguments(&Arguments("--id D-129 --from staged.md")).expect("parses"),
+            SpecCommand::Preview(EditRequest {
+                id: "D-129".to_owned(),
+                from: PathBuf::from("staged.md"),
+                rename: None
+            })
+        );
+        assert!(Preview_Command_From_String_Arguments(&Arguments("--from staged.md")).is_err());
+    }
+
+    #[test]
+    fn Test_Commit_Command_From_String_Arguments_Should_Default_Into_To_The_Current_Tree()
+    {
+        assert_eq!(
+            Commit_Command_From_String_Arguments(&Arguments("--id D-129 --from staged.md")).expect("parses"),
+            SpecCommand::Commit(CommitRequest {
+                edit: EditRequest { id: "D-129".to_owned(), from: PathBuf::from("staged.md"), rename: None },
+                into: PathBuf::from(".")
+            })
+        );
+        assert_eq!(
+            Commit_Command_From_String_Arguments(&Arguments("--id D-129 --from staged.md --into build"))
+                .expect("parses"),
+            SpecCommand::Commit(CommitRequest {
+                edit: EditRequest { id: "D-129".to_owned(), from: PathBuf::from("staged.md"), rename: None },
+                into: PathBuf::from("build")
+            })
+        );
+    }
+
+    #[test]
+    fn Test_Parsed_Ordinal_Should_Accept_Absence_And_Whole_Numbers_And_Refuse_The_Rest()
+    {
+        assert_eq!(Parsed_Ordinal(None, "--block").expect("absent is fine"), None);
+        assert_eq!(Parsed_Ordinal(Some(&"3".to_owned()), "--block").expect("parses"), Some(3));
+
+        let error = Parsed_Ordinal(Some(&"seven".to_owned()), "--block").expect_err("must refuse");
+        assert!(error.contains("--block"), "{error}");
+        assert!(error.contains("seven"), "{error}");
+    }
+}

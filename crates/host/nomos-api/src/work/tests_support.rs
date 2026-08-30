@@ -150,3 +150,125 @@ pub(crate) fn Scratch_Board_With_A_Held_Territory_Conflict() -> (std::path::Path
 
     return (directory, contested);
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Claim_Request_Should_Carry_The_Item_Holder_And_A_One_Hour_Lease()
+    {
+        let item = ItemId::New("SCRATCH-CLAIM-REQUEST");
+
+        let request = Claim_Request(item.clone(), "test-holder");
+
+        assert_eq!(request.item, item);
+        assert_eq!(request.holder, "test-holder");
+        assert_eq!(request.lease, std::time::Duration::from_secs(3600));
+    }
+
+    #[test]
+    fn Test_Ending_Request_Should_Carry_The_Item_And_Reason_Under_A_Fixed_Holder()
+    {
+        let item = ItemId::New("SCRATCH-ENDING-REQUEST");
+
+        let request = Ending_Request(item.clone(), "a real reason");
+
+        assert_eq!(request.item, item);
+        assert_eq!(request.holder, "test-holder");
+        assert_eq!(request.reason, "a real reason");
+    }
+
+    #[test]
+    fn Test_Unique_Scratch_Directory_Should_Give_Two_Calls_The_Same_Label_Different_Directories()
+    {
+        let first = Unique_Scratch_Directory("unique-directory-test");
+        let second = Unique_Scratch_Directory("unique-directory-test");
+
+        assert_ne!(first, second);
+
+        let _ignored = std::fs::remove_dir_all(&first);
+        let _ignored = std::fs::remove_dir_all(&second);
+    }
+
+    #[test]
+    fn Test_Scratch_Board_Should_Write_A_Minimal_Valid_Empty_Ledger()
+    {
+        let directory = Scratch_Board();
+
+        let content = std::fs::read_to_string(directory.join("ledger.json")).expect("reads the ledger back");
+        let parsed: serde_json::Value = serde_json::from_str(&content).expect("writes valid json");
+
+        let _ignored = std::fs::remove_dir_all(&directory);
+
+        assert_eq!(*parsed.get("schema_version").expect("a written ledger always carries schema_version"), 5);
+        assert!(parsed.get("items").expect("a written ledger always carries items").as_array().expect("items is an array").is_empty());
+    }
+
+    #[test]
+    fn Test_Scratch_Board_With_One_Item_Should_Write_A_Board_Carrying_Exactly_That_Item()
+    {
+        let (directory, id) = Scratch_Board_With_One_Item();
+
+        let content = std::fs::read_to_string(directory.join("ledger.json")).expect("reads the ledger back");
+
+        let _ignored = std::fs::remove_dir_all(&directory);
+
+        assert!(content.contains(&id.to_string()), "{content}");
+    }
+
+    #[test]
+    fn Test_Scratch_Board_With_A_Blocked_Item_Should_Make_The_Dependency_Ready_And_Unclaimed()
+    {
+        let (directory, dependency, blocked) = Scratch_Board_With_A_Blocked_Item();
+
+        let content = std::fs::read_to_string(directory.join("ledger.json")).expect("reads the ledger back");
+
+        let _ignored = std::fs::remove_dir_all(&directory);
+
+        assert!(content.contains(&dependency.to_string()), "{content}");
+        assert!(content.contains(&blocked.to_string()), "{content}");
+        assert_ne!(dependency, blocked);
+    }
+
+    #[test]
+    fn Test_Scratch_Board_With_A_Claimable_Item_Should_Write_A_Ready_Item_With_Real_Territory()
+    {
+        let (directory, id) = Scratch_Board_With_A_Claimable_Item();
+
+        let content = std::fs::read_to_string(directory.join("ledger.json")).expect("reads the ledger back");
+
+        let _ignored = std::fs::remove_dir_all(&directory);
+
+        assert!(content.contains(&id.to_string()), "{content}");
+        assert!(content.contains("\"paths\": [\"a\"]"), "{content}");
+    }
+
+    #[test]
+    fn Test_Scratch_Board_With_A_Claimed_Item_Should_Carry_The_Given_Holder_And_Expiry()
+    {
+        let (directory, id) = Scratch_Board_With_A_Claimed_Item("a-real-holder", 42);
+
+        let content = std::fs::read_to_string(directory.join("ledger.json")).expect("reads the ledger back");
+
+        let _ignored = std::fs::remove_dir_all(&directory);
+
+        assert!(content.contains(&id.to_string()), "{content}");
+        assert!(content.contains("a-real-holder"), "{content}");
+        assert!(content.contains("\"lease_expires_at\": 42"), "{content}");
+    }
+
+    #[test]
+    fn Test_Scratch_Board_With_A_Held_Territory_Conflict_Should_Share_One_Territory_Between_Two_Items()
+    {
+        let (directory, contested) = Scratch_Board_With_A_Held_Territory_Conflict();
+
+        let content = std::fs::read_to_string(directory.join("ledger.json")).expect("reads the ledger back");
+
+        let _ignored = std::fs::remove_dir_all(&directory);
+
+        assert!(content.contains(&contested.to_string()), "{content}");
+        assert_eq!(content.matches("\"shared\"").count(), 2, "{content}");
+    }
+}

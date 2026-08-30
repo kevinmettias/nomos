@@ -37,3 +37,31 @@ impl SuppressionResponse
         };
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use nomos_gate_orchestration::SuppressionDisposition;
+    use nomos_rules::COMPLETENESS_MIRROR;
+
+    #[test]
+    fn Test_From_Should_Carry_The_Suppressions_Rule_Subject_Disposition_Rationale_And_Owner()
+    {
+        let suppression = Suppression {
+            rule: RuleId::New(COMPLETENESS_MIRROR),
+            subject: nomos_model::Subject_Of_Path("a.rs"),
+            disposition: SuppressionDisposition::FormalRiskAcceptance,
+            rationale: "a real rationale".to_owned(),
+            owner: "a real owner".to_owned(),
+        };
+
+        let response = SuppressionResponse::From(suppression.clone());
+
+        assert_eq!(response.rule, suppression.rule);
+        assert_eq!(response.subject, suppression.subject);
+        assert_eq!(response.disposition, SuppressionDispositionResponse::From(suppression.disposition));
+        assert_eq!(response.rationale, suppression.rationale);
+        assert_eq!(response.owner, suppression.owner);
+    }
+}
