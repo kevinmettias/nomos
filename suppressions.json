@@ -1564,7 +1564,7 @@
     {
       "check": "check-presumption",
       "path": "crates/corrections/nomos-corrections/src/committed.rs",
-      "message": "`workspace.Apply(&initial).expect(\"a fresh present is always accepted\")` promises the compiler that this value is present, on your authority, and the reason it gives -- `a fresh present is always accepted` -- restates the problem rather than naming the invariant. The promise may well be true; what is missing is what MAKES it true. Name the invariant -- what has already validated this, and where -- so the next reader can check whether it still holds. A promise with a reason is an invariant; a promise without one is a bet, and the way you find out you lost it is a crash that explains nothing",
+      "message": "`workspace.Apply(\u0026initial).expect(\"a fresh present is always accepted\")` promises the compiler that this value is present, on your authority, and the reason it gives -- `a fresh present is always accepted` -- restates the problem rather than naming the invariant. The promise may well be true; what is missing is what MAKES it true. Name the invariant -- what has already validated this, and where -- so the next reader can check whether it still holds. A promise with a reason is an invariant; a promise without one is a bet, and the way you find out you lost it is a crash that explains nothing",
       "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
       "owner": "@kmettias",
       "expires": "2026-11-27"
@@ -1652,7 +1652,7 @@
     {
       "check": "check-presumption",
       "path": "crates/host/nomos-api/src/spec/commit.rs",
-      "message": "`std::fs::create_dir_all(&directory).expect(\"a fresh scratch directory can always be created\")` promises the compiler that this value is present, on your authority, and the reason it gives -- `a fresh scratch directory can always be created` -- restates the problem rather than naming the invariant. The promise may well be true; what is missing is what MAKES it true. Name the invariant -- what has already validated this, and where -- so the next reader can check whether it still holds. A promise with a reason is an invariant; a promise without one is a bet, and the way you find out you lost it is a crash that explains nothing",
+      "message": "`std::fs::create_dir_all(\u0026directory).expect(\"a fresh scratch directory can always be created\")` promises the compiler that this value is present, on your authority, and the reason it gives -- `a fresh scratch directory can always be created` -- restates the problem rather than naming the invariant. The promise may well be true; what is missing is what MAKES it true. Name the invariant -- what has already validated this, and where -- so the next reader can check whether it still holds. A promise with a reason is an invariant; a promise without one is a bet, and the way you find out you lost it is a crash that explains nothing",
       "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
       "owner": "@kmettias",
       "expires": "2026-11-27"
@@ -1964,7 +1964,7 @@
     {
       "check": "check-presumption",
       "path": "crates/host/nomos-cli/src/request.rs",
-      "message": "`Parse(&arguments).expect(\"parses\")` promises the compiler that this value is present, on your authority, and the reason it gives -- `parses` -- restates the problem rather than naming the invariant. The promise may well be true; what is missing is what MAKES it true. Name the invariant -- what has already validated this, and where -- so the next reader can check whether it still holds. A promise with a reason is an invariant; a promise without one is a bet, and the way you find out you lost it is a crash that explains nothing",
+      "message": "`Parse(\u0026arguments).expect(\"parses\")` promises the compiler that this value is present, on your authority, and the reason it gives -- `parses` -- restates the problem rather than naming the invariant. The promise may well be true; what is missing is what MAKES it true. Name the invariant -- what has already validated this, and where -- so the next reader can check whether it still holds. A promise with a reason is an invariant; a promise without one is a bet, and the way you find out you lost it is a crash that explains nothing",
       "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
       "owner": "@kmettias",
       "expires": "2026-11-27"
@@ -2028,7 +2028,7 @@
     {
       "check": "check-presumption",
       "path": "crates/languages/nomos-lang-go/src/provider.rs",
-      "message": "`nomos_cap_syntax::Parse_Payload(&fact.payload.bytes).expect(\"well formed\")` promises the compiler that this value is present, on your authority, and the reason it gives -- `well formed` -- restates the problem rather than naming the invariant. The promise may well be true; what is missing is what MAKES it true. Name the invariant -- what has already validated this, and where -- so the next reader can check whether it still holds. A promise with a reason is an invariant; a promise without one is a bet, and the way you find out you lost it is a crash that explains nothing",
+      "message": "`nomos_cap_syntax::Parse_Payload(\u0026fact.payload.bytes).expect(\"well formed\")` promises the compiler that this value is present, on your authority, and the reason it gives -- `well formed` -- restates the problem rather than naming the invariant. The promise may well be true; what is missing is what MAKES it true. Name the invariant -- what has already validated this, and where -- so the next reader can check whether it still holds. A promise with a reason is an invariant; a promise without one is a bet, and the way you find out you lost it is a crash that explains nothing",
       "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
       "owner": "@kmettias",
       "expires": "2026-11-27"
@@ -2236,7 +2236,7 @@
     {
       "check": "check-presumption",
       "path": "crates/spec/nomos-spec-ingest/src/reconciliation/lineage.rs",
-      "message": "`Ingest_Section_Lineage(&mut store, &lineage, \"v14.36\").expect(\"ingests\")` promises the compiler that this value is present, on your authority, and the reason it gives -- `ingests` -- restates the problem rather than naming the invariant. The promise may well be true; what is missing is what MAKES it true. Name the invariant -- what has already validated this, and where -- so the next reader can check whether it still holds. A promise with a reason is an invariant; a promise without one is a bet, and the way you find out you lost it is a crash that explains nothing",
+      "message": "`Ingest_Section_Lineage(\u0026mut store, \u0026lineage, \"v14.36\").expect(\"ingests\")` promises the compiler that this value is present, on your authority, and the reason it gives -- `ingests` -- restates the problem rather than naming the invariant. The promise may well be true; what is missing is what MAKES it true. Name the invariant -- what has already validated this, and where -- so the next reader can check whether it still holds. A promise with a reason is an invariant; a promise without one is a bet, and the way you find out you lost it is a crash that explains nothing",
       "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
       "owner": "@kmettias",
       "expires": "2026-11-27"
@@ -3389,7 +3389,7 @@
       "check": "check-lifetime-discipline",
       "path": "crates/platform/nomos-platform-std/src/launcher/drain.rs",
       "fingerprint": "bb192e8207fa83dc",
-      "reason": "'static is required by std::thread::spawn, which moves the reader onto a detached thread that outlives this call -- not a bound chosen here. check-lifetime-discipline is not one of the safety-critical checks an in-code marker still argues under this repository's safety-only policy, so this moves here per OD-GATE-018's own remedy for an unhonoured marker. Fingerprint refreshed 2026-08-29: P19-NAMING-ATTRS renamed the generic parameter on this line (R -> Source), which is all that changed.",
+      "reason": "'static is required by std::thread::spawn, which moves the reader onto a detached thread that outlives this call -- not a bound chosen here. check-lifetime-discipline is not one of the safety-critical checks an in-code marker still argues under this repository's safety-only policy, so this moves here per OD-GATE-018's own remedy for an unhonoured marker. Fingerprint refreshed 2026-08-29: P19-NAMING-ATTRS renamed the generic parameter on this line (R -\u003e Source), which is all that changed.",
       "owner": "@kmettias",
       "expires": "2027-02-25"
     },
@@ -3565,7 +3565,7 @@
       "check": "check-error-values",
       "path": "crates/languages/nomos-lang-go/src/syntax/walk.rs",
       "fingerprint": "57de0e8c878e855f",
-      "reason": "parser.set_language(&tree_sitter_go::LANGUAGE.into()) can only fail from a build-time ABI mismatch between the tree_sitter runtime and the tree_sitter_go grammar crate, not from anything about the source file being parsed -- every call would fail identically, so it is a build-configuration invariant, not a per-input runtime failure. Routing it through Reading::Unparseable (the per-file failure path this function already has) would misrepresent a systemic problem as a single source's own defect.",
+      "reason": "parser.set_language(\u0026tree_sitter_go::LANGUAGE.into()) can only fail from a build-time ABI mismatch between the tree_sitter runtime and the tree_sitter_go grammar crate, not from anything about the source file being parsed -- every call would fail identically, so it is a build-configuration invariant, not a per-input runtime failure. Routing it through Reading::Unparseable (the per-file failure path this function already has) would misrepresent a systemic problem as a single source's own defect.",
       "owner": "@kmettias",
       "expires": "2027-02-25"
     },
@@ -4997,7 +4997,7 @@
       "check": "check-reference-parameter",
       "path": "crates/spec/nomos-spec-store/src/addressing/document_path.rs",
       "fingerprint": "408aed039fe7e893",
-      "reason": "the &String parameter is the concrete type argument of impl From<&'a String>, kept beside a sibling impl From<&'a str> so a generic impl Into<T> bound accepts a borrowed String too -- retyping this parameter to &str would collide with (duplicate) that sibling impl.",
+      "reason": "the \u0026String parameter is the concrete type argument of impl From\u003c\u0026'a String\u003e, kept beside a sibling impl From\u003c\u0026'a str\u003e so a generic impl Into\u003cT\u003e bound accepts a borrowed String too -- retyping this parameter to \u0026str would collide with (duplicate) that sibling impl.",
       "owner": "@claude-p19-campaign",
       "expires": "2026-11-27"
     },
@@ -5005,7 +5005,7 @@
       "check": "check-reference-parameter",
       "path": "crates/spec/nomos-spec-store/src/addressing/document_revision.rs",
       "fingerprint": "408aed039fe7e893",
-      "reason": "the &String parameter is the concrete type argument of impl From<&'a String>, kept beside a sibling impl From<&'a str> so a generic impl Into<T> bound accepts a borrowed String too -- retyping this parameter to &str would collide with (duplicate) that sibling impl.",
+      "reason": "the \u0026String parameter is the concrete type argument of impl From\u003c\u0026'a String\u003e, kept beside a sibling impl From\u003c\u0026'a str\u003e so a generic impl Into\u003cT\u003e bound accepts a borrowed String too -- retyping this parameter to \u0026str would collide with (duplicate) that sibling impl.",
       "owner": "@claude-p19-campaign",
       "expires": "2026-11-27"
     },
@@ -5013,7 +5013,7 @@
       "check": "check-reference-parameter",
       "path": "crates/spec/nomos-spec-store/src/store/relation/from_node_id.rs",
       "fingerprint": "408aed039fe7e893",
-      "reason": "the &String parameter is the concrete type argument of impl From<&'a String>, kept beside a sibling impl From<&'a str> so a generic impl Into<T> bound accepts a borrowed String too -- retyping this parameter to &str would collide with (duplicate) that sibling impl.",
+      "reason": "the \u0026String parameter is the concrete type argument of impl From\u003c\u0026'a String\u003e, kept beside a sibling impl From\u003c\u0026'a str\u003e so a generic impl Into\u003cT\u003e bound accepts a borrowed String too -- retyping this parameter to \u0026str would collide with (duplicate) that sibling impl.",
       "owner": "@claude-p19-campaign",
       "expires": "2026-11-27"
     },
@@ -5021,7 +5021,7 @@
       "check": "check-reference-parameter",
       "path": "crates/spec/nomos-spec-store/src/store/relation/inverse_relation_type.rs",
       "fingerprint": "408aed039fe7e893",
-      "reason": "the &String parameter is the concrete type argument of impl From<&'a String>, kept beside a sibling impl From<&'a str> so a generic impl Into<T> bound accepts a borrowed String too -- retyping this parameter to &str would collide with (duplicate) that sibling impl.",
+      "reason": "the \u0026String parameter is the concrete type argument of impl From\u003c\u0026'a String\u003e, kept beside a sibling impl From\u003c\u0026'a str\u003e so a generic impl Into\u003cT\u003e bound accepts a borrowed String too -- retyping this parameter to \u0026str would collide with (duplicate) that sibling impl.",
       "owner": "@claude-p19-campaign",
       "expires": "2026-11-27"
     },
@@ -5029,7 +5029,7 @@
       "check": "check-reference-parameter",
       "path": "crates/spec/nomos-spec-store/src/store/relation/relation_tier.rs",
       "fingerprint": "408aed039fe7e893",
-      "reason": "the &String parameter is the concrete type argument of impl From<&'a String>, kept beside a sibling impl From<&'a str> so a generic impl Into<T> bound accepts a borrowed String too -- retyping this parameter to &str would collide with (duplicate) that sibling impl.",
+      "reason": "the \u0026String parameter is the concrete type argument of impl From\u003c\u0026'a String\u003e, kept beside a sibling impl From\u003c\u0026'a str\u003e so a generic impl Into\u003cT\u003e bound accepts a borrowed String too -- retyping this parameter to \u0026str would collide with (duplicate) that sibling impl.",
       "owner": "@claude-p19-campaign",
       "expires": "2026-11-27"
     },
@@ -5037,7 +5037,7 @@
       "check": "check-reference-parameter",
       "path": "crates/spec/nomos-spec-store/src/store/relation/relation_type_name.rs",
       "fingerprint": "408aed039fe7e893",
-      "reason": "the &String parameter is the concrete type argument of impl From<&'a String>, kept beside a sibling impl From<&'a str> so a generic impl Into<T> bound accepts a borrowed String too -- retyping this parameter to &str would collide with (duplicate) that sibling impl.",
+      "reason": "the \u0026String parameter is the concrete type argument of impl From\u003c\u0026'a String\u003e, kept beside a sibling impl From\u003c\u0026'a str\u003e so a generic impl Into\u003cT\u003e bound accepts a borrowed String too -- retyping this parameter to \u0026str would collide with (duplicate) that sibling impl.",
       "owner": "@claude-p19-campaign",
       "expires": "2026-11-27"
     },
@@ -5045,7 +5045,7 @@
       "check": "check-reference-parameter",
       "path": "crates/spec/nomos-spec-store/src/store/relation/to_node_id.rs",
       "fingerprint": "408aed039fe7e893",
-      "reason": "the &String parameter is the concrete type argument of impl From<&'a String>, kept beside a sibling impl From<&'a str> so a generic impl Into<T> bound accepts a borrowed String too -- retyping this parameter to &str would collide with (duplicate) that sibling impl.",
+      "reason": "the \u0026String parameter is the concrete type argument of impl From\u003c\u0026'a String\u003e, kept beside a sibling impl From\u003c\u0026'a str\u003e so a generic impl Into\u003cT\u003e bound accepts a borrowed String too -- retyping this parameter to \u0026str would collide with (duplicate) that sibling impl.",
       "owner": "@claude-p19-campaign",
       "expires": "2026-11-27"
     },
@@ -5053,7 +5053,7 @@
       "check": "check-reference-parameter",
       "path": "crates/spec/nomos-spec-store/src/table/suite_authority/suite_id.rs",
       "fingerprint": "408aed039fe7e893",
-      "reason": "the &String parameter is the concrete type argument of impl From<&'a String>, kept beside a sibling impl From<&'a str> so a generic impl Into<T> bound accepts a borrowed String too -- retyping this parameter to &str would collide with (duplicate) that sibling impl.",
+      "reason": "the \u0026String parameter is the concrete type argument of impl From\u003c\u0026'a String\u003e, kept beside a sibling impl From\u003c\u0026'a str\u003e so a generic impl Into\u003cT\u003e bound accepts a borrowed String too -- retyping this parameter to \u0026str would collide with (duplicate) that sibling impl.",
       "owner": "@claude-p19-campaign",
       "expires": "2026-11-27"
     },
@@ -5061,7 +5061,7 @@
       "check": "check-reference-parameter",
       "path": "crates/spec/nomos-spec-store/src/table/suite_authority/suite_title.rs",
       "fingerprint": "408aed039fe7e893",
-      "reason": "the &String parameter is the concrete type argument of impl From<&'a String>, kept beside a sibling impl From<&'a str> so a generic impl Into<T> bound accepts a borrowed String too -- retyping this parameter to &str would collide with (duplicate) that sibling impl.",
+      "reason": "the \u0026String parameter is the concrete type argument of impl From\u003c\u0026'a String\u003e, kept beside a sibling impl From\u003c\u0026'a str\u003e so a generic impl Into\u003cT\u003e bound accepts a borrowed String too -- retyping this parameter to \u0026str would collide with (duplicate) that sibling impl.",
       "owner": "@claude-p19-campaign",
       "expires": "2026-11-27"
     },
@@ -5746,7 +5746,7 @@
       "check": "check-folder-organization",
       "path": "crates/corrections/nomos-corrections/src",
       "fingerprint": "472b5af0e004b6cd",
-      "reason": "genuinely coherent: one domain (the correction preview->stage->validate->commit->rollback lifecycle plus its supporting vocabulary), every file name is already self-descriptive, and the existing subfolders already group the multi-file concepts.",
+      "reason": "genuinely coherent: one domain (the correction preview-\u003estage-\u003evalidate-\u003ecommit-\u003erollback lifecycle plus its supporting vocabulary), every file name is already self-descriptive, and the existing subfolders already group the multi-file concepts.",
       "owner": "@claude-p19-campaign",
       "expires": "2026-11-27"
     },
@@ -6011,6 +6011,174 @@
       "check": "check-dependency-placement",
       "path": "tests/contract/src/universes.rs",
       "reason": "tests/contract is nomos's own cross-cutting contract-test harness; universes.rs deliberately builds test fixtures spanning the whole type system (syntax, rules, capability) to exercise cross-cutting invariants, so touching several otherwise-unrelated crates from one file is inherent to its role, not misplacement.",
+      "owner": "@claude-p20-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-interfile-duplication",
+      "path": "crates/host/nomos-api/src/sources.rs",
+      "fingerprint": "9b940487d7c97c4d",
+      "reason": "three independent composition roots deliberately duplicate their directory-walk per OD-HOST-002 family 3; each file's own doc comment already says so.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-interfile-duplication",
+      "path": "crates/host/nomos-api/src/sources.rs",
+      "fingerprint": "a9558cf33a6a4729",
+      "reason": "three independent composition roots deliberately duplicate their directory-walk per OD-HOST-002 family 3; each file's own doc comment already says so.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-interfile-duplication",
+      "path": "crates/host/nomos-cli/src/check/sources.rs",
+      "fingerprint": "9b940487d7c97c4d",
+      "reason": "three independent composition roots deliberately duplicate their directory-walk per OD-HOST-002 family 3; each file's own doc comment already says so.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-interfile-duplication",
+      "path": "crates/host/nomos-cli/src/check/sources.rs",
+      "fingerprint": "a9558cf33a6a4729",
+      "reason": "three independent composition roots deliberately duplicate their directory-walk per OD-HOST-002 family 3; each file's own doc comment already says so.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-interfile-duplication",
+      "path": "crates/host/nomos-cli/src/gate/sources.rs",
+      "fingerprint": "9b940487d7c97c4d",
+      "reason": "three independent composition roots deliberately duplicate their directory-walk per OD-HOST-002 family 3; each file's own doc comment already says so.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-interfile-duplication",
+      "path": "crates/host/nomos-cli/src/gate/sources.rs",
+      "fingerprint": "a9558cf33a6a4729",
+      "reason": "three independent composition roots deliberately duplicate their directory-walk per OD-HOST-002 family 3; each file's own doc comment already says so.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-interfile-duplication",
+      "path": "crates/host/nomos-cli/src/arguments.rs",
+      "fingerprint": "c1dd6eedcc1ca17d",
+      "reason": "nomos-surface-provenance's own doc comment says sharing isn't worth the dependency edge for eight lines of argument-parsing boilerplate.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-interfile-duplication",
+      "path": "crates/host/nomos-surface-provenance/src/arguments.rs",
+      "fingerprint": "c1dd6eedcc1ca17d",
+      "reason": "nomos-surface-provenance's own doc comment says sharing isn't worth the dependency edge for eight lines of argument-parsing boilerplate.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-interfile-duplication",
+      "path": "crates/languages/nomos-lang-go-modules/src/fact_context.rs",
+      "fingerprint": "713c5023df51d0c9",
+      "reason": "real, identified duplication: each provider crate's FactContext + Compute_Fact_Key/MaterializedFact-assembly shape is structurally identical, and crates/substrate/nomos-analysis already has an identically-shaped Context struct with a manual conversion already in place (nomos-lang-rust::rollup::materialize::Reading_Context). The real fix is unifying provider FactContext with nomos_analysis::Context -- deferred as its own future increment since it spans crates/languages and crates/substrate at once, a bigger coordinated change than this mechanical placement pass scoped for.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-interfile-duplication",
+      "path": "crates/languages/nomos-lang-go/src/fact_context.rs",
+      "fingerprint": "ff8a2a97d7e4da57",
+      "reason": "real, identified duplication: each provider crate's FactContext + Compute_Fact_Key/MaterializedFact-assembly shape is structurally identical, and crates/substrate/nomos-analysis already has an identically-shaped Context struct with a manual conversion already in place (nomos-lang-rust::rollup::materialize::Reading_Context). The real fix is unifying provider FactContext with nomos_analysis::Context -- deferred as its own future increment since it spans crates/languages and crates/substrate at once, a bigger coordinated change than this mechanical placement pass scoped for.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-interfile-duplication",
+      "path": "crates/languages/nomos-lang-go/src/fact_context.rs",
+      "fingerprint": "866a5bd2069612a4",
+      "reason": "real, identified duplication: each provider crate's FactContext + Compute_Fact_Key/MaterializedFact-assembly shape is structurally identical, and crates/substrate/nomos-analysis already has an identically-shaped Context struct with a manual conversion already in place (nomos-lang-rust::rollup::materialize::Reading_Context). The real fix is unifying provider FactContext with nomos_analysis::Context -- deferred as its own future increment since it spans crates/languages and crates/substrate at once, a bigger coordinated change than this mechanical placement pass scoped for.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-interfile-duplication",
+      "path": "crates/languages/nomos-lang-go/src/guarantee.rs",
+      "fingerprint": "0d24104153f54091",
+      "reason": "real, identified duplication: each provider crate's FactContext + Compute_Fact_Key/MaterializedFact-assembly shape is structurally identical, and crates/substrate/nomos-analysis already has an identically-shaped Context struct with a manual conversion already in place (nomos-lang-rust::rollup::materialize::Reading_Context). The real fix is unifying provider FactContext with nomos_analysis::Context -- deferred as its own future increment since it spans crates/languages and crates/substrate at once, a bigger coordinated change than this mechanical placement pass scoped for.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-interfile-duplication",
+      "path": "crates/languages/nomos-lang-rust-cargo/src/fact_context.rs",
+      "fingerprint": "ea54fa099db812cf",
+      "reason": "real, identified duplication: each provider crate's FactContext + Compute_Fact_Key/MaterializedFact-assembly shape is structurally identical, and crates/substrate/nomos-analysis already has an identically-shaped Context struct with a manual conversion already in place (nomos-lang-rust::rollup::materialize::Reading_Context). The real fix is unifying provider FactContext with nomos_analysis::Context -- deferred as its own future increment since it spans crates/languages and crates/substrate at once, a bigger coordinated change than this mechanical placement pass scoped for.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-interfile-duplication",
+      "path": "crates/languages/nomos-lang-rust-clippy/src/fact_context.rs",
+      "fingerprint": "225a1b18e6897227",
+      "reason": "real, identified duplication: each provider crate's FactContext + Compute_Fact_Key/MaterializedFact-assembly shape is structurally identical, and crates/substrate/nomos-analysis already has an identically-shaped Context struct with a manual conversion already in place (nomos-lang-rust::rollup::materialize::Reading_Context). The real fix is unifying provider FactContext with nomos_analysis::Context -- deferred as its own future increment since it spans crates/languages and crates/substrate at once, a bigger coordinated change than this mechanical placement pass scoped for.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-interfile-duplication",
+      "path": "crates/languages/nomos-lang-rust-clippy/src/fact_context.rs",
+      "fingerprint": "8afc0069ccaf473f",
+      "reason": "real, identified duplication: each provider crate's FactContext + Compute_Fact_Key/MaterializedFact-assembly shape is structurally identical, and crates/substrate/nomos-analysis already has an identically-shaped Context struct with a manual conversion already in place (nomos-lang-rust::rollup::materialize::Reading_Context). The real fix is unifying provider FactContext with nomos_analysis::Context -- deferred as its own future increment since it spans crates/languages and crates/substrate at once, a bigger coordinated change than this mechanical placement pass scoped for.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-interfile-duplication",
+      "path": "crates/languages/nomos-lang-rust-deny/src/fact_context.rs",
+      "fingerprint": "5520a1deffd7abfe",
+      "reason": "real, identified duplication: each provider crate's FactContext + Compute_Fact_Key/MaterializedFact-assembly shape is structurally identical, and crates/substrate/nomos-analysis already has an identically-shaped Context struct with a manual conversion already in place (nomos-lang-rust::rollup::materialize::Reading_Context). The real fix is unifying provider FactContext with nomos_analysis::Context -- deferred as its own future increment since it spans crates/languages and crates/substrate at once, a bigger coordinated change than this mechanical placement pass scoped for.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-interfile-duplication",
+      "path": "crates/languages/nomos-lang-rust/src/fact_context.rs",
+      "fingerprint": "ff8a2a97d7e4da57",
+      "reason": "real, identified duplication: each provider crate's FactContext + Compute_Fact_Key/MaterializedFact-assembly shape is structurally identical, and crates/substrate/nomos-analysis already has an identically-shaped Context struct with a manual conversion already in place (nomos-lang-rust::rollup::materialize::Reading_Context). The real fix is unifying provider FactContext with nomos_analysis::Context -- deferred as its own future increment since it spans crates/languages and crates/substrate at once, a bigger coordinated change than this mechanical placement pass scoped for.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-interfile-duplication",
+      "path": "crates/languages/nomos-lang-rust/src/fact_context.rs",
+      "fingerprint": "bc434d65b92205ba",
+      "reason": "real, identified duplication: each provider crate's FactContext + Compute_Fact_Key/MaterializedFact-assembly shape is structurally identical, and crates/substrate/nomos-analysis already has an identically-shaped Context struct with a manual conversion already in place (nomos-lang-rust::rollup::materialize::Reading_Context). The real fix is unifying provider FactContext with nomos_analysis::Context -- deferred as its own future increment since it spans crates/languages and crates/substrate at once, a bigger coordinated change than this mechanical placement pass scoped for.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-interfile-duplication",
+      "path": "crates/languages/nomos-lang-rust/src/reachability/guarantee.rs",
+      "fingerprint": "778de643d0f56c58",
+      "reason": "real, identified duplication: each provider crate's FactContext + Compute_Fact_Key/MaterializedFact-assembly shape is structurally identical, and crates/substrate/nomos-analysis already has an identically-shaped Context struct with a manual conversion already in place (nomos-lang-rust::rollup::materialize::Reading_Context). The real fix is unifying provider FactContext with nomos_analysis::Context -- deferred as its own future increment since it spans crates/languages and crates/substrate at once, a bigger coordinated change than this mechanical placement pass scoped for.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-interfile-duplication",
+      "path": "crates/languages/nomos-lang-go-modules/src/fact_context.rs",
+      "fingerprint": "57efdb609f47b7b9",
+      "reason": "real, identified duplication: each provider crate's FactContext + Compute_Fact_Key/MaterializedFact-assembly shape is structurally identical, and crates/substrate/nomos-analysis already has an identically-shaped Context struct with a manual conversion already in place (nomos-lang-rust::rollup::materialize::Reading_Context). The real fix is unifying provider FactContext with nomos_analysis::Context -- deferred as its own future increment since it spans crates/languages and crates/substrate at once, a bigger coordinated change than this mechanical placement pass scoped for.",
+      "owner": "@claude-p20-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-interfile-duplication",
+      "path": "crates/languages/nomos-lang-rust-cargo/src/fact_context.rs",
+      "fingerprint": "d1046c6c67ba5276",
+      "reason": "real, identified duplication: each provider crate's FactContext + Compute_Fact_Key/MaterializedFact-assembly shape is structurally identical, and crates/substrate/nomos-analysis already has an identically-shaped Context struct with a manual conversion already in place (nomos-lang-rust::rollup::materialize::Reading_Context). The real fix is unifying provider FactContext with nomos_analysis::Context -- deferred as its own future increment since it spans crates/languages and crates/substrate at once, a bigger coordinated change than this mechanical placement pass scoped for.",
       "owner": "@claude-p20-campaign",
       "expires": "2026-11-27"
     }
