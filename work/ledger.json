@@ -38644,6 +38644,488 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P23-TESTING-SPEC",
+      "title": "P23 testing phase: crates/spec",
+      "why": "the testing rust gate phase has never been addressed; a fresh sweep found check-test-coverage/test-data/error-tests/integration-coverage findings scoped to crates/spec -- most are missing test-name traceability (a rename), not missing tests",
+      "done_when": "check-test-coverage, check-test-data, check-error-tests and check-integration-coverage report zero findings scoped to this band's paths, and cargo build --workspace --all-targets passes",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-p23-testing",
+        "acquired_at": 1788128604,
+        "lease_expires_at": 1788135804
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [
+        {
+          "holder": "claude-p23-testing",
+          "acquired_at": 1788067888,
+          "lease_expires_at": 1788075088
+        }
+      ],
+      "declined": null
+    },
+    {
+      "id": "P23-TESTING-HOST",
+      "title": "P23 testing phase: crates/host",
+      "why": "the testing rust gate phase has never been addressed; a fresh sweep found check-test-coverage/test-data/error-tests/integration-coverage findings scoped to crates/host -- most are missing test-name traceability (a rename), not missing tests",
+      "done_when": "check-test-coverage, check-test-data, check-error-tests and check-integration-coverage report zero findings scoped to this band's paths, and cargo build --workspace --all-targets passes",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-p23-testing",
+        "acquired_at": 1788128604,
+        "lease_expires_at": 1788135804
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [
+        {
+          "holder": "claude-p23-testing",
+          "acquired_at": 1788067888,
+          "lease_expires_at": 1788075088
+        }
+      ],
+      "declined": null
+    },
+    {
+      "id": "P23-TESTING-SUBSTRATE",
+      "title": "P23 testing phase: crates/substrate",
+      "why": "the testing rust gate phase has never been addressed; a fresh sweep found check-test-coverage/test-data/error-tests/integration-coverage findings scoped to crates/substrate -- most are missing test-name traceability (a rename), not missing tests",
+      "done_when": "check-test-coverage, check-test-data, check-error-tests and check-integration-coverage report zero findings scoped to this band's paths, and cargo build --workspace --all-targets passes",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-p23-testing",
+        "acquired_at": 1788128604,
+        "lease_expires_at": 1788135804
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [
+        {
+          "holder": "claude-p23-testing",
+          "acquired_at": 1788067888,
+          "lease_expires_at": 1788075088
+        }
+      ],
+      "declined": null
+    },
+    {
+      "id": "P23-TESTING-LANGUAGES",
+      "title": "P23 testing phase: crates/languages",
+      "why": "the testing rust gate phase has never been addressed; a fresh sweep found check-test-coverage/test-data/error-tests/integration-coverage findings scoped to crates/languages -- most are missing test-name traceability (a rename), not missing tests",
+      "done_when": "check-test-coverage, check-test-data, check-error-tests and check-integration-coverage report zero findings scoped to this band's paths, and cargo build --workspace --all-targets passes",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-p23-testing",
+        "acquired_at": 1788128604,
+        "lease_expires_at": 1788135804
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [
+        {
+          "holder": "claude-p23-testing",
+          "acquired_at": 1788067888,
+          "lease_expires_at": 1788075088
+        }
+      ],
+      "declined": null
+    },
+    {
+      "id": "P23-TESTING-ORCHESTRATION",
+      "title": "P23 testing phase: crates/orchestration",
+      "why": "the testing rust gate phase has never been addressed; a fresh sweep found check-test-coverage/test-data/error-tests/integration-coverage findings scoped to crates/orchestration -- most are missing test-name traceability (a rename), not missing tests",
+      "done_when": "check-test-coverage, check-test-data, check-error-tests and check-integration-coverage report zero findings scoped to this band's paths, and cargo build --workspace --all-targets passes",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "exit_code": 0,
+        "output_tail": "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.19s\n",
+        "verified_at": 1788128613,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "874f2bee4ddb5fcc1c351dd369ef78f31caf0a9c"
+      },
+      "abandoned": [],
+      "displaced": [
+        {
+          "holder": "claude-p23-testing",
+          "acquired_at": 1788067888,
+          "lease_expires_at": 1788075088
+        }
+      ],
+      "declined": null
+    },
+    {
+      "id": "P23-TESTING-CAPABILITIES",
+      "title": "P23 testing phase: crates/capabilities",
+      "why": "the testing rust gate phase has never been addressed; a fresh sweep found check-test-coverage/test-data/error-tests/integration-coverage findings scoped to crates/capabilities -- most are missing test-name traceability (a rename), not missing tests",
+      "done_when": "check-test-coverage, check-test-data, check-error-tests and check-integration-coverage report zero findings scoped to this band's paths, and cargo build --workspace --all-targets passes",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-p23-testing",
+        "acquired_at": 1788128604,
+        "lease_expires_at": 1788135804
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [
+        {
+          "holder": "claude-p23-testing",
+          "acquired_at": 1788067888,
+          "lease_expires_at": 1788075088
+        }
+      ],
+      "declined": null
+    },
+    {
+      "id": "P23-TESTING-CONTRACTS",
+      "title": "P23 testing phase: crates/contracts",
+      "why": "the testing rust gate phase has never been addressed; a fresh sweep found check-test-coverage/test-data/error-tests/integration-coverage findings scoped to crates/contracts -- most are missing test-name traceability (a rename), not missing tests",
+      "done_when": "check-test-coverage, check-test-data, check-error-tests and check-integration-coverage report zero findings scoped to this band's paths, and cargo build --workspace --all-targets passes",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/contracts"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-p23-testing",
+        "acquired_at": 1788128604,
+        "lease_expires_at": 1788135804
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [
+        {
+          "holder": "claude-p23-testing",
+          "acquired_at": 1788067888,
+          "lease_expires_at": 1788075088
+        }
+      ],
+      "declined": null
+    },
+    {
+      "id": "P23-TESTING-RULES",
+      "title": "P23 testing phase: crates/rules",
+      "why": "the testing rust gate phase has never been addressed; a fresh sweep found check-test-coverage/test-data/error-tests/integration-coverage findings scoped to crates/rules -- most are missing test-name traceability (a rename), not missing tests",
+      "done_when": "check-test-coverage, check-test-data, check-error-tests and check-integration-coverage report zero findings scoped to this band's paths, and cargo build --workspace --all-targets passes",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-p23-testing",
+        "acquired_at": 1788128604,
+        "lease_expires_at": 1788135804
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [
+        {
+          "holder": "claude-p23-testing",
+          "acquired_at": 1788067888,
+          "lease_expires_at": 1788075088
+        }
+      ],
+      "declined": null
+    },
+    {
+      "id": "P23-TESTING-KERNEL",
+      "title": "P23 testing phase: crates/kernel",
+      "why": "the testing rust gate phase has never been addressed; a fresh sweep found check-test-coverage/test-data/error-tests/integration-coverage findings scoped to crates/kernel -- most are missing test-name traceability (a rename), not missing tests",
+      "done_when": "check-test-coverage, check-test-data, check-error-tests and check-integration-coverage report zero findings scoped to this band's paths, and cargo build --workspace --all-targets passes",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/kernel"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-p23-testing",
+        "acquired_at": 1788128604,
+        "lease_expires_at": 1788135804
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [
+        {
+          "holder": "claude-p23-testing",
+          "acquired_at": 1788067888,
+          "lease_expires_at": 1788075088
+        }
+      ],
+      "declined": null
+    },
+    {
+      "id": "P23-TESTING-CORRECTIONS",
+      "title": "P23 testing phase: crates/corrections",
+      "why": "the testing rust gate phase has never been addressed; a fresh sweep found check-test-coverage/test-data/error-tests/integration-coverage findings scoped to crates/corrections -- most are missing test-name traceability (a rename), not missing tests",
+      "done_when": "check-test-coverage, check-test-data, check-error-tests and check-integration-coverage report zero findings scoped to this band's paths, and cargo build --workspace --all-targets passes",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/corrections"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-p23-testing",
+        "acquired_at": 1788128604,
+        "lease_expires_at": 1788135804
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [
+        {
+          "holder": "claude-p23-testing",
+          "acquired_at": 1788067888,
+          "lease_expires_at": 1788075088
+        }
+      ],
+      "declined": null
+    },
+    {
+      "id": "P23-TESTING-MISC",
+      "title": "P23 testing phase: agent/platform/packages/tests-integration/tests-contract",
+      "why": "same P23 testing-phase sweep, catching every remaining directory too small for its own band",
+      "done_when": "check-test-coverage, check-test-data, check-error-tests and check-integration-coverage report zero findings scoped to this band's paths, and cargo build --workspace --all-targets passes",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/agent",
+          "crates/platform",
+          "crates/packages",
+          "tests/integration",
+          "tests/contract"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-p23-testing",
+        "acquired_at": 1788128604,
+        "lease_expires_at": 1788135804
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [
+        {
+          "holder": "claude-p23-testing",
+          "acquired_at": 1788067888,
+          "lease_expires_at": 1788075088
+        }
+      ],
+      "declined": null
     }
   ]
 }

@@ -29,3 +29,27 @@ impl Absence
         );
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::Absence;
+
+    /// Every field lands in the formatted line it names, in the order a reader needs them:
+    /// what, where, why, and what that costs.
+    #[test]
+    fn Test_Describe_Should_Report_All_Four_Fields_In_Order()
+    {
+        let absence = Absence {
+            subject: "the v14 authoring corpus".to_owned(),
+            expected: "a directory named by A_CORPUS_VARIABLE".to_owned(),
+            cause: "A_CORPUS_VARIABLE is not set".to_owned(),
+            cost: "the corpus documents are not in this store".to_owned(),
+        };
+
+        assert_eq!(
+            absence.Describe(),
+            "absent: the v14 authoring corpus\n  expected: a directory named by A_CORPUS_VARIABLE\n  cause:    A_CORPUS_VARIABLE is not set\n  so:       the corpus documents are not in this store"
+        );
+    }
+}

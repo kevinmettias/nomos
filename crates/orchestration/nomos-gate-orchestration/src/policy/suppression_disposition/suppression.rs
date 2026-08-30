@@ -36,3 +36,53 @@ impl Suppression
         return self.rule == finding.rule && self.subject == finding.subject;
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::{Suppression, SuppressionDisposition};
+    use nomos_contracts::{Applicability, Digest128, EvidenceClass, Finding, GateCategory, RuleId, SubjectId};
+
+    fn Finding_For(rule: &str, subject_seed: u8) -> Finding
+    {
+        return Finding {
+            rule: RuleId::New(rule),
+            subject: SubjectId::From_Digest(Digest128::From_Bytes([subject_seed; Digest128::BYTE_LENGTH])),
+            subject_name: "Example".to_owned(),
+            applicability: Applicability::Supported,
+            evidence: EvidenceClass::Derived,
+            gate: GateCategory::Blocking,
+            summary: "example".to_owned(),
+            locations: vec!["a.rs".to_owned()],
+        };
+    }
+
+    fn Suppression_Of(finding: &Finding) -> Suppression
+    {
+        return Suppression {
+            rule: finding.rule.clone(),
+            subject: finding.subject,
+            disposition: SuppressionDisposition::FalsePositiveDisposition,
+            rationale: "known false positive".to_owned(),
+            owner: "author".to_owned(),
+        };
+    }
+
+    #[test]
+    fn Test_Is_Applicable_To_Should_Match_Same_Rule_And_Subject()
+    {
+        let finding = Finding_For("naming-convention", 1);
+        let suppression = Suppression_Of(&finding);
+
+        assert!(suppression.Is_Applicable_To(&finding));
+    }
+
+    #[test]
+    fn Test_Is_Applicable_To_Should_Not_Match_A_Different_Subject()
+    {
+        let finding = Finding_For("naming-convention", 1);
+        let suppression = Suppression_Of(&Finding_For("naming-convention", 2));
+
+        assert!(!suppression.Is_Applicable_To(&finding));
+    }
+}

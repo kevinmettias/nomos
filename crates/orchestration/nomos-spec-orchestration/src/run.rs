@@ -212,3 +212,71 @@ fn Commit_Outcome<Filesystem: FileSystem>(
             .and_then(|mut assembly| return Commit_Staged_Edit(&mut assembly, request, filesystem)),
     );
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::{Assemble_Corpus, CorpusRequest, Enumerated_Sources, Profiles, Run};
+    use crate::SpecCommand;
+    use crate::spec_outcome::SpecOutcome;
+    use nomos_platform_std::StdFileSystem;
+
+    fn No_Corpus() -> CorpusRequest
+    {
+        return CorpusRequest {
+            variable: "A_RUN_TEST_CORPUS_VARIABLE".to_owned(),
+            root: None,
+            revision: "v14.36".to_owned(),
+        };
+    }
+
+    #[test]
+    fn Test_Profiles_Should_List_The_Shipped_Catalogue()
+    {
+        let profiles = Profiles().expect("the embedded catalogue parses");
+
+        assert!(!profiles.is_empty(), "the shipped catalogue is never empty");
+    }
+
+    #[test]
+    fn Test_Enumerated_Sources_Should_Report_What_The_Assembly_Read_And_Missed()
+    {
+        let assembly = Assemble_Corpus(&No_Corpus()).expect("assembles from the embedded records alone");
+
+        let answer = Enumerated_Sources(&assembly);
+
+        assert_eq!(answer.read, assembly.read);
+        assert_eq!(answer.absent, assembly.absent);
+    }
+
+    #[test]
+    fn Test_Run_Should_Never_Assemble_A_Store_For_Profiles()
+    {
+        // A request naming a variable that is not set: if `Run` assembled a store for
+        // `Profiles`, the failure path corpus assembly could take is still never reachable --
+        // this outcome must be exactly `Profiles()`'s own, unconditionally.
+        let outcome = Run(&SpecCommand::Profiles, &No_Corpus(), &StdFileSystem);
+
+        let SpecOutcome::Profiles(profiles) = outcome
+        else
+        {
+            panic!("Run(Profiles, ..) must answer SpecOutcome::Profiles");
+        };
+        assert!(profiles.is_ok());
+    }
+
+    #[test]
+    fn Test_Run_Should_Report_The_Corpus_As_Absent_When_None_Is_Named()
+    {
+        let outcome = Run(&SpecCommand::Sources, &No_Corpus(), &StdFileSystem);
+
+        let SpecOutcome::Sources(answer) = outcome
+        else
+        {
+            panic!("Run(Sources, ..) must answer SpecOutcome::Sources");
+        };
+        let answer = answer.expect("an in-memory store assembles even with no corpus");
+
+        assert!(!answer.Is_Complete(), "no corpus was named, so this store is not whole");
+    }
+}

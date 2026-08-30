@@ -32,3 +32,66 @@ impl Assembly
             .join("\n");
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::{Absence, Assembly};
+    use nomos_spec_store::SpecificationStore;
+
+    fn Absence_Named(subject: &str) -> Absence
+    {
+        return Absence {
+            subject: subject.to_owned(),
+            expected: "somewhere".to_owned(),
+            cause: "not there".to_owned(),
+            cost: "nothing".to_owned(),
+        };
+    }
+
+    fn Empty_Assembly() -> Assembly
+    {
+        return Assembly {
+            store: SpecificationStore::In_Memory().expect("an in-memory store always opens"),
+            read: Vec::new(),
+            absent: Vec::new(),
+        };
+    }
+
+    #[test]
+    fn Test_Is_Complete_Should_Be_True_With_No_Absences()
+    {
+        let assembly = Empty_Assembly();
+
+        assert!(assembly.Is_Complete());
+    }
+
+    #[test]
+    fn Test_Is_Complete_Should_Be_False_With_At_Least_One_Absence()
+    {
+        let mut assembly = Empty_Assembly();
+        assembly.absent.push(Absence_Named("the v14 authoring corpus"));
+
+        assert!(!assembly.Is_Complete());
+    }
+
+    #[test]
+    fn Test_Describe_Absences_Should_Join_Every_Absence_By_Name()
+    {
+        let mut assembly = Empty_Assembly();
+        assembly.absent.push(Absence_Named("the v14 authoring corpus"));
+        assembly.absent.push(Absence_Named("the node catalog"));
+
+        let described = assembly.Describe_Absences();
+        assert!(described.contains("the v14 authoring corpus"), "{described}");
+        assert!(described.contains("the node catalog"), "{described}");
+    }
+
+    #[test]
+    fn Test_Describe_Absences_Should_Be_Empty_With_No_Absences()
+    {
+        let assembly = Empty_Assembly();
+
+        assert_eq!(assembly.Describe_Absences(), "");
+    }
+}

@@ -212,7 +212,7 @@ fn Repository_Root() -> PathBuf
 /// `P13-CONTROLFLOW-REACHABILITY-WIRE`, and an assertion on `plan.rules.len()` would have
 /// been green throughout.
 #[test]
-fn Test_A_Plan_Should_Hold_All_Four_Shipped_Rules()
+fn Test_Registered_Should_Compose_All_Four_Shipped_Rules()
 {
     let GateOutcome::Planned(plan) = Run(&Command())
     else
@@ -326,7 +326,7 @@ fn Test_The_Naming_Rule_Should_Cite_Its_Record_Less_Contract()
 /// This increment does not select by scope: two different roots must plan identically, so a
 /// caller cannot mistake this for a filtered answer it does not yet give.
 #[test]
-fn Test_The_Plan_Should_Not_Vary_By_Root()
+fn Test_Run_Should_Plan_Identically_Regardless_Of_Root()
 {
     let GateOutcome::Planned(here) = Run(&Command_At(PathBuf::from(".")))
     else
@@ -410,7 +410,7 @@ fn Test_One_Blocking_Finding_Among_Many_Should_Fail()
 /// by hand. [`Run_Gate`] must make the identical assignment, since this crate now performs
 /// that composition too.
 #[test]
-fn Test_An_Unwalked_Root_Should_Be_Indeterminate()
+fn Test_Judged_Sources_Should_Report_Unreadable_For_An_Unwalked_Root()
 {
     let result = Run_Gate(None, GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher }, &Command_At(Repository_Root()), Test_Run_Id());
 
@@ -454,7 +454,7 @@ fn Test_A_Clean_Source_Should_Pass()
 /// owns runs over `nomos_check_orchestration::Run`'s real output rather than a fixture typed
 /// to look like it.
 #[test]
-fn Test_A_Blocking_Finding_Should_Fail_The_Run()
+fn Test_Run_Gate_Should_Fail_On_A_Blocking_Finding()
 {
     let sources = vec![Source(
         "a.rs",
@@ -661,7 +661,7 @@ fn Test_Explain_Should_Report_Not_Found_For_A_Query_Nothing_Answers()
 /// `would_block` true and no suppression -- the everyday case, checked against a real judged
 /// finding rather than a fixture built to look like one.
 #[test]
-fn Test_Explain_Should_Find_A_Real_Blocking_Finding()
+fn Test_Explain_Gate_Should_Find_A_Real_Blocking_Finding()
 {
     let sources = vec![Source(
         "a.rs",

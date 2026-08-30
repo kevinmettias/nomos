@@ -52,7 +52,7 @@ mod tests
     const DISTINCT_SEED_BYTE: u8 = 2;
 
     #[test]
-    fn Test_An_Empty_Policy_Should_Tolerate_Nothing()
+    fn Test_Tolerating_Should_Report_Nothing_For_An_Empty_Policy()
     {
         let policy = BaselinePolicy::default();
 
@@ -60,7 +60,7 @@ mod tests
     }
 
     #[test]
-    fn Test_A_Matching_Rule_And_Subject_Should_Be_Found()
+    fn Test_Is_Applicable_To_Should_Match_Same_Rule_And_Subject()
     {
         let finding = Finding_For("naming-convention", 1);
         let debt = BaselineDebt {

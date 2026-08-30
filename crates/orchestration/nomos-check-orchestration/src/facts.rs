@@ -71,3 +71,50 @@ fn As_One_Checkout(sources: &[SourceFile]) -> WorkspaceChangeSet
 
     return checkout;
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    fn Test_Variant() -> BuildVariant
+    {
+        return BuildVariant::New("test-target", "test-profile", "test-toolchain", std::iter::empty::<String>());
+    }
+
+    /// A single real file ingests, and the [`Context`] it produces carries the registry's
+    /// own configuration -- not a second, independently-computed one -- because a
+    /// [`ConfigurationId`] is documented as a digest of the resolved policy this run
+    /// composed, and there is exactly one of those per run.
+    #[test]
+    fn Test_Ingested_Workspace_Should_Carry_The_Registrys_Own_Configuration()
+    {
+        let registry = crate::composition::Registered().expect("fixture composition");
+        let sources = [SourceFile::New("a.rs", nomos_model::Subject_Of_Path("a.rs"), "pub fn Ok() {}\n")];
+
+        let context = Ingested_Workspace(&sources, &registry, Test_Variant()).expect("a single valid file must ingest");
+
+        assert_eq!(
+            context.configuration,
+            crate::composition::Resolved_Configuration(&registry),
+            "the ingested context's configuration must be the registry's own, not a second rendering of it"
+        );
+    }
+
+    /// Two entries naming the same workspace-relative path cannot both be present in one
+    /// checkout, so ingesting them must refuse rather than silently keep one and drop the
+    /// other.
+    #[test]
+    fn Test_Ingested_Workspace_Should_Refuse_Two_Sources_At_One_Path()
+    {
+        let registry = crate::composition::Registered().expect("fixture composition");
+        let sources = [
+            SourceFile::New("a.rs", nomos_model::Subject_Of_Path("a.rs"), "pub fn one() {}\n"),
+            SourceFile::New("a.rs", nomos_model::Subject_Of_Path("a.rs"), "pub fn two() {}\n"),
+        ];
+
+        let ingested = Ingested_Workspace(&sources, &registry, Test_Variant());
+
+        assert!(ingested.is_err(), "duplicate paths must not be ingested as one checkout");
+    }
+}

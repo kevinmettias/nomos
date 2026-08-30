@@ -243,3 +243,49 @@ fn Rendered_Guarantee(guarantee: Guarantee) -> String
         guarantee.incremental.Label()
     );
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    /// The composition this crate ships must not be self-contradictory, and it must
+    /// declare exactly the five capabilities [`Registered`]'s own body wires: syntax,
+    /// dependency, controlflow, lint and dependency-policy.
+    #[test]
+    fn Test_Registered_Should_Declare_Every_Composed_Capability()
+    {
+        let registry = Registered().expect("this crate's own composition must not be self-contradictory");
+
+        assert_eq!(
+            registry.Declared().count(),
+            5,
+            "Registered() wires five Declare calls; a changed count here means the two drifted"
+        );
+    }
+
+    /// [`Recognized_Syntax_Provider`]'s whole contract: a `.rs` path resolves to
+    /// `nomos_lang_rust`'s identity, a `.go` path to `nomos_lang_go`'s, and a path neither
+    /// recognizes resolves to neither.
+    #[test]
+    fn Test_Recognized_Syntax_Provider_Should_Resolve_By_Extension()
+    {
+        assert_eq!(Recognized_Syntax_Provider("a.rs"), Some(ProviderId::New(nomos_lang_rust::PROVIDER)));
+        assert_eq!(Recognized_Syntax_Provider("main.go"), Some(ProviderId::New(nomos_lang_go::PROVIDER)));
+        assert_eq!(Recognized_Syntax_Provider("readme.md"), None);
+    }
+
+    /// [`Resolved_Configuration`] is documented as a digest of a fully resolved effective
+    /// policy: the same registry must render the same identity every time, or a fact
+    /// this run materializes would be filed under an address that moves under it.
+    #[test]
+    fn Test_Resolved_Configuration_Should_Be_Deterministic_Over_The_Same_Registry()
+    {
+        let registry = Registered().expect("this crate's own composition must not be self-contradictory");
+
+        let first = Resolved_Configuration(&registry);
+        let second = Resolved_Configuration(&registry);
+
+        assert_eq!(first, second, "the same registry must render the same configuration identity");
+    }
+}

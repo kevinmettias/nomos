@@ -30,3 +30,42 @@ impl BaselinePolicy
         return self.debt.iter().find(|entry| return entry.Is_Applicable_To(finding));
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::{BaselineDebt, BaselinePolicy};
+    use nomos_contracts::{Applicability, Digest128, EvidenceClass, Finding, GateCategory, RuleId, SubjectId};
+
+    fn Finding_For(rule: &str) -> Finding
+    {
+        return Finding {
+            rule: RuleId::New(rule),
+            subject: SubjectId::From_Digest(Digest128::From_Bytes([1; Digest128::BYTE_LENGTH])),
+            subject_name: "Example".to_owned(),
+            applicability: Applicability::Supported,
+            evidence: EvidenceClass::Derived,
+            gate: GateCategory::Blocking,
+            summary: "example".to_owned(),
+            locations: vec!["a.rs".to_owned()],
+        };
+    }
+
+    #[test]
+    fn Test_Tolerating_Should_Find_The_Entry_That_Applies_To_A_Finding()
+    {
+        let finding = Finding_For("naming-convention");
+        let debt = BaselineDebt { rule: finding.rule.clone(), subject: finding.subject, rationale: "tracked".to_owned() };
+        let policy = BaselinePolicy { debt: vec![debt.clone()] };
+
+        assert_eq!(policy.Tolerating(&finding), Some(&debt));
+    }
+
+    #[test]
+    fn Test_Tolerating_Should_Find_Nothing_When_No_Entry_Applies()
+    {
+        let policy = BaselinePolicy::default();
+
+        assert!(policy.Tolerating(&Finding_For("naming-convention")).is_none());
+    }
+}

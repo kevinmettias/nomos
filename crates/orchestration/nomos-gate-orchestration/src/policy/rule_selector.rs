@@ -48,7 +48,7 @@ mod tests
     }
 
     #[test]
-    fn Test_A_Named_Selector_Should_Admit_Only_Its_Own_Rules()
+    fn Test_Is_Included_Should_Admit_Only_Its_Own_Rules()
     {
         let selector = RuleSelector { include: vec![RuleId::New("naming-convention")] };
 

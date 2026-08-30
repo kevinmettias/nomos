@@ -50,7 +50,7 @@ mod tests
     const DISTINCT_SEED_BYTE: u8 = 2;
 
     #[test]
-    fn Test_An_Empty_Policy_Should_Calibrate_Nothing()
+    fn Test_Calibrating_Should_Report_Nothing_For_An_Empty_Policy()
     {
         let policy = AdoptionPolicy::default();
 
@@ -58,7 +58,7 @@ mod tests
     }
 
     #[test]
-    fn Test_A_Matching_Rule_Should_Be_Found_Regardless_Of_Subject()
+    fn Test_Is_Applicable_To_Should_Match_By_Rule_Regardless_Of_Subject()
     {
         let finding = Finding_For("naming-convention", 1);
         let calibration = RuleCalibration { rule: RuleId::New("naming-convention"), rationale: "adopting incrementally".to_owned() };

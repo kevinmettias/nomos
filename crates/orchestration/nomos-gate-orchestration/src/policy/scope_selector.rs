@@ -54,7 +54,7 @@ mod tests
     use super::ScopeSelector;
 
     #[test]
-    fn Test_An_Empty_Selector_Should_Match_Everything()
+    fn Test_Is_In_Scope_Should_Match_Everything_When_Empty()
     {
         let selector = ScopeSelector::default();
 
@@ -62,13 +62,34 @@ mod tests
         assert!(selector.Is_In_Scope("README.md"));
     }
 
+    /// One path inside `crates/rules` and one outside it, against a selector whose only
+    /// `include` entry is that directory -- the shape [`Test_Include_Should_Admit_Only_Its_Own_Subtree`]
+    /// checks against.
+    fn Rules_Subtree_Paths() -> Vec<(&'static str, bool)>
+    {
+        return vec![
+            ("crates/rules/nomos-rules/src/lib.rs", true),
+            ("crates/host/nomos-cli/src/gate.rs", false),
+        ];
+    }
+
     #[test]
     fn Test_Include_Should_Admit_Only_Its_Own_Subtree()
     {
         let selector = ScopeSelector { include: vec!["crates/rules".to_owned()], exclude: Vec::new() };
 
-        assert!(selector.Is_In_Scope("crates/rules/nomos-rules/src/lib.rs"));
-        assert!(!selector.Is_In_Scope("crates/host/nomos-cli/src/gate.rs"));
+        for (path, expected) in Rules_Subtree_Paths()
+        {
+            assert_eq!(selector.Is_In_Scope(path), expected, "path: {path}");
+        }
+    }
+
+    /// The exact file an `include` entry names, and a different file that merely shares its
+    /// name as a prefix -- the shape [`Test_An_Exact_File_Should_Match_Its_Own_Include_Entry`]
+    /// checks against.
+    fn Exact_File_Paths() -> Vec<(&'static str, bool)>
+    {
+        return vec![("README.md", true), ("README.md.bak", false)];
     }
 
     #[test]
@@ -76,8 +97,10 @@ mod tests
     {
         let selector = ScopeSelector { include: vec!["README.md".to_owned()], exclude: Vec::new() };
 
-        assert!(selector.Is_In_Scope("README.md"));
-        assert!(!selector.Is_In_Scope("README.md.bak"));
+        for (path, expected) in Exact_File_Paths()
+        {
+            assert_eq!(selector.Is_In_Scope(path), expected, "path: {path}");
+        }
     }
 
     #[test]

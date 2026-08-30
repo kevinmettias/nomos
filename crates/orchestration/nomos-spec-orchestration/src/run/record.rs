@@ -63,3 +63,36 @@ fn Nothing_Behind(assembly: &Assembly, request: &RecordRequest) -> RecordRefusal
         node: summary,
     };
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::{RecordRequest, Resolved_Record};
+    use crate::corpus::{Assemble_Corpus, CorpusRequest};
+
+    fn Assembled() -> crate::corpus::Assembly
+    {
+        let request = CorpusRequest { variable: "A_RECORD_TEST_CORPUS_VARIABLE".to_owned(), root: None, revision: "v14.36".to_owned() };
+        return Assemble_Corpus(&request).expect("assembles from the embedded records alone");
+    }
+
+    #[test]
+    fn Test_Resolved_Record_Should_Resolve_A_Governing_Record_With_No_Corpus()
+    {
+        let assembly = Assembled();
+
+        let answer = Resolved_Record(&assembly, &RecordRequest { id: "D-132".to_owned(), revision: None }).expect("D-132 is embedded even with no corpus");
+
+        assert_eq!(answer.id, "D-132");
+    }
+
+    #[test]
+    fn Test_Resolved_Record_Should_Refuse_An_Identifier_Nothing_Holds()
+    {
+        let assembly = Assembled();
+
+        let error = Resolved_Record(&assembly, &RecordRequest { id: "D-9999".to_owned(), revision: None }).expect_err("nothing in the store is identified D-9999");
+
+        assert!(matches!(error, super::RecordRefusal::NotFound { node: None, .. }), "{error:?}");
+    }
+}

@@ -442,3 +442,144 @@ fn Rust_Production(context: &Context) -> FactContext
         generation: context.generation,
     };
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use nomos_platform::Command;
+    use nomos_workspace::BuildVariant;
+    use std::path::PathBuf;
+
+    fn Test_Variant() -> BuildVariant
+    {
+        return BuildVariant::New("test-target", "test-profile", "test-toolchain", std::iter::empty::<String>());
+    }
+
+    /// What every function below needs and none of them build: a real, ingested
+    /// [`Context`] over `sources` -- the identical two-step composition
+    /// `src/tests.rs`'s own `Findings_Over` assembles, restated here because a colocated
+    /// test cannot reach that file's private helper.
+    fn Fixture_Context(sources: &[SourceFile]) -> Context
+    {
+        let registry = crate::composition::Registered().expect("fixture composition");
+        return crate::facts::Ingested_Workspace(sources, &registry, Test_Variant()).expect("the fixture is a valid tree");
+    }
+
+    /// `(path, text, expected_written)` -- a recognized, parseable source against an
+    /// unrecognized one, so a case added later (an unparseable-but-recognized path, say)
+    /// is one more row rather than one more copy of the test function.
+    fn Materialize_Syntax_Cases() -> Vec<(&'static str, &'static str, usize)>
+    {
+        return vec![
+            ("a.rs", "pub fn Ok() {}\n", 1),
+            ("readme.md", "# hi\n", 0),
+        ];
+    }
+
+    /// A recognized, parseable source materializes exactly one fact; a path neither
+    /// `nomos_lang_rust` nor `nomos_lang_go` recognizes materializes nothing and is not
+    /// dropped silently -- the count this function returns is the denominator a caller
+    /// reports it against.
+    #[test]
+    fn Test_Materialize_Syntax_Should_Write_A_Fact_Only_For_A_Recognized_Source()
+    {
+        for (path, text, expected_written) in Materialize_Syntax_Cases()
+        {
+            let sources = [SourceFile::New(path, nomos_model::Subject_Of_Path(path), text)];
+            let context = Fixture_Context(&sources);
+            let mut store = MemoryFactStore::New();
+
+            let written = Materialize_Syntax(&sources, &context, &mut store);
+
+            assert_eq!(written, expected_written, "{path}");
+        }
+    }
+
+    /// The identical shape [`Materialize_Syntax`]'s own first test proves, for
+    /// `nomos.cap.controlflow.reachability`: one well-formed Rust source materializes
+    /// exactly one fact.
+    #[test]
+    fn Test_Materialize_Reachability_Should_Write_One_Fact_Per_Source()
+    {
+        let sources = [SourceFile::New("a.rs", nomos_model::Subject_Of_Path("a.rs"), "pub fn One() {}\n")];
+        let context = Fixture_Context(&sources);
+        let mut store = MemoryFactStore::New();
+
+        let written = Materialize_Reachability(&sources, &context, &mut store);
+
+        assert_eq!(written, 1, "a single well-formed Rust source must materialize exactly one reachability fact");
+    }
+
+    /// A launcher that cannot even be run -- no real `cargo` invocation, so this stays
+    /// fast and deterministic -- proving the failure path each of the three subprocess
+    /// materializations below shares: a failed launch must report a finding rather than
+    /// silently read as "zero findings", which is exactly the vacuity
+    /// [`Materialize_Syntax`]'s own `NoFacts` case exists to catch one layer over.
+    struct RefusingLauncher;
+
+    impl nomos_platform::ProcessLauncher for RefusingLauncher
+    {
+        fn Run(&self, _command: &Command) -> Result<nomos_platform::ProcessOutput, String>
+        {
+            return Err("refused for this test".to_owned());
+        }
+    }
+
+    #[test]
+    fn Test_Materialize_Dependencies_Should_Report_A_Finding_When_The_Launcher_Refuses()
+    {
+        let sources = [SourceFile::New("a.rs", nomos_model::Subject_Of_Path("a.rs"), "pub fn Ok() {}\n")];
+        let context = Fixture_Context(&sources);
+        let mut store = MemoryFactStore::New();
+
+        let result = Materialize_Dependencies(&PathBuf::from("."), &context, &mut store, &RefusingLauncher);
+
+        assert!(result.sources.is_empty(), "a refused launch must not report workspace members");
+        assert_eq!(result.findings.len(), 1, "{:?}", result.findings);
+        assert_eq!(
+            result.findings.first().expect("the assertion above proves one finding was reported").rule,
+            RuleId::New(nomos_rules::DEPENDENCY_DIRECTION)
+        );
+    }
+
+    /// The identical claim
+    /// [`Test_Materialize_Dependencies_Should_Report_A_Finding_When_The_Launcher_Refuses`]
+    /// proves, for `nomos.cap.lint.diagnostics` and `cargo clippy`.
+    #[test]
+    fn Test_Materialize_Lint_Should_Report_A_Finding_When_The_Launcher_Refuses()
+    {
+        let sources = [SourceFile::New("a.rs", nomos_model::Subject_Of_Path("a.rs"), "pub fn Ok() {}\n")];
+        let context = Fixture_Context(&sources);
+        let mut store = MemoryFactStore::New();
+
+        let result = Materialize_Lint(&PathBuf::from("."), &context, &mut store, &RefusingLauncher);
+
+        assert!(result.sources.is_empty(), "a refused launch must not report workspace members");
+        assert_eq!(result.findings.len(), 1, "{:?}", result.findings);
+        assert_eq!(
+            result.findings.first().expect("the assertion above proves one finding was reported").rule,
+            RuleId::New(nomos_rules::LINT_DIAGNOSTICS)
+        );
+    }
+
+    /// The identical claim
+    /// [`Test_Materialize_Dependencies_Should_Report_A_Finding_When_The_Launcher_Refuses`]
+    /// proves, for `nomos.cap.dependency.policy` and `cargo deny`.
+    #[test]
+    fn Test_Materialize_Policy_Should_Report_A_Finding_When_The_Launcher_Refuses()
+    {
+        let sources = [SourceFile::New("a.rs", nomos_model::Subject_Of_Path("a.rs"), "pub fn Ok() {}\n")];
+        let context = Fixture_Context(&sources);
+        let mut store = MemoryFactStore::New();
+
+        let result = Materialize_Policy(&PathBuf::from("."), &context, &mut store, &RefusingLauncher);
+
+        assert!(result.sources.is_empty(), "a refused launch must not report the policy fact");
+        assert_eq!(result.findings.len(), 1, "{:?}", result.findings);
+        assert_eq!(
+            result.findings.first().expect("the assertion above proves one finding was reported").rule,
+            RuleId::New(nomos_rules::DEPENDENCY_POLICY)
+        );
+    }
+}

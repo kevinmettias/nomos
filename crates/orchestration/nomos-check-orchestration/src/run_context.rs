@@ -421,3 +421,70 @@ fn Is_Rule_Selected(selected: &[RuleId], rule: &str) -> bool
 {
     return selected.is_empty() || selected.iter().any(|id| return id.As_Str() == rule);
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use nomos_contracts::ProviderId;
+    use nomos_platform_std::StdProcessLauncher;
+
+    fn Test_Variant() -> BuildVariant
+    {
+        return BuildVariant::New("test-target", "test-profile", "test-toolchain", std::iter::empty::<String>());
+    }
+
+    /// `root` is never read: `COMPLETENESS_MIRROR` alone selects none of the
+    /// dependency-edges, lint-diagnostics or dependency-policy materializations, so this
+    /// stays a fast, self-contained proof of `Run`'s own composing-and-judging contract
+    /// rather than a second real-repository integration test -- `src/tests.rs` already
+    /// carries that one, over the real syntax provider and the real rule.
+    #[test]
+    fn Test_Run_Should_Judge_A_Clean_Source_With_No_Findings()
+    {
+        let sources = vec![SourceFile::New("a.rs", nomos_model::Subject_Of_Path("a.rs"), "pub fn Ok() {}\n")];
+        let selected = [RuleId::New(COMPLETENESS_MIRROR)];
+        let root = Path::new(".");
+
+        let outcome = Run(&sources, RunContext { variant: Test_Variant(), root, launcher: &StdProcessLauncher }, &selected);
+
+        let CheckOutcome::Judged { findings, examined, claim } = outcome
+        else
+        {
+            panic!("a tree the provider can read must be judged");
+        };
+        assert!(findings.is_empty(), "{findings:?}");
+        assert_eq!(examined, crate::examined::Examined { files: 1, facts: 1 });
+        assert_eq!(claim, crate::examined::Claim::Complete);
+    }
+
+    /// `OD-CAPABILITY-009`'s corrected fix, exercised directly: a `.rs` path's enrichment
+    /// must resolve to `nomos_lang_rust`'s own identity, the same identity
+    /// [`crate::facts::dependency_materialization::Materialize_Syntax`]'s write side
+    /// dispatches on, so the two sides agree by construction.
+    #[test]
+    fn Test_Recognized_Sources_Should_Populate_Preferred_Syntax_Provider()
+    {
+        let sources = vec![SourceFile::New("a.rs", nomos_model::Subject_Of_Path("a.rs"), "pub fn Ok() {}\n")];
+
+        let recognized = Recognized_Sources(&sources);
+
+        assert_eq!(
+            recognized.first().expect("one source in, one source out").preferred_syntax_provider,
+            Some(ProviderId::New(nomos_lang_rust::PROVIDER))
+        );
+    }
+
+    /// A path neither syntax provider recognizes must enrich to `None` rather than to a
+    /// guess -- the same "carried rather than derived" contract
+    /// [`Recognized_Syntax_Provider`] states for the field this populates.
+    #[test]
+    fn Test_Recognized_Sources_Should_Leave_An_Unrecognized_Path_With_No_Preferred_Provider()
+    {
+        let sources = vec![SourceFile::New("readme.md", nomos_model::Subject_Of_Path("readme.md"), "# hi\n")];
+
+        let recognized = Recognized_Sources(&sources);
+
+        assert_eq!(recognized.first().expect("one source in, one source out").preferred_syntax_provider, None);
+    }
+}

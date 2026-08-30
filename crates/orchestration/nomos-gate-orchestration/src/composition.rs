@@ -107,3 +107,32 @@ fn Offer_Unread_Reaches_A_Finding(registry: &mut RuleRegistry) -> Result<(), Rul
 
     return Ok(());
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::Registered;
+    use nomos_contracts::RuleId;
+    use nomos_rules::{COMPLETENESS_MIRROR, DEPENDENCY_DIRECTION, NAMING_CONVENTION, UNREAD_REACHES_FINDING};
+
+    /// The whole registry, by identity and in `RuleId` order -- the same discipline
+    /// `crate::tests::Test_Registered_Should_Compose_All_Four_Shipped_Rules` (over `Run`'s own
+    /// output) already keeps, asserted here directly against `Registered` itself.
+    #[test]
+    fn Test_Registered_Should_Offer_All_Four_Shipped_Rules()
+    {
+        let registry = Registered().expect("this crate's own registration must not be contradictory");
+
+        let ids: Vec<RuleId> = registry.Offers().map(|offer| return offer.rule.clone()).collect();
+        assert_eq!(
+            ids,
+            vec![
+                RuleId::New(COMPLETENESS_MIRROR),
+                RuleId::New(DEPENDENCY_DIRECTION),
+                RuleId::New(NAMING_CONVENTION),
+                RuleId::New(UNREAD_REACHES_FINDING),
+            ],
+            "in RuleId order: {ids:?}"
+        );
+    }
+}

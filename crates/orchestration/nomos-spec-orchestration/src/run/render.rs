@@ -102,3 +102,48 @@ fn Placed_Projection<Filesystem: FileSystem>(
         stamp: built.stamp.clone(),
     });
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::{Rendered_Projection, RenderRequest};
+    use crate::corpus::{Assemble_Corpus, CorpusRequest};
+    use nomos_platform_std::StdFileSystem;
+
+    const EMBEDDED_PROFILE: &str = "domain-specification";
+
+    fn Scratch(name: &str) -> std::path::PathBuf
+    {
+        let root = std::env::temp_dir().join(format!("nomos-spec-orchestration-render-{name}-{}", std::process::id()));
+        let _ignored = std::fs::remove_dir_all(&root);
+        std::fs::create_dir_all(&root).expect("a scratch build root");
+        return root;
+    }
+
+    #[test]
+    fn Test_Rendered_Projection_Should_Place_A_Projection_Built_With_No_Corpus()
+    {
+        let request = CorpusRequest { variable: "A_RENDER_TEST_CORPUS_VARIABLE".to_owned(), root: None, revision: "v14.36".to_owned() };
+        let assembly = Assemble_Corpus(&request).expect("assembles from the embedded records alone");
+        let into = Scratch("colocated");
+
+        let answer = Rendered_Projection(&assembly, &RenderRequest { profile: EMBEDDED_PROFILE.to_owned(), into, subject: None }, &StdFileSystem)
+            .expect("domain-specification builds from the embedded records alone");
+
+        assert_eq!(answer.id, EMBEDDED_PROFILE);
+        assert!(std::fs::read_to_string(&answer.body).is_ok(), "the body was written");
+    }
+
+    #[test]
+    fn Test_Rendered_Projection_Should_Refuse_An_Unknown_Profile()
+    {
+        let request = CorpusRequest { variable: "A_RENDER_TEST_CORPUS_VARIABLE".to_owned(), root: None, revision: "v14.36".to_owned() };
+        let assembly = Assemble_Corpus(&request).expect("assembles from the embedded records alone");
+        let into = Scratch("unknown");
+
+        let error = Rendered_Projection(&assembly, &RenderRequest { profile: "no-such-profile".to_owned(), into, subject: None }, &StdFileSystem)
+            .expect_err("an unknown profile must refuse");
+
+        assert!(matches!(error, super::RenderRefusal::NoSuchProfile { .. }), "{error:?}");
+    }
+}

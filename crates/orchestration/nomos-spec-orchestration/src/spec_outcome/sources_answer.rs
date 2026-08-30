@@ -37,3 +37,48 @@ impl SourcesAnswer
             .join("\n");
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::{Absence, SourcesAnswer};
+
+    fn Absence_Named(subject: &str) -> Absence
+    {
+        return Absence {
+            subject: subject.to_owned(),
+            expected: "somewhere".to_owned(),
+            cause: "not there".to_owned(),
+            cost: "nothing".to_owned(),
+        };
+    }
+
+    #[test]
+    fn Test_Is_Complete_Should_Be_True_With_No_Absences()
+    {
+        let answer = SourcesAnswer { read: Vec::new(), absent: Vec::new() };
+
+        assert!(answer.Is_Complete());
+    }
+
+    #[test]
+    fn Test_Is_Complete_Should_Be_False_With_At_Least_One_Absence()
+    {
+        let answer = SourcesAnswer { read: Vec::new(), absent: vec![Absence_Named("the v14 authoring corpus")] };
+
+        assert!(!answer.Is_Complete());
+    }
+
+    #[test]
+    fn Test_Describe_Absences_Should_Join_Every_Absence_By_Name()
+    {
+        let answer = SourcesAnswer {
+            read: Vec::new(),
+            absent: vec![Absence_Named("the v14 authoring corpus"), Absence_Named("the node catalog")],
+        };
+
+        let described = answer.Describe_Absences();
+        assert!(described.contains("the v14 authoring corpus"), "{described}");
+        assert!(described.contains("the node catalog"), "{described}");
+    }
+}

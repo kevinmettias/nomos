@@ -60,3 +60,55 @@ fn Preview_Of_Staged_Text(assembly: &Assembly, request: &EditRequest, staged: &s
         .and_then(|edit| return edit.Preview(&assembly.store))
         .map_err(PreviewRefusal::Edit);
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::{EditRequest, PreviewRefusal, Preview_Staged_Edit};
+    use crate::corpus::{Assemble_Corpus, Assembly, CorpusRequest};
+    use nomos_platform_std::StdFileSystem;
+    use std::path::PathBuf;
+
+    fn Assembled() -> Assembly
+    {
+        let request = CorpusRequest { variable: "A_PREVIEW_TEST_CORPUS_VARIABLE".to_owned(), root: None, revision: "v14.36".to_owned() };
+        return Assemble_Corpus(&request).expect("assembles from the embedded records alone");
+    }
+
+    fn Scratch(name: &str) -> PathBuf
+    {
+        let root = std::env::temp_dir().join(format!("nomos-spec-orchestration-preview-{name}-{}", std::process::id()));
+        let _ignored = std::fs::remove_dir_all(&root);
+        std::fs::create_dir_all(&root).expect("a scratch build root");
+        return root;
+    }
+
+    #[test]
+    fn Test_Preview_Staged_Edit_Should_Refuse_A_Staged_File_That_Cannot_Be_Read()
+    {
+        let assembly = Assembled();
+        let missing = PathBuf::from("no-such-staged-file-anywhere.md");
+
+        let error = Preview_Staged_Edit(&assembly, &EditRequest { id: "D-132".to_owned(), from: missing.clone(), rename: None }, &StdFileSystem)
+            .expect_err("a --from naming nothing must refuse");
+
+        assert!(matches!(&error, PreviewRefusal::Unreadable { path, .. } if *path == missing), "{error:?}");
+    }
+
+    #[test]
+    fn Test_Preview_Staged_Edit_Should_Describe_A_Canonical_Heading_Rename()
+    {
+        let assembly = Assembled();
+        let markdown = crate::run::Rendered_Markdown(&assembly, &crate::request::RecordRequest { id: "D-132".to_owned(), revision: None })
+            .expect("D-132 is embedded")
+            .markdown;
+        let edited = markdown.replace("## Decision", "## The decision");
+        let staged = Scratch("colocated").join("staged.md");
+        std::fs::write(&staged, &edited).expect("writes the staged edit");
+
+        let preview = Preview_Staged_Edit(&assembly, &EditRequest { id: "D-132".to_owned(), from: staged, rename: None }, &StdFileSystem)
+            .expect("a canonical heading rename previews cleanly");
+
+        assert!(preview.Is_Wording_Moved(), "a heading rename must count as wording moved");
+    }
+}

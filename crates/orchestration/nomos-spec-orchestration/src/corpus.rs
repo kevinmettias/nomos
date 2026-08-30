@@ -97,3 +97,28 @@ fn Seeded() -> Result<Assembly, StoreError>
         absent: Vec::new(),
     });
 }
+
+#[cfg(test)]
+mod colocated_tests
+{
+    use super::{Assemble_Corpus, CorpusRequest, DEFAULT_REVISION};
+
+    /// This crate's own colocated address for `Assemble_Corpus`, proven here directly rather
+    /// than only through `corpus::tests`'s wider fixtures (a different physical file, so this
+    /// check's own companion rule does not read it as covering this unit). The embedded
+    /// governing records travel with the binary and do not depend on a corpus being named at
+    /// all.
+    #[test]
+    fn Test_Assemble_Corpus_Should_Seed_Governing_Records_With_No_Corpus_Named()
+    {
+        let request = CorpusRequest { variable: "A_CORPUS_VARIABLE".to_owned(), root: None, revision: DEFAULT_REVISION.to_owned() };
+
+        let assembly = Assemble_Corpus(&request).expect("assembles");
+
+        assert!(
+            assembly.store.Node_Summary("D-129").expect("queries").is_some(),
+            "the embedded records travel with the binary and do not depend on a corpus"
+        );
+        assert!(!assembly.absent.is_empty(), "an unnamed corpus is still a recorded absence");
+    }
+}

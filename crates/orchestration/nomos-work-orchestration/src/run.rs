@@ -225,3 +225,51 @@ fn Validated_Board<Filesystem: FileSystem, ClockSource: Clock, Lock: CrossProces
 
     return Ok(document);
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::Run;
+    use crate::WorkCommand;
+    use nomos_ledger::{FileLedger, Territory};
+    use nomos_platform_std::{FileLock, StdFileSystem, SystemClock};
+
+    /// A ledger under a directory unique to this process and this test -- the same colocated
+    /// shape [`crate::tests`]'s own `Scratch_Ledger` builds, re-homed here so this check's own
+    /// companion rule (the test must sit beside `Run`'s own file) can find it.
+    fn Scratch_Ledger() -> FileLedger<StdFileSystem, SystemClock, FileLock>
+    {
+        let root = std::env::temp_dir().join(format!("nomos-work-orchestration-run-colocated-{}", std::process::id()));
+        let _ignored = std::fs::remove_dir_all(&root);
+        std::fs::create_dir_all(&root).expect("a scratch directory");
+
+        return FileLedger::At(root.join("ledger.json"), StdFileSystem, SystemClock, FileLock::At(root.join("ledger.lock")));
+    }
+
+    /// No process is ever actually launched by `list`, so any launcher would do; one that
+    /// panics if called also proves it.
+    struct Unreached;
+
+    impl nomos_platform::ProcessLauncher for Unreached
+    {
+        fn Run(&self, _command: &nomos_platform::Command) -> Result<nomos_platform::ProcessOutput, String>
+        {
+            panic!("no command dispatched by this test should run a process");
+        }
+    }
+
+    #[test]
+    fn Test_Run_Should_Dispatch_List_To_An_Empty_Board()
+    {
+        let mut ledger = Scratch_Ledger();
+
+        let outcome = Run(&WorkCommand::List { state: None }, &mut ledger, &Unreached, Territory::Empty);
+
+        let super::WorkOutcome::List(Ok(view)) = outcome
+        else
+        {
+            panic!("an unwritten ledger loads as an empty, valid board");
+        };
+        assert!(view.document.items.is_empty());
+    }
+}

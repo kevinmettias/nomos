@@ -141,3 +141,53 @@ fn Verdict_Of<Filesystem: FileSystem>(
         }
     };
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::{FreshnessRefusal, FreshnessRequest, Freshness_Of_Render, Verdict};
+    use crate::corpus::{Assemble_Corpus, Assembly, CorpusRequest};
+    use nomos_platform_std::StdFileSystem;
+    use std::path::PathBuf;
+
+    const EMBEDDED_PROFILE: &str = "domain-specification";
+
+    fn Assembled() -> Assembly
+    {
+        let request = CorpusRequest { variable: "A_FRESHNESS_TEST_CORPUS_VARIABLE".to_owned(), root: None, revision: "v14.36".to_owned() };
+        return Assemble_Corpus(&request).expect("assembles from the embedded records alone");
+    }
+
+    fn Scratch(name: &str) -> PathBuf
+    {
+        let root = std::env::temp_dir().join(format!("nomos-spec-orchestration-freshness-{name}-{}", std::process::id()));
+        let _ignored = std::fs::remove_dir_all(&root);
+        std::fs::create_dir_all(&root).expect("a scratch build root");
+        return root;
+    }
+
+    #[test]
+    fn Test_Freshness_Of_Render_Should_Report_An_Empty_Build_Root_As_Absent()
+    {
+        let assembly = Assembled();
+        let into = Scratch("absent");
+
+        let answer = Freshness_Of_Render(&assembly, &FreshnessRequest { into, profile: Some(EMBEDDED_PROFILE.to_owned()), require: Vec::new() }, &StdFileSystem)
+            .expect("a resolvable single profile does not refuse");
+
+        let [outcome] = answer.examined.try_into().unwrap_or_else(|examined: Vec<_>| panic!("--profile narrows this run to exactly one profile: {}", examined.len()));
+        assert!(matches!(outcome.verdict, Verdict::Absent), "{:?}", outcome.verdict);
+    }
+
+    #[test]
+    fn Test_Freshness_Of_Render_Should_Refuse_An_Unknown_Profile()
+    {
+        let assembly = Assembled();
+        let into = Scratch("unknown-profile");
+
+        let error = Freshness_Of_Render(&assembly, &FreshnessRequest { into, profile: Some("no-such-profile".to_owned()), require: Vec::new() }, &StdFileSystem)
+            .expect_err("an unknown --profile must refuse");
+
+        assert!(matches!(error, FreshnessRefusal::NoSuchProfile { .. }), "{error:?}");
+    }
+}

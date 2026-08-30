@@ -24,3 +24,30 @@ pub fn Run(_command: &GateCommand) -> GateOutcome
 
     return GateOutcome::Planned(GatePlan { rules });
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::Run;
+    use crate::{GateCommand, GateOutcome};
+    use std::path::PathBuf;
+
+    /// Two different roots must plan identically: this increment does not select by scope, so
+    /// a caller cannot mistake `Run`'s answer for one that reads `command.root`.
+    #[test]
+    fn Test_Run_Should_Plan_Identically_Regardless_Of_Root()
+    {
+        let GateOutcome::Planned(here) = Run(&GateCommand { root: PathBuf::from("."), ..Default::default() })
+        else
+        {
+            panic!("this crate's own registration must not be contradictory");
+        };
+        let GateOutcome::Planned(elsewhere) = Run(&GateCommand { root: PathBuf::from("elsewhere"), ..Default::default() })
+        else
+        {
+            panic!("this crate's own registration must not be contradictory");
+        };
+
+        assert_eq!(here, elsewhere, "root is not read yet, so the plan must not depend on it");
+    }
+}

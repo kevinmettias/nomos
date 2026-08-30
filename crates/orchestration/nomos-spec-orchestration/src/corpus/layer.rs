@@ -153,3 +153,164 @@ pub(super) fn Refused_Absence(subject: Subject<'_>, path: Expected<'_>, error: &
         cost: cost.to_owned(),
     };
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::{
+        Expected, Ingest_Catalog_File, Ingest_Optional_Layer, Ingest_Statement_File, Layered,
+        Note_Contribution, Refuse_Input, Refused_Absence, Subject, Text_Of,
+    };
+    use crate::corpus::Assembly;
+    use nomos_spec_ingest::IngestError;
+    use nomos_spec_store::SpecificationStore;
+
+    fn Empty_Assembly() -> Assembly
+    {
+        return Assembly {
+            store: SpecificationStore::In_Memory().expect("an in-memory store always opens"),
+            read: Vec::new(),
+            absent: Vec::new(),
+        };
+    }
+
+    fn Input_At(path: std::path::PathBuf) -> Layered<'static>
+    {
+        return Layered { subject: "an optional input", path, unread: "it is not read", refused: "it is not in" };
+    }
+
+    #[test]
+    fn Test_Text_Of_Should_Read_A_File_That_Exists()
+    {
+        let mut assembly = Empty_Assembly();
+        let path = std::env::temp_dir().join("nomos-spec-orchestration-layer-text-of.txt");
+        std::fs::write(&path, "the text").expect("writes");
+
+        let text = Text_Of(&mut assembly, &Input_At(path));
+
+        assert_eq!(text, Some("the text".to_owned()));
+        assert!(assembly.absent.is_empty());
+    }
+
+    #[test]
+    fn Test_Text_Of_Should_Record_An_Absence_When_The_File_Cannot_Be_Read()
+    {
+        let mut assembly = Empty_Assembly();
+        let path = std::path::PathBuf::from("no/such/file/anywhere.txt");
+
+        let text = Text_Of(&mut assembly, &Input_At(path));
+
+        assert_eq!(text, None);
+        assert_eq!(assembly.absent.len(), 1);
+        assert_eq!(assembly.absent.first().expect("the assertion above proves one absence was recorded").subject, "an optional input");
+        assert_eq!(assembly.absent.first().expect("the assertion above proves one absence was recorded").cost, "it is not read");
+    }
+
+    #[test]
+    fn Test_Refuse_Input_Should_Record_A_Refusal_Against_The_Refused_Cost()
+    {
+        let mut assembly = Empty_Assembly();
+        let input = Input_At(std::path::PathBuf::from("somewhere.txt"));
+        let error = IngestError::Parse("not valid".to_owned());
+
+        Refuse_Input(&mut assembly, &input, &error);
+
+        assert_eq!(assembly.absent.len(), 1);
+        assert_eq!(assembly.absent.first().expect("the assertion above proves one absence was recorded").subject, "an optional input");
+        assert_eq!(assembly.absent.first().expect("the assertion above proves one absence was recorded").cost, "it is not in");
+        assert!(
+            assembly.absent.first().expect("the assertion above proves one absence was recorded").cause.contains("not valid"),
+            "{}",
+            assembly.absent.first().expect("the assertion above proves one absence was recorded").cause
+        );
+    }
+
+    #[test]
+    fn Test_Ingest_Optional_Layer_Should_Report_The_Ingest_Outcome_When_The_File_Is_Readable()
+    {
+        let mut assembly = Empty_Assembly();
+        let path = std::env::temp_dir().join("nomos-spec-orchestration-layer-ingest-optional.txt");
+        std::fs::write(&path, "parsed text").expect("writes");
+        let input = Input_At(path);
+
+        let report = Ingest_Optional_Layer(
+            &mut assembly,
+            &input,
+            |text| return Ok::<String, IngestError>(text.to_owned()),
+            |_store, parsed| return Ok::<String, IngestError>(parsed.clone()),
+        );
+
+        assert_eq!(report, Some("parsed text".to_owned()));
+        assert!(assembly.absent.is_empty());
+    }
+
+    #[test]
+    fn Test_Ingest_Optional_Layer_Should_Refuse_A_Parse_Failure_Without_Ingesting()
+    {
+        let mut assembly = Empty_Assembly();
+        let path = std::env::temp_dir().join("nomos-spec-orchestration-layer-ingest-optional-bad.txt");
+        std::fs::write(&path, "unparseable").expect("writes");
+        let input = Input_At(path);
+
+        let report = Ingest_Optional_Layer(
+            &mut assembly,
+            &input,
+            |_text| return Err(IngestError::Parse("cannot parse".to_owned())),
+            |_store, parsed: &String| return Ok::<String, IngestError>(parsed.clone()),
+        );
+
+        assert_eq!(report, None);
+        assert_eq!(assembly.absent.len(), 1);
+        assert_eq!(assembly.absent.first().expect("the assertion above proves one absence was recorded").cost, "it is not in");
+    }
+
+    #[test]
+    fn Test_Note_Contribution_Should_Format_The_Count_Noun_And_Path()
+    {
+        let mut assembly = Empty_Assembly();
+        let input = Input_At(std::path::PathBuf::from("a/path.txt"));
+
+        Note_Contribution(&mut assembly, &input, 3, "statement(s)");
+
+        assert_eq!(assembly.read, vec!["3 statement(s) from a/path.txt".to_owned()]);
+    }
+
+    #[test]
+    fn Test_Ingest_Statement_File_Should_Record_An_Absence_When_The_Root_Has_No_Statements()
+    {
+        let mut assembly = Empty_Assembly();
+        let root = std::env::temp_dir().join("nomos-spec-orchestration-layer-no-statements");
+        std::fs::create_dir_all(&root).expect("creates");
+
+        Ingest_Statement_File(&mut assembly, &root);
+
+        assert_eq!(assembly.absent.len(), 1);
+        assert_eq!(assembly.absent.first().expect("the assertion above proves one absence was recorded").subject, "the normative statements");
+    }
+
+    #[test]
+    fn Test_Ingest_Catalog_File_Should_Record_An_Absence_When_The_Root_Has_No_Catalog()
+    {
+        let mut assembly = Empty_Assembly();
+        let root = std::env::temp_dir().join("nomos-spec-orchestration-layer-no-catalog");
+        std::fs::create_dir_all(&root).expect("creates");
+
+        Ingest_Catalog_File(&mut assembly, &root);
+
+        assert_eq!(assembly.absent.len(), 1);
+        assert_eq!(assembly.absent.first().expect("the assertion above proves one absence was recorded").subject, "the node catalog");
+    }
+
+    #[test]
+    fn Test_Refused_Absence_Should_Carry_The_Subject_Path_And_Error()
+    {
+        let error = IngestError::Parse("bad bytes".to_owned());
+
+        let absence = Refused_Absence(Subject("the node catalog"), Expected("a/path.json"), &error, "nothing is in this store");
+
+        assert_eq!(absence.subject, "the node catalog");
+        assert_eq!(absence.expected, "a/path.json");
+        assert_eq!(absence.cost, "nothing is in this store");
+        assert!(absence.cause.contains("bad bytes"), "{}", absence.cause);
+    }
+}

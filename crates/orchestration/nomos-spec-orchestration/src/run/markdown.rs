@@ -24,3 +24,22 @@ pub fn Rendered_Markdown(assembly: &Assembly, request: &RecordRequest) -> Result
 
     return assembly.store.Record_Markdown(&request.id, revision);
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::{RecordRequest, Rendered_Markdown};
+    use crate::corpus::{Assemble_Corpus, CorpusRequest};
+
+    #[test]
+    fn Test_Rendered_Markdown_Should_Render_A_Governing_Record_Back_Out()
+    {
+        let request = CorpusRequest { variable: "A_MARKDOWN_TEST_CORPUS_VARIABLE".to_owned(), root: None, revision: "v14.36".to_owned() };
+        let assembly = Assemble_Corpus(&request).expect("assembles from the embedded records alone");
+
+        let projection = Rendered_Markdown(&assembly, &RecordRequest { id: "D-132".to_owned(), revision: None })
+            .expect("D-132 is a governing record with declared front matter");
+
+        assert_eq!(projection.node_id, "D-132");
+    }
+}

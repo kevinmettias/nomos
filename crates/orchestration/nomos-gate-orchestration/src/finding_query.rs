@@ -126,3 +126,54 @@ fn Contract_Of(rule: &RuleId) -> Option<(String, u32)>
 
     return Some((offer.contract_record.clone(), offer.contract_record_version));
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::{Explain_Gate, FindingQuery};
+    use crate::{Explanation, GateCommand, GateEnvironment};
+    use nomos_model::Subject_Of_Path;
+    use nomos_platform_std::StdProcessLauncher;
+    use nomos_rules::{SourceFile, COMPLETENESS_MIRROR};
+    use nomos_workspace::BuildVariant;
+    use std::path::PathBuf;
+
+    fn Test_Variant() -> BuildVariant
+    {
+        return BuildVariant::New("test-target", "test-profile", "test-toolchain", std::iter::empty::<String>());
+    }
+
+    fn Repository_Root() -> PathBuf
+    {
+        let manifest = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+        return manifest.parent().and_then(std::path::Path::parent).and_then(std::path::Path::parent).map(PathBuf::from).expect("this crate sits three levels below the workspace root");
+    }
+
+    fn Source(path: &str, text: &str) -> SourceFile
+    {
+        return SourceFile::New(path, Subject_Of_Path(path), text);
+    }
+
+    /// A real query naming the one blocking finding a phantom mirror produces answers `Found`,
+    /// with `would_block` true -- proof this crate's own `Explain_Gate` (not a rename of the
+    /// higher-level `Run_Gate` fixture) actually judges the source and answers the query.
+    #[test]
+    fn Test_Explain_Gate_Should_Find_A_Real_Blocking_Finding()
+    {
+        let sources = vec![Source(
+            "a.rs",
+            "/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n",
+        )];
+        let query = FindingQuery { rule: nomos_contracts::RuleId::New(COMPLETENESS_MIRROR), location: "a.rs".to_owned() };
+        let command = GateCommand { root: Repository_Root(), ..Default::default() };
+
+        let result = Explain_Gate(Some(sources), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher }, &command, &query);
+
+        let Explanation::Found { would_block, .. } = result.explanation
+        else
+        {
+            panic!("this fixture must produce the finding the query names");
+        };
+        assert!(would_block);
+    }
+}

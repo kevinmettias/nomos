@@ -104,3 +104,25 @@ fn Vanished_Document(uid: i64) -> StoreError
         "document {uid} resolved and then could not be read back from the same connection"
     ));
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::{Resolved_Table, TableRefusal, TableRequest};
+    use crate::corpus::{Assemble_Corpus, CorpusRequest};
+
+    #[test]
+    fn Test_Resolved_Table_Should_Refuse_An_Address_Nothing_Matches()
+    {
+        let request = CorpusRequest { variable: "A_TABLE_TEST_CORPUS_VARIABLE".to_owned(), root: None, revision: "v14.36".to_owned() };
+        let assembly = Assemble_Corpus(&request).expect("assembles from the embedded records alone");
+
+        let error = Resolved_Table(
+            &assembly,
+            &TableRequest { document: "no-such-document.md".to_owned(), block: None, table: None, revision: None },
+        )
+        .expect_err("an address nothing matches must refuse");
+
+        assert!(matches!(error, TableRefusal::NoSuchDocument), "{error:?}");
+    }
+}

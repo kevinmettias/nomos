@@ -18,7 +18,7 @@ fn Request(root: Option<PathBuf>) -> CorpusRequest
 }
 
 #[test]
-fn Test_With_No_Corpus_The_Governing_Records_Should_Still_Be_There()
+fn Test_Assemble_Corpus_Should_Include_Governing_Records_Even_With_No_Corpus()
 {
     let assembly = Assemble_Corpus(&Request(None)).expect("assembles");
 

@@ -95,3 +95,63 @@ fn Constructed_Submission(request: &SubmitRequest) -> Submission
         gaps: request.gaps.clone(),
     };
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::{SubmitRefusal, SubmitRequest, Submit_Corpus_Request};
+    use crate::corpus::{Assemble_Corpus, Assembly, CorpusRequest};
+    use nomos_platform_std::StdFileSystem;
+    use nomos_spec_model::{Origin, SubmissionState};
+
+    fn Assembled() -> Assembly
+    {
+        let request = CorpusRequest { variable: "A_SUBMIT_TEST_CORPUS_VARIABLE".to_owned(), root: None, revision: "v14.36".to_owned() };
+        return Assemble_Corpus(&request).expect("assembles from the embedded records alone");
+    }
+
+    fn Complete_Feature_Request(id: &str) -> SubmitRequest
+    {
+        return SubmitRequest {
+            kind: nomos_spec_model::SubmissionKind::FeatureRequest,
+            id: id.to_owned(),
+            by: "kevin".to_owned(),
+            state: SubmissionState::Draft,
+            contract_version: 1,
+            fields: vec![
+                ("title".to_owned(), "t".to_owned()),
+                ("goal".to_owned(), "g".to_owned()),
+                ("behaviour".to_owned(), "b".to_owned()),
+                ("acceptance".to_owned(), "a".to_owned()),
+                ("invariants".to_owned(), "none".to_owned()),
+            ],
+            gaps: Vec::new(),
+            submitted_through: "test".to_owned(),
+            into: None,
+        };
+    }
+
+    #[test]
+    fn Test_Submit_Corpus_Request_Should_Accept_A_Complete_Submission()
+    {
+        let mut assembly = Assembled();
+        let request = Complete_Feature_Request("FR-ORCH-COLOCATED-001");
+
+        let answer = Submit_Corpus_Request(&mut assembly, &request, &StdFileSystem).expect("a complete feature request is accepted");
+
+        assert!(answer.submission.values.iter().all(|value| return value.origin == Origin::Submitted));
+        assert!(answer.written.is_none(), "no --into was given");
+    }
+
+    #[test]
+    fn Test_Submit_Corpus_Request_Should_Refuse_An_Incomplete_Submission()
+    {
+        let mut assembly = Assembled();
+        let mut request = Complete_Feature_Request("FR-ORCH-COLOCATED-002");
+        request.fields.truncate(1);
+
+        let error = Submit_Corpus_Request(&mut assembly, &request, &StdFileSystem).expect_err("an incomplete submission must be refused");
+
+        assert!(matches!(error, SubmitRefusal::Refused(_)), "{error:?}");
+    }
+}

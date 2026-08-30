@@ -75,3 +75,89 @@ pub(super) fn Unreadable_Corpus(root: &Path, variable: &str) -> Absence
             .to_owned(),
     };
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::{Assembly, Corpus_Root, CorpusRequest, Unnamed_Corpus, Unreadable_Corpus};
+    use nomos_spec_store::SpecificationStore;
+    use std::path::PathBuf;
+
+    const VARIABLE: &str = "A_CORPUS_VARIABLE";
+
+    fn Assembly_With_Nothing_Read() -> Assembly
+    {
+        return Assembly {
+            store: SpecificationStore::In_Memory().expect("an in-memory store always opens"),
+            read: Vec::new(),
+            absent: Vec::new(),
+        };
+    }
+
+    fn Request(root: Option<PathBuf>) -> CorpusRequest
+    {
+        return CorpusRequest { variable: VARIABLE.to_owned(), root, revision: "v14.36".to_owned() };
+    }
+
+    #[test]
+    fn Test_Corpus_Root_Should_Report_An_Unnamed_Absence_When_Nothing_Was_Named()
+    {
+        let mut assembly = Assembly_With_Nothing_Read();
+        let request = Request(None);
+
+        let root = Corpus_Root(&mut assembly, &request);
+
+        assert!(root.is_none());
+        assert_eq!(assembly.absent.len(), 1);
+        assert_eq!(assembly.absent.first().expect("the assertion above proves one absence was recorded"), &Unnamed_Corpus(VARIABLE));
+    }
+
+    #[test]
+    fn Test_Corpus_Root_Should_Report_An_Unreadable_Absence_For_A_Path_That_Is_Not_A_Directory()
+    {
+        let mut assembly = Assembly_With_Nothing_Read();
+        let named = PathBuf::from("no/such/corpus/anywhere");
+        let request = Request(Some(named.clone()));
+
+        let root = Corpus_Root(&mut assembly, &request);
+
+        assert!(root.is_none());
+        assert_eq!(assembly.absent.len(), 1);
+        assert_eq!(assembly.absent.first().expect("the assertion above proves one absence was recorded"), &Unreadable_Corpus(&named, VARIABLE));
+    }
+
+    #[test]
+    fn Test_Corpus_Root_Should_Report_The_Root_When_It_Is_A_Real_Directory()
+    {
+        let mut assembly = Assembly_With_Nothing_Read();
+        let real = std::env::temp_dir();
+        let request = Request(Some(real.clone()));
+
+        let root = Corpus_Root(&mut assembly, &request);
+
+        assert_eq!(root, Some(real.as_path()));
+        assert!(assembly.absent.is_empty());
+    }
+
+    #[test]
+    fn Test_Unnamed_Corpus_Should_Name_The_Variable_That_Was_Not_Set()
+    {
+        let absence = Unnamed_Corpus(VARIABLE);
+
+        assert_eq!(absence.subject, "the v14 authoring corpus");
+        assert!(absence.cause.contains(VARIABLE), "{}", absence.cause);
+        assert!(absence.expected.contains(VARIABLE), "{}", absence.expected);
+    }
+
+    #[test]
+    fn Test_Unreadable_Corpus_Should_Name_The_Path_That_Was_Not_A_Directory()
+    {
+        let named = PathBuf::from("no/such/corpus/anywhere");
+
+        let absence = Unreadable_Corpus(&named, VARIABLE);
+
+        assert_eq!(absence.subject, "the v14 authoring corpus");
+        assert!(absence.expected.contains("no/such/corpus/anywhere") || absence.expected.contains("no\\such\\corpus\\anywhere"), "{}", absence.expected);
+        assert!(absence.cause.contains(VARIABLE), "{}", absence.cause);
+    }
+}

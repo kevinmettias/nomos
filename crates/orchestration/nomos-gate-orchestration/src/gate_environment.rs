@@ -215,3 +215,70 @@ fn Reduced_With_Coverage(outcome: GateRunOutcome, coverage: CoveragePolicy, sele
         (_, outcome) => outcome,
     };
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::{JudgeContext, Judged_Sources, Run_Gate};
+    use crate::GateCommand;
+    use nomos_check_orchestration::CheckOutcome;
+    use nomos_contracts::{Digest128, RunId};
+    use nomos_model::Subject_Of_Path;
+    use nomos_platform_std::StdProcessLauncher;
+    use nomos_rules::SourceFile;
+    use nomos_workspace::BuildVariant;
+    use std::path::PathBuf;
+
+    fn Test_Variant() -> BuildVariant
+    {
+        return BuildVariant::New("test-target", "test-profile", "test-toolchain", std::iter::empty::<String>());
+    }
+
+    /// This repository's own real root -- [`Judged_Sources`]'s dependency step, through
+    /// `nomos_check_orchestration::Run`, runs `cargo metadata` against it regardless of what
+    /// sources a test hands in.
+    fn Repository_Root() -> PathBuf
+    {
+        let manifest = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+        return manifest.parent().and_then(std::path::Path::parent).and_then(std::path::Path::parent).map(PathBuf::from).expect("this crate sits three levels below the workspace root");
+    }
+
+    fn Source(path: &str, text: &str) -> SourceFile
+    {
+        return SourceFile::New(path, Subject_Of_Path(path), text);
+    }
+
+    #[test]
+    fn Test_Judged_Sources_Should_Report_Unreadable_For_An_Unwalked_Root()
+    {
+        let root = Repository_Root();
+        let outcome = Judged_Sources(None, &StdProcessLauncher, JudgeContext { variant: Test_Variant(), root: &root, selected: &[] });
+
+        assert!(matches!(outcome, CheckOutcome::Unreadable));
+    }
+
+    #[test]
+    fn Test_Judged_Sources_Should_Report_No_Source_For_An_Empty_Walk()
+    {
+        let root = Repository_Root();
+        let outcome = Judged_Sources(Some(Vec::new()), &StdProcessLauncher, JudgeContext { variant: Test_Variant(), root: &root, selected: &[] });
+
+        assert!(matches!(outcome, CheckOutcome::NoSource));
+    }
+
+    #[test]
+    fn Test_Run_Gate_Should_Fail_On_A_Blocking_Finding()
+    {
+        let root = Repository_Root();
+        let sources = vec![Source(
+            "a.rs",
+            "/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n",
+        )];
+        let command = GateCommand { root: root.clone(), ..Default::default() };
+        let run = RunId::From_Digest(Digest128::From_Bytes([0; Digest128::BYTE_LENGTH]));
+
+        let result = Run_Gate(Some(sources), super::GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher }, &command, run);
+
+        assert!(!result.findings.blocking_findings.is_empty());
+    }
+}
