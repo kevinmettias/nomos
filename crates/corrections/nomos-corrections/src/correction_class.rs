@@ -52,7 +52,7 @@ mod tests
     use super::*;
 
     #[test]
-    fn Test_Labels_Are_Distinct()
+    fn Test_Label_Should_Be_Distinct_Per_Variant()
     {
         let mut labels = vec![
             CorrectionClass::Mechanical.Label(),

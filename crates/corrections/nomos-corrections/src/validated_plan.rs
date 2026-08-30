@@ -80,7 +80,7 @@ mod tests
     const CONFIGURATION_SEED_BYTE: u8 = 0x22;
 
     #[test]
-    fn Test_Committing_A_Validated_Plan_Should_Change_The_Workspace()
+    fn Test_Commit_Should_Change_The_Workspace()
     {
         let mut base = Base(CONFIGURATION_SEED_BYTE);
         let plan = Plan_Changing_A("old", "new");
@@ -99,7 +99,7 @@ mod tests
     }
 
     #[test]
-    fn Test_Committing_After_The_Workspace_Moved_Should_Be_Refused()
+    fn Test_Commit_Should_Be_Refused_After_The_Workspace_Moved()
     {
         let mut base = Base(CONFIGURATION_SEED_BYTE);
         let plan = Plan_Changing_A("old", "new");
@@ -124,5 +124,19 @@ mod tests
     fn Test_A_Validated_Plan_Belongs_To_The_Validate_Mutation_Class()
     {
         assert_eq!(ValidatedPlan::Mutation_Class(), MutationClass::Validate);
+    }
+
+    #[test]
+    fn Test_Of_Should_Carry_The_Given_Snapshot_Into_The_Committed_Plan()
+    {
+        let mut base = Base(CONFIGURATION_SEED_BYTE);
+        let starting = base.Id();
+        let forward = WorkspaceChangeSet::From(ChangeSource::GitCheckout).Present("a.rs", "new");
+        let reverse = WorkspaceChangeSet::From(ChangeSource::GitCheckout).Present("a.rs", "old");
+
+        let validated = ValidatedPlan::Of(starting, forward, reverse);
+        let committed = validated.Commit(&mut base, Agent_Judged()).expect("commits cleanly");
+
+        assert_eq!(committed.Base(), starting);
     }
 }

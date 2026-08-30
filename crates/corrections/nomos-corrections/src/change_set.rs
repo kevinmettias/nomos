@@ -76,4 +76,32 @@ mod tests
         assert!(!set.Is_Empty());
         assert_eq!(set.Edits().len(), 2);
     }
+
+    #[test]
+    fn Test_Is_Empty_Should_Be_False_Once_An_Edit_Is_Added()
+    {
+        let edit = Edit::New("a.rs", None, Some("x".to_owned()));
+        let set = ChangeSet::Empty().With(edit);
+
+        assert!(!set.Is_Empty());
+    }
+
+    #[test]
+    fn Test_With_Should_Append_The_Given_Edit()
+    {
+        let edit = Edit::New("a.rs", None, Some("x".to_owned()));
+        let set = ChangeSet::Empty().With(edit.clone());
+
+        assert_eq!(set.Edits(), [edit]);
+    }
+
+    #[test]
+    fn Test_Edits_Should_Report_Every_Appended_Edit_In_Order()
+    {
+        let edit_a = Edit::New("a.rs", None, Some("x".to_owned()));
+        let edit_b = Edit::New("b.rs", Some("y".to_owned()), None);
+        let set = ChangeSet::Empty().With(edit_a.clone()).With(edit_b.clone());
+
+        assert_eq!(set.Edits(), [edit_a, edit_b]);
+    }
 }

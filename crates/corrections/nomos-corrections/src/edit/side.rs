@@ -51,3 +51,48 @@ impl EditSide
         };
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_New_Should_Construct_A_Side_From_Its_Given_Arguments()
+    {
+        let side = EditSide::New("a.rs".to_owned(), Some("x".to_owned()));
+
+        assert_eq!(side.Path(), "a.rs");
+        assert_eq!(side.Content(), Some("x"));
+    }
+
+    #[test]
+    fn Test_Path_Should_Report_The_Sides_Own_Location()
+    {
+        let side = EditSide::New("a.rs".to_owned(), None);
+
+        assert_eq!(side.Path(), "a.rs");
+    }
+
+    #[test]
+    fn Test_Content_Should_Be_None_When_This_Side_Carries_No_Value()
+    {
+        let side = EditSide::New("a.rs".to_owned(), None);
+
+        assert_eq!(side.Content(), None);
+    }
+
+    #[test]
+    fn Test_As_Change_Should_Produce_A_Present_Change_When_Content_Is_Set()
+    {
+        let side = EditSide::New("a.rs".to_owned(), Some("x".to_owned()));
+
+        assert_eq!(
+            side.As_Change(),
+            Change::Present {
+                path: "a.rs".to_owned(),
+                content: "x".to_owned()
+            }
+        );
+    }
+}

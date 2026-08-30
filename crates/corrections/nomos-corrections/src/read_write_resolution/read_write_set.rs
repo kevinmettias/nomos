@@ -97,4 +97,28 @@ mod tests
         assert_eq!(derived.Confidence(), "high");
         assert_eq!(derived.Invalidation_Basis(), "invalidated when the crate's own dependency graph changes");
     }
+
+    #[test]
+    fn Test_Resolution_Should_Report_The_Tier_The_Set_Was_Declared_Or_Derived_At()
+    {
+        let set = ReadWriteSet::Declared(ReadWriteResolution::Symbol, vec!["nomos_corrections::Edit".to_owned()]);
+
+        assert_eq!(set.Resolution(), ReadWriteResolution::Symbol);
+    }
+
+    #[test]
+    fn Test_Entries_Should_Report_Every_Path_The_Set_Names()
+    {
+        let set = ReadWriteSet::Declared(ReadWriteResolution::Artifact, vec!["a.rs".to_owned(), "b.rs".to_owned()]);
+
+        assert_eq!(set.Entries(), ["a.rs", "b.rs"]);
+    }
+
+    #[test]
+    fn Test_Derived_Provenance_Should_Return_None_For_A_Declared_Set()
+    {
+        let set = ReadWriteSet::Declared(ReadWriteResolution::Symbol, vec!["nomos_corrections::Edit".to_owned()]);
+
+        assert!(set.Derived_Provenance().is_none());
+    }
 }

@@ -116,10 +116,11 @@ mod tests
     }
 
     #[test]
-    fn Test_An_Addition_Should_Reverse_To_A_Removal()
+    fn Test_After_Should_Report_The_New_Content_An_Addition_Introduces()
     {
         let edit = Edit::New("src/new.rs", None, Some("content".to_owned()));
 
+        assert_eq!(edit.After(), Some("content"));
         assert_eq!(
             edit.Forward(),
             Change::Present {
@@ -133,5 +134,35 @@ mod tests
                 path: "src/new.rs".to_owned()
             }
         );
+    }
+
+    #[test]
+    fn Test_New_Should_Construct_An_Edit_From_Its_Given_Values()
+    {
+        let edit = Edit::New("src/a.rs", Some("old".to_owned()), Some("new".to_owned()));
+
+        assert_eq!(
+            edit.Forward(),
+            Change::Present {
+                path: "src/a.rs".to_owned(),
+                content: "new".to_owned()
+            }
+        );
+    }
+
+    #[test]
+    fn Test_Path_Should_Report_The_Edits_Location()
+    {
+        let edit = Edit::New("src/a.rs", None, Some("new".to_owned()));
+
+        assert_eq!(edit.Path(), "src/a.rs");
+    }
+
+    #[test]
+    fn Test_Before_Should_Report_None_When_The_Location_Did_Not_Exist()
+    {
+        let edit = Edit::New("src/a.rs", None, Some("new".to_owned()));
+
+        assert_eq!(edit.Before(), None);
     }
 }

@@ -45,3 +45,33 @@ pub(crate) fn Agent_Judged() -> Evidence
         supporting: Vec::new(),
     };
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Base_Should_Start_With_The_Configured_File_Present()
+    {
+        let workspace = Base(0x01);
+
+        assert_eq!(workspace.Content_Of("a.rs"), Some(nomos_model::Content_Digest(b"old")));
+    }
+
+    #[test]
+    fn Test_Plan_Changing_A_Should_Build_A_Plan_That_Rewrites_The_File()
+    {
+        let plan = Plan_Changing_A("old", "new");
+
+        assert_eq!(plan.Candidates().len(), 1);
+    }
+
+    #[test]
+    fn Test_Agent_Judged_Should_Report_The_Agent_Judged_Evidence_Class()
+    {
+        let evidence = Agent_Judged();
+
+        assert_eq!(evidence.class, EvidenceClass::AgentJudged);
+    }
+}

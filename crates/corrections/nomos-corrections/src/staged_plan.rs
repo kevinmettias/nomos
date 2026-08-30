@@ -124,11 +124,12 @@ mod tests
     use crate::{CorrectionError, StagedPlan};
     use nomos_contracts::MutationClass;
     use nomos_workspace::{ChangeSource, WorkspaceChangeSet};
+    use super::Assert_Not_Moved;
 
     const CONFIGURATION_SEED_BYTE: u8 = 0x11;
 
     #[test]
-    fn Test_Staging_Against_The_Content_It_Was_Built_Over_Should_Succeed()
+    fn Test_Of_Should_Succeed_When_Every_Candidates_Prior_Content_Matches_The_Workspace()
     {
         let base = Base(CONFIGURATION_SEED_BYTE);
         let plan = Plan_Changing_A("old", "new");
@@ -150,7 +151,7 @@ mod tests
     }
 
     #[test]
-    fn Test_Validating_An_Unmoved_Workspace_Should_Succeed()
+    fn Test_Validate_Should_Accept_A_Workspace_That_Has_Not_Moved()
     {
         let base = Base(CONFIGURATION_SEED_BYTE);
         let plan = Plan_Changing_A("old", "new");
@@ -160,7 +161,7 @@ mod tests
     }
 
     #[test]
-    fn Test_Validating_A_Moved_Workspace_Should_Be_Refused()
+    fn Test_Validate_Should_Refuse_A_Workspace_That_Has_Moved_Since_Staging()
     {
         let mut base = Base(CONFIGURATION_SEED_BYTE);
         let plan = Plan_Changing_A("old", "new");
@@ -179,5 +180,32 @@ mod tests
     fn Test_A_Staged_Plan_Belongs_To_The_Validate_Mutation_Class()
     {
         assert_eq!(StagedPlan::Mutation_Class(), MutationClass::Validate);
+    }
+
+    #[test]
+    fn Test_Base_Should_Report_The_Snapshot_The_Plan_Was_Staged_Over()
+    {
+        let base = Base(0x66);
+        let plan = Plan_Changing_A("old", "new");
+
+        let staged = plan.Stage(&base).expect("stages cleanly");
+
+        assert_eq!(staged.Base(), base.Id());
+    }
+
+    #[test]
+    fn Test_Assert_Not_Moved_Should_Refuse_When_The_Live_Snapshot_Differs_From_Expected()
+    {
+        let mut workspace = Base(0x77);
+        let expected = workspace.Id();
+
+        let advance = WorkspaceChangeSet::From(ChangeSource::GitCheckout).Present("b.rs", "other");
+        workspace
+            .Apply(&advance)
+            .expect("an unrelated change still advances the workspace");
+
+        let refusal = Assert_Not_Moved(expected, &workspace).expect_err("the workspace moved");
+
+        assert!(matches!(refusal, CorrectionError::Moved { .. }));
     }
 }

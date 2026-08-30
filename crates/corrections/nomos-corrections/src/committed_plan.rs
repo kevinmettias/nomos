@@ -174,6 +174,29 @@ mod tests
         assert_eq!(CommittedPlan::Rollback_Boundary(), crate::RollbackBoundary::Exact);
     }
 
+    #[test]
+    fn Test_Of_Should_Assemble_A_Committed_Plan_From_Its_Parts()
+    {
+        let mut base = Base(CONFIGURATION_SEED_BYTE);
+        let starting = base.Id();
+        let plan = Plan_Changing_A("old", "new");
+
+        let committed = Commit_Plan(&plan, &mut base);
+
+        assert_eq!(committed.Base(), starting);
+    }
+
+    #[test]
+    fn Test_After_Should_Report_The_Snapshot_Once_The_Change_Was_Applied()
+    {
+        let mut base = Base(CONFIGURATION_SEED_BYTE);
+        let plan = Plan_Changing_A("old", "new");
+
+        let committed = Commit_Plan(&plan, &mut base);
+
+        assert_eq!(committed.After(), base.Id());
+    }
+
     /// Stages, validates and commits `plan` against `base` in one step.
     fn Commit_Plan(plan: &CorrectionPlan, base: &mut Workspace) -> CommittedPlan
     {

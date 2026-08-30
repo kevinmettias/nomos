@@ -108,11 +108,34 @@ mod tests
     }
 
     #[test]
-    fn Test_An_Empty_Plan_Should_Be_Refused()
+    fn Test_New_Should_Refuse_An_Empty_Candidate_List()
     {
         let refusal = CorrectionPlan::New(Vec::new()).expect_err("no candidates is vacuous");
 
         assert_eq!(refusal, CorrectionError::Vacuous);
+    }
+
+    #[test]
+    fn Test_Preview_Should_Render_Without_Touching_Any_Workspace()
+    {
+        let plan = CorrectionPlan::New(vec![Candidate_Touching(Description("first"), Path("a.rs"))]).expect("one candidate is a valid plan");
+
+        let preview = plan.Preview();
+
+        assert!(!preview.Rendered().is_empty());
+    }
+
+    #[test]
+    fn Test_Stage_Should_Check_Prior_Content_Against_The_Base_Workspace()
+    {
+        let workspace = crate::test_support::Base(0x44);
+        let edit = Edit::New("a.rs", Some("old".to_owned()), Some("new".to_owned()));
+        let plan = CorrectionPlan::New(vec![CorrectionCandidate::New("fix a", ChangeSet::Empty().With(edit), CorrectionClass::Mechanical, vec![])])
+            .expect("one candidate is a valid plan");
+
+        let staged = plan.Stage(&workspace).expect("the candidate's declared prior content matches");
+
+        assert_eq!(staged.Base(), workspace.Id());
     }
 
     #[test]

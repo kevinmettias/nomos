@@ -99,7 +99,7 @@ mod tests
     use crate::Edit;
 
     #[test]
-    fn Test_Identical_Candidates_Should_Share_An_Identity()
+    fn Test_New_Should_Give_Identical_Candidates_The_Same_Identity()
     {
         let change = Change_Setting_A_To("x");
 
@@ -107,6 +107,15 @@ mod tests
         let other = CorrectionCandidate::New("fix a", change, CorrectionClass::Mechanical, vec![]);
 
         assert_eq!(one.Id(), other.Id());
+    }
+
+    #[test]
+    fn Test_Id_Should_Return_The_Same_Value_Every_Time_Its_Called()
+    {
+        let change = Change_Setting_A_To("x");
+        let candidate = CorrectionCandidate::New("fix a", change, CorrectionClass::Mechanical, vec![]);
+
+        assert_eq!(candidate.Id(), candidate.Id());
     }
 
     #[test]
@@ -131,7 +140,7 @@ mod tests
     }
 
     #[test]
-    fn Test_A_Different_Class_Or_Labels_Should_Not_Change_The_Identity()
+    fn Test_Class_Should_Not_Affect_The_Identity()
     {
         let change = Change_Setting_A_To("x");
 

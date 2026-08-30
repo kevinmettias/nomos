@@ -86,7 +86,7 @@ mod tests
     use nomos_contracts::{AuthorityClass, MutationClass};
 
     #[test]
-    fn Test_A_Preview_Names_Every_Candidate_And_Edit()
+    fn Test_Rendered_Should_Name_Every_Candidate_And_Edit()
     {
         let plan = CorrectionPlan::New(vec![CorrectionCandidate::New(
             "fix a",
@@ -103,7 +103,7 @@ mod tests
     }
 
     #[test]
-    fn Test_Previewing_The_Same_Plan_Twice_Should_Agree()
+    fn Test_Of_Should_Produce_The_Same_Rendering_For_The_Same_Plan_Twice()
     {
         let plan = CorrectionPlan::New(vec![CorrectionCandidate::New(
             "fix a",

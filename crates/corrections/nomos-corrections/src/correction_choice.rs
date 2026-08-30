@@ -84,12 +84,73 @@ mod tests
     use crate::{ChangeSet, CorrectionCandidate, CorrectionClass, Edit};
 
     #[test]
-    fn Test_A_Choice_Carries_Exactly_What_It_Was_Given()
+    fn Test_New_Should_Carry_Every_Field_It_Was_Constructed_With()
     {
         let selected = Candidate_Named("winner").Id();
         let rejected = Candidate_Named("loser").Id();
+        let choice = Choice_Over(selected, rejected);
 
-        let choice = CorrectionChoice::New(
+        assert_eq!(choice.Selected(), selected);
+        assert_eq!(choice.Rejected_Alternatives(), [rejected]);
+    }
+
+    #[test]
+    fn Test_Selected_Should_Report_The_Winning_Candidates_Identity()
+    {
+        let selected = Candidate_Named("winner").Id();
+        let choice = Choice_Over(selected, Candidate_Named("loser").Id());
+
+        assert_eq!(choice.Selected(), selected);
+    }
+
+    #[test]
+    fn Test_Objective_Weights_Should_Report_What_The_Choice_Was_Given()
+    {
+        let choice = Choice_Over(Candidate_Named("winner").Id(), Candidate_Named("loser").Id());
+
+        assert_eq!(choice.Objective_Weights(), [(RankingCriterion::BehaviorPreservation, 3)]);
+    }
+
+    #[test]
+    fn Test_Rejected_Alternatives_Should_List_Every_Candidate_That_Lost()
+    {
+        let rejected = Candidate_Named("loser").Id();
+        let choice = Choice_Over(Candidate_Named("winner").Id(), rejected);
+
+        assert_eq!(choice.Rejected_Alternatives(), [rejected]);
+    }
+
+    #[test]
+    fn Test_Predicted_Side_Effects_Should_Report_What_The_Choice_Was_Given()
+    {
+        let choice = Choice_Over(Candidate_Named("winner").Id(), Candidate_Named("loser").Id());
+
+        assert_eq!(choice.Predicted_Side_Effects(), ["may slow the hot path"]);
+    }
+
+    #[test]
+    fn Test_Unresolved_Tradeoffs_Should_Report_What_The_Choice_Was_Given()
+    {
+        let choice = Choice_Over(Candidate_Named("winner").Id(), Candidate_Named("loser").Id());
+
+        assert_eq!(choice.Unresolved_Tradeoffs(), ["unclear whether callers rely on the old error message"]);
+    }
+
+    #[test]
+    fn Test_Verification_Obligations_Should_Report_What_The_Choice_Was_Given()
+    {
+        let choice = Choice_Over(Candidate_Named("winner").Id(), Candidate_Named("loser").Id());
+
+        assert_eq!(choice.Verification_Obligations(), ["run the integration suite"]);
+    }
+
+    /// The one choice record every test above builds against: one objective weight, one
+    /// rejected alternative, and the same predicted side effect, unresolved tradeoff and
+    /// verification obligation -- encapsulated once so the fields under test are not
+    /// repeated at every call site.
+    fn Choice_Over(selected: crate::CorrectionId, rejected: crate::CorrectionId) -> CorrectionChoice
+    {
+        return CorrectionChoice::New(
             selected,
             ChoiceRecord {
                 objective_weights: vec![(RankingCriterion::BehaviorPreservation, 3)],
@@ -99,13 +160,6 @@ mod tests
                 verification_obligations: vec!["run the integration suite".to_owned()],
             },
         );
-
-        assert_eq!(choice.Selected(), selected);
-        assert_eq!(choice.Objective_Weights(), [(RankingCriterion::BehaviorPreservation, 3)]);
-        assert_eq!(choice.Rejected_Alternatives(), [rejected]);
-        assert_eq!(choice.Predicted_Side_Effects(), ["may slow the hot path"]);
-        assert_eq!(choice.Unresolved_Tradeoffs(), ["unclear whether callers rely on the old error message"]);
-        assert_eq!(choice.Verification_Obligations(), ["run the integration suite"]);
     }
 
     fn Candidate_Named(description: &str) -> CorrectionCandidate

@@ -61,3 +61,57 @@ impl DerivedProvenance
         return &self.invalidation_basis;
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use nomos_contracts::{Assurance, FactVariant, IncrementalGranularity};
+
+    #[test]
+    fn Test_New_Should_Construct_A_Value_From_Its_Given_Arguments()
+    {
+        let provenance = DerivedProvenance::New(ProviderId::New("nomos-lang-rust"), Sample_Guarantee(), "high", "reason");
+
+        assert_eq!(provenance.Provider(), &ProviderId::New("nomos-lang-rust"));
+        assert_eq!(provenance.Invalidation_Basis(), "reason");
+    }
+
+    #[test]
+    fn Test_Provider_Should_Report_Who_Produced_The_Fact()
+    {
+        let provenance = DerivedProvenance::New(ProviderId::New("nomos-lang-rust"), Sample_Guarantee(), "high", "reason");
+
+        assert_eq!(provenance.Provider(), &ProviderId::New("nomos-lang-rust"));
+    }
+
+    #[test]
+    fn Test_Guarantee_Should_Report_What_The_Provider_Promised()
+    {
+        let guarantee = Sample_Guarantee();
+        let provenance = DerivedProvenance::New(ProviderId::New("nomos-lang-rust"), guarantee, "high", "reason");
+
+        assert_eq!(provenance.Guarantee(), guarantee);
+    }
+
+    #[test]
+    fn Test_Confidence_Should_Report_The_Callers_Own_Assessment()
+    {
+        let provenance = DerivedProvenance::New(ProviderId::New("nomos-lang-rust"), Sample_Guarantee(), "high", "reason");
+
+        assert_eq!(provenance.Confidence(), "high");
+    }
+
+    #[test]
+    fn Test_Invalidation_Basis_Should_Report_When_The_Fact_Goes_Stale()
+    {
+        let provenance = DerivedProvenance::New(ProviderId::New("nomos-lang-rust"), Sample_Guarantee(), "high", "the dependency graph changed");
+
+        assert_eq!(provenance.Invalidation_Basis(), "the dependency graph changed");
+    }
+
+    fn Sample_Guarantee() -> Guarantee
+    {
+        return Guarantee::New(FactVariant::SemanticallyResolved, Assurance::Sound, Assurance::Unknown, IncrementalGranularity::File);
+    }
+}
