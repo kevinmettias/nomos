@@ -121,35 +121,6 @@ mod tests
         assert!(EvidenceClass::Approximate.Is_Mechanical());
     }
 
-    /// Every declared evidence class, once.
-    fn All_Evidence_Classes() -> [EvidenceClass; 8]
-    {
-        return [
-            EvidenceClass::AgentJudged,
-            EvidenceClass::HumanAsserted,
-            EvidenceClass::Predicted,
-            EvidenceClass::Approximate,
-            EvidenceClass::Derived,
-            EvidenceClass::Observed,
-            EvidenceClass::Verified,
-            EvidenceClass::Authoritative,
-        ];
-    }
-
-    /// Every evidence class except the floor, [`EvidenceClass::AgentJudged`] itself.
-    fn Non_Floor_Evidence_Classes() -> [EvidenceClass; 7]
-    {
-        return [
-            EvidenceClass::HumanAsserted,
-            EvidenceClass::Predicted,
-            EvidenceClass::Approximate,
-            EvidenceClass::Derived,
-            EvidenceClass::Observed,
-            EvidenceClass::Verified,
-            EvidenceClass::Authoritative,
-        ];
-    }
-
     /// Combining must never manufacture strength. This is the property that stops a
     /// chain of derivations from laundering a guess into a measurement.
     #[test]
@@ -180,6 +151,20 @@ mod tests
         }
     }
 
+    /// Every evidence class except the floor, [`EvidenceClass::AgentJudged`] itself.
+    fn Non_Floor_Evidence_Classes() -> [EvidenceClass; 7]
+    {
+        return [
+            EvidenceClass::HumanAsserted,
+            EvidenceClass::Predicted,
+            EvidenceClass::Approximate,
+            EvidenceClass::Derived,
+            EvidenceClass::Observed,
+            EvidenceClass::Verified,
+            EvidenceClass::Authoritative,
+        ];
+    }
+
     /// `Label` is the `Display` form every variant renders through.
     #[test]
     fn Test_Label_Should_Spell_Every_Variant_Distinctly()
@@ -190,5 +175,20 @@ mod tests
         labels.dedup();
 
         assert_eq!(labels.len(), count, "two evidence classes share a wire spelling");
+    }
+
+    /// Every declared evidence class, once.
+    fn All_Evidence_Classes() -> [EvidenceClass; 8]
+    {
+        return [
+            EvidenceClass::AgentJudged,
+            EvidenceClass::HumanAsserted,
+            EvidenceClass::Predicted,
+            EvidenceClass::Approximate,
+            EvidenceClass::Derived,
+            EvidenceClass::Observed,
+            EvidenceClass::Verified,
+            EvidenceClass::Authoritative,
+        ];
     }
 }

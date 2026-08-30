@@ -228,7 +228,7 @@ mod tests
     /// which `evidence_class.rs` tests across every variant; this pins the delegation
     /// itself rather than the axis it reads.
     #[test]
-    fn Test_Is_Mechanical_Should_Reflect_The_Finding_s_Evidence_Class()
+    fn Test_Is_Mechanical_Should_Reflect_The_Finding_S_Evidence_Class()
     {
         assert!(Example_Finding(Applicability::Supported, GateCategory::Blocking).Is_Mechanical());
     }

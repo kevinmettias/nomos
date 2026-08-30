@@ -118,26 +118,6 @@ mod tests
     use super::*;
     use std::num::NonZeroU32;
 
-    fn Base() -> WorkflowStep
-    {
-        return WorkflowStep {
-            input_schema: SchemaId::New("nomos.workflow.test.input.v1"),
-            output_schema: SchemaId::New("nomos.workflow.test.output.v1"),
-            has_side_effects: true,
-            idempotent: false,
-            retry: RetryPolicy::NoRetry,
-            timeout: Timeout::Unbounded,
-            cacheability: Cacheability::NotCacheable,
-            privileges: Vec::new(),
-            cancellation: CancellationBehavior::Uncancellable,
-            compensation: Compensation::None,
-            determinism_strength: DeterminismStrength::None,
-            reproducibility_scope: ReproducibilityScope::SingleRun,
-            trace_equivalence: TraceEquivalence::NotApplicable,
-            evidence: EvidenceClass::AgentJudged,
-        };
-    }
-
     #[test]
     fn Test_Is_Coherent_Should_Accept_A_Step_With_No_Retry()
     {
@@ -223,5 +203,25 @@ mod tests
         step.trace_equivalence = TraceEquivalence::NotApplicable;
 
         assert!(!step.Is_Coherent());
+    }
+
+    fn Base() -> WorkflowStep
+    {
+        return WorkflowStep {
+            input_schema: SchemaId::New("nomos.workflow.test.input.v1"),
+            output_schema: SchemaId::New("nomos.workflow.test.output.v1"),
+            has_side_effects: true,
+            idempotent: false,
+            retry: RetryPolicy::NoRetry,
+            timeout: Timeout::Unbounded,
+            cacheability: Cacheability::NotCacheable,
+            privileges: Vec::new(),
+            cancellation: CancellationBehavior::Uncancellable,
+            compensation: Compensation::None,
+            determinism_strength: DeterminismStrength::None,
+            reproducibility_scope: ReproducibilityScope::SingleRun,
+            trace_equivalence: TraceEquivalence::NotApplicable,
+            evidence: EvidenceClass::AgentJudged,
+        };
     }
 }

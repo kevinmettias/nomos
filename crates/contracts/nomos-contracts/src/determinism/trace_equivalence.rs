@@ -109,16 +109,6 @@ mod tests
         }
     }
 
-    /// Every declared trace-equivalence variant, once.
-    fn All_Trace_Equivalences() -> [TraceEquivalence; 3]
-    {
-        return [
-            TraceEquivalence::NotApplicable,
-            TraceEquivalence::BehaviorallyEquivalent,
-            TraceEquivalence::BitIdentical,
-        ];
-    }
-
     /// `Label` is the `Display` form every variant renders through.
     #[test]
     fn Test_Label_Should_Spell_Every_Variant_Distinctly()
@@ -129,5 +119,15 @@ mod tests
         labels.dedup();
 
         assert_eq!(labels.len(), count, "two trace equivalences share a wire spelling");
+    }
+
+    /// Every declared trace-equivalence variant, once.
+    fn All_Trace_Equivalences() -> [TraceEquivalence; 3]
+    {
+        return [
+            TraceEquivalence::NotApplicable,
+            TraceEquivalence::BehaviorallyEquivalent,
+            TraceEquivalence::BitIdentical,
+        ];
     }
 }
