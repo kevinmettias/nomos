@@ -70,7 +70,7 @@ mod tests
     use super::*;
 
     #[test]
-    fn Test_A_Capitalized_Name_Should_Be_Public()
+    fn Test_Of_Name_Should_Treat_A_Capitalized_Name_As_Public()
     {
         assert_eq!(Visibility::Of_Name("Add"), Visibility::Public);
     }
@@ -94,7 +94,7 @@ mod tests
     }
 
     #[test]
-    fn Test_Labels_Should_Match_The_Shared_Vocabulary()
+    fn Test_Label_Should_Match_The_Shared_Vocabulary()
     {
         assert_eq!(Visibility::Public.Label(), nomos_cap_syntax::PUBLIC);
         assert_eq!(Visibility::NotApplicable.Label(), nomos_cap_syntax::NOT_APPLICABLE);

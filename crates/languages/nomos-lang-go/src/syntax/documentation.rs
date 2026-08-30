@@ -141,3 +141,53 @@ fn Stripped_Comment_Text(raw: &str) -> String
 
     return raw.trim().to_owned();
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    fn Parse(source: &str) -> tree_sitter::Tree
+    {
+        let mut parser = tree_sitter::Parser::new();
+        parser
+            .set_language(&tree_sitter_go::LANGUAGE.into())
+            .expect("the Go grammar is compiled into this crate");
+
+        return parser.parse(source, None).expect("well-formed fixture source parses");
+    }
+
+    fn Function_Declaration(tree: &tree_sitter::Tree) -> Node<'_>
+    {
+        let root = tree.root_node();
+        let mut cursor = root.walk();
+
+        return root
+            .children(&mut cursor)
+            .find(|child| return child.kind() == "function_declaration")
+            .expect("the fixture source declares a function");
+    }
+
+    #[test]
+    fn Test_Documentation_Of_Declaration_Should_Read_A_Comment_Directly_Above_It()
+    {
+        let source = "package main\n\n// Adds two numbers.\nfunc Add() {}\n";
+        let tree = Parse(source);
+        let declaration = Function_Declaration(&tree);
+
+        assert_eq!(
+            Documentation_Of_Declaration(declaration, source.as_bytes()),
+            Some("Adds two numbers.".to_owned())
+        );
+    }
+
+    #[test]
+    fn Test_Documentation_Of_Declaration_Should_Be_None_With_No_Comment_Directly_Above_It()
+    {
+        let source = "package main\n\nfunc Add() {}\n";
+        let tree = Parse(source);
+        let declaration = Function_Declaration(&tree);
+
+        assert_eq!(Documentation_Of_Declaration(declaration, source.as_bytes()), None);
+    }
+}

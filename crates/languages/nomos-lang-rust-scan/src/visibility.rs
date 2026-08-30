@@ -29,3 +29,20 @@ impl Visibility
         };
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Label_Should_Match_The_Shared_Vocabulary()
+    {
+        assert_eq!(Visibility::Public.Label(), "Public");
+        assert_eq!(Visibility::Private.Label(), "Private");
+        assert_eq!(
+            Visibility::Restricted { scope: "crate".to_owned() }.Label(),
+            "Restricted(crate)"
+        );
+    }
+}

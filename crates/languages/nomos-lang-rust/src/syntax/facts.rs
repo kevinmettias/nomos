@@ -33,3 +33,37 @@ impl Facts
         return self.items.is_empty();
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use crate::Item;
+    use crate::ItemKind;
+    use crate::Visibility;
+
+    #[test]
+    fn Test_Has_No_Declarations_Should_Be_True_For_A_Facts_With_No_Items()
+    {
+        assert!(Facts::default().Has_No_Declarations());
+    }
+
+    #[test]
+    fn Test_Has_No_Declarations_Should_Be_False_Once_An_Item_Is_Recorded()
+    {
+        let facts = Facts {
+            items: vec![Item {
+                ordinal: 0,
+                kind: ItemKind::Function,
+                scope: Vec::new(),
+                name: "One".to_owned(),
+                visibility: Visibility::Public,
+                documentation: None,
+                shape: None,
+            }],
+            unexpanded: 0,
+        };
+
+        assert!(!facts.Has_No_Declarations());
+    }
+}

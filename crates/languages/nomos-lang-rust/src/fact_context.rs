@@ -213,7 +213,7 @@ mod tests
     /// The identity claim behind `IncrementalGranularity::File`: the same bytes are the
     /// same computation, so a file that did not change does not recompute.
     #[test]
-    fn Test_The_Same_Bytes_Should_Reach_The_Same_Semantic_Inputs()
+    fn Test_Syntax_Inputs_Should_Reach_The_Same_Value_For_The_Same_Bytes()
     {
         let source = "pub struct S;\nimpl S { pub fn new() -> Self { Self } }\n";
 
@@ -268,7 +268,7 @@ mod tests
     }
 
     #[test]
-    fn Test_An_Unparseable_File_Should_Produce_No_Fact()
+    fn Test_Materialize_Syntax_Fact_Should_Produce_No_Fact_For_An_Unparseable_File()
     {
         let outcome = Materialize_Syntax_Fact(Subject_Of_Path("broken.rs"), "fn unclosed( {", Context());
 
@@ -282,7 +282,7 @@ mod tests
     /// the facts — and it must not be empty for a file that has items, or the digest
     /// would be the digest of nothing.
     #[test]
-    fn Test_The_Encoding_Should_Be_Stable_And_Not_Empty()
+    fn Test_Encode_Payload_Should_Be_Stable_And_Not_Empty()
     {
         let fact = Fact_From_Source("pub fn one() {}\nmod inner { fn two() {} }\n");
         let rendered = String::from_utf8(fact.payload.bytes.clone())

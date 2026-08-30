@@ -59,3 +59,19 @@ impl core::fmt::Display for ItemKind
         return formatter.write_str(self.Label());
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    /// The stable vocabulary an encoded payload is read back through.
+    #[test]
+    fn Test_Label_Should_Match_The_Shared_Vocabulary()
+    {
+        assert_eq!(ItemKind::Function.Label(), "Function");
+        assert_eq!(ItemKind::Struct.Label(), "Struct");
+        assert_eq!(ItemKind::ForeignModule.Label(), "ForeignModule");
+        assert_eq!(ItemKind::TraitAlias.Label(), "TraitAlias");
+    }
+}

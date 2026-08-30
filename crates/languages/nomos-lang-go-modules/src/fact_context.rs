@@ -161,7 +161,7 @@ mod tests
     const CONFIGURATION_DIGEST_FILL: u8 = 3;
 
     #[test]
-    fn Test_Every_Module_Should_Produce_One_Fact()
+    fn Test_Materialize_Workspace_Should_Produce_One_Fact_Per_Module()
     {
         let workspace = TemporaryWorkspace::New();
         workspace.Write("go.mod", "module example.com/solo\n");

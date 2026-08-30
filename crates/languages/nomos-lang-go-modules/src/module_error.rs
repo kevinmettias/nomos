@@ -400,3 +400,24 @@ fn Read_To_String(path: &Path) -> Result<String, ModuleError>
 #[cfg(test)]
 #[path = "discovery/tests.rs"]
 mod tests;
+
+#[cfg(test)]
+mod local_tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Discover_Workspace_Should_Refuse_A_Root_With_No_Go_Mod_Or_Go_Work()
+    {
+        let root = std::env::temp_dir().join(format!(
+            "nomos-lang-go-modules-local-test-{}",
+            std::process::id()
+        ));
+        std::fs::create_dir_all(&root).expect("a fresh temp directory can be created");
+
+        let result = Discover_Workspace(&root);
+
+        let _ = std::fs::remove_dir_all(&root);
+        assert!(result.is_err(), "an empty root names no module at all");
+    }
+}

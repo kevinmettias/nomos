@@ -50,3 +50,67 @@ fn Import_Name(spec: Node, source: &[u8], path: &str) -> String
         None => path.rsplit('/').next().unwrap_or(path).to_owned(),
     };
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    fn Parse(source: &str) -> tree_sitter::Tree
+    {
+        let mut parser = tree_sitter::Parser::new();
+        parser
+            .set_language(&tree_sitter_go::LANGUAGE.into())
+            .expect("the Go grammar is compiled into this crate");
+
+        return parser.parse(source, None).expect("well-formed fixture source parses");
+    }
+
+    fn Find_Kind<'a>(node: Node<'a>, kind: &str) -> Option<Node<'a>>
+    {
+        if node.kind() == kind
+        {
+            return Some(node);
+        }
+
+        let mut cursor = node.walk();
+        for child in node.children(&mut cursor)
+        {
+            if let Some(found) = Find_Kind(child, kind)
+            {
+                return Some(found);
+            }
+        }
+
+        return None;
+    }
+
+    #[test]
+    fn Test_Record_Import_Spec_Should_Bind_An_Unaliased_Imports_Final_Path_Segment()
+    {
+        let source = "package main\n\nimport \"path/filepath\"\n";
+        let tree = Parse(source);
+        let spec = Find_Kind(tree.root_node(), "import_spec").expect("the fixture declares an import");
+        let mut items = Vec::new();
+
+        Record_Import_Spec(&mut items, spec, source.as_bytes());
+
+        let item = items.first().expect("one item recorded");
+        assert_eq!(item.name, "filepath");
+        assert_eq!(item.visibility, Visibility::NotApplicable);
+    }
+
+    #[test]
+    fn Test_Record_Import_Spec_Should_Bind_An_Aliased_Imports_Own_Alias()
+    {
+        let source = "package main\n\nimport str \"strings\"\n";
+        let tree = Parse(source);
+        let spec = Find_Kind(tree.root_node(), "import_spec").expect("the fixture declares an import");
+        let mut items = Vec::new();
+
+        Record_Import_Spec(&mut items, spec, source.as_bytes());
+
+        let item = items.first().expect("one item recorded");
+        assert_eq!(item.name, "str");
+    }
+}

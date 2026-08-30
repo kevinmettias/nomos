@@ -82,3 +82,50 @@ pub(super) fn Encode_Entry(encoded: &mut String, item: &IndexEntry)
     encoded.push_str(&item.qualified_name);
     encoded.push('\n');
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use nomos_contracts::SubjectId;
+
+    #[test]
+    fn Test_Encode_Index_Should_Write_The_Module_Record_First()
+    {
+        use nomos_model::Content_Digest;
+
+        let index = Index {
+            module: SubjectId::From_Digest(Content_Digest(b"the/module")),
+            members: Vec::new(),
+            items: Vec::new(),
+        };
+
+        let encoded = Encode_Index(&index);
+        let rendered = String::from_utf8(encoded).expect("the encoding is ASCII tabs and hexadecimal");
+
+        assert!(rendered.starts_with("module\t"), "{rendered}");
+        assert_eq!(rendered.lines().count(), 1, "no members and no items adds nothing past the header");
+    }
+
+    #[test]
+    fn Test_Encode_Entry_Should_Write_The_Member_Then_The_Syntax_Schemas_Own_Fields()
+    {
+        use nomos_model::Content_Digest;
+
+        let item = IndexEntry {
+            member: SubjectId::From_Digest(Content_Digest(b"alpha.rs")),
+            ordinal: 2,
+            kind: "Function".to_owned(),
+            visibility: "Public".to_owned(),
+            qualified_name: "inner::Deep".to_owned(),
+        };
+        let mut encoded = String::new();
+
+        Encode_Entry(&mut encoded, &item);
+
+        assert_eq!(
+            encoded,
+            format!("item\t{}\t2\tFunction\tPublic\tinner::Deep\n", item.member.Digest())
+        );
+    }
+}

@@ -335,25 +335,31 @@ fn Test_The_Granularity_Should_Not_Be_Symbol_Because_A_Failure_Costs_The_Whole_F
 #[test]
 fn Test_A_Failure_And_An_Empty_File_Should_Never_Be_The_Same_Answer()
 {
-    let broken = [
-        "fn unclosed( {",
-        "struct S { field: }",
-        "impl { }",
-        "not rust",
-        "pub pub fn twice() {}",
-    ];
-    for source in broken
+    for source in BROKEN_SOURCES
     {
         assert!(
             matches!(Read_Source(source), Reading::Unparseable(_)),
             "`{source}` must refuse rather than read as empty"
         );
     }
-    for source in ["", "\n", "// a comment\n", "#![allow(dead_code)]\n"]
+    for source in EMPTY_SOURCES
     {
         Assert_It_Parses_And_Declares_Nothing(source);
     }
 }
+
+/// Sources broken in different ways, none of which should ever be mistaken for an empty
+/// file.
+const BROKEN_SOURCES: [&str; 5] = [
+    "fn unclosed( {",
+    "struct S { field: }",
+    "impl { }",
+    "not rust",
+    "pub pub fn twice() {}",
+];
+
+/// Sources that declare nothing at all: empty, blank, a comment, or an inner attribute.
+const EMPTY_SOURCES: [&str; 4] = ["", "\n", "// a comment\n", "#![allow(dead_code)]\n"];
 
 /// Valid Rust that declares nothing is a reading, never a refusal.
 fn Assert_It_Parses_And_Declares_Nothing(source: &str)

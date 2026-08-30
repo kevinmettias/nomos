@@ -239,3 +239,207 @@ pub(super) fn Outcome_Of(applicability: Applicability) -> Outcome
 
     return Outcome::Read;
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use nomos_capability::Registry;
+    use nomos_contracts::{Assurance, BuildVariantId, ConfigurationId, FactVariant, GenerationId, Guarantee, IncrementalGranularity, SnapshotId};
+
+    fn Subject(path: &str) -> SubjectId
+    {
+        use nomos_model::Content_Digest;
+
+        return SubjectId::From_Digest(Content_Digest(path.as_bytes()));
+    }
+
+    fn Test_Context() -> FactContext
+    {
+        return FactContext {
+            snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([1; Digest128::BYTE_LENGTH])),
+            variant: BuildVariantId::From_Digest(Digest128::From_Bytes([2; Digest128::BYTE_LENGTH])),
+            configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([3; Digest128::BYTE_LENGTH])),
+            generation: GenerationId::INITIAL,
+        };
+    }
+
+    /// The syntax capability's requirement every reader below asks against — an empty
+    /// registry cannot satisfy it, which is exactly the "nothing was declared" case these
+    /// tests need.
+    fn Need() -> Requirement
+    {
+        let guarantee = Guarantee::New(
+            FactVariant::Syntactic,
+            Assurance::Sound,
+            Assurance::Unknown,
+            IncrementalGranularity::File,
+        );
+
+        return Requirement::New(nomos_cap_syntax::Capability(), nomos_cap_syntax::CONTRACT_VERSION, guarantee);
+    }
+
+    #[test]
+    fn Test_Index_Key_Should_Not_Depend_On_The_Members_Own_Order()
+    {
+        let a = Member::Of(Subject("a.rs"), "pub fn A() {}\n");
+        let b = Member::Of(Subject("b.rs"), "pub fn B() {}\n");
+        let context = Test_Context();
+
+        let forwards = Index_Key(Subject("the/module"), &[a, b], context);
+        let backwards = Index_Key(Subject("the/module"), &[b, a], context);
+
+        assert_eq!(forwards.Digest(), backwards.Digest());
+    }
+
+    #[test]
+    fn Test_Canonical_Members_Should_Sort_And_Deduplicate_By_Subject()
+    {
+        let a = Member::Of(Subject("a.rs"), "pub fn A() {}\n");
+        let b = Member::Of(Subject("b.rs"), "pub fn B() {}\n");
+        let a_again = Member::Of(Subject("a.rs"), "pub fn A() {}\n");
+
+        let ordered = Canonical_Members(&[b, a, a_again]);
+
+        assert_eq!(ordered.len(), 2, "the repeated subject must collapse to one member");
+        assert_eq!(ordered.first().expect("two members").subject, a.subject);
+    }
+
+    #[test]
+    fn Test_Index_Inputs_Should_Depend_On_Both_Subject_And_Content()
+    {
+        let a = Member::Of(Subject("a.rs"), "pub fn A() {}\n");
+        let a_edited = Member::Of(Subject("a.rs"), "pub fn A() {}\npub fn B() {}\n");
+        let renamed = Member::Of(Subject("b.rs"), "pub fn A() {}\n");
+
+        let original = Index_Inputs(&[a]);
+
+        assert_ne!(original, Index_Inputs(&[a_edited]), "editing a member must change the inputs");
+        assert_ne!(original, Index_Inputs(&[renamed]), "renaming a member must change the inputs");
+    }
+
+    #[test]
+    fn Test_Reading_Context_Should_Carry_Every_Field_The_Fact_Context_Has()
+    {
+        let context = Test_Context();
+        let reading = Reading_Context(context);
+
+        assert_eq!(reading.snapshot, context.snapshot);
+        assert_eq!(reading.variant, context.variant);
+        assert_eq!(reading.configuration, context.configuration);
+        assert_eq!(reading.generation, context.generation);
+    }
+
+    #[test]
+    fn Test_Entry_Of_Should_File_The_Item_Under_Its_Declaring_Member()
+    {
+        let member = Subject("alpha.rs");
+        let item = nomos_cap_syntax::PayloadItem {
+            ordinal: 3,
+            kind: "Function".to_owned(),
+            visibility: "Public".to_owned(),
+            qualified_name: "Alpha".to_owned(),
+            documentation: nomos_cap_syntax::Observation::Absent,
+            shape: nomos_cap_syntax::Observation::Absent,
+        };
+
+        let entry = Entry_Of(member, item);
+
+        assert_eq!(entry.member, member);
+        assert_eq!(entry.ordinal, 3);
+        assert_eq!(entry.qualified_name, "Alpha");
+    }
+
+    #[test]
+    fn Test_Outcome_Of_Should_Be_Approximate_Only_For_A_Fallback_Applicability()
+    {
+        assert_eq!(Outcome_Of(Applicability::SupportedWithFallback), Outcome::Approximate);
+        assert_eq!(Outcome_Of(Applicability::Supported), Outcome::Read);
+    }
+
+    #[test]
+    fn Test_Declared_By_Should_Be_None_When_The_Capability_Was_Never_Declared()
+    {
+        let store = MemoryFactStore::New();
+        let registry = Registry::New();
+        let mut reader = Reader::On(&store, &registry, Reading_Context(Test_Context()));
+        let member = Member::Of(Subject("alpha.rs"), "pub fn Alpha() {}\n");
+
+        assert!(Declared_By(&mut reader, &member, &Need()).is_none());
+    }
+
+    #[test]
+    fn Test_Index_Member_Should_Record_Unreachable_When_Nothing_Was_Declared()
+    {
+        let store = MemoryFactStore::New();
+        let registry = Registry::New();
+        let mut reader = Reader::On(&store, &registry, Reading_Context(Test_Context()));
+        let mut index = Index {
+            module: Subject("the/module"),
+            members: Vec::new(),
+            items: Vec::new(),
+        };
+        let member = Member::Of(Subject("alpha.rs"), "pub fn Alpha() {}\n");
+
+        Index_Member(&mut index, &mut reader, &member, &Need());
+
+        let recorded = index.members.first().expect("one member recorded");
+        assert_eq!(recorded.outcome, Outcome::Unreachable);
+        assert!(index.items.is_empty());
+    }
+
+    #[test]
+    fn Test_Read_Members_Should_Report_Every_Member_Unreachable_With_No_Registered_Provider()
+    {
+        let store = MemoryFactStore::New();
+        let registry = Registry::New();
+        let need = Need();
+        let against = Against {
+            registry: &registry,
+            need: &need,
+            context: Test_Context(),
+        };
+        let member = Member::Of(Subject("alpha.rs"), "pub fn Alpha() {}\n");
+
+        let Members { index, dependencies: _ } = Read_Members(&store, &against, Subject("the/module"), &[member]);
+
+        assert_eq!(index.Unreachable(), 1, "a capability nothing declared has no readable answer for any member");
+    }
+
+    #[test]
+    fn Test_Rollup_Fact_Should_Carry_The_Declared_Guarantee_And_Derived_Evidence()
+    {
+        let key = Index_Key(Subject("the/module"), &[], Test_Context());
+        let index = Index {
+            module: Subject("the/module"),
+            members: Vec::new(),
+            items: Vec::new(),
+        };
+
+        let fact = Rollup_Fact(&key, &index, Test_Context());
+
+        assert_eq!(fact.guarantee, Declared_Guarantee());
+        assert_eq!(fact.evidence, EvidenceClass::Derived);
+    }
+
+    #[test]
+    fn Test_Materialize_Index_Should_Write_A_Rollup_Fact_For_An_Unreachable_Module()
+    {
+        let mut store = MemoryFactStore::New();
+        let registry = Registry::New();
+        let need = Need();
+        let against = Against {
+            registry: &registry,
+            need: &need,
+            context: Test_Context(),
+        };
+        let module = Module {
+            subject: Subject("the/module"),
+            members: vec![Member::Of(Subject("alpha.rs"), "pub fn Alpha() {}\n")],
+        };
+
+        let rolled = Materialize_Index(&mut store, &against, &module).expect("materializes even with nothing readable");
+
+        assert_eq!(rolled.index.Unreachable(), 1);
+    }
+}

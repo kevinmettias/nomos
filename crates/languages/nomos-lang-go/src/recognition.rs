@@ -56,10 +56,13 @@ mod tests
 {
     use super::*;
 
+    /// Paths a Go provider must recognize regardless of directory separator or case.
+    const RECOGNIZED_GO_PATHS: &[&str] = &["main.go", "src/lib.go", "crates\\a\\b.go", "F:/repos/x/y.go", "SRC/MAIN.GO"];
+
     #[test]
-    fn Test_Go_Sources_Should_Be_Recognized()
+    fn Test_Of_Path_Should_Recognize_Go_Sources()
     {
-        for path in ["main.go", "src/lib.go", "crates\\a\\b.go", "F:/repos/x/y.go", "SRC/MAIN.GO"]
+        for path in RECOGNIZED_GO_PATHS
         {
             assert_eq!(Recognition::Of_Path(path), Recognition::Recognized, "`{path}` is Go source");
         }

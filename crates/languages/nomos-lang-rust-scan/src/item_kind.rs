@@ -79,3 +79,36 @@ impl ItemKind
         ];
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    /// The stable vocabulary an encoded payload is read back through.
+    #[test]
+    fn Test_Label_Should_Match_The_Shared_Vocabulary()
+    {
+        assert_eq!(ItemKind::Function.Label(), "Function");
+        assert_eq!(ItemKind::Struct.Label(), "Struct");
+        assert_eq!(ItemKind::MacroDefinition.Label(), "MacroDefinition");
+    }
+
+    #[test]
+    fn Test_Table_Should_Try_Macro_Rules_Before_Any_Shorter_Prefix_Of_It()
+    {
+        let table = ItemKind::Table();
+
+        assert_eq!(table.first(), Some(&("macro_rules!", ItemKind::MacroDefinition)));
+    }
+
+    #[test]
+    fn Test_Table_Should_Name_Every_Keyword_This_Scanner_Recognizes()
+    {
+        let keywords: Vec<&str> = ItemKind::Table().iter().map(|(keyword, _)| return *keyword).collect();
+
+        assert!(keywords.contains(&"fn"));
+        assert!(keywords.contains(&"struct"));
+        assert!(keywords.contains(&"use"));
+    }
+}

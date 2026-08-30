@@ -55,25 +55,49 @@ pub fn Provider_Offer() -> ProviderOffer
     };
 }
 
+// The seam this offer's own guarantee has with `nomos_cap_lint`'s ceiling and with
+// `nomos_capability::Registry` is proven from outside this crate now, not inside it:
+// `tests/capability_seam.rs` moved what used to be this module's own inline test out to
+// where it can reach only the public API a real caller has — see that file's own module
+// doc for why.
 #[cfg(test)]
 mod tests
 {
     use super::*;
 
-    /// The offer must satisfy the contract's own ceiling — `contract.ceiling.Satisfies(&
-    /// offer.guarantee)` is the exact check `Registry::Offer` runs at composition time
-    /// (`nomos_capability::registry::declaring::Offer`), asserted here in the same
-    /// direction so a future weakening of either constant is caught beside the constants
-    /// rather than only at whatever composition root happens to run first. This
-    /// provider's own completeness (`Assurance::Unknown`) is genuinely weaker than the
-    /// ceiling's (`Assurance::Sound`), so the reversed direction `Declared_Guarantee().
-    /// Satisfies(&Ceiling())` would give a false pass here only by coincidence elsewhere
-    /// in this workspace, where every axis happens to already match the ceiling exactly.
+    /// `Declared_Guarantee` claims exactly these four axes — the offer this provider
+    /// makes, pinned here in the same file check-test-coverage's own Rust strategy keys a
+    /// unit test's companion function against, so a change to any one axis is a deliberate
+    /// edit to this constant rather than a silent drift nothing in this file would catch.
+    /// The seam this guarantee has with `nomos_cap_lint`'s ceiling is a different claim,
+    /// proven in `tests/capability_seam.rs` instead.
     #[test]
-    fn Test_The_Ceiling_Should_Satisfy_The_Declared_Guarantee()
+    fn Test_Declared_Guarantee_Should_Claim_Sound_Semantically_Resolved_Diagnostics_At_Project_Granularity()
     {
-        use nomos_cap_lint::Ceiling;
+        assert_eq!(
+            Declared_Guarantee(),
+            Guarantee::New(FactVariant::SemanticallyResolved, Assurance::Sound, Assurance::Unknown, IncrementalGranularity::Project)
+        );
+    }
 
-        assert!(Ceiling().Satisfies(&Declared_Guarantee()));
+    /// `Provider_Offer` assembles this provider's own identity and its declared guarantee
+    /// into one offer. Whether `nomos_capability::Registry` actually accepts it is a
+    /// different claim, proven in `tests/capability_seam.rs`; this checks only that the
+    /// offer itself is assembled from the right parts.
+    ///
+    /// Deliberately avoids the word pair "Declared Guarantee" in its own name:
+    /// check-test-coverage's Rust strategy attributes a test to the *longest* declared
+    /// function name it contains, and this unit also declares `Declared_Guarantee` — a name
+    /// naming both would be attributed entirely to that longer one, leaving this function's
+    /// own coverage unaddressed.
+    #[test]
+    fn Test_Provider_Offer_Should_Assemble_This_Providers_Own_Identity_And_Guarantee()
+    {
+        let offer = Provider_Offer();
+
+        assert_eq!(offer.provider, ProviderId::New(PROVIDER));
+        assert_eq!(offer.capability, Capability());
+        assert_eq!(offer.version, CONTRACT_VERSION);
+        assert_eq!(offer.guarantee, Declared_Guarantee());
     }
 }

@@ -213,3 +213,68 @@ fn Push_Struct_Field(declaration: Node, source: &[u8], fields: &mut Vec<(String,
         }
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    fn Parse(source: &str) -> tree_sitter::Tree
+    {
+        let mut parser = tree_sitter::Parser::new();
+        parser
+            .set_language(&tree_sitter_go::LANGUAGE.into())
+            .expect("the Go grammar is compiled into this crate");
+
+        return parser.parse(source, None).expect("well-formed fixture source parses");
+    }
+
+    fn Find_Kind<'a>(node: Node<'a>, kind: &str) -> Option<Node<'a>>
+    {
+        if node.kind() == kind
+        {
+            return Some(node);
+        }
+
+        let mut cursor = node.walk();
+        for child in node.children(&mut cursor)
+        {
+            if let Some(found) = Find_Kind(child, kind)
+            {
+                return Some(found);
+            }
+        }
+
+        return None;
+    }
+
+    #[test]
+    fn Test_Record_Type_Spec_Should_Record_A_Struct_By_Name()
+    {
+        let source = "package main\n\ntype Counter struct { n int }\n";
+        let tree = Parse(source);
+        let spec = Find_Kind(tree.root_node(), "type_spec").expect("the fixture declares a type");
+        let mut items = Vec::new();
+
+        Record_Type_Spec(&mut items, spec, source.as_bytes());
+
+        let item = items.first().expect("one item recorded");
+        assert_eq!(item.name, "Counter");
+        assert_eq!(item.kind, ItemKind::Struct);
+    }
+
+    #[test]
+    fn Test_Record_Type_Alias_Should_Record_The_Alias_By_Name()
+    {
+        let source = "package main\n\ntype Alias = string\n";
+        let tree = Parse(source);
+        let spec = Find_Kind(tree.root_node(), "type_alias").expect("the fixture declares a type alias");
+        let mut items = Vec::new();
+
+        Record_Type_Alias(&mut items, spec, source.as_bytes());
+
+        let item = items.first().expect("one item recorded");
+        assert_eq!(item.name, "Alias");
+        assert_eq!(item.kind, ItemKind::TypeAlias);
+    }
+}

@@ -69,3 +69,34 @@ impl core::fmt::Display for Visibility
         return formatter.write_str(&self.Label());
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Label_Should_Match_The_Shared_Vocabulary()
+    {
+        assert_eq!(Visibility::Public.Label(), "Public");
+        assert_eq!(Visibility::Private.Label(), "Private");
+        assert_eq!(Visibility::NotApplicable.Label(), "NotApplicable");
+        assert_eq!(Visibility::Restricted { scope: "crate".to_owned() }.Label(), "Restricted(crate)");
+    }
+
+    #[test]
+    fn Test_Of_Should_Read_A_Restricted_Visibilitys_Scope_As_Written()
+    {
+        let restricted: syn::Visibility = syn::parse_str("pub(crate)").expect("a valid visibility fixture parses");
+
+        assert_eq!(Visibility::Of(&restricted), Visibility::Restricted { scope: "crate".to_owned() });
+    }
+
+    #[test]
+    fn Test_Of_Should_Read_No_Keyword_As_Private()
+    {
+        let inherited: syn::Visibility = syn::Visibility::Inherited;
+
+        assert_eq!(Visibility::Of(&inherited), Visibility::Private);
+    }
+}

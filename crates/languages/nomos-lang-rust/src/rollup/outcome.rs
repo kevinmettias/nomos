@@ -42,3 +42,25 @@ impl Outcome
         return matches!(self, Self::Read | Self::Approximate);
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Label_Should_Match_The_Shared_Vocabulary()
+    {
+        assert_eq!(Outcome::Read.Label(), READ);
+        assert_eq!(Outcome::Approximate.Label(), APPROXIMATE);
+        assert_eq!(Outcome::Unreachable.Label(), UNREACHABLE);
+    }
+
+    #[test]
+    fn Test_Is_Answered_Should_Be_True_For_Read_And_Approximate_Only()
+    {
+        assert!(Outcome::Read.Is_Answered());
+        assert!(Outcome::Approximate.Is_Answered());
+        assert!(!Outcome::Unreachable.Is_Answered());
+    }
+}

@@ -108,3 +108,62 @@ fn Unwrapped_Type_Name(node: Node, source: &[u8]) -> Option<String>
         _ => None,
     };
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    fn Parse(source: &str) -> tree_sitter::Tree
+    {
+        let mut parser = tree_sitter::Parser::new();
+        parser
+            .set_language(&tree_sitter_go::LANGUAGE.into())
+            .expect("the Go grammar is compiled into this crate");
+
+        return parser.parse(source, None).expect("well-formed fixture source parses");
+    }
+
+    fn Declaration_Of_Kind<'a>(tree: &'a tree_sitter::Tree, kind: &str) -> Node<'a>
+    {
+        let root = tree.root_node();
+        let mut cursor = root.walk();
+
+        return root
+            .children(&mut cursor)
+            .find(|child| return child.kind() == kind)
+            .unwrap_or_else(|| panic!("the fixture source declares a {kind}"));
+    }
+
+    #[test]
+    fn Test_Record_Function_Should_Record_A_Top_Level_Function()
+    {
+        let source = "package main\n\nfunc One(a int) {}\n";
+        let tree = Parse(source);
+        let declaration = Declaration_Of_Kind(&tree, "function_declaration");
+        let mut items = Vec::new();
+
+        Record_Function(&mut items, declaration, source.as_bytes());
+
+        let item = items.first().expect("one item recorded");
+        assert_eq!(item.name, "One");
+        assert_eq!(item.kind, ItemKind::Function);
+        assert!(item.scope.is_empty(), "a free function has no receiver scope");
+        assert_eq!(item.shape.as_deref(), Some("fn/1"));
+    }
+
+    #[test]
+    fn Test_Record_Method_Should_Scope_The_Item_To_Its_Receiver_Type()
+    {
+        let source = "package main\n\ntype Counter struct{}\n\nfunc (c *Counter) Increment() {}\n";
+        let tree = Parse(source);
+        let declaration = Declaration_Of_Kind(&tree, "method_declaration");
+        let mut items = Vec::new();
+
+        Record_Method(&mut items, declaration, source.as_bytes());
+
+        let item = items.first().expect("one item recorded");
+        assert_eq!(item.name, "Increment");
+        assert_eq!(item.scope, vec!["Counter".to_owned()]);
+    }
+}

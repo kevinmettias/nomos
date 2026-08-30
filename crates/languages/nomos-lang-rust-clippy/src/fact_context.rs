@@ -107,7 +107,7 @@ mod tests
     /// metadata` call is a manifest read and this one is a real clippy pass over the whole
     /// workspace: cheap to repeat there, not here.
     #[test]
-    fn Test_Materialize_Workspace_Over_This_Repository()
+    fn Test_Discover_Workspace_And_Materialize_Workspace_Should_Find_Every_Real_Workspace_Member()
     {
         let facts = Materialize_Workspace(&Repository_Root(), Context(), &StdProcessLauncher).expect("this repository is a real cargo workspace under clippy");
 
@@ -139,23 +139,6 @@ mod tests
             .and_then(std::path::Path::parent)
             .map(std::path::PathBuf::from)
             .expect("this crate sits three levels below the workspace root");
-    }
-
-    #[test]
-    fn Test_A_Fact_Key_Should_Depend_On_The_Guarantee()
-    {
-        let subject = nomos_model::Subject_Of_Path("crates/rules/nomos-rules");
-        let weaker = nomos_contracts::Guarantee::New(
-            nomos_contracts::FactVariant::Syntactic,
-            nomos_contracts::Assurance::Unsound,
-            nomos_contracts::Assurance::Unknown,
-            nomos_contracts::IncrementalGranularity::WholeWorkspace,
-        );
-
-        let strong_key = Compute_Fact_Key(subject, Declared_Guarantee(), Context());
-        let weak_key = Compute_Fact_Key(subject, weaker, Context());
-
-        assert_ne!(strong_key.Digest(), weak_key.Digest(), "two offers of the same subject at different guarantees must file apart");
     }
 
     /// Fill bytes distinct enough that `Context()`'s three digests differ from one

@@ -73,3 +73,25 @@ pub fn Read_Reachability(source: &str) -> ReachabilityReading
 
     return ReachabilityReading::Parsed(walk.sites);
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Read_Reachability_Should_Report_No_Sites_For_A_File_With_No_Matches()
+    {
+        let reading = Read_Reachability("pub fn One() {}\n");
+
+        assert_eq!(reading, ReachabilityReading::Parsed(Vec::new()));
+    }
+
+    #[test]
+    fn Test_Read_Reachability_Should_Be_Unparseable_For_Broken_Source()
+    {
+        let reading = Read_Reachability("fn unclosed( {");
+
+        assert!(matches!(reading, ReachabilityReading::Unparseable(_)), "got {reading:?}");
+    }
+}

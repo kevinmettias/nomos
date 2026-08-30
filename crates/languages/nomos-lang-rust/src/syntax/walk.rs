@@ -470,3 +470,19 @@ impl<'ast> Visit<'ast> for Walk
         syn::visit::visit_attribute(self, node);
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_New_Should_Produce_An_Empty_Walk_With_No_Scope()
+    {
+        let walk = Walk::New();
+
+        assert!(walk.items.is_empty());
+        assert_eq!(walk.unexpanded, 0);
+        assert!(walk.scope.is_empty());
+    }
+}

@@ -51,7 +51,7 @@ fn Test_An_Index_Should_Survive_A_Round_Trip()
 /// the index — and it must be readable by a person, because two rollups that disagree
 /// are compared in a diff before they are compared by a tool.
 #[test]
-fn Test_The_Encoding_Should_Be_Line_Oriented_And_Local_To_Nothing()
+fn Test_Encode_Index_Should_Be_Line_Oriented_And_Local_To_Nothing()
 {
     let rendered = String::from_utf8(Encode_Index(&An_Index()))
         .expect("the encoding is ASCII tabs around hexadecimal and UTF-8 identifiers");
@@ -220,11 +220,15 @@ fn Test_Every_Record_This_Encoder_Writes_Should_Still_Be_Accepted()
     // a payload with no `item` record would say nothing about the longest record there is.
     assert!(rendered.contains("\nmember\t"), "{rendered}");
     assert!(rendered.contains("\nitem\t"), "{rendered}");
-    for outcome in [READ, APPROXIMATE, UNREACHABLE]
+    for outcome in EVERY_OUTCOME_LABEL
     {
         assert!(rendered.contains(outcome), "{outcome} is not exercised: {rendered}");
     }
 }
+
+/// Every outcome label the encoder can write, so a round trip proves the grammar rather
+/// than one record.
+const EVERY_OUTCOME_LABEL: [&str; 3] = [READ, APPROXIMATE, UNREACHABLE];
 
 /// The ceiling admits a weaker offer, which is what a ceiling is for.
 #[test]

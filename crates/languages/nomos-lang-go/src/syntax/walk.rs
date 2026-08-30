@@ -178,3 +178,31 @@ fn Record_Declaration_Body(items: &mut Vec<Item>, node: Node, source: &[u8])
         }
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use crate::Reading;
+
+    #[test]
+    fn Test_Read_Source_Should_Parse_A_Well_Formed_Go_File()
+    {
+        let reading = Read_Source("package main\n\nfunc One() {}\n");
+
+        let Reading::Parsed(facts) = reading
+        else
+        {
+            panic!("expected a parse: {reading:?}");
+        };
+        assert_eq!(facts.items.len(), 1);
+    }
+
+    #[test]
+    fn Test_Read_Source_Should_Refuse_A_File_Tree_Sitter_Could_Not_Parse_Cleanly()
+    {
+        let reading = Read_Source("func unclosed( {");
+
+        assert!(matches!(reading, Reading::Unparseable(_)), "got {reading:?}");
+    }
+}

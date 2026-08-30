@@ -125,3 +125,100 @@ pub(super) fn Type_Head(kind: &syn::Type) -> String
         _ => "_".to_owned(),
     };
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Impl_Shape_Should_Distinguish_A_Trait_Impl_From_An_Inherent_One()
+    {
+        assert_eq!(Impl_Shape(true), nomos_cap_syntax::TRAIT);
+        assert_eq!(Impl_Shape(false), nomos_cap_syntax::INHERENT);
+    }
+
+    /// (use-tree leaf source, the name it binds) — a second leaf shape beside these would
+    /// extend the table rather than duplicate the test.
+    fn Bound_By_Cases() -> Vec<(&'static str, &'static str)>
+    {
+        return vec![("HashMap as Map", "Map"), ("*", "*")];
+    }
+
+    #[test]
+    fn Test_Bound_By_Should_Bind_A_Renamed_Leafs_Own_Alias_Or_A_Globs_Star()
+    {
+        for (source, expected) in Bound_By_Cases()
+        {
+            let tree: syn::UseTree = syn::parse_str(source).expect("a valid use-tree fixture parses");
+
+            assert_eq!(Bound_By(&tree), expected);
+        }
+    }
+
+    #[test]
+    fn Test_Type_Shape_Should_See_Through_A_Reference_To_A_Slice()
+    {
+        let ty: syn::Type = syn::parse_str("&[String]").expect("a valid type fixture parses");
+
+        assert_eq!(Type_Shape(&ty), nomos_cap_syntax::SLICE);
+    }
+
+    #[test]
+    fn Test_Type_Shape_Should_Be_A_Value_For_Anything_Else()
+    {
+        let ty: syn::Type = syn::parse_str("usize").expect("a valid type fixture parses");
+
+        assert_eq!(Type_Shape(&ty), nomos_cap_syntax::VALUE);
+    }
+
+    #[test]
+    fn Test_Struct_Shape_Should_Record_A_Named_Fields_Fields()
+    {
+        let item: syn::ItemStruct = syn::parse_str("struct S { n: u32, label: String }").expect("a valid struct fixture parses");
+
+        let shape = Struct_Shape(&item.fields).expect("a named-field struct has a shape");
+
+        assert!(shape.contains('n'), "{shape}");
+    }
+
+    #[test]
+    fn Test_Struct_Shape_Should_Be_None_For_A_Tuple_Struct()
+    {
+        let item: syn::ItemStruct = syn::parse_str("struct S(u32);").expect("a valid struct fixture parses");
+
+        assert_eq!(Struct_Shape(&item.fields), None);
+    }
+
+    #[test]
+    fn Test_Function_Shape_Should_Delegate_To_The_Shared_Vocabulary()
+    {
+        assert_eq!(Function_Shape(2), nomos_cap_syntax::Function_Shape(2));
+    }
+
+    #[test]
+    fn Test_Path_As_Written_Should_Keep_A_Leading_Double_Colon()
+    {
+        let path: syn::Path = syn::parse_str("::std::fmt::Display").expect("a valid path fixture parses");
+
+        assert_eq!(Path_As_Written(&path), "::std::fmt::Display");
+    }
+
+    /// (type source, the head it records) — a second wrapper or headless form beside these
+    /// would extend the table rather than duplicate the test.
+    fn Type_Head_Cases() -> Vec<(&'static str, &'static str)>
+    {
+        return vec![("&Foo", "Foo"), ("(u32, u32)", "_")];
+    }
+
+    #[test]
+    fn Test_Type_Head_Should_See_Through_A_Reference_And_Be_An_Underscore_With_No_Single_Head()
+    {
+        for (source, expected) in Type_Head_Cases()
+        {
+            let ty: syn::Type = syn::parse_str(source).expect("a valid type fixture parses");
+
+            assert_eq!(Type_Head(&ty), expected);
+        }
+    }
+}

@@ -58,7 +58,7 @@ fn Payload_Of<'a>(discovered: &'a [DiscoveredModule], package: &str) -> &'a Depe
 }
 
 #[test]
-fn Test_A_Single_Module_With_No_Go_Work_Should_Be_Its_Own_Whole_Workspace()
+fn Test_Discover_Workspace_Should_Treat_A_Single_Module_With_No_Go_Work_As_Its_Own_Whole_Workspace()
 {
     let workspace = TempWorkspace::New();
     workspace.Write(
@@ -169,22 +169,43 @@ fn Test_A_Missing_Go_Mod_Should_Be_Refused()
     assert!(error.reason.contains("go.mod"), "{}", error.reason);
 }
 
+/// (`go.mod` content, the fragment its own refusal reason must contain) for a manifest that
+/// declares no `module` line at all — a second case beside this one would extend the table
+/// rather than duplicate the test.
+fn Go_Mod_With_No_Module_Line_Cases() -> Vec<(&'static str, &'static str)>
+{
+    return vec![("go 1.21\n", "module")];
+}
+
 #[test]
 fn Test_A_Go_Mod_With_No_Module_Line_Should_Be_Refused()
 {
-    let workspace = TempWorkspace::New();
-    workspace.Write("go.mod", "go 1.21\n");
+    for (content, expected_fragment) in Go_Mod_With_No_Module_Line_Cases()
+    {
+        let workspace = TempWorkspace::New();
+        workspace.Write("go.mod", content);
 
-    let error = Discover_Workspace(&workspace.root).expect_err("a go.mod with no module line");
-    assert!(error.reason.contains("module"), "{}", error.reason);
+        let error = Discover_Workspace(&workspace.root).expect_err("a go.mod with no module line");
+        assert!(error.reason.contains(expected_fragment), "{}", error.reason);
+    }
+}
+
+/// (`go.work` content, the fragment its own refusal reason must contain) for a workspace
+/// file that declares no `use` directive at all.
+fn Go_Work_With_No_Use_Directive_Cases() -> Vec<(&'static str, &'static str)>
+{
+    return vec![("go 1.21\n", "use")];
 }
 
 #[test]
 fn Test_A_Go_Work_With_No_Use_Directive_Should_Be_Refused()
 {
-    let workspace = TempWorkspace::New();
-    workspace.Write("go.work", "go 1.21\n");
+    for (content, expected_fragment) in Go_Work_With_No_Use_Directive_Cases()
+    {
+        let workspace = TempWorkspace::New();
+        workspace.Write("go.work", content);
 
-    let error = Discover_Workspace(&workspace.root).expect_err("a go.work naming no member");
-    assert!(error.reason.contains("use"), "{}", error.reason);
+        let error = Discover_Workspace(&workspace.root).expect_err("a go.work naming no member");
+        assert!(error.reason.contains(expected_fragment), "{}", error.reason);
+    }
 }

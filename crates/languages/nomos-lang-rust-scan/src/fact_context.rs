@@ -143,7 +143,7 @@ mod tests
     const CONFIGURATION_DIGEST_FILL: u8 = 3;
 
     #[test]
-    fn Test_The_Encoding_Should_Be_The_Format_The_Other_Provider_Writes()
+    fn Test_Encode_Payload_Should_Match_The_Format_The_Other_Provider_Writes()
     {
         let fact = Materialize_Syntax_Fact(Subject_Of_Path("a.rs"), "pub fn one() {}\nfn two() {}\n", Context());
         let rendered = String::from_utf8(fact.payload.bytes.clone()).expect("ASCII and identifiers");
@@ -247,7 +247,7 @@ mod tests
     /// answer; the format still carries its `unexpanded` line so a consumer needs no
     /// special case for the empty file.
     #[test]
-    fn Test_An_Empty_File_Should_Still_Produce_A_Payload()
+    fn Test_Materialize_Syntax_Fact_Should_Still_Produce_A_Payload_For_An_Empty_File()
     {
         let fact = Materialize_Syntax_Fact(Subject_Of_Path("empty.rs"), "", Context());
 

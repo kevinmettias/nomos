@@ -29,7 +29,7 @@ fn Names(source: &str) -> Vec<String>
 }
 
 #[test]
-fn Test_Items_Should_Be_Named_By_Their_Syntactic_Nesting()
+fn Test_Qualified_Name_Should_Include_Every_Items_Syntactic_Nesting()
 {
     let names = Names(
         "mod outer { pub mod inner { pub fn deep() {} } }\n\
@@ -159,12 +159,15 @@ fn Test_A_Use_Should_Record_The_Binding_It_Introduces()
     assert_eq!(Names("use std::fmt::*;\n"), vec!["*".to_owned()]);
 }
 
+/// Sources that declare nothing at all: empty, blank, or only a comment.
+const EMPTY_SOURCES: &[&str] = &["", "\n\n", "// nothing here\n", "//! only a doc comment\n"];
+
 /// A file that declares nothing parses. This is the variant that must never be how
 /// a failure looks.
 #[test]
-fn Test_A_File_That_Declares_Nothing_Should_Parse()
+fn Test_Has_No_Declarations_Should_Be_True_For_A_File_That_Declares_Nothing()
 {
-    for source in ["", "\n\n", "// nothing here\n", "//! only a doc comment\n"]
+    for source in EMPTY_SOURCES
     {
         let facts = Parsed(source);
 
@@ -173,16 +176,19 @@ fn Test_A_File_That_Declares_Nothing_Should_Parse()
     }
 }
 
+/// Sources broken in different ways, none of which should ever parse.
+const UNPARSEABLE_SOURCES: &[&str] = &[
+    "fn unclosed( {",
+    "struct S { field: }",
+    "this is not rust at all",
+    "fn f() { let x = ; }",
+];
+
 /// The property the whole outcome type exists for.
 #[test]
-fn Test_Broken_Source_Should_Be_Unparseable_Rather_Than_Empty()
+fn Test_Read_Source_Should_Report_Broken_Source_As_Unparseable_Rather_Than_Empty()
 {
-    for source in [
-        "fn unclosed( {",
-        "struct S { field: }",
-        "this is not rust at all",
-        "fn f() { let x = ; }",
-    ]
+    for source in UNPARSEABLE_SOURCES
     {
         match Read_Source(source)
         {
@@ -263,7 +269,7 @@ fn Assert_Stray_Mark_Is_Refused()
 /// the count inside the function body would be zero and the declared weakness would
 /// be undetectable from the output.
 #[test]
-fn Test_Unexpanded_Regions_Should_Be_Counted_Wherever_They_Are()
+fn Test_New_Should_Produce_A_Walk_That_Counts_Unexpanded_Regions_Wherever_They_Are()
 {
     let facts = Parsed(
         "#[derive(Clone, Debug)]\n\

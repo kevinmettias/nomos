@@ -250,3 +250,127 @@ pub(super) fn Hexadecimal_Byte_Pairs(hexadecimal: &str) -> impl Iterator<Item = 
         .step_by(PER_BYTE)
         .filter_map(|start| return hexadecimal.get(start..start.saturating_add(PER_BYTE)));
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    fn A_Subject_Hex() -> String
+    {
+        return SubjectId::From_Digest(Digest128::From_Bytes([7; Digest128::BYTE_LENGTH])).Digest().to_string();
+    }
+
+    #[test]
+    fn Test_Parse_Index_Should_Read_A_Module_Record_With_No_Members()
+    {
+        let payload = format!("module\t{}\n", A_Subject_Hex());
+
+        let index = Parse_Index(payload.as_bytes()).expect("a bare module record parses");
+
+        assert!(index.members.is_empty());
+        assert!(index.items.is_empty());
+    }
+
+    /// (payload text, a fragment its refusal reason must contain) for a payload
+    /// `Opened_Module_Index` must refuse before any member or item is ever read — a second
+    /// malformed header beside these would extend the table rather than duplicate the test.
+    fn Malformed_Header_Cases() -> Vec<(&'static str, &'static str)>
+    {
+        return vec![
+            ("", "empty"),
+            ("member\t00000000000000000000000000000000\tread", "module"),
+        ];
+    }
+
+    #[test]
+    fn Test_Opened_Module_Index_Should_Refuse_A_Payload_With_No_Leading_Module_Record()
+    {
+        for (payload, expected_fragment) in Malformed_Header_Cases()
+        {
+            let mut lines = payload.lines().enumerate();
+
+            let error = Opened_Module_Index(&mut lines).expect_err("no `module` record opens this payload");
+
+            assert!(error.contains(expected_fragment), "{error}");
+        }
+    }
+
+    #[test]
+    fn Test_Read_Record_Should_Refuse_An_Unrecognised_Tag()
+    {
+        let mut index = Index {
+            module: SubjectId::From_Digest(Digest128::From_Bytes([1; Digest128::BYTE_LENGTH])),
+            members: Vec::new(),
+            items: Vec::new(),
+        };
+
+        let error = Read_Record(&mut index, "surface\t1", 5).expect_err("an unknown tag must be refused");
+
+        assert!(error.contains('5'), "{error}");
+    }
+
+    #[test]
+    fn Test_Unreadable_Record_Should_Name_A_Second_Module_Record_Specifically()
+    {
+        assert!(Unreadable_Record("module", 3).contains("second"));
+        assert!(Unreadable_Record("surface", 3).contains("surface"));
+    }
+
+    #[test]
+    fn Test_Member_Record_Should_Refuse_An_Outcome_This_Build_Does_Not_Know()
+    {
+        let hex = A_Subject_Hex();
+        let fields: Vec<&str> = vec!["member", hex.as_str(), "maybe"];
+
+        let error = Member_Record(&fields, 2).expect_err("`maybe` is not a known outcome");
+
+        assert!(error.contains("maybe"), "{error}");
+        assert!(error.contains("outcome"), "{error}");
+    }
+
+    #[test]
+    fn Test_Item_Record_Should_Refuse_An_Ordinal_That_Does_Not_Parse()
+    {
+        let hex = A_Subject_Hex();
+        let fields: Vec<&str> = vec!["item", hex.as_str(), "not-a-number", "Function", "Public", "One"];
+
+        let error = Item_Record(&fields, 2).expect_err("`not-a-number` does not parse as an ordinal");
+
+        assert!(error.contains("not-a-number"), "{error}");
+        assert!(error.contains("ordinal"), "{error}");
+    }
+
+    #[test]
+    fn Test_Expect_Fields_Should_Refuse_A_Field_Count_Other_Than_Expected()
+    {
+        assert!(Expect_Fields("module", &["module", "a"], 2, 1).is_ok());
+        assert!(Expect_Fields("module", &["module", "a", "extra"], 2, 1).is_err());
+    }
+
+    #[test]
+    fn Test_Subject_From_Should_Refuse_A_String_Of_The_Wrong_Length()
+    {
+        let error = Subject_From("short", 1).expect_err("`short` is not 32 hexadecimal characters");
+
+        assert!(error.contains("short"), "{error}");
+        assert!(error.contains("characters"), "{error}");
+    }
+
+    #[test]
+    fn Test_Subject_From_Should_Round_Trip_A_Digest_Written_As_Hexadecimal()
+    {
+        let subject = SubjectId::From_Digest(Digest128::From_Bytes([9; Digest128::BYTE_LENGTH]));
+        let hex = subject.Digest().to_string();
+
+        assert_eq!(Subject_From(&hex, 1), Ok(subject));
+    }
+
+    #[test]
+    fn Test_Hexadecimal_Byte_Pairs_Should_Split_Into_Two_Character_Chunks()
+    {
+        let pairs: Vec<&str> = Hexadecimal_Byte_Pairs("0a1b2c").collect();
+
+        assert_eq!(pairs, vec!["0a", "1b", "2c"]);
+    }
+}

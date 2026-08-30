@@ -168,7 +168,7 @@ mod tests
     }
 
     #[test]
-    fn Test_The_Same_Bytes_Should_Reach_The_Same_Semantic_Inputs()
+    fn Test_Syntax_Inputs_Should_Reach_The_Same_Value_For_The_Same_Bytes()
     {
         let source = "package main\n\ntype S struct{}\n\nfunc (s S) New() S { return s }\n";
 
@@ -191,7 +191,7 @@ mod tests
     }
 
     #[test]
-    fn Test_An_Unparseable_File_Should_Produce_No_Fact()
+    fn Test_Materialize_Syntax_Fact_Should_Produce_No_Fact_For_An_Unparseable_File()
     {
         let outcome = Materialize_Syntax_Fact(Subject_Of_Path("broken.go"), "func unclosed( {", Context());
 
@@ -201,7 +201,7 @@ mod tests
     /// The encoding is the fact's content address, so it must not vary with anything but the
     /// facts, and it must not be empty for a file that has items.
     #[test]
-    fn Test_The_Encoding_Should_Be_Stable_And_Not_Empty()
+    fn Test_Encode_Payload_Should_Be_Stable_And_Not_Empty()
     {
         let fact = Fact_From_Source(
             "package main\n\n\

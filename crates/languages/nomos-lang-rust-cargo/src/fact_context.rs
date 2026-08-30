@@ -120,7 +120,7 @@ mod tests
     const CONFIGURATION_DIGEST_FILL: u8 = 3;
 
     #[test]
-    fn Test_Every_Workspace_Member_Should_Produce_One_Fact()
+    fn Test_Materialize_Workspace_Should_Produce_One_Fact_Per_Workspace_Member()
     {
         let facts = Materialize_Workspace(&Repository_Root(), Context(), &StdProcessLauncher).expect("a real workspace");
 
@@ -131,21 +131,10 @@ mod tests
         );
     }
 
-    #[test]
-    fn Test_A_Facts_Subject_Should_Match_Subject_Of_Its_Own_Path()
-    {
-        let facts = Materialize_Workspace(&Repository_Root(), Context(), &StdProcessLauncher).expect("a real workspace");
-
-        let rules = facts
-            .iter()
-            .find(|fact| fact.fact.payload.bytes.starts_with(b"package\tnomos-rules\n"))
-            .expect("nomos-rules is a workspace member");
-
-        assert_eq!(
-            rules.subject,
-            nomos_model::Subject_Of_Path("crates/rules/nomos-rules")
-        );
-    }
+    // Test_A_Facts_Subject_Should_Match_Subject_Of_Its_Own_Path moved to
+    // tests/integration_seams.rs: it exercises `nomos_model::Subject_Of_Path` through this
+    // crate's own public API, so it belongs in an external test rather than a private
+    // inline one. See that file's own doc comment for why.
 
     #[test]
     fn Test_A_Facts_Path_Should_Be_What_Its_Subject_Was_Addressed_By()

@@ -107,3 +107,69 @@ pub fn Provider_Offer() -> ProviderOffer
         guarantee: Declared_Guarantee(),
     };
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use nomos_capability::Registry;
+
+    #[test]
+    fn Test_Capability_Should_Name_The_Module_Index_Capability()
+    {
+        assert_eq!(Capability(), CapabilityId::New(CAPABILITY));
+    }
+
+    #[test]
+    fn Test_Payload_Schema_Should_Name_The_Module_Index_Schema()
+    {
+        assert_eq!(Payload_Schema(), SchemaId::New(SCHEMA));
+    }
+
+    /// The strongest anything may claim for this capability, restated as a value so a
+    /// silent weakening of any one axis fails here beside the constants rather than only
+    /// wherever a caller happens to compare against it.
+    #[test]
+    fn Test_Ceiling_Should_State_The_Capabilitys_Strongest_Claimable_Guarantee()
+    {
+        assert_eq!(
+            Ceiling(),
+            Guarantee::New(FactVariant::Syntactic, Assurance::Sound, Assurance::Sound, IncrementalGranularity::File)
+        );
+    }
+
+    #[test]
+    fn Test_Capability_Contract_Should_Carry_The_Capability_Version_And_Ceiling()
+    {
+        let contract = Capability_Contract();
+
+        assert_eq!(contract.id, Capability());
+        assert_eq!(contract.version, CONTRACT_VERSION);
+        assert_eq!(contract.ceiling, Ceiling());
+    }
+
+    /// What this rollup claims, weaker than the ceiling on completeness alone — the one
+    /// axis a rollup over possibly-incomplete leaf facts cannot honestly claim `Sound` for.
+    #[test]
+    fn Test_Declared_Guarantee_Should_Be_Weaker_Than_The_Ceiling_On_Completeness_Only()
+    {
+        let ceiling = Ceiling();
+        let declared = Declared_Guarantee();
+
+        assert_eq!(declared.variant, ceiling.variant);
+        assert_eq!(declared.soundness, ceiling.soundness);
+        assert_ne!(declared.completeness, ceiling.completeness);
+        assert_eq!(declared.incremental, IncrementalGranularity::Project);
+    }
+
+    #[test]
+    fn Test_Provider_Offer_Should_Be_Accepted_Under_This_Capabilitys_Own_Contract()
+    {
+        let mut registry = Registry::New();
+        registry
+            .Declare(Capability_Contract())
+            .expect("the contract is the first declaration in a fresh registry");
+
+        assert_eq!(registry.Offer(Provider_Offer()), Ok(()));
+    }
+}

@@ -45,3 +45,52 @@ fn Type_Shape(node: Node) -> String
         _ => nomos_cap_syntax::VALUE.to_owned(),
     };
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    fn Parse(source: &str) -> tree_sitter::Tree
+    {
+        let mut parser = tree_sitter::Parser::new();
+        parser
+            .set_language(&tree_sitter_go::LANGUAGE.into())
+            .expect("the Go grammar is compiled into this crate");
+
+        return parser.parse(source, None).expect("well-formed fixture source parses");
+    }
+
+    fn Find_Kind<'a>(node: Node<'a>, kind: &str) -> Option<Node<'a>>
+    {
+        if node.kind() == kind
+        {
+            return Some(node);
+        }
+
+        let mut cursor = node.walk();
+        for child in node.children(&mut cursor)
+        {
+            if let Some(found) = Find_Kind(child, kind)
+            {
+                return Some(found);
+            }
+        }
+
+        return None;
+    }
+
+    #[test]
+    fn Test_Record_Const_Or_Var_Spec_Should_Record_Each_Name_Sharing_One_Value_List()
+    {
+        let source = "package main\n\nconst A, B = 1, 2\n";
+        let tree = Parse(source);
+        let spec = Find_Kind(tree.root_node(), "const_spec").expect("the fixture declares a const spec");
+        let mut items = Vec::new();
+
+        Record_Const_Or_Var_Spec(&mut items, spec, source.as_bytes(), ItemKind::Constant);
+
+        let names: Vec<&str> = items.iter().map(|item| return item.name.as_str()).collect();
+        assert_eq!(names, vec!["A", "B"]);
+    }
+}

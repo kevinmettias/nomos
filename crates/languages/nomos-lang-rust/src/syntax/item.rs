@@ -46,3 +46,37 @@ impl Item
         return format!("{}::{}", self.scope.join("::"), self.name);
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    fn An_Item(scope: Vec<String>, name: &str) -> Item
+    {
+        return Item {
+            ordinal: 0,
+            kind: ItemKind::Function,
+            scope,
+            name: name.to_owned(),
+            visibility: Visibility::Public,
+            documentation: None,
+            shape: None,
+        };
+    }
+
+    #[test]
+    fn Test_Qualified_Name_Should_Be_The_Bare_Name_With_No_Scope()
+    {
+        assert_eq!(An_Item(Vec::new(), "One").Qualified_Name(), "One");
+    }
+
+    #[test]
+    fn Test_Qualified_Name_Should_Join_Scope_And_Name_With_Double_Colons()
+    {
+        assert_eq!(
+            An_Item(vec!["Counter".to_owned()], "Increment").Qualified_Name(),
+            "Counter::Increment"
+        );
+    }
+}

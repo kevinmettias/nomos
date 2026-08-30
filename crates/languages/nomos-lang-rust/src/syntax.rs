@@ -68,3 +68,30 @@ fn Walk_File(file: &syn::File) -> Facts
         unexpanded: walk.unexpanded,
     };
 }
+
+#[cfg(test)]
+mod local_tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Read_Source_Should_Parse_A_Well_Formed_File()
+    {
+        let reading = Read_Source("pub fn One() {}\n");
+
+        let Reading::Parsed(facts) = reading
+        else
+        {
+            panic!("expected a parse: {reading:?}");
+        };
+        assert_eq!(facts.items.len(), 1);
+    }
+
+    #[test]
+    fn Test_Read_Source_Should_Refuse_A_File_Syn_Could_Not_Parse()
+    {
+        let reading = Read_Source("fn unclosed( {");
+
+        assert!(matches!(reading, Reading::Unparseable(_)), "got {reading:?}");
+    }
+}

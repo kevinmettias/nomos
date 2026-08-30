@@ -121,4 +121,18 @@ mod tests
 
         assert!(Declared_Guarantee().Satisfies(&accepts_unknown_completeness));
     }
+
+    /// [`Provider_Offer`] has no direct test of its own elsewhere in this file: the four tests
+    /// above drive [`Declared_Guarantee`] and [`Ceiling`] but never assemble the offer itself.
+    /// This is the direct address, over every field the offer states.
+    #[test]
+    fn Test_Provider_Offer_Should_Carry_This_Providers_Own_Identity_And_Guarantee()
+    {
+        let offer = Provider_Offer();
+
+        assert_eq!(offer.provider, ProviderId::New(PROVIDER));
+        assert_eq!(offer.capability, Capability());
+        assert_eq!(offer.version, CONTRACT_VERSION);
+        assert_eq!(offer.guarantee, Declared_Guarantee());
+    }
 }

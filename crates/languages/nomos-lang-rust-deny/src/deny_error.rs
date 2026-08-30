@@ -190,6 +190,61 @@ fn Violation_Of(diagnostic: &serde_json::Value) -> Option<PolicyViolation>
 mod tests
 {
     use super::*;
+    use nomos_platform::ProcessOutput;
+
+    /// A launcher that hands `Discover_Workspace` a fixed stderr stream instead of running
+    /// a real `cargo deny` — the boundary this crate's own module doc names as the one
+    /// place a caller substitutes a real subprocess.
+    struct FakeLauncher
+    {
+        stderr: String,
+    }
+
+    impl ProcessLauncher for FakeLauncher
+    {
+        fn Run(&self, _command: &Command) -> Result<ProcessOutput, String>
+        {
+            return Ok(ProcessOutput {
+                outcome: ExitOutcome::Exited { code: 0 },
+                stdout: String::new(),
+                stderr: self.stderr.clone(),
+            });
+        }
+    }
+
+    #[test]
+    fn Test_Discover_Workspace_Should_Read_A_Violation_From_The_Json_Stream()
+    {
+        let root = Path::new("F:/repos/nomos");
+        let stderr = serde_json::json!({
+            "type": "diagnostic",
+            "fields": {
+                "code": "duplicate",
+                "severity": "warning",
+                "message": "multiple versions",
+                "labels": [],
+                "graphs": []
+            }
+        })
+        .to_string();
+        let launcher = FakeLauncher { stderr };
+
+        let violations = Discover_Workspace(root, &launcher).expect("the fake launcher writes a real stderr stream");
+
+        assert_eq!(violations.len(), 1);
+        assert_eq!(violations.first().expect("one violation").code, "duplicate");
+    }
+
+    #[test]
+    fn Test_Discover_Workspace_Should_Refuse_An_Empty_Stderr_Stream()
+    {
+        let root = Path::new("F:/repos/nomos");
+        let launcher = FakeLauncher { stderr: String::new() };
+
+        let error = Discover_Workspace(root, &launcher).expect_err("an empty stderr stream is not a real cargo deny run");
+
+        assert!(error.reason.contains("no output"), "{}", error.reason);
+    }
 
     #[test]
     fn Test_A_Real_Captured_Diagnostic_Should_Parse()

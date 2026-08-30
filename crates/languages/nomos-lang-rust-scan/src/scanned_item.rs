@@ -218,7 +218,7 @@ mod tests
     }
 
     #[test]
-    fn Test_A_Declaration_Should_Be_Found_With_Its_Kind_And_Visibility()
+    fn Test_Scan_Source_Should_Find_A_Declaration_With_Its_Kind_And_Visibility()
     {
         assert_eq!(
             Scanned_Kinds(
@@ -328,7 +328,7 @@ mod tests
     /// form wins, and a table that lost its order would file every `const fn` as a `const`
     /// named `fn`.
     #[test]
-    fn Test_A_Longer_Keyword_Should_Win_Over_A_Prefix_Of_It()
+    fn Test_Table_Should_Order_A_Longer_Keyword_Before_A_Shorter_Prefix_Of_It()
     {
         assert_eq!(
             Scanned_Kinds("pub const fn Computed() -> u8 { 0 }\npub const VALUE: u8 = 0;\n"),

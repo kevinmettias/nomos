@@ -105,3 +105,104 @@ pub(super) fn Parameter_Arity(list: Node) -> usize
 
     return total;
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    fn Parse(source: &str) -> tree_sitter::Tree
+    {
+        let mut parser = tree_sitter::Parser::new();
+        parser
+            .set_language(&tree_sitter_go::LANGUAGE.into())
+            .expect("the Go grammar is compiled into this crate");
+
+        return parser.parse(source, None).expect("well-formed fixture source parses");
+    }
+
+    fn Find_Kind<'a>(node: Node<'a>, kind: &str) -> Option<Node<'a>>
+    {
+        if node.kind() == kind
+        {
+            return Some(node);
+        }
+
+        let mut cursor = node.walk();
+        for child in node.children(&mut cursor)
+        {
+            if let Some(found) = Find_Kind(child, kind)
+            {
+                return Some(found);
+            }
+        }
+
+        return None;
+    }
+
+    #[test]
+    fn Test_Push_Item_Record_Should_Assign_Dense_Zero_Based_Ordinals()
+    {
+        let mut items = Vec::new();
+        Push_Item_Record(
+            &mut items,
+            ItemRecord {
+                kind: ItemKind::Function,
+                scope: Vec::new(),
+                name: "First".to_owned(),
+                visibility: Visibility::Public,
+                documentation: None,
+                shape: None,
+            },
+        );
+        Push_Item_Record(
+            &mut items,
+            ItemRecord {
+                kind: ItemKind::Function,
+                scope: Vec::new(),
+                name: "Second".to_owned(),
+                visibility: Visibility::Public,
+                documentation: None,
+                shape: None,
+            },
+        );
+
+        let first = items.first().expect("two items were pushed");
+        let second = items.get(1).expect("two items were pushed");
+        assert_eq!(first.ordinal, 0);
+        assert_eq!(second.ordinal, 1);
+        assert_eq!(second.name, "Second");
+    }
+
+    #[test]
+    fn Test_Function_Name_Should_Read_The_Nodes_Own_Name_Field()
+    {
+        let source = "package main\n\nfunc One() {}\n";
+        let tree = Parse(source);
+        let declaration = Find_Kind(tree.root_node(), "function_declaration").expect("the fixture declares a function");
+
+        assert_eq!(Function_Name(declaration, source.as_bytes()), Some("One".to_owned()));
+    }
+
+    #[test]
+    fn Test_Parameter_Arity_Should_Count_Every_Name_Sharing_One_Type()
+    {
+        let source = "package main\n\nfunc f(a, b int, c string) {}\n";
+        let tree = Parse(source);
+        let list = Find_Kind(tree.root_node(), "parameter_list").expect("the fixture declares parameters");
+
+        assert_eq!(Parameter_Arity(list), 3);
+    }
+
+    #[test]
+    fn Test_Named_Field_Children_Should_Find_Every_Name_A_Shared_Type_Declares()
+    {
+        let source = "package main\n\nfunc f(a, b int) {}\n";
+        let tree = Parse(source);
+        let declaration = Find_Kind(tree.root_node(), "parameter_declaration").expect("the fixture declares a parameter");
+
+        let names = Named_Field_Children(declaration, "name");
+
+        assert_eq!(names.len(), 2, "{names:?}");
+    }
+}

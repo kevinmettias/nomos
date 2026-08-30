@@ -1,0 +1,186 @@
+//! The real seams between `nomos_lang_rust_clippy` and `nomos_analysis` / `nomos_contracts` /
+//! `nomos_model` / `nomos_platform`, driven through this crate's own public
+//! [`Materialize_Workspace`] and [`Discover_Workspace`] rather than through a real `cargo
+//! clippy` subprocess — the same substitution `src/clippy_error.rs`'s own inline `FakeLauncher`
+//! already makes for the identical reason: a fake launcher is fast and deterministic where a
+//! real one is neither.
+//!
+//! `nomos_contracts` and `nomos_model` were previously exercised only from inside
+//! `src/fact_context.rs`'s own `#[cfg(test)]` block (`Test_A_Fact_Key_Should_Depend_On_The_
+//! Guarantee`, which called the crate-private `Compute_Fact_Key` directly); this file proves
+//! the same property — a fact's key depends on the build variant it was materialized under —
+//! through `Materialize_Workspace` alone, since `Compute_Fact_Key` is not public. `nomos_
+//! analysis` and `nomos_platform` had no suite anywhere; both are exercised here for the first
+//! time.
+
+use nomos_analysis::GuaranteeDigest;
+use nomos_cap_lint::{Parse_Payload, Payload_Schema};
+use nomos_contracts::{BuildVariantId, ConfigurationId, Digest128, GenerationId, SnapshotId};
+use nomos_lang_rust_clippy::{Declared_Guarantee, FactContext, Materialize_Workspace};
+use nomos_platform::{Command, ExitOutcome, ProcessLauncher, ProcessOutput};
+use std::path::Path;
+
+/// Neither this crate nor the fake launcher below ever touches a real filesystem at this
+/// path — `Discover_Workspace` only relativizes the `package_id` strings the launcher hands
+/// back against it, so a synthetic root proves the same string arithmetic a real repository
+/// root would.
+const ROOT: &str = "/workspace";
+
+/// A launcher that hands `Materialize_Workspace` a fixed JSON-lines stream, or a failed
+/// exit, instead of running a real `cargo clippy` — the same shape `src/clippy_error.rs`'s
+/// own private `FakeLauncher` takes, reimplemented here because that one is not public.
+struct FakeLauncher
+{
+    stdout: String,
+    outcome: ExitOutcome,
+    stderr: String,
+}
+
+impl FakeLauncher
+{
+    fn Reporting(stdout: String) -> Self
+    {
+        return Self { stdout, outcome: ExitOutcome::Exited { code: 0 }, stderr: String::new() };
+    }
+}
+
+impl ProcessLauncher for FakeLauncher
+{
+    fn Run(&self, _command: &Command) -> Result<ProcessOutput, String>
+    {
+        return Ok(ProcessOutput {
+            outcome: self.outcome,
+            stdout: self.stdout.clone(),
+            stderr: self.stderr.clone(),
+        });
+    }
+}
+
+/// One workspace member, `nomos-rules`, reporting one real-shaped diagnostic — the same
+/// `compiler-artifact` / `compiler-message` pair `cargo clippy --message-format=json`
+/// actually prints, in the same two-line form `src/clippy_error.rs`'s own fixtures use.
+fn Single_Member_Clippy_Output() -> String
+{
+    let artifact = serde_json::json!({
+        "reason": "compiler-artifact",
+        "package_id": "path+file:///workspace/nomos-rules#0.1.0",
+        "target": { "kind": ["lib"] }
+    })
+    .to_string();
+    let message = serde_json::json!({
+        "reason": "compiler-message",
+        "package_id": "path+file:///workspace/nomos-rules#0.1.0",
+        "message": {
+            "level": "warning",
+            "message": "unneeded return statement",
+            "code": { "code": "clippy::needless_return" },
+            "spans": [{ "file_name": "src/lib.rs", "line_start": 5, "is_primary": true }]
+        }
+    })
+    .to_string();
+
+    return format!("{artifact}\n{message}\n");
+}
+
+/// Fill bytes distinct enough that a context's three digests differ from one another; each
+/// value carries no meaning beyond "not equal to the others" — the same convention
+/// `src/fact_context.rs`'s own inline tests already use.
+fn Context(generation: GenerationId) -> FactContext
+{
+    return FactContext {
+        snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([1; Digest128::BYTE_LENGTH])),
+        variant: BuildVariantId::From_Digest(Digest128::From_Bytes([2; Digest128::BYTE_LENGTH])),
+        configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([3; Digest128::BYTE_LENGTH])),
+        generation,
+    };
+}
+
+/// The happy path: a fake but real-shaped `cargo clippy` stream, materialized into a fact
+/// `nomos_analysis` and `nomos_model` both recognize as their own.
+#[test]
+fn Test_Materialize_Workspace_Should_Produce_A_Fact_Nomos_Analysis_And_Nomos_Model_Both_Recognize()
+{
+    let launcher = FakeLauncher::Reporting(Single_Member_Clippy_Output());
+    let context = Context(GenerationId::INITIAL);
+
+    let facts = Materialize_Workspace(Path::new(ROOT), context, &launcher).expect("the fake launcher reports one clean member");
+
+    assert_eq!(facts.len(), 1, "{facts:?}");
+    let member = facts.first().expect("asserted len 1 above");
+
+    assert_eq!(member.path, "nomos-rules");
+    assert_eq!(
+        member.subject,
+        nomos_model::Subject_Of_Path("nomos-rules"),
+        "the subject a real rule looks the fact up by must be the same one `nomos_model` computes for this path"
+    );
+    assert_eq!(member.fact.guarantee, Declared_Guarantee());
+    assert_eq!(member.fact.Key().guarantee, GuaranteeDigest::Of(&Declared_Guarantee()));
+    assert_eq!(member.fact.payload.schema, Payload_Schema());
+
+    let decoded = Parse_Payload(&member.fact.payload.bytes).expect("this crate's own encoding");
+    assert_eq!(decoded.package, "nomos-rules");
+    let diagnostic = decoded.diagnostics.first().expect("the fixture stdout names one diagnostic");
+    assert_eq!(diagnostic.lint.as_deref(), Some("clippy::needless_return"));
+}
+
+/// The lifecycle constraint the other side imposes: two runs at different generations over
+/// the same inputs must file under the *same* key (a later generation re-asks the same
+/// question), while two runs under a different build variant must file apart.
+/// `src/fact_context.rs`'s own (now-removed) `Test_A_Fact_Key_Should_Depend_On_The_Guarantee`
+/// proved the neighboring claim — that the key depends on the *guarantee* — through the
+/// crate-private `Compute_Fact_Key`, which is not reachable from outside the crate; the
+/// build-variant axis proved here is the closest equivalent `Materialize_Workspace`'s public
+/// signature actually exposes, and it exercises the identical `FactKey` fields
+/// (`nomos_contracts::BuildVariantId`, `nomos_contracts::GenerationId`) that made the
+/// original claim true.
+#[test]
+fn Test_The_Facts_Key_Should_Depend_On_The_Build_Variant_But_Not_On_The_Generation()
+{
+    let launcher = FakeLauncher::Reporting(Single_Member_Clippy_Output());
+    let base = Context(GenerationId::INITIAL);
+    let later_generation = FactContext { generation: GenerationId::INITIAL.Next(), ..base };
+    let different_variant =
+        FactContext { variant: BuildVariantId::From_Digest(Digest128::From_Bytes([9; Digest128::BYTE_LENGTH])), ..base };
+
+    let at_base = Materialize_Workspace(Path::new(ROOT), base, &launcher).expect("base context");
+    let at_later_generation = Materialize_Workspace(Path::new(ROOT), later_generation, &launcher).expect("later generation");
+    let at_different_variant = Materialize_Workspace(Path::new(ROOT), different_variant, &launcher).expect("different variant");
+
+    let key_at_base = at_base.first().expect("one member").fact.Key().Digest();
+    let key_at_later_generation = at_later_generation.first().expect("one member").fact.Key().Digest();
+    let key_at_different_variant = at_different_variant.first().expect("one member").fact.Key().Digest();
+
+    assert_eq!(
+        key_at_base, key_at_later_generation,
+        "a later generation re-asks the same question and must file under the same key"
+    );
+    assert_ne!(
+        key_at_base, key_at_different_variant,
+        "two offers of the same subject under a different build variant must file apart"
+    );
+    assert_ne!(
+        at_base.first().expect("one member").fact.Generation(),
+        at_later_generation.first().expect("one member").fact.Generation(),
+        "the generation itself must still differ even though the key does not"
+    );
+}
+
+/// The error that crosses the boundary: a real compile failure — `cargo clippy` exiting
+/// non-zero — must refuse rather than report a clean but empty result, and the refusal must
+/// carry the real exit code and the real stderr rather than a generic message.
+#[test]
+fn Test_A_Non_Zero_Exit_Should_Refuse_Rather_Than_Report_A_Clean_Result()
+{
+    let launcher = FakeLauncher {
+        stdout: String::new(),
+        outcome: ExitOutcome::Exited { code: 101 },
+        stderr: "error[E0308]: mismatched types".to_owned(),
+    };
+
+    let error =
+        Materialize_Workspace(Path::new(ROOT), Context(GenerationId::INITIAL), &launcher).expect_err("a non-zero exit must refuse");
+
+    assert!(error.reason.contains("exit 101"), "{}", error.reason);
+    assert!(error.reason.contains("mismatched types"), "{}", error.reason);
+}

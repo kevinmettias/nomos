@@ -93,7 +93,7 @@ mod tests
     /// metadata` call is a manifest read and this one is a real policy pass over the whole
     /// resolved graph: cheap to repeat there, not here.
     #[test]
-    fn Test_Materialize_Workspace_Over_This_Repository()
+    fn Test_Discover_Workspace_And_Materialize_Workspace_Should_Find_Every_Real_Policy_Violation()
     {
         let PolicyFact { subject, fact } =
             Materialize_Workspace(&Repository_Root(), Context(), &StdProcessLauncher).expect("this repository is a real workspace under cargo deny's own deny.toml");

@@ -348,7 +348,7 @@ mod tests
     use nomos_platform_std::StdProcessLauncher;
 
     #[test]
-    fn Test_This_Crate_Should_Depend_On_Nomos_Contracts()
+    fn Test_Discover_Workspace_Should_Find_This_Crates_Real_Dependency_On_Nomos_Contracts()
     {
         let discovered = Discover_Workspace(&Repository_Root(), &StdProcessLauncher).expect("a real cargo workspace");
 

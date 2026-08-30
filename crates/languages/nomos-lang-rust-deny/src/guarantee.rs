@@ -73,4 +73,23 @@ mod tests
 
         assert!(Ceiling().Satisfies(&Declared_Guarantee()));
     }
+
+    /// `Provider_Offer` itself, addressed by name rather than only through the ceiling
+    /// property above -- the same composition-time check
+    /// `tests/integration_seams.rs::Test_Provider_Offer_Should_Be_Accepted_By_Nomos_
+    /// Capabilitys_Own_Registry` repeats through this crate's public API, kept here as well
+    /// because a Rust test outside this file cannot address a function declared in it.
+    #[test]
+    fn Test_Provider_Offer_Should_Be_Accepted_Under_The_Capabilitys_Contract()
+    {
+        use nomos_cap_dependency_policy::Capability_Contract;
+        use nomos_capability::Registry;
+
+        let mut registry = Registry::New();
+        registry
+            .Declare(Capability_Contract())
+            .expect("the contract is the first declaration in a fresh registry");
+
+        assert_eq!(registry.Offer(Provider_Offer()), Ok(()));
+    }
 }

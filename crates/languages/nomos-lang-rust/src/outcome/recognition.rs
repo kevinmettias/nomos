@@ -82,16 +82,19 @@ mod tests
 {
     use super::*;
 
+    /// Paths a Rust provider must recognize regardless of directory separator or case.
+    const RECOGNIZED_RUST_PATHS: &[&str] = &[
+        "main.rs",
+        "src/lib.rs",
+        "crates\\kernel\\nomos-model\\src\\digest.rs",
+        "F:/repos/xvpe/crates/a/src/b.rs",
+        "SRC/MAIN.RS",
+    ];
+
     #[test]
-    fn Test_Rust_Sources_Should_Be_Recognized()
+    fn Test_Of_Path_Should_Recognize_Rust_Sources()
     {
-        for path in [
-            "main.rs",
-            "src/lib.rs",
-            "crates\\kernel\\nomos-model\\src\\digest.rs",
-            "F:/repos/xvpe/crates/a/src/b.rs",
-            "SRC/MAIN.RS",
-        ]
+        for path in RECOGNIZED_RUST_PATHS
         {
             assert_eq!(
                 Recognition::Of_Path(path),
@@ -142,10 +145,13 @@ mod tests
 
     /// No extension is its own answer, distinct from an unknown one. `Makefile` was
     /// never going to be Rust; `foo.zig` might have been, if somebody added a provider.
+    /// Paths that have no extension at all, distinct from an unrecognized one.
+    const EXTENSIONLESS_PATHS: &[&str] = &["Makefile", "src/Makefile", ".gitignore", "crates/a.b/LICENSE"];
+
     #[test]
     fn Test_A_Missing_Extension_Should_Say_So_Rather_Than_Guess()
     {
-        for path in ["Makefile", "src/Makefile", ".gitignore", "crates/a.b/LICENSE"]
+        for path in EXTENSIONLESS_PATHS
         {
             assert_eq!(
                 Recognition::Of_Path(path),

@@ -29,3 +29,23 @@ impl Member
         };
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use crate::provider::Syntax_Inputs;
+    use nomos_model::Content_Digest;
+
+    #[test]
+    fn Test_Of_Should_Route_Its_Inputs_Through_Syntax_Inputs()
+    {
+        let subject = SubjectId::From_Digest(Content_Digest(b"a.rs"));
+        let source = "pub fn A() {}\n";
+
+        let member = Member::Of(subject, source);
+
+        assert_eq!(member.subject, subject);
+        assert_eq!(member.inputs, Syntax_Inputs(source));
+    }
+}

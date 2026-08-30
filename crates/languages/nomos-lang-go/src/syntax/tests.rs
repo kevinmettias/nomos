@@ -18,7 +18,7 @@ fn Names(source: &str) -> Vec<String>
 }
 
 #[test]
-fn Test_A_Method_Should_Be_Named_By_Its_Receiver_Type()
+fn Test_Qualified_Name_Should_Include_A_Methods_Receiver_Type()
 {
     let names = Names(
         "package main\n\n\
@@ -30,41 +30,61 @@ fn Test_A_Method_Should_Be_Named_By_Its_Receiver_Type()
     assert_eq!(names, vec!["Counter", "Counter::Increment", "Free"]);
 }
 
+/// (source, expected fields) for a struct whose fields are each declared on their own line
+/// with their own type — the plain case a second case beside this one would extend rather
+/// than duplicate.
+fn One_Field_Per_Line_Cases() -> Vec<(&'static str, Vec<(String, String)>)>
+{
+    return vec![(
+        "package main\n\ntype Counter struct {\n\tN int\n\tLabel string\n}\n",
+        vec![("N".to_owned(), "int".to_owned()), ("Label".to_owned(), "string".to_owned())],
+    )];
+}
+
 /// `OD-CAPABILITY-010`'s extension: a Go struct's own field names and their exact source
 /// text, read back through `nomos_cap_syntax::Struct_Fields` the same way a real consumer
 /// would.
 #[test]
 fn Test_A_Structs_Fields_Should_Be_Recorded()
 {
-    let facts = Parsed("package main\n\ntype Counter struct {\n\tN int\n\tLabel string\n}\n");
-    let item = facts.items.first().expect("one struct");
+    for (source, expected) in One_Field_Per_Line_Cases()
+    {
+        let facts = Parsed(source);
+        let item = facts.items.first().expect("one struct");
 
-    let shape = item.shape.clone().map_or(nomos_cap_syntax::Observation::Absent, nomos_cap_syntax::Observation::Present);
-    let fields = nomos_cap_syntax::Struct_Fields(&shape).expect("a struct with named fields records them");
+        let shape = item.shape.clone().map_or(nomos_cap_syntax::Observation::Absent, nomos_cap_syntax::Observation::Present);
+        let fields = nomos_cap_syntax::Struct_Fields(&shape).expect("a struct with named fields records them");
 
-    assert_eq!(
-        fields,
-        vec![("N".to_owned(), "int".to_owned()), ("Label".to_owned(), "string".to_owned())]
-    );
+        assert_eq!(fields, expected);
+    }
 }
 
-/// A single declaration naming more than one field (`X, Y int`) is one `field_declaration`
-/// node carrying two `name` children in the real grammar — verified directly before this
-/// reader was written, the same discipline `Named_Field_Children`'s own doc already
-/// states for the identical shape one construct over.
-#[test]
-fn Test_A_Multi_Name_Field_Declaration_Should_Record_Each_Name()
+/// (source, expected fields) for a single declaration naming more than one field
+/// (`X, Y int`) — one `field_declaration` node carrying two `name` children in the real
+/// grammar, verified directly before this reader was written, the same discipline
+/// `Named_Field_Children`'s own doc already states for the identical shape one construct
+/// over.
+fn Shared_Type_Field_Cases() -> Vec<(&'static str, Vec<(String, String)>)>
 {
-    let facts = Parsed("package main\n\ntype Point struct {\n\tX, Y int\n}\n");
-    let item = facts.items.first().expect("one struct");
+    return vec![(
+        "package main\n\ntype Point struct {\n\tX, Y int\n}\n",
+        vec![("X".to_owned(), "int".to_owned()), ("Y".to_owned(), "int".to_owned())],
+    )];
+}
 
-    let shape = item.shape.clone().map_or(nomos_cap_syntax::Observation::Absent, nomos_cap_syntax::Observation::Present);
-    let fields = nomos_cap_syntax::Struct_Fields(&shape).expect("a struct with named fields records them");
+#[test]
+fn Test_Named_Field_Children_Should_Record_Each_Name_In_A_Multi_Name_Field_Declaration()
+{
+    for (source, expected) in Shared_Type_Field_Cases()
+    {
+        let facts = Parsed(source);
+        let item = facts.items.first().expect("one struct");
 
-    assert_eq!(
-        fields,
-        vec![("X".to_owned(), "int".to_owned()), ("Y".to_owned(), "int".to_owned())]
-    );
+        let shape = item.shape.clone().map_or(nomos_cap_syntax::Observation::Absent, nomos_cap_syntax::Observation::Present);
+        let fields = nomos_cap_syntax::Struct_Fields(&shape).expect("a struct with named fields records them");
+
+        assert_eq!(fields, expected);
+    }
 }
 
 /// A field's type is recorded exactly as written — this provider has no "no printing"
@@ -288,12 +308,16 @@ fn Test_A_Blank_Line_Should_End_The_Documentation_Run()
     assert_eq!(facts.items.first().and_then(|item| return item.documentation.clone()), None);
 }
 
+/// Sources that declare nothing at all — empty but for the package clause, or with only a
+/// comment beside it.
+const EMPTY_SOURCES: &[&str] = &["package main\n", "package main\n\n// nothing here\n"];
+
 /// A file that declares nothing parses. This is the variant that must never be how a
 /// failure looks.
 #[test]
-fn Test_A_File_That_Declares_Nothing_Should_Parse()
+fn Test_Has_No_Declarations_Should_Be_True_For_A_File_That_Declares_Nothing()
 {
-    for source in ["package main\n", "package main\n\n// nothing here\n"]
+    for source in EMPTY_SOURCES
     {
         let facts = Parsed(source);
 
@@ -302,11 +326,15 @@ fn Test_A_File_That_Declares_Nothing_Should_Parse()
     }
 }
 
+/// Sources broken badly enough that no parse should ever succeed: an unclosed construct,
+/// and text that is not Go at all.
+const UNPARSEABLE_SOURCES: &[&str] = &["package main\n\nfunc unclosed( {", "this is not go at all {{{"];
+
 /// The property the whole outcome type exists for.
 #[test]
 fn Test_Broken_Source_Should_Be_Unparseable_Rather_Than_Empty()
 {
-    for source in ["package main\n\nfunc unclosed( {", "this is not go at all {{{"]
+    for source in UNPARSEABLE_SOURCES
     {
         match Read_Source(source)
         {

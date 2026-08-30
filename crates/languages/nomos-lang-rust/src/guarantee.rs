@@ -91,7 +91,16 @@ mod tests
     /// Not "its own contract". This provider does not author the terms it offers under,
     /// and every test below declares them from `nomos-cap-syntax` for that reason.
     #[test]
-    fn Test_The_Offer_Should_Be_Accepted_Under_The_Capabilitys_Contract()
+    fn Test_Declared_Guarantee_Should_State_A_Sound_Syntactic_File_Granular_Claim()
+    {
+        assert_eq!(
+            Declared_Guarantee(),
+            Guarantee::New(FactVariant::Syntactic, Assurance::Sound, Assurance::Unknown, IncrementalGranularity::File)
+        );
+    }
+
+    #[test]
+    fn Test_Provider_Offer_Should_Be_Accepted_Under_The_Capabilitys_Contract()
     {
         let mut registry = Registry::New();
         registry

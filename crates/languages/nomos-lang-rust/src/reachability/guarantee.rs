@@ -69,7 +69,16 @@ mod tests
     use nomos_capability::{OfferRefusal, Registry, RegistryError, RegistryErrorKind, Requirement};
 
     #[test]
-    fn Test_The_Offer_Should_Be_Accepted_Under_The_Capabilitys_Contract()
+    fn Test_Declared_Guarantee_Should_State_A_Sound_Pattern_Unsound_Completeness_Claim()
+    {
+        assert_eq!(
+            Declared_Guarantee(),
+            Guarantee::New(FactVariant::Syntactic, Assurance::Sound, Assurance::Unsound, IncrementalGranularity::File)
+        );
+    }
+
+    #[test]
+    fn Test_Provider_Offer_Should_Be_Accepted_Under_The_Capabilitys_Contract()
     {
         let mut registry = Registry::New();
         registry

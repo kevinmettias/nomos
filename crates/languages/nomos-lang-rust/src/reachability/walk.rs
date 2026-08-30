@@ -146,6 +146,20 @@ fn Tail_Expression(expression: &syn::Expr) -> &syn::Expr
     return expression;
 }
 
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_New_Should_Produce_A_Walk_With_No_Sites_Recorded_Yet()
+    {
+        let walk = Walk::New();
+
+        assert!(walk.sites.is_empty());
+    }
+}
+
 impl<'ast> Visit<'ast> for Walk
 {
     fn visit_item_fn(&mut self, node: &'ast syn::ItemFn)

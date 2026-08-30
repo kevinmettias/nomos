@@ -65,3 +65,24 @@ impl core::fmt::Display for ItemKind
         return formatter.write_str(self.Label());
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    /// The stable vocabulary an encoded payload is read back through — `nomos_cap_syntax`'s
+    /// own reader depends on these exact strings, not on `ItemKind`'s own `Debug` spelling.
+    #[test]
+    fn Test_Label_Should_Match_The_Shared_Vocabulary()
+    {
+        assert_eq!(ItemKind::Function.Label(), nomos_cap_syntax::FUNCTION);
+        assert_eq!(ItemKind::Struct.Label(), "Struct");
+        assert_eq!(ItemKind::Interface.Label(), "Interface");
+        assert_eq!(ItemKind::TypeAlias.Label(), "TypeAlias");
+        assert_eq!(ItemKind::TypeDefinition.Label(), "TypeDefinition");
+        assert_eq!(ItemKind::Constant.Label(), "Constant");
+        assert_eq!(ItemKind::Variable.Label(), "Variable");
+        assert_eq!(ItemKind::Import.Label(), "Import");
+    }
+}

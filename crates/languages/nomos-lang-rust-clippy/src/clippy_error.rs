@@ -302,6 +302,56 @@ fn Require_Nonempty(discovered: Vec<DiscoveredDiagnostics>) -> Result<Vec<Discov
 mod tests
 {
     use super::*;
+    use nomos_platform::ProcessOutput;
+
+    /// A launcher that hands `Discover_Workspace` a fixed JSON-lines stream instead of
+    /// running a real `cargo clippy` — the boundary this crate's own module doc names as
+    /// the one place a caller substitutes a real subprocess.
+    struct FakeLauncher
+    {
+        stdout: String,
+    }
+
+    impl ProcessLauncher for FakeLauncher
+    {
+        fn Run(&self, _command: &Command) -> Result<ProcessOutput, String>
+        {
+            return Ok(ProcessOutput {
+                outcome: ExitOutcome::Exited { code: 0 },
+                stdout: self.stdout.clone(),
+                stderr: String::new(),
+            });
+        }
+    }
+
+    #[test]
+    fn Test_Discover_Workspace_Should_Read_A_First_Party_Package_From_The_Json_Stream()
+    {
+        let root = Path::new("F:/repos/nomos");
+        let stdout = serde_json::json!({
+            "reason": "compiler-artifact",
+            "package_id": "path+file:///F:/repos/nomos/crates/contracts/nomos-contracts#0.1.0",
+            "target": { "kind": ["lib"] }
+        })
+        .to_string();
+        let launcher = FakeLauncher { stdout };
+
+        let discovered = Discover_Workspace(root, &launcher).expect("the fake launcher reports one package");
+
+        assert_eq!(discovered.len(), 1);
+        assert_eq!(discovered.first().expect("one package").payload.package, "nomos-contracts");
+    }
+
+    #[test]
+    fn Test_Discover_Workspace_Should_Refuse_An_Empty_Stream()
+    {
+        let root = Path::new("F:/repos/nomos");
+        let launcher = FakeLauncher { stdout: String::new() };
+
+        let error = Discover_Workspace(root, &launcher).expect_err("an empty stream names no first-party package");
+
+        assert!(error.reason.contains("no first-party workspace member"), "{}", error.reason);
+    }
 
     /// The primary span line/column `Real_Compiler_Message`'s fixture reproduces from the
     /// real capture, and the value `Test_A_Real_Captured_Diagnostic_Should_Parse` checks
@@ -320,28 +370,45 @@ mod tests
         assert_eq!(First_Party_Relative_Root(id, root), None);
     }
 
+    /// (root, `path+file://` package id, expected relative root) for a Windows-style first
+    /// party package id — a second case beside this one would extend the table rather than
+    /// duplicate the test.
+    fn Windows_First_Party_Package_Id_Cases() -> Vec<(&'static str, &'static str, &'static str)>
+    {
+        return vec![(
+            "F:/repos/nomos",
+            "path+file:///F:/repos/nomos/crates/substrate/nomos-ledger#0.1.0",
+            "crates/substrate/nomos-ledger",
+        )];
+    }
+
     #[test]
     fn Test_A_First_Party_Package_Id_Should_Resolve_Relative_To_Root()
     {
-        let root = Path::new("F:/repos/nomos");
-        let id = "path+file:///F:/repos/nomos/crates/substrate/nomos-ledger#0.1.0";
+        for (root, id, expected) in Windows_First_Party_Package_Id_Cases()
+        {
+            assert_eq!(First_Party_Relative_Root(id, Path::new(root)), Some(expected.to_owned()));
+        }
+    }
 
-        assert_eq!(
-            First_Party_Relative_Root(id, root),
-            Some("crates/substrate/nomos-ledger".to_owned())
-        );
+    /// (root, `path+file://` package id, expected relative root) for a POSIX-style first
+    /// party package id, which carries no drive letter to strip.
+    fn Posix_First_Party_Package_Id_Cases() -> Vec<(&'static str, &'static str, &'static str)>
+    {
+        return vec![(
+            "/home/build/nomos",
+            "path+file:///home/build/nomos/crates/substrate/nomos-ledger#0.1.0",
+            "crates/substrate/nomos-ledger",
+        )];
     }
 
     #[test]
     fn Test_A_Posix_Package_Id_Should_Resolve_Without_A_Drive_Letter()
     {
-        let root = Path::new("/home/build/nomos");
-        let id = "path+file:///home/build/nomos/crates/substrate/nomos-ledger#0.1.0";
-
-        assert_eq!(
-            First_Party_Relative_Root(id, root),
-            Some("crates/substrate/nomos-ledger".to_owned())
-        );
+        for (root, id, expected) in Posix_First_Party_Package_Id_Cases()
+        {
+            assert_eq!(First_Party_Relative_Root(id, Path::new(root)), Some(expected.to_owned()));
+        }
     }
 
     #[test]
