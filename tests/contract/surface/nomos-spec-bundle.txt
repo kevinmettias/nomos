@@ -5,11 +5,9 @@ pub const nomos_spec_bundle::BundleSerialization::SCOPE: ReproducibilityScope
 pub const nomos_spec_bundle::BundleSerialization::STRENGTH: DeterminismStrength
 pub const nomos_spec_bundle::BundleSerialization::TRACE: TraceEquivalence
 pub const nomos_spec_bundle::FORMAT: u32
-pub enum nomos_spec_bundle::BlobEncoding
 pub enum nomos_spec_bundle::BundleError
+pub enum nomos_spec_bundle::Encoding
 pub enum nomos_spec_bundle::Record
-pub enum variant nomos_spec_bundle::BlobEncoding::Base64
-pub enum variant nomos_spec_bundle::BlobEncoding::Utf8
 pub enum variant nomos_spec_bundle::BundleError::Incomplete { table: String, in_store: u32, exported: u32, }
 pub enum variant nomos_spec_bundle::BundleError::Json(String)
 pub enum variant nomos_spec_bundle::BundleError::Malformed(String)
@@ -24,6 +22,8 @@ pub enum variant nomos_spec_bundle::BundleError::TooNew { found: u32, supported:
 pub enum variant nomos_spec_bundle::BundleError::Uncarried { table: String, column: String, field: String, }
 pub enum variant nomos_spec_bundle::BundleError::UncoveredColumn { table: String, column: String, }
 pub enum variant nomos_spec_bundle::BundleError::Unresolved { record: String, reference: String, }
+pub enum variant nomos_spec_bundle::Encoding::Base64
+pub enum variant nomos_spec_bundle::Encoding::Utf8
 pub enum variant nomos_spec_bundle::Record::Blob(Blob)
 pub enum variant nomos_spec_bundle::Record::Lineage(Lineage)
 pub enum variant nomos_spec_bundle::Record::Node(Node)
@@ -53,23 +53,49 @@ pub fn nomos_spec_bundle::BundleError::from(error: nomos_spec_store::StoreError)
 pub fn nomos_spec_bundle::BundleError::from(error: rusqlite::Error) -> Self
 pub fn nomos_spec_bundle::BundleError::from(error: serde_json::Error) -> Self
 pub fn nomos_spec_bundle::Export(store: &SpecificationStore) -> Result<Bundle, BundleError>
-pub fn nomos_spec_bundle::Import_Bundle(store: &mut SpecificationStore, bundle: &Bundle) -> Result<ImportReport, BundleError>
+pub fn nomos_spec_bundle::Import_Bundle(store: &mut SpecificationStore, bundle: &Bundle) -> Result<Report, BundleError>
 pub impl nomos_spec_bundle::BundleError implements From<nomos_spec_store::StoreError>
 pub impl nomos_spec_bundle::BundleError implements From<rusqlite::Error>
 pub impl nomos_spec_bundle::BundleError implements From<serde_json::Error>
 pub impl nomos_spec_bundle::BundleError implements core::fmt::Display
 pub impl nomos_spec_bundle::BundleError implements std::error::Error
 pub impl nomos_spec_bundle::BundleSerialization implements Strategy
+pub struct field nomos_spec_bundle::Alias::alias: String
+pub struct field nomos_spec_bundle::Alias::node_id: String
 pub struct field nomos_spec_bundle::Blob::byte_length: i64
 pub struct field nomos_spec_bundle::Blob::content: String
-pub struct field nomos_spec_bundle::Blob::encoding: BlobEncoding
+pub struct field nomos_spec_bundle::Blob::encoding: Encoding
 pub struct field nomos_spec_bundle::Blob::sha256: String
+pub struct field nomos_spec_bundle::Block::content_hash: String
+pub struct field nomos_spec_bundle::Block::document: DocumentRef
+pub struct field nomos_spec_bundle::Block::heading_path: String
+pub struct field nomos_spec_bundle::Block::kind: String
+pub struct field nomos_spec_bundle::Block::normalized_hash: String
+pub struct field nomos_spec_bundle::Block::ordinal: i64
+pub struct field nomos_spec_bundle::Block::text: String
+pub struct field nomos_spec_bundle::Document::blob_sha256: String
+pub struct field nomos_spec_bundle::Document::path: String
+pub struct field nomos_spec_bundle::Document::revision: String
 pub struct field nomos_spec_bundle::DocumentRef::path: String
 pub struct field nomos_spec_bundle::DocumentRef::revision: String
+pub struct field nomos_spec_bundle::FrontMatter::document: DocumentRef
+pub struct field nomos_spec_bundle::FrontMatter::node_id: String
+pub struct field nomos_spec_bundle::FrontMatter::status: String
+pub struct field nomos_spec_bundle::FrontMatter::tags: Vec<String>
+pub struct field nomos_spec_bundle::FrontMatter::version: i64
 pub struct field nomos_spec_bundle::Header::format: u32
 pub struct field nomos_spec_bundle::Header::schema_version: u32
-pub struct field nomos_spec_bundle::ImportReport::counts: BTreeMap<String, u32>
-pub struct field nomos_spec_bundle::ImportReport::records: u32
+pub struct field nomos_spec_bundle::Heading::depth: i64
+pub struct field nomos_spec_bundle::Heading::document: DocumentRef
+pub struct field nomos_spec_bundle::Heading::ordinal: i64
+pub struct field nomos_spec_bundle::Heading::title: String
+pub struct field nomos_spec_bundle::History::event: String
+pub struct field nomos_spec_bundle::History::event_hash: String
+pub struct field nomos_spec_bundle::History::node_id: String
+pub struct field nomos_spec_bundle::History::ordinal: i64
+pub struct field nomos_spec_bundle::History::previous_event_hash: Option<String>
+pub struct field nomos_spec_bundle::History::reason: String
+pub struct field nomos_spec_bundle::History::recorded_at: String
 pub struct field nomos_spec_bundle::Lineage::disposition: String
 pub struct field nomos_spec_bundle::Lineage::source_block: Option<OrdinalRef>
 pub struct field nomos_spec_bundle::Lineage::source_heading: Option<OrdinalRef>
@@ -86,15 +112,6 @@ pub struct field nomos_spec_bundle::Node::node_id: String
 pub struct field nomos_spec_bundle::Node::representation: String
 pub struct field nomos_spec_bundle::Node::suite_id: Option<String>
 pub struct field nomos_spec_bundle::Node::title: String
-pub struct field nomos_spec_bundle::NodeAlias::alias: String
-pub struct field nomos_spec_bundle::NodeAlias::node_id: String
-pub struct field nomos_spec_bundle::NodeHistory::event: String
-pub struct field nomos_spec_bundle::NodeHistory::event_hash: String
-pub struct field nomos_spec_bundle::NodeHistory::node_id: String
-pub struct field nomos_spec_bundle::NodeHistory::ordinal: i64
-pub struct field nomos_spec_bundle::NodeHistory::previous_event_hash: Option<String>
-pub struct field nomos_spec_bundle::NodeHistory::reason: String
-pub struct field nomos_spec_bundle::NodeHistory::recorded_at: String
 pub struct field nomos_spec_bundle::NormativeStatement::canonical_hash: String
 pub struct field nomos_spec_bundle::NormativeStatement::canonical_text: String
 pub struct field nomos_spec_bundle::NormativeStatement::kind: String
@@ -108,11 +125,6 @@ pub struct field nomos_spec_bundle::Omission::source_block: Option<OrdinalRef>
 pub struct field nomos_spec_bundle::Omission::source_heading: Option<OrdinalRef>
 pub struct field nomos_spec_bundle::OrdinalRef::document: DocumentRef
 pub struct field nomos_spec_bundle::OrdinalRef::ordinal: i64
-pub struct field nomos_spec_bundle::RecordFrontMatter::document: DocumentRef
-pub struct field nomos_spec_bundle::RecordFrontMatter::node_id: String
-pub struct field nomos_spec_bundle::RecordFrontMatter::status: String
-pub struct field nomos_spec_bundle::RecordFrontMatter::tags: Vec<String>
-pub struct field nomos_spec_bundle::RecordFrontMatter::version: i64
 pub struct field nomos_spec_bundle::RecordRelation::document: DocumentRef
 pub struct field nomos_spec_bundle::RecordRelation::ordinal: i64
 pub struct field nomos_spec_bundle::RecordRelation::relation: String
@@ -120,60 +132,44 @@ pub struct field nomos_spec_bundle::RecordRelation::target: String
 pub struct field nomos_spec_bundle::Relation::from_node_id: String
 pub struct field nomos_spec_bundle::Relation::relation_type: String
 pub struct field nomos_spec_bundle::Relation::to_node_id: String
-pub struct field nomos_spec_bundle::RelationType::domain: Vec<String>
-pub struct field nomos_spec_bundle::RelationType::inverse_of: Option<String>
-pub struct field nomos_spec_bundle::RelationType::max_per_node: u32
-pub struct field nomos_spec_bundle::RelationType::name: String
-pub struct field nomos_spec_bundle::RelationType::range: Vec<String>
-pub struct field nomos_spec_bundle::RelationType::tier: String
-pub struct field nomos_spec_bundle::SourceBlock::content_hash: String
-pub struct field nomos_spec_bundle::SourceBlock::document: DocumentRef
-pub struct field nomos_spec_bundle::SourceBlock::heading_path: String
-pub struct field nomos_spec_bundle::SourceBlock::kind: String
-pub struct field nomos_spec_bundle::SourceBlock::normalized_hash: String
-pub struct field nomos_spec_bundle::SourceBlock::ordinal: i64
-pub struct field nomos_spec_bundle::SourceBlock::text: String
-pub struct field nomos_spec_bundle::SourceDocument::blob_sha256: String
-pub struct field nomos_spec_bundle::SourceDocument::path: String
-pub struct field nomos_spec_bundle::SourceDocument::revision: String
-pub struct field nomos_spec_bundle::SourceHeading::depth: i64
-pub struct field nomos_spec_bundle::SourceHeading::document: DocumentRef
-pub struct field nomos_spec_bundle::SourceHeading::ordinal: i64
-pub struct field nomos_spec_bundle::SourceHeading::title: String
-pub struct field nomos_spec_bundle::SourceTableRow::block: OrdinalRef
-pub struct field nomos_spec_bundle::SourceTableRow::cells: Vec<String>
-pub struct field nomos_spec_bundle::SourceTableRow::content_hash: String
-pub struct field nomos_spec_bundle::SourceTableRow::kind: String
-pub struct field nomos_spec_bundle::SourceTableRow::normalized_hash: String
-pub struct field nomos_spec_bundle::SourceTableRow::ordinal: i64
-pub struct field nomos_spec_bundle::SourceTableRow::table_ordinal: i64
-pub struct field nomos_spec_bundle::SourceTableRow::text: String
+pub struct field nomos_spec_bundle::Report::counts: BTreeMap<String, u32>
+pub struct field nomos_spec_bundle::Report::records: u32
 pub struct field nomos_spec_bundle::Suite::authority_root: bool
 pub struct field nomos_spec_bundle::Suite::suite_id: String
 pub struct field nomos_spec_bundle::Suite::title: String
+pub struct field nomos_spec_bundle::TableRow::block: OrdinalRef
+pub struct field nomos_spec_bundle::TableRow::cells: Vec<String>
+pub struct field nomos_spec_bundle::TableRow::content_hash: String
+pub struct field nomos_spec_bundle::TableRow::kind: String
+pub struct field nomos_spec_bundle::TableRow::normalized_hash: String
+pub struct field nomos_spec_bundle::TableRow::ordinal: i64
+pub struct field nomos_spec_bundle::TableRow::table_ordinal: i64
+pub struct field nomos_spec_bundle::TableRow::text: String
 pub struct field nomos_spec_bundle::TableRowRef::block: OrdinalRef
 pub struct field nomos_spec_bundle::TableRowRef::ordinal: i64
+pub struct nomos_spec_bundle::Alias
 pub struct nomos_spec_bundle::Blob
+pub struct nomos_spec_bundle::Block
 pub struct nomos_spec_bundle::Bundle
 pub struct nomos_spec_bundle::BundleSerialization
+pub struct nomos_spec_bundle::Document
 pub struct nomos_spec_bundle::DocumentRef
+pub struct nomos_spec_bundle::FrontMatter
 pub struct nomos_spec_bundle::Header
-pub struct nomos_spec_bundle::ImportReport
+pub struct nomos_spec_bundle::Heading
+pub struct nomos_spec_bundle::History
 pub struct nomos_spec_bundle::Lineage
 pub struct nomos_spec_bundle::Manifest
 pub struct nomos_spec_bundle::Node
-pub struct nomos_spec_bundle::NodeAlias
-pub struct nomos_spec_bundle::NodeHistory
 pub struct nomos_spec_bundle::NormativeStatement
 pub struct nomos_spec_bundle::Omission
 pub struct nomos_spec_bundle::OrdinalRef
-pub struct nomos_spec_bundle::RecordFrontMatter
 pub struct nomos_spec_bundle::RecordRelation
 pub struct nomos_spec_bundle::Relation
-pub struct nomos_spec_bundle::RelationType
-pub struct nomos_spec_bundle::SourceBlock
-pub struct nomos_spec_bundle::SourceDocument
-pub struct nomos_spec_bundle::SourceHeading
-pub struct nomos_spec_bundle::SourceTableRow
+pub struct nomos_spec_bundle::Report
 pub struct nomos_spec_bundle::Suite
+pub struct nomos_spec_bundle::TableRow
 pub struct nomos_spec_bundle::TableRowRef
+
+# re-exports of items declared outside this crate
+pub use row::relation::r#type::Type

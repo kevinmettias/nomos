@@ -9,18 +9,18 @@ pub enum variant nomos_cap_dependency_policy::PolicySeverity::Warning
 pub fn nomos_cap_dependency_policy::Capability() -> CapabilityId
 pub fn nomos_cap_dependency_policy::Capability_Contract() -> CapabilityContract
 pub fn nomos_cap_dependency_policy::Encode_Payload(payload: &PolicyPayload) -> Vec<u8>
-pub fn nomos_cap_dependency_policy::Parse_Payload(bytes: &[u8]) -> Result<PolicyPayload, PayloadRefusal>
-pub fn nomos_cap_dependency_policy::PayloadRefusal::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_cap_dependency_policy::Parse_Payload(bytes: &[u8]) -> Result<PolicyPayload, Refusal>
 pub fn nomos_cap_dependency_policy::Payload_Schema() -> SchemaId
 pub fn nomos_cap_dependency_policy::PolicySeverity::From_Label(label: &str) -> Option<Self>
 pub fn nomos_cap_dependency_policy::PolicySeverity::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
-pub impl nomos_cap_dependency_policy::PayloadRefusal implements core::fmt::Display
+pub fn nomos_cap_dependency_policy::Refusal::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub impl nomos_cap_dependency_policy::PolicySeverity implements core::fmt::Display
-pub struct field nomos_cap_dependency_policy::PayloadRefusal::reason: String
+pub impl nomos_cap_dependency_policy::Refusal implements core::fmt::Display
 pub struct field nomos_cap_dependency_policy::PolicyPayload::violations: Vec<PolicyViolation>
 pub struct field nomos_cap_dependency_policy::PolicyViolation::code: String
 pub struct field nomos_cap_dependency_policy::PolicyViolation::message: String
 pub struct field nomos_cap_dependency_policy::PolicyViolation::severity: PolicySeverity
-pub struct nomos_cap_dependency_policy::PayloadRefusal
+pub struct field nomos_cap_dependency_policy::Refusal::reason: String
 pub struct nomos_cap_dependency_policy::PolicyPayload
 pub struct nomos_cap_dependency_policy::PolicyViolation
+pub struct nomos_cap_dependency_policy::Refusal

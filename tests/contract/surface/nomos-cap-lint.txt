@@ -11,11 +11,11 @@ pub fn nomos_cap_lint::Capability_Contract() -> CapabilityContract
 pub fn nomos_cap_lint::Encode_Payload(payload: &DiagnosticsPayload) -> Vec<u8>
 pub fn nomos_cap_lint::LintLevel::From_Label(label: &str) -> Option<Self>
 pub fn nomos_cap_lint::LintLevel::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
-pub fn nomos_cap_lint::Parse_Payload(bytes: &[u8]) -> Result<DiagnosticsPayload, PayloadRefusal>
-pub fn nomos_cap_lint::PayloadRefusal::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_cap_lint::Parse_Payload(bytes: &[u8]) -> Result<DiagnosticsPayload, Refusal>
 pub fn nomos_cap_lint::Payload_Schema() -> SchemaId
+pub fn nomos_cap_lint::Refusal::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub impl nomos_cap_lint::LintLevel implements core::fmt::Display
-pub impl nomos_cap_lint::PayloadRefusal implements core::fmt::Display
+pub impl nomos_cap_lint::Refusal implements core::fmt::Display
 pub struct field nomos_cap_lint::DiagnosticsPayload::diagnostics: Vec<LintDiagnostic>
 pub struct field nomos_cap_lint::DiagnosticsPayload::package: String
 pub struct field nomos_cap_lint::LintDiagnostic::file: String
@@ -23,7 +23,7 @@ pub struct field nomos_cap_lint::LintDiagnostic::level: LintLevel
 pub struct field nomos_cap_lint::LintDiagnostic::line: u32
 pub struct field nomos_cap_lint::LintDiagnostic::lint: Option<String>
 pub struct field nomos_cap_lint::LintDiagnostic::message: String
-pub struct field nomos_cap_lint::PayloadRefusal::reason: String
+pub struct field nomos_cap_lint::Refusal::reason: String
 pub struct nomos_cap_lint::DiagnosticsPayload
 pub struct nomos_cap_lint::LintDiagnostic
-pub struct nomos_cap_lint::PayloadRefusal
+pub struct nomos_cap_lint::Refusal

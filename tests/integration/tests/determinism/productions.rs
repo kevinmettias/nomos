@@ -263,7 +263,7 @@ fn Fixture_Module() -> rollup::Module
         members: FIXTURE
             .iter()
             .rev()
-            .map(|(path, source)| return rollup::ModuleMember::Of(Subject_Of(path), source))
+            .map(|(path, source)| return rollup::Member::Of(Subject_Of(path), source))
             .collect(),
     };
 }

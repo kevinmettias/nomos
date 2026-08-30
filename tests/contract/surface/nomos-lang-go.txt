@@ -17,13 +17,15 @@ pub enum variant nomos_lang_go::ItemKind::TypeDefinition
 pub enum variant nomos_lang_go::ItemKind::Variable
 pub enum variant nomos_lang_go::Materialization::Materialized(Box<MaterializedFact>)
 pub enum variant nomos_lang_go::Materialization::Unparseable(ParseFailure)
-pub enum variant nomos_lang_go::Reading::Parsed(SyntaxFacts)
+pub enum variant nomos_lang_go::Reading::Parsed(Facts)
 pub enum variant nomos_lang_go::Reading::Unparseable(ParseFailure)
 pub enum variant nomos_lang_go::Recognition::Recognized
 pub enum variant nomos_lang_go::Recognition::Unrecognized { extension: Option<String>, }
 pub enum variant nomos_lang_go::Visibility::NotApplicable
 pub enum variant nomos_lang_go::Visibility::Private
 pub enum variant nomos_lang_go::Visibility::Public
+pub fn nomos_lang_go::Facts::Has_No_Declarations(&self) -> bool
+pub fn nomos_lang_go::Item::Qualified_Name(&self) -> String
 pub fn nomos_lang_go::ItemKind::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_lang_go::ParseFailure::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_lang_go::Provider_Offer() -> ProviderOffer
@@ -36,9 +38,20 @@ pub impl nomos_lang_go::ItemKind implements core::fmt::Display
 pub impl nomos_lang_go::ParseFailure implements core::fmt::Display
 pub impl nomos_lang_go::ParseFailure implements std::error::Error
 pub impl nomos_lang_go::Visibility implements core::fmt::Display
+pub struct field nomos_lang_go::Facts::items: Vec<Item>
+pub struct field nomos_lang_go::Facts::unexpanded: u32
+pub struct field nomos_lang_go::Item::documentation: Option<String>
+pub struct field nomos_lang_go::Item::kind: ItemKind
+pub struct field nomos_lang_go::Item::name: String
+pub struct field nomos_lang_go::Item::ordinal: u32
+pub struct field nomos_lang_go::Item::scope: Vec<String>
+pub struct field nomos_lang_go::Item::shape: Option<String>
+pub struct field nomos_lang_go::Item::visibility: Visibility
 pub struct field nomos_lang_go::ParseFailure::column: usize
 pub struct field nomos_lang_go::ParseFailure::line: usize
 pub struct field nomos_lang_go::ParseFailure::message: String
+pub struct nomos_lang_go::Facts
+pub struct nomos_lang_go::Item
 pub struct nomos_lang_go::ParseFailure
 
 # re-exports of items declared outside this crate
@@ -46,5 +59,3 @@ pub use determinism::SyntaxFactProduction
 pub use provider::Encode_Payload
 pub use provider::FactContext
 pub use provider::Materialize_Syntax_Fact
-pub use syntax::SyntaxFacts
-pub use syntax::SyntaxItem

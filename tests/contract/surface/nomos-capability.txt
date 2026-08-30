@@ -42,6 +42,11 @@ pub fn nomos_capability::Selection::Unranked(&self) -> Vec<&ProviderOffer>
 pub fn nomos_capability::Selection::Weaker(&self) -> Vec<&ProviderOffer>
 pub fn nomos_capability::Standing::Of(offered: &Guarantee, against: &Guarantee) -> Self
 pub fn nomos_capability::Unmet::Describe(&self) -> String
+pub fn nomos_capability::contract_testing::Assert_Ceiling_Admits( contract: CapabilityContract, capability: CapabilityId, version: ContractVersion, guarantee: Guarantee, )
+pub fn nomos_capability::contract_testing::Assert_Ceiling_Refuses( contract: CapabilityContract, capability: CapabilityId, version: ContractVersion, guarantee: Guarantee, why: &str, )
+pub fn nomos_capability::contract_testing::Assert_One_Contract_Per_Capability(contract: CapabilityContract, why: &str)
+pub fn nomos_capability::contract_testing::Assert_Stands_With_No_Provider( contract: CapabilityContract, capability: CapabilityId, version: ContractVersion, ceiling: Guarantee, )
+pub fn nomos_capability::contract_testing::Declared_Registry(contract: CapabilityContract) -> Registry
 pub struct field nomos_capability::ProviderOffer::capability: CapabilityId
 pub struct field nomos_capability::ProviderOffer::guarantee: Guarantee
 pub struct field nomos_capability::ProviderOffer::provider: ProviderId
