@@ -114,48 +114,6 @@ mod tests
     use super::*;
     use nomos_spec_model::{SubmissionKind, SubmissionState};
 
-    /// An empty, unique scratch directory of this test's own.
-    fn Unique_Scratch_Directory(label: &str) -> std::path::PathBuf
-    {
-        use std::sync::atomic::{AtomicU32, Ordering};
-        // scope: allow this test-only counter has no owner beyond disambiguating calls within
-        // one process; a bare pid does not distinguish two calls in the same test run.
-        static COUNTER: AtomicU32 = AtomicU32::new(0);
-
-        let directory = std::env::temp_dir().join(format!(
-            "nomos-api-spec-submit-{label}-{}-{}",
-            std::process::id(),
-            COUNTER.fetch_add(1, Ordering::Relaxed)
-        ));
-        let _ = std::fs::remove_dir_all(&directory);
-        std::fs::create_dir_all(&directory).expect("a fresh scratch directory can always be created");
-
-        return directory;
-    }
-
-    /// Every universal field and every field `OD-SPEC-010` requires of `SubmissionKind::
-    /// FeatureRequest` -- the same set `nomos_spec_orchestration`'s own `tests.rs` submits.
-    fn Complete_Feature_Request(id: &str, into: Option<std::path::PathBuf>) -> SubmitRequest
-    {
-        return SubmitRequest {
-            kind: SubmissionKind::FeatureRequest,
-            id: id.to_owned(),
-            by: "kevin".to_owned(),
-            state: SubmissionState::Draft,
-            contract_version: 1,
-            fields: vec![
-                ("title".to_owned(), "t".to_owned()),
-                ("goal".to_owned(), "g".to_owned()),
-                ("behaviour".to_owned(), "b".to_owned()),
-                ("acceptance".to_owned(), "a".to_owned()),
-                ("invariants".to_owned(), "none".to_owned()),
-            ],
-            gaps: Vec::new(),
-            submitted_through: "nomos-api-test".to_owned(),
-            into,
-        };
-    }
-
     #[test]
     fn Test_A_Real_Complete_Submission_Should_Be_Accepted_With_Submitted_Origin()
     {
@@ -205,6 +163,25 @@ mod tests
         assert!(body.contains("FR-API-002"), "{body}");
     }
 
+    /// An empty, unique scratch directory of this test's own.
+    fn Unique_Scratch_Directory(label: &str) -> std::path::PathBuf
+    {
+        use std::sync::atomic::{AtomicU32, Ordering};
+        // scope: allow this test-only counter has no owner beyond disambiguating calls within
+        // one process; a bare pid does not distinguish two calls in the same test run.
+        static COUNTER: AtomicU32 = AtomicU32::new(0);
+
+        let directory = std::env::temp_dir().join(format!(
+            "nomos-api-spec-submit-{label}-{}-{}",
+            std::process::id(),
+            COUNTER.fetch_add(1, Ordering::Relaxed)
+        ));
+        let _ignored = std::fs::remove_dir_all(&directory);
+        std::fs::create_dir_all(&directory).expect("a fresh scratch directory can always be created");
+
+        return directory;
+    }
+
     #[test]
     fn Test_An_Incomplete_Submission_Should_Be_Refused_And_Write_Nothing()
     {
@@ -237,5 +214,28 @@ mod tests
         let outcome = parsed.get("outcome").expect("a serialized SpecSubmitResponse always has this field");
 
         assert_eq!(outcome, "accepted", "{json}");
+    }
+
+    /// Every universal field and every field `OD-SPEC-010` requires of `SubmissionKind::
+    /// FeatureRequest` -- the same set `nomos_spec_orchestration`'s own `tests.rs` submits.
+    fn Complete_Feature_Request(id: &str, into: Option<std::path::PathBuf>) -> SubmitRequest
+    {
+        return SubmitRequest {
+            kind: SubmissionKind::FeatureRequest,
+            id: id.to_owned(),
+            by: "kevin".to_owned(),
+            state: SubmissionState::Draft,
+            contract_version: 1,
+            fields: vec![
+                ("title".to_owned(), "t".to_owned()),
+                ("goal".to_owned(), "g".to_owned()),
+                ("behaviour".to_owned(), "b".to_owned()),
+                ("acceptance".to_owned(), "a".to_owned()),
+                ("invariants".to_owned(), "none".to_owned()),
+            ],
+            gaps: Vec::new(),
+            submitted_through: "nomos-api-test".to_owned(),
+            into,
+        };
     }
 }

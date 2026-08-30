@@ -124,49 +124,6 @@ mod tests
     use super::*;
     use crate::spec::SpecMarkdownResponse;
 
-    /// An empty, unique scratch directory of this test's own -- never the real shared `work/`
-    /// directory, which live sessions write to concurrently.
-    fn Unique_Scratch_Directory(label: &str) -> std::path::PathBuf
-    {
-        use std::sync::atomic::{AtomicU32, Ordering};
-        // scope: allow this test-only counter has no owner beyond disambiguating calls within
-        // one process; a bare pid does not distinguish two calls in the same test run.
-        static COUNTER: AtomicU32 = AtomicU32::new(0);
-
-        let directory = std::env::temp_dir().join(format!(
-            "nomos-api-spec-preview-{label}-{}-{}",
-            std::process::id(),
-            COUNTER.fetch_add(1, Ordering::Relaxed)
-        ));
-        let _ = std::fs::remove_dir_all(&directory);
-        std::fs::create_dir_all(&directory).expect("a fresh scratch directory can always be created");
-
-        return directory;
-    }
-
-    /// Stages a canonical heading rename against `id`'s own real, embedded markdown (read
-    /// through this crate's own `Handle_Spec_Markdown`, so this test needs no corpus and
-    /// touches no file this repository tracks), writes it to `staged.md` under `into`, and
-    /// hands back the path it was written to. Mirrors
-    /// `nomos_spec_orchestration`'s own `Staged_Heading_Rename`.
-    fn Staged_Heading_Rename(id: &str, into: &std::path::Path) -> std::path::PathBuf
-    {
-        let request = nomos_spec_orchestration::RecordRequest { id: id.to_owned(), revision: None };
-        let SpecMarkdownResponse::Resolved { markdown, .. } = crate::spec::Handle_Spec_Markdown(&request)
-        else
-        {
-            // Every id this test fixture is called with names a real governing record that
-            // ships embedded in the binary, so this branch means the fixture was called with
-            // the wrong id, not a runtime condition the fixture should tolerate.
-            panic!("{id} is a governing record, embedded even with no corpus");
-        };
-        let edited = markdown.replace("## Decision", "## The decision");
-        let staged = into.join("staged.md");
-        std::fs::write(&staged, &edited).expect("writes the staged edit");
-
-        return staged;
-    }
-
     #[test]
     fn Test_A_Real_Heading_Rename_Should_Preview_Wording_Moved()
     {
@@ -213,5 +170,48 @@ mod tests
         let outcome = parsed.get("outcome").expect("a serialized SpecPreviewResponse always has this field");
 
         assert_eq!(outcome, "previewed", "{json}");
+    }
+
+    /// An empty, unique scratch directory of this test's own -- never the real shared `work/`
+    /// directory, which live sessions write to concurrently.
+    fn Unique_Scratch_Directory(label: &str) -> std::path::PathBuf
+    {
+        use std::sync::atomic::{AtomicU32, Ordering};
+        // scope: allow this test-only counter has no owner beyond disambiguating calls within
+        // one process; a bare pid does not distinguish two calls in the same test run.
+        static COUNTER: AtomicU32 = AtomicU32::new(0);
+
+        let directory = std::env::temp_dir().join(format!(
+            "nomos-api-spec-preview-{label}-{}-{}",
+            std::process::id(),
+            COUNTER.fetch_add(1, Ordering::Relaxed)
+        ));
+        let _ignored = std::fs::remove_dir_all(&directory);
+        std::fs::create_dir_all(&directory).expect("a fresh scratch directory can always be created");
+
+        return directory;
+    }
+
+    /// Stages a canonical heading rename against `id`'s own real, embedded markdown (read
+    /// through this crate's own `Handle_Spec_Markdown`, so this test needs no corpus and
+    /// touches no file this repository tracks), writes it to `staged.md` under `into`, and
+    /// hands back the path it was written to. Mirrors
+    /// `nomos_spec_orchestration`'s own `Staged_Heading_Rename`.
+    fn Staged_Heading_Rename(id: &str, into: &std::path::Path) -> std::path::PathBuf
+    {
+        let request = nomos_spec_orchestration::RecordRequest { id: id.to_owned(), revision: None };
+        let SpecMarkdownResponse::Resolved { markdown, .. } = crate::spec::Handle_Spec_Markdown(&request)
+        else
+        {
+            // Every id this test fixture is called with names a real governing record that
+            // ships embedded in the binary, so this branch means the fixture was called with
+            // the wrong id, not a runtime condition the fixture should tolerate.
+            panic!("{id} is a governing record, embedded even with no corpus");
+        };
+        let edited = markdown.replace("## Decision", "## The decision");
+        let staged = into.join("staged.md");
+        std::fs::write(&staged, &edited).expect("writes the staged edit");
+
+        return staged;
     }
 }

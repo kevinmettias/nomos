@@ -219,36 +219,6 @@ mod tests
     use super::*;
     use fake_launcher::{Scripted, Stderr, Stdout};
 
-    /// A scratch repository root carrying exactly one snapshot file (`nomos-model`) --
-    /// the fixture every test below needs before it can call `Run` at all. `label`
-    /// distinguishes one test's directory from another's so concurrent runs never collide.
-    fn Scratch_Root_With_One_Snapshot(label: &str) -> std::path::PathBuf
-    {
-        let root = std::env::temp_dir().join(format!("nomos-surface-provenance-test-{label}{}", std::process::id()));
-        let surface = root.join("tests").join("contract").join("surface");
-        std::fs::create_dir_all(&surface).expect("test needs a directory");
-        std::fs::write(surface.join("nomos-model.txt"), "pub fn f();\n").expect("test needs a file");
-
-        return root;
-    }
-
-    /// The `--since a --until b --root <root>` every test below needs, plus whatever else
-    /// it wants to name.
-    fn Arguments_With_Extra(root: &std::path::Path, extra: &[&str]) -> Vec<String>
-    {
-        let mut arguments = vec![
-            "--since".to_owned(),
-            "a".to_owned(),
-            "--until".to_owned(),
-            "b".to_owned(),
-            "--root".to_owned(),
-            root.to_string_lossy().into_owned(),
-        ];
-        arguments.extend(extra.iter().map(|value| (*value).to_owned()));
-
-        return arguments;
-    }
-
     /// A usage error is rendered and exits `2` before any query is attempted — proven
     /// with no launcher scripted at all, since none should be asked to run anything.
     #[test]
@@ -311,5 +281,35 @@ mod tests
         assert!(String::from_utf8_lossy(&stderr).contains("no-such-crate"));
 
         let _ = std::fs::remove_dir_all(&root);
+    }
+
+    /// A scratch repository root carrying exactly one snapshot file (`nomos-model`) --
+    /// the fixture every test above needs before it can call `Run` at all. `label`
+    /// distinguishes one test's directory from another's so concurrent runs never collide.
+    fn Scratch_Root_With_One_Snapshot(label: &str) -> std::path::PathBuf
+    {
+        let root = std::env::temp_dir().join(format!("nomos-surface-provenance-test-{label}{}", std::process::id()));
+        let surface = root.join("tests").join("contract").join("surface");
+        std::fs::create_dir_all(&surface).expect("test needs a directory");
+        std::fs::write(surface.join("nomos-model.txt"), "pub fn f();\n").expect("test needs a file");
+
+        return root;
+    }
+
+    /// The `--since a --until b --root <root>` every test above needs, plus whatever else
+    /// it wants to name.
+    fn Arguments_With_Extra(root: &std::path::Path, extra: &[&str]) -> Vec<String>
+    {
+        let mut arguments = vec![
+            "--since".to_owned(),
+            "a".to_owned(),
+            "--until".to_owned(),
+            "b".to_owned(),
+            "--root".to_owned(),
+            root.to_string_lossy().into_owned(),
+        ];
+        arguments.extend(extra.iter().map(|value| (*value).to_owned()));
+
+        return arguments;
     }
 }

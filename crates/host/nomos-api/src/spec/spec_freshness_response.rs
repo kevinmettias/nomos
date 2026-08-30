@@ -94,28 +94,6 @@ mod tests
     use super::*;
     use crate::spec::VerdictResponse;
 
-    /// An empty, unique scratch directory means nothing has ever been rendered there, so
-    /// every shipped profile examines as `Absent` regardless of this session's own
-    /// `NOMOS_V14_CORPUS` state -- the same zero-setup determinism every other test in this
-    /// file already relies on.
-    fn Unique_Scratch_Directory(label: &str) -> std::path::PathBuf
-    {
-        use std::sync::atomic::{AtomicU32, Ordering};
-        // scope: allow this test-only counter has no owner beyond disambiguating calls within
-        // one process; a bare pid does not distinguish two calls in the same test run.
-        static COUNTER: AtomicU32 = AtomicU32::new(0);
-
-        let directory = std::env::temp_dir().join(format!(
-            "nomos-api-spec-freshness-{label}-{}-{}",
-            std::process::id(),
-            COUNTER.fetch_add(1, Ordering::Relaxed)
-        ));
-        let _ = std::fs::remove_dir_all(&directory);
-        std::fs::create_dir_all(&directory).expect("a fresh scratch directory can always be created");
-
-        return directory;
-    }
-
     #[test]
     fn Test_A_Real_Call_Over_An_Empty_Root_Should_Examine_Every_Profile_As_Absent()
     {
@@ -166,5 +144,27 @@ mod tests
         let outcome = parsed.get("outcome").expect("a serialized SpecFreshnessResponse always has this field");
 
         assert_eq!(outcome, "examined", "{json}");
+    }
+
+    /// An empty, unique scratch directory means nothing has ever been rendered there, so
+    /// every shipped profile examines as `Absent` regardless of this session's own
+    /// `NOMOS_V14_CORPUS` state -- the same zero-setup determinism every other test in this
+    /// file already relies on.
+    fn Unique_Scratch_Directory(label: &str) -> std::path::PathBuf
+    {
+        use std::sync::atomic::{AtomicU32, Ordering};
+        // scope: allow this test-only counter has no owner beyond disambiguating calls within
+        // one process; a bare pid does not distinguish two calls in the same test run.
+        static COUNTER: AtomicU32 = AtomicU32::new(0);
+
+        let directory = std::env::temp_dir().join(format!(
+            "nomos-api-spec-freshness-{label}-{}-{}",
+            std::process::id(),
+            COUNTER.fetch_add(1, Ordering::Relaxed)
+        ));
+        let _ignored = std::fs::remove_dir_all(&directory);
+        std::fs::create_dir_all(&directory).expect("a fresh scratch directory can always be created");
+
+        return directory;
     }
 }

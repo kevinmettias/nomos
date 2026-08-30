@@ -69,11 +69,6 @@ mod tests
 {
     use super::*;
 
-    fn Arguments_From_Text(text: &str) -> Vec<String>
-    {
-        return text.split_whitespace().map(str::to_owned).collect();
-    }
-
     #[test]
     fn Test_A_Repeated_Flag_Should_Yield_Every_Value()
     {
@@ -102,5 +97,10 @@ mod tests
 
         assert!(error.contains("--item"));
         assert!(error.contains("usage"));
+    }
+
+    fn Arguments_From_Text(text: &str) -> Vec<String>
+    {
+        return text.split_whitespace().map(str::to_owned).collect();
     }
 }

@@ -126,30 +126,6 @@ mod tests
     use crate::work::tests_support::{Scratch_Board, Scratch_Board_With_A_Claimable_Item};
     use nomos_ledger::{ItemId, ItemKind, ItemOrigin, ItemState};
 
-    /// A well-formed, real `LedgerItem` this test's own -- `id` is the only field a caller
-    /// varies below, since every other field is incidental to what `Add` itself judges.
-    fn Real_New_Item(id: ItemId, territory_path: &str) -> LedgerItem
-    {
-        return LedgerItem {
-            id,
-            title: "t".to_owned(),
-            why: "w".to_owned(),
-            done_when: "d".to_owned(),
-            kind: ItemKind::Capability,
-            origin: ItemOrigin::Proposed,
-            territory: Territory::Of_Files([territory_path]),
-            state: ItemState::Ready,
-            depends_on: Vec::new(),
-            blocked: None,
-            claim: None,
-            verification: None,
-            verified: None,
-            abandoned: Vec::new(),
-            displaced: Vec::new(),
-            declined: None,
-        };
-    }
-
     #[test]
     fn Test_Adding_A_Real_Well_Formed_Item_To_A_Fresh_Board_Should_Record_It()
     {
@@ -199,5 +175,29 @@ mod tests
         let outcome = parsed.get("outcome").expect("a serialized WorkAddResponse always has this field");
 
         assert_eq!(outcome, "added", "{json}");
+    }
+
+    /// A well-formed, real `LedgerItem` this test's own -- `id` is the only field a caller
+    /// varies below, since every other field is incidental to what `Add` itself judges.
+    fn Real_New_Item(id: ItemId, territory_path: &str) -> LedgerItem
+    {
+        return LedgerItem {
+            id,
+            title: "t".to_owned(),
+            why: "w".to_owned(),
+            done_when: "d".to_owned(),
+            kind: ItemKind::Capability,
+            origin: ItemOrigin::Proposed,
+            territory: Territory::Of_Files([territory_path]),
+            state: ItemState::Ready,
+            depends_on: Vec::new(),
+            blocked: None,
+            claim: None,
+            verification: None,
+            verified: None,
+            abandoned: Vec::new(),
+            displaced: Vec::new(),
+            declined: None,
+        };
     }
 }

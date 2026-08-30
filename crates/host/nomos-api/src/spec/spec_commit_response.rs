@@ -143,50 +143,6 @@ mod tests
     use crate::spec::SpecMarkdownResponse;
     use nomos_spec_orchestration::EditRequest;
 
-    /// An empty, unique scratch directory of this test's own.
-    fn Unique_Scratch_Directory(label: &str) -> std::path::PathBuf
-    {
-        use std::sync::atomic::{AtomicU32, Ordering};
-        // scope: allow this test-only counter has no owner beyond disambiguating calls within
-        // one process; a bare pid does not distinguish two calls in the same test run.
-        static COUNTER: AtomicU32 = AtomicU32::new(0);
-
-        let directory = std::env::temp_dir().join(format!(
-            "nomos-api-spec-commit-{label}-{}-{}",
-            std::process::id(),
-            COUNTER.fetch_add(1, Ordering::Relaxed)
-        ));
-        let _ = std::fs::remove_dir_all(&directory);
-        std::fs::create_dir_all(&directory).expect("a fresh scratch directory can always be created");
-
-        return directory;
-    }
-
-    /// Stages a canonical heading rename against `id`'s own real, embedded markdown (read
-    /// through this crate's own `Handle_Spec_Markdown`, so this test needs no corpus and
-    /// touches no file this repository tracks), writes it to `staged.md` under `into`, and
-    /// hands back the path it was written to. Mirrors `crate::spec::spec_preview_response::tests`'s own
-    /// copy of the same fixture -- kept apart rather than shared for the reason this crate's
-    /// own composition-root walks already are (`crate::sources`'s own doc): a test fixture
-    /// pinned to one file is a composition-root concern of that file's own test module.
-    fn Staged_Heading_Rename(id: &str, into: &std::path::Path) -> std::path::PathBuf
-    {
-        let request = nomos_spec_orchestration::RecordRequest { id: id.to_owned(), revision: None };
-        let SpecMarkdownResponse::Resolved { markdown, .. } = crate::spec::Handle_Spec_Markdown(&request)
-        else
-        {
-            // Every id this test fixture is called with names a real governing record that
-            // ships embedded in the binary, so this branch means the fixture was called with
-            // the wrong id, not a runtime condition the fixture should tolerate.
-            panic!("{id} is a governing record, embedded even with no corpus");
-        };
-        let edited = markdown.replace("## Decision", "## The decision");
-        let staged = into.join("staged.md");
-        std::fs::write(&staged, &edited).expect("writes the staged edit");
-
-        return staged;
-    }
-
     #[test]
     fn Test_A_Real_Commit_Should_Write_The_Record_And_Close_The_Round_Trip()
     {
@@ -243,5 +199,49 @@ mod tests
         let outcome = parsed.get("outcome").expect("a serialized SpecCommitResponse always has this field");
 
         assert_eq!(outcome, "committed", "{json}");
+    }
+
+    /// An empty, unique scratch directory of this test's own.
+    fn Unique_Scratch_Directory(label: &str) -> std::path::PathBuf
+    {
+        use std::sync::atomic::{AtomicU32, Ordering};
+        // scope: allow this test-only counter has no owner beyond disambiguating calls within
+        // one process; a bare pid does not distinguish two calls in the same test run.
+        static COUNTER: AtomicU32 = AtomicU32::new(0);
+
+        let directory = std::env::temp_dir().join(format!(
+            "nomos-api-spec-commit-{label}-{}-{}",
+            std::process::id(),
+            COUNTER.fetch_add(1, Ordering::Relaxed)
+        ));
+        let _ignored = std::fs::remove_dir_all(&directory);
+        std::fs::create_dir_all(&directory).expect("a fresh scratch directory can always be created");
+
+        return directory;
+    }
+
+    /// Stages a canonical heading rename against `id`'s own real, embedded markdown (read
+    /// through this crate's own `Handle_Spec_Markdown`, so this test needs no corpus and
+    /// touches no file this repository tracks), writes it to `staged.md` under `into`, and
+    /// hands back the path it was written to. Mirrors `crate::spec::spec_preview_response::tests`'s own
+    /// copy of the same fixture -- kept apart rather than shared for the reason this crate's
+    /// own composition-root walks already are (`crate::sources`'s own doc): a test fixture
+    /// pinned to one file is a composition-root concern of that file's own test module.
+    fn Staged_Heading_Rename(id: &str, into: &std::path::Path) -> std::path::PathBuf
+    {
+        let request = nomos_spec_orchestration::RecordRequest { id: id.to_owned(), revision: None };
+        let SpecMarkdownResponse::Resolved { markdown, .. } = crate::spec::Handle_Spec_Markdown(&request)
+        else
+        {
+            // Every id this test fixture is called with names a real governing record that
+            // ships embedded in the binary, so this branch means the fixture was called with
+            // the wrong id, not a runtime condition the fixture should tolerate.
+            panic!("{id} is a governing record, embedded even with no corpus");
+        };
+        let edited = markdown.replace("## Decision", "## The decision");
+        let staged = into.join("staged.md");
+        std::fs::write(&staged, &edited).expect("writes the staged edit");
+
+        return staged;
     }
 }

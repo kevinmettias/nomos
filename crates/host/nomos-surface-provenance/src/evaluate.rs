@@ -200,27 +200,6 @@ mod tests
     use super::*;
     use crate::fake_launcher::{Scripted, Stderr, Stdout};
 
-    /// Runs the whole join a real invocation performs -- `Records_Touched` then
-    /// `Finding_For`, both expected to succeed. Every test below wants exactly this
-    /// sequence and differs only in what `launcher` answers, so they share it rather than
-    /// each repeating the two-call join.
-    fn Joined_Finding(launcher: &Scripted, range: CommitRange<'_>, krate: &str) -> CrateFinding
-    {
-        let records_touched =
-            Records_Touched(launcher, range.root, git::Since(range.since), git::Until(range.until)).expect("must run");
-        let query = Query { range, records_touched };
-
-        return Finding_For(launcher, &query, krate).expect("must run");
-    }
-
-    /// The range and root every test in this module scripts a launcher against -- the git
-    /// coordinates themselves are never the fact under test, only what `launcher` answers
-    /// for them.
-    fn Repository_Range() -> CommitRange<'static>
-    {
-        return CommitRange { root: Path::new("/repo"), since: "a", until: "b" };
-    }
-
     #[test]
     fn Test_A_Blank_Diff_Means_No_Finding()
     {
@@ -231,18 +210,6 @@ mod tests
 
         assert!(!finding.surface_changed);
         assert!(!finding.Is_A_Finding());
-    }
-
-    /// A launcher scripted for `nomos-model`'s surface file changing -- the "diff touched
-    /// the surface" premise both `Test_A_Changed_Surface_With_*` tests share, differing only
-    /// in what commits the two `log` answers report: `records_log` for whether a records
-    /// commit touched the range, `surface_log` for the surface commit itself.
-    fn Changed_Surface_Launcher(records_log: &str, surface_log: &str) -> Scripted
-    {
-        return Scripted::New()
-            .Answer("diff", 0, Stdout("tests/contract/surface/nomos-model.txt\n"), Stderr(""))
-            .Answer("log a..b --format=%H --", 0, Stdout(records_log), Stderr(""))
-            .Answer("log a..b --format=%H\t%s --", 0, Stdout(surface_log), Stderr(""));
     }
 
     #[test]
@@ -281,5 +248,38 @@ mod tests
         let result = Finding_For(&launcher, &query, "nomos-model");
 
         assert!(result.is_err());
+    }
+
+    /// Runs the whole join a real invocation performs -- `Records_Touched` then
+    /// `Finding_For`, both expected to succeed. Every test above wants exactly this
+    /// sequence and differs only in what `launcher` answers, so they share it rather than
+    /// each repeating the two-call join.
+    fn Joined_Finding(launcher: &Scripted, range: CommitRange<'_>, krate: &str) -> CrateFinding
+    {
+        let records_touched =
+            Records_Touched(launcher, range.root, git::Since(range.since), git::Until(range.until)).expect("must run");
+        let query = Query { range, records_touched };
+
+        return Finding_For(launcher, &query, krate).expect("must run");
+    }
+
+    /// The range and root every test in this module scripts a launcher against -- the git
+    /// coordinates themselves are never the fact under test, only what `launcher` answers
+    /// for them.
+    fn Repository_Range() -> CommitRange<'static>
+    {
+        return CommitRange { root: Path::new("/repo"), since: "a", until: "b" };
+    }
+
+    /// A launcher scripted for `nomos-model`'s surface file changing -- the "diff touched
+    /// the surface" premise both `Test_A_Changed_Surface_With_*` tests share, differing only
+    /// in what commits the two `log` answers report: `records_log` for whether a records
+    /// commit touched the range, `surface_log` for the surface commit itself.
+    fn Changed_Surface_Launcher(records_log: &str, surface_log: &str) -> Scripted
+    {
+        return Scripted::New()
+            .Answer("diff", 0, Stdout("tests/contract/surface/nomos-model.txt\n"), Stderr(""))
+            .Answer("log a..b --format=%H --", 0, Stdout(records_log), Stderr(""))
+            .Answer("log a..b --format=%H\t%s --", 0, Stdout(surface_log), Stderr(""));
     }
 }

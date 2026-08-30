@@ -109,25 +109,6 @@ mod tests
     /// `crates/host/nomos-cli/tests/read_surface.rs` both use for the same reason.
     const EMBEDDED_PROFILE: &str = "domain-specification";
 
-    /// An empty, unique scratch directory of this test's own.
-    fn Unique_Scratch_Directory(label: &str) -> std::path::PathBuf
-    {
-        use std::sync::atomic::{AtomicU32, Ordering};
-        // scope: allow this test-only counter has no owner beyond disambiguating calls within
-        // one process; a bare pid does not distinguish two calls in the same test run.
-        static COUNTER: AtomicU32 = AtomicU32::new(0);
-
-        let directory = std::env::temp_dir().join(format!(
-            "nomos-api-spec-render-{label}-{}-{}",
-            std::process::id(),
-            COUNTER.fetch_add(1, Ordering::Relaxed)
-        ));
-        let _ = std::fs::remove_dir_all(&directory);
-        std::fs::create_dir_all(&directory).expect("a fresh scratch directory can always be created");
-
-        return directory;
-    }
-
     #[test]
     fn Test_A_Real_Render_Should_Place_Both_Files_On_Disk()
     {
@@ -181,5 +162,24 @@ mod tests
         let outcome = parsed.get("outcome").expect("a serialized SpecRenderResponse always has this field");
 
         assert_eq!(outcome, "placed", "{json}");
+    }
+
+    /// An empty, unique scratch directory of this test's own.
+    fn Unique_Scratch_Directory(label: &str) -> std::path::PathBuf
+    {
+        use std::sync::atomic::{AtomicU32, Ordering};
+        // scope: allow this test-only counter has no owner beyond disambiguating calls within
+        // one process; a bare pid does not distinguish two calls in the same test run.
+        static COUNTER: AtomicU32 = AtomicU32::new(0);
+
+        let directory = std::env::temp_dir().join(format!(
+            "nomos-api-spec-render-{label}-{}-{}",
+            std::process::id(),
+            COUNTER.fetch_add(1, Ordering::Relaxed)
+        ));
+        let _ignored = std::fs::remove_dir_all(&directory);
+        std::fs::create_dir_all(&directory).expect("a fresh scratch directory can always be created");
+
+        return directory;
     }
 }

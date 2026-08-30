@@ -23,7 +23,7 @@
 //! will not exist a moment later, is still a true stamp of what this store held.
 
 use crate::arguments::{Name, Named_Value_From_String_Arguments, Named_Values_From_String_Arguments, Required_Value, Usage};
-use nomos_spec_orchestration::corpus::{Assemble_Corpus, CorpusRequest};
+use nomos_spec_orchestration::corpus::{Assemble_Corpus, Assembly, CorpusRequest};
 use nomos_spec_orchestration::{RenderRefusal, SubmitAnswer, SubmitRefusal, SubmitRequest};
 
 use nomos_spec_model::{DecisionGap, Severity, SubmissionKind, SubmissionState};
@@ -91,18 +91,9 @@ pub(crate) fn Command_From_String_Arguments(arguments: &[String]) -> Result<Comm
 
 fn Submit_Command_From_String_Arguments(arguments: &[String]) -> Result<Command, String>
 {
-    use std::path::PathBuf;
-
-    let kind_text = Required_Value_From_String_Arguments(arguments, "--kind")?;
-    let kind = Parse_Kind(&kind_text)?;
-    let id = Required_Value_From_String_Arguments(arguments, "--id")?;
-    let by = Required_Value_From_String_Arguments(arguments, "--by")?;
-    let state = Parse_State(Named_Value_From_String_Arguments(arguments, "--state").as_deref())?;
-    let contract_version =
-        Parse_Contract_Version(Named_Value_From_String_Arguments(arguments, "--contract-version").as_deref())?;
-    let fields = Fields_From_String_Arguments(arguments)?;
-    let gaps = Gaps_From_String_Arguments(arguments)?;
-    let into = Named_Value_From_String_Arguments(arguments, "--into").map(PathBuf::from);
+    let (kind, id, by) = Required_Submission_Fields(arguments)?;
+    let (state, contract_version) = Defaulted_Submission_Fields(arguments)?;
+    let (fields, gaps, into) = Submission_Collections(arguments)?;
 
     return Ok(Command::Submit(SubmitRequest {
         kind,
@@ -115,6 +106,18 @@ fn Submit_Command_From_String_Arguments(arguments: &[String]) -> Result<Command,
         submitted_through: "cli".to_owned(),
         into,
     }));
+}
+
+/// The three values `--kind`, `--id` and `--by` name, with no default: every `SubmitRequest`
+/// this transport builds must carry all three.
+fn Required_Submission_Fields(arguments: &[String]) -> Result<(SubmissionKind, String, String), String>
+{
+    let kind_text = Required_Value_From_String_Arguments(arguments, "--kind")?;
+    let kind = Parse_Kind(&kind_text)?;
+    let id = Required_Value_From_String_Arguments(arguments, "--id")?;
+    let by = Required_Value_From_String_Arguments(arguments, "--by")?;
+
+    return Ok((kind, id, by));
 }
 
 fn Required_Value_From_String_Arguments(arguments: &[String], name: &str) -> Result<String, String>
@@ -133,6 +136,18 @@ fn Parse_Kind(text: &str) -> Result<SubmissionKind, String>
             Usage_Text()
         );
     });
+}
+
+/// `--state` and `--contract-version`, each falling back to its own default when the caller
+/// does not give it -- a fact about this run, decided before either field is read, per this
+/// module's own doc.
+fn Defaulted_Submission_Fields(arguments: &[String]) -> Result<(SubmissionState, u32), String>
+{
+    let state = Parse_State(Named_Value_From_String_Arguments(arguments, "--state").as_deref())?;
+    let contract_version =
+        Parse_Contract_Version(Named_Value_From_String_Arguments(arguments, "--contract-version").as_deref())?;
+
+    return Ok((state, contract_version));
 }
 
 fn Parse_State(text: Option<&str>) -> Result<SubmissionState, String>
@@ -162,6 +177,18 @@ fn Parse_Contract_Version(text: Option<&str>) -> Result<u32, String>
             Usage_Text()
         );
     });
+}
+
+/// The repeatable `--field` and `--gap` flags, and the optional `--into` directory.
+fn Submission_Collections(
+    arguments: &[String],
+) -> Result<(Vec<(String, String)>, Vec<DecisionGap>, Option<std::path::PathBuf>), String>
+{
+    let fields = Fields_From_String_Arguments(arguments)?;
+    let gaps = Gaps_From_String_Arguments(arguments)?;
+    let into = Named_Value_From_String_Arguments(arguments, "--into").map(std::path::PathBuf::from);
+
+    return Ok((fields, gaps, into));
 }
 
 /// Every `--field name=value`, in the order they were given.
@@ -286,19 +313,42 @@ fn Assemble_And_Submit(
     notes: &mut impl std::io::Write,
 ) -> ExitCode
 {
-    use nomos_platform_std::StdFileSystem;
-
-    let mut assembly = match Assemble_Corpus(request)
+    let mut assembly = match Assembled_Corpus(request, notes)
     {
         Ok(assembly) => assembly,
+        Err(code) => return code,
+    };
+
+    return Submission_Exit_Code(&mut assembly, submit, output, notes);
+}
+
+/// The store `request` names, or `ExitCode::StoreError` reported to `notes` when it could not
+/// be assembled at all.
+fn Assembled_Corpus(request: &CorpusRequest, notes: &mut impl std::io::Write) -> Result<Assembly, ExitCode>
+{
+    return match Assemble_Corpus(request)
+    {
+        Ok(assembly) => Ok(assembly),
         Err(error) =>
         {
             let _ = writeln!(notes, "{error}");
-            return ExitCode::StoreError;
+            Err(ExitCode::StoreError)
         }
     };
+}
 
-    return match nomos_spec_orchestration::Submit_Corpus_Request(&mut assembly, submit, &StdFileSystem)
+/// Dispatches `submit` against `assembly` and renders whichever of the four outcomes it
+/// produces.
+fn Submission_Exit_Code(
+    assembly: &mut Assembly,
+    submit: &SubmitRequest,
+    output: &mut impl std::io::Write,
+    notes: &mut impl std::io::Write,
+) -> ExitCode
+{
+    use nomos_platform_std::StdFileSystem;
+
+    return match nomos_spec_orchestration::Submit_Corpus_Request(assembly, submit, &StdFileSystem)
     {
         Ok(answer) => Report_Accepted(&answer, output),
         Err(SubmitRefusal::Refused(refusal)) =>
@@ -405,11 +455,6 @@ mod tests
 {
     use super::*;
 
-    fn Arguments_From_Text(text: &str) -> Vec<String>
-    {
-        return text.split_whitespace().map(str::to_owned).collect();
-    }
-
     #[test]
     fn Test_A_Submit_Command_Should_Parse_Its_Fields_And_Default_State_And_Version()
     {
@@ -480,5 +525,10 @@ mod tests
         let Command::Submit(request) = Command_From_String_Arguments(&arguments).expect("parses");
 
         assert_eq!(request.submitted_through, "cli");
+    }
+
+    fn Arguments_From_Text(text: &str) -> Vec<String>
+    {
+        return text.split_whitespace().map(str::to_owned).collect();
     }
 }

@@ -125,26 +125,11 @@ mod tests
     use nomos_contracts::RuleId;
     use nomos_rules::COMPLETENESS_MIRROR;
 
-    /// A real, freshly walkable scratch tree of this test's own -- never the real repository
-    /// tree, which live sessions write to concurrently. A call-local counter, the same
-    /// `crates/host/nomos-api/src/work.rs::tests::Unique_Scratch_Directory` fix: several
-    /// tests below build a tree holding the same trigger content, and the default test
-    /// runner's threads would otherwise race on one directory a bare pid gave them.
-    fn Scratch_Source_Tree(label: &str, file_name: &str, content: &str) -> std::path::PathBuf
-    {
-        // scope: allow this test-only counter has no owner beyond disambiguating calls within
-        // one process; a bare pid does not distinguish two calls in the same test run.
-        static COUNTER: std::sync::atomic::AtomicU64 = std::sync::atomic::AtomicU64::new(0);
-        let unique = COUNTER.fetch_add(1, std::sync::atomic::Ordering::Relaxed);
-
-        let directory =
-            std::env::temp_dir().join(format!("nomos-api-gate-explain-{label}-{}-{unique}", std::process::id()));
-        let _ignored = std::fs::remove_dir_all(&directory);
-        std::fs::create_dir_all(&directory).expect("creates a scratch directory");
-        std::fs::write(directory.join(file_name), content).expect("writes a real source file");
-
-        return directory;
-    }
+    /// The `COMPLETENESS_MIRROR` rule's contract record version, cited in
+    /// `Test_Explaining_A_Real_Trigger_Should_Find_A_Real_Blocking_Finding`'s own assertion
+    /// against `D-134`'s current version -- named so that assertion reads as a citation of a
+    /// specific record version, not an unexplained number.
+    const EXPECTED_CONTRACT_RECORD_VERSION: u32 = 2;
 
     /// A query naming a rule and location no finding carries is [`GateExplainResponse::
     /// NotFound`], not a panic or a default -- over a real walked directory, the same "an
@@ -203,7 +188,7 @@ mod tests
         assert!(suppressed_by.is_none());
         assert!(baselined_by.is_none());
         assert_eq!(contract_record.as_deref(), Some("D-134"));
-        assert_eq!(contract_record_version, Some(2));
+        assert_eq!(contract_record_version, Some(EXPECTED_CONTRACT_RECORD_VERSION));
     }
 
     /// The response a real `Found` explanation produces is valid JSON, and its outcome
@@ -225,5 +210,26 @@ mod tests
         let outcome = parsed.get("outcome").expect("a serialized GateExplainResponse always has this field");
 
         assert_eq!(outcome, "found", "{json}");
+    }
+
+    /// A real, freshly walkable scratch tree of this test's own -- never the real repository
+    /// tree, which live sessions write to concurrently. A call-local counter, the same
+    /// `crates/host/nomos-api/src/work.rs::tests::Unique_Scratch_Directory` fix: several
+    /// tests above build a tree holding the same trigger content, and the default test
+    /// runner's threads would otherwise race on one directory a bare pid gave them.
+    fn Scratch_Source_Tree(label: &str, file_name: &str, content: &str) -> std::path::PathBuf
+    {
+        // scope: allow this test-only counter has no owner beyond disambiguating calls within
+        // one process; a bare pid does not distinguish two calls in the same test run.
+        static COUNTER: std::sync::atomic::AtomicU64 = std::sync::atomic::AtomicU64::new(0);
+        let unique = COUNTER.fetch_add(1, std::sync::atomic::Ordering::Relaxed);
+
+        let directory =
+            std::env::temp_dir().join(format!("nomos-api-gate-explain-{label}-{}-{unique}", std::process::id()));
+        let _ignored = std::fs::remove_dir_all(&directory);
+        std::fs::create_dir_all(&directory).expect("creates a scratch directory");
+        std::fs::write(directory.join(file_name), content).expect("writes a real source file");
+
+        return directory;
     }
 }

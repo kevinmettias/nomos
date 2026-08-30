@@ -90,11 +90,6 @@ mod tests
 {
     use super::*;
 
-    fn Arguments_From_Text(text: &str) -> Vec<String>
-    {
-        return text.split_whitespace().map(str::to_owned).collect();
-    }
-
     #[test]
     fn Test_Since_And_Until_Are_Required()
     {
@@ -122,5 +117,10 @@ mod tests
 
         assert_eq!(parsed.root, PathBuf::from("/work"));
         assert_eq!(parsed.crates, vec!["nomos-model", "nomos-store"]);
+    }
+
+    fn Arguments_From_Text(text: &str) -> Vec<String>
+    {
+        return text.split_whitespace().map(str::to_owned).collect();
     }
 }
