@@ -2,6 +2,14 @@
   "schema": 1,
   "waivers": [
     {
+      "check": "check-responsibility-extraction",
+      "path": "crates/orchestration/nomos-check-orchestration/src/facts/dependency_materialization.rs",
+      "fingerprint": "8f96a21f97a39999",
+      "reason": "Materialize_Dependencies/Materialize_Lint/Materialize_Policy/Materialize_Reachability/Materialize_Syntax are five sibling fact-materializers, heavily cross-documented with each other in this same file (each doc comment references the others) and sharing one FactContext-shaped signature; the Materialize_ prefix names a real, intentional module-level concept rather than an accidental collision. check-responsibility-extraction is not safety-critical, so responsibility: allow is not honoured under this repository's safety-only marker policy; this waives per OD-GATE-018's remedy for that gap.",
+      "owner": "@kmettias",
+      "expires": "2027-02-25"
+    },
+    {
       "check": "check-literals",
       "path": "crates/agent/nomos-agent-contracts/src/change_context.rs",
       "fingerprint": "c22427a295df8b19",
@@ -3380,8 +3388,8 @@
     {
       "check": "check-lifetime-discipline",
       "path": "crates/platform/nomos-platform-std/src/launcher/drain.rs",
-      "fingerprint": "ee93784c82f23dbb",
-      "reason": "'static is required by std::thread::spawn, which moves the reader onto a detached thread that outlives this call -- not a bound chosen here. check-lifetime-discipline is not one of the safety-critical checks an in-code marker still argues under this repository's safety-only policy, so this moves here per OD-GATE-018's own remedy for an unhonoured marker.",
+      "fingerprint": "bb192e8207fa83dc",
+      "reason": "'static is required by std::thread::spawn, which moves the reader onto a detached thread that outlives this call -- not a bound chosen here. check-lifetime-discipline is not one of the safety-critical checks an in-code marker still argues under this repository's safety-only policy, so this moves here per OD-GATE-018's own remedy for an unhonoured marker. Fingerprint refreshed 2026-08-29: P19-NAMING-ATTRS renamed the generic parameter on this line (R -> Source), which is all that changed.",
       "owner": "@kmettias",
       "expires": "2027-02-25"
     },
