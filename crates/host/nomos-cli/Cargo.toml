@@ -20,18 +20,16 @@ nomos-model = { workspace = true }
 nomos-platform = { workspace = true }
 nomos-platform-std = { workspace = true }
 nomos-rules = { workspace = true }
-# The analysis composition `nomos check` assembles. A composition root is the only place
-# permitted to name a provider — a rule states a floor and the registry decides who
-# serves it — and OD-RULES-001 makes this command that root in earnest: it declares the
-# syntax contract, registers the parser, materializes a fact per file and runs the rule
-# over the store.
+# `RegistryError` is what a self-contradictory capability registry one band down
+# (`nomos-check-orchestration`) reports back through -- `check.rs` and `gate.rs` both
+# render it as `ExitCode::Contradictory`. The registry composition itself (`Registered`,
+# `Resolved_Configuration`) moved to `nomos-check-orchestration` under `OD-HOST-002`; this
+# crate no longer assembles it, only renders what comes back.
 #
 # `nomos-lang-rust-scan` is deliberately absent. It cannot serve `nomos_rules::
 # Syntax_Requirement`, so registering it would turn a refusal that can be reasoned about
 # here into a runtime event nobody sees.
-nomos-analysis = { workspace = true }
 nomos-capability = { workspace = true }
-nomos-cap-syntax = { workspace = true }
 nomos-lang-rust = { workspace = true }
 # The one door a workspace state comes through. Used so that the snapshot, generation,
 # variant and configuration a fact is filed under come from something real rather than
