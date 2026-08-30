@@ -37531,14 +37531,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-p21-telemetry",
-        "acquired_at": 1788051041,
-        "lease_expires_at": 1788058241
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -37548,7 +37544,27 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "exit_code": 0,
+        "output_tail": "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.18s\n",
+        "verified_at": 1788053031,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "ff58c299ac3be9039adcb492ddb240f80be61d03"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
