@@ -4,9 +4,9 @@ use serde::Deserialize;
 use serde::Serialize;
 /// A ledger item's stable identifier.
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, Serialize, Deserialize)]
-pub struct ItemId(String);
+pub struct Id(String);
 
-impl ItemId
+impl Id
 {
     /// Wraps an authored identifier.
     #[must_use]
@@ -23,7 +23,7 @@ impl ItemId
     }
 }
 
-impl core::fmt::Display for ItemId
+impl core::fmt::Display for Id
 {
     fn fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
     {

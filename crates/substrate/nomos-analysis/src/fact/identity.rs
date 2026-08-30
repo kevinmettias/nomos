@@ -4,13 +4,13 @@ use nomos_contracts::Digest128;
 use nomos_contracts::GenerationId;
 use crate::FactKey;
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
-pub struct FactIdentity
+pub struct Identity
 {
     pub key: FactKey,
     pub generation: GenerationId,
 }
 
-impl FactIdentity
+impl Identity
 {
     #[must_use]
     pub const fn Key(&self) -> &FactKey
@@ -25,7 +25,7 @@ impl FactIdentity
     }
 }
 
-impl core::fmt::Display for FactIdentity
+impl core::fmt::Display for Identity
 {
     fn fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
     {

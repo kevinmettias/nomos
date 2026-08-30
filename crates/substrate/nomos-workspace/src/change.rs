@@ -6,13 +6,13 @@
 //! after something has been built on the first.
 
 // A change set and the source a change came from are parts of a change.
-#[path = "change/change_set.rs"]
+#[path = "change/set.rs"]
 mod set;
-#[path = "change/change_source.rs"]
+#[path = "change/source.rs"]
 mod source;
 
-pub use set::ChangeSet;
-pub use source::ChangeSource;
+pub use set::Set as ChangeSet;
+pub use source::Source as ChangeSource;
 
 use nomos_contracts::Digest128;
 use nomos_model::Content_Digest;

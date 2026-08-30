@@ -2,7 +2,7 @@
 
 use nomos_contracts::CapabilityId;
 
-use super::RegistryErrorKind;
+use super::error_kind::ErrorKind;
 
 /// Why a declaration or an offer was refused, always naming the capability it was about.
 ///
@@ -11,13 +11,13 @@ use super::RegistryErrorKind;
 /// does not otherwise care about, and a new reason cannot forget to say which capability
 /// it concerns.
 #[derive(Clone, Debug, PartialEq, Eq)]
-pub struct RegistryError
+pub struct Error
 {
     pub capability: CapabilityId,
-    pub kind: RegistryErrorKind,
+    pub kind: ErrorKind,
 }
 
-impl core::fmt::Display for RegistryError
+impl core::fmt::Display for Error
 {
     fn fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
     {
@@ -28,14 +28,14 @@ impl core::fmt::Display for RegistryError
 /// The one human-readable sentence for `capability`'s refusal, gathered here rather than
 /// assembled across several `write!` calls sharing one `Formatter` — a `RegistryError` is
 /// one sentence, not several fragments.
-fn Refusal_Message(capability: &CapabilityId, kind: &RegistryErrorKind) -> String
+fn Refusal_Message(capability: &CapabilityId, kind: &ErrorKind) -> String
 {
     use crate::OfferRefusal;
 
     return match kind
     {
-        RegistryErrorKind::AlreadyDeclared => format!("{capability} is already declared"),
-        RegistryErrorKind::Offer { provider, refusal } => match refusal
+        ErrorKind::AlreadyDeclared => format!("{capability} is already declared"),
+        ErrorKind::Offer { provider, refusal } => match refusal
         {
             OfferRefusal::ForUndeclared => format!(
                 "{provider} offers {capability}, which no contract declares. An offer \
@@ -51,5 +51,5 @@ fn Refusal_Message(capability: &CapabilityId, kind: &RegistryErrorKind) -> Strin
     };
 }
 
-impl std::error::Error for RegistryError
+impl std::error::Error for Error
 {}

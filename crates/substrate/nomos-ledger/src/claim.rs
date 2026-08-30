@@ -1,10 +1,10 @@
 //! Somebody holding an item, until when.
 
 // Why a claim was refused, beneath the claim it would have been.
-#[path = "claim/claim_refusal.rs"]
+#[path = "claim/refusal.rs"]
 mod refusal;
 
-pub use refusal::{ClaimRefusal, RefusalLayer};
+pub use refusal::{Refusal as ClaimRefusal, Layer as RefusalLayer};
 
 use serde::Deserialize;
 use serde::Serialize;

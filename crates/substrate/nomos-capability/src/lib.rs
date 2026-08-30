@@ -21,6 +21,10 @@ mod registry;
 mod requirement;
 mod resolution;
 
+// Shared shape for a capability contract's own tests -- see its module doc for why this
+// is a plain public module here rather than `#[cfg(test)]` on each of its five callers.
+pub mod contract_testing;
+
 pub use contract::CapabilityContract;
 pub use offer_refusal::OfferRefusal;
 pub use provider_offer::ProviderOffer;

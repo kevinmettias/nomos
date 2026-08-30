@@ -14,7 +14,7 @@ pub(crate) mod sealed
     {}
 }
 
-pub trait FactStore: sealed::Sealed
+pub trait Store: sealed::Sealed
 {
     fn Current(&self, identity: &FactIdentity, at: GenerationId) -> Option<MaterializedFact>;
 

@@ -2,7 +2,7 @@
 
 /// Which of the five things a change turned out to be.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
-pub enum EffectKind
+pub enum Kind
 {
     Added,
     Modified,
@@ -22,7 +22,7 @@ pub enum EffectKind
     AlreadyAbsent,
 }
 
-impl EffectKind
+impl Kind
 {
     /// Whether an outcome of this kind changed what the workspace is.
     #[must_use]

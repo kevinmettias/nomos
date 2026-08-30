@@ -19,19 +19,19 @@
 //! populated document and probes every object node it finds.
 
 // An item's identity, the state it is in, what kind of work it is, and where it came from.
-#[path = "item/item_id.rs"]
+#[path = "item/id.rs"]
 mod id;
-#[path = "item/item_kind.rs"]
+#[path = "item/kind.rs"]
 mod kind;
-#[path = "item/item_origin.rs"]
+#[path = "item/origin.rs"]
 mod origin;
-#[path = "item/item_state.rs"]
+#[path = "item/state.rs"]
 mod state;
 
-pub use id::ItemId;
-pub use kind::ItemKind;
-pub use origin::ItemOrigin;
-pub use state::ItemState;
+pub use id::Id as ItemId;
+pub use kind::Kind as ItemKind;
+pub use origin::Origin as ItemOrigin;
+pub use state::State as ItemState;
 
 // Why an item is being declined, and the item schema itself — each its own single public
 // type, and the second large enough on its own to want a file of its own.

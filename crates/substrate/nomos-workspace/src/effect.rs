@@ -1,10 +1,10 @@
 //! One consequence of applying a change.
 
 // What kind of effect this is, beneath the effect it describes.
-#[path = "effect/effect_kind.rs"]
+#[path = "effect/kind.rs"]
 mod kind;
 
-pub use kind::EffectKind;
+pub use kind::Kind as EffectKind;
 
 /// What one change actually did, and to what.
 ///

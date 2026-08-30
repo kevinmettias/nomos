@@ -9,7 +9,7 @@ use crate::InputDigest;
 use crate::FactError;
 use crate::MaterializedFact;
 use crate::FactIdentity;
-pub trait FactReader
+pub trait Reader
 {
     /// # Errors
     ///
@@ -21,7 +21,7 @@ pub trait FactReader
     ///
     /// Returns the resolved [`Applicability`] when the chosen provider has no answer —
     /// [`Applicability::DependencyUnavailable`] and its siblings name why, in the same
-    /// vocabulary [`FactReader::Require_Any`] returns on total failure.
+    /// vocabulary [`Reader::Require_Any`] returns on total failure.
     fn Require(
         &mut self,
         capability: &CapabilityId,
@@ -32,7 +32,7 @@ pub trait FactReader
 
     /// The best answer any admitted provider has for this subject, and how good it is.
     ///
-    /// [`FactReader::Require`] asks the chosen provider and stops. That is right when a
+    /// [`Reader::Require`] asks the chosen provider and stops. That is right when a
     /// caller wants one provider's answer or none, and it is what leaves a lowered floor
     /// unspent: the offers the floor admitted are reachable and nothing looks at them.
     ///

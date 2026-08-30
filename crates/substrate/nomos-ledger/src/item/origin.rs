@@ -10,7 +10,7 @@ use serde::Serialize;
 /// same reason [`crate::ItemKind`] is one: an unrecognized origin is refused by the same
 /// parse that already refuses an unrecognized key, rather than stored and ignored.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
-pub enum ItemOrigin
+pub enum Origin
 {
     /// Specified by a person: written into the plan this ledger's own `P1`–`P8` batches
     /// built out (`OD-LEDGER-002`), or asked for directly in a session.

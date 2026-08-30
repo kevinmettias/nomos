@@ -1,4 +1,4 @@
-//! The one-line renderings behind [`super::ClaimRefusal::Describe`].
+//! The one-line renderings behind [`super::Refusal::Describe`].
 //!
 //! Split out because none of this is part of the crate's public surface: every function
 //! here is a private helper reached only through `Describe`, which keeps its own

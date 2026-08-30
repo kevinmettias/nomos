@@ -12,7 +12,7 @@
 /// on the source would make an agent's edit and a human's edit of identical content two
 /// different states to analyze.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
-pub enum ChangeSource
+pub enum Source
 {
     /// A correction applied by the system to its own recorded state.
     Correction,
@@ -26,7 +26,7 @@ pub enum ChangeSource
     CodeGenerator,
 }
 
-impl ChangeSource
+impl Source
 {
     #[must_use]
     pub const fn Label(self) -> &'static str
@@ -60,7 +60,7 @@ impl ChangeSource
     }
 }
 
-impl core::fmt::Display for ChangeSource
+impl core::fmt::Display for Source
 {
     fn fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
     {

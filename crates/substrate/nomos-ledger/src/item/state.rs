@@ -8,7 +8,7 @@ use serde::Serialize;
 /// only in one tool's imagination is a state no query can filter on.
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
-pub enum ItemState
+pub enum State
 {
     /// Available to claim.
     Ready,
@@ -23,7 +23,7 @@ pub enum ItemState
     /// Reached by `nomos work decline` and by nothing else. It was reachable by nothing at
     /// all until `OD-LEDGER-019`, which is what that record measures: a state the ledger
     /// could describe, filter on and count terminal, and could not enter, so a superseded
-    /// item went back to [`ItemState::Ready`] and the board offered it again.
+    /// item went back to [`Self::Ready`] and the board offered it again.
     Declined
     {
         /// Why not. Carried in the variant so an item cannot be declined reasonlessly.
@@ -35,7 +35,7 @@ pub enum ItemState
     },
 }
 
-impl ItemState
+impl State
 {
     /// Whether an item in this state may be claimed.
     #[must_use]
@@ -54,7 +54,7 @@ impl ItemState
     /// This state as one line, for a refusal that has to name it.
     ///
     /// `Debug` was what every caller used, and it was fine for four of the five variants
-    /// because they carry nothing. [`ItemState::Declined`] carries prose, and the moment the
+    /// because they carry nothing. [`Self::Declined`] carries prose, and the moment the
     /// state became reachable that prose started arriving inside single-line refusals with
     /// its newlines escaped — the reason `P10-DERIVED-FACT` was declined with runs to five
     /// paragraphs, and `nomos work decline` on it printed all of them as one line.

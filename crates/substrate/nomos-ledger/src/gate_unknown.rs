@@ -11,10 +11,10 @@
 //! for one rule is how they come to disagree. This module reads the workflow.
 
 // What running the gate produced.
-#[path = "gate/gate_outcome.rs"]
+#[path = "gate/outcome.rs"]
 mod outcome;
 
-pub use outcome::GateOutcome;
+pub use outcome::Outcome as GateOutcome;
 
 // The workflow's whole text, and a step's name within it — kept apart purely by type, and
 // each large enough on its own to want a file of its own.

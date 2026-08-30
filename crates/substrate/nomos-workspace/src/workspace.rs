@@ -1,13 +1,13 @@
 //! The workspace, and the only thing that changes it.
 
 // A change set over a workspace, and the refusals a workspace raises.
-#[path = "workspace/workspace_change_set.rs"]
+#[path = "workspace/change_set.rs"]
 mod change_set;
-#[path = "workspace/workspace_error.rs"]
+#[path = "workspace/error.rs"]
 mod error;
 
-pub use change_set::WorkspaceChangeSet;
-pub use error::WorkspaceError;
+pub use change_set::ChangeSet as WorkspaceChangeSet;
+pub use error::Error as WorkspaceError;
 
 mod naming;
 #[cfg(test)]

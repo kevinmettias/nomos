@@ -1,12 +1,12 @@
 // The two error types are the registry's own vocabulary and nobody else raises them, so
 // they live beneath it rather than beside it.
-#[path = "registry/registry_error.rs"]
+#[path = "registry/error.rs"]
 mod error;
-#[path = "registry/registry_error_kind.rs"]
+#[path = "registry/error_kind.rs"]
 mod error_kind;
 
-pub use error::RegistryError;
-pub use error_kind::RegistryErrorKind;
+pub use error::Error as RegistryError;
+pub use error_kind::ErrorKind as RegistryErrorKind;
 
 // The required-naming vocabulary (`RequiredUnmet`, `RequiredResolution`) and the two
 // responsibilities `Registry` itself carries (declaring/offering, and resolving) each keep

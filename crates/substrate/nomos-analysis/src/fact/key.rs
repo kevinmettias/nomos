@@ -12,7 +12,7 @@ use crate::FactIdentity;
 use crate::GuaranteeDigest;
 use crate::InputDigest;
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
-pub struct FactKey
+pub struct Key
 {
     pub contract: CapabilityId,
     pub contract_version: ContractVersion,
@@ -25,7 +25,7 @@ pub struct FactKey
     pub configuration: ConfigurationId,
 }
 
-impl FactKey
+impl Key
 {
     #[must_use]
     pub fn Parts(&self) -> Vec<Vec<u8>>

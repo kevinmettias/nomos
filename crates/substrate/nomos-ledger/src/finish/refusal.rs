@@ -17,7 +17,7 @@ pub(super) const OUTPUT_TAIL_LIMIT: usize = 2_000;
 /// is that nobody found out. That is the same conflation this system exists to prevent
 /// one level up, so it is not permitted here either.
 #[derive(Clone, Debug, PartialEq, Eq)]
-pub enum FinishRefusal
+pub enum Refusal
 {
     /// The item is not this holder's to finish, or does not exist.
     NotHeld
@@ -78,7 +78,7 @@ pub enum FinishRefusal
     },
     /// The gate's own step ran, and the answer was no.
     ///
-    /// Separate from [`FinishRefusal::PredicateFailed`] because the remedy differs. A
+    /// Separate from [`Self::PredicateFailed`] because the remedy differs. A
     /// failing predicate says the work does not do what the item asked. A failing gate
     /// step says the work may be exactly right and still cannot land, and telling an
     /// author the first when the truth is the second sends them to rewrite working code.
@@ -101,7 +101,7 @@ pub enum FinishRefusal
     },
 }
 
-impl FinishRefusal
+impl Refusal
 {
     /// A one-line explanation a person or an agent can act on.
     #[must_use]
@@ -134,12 +134,12 @@ impl FinishRefusal
 
     /// Whether the work itself was judged, as opposed to the check having been prevented.
     ///
-    /// [`FinishRefusal::PredicateFailed`] and [`FinishRefusal::GateFailed`] say something
+    /// [`Self::PredicateFailed`] and [`Self::GateFailed`] say something
     /// about the work; they differ in what the author does next, not in whether an answer
     /// was reached. Everything else says something about the tooling, and a report that
     /// does not separate the two sends an author to fix the wrong thing.
     ///
-    /// [`FinishRefusal::GateUndetermined`] is deliberately on the tooling side. Nobody
+    /// [`Self::GateUndetermined`] is deliberately on the tooling side. Nobody
     /// found out whether the work passes the gate, and reporting that as failing work
     /// would be the same conflation one arm further down.
     #[must_use]

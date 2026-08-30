@@ -2,4 +2,4 @@
 
 use crate::WorkspaceChangeSet;
 /// The name this type is known by where the distinction from [`Change`] is already clear.
-pub type ChangeSet = WorkspaceChangeSet;
+pub type Set = WorkspaceChangeSet;

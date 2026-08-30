@@ -2,7 +2,7 @@
 
 use nomos_store::StoreError;
 #[derive(Clone, Debug, PartialEq, Eq)]
-pub enum WorkspaceError
+pub enum Error
 {
     /// A change set with nothing in it.
     ///
@@ -29,7 +29,7 @@ pub enum WorkspaceError
     Store(StoreError),
 }
 
-impl core::fmt::Display for WorkspaceError
+impl core::fmt::Display for Error
 {
     fn fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
     {
@@ -54,10 +54,10 @@ impl core::fmt::Display for WorkspaceError
     }
 }
 
-impl std::error::Error for WorkspaceError
+impl std::error::Error for Error
 {}
 
-impl From<StoreError> for WorkspaceError
+impl From<StoreError> for Error
 {
     fn from(error: StoreError) -> Self
     {

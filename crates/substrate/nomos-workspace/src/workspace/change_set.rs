@@ -9,13 +9,13 @@ use crate::ChangeSource;
 /// intermediate one would describe a tree that never existed — a half-applied checkout is
 /// not a state anybody should be able to ask questions about.
 #[derive(Clone, Debug, PartialEq, Eq)]
-pub struct WorkspaceChangeSet
+pub struct ChangeSet
 {
     source: ChangeSource,
     changes: Vec<Change>,
 }
 
-impl WorkspaceChangeSet
+impl ChangeSet
 {
     #[must_use]
     pub const fn From(source: ChangeSource) -> Self

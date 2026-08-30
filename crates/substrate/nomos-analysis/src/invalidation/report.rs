@@ -5,7 +5,7 @@ use crate::Broadening;
 use crate::FactKey;
 use crate::GenerationCause;
 #[derive(Clone, Debug, PartialEq, Eq)]
-pub struct InvalidationReport
+pub struct Report
 {
     pub cause: GenerationCause,
     pub from: GenerationId,
@@ -15,7 +15,7 @@ pub struct InvalidationReport
     pub retained: u32,
 }
 
-impl InvalidationReport
+impl Report
 {
     #[must_use]
     pub fn Invalidated(&self) -> usize

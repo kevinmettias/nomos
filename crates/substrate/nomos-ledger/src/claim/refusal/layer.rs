@@ -14,7 +14,7 @@
 /// a refusal already is — but the classification is what lets the rule be tested at all, over
 /// the whole set of refusals rather than the two variants a caller happens to remember.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub enum RefusalLayer
+pub enum Layer
 {
     /// A fact about the plan: whether this item can be worked at all, by anybody, regardless
     /// of when they ask. Stays true until the plan itself changes — a dependency finishes, an

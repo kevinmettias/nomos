@@ -3,7 +3,7 @@
 use nomos_contracts::GenerationId;
 use crate::FactIdentity;
 #[derive(Clone, Debug, PartialEq, Eq)]
-pub enum FactError
+pub enum Error
 {
     Absent
     {
@@ -21,7 +21,7 @@ pub enum FactError
     },
 }
 
-impl core::fmt::Display for FactError
+impl core::fmt::Display for Error
 {
     fn fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
     {
@@ -49,5 +49,5 @@ impl core::fmt::Display for FactError
     }
 }
 
-impl std::error::Error for FactError
+impl std::error::Error for Error
 {}

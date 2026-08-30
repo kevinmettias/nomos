@@ -10,7 +10,7 @@ use crate::OfferRefusal;
 /// three, because all three are about an offer and an offer has a provider. Declaring a
 /// contract has none, which is the whole distinction this level draws.
 #[derive(Clone, Debug, PartialEq, Eq)]
-pub enum RegistryErrorKind
+pub enum ErrorKind
 {
     /// A second contract for a capability that already has one.
     AlreadyDeclared,

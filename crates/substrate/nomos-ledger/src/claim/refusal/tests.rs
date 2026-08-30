@@ -14,45 +14,45 @@ fn At(seconds: i64) -> Timestamp
 /// same one `Test_Readiness_Refusals_Should_Be_Exactly_The_Plan_Facts` and
 /// `Test_Dispatch_Refusals_Should_Be_Exactly_The_Coordination_Facts` already draw, so this
 /// is the natural seam rather than an arbitrary halving.
-fn All() -> [ClaimRefusal; 10]
+fn All() -> [Refusal; 10]
 {
     let mut all = Dispatch_Universe().to_vec();
     all.extend(Readiness_Universe());
 
-    return all.try_into().unwrap_or_else(|found: Vec<ClaimRefusal>| {
+    return all.try_into().unwrap_or_else(|found: Vec<Refusal>| {
         panic!("All() must produce exactly 10 refusals, found {}", found.len());
     });
 }
 
 /// The six refusals coordination answers: a holder, a lease, a lock, an unprovable
 /// overlap, an unusable store.
-fn Dispatch_Universe() -> [ClaimRefusal; 6]
+fn Dispatch_Universe() -> [Refusal; 6]
 {
     return [
-        ClaimRefusal::HeldBy {
+        Refusal::HeldBy {
             holder: "agent-a".to_owned(),
             until: At(2_000),
             item: ItemId::New("T-1"),
         },
-        ClaimRefusal::UnknownIndependence {
+        Refusal::UnknownIndependence {
             against: ItemId::New("T-2"),
             reason: UnknownReason::IncomparableSnapshots,
         },
-        ClaimRefusal::LeaseTooLong {
+        Refusal::LeaseTooLong {
             requested: Duration::from_secs(9_999_999),
             maximum: Duration::from_secs(3_600),
         },
-        ClaimRefusal::Lapsed {
+        Refusal::Lapsed {
             item: ItemId::New("T-3"),
             holder: "dead-agent".to_owned(),
             since: At(2_000),
         },
-        ClaimRefusal::StillHeld {
+        Refusal::StillHeld {
             item: ItemId::New("T-4"),
             holder: "agent-b".to_owned(),
             until: At(2_000),
         },
-        ClaimRefusal::LedgerUnusable {
+        Refusal::LedgerUnusable {
             cause: "disk full".to_owned(),
         },
     ];
@@ -60,24 +60,24 @@ fn Dispatch_Universe() -> [ClaimRefusal; 6]
 
 /// The four refusals the plan answers: whether a dependency is unfinished or declined,
 /// whether the item is claimable, whether it exists at all.
-fn Readiness_Universe() -> [ClaimRefusal; 4]
+fn Readiness_Universe() -> [Refusal; 4]
 {
     return [
-        ClaimRefusal::NotClaimable {
+        Refusal::NotClaimable {
             item: ItemId::New("T-5"),
             state: "Done".to_owned(),
         },
-        ClaimRefusal::DependencyUnmet {
+        Refusal::DependencyUnmet {
             item: ItemId::New("T-6"),
             dependency: ItemId::New("T-7"),
             state: "Ready".to_owned(),
         },
-        ClaimRefusal::DependencyDeclined {
+        Refusal::DependencyDeclined {
             item: ItemId::New("T-8"),
             dependency: ItemId::New("T-9"),
             state: "declined".to_owned(),
         },
-        ClaimRefusal::NoSuchItem {
+        Refusal::NoSuchItem {
             item: ItemId::New("T-10"),
         },
     ];
@@ -90,28 +90,28 @@ fn Readiness_Universe() -> [ClaimRefusal; 4]
 fn Test_Readiness_Refusals_Should_Be_Exactly_The_Plan_Facts()
 {
     let readiness = [
-        ClaimRefusal::NotClaimable {
+        Refusal::NotClaimable {
             item: ItemId::New("T-1"),
             state: "Done".to_owned(),
         },
-        ClaimRefusal::DependencyUnmet {
+        Refusal::DependencyUnmet {
             item: ItemId::New("T-2"),
             dependency: ItemId::New("T-3"),
             state: "Ready".to_owned(),
         },
-        ClaimRefusal::DependencyDeclined {
+        Refusal::DependencyDeclined {
             item: ItemId::New("T-4"),
             dependency: ItemId::New("T-5"),
             state: "declined".to_owned(),
         },
-        ClaimRefusal::NoSuchItem {
+        Refusal::NoSuchItem {
             item: ItemId::New("T-6"),
         },
     ];
 
     for refusal in readiness
     {
-        assert_eq!(refusal.Layer(), RefusalLayer::Readiness, "{refusal:?}");
+        assert_eq!(refusal.Layer(), Layer::Readiness, "{refusal:?}");
         assert!(refusal.Is_Readiness(), "{refusal:?}");
         assert!(!refusal.Is_Dispatch(), "{refusal:?}");
     }
@@ -124,37 +124,37 @@ fn Test_Readiness_Refusals_Should_Be_Exactly_The_Plan_Facts()
 fn Test_Dispatch_Refusals_Should_Be_Exactly_The_Coordination_Facts()
 {
     let dispatch = [
-        ClaimRefusal::HeldBy {
+        Refusal::HeldBy {
             holder: "agent-a".to_owned(),
             until: At(2_000),
             item: ItemId::New("T-1"),
         },
-        ClaimRefusal::UnknownIndependence {
+        Refusal::UnknownIndependence {
             against: ItemId::New("T-2"),
             reason: UnknownReason::IncomparableSnapshots,
         },
-        ClaimRefusal::LeaseTooLong {
+        Refusal::LeaseTooLong {
             requested: Duration::from_secs(9_999_999),
             maximum: Duration::from_secs(3_600),
         },
-        ClaimRefusal::Lapsed {
+        Refusal::Lapsed {
             item: ItemId::New("T-3"),
             holder: "dead-agent".to_owned(),
             since: At(2_000),
         },
-        ClaimRefusal::StillHeld {
+        Refusal::StillHeld {
             item: ItemId::New("T-4"),
             holder: "agent-b".to_owned(),
             until: At(2_000),
         },
-        ClaimRefusal::LedgerUnusable {
+        Refusal::LedgerUnusable {
             cause: "disk full".to_owned(),
         },
     ];
 
     for refusal in dispatch
     {
-        assert_eq!(refusal.Layer(), RefusalLayer::Dispatch, "{refusal:?}");
+        assert_eq!(refusal.Layer(), Layer::Dispatch, "{refusal:?}");
         assert!(refusal.Is_Dispatch(), "{refusal:?}");
         assert!(!refusal.Is_Readiness(), "{refusal:?}");
     }
@@ -185,16 +185,16 @@ fn Test_Every_Variant_Should_Be_In_The_Tested_Universe()
     {
         match refusal
         {
-            ClaimRefusal::HeldBy { .. }
-            | ClaimRefusal::UnknownIndependence { .. }
-            | ClaimRefusal::LeaseTooLong { .. }
-            | ClaimRefusal::Lapsed { .. }
-            | ClaimRefusal::StillHeld { .. }
-            | ClaimRefusal::NotClaimable { .. }
-            | ClaimRefusal::DependencyUnmet { .. }
-            | ClaimRefusal::DependencyDeclined { .. }
-            | ClaimRefusal::NoSuchItem { .. }
-            | ClaimRefusal::LedgerUnusable { .. } =>
+            Refusal::HeldBy { .. }
+            | Refusal::UnknownIndependence { .. }
+            | Refusal::LeaseTooLong { .. }
+            | Refusal::Lapsed { .. }
+            | Refusal::StillHeld { .. }
+            | Refusal::NotClaimable { .. }
+            | Refusal::DependencyUnmet { .. }
+            | Refusal::DependencyDeclined { .. }
+            | Refusal::NoSuchItem { .. }
+            | Refusal::LedgerUnusable { .. } =>
             {}
         }
     }
@@ -207,12 +207,12 @@ fn Test_Every_Variant_Should_Be_In_The_Tested_Universe()
 #[test]
 fn Test_Layer_And_Retryability_Are_Independent_Axes()
 {
-    let held_by = ClaimRefusal::HeldBy {
+    let held_by = Refusal::HeldBy {
         holder: "agent-a".to_owned(),
         until: At(2_000),
         item: ItemId::New("T-1"),
     };
-    let dependency_unmet = ClaimRefusal::DependencyUnmet {
+    let dependency_unmet = Refusal::DependencyUnmet {
         item: ItemId::New("T-2"),
         dependency: ItemId::New("T-3"),
         state: "Ready".to_owned(),

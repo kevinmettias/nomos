@@ -12,14 +12,14 @@ use serde::Serialize;
 /// it and cannot silently drop it either; it refuses the document. `OD-LEDGER-024` is the
 /// record this closes and names why these five and not a free-form tag list.
 ///
-/// [`ItemKind::Capability`] is not one of the four kinds that record names in its own
+/// [`Self::Capability`] is not one of the four kinds that record names in its own
 /// prose — validation, decision, correction, cleanup — because this ledger's earliest
 /// batches (`P1` through `P8`, per `OD-LEDGER-002`'s own table) built crates that did not
 /// exist yet rather than fixing, checking or simplifying ones that did. A defect taxonomy
 /// with nothing for the thing it corrects against has nowhere to put the corpus's own
 /// first half.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
-pub enum ItemKind
+pub enum Kind
 {
     /// Builds a capability that did not exist: a crate, a command, a data shape. Nothing
     /// was wrong beforehand; there was simply nothing there yet.
