@@ -3,12 +3,12 @@
 use super::*;
 use crate::Reading;
 
-fn Parsed(source: &str) -> SyntaxFacts
+fn Parsed(source: &str) -> Facts
 {
     return match Read_Source(source)
     {
         Reading::Parsed(facts) => facts,
-        // Callers of this helper go straight on to read `.items`, so an empty `SyntaxFacts`
+        // Callers of this helper go straight on to read `.items`, so an empty `Facts`
         // handed back instead of a panic would be indistinguishable from a file that parsed
         // and declared nothing — which is the one confusion this module exists to rule out.
         // The failure carries the line it stopped on, and that is the only thing that tells
@@ -19,12 +19,12 @@ fn Parsed(source: &str) -> SyntaxFacts
 
 fn Names(source: &str) -> Vec<String>
 {
-    use crate::SyntaxItem;
+    use crate::Item;
 
     return Parsed(source)
         .items
         .iter()
-        .map(SyntaxItem::Qualified_Name)
+        .map(Item::Qualified_Name)
         .collect();
 }
 

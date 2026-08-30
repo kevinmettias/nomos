@@ -5,7 +5,7 @@
 //! Over this corpus that is the difference between a test that runs and one nobody waits
 //! for.
 
-use nomos_lang_rust::{Read_Source, Reading, SyntaxItem};
+use nomos_lang_rust::{Read_Source, Reading, Item};
 use std::collections::BTreeSet;
 use std::path::Path;
 
@@ -65,7 +65,7 @@ pub(crate) fn Names_Checked(path: &Path) -> Option<u64>
 ///
 /// `*` for a glob import and `_` for a type with no single head are this provider saying it
 /// has no name, not names it claims to have found.
-fn Assert_Names_Occur(path: &Path, item: &SyntaxItem, identifiers: &BTreeSet<&str>) -> u64
+fn Assert_Names_Occur(path: &Path, item: &Item, identifiers: &BTreeSet<&str>) -> u64
 {
     let named = item
         .name

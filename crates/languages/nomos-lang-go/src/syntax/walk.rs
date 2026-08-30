@@ -18,7 +18,7 @@
 //! the entry point, parse-error handling, and the top-level dispatch that hands each
 //! declaration node to the recorder that owns its kind.
 
-use super::{ItemKind, SyntaxFacts, SyntaxItem};
+use super::{ItemKind, Facts, Item};
 use crate::ParseFailure;
 use crate::Reading;
 use tree_sitter::Node;
@@ -63,7 +63,7 @@ pub fn Read_Source(source: &str) -> Reading
 
     let items = Walk_Source_File(root, source.as_bytes());
 
-    return Reading::Parsed(SyntaxFacts { items, unexpanded: 0 });
+    return Reading::Parsed(Facts { items, unexpanded: 0 });
 }
 
 fn Parsed_Tree(source: &str) -> Option<tree_sitter::Tree>
@@ -101,7 +101,7 @@ fn Root_Error(root: Node) -> Option<ParseFailure>
     }));
 }
 
-fn Walk_Source_File(root: Node, source: &[u8]) -> Vec<SyntaxItem>
+fn Walk_Source_File(root: Node, source: &[u8]) -> Vec<Item>
 {
     let mut items = Vec::new();
     let mut cursor = root.walk();
@@ -156,7 +156,7 @@ fn First_Error(node: Node) -> Option<ParseFailure>
 /// (`const X = 1`) are handled by the same walk, in true source order, without this crate
 /// needing to know which declaration kinds `tree-sitter-go` wraps in a list node and which
 /// it does not. Stops at `block` and `func_literal`; see the module doc.
-fn Record_Declaration_Body(items: &mut Vec<SyntaxItem>, node: Node, source: &[u8])
+fn Record_Declaration_Body(items: &mut Vec<Item>, node: Node, source: &[u8])
 {
     use imports::Record_Import_Spec;
     use values::Record_Const_Or_Var_Spec;

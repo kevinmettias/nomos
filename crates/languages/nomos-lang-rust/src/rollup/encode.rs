@@ -1,6 +1,6 @@
 //! Writing a module index out.
 
-use super::{IndexEntry, ModuleIndex};
+use super::{IndexEntry, Index};
 
 /// Fields in a `module` record, counting the tag.
 pub(super) const MODULE_FIELDS: usize = 2;
@@ -42,7 +42,7 @@ pub(super) const ITEM_FIELDS: usize = 6;
 /// grammar, so an escape here would be a second encoding of bytes that already passed
 /// through one.
 #[must_use]
-pub fn Encode_Index(index: &ModuleIndex) -> Vec<u8>
+pub fn Encode_Index(index: &Index) -> Vec<u8>
 {
     let mut encoded = String::new();
 

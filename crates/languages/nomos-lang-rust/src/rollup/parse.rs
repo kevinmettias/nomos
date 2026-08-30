@@ -1,6 +1,6 @@
 //! Reading a module index back.
 
-use super::{ModuleIndex, MemberReading, READ, Outcome, APPROXIMATE, UNREACHABLE, IndexEntry, SubjectId, Digest128};
+use super::{Index, MemberReading, READ, Outcome, APPROXIMATE, UNREACHABLE, IndexEntry, SubjectId, Digest128};
 use super::encode::{ITEM_FIELDS, MEMBER_FIELDS, MODULE_FIELDS};
 
 /// Reads an index payload back.
@@ -15,7 +15,7 @@ use super::encode::{ITEM_FIELDS, MEMBER_FIELDS, MODULE_FIELDS};
 /// Returns what was refused and where. A decoder that fell back to an empty index would
 /// report every unreadable rollup as a module that declares nothing, which is
 /// indistinguishable from a module that genuinely does.
-pub fn Parse_Index(payload: &[u8]) -> Result<ModuleIndex, String>
+pub fn Parse_Index(payload: &[u8]) -> Result<Index, String>
 {
     let text = core::str::from_utf8(payload).map_err(|error| {
         return format!("the payload is not UTF-8, so it is not this schema: {error}");
@@ -71,7 +71,7 @@ impl<'record, 'text> Fields<'record, 'text>
 /// It appears exactly once and first. That is what makes an index over a module with no
 /// members a payload rather than the empty byte string — a module nothing was read for and
 /// a module that declares nothing are two answers and must not share an encoding.
-pub(super) fn Opened_Module_Index(lines: &mut core::iter::Enumerate<core::str::Lines<'_>>) -> Result<ModuleIndex, String>
+pub(super) fn Opened_Module_Index(lines: &mut core::iter::Enumerate<core::str::Lines<'_>>) -> Result<Index, String>
 {
     let Some((_, header)) = lines.next()
     else
@@ -90,7 +90,7 @@ pub(super) fn Opened_Module_Index(lines: &mut core::iter::Enumerate<core::str::L
 
     let mut record = Fields::After_The_Tag(&fields);
 
-    return Ok(ModuleIndex {
+    return Ok(Index {
         module: Subject_From(record.Next(), 1)?,
         members: Vec::new(),
         items: Vec::new(),
@@ -102,7 +102,7 @@ pub(super) fn Opened_Module_Index(lines: &mut core::iter::Enumerate<core::str::L
 /// An unrecognised tag is refused rather than skipped, for the reason the schema gives: a
 /// record this build does not know is most likely a newer schema, and passing over it reads
 /// the payload down to the part that has not changed.
-pub(super) fn Read_Record(index: &mut ModuleIndex, line: &str, number: usize) -> Result<(), String>
+pub(super) fn Read_Record(index: &mut Index, line: &str, number: usize) -> Result<(), String>
 {
     let fields: Vec<&str> = line.split('\t').collect();
 

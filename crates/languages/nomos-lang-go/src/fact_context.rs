@@ -5,8 +5,8 @@
 //! Go file in place of a Rust one.
 
 use crate::Materialization;
-use crate::SyntaxFacts;
-use crate::SyntaxItem;
+use crate::Facts;
+use crate::Item;
 use crate::{Declared_Guarantee, PROVIDER};
 use nomos_analysis::{FactPayload, GuaranteeDigest, InputDigest, MaterializedFact};
 use nomos_cap_syntax::{CONTRACT_VERSION, Capability, Payload_Schema};
@@ -98,7 +98,7 @@ fn Assembled_Fact(
 /// `nomos_cap_syntax::Render_Payload`, deliberately: see that crate's own module doc for why
 /// the writers stay with their providers while the reader stays shared.
 #[must_use]
-pub fn Encode_Payload(facts: &SyntaxFacts) -> Vec<u8>
+pub fn Encode_Payload(facts: &Facts) -> Vec<u8>
 {
     let mut encoded = String::new();
 
@@ -115,7 +115,7 @@ pub fn Encode_Payload(facts: &SyntaxFacts) -> Vec<u8>
 }
 
 /// One item as a record: ordinal, kind, visibility, name, documentation and shape.
-fn Encode_Item(encoded: &mut String, item: &SyntaxItem)
+fn Encode_Item(encoded: &mut String, item: &Item)
 {
     encoded.push_str("item\t");
     encoded.push_str(&item.ordinal.to_string());

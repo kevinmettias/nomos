@@ -1,12 +1,12 @@
 //! Everything one file was parsed into.
 
-use crate::SyntaxItem;
+use crate::Item;
 /// Everything one file says on its face.
 #[derive(Clone, Debug, PartialEq, Eq, Default)]
-pub struct SyntaxFacts
+pub struct Facts
 {
     /// Items in source order.
-    pub items: Vec<SyntaxItem>,
+    pub items: Vec<Item>,
     /// Places where the parse tree ends and an unexpanded token stream begins.
     ///
     /// A **lower bound**, and the reason completeness is
@@ -20,7 +20,7 @@ pub struct SyntaxFacts
     pub unexpanded: u32,
 }
 
-impl SyntaxFacts
+impl Facts
 {
     /// Whether the file declared nothing at all.
     ///

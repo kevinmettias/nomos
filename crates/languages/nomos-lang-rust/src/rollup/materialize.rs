@@ -1,6 +1,6 @@
 //! Computing one module index from the member facts it depends on.
 
-use super::{FactReader, MemoryFactStore, Against, Module, Rolled, FactError, FactKey, ModuleIndex, FactContext, MaterializedFact, EvidenceClass, Declared_Guarantee, FactPayload, Payload_Schema, Encode_Index, SubjectId, ModuleMember, Capability, CONTRACT_VERSION, ProviderId, PROVIDER, GuaranteeDigest, InputDigest, Digest128, Dependency, Reader, Context, Requirement, MemberReading, Outcome, Applicability, IndexEntry};
+use super::{FactReader, MemoryFactStore, Against, Module, Rolled, FactError, FactKey, Index, FactContext, MaterializedFact, EvidenceClass, Declared_Guarantee, FactPayload, Payload_Schema, Encode_Index, SubjectId, Member, Capability, CONTRACT_VERSION, ProviderId, PROVIDER, GuaranteeDigest, InputDigest, Digest128, Dependency, Reader, Context, Requirement, MemberReading, Outcome, Applicability, IndexEntry};
 
 /// Rolls a module's members up into a derived fact and writes it, with its edges.
 ///
@@ -52,7 +52,7 @@ pub fn Materialize_Index(
 ///
 /// The evidence is no stronger than what it derived from. Promoting it to `Verified` would
 /// launder the rollup's own arithmetic into a measurement.
-pub(super) fn Rollup_Fact(key: &FactKey, index: &ModuleIndex, context: FactContext) -> MaterializedFact
+pub(super) fn Rollup_Fact(key: &FactKey, index: &Index, context: FactContext) -> MaterializedFact
 {
     return MaterializedFact {
         identity: key.clone().At(context.generation),
@@ -68,7 +68,7 @@ pub(super) fn Rollup_Fact(key: &FactKey, index: &ModuleIndex, context: FactConte
 /// Exposed because a caller that wants to know whether a rollup is already held, or to read
 /// one back, needs the key without recomputing it.
 #[must_use]
-pub fn Index_Key(module: SubjectId, members: &[ModuleMember], context: FactContext) -> FactKey
+pub fn Index_Key(module: SubjectId, members: &[Member], context: FactContext) -> FactKey
 {
     return FactKey {
         contract: Capability(),
@@ -84,7 +84,7 @@ pub fn Index_Key(module: SubjectId, members: &[ModuleMember], context: FactConte
 }
 
 /// The members in the one order this provider reads them in.
-pub(super) fn Canonical_Members(members: &[ModuleMember]) -> Vec<ModuleMember>
+pub(super) fn Canonical_Members(members: &[Member]) -> Vec<Member>
 {
     let mut ordered = members.to_vec();
     ordered.sort_by_key(|member| {
@@ -101,7 +101,7 @@ pub(super) fn Canonical_Members(members: &[ModuleMember]) -> Vec<ModuleMember>
 /// key unchanged and a stale answer stays addressable as a current one. Without the
 /// subjects, a module that swapped one file for another holding identical bytes would key
 /// the same, and a module is which files it has and not only what they contain.
-pub(super) fn Index_Inputs(members: &[ModuleMember]) -> InputDigest
+pub(super) fn Index_Inputs(members: &[Member]) -> InputDigest
 {
     let mut parts: Vec<[u8; Digest128::BYTE_LENGTH]> = Vec::new();
     for member in members
@@ -121,7 +121,7 @@ pub(super) fn Index_Inputs(members: &[ModuleMember]) -> InputDigest
 /// not a position.
 pub(super) struct Members
 {
-    pub(super) index: ModuleIndex,
+    pub(super) index: Index,
     pub(super) dependencies: Vec<Dependency>,
 }
 
@@ -130,12 +130,12 @@ pub(super) fn Read_Members(
     store: &MemoryFactStore,
     against: &Against<'_>,
     module: SubjectId,
-    members: &[ModuleMember],
+    members: &[Member],
 ) -> Members
 {
     let context = Reading_Context(against.context);
     let mut reader = Reader::On(store, against.registry, context);
-    let mut index = ModuleIndex {
+    let mut index = Index {
         module,
         members: Vec::new(),
         items: Vec::new(),
@@ -173,9 +173,9 @@ pub(super) fn Reading_Context(context: FactContext) -> Context
 /// rather than as an empty answer — a member that could not be read must not encode like a
 /// member that declares nothing.
 pub(super) fn Index_Member(
-    index: &mut ModuleIndex,
+    index: &mut Index,
     reader: &mut Reader<'_, '_>,
-    member: &ModuleMember,
+    member: &Member,
     need: &Requirement,
 )
 {
@@ -204,7 +204,7 @@ pub(super) fn Index_Member(
 /// What one member's fact says, and how good the answer was.
 pub(super) fn Declared_By(
     reader: &mut Reader<'_, '_>,
-    member: &ModuleMember,
+    member: &Member,
     need: &Requirement,
 ) -> Option<(nomos_cap_syntax::SyntaxPayload, Applicability)>
 {

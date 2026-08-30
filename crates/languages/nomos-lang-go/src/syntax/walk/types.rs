@@ -1,11 +1,11 @@
 //! Recording Go type declarations: a struct, an interface (with its own method set), a
 //! plain type definition, and a type alias.
 
-use super::super::{Documentation_Of_Declaration, ItemKind, SyntaxItem, Visibility};
+use super::super::{Documentation_Of_Declaration, ItemKind, Item, Visibility};
 use super::support::{Function_Name, ItemRecord, Named_Field_Children, Parameter_Arity, Push_Item_Record};
 use tree_sitter::Node;
 
-pub(super) fn Record_Type_Spec(items: &mut Vec<SyntaxItem>, spec: Node, source: &[u8])
+pub(super) fn Record_Type_Spec(items: &mut Vec<Item>, spec: Node, source: &[u8])
 {
     let Some(name) = Type_Spec_Name(spec, source)
     else
@@ -80,7 +80,7 @@ fn Type_Spec_Shape(kind: ItemKind, type_node: Option<Node>, source: &[u8]) -> Op
 
 /// `type_node`'s methods, recorded when [`Record_Type_Spec`] just built an interface --
 /// its own trailing, conditional step, named so the parent's body ends at "record it."
-fn Record_Interface_Methods_If_Interface(items: &mut Vec<SyntaxItem>, kind_and_type: (ItemKind, Option<Node>), name: &str, source: &[u8])
+fn Record_Interface_Methods_If_Interface(items: &mut Vec<Item>, kind_and_type: (ItemKind, Option<Node>), name: &str, source: &[u8])
 {
     if let (ItemKind::Interface, Some(interface)) = kind_and_type
     {
@@ -97,7 +97,7 @@ fn Record_Interface_Methods_If_Interface(items: &mut Vec<SyntaxItem>, kind_and_t
 /// about a different language. An embedded interface (`type_elem`) is not a named method and
 /// is not recorded — it declares no name of its own for this provider to attribute an item
 /// to.
-fn Record_Interface_Methods(items: &mut Vec<SyntaxItem>, interface: Node, interface_name: &str, source: &[u8])
+fn Record_Interface_Methods(items: &mut Vec<Item>, interface: Node, interface_name: &str, source: &[u8])
 {
     let mut cursor = interface.walk();
 
@@ -112,7 +112,7 @@ fn Record_Interface_Methods(items: &mut Vec<SyntaxItem>, interface: Node, interf
     }
 }
 
-fn Record_Interface_Method(items: &mut Vec<SyntaxItem>, member: Node, interface_name: &str, source: &[u8])
+fn Record_Interface_Method(items: &mut Vec<Item>, member: Node, interface_name: &str, source: &[u8])
 {
     let Some(name) = Function_Name(member, source)
     else
@@ -136,7 +136,7 @@ fn Record_Interface_Method(items: &mut Vec<SyntaxItem>, member: Node, interface_
     );
 }
 
-pub(super) fn Record_Type_Alias(items: &mut Vec<SyntaxItem>, spec: Node, source: &[u8])
+pub(super) fn Record_Type_Alias(items: &mut Vec<Item>, spec: Node, source: &[u8])
 {
     let Some(name) = Function_Name(spec, source)
     else

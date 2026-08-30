@@ -1,10 +1,10 @@
 //! Recording Go `const` and `var` declarations.
 
-use super::super::{Documentation_Of_Declaration, ItemKind, SyntaxItem, Visibility};
+use super::super::{Documentation_Of_Declaration, ItemKind, Item, Visibility};
 use super::support::{ItemRecord, Named_Field_Children, Push_Item_Record};
 use tree_sitter::Node;
 
-pub(super) fn Record_Const_Or_Var_Spec(items: &mut Vec<SyntaxItem>, spec: Node, source: &[u8], kind: ItemKind)
+pub(super) fn Record_Const_Or_Var_Spec(items: &mut Vec<Item>, spec: Node, source: &[u8], kind: ItemKind)
 {
     let name_nodes = Named_Field_Children(spec, "name");
     let shape = spec.child_by_field_name("type").map(Type_Shape);

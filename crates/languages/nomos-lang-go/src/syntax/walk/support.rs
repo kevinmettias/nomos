@@ -1,7 +1,7 @@
 //! Shared plumbing every declaration recorder in [`super`] uses: reading a node's own
 //! named fields out of the parse tree, and turning what was found into one recorded item.
 
-use super::super::{ItemKind, SyntaxItem, Visibility};
+use super::super::{ItemKind, Item, Visibility};
 use tree_sitter::Node;
 
 /// The fields one recorded declaration needs, grouped so [`Push_Item_Record`] takes a small,
@@ -21,11 +21,11 @@ pub(super) struct ItemRecord
 /// `shape` is `None` where the form has no shape to describe rather than where none could be
 /// seen. This provider parses, so everything it does not record is an absence it looked for
 /// — the distinction the payload spells `.` rather than `-`.
-pub(super) fn Push_Item_Record(items: &mut Vec<SyntaxItem>, record: ItemRecord)
+pub(super) fn Push_Item_Record(items: &mut Vec<Item>, record: ItemRecord)
 {
     let ordinal = u32::try_from(items.len()).unwrap_or(u32::MAX);
 
-    items.push(SyntaxItem {
+    items.push(Item {
         ordinal,
         kind: record.kind,
         scope: record.scope,

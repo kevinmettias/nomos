@@ -42,11 +42,11 @@ pub const PROVIDER: &str = "nomos.lang.rust.syn";
 /// telling them apart is name resolution — the thing this provider does not do.
 ///
 /// So the size of the gap is not known, and a provider that cannot bound its own
-/// omissions may not claim completeness. [`SyntaxFacts::unexpanded`] reports the lower
+/// omissions may not claim completeness. [`Facts::unexpanded`] reports the lower
 /// bound so a caller can see how much of a file was beyond reach rather than inferring
 /// silence from a small number.
 ///
-/// [`SyntaxFacts::unexpanded`]: crate::SyntaxFacts::unexpanded
+/// [`Facts::unexpanded`]: crate::Facts::unexpanded
 ///
 /// # File
 ///

@@ -6,16 +6,16 @@ use nomos_contracts::SubjectId;
 ///
 /// Carries the subject *and* the semantic inputs its syntax fact was computed from,
 /// because a fact is looked up by rebuilding its key and the inputs are a component of
-/// one. [`ModuleMember::Of`] is the way to construct it: it routes through
+/// one. [`Member::Of`] is the way to construct it: it routes through
 /// [`Syntax_Inputs`], so the digest this rebuilds a key with is the digest that wrote it.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub struct ModuleMember
+pub struct Member
 {
     pub subject: SubjectId,
     pub inputs: InputDigest,
 }
 
-impl ModuleMember
+impl Member
 {
     /// A member from the file's subject and its entire contents.
     #[must_use]

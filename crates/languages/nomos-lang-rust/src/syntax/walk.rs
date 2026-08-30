@@ -1,16 +1,16 @@
 //! One pass over a parsed file, recording every declaration it meets.
 
-use super::{SyntaxItem, Documentation_Of_Attributes, Visibility, Bound_By, ItemKind, Visit, Type_Shape, Function_Shape, Struct_Shape, Type_Head, Impl_Shape, Path_As_Written};
+use super::{Item, Documentation_Of_Attributes, Visibility, Bound_By, ItemKind, Visit, Type_Shape, Function_Shape, Struct_Shape, Type_Head, Impl_Shape, Path_As_Written};
 
 /// The walk that turns a parsed file into items.
 ///
 /// A visitor rather than a hand-rolled recursion over `syn::Item`, because
-/// [`SyntaxFacts::unexpanded`] has to count macro invocations inside function bodies —
+/// [`Facts::unexpanded`] has to count macro invocations inside function bodies —
 /// and a recursion that only descends through items would report zero for a file whose
 /// every function body is a macro, which is the exact case the count exists to expose.
 pub(super) struct Walk
 {
-    pub(super) items: Vec<SyntaxItem>,
+    pub(super) items: Vec<Item>,
     scope: Vec<String>,
     pub(super) unexpanded: u32,
 }
@@ -36,7 +36,7 @@ impl Walk
     {
         let ordinal = u32::try_from(self.items.len()).unwrap_or(u32::MAX);
 
-        self.items.push(SyntaxItem {
+        self.items.push(Item {
             ordinal,
             kind: declared.kind,
             scope: self.scope.clone(),

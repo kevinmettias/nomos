@@ -11,9 +11,9 @@ fn Subject(path: &str) -> SubjectId
     return SubjectId::From_Digest(Content_Digest(path.as_bytes()));
 }
 
-fn An_Index() -> ModuleIndex
+fn An_Index() -> Index
 {
-    return ModuleIndex {
+    return Index {
         module: Subject("the/module"),
         members: vec![
             MemberReading {
@@ -69,9 +69,9 @@ fn Test_The_Encoding_Should_Be_Line_Oriented_And_Local_To_Nothing()
 /// The three outcomes are the point of these tests: each pair is the same member count
 /// and a different answer, and an encoding that collapsed any two of them would let a
 /// run report a clean module it never read.
-fn One_Member(outcome: Outcome) -> ModuleIndex
+fn One_Member(outcome: Outcome) -> Index
 {
-    return ModuleIndex {
+    return Index {
         module: Subject("the/module"),
         members: vec![MemberReading {
             subject: Subject("alpha.rs"),

@@ -71,4 +71,4 @@ pub use parse_failure::ParseFailure;
 pub use provider::{Encode_Payload, FactContext, Materialize_Syntax_Fact};
 pub use reading::Reading;
 pub use recognition::{GO_EXTENSION, Recognition};
-pub use syntax::{ItemKind, Read_Source, SyntaxFacts, SyntaxItem, Visibility};
+pub use syntax::{ItemKind, Read_Source, Facts, Item, Visibility};

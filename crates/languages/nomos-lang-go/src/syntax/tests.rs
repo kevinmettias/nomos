@@ -3,7 +3,7 @@
 use super::*;
 use crate::Reading;
 
-fn Parsed(source: &str) -> SyntaxFacts
+fn Parsed(source: &str) -> Facts
 {
     return match Read_Source(source)
     {
@@ -14,7 +14,7 @@ fn Parsed(source: &str) -> SyntaxFacts
 
 fn Names(source: &str) -> Vec<String>
 {
-    return Parsed(source).items.iter().map(SyntaxItem::Qualified_Name).collect();
+    return Parsed(source).items.iter().map(Item::Qualified_Name).collect();
 }
 
 #[test]
@@ -158,7 +158,7 @@ fn Test_An_Interfaces_Method_Set_Should_Be_Recorded_Under_Its_Name()
          }\n",
     );
 
-    let names: Vec<String> = facts.items.iter().map(SyntaxItem::Qualified_Name).collect();
+    let names: Vec<String> = facts.items.iter().map(Item::Qualified_Name).collect();
     assert_eq!(names, vec!["Writer".to_owned(), "Writer::Write".to_owned()]);
 
     let method = facts.items.get(1).expect("two items");
@@ -180,7 +180,7 @@ fn Test_A_Generic_Declaration_Should_Be_Read_Like_Any_Other()
          func Map[T any, U any](items []T, f func(T) U) []U { return nil }\n",
     );
 
-    let names: Vec<String> = facts.items.iter().map(SyntaxItem::Qualified_Name).collect();
+    let names: Vec<String> = facts.items.iter().map(Item::Qualified_Name).collect();
     assert_eq!(names, vec!["Container", "Container::Add", "Map"]);
     assert_eq!(facts.unexpanded, 0);
 }

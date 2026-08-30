@@ -15,10 +15,10 @@
 
 use nomos_contracts::{Assurance, FactVariant, IncrementalGranularity};
 use nomos_lang_rust::{
-    Declared_Guarantee, ItemKind, Read_Source, Reading, SyntaxFacts, SyntaxItem,
+    Declared_Guarantee, ItemKind, Read_Source, Reading, Facts, Item,
 };
 
-fn Parsed(source: &str) -> SyntaxFacts
+fn Parsed(source: &str) -> Facts
 {
     return match Read_Source(source)
     {
@@ -32,9 +32,9 @@ fn Parsed(source: &str) -> SyntaxFacts
     };
 }
 
-fn Names(facts: &SyntaxFacts) -> Vec<String>
+fn Names(facts: &Facts) -> Vec<String>
 {
-    return facts.items.iter().map(SyntaxItem::Qualified_Name).collect();
+    return facts.items.iter().map(Item::Qualified_Name).collect();
 }
 
 // ---------------------------------------------------------------------------------

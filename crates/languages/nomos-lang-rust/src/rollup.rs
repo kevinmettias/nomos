@@ -88,7 +88,7 @@ mod outcome;
 mod rolled;
 
 pub use against::Against;
-pub use module::{IndexEntry, MemberReading, Module, ModuleIndex, ModuleMember};
+pub use module::{IndexEntry, MemberReading, Module, Index, Member};
 pub use outcome::Outcome;
 pub use rolled::Rolled;
 

@@ -1,11 +1,11 @@
 //! Recording Go function and method declarations — a top-level `func`, and a method bound
 //! to a receiver type.
 
-use super::super::{Documentation_Of_Declaration, ItemKind, SyntaxItem, Visibility};
+use super::super::{Documentation_Of_Declaration, ItemKind, Item, Visibility};
 use super::support::{Function_Name, ItemRecord, Parameter_Arity, Push_Item_Record};
 use tree_sitter::Node;
 
-pub(super) fn Record_Function(items: &mut Vec<SyntaxItem>, node: Node, source: &[u8])
+pub(super) fn Record_Function(items: &mut Vec<Item>, node: Node, source: &[u8])
 {
     let Some(name) = Function_Name(node, source)
     else
@@ -29,7 +29,7 @@ pub(super) fn Record_Function(items: &mut Vec<SyntaxItem>, node: Node, source: &
     );
 }
 
-pub(super) fn Record_Method(items: &mut Vec<SyntaxItem>, node: Node, source: &[u8])
+pub(super) fn Record_Method(items: &mut Vec<Item>, node: Node, source: &[u8])
 {
     let Some(name) = Method_Name(node, source)
     else

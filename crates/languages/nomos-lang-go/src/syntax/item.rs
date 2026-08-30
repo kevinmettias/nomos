@@ -5,7 +5,7 @@ use crate::Visibility;
 
 /// One declaration, as the file spells it.
 #[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
-pub struct SyntaxItem
+pub struct Item
 {
     /// Position in the walk, dense and zero-based. Source order, so it is stable for a
     /// given file and says nothing about any other file.
@@ -32,7 +32,7 @@ pub struct SyntaxItem
     pub shape: Option<String>,
 }
 
-impl SyntaxItem
+impl Item
 {
     /// The item's name qualified by its syntactic nesting.
     #[must_use]

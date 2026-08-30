@@ -65,22 +65,16 @@
 #[path = "syntax_fact_production.rs"]
 mod determinism;
 mod guarantee;
-mod materialization;
-mod parse_failure;
+mod outcome;
 #[path = "fact_context.rs"]
 mod provider;
 #[path = "reachability_reading.rs"]
 pub mod reachability;
-mod reading;
-mod recognition;
 pub mod rollup;
 mod syntax;
 
 pub use determinism::SyntaxFactProduction;
 pub use guarantee::{Declared_Guarantee, PROVIDER, Provider_Offer};
-pub use materialization::Materialization;
-pub use parse_failure::ParseFailure;
+pub use outcome::{Materialization, ParseFailure, Reading, Recognition, RUST_EXTENSION};
 pub use provider::{Encode_Payload, FactContext, Materialize_Syntax_Fact};
-pub use reading::Reading;
-pub use recognition::{Recognition, RUST_EXTENSION};
-pub use syntax::{ItemKind, Read_Source, SyntaxFacts, SyntaxItem, Visibility};
+pub use syntax::{Facts, Item, ItemKind, Read_Source, Visibility};

@@ -18,7 +18,7 @@ use nomos_contracts::{
     Assurance, BuildVariantId, ConfigurationId, Digest128, EvidenceClass, FactVariant,
     GenerationId, Guarantee, IncrementalGranularity, SnapshotId, SubjectId,
 };
-use nomos_lang_rust::rollup::{self, Against, Module, ModuleMember, Outcome, Rolled};
+use nomos_lang_rust::rollup::{self, Against, Module, Member, Outcome, Rolled};
 use nomos_lang_rust::{FactContext, Materialization};
 
 const ALPHA: &str = "pub fn Alpha() {}\nfn hidden() {}\n";
@@ -128,8 +128,8 @@ fn Roll_Up_Two_Files() -> RolledModule
         // vanishing into the one that was already proven.
         subject: Subject("the/module"),
         members: vec![
-            ModuleMember::Of(Subject("alpha.rs"), ALPHA),
-            ModuleMember::Of(Subject("beta.rs"), BETA),
+            Member::Of(Subject("alpha.rs"), ALPHA),
+            Member::Of(Subject("beta.rs"), BETA),
         ],
     };
     let against = Against {
@@ -289,8 +289,8 @@ fn A_Module_With_One_Missing_Member() -> Module
     return Module {
         subject: Subject("the/module"),
         members: vec![
-            ModuleMember::Of(Subject("alpha.rs"), ALPHA),
-            ModuleMember::Of(Subject("missing.rs"), "pub fn Absent() {}\n"),
+            Member::Of(Subject("alpha.rs"), ALPHA),
+            Member::Of(Subject("missing.rs"), "pub fn Absent() {}\n"),
         ],
     };
 }
@@ -324,7 +324,7 @@ fn Test_Every_Entry_Should_Name_The_Member_That_Declared_It()
 }
 
 /// Every name one member declared, in the order the index holds them.
-fn Names_Declared_By<'a>(index: &'a rollup::ModuleIndex, member: &str) -> Vec<&'a str>
+fn Names_Declared_By<'a>(index: &'a rollup::Index, member: &str) -> Vec<&'a str>
 {
     return index
         .items
@@ -402,8 +402,8 @@ fn Test_The_Rollup_Should_Broaden_A_File_Granular_Cause()
 fn Test_The_Member_Order_Should_Not_Change_The_Fact()
 {
     let context = Context(GenerationId::INITIAL);
-    let alpha = ModuleMember::Of(Subject("alpha.rs"), ALPHA);
-    let beta = ModuleMember::Of(Subject("beta.rs"), BETA);
+    let alpha = Member::Of(Subject("alpha.rs"), ALPHA);
+    let beta = Member::Of(Subject("beta.rs"), BETA);
 
     let forwards = rollup::Index_Key(Subject("the/module"), &[alpha, beta], context);
     let backwards = rollup::Index_Key(Subject("the/module"), &[beta, alpha], context);
@@ -423,11 +423,11 @@ fn Test_The_Member_Order_Should_Not_Change_The_Fact()
 fn Test_A_Module_Whose_Members_Changed_Should_Not_Keep_Its_Key()
 {
     let context = Context(GenerationId::INITIAL);
-    let alpha = ModuleMember::Of(Subject("alpha.rs"), ALPHA);
-    let beta = ModuleMember::Of(Subject("beta.rs"), BETA);
-    let edited = ModuleMember::Of(Subject("alpha.rs"), "pub fn Alpha() {}\npub fn Added() {}\n");
+    let alpha = Member::Of(Subject("alpha.rs"), ALPHA);
+    let beta = Member::Of(Subject("beta.rs"), BETA);
+    let edited = Member::Of(Subject("alpha.rs"), "pub fn Alpha() {}\npub fn Added() {}\n");
     // Same bytes as beta, different file.
-    let renamed = ModuleMember::Of(Subject("gamma.rs"), BETA);
+    let renamed = Member::Of(Subject("gamma.rs"), BETA);
     let original = rollup::Index_Key(Subject("the/module"), &[alpha, beta], context).Digest();
 
     assert_ne!(

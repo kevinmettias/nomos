@@ -2,9 +2,7 @@
 //! the facts it produces.
 
 mod documentation;
-#[path = "syntax_facts.rs"]
 mod facts;
-#[path = "syntax_item.rs"]
 mod item;
 mod item_kind;
 #[cfg(test)]
@@ -12,8 +10,8 @@ mod tests;
 mod visibility;
 mod walk;
 
-pub use facts::SyntaxFacts;
-pub use item::SyntaxItem;
+pub use facts::Facts;
+pub use item::Item;
 pub use item_kind::ItemKind;
 pub use visibility::Visibility;
 pub use walk::Read_Source;

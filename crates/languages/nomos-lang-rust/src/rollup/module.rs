@@ -2,16 +2,14 @@
 
 // What a rolled module is made of: the index over it, the members in it, an entry of that
 // index, and how one member was read.
-#[path = "module/module_index.rs"]
 mod index;
 mod index_entry;
-#[path = "module/module_member.rs"]
 mod member;
 mod member_reading;
 
-pub use index::ModuleIndex;
+pub use index::Index;
 pub use index_entry::IndexEntry;
-pub use member::ModuleMember;
+pub use member::Member;
 pub use member_reading::MemberReading;
 
 use nomos_contracts::SubjectId;
@@ -25,5 +23,5 @@ use nomos_contracts::SubjectId;
 pub struct Module
 {
     pub subject: SubjectId,
-    pub members: Vec<ModuleMember>,
+    pub members: Vec<Member>,
 }

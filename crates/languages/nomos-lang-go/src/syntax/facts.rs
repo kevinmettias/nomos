@@ -1,13 +1,13 @@
 //! Everything one file was parsed into.
 
-use crate::SyntaxItem;
+use crate::Item;
 
 /// Everything one file says on its face.
 #[derive(Clone, Debug, PartialEq, Eq, Default)]
-pub struct SyntaxFacts
+pub struct Facts
 {
     /// Items in source order.
-    pub items: Vec<SyntaxItem>,
+    pub items: Vec<Item>,
     /// Always `0`.
     ///
     /// `nomos-lang-rust` uses this field for a lower bound on macro invocations, and reports
@@ -21,7 +21,7 @@ pub struct SyntaxFacts
     pub unexpanded: u32,
 }
 
-impl SyntaxFacts
+impl Facts
 {
     /// Whether the file declared nothing at all.
     ///

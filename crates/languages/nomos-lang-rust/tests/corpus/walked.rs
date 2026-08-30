@@ -6,7 +6,7 @@
 //! error.
 
 use crate::claims::Corpus;
-use nomos_lang_rust::{Read_Source, Reading, SyntaxFacts};
+use nomos_lang_rust::{Read_Source, Reading, Facts};
 use std::path::{Path, PathBuf};
 
 /// What a walk of the corpus found.
@@ -57,7 +57,7 @@ impl Walked
     }
 
     /// One file this provider answered for, folded into the totals.
-    fn Counted(&mut self, facts: &SyntaxFacts)
+    fn Counted(&mut self, facts: &Facts)
     {
         self.read = self.read.saturating_add(1);
         self.items = self.items.saturating_add(facts.items.len());

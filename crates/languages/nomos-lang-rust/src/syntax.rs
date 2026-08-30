@@ -2,15 +2,13 @@
 
 // What a read of a source file yields: the facts, the items in them, and the two
 // properties an item carries.
-#[path = "syntax/syntax_facts.rs"]
 mod facts;
-#[path = "syntax/syntax_item.rs"]
 mod item;
 mod item_kind;
 mod visibility;
 
-pub use facts::SyntaxFacts;
-pub use item::SyntaxItem;
+pub use facts::Facts;
+pub use item::Item;
 pub use item_kind::ItemKind;
 pub use visibility::Visibility;
 
@@ -58,14 +56,14 @@ fn Parse_Failure(error: &syn::Error) -> ParseFailure
 }
 
 /// Every item and unexpanded construct a full walk of an already-parsed file records.
-fn Walk_File(file: &syn::File) -> SyntaxFacts
+fn Walk_File(file: &syn::File) -> Facts
 {
     use walk::Walk;
 
     let mut walk = Walk::New();
     walk.visit_file(file);
 
-    return SyntaxFacts {
+    return Facts {
         items: walk.items,
         unexpanded: walk.unexpanded,
     };

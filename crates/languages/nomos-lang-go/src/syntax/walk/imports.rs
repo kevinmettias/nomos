@@ -1,6 +1,6 @@
 //! Recording Go `import` declarations.
 
-use super::super::{Documentation_Of_Declaration, ItemKind, SyntaxItem, Visibility};
+use super::super::{Documentation_Of_Declaration, ItemKind, Item, Visibility};
 use super::support::{ItemRecord, Push_Item_Record};
 use tree_sitter::Node;
 
@@ -8,7 +8,7 @@ use tree_sitter::Node;
 /// clause — this provider does not read that file, so it falls back to the path's final
 /// segment, which is what an unaliased import binds in every real Go source tree. An
 /// aliased import (`import x "path"`) states its binding directly and is read from there.
-pub(super) fn Record_Import_Spec(items: &mut Vec<SyntaxItem>, spec: Node, source: &[u8])
+pub(super) fn Record_Import_Spec(items: &mut Vec<Item>, spec: Node, source: &[u8])
 {
     let Some(path) = Import_Path(spec, source)
     else

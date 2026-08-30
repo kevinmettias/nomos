@@ -6,14 +6,14 @@ use crate::rollup::Outcome;
 use nomos_contracts::SubjectId;
 /// What a module declares.
 #[derive(Clone, Debug, PartialEq, Eq)]
-pub struct ModuleIndex
+pub struct Index
 {
     pub module: SubjectId,
     pub members: Vec<MemberReading>,
     pub items: Vec<IndexEntry>,
 }
 
-impl ModuleIndex
+impl Index
 {
     /// Members that contributed entries, whether exactly or approximately.
     #[must_use]

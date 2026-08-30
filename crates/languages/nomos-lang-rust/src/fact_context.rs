@@ -8,8 +8,8 @@
 
 use crate::Materialization;
 use crate::{Declared_Guarantee, PROVIDER};
-use crate::SyntaxFacts;
-use crate::SyntaxItem;
+use crate::Facts;
+use crate::Item;
 use nomos_analysis::{FactPayload, GuaranteeDigest, InputDigest, MaterializedFact};
 use nomos_cap_syntax::{Capability, CONTRACT_VERSION, Payload_Schema};
 use nomos_contracts::{
@@ -138,7 +138,7 @@ fn Assembled_Fact(
 /// *not observed* mark — an absence here is always an absence in the source. The mark
 /// exists for its peer, and `OD-SYNTAX-002` records why that had to be two spellings.
 #[must_use]
-pub fn Encode_Payload(facts: &SyntaxFacts) -> Vec<u8>
+pub fn Encode_Payload(facts: &Facts) -> Vec<u8>
 {
     let mut encoded = String::new();
 
@@ -155,7 +155,7 @@ pub fn Encode_Payload(facts: &SyntaxFacts) -> Vec<u8>
 }
 
 /// One item as a record: ordinal, kind, visibility, name, documentation and shape.
-fn Encode_Item(encoded: &mut String, item: &SyntaxItem)
+fn Encode_Item(encoded: &mut String, item: &Item)
 {
     encoded.push_str("item\t");
     encoded.push_str(&item.ordinal.to_string());
