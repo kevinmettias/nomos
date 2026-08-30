@@ -323,6 +323,10 @@ mod tests
         );
     }
 
+    const EXPECTED_ITEM_COUNT: usize = 3;
+    const THIRD_ITEM_INDEX: usize = 2;
+    const THIRD_ITEM_ORDINAL: u32 = 2;
+
     /// What this provider writes is what the schema says a payload is.
     ///
     /// The encoder above is hand-written here and its peer is hand-written in
@@ -343,10 +347,6 @@ mod tests
 
         let payload = nomos_cap_syntax::Parse_Payload(&fact.payload.bytes)
             .expect("this provider writes nomos.syntax.items.v1");
-
-        const EXPECTED_ITEM_COUNT: usize = 3;
-        const THIRD_ITEM_INDEX: usize = 2;
-        const THIRD_ITEM_ORDINAL: u32 = 2;
 
         assert_eq!(payload.unexpanded, 0);
         assert_eq!(payload.items.len(), EXPECTED_ITEM_COUNT);

@@ -238,6 +238,8 @@ mod tests
         );
     }
 
+    const EXPECTED_ITEM_COUNT: usize = 2;
+
     /// The property this provider exists for. A parser refuses these bytes outright; a
     /// line-reader does not care.
     #[test]
@@ -246,8 +248,6 @@ mod tests
         let damaged = "use super::*;\n\n\u{feff}//! A stray mark, mid-file.\n\npub fn Answered() {}\n";
 
         let scanned = Scan_Source(damaged);
-
-        const EXPECTED_ITEM_COUNT: usize = 2;
 
         assert_eq!(scanned.items.len(), EXPECTED_ITEM_COUNT, "{:?}", scanned.items);
         assert_eq!(
@@ -313,13 +313,13 @@ mod tests
         );
     }
 
+    const EXPECTED_LINE_COUNT: u32 = 3;
+
     /// The denominator. A scan that reported nothing over four thousand lines and one that
     /// reported nothing over four are different answers.
     #[test]
     fn Test_A_Scan_Should_Count_The_Lines_It_Read()
     {
-        const EXPECTED_LINE_COUNT: u32 = 3;
-
         assert_eq!(Scan_Source("one\ntwo\nthree\n").lines, EXPECTED_LINE_COUNT);
         assert_eq!(Scan_Source("").lines, 0, "an empty file has no lines and is not a failure");
     }

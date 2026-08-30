@@ -37988,6 +37988,244 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P22-REGRESSION-RULES",
+      "title": "P22 regression sweep across crates/rules",
+      "why": "a fresh phase-run.exe sweep (crates-scoped, --keep-going) after the P20-PLACEMENT campaign landed found new findings across clean-file/declare-types/decompose-file/code-shape/errors/concurrency-and-unsafe/formatting/naming/attributes that P16-P21 had already driven to zero -- crate-split and folder-reorg churn reintroduced them",
+      "done_when": "the newly-regressed checks (check-nested-call, check-literals, check-function-size, check-parameter-count from clean-file; check-error-values, check-transposable-parameters from declare-types; check-file-size, check-responsibility-extraction from decompose-file; check-glob-imports, check-presumption, check-vertical-organization from code-shape; check-error-info from errors; check-panic-primitives from concurrency-and-unsafe; check-allman-braces, check-closing-brace, check-generic-layout from formatting; check-abbreviations, check-boolean-predicate, check-file-name, check-generic-parameter-name, check-naming-clarity, check-reference-parameter from naming; check-constant-scope, check-import-scope, check-scope-discipline, check-speculative-dependency, check-suppression-justified from attributes) report zero findings scoped to this band's paths, and cargo build --workspace --all-targets passes",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-p22-campaign",
+        "acquired_at": 1788063972,
+        "lease_expires_at": 1788071172
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P22-REGRESSION-HOST",
+      "title": "P22 regression sweep across crates/host",
+      "why": "same P22 sweep as P22-REGRESSION-RULES, scoped to nomos-api/nomos-cli/nomos-surface-provenance",
+      "done_when": "the newly-regressed checks (check-nested-call, check-literals, check-function-size, check-parameter-count from clean-file; check-error-values, check-transposable-parameters from declare-types; check-file-size, check-responsibility-extraction from decompose-file; check-glob-imports, check-presumption, check-vertical-organization from code-shape; check-error-info from errors; check-panic-primitives from concurrency-and-unsafe; check-allman-braces, check-closing-brace, check-generic-layout from formatting; check-abbreviations, check-boolean-predicate, check-file-name, check-generic-parameter-name, check-naming-clarity, check-reference-parameter from naming; check-constant-scope, check-import-scope, check-scope-discipline, check-speculative-dependency, check-suppression-justified from attributes) report zero findings scoped to this band's paths, and cargo build --workspace --all-targets passes",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-p22-campaign",
+        "acquired_at": 1788063972,
+        "lease_expires_at": 1788071172
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P22-REGRESSION-LANGUAGES",
+      "title": "P22 regression sweep across crates/languages",
+      "why": "same P22 sweep as P22-REGRESSION-RULES, scoped to the language provider crates",
+      "done_when": "the newly-regressed checks (check-nested-call, check-literals, check-function-size, check-parameter-count from clean-file; check-error-values, check-transposable-parameters from declare-types; check-file-size, check-responsibility-extraction from decompose-file; check-glob-imports, check-presumption, check-vertical-organization from code-shape; check-error-info from errors; check-panic-primitives from concurrency-and-unsafe; check-allman-braces, check-closing-brace, check-generic-layout from formatting; check-abbreviations, check-boolean-predicate, check-file-name, check-generic-parameter-name, check-naming-clarity, check-reference-parameter from naming; check-constant-scope, check-import-scope, check-scope-discipline, check-speculative-dependency, check-suppression-justified from attributes) report zero findings scoped to this band's paths, and cargo build --workspace --all-targets passes",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "exit_code": 0,
+        "output_tail": "   Compiling nomos-cap-syntax v0.1.0 (F:\\repos\\nomos\\crates\\capabilities\\nomos-cap-syntax)\n   Compiling nomos-cap-controlflow v0.1.0 (F:\\repos\\nomos\\crates\\capabilities\\nomos-cap-controlflow)\n   Compiling nomos-cap-dependency v0.1.0 (F:\\repos\\nomos\\crates\\capabilities\\nomos-cap-dependency)\n   Compiling nomos-cap-dependency-policy v0.1.0 (F:\\repos\\nomos\\crates\\capabilities\\nomos-cap-dependency-policy)\n   Compiling nomos-cap-lint v0.1.0 (F:\\repos\\nomos\\crates\\capabilities\\nomos-cap-lint)\n   Compiling nomos-lang-rust v0.1.0 (F:\\repos\\nomos\\crates\\languages\\nomos-lang-rust)\n   Compiling nomos-rules v0.1.0 (F:\\repos\\nomos\\crates\\rules\\nomos-rules)\n   Compiling nomos-lang-go v0.1.0 (F:\\repos\\nomos\\crates\\languages\\nomos-lang-go)\n   Compiling nomos-lang-rust-scan v0.1.0 (F:\\repos\\nomos\\crates\\languages\\nomos-lang-rust-scan)\n   Compiling nomos-lang-rust-cargo v0.1.0 (F:\\repos\\nomos\\crates\\languages\\nomos-lang-rust-cargo)\n   Compiling nomos-lang-rust-deny v0.1.0 (F:\\repos\\nomos\\crates\\languages\\nomos-lang-rust-deny)\n   Compiling nomos-lang-go-modules v0.1.0 (F:\\repos\\nomos\\crates\\languages\\nomos-lang-go-modules)\n   Compiling nomos-lang-rust-clippy v0.1.0 (F:\\repos\\nomos\\crates\\languages\\nomos-lang-rust-clippy)\n   Compiling nomos-lang-go-package v0.1.0 (F:\\repos\\nomos\\crates\\packages\\nomos-lang-go-package)\n   Compiling nomos-lang-rust-package v0.1.0 (F:\\repos\\nomos\\crates\\packages\\nomos-lang-rust-package)\n   Compiling nomos-check-orchestration v0.1.0 (F:\\repos\\nomos\\crates\\orchestration\\nomos-check-orchestration)\n   Compiling nomos-contract-tests v0.1.0 (F:\\repos\\nomos\\tests\\contract)\n   Compiling nomos-gate-orchestration v0.1.0 (F:\\repos\\nomos\\crates\\orchestration\\nomos-gate-orchestration)\n   Compiling nomos-integration-tests v0.1.0 (F:\\repos\\nomos\\tests\\integration)\n   Compiling nomos-api v0.1.0 (F:\\repos\\nomos\\crates\\host\\nomos-api)\n   Compiling nomos-cli v0.1.0 (F:\\repos\\nomos\\crates\\host\\nomos-cli)\n    Finished `dev` profile [unoptimized + debuginfo] target(s) in 17.52s\n",
+        "verified_at": 1788064841,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "b1cea1fba701b3d87e0c207c144bb55fb139b3a5"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P22-REGRESSION-SUBSTRATE",
+      "title": "P22 regression sweep across crates/substrate",
+      "why": "same P22 sweep as P22-REGRESSION-RULES, scoped to nomos-ledger/nomos-capability/nomos-analysis/nomos-workspace",
+      "done_when": "the newly-regressed checks (check-nested-call, check-literals, check-function-size, check-parameter-count from clean-file; check-error-values, check-transposable-parameters from declare-types; check-file-size, check-responsibility-extraction from decompose-file; check-glob-imports, check-presumption, check-vertical-organization from code-shape; check-error-info from errors; check-panic-primitives from concurrency-and-unsafe; check-allman-braces, check-closing-brace, check-generic-layout from formatting; check-abbreviations, check-boolean-predicate, check-file-name, check-generic-parameter-name, check-naming-clarity, check-reference-parameter from naming; check-constant-scope, check-import-scope, check-scope-discipline, check-speculative-dependency, check-suppression-justified from attributes) report zero findings scoped to this band's paths, and cargo build --workspace --all-targets passes",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-p22-campaign",
+        "acquired_at": 1788063972,
+        "lease_expires_at": 1788071172
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P22-REGRESSION-SPEC",
+      "title": "P22 regression sweep across crates/spec",
+      "why": "same P22 sweep as P22-REGRESSION-RULES, scoped to the specification-store crate family",
+      "done_when": "the newly-regressed checks (check-nested-call, check-literals, check-function-size, check-parameter-count from clean-file; check-error-values, check-transposable-parameters from declare-types; check-file-size, check-responsibility-extraction from decompose-file; check-glob-imports, check-presumption, check-vertical-organization from code-shape; check-error-info from errors; check-panic-primitives from concurrency-and-unsafe; check-allman-braces, check-closing-brace, check-generic-layout from formatting; check-abbreviations, check-boolean-predicate, check-file-name, check-generic-parameter-name, check-naming-clarity, check-reference-parameter from naming; check-constant-scope, check-import-scope, check-scope-discipline, check-speculative-dependency, check-suppression-justified from attributes) report zero findings scoped to this band's paths, and cargo build --workspace --all-targets passes",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-p22-campaign",
+        "acquired_at": 1788063972,
+        "lease_expires_at": 1788071172
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P22-REGRESSION-MISC",
+      "title": "P22 regression sweep across capabilities/agent/contracts/corrections/orchestration/platform/kernel",
+      "why": "same P22 sweep as P22-REGRESSION-RULES, catching every crate-directory too small to deserve its own band",
+      "done_when": "the newly-regressed checks (check-nested-call, check-literals, check-function-size, check-parameter-count from clean-file; check-error-values, check-transposable-parameters from declare-types; check-file-size, check-responsibility-extraction from decompose-file; check-glob-imports, check-presumption, check-vertical-organization from code-shape; check-error-info from errors; check-panic-primitives from concurrency-and-unsafe; check-allman-braces, check-closing-brace, check-generic-layout from formatting; check-abbreviations, check-boolean-predicate, check-file-name, check-generic-parameter-name, check-naming-clarity, check-reference-parameter from naming; check-constant-scope, check-import-scope, check-scope-discipline, check-speculative-dependency, check-suppression-justified from attributes) report zero findings scoped to this band's paths, and cargo build --workspace --all-targets passes",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities",
+          "crates/agent",
+          "crates/contracts",
+          "crates/corrections",
+          "crates/orchestration",
+          "crates/platform",
+          "crates/kernel"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-p22-campaign",
+        "acquired_at": 1788063973,
+        "lease_expires_at": 1788071173
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

@@ -307,6 +307,7 @@ mod tests
     /// real capture, and the value `Test_A_Real_Captured_Diagnostic_Should_Parse` checks
     /// its parsed `line` against — one constant, so the two can never independently drift.
     const CAPTURED_LINE_START: u32 = 113;
+    const CAPTURED_LINE_END: u32 = CAPTURED_LINE_START;
     const CAPTURED_COLUMN_START: u32 = 9;
     const CAPTURED_COLUMN_END: u32 = 12;
 
@@ -374,8 +375,6 @@ mod tests
     /// `113`.
     fn Real_Compiler_Message() -> serde_json::Value
     {
-        const CAPTURED_LINE_END: u32 = CAPTURED_LINE_START;
-
         return serde_json::json!({
             "reason": "compiler-message",
             "package_id": "path+file:///F:/repos/nomos/crates/substrate/nomos-ledger#0.1.0",
@@ -456,11 +455,11 @@ mod tests
         assert!(Grouped_By_Package(stdout, root).is_empty());
     }
 
+    const DUPLICATE_MESSAGE_LINE: u32 = 5;
+
     #[test]
     fn Test_Duplicate_Diagnostics_From_Two_Target_Compiles_Should_Collapse_To_One()
     {
-        const DUPLICATE_MESSAGE_LINE: u32 = 5;
-
         let root = Path::new("F:/repos/nomos");
         let one_message = |package_id: &str| {
             return serde_json::json!({

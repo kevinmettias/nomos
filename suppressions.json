@@ -6269,6 +6269,694 @@
       "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple into crates/host (call sites confirmed via full workspace grep before renaming). The public API is unchanged; only the internal declaration and file path were destuttered.",
       "owner": "@claude-p19-campaign",
       "expires": "2026-11-27"
+    },
+    {
+      "check": "check-allman-braces",
+      "path": "crates/substrate/nomos-ledger/src/gate_unknown.rs",
+      "fingerprint": "bd3d01b4c6d6ebfa",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect. Same class already waived for the sibling file crates/substrate/nomos-ledger/src/gate.rs (fingerprints bd3d01b4c6d6ebfa / f652bb398b393c11).",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-closing-brace",
+      "path": "crates/substrate/nomos-ledger/src/gate_unknown.rs",
+      "fingerprint": "f652bb398b393c11",
+      "reason": "check-allman-braces/check-closing-brace both blank string/char literal contents before doing column arithmetic, but their string-literal scan cannot see a backslash-continued Rust string (a string wrapped across lines with a trailing backslash) -- the opening quote pairs with some later, unrelated quote instead, and every line between reads as blanked whitespace, which then misjudges a brace's alignment against the wrong keyword line. Verified independently with a token-aware scanner (correct backslash-continuation handling per Rust's own lexing rules) that this specific brace genuinely aligns with its block-opening line's own indentation (allman) or its true matching brace's line (closing); the finding is the checker's own front-end gap, the same documented class as check-literals' enum-discriminant misread, not a real formatting defect. Same class already waived for the sibling file crates/substrate/nomos-ledger/src/gate.rs (fingerprints bd3d01b4c6d6ebfa / f652bb398b393c11).",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-transposable-parameters",
+      "path": "crates/languages/nomos-lang-go-modules/src/fact_context.rs",
+      "fingerprint": "da8e9c271ba14026",
+      "reason": "check-transposable-parameters test-code exemption per OD-GATE-018 (fn is inside #[cfg(test)] mod tests)",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/languages/nomos-lang-go/src/fact_context.rs",
+      "fingerprint": "5428bbb0bc472eae",
+      "reason": "check-presumption test-code exemption per OD-GATE-018 (expect() is inside #[cfg(test)] mod tests)",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/languages/nomos-lang-go/src/fact_context.rs",
+      "fingerprint": "5b21c7c95e3945e9",
+      "reason": "check-presumption test-code exemption per OD-GATE-018 (expect() is inside #[cfg(test)] mod tests)",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/languages/nomos-lang-rust-scan/src/fact_context.rs",
+      "fingerprint": "5b21c7c95e3945e9",
+      "reason": "check-presumption test-code exemption per OD-GATE-018 (expect() is inside #[cfg(test)] mod tests)",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/languages/nomos-lang-rust/src/fact_context.rs",
+      "fingerprint": "fb18f92b8bfecad0",
+      "reason": "check-presumption test-code exemption per OD-GATE-018 (expect() is inside #[cfg(test)] mod tests)",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/languages/nomos-lang-rust/src/fact_context.rs",
+      "fingerprint": "5b21c7c95e3945e9",
+      "reason": "check-presumption test-code exemption per OD-GATE-018 (expect() is inside #[cfg(test)] mod tests)",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-allman-braces",
+      "path": "crates/languages/nomos-lang-go-modules/src/module_error.rs",
+      "fingerprint": "9c94ad1c368062f6",
+      "reason": "check-allman-braces/check-closing-brace backslash-continued-string front-end gap, see code-standards-checks-against-nomos memory (verified: real brace columns already match their keyword)",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-closing-brace",
+      "path": "crates/languages/nomos-lang-go-modules/src/module_error.rs",
+      "fingerprint": "00d6019076901da8",
+      "reason": "check-allman-braces/check-closing-brace backslash-continued-string front-end gap, see code-standards-checks-against-nomos memory (verified: real brace columns already match their keyword)",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-allman-braces",
+      "path": "crates/languages/nomos-lang-go/src/fact_context.rs",
+      "fingerprint": "476aca8c50587297",
+      "reason": "check-allman-braces/check-closing-brace backslash-continued-string front-end gap, see code-standards-checks-against-nomos memory (verified: real brace columns already match their keyword)",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-closing-brace",
+      "path": "crates/languages/nomos-lang-go/src/fact_context.rs",
+      "fingerprint": "342aa494b340bb4d",
+      "reason": "check-allman-braces/check-closing-brace backslash-continued-string front-end gap, see code-standards-checks-against-nomos memory (verified: real brace columns already match their keyword)",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-allman-braces",
+      "path": "crates/languages/nomos-lang-rust/src/fact_context.rs",
+      "fingerprint": "018b83f48f899571",
+      "reason": "check-allman-braces/check-closing-brace backslash-continued-string front-end gap, see code-standards-checks-against-nomos memory (verified: real brace columns already match their keyword)",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-closing-brace",
+      "path": "crates/languages/nomos-lang-rust/src/fact_context.rs",
+      "fingerprint": "d3d7427afb30043d",
+      "reason": "check-allman-braces/check-closing-brace backslash-continued-string front-end gap, see code-standards-checks-against-nomos memory (verified: real brace columns already match their keyword)",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-allman-braces",
+      "path": "crates/languages/nomos-lang-rust/src/reachability/provider.rs",
+      "fingerprint": "8792256c829385fc",
+      "reason": "check-allman-braces/check-closing-brace backslash-continued-string front-end gap, see code-standards-checks-against-nomos memory (verified: real brace columns already match their keyword)",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-closing-brace",
+      "path": "crates/languages/nomos-lang-rust/src/reachability/provider.rs",
+      "fingerprint": "450a8a8c2462f598",
+      "reason": "check-allman-braces/check-closing-brace backslash-continued-string front-end gap, see code-standards-checks-against-nomos memory (verified: real brace columns already match their keyword)",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/languages/nomos-lang-rust/src/outcome/parse_failure.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fmt is the mandatory method name for std::fmt::Display/Debug (trait signature requires it verbatim); checker front-end gap, not a nomos defect",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/rules/nomos-rules/src/checks/lint.rs",
+      "fingerprint": "00cf2af1a5622643",
+      "reason": "test-code exemption, OD-GATE-018 pre-decided category (a) for the P22 sweep: this finding sits inside #[cfg(test)] code, and clippy.toml already permits this ergonomics class in test code repository-wide.",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/rules/nomos-rules/src/checks/lint.rs",
+      "fingerprint": "88445b7d7589384a",
+      "reason": "test-code exemption, OD-GATE-018 pre-decided category (a) for the P22 sweep: this finding sits inside #[cfg(test)] code, and clippy.toml already permits this ergonomics class in test code repository-wide.",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/rules/nomos-rules/src/checks/lint.rs",
+      "fingerprint": "68dfe9110365c3aa",
+      "reason": "test-code exemption, OD-GATE-018 pre-decided category (a) for the P22 sweep: this finding sits inside #[cfg(test)] code, and clippy.toml already permits this ergonomics class in test code repository-wide.",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/rules/nomos-rules/src/checks/policy.rs",
+      "fingerprint": "68dfe9110365c3aa",
+      "reason": "test-code exemption, OD-GATE-018 pre-decided category (a) for the P22 sweep: this finding sits inside #[cfg(test)] code, and clippy.toml already permits this ergonomics class in test code repository-wide.",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/rules/nomos-rules/src/checks/reachability.rs",
+      "fingerprint": "635de7fcfed4845e",
+      "reason": "test-code exemption, OD-GATE-018 pre-decided category (a) for the P22 sweep: this finding sits inside #[cfg(test)] code, and clippy.toml already permits this ergonomics class in test code repository-wide.",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/rules/nomos-rules/src/checks/test_support.rs",
+      "fingerprint": "3a0f6f94107ae82c",
+      "reason": "test-code exemption, OD-GATE-018 pre-decided category (a) for the P22 sweep: this finding sits inside #[cfg(test)] code, and clippy.toml already permits this ergonomics class in test code repository-wide.",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/rules/nomos-rules/src/checks/test_support.rs",
+      "fingerprint": "e4c560742c2d40fb",
+      "reason": "test-code exemption, OD-GATE-018 pre-decided category (a) for the P22 sweep: this finding sits inside #[cfg(test)] code, and clippy.toml already permits this ergonomics class in test code repository-wide.",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/rules/nomos-rules/src/checks/test_support.rs",
+      "fingerprint": "ac6413bf920b423a",
+      "reason": "test-code exemption, OD-GATE-018 pre-decided category (a) for the P22 sweep: this finding sits inside #[cfg(test)] code, and clippy.toml already permits this ergonomics class in test code repository-wide.",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/rules/nomos-rules/src/checks/test_support.rs",
+      "fingerprint": "555c5a54a31a3615",
+      "reason": "test-code exemption, OD-GATE-018 pre-decided category (a) for the P22 sweep: this finding sits inside #[cfg(test)] code, and clippy.toml already permits this ergonomics class in test code repository-wide.",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/rules/nomos-rules/src/checks/test_support.rs",
+      "fingerprint": "1dcc211384a6b054",
+      "reason": "test-code exemption, OD-GATE-018 pre-decided category (a) for the P22 sweep: this finding sits inside #[cfg(test)] code, and clippy.toml already permits this ergonomics class in test code repository-wide.",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-nested-call",
+      "path": "crates/rules/nomos-rules/src/checks/reachability.rs",
+      "fingerprint": "63ef930f759b8d03",
+      "reason": "test-code exemption, OD-GATE-018 pre-decided category (a) for the P22 sweep: this finding sits inside #[cfg(test)] code, and clippy.toml already permits this ergonomics class in test code repository-wide.",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-parameter-count",
+      "path": "crates/rules/nomos-rules/src/checks/test_support.rs",
+      "fingerprint": "6a82ec6c30548564",
+      "reason": "test-code exemption, OD-GATE-018 pre-decided category (a) for the P22 sweep: this finding sits inside #[cfg(test)] code, and clippy.toml already permits this ergonomics class in test code repository-wide.",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-parameter-count",
+      "path": "crates/rules/nomos-rules/src/checks/test_support.rs",
+      "fingerprint": "b486915bf5b0537e",
+      "reason": "test-code exemption, OD-GATE-018 pre-decided category (a) for the P22 sweep: this finding sits inside #[cfg(test)] code, and clippy.toml already permits this ergonomics class in test code repository-wide.",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-error-values",
+      "path": "crates/rules/nomos-rules/src/checks/test_support.rs",
+      "fingerprint": "bb2a147c8e741574",
+      "reason": "test-code exemption, OD-GATE-018 pre-decided category (a) for the P22 sweep: this finding sits inside #[cfg(test)] code, and clippy.toml already permits this ergonomics class in test code repository-wide.",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-error-values",
+      "path": "crates/rules/nomos-rules/src/checks/test_support.rs",
+      "fingerprint": "894136ee5e76c043",
+      "reason": "test-code exemption, OD-GATE-018 pre-decided category (a) for the P22 sweep: this finding sits inside #[cfg(test)] code, and clippy.toml already permits this ergonomics class in test code repository-wide.",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-transposable-parameters",
+      "path": "crates/rules/nomos-rules/src/checks/role_surface_pair.rs",
+      "fingerprint": "c904d9c47bf5567b",
+      "reason": "test-code exemption, OD-GATE-018 pre-decided category (a) for the P22 sweep: this finding sits inside #[cfg(test)] code, and clippy.toml already permits this ergonomics class in test code repository-wide.",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/rules/nomos-rules/src/registry/rule_registry.rs",
+      "fingerprint": "1eb76c4ef4b0e6e6",
+      "reason": "test-code exemption, OD-GATE-018 pre-decided category (a) for the P22 sweep: this finding sits inside #[cfg(test)] code, and clippy.toml already permits this ergonomics class in test code repository-wide.",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/rules/nomos-rules/src/registry/rule_registry.rs",
+      "fingerprint": "7db43fe7b25a35df",
+      "reason": "test-code exemption, OD-GATE-018 pre-decided category (a) for the P22 sweep: this finding sits inside #[cfg(test)] code, and clippy.toml already permits this ergonomics class in test code repository-wide.",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-error-info",
+      "path": "crates/rules/nomos-rules/src/checks/crosslang/reading.rs",
+      "fingerprint": "81dab60706af2871",
+      "reason": "Check_Cross_Language_Correspondence's own module doc (crosslang.rs) states that a source whose fact could not be read is silently absent from the index rather than reported here; this map_err intentionally discards the read error for that documented reason, not a defect.",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-error-info",
+      "path": "crates/rules/nomos-rules/src/checks/crosslang/reading.rs",
+      "fingerprint": "12848977b27acf46",
+      "reason": "Check_Cross_Language_Correspondence's own module doc (crosslang.rs) states that a source whose fact could not be read is silently absent from the index rather than reported here; this map_err intentionally discards the read error for that documented reason, not a defect.",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-allman-braces",
+      "path": "crates/rules/nomos-rules/src/checks/lint.rs",
+      "fingerprint": "12d6d1db2fa0b1c3",
+      "reason": "check-allman-braces/check-closing-brace backslash-continued-string front-end gap: the checker blanks the string literal before doing column arithmetic and misreads a later brace's column. The real brace here is correctly Allman-aligned with its opening keyword; verified by eye against the raw bytes. See code-standards-checks-against-nomos memory.",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-allman-braces",
+      "path": "crates/rules/nomos-rules/src/checks/reachability.rs",
+      "fingerprint": "e3e8a926a0288da0",
+      "reason": "check-allman-braces/check-closing-brace backslash-continued-string front-end gap: the checker blanks the string literal before doing column arithmetic and misreads a later brace's column. The real brace here is correctly Allman-aligned with its opening keyword; verified by eye against the raw bytes. See code-standards-checks-against-nomos memory.",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-closing-brace",
+      "path": "crates/rules/nomos-rules/src/checks/lint.rs",
+      "fingerprint": "5eeeaf8f0ed38724",
+      "reason": "check-allman-braces/check-closing-brace backslash-continued-string front-end gap: the checker blanks the string literal before doing column arithmetic and misreads a later brace's column. The real brace here is correctly Allman-aligned with its opening keyword; verified by eye against the raw bytes. See code-standards-checks-against-nomos memory.",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-closing-brace",
+      "path": "crates/rules/nomos-rules/src/checks/reachability.rs",
+      "fingerprint": "5eeeaf8f0ed38724",
+      "reason": "check-allman-braces/check-closing-brace backslash-continued-string front-end gap: the checker blanks the string literal before doing column arithmetic and misreads a later brace's column. The real brace here is correctly Allman-aligned with its opening keyword; verified by eye against the raw bytes. See code-standards-checks-against-nomos memory.",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/rules/nomos-rules/src/checks/test_support.rs",
+      "fingerprint": "ff73cdaa31871af4",
+      "reason": "test-code exemption, OD-GATE-018 pre-decided category (a) for the P22 sweep: this finding sits inside #[cfg(test)] code, and clippy.toml already permits this ergonomics class in test code repository-wide.",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/rules/nomos-rules/src/checks/test_support.rs",
+      "fingerprint": "daec6e97a2eeb65f",
+      "reason": "test-code exemption, OD-GATE-018 pre-decided category (a) for the P22 sweep: this finding sits inside #[cfg(test)] code, and clippy.toml already permits this ergonomics class in test code repository-wide.",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/spec/nomos-spec-ingest/src/archive/error.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fmt is the mandatory method name for std::fmt::Display/Debug; the trait signature requires it letter for letter and it cannot be renamed (check-abbreviations front-end gap, pre-decided in P22 SHARED_GUIDANCE category b)",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/spec/nomos-spec-model/src/record/error.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fmt is the mandatory method name for std::fmt::Display/Debug; the trait signature requires it letter for letter and it cannot be renamed (check-abbreviations front-end gap, pre-decided in P22 SHARED_GUIDANCE category b)",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/spec/nomos-spec-model/src/statement/id.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fmt is the mandatory method name for std::fmt::Display/Debug; the trait signature requires it letter for letter and it cannot be renamed (check-abbreviations front-end gap, pre-decided in P22 SHARED_GUIDANCE category b)",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/spec/nomos-spec-model/src/table/defect.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fmt is the mandatory method name for std::fmt::Display/Debug; the trait signature requires it letter for letter and it cannot be renamed (check-abbreviations front-end gap, pre-decided in P22 SHARED_GUIDANCE category b)",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/spec/nomos-spec-store/src/edit/error.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fmt is the mandatory method name for std::fmt::Display/Debug; the trait signature requires it letter for letter and it cannot be renamed (check-abbreviations front-end gap, pre-decided in P22 SHARED_GUIDANCE category b)",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/spec/nomos-spec-store/src/store/error.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fmt is the mandatory method name for std::fmt::Display/Debug; the trait signature requires it letter for letter and it cannot be renamed (check-abbreviations front-end gap, pre-decided in P22 SHARED_GUIDANCE category b)",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/spec/nomos-spec-ingest/src/phases/gate_report.rs",
+      "fingerprint": "3b9e6cd68e58d463",
+      "reason": "inside #[cfg(test)] mod tests (starts line 235 of 348); test-code exemption for check-presumption, pre-decided in P22 SHARED_GUIDANCE category a / OD-GATE-018",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/spec/nomos-spec-store/src/store/relation.rs",
+      "fingerprint": "e70b67409ba94959",
+      "reason": "inside #[cfg(test)] mod tests (starts line 47 of 202); test-code exemption for check-presumption, pre-decided in P22 SHARED_GUIDANCE category a / OD-GATE-018",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/spec/nomos-spec-validate/src/validation_run.rs",
+      "fingerprint": "42fbf4f5030bb18f",
+      "reason": "inside #[cfg(test)] mod tests (starts line 217 of 371); test-code exemption for check-presumption, pre-decided in P22 SHARED_GUIDANCE category a / OD-GATE-018",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/spec/nomos-spec-model/src/render_error.rs",
+      "fingerprint": "9cdcff255c5bf3d2",
+      "reason": "inside #[cfg(test)] mod tests (starts line 288 of 428); test-code exemption for check-presumption, pre-decided in P22 SHARED_GUIDANCE category a / OD-GATE-018",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/spec/nomos-spec-model/src/render_error.rs",
+      "fingerprint": "7d6eb84f9fc2ef44",
+      "reason": "inside #[cfg(test)] mod tests (starts line 288 of 428); test-code exemption for check-presumption, pre-decided in P22 SHARED_GUIDANCE category a / OD-GATE-018",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/spec/nomos-spec-model/src/render_error.rs",
+      "message": "`Parse_Record(RECORD).expect(\"reads\")` promises the compiler that this value is present, on your authority, and the reason it gives -- `reads` -- restates the problem rather than naming the invariant. The promise may well be true; what is missing is what MAKES it true. Name the invariant -- what has already validated this, and where -- so the next reader can check whether it still holds. A promise with a reason is an invariant; a promise without one is a bet, and the way you find out you lost it is a crash that explains nothing",
+      "reason": "inside #[cfg(test)] mod tests (starts line 288 of 428); test-code exemption for check-presumption, pre-decided in P22 SHARED_GUIDANCE category a / OD-GATE-018",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-api/src/work/tests_support.rs",
+      "fingerprint": "a82b83cbd0afbcbe",
+      "reason": "test-code exemption (OD-GATE-018 category a, reaffirmed by P22 shared guidance): file is #[cfg(test)]-gated or the finding sits inside an inline #[cfg(test)] mod tests block; clippy.toml already permits this ergonomics class in test code",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/check/report.rs",
+      "fingerprint": "7e6256a3c507ee21",
+      "reason": "test-code exemption (OD-GATE-018 category a, reaffirmed by P22 shared guidance): file is #[cfg(test)]-gated or the finding sits inside an inline #[cfg(test)] mod tests block; clippy.toml already permits this ergonomics class in test code",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/check/report.rs",
+      "fingerprint": "d77ec09c950f2f28",
+      "reason": "test-code exemption (OD-GATE-018 category a, reaffirmed by P22 shared guidance): file is #[cfg(test)]-gated or the finding sits inside an inline #[cfg(test)] mod tests block; clippy.toml already permits this ergonomics class in test code",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/request/exit_code.rs",
+      "fingerprint": "7d0210d87148120e",
+      "reason": "enum discriminant checker front-end gap, same precedent already covering check/gate/spec's own exit_code.rs and formerly request.rs itself (OD-GATE-018); surfaced fresh at this path after P22-REGRESSION-HOST's decompose-file split moved ExitCode out of request.rs into request/exit_code.rs",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/request/exit_code.rs",
+      "fingerprint": "4694e8bb50d0a2fa",
+      "reason": "enum discriminant checker front-end gap, same precedent already covering check/gate/spec's own exit_code.rs and formerly request.rs itself (OD-GATE-018); surfaced fresh at this path after P22-REGRESSION-HOST's decompose-file split moved ExitCode out of request.rs into request/exit_code.rs",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/request/exit_code.rs",
+      "fingerprint": "083e338c7e4de5da",
+      "reason": "enum discriminant checker front-end gap, same precedent already covering check/gate/spec's own exit_code.rs and formerly request.rs itself (OD-GATE-018); surfaced fresh at this path after P22-REGRESSION-HOST's decompose-file split moved ExitCode out of request.rs into request/exit_code.rs",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/request/exit_code.rs",
+      "fingerprint": "10f06bac4d04dca2",
+      "reason": "enum discriminant checker front-end gap, same precedent already covering check/gate/spec's own exit_code.rs and formerly request.rs itself (OD-GATE-018); surfaced fresh at this path after P22-REGRESSION-HOST's decompose-file split moved ExitCode out of request.rs into request/exit_code.rs",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-nested-call",
+      "path": "crates/host/nomos-api/src/spec/preview_response.rs",
+      "fingerprint": "86f62420579b7498",
+      "reason": "test-code exemption (OD-GATE-018 category a, reaffirmed by P22 shared guidance): file is #[cfg(test)]-gated or the finding sits inside an inline #[cfg(test)] mod tests block; clippy.toml already permits this ergonomics class in test code",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-nested-call",
+      "path": "crates/host/nomos-api/src/spec/preview_response.rs",
+      "fingerprint": "fe79d6af5a593866",
+      "reason": "test-code exemption (OD-GATE-018 category a, reaffirmed by P22 shared guidance): file is #[cfg(test)]-gated or the finding sits inside an inline #[cfg(test)] mod tests block; clippy.toml already permits this ergonomics class in test code",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-error-values",
+      "path": "crates/host/nomos-api/src/test_support.rs",
+      "fingerprint": "fad0e643da996d61",
+      "reason": "test-code exemption (OD-GATE-018 category a, reaffirmed by P22 shared guidance): file is #[cfg(test)]-gated or the finding sits inside an inline #[cfg(test)] mod tests block; clippy.toml already permits this ergonomics class in test code",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-error-values",
+      "path": "crates/host/nomos-api/src/test_support.rs",
+      "fingerprint": "196b36d238f1bfdb",
+      "reason": "test-code exemption (OD-GATE-018 category a, reaffirmed by P22 shared guidance): file is #[cfg(test)]-gated or the finding sits inside an inline #[cfg(test)] mod tests block; clippy.toml already permits this ergonomics class in test code",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-error-values",
+      "path": "crates/host/nomos-api/src/test_support.rs",
+      "fingerprint": "e8d096c46ee9d0ec",
+      "reason": "test-code exemption (OD-GATE-018 category a, reaffirmed by P22 shared guidance): file is #[cfg(test)]-gated or the finding sits inside an inline #[cfg(test)] mod tests block; clippy.toml already permits this ergonomics class in test code",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-error-values",
+      "path": "crates/host/nomos-api/src/test_support.rs",
+      "fingerprint": "8e1c5f94ad052487",
+      "reason": "test-code exemption (OD-GATE-018 category a, reaffirmed by P22 shared guidance): file is #[cfg(test)]-gated or the finding sits inside an inline #[cfg(test)] mod tests block; clippy.toml already permits this ergonomics class in test code",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-error-values",
+      "path": "crates/host/nomos-api/src/test_support.rs",
+      "fingerprint": "a9939b54f40aa164",
+      "reason": "test-code exemption (OD-GATE-018 category a, reaffirmed by P22 shared guidance): file is #[cfg(test)]-gated or the finding sits inside an inline #[cfg(test)] mod tests block; clippy.toml already permits this ergonomics class in test code",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-error-values",
+      "path": "crates/host/nomos-api/src/test_support.rs",
+      "fingerprint": "5eb77c9dbc379e63",
+      "reason": "test-code exemption (OD-GATE-018 category a, reaffirmed by P22 shared guidance): file is #[cfg(test)]-gated or the finding sits inside an inline #[cfg(test)] mod tests block; clippy.toml already permits this ergonomics class in test code",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-transposable-parameters",
+      "path": "crates/host/nomos-api/src/response/gate_explain_response.rs",
+      "fingerprint": "4866e2056c35cab0",
+      "reason": "test-code exemption (OD-GATE-018 category a, reaffirmed by P22 shared guidance): file is #[cfg(test)]-gated or the finding sits inside an inline #[cfg(test)] mod tests block; clippy.toml already permits this ergonomics class in test code",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-transposable-parameters",
+      "path": "crates/host/nomos-api/src/test_support.rs",
+      "fingerprint": "9fb1b67906cdef52",
+      "reason": "test-code exemption (OD-GATE-018 category a, reaffirmed by P22 shared guidance): file is #[cfg(test)]-gated or the finding sits inside an inline #[cfg(test)] mod tests block; clippy.toml already permits this ergonomics class in test code",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-api/src/response/gate_plan_response.rs",
+      "fingerprint": "e67362677240c73f",
+      "reason": "test-code exemption (OD-GATE-018 category a, reaffirmed by P22 shared guidance): file is #[cfg(test)]-gated or the finding sits inside an inline #[cfg(test)] mod tests block; clippy.toml already permits this ergonomics class in test code",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-api/src/response/gate_plan_response.rs",
+      "fingerprint": "21ca327164c2f0f1",
+      "reason": "test-code exemption (OD-GATE-018 category a, reaffirmed by P22 shared guidance): file is #[cfg(test)]-gated or the finding sits inside an inline #[cfg(test)] mod tests block; clippy.toml already permits this ergonomics class in test code",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-api/src/response/gate_run_response.rs",
+      "fingerprint": "cef849104c74b6e3",
+      "reason": "test-code exemption (OD-GATE-018 category a, reaffirmed by P22 shared guidance): file is #[cfg(test)]-gated or the finding sits inside an inline #[cfg(test)] mod tests block; clippy.toml already permits this ergonomics class in test code",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-api/src/response/gate_run_response.rs",
+      "fingerprint": "7b94edbdfa431fa3",
+      "reason": "test-code exemption (OD-GATE-018 category a, reaffirmed by P22 shared guidance): file is #[cfg(test)]-gated or the finding sits inside an inline #[cfg(test)] mod tests block; clippy.toml already permits this ergonomics class in test code",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-api/src/test_support.rs",
+      "fingerprint": "74b5b1df29610882",
+      "reason": "test-code exemption (OD-GATE-018 category a, reaffirmed by P22 shared guidance): file is #[cfg(test)]-gated or the finding sits inside an inline #[cfg(test)] mod tests block; clippy.toml already permits this ergonomics class in test code",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-api/src/test_support.rs",
+      "fingerprint": "3b037e722fca670b",
+      "reason": "test-code exemption (OD-GATE-018 category a, reaffirmed by P22 shared guidance): file is #[cfg(test)]-gated or the finding sits inside an inline #[cfg(test)] mod tests block; clippy.toml already permits this ergonomics class in test code",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-api/src/test_support.rs",
+      "fingerprint": "0de0917adea11024",
+      "reason": "test-code exemption (OD-GATE-018 category a, reaffirmed by P22 shared guidance): file is #[cfg(test)]-gated or the finding sits inside an inline #[cfg(test)] mod tests block; clippy.toml already permits this ergonomics class in test code",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-cli/src/vacuity.rs",
+      "fingerprint": "f0cdd8083f55406a",
+      "reason": "test-code exemption (OD-GATE-018 category a, reaffirmed by P22 shared guidance): file is #[cfg(test)]-gated or the finding sits inside an inline #[cfg(test)] mod tests block; clippy.toml already permits this ergonomics class in test code",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-surface-provenance/src/arguments.rs",
+      "fingerprint": "a4ac0dc2ec14afc4",
+      "reason": "test-code exemption (OD-GATE-018 category a, reaffirmed by P22 shared guidance): file is #[cfg(test)]-gated or the finding sits inside an inline #[cfg(test)] mod tests block; clippy.toml already permits this ergonomics class in test code",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-surface-provenance/src/arguments.rs",
+      "fingerprint": "7132ef576c9e28fe",
+      "reason": "test-code exemption (OD-GATE-018 category a, reaffirmed by P22 shared guidance): file is #[cfg(test)]-gated or the finding sits inside an inline #[cfg(test)] mod tests block; clippy.toml already permits this ergonomics class in test code",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-panic-primitives",
+      "path": "crates/host/nomos-api/src/test_support.rs",
+      "fingerprint": "845fc1449d340c0b",
+      "reason": "test-code exemption (OD-GATE-018 category a, reaffirmed by P22 shared guidance): file is #[cfg(test)]-gated or the finding sits inside an inline #[cfg(test)] mod tests block; clippy.toml already permits this ergonomics class in test code",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-allman-braces",
+      "path": "crates/host/nomos-api/src/response/gate_run_response.rs",
+      "fingerprint": "996f233bd3bfdc20",
+      "reason": "check-allman-braces/check-closing-brace backslash-continued-string front-end gap, see code-standards-checks-against-nomos memory; a \\-continued string literal earlier in this file (Test_A_Real_Run_Should_Reach_A_Judgment's assert_ne! message) blanks the scanner's column tracking -- the real brace at this line genuinely sits at the same column as the keyword/statement that opens its block",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-closing-brace",
+      "path": "crates/host/nomos-api/src/response/gate_run_response.rs",
+      "fingerprint": "00d6019076901da8",
+      "reason": "check-allman-braces/check-closing-brace backslash-continued-string front-end gap, see code-standards-checks-against-nomos memory; a \\-continued string literal earlier in this file (Test_A_Real_Run_Should_Reach_A_Judgment's assert_ne! message) blanks the scanner's column tracking -- the real brace at this line genuinely sits at the same column as the keyword/statement that opens its block",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-generic-parameter-name",
+      "path": "crates/host/nomos-api/src/test_support.rs",
+      "fingerprint": "b81ea380ac1db844",
+      "reason": "test-code exemption (OD-GATE-018 category a, reaffirmed by P22 shared guidance): file is #[cfg(test)]-gated or the finding sits inside an inline #[cfg(test)] mod tests block; clippy.toml already permits this ergonomics class in test code",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
     }
   ]
 }

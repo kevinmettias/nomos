@@ -242,6 +242,10 @@ mod tests
         );
     }
 
+    const EXPECTED_ITEM_COUNT: usize = 3;
+    const THIRD_ITEM_INDEX: usize = 2;
+    const THIRD_ITEM_ORDINAL: u32 = 2;
+
     /// What this provider writes is what the schema says a payload is — decoded here through
     /// the shared reader rather than compared against `nomos-lang-rust`'s own bytes, for the
     /// reason `nomos_cap_syntax`'s module doc gives.
@@ -251,10 +255,6 @@ mod tests
         let fact = Fact_From_Source("package main\n\nfunc One() {}\n\ntype Inner struct{}\n\nfunc (i Inner) Two() {}\n");
 
         let payload = nomos_cap_syntax::Parse_Payload(&fact.payload.bytes).expect("this provider writes nomos.syntax.items.v2");
-
-        const EXPECTED_ITEM_COUNT: usize = 3;
-        const THIRD_ITEM_INDEX: usize = 2;
-        const THIRD_ITEM_ORDINAL: u32 = 2;
 
         assert_eq!(payload.unexpanded, 0);
         assert_eq!(payload.items.len(), EXPECTED_ITEM_COUNT);

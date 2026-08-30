@@ -157,6 +157,8 @@ mod tests
         assert!(!rendered.contains('\r'), "line endings must not be local");
     }
 
+    const EXPECTED_ITEM_COUNT: usize = 2;
+
     /// What this provider writes is what the schema says a payload is.
     ///
     /// The encoder above is hand-written and stays that way: what makes two providers of
@@ -170,8 +172,6 @@ mod tests
 
         let payload = nomos_cap_syntax::Parse_Payload(&fact.payload.bytes)
             .expect("this provider writes nomos.syntax.items.v1");
-
-        const EXPECTED_ITEM_COUNT: usize = 2;
 
         assert_eq!(payload.unexpanded, 0);
         assert_eq!(payload.items.len(), EXPECTED_ITEM_COUNT);

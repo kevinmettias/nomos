@@ -99,6 +99,8 @@ mod tests
     use nomos_contracts::Digest128;
     use nomos_platform_std::StdProcessLauncher;
 
+    const MANY_WORKSPACE_MEMBERS: usize = 10;
+
     /// One real, whole-workspace `cargo clippy` invocation, checked for every property this
     /// crate promises at once -- not split across several `#[test]`s the way
     /// `nomos_lang_rust_cargo::provider::tests` is, because that crate's own `cargo
@@ -107,8 +109,6 @@ mod tests
     #[test]
     fn Test_Materialize_Workspace_Over_This_Repository()
     {
-        const MANY_WORKSPACE_MEMBERS: usize = 10;
-
         let facts = Materialize_Workspace(&Repository_Root(), Context(), &StdProcessLauncher).expect("this repository is a real cargo workspace under clippy");
 
         assert!(
