@@ -165,6 +165,8 @@ mod tests
     use super::*;
     use crate::Content_Digest;
 
+    const MINIMUM_USEFUL_DESCRIPTION_LENGTH: usize = 20;
+
     #[test]
     fn Test_Disjoint_Sets_Should_Permit_Concurrency()
     {
@@ -321,8 +323,6 @@ mod tests
                 pattern: "src/**".to_owned(),
             },
         ];
-
-        const MINIMUM_USEFUL_DESCRIPTION_LENGTH: usize = 20;
 
         for reason in &reasons
         {

@@ -56,6 +56,8 @@ mod tests
 {
     use super::*;
 
+    const ARBITRARY_POSITIVE_THRESHOLD: f64 = 0.1;
+
     #[test]
     fn Test_Confidence_Should_Clamp_To_The_Unit_Interval()
     {
@@ -69,8 +71,6 @@ mod tests
     #[test]
     fn Test_Nan_Confidence_Should_Become_None()
     {
-        const ARBITRARY_POSITIVE_THRESHOLD: f64 = 0.1;
-
         assert!(Confidence::Of(f64::NAN).Value() <= 0.0);
         assert!(!Confidence::Of(f64::NAN).Is_At_Least(Confidence::Of(ARBITRARY_POSITIVE_THRESHOLD)));
     }

@@ -159,24 +159,6 @@ mod tests
 {
     use super::*;
 
-    fn Sample() -> ReachabilityPayload
-    {
-        return ReachabilityPayload {
-            sites: vec![
-                ReachabilitySite {
-                    function: "Payload_Of".to_owned(),
-                    binding: "applicability".to_owned(),
-                    shape: ArmShape::Empty,
-                },
-                ReachabilitySite {
-                    function: "Walk_Sources".to_owned(),
-                    binding: "applicability".to_owned(),
-                    shape: ArmShape::TailOk,
-                },
-            ],
-        };
-    }
-
     #[test]
     fn Test_A_Payload_Should_Round_Trip_Through_Its_Own_Encoding()
     {
@@ -219,5 +201,23 @@ mod tests
     {
         let bytes = b"site\tf\tapplicability\tsomething-else\n";
         assert!(Parse_Payload(bytes).is_err());
+    }
+
+    fn Sample() -> ReachabilityPayload
+    {
+        return ReachabilityPayload {
+            sites: vec![
+                ReachabilitySite {
+                    function: "Payload_Of".to_owned(),
+                    binding: "applicability".to_owned(),
+                    shape: ArmShape::Empty,
+                },
+                ReachabilitySite {
+                    function: "Walk_Sources".to_owned(),
+                    binding: "applicability".to_owned(),
+                    shape: ArmShape::TailOk,
+                },
+            ],
+        };
     }
 }

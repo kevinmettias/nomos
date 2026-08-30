@@ -38253,14 +38253,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-p22-campaign",
-        "acquired_at": 1788063973,
-        "lease_expires_at": 1788071173
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -38270,7 +38266,27 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "exit_code": 0,
+        "output_tail": "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.44s\n",
+        "verified_at": 1788065729,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "14bee9eb079e50a228b8fbc06419e82f1a0bc6e2"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

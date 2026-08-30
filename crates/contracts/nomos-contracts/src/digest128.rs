@@ -258,12 +258,14 @@ mod tests
 {
     use super::*;
 
+    const RENDER_SAMPLE_BYTE: u8 = 0x0a;
+    const HIGH_NIBBLE_BYTE: u8 = 0xf0;
+    const DEBUG_SAMPLE_BYTE: u8 = 0xab;
+
     #[test]
     fn Test_Digest_Should_Render_As_Thirty_Two_Hex_Characters()
     {
-        const SAMPLE_BYTE: u8 = 0x0a;
-
-        let digest = Digest128::From_Bytes([SAMPLE_BYTE; Digest128::BYTE_LENGTH]);
+        let digest = Digest128::From_Bytes([RENDER_SAMPLE_BYTE; Digest128::BYTE_LENGTH]);
         let rendered = digest.to_string();
 
         assert_eq!(rendered.len(), Digest128::HEX_LENGTH);
@@ -279,8 +281,6 @@ mod tests
         bytes[Digest128::BYTE_LENGTH - 1] = 0x0f;
         let low = Digest128::From_Bytes(bytes);
 
-        const HIGH_NIBBLE_BYTE: u8 = 0xf0;
-
         bytes[Digest128::BYTE_LENGTH - 1] = HIGH_NIBBLE_BYTE;
         let high = Digest128::From_Bytes(bytes);
 
@@ -294,9 +294,7 @@ mod tests
     #[test]
     fn Test_Digest_Debug_Should_Contain_The_Hex_Form()
     {
-        const SAMPLE_BYTE: u8 = 0xab;
-
-        let digest = Digest128::From_Bytes([SAMPLE_BYTE; Digest128::BYTE_LENGTH]);
+        let digest = Digest128::From_Bytes([DEBUG_SAMPLE_BYTE; Digest128::BYTE_LENGTH]);
 
         assert!(format!("{digest:?}").contains(&digest.to_string()));
     }

@@ -344,6 +344,8 @@ fn Rule_Findings(
 /// Runs every `rules` entry `selected` names, in table order, and collects what each
 /// produces.
 fn Findings_For_Selected_Rules(
+    // `dyn Fn` matches the array element type `Rule_Findings` builds, above: eight distinct
+    // closures need one common type, and `dyn Fn` is that type where `impl Fn` cannot be.
     rules: [(&str, &dyn Fn(&mut Reader<'_, '_>) -> Vec<Finding>); RULE_COUNT],
     reader: &mut Reader<'_, '_>,
     selected: &[RuleId],

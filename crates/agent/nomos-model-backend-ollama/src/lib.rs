@@ -82,23 +82,6 @@ pub fn Execute_Task<Launcher: ProcessLauncher>(task: &TaskEnvelope, launcher: &L
     return Execute_In(task, launcher, &working_directory);
 }
 
-/// A freshly created, empty directory under the system temp root, never this repository's
-/// own tree — `OD-EXECUTOR-004`'s rule applies this defensively, even though it found no
-/// mechanism by which `ollama run` reads its own working directory, on the same "a property
-/// of the invocation, not a property inferred from today's absence of a mechanism that could
-/// read it" reasoning that record states.
-///
-/// Delegates to `nomos_agent_contracts::Isolated_Working_Directory`, shared with
-/// `nomos-agent-executor-claude-code`'s own isolation step; this crate's only distinct part
-/// is the prefix its directories are named from, so two crates' isolated directories are
-/// never mistaken for one another on the same machine.
-fn Isolated_Working_Directory() -> Result<PathBuf, AgentExecutionError>
-{
-    return nomos_agent_contracts::Isolated_Working_Directory("nomos-model-backend-ollama").map_err(|error| {
-        return AgentExecutionError::Unavailable(error.to_string());
-    });
-}
-
 /// [`Execute_Task`], over a caller-chosen `working_directory` rather than a freshly generated
 /// one — the same seam `nomos_agent_executor_claude_code::Execute_In` offers its own real
 /// adversarial integration test.
@@ -162,6 +145,23 @@ fn Require_Clean_Exit(outcome: &ExitOutcome, stderr: &str) -> Result<(), AgentEx
             Err(AgentExecutionError::Unavailable("ollama was terminated before it could finish".to_owned()))
         }
     };
+}
+
+/// A freshly created, empty directory under the system temp root, never this repository's
+/// own tree — `OD-EXECUTOR-004`'s rule applies this defensively, even though it found no
+/// mechanism by which `ollama run` reads its own working directory, on the same "a property
+/// of the invocation, not a property inferred from today's absence of a mechanism that could
+/// read it" reasoning that record states.
+///
+/// Delegates to `nomos_agent_contracts::Isolated_Working_Directory`, shared with
+/// `nomos-agent-executor-claude-code`'s own isolation step; this crate's only distinct part
+/// is the prefix its directories are named from, so two crates' isolated directories are
+/// never mistaken for one another on the same machine.
+fn Isolated_Working_Directory() -> Result<PathBuf, AgentExecutionError>
+{
+    return nomos_agent_contracts::Isolated_Working_Directory("nomos-model-backend-ollama").map_err(|error| {
+        return AgentExecutionError::Unavailable(error.to_string());
+    });
 }
 
 #[cfg(test)]

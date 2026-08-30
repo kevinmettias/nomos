@@ -104,6 +104,8 @@ mod tests
 {
     use super::*;
 
+    const MINIMUM_USEFUL_DESCRIPTION_LENGTH: usize = 20;
+
     /// Every breach must say what is wrong in terms an author can act on. A breach that
     /// renders as a type name teaches nobody anything.
     #[test]
@@ -136,8 +138,6 @@ mod tests
                 unreached: vec!["kotlin".to_owned()],
             },
         ];
-
-        const MINIMUM_USEFUL_DESCRIPTION_LENGTH: usize = 20;
 
         for breach in &breaches
         {

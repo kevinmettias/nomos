@@ -95,6 +95,8 @@ mod tests
     use super::*;
     use crate::{ChangeSet, CorrectionClass, Edit};
 
+    const CANDIDATE_COUNT: usize = 2;
+
     struct Description<'a>(&'a str);
     struct Path<'a>(&'a str);
 
@@ -133,8 +135,6 @@ mod tests
     #[test]
     fn Test_Candidates_Touching_Different_Paths_Should_Be_Accepted()
     {
-        const CANDIDATE_COUNT: usize = 2;
-
         let plan = CorrectionPlan::New(vec![
             Candidate_Touching(Description("first"), Path("a.rs")),
             Candidate_Touching(Description("second"), Path("b.rs")),

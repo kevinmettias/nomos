@@ -47,6 +47,8 @@ mod tests
     use nomos_contracts::{Digest128, Finding, RuleId, SubjectId};
     use nomos_contracts::{Applicability, EvidenceClass, GateCategory};
 
+    const DISTINCT_SEED_BYTE: u8 = 2;
+
     #[test]
     fn Test_An_Empty_Policy_Should_Calibrate_Nothing()
     {
@@ -64,7 +66,6 @@ mod tests
 
         assert_eq!(policy.Calibrating(&finding), Some(&calibration));
 
-        const DISTINCT_SEED_BYTE: u8 = 2;
         assert_eq!(policy.Calibrating(&Finding_For("naming-convention", DISTINCT_SEED_BYTE)), Some(&calibration));
     }
 

@@ -82,20 +82,6 @@ pub fn Execute_Task<Launcher: ProcessLauncher>(task: &TaskEnvelope, launcher: &L
     return Execute_In(task, launcher, &working_directory);
 }
 
-/// A freshly created, empty directory under the system temp root, never this repository's
-/// own tree and never one carrying its own `.claude/settings*` or `CLAUDE.md` — the first
-/// clause of `OD-EXECUTOR-001`'s rule.
-///
-/// Delegates to `nomos_agent_contracts::Isolated_Working_Directory`, shared with
-/// `nomos-model-backend-ollama`'s own isolation step; this crate's only distinct part is
-/// the prefix its directories are named from.
-fn Isolated_Working_Directory() -> Result<PathBuf, AgentExecutionError>
-{
-    return nomos_agent_contracts::Isolated_Working_Directory("nomos-agent-executor").map_err(|error| {
-        return AgentExecutionError::Unavailable(error.to_string());
-    });
-}
-
 /// [`Execute_Task`], over a caller-chosen `working_directory` rather than a freshly generated
 /// one — the seam this crate's own real, adversarial integration test uses to inspect
 /// that directory afterward, since `Execute_Task`'s own isolated directory is otherwise
@@ -221,6 +207,20 @@ fn Require_Clean_Exit(outcome: &ExitOutcome, stderr: &str) -> Result<(), AgentEx
 fn Single_Line(goal: &str) -> String
 {
     return goal.replace(['\n', '\r'], " ").replace('"', "'");
+}
+
+/// A freshly created, empty directory under the system temp root, never this repository's
+/// own tree and never one carrying its own `.claude/settings*` or `CLAUDE.md` — the first
+/// clause of `OD-EXECUTOR-001`'s rule.
+///
+/// Delegates to `nomos_agent_contracts::Isolated_Working_Directory`, shared with
+/// `nomos-model-backend-ollama`'s own isolation step; this crate's only distinct part is
+/// the prefix its directories are named from.
+fn Isolated_Working_Directory() -> Result<PathBuf, AgentExecutionError>
+{
+    return nomos_agent_contracts::Isolated_Working_Directory("nomos-agent-executor").map_err(|error| {
+        return AgentExecutionError::Unavailable(error.to_string());
+    });
 }
 
 /// `claude` on every platform this workspace's own `StdProcessLauncher` runs on but

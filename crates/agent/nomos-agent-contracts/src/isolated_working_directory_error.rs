@@ -33,6 +33,28 @@ impl core::fmt::Display for IsolatedWorkingDirectoryError
     }
 }
 
+/// The one owner of the process-lifetime sequence [`Isolated_Working_Directory`] mixes into
+/// every directory name. Nothing outside [`Next`](Self::Next) ever touches the atomic it
+/// wraps, so "who can write this" has a single, named answer instead of a bare global
+/// anyone could reach into.
+struct SequenceCounter(AtomicU64);
+
+impl SequenceCounter
+{
+    const fn New() -> Self
+    {
+        return Self(AtomicU64::new(0));
+    }
+
+    /// A number no other call in this process has been given before.
+    fn Next(&self) -> u64
+    {
+        // atomic-ordering: allow: only used to give two calls in this process different numbers;
+        // nothing else synchronizes on it or reads memory ordered by this counter.
+        return self.0.fetch_add(1, Ordering::Relaxed);
+    }
+}
+
 /// A freshly created, empty directory under the system temp root, named from `prefix`,
 /// this process's id and a per-process counter shared by every caller -- so two calls in
 /// the same process, whatever their prefix, never collide, and nothing here depends on
@@ -43,11 +65,9 @@ impl core::fmt::Display for IsolatedWorkingDirectoryError
 /// [`IsolatedWorkingDirectoryError`] if the directory could not be created.
 pub fn Isolated_Working_Directory(prefix: &str) -> Result<PathBuf, IsolatedWorkingDirectoryError>
 {
-    static COUNTER: AtomicU64 = AtomicU64::new(0);
+    static COUNTER: SequenceCounter = SequenceCounter::New();
 
-    // atomic-ordering: allow: only used to give two calls in this process different numbers;
-    // nothing else synchronizes on it or reads memory ordered by this counter.
-    let sequence = COUNTER.fetch_add(1, Ordering::Relaxed);
+    let sequence = COUNTER.Next();
     let directory = std::env::temp_dir().join(format!("{prefix}-{}-{sequence}", std::process::id()));
 
     std::fs::create_dir_all(&directory).map_err(|cause| IsolatedWorkingDirectoryError { path: directory.clone(), cause })?;

@@ -12,12 +12,12 @@
 
 #![forbid(unsafe_code)]
 
-mod isolated_working_directory;
+mod isolated_working_directory_error;
 mod nomos_resolved_change_context;
 mod task_envelope;
 mod work_result;
 
-pub use isolated_working_directory::{Isolated_Working_Directory, IsolatedWorkingDirectoryError};
+pub use isolated_working_directory_error::{Isolated_Working_Directory, IsolatedWorkingDirectoryError};
 pub use nomos_resolved_change_context::{ChangeContextSubject, NomosResolvedChangeContext};
 pub use task_envelope::TaskEnvelope;
 pub use work_result::WorkResult;

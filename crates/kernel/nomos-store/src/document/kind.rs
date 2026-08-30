@@ -68,6 +68,15 @@ mod tests
 {
     use super::*;
 
+    // Each position below is hand-typed and independent of `Kind::All()`'s own order --
+    // naming them does not derive one from the other, which would defeat the point of an
+    // independent mirror.
+    const FINDING_POSITION: usize = 2;
+    const RUN_POSITION: usize = 3;
+    const SPECIFICATION_POSITION: usize = 4;
+    const RECORD_POSITION: usize = 5;
+    const PROJECTION_POSITION: usize = 6;
+
     /// `Kind::All()`'s own mirror, named in the doc comment above it.
     ///
     /// The match has no wildcard arm. A variant added to `Kind` without a matching
@@ -78,15 +87,6 @@ mod tests
     {
         fn Expected_Ordinal(kind: Kind) -> usize
         {
-            // Each position below is hand-typed and independent of `Kind::All()`'s own
-            // order -- naming them does not derive one from the other, which would defeat the
-            // point of an independent mirror.
-            const FINDING_POSITION: usize = 2;
-            const RUN_POSITION: usize = 3;
-            const SPECIFICATION_POSITION: usize = 4;
-            const RECORD_POSITION: usize = 5;
-            const PROJECTION_POSITION: usize = 6;
-
             return match kind
             {
                 Kind::Commit => 0,

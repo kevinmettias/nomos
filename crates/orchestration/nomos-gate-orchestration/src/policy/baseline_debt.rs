@@ -49,6 +49,8 @@ mod tests
     use nomos_contracts::{Digest128, Finding, RuleId, SubjectId};
     use nomos_contracts::{Applicability, EvidenceClass, GateCategory};
 
+    const DISTINCT_SEED_BYTE: u8 = 2;
+
     #[test]
     fn Test_An_Empty_Policy_Should_Tolerate_Nothing()
     {
@@ -74,8 +76,6 @@ mod tests
     #[test]
     fn Test_A_Mismatched_Subject_Should_Not_Match()
     {
-        const DISTINCT_SEED_BYTE: u8 = 2;
-
         let finding = Finding_For("naming-convention", 1);
         let debt = BaselineDebt {
             rule: RuleId::New("naming-convention"),
