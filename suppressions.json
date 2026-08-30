@@ -5200,6 +5200,123 @@
       "reason": "this pub use forms part of the crate's real public API surface -- nomos_spec_orchestration::Commit_Staged_Edit (and its siblings) is called directly by that qualified path from crates/host/nomos-cli, so this is a load-bearing re-export chain, not a private import for internal convenience. The checker can't distinguish a pub use from a movable one and doesn't see the external caller.",
       "owner": "@claude-p19-campaign",
       "expires": "2026-11-27"
+    },
+    {
+      "check": "check-speculative-dependency",
+      "path": ".claude/worktrees/agent-a055794b88b62f469/tests/contract",
+      "fingerprint": "ff39aeb28516e7c0",
+      "reason": "checker front-end gap: check-speculative-dependency's usage scanner does not see symbol references confined to a tests/-only integration-test crate (files directly under tests/*.rs, no src/lib.rs) -- confirmed by direct grep, every one of these dependencies is genuinely consumed (tests/contract's nomos_ledger in tests/agent_harness/*.rs and toolchain_floor.rs; tests/integration's 9 crates in tests/determinism/*.rs)",
+      "owner": "@kmettias",
+      "expires": "2027-02-25"
+    },
+    {
+      "check": "check-speculative-dependency",
+      "path": ".claude/worktrees/agent-a055794b88b62f469/tests/integration",
+      "fingerprint": "4debfdb92bd6bafa",
+      "reason": "checker front-end gap: check-speculative-dependency's usage scanner does not see symbol references confined to a tests/-only integration-test crate (files directly under tests/*.rs, no src/lib.rs) -- confirmed by direct grep, every one of these dependencies is genuinely consumed (tests/contract's nomos_ledger in tests/agent_harness/*.rs and toolchain_floor.rs; tests/integration's 9 crates in tests/determinism/*.rs)",
+      "owner": "@kmettias",
+      "expires": "2027-02-25"
+    },
+    {
+      "check": "check-speculative-dependency",
+      "path": ".claude/worktrees/agent-a055794b88b62f469/tests/integration",
+      "fingerprint": "d927a69c55c2e033",
+      "reason": "checker front-end gap: check-speculative-dependency's usage scanner does not see symbol references confined to a tests/-only integration-test crate (files directly under tests/*.rs, no src/lib.rs) -- confirmed by direct grep, every one of these dependencies is genuinely consumed (tests/contract's nomos_ledger in tests/agent_harness/*.rs and toolchain_floor.rs; tests/integration's 9 crates in tests/determinism/*.rs)",
+      "owner": "@kmettias",
+      "expires": "2027-02-25"
+    },
+    {
+      "check": "check-speculative-dependency",
+      "path": ".claude/worktrees/agent-a055794b88b62f469/tests/integration",
+      "fingerprint": "cb122e125d785a38",
+      "reason": "checker front-end gap: check-speculative-dependency's usage scanner does not see symbol references confined to a tests/-only integration-test crate (files directly under tests/*.rs, no src/lib.rs) -- confirmed by direct grep, every one of these dependencies is genuinely consumed (tests/contract's nomos_ledger in tests/agent_harness/*.rs and toolchain_floor.rs; tests/integration's 9 crates in tests/determinism/*.rs)",
+      "owner": "@kmettias",
+      "expires": "2027-02-25"
+    },
+    {
+      "check": "check-speculative-dependency",
+      "path": ".claude/worktrees/agent-a055794b88b62f469/tests/integration",
+      "fingerprint": "ddc3806eec31328f",
+      "reason": "checker front-end gap: check-speculative-dependency's usage scanner does not see symbol references confined to a tests/-only integration-test crate (files directly under tests/*.rs, no src/lib.rs) -- confirmed by direct grep, every one of these dependencies is genuinely consumed (tests/contract's nomos_ledger in tests/agent_harness/*.rs and toolchain_floor.rs; tests/integration's 9 crates in tests/determinism/*.rs)",
+      "owner": "@kmettias",
+      "expires": "2027-02-25"
+    },
+    {
+      "check": "check-speculative-dependency",
+      "path": ".claude/worktrees/agent-a055794b88b62f469/tests/integration",
+      "fingerprint": "4f6f52457cd8ef37",
+      "reason": "checker front-end gap: check-speculative-dependency's usage scanner does not see symbol references confined to a tests/-only integration-test crate (files directly under tests/*.rs, no src/lib.rs) -- confirmed by direct grep, every one of these dependencies is genuinely consumed (tests/contract's nomos_ledger in tests/agent_harness/*.rs and toolchain_floor.rs; tests/integration's 9 crates in tests/determinism/*.rs)",
+      "owner": "@kmettias",
+      "expires": "2027-02-25"
+    },
+    {
+      "check": "check-speculative-dependency",
+      "path": ".claude/worktrees/agent-a055794b88b62f469/tests/integration",
+      "fingerprint": "cbec57e5446a4373",
+      "reason": "checker front-end gap: check-speculative-dependency's usage scanner does not see symbol references confined to a tests/-only integration-test crate (files directly under tests/*.rs, no src/lib.rs) -- confirmed by direct grep, every one of these dependencies is genuinely consumed (tests/contract's nomos_ledger in tests/agent_harness/*.rs and toolchain_floor.rs; tests/integration's 9 crates in tests/determinism/*.rs)",
+      "owner": "@kmettias",
+      "expires": "2027-02-25"
+    },
+    {
+      "check": "check-speculative-dependency",
+      "path": ".claude/worktrees/agent-a055794b88b62f469/tests/integration",
+      "fingerprint": "4d5bcdad4802d6e4",
+      "reason": "checker front-end gap: check-speculative-dependency's usage scanner does not see symbol references confined to a tests/-only integration-test crate (files directly under tests/*.rs, no src/lib.rs) -- confirmed by direct grep, every one of these dependencies is genuinely consumed (tests/contract's nomos_ledger in tests/agent_harness/*.rs and toolchain_floor.rs; tests/integration's 9 crates in tests/determinism/*.rs)",
+      "owner": "@kmettias",
+      "expires": "2027-02-25"
+    },
+    {
+      "check": "check-speculative-dependency",
+      "path": ".claude/worktrees/agent-a055794b88b62f469/tests/integration",
+      "fingerprint": "5701790d6e369770",
+      "reason": "checker front-end gap: check-speculative-dependency's usage scanner does not see symbol references confined to a tests/-only integration-test crate (files directly under tests/*.rs, no src/lib.rs) -- confirmed by direct grep, every one of these dependencies is genuinely consumed (tests/contract's nomos_ledger in tests/agent_harness/*.rs and toolchain_floor.rs; tests/integration's 9 crates in tests/determinism/*.rs)",
+      "owner": "@kmettias",
+      "expires": "2027-02-25"
+    },
+    {
+      "check": "check-speculative-dependency",
+      "path": ".claude/worktrees/agent-a055794b88b62f469/tests/integration",
+      "fingerprint": "5a7958c731dfc09a",
+      "reason": "checker front-end gap: check-speculative-dependency's usage scanner does not see symbol references confined to a tests/-only integration-test crate (files directly under tests/*.rs, no src/lib.rs) -- confirmed by direct grep, every one of these dependencies is genuinely consumed (tests/contract's nomos_ledger in tests/agent_harness/*.rs and toolchain_floor.rs; tests/integration's 9 crates in tests/determinism/*.rs)",
+      "owner": "@kmettias",
+      "expires": "2027-02-25"
+    },
+    {
+      "check": "check-speculative-dependency",
+      "path": ".claude/worktrees/agent-a055794b88b62f469/tests/integration",
+      "fingerprint": "cf75c899f94ffdd7",
+      "reason": "checker front-end gap: check-speculative-dependency's usage scanner does not see symbol references confined to a tests/-only integration-test crate (files directly under tests/*.rs, no src/lib.rs) -- confirmed by direct grep, every one of these dependencies is genuinely consumed (tests/contract's nomos_ledger in tests/agent_harness/*.rs and toolchain_floor.rs; tests/integration's 9 crates in tests/determinism/*.rs)",
+      "owner": "@kmettias",
+      "expires": "2027-02-25"
+    },
+    {
+      "check": "check-speculative-dependency",
+      "path": ".claude/worktrees/agent-a055794b88b62f469/tests/integration",
+      "fingerprint": "d30dd2687ba79e38",
+      "reason": "checker front-end gap: check-speculative-dependency's usage scanner does not see symbol references confined to a tests/-only integration-test crate (files directly under tests/*.rs, no src/lib.rs) -- confirmed by direct grep, every one of these dependencies is genuinely consumed (tests/contract's nomos_ledger in tests/agent_harness/*.rs and toolchain_floor.rs; tests/integration's 9 crates in tests/determinism/*.rs)",
+      "owner": "@kmettias",
+      "expires": "2027-02-25"
+    },
+    {
+      "check": "check-crate-split",
+      "path": "crates/platform/nomos-platform",
+      "reason": "nomos-platform is Band 1p, the single platform port crate: its own lib.rs doc comment states the reason all its trait groups are bundled -- 'exactly one crate in the workspace names a platform dependency,' so swapping the implementation cannot recompile the bands above. Reviewed and answered already in commit baf823a4 ('Bind imports to the facade, and answer the four crate-split reviews'); splitting it now would undo that settled decision, not fix a defect.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-crate-split",
+      "path": "crates/platform/nomos-platform-std",
+      "reason": "nomos-platform-std is the std implementation of nomos-platform's unified port (Band 1p) and mirrors its bundled shape for the same reason -- a caller depending on the real implementation needs the whole port, not one trait's worth. Same baf823a4 review as nomos-platform.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-crate-split",
+      "path": "crates/spec/nomos-spec-model",
+      "reason": "nomos-spec-model's own lib.rs doc comment already answers this: the content model and the submission vocabulary are correctly read as two unreferencing groups today because the typed layer that would connect them (a submission naming the content it is about) does not exist yet. The comment states explicitly that splitting is a band-and-ownership decision this repository settles deliberately, not one to make while tidying the tree.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
     }
   ]
 }
