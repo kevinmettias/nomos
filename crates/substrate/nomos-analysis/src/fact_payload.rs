@@ -44,3 +44,27 @@ impl FactPayload
         return Content_Digest(&self.bytes);
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_New_Should_Store_The_Schema_And_Bytes_Given()
+    {
+        let payload = FactPayload::New(SchemaId::New("nomos.test.payload.v1"), b"hello".to_vec());
+
+        assert_eq!(payload.schema, SchemaId::New("nomos.test.payload.v1"));
+        assert_eq!(payload.bytes, b"hello".to_vec());
+    }
+
+    #[test]
+    fn Test_Digest_Should_Differ_For_Different_Bytes()
+    {
+        let one = FactPayload::New(SchemaId::New("nomos.test.payload.v1"), b"hello".to_vec());
+        let other = FactPayload::New(SchemaId::New("nomos.test.payload.v1"), b"world".to_vec());
+
+        assert_ne!(one.Digest(), other.Digest());
+    }
+}

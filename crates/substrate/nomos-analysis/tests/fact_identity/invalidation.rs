@@ -169,6 +169,13 @@ fn Test_Invalidation_Should_Follow_Dependency_Edges()
     assert!(store.Current(&derived.At(next), next).is_none());
 }
 
+/// Which position in a `[read, middle, outer]` triple each key depends on, forming a chain:
+/// `middle` reads `read`, and `outer` reads `middle`.
+fn Chain_Edges() -> [(usize, usize); 2]
+{
+    return [(1, 0), (2, 1)];
+}
+
 #[test]
 fn Test_Invalidation_Should_Follow_Edges_Transitively()
 {
@@ -177,11 +184,17 @@ fn Test_Invalidation_Should_Follow_Edges_Transitively()
     middle.subject = Subject(7);
     let mut outer = Base();
     outer.subject = Subject(8);
+    let chain = [&read, &middle, &outer];
 
     let mut store = Stored(&read);
-    for (key, upstream) in [(&middle, &read), (&outer, &middle)]
+    for (downstream, upstream) in Chain_Edges()
     {
-        Materialize_Reading(&mut store, key, upstream, ReadOutcome::Materialized);
+        Materialize_Reading(
+            &mut store,
+            *chain.get(downstream).expect("Chain_Edges only names indices within the 3-element chain"),
+            *chain.get(upstream).expect("Chain_Edges only names indices within the 3-element chain"),
+            ReadOutcome::Materialized,
+        );
     }
     let next = GenerationId::INITIAL.Next();
 

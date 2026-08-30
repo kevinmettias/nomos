@@ -214,7 +214,7 @@ mod tests
                             \x20       run: cargo test --workspace\n";
 
     #[test]
-    fn Test_The_Lint_Step_Should_Be_Derived_From_The_Workflow()
+    fn Test_Derive_Step_Should_Return_The_Lint_Steps_Argv()
     {
         let argv = Derive_Step(WORKFLOW, LINT_STEP).expect("the workflow has a Lint step");
 
@@ -258,23 +258,53 @@ mod tests
         );
     }
 
-    /// The top-level `name: gate` must not be mistaken for a step, or the first `run:`
-    /// in the file gets attributed to a step that has none.
+    /// The top-level workflow name, for [`Test_A_Workflow_Name_Should_Not_Be_Read_As_A_Step`]:
+    /// it must not be mistaken for a step, or the first `run:` in the file gets attributed to
+    /// a step that has none.
+    fn Workflow_Level_Names() -> [&'static str; 1]
+    {
+        ["gate"]
+    }
+
     #[test]
     fn Test_A_Workflow_Name_Should_Not_Be_Read_As_A_Step()
     {
-        let refusal = Derive_Step(WORKFLOW, "gate").expect_err("gate is the workflow, not a step");
+        for name in Workflow_Level_Names()
+        {
+            let refusal = Derive_Step(WORKFLOW, name).expect_err("gate is the workflow, not a step");
 
-        assert!(matches!(refusal, GateUnknown::NoSuchStep { .. }));
+            assert!(matches!(refusal, GateUnknown::NoSuchStep { .. }));
+        }
+    }
+
+    /// Step names the fixture workflow never declares, for
+    /// [`Test_A_Missing_Step_Should_Be_Refused`].
+    fn Names_Of_Steps_The_Workflow_Never_Declares() -> [&'static str; 1]
+    {
+        ["Boundaries"]
     }
 
     #[test]
     fn Test_A_Missing_Step_Should_Be_Refused()
     {
-        let refusal =
-            Derive_Step(WORKFLOW, "Boundaries").expect_err("there is no Boundaries step here");
+        for step in Names_Of_Steps_The_Workflow_Never_Declares()
+        {
+            let refusal = Derive_Step(WORKFLOW, step).expect_err("there is no such step here");
 
-        assert!(matches!(refusal, GateUnknown::NoSuchStep { .. }));
+            assert!(matches!(refusal, GateUnknown::NoSuchStep { .. }));
+        }
+    }
+
+    /// `run:` lines that are scripts rather than a single command, for
+    /// [`Test_A_Scripted_Step_Should_Be_Refused_Rather_Than_Guessed`].
+    fn Scripted_Step_Run_Lines() -> [&'static str; 4]
+    {
+        [
+            "cargo clippy && cargo test",
+            "cargo test | tee log",
+            "cargo test --features \"a b\"",
+            "|",
+        ]
     }
 
     /// A shell script cannot be turned into an argv without guessing, and a guessed
@@ -282,12 +312,7 @@ mod tests
     #[test]
     fn Test_A_Scripted_Step_Should_Be_Refused_Rather_Than_Guessed()
     {
-        for run in [
-            "cargo clippy && cargo test",
-            "cargo test | tee log",
-            "cargo test --features \"a b\"",
-            "|",
-        ]
+        for run in Scripted_Step_Run_Lines()
         {
             let workflow = format!("      - name: Lint\n        run: {run}\n");
 

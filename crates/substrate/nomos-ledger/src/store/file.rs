@@ -125,3 +125,122 @@ pub(super) fn Load_Document<Files: FileSystem, TimeSource: Clock, Lock: CrossPro
     return serde_json::from_str::<LedgerDocument>(&text)
         .map_err(|error| return Explain_Parse_Failure(&ledger.path, &text, &error));
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use crate::{AddRefusal, ItemId, ItemKind, ItemOrigin, ItemState, LedgerItem, Territory};
+    use nomos_platform_std::{FileLock, StdFileSystem};
+    use std::path::{Path, PathBuf};
+
+    struct FixedClock(i64);
+
+    impl Clock for &FixedClock
+    {
+        fn Now(&self) -> Timestamp
+        {
+            return Timestamp::From_Unix_Seconds(self.0);
+        }
+    }
+
+    fn Temp_Dir(name: &str) -> PathBuf
+    {
+        let mut path = std::env::temp_dir();
+        path.push(format!("nomos-store-file-{name}-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&path);
+        std::fs::create_dir_all(&path).expect("test needs a temp directory");
+        return path;
+    }
+
+    fn Ledger_At<'clock>(
+        directory: &Path,
+        clock: &'clock FixedClock,
+    ) -> FileLedger<StdFileSystem, &'clock FixedClock, FileLock>
+    {
+        return FileLedger::At(
+            directory.join("ledger.json"),
+            StdFileSystem,
+            clock,
+            FileLock::At(directory.join("ledger.lock")),
+        );
+    }
+
+    fn Workable_Item(id: &str) -> LedgerItem
+    {
+        return LedgerItem {
+            id: ItemId::New(id),
+            title: "an item".to_owned(),
+            why: "because".to_owned(),
+            done_when: "when it is done".to_owned(),
+            kind: ItemKind::Correction,
+            origin: ItemOrigin::Proposed,
+            territory: Territory::Of_Files([format!("src/{id}.rs")]),
+            state: ItemState::Ready,
+            depends_on: Vec::new(),
+            blocked: None,
+            claim: None,
+            verification: None,
+            verified: None,
+            abandoned: Vec::new(),
+            displaced: Vec::new(),
+            declined: None,
+        };
+    }
+
+    #[test]
+    fn Test_Save_Document_Should_Refuse_An_Invalid_Document_Without_Writing_It()
+    {
+        let directory = Temp_Dir("save-document");
+        let clock = FixedClock(1_000);
+        let ledger = Ledger_At(&directory, &clock);
+        let mut reserves_nothing = Workable_Item("BAD-1");
+        reserves_nothing.territory = Territory::Empty();
+        let invalid = LedgerDocument {
+            schema_version: SCHEMA_VERSION,
+            items: vec![reserves_nothing],
+        };
+
+        let error = Save_Document(&ledger, &invalid).expect_err("an item reserving nothing must be refused");
+
+        assert!(matches!(error, LedgerError::Invalid { .. }), "got {error:?}");
+        let after = Load_Document(&ledger).expect("a refused save leaves no file behind, which loads as empty");
+        assert!(after.items.is_empty(), "the invalid document must not have reached disk");
+    }
+
+    #[test]
+    fn Test_Decide_Under_Lock_Should_Convert_A_Store_Failure_Through_The_Callers_Own_Error()
+    {
+        let directory = Temp_Dir("decide-under-lock");
+        let clock = FixedClock(1_000);
+        let ledger = Ledger_At(&directory, &clock);
+
+        let outcome: Result<(), AddRefusal> = Decide_Under_Lock(&ledger, "agent-a", |document, _now| {
+            document.items.push(Workable_Item("D-1"));
+            return Ok(());
+        });
+
+        outcome.expect("a plain decision must succeed");
+        let reloaded = Load_Document(&ledger).expect("the decision must have been written");
+        assert_eq!(reloaded.items.len(), 1);
+    }
+
+    #[test]
+    fn Test_Load_Document_Should_Parse_The_Text_On_Disk_Into_A_Document()
+    {
+        let directory = Temp_Dir("load-document");
+        let clock = FixedClock(1_000);
+        let ledger = Ledger_At(&directory, &clock);
+        let raw = serde_json::to_string(&LedgerDocument {
+            schema_version: SCHEMA_VERSION,
+            items: vec![Workable_Item("L-1")],
+        })
+        .expect("the fixture document serializes");
+        std::fs::write(ledger.Path(), raw).expect("test can write the raw fixture directly");
+
+        let document = Load_Document(&ledger).expect("a well-formed file must load");
+
+        assert_eq!(document.items.len(), 1);
+        assert_eq!(document.items.first().expect("the assertion above found exactly one item").id, ItemId::New("L-1"));
+    }
+}

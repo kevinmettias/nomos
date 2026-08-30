@@ -323,3 +323,86 @@ impl FactReader for Reader<'_, '_>
         return self.trail.Recorded();
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use crate::GuaranteeDigest;
+    use nomos_capability::Registry;
+    use nomos_contracts::{
+        Assurance, BuildVariantId, ConfigurationId, ContractVersion, Digest128, FactVariant,
+        Guarantee, IncrementalGranularity, ProviderId, SnapshotId,
+    };
+
+    fn Seeded(seed: u8) -> Digest128
+    {
+        return Digest128::From_Bytes([seed; Digest128::BYTE_LENGTH]);
+    }
+
+    fn Sample_Context() -> Context
+    {
+        return Context {
+            snapshot: SnapshotId::From_Digest(Seeded(1)),
+            variant: BuildVariantId::From_Digest(Seeded(2)),
+            configuration: ConfigurationId::From_Digest(Seeded(3)),
+            generation: GenerationId::From_Raw(4),
+        };
+    }
+
+    fn Sample_Key() -> FactKey
+    {
+        return FactKey {
+            contract: CapabilityId::New("nomos.cap.test.reader"),
+            contract_version: ContractVersion::New(1, 0),
+            subject: SubjectId::From_Digest(Seeded(5)),
+            semantic_inputs: InputDigest::Of(&[b"fn main() {}"]),
+            provider: ProviderId::New("nomos.provider.test"),
+            provider_version: ContractVersion::New(1, 0),
+            guarantee: GuaranteeDigest::Of(&Guarantee::New(
+                FactVariant::Syntactic,
+                Assurance::Sound,
+                Assurance::Sound,
+                IncrementalGranularity::File,
+            )),
+            variant: Sample_Context().variant,
+            configuration: Sample_Context().configuration,
+        };
+    }
+
+    #[test]
+    fn Test_On_Should_Build_A_Reader_With_An_Empty_Trail()
+    {
+        let store = MemoryFactStore::New();
+        let registry = Registry::New();
+
+        let reader = Reader::On(&store, &registry, Sample_Context());
+
+        assert!(reader.Into_Dependencies().is_empty());
+    }
+
+    #[test]
+    fn Test_Context_Should_Return_The_Context_The_Reader_Was_Built_With()
+    {
+        let store = MemoryFactStore::New();
+        let registry = Registry::New();
+        let context = Sample_Context();
+
+        let reader = Reader::On(&store, &registry, context.clone());
+
+        assert_eq!(reader.Context(), &context);
+    }
+
+    #[test]
+    fn Test_Into_Dependencies_Should_Report_Every_Read_A_Get_Recorded()
+    {
+        let store = MemoryFactStore::New();
+        let registry = Registry::New();
+        let mut reader = Reader::On(&store, &registry, Sample_Context());
+
+        let identity = Sample_Key().At(Sample_Context().generation);
+        let _ = reader.Get(&identity);
+
+        assert_eq!(reader.Into_Dependencies().len(), 1);
+    }
+}

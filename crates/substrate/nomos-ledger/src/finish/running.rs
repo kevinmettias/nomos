@@ -164,3 +164,127 @@ fn Idle_Timeout(timeout: std::time::Duration) -> std::time::Duration
 {
     return timeout.checked_div(IDLE_TIMEOUT_DIVISOR).unwrap_or(timeout);
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use crate::{ItemKind, ItemOrigin, ItemState, LedgerItem, Territory};
+    use nomos_platform::ProcessOutput;
+
+    fn Item_With_Predicate(id: &str, verification: Option<VerificationPredicate>) -> LedgerItem
+    {
+        return LedgerItem {
+            id: ItemId::New(id),
+            title: "an item".to_owned(),
+            why: "because".to_owned(),
+            done_when: "when it is done".to_owned(),
+            kind: ItemKind::Correction,
+            origin: ItemOrigin::Proposed,
+            territory: Territory::Of_Files(["src/a.rs"]),
+            state: ItemState::Claimed,
+            depends_on: Vec::new(),
+            blocked: None,
+            claim: None,
+            verification,
+            verified: None,
+            abandoned: Vec::new(),
+            displaced: Vec::new(),
+            declined: None,
+        };
+    }
+
+    fn Board_Of(item: LedgerItem) -> LedgerDocument
+    {
+        return LedgerDocument { schema_version: 1, items: vec![item] };
+    }
+
+    #[test]
+    fn Test_Refuse_Nonzero_Should_Pass_A_Zero_Exit_Through_And_Refuse_Everything_Else()
+    {
+        let item = ItemId::New("T-1");
+
+        assert!(Refuse_Nonzero(&item, 0, "all good").is_ok());
+
+        let refusal = Refuse_Nonzero(&item, 3, "boom").expect_err("a nonzero exit must refuse");
+        assert!(matches!(refusal, FinishRefusal::PredicateFailed { exit_code: 3, .. }), "got {refusal:?}");
+    }
+
+    #[test]
+    fn Test_Runnable_Predicate_Should_Refuse_An_Argv_With_No_Program()
+    {
+        let document = Board_Of(Item_With_Predicate(
+            "T-2",
+            Some(VerificationPredicate::From_String_Arguments(vec![])),
+        ));
+
+        let refusal = Runnable_Predicate(&document, &ItemId::New("T-2")).expect_err("an empty argv cannot be run");
+
+        assert!(matches!(refusal, FinishRefusal::CouldNotRun { .. }), "got {refusal:?}");
+    }
+
+    #[test]
+    fn Test_Predicate_Of_Should_Report_No_Predicate_When_The_Item_Declares_None()
+    {
+        let document = Board_Of(Item_With_Predicate("T-3", None));
+
+        let no_predicate =
+            Predicate_Of(&document, &ItemId::New("T-3")).expect_err("an item with none declared has none to return");
+        assert!(matches!(no_predicate, FinishRefusal::NoPredicate { .. }), "got {no_predicate:?}");
+
+        let missing =
+            Predicate_Of(&document, &ItemId::New("GHOST")).expect_err("an unknown identifier matches nothing");
+        assert!(
+            matches!(missing, FinishRefusal::NotHeld { refusal: ClaimRefusal::NoSuchItem { .. } }),
+            "got {missing:?}"
+        );
+    }
+
+    /// A launcher standing in for a real one: it always ends the same way, with the exit
+    /// code and streams this test hands it.
+    struct Scripted
+    {
+        code: i32,
+        stdout: String,
+        stderr: String,
+    }
+
+    impl ProcessLauncher for &Scripted
+    {
+        fn Run(&self, _command: &Command) -> Result<ProcessOutput, String>
+        {
+            return Ok(ProcessOutput {
+                outcome: ExitOutcome::Exited { code: self.code },
+                stdout: self.stdout.clone(),
+                stderr: self.stderr.clone(),
+            });
+        }
+    }
+
+    #[test]
+    fn Test_Ran_To_Completion_Should_Combine_Standard_Out_And_Error_Into_One_Tail()
+    {
+        let item = ItemId::New("T-4");
+        let command = Command::New(vec!["a-predicate".to_owned()], std::time::Duration::from_secs(10));
+        let launcher = Scripted { code: 0, stdout: "out-".to_owned(), stderr: "err".to_owned() };
+
+        let ran = Ran_To_Completion(&&launcher, &command, &item).expect("a zero exit is a verdict");
+
+        assert_eq!(ran.code, 0);
+        assert_eq!(ran.tail, "out-err");
+    }
+
+    #[test]
+    fn Test_Command_From_Argv_Should_Carry_The_Runners_Working_Directory_Onto_The_Command()
+    {
+        let runner = Runner {
+            working_directory: Some(Path::new("some/tree")),
+            timeout: std::time::Duration::from_secs(120),
+        };
+
+        let command = Command_From_Argv(vec!["cargo".to_owned(), "test".to_owned()], runner);
+
+        assert_eq!(command.argv, vec!["cargo".to_owned(), "test".to_owned()]);
+        assert_eq!(command.working_directory, Some(std::path::PathBuf::from("some/tree")));
+    }
+}

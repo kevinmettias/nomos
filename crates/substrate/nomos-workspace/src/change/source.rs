@@ -67,3 +67,30 @@ impl core::fmt::Display for Source
         return formatter.write_str(self.Label());
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Label_Should_Spell_Every_Source_Distinctly()
+    {
+        assert_eq!(Source::Correction.Label(), "Correction");
+        assert_eq!(Source::AgentEdit.Label(), "AgentEdit");
+        assert_ne!(Source::IdeEdit.Label(), Source::GitCheckout.Label());
+    }
+
+    #[test]
+    fn Test_All_Should_List_Every_Source_Exactly_Once()
+    {
+        let all = Source::All();
+
+        assert_eq!(all.len(), 5);
+        assert!(all.contains(&Source::Correction));
+        assert!(all.contains(&Source::CodeGenerator));
+
+        let unique: std::collections::BTreeSet<_> = all.iter().collect();
+        assert_eq!(unique.len(), all.len());
+    }
+}

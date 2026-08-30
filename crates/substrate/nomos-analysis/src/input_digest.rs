@@ -33,3 +33,44 @@ impl core::fmt::Display for InputDigest
         return self.0.fmt(formatter);
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Of_Should_Be_Deterministic_For_The_Same_Parts()
+    {
+        assert_eq!(InputDigest::Of(&[b"a", b"b"]), InputDigest::Of(&[b"a", b"b"]));
+        assert_ne!(InputDigest::Of(&[b"a"]), InputDigest::Of(&[b"b"]));
+    }
+
+    /// A handful of distinct byte fills, so the round trip is shown for more than one value.
+    fn Sample_Seeds() -> [u8; 3]
+    {
+        return [0, 7, 255];
+    }
+
+    #[test]
+    fn Test_From_Digest_Should_Wrap_The_Given_Value_Unchanged()
+    {
+        for seed in Sample_Seeds()
+        {
+            let digest = Digest128::From_Bytes([seed; Digest128::BYTE_LENGTH]);
+
+            assert_eq!(InputDigest::From_Digest(digest).Digest(), digest);
+        }
+    }
+
+    #[test]
+    fn Test_Digest_Should_Return_Whatever_Value_It_Was_Wrapped_Around()
+    {
+        for seed in Sample_Seeds()
+        {
+            let digest = Digest128::From_Bytes([seed; Digest128::BYTE_LENGTH]);
+
+            assert_eq!(InputDigest::From_Digest(digest).Digest(), digest);
+        }
+    }
+}

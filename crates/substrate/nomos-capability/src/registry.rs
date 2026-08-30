@@ -159,3 +159,150 @@ impl Registry
 
 #[cfg(test)]
 mod tests;
+
+// `mod tests` above is a SEPARATE file (`registry/tests.rs`). check-test-coverage's Rust
+// front end keys a test's companion unit off the literal file it is textually written in,
+// so a test living in that separate file can never address a function declared here,
+// however it is named. This second, LITERAL inline module gives each method here the
+// one-file address the check reads, without disturbing `registry/tests.rs`'s own broader
+// behavioural suite.
+#[cfg(test)]
+mod local_tests
+{
+    use super::*;
+    use nomos_contracts::{Assurance, ContractVersion, FactVariant, Guarantee, IncrementalGranularity};
+
+    fn Capability() -> CapabilityId
+    {
+        return CapabilityId::New("nomos.cap.test.registry_local");
+    }
+
+    fn Version() -> ContractVersion
+    {
+        return ContractVersion::New(1, 0);
+    }
+
+    fn Floor() -> Guarantee
+    {
+        return Guarantee::New(
+            FactVariant::Syntactic,
+            Assurance::Sound,
+            Assurance::Unknown,
+            IncrementalGranularity::File,
+        );
+    }
+
+    fn Contract() -> CapabilityContract
+    {
+        return CapabilityContract {
+            id: Capability(),
+            version: Version(),
+            summary: "a contract for registry.rs's own local tests".to_owned(),
+            ceiling: Floor(),
+        };
+    }
+
+    fn Offer() -> ProviderOffer
+    {
+        return ProviderOffer {
+            provider: ProviderId::New("nomos.test.registry_local"),
+            capability: Capability(),
+            version: Version(),
+            guarantee: Floor(),
+        };
+    }
+
+    #[test]
+    fn Test_New_Should_Begin_Completely_Blank()
+    {
+        let registry = Registry::New();
+
+        assert_eq!(registry.Declared().count(), 0);
+        assert!(registry.Offers(&Capability()).is_empty());
+    }
+
+    #[test]
+    fn Test_Declare_Should_Refuse_A_Second_Declaration_For_The_Same_Capability()
+    {
+        let mut registry = Registry::New();
+
+        assert!(registry.Declare(Contract()).is_ok());
+        assert_eq!(registry.Declare(Contract()).unwrap_err().kind, RegistryErrorKind::AlreadyDeclared);
+    }
+
+    #[test]
+    fn Test_Offer_Should_Refuse_An_Offer_Against_An_Undeclared_Capability()
+    {
+        let mut registry = Registry::New();
+
+        let error = registry.Offer(Offer()).unwrap_err();
+
+        assert_eq!(
+            error.kind,
+            RegistryErrorKind::Offer {
+                provider: Offer().provider,
+                refusal: crate::OfferRefusal::ForUndeclared,
+            }
+        );
+    }
+
+    #[test]
+    fn Test_Declare_And_Offer_Should_Do_Both_In_One_Call()
+    {
+        let mut registry = Registry::New();
+
+        assert!(registry.Declare_And_Offer(Contract(), Offer()).is_ok());
+        assert_eq!(registry.Offers(&Capability()).len(), 1);
+    }
+
+    #[test]
+    fn Test_Resolve_Should_Report_No_Provider_For_An_Unoffered_Capability()
+    {
+        let mut registry = Registry::New();
+        registry.Declare(Contract()).expect("declared once");
+
+        let resolution = registry.Resolve(&Requirement::New(Capability(), Version(), Floor()));
+
+        assert!(matches!(
+            resolution,
+            Resolution::Unsatisfied {
+                reason: crate::Unmet::NoProvider,
+                ..
+            }
+        ));
+    }
+
+    #[test]
+    fn Test_Resolve_Requiring_Should_Refuse_A_Requirement_Nobody_Named_Answers()
+    {
+        let mut registry = Registry::New();
+        registry.Declare_And_Offer(Contract(), Offer()).expect("declared and offered");
+        let absent = ProviderId::New("nomos.test.absent");
+
+        let resolution = registry.Resolve_Requiring(&Requirement::New(Capability(), Version(), Floor()), &absent);
+
+        assert!(matches!(resolution, RequiredResolution::Unsatisfied { .. }));
+    }
+
+    #[test]
+    fn Test_Declared_Should_List_Every_Declared_Contract()
+    {
+        let mut registry = Registry::New();
+        registry.Declare(Contract()).expect("declared once");
+
+        let declared: Vec<&CapabilityContract> = registry.Declared().collect();
+
+        assert_eq!(declared, vec![&Contract()]);
+    }
+
+    #[test]
+    fn Test_Offers_Should_Be_Empty_For_A_Capability_Nobody_Offered()
+    {
+        let mut registry = Registry::New();
+        registry.Declare(Contract()).expect("declared once");
+
+        assert!(registry.Offers(&Capability()).is_empty());
+        registry.Offer(Offer()).expect("within the ceiling");
+        assert_eq!(registry.Offers(&Capability()).len(), 1);
+    }
+}

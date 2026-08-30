@@ -226,3 +226,84 @@ impl Territory
         return duplicates;
     }
 }
+
+// `mod tests` above is a SEPARATE file (`territory/tests.rs`), loaded via a bare `mod
+// tests;` with no `#[path]` override. check-test-coverage's Rust front end keys a test's
+// companion unit off the literal file it is textually written in, so a test living in that
+// separate file can never address a function declared here, however it is named — see
+// `check-test-coverage: allow-untested` note history for this crate. This second, LITERAL
+// inline module gives each public method here the one-file address the check reads, without
+// disturbing `territory/tests.rs`'s own broader behavioural suite.
+#[cfg(test)]
+mod local_tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Of_Files_Should_Set_File_Resolution_And_Store_The_Given_Paths()
+    {
+        let territory = Territory::Of_Files(["a/b.rs", "c/d.rs"]);
+
+        assert_eq!(territory.resolution, SetResolution::File);
+        assert_eq!(territory.paths, vec!["a/b.rs".to_owned(), "c/d.rs".to_owned()]);
+        assert!(territory.patterns.is_empty());
+    }
+
+    #[test]
+    fn Test_Empty_Should_Have_No_Paths_And_No_Patterns()
+    {
+        let territory = Territory::Empty();
+
+        assert!(territory.paths.is_empty());
+        assert!(territory.patterns.is_empty());
+    }
+
+    #[test]
+    fn Test_With_Pattern_Should_Record_An_Unexpanded_Pattern()
+    {
+        let territory = Territory::Empty().With_Pattern("crates/spec/**");
+
+        assert_eq!(territory.patterns, vec!["crates/spec/**".to_owned()]);
+    }
+
+    #[test]
+    fn Test_Is_Empty_Should_Turn_False_Once_A_Path_Is_Present()
+    {
+        let empty = Territory::Empty();
+        let with_path = Territory::Of_Files(["a.rs"]);
+
+        assert!(empty.Is_Empty());
+        assert!(!with_path.Is_Empty());
+    }
+
+    #[test]
+    fn Test_As_Subject_Set_Should_Compare_Equal_For_The_Same_Paths()
+    {
+        let one = Territory::Of_Files(["a/b.rs", "c/d.rs"]);
+        let other = Territory::Of_Files(["a/b.rs", "c/d.rs"]);
+        let different = Territory::Of_Files(["a/b.rs"]);
+
+        assert_eq!(one.As_Subject_Set(), other.As_Subject_Set());
+        assert_ne!(one.As_Subject_Set(), different.As_Subject_Set());
+    }
+
+    #[test]
+    fn Test_Intersect_Should_Report_Overlaps_For_A_Shared_Path()
+    {
+        let left = Territory::Of_Files(["a/b.rs"]);
+        let right = Territory::Of_Files(["a/b.rs", "c/d.rs"]);
+
+        assert!(matches!(left.Intersect(&right), Intersection::Overlaps(_)));
+        assert_eq!(right.Intersect(&Territory::Of_Files(["e/f.rs"])), Intersection::Disjoint);
+    }
+
+    #[test]
+    fn Test_Ambiguous_Paths_Should_Pair_Two_Spellings_Of_One_File()
+    {
+        let territory = Territory::Of_Files(["src/Main.rs", "src/main.rs", "src/other.rs"]);
+
+        let pairs = territory.Ambiguous_Paths();
+
+        assert_eq!(pairs, vec![("src/Main.rs".to_owned(), "src/main.rs".to_owned())]);
+    }
+}

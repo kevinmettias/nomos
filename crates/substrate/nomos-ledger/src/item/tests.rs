@@ -380,6 +380,30 @@ fn Test_Terminal_States_Should_Be_Recognized()
     assert!(!ItemState::Claimed.Is_Finished());
 }
 
+/// Every kind `ItemKind` declares.
+///
+/// A named provider rather than an inline literal, so a sixth kind is a value added here
+/// rather than a change to the loop that reads them.
+fn Every_Declared_Item_Kind() -> [ItemKind; 5]
+{
+    [
+        ItemKind::Capability,
+        ItemKind::Decision,
+        ItemKind::Validation,
+        ItemKind::Correction,
+        ItemKind::Cleanup,
+    ]
+}
+
+/// Every origin `ItemOrigin` declares.
+///
+/// A named provider rather than an inline literal, for the reason [`Every_Declared_Item_Kind`]
+/// is one.
+fn Every_Declared_Item_Origin() -> [ItemOrigin; 2]
+{
+    [ItemOrigin::Required, ItemOrigin::Proposed]
+}
+
 /// `OD-LEDGER-024`'s closed set: a kind or an origin outside the five and two named
 /// variants is refused rather than accepted and ignored, the same guarantee
 /// `#[serde(deny_unknown_fields)]` gives an unrecognized *key* — this is the same promise
@@ -392,13 +416,7 @@ fn Test_An_Unrecognized_Kind_Or_Origin_Should_Be_Refused()
 
     // And every declared variant round-trips, or the refusal above would be trivially true
     // of a type nothing can construct either.
-    for kind in [
-        ItemKind::Capability,
-        ItemKind::Decision,
-        ItemKind::Validation,
-        ItemKind::Correction,
-        ItemKind::Cleanup,
-    ]
+    for kind in Every_Declared_Item_Kind()
     {
         let value = serde_json::to_value(kind).expect("a kind serializes");
         assert_eq!(
@@ -406,7 +424,7 @@ fn Test_An_Unrecognized_Kind_Or_Origin_Should_Be_Refused()
             kind
         );
     }
-    for origin in [ItemOrigin::Required, ItemOrigin::Proposed]
+    for origin in Every_Declared_Item_Origin()
     {
         let value = serde_json::to_value(origin).expect("an origin serializes");
         assert_eq!(

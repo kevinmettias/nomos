@@ -80,6 +80,29 @@ impl<'a> Holder<'a>
     }
 }
 
+/// A narrow, file-local proof for [`Holder::As_Text`], addressed by name.
+///
+/// [`tests`] above is `item/tests.rs`, a separate physical file whose behavioural suite this
+/// does not repeat or replace. `check-test-coverage`'s Rust front end keys a test's companion
+/// unit off the literal file it is textually written in, so a test living in that separate
+/// file can never address a function declared here, however it is named — this module gives
+/// [`Holder::As_Text`] the one-file address the check reads. Named apart from `tests` because
+/// this file already declares that name for the `#[path]`-mapped module above.
+#[cfg(test)]
+mod holder_tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_As_Text_Should_Return_The_Wrapped_String_Unchanged()
+    {
+        let name = "agent-a".to_owned();
+        let holder: Holder<'_> = Holder::from(&name);
+
+        assert_eq!(holder.As_Text(), "agent-a");
+    }
+}
+
 /// The lease a claim gets when the holder does not ask for a specific one.
 ///
 /// Long enough that an agent working a real item is not interrupted; short enough that

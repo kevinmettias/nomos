@@ -34,3 +34,39 @@ impl core::fmt::Display for GuaranteeDigest
         return self.0.fmt(formatter);
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use nomos_contracts::{Assurance, FactVariant, IncrementalGranularity};
+
+    fn Sample() -> Guarantee
+    {
+        return Guarantee::New(
+            FactVariant::Syntactic,
+            Assurance::Sound,
+            Assurance::Unknown,
+            IncrementalGranularity::File,
+        );
+    }
+
+    #[test]
+    fn Test_Of_Should_Be_Deterministic_For_The_Same_Guarantee()
+    {
+        assert_eq!(GuaranteeDigest::Of(&Sample()), GuaranteeDigest::Of(&Sample()));
+    }
+
+    #[test]
+    fn Test_Digest_Should_Differ_For_A_Different_Guarantee()
+    {
+        let other = Guarantee::New(
+            FactVariant::Approximate,
+            Assurance::Unsound,
+            Assurance::Unknown,
+            IncrementalGranularity::File,
+        );
+
+        assert_ne!(GuaranteeDigest::Of(&Sample()).Digest(), GuaranteeDigest::Of(&other).Digest());
+    }
+}

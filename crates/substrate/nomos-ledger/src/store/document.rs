@@ -32,3 +32,40 @@ pub(super) fn Explain_Parse_Failure(path: &Path, text: &str, error: &serde_json:
         cause: format!("{}: {error}", path.display()),
     };
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use crate::LedgerDocument;
+
+    #[test]
+    fn Test_Explain_Parse_Failure_Should_Report_Unrecognized_For_A_Schema_Newer_Than_This_Build()
+    {
+        let path = Path::new("work/ledger.json");
+        // Unknown to `LedgerDocument`'s own strict parse (deny_unknown_fields refuses
+        // `bogus`), but still readable as a bare schema-version probe -- exactly the two
+        // facts this function has to reconcile.
+        let text = r#"{"schema_version":999999,"items":[],"bogus":true}"#;
+        let error = serde_json::from_str::<LedgerDocument>(text).expect_err("the unknown field must refuse");
+
+        let explained = Explain_Parse_Failure(path, text, &error);
+
+        assert!(
+            matches!(explained, LedgerError::Unrecognized { found: 999_999, .. }),
+            "got {explained:?}"
+        );
+    }
+
+    #[test]
+    fn Test_Explain_Parse_Failure_Should_Report_Malformed_When_The_Schema_Is_Not_Newer()
+    {
+        let path = Path::new("work/ledger.json");
+        let text = r#"{"schema_version":1,"items":[],"bogus":true}"#;
+        let error = serde_json::from_str::<LedgerDocument>(text).expect_err("the unknown field must refuse");
+
+        let explained = Explain_Parse_Failure(path, text, &error);
+
+        assert!(matches!(explained, LedgerError::Malformed { .. }), "got {explained:?}");
+    }
+}

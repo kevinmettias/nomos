@@ -174,3 +174,23 @@ impl From<&LedgerError> for AddRefusal
         };
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Describe_Should_Name_Both_Acts_For_A_Published_Record()
+    {
+        let refusal = AddRefusal::RecordPublished {
+            identifier: "docs/records/od-ledger-999".to_owned(),
+            file: "docs/records/OD-LEDGER-999-a-slug.md".to_owned(),
+        };
+
+        let sentence = refusal.Describe();
+
+        assert!(sentence.contains("od-ledger-999"));
+        assert!(sentence.contains("--amends"), "the amendment remedy must be spelled out: {sentence}");
+    }
+}

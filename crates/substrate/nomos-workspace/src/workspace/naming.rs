@@ -98,3 +98,63 @@ pub(super) fn Normalize_Path(path: &str) -> String
 {
     return Named_Path(path).unwrap_or_else(|_| return path.to_owned());
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use crate::ChangeSource;
+
+    #[test]
+    fn Test_Normalized_Changes_Should_Reject_The_Same_Member_Named_Twice()
+    {
+        let changes = WorkspaceChangeSet::From(ChangeSource::GitCheckout)
+            .Present("src/a.rs", "one")
+            .Present("./SRC/A.RS", "two");
+
+        assert_eq!(
+            Normalized_Changes(&changes),
+            Err(WorkspaceError::Conflicting {
+                path: "src/a.rs".to_owned()
+            })
+        );
+    }
+
+    #[test]
+    fn Test_Named_Path_Should_Lowercase_And_Collapse_A_Submitted_Path()
+    {
+        assert_eq!(Named_Path("./SRC/A.RS").unwrap(), "src/a.rs");
+        assert!(Named_Path("../outside.rs").is_err());
+    }
+
+    #[test]
+    fn Test_Unnameable_Path_Should_Explain_Why_A_Path_Cannot_Name_A_Member()
+    {
+        assert_eq!(
+            Unnameable_Path("/abs.rs", &["abs.rs"]),
+            Some("a member is workspace-relative, and this is absolute")
+        );
+        assert_eq!(Unnameable_Path("src/a.rs", &["src", "a.rs"]), None);
+    }
+
+    #[test]
+    fn Test_Segments_Of_Should_Drop_Empty_And_Dot_Components()
+    {
+        assert_eq!(Segments_Of("src//./a.rs"), vec!["src", "a.rs"]);
+    }
+
+    #[test]
+    fn Test_Is_Absolute_Should_Recognize_A_Leading_Slash_Or_A_Drive_Letter()
+    {
+        assert!(Is_Absolute("/a.rs"));
+        assert!(Is_Absolute("f:/a.rs"));
+        assert!(!Is_Absolute("src/a.rs"));
+    }
+
+    #[test]
+    fn Test_Normalize_Path_Should_Fall_Back_To_The_Original_When_Unnameable()
+    {
+        assert_eq!(Normalize_Path("SRC/A.RS"), "src/a.rs");
+        assert_eq!(Normalize_Path("../outside.rs"), "../outside.rs");
+    }
+}

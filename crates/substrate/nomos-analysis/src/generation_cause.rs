@@ -124,3 +124,101 @@ impl GenerationCause
         };
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use crate::GuaranteeDigest;
+    use crate::InputDigest;
+    use nomos_contracts::{Assurance, CapabilityId, ContractVersion, Digest128, FactVariant, Guarantee};
+
+    fn Seeded(seed: u8) -> Digest128
+    {
+        return Digest128::From_Bytes([seed; Digest128::BYTE_LENGTH]);
+    }
+
+    fn Key_With(
+        subject: SubjectId,
+        configuration: ConfigurationId,
+        provider: ProviderId,
+        variant: BuildVariantId,
+    ) -> FactKey
+    {
+        return FactKey {
+            contract: CapabilityId::New("nomos.cap.test.generation_cause"),
+            contract_version: ContractVersion::New(1, 0),
+            subject,
+            semantic_inputs: InputDigest::Of(&[b"fn main() {}"]),
+            provider,
+            provider_version: ContractVersion::New(1, 0),
+            guarantee: GuaranteeDigest::Of(&Guarantee::New(
+                FactVariant::Syntactic,
+                Assurance::Sound,
+                Assurance::Sound,
+                IncrementalGranularity::File,
+            )),
+            variant,
+            configuration,
+        };
+    }
+
+    #[test]
+    fn Test_Describe_Should_Name_What_Changed_For_Every_Variant()
+    {
+        assert!(
+            GenerationCause::ConfigurationChanged { configuration: ConfigurationId::From_Digest(Seeded(1)) }
+                .Describe()
+                .contains("configuration")
+        );
+        assert!(
+            GenerationCause::ProviderChanged { provider: ProviderId::New("nomos.test.provider") }
+                .Describe()
+                .contains("provider")
+        );
+        assert!(
+            GenerationCause::VariantChanged { variant: BuildVariantId::From_Digest(Seeded(2)) }
+                .Describe()
+                .contains("build variant")
+        );
+    }
+
+    #[test]
+    fn Test_Granularity_Should_Read_A_Subject_Change_Own_Stated_Granularity()
+    {
+        let cause = GenerationCause::SubjectChanged {
+            subject: SubjectId::From_Digest(Seeded(1)),
+            granularity: IncrementalGranularity::Symbol,
+        };
+
+        assert_eq!(cause.Granularity(), IncrementalGranularity::Symbol);
+        assert_eq!(
+            GenerationCause::ProviderChanged { provider: ProviderId::New("nomos.test.provider") }.Granularity(),
+            IncrementalGranularity::WholeWorkspace
+        );
+    }
+
+    #[test]
+    fn Test_Is_Naming_Should_Match_Only_The_Subject_A_Change_Names()
+    {
+        let subject = SubjectId::From_Digest(Seeded(1));
+        let other_subject = SubjectId::From_Digest(Seeded(2));
+        let cause = GenerationCause::SubjectChanged { subject, granularity: IncrementalGranularity::File };
+
+        let key = Key_With(
+            subject,
+            ConfigurationId::From_Digest(Seeded(3)),
+            ProviderId::New("nomos.test.provider"),
+            BuildVariantId::From_Digest(Seeded(4)),
+        );
+        let other_key = Key_With(
+            other_subject,
+            ConfigurationId::From_Digest(Seeded(3)),
+            ProviderId::New("nomos.test.provider"),
+            BuildVariantId::From_Digest(Seeded(4)),
+        );
+
+        assert!(cause.Is_Naming(&key));
+        assert!(!cause.Is_Naming(&other_key));
+    }
+}

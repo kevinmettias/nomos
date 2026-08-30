@@ -43,3 +43,68 @@ impl MaterializedFact
         return self.identity.generation;
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use crate::GuaranteeDigest;
+    use crate::InputDigest;
+    use nomos_contracts::{
+        Assurance, BuildVariantId, CapabilityId, ConfigurationId, ContractVersion, Digest128,
+        FactVariant, IncrementalGranularity, ProviderId, SchemaId, SubjectId,
+    };
+
+    fn Seeded(seed: u8) -> Digest128
+    {
+        return Digest128::From_Bytes([seed; Digest128::BYTE_LENGTH]);
+    }
+
+    fn Sample_Guarantee() -> Guarantee
+    {
+        return Guarantee::New(
+            FactVariant::Syntactic,
+            Assurance::Sound,
+            Assurance::Sound,
+            IncrementalGranularity::File,
+        );
+    }
+
+    fn Sample_Key() -> FactKey
+    {
+        return FactKey {
+            contract: CapabilityId::New("nomos.cap.test.materialized"),
+            contract_version: ContractVersion::New(1, 0),
+            subject: SubjectId::From_Digest(Seeded(1)),
+            semantic_inputs: InputDigest::Of(&[b"fn main() {}"]),
+            provider: ProviderId::New("nomos.provider.test"),
+            provider_version: ContractVersion::New(1, 0),
+            guarantee: GuaranteeDigest::Of(&Sample_Guarantee()),
+            variant: BuildVariantId::From_Digest(Seeded(3)),
+            configuration: ConfigurationId::From_Digest(Seeded(4)),
+        };
+    }
+
+    fn Sample_Fact() -> MaterializedFact
+    {
+        return MaterializedFact {
+            identity: Sample_Key().At(GenerationId::From_Raw(5)),
+            snapshot: SnapshotId::From_Digest(Seeded(2)),
+            evidence: EvidenceClass::Derived,
+            guarantee: Sample_Guarantee(),
+            payload: FactPayload::New(SchemaId::New("nomos.test.materialized.v1"), b"tree".to_vec()),
+        };
+    }
+
+    #[test]
+    fn Test_Key_Should_Return_The_Fact_Identitys_Own_Key()
+    {
+        assert_eq!(Sample_Fact().Key(), &Sample_Key());
+    }
+
+    #[test]
+    fn Test_Generation_Should_Return_The_Fact_Identitys_Own_Generation()
+    {
+        assert_eq!(Sample_Fact().Generation(), GenerationId::From_Raw(5));
+    }
+}

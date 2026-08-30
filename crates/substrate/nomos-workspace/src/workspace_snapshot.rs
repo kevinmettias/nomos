@@ -337,7 +337,7 @@ mod tests
     const OTHER_CONFIGURATION_BYTE: u8 = 0x7d;
 
     #[test]
-    fn Test_A_Snapshot_Should_Survive_A_Round_Trip()
+    fn Test_Encode_Should_Produce_Bytes_That_Round_Trip_Byte_For_Byte()
     {
         let snapshot = Populated();
 
@@ -351,7 +351,7 @@ mod tests
     /// The property that makes the snapshot a state rather than a log entry: insertion
     /// order cannot reach the bytes.
     #[test]
-    fn Test_Insertion_Order_Should_Not_Reach_The_Encoding()
+    fn Test_Put_Should_Make_The_Encoding_Independent_Of_Insertion_Order()
     {
         let mut forwards = WorkspaceSnapshot::Of(Variant(), Configuration());
         let mut backwards = WorkspaceSnapshot::Of(Variant(), Configuration());
@@ -399,6 +399,17 @@ mod tests
     {
         let base = Populated();
 
+        for altered in Altered_Snapshots()
+        {
+            assert_ne!(base.Id(), altered.Id(), "{altered:?} must not share the base's identity");
+        }
+    }
+
+    /// The base snapshot's members, taken under a different variant, and again under a
+    /// different configuration. Two named alterations rather than one, because the identity
+    /// must move for either change on its own.
+    fn Altered_Snapshots() -> Vec<WorkspaceSnapshot>
+    {
         let variant = BuildVariant::New("x86_64-unknown-linux-gnu", "release", "1.85", ["analysis"]);
         let mut other_variant = WorkspaceSnapshot::Of(variant, Configuration());
         let mut other_configuration = WorkspaceSnapshot::Of(
@@ -411,24 +422,16 @@ mod tests
             snapshot.Put("src/main.rs".to_owned(), Content_Digest(b"fn main() {}"));
         }
 
-        assert_ne!(base.Id(), other_variant.Id());
-        assert_ne!(base.Id(), other_configuration.Id());
+        return vec![other_variant, other_configuration];
     }
 
     /// A decoder that defaulted would produce a snapshot describing a build nobody
     /// configured, and every fact keyed on it would be filed under a variant that does not
     /// exist.
     #[test]
-    fn Test_Bytes_That_Are_Not_A_Snapshot_Should_Be_Refused()
+    fn Test_Decode_Should_Refuse_Bytes_That_Are_Not_A_Valid_Snapshot()
     {
-        for bytes in [
-            &b"not a snapshot"[..],
-            b"nomos.workspace.snapshot.v0\n",
-            b"nomos.workspace.snapshot.v1\nmember\ta.rs\tnot-a-digest\n",
-            b"nomos.workspace.snapshot.v1\nunknown\tfield\n",
-            // Schema and members, and no variant. The one that would have defaulted.
-            b"nomos.workspace.snapshot.v1\nmember\ta.rs\t0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a\n",
-        ]
+        for bytes in Malformed_Snapshot_Bytes()
         {
             assert!(
                 WorkspaceSnapshot::Decode(bytes).is_err(),
@@ -438,10 +441,24 @@ mod tests
         }
     }
 
+    /// Every way a byte string fails to be a snapshot: not UTF-8 in spirit, the wrong
+    /// schema, a field that does not parse, a field this build does not know, and a
+    /// schema with members but no variant — the one that would have defaulted.
+    fn Malformed_Snapshot_Bytes() -> Vec<&'static [u8]>
+    {
+        return vec![
+            &b"not a snapshot"[..],
+            b"nomos.workspace.snapshot.v0\n",
+            b"nomos.workspace.snapshot.v1\nmember\ta.rs\tnot-a-digest\n",
+            b"nomos.workspace.snapshot.v1\nunknown\tfield\n",
+            b"nomos.workspace.snapshot.v1\nmember\ta.rs\t0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a\n",
+        ];
+    }
+
     /// The positive control for the test above: a decoder that refused everything would
     /// pass it while nothing could ever be read back.
     #[test]
-    fn Test_A_Snapshot_With_No_Members_Should_Still_Decode()
+    fn Test_Is_Empty_Should_Be_True_For_A_Snapshot_With_Nothing_Decoded()
     {
         let empty = WorkspaceSnapshot::Of(Variant(), Configuration());
 
@@ -449,6 +466,68 @@ mod tests
 
         assert!(decoded.Is_Empty());
         assert_eq!(decoded.Variant(), &Variant());
+    }
+
+    #[test]
+    fn Test_Of_Should_Start_Completely_Blank()
+    {
+        let snapshot = WorkspaceSnapshot::Of(Variant(), Configuration());
+
+        assert!(snapshot.Is_Empty());
+        assert_eq!(snapshot.Length(), 0);
+    }
+
+    #[test]
+    fn Test_Take_Should_Remove_A_Path_And_Return_What_It_Held()
+    {
+        let mut snapshot = WorkspaceSnapshot::Of(Variant(), Configuration());
+        let digest = Content_Digest(b"pub fn a() {}");
+        snapshot.Put("src/a.rs".to_owned(), digest);
+
+        assert_eq!(snapshot.Take("src/a.rs"), Some(digest));
+        assert_eq!(snapshot.Take("src/a.rs"), None, "a second take finds nothing left");
+    }
+
+    #[test]
+    fn Test_Content_Of_Should_Find_What_Was_Written_At_A_Path()
+    {
+        let mut snapshot = WorkspaceSnapshot::Of(Variant(), Configuration());
+        let digest = Content_Digest(b"pub fn a() {}");
+        snapshot.Put("src/a.rs".to_owned(), digest);
+
+        assert_eq!(snapshot.Content_Of("src/a.rs"), Some(digest));
+        assert_eq!(snapshot.Content_Of("src/missing.rs"), None);
+    }
+
+    #[test]
+    fn Test_Length_Should_Count_How_Many_Paths_Are_Held()
+    {
+        let mut snapshot = WorkspaceSnapshot::Of(Variant(), Configuration());
+        assert_eq!(snapshot.Length(), 0);
+
+        snapshot.Put("a.rs".to_owned(), Content_Digest(b"one"));
+        snapshot.Put("b.rs".to_owned(), Content_Digest(b"two"));
+
+        assert_eq!(snapshot.Length(), 2);
+    }
+
+    #[test]
+    fn Test_Variant_Should_Report_The_Build_It_Was_Taken_Under()
+    {
+        let snapshot = WorkspaceSnapshot::Of(Variant(), Configuration());
+
+        assert_eq!(snapshot.Variant(), &Variant());
+    }
+
+    #[test]
+    fn Test_Id_Should_Change_When_A_Path_Is_Added()
+    {
+        let mut snapshot = WorkspaceSnapshot::Of(Variant(), Configuration());
+        let before = snapshot.Id();
+
+        snapshot.Put("a.rs".to_owned(), Content_Digest(b"content"));
+
+        assert_ne!(snapshot.Id(), before);
     }
 
     fn Variant() -> BuildVariant

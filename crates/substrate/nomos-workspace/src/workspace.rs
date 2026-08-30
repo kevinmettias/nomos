@@ -254,3 +254,120 @@ impl Workspace
         };
     }
 }
+
+#[cfg(test)]
+mod local_tests
+{
+    use super::*;
+    use crate::ChangeSource;
+
+    fn Sample_Variant() -> BuildVariant
+    {
+        return BuildVariant::New("x86_64-pc-windows-msvc", "dev", "1.85", ["analysis"]);
+    }
+
+    fn Sample_Configuration() -> ConfigurationId
+    {
+        return ConfigurationId::From_Digest(Digest128::From_Bytes([0x24; 16]));
+    }
+
+    fn Fresh_Workspace() -> Workspace
+    {
+        return Workspace::Empty(Sample_Variant(), Sample_Configuration());
+    }
+
+    #[test]
+    fn Test_Empty_Should_Have_No_Members_And_A_Fresh_Counter()
+    {
+        let workspace = Fresh_Workspace();
+
+        assert_eq!(workspace.Generation(), GenerationId::INITIAL);
+        assert!(workspace.Snapshot().Is_Empty());
+    }
+
+    #[test]
+    fn Test_Generation_Should_Advance_By_Exactly_One_Per_Applied_Set()
+    {
+        let mut workspace = Fresh_Workspace();
+        let changes = WorkspaceChangeSet::From(ChangeSource::IdeEdit).Present("a.rs", "fn a() {}");
+
+        workspace.Apply(&changes).expect("applies");
+
+        assert_eq!(workspace.Generation(), GenerationId::From_Raw(1));
+    }
+
+    #[test]
+    fn Test_Snapshot_Should_Expose_The_Workspaces_Current_State()
+    {
+        let mut workspace = Fresh_Workspace();
+        let changes = WorkspaceChangeSet::From(ChangeSource::IdeEdit).Present("a.rs", "fn a() {}");
+
+        workspace.Apply(&changes).expect("applies");
+
+        assert_eq!(workspace.Snapshot().Length(), 1);
+        assert!(!workspace.Snapshot().Is_Empty());
+    }
+
+    #[test]
+    fn Test_Id_Should_Match_The_Snapshots_Own_Identity()
+    {
+        let workspace = Fresh_Workspace();
+
+        assert_eq!(workspace.Id(), workspace.Snapshot().Id());
+    }
+
+    #[test]
+    fn Test_Content_Of_Should_Find_What_Was_Written_At_A_Path()
+    {
+        let mut workspace = Fresh_Workspace();
+        let changes = WorkspaceChangeSet::From(ChangeSource::IdeEdit).Present("src/a.rs", "fn a() {}");
+        workspace.Apply(&changes).expect("applies");
+
+        let expected = nomos_model::Content_Digest("fn a() {}".as_bytes());
+
+        assert_eq!(
+            workspace.Content_Of("SRC/A.RS"),
+            Some(expected),
+            "lookup normalizes the path"
+        );
+        assert_eq!(workspace.Content_Of("does/not/exist.rs"), None);
+    }
+
+    #[test]
+    fn Test_Apply_Should_Refuse_A_Vacuous_Change_Set()
+    {
+        let mut workspace = Fresh_Workspace();
+
+        assert_eq!(
+            workspace.Apply(&WorkspaceChangeSet::From(ChangeSource::Correction)),
+            Err(WorkspaceError::Vacuous)
+        );
+    }
+
+    #[test]
+    fn Test_Record_Should_Let_The_Store_Read_The_State_Back()
+    {
+        let workspace = Fresh_Workspace();
+        let mut store = DocumentStore::For(Workspace::Authority());
+
+        workspace.Record(&mut store).expect("an observed store admits it");
+
+        let recorded: Vec<_> = store
+            .Documents()
+            .values()
+            .filter(|document| return document.kind == DocumentKind::Fact)
+            .collect();
+        assert_eq!(recorded.len(), 1, "one state was recorded");
+
+        let decoded =
+            WorkspaceSnapshot::Decode(&recorded.first().expect("the assertion above found exactly one recorded document").bytes)
+                .expect("it decodes");
+        assert_eq!(decoded.Id(), workspace.Id());
+    }
+
+    #[test]
+    fn Test_Authority_Should_Be_Observed_Not_Authored()
+    {
+        assert_eq!(Workspace::Authority(), Authority::Observed);
+    }
+}

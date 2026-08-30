@@ -91,3 +91,105 @@ pub(super) fn Still_Held(item: &ItemId, holder: &str, until: Timestamp) -> Strin
         until.Unix_Seconds()
     );
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Held_By_Should_Name_The_Item_The_Holder_And_The_Lease()
+    {
+        let said = Held_By(&ItemId::New("T-1"), "agent-a", Timestamp::From_Unix_Seconds(2_000));
+
+        assert!(said.contains("T-1"), "{said}");
+        assert!(said.contains("agent-a"), "{said}");
+        assert!(said.contains("2000"), "{said}");
+    }
+
+    #[test]
+    fn Test_Dependency_Declined_Should_Name_The_Dependency_And_The_Remedy()
+    {
+        let said = Dependency_Declined(&ItemId::New("T-1"), &ItemId::New("T-2"), "declined");
+
+        assert!(said.contains("T-1"), "{said}");
+        assert!(said.contains("T-2"), "{said}");
+        assert!(said.contains("nomos work decline"), "the remedy must be named: {said}");
+    }
+
+    #[test]
+    fn Test_Lease_Too_Long_Should_Name_Both_The_Request_And_The_Ceiling()
+    {
+        let requested = Duration::from_secs(9_999_999);
+        let maximum = Duration::from_secs(3_600);
+
+        let said = Lease_Too_Long(requested, maximum);
+
+        assert!(said.contains(&format!("{requested:?}")), "{said}");
+        assert!(said.contains(&format!("{maximum:?}")), "{said}");
+    }
+
+    #[test]
+    fn Test_Not_Claimable_Should_Name_The_Item_And_Its_State()
+    {
+        let said = Not_Claimable(&ItemId::New("T-1"), "Done");
+
+        assert!(said.contains("T-1"), "{said}");
+        assert!(said.contains("Done"), "{said}");
+    }
+
+    #[test]
+    fn Test_Dependency_Unmet_Should_Name_The_Item_The_Dependency_And_Its_State()
+    {
+        let said = Dependency_Unmet(&ItemId::New("T-1"), &ItemId::New("T-2"), "Ready");
+
+        assert!(said.contains("T-1"), "{said}");
+        assert!(said.contains("T-2"), "{said}");
+        assert!(said.contains("Ready"), "{said}");
+    }
+
+    #[test]
+    fn Test_No_Such_Item_Should_Name_The_Identifier_That_Matched_Nothing()
+    {
+        let said = No_Such_Item(&ItemId::New("T-1"));
+
+        assert!(said.contains("T-1"), "{said}");
+    }
+
+    #[test]
+    fn Test_Ledger_Unusable_Should_Carry_The_Stores_Own_Cause()
+    {
+        let said = Ledger_Unusable("disk full");
+
+        assert!(said.contains("disk full"), "{said}");
+    }
+
+    #[test]
+    fn Test_Unknown_Independence_Should_Name_The_Item_And_Refuse_Rather_Than_Grant()
+    {
+        let said = Unknown_Independence(&ItemId::New("T-1"), &UnknownReason::IncomparableSnapshots);
+
+        assert!(said.contains("T-1"), "{said}");
+        assert!(said.contains("refused"), "must not read as a grant: {said}");
+    }
+
+    #[test]
+    fn Test_Lapsed_Claim_Should_Name_The_Holder_And_The_Takeover_Remedy()
+    {
+        let said = Lapsed_Claim(&ItemId::New("T-1"), "dead-agent", Timestamp::From_Unix_Seconds(2_000));
+
+        assert!(said.contains("T-1"), "{said}");
+        assert!(said.contains("dead-agent"), "{said}");
+        assert!(said.contains("takeover"), "the remedy must be named: {said}");
+    }
+
+    #[test]
+    fn Test_Still_Held_Should_Name_The_Holder_And_Whose_Call_It_Is_To_End_It()
+    {
+        let said = Still_Held(&ItemId::New("T-1"), "agent-a", Timestamp::From_Unix_Seconds(2_000));
+
+        assert!(said.contains("T-1"), "{said}");
+        assert!(said.contains("agent-a"), "{said}");
+        assert!(said.contains("abandon"), "the remedy must be named: {said}");
+    }
+}

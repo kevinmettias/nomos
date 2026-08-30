@@ -25,3 +25,18 @@ impl<'a> StepName<'a>
         return self.0;
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_As_Text_Should_Return_The_Wrapped_String_Unchanged()
+    {
+        let name = "Lint".to_owned();
+        let step: StepName<'_> = StepName::from(&name);
+
+        assert_eq!(step.As_Text(), "Lint");
+    }
+}

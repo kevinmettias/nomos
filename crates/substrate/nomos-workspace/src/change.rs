@@ -76,6 +76,21 @@ mod tests
     use crate::WorkspaceChangeSet;
 
     #[test]
+    fn Test_Path_Should_Return_The_Submitted_Path()
+    {
+        let present = Change::Present {
+            path: "src/a.rs".to_owned(),
+            content: "pub fn a() {}".to_owned(),
+        };
+        let absent = Change::Absent {
+            path: "src/gone.rs".to_owned(),
+        };
+
+        assert_eq!(present.Path(), "src/a.rs");
+        assert_eq!(absent.Path(), "src/gone.rs");
+    }
+
+    #[test]
     fn Test_A_Change_Set_Should_Carry_Its_Source_And_Its_Changes()
     {
         let set = WorkspaceChangeSet::From(ChangeSource::GitCheckout)

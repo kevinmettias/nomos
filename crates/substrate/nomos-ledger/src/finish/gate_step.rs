@@ -69,3 +69,137 @@ pub(super) fn Run_Gate_Step<Files: FileSystem, TimeSource: Clock, Lock: CrossPro
         exit_code: ran.code,
     });
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use nomos_platform::{Command, ExitOutcome, ProcessOutput, Timestamp};
+    use nomos_platform_std::{FileLock, StdFileSystem};
+
+    struct FixedClock(i64);
+
+    impl Clock for &FixedClock
+    {
+        fn Now(&self) -> Timestamp
+        {
+            return Timestamp::From_Unix_Seconds(self.0);
+        }
+    }
+
+    const WORKFLOW: &str = "name: gate\n\
+                            \n\
+                            jobs:\n\
+                            \x20 gate:\n\
+                            \x20   steps:\n\
+                            \x20     - uses: actions/checkout@v4\n\
+                            \x20     - name: Lint\n\
+                            \x20       run: cargo clippy --workspace --all-targets -- -D warnings\n\
+                            \x20     - name: Test\n\
+                            \x20       run: cargo test --workspace\n";
+
+    fn Temp_Dir(name: &str) -> std::path::PathBuf
+    {
+        let mut path = std::env::temp_dir();
+        path.push(format!("nomos-gate-step-{name}-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&path);
+        std::fs::create_dir_all(&path).expect("test needs a temp directory");
+        return path;
+    }
+
+    fn Tree_With_Workflow(name: &str) -> std::path::PathBuf
+    {
+        let directory = Temp_Dir(name);
+        let workflows = directory.join(".github").join("workflows");
+        std::fs::create_dir_all(&workflows).expect("test needs a workflow directory");
+        std::fs::write(workflows.join("gate.yml"), WORKFLOW).expect("test needs a workflow");
+        return directory;
+    }
+
+    fn Ledger_At<'clock>(
+        directory: &Path,
+        clock: &'clock FixedClock,
+    ) -> FileLedger<StdFileSystem, &'clock FixedClock, FileLock>
+    {
+        return FileLedger::At(
+            directory.join("ledger.json"),
+            StdFileSystem,
+            clock,
+            FileLock::At(directory.join("ledger.lock")),
+        );
+    }
+
+    /// A launcher standing in for a lint step that finds a problem.
+    struct AlwaysFails;
+
+    impl ProcessLauncher for &AlwaysFails
+    {
+        fn Run(&self, _command: &Command) -> Result<ProcessOutput, String>
+        {
+            return Ok(ProcessOutput {
+                outcome: ExitOutcome::Exited { code: 101 },
+                stdout: String::new(),
+                stderr: "clippy found problems".to_owned(),
+            });
+        }
+    }
+
+    #[test]
+    fn Test_Gate_Argv_Should_Derive_The_Lint_Steps_Command_From_The_Workflow()
+    {
+        let directory = Tree_With_Workflow("gate-argv");
+        let clock = FixedClock(1_000);
+        let ledger = Ledger_At(&directory, &clock);
+        let item = ItemId::New("G-1");
+
+        let argv = Gate_Argv(&ledger, &item, Some(&directory)).expect("the workflow declares a Lint step");
+
+        assert_eq!(
+            argv,
+            vec!["cargo", "clippy", "--workspace", "--all-targets", "--", "-D", "warnings"]
+                .into_iter()
+                .map(str::to_owned)
+                .collect::<Vec<_>>()
+        );
+    }
+
+    #[test]
+    fn Test_Gate_Argv_Should_Report_An_Undetermined_Gate_When_No_Workflow_Exists()
+    {
+        let directory = Temp_Dir("gate-argv-missing");
+        let clock = FixedClock(1_000);
+        let ledger = Ledger_At(&directory, &clock);
+        let item = ItemId::New("G-1B");
+
+        let refusal = Gate_Argv(&ledger, &item, Some(&directory)).expect_err("no workflow means no derivable step");
+
+        assert!(
+            matches!(
+                refusal,
+                FinishRefusal::GateUndetermined { cause: GateUnknown::Unreadable { .. }, .. }
+            ),
+            "got {refusal:?}"
+        );
+    }
+
+    #[test]
+    fn Test_Run_Gate_Step_Should_Refuse_When_The_Lint_Command_Exits_Nonzero()
+    {
+        let directory = Tree_With_Workflow("run-gate-step");
+        let clock = FixedClock(1_000);
+        let ledger = Ledger_At(&directory, &clock);
+        let item = ItemId::New("G-2");
+        let runner = Runner {
+            working_directory: Some(directory.as_path()),
+            timeout: std::time::Duration::from_secs(60),
+        };
+        let launcher = AlwaysFails;
+
+        let refusal = Run_Gate_Step(&ledger, &&launcher, &item, runner).expect_err("a nonzero lint exit must refuse");
+
+        assert!(
+            matches!(refusal, FinishRefusal::GateFailed { exit_code: 101, .. }),
+            "got {refusal:?}"
+        );
+    }
+}

@@ -144,13 +144,23 @@ fn Amending(files: &[&str]) -> ItemTerritory
 /// writers off one file. Both spellings are driven, because `OD-LEDGER-016` makes the
 /// identifier and its file one subject and an author who had to guess which one `--amends`
 /// wanted would be following a convention rather than a rule.
-#[test]
-fn Test_A_Published_Record_Declared_As_An_Amendment_Should_Be_Accepted()
+/// The two spellings `--amends` accepts for the same published record: the bare identifier,
+/// and the filename it was actually published under.
+///
+/// A named provider rather than an inline literal, so a third accepted spelling is a value
+/// added here rather than a change to the loop that reads them.
+fn Spellings_Of_The_Published_Record() -> [(&'static str, &'static str); 2]
 {
-    for (described, spelled) in [
+    [
         ("the bare identifier", "docs/records/OD-LEDGER-006"),
         ("the published filename", PUBLISHED_RECORD_FILE),
     ]
+}
+
+#[test]
+fn Test_A_Published_Record_Declared_As_An_Amendment_Should_Be_Accepted()
+{
+    for (described, spelled) in Spellings_Of_The_Published_Record()
     {
         let (_directory, mut ledger) = Board_At("add-record-amended", Vec::new());
         let item = Reserving_Record("T-1", spelled);
@@ -298,42 +308,42 @@ fn Test_A_Published_Identifier_And_A_Reserved_One_Should_Be_Different_Refusals()
 /// The rule that keeps this guard from refusing the whole board: almost every item ever
 /// finished reserved a record, so counting closed items would make every allocated number a
 /// permanent claim and the next author could allocate nothing at all.
+/// The two states under which a record reservation is history rather than a hold: finished
+/// with a passing verification, or declined with a reason.
+///
+/// A named provider rather than an inline literal, so a third closed state — should one ever
+/// exist — is a value added here rather than a change to the loop that reads them.
+fn Closed_States() -> [ItemState; 2]
+{
+    [
+        ItemState::Done,
+        ItemState::Declined {
+            reason: "it turned out not to be work".to_owned(),
+        },
+    ]
+}
+
 #[test]
 fn Test_A_Closed_Items_Record_Reservation_Should_Not_Reserve_Anything()
 {
     let directory = Temp_Dir("add-record-closed");
     let mut ledger = Ledger_At(directory.As_Path(), &AT_NOW);
 
-    let closed_states = [
-        ItemState::Done,
-        ItemState::Declined {
-            reason: "it turned out not to be work".to_owned(),
-        },
-    ];
-
-    for state in closed_states
+    // The board holds one closed item reserving a record, and the next author allocates it.
+    for state in Closed_States()
     {
-        Allocates_Over(&mut ledger, state);
+        let described = format!("{state:?}");
+        ledger
+            .Save(&Document(vec![Closed_Reserving(RESERVED_RECORD, state)]))
+            .expect("valid");
+
+        let item = Reserving_Record("T-2", RESERVED_RECORD);
+        assert_eq!(
+            ledger.Add(&item, "agent-b", &ItemTerritory::Empty(), &ItemTerritory::Empty()),
+            Ok(()),
+            "a {described} item's reservation outlived it, so the number is claimed forever"
+        );
     }
-}
-
-/// The board holds one closed item reserving a record, and the next author allocates it.
-fn Allocates_Over<Clock: nomos_platform::Clock>(
-    ledger: &mut FileLedger<StdFileSystem, Clock, FileLock>,
-    state: ItemState,
-)
-{
-    let described = format!("{state:?}");
-    ledger
-        .Save(&Document(vec![Closed_Reserving(RESERVED_RECORD, state)]))
-        .expect("valid");
-
-    let item = Reserving_Record("T-2", RESERVED_RECORD);
-    assert_eq!(
-        ledger.Add(&item, "agent-b", &ItemTerritory::Empty(), &ItemTerritory::Empty()),
-        Ok(()),
-        "a {described} item's reservation outlived it, so the number is claimed forever"
-    );
 }
 
 /// An item in a closed state, carrying whatever that state's own invariants require.

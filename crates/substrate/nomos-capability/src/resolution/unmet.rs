@@ -67,3 +67,41 @@ impl Unmet
         };
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Applicability_Should_Report_Every_Variant_As_A_Missing_Capability()
+    {
+        assert_eq!(Unmet::Undeclared.Applicability(), Applicability::MissingCapability);
+        assert_eq!(Unmet::NoProvider.Applicability(), Applicability::MissingCapability);
+        assert_eq!(
+            Unmet::VersionMismatch { offered: ContractVersion::New(2, 0) }.Applicability(),
+            Applicability::MissingCapability
+        );
+        assert_eq!(
+            Unmet::BelowRequirement { closest: ProviderId::New("nomos.test.closest") }.Applicability(),
+            Applicability::MissingCapability
+        );
+    }
+
+    #[test]
+    fn Test_Describe_Should_Name_What_Is_Missing()
+    {
+        assert!(Unmet::Undeclared.Describe().contains("no capability contract"));
+        assert!(Unmet::NoProvider.Describe().contains("no provider"));
+        assert!(
+            Unmet::VersionMismatch { offered: ContractVersion::New(2, 0) }
+                .Describe()
+                .contains("cannot read")
+        );
+        assert!(
+            Unmet::BelowRequirement { closest: ProviderId::New("nomos.test.closest") }
+                .Describe()
+                .contains("nomos.test.closest")
+        );
+    }
+}

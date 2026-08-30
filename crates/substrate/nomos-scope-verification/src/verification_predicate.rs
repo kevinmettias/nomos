@@ -47,3 +47,26 @@ impl VerificationPredicate
         return self.argv.first().is_some_and(|program| !program.is_empty());
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_From_String_Arguments_Should_Apply_The_Default_Timeout()
+    {
+        let predicate = VerificationPredicate::From_String_Arguments(vec!["cargo".to_owned(), "test".to_owned()]);
+
+        assert_eq!(predicate.argv, vec!["cargo".to_owned(), "test".to_owned()]);
+        assert_eq!(predicate.timeout_seconds, DEFAULT_TIMEOUT_SECONDS);
+    }
+
+    #[test]
+    fn Test_Is_Runnable_Should_Refuse_An_Empty_Or_Blank_Program()
+    {
+        assert!(VerificationPredicate::From_String_Arguments(vec!["cargo".to_owned()]).Is_Runnable());
+        assert!(!VerificationPredicate::From_String_Arguments(vec![]).Is_Runnable());
+        assert!(!VerificationPredicate::From_String_Arguments(vec![String::new()]).Is_Runnable());
+    }
+}

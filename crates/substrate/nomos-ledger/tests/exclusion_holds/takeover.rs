@@ -43,6 +43,16 @@ fn Test_An_Item_With_A_Live_Claim_Should_Not_Be_Taken_Over()
 /// A `takeover` that quietly worked as a `claim` would mean two verbs doing one thing, and the
 /// whole point of a separate verb is that it means something the other does not. Both ends of
 /// the range are covered: an item nobody has ever held, and one that is finished.
+/// The two items on the board a takeover must refuse for a reason other than a live claim:
+/// one nobody has ever held, and one that is already finished.
+///
+/// A named provider rather than an inline literal, so a third wrong-verb case is a value
+/// added here rather than a change to the loop that reads them.
+fn Items_A_Takeover_Must_Refuse() -> [(&'static str, &'static str); 2]
+{
+    [("T-1", "an item nobody holds"), ("T-2", "a finished item")]
+}
+
 #[test]
 fn Test_Taking_Over_An_Item_Nobody_Holds_Should_Be_Refused()
 {
@@ -50,7 +60,7 @@ fn Test_Taking_Over_An_Item_Nobody_Holds_Should_Be_Refused()
         Item("T-1", &["src/a.rs"]),
         Finished("T-2", &["src/b.rs"]),
     ]);
-    for (item, what) in [("T-1", "an item nobody holds"), ("T-2", "a finished item")]
+    for (item, what) in Items_A_Takeover_Must_Refuse()
     {
         let refusal = Take_Over_In(&mut ledger, item, "agent-b")
             .expect_err("a takeover answers a lapse and nothing else");

@@ -221,3 +221,122 @@ pub(super) fn Tail_Of(text: &str, limit: usize) -> String
 
     return text.get(start..).unwrap_or_default().to_owned();
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Describe_Should_Word_The_Not_Recorded_Case_Inline()
+    {
+        let refusal = Refusal::NotRecorded { cause: "disk full".to_owned() };
+
+        assert_eq!(
+            refusal.Describe(),
+            "the predicate passed but the result could not be recorded: disk full"
+        );
+    }
+
+    #[test]
+    fn Test_Has_Judged_The_Work_Should_Be_True_Only_For_The_Two_Verdict_Bearing_Variants()
+    {
+        let item = ItemId::New("T-1");
+
+        assert!(
+            Refusal::PredicateFailed { item: item.clone(), exit_code: 1, output_tail: String::new() }
+                .Has_Judged_The_Work()
+        );
+        assert!(
+            Refusal::GateFailed {
+                item: item.clone(),
+                argv: vec!["cargo".to_owned()],
+                exit_code: 101,
+                output_tail: String::new(),
+            }
+            .Has_Judged_The_Work()
+        );
+        assert!(!Refusal::NotRecorded { cause: "locked".to_owned() }.Has_Judged_The_Work());
+        assert!(
+            !Refusal::NoPredicate { item, done_when: "when it works".to_owned() }.Has_Judged_The_Work()
+        );
+    }
+
+    #[test]
+    fn Test_No_Predicate_Should_Quote_The_Items_Own_Done_When_Prose()
+    {
+        let item = ItemId::New("T-9");
+
+        let sentence = No_Predicate(&item, "when the tests pass");
+
+        assert!(sentence.contains("T-9"));
+        assert!(sentence.contains("when the tests pass"));
+        assert!(sentence.contains("prose is not a predicate"));
+    }
+
+    #[test]
+    fn Test_Could_Not_Run_Should_Distinguish_A_Broken_Predicate_From_Failing_Work()
+    {
+        let item = ItemId::New("T-2");
+
+        let sentence = Could_Not_Run(&item, "no such program");
+
+        assert!(sentence.contains("no such program"));
+        assert!(sentence.contains("not failing work"));
+    }
+
+    #[test]
+    fn Test_No_Verdict_Should_Say_The_Question_Is_Still_Unknown()
+    {
+        let item = ItemId::New("T-3");
+
+        let sentence = No_Verdict(&item, ExitOutcome::TimedOut);
+
+        assert!(sentence.contains("TimedOut"));
+        assert!(sentence.contains("still unknown"));
+    }
+
+    #[test]
+    fn Test_Predicate_Failed_Should_Report_The_Exit_Code_And_Its_Output()
+    {
+        let item = ItemId::New("T-4");
+
+        let sentence = Predicate_Failed(&item, 7, "assertion failed");
+
+        assert!(sentence.contains("exited 7"));
+        assert!(sentence.contains("assertion failed"));
+    }
+
+    #[test]
+    fn Test_Gate_Undetermined_Should_Explain_Why_The_Gate_Could_Not_Be_Asked()
+    {
+        let item = ItemId::New("T-5");
+        let cause = GateUnknown::NoSuchStep { step: "Lint".to_owned() };
+
+        let sentence = Gate_Undetermined(&item, &cause);
+
+        assert!(sentence.contains("no step named"));
+    }
+
+    #[test]
+    fn Test_Gate_Failed_From_Argv_Should_Name_The_Steps_Own_Command()
+    {
+        let item = ItemId::New("T-6");
+
+        let sentence = Gate_Failed_From_Argv(&item, &["cargo".to_owned(), "clippy".to_owned()], 101, "warnings found");
+
+        assert!(sentence.contains("cargo clippy"));
+        assert!(sentence.contains("exited 101"));
+        assert!(sentence.contains("warnings found"));
+    }
+
+    #[test]
+    fn Test_Tail_Of_Should_Keep_The_Last_Bytes_On_A_Character_Boundary()
+    {
+        let text = "a".repeat(10) + "END";
+
+        let tail = Tail_Of(&text, 3);
+
+        assert_eq!(tail, "END");
+    }
+}

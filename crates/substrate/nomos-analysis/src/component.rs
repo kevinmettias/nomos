@@ -75,3 +75,30 @@ impl Component
         ];
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Label_Should_Give_Each_Variant_A_Distinct_Lowercase_Name()
+    {
+        let mut labels: Vec<&str> = Component::All().iter().map(|component| component.Label()).collect();
+        let count = labels.len();
+        labels.sort_unstable();
+        labels.dedup();
+
+        assert_eq!(labels.len(), count, "two components share a label");
+        assert_eq!(Component::Contract.Label(), "contract");
+    }
+
+    #[test]
+    fn Test_All_Should_List_Every_Variant_Exactly_Once()
+    {
+        let all = Component::All();
+
+        assert_eq!(all.len(), 9);
+        assert!(all.contains(&Component::Configuration));
+    }
+}

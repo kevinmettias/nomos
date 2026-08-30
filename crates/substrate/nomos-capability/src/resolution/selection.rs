@@ -308,7 +308,7 @@ mod tests
     }
 
     #[test]
-    fn Test_A_Selection_Should_Account_For_Every_Usable_Offer()
+    fn Test_Over_Should_Account_For_Every_Usable_Offer()
     {
         let selection = Selection::Over(
             vec![Offer_With_Guarantee("a.scan", Scan()), Offer_With_Guarantee("z.parse", Parse())],
@@ -326,7 +326,7 @@ mod tests
     /// A preference is the caller's, and the registry does not overrule it — but the
     /// stronger offer it was honoured over stays visible.
     #[test]
-    fn Test_An_Honoured_Preference_Should_Keep_The_Stronger_Offer_Visible()
+    fn Test_Has_Passed_Over_Stronger_Should_Be_True_Once_A_Preference_Passed_Over_The_Ranked_Head()
     {
         let selection = Selection::Over(
             vec![Offer_With_Guarantee("a.scan", Scan()), Offer_With_Guarantee("z.parse", Parse())],
@@ -341,6 +341,51 @@ mod tests
              cannot record what its preference cost"
         );
         assert!(selection.Weaker().is_empty());
+    }
+
+    #[test]
+    fn Test_Standing_Of_Should_Read_How_An_Alternative_Compares_To_The_Chosen_Offer()
+    {
+        let selection = Selection::Over(
+            vec![Offer_With_Guarantee("a.scan", Scan()), Offer_With_Guarantee("z.parse", Parse())],
+            None,
+        )
+        .expect("two usable offers");
+
+        assert_eq!(
+            selection.Standing_Of(&Offer_With_Guarantee("a.scan", Scan())),
+            Standing::Weaker,
+            "the parser answered, and the scan alternative reaches less than it does"
+        );
+    }
+
+    #[test]
+    fn Test_Weaker_Should_List_Only_The_Alternatives_Standing_Below_The_Chosen_Offer()
+    {
+        let selection = Selection::Over(
+            vec![Offer_With_Guarantee("a.scan", Scan()), Offer_With_Guarantee("z.parse", Parse())],
+            None,
+        )
+        .expect("two usable offers");
+
+        let weaker = selection.Weaker();
+
+        assert_eq!(weaker.len(), 1);
+        assert_eq!(weaker.first().expect("the assertion above found exactly one weaker offer").provider, ProviderId::New("a.scan"));
+    }
+
+    #[test]
+    fn Test_Unranked_Should_List_Alternatives_The_Guarantee_Could_Not_Compare()
+    {
+        let selection = Selection::Over(
+            vec![Offer_With_Guarantee("scan", Scan()), Offer_With_Guarantee("semantic", Coarse_Semantic())],
+            None,
+        )
+        .expect("two usable offers");
+
+        // `scan` and `semantic` are incomparable (see the fixtures' own doc comment), so
+        // whichever ranked first leaves the other unranked rather than decided.
+        assert_eq!(selection.Unranked().len(), 1);
     }
 
     #[test]

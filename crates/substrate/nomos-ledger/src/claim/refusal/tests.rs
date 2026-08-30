@@ -89,27 +89,7 @@ fn Readiness_Universe() -> [Refusal; 4]
 #[test]
 fn Test_Readiness_Refusals_Should_Be_Exactly_The_Plan_Facts()
 {
-    let readiness = [
-        Refusal::NotClaimable {
-            item: ItemId::New("T-1"),
-            state: "Done".to_owned(),
-        },
-        Refusal::DependencyUnmet {
-            item: ItemId::New("T-2"),
-            dependency: ItemId::New("T-3"),
-            state: "Ready".to_owned(),
-        },
-        Refusal::DependencyDeclined {
-            item: ItemId::New("T-4"),
-            dependency: ItemId::New("T-5"),
-            state: "declined".to_owned(),
-        },
-        Refusal::NoSuchItem {
-            item: ItemId::New("T-6"),
-        },
-    ];
-
-    for refusal in readiness
+    for refusal in Readiness_Universe()
     {
         assert_eq!(refusal.Layer(), Layer::Readiness, "{refusal:?}");
         assert!(refusal.Is_Readiness(), "{refusal:?}");
@@ -123,36 +103,7 @@ fn Test_Readiness_Refusals_Should_Be_Exactly_The_Plan_Facts()
 #[test]
 fn Test_Dispatch_Refusals_Should_Be_Exactly_The_Coordination_Facts()
 {
-    let dispatch = [
-        Refusal::HeldBy {
-            holder: "agent-a".to_owned(),
-            until: At(2_000),
-            item: ItemId::New("T-1"),
-        },
-        Refusal::UnknownIndependence {
-            against: ItemId::New("T-2"),
-            reason: UnknownReason::IncomparableSnapshots,
-        },
-        Refusal::LeaseTooLong {
-            requested: Duration::from_secs(9_999_999),
-            maximum: Duration::from_secs(3_600),
-        },
-        Refusal::Lapsed {
-            item: ItemId::New("T-3"),
-            holder: "dead-agent".to_owned(),
-            since: At(2_000),
-        },
-        Refusal::StillHeld {
-            item: ItemId::New("T-4"),
-            holder: "agent-b".to_owned(),
-            until: At(2_000),
-        },
-        Refusal::LedgerUnusable {
-            cause: "disk full".to_owned(),
-        },
-    ];
-
-    for refusal in dispatch
+    for refusal in Dispatch_Universe()
     {
         assert_eq!(refusal.Layer(), Layer::Dispatch, "{refusal:?}");
         assert!(refusal.Is_Dispatch(), "{refusal:?}");
@@ -178,26 +129,57 @@ fn Test_No_Refusal_Should_Answer_Both_Layers()
 /// `ALL` is a hand-written universe. The match below has no wildcard, so an eleventh
 /// variant arriving stops the build here, beside the list it has to be added to —
 /// `OD-COMPLETENESS-001`'s reasoning applied to this enum's own coverage of itself.
+///
+/// The exhaustive match alone only proves that every refusal `All()` happens to produce is
+/// *some* declared variant — it says nothing about which ones. `Dispatch_Universe` or
+/// `Readiness_Universe` could be edited into two entries of one variant and none of another,
+/// and ten refusals would still satisfy every arm here. So each arm records that its own
+/// variant was actually seen, and the assertion below is the other half: every declared
+/// variant, not merely some variant, is present at least once.
 #[test]
 fn Test_Every_Variant_Should_Be_In_The_Tested_Universe()
 {
+    let mut seen_held_by = false;
+    let mut seen_unknown_independence = false;
+    let mut seen_lease_too_long = false;
+    let mut seen_lapsed = false;
+    let mut seen_still_held = false;
+    let mut seen_not_claimable = false;
+    let mut seen_dependency_unmet = false;
+    let mut seen_dependency_declined = false;
+    let mut seen_no_such_item = false;
+    let mut seen_ledger_unusable = false;
+
     for refusal in All()
     {
         match refusal
         {
-            Refusal::HeldBy { .. }
-            | Refusal::UnknownIndependence { .. }
-            | Refusal::LeaseTooLong { .. }
-            | Refusal::Lapsed { .. }
-            | Refusal::StillHeld { .. }
-            | Refusal::NotClaimable { .. }
-            | Refusal::DependencyUnmet { .. }
-            | Refusal::DependencyDeclined { .. }
-            | Refusal::NoSuchItem { .. }
-            | Refusal::LedgerUnusable { .. } =>
-            {}
+            Refusal::HeldBy { .. } => seen_held_by = true,
+            Refusal::UnknownIndependence { .. } => seen_unknown_independence = true,
+            Refusal::LeaseTooLong { .. } => seen_lease_too_long = true,
+            Refusal::Lapsed { .. } => seen_lapsed = true,
+            Refusal::StillHeld { .. } => seen_still_held = true,
+            Refusal::NotClaimable { .. } => seen_not_claimable = true,
+            Refusal::DependencyUnmet { .. } => seen_dependency_unmet = true,
+            Refusal::DependencyDeclined { .. } => seen_dependency_declined = true,
+            Refusal::NoSuchItem { .. } => seen_no_such_item = true,
+            Refusal::LedgerUnusable { .. } => seen_ledger_unusable = true,
         }
     }
+
+    assert!(
+        seen_held_by
+            && seen_unknown_independence
+            && seen_lease_too_long
+            && seen_lapsed
+            && seen_still_held
+            && seen_not_claimable
+            && seen_dependency_unmet
+            && seen_dependency_declined
+            && seen_no_such_item
+            && seen_ledger_unusable,
+        "All() must contain at least one of every declared Refusal variant"
+    );
 }
 
 /// A refusal that is retryable but not a plan fact — the case `Is_Retryable` alone cannot

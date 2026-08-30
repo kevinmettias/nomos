@@ -47,3 +47,47 @@ impl Standing
         return matches!(self, Self::Stronger | Self::Weaker);
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use nomos_contracts::{Assurance, FactVariant, IncrementalGranularity};
+
+    fn Parse() -> Guarantee
+    {
+        return Guarantee::New(
+            FactVariant::Syntactic,
+            Assurance::Sound,
+            Assurance::Unknown,
+            IncrementalGranularity::File,
+        );
+    }
+
+    fn Scan() -> Guarantee
+    {
+        return Guarantee::New(
+            FactVariant::Approximate,
+            Assurance::Unsound,
+            Assurance::Unknown,
+            IncrementalGranularity::File,
+        );
+    }
+
+    #[test]
+    fn Test_Of_Should_Separate_Stronger_Weaker_And_Equivalent()
+    {
+        assert_eq!(Standing::Of(&Parse(), &Scan()), Standing::Stronger);
+        assert_eq!(Standing::Of(&Scan(), &Parse()), Standing::Weaker);
+        assert_eq!(Standing::Of(&Parse(), &Parse()), Standing::Equivalent);
+    }
+
+    #[test]
+    fn Test_Is_Decided_Should_Be_True_Only_For_Stronger_Or_Weaker()
+    {
+        assert!(Standing::Stronger.Is_Decided());
+        assert!(Standing::Weaker.Is_Decided());
+        assert!(!Standing::Equivalent.Is_Decided());
+        assert!(!Standing::Incomparable.Is_Decided());
+    }
+}

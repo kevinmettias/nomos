@@ -277,3 +277,161 @@ impl MemoryFactStore
 
 #[cfg(test)]
 #[path = "memory_store/tests.rs"] mod tests;
+
+// `mod tests` above is a SEPARATE file (`memory_store/tests.rs`). check-test-coverage's Rust
+// front end keys a test's companion unit off the literal file it is textually written in, so
+// a test living in that separate file can never address a function declared here, however it
+// is named. This second, LITERAL inline module gives each method here the one-file address
+// the check reads, without disturbing `memory_store/tests.rs`'s own broader behavioural suite.
+#[cfg(test)]
+mod local_tests
+{
+    use super::*;
+    use crate::{Dependency, FactPayload, GuaranteeDigest, InputDigest, ReadOutcome};
+    use nomos_contracts::{
+        Assurance, BuildVariantId, CapabilityId, ConfigurationId, ContractVersion, EvidenceClass,
+        FactVariant, Guarantee, IncrementalGranularity, ProviderId, SchemaId, SnapshotId, SubjectId,
+    };
+
+    fn Seeded(seed: u8) -> Digest128
+    {
+        return Digest128::From_Bytes([seed; Digest128::BYTE_LENGTH]);
+    }
+
+    fn File_Guarantee() -> Guarantee
+    {
+        return Guarantee::New(
+            FactVariant::Syntactic,
+            Assurance::Sound,
+            Assurance::Sound,
+            IncrementalGranularity::File,
+        );
+    }
+
+    fn Key_For(subject_seed: u8) -> FactKey
+    {
+        return FactKey {
+            contract: CapabilityId::New("nomos.cap.test.memory_fact_store"),
+            contract_version: ContractVersion::New(1, 0),
+            subject: SubjectId::From_Digest(Seeded(subject_seed)),
+            semantic_inputs: InputDigest::Of(&[b"fn main() {}"]),
+            provider: ProviderId::New("nomos.provider.test"),
+            provider_version: ContractVersion::New(1, 0),
+            guarantee: GuaranteeDigest::Of(&File_Guarantee()),
+            variant: BuildVariantId::From_Digest(Seeded(3)),
+            configuration: ConfigurationId::From_Digest(Seeded(4)),
+        };
+    }
+
+    fn Fact_For(key: &FactKey, generation: GenerationId) -> MaterializedFact
+    {
+        return MaterializedFact {
+            identity: key.clone().At(generation),
+            snapshot: SnapshotId::From_Digest(Seeded(2)),
+            evidence: EvidenceClass::Derived,
+            guarantee: File_Guarantee(),
+            payload: FactPayload::New(SchemaId::New("nomos.test.memory_fact_store.v1"), b"tree".to_vec()),
+        };
+    }
+
+    #[test]
+    fn Test_New_Should_Start_Completely_Empty()
+    {
+        let store = MemoryFactStore::New();
+
+        assert_eq!(store.Materializations(), 0);
+        assert_eq!(store.Live(), 0);
+    }
+
+    #[test]
+    fn Test_Materialize_Should_Refuse_A_Backdated_Rewrite()
+    {
+        let mut store = MemoryFactStore::New();
+        let key = Key_For(1);
+        store
+            .Materialize(Fact_For(&key, GenerationId::From_Raw(5)), &[])
+            .expect("first write cannot conflict");
+
+        let backdated = store.Materialize(Fact_For(&key, GenerationId::From_Raw(1)), &[]);
+
+        assert!(matches!(backdated, Err(FactError::Backdated { .. })));
+    }
+
+    #[test]
+    fn Test_Materializations_Should_Count_Every_Successful_Write()
+    {
+        let mut store = MemoryFactStore::New();
+        store
+            .Materialize(Fact_For(&Key_For(1), GenerationId::From_Raw(1)), &[])
+            .expect("first write");
+        store
+            .Materialize(Fact_For(&Key_For(2), GenerationId::From_Raw(1)), &[])
+            .expect("second write");
+
+        assert_eq!(store.Materializations(), 2);
+    }
+
+    #[test]
+    fn Test_Live_Should_Not_Count_An_Entry_Once_It_Is_Invalidated()
+    {
+        let mut store = MemoryFactStore::New();
+        let key = Key_For(1);
+        store
+            .Materialize(Fact_For(&key, GenerationId::From_Raw(1)), &[])
+            .expect("first write");
+        assert_eq!(store.Live(), 1);
+
+        store.Try_Invalidate_One(key.Digest(), GenerationId::From_Raw(2), "test");
+        assert_eq!(store.Live(), 0);
+    }
+
+    #[test]
+    fn Test_Dependencies_Of_Should_Return_What_The_Latest_Write_Named()
+    {
+        let mut store = MemoryFactStore::New();
+        let dependency = Dependency {
+            key: Key_For(9),
+            outcome: ReadOutcome::Materialized,
+        };
+        let key = Key_For(1);
+        store
+            .Materialize(Fact_For(&key, GenerationId::From_Raw(1)), &[dependency.clone()])
+            .expect("first write");
+
+        assert_eq!(store.Dependencies_Of(&key), vec![dependency]);
+    }
+
+    #[test]
+    fn Test_Lookup_Should_Refuse_A_Key_Nobody_Wrote()
+    {
+        let store = MemoryFactStore::New();
+
+        // `Lookup`'s error is `()` by design (every failure path collapses to it on
+        // purpose -- `Reader` reads its own richer applicability instead), so there is no
+        // variant to name here. Waived in suppressions.json rather than with an inline
+        // `error-tests: allow` marker, which this repository's policy does not honour.
+        assert!(store.Lookup(&Key_For(1), GenerationId::From_Raw(1)).is_err());
+    }
+
+    #[test]
+    fn Test_Superseded_At_Should_Be_None_Before_Any_Invalidation()
+    {
+        let mut store = MemoryFactStore::New();
+        let key = Key_For(1);
+        store
+            .Materialize(Fact_For(&key, GenerationId::From_Raw(1)), &[])
+            .expect("first write");
+
+        assert_eq!(store.Superseded_At(&key), None);
+    }
+
+    #[test]
+    fn Test_With_Propagation_Should_Build_A_Store_That_Starts_Empty()
+    {
+        use crate::propagation::LocalGraphPropagation;
+
+        let store = MemoryFactStore::With_Propagation(Box::new(LocalGraphPropagation));
+
+        assert_eq!(store.Materializations(), 0);
+    }
+}

@@ -168,12 +168,18 @@ fn Test_An_Empty_Change_Set_Should_Be_Refused()
 
 /// The failure portability exists to prevent, caught at the door rather than in the
 /// bytes.
+/// Every spelling of "this is not workspace-relative" the door has to catch.
+fn Absolute_Paths() -> [&'static str; 4]
+{
+    return ["F:/repos/xvpe/a.rs", "/usr/src/a.rs", "C:\\src\\a.rs", "\\\\?\\F:\\a.rs"];
+}
+
 #[test]
 fn Test_An_Absolute_Path_Should_Be_Refused()
 {
     let mut workspace = Fresh();
 
-    for path in ["F:/repos/xvpe/a.rs", "/usr/src/a.rs", "C:\\src\\a.rs", "\\\\?\\F:\\a.rs"]
+    for path in Absolute_Paths()
     {
         assert!(
             workspace.Apply(&Edit(path, "content")).is_err(),
@@ -182,12 +188,18 @@ fn Test_An_Absolute_Path_Should_Be_Refused()
     }
 }
 
+/// Every spelling of "this reaches outside the workspace" the door has to catch.
+fn Escaping_Paths() -> [&'static str; 3]
+{
+    return ["../outside.rs", "src/../../outside.rs", ".."];
+}
+
 #[test]
 fn Test_A_Path_Reaching_Outside_The_Workspace_Should_Be_Refused()
 {
     let mut workspace = Fresh();
 
-    for path in ["../outside.rs", "src/../../outside.rs", ".."]
+    for path in Escaping_Paths()
     {
         assert!(workspace.Apply(&Edit(path, "content")).is_err(), "`{path}`");
     }

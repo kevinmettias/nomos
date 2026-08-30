@@ -48,3 +48,24 @@ impl Claim
         return now > self.lease_expires_at;
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    /// The boundary case: a lease expiring exactly now has not yet lapsed, or a holder
+    /// renewing at the moment of expiry would race against being displaced.
+    #[test]
+    fn Test_Has_Lapsed_Should_Be_False_On_The_Expiry_Second_And_True_After()
+    {
+        let claim = Claim {
+            holder: "agent-a".to_owned(),
+            acquired_at: Timestamp::From_Unix_Seconds(1_000),
+            lease_expires_at: Timestamp::From_Unix_Seconds(2_000),
+        };
+
+        assert!(!claim.Has_Lapsed(Timestamp::From_Unix_Seconds(2_000)));
+        assert!(claim.Has_Lapsed(Timestamp::From_Unix_Seconds(2_001)));
+    }
+}

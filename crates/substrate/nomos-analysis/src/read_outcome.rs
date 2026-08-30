@@ -17,3 +17,18 @@ impl ReadOutcome
         return matches!(self, Self::Materialized);
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Is_Answered_Should_Be_True_Only_For_Materialized()
+    {
+        assert!(ReadOutcome::Materialized.Is_Answered());
+        assert!(!ReadOutcome::Absent.Is_Answered());
+        assert!(!ReadOutcome::Superseded.Is_Answered());
+        assert!(!ReadOutcome::Degraded(Applicability::SupportedWithFallback).Is_Answered());
+    }
+}

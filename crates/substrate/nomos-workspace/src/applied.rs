@@ -57,3 +57,60 @@ impl Applied
         };
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    fn Sample_Effects() -> Vec<Effect>
+    {
+        return vec![Effect {
+            path: "src/a.rs".to_owned(),
+            kind: crate::EffectKind::Added,
+        }];
+    }
+
+    fn Sample_Snapshot() -> SnapshotId
+    {
+        return SnapshotId::From_Digest(nomos_contracts::Digest128::From_Bytes([0x42; 16]));
+    }
+
+    #[test]
+    fn Test_Generation_Should_Report_The_Generation_Of_An_Advanced_Outcome()
+    {
+        let applied = Applied::Advanced {
+            generation: GenerationId::From_Raw(3),
+            snapshot: Sample_Snapshot(),
+            effects: Sample_Effects(),
+        };
+
+        assert_eq!(applied.Generation(), GenerationId::From_Raw(3));
+    }
+
+    #[test]
+    fn Test_Snapshot_Should_Report_The_Snapshot_Of_An_Unchanged_Outcome()
+    {
+        let snapshot = Sample_Snapshot();
+        let applied = Applied::Unchanged {
+            generation: GenerationId::INITIAL,
+            snapshot,
+            effects: Sample_Effects(),
+        };
+
+        assert_eq!(applied.Snapshot(), snapshot);
+    }
+
+    #[test]
+    fn Test_Effects_Should_Report_The_Effects_Of_Either_Outcome()
+    {
+        let effects = Sample_Effects();
+        let applied = Applied::Advanced {
+            generation: GenerationId::INITIAL,
+            snapshot: Sample_Snapshot(),
+            effects: effects.clone(),
+        };
+
+        assert_eq!(applied.Effects(), effects.as_slice());
+    }
+}

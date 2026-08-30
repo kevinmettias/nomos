@@ -129,14 +129,14 @@ mod tests
     const MINIMUM_USEFUL_DESCRIPTION_LENGTH: usize = 15;
 
     #[test]
-    fn Test_A_Lease_Within_The_Ceiling_Should_Be_Accepted()
+    fn Test_Check_Lease_Should_Accept_A_Lease_Within_The_Ceiling()
     {
         assert!(Check_Lease(Duration::from_secs(ONE_HOUR_SECONDS)).is_ok());
         assert!(Check_Lease(MAXIMUM_LEASE).is_ok());
     }
 
     #[test]
-    fn Test_A_Lease_Beyond_The_Ceiling_Should_Be_Refused()
+    fn Test_Check_Lease_Should_Refuse_A_Lease_Beyond_The_Ceiling()
     {
         let refusal = Check_Lease(MAXIMUM_LEASE + Duration::from_secs(1)).unwrap_err();
 
@@ -145,7 +145,7 @@ mod tests
     }
 
     #[test]
-    fn Test_Disjoint_Territory_Should_Produce_No_Refusal()
+    fn Test_Refusal_From_Should_Produce_None_For_Disjoint_Territory()
     {
         let refusal = Refusal_From(
             &Intersection::Disjoint,

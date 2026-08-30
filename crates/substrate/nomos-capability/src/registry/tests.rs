@@ -122,10 +122,10 @@ fn Test_An_Undeclared_Capability_And_An_Unoffered_One_Should_Be_Different_Absenc
 /// optional knowledge seam must not be reported through a rule's applicability at all
 /// rather than that this mapping should change — so this test is the measurement that
 /// answer rests on, and it fails if the mapping moves underneath it.
-#[test]
-fn Test_Every_Absence_Should_Report_As_A_Missing_Capability_Today()
+/// Every way [`Unmet`] can name an absence, once each.
+fn Every_Unmet_Reason() -> [Unmet; 4]
 {
-    for reason in [
+    return [
         Unmet::Undeclared,
         Unmet::NoProvider,
         Unmet::VersionMismatch {
@@ -134,7 +134,13 @@ fn Test_Every_Absence_Should_Report_As_A_Missing_Capability_Today()
         Unmet::BelowRequirement {
             closest: ProviderId::New("nomos.test.knowledge"),
         },
-    ]
+    ];
+}
+
+#[test]
+fn Test_Every_Absence_Should_Report_As_A_Missing_Capability_Today()
+{
+    for reason in Every_Unmet_Reason()
     {
         assert_eq!(
             reason.Applicability(),

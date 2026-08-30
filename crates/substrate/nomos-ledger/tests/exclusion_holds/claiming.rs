@@ -55,6 +55,15 @@ fn Test_Claiming_Disjoint_Territory_Should_Succeed_Concurrently()
 /// lands, not from the moment somebody happens to claim it — no ordering makes it safe, and
 /// now no ordering makes it *quiet* either. The state stays reachable by hand-editing the
 /// document, which is why this test still constructs it directly rather than through `Save`.
+/// The three items on the pattern-bricked board, and who tries to claim each.
+///
+/// A named provider rather than an inline literal, so a fourth claimant is a value added
+/// here rather than a change to the loop that reads them.
+fn Claimants_Of_The_Pattern_Bricked_Board() -> [(&'static str, &'static str); 3]
+{
+    [("T-1", "agent-a"), ("T-2", "agent-b"), ("T-3", "agent-c")]
+}
+
 #[test]
 fn Test_A_Pattern_Anywhere_On_The_Board_Should_Refuse_Every_Claim_As_Ledger_Unusable()
 {
@@ -66,24 +75,18 @@ fn Test_A_Pattern_Anywhere_On_The_Board_Should_Refuse_Every_Claim_As_Ledger_Unus
 
     // Every item is refused the same way, including the pattern item itself and territory
     // sharing no path with it at all: the refusal is about the document, not about what any
-    // one claim would have compared against.
-    for (item, holder) in [("T-1", "agent-a"), ("T-2", "agent-b"), ("T-3", "agent-c")]
+    // one claim would have compared against. A claim refused for no reason of its own is
+    // non-retryable, which is what tells the agent to stop and fetch a person rather than
+    // wait.
+    for (item, holder) in Claimants_Of_The_Pattern_Bricked_Board()
     {
         let refusal = Refused(&mut ledger, item, holder);
-        Is_Ledger_Unusable(item, &refusal);
+        assert!(
+            matches!(refusal, ClaimRefusal::LedgerUnusable { .. }),
+            "{item}: {refusal:?}"
+        );
+        assert!(!refusal.Is_Retryable(), "{item}: {}", refusal.Describe());
     }
-}
-
-/// A claim refused for no reason of its own: the document itself is invalid, not contended,
-/// and the refusal is non-retryable, which is what tells the agent to stop and fetch a
-/// person. One hand-edited pattern therefore reads to every session as a broken ledger.
-fn Is_Ledger_Unusable(item: &str, refusal: &ClaimRefusal)
-{
-    assert!(
-        matches!(refusal, ClaimRefusal::LedgerUnusable { .. }),
-        "{item}: {refusal:?}"
-    );
-    assert!(!refusal.Is_Retryable(), "{item}: {}", refusal.Describe());
 }
 
 /// The same finding regardless of where the pattern item sits in the document, so the
@@ -127,14 +130,8 @@ fn Test_A_Refusal_Should_Not_Open_With_The_Blockers_Name()
 
     Take(&mut ledger, "T-BLOCKER", "agent-a");
 
-    Reads_As_A_Statement_About_The_Refused_Item(
-        &Refused(&mut ledger, "T-REFUSED", "agent-b").Describe(),
-    );
-}
+    let sentence = Refused(&mut ledger, "T-REFUSED", "agent-b").Describe();
 
-/// The three things the sentence has to do, and the line `work audit` composes from it.
-fn Reads_As_A_Statement_About_The_Refused_Item(sentence: &str)
-{
     // The whole defect in one assertion: the blocker's name must not be the first thing the
     // sentence says. Restoring `{item} overlaps territory held by {holder} …` makes this red
     // and leaves every other assertion in this file green, which is what makes it the control
@@ -193,6 +190,23 @@ fn Test_The_Same_Board_Without_The_Pattern_Should_Claim_Freely()
 
     Take(&mut ledger, "T-1", "agent-a");
     Take(&mut ledger, "T-2", "agent-b");
+
+    ledger
+        .Validate_Current()
+        .expect("neither claim collided, so the document stays valid without the pattern");
+
+    let document = ledger.Load().expect("readable");
+    let claimed: Vec<&str> = document
+        .items
+        .iter()
+        .filter(|item| return item.claim.is_some())
+        .map(|item| return item.id.As_Text())
+        .collect();
+    assert_eq!(
+        claimed,
+        vec!["T-1", "T-2"],
+        "both claims must have actually landed, or this is not the control it claims to be"
+    );
 }
 
 /// A directory reserves what is beneath it, which is what the withdrawn flag was for.

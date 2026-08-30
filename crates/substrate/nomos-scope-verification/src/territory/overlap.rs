@@ -82,3 +82,43 @@ pub(super) fn Is_Overlapping(left: Mine<'_>, right: Theirs<'_>) -> bool
 
     return right.starts_with(&format!("{left}/")) || left.starts_with(&format!("{right}/"));
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Shared_Subjects_Should_Report_The_Narrower_Path_Once_For_An_Overlap()
+    {
+        let mine = vec!["crates/a".to_owned()];
+        let theirs = vec!["crates/a/src/lib.rs".to_owned()];
+
+        let shared = Shared_Subjects(&mine, &theirs);
+
+        assert_eq!(shared, vec![Subject_Of("crates/a/src/lib.rs")]);
+    }
+
+    #[test]
+    fn Test_Shared_Subjects_Should_Be_Empty_For_Disjoint_Paths()
+    {
+        let mine = vec!["crates/a".to_owned()];
+        let theirs = vec!["crates/b".to_owned()];
+
+        assert!(Shared_Subjects(&mine, &theirs).is_empty());
+    }
+
+    #[test]
+    fn Test_Narrower_Path_Should_Prefer_The_Longer_Normalized_Spelling()
+    {
+        assert_eq!(Narrower_Path("crates/a", "crates/a/src/lib.rs"), "crates/a/src/lib.rs");
+        assert_eq!(Narrower_Path("crates/a/src/lib.rs", "crates/a"), "crates/a/src/lib.rs");
+    }
+
+    #[test]
+    fn Test_Is_Overlapping_Should_Treat_A_Directory_As_Containing_Its_Files()
+    {
+        assert!(Is_Overlapping(Mine("crates/a"), Theirs("crates/a/src/lib.rs")));
+        assert!(!Is_Overlapping(Mine("crates/a"), Theirs("crates/abc")));
+    }
+}

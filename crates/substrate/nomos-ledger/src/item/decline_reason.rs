@@ -24,3 +24,18 @@ impl<'a> DeclineReason<'a>
         return self.0;
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_As_Text_Should_Return_The_Wrapped_String_Unchanged()
+    {
+        let reason = "superseded".to_owned();
+        let decline_reason: DeclineReason<'_> = DeclineReason::from(&reason);
+
+        assert_eq!(decline_reason.As_Text(), "superseded");
+    }
+}

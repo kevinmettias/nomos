@@ -301,3 +301,92 @@ impl Refusal
 #[cfg(test)]
 #[path = "refusal/tests.rs"]
 mod tests;
+
+/// Narrow, file-local proofs for each of this file's own methods, addressed by name.
+///
+/// [`tests`] above is `refusal/tests.rs`, a separate physical file whose behavioural suite
+/// this does not repeat or replace. `check-test-coverage`'s Rust front end keys a test's
+/// companion unit off the literal file it is textually written in, so a test living in that
+/// separate file can never address a function declared here, however it is named — this
+/// module gives each method here the one-file address the check reads.
+#[cfg(test)]
+mod self_tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Describe_Should_Name_The_State_A_Not_Claimable_Item_Is_In()
+    {
+        let refusal = Refusal::NotClaimable {
+            item: ItemId::New("T-1"),
+            state: "Done".to_owned(),
+        };
+
+        let said = refusal.Describe();
+        assert!(said.contains("T-1"), "{said}");
+        assert!(said.contains("Done"), "{said}");
+    }
+
+    #[test]
+    fn Test_Is_Retryable_Should_Be_True_For_A_Held_Item_And_False_For_A_Declined_Dependency()
+    {
+        let held_by = Refusal::HeldBy {
+            holder: "agent-a".to_owned(),
+            until: Timestamp::From_Unix_Seconds(2_000),
+            item: ItemId::New("T-1"),
+        };
+        let dependency_declined = Refusal::DependencyDeclined {
+            item: ItemId::New("T-2"),
+            dependency: ItemId::New("T-3"),
+            state: "declined".to_owned(),
+        };
+
+        assert!(held_by.Is_Retryable());
+        assert!(!dependency_declined.Is_Retryable());
+    }
+
+    #[test]
+    fn Test_Layer_Should_Put_A_Held_Item_In_Dispatch_And_A_Not_Claimable_One_In_Readiness()
+    {
+        let held_by = Refusal::HeldBy {
+            holder: "agent-a".to_owned(),
+            until: Timestamp::From_Unix_Seconds(2_000),
+            item: ItemId::New("T-1"),
+        };
+        let not_claimable = Refusal::NotClaimable {
+            item: ItemId::New("T-2"),
+            state: "Done".to_owned(),
+        };
+
+        assert_eq!(held_by.Layer(), Layer::Dispatch);
+        assert_eq!(not_claimable.Layer(), Layer::Readiness);
+    }
+
+    #[test]
+    fn Test_Is_Readiness_Should_Agree_With_Layer()
+    {
+        let not_claimable = Refusal::NotClaimable {
+            item: ItemId::New("T-1"),
+            state: "Done".to_owned(),
+        };
+
+        assert!(not_claimable.Is_Readiness());
+        assert_eq!(
+            not_claimable.Is_Readiness(),
+            matches!(not_claimable.Layer(), Layer::Readiness)
+        );
+    }
+
+    #[test]
+    fn Test_Is_Dispatch_Should_Agree_With_Layer()
+    {
+        let held_by = Refusal::HeldBy {
+            holder: "agent-a".to_owned(),
+            until: Timestamp::From_Unix_Seconds(2_000),
+            item: ItemId::New("T-1"),
+        };
+
+        assert!(held_by.Is_Dispatch());
+        assert_eq!(held_by.Is_Dispatch(), matches!(held_by.Layer(), Layer::Dispatch));
+    }
+}

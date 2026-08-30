@@ -6,18 +6,24 @@ use nomos_model::Intersection;
 
 /// The property the normalization exists for. Two spellings of one file must be one
 /// subject, or the ledger hands out overlapping territory believing it is disjoint.
-#[test]
-fn Test_Spellings_Of_One_Path_Should_Be_One_Subject()
+/// Every spelling this test asserts must reduce to the same subject as the canonical path.
+fn Equivalent_Spellings_Of_One_File() -> [&'static str; 5]
 {
-    let canonical = Subject_Of("crates/kernel/nomos-model/src/digest.rs");
-
-    for spelling in [
+    return [
         "./crates/kernel/nomos-model/src/digest.rs",
         "crates\\kernel\\nomos-model\\src\\digest.rs",
         "crates//kernel/nomos-model/src/digest.rs",
         "  crates/kernel/nomos-model/src/digest.rs  ",
         "crates/kernel/nomos-model/src/Digest.rs",
-    ]
+    ];
+}
+
+#[test]
+fn Test_Spellings_Of_One_Path_Should_Be_One_Subject()
+{
+    let canonical = Subject_Of("crates/kernel/nomos-model/src/digest.rs");
+
+    for spelling in Equivalent_Spellings_Of_One_File()
     {
         assert_eq!(
             Subject_Of(spelling),
@@ -38,7 +44,7 @@ fn Test_Different_Paths_Should_Be_Different_Subjects()
 }
 
 #[test]
-fn Test_Distinct_Territories_Should_Be_Disjoint()
+fn Test_Of_Files_Should_Be_Disjoint_Across_Distinct_Territories()
 {
     let left = Territory::Of_Files(["crates/a/src/lib.rs"]);
     let right = Territory::Of_Files(["crates/b/src/lib.rs"]);
@@ -299,15 +305,21 @@ fn Test_A_Leading_Digit_Group_Should_Not_Be_An_Ordinal()
 /// What is left alone. A file under `docs/records` that carries no ordinal is a file,
 /// and a registration file elsewhere keeps its extension — that directory is named by
 /// identifier too, and `records/OD-LEDGER-016.record` is a real path that resolves.
-#[test]
-fn Test_A_Path_Without_A_Record_Identifier_Should_Be_Untouched()
+/// Paths that carry no record filename for `Normalize_Path` to fold.
+fn Paths_With_No_Record_Identifier() -> [&'static str; 4]
 {
-    for path in [
+    return [
         "docs/records/readme.md",
         "docs/records/OD-LEDGER-006",
         "crates/spec/nomos-spec-store/records/OD-LEDGER-016.record",
         "docs/records",
-    ]
+    ];
+}
+
+#[test]
+fn Test_A_Path_Without_A_Record_Identifier_Should_Be_Untouched()
+{
+    for path in Paths_With_No_Record_Identifier()
     {
         assert_eq!(
             Normalize_Path(path),

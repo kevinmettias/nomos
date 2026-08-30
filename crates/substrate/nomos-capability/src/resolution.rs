@@ -74,3 +74,65 @@ impl Resolution
         };
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use nomos_contracts::{Assurance, CapabilityId, ContractVersion, FactVariant, Guarantee, IncrementalGranularity, ProviderId};
+
+    fn Offer() -> ProviderOffer
+    {
+        return ProviderOffer {
+            provider: ProviderId::New("nomos.test.resolution"),
+            capability: CapabilityId::New("nomos.cap.test.resolution"),
+            version: ContractVersion::New(1, 0),
+            guarantee: Guarantee::New(
+                FactVariant::Syntactic,
+                Assurance::Sound,
+                Assurance::Unknown,
+                IncrementalGranularity::File,
+            ),
+        };
+    }
+
+    fn Satisfied() -> Resolution
+    {
+        return Resolution::Satisfied {
+            selection: Selection {
+                chosen: Offer(),
+                alternatives: Vec::new(),
+            },
+            applicability: Applicability::Supported,
+        };
+    }
+
+    fn Unsatisfied() -> Resolution
+    {
+        return Resolution::Unsatisfied {
+            capability: CapabilityId::New("nomos.cap.test.resolution"),
+            reason: Unmet::NoProvider,
+        };
+    }
+
+    #[test]
+    fn Test_Applicability_Should_Read_From_Either_Branch()
+    {
+        assert_eq!(Satisfied().Applicability(), Applicability::Supported);
+        assert_eq!(Unsatisfied().Applicability(), Applicability::MissingCapability);
+    }
+
+    #[test]
+    fn Test_Offer_Should_Be_Present_Only_When_Satisfied()
+    {
+        assert_eq!(Satisfied().Offer(), Some(&Offer()));
+        assert_eq!(Unsatisfied().Offer(), None);
+    }
+
+    #[test]
+    fn Test_Selection_Should_Be_Present_Only_When_Satisfied()
+    {
+        assert!(Satisfied().Selection().is_some());
+        assert!(Unsatisfied().Selection().is_none());
+    }
+}

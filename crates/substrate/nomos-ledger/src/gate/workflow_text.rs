@@ -30,3 +30,18 @@ impl<'a> WorkflowText<'a>
         return self.0;
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_As_Text_Should_Return_The_Wrapped_String_Unchanged()
+    {
+        let workflow = "name: gate\n".to_owned();
+        let text: WorkflowText<'_> = WorkflowText::from(&workflow);
+
+        assert_eq!(text.As_Text(), "name: gate\n");
+    }
+}

@@ -185,3 +185,74 @@ pub(super) fn Refuse_An_Unpublished_Amendment(
 
 /// The folded record directory, with its separator, as [`Normalize_Path`] leaves it.
 const RECORD_DIRECTORY_PREFIX: &str = "docs/records/";
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use crate::{ItemId, ItemKind, ItemOrigin, ItemState};
+
+    fn Item_Reserving(id: &str, path: &str) -> LedgerItem
+    {
+        return LedgerItem {
+            id: ItemId::New(id),
+            title: "an item".to_owned(),
+            why: "because".to_owned(),
+            done_when: "when it is done".to_owned(),
+            kind: ItemKind::Decision,
+            origin: ItemOrigin::Proposed,
+            territory: Territory::Of_Files([path.to_owned()]),
+            state: ItemState::Ready,
+            depends_on: Vec::new(),
+            blocked: None,
+            claim: None,
+            verification: None,
+            verified: None,
+            abandoned: Vec::new(),
+            displaced: Vec::new(),
+            declined: None,
+        };
+    }
+
+    fn Document_Of(items: Vec<LedgerItem>) -> LedgerDocument
+    {
+        return LedgerDocument { schema_version: crate::SCHEMA_VERSION, items };
+    }
+
+    #[test]
+    fn Test_Refuse_A_Spent_Record_Should_Refuse_An_Undeclared_Reservation_Of_A_Published_Identifier()
+    {
+        let published = Territory::Of_Files(["docs/records/OD-LEDGER-999-a-slug.md"]);
+        let document = Document_Of(Vec::new());
+
+        let undeclared = Item_Reserving("NEW-1", "docs/records/OD-LEDGER-999");
+        let refusal = Refuse_A_Spent_Record(
+            &undeclared,
+            &document,
+            &RecordDeclaration { published: &published, amending: &Territory::Empty() },
+        )
+        .expect_err("an unamended, already-published identifier must refuse");
+        assert!(matches!(refusal, AddRefusal::RecordPublished { .. }), "got {refusal:?}");
+
+        let amending = Territory::Of_Files(["docs/records/OD-LEDGER-999"]);
+        let declared_edit = Item_Reserving("EDIT-1", "docs/records/OD-LEDGER-999");
+        Refuse_A_Spent_Record(
+            &declared_edit,
+            &document,
+            &RecordDeclaration { published: &published, amending: &amending },
+        )
+        .expect("a declared amendment of a published record must be accepted");
+    }
+
+    #[test]
+    fn Test_Refuse_An_Unpublished_Amendment_Should_Refuse_A_Declared_Edit_Of_Nothing_Published()
+    {
+        let amending = Territory::Of_Files(["docs/records/OD-LEDGER-888"]);
+        let published = Territory::Empty();
+
+        let refusal =
+            Refuse_An_Unpublished_Amendment(&amending, &published).expect_err("amending nothing published must refuse");
+
+        assert!(matches!(refusal, AddRefusal::AmendmentNotPublished { .. }), "got {refusal:?}");
+    }
+}

@@ -197,3 +197,51 @@ pub(super) fn Record_Identifier_Form(folded: &str) -> Option<String>
 
     return Some(format!("{RECORD_DIRECTORY}/{identifier}"));
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Up_To_The_Ordinal_Should_Stop_At_The_First_All_Digit_Component()
+    {
+        assert_eq!(Up_To_The_Ordinal("od-ledger-006-a-reason"), Some("od-ledger-006".to_owned()));
+        assert_eq!(Up_To_The_Ordinal("2026-08-09-notes"), None);
+    }
+
+    #[test]
+    fn Test_Is_Ordinal_Should_Reject_The_First_Component()
+    {
+        assert!(!Is_Ordinal("2026", 0));
+        assert!(Is_Ordinal("006", 2));
+        assert!(!Is_Ordinal("ledger", 1));
+    }
+
+    #[test]
+    fn Test_Subject_Of_Should_Fold_A_Record_Filename_Onto_Its_Identifier()
+    {
+        assert_eq!(
+            Subject_Of("docs/records/OD-LEDGER-006-a-reason.md"),
+            Subject_Of("docs/records/OD-LEDGER-006")
+        );
+        assert_ne!(Subject_Of("src/a.rs"), Subject_Of("src/b.rs"));
+    }
+
+    #[test]
+    fn Test_Normalize_Path_Should_Fold_Separators_And_Case()
+    {
+        assert_eq!(Normalize_Path("./Crates\\A\\B.rs"), "crates/a/b.rs");
+    }
+
+    #[test]
+    fn Test_Record_Identifier_Form_Should_Read_Only_Flat_Record_Filenames()
+    {
+        assert_eq!(
+            Record_Identifier_Form("docs/records/od-ledger-006-a-reason.md"),
+            Some("docs/records/od-ledger-006".to_owned())
+        );
+        assert_eq!(Record_Identifier_Form("docs/records/sub/od-ledger-006.md"), None);
+        assert_eq!(Record_Identifier_Form("src/a.rs"), None);
+    }
+}

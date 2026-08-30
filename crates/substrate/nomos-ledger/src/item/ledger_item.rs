@@ -195,3 +195,98 @@ impl LedgerItem
         });
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    fn Item(id: &str) -> LedgerItem
+    {
+        return LedgerItem {
+            id: ItemId::New(id),
+            title: "an item".to_owned(),
+            why: "because".to_owned(),
+            done_when: "when it is done".to_owned(),
+            kind: ItemKind::Correction,
+            origin: ItemOrigin::Proposed,
+            territory: Territory::Empty(),
+            state: ItemState::Ready,
+            depends_on: Vec::new(),
+            blocked: None,
+            claim: None,
+            verification: None,
+            verified: None,
+            abandoned: Vec::new(),
+            displaced: Vec::new(),
+            declined: None,
+        };
+    }
+
+    fn At(seconds: i64) -> Timestamp
+    {
+        return Timestamp::From_Unix_Seconds(seconds);
+    }
+
+    fn Claimed_By(holder: &str, expires: i64) -> Claim
+    {
+        return Claim {
+            holder: holder.to_owned(),
+            acquired_at: At(1_000),
+            lease_expires_at: At(expires),
+        };
+    }
+
+    #[test]
+    fn Test_Has_Active_Claim_Should_Be_False_Once_The_Claim_Has_Lapsed()
+    {
+        let mut item = Item("T-1");
+        item.claim = Some(Claimed_By("agent-a", 2_000));
+
+        assert!(item.Has_Active_Claim(At(1_999)));
+        assert!(!item.Has_Active_Claim(At(2_001)));
+    }
+
+    #[test]
+    fn Test_Try_Replace_Lapsed_Claim_Should_Keep_The_Claim_It_Replaced()
+    {
+        let mut item = Item("T-1");
+        item.state = ItemState::Claimed;
+        item.claim = Some(Claimed_By("dead-agent", 2_000));
+
+        assert!(item.Try_Replace_Lapsed_Claim(Claimed_By("agent-b", 9_000), At(2_001)));
+
+        assert_eq!(
+            item.claim.as_ref().map(|claim| return claim.holder.clone()),
+            Some("agent-b".to_owned())
+        );
+        assert_eq!(
+            item.displaced
+                .iter()
+                .map(|claim| return claim.holder.clone())
+                .collect::<Vec<String>>(),
+            vec!["dead-agent".to_owned()],
+            "the claim the takeover replaced was dropped"
+        );
+    }
+
+    #[test]
+    fn Test_Decline_Should_Set_The_Declined_State_And_Record_The_Declination()
+    {
+        let mut item = Item("T-1");
+
+        item.Decline("superseded", "agent-a", At(2_000));
+
+        assert_eq!(
+            item.state,
+            ItemState::Declined {
+                reason: "superseded".to_owned()
+            }
+        );
+        let declined = item
+            .declined
+            .expect("Decline must record who ended it and when");
+        assert_eq!(declined.holder, "agent-a");
+        assert_eq!(declined.declined_at, At(2_000));
+    }
+}

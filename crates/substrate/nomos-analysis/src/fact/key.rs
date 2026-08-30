@@ -74,3 +74,63 @@ const fn Version_Bytes(version: ContractVersion) -> [u8; VERSION_BYTES]
 
     return [major[0], major[1], minor[0], minor[1]];
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use nomos_contracts::{Assurance, FactVariant, Guarantee, IncrementalGranularity};
+
+    fn Seeded(seed: u8) -> Digest128
+    {
+        return Digest128::From_Bytes([seed; Digest128::BYTE_LENGTH]);
+    }
+
+    fn Sample() -> Key
+    {
+        return Key {
+            contract: CapabilityId::New("nomos.cap.test.key"),
+            contract_version: ContractVersion::New(1, 0),
+            subject: SubjectId::From_Digest(Seeded(1)),
+            semantic_inputs: InputDigest::Of(&[b"fn main() {}"]),
+            provider: ProviderId::New("nomos.provider.test"),
+            provider_version: ContractVersion::New(1, 0),
+            guarantee: GuaranteeDigest::Of(&Guarantee::New(
+                FactVariant::Syntactic,
+                Assurance::Sound,
+                Assurance::Sound,
+                IncrementalGranularity::File,
+            )),
+            variant: BuildVariantId::From_Digest(Seeded(3)),
+            configuration: ConfigurationId::From_Digest(Seeded(4)),
+        };
+    }
+
+    #[test]
+    fn Test_Parts_Should_Carry_Every_Field_As_A_Non_Empty_Byte_Vector()
+    {
+        let parts = Sample().Parts();
+
+        assert_eq!(parts.len(), 9);
+        assert!(parts.iter().all(|part| !part.is_empty()));
+    }
+
+    #[test]
+    fn Test_Digest_Should_Change_When_A_Single_Field_Changes()
+    {
+        let mut other = Sample();
+        other.provider = ProviderId::New("nomos.provider.other");
+
+        assert_ne!(Sample().Digest(), other.Digest());
+    }
+
+    #[test]
+    fn Test_At_Should_Pair_The_Key_With_A_Generation()
+    {
+        let key = Sample();
+        let identity = key.clone().At(GenerationId::From_Raw(7));
+
+        assert_eq!(identity.Key(), &key);
+        assert_eq!(identity.generation, GenerationId::From_Raw(7));
+    }
+}

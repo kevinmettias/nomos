@@ -80,3 +80,80 @@ fn Refused_Offer(capability: &CapabilityId, provider: &ProviderId, refusal: Offe
         },
     };
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use nomos_contracts::{Assurance, ContractVersion, FactVariant, Guarantee, IncrementalGranularity};
+
+    fn Capability() -> CapabilityId
+    {
+        return CapabilityId::New("nomos.cap.test.declaring");
+    }
+
+    fn Version() -> ContractVersion
+    {
+        return ContractVersion::New(1, 0);
+    }
+
+    fn Floor() -> Guarantee
+    {
+        return Guarantee::New(
+            FactVariant::Syntactic,
+            Assurance::Sound,
+            Assurance::Unknown,
+            IncrementalGranularity::File,
+        );
+    }
+
+    fn Contract() -> CapabilityContract
+    {
+        return CapabilityContract {
+            id: Capability(),
+            version: Version(),
+            summary: "a contract for declaring.rs's own tests".to_owned(),
+            ceiling: Guarantee::New(
+                FactVariant::Syntactic,
+                Assurance::Sound,
+                Assurance::Sound,
+                IncrementalGranularity::Region,
+            ),
+        };
+    }
+
+    fn Offer() -> ProviderOffer
+    {
+        return ProviderOffer {
+            provider: ProviderId::New("nomos.test.declaring"),
+            capability: Capability(),
+            version: Version(),
+            guarantee: Floor(),
+        };
+    }
+
+    #[test]
+    fn Test_Declare_Contract_Should_Refuse_A_Second_Declaration_For_The_Same_Capability()
+    {
+        let mut registry = Registry::New();
+
+        assert!(Declare_Contract(&mut registry, Contract()).is_ok());
+        assert!(Declare_Contract(&mut registry, Contract()).is_err());
+    }
+
+    #[test]
+    fn Test_Register_Offer_Should_Refuse_An_Offer_Against_An_Undeclared_Capability()
+    {
+        let mut registry = Registry::New();
+
+        let error = Register_Offer(&mut registry, Offer()).unwrap_err();
+
+        assert_eq!(
+            error.kind,
+            RegistryErrorKind::Offer {
+                provider: Offer().provider,
+                refusal: OfferRefusal::ForUndeclared,
+            }
+        );
+    }
+}

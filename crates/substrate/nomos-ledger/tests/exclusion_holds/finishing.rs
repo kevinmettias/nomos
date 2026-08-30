@@ -173,12 +173,21 @@ fn Test_An_Abandoned_Item_Should_Return_To_Ready_And_Stop_Excluding()
 ///
 /// An item abandoned twice was abandoned twice. Keeping only the latest would discard the
 /// earlier reason, which is the loss this whole item is about, one scale down.
+/// The two claims on the same item, oldest first, and why each one ended.
+///
+/// A named provider rather than an inline literal, so a third abandonment is a value added
+/// here rather than a change to the loop that reads them.
+fn Two_Abandonments() -> [(&'static str, &'static str); 2]
+{
+    [("agent-a", "ran out of lease"), ("agent-b", REASON)]
+}
+
 #[test]
 fn Test_An_Item_Abandoned_Twice_Should_Keep_Both_Reasons()
 {
     let (_directory, mut ledger) = Board_At("abandon-twice", vec![Item("T-1", &["src/a.rs"])]);
 
-    for (holder, reason) in [("agent-a", "ran out of lease"), ("agent-b", REASON)]
+    for (holder, reason) in Two_Abandonments()
     {
         ledger
             .Claim(&ItemId::New("T-1"), holder, Duration::from_secs(3_600))

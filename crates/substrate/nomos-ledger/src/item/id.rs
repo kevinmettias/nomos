@@ -33,3 +33,24 @@ impl core::fmt::Display for Id
         return formatter.pad(&self.0);
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_New_Should_Wrap_Whatever_Identifier_Was_Authored()
+    {
+        assert_eq!(Id::New("P1-MODEL").As_Text(), "P1-MODEL");
+        assert_eq!(Id::New("P1-MODEL".to_owned()).As_Text(), "P1-MODEL");
+    }
+
+    #[test]
+    fn Test_As_Text_Should_Return_The_Identifier_As_Authored()
+    {
+        let id = Id::New("P1-MODEL");
+
+        assert_eq!(id.As_Text(), "P1-MODEL");
+    }
+}

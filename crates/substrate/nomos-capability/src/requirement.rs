@@ -40,3 +40,51 @@ impl Requirement
         return self;
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use nomos_contracts::{Assurance, FactVariant, IncrementalGranularity};
+
+    fn Capability() -> CapabilityId
+    {
+        return CapabilityId::New("nomos.cap.test.requirement");
+    }
+
+    fn Version() -> ContractVersion
+    {
+        return ContractVersion::New(1, 0);
+    }
+
+    fn Floor() -> Guarantee
+    {
+        return Guarantee::New(
+            FactVariant::Syntactic,
+            Assurance::Sound,
+            Assurance::Unknown,
+            IncrementalGranularity::File,
+        );
+    }
+
+    #[test]
+    fn Test_New_Should_Start_With_No_Preferred_Provider()
+    {
+        let requirement = Requirement::New(Capability(), Version(), Floor());
+
+        assert_eq!(requirement.capability, Capability());
+        assert_eq!(requirement.version, Version());
+        assert_eq!(requirement.minimum, Floor());
+        assert!(requirement.preferred.is_none());
+    }
+
+    #[test]
+    fn Test_Preferring_Should_Record_The_Named_Provider()
+    {
+        let provider = ProviderId::New("nomos.test.preferred");
+
+        let requirement = Requirement::New(Capability(), Version(), Floor()).Preferring(provider.clone());
+
+        assert_eq!(requirement.preferred, Some(provider));
+    }
+}

@@ -188,6 +188,86 @@ fn Offers_For<'registry>(registry: &'registry Registry, requirement: &Requiremen
 /// Both answers are about the capability rather than about any offer: it was never
 /// declared, or it was declared at a version this caller cannot read. Neither depends
 /// on who is offering, which is why they are asked before the offers are looked at.
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use crate::CapabilityContract;
+    use nomos_contracts::{Assurance, CapabilityId, ContractVersion, FactVariant, Guarantee, IncrementalGranularity};
+
+    fn Capability() -> CapabilityId
+    {
+        return CapabilityId::New("nomos.cap.test.resolving");
+    }
+
+    fn Version() -> ContractVersion
+    {
+        return ContractVersion::New(1, 0);
+    }
+
+    fn Floor() -> Guarantee
+    {
+        return Guarantee::New(
+            FactVariant::Syntactic,
+            Assurance::Sound,
+            Assurance::Unknown,
+            IncrementalGranularity::File,
+        );
+    }
+
+    fn Contract() -> CapabilityContract
+    {
+        return CapabilityContract {
+            id: Capability(),
+            version: Version(),
+            summary: "a contract for resolving.rs's own tests".to_owned(),
+            ceiling: Floor(),
+        };
+    }
+
+    fn Offer_From(provider: &str) -> ProviderOffer
+    {
+        return ProviderOffer {
+            provider: ProviderId::New(provider),
+            capability: Capability(),
+            version: Version(),
+            guarantee: Floor(),
+        };
+    }
+
+    fn Registry_With_One_Offer() -> Registry
+    {
+        let mut registry = Registry::New();
+        registry.Declare(Contract()).expect("declared once");
+        registry.Offer(Offer_From("nomos.test.resolving")).expect("within the ceiling");
+
+        return registry;
+    }
+
+    #[test]
+    fn Test_Resolve_Requirement_Should_Report_No_Provider_For_A_Declared_But_Unoffered_Capability()
+    {
+        let mut registry = Registry::New();
+        registry.Declare(Contract()).expect("declared once");
+
+        let resolution = Resolve_Requirement(&registry, &Requirement::New(Capability(), Version(), Floor()));
+
+        assert!(matches!(resolution, Resolution::Unsatisfied { reason: Unmet::NoProvider, .. }));
+    }
+
+    #[test]
+    fn Test_Resolve_Requiring_Should_Refuse_A_Requirement_Nobody_Named_Answers()
+    {
+        let registry = Registry_With_One_Offer();
+        let required = ProviderId::New("nomos.test.absent");
+
+        let resolution =
+            Resolve_Requiring(&registry, &Requirement::New(Capability(), Version(), Floor()), &required);
+
+        assert!(matches!(resolution, RequiredResolution::Unsatisfied { .. }));
+    }
+}
+
 fn Unreadable_Contract(registry: &Registry, requirement: &Requirement) -> Option<Unmet>
 {
     let Some(contract) = registry.declared.get(&requirement.capability)

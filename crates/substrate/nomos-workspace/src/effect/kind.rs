@@ -31,3 +31,19 @@ impl Kind
         return matches!(self, Self::Added | Self::Modified | Self::Removed);
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Is_Altered_Should_Be_True_Only_For_Added_Modified_Or_Removed()
+    {
+        assert!(Kind::Added.Is_Altered());
+        assert!(Kind::Modified.Is_Altered());
+        assert!(Kind::Removed.Is_Altered());
+        assert!(!Kind::Redundant.Is_Altered());
+        assert!(!Kind::AlreadyAbsent.Is_Altered());
+    }
+}

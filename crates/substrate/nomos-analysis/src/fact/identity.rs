@@ -37,3 +37,58 @@ impl core::fmt::Display for Identity
         );
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use crate::GuaranteeDigest;
+    use crate::InputDigest;
+    use nomos_contracts::{
+        Assurance, BuildVariantId, CapabilityId, ConfigurationId, ContractVersion, FactVariant,
+        Guarantee, IncrementalGranularity, ProviderId, SubjectId,
+    };
+
+    fn Seeded(seed: u8) -> Digest128
+    {
+        return Digest128::From_Bytes([seed; Digest128::BYTE_LENGTH]);
+    }
+
+    fn Sample_Key() -> FactKey
+    {
+        return FactKey {
+            contract: CapabilityId::New("nomos.cap.test.identity"),
+            contract_version: ContractVersion::New(1, 0),
+            subject: SubjectId::From_Digest(Seeded(1)),
+            semantic_inputs: InputDigest::Of(&[b"fn main() {}"]),
+            provider: ProviderId::New("nomos.provider.test"),
+            provider_version: ContractVersion::New(1, 0),
+            guarantee: GuaranteeDigest::Of(&Guarantee::New(
+                FactVariant::Syntactic,
+                Assurance::Sound,
+                Assurance::Sound,
+                IncrementalGranularity::File,
+            )),
+            variant: BuildVariantId::From_Digest(Seeded(3)),
+            configuration: ConfigurationId::From_Digest(Seeded(4)),
+        };
+    }
+
+    #[test]
+    fn Test_Key_Should_Return_The_Identitys_Own_Key()
+    {
+        let key = Sample_Key();
+        let identity = key.clone().At(GenerationId::From_Raw(5));
+
+        assert_eq!(identity.Key(), &key);
+    }
+
+    #[test]
+    fn Test_Digest_Should_Match_The_Keys_Own_Digest()
+    {
+        let key = Sample_Key();
+        let identity = key.clone().At(GenerationId::From_Raw(5));
+
+        assert_eq!(identity.Digest(), key.Digest());
+    }
+}

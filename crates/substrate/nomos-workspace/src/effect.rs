@@ -45,3 +45,36 @@ impl Effect
         return self.kind.Is_Altered();
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Path_Should_Return_The_Effects_Own_Path()
+    {
+        let effect = Effect {
+            path: "src/a.rs".to_owned(),
+            kind: EffectKind::Added,
+        };
+
+        assert_eq!(effect.Path(), "src/a.rs");
+    }
+
+    #[test]
+    fn Test_Is_Altered_Should_Reflect_Whether_The_Kind_Changed_The_Workspace()
+    {
+        let added = Effect {
+            path: "a.rs".to_owned(),
+            kind: EffectKind::Added,
+        };
+        let redundant = Effect {
+            path: "a.rs".to_owned(),
+            kind: EffectKind::Redundant,
+        };
+
+        assert!(added.Is_Altered());
+        assert!(!redundant.Is_Altered());
+    }
+}

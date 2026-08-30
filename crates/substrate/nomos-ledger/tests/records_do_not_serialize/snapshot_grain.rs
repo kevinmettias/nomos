@@ -30,6 +30,17 @@ fn Reserved_Snapshots(item: &LedgerItem) -> BTreeSet<String>
         .collect();
 }
 
+/// The two claimants [`Test_Two_Items_Widening_Different_Crates_Should_Be_Held_At_Once`]
+/// drives through the ledger, one per widened crate.
+///
+/// A named provider rather than an array literal inside the test: the loop that reads it is
+/// then a fixed statement of the logic, and a third claimant one day becomes a diff to this
+/// function rather than an edit to the loop that reads it too.
+fn Claimants_Widening_Each_Crate<'a>(first: &'a ItemId, second: &'a ItemId) -> Vec<(&'a ItemId, &'static str)>
+{
+    return vec![(first, "agent-a"), (second, "agent-b")];
+}
+
 /// Two record writers that widen different crates' public APIs and share no territory.
 ///
 /// Derived rather than named. Two identifiers written here would be right until one of them
@@ -117,7 +128,7 @@ fn Test_Two_Items_Widening_Different_Crates_Should_Be_Held_At_Once()
     };
     let (_scratch, mut ledger) = Saved("snapshot-grain", &document);
 
-    for (writer, agent) in [(&first, "agent-a"), (&second, "agent-b")]
+    for (writer, agent) in Claimants_Widening_Each_Crate(&first, &second)
     {
         let blame = format!(
             "{first} and {second} widen different crates' APIs and {writer} was still refused"

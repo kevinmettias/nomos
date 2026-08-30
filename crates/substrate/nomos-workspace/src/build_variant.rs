@@ -90,7 +90,7 @@ mod tests
 
     /// The property that stops a resolver's iteration order from invalidating a corpus.
     #[test]
-    fn Test_Feature_Order_Should_Not_Change_The_Variant()
+    fn Test_Rendered_Should_Ignore_Feature_Order()
     {
         let one = BuildVariant::New("t", "dev", "1.85", ["alpha", "beta", "gamma"]);
         let other = BuildVariant::New("t", "dev", "1.85", ["gamma", "alpha", "beta"]);
@@ -121,14 +121,20 @@ mod tests
     {
         let base = Host();
 
-        for altered in [
-            BuildVariant::New("aarch64-apple-darwin", "dev", "1.85", ["telemetry", "analysis"]),
-            BuildVariant::New("x86_64-pc-windows-msvc", "release", "1.85", ["telemetry", "analysis"]),
-            BuildVariant::New("x86_64-pc-windows-msvc", "dev", "nightly", ["telemetry", "analysis"]),
-        ]
+        for altered in Altered_Variants()
         {
             assert_ne!(base.Id(), altered.Id(), "{altered:?} must not share an identity");
         }
+    }
+
+    /// One host variant altered in each component in turn: target, profile, and toolchain.
+    fn Altered_Variants() -> Vec<BuildVariant>
+    {
+        return vec![
+            BuildVariant::New("aarch64-apple-darwin", "dev", "1.85", ["telemetry", "analysis"]),
+            BuildVariant::New("x86_64-pc-windows-msvc", "release", "1.85", ["telemetry", "analysis"]),
+            BuildVariant::New("x86_64-pc-windows-msvc", "dev", "nightly", ["telemetry", "analysis"]),
+        ];
     }
 
     fn Host() -> BuildVariant
@@ -144,7 +150,7 @@ mod tests
     /// Components are delimited, not concatenated. Two variants whose fields differ only
     /// in where one field ends and the next begins must not collide.
     #[test]
-    fn Test_A_Separator_Should_Not_Be_Forgeable()
+    fn Test_Id_Should_Not_Let_A_Field_Boundary_Be_Forged()
     {
         let left = BuildVariant::New("a", "b", "c", ["d"]);
         let right = BuildVariant::New("ab", "c", "d", Vec::<String>::new());
@@ -155,7 +161,7 @@ mod tests
     /// A feature named twice is one feature. Otherwise a caller that appended before
     /// checking would produce a variant nothing else in the system can reach.
     #[test]
-    fn Test_A_Repeated_Feature_Should_Be_One_Feature()
+    fn Test_New_Should_Deduplicate_A_Repeated_Feature()
     {
         assert_eq!(
             BuildVariant::New("t", "dev", "1.85", ["alpha", "alpha"]).Id(),

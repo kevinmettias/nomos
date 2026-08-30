@@ -84,3 +84,42 @@ impl State
         };
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Is_Claimable_Should_Be_True_Only_For_Ready()
+    {
+        assert!(State::Ready.Is_Claimable());
+        assert!(!State::Claimed.Is_Claimable());
+        assert!(!State::Done.Is_Claimable());
+    }
+
+    #[test]
+    fn Test_Is_Finished_Should_Be_True_For_Done_And_Declined_Only()
+    {
+        assert!(State::Done.Is_Finished());
+        assert!(
+            State::Declined {
+                reason: "superseded".to_owned()
+            }
+            .Is_Finished()
+        );
+        assert!(!State::Ready.Is_Finished());
+        assert!(!State::Claimed.Is_Finished());
+    }
+
+    #[test]
+    fn Test_Describe_Should_Cut_A_Declined_Reason_To_Its_First_Line()
+    {
+        let state = State::Declined {
+            reason: "duplicate of P1-MODEL\nsecond paragraph".to_owned(),
+        };
+
+        assert_eq!(state.Describe(), "Declined: duplicate of P1-MODEL […]");
+        assert_eq!(State::Done.Describe(), "Done");
+    }
+}

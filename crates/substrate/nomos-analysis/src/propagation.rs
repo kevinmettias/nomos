@@ -101,6 +101,21 @@ mod tests
     /// supersession rule must not migrate in here merely because it participates in
     /// invalidation, so `Broadening`, `Supersession` and `GuaranteeDigest` are forbidden
     /// alongside the fact-identity types the first version of this test already covered.
+    /// Fact-identity and invalidation-policy vocabulary this module must stay free of, per
+    /// `D-135` and `D-138`.
+    fn Forbidden_Fact_Identity_Vocabulary() -> [&'static str; 7]
+    {
+        return [
+            "FactIdentity",
+            "FactKey",
+            "GenerationCause",
+            "Component",
+            "Broadening",
+            "Supersession",
+            "GuaranteeDigest",
+        ];
+    }
+
     #[test]
     fn Test_This_Modules_Code_Should_Carry_No_Fact_Identity_Vocabulary()
     {
@@ -111,15 +126,7 @@ mod tests
             .collect::<Vec<_>>()
             .join("\n");
 
-        for forbidden in [
-            "FactIdentity",
-            "FactKey",
-            "GenerationCause",
-            "Component",
-            "Broadening",
-            "Supersession",
-            "GuaranteeDigest",
-        ]
+        for forbidden in Forbidden_Fact_Identity_Vocabulary()
         {
             assert!(
                 !code.contains(forbidden),

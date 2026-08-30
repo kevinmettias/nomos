@@ -330,3 +330,106 @@ impl Tarjan<'_>
         self.components.push(component);
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use crate::{Dependency, FactPayload, GenerationCause, GuaranteeDigest, InputDigest, MaterializedFact, ReadOutcome};
+    use nomos_contracts::{
+        Assurance, BuildVariantId, CapabilityId, ConfigurationId, ContractVersion, EvidenceClass,
+        FactVariant, Guarantee, GenerationId, IncrementalGranularity, ProviderId, SchemaId, SnapshotId, SubjectId,
+    };
+
+    fn Seeded(seed: u8) -> Digest128
+    {
+        return Digest128::From_Bytes([seed; Digest128::BYTE_LENGTH]);
+    }
+
+    fn File_Guarantee() -> Guarantee
+    {
+        return Guarantee::New(
+            FactVariant::Syntactic,
+            Assurance::Sound,
+            Assurance::Sound,
+            IncrementalGranularity::File,
+        );
+    }
+
+    fn Key_For(subject_seed: u8) -> FactKey
+    {
+        return FactKey {
+            contract: CapabilityId::New("nomos.cap.test.rematerialization_group"),
+            contract_version: ContractVersion::New(1, 0),
+            subject: SubjectId::From_Digest(Seeded(subject_seed)),
+            semantic_inputs: InputDigest::Of(&[b"fn main() {}"]),
+            provider: ProviderId::New("nomos.provider.test"),
+            provider_version: ContractVersion::New(1, 0),
+            guarantee: GuaranteeDigest::Of(&File_Guarantee()),
+            variant: BuildVariantId::From_Digest(Seeded(3)),
+            configuration: ConfigurationId::From_Digest(Seeded(4)),
+        };
+    }
+
+    fn Fact_For(key: &FactKey, generation: GenerationId) -> MaterializedFact
+    {
+        return MaterializedFact {
+            identity: key.clone().At(generation),
+            snapshot: SnapshotId::From_Digest(Seeded(2)),
+            evidence: EvidenceClass::Derived,
+            guarantee: File_Guarantee(),
+            payload: FactPayload::New(SchemaId::New("nomos.test.rematerialization_group.v1"), b"tree".to_vec()),
+        };
+    }
+
+    fn Report_Naming(keys: &[FactKey]) -> InvalidationReport
+    {
+        return InvalidationReport {
+            cause: GenerationCause::VariantChanged { variant: BuildVariantId::From_Digest(Seeded(9)) },
+            from: GenerationId::From_Raw(2),
+            direct: keys.to_vec(),
+            dependent: Vec::new(),
+            broadened: Vec::new(),
+            retained: 0,
+        };
+    }
+
+    #[test]
+    fn Test_Is_Cycle_Should_Be_True_Only_For_A_Group_Of_More_Than_One_Member()
+    {
+        assert!(!RematerializationGroup { members: vec![Key_For(1)] }.Is_Cycle());
+        assert!(RematerializationGroup { members: vec![Key_For(1), Key_For(2)] }.Is_Cycle());
+    }
+
+    #[test]
+    fn Test_Condensation_Of_Should_Group_Two_Facts_That_Depend_On_Each_Other()
+    {
+        let mut store = MemoryFactStore::New();
+        let a = Key_For(1);
+        let b = Key_For(2);
+        store
+            .Materialize(
+                Fact_For(&a, GenerationId::From_Raw(1)),
+                &[Dependency { key: b.clone(), outcome: ReadOutcome::Materialized }],
+            )
+            .expect("a depends on b");
+        store
+            .Materialize(
+                Fact_For(&b, GenerationId::From_Raw(1)),
+                &[Dependency { key: a.clone(), outcome: ReadOutcome::Materialized }],
+            )
+            .expect("b depends on a");
+
+        let report = Report_Naming(&[a.clone(), b.clone()]);
+        let groups = Condensation_Of(&report, &store);
+
+        assert_eq!(groups.len(), 1, "a mutual dependency is one group, not two: {groups:?}");
+        let group = groups.first().expect("the assertion above found exactly one group");
+        assert!(group.Is_Cycle());
+        let mut members = group.members.clone();
+        members.sort();
+        let mut expected = vec![a, b];
+        expected.sort();
+        assert_eq!(members, expected);
+    }
+}

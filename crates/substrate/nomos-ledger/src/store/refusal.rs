@@ -481,4 +481,56 @@ mod tests
             items,
         };
     }
+
+    #[test]
+    fn Test_Claim_Refusal_Should_Report_No_Such_Item_When_Absent()
+    {
+        let document = Document_Of(Vec::new());
+
+        let refusal = Claim_Refusal(&document, &ItemId::New("GHOST"), Timestamp_At_Seconds(2_000));
+
+        assert_eq!(refusal, Some(ClaimRefusal::NoSuchItem { item: ItemId::New("GHOST") }));
+    }
+
+    #[test]
+    fn Test_Decline_Refusal_Should_Refuse_An_Item_Someone_Else_Is_Holding()
+    {
+        let mut held = Item_Named("P1-HELD");
+        held.state = ItemState::Claimed;
+        held.claim = Some(Claim {
+            holder: "agent-a".to_owned(),
+            acquired_at: Timestamp_At_Seconds(CLAIM_ACQUIRED_AT_SECONDS),
+            lease_expires_at: Timestamp_At_Seconds(CLAIM_EXPIRES_AT_SECONDS),
+        });
+        let document = Document_Of(vec![held]);
+
+        let refusal = Decline_Refusal(&document, &ItemId::New("P1-HELD"), Timestamp_At_Seconds(2_000));
+
+        assert!(
+            matches!(refusal, Some(ClaimRefusal::StillHeld { .. })),
+            "got {refusal:?}"
+        );
+    }
+
+    #[test]
+    fn Test_Takeover_Refusal_Should_Refuse_A_Verb_Used_On_A_Live_Claim()
+    {
+        let mut held = Item_Named("P1-HELD");
+        held.state = ItemState::Claimed;
+        held.claim = Some(Claim {
+            holder: "agent-a".to_owned(),
+            acquired_at: Timestamp_At_Seconds(CLAIM_ACQUIRED_AT_SECONDS),
+            lease_expires_at: Timestamp_At_Seconds(CLAIM_EXPIRES_AT_SECONDS),
+        });
+        let document = Document_Of(vec![held]);
+
+        // The claim above expires at CLAIM_EXPIRES_AT_SECONDS; asking before that means it
+        // has not lapsed, so a takeover is the wrong verb rather than a valid recovery.
+        let refusal = Takeover_Refusal(&document, &ItemId::New("P1-HELD"), Timestamp_At_Seconds(2_000));
+
+        assert!(
+            matches!(refusal, Some(ClaimRefusal::HeldBy { .. })),
+            "a live claim asked about with the recovery verb must read as held, not takeable: {refusal:?}"
+        );
+    }
 }

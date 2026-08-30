@@ -252,3 +252,55 @@ fn Unknown_Message(first: Claimant<'_>, second: Claimant<'_>, reason: &nomos_mod
         reason.Describe()
     );
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use crate::{ItemKind, ItemOrigin, Territory};
+
+    fn Workable_Item(id: ItemId) -> LedgerItem
+    {
+        return LedgerItem {
+            id,
+            title: "an item".to_owned(),
+            why: "because".to_owned(),
+            done_when: "when it is done".to_owned(),
+            kind: ItemKind::Correction,
+            origin: ItemOrigin::Proposed,
+            territory: Territory::Of_Files(["src/a.rs"]),
+            state: ItemState::Ready,
+            depends_on: Vec::new(),
+            blocked: None,
+            claim: None,
+            verification: None,
+            verified: None,
+            abandoned: Vec::new(),
+            displaced: Vec::new(),
+            declined: None,
+        };
+    }
+
+    #[test]
+    fn Test_Validate_Document_Should_Collect_Every_Violation_Not_Just_The_First()
+    {
+        let now = Timestamp::From_Unix_Seconds(1_000);
+        let duplicate_id = ItemId::New("DUP-1");
+        let first = Workable_Item(duplicate_id.clone());
+        let mut second = Workable_Item(duplicate_id);
+        second.territory = Territory::Of_Files(["src/other.rs"]);
+        let mut reserves_nothing = Workable_Item(ItemId::New("EMPTY-1"));
+        reserves_nothing.territory = Territory::Empty();
+
+        let document = LedgerDocument {
+            schema_version: crate::SCHEMA_VERSION,
+            items: vec![first, second, reserves_nothing],
+        };
+
+        let violations = Validate_Document(&document, now);
+
+        assert!(violations.iter().any(|line| line.contains("more than once")), "{violations:?}");
+        assert!(violations.iter().any(|line| line.contains("reserves nothing")), "{violations:?}");
+        assert_eq!(violations.len(), 2, "exactly these two violations for this fixture, no more, no fewer: {violations:?}");
+    }
+}

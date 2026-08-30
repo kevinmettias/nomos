@@ -348,6 +348,29 @@ fn Test_A_Run_Should_Report_Whether_The_Board_Is_Parallel()
         counted.structural,
         counted.blocked.saturating_sub(counted.structural)
     );
+
+    // The figure printed above is deliberately not asserted against a threshold --
+    // `OD-LEDGER-032` is the record of what demanding one cost (red on 26 of the last 30
+    // commits, for a reason no commit contained), and reasserting it here would be the same
+    // defect in miniature. What *is* asserted is the arithmetic relationship `Count_Exclusion`
+    // promises regardless of which items happen to be on the board: a pair the register alone
+    // excludes is still an excluded pair, and an excluded pair is still one of the pairs
+    // counted. Either inequality breaking would mean the counting itself regressed, which the
+    // report above would not by itself reveal -- it would simply print a different number and
+    // look no less legitimate for it.
+    assert!(
+        counted.blocked <= counted.pairs,
+        "a blocked pair must be one of the pairs counted: {} blocked of {} pairs",
+        counted.blocked,
+        counted.pairs
+    );
+    assert!(
+        counted.structural <= counted.blocked,
+        "a pair excluded only by a declared serializer is still an excluded pair, so \
+         structural must never exceed blocked: {} structural of {} blocked",
+        counted.structural,
+        counted.blocked
+    );
 }
 
 /// How many pairs of record writers there are, how many exclude each other, and how many of

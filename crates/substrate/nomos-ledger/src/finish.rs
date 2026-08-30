@@ -184,3 +184,152 @@ fn Record_From_Argv(argv: &[String], ran: &Ran, gate: GateOutcome, context: Reco
         revision: context.revision,
     };
 }
+
+#[cfg(test)]
+mod local_tests
+{
+    // A SEPARATE, literal `#[cfg(test)] mod tests` (`finish/tests.rs`) already exercises this
+    // module's exported behaviour in depth. It cannot address `Finish_Item` itself:
+    // `check-test-coverage` keys a test's companion unit off the file it is textually written
+    // in, and `finish/tests.rs` is a different file with its own unit. This second, literal
+    // inline module gives `Finish_Item` the one-file address the check reads, without
+    // disturbing that broader suite.
+    use super::*;
+    use crate::{Claim, ItemKind, ItemOrigin, ItemState, Territory};
+    use nomos_platform::ProcessOutput;
+    use nomos_platform_std::{FileLock, StdFileSystem};
+    use std::path::PathBuf;
+
+    struct FixedClock(i64);
+
+    impl Clock for &FixedClock
+    {
+        fn Now(&self) -> Timestamp
+        {
+            return Timestamp::From_Unix_Seconds(self.0);
+        }
+    }
+
+    const NOW: i64 = 1_000_000;
+    const HOLDER: &str = "agent-a";
+
+    const WORKFLOW: &str = "name: gate\n\
+                            \n\
+                            jobs:\n\
+                            \x20 gate:\n\
+                            \x20   steps:\n\
+                            \x20     - uses: actions/checkout@v4\n\
+                            \x20     - name: Lint\n\
+                            \x20       run: cargo clippy --workspace --all-targets -- -D warnings\n\
+                            \x20     - name: Test\n\
+                            \x20       run: cargo test --workspace\n";
+
+    /// A launcher that always exits zero, standing in for a lint step and a predicate that
+    /// both pass.
+    struct AlwaysZero;
+
+    impl ProcessLauncher for &AlwaysZero
+    {
+        fn Run(&self, _command: &Command) -> Result<ProcessOutput, String>
+        {
+            return Ok(ProcessOutput {
+                outcome: ExitOutcome::Exited { code: 0 },
+                stdout: "all good".to_owned(),
+                stderr: String::new(),
+            });
+        }
+    }
+
+    fn Temp_Dir(name: &str) -> PathBuf
+    {
+        let mut path = std::env::temp_dir();
+        path.push(format!("nomos-finish-item-{name}-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&path);
+        std::fs::create_dir_all(&path).expect("test needs a temp directory");
+        return path;
+    }
+
+    fn Write_Workflow(directory: &Path)
+    {
+        let workflows = directory.join(".github").join("workflows");
+        std::fs::create_dir_all(&workflows).expect("test needs a workflow directory");
+        std::fs::write(workflows.join("gate.yml"), WORKFLOW).expect("test needs a workflow");
+    }
+
+    fn Ledger_At<'clock>(
+        directory: &Path,
+        clock: &'clock FixedClock,
+    ) -> FileLedger<StdFileSystem, &'clock FixedClock, FileLock>
+    {
+        return FileLedger::At(
+            directory.join("ledger.json"),
+            StdFileSystem,
+            clock,
+            FileLock::At(directory.join("ledger.lock")),
+        );
+    }
+
+    fn Claimed_Item(id: ItemId) -> crate::LedgerItem
+    {
+        return crate::LedgerItem {
+            id,
+            title: "an item".to_owned(),
+            why: "it needs doing".to_owned(),
+            done_when: "the predicate passes".to_owned(),
+            kind: ItemKind::Correction,
+            origin: ItemOrigin::Proposed,
+            territory: Territory::Of_Files(["src/a.rs"]),
+            state: ItemState::Claimed,
+            depends_on: Vec::new(),
+            blocked: None,
+            claim: Some(Claim {
+                holder: HOLDER.to_owned(),
+                acquired_at: Timestamp::From_Unix_Seconds(NOW),
+                lease_expires_at: Timestamp::From_Unix_Seconds(NOW + 3_600),
+            }),
+            verification: Some(VerificationPredicate::From_String_Arguments(vec![
+                "a-predicate".to_owned(),
+            ])),
+            verified: None,
+            abandoned: Vec::new(),
+            displaced: Vec::new(),
+            declined: None,
+        };
+    }
+
+    /// The property this whole module exists for, stated over the one function that ties its
+    /// pieces together: a predicate that passes behind a green gate closes the claim and
+    /// leaves a verification record behind, rather than merely saying it did.
+    #[test]
+    fn Test_Finish_Item_Should_Record_A_Passing_Predicate_And_Close_The_Claim()
+    {
+        let directory = Temp_Dir("passing");
+        Write_Workflow(&directory);
+        let clock = FixedClock(NOW);
+        let mut ledger = Ledger_At(&directory, &clock);
+        let item_id = ItemId::New("F-1");
+        ledger
+            .Save(&LedgerDocument {
+                schema_version: crate::SCHEMA_VERSION,
+                items: vec![Claimed_Item(item_id.clone())],
+            })
+            .expect("a claimed item is a valid document");
+        let launcher = AlwaysZero;
+
+        let record = Finish_Item(
+            &mut ledger,
+            &&launcher,
+            &Finishing { item: &item_id, holder: HOLDER },
+            Some(&directory),
+        )
+        .expect("a zero-exit predicate behind a green gate must finish");
+
+        assert_eq!(record.exit_code, 0);
+        assert!(record.gate.is_some(), "the gate's own outcome must ride along with the predicate's");
+
+        let reloaded = ledger.Load().expect("the release must have been written");
+        let closed = reloaded.items.first().expect("the item survives finishing");
+        assert_eq!(closed.state, ItemState::Done);
+        assert_eq!(closed.claim, None, "a finished item is no longer held");
+    }
+}
