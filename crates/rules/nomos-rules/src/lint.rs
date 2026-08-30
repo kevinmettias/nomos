@@ -193,86 +193,6 @@ mod tests
 
     const PROVIDER: &str = "nomos.test.lint.resolves";
 
-    fn Source_File(package: &str) -> SourceFile
-    {
-        return SourceFile::New(package, SubjectId::From_Digest(Content_Digest(package.as_bytes())), String::new());
-    }
-
-    fn Guarantee_At_Floor() -> Guarantee
-    {
-        return Guarantee::New(
-            FactVariant::SemanticallyResolved,
-            Assurance::Sound,
-            Assurance::Unknown,
-            IncrementalGranularity::Project,
-        );
-    }
-
-    fn Test_Context() -> Context
-    {
-        return Context {
-            snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([1; 16])),
-            variant: BuildVariantId::From_Digest(Digest128::From_Bytes([2; 16])),
-            configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([3; 16])),
-            generation: GenerationId::INITIAL,
-        };
-    }
-
-    struct TestOffering
-    {
-        store: MemoryFactStore,
-        registry: Registry,
-        offer: ProviderOffer,
-    }
-
-    fn Offering() -> TestOffering
-    {
-        let mut registry = Registry::New();
-        registry
-            .Declare(nomos_cap_lint::Capability_Contract())
-            .expect("the lint capability is declared once");
-
-        let offer = ProviderOffer {
-            provider: ProviderId::New(PROVIDER),
-            capability: nomos_cap_lint::Capability(),
-            version: nomos_cap_lint::CONTRACT_VERSION,
-            guarantee: Guarantee_At_Floor(),
-        };
-        registry.Offer(offer.clone()).expect("within the ceiling");
-
-        return TestOffering { store: MemoryFactStore::New(), registry, offer };
-    }
-
-    fn Materialize_Diagnostics_Fact(store: &mut MemoryFactStore, source: &SourceFile, offer: &ProviderOffer, payload: &DiagnosticsPayload)
-    {
-        let context = Test_Context();
-        let bytes = nomos_cap_lint::Encode_Payload(payload);
-        let key = FactKey {
-            contract: nomos_cap_lint::Capability(),
-            contract_version: offer.version,
-            subject: source.subject,
-            semantic_inputs: InputDigest::Of(&[]),
-            provider: offer.provider.clone(),
-            provider_version: offer.version,
-            guarantee: GuaranteeDigest::Of(&offer.guarantee),
-            variant: context.variant,
-            configuration: context.configuration,
-        };
-
-        store
-            .Materialize(
-                Fact {
-                    identity: key.At(context.generation),
-                    snapshot: context.snapshot,
-                    evidence: EvidenceClass::Verified,
-                    guarantee: offer.guarantee,
-                    payload: FactPayload::New(nomos_cap_lint::Payload_Schema(), bytes),
-                },
-                &[],
-            )
-            .expect("nothing here is backdated");
-    }
-
     #[test]
     fn Test_A_Real_Fact_With_A_Diagnostic_Should_Be_Read_And_Relayed()
     {
@@ -338,6 +258,13 @@ mod tests
         assert_eq!(findings.first().expect("asserted len 1 above").gate, GateCategory::Advisory);
     }
 
+    struct TestOffering
+    {
+        store: MemoryFactStore,
+        registry: Registry,
+        offer: ProviderOffer,
+    }
+
     #[test]
     fn Test_Multiple_Diagnostics_On_One_Member_Should_Each_Become_A_Finding()
     {
@@ -372,5 +299,78 @@ mod tests
         let findings = Check_Lint_Diagnostics(&[source], &mut reader);
 
         assert_eq!(findings.len(), 2, "{findings:?}");
+    }
+
+    fn Source_File(package: &str) -> SourceFile
+    {
+        return SourceFile::New(package, SubjectId::From_Digest(Content_Digest(package.as_bytes())), String::new());
+    }
+
+    fn Guarantee_At_Floor() -> Guarantee
+    {
+        return Guarantee::New(
+            FactVariant::SemanticallyResolved,
+            Assurance::Sound,
+            Assurance::Unknown,
+            IncrementalGranularity::Project,
+        );
+    }
+
+    fn Test_Context() -> Context
+    {
+        return Context {
+            snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([1; 16])),
+            variant: BuildVariantId::From_Digest(Digest128::From_Bytes([2; 16])),
+            configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([3; 16])),
+            generation: GenerationId::INITIAL,
+        };
+    }
+
+    fn Offering() -> TestOffering
+    {
+        let mut registry = Registry::New();
+        registry
+            .Declare(nomos_cap_lint::Capability_Contract())
+            .expect("the lint capability is declared once");
+
+        let offer = ProviderOffer {
+            provider: ProviderId::New(PROVIDER),
+            capability: nomos_cap_lint::Capability(),
+            version: nomos_cap_lint::CONTRACT_VERSION,
+            guarantee: Guarantee_At_Floor(),
+        };
+        registry.Offer(offer.clone()).expect("within the ceiling");
+
+        return TestOffering { store: MemoryFactStore::New(), registry, offer };
+    }
+
+    fn Materialize_Diagnostics_Fact(store: &mut MemoryFactStore, source: &SourceFile, offer: &ProviderOffer, payload: &DiagnosticsPayload)
+    {
+        let context = Test_Context();
+        let bytes = nomos_cap_lint::Encode_Payload(payload);
+        let key = FactKey {
+            contract: nomos_cap_lint::Capability(),
+            contract_version: offer.version,
+            subject: source.subject,
+            semantic_inputs: InputDigest::Of(&[]),
+            provider: offer.provider.clone(),
+            provider_version: offer.version,
+            guarantee: GuaranteeDigest::Of(&offer.guarantee),
+            variant: context.variant,
+            configuration: context.configuration,
+        };
+
+        store
+            .Materialize(
+                Fact {
+                    identity: key.At(context.generation),
+                    snapshot: context.snapshot,
+                    evidence: EvidenceClass::Verified,
+                    guarantee: offer.guarantee,
+                    payload: FactPayload::New(nomos_cap_lint::Payload_Schema(), bytes),
+                },
+                &[],
+            )
+            .expect("nothing here is backdated");
     }
 }

@@ -249,10 +249,10 @@ fn Is_The_Variant_List(item: &PayloadItem) -> bool
 pub fn Universes_In(path: &str, payload: &SyntaxPayload) -> Vec<DeclaredUniverse>
 {
     return match Read_Universes(path, payload)
-    {
+           {
         Reading::Observed(universes) => universes,
         Reading::Unobserved { .. } => Vec::new(),
-    };
+           };
 }
 
 /// The mirror named in an item's documentation, if one is named.
@@ -297,13 +297,6 @@ mod tests
 {
     use super::*;
     use nomos_cap_syntax::Parse_Payload;
-
-    /// A payload built from item records, so a fixture reads as the bytes a provider wrote.
-    fn Payload_From_Records(records: &str) -> SyntaxPayload
-    {
-        return Parse_Payload(format!("unexpanded\t0\n{records}").as_bytes())
-            .expect("the fixture is written in the schema");
-    }
 
     #[test]
     fn Test_A_Constant_Slice_Should_Be_Found()
@@ -452,5 +445,12 @@ mod tests
     fn Test_A_File_That_Declares_Nothing_Should_Be_Observed_And_Empty()
     {
         assert_eq!(Read_Universes("a.rs", &Payload_From_Records("")), Reading::Observed(Vec::new()));
+    }
+
+    /// A payload built from item records, so a fixture reads as the bytes a provider wrote.
+    fn Payload_From_Records(records: &str) -> SyntaxPayload
+    {
+        return Parse_Payload(format!("unexpanded\t0\n{records}").as_bytes())
+            .expect("the fixture is written in the schema");
     }
 }

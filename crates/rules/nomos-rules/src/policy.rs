@@ -187,86 +187,6 @@ mod tests
 
     const PROVIDER: &str = "nomos.test.policy.resolves";
 
-    fn Source() -> SourceFile
-    {
-        return SourceFile::New("workspace", nomos_model::Subject_Of_Path(""), String::new());
-    }
-
-    fn Guarantee_At_Floor() -> Guarantee
-    {
-        return Guarantee::New(
-            FactVariant::SemanticallyResolved,
-            Assurance::Sound,
-            Assurance::Unknown,
-            IncrementalGranularity::WholeWorkspace,
-        );
-    }
-
-    fn Test_Context() -> Context
-    {
-        return Context {
-            snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([1; 16])),
-            variant: BuildVariantId::From_Digest(Digest128::From_Bytes([2; 16])),
-            configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([3; 16])),
-            generation: GenerationId::INITIAL,
-        };
-    }
-
-    struct TestOffering
-    {
-        store: MemoryFactStore,
-        registry: Registry,
-        offer: ProviderOffer,
-    }
-
-    fn Offering() -> TestOffering
-    {
-        let mut registry = Registry::New();
-        registry
-            .Declare(nomos_cap_dependency_policy::Capability_Contract())
-            .expect("the dependency-policy capability is declared once");
-
-        let offer = ProviderOffer {
-            provider: ProviderId::New(PROVIDER),
-            capability: nomos_cap_dependency_policy::Capability(),
-            version: nomos_cap_dependency_policy::CONTRACT_VERSION,
-            guarantee: Guarantee_At_Floor(),
-        };
-        registry.Offer(offer.clone()).expect("within the ceiling");
-
-        return TestOffering { store: MemoryFactStore::New(), registry, offer };
-    }
-
-    fn Materialize_Policy_Fact(store: &mut MemoryFactStore, source: &SourceFile, offer: &ProviderOffer, payload: &PolicyPayload)
-    {
-        let context = Test_Context();
-        let bytes = nomos_cap_dependency_policy::Encode_Payload(payload);
-        let key = FactKey {
-            contract: nomos_cap_dependency_policy::Capability(),
-            contract_version: offer.version,
-            subject: source.subject,
-            semantic_inputs: InputDigest::Of(&[]),
-            provider: offer.provider.clone(),
-            provider_version: offer.version,
-            guarantee: GuaranteeDigest::Of(&offer.guarantee),
-            variant: context.variant,
-            configuration: context.configuration,
-        };
-
-        store
-            .Materialize(
-                Fact {
-                    identity: key.At(context.generation),
-                    snapshot: context.snapshot,
-                    evidence: EvidenceClass::Verified,
-                    guarantee: offer.guarantee,
-                    payload: FactPayload::New(nomos_cap_dependency_policy::Payload_Schema(), bytes),
-                },
-                &[],
-            )
-            .expect("nothing here is backdated");
-    }
-
     #[test]
     fn Test_A_Real_Fact_With_A_Violation_Should_Be_Read_And_Relayed()
     {
@@ -321,6 +241,13 @@ mod tests
         assert!(findings.is_empty());
     }
 
+    struct TestOffering
+    {
+        store: MemoryFactStore,
+        registry: Registry,
+        offer: ProviderOffer,
+    }
+
     #[test]
     fn Test_A_Source_With_No_Fact_Should_Be_Reported_Rather_Than_Silently_Clean()
     {
@@ -355,5 +282,78 @@ mod tests
         let findings = Check_Dependency_Policy(&[source], &mut reader);
 
         assert_eq!(findings.len(), 2, "{findings:?}");
+    }
+
+    fn Source() -> SourceFile
+    {
+        return SourceFile::New("workspace", nomos_model::Subject_Of_Path(""), String::new());
+    }
+
+    fn Guarantee_At_Floor() -> Guarantee
+    {
+        return Guarantee::New(
+            FactVariant::SemanticallyResolved,
+            Assurance::Sound,
+            Assurance::Unknown,
+            IncrementalGranularity::WholeWorkspace,
+        );
+    }
+
+    fn Test_Context() -> Context
+    {
+        return Context {
+            snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([1; 16])),
+            variant: BuildVariantId::From_Digest(Digest128::From_Bytes([2; 16])),
+            configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([3; 16])),
+            generation: GenerationId::INITIAL,
+        };
+    }
+
+    fn Offering() -> TestOffering
+    {
+        let mut registry = Registry::New();
+        registry
+            .Declare(nomos_cap_dependency_policy::Capability_Contract())
+            .expect("the dependency-policy capability is declared once");
+
+        let offer = ProviderOffer {
+            provider: ProviderId::New(PROVIDER),
+            capability: nomos_cap_dependency_policy::Capability(),
+            version: nomos_cap_dependency_policy::CONTRACT_VERSION,
+            guarantee: Guarantee_At_Floor(),
+        };
+        registry.Offer(offer.clone()).expect("within the ceiling");
+
+        return TestOffering { store: MemoryFactStore::New(), registry, offer };
+    }
+
+    fn Materialize_Policy_Fact(store: &mut MemoryFactStore, source: &SourceFile, offer: &ProviderOffer, payload: &PolicyPayload)
+    {
+        let context = Test_Context();
+        let bytes = nomos_cap_dependency_policy::Encode_Payload(payload);
+        let key = FactKey {
+            contract: nomos_cap_dependency_policy::Capability(),
+            contract_version: offer.version,
+            subject: source.subject,
+            semantic_inputs: InputDigest::Of(&[]),
+            provider: offer.provider.clone(),
+            provider_version: offer.version,
+            guarantee: GuaranteeDigest::Of(&offer.guarantee),
+            variant: context.variant,
+            configuration: context.configuration,
+        };
+
+        store
+            .Materialize(
+                Fact {
+                    identity: key.At(context.generation),
+                    snapshot: context.snapshot,
+                    evidence: EvidenceClass::Verified,
+                    guarantee: offer.guarantee,
+                    payload: FactPayload::New(nomos_cap_dependency_policy::Payload_Schema(), bytes),
+                },
+                &[],
+            )
+            .expect("nothing here is backdated");
     }
 }

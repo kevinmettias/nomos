@@ -112,11 +112,6 @@ mod tests
     use nomos_contracts::SubjectId;
     use nomos_model::Content_Digest;
 
-    fn Source_File(package: &str) -> SourceFile
-    {
-        return SourceFile::New(package, SubjectId::From_Digest(Content_Digest(package.as_bytes())), String::new());
-    }
-
     fn Dependency_Edge(target: &str) -> DependencyEdge
     {
         return DependencyEdge {
@@ -242,5 +237,10 @@ mod tests
         let findings = Violations_In(&payload, &Source_File("nomos-contracts"));
 
         assert!(findings.is_empty(), "{findings:?}");
+    }
+
+    fn Source_File(package: &str) -> SourceFile
+    {
+        return SourceFile::New(package, SubjectId::From_Digest(Content_Digest(package.as_bytes())), String::new());
     }
 }

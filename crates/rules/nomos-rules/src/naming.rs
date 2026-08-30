@@ -99,14 +99,23 @@ mod tests
 
     const PARSER: &str = "nomos.test.naming.parses";
 
-    fn Guarantee_At_Floor() -> Guarantee
+    #[test]
+    fn Test_A_Real_Fact_Should_Be_Read_And_Judged()
     {
-        return Guarantee::New(
-            FactVariant::Syntactic,
-            Assurance::Sound,
-            Assurance::Unknown,
-            IncrementalGranularity::File,
+        let source = Source_File(Path("src/lib.rs"), Text("fn bad_name() {}"));
+        let TestOffering { mut store, registry, offer } = Offering();
+        Materialize_Syntax_Fact(
+            &mut store,
+            &source,
+            &offer,
+            "unexpanded\t0\nitem\t0\tFunction\tPublic\tbad_name\t.\t+fn/0\n",
         );
+
+        let mut reader = Reader::On(&store, &registry, Test_Context());
+        let findings = Check_Naming_Convention(&[source], &mut reader);
+
+        assert_eq!(findings.len(), 1, "{findings:?}");
+        assert_eq!(findings.first().expect("asserted len 1 above").subject_name, "bad_name");
     }
 
     /// `path` and `text` are both `&str`; without a distinct type per position a call site
@@ -115,48 +124,6 @@ mod tests
     /// other cannot satisfy.
     struct Path<'a>(&'a str);
     struct Text<'a>(&'a str);
-
-    fn Source_File(path: Path<'_>, text: Text<'_>) -> SourceFile
-    {
-        return SourceFile::New(path.0, SubjectId::From_Digest(Content_Digest(path.0.as_bytes())), text.0);
-    }
-
-    fn Test_Context() -> Context
-    {
-        return Context {
-            snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([1; 16])),
-            variant: BuildVariantId::From_Digest(Digest128::From_Bytes([2; 16])),
-            configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([3; 16])),
-            generation: GenerationId::INITIAL,
-        };
-    }
-
-    /// A fresh fact store, registry, and the one [`ProviderOffer`] declared into it — named
-    /// so a call site reads `offering.store`, not a position it has to count.
-    struct TestOffering
-    {
-        store: MemoryFactStore,
-        registry: Registry,
-        offer: ProviderOffer,
-    }
-
-    fn Offering() -> TestOffering
-    {
-        let mut registry = Registry::New();
-        registry
-            .Declare(nomos_cap_syntax::Capability_Contract())
-            .expect("the syntax capability is declared once");
-
-        let offer = ProviderOffer {
-            provider: ProviderId::New(PARSER),
-            capability: nomos_cap_syntax::Capability(),
-            version: nomos_cap_syntax::CONTRACT_VERSION,
-            guarantee: Guarantee_At_Floor(),
-        };
-        registry.Offer(offer.clone()).expect("within the ceiling");
-
-        return TestOffering { store: MemoryFactStore::New(), registry, offer };
-    }
 
     fn Materialize_Syntax_Fact(store: &mut MemoryFactStore, source: &SourceFile, offer: &ProviderOffer, payload: &str)
     {
@@ -191,25 +158,6 @@ mod tests
     }
 
     #[test]
-    fn Test_A_Real_Fact_Should_Be_Read_And_Judged()
-    {
-        let source = Source_File(Path("src/lib.rs"), Text("fn bad_name() {}"));
-        let TestOffering { mut store, registry, offer } = Offering();
-        Materialize_Syntax_Fact(
-            &mut store,
-            &source,
-            &offer,
-            "unexpanded\t0\nitem\t0\tFunction\tPublic\tbad_name\t.\t+fn/0\n",
-        );
-
-        let mut reader = Reader::On(&store, &registry, Test_Context());
-        let findings = Check_Naming_Convention(&[source], &mut reader);
-
-        assert_eq!(findings.len(), 1, "{findings:?}");
-        assert_eq!(findings.first().expect("asserted len 1 above").subject_name, "bad_name");
-    }
-
-    #[test]
     fn Test_A_Subject_With_No_Fact_Should_Be_Reported_Rather_Than_Silently_Clean()
     {
         let source = Source_File(Path("src/lib.rs"), Text("fn bad_name() {}"));
@@ -223,5 +171,57 @@ mod tests
             findings.first().expect("asserted len 1 above").subject_name,
             "src/lib.rs"
         );
+    }
+
+    /// A fresh fact store, registry, and the one [`ProviderOffer`] declared into it — named
+    /// so a call site reads `offering.store`, not a position it has to count.
+    struct TestOffering
+    {
+        store: MemoryFactStore,
+        registry: Registry,
+        offer: ProviderOffer,
+    }
+
+    fn Guarantee_At_Floor() -> Guarantee
+    {
+        return Guarantee::New(
+            FactVariant::Syntactic,
+            Assurance::Sound,
+            Assurance::Unknown,
+            IncrementalGranularity::File,
+        );
+    }
+
+    fn Source_File(path: Path<'_>, text: Text<'_>) -> SourceFile
+    {
+        return SourceFile::New(path.0, SubjectId::From_Digest(Content_Digest(path.0.as_bytes())), text.0);
+    }
+
+    fn Test_Context() -> Context
+    {
+        return Context {
+            snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([1; 16])),
+            variant: BuildVariantId::From_Digest(Digest128::From_Bytes([2; 16])),
+            configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([3; 16])),
+            generation: GenerationId::INITIAL,
+        };
+    }
+
+    fn Offering() -> TestOffering
+    {
+        let mut registry = Registry::New();
+        registry
+            .Declare(nomos_cap_syntax::Capability_Contract())
+            .expect("the syntax capability is declared once");
+
+        let offer = ProviderOffer {
+            provider: ProviderId::New(PARSER),
+            capability: nomos_cap_syntax::Capability(),
+            version: nomos_cap_syntax::CONTRACT_VERSION,
+            guarantee: Guarantee_At_Floor(),
+        };
+        registry.Offer(offer.clone()).expect("within the ceiling");
+
+        return TestOffering { store: MemoryFactStore::New(), registry, offer };
     }
 }

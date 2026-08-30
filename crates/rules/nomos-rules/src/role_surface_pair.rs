@@ -106,16 +106,6 @@ mod tests
 {
     use super::*;
 
-    fn Role_Surface_Pair(crate_name: &str, declared_role: &str, actual_surface: &str) -> RoleSurfacePair
-    {
-        return RoleSurfacePair {
-            crate_root: format!("crates/example/{crate_name}"),
-            crate_name: crate_name.to_owned(),
-            declared_role: declared_role.to_owned(),
-            actual_surface: actual_surface.to_owned(),
-        };
-    }
-
     #[test]
     fn Test_Every_Subject_Is_Reported_As_Agent_Required()
     {
@@ -126,7 +116,8 @@ mod tests
 
         let findings = Check_Declared_Role_Matches_Surface(&subjects);
 
-        assert_eq!(findings.len(), 2, "{findings:?}");
+        const SUBJECT_COUNT: usize = 2;
+        assert_eq!(findings.len(), SUBJECT_COUNT, "{findings:?}");
         for finding in &findings
         {
             assert_eq!(finding.applicability, Applicability::AgentRequired);
@@ -150,6 +141,16 @@ mod tests
 
         assert_eq!(first.applicability, second.applicability);
         assert_eq!(first.evidence, second.evidence);
+    }
+
+    fn Role_Surface_Pair(crate_name: &str, declared_role: &str, actual_surface: &str) -> RoleSurfacePair
+    {
+        return RoleSurfacePair {
+            crate_root: format!("crates/example/{crate_name}"),
+            crate_name: crate_name.to_owned(),
+            declared_role: declared_role.to_owned(),
+            actual_surface: actual_surface.to_owned(),
+        };
     }
 
     #[test]

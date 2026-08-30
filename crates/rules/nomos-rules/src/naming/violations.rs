@@ -173,12 +173,6 @@ mod tests
     {
         use super::*;
 
-        fn Payload_From_Text(text: &str) -> SyntaxPayload
-        {
-            return nomos_cap_syntax::Parse_Payload(text.as_bytes())
-                .expect("this fixture payload is well formed");
-        }
-
         #[test]
         fn Test_A_Conforming_Function_Should_Produce_No_Finding()
         {
@@ -255,6 +249,12 @@ mod tests
             let payload = Payload_From_Text("unexpanded\t0\n");
 
             assert!(Violations_In(&payload, "src/lib.rs").is_empty());
+        }
+
+        fn Payload_From_Text(text: &str) -> SyntaxPayload
+        {
+            return nomos_cap_syntax::Parse_Payload(text.as_bytes())
+                .expect("this fixture payload is well formed");
         }
     }
 }

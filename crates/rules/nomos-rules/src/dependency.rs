@@ -176,11 +176,6 @@ mod tests
 
     const PROVIDER: &str = "nomos.test.dependency.resolves";
 
-    fn Source_File(package: &str) -> SourceFile
-    {
-        return SourceFile::New(package, SubjectId::From_Digest(Content_Digest(package.as_bytes())), String::new());
-    }
-
     fn Dependency_Edge(target: &str) -> DependencyEdge
     {
         return DependencyEdge {
@@ -188,83 +183,6 @@ mod tests
             kind: DependencyKind::Normal,
             optional: false,
         };
-    }
-
-    fn Guarantee_At_Floor() -> Guarantee
-    {
-        return Guarantee::New(
-            FactVariant::SemanticallyResolved,
-            Assurance::Sound,
-            Assurance::Sound,
-            IncrementalGranularity::Project,
-        );
-    }
-
-    fn Test_Context() -> Context
-    {
-        return Context {
-            snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([1; 16])),
-            variant: BuildVariantId::From_Digest(Digest128::From_Bytes([2; 16])),
-            configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([3; 16])),
-            generation: GenerationId::INITIAL,
-        };
-    }
-
-    /// A fresh fact store, registry, and the one [`ProviderOffer`] declared into it — named
-    /// so a call site reads `offering.store`, not a position it has to count.
-    struct TestOffering
-    {
-        store: MemoryFactStore,
-        registry: Registry,
-        offer: ProviderOffer,
-    }
-
-    fn Offering() -> TestOffering
-    {
-        let mut registry = Registry::New();
-        registry
-            .Declare(nomos_cap_dependency::Capability_Contract())
-            .expect("the dependency capability is declared once");
-
-        let offer = ProviderOffer {
-            provider: ProviderId::New(PROVIDER),
-            capability: nomos_cap_dependency::Capability(),
-            version: nomos_cap_dependency::CONTRACT_VERSION,
-            guarantee: Guarantee_At_Floor(),
-        };
-        registry.Offer(offer.clone()).expect("within the ceiling");
-
-        return TestOffering { store: MemoryFactStore::New(), registry, offer };
-    }
-
-    fn Materialize_Dependency_Fact(store: &mut MemoryFactStore, source: &SourceFile, offer: &ProviderOffer, payload: &DependencyPayload)
-    {
-        let context = Test_Context();
-        let bytes = nomos_cap_dependency::Encode_Payload(payload);
-        let key = FactKey {
-            contract: nomos_cap_dependency::Capability(),
-            contract_version: offer.version,
-            subject: source.subject,
-            semantic_inputs: InputDigest::Of(&[]),
-            provider: offer.provider.clone(),
-            provider_version: offer.version,
-            guarantee: GuaranteeDigest::Of(&offer.guarantee),
-            variant: context.variant,
-            configuration: context.configuration,
-        };
-
-        store
-            .Materialize(
-                MaterializedFact {
-                    identity: key.At(context.generation),
-                    snapshot: context.snapshot,
-                    evidence: EvidenceClass::Verified,
-                    guarantee: offer.guarantee,
-                    payload: FactPayload::New(nomos_cap_dependency::Payload_Schema(), bytes),
-                },
-                &[],
-            )
-            .expect("nothing here is backdated");
     }
 
     #[test]
@@ -322,6 +240,15 @@ mod tests
         assert!(findings.is_empty(), "{findings:?}");
     }
 
+    /// A fresh fact store, registry, and the one [`ProviderOffer`] declared into it — named
+    /// so a call site reads `offering.store`, not a position it has to count.
+    struct TestOffering
+    {
+        store: MemoryFactStore,
+        registry: Registry,
+        offer: ProviderOffer,
+    }
+
     #[test]
     fn Test_An_Undeclared_Package_Should_Produce_One_Completeness_Finding()
     {
@@ -361,5 +288,78 @@ mod tests
             RuleId::New(DEPENDENCY_COMPLETENESS),
             "an unread subject must be filed under whichever rule asked, not always direction's"
         );
+    }
+
+    fn Source_File(package: &str) -> SourceFile
+    {
+        return SourceFile::New(package, SubjectId::From_Digest(Content_Digest(package.as_bytes())), String::new());
+    }
+
+    fn Guarantee_At_Floor() -> Guarantee
+    {
+        return Guarantee::New(
+            FactVariant::SemanticallyResolved,
+            Assurance::Sound,
+            Assurance::Sound,
+            IncrementalGranularity::Project,
+        );
+    }
+
+    fn Test_Context() -> Context
+    {
+        return Context {
+            snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([1; 16])),
+            variant: BuildVariantId::From_Digest(Digest128::From_Bytes([2; 16])),
+            configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([3; 16])),
+            generation: GenerationId::INITIAL,
+        };
+    }
+
+    fn Offering() -> TestOffering
+    {
+        let mut registry = Registry::New();
+        registry
+            .Declare(nomos_cap_dependency::Capability_Contract())
+            .expect("the dependency capability is declared once");
+
+        let offer = ProviderOffer {
+            provider: ProviderId::New(PROVIDER),
+            capability: nomos_cap_dependency::Capability(),
+            version: nomos_cap_dependency::CONTRACT_VERSION,
+            guarantee: Guarantee_At_Floor(),
+        };
+        registry.Offer(offer.clone()).expect("within the ceiling");
+
+        return TestOffering { store: MemoryFactStore::New(), registry, offer };
+    }
+
+    fn Materialize_Dependency_Fact(store: &mut MemoryFactStore, source: &SourceFile, offer: &ProviderOffer, payload: &DependencyPayload)
+    {
+        let context = Test_Context();
+        let bytes = nomos_cap_dependency::Encode_Payload(payload);
+        let key = FactKey {
+            contract: nomos_cap_dependency::Capability(),
+            contract_version: offer.version,
+            subject: source.subject,
+            semantic_inputs: InputDigest::Of(&[]),
+            provider: offer.provider.clone(),
+            provider_version: offer.version,
+            guarantee: GuaranteeDigest::Of(&offer.guarantee),
+            variant: context.variant,
+            configuration: context.configuration,
+        };
+
+        store
+            .Materialize(
+                MaterializedFact {
+                    identity: key.At(context.generation),
+                    snapshot: context.snapshot,
+                    evidence: EvidenceClass::Verified,
+                    guarantee: offer.guarantee,
+                    payload: FactPayload::New(nomos_cap_dependency::Payload_Schema(), bytes),
+                },
+                &[],
+            )
+            .expect("nothing here is backdated");
     }
 }

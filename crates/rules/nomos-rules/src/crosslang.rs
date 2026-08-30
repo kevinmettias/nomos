@@ -113,79 +113,6 @@ mod tests
 
     const PROVIDER: &str = "nomos.test.crosslang.resolves";
 
-    fn Source_File(path: &str) -> SourceFile
-    {
-        return SourceFile::New(path, nomos_model::Subject_Of_Path(path), String::new());
-    }
-
-    fn Guarantee_At_Floor() -> Guarantee
-    {
-        return Guarantee::New(FactVariant::Syntactic, Assurance::Sound, Assurance::Unknown, IncrementalGranularity::File);
-    }
-
-    fn Test_Context() -> Context
-    {
-        return Context {
-            snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([1; 16])),
-            variant: BuildVariantId::From_Digest(Digest128::From_Bytes([2; 16])),
-            configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([3; 16])),
-            generation: GenerationId::INITIAL,
-        };
-    }
-
-    struct TestOffering
-    {
-        store: MemoryFactStore,
-        registry: Registry,
-        offer: ProviderOffer,
-    }
-
-    fn Offering() -> TestOffering
-    {
-        let mut registry = Registry::New();
-        registry.Declare(nomos_cap_syntax::Capability_Contract()).expect("declared once");
-
-        let offer = ProviderOffer {
-            provider: ProviderId::New(PROVIDER),
-            capability: nomos_cap_syntax::Capability(),
-            version: nomos_cap_syntax::CONTRACT_VERSION,
-            guarantee: Guarantee_At_Floor(),
-        };
-        registry.Offer(offer.clone()).expect("within the ceiling");
-
-        return TestOffering { store: MemoryFactStore::New(), registry, offer };
-    }
-
-    fn Materialize_Syntax_Fact(store: &mut MemoryFactStore, source: &SourceFile, offer: &ProviderOffer, payload: &SyntaxPayload)
-    {
-        let context = Test_Context();
-        let bytes = nomos_cap_syntax::Render_Payload(payload);
-        let key = FactKey {
-            contract: nomos_cap_syntax::Capability(),
-            contract_version: offer.version,
-            subject: source.subject,
-            semantic_inputs: InputDigest::Of(&[source.text.as_bytes()]),
-            provider: offer.provider.clone(),
-            provider_version: offer.version,
-            guarantee: GuaranteeDigest::Of(&offer.guarantee),
-            variant: context.variant,
-            configuration: context.configuration,
-        };
-
-        store
-            .Materialize(
-                Fact {
-                    identity: key.At(context.generation),
-                    snapshot: context.snapshot,
-                    evidence: EvidenceClass::Verified,
-                    guarantee: offer.guarantee,
-                    payload: FactPayload::New(nomos_cap_syntax::Payload_Schema(), bytes),
-                },
-                &[],
-            )
-            .expect("nothing here is backdated");
-    }
-
     fn Struct_Item(ordinal: u32, qualified_name: &str, documentation: Observation, fields: &[(&str, &str)]) -> PayloadItem
     {
         let owned: Vec<(String, String)> = fields.iter().map(|(field_name, t)| return ((*field_name).to_owned(), (*t).to_owned())).collect();
@@ -272,6 +199,13 @@ mod tests
         assert!(found.summary.contains('b'), "{}", found.summary);
     }
 
+    struct TestOffering
+    {
+        store: MemoryFactStore,
+        registry: Registry,
+        offer: ProviderOffer,
+    }
+
     #[test]
     fn Test_A_Correspondence_Naming_Nothing_Should_Report_Missing_Capability()
     {
@@ -342,5 +276,71 @@ mod tests
         let findings = Check_Cross_Language_Correspondence(&[source], &mut reader);
 
         assert!(findings.is_empty());
+    }
+
+    fn Source_File(path: &str) -> SourceFile
+    {
+        return SourceFile::New(path, nomos_model::Subject_Of_Path(path), String::new());
+    }
+
+    fn Guarantee_At_Floor() -> Guarantee
+    {
+        return Guarantee::New(FactVariant::Syntactic, Assurance::Sound, Assurance::Unknown, IncrementalGranularity::File);
+    }
+
+    fn Test_Context() -> Context
+    {
+        return Context {
+            snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([1; 16])),
+            variant: BuildVariantId::From_Digest(Digest128::From_Bytes([2; 16])),
+            configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([3; 16])),
+            generation: GenerationId::INITIAL,
+        };
+    }
+
+    fn Offering() -> TestOffering
+    {
+        let mut registry = Registry::New();
+        registry.Declare(nomos_cap_syntax::Capability_Contract()).expect("declared once");
+
+        let offer = ProviderOffer {
+            provider: ProviderId::New(PROVIDER),
+            capability: nomos_cap_syntax::Capability(),
+            version: nomos_cap_syntax::CONTRACT_VERSION,
+            guarantee: Guarantee_At_Floor(),
+        };
+        registry.Offer(offer.clone()).expect("within the ceiling");
+
+        return TestOffering { store: MemoryFactStore::New(), registry, offer };
+    }
+
+    fn Materialize_Syntax_Fact(store: &mut MemoryFactStore, source: &SourceFile, offer: &ProviderOffer, payload: &SyntaxPayload)
+    {
+        let context = Test_Context();
+        let bytes = nomos_cap_syntax::Render_Payload(payload);
+        let key = FactKey {
+            contract: nomos_cap_syntax::Capability(),
+            contract_version: offer.version,
+            subject: source.subject,
+            semantic_inputs: InputDigest::Of(&[source.text.as_bytes()]),
+            provider: offer.provider.clone(),
+            provider_version: offer.version,
+            guarantee: GuaranteeDigest::Of(&offer.guarantee),
+            variant: context.variant,
+            configuration: context.configuration,
+        };
+
+        store
+            .Materialize(
+                Fact {
+                    identity: key.At(context.generation),
+                    snapshot: context.snapshot,
+                    evidence: EvidenceClass::Verified,
+                    guarantee: offer.guarantee,
+                    payload: FactPayload::New(nomos_cap_syntax::Payload_Schema(), bytes),
+                },
+                &[],
+            )
+            .expect("nothing here is backdated");
     }
 }

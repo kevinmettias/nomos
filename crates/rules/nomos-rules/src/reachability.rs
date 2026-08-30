@@ -310,14 +310,25 @@ mod tests
 
         const PROVIDER: &str = "nomos.test.reachability.resolves";
 
-        fn Test_Context() -> Context
+        #[test]
+        fn Test_A_Real_Fact_Should_Be_Read_And_Judged()
         {
-            return Context {
-                snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([1; 16])),
-                variant: BuildVariantId::From_Digest(Digest128::From_Bytes([2; 16])),
-                configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([3; 16])),
-                generation: GenerationId::INITIAL,
-            };
+            let source = Source_File("a.rs");
+            let TestOffering { mut store, registry, offer } = Offering();
+            Materialize_Reachability_Fact(
+                &mut store,
+                &source,
+                &offer,
+                &ReachabilityPayload {
+                    sites: vec![Reachability_Site("Payload_Of", ArmShape::Empty)],
+                },
+            );
+
+            let mut reader = Reader::On(&store, &registry, Test_Context());
+            let findings = Check_Unread_Reaches_A_Finding(&[source], &mut reader);
+
+            assert_eq!(findings.len(), 1, "{findings:?}");
+            assert_eq!(findings.first().expect("asserted len 1 above").subject_name, "a.rs");
         }
 
         /// A fresh fact store, registry, and the one [`ProviderOffer`] declared into it —
@@ -327,6 +338,41 @@ mod tests
             store: MemoryFactStore,
             registry: Registry,
             offer: ProviderOffer,
+        }
+
+        #[test]
+        fn Test_A_Subject_With_No_Fact_Should_Be_Reported_Rather_Than_Silently_Clean()
+        {
+            let source = Source_File("a.rs");
+            let TestOffering { store, registry, .. } = Offering();
+
+            let mut reader = Reader::On(&store, &registry, Test_Context());
+            let findings = Check_Unread_Reaches_A_Finding(&[source], &mut reader);
+
+            assert_eq!(findings.len(), 1, "an unread subject must not render as a clean one: {findings:?}");
+        }
+
+        #[test]
+        fn Test_A_Source_With_No_Flagged_Sites_Should_Produce_No_Finding()
+        {
+            let source = Source_File("a.rs");
+            let TestOffering { mut store, registry, offer } = Offering();
+            Materialize_Reachability_Fact(&mut store, &source, &offer, &ReachabilityPayload { sites: Vec::new() });
+
+            let mut reader = Reader::On(&store, &registry, Test_Context());
+            let findings = Check_Unread_Reaches_A_Finding(&[source], &mut reader);
+
+            assert!(findings.is_empty(), "{findings:?}");
+        }
+
+        fn Test_Context() -> Context
+        {
+            return Context {
+                snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([1; 16])),
+                variant: BuildVariantId::From_Digest(Digest128::From_Bytes([2; 16])),
+                configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([3; 16])),
+                generation: GenerationId::INITIAL,
+            };
         }
 
         fn Offering() -> TestOffering
@@ -380,52 +426,6 @@ mod tests
                     &[],
                 )
                 .expect("nothing here is backdated");
-        }
-
-        #[test]
-        fn Test_A_Real_Fact_Should_Be_Read_And_Judged()
-        {
-            let source = Source_File("a.rs");
-            let TestOffering { mut store, registry, offer } = Offering();
-            Materialize_Reachability_Fact(
-                &mut store,
-                &source,
-                &offer,
-                &ReachabilityPayload {
-                    sites: vec![Reachability_Site("Payload_Of", ArmShape::Empty)],
-                },
-            );
-
-            let mut reader = Reader::On(&store, &registry, Test_Context());
-            let findings = Check_Unread_Reaches_A_Finding(&[source], &mut reader);
-
-            assert_eq!(findings.len(), 1, "{findings:?}");
-            assert_eq!(findings.first().expect("asserted len 1 above").subject_name, "a.rs");
-        }
-
-        #[test]
-        fn Test_A_Subject_With_No_Fact_Should_Be_Reported_Rather_Than_Silently_Clean()
-        {
-            let source = Source_File("a.rs");
-            let TestOffering { store, registry, .. } = Offering();
-
-            let mut reader = Reader::On(&store, &registry, Test_Context());
-            let findings = Check_Unread_Reaches_A_Finding(&[source], &mut reader);
-
-            assert_eq!(findings.len(), 1, "an unread subject must not render as a clean one: {findings:?}");
-        }
-
-        #[test]
-        fn Test_A_Source_With_No_Flagged_Sites_Should_Produce_No_Finding()
-        {
-            let source = Source_File("a.rs");
-            let TestOffering { mut store, registry, offer } = Offering();
-            Materialize_Reachability_Fact(&mut store, &source, &offer, &ReachabilityPayload { sites: Vec::new() });
-
-            let mut reader = Reader::On(&store, &registry, Test_Context());
-            let findings = Check_Unread_Reaches_A_Finding(&[source], &mut reader);
-
-            assert!(findings.is_empty(), "{findings:?}");
         }
     }
 }

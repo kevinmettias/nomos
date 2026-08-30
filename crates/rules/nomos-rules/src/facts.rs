@@ -81,14 +81,6 @@ mod tests
 {
     use super::*;
 
-    fn Names_In_Payload_Text(payload: &str) -> BTreeSet<String>
-    {
-        let decoded = nomos_cap_syntax::Parse_Payload(payload.as_bytes())
-            .expect("this payload is well formed");
-
-        return Check_Names_In(&decoded);
-    }
-
     /// The positive control, and it is not optional. Every negative control below is
     /// satisfied by a filter that admits nothing at all, so the set this is supposed to
     /// produce has to be asserted somewhere.
@@ -150,5 +142,13 @@ mod tests
         );
 
         assert!(names.contains("Test_Every_Row"), "{names:?}");
+    }
+
+    fn Names_In_Payload_Text(payload: &str) -> BTreeSet<String>
+    {
+        let decoded = nomos_cap_syntax::Parse_Payload(payload.as_bytes())
+            .expect("this payload is well formed");
+
+        return Check_Names_In(&decoded);
     }
 }

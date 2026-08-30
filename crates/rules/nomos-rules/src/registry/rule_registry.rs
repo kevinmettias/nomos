@@ -57,15 +57,6 @@ mod tests
 {
     use super::*;
 
-    fn Rule_Offer(id: &str) -> RuleOffer
-    {
-        return RuleOffer {
-            rule: RuleId::New(id),
-            contract_record: "D-134".to_owned(),
-            contract_record_version: 2,
-        };
-    }
-
     #[test]
     fn Test_A_Rule_Should_Be_Findable_By_Its_Id()
     {
@@ -98,5 +89,14 @@ mod tests
 
         assert_eq!(registry.Offers().count(), 0);
         assert_eq!(registry.Offered(&RuleId::New("completeness-mirror")), None);
+    }
+
+    fn Rule_Offer(id: &str) -> RuleOffer
+    {
+        return RuleOffer {
+            rule: RuleId::New(id),
+            contract_record: "D-134".to_owned(),
+            contract_record_version: 2,
+        };
     }
 }
