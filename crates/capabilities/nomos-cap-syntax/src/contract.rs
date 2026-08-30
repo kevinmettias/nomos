@@ -95,8 +95,7 @@ pub fn Capability_Contract() -> CapabilityContract
 mod tests
 {
     use super::*;
-    use nomos_capability::{ProviderOffer, Registry, Requirement, Resolution, Unmet};
-    use nomos_contracts::ProviderId;
+    use nomos_capability::contract_testing;
 
     /// The contract admits an answer weaker than its ceiling, which is what a ceiling is
     /// for. Without this the ceiling could be anything and nothing would notice until a
@@ -104,22 +103,17 @@ mod tests
     #[test]
     fn Test_The_Ceiling_Should_Admit_A_Weaker_Offer()
     {
-        let mut registry = Registry::New();
-        registry.Declare(Capability_Contract()).expect("declared once");
-
-        let approximate = ProviderOffer {
-            provider: ProviderId::New("nomos.test.weak"),
-            capability: Capability(),
-            version: CONTRACT_VERSION,
-            guarantee: Guarantee::New(
+        contract_testing::Assert_Ceiling_Admits(
+            Capability_Contract(),
+            Capability(),
+            CONTRACT_VERSION,
+            Guarantee::New(
                 FactVariant::Approximate,
                 Assurance::Unsound,
                 Assurance::Unknown,
                 IncrementalGranularity::File,
             ),
-        };
-
-        assert_eq!(registry.Offer(approximate), Ok(()));
+        );
     }
 
     /// And refuses one above it. This is the property the whole contract exists for, and it
@@ -128,25 +122,18 @@ mod tests
     #[test]
     fn Test_The_Ceiling_Should_Refuse_A_Claim_Of_Name_Resolution()
     {
-        let mut registry = Registry::New();
-        registry.Declare(Capability_Contract()).expect("declared once");
-
-        let resolved = ProviderOffer {
-            provider: ProviderId::New("nomos.test.optimistic"),
-            capability: Capability(),
-            version: CONTRACT_VERSION,
-            guarantee: Guarantee::New(
+        contract_testing::Assert_Ceiling_Refuses(
+            Capability_Contract(),
+            Capability(),
+            CONTRACT_VERSION,
+            Guarantee::New(
                 FactVariant::SemanticallyResolved,
                 Assurance::Sound,
                 Assurance::Sound,
                 IncrementalGranularity::Region,
             ),
-        };
-
-        assert!(
-            registry.Offer(resolved).is_err(),
             "a provider claiming resolution for a capability about what a file says on its \
-             face would satisfy every rule that needs resolution"
+             face would satisfy every rule that needs resolution",
         );
     }
 
@@ -159,22 +146,11 @@ mod tests
     #[test]
     fn Test_The_Contract_Should_Stand_With_No_Provider_At_All()
     {
-        let mut registry = Registry::New();
-        registry.Declare(Capability_Contract()).expect("declared once");
-
-        let need = Requirement::New(Capability(), CONTRACT_VERSION, Ceiling());
-        let resolution = registry.Resolve(&need);
-
-        assert!(
-            matches!(
-                resolution,
-                Resolution::Unsatisfied {
-                    reason: Unmet::NoProvider,
-                    ..
-                }
-            ),
-            "the contract is declared and unoffered, which is coverage debt rather than an \
-             undeclared capability: {resolution:?}"
+        contract_testing::Assert_Stands_With_No_Provider(
+            Capability_Contract(),
+            Capability(),
+            CONTRACT_VERSION,
+            Ceiling(),
         );
     }
 
@@ -183,14 +159,11 @@ mod tests
     #[test]
     fn Test_One_Capability_Should_Admit_One_Contract()
     {
-        let mut registry = Registry::New();
-        registry.Declare(Capability_Contract()).expect("declared once");
-
-        assert!(
-            registry.Declare(Capability_Contract()).is_err(),
+        contract_testing::Assert_One_Contract_Per_Capability(
+            Capability_Contract(),
             "one name, one meaning — and while this was the only thing keeping a second \
              provider from authoring its own terms, it was the registry compensating for \
-             the layering"
+             the layering",
         );
     }
 }

@@ -49,8 +49,8 @@ mod contract;
 mod payload;
 
 pub use contract::{Capability, Capability_Contract, Ceiling, CAPABILITY, CONTRACT_VERSION, Payload_Schema, SCHEMA};
-pub use payload::payload_refusal::PayloadRefusal;
 pub use payload::policy_payload::PolicyPayload;
 pub use payload::policy_severity::PolicySeverity;
 pub use payload::policy_violation::PolicyViolation;
+pub use payload::refusal::Refusal;
 pub use payload::{Encode_Payload, Parse_Payload};

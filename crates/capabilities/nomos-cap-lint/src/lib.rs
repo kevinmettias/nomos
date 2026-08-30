@@ -38,4 +38,4 @@ pub use payload::{Encode_Payload, Parse_Payload};
 pub use payload::diagnostics_payload::DiagnosticsPayload;
 pub use payload::lint_diagnostic::LintDiagnostic;
 pub use payload::lint_level::LintLevel;
-pub use payload::payload_refusal::PayloadRefusal;
+pub use payload::refusal::Refusal;

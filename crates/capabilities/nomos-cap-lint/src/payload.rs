@@ -3,12 +3,12 @@
 pub(crate) mod diagnostics_payload;
 pub(crate) mod lint_diagnostic;
 pub(crate) mod lint_level;
-pub(crate) mod payload_refusal;
+pub(crate) mod refusal;
 
 use diagnostics_payload::DiagnosticsPayload;
 use lint_diagnostic::LintDiagnostic;
 use lint_level::LintLevel;
-use payload_refusal::PayloadRefusal;
+use refusal::Refusal;
 
 /// A diagnostic line's own fields, in canonical order — a stand-in for the six-field
 /// tuple `Diagnostic_Line`/`Parse_Diagnostic_Line` would otherwise pass by position.
@@ -63,12 +63,12 @@ fn Single_Line(message: &str) -> String
 ///
 /// # Errors
 ///
-/// [`PayloadRefusal`] if the bytes are not valid UTF-8, the first line does not name a
+/// [`Refusal`] if the bytes are not valid UTF-8, the first line does not name a
 /// package, or a diagnostic line does not have exactly the five fields this schema
 /// declares.
-pub fn Parse_Payload(bytes: &[u8]) -> Result<DiagnosticsPayload, PayloadRefusal>
+pub fn Parse_Payload(bytes: &[u8]) -> Result<DiagnosticsPayload, Refusal>
 {
-    let text = core::str::from_utf8(bytes).map_err(|error| PayloadRefusal {
+    let text = core::str::from_utf8(bytes).map_err(|error| Refusal {
         reason: format!("not UTF-8: {error}"),
     })?;
 
@@ -84,12 +84,12 @@ pub fn Parse_Payload(bytes: &[u8]) -> Result<DiagnosticsPayload, PayloadRefusal>
     return Ok(DiagnosticsPayload { package, diagnostics });
 }
 
-fn Package_Line(line: Option<&str>) -> Result<String, PayloadRefusal>
+fn Package_Line(line: Option<&str>) -> Result<String, Refusal>
 {
     let Some(line) = line
     else
     {
-        return Err(PayloadRefusal {
+        return Err(Refusal {
             reason: "empty payload; expected a package line".to_owned(),
         });
     };
@@ -97,7 +97,7 @@ fn Package_Line(line: Option<&str>) -> Result<String, PayloadRefusal>
     let Some(name) = line.strip_prefix("package\t")
     else
     {
-        return Err(PayloadRefusal {
+        return Err(Refusal {
             reason: format!("first line is not a package declaration: {line:?}"),
         });
     };
@@ -105,7 +105,7 @@ fn Package_Line(line: Option<&str>) -> Result<String, PayloadRefusal>
     return Ok(name.to_owned());
 }
 
-fn Diagnostic_Line(line: &str) -> Result<LintDiagnostic, PayloadRefusal>
+fn Diagnostic_Line(line: &str) -> Result<LintDiagnostic, Refusal>
 {
     let rest = Diagnostic_Body(line)?;
     let [level, lint_id, file, line_number, message] = Diagnostic_Fields(line, rest)?;
@@ -124,12 +124,12 @@ fn Diagnostic_Line(line: &str) -> Result<LintDiagnostic, PayloadRefusal>
 
 /// `line` with its `"diagnostic\t"` prefix stripped, or a refusal naming the line that was
 /// not one.
-fn Diagnostic_Body(line: &str) -> Result<&str, PayloadRefusal>
+fn Diagnostic_Body(line: &str) -> Result<&str, Refusal>
 {
     let Some(rest) = line.strip_prefix("diagnostic\t")
     else
     {
-        return Err(PayloadRefusal {
+        return Err(Refusal {
             reason: format!("line is not a diagnostic: {line:?}"),
         });
     };
@@ -139,13 +139,13 @@ fn Diagnostic_Body(line: &str) -> Result<&str, PayloadRefusal>
 
 /// `rest` split into exactly [`DIAGNOSTIC_FIELDS`] tab-separated fields, or a refusal
 /// naming the original `line` that did not have that many.
-fn Diagnostic_Fields<'a>(line: &str, rest: &'a str) -> Result<[&'a str; DIAGNOSTIC_FIELDS], PayloadRefusal>
+fn Diagnostic_Fields<'a>(line: &str, rest: &'a str) -> Result<[&'a str; DIAGNOSTIC_FIELDS], Refusal>
 {
     let fields: Vec<&str> = rest.splitn(DIAGNOSTIC_FIELDS, '\t').collect();
     let [level, lint_id, file, line_number, message] = fields.as_slice()
     else
     {
-        return Err(PayloadRefusal {
+        return Err(Refusal {
             reason: format!("diagnostic line does not have exactly {DIAGNOSTIC_FIELDS} fields: {line:?}"),
         });
     };
@@ -153,12 +153,12 @@ fn Diagnostic_Fields<'a>(line: &str, rest: &'a str) -> Result<[&'a str; DIAGNOST
     return Ok([*level, *lint_id, *file, *line_number, *message]);
 }
 
-fn Parse_Level(level: &str) -> Result<LintLevel, PayloadRefusal>
+fn Parse_Level(level: &str) -> Result<LintLevel, Refusal>
 {
     let Some(level) = LintLevel::From_Label(level)
     else
     {
-        return Err(PayloadRefusal {
+        return Err(Refusal {
             reason: format!("unrecognized lint level: {level:?}"),
         });
     };
@@ -179,9 +179,9 @@ fn Parse_Lint(lint: &str) -> Option<String>
     return Some(lint.to_owned());
 }
 
-fn Parse_Line_Number(line_number: &str) -> Result<u32, PayloadRefusal>
+fn Parse_Line_Number(line_number: &str) -> Result<u32, Refusal>
 {
-    return line_number.parse::<u32>().map_err(|error| PayloadRefusal {
+    return line_number.parse::<u32>().map_err(|error| Refusal {
         reason: format!("line number {line_number:?} did not parse: {error}"),
     });
 }

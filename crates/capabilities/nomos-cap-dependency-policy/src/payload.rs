@@ -1,14 +1,14 @@
 //! The wire shape of a `nomos.dependency.policy.v1` payload, and its canonical encoding.
 
-pub(crate) mod payload_refusal;
 pub(crate) mod policy_payload;
 pub(crate) mod policy_severity;
 pub(crate) mod policy_violation;
+pub(crate) mod refusal;
 
-use payload_refusal::PayloadRefusal;
 use policy_payload::PolicyPayload;
 use policy_severity::PolicySeverity;
 use policy_violation::PolicyViolation;
+use refusal::Refusal;
 
 /// A violation line's own fields, in canonical order — a stand-in for the three-field
 /// tuple `Violation_Line`/`Parse_Violation_Line` would otherwise pass by position.
@@ -59,13 +59,13 @@ fn Single_Line(message: &str) -> String
 ///
 /// # Errors
 ///
-/// [`PayloadRefusal`] if the bytes are not valid UTF-8, or a line does not have exactly
+/// [`Refusal`] if the bytes are not valid UTF-8, or a line does not have exactly
 /// the three fields this schema declares. Empty bytes decode to an empty, clean payload
 /// rather than being refused — there is no header line here whose absence would make an
 /// empty byte string ambiguous.
-pub fn Parse_Payload(bytes: &[u8]) -> Result<PolicyPayload, PayloadRefusal>
+pub fn Parse_Payload(bytes: &[u8]) -> Result<PolicyPayload, Refusal>
 {
-    let text = core::str::from_utf8(bytes).map_err(|error| PayloadRefusal {
+    let text = core::str::from_utf8(bytes).map_err(|error| Refusal {
         reason: format!("not UTF-8: {error}"),
     })?;
 
@@ -78,7 +78,7 @@ pub fn Parse_Payload(bytes: &[u8]) -> Result<PolicyPayload, PayloadRefusal>
     return Ok(PolicyPayload { violations });
 }
 
-fn Violation_Line(line: &str) -> Result<PolicyViolation, PayloadRefusal>
+fn Violation_Line(line: &str) -> Result<PolicyViolation, Refusal>
 {
     let rest = Violation_Body(line)?;
     let [severity, code, message] = Violation_Fields(line, rest)?;
@@ -89,12 +89,12 @@ fn Violation_Line(line: &str) -> Result<PolicyViolation, PayloadRefusal>
 
 /// `line` with its `"violation\t"` prefix stripped, or a refusal naming the line that was
 /// not one.
-fn Violation_Body(line: &str) -> Result<&str, PayloadRefusal>
+fn Violation_Body(line: &str) -> Result<&str, Refusal>
 {
     let Some(rest) = line.strip_prefix("violation\t")
     else
     {
-        return Err(PayloadRefusal {
+        return Err(Refusal {
             reason: format!("line is not a violation: {line:?}"),
         });
     };
@@ -104,13 +104,13 @@ fn Violation_Body(line: &str) -> Result<&str, PayloadRefusal>
 
 /// `rest` split into exactly [`VIOLATION_FIELDS`] tab-separated fields, or a refusal naming
 /// the original `line` that did not have that many.
-fn Violation_Fields<'a>(line: &str, rest: &'a str) -> Result<[&'a str; VIOLATION_FIELDS], PayloadRefusal>
+fn Violation_Fields<'a>(line: &str, rest: &'a str) -> Result<[&'a str; VIOLATION_FIELDS], Refusal>
 {
     let fields: Vec<&str> = rest.splitn(VIOLATION_FIELDS, '\t').collect();
     let [severity, code, message] = fields.as_slice()
     else
     {
-        return Err(PayloadRefusal {
+        return Err(Refusal {
             reason: format!("violation line does not have exactly {VIOLATION_FIELDS} fields: {line:?}"),
         });
     };
@@ -118,12 +118,12 @@ fn Violation_Fields<'a>(line: &str, rest: &'a str) -> Result<[&'a str; VIOLATION
     return Ok([*severity, *code, *message]);
 }
 
-fn Parse_Severity(severity: &str) -> Result<PolicySeverity, PayloadRefusal>
+fn Parse_Severity(severity: &str) -> Result<PolicySeverity, Refusal>
 {
     let Some(severity) = PolicySeverity::From_Label(severity)
     else
     {
-        return Err(PayloadRefusal {
+        return Err(Refusal {
             reason: format!("unrecognized policy severity: {severity:?}"),
         });
     };
