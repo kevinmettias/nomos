@@ -301,6 +301,11 @@ mod tests
         return Render_Record(&record.front_matter, &Segment(&record.body)).expect("renders");
     }
 
+    /// How many of `RECORD`'s blocks to keep for
+    /// [`Test_Rendering_Should_Use_The_Blocks_And_Not_The_Retained_Body`] — the heading and
+    /// the first paragraph, stopping short of the second heading.
+    const BLOCKS_KEPT: usize = 2;
+
     #[test]
     fn Test_A_Record_Should_Render_To_The_Bytes_It_Was_Read_From()
     {
@@ -317,7 +322,7 @@ mod tests
     {
         let record = Parse_Record(RECORD).expect("reads");
         let mut blocks = Segment(&record.body);
-        blocks.truncate(2);
+        blocks.truncate(BLOCKS_KEPT);
 
         let rendered =
             Render_Record(&record.front_matter, &blocks).expect("renders the shorter document");

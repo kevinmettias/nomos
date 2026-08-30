@@ -20,24 +20,37 @@ pub(crate) fn Offending_Outcome(
     violation: impl Fn(&Row<'_>) -> rusqlite::Result<Violation>,
 ) -> RuleOutcome
 {
-    // `total` is bound here, ahead of the violations check below, on purpose rather than by
-    // oversight: it runs the count query unconditionally so a broken count is `Errored`
-    // regardless of whether `Found_Violations` later reports any rows. Binding it inside the
-    // `if violations.is_empty()` block below would make the count query run only when there
-    // are no violations, so a rule with real violations and a broken count would report
-    // `Violated` over a count query that never ran -- the same silent swallow this function's
-    // own doc comment exists to rule out.
-    let total = match Counted_Rows(store, counted)
+    let (total, violations) = match Counted_And_Found(store, counted, offenders, violation)
     {
-        Ok(count) => count,
-        Err(error) => return RuleOutcome::Errored(error),
-    };
-    let violations = match Found_Violations(store, offenders, violation)
-    {
-        Ok(found) => found,
-        Err(error) => return RuleOutcome::Errored(error),
+        Ok(pair) => pair,
+        Err(outcome) => return outcome,
     };
 
+    return Verdict(total, violations);
+}
+
+/// Both queries a rule needs, run unconditionally.
+///
+/// The count is run whether or not `Found_Violations` later reports any rows, on purpose
+/// rather than by oversight: running it only when there are no violations would make a rule
+/// with real violations and a broken count report `Violated` over a count query that never
+/// ran — the same silent swallow this module's own doc comment exists to rule out.
+fn Counted_And_Found(
+    store: &SpecificationStore,
+    counted: Table,
+    offenders: &'static str,
+    violation: impl Fn(&Row<'_>) -> rusqlite::Result<Violation>,
+) -> Result<(u32, Vec<Violation>), RuleOutcome>
+{
+    let total = Counted_Rows(store, counted).map_err(RuleOutcome::Errored)?;
+    let violations = Found_Violations(store, offenders, violation).map_err(RuleOutcome::Errored)?;
+
+    return Ok((total, violations));
+}
+
+/// Satisfied when nothing offends, violated otherwise.
+pub(crate) fn Verdict(total: u32, violations: Vec<Violation>) -> RuleOutcome
+{
     if violations.is_empty()
     {
         return RuleOutcome::Satisfied { checked: total };

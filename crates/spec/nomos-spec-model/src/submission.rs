@@ -330,29 +330,38 @@ fn Check_Nothing_Required_Was_Inferred(submission: &Submission, failures: &mut V
 /// question was answered.
 fn Check_No_Blocking_Gap_Is_Open(submission: &Submission, failures: &mut Vec<Failure>)
 {
-    use std::collections::BTreeSet;
+    for question in Open_Blocking_Gap_Questions(submission)
+    {
+        failures.push(Blocking_Gap_Failure(question));
+    }
+}
 
+/// The blocking gaps still open, by question — deduplicated so a question shared by more
+/// than one gap is not reported once per gap.
+fn Open_Blocking_Gap_Questions(submission: &Submission) -> std::collections::BTreeSet<&str>
+{
     use crate::Severity;
 
-    let open: BTreeSet<&str> = submission
+    return submission
         .gaps
         .iter()
         .filter(|gap| return gap.severity == Severity::Blocking && gap.Is_Open())
         .map(|gap| return gap.question.as_str())
         .collect();
+}
 
-    for question in open
-    {
-        failures.push(Failure {
-            field: "gaps".to_owned(),
-            rule: "no-open-blocking-gap".to_owned(),
-            remedy: format!(
-                "close `{question}` by citing a governing record or a recorded decision, or \
-                 submit as a draft; supplying the value it blocks does not close it, because \
-                 nothing would record that the question was answered"
-            ),
-        });
-    }
+/// The failure reported for one open blocking gap.
+fn Blocking_Gap_Failure(question: &str) -> Failure
+{
+    return Failure {
+        field: "gaps".to_owned(),
+        rule: "no-open-blocking-gap".to_owned(),
+        remedy: format!(
+            "close `{question}` by citing a governing record or a recorded decision, or \
+             submit as a draft; supplying the value it blocks does not close it, because \
+             nothing would record that the question was answered"
+        ),
+    };
 }
 
 /// The entries of a multi-entry value: its non-empty lines.

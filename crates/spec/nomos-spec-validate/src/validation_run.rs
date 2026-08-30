@@ -236,34 +236,14 @@ mod tests
         }
     }
 
-    fn Store() -> SpecificationStore
-    {
-        return SpecificationStore::In_Memory().expect("opens");
-    }
-
-    // Erased to the same `Box<dyn Rule>` the production caller passes, so these tests exercise
-    // `Validate`'s real parameter. A helper returning `Vec<Fake>` would prove nothing about the
-    // signature `Registered()` feeds.
-    fn All_Declared(outcome: &RuleOutcome) -> Vec<Box<dyn Rule>>
-    {
-        return DECLARED_RULES
-            .iter()
-            .map(|id| {
-                let rule = Fake(id, outcome.clone());
-
-                // The cast is load-bearing: without it the closure returns `Box<Fake>` and
-                // `collect` builds a `Vec<Box<Fake>>`, which is not the declared return type.
-                // Erasure happens here rather than at the `return` because `collect` is what
-                // has to be told which element type it is accumulating.
-                return Box::new(rule) as Box<dyn Rule>;
-            })
-            .collect();
-    }
+    /// An arbitrary non-zero subject count for a fixture rule that must read as satisfied
+    /// but not vacuous. Its exact value is not significant, only that it is not zero.
+    const SOME_SUBJECTS_CHECKED: u32 = 10;
 
     #[test]
     fn Test_A_Complete_Satisfied_Run_Should_Pass()
     {
-        let rules = All_Declared(&RuleOutcome::Satisfied { checked: 10 });
+        let rules = All_Declared(&RuleOutcome::Satisfied { checked: SOME_SUBJECTS_CHECKED });
 
         let run = Validate_Rules(&Store(), &rules);
 
@@ -276,7 +256,7 @@ mod tests
     #[test]
     fn Test_A_Declared_But_Unregistered_Rule_Should_Fail_The_Run()
     {
-        let mut rules = All_Declared(&RuleOutcome::Satisfied { checked: 10 });
+        let mut rules = All_Declared(&RuleOutcome::Satisfied { checked: SOME_SUBJECTS_CHECKED });
         rules.pop();
 
         let run = Validate_Rules(&Store(), &rules);
@@ -289,7 +269,7 @@ mod tests
     #[test]
     fn Test_An_Errored_Rule_Should_Fail_The_Run()
     {
-        let mut rules = All_Declared(&RuleOutcome::Satisfied { checked: 10 });
+        let mut rules = All_Declared(&RuleOutcome::Satisfied { checked: SOME_SUBJECTS_CHECKED });
         rules.pop();
         let errored = Fake(
             "NSV-PRESERVE-006",
@@ -307,7 +287,7 @@ mod tests
     #[test]
     fn Test_A_Rule_Nobody_Declared_Should_Fail_The_Run()
     {
-        let mut rules = All_Declared(&RuleOutcome::Satisfied { checked: 10 });
+        let mut rules = All_Declared(&RuleOutcome::Satisfied { checked: SOME_SUBJECTS_CHECKED });
         let undeclared = Fake("NSV-INVENTED-001", RuleOutcome::Satisfied { checked: 1 });
         rules.push(Box::new(undeclared));
 
@@ -363,5 +343,29 @@ mod tests
 
         assert_eq!(forward, reverse);
         assert_ne!(forward, fewer, "a narrowed ruleset must not hash the same");
+    }
+
+    fn Store() -> SpecificationStore
+    {
+        return SpecificationStore::In_Memory().expect("opens");
+    }
+
+    // Erased to the same `Box<dyn Rule>` the production caller passes, so these tests exercise
+    // `Validate`'s real parameter. A helper returning `Vec<Fake>` would prove nothing about the
+    // signature `Registered()` feeds.
+    fn All_Declared(outcome: &RuleOutcome) -> Vec<Box<dyn Rule>>
+    {
+        return DECLARED_RULES
+            .iter()
+            .map(|id| {
+                let rule = Fake(id, outcome.clone());
+
+                // The cast is load-bearing: without it the closure returns `Box<Fake>` and
+                // `collect` builds a `Vec<Box<Fake>>`, which is not the declared return type.
+                // Erasure happens here rather than at the `return` because `collect` is what
+                // has to be told which element type it is accumulating.
+                return Box::new(rule) as Box<dyn Rule>;
+            })
+            .collect();
     }
 }

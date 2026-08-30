@@ -2,6 +2,8 @@
 
 use rusqlite::{Connection, OptionalExtension, params};
 
+use nomos_spec_model::ContentHash;
+
 use crate::DocumentPath;
 use crate::DocumentRevision;
 use crate::NodeRow;
@@ -14,20 +16,31 @@ use crate::StoreError;
 /// Returns [`StoreError`] on any SQL failure.
 pub(crate) fn Write_Blob(connection: &Connection, content: &[u8]) -> Result<i64, StoreError>
 {
-    use nomos_spec_model::ContentHash;
-
     let digest = ContentHash::Of_Bytes(content);
-    let existing: Option<i64> = connection
+
+    if let Some(uid) = Existing_Blob_Uid(connection, &digest)?
+    {
+        return Ok(uid);
+    }
+
+    return Insert_Blob(connection, &digest, content);
+}
+
+/// The blob already stored under this digest, if content-addressing already has it.
+fn Existing_Blob_Uid(connection: &Connection, digest: &ContentHash) -> Result<Option<i64>, StoreError>
+{
+    return Ok(connection
         .query_row(
             "SELECT uid FROM blobs WHERE sha256 = ?1",
             params![digest.As_String_Slice()],
             |row| row.get(0),
         )
-        .optional()?;
-    if let Some(uid) = existing
-    {
-        return Ok(uid);
-    }
+        .optional()?);
+}
+
+/// Inserts bytes nobody has stored under this digest yet.
+fn Insert_Blob(connection: &Connection, digest: &ContentHash, content: &[u8]) -> Result<i64, StoreError>
+{
     connection.execute(
         "INSERT INTO blobs (sha256, byte_length, content) VALUES (?1, ?2, ?3)",
         params![

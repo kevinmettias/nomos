@@ -205,21 +205,6 @@ mod tests
 {
     use super::*;
 
-    /// Discards the archive so a refusal can be asserted on. `Archive` is not `Debug`,
-    /// and deriving it purely for `expect_err` would put a zip reader's internals into a
-    /// public trait impl.
-    fn Refusal_For(path: &str) -> ArchiveError
-    {
-        return match Archive::Open(Path::new(path))
-        {
-            // Every caller hands this a path built to be unopenable, so the `Ok` arm is
-            // unreachable while `Archive::Open` still refuses what it should. Reaching it is
-            // the assertion failing, and there is no `ArchiveError` to return in its place.
-            Ok(_) => panic!("{path} should have been refused"),
-            Err(error) => error,
-        };
-    }
-
     #[test]
     fn Test_A_Missing_Archive_Should_Name_Itself()
     {
@@ -254,5 +239,20 @@ mod tests
         let refusal = Archives_In(Path::new("no-such-directory")).expect_err("must refuse");
 
         assert!(matches!(refusal.kind, ArchiveErrorKind::Unreadable { .. }), "{refusal}");
+    }
+
+    /// Discards the archive so a refusal can be asserted on. `Archive` is not `Debug`,
+    /// and deriving it purely for `expect_err` would put a zip reader's internals into a
+    /// public trait impl.
+    fn Refusal_For(path: &str) -> ArchiveError
+    {
+        return match Archive::Open(Path::new(path))
+        {
+            // Every caller hands this a path built to be unopenable, so the `Ok` arm is
+            // unreachable while `Archive::Open` still refuses what it should. Reaching it is
+            // the assertion failing, and there is no `ArchiveError` to return in its place.
+            Ok(_) => panic!("{path} should have been refused"),
+            Err(error) => error,
+        };
     }
 }

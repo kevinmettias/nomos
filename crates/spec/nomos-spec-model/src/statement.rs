@@ -41,17 +41,6 @@ mod tests
         );
     }
 
-    fn Statement_From_Text(text: &str) -> NormativeStatement
-    {
-        return NormativeStatement {
-            id: StatementId::Parse("AGT-001").expect("valid"),
-            kind: StatementKind::Requirement,
-            canonical_text: text.to_owned(),
-            source_document: "x.md".to_owned(),
-            heading_path: Vec::new(),
-        };
-    }
-
     #[test]
     fn Test_A_Fixed_Point_Should_Be_Recognized()
     {
@@ -80,5 +69,16 @@ mod tests
             statement.Canonical_Hash().As_String_Slice(),
             "sha256:f712ecde70e8f375d216a5636e3aff78c07cd2b8d235e9db5db64eeb0cdd1288"
         );
+    }
+
+    fn Statement_From_Text(text: &str) -> NormativeStatement
+    {
+        return NormativeStatement {
+            id: StatementId::Parse("AGT-001").expect("valid"),
+            kind: StatementKind::Requirement,
+            canonical_text: text.to_owned(),
+            source_document: "x.md".to_owned(),
+            heading_path: Vec::new(),
+        };
     }
 }

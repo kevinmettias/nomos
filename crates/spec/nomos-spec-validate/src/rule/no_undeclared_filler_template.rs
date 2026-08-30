@@ -50,33 +50,30 @@ impl Rule for NoUndeclaredFillerTemplate
 
     fn Evaluate(&self, store: &SpecificationStore) -> RuleOutcome
     {
-        use crate::offending::Counted_Rows;
-
-        // `total` is bound here, ahead of the violations check below, on purpose rather than
-        // by oversight: it runs the count query unconditionally so a broken count is
-        // `Errored` regardless of whether `Undeclared_Templates` later reports any rows.
-        // Binding it inside the `if violations.is_empty()` block below would make the count
-        // query run only when there are no violations, so a rule with real violations and a
-        // broken count would report `Violated` over a count query that never ran.
-        let total = match Counted_Rows(store, Table::SourceBlocks)
+        let (total, violations) = match Counted_And_Undeclared(store)
         {
-            Ok(count) => count,
-            Err(error) => return RuleOutcome::Errored(error),
+            Ok(pair) => pair,
+            Err(outcome) => return outcome,
         };
 
-        let violations = match Undeclared_Templates(store)
-        {
-            Ok(found) => found,
-            Err(error) => return RuleOutcome::Errored(error),
-        };
-
-        if violations.is_empty()
-        {
-            return RuleOutcome::Satisfied { checked: total };
-        }
-
-        return RuleOutcome::Violated(violations);
+        return crate::offending::Verdict(total, violations);
     }
+}
+
+/// Both queries this rule needs, run unconditionally.
+///
+/// The count is run whether or not `Undeclared_Templates` later reports any rows, on purpose
+/// rather than by oversight: running it only when there are no violations would make a rule
+/// with real violations and a broken count report `Violated` over a count query that never
+/// ran.
+fn Counted_And_Undeclared(store: &SpecificationStore) -> Result<(u32, Vec<Violation>), RuleOutcome>
+{
+    use crate::offending::Counted_Rows;
+
+    let total = Counted_Rows(store, Table::SourceBlocks).map_err(RuleOutcome::Errored)?;
+    let violations = Undeclared_Templates(store).map_err(RuleOutcome::Errored)?;
+
+    return Ok((total, violations));
 }
 
 /// The templates the query names, filtered to the ones `Get_Filler_Pattern` does not.

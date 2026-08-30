@@ -244,12 +244,6 @@ mod tests
     use super::*;
     use crate::Segment;
 
-    fn Rows_From_Markdown(markdown: &str) -> Vec<TableRow>
-    {
-        let blocks = Segment(markdown);
-        return blocks.iter().flat_map(Table_Rows).collect();
-    }
-
     fn Of_Kind(rows: &[TableRow], kind: RowKind) -> usize
     {
         return rows.iter().filter(|row| row.kind == kind).count();
@@ -453,5 +447,11 @@ mod tests
         let rows = Rows_From_Markdown("| a | b |\n|:--- | ---:|\n| 1 | 2 |\n");
 
         assert_eq!(rows.get(1).map(|row| row.kind), Some(RowKind::Separator));
+    }
+
+    fn Rows_From_Markdown(markdown: &str) -> Vec<TableRow>
+    {
+        let blocks = Segment(markdown);
+        return blocks.iter().flat_map(Table_Rows).collect();
     }
 }

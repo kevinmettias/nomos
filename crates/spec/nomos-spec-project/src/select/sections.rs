@@ -296,7 +296,7 @@ pub(super) fn Gather_Lineage(connection: &Connection, filter: &Filter) -> Result
             {
                 true => node,
                 false => statement,
-            };
+                         };
 
             return Ok(Item::Of(&format!("{source} -> {disposition}"))
                 .With(Name("source"), Value(&source))

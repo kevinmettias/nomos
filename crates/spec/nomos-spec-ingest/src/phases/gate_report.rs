@@ -236,30 +236,10 @@ mod tests
 {
     use super::*;
 
-    fn Parsed_Manifest(yaml: &str) -> BlockLineage
-    {
-        return Parse_Block_Lineage(yaml).expect("valid");
-    }
-
     const DOC: &str = "# Title\n\nOne.\n";
 
-    fn Documents() -> BTreeMap<String, String>
-    {
-        return BTreeMap::from([("a.md".to_owned(), DOC.to_owned())]);
-    }
-
-    fn Recorded() -> String
-    {
-        let heading = ContentHash::Of("# Title");
-        let prose = ContentHash::Of("One.");
-        return format!(
-            "blocks:\n\
-             - source_document: a.md\n  block_ordinal: 1\n  block_kind: heading\n  \
-             content_hash: {heading}\n  normalized_hash: {heading}\n\
-             - source_document: a.md\n  block_ordinal: 2\n  block_kind: prose\n  \
-             content_hash: {prose}\n  normalized_hash: {prose}\n"
-        );
-    }
+    /// How many blocks [`Recorded`] declares — a heading and a prose paragraph.
+    const RECORDED_BLOCK_COUNT: u32 = 2;
 
     #[test]
     fn Test_A_Matching_Corpus_Should_Pass()
@@ -267,7 +247,7 @@ mod tests
         let report = Check_Against_Manifest(&Parsed_Manifest(&Recorded()), &Documents());
 
         assert!(report.Is_Passing(), "{:?}", report.mismatches);
-        assert_eq!(report.blocks_checked, 2);
+        assert_eq!(report.blocks_checked, RECORDED_BLOCK_COUNT);
     }
 
     /// An empty manifest must not pass. A gate that checked nothing and reported clean is
@@ -341,5 +321,28 @@ mod tests
         assert!(report.Is_Passing(), "{:?}", report.mismatches);
         assert_eq!(report.discriminating_blocks, 1);
         assert!(report.Has_Exercised_The_Normalizer());
+    }
+
+    fn Parsed_Manifest(yaml: &str) -> BlockLineage
+    {
+        return Parse_Block_Lineage(yaml).expect("valid");
+    }
+
+    fn Documents() -> BTreeMap<String, String>
+    {
+        return BTreeMap::from([("a.md".to_owned(), DOC.to_owned())]);
+    }
+
+    fn Recorded() -> String
+    {
+        let heading = ContentHash::Of("# Title");
+        let prose = ContentHash::Of("One.");
+        return format!(
+            "blocks:\n\
+             - source_document: a.md\n  block_ordinal: 1\n  block_kind: heading\n  \
+             content_hash: {heading}\n  normalized_hash: {heading}\n\
+             - source_document: a.md\n  block_ordinal: 2\n  block_kind: prose\n  \
+             content_hash: {prose}\n  normalized_hash: {prose}\n"
+        );
     }
 }

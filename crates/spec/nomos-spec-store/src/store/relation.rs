@@ -54,32 +54,6 @@ mod tests
     struct TestNodeId<'a>(&'a str);
     struct TestNodeKind<'a>(&'a str);
 
-    fn Insert_Node(store: &mut SpecificationStore, node_id: TestNodeId<'_>, kind: TestNodeKind<'_>)
-    {
-        store
-            .Upsert_Node(NodeRow {
-                node_id: node_id.0,
-                kind: kind.0,
-                authority: AUTHORED,
-                representation: "record",
-                title: node_id.0,
-            })
-            .expect("mints a node");
-    }
-
-    /// The `joins` relation type, admitting only `widget` at either end, at the cardinality
-    /// the caller asks for.
-    fn Put_Joins_Relation_Type(store: &mut SpecificationStore, max_per_node: u32)
-    {
-        store
-            .Put_Relation_Type(
-                "joins",
-                "seed",
-                &RelationConstraint { domain: &["widget"], range: &["widget"], max_per_node },
-            )
-            .expect("registers");
-    }
-
     /// `OD-SPEC-012`: a relation type declaring nothing is refused where it is registered,
     /// not left to write an edge that later discovers there was nothing to check.
     #[test]
@@ -198,5 +172,31 @@ mod tests
         store
             .Put_Relation("A", "joins", "B")
             .expect("a placeholder endpoint is exempt from the range check");
+    }
+
+    fn Insert_Node(store: &mut SpecificationStore, node_id: TestNodeId<'_>, kind: TestNodeKind<'_>)
+    {
+        store
+            .Upsert_Node(NodeRow {
+                node_id: node_id.0,
+                kind: kind.0,
+                authority: AUTHORED,
+                representation: "record",
+                title: node_id.0,
+            })
+            .expect("mints a node");
+    }
+
+    /// The `joins` relation type, admitting only `widget` at either end, at the cardinality
+    /// the caller asks for.
+    fn Put_Joins_Relation_Type(store: &mut SpecificationStore, max_per_node: u32)
+    {
+        store
+            .Put_Relation_Type(
+                "joins",
+                "seed",
+                &RelationConstraint { domain: &["widget"], range: &["widget"], max_per_node },
+            )
+            .expect("registers");
     }
 }
