@@ -2,6 +2,11 @@ pub enum nomos_agent_contracts::ChangeContextSubject
 pub enum variant nomos_agent_contracts::ChangeContextSubject::Scope(Territory)
 pub enum variant nomos_agent_contracts::ChangeContextSubject::Symbol(SubjectId)
 pub enum variant nomos_agent_contracts::ChangeContextSubject::TaskDescription(String)
+pub fn nomos_agent_contracts::IsolatedWorkingDirectoryError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_agent_contracts::Isolated_Working_Directory(prefix: &str) -> Result<PathBuf, IsolatedWorkingDirectoryError>
+pub impl nomos_agent_contracts::IsolatedWorkingDirectoryError implements core::fmt::Display
+pub struct field nomos_agent_contracts::IsolatedWorkingDirectoryError::cause: std::io::Error
+pub struct field nomos_agent_contracts::IsolatedWorkingDirectoryError::path: PathBuf
 pub struct field nomos_agent_contracts::NomosResolvedChangeContext::applicability: BTreeMap<RuleId, Applicability>
 pub struct field nomos_agent_contracts::NomosResolvedChangeContext::approved_capabilities: Vec<CapabilityId>
 pub struct field nomos_agent_contracts::NomosResolvedChangeContext::permitted_scope: Territory
@@ -24,6 +29,7 @@ pub struct field nomos_agent_contracts::WorkResult::plan: Option<CorrectionPlan>
 pub struct field nomos_agent_contracts::WorkResult::requested_verification: Option<VerificationPredicate>
 pub struct field nomos_agent_contracts::WorkResult::tests: Vec<VerificationPredicate>
 pub struct field nomos_agent_contracts::WorkResult::unresolved_questions: Vec<String>
+pub struct nomos_agent_contracts::IsolatedWorkingDirectoryError
 pub struct nomos_agent_contracts::NomosResolvedChangeContext
 pub struct nomos_agent_contracts::TaskEnvelope
 pub struct nomos_agent_contracts::WorkResult

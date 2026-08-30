@@ -4,6 +4,7 @@ pub const fn nomos_capability::Resolution::Selection(&self) -> Option<&Selection
 pub const fn nomos_capability::Standing::Is_Decided(self) -> bool
 pub const fn nomos_capability::Unmet::Applicability(&self) -> Applicability
 pub enum nomos_capability::OfferRefusal
+pub enum nomos_capability::RegistryErrorKind
 pub enum nomos_capability::RequiredResolution
 pub enum nomos_capability::RequiredUnmet
 pub enum nomos_capability::Resolution
@@ -12,6 +13,8 @@ pub enum nomos_capability::Unmet
 pub enum variant nomos_capability::OfferRefusal::Duplicate
 pub enum variant nomos_capability::OfferRefusal::ExceedsCeiling
 pub enum variant nomos_capability::OfferRefusal::ForUndeclared
+pub enum variant nomos_capability::RegistryErrorKind::AlreadyDeclared
+pub enum variant nomos_capability::RegistryErrorKind::Offer { provider: ProviderId, refusal: OfferRefusal, }
 pub enum variant nomos_capability::RequiredResolution::Satisfied { selection: Selection, }
 pub enum variant nomos_capability::RequiredResolution::Unsatisfied { capability: CapabilityId, reason: RequiredUnmet, }
 pub enum variant nomos_capability::RequiredUnmet::AnsweredByOther { required: ProviderId, answered: ProviderId, }
@@ -34,6 +37,7 @@ pub fn nomos_capability::Registry::Offer(&mut self, offer: ProviderOffer) -> Res
 pub fn nomos_capability::Registry::Offers(&self, capability: &CapabilityId) -> &[ProviderOffer]
 pub fn nomos_capability::Registry::Resolve(&self, requirement: &Requirement) -> Resolution
 pub fn nomos_capability::Registry::Resolve_Requiring( &self, requirement: &Requirement, required: &ProviderId, ) -> RequiredResolution
+pub fn nomos_capability::RegistryError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_capability::Requirement::Preferring(mut self, provider: ProviderId) -> Self
 pub fn nomos_capability::Resolution::Applicability(&self) -> Applicability
 pub fn nomos_capability::Selection::Has_Passed_Over_Stronger(&self) -> bool
@@ -43,14 +47,18 @@ pub fn nomos_capability::Selection::Weaker(&self) -> Vec<&ProviderOffer>
 pub fn nomos_capability::Standing::Of(offered: &Guarantee, against: &Guarantee) -> Self
 pub fn nomos_capability::Unmet::Describe(&self) -> String
 pub fn nomos_capability::contract_testing::Assert_Ceiling_Admits( contract: CapabilityContract, capability: CapabilityId, version: ContractVersion, guarantee: Guarantee, )
-pub fn nomos_capability::contract_testing::Assert_Ceiling_Refuses( contract: CapabilityContract, capability: CapabilityId, version: ContractVersion, guarantee: Guarantee, why: &str, )
+pub fn nomos_capability::contract_testing::Assert_Ceiling_Refuses(contract: CapabilityContract, guarantee: Guarantee, why: &str)
 pub fn nomos_capability::contract_testing::Assert_One_Contract_Per_Capability(contract: CapabilityContract, why: &str)
 pub fn nomos_capability::contract_testing::Assert_Stands_With_No_Provider( contract: CapabilityContract, capability: CapabilityId, version: ContractVersion, ceiling: Guarantee, )
 pub fn nomos_capability::contract_testing::Declared_Registry(contract: CapabilityContract) -> Registry
+pub impl nomos_capability::RegistryError implements core::fmt::Display
+pub impl nomos_capability::RegistryError implements std::error::Error
 pub struct field nomos_capability::ProviderOffer::capability: CapabilityId
 pub struct field nomos_capability::ProviderOffer::guarantee: Guarantee
 pub struct field nomos_capability::ProviderOffer::provider: ProviderId
 pub struct field nomos_capability::ProviderOffer::version: ContractVersion
+pub struct field nomos_capability::RegistryError::capability: CapabilityId
+pub struct field nomos_capability::RegistryError::kind: ErrorKind
 pub struct field nomos_capability::Requirement::capability: CapabilityId
 pub struct field nomos_capability::Requirement::minimum: Guarantee
 pub struct field nomos_capability::Requirement::preferred: Option<ProviderId>
@@ -59,10 +67,9 @@ pub struct field nomos_capability::Selection::alternatives: Vec<ProviderOffer>
 pub struct field nomos_capability::Selection::chosen: ProviderOffer
 pub struct nomos_capability::ProviderOffer
 pub struct nomos_capability::Registry
+pub struct nomos_capability::RegistryError
 pub struct nomos_capability::Requirement
 pub struct nomos_capability::Selection
 
 # re-exports of items declared outside this crate
 pub use contract::CapabilityContract
-pub use registry::RegistryError
-pub use registry::RegistryErrorKind

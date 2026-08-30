@@ -146,11 +146,9 @@ pub fn nomos_spec_store::SuiteId::from(value: &'a String) -> Self
 pub fn nomos_spec_store::SuiteId::from(value: &'a str) -> Self
 pub fn nomos_spec_store::SuiteTitle::from(value: &'a String) -> Self
 pub fn nomos_spec_store::SuiteTitle::from(value: &'a str) -> Self
-pub fn nomos_spec_store::Tier::from(value: &'a String) -> Self
 pub fn nomos_spec_store::Tier::from(value: &'a str) -> Self
 pub fn nomos_spec_store::ToNodeId::from(value: &'a String) -> Self
 pub fn nomos_spec_store::ToNodeId::from(value: &'a str) -> Self
-pub fn nomos_spec_store::TypeName::from(value: &'a String) -> Self
 pub fn nomos_spec_store::TypeName::from(value: &'a str) -> Self
 pub impl nomos_spec_store::AcceptError implements From<StoreError>
 pub impl nomos_spec_store::AcceptError implements std::fmt::Display
@@ -174,11 +172,9 @@ pub impl nomos_spec_store::SuiteId implements From<&'a String>
 pub impl nomos_spec_store::SuiteId implements From<&'a str>
 pub impl nomos_spec_store::SuiteTitle implements From<&'a String>
 pub impl nomos_spec_store::SuiteTitle implements From<&'a str>
-pub impl nomos_spec_store::Tier implements From<&'a String>
 pub impl nomos_spec_store::Tier implements From<&'a str>
 pub impl nomos_spec_store::ToNodeId implements From<&'a String>
 pub impl nomos_spec_store::ToNodeId implements From<&'a str>
-pub impl nomos_spec_store::TypeName implements From<&'a String>
 pub impl nomos_spec_store::TypeName implements From<&'a str>
 pub struct field nomos_spec_store::CommitReport::blocks: usize
 pub struct field nomos_spec_store::CommitReport::blocks_removed: usize
