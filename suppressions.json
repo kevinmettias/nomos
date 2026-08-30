@@ -15565,6 +15565,294 @@
       "reason": "test-code exemption (OD-GATE-018): inside a #[cfg(test)] mod tests block, out of scope for this check per the P24 regression-sweep triage",
       "owner": "@claude-p24-regression",
       "expires": "2026-11-28"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/orchestration/nomos-spec-orchestration/src/corpus/layer.rs",
+      "fingerprint": "7c428674aea99f1d",
+      "reason": "test-code exemption (OD-GATE-018): inside a #[cfg(test)] mod tests block, out of scope for this check per the P24 regression-sweep triage",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/orchestration/nomos-spec-orchestration/src/corpus/roots.rs",
+      "fingerprint": "7c428674aea99f1d",
+      "reason": "test-code exemption (OD-GATE-018): inside a #[cfg(test)] mod tests block, out of scope for this check per the P24 regression-sweep triage",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/orchestration/nomos-spec-orchestration/src/corpus/volumes.rs",
+      "fingerprint": "7c428674aea99f1d",
+      "reason": "test-code exemption (OD-GATE-018): inside a #[cfg(test)] mod tests block, out of scope for this check per the P24 regression-sweep triage",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/platform/nomos-platform-std/src/launcher/drain.rs",
+      "fingerprint": "b63fc7490bf13f2b",
+      "reason": "test-only literal inside #[cfg(test)] mod tests (timing bound, byte-count assertion, or deliberately-invalid-UTF-8 fixture byte); check-literals is test-code-exempt per OD-GATE-018's category boundaries",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/platform/nomos-platform-std/src/launcher/drain.rs",
+      "fingerprint": "d1d40c2b49f02650",
+      "reason": "test-only literal inside #[cfg(test)] mod tests (timing bound, byte-count assertion, or deliberately-invalid-UTF-8 fixture byte); check-literals is test-code-exempt per OD-GATE-018's category boundaries",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/platform/nomos-platform-std/src/launcher/drain.rs",
+      "fingerprint": "5c3897a01402d1e6",
+      "reason": "test-only literal inside #[cfg(test)] mod tests (timing bound, byte-count assertion, or deliberately-invalid-UTF-8 fixture byte); check-literals is test-code-exempt per OD-GATE-018's category boundaries",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/platform/nomos-platform-std/src/launcher/drain.rs",
+      "fingerprint": "06f03a995d1fea6b",
+      "reason": "test-only literal inside #[cfg(test)] mod tests (timing bound, byte-count assertion, or deliberately-invalid-UTF-8 fixture byte); check-literals is test-code-exempt per OD-GATE-018's category boundaries",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/platform/nomos-platform-std/src/launcher/spawn.rs",
+      "fingerprint": "3a2cdea8ad8b3e7d",
+      "reason": "test-only literal inside #[cfg(test)] mod tests (timing bound, byte-count assertion, or deliberately-invalid-UTF-8 fixture byte); check-literals is test-code-exempt per OD-GATE-018's category boundaries",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/platform/nomos-platform-std/src/launcher/spawn.rs",
+      "fingerprint": "5c3897a01402d1e6",
+      "reason": "test-only literal inside #[cfg(test)] mod tests (timing bound, byte-count assertion, or deliberately-invalid-UTF-8 fixture byte); check-literals is test-code-exempt per OD-GATE-018's category boundaries",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/platform/nomos-platform-std/src/launcher/spawn.rs",
+      "fingerprint": "06f03a995d1fea6b",
+      "reason": "test-only literal inside #[cfg(test)] mod tests (timing bound, byte-count assertion, or deliberately-invalid-UTF-8 fixture byte); check-literals is test-code-exempt per OD-GATE-018's category boundaries",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/platform/nomos-platform-std/src/launcher/wait.rs",
+      "fingerprint": "2e6b0e7dedb519c0",
+      "reason": "test-only literal inside #[cfg(test)] mod tests (timing bound, byte-count assertion, or deliberately-invalid-UTF-8 fixture byte); check-literals is test-code-exempt per OD-GATE-018's category boundaries",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/platform/nomos-platform/src/clock.rs",
+      "fingerprint": "9a0b7a2e9486b61a",
+      "reason": "test-only literal inside #[cfg(test)] mod tests (timing bound, byte-count assertion, or deliberately-invalid-UTF-8 fixture byte); check-literals is test-code-exempt per OD-GATE-018's category boundaries",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/platform/nomos-platform/src/clock/timestamp.rs",
+      "fingerprint": "9a0b7a2e9486b61a",
+      "reason": "test-only literal inside #[cfg(test)] mod tests (timing bound, byte-count assertion, or deliberately-invalid-UTF-8 fixture byte); check-literals is test-code-exempt per OD-GATE-018's category boundaries",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/platform/nomos-platform/src/clock/timestamp.rs",
+      "fingerprint": "562752f048ae05a3",
+      "reason": "test-only literal inside #[cfg(test)] mod tests (timing bound, byte-count assertion, or deliberately-invalid-UTF-8 fixture byte); check-literals is test-code-exempt per OD-GATE-018's category boundaries",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/platform/nomos-platform/src/clock/timestamp.rs",
+      "fingerprint": "4ae7aa8cec964bce",
+      "reason": "test-only literal inside #[cfg(test)] mod tests (timing bound, byte-count assertion, or deliberately-invalid-UTF-8 fixture byte); check-literals is test-code-exempt per OD-GATE-018's category boundaries",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/platform/nomos-platform/src/clock/timestamp.rs",
+      "fingerprint": "c436845abf979dea",
+      "reason": "test-only literal inside #[cfg(test)] mod tests (timing bound, byte-count assertion, or deliberately-invalid-UTF-8 fixture byte); check-literals is test-code-exempt per OD-GATE-018's category boundaries",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/platform/nomos-platform/src/clock/timestamp.rs",
+      "fingerprint": "ab88e4b7d6df4d4f",
+      "reason": "test-only literal inside #[cfg(test)] mod tests (timing bound, byte-count assertion, or deliberately-invalid-UTF-8 fixture byte); check-literals is test-code-exempt per OD-GATE-018's category boundaries",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/platform/nomos-platform/src/clock/timestamp.rs",
+      "fingerprint": "a6adacb5dc4da3e1",
+      "reason": "test-only literal inside #[cfg(test)] mod tests (timing bound, byte-count assertion, or deliberately-invalid-UTF-8 fixture byte); check-literals is test-code-exempt per OD-GATE-018's category boundaries",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/platform/nomos-platform/src/clock/timestamp.rs",
+      "fingerprint": "ac4cfeafd038ef6f",
+      "reason": "test-only literal inside #[cfg(test)] mod tests (timing bound, byte-count assertion, or deliberately-invalid-UTF-8 fixture byte); check-literals is test-code-exempt per OD-GATE-018's category boundaries",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/platform/nomos-platform/src/clock/timestamp.rs",
+      "fingerprint": "a2d763fdd6fd957f",
+      "reason": "test-only literal inside #[cfg(test)] mod tests (timing bound, byte-count assertion, or deliberately-invalid-UTF-8 fixture byte); check-literals is test-code-exempt per OD-GATE-018's category boundaries",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/platform/nomos-platform/src/process_launcher/command.rs",
+      "fingerprint": "6c6974225675469b",
+      "reason": "test-only literal inside #[cfg(test)] mod tests (timing bound, byte-count assertion, or deliberately-invalid-UTF-8 fixture byte); check-literals is test-code-exempt per OD-GATE-018's category boundaries",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/platform/nomos-platform/src/process_launcher/command.rs",
+      "fingerprint": "c6230bde692caa66",
+      "reason": "test-only literal inside #[cfg(test)] mod tests (timing bound, byte-count assertion, or deliberately-invalid-UTF-8 fixture byte); check-literals is test-code-exempt per OD-GATE-018's category boundaries",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/platform/nomos-platform/src/process_launcher/command.rs",
+      "fingerprint": "3947102198839669",
+      "reason": "test-only literal inside #[cfg(test)] mod tests (timing bound, byte-count assertion, or deliberately-invalid-UTF-8 fixture byte); check-literals is test-code-exempt per OD-GATE-018's category boundaries",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/platform/nomos-platform/src/process_launcher/command.rs",
+      "fingerprint": "16d1068daf66efaa",
+      "reason": "test-only literal inside #[cfg(test)] mod tests (timing bound, byte-count assertion, or deliberately-invalid-UTF-8 fixture byte); check-literals is test-code-exempt per OD-GATE-018's category boundaries",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/platform/nomos-platform/src/process_launcher/command.rs",
+      "fingerprint": "f74d0fcd9b2c810c",
+      "reason": "test-only literal inside #[cfg(test)] mod tests (timing bound, byte-count assertion, or deliberately-invalid-UTF-8 fixture byte); check-literals is test-code-exempt per OD-GATE-018's category boundaries",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/platform/nomos-platform-std/src/launcher/drain.rs",
+      "fingerprint": "4f52ff11b64f9b09",
+      "reason": "function Awaited is a private test-only helper inside #[cfg(test)] mod tests (a polling wait for a test fixture, called only by tests in this same module); check-naming-clarity is test-code-exempt per OD-GATE-018's category boundaries",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/platform/nomos-platform-std/src/launcher/spawn.rs",
+      "fingerprint": "39c10423afe0f6d8",
+      "reason": "function Awaited is a private test-only helper inside #[cfg(test)] mod tests (a polling wait for a test fixture, called only by tests in this same module); check-naming-clarity is test-code-exempt per OD-GATE-018's category boundaries",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/orchestration/nomos-gate-orchestration/src/finding_query.rs",
+      "fingerprint": "cb582b9d8f770304",
+      "reason": "test-code exemption (OD-GATE-018): inside a #[cfg(test)] mod tests block, out of scope for this check per the P24 regression-sweep triage",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/orchestration/nomos-gate-orchestration/src/gate_environment.rs",
+      "fingerprint": "cb582b9d8f770304",
+      "reason": "test-code exemption (OD-GATE-018): inside a #[cfg(test)] mod tests block, out of scope for this check per the P24 regression-sweep triage",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/orchestration/nomos-gate-orchestration/src/run_id.rs",
+      "fingerprint": "18af558324df8edc",
+      "reason": "test-code exemption (OD-GATE-018): inside a #[cfg(test)] mod tests block, out of scope for this check per the P24 regression-sweep triage",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/orchestration/nomos-spec-orchestration/src/corpus/roots.rs",
+      "fingerprint": "4915360e1dfc3f97",
+      "reason": "test-code exemption (OD-GATE-018): inside a #[cfg(test)] mod tests block, out of scope for this check per the P24 regression-sweep triage",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/orchestration/nomos-spec-orchestration/src/corpus/volumes.rs",
+      "fingerprint": "202c74f17f1ac12d",
+      "reason": "test-code exemption (OD-GATE-018): inside a #[cfg(test)] mod tests block, out of scope for this check per the P24 regression-sweep triage",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/orchestration/nomos-spec-orchestration/src/run/commit.rs",
+      "fingerprint": "b530a68a2d49eb44",
+      "reason": "test-code exemption (OD-GATE-018): inside a #[cfg(test)] mod tests block, out of scope for this check per the P24 regression-sweep triage",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/orchestration/nomos-spec-orchestration/src/run/freshness.rs",
+      "fingerprint": "b530a68a2d49eb44",
+      "reason": "test-code exemption (OD-GATE-018): inside a #[cfg(test)] mod tests block, out of scope for this check per the P24 regression-sweep triage",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/orchestration/nomos-spec-orchestration/src/run/preview.rs",
+      "fingerprint": "b530a68a2d49eb44",
+      "reason": "test-code exemption (OD-GATE-018): inside a #[cfg(test)] mod tests block, out of scope for this check per the P24 regression-sweep triage",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/orchestration/nomos-spec-orchestration/src/run/render.rs",
+      "fingerprint": "fb89a78151d6a765",
+      "reason": "test-code exemption (OD-GATE-018): inside a #[cfg(test)] mod tests block, out of scope for this check per the P24 regression-sweep triage",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
     }
   ]
 }

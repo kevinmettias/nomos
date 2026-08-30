@@ -39769,14 +39769,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-p24-regression",
-        "acquired_at": 1788130146,
-        "lease_expires_at": 1788137346
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -39786,7 +39782,27 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "exit_code": 0,
+        "output_tail": "    Blocking waiting for file lock on build directory\nwarning: unused import: `SubmissionState`\n  --> crates\\spec\\nomos-spec-store\\src\\submission.rs:19:68\n   |\n19 |     ContentHash, FieldValue, Failure, Origin, Refusal, Submission, SubmissionState, Validate_Submission,\n   |                                                                    ^^^^^^^^^^^^^^^\n   |\n   = note: `#[warn(unused_imports)]` on by default\n\nwarning: `nomos-spec-store` (lib) generated 1 warning (run `cargo fix --lib -p nomos-spec-store` to apply 1 suggestion)\n    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.38s\n",
+        "verified_at": 1788131859,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "74d4a890490ac3c6912b896a2a1e2823696f5895"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
