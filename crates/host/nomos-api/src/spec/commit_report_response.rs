@@ -1,4 +1,4 @@
-//! [`CommitReportResponse`], carried only by [`super::spec_commit_response::SpecCommitResponse`].
+//! [`CommitReportResponse`], carried only by [`super::commit_response::CommitResponse`].
 
 use nomos_spec_store::CommitReport;
 use serde::Serialize;

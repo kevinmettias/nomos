@@ -1,4 +1,4 @@
-//! [`PathMatchResponse`], carried only by [`super::spec_table_response::SpecTableResponse`].
+//! [`PathMatchResponse`], carried only by [`super::table_response::TableResponse`].
 
 use nomos_spec_store::PathMatch;
 use serde::Serialize;

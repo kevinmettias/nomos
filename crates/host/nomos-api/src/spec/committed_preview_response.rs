@@ -1,4 +1,4 @@
-//! [`CommittedPreviewResponse`], carried only by [`super::spec_commit_response::SpecCommitResponse`].
+//! [`CommittedPreviewResponse`], carried only by [`super::commit_response::CommitResponse`].
 
 use nomos_spec_store::EditPreview;
 use serde::Serialize;
@@ -6,7 +6,7 @@ use serde::Serialize;
 use super::{BlockChangeResponse, IdentityChangeResponse, NormativeMovementResponse, RecordRelationResponse};
 
 /// The structured fields [`EditPreview`]'s own accessors expose, built the same way
-/// [`crate::spec::spec_preview_response::SpecPreviewResponse::Previewed`]'s payload is -- kept as its own
+/// [`crate::spec::preview_response::PreviewResponse::Previewed`]'s payload is -- kept as its own
 /// type rather than shared with it, since `Preview`'s own wire shape is already fixed by
 /// `P13-API-SPEC-PREVIEW-SEAM` and this crate does not widen an already-shipped response.
 #[derive(Debug, Serialize)]

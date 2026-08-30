@@ -1,4 +1,4 @@
-//! [`Handle_Spec_Render`] and its own [`SpecRenderResponse`].
+//! [`Handle_Spec_Render`] and its own [`RenderResponse`].
 
 use nomos_spec_orchestration::{RenderAnswer, RenderRefusal, RenderRequest, SpecCommand};
 use nomos_spec_project::Stamp;
@@ -8,7 +8,7 @@ use std::path::PathBuf;
 /// Builds a projection profile and writes both halves of it under `request.into`, exactly as
 /// `nomos spec render` would, and hands back a JSON-serializable response.
 ///
-/// Follows [`crate::spec::spec_record_response::Handle_Spec_Record`]'s own composition. Unlike `Record`,
+/// Follows [`crate::spec::record_response::Handle_Spec_Record`]'s own composition. Unlike `Record`,
 /// `Table`, `Markdown`, `Freshness` and `Preview`, this verb does write: `run::render::Rendered_Projection`
 /// places a built projection's body and its sidecar under `request.into` through
 /// `nomos_platform::FileSystem::Replace_Atomically`, unconditionally overwriting whatever
@@ -20,7 +20,7 @@ use std::path::PathBuf;
 /// is destructive in the way `Commit`'s vacate step can be: a rendered projection is a
 /// derived, regenerable artifact, not the governing record itself.
 #[must_use]
-pub fn Handle_Spec_Render(request: &RenderRequest) -> SpecRenderResponse
+pub fn Handle_Spec_Render(request: &RenderRequest) -> RenderResponse
 {
     use super::Build_Corpus_Request;
     use nomos_platform_std::StdFileSystem;
@@ -38,13 +38,13 @@ pub fn Handle_Spec_Render(request: &RenderRequest) -> SpecRenderResponse
         unreachable!("Run always returns the SpecOutcome variant naming the SpecCommand it was given")
     };
 
-    return SpecRenderResponse::From(result);
+    return RenderResponse::From(result);
 }
 
 /// What a real `nomos spec render` produced, in a shape `serde_json` can hand across a wire.
 #[derive(Debug, Serialize)]
 #[serde(tag = "outcome", rename_all = "snake_case")]
-pub enum SpecRenderResponse
+pub enum RenderResponse
 {
     /// Both halves of the built projection, placed where the run asked for them.
     Placed
@@ -81,7 +81,7 @@ pub enum SpecRenderResponse
     },
 }
 
-impl SpecRenderResponse
+impl RenderResponse
 {
     pub(crate) fn From(result: Result<RenderAnswer, RenderRefusal>) -> Self
     {
@@ -103,6 +103,7 @@ impl SpecRenderResponse
 mod tests
 {
     use super::*;
+    use crate::test_support::{Assert_Round_Trips_As_Json, Unique_Scratch_Directory};
 
     /// Builds from the embedded governing records alone, so a test naming it needs no corpus
     /// -- the same profile `nomos_spec_orchestration`'s own `tests.rs` and
@@ -112,12 +113,12 @@ mod tests
     #[test]
     fn Test_A_Real_Render_Should_Place_Both_Files_On_Disk()
     {
-        let into = Unique_Scratch_Directory("render");
+        let into = Unique_Scratch_Directory("spec-render", "render");
         let request = RenderRequest { profile: EMBEDDED_PROFILE.to_owned(), into: into.clone(), subject: None };
 
         let response = Handle_Spec_Render(&request);
 
-        let SpecRenderResponse::Placed { id, body, sidecar, .. } = response
+        let RenderResponse::Placed { id, body, sidecar, .. } = response
         else
         {
             // This profile builds from embedded governing records alone, with a fresh scratch
@@ -137,13 +138,13 @@ mod tests
     {
         let request = RenderRequest {
             profile: "definitely-not-a-real-profile".to_owned(),
-            into: Unique_Scratch_Directory("render-unknown"),
+            into: Unique_Scratch_Directory("spec-render", "render-unknown"),
             subject: None,
         };
 
         let response = Handle_Spec_Render(&request);
 
-        assert!(matches!(response, SpecRenderResponse::NoSuchProfile { .. }), "{response:?}");
+        assert!(matches!(response, RenderResponse::NoSuchProfile { .. }), "{response:?}");
     }
 
     #[test]
@@ -151,35 +152,12 @@ mod tests
     {
         let request = RenderRequest {
             profile: EMBEDDED_PROFILE.to_owned(),
-            into: Unique_Scratch_Directory("render-json"),
+            into: Unique_Scratch_Directory("spec-render", "render-json"),
             subject: None,
         };
 
         let response = Handle_Spec_Render(&request);
 
-        let json = serde_json::to_string(&response).expect("a SpecRenderResponse always serializes");
-        let parsed: serde_json::Value = serde_json::from_str(&json).expect("what was just written parses back");
-        let outcome = parsed.get("outcome").expect("a serialized SpecRenderResponse always has this field");
-
-        assert_eq!(outcome, "placed", "{json}");
-    }
-
-    /// An empty, unique scratch directory of this test's own.
-    fn Unique_Scratch_Directory(label: &str) -> std::path::PathBuf
-    {
-        use std::sync::atomic::{AtomicU32, Ordering};
-        // scope: allow this test-only counter has no owner beyond disambiguating calls within
-        // one process; a bare pid does not distinguish two calls in the same test run.
-        static COUNTER: AtomicU32 = AtomicU32::new(0);
-
-        let directory = std::env::temp_dir().join(format!(
-            "nomos-api-spec-render-{label}-{}-{}",
-            std::process::id(),
-            COUNTER.fetch_add(1, Ordering::Relaxed)
-        ));
-        let _ignored = std::fs::remove_dir_all(&directory);
-        std::fs::create_dir_all(&directory).expect("a fresh scratch directory can always be created");
-
-        return directory;
+        Assert_Round_Trips_As_Json(&response, "placed");
     }
 }

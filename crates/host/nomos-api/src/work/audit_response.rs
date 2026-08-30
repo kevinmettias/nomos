@@ -1,4 +1,4 @@
-//! [`Handle_Work_Audit`] and its own [`WorkAuditResponse`].
+//! [`Handle_Work_Audit`] and its own [`AuditResponse`].
 
 use nomos_ledger::{Claim_Refusal, ItemState, Territory};
 use nomos_platform::Timestamp;
@@ -23,7 +23,7 @@ use super::{BlockedItem, Ledger_At};
 /// a wire caller gets each blocked item's full `ClaimRefusal::Describe()` text instead of
 /// that terse label.
 #[must_use]
-pub fn Handle_Work_Audit(directory: &Path) -> WorkAuditResponse
+pub fn Handle_Work_Audit(directory: &Path) -> AuditResponse
 {
     use nomos_platform_std::StdProcessLauncher;
     use nomos_work_orchestration::WorkCommand;
@@ -45,17 +45,17 @@ pub fn Handle_Work_Audit(directory: &Path) -> WorkAuditResponse
         unreachable!("Run always returns the WorkOutcome variant naming the WorkCommand it was given")
     };
 
-    return WorkAuditResponse::From(audited);
+    return AuditResponse::From(audited);
 }
 
 /// What a real `nomos work audit` produced, in a shape `serde_json` can hand across a wire.
 ///
-/// The same two-state honesty shape `crate::work::work_list_response::WorkListResponse` already holds to:
+/// The same two-state honesty shape `crate::work::list_response::ListResponse` already holds to:
 /// `Unreadable` names the board itself failing to read, the one way this can fail short of a
 /// genuine audit answer.
 #[derive(Debug, Serialize)]
 #[serde(tag = "outcome", rename_all = "snake_case")]
-pub enum WorkAuditResponse
+pub enum AuditResponse
 {
     /// The board was read, and every claimable item currently blocked is named.
     Audited
@@ -73,7 +73,7 @@ pub enum WorkAuditResponse
     },
 }
 
-impl WorkAuditResponse
+impl AuditResponse
 {
     pub(crate) fn From(audited: Result<nomos_work_orchestration::BoardView, nomos_ledger::LedgerError>) -> Self
     {
@@ -113,7 +113,7 @@ mod tests
 
         let _ignored = std::fs::remove_dir_all(&directory);
 
-        let WorkAuditResponse::Audited { blocked: found, .. } = response
+        let AuditResponse::Audited { blocked: found, .. } = response
         else
         {
             // This fixture writes a real, well-formed ledger file, so reading it back must
@@ -136,7 +136,7 @@ mod tests
 
         let _ignored = std::fs::remove_dir_all(&directory);
 
-        let WorkAuditResponse::Audited { blocked, .. } = response
+        let AuditResponse::Audited { blocked, .. } = response
         else
         {
             // This fixture writes a real, well-formed, empty ledger file, so reading it back
@@ -156,10 +156,6 @@ mod tests
 
         let _ignored = std::fs::remove_dir_all(&directory);
 
-        let json = serde_json::to_string(&response).expect("a WorkAuditResponse always serializes");
-        let parsed: serde_json::Value = serde_json::from_str(&json).expect("what was just written parses back");
-        let outcome = parsed.get("outcome").expect("a serialized WorkAuditResponse always has this field");
-
-        assert_eq!(outcome, "audited", "{json}");
+        crate::test_support::Assert_Round_Trips_As_Json(&response, "audited");
     }
 }

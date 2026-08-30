@@ -1,4 +1,4 @@
-//! [`Handle_Work_Finish`] and its own [`WorkFinishResponse`].
+//! [`Handle_Work_Finish`] and its own [`FinishResponse`].
 
 use nomos_ledger::{FinishRefusal, ItemId, Territory, VerificationRecord};
 use serde::Serialize;
@@ -14,7 +14,7 @@ use std::path::Path;
 /// gate.yml`) resolves relative to the calling process's own current directory, the same
 /// fixed composition `nomos-cli`'s own `nomos work finish` already runs under.
 #[must_use]
-pub fn Handle_Work_Finish(directory: &Path, item: &ItemId, holder: &str) -> WorkFinishResponse
+pub fn Handle_Work_Finish(directory: &Path, item: &ItemId, holder: &str) -> FinishResponse
 {
     use super::Ledger_At;
     use nomos_platform_std::StdProcessLauncher;
@@ -37,13 +37,13 @@ pub fn Handle_Work_Finish(directory: &Path, item: &ItemId, holder: &str) -> Work
         unreachable!("Run always returns the WorkOutcome variant naming the WorkCommand it was given")
     };
 
-    return WorkFinishResponse::From(finished);
+    return FinishResponse::From(finished);
 }
 
 /// What a real `nomos work finish` produced, in a shape `serde_json` can hand across a wire.
 #[derive(Debug, Serialize)]
 #[serde(tag = "outcome", rename_all = "snake_case")]
-pub enum WorkFinishResponse
+pub enum FinishResponse
 {
     /// The predicate passed, and the item is recorded done.
     Finished
@@ -65,7 +65,7 @@ pub enum WorkFinishResponse
     },
 }
 
-impl WorkFinishResponse
+impl FinishResponse
 {
     pub(crate) fn From(result: Result<VerificationRecord, FinishRefusal>) -> Self
     {
@@ -93,7 +93,7 @@ mod tests
 
         let _ignored = std::fs::remove_dir_all(&directory);
 
-        let WorkFinishResponse::Refused { judged, cause } = response
+        let FinishResponse::Refused { judged, cause } = response
         else
         {
             // This fixture writes a real, readable board and then finishes an id that was
@@ -114,7 +114,7 @@ mod tests
 
         let _ignored = std::fs::remove_dir_all(&directory);
 
-        let WorkFinishResponse::Refused { judged, cause } = response
+        let FinishResponse::Refused { judged, cause } = response
         else
         {
             // This fixture builds an item with no `verification` field set at all, so
@@ -136,10 +136,6 @@ mod tests
 
         let _ignored = std::fs::remove_dir_all(&directory);
 
-        let json = serde_json::to_string(&response).expect("a WorkFinishResponse always serializes");
-        let parsed: serde_json::Value = serde_json::from_str(&json).expect("what was just written parses back");
-        let outcome = parsed.get("outcome").expect("a serialized WorkFinishResponse always has this field");
-
-        assert_eq!(outcome, "refused", "{json}");
+        crate::test_support::Assert_Round_Trips_As_Json(&response, "refused");
     }
 }

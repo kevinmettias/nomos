@@ -1,5 +1,5 @@
-//! [`DocumentSourceResponse`], shared by [`super::spec_record_response::SpecRecordResponse`] and
-//! [`super::spec_table_response::SpecTableResponse`] -- the one document a resolved identifier or a
+//! [`DocumentSourceResponse`], shared by [`super::record_response::RecordResponse`] and
+//! [`super::table_response::TableResponse`] -- the one document a resolved identifier or a
 //! selected table both carry.
 
 use nomos_spec_store::DocumentSource;

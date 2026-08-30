@@ -1,29 +1,19 @@
-//! [`Handle_Work_TakeOver`]. Its own response type, [`super::WorkReservationResponse`], lives
-//! in [`super::work_reservation_response`] -- see that module's own doc for why it cannot
+//! [`Handle_Work_TakeOver`]. Its own response type, [`super::ReservationOutcomeResponse`], lives
+//! in [`super::reservation_outcome_response`] -- see that module's own doc for why it cannot
 //! live beside this function, [`super::claim::Handle_Work_Claim`] or
 //! [`super::renew::Handle_Work_Renew`].
 
 use nomos_work_orchestration::{ClaimRequest, WorkCommand};
 use std::path::Path;
 
-use super::{Ledger_At, WorkReservationResponse};
+use super::{ReservationOutcomeResponse, Run_Reservation_Command};
 
 /// Takes over `request`'s item on the board at `directory` from a lapsed holder, exactly as
 /// `nomos work takeover` would, and hands back a JSON-serializable response.
 #[must_use]
-pub fn Handle_Work_TakeOver(directory: &Path, request: &ClaimRequest) -> WorkReservationResponse
+pub fn Handle_Work_TakeOver(directory: &Path, request: &ClaimRequest) -> ReservationOutcomeResponse
 {
-    use nomos_ledger::Territory;
-    use nomos_platform_std::StdProcessLauncher;
-
-    let mut ledger = Ledger_At(directory);
-
-    let outcome = nomos_work_orchestration::Run(
-        &WorkCommand::TakeOver(request.clone()),
-        &mut ledger,
-        &StdProcessLauncher,
-        || Territory::Of_Files(std::iter::empty::<String>()),
-    );
+    let outcome = Run_Reservation_Command(directory, WorkCommand::TakeOver(request.clone()));
 
     let nomos_work_orchestration::WorkOutcome::TakeOver(taken_over) = outcome
     else
@@ -33,26 +23,26 @@ pub fn Handle_Work_TakeOver(directory: &Path, request: &ClaimRequest) -> WorkRes
         unreachable!("Run always returns the WorkOutcome variant naming the WorkCommand it was given")
     };
 
-    return WorkReservationResponse::From(taken_over);
+    return ReservationOutcomeResponse::From(taken_over);
 }
 
 #[cfg(test)]
 mod tests
 {
     use super::*;
-    use crate::work::tests_support::Scratch_Board_With_A_Claimed_Item;
+    use crate::work::tests_support::{Claim_Request, Scratch_Board_With_A_Claimed_Item};
 
     #[test]
     fn Test_Taking_Over_A_Real_Lapsed_Claim_Should_Grant_A_Reservation()
     {
         let (directory, id) = Scratch_Board_With_A_Claimed_Item("old-holder", 1);
-        let request = ClaimRequest { item: id.clone(), holder: "new-holder".to_owned(), lease: std::time::Duration::from_secs(3600) };
+        let request = Claim_Request(id.clone(), "new-holder");
 
         let response = Handle_Work_TakeOver(&directory, &request);
 
         let _ignored = std::fs::remove_dir_all(&directory);
 
-        let WorkReservationResponse::Reserved { reservation } = response
+        let ReservationOutcomeResponse::Reserved { reservation } = response
         else
         {
             // This fixture claims the item with a one-second lease and lets it lapse before

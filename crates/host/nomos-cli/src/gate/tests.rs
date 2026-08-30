@@ -93,13 +93,13 @@ fn Sorted(codes: impl Iterator<Item = i32>) -> Vec<i32>
     return sorted;
 }
 
-/// A [`GateInvocation`]'s carried [`GateCommand`], whichever verb it is -- most of these
+/// An [`Invocation`]'s carried [`GateCommand`], whichever verb it is -- most of these
 /// tests only care about `root` and would otherwise have to match twice for no reason.
-fn Root_Of(invocation: &GateInvocation) -> &PathBuf
+fn Root_Of(invocation: &Invocation) -> &PathBuf
 {
     return match invocation
     {
-        GateInvocation::Plan(command) | GateInvocation::Run(command) | GateInvocation::Explain { command, .. } => &command.root,
+        Invocation::Plan(command) | Invocation::Run(command) | Invocation::Explain { command, .. } => &command.root,
     };
 }
 
@@ -135,7 +135,7 @@ fn Test_Run_Should_Gate_Invocation_From_String_Arguments()
 {
     let invocation = Gate_Invocation_From_String_Arguments(&["run".to_owned()]).expect("run with no root is valid");
 
-    assert!(matches!(invocation, GateInvocation::Run(_)), "run must not parse as Plan");
+    assert!(matches!(invocation, Invocation::Run(_)), "run must not parse as Plan");
     assert_eq!(Root_Of(&invocation), &PathBuf::from("."));
 }
 
@@ -169,8 +169,8 @@ fn Test_An_Unknown_Flag_Should_Refuse()
 /// strings -- the "real command over the real tree" setup
 /// `Test_A_Real_Plan_Should_Report_All_Four_Shipped_Rules` and
 /// `Test_A_Real_Run_Should_Judge_This_Workspaces_Own_Tree` both need, differing only in
-/// which verb's [`GateInvocation`] they build.
-fn Run_Over_This_Tree(invocation: GateInvocation) -> (ExitCode, String, String)
+/// which verb's [`Invocation`] they build.
+fn Run_Over_This_Tree(invocation: Invocation) -> (ExitCode, String, String)
 {
     let mut stdout = Vec::new();
     let mut stderr = Vec::new();
@@ -193,7 +193,7 @@ fn Run_Over_This_Tree(invocation: GateInvocation) -> (ExitCode, String, String)
 fn Test_A_Real_Plan_Should_Report_All_Four_Shipped_Rules()
 {
     let command = GateCommand { root: PathBuf::from("."), ..Default::default() };
-    let (code, rendered, stderr) = Run_Over_This_Tree(GateInvocation::Plan(command));
+    let (code, rendered, stderr) = Run_Over_This_Tree(Invocation::Plan(command));
 
     assert_eq!(code, ExitCode::Ok, "{rendered}");
     assert!(rendered.contains("rules: 4"), "{rendered}");
@@ -215,7 +215,7 @@ fn Test_A_Real_Plan_Should_Report_All_Four_Shipped_Rules()
 fn Test_A_Real_Run_Should_Judge_This_Workspaces_Own_Tree()
 {
     let command = GateCommand { root: PathBuf::from("."), ..Default::default() };
-    let (code, rendered, stderr) = Run_Over_This_Tree(GateInvocation::Run(command));
+    let (code, rendered, stderr) = Run_Over_This_Tree(Invocation::Run(command));
 
     assert_eq!(
         code,
@@ -237,7 +237,7 @@ fn Test_A_Real_Run_Should_Judge_This_Workspaces_Own_Tree()
 fn Test_A_Real_Run_Should_Report_Its_RunId()
 {
     let command = GateCommand { root: PathBuf::from("."), ..Default::default() };
-    let (code, rendered, stderr) = Run_Over_This_Tree(GateInvocation::Run(command));
+    let (code, rendered, stderr) = Run_Over_This_Tree(Invocation::Run(command));
 
     assert_eq!(code, ExitCode::Ok, "{rendered}");
     let run_line = rendered.lines().find(|line| line.starts_with("run: ")).unwrap_or_else(|| panic!("no `run: ` line in: {rendered}"));
@@ -257,7 +257,7 @@ fn Test_A_Run_Over_An_Empty_Tree_Should_Not_Report_Ok()
     let _ignored = std::fs::remove_dir_all(&empty);
     std::fs::create_dir_all(&empty).expect("creates an empty directory");
 
-    let invocation = GateInvocation::Run(GateCommand { root: empty.clone(), ..Default::default() });
+    let invocation = Invocation::Run(GateCommand { root: empty.clone(), ..Default::default() });
     let mut stdout = Vec::new();
     let mut stderr = Vec::new();
 
@@ -284,7 +284,7 @@ fn Test_Include_And_Exclude_Should_Repeat()
     ];
     let invocation = Gate_Invocation_From_String_Arguments(&arguments).expect("plan with include/exclude is valid");
 
-    let GateInvocation::Plan(command) = invocation
+    let Invocation::Plan(command) = invocation
     else
     {
         panic!("plan must parse as Plan");
@@ -300,7 +300,7 @@ fn Test_Rule_Should_Repeat()
     let arguments = vec!["run".to_owned(), "--rule".to_owned(), "naming-convention".to_owned()];
     let invocation = Gate_Invocation_From_String_Arguments(&arguments).expect("run with --rule is valid");
 
-    let GateInvocation::Run(command) = invocation
+    let Invocation::Run(command) = invocation
     else
     {
         panic!("run must parse as Run");
@@ -314,7 +314,7 @@ fn Test_Rule_Should_Repeat()
 #[test]
 fn Test_A_Run_Scoped_To_Nothing_Should_Not_Report_Ok()
 {
-    let invocation = GateInvocation::Run(GateCommand {
+    let invocation = Invocation::Run(GateCommand {
         root: PathBuf::from("."),
         scope: nomos_gate_orchestration::ScopeSelector {
             include: vec!["does/not/exist.rs".to_owned()],
@@ -348,7 +348,7 @@ fn Test_Explain_Should_Parse_With_Rule_And_Location()
     ];
     let invocation = Gate_Invocation_From_String_Arguments(&arguments).expect("explain with --rule and --location is valid");
 
-    let GateInvocation::Explain { query, .. } = invocation
+    let Invocation::Explain { query, .. } = invocation
     else
     {
         panic!("explain must parse as Explain");
@@ -385,7 +385,7 @@ fn Test_Explain_Should_Require_Location()
 #[test]
 fn Test_A_Real_Explain_Should_Report_Not_Found_Over_A_Clean_Tree()
 {
-    let invocation = GateInvocation::Explain {
+    let invocation = Invocation::Explain {
         command: GateCommand { root: PathBuf::from("."), ..Default::default() },
         query: nomos_gate_orchestration::FindingQuery {
             rule: nomos_contracts::RuleId::New("naming-convention"),

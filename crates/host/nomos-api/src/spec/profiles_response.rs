@@ -14,7 +14,7 @@ pub fn Handle_Spec_Profiles() -> ProfilesResponse
 /// What a real `nomos spec profiles` produced, in a shape `serde_json` can hand across a
 /// wire.
 ///
-/// A tagged enum, the same shape `WorkListResponse` already uses: `nomos_spec_project::
+/// A tagged enum, the same shape `ListResponse` already uses: `nomos_spec_project::
 /// ProjectError` does not derive `Serialize` -- nothing needed a wire format for it before
 /// this crate existed -- so the refusal case is named rather than collapsed into an empty
 /// success. `Profiles`' own doc calls that refusal "a defect in this build, not in
@@ -55,6 +55,7 @@ impl ProfilesResponse
 mod tests
 {
     use super::*;
+    use crate::test_support::Assert_Round_Trips_As_Json;
 
     /// The catalogue is embedded in the binary, so this is a real end-to-end exercise of
     /// this workspace's own shipped profiles -- no fixture, no scratch directory, the same
@@ -81,10 +82,6 @@ mod tests
     {
         let response = Handle_Spec_Profiles();
 
-        let json = serde_json::to_string(&response).expect("a ProfilesResponse always serializes");
-        let parsed: serde_json::Value = serde_json::from_str(&json).expect("what was just written parses back");
-        let outcome = parsed.get("outcome").expect("a serialized ProfilesResponse always has this field");
-
-        assert_eq!(outcome, "listed", "{json}");
+        Assert_Round_Trips_As_Json(&response, "listed");
     }
 }

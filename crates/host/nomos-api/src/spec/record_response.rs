@@ -1,4 +1,4 @@
-//! [`Handle_Spec_Record`] and its own [`SpecRecordResponse`].
+//! [`Handle_Spec_Record`] and its own [`RecordResponse`].
 
 use nomos_spec_orchestration::{RecordAnswer, RecordRefusal, RecordRequest, SpecCommand};
 use serde::Serialize;
@@ -15,7 +15,7 @@ use super::{Build_Corpus_Request, DocumentSourceResponse, NodeSummaryResponse};
 /// point it is dispatched through, `nomos_spec_orchestration::Run`, is generic over one for
 /// every verb regardless.
 #[must_use]
-pub fn Handle_Spec_Record(request: &RecordRequest) -> SpecRecordResponse
+pub fn Handle_Spec_Record(request: &RecordRequest) -> RecordResponse
 {
     use nomos_platform_std::StdFileSystem;
 
@@ -32,13 +32,13 @@ pub fn Handle_Spec_Record(request: &RecordRequest) -> SpecRecordResponse
         unreachable!("Run always returns the SpecOutcome variant naming the SpecCommand it was given")
     };
 
-    return SpecRecordResponse::From(result);
+    return RecordResponse::From(result);
 }
 
 /// What a real `nomos spec record` produced, in a shape `serde_json` can hand across a wire.
 #[derive(Debug, Serialize)]
 #[serde(tag = "outcome", rename_all = "snake_case")]
-pub enum SpecRecordResponse
+pub enum RecordResponse
 {
     /// The one document behind the identifier, resolved.
     Resolved
@@ -74,7 +74,7 @@ pub enum SpecRecordResponse
     },
 }
 
-impl SpecRecordResponse
+impl RecordResponse
 {
     pub(crate) fn From(result: Result<RecordAnswer, RecordRefusal>) -> Self
     {
@@ -98,6 +98,7 @@ impl SpecRecordResponse
 mod tests
 {
     use super::*;
+    use crate::test_support::Assert_Round_Trips_As_Json;
 
     /// `D-132` is a real, embedded governing record -- `nomos_spec_orchestration`'s own
     /// `tests.rs` already resolves it with no corpus present -- so this needs no scratch
@@ -110,7 +111,7 @@ mod tests
 
         let response = Handle_Spec_Record(&request);
 
-        let SpecRecordResponse::Resolved { id, document } = response
+        let RecordResponse::Resolved { id, document } = response
         else
         {
             // D-132 is a real, embedded governing record, so reaching any other variant here
@@ -129,7 +130,7 @@ mod tests
 
         let response = Handle_Spec_Record(&request);
 
-        assert!(matches!(response, SpecRecordResponse::NotFound { node: None, .. }), "{response:?}");
+        assert!(matches!(response, RecordResponse::NotFound { node: None, .. }), "{response:?}");
     }
 
     #[test]
@@ -139,10 +140,6 @@ mod tests
 
         let response = Handle_Spec_Record(&request);
 
-        let json = serde_json::to_string(&response).expect("a SpecRecordResponse always serializes");
-        let parsed: serde_json::Value = serde_json::from_str(&json).expect("what was just written parses back");
-        let outcome = parsed.get("outcome").expect("a serialized SpecRecordResponse always has this field");
-
-        assert_eq!(outcome, "resolved", "{json}");
+        Assert_Round_Trips_As_Json(&response, "resolved");
     }
 }

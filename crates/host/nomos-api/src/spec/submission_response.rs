@@ -1,4 +1,4 @@
-//! [`SubmissionResponse`], carried only by [`super::spec_submit_response::SpecSubmitResponse::Accepted`].
+//! [`SubmissionResponse`], carried only by [`super::submit_response::SubmitResponse::Accepted`].
 
 use nomos_spec_model::Submission;
 use serde::Serialize;

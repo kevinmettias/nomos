@@ -1,4 +1,4 @@
-//! [`Handle_Spec_Markdown`] and its own [`SpecMarkdownResponse`].
+//! [`Handle_Spec_Markdown`] and its own [`MarkdownResponse`].
 
 use nomos_spec_orchestration::{RecordRequest, SpecCommand};
 use nomos_spec_store::{EditError, RecordProjection};
@@ -7,12 +7,12 @@ use serde::Serialize;
 /// Renders one record's markdown from the store's own rows, exactly as `nomos spec markdown`
 /// would, and hands back a JSON-serializable response.
 ///
-/// Follows [`crate::spec::spec_record_response::Handle_Spec_Record`]'s own composition, reusing the same
+/// Follows [`crate::spec::record_response::Handle_Spec_Record`]'s own composition, reusing the same
 /// [`RecordRequest`]: builds a `CorpusRequest` from the environment, dispatches through the
 /// shared `Run` entry point, matches `SpecOutcome::Markdown`. `run::markdown::Markdown` itself
 /// never touches a `FileSystem`, the same as `Record` and `Table`.
 #[must_use]
-pub fn Handle_Spec_Markdown(request: &RecordRequest) -> SpecMarkdownResponse
+pub fn Handle_Spec_Markdown(request: &RecordRequest) -> MarkdownResponse
 {
     use super::Build_Corpus_Request;
     use nomos_platform_std::StdFileSystem;
@@ -30,14 +30,14 @@ pub fn Handle_Spec_Markdown(request: &RecordRequest) -> SpecMarkdownResponse
         unreachable!("Run always returns the SpecOutcome variant naming the SpecCommand it was given")
     };
 
-    return SpecMarkdownResponse::From(result);
+    return MarkdownResponse::From(result);
 }
 
 /// What a real `nomos spec markdown` produced, in a shape `serde_json` can hand across a
 /// wire.
 #[derive(Debug, Serialize)]
 #[serde(tag = "outcome", rename_all = "snake_case")]
-pub enum SpecMarkdownResponse
+pub enum MarkdownResponse
 {
     /// The record, rendered from the store's own rows.
     Resolved
@@ -62,7 +62,7 @@ pub enum SpecMarkdownResponse
     },
 }
 
-impl SpecMarkdownResponse
+impl MarkdownResponse
 {
     pub(crate) fn From(result: Result<RecordProjection, EditError>) -> Self
     {
@@ -91,6 +91,7 @@ impl SpecMarkdownResponse
 mod tests
 {
     use super::*;
+    use crate::test_support::Assert_Round_Trips_As_Json;
 
     /// `D-132` is a real, embedded governing record with declared front matter --
     /// `nomos_spec_orchestration`'s own `tests.rs` already renders it with no corpus present.
@@ -101,7 +102,7 @@ mod tests
 
         let response = Handle_Spec_Markdown(&request);
 
-        let SpecMarkdownResponse::Resolved { node_id, markdown, .. } = response
+        let MarkdownResponse::Resolved { node_id, markdown, .. } = response
         else
         {
             // D-132 is a real, embedded governing record with declared front matter, so
@@ -120,7 +121,7 @@ mod tests
 
         let response = Handle_Spec_Markdown(&request);
 
-        assert!(matches!(response, SpecMarkdownResponse::Refused { .. }), "{response:?}");
+        assert!(matches!(response, MarkdownResponse::Refused { .. }), "{response:?}");
     }
 
     #[test]
@@ -130,10 +131,6 @@ mod tests
 
         let response = Handle_Spec_Markdown(&request);
 
-        let json = serde_json::to_string(&response).expect("a SpecMarkdownResponse always serializes");
-        let parsed: serde_json::Value = serde_json::from_str(&json).expect("what was just written parses back");
-        let outcome = parsed.get("outcome").expect("a serialized SpecMarkdownResponse always has this field");
-
-        assert_eq!(outcome, "resolved", "{json}");
+        Assert_Round_Trips_As_Json(&response, "resolved");
     }
 }

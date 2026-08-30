@@ -1,4 +1,4 @@
-//! [`Handle_Work_Show`] and its own [`WorkShowResponse`].
+//! [`Handle_Work_Show`] and its own [`ShowResponse`].
 
 use nomos_ledger::{ItemId, LedgerItem, Territory};
 use nomos_platform::Timestamp;
@@ -14,7 +14,7 @@ use std::path::Path;
 /// `Render_Show` does that lookup after the fact; this function does the same, rather than
 /// inventing a server-side filter `nomos_work_orchestration` itself does not have.
 #[must_use]
-pub fn Handle_Work_Show(directory: &Path, item: &ItemId) -> WorkShowResponse
+pub fn Handle_Work_Show(directory: &Path, item: &ItemId) -> ShowResponse
 {
     use super::Ledger_At;
     use nomos_platform_std::StdProcessLauncher;
@@ -37,18 +37,18 @@ pub fn Handle_Work_Show(directory: &Path, item: &ItemId) -> WorkShowResponse
         unreachable!("Run always returns the WorkOutcome variant naming the WorkCommand it was given")
     };
 
-    return WorkShowResponse::From(item, shown);
+    return ShowResponse::From(item, shown);
 }
 
 /// What a real `nomos work show` produced, in a shape `serde_json` can hand across a wire.
 ///
-/// A three-state tagged enum, the same honesty shape `crate::work::work_list_response::WorkListResponse`
+/// A three-state tagged enum, the same honesty shape `crate::work::list_response::ListResponse`
 /// already holds to for a two-state case, extended by one: unlike `list`, `show` can
 /// legitimately fail to find its subject on a board that itself read fine, and collapsing
 /// that into `Unreadable` would misreport a real miss as a broken ledger.
 #[derive(Debug, Serialize)]
 #[serde(tag = "outcome", rename_all = "snake_case")]
-pub enum WorkShowResponse
+pub enum ShowResponse
 {
     /// The item was on the board.
     Found
@@ -56,7 +56,7 @@ pub enum WorkShowResponse
         /// The item, including what has happened to it.
         ///
         /// Boxed: `LedgerItem` is far larger than the other two variants, and an unboxed
-        /// field here would size every `WorkShowResponse` -- `NotFound` and `Unreadable`
+        /// field here would size every `ShowResponse` -- `NotFound` and `Unreadable`
         /// included -- to its width.
         item: Box<LedgerItem>,
         /// This tree's revision right now, or `None` if it could not be read.
@@ -78,7 +78,7 @@ pub enum WorkShowResponse
     },
 }
 
-impl WorkShowResponse
+impl ShowResponse
 {
     pub(crate) fn From(
         item: &ItemId,
@@ -118,7 +118,7 @@ mod tests
 
         let _ignored = std::fs::remove_dir_all(&directory);
 
-        let WorkShowResponse::Found { item, .. } = response
+        let ShowResponse::Found { item, .. } = response
         else
         {
             // This fixture writes a real board carrying `id`, so showing that same id must
@@ -139,7 +139,7 @@ mod tests
 
         let _ignored = std::fs::remove_dir_all(&directory);
 
-        let WorkShowResponse::NotFound { item } = response
+        let ShowResponse::NotFound { item } = response
         else
         {
             // This fixture writes a real, readable board that never carries `absent`'s id,
@@ -159,10 +159,6 @@ mod tests
 
         let _ignored = std::fs::remove_dir_all(&directory);
 
-        let json = serde_json::to_string(&response).expect("a WorkShowResponse always serializes");
-        let parsed: serde_json::Value = serde_json::from_str(&json).expect("what was just written parses back");
-        let outcome = parsed.get("outcome").expect("a serialized WorkShowResponse always has this field");
-
-        assert_eq!(outcome, "found", "{json}");
+        crate::test_support::Assert_Round_Trips_As_Json(&response, "found");
     }
 }

@@ -1,6 +1,6 @@
 //! What `nomos gate` was asked for.
 
-use super::{FindingQuery, GateCommand, GateInvocation, Named_Value_From_String_Arguments, PathBuf};
+use super::{FindingQuery, GateCommand, Invocation, Named_Value_From_String_Arguments, PathBuf};
 use crate::arguments::{Name, Named_Values_From_String_Arguments, Required_Value, Usage};
 use nomos_contracts::RuleId;
 use nomos_gate_orchestration::{RuleSelector, ScopeSelector};
@@ -42,7 +42,7 @@ materialized for any of it";
 ///
 /// Returns the usage message when the verb is missing or unrecognized, `explain` is
 /// missing `--rule` or `--location`, or an argument is not understood.
-pub fn Gate_Invocation_From_String_Arguments(arguments: &[String]) -> Result<GateInvocation, String>
+pub fn Gate_Invocation_From_String_Arguments(arguments: &[String]) -> Result<Invocation, String>
 {
     let Some((verb, rest)) = arguments.split_first()
     else
@@ -62,7 +62,7 @@ pub fn Gate_Invocation_From_String_Arguments(arguments: &[String]) -> Result<Gat
 
     let command = Plan_Or_Run_Command(root, rest);
 
-    return Ok(if verb == "run" { GateInvocation::Run(command) } else { GateInvocation::Plan(command) });
+    return Ok(if verb == "run" { Invocation::Run(command) } else { Invocation::Plan(command) });
 }
 
 /// Refuses anything but the three verbs this group implements today.
@@ -95,7 +95,7 @@ fn No_Unknown_Argument(rest: &[String]) -> Result<(), String>
 /// selector, so this does not populate `GateCommand::rules` at all -- `Explain_Gate`
 /// ignores it regardless, and populating it from the same flag that also names the query
 /// would read as a selector nobody asked for.
-fn Explain_Invocation(rest: &[String], root: PathBuf) -> Result<GateInvocation, String>
+fn Explain_Invocation(rest: &[String], root: PathBuf) -> Result<Invocation, String>
 {
     let rule = Required_Value(Named_Value_From_String_Arguments(rest, "--rule").as_ref(), Name("--rule"), Usage(USAGE))?;
     let location = Required_Value(Named_Value_From_String_Arguments(rest, "--location").as_ref(), Name("--location"), Usage(USAGE))?;
@@ -103,7 +103,7 @@ fn Explain_Invocation(rest: &[String], root: PathBuf) -> Result<GateInvocation, 
     let command = GateCommand { root, ..GateCommand::default() };
     let query = FindingQuery { rule: RuleId::New(rule), location };
 
-    return Ok(GateInvocation::Explain { command, query });
+    return Ok(Invocation::Explain { command, query });
 }
 
 /// Builds `plan`/`run`'s shared command from `rest`'s flags, now that the verb and its

@@ -5,7 +5,7 @@
 //! `Run(&GateCommand) -> GateOutcome` -- but that crate cannot read argv, choose a platform
 //! or write to a terminal, and until this module existed nothing called it. This is the
 //! same seam `OD-HOST-002` already built for `check`/`work`/`spec`: `Gate_Invocation_From_String_Arguments` turns argv into
-//! a typed [`GateInvocation`], [`Run`] below dispatches to either the orchestration crate's
+//! a typed [`Invocation`], [`Run`] below dispatches to either the orchestration crate's
 //! own `Run` (`plan`) or `Run_Gate` (`run`), and [`report`] turns what came back into text
 //! and an [`ExitCode`].
 //!
@@ -33,7 +33,7 @@
 //!
 //! # `explain`, after `P13-GATE-EXPLAIN-FIRST-INCREMENT`
 //!
-//! [`GateInvocation::Explain`] carries a [`GateCommand`] and a
+//! [`Invocation::Explain`] carries a [`GateCommand`] and a
 //! `nomos_gate_orchestration::FindingQuery` -- `--rule <id> --location <path>` --
 //! [`parsing::Gate_Invocation_From_String_Arguments`] now recognizes as a third verb. `Explain_Gate` is what actually
 //! answers it; this module still owns only the walk and the host build variant, the same
@@ -46,7 +46,7 @@
 //! `command.rs` already documents.
 
 mod composition;
-mod gate_invocation;
+mod invocation;
 mod parsing;
 mod report;
 mod sources;
@@ -54,7 +54,7 @@ mod sources;
 #[cfg(test)]
 mod tests;
 
-pub use gate_invocation::GateInvocation;
+pub use invocation::Invocation;
 pub use parsing::Gate_Invocation_From_String_Arguments;
 use report::{Render_Explain, Render_Plan, Render_Run};
 
@@ -73,17 +73,17 @@ use std::io::Write;
 use std::path::{Path, PathBuf};
 
 /// Runs the requested verb and renders what it says.
-pub fn Run(invocation: &GateInvocation, stdout: &mut impl Write, stderr: &mut impl Write) -> ExitCode
+pub fn Run(invocation: &Invocation, stdout: &mut impl Write, stderr: &mut impl Write) -> ExitCode
 {
     return match invocation
     {
-        GateInvocation::Plan(command) =>
+        Invocation::Plan(command) =>
         {
             let outcome = nomos_gate_orchestration::Run(command);
             Render_Plan(&outcome, stdout, stderr)
         }
-        GateInvocation::Run(command) => Run_Verb(command, stdout, stderr),
-        GateInvocation::Explain { command, query } =>
+        Invocation::Run(command) => Run_Verb(command, stdout, stderr),
+        Invocation::Explain { command, query } =>
         {
             let walked = sources::Walked_Sources(&command.root);
             let result = nomos_gate_orchestration::Explain_Gate(
@@ -98,7 +98,7 @@ pub fn Run(invocation: &GateInvocation, stdout: &mut impl Write, stderr: &mut im
 }
 
 /// Walks `command.root`, runs `Run_Gate` over it under a freshly minted `RunId`, and
-/// renders what came back -- the self-contained unit `GateInvocation::Run`'s own arm was.
+/// renders what came back -- the self-contained unit `Invocation::Run`'s own arm was.
 fn Run_Verb(command: &GateCommand, stdout: &mut impl Write, stderr: &mut impl Write) -> ExitCode
 {
     let walked = sources::Walked_Sources(&command.root);

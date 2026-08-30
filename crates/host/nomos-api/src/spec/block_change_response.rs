@@ -1,4 +1,4 @@
-//! [`BlockChangeResponse`], shared by [`super::spec_preview_response::SpecPreviewResponse::Previewed`] and
+//! [`BlockChangeResponse`], shared by [`super::preview_response::PreviewResponse::Previewed`] and
 //! [`super::committed_preview_response::CommittedPreviewResponse`] -- the same "what changed at the
 //! block level" vocabulary both an uncommitted and a just-committed edit report.
 

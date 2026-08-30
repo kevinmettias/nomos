@@ -1,4 +1,4 @@
-//! [`AbsenceResponse`], one entry of [`super::spec_sources_response::SpecSourcesResponse::Assembled`]'s
+//! [`AbsenceResponse`], one entry of [`super::sources_response::SourcesResponse::Assembled`]'s
 //! own `absent` list.
 
 use nomos_spec_orchestration::corpus::Absence;

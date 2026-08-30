@@ -1,4 +1,4 @@
-//! [`Handle_Work_List`] and its own [`WorkListResponse`].
+//! [`Handle_Work_List`] and its own [`ListResponse`].
 
 use nomos_ledger::{LedgerDocument, Territory};
 use nomos_platform::Timestamp;
@@ -15,7 +15,7 @@ use std::path::Path;
 /// real `Territory` is handed here rather than a closure that would panic if this crate's
 /// own scope ever widened past `List` without updating this comment.
 #[must_use]
-pub fn Handle_Work_List(directory: &Path) -> WorkListResponse
+pub fn Handle_Work_List(directory: &Path) -> ListResponse
 {
     use super::Ledger_At;
     use nomos_platform_std::StdProcessLauncher;
@@ -38,7 +38,7 @@ pub fn Handle_Work_List(directory: &Path) -> WorkListResponse
         unreachable!("Run always returns the WorkOutcome variant naming the WorkCommand it was given")
     };
 
-    return WorkListResponse::From(listed);
+    return ListResponse::From(listed);
 }
 
 /// What a real `nomos work list` produced, in a shape `serde_json` can hand across a wire.
@@ -50,7 +50,7 @@ pub fn Handle_Work_List(directory: &Path) -> WorkListResponse
 /// to, is clearer than collapsing a real refusal into an empty success.
 #[derive(Debug, Serialize)]
 #[serde(tag = "outcome", rename_all = "snake_case")]
-pub enum WorkListResponse
+pub enum ListResponse
 {
     /// The board was read.
     Listed
@@ -68,7 +68,7 @@ pub enum WorkListResponse
     },
 }
 
-impl WorkListResponse
+impl ListResponse
 {
     pub(crate) fn From(listed: Result<nomos_work_orchestration::BoardView, nomos_ledger::LedgerError>) -> Self
     {
@@ -95,7 +95,7 @@ mod tests
 
         let _ignored = std::fs::remove_dir_all(&directory);
 
-        let WorkListResponse::Listed { document, .. } = response
+        let ListResponse::Listed { document, .. } = response
         else
         {
             // This fixture writes a real, well-formed, empty ledger file, so reading it back
@@ -115,10 +115,6 @@ mod tests
 
         let _ignored = std::fs::remove_dir_all(&directory);
 
-        let json = serde_json::to_string(&response).expect("a WorkListResponse always serializes");
-        let parsed: serde_json::Value = serde_json::from_str(&json).expect("what was just written parses back");
-        let outcome = parsed.get("outcome").expect("a serialized WorkListResponse always has this field");
-
-        assert_eq!(outcome, "listed", "{json}");
+        crate::test_support::Assert_Round_Trips_As_Json(&response, "listed");
     }
 }

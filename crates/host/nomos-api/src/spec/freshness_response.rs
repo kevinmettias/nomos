@@ -1,4 +1,4 @@
-//! [`Handle_Spec_Freshness`] and its own [`SpecFreshnessResponse`].
+//! [`Handle_Spec_Freshness`] and its own [`FreshnessResponse`].
 
 use nomos_spec_orchestration::{FreshnessAnswer, FreshnessRefusal, FreshnessRequest, SpecCommand};
 use serde::Serialize;
@@ -8,14 +8,14 @@ use super::{Build_Corpus_Request, ProfileOutcomeResponse};
 /// Compares every shipped profile's build root against the store, exactly as `nomos spec
 /// freshness` would, and hands back a JSON-serializable response.
 ///
-/// Follows [`crate::spec::spec_record_response::Handle_Spec_Record`]'s own composition. `run::freshness::
+/// Follows [`crate::spec::record_response::Handle_Spec_Record`]'s own composition. `run::freshness::
 /// Freshness` is generic over `FileSystem` (it reads a rendered body and its sidecar at
 /// `request.into`, through `nomos_platform::FileSystem::Read_To_String`), but never writes --
 /// unlike `Render`, `Preview` and `Commit`, exposing it carries none of the "does a wire call
 /// write to this host's disk" hazard those three do, since `StdFileSystem` here only ever
 /// reads paths the caller already named.
 #[must_use]
-pub fn Handle_Spec_Freshness(request: &FreshnessRequest) -> SpecFreshnessResponse
+pub fn Handle_Spec_Freshness(request: &FreshnessRequest) -> FreshnessResponse
 {
     use nomos_platform_std::StdFileSystem;
 
@@ -32,14 +32,14 @@ pub fn Handle_Spec_Freshness(request: &FreshnessRequest) -> SpecFreshnessRespons
         unreachable!("Run always returns the SpecOutcome variant naming the SpecCommand it was given")
     };
 
-    return SpecFreshnessResponse::From(result);
+    return FreshnessResponse::From(result);
 }
 
 /// What a real `nomos spec freshness` produced, in a shape `serde_json` can hand across a
 /// wire.
 #[derive(Debug, Serialize)]
 #[serde(tag = "outcome", rename_all = "snake_case")]
-pub enum SpecFreshnessResponse
+pub enum FreshnessResponse
 {
     /// Every profile this run looked at, and what it required.
     Examined
@@ -67,7 +67,7 @@ pub enum SpecFreshnessResponse
     },
 }
 
-impl SpecFreshnessResponse
+impl FreshnessResponse
 {
     pub(crate) fn From(result: Result<FreshnessAnswer, FreshnessRefusal>) -> Self
     {
@@ -93,16 +93,20 @@ mod tests
 {
     use super::*;
     use crate::spec::VerdictResponse;
+    use crate::test_support::{Assert_Round_Trips_As_Json, Unique_Scratch_Directory};
 
     #[test]
     fn Test_A_Real_Call_Over_An_Empty_Root_Should_Examine_Every_Profile_As_Absent()
     {
-        let request =
-            FreshnessRequest { into: Unique_Scratch_Directory("empty-root"), profile: None, require: Vec::new() };
+        let request = FreshnessRequest {
+            into: Unique_Scratch_Directory("spec-freshness", "empty-root"),
+            profile: None,
+            require: Vec::new(),
+        };
 
         let response = Handle_Spec_Freshness(&request);
 
-        let SpecFreshnessResponse::Examined { examined, .. } = response
+        let FreshnessResponse::Examined { examined, .. } = response
         else
         {
             // A freshly created, never-rendered scratch root has nothing to refuse against --
@@ -121,50 +125,27 @@ mod tests
     fn Test_An_Unknown_Required_Profile_Should_Report_No_Such_Profile()
     {
         let request = FreshnessRequest {
-            into: Unique_Scratch_Directory("unknown-required"),
+            into: Unique_Scratch_Directory("spec-freshness", "unknown-required"),
             profile: None,
             require: vec!["definitely-not-a-real-profile".to_owned()],
         };
 
         let response = Handle_Spec_Freshness(&request);
 
-        assert!(matches!(response, SpecFreshnessResponse::NoSuchProfile { .. }), "{response:?}");
+        assert!(matches!(response, FreshnessResponse::NoSuchProfile { .. }), "{response:?}");
     }
 
     #[test]
     fn Test_A_Real_Examined_Response_Should_Round_Trip_As_Json()
     {
-        let request =
-            FreshnessRequest { into: Unique_Scratch_Directory("round-trip"), profile: None, require: Vec::new() };
+        let request = FreshnessRequest {
+            into: Unique_Scratch_Directory("spec-freshness", "round-trip"),
+            profile: None,
+            require: Vec::new(),
+        };
 
         let response = Handle_Spec_Freshness(&request);
 
-        let json = serde_json::to_string(&response).expect("a SpecFreshnessResponse always serializes");
-        let parsed: serde_json::Value = serde_json::from_str(&json).expect("what was just written parses back");
-        let outcome = parsed.get("outcome").expect("a serialized SpecFreshnessResponse always has this field");
-
-        assert_eq!(outcome, "examined", "{json}");
-    }
-
-    /// An empty, unique scratch directory means nothing has ever been rendered there, so
-    /// every shipped profile examines as `Absent` regardless of this session's own
-    /// `NOMOS_V14_CORPUS` state -- the same zero-setup determinism every other test in this
-    /// file already relies on.
-    fn Unique_Scratch_Directory(label: &str) -> std::path::PathBuf
-    {
-        use std::sync::atomic::{AtomicU32, Ordering};
-        // scope: allow this test-only counter has no owner beyond disambiguating calls within
-        // one process; a bare pid does not distinguish two calls in the same test run.
-        static COUNTER: AtomicU32 = AtomicU32::new(0);
-
-        let directory = std::env::temp_dir().join(format!(
-            "nomos-api-spec-freshness-{label}-{}-{}",
-            std::process::id(),
-            COUNTER.fetch_add(1, Ordering::Relaxed)
-        ));
-        let _ignored = std::fs::remove_dir_all(&directory);
-        std::fs::create_dir_all(&directory).expect("a fresh scratch directory can always be created");
-
-        return directory;
+        Assert_Round_Trips_As_Json(&response, "examined");
     }
 }

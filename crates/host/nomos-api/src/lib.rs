@@ -92,7 +92,7 @@
 //! rather than getting it from `Run`.
 //!
 //! [`Handle_Gate_Run`] is a deliberate twin of `nomos-cli`'s `gate.rs`
-//! `GateInvocation::Run` arm: it walks `root` for `.rs` sources
+//! `Invocation::Run` arm: it walks `root` for `.rs` sources
 //! ([`sources::Walked_Sources`] -- a twin of `crates/host/nomos-cli/src/gate/sources.rs`, since a
 //! walk is a composition-root concern `OD-HOST-002` does not seam), reads this crate's own
 //! build variant ([`composition::Host_Variant`] -- `env!` resolves against the crate that
@@ -122,6 +122,8 @@ mod composition;
 mod response;
 mod sources;
 mod spec;
+#[cfg(test)]
+mod test_support;
 mod work;
 
 pub use response::{
@@ -130,22 +132,21 @@ pub use response::{
     SuppressionResponse,
 };
 pub use spec::{
-    AbsenceResponse, BlockChangeResponse, CommitReportResponse, CommittedPreviewResponse, DecisionGapResponse,
-    DocumentSourceResponse, FailureResponse, FieldValueResponse, Handle_Spec_Commit, Handle_Spec_Freshness,
-    Handle_Spec_Markdown, Handle_Spec_Preview, Handle_Spec_Profiles, Handle_Spec_Record, Handle_Spec_Render,
-    Handle_Spec_Sources, Handle_Spec_Submit, Handle_Spec_Table, IdentityChangeResponse, NodeSummaryResponse,
-    NormativeMovementResponse, NormativeOutcomeResponse, OriginResponse, PathMatchResponse, ProfileOutcomeResponse,
-    ProfilesResponse, RecordRelationResponse, RefusalResponse, RenderedProjectionResponse, ReproductionResponse,
-    RowCensusResponse, SeverityResponse, SpecCommitResponse, SpecFreshnessResponse, SpecMarkdownResponse,
-    SpecPreviewResponse, SpecRecordResponse, SpecRenderResponse, SpecSourcesResponse, SpecSubmitResponse,
-    SpecTableResponse, SubmissionKindResponse, SubmissionResponse, SubmissionStateResponse, TableLineResponse,
-    VacateOutcomeResponse, VacatedResponse, VerdictResponse,
+    AbsenceResponse, BlockChangeResponse, CommitReportResponse, CommitResponse, CommittedPreviewResponse,
+    DecisionGapResponse, DocumentSourceResponse, FailureResponse, FieldValueResponse, FreshnessResponse,
+    Handle_Spec_Commit, Handle_Spec_Freshness, Handle_Spec_Markdown, Handle_Spec_Preview, Handle_Spec_Profiles,
+    Handle_Spec_Record, Handle_Spec_Render, Handle_Spec_Sources, Handle_Spec_Submit, Handle_Spec_Table,
+    IdentityChangeResponse, MarkdownResponse, NodeSummaryResponse, NormativeMovementResponse,
+    NormativeOutcomeResponse, OriginResponse, PathMatchResponse, PreviewResponse, ProfileOutcomeResponse,
+    ProfilesResponse, RecordRelationResponse, RecordResponse, RefusalResponse, RenderResponse,
+    RenderedProjectionResponse, ReproductionResponse, RowCensusResponse, SeverityResponse, SourcesResponse,
+    SubmissionKindResponse, SubmissionResponse, SubmissionStateResponse, SubmitResponse, TableLineResponse,
+    TableResponse, VacateOutcomeResponse, VacatedResponse, VerdictResponse,
 };
 pub use work::{
-    BlockedItem, Handle_Work_Abandon, Handle_Work_Add, Handle_Work_Audit, Handle_Work_Claim, Handle_Work_Decline,
-    Handle_Work_Finish, Handle_Work_List, Handle_Work_Renew, Handle_Work_Show, Handle_Work_TakeOver,
-    Handle_Work_Validate, ReservationResponse, WorkAbandonResponse, WorkAddResponse, WorkAuditResponse,
-    WorkDeclineResponse, WorkFinishResponse, WorkListResponse, WorkReservationResponse, WorkShowResponse,
-    WorkValidateResponse,
+    AbandonResponse, AddResponse, AuditResponse, BlockedItem, DeclineResponse, FinishResponse, Handle_Work_Abandon,
+    Handle_Work_Add, Handle_Work_Audit, Handle_Work_Claim, Handle_Work_Decline, Handle_Work_Finish, Handle_Work_List,
+    Handle_Work_Renew, Handle_Work_Show, Handle_Work_TakeOver, Handle_Work_Validate, ListResponse,
+    ReservationOutcomeResponse, ReservationResponse, ShowResponse, ValidateResponse,
 };
 

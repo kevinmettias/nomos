@@ -1,4 +1,4 @@
-//! [`TableLineResponse`], carried only by [`super::spec_table_response::SpecTableResponse`].
+//! [`TableLineResponse`], carried only by [`super::table_response::TableResponse`].
 
 use nomos_spec_store::TableLine;
 use serde::Serialize;

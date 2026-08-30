@@ -1,4 +1,4 @@
-//! [`RecordRelationResponse`], shared by [`super::spec_preview_response::SpecPreviewResponse::Previewed`]
+//! [`RecordRelationResponse`], shared by [`super::preview_response::PreviewResponse::Previewed`]
 //! and [`super::committed_preview_response::CommittedPreviewResponse`].
 
 use nomos_spec_model::RecordRelation;

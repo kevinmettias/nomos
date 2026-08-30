@@ -1,4 +1,4 @@
-//! [`RefusalResponse`], carried only by [`super::spec_submit_response::SpecSubmitResponse::Refused`].
+//! [`RefusalResponse`], carried only by [`super::submit_response::SubmitResponse::Refused`].
 
 use nomos_spec_model::Refusal;
 use serde::Serialize;

@@ -1,4 +1,4 @@
-//! [`ProfileOutcomeResponse`], carried only by [`super::spec_freshness_response::SpecFreshnessResponse`].
+//! [`ProfileOutcomeResponse`], carried only by [`super::freshness_response::FreshnessResponse`].
 
 use nomos_spec_orchestration::ProfileOutcome;
 use nomos_spec_project::Profile;

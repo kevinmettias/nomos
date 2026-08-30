@@ -1,4 +1,4 @@
-//! [`Handle_Work_Add`] and its own [`WorkAddResponse`].
+//! [`Handle_Work_Add`] and its own [`AddResponse`].
 
 use nomos_ledger::{AddRefusal, LedgerItem, Territory};
 use serde::Serialize;
@@ -8,7 +8,7 @@ use std::path::Path;
 /// edits rather than allocates, exactly as `nomos work add` would, and hands back a
 /// JSON-serializable response.
 #[must_use]
-pub fn Handle_Work_Add(directory: &Path, item: &LedgerItem, amending: &Territory) -> WorkAddResponse
+pub fn Handle_Work_Add(directory: &Path, item: &LedgerItem, amending: &Territory) -> AddResponse
 {
     use super::Ledger_At;
     use nomos_platform_std::StdProcessLauncher;
@@ -31,13 +31,13 @@ pub fn Handle_Work_Add(directory: &Path, item: &LedgerItem, amending: &Territory
         unreachable!("Run always returns the WorkOutcome variant naming the WorkCommand it was given")
     };
 
-    return WorkAddResponse::From(added);
+    return AddResponse::From(added);
 }
 
 /// What a real `nomos work add` produced, in a shape `serde_json` can hand across a wire.
 ///
 /// `Refused` carries only `cause`, unlike the retryable/judged extra field
-/// `WorkReservationResponse`/`WorkAbandonResponse`/`WorkDeclineResponse`/`WorkFinishResponse`
+/// `ReservationOutcomeResponse`/`AbandonResponse`/`DeclineResponse`/`FinishResponse`
 /// each add to theirs: `nomos_ledger::AddRefusal` exposes no single `Is_X`-style method the
 /// way `ClaimRefusal`/`FinishRefusal` do -- `crates/host/nomos-cli/src/work/report.rs`'s own
 /// `Code_For_Refusal` maps its six variants across three different exit codes, and nothing
@@ -45,7 +45,7 @@ pub fn Handle_Work_Add(directory: &Path, item: &LedgerItem, amending: &Territory
 /// distinction only that function currently draws.
 #[derive(Debug, Serialize)]
 #[serde(tag = "outcome", rename_all = "snake_case")]
-pub enum WorkAddResponse
+pub enum AddResponse
 {
     /// The item was recorded.
     Added,
@@ -57,7 +57,7 @@ pub enum WorkAddResponse
     },
 }
 
-impl WorkAddResponse
+impl AddResponse
 {
     pub(crate) fn From(result: Result<(), AddRefusal>) -> Self
     {
@@ -136,7 +136,7 @@ mod tests
 
         let _ignored = std::fs::remove_dir_all(&directory);
 
-        assert!(matches!(response, WorkAddResponse::Added), "{response:?}");
+        assert!(matches!(response, AddResponse::Added), "{response:?}");
     }
 
     #[test]
@@ -149,7 +149,7 @@ mod tests
 
         let _ignored = std::fs::remove_dir_all(&directory);
 
-        let WorkAddResponse::Refused { cause } = response
+        let AddResponse::Refused { cause } = response
         else
         {
             // This fixture builds a board that already carries `id`, so adding it again must
@@ -170,11 +170,7 @@ mod tests
 
         let _ignored = std::fs::remove_dir_all(&directory);
 
-        let json = serde_json::to_string(&response).expect("a WorkAddResponse always serializes");
-        let parsed: serde_json::Value = serde_json::from_str(&json).expect("what was just written parses back");
-        let outcome = parsed.get("outcome").expect("a serialized WorkAddResponse always has this field");
-
-        assert_eq!(outcome, "added", "{json}");
+        crate::test_support::Assert_Round_Trips_As_Json(&response, "added");
     }
 
     /// A well-formed, real `LedgerItem` this test's own -- `id` is the only field a caller

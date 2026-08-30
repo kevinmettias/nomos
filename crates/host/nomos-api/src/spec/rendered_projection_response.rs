@@ -1,4 +1,4 @@
-//! [`RenderedProjectionResponse`], carried only by [`super::spec_submit_response::SpecSubmitResponse::
+//! [`RenderedProjectionResponse`], carried only by [`super::submit_response::SubmitResponse::
 //! Accepted`].
 
 use nomos_spec_orchestration::RenderAnswer;
@@ -7,10 +7,10 @@ use serde::Serialize;
 use std::path::PathBuf;
 
 /// Both halves of a built projection, placed where a submission's own `into` asked for them
-/// -- the same fields [`crate::spec::spec_render_response::SpecRenderResponse::Placed`] carries, kept as
+/// -- the same fields [`crate::spec::render_response::RenderResponse::Placed`] carries, kept as
 /// its own type here rather than shared with it for the same reason
 /// [`crate::spec::committed_preview_response::CommittedPreviewResponse`] is not shared with
-/// `SpecPreviewResponse`: `Render`'s own wire shape is already fixed by its own finished
+/// `PreviewResponse`: `Render`'s own wire shape is already fixed by its own finished
 /// item.
 #[derive(Debug, Serialize)]
 pub struct RenderedProjectionResponse

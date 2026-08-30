@@ -1,4 +1,4 @@
-//! [`Handle_Work_Decline`] and its own [`WorkDeclineResponse`].
+//! [`Handle_Work_Decline`] and its own [`DeclineResponse`].
 
 use nomos_ledger::{ClaimRefusal, Territory};
 use nomos_work_orchestration::{EndingRequest, WorkCommand};
@@ -8,7 +8,7 @@ use std::path::Path;
 /// Ends `request`'s item on the board at `directory` as not being work, exactly as `nomos
 /// work decline` would, and hands back a JSON-serializable response.
 #[must_use]
-pub fn Handle_Work_Decline(directory: &Path, request: &EndingRequest) -> WorkDeclineResponse
+pub fn Handle_Work_Decline(directory: &Path, request: &EndingRequest) -> DeclineResponse
 {
     use super::Ledger_At;
     use nomos_platform_std::StdProcessLauncher;
@@ -30,15 +30,15 @@ pub fn Handle_Work_Decline(directory: &Path, request: &EndingRequest) -> WorkDec
         unreachable!("Run always returns the WorkOutcome variant naming the WorkCommand it was given")
     };
 
-    return WorkDeclineResponse::From(declined);
+    return DeclineResponse::From(declined);
 }
 
 /// An item ended, or the refusal that kept it open, in a shape `serde_json` can hand across
-/// a wire. Not shared with `crate::work::work_abandon_response::WorkAbandonResponse`; see that type's own
+/// a wire. Not shared with `crate::work::abandon_response::AbandonResponse`; see that type's own
 /// doc for why.
 #[derive(Debug, Serialize)]
 #[serde(tag = "outcome", rename_all = "snake_case")]
-pub enum WorkDeclineResponse
+pub enum DeclineResponse
 {
     /// The item was ended; it is no longer workable.
     Declined,
@@ -52,7 +52,7 @@ pub enum WorkDeclineResponse
     },
 }
 
-impl WorkDeclineResponse
+impl DeclineResponse
 {
     pub(crate) fn From(result: Result<(), ClaimRefusal>) -> Self
     {
@@ -68,32 +68,32 @@ impl WorkDeclineResponse
 mod tests
 {
     use super::*;
-    use crate::work::tests_support::{Scratch_Board_With_A_Claimable_Item, Scratch_Board_With_A_Claimed_Item};
+    use crate::work::tests_support::{Ending_Request, Scratch_Board_With_A_Claimable_Item, Scratch_Board_With_A_Claimed_Item};
 
     #[test]
     fn Test_Declining_A_Real_Unclaimed_Ready_Item_Should_End_It()
     {
         let (directory, id) = Scratch_Board_With_A_Claimable_Item();
-        let request = EndingRequest { item: id, holder: "test-holder".to_owned(), reason: "superseded".to_owned() };
+        let request = Ending_Request(id, "superseded");
 
         let response = Handle_Work_Decline(&directory, &request);
 
         let _ignored = std::fs::remove_dir_all(&directory);
 
-        assert!(matches!(response, WorkDeclineResponse::Declined), "{response:?}");
+        assert!(matches!(response, DeclineResponse::Declined), "{response:?}");
     }
 
     #[test]
     fn Test_Declining_An_Item_A_Real_Active_Claim_Still_Holds_Should_Be_Refused_And_Retryable()
     {
         let (directory, id) = Scratch_Board_With_A_Claimed_Item("someone-else", i64::from(u32::MAX));
-        let request = EndingRequest { item: id, holder: "test-holder".to_owned(), reason: "superseded".to_owned() };
+        let request = Ending_Request(id, "superseded");
 
         let response = Handle_Work_Decline(&directory, &request);
 
         let _ignored = std::fs::remove_dir_all(&directory);
 
-        let WorkDeclineResponse::Refused { retryable, cause } = response
+        let DeclineResponse::Refused { retryable, cause } = response
         else
         {
             // This fixture claims the item as "someone-else" and leaves that claim active, so
@@ -109,16 +109,12 @@ mod tests
     fn Test_A_Real_Declined_Response_Should_Round_Trip_As_Json()
     {
         let (directory, id) = Scratch_Board_With_A_Claimable_Item();
-        let request = EndingRequest { item: id, holder: "test-holder".to_owned(), reason: "superseded".to_owned() };
+        let request = Ending_Request(id, "superseded");
 
         let response = Handle_Work_Decline(&directory, &request);
 
         let _ignored = std::fs::remove_dir_all(&directory);
 
-        let json = serde_json::to_string(&response).expect("a WorkDeclineResponse always serializes");
-        let parsed: serde_json::Value = serde_json::from_str(&json).expect("what was just written parses back");
-        let outcome = parsed.get("outcome").expect("a serialized WorkDeclineResponse always has this field");
-
-        assert_eq!(outcome, "declined", "{json}");
+        crate::test_support::Assert_Round_Trips_As_Json(&response, "declined");
     }
 }

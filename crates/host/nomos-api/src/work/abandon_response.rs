@@ -1,4 +1,4 @@
-//! [`Handle_Work_Abandon`] and its own [`WorkAbandonResponse`].
+//! [`Handle_Work_Abandon`] and its own [`AbandonResponse`].
 
 use nomos_ledger::{ClaimRefusal, Territory};
 use nomos_work_orchestration::{EndingRequest, WorkCommand};
@@ -8,7 +8,7 @@ use std::path::Path;
 /// Releases `request`'s claim on the board at `directory` without finishing it, exactly as
 /// `nomos work abandon` would, and hands back a JSON-serializable response.
 #[must_use]
-pub fn Handle_Work_Abandon(directory: &Path, request: &EndingRequest) -> WorkAbandonResponse
+pub fn Handle_Work_Abandon(directory: &Path, request: &EndingRequest) -> AbandonResponse
 {
     use super::Ledger_At;
     use nomos_platform_std::StdProcessLauncher;
@@ -30,20 +30,20 @@ pub fn Handle_Work_Abandon(directory: &Path, request: &EndingRequest) -> WorkAba
         unreachable!("Run always returns the WorkOutcome variant naming the WorkCommand it was given")
     };
 
-    return WorkAbandonResponse::From(released);
+    return AbandonResponse::From(released);
 }
 
 /// A claim released, or the refusal that kept it held, in a shape `serde_json` can hand
 /// across a wire.
 ///
-/// Not shared with `crate::work::work_decline_response::WorkDeclineResponse`, even though both wrap
+/// Not shared with `crate::work::decline_response::DeclineResponse`, even though both wrap
 /// `Result<(), ClaimRefusal>` today: `nomos_work_orchestration::EndingRequest`'s own doc says
 /// `abandon` and `decline` "stay two verbs and two ledger calls" past sharing an argument
 /// shape, and `crates/host/nomos-cli/src/work.rs`'s own dispatch keeps their rendering apart
 /// the same way.
 #[derive(Debug, Serialize)]
 #[serde(tag = "outcome", rename_all = "snake_case")]
-pub enum WorkAbandonResponse
+pub enum AbandonResponse
 {
     /// The claim was given up; the item is claimable again.
     Abandoned,
@@ -57,7 +57,7 @@ pub enum WorkAbandonResponse
     },
 }
 
-impl WorkAbandonResponse
+impl AbandonResponse
 {
     pub(crate) fn From(result: Result<(), ClaimRefusal>) -> Self
     {
@@ -73,32 +73,32 @@ impl WorkAbandonResponse
 mod tests
 {
     use super::*;
-    use crate::work::tests_support::Scratch_Board_With_A_Claimed_Item;
+    use crate::work::tests_support::{Ending_Request, Scratch_Board_With_A_Claimed_Item};
 
     #[test]
     fn Test_Abandoning_A_Real_Claim_This_Holder_Actually_Has_Should_Release_It()
     {
         let (directory, id) = Scratch_Board_With_A_Claimed_Item("test-holder", i64::from(u32::MAX));
-        let request = EndingRequest { item: id, holder: "test-holder".to_owned(), reason: "test fixture".to_owned() };
+        let request = Ending_Request(id, "test fixture");
 
         let response = Handle_Work_Abandon(&directory, &request);
 
         let _ignored = std::fs::remove_dir_all(&directory);
 
-        assert!(matches!(response, WorkAbandonResponse::Abandoned), "{response:?}");
+        assert!(matches!(response, AbandonResponse::Abandoned), "{response:?}");
     }
 
     #[test]
     fn Test_Abandoning_A_Claim_A_Different_Holder_Actually_Has_Should_Be_Refused_And_Retryable()
     {
         let (directory, id) = Scratch_Board_With_A_Claimed_Item("someone-else", i64::from(u32::MAX));
-        let request = EndingRequest { item: id, holder: "test-holder".to_owned(), reason: "test fixture".to_owned() };
+        let request = Ending_Request(id, "test fixture");
 
         let response = Handle_Work_Abandon(&directory, &request);
 
         let _ignored = std::fs::remove_dir_all(&directory);
 
-        let WorkAbandonResponse::Refused { retryable, cause } = response
+        let AbandonResponse::Refused { retryable, cause } = response
         else
         {
             // This fixture claims the item as "someone-else" and then abandons it as

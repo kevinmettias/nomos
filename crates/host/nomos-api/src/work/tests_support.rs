@@ -3,29 +3,35 @@
 //! a real build.
 
 use nomos_ledger::ItemId;
+use nomos_work_orchestration::{ClaimRequest, EndingRequest};
+
+/// A `ClaimRequest` for `item`, held by `holder`, with the one-hour lease every `Claim`/
+/// `Renew`/`TakeOver` test in this module reaches for -- the fixture literal
+/// `check-interfile-duplication` flagged as structurally repeated across `claim.rs`,
+/// `renew.rs` and `take_over.rs` once `Handle_Work_Claim`/`Handle_Work_Renew`/
+/// `Handle_Work_TakeOver` themselves stopped duplicating their own ledger/territory/launcher
+/// wiring.
+pub(crate) fn Claim_Request(item: ItemId, holder: &str) -> ClaimRequest
+{
+    return ClaimRequest { item, holder: holder.to_owned(), lease: std::time::Duration::from_secs(3600) };
+}
+
+/// An `EndingRequest` for `item`, held by `"test-holder"`, with `reason` naming why -- the
+/// fixture literal `check-interfile-duplication` flagged as structurally repeated across
+/// `abandon_response.rs` and `decline_response.rs`'s own test suites.
+pub(crate) fn Ending_Request(item: ItemId, reason: &str) -> EndingRequest
+{
+    return EndingRequest { item, holder: "test-holder".to_owned(), reason: reason.to_owned() };
+}
 
 /// A scratch directory of this test's own -- never the real shared `work/` directory, which
-/// live sessions write to concurrently. The same `std::env::temp_dir()` / `std::process::id()`
-/// scoping `crates/host/nomos-cli/tests/scratch_ledger` already uses, plus a call-local
-/// counter: several fixtures below share one `label` (`Scratch_Board` backs `List`,
-/// `Validate` and `Audit` tests across three different files, for instance), and the default
-/// test runner's threads would otherwise race on one directory a bare pid gave them.
-/// `process::id()` alone tells two runs of the whole suite apart; it says nothing about two
-/// calls inside one.
+/// live sessions write to concurrently. A thin delegator onto `crate::test_support`'s own
+/// `Unique_Scratch_Directory`, which carries the real `temp_dir`/counter/create-and-clean
+/// body shared by both areas; `"work"` names this crate's `work` area the same way
+/// `crate::test_support`'s own callers name theirs.
 pub(crate) fn Unique_Scratch_Directory(label: &str) -> std::path::PathBuf
 {
-    // scope: allow this test-only counter has no owner beyond disambiguating calls within one
-    // process; a bare pid does not distinguish two calls in the same test run.
-    static COUNTER: std::sync::atomic::AtomicU64 = std::sync::atomic::AtomicU64::new(0);
-    // atomic-ordering: allow: only used to give two calls in this process different numbers;
-    // nothing else synchronizes on it or reads memory ordered by this counter.
-    let unique = COUNTER.fetch_add(1, std::sync::atomic::Ordering::Relaxed);
-
-    let directory = std::env::temp_dir().join(format!("nomos-api-work-{label}-{}-{unique}", std::process::id()));
-    let _ignored = std::fs::remove_dir_all(&directory);
-    std::fs::create_dir_all(&directory).expect("creates a scratch directory");
-
-    return directory;
+    return crate::test_support::Unique_Scratch_Directory("work", label);
 }
 
 /// A scratch board with no items, for the `List`, `Validate` and `Audit` tests that need

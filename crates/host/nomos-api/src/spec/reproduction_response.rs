@@ -1,4 +1,4 @@
-//! [`ReproductionResponse`], carried only by [`super::spec_commit_response::SpecCommitResponse`].
+//! [`ReproductionResponse`], carried only by [`super::commit_response::CommitResponse`].
 
 use nomos_spec_orchestration::Reproduction;
 use nomos_spec_store::EditError;

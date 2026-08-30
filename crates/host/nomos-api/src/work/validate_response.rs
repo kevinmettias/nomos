@@ -1,4 +1,4 @@
-//! [`Handle_Work_Validate`] and its own [`WorkValidateResponse`].
+//! [`Handle_Work_Validate`] and its own [`ValidateResponse`].
 
 use nomos_ledger::{LedgerDocument, Territory};
 use serde::Serialize;
@@ -7,7 +7,7 @@ use std::path::Path;
 /// Checks the board at `directory` against its own invariants, exactly as `nomos work
 /// validate` would, and hands back a JSON-serializable response.
 #[must_use]
-pub fn Handle_Work_Validate(directory: &Path) -> WorkValidateResponse
+pub fn Handle_Work_Validate(directory: &Path) -> ValidateResponse
 {
     use super::Ledger_At;
     use nomos_platform_std::StdProcessLauncher;
@@ -30,20 +30,20 @@ pub fn Handle_Work_Validate(directory: &Path) -> WorkValidateResponse
         unreachable!("Run always returns the WorkOutcome variant naming the WorkCommand it was given")
     };
 
-    return WorkValidateResponse::From(validated);
+    return ValidateResponse::From(validated);
 }
 
 /// What a real `nomos work validate` produced, in a shape `serde_json` can hand across a
 /// wire.
 ///
-/// The same two-state honesty shape `crate::work::work_list_response::WorkListResponse` already holds to:
+/// The same two-state honesty shape `crate::work::list_response::ListResponse` already holds to:
 /// `nomos_ledger::LedgerError` does not derive `Serialize`, so `Invalid` names both a genuine
 /// invariant violation (`LedgerError::Invalid`'s own variant) and every other read failure
 /// alike, by the same `Display` string `LedgerError` itself already collapses them into -- no
 /// finer split is invented here than the type underneath draws.
 #[derive(Debug, Serialize)]
 #[serde(tag = "outcome", rename_all = "snake_case")]
-pub enum WorkValidateResponse
+pub enum ValidateResponse
 {
     /// The board satisfies its own invariants.
     Valid
@@ -59,7 +59,7 @@ pub enum WorkValidateResponse
     },
 }
 
-impl WorkValidateResponse
+impl ValidateResponse
 {
     pub(crate) fn From(validated: Result<LedgerDocument, nomos_ledger::LedgerError>) -> Self
     {
@@ -86,7 +86,7 @@ mod tests
 
         let _ignored = std::fs::remove_dir_all(&directory);
 
-        let WorkValidateResponse::Valid { document } = response
+        let ValidateResponse::Valid { document } = response
         else
         {
             // This fixture writes a real, empty, well-formed ledger file, so validating it
@@ -109,7 +109,7 @@ mod tests
 
         let _ignored = std::fs::remove_dir_all(&directory);
 
-        let WorkValidateResponse::Invalid { cause } = response
+        let ValidateResponse::Invalid { cause } = response
         else
         {
             // This fixture's item is `Ready` with an empty territory, a known real
@@ -130,10 +130,6 @@ mod tests
 
         let _ignored = std::fs::remove_dir_all(&directory);
 
-        let json = serde_json::to_string(&response).expect("a WorkValidateResponse always serializes");
-        let parsed: serde_json::Value = serde_json::from_str(&json).expect("what was just written parses back");
-        let outcome = parsed.get("outcome").expect("a serialized WorkValidateResponse always has this field");
-
-        assert_eq!(outcome, "valid", "{json}");
+        crate::test_support::Assert_Round_Trips_As_Json(&response, "valid");
     }
 }

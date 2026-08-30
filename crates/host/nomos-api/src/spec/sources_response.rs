@@ -1,4 +1,4 @@
-//! [`Handle_Spec_Sources`] and its own [`SpecSourcesResponse`].
+//! [`Handle_Spec_Sources`] and its own [`SourcesResponse`].
 
 use nomos_spec_store::StoreError;
 use serde::Serialize;
@@ -16,7 +16,7 @@ use super::{AbsenceResponse, Build_Corpus_Request};
 /// "no invented shape ahead of a real body" choice [`crate::Handle_Gate_Run`] already makes
 /// for `GateCommand`'s own scope/rules selectors.
 #[must_use]
-pub fn Handle_Spec_Sources() -> SpecSourcesResponse
+pub fn Handle_Spec_Sources() -> SourcesResponse
 {
     use nomos_platform_std::StdFileSystem;
     use nomos_spec_orchestration::SpecCommand;
@@ -33,14 +33,14 @@ pub fn Handle_Spec_Sources() -> SpecSourcesResponse
         unreachable!("Run always returns the SpecOutcome variant naming the SpecCommand it was given")
     };
 
-    return SpecSourcesResponse::From(sourced);
+    return SourcesResponse::From(sourced);
 }
 
 /// What a real `nomos spec sources` produced, in a shape `serde_json` can hand across a
 /// wire.
 #[derive(Debug, Serialize)]
 #[serde(tag = "outcome", rename_all = "snake_case")]
-pub enum SpecSourcesResponse
+pub enum SourcesResponse
 {
     /// The store assembled -- possibly with real absences, which is itself the answer this
     /// verb exists to give, not a failure.
@@ -59,7 +59,7 @@ pub enum SpecSourcesResponse
     },
 }
 
-impl SpecSourcesResponse
+impl SourcesResponse
 {
     pub(crate) fn From(result: Result<nomos_spec_orchestration::SourcesAnswer, StoreError>) -> Self
     {
@@ -78,6 +78,7 @@ impl SpecSourcesResponse
 mod tests
 {
     use super::*;
+    use crate::test_support::Assert_Round_Trips_As_Json;
 
     /// A real end-to-end call, over whatever this session's own `NOMOS_V14_CORPUS` state
     /// happens to be. `Assemble_Corpus`'s own contract is that neither the variable nor the corpus
@@ -89,7 +90,7 @@ mod tests
     {
         let response = Handle_Spec_Sources();
 
-        assert!(matches!(response, SpecSourcesResponse::Assembled { .. }), "{response:?}");
+        assert!(matches!(response, SourcesResponse::Assembled { .. }), "{response:?}");
     }
 
     #[test]
@@ -97,10 +98,6 @@ mod tests
     {
         let response = Handle_Spec_Sources();
 
-        let json = serde_json::to_string(&response).expect("a SpecSourcesResponse always serializes");
-        let parsed: serde_json::Value = serde_json::from_str(&json).expect("what was just written parses back");
-        let outcome = parsed.get("outcome").expect("a serialized SpecSourcesResponse always has this field");
-
-        assert_eq!(outcome, "assembled", "{json}");
+        Assert_Round_Trips_As_Json(&response, "assembled");
     }
 }

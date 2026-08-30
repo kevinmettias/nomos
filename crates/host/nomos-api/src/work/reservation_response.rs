@@ -1,4 +1,4 @@
-//! [`ReservationResponse`], carried only by [`super::work_reservation_response::WorkReservationResponse::
+//! [`ReservationResponse`], carried only by [`super::reservation_outcome_response::ReservationOutcomeResponse::
 //! Reserved`].
 
 use nomos_ledger::{ItemId, Reservation};

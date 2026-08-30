@@ -1,4 +1,4 @@
-//! [`WorkReservationResponse`], shared by [`super::claim::Handle_Work_Claim`],
+//! [`ReservationOutcomeResponse`], shared by [`super::claim::Handle_Work_Claim`],
 //! [`super::renew::Handle_Work_Renew`] and [`super::take_over::Handle_Work_TakeOver`].
 //!
 //! One shared response type for the three of them rather than three that could only ever
@@ -18,7 +18,7 @@ use super::ReservationResponse;
 /// A granted or refused reservation, in a shape `serde_json` can hand across a wire.
 #[derive(Debug, Serialize)]
 #[serde(tag = "outcome", rename_all = "snake_case")]
-pub enum WorkReservationResponse
+pub enum ReservationOutcomeResponse
 {
     /// The reservation was granted.
     Reserved
@@ -39,7 +39,7 @@ pub enum WorkReservationResponse
     },
 }
 
-impl WorkReservationResponse
+impl ReservationOutcomeResponse
 {
     pub(crate) fn From(result: Result<Reservation, ClaimRefusal>) -> Self
     {

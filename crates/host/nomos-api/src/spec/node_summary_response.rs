@@ -1,4 +1,4 @@
-//! [`NodeSummaryResponse`], carried only by [`super::spec_record_response::SpecRecordResponse::NotFound`].
+//! [`NodeSummaryResponse`], carried only by [`super::record_response::RecordResponse::NotFound`].
 
 use nomos_spec_store::NodeSummary;
 use serde::Serialize;

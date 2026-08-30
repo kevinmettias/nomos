@@ -1,4 +1,4 @@
-//! [`RowCensusResponse`], carried only by [`super::spec_table_response::SpecTableResponse`].
+//! [`RowCensusResponse`], carried only by [`super::table_response::TableResponse`].
 
 use nomos_spec_store::RowCensus;
 use serde::Serialize;

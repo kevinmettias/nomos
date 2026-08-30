@@ -1,9 +1,9 @@
-//! [`BlockedItem`], carried only by [`super::work_audit_response::WorkAuditResponse::Audited`].
+//! [`BlockedItem`], carried only by [`super::audit_response::AuditResponse::Audited`].
 
 use nomos_ledger::LedgerItem;
 use serde::Serialize;
 
-/// One `Ready` item [`super::work_audit_response::Handle_Work_Audit`] found blocked, paired with why.
+/// One `Ready` item [`super::audit_response::Handle_Work_Audit`] found blocked, paired with why.
 #[derive(Debug, Serialize)]
 pub struct BlockedItem
 {

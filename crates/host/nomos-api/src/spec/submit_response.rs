@@ -1,4 +1,4 @@
-//! [`Handle_Spec_Submit`] and its own [`SpecSubmitResponse`].
+//! [`Handle_Spec_Submit`] and its own [`SubmitResponse`].
 
 use nomos_spec_orchestration::{RenderRefusal, SubmitAnswer, SubmitRefusal, SubmitRequest};
 use serde::Serialize;
@@ -16,11 +16,11 @@ use super::{Build_Corpus_Request, RefusalResponse, RenderedProjectionResponse, S
 /// `Run`. This function therefore assembles the store itself, the one step every other
 /// `Handle_Spec_*` function in this crate gets from `Run`. Writes real bytes through
 /// `StdFileSystem` when `request.into` is given, the same `Render`-shaped write
-/// [`crate::spec::spec_render_response::Handle_Spec_Render`] already performs (`Submit_Corpus_Request` calls
+/// [`crate::spec::render_response::Handle_Spec_Render`] already performs (`Submit_Corpus_Request` calls
 /// `run::render::Rendered_Projection` internally for exactly that reason, addressed at the submission's
 /// own id under the same `into` root).
 #[must_use]
-pub fn Handle_Spec_Submit(request: &SubmitRequest) -> SpecSubmitResponse
+pub fn Handle_Spec_Submit(request: &SubmitRequest) -> SubmitResponse
 {
     use nomos_platform_std::StdFileSystem;
     use nomos_spec_orchestration::corpus::Assemble_Corpus;
@@ -30,18 +30,18 @@ pub fn Handle_Spec_Submit(request: &SubmitRequest) -> SpecSubmitResponse
     let mut assembly = match Assemble_Corpus(&corpus_request)
     {
         Ok(assembly) => assembly,
-        Err(error) => return SpecSubmitResponse::Unreadable { cause: error.to_string() },
+        Err(error) => return SubmitResponse::Unreadable { cause: error.to_string() },
     };
 
     let submitted = nomos_spec_orchestration::Submit_Corpus_Request(&mut assembly, request, &StdFileSystem);
-    return SpecSubmitResponse::From(submitted);
+    return SubmitResponse::From(submitted);
 }
 
 /// What a real `nomos request submit` produced, in a shape `serde_json` can hand across a
 /// wire.
 #[derive(Debug, Serialize)]
 #[serde(tag = "outcome", rename_all = "snake_case")]
-pub enum SpecSubmitResponse
+pub enum SubmitResponse
 {
     /// The submission was accepted, and its projection placed if one was asked for.
     Accepted
@@ -74,7 +74,7 @@ pub enum SpecSubmitResponse
     },
 }
 
-impl SpecSubmitResponse
+impl SubmitResponse
 {
     pub(crate) fn From(result: Result<SubmitAnswer, SubmitRefusal>) -> Self
     {
@@ -112,6 +112,7 @@ fn Render_Refusal_Cause(refusal: RenderRefusal) -> String
 mod tests
 {
     use super::*;
+    use crate::test_support::{Assert_Round_Trips_As_Json, Unique_Scratch_Directory};
     use nomos_spec_model::{SubmissionKind, SubmissionState};
 
     #[test]
@@ -121,7 +122,7 @@ mod tests
 
         let response = Handle_Spec_Submit(&request);
 
-        let SpecSubmitResponse::Accepted { submission, written, .. } = response
+        let SubmitResponse::Accepted { submission, written, .. } = response
         else
         {
             // This request carries every universal field and every field OD-SPEC-010
@@ -143,12 +144,12 @@ mod tests
     #[test]
     fn Test_A_Real_Submission_With_Into_Should_Place_Its_Subject_Dossier_Projection()
     {
-        let into = Unique_Scratch_Directory("submit");
+        let into = Unique_Scratch_Directory("spec-submit", "submit");
         let request = Complete_Feature_Request("FR-API-002", Some(into));
 
         let response = Handle_Spec_Submit(&request);
 
-        let SpecSubmitResponse::Accepted { written, .. } = response
+        let SubmitResponse::Accepted { written, .. } = response
         else
         {
             // This request carries every universal field and every field OD-SPEC-010
@@ -163,25 +164,6 @@ mod tests
         assert!(body.contains("FR-API-002"), "{body}");
     }
 
-    /// An empty, unique scratch directory of this test's own.
-    fn Unique_Scratch_Directory(label: &str) -> std::path::PathBuf
-    {
-        use std::sync::atomic::{AtomicU32, Ordering};
-        // scope: allow this test-only counter has no owner beyond disambiguating calls within
-        // one process; a bare pid does not distinguish two calls in the same test run.
-        static COUNTER: AtomicU32 = AtomicU32::new(0);
-
-        let directory = std::env::temp_dir().join(format!(
-            "nomos-api-spec-submit-{label}-{}-{}",
-            std::process::id(),
-            COUNTER.fetch_add(1, Ordering::Relaxed)
-        ));
-        let _ignored = std::fs::remove_dir_all(&directory);
-        std::fs::create_dir_all(&directory).expect("a fresh scratch directory can always be created");
-
-        return directory;
-    }
-
     #[test]
     fn Test_An_Incomplete_Submission_Should_Be_Refused_And_Write_Nothing()
     {
@@ -190,7 +172,7 @@ mod tests
 
         let response = Handle_Spec_Submit(&request);
 
-        let SpecSubmitResponse::Refused { refusal } = response
+        let SubmitResponse::Refused { refusal } = response
         else
         {
             // This request was truncated to just its first field, dropping the ones
@@ -209,11 +191,7 @@ mod tests
 
         let response = Handle_Spec_Submit(&request);
 
-        let json = serde_json::to_string(&response).expect("a SpecSubmitResponse always serializes");
-        let parsed: serde_json::Value = serde_json::from_str(&json).expect("what was just written parses back");
-        let outcome = parsed.get("outcome").expect("a serialized SpecSubmitResponse always has this field");
-
-        assert_eq!(outcome, "accepted", "{json}");
+        Assert_Round_Trips_As_Json(&response, "accepted");
     }
 
     /// Every universal field and every field `OD-SPEC-010` requires of `SubmissionKind::

@@ -1,4 +1,4 @@
-//! [`Handle_Spec_Table`] and its own [`SpecTableResponse`].
+//! [`Handle_Spec_Table`] and its own [`TableResponse`].
 
 use nomos_spec_orchestration::{SpecCommand, TableAnswer, TableRefusal, TableRequest};
 use serde::Serialize;
@@ -8,12 +8,12 @@ use super::{Build_Corpus_Request, DocumentSourceResponse, PathMatchResponse, Row
 /// Selects table rows exactly as `nomos spec table` would, and hands back a
 /// JSON-serializable response.
 ///
-/// Follows [`crate::spec::spec_record_response::Handle_Spec_Record`]'s own composition: builds a
+/// Follows [`crate::spec::record_response::Handle_Spec_Record`]'s own composition: builds a
 /// `CorpusRequest` from the environment, dispatches through the shared `Run` entry point,
 /// matches `SpecOutcome::Table`. `run::table::Resolved_Table` itself never touches a `FileSystem`, the
 /// same as `Record`.
 #[must_use]
-pub fn Handle_Spec_Table(request: &TableRequest) -> SpecTableResponse
+pub fn Handle_Spec_Table(request: &TableRequest) -> TableResponse
 {
     use nomos_platform_std::StdFileSystem;
 
@@ -30,13 +30,13 @@ pub fn Handle_Spec_Table(request: &TableRequest) -> SpecTableResponse
         unreachable!("Run always returns the SpecOutcome variant naming the SpecCommand it was given")
     };
 
-    return SpecTableResponse::From(result);
+    return TableResponse::From(result);
 }
 
 /// What a real `nomos spec table` produced, in a shape `serde_json` can hand across a wire.
 #[derive(Debug, Serialize)]
 #[serde(tag = "outcome", rename_all = "snake_case")]
-pub enum SpecTableResponse
+pub enum TableResponse
 {
     /// The rows the request selected, and the document and census they came from.
     Selected
@@ -69,7 +69,7 @@ pub enum SpecTableResponse
     },
 }
 
-impl SpecTableResponse
+impl TableResponse
 {
     pub(crate) fn From(result: Result<TableAnswer, TableRefusal>) -> Self
     {
@@ -100,6 +100,7 @@ impl SpecTableResponse
 mod tests
 {
     use super::*;
+    use crate::test_support::Assert_Round_Trips_As_Json;
 
     /// No document under any corpus state can match this name, regardless of whether this
     /// session's own `NOMOS_V14_CORPUS` happens to be set -- `Assemble_Corpus`'s own contract is
@@ -116,7 +117,7 @@ mod tests
 
         let response = Handle_Spec_Table(&request);
 
-        assert!(matches!(response, SpecTableResponse::NoSuchDocument), "{response:?}");
+        assert!(matches!(response, TableResponse::NoSuchDocument), "{response:?}");
     }
 
     #[test]
@@ -131,10 +132,6 @@ mod tests
 
         let response = Handle_Spec_Table(&request);
 
-        let json = serde_json::to_string(&response).expect("a SpecTableResponse always serializes");
-        let parsed: serde_json::Value = serde_json::from_str(&json).expect("what was just written parses back");
-        let outcome = parsed.get("outcome").expect("a serialized SpecTableResponse always has this field");
-
-        assert_eq!(outcome, "no_such_document", "{json}");
+        Assert_Round_Trips_As_Json(&response, "no_such_document");
     }
 }

@@ -58,7 +58,7 @@ pub enum GateExplainResponse
     Found
     {
         /// The finding itself, in full. `Finding` already derives `Serialize`. Boxed, the
-        /// same reason `WorkShowResponse::Found::item` is: `NotFound` carries nothing, and
+        /// same reason `ShowResponse::Found::item` is: `NotFound` carries nothing, and
         /// an unboxed `Finding` here would size every `GateExplainResponse` to `Found`'s own
         /// width regardless of which variant it holds.
         finding: Box<Finding>,
@@ -122,6 +122,7 @@ impl GateExplainResponse
 mod tests
 {
     use super::*;
+    use crate::test_support::Assert_Round_Trips_As_Json;
     use nomos_contracts::RuleId;
     use nomos_rules::COMPLETENESS_MIRROR;
 
@@ -205,29 +206,16 @@ mod tests
 
         let _ignored = std::fs::remove_dir_all(&directory);
 
-        let json = serde_json::to_string(&response).expect("a GateExplainResponse always serializes");
-        let parsed: serde_json::Value = serde_json::from_str(&json).expect("what was just written parses back");
-        let outcome = parsed.get("outcome").expect("a serialized GateExplainResponse always has this field");
-
-        assert_eq!(outcome, "found", "{json}");
+        Assert_Round_Trips_As_Json(&response, "found");
     }
 
     /// A real, freshly walkable scratch tree of this test's own -- never the real repository
-    /// tree, which live sessions write to concurrently. A call-local counter, the same
-    /// `crates/host/nomos-api/src/work.rs::tests::Unique_Scratch_Directory` fix: several
-    /// tests above build a tree holding the same trigger content, and the default test
-    /// runner's threads would otherwise race on one directory a bare pid gave them.
+    /// tree, which live sessions write to concurrently. Several tests above build a tree
+    /// holding the same trigger content, so this delegates its own uniqueness to
+    /// [`crate::test_support::Unique_Scratch_Directory`] rather than keeping a second counter.
     fn Scratch_Source_Tree(label: &str, file_name: &str, content: &str) -> std::path::PathBuf
     {
-        // scope: allow this test-only counter has no owner beyond disambiguating calls within
-        // one process; a bare pid does not distinguish two calls in the same test run.
-        static COUNTER: std::sync::atomic::AtomicU64 = std::sync::atomic::AtomicU64::new(0);
-        let unique = COUNTER.fetch_add(1, std::sync::atomic::Ordering::Relaxed);
-
-        let directory =
-            std::env::temp_dir().join(format!("nomos-api-gate-explain-{label}-{}-{unique}", std::process::id()));
-        let _ignored = std::fs::remove_dir_all(&directory);
-        std::fs::create_dir_all(&directory).expect("creates a scratch directory");
+        let directory = crate::test_support::Unique_Scratch_Directory("gate-explain", label);
         std::fs::write(directory.join(file_name), content).expect("writes a real source file");
 
         return directory;

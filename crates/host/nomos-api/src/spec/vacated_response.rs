@@ -1,4 +1,4 @@
-//! [`VacatedResponse`], carried only by [`super::spec_commit_response::SpecCommitResponse`].
+//! [`VacatedResponse`], carried only by [`super::commit_response::CommitResponse`].
 
 use nomos_spec_orchestration::Vacated;
 use serde::Serialize;
