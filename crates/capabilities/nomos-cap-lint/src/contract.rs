@@ -113,8 +113,6 @@ mod tests
     {
         contract_testing::Assert_Ceiling_Refuses(
             Capability_Contract(),
-            Capability(),
-            CONTRACT_VERSION,
             Guarantee::New(
                 FactVariant::RuntimeObserved,
                 Assurance::Sound,

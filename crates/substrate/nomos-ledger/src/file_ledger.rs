@@ -76,7 +76,8 @@ pub struct FileLedger<Files, TimeSource, Lock>
     lock: Lock,
 }
 
-impl<Files: FileSystem, TimeSource: Clock, Lock: CrossProcessLock> FileLedger<Files, TimeSource, Lock>
+impl<Files: FileSystem, TimeSource: Clock, Lock: CrossProcessLock>
+FileLedger<Files, TimeSource, Lock>
 {
     /// A ledger at the given path.
     pub fn At(path: impl Into<PathBuf>, filesystem: Files, clock: TimeSource, lock: Lock) -> Self
@@ -403,7 +404,8 @@ impl<Files: FileSystem, TimeSource: Clock, Lock: CrossProcessLock> FileLedger<Fi
     }
 }
 
-impl<Files: FileSystem, TimeSource: Clock, Lock: CrossProcessLock> ExclusionLedger for FileLedger<Files, TimeSource, Lock>
+impl<Files: FileSystem, TimeSource: Clock, Lock: CrossProcessLock> ExclusionLedger
+for FileLedger<Files, TimeSource, Lock>
 {
     fn Claim(
         &mut self,

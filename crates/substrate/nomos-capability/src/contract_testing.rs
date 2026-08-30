@@ -29,11 +29,16 @@ use nomos_contracts::{CapabilityId, ContractVersion, Guarantee, ProviderId};
 
 /// A fresh registry with `contract` declared, and nothing else — the setup every one of a
 /// contract's own tests needs before it can offer or resolve against it.
+///
+/// A freshly constructed [`Registry`] has nothing declared yet, so this first declaration
+/// can never collide -- the failure `Declare` reports is a broken precondition here, not a
+/// recoverable one, which is why it is asserted rather than propagated.
 #[must_use]
 pub fn Declared_Registry(contract: CapabilityContract) -> Registry
 {
     let mut registry = Registry::New();
-    registry.Declare(contract).expect("declared once");
+    let declared = registry.Declare(contract);
+    assert!(declared.is_ok(), "a fresh registry's first declaration cannot conflict: {declared:?}");
 
     return registry;
 }
@@ -59,17 +64,18 @@ pub fn Assert_Ceiling_Admits(
     assert_eq!(registry.Offer(offer), Ok(()));
 }
 
-/// Asserts that `guarantee` is too strong for `contract`'s own ceiling — a claim above it
-/// is refused rather than silently accepted. `why` is the reason accepting it would be
-/// wrong for this capability, and becomes the assertion's own failure message.
-pub fn Assert_Ceiling_Refuses(
-    contract: CapabilityContract,
-    capability: CapabilityId,
-    version: ContractVersion,
-    guarantee: Guarantee,
-    why: &str,
-)
+/// Asserts that `guarantee` is too strong for `contract`'s own ceiling — a claim above it is
+/// refused rather than silently accepted. `why` is the reason accepting it would be wrong
+/// for this capability, and becomes the assertion's own failure message.
+///
+/// Unlike its siblings, this does not take `capability` and `version` as separate
+/// parameters: `contract.id` and `contract.version` already carry them, every caller was
+/// passing the same values back in twice, and doing so had pushed this function one
+/// parameter past the standard's limit.
+pub fn Assert_Ceiling_Refuses(contract: CapabilityContract, guarantee: Guarantee, why: &str)
 {
+    let capability = contract.id.clone();
+    let version = contract.version;
     let mut registry = Declared_Registry(contract);
     let offer = ProviderOffer {
         provider: ProviderId::New("nomos.test.optimistic"),

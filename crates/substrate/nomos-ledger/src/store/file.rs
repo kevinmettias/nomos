@@ -69,7 +69,13 @@ pub(super) fn Save_Document<Files: FileSystem, TimeSource: Clock, Lock: CrossPro
 /// taken after the wait for the lock. Read before, a claim that waited on a contended
 /// lock would be granted a lease shortened by however long it waited, and would judge
 /// other holders' leases against a time that had already passed.
-pub(super) fn Decide_Under_Lock<Files: FileSystem, TimeSource: Clock, Lock: CrossProcessLock, Outcome, Error>(
+pub(super) fn Decide_Under_Lock<
+    Files: FileSystem,
+    TimeSource: Clock,
+    Lock: CrossProcessLock,
+    Outcome,
+    Error,
+>(
     ledger: &FileLedger<Files, TimeSource, Lock>,
     holder: &str,
     decide: impl FnOnce(&mut LedgerDocument, Timestamp) -> Result<Outcome, Error>,
