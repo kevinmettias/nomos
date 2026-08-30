@@ -376,10 +376,19 @@ mod tests
         assert_eq!(Module_Declared_By("pub(crate) mod r#ref;"), Some("ref".to_owned()));
     }
 
+    /// Every visibility spelling a module declaration can carry, all naming the same module.
+    const VISIBILITY_SPELLINGS: [&str; 5] = [
+        "mod finish;",
+        "pub mod finish;",
+        "pub(crate) mod finish;",
+        "pub(super) mod finish;",
+        "pub(in crate::store) mod finish;",
+    ];
+
     #[test]
     fn Test_Every_Visibility_Spelling_Should_Declare_Its_Module()
     {
-        for line in ["mod finish;", "pub mod finish;", "pub(crate) mod finish;", "pub(super) mod finish;", "pub(in crate::store) mod finish;"]
+        for line in VISIBILITY_SPELLINGS
         {
             assert_eq!(Module_Declared_By(line), Some("finish".to_owned()), "{line} should declare finish");
         }

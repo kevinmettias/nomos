@@ -12,6 +12,9 @@ use crate::{
     LEDGER_VERB_REFERENCE, ROUTED_AUTHORITIES, TEMPORARY_HAZARDS,
 };
 
+/// The harness files every agent looks for by name at the repository root.
+const FRONT_DOOR_FILES: [&str; 2] = [CONTRACT, ADAPTER];
+
 /// The front door has to be at the door.
 ///
 /// Claude Code and Codex both look for a file by name before they look at anything else,
@@ -20,7 +23,7 @@ use crate::{
 #[test]
 fn Test_The_Repository_Should_Have_An_Agent_Front_Door()
 {
-    for name in [CONTRACT, ADAPTER]
+    for name in FRONT_DOOR_FILES
     {
         let text = Read_Harness_File(name);
 

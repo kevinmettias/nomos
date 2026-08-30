@@ -27,13 +27,13 @@ fn Test_A_Lowered_Floor_Should_Be_Spent_On_The_Subjects_The_Parser_Refuses()
     let corpus = Precision_Corpus();
     let run = Slice::Over(&corpus).Accepting(Approximate_Floor()).Run(&corpus);
 
-    Nothing_Below_The_Floor_Was_Admitted_And_Refused(&run);
-    Each_Provider_Answered_For_What_It_Could_Read(&run);
-    The_Fallen_Back_Subject_Is_Named(&run);
+    Assert_Nothing_Below_The_Floor_Was_Admitted_And_Refused(&run);
+    Assert_Each_Provider_Answered_For_What_It_Could_Read(&run);
+    Assert_The_Fallen_Back_Subject_Is_Named(&run);
 }
 
 /// Admitting the scanner must not leave a still-unreadable file counted as refused.
-fn Nothing_Below_The_Floor_Was_Admitted_And_Refused(run: &RunReport)
+fn Assert_Nothing_Below_The_Floor_Was_Admitted_And_Refused(run: &RunReport)
 {
     assert!(
         run.refused.is_empty(),
@@ -44,7 +44,7 @@ fn Nothing_Below_The_Floor_Was_Admitted_And_Refused(run: &RunReport)
 
 /// The parser keeps the files it can read, and the scanner answers for exactly the one it
 /// cannot.
-fn Each_Provider_Answered_For_What_It_Could_Read(run: &RunReport)
+fn Assert_Each_Provider_Answered_For_What_It_Could_Read(run: &RunReport)
 {
     use nomos_lang_rust as rust;
 
@@ -63,7 +63,7 @@ fn Each_Provider_Answered_For_What_It_Could_Read(run: &RunReport)
 }
 
 /// The subject that fell back is named, not counted.
-fn The_Fallen_Back_Subject_Is_Named(run: &RunReport)
+fn Assert_The_Fallen_Back_Subject_Is_Named(run: &RunReport)
 {
     assert_eq!(
         run.fell_back,
@@ -134,12 +134,19 @@ fn Test_A_Group_The_Parser_Read_Whole_Should_Not_Be_Marked_Approximate()
     let mut lowered = Slice::Over(&corpus).Accepting(Approximate_Floor());
     lowered.Run(&corpus);
 
-    for group in ["alpha", "beta"]
+    for group in Groups_The_Parser_Read_Whole()
     {
         let surface = Surface_Of(&lowered, &corpus, group);
         assert_eq!(surface.approximate, 0, "{group} parsed whole and is marked approximate");
         assert_eq!(surface.unreachable, 0, "{group} lost a member");
     }
+}
+
+/// The groups this floor's parser reads whole, with nothing falling back to the scanner —
+/// `gamma` is the one that does, and is not among them.
+fn Groups_The_Parser_Read_Whole() -> [&'static str; 2]
+{
+    return ["alpha", "beta"];
 }
 
 /// One question, one answer: the store never holds two providers' syntax facts about one

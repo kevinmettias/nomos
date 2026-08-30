@@ -240,3 +240,73 @@ const CLAUDE_PROGRAM: &str = "claude";
 
 #[cfg(test)]
 mod tests;
+
+/// The direct address for `Execute_Task`/`Execute_In`. `tests.rs`'s own suite exercises
+/// both extensively -- Rust's own coverage attribution keys a test to the FILE that
+/// physically contains it, and this crate deliberately keeps its behavioural suite in its
+/// own file (`tests.rs`) rather than inline, so a test living there cannot address a
+/// function declared here. These two are the address that file cannot supply.
+#[cfg(test)]
+mod address_tests
+{
+    use super::*;
+    use nomos_ledger::Territory;
+    use nomos_platform::ProcessOutput;
+
+    struct Scripted
+    {
+        outcome: ExitOutcome,
+        stdout: String,
+    }
+
+    impl ProcessLauncher for Scripted
+    {
+        fn Run(&self, _command: &Command) -> Result<ProcessOutput, String>
+        {
+            return Ok(ProcessOutput { outcome: self.outcome, stdout: self.stdout.clone(), stderr: String::new() });
+        }
+    }
+
+    fn Bare_Task(goal: &str) -> TaskEnvelope
+    {
+        return TaskEnvelope {
+            goal: goal.to_owned(),
+            scope: Territory::Of_Files(Vec::<String>::new()),
+            knowledge_context: Vec::new(),
+            applicable_rules: Vec::new(),
+            prohibited_changes: Territory::Of_Files(Vec::<String>::new()),
+            available_tools: Vec::new(),
+            expected_output_schema: nomos_contracts::SchemaId::New("nomos.agent.executor.v1"),
+            effort: EffortLevel::BackendDefault,
+        };
+    }
+
+    #[test]
+    fn Test_Execute_Task_Should_Create_Its_Own_Isolated_Directory_And_Read_A_Clean_Response()
+    {
+        let launcher = Scripted {
+            outcome: ExitOutcome::Exited { code: 0 },
+            stdout: r#"{"result": "PONG", "is_error": false, "total_cost_usd": 0.01, "duration_ms": 500, "permission_denials": []}"#
+                .to_owned(),
+        };
+
+        let outcome = Execute_Task(&Bare_Task("say PONG"), &launcher).expect("a well-formed scripted response");
+
+        assert_eq!(outcome.response, "PONG");
+    }
+
+    #[test]
+    fn Test_Execute_In_Should_Run_Over_A_Caller_Chosen_Directory()
+    {
+        let launcher = Scripted {
+            outcome: ExitOutcome::Exited { code: 0 },
+            stdout: r#"{"result": "PONG", "is_error": false, "total_cost_usd": 0.01, "duration_ms": 500, "permission_denials": []}"#
+                .to_owned(),
+        };
+        let directory = std::env::temp_dir();
+
+        let outcome = Execute_In(&Bare_Task("say PONG"), &launcher, &directory).expect("a well-formed scripted response");
+
+        assert_eq!(outcome.response, "PONG");
+    }
+}

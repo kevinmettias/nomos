@@ -8,6 +8,9 @@
 use crate::reading::{Says, Surface_Named};
 use nomos_contract_tests::Surface;
 
+/// Every restricted-visibility spelling the scanner must draw the line at.
+const RESTRICTED_VISIBILITY_MARKERS: [&str; 3] = ["pub(crate)", "pub(super)", "pub(in "];
+
 /// The negative control.
 ///
 /// This asserts the scanner finds real exports, and that it draws the line where the
@@ -30,7 +33,7 @@ fn Test_The_Scanner_Should_Find_Real_Exports_And_Stop_At_Restricted_Ones()
         "a unit test module reached the public surface: {:?}",
         surface.declarations
     );
-    for restricted in ["pub(crate)", "pub(super)", "pub(in "]
+    for restricted in RESTRICTED_VISIBILITY_MARKERS
     {
         assert!(
             !Says(&surface, restricted),
@@ -41,6 +44,11 @@ fn Test_The_Scanner_Should_Find_Real_Exports_And_Stop_At_Restricted_Ones()
 
 /// Restricted visibility elsewhere in the workspace is genuinely excluded.
 ///
+/// `pub(crate)` helpers declared in this very crate. Neither is an export, and a scanner
+/// that treated any `pub` prefix as public would list all of them — so this is the case
+/// that would catch it.
+const CRATE_VISIBLE_HELPERS: [&str; 3] = ["Source_Files", "Without_Test_Modules", "Matching_Brace"];
+
 /// `gates.rs` in this very crate declares `pub(crate) fn Source_Files` and
 /// `pub(crate) fn Without_Test_Modules`. Neither is an export, and a scanner that treated
 /// any `pub` prefix as public would list both — so this is the case that would catch it.
@@ -49,7 +57,7 @@ fn Test_A_Crate_Visible_Helper_Should_Not_Be_An_Export()
 {
     let surface = Surface_Named("nomos-contract-tests");
 
-    for hidden in ["Source_Files", "Without_Test_Modules", "Matching_Brace"]
+    for hidden in CRATE_VISIBLE_HELPERS
     {
         assert!(
             !Says(&surface, hidden),
@@ -78,6 +86,10 @@ fn Test_A_Crate_Visible_Helper_Should_Not_Be_An_Export()
 /// while the crate went on exporting it and `slice.rs` went on calling it. `a6f0e9c` is the
 /// commit that blessed it away.
 ///
+/// The siblings declared in `nomos-integration-tests`'s own `pub use` list, alongside the
+/// one name (`Subject_Of_Path`) the reader cannot follow.
+const RESOLVABLE_REEXPORT_SIBLINGS: [&str; 3] = ["Corpus", "SourceFile", "Walk"];
+
 /// Both halves are in one list on purpose. The names that must resolve and the name that
 /// must not are siblings, so a reader that had simply started reporting everything as
 /// unresolved would satisfy the first assertion and fail the second in the same breath.
@@ -90,7 +102,7 @@ fn Test_An_Unfollowable_Re_Export_Should_Be_Reported_While_Its_Siblings_Resolve(
 
     // The negative control, and the whole reason the grain is per name rather than per
     // declaration: its three siblings are declared in this crate and must still be found.
-    for resolved in ["Corpus", "SourceFile", "Walk"]
+    for resolved in RESOLVABLE_REEXPORT_SIBLINGS
     {
         Assert_The_Sibling_Resolves(&surface, resolved);
     }

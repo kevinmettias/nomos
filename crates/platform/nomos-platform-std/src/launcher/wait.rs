@@ -201,3 +201,46 @@ fn Combined_Length(streams: &Streams<'_>) -> usize
 
     return streams.stdout.map_or(0, Drain::Length).saturating_add(stderr_len);
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use std::time::Duration;
+
+    #[test]
+    fn Test_Waited_For_Child_Should_Report_A_Clean_Exit()
+    {
+        let mut child = Spawned_Exiting_With(0);
+        let command = Command::New(Vec::new(), Duration::from_secs(5));
+        let streams = Streams { stdout: None, stderr: None };
+
+        let outcome = Waited_For_Child(&mut child, "nomos-platform-std-wait-test", &command, &streams)
+            .expect("the child exits on its own well within the bound");
+
+        assert_eq!(outcome, ExitOutcome::Exited { code: 0 });
+    }
+
+    fn Spawned_Exiting_With(code: i32) -> std::process::Child
+    {
+        let mut command = if cfg!(windows)
+        {
+            let mut command = std::process::Command::new("cmd");
+            command.args(["/C", &format!("exit {code}")]);
+            command
+        }
+        else
+        {
+            let mut command = std::process::Command::new("sh");
+            command.args(["-c", &format!("exit {code}")]);
+            command
+        };
+
+        return command
+            .stdin(std::process::Stdio::null())
+            .stdout(std::process::Stdio::null())
+            .stderr(std::process::Stdio::null())
+            .spawn()
+            .expect("spawns a quick-exiting child for the wait test");
+    }
+}

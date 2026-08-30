@@ -44,3 +44,41 @@ impl Timestamp
         return std::time::Duration::from_secs(u64::try_from(elapsed).unwrap_or(0));
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    /// The direct address for the constructor -- `clock.rs`'s own suite exercises it
+    /// extensively as scaffolding for `Plus`/`Since`, but never names it, which is a
+    /// missing address rather than a missing test.
+    #[test]
+    fn Test_From_Unix_Seconds_Should_Wrap_The_Given_Value()
+    {
+        assert_eq!(Timestamp::From_Unix_Seconds(1_700_000_000).Unix_Seconds(), 1_700_000_000);
+    }
+
+    #[test]
+    fn Test_Unix_Seconds_Should_Return_The_Wrapped_Value()
+    {
+        assert_eq!(Timestamp::From_Unix_Seconds(42).Unix_Seconds(), 42);
+    }
+
+    #[test]
+    fn Test_Plus_Should_Advance_By_A_Duration()
+    {
+        let start = Timestamp::From_Unix_Seconds(1_000);
+
+        assert_eq!(start.Plus(std::time::Duration::from_secs(30)).Unix_Seconds(), 1_030);
+    }
+
+    #[test]
+    fn Test_Since_Should_Measure_The_Gap_Between_Two_Values()
+    {
+        let earlier = Timestamp::From_Unix_Seconds(1_000);
+        let later = Timestamp::From_Unix_Seconds(1_030);
+
+        assert_eq!(later.Since(earlier), std::time::Duration::from_secs(30));
+    }
+}

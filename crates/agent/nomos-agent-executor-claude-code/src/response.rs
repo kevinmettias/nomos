@@ -120,7 +120,7 @@ mod tests
     }"#;
 
     #[test]
-    fn Test_A_Clean_Response_Has_No_Denied_Tool_Uses()
+    fn Test_Parse_Response_Should_Read_Every_Field_Of_A_Clean_Document()
     {
         let outcome = Parse_Response(CLEAN).expect("valid document");
 

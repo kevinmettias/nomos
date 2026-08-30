@@ -110,25 +110,23 @@ const MALFORMED: &[(&str, &str, &str)] = &[
     ),
 ];
 
+/// Well-formed requirement identifiers: a family and a number, nothing more.
+const REQUIREMENT_IDS: &[&str] = &["CHK-003", "EVID-001", "CAP-002", "WORK-LEDGER-005"];
+
+/// Near misses, each wrong in one way a lenient stem check would let through.
+const NOT_REQUIREMENT_IDS: &[&str] =
+    &["CHK-3", "CHK-0003", "chk-003", "003", "CHK-", "-003", "CHK-00A", "US-CHK-001"];
+
 /// The identifier is the stem, and nothing inside the file may restate it.
 #[test]
 fn Test_A_Requirement_Identifier_Should_Be_A_Family_And_A_Number()
 {
-    for accepted in ["CHK-003", "EVID-001", "CAP-002", "WORK-LEDGER-005"]
+    for accepted in REQUIREMENT_IDS
     {
         assert!(Is_Requirement_Id(accepted), "{accepted} is a requirement id");
     }
 
-    for refused in [
-        "CHK-3",
-        "CHK-0003",
-        "chk-003",
-        "003",
-        "CHK-",
-        "-003",
-        "CHK-00A",
-        "US-CHK-001",
-    ]
+    for refused in NOT_REQUIREMENT_IDS
     {
         assert!(!Is_Requirement_Id(refused), "{refused} is not a requirement id");
     }

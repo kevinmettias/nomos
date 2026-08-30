@@ -198,6 +198,12 @@ fn Assert_No_Requirement_Assessed_Twice(assessments: &[crate::assessment::Assess
     );
 }
 
+/// The two source files `OD-CONTRACTS-002`'s territory named for `CHK-003`.
+const CHK_003_SITE_FILES: [&str; 2] = [
+    "crates/contracts/nomos-contracts/src/finding/applicability.rs",
+    "crates/contracts/nomos-contracts/src/finding/evidence.rs",
+];
+
 /// `CHK-003`'s verdict stops living in prose.
 ///
 /// The entry this whole item exists to make readable. `OD-CONTRACTS-002` argued that
@@ -214,10 +220,7 @@ fn Test_CHK_003_Should_Be_Assessed_Met_By_The_Record_That_Decided_It()
 
     Assert_Decided_Met_By_OD_Contracts_002(entry);
 
-    for file in [
-        "crates/contracts/nomos-contracts/src/finding/applicability.rs",
-        "crates/contracts/nomos-contracts/src/finding/evidence.rs",
-    ]
+    for file in CHK_003_SITE_FILES
     {
         Assert_Entry_Names_A_Site_In(entry, file);
     }

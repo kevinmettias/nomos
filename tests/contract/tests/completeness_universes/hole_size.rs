@@ -19,6 +19,14 @@ fn Test_The_Number_Of_Unmirrored_Universes_Should_Be_Declared()
     );
 }
 
+/// The three recorded instances of `P9-ONE-DIRECTION`, each paired with the test that
+/// mirrors it today.
+const P9_ONE_DIRECTION_INSTANCES: [(&str, &str); 3] = [
+    ("Table::All", "Test_Every_Table_In_The_Schema_Should_Be_Declared"),
+    ("GOVERNING_RECORD_IDS", "Test_Every_Canonical_Record_On_Disk_Should_Be_Governing"),
+    ("CORPUS_VARIABLES", "Test_The_Scanner_And_This_Table_Should_Name_The_Same_Variables"),
+];
+
 /// `P9-ONE-DIRECTION` requires that all three instances would have failed the enforcement
 /// as originally written. They cannot be replayed — each was repaired at the site — so each
 /// is reconstructed by taking its mirror away and asserting it lands in the counted hole.
@@ -28,13 +36,7 @@ fn Test_The_Number_Of_Unmirrored_Universes_Should_Be_Declared()
 #[test]
 fn Test_The_Three_Instances_Should_Have_Failed_This_Check()
 {
-    let instances = [
-        ("Table::All", "Test_Every_Table_In_The_Schema_Should_Be_Declared"),
-        ("GOVERNING_RECORD_IDS", "Test_Every_Canonical_Record_On_Disk_Should_Be_Governing"),
-        ("CORPUS_VARIABLES", "Test_The_Scanner_And_This_Table_Should_Name_The_Same_Variables"),
-    ];
-
-    for (name, mirror) in instances
+    for (name, mirror) in P9_ONE_DIRECTION_INSTANCES
     {
         Assert_It_Would_Have_Failed(name, mirror);
     }

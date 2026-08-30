@@ -579,10 +579,11 @@ fn Go_Workspace_Fixture() -> GoWorkspaceFixture
     use std::sync::atomic::{AtomicU64, Ordering};
     static COUNTER: AtomicU64 = AtomicU64::new(0);
 
-    // Unique per call, not merely per process: `Check` can invoke this production more
-    // than once within one process (the parent's own repeat-check, alongside whatever a
-    // spawned child does in its own process), and a name shared across calls would let one
-    // call's `Drop` remove a directory another is still reading.
+    // Unique per call, not merely per process: `Assert_Meets_Declared_Strategy` can invoke
+    // this production more than once within one process (the parent's own repeat-check and
+    // its own fresh-production re-check, alongside whatever a spawned child does in its own
+    // process), and a name shared across calls would let one call's `Drop` remove a
+    // directory another is still reading.
     let n = COUNTER.fetch_add(1, Ordering::Relaxed);
     let root = std::env::temp_dir().join(format!(
         "nomos-determinism-go-dependency-{}-{n}",

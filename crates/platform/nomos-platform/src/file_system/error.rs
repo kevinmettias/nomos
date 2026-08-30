@@ -56,3 +56,23 @@ impl core::fmt::Display for Error
 
 impl std::error::Error for Error
 {}
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Path_Should_Read_Back_Whichever_Variant_Carries_It()
+    {
+        assert_eq!(Error::NotFound { path: "a/missing".to_owned() }.Path(), "a/missing");
+        assert_eq!(
+            Error::Denied { path: "b/locked".to_owned(), cause: "permission denied".to_owned() }.Path(),
+            "b/locked"
+        );
+        assert_eq!(
+            Error::Other { path: "c/odd".to_owned(), cause: "disk full".to_owned() }.Path(),
+            "c/odd"
+        );
+    }
+}

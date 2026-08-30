@@ -69,7 +69,12 @@ fn Test_An_Empty_Command_Should_Be_Refused()
 {
     let empty = Command::New(Vec::new(), Duration::from_secs(5));
 
-    assert!(StdProcessLauncher.Run(&empty).is_err());
+    let error = StdProcessLauncher.Run(&empty).expect_err("an empty argv names no program to run");
+
+    assert_eq!(
+        error, "a command needs a program to run",
+        "the error must name the empty argv as the reason, not any of `Run`'s other failure modes"
+    );
 }
 
 /// How many lines the loud fixture writes.

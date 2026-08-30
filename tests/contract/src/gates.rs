@@ -318,33 +318,52 @@ fn Test_Reads_Nothing()
         );
     }
 
-    /// A doc comment naming a variable is documentation, not a gate.
-    #[test]
-    fn Test_A_Variable_Named_Only_In_A_Comment_Should_Not_Gate()
+    /// Sources that name a corpus variable only in prose — a doc comment or a trailing
+    /// comment — never in code a scanner should treat as a read.
+    fn Comment_Only_Corpus_Mentions() -> Vec<&'static str>
     {
-        let source = r"
+        return vec![
+            r"
 /// Opt-in by NOMOS_V14_CORPUS.
 #[test]
 fn Test_Runs_Always()
 {
     assert!(true); // NOMOS_SPEC_ARCHIVES is not read here
 }
-";
-
-        assert!(Gates_In("example.rs", source).is_empty());
+",
+        ];
     }
 
+    /// A doc comment naming a variable is documentation, not a gate.
     #[test]
-    fn Test_An_Ungated_Test_Should_Not_Be_Reported()
+    fn Test_A_Variable_Named_Only_In_A_Comment_Should_Not_Gate()
     {
-        let source = r"
+        for source in Comment_Only_Corpus_Mentions()
+        {
+            assert!(Gates_In("example.rs", source).is_empty());
+        }
+    }
+
+    /// Sources whose tests never read a corpus variable at all, gated or otherwise.
+    fn Ungated_Test_Sources() -> Vec<&'static str>
+    {
+        return vec![
+            r"
 #[test]
 fn Test_Plain()
 {
     assert_eq!(1 + 1, 2);
 }
-";
+",
+        ];
+    }
 
-        assert!(Gates_In("example.rs", source).is_empty());
+    #[test]
+    fn Test_An_Ungated_Test_Should_Not_Be_Reported()
+    {
+        for source in Ungated_Test_Sources()
+        {
+            assert!(Gates_In("example.rs", source).is_empty());
+        }
     }
 }

@@ -339,6 +339,10 @@ pub use authoring::{Claimed};
         assert_eq!(blanked.len(), source.len());
     }
 
+    /// The exports the `pub use authoring::{…}` line names, in `Test_A_Braceless_Test_Declaration_Should_Not_Eat_The_Item_After_It`'s fixture.
+    /// Each must survive the brace-less `#[cfg(test)] mod registration;` above it.
+    const AUTHORING_EXPORTS: [&str; 3] = ["BlockChange", "ClaimedRecord", "CommitReport"];
+
     /// The defect, in the shape it was found in. `#[cfg(test)] mod registration;` carries no
     /// braces of its own, so an unbounded search for a body takes the braces of whatever
     /// item comes next — in `nomos-spec-store` that was the `pub use authoring::{…}` line,
@@ -364,7 +368,7 @@ pub use authoring::{
             "pub use authoring::{{…}} was eaten by the brace-less #[cfg(test)] mod \
              registration; above it; what survived was: {blanked}"
         );
-        for export in ["BlockChange", "ClaimedRecord", "CommitReport"]
+        for export in AUTHORING_EXPORTS
         {
             assert!(
                 blanked.contains(export),
@@ -401,19 +405,23 @@ mod rows;
         assert_eq!(blanked.len(), source.len());
     }
 
+    /// Every brace-less item form the shape check has to treat alike: decided by `;` versus
+    /// `{`, never by the keyword.
+    const BRACELESS_ITEM_FORMS: [&str; 5] = [
+        "mod registration;",
+        "use super::Helper;",
+        "struct Marker;",
+        "type Alias = Vec<u8>;",
+        "static LIMIT: [u8; 4] = [0; 4];",
+    ];
+
     /// The shapes are decided by `;` versus `{`, not by the keyword, so every brace-less
     /// item form has to behave the same way. Each of these is followed by a braced item that
     /// must survive.
     #[test]
     fn Test_Every_Braceless_Item_Form_Should_Blank_Only_Itself()
     {
-        for declaration in [
-            "mod registration;",
-            "use super::Helper;",
-            "struct Marker;",
-            "type Alias = Vec<u8>;",
-            "static LIMIT: [u8; 4] = [0; 4];",
-        ]
+        for declaration in BRACELESS_ITEM_FORMS
         {
             let source = format!("\n#[cfg(test)]\n{declaration}\n\npub fn Survivor() {{}}\n");
             let blanked = Without_Test_Modules(&source);

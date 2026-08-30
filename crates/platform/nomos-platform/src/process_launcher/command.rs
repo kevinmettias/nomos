@@ -86,4 +86,24 @@ mod tests
 
         assert_eq!(empty.Program(), None);
     }
+
+    #[test]
+    fn Test_New_Should_Start_The_Idle_Bound_Equal_To_The_Wall_Bound()
+    {
+        let command = Command::New(vec!["prog".to_owned()], Duration::from_secs(10));
+
+        assert_eq!(
+            command.idle_timeout, command.timeout,
+            "a caller that never asks for the distinction must get the same bound twice"
+        );
+    }
+
+    #[test]
+    fn Test_With_Idle_Timeout_Should_Set_The_Idle_Bound_Independently_Of_The_Wall_Bound()
+    {
+        let command = Command::New(vec!["prog".to_owned()], Duration::from_secs(30)).With_Idle_Timeout(Duration::from_secs(5));
+
+        assert_eq!(command.timeout, Duration::from_secs(30));
+        assert_eq!(command.idle_timeout, Duration::from_secs(5));
+    }
 }

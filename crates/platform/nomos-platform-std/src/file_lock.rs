@@ -251,6 +251,26 @@ mod tests
     const ALWAYS_STALE: Duration = Duration::ZERO;
 
     #[test]
+    fn Test_At_Should_Construct_A_Lock_For_The_Given_Location()
+    {
+        let location = Temporary_Path("at-constructs-for-location");
+        let lock = FileLock::At(&location);
+
+        let acquisition = lock.Acquire("agent-a", NO_WAIT, NEVER_STALE).expect("an uncontended lock is acquired cleanly");
+        assert!(location.exists(), "the location the constructor named must be where the real lock file appears");
+        drop(acquisition);
+    }
+
+    #[test]
+    fn Test_Path_Should_Read_Back_What_At_Was_Constructed_With()
+    {
+        let location = Temporary_Path("path-reads-back-the-location");
+        let lock = FileLock::At(&location);
+
+        assert_eq!(lock.Path(), location.as_path());
+    }
+
+    #[test]
     fn Test_An_Uncontended_Lock_Should_Be_Acquired_Cleanly()
     {
         let path = Temporary_Path("uncontended");

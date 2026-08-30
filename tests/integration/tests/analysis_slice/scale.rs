@@ -149,13 +149,13 @@ fn Test_A_Second_Run_Should_Materialize_Zero()
         second.surface_reused
     );
 
-    Recognized_Rather_Than_Skipped(&second, &first);
+    Assert_Recognized_Rather_Than_Skipped(&second, &first);
 }
 
 /// Nothing was recomputed, and the reuse counts say the work was recognized rather than
 /// skipped. Both figures are also zero for a run that did nothing at all, which is why the
 /// second pair is not optional.
-fn Recognized_Rather_Than_Skipped(second: &RunReport, first: &RunReport)
+fn Assert_Recognized_Rather_Than_Skipped(second: &RunReport, first: &RunReport)
 {
     assert_eq!(
         second.syntax_materialized, 0,
@@ -203,13 +203,13 @@ fn Test_The_Weaker_Provider_Should_Answer_For_The_Whole_Scale_Corpus()
         scanned.degraded.len()
     );
 
-    Bought_Coverage(&parsed, &scanned);
+    Assert_Bought_Coverage(&parsed, &scanned);
 }
 
 /// The parser refuses something here, so there is coverage to buy; the scanner answers for
 /// every file, so it is the provider this describes; and it leaves fewer degraded rollups
 /// behind, so the coverage was actually bought.
-fn Bought_Coverage(parsed: &RunReport, scanned: &RunReport)
+fn Assert_Bought_Coverage(parsed: &RunReport, scanned: &RunReport)
 {
     assert!(
         !parsed.refused.is_empty(),

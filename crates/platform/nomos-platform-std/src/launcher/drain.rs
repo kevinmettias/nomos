@@ -120,3 +120,67 @@ impl Drain
         );
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use std::time::{Duration, Instant};
+
+    /// Waits until `Is_Finished` reports true, or panics -- the reader thread `Reading`
+    /// starts is asynchronous, so a test that read `Length`/`Text` immediately after
+    /// starting it would be racing the very thread it means to observe.
+    fn Awaited(drain: Drain) -> Drain
+    {
+        let started = Instant::now();
+        while !drain.Is_Finished()
+        {
+            assert!(started.elapsed() < Duration::from_secs(5), "the drain never finished");
+            std::thread::sleep(Duration::from_millis(10));
+        }
+
+        return drain;
+    }
+
+    #[test]
+    fn Test_Reading_Should_Collect_Everything_The_Source_Produces()
+    {
+        let source = std::io::Cursor::new(b"hello, drain".to_vec());
+
+        let drain = Awaited(Drain::Reading(source));
+
+        assert_eq!(drain.Text(), "hello, drain");
+    }
+
+    #[test]
+    fn Test_Is_Finished_Should_Become_True_Once_The_Source_Ends()
+    {
+        let source = std::io::Cursor::new(b"short".to_vec());
+
+        let drain = Awaited(Drain::Reading(source));
+
+        assert!(drain.Is_Finished(), "a source that has yielded end of file must be reported finished");
+    }
+
+    #[test]
+    fn Test_Length_Should_Report_Bytes_Collected_So_Far()
+    {
+        let source = std::io::Cursor::new(b"0123456789".to_vec());
+
+        let drain = Awaited(Drain::Reading(source));
+
+        assert_eq!(drain.Length(), 10);
+    }
+
+    #[test]
+    fn Test_Text_Should_Decode_Collected_Bytes_Lossily_Rather_Than_Refuse_Them()
+    {
+        // Deliberately invalid UTF-8 -- `read_to_string` would refuse this whole buffer
+        // and lose everything else the process wrote alongside it.
+        let source = std::io::Cursor::new(vec![b'o', b'k', 0xFF, b'!']);
+
+        let drain = Awaited(Drain::Reading(source));
+
+        assert!(drain.Text().contains("ok"), "valid bytes around the invalid one must still survive");
+    }
+}

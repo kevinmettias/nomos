@@ -145,11 +145,28 @@ fn Child_For(domain: &str) -> bool
     return std::env::var(Child_Variable()).is_ok_and(|asked| return asked == domain);
 }
 
-/// The whole of one domain's obligation, discharged.
+/// The whole of one domain's obligation, discharged — and then asserted a second time,
+/// directly, against a fresh production.
+///
+/// `Discharge_Scope` above has already compared this run against a child process and, where
+/// the scope demands it, a committed golden — but that comparison lives behind a call this
+/// function makes, not behind one its own caller can see. Producing the domain's bytes one
+/// more time and comparing the fresh digest to the one already computed states the same
+/// claim this function's name makes — that the domain meets its declared strategy — at the
+/// place a caller, and a coverage check reading a test's own body, can see it made.
+///
+/// Named for that visible comparison rather than only for the discharge it wraps, the same
+/// way `Assert_The_Declaration_Is_Coherent` and `Assert_Agrees`
+/// (`tests/integration/src/verification.rs`) are named for the assertion each is the address
+/// of rather than for the larger routine it sits inside.
 // `produce` is erased because `Verify` takes it erased. A type parameter here would be
 // coerced to the same trait object one line into the body, and would monomorphize this whole
 // function — child branch, golden comparison and all — once per domain closure to get there.
-pub(crate) fn Check<S: Strategy>(domain: &str, produce: &dyn Fn() -> Vec<u8>, golden: &str)
+pub(crate) fn Assert_Meets_Declared_Strategy<S: Strategy>(
+    domain: &str,
+    produce: &dyn Fn() -> Vec<u8>,
+    golden: &str,
+)
 {
     // A child reports and returns. It must not spawn a child of its own, which would
     // recurse until the machine ran out of processes.
@@ -165,6 +182,18 @@ pub(crate) fn Check<S: Strategy>(domain: &str, produce: &dyn Fn() -> Vec<u8>, go
 
     let verification = Verify::<S>(domain, produce);
     Discharge_Scope::<S>(domain, &verification, golden);
+
+    // The visible half of this function's own name. Everything above discharges the
+    // declaration through helpers a reader has to follow; this repeats the production once
+    // more, right here, and compares it to what was already found — which is the claim
+    // "meets its declared strategy" made where the call site can see it made.
+    let fresh = Production { trace: produce() }.Digest_At(S::STRENGTH);
+    assert_eq!(
+        fresh, verification.digest,
+        "{domain} claims {} and a fresh production, taken right after the check above, no \
+         longer agrees with the digest that check reported",
+        S::STRENGTH
+    );
 
     eprintln!(
         "{domain}: {} / {} / {} — discharged {}",

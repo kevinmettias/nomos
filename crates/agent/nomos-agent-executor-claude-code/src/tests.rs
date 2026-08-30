@@ -56,6 +56,15 @@ fn Test_Command_For_Requests_The_Bounded_Invocation()
     assert_eq!(command.working_directory.as_deref(), Some(directory));
 }
 
+/// Every flag or fixed string that would turn the permission boundary off, named by
+/// `OD-EXECUTOR-001`'s own rule directly.
+const FORBIDDEN_PERMISSION_BYPASS_FLAGS: [&str; 4] = [
+    "--dangerously-skip-permissions",
+    "--allow-dangerously-skip-permissions",
+    "bypassPermissions",
+    "acceptEdits",
+];
+
 /// The negative control `OD-EXECUTOR-001`'s rule names directly: none of these ever
 /// appears, or the boundary is one flag away from being turned off.
 #[test]
@@ -67,12 +76,7 @@ fn Test_Command_For_Never_Sets_A_Permission_Bypass()
     let command = Command_For(&task, directory);
     let joined = command.argv.join(" ");
 
-    for forbidden in [
-        "--dangerously-skip-permissions",
-        "--allow-dangerously-skip-permissions",
-        "bypassPermissions",
-        "acceptEdits",
-    ]
+    for forbidden in FORBIDDEN_PERMISSION_BYPASS_FLAGS
     {
         assert!(!joined.contains(forbidden), "the invocation must never contain {forbidden:?}: {joined}");
     }
@@ -110,23 +114,24 @@ fn Test_Command_For_Ignores_The_Still_Unenforced_Fields()
     assert_eq!(Command_For(&bare, directory), Command_For(&populated, directory));
 }
 
-/// Every `EffortLevel` `Command_For` can be given maps to the exact `--effort` argv
-/// `Effort_Flag`'s own doc promises, verified against the real `claude --help` output --
-/// `BackendDefault` alone omits the flag, matching `Bare_Task`'s own invocation exactly.
+/// Every `EffortLevel` paired with the `--effort` argv `Effort_Flag`'s own doc promises
+/// for it, verified against the real `claude --help` output -- `BackendDefault` alone
+/// omits the flag, matching `Bare_Task`'s own invocation exactly.
+const EVERY_EFFORT_LEVEL_AND_ITS_REAL_FLAG: [(EffortLevel, Option<&str>); 6] = [
+    (EffortLevel::BackendDefault, None),
+    (EffortLevel::Minimal, Some("low")),
+    (EffortLevel::Low, Some("low")),
+    (EffortLevel::Medium, Some("medium")),
+    (EffortLevel::High, Some("high")),
+    (EffortLevel::Maximum, Some("max")),
+];
+
 #[test]
 fn Test_Command_For_Maps_Every_Effort_Level_To_The_Real_Flag()
 {
     let directory = std::path::Path::new("/tmp/does-not-need-to-exist-for-this-test");
-    let cases = [
-        (EffortLevel::BackendDefault, None),
-        (EffortLevel::Minimal, Some("low")),
-        (EffortLevel::Low, Some("low")),
-        (EffortLevel::Medium, Some("medium")),
-        (EffortLevel::High, Some("high")),
-        (EffortLevel::Maximum, Some("max")),
-    ];
 
-    for (effort, expected) in cases
+    for (effort, expected) in EVERY_EFFORT_LEVEL_AND_ITS_REAL_FLAG
     {
         let mut task = Bare_Task("say hello");
         task.effort = effort;
@@ -213,7 +218,7 @@ fn Scratch_Directory(name: &str) -> std::path::PathBuf
 }
 
 #[test]
-fn Test_Execute_Reads_A_Scripted_Clean_Response()
+fn Test_Execute_In_Should_Read_A_Scripted_Clean_Response()
 {
     let launcher = Scripted {
         outcome: ExitOutcome::Exited { code: 0 },
@@ -228,6 +233,24 @@ fn Test_Execute_Reads_A_Scripted_Clean_Response()
     assert_eq!(outcome.response, "PONG");
     assert!(outcome.denied_tool_uses.is_empty());
     assert!(!outcome.is_error);
+}
+
+/// `Execute_Task` is [`Execute_In`] plus a freshly generated, caller-invisible working
+/// directory — the one behaviour above cannot exercise, since every other test here
+/// names its own directory precisely so it can be inspected afterward.
+#[test]
+fn Test_Execute_Task_Should_Create_Its_Own_Isolated_Directory_And_Delegate_To_Execute_In()
+{
+    let launcher = Scripted {
+        outcome: ExitOutcome::Exited { code: 0 },
+        stdout: r#"{"result": "PONG", "is_error": false, "total_cost_usd": 0.01, "duration_ms": 500, "permission_denials": []}"#
+            .to_owned(),
+        stderr: String::new(),
+    };
+
+    let outcome = Execute_Task(&Bare_Task("say PONG"), &launcher).expect("a well-formed scripted response");
+
+    assert_eq!(outcome.response, "PONG");
 }
 
 /// The same falsely-claims-success shape `response.rs`'s own tests fix as a canned

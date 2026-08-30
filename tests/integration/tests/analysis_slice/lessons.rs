@@ -41,12 +41,19 @@ fn Test_A_Rollup_Over_A_Refused_Member_Should_Report_A_Degraded_Answer()
     );
     // The undegraded groups, as the control. If every rollup reported unreachable members
     // the assertion above would pass over a slice that could read nothing.
-    for group in ["alpha", "beta"]
+    for group in Undegraded_Groups()
     {
         let whole = Surface_Of(&slice, &corpus, group);
         assert_eq!(whole.unreachable, 0, "{group} has no unreadable members");
         assert_eq!(whole.files, 2, "{group} has two files");
     }
+}
+
+/// The groups the precision corpus's parser reads whole — the negative control beside
+/// `gamma`'s degraded rollup above.
+fn Undegraded_Groups() -> [&'static str; 2]
+{
+    return ["alpha", "beta"];
 }
 
 /// The precision corpus's shape, asserted so its README cannot drift from it.
@@ -56,7 +63,7 @@ fn Test_The_Precision_Corpus_Should_Have_The_Shape_Its_Readme_Claims()
     let (corpus, mut slice) = Over_The_Precision_Corpus();
     slice.Run(&corpus);
 
-    for (group, files, items, public) in [("alpha", 2, 7, 3), ("beta", 2, 7, 3), ("gamma", 1, 3, 0)]
+    for (group, files, items, public) in Precision_Corpus_Shape()
     {
         let surface = Surface_Of(&slice, &corpus, group);
         assert_eq!(
@@ -65,6 +72,13 @@ fn Test_The_Precision_Corpus_Should_Have_The_Shape_Its_Readme_Claims()
             "{group} does not match the table in tests/corpus/analysis/README.md"
         );
     }
+}
+
+/// The precision corpus's shape, per group, exactly as `tests/corpus/analysis/README.md`
+/// claims it: file count, item count, and how many of those items are public.
+fn Precision_Corpus_Shape() -> [(&'static str, u32, u32, u32); 3]
+{
+    return [("alpha", 2, 7, 3), ("beta", 2, 7, 3), ("gamma", 1, 3, 0)];
 }
 
 /// Resolution is a value, and a caller that needs more than any provider offers is told so
@@ -78,16 +92,16 @@ fn Test_An_Unmeetable_Requirement_Should_Report_Coverage_Debt()
 {
     let slice = Slice::Composed();
 
-    An_Unreachable_Guarantee_Resolves_To_Coverage_Debt(&slice);
+    Assert_An_Unreachable_Guarantee_Resolves_To_Coverage_Debt(&slice);
     // The positive control. If resolution refused everything the assertion above would
     // pass over a composition that serves nobody.
-    A_Guarantee_The_Provider_Declares_Still_Resolves(&slice);
+    Assert_A_Guarantee_The_Provider_Declares_Still_Resolves(&slice);
 }
 
 /// A requirement no offer reaches resolves to `MissingCapability` — coverage debt — rather
 /// than to `NotApplicable`, which would be a statement about the subject that only a rule
 /// may make.
-fn An_Unreachable_Guarantee_Resolves_To_Coverage_Debt(slice: &Slice)
+fn Assert_An_Unreachable_Guarantee_Resolves_To_Coverage_Debt(slice: &Slice)
 {
     let guarantee = Guarantee::New(
         FactVariant::SemanticallyResolved,
@@ -113,7 +127,7 @@ fn An_Unreachable_Guarantee_Resolves_To_Coverage_Debt(slice: &Slice)
 
 /// The positive control. If resolution refused everything the assertion above would pass
 /// over a composition that serves nobody.
-fn A_Guarantee_The_Provider_Declares_Still_Resolves(slice: &Slice)
+fn Assert_A_Guarantee_The_Provider_Declares_Still_Resolves(slice: &Slice)
 {
     let servable = Requirement::New(
         CapabilityId::New(syntax::CAPABILITY),

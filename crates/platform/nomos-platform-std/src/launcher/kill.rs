@@ -70,3 +70,46 @@ fn Kill_Tree(child: &mut std::process::Child) -> std::io::Result<()>
 
     return child.kill();
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Killed_And_Reaped_Should_Stop_And_Reap_A_Running_Child()
+    {
+        let mut child = Spawned_A_Long_Running_Child();
+
+        let result = Killed_And_Reaped(&mut child, "nomos-platform-std-kill-test");
+
+        assert!(result.is_ok(), "killing a still-running child must succeed: {result:?}");
+        assert!(
+            matches!(child.try_wait(), Ok(Some(_))),
+            "the child must already be reaped, not merely killed"
+        );
+    }
+
+    fn Spawned_A_Long_Running_Child() -> std::process::Child
+    {
+        let mut command = if cfg!(windows)
+        {
+            let mut command = std::process::Command::new("ping");
+            command.args(["-n", "30", "127.0.0.1"]);
+            command
+        }
+        else
+        {
+            let mut command = std::process::Command::new("sleep");
+            command.arg("30");
+            command
+        };
+
+        return command
+            .stdin(std::process::Stdio::null())
+            .stdout(std::process::Stdio::null())
+            .stderr(std::process::Stdio::null())
+            .spawn()
+            .expect("spawns a long-running child for the kill test");
+    }
+}

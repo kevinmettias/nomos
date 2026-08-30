@@ -50,6 +50,10 @@ fn Test_Command_For_Requests_The_Bounded_Invocation()
     assert_eq!(command.working_directory.as_deref(), Some(directory));
 }
 
+/// Every flag that would open this backend's tool-use loop, named by `OD-EXECUTOR-004`'s
+/// own rule directly.
+const FORBIDDEN_TOOL_USE_FLAGS: [&str; 3] = ["--experimental", "--experimental-yolo", "--experimental-websearch"];
+
 /// The negative control `OD-EXECUTOR-004`'s rule names directly: none of these ever
 /// appears, or the boundary this crate exists to hold is one flag away from being opened.
 #[test]
@@ -61,7 +65,7 @@ fn Test_Command_For_Never_Opens_The_Tool_Use_Loop()
     let command = Command_For(&task, directory);
     let joined = command.argv.join(" ");
 
-    for forbidden in ["--experimental", "--experimental-yolo", "--experimental-websearch"]
+    for forbidden in FORBIDDEN_TOOL_USE_FLAGS
     {
         assert!(!joined.contains(forbidden), "the invocation must never contain {forbidden:?}: {joined}");
     }
@@ -152,12 +156,25 @@ fn Scratch_Directory(name: &str) -> std::path::PathBuf
 }
 
 #[test]
-fn Test_Execute_Reads_A_Scripted_Clean_Response()
+fn Test_Execute_In_Should_Read_A_Scripted_Clean_Response()
 {
     let launcher = Scripted { outcome: ExitOutcome::Exited { code: 0 }, stdout: "PONG\n\n".to_owned(), stderr: String::new() };
     let directory = Scratch_Directory("clean");
 
     let outcome = Execute_In(&Bare_Task("say PONG"), &launcher, &directory).expect("a well-formed scripted response");
+
+    assert_eq!(outcome.response, "PONG");
+}
+
+/// `Execute_Task` is [`Execute_In`] plus a freshly generated, caller-invisible working
+/// directory — the one behaviour above cannot exercise, since every other test here names
+/// its own directory precisely so it can be inspected afterward.
+#[test]
+fn Test_Execute_Task_Should_Create_Its_Own_Isolated_Directory_And_Delegate_To_Execute_In()
+{
+    let launcher = Scripted { outcome: ExitOutcome::Exited { code: 0 }, stdout: "PONG\n\n".to_owned(), stderr: String::new() };
+
+    let outcome = Execute_Task(&Bare_Task("say PONG"), &launcher).expect("a well-formed scripted response");
 
     assert_eq!(outcome.response, "PONG");
 }

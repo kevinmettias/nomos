@@ -220,16 +220,16 @@ fn Test_A_Save_That_Changed_Nothing_Should_Invalidate_Nothing()
     let (mut corpus, mut slice) = Over_The_Precision_Corpus();
     let first = slice.Run(&corpus);
 
-    Rewriting_A_File_With_Its_Own_Contents_Moves_Nothing(&mut slice, &mut corpus, &first);
+    Assert_Rewriting_A_File_With_Its_Own_Contents_Moves_Nothing(&mut slice, &mut corpus, &first);
     // The positive control. If `Edit` reported `Unchanged` for everything, the assertions
     // above would pass over a door that cannot register a change at all.
-    An_Actual_Edit_Still_Registers_As_A_Change(&mut slice, &mut corpus);
+    Assert_An_Actual_Edit_Still_Registers_As_A_Change(&mut slice, &mut corpus);
 }
 
 /// An editor's save hook does not consult the previous generation before writing, so this
 /// arrives constantly — and invalidating on it would discard every fact reachable from the
 /// file in order to recompute the answers the store already held.
-fn Rewriting_A_File_With_Its_Own_Contents_Moves_Nothing(
+fn Assert_Rewriting_A_File_With_Its_Own_Contents_Moves_Nothing(
     slice: &mut Slice,
     corpus: &mut Corpus,
     first: &RunReport,
@@ -250,11 +250,11 @@ fn Rewriting_A_File_With_Its_Own_Contents_Moves_Nothing(
         before,
         "and neither the generation nor the workspace may move for it"
     );
-    Nothing_Recomputed_And_Nothing_Lost(&slice.Run(corpus), first);
+    Assert_Nothing_Recomputed_And_Nothing_Lost(&slice.Run(corpus), first);
 }
 
 /// The positive control: a real edit still advances the generation and reports as such.
-fn An_Actual_Edit_Still_Registers_As_A_Change(slice: &mut Slice, corpus: &mut Corpus)
+fn Assert_An_Actual_Edit_Still_Registers_As_A_Change(slice: &mut Slice, corpus: &mut Corpus)
 {
     use nomos_workspace::ChangeSource;
 
@@ -270,7 +270,7 @@ fn An_Actual_Edit_Still_Registers_As_A_Change(slice: &mut Slice, corpus: &mut Co
 /// Nothing changed, so nothing recomputes — and every fact is still there to be reused,
 /// which is what makes the first half an assertion about reuse rather than about a store
 /// that lost everything.
-fn Nothing_Recomputed_And_Nothing_Lost(second: &RunReport, first: &RunReport)
+fn Assert_Nothing_Recomputed_And_Nothing_Lost(second: &RunReport, first: &RunReport)
 {
     assert_eq!(second.Recomputed(), Vec::<String>::new());
     assert_eq!(

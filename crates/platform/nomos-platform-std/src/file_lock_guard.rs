@@ -56,3 +56,25 @@ impl Drop for FileLockGuard
         }
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    /// `Over` is `pub(crate)`, so this is the only place a test can construct one
+    /// directly rather than through `FileLock::Acquire`.
+    #[test]
+    fn Test_Over_Should_Release_The_File_It_Was_Given_When_Dropped()
+    {
+        let path = std::env::temp_dir().join(format!("nomos-file-lock-guard-test-{}", std::process::id()));
+        std::fs::write(&path, b"held").expect("creates the file the guard will own");
+
+        let guard = FileLockGuard::Over(path.clone());
+        assert!(path.exists(), "the guard's path must be the file that was just created");
+
+        drop(guard);
+
+        assert!(!path.exists(), "dropping the guard must release the file it was given");
+    }
+}

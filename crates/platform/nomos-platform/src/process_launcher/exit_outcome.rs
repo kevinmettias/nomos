@@ -80,7 +80,7 @@ mod tests
     const ARBITRARY_IDLE_ELAPSED_SECS: u64 = 30;
 
     #[test]
-    fn Test_Only_A_Zero_Exit_Should_Succeed()
+    fn Test_Is_Successful_Should_Only_Accept_A_Zero_Exit()
     {
         assert!(ExitOutcome::Exited { code: 0 }.Is_Successful());
         assert!(!ExitOutcome::Exited { code: 1 }.Is_Successful());
@@ -95,7 +95,7 @@ mod tests
     /// The distinction the enum exists for. A timeout must not be recorded as the
     /// predicate having been checked and found false.
     #[test]
-    fn Test_A_Timeout_Should_Not_Count_As_A_Verdict()
+    fn Test_Has_A_Verdict_Should_Exclude_A_Timeout_But_Accept_A_Real_Exit()
     {
         assert!(!ExitOutcome::TimedOut.Has_A_Verdict());
         assert!(!ExitOutcome::Terminated.Has_A_Verdict());

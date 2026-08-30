@@ -6,7 +6,7 @@
 //!
 //! [`Test_Name_For`]: crate::harness::Test_Name_For
 
-use crate::harness::Check;
+use crate::harness::Assert_Meets_Declared_Strategy;
 use crate::goldens::{
     BUNDLE_GOLDEN, GO_GOLDEN, PARSED_GOLDEN, PROJECTION_GOLDEN, REACHABILITY_GOLDEN, ROLLED_GOLDEN,
     SCANNED_GOLDEN, SNAPSHOT_GOLDEN,
@@ -22,7 +22,7 @@ use nomos_lang_rust::SyntaxFactProduction;
 #[test]
 fn Test_The_Parser_Should_Meet_Its_Declared_Strategy()
 {
-    Check::<SyntaxFactProduction>(
+    Assert_Meets_Declared_Strategy::<SyntaxFactProduction>(
         "syntax-fact-production",
         &Parsed_Production,
         PARSED_GOLDEN,
@@ -39,7 +39,7 @@ fn Test_The_Parser_Should_Meet_Its_Declared_Strategy()
 #[test]
 fn Test_The_Rollup_Should_Meet_Its_Declared_Strategy()
 {
-    Check::<SyntaxFactProduction>("module-index-rollup", &Rolled_Production, ROLLED_GOLDEN);
+    Assert_Meets_Declared_Strategy::<SyntaxFactProduction>("module-index-rollup", &Rolled_Production, ROLLED_GOLDEN);
 }
 
 /// The third producer covered by `nomos-lang-rust`'s declaration, discharged separately —
@@ -48,7 +48,7 @@ fn Test_The_Rollup_Should_Meet_Its_Declared_Strategy()
 #[test]
 fn Test_The_Reachability_Offer_Should_Meet_Its_Declared_Strategy()
 {
-    Check::<SyntaxFactProduction>(
+    Assert_Meets_Declared_Strategy::<SyntaxFactProduction>(
         "controlflow-reachability-production",
         &Reachability_Production,
         REACHABILITY_GOLDEN,
@@ -60,13 +60,17 @@ fn Test_The_Scanner_Should_Meet_Its_Declared_Strategy()
 {
     use nomos_lang_rust_scan::ScanFactProduction;
 
-    Check::<ScanFactProduction>("scan-fact-production", &Scanned_Production, SCANNED_GOLDEN);
+    Assert_Meets_Declared_Strategy::<ScanFactProduction>("scan-fact-production", &Scanned_Production, SCANNED_GOLDEN);
 }
 
 #[test]
 fn Test_The_Go_Provider_Should_Meet_Its_Declared_Strategy()
 {
-    Check::<nomos_lang_go::SyntaxFactProduction>("go-syntax-fact-production", &Go_Production, GO_GOLDEN);
+    Assert_Meets_Declared_Strategy::<nomos_lang_go::SyntaxFactProduction>(
+        "go-syntax-fact-production",
+        &Go_Production,
+        GO_GOLDEN,
+    );
 }
 
 #[test]
@@ -77,7 +81,11 @@ fn Test_The_Dependency_Provider_Should_Meet_Its_Declared_Strategy()
     // No golden. `DependencyFactProduction` declares `CrossRun`, and `Cross_Environment_
     // Owed` therefore never reaches for one — the same shape `FactReuse` and
     // `CorrectionStaging` already take below.
-    Check::<DependencyFactProduction>("dependency-fact-production", &Dependency_Production, "");
+    Assert_Meets_Declared_Strategy::<DependencyFactProduction>(
+        "dependency-fact-production",
+        &Dependency_Production,
+        "",
+    );
 }
 
 #[test]
@@ -87,7 +95,7 @@ fn Test_The_Go_Dependency_Provider_Should_Meet_Its_Declared_Strategy()
 
     // No golden, the identical reason `nomos_lang_rust_cargo::DependencyFactProduction`
     // has none above: this crate's own `DependencyFactProduction` declares `CrossRun` too.
-    Check::<DependencyFactProduction>(
+    Assert_Meets_Declared_Strategy::<DependencyFactProduction>(
         "go-dependency-fact-production",
         &Go_Dependency_Production,
         "",
@@ -101,7 +109,7 @@ fn Test_The_Lint_Provider_Should_Meet_Its_Declared_Strategy()
 
     // No golden, the identical reason `DependencyFactProduction` has none above:
     // `LintFactProduction` declares `CrossRun`.
-    Check::<LintFactProduction>("lint-fact-production", &Lint_Production, "");
+    Assert_Meets_Declared_Strategy::<LintFactProduction>("lint-fact-production", &Lint_Production, "");
 }
 
 #[test]
@@ -111,7 +119,7 @@ fn Test_The_Dependency_Policy_Provider_Should_Meet_Its_Declared_Strategy()
 
     // No golden, the identical reason `LintFactProduction` has none above:
     // `DependencyPolicyFactProduction` declares `CrossRun`.
-    Check::<DependencyPolicyFactProduction>(
+    Assert_Meets_Declared_Strategy::<DependencyPolicyFactProduction>(
         "dependency-policy-fact-production",
         &Dependency_Policy_Production,
         "",
@@ -126,7 +134,7 @@ fn Test_The_Fact_Cache_Should_Meet_Its_Declared_Strategy()
     // No golden. `FactReuse` declares `CrossRun`, and `Cross_Environment_Owed` therefore
     // never reaches for one — passing a real digest here would be a check the declaration
     // did not ask for, which is the same defect as a missing one pointed the other way.
-    Check::<FactReuse>("fact-reuse", &Reuse_Production, "");
+    Assert_Meets_Declared_Strategy::<FactReuse>("fact-reuse", &Reuse_Production, "");
 }
 
 #[test]
@@ -134,7 +142,7 @@ fn Test_Snapshot_Serialization_Should_Meet_Its_Declared_Strategy()
 {
     use nomos_workspace::SnapshotSerialization;
 
-    Check::<SnapshotSerialization>(
+    Assert_Meets_Declared_Strategy::<SnapshotSerialization>(
         "snapshot-serialization",
         &Snapshot_Production,
         SNAPSHOT_GOLDEN,
@@ -146,7 +154,7 @@ fn Test_Bundle_Serialization_Should_Meet_Its_Declared_Strategy()
 {
     use nomos_spec_bundle::BundleSerialization;
 
-    Check::<BundleSerialization>(
+    Assert_Meets_Declared_Strategy::<BundleSerialization>(
         "bundle-serialization",
         &Alternating(Bundle_Bytes),
         BUNDLE_GOLDEN,
@@ -158,7 +166,7 @@ fn Test_Projection_Output_Should_Meet_Its_Declared_Strategy()
 {
     use nomos_spec_project::ProjectionOutput;
 
-    Check::<ProjectionOutput>(
+    Assert_Meets_Declared_Strategy::<ProjectionOutput>(
         "projection-output",
         &Alternating(Projection_Bytes),
         PROJECTION_GOLDEN,
@@ -174,5 +182,5 @@ fn Test_Corrections_Should_Meet_Their_Declared_Strategy()
     // therefore never reaches for one — passing a real digest here would be a check the
     // declaration did not ask for, which is the same defect as a missing one pointed the
     // other way.
-    Check::<CorrectionStaging>("correction-staging", &Correction_Production, "");
+    Assert_Meets_Declared_Strategy::<CorrectionStaging>("correction-staging", &Correction_Production, "");
 }

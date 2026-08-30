@@ -74,3 +74,38 @@ pub fn Isolated_Working_Directory(prefix: &str) -> Result<PathBuf, IsolatedWorki
 
     return Ok(directory);
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    /// The two adapters that share this function (`nomos-agent-executor-claude-code`,
+    /// `nomos-model-backend-ollama`) each cover it transitively, through their own
+    /// same-named private wrapper -- real coverage, but under an address that names their
+    /// wrapper and not this function. This is the direct test for the shared primitive
+    /// itself.
+    #[test]
+    fn Test_Isolated_Working_Directory_Should_Create_A_Fresh_Empty_Directory()
+    {
+        let directory = Isolated_Working_Directory("nomos-agent-contracts-test").expect("creates a real directory");
+
+        assert!(directory.is_dir());
+        let entries: Vec<_> = std::fs::read_dir(&directory).expect("reads the directory").collect();
+        assert!(entries.is_empty(), "a freshly created isolated directory must start empty");
+
+        let _ = std::fs::remove_dir(&directory);
+    }
+
+    #[test]
+    fn Test_Isolated_Working_Directory_Should_Never_Collide_Across_Two_Calls()
+    {
+        let first = Isolated_Working_Directory("nomos-agent-contracts-test").expect("creates a real directory");
+        let second = Isolated_Working_Directory("nomos-agent-contracts-test").expect("creates a real directory");
+
+        assert_ne!(first, second);
+
+        let _ = std::fs::remove_dir(&first);
+        let _ = std::fs::remove_dir(&second);
+    }
+}

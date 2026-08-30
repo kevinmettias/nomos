@@ -26,7 +26,7 @@ mod tests
     use std::time::Duration;
 
     #[test]
-    fn Test_Elapsed_Should_Measure_Forward_Distance()
+    fn Test_Since_Should_Measure_Forward_Distance()
     {
         let start = Timestamp::From_Unix_Seconds(1_000);
         let later = start.Plus(Duration::from_secs(30));
@@ -39,7 +39,7 @@ mod tests
     /// would read as "this lease expired an eternity ago" and break every live claim at
     /// once.
     #[test]
-    fn Test_A_Backwards_Clock_Should_Report_No_Elapsed_Time()
+    fn Test_Since_Should_Report_Zero_When_The_Clock_Moved_Backwards()
     {
         let earlier = Timestamp::From_Unix_Seconds(1_000);
         let later = Timestamp::From_Unix_Seconds(2_000);
@@ -48,7 +48,7 @@ mod tests
     }
 
     #[test]
-    fn Test_Advancing_Should_Saturate_Rather_Than_Wrap()
+    fn Test_Plus_Should_Saturate_Rather_Than_Wrap()
     {
         let far_future = Timestamp::From_Unix_Seconds(i64::MAX);
 
@@ -56,5 +56,11 @@ mod tests
             far_future.Plus(Duration::from_secs(60)).Unix_Seconds(),
             i64::MAX
         );
+    }
+
+    #[test]
+    fn Test_From_Unix_Seconds_Should_Round_Trip_Through_Unix_Seconds()
+    {
+        assert_eq!(Timestamp::From_Unix_Seconds(1_700_000_000).Unix_Seconds(), 1_700_000_000);
     }
 }

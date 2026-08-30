@@ -58,3 +58,53 @@ fn Spawned_Program(command: &Command, program: &str) -> Result<std::process::Chi
         .spawn()
         .map_err(|error| return format!("could not start `{program}`: {error}"));
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use std::time::Duration;
+
+    #[test]
+    fn Test_Spawned_With_Streams_Should_Capture_The_Childs_Own_Output()
+    {
+        let command = Echo_Command("spawned-with-streams-hello");
+        let program = command.Program().expect("the fixture names a program");
+
+        let (mut child, stdout, stderr) = Spawned_With_Streams(&command, program).expect("starts the program");
+        child.wait().expect("the child runs to completion");
+        Awaited(stdout.as_ref());
+
+        let text = stdout.as_ref().map(Drain::Text).unwrap_or_default();
+        assert!(
+            text.contains("spawned-with-streams-hello"),
+            "the piped stdout must carry what the child printed, got {text:?}"
+        );
+        assert!(stderr.is_some(), "stderr must also be piped even when the child writes nothing to it");
+    }
+
+    /// Waits until a drain has finished, or panics -- the reader thread is asynchronous.
+    fn Awaited(drain: Option<&Drain>)
+    {
+        let started = std::time::Instant::now();
+        while drain.is_some_and(|drain| return !drain.Is_Finished())
+        {
+            assert!(started.elapsed() < Duration::from_secs(5), "the drain never finished");
+            std::thread::sleep(Duration::from_millis(10));
+        }
+    }
+
+    fn Echo_Command(word: &str) -> Command
+    {
+        let argv = if cfg!(windows)
+        {
+            vec!["cmd".to_owned(), "/C".to_owned(), format!("echo {word}")]
+        }
+        else
+        {
+            vec!["sh".to_owned(), "-c".to_owned(), format!("echo {word}")]
+        };
+
+        return Command::New(argv, Duration::from_secs(5));
+    }
+}
