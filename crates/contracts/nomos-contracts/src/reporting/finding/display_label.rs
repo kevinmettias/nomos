@@ -67,3 +67,33 @@ impl core::fmt::Display for DisplayLabel
         return formatter.write_str(self.Label());
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    /// `Label` is the `Display` form every variant renders through. `NotApplicable`'s
+    /// `N/A` is deliberately not distinct in *shape* from a longer word, only in
+    /// spelling, so this checks the spelling rather than any format convention.
+    #[test]
+    fn Test_Label_Should_Spell_Every_Variant_Distinctly()
+    {
+        let all = [
+            DisplayLabel::Native,
+            DisplayLabel::Fallback,
+            DisplayLabel::Partial,
+            DisplayLabel::NotApplicable,
+            DisplayLabel::Unavailable,
+            DisplayLabel::Failed,
+            DisplayLabel::AgentRequired,
+        ];
+
+        let mut labels: Vec<&str> = all.iter().map(|label| return label.Label()).collect();
+        let count = labels.len();
+        labels.sort_unstable();
+        labels.dedup();
+
+        assert_eq!(labels.len(), count, "two display labels share a spelling");
+    }
+}

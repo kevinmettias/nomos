@@ -57,7 +57,20 @@ mod tests
     use super::*;
 
     #[test]
-    fn Test_Generation_Should_Advance_And_Never_Wrap()
+    fn Test_From_Raw_Should_Wrap_The_Given_Counter_Value()
+    {
+        assert_eq!(GenerationId::From_Raw(7).Raw(), 7);
+    }
+
+    #[test]
+    fn Test_Raw_Should_Return_The_Wrapped_Counter_Value()
+    {
+        assert_eq!(GenerationId::From_Raw(7).Raw(), 7);
+        assert_eq!(GenerationId::INITIAL.Raw(), 0);
+    }
+
+    #[test]
+    fn Test_Next_Should_Advance_And_Never_Wrap()
     {
         assert_eq!(GenerationId::INITIAL.Next().Raw(), 1);
         assert_eq!(GenerationId::From_Raw(u64::MAX).Next().Raw(), u64::MAX);

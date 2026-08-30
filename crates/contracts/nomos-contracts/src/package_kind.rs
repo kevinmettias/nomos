@@ -283,7 +283,7 @@ mod tests
     }
 
     #[test]
-    fn Test_Kernel_Modules_Should_Not_Be_Optional()
+    fn Test_Is_Optional_Should_Be_False_For_Kernel_Modules_Only()
     {
         assert!(!PackageKind::KernelModule.Is_Optional());
 
@@ -299,7 +299,7 @@ mod tests
     /// A kind that hosts foreign code and is not recognized as doing so would be loaded
     /// in-process without isolation, which is the failure this predicate prevents.
     #[test]
-    fn Test_Provider_Kinds_Should_Be_Recognized_As_Hosting_Foreign_Code()
+    fn Test_Can_Host_Foreign_Code_Should_Be_True_For_Provider_And_Model_Backend_Kinds()
     {
         assert!(PackageKind::ToolProvider.Can_Host_Foreign_Code());
         assert!(PackageKind::ModelBackendPackage.Can_Host_Foreign_Code());

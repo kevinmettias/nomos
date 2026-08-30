@@ -49,7 +49,7 @@ mod tests
     use super::*;
 
     #[test]
-    fn Test_A_Missing_Role_Or_Authority_Scope_Should_Be_Unresolved()
+    fn Test_Is_Unresolved_Should_Be_True_When_Role_Or_Authority_Scope_Is_Missing()
     {
         let missing_role = KnowledgeContextItem {
             source: None,

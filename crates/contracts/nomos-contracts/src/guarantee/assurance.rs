@@ -55,3 +55,33 @@ impl core::fmt::Display for Assurance
         return formatter.write_str(self.Label());
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    /// `Label` is the `Display` form every variant renders through.
+    #[test]
+    fn Test_Label_Should_Spell_Every_Variant_Distinctly()
+    {
+        let all = [Assurance::Sound, Assurance::Unsound, Assurance::Unknown];
+
+        let mut labels: Vec<&str> = all.iter().map(|assurance| return assurance.Label()).collect();
+        let count = labels.len();
+        labels.sort_unstable();
+        labels.dedup();
+
+        assert_eq!(labels.len(), count, "two assurances share a wire spelling");
+    }
+
+    /// Only `Sound` satisfies a requirement; `Unknown` deliberately does not, because a
+    /// requirement met by an absence of information is not a requirement.
+    #[test]
+    fn Test_Satisfies_Requirement_Should_Be_True_For_Sound_Only()
+    {
+        assert!(Assurance::Sound.Satisfies_Requirement());
+        assert!(!Assurance::Unsound.Satisfies_Requirement());
+        assert!(!Assurance::Unknown.Satisfies_Requirement());
+    }
+}

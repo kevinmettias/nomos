@@ -112,7 +112,7 @@ mod tests
     }
 
     #[test]
-    fn Test_Measured_And_Derived_Classes_Should_Be_Mechanical()
+    fn Test_Is_Mechanical_Should_Be_True_For_Measured_And_Derived_Classes()
     {
         assert!(EvidenceClass::Authoritative.Is_Mechanical());
         assert!(EvidenceClass::Verified.Is_Mechanical());
@@ -121,12 +121,10 @@ mod tests
         assert!(EvidenceClass::Approximate.Is_Mechanical());
     }
 
-    /// Combining must never manufacture strength. This is the property that stops a
-    /// chain of derivations from laundering a guess into a measurement.
-    #[test]
-    fn Test_Combining_Should_Never_Exceed_The_Weaker_Input()
+    /// Every declared evidence class, once.
+    fn All_Evidence_Classes() -> [EvidenceClass; 8]
     {
-        let all = [
+        return [
             EvidenceClass::AgentJudged,
             EvidenceClass::HumanAsserted,
             EvidenceClass::Predicted,
@@ -136,10 +134,30 @@ mod tests
             EvidenceClass::Verified,
             EvidenceClass::Authoritative,
         ];
+    }
 
-        for left in all
+    /// Every evidence class except the floor, [`EvidenceClass::AgentJudged`] itself.
+    fn Non_Floor_Evidence_Classes() -> [EvidenceClass; 7]
+    {
+        return [
+            EvidenceClass::HumanAsserted,
+            EvidenceClass::Predicted,
+            EvidenceClass::Approximate,
+            EvidenceClass::Derived,
+            EvidenceClass::Observed,
+            EvidenceClass::Verified,
+            EvidenceClass::Authoritative,
+        ];
+    }
+
+    /// Combining must never manufacture strength. This is the property that stops a
+    /// chain of derivations from laundering a guess into a measurement.
+    #[test]
+    fn Test_Weaker_Of_Should_Never_Exceed_The_Weaker_Input()
+    {
+        for left in All_Evidence_Classes()
         {
-            for right in all
+            for right in All_Evidence_Classes()
             {
                 let combined = left.Weaker_Of(right);
 
@@ -153,22 +171,24 @@ mod tests
     #[test]
     fn Test_Agent_Judged_Should_Be_The_Floor()
     {
-        let all = [
-            EvidenceClass::HumanAsserted,
-            EvidenceClass::Predicted,
-            EvidenceClass::Approximate,
-            EvidenceClass::Derived,
-            EvidenceClass::Observed,
-            EvidenceClass::Verified,
-            EvidenceClass::Authoritative,
-        ];
-
-        for class in all
+        for class in Non_Floor_Evidence_Classes()
         {
             assert_eq!(
                 class.Weaker_Of(EvidenceClass::AgentJudged),
                 EvidenceClass::AgentJudged
             );
         }
+    }
+
+    /// `Label` is the `Display` form every variant renders through.
+    #[test]
+    fn Test_Label_Should_Spell_Every_Variant_Distinctly()
+    {
+        let mut labels: Vec<&str> = All_Evidence_Classes().iter().map(|class| return class.Label()).collect();
+        let count = labels.len();
+        labels.sort_unstable();
+        labels.dedup();
+
+        assert_eq!(labels.len(), count, "two evidence classes share a wire spelling");
     }
 }

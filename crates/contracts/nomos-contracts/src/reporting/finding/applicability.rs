@@ -200,17 +200,9 @@ mod tests
     /// The whole point of the type. If this ever passes for a debt state, a run can
     /// report success having analyzed nothing.
     #[test]
-    fn Test_Coverage_Debt_Should_Never_Read_As_Evaluated()
+    fn Test_Is_Coverage_Debt_Should_Never_Also_Read_As_Evaluated()
     {
-        let debt = [
-            Applicability::MissingCapability,
-            Applicability::ProviderUnavailable,
-            Applicability::DependencyUnavailable,
-            Applicability::Unparseable,
-            Applicability::AnalysisFailed,
-        ];
-
-        for state in debt
+        for state in Coverage_Debt_States()
         {
             assert!(state.Is_Coverage_Debt(), "{state} should be coverage debt");
             assert!(
@@ -220,11 +212,23 @@ mod tests
         }
     }
 
+    /// The applicability states `Is_Coverage_Debt` must report `true` for.
+    fn Coverage_Debt_States() -> [Applicability; 5]
+    {
+        return [
+            Applicability::MissingCapability,
+            Applicability::ProviderUnavailable,
+            Applicability::DependencyUnavailable,
+            Applicability::Unparseable,
+            Applicability::AnalysisFailed,
+        ];
+    }
+
     /// A human switching a rule off, and a rule that does not bind, are decisions —
     /// not gaps. Counting them as debt would make every honest configuration look
     /// broken, which is how a real signal gets turned off.
     #[test]
-    fn Test_Deliberate_Absences_Should_Not_Be_Coverage_Debt()
+    fn Test_Is_Coverage_Debt_Should_Exclude_Deliberate_Absences()
     {
         assert!(!Applicability::NotApplicable.Is_Coverage_Debt());
         assert!(!Applicability::ConfigurationDisabled.Is_Coverage_Debt());
@@ -234,13 +238,21 @@ mod tests
     /// done, so reading as evaluated would be a lie and reading as debt would send the
     /// reader to install a provider that does not exist.
     #[test]
-    fn Test_Agent_Required_Should_Be_Neither_Evaluated_Nor_Coverage_Debt()
+    fn Test_Requires_Agent_Should_Be_True_Only_For_Agent_Required()
     {
         let state = Applicability::AgentRequired;
 
         assert!(state.Requires_Agent());
         assert!(!state.Was_Evaluated(), "a model has not run yet");
         assert!(!state.Is_Coverage_Debt(), "the work is available, not missing");
+
+        for other in ALL
+        {
+            if other != Applicability::AgentRequired
+            {
+                assert!(!other.Requires_Agent(), "{other} should not require a model");
+            }
+        }
     }
 
     /// The three predicates partition nothing between them, and a state answering two of
@@ -261,7 +273,7 @@ mod tests
     /// Collapsing this into `Unavailable` is the mis-filing the variant exists to end,
     /// and the display layer is where it would come back unnoticed.
     #[test]
-    fn Test_Agent_Required_Should_Not_Display_As_Unavailable()
+    fn Test_Display_Label_Should_Not_Collapse_Agent_Required_Into_Unavailable()
     {
         assert_eq!(
             Applicability::AgentRequired.Display_Label(),
@@ -279,7 +291,7 @@ mod tests
     }
 
     #[test]
-    fn Test_Evaluated_States_Should_Be_Exactly_The_Three_Judged_Ones()
+    fn Test_Was_Evaluated_Should_Be_True_For_Exactly_The_Three_Judged_States()
     {
         assert!(Applicability::Supported.Was_Evaluated());
         assert!(Applicability::SupportedWithFallback.Was_Evaluated());
@@ -291,7 +303,7 @@ mod tests
     /// A label is a wire value and a stable identity, not decoration. Renaming one is a
     /// protocol change, and this test is what makes that visible in review.
     #[test]
-    fn Test_Labels_Should_Be_Stable_And_Distinct()
+    fn Test_Label_Should_Be_Stable_And_Distinct_Per_State()
     {
         let mut seen: Vec<&str> = ALL.iter().map(|state| state.Label()).collect();
         let count = seen.len();

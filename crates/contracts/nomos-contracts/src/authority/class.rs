@@ -84,10 +84,33 @@ mod tests
     use super::*;
 
     #[test]
-    fn Test_Reading_Should_Not_Require_An_Explicit_Grant()
+    fn Test_Is_Explicit_Grant_Required_Should_Be_False_For_Reading_Proposing_And_Previewing()
     {
         assert!(!Class::Read.Is_Explicit_Grant_Required());
         assert!(!Class::Propose.Is_Explicit_Grant_Required());
         assert!(!Class::Preview.Is_Explicit_Grant_Required());
+    }
+
+    /// `Label` is the `Display` form every variant renders through; pinning it here is
+    /// what lets a wire consumer trust the spelling without also trusting the derive.
+    #[test]
+    fn Test_Label_Should_Spell_Every_Variant_Distinctly()
+    {
+        let all = [
+            Class::Read,
+            Class::Propose,
+            Class::Preview,
+            Class::Mutate,
+            Class::Execute,
+            Class::Approve,
+            Class::Publish,
+        ];
+
+        let mut labels: Vec<&str> = all.iter().map(|class| return class.Label()).collect();
+        let count = labels.len();
+        labels.sort_unstable();
+        labels.dedup();
+
+        assert_eq!(labels.len(), count, "two authority classes share a wire spelling");
     }
 }

@@ -77,7 +77,7 @@ mod tests
     ];
 
     #[test]
-    fn Test_Labels_Are_Distinct()
+    fn Test_Label_Should_Be_Distinct_Per_Origin()
     {
         let mut labels: Vec<&str> = ALL.iter().map(|origin| return origin.Label()).collect();
         let count = labels.len();

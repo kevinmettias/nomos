@@ -100,18 +100,34 @@ mod tests
     #[test]
     fn Test_Weaker_Of_Should_Be_Commutative()
     {
-        let all = [
-            TraceEquivalence::NotApplicable,
-            TraceEquivalence::BehaviorallyEquivalent,
-            TraceEquivalence::BitIdentical,
-        ];
-
-        for left in all
+        for left in All_Trace_Equivalences()
         {
-            for right in all
+            for right in All_Trace_Equivalences()
             {
                 assert_eq!(left.Weaker_Of(right), right.Weaker_Of(left));
             }
         }
+    }
+
+    /// Every declared trace-equivalence variant, once.
+    fn All_Trace_Equivalences() -> [TraceEquivalence; 3]
+    {
+        return [
+            TraceEquivalence::NotApplicable,
+            TraceEquivalence::BehaviorallyEquivalent,
+            TraceEquivalence::BitIdentical,
+        ];
+    }
+
+    /// `Label` is the `Display` form every variant renders through.
+    #[test]
+    fn Test_Label_Should_Spell_Every_Variant_Distinctly()
+    {
+        let mut labels: Vec<&str> = All_Trace_Equivalences().iter().map(|trace| return trace.Label()).collect();
+        let count = labels.len();
+        labels.sort_unstable();
+        labels.dedup();
+
+        assert_eq!(labels.len(), count, "two trace equivalences share a wire spelling");
     }
 }

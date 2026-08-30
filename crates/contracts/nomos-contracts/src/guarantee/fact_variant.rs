@@ -51,3 +51,29 @@ impl core::fmt::Display for FactVariant
         return formatter.write_str(self.Label());
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    /// `Label` is the `Display` form every variant renders through.
+    #[test]
+    fn Test_Label_Should_Spell_Every_Variant_Distinctly()
+    {
+        let all = [
+            FactVariant::Predicted,
+            FactVariant::Approximate,
+            FactVariant::Syntactic,
+            FactVariant::SemanticallyResolved,
+            FactVariant::RuntimeObserved,
+        ];
+
+        let mut labels: Vec<&str> = all.iter().map(|variant| return variant.Label()).collect();
+        let count = labels.len();
+        labels.sort_unstable();
+        labels.dedup();
+
+        assert_eq!(labels.len(), count, "two fact variants share a wire spelling");
+    }
+}

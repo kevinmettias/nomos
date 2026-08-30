@@ -263,13 +263,24 @@ mod tests
     const DEBUG_SAMPLE_BYTE: u8 = 0xab;
 
     #[test]
-    fn Test_Digest_Should_Render_As_Thirty_Two_Hex_Characters()
+    fn Test_From_Bytes_Should_Render_As_Thirty_Two_Hex_Characters()
     {
         let digest = Digest128::From_Bytes([RENDER_SAMPLE_BYTE; Digest128::BYTE_LENGTH]);
         let rendered = digest.to_string();
 
         assert_eq!(rendered.len(), Digest128::HEX_LENGTH);
         assert_eq!(rendered, "0a".repeat(Digest128::BYTE_LENGTH));
+    }
+
+    /// `Bytes` must hand back exactly the array `From_Bytes` wrapped, or a caller
+    /// re-deriving anything from it is re-deriving from the wrong sixteen bytes.
+    #[test]
+    fn Test_Bytes_Should_Return_The_Wrapped_Array_Unchanged()
+    {
+        let bytes = [DEBUG_SAMPLE_BYTE; Digest128::BYTE_LENGTH];
+        let digest = Digest128::From_Bytes(bytes);
+
+        assert_eq!(digest.Bytes(), &bytes);
     }
 
     /// A leading zero byte must survive rendering. Formatting a digest with `{:x}` per

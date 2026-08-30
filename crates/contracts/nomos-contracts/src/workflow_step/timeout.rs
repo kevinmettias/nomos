@@ -39,7 +39,7 @@ mod tests
     }
 
     #[test]
-    fn Test_Seconds_Should_Be_Bounded()
+    fn Test_Is_Bounded_Should_Be_True_When_Seconds_Are_Declared()
     {
         assert!(Timeout::Seconds(NonZeroU32::new(30).expect("30 is nonzero")).Is_Bounded());
     }

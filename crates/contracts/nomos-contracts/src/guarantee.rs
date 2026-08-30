@@ -92,9 +92,25 @@ mod tests
     }
 
     #[test]
-    fn Test_Guarantee_Should_Satisfy_An_Equal_Requirement()
+    fn Test_Satisfies_Should_Accept_An_Equal_Requirement()
     {
         assert!(Semantic_And_Sound().Satisfies(&Semantic_And_Sound()));
+    }
+
+    #[test]
+    fn Test_New_Should_Construct_A_Guarantee_From_Its_Four_Axes()
+    {
+        let guarantee = Guarantee::New(
+            FactVariant::Syntactic,
+            Assurance::Sound,
+            Assurance::Unsound,
+            IncrementalGranularity::File,
+        );
+
+        assert_eq!(guarantee.variant, FactVariant::Syntactic);
+        assert_eq!(guarantee.soundness, Assurance::Sound);
+        assert_eq!(guarantee.completeness, Assurance::Unsound);
+        assert_eq!(guarantee.incremental, IncrementalGranularity::File);
     }
 
     /// The case the whole type exists for: a syntactic provider must not be allowed to
@@ -113,9 +129,11 @@ mod tests
     }
 
     /// An unestablished property must not satisfy a requirement for that property.
-    /// This is the same rule as "unknown is not pass", one level down.
+    /// This is the same rule as "unknown is not pass", one level down:
+    /// [`Assurance::Satisfies_Requirement`] is `false` for `Unknown`, and `Guarantee`
+    /// must carry that refusal through rather than rounding it up to a pass.
     #[test]
-    fn Test_Unknown_Soundness_Should_Not_Satisfy_A_Soundness_Requirement()
+    fn Test_Satisfies_Requirement_Should_Refuse_Unknown_Soundness()
     {
         let unknown_soundness = Guarantee::New(
             FactVariant::SemanticallyResolved,

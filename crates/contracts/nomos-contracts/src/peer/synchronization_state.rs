@@ -70,7 +70,7 @@ mod tests
     use super::*;
 
     #[test]
-    fn Test_Divergence_Should_Require_An_Authorized_Decision()
+    fn Test_Is_Authorized_Resolution_Required_Should_Be_True_For_Diverged_And_Rejected()
     {
         assert!(SynchronizationState::Diverged.Is_Authorized_Resolution_Required());
         assert!(SynchronizationState::Rejected.Is_Authorized_Resolution_Required());
@@ -85,5 +85,26 @@ mod tests
     {
         assert_ne!(SynchronizationState::Unavailable, SynchronizationState::Current);
         assert!(!SynchronizationState::Unavailable.Is_Authorized_Resolution_Required());
+    }
+
+    /// `Label` is the `Display` form every variant renders through.
+    #[test]
+    fn Test_Label_Should_Spell_Every_Variant_Distinctly()
+    {
+        let all = [
+            SynchronizationState::Current,
+            SynchronizationState::SourceNewer,
+            SynchronizationState::OperationalNewer,
+            SynchronizationState::Diverged,
+            SynchronizationState::Rejected,
+            SynchronizationState::Unavailable,
+        ];
+
+        let mut labels: Vec<&str> = all.iter().map(|state| return state.Label()).collect();
+        let count = labels.len();
+        labels.sort_unstable();
+        labels.dedup();
+
+        assert_eq!(labels.len(), count, "two synchronization states share a wire spelling");
     }
 }

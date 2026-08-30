@@ -47,7 +47,7 @@ mod tests
     use super::*;
 
     #[test]
-    fn Test_Version_Should_Read_Its_Own_And_Older_Minors_Only()
+    fn Test_Can_Read_Should_Accept_Its_Own_And_Older_Minors_Only()
     {
         let reader = ContractVersion::New(1, 3);
 
@@ -56,5 +56,14 @@ mod tests
         assert!(!reader.Can_Read(ContractVersion::New(1, 4)));
         assert!(!reader.Can_Read(ContractVersion::New(2, 0)));
         assert!(!reader.Can_Read(ContractVersion::New(0, 9)));
+    }
+
+    #[test]
+    fn Test_New_Should_Construct_A_Version_From_Its_Major_And_Minor()
+    {
+        let version = ContractVersion::New(4, 2);
+
+        assert_eq!(version.major, 4);
+        assert_eq!(version.minor, 2);
     }
 }

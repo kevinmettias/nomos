@@ -66,11 +66,25 @@ mod tests
     use super::*;
 
     #[test]
-    fn Test_None_Should_Not_Claim_Reproducibility()
+    fn Test_Can_Claim_Reproducibility_Should_Be_False_For_None_Only()
     {
         assert!(!Strength::None.Can_Claim_Reproducibility());
         assert!(Strength::State.Can_Claim_Reproducibility());
         assert!(Strength::StateTemporal.Can_Claim_Reproducibility());
+    }
+
+    /// `Label` is the `Display` form every variant renders through.
+    #[test]
+    fn Test_Label_Should_Spell_Every_Variant_Distinctly()
+    {
+        let all = [Strength::None, Strength::State, Strength::StateTemporal];
+
+        let mut labels: Vec<&str> = all.iter().map(|strength| return strength.Label()).collect();
+        let count = labels.len();
+        labels.sort_unstable();
+        labels.dedup();
+
+        assert_eq!(labels.len(), count, "two strengths share a wire spelling");
     }
 
     /// The ordering is load-bearing: a hierarchical strategy must declare the

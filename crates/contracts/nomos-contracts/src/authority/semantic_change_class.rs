@@ -96,7 +96,7 @@ mod tests
     ];
 
     #[test]
-    fn Test_Labels_Are_Distinct()
+    fn Test_Label_Should_Be_Distinct_Per_Variant()
     {
         let mut labels: Vec<&str> = ALL.iter().map(|class| return class.Label()).collect();
         let count = labels.len();

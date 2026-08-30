@@ -69,9 +69,27 @@ mod tests
     }
 
     #[test]
-    fn Test_The_Other_Two_Should_Exist()
+    fn Test_Is_Present_Should_Be_True_For_Both_Compensating_Variants()
     {
         assert!(Compensation::SelfCompensating.Is_Present());
         assert!(Compensation::ExternallyCompensated.Is_Present());
+    }
+
+    /// `Label` is the `Display` form every variant renders through.
+    #[test]
+    fn Test_Label_Should_Spell_Every_Variant_Distinctly()
+    {
+        let all = [
+            Compensation::None,
+            Compensation::SelfCompensating,
+            Compensation::ExternallyCompensated,
+        ];
+
+        let mut labels: Vec<&str> = all.iter().map(|compensation| return compensation.Label()).collect();
+        let count = labels.len();
+        labels.sort_unstable();
+        labels.dedup();
+
+        assert_eq!(labels.len(), count, "two compensations share a wire spelling");
     }
 }

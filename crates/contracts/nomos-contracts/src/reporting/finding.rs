@@ -138,7 +138,7 @@ mod tests
     use crate::Digest128;
 
     #[test]
-    fn Test_A_Blocking_Finding_That_Was_Evaluated_Should_Fail_A_Build()
+    fn Test_Can_Fail_A_Build_Should_Be_True_For_An_Evaluated_Blocking_Finding()
     {
         assert!(Example_Finding(Applicability::Supported, GateCategory::Blocking).Can_Fail_A_Build());
     }
@@ -149,13 +149,7 @@ mod tests
     #[test]
     fn Test_A_Finding_From_A_Rule_That_Never_Ran_Should_Not_Fail_A_Build()
     {
-        for unreached in [
-            Applicability::MissingCapability,
-            Applicability::ProviderUnavailable,
-            Applicability::DependencyUnavailable,
-            Applicability::Unparseable,
-            Applicability::AnalysisFailed,
-        ]
+        for unreached in Unreached_Applicability_States()
         {
             assert!(
                 !Example_Finding(unreached, GateCategory::Blocking).Can_Fail_A_Build(),
@@ -163,6 +157,18 @@ mod tests
                 unreached.Label()
             );
         }
+    }
+
+    /// The applicability states that mean a rule never reached its subject.
+    fn Unreached_Applicability_States() -> [Applicability; 5]
+    {
+        return [
+            Applicability::MissingCapability,
+            Applicability::ProviderUnavailable,
+            Applicability::DependencyUnavailable,
+            Applicability::Unparseable,
+            Applicability::AnalysisFailed,
+        ];
     }
 
     /// A partial judgment is still a judgment. What it did see, it saw.
@@ -179,19 +185,25 @@ mod tests
     #[test]
     fn Test_A_Real_Finding_Behind_A_Gate_That_Cannot_Fail_Should_Not_Fail_A_Build()
     {
-        for toothless in [
-            GateCategory::Advisory,
-            GateCategory::Unreachable,
-            GateCategory::Review,
-        ]
+        for toothless in Toothless_Gate_Categories()
         {
             assert!(!Example_Finding(Applicability::Supported, toothless).Can_Fail_A_Build());
         }
     }
 
+    /// The gate categories that cannot fail a build no matter what a rule found.
+    fn Toothless_Gate_Categories() -> [GateCategory; 3]
+    {
+        return [
+            GateCategory::Advisory,
+            GateCategory::Unreachable,
+            GateCategory::Review,
+        ];
+    }
+
     /// A reader scanning output must be able to tell which lines can stop them.
     #[test]
-    fn Test_A_Description_Should_Name_The_Gate_The_Rule_And_The_Place()
+    fn Test_Describe_Should_Name_The_Gate_The_Rule_And_The_Place()
     {
         let described = Example_Finding(Applicability::Supported, GateCategory::Blocking).Describe();
 
@@ -204,12 +216,21 @@ mod tests
     /// A finding with nowhere to look says so rather than rendering an empty field, which
     /// reads as a location of "".
     #[test]
-    fn Test_A_Finding_With_No_Location_Should_Say_So()
+    fn Test_Describe_Should_Say_No_Location_When_None_Is_Recorded()
     {
         let mut nowhere = Example_Finding(Applicability::Supported, GateCategory::Blocking);
         nowhere.locations.clear();
 
         assert!(nowhere.Describe().contains("no location"));
+    }
+
+    /// `Finding::Is_Mechanical` is a pure delegation to `self.evidence.Is_Mechanical`,
+    /// which `evidence_class.rs` tests across every variant; this pins the delegation
+    /// itself rather than the axis it reads.
+    #[test]
+    fn Test_Is_Mechanical_Should_Reflect_The_Finding_s_Evidence_Class()
+    {
+        assert!(Example_Finding(Applicability::Supported, GateCategory::Blocking).Is_Mechanical());
     }
 
     fn Example_Finding(applicability: Applicability, gate: GateCategory) -> Finding

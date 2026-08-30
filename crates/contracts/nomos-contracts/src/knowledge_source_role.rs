@@ -96,7 +96,7 @@ mod tests
     ];
 
     #[test]
-    fn Test_Labels_Are_Distinct()
+    fn Test_Label_Should_Be_Distinct_Per_Role()
     {
         let mut labels: Vec<&str> = ALL.iter().map(|role| return role.Label()).collect();
         let count = labels.len();
@@ -107,7 +107,7 @@ mod tests
     }
 
     #[test]
-    fn Test_Only_Normative_Repository_Policy_May_Constrain()
+    fn Test_Can_Constrain_Should_Be_True_For_Only_Normative_Repository_Policy()
     {
         assert!(KnowledgeSourceRole::NormativeRepositoryPolicy.Can_Constrain());
 

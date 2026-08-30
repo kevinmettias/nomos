@@ -79,11 +79,30 @@ mod tests
     }
 
     #[test]
-    fn Test_Only_Single_Run_Should_Skip_Cross_Environment_Verification()
+    fn Test_Is_Cross_Environment_Verification_Required_Should_Be_False_For_Single_Run_Only()
     {
         assert!(!ReproducibilityScope::SingleRun.Is_Cross_Environment_Verification_Required());
         assert!(ReproducibilityScope::CrossRun.Is_Cross_Environment_Verification_Required());
         assert!(ReproducibilityScope::CrossPlatform.Is_Cross_Environment_Verification_Required());
         assert!(ReproducibilityScope::CrossBinary.Is_Cross_Environment_Verification_Required());
+    }
+
+    /// `Label` is the `Display` form every variant renders through.
+    #[test]
+    fn Test_Label_Should_Spell_Every_Variant_Distinctly()
+    {
+        let all = [
+            ReproducibilityScope::SingleRun,
+            ReproducibilityScope::CrossRun,
+            ReproducibilityScope::CrossPlatform,
+            ReproducibilityScope::CrossBinary,
+        ];
+
+        let mut labels: Vec<&str> = all.iter().map(|scope| return scope.Label()).collect();
+        let count = labels.len();
+        labels.sort_unstable();
+        labels.dedup();
+
+        assert_eq!(labels.len(), count, "two scopes share a wire spelling");
     }
 }

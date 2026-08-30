@@ -45,7 +45,7 @@ mod tests
     }
 
     #[test]
-    fn Test_Cacheable_Should_Report_So()
+    fn Test_Is_Cacheable_Should_Be_True_When_Key_Inputs_Are_Declared()
     {
         let cacheable = Cacheability::Cacheable { key_inputs: vec!["path".to_owned()] };
 

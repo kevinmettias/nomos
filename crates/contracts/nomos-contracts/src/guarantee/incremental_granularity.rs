@@ -78,7 +78,7 @@ mod tests
     use super::*;
 
     #[test]
-    fn Test_Broadening_Should_Take_The_Coarser_Granularity()
+    fn Test_Broadened_To_Should_Take_The_Coarser_Granularity()
     {
         assert_eq!(
             IncrementalGranularity::Region.Broadened_To(IncrementalGranularity::Project),
@@ -92,5 +92,26 @@ mod tests
             IncrementalGranularity::Symbol.Broadened_To(IncrementalGranularity::None),
             IncrementalGranularity::None
         );
+    }
+
+    /// `Label` is the `Display` form every variant renders through.
+    #[test]
+    fn Test_Label_Should_Spell_Every_Variant_Distinctly()
+    {
+        let all = [
+            IncrementalGranularity::None,
+            IncrementalGranularity::WholeWorkspace,
+            IncrementalGranularity::Project,
+            IncrementalGranularity::File,
+            IncrementalGranularity::Symbol,
+            IncrementalGranularity::Region,
+        ];
+
+        let mut labels: Vec<&str> = all.iter().map(|granularity| return granularity.Label()).collect();
+        let count = labels.len();
+        labels.sort_unstable();
+        labels.dedup();
+
+        assert_eq!(labels.len(), count, "two granularities share a wire spelling");
     }
 }

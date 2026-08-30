@@ -51,7 +51,7 @@ mod tests
     }
 
     #[test]
-    fn Test_Retry_Should_Be_Retryable()
+    fn Test_Is_Retryable_Should_Be_True_For_A_Retry_Policy()
     {
         let policy = RetryPolicy::Retry {
             max_attempts: NonZeroU32::new(3).expect("3 is nonzero"),

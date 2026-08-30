@@ -79,7 +79,7 @@ mod tests
     use super::*;
 
     #[test]
-    fn Test_Only_Apply_And_Rollback_Should_Write()
+    fn Test_Is_Write_Should_Be_True_For_Only_Apply_And_Rollback()
     {
         assert!(MutationClass::Apply.Is_Write());
         assert!(MutationClass::Rollback.Is_Write());
@@ -91,7 +91,7 @@ mod tests
     /// A preview that needed write authority would push callers to skip previewing,
     /// which defeats the sequence the class exists to enforce.
     #[test]
-    fn Test_Preview_Should_Not_Require_Mutate_Authority()
+    fn Test_Required_Authority_Should_Not_Demand_Mutate_For_Preview_Or_Validate()
     {
         assert_eq!(
             MutationClass::Preview.Required_Authority(),
@@ -106,9 +106,35 @@ mod tests
     #[test]
     fn Test_Writing_Operations_Should_Require_An_Explicit_Grant()
     {
-        for class in [MutationClass::Apply, MutationClass::Rollback]
+        for class in Write_Classes()
         {
             assert!(class.Required_Authority().Is_Explicit_Grant_Required());
         }
+    }
+
+    /// The two classes [`MutationClass::Is_Write`] reports `true` for.
+    fn Write_Classes() -> [MutationClass; 2]
+    {
+        return [MutationClass::Apply, MutationClass::Rollback];
+    }
+
+    /// `Label` is the `Display` form every variant renders through.
+    #[test]
+    fn Test_Label_Should_Spell_Every_Variant_Distinctly()
+    {
+        let all = [
+            MutationClass::Read,
+            MutationClass::Preview,
+            MutationClass::Validate,
+            MutationClass::Apply,
+            MutationClass::Rollback,
+        ];
+
+        let mut labels: Vec<&str> = all.iter().map(|class| return class.Label()).collect();
+        let count = labels.len();
+        labels.sort_unstable();
+        labels.dedup();
+
+        assert_eq!(labels.len(), count, "two mutation classes share a wire spelling");
     }
 }

@@ -62,7 +62,7 @@ mod tests
     /// The whole reason the type exists: an outage must not be indistinguishable from
     /// an empty result.
     #[test]
-    fn Test_Silence_Should_Never_Read_As_Knowledge()
+    fn Test_Is_Knowledge_Should_Be_True_Only_For_Answered()
     {
         let outage = Availability::Unavailable {
             reason: "connection refused".to_owned(),
@@ -79,7 +79,7 @@ mod tests
     /// A reason that never reaches the user leaves them staring at an empty list with
     /// no way to tell why.
     #[test]
-    fn Test_Unavailability_Should_Carry_Its_Reason_Into_The_Description()
+    fn Test_Describe_Should_Carry_The_Reason_For_An_Unavailable_Response()
     {
         let outage = Availability::Unavailable {
             reason: "connection refused".to_owned(),

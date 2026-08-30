@@ -84,7 +84,7 @@ mod tests
     use super::*;
 
     #[test]
-    fn Test_Review_Declaration_Should_Be_Truthful_When_Nothing_Enforces_It()
+    fn Test_Is_Truthful_Should_Accept_A_Review_Declaration_That_Nothing_Enforces()
     {
         assert!(
             Reach_Fixture(
@@ -162,7 +162,7 @@ mod tests
     }
 
     #[test]
-    fn Test_A_Breach_Should_Make_A_Rule_Untruthful_Even_When_Blocking()
+    fn Test_Is_Truthful_And_Is_Enforced_Should_Both_Be_Refused_By_A_Breach_Even_When_Blocking()
     {
         let mut reach = Reach_Fixture(
             vec![Named_Check("check-cohesion")],

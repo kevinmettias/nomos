@@ -67,9 +67,27 @@ mod tests
     }
 
     #[test]
-    fn Test_The_Other_Two_Should_Be_Cancellable()
+    fn Test_Is_Cancellable_Should_Be_True_For_Both_Cancellable_Variants()
     {
         assert!(CancellationBehavior::CancellableBeforeSideEffects.Is_Cancellable());
         assert!(CancellationBehavior::CancellableWithCompensation.Is_Cancellable());
+    }
+
+    /// `Label` is the `Display` form every variant renders through.
+    #[test]
+    fn Test_Label_Should_Spell_Every_Variant_Distinctly()
+    {
+        let all = [
+            CancellationBehavior::Uncancellable,
+            CancellationBehavior::CancellableBeforeSideEffects,
+            CancellationBehavior::CancellableWithCompensation,
+        ];
+
+        let mut labels: Vec<&str> = all.iter().map(|behavior| return behavior.Label()).collect();
+        let count = labels.len();
+        labels.sort_unstable();
+        labels.dedup();
+
+        assert_eq!(labels.len(), count, "two cancellation behaviors share a wire spelling");
     }
 }

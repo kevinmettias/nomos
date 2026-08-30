@@ -139,7 +139,7 @@ mod tests
     }
 
     #[test]
-    fn Test_No_Retry_Should_Always_Be_Coherent()
+    fn Test_Is_Coherent_Should_Accept_A_Step_With_No_Retry()
     {
         assert!(Base().Is_Coherent());
     }

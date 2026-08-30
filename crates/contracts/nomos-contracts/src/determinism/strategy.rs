@@ -80,7 +80,7 @@ mod tests
     }
 
     #[test]
-    fn Test_Reference_Declarations_Should_Be_Coherent()
+    fn Test_Declaration_Is_Coherent_Should_Accept_The_Reference_Declarations()
     {
         assert!(Declaration_Is_Coherent(
             AnalysisKernel::STRENGTH,
@@ -96,7 +96,7 @@ mod tests
     /// made an unverifiable claim, which is the shape of claim this whole triple exists
     /// to refuse.
     #[test]
-    fn Test_Reproducible_Strength_Should_Require_A_Trace_Definition()
+    fn Test_Declaration_Is_Coherent_Should_Require_A_Trace_Definition_For_Reproducible_Strength()
     {
         assert!(!Declaration_Is_Coherent(
             DeterminismStrength::State,
@@ -111,7 +111,7 @@ mod tests
     /// The inverse, and the more tempting mistake: claiming bit-identical output while
     /// declaring no determinism at all. It reads as rigour and means nothing.
     #[test]
-    fn Test_No_Strength_Should_Refuse_A_Trace_Claim()
+    fn Test_Declaration_Is_Coherent_Should_Refuse_A_Trace_Claim_With_No_Strength()
     {
         assert!(!Declaration_Is_Coherent(
             DeterminismStrength::None,

@@ -75,7 +75,7 @@ mod tests
     use super::*;
 
     #[test]
-    fn Test_Only_Blocking_Should_Fail_A_Build()
+    fn Test_Can_Fail_A_Build_Should_Be_True_For_Blocking_Only()
     {
         assert!(GateCategory::Blocking.Can_Fail_A_Build());
         assert!(!GateCategory::Advisory.Can_Fail_A_Build());
@@ -85,7 +85,7 @@ mod tests
 
     /// Running advisory in one place does not undo being enforced in another.
     #[test]
-    fn Test_Strongest_Category_Should_Win()
+    fn Test_Strongest_Of_Should_Pick_The_Stronger_Category()
     {
         assert_eq!(
             GateCategory::Advisory.Strongest_Of(GateCategory::Blocking),
@@ -99,5 +99,24 @@ mod tests
             GateCategory::Review.Strongest_Of(GateCategory::Unreachable),
             GateCategory::Unreachable
         );
+    }
+
+    /// `Label` is the `Display` form every variant renders through.
+    #[test]
+    fn Test_Label_Should_Spell_Every_Variant_Distinctly()
+    {
+        let all = [
+            GateCategory::Review,
+            GateCategory::Unreachable,
+            GateCategory::Advisory,
+            GateCategory::Blocking,
+        ];
+
+        let mut labels: Vec<&str> = all.iter().map(|category| return category.Label()).collect();
+        let count = labels.len();
+        labels.sort_unstable();
+        labels.dedup();
+
+        assert_eq!(labels.len(), count, "two gate categories share a wire spelling");
     }
 }
