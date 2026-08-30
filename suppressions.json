@@ -6965,6 +6965,182 @@
       "reason": "test-code exemption (OD-GATE-018 category a, reaffirmed by P22 shared guidance): file is #[cfg(test)]-gated; clippy.toml already permits this ergonomics class in test code",
       "owner": "@claude-p22-campaign",
       "expires": "2026-11-27"
+    },
+    {
+      "check": "check-import-scope",
+      "path": "crates/substrate/nomos-workspace/src/change.rs",
+      "fingerprint": "093ee41e99af6d07",
+      "reason": "check-import-scope's rust_Imported_Names (language-kernels/programming/rust/rustlang/rust_import_scope.go) double-counts a use-with-alias: it walks the whole use-declaration subtree and appends the use_as_clause's alias (the real bound name, ChangeSource) but ALSO independently appends the inner scoped_identifier's last path segment (Source, the pre-alias name) since that scoped_identifier's parent is the use_as_clause rather than another scoped_identifier, so the walker's skip condition never fires for it. Source is never actually bound into scope by 'pub use source::Source as ChangeSource;' -- only ChangeSource is -- but the checker treats the discarded path segment as a second countable import name, then finds its only textual match at line 85's unrelated '.Source()' method call (a method defined on WorkspaceChangeSet in workspace/change_set.rs, spelled the same by coincidence) inside Test_A_Change_Set_Should_Carry_Its_Source_And_Its_Changes, and reports that as the import's sole use. ChangeSource itself (the actual imported/bound name) is used throughout this file and re-exported from crate::lib.rs for the whole workspace (nomos_workspace::ChangeSource), so the suggested remedy of moving the pub use into that one test function is not applicable: it is a public re-export the whole crate and its dependents need, not a module-scope convenience import serving one function.",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/contracts/nomos-contracts/src/determinism/strength.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fmt is the mandatory method name for std::fmt::Display/Debug (the trait signature requires it letter for letter); check-abbreviations front-end gap, not a nomos defect",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/contracts/nomos-contracts/src/reporting/finding/display_label.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fmt is the mandatory method name for std::fmt::Display/Debug (the trait signature requires it letter for letter); check-abbreviations front-end gap, not a nomos defect",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/platform/nomos-platform/src/file_system/error.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fmt is the mandatory method name for std::fmt::Display/Debug (the trait signature requires it letter for letter); check-abbreviations front-end gap, not a nomos defect",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/kernel/nomos-store/src/document/id.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fmt is the mandatory method name for std::fmt::Display/Debug (the trait signature requires it letter for letter); check-abbreviations front-end gap, not a nomos defect",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/capabilities/nomos-cap-lint/src/payload/refusal.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fmt is the mandatory method name for std::fmt::Display/Debug (the trait signature requires it letter for letter); check-abbreviations front-end gap, not a nomos defect",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/kernel/nomos-model/src/entity/id.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fmt is the mandatory method name for std::fmt::Display/Debug (the trait signature requires it letter for letter); check-abbreviations front-end gap, not a nomos defect",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/contracts/nomos-contracts/src/authority/class.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fmt is the mandatory method name for std::fmt::Display/Debug (the trait signature requires it letter for letter); check-abbreviations front-end gap, not a nomos defect",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/contracts/nomos-contracts/src/reporting/finding/evidence_class.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fmt is the mandatory method name for std::fmt::Display/Debug (the trait signature requires it letter for letter); check-abbreviations front-end gap, not a nomos defect",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/contracts/nomos-contracts/src/reporting/enforcement/gate_category.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fmt is the mandatory method name for std::fmt::Display/Debug (the trait signature requires it letter for letter); check-abbreviations front-end gap, not a nomos defect",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/agent/nomos-agent-contracts/src/isolated_working_directory_error.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fmt is the mandatory method name for std::fmt::Display/Debug (the trait signature requires it letter for letter); check-abbreviations front-end gap, not a nomos defect",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/capabilities/nomos-cap-dependency-policy/src/payload/refusal.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fmt is the mandatory method name for std::fmt::Display/Debug (the trait signature requires it letter for letter); check-abbreviations front-end gap, not a nomos defect",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/contracts/nomos-contracts/src/reporting/finding/applicability.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fmt is the mandatory method name for std::fmt::Display/Debug (the trait signature requires it letter for letter); check-abbreviations front-end gap, not a nomos defect",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/contracts/nomos-contracts/src/reporting/enforcement/enforcer_ref.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fmt is the mandatory method name for std::fmt::Display/Debug (the trait signature requires it letter for letter); check-abbreviations front-end gap, not a nomos defect",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-boolean-predicate",
+      "path": "crates/contracts/nomos-contracts/src/reporting/finding/applicability.rs",
+      "fingerprint": "e29f1706b69e2669",
+      "reason": "Was_Evaluated/Requires_Agent are pub API on nomos-contracts::Applicability referenced by call sites in crates/substrate (outside this item's territory) and quoted verbatim in multiple docs/records/ governing records plus spec/domain-specification.md; a correct rename needs the nomos-spec-change re-render workflow and cross-territory coordination, out of scope for this bounded regression item -- flagged for a dedicated follow-up",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-boolean-predicate",
+      "path": "crates/contracts/nomos-contracts/src/reporting/finding/applicability.rs",
+      "fingerprint": "9bfbab3786dd99d7",
+      "reason": "Was_Evaluated/Requires_Agent are pub API on nomos-contracts::Applicability referenced by call sites in crates/substrate (outside this item's territory) and quoted verbatim in multiple docs/records/ governing records plus spec/domain-specification.md; a correct rename needs the nomos-spec-change re-render workflow and cross-territory coordination, out of scope for this bounded regression item -- flagged for a dedicated follow-up",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/substrate/nomos-analysis/src/fact/error.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fmt is the mandatory method name for std::fmt::Display/Debug -- the trait signature requires it letter for letter, so it cannot be renamed. This is a checker front-end gap (it does not special-case trait-mandated method names), not a nomos defect.",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/substrate/nomos-analysis/src/fact/identity.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fmt is the mandatory method name for std::fmt::Display/Debug -- the trait signature requires it letter for letter, so it cannot be renamed. This is a checker front-end gap (it does not special-case trait-mandated method names), not a nomos defect.",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/substrate/nomos-capability/src/registry/error.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fmt is the mandatory method name for std::fmt::Display/Debug -- the trait signature requires it letter for letter, so it cannot be renamed. This is a checker front-end gap (it does not special-case trait-mandated method names), not a nomos defect.",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/substrate/nomos-ledger/src/item/id.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fmt is the mandatory method name for std::fmt::Display/Debug -- the trait signature requires it letter for letter, so it cannot be renamed. This is a checker front-end gap (it does not special-case trait-mandated method names), not a nomos defect.",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/substrate/nomos-workspace/src/change/source.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fmt is the mandatory method name for std::fmt::Display/Debug -- the trait signature requires it letter for letter, so it cannot be renamed. This is a checker front-end gap (it does not special-case trait-mandated method names), not a nomos defect.",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-abbreviations",
+      "path": "crates/substrate/nomos-workspace/src/workspace/error.rs",
+      "fingerprint": "b0dc6ceaf1d78f23",
+      "reason": "fmt is the mandatory method name for std::fmt::Display/Debug -- the trait signature requires it letter for letter, so it cannot be renamed. This is a checker front-end gap (it does not special-case trait-mandated method names), not a nomos defect.",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
     }
   ]
 }

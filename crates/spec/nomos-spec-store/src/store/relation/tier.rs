@@ -11,11 +11,3 @@ impl<'a> From<&'a str> for Tier<'a>
         return Self(value);
     }
 }
-
-impl<'a> From<&'a String> for Tier<'a>
-{
-    fn from(value: &'a String) -> Self
-    {
-        return Self(value.as_str());
-    }
-}

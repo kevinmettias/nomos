@@ -56,7 +56,7 @@ impl Rule for NoUndeclaredFillerTemplate
             Err(outcome) => return outcome,
         };
 
-        return crate::offending::Verdict(total, violations);
+        return crate::offending::Verdict_From_Violations(total, violations);
     }
 }
 

@@ -6,10 +6,6 @@ pub(crate) mod kind;
 mod normative_statement;
 
 use id::Id as StatementId;
-// `Kind` would collide with `block::kind::Kind` if flattened bare, so `lib.rs` reaches this
-// module directly and keeps the longer, table-naming public name at the crate root; this
-// local alias is for this file's own use only, not part of the public surface.
-use kind::Kind as StatementKind;
 pub use normative_statement::NormativeStatement;
 
 #[cfg(test)]
@@ -76,6 +72,12 @@ mod tests
 
     fn Statement_From_Text(text: &str) -> NormativeStatement
     {
+        // `Kind` would collide with `block::kind::Kind` if flattened bare, so `lib.rs` reaches
+        // this module directly and keeps the longer, table-naming public name at the crate
+        // root; this local alias is for this function's own use only, not part of the public
+        // surface.
+        use super::kind::Kind as StatementKind;
+
         return NormativeStatement {
             id: StatementId::Parse("AGT-001").expect("valid"),
             kind: StatementKind::Requirement,

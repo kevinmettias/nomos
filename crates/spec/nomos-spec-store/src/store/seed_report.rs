@@ -1,4 +1,4 @@
-use crate::{AUTHORED, Constraint as RelationConstraint, SpecificationStore, TypeName as RelationTypeName};
+use crate::{AUTHORED, SpecificationStore, TypeName as RelationTypeName};
 use crate::DocumentPath;
 use crate::StoreError;
 
@@ -222,6 +222,8 @@ pub fn Seed_Governing_Records(store: &mut SpecificationStore) -> Result<SeedRepo
 /// each is paired with.
 fn Declare_The_Relation_Types(store: &mut SpecificationStore) -> Result<(), StoreError>
 {
+    use crate::Constraint as RelationConstraint;
+
     for seed in RELATION_TYPES
     {
         store.Put_Relation_Type(
@@ -280,7 +282,7 @@ fn Put_The_Relations_Of(
             report.references.push(relation.target.clone());
         }
 
-        store.Put_Relation(&record.front_matter.id, &relation.relation, &relation.target)?;
+        store.Put_Relation(&record.front_matter.id, relation.relation.as_str(), &relation.target)?;
         report.relations = report.relations.saturating_add(1);
     }
 

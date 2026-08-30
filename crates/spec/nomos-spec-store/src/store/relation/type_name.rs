@@ -12,11 +12,3 @@ impl<'a> From<&'a str> for TypeName<'a>
         return Self(value);
     }
 }
-
-impl<'a> From<&'a String> for TypeName<'a>
-{
-    fn from(value: &'a String) -> Self
-    {
-        return Self(value.as_str());
-    }
-}

@@ -26,7 +26,7 @@ pub(crate) fn Offending_Outcome(
         Err(outcome) => return outcome,
     };
 
-    return Verdict(total, violations);
+    return Verdict_From_Violations(total, violations);
 }
 
 /// Both queries a rule needs, run unconditionally.
@@ -49,7 +49,7 @@ fn Counted_And_Found(
 }
 
 /// Satisfied when nothing offends, violated otherwise.
-pub(crate) fn Verdict(total: u32, violations: Vec<Violation>) -> RuleOutcome
+pub(crate) fn Verdict_From_Violations(total: u32, violations: Vec<Violation>) -> RuleOutcome
 {
     if violations.is_empty()
     {
