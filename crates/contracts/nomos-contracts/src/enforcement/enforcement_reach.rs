@@ -83,28 +83,6 @@ mod tests
 {
     use super::*;
 
-    fn Reach_Fixture(
-        declared: Vec<EnforcerRef>,
-        expected: GateCategory,
-        computed: GateCategory,
-    ) -> EnforcementReach
-    {
-        return EnforcementReach {
-            rule: RuleId::New("example-rule"),
-            declared,
-            expected,
-            computed,
-            breaches: Vec::new(),
-        };
-    }
-
-    fn Named_Check(name: &str) -> EnforcerRef
-    {
-        return EnforcerRef::Check {
-            name: name.to_owned(),
-        };
-    }
-
     #[test]
     fn Test_Review_Declaration_Should_Be_Truthful_When_Nothing_Enforces_It()
     {
@@ -201,5 +179,27 @@ mod tests
             !reach.Is_Enforced(),
             "a check that cannot see most of what the rule binds is not enforcement"
         );
+    }
+
+    fn Named_Check(name: &str) -> EnforcerRef
+    {
+        return EnforcerRef::Check {
+            name: name.to_owned(),
+        };
+    }
+
+    fn Reach_Fixture(
+        declared: Vec<EnforcerRef>,
+        expected: GateCategory,
+        computed: GateCategory,
+    ) -> EnforcementReach
+    {
+        return EnforcementReach {
+            rule: RuleId::New("example-rule"),
+            declared,
+            expected,
+            computed,
+            breaches: Vec::new(),
+        };
     }
 }

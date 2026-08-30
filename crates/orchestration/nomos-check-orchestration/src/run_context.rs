@@ -338,6 +338,17 @@ fn Rule_Findings(
         (CROSS_LANGUAGE_CORRESPONDENCE, &|reader| return Check_Cross_Language_Correspondence(sources, reader)),
     ];
 
+    return Findings_For_Selected_Rules(rules, reader, selected);
+}
+
+/// Runs every `rules` entry `selected` names, in table order, and collects what each
+/// produces.
+fn Findings_For_Selected_Rules(
+    rules: [(&str, &dyn Fn(&mut Reader<'_, '_>) -> Vec<Finding>); RULE_COUNT],
+    reader: &mut Reader<'_, '_>,
+    selected: &[RuleId],
+) -> Vec<Finding>
+{
     let mut findings = Vec::new();
     for (rule, check) in rules
     {

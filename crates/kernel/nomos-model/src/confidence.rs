@@ -69,7 +69,9 @@ mod tests
     #[test]
     fn Test_Nan_Confidence_Should_Become_None()
     {
+        const ARBITRARY_POSITIVE_THRESHOLD: f64 = 0.1;
+
         assert!(Confidence::Of(f64::NAN).Value() <= 0.0);
-        assert!(!Confidence::Of(f64::NAN).Is_At_Least(Confidence::Of(0.1)));
+        assert!(!Confidence::Of(f64::NAN).Is_At_Least(Confidence::Of(ARBITRARY_POSITIVE_THRESHOLD)));
     }
 }

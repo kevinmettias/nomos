@@ -244,24 +244,6 @@ mod tests
 {
     use super::*;
 
-    fn Temporary_Path(name: &str) -> PathBuf
-    {
-        let mut path = std::env::temp_dir();
-        path.push(format!("nomos-lock-test-{name}-{}", std::process::id()));
-
-        // A path that is already absent is the state this asks for, so `NotFound` is
-        // success. Anything else is said out loud rather than discarded, because a setup
-        // that quietly cannot delete hands the test a lock file a previous run left behind
-        // — and every one of these tests reads "the lock file exists" as "somebody holds it".
-        if let Err(cause) = std::fs::remove_file(&path)
-            && cause.kind() != std::io::ErrorKind::NotFound
-        {
-            eprintln!("{} could not be cleared: {cause}", path.display());
-        }
-
-        return path;
-    }
-
     const NO_WAIT: Duration = Duration::ZERO;
     const NEVER_STALE: Duration = Duration::from_secs(86_400);
     /// Makes any existing lock immediately eligible for takeover, which is how these
@@ -378,5 +360,23 @@ mod tests
             second.broke_stale.is_none(),
             "the previous holder released cleanly; there was nothing to break"
         );
+    }
+
+    fn Temporary_Path(name: &str) -> PathBuf
+    {
+        let mut path = std::env::temp_dir();
+        path.push(format!("nomos-lock-test-{name}-{}", std::process::id()));
+
+        // A path that is already absent is the state this asks for, so `NotFound` is
+        // success. Anything else is said out loud rather than discarded, because a setup
+        // that quietly cannot delete hands the test a lock file a previous run left behind
+        // — and every one of these tests reads "the lock file exists" as "somebody holds it".
+        if let Err(cause) = std::fs::remove_file(&path)
+            && cause.kind() != std::io::ErrorKind::NotFound
+        {
+            eprintln!("{} could not be cleared: {cause}", path.display());
+        }
+
+        return path;
     }
 }

@@ -135,7 +135,12 @@ fn Add_Outcome<Filesystem: FileSystem, ClockSource: Clock, Lock: CrossProcessLoc
 
 /// The outcome of running `item`'s verification predicate as `holder` claims it, for
 /// [`WorkCommand::Finish`].
-fn Finish_Outcome<Filesystem: FileSystem, ClockSource: Clock, Lock: CrossProcessLock, Launcher: ProcessLauncher>(
+fn Finish_Outcome<
+    Filesystem: FileSystem,
+    ClockSource: Clock,
+    Lock: CrossProcessLock,
+    Launcher: ProcessLauncher,
+>(
     ledger: &mut FileLedger<Filesystem, ClockSource, Lock>,
     launcher: &Launcher,
     item: &ItemId,

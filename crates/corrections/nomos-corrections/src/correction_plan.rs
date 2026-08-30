@@ -133,12 +133,14 @@ mod tests
     #[test]
     fn Test_Candidates_Touching_Different_Paths_Should_Be_Accepted()
     {
+        const CANDIDATE_COUNT: usize = 2;
+
         let plan = CorrectionPlan::New(vec![
             Candidate_Touching(Description("first"), Path("a.rs")),
             Candidate_Touching(Description("second"), Path("b.rs")),
         ])
             .expect("disjoint candidates form a plan");
 
-        assert_eq!(plan.Candidates().len(), 2);
+        assert_eq!(plan.Candidates().len(), CANDIDATE_COUNT);
     }
 }

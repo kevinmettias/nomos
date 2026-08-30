@@ -109,59 +109,6 @@ mod tests
     use nomos_model::{Content_Digest, Evidence};
     use nomos_workspace::{BuildVariant, ChangeSource, Workspace, WorkspaceChangeSet};
 
-    /// What a caller with nothing stronger than its own judgment supplies.
-    fn Agent_Judged() -> Evidence
-    {
-        return Evidence {
-            class: EvidenceClass::AgentJudged,
-            producer: ProviderId::New("test"),
-            supporting: Vec::new(),
-        };
-    }
-
-    fn Base() -> Workspace
-    {
-        let variant = BuildVariant::New("x86_64-unknown-none", "test", "fixed", Vec::<String>::new());
-        let configuration = ConfigurationId::From_Digest(Digest128::From_Bytes([0x33; 16]));
-        let mut workspace = Workspace::Empty(variant, configuration);
-
-        let initial = WorkspaceChangeSet::From(ChangeSource::GitCheckout).Present("a.rs", "old");
-        workspace.Apply(&initial).expect("a fresh present is always accepted");
-
-        return workspace;
-    }
-
-    struct Before<'a>(&'a str);
-    struct After<'a>(&'a str);
-
-    /// A plan with a single candidate that rewrites `a.rs` from `before` to `after`.
-    fn Plan_Changing_A(before: Before<'_>, after: After<'_>) -> CorrectionPlan
-    {
-        return CorrectionPlan::New(vec![CorrectionCandidate::New(
-            "fix a",
-            ChangeSet::Empty().With(Edit::New(
-                "a.rs",
-                Some(before.0.to_owned()),
-                Some(after.0.to_owned()),
-            )),
-            CorrectionClass::Mechanical,
-            vec![],
-        )])
-        .expect("a single candidate is a valid plan");
-    }
-
-    /// Stages, validates and commits `plan` against `base` in one step.
-    fn Commit_Plan(plan: &CorrectionPlan, base: &mut Workspace) -> CommittedPlan
-    {
-        return plan
-            .Stage(base)
-            .expect("stages cleanly")
-            .Validate(base)
-            .expect("validates cleanly")
-            .Commit(base, Agent_Judged())
-            .expect("commits cleanly");
-    }
-
     /// The invariant that makes rollback worth having: undoing a committed plan returns
     /// the workspace to exactly the snapshot it started from, byte for byte.
     #[test]
@@ -222,5 +169,61 @@ mod tests
     fn Test_A_Committed_Plan_Declares_An_Exact_Rollback_Boundary()
     {
         assert_eq!(CommittedPlan::Rollback_Boundary(), crate::RollbackBoundary::Exact);
+    }
+
+    /// What a caller with nothing stronger than its own judgment supplies.
+    fn Agent_Judged() -> Evidence
+    {
+        return Evidence {
+            class: EvidenceClass::AgentJudged,
+            producer: ProviderId::New("test"),
+            supporting: Vec::new(),
+        };
+    }
+
+    fn Base() -> Workspace
+    {
+        const CONFIGURATION_SEED_BYTE: u8 = 0x33;
+
+        let variant = BuildVariant::New("x86_64-unknown-none", "test", "fixed", Vec::<String>::new());
+        let configuration =
+            ConfigurationId::From_Digest(Digest128::From_Bytes([CONFIGURATION_SEED_BYTE; Digest128::BYTE_LENGTH]));
+        let mut workspace = Workspace::Empty(variant, configuration);
+
+        let initial = WorkspaceChangeSet::From(ChangeSource::GitCheckout).Present("a.rs", "old");
+        workspace.Apply(&initial).expect("a fresh present is always accepted");
+
+        return workspace;
+    }
+
+    struct Before<'a>(&'a str);
+    struct After<'a>(&'a str);
+
+    /// A plan with a single candidate that rewrites `a.rs` from `before` to `after`.
+    fn Plan_Changing_A(before: Before<'_>, after: After<'_>) -> CorrectionPlan
+    {
+        return CorrectionPlan::New(vec![CorrectionCandidate::New(
+            "fix a",
+            ChangeSet::Empty().With(Edit::New(
+                "a.rs",
+                Some(before.0.to_owned()),
+                Some(after.0.to_owned()),
+            )),
+            CorrectionClass::Mechanical,
+            vec![],
+        )])
+        .expect("a single candidate is a valid plan");
+    }
+
+    /// Stages, validates and commits `plan` against `base` in one step.
+    fn Commit_Plan(plan: &CorrectionPlan, base: &mut Workspace) -> CommittedPlan
+    {
+        return plan
+            .Stage(base)
+            .expect("stages cleanly")
+            .Validate(base)
+            .expect("validates cleanly")
+            .Commit(base, Agent_Judged())
+            .expect("commits cleanly");
     }
 }

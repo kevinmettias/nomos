@@ -5,5 +5,8 @@
   "naming": {
     "function": "upper-snake",
     "method": "upper-snake"
+  },
+  "telemetry": {
+    "none": "nomos is a synchronous CLI and library toolchain: every invocation runs one command against the workspace, reports its outcome as a Result and an exit code, and exits. There is no request-handling loop, background job, or persistent process for a logger, tracer, or metrics emitter to observe."
   }
 }

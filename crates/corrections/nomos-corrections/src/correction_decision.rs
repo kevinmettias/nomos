@@ -34,13 +34,6 @@ mod tests
     use super::*;
     use crate::{ChangeSet, ChoiceRecord, CorrectionCandidate, CorrectionClass, Edit};
 
-    fn Candidate_Named(description: &str) -> CorrectionCandidate
-    {
-        let edit = Edit::New("a.rs", None, Some(description.to_owned()));
-        let change = ChangeSet::Empty().With(edit);
-        return CorrectionCandidate::New(description, change, CorrectionClass::Mechanical, vec![]);
-    }
-
     #[test]
     fn Test_An_Automatic_Decision_Carries_Its_Choice()
     {
@@ -82,5 +75,12 @@ mod tests
             // test's own failure mode, and panicking is how a test reports one.
             CorrectionDecision::Automatic(_) => panic!("expected a reviewed proposal"),
         }
+    }
+
+    fn Candidate_Named(description: &str) -> CorrectionCandidate
+    {
+        let edit = Edit::New("a.rs", None, Some(description.to_owned()));
+        let change = ChangeSet::Empty().With(edit);
+        return CorrectionCandidate::New(description, change, CorrectionClass::Mechanical, vec![]);
     }
 }

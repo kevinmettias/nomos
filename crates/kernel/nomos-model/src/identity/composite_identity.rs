@@ -45,22 +45,8 @@ impl CompositeIdentity
         use crate::Digest_Of_Parts;
 
         let qualified = self.qualified_name.as_deref().unwrap_or_default();
-        let signature = if self.policy.distinguish_overloads
-        {
-            self.signature.as_deref().unwrap_or_default()
-        }
-        else
-        {
-            ""
-        };
-        let generator = if self.policy.distinguish_generated
-        {
-            self.provenance.generator.as_deref().unwrap_or_default()
-        }
-        else
-        {
-            ""
-        };
+        let signature = self.Significant_Signature();
+        let generator = self.Significant_Generator();
 
         return EntityId::From_Digest(Digest_Of_Parts(&[
             self.language.as_bytes(),
@@ -70,6 +56,30 @@ impl CompositeIdentity
             self.provenance.repository.as_bytes(),
             generator.as_bytes(),
         ]));
+    }
+
+    /// The signature, when the policy says overloads must be distinguished by it --
+    /// empty otherwise, so a language without overloading pays nothing for it.
+    fn Significant_Signature(&self) -> &str
+    {
+        if self.policy.distinguish_overloads
+        {
+            return self.signature.as_deref().unwrap_or_default();
+        }
+
+        return "";
+    }
+
+    /// The generator, when the policy says a generated declaration must be distinguished
+    /// from a hand-written one -- empty otherwise.
+    fn Significant_Generator(&self) -> &str
+    {
+        if self.policy.distinguish_generated
+        {
+            return self.provenance.generator.as_deref().unwrap_or_default();
+        }
+
+        return "";
     }
 }
 
@@ -81,23 +91,6 @@ mod tests
 
     struct Qualified<'a>(&'a str);
     struct Signature<'a>(&'a str);
-
-    fn Identity_From_Components(qualified: Qualified<'_>, signature: Signature<'_>) -> CompositeIdentity
-    {
-        return CompositeIdentity {
-            language: "rust".to_owned(),
-            provider_native: None,
-            qualified_name: Some(qualified.0.to_owned()),
-            signature: Some(signature.0.to_owned()),
-            structural: StructuralFingerprint::From_Digest(Content_Digest(b"shape")),
-            provenance: SourceProvenance {
-                repository: "nomos".to_owned(),
-                revision: "abc123".to_owned(),
-                generator: None,
-            },
-            policy: IdentityPolicy::STRICT,
-        };
-    }
 
     #[test]
     fn Test_Identity_Should_Be_Stable_For_The_Same_Components()
@@ -162,5 +155,22 @@ mod tests
             generated.Entity_Id(),
             Identity_From_Components(Qualified("crate::foo"), Signature("(u32) -> bool")).Entity_Id()
         );
+    }
+
+    fn Identity_From_Components(qualified: Qualified<'_>, signature: Signature<'_>) -> CompositeIdentity
+    {
+        return CompositeIdentity {
+            language: "rust".to_owned(),
+            provider_native: None,
+            qualified_name: Some(qualified.0.to_owned()),
+            signature: Some(signature.0.to_owned()),
+            structural: StructuralFingerprint::From_Digest(Content_Digest(b"shape")),
+            provenance: SourceProvenance {
+                repository: "nomos".to_owned(),
+                revision: "abc123".to_owned(),
+                generator: None,
+            },
+            policy: IdentityPolicy::STRICT,
+        };
     }
 }

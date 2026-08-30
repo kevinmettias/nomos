@@ -137,11 +137,16 @@ mod tests
             },
         ];
 
+        const MINIMUM_USEFUL_DESCRIPTION_LENGTH: usize = 20;
+
         for breach in &breaches
         {
             let description = breach.Describe();
 
-            assert!(description.len() > 20, "{description} is too terse to act on");
+            assert!(
+                description.len() > MINIMUM_USEFUL_DESCRIPTION_LENGTH,
+                "{description} is too terse to act on"
+            );
         }
     }
 }

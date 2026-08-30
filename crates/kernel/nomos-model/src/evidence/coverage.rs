@@ -77,11 +77,6 @@ mod tests
     use super::*;
     use crate::Content_Digest;
 
-    fn Subject_Named(name: &str) -> SubjectId
-    {
-        return SubjectId::From_Digest(Content_Digest(name.as_bytes()));
-    }
-
     /// The load-bearing case. A run that judged nothing must not be able to say it
     /// found nothing wrong.
     #[test]
@@ -121,6 +116,11 @@ mod tests
             subject: Subject_Named(subject),
             reason,
         };
+    }
+
+    fn Subject_Named(name: &str) -> SubjectId
+    {
+        return SubjectId::From_Digest(Content_Digest(name.as_bytes()));
     }
 
     /// A run with only deliberate absences really is complete — otherwise every honest

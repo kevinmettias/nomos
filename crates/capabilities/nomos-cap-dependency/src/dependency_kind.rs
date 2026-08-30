@@ -193,25 +193,6 @@ mod tests
 {
     use super::*;
 
-    fn Sample() -> DependencyPayload
-    {
-        return DependencyPayload {
-            package: "nomos-rules".to_owned(),
-            edges: vec![
-                DependencyEdge {
-                    target: "nomos-capability".to_owned(),
-                    kind: DependencyKind::Normal,
-                    optional: false,
-                },
-                DependencyEdge {
-                    target: "nomos-analysis".to_owned(),
-                    kind: DependencyKind::Dev,
-                    optional: true,
-                },
-            ],
-        };
-    }
-
     #[test]
     fn Test_A_Payload_Should_Round_Trip_Through_Its_Own_Encoding()
     {
@@ -260,5 +241,24 @@ mod tests
         let decoded = Parse_Payload(&encoded).expect("a package with no dependencies is valid");
 
         assert_eq!(decoded, payload);
+    }
+
+    fn Sample() -> DependencyPayload
+    {
+        return DependencyPayload {
+            package: "nomos-rules".to_owned(),
+            edges: vec![
+                DependencyEdge {
+                    target: "nomos-capability".to_owned(),
+                    kind: DependencyKind::Normal,
+                    optional: false,
+                },
+                DependencyEdge {
+                    target: "nomos-analysis".to_owned(),
+                    kind: DependencyKind::Dev,
+                    optional: true,
+                },
+            ],
+        };
     }
 }

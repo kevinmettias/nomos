@@ -137,20 +137,6 @@ mod tests
     use super::*;
     use crate::Digest128;
 
-    fn Example_Finding(applicability: Applicability, gate: GateCategory) -> Finding
-    {
-        return Finding {
-            rule: RuleId::New("completeness-mirror"),
-            subject: SubjectId::From_Digest(Digest128::From_Bytes([7; Digest128::BYTE_LENGTH])),
-            subject_name: "Table::All".to_owned(),
-            applicability,
-            evidence: EvidenceClass::Derived,
-            gate,
-            summary: "declares no mirror".to_owned(),
-            locations: vec!["crates/spec/nomos-spec-store/src/store.rs".to_owned()],
-        };
-    }
-
     #[test]
     fn Test_A_Blocking_Finding_That_Was_Evaluated_Should_Fail_A_Build()
     {
@@ -224,5 +210,19 @@ mod tests
         nowhere.locations.clear();
 
         assert!(nowhere.Describe().contains("no location"));
+    }
+
+    fn Example_Finding(applicability: Applicability, gate: GateCategory) -> Finding
+    {
+        return Finding {
+            rule: RuleId::New("completeness-mirror"),
+            subject: SubjectId::From_Digest(Digest128::From_Bytes([7; Digest128::BYTE_LENGTH])),
+            subject_name: "Table::All".to_owned(),
+            applicability,
+            evidence: EvidenceClass::Derived,
+            gate,
+            summary: "declares no mirror".to_owned(),
+            locations: vec!["crates/spec/nomos-spec-store/src/store.rs".to_owned()],
+        };
     }
 }

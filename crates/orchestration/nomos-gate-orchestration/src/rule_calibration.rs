@@ -47,20 +47,6 @@ mod tests
     use nomos_contracts::{Digest128, Finding, RuleId, SubjectId};
     use nomos_contracts::{Applicability, EvidenceClass, GateCategory};
 
-    fn Finding_For(rule: &str, subject_seed: u8) -> Finding
-    {
-        return Finding {
-            rule: RuleId::New(rule),
-            subject: SubjectId::From_Digest(Digest128::From_Bytes([subject_seed; Digest128::BYTE_LENGTH])),
-            subject_name: "Example".to_owned(),
-            applicability: Applicability::Supported,
-            evidence: EvidenceClass::Derived,
-            gate: GateCategory::Blocking,
-            summary: "example".to_owned(),
-            locations: vec!["a.rs".to_owned()],
-        };
-    }
-
     #[test]
     fn Test_An_Empty_Policy_Should_Calibrate_Nothing()
     {
@@ -77,7 +63,9 @@ mod tests
         let policy = AdoptionPolicy { calibrated: vec![calibration.clone()] };
 
         assert_eq!(policy.Calibrating(&finding), Some(&calibration));
-        assert_eq!(policy.Calibrating(&Finding_For("naming-convention", 2)), Some(&calibration));
+
+        const DISTINCT_SEED_BYTE: u8 = 2;
+        assert_eq!(policy.Calibrating(&Finding_For("naming-convention", DISTINCT_SEED_BYTE)), Some(&calibration));
     }
 
     #[test]
@@ -88,5 +76,19 @@ mod tests
         let policy = AdoptionPolicy { calibrated: vec![calibration] };
 
         assert!(policy.Calibrating(&finding).is_none());
+    }
+
+    fn Finding_For(rule: &str, subject_seed: u8) -> Finding
+    {
+        return Finding {
+            rule: RuleId::New(rule),
+            subject: SubjectId::From_Digest(Digest128::From_Bytes([subject_seed; Digest128::BYTE_LENGTH])),
+            subject_name: "Example".to_owned(),
+            applicability: Applicability::Supported,
+            evidence: EvidenceClass::Derived,
+            gate: GateCategory::Blocking,
+            summary: "example".to_owned(),
+            locations: vec!["a.rs".to_owned()],
+        };
     }
 }

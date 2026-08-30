@@ -165,11 +165,6 @@ mod tests
     use super::*;
     use crate::Content_Digest;
 
-    fn Subject_Named(name: &str) -> SubjectId
-    {
-        return SubjectId::From_Digest(Content_Digest(name.as_bytes()));
-    }
-
     #[test]
     fn Test_Disjoint_Sets_Should_Permit_Concurrency()
     {
@@ -327,13 +322,20 @@ mod tests
             },
         ];
 
+        const MINIMUM_USEFUL_DESCRIPTION_LENGTH: usize = 20;
+
         for reason in &reasons
         {
             assert!(
-                reason.Describe().len() > 20,
+                reason.Describe().len() > MINIMUM_USEFUL_DESCRIPTION_LENGTH,
                 "{} is too terse to act on",
                 reason.Describe()
             );
         }
+    }
+
+    fn Subject_Named(name: &str) -> SubjectId
+    {
+        return SubjectId::From_Digest(Content_Digest(name.as_bytes()));
     }
 }

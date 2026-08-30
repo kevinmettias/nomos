@@ -124,18 +124,6 @@ mod tests
     use nomos_contracts::{ConfigurationId, Digest128, MutationClass};
     use nomos_workspace::{BuildVariant, ChangeSource, Workspace, WorkspaceChangeSet};
 
-    fn Base() -> Workspace
-    {
-        let variant = BuildVariant::New("x86_64-unknown-none", "test", "fixed", Vec::<String>::new());
-        let configuration = ConfigurationId::From_Digest(Digest128::From_Bytes([0x11; 16]));
-        let mut workspace = Workspace::Empty(variant, configuration);
-
-        let initial = WorkspaceChangeSet::From(ChangeSource::GitCheckout).Present("a.rs", "old");
-        workspace.Apply(&initial).expect("a fresh present is always accepted");
-
-        return workspace;
-    }
-
     #[test]
     fn Test_Staging_Against_The_Content_It_Was_Built_Over_Should_Succeed()
     {
@@ -216,5 +204,20 @@ mod tests
     fn Test_A_Staged_Plan_Belongs_To_The_Validate_Mutation_Class()
     {
         assert_eq!(StagedPlan::Mutation_Class(), MutationClass::Validate);
+    }
+
+    fn Base() -> Workspace
+    {
+        const CONFIGURATION_SEED_BYTE: u8 = 0x11;
+
+        let variant = BuildVariant::New("x86_64-unknown-none", "test", "fixed", Vec::<String>::new());
+        let configuration =
+            ConfigurationId::From_Digest(Digest128::From_Bytes([CONFIGURATION_SEED_BYTE; Digest128::BYTE_LENGTH]));
+        let mut workspace = Workspace::Empty(variant, configuration);
+
+        let initial = WorkspaceChangeSet::From(ChangeSource::GitCheckout).Present("a.rs", "old");
+        workspace.Apply(&initial).expect("a fresh present is always accepted");
+
+        return workspace;
     }
 }

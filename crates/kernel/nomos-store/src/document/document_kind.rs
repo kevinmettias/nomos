@@ -78,15 +78,24 @@ mod tests
     {
         fn Expected_Ordinal(kind: DocumentKind) -> usize
         {
+            // Each position below is hand-typed and independent of `DocumentKind::All()`'s own
+            // order -- naming them does not derive one from the other, which would defeat the
+            // point of an independent mirror.
+            const FINDING_POSITION: usize = 2;
+            const RUN_POSITION: usize = 3;
+            const SPECIFICATION_POSITION: usize = 4;
+            const RECORD_POSITION: usize = 5;
+            const PROJECTION_POSITION: usize = 6;
+
             return match kind
             {
                 DocumentKind::Commit => 0,
                 DocumentKind::Fact => 1,
-                DocumentKind::Finding => 2,
-                DocumentKind::Run => 3,
-                DocumentKind::Specification => 4,
-                DocumentKind::Record => 5,
-                DocumentKind::Projection => 6,
+                DocumentKind::Finding => FINDING_POSITION,
+                DocumentKind::Run => RUN_POSITION,
+                DocumentKind::Specification => SPECIFICATION_POSITION,
+                DocumentKind::Record => RECORD_POSITION,
+                DocumentKind::Projection => PROJECTION_POSITION,
             };
         }
 

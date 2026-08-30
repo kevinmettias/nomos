@@ -75,6 +75,10 @@ mod tests
 {
     use super::*;
 
+    /// An arbitrary idle duration for the `Stalled` fixtures below -- its only role is to
+    /// be nonzero and shared, so the two tests that build a stalled outcome agree on it.
+    const ARBITRARY_IDLE_ELAPSED_SECS: u64 = 30;
+
     #[test]
     fn Test_Only_A_Zero_Exit_Should_Succeed()
     {
@@ -104,7 +108,7 @@ mod tests
     fn Test_A_Stall_Should_Not_Count_As_A_Verdict_Either()
     {
         let stalled = ExitOutcome::Stalled {
-            idle_elapsed: std::time::Duration::from_secs(30),
+            idle_elapsed: std::time::Duration::from_secs(ARBITRARY_IDLE_ELAPSED_SECS),
         };
 
         assert!(!stalled.Has_A_Verdict());
@@ -117,7 +121,7 @@ mod tests
     fn Test_A_Stall_And_A_Timeout_Should_Be_Different_Values()
     {
         let stalled = ExitOutcome::Stalled {
-            idle_elapsed: std::time::Duration::from_secs(30),
+            idle_elapsed: std::time::Duration::from_secs(ARBITRARY_IDLE_ELAPSED_SECS),
         };
 
         assert_ne!(stalled, ExitOutcome::TimedOut);

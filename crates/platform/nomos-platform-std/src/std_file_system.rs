@@ -106,29 +106,6 @@ mod tests
     use super::*;
     use std::path::PathBuf;
 
-    fn Temporary_Path(name: &str) -> PathBuf
-    {
-        let mut path = std::env::temp_dir();
-        path.push(format!("nomos-fs-test-{name}-{}", std::process::id()));
-        Removed_If_Present(&path);
-        return path;
-    }
-
-    /// Removes a fixture file, tolerating the one failure that is not one.
-    ///
-    /// A path that is already absent is the state this asks for, so `NotFound` is success.
-    /// Anything else is said out loud rather than discarded: a teardown that quietly cannot
-    /// delete leaves one file per run in the temporary directory and never reports it, and a
-    /// setup that quietly cannot delete hands the test a fixture a previous run wrote.
-    fn Removed_If_Present(path: &Path)
-    {
-        if let Err(cause) = std::fs::remove_file(path)
-            && cause.kind() != std::io::ErrorKind::NotFound
-        {
-            eprintln!("{} could not be cleared: {cause}", path.display());
-        }
-    }
-
     #[test]
     fn Test_Replace_Should_Round_Trip_Contents()
     {
@@ -189,6 +166,29 @@ mod tests
             && cause.kind() != std::io::ErrorKind::NotFound
         {
             eprintln!("{} could not be cleared: {cause}", root.display());
+        }
+    }
+
+    fn Temporary_Path(name: &str) -> PathBuf
+    {
+        let mut path = std::env::temp_dir();
+        path.push(format!("nomos-fs-test-{name}-{}", std::process::id()));
+        Removed_If_Present(&path);
+        return path;
+    }
+
+    /// Removes a fixture file, tolerating the one failure that is not one.
+    ///
+    /// A path that is already absent is the state this asks for, so `NotFound` is success.
+    /// Anything else is said out loud rather than discarded: a teardown that quietly cannot
+    /// delete leaves one file per run in the temporary directory and never reports it, and a
+    /// setup that quietly cannot delete hands the test a fixture a previous run wrote.
+    fn Removed_If_Present(path: &Path)
+    {
+        if let Err(cause) = std::fs::remove_file(path)
+            && cause.kind() != std::io::ErrorKind::NotFound
+        {
+            eprintln!("{} could not be cleared: {cause}", path.display());
         }
     }
 }

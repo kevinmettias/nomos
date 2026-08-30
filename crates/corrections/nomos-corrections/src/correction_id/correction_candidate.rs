@@ -101,8 +101,7 @@ mod tests
     #[test]
     fn Test_Identical_Candidates_Should_Share_An_Identity()
     {
-        let edit = Edit::New("a.rs", None, Some("x".to_owned()));
-        let change = ChangeSet::Empty().With(edit);
+        let change = Change_Setting_A_To("x");
 
         let one = CorrectionCandidate::New("fix a", change.clone(), CorrectionClass::Mechanical, vec![]);
         let other = CorrectionCandidate::New("fix a", change, CorrectionClass::Mechanical, vec![]);
@@ -113,8 +112,7 @@ mod tests
     #[test]
     fn Test_A_Different_Description_Should_Change_The_Identity()
     {
-        let edit = Edit::New("a.rs", None, Some("x".to_owned()));
-        let change = ChangeSet::Empty().With(edit);
+        let change = Change_Setting_A_To("x");
 
         let one = CorrectionCandidate::New("fix a", change.clone(), CorrectionClass::Mechanical, vec![]);
         let other = CorrectionCandidate::New("fix a differently", change, CorrectionClass::Mechanical, vec![]);
@@ -125,13 +123,9 @@ mod tests
     #[test]
     fn Test_A_Different_Change_Should_Change_The_Identity()
     {
-        let edit_one = Edit::New("a.rs", None, Some("x".to_owned()));
-        let one =
-            CorrectionCandidate::New("fix a", ChangeSet::Empty().With(edit_one), CorrectionClass::Mechanical, vec![]);
+        let one = CorrectionCandidate::New("fix a", Change_Setting_A_To("x"), CorrectionClass::Mechanical, vec![]);
 
-        let edit_other = Edit::New("a.rs", None, Some("y".to_owned()));
-        let other =
-            CorrectionCandidate::New("fix a", ChangeSet::Empty().With(edit_other), CorrectionClass::Mechanical, vec![]);
+        let other = CorrectionCandidate::New("fix a", Change_Setting_A_To("y"), CorrectionClass::Mechanical, vec![]);
 
         assert_ne!(one.Id(), other.Id());
     }
@@ -139,8 +133,7 @@ mod tests
     #[test]
     fn Test_A_Different_Class_Or_Labels_Should_Not_Change_The_Identity()
     {
-        let edit = Edit::New("a.rs", None, Some("x".to_owned()));
-        let change = ChangeSet::Empty().With(edit);
+        let change = Change_Setting_A_To("x");
 
         let mechanical = CorrectionCandidate::New("fix a", change.clone(), CorrectionClass::Mechanical, vec![]);
         let agent = CorrectionCandidate::New(
@@ -160,13 +153,21 @@ mod tests
     #[test]
     fn Test_Class_And_Labels_Are_Carried_Rather_Than_Computed()
     {
-        let edit = Edit::New("a.rs", None, Some("x".to_owned()));
-        let change = ChangeSet::Empty().With(edit);
+        let change = Change_Setting_A_To("x");
         let labels = vec![CandidateLabel::MechanicallySafe, CandidateLabel::BehaviorPreserving];
 
         let candidate = CorrectionCandidate::New("fix a", change, CorrectionClass::Mechanical, labels.clone());
 
         assert_eq!(candidate.Class(), CorrectionClass::Mechanical);
         assert_eq!(candidate.Labels(), labels.as_slice());
+    }
+
+    /// The one-edit changeset every test above builds: `a.rs` set to `content`, with no
+    /// prior content declared. Encapsulated once so the same `Edit::New` /
+    /// `ChangeSet::Empty().With` pairing is not repeated at every call site.
+    fn Change_Setting_A_To(content: &str) -> ChangeSet
+    {
+        let edit = Edit::New("a.rs", None, Some(content.to_owned()));
+        return ChangeSet::Empty().With(edit);
     }
 }

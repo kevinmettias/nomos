@@ -35,20 +35,6 @@ mod tests
     use nomos_contracts::{Digest128, Finding, RuleId, SubjectId};
     use nomos_contracts::{Applicability, EvidenceClass, GateCategory};
 
-    fn Finding_For(rule: &str, subject_seed: u8) -> Finding
-    {
-        return Finding {
-            rule: RuleId::New(rule),
-            subject: SubjectId::From_Digest(Digest128::From_Bytes([subject_seed; Digest128::BYTE_LENGTH])),
-            subject_name: "Example".to_owned(),
-            applicability: Applicability::Supported,
-            evidence: EvidenceClass::Derived,
-            gate: GateCategory::Blocking,
-            summary: "example".to_owned(),
-            locations: vec!["a.rs".to_owned()],
-        };
-    }
-
     #[test]
     fn Test_An_Empty_Policy_Should_Suppress_Nothing()
     {
@@ -76,10 +62,12 @@ mod tests
     #[test]
     fn Test_A_Mismatched_Subject_Should_Not_Match()
     {
+        const DISTINCT_SEED_BYTE: u8 = 2;
+
         let finding = Finding_For("naming-convention", 1);
         let suppression = Suppression {
             rule: RuleId::New("naming-convention"),
-            subject: SubjectId::From_Digest(Digest128::From_Bytes([2; Digest128::BYTE_LENGTH])),
+            subject: SubjectId::From_Digest(Digest128::From_Bytes([DISTINCT_SEED_BYTE; Digest128::BYTE_LENGTH])),
             disposition: SuppressionDisposition::TemporaryWaiver,
             rationale: "different subject".to_owned(),
             owner: "author".to_owned(),
@@ -103,5 +91,19 @@ mod tests
         let policy = SuppressionPolicy { suppressions: vec![suppression] };
 
         assert!(policy.Suppressing(&finding).is_none());
+    }
+
+    fn Finding_For(rule: &str, subject_seed: u8) -> Finding
+    {
+        return Finding {
+            rule: RuleId::New(rule),
+            subject: SubjectId::From_Digest(Digest128::From_Bytes([subject_seed; Digest128::BYTE_LENGTH])),
+            subject_name: "Example".to_owned(),
+            applicability: Applicability::Supported,
+            evidence: EvidenceClass::Derived,
+            gate: GateCategory::Blocking,
+            summary: "example".to_owned(),
+            locations: vec!["a.rs".to_owned()],
+        };
     }
 }

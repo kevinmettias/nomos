@@ -83,13 +83,6 @@ mod tests
     use super::*;
     use crate::{ChangeSet, CorrectionCandidate, CorrectionClass, Edit};
 
-    fn Candidate_Named(description: &str) -> CorrectionCandidate
-    {
-        let edit = Edit::New("a.rs", None, Some(description.to_owned()));
-        let change = ChangeSet::Empty().With(edit);
-        return CorrectionCandidate::New(description, change, CorrectionClass::Mechanical, vec![]);
-    }
-
     #[test]
     fn Test_A_Choice_Carries_Exactly_What_It_Was_Given()
     {
@@ -113,5 +106,12 @@ mod tests
         assert_eq!(choice.Predicted_Side_Effects(), ["may slow the hot path"]);
         assert_eq!(choice.Unresolved_Tradeoffs(), ["unclear whether callers rely on the old error message"]);
         assert_eq!(choice.Verification_Obligations(), ["run the integration suite"]);
+    }
+
+    fn Candidate_Named(description: &str) -> CorrectionCandidate
+    {
+        let edit = Edit::New("a.rs", None, Some(description.to_owned()));
+        let change = ChangeSet::Empty().With(edit);
+        return CorrectionCandidate::New(description, change, CorrectionClass::Mechanical, vec![]);
     }
 }
