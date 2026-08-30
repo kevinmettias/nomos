@@ -4,6 +4,7 @@
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct PayloadRefusal
 {
+    /// Why the bytes were refused, as a human-readable message.
     pub reason: String,
 }
 

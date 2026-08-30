@@ -11,10 +11,7 @@ use reachability_site::ReachabilitySite;
 
 /// How one flagged arm's body was shaped, restricted to the four `OD-RULES-008` names as
 /// syntactically obvious without name or type resolution.
-///
-/// Deliberately closed: a shape this enum cannot name is a shape a `Syntactic`-level
-/// provider does not flag, by construction — extending recognition to a new shape is a new
-/// variant here, not a default arm quietly widening what "obvious" means.
+#[doc = include_str!("../docs/api/arm_shape.md")]
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum ArmShape
 {
@@ -32,6 +29,8 @@ pub enum ArmShape
 
 impl ArmShape
 {
+    /// This shape's canonical string label, the spelling `Encode_Payload` writes and
+    /// [`From_Label`] parses back.
     #[must_use]
     pub const fn Label(self) -> &'static str
     {
@@ -44,6 +43,8 @@ impl ArmShape
         };
     }
 
+    /// Parses a shape back from the label [`Label`] produces, returning `None` for any
+    /// other string.
     #[must_use]
     pub fn From_Label(label: &str) -> Option<Self>
     {
@@ -81,15 +82,7 @@ pub fn Encode_Payload(payload: &ReachabilityPayload) -> Vec<u8>
 }
 
 /// Reads a payload back out of its canonical encoding.
-///
-/// An empty byte string is a valid payload — a file with no flagged sites at all — unlike
-/// [`nomos_cap_dependency::Parse_Payload`], which always expects a leading `package` line.
-/// This schema has no such header line to require.
-///
-/// # Errors
-///
-/// [`PayloadRefusal`] if the bytes are not valid UTF-8, or a line does not have exactly the
-/// four tab-separated fields this schema declares.
+#[doc = include_str!("../docs/api/arm_shape.md")]
 pub fn Parse_Payload(bytes: &[u8]) -> Result<ReachabilityPayload, PayloadRefusal>
 {
     let text = core::str::from_utf8(bytes).map_err(|error| PayloadRefusal {

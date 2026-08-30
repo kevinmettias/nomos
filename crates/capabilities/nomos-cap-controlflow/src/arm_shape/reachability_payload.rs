@@ -6,5 +6,6 @@ use super::reachability_site::ReachabilitySite;
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct ReachabilityPayload
 {
+    /// The flagged sites this payload carries.
     pub sites: Vec<ReachabilitySite>,
 }

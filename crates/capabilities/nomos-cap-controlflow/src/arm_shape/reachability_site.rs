@@ -4,10 +4,7 @@ use super::ArmShape;
 
 /// One `Err(binding) => <body>` arm this file's provider found and could classify as one
 /// of [`ArmShape`]'s four obvious-defect shapes.
-///
-/// Absence from a payload is not a claim of cleanliness — an arm whose body is anything
-/// else is simply not recorded, the same "no finding is not confirmed clean" convention
-/// every rule in this workspace already keeps.
+#[doc = include_str!("../../docs/api/arm_shape/reachability_site.md")]
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct ReachabilitySite
 {
@@ -19,5 +16,6 @@ pub struct ReachabilitySite
     /// The identifier the `Err(...)` pattern binds. Not asserted to be `applicability` by
     /// this type — the provider that writes it is the one narrowing to that name.
     pub binding: String,
+    /// How this arm's body was classified.
     pub shape: ArmShape,
 }
