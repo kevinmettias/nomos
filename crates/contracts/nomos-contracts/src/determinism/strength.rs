@@ -8,13 +8,13 @@ const STATE_TEMPORAL_LABEL: &str = "StateTemporal";
 
 /// Degree of determinism guaranteed by a strategy.
 ///
-/// The distinction between [`DeterminismStrength::State`] and
-/// [`DeterminismStrength::StateTemporal`] is the one that catches people out. A run
+/// The distinction between [`Strength::State`] and
+/// [`Strength::StateTemporal`] is the one that catches people out. A run
 /// that produces the same set of findings has `State`. A run that also produces them in
 /// the same order has `StateTemporal` — and for Nomos that stronger claim is what makes
 /// a finding transcript diffable, which is what makes goldens possible at all.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, Serialize, Deserialize)]
-pub enum DeterminismStrength
+pub enum Strength
 {
     /// No determinism claim. The honest declaration for anything reading a clock,
     /// sampling, or consuming a model backend.
@@ -26,7 +26,7 @@ pub enum DeterminismStrength
     StateTemporal,
 }
 
-impl DeterminismStrength
+impl Strength
 {
     /// The variant's stable `PascalCase` name, for display and diagnostics.
     #[must_use]
@@ -43,7 +43,7 @@ impl DeterminismStrength
     /// Whether this strength admits a reproducibility claim at all.
     ///
     /// Used to enforce the one cross-axis rule in the triple: a strategy claiming
-    /// [`DeterminismStrength::None`] may not also claim a meaningful trace, and a
+    /// [`Strength::None`] may not also claim a meaningful trace, and a
     /// strategy claiming `State` or stronger may not decline to define one.
     #[must_use]
     pub const fn Can_Claim_Reproducibility(self) -> bool
@@ -52,7 +52,7 @@ impl DeterminismStrength
     }
 }
 
-impl core::fmt::Display for DeterminismStrength
+impl core::fmt::Display for Strength
 {
     fn fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
     {
@@ -68,9 +68,9 @@ mod tests
     #[test]
     fn Test_None_Should_Not_Claim_Reproducibility()
     {
-        assert!(!DeterminismStrength::None.Can_Claim_Reproducibility());
-        assert!(DeterminismStrength::State.Can_Claim_Reproducibility());
-        assert!(DeterminismStrength::StateTemporal.Can_Claim_Reproducibility());
+        assert!(!Strength::None.Can_Claim_Reproducibility());
+        assert!(Strength::State.Can_Claim_Reproducibility());
+        assert!(Strength::StateTemporal.Can_Claim_Reproducibility());
     }
 
     /// The ordering is load-bearing: a hierarchical strategy must declare the
@@ -79,11 +79,11 @@ mod tests
     #[test]
     fn Test_Strength_Should_Order_Weakest_First()
     {
-        assert!(DeterminismStrength::None < DeterminismStrength::State);
-        assert!(DeterminismStrength::State < DeterminismStrength::StateTemporal);
+        assert!(Strength::None < Strength::State);
+        assert!(Strength::State < Strength::StateTemporal);
         assert_eq!(
-            DeterminismStrength::StateTemporal.min(DeterminismStrength::None),
-            DeterminismStrength::None
+            Strength::StateTemporal.min(Strength::None),
+            Strength::None
         );
     }
 }

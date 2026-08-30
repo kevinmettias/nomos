@@ -78,23 +78,21 @@
 mod authority;
 mod contract_version;
 mod determinism;
-mod enforcement;
-mod finding;
 mod guarantee;
 mod digest128;
 mod knowledge_source_role;
 mod package_kind;
 mod peer;
+mod reporting;
 mod workflow_step;
 
 pub use authority::{AuthorityClass, MutationClass, SemanticChangeAuthorityResolution, SemanticChangeClass, UntrustedPromptContent, UntrustedPromptOrigin};
 pub use contract_version::ContractVersion;
 pub use determinism::{Declaration_Is_Coherent, DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
-pub use enforcement::{EnforcementBreach, EnforcementReach, EnforcerRef, GateCategory};
-pub use finding::{Applicability, DisplayLabel, EvidenceClass, Finding};
 pub use guarantee::{Assurance, FactVariant, Guarantee, IncrementalGranularity};
 pub use digest128::{BuildVariantId, CapabilityId, ConfigurationId, Digest128, GenerationId, KnowledgeReferenceId, OperationName, PackageId, ProviderId, RuleId, RunId, SchemaId, SnapshotEntityId, SnapshotId, SubjectId};
 pub use knowledge_source_role::{KnowledgeContextItem, KnowledgeSourceRole};
 pub use package_kind::PackageKind;
 pub use peer::{PeerAvailability, SynchronizationState};
+pub use reporting::{Applicability, DisplayLabel, EnforcementBreach, EnforcementReach, EnforcerRef, EvidenceClass, Finding, GateCategory};
 pub use workflow_step::{Cacheability, CancellationBehavior, Compensation, RetryPolicy, Timeout, WorkflowStep};

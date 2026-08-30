@@ -9,7 +9,7 @@ use serde::{Deserialize, Serialize};
 /// There is deliberately no `Default`. A peer response that was never populated must
 /// not construct itself as an answer.
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
-pub enum PeerAvailability
+pub enum Availability
 {
     /// The peer answered. Only this variant may be read as a statement about the world.
     Answered,
@@ -28,11 +28,11 @@ pub enum PeerAvailability
     },
 }
 
-impl PeerAvailability
+impl Availability
 {
     /// Whether this response may be treated as knowledge.
     ///
-    /// Only [`PeerAvailability::Answered`]. A partial answer is knowledge about what it
+    /// Only [`Availability::Answered`]. A partial answer is knowledge about what it
     /// covered and silence about the rest, so a caller must handle it explicitly rather
     /// than through this predicate.
     #[must_use]
@@ -64,16 +64,16 @@ mod tests
     #[test]
     fn Test_Silence_Should_Never_Read_As_Knowledge()
     {
-        let outage = PeerAvailability::Unavailable {
+        let outage = Availability::Unavailable {
             reason: "connection refused".to_owned(),
         };
-        let partial = PeerAvailability::Partial {
+        let partial = Availability::Partial {
             reason: "index rebuilding".to_owned(),
         };
 
         assert!(!outage.Is_Knowledge());
         assert!(!partial.Is_Knowledge());
-        assert!(PeerAvailability::Answered.Is_Knowledge());
+        assert!(Availability::Answered.Is_Knowledge());
     }
 
     /// A reason that never reaches the user leaves them staring at an empty list with
@@ -81,7 +81,7 @@ mod tests
     #[test]
     fn Test_Unavailability_Should_Carry_Its_Reason_Into_The_Description()
     {
-        let outage = PeerAvailability::Unavailable {
+        let outage = Availability::Unavailable {
             reason: "connection refused".to_owned(),
         };
 

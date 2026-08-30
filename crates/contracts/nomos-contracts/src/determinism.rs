@@ -42,12 +42,12 @@
 //! substituting strategies at boundaries, not by constraining the whole workspace, so
 //! the CLI, the reporting layer and the agent host pay nothing for it.
 
-mod determinism_strength;
 mod reproducibility_scope;
 mod strategy;
+mod strength;
 mod trace_equivalence;
 
-pub use determinism_strength::DeterminismStrength;
 pub use reproducibility_scope::ReproducibilityScope;
+pub use strength::Strength as DeterminismStrength;
 pub use strategy::{Declaration_Is_Coherent, Strategy};
 pub use trace_equivalence::TraceEquivalence;

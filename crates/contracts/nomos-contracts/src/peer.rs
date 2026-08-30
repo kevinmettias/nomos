@@ -7,8 +7,8 @@
 //! disagree are not an outage — collapsing the two would let a network failure resolve
 //! itself as a decision about content.
 
-mod peer_availability;
+mod availability;
 mod synchronization_state;
 
-pub use peer_availability::PeerAvailability;
+pub use availability::Availability as PeerAvailability;
 pub use synchronization_state::SynchronizationState;

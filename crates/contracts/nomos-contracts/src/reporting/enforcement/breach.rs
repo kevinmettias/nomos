@@ -4,13 +4,13 @@ use super::EnforcerRef;
 
 /// A way an enforcement claim can be false.
 ///
-/// Four of these are xvpe's taxonomy; the fifth — [`EnforcementBreach::OutOfReach`] —
+/// Four of these are xvpe's taxonomy; the fifth — [`Breach::OutOfReach`] —
 /// comes from the Nomos prototype, where it was the most expensive of the five. A rule
 /// named a check, the check named the rule back, every cross-reference agreed, and the
 /// rule was still unenforced in every language but one because the check imported a
 /// single front end. It reported clean everywhere it could not see.
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
-pub enum EnforcementBreach
+pub enum Breach
 {
     /// The name resolves to nothing. No such check exists.
     ///
@@ -44,7 +44,7 @@ pub enum EnforcementBreach
     /// The check exists in the source tree but not in this build, behind a feature or
     /// build flag.
     ///
-    /// Distinguished from [`EnforcementBreach::Phantom`] so the finding is *true* — the
+    /// Distinguished from [`Breach::Phantom`] so the finding is *true* — the
     /// remedy is a build configuration change, not writing a check.
     OptIn
     {
@@ -66,7 +66,7 @@ pub enum EnforcementBreach
     },
 }
 
-impl EnforcementBreach
+impl Breach
 {
     /// A one-line description naming both the defect and why it matters.
     #[must_use]
@@ -110,26 +110,26 @@ mod tests
     fn Test_Every_Breach_Should_Describe_Itself_Usefully()
     {
         let breaches = [
-            EnforcementBreach::Phantom {
+            Breach::Phantom {
                 name: "check-imaginary".to_owned(),
             },
-            EnforcementBreach::Misclaimed {
+            Breach::Misclaimed {
                 enforcer: EnforcerRef::Check {
                     name: "check-scope-discipline".to_owned(),
                 },
                 actual_subject: "dot imports and mutable globals".to_owned(),
             },
-            EnforcementBreach::ExternalUnconfigured {
+            Breach::ExternalUnconfigured {
                 tool: "editorconfig".to_owned(),
                 setting: "CA1822".to_owned(),
             },
-            EnforcementBreach::OptIn {
+            Breach::OptIn {
                 enforcer: EnforcerRef::Check {
                     name: "check-slow".to_owned(),
                 },
                 missing_feature: "heavy-checks".to_owned(),
             },
-            EnforcementBreach::OutOfReach {
+            Breach::OutOfReach {
                 enforcer: EnforcerRef::Check {
                     name: "check-cohesion".to_owned(),
                 },

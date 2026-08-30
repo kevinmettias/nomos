@@ -20,7 +20,7 @@ const PUBLISH_LABEL: &str = "Publish";
 /// deliberately no `PartialOrd` to invite `>=` comparisons that would grant approval to
 /// anything allowed to write.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, Serialize, Deserialize)]
-pub enum AuthorityClass
+pub enum Class
 {
     /// Observe state.
     Read,
@@ -38,7 +38,7 @@ pub enum AuthorityClass
     Publish,
 }
 
-impl AuthorityClass
+impl Class
 {
     /// The variant's stable `PascalCase` name.
     #[must_use]
@@ -70,7 +70,7 @@ impl AuthorityClass
     }
 }
 
-impl core::fmt::Display for AuthorityClass
+impl core::fmt::Display for Class
 {
     fn fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
     {
@@ -86,8 +86,8 @@ mod tests
     #[test]
     fn Test_Reading_Should_Not_Require_An_Explicit_Grant()
     {
-        assert!(!AuthorityClass::Read.Is_Explicit_Grant_Required());
-        assert!(!AuthorityClass::Propose.Is_Explicit_Grant_Required());
-        assert!(!AuthorityClass::Preview.Is_Explicit_Grant_Required());
+        assert!(!Class::Read.Is_Explicit_Grant_Required());
+        assert!(!Class::Propose.Is_Explicit_Grant_Required());
+        assert!(!Class::Preview.Is_Explicit_Grant_Required());
     }
 }

@@ -22,12 +22,12 @@
 //! [`EnforcementBreach`] is a way the naming is false, and [`EnforcementReach`] is where
 //! the claim and the reality are held side by side without either overwriting the other.
 
-mod enforcement_breach;
-mod enforcement_reach;
+mod breach;
 mod enforcer_ref;
 mod gate_category;
+mod reach;
 
-pub use enforcement_breach::EnforcementBreach;
-pub use enforcement_reach::EnforcementReach;
+pub use breach::Breach as EnforcementBreach;
 pub use enforcer_ref::EnforcerRef;
 pub use gate_category::GateCategory;
+pub use reach::Reach as EnforcementReach;

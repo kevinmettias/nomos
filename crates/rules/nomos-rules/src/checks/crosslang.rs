@@ -101,15 +101,11 @@ fn Sort_Findings(findings: &mut [Finding])
 mod tests
 {
     use super::*;
-    use nomos_analysis::{
-        Context, FactKey, FactPayload, GuaranteeDigest, InputDigest, MaterializedFact as Fact, MemoryFactStore, Reader,
-    };
-    use nomos_capability::{ProviderOffer, Registry};
+    use crate::checks::test_support::{self, Test_Context, TestOffering};
+    use nomos_analysis::{InputDigest, MemoryFactStore, Reader};
+    use nomos_capability::ProviderOffer;
     use nomos_cap_syntax::{Observation, PayloadItem, PUBLIC};
-    use nomos_contracts::{
-        Applicability, Assurance, BuildVariantId, ConfigurationId, Digest128, EvidenceClass, FactVariant, GenerationId,
-        Guarantee, IncrementalGranularity, ProviderId, SnapshotId,
-    };
+    use nomos_contracts::{Applicability, Assurance, FactVariant, Guarantee, IncrementalGranularity};
 
     const PROVIDER: &str = "nomos.test.crosslang.resolves";
 
@@ -199,13 +195,6 @@ mod tests
         assert!(found.summary.contains('b'), "{}", found.summary);
     }
 
-    struct TestOffering
-    {
-        store: MemoryFactStore,
-        registry: Registry,
-        offer: ProviderOffer,
-    }
-
     #[test]
     fn Test_A_Correspondence_Naming_Nothing_Should_Report_Missing_Capability()
     {
@@ -288,59 +277,21 @@ mod tests
         return Guarantee::New(FactVariant::Syntactic, Assurance::Sound, Assurance::Unknown, IncrementalGranularity::File);
     }
 
-    fn Test_Context() -> Context
-    {
-        return Context {
-            snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([1; 16])),
-            variant: BuildVariantId::From_Digest(Digest128::From_Bytes([2; 16])),
-            configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([3; 16])),
-            generation: GenerationId::INITIAL,
-        };
-    }
-
     fn Offering() -> TestOffering
     {
-        let mut registry = Registry::New();
-        registry.Declare(nomos_cap_syntax::Capability_Contract()).expect("declared once");
-
-        let offer = ProviderOffer {
-            provider: ProviderId::New(PROVIDER),
-            capability: nomos_cap_syntax::Capability(),
-            version: nomos_cap_syntax::CONTRACT_VERSION,
-            guarantee: Guarantee_At_Floor(),
-        };
-        registry.Offer(offer.clone()).expect("within the ceiling");
-
-        return TestOffering { store: MemoryFactStore::New(), registry, offer };
+        return test_support::Offering(
+            nomos_cap_syntax::Capability_Contract(),
+            nomos_cap_syntax::Capability(),
+            nomos_cap_syntax::CONTRACT_VERSION,
+            PROVIDER,
+            Guarantee_At_Floor(),
+        );
     }
 
     fn Materialize_Syntax_Fact(store: &mut MemoryFactStore, source: &SourceFile, offer: &ProviderOffer, payload: &SyntaxPayload)
     {
-        let context = Test_Context();
         let bytes = nomos_cap_syntax::Render_Payload(payload);
-        let key = FactKey {
-            contract: nomos_cap_syntax::Capability(),
-            contract_version: offer.version,
-            subject: source.subject,
-            semantic_inputs: InputDigest::Of(&[source.text.as_bytes()]),
-            provider: offer.provider.clone(),
-            provider_version: offer.version,
-            guarantee: GuaranteeDigest::Of(&offer.guarantee),
-            variant: context.variant,
-            configuration: context.configuration,
-        };
-
-        store
-            .Materialize(
-                Fact {
-                    identity: key.At(context.generation),
-                    snapshot: context.snapshot,
-                    evidence: EvidenceClass::Verified,
-                    guarantee: offer.guarantee,
-                    payload: FactPayload::New(nomos_cap_syntax::Payload_Schema(), bytes),
-                },
-                &[],
-            )
-            .expect("nothing here is backdated");
+        let inputs = InputDigest::Of(&[source.text.as_bytes()]);
+        test_support::Materialize(store, source.subject, offer, inputs, nomos_cap_syntax::Payload_Schema(), bytes);
     }
 }

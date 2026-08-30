@@ -119,40 +119,31 @@
 
 #![forbid(unsafe_code)]
 
-mod crosslang;
+mod checks;
 mod declared_universe;
-mod dependency;
 mod facts;
-mod lint;
-mod mirror;
-mod naming;
-mod policy;
-mod reachability;
 mod reading;
 mod registry;
-mod role_surface_pair;
 mod universe_kind;
 
 use nomos_capability::Requirement;
 use nomos_contracts::{Assurance, FactVariant, Guarantee, IncrementalGranularity, ProviderId, SubjectId};
 
-pub use mirror::{Check_Completeness_Mirrors, COMPLETENESS_MIRROR, CONTRACT_RECORD, CONTRACT_RECORD_VERSION};
-pub use declared_universe::DeclaredUniverse;
-pub use dependency::{
+pub use checks::{
+    Check_Completeness_Mirrors, COMPLETENESS_MIRROR, CONTRACT_RECORD, CONTRACT_RECORD_VERSION,
     Check_Dependency_Direction, Check_Every_Member_Declares_A_Band, DEPENDENCY_COMPLETENESS, DEPENDENCY_CONTRACT_RECORD,
     DEPENDENCY_CONTRACT_RECORD_VERSION, DEPENDENCY_DIRECTION,
-};
-pub use lint::{Check_Lint_Diagnostics, LINT_DIAGNOSTICS};
-pub use policy::{Check_Dependency_Policy, DEPENDENCY_POLICY};
-pub use crosslang::{Check_Cross_Language_Correspondence, CROSS_LANGUAGE_CORRESPONDENCE};
-pub use naming::{Check_Naming_Convention, NAMING_CONVENTION};
-pub use reachability::{
+    Check_Lint_Diagnostics, LINT_DIAGNOSTICS,
+    Check_Dependency_Policy, DEPENDENCY_POLICY,
+    Check_Cross_Language_Correspondence, CROSS_LANGUAGE_CORRESPONDENCE,
+    Check_Naming_Convention, NAMING_CONVENTION,
     Check_Unread_Reaches_A_Finding, UNREAD_REACHES_FINDING, UNREAD_REACHES_FINDING_CONTRACT_RECORD,
     UNREAD_REACHES_FINDING_CONTRACT_RECORD_VERSION,
+    Check_Declared_Role_Matches_Surface, RoleSurfacePair, DECLARED_ROLE_MATCHES_SURFACE,
 };
+pub use declared_universe::DeclaredUniverse;
 pub use reading::Reading;
 pub use registry::{RuleOffer, RuleRegistry, RuleRegistryError};
-pub use role_surface_pair::{Check_Declared_Role_Matches_Surface, RoleSurfacePair, DECLARED_ROLE_MATCHES_SURFACE};
 pub use universe_kind::{UniverseKind, Universes_In};
 
 /// What this crate needs from a syntax provider before it will believe an answer.

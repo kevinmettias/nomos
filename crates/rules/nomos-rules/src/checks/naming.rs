@@ -87,14 +87,10 @@ pub fn Check_Naming_Convention(
 mod tests
 {
     use super::*;
-    use nomos_analysis::{
-        Context, FactKey, FactPayload, GuaranteeDigest, InputDigest, MaterializedFact, MemoryFactStore, Reader,
-    };
-    use nomos_capability::{ProviderOffer, Registry};
-    use nomos_contracts::{
-        Assurance, BuildVariantId, ConfigurationId, Digest128, EvidenceClass, FactVariant, GenerationId,
-        Guarantee, IncrementalGranularity, ProviderId, SnapshotId, SubjectId,
-    };
+    use crate::checks::test_support::{self, Test_Context, TestOffering};
+    use nomos_analysis::{InputDigest, MemoryFactStore, Reader};
+    use nomos_capability::ProviderOffer;
+    use nomos_contracts::{Assurance, FactVariant, Guarantee, IncrementalGranularity, SubjectId};
     use nomos_model::Content_Digest;
 
     const PARSER: &str = "nomos.test.naming.parses";
@@ -127,34 +123,8 @@ mod tests
 
     fn Materialize_Syntax_Fact(store: &mut MemoryFactStore, source: &SourceFile, offer: &ProviderOffer, payload: &str)
     {
-        let context = Test_Context();
-        let key = FactKey {
-            contract: nomos_cap_syntax::Capability(),
-            contract_version: offer.version,
-            subject: source.subject,
-            semantic_inputs: InputDigest::Of(&[source.text.as_bytes()]),
-            provider: offer.provider.clone(),
-            provider_version: offer.version,
-            guarantee: GuaranteeDigest::Of(&offer.guarantee),
-            variant: context.variant,
-            configuration: context.configuration,
-        };
-
-        store
-            .Materialize(
-                MaterializedFact {
-                    identity: key.At(context.generation),
-                    snapshot: context.snapshot,
-                    evidence: EvidenceClass::Verified,
-                    guarantee: offer.guarantee,
-                    payload: FactPayload::New(
-                        nomos_cap_syntax::Payload_Schema(),
-                        payload.as_bytes().to_vec(),
-                    ),
-                },
-                &[],
-            )
-            .expect("nothing here is backdated");
+        let inputs = InputDigest::Of(&[source.text.as_bytes()]);
+        test_support::Materialize(store, source.subject, offer, inputs, nomos_cap_syntax::Payload_Schema(), payload.as_bytes().to_vec());
     }
 
     #[test]
@@ -173,15 +143,6 @@ mod tests
         );
     }
 
-    /// A fresh fact store, registry, and the one [`ProviderOffer`] declared into it — named
-    /// so a call site reads `offering.store`, not a position it has to count.
-    struct TestOffering
-    {
-        store: MemoryFactStore,
-        registry: Registry,
-        offer: ProviderOffer,
-    }
-
     fn Guarantee_At_Floor() -> Guarantee
     {
         return Guarantee::New(
@@ -197,31 +158,14 @@ mod tests
         return SourceFile::New(path.0, SubjectId::From_Digest(Content_Digest(path.0.as_bytes())), text.0);
     }
 
-    fn Test_Context() -> Context
-    {
-        return Context {
-            snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([1; 16])),
-            variant: BuildVariantId::From_Digest(Digest128::From_Bytes([2; 16])),
-            configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([3; 16])),
-            generation: GenerationId::INITIAL,
-        };
-    }
-
     fn Offering() -> TestOffering
     {
-        let mut registry = Registry::New();
-        registry
-            .Declare(nomos_cap_syntax::Capability_Contract())
-            .expect("the syntax capability is declared once");
-
-        let offer = ProviderOffer {
-            provider: ProviderId::New(PARSER),
-            capability: nomos_cap_syntax::Capability(),
-            version: nomos_cap_syntax::CONTRACT_VERSION,
-            guarantee: Guarantee_At_Floor(),
-        };
-        registry.Offer(offer.clone()).expect("within the ceiling");
-
-        return TestOffering { store: MemoryFactStore::New(), registry, offer };
+        return test_support::Offering(
+            nomos_cap_syntax::Capability_Contract(),
+            nomos_cap_syntax::Capability(),
+            nomos_cap_syntax::CONTRACT_VERSION,
+            PARSER,
+            Guarantee_At_Floor(),
+        );
     }
 }

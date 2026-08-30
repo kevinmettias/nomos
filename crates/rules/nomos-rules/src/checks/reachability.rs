@@ -302,11 +302,9 @@ mod tests
     mod reading_a_fact
     {
         use super::*;
-        use nomos_analysis::{
-            Context, FactKey, FactPayload, GuaranteeDigest, MaterializedFact, MemoryFactStore, Reader,
-        };
-        use nomos_capability::{ProviderOffer, Registry};
-        use nomos_contracts::{BuildVariantId, ConfigurationId, Digest128, GenerationId, ProviderId, SnapshotId};
+        use crate::checks::test_support::{self, Test_Context, TestOffering};
+        use nomos_analysis::{InputDigest, MemoryFactStore, Reader};
+        use nomos_capability::ProviderOffer;
 
         const PROVIDER: &str = "nomos.test.reachability.resolves";
 
@@ -329,15 +327,6 @@ mod tests
 
             assert_eq!(findings.len(), 1, "{findings:?}");
             assert_eq!(findings.first().expect("asserted len 1 above").subject_name, "a.rs");
-        }
-
-        /// A fresh fact store, registry, and the one [`ProviderOffer`] declared into it —
-        /// named so a call site reads `offering.store`, not a position it has to count.
-        struct TestOffering
-        {
-            store: MemoryFactStore,
-            registry: Registry,
-            offer: ProviderOffer,
         }
 
         #[test]
@@ -365,67 +354,22 @@ mod tests
             assert!(findings.is_empty(), "{findings:?}");
         }
 
-        fn Test_Context() -> Context
-        {
-            return Context {
-                snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([1; 16])),
-                variant: BuildVariantId::From_Digest(Digest128::From_Bytes([2; 16])),
-                configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([3; 16])),
-                generation: GenerationId::INITIAL,
-            };
-        }
-
         fn Offering() -> TestOffering
         {
-            let mut registry = Registry::New();
-            registry
-                .Declare(nomos_cap_controlflow::Capability_Contract())
-                .expect("the controlflow capability is declared once");
-
-            let offer = ProviderOffer {
-                provider: ProviderId::New(PROVIDER),
-                capability: nomos_cap_controlflow::Capability(),
-                version: nomos_cap_controlflow::CONTRACT_VERSION,
-                guarantee: Guarantee::New(
-                    FactVariant::Syntactic,
-                    Assurance::Sound,
-                    Assurance::Unsound,
-                    IncrementalGranularity::File,
-                ),
-            };
-            registry.Offer(offer.clone()).expect("within the ceiling");
-
-            return TestOffering { store: MemoryFactStore::New(), registry, offer };
+            return test_support::Offering(
+                nomos_cap_controlflow::Capability_Contract(),
+                nomos_cap_controlflow::Capability(),
+                nomos_cap_controlflow::CONTRACT_VERSION,
+                PROVIDER,
+                Guarantee::New(FactVariant::Syntactic, Assurance::Sound, Assurance::Unsound, IncrementalGranularity::File),
+            );
         }
 
         fn Materialize_Reachability_Fact(store: &mut MemoryFactStore, source: &SourceFile, offer: &ProviderOffer, payload: &ReachabilityPayload)
         {
-            let context = Test_Context();
             let bytes = nomos_cap_controlflow::Encode_Payload(payload);
-            let key = FactKey {
-                contract: nomos_cap_controlflow::Capability(),
-                contract_version: offer.version,
-                subject: source.subject,
-                semantic_inputs: InputDigest::Of(&[source.text.as_bytes()]),
-                provider: offer.provider.clone(),
-                provider_version: offer.version,
-                guarantee: GuaranteeDigest::Of(&offer.guarantee),
-                variant: context.variant,
-                configuration: context.configuration,
-            };
-
-            store
-                .Materialize(
-                    MaterializedFact {
-                        identity: key.At(context.generation),
-                        snapshot: context.snapshot,
-                        evidence: EvidenceClass::Verified,
-                        guarantee: offer.guarantee,
-                        payload: FactPayload::New(nomos_cap_controlflow::Payload_Schema(), bytes),
-                    },
-                    &[],
-                )
-                .expect("nothing here is backdated");
+            let inputs = InputDigest::Of(&[source.text.as_bytes()]);
+            test_support::Materialize(store, source.subject, offer, inputs, nomos_cap_controlflow::Payload_Schema(), bytes);
         }
     }
 }
