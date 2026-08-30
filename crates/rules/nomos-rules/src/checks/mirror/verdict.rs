@@ -210,3 +210,159 @@ pub(super) struct Judgment
     pub(super) gate: GateCategory,
     pub(super) summary: String,
 }
+
+// Test-only: production code here never constructs an `Unread` directly, only ever an
+// index that already carries one.
+#[cfg(test)]
+use super::Unread;
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    fn Empty_Index_With_Names(names: std::collections::BTreeSet<String>) -> CheckIndex<'static>
+    {
+        return CheckIndex { names, universes: Vec::new(), unobserved: Vec::new(), unread: Vec::new() };
+    }
+
+    fn Universe(claimed_mirror: Option<&str>) -> DeclaredUniverse
+    {
+        return DeclaredUniverse {
+            path: "a.rs".to_owned(),
+            name: "TABLES".to_owned(),
+            kind: UniverseKind::Constant,
+            claimed_mirror: claimed_mirror.map(str::to_owned),
+        };
+    }
+
+    #[test]
+    fn Test_Judgment_For_Universe_Should_Produce_No_Finding_When_The_Reach_Is_Enforced()
+    {
+        let universe = Universe(Some("Test_Every_Row"));
+        let mut names = std::collections::BTreeSet::new();
+        names.insert("Test_Every_Row".to_owned());
+        let index = Empty_Index_With_Names(names);
+
+        let judgment = Judgment_For_Universe(&universe, &index);
+
+        assert!(judgment.is_none(), "{judgment:?}");
+    }
+
+    #[test]
+    fn Test_Judgment_For_Universe_Should_Produce_A_Finding_When_The_Reach_Is_Not_Enforced()
+    {
+        let universe = Universe(None);
+        let index = Empty_Index_With_Names(std::collections::BTreeSet::new());
+
+        let judgment = Judgment_For_Universe(&universe, &index).expect("an admitted gap is still reported");
+
+        assert_eq!(judgment.subject_name, "TABLES");
+        assert_eq!(judgment.gate, GateCategory::Advisory);
+    }
+
+    #[test]
+    fn Test_Shortcoming_Finding_Should_Carry_The_Judgments_Applicability_Gate_And_Summary()
+    {
+        let universe = Universe(None);
+        let judgment = Admitted_Gap(&universe);
+        let expected_summary = judgment.summary.clone();
+
+        let finding = Shortcoming_Finding(&universe, judgment);
+
+        assert_eq!(finding.applicability, Applicability::Supported);
+        assert_eq!(finding.gate, GateCategory::Advisory);
+        assert_eq!(finding.summary, expected_summary);
+        assert_eq!(finding.subject_name, "TABLES");
+    }
+
+    #[test]
+    fn Test_Verdict_For_Reach_Should_Admit_A_Gap_When_The_Reach_Has_No_Breach()
+    {
+        let universe = Universe(None);
+        let reach = EnforcementReach {
+            rule: RuleId::New(COMPLETENESS_MIRROR),
+            declared: vec![nomos_contracts::EnforcerRef::Review],
+            expected: GateCategory::Review,
+            computed: GateCategory::Review,
+            breaches: Vec::new(),
+        };
+        let index = Empty_Index_With_Names(std::collections::BTreeSet::new());
+
+        let judgment = Verdict_For_Reach(&universe, &reach, &index);
+
+        assert_eq!(judgment.gate, GateCategory::Advisory);
+        assert!(judgment.summary.contains("declares no mirror"), "{}", judgment.summary);
+    }
+
+    #[test]
+    fn Test_Verdict_For_Reach_Should_Resolve_The_Claim_When_The_Reach_Has_A_Breach()
+    {
+        let universe = Universe(Some("Test_Nowhere"));
+        let reach = EnforcementReach {
+            rule: RuleId::New(COMPLETENESS_MIRROR),
+            declared: vec![nomos_contracts::EnforcerRef::Check { name: "Test_Nowhere".to_owned() }],
+            expected: GateCategory::Blocking,
+            computed: GateCategory::Unreachable,
+            breaches: vec![EnforcementBreach::Phantom { name: "Test_Nowhere".to_owned() }],
+        };
+        let index = Empty_Index_With_Names(std::collections::BTreeSet::new());
+
+        let judgment = Verdict_For_Reach(&universe, &reach, &index);
+
+        assert_eq!(judgment.gate, GateCategory::Blocking);
+        assert_eq!(judgment.applicability, Applicability::Supported);
+    }
+
+    #[test]
+    fn Test_Unresolved_Claim_Should_Block_When_Nothing_Was_Left_Unread()
+    {
+        let breach = EnforcementBreach::Phantom { name: "Test_Nowhere".to_owned() };
+        let index = Empty_Index_With_Names(std::collections::BTreeSet::new());
+
+        let judgment = Unresolved_Claim(&breach, "Test_Nowhere", &index);
+
+        assert_eq!(judgment.gate, GateCategory::Blocking);
+        assert_eq!(judgment.applicability, Applicability::Supported);
+    }
+
+    #[test]
+    fn Test_Unresolved_Claim_Should_Downgrade_When_The_Index_Is_Short_Of_A_Subject_That_Could_Have_Resolved_It()
+    {
+        let breach = EnforcementBreach::Phantom { name: "Test_Renamed_Away".to_owned() };
+        let index = CheckIndex {
+            names: std::collections::BTreeSet::new(),
+            universes: Vec::new(),
+            unobserved: Vec::new(),
+            unread: vec![Unread {
+                path: "b.rs".to_owned(),
+                text: "fn Test_Renamed_Away() {}",
+                inputs: SubjectId::From_Digest(Content_Digest(b"b.rs")),
+                applicability: Applicability::DependencyUnavailable,
+                because: "no admitted provider answered for it".to_owned(),
+            }],
+        };
+
+        let judgment = Unresolved_Claim(&breach, "Test_Renamed_Away", &index);
+
+        assert_eq!(judgment.gate, GateCategory::Advisory);
+        assert_eq!(judgment.applicability, Applicability::DependencyUnavailable);
+    }
+
+    #[test]
+    fn Test_Admitted_Gap_Should_Name_The_Kind_Of_Member_The_List_Enumerates()
+    {
+        let universe = DeclaredUniverse {
+            path: "a.rs".to_owned(),
+            name: "Table::All".to_owned(),
+            kind: UniverseKind::Enumeration,
+            claimed_mirror: None,
+        };
+
+        let judgment = Admitted_Gap(&universe);
+
+        assert_eq!(judgment.gate, GateCategory::Advisory);
+        assert_eq!(judgment.applicability, Applicability::Supported);
+        assert!(judgment.summary.contains("variant"), "{}", judgment.summary);
+    }
+}

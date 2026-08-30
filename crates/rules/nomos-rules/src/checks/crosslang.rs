@@ -125,7 +125,7 @@ mod tests
     }
 
     #[test]
-    fn Test_Two_Structs_With_The_Same_Fields_Should_Produce_No_Finding()
+    fn Test_Check_Cross_Language_Correspondence_Should_Produce_No_Finding_For_Matching_Structs()
     {
         let rust_source = Source_File("counter.rs");
         let go_source = Source_File("counter.go");
@@ -159,7 +159,7 @@ mod tests
     }
 
     #[test]
-    fn Test_A_Missing_Field_On_One_Side_Should_Be_Reported()
+    fn Test_Judged_Correspondence_Should_Report_A_Missing_Field_On_One_Side()
     {
         let rust_source = Source_File("wide.rs");
         let go_source = Source_File("wide.go");
@@ -248,8 +248,10 @@ mod tests
         assert_eq!(findings.first().expect("asserted len 1 above").applicability, Applicability::Unparseable);
     }
 
+    /// Also [`reading::Struct_Index`]'s own shape: a struct with no correspondence still
+    /// takes its place in the index, and the index alone must not manufacture a finding.
     #[test]
-    fn Test_A_Struct_With_No_Correspondence_Should_Produce_No_Finding()
+    fn Test_Struct_Index_Should_Admit_A_Struct_That_Declares_No_Correspondence()
     {
         let source = Source_File("plain.rs");
         let TestOffering { mut store, registry, offer } = Offering();

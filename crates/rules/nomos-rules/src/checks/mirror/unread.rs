@@ -94,6 +94,58 @@ impl Unread<'_>
     }
 }
 
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Unreadable_Finding_Should_Report_Advisory_And_Name_The_Reason()
+    {
+        let source = SourceFile::New("a.rs", SubjectId::From_Digest(Content_Digest(b"a.rs")), "pub const T: &[&str] = &[];");
+
+        let finding = Unreadable_Finding(&source, "the provider observed no documentation");
+
+        assert_eq!(finding.gate, GateCategory::Advisory);
+        assert_eq!(finding.applicability, Applicability::Unparseable);
+        assert!(finding.summary.contains("the provider observed no documentation"), "{}", finding.summary);
+        assert_eq!(finding.locations, vec!["a.rs".to_owned()]);
+    }
+
+    #[test]
+    fn Test_Unread_Subject_Should_Report_Advisory_And_Name_Why_It_Could_Not_Be_Read()
+    {
+        let subject = Unread {
+            path: "b.rs".to_owned(),
+            text: "fn Test_Something() {}",
+            inputs: SubjectId::From_Digest(Content_Digest(b"b.rs")),
+            applicability: Applicability::DependencyUnavailable,
+            because: "no admitted provider answered for it".to_owned(),
+        };
+
+        let finding = Unread_Subject(&subject);
+
+        assert_eq!(finding.gate, GateCategory::Advisory);
+        assert_eq!(finding.applicability, Applicability::DependencyUnavailable);
+        assert!(finding.summary.contains("no admitted provider answered for it"), "{}", finding.summary);
+    }
+
+    #[test]
+    fn Test_Can_Have_Declared_Should_Match_A_Name_Spelled_Anywhere_In_The_Subjects_Own_Text()
+    {
+        let subject = Unread {
+            path: "b.rs".to_owned(),
+            text: "// Test_Mentioned_Only_In_A_Comment lived here.\npub const ??? = ;\n",
+            inputs: SubjectId::From_Digest(Content_Digest(b"b.rs")),
+            applicability: Applicability::DependencyUnavailable,
+            because: "no admitted provider answered for it".to_owned(),
+        };
+
+        assert!(subject.Can_Have_Declared("Test_Mentioned_Only_In_A_Comment"));
+        assert!(!subject.Can_Have_Declared("Test_Nowhere_In_This_Text"));
+    }
+}
+
 /// A subject whose check names are missing from the index.
 ///
 /// Advisory, and it would make no difference if it were not: `Can_Fail_A_Build` consults

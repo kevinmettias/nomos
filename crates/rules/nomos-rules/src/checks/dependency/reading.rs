@@ -122,3 +122,78 @@ fn Unread_Finding(source: &SourceFile, applicability: Applicability, rule: &'sta
         locations: vec![source.path.clone()],
     };
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use crate::checks::test_support::{self, Test_Context, TestOffering};
+    use nomos_analysis::{InputDigest, MemoryFactStore, Reader};
+    use nomos_capability::ProviderOffer;
+    use nomos_cap_dependency::DependencyPayload;
+    use nomos_contracts::SubjectId;
+    use nomos_model::Content_Digest;
+
+    const PROVIDER: &str = "nomos.test.dependency.reading.resolves";
+
+    fn Source(package: &str) -> SourceFile
+    {
+        return SourceFile::New(package, SubjectId::From_Digest(Content_Digest(package.as_bytes())), String::new());
+    }
+
+    fn Offering() -> TestOffering
+    {
+        return test_support::Offering(
+            nomos_cap_dependency::Capability_Contract(),
+            nomos_cap_dependency::Capability(),
+            nomos_cap_dependency::CONTRACT_VERSION,
+            PROVIDER,
+            Dependency_Requirement().minimum,
+        );
+    }
+
+    fn Materialize_Dependency_Fact(store: &mut MemoryFactStore, source: &SourceFile, offer: &ProviderOffer, payload: &DependencyPayload)
+    {
+        let bytes = nomos_cap_dependency::Encode_Payload(payload);
+        test_support::Materialize(store, source.subject, offer, InputDigest::Of(&[]), nomos_cap_dependency::Payload_Schema(), bytes);
+    }
+
+    #[test]
+    fn Test_Dependency_Requirement_Should_Be_Met_By_The_Real_Providers_Own_Guarantee()
+    {
+        assert!(
+            nomos_cap_dependency::Capability_Contract().ceiling.Satisfies(&Dependency_Requirement().minimum),
+            "the capability's own ceiling must be able to satisfy this rule's floor, or no real provider ever could"
+        );
+    }
+
+    #[test]
+    fn Test_Payload_Of_Should_Decode_A_Materialized_Fact_Under_The_Asking_Rule()
+    {
+        let source = Source("nomos-cap-syntax");
+        let TestOffering { mut store, registry, offer } = Offering();
+        Materialize_Dependency_Fact(
+            &mut store,
+            &source,
+            &offer,
+            &DependencyPayload { package: "nomos-cap-syntax".to_owned(), edges: Vec::new() },
+        );
+        let mut reader = Reader::On(&store, &registry, Test_Context());
+
+        let payload = Payload_Of(&source, &mut reader, "example-rule").expect("the fact was just materialized");
+
+        assert_eq!(payload.package, "nomos-cap-syntax");
+    }
+
+    #[test]
+    fn Test_Payload_Of_Should_Report_An_Unread_Subject_Under_Whichever_Rule_Asked()
+    {
+        let source = Source("nomos-cap-syntax");
+        let TestOffering { store, registry, .. } = Offering();
+        let mut reader = Reader::On(&store, &registry, Test_Context());
+
+        let refused = Payload_Of(&source, &mut reader, "example-rule").expect_err("no fact was materialized");
+
+        assert_eq!(refused.rule, RuleId::New("example-rule"));
+    }
+}

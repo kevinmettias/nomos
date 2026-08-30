@@ -53,7 +53,7 @@ mod tests
     use nomos_model::Content_Digest;
 
     #[test]
-    fn Test_A_Declared_Package_Should_Produce_No_Finding()
+    fn Test_Violations_In_Should_Produce_No_Finding_For_A_Declared_Package()
     {
         let payload = DependencyPayload {
             package: "nomos-rules".to_owned(),

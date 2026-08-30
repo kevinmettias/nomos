@@ -85,7 +85,7 @@ mod tests
     /// satisfied by a filter that admits nothing at all, so the set this is supposed to
     /// produce has to be asserted somewhere.
     #[test]
-    fn Test_A_Test_Function_In_A_Test_Module_Should_Be_A_Check()
+    fn Test_Check_Names_In_Should_Find_A_Test_Function_Declared_In_A_Test_Module()
     {
         let names = Names_In_Payload_Text(
             "unexpanded\t0\n\

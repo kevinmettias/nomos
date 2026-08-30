@@ -58,7 +58,7 @@ mod tests
     use super::*;
 
     #[test]
-    fn Test_A_Rule_Should_Be_Findable_By_Its_Id()
+    fn Test_New_Should_Produce_A_Registry_Whose_Offered_Rule_Is_Findable_By_Its_Id()
     {
         let mut registry = RuleRegistry::New();
         registry.Offer(Rule_Offer("completeness-mirror")).expect("first offer");
@@ -83,12 +83,24 @@ mod tests
     }
 
     #[test]
-    fn Test_An_Empty_Registry_Should_Offer_Nothing()
+    fn Test_New_Should_Return_An_Empty_Registry()
     {
         let registry = RuleRegistry::New();
 
         assert_eq!(registry.Offers().count(), 0);
         assert_eq!(registry.Offered(&RuleId::New("completeness-mirror")), None);
+    }
+
+    #[test]
+    fn Test_Offers_Should_List_Every_Registered_Rule()
+    {
+        let mut registry = RuleRegistry::New();
+        registry.Offer(Rule_Offer("completeness-mirror")).expect("first offer");
+        registry.Offer(Rule_Offer("dependency-direction")).expect("second offer");
+
+        let listed: Vec<RuleOffer> = registry.Offers().cloned().collect();
+
+        assert_eq!(listed, vec![Rule_Offer("completeness-mirror"), Rule_Offer("dependency-direction")]);
     }
 
     fn Rule_Offer(id: &str) -> RuleOffer

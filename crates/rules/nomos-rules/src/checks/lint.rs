@@ -174,8 +174,10 @@ mod tests
 
     const PROVIDER: &str = "nomos.test.lint.resolves";
 
+    /// Also the [`super::Relay_Findings`] shape itself: a real fact read and its
+    /// diagnostic relayed 1:1, never judged a second time.
     #[test]
-    fn Test_A_Real_Fact_With_A_Diagnostic_Should_Be_Read_And_Relayed()
+    fn Test_Relay_Findings_Should_Read_A_Real_Fact_And_Relay_Its_Diagnostic()
     {
         let source = Source_File("nomos-cap-syntax");
         let TestOffering { mut store, registry, offer } = Offering();
@@ -209,7 +211,7 @@ mod tests
     }
 
     #[test]
-    fn Test_A_Clean_Members_Fact_Should_Produce_No_Finding()
+    fn Test_Check_Lint_Diagnostics_Should_Produce_No_Finding_For_A_Clean_Members_Fact()
     {
         let source = Source_File("nomos-contracts");
         let TestOffering { mut store, registry, offer } = Offering();
@@ -226,8 +228,10 @@ mod tests
         assert!(findings.is_empty(), "a clean report must not manufacture a finding: {findings:?}");
     }
 
+    /// Also [`Test_Context`]'s own shape: the fixed context every fact and every reader
+    /// this suite builds resolves under.
     #[test]
-    fn Test_A_Subject_With_No_Fact_Should_Be_Reported_Rather_Than_Silently_Clean()
+    fn Test_Test_Context_Should_Be_The_Context_A_Real_Reader_Resolves_Facts_Under()
     {
         let source = Source_File("nomos-cap-syntax");
         let TestOffering { store, registry, .. } = Offering();

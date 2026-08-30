@@ -181,8 +181,11 @@ mod tests
         };
     }
 
+    /// Also [`reading::Dependency_Requirement`]'s own shape: the registered guarantee is
+    /// built to exactly meet that floor, so a real fact only reaches this rule because the
+    /// floor admits it.
     #[test]
-    fn Test_A_Real_Fact_Should_Be_Read_And_Judged()
+    fn Test_Check_Dependency_Direction_Should_Read_And_Judge_A_Real_Fact_Whose_Guarantee_Meets_Dependency_Requirement()
     {
         let source = Source_File("nomos-cap-syntax");
         let TestOffering { mut store, registry, offer } = Offering();
@@ -203,8 +206,11 @@ mod tests
         assert_eq!(findings.first().expect("asserted len 1 above").subject_name, "nomos-cap-syntax");
     }
 
+    /// Also [`reading::Dependency_Requirement`]'s own shape: a provider is registered
+    /// against exactly that floor, so the subject is reported unread for want of a
+    /// materialized fact rather than for want of an admitted provider.
     #[test]
-    fn Test_A_Subject_With_No_Fact_Should_Be_Reported_Rather_Than_Silently_Clean()
+    fn Test_Dependency_Requirement_Should_Be_Registered_Yet_Report_A_Subject_With_No_Fact()
     {
         let source = Source_File("nomos-cap-syntax");
         let TestOffering { store, registry, .. } = Offering();
@@ -216,7 +222,7 @@ mod tests
     }
 
     #[test]
-    fn Test_A_Declared_Package_Should_Produce_No_Completeness_Finding()
+    fn Test_Check_Every_Member_Declares_A_Band_Should_Produce_No_Finding_For_A_Declared_Package()
     {
         let source = Source_File("nomos-cap-syntax");
         let TestOffering { mut store, registry, offer } = Offering();
@@ -260,7 +266,7 @@ mod tests
     }
 
     #[test]
-    fn Test_A_Completeness_Subject_With_No_Fact_Should_Be_Reported_Under_Its_Own_Rule()
+    fn Test_Payload_Of_Should_Report_An_Unread_Completeness_Subject_Under_Its_Own_Rule()
     {
         let source = Source_File("nomos-cap-syntax");
         let TestOffering { store, registry, .. } = Offering();

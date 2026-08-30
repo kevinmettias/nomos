@@ -106,3 +106,82 @@ pub(super) fn Resolution_Of_Claim(claimed: &str, claim: Claim) -> Resolved
         }],
     };
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use crate::DeclaredUniverse;
+
+    fn Universe_Claiming(mirror: Option<&str>) -> DeclaredUniverse
+    {
+        return DeclaredUniverse {
+            path: "a.rs".to_owned(),
+            name: "TABLES".to_owned(),
+            kind: crate::UniverseKind::Constant,
+            claimed_mirror: mirror.map(str::to_owned),
+        };
+    }
+
+    #[test]
+    fn Test_Reach_Of_Should_Report_Reviewed_When_No_Mirror_Is_Claimed()
+    {
+        let universe = Universe_Claiming(None);
+        let checks = BTreeSet::new();
+
+        let reach = Reach_Of(&universe, &checks);
+
+        assert_eq!(reach.declared, vec![EnforcerRef::Review]);
+        assert_eq!(reach.expected, GateCategory::Review);
+        assert!(reach.breaches.is_empty());
+    }
+
+    #[test]
+    fn Test_Reach_Of_Should_Name_A_Check_Enforcer_When_A_Mirror_Is_Claimed()
+    {
+        let universe = Universe_Claiming(Some("Test_Every_Row"));
+        let mut checks = BTreeSet::new();
+        checks.insert("Test_Every_Row".to_owned());
+
+        let reach = Reach_Of(&universe, &checks);
+
+        assert_eq!(reach.declared, vec![EnforcerRef::Check { name: "Test_Every_Row".to_owned() }]);
+        assert_eq!(reach.expected, GateCategory::Blocking);
+        assert!(reach.breaches.is_empty());
+    }
+
+    #[test]
+    fn Test_Reviewed_Should_Declare_A_Review_Enforcer_With_No_Breach()
+    {
+        let reach = Reviewed();
+
+        assert_eq!(reach.declared, vec![EnforcerRef::Review]);
+        assert_eq!(reach.computed, GateCategory::Review);
+        assert!(reach.breaches.is_empty());
+    }
+
+    #[test]
+    fn Test_Resolution_Of_Claim_Should_Report_A_Phantom_Breach_When_The_Claim_Does_Not_Resolve()
+    {
+        let resolved = Resolution_Of_Claim("Test_Nowhere", Claim::Of(false));
+
+        assert_eq!(resolved.computed, GateCategory::Unreachable);
+        assert_eq!(resolved.breaches, vec![EnforcementBreach::Phantom { name: "Test_Nowhere".to_owned() }]);
+    }
+
+    #[test]
+    fn Test_Resolution_Of_Claim_Should_Report_No_Breach_When_The_Claim_Resolves()
+    {
+        let resolved = Resolution_Of_Claim("Test_Somewhere", Claim::Of(true));
+
+        assert_eq!(resolved.computed, GateCategory::Blocking);
+        assert!(resolved.breaches.is_empty());
+    }
+
+    #[test]
+    fn Test_Of_Should_Read_A_True_Bool_As_Resolves_And_A_False_One_As_Phantom()
+    {
+        assert_eq!(Claim::Of(true), Claim::Resolves);
+        assert_eq!(Claim::Of(false), Claim::Phantom);
+    }
+}

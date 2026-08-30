@@ -177,6 +177,62 @@ fn Drift_Finding(source: &SourceFile, item: &PayloadItem, target_name: &str, mis
 /// type for the identical reason.
 struct TargetName<'a>(&'a str);
 
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use nomos_cap_syntax::{Observation, PUBLIC};
+    use nomos_contracts::SubjectId;
+    use nomos_model::Content_Digest;
+
+    fn Struct_Item(qualified_name: &str, fields: &[(&str, &str)]) -> PayloadItem
+    {
+        let owned: Vec<(String, String)> = fields.iter().map(|(name, kind)| return ((*name).to_owned(), (*kind).to_owned())).collect();
+        let shape = nomos_cap_syntax::Struct_Shape(&owned).map_or(Observation::Absent, Observation::Present);
+
+        return PayloadItem {
+            ordinal: 0,
+            kind: "Struct".to_owned(),
+            visibility: PUBLIC.to_owned(),
+            qualified_name: qualified_name.to_owned(),
+            documentation: Observation::Absent,
+            shape,
+        };
+    }
+
+    fn Source(path: &str) -> SourceFile
+    {
+        return SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), String::new());
+    }
+
+    #[test]
+    fn Test_Judged_Correspondence_Should_Report_Nothing_When_Both_Sides_Name_The_Same_Fields()
+    {
+        let source = Source("counter.rs");
+        let item = Struct_Item("Counter", &[("n", "u32")]);
+        let target_source = Source("counter.go");
+        let index = vec![(&target_source, SyntaxPayload { unexpanded: 0, items: vec![Struct_Item("Counter", &[("n", "int")])] })];
+
+        let judged = Judged_Correspondence(&source, &item, "Counter", &index);
+
+        assert!(judged.is_none(), "{judged:?}");
+    }
+
+    #[test]
+    fn Test_Judged_Correspondence_Should_Report_A_Missing_Field_On_One_Side()
+    {
+        let source = Source("wide.rs");
+        let item = Struct_Item("Wide", &[("a", "u32"), ("b", "u32")]);
+        let target_source = Source("wide.go");
+        let index = vec![(&target_source, SyntaxPayload { unexpanded: 0, items: vec![Struct_Item("Wide", &[("a", "int")])] })];
+
+        let judged = Judged_Correspondence(&source, &item, "Wide", &index).expect("the sides disagree on fields");
+
+        assert_eq!(judged.applicability, Applicability::Supported);
+        assert!(judged.summary.contains('b'), "{}", judged.summary);
+    }
+}
+
 fn Drift_Summary(declaring_name: DeclaringName<'_>, target_name: TargetName<'_>, missing_on_target: &[&str], missing_on_own: &[&str]) -> String
 {
     let declaring_name = declaring_name.0;

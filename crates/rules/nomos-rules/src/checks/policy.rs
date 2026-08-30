@@ -169,8 +169,10 @@ mod tests
 
     const PROVIDER: &str = "nomos.test.policy.resolves";
 
+    /// Also [`crate::checks::test_support::Materialize`]'s own shape: the fact this test
+    /// reads back is one it filed through that same helper.
     #[test]
-    fn Test_A_Real_Fact_With_A_Violation_Should_Be_Read_And_Relayed()
+    fn Test_Materialize_Should_Let_A_Real_Fact_With_A_Violation_Be_Read_And_Relayed()
     {
         let source = Source();
         let TestOffering { mut store, registry, offer } = Offering();
@@ -200,7 +202,7 @@ mod tests
     }
 
     #[test]
-    fn Test_A_Clean_Facts_Should_Produce_No_Finding()
+    fn Test_Check_Dependency_Policy_Should_Produce_No_Finding_For_Clean_Facts()
     {
         let source = Source();
         let TestOffering { mut store, registry, offer } = Offering();
@@ -212,8 +214,10 @@ mod tests
         assert!(findings.is_empty(), "a clean report must not manufacture a finding: {findings:?}");
     }
 
+    /// Also [`crate::checks::test_support::Offering`]'s own shape: a registry and store built
+    /// through it are enough to judge an empty source list.
     #[test]
-    fn Test_No_Sources_Should_Produce_No_Finding()
+    fn Test_Offering_Should_Support_Judging_An_Empty_Source_List()
     {
         let TestOffering { registry, store, .. } = Offering();
         let mut reader = Reader::On(&store, &registry, Test_Context());

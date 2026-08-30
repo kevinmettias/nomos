@@ -83,3 +83,63 @@ fn Unread_Finding(source: &SourceFile, applicability: Applicability, because: &s
         locations: vec![source.path.clone()],
     };
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use crate::checks::test_support::{self, Test_Context, TestOffering};
+    use nomos_analysis::Reader;
+    use nomos_contracts::{Assurance, FactVariant, Guarantee, IncrementalGranularity, SubjectId};
+    use nomos_model::Content_Digest;
+
+    const PARSER: &str = "nomos.test.naming.reading.parses";
+
+    fn Source(path: &str, text: &str) -> SourceFile
+    {
+        return SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), text);
+    }
+
+    fn Offering() -> TestOffering
+    {
+        return test_support::Offering(
+            nomos_cap_syntax::Capability_Contract(),
+            nomos_cap_syntax::Capability(),
+            nomos_cap_syntax::CONTRACT_VERSION,
+            PARSER,
+            Guarantee::New(FactVariant::Syntactic, Assurance::Sound, Assurance::Unknown, IncrementalGranularity::File),
+        );
+    }
+
+    #[test]
+    fn Test_Payload_Of_Should_Decode_A_Materialized_Fact()
+    {
+        let source = Source("src/lib.rs", "fn Good_Name() {}");
+        let TestOffering { mut store, registry, offer } = Offering();
+        test_support::Materialize(
+            &mut store,
+            source.subject,
+            &offer,
+            nomos_analysis::InputDigest::Of(&[source.text.as_bytes()]),
+            nomos_cap_syntax::Payload_Schema(),
+            "unexpanded\t0\nitem\t0\tFunction\tPublic\tGood_Name\t.\t+fn/0\n".as_bytes().to_vec(),
+        );
+        let mut reader = Reader::On(&store, &registry, Test_Context());
+
+        let payload = Payload_Of(&source, &mut reader).expect("the fact was just materialized");
+
+        assert_eq!(payload.items.len(), 1, "{payload:?}");
+    }
+
+    #[test]
+    fn Test_Payload_Of_Should_Report_A_Subject_With_No_Fact_As_A_Finding()
+    {
+        let source = Source("src/lib.rs", "fn Good_Name() {}");
+        let TestOffering { store, registry, .. } = Offering();
+        let mut reader = Reader::On(&store, &registry, Test_Context());
+
+        let refused = Payload_Of(&source, &mut reader);
+
+        assert!(refused.is_err(), "{refused:?}");
+    }
+}

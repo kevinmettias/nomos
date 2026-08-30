@@ -173,21 +173,29 @@ mod tests
     {
         use super::{GateCategory, SyntaxPayload, Violations_In};
 
-        #[test]
-        fn Test_A_Conforming_Function_Should_Produce_No_Finding()
+        /// Names conforming to `Pascal_Snake_Case` under every shape `casing`'s own table
+        /// exercises: a bare word, two segments, a numeric segment, and a stripped leading
+        /// underscore.
+        fn Conforming_Function_Names() -> Vec<&'static str>
         {
-            let payload = Payload_From_Text(
-                "unexpanded\t0\n\
-                 item\t0\tFunction\tPublic\tGood_Name\t.\t+fn/0\n",
-            );
-
-            let findings = Violations_In(&payload, "src/lib.rs");
-
-            assert!(findings.is_empty(), "{findings:?}");
+            return vec!["Good_Name", "New", "As_Str", "Test_CHK_003_Something_Should_Hold", "_Unused"];
         }
 
         #[test]
-        fn Test_A_Non_Conforming_Function_Should_Produce_One_Finding()
+        fn Test_A_Conforming_Function_Should_Produce_No_Finding()
+        {
+            for name in Conforming_Function_Names()
+            {
+                let payload = Payload_From_Text(&format!("unexpanded\t0\nitem\t0\tFunction\tPublic\t{name}\t.\t+fn/0\n"));
+
+                let findings = Violations_In(&payload, "src/lib.rs");
+
+                assert!(findings.is_empty(), "{name}: {findings:?}");
+            }
+        }
+
+        #[test]
+        fn Test_Violations_In_Should_Produce_One_Finding_For_A_Non_Conforming_Function()
         {
             let payload = Payload_From_Text(
                 "unexpanded\t0\n\
@@ -202,31 +210,52 @@ mod tests
             assert_eq!(found.gate, GateCategory::Advisory);
         }
 
+        /// Qualified names whose *own* name is `main`, for [`Test_Main_Should_Be_Exempt`] —
+        /// visibility and nesting vary; the exemption is keyed on the item's own name alone.
+        fn Main_Qualified_Names() -> Vec<(&'static str, &'static str)>
+        {
+            return vec![
+                ("Private", "main"),
+                ("Public", "main"),
+                ("Private", "tests::main"),
+                ("Public", "examples::demo::main"),
+            ];
+        }
+
         #[test]
         fn Test_Main_Should_Be_Exempt()
         {
-            let payload = Payload_From_Text(
-                "unexpanded\t0\n\
-                 item\t0\tFunction\tPrivate\tmain\t.\t+fn/0\n",
-            );
+            for (visibility, qualified_name) in Main_Qualified_Names()
+            {
+                let payload = Payload_From_Text(&format!("unexpanded\t0\nitem\t0\tFunction\t{visibility}\t{qualified_name}\t.\t+fn/0\n"));
 
-            let findings = Violations_In(&payload, "src/main.rs");
+                let findings = Violations_In(&payload, "src/main.rs");
 
-            assert!(findings.is_empty(), "{findings:?}");
+                assert!(findings.is_empty(), "{qualified_name}: {findings:?}");
+            }
+        }
+
+        /// Foreign trait/method pairs whose method name the trait fixes, for
+        /// [`Test_A_Trait_Methods_Non_Conforming_Name_Should_Be_Exempt`] — the compiler forces
+        /// each of these exact spellings regardless of this workspace's own convention.
+        fn Foreign_Trait_Methods() -> Vec<(&'static str, &'static str)>
+        {
+            return vec![("Display", "fmt"), ("Iterator", "next"), ("Clone", "clone"), ("Drop", "drop")];
         }
 
         #[test]
         fn Test_A_Trait_Methods_Non_Conforming_Name_Should_Be_Exempt()
         {
-            let payload = Payload_From_Text(
-                "unexpanded\t0\n\
-                 item\t0\tImplementation\tNotApplicable\tDisplay\t.\t+trait\n\
-                 item\t1\tFunction\tPublic\tDisplay::fmt\t.\t+fn/1\n",
-            );
+            for (trait_name, method) in Foreign_Trait_Methods()
+            {
+                let payload = Payload_From_Text(&format!(
+                    "unexpanded\t0\nitem\t0\tImplementation\tNotApplicable\t{trait_name}\t.\t+trait\nitem\t1\tFunction\tPublic\t{trait_name}::{method}\t.\t+fn/1\n"
+                ));
 
-            let findings = Violations_In(&payload, "src/lib.rs");
+                let findings = Violations_In(&payload, "src/lib.rs");
 
-            assert!(findings.is_empty(), "a trait method's fixed name was judged: {findings:?}");
+                assert!(findings.is_empty(), "{trait_name}::{method}: a trait method's fixed name was judged: {findings:?}");
+            }
         }
 
         #[test]

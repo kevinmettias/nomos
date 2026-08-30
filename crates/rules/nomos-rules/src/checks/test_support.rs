@@ -90,3 +90,52 @@ pub(crate) fn Materialize(store: &mut MemoryFactStore, subject: SubjectId, offer
         )
         .expect("nothing here is backdated");
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use nomos_analysis::FactReader as _;
+
+    fn Floor() -> Guarantee
+    {
+        return Guarantee::New(
+            nomos_contracts::FactVariant::Syntactic,
+            nomos_contracts::Assurance::Sound,
+            nomos_contracts::Assurance::Unknown,
+            nomos_contracts::IncrementalGranularity::File,
+        );
+    }
+
+    #[test]
+    fn Test_Offering_Should_Declare_The_Contract_And_Admit_The_One_Named_Provider()
+    {
+        let offering = Offering(nomos_cap_syntax::Capability_Contract(), nomos_cap_syntax::Capability(), nomos_cap_syntax::CONTRACT_VERSION, "nomos.test.test_support.offers", Floor());
+
+        assert_eq!(offering.offer.provider, ProviderId::New("nomos.test.test_support.offers"));
+        let registered: Vec<&ProviderId> = offering.registry.Offers(&nomos_cap_syntax::Capability()).iter().map(|offer| &offer.provider).collect();
+        assert_eq!(registered, vec![&offering.offer.provider]);
+    }
+
+    #[test]
+    fn Test_Test_Context_Should_Be_A_Fixed_Value_Every_Call_Reproduces()
+    {
+        assert_eq!(Test_Context(), Test_Context());
+    }
+
+    #[test]
+    fn Test_Materialize_Should_File_A_Fact_A_Real_Reader_Can_Read_Back()
+    {
+        let offering = Offering(nomos_cap_syntax::Capability_Contract(), nomos_cap_syntax::Capability(), nomos_cap_syntax::CONTRACT_VERSION, "nomos.test.test_support.materializes", Floor());
+        let mut store = offering.store;
+        let subject = SubjectId::From_Digest(Digest128::From_Bytes([9; 16]));
+        Materialize(&mut store, subject, &offering.offer, InputDigest::Of(&[]), nomos_cap_syntax::Payload_Schema(), b"unexpanded\t0\n".to_vec());
+
+        let mut reader = nomos_analysis::Reader::On(&store, &offering.registry, Test_Context());
+        let need = nomos_capability::Requirement::New(nomos_cap_syntax::Capability(), nomos_cap_syntax::CONTRACT_VERSION, Floor());
+        let fact = reader.Require(&nomos_cap_syntax::Capability(), &subject, InputDigest::Of(&[]), &need).expect("just materialized");
+
+        assert_eq!(fact.payload.schema, nomos_cap_syntax::Payload_Schema());
+        assert_eq!(fact.payload.bytes, b"unexpanded\t0\n".to_vec());
+    }
+}

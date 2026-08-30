@@ -311,8 +311,10 @@ mod tests
 
         const PROVIDER: &str = "nomos.test.reachability.resolves";
 
+        /// Also [`super::super::Reachability_Requirement`]'s own shape: the registered offer
+        /// is built at exactly that floor, which is what admits the fact this test reads back.
         #[test]
-        fn Test_A_Real_Fact_Should_Be_Read_And_Judged()
+        fn Test_Reachability_Requirement_Should_Admit_A_Real_Fact_And_Have_It_Judged()
         {
             let source = Source_File("a.rs");
             let TestOffering { mut store, registry, offer } = Offering();
@@ -345,7 +347,7 @@ mod tests
         }
 
         #[test]
-        fn Test_A_Source_With_No_Flagged_Sites_Should_Produce_No_Finding()
+        fn Test_Check_Unread_Reaches_A_Finding_Should_Produce_No_Finding_For_A_Source_With_No_Flagged_Sites()
         {
             let source = Source_File("a.rs");
             let TestOffering { mut store, registry, offer } = Offering();

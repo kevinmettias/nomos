@@ -196,3 +196,54 @@ fn Findings_Over_Universes(index: &CheckIndex<'_>) -> Vec<Finding>
         .filter_map(|universe| return Judgment_For_Universe(universe, index))
         .collect();
 }
+
+// `mod tests;` above is `checks/mirror/tests.rs` and its own `tests/*.rs` split, which the
+// coverage rule attributes to those files' own stems ("tests", "historical", "judgments", ...)
+// rather than to `mirror` — a Rust unit is the FILE, and a module POINTED AT another file is
+// not the same file. This block exists solely to give `mirror.rs`'s own public entry point an
+// address IN THIS FILE; the exhaustive judgment-by-judgment suite stays in `mod tests` above.
+#[cfg(test)]
+mod address
+{
+    use super::*;
+    use crate::checks::test_support::{self, Test_Context, TestOffering};
+    use nomos_contracts::{Assurance, FactVariant, Guarantee, IncrementalGranularity, SubjectId};
+    use nomos_model::Content_Digest;
+
+    const PARSER: &str = "nomos.test.mirror.address.parses";
+
+    #[test]
+    fn Test_Check_Completeness_Mirrors_Should_Block_On_A_Mirror_That_Resolves_To_Nothing()
+    {
+        let source = SourceFile::New(
+            "a.rs",
+            SubjectId::From_Digest(Content_Digest(b"a.rs")),
+            "/// Mirrored by `Test_Renamed_Away`.\npub const TABLES: &[&str] = &[];\n",
+        );
+        let TestOffering { mut store, registry, offer } = test_support::Offering(
+            nomos_cap_syntax::Capability_Contract(),
+            nomos_cap_syntax::Capability(),
+            nomos_cap_syntax::CONTRACT_VERSION,
+            PARSER,
+            Guarantee::New(FactVariant::Syntactic, Assurance::Sound, Assurance::Unknown, IncrementalGranularity::File),
+        );
+        test_support::Materialize(
+            &mut store,
+            source.subject,
+            &offer,
+            nomos_analysis::InputDigest::Of(&[source.text.as_bytes()]),
+            nomos_cap_syntax::Payload_Schema(),
+            "unexpanded\t0\nitem\t0\tConstant\tPublic\tTABLES\t+ Mirrored by `Test_Renamed_Away`.\t+slice\n"
+                .as_bytes()
+                .to_vec(),
+        );
+        let mut reader = nomos_analysis::Reader::On(&store, &registry, Test_Context());
+
+        let findings = Check_Completeness_Mirrors(&[source], &mut reader);
+
+        assert_eq!(findings.len(), 1, "{findings:?}");
+        let finding = findings.first().expect("asserted len 1 above");
+        assert_eq!(finding.subject_name, "TABLES");
+        assert_eq!(finding.gate, GateCategory::Blocking);
+    }
+}

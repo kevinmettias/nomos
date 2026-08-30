@@ -72,3 +72,76 @@ pub(crate) fn Relay_Findings<Payload>(
     findings.sort_by(|left, right| return (&left.subject_name, &left.summary).cmp(&(&right.subject_name, &right.summary)));
     return findings;
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use nomos_analysis::{MemoryFactStore, Reader};
+    use nomos_capability::Registry;
+
+    fn Source(path: &str) -> SourceFile
+    {
+        use nomos_contracts::SubjectId;
+        use nomos_model::Content_Digest;
+
+        return SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), String::new());
+    }
+
+    /// An admitted registry and an empty store — `Relay_Findings` never actually calls
+    /// `Require` itself (its closures do), so what this reader offers is beside the
+    /// point; it only has to be a real `FactReader`, the same view every real caller has.
+    fn Idle_Reader() -> (Registry, MemoryFactStore)
+    {
+        return (Registry::New(), MemoryFactStore::New());
+    }
+
+    #[test]
+    fn Test_Relay_Findings_Should_Push_The_Payload_Error_And_Extend_The_Findings_Of_Success()
+    {
+        let sources = vec![Source("a.rs"), Source("b.rs")];
+        let (registry, store) = Idle_Reader();
+        let mut facts = Reader::On(&store, &registry, crate::checks::test_support::Test_Context());
+
+        let findings = Relay_Findings(
+            &sources,
+            &mut facts,
+            |source, _facts| {
+                if source.path == "a.rs"
+                {
+                    return Err(Finding {
+                        rule: nomos_contracts::RuleId::New("example"),
+                        subject: source.subject,
+                        subject_name: source.path.clone(),
+                        applicability: nomos_contracts::Applicability::DependencyUnavailable,
+                        evidence: nomos_contracts::EvidenceClass::Derived,
+                        gate: nomos_contracts::GateCategory::Advisory,
+                        summary: "no fact for a.rs".to_owned(),
+                        locations: vec![source.path.clone()],
+                    });
+                }
+                return Ok(2u32);
+            },
+            |source, payload| {
+                return (0..*payload)
+                    .map(|index| {
+                        return Finding {
+                            rule: nomos_contracts::RuleId::New("example"),
+                            subject: source.subject,
+                            subject_name: format!("{}#{index}", source.path),
+                            applicability: nomos_contracts::Applicability::Supported,
+                            evidence: nomos_contracts::EvidenceClass::Derived,
+                            gate: nomos_contracts::GateCategory::Advisory,
+                            summary: "relayed".to_owned(),
+                            locations: vec![source.path.clone()],
+                        };
+                    })
+                    .collect();
+            },
+        );
+
+        assert_eq!(findings.len(), 3, "one pushed error plus two relayed findings: {findings:?}");
+        assert!(findings.iter().any(|finding| return finding.summary == "no fact for a.rs"));
+        assert_eq!(findings.iter().filter(|finding| return finding.summary == "relayed").count(), 2);
+    }
+}

@@ -96,7 +96,7 @@ mod tests
     const PARSER: &str = "nomos.test.naming.parses";
 
     #[test]
-    fn Test_A_Real_Fact_Should_Be_Read_And_Judged()
+    fn Test_Payload_Of_Should_Read_And_Judge_A_Real_Fact()
     {
         let source = Source_File(Path("src/lib.rs"), Text("fn bad_name() {}"));
         let TestOffering { mut store, registry, offer } = Offering();
@@ -128,7 +128,7 @@ mod tests
     }
 
     #[test]
-    fn Test_A_Subject_With_No_Fact_Should_Be_Reported_Rather_Than_Silently_Clean()
+    fn Test_Check_Naming_Convention_Should_Report_A_Subject_With_No_Fact_Rather_Than_Silently_Clean()
     {
         let source = Source_File(Path("src/lib.rs"), Text("fn bad_name() {}"));
         let TestOffering { store, registry, .. } = Offering();

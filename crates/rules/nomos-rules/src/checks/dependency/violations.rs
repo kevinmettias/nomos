@@ -130,21 +130,36 @@ mod tests
         };
     }
 
-    #[test]
-    fn Test_A_Strictly_Downward_Edge_Should_Produce_No_Finding()
+    /// A member and a downward edge it declares, for [`Test_A_Strictly_Downward_Edge_Should_Produce_No_Finding`] —
+    /// named for the pairing rather than `Cases()`, since what varies is which real band
+    /// gap the edge crosses.
+    fn Downward_Edges() -> Vec<(&'static str, &'static str)>
     {
-        let payload = DependencyPayload {
-            package: "nomos-rules".to_owned(),
-            edges: vec![Dependency_Edge("nomos-cap-syntax")],
-        };
-
-        let findings = Violations_In(&payload, &Source_File("nomos-rules"));
-
-        assert!(findings.is_empty(), "{findings:?}");
+        return vec![
+            ("nomos-rules", "nomos-cap-syntax"),
+            ("nomos-check-orchestration", "nomos-rules"),
+            ("nomos-cli", "nomos-gate-orchestration"),
+        ];
     }
 
     #[test]
-    fn Test_An_Upward_Edge_Should_Produce_One_Finding()
+    fn Test_A_Strictly_Downward_Edge_Should_Produce_No_Finding()
+    {
+        for (package, target) in Downward_Edges()
+        {
+            let payload = DependencyPayload {
+                package: package.to_owned(),
+                edges: vec![Dependency_Edge(target)],
+            };
+
+            let findings = Violations_In(&payload, &Source_File(package));
+
+            assert!(findings.is_empty(), "{package} -> {target}: {findings:?}");
+        }
+    }
+
+    #[test]
+    fn Test_Violations_In_Should_Produce_One_Finding_For_An_Upward_Edge()
     {
         let payload = DependencyPayload {
             package: "nomos-cap-syntax".to_owned(),
@@ -213,21 +228,32 @@ mod tests
         );
     }
 
-    #[test]
-    fn Test_An_Edge_To_An_Undeclared_Target_Should_Produce_No_Finding()
+    /// Target names no `BANDS` entry declares, for
+    /// [`Test_An_Edge_To_An_Undeclared_Target_Should_Produce_No_Finding`] — an edge whose
+    /// target has no declared band is out of scope for direction, whatever it is called.
+    fn Undeclared_Targets() -> Vec<&'static str>
     {
-        let payload = DependencyPayload {
-            package: "nomos-rules".to_owned(),
-            edges: vec![Dependency_Edge("not-in-bands")],
-        };
-
-        let findings = Violations_In(&payload, &Source_File("nomos-rules"));
-
-        assert!(findings.is_empty(), "{findings:?}");
+        return vec!["not-in-bands", "totally-unknown-crate", "another-missing-crate"];
     }
 
     #[test]
-    fn Test_A_Package_With_No_Edges_Should_Produce_No_Finding()
+    fn Test_An_Edge_To_An_Undeclared_Target_Should_Produce_No_Finding()
+    {
+        for target in Undeclared_Targets()
+        {
+            let payload = DependencyPayload {
+                package: "nomos-rules".to_owned(),
+                edges: vec![Dependency_Edge(target)],
+            };
+
+            let findings = Violations_In(&payload, &Source_File("nomos-rules"));
+
+            assert!(findings.is_empty(), "target {target}: {findings:?}");
+        }
+    }
+
+    #[test]
+    fn Test_New_Should_Build_A_Source_File_For_A_Package_With_No_Edges()
     {
         let payload = DependencyPayload {
             package: "nomos-contracts".to_owned(),

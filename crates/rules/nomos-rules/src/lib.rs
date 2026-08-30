@@ -302,7 +302,7 @@ mod tests
     use super::*;
 
     #[test]
-    fn Test_A_Named_Preference_Should_Narrow_The_Floor()
+    fn Test_Syntax_Requirement_For_Should_Narrow_The_Floor_To_A_Named_Preference()
     {
         let preferred = ProviderId::New("nomos.test.provider");
 
@@ -316,10 +316,23 @@ mod tests
     /// floor falls through to the registry's own, subject-agnostic ranking — the same as
     /// before this fix existed.
     #[test]
-    fn Test_No_Preference_Should_Carry_The_Bare_Floor_Through_Unchanged()
+    fn Test_Syntax_Requirement_Should_Be_The_Bare_Floor_Returned_When_No_Preference_Is_Named()
     {
         let need = Syntax_Requirement_For(None);
 
         assert_eq!(need, Syntax_Requirement());
+    }
+
+    #[test]
+    fn Test_New_Should_Build_A_Source_File_Whose_Preferred_Provider_Starts_Unset()
+    {
+        let subject = SubjectId::From_Digest(nomos_model::Content_Digest(b"a.rs"));
+
+        let source = SourceFile::New("a.rs", subject, "fn Test_Something() {}");
+
+        assert_eq!(source.path, "a.rs");
+        assert_eq!(source.text, "fn Test_Something() {}");
+        assert_eq!(source.subject, subject);
+        assert_eq!(source.preferred_syntax_provider, None);
     }
 }

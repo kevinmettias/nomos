@@ -109,7 +109,7 @@ mod tests
     const SUBJECT_COUNT: usize = 2;
 
     #[test]
-    fn Test_Every_Subject_Is_Reported_As_Agent_Required()
+    fn Test_Check_Declared_Role_Matches_Surface_Should_Report_Every_Subject_As_Agent_Required()
     {
         let subjects = vec![
             Role_Surface_Pair("nomos-example-a", "Reads files.", "pub fn Read() -> String"),

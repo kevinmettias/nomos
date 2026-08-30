@@ -299,7 +299,7 @@ mod tests
     use nomos_cap_syntax::Parse_Payload;
 
     #[test]
-    fn Test_A_Constant_Slice_Should_Be_Found()
+    fn Test_Universes_In_Should_Find_A_Constant_Slice()
     {
         let found = Universes_In(
             "a.rs",
@@ -334,37 +334,55 @@ mod tests
         );
     }
 
+    /// Trait names an `All()` sits behind, for [`Test_A_Trait_Impl_Should_Not_Claim_The_Type`] —
+    /// whichever foreign trait it is, a trait implementation never owns the variant list.
+    fn Trait_Impl_Names() -> Vec<&'static str>
+    {
+        return vec!["Other", "Display", "Iterator", "SomeCustomTrait"];
+    }
+
     /// A trait implementation does not own the type's variant list, so attributing an
     /// `All()` to it would name the wrong universe. Two `impl` blocks for one type carry
     /// the same qualified name, and only the record each member follows tells them apart.
     #[test]
     fn Test_A_Trait_Impl_Should_Not_Claim_The_Type()
     {
-        let found = Universes_In(
-            "a.rs",
-            &Payload_From_Records(
-                "item\t0\tImplementation\tNotApplicable\tTable\t.\t+inherent\n\
-                 item\t1\tImplementation\tNotApplicable\tOther\t.\t+trait\n\
-                 item\t2\tFunction\tNotApplicable\tOther::All\t.\t+fn/0\n",
-            ),
-        );
+        for trait_name in Trait_Impl_Names()
+        {
+            let found = Universes_In(
+                "a.rs",
+                &Payload_From_Records(&format!(
+                    "item\t0\tImplementation\tNotApplicable\tTable\t.\t+inherent\nitem\t1\tImplementation\tNotApplicable\t{trait_name}\t.\t+trait\nitem\t2\tFunction\tNotApplicable\t{trait_name}::All\t.\t+fn/0\n"
+                )),
+            );
 
-        assert!(found.is_empty(), "{found:?}");
+            assert!(found.is_empty(), "{trait_name}: {found:?}");
+        }
+    }
+
+    /// Nonzero arities for `Table::All`, for
+    /// [`Test_An_All_That_Takes_A_Receiver_Should_Not_Be_A_Universe`] — any receiver or
+    /// argument at all makes it an accessor rather than the type's own list.
+    fn Nonzero_All_Arities() -> Vec<u32>
+    {
+        return vec![1, 2, 3];
     }
 
     /// An accessor on an instance is not the type's list of itself.
     #[test]
     fn Test_An_All_That_Takes_A_Receiver_Should_Not_Be_A_Universe()
     {
-        let found = Universes_In(
-            "a.rs",
-            &Payload_From_Records(
-                "item\t0\tImplementation\tNotApplicable\tTable\t.\t+inherent\n\
-                 item\t1\tFunction\tPublic\tTable::All\t.\t+fn/1\n",
-            ),
-        );
+        for arity in Nonzero_All_Arities()
+        {
+            let found = Universes_In(
+                "a.rs",
+                &Payload_From_Records(&format!(
+                    "item\t0\tImplementation\tNotApplicable\tTable\t.\t+inherent\nitem\t1\tFunction\tPublic\tTable::All\t.\t+fn/{arity}\n"
+                )),
+            );
 
-        assert!(found.is_empty(), "{found:?}");
+            assert!(found.is_empty(), "arity {arity}: {found:?}");
+        }
     }
 
     /// A scalar constant is not a universe. Matching it would bury the real ones.
@@ -442,7 +460,7 @@ mod tests
 
     /// A file that declares nothing is not a file nobody could read.
     #[test]
-    fn Test_A_File_That_Declares_Nothing_Should_Be_Observed_And_Empty()
+    fn Test_Read_Universes_Should_Observe_A_File_That_Declares_Nothing_As_Empty()
     {
         assert_eq!(Read_Universes("a.rs", &Payload_From_Records("")), Reading::Observed(Vec::new()));
     }

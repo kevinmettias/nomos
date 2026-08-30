@@ -67,3 +67,47 @@ impl Shortfall<'_>
         };
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Describe_Should_Say_No_Index_Could_Answer_For_Any_Subject()
+    {
+        let description = Shortfall::NoIndex.Describe();
+
+        assert!(description.contains("no admitted provider"), "{description}");
+    }
+
+    #[test]
+    fn Test_Describe_Should_Name_Every_Withheld_Subject()
+    {
+        let shortfall = Shortfall::Withheld {
+            applicability: Applicability::DependencyUnavailable,
+            subjects: vec!["a.rs", "b.rs"],
+        };
+
+        let description = shortfall.Describe();
+
+        assert!(description.contains("a.rs, b.rs"), "{description}");
+    }
+
+    #[test]
+    fn Test_Applicability_Should_Report_Missing_Capability_For_No_Index()
+    {
+        assert_eq!(Shortfall::NoIndex.Applicability(), Applicability::MissingCapability);
+    }
+
+    #[test]
+    fn Test_Applicability_Should_Carry_The_Withheld_Subjects_Own_Reading()
+    {
+        let shortfall = Shortfall::Withheld {
+            applicability: Applicability::Unparseable,
+            subjects: vec!["a.rs"],
+        };
+
+        assert_eq!(shortfall.Applicability(), Applicability::Unparseable);
+    }
+}

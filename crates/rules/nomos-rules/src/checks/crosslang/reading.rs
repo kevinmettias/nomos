@@ -43,3 +43,54 @@ fn Payload_Of(source: &SourceFile, facts: &mut dyn FactReader) -> Result<SyntaxP
 
     return nomos_cap_syntax::Parse_Payload(&fact.payload.bytes).map_err(|_| ());
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use crate::checks::test_support::{self, Test_Context, TestOffering};
+    use nomos_analysis::Reader;
+    use nomos_contracts::{Assurance, FactVariant, Guarantee, IncrementalGranularity, SubjectId};
+    use nomos_model::Content_Digest;
+
+    const PARSER: &str = "nomos.test.crosslang.reading.parses";
+
+    fn Source(path: &str) -> SourceFile
+    {
+        return SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), String::new());
+    }
+
+    fn Offering() -> TestOffering
+    {
+        return test_support::Offering(
+            nomos_cap_syntax::Capability_Contract(),
+            nomos_cap_syntax::Capability(),
+            nomos_cap_syntax::CONTRACT_VERSION,
+            PARSER,
+            Guarantee::New(FactVariant::Syntactic, Assurance::Sound, Assurance::Unknown, IncrementalGranularity::File),
+        );
+    }
+
+    #[test]
+    fn Test_Struct_Index_Should_Include_Only_The_Sources_Whose_Fact_Could_Be_Read()
+    {
+        let readable = Source("readable.rs");
+        let unread = Source("unread.rs");
+        let TestOffering { mut store, registry, offer } = Offering();
+        test_support::Materialize(
+            &mut store,
+            readable.subject,
+            &offer,
+            nomos_analysis::InputDigest::Of(&[readable.text.as_bytes()]),
+            nomos_cap_syntax::Payload_Schema(),
+            "unexpanded\t0\n".as_bytes().to_vec(),
+        );
+        let mut reader = Reader::On(&store, &registry, Test_Context());
+
+        let sources = [readable.clone(), unread.clone()];
+        let index = Struct_Index(&sources, &mut reader);
+
+        assert_eq!(index.len(), 1, "expected exactly the readable source: {}", index.len());
+        assert_eq!(index.first().map(|(source, _)| source.path.clone()), Some(readable.path));
+    }
+}
