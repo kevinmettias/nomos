@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 
 /// What kind of thing a subject denotes.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, Serialize, Deserialize)]
-pub enum SubjectKind
+pub enum Kind
 {
     /// A persisted or generated repository object.
     Artifact,

@@ -71,22 +71,19 @@ impl ValidatedPlan
 #[cfg(test)]
 mod tests
 {
-    use crate::{ChangeSet, CorrectionCandidate, CorrectionClass, CorrectionError, CorrectionPlan, Edit, ValidatedPlan};
-    use nomos_contracts::{ConfigurationId, Digest128, EvidenceClass, MutationClass, ProviderId};
-    use nomos_model::{Content_Digest, Evidence};
-    use nomos_workspace::{BuildVariant, ChangeSource, Workspace, WorkspaceChangeSet};
+    use crate::test_support::{Agent_Judged, Base, Plan_Changing_A};
+    use crate::{CorrectionError, ValidatedPlan};
+    use nomos_contracts::MutationClass;
+    use nomos_model::Content_Digest;
+    use nomos_workspace::{ChangeSource, WorkspaceChangeSet};
+
+    const CONFIGURATION_SEED_BYTE: u8 = 0x22;
 
     #[test]
     fn Test_Committing_A_Validated_Plan_Should_Change_The_Workspace()
     {
-        let mut base = Base();
-        let plan = CorrectionPlan::New(vec![CorrectionCandidate::New(
-            "fix a",
-            ChangeSet::Empty().With(Edit::New("a.rs", Some("old".to_owned()), Some("new".to_owned()))),
-            CorrectionClass::Mechanical,
-            vec![],
-        )])
-        .expect("a single candidate is a valid plan");
+        let mut base = Base(CONFIGURATION_SEED_BYTE);
+        let plan = Plan_Changing_A("old", "new");
         let before = base.Id();
         let validated = plan
             .Stage(&base)
@@ -104,14 +101,8 @@ mod tests
     #[test]
     fn Test_Committing_After_The_Workspace_Moved_Should_Be_Refused()
     {
-        let mut base = Base();
-        let plan = CorrectionPlan::New(vec![CorrectionCandidate::New(
-            "fix a",
-            ChangeSet::Empty().With(Edit::New("a.rs", Some("old".to_owned()), Some("new".to_owned()))),
-            CorrectionClass::Mechanical,
-            vec![],
-        )])
-        .expect("a single candidate is a valid plan");
+        let mut base = Base(CONFIGURATION_SEED_BYTE);
+        let plan = Plan_Changing_A("old", "new");
         let validated = plan
             .Stage(&base)
             .expect("stages cleanly")
@@ -133,30 +124,5 @@ mod tests
     fn Test_A_Validated_Plan_Belongs_To_The_Validate_Mutation_Class()
     {
         assert_eq!(ValidatedPlan::Mutation_Class(), MutationClass::Validate);
-    }
-
-    /// What a caller with nothing stronger than its own judgment supplies.
-    fn Agent_Judged() -> Evidence
-    {
-        return Evidence {
-            class: EvidenceClass::AgentJudged,
-            producer: ProviderId::New("test"),
-            supporting: Vec::new(),
-        };
-    }
-
-    fn Base() -> Workspace
-    {
-        const CONFIGURATION_SEED_BYTE: u8 = 0x22;
-
-        let variant = BuildVariant::New("x86_64-unknown-none", "test", "fixed", Vec::<String>::new());
-        let configuration =
-            ConfigurationId::From_Digest(Digest128::From_Bytes([CONFIGURATION_SEED_BYTE; Digest128::BYTE_LENGTH]));
-        let mut workspace = Workspace::Empty(variant, configuration);
-
-        let initial = WorkspaceChangeSet::From(ChangeSource::GitCheckout).Present("a.rs", "old");
-        workspace.Apply(&initial).expect("a fresh present is always accepted");
-
-        return workspace;
     }
 }

@@ -32,6 +32,8 @@ mod ranking_criterion;
 mod read_write_resolution;
 mod rollback_boundary;
 mod staged_plan;
+#[cfg(test)]
+mod test_support;
 mod validated_plan;
 
 pub use correction_id::{CorrectionCandidate, CorrectionId};

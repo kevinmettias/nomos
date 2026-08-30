@@ -1,8 +1,8 @@
 //! Reading and writing files, with the durability rules stated rather than assumed.
 
-mod file_system_error;
+mod error;
 
-pub use file_system_error::FileSystemError;
+pub use error::Error as FileSystemError;
 
 use std::path::Path;
 

@@ -9,7 +9,7 @@ use serde::{Deserialize, Serialize};
 /// prototype could not express any of these, so every one of them presented as a
 /// deletion followed by an unrelated arrival.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, Serialize, Deserialize)]
-pub enum IdentityTransitionKind
+pub enum TransitionKind
 {
     /// The same thing, unchanged.
     ExactContinuity,
@@ -32,12 +32,12 @@ pub enum IdentityTransitionKind
     Unresolved,
 }
 
-impl IdentityTransitionKind
+impl TransitionKind
 {
     /// Whether this transition preserves the subject's accumulated history.
     ///
-    /// [`IdentityTransitionKind::Recreated`] and
-    /// [`IdentityTransitionKind::Unresolved`] deliberately do not. Carrying a
+    /// [`TransitionKind::Recreated`] and
+    /// [`TransitionKind::Unresolved`] deliberately do not. Carrying a
     /// suppression across a recreation would silence a finding on code nobody has
     /// reviewed, and carrying one across an unresolved link would do so on the strength
     /// of a guess.
@@ -63,18 +63,18 @@ mod tests
     #[test]
     fn Test_Recreation_Should_Not_Preserve_History()
     {
-        assert!(!IdentityTransitionKind::Recreated.Is_History_Preserving());
-        assert!(!IdentityTransitionKind::Unresolved.Is_History_Preserving());
-        assert!(!IdentityTransitionKind::SplitInto.Is_History_Preserving());
-        assert!(!IdentityTransitionKind::MergedFrom.Is_History_Preserving());
+        assert!(!TransitionKind::Recreated.Is_History_Preserving());
+        assert!(!TransitionKind::Unresolved.Is_History_Preserving());
+        assert!(!TransitionKind::SplitInto.Is_History_Preserving());
+        assert!(!TransitionKind::MergedFrom.Is_History_Preserving());
     }
 
     #[test]
     fn Test_Renames_And_Moves_Should_Preserve_History()
     {
-        assert!(IdentityTransitionKind::ExactContinuity.Is_History_Preserving());
-        assert!(IdentityTransitionKind::ProbableRename.Is_History_Preserving());
-        assert!(IdentityTransitionKind::ProbableMove.Is_History_Preserving());
-        assert!(IdentityTransitionKind::SignatureEvolution.Is_History_Preserving());
+        assert!(TransitionKind::ExactContinuity.Is_History_Preserving());
+        assert!(TransitionKind::ProbableRename.Is_History_Preserving());
+        assert!(TransitionKind::ProbableMove.Is_History_Preserving());
+        assert!(TransitionKind::SignatureEvolution.Is_History_Preserving());
     }
 }

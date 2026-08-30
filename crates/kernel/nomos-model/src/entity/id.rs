@@ -6,9 +6,9 @@ use serde::{Deserialize, Serialize};
 /// Answers "which thing is this" across time. Pair it with a snapshot to get a
 /// [`crate::SnapshotEntity`], which answers "which thing is this, as it was then".
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, Serialize, Deserialize)]
-pub struct EntityId(Digest128);
+pub struct Id(Digest128);
 
-impl EntityId
+impl Id
 {
     /// Wraps a digest as an entity identity.
     #[must_use]
@@ -25,7 +25,7 @@ impl EntityId
     }
 }
 
-impl core::fmt::Display for EntityId
+impl core::fmt::Display for Id
 {
     fn fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
     {
@@ -43,7 +43,7 @@ mod tests
     fn Test_Entity_Id_Should_Render_As_Its_Digest()
     {
         let digest = Content_Digest(b"symbol");
-        let id = EntityId::From_Digest(digest);
+        let id = Id::From_Digest(digest);
 
         assert_eq!(id.to_string(), digest.to_string());
     }

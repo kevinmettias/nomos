@@ -14,7 +14,7 @@ pub use snapshot_entity::SnapshotEntity;
 
 mod artifact;
 mod artifact_kind;
-mod entity_id;
+mod id;
 mod resource;
 mod resource_kind;
 mod symbol;
@@ -22,7 +22,7 @@ mod symbol_kind;
 
 pub use artifact::Artifact;
 pub use artifact_kind::ArtifactKind;
-pub use entity_id::EntityId;
+pub use id::Id as EntityId;
 pub use resource::Resource;
 pub use resource_kind::ResourceKind;
 pub use symbol::Symbol;

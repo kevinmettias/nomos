@@ -13,7 +13,7 @@ use crate::SubjectKind;
 /// field duplicated from the entity into the subject is a second place for it to be
 /// wrong, and the two will disagree the first time one of them is updated.
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
-pub enum SubjectTarget
+pub enum Target
 {
     /// A repository object.
     Artifact(EntityId),
@@ -31,7 +31,7 @@ pub enum SubjectTarget
     },
 }
 
-impl SubjectTarget
+impl Target
 {
     /// What kind of thing this target denotes.
     #[must_use]

@@ -27,14 +27,14 @@ use std::collections::BTreeSet;
 /// [`UnknownReason::UnexpandedPattern`] rather than an answer, because a comparison
 /// against an unexpanded pattern is a guess wearing the costume of a computation.
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
-pub struct SubjectSet
+pub struct Set
 {
     resolution: SetResolution,
     members: BTreeSet<SubjectId>,
     unexpanded: Vec<String>,
 }
 
-impl SubjectSet
+impl Set
 {
     /// An empty set at the given resolution.
     #[must_use]
@@ -168,8 +168,8 @@ mod tests
     #[test]
     fn Test_Disjoint_Sets_Should_Permit_Concurrency()
     {
-        let left = SubjectSet::Of(SetResolution::File, [Subject_Named("a.rs")]);
-        let right = SubjectSet::Of(SetResolution::File, [Subject_Named("b.rs")]);
+        let left = Set::Of(SetResolution::File, [Subject_Named("a.rs")]);
+        let right = Set::Of(SetResolution::File, [Subject_Named("b.rs")]);
 
         assert_eq!(left.Intersect(&right), Intersection::Disjoint);
         assert!(left.Intersect(&right).Permits_Concurrency());
@@ -178,8 +178,8 @@ mod tests
     #[test]
     fn Test_Overlapping_Sets_Should_Report_The_Shared_Members()
     {
-        let left = SubjectSet::Of(SetResolution::File, [Subject_Named("a.rs"), Subject_Named("b.rs")]);
-        let right = SubjectSet::Of(SetResolution::File, [Subject_Named("b.rs"), Subject_Named("c.rs")]);
+        let left = Set::Of(SetResolution::File, [Subject_Named("a.rs"), Subject_Named("b.rs")]);
+        let right = Set::Of(SetResolution::File, [Subject_Named("b.rs"), Subject_Named("c.rs")]);
 
         let result = left.Intersect(&right);
 
@@ -221,8 +221,8 @@ mod tests
     #[test]
     fn Test_Mismatched_Resolutions_Should_Be_Unknown_Not_Disjoint()
     {
-        let by_file = SubjectSet::Of(SetResolution::File, [Subject_Named("a.rs")]);
-        let by_symbol = SubjectSet::Of(SetResolution::Symbol, [Subject_Named("a.rs::foo")]);
+        let by_file = Set::Of(SetResolution::File, [Subject_Named("a.rs")]);
+        let by_symbol = Set::Of(SetResolution::Symbol, [Subject_Named("a.rs::foo")]);
 
         let result = by_file.Intersect(&by_symbol);
 
@@ -236,8 +236,8 @@ mod tests
     fn Test_An_Unexpanded_Pattern_Should_Make_The_Answer_Unknown()
     {
         let wildcard =
-            SubjectSet::Empty(SetResolution::File).With_Unexpanded_Pattern("src/**/*.rs");
-        let concrete = SubjectSet::Of(SetResolution::File, [Subject_Named("src/main.rs")]);
+            Set::Empty(SetResolution::File).With_Unexpanded_Pattern("src/**/*.rs");
+        let concrete = Set::Of(SetResolution::File, [Subject_Named("src/main.rs")]);
 
         assert!(!wildcard.Intersect(&concrete).Permits_Concurrency());
         assert!(
@@ -252,8 +252,8 @@ mod tests
     #[test]
     fn Test_Empty_Sets_Should_Be_Disjoint()
     {
-        let left = SubjectSet::Empty(SetResolution::File);
-        let right = SubjectSet::Empty(SetResolution::File);
+        let left = Set::Empty(SetResolution::File);
+        let right = Set::Empty(SetResolution::File);
 
         assert_eq!(left.Intersect(&right), Intersection::Disjoint);
     }
@@ -261,8 +261,8 @@ mod tests
     #[test]
     fn Test_Intersection_Should_Be_Symmetric()
     {
-        let left = SubjectSet::Of(SetResolution::File, [Subject_Named("a.rs"), Subject_Named("b.rs")]);
-        let right = SubjectSet::Of(SetResolution::File, [Subject_Named("b.rs")]);
+        let left = Set::Of(SetResolution::File, [Subject_Named("a.rs"), Subject_Named("b.rs")]);
+        let right = Set::Of(SetResolution::File, [Subject_Named("b.rs")]);
 
         assert_eq!(
             left.Intersect(&right).Permits_Concurrency(),
@@ -279,7 +279,7 @@ mod tests
     #[test]
     fn Test_A_Nonempty_Set_Should_Overlap_Itself()
     {
-        let set = SubjectSet::Of(SetResolution::File, [Subject_Named("a.rs")]);
+        let set = Set::Of(SetResolution::File, [Subject_Named("a.rs")]);
 
         assert!(!set.Intersect(&set).Permits_Concurrency());
     }
@@ -290,11 +290,11 @@ mod tests
     #[test]
     fn Test_Members_Should_Iterate_In_A_Stable_Order()
     {
-        let forward = SubjectSet::Of(
+        let forward = Set::Of(
             SetResolution::File,
             [Subject_Named("a.rs"), Subject_Named("b.rs"), Subject_Named("c.rs")],
         );
-        let reverse = SubjectSet::Of(
+        let reverse = Set::Of(
             SetResolution::File,
             [Subject_Named("c.rs"), Subject_Named("b.rs"), Subject_Named("a.rs")],
         );

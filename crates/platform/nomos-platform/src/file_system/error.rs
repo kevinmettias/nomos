@@ -2,7 +2,7 @@
 
 /// Why a filesystem operation failed.
 #[derive(Debug)]
-pub enum FileSystemError
+pub enum Error
 {
     /// The path does not exist.
     NotFound
@@ -28,7 +28,7 @@ pub enum FileSystemError
     },
 }
 
-impl FileSystemError
+impl Error
 {
     /// The path the failure concerns.
     #[must_use]
@@ -41,7 +41,7 @@ impl FileSystemError
     }
 }
 
-impl core::fmt::Display for FileSystemError
+impl core::fmt::Display for Error
 {
     fn fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
     {
@@ -54,5 +54,5 @@ impl core::fmt::Display for FileSystemError
     }
 }
 
-impl std::error::Error for FileSystemError
+impl std::error::Error for Error
 {}

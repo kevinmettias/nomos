@@ -47,7 +47,6 @@ pub use agent_execution_outcome::AgentExecutionOutcome;
 use nomos_agent_contracts::TaskEnvelope;
 use nomos_platform::{Command, ExitOutcome, ProcessLauncher};
 use std::path::PathBuf;
-use std::sync::atomic::{AtomicU64, Ordering};
 use std::time::Duration;
 
 /// `OD-EXECUTOR-004`'s own measured adversarial run took under two minutes on this crate's
@@ -87,26 +86,17 @@ pub fn Execute_Task<Launcher: ProcessLauncher>(task: &TaskEnvelope, launcher: &L
 /// own tree — `OD-EXECUTOR-004`'s rule applies this defensively, even though it found no
 /// mechanism by which `ollama run` reads its own working directory, on the same "a property
 /// of the invocation, not a property inferred from today's absence of a mechanism that could
-/// read it" reasoning that record states. Named from this process's id and a per-process
-/// counter, distinct from `nomos-agent-executor-claude-code`'s own prefix, so two crates'
-/// isolated directories are never mistaken for one another on the same machine.
+/// read it" reasoning that record states.
+///
+/// Delegates to `nomos_agent_contracts::Isolated_Working_Directory`, shared with
+/// `nomos-agent-executor-claude-code`'s own isolation step; this crate's only distinct part
+/// is the prefix its directories are named from, so two crates' isolated directories are
+/// never mistaken for one another on the same machine.
 fn Isolated_Working_Directory() -> Result<PathBuf, AgentExecutionError>
 {
-    static COUNTER: AtomicU64 = AtomicU64::new(0);
-
-    // atomic-ordering: allow: only used to give two calls in this process different numbers;
-    // nothing else synchronizes on it or reads memory ordered by this counter.
-    let sequence = COUNTER.fetch_add(1, Ordering::Relaxed);
-    let directory = std::env::temp_dir().join(format!("nomos-model-backend-ollama-{}-{sequence}", std::process::id()));
-
-    std::fs::create_dir_all(&directory).map_err(|error| {
-        return AgentExecutionError::Unavailable(format!(
-            "could not create an isolated working directory at {}: {error}",
-            directory.display()
-        ));
-    })?;
-
-    return Ok(directory);
+    return nomos_agent_contracts::Isolated_Working_Directory("nomos-model-backend-ollama").map_err(|error| {
+        return AgentExecutionError::Unavailable(error.to_string());
+    });
 }
 
 /// [`Execute_Task`], over a caller-chosen `working_directory` rather than a freshly generated

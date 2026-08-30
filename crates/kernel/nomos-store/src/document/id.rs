@@ -4,9 +4,9 @@ use nomos_contracts::Digest128;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, Serialize, Deserialize)]
-pub struct DocumentId(Digest128);
+pub struct Id(Digest128);
 
-impl DocumentId
+impl Id
 {
     #[must_use]
     pub const fn From_Digest(digest: Digest128) -> Self
@@ -21,7 +21,7 @@ impl DocumentId
     }
 }
 
-impl core::fmt::Display for DocumentId
+impl core::fmt::Display for Id
 {
     fn fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
     {

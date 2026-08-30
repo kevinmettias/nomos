@@ -104,19 +104,22 @@ impl CommittedPlan
 #[cfg(test)]
 mod tests
 {
-    use crate::{ChangeSet, CommittedPlan, CorrectionCandidate, CorrectionClass, CorrectionPlan, Edit};
-    use nomos_contracts::{ConfigurationId, Digest128, EvidenceClass, MutationClass, ProviderId};
-    use nomos_model::{Content_Digest, Evidence};
-    use nomos_workspace::{BuildVariant, ChangeSource, Workspace, WorkspaceChangeSet};
+    use crate::test_support::{Agent_Judged, Base, Plan_Changing_A};
+    use crate::{CommittedPlan, CorrectionPlan};
+    use nomos_contracts::MutationClass;
+    use nomos_model::Content_Digest;
+    use nomos_workspace::{ChangeSource, Workspace, WorkspaceChangeSet};
+
+    const CONFIGURATION_SEED_BYTE: u8 = 0x33;
 
     /// The invariant that makes rollback worth having: undoing a committed plan returns
     /// the workspace to exactly the snapshot it started from, byte for byte.
     #[test]
     fn Test_Committing_Then_Rolling_Back_Should_Return_To_The_Base_Snapshot()
     {
-        let mut base = Base();
+        let mut base = Base(CONFIGURATION_SEED_BYTE);
         let starting = base.Id();
-        let plan = Plan_Changing_A(Before("old"), After("new"));
+        let plan = Plan_Changing_A("old", "new");
         let committed = Commit_Plan(&plan, &mut base);
 
         assert_ne!(base.Id(), starting, "the commit must have changed something");
@@ -133,8 +136,8 @@ mod tests
     #[test]
     fn Test_A_Committed_Plan_Should_Carry_Its_Evidence()
     {
-        let mut base = Base();
-        let plan = Plan_Changing_A(Before("old"), After("new"));
+        let mut base = Base(CONFIGURATION_SEED_BYTE);
+        let plan = Plan_Changing_A("old", "new");
         let committed = Commit_Plan(&plan, &mut base);
 
         assert_eq!(committed.Evidence(), &Agent_Judged());
@@ -143,8 +146,8 @@ mod tests
     #[test]
     fn Test_Rollback_After_The_Workspace_Moved_Should_Be_Refused()
     {
-        let mut base = Base();
-        let plan = Plan_Changing_A(Before("old"), After("new"));
+        let mut base = Base(CONFIGURATION_SEED_BYTE);
+        let plan = Plan_Changing_A("old", "new");
         let committed = Commit_Plan(&plan, &mut base);
 
         let advance = WorkspaceChangeSet::From(ChangeSource::GitCheckout).Present("b.rs", "other");
@@ -169,50 +172,6 @@ mod tests
     fn Test_A_Committed_Plan_Declares_An_Exact_Rollback_Boundary()
     {
         assert_eq!(CommittedPlan::Rollback_Boundary(), crate::RollbackBoundary::Exact);
-    }
-
-    /// What a caller with nothing stronger than its own judgment supplies.
-    fn Agent_Judged() -> Evidence
-    {
-        return Evidence {
-            class: EvidenceClass::AgentJudged,
-            producer: ProviderId::New("test"),
-            supporting: Vec::new(),
-        };
-    }
-
-    fn Base() -> Workspace
-    {
-        const CONFIGURATION_SEED_BYTE: u8 = 0x33;
-
-        let variant = BuildVariant::New("x86_64-unknown-none", "test", "fixed", Vec::<String>::new());
-        let configuration =
-            ConfigurationId::From_Digest(Digest128::From_Bytes([CONFIGURATION_SEED_BYTE; Digest128::BYTE_LENGTH]));
-        let mut workspace = Workspace::Empty(variant, configuration);
-
-        let initial = WorkspaceChangeSet::From(ChangeSource::GitCheckout).Present("a.rs", "old");
-        workspace.Apply(&initial).expect("a fresh present is always accepted");
-
-        return workspace;
-    }
-
-    struct Before<'a>(&'a str);
-    struct After<'a>(&'a str);
-
-    /// A plan with a single candidate that rewrites `a.rs` from `before` to `after`.
-    fn Plan_Changing_A(before: Before<'_>, after: After<'_>) -> CorrectionPlan
-    {
-        return CorrectionPlan::New(vec![CorrectionCandidate::New(
-            "fix a",
-            ChangeSet::Empty().With(Edit::New(
-                "a.rs",
-                Some(before.0.to_owned()),
-                Some(after.0.to_owned()),
-            )),
-            CorrectionClass::Mechanical,
-            vec![],
-        )])
-        .expect("a single candidate is a valid plan");
     }
 
     /// Stages, validates and commits `plan` against `base` in one step.

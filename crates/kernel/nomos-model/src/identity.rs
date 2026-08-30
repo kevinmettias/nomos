@@ -7,18 +7,18 @@
 //! [`IdentityPolicy`] without touching what an identity is made of.
 
 // How an identity moves from one form to another, beneath the identity it is of.
-mod identity_transition;
-mod identity_transition_kind;
+mod transition;
+mod transition_kind;
 
-pub use identity_transition::IdentityTransition;
-pub use identity_transition_kind::IdentityTransitionKind;
+pub use transition::Transition as IdentityTransition;
+pub use transition_kind::TransitionKind as IdentityTransitionKind;
 
 mod composite_identity;
-mod identity_policy;
+mod policy;
 mod source_provenance;
 mod structural_fingerprint;
 
 pub use composite_identity::CompositeIdentity;
-pub use identity_policy::IdentityPolicy;
+pub use policy::Policy as IdentityPolicy;
 pub use source_provenance::SourceProvenance;
 pub use structural_fingerprint::StructuralFingerprint;

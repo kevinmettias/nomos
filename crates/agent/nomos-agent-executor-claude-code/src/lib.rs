@@ -41,7 +41,6 @@ use nomos_agent_contracts::TaskEnvelope;
 use nomos_model_package::EffortLevel;
 use nomos_platform::{Command, ExitOutcome, ProcessLauncher};
 use std::path::PathBuf;
-use std::sync::atomic::{AtomicU64, Ordering};
 use std::time::Duration;
 
 /// A prompt this repository has already run against the real CLI takes well under a
@@ -85,26 +84,16 @@ pub fn Execute_Task<Launcher: ProcessLauncher>(task: &TaskEnvelope, launcher: &L
 
 /// A freshly created, empty directory under the system temp root, never this repository's
 /// own tree and never one carrying its own `.claude/settings*` or `CLAUDE.md` — the first
-/// clause of `OD-EXECUTOR-001`'s rule. Named from this process's id and a per-process
-/// counter rather than the wall clock, so two calls in the same process never collide and
-/// nothing here depends on time having advanced.
+/// clause of `OD-EXECUTOR-001`'s rule.
+///
+/// Delegates to `nomos_agent_contracts::Isolated_Working_Directory`, shared with
+/// `nomos-model-backend-ollama`'s own isolation step; this crate's only distinct part is
+/// the prefix its directories are named from.
 fn Isolated_Working_Directory() -> Result<PathBuf, AgentExecutionError>
 {
-    static COUNTER: AtomicU64 = AtomicU64::new(0);
-
-    // atomic-ordering: allow: only used to give two calls in this process different numbers;
-    // nothing else synchronizes on it or reads memory ordered by this counter.
-    let sequence = COUNTER.fetch_add(1, Ordering::Relaxed);
-    let directory = std::env::temp_dir().join(format!("nomos-agent-executor-{}-{sequence}", std::process::id()));
-
-    std::fs::create_dir_all(&directory).map_err(|error| {
-        return AgentExecutionError::Unavailable(format!(
-            "could not create an isolated working directory at {}: {error}",
-            directory.display()
-        ));
-    })?;
-
-    return Ok(directory);
+    return nomos_agent_contracts::Isolated_Working_Directory("nomos-agent-executor").map_err(|error| {
+        return AgentExecutionError::Unavailable(error.to_string());
+    });
 }
 
 /// [`Execute_Task`], over a caller-chosen `working_directory` rather than a freshly generated

@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 /// and each needs a stated answer rather than whatever the first implementation
 /// happened to do.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
-pub struct IdentityPolicy
+pub struct Policy
 {
     /// Whether overloads sharing a name are distinguished by signature.
     pub distinguish_overloads: bool,
@@ -17,7 +17,7 @@ pub struct IdentityPolicy
     pub distinguish_conditional_compilation: bool,
 }
 
-impl IdentityPolicy
+impl Policy
 {
     /// The policy Nomos applies unless a language package states otherwise.
     ///

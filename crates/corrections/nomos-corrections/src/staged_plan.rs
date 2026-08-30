@@ -120,21 +120,18 @@ pub(crate) fn Assert_Not_Moved(expected: SnapshotId, live: &Workspace) -> Result
 #[cfg(test)]
 mod tests
 {
-    use crate::{ChangeSet, CorrectionCandidate, CorrectionClass, CorrectionError, CorrectionPlan, Edit, StagedPlan};
-    use nomos_contracts::{ConfigurationId, Digest128, MutationClass};
-    use nomos_workspace::{BuildVariant, ChangeSource, Workspace, WorkspaceChangeSet};
+    use crate::test_support::{Base, Plan_Changing_A};
+    use crate::{CorrectionError, StagedPlan};
+    use nomos_contracts::MutationClass;
+    use nomos_workspace::{ChangeSource, WorkspaceChangeSet};
+
+    const CONFIGURATION_SEED_BYTE: u8 = 0x11;
 
     #[test]
     fn Test_Staging_Against_The_Content_It_Was_Built_Over_Should_Succeed()
     {
-        let base = Base();
-        let plan = CorrectionPlan::New(vec![CorrectionCandidate::New(
-            "fix a",
-            ChangeSet::Empty().With(Edit::New("a.rs", Some("old".to_owned()), Some("new".to_owned()))),
-            CorrectionClass::Mechanical,
-            vec![],
-        )])
-        .expect("a single candidate is a valid plan");
+        let base = Base(CONFIGURATION_SEED_BYTE);
+        let plan = Plan_Changing_A("old", "new");
 
         let staged = plan.Stage(&base).expect("the candidate's prior content matches");
 
@@ -144,18 +141,8 @@ mod tests
     #[test]
     fn Test_Staging_Against_Stale_Content_Should_Be_Refused()
     {
-        let base = Base();
-        let plan = CorrectionPlan::New(vec![CorrectionCandidate::New(
-            "fix a",
-            ChangeSet::Empty().With(Edit::New(
-                "a.rs",
-                Some("not what is there".to_owned()),
-                Some("new".to_owned()),
-            )),
-            CorrectionClass::Mechanical,
-            vec![],
-        )])
-        .expect("a single candidate is a valid plan");
+        let base = Base(CONFIGURATION_SEED_BYTE);
+        let plan = Plan_Changing_A("not what is there", "new");
 
         let refusal = plan.Stage(&base).expect_err("the candidate's prior content is wrong");
 
@@ -165,14 +152,8 @@ mod tests
     #[test]
     fn Test_Validating_An_Unmoved_Workspace_Should_Succeed()
     {
-        let base = Base();
-        let plan = CorrectionPlan::New(vec![CorrectionCandidate::New(
-            "fix a",
-            ChangeSet::Empty().With(Edit::New("a.rs", Some("old".to_owned()), Some("new".to_owned()))),
-            CorrectionClass::Mechanical,
-            vec![],
-        )])
-        .expect("a single candidate is a valid plan");
+        let base = Base(CONFIGURATION_SEED_BYTE);
+        let plan = Plan_Changing_A("old", "new");
         let staged = plan.Stage(&base).expect("stages cleanly");
 
         assert!(staged.Validate(&base).is_ok());
@@ -181,14 +162,8 @@ mod tests
     #[test]
     fn Test_Validating_A_Moved_Workspace_Should_Be_Refused()
     {
-        let mut base = Base();
-        let plan = CorrectionPlan::New(vec![CorrectionCandidate::New(
-            "fix a",
-            ChangeSet::Empty().With(Edit::New("a.rs", Some("old".to_owned()), Some("new".to_owned()))),
-            CorrectionClass::Mechanical,
-            vec![],
-        )])
-        .expect("a single candidate is a valid plan");
+        let mut base = Base(CONFIGURATION_SEED_BYTE);
+        let plan = Plan_Changing_A("old", "new");
         let staged = plan.Stage(&base).expect("stages cleanly");
 
         let advance = WorkspaceChangeSet::From(ChangeSource::GitCheckout).Present("b.rs", "other");
@@ -204,20 +179,5 @@ mod tests
     fn Test_A_Staged_Plan_Belongs_To_The_Validate_Mutation_Class()
     {
         assert_eq!(StagedPlan::Mutation_Class(), MutationClass::Validate);
-    }
-
-    fn Base() -> Workspace
-    {
-        const CONFIGURATION_SEED_BYTE: u8 = 0x11;
-
-        let variant = BuildVariant::New("x86_64-unknown-none", "test", "fixed", Vec::<String>::new());
-        let configuration =
-            ConfigurationId::From_Digest(Digest128::From_Bytes([CONFIGURATION_SEED_BYTE; Digest128::BYTE_LENGTH]));
-        let mut workspace = Workspace::Empty(variant, configuration);
-
-        let initial = WorkspaceChangeSet::From(ChangeSource::GitCheckout).Present("a.rs", "old");
-        workspace.Apply(&initial).expect("a fresh present is always accepted");
-
-        return workspace;
     }
 }
