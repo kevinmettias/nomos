@@ -52,7 +52,7 @@ pub fn Commit_Staged_Edit<Filesystem: FileSystem>(
     filesystem: &Filesystem,
 ) -> Result<CommitAnswer, CommitRefusal>
 {
-    use crate::run::preview::Preview_Staged_Edit;
+    use crate::run::Preview_Staged_Edit;
 
     let preview = Preview_Staged_Edit(assembly, &request.edit, filesystem)?;
     let renamed = preview.Rename().map(|(before, _)| return before.to_owned());

@@ -14,7 +14,7 @@ use nomos_platform::FileSystem;
 use nomos_spec_project::{Catalogue, Profile, ProjectError};
 use nomos_spec_store::StoreError;
 
-use crate::spec_command::SpecCommand;
+use crate::SpecCommand;
 use crate::corpus::{Assemble_Corpus, Assembly, CorpusRequest};
 use crate::spec_outcome::{
     CommitRefusal, FreshnessRefusal, PreviewRefusal, RecordRefusal, RenderRefusal, SourcesAnswer, SpecOutcome,

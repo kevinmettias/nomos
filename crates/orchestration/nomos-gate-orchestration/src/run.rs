@@ -11,7 +11,7 @@ use crate::{GateCommand, GateOutcome};
 #[must_use]
 pub fn Run(_command: &GateCommand) -> GateOutcome
 {
-    use crate::composition::Registered;
+    use crate::Registered;
     use crate::gate_plan::GatePlan;
 
     let registry = match Registered()

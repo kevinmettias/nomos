@@ -8,8 +8,7 @@ use nomos_ledger::{
 use nomos_platform::{Clock, CrossProcessLock, FileSystem, ProcessLauncher};
 
 use crate::board_view::{BoardView, ShowView, WorkOutcome};
-use crate::work_command::WorkCommand;
-use crate::{ClaimRequest, EndingRequest};
+use crate::{ClaimRequest, EndingRequest, WorkCommand};
 
 /// Runs one command against `ledger` and hands back what happened, choosing nothing about
 /// the platform and rendering nothing about the answer.

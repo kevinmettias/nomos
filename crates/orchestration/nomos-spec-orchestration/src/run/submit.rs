@@ -42,7 +42,7 @@ pub fn Submit_Corpus_Request<Filesystem: FileSystem>(
     filesystem: &Filesystem,
 ) -> Result<SubmitAnswer, SubmitRefusal>
 {
-    use crate::run::render::Rendered_Projection;
+    use crate::run::Rendered_Projection;
     use nomos_spec_store::Accept_Submission;
 
     let submission = Constructed_Submission(request);

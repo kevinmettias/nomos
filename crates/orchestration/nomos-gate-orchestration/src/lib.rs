@@ -145,33 +145,26 @@
 
 #![forbid(unsafe_code)]
 
-mod baseline_debt;
 mod composition;
-mod coverage_policy;
 mod finding_query;
 mod gate_command;
 mod gate_environment;
 mod gate_plan;
-mod rule_calibration;
-mod rule_selector;
+mod policy;
 mod run;
 mod run_id;
-mod scope_selector;
-mod suppression_disposition;
 
 #[cfg(test)]
 mod tests;
 
-pub use baseline_debt::{BaselineDebt, BaselinePolicy};
 pub use composition::Registered;
-pub use coverage_policy::CoveragePolicy;
 pub use finding_query::{Explain_Gate, Explanation, FindingQuery, GateExplainResult};
 pub use gate_command::GateCommand;
 pub use gate_environment::{GateEnvironment, Run_Gate};
 pub use gate_plan::{Disposition_Of_Findings, GateFindings, GateOutcome, GatePlan, GateRunOutcome, GateRunResult};
-pub use rule_calibration::{AdoptionPolicy, RuleCalibration};
-pub use rule_selector::RuleSelector;
+pub use policy::{
+    AdoptionPolicy, BaselineDebt, BaselinePolicy, CoveragePolicy, RuleCalibration, RuleSelector, ScopeSelector,
+    Suppression, SuppressionDisposition, SuppressionPolicy,
+};
 pub use run::Run;
 pub use run_id::Fresh_Run_Id;
-pub use scope_selector::ScopeSelector;
-pub use suppression_disposition::{Suppression, SuppressionDisposition, SuppressionPolicy};

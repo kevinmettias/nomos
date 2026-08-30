@@ -32,11 +32,11 @@ pub use roots::DEFAULT_REVISION;
 use layer::{Expected, Ingest_Catalog_File, Ingest_Statement_File, Refused_Absence, Subject};
 
 mod absence;
-mod corpus_request;
+mod request;
 mod assembly;
 
 pub use absence::Absence;
-pub use corpus_request::CorpusRequest;
+pub use request::Request as CorpusRequest;
 pub use assembly::Assembly;
 
 use nomos_spec_ingest::{

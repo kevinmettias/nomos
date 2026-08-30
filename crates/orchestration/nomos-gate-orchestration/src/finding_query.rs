@@ -119,7 +119,7 @@ fn Disposed_Finding(finding: &Finding, adoption: &AdoptionPolicy, suppressions: 
 /// not hold at all.
 fn Contract_Of(rule: &RuleId) -> Option<(String, u32)>
 {
-    use crate::composition::Registered;
+    use crate::Registered;
 
     let registry = Registered().ok()?;
     let offer = registry.Offered(rule)?;

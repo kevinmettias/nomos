@@ -7,8 +7,7 @@
 
 use nomos_ledger::{ItemId, LedgerItem, Territory};
 
-use crate::claim_request::ClaimRequest;
-use crate::ending_request::EndingRequest;
+use crate::{ClaimRequest, EndingRequest};
 
 /// What to do.
 #[derive(Clone, Debug, PartialEq, Eq)]

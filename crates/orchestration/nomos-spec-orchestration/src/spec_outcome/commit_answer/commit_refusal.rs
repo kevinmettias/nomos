@@ -1,10 +1,10 @@
 //! Why `nomos spec commit` did not produce a [`CommitAnswer`].
 
-mod commit_refusal_error;
-mod commit_refusal_kind;
+mod error;
+mod kind;
 
-pub use commit_refusal_error::CommitRefusalError;
-pub use commit_refusal_kind::CommitRefusalKind;
+pub use error::Error as CommitRefusalError;
+pub use kind::Kind as CommitRefusalKind;
 
 use nomos_platform::FileSystemError;
 use nomos_spec_store::{CommitReport, EditError, EditPreview};

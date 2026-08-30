@@ -7,7 +7,7 @@ use nomos_platform_std::StdFileSystem;
 use nomos_spec_model::{Origin, SubmissionKind, SubmissionState};
 
 use crate::corpus::{Assemble_Corpus, CorpusRequest};
-use crate::spec_command::SpecCommand;
+use crate::SpecCommand;
 use crate::spec_outcome::{
     CommitAnswer, FreshnessRefusal, PreviewRefusal, RecordRefusal, RenderRefusal, Reproduction, SpecOutcome,
     SubmitRefusal, TableRefusal, Verdict,
