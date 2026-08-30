@@ -39414,6 +39414,422 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P24-REGRESSION-SPEC",
+      "title": "P24 regression sweep across crates/spec",
+      "why": "the P23 testing-phase campaign's ~600 new test files were never checked against the other 13 gate phases; a fresh sweep found regressions in previously-clean phases scoped to crates/spec (mostly check-presumption/check-literals/check-nested-call/check-naming-clarity, which are test-code-exempt, plus some real fixes: vertical-organization, file-size, formatting)",
+      "done_when": "the newly-regressed checks from clean-file/declare-types/decompose-file/code-shape/errors/concurrency-and-unsafe/formatting/naming/placement/attributes (introduced by the P23 testing-phase campaign's ~600 new test files) report zero findings scoped to this band's paths, and cargo build --workspace --all-targets passes",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-p24-regression",
+        "acquired_at": 1788130145,
+        "lease_expires_at": 1788137345
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P24-REGRESSION-HOST",
+      "title": "P24 regression sweep across crates/host",
+      "why": "the P23 testing-phase campaign's ~600 new test files were never checked against the other 13 gate phases; a fresh sweep found regressions in previously-clean phases scoped to crates/host (mostly check-presumption/check-literals/check-nested-call/check-naming-clarity, which are test-code-exempt, plus some real fixes: vertical-organization, file-size, formatting)",
+      "done_when": "the newly-regressed checks from clean-file/declare-types/decompose-file/code-shape/errors/concurrency-and-unsafe/formatting/naming/placement/attributes (introduced by the P23 testing-phase campaign's ~600 new test files) report zero findings scoped to this band's paths, and cargo build --workspace --all-targets passes",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-p24-regression",
+        "acquired_at": 1788130145,
+        "lease_expires_at": 1788137345
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P24-REGRESSION-SUBSTRATE",
+      "title": "P24 regression sweep across crates/substrate",
+      "why": "the P23 testing-phase campaign's ~600 new test files were never checked against the other 13 gate phases; a fresh sweep found regressions in previously-clean phases scoped to crates/substrate (mostly check-presumption/check-literals/check-nested-call/check-naming-clarity, which are test-code-exempt, plus some real fixes: vertical-organization, file-size, formatting)",
+      "done_when": "the newly-regressed checks from clean-file/declare-types/decompose-file/code-shape/errors/concurrency-and-unsafe/formatting/naming/placement/attributes (introduced by the P23 testing-phase campaign's ~600 new test files) report zero findings scoped to this band's paths, and cargo build --workspace --all-targets passes",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-p24-regression",
+        "acquired_at": 1788130145,
+        "lease_expires_at": 1788137345
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P24-REGRESSION-LANGUAGES",
+      "title": "P24 regression sweep across crates/languages",
+      "why": "the P23 testing-phase campaign's ~600 new test files were never checked against the other 13 gate phases; a fresh sweep found regressions in previously-clean phases scoped to crates/languages (mostly check-presumption/check-literals/check-nested-call/check-naming-clarity, which are test-code-exempt, plus some real fixes: vertical-organization, file-size, formatting)",
+      "done_when": "the newly-regressed checks from clean-file/declare-types/decompose-file/code-shape/errors/concurrency-and-unsafe/formatting/naming/placement/attributes (introduced by the P23 testing-phase campaign's ~600 new test files) report zero findings scoped to this band's paths, and cargo build --workspace --all-targets passes",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-p24-regression",
+        "acquired_at": 1788130145,
+        "lease_expires_at": 1788137345
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P24-REGRESSION-ORCHESTRATION",
+      "title": "P24 regression sweep across crates/orchestration",
+      "why": "the P23 testing-phase campaign's ~600 new test files were never checked against the other 13 gate phases; a fresh sweep found regressions in previously-clean phases scoped to crates/orchestration (mostly check-presumption/check-literals/check-nested-call/check-naming-clarity, which are test-code-exempt, plus some real fixes: vertical-organization, file-size, formatting)",
+      "done_when": "the newly-regressed checks from clean-file/declare-types/decompose-file/code-shape/errors/concurrency-and-unsafe/formatting/naming/placement/attributes (introduced by the P23 testing-phase campaign's ~600 new test files) report zero findings scoped to this band's paths, and cargo build --workspace --all-targets passes",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-p24-regression",
+        "acquired_at": 1788130145,
+        "lease_expires_at": 1788137345
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P24-REGRESSION-CAPABILITIES",
+      "title": "P24 regression sweep across crates/capabilities",
+      "why": "the P23 testing-phase campaign's ~600 new test files were never checked against the other 13 gate phases; a fresh sweep found regressions in previously-clean phases scoped to crates/capabilities (mostly check-presumption/check-literals/check-nested-call/check-naming-clarity, which are test-code-exempt, plus some real fixes: vertical-organization, file-size, formatting)",
+      "done_when": "the newly-regressed checks from clean-file/declare-types/decompose-file/code-shape/errors/concurrency-and-unsafe/formatting/naming/placement/attributes (introduced by the P23 testing-phase campaign's ~600 new test files) report zero findings scoped to this band's paths, and cargo build --workspace --all-targets passes",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "exit_code": 0,
+        "output_tail": "   Compiling nomos-cap-syntax v0.1.0 (F:\\repos\\nomos\\crates\\capabilities\\nomos-cap-syntax)\n   Compiling nomos-cap-controlflow v0.1.0 (F:\\repos\\nomos\\crates\\capabilities\\nomos-cap-controlflow)\n   Compiling nomos-cap-dependency v0.1.0 (F:\\repos\\nomos\\crates\\capabilities\\nomos-cap-dependency)\n   Compiling nomos-cap-lint v0.1.0 (F:\\repos\\nomos\\crates\\capabilities\\nomos-cap-lint)\n   Compiling nomos-cap-dependency-policy v0.1.0 (F:\\repos\\nomos\\crates\\capabilities\\nomos-cap-dependency-policy)\n   Compiling nomos-lang-rust v0.1.0 (F:\\repos\\nomos\\crates\\languages\\nomos-lang-rust)\n   Compiling nomos-rules v0.1.0 (F:\\repos\\nomos\\crates\\rules\\nomos-rules)\n   Compiling nomos-lang-go v0.1.0 (F:\\repos\\nomos\\crates\\languages\\nomos-lang-go)\n   Compiling nomos-lang-rust-scan v0.1.0 (F:\\repos\\nomos\\crates\\languages\\nomos-lang-rust-scan)\n   Compiling nomos-lang-rust-clippy v0.1.0 (F:\\repos\\nomos\\crates\\languages\\nomos-lang-rust-clippy)\n   Compiling nomos-lang-rust-cargo v0.1.0 (F:\\repos\\nomos\\crates\\languages\\nomos-lang-rust-cargo)\n   Compiling nomos-lang-rust-deny v0.1.0 (F:\\repos\\nomos\\crates\\languages\\nomos-lang-rust-deny)\n   Compiling nomos-lang-go-modules v0.1.0 (F:\\repos\\nomos\\crates\\languages\\nomos-lang-go-modules)\n   Compiling nomos-lang-go-package v0.1.0 (F:\\repos\\nomos\\crates\\packages\\nomos-lang-go-package)\n   Compiling nomos-contract-tests v0.1.0 (F:\\repos\\nomos\\tests\\contract)\n   Compiling nomos-lang-rust-package v0.1.0 (F:\\repos\\nomos\\crates\\packages\\nomos-lang-rust-package)\n   Compiling nomos-check-orchestration v0.1.0 (F:\\repos\\nomos\\crates\\orchestration\\nomos-check-orchestration)\n   Compiling nomos-gate-orchestration v0.1.0 (F:\\repos\\nomos\\crates\\orchestration\\nomos-gate-orchestration)\n   Compiling nomos-integration-tests v0.1.0 (F:\\repos\\nomos\\tests\\integration)\n   Compiling nomos-api v0.1.0 (F:\\repos\\nomos\\crates\\host\\nomos-api)\n   Compiling nomos-cli v0.1.0 (F:\\repos\\nomos\\crates\\host\\nomos-cli)\n    Finished `dev` profile [unoptimized + debuginfo] target(s) in 21.07s\n",
+        "verified_at": 1788131511,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "72849962d58130c41a9e14034c582f233f26eb5f"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P24-REGRESSION-CONTRACTS",
+      "title": "P24 regression sweep across crates/contracts",
+      "why": "the P23 testing-phase campaign's ~600 new test files were never checked against the other 13 gate phases; a fresh sweep found regressions in previously-clean phases scoped to crates/contracts (mostly check-presumption/check-literals/check-nested-call/check-naming-clarity, which are test-code-exempt, plus some real fixes: vertical-organization, file-size, formatting)",
+      "done_when": "the newly-regressed checks from clean-file/declare-types/decompose-file/code-shape/errors/concurrency-and-unsafe/formatting/naming/placement/attributes (introduced by the P23 testing-phase campaign's ~600 new test files) report zero findings scoped to this band's paths, and cargo build --workspace --all-targets passes",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/contracts"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-p24-regression",
+        "acquired_at": 1788130145,
+        "lease_expires_at": 1788137345
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P24-REGRESSION-RULES",
+      "title": "P24 regression sweep across crates/rules",
+      "why": "the P23 testing-phase campaign's ~600 new test files were never checked against the other 13 gate phases; a fresh sweep found regressions in previously-clean phases scoped to crates/rules (mostly check-presumption/check-literals/check-nested-call/check-naming-clarity, which are test-code-exempt, plus some real fixes: vertical-organization, file-size, formatting)",
+      "done_when": "the newly-regressed checks from clean-file/declare-types/decompose-file/code-shape/errors/concurrency-and-unsafe/formatting/naming/placement/attributes (introduced by the P23 testing-phase campaign's ~600 new test files) report zero findings scoped to this band's paths, and cargo build --workspace --all-targets passes",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-p24-regression",
+        "acquired_at": 1788130146,
+        "lease_expires_at": 1788137346
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P24-REGRESSION-KERNEL",
+      "title": "P24 regression sweep across crates/kernel",
+      "why": "the P23 testing-phase campaign's ~600 new test files were never checked against the other 13 gate phases; a fresh sweep found regressions in previously-clean phases scoped to crates/kernel (mostly check-presumption/check-literals/check-nested-call/check-naming-clarity, which are test-code-exempt, plus some real fixes: vertical-organization, file-size, formatting)",
+      "done_when": "the newly-regressed checks from clean-file/declare-types/decompose-file/code-shape/errors/concurrency-and-unsafe/formatting/naming/placement/attributes (introduced by the P23 testing-phase campaign's ~600 new test files) report zero findings scoped to this band's paths, and cargo build --workspace --all-targets passes",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/kernel"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-p24-regression",
+        "acquired_at": 1788130146,
+        "lease_expires_at": 1788137346
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P24-REGRESSION-CORRECTIONS",
+      "title": "P24 regression sweep across crates/corrections",
+      "why": "the P23 testing-phase campaign's ~600 new test files were never checked against the other 13 gate phases; a fresh sweep found regressions in previously-clean phases scoped to crates/corrections (mostly check-presumption/check-literals/check-nested-call/check-naming-clarity, which are test-code-exempt, plus some real fixes: vertical-organization, file-size, formatting)",
+      "done_when": "the newly-regressed checks from clean-file/declare-types/decompose-file/code-shape/errors/concurrency-and-unsafe/formatting/naming/placement/attributes (introduced by the P23 testing-phase campaign's ~600 new test files) report zero findings scoped to this band's paths, and cargo build --workspace --all-targets passes",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/corrections"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-p24-regression",
+        "acquired_at": 1788130146,
+        "lease_expires_at": 1788137346
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P24-REGRESSION-MISC",
+      "title": "P24 regression sweep across agent/platform/packages/tests-integration/tests-contract",
+      "why": "same P24 sweep as the other bands, catching every directory too small for its own band",
+      "done_when": "the newly-regressed checks from clean-file/declare-types/decompose-file/code-shape/errors/concurrency-and-unsafe/formatting/naming/placement/attributes (introduced by the P23 testing-phase campaign's ~600 new test files) report zero findings scoped to this band's paths, and cargo build --workspace --all-targets passes",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/agent",
+          "crates/platform",
+          "crates/packages",
+          "tests/integration",
+          "tests/contract"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-p24-regression",
+        "acquired_at": 1788130146,
+        "lease_expires_at": 1788137346
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

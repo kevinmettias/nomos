@@ -191,29 +191,6 @@ mod tests
 {
     use super::*;
 
-    fn Sample() -> DiagnosticsPayload
-    {
-        return DiagnosticsPayload {
-            package: "nomos-rules".to_owned(),
-            diagnostics: vec![
-                LintDiagnostic {
-                    level: LintLevel::Warning,
-                    lint: Some("clippy::needless_return".to_owned()),
-                    message: "unneeded `return` statement".to_owned(),
-                    file: "crates/rules/nomos-rules/src/lib.rs".to_owned(),
-                    line: 42,
-                },
-                LintDiagnostic {
-                    level: LintLevel::Error,
-                    lint: None,
-                    message: "mismatched types".to_owned(),
-                    file: "crates/rules/nomos-rules/src/lint.rs".to_owned(),
-                    line: 7,
-                },
-            ],
-        };
-    }
-
     #[test]
     fn Test_Parse_Payload_Should_Round_Trip_A_Payload_Through_Its_Own_Encoding()
     {
@@ -290,18 +267,6 @@ mod tests
         );
     }
 
-    /// Each case here has fewer than the five tab-separated fields a diagnostic line must
-    /// carry — `splitn` can never hand back more than five, so under-counting is the only way
-    /// to reach this refusal.
-    fn Malformed_Diagnostic_Lines() -> Vec<&'static [u8]>
-    {
-        return vec![
-            b"package\tsomething\ndiagnostic\tzero-tabs-here\n",
-            b"package\tsomething\ndiagnostic\twarning\tonly-one-more-field\n",
-            b"package\tsomething\ndiagnostic\twarning\t-\ta.rs\n",
-        ];
-    }
-
     #[test]
     fn Test_A_Malformed_Diagnostic_Line_Should_Be_Refused()
     {
@@ -317,14 +282,15 @@ mod tests
         }
     }
 
-    /// Every case here has exactly five fields, so it reaches level resolution and is refused
-    /// there specifically — not for a field count or a missing prefix.
-    fn Unrecognized_Lint_Levels() -> Vec<&'static [u8]>
+    /// Each case here has fewer than the five tab-separated fields a diagnostic line must
+    /// carry — `splitn` can never hand back more than five, so under-counting is the only way
+    /// to reach this refusal.
+    fn Malformed_Diagnostic_Lines() -> Vec<&'static [u8]>
     {
         return vec![
-            b"package\tsomething\ndiagnostic\tcatastrophic\t-\ta.rs\t1\toops\n",
-            b"package\tsomething\ndiagnostic\tFYI\t-\tb.rs\t2\tsomething\n",
-            b"package\tsomething\ndiagnostic\t\t-\tc.rs\t3\tempty level\n",
+            b"package\tsomething\ndiagnostic\tzero-tabs-here\n",
+            b"package\tsomething\ndiagnostic\twarning\tonly-one-more-field\n",
+            b"package\tsomething\ndiagnostic\twarning\t-\ta.rs\n",
         ];
     }
 
@@ -342,6 +308,17 @@ mod tests
         }
     }
 
+    /// Every case here has exactly five fields, so it reaches level resolution and is refused
+    /// there specifically — not for a field count or a missing prefix.
+    fn Unrecognized_Lint_Levels() -> Vec<&'static [u8]>
+    {
+        return vec![
+            b"package\tsomething\ndiagnostic\tcatastrophic\t-\ta.rs\t1\toops\n",
+            b"package\tsomething\ndiagnostic\tFYI\t-\tb.rs\t2\tsomething\n",
+            b"package\tsomething\ndiagnostic\t\t-\tc.rs\t3\tempty level\n",
+        ];
+    }
+
     #[test]
     fn Test_A_Package_With_No_Diagnostics_Should_Round_Trip()
     {
@@ -353,5 +330,28 @@ mod tests
         let decoded = Parse_Payload(&encoded).expect("a clean package is valid");
 
         assert_eq!(decoded, payload);
+    }
+
+    fn Sample() -> DiagnosticsPayload
+    {
+        return DiagnosticsPayload {
+            package: "nomos-rules".to_owned(),
+            diagnostics: vec![
+                LintDiagnostic {
+                    level: LintLevel::Warning,
+                    lint: Some("clippy::needless_return".to_owned()),
+                    message: "unneeded `return` statement".to_owned(),
+                    file: "crates/rules/nomos-rules/src/lib.rs".to_owned(),
+                    line: 42,
+                },
+                LintDiagnostic {
+                    level: LintLevel::Error,
+                    lint: None,
+                    message: "mismatched types".to_owned(),
+                    file: "crates/rules/nomos-rules/src/lint.rs".to_owned(),
+                    line: 7,
+                },
+            ],
+        };
     }
 }

@@ -214,14 +214,6 @@ mod tests
         assert_eq!(decoded, ReachabilityPayload { sites: Vec::new() });
     }
 
-    /// Every case here undershoots the three tab-separated fields a site line must have —
-    /// one field, or two — so each must be refused for that reason specifically, not merely
-    /// refused for some reason or other.
-    fn Malformed_Site_Field_Counts() -> Vec<&'static [u8]>
-    {
-        return vec![b"site\tonly-one-field\n", b"site\ttwo\tfields\n", b"site\t\n"];
-    }
-
     #[test]
     fn Test_A_Malformed_Site_Line_Should_Be_Refused()
     {
@@ -236,15 +228,12 @@ mod tests
         }
     }
 
-    /// Every case here has exactly three fields, so it reaches shape resolution and is
-    /// refused there specifically — not for a field count or a missing prefix.
-    fn Unrecognized_Arm_Shape_Labels() -> Vec<&'static [u8]>
+    /// Every case here undershoots the three tab-separated fields a site line must have —
+    /// one field, or two — so each must be refused for that reason specifically, not merely
+    /// refused for some reason or other.
+    fn Malformed_Site_Field_Counts() -> Vec<&'static [u8]>
     {
-        return vec![
-            b"site\tf\tapplicability\tsomething-else\n",
-            b"site\tf\tapplicability\tEMPTY\n",
-            b"site\tf\tapplicability\t\n",
-        ];
+        return vec![b"site\tonly-one-field\n", b"site\ttwo\tfields\n", b"site\t\n"];
     }
 
     #[test]
@@ -259,6 +248,17 @@ mod tests
                 error.reason
             );
         }
+    }
+
+    /// Every case here has exactly three fields, so it reaches shape resolution and is
+    /// refused there specifically — not for a field count or a missing prefix.
+    fn Unrecognized_Arm_Shape_Labels() -> Vec<&'static [u8]>
+    {
+        return vec![
+            b"site\tf\tapplicability\tsomething-else\n",
+            b"site\tf\tapplicability\tEMPTY\n",
+            b"site\tf\tapplicability\t\n",
+        ];
     }
 
     fn Sample() -> ReachabilityPayload

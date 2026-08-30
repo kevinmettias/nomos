@@ -136,24 +136,6 @@ mod tests
 {
     use super::*;
 
-    fn Sample() -> PolicyPayload
-    {
-        return PolicyPayload {
-            violations: vec![
-                PolicyViolation {
-                    severity: PolicySeverity::Warning,
-                    code: "duplicate".to_owned(),
-                    message: "found 2 duplicate entries for crate 'syn'".to_owned(),
-                },
-                PolicyViolation {
-                    severity: PolicySeverity::Error,
-                    code: "banned".to_owned(),
-                    message: "crate 'wgpu' is explicitly banned".to_owned(),
-                },
-            ],
-        };
-    }
-
     #[test]
     fn Test_Parse_Payload_Should_Round_Trip_A_Payload_Through_Its_Own_Encoding()
     {
@@ -219,18 +201,6 @@ mod tests
         assert!(decoded.violations.is_empty());
     }
 
-    /// Each case here has fewer than the three tab-separated fields a violation line must
-    /// carry — `splitn` can never hand back more than three, so under-counting is the only
-    /// way to reach this refusal.
-    fn Malformed_Violation_Lines() -> Vec<&'static [u8]>
-    {
-        return vec![
-            b"violation\twarning\tonly-one-more-field\n",
-            b"violation\tjust-one-field\n",
-            b"violation\t\n",
-        ];
-    }
-
     #[test]
     fn Test_A_Malformed_Violation_Line_Should_Be_Refused()
     {
@@ -246,14 +216,15 @@ mod tests
         }
     }
 
-    /// Every case here has exactly three fields, so it reaches severity resolution and is
-    /// refused there specifically — not for a field count or a missing prefix.
-    fn Unrecognized_Policy_Severities() -> Vec<&'static [u8]>
+    /// Each case here has fewer than the three tab-separated fields a violation line must
+    /// carry — `splitn` can never hand back more than three, so under-counting is the only
+    /// way to reach this refusal.
+    fn Malformed_Violation_Lines() -> Vec<&'static [u8]>
     {
         return vec![
-            b"violation\tcatastrophic\tsomecode\toops\n",
-            b"violation\tfyi\tsomecode\tjust so you know\n",
-            b"violation\t\tsomecode\tempty severity\n",
+            b"violation\twarning\tonly-one-more-field\n",
+            b"violation\tjust-one-field\n",
+            b"violation\t\n",
         ];
     }
 
@@ -271,11 +242,15 @@ mod tests
         }
     }
 
-    /// Every case here is missing the `violation\t` tag altogether, so it is refused before
-    /// either field count or severity is even inspected.
-    fn Lines_Not_Prefixed_As_Violations() -> Vec<&'static [u8]>
+    /// Every case here has exactly three fields, so it reaches severity resolution and is
+    /// refused there specifically — not for a field count or a missing prefix.
+    fn Unrecognized_Policy_Severities() -> Vec<&'static [u8]>
     {
-        return vec![b"package\tsomething\n", b"violationx\ta\tb\tc\n", b"\ta\tb\tc\n"];
+        return vec![
+            b"violation\tcatastrophic\tsomecode\toops\n",
+            b"violation\tfyi\tsomecode\tjust so you know\n",
+            b"violation\t\tsomecode\tempty severity\n",
+        ];
     }
 
     #[test]
@@ -290,5 +265,30 @@ mod tests
                 error.reason
             );
         }
+    }
+
+    /// Every case here is missing the `violation\t` tag altogether, so it is refused before
+    /// either field count or severity is even inspected.
+    fn Lines_Not_Prefixed_As_Violations() -> Vec<&'static [u8]>
+    {
+        return vec![b"package\tsomething\n", b"violationx\ta\tb\tc\n", b"\ta\tb\tc\n"];
+    }
+
+    fn Sample() -> PolicyPayload
+    {
+        return PolicyPayload {
+            violations: vec![
+                PolicyViolation {
+                    severity: PolicySeverity::Warning,
+                    code: "duplicate".to_owned(),
+                    message: "found 2 duplicate entries for crate 'syn'".to_owned(),
+                },
+                PolicyViolation {
+                    severity: PolicySeverity::Error,
+                    code: "banned".to_owned(),
+                    message: "crate 'wgpu' is explicitly banned".to_owned(),
+                },
+            ],
+        };
     }
 }

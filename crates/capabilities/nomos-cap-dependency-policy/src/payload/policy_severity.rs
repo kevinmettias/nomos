@@ -51,13 +51,6 @@ mod tests
 {
     use super::*;
 
-    /// Every declared severity, named so a second test could point at the same list rather
-    /// than writing its own.
-    fn All_Policy_Severities() -> Vec<PolicySeverity>
-    {
-        return vec![PolicySeverity::Warning, PolicySeverity::Error];
-    }
-
     #[test]
     fn Test_From_Label_Should_Round_Trip_Every_Severity_Through_Its_Label()
     {
@@ -65,6 +58,13 @@ mod tests
         {
             assert_eq!(PolicySeverity::From_Label(severity.Label()), Some(severity));
         }
+    }
+
+    /// Every declared severity, named so a second test could point at the same list rather
+    /// than writing its own.
+    fn All_Policy_Severities() -> Vec<PolicySeverity>
+    {
+        return vec![PolicySeverity::Warning, PolicySeverity::Error];
     }
 
     #[test]

@@ -52,13 +52,6 @@ mod tests
 {
     use super::*;
 
-    /// Every declared level, named so a second test could point at the same list rather than
-    /// writing its own.
-    fn All_Lint_Levels() -> Vec<LintLevel>
-    {
-        return vec![LintLevel::Warning, LintLevel::Error];
-    }
-
     #[test]
     fn Test_From_Label_Should_Round_Trip_Every_Level_Through_Its_Label()
     {
@@ -66,6 +59,13 @@ mod tests
         {
             assert_eq!(LintLevel::From_Label(level.Label()), Some(level));
         }
+    }
+
+    /// Every declared level, named so a second test could point at the same list rather than
+    /// writing its own.
+    fn All_Lint_Levels() -> Vec<LintLevel>
+    {
+        return vec![LintLevel::Warning, LintLevel::Error];
     }
 
     #[test]
