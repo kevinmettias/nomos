@@ -39306,6 +39306,82 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P23-PRESERVATION-ACCEPTED-TEMPLATE",
+      "title": "preservation_holds: 3 sections repeat an undeclared 'Accepted' template",
+      "why": "Test_A_Seeded_Store_Should_Pass_Preservation_Non_Vacuously fails with a real NSV-PRESERVE-004 repetition-census violation ('3 section(s) across 3 document(s): repeats an undeclared template: Accepted'), discovered running the full workspace test suite after the P23 testing-phase campaign. Confirmed pre-existing and unrelated to that campaign: no docs/records/ content was touched by any P23 item (git status is empty there), and the only diff to this test file was one new, unrelated check-test-coverage test",
+      "done_when": "cargo test -p nomos-spec-validate --test preservation_holds passes",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records",
+          "crates/spec/nomos-spec-validate"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "reserved the whole docs/records directory before investigation identified which specific record(s) repeat the undeclared 'Accepted' template -- same P10-RECORD-LOCK defect just hit by P23-BOOLPRED-SPEC-RENAME. Re-added without pre-reserving docs/records; whoever picks this up should investigate first, then --amends the specific record(s) found."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-validate",
+          "--test",
+          "preservation_holds"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-p23-testing",
+        "declined_at": 1788129369
+      }
+    },
+    {
+      "id": "P23-PRESERVATION-ACCEPTED-TEMPLATE-2",
+      "title": "preservation_holds: 3 sections repeat an undeclared 'Accepted' template",
+      "why": "Test_A_Seeded_Store_Should_Pass_Preservation_Non_Vacuously fails with a real NSV-PRESERVE-004 repetition-census violation ('3 section(s) across 3 document(s): repeats an undeclared template: Accepted'), discovered running the full workspace test suite after the P23 testing-phase campaign. Confirmed pre-existing and unrelated to that campaign: no docs/records/ content was touched by any P23 item, and the only diff to this test file was one new, unrelated check-test-coverage test. Investigate which record(s)/section(s) repeat the template before claiming further territory -- reserve only the specific docs/records/*.md file(s) found via --amends, not the whole directory (P10-RECORD-LOCK).",
+      "done_when": "cargo test -p nomos-spec-validate --test preservation_holds passes",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-validate"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-validate",
+          "--test",
+          "preservation_holds"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
