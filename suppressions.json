@@ -3389,7 +3389,7 @@
       "check": "check-lifetime-discipline",
       "path": "crates/platform/nomos-platform-std/src/launcher/drain.rs",
       "fingerprint": "bb192e8207fa83dc",
-      "reason": "'static is required by std::thread::spawn, which moves the reader onto a detached thread that outlives this call -- not a bound chosen here. check-lifetime-discipline is not one of the safety-critical checks an in-code marker still argues under this repository's safety-only policy, so this moves here per OD-GATE-018's own remedy for an unhonoured marker. Fingerprint refreshed 2026-08-29: P19-NAMING-ATTRS renamed the generic parameter on this line (R -> Source), which is all that changed.",
+      "reason": "'static is required by std::thread::spawn, which moves the reader onto a detached thread that outlives this call -- not a bound chosen here. check-lifetime-discipline is not one of the safety-critical checks an in-code marker still argues under this repository's safety-only policy, so this moves here per OD-GATE-018's own remedy for an unhonoured marker. Fingerprint refreshed 2026-08-29: P19-NAMING-ATTRS renamed the generic parameter on this line (R -\u003e Source), which is all that changed.",
       "owner": "@kmettias",
       "expires": "2027-02-25"
     },
@@ -5323,6 +5323,406 @@
       "check": "check-crate-split",
       "path": "crates/spec/nomos-spec-model",
       "reason": "nomos-spec-model's own lib.rs doc comment already answers this: the content model and the submission vocabulary are correctly read as two unreferencing groups today because the typed layer that would connect them (a submission naming the content it is about) does not exist yet. The comment states explicitly that splitting is a band-and-ownership decision this repository settles deliberately, not one to make while tidying the tree.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-interfile-duplication",
+      "path": "crates/capabilities/nomos-cap-dependency/src/dependency_kind.rs",
+      "fingerprint": "b827df24de40d8a4",
+      "reason": "a small 'strip a tag prefix, else return a local refusal' idiom with no natural shared home: nomos_contracts is charter-restricted (OD-CONTRACTS-001) to types crossing a process/peer boundary, which this private parser isn't, and nomos_capability is chartered to registry/contract resolution. Also demonstrably fragile -- the fingerprint shifts which two files it pairs against after an unrelated identifier rename, indicating it matches a generic idiom near the check's minimum-size threshold rather than a stable design duplication.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-interfile-duplication",
+      "path": "crates/capabilities/nomos-cap-lint/src/payload.rs",
+      "fingerprint": "f35e6f1d6e198ab4",
+      "reason": "a small 'strip a tag prefix, else return a local refusal' idiom with no natural shared home: nomos_contracts is charter-restricted (OD-CONTRACTS-001) to types crossing a process/peer boundary, which this private parser isn't, and nomos_capability is chartered to registry/contract resolution. Also demonstrably fragile -- the fingerprint shifts which two files it pairs against after an unrelated identifier rename, indicating it matches a generic idiom near the check's minimum-size threshold rather than a stable design duplication.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/spec/nomos-spec-bundle/src/export.rs",
+      "fingerprint": "b83faf284cc04f65",
+      "reason": "renamed facade re-export Export: the internal type/file was destuttered per the check-tree-legibility fix, but the facade alias is kept here rather than propagated because pre-existing, on this naming-clarity-phase campaign's central-exclusion list.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/spec/nomos-spec-model/src/block.rs",
+      "fingerprint": "8fc8eb4eaa57e9f0",
+      "reason": "renamed facade re-export Segment: the internal type/file was destuttered per the check-tree-legibility fix, but the facade alias is kept here rather than propagated because ~30 call sites across crates/spec plus tests/integration/tests/determinism/spec_productions.rs, outside this sweep's territory.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/spec/nomos-spec-project/src/build.rs",
+      "fingerprint": "8e3abaced8aec843",
+      "reason": "renamed facade re-export Build: the internal type/file was destuttered per the check-tree-legibility fix, but the facade alias is kept here rather than propagated because called from nomos-spec-orchestration and tests/integration, outside this sweep's territory.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/spec/nomos-spec-project/src/build.rs",
+      "fingerprint": "4c4d0b13c37b6553",
+      "reason": "renamed facade re-export Check: the internal type/file was destuttered per the check-tree-legibility fix, but the facade alias is kept here rather than propagated because called from nomos-spec-orchestration and tests/integration, outside this sweep's territory.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/spec/nomos-spec-bundle/src/lib.rs",
+      "fingerprint": "e2adc69d25e10a14",
+      "reason": "renamed facade re-export RecordRelation: the internal type/file was destuttered per the check-tree-legibility fix, but the facade alias is kept here rather than propagated because real collision: the destuttered bare name Relation would collide with this same crate's row::relation::Relation.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/spec/nomos-spec-ingest/src/lib.rs",
+      "fingerprint": "ef76cadf45166270",
+      "reason": "renamed facade re-export BlockLineage: the internal type/file was destuttered per the check-tree-legibility fix, but the facade alias is kept here rather than propagated because real sibling-name collision: this crate also declares SectionLineage, both would destutter to Lineage.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/spec/nomos-spec-ingest/src/lib.rs",
+      "fingerprint": "858ae6ef0b5e35d5",
+      "reason": "renamed facade re-export SectionLineage: the internal type/file was destuttered per the check-tree-legibility fix, but the facade alias is kept here rather than propagated because real sibling-name collision with BlockLineage, both would destutter to Lineage.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/spec/nomos-spec-ingest/src/lib.rs",
+      "fingerprint": "781467335098acbc",
+      "reason": "renamed facade re-export StatementReport: the internal type/file was destuttered per the check-tree-legibility fix, but the facade alias is kept here rather than propagated because real sibling-name collision: this crate also declares OverlayReport, both would destutter to Report.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/spec/nomos-spec-model/src/lib.rs",
+      "fingerprint": "01d1adef4947bee8",
+      "reason": "renamed facade re-export BlockKind: the internal type/file was destuttered per the check-tree-legibility fix, but the facade alias is kept here rather than propagated because real sibling-name collision: this crate also declares StatementKind, both would destutter to Kind.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/spec/nomos-spec-model/src/lib.rs",
+      "fingerprint": "935ea9581fd212ff",
+      "reason": "renamed facade re-export StatementKind: the internal type/file was destuttered per the check-tree-legibility fix, but the facade alias is kept here rather than propagated because real sibling-name collision with BlockKind, both would destutter to Kind.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/spec/nomos-spec-validate/src/rule.rs",
+      "fingerprint": "e0ffd602d11c80c4",
+      "reason": "renamed facade re-export RuleOutcome: the internal type/file was destuttered per the check-tree-legibility fix, but the facade alias is kept here rather than propagated because the destuttered bare name has ~10-file in-crate fan-out, large enough to not be a clean 1-line fix.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/spec/nomos-spec-validate/src/rule.rs",
+      "fingerprint": "41556306ee4b2753",
+      "reason": "renamed facade re-export RuleResult: the internal type/file was destuttered per the check-tree-legibility fix, but the facade alias is kept here rather than propagated because the destuttered bare name Result would shadow std::result::Result everywhere it's imported.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/contracts/nomos-contracts/src/authority.rs",
+      "fingerprint": "f615551ea6a6b29b",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/contracts/nomos-contracts/src/determinism.rs",
+      "fingerprint": "659bec45531474bf",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/contracts/nomos-contracts/src/peer.rs",
+      "fingerprint": "91a36146a4f7ac6d",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/contracts/nomos-contracts/src/reporting/enforcement.rs",
+      "fingerprint": "27c905ef36853fb4",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/contracts/nomos-contracts/src/reporting/enforcement.rs",
+      "fingerprint": "46652040908deb7c",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/kernel/nomos-model/src/entity.rs",
+      "fingerprint": "b430c9e37dd25474",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/kernel/nomos-model/src/evidence.rs",
+      "fingerprint": "e9a9a50378ff71bf",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/kernel/nomos-model/src/identity.rs",
+      "fingerprint": "3cf8586a04cb0077",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/kernel/nomos-model/src/identity.rs",
+      "fingerprint": "78d4f4b4eca519ff",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/kernel/nomos-model/src/identity.rs",
+      "fingerprint": "70b61e1693e9c2b5",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/kernel/nomos-model/src/subject.rs",
+      "fingerprint": "b883ab01e1f6bc75",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/kernel/nomos-model/src/subject.rs",
+      "fingerprint": "b7117ce6c7419f27",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/kernel/nomos-model/src/subject.rs",
+      "fingerprint": "1120399493fee2c0",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/kernel/nomos-store/src/document.rs",
+      "fingerprint": "70f6bab1041f4184",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/kernel/nomos-store/src/document.rs",
+      "fingerprint": "6cd9f0e0a0d8393b",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/platform/nomos-platform/src/file_system.rs",
+      "fingerprint": "41f0801335041e73",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/substrate/nomos-analysis/src/fact_payload.rs",
+      "fingerprint": "bb3e716fab8d75d1",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/substrate/nomos-analysis/src/fact_payload.rs",
+      "fingerprint": "5b98be1964765c3c",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/substrate/nomos-analysis/src/fact_payload.rs",
+      "fingerprint": "30acc7c7e3bbbe53",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/substrate/nomos-analysis/src/fact_payload.rs",
+      "fingerprint": "d3f99d041046e3f0",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/substrate/nomos-analysis/src/fact_payload.rs",
+      "fingerprint": "3e080e585491eb77",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/substrate/nomos-analysis/src/invalidation.rs",
+      "fingerprint": "377a8e2e340c411e",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/substrate/nomos-capability/src/registry.rs",
+      "fingerprint": "a2f62324e38e8bb4",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/substrate/nomos-capability/src/registry.rs",
+      "fingerprint": "1511ea7f989e4bdb",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/substrate/nomos-ledger/src/finish.rs",
+      "fingerprint": "30baf79202a76534",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/substrate/nomos-ledger/src/gate_unknown.rs",
+      "fingerprint": "d512931f8b0a986c",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/substrate/nomos-ledger/src/holder.rs",
+      "fingerprint": "0692801c15b4ed7a",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/substrate/nomos-ledger/src/holder.rs",
+      "fingerprint": "dada7883a34fd288",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/substrate/nomos-ledger/src/holder.rs",
+      "fingerprint": "39104a0d37eb9345",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/substrate/nomos-ledger/src/holder.rs",
+      "fingerprint": "c0d8a894c66b7eed",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/substrate/nomos-ledger/src/verification.rs",
+      "fingerprint": "975bee25d9ba748d",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/substrate/nomos-workspace/src/change.rs",
+      "fingerprint": "c669a276c704f014",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/substrate/nomos-workspace/src/change.rs",
+      "fingerprint": "c0fb601be2bab403",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/substrate/nomos-workspace/src/effect.rs",
+      "fingerprint": "a9217138b43a349a",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/substrate/nomos-workspace/src/workspace.rs",
+      "fingerprint": "fe54064c65e89aab",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/substrate/nomos-workspace/src/workspace.rs",
+      "fingerprint": "8866ea7bdbab7103",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
       "owner": "@claude-p19-campaign",
       "expires": "2026-11-27"
     }
