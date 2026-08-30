@@ -66,3 +66,27 @@ fn Orphan(file: &Path, root: &Path, declared: &BTreeSet<String>) -> Option<Strin
 
     return Some(file.strip_prefix(root).unwrap_or(file).display().to_string());
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_A_Genuinely_Undeclared_File_Should_Still_Be_An_Orphan()
+    {
+        let declared: BTreeSet<String> = ["applied", "change"].into_iter().map(str::to_owned).collect();
+        let stray = Path::new("crates/example/src/stray.rs");
+
+        assert_eq!(Orphan(stray, Path::new("crates/example"), &declared), Some("src/stray.rs".to_owned()));
+    }
+
+    #[test]
+    fn Test_A_Declared_File_Should_Not_Be_An_Orphan()
+    {
+        let declared: BTreeSet<String> = ["applied", "change"].into_iter().map(str::to_owned).collect();
+        let known = Path::new("crates/example/src/change.rs");
+
+        assert_eq!(Orphan(known, Path::new("crates/example"), &declared), None);
+    }
+}

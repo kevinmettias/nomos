@@ -38421,6 +38421,62 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P22-REACHABILITY-PATH-ATTR",
+      "title": "reachability test misses #[path]-remapped modules",
+      "why": "Test_Every_Source_File_Should_Be_Reachable's Declared_Modules only reads a bare 'mod name;' line for its name, never the file a preceding #[path = ...] attribute points at -- so every #[path]-remapped file (nomos-analysis, nomos-workspace, and others) whose file stem differs from its declared mod name reads as an orphan. 50 false positives found running the full workspace suite after the P22 regression sweep; #[path] splits are an established, endorsed pattern here (see nomos-add-plugin skill and prior campaign notes), not something to discourage",
+      "done_when": "cargo test -p nomos-contract-tests --test boundaries passes with zero orphans reported, and the fix does not stop flagging a genuinely undeclared file (a fixture or new test proves it)",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/tests/boundaries"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "boundaries"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "boundaries"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 18 tests\ntest bands::tests::Test_A_Path_Attribute_On_Its_Own_Line_Should_Declare_Its_File_Stem ... ok\ntest bands::tests::Test_A_Raw_Identifier_Module_Should_Declare_Its_Unprefixed_Name ... ok\ntest bands::tests::Test_A_Line_With_No_Path_Attribute_Should_Declare_Nothing ... ok\ntest readme::Test_The_Readme_Should_List_Every_Member_At_Its_Declared_Band ... ok\ntest bands::tests::Test_A_Path_Attribute_Sharing_A_Line_With_Its_Mod_Should_Still_Declare_Its_File_Stem ... ok\ntest band_zero::Test_Band_Zero_Should_Be_Described_In_One_Place ... ok\ntest reachability::tests::Test_A_Declared_File_Should_Not_Be_An_Orphan ... ok\ntest reachability::tests::Test_A_Genuinely_Undeclared_File_Should_Still_Be_An_Orphan ... ok\ntest bands::tests::Test_Every_Visibility_Spelling_Should_Declare_Its_Module ... ok\ntest bands::tests::Test_A_Commented_Out_Path_Attribute_Should_Declare_Nothing ... ok\ntest graph::Test_Dependencies_Should_Run_Strictly_Downward ... ok\ntest graph::Test_The_Workspace_Should_Not_Appear_Empty ... ok\ntest graph::Test_Every_Member_Should_Declare_A_Band ... ok\ntest graph::Test_Only_The_Platform_Adapter_May_Name_The_Sibling_Workspace ... ok\ntest graph::Test_Contracts_Should_Depend_On_The_Allowlist_And_Nothing_Else ... ok\ntest graph::Test_No_Crate_May_Name_The_Sibling_Knowledge_Workbench ... ok\ntest capabilities::Test_A_Capability_Id_Should_Be_Written_In_One_Crate ... ok\ntest reachability::Test_Every_Source_File_Should_Be_Reachable ... ok\n\ntest result: ok. 18 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.20s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.11s\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-ad017fcca31ec54f.exe)\n",
+        "verified_at": 1788066827,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "c1ed70999e91a1897ef6c9db9b44badd31e7e06b"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

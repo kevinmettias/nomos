@@ -254,10 +254,11 @@ fn Sort_One_Entry(path: &Path, pending: &mut Vec<PathBuf>, found: &mut Vec<PathB
 /// Every `mod` name declared anywhere under a source root.
 ///
 /// Deliberately a flat set rather than a resolved tree. The precise version would walk
-/// declarations from each root, and would need to handle `#[path]`, `#[cfg]` and inline
-/// modules to avoid false positives. This approximation cannot report a false orphan —
-/// it only misses the case where a module is declared in one place and the file lives in
-/// an unrelated one, which is a naming problem rather than an invisibility problem.
+/// declarations from each root, and would need to handle `#[cfg]` and inline modules to
+/// avoid false positives — `#[path]` is handled below. This approximation cannot report a
+/// false orphan — it only misses the case where a module is declared in one place and the
+/// file lives in an unrelated one, which is a naming problem rather than an invisibility
+/// problem.
 pub(crate) fn Declared_Modules(source_root: &Path) -> BTreeSet<String>
 {
     let mut declared = BTreeSet::new();
@@ -270,13 +271,32 @@ pub(crate) fn Declared_Modules(source_root: &Path) -> BTreeSet<String>
         };
         for line in text.lines()
         {
-            let named = Module_Declared_By(line);
-
-            declared.extend(named);
+            declared.extend(Module_Declared_By(line));
+            declared.extend(Path_Attribute_Stem(line));
         }
     }
 
     return declared;
+}
+
+/// The file stem a `#[path = "..."]` attribute names, when this line carries one.
+///
+/// `#[path]` is legal only on a `mod` item, so finding the attribute is enough on its own
+/// to know the file it names is reachable — rustc has already enforced which item it
+/// attaches to, whether the two share a line (`#[path = "x.rs"] mod y;`) or not.
+fn Path_Attribute_Stem(line: &str) -> Option<String>
+{
+    let trimmed = line.trim();
+    if trimmed.starts_with("//")
+    {
+        return None;
+    }
+
+    let (_, after_marker) = trimmed.split_once("#[path")?;
+    let (_, after_open_quote) = after_marker.split_once('"')?;
+    let (path, _) = after_open_quote.split_once('"')?;
+
+    return Path::new(path).file_stem()?.to_str().map(str::to_owned);
 }
 
 /// The file name one `mod` line declares.
@@ -292,10 +312,76 @@ fn Module_Declared_By(line: &str) -> Option<String>
         return None;
     }
 
-    let rest = trimmed
-        .strip_prefix("mod ")
-        .or_else(|| trimmed.strip_prefix("pub mod "))
-        .or_else(|| trimmed.strip_prefix("pub(crate) mod "))?;
+    let rest = Without_Visibility(trimmed).strip_prefix("mod ")?;
+    let name = rest.strip_suffix(';')?.trim();
 
-    return rest.strip_suffix(';').map(|name| return name.trim().to_owned());
+    return Some(name.strip_prefix("r#").unwrap_or(name).to_owned());
+}
+
+/// A line with any leading visibility modifier removed, whatever spelling it used.
+///
+/// `pub`, `pub(crate)`, `pub(super)` and `pub(in some::path)` are all legal ahead of `mod`,
+/// and a fixed list of exact prefixes missed `pub(super)` the first time this was written —
+/// stripping the shape generically (an optional `pub`, then an optional parenthesized
+/// group) covers every spelling rustc accepts instead of enumerating them one at a time.
+fn Without_Visibility(trimmed: &str) -> &str
+{
+    let Some(after_pub) = trimmed.strip_prefix("pub") else { return trimmed };
+    let after_pub = after_pub.trim_start();
+    if let Some(after_open_paren) = after_pub.strip_prefix('(')
+        && let Some((_, after_close_paren)) = after_open_paren.split_once(')')
+    {
+        return after_close_paren.trim_start();
+    }
+
+    return after_pub;
+}
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_A_Path_Attribute_On_Its_Own_Line_Should_Declare_Its_File_Stem()
+    {
+        assert_eq!(Path_Attribute_Stem(r#"#[path = "build_variant.rs"]"#), Some("build_variant".to_owned()));
+    }
+
+    #[test]
+    fn Test_A_Path_Attribute_Sharing_A_Line_With_Its_Mod_Should_Still_Declare_Its_File_Stem()
+    {
+        assert_eq!(
+            Path_Attribute_Stem(r#"#[path = "fact_reuse.rs"] mod determinism;"#),
+            Some("fact_reuse".to_owned())
+        );
+    }
+
+    #[test]
+    fn Test_A_Commented_Out_Path_Attribute_Should_Declare_Nothing()
+    {
+        assert_eq!(Path_Attribute_Stem(r#"// #[path = "build_variant.rs"]"#), None);
+    }
+
+    #[test]
+    fn Test_A_Line_With_No_Path_Attribute_Should_Declare_Nothing()
+    {
+        assert_eq!(Path_Attribute_Stem("mod variant;"), None);
+    }
+
+    #[test]
+    fn Test_A_Raw_Identifier_Module_Should_Declare_Its_Unprefixed_Name()
+    {
+        assert_eq!(Module_Declared_By("mod r#type;"), Some("type".to_owned()));
+        assert_eq!(Module_Declared_By("pub(crate) mod r#ref;"), Some("ref".to_owned()));
+    }
+
+    #[test]
+    fn Test_Every_Visibility_Spelling_Should_Declare_Its_Module()
+    {
+        for line in ["mod finish;", "pub mod finish;", "pub(crate) mod finish;", "pub(super) mod finish;", "pub(in crate::store) mod finish;"]
+        {
+            assert_eq!(Module_Declared_By(line), Some("finish".to_owned()), "{line} should declare finish");
+        }
+    }
 }
