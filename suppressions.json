@@ -76,7 +76,7 @@
     {
       "check": "check-literals",
       "path": "crates/contracts/nomos-contracts/src/contract_version.rs",
-      "message": "magic number literal `3` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `3` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -148,7 +148,7 @@
     {
       "check": "check-literals",
       "path": "crates/contracts/nomos-contracts/src/workflow_step.rs",
-      "message": "magic number literal `3` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `3` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -196,7 +196,7 @@
     {
       "check": "check-literals",
       "path": "crates/corrections/nomos-corrections/src/correction_choice.rs",
-      "message": "magic number literal `3` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `3` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -252,7 +252,7 @@
     {
       "check": "check-literals",
       "path": "crates/host/nomos-api/src/work.rs",
-      "message": "magic number literal `3600` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `3600` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -508,7 +508,7 @@
     {
       "check": "check-literals",
       "path": "crates/kernel/nomos-model/src/evidence/coverage.rs",
-      "message": "magic number literal `3` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `3` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -580,7 +580,7 @@
     {
       "check": "check-literals",
       "path": "crates/languages/nomos-lang-go-modules/src/provider.rs",
-      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -604,7 +604,7 @@
     {
       "check": "check-literals",
       "path": "crates/languages/nomos-lang-go/src/provider.rs",
-      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -612,7 +612,7 @@
     {
       "check": "check-literals",
       "path": "crates/languages/nomos-lang-go/src/provider.rs",
-      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -620,7 +620,7 @@
     {
       "check": "check-literals",
       "path": "crates/languages/nomos-lang-go/src/provider.rs",
-      "message": "magic number literal `3` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `3` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -628,7 +628,7 @@
     {
       "check": "check-literals",
       "path": "crates/languages/nomos-lang-rust-cargo/src/provider.rs",
-      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -652,7 +652,7 @@
     {
       "check": "check-literals",
       "path": "crates/languages/nomos-lang-rust-clippy/src/provider.rs",
-      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -684,7 +684,7 @@
     {
       "check": "check-literals",
       "path": "crates/languages/nomos-lang-rust-clippy/src/reading.rs",
-      "message": "magic number literal `113` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `113` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -716,7 +716,7 @@
     {
       "check": "check-literals",
       "path": "crates/languages/nomos-lang-rust-deny/src/provider.rs",
-      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -740,7 +740,7 @@
     {
       "check": "check-literals",
       "path": "crates/languages/nomos-lang-rust-scan/src/provider.rs",
-      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -748,7 +748,7 @@
     {
       "check": "check-literals",
       "path": "crates/languages/nomos-lang-rust-scan/src/provider.rs",
-      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -780,7 +780,7 @@
     {
       "check": "check-literals",
       "path": "crates/languages/nomos-lang-rust/src/provider.rs",
-      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -788,7 +788,7 @@
     {
       "check": "check-literals",
       "path": "crates/languages/nomos-lang-rust/src/provider.rs",
-      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -796,7 +796,7 @@
     {
       "check": "check-literals",
       "path": "crates/languages/nomos-lang-rust/src/provider.rs",
-      "message": "magic number literal `3` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `3` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -804,7 +804,7 @@
     {
       "check": "check-literals",
       "path": "crates/languages/nomos-lang-rust/src/reachability/provider.rs",
-      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -868,7 +868,7 @@
     {
       "check": "check-literals",
       "path": "crates/platform/nomos-platform/src/clock.rs",
-      "message": "magic number literal `1_000` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `1_000` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -876,7 +876,7 @@
     {
       "check": "check-literals",
       "path": "crates/platform/nomos-platform/src/clock.rs",
-      "message": "magic number literal `30` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `30` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -900,7 +900,7 @@
     {
       "check": "check-literals",
       "path": "crates/platform/nomos-platform/src/launcher/exit_outcome.rs",
-      "message": "magic number literal `30` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `30` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -908,7 +908,7 @@
     {
       "check": "check-literals",
       "path": "crates/rules/nomos-rules/src/crosslang.rs",
-      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -932,7 +932,7 @@
     {
       "check": "check-literals",
       "path": "crates/rules/nomos-rules/src/dependency.rs",
-      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -956,7 +956,7 @@
     {
       "check": "check-literals",
       "path": "crates/rules/nomos-rules/src/lint.rs",
-      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -964,7 +964,7 @@
     {
       "check": "check-literals",
       "path": "crates/rules/nomos-rules/src/lint.rs",
-      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -988,7 +988,7 @@
     {
       "check": "check-literals",
       "path": "crates/rules/nomos-rules/src/naming.rs",
-      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -1012,7 +1012,7 @@
     {
       "check": "check-literals",
       "path": "crates/rules/nomos-rules/src/policy.rs",
-      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -1020,7 +1020,7 @@
     {
       "check": "check-literals",
       "path": "crates/rules/nomos-rules/src/policy.rs",
-      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -1036,7 +1036,7 @@
     {
       "check": "check-literals",
       "path": "crates/rules/nomos-rules/src/reachability.rs",
-      "message": "magic number literal `3` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `3` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -1044,7 +1044,7 @@
     {
       "check": "check-literals",
       "path": "crates/rules/nomos-rules/src/reachability.rs",
-      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -1076,7 +1076,7 @@
     {
       "check": "check-literals",
       "path": "crates/spec/nomos-spec-bundle/src/bundle.rs",
-      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -1164,7 +1164,7 @@
     {
       "check": "check-literals",
       "path": "crates/spec/nomos-spec-model/src/block.rs",
-      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -1172,7 +1172,7 @@
     {
       "check": "check-literals",
       "path": "crates/spec/nomos-spec-model/src/block.rs",
-      "message": "magic number literal `3` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `3` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -1196,7 +1196,7 @@
     {
       "check": "check-literals",
       "path": "crates/spec/nomos-spec-model/src/table.rs",
-      "message": "magic number literal `3` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `3` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -1204,7 +1204,7 @@
     {
       "check": "check-literals",
       "path": "crates/spec/nomos-spec-model/src/table.rs",
-      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -1212,7 +1212,7 @@
     {
       "check": "check-literals",
       "path": "crates/spec/nomos-spec-model/src/table.rs",
-      "message": "magic number literal `4` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `4` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -1324,7 +1324,7 @@
     {
       "check": "check-literals",
       "path": "crates/spec/nomos-spec-store/src/read.rs",
-      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -1332,7 +1332,7 @@
     {
       "check": "check-literals",
       "path": "crates/spec/nomos-spec-store/src/store/relation.rs",
-      "message": "magic number literal `4` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `4` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -1348,7 +1348,7 @@
     {
       "check": "check-literals",
       "path": "crates/spec/nomos-spec-validate/src/run.rs",
-      "message": "magic number literal `10` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `10` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -1364,7 +1364,7 @@
     {
       "check": "check-literals",
       "path": "crates/substrate/nomos-analysis/src/propagation.rs",
-      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -1372,7 +1372,7 @@
     {
       "check": "check-literals",
       "path": "crates/substrate/nomos-analysis/src/propagation.rs",
-      "message": "magic number literal `3` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `3` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -1396,7 +1396,7 @@
     {
       "check": "check-literals",
       "path": "crates/substrate/nomos-ledger/src/exclusion.rs",
-      "message": "magic number literal `2_000` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `2_000` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -1444,7 +1444,7 @@
     {
       "check": "check-literals",
       "path": "crates/substrate/nomos-ledger/src/store/refusal.rs",
-      "message": "magic number literal `2_000` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `2_000` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -1452,7 +1452,7 @@
     {
       "check": "check-literals",
       "path": "crates/substrate/nomos-workspace/src/change.rs",
-      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -1484,7 +1484,7 @@
     {
       "check": "check-literals",
       "path": "crates/substrate/nomos-workspace/src/snapshot.rs",
-      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -2644,7 +2644,7 @@
     {
       "check": "check-error-info",
       "path": "crates/host/nomos-surface-provenance/src/main.rs",
-      "message": "`let _ = ...` discards an error; handle it, report it, or return it (`// error-info: allow <reason>` if the failure genuinely changes nothing)",
+      "message": "`let _ = ...` discards an error; handle it, report it, or return it (`// error-info: allow \u003creason\u003e` if the failure genuinely changes nothing)",
       "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
       "owner": "@kmettias",
       "expires": "2026-11-27"
@@ -3556,7 +3556,7 @@
     {
       "check": "check-error-values",
       "path": "crates/host/nomos-api/src/work/tests_support.rs",
-      "message": "`.expect()` signals a recoverable failure by unwinding the stack; return an error value the caller has to handle (`// error-type: allow <reason>` for a genuine boundary)",
+      "message": "`.expect()` signals a recoverable failure by unwinding the stack; return an error value the caller has to handle (`// error-type: allow \u003creason\u003e` for a genuine boundary)",
       "reason": "this file (or the module it is nested under) is declared #[cfg(test)] mod X; from its parent, so the whole file compiles only under cargo test -- the same governance OD-GATE-018 category 1 already gives an inline #[cfg(test)] mod tests { } block, extended to a file-level test module.",
       "owner": "@kmettias",
       "expires": "2026-11-27"
@@ -4052,7 +4052,7 @@
     {
       "check": "check-literals",
       "path": "crates/host/nomos-api/src/work/claim.rs",
-      "message": "magic number literal `3600` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `3600` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "OD-GATE-018 category-1: value sits inside test code (a #[cfg(test)] mod block or its own file-scoped test module) -- clippy.toml already permits this test-only ergonomics repository-wide",
       "owner": "@kmettias",
       "expires": "2027-02-25"
