@@ -160,7 +160,7 @@ mod tests
     use super::*;
 
     #[test]
-    fn Test_A_Payload_Should_Round_Trip_Through_Its_Own_Encoding()
+    fn Test_Parse_Payload_Should_Round_Trip_A_Payload_Through_Its_Own_Encoding()
     {
         let payload = Sample();
         let encoded = Encode_Payload(&payload);
@@ -170,7 +170,7 @@ mod tests
     }
 
     #[test]
-    fn Test_The_Encoding_Should_Be_Stable_And_Diffable()
+    fn Test_Encode_Payload_Should_Produce_Stable_Diffable_Bytes()
     {
         let rendered = String::from_utf8(Encode_Payload(&Sample())).expect("ASCII and tabs");
 
@@ -182,6 +182,31 @@ mod tests
         assert!(!rendered.contains('\r'), "line endings must not be local");
     }
 
+    /// [`ArmShape::Label`] has no test of its own: the round-trip test above drives it only as
+    /// a side effect of encoding [`Sample`], which never exercises `BareContinue` or
+    /// `BareReturn`. This is the direct address, over every variant.
+    #[test]
+    fn Test_Label_Should_Produce_A_Distinct_String_Per_Arm_Shape()
+    {
+        assert_eq!(ArmShape::Empty.Label(), "empty");
+        assert_eq!(ArmShape::BareContinue.Label(), "bare-continue");
+        assert_eq!(ArmShape::BareReturn.Label(), "bare-return");
+        assert_eq!(ArmShape::TailOk.Label(), "tail-ok");
+    }
+
+    /// [`ArmShape::From_Label`] is exercised indirectly wherever [`Parse_Payload`] reads a
+    /// shape field, but no test is named for it directly. This drives every label it must
+    /// resolve, plus the one it must refuse.
+    #[test]
+    fn Test_From_Label_Should_Resolve_Every_Known_Label_Back_To_Its_Shape()
+    {
+        assert_eq!(ArmShape::From_Label("empty"), Some(ArmShape::Empty));
+        assert_eq!(ArmShape::From_Label("bare-continue"), Some(ArmShape::BareContinue));
+        assert_eq!(ArmShape::From_Label("bare-return"), Some(ArmShape::BareReturn));
+        assert_eq!(ArmShape::From_Label("tail-ok"), Some(ArmShape::TailOk));
+        assert_eq!(ArmShape::From_Label("bogus"), None);
+    }
+
     #[test]
     fn Test_An_Empty_Byte_String_Should_Round_Trip_To_No_Sites()
     {
@@ -189,18 +214,51 @@ mod tests
         assert_eq!(decoded, ReachabilityPayload { sites: Vec::new() });
     }
 
+    /// Every case here undershoots the three tab-separated fields a site line must have —
+    /// one field, or two — so each must be refused for that reason specifically, not merely
+    /// refused for some reason or other.
+    fn Malformed_Site_Field_Counts() -> Vec<&'static [u8]>
+    {
+        return vec![b"site\tonly-one-field\n", b"site\ttwo\tfields\n", b"site\t\n"];
+    }
+
     #[test]
     fn Test_A_Malformed_Site_Line_Should_Be_Refused()
     {
-        let bytes = b"site\tonly-one-field\n";
-        assert!(Parse_Payload(bytes).is_err());
+        for bytes in Malformed_Site_Field_Counts()
+        {
+            let error = Parse_Payload(bytes).expect_err("a site line without three fields must be refused");
+            assert!(
+                error.reason.contains("does not have exactly three fields"),
+                "expected a field-count refusal for {bytes:?}, got: {}",
+                error.reason
+            );
+        }
+    }
+
+    /// Every case here has exactly three fields, so it reaches shape resolution and is
+    /// refused there specifically — not for a field count or a missing prefix.
+    fn Unrecognized_Arm_Shape_Labels() -> Vec<&'static [u8]>
+    {
+        return vec![
+            b"site\tf\tapplicability\tsomething-else\n",
+            b"site\tf\tapplicability\tEMPTY\n",
+            b"site\tf\tapplicability\t\n",
+        ];
     }
 
     #[test]
     fn Test_An_Unrecognized_Shape_Should_Be_Refused()
     {
-        let bytes = b"site\tf\tapplicability\tsomething-else\n";
-        assert!(Parse_Payload(bytes).is_err());
+        for bytes in Unrecognized_Arm_Shape_Labels()
+        {
+            let error = Parse_Payload(bytes).expect_err("an unrecognized shape label must be refused");
+            assert!(
+                error.reason.contains("unrecognized arm shape"),
+                "expected an unrecognized-shape refusal for {bytes:?}, got: {}",
+                error.reason
+            );
+        }
     }
 
     fn Sample() -> ReachabilityPayload

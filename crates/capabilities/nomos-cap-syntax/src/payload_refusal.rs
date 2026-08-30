@@ -52,3 +52,40 @@ impl PayloadRefusal
         };
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Whole_Should_Refuse_With_No_Line()
+    {
+        let refusal = PayloadRefusal::Whole(PayloadRefusalKind::NotUtf8);
+
+        assert_eq!(refusal.line, None);
+        assert_eq!(refusal.kind, PayloadRefusalKind::NotUtf8);
+    }
+
+    #[test]
+    fn Test_At_Should_Refuse_The_Record_At_That_Line()
+    {
+        let refusal = PayloadRefusal::At(4, PayloadRefusalKind::RepeatedHeader);
+
+        assert_eq!(refusal.line, Some(4));
+        assert_eq!(refusal.kind, PayloadRefusalKind::RepeatedHeader);
+    }
+
+    #[test]
+    fn Test_Describe_Should_Prefix_A_Line_Bound_Refusal_And_Leave_A_Whole_One_Bare()
+    {
+        let whole = PayloadRefusal::Whole(PayloadRefusalKind::NotUtf8);
+        assert_eq!(whole.Describe(), PayloadRefusalKind::NotUtf8.Describe());
+
+        let at_line = PayloadRefusal::At(4, PayloadRefusalKind::RepeatedHeader);
+        assert_eq!(
+            at_line.Describe(),
+            format!("line 4 {}", PayloadRefusalKind::RepeatedHeader.Describe())
+        );
+    }
+}

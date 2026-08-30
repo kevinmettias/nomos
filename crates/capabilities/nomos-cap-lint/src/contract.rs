@@ -142,4 +142,26 @@ mod tests
     {
         contract_testing::Assert_One_Contract_Per_Capability(Capability_Contract(), "one name, one meaning");
     }
+
+    /// [`Payload_Schema`] is a leaf wrapper with no in-crate caller of its own — the four
+    /// tests above drive [`Capability_Contract`], [`Capability`] and [`Ceiling`] but never
+    /// this one, so it needs its own direct assertion rather than borrowing theirs.
+    #[test]
+    fn Test_Payload_Schema_Should_Match_The_Declared_Schema_Constant()
+    {
+        assert_eq!(Payload_Schema(), SchemaId::New(SCHEMA));
+    }
+
+    /// The other four tests each drive [`Capability_Contract`] only to reach a property of
+    /// the ceiling or the registry; none asserts on the struct it built. This checks the
+    /// construction itself: every field lands the value its own declaration says it should.
+    #[test]
+    fn Test_Capability_Contract_Should_Assemble_Its_Declared_Identity_And_Ceiling()
+    {
+        let contract = Capability_Contract();
+
+        assert_eq!(contract.id, Capability());
+        assert_eq!(contract.version, CONTRACT_VERSION);
+        assert_eq!(contract.ceiling, Ceiling());
+    }
 }

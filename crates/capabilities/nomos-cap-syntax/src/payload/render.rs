@@ -104,3 +104,56 @@ pub(super) fn Push_Escaped(plain: &mut String, escaped: Option<char>)
         }
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use crate::{Observation, PayloadItem, SyntaxPayload};
+
+    #[test]
+    fn Test_Render_Payload_Should_Write_The_Header_And_Every_Item()
+    {
+        let payload = SyntaxPayload {
+            unexpanded: 1,
+            items: vec![PayloadItem {
+                ordinal: 0,
+                kind: "Constant".to_owned(),
+                visibility: "Public".to_owned(),
+                qualified_name: "TABLES".to_owned(),
+                documentation: Observation::Absent,
+                shape: Observation::Present("slice".to_owned()),
+            }],
+        };
+
+        let rendered = String::from_utf8(Render_Payload(&payload)).expect("ASCII and tabs");
+
+        assert_eq!(rendered, "unexpanded\t1\nitem\t0\tConstant\tPublic\tTABLES\t.\t+slice\n");
+    }
+
+    #[test]
+    fn Test_Escape_Should_Backslash_Every_Reserved_Character()
+    {
+        assert_eq!(Escape("a\\b\tc\nd\re"), "a\\\\b\\tc\\nd\\re");
+        assert_eq!(Escape("plain"), "plain");
+    }
+
+    #[test]
+    fn Test_Unescape_Field_Should_Read_Back_What_Escape_Wrote()
+    {
+        let original = "a\\b\tc\nd\re";
+        assert_eq!(Unescape_Field(&Escape(original)), original);
+    }
+
+    #[test]
+    fn Test_Push_Escaped_Should_Keep_An_Unknown_Escape_Backslash_And_All()
+    {
+        let mut plain = String::new();
+        Push_Escaped(&mut plain, Some('q'));
+        assert_eq!(plain, "\\q");
+
+        let mut trailing = String::new();
+        Push_Escaped(&mut trailing, None);
+        assert_eq!(trailing, "\\");
+    }
+}

@@ -215,7 +215,7 @@ mod tests
     }
 
     #[test]
-    fn Test_A_Payload_Should_Round_Trip_Through_Its_Own_Encoding()
+    fn Test_Parse_Payload_Should_Round_Trip_A_Payload_Through_Its_Own_Encoding()
     {
         let payload = Sample();
         let encoded = Encode_Payload(&payload);
@@ -225,7 +225,7 @@ mod tests
     }
 
     #[test]
-    fn Test_The_Encoding_Should_Be_Stable_And_Diffable()
+    fn Test_Encode_Payload_Should_Produce_Stable_Diffable_Bytes()
     {
         let rendered = String::from_utf8(Encode_Payload(&Sample())).expect("ASCII and tabs");
 
@@ -282,21 +282,64 @@ mod tests
     #[test]
     fn Test_An_Empty_Byte_String_Should_Be_Refused()
     {
-        assert!(Parse_Payload(&[]).is_err());
+        let error = Parse_Payload(&[]).expect_err("an empty payload has no package line");
+        assert!(
+            error.reason.contains("empty payload"),
+            "expected an empty-payload refusal, got: {}",
+            error.reason
+        );
+    }
+
+    /// Each case here has fewer than the five tab-separated fields a diagnostic line must
+    /// carry — `splitn` can never hand back more than five, so under-counting is the only way
+    /// to reach this refusal.
+    fn Malformed_Diagnostic_Lines() -> Vec<&'static [u8]>
+    {
+        return vec![
+            b"package\tsomething\ndiagnostic\tzero-tabs-here\n",
+            b"package\tsomething\ndiagnostic\twarning\tonly-one-more-field\n",
+            b"package\tsomething\ndiagnostic\twarning\t-\ta.rs\n",
+        ];
     }
 
     #[test]
     fn Test_A_Malformed_Diagnostic_Line_Should_Be_Refused()
     {
-        let bytes = b"package\tsomething\ndiagnostic\twarning\tonly-one-more-field\n";
-        assert!(Parse_Payload(bytes).is_err());
+        for bytes in Malformed_Diagnostic_Lines()
+        {
+            let error =
+                Parse_Payload(bytes).expect_err("a diagnostic line without five fields must be refused");
+            assert!(
+                error.reason.contains("does not have exactly 5 fields"),
+                "expected a field-count refusal for {bytes:?}, got: {}",
+                error.reason
+            );
+        }
+    }
+
+    /// Every case here has exactly five fields, so it reaches level resolution and is refused
+    /// there specifically — not for a field count or a missing prefix.
+    fn Unrecognized_Lint_Levels() -> Vec<&'static [u8]>
+    {
+        return vec![
+            b"package\tsomething\ndiagnostic\tcatastrophic\t-\ta.rs\t1\toops\n",
+            b"package\tsomething\ndiagnostic\tFYI\t-\tb.rs\t2\tsomething\n",
+            b"package\tsomething\ndiagnostic\t\t-\tc.rs\t3\tempty level\n",
+        ];
     }
 
     #[test]
     fn Test_An_Unrecognized_Level_Should_Be_Refused()
     {
-        let bytes = b"package\tsomething\ndiagnostic\tcatastrophic\t-\ta.rs\t1\toops\n";
-        assert!(Parse_Payload(bytes).is_err());
+        for bytes in Unrecognized_Lint_Levels()
+        {
+            let error = Parse_Payload(bytes).expect_err("an unrecognized lint level must be refused");
+            assert!(
+                error.reason.contains("unrecognized lint level"),
+                "expected an unrecognized-level refusal for {bytes:?}, got: {}",
+                error.reason
+            );
+        }
     }
 
     #[test]

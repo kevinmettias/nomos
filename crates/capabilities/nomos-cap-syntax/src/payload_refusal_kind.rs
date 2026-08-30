@@ -84,3 +84,29 @@ impl PayloadRefusalKind
         };
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Describe_Should_Name_What_Went_Wrong_For_Every_Kind()
+    {
+        assert_eq!(PayloadRefusalKind::NotUtf8.Describe(), "the payload is not UTF-8, so it is not this schema");
+
+        let unknown = PayloadRefusalKind::UnknownRecord {
+            tag: "region".to_owned(),
+        };
+        assert!(unknown.Describe().contains("region"));
+
+        let wrong_count = PayloadRefusalKind::WrongFieldCount {
+            tag: "item".to_owned(),
+            expected: 7,
+            found: 5,
+        };
+        assert!(wrong_count.Describe().contains("item"));
+        assert!(wrong_count.Describe().contains('7'));
+        assert!(wrong_count.Describe().contains('5'));
+    }
+}

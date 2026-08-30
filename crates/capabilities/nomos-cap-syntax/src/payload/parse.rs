@@ -224,3 +224,121 @@ pub(super) fn Parsed_Number(value: &str, field: &'static str, line: usize) -> Re
         );
     });
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use crate::Observation;
+
+    #[test]
+    fn Test_Parse_Payload_Should_Read_A_Header_With_No_Items()
+    {
+        let payload = Parse_Payload(b"unexpanded\t0\n").expect("a header alone is well formed");
+
+        assert_eq!(payload.unexpanded, 0);
+        assert!(payload.items.is_empty());
+    }
+
+    #[test]
+    fn Test_Parsed_Number_Should_Refuse_A_Value_That_Is_Not_A_Number()
+    {
+        assert_eq!(Parsed_Number("3", "ordinal", 1), Ok(3));
+
+        let refused = Parsed_Number("many", "ordinal", 1).expect_err("not a number");
+        assert!(
+            matches!(
+                refused,
+                PayloadRefusal {
+                    kind: PayloadRefusalKind::UnreadableNumber { field: "ordinal", .. },
+                    line: Some(1),
+                }
+            ),
+            "{refused:?}"
+        );
+    }
+
+    #[test]
+    fn Test_Expect_Fields_Should_Refuse_A_Record_Of_The_Wrong_Length()
+    {
+        assert_eq!(Expect_Fields("item", &["item", "0"], 2, 3), Ok(()));
+
+        let refused = Expect_Fields("item", &["item", "0"], 7, 3).expect_err("two fields where seven are expected");
+        assert!(
+            matches!(
+                refused,
+                PayloadRefusal {
+                    kind: PayloadRefusalKind::WrongFieldCount { ref tag, expected: 7, found: 2 },
+                    line: Some(3),
+                } if tag == "item"
+            ),
+            "{refused:?}"
+        );
+    }
+
+    #[test]
+    fn Test_Header_Count_Should_Refuse_A_Second_Header()
+    {
+        let fields: Vec<&str> = "unexpanded\t2".split('\t').collect();
+        assert_eq!(Header_Count(&fields, 1, None), Ok(2));
+
+        let refused = Header_Count(&fields, 2, Some(2)).expect_err("a header already arrived");
+        assert!(
+            matches!(
+                refused,
+                PayloadRefusal {
+                    kind: PayloadRefusalKind::RepeatedHeader,
+                    line: Some(2),
+                }
+            ),
+            "{refused:?}"
+        );
+    }
+
+    #[test]
+    fn Test_Item_Record_Should_Read_Every_Field_In_Order()
+    {
+        let fields: Vec<&str> = "item\t0\tConstant\tPublic\tTABLES\t+doc\t+slice".split('\t').collect();
+        let item = Item_Record(&fields, 1).expect("seven well-formed fields");
+
+        assert_eq!(item.ordinal, 0);
+        assert_eq!(item.kind, "Constant");
+        assert_eq!(item.visibility, "Public");
+        assert_eq!(item.qualified_name, "TABLES");
+        assert_eq!(item.documentation, Observation::Present("doc".to_owned()));
+        assert_eq!(item.shape, Observation::Present("slice".to_owned()));
+    }
+
+    #[test]
+    fn Test_Read_Item_Should_Refuse_An_Item_Before_The_Header_Arrives()
+    {
+        let fields: Vec<&str> = "item\t0\tConstant\tPublic\tTABLES\t.\t.".split('\t').collect();
+        let refused = Read_Item(&fields, 1, None).expect_err("no header has arrived yet");
+
+        assert!(
+            matches!(refused, PayloadRefusal { kind: PayloadRefusalKind::NoHeader, line: None }),
+            "{refused:?}"
+        );
+    }
+
+    #[test]
+    fn Test_Read_Record_Should_Refuse_An_Unknown_Tag()
+    {
+        let mut read = Reading {
+            unexpanded: Some(0),
+            items: Vec::new(),
+        };
+        let refused = Read_Record("region\t0\t3", 2, &mut read).expect_err("this build does not know `region`");
+
+        assert!(
+            matches!(
+                refused,
+                PayloadRefusal {
+                    kind: PayloadRefusalKind::UnknownRecord { ref tag },
+                    line: Some(2),
+                } if tag == "region"
+            ),
+            "{refused:?}"
+        );
+    }
+}

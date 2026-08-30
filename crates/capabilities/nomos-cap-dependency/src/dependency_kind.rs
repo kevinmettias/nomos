@@ -194,7 +194,7 @@ mod tests
     use super::*;
 
     #[test]
-    fn Test_A_Payload_Should_Round_Trip_Through_Its_Own_Encoding()
+    fn Test_Parse_Payload_Should_Round_Trip_A_Payload_Through_Its_Own_Encoding()
     {
         let payload = Sample();
         let encoded = Encode_Payload(&payload);
@@ -204,7 +204,7 @@ mod tests
     }
 
     #[test]
-    fn Test_The_Encoding_Should_Be_Stable_And_Diffable()
+    fn Test_Encode_Payload_Should_Produce_Stable_Diffable_Bytes()
     {
         let rendered = String::from_utf8(Encode_Payload(&Sample())).expect("ASCII and tabs");
 
@@ -217,17 +217,50 @@ mod tests
         assert!(!rendered.contains('\r'), "line endings must not be local");
     }
 
+    /// [`DependencyKind::Label`] has no test of its own: the round-trip test above drives it
+    /// only as a side effect of encoding [`Sample`], which never reaches `Build`. This is the
+    /// direct address, over every variant.
+    #[test]
+    fn Test_Label_Should_Produce_A_Distinct_String_Per_Dependency_Kind()
+    {
+        assert_eq!(DependencyKind::Normal.Label(), "normal");
+        assert_eq!(DependencyKind::Dev.Label(), "dev");
+        assert_eq!(DependencyKind::Build.Label(), "build");
+    }
+
+    /// [`DependencyKind::From_Label`] is exercised indirectly wherever [`Parse_Payload`] reads
+    /// an edge's kind field, but no test is named for it directly. This drives every label it
+    /// must resolve, plus the one it must refuse.
+    #[test]
+    fn Test_From_Label_Should_Resolve_Every_Known_Label_Back_To_Its_Kind()
+    {
+        assert_eq!(DependencyKind::From_Label("normal"), Some(DependencyKind::Normal));
+        assert_eq!(DependencyKind::From_Label("dev"), Some(DependencyKind::Dev));
+        assert_eq!(DependencyKind::From_Label("build"), Some(DependencyKind::Build));
+        assert_eq!(DependencyKind::From_Label("bogus"), None);
+    }
+
     #[test]
     fn Test_An_Empty_Byte_String_Should_Be_Refused()
     {
-        assert!(Parse_Payload(&[]).is_err());
+        let error = Parse_Payload(&[]).expect_err("an empty payload has no package line");
+        assert!(
+            error.reason.contains("empty payload"),
+            "expected an empty-payload refusal, got: {}",
+            error.reason
+        );
     }
 
     #[test]
     fn Test_A_Malformed_Edge_Line_Should_Be_Refused()
     {
         let bytes = b"package\tsomething\nedge\tonly-one-field\n";
-        assert!(Parse_Payload(bytes).is_err());
+        let error = Parse_Payload(bytes).expect_err("an edge line without three fields must be refused");
+        assert!(
+            error.reason.contains("does not have exactly three fields"),
+            "expected a field-count refusal, got: {}",
+            error.reason
+        );
     }
 
     #[test]

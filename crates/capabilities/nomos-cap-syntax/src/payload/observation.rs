@@ -188,3 +188,85 @@ pub(super) fn Observed_Field(value: &str, field: &'static str, line: usize) -> R
         );
     });
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Value_Should_Return_The_Text_Only_When_Present()
+    {
+        assert_eq!(Observation::Present("x".to_owned()).Value(), Some("x"));
+        assert_eq!(Observation::Absent.Value(), None);
+        assert_eq!(Observation::NotObserved.Value(), None);
+    }
+
+    #[test]
+    fn Test_Was_Observed_Should_Be_False_Only_When_The_Method_Could_Not_Look()
+    {
+        assert!(!Observation::NotObserved.Was_Observed());
+        assert!(Observation::Absent.Was_Observed());
+        assert!(Observation::Present("x".to_owned()).Was_Observed());
+    }
+
+    #[test]
+    fn Test_Encode_Should_Write_The_Mark_Each_State_Declares()
+    {
+        assert_eq!(Observation::NotObserved.Encode(), "-");
+        assert_eq!(Observation::Absent.Encode(), ".");
+        assert_eq!(Observation::Present("a\tb".to_owned()).Encode(), "+a\\tb");
+    }
+
+    #[test]
+    fn Test_Function_Arity_Should_Read_The_Number_Behind_The_Function_Prefix()
+    {
+        assert_eq!(Function_Arity(&Observation::Present(Function_Shape(3))), Some(3));
+        assert_eq!(Function_Arity(&Observation::Present(SLICE.to_owned())), None);
+        assert_eq!(Function_Arity(&Observation::NotObserved), None);
+    }
+
+    #[test]
+    fn Test_Function_Shape_Should_Prefix_The_Arity()
+    {
+        assert_eq!(Function_Shape(0), "fn/0");
+        assert_eq!(Function_Shape(5), "fn/5");
+    }
+
+    #[test]
+    fn Test_Struct_Fields_Should_Read_Back_What_Struct_Shape_Wrote()
+    {
+        let fields = vec![("a".to_owned(), "u32".to_owned()), ("b".to_owned(), "String".to_owned())];
+        let shape = Struct_Shape(&fields).map(Observation::Present).expect("two fields is not empty");
+
+        assert_eq!(Struct_Fields(&shape), Some(fields));
+        assert_eq!(Struct_Fields(&Observation::NotObserved), None);
+    }
+
+    #[test]
+    fn Test_Struct_Shape_Should_Have_Nothing_To_Say_For_No_Named_Fields()
+    {
+        assert_eq!(Struct_Shape(&[]), None);
+        assert!(Struct_Shape(&[("a".to_owned(), "u32".to_owned())]).is_some());
+    }
+
+    #[test]
+    fn Test_Observed_Field_Should_Refuse_A_Value_That_Is_Not_One_Of_The_Three_Marks()
+    {
+        assert_eq!(Observed_Field("-", "documentation", 2), Ok(Observation::NotObserved));
+        assert_eq!(Observed_Field(".", "documentation", 2), Ok(Observation::Absent));
+        assert_eq!(Observed_Field("+ok", "documentation", 2), Ok(Observation::Present("ok".to_owned())));
+
+        let refused = Observed_Field("none", "documentation", 2).expect_err("not one of the three marks");
+        assert_eq!(
+            refused,
+            PayloadRefusal::At(
+                2,
+                PayloadRefusalKind::UnreadableObservation {
+                    field: "documentation",
+                    value: "none".to_owned(),
+                },
+            )
+        );
+    }
+}

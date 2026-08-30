@@ -155,7 +155,7 @@ mod tests
     }
 
     #[test]
-    fn Test_A_Payload_Should_Round_Trip_Through_Its_Own_Encoding()
+    fn Test_Parse_Payload_Should_Round_Trip_A_Payload_Through_Its_Own_Encoding()
     {
         let payload = Sample();
         let encoded = Encode_Payload(&payload);
@@ -165,7 +165,7 @@ mod tests
     }
 
     #[test]
-    fn Test_The_Encoding_Should_Be_Stable_And_Diffable()
+    fn Test_Encode_Payload_Should_Produce_Stable_Diffable_Bytes()
     {
         let rendered = String::from_utf8(Encode_Payload(&Sample())).expect("ASCII and tabs");
 
@@ -219,24 +219,76 @@ mod tests
         assert!(decoded.violations.is_empty());
     }
 
+    /// Each case here has fewer than the three tab-separated fields a violation line must
+    /// carry — `splitn` can never hand back more than three, so under-counting is the only
+    /// way to reach this refusal.
+    fn Malformed_Violation_Lines() -> Vec<&'static [u8]>
+    {
+        return vec![
+            b"violation\twarning\tonly-one-more-field\n",
+            b"violation\tjust-one-field\n",
+            b"violation\t\n",
+        ];
+    }
+
     #[test]
     fn Test_A_Malformed_Violation_Line_Should_Be_Refused()
     {
-        let bytes = b"violation\twarning\tonly-one-more-field\n";
-        assert!(Parse_Payload(bytes).is_err());
+        for bytes in Malformed_Violation_Lines()
+        {
+            let error =
+                Parse_Payload(bytes).expect_err("a violation line without three fields must be refused");
+            assert!(
+                error.reason.contains("does not have exactly 3 fields"),
+                "expected a field-count refusal for {bytes:?}, got: {}",
+                error.reason
+            );
+        }
+    }
+
+    /// Every case here has exactly three fields, so it reaches severity resolution and is
+    /// refused there specifically — not for a field count or a missing prefix.
+    fn Unrecognized_Policy_Severities() -> Vec<&'static [u8]>
+    {
+        return vec![
+            b"violation\tcatastrophic\tsomecode\toops\n",
+            b"violation\tfyi\tsomecode\tjust so you know\n",
+            b"violation\t\tsomecode\tempty severity\n",
+        ];
     }
 
     #[test]
     fn Test_An_Unrecognized_Severity_Should_Be_Refused()
     {
-        let bytes = b"violation\tcatastrophic\tsomecode\toops\n";
-        assert!(Parse_Payload(bytes).is_err());
+        for bytes in Unrecognized_Policy_Severities()
+        {
+            let error = Parse_Payload(bytes).expect_err("an unrecognized severity must be refused");
+            assert!(
+                error.reason.contains("unrecognized policy severity"),
+                "expected an unrecognized-severity refusal for {bytes:?}, got: {}",
+                error.reason
+            );
+        }
+    }
+
+    /// Every case here is missing the `violation\t` tag altogether, so it is refused before
+    /// either field count or severity is even inspected.
+    fn Lines_Not_Prefixed_As_Violations() -> Vec<&'static [u8]>
+    {
+        return vec![b"package\tsomething\n", b"violationx\ta\tb\tc\n", b"\ta\tb\tc\n"];
     }
 
     #[test]
     fn Test_A_Line_Not_Prefixed_Violation_Should_Be_Refused()
     {
-        let bytes = b"package\tsomething\n";
-        assert!(Parse_Payload(bytes).is_err());
+        for bytes in Lines_Not_Prefixed_As_Violations()
+        {
+            let error = Parse_Payload(bytes).expect_err("a line without the violation tag must be refused");
+            assert!(
+                error.reason.contains("is not a violation"),
+                "expected a not-a-violation refusal for {bytes:?}, got: {}",
+                error.reason
+            );
+        }
     }
 }

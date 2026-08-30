@@ -55,3 +55,45 @@ impl PayloadItem
         return self.visibility == NOT_APPLICABLE;
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use crate::{NOT_APPLICABLE, Observation, PUBLIC};
+
+    fn Item_With(visibility: &str, qualified_name: &str) -> PayloadItem
+    {
+        return PayloadItem {
+            ordinal: 0,
+            kind: "Function".to_owned(),
+            visibility: visibility.to_owned(),
+            qualified_name: qualified_name.to_owned(),
+            documentation: Observation::Absent,
+            shape: Observation::Absent,
+        };
+    }
+
+    #[test]
+    fn Test_Own_Name_Should_Be_The_Last_Segment_Of_A_Qualified_Name()
+    {
+        assert_eq!(Item_With(PUBLIC, "Table::All").Own_Name(), "All");
+        assert_eq!(Item_With(PUBLIC, "All").Own_Name(), "All");
+    }
+
+    #[test]
+    fn Test_Is_Public_Should_Be_True_Only_For_The_Public_Label()
+    {
+        assert!(Item_With(PUBLIC, "All").Is_Public());
+        assert!(!Item_With("Private", "All").Is_Public());
+        assert!(!Item_With(NOT_APPLICABLE, "All").Is_Public());
+    }
+
+    #[test]
+    fn Test_Declares_No_Visibility_Should_Be_True_Only_For_The_Not_Applicable_Label()
+    {
+        assert!(Item_With(NOT_APPLICABLE, "All").Declares_No_Visibility());
+        assert!(!Item_With(PUBLIC, "All").Declares_No_Visibility());
+        assert!(!Item_With("Private", "All").Declares_No_Visibility());
+    }
+}

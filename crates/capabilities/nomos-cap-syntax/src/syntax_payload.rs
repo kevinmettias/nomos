@@ -33,3 +33,38 @@ impl SyntaxPayload
             .find(|candidate| return candidate.qualified_name == owner);
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use crate::Observation;
+
+    fn Item(qualified_name: &str) -> PayloadItem
+    {
+        return PayloadItem {
+            ordinal: 0,
+            kind: "Function".to_owned(),
+            visibility: "Public".to_owned(),
+            qualified_name: qualified_name.to_owned(),
+            documentation: Observation::Absent,
+            shape: Observation::Absent,
+        };
+    }
+
+    #[test]
+    fn Test_Enclosing_Should_Find_The_Most_Recent_Record_Whose_Name_Prefixes_This_Ones()
+    {
+        let payload = SyntaxPayload {
+            unexpanded: 0,
+            items: vec![Item("Table"), Item("Table::All"), Item("Other")],
+        };
+
+        assert_eq!(
+            payload.Enclosing(1).map(|item| return item.qualified_name.as_str()),
+            Some("Table")
+        );
+        assert!(payload.Enclosing(0).is_none(), "a top-level item encloses nothing");
+        assert!(payload.Enclosing(2).is_none(), "`Other` has no `::` to look up an owner from");
+    }
+}
