@@ -1,48 +1,71 @@
+pub enum nomos_api::AbandonResponse
+pub enum nomos_api::AddResponse
+pub enum nomos_api::AuditResponse
 pub enum nomos_api::BlockChangeResponse
+pub enum nomos_api::CommitResponse
+pub enum nomos_api::DeclineResponse
 pub enum nomos_api::Disposition
+pub enum nomos_api::FinishResponse
+pub enum nomos_api::FreshnessResponse
 pub enum nomos_api::GateExplainResponse
 pub enum nomos_api::GatePlanResponse
+pub enum nomos_api::ListResponse
+pub enum nomos_api::MarkdownResponse
 pub enum nomos_api::NormativeOutcomeResponse
 pub enum nomos_api::OriginResponse
 pub enum nomos_api::PathMatchResponse
+pub enum nomos_api::PreviewResponse
 pub enum nomos_api::ProfilesResponse
+pub enum nomos_api::RecordResponse
+pub enum nomos_api::RenderResponse
 pub enum nomos_api::ReproductionResponse
+pub enum nomos_api::ReservationOutcomeResponse
 pub enum nomos_api::SeverityResponse
-pub enum nomos_api::SpecCommitResponse
-pub enum nomos_api::SpecFreshnessResponse
-pub enum nomos_api::SpecMarkdownResponse
-pub enum nomos_api::SpecPreviewResponse
-pub enum nomos_api::SpecRecordResponse
-pub enum nomos_api::SpecRenderResponse
-pub enum nomos_api::SpecSourcesResponse
-pub enum nomos_api::SpecSubmitResponse
-pub enum nomos_api::SpecTableResponse
+pub enum nomos_api::ShowResponse
+pub enum nomos_api::SourcesResponse
 pub enum nomos_api::SubmissionKindResponse
 pub enum nomos_api::SubmissionStateResponse
+pub enum nomos_api::SubmitResponse
 pub enum nomos_api::SuppressionDispositionResponse
+pub enum nomos_api::TableResponse
 pub enum nomos_api::VacateOutcomeResponse
+pub enum nomos_api::ValidateResponse
 pub enum nomos_api::VerdictResponse
-pub enum nomos_api::WorkAbandonResponse
-pub enum nomos_api::WorkAddResponse
-pub enum nomos_api::WorkAuditResponse
-pub enum nomos_api::WorkDeclineResponse
-pub enum nomos_api::WorkFinishResponse
-pub enum nomos_api::WorkListResponse
-pub enum nomos_api::WorkReservationResponse
-pub enum nomos_api::WorkShowResponse
-pub enum nomos_api::WorkValidateResponse
+pub enum variant nomos_api::AbandonResponse::Abandoned
+pub enum variant nomos_api::AbandonResponse::Refused { cause: String, retryable: bool, }
+pub enum variant nomos_api::AddResponse::Added
+pub enum variant nomos_api::AddResponse::Refused { cause: String, }
+pub enum variant nomos_api::AuditResponse::Audited { blocked: Vec<BlockedItem>, now: Timestamp, }
+pub enum variant nomos_api::AuditResponse::Unreadable { cause: String, }
 pub enum variant nomos_api::BlockChangeResponse::Added { ordinal: u32, kind: String }
 pub enum variant nomos_api::BlockChangeResponse::Moved { from: u32, to: u32 }
 pub enum variant nomos_api::BlockChangeResponse::Reflowed { ordinal: u32 }
 pub enum variant nomos_api::BlockChangeResponse::Removed { ordinal: u32, kind: String }
 pub enum variant nomos_api::BlockChangeResponse::Reworded { ordinal: u32, before: String, after: String }
+pub enum variant nomos_api::CommitResponse::Committed { preview: CommittedPreviewResponse, report: CommitReportResponse, destination: PathBuf, vacated: Option<VacatedResponse>, reproduction: ReproductionResponse, }
+pub enum variant nomos_api::CommitResponse::Refused { cause: String, }
+pub enum variant nomos_api::CommitResponse::StoreRefused { preview: CommittedPreviewResponse, cause: String, }
+pub enum variant nomos_api::CommitResponse::Unreadable { path: String, cause: String, }
+pub enum variant nomos_api::CommitResponse::Unwritable { preview: CommittedPreviewResponse, report: CommitReportResponse, path: String, cause: String, }
+pub enum variant nomos_api::DeclineResponse::Declined
+pub enum variant nomos_api::DeclineResponse::Refused { cause: String, retryable: bool, }
 pub enum variant nomos_api::Disposition::Failed
 pub enum variant nomos_api::Disposition::Indeterminate
 pub enum variant nomos_api::Disposition::Passed
+pub enum variant nomos_api::FinishResponse::Finished { record: VerificationRecord, }
+pub enum variant nomos_api::FinishResponse::Refused { cause: String, judged: bool, }
+pub enum variant nomos_api::FreshnessResponse::Examined { examined: Vec<ProfileOutcomeResponse>, required: Vec<String>, }
+pub enum variant nomos_api::FreshnessResponse::NoSuchProfile { requested: String, known: Vec<String>, }
+pub enum variant nomos_api::FreshnessResponse::RequirementUnexamined { requested: String, only: Option<String>, }
+pub enum variant nomos_api::FreshnessResponse::Unreadable { cause: String, }
 pub enum variant nomos_api::GateExplainResponse::Found { finding: Box<Finding>, would_block: bool, calibrated_by: Option<RuleCalibrationResponse>, suppressed_by: Box<Option<SuppressionResponse>>, baselined_by: Option<BaselineDebtResponse>, contract_record: Option<String>, contract_record_version: Option<u32>, }
 pub enum variant nomos_api::GateExplainResponse::NotFound
 pub enum variant nomos_api::GatePlanResponse::Contradictory { cause: String, }
 pub enum variant nomos_api::GatePlanResponse::Planned { rules: Vec<RuleOfferResponse>, }
+pub enum variant nomos_api::ListResponse::Listed { document: LedgerDocument, now: Timestamp, }
+pub enum variant nomos_api::ListResponse::Unreadable { cause: String, }
+pub enum variant nomos_api::MarkdownResponse::Refused { cause: String, }
+pub enum variant nomos_api::MarkdownResponse::Resolved { node_id: String, path: String, revision: String, markdown: String, source_hash: String, projected_hash: String, matches_source: bool, }
 pub enum variant nomos_api::NormativeOutcomeResponse::Gone { from: u32 }
 pub enum variant nomos_api::NormativeOutcomeResponse::Held { block: u32 }
 pub enum variant nomos_api::NormativeOutcomeResponse::Moved { from: u32, to: u32 }
@@ -54,108 +77,85 @@ pub enum variant nomos_api::OriginResponse::Submitted
 pub enum variant nomos_api::PathMatchResponse::Exact
 pub enum variant nomos_api::PathMatchResponse::FileName
 pub enum variant nomos_api::PathMatchResponse::Fragment
+pub enum variant nomos_api::PreviewResponse::Previewed { node_id: String, path: String, rename: Option<(String, String)>, markdown: String, blocks: Vec<BlockChangeResponse>, identity: Vec<IdentityChangeResponse>, relations_added: Vec<RecordRelationResponse>, relations_removed: Vec<RecordRelationResponse>, statements: Vec<NormativeMovementResponse>, wording_moved: bool, changes_nothing: bool, }
+pub enum variant nomos_api::PreviewResponse::Refused { cause: String, }
+pub enum variant nomos_api::PreviewResponse::Unreadable { path: String, cause: String, }
 pub enum variant nomos_api::ProfilesResponse::Listed { profiles: Vec<Profile>, }
 pub enum variant nomos_api::ProfilesResponse::Unreadable { cause: String, }
+pub enum variant nomos_api::RecordResponse::Ambiguous { id: String, documents: Vec<DocumentSourceResponse>, }
+pub enum variant nomos_api::RecordResponse::NotFound { id: String, revision: Option<String>, node: Option<NodeSummaryResponse>, }
+pub enum variant nomos_api::RecordResponse::Resolved { id: String, document: DocumentSourceResponse, }
+pub enum variant nomos_api::RecordResponse::Unreadable { cause: String, }
+pub enum variant nomos_api::RenderResponse::NoSuchProfile { requested: String, known: Vec<String>, }
+pub enum variant nomos_api::RenderResponse::Placed { id: String, body: PathBuf, sidecar: PathBuf, stamp: Stamp, }
+pub enum variant nomos_api::RenderResponse::Unreadable { cause: String, }
+pub enum variant nomos_api::RenderResponse::Unwritable { path: String, cause: String, }
 pub enum variant nomos_api::ReproductionResponse::Matched { hash: String }
 pub enum variant nomos_api::ReproductionResponse::Mismatched { hash: String }
 pub enum variant nomos_api::ReproductionResponse::Unverifiable { cause: String }
+pub enum variant nomos_api::ReservationOutcomeResponse::Refused { cause: String, retryable: bool, }
+pub enum variant nomos_api::ReservationOutcomeResponse::Reserved { reservation: ReservationResponse, }
 pub enum variant nomos_api::SeverityResponse::Blocking
 pub enum variant nomos_api::SeverityResponse::NonBlocking
-pub enum variant nomos_api::SpecCommitResponse::Committed { preview: CommittedPreviewResponse, report: CommitReportResponse, destination: PathBuf, vacated: Option<VacatedResponse>, reproduction: ReproductionResponse, }
-pub enum variant nomos_api::SpecCommitResponse::Refused { cause: String, }
-pub enum variant nomos_api::SpecCommitResponse::StoreRefused { preview: CommittedPreviewResponse, cause: String, }
-pub enum variant nomos_api::SpecCommitResponse::Unreadable { path: String, cause: String, }
-pub enum variant nomos_api::SpecCommitResponse::Unwritable { preview: CommittedPreviewResponse, report: CommitReportResponse, path: String, cause: String, }
-pub enum variant nomos_api::SpecFreshnessResponse::Examined { examined: Vec<ProfileOutcomeResponse>, required: Vec<String>, }
-pub enum variant nomos_api::SpecFreshnessResponse::NoSuchProfile { requested: String, known: Vec<String>, }
-pub enum variant nomos_api::SpecFreshnessResponse::RequirementUnexamined { requested: String, only: Option<String>, }
-pub enum variant nomos_api::SpecFreshnessResponse::Unreadable { cause: String, }
-pub enum variant nomos_api::SpecMarkdownResponse::Refused { cause: String, }
-pub enum variant nomos_api::SpecMarkdownResponse::Resolved { node_id: String, path: String, revision: String, markdown: String, source_hash: String, projected_hash: String, matches_source: bool, }
-pub enum variant nomos_api::SpecPreviewResponse::Previewed { node_id: String, path: String, rename: Option<(String, String)>, markdown: String, blocks: Vec<BlockChangeResponse>, identity: Vec<IdentityChangeResponse>, relations_added: Vec<RecordRelationResponse>, relations_removed: Vec<RecordRelationResponse>, statements: Vec<NormativeMovementResponse>, wording_moved: bool, changes_nothing: bool, }
-pub enum variant nomos_api::SpecPreviewResponse::Refused { cause: String, }
-pub enum variant nomos_api::SpecPreviewResponse::Unreadable { path: String, cause: String, }
-pub enum variant nomos_api::SpecRecordResponse::Ambiguous { id: String, documents: Vec<DocumentSourceResponse>, }
-pub enum variant nomos_api::SpecRecordResponse::NotFound { id: String, revision: Option<String>, node: Option<NodeSummaryResponse>, }
-pub enum variant nomos_api::SpecRecordResponse::Resolved { id: String, document: DocumentSourceResponse, }
-pub enum variant nomos_api::SpecRecordResponse::Unreadable { cause: String, }
-pub enum variant nomos_api::SpecRenderResponse::NoSuchProfile { requested: String, known: Vec<String>, }
-pub enum variant nomos_api::SpecRenderResponse::Placed { id: String, body: PathBuf, sidecar: PathBuf, stamp: Stamp, }
-pub enum variant nomos_api::SpecRenderResponse::Unreadable { cause: String, }
-pub enum variant nomos_api::SpecRenderResponse::Unwritable { path: String, cause: String, }
-pub enum variant nomos_api::SpecSourcesResponse::Assembled { read: Vec<String>, absent: Vec<AbsenceResponse>, }
-pub enum variant nomos_api::SpecSourcesResponse::Unreadable { cause: String, }
-pub enum variant nomos_api::SpecSubmitResponse::Accepted { submission: SubmissionResponse, uid: i64, written: Option<RenderedProjectionResponse>, }
-pub enum variant nomos_api::SpecSubmitResponse::Refused { refusal: RefusalResponse, }
-pub enum variant nomos_api::SpecSubmitResponse::Unreadable { cause: String, }
-pub enum variant nomos_api::SpecSubmitResponse::WrittenRefused { cause: String, }
-pub enum variant nomos_api::SpecTableResponse::AmbiguousDocument { matched: usize, tier: PathMatchResponse, }
-pub enum variant nomos_api::SpecTableResponse::NoRows { document: DocumentSourceResponse, tier: PathMatchResponse, census: RowCensusResponse, }
-pub enum variant nomos_api::SpecTableResponse::NoSuchDocument
-pub enum variant nomos_api::SpecTableResponse::Selected { document: DocumentSourceResponse, tier: PathMatchResponse, census: RowCensusResponse, lines: Vec<TableLineResponse>, }
-pub enum variant nomos_api::SpecTableResponse::Unreadable { cause: String, }
+pub enum variant nomos_api::ShowResponse::Found { item: Box<LedgerItem>, current_revision: Option<String>, now: Timestamp, }
+pub enum variant nomos_api::ShowResponse::NotFound { item: ItemId, }
+pub enum variant nomos_api::ShowResponse::Unreadable { cause: String, }
+pub enum variant nomos_api::SourcesResponse::Assembled { read: Vec<String>, absent: Vec<AbsenceResponse>, }
+pub enum variant nomos_api::SourcesResponse::Unreadable { cause: String, }
 pub enum variant nomos_api::SubmissionKindResponse::DesignSpec
 pub enum variant nomos_api::SubmissionKindResponse::FeatureRequest
 pub enum variant nomos_api::SubmissionKindResponse::FeatureResult
 pub enum variant nomos_api::SubmissionStateResponse::Accepted
 pub enum variant nomos_api::SubmissionStateResponse::Draft
+pub enum variant nomos_api::SubmitResponse::Accepted { submission: SubmissionResponse, uid: i64, written: Option<RenderedProjectionResponse>, }
+pub enum variant nomos_api::SubmitResponse::Refused { refusal: RefusalResponse, }
+pub enum variant nomos_api::SubmitResponse::Unreadable { cause: String, }
+pub enum variant nomos_api::SubmitResponse::WrittenRefused { cause: String, }
 pub enum variant nomos_api::SuppressionDispositionResponse::AcceptedBaselineDebt
 pub enum variant nomos_api::SuppressionDispositionResponse::FalsePositiveDisposition
 pub enum variant nomos_api::SuppressionDispositionResponse::FormalRiskAcceptance
 pub enum variant nomos_api::SuppressionDispositionResponse::InlineSuppression
 pub enum variant nomos_api::SuppressionDispositionResponse::RepositoryPolicyException
 pub enum variant nomos_api::SuppressionDispositionResponse::TemporaryWaiver
+pub enum variant nomos_api::TableResponse::AmbiguousDocument { matched: usize, tier: PathMatchResponse, }
+pub enum variant nomos_api::TableResponse::NoRows { document: DocumentSourceResponse, tier: PathMatchResponse, census: RowCensusResponse, }
+pub enum variant nomos_api::TableResponse::NoSuchDocument
+pub enum variant nomos_api::TableResponse::Selected { document: DocumentSourceResponse, tier: PathMatchResponse, census: RowCensusResponse, lines: Vec<TableLineResponse>, }
+pub enum variant nomos_api::TableResponse::Unreadable { cause: String, }
 pub enum variant nomos_api::VacateOutcomeResponse::AlreadyGone
 pub enum variant nomos_api::VacateOutcomeResponse::Failed { message: String }
 pub enum variant nomos_api::VacateOutcomeResponse::Removed
+pub enum variant nomos_api::ValidateResponse::Invalid { cause: String, }
+pub enum variant nomos_api::ValidateResponse::Valid { document: LedgerDocument, }
 pub enum variant nomos_api::VerdictResponse::Absent
 pub enum variant nomos_api::VerdictResponse::BuildFailed { cause: String, }
 pub enum variant nomos_api::VerdictResponse::Compared { fresh: bool, stale: Option<(String, String)>, edited: Option<(String, String)>, diverged: Option<(String, String)>, }
 pub enum variant nomos_api::VerdictResponse::Unbodied
 pub enum variant nomos_api::VerdictResponse::Unstamped
-pub enum variant nomos_api::WorkAbandonResponse::Abandoned
-pub enum variant nomos_api::WorkAbandonResponse::Refused { cause: String, retryable: bool, }
-pub enum variant nomos_api::WorkAddResponse::Added
-pub enum variant nomos_api::WorkAddResponse::Refused { cause: String, }
-pub enum variant nomos_api::WorkAuditResponse::Audited { blocked: Vec<BlockedItem>, now: Timestamp, }
-pub enum variant nomos_api::WorkAuditResponse::Unreadable { cause: String, }
-pub enum variant nomos_api::WorkDeclineResponse::Declined
-pub enum variant nomos_api::WorkDeclineResponse::Refused { cause: String, retryable: bool, }
-pub enum variant nomos_api::WorkFinishResponse::Finished { record: VerificationRecord, }
-pub enum variant nomos_api::WorkFinishResponse::Refused { cause: String, judged: bool, }
-pub enum variant nomos_api::WorkListResponse::Listed { document: LedgerDocument, now: Timestamp, }
-pub enum variant nomos_api::WorkListResponse::Unreadable { cause: String, }
-pub enum variant nomos_api::WorkReservationResponse::Refused { cause: String, retryable: bool, }
-pub enum variant nomos_api::WorkReservationResponse::Reserved { reservation: ReservationResponse, }
-pub enum variant nomos_api::WorkShowResponse::Found { item: Box<LedgerItem>, current_revision: Option<String>, now: Timestamp, }
-pub enum variant nomos_api::WorkShowResponse::NotFound { item: ItemId, }
-pub enum variant nomos_api::WorkShowResponse::Unreadable { cause: String, }
-pub enum variant nomos_api::WorkValidateResponse::Invalid { cause: String, }
-pub enum variant nomos_api::WorkValidateResponse::Valid { document: LedgerDocument, }
 pub fn nomos_api::Handle_Gate_Explain(root: &Path, query: &FindingQuery) -> GateExplainResponse
 pub fn nomos_api::Handle_Gate_Plan() -> GatePlanResponse
 pub fn nomos_api::Handle_Gate_Run(root: &Path) -> GateRunResponse
-pub fn nomos_api::Handle_Spec_Commit(request: &CommitRequest) -> SpecCommitResponse
-pub fn nomos_api::Handle_Spec_Freshness(request: &FreshnessRequest) -> SpecFreshnessResponse
-pub fn nomos_api::Handle_Spec_Markdown(request: &RecordRequest) -> SpecMarkdownResponse
-pub fn nomos_api::Handle_Spec_Preview(request: &EditRequest) -> SpecPreviewResponse
+pub fn nomos_api::Handle_Spec_Commit(request: &CommitRequest) -> CommitResponse
+pub fn nomos_api::Handle_Spec_Freshness(request: &FreshnessRequest) -> FreshnessResponse
+pub fn nomos_api::Handle_Spec_Markdown(request: &RecordRequest) -> MarkdownResponse
+pub fn nomos_api::Handle_Spec_Preview(request: &EditRequest) -> PreviewResponse
 pub fn nomos_api::Handle_Spec_Profiles() -> ProfilesResponse
-pub fn nomos_api::Handle_Spec_Record(request: &RecordRequest) -> SpecRecordResponse
-pub fn nomos_api::Handle_Spec_Render(request: &RenderRequest) -> SpecRenderResponse
-pub fn nomos_api::Handle_Spec_Sources() -> SpecSourcesResponse
-pub fn nomos_api::Handle_Spec_Submit(request: &SubmitRequest) -> SpecSubmitResponse
-pub fn nomos_api::Handle_Spec_Table(request: &TableRequest) -> SpecTableResponse
-pub fn nomos_api::Handle_Work_Abandon(directory: &Path, request: &EndingRequest) -> WorkAbandonResponse
-pub fn nomos_api::Handle_Work_Add(directory: &Path, item: &LedgerItem, amending: &Territory) -> WorkAddResponse
-pub fn nomos_api::Handle_Work_Audit(directory: &Path) -> WorkAuditResponse
-pub fn nomos_api::Handle_Work_Claim(directory: &Path, request: &ClaimRequest) -> WorkReservationResponse
-pub fn nomos_api::Handle_Work_Decline(directory: &Path, request: &EndingRequest) -> WorkDeclineResponse
-pub fn nomos_api::Handle_Work_Finish(directory: &Path, item: &ItemId, holder: &str) -> WorkFinishResponse
-pub fn nomos_api::Handle_Work_List(directory: &Path) -> WorkListResponse
-pub fn nomos_api::Handle_Work_Renew(directory: &Path, request: &ClaimRequest) -> WorkReservationResponse
-pub fn nomos_api::Handle_Work_Show(directory: &Path, item: &ItemId) -> WorkShowResponse
-pub fn nomos_api::Handle_Work_TakeOver(directory: &Path, request: &ClaimRequest) -> WorkReservationResponse
-pub fn nomos_api::Handle_Work_Validate(directory: &Path) -> WorkValidateResponse
+pub fn nomos_api::Handle_Spec_Record(request: &RecordRequest) -> RecordResponse
+pub fn nomos_api::Handle_Spec_Render(request: &RenderRequest) -> RenderResponse
+pub fn nomos_api::Handle_Spec_Sources() -> SourcesResponse
+pub fn nomos_api::Handle_Spec_Submit(request: &SubmitRequest) -> SubmitResponse
+pub fn nomos_api::Handle_Spec_Table(request: &TableRequest) -> TableResponse
+pub fn nomos_api::Handle_Work_Abandon(directory: &Path, request: &EndingRequest) -> AbandonResponse
+pub fn nomos_api::Handle_Work_Add(directory: &Path, item: &LedgerItem, amending: &Territory) -> AddResponse
+pub fn nomos_api::Handle_Work_Audit(directory: &Path) -> AuditResponse
+pub fn nomos_api::Handle_Work_Claim(directory: &Path, request: &ClaimRequest) -> ReservationOutcomeResponse
+pub fn nomos_api::Handle_Work_Decline(directory: &Path, request: &EndingRequest) -> DeclineResponse
+pub fn nomos_api::Handle_Work_Finish(directory: &Path, item: &ItemId, holder: &str) -> FinishResponse
+pub fn nomos_api::Handle_Work_List(directory: &Path) -> ListResponse
+pub fn nomos_api::Handle_Work_Renew(directory: &Path, request: &ClaimRequest) -> ReservationOutcomeResponse
+pub fn nomos_api::Handle_Work_Show(directory: &Path, item: &ItemId) -> ShowResponse
+pub fn nomos_api::Handle_Work_TakeOver(directory: &Path, request: &ClaimRequest) -> ReservationOutcomeResponse
+pub fn nomos_api::Handle_Work_Validate(directory: &Path) -> ValidateResponse
 pub struct field nomos_api::AbsenceResponse::cause: String
 pub struct field nomos_api::AbsenceResponse::cost: String
 pub struct field nomos_api::AbsenceResponse::expected: String

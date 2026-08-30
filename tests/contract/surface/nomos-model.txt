@@ -117,8 +117,6 @@ pub struct field nomos_model::CoverageGap::subject: SubjectId
 pub struct field nomos_model::Evidence::class: EvidenceClass
 pub struct field nomos_model::Evidence::producer: ProviderId
 pub struct field nomos_model::Evidence::supporting: Vec<EvidenceRef>
-pub struct field nomos_model::EvidenceRef::kind: String
-pub struct field nomos_model::EvidenceRef::locator: String
 pub struct field nomos_model::IdentityPolicy::distinguish_conditional_compilation: bool
 pub struct field nomos_model::IdentityPolicy::distinguish_generated: bool
 pub struct field nomos_model::IdentityPolicy::distinguish_overloads: bool
@@ -151,7 +149,6 @@ pub struct nomos_model::Coverage
 pub struct nomos_model::CoverageGap
 pub struct nomos_model::EntityId(Digest128)
 pub struct nomos_model::Evidence
-pub struct nomos_model::EvidenceRef
 pub struct nomos_model::IdentityPolicy
 pub struct nomos_model::Resource
 pub struct nomos_model::SnapshotEntity
@@ -162,3 +159,6 @@ pub struct nomos_model::SubjectSet
 pub struct nomos_model::Symbol
 pub struct nomos_model::Transition<ChangeKind>
 pub type nomos_model::IdentityTransition
+
+# re-exports of items declared outside this crate
+pub use evidence::EvidenceRef
