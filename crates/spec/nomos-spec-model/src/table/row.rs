@@ -35,3 +35,37 @@ impl Row
         return ContentHash::Of_Normalized(&self.text);
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    fn Row_With_Text(text: &str) -> Row
+    {
+        return Row {
+            ordinal: 1,
+            table_ordinal: 1,
+            kind: RowKind::Content,
+            cells: Vec::new(),
+            text: text.to_owned(),
+        };
+    }
+
+    #[test]
+    fn Test_Content_Hash_Should_Hash_The_Rows_Text_Verbatim()
+    {
+        let row = Row_With_Text("| a | b |");
+
+        assert_eq!(row.Content_Hash(), ContentHash::Of("| a | b |"));
+    }
+
+    #[test]
+    fn Test_Normalized_Hash_Should_Hash_The_Rows_Normalized_Text()
+    {
+        let row = Row_With_Text("| a  |  b |");
+
+        assert_eq!(row.Normalized_Hash(), ContentHash::Of_Normalized("| a  |  b |"));
+        assert_ne!(row.Normalized_Hash(), row.Content_Hash(), "the whitespace run must collapse");
+    }
+}

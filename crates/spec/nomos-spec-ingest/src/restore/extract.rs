@@ -377,3 +377,307 @@ fn Is_All_Digits(text: &str) -> bool
 {
     return !text.is_empty() && text.bytes().all(|byte| return byte.is_ascii_digit());
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    fn Block(text: &str) -> SourceBlock
+    {
+        return SourceBlock {
+            ordinal: 1,
+            kind: BlockKind::Heading,
+            heading_path: Vec::new(),
+            text: text.to_owned(),
+        };
+    }
+
+    #[test]
+    fn Test_Extract_Members_Should_Collect_Heading_And_Row_Members()
+    {
+        let markdown = "# Core\n\n## 5. Canonical domain model\n\n\
+                        | Model | Responsibility |\n| --- | --- |\n\
+                        | WorkspaceContext | Repository. |\n\n\
+                        ## 6. Systems and subsystem responsibilities\n\n\
+                        ### 6.1 Change reasoning\n\n\
+                        #### Counterfactual Analysis Service\n\nEvaluates proposals.\n";
+
+        let members = Extract_Members(DocumentPath("02-core.md"), markdown).expect("extracts");
+
+        assert_eq!(
+            members.iter().filter(|member| return member.family == Restored::CanonicalDomainModel).count(),
+            1
+        );
+        assert_eq!(members.iter().filter(|member| return member.family == Restored::Service).count(), 1);
+    }
+
+    #[test]
+    fn Test_Refuse_Collisions_Should_Reject_A_Repeated_Identifier()
+    {
+        let one = Member {
+            id: "GLS-APPLICABILITY".to_owned(),
+            family: Restored::GlossaryTerm,
+            name: "Applicability".to_owned(),
+            document: "09-reference.md".to_owned(),
+            origin: Origin::Row {
+                block_ordinal: 1,
+                row_ordinal: 1,
+            },
+            alias: Some("Applicability".to_owned()),
+        };
+        let two = Member {
+            name: "applicability".to_owned(),
+            origin: Origin::Row {
+                block_ordinal: 1,
+                row_ordinal: 2,
+            },
+            ..one.clone()
+        };
+
+        let refusal = Refuse_Collisions(&[one, two]).expect_err("must refuse");
+
+        assert!(format!("{refusal}").contains("GLS-APPLICABILITY"), "{refusal}");
+    }
+
+    #[test]
+    fn Test_From_Heading_Should_Mint_A_Member_When_The_Document_Matches_The_Family()
+    {
+        let block = Block("### D.7 Profiles");
+        let mut members = Vec::new();
+
+        From_Heading("09-reference.md", &block, &mut members);
+
+        assert_eq!(members.len(), 1);
+        assert_eq!(members.first().map(|member| member.family), Some(Restored::AppendixD));
+        assert_eq!(members.first().map(|member| member.name.as_str()), Some("D.7 Profiles"));
+
+        let mut wrong_volume = Vec::new();
+        From_Heading("07-clients.md", &block, &mut wrong_volume);
+        assert!(wrong_volume.is_empty(), "a heading recognized outside its volume was still minted");
+    }
+
+    #[test]
+    fn Test_Recognized_In_Heading_Should_Read_The_Heading_Depth()
+    {
+        let deep_enough = Block("### D.7 Profiles");
+        let recognitions = Recognized_In_Heading(&deep_enough, "D.7 Profiles");
+        assert_eq!(recognitions, vec![(Restored::AppendixD, "D.7".to_owned(), None)]);
+
+        let shallow = Block("## Not a member");
+        assert!(Recognized_In_Heading(&shallow, "Not a member").is_empty());
+    }
+
+    #[test]
+    fn Test_Numbered_Families_Should_Match_Every_Letter_In_The_Series()
+    {
+        let found = Numbered_Families("D.7 Profiles", 1, DEPTH_3);
+        assert_eq!(found, vec![(Restored::AppendixD, "D.7".to_owned(), None)]);
+
+        assert!(Numbered_Families("Z.7 Nothing", 1, DEPTH_3).is_empty());
+    }
+
+    #[test]
+    fn Test_At_Depth_3_Should_Recognize_A_Numbered_Family_A_Milestone_And_A_Scenario()
+    {
+        assert_eq!(At_Depth_3("D.7 Profiles"), vec![(Restored::AppendixD, "D.7".to_owned(), None)]);
+        assert_eq!(
+            At_Depth_3("Foundation 0 — Protocol"),
+            vec![(Restored::RoadmapMilestone, "F.0".to_owned(), None)]
+        );
+        assert_eq!(
+            At_Depth_3("G.2 End-to-end scenario: add a strategy"),
+            vec![(Restored::Scenario, "G.2".to_owned(), None)]
+        );
+    }
+
+    #[test]
+    fn Test_At_Depth_4_Should_Recognize_A_Numbered_Family_A_Service_And_A_Glossary_Term()
+    {
+        let systems_path = vec![SYSTEMS_HEADING.to_owned()];
+        let extended_path = vec![EXTENDED_TERMS.to_owned()];
+
+        assert_eq!(
+            At_Depth_4("E.1.1 Legacy client", &[]),
+            vec![(Restored::HeadlessInventory, "E.1.1".to_owned(), None)]
+        );
+        assert_eq!(
+            At_Depth_4("Counterfactual Analysis Service", &systems_path),
+            vec![(Restored::Service, "Counterfactual Analysis Service".to_owned(), None)]
+        );
+        assert_eq!(
+            At_Depth_4("SavedView", &extended_path),
+            vec![(Restored::GlossaryTerm, "SavedView".to_owned(), Some("SavedView".to_owned()))]
+        );
+    }
+
+    #[test]
+    fn Test_From_Rows_Should_Mint_A_Member_Per_Content_Row_In_Its_Volume()
+    {
+        let block = SourceBlock {
+            ordinal: 5,
+            kind: BlockKind::Prose,
+            heading_path: vec!["Reference".to_owned(), GLOSSARY.to_owned()],
+            text: "| Term | Definition |\n| --- | --- |\n| Applicability | Whether a rule can run. |\n".to_owned(),
+        };
+        let mut members = Vec::new();
+
+        From_Rows("09-reference.md", &block, &mut members);
+
+        assert_eq!(members.len(), 1);
+        assert_eq!(members.first().map(|member| member.id.as_str()), Some("GLS-APPLICABILITY"));
+
+        let mut wrong_volume = Vec::new();
+        From_Rows("02-core.md", &block, &mut wrong_volume);
+        assert!(wrong_volume.is_empty(), "a table recognized outside its volume was still minted");
+    }
+
+    #[test]
+    fn Test_Tabled_Family_Should_Read_The_Heading_Paths_Last_Step()
+    {
+        let domain_model = SourceBlock {
+            ordinal: 1,
+            kind: BlockKind::Prose,
+            heading_path: vec![DOMAIN_MODEL.to_owned()],
+            text: String::new(),
+        };
+        let glossary = SourceBlock {
+            ordinal: 2,
+            kind: BlockKind::Prose,
+            heading_path: vec![GLOSSARY.to_owned()],
+            text: String::new(),
+        };
+        let neither = SourceBlock {
+            ordinal: 3,
+            kind: BlockKind::Prose,
+            heading_path: vec!["Something else".to_owned()],
+            text: String::new(),
+        };
+
+        assert_eq!(Tabled_Family(&domain_model), Some(Restored::CanonicalDomainModel));
+        assert_eq!(Tabled_Family(&glossary), Some(Restored::GlossaryTerm));
+        assert_eq!(Tabled_Family(&neither), None);
+    }
+
+    #[test]
+    fn Test_Tabled_Member_Should_Carry_The_Rows_Name_As_Its_Alias()
+    {
+        let origin = Origin::Row {
+            block_ordinal: 2,
+            row_ordinal: 3,
+        };
+
+        let member = Tabled_Member("09-reference.md", Restored::GlossaryTerm, "Applicability", origin);
+
+        assert_eq!(member.id, "GLS-APPLICABILITY");
+        assert_eq!(member.name, "Applicability");
+        assert_eq!(member.document, "09-reference.md");
+        assert_eq!(member.alias, Some("Applicability".to_owned()));
+        assert_eq!(member.origin, origin);
+    }
+
+    #[test]
+    fn Test_Named_By_Should_Split_The_Domain_Models_Cell_And_Read_Others_Whole()
+    {
+        let split_row = TableRow {
+            ordinal: 1,
+            table_ordinal: 1,
+            kind: RowKind::Content,
+            cells: vec![
+                "ModelUsageObservation and CostObservation".to_owned(),
+                "Two models.".to_owned(),
+            ],
+            text: String::new(),
+        };
+        let whole_row = TableRow {
+            ordinal: 2,
+            table_ordinal: 1,
+            kind: RowKind::Content,
+            cells: vec!["Applicability".to_owned(), "One term.".to_owned()],
+            text: String::new(),
+        };
+
+        assert_eq!(
+            Named_By(&split_row, Restored::CanonicalDomainModel),
+            vec!["ModelUsageObservation", "CostObservation"]
+        );
+        assert_eq!(Named_By(&whole_row, Restored::GlossaryTerm), vec!["Applicability"]);
+    }
+
+    #[test]
+    fn Test_Models_In_Should_Split_On_Commas_And_The_Word_And()
+    {
+        assert_eq!(Models_In("Gate, Phase, Workflow"), vec!["Gate", "Phase", "Workflow"]);
+        assert_eq!(
+            Models_In("ModelUsageObservation and CostObservation"),
+            vec!["ModelUsageObservation", "CostObservation"]
+        );
+        assert_eq!(Models_In("WorkspaceContext"), vec!["WorkspaceContext"]);
+    }
+
+    #[test]
+    fn Test_First_Cell_Should_Skip_Empty_Cells_And_Return_The_First_One_With_Content()
+    {
+        let row = TableRow {
+            ordinal: 1,
+            table_ordinal: 1,
+            kind: RowKind::Content,
+            cells: vec![String::new(), "  ".to_owned(), "Applicability".to_owned()],
+            text: String::new(),
+        };
+        assert_eq!(First_Cell(&row), Some("Applicability"));
+
+        let empty = TableRow {
+            ordinal: 2,
+            table_ordinal: 1,
+            kind: RowKind::Content,
+            cells: vec![String::new(), "  ".to_owned()],
+            text: String::new(),
+        };
+        assert_eq!(First_Cell(&empty), None);
+    }
+
+    #[test]
+    fn Test_Has_Ancestor_Should_Find_A_Step_Anywhere_In_The_Path()
+    {
+        let path = vec!["Reference".to_owned(), GLOSSARY.to_owned(), "Extended operational terms".to_owned()];
+
+        assert!(Has_Ancestor(&path, GLOSSARY));
+        assert!(!Has_Ancestor(&path, SYSTEMS_HEADING));
+    }
+
+    #[test]
+    fn Test_Milestone_Numbering_Should_Read_Foundation_And_Release_Titles()
+    {
+        assert_eq!(Milestone_Numbering("Foundation 0 — Protocol"), Some("F.0".to_owned()));
+        assert_eq!(Milestone_Numbering("Release 7 — Advanced"), Some("R.7".to_owned()));
+        assert_eq!(Milestone_Numbering("Release notes"), None);
+    }
+
+    #[test]
+    fn Test_Numbering_In_Should_Require_The_Exact_Depth_Of_Numbers()
+    {
+        assert_eq!(Numbering_In("D.7 Profiles", 'D', 1), Some("D.7".to_owned()));
+        assert_eq!(Numbering_In("D.7 Profiles", 'D', 2), None);
+        assert_eq!(Numbering_In("D.7.1 atlas", 'D', 2), Some("D.7.1".to_owned()));
+        assert_eq!(Numbering_In("Design notes", 'D', 1), None);
+    }
+
+    #[test]
+    fn Test_Identify_Member_Should_Mint_An_Identifier_From_The_Family_Prefix_And_Slug()
+    {
+        assert_eq!(
+            Identify_Member(Restored::Service, "Counterfactual Analysis Service"),
+            "SVC-COUNTERFACTUAL-ANALYSIS-SERVICE"
+        );
+        assert_eq!(Identify_Member(Restored::GlossaryTerm, "Applicability"), "GLS-APPLICABILITY");
+    }
+
+    #[test]
+    fn Test_Slug_Of_Should_Join_Alnum_Runs_With_A_Single_Dash()
+    {
+        assert_eq!(Slug_Of("WorkspaceContext"), "WORKSPACECONTEXT");
+        assert_eq!(Slug_Of("Counterfactual Analysis Service"), "COUNTERFACTUAL-ANALYSIS-SERVICE");
+        assert_eq!(Slug_Of("  Leading and trailing  "), "LEADING-AND-TRAILING");
+    }
+}

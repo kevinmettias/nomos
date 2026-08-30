@@ -235,12 +235,18 @@ fn Test_Rendering_Over_A_Seeded_Store_Should_Imply_Reaching_Only_Seeded_Content(
 /// The pair is written here and in `.github/workflows/gate.yml`. That duplication is chosen:
 /// the workflow is what CI runs and this is what a local `cargo test` can check, and deriving
 /// one from the other would put a workflow parser in this band. `OD-PROJECT-002` records it.
+/// Every profile the gate names as required, in `.github/workflows/gate.yml`.
+fn Required_Profile_Ids() -> [&'static str; 2]
+{
+    return ["diagram-set", "domain-specification"];
+}
+
 #[test]
 fn Test_Every_Required_Profile_Should_Render_Over_A_Seeded_Store()
 {
     let store = Seeded();
 
-    for id in ["diagram-set", "domain-specification"]
+    for id in Required_Profile_Ids()
     {
         let profile = Profile_Named(id);
 

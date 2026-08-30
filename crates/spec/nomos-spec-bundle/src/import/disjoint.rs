@@ -123,3 +123,53 @@ fn Already_Holds_From_String_Arguments(
         .optional()?
         .is_some());
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    fn A_Node() -> Record
+    {
+        return Record::Node(crate::Node {
+            node_id: "N1".to_owned(),
+            kind: "requirement".to_owned(),
+            authority: "canonical".to_owned(),
+            representation: "record".to_owned(),
+            title: "Node One".to_owned(),
+            deleted_at: None,
+            suite_id: None,
+        });
+    }
+
+    #[test]
+    fn Test_Assert_Disjoint_Should_Accept_A_Bundle_The_Store_Does_Not_Already_Hold()
+    {
+        let store = SpecificationStore::In_Memory().expect("opens");
+        let bundle = Bundle::New(1, vec![A_Node()]).expect("builds");
+
+        assert!(Assert_Disjoint(&store, &bundle).is_ok());
+    }
+
+    #[test]
+    fn Test_Assert_Disjoint_Should_Refuse_A_Node_The_Store_Already_Holds()
+    {
+        let store = SpecificationStore::In_Memory().expect("opens");
+        store
+            .Connection()
+            .execute_batch(
+                "INSERT INTO nodes
+                     (node_id, kind, authority, representation, title, deleted_at, suite_uid)
+                     VALUES ('N1', 'requirement', 'canonical', 'record', 'Node One', NULL, NULL);",
+            )
+            .expect("seeds");
+        let bundle = Bundle::New(1, vec![A_Node()]).expect("builds");
+
+        let refusal = Assert_Disjoint(&store, &bundle).expect_err("a collision must be refused");
+        assert!(
+            matches!(refusal, BundleError::Occupied { ref table, ref identity }
+                if table == "nodes" && identity == "N1"),
+            "{refusal}"
+        );
+    }
+}

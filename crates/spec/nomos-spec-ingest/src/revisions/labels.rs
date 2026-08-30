@@ -140,3 +140,101 @@ pub(super) fn Missing_Between(before: Numbered, after: Numbered) -> Vec<String>
 
     return missing;
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use std::collections::BTreeSet;
+
+    fn Temp_Dir_With(name: &str, files: &[&str]) -> PathBuf
+    {
+        let directory = std::env::temp_dir().join(format!("nomos-spec-ingest-labels-{name}"));
+        std::fs::create_dir_all(&directory).expect("creates the directory");
+
+        for file in files
+        {
+            std::fs::write(directory.join(file), b"").expect("writes a placeholder file");
+        }
+
+        return directory;
+    }
+
+    #[test]
+    fn Test_Revisions_In_Should_Sort_By_Numeric_Label_Order()
+    {
+        let directory = Temp_Dir_With("sort-order", &["nomos-spec-v14.36.zip", "nomos-spec-v14.9.zip"]);
+
+        let revisions = Revisions_In(&directory).expect("finds the archives");
+        let labels: Vec<&str> = revisions.iter().map(|(label, _)| return label.as_str()).collect();
+
+        assert_eq!(labels, vec!["v14.9", "v14.36"]);
+    }
+
+    #[test]
+    fn Test_Revisions_In_Should_Refuse_A_Directory_With_No_Revision_Archive()
+    {
+        let directory = Temp_Dir_With("empty", &["readme.txt"]);
+
+        let refusal = Revisions_In(&directory).expect_err("must refuse");
+
+        assert!(matches!(refusal, IngestError::Parse(_)), "{refusal}");
+    }
+
+    #[test]
+    fn Test_Labelled_Archives_Should_Collect_Every_Archive_The_Directory_Names()
+    {
+        let directory = Temp_Dir_With(
+            "labelled",
+            &["nomos-spec-v14.36.zip", "nomos-spec-internal-artifacts-v14.37.zip", "readme.txt"],
+        );
+
+        let found = Labelled_Archives(&directory).expect("reads the directory");
+        let labels: BTreeSet<&str> = found.iter().map(|(label, _)| return label.as_str()).collect();
+
+        assert_eq!(labels.len(), 2);
+        assert!(labels.contains("v14.36"));
+        assert!(labels.contains("v14.37"));
+    }
+
+    #[test]
+    fn Test_Label_Of_Should_Recognize_A_Revision_Archive_By_Name()
+    {
+        assert_eq!(Label_Of("nomos-spec-v15.0.zip"), Some("v15.0".to_owned()));
+        assert_eq!(Label_Of("nomos_v14_31_ocaml_semantic_kernel.zip"), None);
+    }
+
+    #[test]
+    fn Test_Version_Of_Should_Parse_Major_And_Minor_As_Numbers()
+    {
+        assert_eq!(Version_Of("v14.36"), Some(Numbered { major: 14, minor: 36 }));
+        assert_eq!(Version_Of("not-a-version"), None);
+    }
+
+    #[test]
+    fn Test_Order_Of_Should_Sort_An_Unreadable_Label_Last()
+    {
+        assert!(Order_Of("v14.9") < Order_Of("v14.10"));
+        assert_eq!(Order_Of("garbage"), Numbered { major: u32::MAX, minor: u32::MAX });
+    }
+
+    #[test]
+    fn Test_Label_Gaps_Should_Report_A_Skipped_Minor_Version()
+    {
+        let labels = ["v14.25", "v14.27"].map(str::to_owned).to_vec();
+
+        assert_eq!(Label_Gaps(&labels), vec!["v14.26".to_owned()]);
+    }
+
+    #[test]
+    fn Test_Missing_Between_Should_List_Skipped_Minor_Numbers_Within_One_Major()
+    {
+        let before = Numbered { major: 14, minor: 25 };
+        let after = Numbered { major: 14, minor: 28 };
+
+        assert_eq!(Missing_Between(before, after), vec!["v14.26".to_owned(), "v14.27".to_owned()]);
+
+        let across_major = Missing_Between(Numbered { major: 14, minor: 36 }, Numbered { major: 15, minor: 0 });
+        assert!(across_major.is_empty());
+    }
+}

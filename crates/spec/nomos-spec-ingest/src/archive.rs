@@ -206,7 +206,7 @@ mod tests
     use super::*;
 
     #[test]
-    fn Test_A_Missing_Archive_Should_Name_Itself()
+    fn Test_Open_Should_Name_The_Archive_When_It_Is_Missing()
     {
         let refusal = Refusal_For("no-such-file.zip");
 
@@ -226,7 +226,7 @@ mod tests
     }
 
     #[test]
-    fn Test_A_Directory_With_No_Archives_Should_Be_Refused()
+    fn Test_Archives_In_Should_Refuse_A_Directory_With_No_Archives()
     {
         let refusal = Archives_In(Path::new("src")).expect_err("must refuse");
 
@@ -239,6 +239,43 @@ mod tests
         let refusal = Archives_In(Path::new("no-such-directory")).expect_err("must refuse");
 
         assert!(matches!(refusal.kind, ArchiveErrorKind::Unreadable { .. }), "{refusal}");
+    }
+
+    #[test]
+    fn Test_Path_Should_Return_The_Path_It_Was_Opened_From()
+    {
+        let archive = Fixture("path", &[("a.md", "one")]);
+        let expected = std::env::temp_dir().join("nomos-spec-ingest-archive-path.zip");
+
+        assert_eq!(archive.Path(), expected);
+    }
+
+    #[test]
+    fn Test_Listing_Should_Report_Every_Entry_The_Fixture_Wrote()
+    {
+        let archive = Fixture("listing", &[("a.md", "one"), ("b.md", "two")]);
+
+        assert_eq!(archive.Listing().Paths(), ["a.md".to_owned(), "b.md".to_owned()]);
+    }
+
+    #[test]
+    fn Test_Read_Should_Return_The_Bytes_Of_The_Named_Entry()
+    {
+        let mut archive = Fixture("read", &[("a.md", "hello")]);
+
+        let bytes = archive.Read("a.md").expect("reads");
+
+        assert_eq!(bytes, b"hello");
+    }
+
+    #[test]
+    fn Test_Read_Text_Should_Decode_The_Entry_As_Utf8()
+    {
+        let mut archive = Fixture("read-text", &[("a.md", "caf\u{e9}")]);
+
+        let text = archive.Read_Text("a.md").expect("reads");
+
+        assert_eq!(text, "caf\u{e9}");
     }
 
     /// Discards the archive so a refusal can be asserted on. `Archive` is not `Debug`,
@@ -254,5 +291,26 @@ mod tests
             Ok(_) => panic!("{path} should have been refused"),
             Err(error) => error,
         };
+    }
+
+    /// A zip written for one test, so no two concurrently running tests collide on the
+    /// same temp path.
+    fn Fixture(name: &str, entries: &[(&str, &str)]) -> Archive
+    {
+        use std::io::Write as _;
+
+        let path = std::env::temp_dir().join(format!("nomos-spec-ingest-archive-{name}.zip"));
+        let file = std::fs::File::create(&path).expect("creates the fixture");
+        let mut writer = zip::ZipWriter::new(file);
+        let options: zip::write::FileOptions<'_, ()> = zip::write::FileOptions::default();
+
+        for (entry, text) in entries
+        {
+            writer.start_file(*entry, options).expect("starts");
+            writer.write_all(text.as_bytes()).expect("writes");
+        }
+        writer.finish().expect("finishes");
+
+        return Archive::Open(&path).expect("opens");
     }
 }

@@ -450,4 +450,13 @@ mod tests
             assert!(!migration.statements.is_empty(), "{} does nothing", migration.name);
         }
     }
+
+    #[test]
+    fn Test_Latest_Version_Should_Be_The_Last_Migrations_Own_Version()
+    {
+        assert_eq!(
+            Latest_Version(),
+            MIGRATIONS.last().expect("at least one migration").version
+        );
+    }
 }

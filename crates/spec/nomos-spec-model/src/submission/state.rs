@@ -39,3 +39,31 @@ impl State
         };
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    fn All_States() -> [State; 2]
+    {
+        return [State::Draft, State::Accepted];
+    }
+
+    #[test]
+    fn Test_Label_Should_Match_The_Stored_Spelling()
+    {
+        assert_eq!(State::Draft.Label(), "draft");
+        assert_eq!(State::Accepted.Label(), "accepted");
+    }
+
+    #[test]
+    fn Test_Parse_Should_Round_Trip_Every_Stored_Spelling_And_Refuse_An_Unknown_One()
+    {
+        for state in All_States()
+        {
+            assert_eq!(State::Parse(state.Label()), Some(state));
+        }
+        assert_eq!(State::Parse("unknown"), None);
+    }
+}

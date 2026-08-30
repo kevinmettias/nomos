@@ -18,6 +18,18 @@ fn Test_A_Staged_Text_Naming_A_Different_Record_Should_Be_Refused()
     assert!(matches!(refusal, EditError::IdentityChanged { .. }), "{refusal}");
 }
 
+/// Edits this surface cannot reproduce, paired with why each fails to be canonical. A
+/// provider rather than a literal in the test body: a fourth case becomes a diff that
+/// touches no test logic.
+fn Uncanonical_Edits() -> Vec<(String, &'static str)>
+{
+    return vec![
+        (SYNTHETIC.replace("First paragraph.\n\n", "First paragraph.\n\n\n"), "a second blank line"),
+        (format!("\u{feff}{SYNTHETIC}"), "a byte order mark"),
+        (SYNTHETIC.replace("    type: relates-to", "    relation: relates-to"), "the other relation spelling"),
+    ];
+}
+
 /// An edit this surface cannot reproduce is refused rather than rewritten. Accepting it would
 /// mean the commit changed bytes the author did not touch, and the next read-out would
 /// disagree with the file for a reason nothing recorded.
@@ -26,11 +38,7 @@ fn Test_An_Edit_This_Surface_Would_Not_Write_Should_Be_Refused()
 {
     let store = With_Synthetic();
 
-    for (markdown, why) in [
-        (SYNTHETIC.replace("First paragraph.\n\n", "First paragraph.\n\n\n"), "a second blank line"),
-        (format!("\u{feff}{SYNTHETIC}"), "a byte order mark"),
-        (SYNTHETIC.replace("    type: relates-to", "    relation: relates-to"), "the other relation spelling"),
-    ]
+    for (markdown, why) in Uncanonical_Edits()
     {
         let refusal = store
             .Claim_For_Edit("D-900", None)

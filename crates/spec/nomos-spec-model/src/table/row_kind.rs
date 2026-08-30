@@ -59,3 +59,38 @@ impl RowKind
         return &[Self::Header, Self::Content, Self::Separator];
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Label_Should_Match_The_Stored_Spelling()
+    {
+        assert_eq!(RowKind::Header.Label(), "header");
+        assert_eq!(RowKind::Content.Label(), "content");
+        assert_eq!(RowKind::Separator.Label(), "separator");
+    }
+
+    #[test]
+    fn Test_Parse_Should_Round_Trip_Every_Stored_Spelling_And_Refuse_An_Unknown_One()
+    {
+        for kind in RowKind::All()
+        {
+            assert_eq!(RowKind::Parse(kind.Label()), Some(*kind));
+        }
+        assert_eq!(RowKind::Parse("unknown"), None);
+    }
+
+    #[test]
+    fn Test_All_Should_List_Every_Kind_Exactly_Once()
+    {
+        let kinds = RowKind::All();
+
+        assert_eq!(kinds.len(), 3);
+        assert!(kinds.contains(&RowKind::Header));
+        assert!(kinds.contains(&RowKind::Content));
+        assert!(kinds.contains(&RowKind::Separator));
+    }
+}

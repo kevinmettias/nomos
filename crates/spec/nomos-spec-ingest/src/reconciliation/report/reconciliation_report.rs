@@ -111,3 +111,109 @@ impl ReconciliationReport
         return line;
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use nomos_spec_model::ContentHash;
+
+    fn Outcome(id: &str, family: Family, disposition: Disposition) -> IdentifierOutcome
+    {
+        return IdentifierOutcome { id: id.to_owned(), family, disposition };
+    }
+
+    #[test]
+    fn Test_Absent_Should_List_Outcomes_Reported_As_Absent()
+    {
+        let report = ReconciliationReport {
+            outcomes: vec![
+                Outcome("MODEL-001", Family::Requirement, Disposition::Preserved),
+                Outcome("MODEL-002", Family::Requirement, Disposition::Absent),
+            ],
+        };
+
+        let absent = report.Absent();
+
+        assert_eq!(absent.len(), 1);
+        assert_eq!(absent.first().map(|outcome| outcome.id.as_str()), Some("MODEL-002"));
+    }
+
+    #[test]
+    fn Test_Reworded_Should_List_Outcomes_Whose_Statement_Changed()
+    {
+        let report = ReconciliationReport {
+            outcomes: vec![
+                Outcome("MODEL-001", Family::Requirement, Disposition::Preserved),
+                Outcome(
+                    "MODEL-002",
+                    Family::Requirement,
+                    Disposition::Reworded {
+                        v14: ContentHash::Of_Normalized("a"),
+                        v15: ContentHash::Of_Normalized("b"),
+                    },
+                ),
+            ],
+        };
+
+        let reworded = report.Reworded();
+
+        assert_eq!(reworded.len(), 1);
+        assert_eq!(reworded.first().map(|outcome| outcome.id.as_str()), Some("MODEL-002"));
+    }
+
+    #[test]
+    fn Test_Preserved_In_Should_Count_One_Family_Preserved_Outcomes()
+    {
+        let report = ReconciliationReport {
+            outcomes: vec![
+                Outcome("MODEL-001", Family::Requirement, Disposition::Preserved),
+                Outcome("US-A-001", Family::Story, Disposition::Preserved),
+            ],
+        };
+
+        assert_eq!(report.Preserved_In(Family::Requirement), 1);
+        assert_eq!(report.Preserved_In(Family::Acceptance), 0);
+    }
+
+    #[test]
+    fn Test_Declared_In_Should_Count_Every_Outcome_For_One_Family()
+    {
+        let report = ReconciliationReport {
+            outcomes: vec![
+                Outcome("MODEL-001", Family::Requirement, Disposition::Preserved),
+                Outcome("MODEL-002", Family::Requirement, Disposition::Absent),
+                Outcome("US-A-001", Family::Story, Disposition::Preserved),
+            ],
+        };
+
+        assert_eq!(report.Declared_In(Family::Requirement), 2);
+        assert_eq!(report.Declared_In(Family::Story), 1);
+    }
+
+    #[test]
+    fn Test_Absent_In_Should_Name_Absent_Identifiers_For_One_Family()
+    {
+        let report = ReconciliationReport {
+            outcomes: vec![
+                Outcome("MODEL-001", Family::Requirement, Disposition::Absent),
+                Outcome("US-A-001", Family::Story, Disposition::Absent),
+            ],
+        };
+
+        assert_eq!(report.Absent_In(Family::Requirement), vec!["MODEL-001"]);
+    }
+
+    #[test]
+    fn Test_Summary_Should_List_Every_Family_With_Its_Preserved_And_Declared_Counts()
+    {
+        let report = ReconciliationReport {
+            outcomes: vec![Outcome("MODEL-001", Family::Requirement, Disposition::Preserved)],
+        };
+
+        let summary = report.Summary();
+
+        assert!(summary.contains("requirement: 1 of 1 preserved"));
+        assert!(summary.contains("story: 0 of 0 preserved"));
+    }
+}

@@ -242,7 +242,7 @@ mod tests
     const RECORDED_BLOCK_COUNT: u32 = 2;
 
     #[test]
-    fn Test_A_Matching_Corpus_Should_Pass()
+    fn Test_Check_Against_Manifest_Should_Pass_A_Matching_Corpus()
     {
         let report = Check_Against_Manifest(&Parsed_Manifest(&Recorded()), &Documents());
 
@@ -253,7 +253,7 @@ mod tests
     /// An empty manifest must not pass. A gate that checked nothing and reported clean is
     /// the defect this whole project exists to prevent.
     #[test]
-    fn Test_An_Empty_Manifest_Should_Not_Pass()
+    fn Test_Is_Passing_Should_Report_False_When_The_Manifest_Checked_Nothing()
     {
         let report = Check_Against_Manifest(&Parsed_Manifest("blocks: []"), &Documents());
 
@@ -296,7 +296,7 @@ mod tests
     /// A manifest with no discriminating block verifies hashing and not normalization,
     /// and must say so rather than reporting an unqualified pass.
     #[test]
-    fn Test_A_Manifest_Without_Tables_Should_Not_Claim_To_Exercise_The_Normalizer()
+    fn Test_Has_Exercised_The_Normalizer_Should_Be_False_Without_A_Discriminating_Block()
     {
         let report = Check_Against_Manifest(&Parsed_Manifest(&Recorded()), &Documents());
 
@@ -321,6 +321,26 @@ mod tests
         assert!(report.Is_Passing(), "{:?}", report.mismatches);
         assert_eq!(report.discriminating_blocks, 1);
         assert!(report.Has_Exercised_The_Normalizer());
+    }
+
+    #[test]
+    fn Test_Parse_Block_Lineage_Should_Read_The_Recorded_Blocks_From_Yaml()
+    {
+        let lineage = Parsed_Manifest(&Recorded());
+
+        assert_eq!(lineage.blocks.len(), RECORDED_BLOCK_COUNT as usize);
+    }
+
+    #[test]
+    fn Test_Summary_Should_Report_Documents_Blocks_And_Mismatches_In_One_Line()
+    {
+        let report = Check_Against_Manifest(&Parsed_Manifest(&Recorded()), &Documents());
+
+        let summary = report.Summary();
+
+        assert!(summary.contains(&report.documents_checked.to_string()));
+        assert!(summary.contains(&report.blocks_checked.to_string()));
+        assert!(summary.contains("0 mismatch"));
     }
 
     fn Parsed_Manifest(yaml: &str) -> BlockLineage

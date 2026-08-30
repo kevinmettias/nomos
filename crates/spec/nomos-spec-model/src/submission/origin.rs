@@ -59,3 +59,42 @@ impl Origin
         return !matches!(self, Self::Inferred);
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    fn All_Origins() -> [Origin; 4]
+    {
+        return [Origin::Submitted, Origin::Clarified, Origin::Inferred, Origin::Decided];
+    }
+
+    #[test]
+    fn Test_Label_Should_Match_The_Stored_Spelling()
+    {
+        assert_eq!(Origin::Submitted.Label(), "submitted");
+        assert_eq!(Origin::Clarified.Label(), "clarified");
+        assert_eq!(Origin::Inferred.Label(), "inferred");
+        assert_eq!(Origin::Decided.Label(), "decided");
+    }
+
+    #[test]
+    fn Test_Parse_Should_Round_Trip_Every_Stored_Spelling_And_Refuse_An_Unknown_One()
+    {
+        for origin in All_Origins()
+        {
+            assert_eq!(Origin::Parse(origin.Label()), Some(origin));
+        }
+        assert_eq!(Origin::Parse("unknown"), None);
+    }
+
+    #[test]
+    fn Test_Can_Satisfy_Acceptance_Should_Be_False_Only_For_An_Inferred_Value()
+    {
+        for origin in All_Origins()
+        {
+            assert_eq!(origin.Can_Satisfy_Acceptance(), origin != Origin::Inferred);
+        }
+    }
+}

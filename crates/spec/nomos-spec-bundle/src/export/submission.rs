@@ -104,3 +104,108 @@ pub(super) fn Submission_Gaps(connection: &Connection, records: &mut Vec<Record>
         },
     );
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use nomos_spec_store::SpecificationStore;
+
+    /// One node filed as a submission, one attributed value and one open gap.
+    fn Fixture() -> SpecificationStore
+    {
+        let store = SpecificationStore::In_Memory().expect("opens");
+        store
+            .Connection()
+            .execute_batch(
+                "INSERT INTO nodes
+                     (node_id, kind, authority, representation, title, deleted_at, suite_uid)
+                     VALUES ('N1', 'submission', 'canonical', 'record', 'A Submission', NULL, NULL);
+                 INSERT INTO submissions
+                     (node_uid, kind, form_contract_version, state, submitted_by, submitted_through)
+                     VALUES (1, 'feature-request', 1, 'draft', 'me', 'test');
+                 INSERT INTO submission_values
+                     (submission_uid, field, ordinal, origin, value, value_hash, supersedes_hash,
+                      recorded_at)
+                     VALUES (1, 'title', 1, 'submitted', 'A title', 'sha256:vv', NULL,
+                             '2026-01-01T00:00:00Z');
+                 INSERT INTO submission_gaps
+                     (submission_uid, ordinal, question, blocks, severity, closed_by)
+                     VALUES (1, 1, 'What?', '[]', 'non-blocking', NULL);",
+            )
+            .expect("populates every table this file reads");
+
+        return store;
+    }
+
+    #[test]
+    fn Test_Collect_Submissions_Should_Read_A_Submission_By_Its_Node()
+    {
+        use crate::row::submission::Submission;
+
+        let store = Fixture();
+        let mut records = Vec::new();
+
+        Collect_Submissions(store.Connection(), &mut records).expect("collects");
+
+        assert_eq!(
+            records,
+            vec![Record::Submission(Submission {
+                node_id: "N1".to_owned(),
+                kind: "feature-request".to_owned(),
+                form_contract_version: 1,
+                state: "draft".to_owned(),
+                submitted_by: "me".to_owned(),
+                submitted_through: "test".to_owned(),
+            })]
+        );
+    }
+
+    #[test]
+    fn Test_Submission_Values_Should_Preserve_The_Ordinal_And_Origin_Of_Each_Value()
+    {
+        use crate::row::submission::value::Value as SubmissionValue;
+
+        let store = Fixture();
+        let mut records = Vec::new();
+
+        Submission_Values(store.Connection(), &mut records).expect("collects");
+
+        assert_eq!(
+            records,
+            vec![Record::SubmissionValue(SubmissionValue {
+                node_id: "N1".to_owned(),
+                field: "title".to_owned(),
+                ordinal: 1,
+                origin: "submitted".to_owned(),
+                value: "A title".to_owned(),
+                value_hash: "sha256:vv".to_owned(),
+                supersedes_hash: None,
+                recorded_at: "2026-01-01T00:00:00Z".to_owned(),
+            })]
+        );
+    }
+
+    #[test]
+    fn Test_Submission_Gaps_Should_Preserve_An_Open_And_A_Closed_Gap()
+    {
+        use crate::row::submission::gap::Gap as SubmissionGap;
+
+        let store = Fixture();
+        let mut records = Vec::new();
+
+        Submission_Gaps(store.Connection(), &mut records).expect("collects");
+
+        assert_eq!(
+            records,
+            vec![Record::SubmissionGap(SubmissionGap {
+                node_id: "N1".to_owned(),
+                ordinal: 1,
+                question: "What?".to_owned(),
+                blocks: "[]".to_owned(),
+                severity: "non-blocking".to_owned(),
+                closed_by: None,
+            })]
+        );
+    }
+}

@@ -22,9 +22,9 @@ pub const fn Kind_Label(kind: BlockKind) -> &'static str
 ///
 /// [`Kind_Label`]'s inverse, and its counterpart rather than a second opinion: reading a
 /// block back out of the store needs the label to mean what writing it meant, and
-/// `Test_A_Block_Kind_Should_Survive_The_Label` is what says the pair is one mapping.
-/// `None` for a label this build does not know, so a store written by a newer one reads as
-/// unknown rather than as prose.
+/// `Test_Kind_Of_Should_Invert_What_The_Kind_Encodes_As_Text` is what says the pair is one
+/// mapping. `None` for a label this build does not know, so a store written by a newer one
+/// reads as unknown rather than as prose.
 #[must_use]
 pub(crate) fn Kind_Of(label: &str) -> Option<BlockKind>
 {
@@ -38,10 +38,23 @@ mod tests
 {
     use super::*;
 
-    #[test]
-    fn Test_A_Block_Kind_Should_Survive_The_Label()
+    fn All_Block_Kinds() -> [BlockKind; 3]
     {
-        for kind in [BlockKind::Heading, BlockKind::Prose, BlockKind::Code]
+        return [BlockKind::Heading, BlockKind::Prose, BlockKind::Code];
+    }
+
+    #[test]
+    fn Test_Kind_Label_Should_Name_Every_Known_Block_Kind()
+    {
+        assert_eq!(Kind_Label(BlockKind::Heading), "heading");
+        assert_eq!(Kind_Label(BlockKind::Prose), "prose");
+        assert_eq!(Kind_Label(BlockKind::Code), "code");
+    }
+
+    #[test]
+    fn Test_Kind_Of_Should_Invert_What_The_Kind_Encodes_As_Text()
+    {
+        for kind in All_Block_Kinds()
         {
             assert_eq!(Kind_Of(Kind_Label(kind)), Some(kind));
         }

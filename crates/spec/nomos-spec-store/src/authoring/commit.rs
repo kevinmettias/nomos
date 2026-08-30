@@ -338,3 +338,43 @@ fn Optional_Node_Uid(connection: &Connection, node_id: &str) -> Result<Option<i6
         )
         .optional()?);
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use crate::Seed_Governing_Records;
+    use crate::SpecificationStore;
+    use crate::store::AUTHORED;
+
+    const CANONICAL: &str = "---\nid: D-900\ntype: decision\ntitle: A synthetic record\n\
+                             status: accepted\nversion: 1\n\
+                             authority: canonical-normative-record\ntags:\n  - testing\n\
+                             relations:\n  - target: D-129\n    type: relates-to\n---\n\n\
+                             # A synthetic record\n\n## Decision\n\nFirst paragraph.\n\n\
+                             ## Rationale\n\nSecond paragraph.\n";
+    const PATH: &str = "docs/records/D-900-a-synthetic-record.md";
+
+    #[test]
+    fn Test_Apply_Preview_Should_Write_The_Staged_Edit_Through_The_Connection_It_Is_Given()
+    {
+        let mut store = SpecificationStore::In_Memory().expect("opens");
+        Seed_Governing_Records(&mut store).expect("seeds");
+        store.Put_Record(PATH, AUTHORED, CANONICAL).expect("writes");
+        let edited = CANONICAL.replace("First paragraph.", "First paragraph, edited.");
+
+        let preview = store
+            .Claim_For_Edit("D-900", None)
+            .expect("claims")
+            .Stage(&edited, None)
+            .expect("stages")
+            .Preview(&store)
+            .expect("previews");
+
+        let report = Apply_Preview(store.Connection(), &preview).expect("applies");
+
+        assert_eq!(report.node_id, "D-900");
+        let projection = store.Record_Markdown("D-900", None).expect("projects");
+        assert_eq!(projection.markdown, edited);
+    }
+}

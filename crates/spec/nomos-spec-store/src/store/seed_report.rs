@@ -453,5 +453,16 @@ mod tests
             RELATION_TYPES.len()
         );
     }
+
+    #[test]
+    fn Test_Seed_Governing_Records_Should_Report_A_Nonzero_Seed()
+    {
+        let mut store = SpecificationStore::In_Memory().expect("opens");
+
+        let report = Seed_Governing_Records(&mut store).expect("seeds");
+
+        assert!(report.records > 0, "the embedded record set must not be empty");
+        assert!(report.blocks > 0);
+    }
 }
 

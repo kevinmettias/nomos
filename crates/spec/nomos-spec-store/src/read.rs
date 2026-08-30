@@ -327,7 +327,7 @@ mod tests
     /// An empty vector here means "no content recorded", which is not the same as an
     /// unknown identifier and must not print like one.
     #[test]
-    fn Test_A_Node_With_No_Source_Should_Be_Told_From_An_Unknown_One()
+    fn Test_Node_Summary_Should_Be_Told_From_An_Unknown_One()
     {
         let store = Seeded();
 
@@ -337,7 +337,7 @@ mod tests
     }
 
     #[test]
-    fn Test_A_Revision_Filter_Should_Narrow_A_Record()
+    fn Test_Documents_Behind_Should_Narrow_By_Revision()
     {
         let store = Seeded();
 
@@ -359,7 +359,7 @@ mod tests
     /// A whole path beats a fragment. Otherwise the most precise way to ask is the one
     /// that drags in every neighbouring document.
     #[test]
-    fn Test_A_Whole_Path_Should_Beat_A_Fragment()
+    fn Test_Documents_Named_Should_Prefer_A_Whole_Path_Over_A_Fragment()
     {
         let mut store = SpecificationStore::In_Memory().expect("opens");
         store.Put_Source_Document("a/model.md", "v1", "# one\n").expect("writes");

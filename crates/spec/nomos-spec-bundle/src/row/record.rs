@@ -102,3 +102,24 @@ impl Record
         };
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use crate::Blob;
+    use crate::Encoding as BlobEncoding;
+
+    #[test]
+    fn Test_Table_Should_Name_The_Table_Each_Variant_Belongs_To()
+    {
+        let record = Record::Blob(Blob {
+            sha256: "sha256:aa".to_owned(),
+            byte_length: 2,
+            encoding: BlobEncoding::Utf8,
+            content: "hi".to_owned(),
+        });
+
+        assert_eq!(record.Table(), "blobs");
+    }
+}

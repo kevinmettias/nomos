@@ -109,3 +109,115 @@ pub(super) fn Take_Node(
 
     return Ok(node);
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use nomos_spec_store::SuiteAuthority;
+
+    /// A zip written for this test alone, so it does not depend on the corpus. Named for
+    /// this file's own purpose, because these tests run concurrently and a shared path
+    /// would have one reading a file another was still writing.
+    fn Fixture(name: &str, entries: &[(&str, &str)]) -> Archive
+    {
+        use std::io::Write as _;
+
+        let path = std::env::temp_dir().join(format!("nomos-spec-ingest-prose-{name}.zip"));
+        let file = std::fs::File::create(&path).expect("creates the fixture");
+        let mut writer = zip::ZipWriter::new(file);
+        let options: zip::write::FileOptions<'_, ()> = zip::write::FileOptions::default();
+
+        for (entry, text) in entries
+        {
+            writer.start_file(*entry, options).expect("starts");
+            writer.write_all(text.as_bytes()).expect("writes");
+        }
+        writer.finish().expect("finishes");
+
+        return Archive::Open(&path).expect("opens");
+    }
+
+    #[test]
+    fn Test_Ingest_Prose_Should_Ingest_Every_Markdown_Entry_In_The_Suite()
+    {
+        let mut store = SpecificationStore::In_Memory().expect("opens");
+        let suite_uid =
+            store.Put_Suite(Sibling::Xvpe.Suite_Id(), Sibling::Xvpe.Title(), SuiteAuthority::Sibling).expect("puts suite");
+        let suite = Suite { sibling: Sibling::Xvpe, uid: suite_uid };
+        let mut archive = Fixture("ingest-prose", &[("suite/00-index.md", "# Index\n\nSome prose.\n")]);
+        let mut report = SuiteReport::default();
+
+        Ingest_Prose(&mut store, &mut archive, suite, &mut report).expect("ingests");
+
+        assert_eq!(report.documents, 1);
+        assert!(report.blocks > 0);
+        assert_eq!(report.records, vec!["xvpe-spec-seed:00-index.md".to_owned()]);
+    }
+
+    #[test]
+    fn Test_Declared_By_Should_Qualify_A_Plain_Document_By_Its_Suite()
+    {
+        let declared = Declared_By(Sibling::Xvpe, EntryAt("suite/00-index.md"), EntryText("# Index\n\nText.\n"))
+            .expect("declares");
+
+        assert_eq!(declared.id, "xvpe-spec-seed:00-index.md");
+        assert_eq!(declared.kind, "document");
+    }
+
+    #[test]
+    fn Test_Declared_By_Should_Read_A_Records_Own_Identifier_From_Its_Front_Matter()
+    {
+        let record_text = "---\nid: D-900\ntype: decision\ntitle: A title\nstatus: accepted\n\
+                            version: 1\nauthority: canonical-normative-record\n---\n\n\
+                            # A title\n\nBody.\n";
+
+        let declared = Declared_By(Sibling::Xvpe, EntryAt("suite/records/d-900.md"), EntryText(record_text))
+            .expect("declares");
+
+        assert_eq!(declared.id, "D-900");
+    }
+
+    #[test]
+    fn Test_Take_Node_Should_Report_A_Contested_Identifier_Rather_Than_A_Fresh_Claim()
+    {
+        let mut store = SpecificationStore::In_Memory().expect("opens");
+        let first_uid =
+            store.Put_Suite(Sibling::Xvpe.Suite_Id(), Sibling::Xvpe.Title(), SuiteAuthority::Sibling).expect("puts suite");
+        let second_uid =
+            store.Put_Suite(Sibling::Kwb.Suite_Id(), Sibling::Kwb.Title(), SuiteAuthority::Sibling).expect("puts suite");
+        let first_suite = Suite { sibling: Sibling::Xvpe, uid: first_uid };
+        let second_suite = Suite { sibling: Sibling::Kwb, uid: second_uid };
+
+        let mut first_report = SuiteReport::default();
+        Take_Node(
+            &mut store,
+            &Declared {
+                id: "shared-id".to_owned(),
+                kind: "document".to_owned(),
+                authority: "canonical".to_owned(),
+                title: "Shared".to_owned(),
+            },
+            first_suite,
+            &mut first_report,
+        )
+        .expect("takes");
+
+        let mut second_report = SuiteReport::default();
+        Take_Node(
+            &mut store,
+            &Declared {
+                id: "shared-id".to_owned(),
+                kind: "document".to_owned(),
+                authority: "canonical".to_owned(),
+                title: "Shared".to_owned(),
+            },
+            second_suite,
+            &mut second_report,
+        )
+        .expect("takes");
+
+        assert_eq!(first_report.records, vec!["shared-id".to_owned()]);
+        assert_eq!(second_report.contested, vec!["shared-id".to_owned()]);
+    }
+}

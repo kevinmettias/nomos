@@ -32,3 +32,44 @@ impl<'row, 'statement> Columns<'row, 'statement>
         return self.row.get(at);
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use rusqlite::Connection;
+
+    #[test]
+    fn Test_Of_Should_Wrap_A_Row_Starting_Before_Its_First_Column()
+    {
+        let connection = Connection::open_in_memory().expect("opens");
+
+        connection
+            .query_row("SELECT 7, 'seven'", [], |row| {
+                let mut columns = Columns::Of(row);
+                let number: i64 = columns.Next()?;
+
+                assert_eq!(number, 7, "Of should start reading at the row's first column");
+                return Ok(());
+            })
+            .expect("reads");
+    }
+
+    #[test]
+    fn Test_Next_Should_Advance_Past_Each_Column_It_Reads()
+    {
+        let connection = Connection::open_in_memory().expect("opens");
+
+        connection
+            .query_row("SELECT 10, 20, 30", [], |row| {
+                let mut columns = Columns::Of(row);
+                let first: i64 = columns.Next()?;
+                let second: i64 = columns.Next()?;
+                let third: i64 = columns.Next()?;
+
+                assert_eq!((first, second, third), (10, 20, 30));
+                return Ok(());
+            })
+            .expect("reads");
+    }
+}

@@ -239,7 +239,10 @@ fn Test_A_Revision_With_No_Markdown_Should_Be_Refused()
 {
     let empty: BTreeMap<String, String> = BTreeMap::new();
 
-    assert!(Fingerprint_Of("v15.0", &empty).is_err());
+    let refusal = Fingerprint_Of("v15.0", &empty).expect_err("must refuse");
+
+    assert!(matches!(refusal, IngestError::Parse(_)), "{refusal}");
+    assert!(format!("{refusal}").contains("fingerprints to no document"), "{refusal}");
 }
 
 #[test]

@@ -3,12 +3,11 @@
 use crate::seeded::{Previewed, SYNTHETIC, Swapped, With_Synthetic};
 use nomos_spec_store::{BlockChange, EditPreview, NormativeOutcome};
 
-/// The mandatory sentence, in the three cases that are not the same answer.
-#[test]
-fn Test_The_Preview_Should_Say_Whether_Normative_Is_Wording_Moved()
+/// The three cases that are not the same answer for whether normative wording moved,
+/// paired with the reason each one settles it. A provider rather than a literal in the
+/// test body: a fourth case becomes a diff that touches no test logic.
+fn Wording_Cases() -> Vec<(String, bool, &'static str)>
 {
-    let store = With_Synthetic();
-
     let reworded = SYNTHETIC.replace("First paragraph.", "First paragraph, differently.");
     let reflowed = SYNTHETIC.replace("Second paragraph.", "Second  paragraph.");
     let appended = SYNTHETIC.replace(
@@ -16,15 +15,24 @@ fn Test_The_Preview_Should_Say_Whether_Normative_Is_Wording_Moved()
         "Second paragraph.\n\nA third paragraph.\n",
     );
 
-    for (markdown, moved, why) in [
-        (&reworded, true, "rewording a paragraph moves its wording"),
-        (&reflowed, false, "whitespace is not wording under the normalizer"),
-        (&appended, false, "adding a paragraph moves nothing that was there"),
-    ]
-    {
-        let preview = Previewed(&store, markdown);
+    return vec![
+        (reworded, true, "rewording a paragraph moves its wording"),
+        (reflowed, false, "whitespace is not wording under the normalizer"),
+        (appended, false, "adding a paragraph moves nothing that was there"),
+    ];
+}
 
-        assert_ne!(markdown.as_str(), SYNTHETIC, "the {why} case changed nothing");
+/// The mandatory sentence, in the three cases that are not the same answer.
+#[test]
+fn Test_The_Preview_Should_Say_Whether_Normative_Is_Wording_Moved()
+{
+    let store = With_Synthetic();
+
+    for (markdown, moved, why) in Wording_Cases()
+    {
+        let preview = Previewed(&store, &markdown);
+
+        assert_ne!(markdown, SYNTHETIC, "the {why} case changed nothing");
         Assert_Answers_The_Mandatory_Question(&preview, moved, why);
     }
 }

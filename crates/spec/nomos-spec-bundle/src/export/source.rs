@@ -201,3 +201,148 @@ fn Table_Row_Identity(columns: &mut Columns<'_, '_>) -> rusqlite::Result<(i64, i
 
     return Ok((ordinal, table_ordinal, kind));
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use nomos_spec_store::SpecificationStore;
+
+    /// One blob, the document read from it, one heading, one block and one table row
+    /// inside that block — one row of everything this file reads.
+    fn Fixture() -> SpecificationStore
+    {
+        let store = SpecificationStore::In_Memory().expect("opens");
+        store
+            .Connection()
+            .execute_batch(
+                "INSERT INTO blobs (sha256, byte_length, content) VALUES ('sha256:aa', 2, x'6869');
+                 INSERT INTO source_documents (path, revision, blob_uid) VALUES ('doc.md', 'v1', 1);
+                 INSERT INTO source_headings (document_uid, ordinal, depth, title)
+                     VALUES (1, 1, 1, 'Intro');
+                 INSERT INTO source_blocks
+                     (document_uid, ordinal, kind, heading_path, text, content_hash, normalized_hash)
+                     VALUES (1, 1, 'paragraph', 'Intro', 'Hello.', 'sha256:hc', 'sha256:nh');
+                 INSERT INTO source_table_rows
+                     (source_block_uid, ordinal, table_ordinal, kind, cells_json, text,
+                      content_hash, normalized_hash)
+                     VALUES (1, 1, 1, 'content', '[\"a\",\"b\"]', 'a | b', 'sha256:rc', 'sha256:rn');",
+            )
+            .expect("populates every table this file reads");
+
+        return store;
+    }
+
+    #[test]
+    fn Test_Collect_Blobs_Should_Spell_Utf8_Content_As_Text()
+    {
+        let store = Fixture();
+        let mut records = Vec::new();
+
+        Collect_Blobs(store.Connection(), &mut records).expect("collects");
+
+        assert_eq!(
+            records,
+            vec![Record::Blob(crate::Blob {
+                sha256: "sha256:aa".to_owned(),
+                byte_length: 2,
+                encoding: crate::Encoding::Utf8,
+                content: "hi".to_owned(),
+            })]
+        );
+    }
+
+    #[test]
+    fn Test_Source_Documents_Should_Read_A_Document_By_Its_Blob()
+    {
+        let store = Fixture();
+        let mut records = Vec::new();
+
+        Source_Documents(store.Connection(), &mut records).expect("collects");
+
+        assert_eq!(
+            records,
+            vec![Record::SourceDocument(crate::Document {
+                path: "doc.md".to_owned(),
+                revision: "v1".to_owned(),
+                blob_sha256: "sha256:aa".to_owned(),
+            })]
+        );
+    }
+
+    #[test]
+    fn Test_Source_Headings_Should_Read_A_Heading_By_Its_Document()
+    {
+        let store = Fixture();
+        let mut records = Vec::new();
+
+        Source_Headings(store.Connection(), &mut records).expect("collects");
+
+        assert_eq!(
+            records,
+            vec![Record::SourceHeading(crate::Heading {
+                document: DocumentRef {
+                    path: "doc.md".to_owned(),
+                    revision: "v1".to_owned(),
+                },
+                ordinal: 1,
+                depth: 1,
+                title: "Intro".to_owned(),
+            })]
+        );
+    }
+
+    #[test]
+    fn Test_Source_Blocks_Should_Read_A_Block_By_Its_Document()
+    {
+        let store = Fixture();
+        let mut records = Vec::new();
+
+        Source_Blocks(store.Connection(), &mut records).expect("collects");
+
+        assert_eq!(
+            records,
+            vec![Record::SourceBlock(crate::Block {
+                document: DocumentRef {
+                    path: "doc.md".to_owned(),
+                    revision: "v1".to_owned(),
+                },
+                ordinal: 1,
+                kind: "paragraph".to_owned(),
+                heading_path: "Intro".to_owned(),
+                text: "Hello.".to_owned(),
+                content_hash: "sha256:hc".to_owned(),
+                normalized_hash: "sha256:nh".to_owned(),
+            })]
+        );
+    }
+
+    #[test]
+    fn Test_Source_Table_Rows_Should_Decode_The_Cells_Json_Column()
+    {
+        let store = Fixture();
+        let mut records = Vec::new();
+
+        Source_Table_Rows(store.Connection(), &mut records).expect("collects");
+
+        assert_eq!(
+            records,
+            vec![Record::SourceTableRow(SourceTableRow {
+                block: crate::OrdinalRef {
+                    document: DocumentRef {
+                        path: "doc.md".to_owned(),
+                        revision: "v1".to_owned(),
+                    },
+                    ordinal: 1,
+                },
+                ordinal: 1,
+                table_ordinal: 1,
+                kind: "content".to_owned(),
+                cells: vec!["a".to_owned(), "b".to_owned()],
+                text: "a | b".to_owned(),
+                content_hash: "sha256:rc".to_owned(),
+                normalized_hash: "sha256:rn".to_owned(),
+            })]
+        );
+    }
+}

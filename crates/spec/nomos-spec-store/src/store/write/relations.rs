@@ -321,3 +321,88 @@ fn Read_Constraint_Row(row: &rusqlite::Row<'_>) -> rusqlite::Result<(String, Str
     let mut columns = Columns::Of(row);
     return Ok((columns.Next()?, columns.Next()?, columns.Next()?));
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use crate::AUTHORED;
+    use crate::Constraint as RelationConstraint;
+    use crate::NodeRow;
+    use crate::SpecificationStore;
+
+    fn Store_With_A_Relation_Type() -> SpecificationStore
+    {
+        let mut store = SpecificationStore::In_Memory().expect("opens");
+        store
+            .Upsert_Node(NodeRow {
+                node_id: "A",
+                kind: "widget",
+                authority: AUTHORED,
+                representation: "record",
+                title: "A",
+            })
+            .expect("mints");
+        store
+            .Upsert_Node(NodeRow {
+                node_id: "B",
+                kind: "widget",
+                authority: AUTHORED,
+                representation: "record",
+                title: "B",
+            })
+            .expect("mints");
+        store
+            .Put_Relation_Type(
+                "relates-to",
+                "seed",
+                &RelationConstraint { domain: &["widget"], range: &["widget"], max_per_node: 5 },
+            )
+            .expect("registers");
+        return store;
+    }
+
+    #[test]
+    fn Test_Write_Relation_Should_Record_The_Edge_Between_Two_Nodes()
+    {
+        let store = Store_With_A_Relation_Type();
+
+        Write_Relation(
+            store.Connection(),
+            FromNodeId("A"),
+            RelationTypeName("relates-to"),
+            ToNodeId("B"),
+        )
+        .expect("writes");
+
+        let count: i64 = store
+            .Connection()
+            .query_row(
+                "SELECT count(*) FROM relations WHERE relation_type = 'relates-to'",
+                [],
+                |row| return row.get(0),
+            )
+            .expect("counts");
+        assert_eq!(count, 1);
+    }
+
+    #[test]
+    fn Test_Inverse_Of_Should_Report_The_Declared_Inverse_If_Any()
+    {
+        let mut store = Store_With_A_Relation_Type();
+        store
+            .Put_Relation_Type(
+                "relates-from",
+                "seed",
+                &RelationConstraint { domain: &["widget"], range: &["widget"], max_per_node: 5 },
+            )
+            .expect("registers");
+        store.Pair_Relation_Type("relates-to", "relates-from").expect("pairs");
+
+        assert_eq!(
+            Inverse_Of(store.Connection(), "relates-to").expect("reads"),
+            Some("relates-from".to_owned())
+        );
+        assert_eq!(Inverse_Of(store.Connection(), "unregistered").expect("reads"), None);
+    }
+}

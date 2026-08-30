@@ -252,6 +252,19 @@ fn Kind_Count(store: &SpecificationStore, kind: &str) -> u32
         .expect("queries");
 }
 
+/// A record identifier and the sibling suite it must resolve to, named for what is being
+/// resolved rather than `Cases()` — what varies here is which sibling's own identifier it is.
+fn Sibling_Record_Identifiers() -> Vec<(&'static str, &'static str)>
+{
+    return vec![
+        ("D-085", Sibling::Xvpe.Suite_Id()),
+        ("D-122", Sibling::Xvpe.Suite_Id()),
+        ("D-102", Sibling::Kwb.Suite_Id()),
+        ("D-096", Sibling::Ecosystem.Suite_Id()),
+        ("ARC-ECOSYS-001", Sibling::Ecosystem.Suite_Id()),
+    ];
+}
+
 /// A sibling's decision resolves by the identifier it declares, so a cross-suite relation
 /// is an ordinary row rather than a special case.
 #[test]
@@ -263,13 +276,7 @@ fn Test_A_Sibling_Record_Should_Resolve_By_Its_Own_Identifier()
         return;
     };
 
-    for (id, suite) in [
-        ("D-085", Sibling::Xvpe.Suite_Id()),
-        ("D-122", Sibling::Xvpe.Suite_Id()),
-        ("D-102", Sibling::Kwb.Suite_Id()),
-        ("D-096", Sibling::Ecosystem.Suite_Id()),
-        ("ARC-ECOSYS-001", Sibling::Ecosystem.Suite_Id()),
-    ]
+    for (id, suite) in Sibling_Record_Identifiers()
     {
         let held = store
             .Suite_Of(id)

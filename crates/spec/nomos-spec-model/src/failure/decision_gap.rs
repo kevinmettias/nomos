@@ -31,3 +31,32 @@ impl DecisionGap
         return self.closed_by.is_none();
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    fn Gap() -> DecisionGap
+    {
+        return DecisionGap {
+            question: "which substrate is canonical".to_owned(),
+            blocks: vec!["behaviour".to_owned()],
+            severity: Severity::Blocking,
+            closed_by: None,
+        };
+    }
+
+    #[test]
+    fn Test_Is_Open_Should_Be_True_Until_A_Closing_Citation_Is_Recorded()
+    {
+        assert!(Gap().Is_Open());
+
+        let closed = DecisionGap {
+            closed_by: Some("OD-SPEC-008".to_owned()),
+            ..Gap()
+        };
+
+        assert!(!closed.Is_Open());
+    }
+}

@@ -97,3 +97,140 @@ pub(super) fn Is_Schema(entry: &str) -> bool
 {
     return entry.ends_with(".schema.json");
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use nomos_spec_store::SuiteAuthority;
+
+    /// A zip written for this test alone, so it does not depend on the corpus. Named for
+    /// this file's own purpose, because these tests run concurrently and a shared path
+    /// would have one reading a file another was still writing.
+    fn Fixture(name: &str, entries: &[(&str, &str)]) -> Archive
+    {
+        use std::io::Write as _;
+
+        let path = std::env::temp_dir().join(format!("nomos-spec-ingest-machine-{name}.zip"));
+        let file = std::fs::File::create(&path).expect("creates the fixture");
+        let mut writer = zip::ZipWriter::new(file);
+        let options: zip::write::FileOptions<'_, ()> = zip::write::FileOptions::default();
+
+        for (entry, text) in entries
+        {
+            writer.start_file(*entry, options).expect("starts");
+            writer.write_all(text.as_bytes()).expect("writes");
+        }
+        writer.finish().expect("finishes");
+
+        return Archive::Open(&path).expect("opens");
+    }
+
+    #[test]
+    fn Test_Ingest_Machine_Should_Record_A_Schema_File_As_A_Schema_Node()
+    {
+        let mut store = SpecificationStore::In_Memory().expect("opens");
+        let suite_uid =
+            store.Put_Suite(Sibling::Xvpe.Suite_Id(), Sibling::Xvpe.Title(), SuiteAuthority::Sibling).expect("puts suite");
+        let suite = Suite { sibling: Sibling::Xvpe, uid: suite_uid };
+        let mut archive = Fixture(
+            "ingest-machine",
+            &[("suite/machine/target-adapter.schema.json", r#"{"$id":"target-adapter","title":"Target adapter"}"#)],
+        );
+        let mut report = SuiteReport::default();
+
+        Ingest_Machine(&mut store, &mut archive, suite, &mut report).expect("ingests");
+
+        assert_eq!(report.schemas, vec!["xvpe-spec-seed:target-adapter.schema.json".to_owned()]);
+        assert!(report.machine_documents.is_empty());
+    }
+
+    #[test]
+    fn Test_Record_Machine_Should_File_A_Node_It_Cannot_Claim_As_Contested()
+    {
+        let mut store = SpecificationStore::In_Memory().expect("opens");
+        let xvpe_uid =
+            store.Put_Suite(Sibling::Xvpe.Suite_Id(), Sibling::Xvpe.Title(), SuiteAuthority::Sibling).expect("puts suite");
+        let kwb_uid =
+            store.Put_Suite(Sibling::Kwb.Suite_Id(), Sibling::Kwb.Title(), SuiteAuthority::Sibling).expect("puts suite");
+        let xvpe = Suite { sibling: Sibling::Xvpe, uid: xvpe_uid };
+        let kwb = Suite { sibling: Sibling::Kwb, uid: kwb_uid };
+
+        let mut first_report = SuiteReport::default();
+        Record_Machine(
+            &mut store,
+            Declared {
+                id: "shared-id".to_owned(),
+                kind: "schema".to_owned(),
+                authority: "canonical".to_owned(),
+                title: "Shared".to_owned(),
+            },
+            xvpe,
+            &mut first_report,
+        )
+        .expect("records");
+
+        let mut second_report = SuiteReport::default();
+        Record_Machine(
+            &mut store,
+            Declared {
+                id: "shared-id".to_owned(),
+                kind: "schema".to_owned(),
+                authority: "canonical".to_owned(),
+                title: "Shared".to_owned(),
+            },
+            kwb,
+            &mut second_report,
+        )
+        .expect("records");
+
+        assert!(first_report.contested.is_empty());
+        assert_eq!(second_report.contested, vec!["shared-id".to_owned()]);
+    }
+
+    #[test]
+    fn Test_Machine_Declared_Should_Type_A_File_By_The_Schema_Json_Naming_Convention()
+    {
+        let schema = SchemaHeader { id: "target-adapter".to_owned(), title: String::new() };
+        let declared = Machine_Declared(Sibling::Xvpe, "suite/machine/target-adapter.schema.json", &schema);
+
+        assert_eq!(declared.kind, "schema");
+        assert_eq!(declared.id, "xvpe-spec-seed:target-adapter.schema.json");
+        assert_eq!(declared.title, "target-adapter");
+
+        let instance = SchemaHeader { id: "ownership".to_owned(), title: "Ownership matrix".to_owned() };
+        let declared_instance = Machine_Declared(Sibling::Xvpe, "suite/machine/ownership.json", &instance);
+
+        assert_eq!(declared_instance.kind, "machine_document");
+        assert_eq!(declared_instance.title, "Ownership matrix");
+    }
+
+    #[test]
+    fn Test_Note_Machine_Should_File_A_Node_By_Its_Kind_Into_The_Report()
+    {
+        let mut report = SuiteReport::default();
+        Note_Machine(
+            Declared { id: "a".to_owned(), kind: "schema".to_owned(), authority: "canonical".to_owned(), title: "A".to_owned() },
+            &mut report,
+        );
+        Note_Machine(
+            Declared {
+                id: "b".to_owned(),
+                kind: "machine_document".to_owned(),
+                authority: "canonical".to_owned(),
+                title: "B".to_owned(),
+            },
+            &mut report,
+        );
+
+        assert_eq!(report.schemas, vec!["a".to_owned()]);
+        assert_eq!(report.machine_documents, vec!["b".to_owned()]);
+    }
+
+    #[test]
+    fn Test_Is_Schema_Should_Recognize_The_Schema_Json_Suffix()
+    {
+        assert!(Is_Schema("target-adapter.schema.json"));
+        assert!(!Is_Schema("ownership.json"));
+    }
+}

@@ -88,6 +88,12 @@ fn Test_An_Html_Projection_Should_Escape_What_It_Renders()
     assert!(!rendered.contains("<script>"), "the renderer emitted raw markup");
 }
 
+/// Every profile this claim checks against the seeded governing records.
+fn Governing_Record_Profile_Ids() -> [&'static str; 2]
+{
+    return ["domain-specification", "html-site"];
+}
+
 #[test]
 fn Test_The_Governing_Records_Should_Project_As_A_Document_Suite()
 {
@@ -96,7 +102,7 @@ fn Test_The_Governing_Records_Should_Project_As_A_Document_Suite()
     let mut store = SpecificationStore::In_Memory().expect("opens");
     nomos_spec_store::Seed_Governing_Records(&mut store).expect("seeds");
 
-    for id in ["domain-specification", "html-site"]
+    for id in Governing_Record_Profile_Ids()
     {
         Assert_Profile_Projects_The_Governing_Records(&store, id);
     }

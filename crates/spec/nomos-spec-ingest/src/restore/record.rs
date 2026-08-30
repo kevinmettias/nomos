@@ -317,3 +317,357 @@ pub(super) fn Sql_Result<Value>(result: rusqlite::Result<Value>) -> Result<Value
 {
     return result.map_err(|error| IngestError::Store(StoreError::Sql(error.to_string())));
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    const CORE_MARKDOWN: &str = "# Core\n\n## 5. Canonical domain model\n\n\
+                                 | Model | Responsibility |\n| --- | --- |\n\
+                                 | WorkspaceContext | Repository. |\n";
+
+    /// A store already holding one ingested document, and the document set that produced it.
+    fn Store_With_Core() -> (SpecificationStore, BTreeMap<String, String>)
+    {
+        use crate::Ingest_Source_Document;
+
+        let mut store = SpecificationStore::In_Memory().expect("opens");
+        Ingest_Source_Document(&mut store, "02-core.md", "v14.36", CORE_MARKDOWN).expect("ingests");
+
+        let mut documents = BTreeMap::new();
+        documents.insert("02-core.md".to_owned(), CORE_MARKDOWN.to_owned());
+
+        return (store, documents);
+    }
+
+    #[test]
+    fn Test_Restore_Members_Should_Produce_A_Report_Naming_Every_Member()
+    {
+        let (mut store, documents) = Store_With_Core();
+
+        let report = Restore_Members(&mut store, "v14.36", &documents).expect("restores");
+
+        assert_eq!(report.members.len(), 1);
+        assert_eq!(
+            report.members.first().map(|member| member.id.as_str()),
+            Some("CDM-WORKSPACECONTEXT")
+        );
+        assert!(report.ambiguous_names.is_empty());
+        assert!(report.contested_aliases.is_empty());
+    }
+
+    #[test]
+    fn Test_Located_Members_Should_Pair_Each_Member_With_The_Document_It_Came_From()
+    {
+        let (mut store, documents) = Store_With_Core();
+
+        let located = Located_Members(&mut store, "v14.36", &documents).expect("locates");
+
+        assert_eq!(located.len(), 1);
+        let (document_uid, member) = located.first().expect("the assertion above confirms exactly one located member");
+        assert_eq!(member.id, "CDM-WORKSPACECONTEXT");
+        assert!(*document_uid > 0);
+    }
+
+    #[test]
+    fn Test_Record_Member_Should_Upsert_A_Node_Trace_It_And_Append_It_To_The_Report()
+    {
+        let (mut store, documents) = Store_With_Core();
+        let located = Located_Members(&mut store, "v14.36", &documents).expect("locates");
+        let (document_uid, member) = located.into_iter().next().expect("one member");
+        let mut report = RestorationReport::default();
+
+        Record_Member(&mut store, document_uid, member.clone(), &mut report).expect("records");
+
+        assert_eq!(report.members, vec![member]);
+        assert!(store.Node_Uid("CDM-WORKSPACECONTEXT").expect("looks up").is_some());
+    }
+
+    #[test]
+    fn Test_Trace_Member_Should_Dispatch_By_Origin_Kind()
+    {
+        let (mut store, documents) = Store_With_Core();
+        let located = Located_Members(&mut store, "v14.36", &documents).expect("locates");
+        let (document_uid, row_member) = located.into_iter().next().expect("one member");
+        let node_for_row = store
+            .Upsert_Node(NodeRow {
+                node_id: &row_member.id,
+                kind: "concept",
+                authority: "canonical",
+                representation: "record",
+                title: &row_member.name,
+            })
+            .expect("mints");
+
+        Trace_Member(&mut store, document_uid, &row_member, node_for_row).expect("traces the row");
+
+        let traced_row: i64 = store
+            .Connection()
+            .query_row(
+                "SELECT COUNT(*) FROM lineage WHERE source_table_row_uid IS NOT NULL AND target_node_uid = ?1",
+                rusqlite::params![node_for_row],
+                |row| row.get(0),
+            )
+            .expect("counts");
+        assert_eq!(traced_row, 1);
+
+        let block_member = Member {
+            origin: Origin::Block { ordinal: 1 },
+            ..row_member
+        };
+        let node_for_block = store
+            .Upsert_Node(NodeRow {
+                node_id: "APX-D-TEST",
+                kind: "schema",
+                authority: "canonical",
+                representation: "record",
+                title: "Test",
+            })
+            .expect("mints");
+
+        Trace_Member(&mut store, document_uid, &block_member, node_for_block).expect("traces the block");
+
+        let traced_block: i64 = store
+            .Connection()
+            .query_row(
+                "SELECT COUNT(*) FROM lineage WHERE source_block_uid IS NOT NULL AND target_node_uid = ?1",
+                rusqlite::params![node_for_block],
+                |row| row.get(0),
+            )
+            .expect("counts");
+        assert_eq!(traced_block, 1);
+    }
+
+    #[test]
+    fn Test_Trace_Row_Should_Point_The_Row_At_Its_Node_Or_Refuse_A_Missing_One()
+    {
+        let (mut store, documents) = Store_With_Core();
+        let located = Located_Members(&mut store, "v14.36", &documents).expect("locates");
+        let (document_uid, member) = located.into_iter().next().expect("one member");
+        let Origin::Row {
+            block_ordinal,
+            row_ordinal,
+        } = member.origin
+        else
+        {
+            panic!("the domain model member must trace to a row");
+        };
+        let node_uid = store
+            .Upsert_Node(NodeRow {
+                node_id: &member.id,
+                kind: "concept",
+                authority: "canonical",
+                representation: "record",
+                title: &member.name,
+            })
+            .expect("mints");
+        let at = RowAt {
+            document_uid,
+            block_ordinal,
+            row_ordinal,
+        };
+
+        Trace_Row(&mut store, at, &member, node_uid).expect("traces");
+
+        let row_uid = store
+            .Table_Row_Uid(document_uid, block_ordinal, row_ordinal)
+            .expect("looks up")
+            .expect("row exists");
+        let traced: Option<i64> = store
+            .Connection()
+            .query_row(
+                "SELECT target_node_uid FROM lineage WHERE source_table_row_uid = ?1",
+                rusqlite::params![row_uid],
+                |row| row.get(0),
+            )
+            .expect("reads lineage");
+        assert_eq!(traced, Some(node_uid));
+
+        let missing = RowAt {
+            document_uid,
+            block_ordinal,
+            row_ordinal: row_ordinal + 100,
+        };
+        let refusal =
+            Trace_Row(&mut store, missing, &member, node_uid).expect_err("must refuse a row that is not in the store");
+        assert!(format!("{refusal}").contains("is not in the store"), "{refusal}");
+    }
+
+    #[test]
+    fn Test_Claim_Alias_Should_Point_The_Alias_At_The_Node_Unless_It_Is_Ambiguous()
+    {
+        let (mut store, documents) = Store_With_Core();
+        let located = Located_Members(&mut store, "v14.36", &documents).expect("locates");
+        let (_document_uid, member) = located.into_iter().next().expect("one member");
+        let node_uid = store
+            .Upsert_Node(NodeRow {
+                node_id: &member.id,
+                kind: "concept",
+                authority: "canonical",
+                representation: "record",
+                title: &member.name,
+            })
+            .expect("mints");
+        let alias = member.alias.clone().expect("the domain model row carries an alias");
+
+        let mut ambiguous_report = RestorationReport {
+            ambiguous_names: vec![alias.clone()],
+            ..RestorationReport::default()
+        };
+        Claim_Alias(&mut store, &member, node_uid, &mut ambiguous_report).expect("claims");
+        assert!(ambiguous_report.contested_aliases.is_empty());
+        let claimed: i64 = store
+            .Connection()
+            .query_row(
+                "SELECT COUNT(*) FROM node_aliases WHERE alias = ?1",
+                rusqlite::params![&alias],
+                |row| row.get(0),
+            )
+            .expect("counts");
+        assert_eq!(claimed, 0, "an ambiguous alias must not be claimed");
+
+        let mut report = RestorationReport::default();
+        Claim_Alias(&mut store, &member, node_uid, &mut report).expect("claims");
+        assert!(report.contested_aliases.is_empty());
+        let owner: i64 = store
+            .Connection()
+            .query_row(
+                "SELECT node_uid FROM node_aliases WHERE alias = ?1",
+                rusqlite::params![&alias],
+                |row| row.get(0),
+            )
+            .expect("reads the alias");
+        assert_eq!(owner, node_uid);
+    }
+
+    #[test]
+    fn Test_Ambiguous_Names_Should_Count_Aliases_Claimed_By_More_Than_One_Member()
+    {
+        use crate::Restored;
+
+        let shared = Member {
+            id: "CDM-X".to_owned(),
+            family: Restored::CanonicalDomainModel,
+            name: "X".to_owned(),
+            document: "02-core.md".to_owned(),
+            origin: Origin::Row {
+                block_ordinal: 1,
+                row_ordinal: 1,
+            },
+            alias: Some("Shared".to_owned()),
+        };
+        let other = Member {
+            id: "GLS-SHARED".to_owned(),
+            alias: Some("Shared".to_owned()),
+            ..shared.clone()
+        };
+        let unique = Member {
+            id: "CDM-Y".to_owned(),
+            name: "Y".to_owned(),
+            alias: Some("Unique".to_owned()),
+            ..shared.clone()
+        };
+
+        let ambiguous = Ambiguous_Names(&[shared, other, unique]);
+
+        assert_eq!(ambiguous, vec!["Shared".to_owned()]);
+    }
+
+    #[test]
+    fn Test_Document_Uid_Should_Find_The_Row_For_A_Known_Revision_And_Refuse_An_Unknown_One()
+    {
+        let (store, _documents) = Store_With_Core();
+
+        let uid = Document_Uid(&store, DocumentRevision("v14.36"), DocumentPath("02-core.md")).expect("finds");
+        assert!(uid > 0);
+
+        let refusal =
+            Document_Uid(&store, DocumentRevision("v14.36"), DocumentPath("no-such.md")).expect_err("must refuse");
+        assert!(format!("{refusal}").contains("is not in the store"), "{refusal}");
+    }
+
+    #[test]
+    fn Test_Dispose_Block_Should_Trace_A_Whole_Block_To_One_Node()
+    {
+        let (mut store, _documents) = Store_With_Core();
+        let document_uid = Document_Uid(&store, DocumentRevision("v14.36"), DocumentPath("02-core.md")).expect("finds");
+        let node_uid = store
+            .Upsert_Node(NodeRow {
+                node_id: "APX-D-TEST",
+                kind: "schema",
+                authority: "canonical",
+                representation: "record",
+                title: "Test",
+            })
+            .expect("mints");
+
+        Dispose_Block(&mut store, document_uid, 1, node_uid).expect("disposes");
+
+        let traced: i64 = store
+            .Connection()
+            .query_row(
+                "SELECT COUNT(*) FROM lineage l JOIN source_blocks b ON b.uid = l.source_block_uid \
+                 WHERE b.document_uid = ?1 AND b.ordinal = 1 AND l.target_node_uid = ?2",
+                rusqlite::params![document_uid, node_uid],
+                |row| row.get(0),
+            )
+            .expect("counts");
+        assert_eq!(traced, 1);
+    }
+
+    #[test]
+    fn Test_Alias_Resolves_To_Should_Report_False_When_Another_Node_Already_Owns_It()
+    {
+        let mut store = SpecificationStore::In_Memory().expect("opens");
+        let first = store
+            .Upsert_Node(NodeRow {
+                node_id: "CDM-A",
+                kind: "concept",
+                authority: "canonical",
+                representation: "record",
+                title: "A",
+            })
+            .expect("mints");
+        let second = store
+            .Upsert_Node(NodeRow {
+                node_id: "CDM-B",
+                kind: "concept",
+                authority: "canonical",
+                representation: "record",
+                title: "B",
+            })
+            .expect("mints");
+
+        assert!(Alias_Resolves_To(&store, "Shared", first).expect("resolves"));
+        assert!(
+            !Alias_Resolves_To(&store, "Shared", second).expect("resolves"),
+            "a second node was allowed to take a claimed alias"
+        );
+    }
+
+    #[test]
+    fn Test_Resolve_Model_Uid_Should_Answer_By_Identifier_Or_By_The_Corpus_Name()
+    {
+        let (mut store, documents) = Store_With_Core();
+        Restore_Members(&mut store, "v14.36", &documents).expect("restores");
+
+        assert!(Resolve_Model_Uid(&store, "CDM-WORKSPACECONTEXT").expect("resolves").is_some());
+        assert!(Resolve_Model_Uid(&store, "WorkspaceContext").expect("resolves").is_some());
+        assert!(Resolve_Model_Uid(&store, "NoSuchModel").expect("resolves").is_none());
+    }
+
+    #[test]
+    fn Test_Sql_Result_Should_Wrap_A_Failure_As_A_Store_Error()
+    {
+        let store = SpecificationStore::In_Memory().expect("opens");
+        let failure: rusqlite::Result<i64> =
+            store.Connection().query_row("SELECT * FROM no_such_table", [], |row| row.get(0));
+
+        let wrapped = Sql_Result(failure).expect_err("must wrap the failure");
+        assert!(matches!(wrapped, IngestError::Store(StoreError::Sql(_))));
+
+        let ok = Sql_Result(Ok::<i64, rusqlite::Error>(42)).expect("passes through Ok");
+        assert_eq!(ok, 42);
+    }
+}

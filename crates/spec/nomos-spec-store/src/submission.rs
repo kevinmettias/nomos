@@ -434,5 +434,75 @@ pub const fn Transport_Origin() -> Origin
     return Origin::Inferred;
 }
 
+/// Coverage for the two functions declared in this file whose only exerciser today lives in
+/// `submission/tests.rs` — a separate `.rs` file, so it cannot address a function declared
+/// here. These stay small and inline on purpose; the real behavioural suite is `tests.rs`.
+#[cfg(test)]
+mod inline_coverage
+{
+    use super::*;
+    use crate::Seed_Governing_Records;
+    use nomos_spec_model::SubmissionKind;
+
+    fn Minimal_Request(id: &str) -> Submission
+    {
+        return Submission {
+            id: id.to_owned(),
+            kind: SubmissionKind::FeatureRequest,
+            form_contract_version: 1,
+            state: SubmissionState::Accepted,
+            submitted_by: "kevin".to_owned(),
+            submitted_through: "cli".to_owned(),
+            values: vec![
+                FieldValue {
+                    field: "title".to_owned(),
+                    value: "Items can be declined".to_owned(),
+                    origin: Origin::Submitted,
+                },
+                FieldValue {
+                    field: "goal".to_owned(),
+                    value: "close superseded work".to_owned(),
+                    origin: Origin::Submitted,
+                },
+                FieldValue {
+                    field: "behaviour".to_owned(),
+                    value: "a verb writes Declined".to_owned(),
+                    origin: Origin::Submitted,
+                },
+                FieldValue {
+                    field: "acceptance".to_owned(),
+                    value: "it stops being claimable".to_owned(),
+                    origin: Origin::Submitted,
+                },
+                FieldValue {
+                    field: "invariants".to_owned(),
+                    value: "none".to_owned(),
+                    origin: Origin::Submitted,
+                },
+            ],
+            gaps: Vec::new(),
+        };
+    }
+
+    #[test]
+    fn Test_Accept_Submission_Should_Persist_A_Valid_Request_As_A_Node()
+    {
+        let mut store = SpecificationStore::In_Memory().expect("opens");
+        Seed_Governing_Records(&mut store).expect("seeds");
+
+        let uid =
+            Accept_Submission(&mut store, &Minimal_Request("FR-900")).expect("accepted");
+
+        assert!(uid > 0);
+        assert!(store.Node_Uid("FR-900").expect("looks up").is_some());
+    }
+
+    #[test]
+    fn Test_Transport_Origin_Should_Be_Inferred()
+    {
+        assert_eq!(Transport_Origin(), Origin::Inferred);
+    }
+}
+
 #[cfg(test)]
 mod tests;

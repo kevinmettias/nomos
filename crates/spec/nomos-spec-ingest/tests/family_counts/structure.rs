@@ -27,20 +27,27 @@ const REQUIRED_FAMILIES: &[&str] = &[
     "v15_record",
 ];
 
+/// The fields every register entry must say something about, named for what each field
+/// holds rather than `Cases()` — what varies here is which field of the entry is checked.
+fn Required_Fields() -> Vec<(&'static str, fn(&Entry) -> &String)>
+{
+    return vec![
+        ("family", |entry| &entry.family),
+        ("unit", |entry| &entry.unit),
+        ("definition", |entry| &entry.definition),
+        ("corpus", |entry| &entry.corpus),
+    ];
+}
+
 /// Runs without a corpus, and is the half that keeps the register honest about itself.
 #[test]
 fn Test_Every_Entry_Should_Say_What_It_Counted_And_Over_What()
 {
     for entry in Register()
     {
-        for (field, value) in [
-            ("family", &entry.family),
-            ("unit", &entry.unit),
-            ("definition", &entry.definition),
-            ("corpus", &entry.corpus),
-        ]
+        for (field, accessor) in Required_Fields()
         {
-            assert!(!value.trim().is_empty(), "{}: {field} is empty", entry.id);
+            assert!(!accessor(&entry).trim().is_empty(), "{}: {field} is empty", entry.id);
         }
     }
 }

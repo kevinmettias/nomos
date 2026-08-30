@@ -54,6 +54,52 @@ mod tests
     struct TestNodeId<'a>(&'a str);
     struct TestNodeKind<'a>(&'a str);
 
+    #[test]
+    fn Test_Assert_Constraint_Is_Declared_Should_Refuse_An_Empty_Domain_Range_Or_Cardinality()
+    {
+        assert!(
+            Assert_Constraint_Is_Declared(
+                "t",
+                &Constraint { domain: &[], range: &["w"], max_per_node: 1 }
+            )
+            .is_err()
+        );
+        assert!(
+            Assert_Constraint_Is_Declared(
+                "t",
+                &Constraint { domain: &["w"], range: &[], max_per_node: 1 }
+            )
+            .is_err()
+        );
+        assert!(
+            Assert_Constraint_Is_Declared(
+                "t",
+                &Constraint { domain: &["w"], range: &["w"], max_per_node: 0 }
+            )
+            .is_err()
+        );
+        assert!(
+            Assert_Constraint_Is_Declared(
+                "t",
+                &Constraint { domain: &["w"], range: &["w"], max_per_node: 1 }
+            )
+            .is_ok()
+        );
+    }
+
+    #[test]
+    fn Test_Sorted_Kinds_Json_Should_Serialize_Kinds_In_Sorted_Order()
+    {
+        assert_eq!(
+            Sorted_Kinds_Json(&["widget", "gadget"]).expect("serializes"),
+            "[\"gadget\",\"widget\"]"
+        );
+        assert_eq!(
+            Sorted_Kinds_Json(&["gadget", "widget"]).expect("serializes"),
+            "[\"gadget\",\"widget\"]"
+        );
+    }
+
     /// `OD-SPEC-012`: a relation type declaring nothing is refused where it is registered,
     /// not left to write an edge that later discovers there was nothing to check.
     #[test]

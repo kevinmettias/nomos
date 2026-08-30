@@ -41,6 +41,7 @@ pub fn Counted_Rows(connection: &Connection, scope: RowScope) -> Result<RowCensu
 #[cfg(test)]
 mod tests
 {
+    use super::*;
     use nomos_spec_model::RowKind;
 
     /// A fourth kind must not be addable while the census keeps quiet about it: `lines`
@@ -53,5 +54,23 @@ mod tests
             3,
             "a row kind was added; RowCensus has no field for it"
         );
+    }
+
+    #[test]
+    fn Test_Counted_Rows_Should_Read_The_Scoped_Census_From_The_Connection()
+    {
+        let mut store = crate::SpecificationStore::In_Memory().expect("opens");
+        let markdown = "# Title\n\n| A | B |\n| --- | --- |\n| 1 | 2 |\n";
+        let uid = store.Put_Source_Document("a.md", "v1", markdown).expect("writes");
+        store
+            .Put_Source_Blocks(uid, &nomos_spec_model::Segment(markdown))
+            .expect("writes");
+
+        let census = Counted_Rows(store.Connection(), RowScope::Everything).expect("counts");
+
+        assert_eq!(census.lines, 3);
+        assert_eq!(census.header, 1);
+        assert_eq!(census.content, 1);
+        assert_eq!(census.separator, 1);
     }
 }

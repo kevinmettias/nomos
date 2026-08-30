@@ -474,3 +474,41 @@ impl Names
         return unique;
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use crate::{Content, Format, Name, Value};
+
+    fn One_Section_Projection() -> Projection
+    {
+        return Projection {
+            profile: "one".to_owned(),
+            title: "One".to_owned(),
+            format: Format::Markdown,
+            output: "one.md".to_owned(),
+            sections: vec![Section {
+                title: "Nodes".to_owned(),
+                content: Content::Nodes,
+                items: vec![Item::Of("CDM-ONE").With(Name("title"), Value("One"))],
+            }],
+            inputs: Vec::new(),
+        };
+    }
+
+    #[test]
+    fn Test_Render_Projection_Should_Dispatch_To_The_Format_The_Projection_Declares()
+    {
+        let mut projection = One_Section_Projection();
+        let markdown = Render_Projection(&projection).expect("renders");
+
+        assert!(markdown.contains("# One"), "{markdown}");
+        assert!(markdown.contains("## Nodes"), "{markdown}");
+
+        projection.format = Format::Json;
+        let json = Render_Projection(&projection).expect("renders");
+
+        assert!(json.contains("\"title\": \"One\""), "{json}");
+    }
+}

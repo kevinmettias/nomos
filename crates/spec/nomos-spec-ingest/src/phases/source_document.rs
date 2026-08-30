@@ -52,3 +52,63 @@ pub(super) fn Store_Text(
 
     return Ok(());
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    fn Store() -> SpecificationStore
+    {
+        return SpecificationStore::In_Memory().expect("opens");
+    }
+
+    #[test]
+    fn Test_Ingest_Source_Document_Should_Store_The_Document_And_Its_Blocks()
+    {
+        let mut store = Store();
+        let markdown = "# Title\n\nOne.\n";
+
+        let written = Ingest_Source_Document(&mut store, "a.md", "v14.36", markdown).expect("ingests");
+
+        assert_eq!(written, 2, "a heading and a prose block");
+        assert_eq!(
+            store.Count(nomos_spec_store::Table::SourceBlocks).expect("counts"),
+            2
+        );
+    }
+
+    #[test]
+    fn Test_Store_Text_Should_Record_The_Statements_Canonical_Text_And_Hash()
+    {
+        let mut store = Store();
+        let node_uid = store
+            .Upsert_Node(nomos_spec_store::NodeRow {
+                node_id: "AGT-001",
+                kind: "requirement",
+                authority: "canonical",
+                representation: "record",
+                title: "a requirement",
+            })
+            .expect("upserts");
+        let statement = RecordedStatement {
+            id: "AGT-001".to_owned(),
+            kind: "Requirement".to_owned(),
+            canonical_text: "Nomos shall do the thing.".to_owned(),
+            canonical_hash: "sha256:deadbeef".to_owned(),
+            source_document: "a.md".to_owned(),
+        };
+
+        Store_Text(&mut store, &statement, "requirement", node_uid).expect("stores");
+
+        let stored_text: String = store
+            .Connection()
+            .query_row(
+                "SELECT canonical_text FROM normative_statements WHERE statement_id = 'AGT-001'",
+                [],
+                |row| row.get(0),
+            )
+            .expect("reads the row Store_Text wrote");
+        assert_eq!(stored_text, "Nomos shall do the thing.");
+    }
+}

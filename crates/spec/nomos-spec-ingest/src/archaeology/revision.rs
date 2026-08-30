@@ -56,3 +56,87 @@ impl Revision
             .collect();
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    fn Fixture(name: &str, entries: &[(&str, &str)]) -> Archive
+    {
+        use std::io::Write as _;
+
+        let path = std::env::temp_dir().join(format!("nomos-spec-ingest-archaeology-revision-{name}.zip"));
+        let file = std::fs::File::create(&path).expect("creates the fixture");
+        let mut writer = zip::ZipWriter::new(file);
+        let options: zip::write::FileOptions<'_, ()> = zip::write::FileOptions::default();
+
+        for (entry, text) in entries
+        {
+            writer.start_file(*entry, options).expect("starts");
+            writer.write_all(text.as_bytes()).expect("writes");
+        }
+        writer.finish().expect("finishes");
+
+        return Archive::Open(&path).expect("opens");
+    }
+
+    #[test]
+    fn Test_Read_Should_Collect_Every_Markdown_Entry_Under_Its_Revision_Local_Path()
+    {
+        let mut archive = Fixture(
+            "read-collects-markdown",
+            &[("v15.0/a.md", "# A\n"), ("v15.0/nested/b.md", "# B\n"), ("v15.0/skip.txt", "not markdown")],
+        );
+
+        let revision = Revision::Read(&mut archive, "v15.0").expect("reads");
+
+        assert_eq!(revision.label, "v15.0");
+        assert_eq!(revision.documents.len(), 2);
+        assert_eq!(revision.documents.get("a.md"), Some(&"# A\n".to_owned()));
+        assert_eq!(revision.documents.get("nested/b.md"), Some(&"# B\n".to_owned()));
+    }
+
+    #[test]
+    fn Test_Read_Should_Refuse_An_Archive_With_No_Markdown()
+    {
+        let mut archive = Fixture("read-refuses-empty", &[("v15.0/notes.txt", "text")]);
+
+        let refusal = Revision::Read(&mut archive, "v15.0").err().expect("must refuse");
+
+        assert!(matches!(refusal, IngestError::Parse(_)));
+        assert!(format!("{refusal}").contains("holds no markdown"));
+    }
+
+    #[test]
+    fn Test_Fingerprint_Should_Reduce_Documents_To_A_Content_Hash_Per_Path()
+    {
+        let revision = Revision {
+            label: "v15.0".to_owned(),
+            documents: BTreeMap::from([("a.md".to_owned(), "# A\n".to_owned())]),
+        };
+
+        let fingerprint = revision.Fingerprint().expect("fingerprints");
+
+        assert_eq!(fingerprint.label, "v15.0");
+        assert_eq!(fingerprint.documents.len(), 1);
+        assert!(fingerprint.documents.contains_key("a.md"));
+    }
+
+    #[test]
+    fn Test_Volumes_Should_Keep_Domain_Volume_Documents_Reduced_To_A_Bare_Filename()
+    {
+        let revision = Revision {
+            label: "v15.0".to_owned(),
+            documents: BTreeMap::from([
+                (format!("{DOMAIN_VOLUMES}02-core-architecture.md"), "# Core\n".to_owned()),
+                ("00-index.md".to_owned(), "# Index\n".to_owned()),
+            ]),
+        };
+
+        let volumes = revision.Volumes();
+
+        assert_eq!(volumes.len(), 1);
+        assert_eq!(volumes.get("02-core-architecture.md"), Some(&"# Core\n".to_owned()));
+    }
+}

@@ -199,3 +199,65 @@ pub(super) fn Decode_Json_Column<Value: serde::de::DeserializeOwned>(json: &str)
 {
     return serde_json::from_str(json).map_err(|error| BundleError::Sql(error.to_string()));
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Export_Store_Should_Produce_An_Empty_Bundle_For_A_Fresh_Store()
+    {
+        let store = SpecificationStore::In_Memory().expect("opens");
+
+        let bundle = Export_Store(&store).expect("exports");
+
+        assert!(bundle.Records().is_empty());
+        assert_eq!(bundle.Manifest().records, 0);
+    }
+
+    #[test]
+    fn Test_Collect_Rows_Should_Append_Every_Row_The_Query_Returns()
+    {
+        let store = SpecificationStore::In_Memory().expect("opens");
+        store
+            .Connection()
+            .execute(
+                "INSERT INTO blobs (sha256, byte_length, content) VALUES (?1, ?2, ?3)",
+                rusqlite::params!["sha256:aa", 2i64, b"hi".as_slice()],
+            )
+            .expect("inserts");
+
+        let mut records = Vec::new();
+        Collect_Rows(store.Connection(), &mut records, "SELECT sha256 FROM blobs", |row| {
+            let sha256: String = row.get(0)?;
+            return Ok(Record::Blob(crate::Blob {
+                sha256,
+                byte_length: 2,
+                encoding: crate::Encoding::Utf8,
+                content: "hi".to_owned(),
+            }));
+        })
+        .expect("collects");
+
+        assert_eq!(
+            records,
+            vec![Record::Blob(crate::Blob {
+                sha256: "sha256:aa".to_owned(),
+                byte_length: 2,
+                encoding: crate::Encoding::Utf8,
+                content: "hi".to_owned(),
+            })]
+        );
+    }
+
+    #[test]
+    fn Test_Decode_Json_Column_Should_Deserialize_A_Vec_Of_Strings()
+    {
+        let decoded: Vec<String> = Decode_Json_Column(r#"["a","b"]"#).expect("decodes");
+        assert_eq!(decoded, vec!["a".to_owned(), "b".to_owned()]);
+
+        let refusal = Decode_Json_Column::<Vec<String>>("not json").expect_err("malformed JSON must be refused");
+        assert!(matches!(refusal, BundleError::Sql(_)), "{refusal}");
+    }
+}

@@ -35,3 +35,32 @@ impl Severity
         };
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Label_Should_Match_The_Stored_Spelling()
+    {
+        assert_eq!(Severity::Blocking.Label(), "blocking");
+        assert_eq!(Severity::NonBlocking.Label(), "non-blocking");
+    }
+
+    /// Every severity there is, so a case cannot quietly go unchecked.
+    fn All_Severities() -> [Severity; 2]
+    {
+        return [Severity::Blocking, Severity::NonBlocking];
+    }
+
+    #[test]
+    fn Test_Parse_Should_Round_Trip_Every_Stored_Spelling_And_Refuse_An_Unknown_One()
+    {
+        for severity in All_Severities()
+        {
+            assert_eq!(Severity::Parse(severity.Label()), Some(severity));
+        }
+        assert_eq!(Severity::Parse("unknown"), None);
+    }
+}

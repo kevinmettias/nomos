@@ -113,6 +113,7 @@ impl Restored
 mod tests
 {
     use super::*;
+    use std::collections::BTreeSet;
 
     /// `Restored::All()`'s own mirror, named in the doc comment above it.
     ///
@@ -148,5 +149,50 @@ mod tests
                 restored.Label()
             );
         }
+    }
+
+    #[test]
+    fn Test_Label_Should_Slug_Each_Restored_Family()
+    {
+        assert_eq!(Restored::RoadmapMilestone.Label(), "roadmap_milestone");
+        assert_eq!(Restored::Scenario.Label(), "scenario");
+        assert_eq!(Restored::GlossaryTerm.Label(), "glossary_term");
+    }
+
+    #[test]
+    fn Test_Node_Kind_Should_Give_The_Restored_Graph_Node_Type()
+    {
+        assert_eq!(Restored::RoadmapMilestone.Node_Kind(), "release");
+        assert_eq!(Restored::AppendixD.Node_Kind(), "schema");
+        assert_eq!(Restored::CanonicalDomainModel.Node_Kind(), "concept");
+    }
+
+    #[test]
+    fn Test_Prefix_Should_Give_The_Restored_Identifier_Prefix()
+    {
+        assert_eq!(Restored::Service.Prefix(), "SVC");
+        assert_eq!(Restored::AppendixH.Prefix(), "APX-H");
+    }
+
+    #[test]
+    fn Test_Volume_Should_Give_The_Filename_Stem_A_Family_Lives_Under()
+    {
+        assert_eq!(Restored::RoadmapMilestone.Volume(), "08-roadmap");
+        assert_eq!(Restored::Scenario.Volume(), "09-reference");
+        assert_eq!(Restored::AppendixD.Volume(), "09-reference");
+        assert_eq!(Restored::Service.Volume(), "02-core");
+        assert_eq!(Restored::AppendixH.Volume(), "06-agents");
+        assert_eq!(Restored::HeadlessInventory.Volume(), "07-clients");
+    }
+
+    #[test]
+    fn Test_All_Should_List_Nine_Restored_Families_With_No_Duplicate()
+    {
+        let all = Restored::All();
+
+        assert_eq!(all.len(), 9);
+
+        let unique: BTreeSet<_> = all.iter().collect();
+        assert_eq!(unique.len(), all.len());
     }
 }

@@ -111,6 +111,17 @@ fn Test_A_Subject_Should_See_The_Relations_At_Either_End()
     );
 }
 
+/// The four subject-addressed profiles, and the path each writes for the fixture's subject.
+fn Subject_Profiles() -> [(&'static str, Format, &'static str); 4]
+{
+    return [
+        ("subject-dossier", Format::Markdown, "subjects/AGT-EXEC-001/dossier.md"),
+        ("subject-contract", Format::Yaml, "subjects/AGT-EXEC-001/contract.yaml"),
+        ("subject-model", Format::Json, "subjects/AGT-EXEC-001/model.json"),
+        ("subject-report", Format::Html, "subjects/AGT-EXEC-001/report.html"),
+    ];
+}
+
 /// One selection, four formats — the claim the four profiles exist to make.
 #[test]
 fn Test_Every_Subject_Profile_Should_Render_The_Same_Subject_In_Its_Own_Format()
@@ -118,15 +129,9 @@ fn Test_Every_Subject_Profile_Should_Render_The_Same_Subject_In_Its_Own_Format()
     use std::collections::BTreeSet;
 
     let store = Populated();
-    let expected = [
-        ("subject-dossier", Format::Markdown, "subjects/AGT-EXEC-001/dossier.md"),
-        ("subject-contract", Format::Yaml, "subjects/AGT-EXEC-001/contract.yaml"),
-        ("subject-model", Format::Json, "subjects/AGT-EXEC-001/model.json"),
-        ("subject-report", Format::Html, "subjects/AGT-EXEC-001/report.html"),
-    ];
 
     let mut inputs = BTreeSet::new();
-    for (id, format, path) in expected
+    for (id, format, path) in Subject_Profiles()
     {
         let digest = Subject_Digest(&store, id, format, path);
         inputs.insert(digest);
@@ -214,13 +219,19 @@ fn Test_A_Subject_That_Matches_Nothing_Should_Not_Render_An_Empty_File()
     assert!(said.contains("selected no nodes"), "{said}");
 }
 
+/// Every whole-store profile this claim checks is untouched by subject resolution.
+fn Whole_Store_Profile_Ids() -> [&'static str; 3]
+{
+    return ["diagram-set", "traceability-matrix", "domain-specification"];
+}
+
 /// The whole-store profiles are untouched by any of this.
 #[test]
 fn Test_A_Whole_Store_Profile_Should_Render_Exactly_What_It_Did_Before()
 {
     let store = Populated();
 
-    for id in ["diagram-set", "traceability-matrix", "domain-specification"]
+    for id in Whole_Store_Profile_Ids()
     {
         let declared = Profile_Named(id);
 
@@ -242,12 +253,18 @@ fn Test_A_Whole_Store_Profile_Should_Render_Exactly_What_It_Did_Before()
 /// the profile is honest and the argument is not. The guard already refuses `..`, a drive
 /// letter and a backslash, and this is the assertion that keeps it refusing them once the
 /// path stopped being fully authored.
+/// Every subject value this claim tries to write outside the build root.
+fn Escaping_Subjects() -> [&'static str; 4]
+{
+    return ["../../escaped", "..\\windows", "C:/absolute", "a/../../b"];
+}
+
 #[test]
 fn Test_A_Subject_Should_Not_Be_Able_To_Escape_The_Build_Root()
 {
     let declared = Profile_Named("subject-dossier");
 
-    for escape in ["../../escaped", "..\\windows", "C:/absolute", "a/../../b"]
+    for escape in Escaping_Subjects()
     {
         let resolved = declared.For(Some(escape)).expect("resolves");
 

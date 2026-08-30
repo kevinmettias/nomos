@@ -21,20 +21,24 @@ fn Refusal(markdown: &str) -> StoreError
     };
 }
 
-#[test]
-fn Test_A_Table_Without_A_Delimiter_Should_Be_Refused()
+/// Tables whose delimiter row is missing or doubled, paired with why each is malformed.
+fn Tables_With_A_Malformed_Delimiter() -> Vec<(&'static str, &'static str)>
 {
-    let refusal = Refusal("| a | b |\n| 1 | 2 |\n");
-
-    assert!(matches!(refusal, StoreError::Table { .. }), "{refusal}");
+    return vec![
+        ("| a | b |\n| 1 | 2 |\n", "no delimiter row at all"),
+        ("| a |\n| --- |\n| --- |\n| 1 |\n", "two delimiter rows"),
+    ];
 }
 
 #[test]
-fn Test_A_Table_With_Two_Delimiters_Should_Be_Refused()
+fn Test_A_Table_With_A_Malformed_Delimiter_Should_Be_Refused()
 {
-    let refusal = Refusal("| a |\n| --- |\n| --- |\n| 1 |\n");
+    for (markdown, why) in Tables_With_A_Malformed_Delimiter()
+    {
+        let refusal = Refusal(markdown);
 
-    assert!(matches!(refusal, StoreError::Table { .. }), "{refusal}");
+        assert!(matches!(refusal, StoreError::Table { .. }), "{why}: {refusal}");
+    }
 }
 
 /// A refused block must leave nothing behind.

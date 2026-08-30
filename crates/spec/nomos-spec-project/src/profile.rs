@@ -223,11 +223,14 @@ mod tests
     {
         let unknown = MINIMAL.replace("\"nodes\"", "\"everything\"");
 
-        assert!(Profile::Parse(&unknown).is_err());
+        let refusal = Profile::Parse(&unknown).expect_err("must refuse");
+
+        assert!(matches!(refusal, ProjectError::Malformed(_)), "{refusal}");
+        assert!(format!("{refusal}").contains("everything"), "{refusal}");
     }
 
     #[test]
-    fn Test_A_Profile_With_No_Section_Should_Be_Refused()
+    fn Test_Validate_Should_Refuse_A_Profile_With_No_Sections()
     {
         let empty = MINIMAL.replace(
             "[{ \"title\": \"Nodes\", \"content\": \"nodes\" }]",
@@ -239,10 +242,15 @@ mod tests
         assert!(format!("{refusal}").contains("declares no section"), "{refusal}");
     }
 
+    fn Escaping_Outputs() -> &'static [&'static str]
+    {
+        return &["/etc/one.md", "C:/build/one.md", "..\\one.md", "../../one.md"];
+    }
+
     #[test]
     fn Test_An_Absolute_Output_Should_Be_Refused()
     {
-        for output in ["/etc/one.md", "C:/build/one.md", "..\\one.md", "../../one.md"]
+        for &output in Escaping_Outputs()
         {
             let escaping = MINIMAL.replace("one.md", output);
 
@@ -251,6 +259,47 @@ mod tests
                 "{output} was accepted as a projection output"
             );
         }
+    }
+
+    #[test]
+    fn Test_Is_Per_Subject_Should_Detect_The_Placeholder_In_Output_Or_A_Filter()
+    {
+        let per_subject = MINIMAL.replace("one.md", "{subject}.md");
+        let per_subject = Profile::Parse(&per_subject).expect("parses");
+
+        assert!(per_subject.Is_Per_Subject());
+
+        let whole_store = Profile::Parse(MINIMAL).expect("parses");
+
+        assert!(!whole_store.Is_Per_Subject());
+    }
+
+    #[test]
+    fn Test_For_Should_Resolve_A_Per_Subject_Profile()
+    {
+        let per_subject = Profile::Parse(&MINIMAL.replace("one.md", "{subject}.md")).expect("parses");
+        let whole_store = Profile::Parse(MINIMAL).expect("parses");
+
+        assert!(per_subject.For(Some("AGT-EXEC-001")).is_ok());
+        assert!(matches!(
+            per_subject.For(None),
+            Err(ProjectError::SubjectMissing { .. })
+        ));
+        assert!(matches!(
+            whole_store.For(Some("AGT-EXEC-001")),
+            Err(ProjectError::SubjectUnexpected { .. })
+        ));
+    }
+
+    #[test]
+    fn Test_Resolved_For_Should_Replace_The_Subject_Placeholder_Throughout()
+    {
+        let per_subject = Profile::Parse(&MINIMAL.replace("one.md", "{subject}.md")).expect("parses");
+
+        let resolved = per_subject.Resolved_For("AGT-EXEC-001");
+
+        assert_eq!(resolved.output, "AGT-EXEC-001.md");
+        assert_ne!(resolved.Digest(), per_subject.Digest());
     }
 
     #[test]

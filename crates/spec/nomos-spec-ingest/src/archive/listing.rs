@@ -46,3 +46,51 @@ impl Listing
             .collect();
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    fn Sample() -> Listing
+    {
+        return Listing::Of(vec!["b.md".to_owned(), "a.md".to_owned(), "a.txt".to_owned()]);
+    }
+
+    #[test]
+    fn Test_Of_Should_Wrap_The_Given_Entries_Without_Reordering_Them()
+    {
+        let listing = Sample();
+
+        assert_eq!(
+            listing.Paths(),
+            ["b.md".to_owned(), "a.md".to_owned(), "a.txt".to_owned()]
+        );
+    }
+
+    #[test]
+    fn Test_Paths_Should_Return_Every_Path_It_Was_Built_From()
+    {
+        let listing = Sample();
+
+        assert_eq!(listing.Paths().len(), 3);
+    }
+
+    #[test]
+    fn Test_Has_Path_Should_Match_Only_An_Exact_Entry()
+    {
+        let listing = Sample();
+
+        assert!(listing.Has_Path("a.md"));
+        assert!(!listing.Has_Path("a.m"));
+        assert!(!listing.Has_Path("nested/a.md"));
+    }
+
+    #[test]
+    fn Test_Ending_With_Should_Return_Every_Entry_Sharing_The_Suffix()
+    {
+        let listing = Sample();
+
+        assert_eq!(listing.Ending_With(".md"), ["b.md".to_owned(), "a.md".to_owned()]);
+    }
+}

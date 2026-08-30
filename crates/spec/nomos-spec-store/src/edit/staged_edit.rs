@@ -50,3 +50,40 @@ impl StagedEdit
         });
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use crate::store::AUTHORED;
+    use crate::Seed_Governing_Records;
+    use crate::SpecificationStore;
+
+    const CANONICAL: &str = "---\nid: D-900\ntype: decision\ntitle: A synthetic record\n\
+                             status: accepted\nversion: 1\n\
+                             authority: canonical-normative-record\ntags:\n  - testing\n\
+                             relations:\n  - target: D-129\n    type: relates-to\n---\n\n\
+                             # A synthetic record\n\n## Decision\n\nFirst paragraph.\n\n\
+                             ## Rationale\n\nSecond paragraph.\n";
+    const PATH: &str = "docs/records/D-900-a-synthetic-record.md";
+
+    #[test]
+    fn Test_Preview_Should_Report_What_A_Staged_Edit_Would_Change()
+    {
+        let mut store = SpecificationStore::In_Memory().expect("opens");
+        Seed_Governing_Records(&mut store).expect("seeds");
+        store.Put_Record(PATH, AUTHORED, CANONICAL).expect("writes");
+        let edited = CANONICAL.replace("First paragraph.", "First paragraph, edited.");
+
+        let preview = store
+            .Claim_For_Edit("D-900", None)
+            .expect("claims")
+            .Stage(&edited, None)
+            .expect("stages")
+            .Preview(&store)
+            .expect("previews");
+
+        assert_eq!(preview.Node_Id(), "D-900");
+        assert!(!preview.Has_No_Changes());
+        assert!(preview.Rename().is_none());
+    }
+}

@@ -53,3 +53,30 @@ impl PairChange
         return line;
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Summary_Should_Name_The_Pair_And_A_Few_Members_Of_Each_Non_Empty_Set()
+    {
+        let change = PairChange {
+            from: "v14.35".to_owned(),
+            to: "v14.36".to_owned(),
+            appeared: vec!["a.md".to_owned()],
+            disappeared: Vec::new(),
+            changed: vec!["b.md".to_owned(), "c.md".to_owned()],
+            reappeared: Vec::new(),
+        };
+
+        let summary = change.Summary();
+
+        assert!(summary.starts_with("v14.35 -> v14.36"));
+        assert!(summary.contains("appeared: 1 (a.md)"));
+        assert!(summary.contains("changed in place: 2 (b.md, c.md)"));
+        assert!(!summary.contains("disappeared"));
+        assert!(!summary.contains("reappeared"));
+    }
+}

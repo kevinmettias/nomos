@@ -125,3 +125,58 @@ fn Node_Uid_By_Id(connection: &Connection, node_id: &str) -> Result<i64, StoreEr
         |row| row.get(0),
     )?);
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use crate::SpecificationStore;
+
+    #[test]
+    fn Test_Write_Blob_Should_Store_The_Same_Bytes_Once()
+    {
+        let store = SpecificationStore::In_Memory().expect("opens");
+
+        let first = Write_Blob(store.Connection(), b"same bytes").expect("writes");
+        let second = Write_Blob(store.Connection(), b"same bytes").expect("writes");
+        let other = Write_Blob(store.Connection(), b"different bytes").expect("writes");
+
+        assert_eq!(first, second);
+        assert_ne!(first, other);
+    }
+
+    #[test]
+    fn Test_Write_Source_Document_Should_Be_Idempotent_For_One_Path_And_Revision()
+    {
+        let store = SpecificationStore::In_Memory().expect("opens");
+
+        let first =
+            Write_Source_Document(store.Connection(), DocumentPath("a.md"), DocumentRevision("v1"), "one")
+                .expect("writes");
+        let second =
+            Write_Source_Document(store.Connection(), DocumentPath("a.md"), DocumentRevision("v1"), "one")
+                .expect("writes");
+
+        assert_eq!(first, second);
+    }
+
+    #[test]
+    fn Test_Write_Node_Should_Insert_A_New_Node()
+    {
+        let store = SpecificationStore::In_Memory().expect("opens");
+
+        let uid = Write_Node(
+            store.Connection(),
+            NodeRow {
+                node_id: "D-1",
+                kind: "decision",
+                authority: "canonical-normative-record",
+                representation: "record",
+                title: "D-1",
+            },
+        )
+        .expect("writes");
+
+        assert!(uid > 0);
+    }
+}

@@ -53,6 +53,22 @@ fn Test_The_Registry_Should_Match_The_Manifest()
     assert_eq!(run.results.len(), DECLARED_RULES.len());
 }
 
+/// `Registered()` itself, independent of the reconciliation `Test_The_Registry_Should_Match_
+/// The_Manifest` performs through `Validate_Rules`: it must build exactly one rule object per
+/// identifier `DECLARED_RULES` names, with nothing missing and nothing extra.
+#[test]
+fn Test_Registered_Should_Build_One_Rule_Object_Per_Declared_Identifier()
+{
+    let rules = Registered();
+    let ids: Vec<&str> = rules.iter().map(|rule| rule.Id()).collect();
+
+    assert_eq!(rules.len(), DECLARED_RULES.len(), "{ids:?}");
+    for id in DECLARED_RULES
+    {
+        assert!(ids.contains(id), "Registered() built no rule for {id}: {ids:?}");
+    }
+}
+
 /// The rule that would have caught v15.0's dropped content: a block with no disposition
 /// and no omission is a violation, named by document and ordinal.
 #[test]

@@ -224,3 +224,145 @@ pub(super) fn Write_Declared_Relations(
 
     return Ok(ordinal);
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use crate::SpecificationStore;
+
+    fn Store() -> SpecificationStore
+    {
+        return SpecificationStore::In_Memory().expect("opens");
+    }
+
+    fn A_Record() -> Record
+    {
+        return Record {
+            front_matter: RecordFrontMatter {
+                id: "D-1".to_owned(),
+                kind: "decision".to_owned(),
+                title: "A record".to_owned(),
+                status: "accepted".to_owned(),
+                authority: "canonical-normative-record".to_owned(),
+                version: 1,
+                tags: vec!["testing".to_owned()],
+                relations: vec![RecordRelation {
+                    target: "D-2".to_owned(),
+                    relation: "relates-to".to_owned(),
+                }],
+            },
+            body: "# A record\n\n## Decision\n\nOne.\n".to_owned(),
+        };
+    }
+
+    fn Written(connection: &Connection) -> RecordWrite
+    {
+        let record = A_Record();
+
+        return Write_Record(
+            connection,
+            Authored {
+                path: "docs/records/D-1.md",
+                revision: "authored",
+                markdown: "# A record\n",
+            },
+            &record,
+        )
+        .expect("writes");
+    }
+
+    #[test]
+    fn Test_Write_Record_Should_Write_The_Node_The_Document_And_Its_Blocks()
+    {
+        let store = Store();
+
+        let write = Written(store.Connection());
+
+        assert!(write.node_uid > 0);
+        assert!(write.document_uid > 0);
+        assert!(write.blocks > 0);
+        assert_eq!(write.relations, 1);
+    }
+
+    #[test]
+    fn Test_Write_Headings_Should_Record_One_Row_Per_Heading()
+    {
+        let store = Store();
+
+        let write = Written(store.Connection());
+
+        let headings: u32 = store
+            .Connection()
+            .query_row(
+                "SELECT count(*) FROM source_headings WHERE document_uid = ?1",
+                [write.document_uid],
+                |row| return row.get(0),
+            )
+            .expect("counts");
+
+        assert_eq!(headings, write.headings);
+        assert!(headings > 0);
+    }
+
+    #[test]
+    fn Test_Dispose_Blocks_Should_Record_A_Lineage_Row_Per_Block()
+    {
+        let store = Store();
+
+        let write = Written(store.Connection());
+
+        let dispositions: u32 = store
+            .Connection()
+            .query_row(
+                "SELECT count(*) FROM lineage WHERE source_block_uid IS NOT NULL",
+                [],
+                |row| return row.get(0),
+            )
+            .expect("counts");
+
+        assert_eq!(dispositions, write.blocks);
+    }
+
+    #[test]
+    fn Test_Write_Front_Matter_Should_Record_Status_Version_And_Tags()
+    {
+        let store = Store();
+
+        let write = Written(store.Connection());
+
+        let (status, version): (String, u32) = store
+            .Connection()
+            .query_row(
+                "SELECT status, version FROM record_front_matter WHERE document_uid = ?1",
+                [write.document_uid],
+                |row| return Ok((row.get(0)?, row.get(1)?)),
+            )
+            .expect("reads");
+
+        assert_eq!(status, "accepted");
+        assert_eq!(version, 1);
+    }
+
+    #[test]
+    fn Test_Write_Declared_Relations_Should_Replace_The_Whole_List()
+    {
+        let store = Store();
+        let write = Written(store.Connection());
+
+        let replaced = Write_Declared_Relations(store.Connection(), write.document_uid, &[])
+            .expect("writes");
+
+        let remaining: u32 = store
+            .Connection()
+            .query_row(
+                "SELECT count(*) FROM record_relations WHERE document_uid = ?1",
+                [write.document_uid],
+                |row| return row.get(0),
+            )
+            .expect("counts");
+
+        assert_eq!(replaced, 0);
+        assert_eq!(remaining, 0, "an empty list must replace, not merge with, what was there");
+    }
+}

@@ -63,3 +63,34 @@ impl core::fmt::Display for Id
         return formatter.pad(&self.0);
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Parse_Should_Accept_A_Well_Formed_Identifier_And_Refuse_A_Malformed_One()
+    {
+        assert!(Id::Parse("AGT-001").is_some());
+        assert!(Id::Parse("agt-001").is_none(), "lower case is refused");
+        assert!(Id::Parse("AGT-1").is_none(), "too few digits is refused");
+    }
+
+    #[test]
+    fn Test_Prefix_Should_Return_Everything_Before_The_Trailing_Number()
+    {
+        assert_eq!(
+            Id::Parse("NSV-PRESERVE-001").map(|id| id.Prefix().to_owned()),
+            Some("NSV-PRESERVE".to_owned())
+        );
+    }
+
+    #[test]
+    fn Test_As_String_Slice_Should_Return_The_Identifier_Verbatim()
+    {
+        let id = Id::Parse("AGT-001").expect("valid");
+
+        assert_eq!(id.As_String_Slice(), "AGT-001");
+    }
+}

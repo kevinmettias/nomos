@@ -39,3 +39,21 @@ impl NormativeOutcome
         };
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Describe_Should_Name_What_Became_Of_The_Statement()
+    {
+        assert_eq!(NormativeOutcome::Held { block: 2 }.Describe(), "held in block 2");
+        assert_eq!(NormativeOutcome::Moved { from: 1, to: 3 }.Describe(), "moved from block 1 to 3");
+        assert_eq!(NormativeOutcome::Gone { from: 4 }.Describe(), "gone from block 4");
+        assert_eq!(
+            NormativeOutcome::Unlocatable.Describe(),
+            "not locatable in this record before the edit"
+        );
+    }
+}

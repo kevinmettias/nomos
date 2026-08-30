@@ -47,3 +47,38 @@ impl Mismatch
         };
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Describe_Should_Name_The_Document_For_Every_Kind_Of_Disagreement()
+    {
+        let missing = Mismatch {
+            document: "a.md".to_owned(),
+            kind: BlockMismatchKind::DocumentMissing,
+        };
+        let count_differs = Mismatch {
+            document: "b.md".to_owned(),
+            kind: BlockMismatchKind::CountDiffers {
+                recorded: 3,
+                recomputed: 2,
+            },
+        };
+        let block = Mismatch {
+            document: "c.md".to_owned(),
+            kind: BlockMismatchKind::Block {
+                ordinal: 4,
+                field: crate::Field::Kind,
+                recorded: "heading".to_owned(),
+                recomputed: "prose".to_owned(),
+            },
+        };
+
+        assert!(missing.Describe().starts_with("a.md:"));
+        assert!(count_differs.Describe().starts_with("b.md:"));
+        assert!(block.Describe().starts_with("c.md#4:"));
+    }
+}

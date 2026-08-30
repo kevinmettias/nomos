@@ -59,3 +59,60 @@ pub(crate) fn Within_Revision(entry: &str) -> String
 {
     return entry.split_once('/').map_or_else(|| return entry.to_owned(), |(_, rest)| return rest.to_owned());
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    /// A zip written for this test alone, so it does not depend on the corpus. Named for
+    /// this file's own purpose, because these tests run concurrently and a shared path
+    /// would have one reading a file another was still writing.
+    fn Fixture(name: &str, entries: &[(&str, &str)]) -> Archive
+    {
+        use std::io::Write as _;
+
+        let path = std::env::temp_dir().join(format!("nomos-spec-ingest-fingerprint-{name}.zip"));
+        let file = std::fs::File::create(&path).expect("creates the fixture");
+        let mut writer = zip::ZipWriter::new(file);
+        let options: zip::write::FileOptions<'_, ()> = zip::write::FileOptions::default();
+
+        for (entry, text) in entries
+        {
+            writer.start_file(*entry, options).expect("starts");
+            writer.write_all(text.as_bytes()).expect("writes");
+        }
+        writer.finish().expect("finishes");
+
+        return Archive::Open(&path).expect("opens");
+    }
+
+    #[test]
+    fn Test_Fingerprint_Revision_Should_Hash_Every_Markdown_Entry_Under_The_Label()
+    {
+        let mut archive = Fixture("basic", &[("suite/a.md", "# A\n\nText.\n")]);
+
+        let fingerprint = Fingerprint_Revision(&mut archive, "v14.1").expect("fingerprints");
+
+        assert_eq!(fingerprint.label, "v14.1");
+        assert_eq!(fingerprint.documents.len(), 1);
+        assert!(fingerprint.documents.contains_key("a.md"));
+    }
+
+    #[test]
+    fn Test_Fingerprint_Of_Should_Refuse_An_Empty_Document_Map()
+    {
+        let documents = BTreeMap::new();
+
+        let refusal = Fingerprint_Of("v14.1", &documents).expect_err("must refuse");
+
+        assert!(matches!(refusal, IngestError::Parse(_)), "{refusal}");
+    }
+
+    #[test]
+    fn Test_Within_Revision_Should_Strip_The_Archives_Top_Directory()
+    {
+        assert_eq!(Within_Revision("nomos-spec-v15.0/01_authoring/a.md"), "01_authoring/a.md");
+        assert_eq!(Within_Revision("a.md"), "a.md");
+    }
+}

@@ -150,7 +150,7 @@ mod tests
                           # A title\n\nBody.\n";
 
     #[test]
-    fn Test_A_Record_Should_Read_Its_Declared_Identity()
+    fn Test_Parse_Record_Should_Read_Its_Declared_Identity()
     {
         let record = Parse_Record(RECORD).expect("reads");
 
@@ -196,11 +196,18 @@ mod tests
         );
     }
 
+    /// The separators the v15.0 archives prefix a record's heading with its own identifier
+    /// using.
+    fn Heading_Prefix_Separators() -> [&'static str; 4]
+    {
+        return [" \u{2014} ", " - ", ": ", " \u{2013} "];
+    }
+
     /// The v15.0 archives prefix a record's heading with its own identifier.
     #[test]
     fn Test_A_Heading_May_Name_The_Record_Before_Its_Title()
     {
-        for separator in [" \u{2014} ", " - ", ": ", " \u{2013} "]
+        for separator in Heading_Prefix_Separators()
         {
             let prefixed = RECORD.replace("# A title", &format!("# D-129{separator}A title"));
             assert_ne!(prefixed, RECORD, "the {separator:?} case changed nothing");
@@ -215,25 +222,45 @@ mod tests
         }
     }
 
-    /// Widening the heading check must not let a different concept through.
-    #[test]
-    fn Test_Another_Records_Identifier_Should_Not_Corroborate()
+    /// One heading that diverges from the front matter, and why it must be refused.
+    struct HeadingDivergenceCase
     {
-        let wrong = RECORD.replace("# A title", "# D-130 \u{2014} A title");
+        /// What `# A title` becomes.
+        replacement: &'static str,
+        /// Why this is not corroboration.
+        description: &'static str,
+    }
 
-        let refusal = Parse_Record(&wrong).expect_err("a foreign identifier must be refused");
-
-        assert!(matches!(refusal, RecordError::TitleDiverges { .. }), "{refusal}");
+    /// Widening the heading check must not let a different concept through, whether the
+    /// heading names a foreign identifier or the record's own identifier with a different
+    /// title.
+    fn Headings_That_Should_Not_Corroborate() -> [HeadingDivergenceCase; 2]
+    {
+        return [
+            HeadingDivergenceCase {
+                replacement: "# D-130 \u{2014} A title",
+                description: "a foreign identifier prefixing the declared title",
+            },
+            HeadingDivergenceCase {
+                replacement: "# D-129 \u{2014} Another title",
+                description: "the record's own identifier prefixing a different title",
+            },
+        ];
     }
 
     #[test]
-    fn Test_A_Prefixed_Heading_With_A_Different_Title_Should_Be_Refused()
+    fn Test_A_Heading_Naming_A_Different_Identity_Should_Not_Corroborate()
     {
-        let wrong = RECORD.replace("# A title", "# D-129 \u{2014} Another title");
+        for case in Headings_That_Should_Not_Corroborate()
+        {
+            let wrong = RECORD.replace("# A title", case.replacement);
+            assert_ne!(wrong, RECORD, "{}: the negative control changed nothing", case.description);
 
-        let refusal = Parse_Record(&wrong).expect_err("two titles must be refused");
+            let refusal = Parse_Record(&wrong)
+                .expect_err(&format!("{} must be refused", case.description));
 
-        assert!(matches!(refusal, RecordError::TitleDiverges { .. }), "{refusal}");
+            assert!(matches!(refusal, RecordError::TitleDiverges { .. }), "{}: {refusal}", case.description);
+        }
     }
 
     #[test]

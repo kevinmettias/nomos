@@ -99,4 +99,34 @@ mod tests
             );
         }
     }
+
+    // `Test_Every_Format_Should_Be_Matched_Exhaustively` above already exercises both
+    // `All` and `Label`, but it is a load-bearing mirror named and checked by literal
+    // string in `tests/contract/tests/completeness_universes/table.rs`, outside this
+    // crate's territory, so it is left untouched rather than renamed to address either.
+    #[test]
+    fn Test_All_Should_List_Every_Variant_Exactly_Once()
+    {
+        use std::collections::BTreeSet;
+
+        let distinct: BTreeSet<&'static str> = Format::All().iter().map(|format| return format.Label()).collect();
+
+        assert_eq!(distinct.len(), Format::All().len(), "a variant is missing or repeated");
+    }
+
+    #[test]
+    fn Test_Label_Should_Spell_Each_Variant_In_Lowercase()
+    {
+        assert_eq!(Format::Markdown.Label(), "markdown");
+        assert_eq!(Format::Contextpack.Label(), "contextpack");
+    }
+
+    #[test]
+    fn Test_Extension_Should_Match_Each_Formats_File_Suffix()
+    {
+        assert_eq!(Format::Markdown.Extension(), "md");
+        assert_eq!(Format::Json.Extension(), "json");
+        assert_eq!(Format::Contextpack.Extension(), "json");
+        assert_eq!(Format::Mermaid.Extension(), "mmd");
+    }
 }

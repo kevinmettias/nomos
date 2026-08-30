@@ -295,3 +295,121 @@ fn Is_Free(taken: &[bool], index: usize) -> bool
 {
     return !taken.get(index).copied().unwrap_or(true);
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use nomos_spec_model::BlockKind;
+
+    fn Block(ordinal: u32, text: &str) -> SourceBlock
+    {
+        return SourceBlock {
+            ordinal,
+            kind: BlockKind::Prose,
+            heading_path: Vec::new(),
+            text: text.to_owned(),
+        };
+    }
+
+    fn Front_Matter(title: &str, version: u32) -> RecordFrontMatter
+    {
+        return RecordFrontMatter {
+            id: "D-1".to_owned(),
+            kind: "decision".to_owned(),
+            title: title.to_owned(),
+            status: "accepted".to_owned(),
+            authority: "canonical-normative-record".to_owned(),
+            version,
+            tags: Vec::new(),
+            relations: Vec::new(),
+        };
+    }
+
+    fn A_Relation(target: &str, relation: &str) -> RecordRelation
+    {
+        return RecordRelation {
+            target: target.to_owned(),
+            relation: relation.to_owned(),
+        };
+    }
+
+    #[test]
+    fn Test_Block_Changes_Should_Report_Additions_Removals_And_Rewordings()
+    {
+        let before = vec![Block(1, "kept"), Block(2, "old text")];
+        let after = vec![Block(1, "kept"), Block(2, "new text")];
+
+        let changes = Block_Changes(&before, &after);
+
+        assert_eq!(changes.len(), 1);
+        assert!(matches!(
+            changes.first().expect("asserted above to contain exactly one change"),
+            BlockChange::Reworded { ordinal: 2, .. }
+        ));
+    }
+
+    #[test]
+    fn Test_Identity_Changes_Should_Report_Only_The_Fields_That_Differ()
+    {
+        let before = Front_Matter("Old title", 1);
+        let after = Front_Matter("New title", 2);
+
+        let changes = Identity_Changes(&before, &after);
+
+        assert_eq!(changes.len(), 2);
+        assert!(changes.iter().any(|change| return change.field == "title"));
+        assert!(changes.iter().any(|change| return change.field == "version"));
+    }
+
+    #[test]
+    fn Test_Relation_Changes_Should_Report_What_Was_Added_And_Removed()
+    {
+        let before = vec![A_Relation("D-2", "relates-to")];
+        let after = vec![A_Relation("D-3", "relates-to")];
+
+        let changes = Relation_Changes(&before, &after);
+
+        assert_eq!(changes.added, vec![A_Relation("D-3", "relates-to")]);
+        assert_eq!(changes.removed, vec![A_Relation("D-2", "relates-to")]);
+    }
+
+    #[test]
+    fn Test_Located_Statement_Should_Tell_Held_From_Moved_Gone_And_Unlocatable()
+    {
+        let before = vec![Block(1, "the statement text")];
+        let after_held = vec![Block(1, "the statement text")];
+        let after_moved = vec![Block(2, "the statement text")];
+        let after_gone: Vec<SourceBlock> = Vec::new();
+
+        assert!(matches!(
+            Located_Statement("the statement text", &before, &after_held),
+            NormativeOutcome::Held { block: 1 }
+        ));
+        assert!(matches!(
+            Located_Statement("the statement text", &before, &after_moved),
+            NormativeOutcome::Moved { from: 1, to: 2 }
+        ));
+        assert!(matches!(
+            Located_Statement("the statement text", &before, &after_gone),
+            NormativeOutcome::Gone { from: 1 }
+        ));
+        assert!(matches!(
+            Located_Statement("never there", &before, &after_held),
+            NormativeOutcome::Unlocatable
+        ));
+    }
+
+    #[test]
+    fn Test_Why_Not_Canonical_Should_Name_The_First_Line_That_Differs()
+    {
+        let record = Record {
+            front_matter: Front_Matter("A title", 1),
+            body: "# A title\n\nOne.\n".to_owned(),
+        };
+
+        let reason = Why_Not_Canonical("not what this surface would write", &record);
+
+        assert!(reason.contains("line 1"), "{reason}");
+    }
+}

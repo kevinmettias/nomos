@@ -241,7 +241,7 @@ mod tests
     const SOME_SUBJECTS_CHECKED: u32 = 10;
 
     #[test]
-    fn Test_A_Complete_Satisfied_Run_Should_Pass()
+    fn Test_Is_Passed_Should_Report_True_For_A_Complete_Satisfied_Run()
     {
         let rules = All_Declared(&RuleOutcome::Satisfied { checked: SOME_SUBJECTS_CHECKED });
 
@@ -254,7 +254,7 @@ mod tests
     /// The structural fix for "no validator ran". A declared rule with no implementation
     /// must fail the run, not be quietly absent from it.
     #[test]
-    fn Test_A_Declared_But_Unregistered_Rule_Should_Fail_The_Run()
+    fn Test_Validate_Rules_Should_Fail_The_Run_When_A_Declared_Rule_Is_Not_Registered()
     {
         let mut rules = All_Declared(&RuleOutcome::Satisfied { checked: SOME_SUBJECTS_CHECKED });
         rules.pop();
@@ -267,7 +267,7 @@ mod tests
 
     /// An error is a failure, never a skip.
     #[test]
-    fn Test_An_Errored_Rule_Should_Fail_The_Run()
+    fn Test_Errors_Should_Report_One_Entry_For_One_Errored_Rule()
     {
         let mut rules = All_Declared(&RuleOutcome::Satisfied { checked: SOME_SUBJECTS_CHECKED });
         rules.pop();
@@ -308,7 +308,7 @@ mod tests
 
     /// "0 violations over 0 subjects" must be distinguishable from a real clean result.
     #[test]
-    fn Test_A_Vacuous_Rule_Should_Be_Visible()
+    fn Test_Vacuous_Rules_Should_List_Every_Rule_When_All_Examined_Nothing()
     {
         let rules = All_Declared(&RuleOutcome::Satisfied { checked: 0 });
 
@@ -316,6 +316,39 @@ mod tests
 
         assert!(run.Is_Passed(), "an empty store legitimately has nothing to check");
         assert_eq!(run.Vacuous_Rules().len(), DECLARED_RULES.len());
+    }
+
+    /// `Summary` renders the four counts a run is judged by: how many rules ran, over how
+    /// many subjects, and how many violations, errors, unregistered and undeclared rules
+    /// resulted. Built by hand rather than through `Registered()`'s real rules, so every
+    /// count in the expected string is one this test chose and can account for.
+    #[test]
+    fn Test_Summary_Should_Combine_Rule_Error_And_Reconciliation_Counts_Into_One_Line()
+    {
+        let rules: Vec<Box<dyn Rule>> = vec![
+            Box::new(Fake(
+                *DECLARED_RULES.first().expect("DECLARED_RULES lists at least two rules"),
+                RuleOutcome::Satisfied { checked: 5 },
+            )),
+            Box::new(Fake(
+                *DECLARED_RULES.get(1).expect("DECLARED_RULES lists at least two rules"),
+                RuleOutcome::Violated(vec![Violation {
+                    subject: "s".to_owned(),
+                    detail: "d".to_owned(),
+                }]),
+            )),
+            Box::new(Fake("NSV-INVENTED-001", RuleOutcome::Errored("boom".to_owned()))),
+        ];
+
+        let run = Validate_Rules(&Store(), &rules);
+
+        assert_eq!(
+            run.Summary(),
+            format!(
+                "3 rule(s) ran over 5 subject(s): 1 violation(s), 1 error(s), {} unregistered, 1 undeclared",
+                DECLARED_RULES.len() - 2
+            )
+        );
     }
 
     #[test]

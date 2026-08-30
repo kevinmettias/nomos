@@ -54,16 +54,31 @@ mod tests
 {
     use super::*;
 
-    #[test]
-    fn Test_Dispositions_Should_Round_Trip()
+    fn All_Dispositions() -> [Disposition; 5]
     {
-        for disposition in [
+        return [
             Disposition::PreservedVerbatim,
             Disposition::PreservedNormalized,
             Disposition::Superseded,
             Disposition::RegressionFiller,
             Disposition::Omitted,
-        ]
+        ];
+    }
+
+    #[test]
+    fn Test_Label_Should_Name_Every_Known_Disposition()
+    {
+        assert_eq!(Disposition::PreservedVerbatim.Label(), "preserved-verbatim");
+        assert_eq!(Disposition::PreservedNormalized.Label(), "preserved-normalized");
+        assert_eq!(Disposition::Superseded.Label(), "superseded");
+        assert_eq!(Disposition::RegressionFiller.Label(), "regression-filler");
+        assert_eq!(Disposition::Omitted.Label(), "omitted");
+    }
+
+    #[test]
+    fn Test_Parse_Should_Recover_The_Disposition_Its_Own_Text_Names()
+    {
+        for disposition in All_Dispositions()
         {
             assert_eq!(Disposition::Parse(disposition.Label()), Some(disposition));
         }
@@ -73,7 +88,7 @@ mod tests
     /// Filler is what v15.0 shipped in place of real content. If it ever counts as
     /// preservation, the rule that would have caught that regression stops working.
     #[test]
-    fn Test_Only_Preserved_Dispositions_Should_Count_As_Preservation()
+    fn Test_Is_Preserving_Content_Should_Be_True_Only_For_Preserved_Dispositions()
     {
         assert!(Disposition::PreservedVerbatim.Is_Preserving_Content());
         assert!(Disposition::PreservedNormalized.Is_Preserving_Content());

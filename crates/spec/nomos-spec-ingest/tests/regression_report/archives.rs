@@ -115,6 +115,21 @@ fn Test_Every_Measured_Figure_Should_Reproduce()
     assert!(checked > 0, "the register states no figure, so this measured nothing");
 }
 
+/// Every family the plan calls entirely gone: restored as headings whose content did not
+/// survive. Named for what the family looks like once hollowed, not `Cases()`.
+fn Heading_Shaped_Families() -> Vec<Restored>
+{
+    return vec![
+        Restored::RoadmapMilestone,
+        Restored::Scenario,
+        Restored::Service,
+        Restored::AppendixD,
+        Restored::AppendixH,
+        Restored::HeadlessInventory,
+        Restored::IdeProfile,
+    ];
+}
+
 #[test]
 fn Test_The_Families_The_Plan_Calls_Gone_Should_Be_Hollowed_Rather_Than_Absent()
 {
@@ -125,17 +140,8 @@ fn Test_The_Families_The_Plan_Calls_Gone_Should_Be_Hollowed_Rather_Than_Absent()
     };
     let report = Headline(&root);
     let mut hollowed = 0_u32;
-    let heading_shaped = [
-        Restored::RoadmapMilestone,
-        Restored::Scenario,
-        Restored::Service,
-        Restored::AppendixD,
-        Restored::AppendixH,
-        Restored::HeadlessInventory,
-        Restored::IdeProfile,
-    ];
 
-    for family in heading_shaped
+    for family in Heading_Shaped_Families()
     {
         let tally = report.Tally(family);
 
@@ -143,6 +149,22 @@ fn Test_The_Families_The_Plan_Calls_Gone_Should_Be_Hollowed_Rather_Than_Absent()
         hollowed = hollowed.saturating_add(tally.hollowed);
     }
     assert_eq!(hollowed, 92, "members whose heading survives and whose content does not");
+}
+
+/// The named members v15.0's headline pair actually lost, quoted rather than counted.
+/// Named for what they are, not `Cases()`.
+fn Members_The_Headline_Lost() -> Vec<&'static str>
+{
+    return vec![
+        "WorkspaceContext",
+        "BuildVariant",
+        "EvidenceClassification",
+        "WorkflowStepContract",
+        "TelemetryJunction",
+        "ModelUsageObservation",
+        "Task envelope",
+        "Protocol binding",
+    ];
 }
 
 #[test]
@@ -170,16 +192,7 @@ fn Test_The_Content_That_Really_Went_Should_Be_Named()
     };
 
     assert_eq!(gone.len(), 19, "{gone:?}");
-    for name in [
-        "WorkspaceContext",
-        "BuildVariant",
-        "EvidenceClassification",
-        "WorkflowStepContract",
-        "TelemetryJunction",
-        "ModelUsageObservation",
-        "Task envelope",
-        "Protocol binding",
-    ]
+    for name in Members_The_Headline_Lost()
     {
         assert!(gone.contains(&name), "{name} is not among the members v15.0 lost: {gone:?}");
     }

@@ -19,3 +19,42 @@ impl Report
             && self.ingested > 0;
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Is_Passing_Should_Require_Ingestion_With_No_Divergence_Or_Non_Canonical_Text()
+    {
+        let clean = Report {
+            ingested: 1,
+            divergences: Vec::new(),
+            non_canonical_text: Vec::new(),
+        };
+        assert!(clean.Is_Passing());
+
+        let empty = Report::default();
+        assert!(!empty.Is_Passing(), "ingesting nothing is not a pass");
+
+        let diverged = Report {
+            ingested: 1,
+            divergences: vec![StatementDivergence {
+                id: "AGT-001".to_owned(),
+                recorded: "sha256:0".to_owned(),
+                recomputed: "sha256:1".to_owned(),
+                text_is_canonical: true,
+            }],
+            non_canonical_text: Vec::new(),
+        };
+        assert!(!diverged.Is_Passing());
+
+        let non_canonical = Report {
+            ingested: 1,
+            divergences: Vec::new(),
+            non_canonical_text: vec!["AGT-002".to_owned()],
+        };
+        assert!(!non_canonical.Is_Passing());
+    }
+}

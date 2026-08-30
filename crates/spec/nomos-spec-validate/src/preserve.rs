@@ -56,3 +56,27 @@ pub fn Registered() -> Vec<Box<dyn Rule>>
         Box::new(NoUndeclaredFillerTemplate),
     ];
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use crate::DECLARED_RULES;
+
+    /// `Registered()` must build exactly one rule object per identifier `DECLARED_RULES`
+    /// names, with nothing missing and nothing extra — the reconciliation
+    /// `Test_The_Registry_Should_Match_The_Manifest` (`tests/preservation_holds.rs`) performs
+    /// through `Validate_Rules` starts from this being true.
+    #[test]
+    fn Test_Registered_Should_Build_One_Rule_Object_Per_Declared_Identifier()
+    {
+        let rules = Registered();
+        let ids: Vec<&str> = rules.iter().map(|rule| rule.Id()).collect();
+
+        assert_eq!(rules.len(), DECLARED_RULES.len(), "{ids:?}");
+        for id in DECLARED_RULES
+        {
+            assert!(ids.contains(id), "Registered() built no rule for {id}: {ids:?}");
+        }
+    }
+}

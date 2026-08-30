@@ -32,3 +32,23 @@ impl SuiteAuthority
         return if stored == 0 { Self::Sibling } else { Self::Root };
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Stored_Should_Spell_Root_As_One_And_Sibling_As_Zero()
+    {
+        assert_eq!(SuiteAuthority::Root.Stored(), 1);
+        assert_eq!(SuiteAuthority::Sibling.Stored(), 0);
+    }
+
+    #[test]
+    fn Test_Read_Should_Recover_What_The_Column_Meant()
+    {
+        assert_eq!(SuiteAuthority::Read(1), SuiteAuthority::Root);
+        assert_eq!(SuiteAuthority::Read(0), SuiteAuthority::Sibling);
+    }
+}

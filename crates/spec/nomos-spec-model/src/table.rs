@@ -302,7 +302,7 @@ mod tests
 
     /// Two tables in one block each get their own header.
     #[test]
-    fn Test_A_Header_Should_Belong_To_Its_Own_Table()
+    fn Test_Table_Rows_Should_Give_Each_Header_Its_Own_Table()
     {
         let block = SourceBlock {
             ordinal: 1,
@@ -394,7 +394,7 @@ mod tests
     }
 
     #[test]
-    fn Test_A_Well_Formed_Table_Should_Have_No_Defects()
+    fn Test_Table_Defects_Should_Be_Empty_For_A_Well_Formed_Table()
     {
         assert!(Table_Defects(&Rows_From_Markdown("| a |\n| --- |\n| 1 |\n")).is_empty());
     }

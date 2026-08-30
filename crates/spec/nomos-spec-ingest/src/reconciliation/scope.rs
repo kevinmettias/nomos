@@ -38,3 +38,24 @@ impl Scope
         };
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Label_Should_Describe_Each_Scope()
+    {
+        assert_eq!(Scope::DomainVolumes.Label(), "01_authoring/domain_volumes");
+        assert_eq!(Scope::EveryMarkdown.Label(), "every markdown document");
+    }
+
+    #[test]
+    fn Test_Is_Covering_Should_Restrict_Domain_Volumes_But_Not_Every_Markdown()
+    {
+        assert!(Scope::DomainVolumes.Is_Covering("01_authoring/domain_volumes/02-core/a.md"));
+        assert!(!Scope::DomainVolumes.Is_Covering("09-reference/glossary.md"));
+        assert!(Scope::EveryMarkdown.Is_Covering("09-reference/glossary.md"));
+    }
+}

@@ -88,10 +88,16 @@ fn Test_A_Missing_Directory_Should_Refuse()
     );
 }
 
+/// File names that sit in the registration directory without being one.
+fn Intruders() -> [&'static str; 3]
+{
+    return ["README.md", "OD-FOO-001.record.bak", "notes.txt"];
+}
+
 #[test]
 fn Test_A_File_That_Is_Not_A_Registration_Should_Refuse()
 {
-    for intruder in ["README.md", "OD-FOO-001.record.bak", "notes.txt"]
+    for intruder in Intruders()
     {
         let directory = Synthetic("intruder");
         Write(&directory, "OD-GATE-001.record", &format!("path: {A_REAL_RECORD}\n"));
@@ -189,15 +195,21 @@ fn Test_A_Registration_Naming_A_File_That_Is_Not_There_Should_Refuse()
     Cleared(&directory);
 }
 
-#[test]
-fn Test_A_Registration_Naming_A_Path_Outside_The_Record_Directory_Should_Refuse()
+/// Paths a registration might name that are not a record file under the record directory.
+fn Paths_Outside_The_Record_Directory() -> [&'static str; 4]
 {
-    for named in [
+    return [
         "../../secrets.md",
         "docs/records/../../Cargo.toml",
         "docs/notes/OD-GATE-001.md",
         "docs/records/OD-GATE-001-a-skipped-test-reports-ok.txt",
-    ]
+    ];
+}
+
+#[test]
+fn Test_A_Registration_Naming_A_Path_Outside_The_Record_Directory_Should_Refuse()
+{
+    for named in Paths_Outside_The_Record_Directory()
     {
         let directory = Synthetic("outside");
         Write(&directory, "OD-GATE-001.record", &format!("path: {named}\n"));
@@ -231,10 +243,16 @@ fn Test_Two_Registrations_Naming_One_Record_Should_Refuse()
     Cleared(&directory);
 }
 
+/// Stems that are not identifiers this store could use.
+fn Stems_That_Are_Not_Identifiers() -> [&'static str; 4]
+{
+    return ["od-foo-001", "OD FOO", "OD--FOO-001", "1D-FOO"];
+}
+
 #[test]
 fn Test_A_Stem_That_Is_Not_An_Identifier_Should_Refuse()
 {
-    for stem in ["od-foo-001", "OD FOO", "OD--FOO-001", "1D-FOO"]
+    for stem in Stems_That_Are_Not_Identifiers()
     {
         let directory = Synthetic("stem");
         Write(
@@ -307,36 +325,40 @@ fn Test_The_Result_Should_Be_Sorted_By_Identifier()
     Cleared(&directory);
 }
 
-#[test]
-fn Test_Comments_And_Blank_Lines_Should_Be_Ignored()
+/// Bodies that carry incidental noise around the one `path:` line that matters — comments,
+/// blank lines, or the carriage return a CRLF checkout leaves behind — paired with the
+/// reason each is tolerated. All of them must still yield the same one path.
+fn Bodies_With_Incidental_Noise() -> [(&'static str, String); 2]
 {
-    let directory = Synthetic("comments");
-    Write(
-        &directory,
-        "OD-GATE-001.record",
-        &format!("# why this file exists\n\n   \n#: not a key\npath:   {A_REAL_RECORD}   \n\n"),
-    );
-
-    let read = Read(&directory).expect("the only tolerance is comments and blank lines");
-
-    assert_eq!(read.first().map(|found| return found.path.as_str()), Some(A_REAL_RECORD));
-    Cleared(&directory);
+    return [
+        (
+            "the only tolerance is comments and blank lines",
+            format!("# why this file exists\n\n   \n#: not a key\npath:   {A_REAL_RECORD}   \n\n"),
+        ),
+        (
+            "a CRLF registration is still a registration",
+            format!("# a CRLF checkout\r\npath: {A_REAL_RECORD}\r\n"),
+        ),
+    ];
 }
 
 #[test]
-fn Test_A_Carriage_Return_Should_Not_Reach_The_Path()
+fn Test_Incidental_Noise_Around_The_Path_Line_Should_Not_Reach_The_Path()
 {
-    let directory = Synthetic("crlf");
-    Write(
-        &directory,
-        "OD-GATE-001.record",
-        &format!("# a CRLF checkout\r\npath: {A_REAL_RECORD}\r\n"),
-    );
+    for (why, body) in Bodies_With_Incidental_Noise()
+    {
+        let directory = Synthetic("noise");
+        Write(&directory, "OD-GATE-001.record", &body);
 
-    let read = Read(&directory).expect("a CRLF registration is still a registration");
+        let read = Read(&directory).expect(why);
 
-    assert_eq!(read.first().map(|found| return found.path.as_str()), Some(A_REAL_RECORD));
-    Cleared(&directory);
+        assert_eq!(
+            read.first().map(|found| return found.path.as_str()),
+            Some(A_REAL_RECORD),
+            "{why}"
+        );
+        Cleared(&directory);
+    }
 }
 
 /// The reader consults the directory it is given and nothing else.

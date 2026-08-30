@@ -147,3 +147,71 @@ pub fn Shipped() -> Result<Catalogue, ProjectError>
 {
     return Catalogue::Shipped();
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    fn Two_Entries() -> Vec<Profile>
+    {
+        let one = Profile::Parse(
+            r#"{
+                "id": "one", "title": "One", "format": "markdown", "output": "one.md",
+                "sections": [{ "title": "Nodes", "content": "nodes" }]
+            }"#,
+        )
+        .expect("parses");
+        let two = Profile::Parse(
+            r#"{
+                "id": "two", "title": "Two", "format": "markdown", "output": "two.md",
+                "sections": [{ "title": "Nodes", "content": "nodes" }]
+            }"#,
+        )
+        .expect("parses");
+
+        return vec![one, two];
+    }
+
+    #[test]
+    fn Test_Catalogue_Shipped_Should_Parse_Every_Bundled_Profile()
+    {
+        let catalogue = Catalogue::Shipped().expect("the shipped profiles parse");
+
+        assert!(!catalogue.Profiles().is_empty(), "no profile shipped at all");
+    }
+
+    #[test]
+    fn Test_Of_Should_Refuse_Two_Entries_Sharing_One_Identifier()
+    {
+        let mut entries = Two_Entries();
+        let first_id = entries.first().expect("Two_Entries builds at least one entry").id.clone();
+        entries.get_mut(1).expect("Two_Entries builds at least two entries").id = first_id;
+
+        let refusal = match Catalogue::Of(entries)
+        {
+            Ok(_) => panic!("must refuse"),
+            Err(error) => error,
+        };
+
+        assert!(matches!(refusal, ProjectError::Duplicate { .. }), "{refusal:?}");
+    }
+
+    #[test]
+    fn Test_Profiles_Should_Return_Every_Profile_It_Was_Built_From()
+    {
+        let entries = Two_Entries();
+        let catalogue = Catalogue::Of(entries.clone()).expect("distinct");
+
+        assert_eq!(catalogue.Profiles(), entries.as_slice());
+    }
+
+    #[test]
+    fn Test_Named_Should_Find_A_Profile_By_Its_Identifier()
+    {
+        let catalogue = Catalogue::Of(Two_Entries()).expect("distinct");
+
+        assert_eq!(catalogue.Named("two").map(|profile| return profile.id.as_str()), Some("two"));
+        assert!(catalogue.Named("missing").is_none());
+    }
+}

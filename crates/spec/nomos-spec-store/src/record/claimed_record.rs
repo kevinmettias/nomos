@@ -91,3 +91,77 @@ impl ClaimedRecord
         return Ok(record);
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    const CANONICAL: &str = "---\nid: D-900\ntype: decision\ntitle: A synthetic record\n\
+                             status: accepted\nversion: 1\n\
+                             authority: canonical-normative-record\ntags:\n  - testing\n\
+                             relations:\n  - target: D-129\n    type: relates-to\n---\n\n\
+                             # A synthetic record\n\n## Decision\n\nFirst paragraph.\n\n\
+                             ## Rationale\n\nSecond paragraph.\n";
+
+    fn A_Claimed_Record() -> ClaimedRecord
+    {
+        return ClaimedRecord {
+            projection: RecordProjection {
+                node_id: "D-900".to_owned(),
+                path: "docs/records/D-900-a-synthetic-record.md".to_owned(),
+                revision: "v1".to_owned(),
+                markdown: CANONICAL.to_owned(),
+                source_hash: "sha256:same".to_owned(),
+                projected_hash: "sha256:same".to_owned(),
+            },
+            front_matter: RecordFrontMatter {
+                id: "D-900".to_owned(),
+                kind: "decision".to_owned(),
+                title: "A synthetic record".to_owned(),
+                status: "accepted".to_owned(),
+                authority: "canonical-normative-record".to_owned(),
+                version: 1,
+                tags: vec!["testing".to_owned()],
+                relations: Vec::new(),
+            },
+            document_uid: 1,
+        };
+    }
+
+    #[test]
+    fn Test_Markdown_Should_Return_The_Text_Held_For_Editing()
+    {
+        let claimed = A_Claimed_Record();
+
+        assert_eq!(claimed.Markdown(), CANONICAL);
+    }
+
+    #[test]
+    fn Test_Node_Id_Should_Name_The_Identity_Held_For_Editing()
+    {
+        let claimed = A_Claimed_Record();
+
+        assert_eq!(claimed.Node_Id(), "D-900");
+    }
+
+    #[test]
+    fn Test_Path_Should_Name_Where_The_Record_Currently_Lives()
+    {
+        let claimed = A_Claimed_Record();
+
+        assert_eq!(claimed.Path(), "docs/records/D-900-a-synthetic-record.md");
+    }
+
+    #[test]
+    fn Test_Stage_Should_Accept_A_Canonical_Edit_And_Carry_The_Claim_Forward()
+    {
+        let claimed = A_Claimed_Record();
+
+        let staged =
+            claimed.Stage(CANONICAL, Some("docs/records/renamed.md")).expect("stages");
+
+        assert_eq!(staged.path, "docs/records/renamed.md");
+        assert_eq!(staged.markdown, CANONICAL);
+    }
+}

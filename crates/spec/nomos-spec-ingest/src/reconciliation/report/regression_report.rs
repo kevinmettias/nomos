@@ -164,3 +164,83 @@ impl RegressionReport
         return filler;
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    fn Member(id: &str, family: Restored, name: &str, fate: Fate) -> MemberFate
+    {
+        return MemberFate { id: id.to_owned(), family, name: name.to_owned(), was: String::new(), fate };
+    }
+
+    #[test]
+    fn Test_In_Should_Filter_Members_To_One_Family()
+    {
+        let report = RegressionReport {
+            members: vec![
+                Member("RMAP-001", Restored::RoadmapMilestone, "Milestone One", Fate::Gone),
+                Member("SCEN-001", Restored::Scenario, "Scenario One", Fate::Gone),
+            ],
+            ..RegressionReport::default()
+        };
+
+        let roadmap = report.In(Restored::RoadmapMilestone);
+
+        assert_eq!(roadmap.len(), 1);
+        assert_eq!(roadmap.first().map(|member| member.id.as_str()), Some("RMAP-001"));
+    }
+
+    #[test]
+    fn Test_Tally_Should_Count_Fates_For_One_Family()
+    {
+        let report = RegressionReport {
+            members: vec![
+                Member(
+                    "RMAP-001",
+                    Restored::RoadmapMilestone,
+                    "One",
+                    Fate::Preserved { document: "d.md".to_owned() },
+                ),
+                Member("RMAP-002", Restored::RoadmapMilestone, "Two", Fate::Gone),
+            ],
+            ..RegressionReport::default()
+        };
+
+        let tally = report.Tally(Restored::RoadmapMilestone);
+
+        assert_eq!(tally.preserved, 1);
+        assert_eq!(tally.gone, 1);
+        assert_eq!(tally.Total(), 2);
+    }
+
+    #[test]
+    fn Test_Named_Should_Find_A_Member_By_Name_Or_Id()
+    {
+        let report = RegressionReport {
+            members: vec![Member("RMAP-001", Restored::RoadmapMilestone, "Milestone One", Fate::Gone)],
+            ..RegressionReport::default()
+        };
+
+        assert_eq!(report.Named("Milestone One").map(|member| member.id.as_str()), Some("RMAP-001"));
+        assert_eq!(report.Named("RMAP-001").map(|member| member.id.as_str()), Some("RMAP-001"));
+        assert!(report.Named("Nothing").is_none());
+    }
+
+    #[test]
+    fn Test_Summary_Should_Compose_The_Header_Then_Family_And_Filler_Sections()
+    {
+        let report = RegressionReport {
+            from: "v14.35".to_owned(),
+            to: "v14.36".to_owned(),
+            members: vec![Member("RMAP-001", Restored::RoadmapMilestone, "One", Fate::Gone)],
+            ..RegressionReport::default()
+        };
+
+        let summary = report.Summary();
+
+        assert!(summary.starts_with("v14.35 -> v14.36"));
+        assert!(summary.contains("roadmap_milestone: 0 preserved, 0 hollowed, 0 mentioned, 1 gone"));
+    }
+}

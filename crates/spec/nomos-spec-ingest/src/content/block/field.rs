@@ -27,3 +27,17 @@ impl Field
         };
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Label_Should_Spell_Each_Field_As_The_Manifest_Does()
+    {
+        assert_eq!(Field::Kind.Label(), "kind");
+        assert_eq!(Field::ContentHash.Label(), "content_hash");
+        assert_eq!(Field::NormalizedHash.Label(), "normalized_hash");
+    }
+}

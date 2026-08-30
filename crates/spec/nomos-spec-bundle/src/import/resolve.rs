@@ -370,3 +370,69 @@ fn Ordinal_Key(document: &DocumentRef, ordinal: i64) -> String
 {
     return format!("{}#{ordinal}", Document_Key(document));
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Assert_Self_Contained_Should_Accept_A_Node_Naming_A_Suite_The_Bundle_Carries()
+    {
+        let bundle = Bundle::New(
+            1,
+            vec![
+                Record::Suite(crate::Suite {
+                    suite_id: "nomos".to_owned(),
+                    title: "The Nomos Specification".to_owned(),
+                    authority_root: true,
+                }),
+                Record::Node(crate::Node {
+                    node_id: "N1".to_owned(),
+                    kind: "requirement".to_owned(),
+                    authority: "canonical".to_owned(),
+                    representation: "record".to_owned(),
+                    title: "Node One".to_owned(),
+                    deleted_at: None,
+                    suite_id: Some("nomos".to_owned()),
+                }),
+            ],
+        )
+        .expect("builds");
+
+        assert!(Assert_Self_Contained(&bundle).is_ok());
+    }
+
+    #[test]
+    fn Test_Assert_Self_Contained_Should_Refuse_A_Node_Naming_A_Suite_It_Does_Not_Carry()
+    {
+        let bundle = Bundle::New(
+            1,
+            vec![Record::Node(crate::Node {
+                node_id: "N1".to_owned(),
+                kind: "requirement".to_owned(),
+                authority: "canonical".to_owned(),
+                representation: "record".to_owned(),
+                title: "Node One".to_owned(),
+                deleted_at: None,
+                suite_id: Some("ghost".to_owned()),
+            })],
+        )
+        .expect("builds");
+
+        let refusal =
+            Assert_Self_Contained(&bundle).expect_err("a reference to an uncarried suite must be refused");
+        assert!(
+            matches!(refusal, BundleError::Unresolved { ref record, .. } if record == "suite"),
+            "{refusal}"
+        );
+    }
+
+    #[test]
+    fn Test_Document_Key_Of_Should_Join_Path_And_Revision_With_An_At_Sign()
+    {
+        let key = Document_Key_Of(Path("doc.md"), Revision("v1"));
+
+        assert_eq!(key, "doc.md@v1");
+    }
+}

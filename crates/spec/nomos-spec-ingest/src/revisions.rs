@@ -195,3 +195,62 @@ fn Absent_From(from: &RevisionFingerprint, to: &RevisionFingerprint) -> Vec<Stri
         .cloned()
         .collect();
 }
+
+#[cfg(test)]
+mod census_kinds_tests
+{
+    use super::*;
+
+    /// A zip written for this test alone, so it does not depend on the corpus. Named for
+    /// this file's own purpose, because these tests run concurrently and a shared path
+    /// would have one reading a file another was still writing.
+    fn Fixture(name: &str, entries: &[(&str, &str)]) -> Archive
+    {
+        use std::io::Write as _;
+
+        let path = std::env::temp_dir().join(format!("nomos-spec-ingest-census-kinds-{name}.zip"));
+        let file = std::fs::File::create(&path).expect("creates the fixture");
+        let mut writer = zip::ZipWriter::new(file);
+        let options: zip::write::FileOptions<'_, ()> = zip::write::FileOptions::default();
+
+        for (entry, text) in entries
+        {
+            writer.start_file(*entry, options).expect("starts");
+            writer.write_all(text.as_bytes()).expect("writes");
+        }
+        writer.finish().expect("finishes");
+
+        return Archive::Open(&path).expect("opens");
+    }
+
+    #[test]
+    fn Test_Census_Kinds_Should_Count_Fences_And_Tables_Within_Scope()
+    {
+        let mut archive = Fixture(
+            "in-scope",
+            &[(
+                "01_authoring/domain_volumes/02-core/a.md",
+                "# A\n\n```\ncode\n```\n\n| a | b |\n| -- | -- |\n| 1 | 2 |\n",
+            )],
+        );
+
+        let census = Census_Kinds(&mut archive, Scope::DomainVolumes).expect("counts");
+
+        assert_eq!(census.documents, 1);
+        assert_eq!(census.fence_lines, 2);
+        assert_eq!(census.documents_with_tables, 1);
+        assert_eq!(census.pipe_lines, 3);
+        assert_eq!(census.non_separator_rows, 2);
+        assert_eq!(census.content_rows, 1);
+    }
+
+    #[test]
+    fn Test_Census_Kinds_Should_Refuse_A_Scope_That_Matches_No_Document()
+    {
+        let mut archive = Fixture("out-of-scope", &[("09-reference/glossary.md", "# G\n\nText.\n")]);
+
+        let refusal = Census_Kinds(&mut archive, Scope::DomainVolumes).expect_err("must refuse");
+
+        assert!(matches!(refusal, IngestError::Parse(_)), "{refusal}");
+    }
+}

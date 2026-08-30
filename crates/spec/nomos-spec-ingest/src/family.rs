@@ -80,4 +80,37 @@ mod tests
             );
         }
     }
+
+    #[test]
+    fn Test_Label_Should_Slug_Each_Family()
+    {
+        assert_eq!(Family::Requirement.Label(), "requirement");
+        assert_eq!(Family::Story.Label(), "story");
+        assert_eq!(Family::Acceptance.Label(), "acceptance");
+    }
+
+    #[test]
+    fn Test_Directory_Should_Name_Each_Familys_V14_Folder()
+    {
+        assert_eq!(Family::Requirement.Directory(), "requirements");
+        assert_eq!(Family::Story.Directory(), "stories");
+        assert_eq!(Family::Acceptance.Directory(), "acceptance");
+    }
+
+    #[test]
+    fn Test_All_Should_List_Three_Families_With_No_Duplicate()
+    {
+        let all = Family::All();
+
+        assert_eq!(all.len(), 3);
+        for family in all
+        {
+            assert_eq!(
+                all.iter().filter(|other| *other == family).count(),
+                1,
+                "{} appears more than once in Family::All()",
+                family.Label()
+            );
+        }
+    }
 }

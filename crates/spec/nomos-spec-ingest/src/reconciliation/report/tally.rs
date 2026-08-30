@@ -21,3 +21,18 @@ impl Tally
             .saturating_add(self.gone);
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Total_Should_Sum_Every_Fate_Bucket()
+    {
+        let tally = Tally { preserved: 3, hollowed: 1, mentioned: 2, gone: 4 };
+
+        assert_eq!(tally.Total(), 10);
+        assert_eq!(Tally::default().Total(), 0);
+    }
+}

@@ -169,3 +169,31 @@ impl Table
         ];
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Name_Should_Return_Every_Tables_Own_Snake_Case_Name()
+    {
+        assert_eq!(Table::Blobs.Name(), "blobs");
+        assert_eq!(Table::SubmissionGaps.Name(), "submission_gaps");
+    }
+
+    #[test]
+    fn Test_Tally_Sql_Should_Label_The_Count_With_The_Tables_Own_Name()
+    {
+        assert!(Table::Blobs.Tally_Sql().contains("'blobs'"));
+        assert!(Table::Blobs.Tally_Sql().contains("FROM blobs"));
+    }
+
+    #[test]
+    fn Test_All_Should_List_One_Entry_Per_Declared_Variant()
+    {
+        assert_eq!(Table::All().len(), 19);
+        assert!(Table::All().contains(&Table::Blobs));
+        assert!(Table::All().contains(&Table::SubmissionGaps));
+    }
+}

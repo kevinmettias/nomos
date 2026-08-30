@@ -71,3 +71,36 @@ impl BlockChange
         };
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Is_Disturbing_Wording_Should_Be_True_Only_When_Wording_Actually_Changed()
+    {
+        assert!(BlockChange::Removed { ordinal: 1, kind: "prose".to_owned() }.Is_Disturbing_Wording());
+        assert!(
+            BlockChange::Reworded {
+                ordinal: 1,
+                before: "a".to_owned(),
+                after: "b".to_owned()
+            }
+            .Is_Disturbing_Wording()
+        );
+        assert!(BlockChange::Moved { from: 1, to: 2 }.Is_Disturbing_Wording());
+        assert!(!BlockChange::Added { ordinal: 1, kind: "prose".to_owned() }.Is_Disturbing_Wording());
+        assert!(!BlockChange::Reflowed { ordinal: 1 }.Is_Disturbing_Wording());
+    }
+
+    #[test]
+    fn Test_Describe_Should_Name_The_Ordinal_And_What_Happened_To_It()
+    {
+        assert_eq!(
+            BlockChange::Added { ordinal: 3, kind: "prose".to_owned() }.Describe(),
+            "block 3 added (prose)"
+        );
+        assert_eq!(BlockChange::Moved { from: 1, to: 2 }.Describe(), "block 1 moved to 2, wording unchanged");
+    }
+}

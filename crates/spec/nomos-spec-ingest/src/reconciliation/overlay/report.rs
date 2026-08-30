@@ -145,3 +145,37 @@ pub fn Ingest_V15_Record<'a>(
 
     return Ok(record.front_matter.id);
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    const RECORD: &str = "---\nid: D-900\ntype: decision\ntitle: A title\nstatus: accepted\n\
+                          version: 1\nauthority: canonical-normative-record\n---\n\n\
+                          # A title\n\nBody.\n";
+
+    #[test]
+    fn Test_Ingest_V15_Record_Should_Upsert_The_Declared_Node()
+    {
+        let mut store = SpecificationStore::In_Memory().expect("opens");
+
+        let id = Ingest_V15_Record(&mut store, "docs/records/d-900.md", RECORD).expect("ingests");
+
+        assert_eq!(id, "D-900");
+    }
+
+    #[test]
+    fn Test_Ingest_Overlay_Document_Should_Count_Blocks_And_Judge_No_Filler_In_Real_Prose()
+    {
+        let mut store = SpecificationStore::In_Memory().expect("opens");
+        let document = Overlaid { path: "09-reference/a.md", markdown: "# A\n\nSome real prose.\n" };
+        let mut report = Report::default();
+
+        Ingest_Overlay_Document(&mut store, &document, &BTreeMap::new(), &mut report).expect("ingests");
+
+        assert_eq!(report.documents, 1);
+        assert!(report.blocks > 0);
+        assert!(report.filler.is_empty());
+    }
+}

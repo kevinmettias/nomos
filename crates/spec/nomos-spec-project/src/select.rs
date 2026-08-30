@@ -212,3 +212,77 @@ fn Inputs_Of(content: Content, items: &[Item]) -> Vec<Input>
         })
         .collect();
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Named_Should_List_Only_The_Fields_A_Filter_Set()
+    {
+        let filter = Filter {
+            kind: Some("concept".to_owned()),
+            node_id: Some("CDM-ONE".to_owned()),
+            ..Filter::default()
+        };
+
+        let names: Vec<&str> = filter.Named().into_iter().map(|(name, _)| return name).collect();
+
+        assert_eq!(names, vec!["kind", "node_id"]);
+    }
+
+    #[test]
+    fn Test_Substitute_Should_Replace_The_Subject_Placeholder_In_Every_Set_Field()
+    {
+        let mut filter = Filter {
+            document: Some("{subject}.md".to_owned()),
+            ..Filter::default()
+        };
+
+        filter.Substitute("AGT-EXEC-001");
+
+        assert_eq!(filter.document.as_deref(), Some("AGT-EXEC-001.md"));
+    }
+
+    #[test]
+    fn Test_Honours_Should_List_Suites_Only_Identifier_Prefix()
+    {
+        assert_eq!(Content::Suites.Honours(), &["identifier_prefix"]);
+    }
+
+    #[test]
+    fn Test_Select_Projection_Should_Gather_Every_Declared_Section_In_Order()
+    {
+        let store = SpecificationStore::In_Memory().expect("opens");
+        store
+            .Connection()
+            .execute_batch(
+                "INSERT INTO suites (suite_id, title, authority_root) \
+                 VALUES ('nomos', 'The Nomos specification', 1);",
+            )
+            .expect("seeds a suite");
+
+        let profile = Profile::Parse(
+            r#"{
+                "id": "one", "title": "One", "format": "markdown", "output": "one.md",
+                "sections": [{ "title": "Suites", "content": "suites" }]
+            }"#,
+        )
+        .expect("parses");
+
+        let projection = Select_Projection(&store, &profile).expect("selects");
+
+        assert_eq!(projection.sections.len(), 1);
+        assert_eq!(
+            projection
+                .sections
+                .first()
+                .expect("asserted above to contain exactly one section")
+                .items
+                .len(),
+            1
+        );
+        assert_eq!(projection.inputs.len(), 1);
+    }
+}

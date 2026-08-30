@@ -57,3 +57,45 @@ impl Kind
         };
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    fn All_Kinds() -> [Kind; 3]
+    {
+        return [Kind::FeatureRequest, Kind::DesignSpec, Kind::FeatureResult];
+    }
+
+    #[test]
+    fn Test_Label_Should_Match_The_Stored_Spelling()
+    {
+        assert_eq!(Kind::FeatureRequest.Label(), "feature-request");
+        assert_eq!(Kind::DesignSpec.Label(), "design-spec");
+        assert_eq!(Kind::FeatureResult.Label(), "feature-result");
+    }
+
+    #[test]
+    fn Test_Parse_Should_Round_Trip_Every_Stored_Spelling_And_Refuse_An_Unknown_One()
+    {
+        for kind in All_Kinds()
+        {
+            assert_eq!(Kind::Parse(kind.Label()), Some(kind));
+        }
+        assert_eq!(Kind::Parse("unknown"), None);
+    }
+
+    #[test]
+    fn Test_Required_Fields_Should_Differ_By_Kind()
+    {
+        assert_eq!(
+            Kind::FeatureRequest.Required_Fields(),
+            &["goal", "behaviour", "acceptance", "invariants"]
+        );
+        assert_eq!(
+            Kind::FeatureResult.Required_Fields(),
+            &["implements", "evidence", "deviations", "owed"]
+        );
+    }
+}

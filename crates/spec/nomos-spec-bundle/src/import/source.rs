@@ -202,3 +202,178 @@ pub(super) fn Insert_Source_Table_Rows(
         },
     );
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use nomos_spec_store::SpecificationStore;
+
+    /// One blob, the document read from it and one block inside it — one row of every
+    /// table this file's inserts can resolve a reference against.
+    fn Fixture() -> SpecificationStore
+    {
+        let store = SpecificationStore::In_Memory().expect("opens");
+        store
+            .Connection()
+            .execute_batch(
+                "INSERT INTO blobs (sha256, byte_length, content) VALUES ('sha256:aa', 2, x'6869');
+                 INSERT INTO source_documents (path, revision, blob_uid) VALUES ('doc.md', 'v1', 1);
+                 INSERT INTO source_blocks
+                     (document_uid, ordinal, kind, heading_path, text, content_hash, normalized_hash)
+                     VALUES (1, 1, 'paragraph', 'Intro', 'Hello.', 'sha256:hc', 'sha256:nh');",
+            )
+            .expect("populates every table this file's inserts resolve against");
+
+        return store;
+    }
+
+    #[test]
+    fn Test_Insert_Blobs_Should_Place_A_Blob_By_Its_Declared_Digest()
+    {
+        let mut store = Fixture();
+        let digest = nomos_spec_model::ContentHash::Of_Bytes(b"bye").As_String_Slice().to_owned();
+        let bundle = Bundle::New(
+            1,
+            vec![Record::Blob(Blob {
+                sha256: digest.clone(),
+                byte_length: 3,
+                encoding: crate::Encoding::Utf8,
+                content: "bye".to_owned(),
+            })],
+        )
+        .expect("builds");
+
+        store.In_Transaction(|transaction| Insert_Blobs(transaction, &bundle)).expect("inserts");
+
+        let byte_length: i64 = store
+            .Connection()
+            .query_row("SELECT byte_length FROM blobs WHERE sha256 = ?1", [&digest], |row| {
+                row.get(0)
+            })
+            .expect("reads back");
+        assert_eq!(byte_length, 3);
+    }
+
+    #[test]
+    fn Test_Insert_Source_Documents_Should_Place_A_Document_By_Its_Blob()
+    {
+        let mut store = Fixture();
+        let bundle = Bundle::New(
+            1,
+            vec![Record::SourceDocument(crate::Document {
+                path: "other.md".to_owned(),
+                revision: "v2".to_owned(),
+                blob_sha256: "sha256:aa".to_owned(),
+            })],
+        )
+        .expect("builds");
+
+        store.In_Transaction(|transaction| Insert_Source_Documents(transaction, &bundle)).expect("inserts");
+
+        let revision: String = store
+            .Connection()
+            .query_row("SELECT revision FROM source_documents WHERE path = 'other.md'", [], |row| {
+                row.get(0)
+            })
+            .expect("reads back");
+        assert_eq!(revision, "v2");
+    }
+
+    #[test]
+    fn Test_Insert_Source_Headings_Should_Place_A_Heading_By_Its_Document()
+    {
+        let mut store = Fixture();
+        let bundle = Bundle::New(
+            1,
+            vec![Record::SourceHeading(crate::Heading {
+                document: crate::DocumentRef {
+                    path: "doc.md".to_owned(),
+                    revision: "v1".to_owned(),
+                },
+                ordinal: 2,
+                depth: 1,
+                title: "Section Two".to_owned(),
+            })],
+        )
+        .expect("builds");
+
+        store.In_Transaction(|transaction| Insert_Source_Headings(transaction, &bundle)).expect("inserts");
+
+        let title: String = store
+            .Connection()
+            .query_row("SELECT title FROM source_headings WHERE document_uid = 1 AND ordinal = 2", [], |row| {
+                row.get(0)
+            })
+            .expect("reads back");
+        assert_eq!(title, "Section Two");
+    }
+
+    #[test]
+    fn Test_Insert_Source_Blocks_Should_Place_A_Block_By_Its_Document()
+    {
+        let mut store = Fixture();
+        let bundle = Bundle::New(
+            1,
+            vec![Record::SourceBlock(crate::Block {
+                document: crate::DocumentRef {
+                    path: "doc.md".to_owned(),
+                    revision: "v1".to_owned(),
+                },
+                ordinal: 2,
+                kind: "paragraph".to_owned(),
+                heading_path: "Intro".to_owned(),
+                text: "World.".to_owned(),
+                content_hash: "sha256:hc2".to_owned(),
+                normalized_hash: "sha256:nh2".to_owned(),
+            })],
+        )
+        .expect("builds");
+
+        store.In_Transaction(|transaction| Insert_Source_Blocks(transaction, &bundle)).expect("inserts");
+
+        let text: String = store
+            .Connection()
+            .query_row("SELECT text FROM source_blocks WHERE document_uid = 1 AND ordinal = 2", [], |row| {
+                row.get(0)
+            })
+            .expect("reads back");
+        assert_eq!(text, "World.");
+    }
+
+    #[test]
+    fn Test_Insert_Source_Table_Rows_Should_Decode_The_Cells_Json_Column()
+    {
+        let mut store = Fixture();
+        let bundle = Bundle::New(
+            1,
+            vec![Record::SourceTableRow(crate::TableRow {
+                block: crate::OrdinalRef {
+                    document: crate::DocumentRef {
+                        path: "doc.md".to_owned(),
+                        revision: "v1".to_owned(),
+                    },
+                    ordinal: 1,
+                },
+                ordinal: 1,
+                table_ordinal: 1,
+                kind: "content".to_owned(),
+                cells: vec!["a".to_owned(), "b".to_owned()],
+                text: "a | b".to_owned(),
+                content_hash: "sha256:rc".to_owned(),
+                normalized_hash: "sha256:rn".to_owned(),
+            })],
+        )
+        .expect("builds");
+
+        store.In_Transaction(|transaction| Insert_Source_Table_Rows(transaction, &bundle)).expect("inserts");
+
+        let cells_json: String = store
+            .Connection()
+            .query_row("SELECT cells_json FROM source_table_rows WHERE source_block_uid = 1", [], |row| {
+                row.get(0)
+            })
+            .expect("reads back");
+        assert_eq!(cells_json, "[\"a\",\"b\"]");
+    }
+}

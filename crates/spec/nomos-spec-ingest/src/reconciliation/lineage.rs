@@ -223,7 +223,7 @@ mod tests
         disposition: preserved-or-referenced\n";
 
     #[test]
-    fn Test_Sections_Should_Become_Headings_With_Lineage()
+    fn Test_Ingest_Section_Lineage_Should_Turn_Sections_Into_Headings_With_Lineage_Rows()
     {
         let mut store = Prepared();
         let lineage = Parse_Section_Lineage(SECTIONS).expect("parses");
@@ -254,7 +254,7 @@ mod tests
     }
 
     #[test]
-    fn Test_Section_Ingest_Should_Be_Idempotent()
+    fn Test_Parse_Section_Lineage_Should_Feed_An_Idempotent_Ingest()
     {
         let mut store = Prepared();
         let lineage = Parse_Section_Lineage(SECTIONS).expect("parses");
@@ -267,5 +267,35 @@ mod tests
             1
         );
         assert_eq!(store.Count(nomos_spec_store::Table::Lineage).expect("counts"), 1);
+    }
+
+    #[test]
+    fn Test_Ingest_Block_Dispositions_Should_Skip_Ordinals_With_No_Recorded_Block()
+    {
+        let mut store = Prepared();
+
+        let written =
+            Ingest_Block_Dispositions(&mut store, "a.md", "v14.36", &[(0, "preserved".to_owned())])
+                .expect("ingests");
+
+        assert_eq!(written, 0);
+    }
+
+    #[test]
+    fn Test_Ingest_Block_Dispositions_Should_Refuse_An_Unknown_Document()
+    {
+        let mut store = Prepared();
+
+        let result = Ingest_Block_Dispositions(
+            &mut store,
+            "missing.md",
+            "v14.36",
+            &[(0, "preserved".to_owned())],
+        );
+
+        assert!(
+            matches!(result, Err(IngestError::Store(StoreError::Sql(_)))),
+            "expected a Store(Sql) refusal for an unknown document, got {result:?}"
+        );
     }
 }

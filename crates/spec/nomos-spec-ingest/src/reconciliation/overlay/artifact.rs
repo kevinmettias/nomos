@@ -97,7 +97,7 @@ mod tests
                             ---\n\n# MODEL-001 - Artifact\n";
 
     #[test]
-    fn Test_An_Artifact_Should_Read_Through_Its_Byte_Order_Mark()
+    fn Test_Parse_Artifact_Should_Read_Through_A_Byte_Order_Mark()
     {
         let artifact = Parse_Artifact(ARTIFACT, Family::Requirement).expect("reads");
 
@@ -110,7 +110,17 @@ mod tests
     {
         let empty = ARTIFACT.replace("statement: MODEL-001 Artifact represents persisted objects.\n", "");
 
-        assert!(Parse_Artifact(&empty, Family::Requirement).is_err());
+        match Parse_Artifact(&empty, Family::Requirement)
+        {
+            Err(IngestError::Parse(message)) =>
+            {
+                assert!(
+                    message.contains("declares neither a statement nor any criteria"),
+                    "wrong Parse message: {message}"
+                );
+            },
+            other => panic!("expected IngestError::Parse naming the missing statement, got {other:?}"),
+        }
     }
 
     /// One acceptance artifact declaring two criteria.

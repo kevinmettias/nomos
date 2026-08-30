@@ -102,4 +102,25 @@ mod tests
             );
         }
     }
+
+    // `Test_Every_Content_Should_Be_Matched_Exhaustively` above already exercises both
+    // `All` and `Label`, but it is a load-bearing mirror named and checked by literal
+    // string in `tests/contract/tests/completeness_universes/table.rs`, outside this
+    // crate's territory, so it is left untouched rather than renamed to address either.
+    #[test]
+    fn Test_All_Should_List_Every_Variant_Exactly_Once()
+    {
+        use std::collections::BTreeSet;
+
+        let distinct: BTreeSet<&'static str> = Content::All().iter().map(|content| return content.Label()).collect();
+
+        assert_eq!(distinct.len(), Content::All().len(), "a variant is missing or repeated");
+    }
+
+    #[test]
+    fn Test_Label_Should_Spell_Each_Variant_In_Lowercase()
+    {
+        assert_eq!(Content::Suites.Label(), "suites");
+        assert_eq!(Content::Omissions.Label(), "omissions");
+    }
 }

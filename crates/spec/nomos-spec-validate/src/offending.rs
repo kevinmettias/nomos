@@ -161,3 +161,124 @@ pub(crate) fn Undisposed_Outcome(store: &SpecificationStore, traced: &Traced) ->
         });
     });
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use nomos_spec_ingest::Ingest_Source_Document;
+
+    /// One H1 and one H2 heading, over two prose paragraphs — four blocks in total, which is
+    /// what `Dispose_All` in this crate's own `tests/preservation_holds.rs` disposes of, and
+    /// what `Test_An_Undisposed_Block_Should_Violate_Preserve_002` there counts on being
+    /// undisposed by default.
+    const DOCUMENT: &str = "---\nid: X\n---\n# Title\n\nOne.\n\n## Section\n\nTwo.\n";
+
+    fn Ingested() -> SpecificationStore
+    {
+        let mut store = SpecificationStore::In_Memory().expect("opens");
+        Ingest_Source_Document(&mut store, "a.md", "v14.36", DOCUMENT).expect("ingests");
+        return store;
+    }
+
+    #[test]
+    fn Test_Counted_Rows_Should_Count_The_Table_It_Is_Asked_About()
+    {
+        let store = Ingested();
+
+        let blocks = Counted_Rows(&store, Table::SourceBlocks).expect("counts");
+
+        assert_eq!(blocks, 4, "two headings and two prose paragraphs");
+    }
+
+    #[test]
+    fn Test_Found_Violations_Should_Turn_Every_Row_The_Query_Names_Into_One_Violation()
+    {
+        let store = Ingested();
+
+        let violations = Found_Violations(&store, "SELECT uid FROM source_blocks", |row| {
+            let uid: i64 = row.get(0)?;
+            return Ok(Violation {
+                subject: uid.to_string(),
+                detail: "named by this test's query".to_owned(),
+            });
+        })
+        .expect("queries");
+
+        assert_eq!(violations.len(), 4, "one violation per block row the query named");
+    }
+
+    #[test]
+    fn Test_Verdict_From_Violations_Should_Report_Satisfied_Only_When_Nothing_Offends()
+    {
+        assert!(matches!(
+            Verdict_From_Violations(3, Vec::new()),
+            RuleOutcome::Satisfied { checked: 3 }
+        ));
+
+        let violated = Verdict_From_Violations(3, vec![Violation {
+            subject: "s".to_owned(),
+            detail: "d".to_owned(),
+        }]);
+        assert!(matches!(violated, RuleOutcome::Violated(violations) if violations.len() == 1));
+    }
+
+    #[test]
+    fn Test_Offending_Outcome_Should_Report_Violated_When_The_Offenders_Query_Finds_Rows()
+    {
+        let store = Ingested();
+
+        let outcome = Offending_Outcome(
+            &store,
+            Table::SourceBlocks,
+            "SELECT uid FROM source_blocks",
+            |row| {
+                let uid: i64 = row.get(0)?;
+                return Ok(Violation {
+                    subject: uid.to_string(),
+                    detail: "every row offends, for this test".to_owned(),
+                });
+            },
+        );
+
+        assert!(matches!(outcome, RuleOutcome::Violated(violations) if violations.len() == 4));
+    }
+
+    #[test]
+    fn Test_Offending_Outcome_Should_Report_Satisfied_When_The_Offenders_Query_Finds_Nothing()
+    {
+        let store = Ingested();
+
+        let outcome = Offending_Outcome(
+            &store,
+            Table::SourceBlocks,
+            "SELECT uid FROM source_blocks WHERE 0",
+            |_row| {
+                return Ok(Violation {
+                    subject: String::new(),
+                    detail: String::new(),
+                });
+            },
+        );
+
+        assert!(matches!(outcome, RuleOutcome::Satisfied { checked: 4 }));
+    }
+
+    #[test]
+    fn Test_Undisposed_Outcome_Should_Violate_A_Block_With_Neither_A_Disposition_Nor_An_Omission()
+    {
+        let store = Ingested();
+
+        let outcome = Undisposed_Outcome(&store, &Traced {
+            table: Table::SourceBlocks,
+            offenders: Undisposed_Statement!(
+                "source_blocks",
+                "source_block_uid",
+                "source_block_uid"
+            ),
+            label: "block",
+        });
+
+        assert!(matches!(outcome, RuleOutcome::Violated(violations) if violations.len() == 4));
+    }
+}

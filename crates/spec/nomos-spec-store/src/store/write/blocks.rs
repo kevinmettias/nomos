@@ -197,3 +197,38 @@ fn Insert_Rows_Under(
 
     return Ok(());
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use crate::SpecificationStore;
+    use crate::{DocumentPath, DocumentRevision};
+    use nomos_spec_model::Segment;
+    use super::super::Write_Source_Document;
+
+    #[test]
+    fn Test_Write_Source_Blocks_Should_Write_Every_Block_And_Its_Table_Rows()
+    {
+        let store = SpecificationStore::In_Memory().expect("opens");
+        let markdown = "# Title\n\n| A | B |\n| --- | --- |\n| 1 | 2 |\n";
+        let document_uid = Write_Source_Document(
+            store.Connection(),
+            DocumentPath("a.md"),
+            DocumentRevision("v1"),
+            markdown,
+        )
+        .expect("writes document");
+        let blocks = Segment(markdown);
+
+        let written = Write_Source_Blocks(store.Connection(), document_uid, &blocks).expect("writes");
+
+        assert_eq!(written, blocks.len());
+
+        let rows: u32 = store
+            .Connection()
+            .query_row("SELECT count(*) FROM source_table_rows", [], |row| return row.get(0))
+            .expect("counts");
+        assert!(rows > 0, "the table's rows must be written alongside the block");
+    }
+}

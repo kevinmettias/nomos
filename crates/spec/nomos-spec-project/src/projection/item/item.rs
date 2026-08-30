@@ -74,3 +74,52 @@ impl Item
         return ContentHash::Of(&material).As_String_Slice().to_owned();
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Of_Should_Create_An_Item_Bearing_Only_Its_Identity()
+    {
+        let item = Item::Of("CDM-ONE");
+
+        assert_eq!(item.identity, "CDM-ONE");
+        assert!(item.fields.is_empty());
+        assert!(item.body.is_none());
+    }
+
+    #[test]
+    fn Test_With_Should_Attach_A_Name_And_Value_To_The_Item()
+    {
+        let item = Item::Of("CDM-ONE").With(Name("title"), Value("One"));
+
+        assert_eq!(item.Field("title"), Some("One"));
+    }
+
+    #[test]
+    fn Test_Carrying_Should_Set_The_Item_Body()
+    {
+        let item = Item::Of("CDM-ONE").Carrying("prose");
+
+        assert_eq!(item.body.as_deref(), Some("prose"));
+    }
+
+    #[test]
+    fn Test_Field_Should_Return_None_For_A_Name_Nothing_Set()
+    {
+        let item = Item::Of("CDM-ONE").With(Name("title"), Value("One"));
+
+        assert_eq!(item.Field("missing"), None);
+    }
+
+    #[test]
+    fn Test_Digest_Should_Change_When_A_Field_Value_Changes()
+    {
+        let base = Item::Of("CDM-ONE").With(Name("title"), Value("One"));
+        let changed = Item::Of("CDM-ONE").With(Name("title"), Value("Two"));
+
+        assert_ne!(base.Digest(), changed.Digest());
+    }
+}

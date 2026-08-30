@@ -27,3 +27,55 @@ impl FillerCensus
         return self.Undeclared().into_iter().next();
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    fn Template_Named(text: &str, declared: Option<&'static str>) -> Template
+    {
+        return Template {
+            text: text.to_owned(),
+            sections: 4,
+            documents: vec!["a.md".to_owned()],
+            declared,
+        };
+    }
+
+    #[test]
+    fn Test_Undeclared_Should_Keep_Only_Templates_With_No_Declared_Pattern()
+    {
+        let census = FillerCensus {
+            templates: vec![
+                Template_Named("known filler", Some("known filler")),
+                Template_Named("mystery block", None),
+            ],
+            declared: Vec::new(),
+            stubs: Vec::new(),
+        };
+
+        let undeclared = census.Undeclared();
+
+        assert_eq!(undeclared.len(), 1);
+        assert_eq!(undeclared.first().map(|template| template.text.as_str()), Some("mystery block"));
+    }
+
+    #[test]
+    fn Test_Widest_Undeclared_Should_Return_The_First_Undeclared_Template()
+    {
+        let census = FillerCensus {
+            templates: vec![Template_Named("first widest", None), Template_Named("second", None)],
+            declared: Vec::new(),
+            stubs: Vec::new(),
+        };
+
+        assert_eq!(
+            census.Widest_Undeclared().map(|template| template.text.as_str()),
+            Some("first widest")
+        );
+
+        let empty = FillerCensus::default();
+        assert!(empty.Widest_Undeclared().is_none());
+    }
+}

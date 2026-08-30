@@ -73,3 +73,32 @@ impl RowScope
         };
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Statement_Should_Carry_The_Right_Predicate_For_Each_Scope()
+    {
+        assert!(RowScope::Everything.Statement().contains("1 = 1"));
+        assert!(RowScope::Document(1).Statement().contains("block.document_uid = ?1"));
+        assert!(
+            RowScope::Table { block_uid: 1, table_ordinal: 0 }
+                .Statement()
+                .contains("line.table_ordinal = ?2")
+        );
+    }
+
+    #[test]
+    fn Test_Arguments_Should_Bind_What_Each_Scopes_Statement_Needs()
+    {
+        assert_eq!(RowScope::Everything.Arguments(), Vec::<i64>::new());
+        assert_eq!(RowScope::Document(7).Arguments(), vec![7]);
+        assert_eq!(
+            RowScope::Table { block_uid: 3, table_ordinal: 2 }.Arguments(),
+            vec![3, 2]
+        );
+    }
+}

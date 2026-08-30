@@ -326,3 +326,204 @@ pub(super) fn Title_Of(block: &SourceBlock) -> String
 {
     return block.text.trim_start_matches('#').trim().to_owned();
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    fn Documents(pairs: &[(&str, &str)]) -> BTreeMap<String, String>
+    {
+        return pairs.iter().map(|(path, text)| return ((*path).to_owned(), (*text).to_owned())).collect();
+    }
+
+    fn Test_Block(text: &str) -> SourceBlock
+    {
+        return SourceBlock {
+            ordinal: 1,
+            kind: BlockKind::Prose,
+            heading_path: Vec::new(),
+            text: text.to_owned(),
+        };
+    }
+
+    fn Empty_Later() -> Later
+    {
+        return Later {
+            authored: BTreeMap::new(),
+            named_in_row: BTreeMap::new(),
+            templates: BTreeMap::new(),
+            declared: BTreeSet::new(),
+            bodies: BTreeMap::new(),
+        };
+    }
+
+    #[test]
+    fn Test_Read_Should_Index_Headings_As_Positions_And_Judge_Repeated_Bodies()
+    {
+        let documents = Documents(&[
+            ("a.md", "# Shared\n\nRefer to the owning domain.\n"),
+            ("b.md", "# Shared\n\nRefer to the owning domain.\n"),
+            ("c.md", "# Shared\n\nRefer to the owning domain.\n"),
+        ]);
+
+        let later = Later::Read(&documents);
+
+        let positions = later.authored.get("Shared").expect("the heading is indexed");
+        assert_eq!(positions.len(), 3);
+        assert!(positions.iter().all(|position| return matches!(
+            position,
+            Position::Heading { body: Some(Body::Template { shared_with: 3, declared: None }), .. }
+        )));
+    }
+
+    #[test]
+    fn Test_Sections_Of_Should_Cut_Every_Document_Into_Its_Own_Sections()
+    {
+        let documents = Documents(&[("a.md", "# One\n\nFirst body.\n\n# Two\n\nSecond body.\n")]);
+        let mut later = Empty_Later();
+
+        let sections = Sections_Of(&documents, &mut later);
+
+        assert_eq!(sections.len(), 2);
+        assert_eq!(sections.first().expect("the document cuts into two sections").0, "a.md");
+        assert_eq!(sections.first().expect("the document cuts into two sections").1, "One");
+        assert_eq!(sections.get(1).expect("the document cuts into two sections").1, "Two");
+    }
+
+    #[test]
+    fn Test_Cut_At_Headings_Should_Not_Emit_A_Section_For_Front_Matter_Before_The_First_Heading()
+    {
+        let mut later = Empty_Later();
+        let mut sections: Sections = Vec::new();
+
+        Cut_At_Headings(SectionPath("a.md"), SectionText("Front matter.\n\n# One\n\nBody.\n"), &mut later, &mut sections);
+
+        assert_eq!(sections.len(), 1, "front matter must not open a section of its own");
+        assert_eq!(sections.first().expect("the assertion above confirms exactly one section").1, "One");
+    }
+
+    #[test]
+    fn Test_Close_Section_Should_Emit_Nothing_When_No_Heading_Has_Opened()
+    {
+        let mut sections: Sections = Vec::new();
+        let mut body = vec![Test_Block("Text.")];
+
+        Close_Section("a.md", None, &mut body, &mut sections);
+
+        assert!(sections.is_empty());
+        assert_eq!(body.len(), 1, "the body is left as-is for a caller who has not opened a section yet");
+    }
+
+    #[test]
+    fn Test_Close_Section_Should_Emit_The_Section_A_Heading_Opened()
+    {
+        let mut sections: Sections = Vec::new();
+        let mut body = vec![Test_Block("Text.")];
+
+        Close_Section("a.md", Some("Title".to_owned()), &mut body, &mut sections);
+
+        assert_eq!(sections.len(), 1);
+        assert_eq!(sections.first().expect("the assertion above confirms exactly one section").0, "a.md");
+        assert_eq!(sections.first().expect("the assertion above confirms exactly one section").1, "Title");
+        assert_eq!(
+            sections.first().expect("the assertion above confirms exactly one section").2,
+            vec![Test_Block("Text.")]
+        );
+        assert!(body.is_empty());
+    }
+
+    #[test]
+    fn Test_Repetitions_In_Should_Count_Sections_And_Distinct_Documents_Per_Key()
+    {
+        let sections: Sections = vec![
+            ("a.md".to_owned(), "Title".to_owned(), vec![Test_Block("Shared body.")]),
+            ("b.md".to_owned(), "Title".to_owned(), vec![Test_Block("Shared body.")]),
+        ];
+
+        let templates = Repetitions_In(&sections);
+
+        let key = Template_Key(SectionText("Shared body."), SectionTitle("Title"));
+        let repetition = templates.get(&key).expect("the shared block is keyed");
+        assert_eq!(repetition.sections, 2);
+        assert_eq!(repetition.documents, BTreeSet::from(["a.md".to_owned(), "b.md".to_owned()]));
+    }
+
+    #[test]
+    fn Test_Note_Block_Should_Flag_Declared_Filler_And_Index_Table_Subjects()
+    {
+        let mut later = Empty_Later();
+
+        Note_Block(&mut later, "a.md", &Test_Block("This section groups related specification material for X.\n"));
+        Note_Block(
+            &mut later,
+            "b.md",
+            &Test_Block("| Subject | Detail |\n| --- | --- |\n| Widget | Detail text. |\n"),
+        );
+
+        assert!(later.declared.contains("a.md"));
+        assert!(!later.declared.contains("b.md"));
+        assert!(later.authored.contains_key("Widget"));
+    }
+
+    #[test]
+    fn Test_Note_Row_Should_Record_The_Rows_Subject_As_An_Authored_Position()
+    {
+        let mut later = Empty_Later();
+        let row = TableRow {
+            ordinal: 1,
+            table_ordinal: 1,
+            kind: RowKind::Content,
+            cells: vec!["  ".to_owned(), "Widget".to_owned()],
+            text: "|  | Widget |".to_owned(),
+        };
+
+        Note_Row(&mut later, "a.md", &row);
+
+        let positions = later.authored.get("Widget").expect("the subject is indexed");
+        assert_eq!(positions.len(), 1);
+        assert!(matches!(
+            positions.first().expect("the assertion above confirms exactly one position"),
+            Position::Row { document } if document == "a.md"
+        ));
+        assert_eq!(later.named_in_row.get("Widget"), Some(&"a.md".to_owned()));
+    }
+
+    #[test]
+    fn Test_Keyable_Blocks_Should_Drop_Empty_And_Navigation_Only_Blocks()
+    {
+        let body = vec![
+            Test_Block("Real content.\n"),
+            Test_Block("   \n"),
+            Test_Block("- [One](one.md)\n- [Two](two.md)\n"),
+        ];
+
+        let kept = Keyable_Blocks(&body);
+
+        assert_eq!(kept.len(), 1);
+        assert_eq!(kept.first().expect("the assertion above confirms exactly one kept block").text, "Real content.\n");
+    }
+
+    #[test]
+    fn Test_Is_Navigation_Should_Recognise_A_Markdown_Link_List_And_Nothing_Else()
+    {
+        assert!(Is_Navigation("- [One](one.md)\n- [Two](two.md)\n"));
+        assert!(!Is_Navigation("Ordinary prose.\n"));
+        assert!(!Is_Navigation("   \n"), "blank text names nothing, so it is not navigation either");
+    }
+
+    #[test]
+    fn Test_Template_Key_Should_Elide_The_Sections_Own_Title_From_Its_Text()
+    {
+        let key = Template_Key(SectionText("Read Widget within the owning contract."), SectionTitle("Widget"));
+
+        assert_eq!(key, "Read {} within the owning contract.");
+        assert_eq!(Template_Key(SectionText("No title inside."), SectionTitle("")), "No title inside.");
+    }
+
+    #[test]
+    fn Test_Title_Of_Should_Strip_The_Hash_Marks_From_A_Heading_Line()
+    {
+        assert_eq!(Title_Of(&Test_Block("## Widget\n")), "Widget");
+    }
+}

@@ -175,3 +175,171 @@ pub(super) fn Narrow_To_Nodes(query: &mut Query, filter: &Filter)
 
     query.Prefix("n.node_id", filter.identifier_prefix.as_ref());
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_On_Should_Start_A_Query_From_The_Given_Base_Sql()
+    {
+        let query = Query::On("SELECT 1");
+
+        assert_eq!(query.sql, "SELECT 1");
+        assert!(query.values.is_empty());
+    }
+
+    #[test]
+    fn Test_Equal_Should_Add_An_Equality_Clause_When_A_Value_Is_Set()
+    {
+        let mut query = Query::On("SELECT 1 WHERE 1 = 1");
+
+        query.Equal("kind", Some(&"concept".to_owned()));
+        query.Equal("authority", None);
+
+        assert_eq!(query.sql, "SELECT 1 WHERE 1 = 1 AND kind = ?1");
+        assert_eq!(query.values, vec!["concept".to_owned()]);
+    }
+
+    #[test]
+    fn Test_Prefix_Should_Escape_A_Percent_Sign_In_The_Value()
+    {
+        let mut query = Query::On("SELECT 1 WHERE 1 = 1");
+
+        query.Prefix("node_id", Some(&"50%".to_owned()));
+
+        assert_eq!(query.sql, "SELECT 1 WHERE 1 = 1 AND node_id LIKE ?1 ESCAPE '\\'");
+        assert_eq!(query.values, vec!["50\\%%".to_owned()]);
+    }
+
+    #[test]
+    fn Test_Either_Should_Match_A_Value_Against_Two_Candidate_Columns()
+    {
+        let mut query = Query::On("SELECT 1 WHERE 1 = 1");
+
+        query.Either(FirstColumn("f.node_id"), SecondColumn("t.node_id"), Some(&"CDM-ONE".to_owned()));
+
+        assert_eq!(query.sql, "SELECT 1 WHERE 1 = 1 AND (f.node_id = ?1 OR t.node_id = ?1)");
+        assert_eq!(query.values, vec!["CDM-ONE".to_owned()]);
+    }
+
+    #[test]
+    fn Test_Ordered_By_Should_Append_An_Order_By_Clause()
+    {
+        let query = Query::On("SELECT 1").Ordered_By("node_id");
+
+        assert_eq!(query.sql, "SELECT 1 ORDER BY node_id");
+    }
+
+    #[test]
+    fn Test_Run_Should_Read_Every_Matching_Row_Through_The_Given_Reader()
+    {
+        let connection = Connection::open_in_memory().expect("opens");
+        connection
+            .execute_batch("CREATE TABLE t (n TEXT); INSERT INTO t (n) VALUES ('a'), ('b');")
+            .expect("seeds");
+
+        let query = Query::On("SELECT n FROM t");
+        let items = query
+            .Run(&connection, |row| {
+                let text: String = row.get(0)?;
+                return Ok(Item::Of(&text));
+            })
+            .expect("reads");
+
+        assert_eq!(items.len(), 2);
+    }
+
+    #[test]
+    fn Test_Gather_Items_Should_Dispatch_By_Content_Kind()
+    {
+        let store = nomos_spec_store::SpecificationStore::In_Memory().expect("opens");
+        store
+            .Connection()
+            .execute(
+                "INSERT INTO suites (suite_id, title, authority_root) VALUES ('nomos', 'The Nomos specification', 1)",
+                [],
+            )
+            .expect("seeds");
+
+        let items = Gather_Items(store.Connection(), Content::Suites, &Filter::default()).expect("gathers");
+
+        assert_eq!(items.len(), 1);
+        assert_eq!(
+            items.first().expect("asserted above to contain exactly one item").identity,
+            "nomos"
+        );
+    }
+
+    #[test]
+    fn Test_Of_Should_Position_Reading_At_The_Rows_First_Column()
+    {
+        let connection = Connection::open_in_memory().expect("opens");
+        connection
+            .execute_batch("CREATE TABLE t (a TEXT, b TEXT); INSERT INTO t VALUES ('first', 'second');")
+            .expect("seeds");
+
+        let first = connection
+            .query_row("SELECT a, b FROM t", [], |row| {
+                return Columns::Of(row).Text();
+            })
+            .expect("reads");
+
+        assert_eq!(first, "first");
+    }
+
+    #[test]
+    fn Test_Text_Should_Read_A_Null_Column_As_An_Empty_String()
+    {
+        let connection = Connection::open_in_memory().expect("opens");
+        connection
+            .execute_batch("CREATE TABLE t (a TEXT); INSERT INTO t (a) VALUES (NULL);")
+            .expect("seeds");
+
+        let text = connection
+            .query_row("SELECT a FROM t", [], |row| {
+                return Columns::Of(row).Text();
+            })
+            .expect("reads");
+
+        assert_eq!(text, "");
+    }
+
+    #[test]
+    fn Test_Next_Should_Advance_Past_Each_Column_It_Reads()
+    {
+        let connection = Connection::open_in_memory().expect("opens");
+        connection
+            .execute_batch("CREATE TABLE t (a INTEGER, b INTEGER); INSERT INTO t VALUES (10, 20);")
+            .expect("seeds");
+
+        let (first, second): (i64, i64) = connection
+            .query_row("SELECT a, b FROM t", [], |row| {
+                let mut columns = Columns::Of(row);
+                let first: i64 = columns.Next()?;
+                let second: i64 = columns.Next()?;
+                return Ok((first, second));
+            })
+            .expect("reads");
+
+        assert_eq!((first, second), (10, 20));
+    }
+
+    #[test]
+    fn Test_Narrow_To_Nodes_Should_Add_A_Clause_Per_Filter_Field_Set()
+    {
+        let filter = Filter {
+            kind: Some("concept".to_owned()),
+            node_id: Some("CDM-ONE".to_owned()),
+            ..Filter::default()
+        };
+        let mut query = Query::On("SELECT 1 FROM nodes n LEFT JOIN suites s ON s.uid = n.suite_uid WHERE 1 = 1");
+
+        Narrow_To_Nodes(&mut query, &filter);
+
+        assert!(query.sql.contains("n.kind = ?1"), "{}", query.sql);
+        assert!(query.sql.contains("n.node_id = ?2"), "{}", query.sql);
+        assert_eq!(query.values, vec!["concept".to_owned(), "CDM-ONE".to_owned()]);
+    }
+}

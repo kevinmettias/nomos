@@ -338,7 +338,7 @@ mod tests
     }
 
     #[test]
-    fn Test_A_Bundle_Should_Round_Trip_Through_Text()
+    fn Test_Parse_Should_Recover_The_Bundle_Written_Beforehand()
     {
         let bundle = Bundle::New(1, One_Blob()).expect("builds");
 
@@ -350,7 +350,7 @@ mod tests
     }
 
     #[test]
-    fn Test_Every_Line_Should_End_With_A_Newline_And_No_Carriage_Return()
+    fn Test_Write_Should_End_Every_Line_With_LF_And_Never_CR()
     {
         let text = Bundle::New(1, One_Blob())
             .expect("builds")
@@ -435,12 +435,45 @@ mod tests
     }
 
     #[test]
-    fn Test_An_Empty_Bundle_Should_Still_Be_Well_Formed()
+    fn Test_New_Should_Produce_A_Well_Formed_Bundle_From_An_Empty_List_Of_Entries()
     {
         let bundle = Bundle::New(1, Vec::new()).expect("builds");
         let text = bundle.Write().expect("writes");
 
         assert_eq!(text.lines().count(), 2, "a header and a manifest");
         assert_eq!(Bundle::Parse(&text).expect("parses"), bundle);
+    }
+
+    #[test]
+    fn Test_Header_Should_Return_The_Format_And_Schema_Version_It_Was_Built_With()
+    {
+        let bundle = Bundle::New(7, Vec::new()).expect("builds");
+
+        assert_eq!(bundle.Header().format, FORMAT);
+        assert_eq!(bundle.Header().schema_version, 7);
+    }
+
+    #[test]
+    fn Test_Manifest_Should_Report_The_Entry_Count_Recorded_At_Build_Time()
+    {
+        let bundle = Bundle::New(1, One_Blob()).expect("builds");
+
+        assert_eq!(bundle.Manifest().records, 1);
+    }
+
+    #[test]
+    fn Test_Records_Should_Return_The_Same_Entries_The_Bundle_Was_Built_With()
+    {
+        let bundle = Bundle::New(1, One_Blob()).expect("builds");
+
+        assert_eq!(bundle.Records().len(), 1);
+    }
+
+    #[test]
+    fn Test_Verify_Counts_Should_Accept_A_Bundle_Whose_Total_Matches_Its_Entries()
+    {
+        let bundle = Bundle::New(1, One_Blob()).expect("builds");
+
+        assert!(bundle.Verify_Counts().is_ok());
     }
 }

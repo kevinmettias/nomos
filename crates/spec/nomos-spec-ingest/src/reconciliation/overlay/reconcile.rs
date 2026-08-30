@@ -67,7 +67,7 @@ mod tests
                             ---\n\n# MODEL-001 - Artifact\n";
 
     #[test]
-    fn Test_A_Preserved_Identifier_Should_Reconcile()
+    fn Test_Reconcile_Artifacts_Should_Report_A_Preserved_Identifier()
     {
         let v14 = vec![Parse_Artifact(ARTIFACT, Family::Requirement).expect("reads")];
         let mut v15 = BTreeMap::new();

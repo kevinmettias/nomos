@@ -52,7 +52,7 @@ mod tests
     use super::*;
 
     #[test]
-    fn Test_Inline_Identifiers_Should_Be_Read_Where_V15_Put_Them()
+    fn Test_Statements_In_Should_Read_Inline_Identifiers_Where_V15_Put_Them()
     {
         let found = Statements_In(
             "> **Requirement:** {#MODEL-001} MODEL-001 Artifact represents persisted objects.\n\

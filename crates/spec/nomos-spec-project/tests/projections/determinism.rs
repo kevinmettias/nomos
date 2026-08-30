@@ -128,27 +128,30 @@ fn Assert_Declares_Itself_Generated(body: &str, id: &str)
     );
 }
 
-/// The done-when, checked against the environment this build actually runs in rather than
-/// against a pattern that guesses what one looks like.
-#[test]
-fn Test_No_Body_Should_Carry_This_Machine()
+/// The environment-specific strings a generated body must never carry.
+fn Environmental_Strings() -> Vec<String>
 {
-    let store = Populated();
     let directory = std::env::current_dir().expect("has a working directory");
     let temporary = std::env::temp_dir();
     let host = std::env::var("COMPUTERNAME")
         .or_else(|_| return std::env::var("HOSTNAME"))
         .unwrap_or_default();
 
+    return vec![directory.display().to_string(), temporary.display().to_string(), host];
+}
+
+/// The done-when, checked against the environment this build actually runs in rather than
+/// against a pattern that guesses what one looks like.
+#[test]
+fn Test_No_Body_Should_Carry_This_Machine()
+{
+    let store = Populated();
+
     for profile in Shipped().Profiles()
     {
         let output = Build(&store, &For_Building(profile)).expect("builds");
 
-        for environmental in [
-            directory.display().to_string(),
-            temporary.display().to_string(),
-            host.clone(),
-        ]
+        for environmental in Environmental_Strings()
         {
             if environmental.trim().is_empty()
             {

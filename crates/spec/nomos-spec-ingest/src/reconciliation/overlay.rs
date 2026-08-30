@@ -42,7 +42,7 @@ mod tests
     use super::*;
 
     #[test]
-    fn Test_Filler_Should_Name_The_Pattern_That_Judged_It()
+    fn Test_Get_Filler_Pattern_Should_Name_The_Pattern_That_Judged_A_Block()
     {
         let judged = Get_Filler_Pattern(
             "This section preserves the reference or explanatory material for Contents.",

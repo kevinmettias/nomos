@@ -62,3 +62,66 @@ impl Projection
         return ContentHash::Of(&material).As_String_Slice().to_owned();
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    fn Two_Section_Projection() -> Projection
+    {
+        return Projection {
+            profile: "one".to_owned(),
+            title: "One".to_owned(),
+            format: Format::Markdown,
+            output: "one.md".to_owned(),
+            sections: vec![
+                Section {
+                    title: "Nodes".to_owned(),
+                    content: Content::Nodes,
+                    items: vec![Item::Of("A"), Item::Of("B")],
+                },
+                Section {
+                    title: "Statements".to_owned(),
+                    content: Content::Statements,
+                    items: vec![Item::Of("C")],
+                },
+            ],
+            inputs: vec![
+                Input {
+                    content: Content::Nodes,
+                    identity: "A".to_owned(),
+                    hash: "sha256:aa".to_owned(),
+                },
+                Input {
+                    content: Content::Statements,
+                    identity: "C".to_owned(),
+                    hash: "sha256:bb".to_owned(),
+                },
+            ],
+        };
+    }
+
+    #[test]
+    fn Test_Items_Should_Sum_Every_Sections_Length()
+    {
+        let projection = Two_Section_Projection();
+
+        assert_eq!(projection.Items(), 3);
+    }
+
+    #[test]
+    fn Test_Inputs_Digest_Should_Change_When_An_Input_Hash_Changes()
+    {
+        let mut projection = Two_Section_Projection();
+        let original = projection.Inputs_Digest();
+
+        projection
+            .inputs
+            .get_mut(0)
+            .expect("Two_Section_Projection builds at least one input")
+            .hash = "sha256:cc".to_owned();
+
+        assert_ne!(projection.Inputs_Digest(), original);
+    }
+}

@@ -238,3 +238,264 @@ pub(super) fn Submission_Uid(transaction: &Transaction<'_>, node_id: &str) -> Re
         |row| return row.get(0),
     )?);
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use nomos_spec_store::SpecificationStore;
+
+    /// One row of everything this file resolves a surrogate for: a blob, the document read
+    /// from it, one heading, one block, one table row inside that block, a suite, a node
+    /// inside it, a normative statement and a submission, both filed under that node.
+    fn Fixture() -> SpecificationStore
+    {
+        let store = SpecificationStore::In_Memory().expect("opens");
+        store
+            .Connection()
+            .execute_batch(
+                "INSERT INTO blobs (sha256, byte_length, content) VALUES ('sha256:aa', 2, x'6869');
+                 INSERT INTO source_documents (path, revision, blob_uid) VALUES ('doc.md', 'v1', 1);
+                 INSERT INTO source_headings (document_uid, ordinal, depth, title)
+                     VALUES (1, 1, 1, 'Intro');
+                 INSERT INTO source_blocks
+                     (document_uid, ordinal, kind, heading_path, text, content_hash, normalized_hash)
+                     VALUES (1, 1, 'paragraph', 'Intro', 'Hello.', 'sha256:hc', 'sha256:nh');
+                 INSERT INTO source_table_rows
+                     (source_block_uid, ordinal, table_ordinal, kind, cells_json, text,
+                      content_hash, normalized_hash)
+                     VALUES (1, 1, 1, 'content', '[\"a\"]', 'a', 'sha256:rc', 'sha256:rn');
+                 INSERT INTO suites (suite_id, title, authority_root)
+                     VALUES ('nomos', 'The Nomos Specification', 1);
+                 INSERT INTO nodes
+                     (node_id, kind, authority, representation, title, deleted_at, suite_uid)
+                     VALUES ('N1', 'requirement', 'canonical', 'record', 'Node One', NULL, 1);
+                 INSERT INTO normative_statements
+                     (node_uid, statement_id, kind, canonical_text, canonical_hash, supersedes_hash)
+                     VALUES (1, 'STMT-1', 'Requirement', 'Text', 'sha256:aa', NULL);
+                 INSERT INTO submissions
+                     (node_uid, kind, form_contract_version, state, submitted_by, submitted_through)
+                     VALUES (1, 'feature-request', 1, 'draft', 'me', 'test');",
+            )
+            .expect("populates every table this file resolves against");
+
+        return store;
+    }
+
+    #[test]
+    fn Test_Optional_Suite_Uid_Should_Return_None_When_No_Suite_Is_Given()
+    {
+        let mut store = Fixture();
+
+        let found = store
+            .In_Transaction(|transaction| Optional_Suite_Uid(transaction, Some("nomos")))
+            .expect("resolves");
+        let absent = store
+            .In_Transaction(|transaction| Optional_Suite_Uid(transaction, None))
+            .expect("resolves");
+
+        assert_eq!(found, Some(1));
+        assert_eq!(absent, None);
+    }
+
+    #[test]
+    fn Test_Resolve_Uid_From_Sql_Arguments_Should_Report_An_Unresolved_Reference_By_Name()
+    {
+        let mut store = Fixture();
+
+        let refusal = store
+            .In_Transaction(|transaction| {
+                Resolve_Uid_From_Sql_Arguments(
+                    transaction,
+                    "SELECT uid FROM nodes WHERE node_id = ?1",
+                    &[&"GHOST"],
+                    Referenced {
+                        record: "node",
+                        reference: "GHOST".to_owned(),
+                    },
+                )
+            })
+            .expect_err("a reference to nothing must be refused");
+
+        assert!(
+            matches!(refusal, BundleError::Unresolved { ref record, ref reference }
+                if record == "node" && reference == "GHOST"),
+            "{refusal}"
+        );
+    }
+
+    #[test]
+    fn Test_Blob_Uid_Should_Resolve_A_Blob_By_Its_Sha256()
+    {
+        let mut store = Fixture();
+
+        let uid = store
+            .In_Transaction(|transaction| Blob_Uid(transaction, "sha256:aa"))
+            .expect("resolves");
+
+        assert_eq!(uid, 1);
+    }
+
+    #[test]
+    fn Test_Document_Uid_Should_Resolve_A_Document_By_Path_And_Revision()
+    {
+        let mut store = Fixture();
+
+        let uid = store
+            .In_Transaction(|transaction| {
+                Document_Uid(
+                    transaction,
+                    &DocumentRef {
+                        path: "doc.md".to_owned(),
+                        revision: "v1".to_owned(),
+                    },
+                )
+            })
+            .expect("resolves");
+
+        assert_eq!(uid, 1);
+    }
+
+    #[test]
+    fn Test_Node_Uid_Should_Resolve_A_Node_By_Its_Node_Id()
+    {
+        let mut store = Fixture();
+
+        let uid = store.In_Transaction(|transaction| Node_Uid(transaction, "N1")).expect("resolves");
+
+        assert_eq!(uid, 1);
+    }
+
+    #[test]
+    fn Test_Optional_Node_Uid_Should_Return_None_When_No_Node_Id_Is_Given()
+    {
+        let mut store = Fixture();
+
+        let found = store
+            .In_Transaction(|transaction| Optional_Node_Uid(transaction, Some("N1")))
+            .expect("resolves");
+        let absent = store.In_Transaction(|transaction| Optional_Node_Uid(transaction, None)).expect("resolves");
+
+        assert_eq!(found, Some(1));
+        assert_eq!(absent, None);
+    }
+
+    #[test]
+    fn Test_Optional_Statement_Uid_Should_Return_None_When_No_Statement_Id_Is_Given()
+    {
+        let mut store = Fixture();
+
+        let found = store
+            .In_Transaction(|transaction| Optional_Statement_Uid(transaction, Some("STMT-1")))
+            .expect("resolves");
+        let absent = store
+            .In_Transaction(|transaction| Optional_Statement_Uid(transaction, None))
+            .expect("resolves");
+
+        assert_eq!(found, Some(1));
+        assert_eq!(absent, None);
+    }
+
+    #[test]
+    fn Test_Block_Uid_Should_Resolve_A_Source_Block_By_Its_Document_And_Ordinal()
+    {
+        let mut store = Fixture();
+
+        let uid = store
+            .In_Transaction(|transaction| {
+                Block_Uid(
+                    transaction,
+                    &OrdinalRef {
+                        document: DocumentRef {
+                            path: "doc.md".to_owned(),
+                            revision: "v1".to_owned(),
+                        },
+                        ordinal: 1,
+                    },
+                )
+            })
+            .expect("resolves");
+
+        assert_eq!(uid, 1);
+    }
+
+    #[test]
+    fn Test_Optional_Table_Row_Uid_Should_Return_None_When_No_Row_Is_Given()
+    {
+        let mut store = Fixture();
+        let row = TableRowRef {
+            block: OrdinalRef {
+                document: DocumentRef {
+                    path: "doc.md".to_owned(),
+                    revision: "v1".to_owned(),
+                },
+                ordinal: 1,
+            },
+            ordinal: 1,
+        };
+
+        let found = store
+            .In_Transaction(|transaction| Optional_Table_Row_Uid(transaction, Some(&row)))
+            .expect("resolves");
+        let absent = store
+            .In_Transaction(|transaction| Optional_Table_Row_Uid(transaction, None))
+            .expect("resolves");
+
+        assert_eq!(found, Some(1));
+        assert_eq!(absent, None);
+    }
+
+    #[test]
+    fn Test_Optional_Block_Uid_Should_Return_None_When_No_Block_Reference_Is_Given()
+    {
+        let mut store = Fixture();
+        let block = OrdinalRef {
+            document: DocumentRef {
+                path: "doc.md".to_owned(),
+                revision: "v1".to_owned(),
+            },
+            ordinal: 1,
+        };
+
+        let found = store
+            .In_Transaction(|transaction| Optional_Block_Uid(transaction, Some(&block)))
+            .expect("resolves");
+        let absent = store.In_Transaction(|transaction| Optional_Block_Uid(transaction, None)).expect("resolves");
+
+        assert_eq!(found, Some(1));
+        assert_eq!(absent, None);
+    }
+
+    #[test]
+    fn Test_Optional_Heading_Uid_Should_Return_None_When_No_Heading_Is_Given()
+    {
+        let mut store = Fixture();
+        let heading = OrdinalRef {
+            document: DocumentRef {
+                path: "doc.md".to_owned(),
+                revision: "v1".to_owned(),
+            },
+            ordinal: 1,
+        };
+
+        let found = store
+            .In_Transaction(|transaction| Optional_Heading_Uid(transaction, Some(&heading)))
+            .expect("resolves");
+        let absent = store
+            .In_Transaction(|transaction| Optional_Heading_Uid(transaction, None))
+            .expect("resolves");
+
+        assert_eq!(found, Some(1));
+        assert_eq!(absent, None);
+    }
+
+    #[test]
+    fn Test_Submission_Uid_Should_Resolve_A_Submission_By_Its_Node_Id()
+    {
+        let mut store = Fixture();
+
+        let uid = store.In_Transaction(|transaction| Submission_Uid(transaction, "N1")).expect("resolves");
+
+        assert_eq!(uid, 1);
+    }
+}

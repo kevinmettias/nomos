@@ -182,3 +182,88 @@ fn Is_Already_Explained(freshness: &Freshness, body: &str, rebuilt: &Output) -> 
 {
     return freshness.stale.is_some() || freshness.edited.is_some() || body == rebuilt.body;
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use nomos_spec_store::SpecificationStore;
+
+    fn Populated_Store() -> SpecificationStore
+    {
+        let store = SpecificationStore::In_Memory().expect("opens");
+        store
+            .Connection()
+            .execute_batch(
+                "INSERT INTO suites (suite_id, title, authority_root) \
+                 VALUES ('nomos', 'The Nomos specification', 1);",
+            )
+            .expect("seeds a suite");
+
+        return store;
+    }
+
+    fn One_Section_Profile() -> Profile
+    {
+        return Profile::Parse(
+            r#"{
+                "id": "one", "title": "One", "format": "markdown", "output": "one.md",
+                "sections": [{ "title": "Suites", "content": "suites" }]
+            }"#,
+        )
+        .expect("parses");
+    }
+
+    #[test]
+    fn Test_Build_Projection_Should_Render_And_Stamp_A_Whole_Store_Profile()
+    {
+        let store = Populated_Store();
+        let profile = One_Section_Profile();
+
+        let output = Build_Projection(&store, &profile).expect("builds");
+
+        assert_eq!(output.path, "one.md");
+        assert!(output.body.contains("nomos"), "{}", output.body);
+        assert_eq!(output.stamp.profile, "one");
+    }
+
+    #[test]
+    fn Test_Build_Projection_Should_Refuse_A_Profile_Whose_Subject_Was_Never_Resolved()
+    {
+        let store = Populated_Store();
+        let mut profile = One_Section_Profile();
+        profile.output = "{subject}.md".to_owned();
+
+        let refusal = Build_Projection(&store, &profile).expect_err("must refuse");
+
+        assert!(matches!(refusal, ProjectError::SubjectUnresolved { .. }), "{refusal:?}");
+    }
+
+    #[test]
+    fn Test_Check_Freshness_Should_Report_Absent_When_Nothing_Was_Built_Yet()
+    {
+        let store = Populated_Store();
+        let profile = One_Section_Profile();
+
+        let freshness = Check_Freshness(&store, &profile, None, None).expect("checks");
+
+        assert!(freshness.absent);
+    }
+
+    #[test]
+    fn Test_Check_Freshness_Should_Report_Current_When_Nothing_Changed_Since_The_Build()
+    {
+        let store = Populated_Store();
+        let profile = One_Section_Profile();
+        let output = Build_Projection(&store, &profile).expect("builds");
+        let sidecar = output.Sidecar().expect("renders");
+
+        let freshness =
+            Check_Freshness(&store, &profile, Some(&output.body), Some(&sidecar)).expect("checks");
+
+        assert!(!freshness.absent);
+        assert!(freshness.stale.is_none());
+        assert!(freshness.edited.is_none());
+        assert!(freshness.diverged.is_none());
+    }
+}

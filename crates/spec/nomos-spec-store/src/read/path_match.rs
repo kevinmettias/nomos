@@ -28,3 +28,17 @@ impl PathMatch
         };
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Label_Should_Name_Each_Tier_It_Matched_At()
+    {
+        assert_eq!(PathMatch::Exact.Label(), "exact path");
+        assert_eq!(PathMatch::FileName.Label(), "file name");
+        assert_eq!(PathMatch::Fragment.Label(), "path fragment");
+    }
+}

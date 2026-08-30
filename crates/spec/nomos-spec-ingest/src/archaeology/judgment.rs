@@ -110,3 +110,126 @@ pub(super) fn Mentions_In_Documents(name: &str, documents: &BTreeMap<String, Str
 
     return Fate::Mentioned { documents: found };
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use crate::Origin;
+    use std::collections::BTreeSet;
+
+    fn Documents(pairs: &[(&str, &str)]) -> BTreeMap<String, String>
+    {
+        return pairs.iter().map(|(path, text)| return ((*path).to_owned(), (*text).to_owned())).collect();
+    }
+
+    fn A_Member(name: &str, family: Restored) -> Member
+    {
+        return Member {
+            id: format!("TEST-{name}"),
+            family,
+            name: name.to_owned(),
+            document: "source.md".to_owned(),
+            origin: Origin::Block { ordinal: 0 },
+            alias: None,
+        };
+    }
+
+    fn Empty_Later() -> Later
+    {
+        return Later {
+            authored: BTreeMap::new(),
+            named_in_row: BTreeMap::new(),
+            templates: BTreeMap::new(),
+            declared: BTreeSet::new(),
+            bodies: BTreeMap::new(),
+        };
+    }
+
+    #[test]
+    fn Test_Judge_Member_Should_Combine_Identity_With_Its_Computed_Fate()
+    {
+        let member = A_Member("WorkspaceContext", Restored::CanonicalDomainModel);
+        let documents = Documents(&[("a.md", "# A\n\nThe WorkspaceContext is discussed.\n")]);
+        let later = Later::Read(&documents);
+
+        let judged = Judge_Member(&member, &later, &documents);
+
+        assert_eq!(judged.id, member.id);
+        assert_eq!(judged.name, "WorkspaceContext");
+        assert_eq!(judged.fate, Fate::Mentioned { documents: vec!["a.md".to_owned()] });
+    }
+
+    #[test]
+    fn Test_Still_In_Later_Should_Prefer_A_Preserving_Position_Over_A_Hollow_One()
+    {
+        let member = A_Member("Widget", Restored::Service);
+        let mut later = Empty_Later();
+        later.authored.insert(
+            "Widget".to_owned(),
+            vec![
+                Position::Heading { document: "a.md".to_owned(), body: None },
+                Position::Row { document: "b.md".to_owned() },
+            ],
+        );
+
+        let fate = Still_In_Later(&member, &later);
+
+        assert_eq!(fate, Some(Fate::Preserved { document: "b.md".to_owned() }));
+    }
+
+    #[test]
+    fn Test_Named_In_Row_Should_Only_Apply_To_The_Canonical_Domain_Model()
+    {
+        let mut later = Empty_Later();
+        later.named_in_row.insert("WorkspaceContext".to_owned(), "a.md".to_owned());
+        let model = A_Member("WorkspaceContext", Restored::CanonicalDomainModel);
+        let service = A_Member("WorkspaceContext", Restored::Service);
+
+        assert_eq!(Named_In_Row(&model, &later), Some(Fate::Preserved { document: "a.md".to_owned() }));
+        assert_eq!(Named_In_Row(&service, &later), None);
+    }
+
+    #[test]
+    fn Test_Fate_Of_Position_Should_Map_Each_Shape_To_Its_Own_Fate()
+    {
+        assert_eq!(
+            Fate_Of_Position(&Position::Row { document: "a.md".to_owned() }),
+            Fate::Preserved { document: "a.md".to_owned() }
+        );
+        assert_eq!(
+            Fate_Of_Position(&Position::Heading { document: "a.md".to_owned(), body: Some(Body::Narrative) }),
+            Fate::Preserved { document: "a.md".to_owned() }
+        );
+        assert_eq!(
+            Fate_Of_Position(&Position::Heading {
+                document: "a.md".to_owned(),
+                body: Some(Body::Template { shared_with: 3, declared: None }),
+            }),
+            Fate::Hollowed {
+                document: "a.md".to_owned(),
+                evidence: Hollow::Template { shared_with: 3, declared: None },
+            }
+        );
+        assert_eq!(
+            Fate_Of_Position(&Position::Heading { document: "a.md".to_owned(), body: None }),
+            Fate::Hollowed { document: "a.md".to_owned(), evidence: Hollow::NoBody }
+        );
+    }
+
+    #[test]
+    fn Test_Mentions_In_Documents_Should_List_Every_Document_Containing_The_Name()
+    {
+        let documents = Documents(&[
+            ("a.md", "The WorkspaceContext is discussed.\n"),
+            ("b.md", "Nothing of the kind.\n"),
+            ("c.md", "WorkspaceContext appears here too.\n"),
+        ]);
+
+        assert_eq!(
+            Mentions_In_Documents("WorkspaceContext", &documents),
+            Fate::Mentioned { documents: vec!["a.md".to_owned(), "c.md".to_owned()] }
+        );
+        assert_eq!(Mentions_In_Documents("Nowhere", &documents), Fate::Gone);
+    }
+}

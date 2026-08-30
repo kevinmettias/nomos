@@ -195,3 +195,20 @@ fn Assert_The_Field_Is_Carried(
         field: (*field).to_owned(),
     });
 }
+
+// Kept beside the function itself, and separate from `columns::tests`, so this file's
+// declaration and its coverage-address stay one unit that `check-test-coverage` can find:
+// the fixed-up test module of a submodule declared as `mod tests;` is a different file.
+#[cfg(test)]
+mod entry_point_tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Assert_Columns_Covered_Should_Accept_A_Fresh_Store_With_No_Records()
+    {
+        let store = nomos_spec_store::SpecificationStore::In_Memory().expect("opens");
+
+        assert!(Assert_Columns_Covered(store.Connection(), &[]).is_ok());
+    }
+}

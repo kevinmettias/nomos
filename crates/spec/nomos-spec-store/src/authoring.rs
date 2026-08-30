@@ -423,3 +423,160 @@ fn Heading_Path(stored: &str) -> Vec<String>
 
     return stored.split(" / ").map(str::to_owned).collect();
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use crate::Seed_Governing_Records;
+    use crate::store::AUTHORED;
+
+    const CANONICAL: &str = "---\nid: D-900\ntype: decision\ntitle: A synthetic record\n\
+                             status: accepted\nversion: 1\n\
+                             authority: canonical-normative-record\ntags:\n  - testing\n\
+                             relations:\n  - target: D-129\n    type: relates-to\n---\n\n\
+                             # A synthetic record\n\n## Decision\n\nFirst paragraph.\n\n\
+                             ## Rationale\n\nSecond paragraph.\n";
+    const PATH: &str = "docs/records/D-900-a-synthetic-record.md";
+
+    fn Seeded() -> SpecificationStore
+    {
+        let mut store = SpecificationStore::In_Memory().expect("opens");
+        Seed_Governing_Records(&mut store).expect("seeds");
+        return store;
+    }
+
+    fn With_Synthetic() -> SpecificationStore
+    {
+        let mut store = Seeded();
+        store.Put_Record(PATH, AUTHORED, CANONICAL).expect("writes the synthetic record");
+        return store;
+    }
+
+    #[test]
+    fn Test_Put_Record_Should_Write_An_Authored_Record_The_Store_Can_Read_Back()
+    {
+        let store = With_Synthetic();
+
+        let documents = store.Documents_Behind("D-900", None).expect("queries");
+
+        assert_eq!(documents.len(), 1);
+        assert_eq!(
+            documents.first().expect("asserted above to contain exactly one document").path,
+            PATH
+        );
+    }
+
+    #[test]
+    fn Test_Record_Markdown_Should_Render_The_Same_Bytes_Back_Out()
+    {
+        let store = With_Synthetic();
+
+        let projection = store.Record_Markdown("D-900", None).expect("projects");
+
+        assert_eq!(projection.markdown, CANONICAL);
+        assert!(projection.Is_Matching_Source());
+    }
+
+    #[test]
+    fn Test_Claim_For_Edit_Should_Read_The_Record_Out_For_Editing()
+    {
+        let store = With_Synthetic();
+
+        let claimed = store.Claim_For_Edit("D-900", None).expect("claims");
+
+        assert_eq!(claimed.Markdown(), CANONICAL);
+        assert_eq!(claimed.Node_Id(), "D-900");
+    }
+
+    #[test]
+    fn Test_Commit_Edit_Should_Apply_A_Previewed_Edit_Atomically()
+    {
+        let mut store = With_Synthetic();
+        let edited = CANONICAL.replace("First paragraph.", "First paragraph, edited.");
+
+        let preview = store
+            .Claim_For_Edit("D-900", None)
+            .expect("claims")
+            .Stage(&edited, None)
+            .expect("stages")
+            .Preview(&store)
+            .expect("previews");
+        store.Commit_Edit(&preview).expect("commits");
+
+        let projection = store.Record_Markdown("D-900", None).expect("projects");
+        assert_eq!(projection.markdown, edited);
+    }
+
+    #[test]
+    fn Test_Stored_Blocks_Should_Return_Blocks_In_Authored_Order()
+    {
+        let store = With_Synthetic();
+        let document = store
+            .Documents_Behind("D-900", None)
+            .expect("queries")
+            .into_iter()
+            .next()
+            .expect("a document");
+
+        let blocks = store.Stored_Blocks(document.uid).expect("reads");
+
+        assert!(!blocks.is_empty());
+        assert!(blocks.windows(2).all(|pair| {
+            return pair.first().expect("windows(2) yields two-element slices").ordinal
+                < pair.get(1).expect("windows(2) yields two-element slices").ordinal;
+        }));
+    }
+
+    #[test]
+    fn Test_Declared_Front_Matter_Should_Return_What_The_Record_Declared()
+    {
+        let store = With_Synthetic();
+        let document = store
+            .Documents_Behind("D-900", None)
+            .expect("queries")
+            .into_iter()
+            .next()
+            .expect("a document");
+
+        let front_matter = store
+            .Declared_Front_Matter(document.uid)
+            .expect("reads")
+            .expect("an authored document declares front matter");
+
+        assert_eq!(front_matter.id, "D-900");
+        assert_eq!(front_matter.status, "accepted");
+    }
+
+    #[test]
+    fn Test_Declared_Relations_Should_Return_Relations_In_Authored_Order()
+    {
+        let store = With_Synthetic();
+        let document = store
+            .Documents_Behind("D-900", None)
+            .expect("queries")
+            .into_iter()
+            .next()
+            .expect("a document");
+
+        let relations = store.Declared_Relations(document.uid).expect("reads");
+
+        assert_eq!(relations.len(), 1);
+        assert_eq!(
+            relations.first().expect("asserted above to contain exactly one relation").target,
+            "D-129"
+        );
+    }
+
+    /// Nothing in this crate writes `normative_statements` yet, so a real store's answer is
+    /// the empty one asserted here — not a stand-in for a fixture this crate cannot build.
+    #[test]
+    fn Test_Statement_Movements_Should_Report_None_When_Nothing_Was_Recorded()
+    {
+        let store = With_Synthetic();
+
+        let movements = store.Statement_Movements("D-900", &[], &[]).expect("reads");
+
+        assert!(movements.is_empty());
+    }
+}

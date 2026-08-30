@@ -82,3 +82,74 @@ impl RestorationReport
         return line;
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use crate::Origin;
+
+    fn Member_Named(name: &str, family: Restored) -> Member
+    {
+        return Member {
+            id: format!("{}-{}", family.Prefix(), name.to_uppercase()),
+            family,
+            name: name.to_owned(),
+            document: "02-core.md".to_owned(),
+            origin: Origin::Row {
+                block_ordinal: 1,
+                row_ordinal: 1,
+            },
+            alias: None,
+        };
+    }
+
+    #[test]
+    fn Test_In_Should_Filter_The_Reports_Members_By_Family()
+    {
+        let report = RestorationReport {
+            members: vec![
+                Member_Named("Alpha", Restored::CanonicalDomainModel),
+                Member_Named("Beta", Restored::GlossaryTerm),
+            ],
+            ..RestorationReport::default()
+        };
+
+        let models = report.In(Restored::CanonicalDomainModel);
+
+        assert_eq!(models.len(), 1);
+        assert_eq!(models.first().map(|member| member.name.as_str()), Some("Alpha"));
+    }
+
+    #[test]
+    fn Test_Named_Should_Find_A_Member_By_Its_Name_Or_Its_Identifier()
+    {
+        let member = Member_Named("Alpha", Restored::CanonicalDomainModel);
+        let report = RestorationReport {
+            members: vec![member.clone()],
+            ..RestorationReport::default()
+        };
+
+        assert_eq!(report.Named("Alpha").map(|found| found.id.as_str()), Some(member.id.as_str()));
+        assert_eq!(
+            report.Named(&member.id).map(|found| found.id.as_str()),
+            Some(member.id.as_str())
+        );
+        assert!(report.Named("NoSuchMember").is_none());
+    }
+
+    #[test]
+    fn Test_Summary_Should_Name_Members_Rather_Than_Only_A_Count()
+    {
+        let report = RestorationReport {
+            members: vec![Member_Named("Alpha", Restored::CanonicalDomainModel)],
+            ..RestorationReport::default()
+        };
+
+        let summary = report.Summary();
+
+        assert!(summary.contains("Alpha"), "{summary}");
+        assert!(summary.contains("1 restored"), "{summary}");
+        assert!(summary.contains(Restored::AppendixD.Label()), "an unrestored family fell out of the summary");
+    }
+}

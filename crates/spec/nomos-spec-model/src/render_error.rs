@@ -307,7 +307,7 @@ mod tests
     const BLOCKS_KEPT: usize = 2;
 
     #[test]
-    fn Test_A_Record_Should_Render_To_The_Bytes_It_Was_Read_From()
+    fn Test_Render_Record_Should_Reproduce_The_Bytes_It_Was_Read_From()
     {
         assert_eq!(Rendered_Record(RECORD), RECORD);
         assert!(Is_Round_Trip(RECORD));
@@ -357,7 +357,7 @@ mod tests
     /// and nothing downstream can know it was there. Reporting that as "does not round
     /// trip" is the honest answer; claiming byte-identity would be false.
     #[test]
-    fn Test_A_Byte_Order_Mark_Should_Not_Claim_To_Round_Trip()
+    fn Test_Is_Round_Trip_Should_Refuse_A_Document_With_A_Byte_Order_Mark()
     {
         let marked = format!("\u{feff}{RECORD}");
 
@@ -405,12 +405,18 @@ mod tests
         assert!(Render_Record(&front_matter, &Segment(&record.body)).is_ok());
     }
 
+    /// Scalars that read back as a node other than the text that was written.
+    fn Scalars_That_Read_Back_As_Something_Else() -> [(&'static str, &'static str); 3]
+    {
+        return [("status", "no"), ("status", "42"), ("authority", "")];
+    }
+
     #[test]
     fn Test_A_Status_That_Reads_Back_As_Something_Else_Should_Be_Refused()
     {
         let record = Parse_Record(RECORD).expect("reads");
 
-        for (field, value) in [("status", "no"), ("status", "42"), ("authority", "")]
+        for (field, value) in Scalars_That_Read_Back_As_Something_Else()
         {
             let mut front_matter = record.front_matter.clone();
             match field

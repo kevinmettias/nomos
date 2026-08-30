@@ -490,5 +490,72 @@ fn Is_Identifier(stem: &str) -> bool
     });
 }
 
+/// Coverage for the two items declared in this file. `registration/tests.rs` is a separate
+/// `.rs` file and so cannot address a function declared in this one, no matter how
+/// thoroughly its refusals exercise `Registrations_In` and `Describe` underneath.
+#[cfg(test)]
+mod inline_coverage
+{
+    use super::*;
+    use std::path::PathBuf;
+
+    /// A record that is really on disk, so a fixture can be well-formed.
+    const A_REAL_RECORD: &str = "docs/records/OD-GATE-001-a-skipped-test-reports-ok.md";
+
+    fn Root() -> PathBuf
+    {
+        return Path::new(env!("CARGO_MANIFEST_DIR"))
+            .ancestors()
+            .nth(3)
+            .expect("the crate sits three directories below the repository root")
+            .to_path_buf();
+    }
+
+    fn Synthetic(name: &str) -> PathBuf
+    {
+        let mut path = std::env::temp_dir();
+        path.push(format!("nomos-registration-inline-{name}-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&path);
+        std::fs::create_dir_all(&path).expect("a test needs a temporary directory");
+        return path;
+    }
+
+    #[test]
+    fn Test_Registrations_In_Should_Read_A_Well_Formed_Directory()
+    {
+        let directory = Synthetic("well-formed");
+        std::fs::write(
+            directory.join("OD-GATE-001.record"),
+            format!("path: {A_REAL_RECORD}\n"),
+        )
+        .expect("writes a fixture");
+
+        let found = Registrations_In(&directory, &Root()).expect("reads");
+
+        assert_eq!(
+            found,
+            vec![Registration {
+                id: "OD-GATE-001".to_owned(),
+                path: A_REAL_RECORD.to_owned(),
+            }]
+        );
+        let _ = std::fs::remove_dir_all(&directory);
+    }
+
+    #[test]
+    fn Test_Describe_Should_Combine_What_Went_Wrong_With_Why_It_Is_Refused()
+    {
+        let refusal = RegistrationError::Empty { at: "docs/records".to_owned() };
+
+        let description = refusal.Describe();
+
+        assert!(description.contains("docs/records"), "{description}");
+        assert!(
+            description.contains("vacuous outcome"),
+            "the fault and the invariant both belong in one sentence: {description}"
+        );
+    }
+}
+
 #[cfg(test)]
 mod tests;

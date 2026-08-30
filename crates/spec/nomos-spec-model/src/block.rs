@@ -258,7 +258,7 @@ mod tests
     }
 
     #[test]
-    fn Test_Consecutive_Lines_Should_Be_One_Block()
+    fn Test_Segment_Markdown_Should_Merge_Consecutive_Lines_Into_One_Block()
     {
         let blocks = Segment("one\ntwo\n\nthree\n");
 

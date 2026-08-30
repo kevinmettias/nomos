@@ -45,11 +45,22 @@ fn Complete_Request_Values() -> Vec<FieldValue>
 }
 
 #[test]
-fn Test_A_Complete_Request_Should_Fail_Nothing()
+fn Test_Validate_Submission_Should_Pass_A_Complete_Request()
 {
     let submission = Request(SubmissionState::Accepted, Complete_Request_Values());
 
     assert_eq!(Validate_Submission(&submission), Vec::new());
+}
+
+#[test]
+fn Test_Required_Fields_Should_Include_Title_And_The_Kinds_Own_Fields()
+{
+    let submission = Request(SubmissionState::Draft, Vec::new());
+
+    assert_eq!(
+        submission.Required_Fields(),
+        vec!["title", "goal", "behaviour", "acceptance", "invariants"]
+    );
 }
 
 #[test]
@@ -122,7 +133,7 @@ fn Test_An_Inferred_Value_Should_Be_Readable_And_Never_Sufficient()
 }
 
 #[test]
-fn Test_A_Later_Value_Should_Supersede_An_Earlier_One_For_Reading_Only()
+fn Test_Current_Should_Read_The_Latest_Value_Not_An_Earlier_One()
 {
     let mut values = Complete_Request_Values();
     let clarified = Value("goal", "what it became", Origin::Clarified);
@@ -218,14 +229,41 @@ fn Design(alternatives: &str, selected: &str) -> Submission
     };
 }
 
-#[test]
-fn Test_A_Design_With_One_Alternative_Should_Be_Refused()
+/// One malformed design, and the rule it should be refused by.
+struct DesignRefusalCase
 {
-    let design = Design("a new verb", "a new verb");
-    let failures = Validate_Submission(&design);
+    alternatives: &'static str,
+    selected: &'static str,
+    rule: &'static str,
+}
 
-    assert_eq!(failures.len(), 1);
-    assert_eq!(First(&failures).rule, "at-least-two-alternatives");
+fn Designs_That_Should_Be_Refused() -> [DesignRefusalCase; 2]
+{
+    return [
+        DesignRefusalCase {
+            alternatives: "a new verb",
+            selected: "a new verb",
+            rule: "at-least-two-alternatives",
+        },
+        DesignRefusalCase {
+            alternatives: "a new verb\ndo nothing",
+            selected: "a third thing",
+            rule: "selected-names-an-alternative",
+        },
+    ];
+}
+
+#[test]
+fn Test_A_Malformed_Design_Should_Be_Refused_By_Its_Own_Rule()
+{
+    for case in Designs_That_Should_Be_Refused()
+    {
+        let design = Design(case.alternatives, case.selected);
+        let failures = Validate_Submission(&design);
+
+        assert_eq!(failures.len(), 1, "{}", case.rule);
+        assert_eq!(First(&failures).rule, case.rule);
+    }
 }
 
 #[test]
@@ -234,16 +272,6 @@ fn Test_Do_Nothing_Should_Be_An_Admissible_Alternative()
     let design = Design("a new verb\ndo nothing", "a new verb");
 
     assert_eq!(Validate_Submission(&design), Vec::new());
-}
-
-#[test]
-fn Test_A_Selected_Option_Absent_From_The_Alternatives_Should_Be_Refused()
-{
-    let design = Design("a new verb\ndo nothing", "a third thing");
-    let failures = Validate_Submission(&design);
-
-    assert_eq!(failures.len(), 1);
-    assert_eq!(First(&failures).rule, "selected-names-an-alternative");
 }
 
 fn Result_Submission(deviations: &str, evidence: Option<&str>) -> Submission
@@ -304,27 +332,42 @@ fn Test_Evidence_Should_Be_Required_For_An_Accepted_Result_And_Not_For_A_Draft()
     assert_eq!(Validate_Submission(&submission), Vec::new());
 }
 
+fn All_Submission_Kinds() -> [SubmissionKind; 3]
+{
+    return [SubmissionKind::FeatureRequest, SubmissionKind::DesignSpec, SubmissionKind::FeatureResult];
+}
+
+fn All_Submission_Origins() -> [Origin; 4]
+{
+    return [Origin::Submitted, Origin::Clarified, Origin::Inferred, Origin::Decided];
+}
+
+fn All_Submission_Severities() -> [Severity; 2]
+{
+    return [Severity::Blocking, Severity::NonBlocking];
+}
+
+fn All_Submission_States() -> [SubmissionState; 2]
+{
+    return [SubmissionState::Draft, SubmissionState::Accepted];
+}
+
 #[test]
 fn Test_Every_Label_Should_Round_Trip_Through_Parse()
 {
-    let kinds = [
-        SubmissionKind::FeatureRequest,
-        SubmissionKind::DesignSpec,
-        SubmissionKind::FeatureResult,
-    ];
-    for kind in kinds
+    for kind in All_Submission_Kinds()
     {
         assert_eq!(SubmissionKind::Parse(kind.Label()), Some(kind));
     }
-    for origin in [Origin::Submitted, Origin::Clarified, Origin::Inferred, Origin::Decided]
+    for origin in All_Submission_Origins()
     {
         assert_eq!(Origin::Parse(origin.Label()), Some(origin));
     }
-    for severity in [Severity::Blocking, Severity::NonBlocking]
+    for severity in All_Submission_Severities()
     {
         assert_eq!(Severity::Parse(severity.Label()), Some(severity));
     }
-    for state in [SubmissionState::Draft, SubmissionState::Accepted]
+    for state in All_Submission_States()
     {
         assert_eq!(SubmissionState::Parse(state.Label()), Some(state));
     }

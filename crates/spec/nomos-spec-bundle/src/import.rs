@@ -288,3 +288,84 @@ where
 
     return Ok(());
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Import_Bundle_Should_Place_Every_Record_And_Report_Its_Counts()
+    {
+        let mut store = SpecificationStore::In_Memory().expect("opens");
+        let digest = nomos_spec_model::ContentHash::Of_Bytes(b"hi").As_String_Slice().to_owned();
+        let bundle = Bundle::New(
+            store.Version(),
+            vec![Record::Blob(crate::Blob {
+                sha256: digest,
+                byte_length: 2,
+                encoding: crate::Encoding::Utf8,
+                content: "hi".to_owned(),
+            })],
+        )
+        .expect("builds");
+
+        let report = Import_Bundle(&mut store, &bundle).expect("imports");
+
+        assert_eq!(report.records, 1);
+        assert_eq!(store.Count(Table::Blobs).expect("counts"), 1);
+    }
+
+    #[test]
+    fn Test_Insert_Each_Should_Skip_Records_Of_Another_Kind()
+    {
+        let mut store = SpecificationStore::In_Memory().expect("opens");
+        let bundle = Bundle::New(
+            1,
+            vec![
+                Record::Suite(crate::Suite {
+                    suite_id: "nomos".to_owned(),
+                    title: "The Nomos Specification".to_owned(),
+                    authority_root: true,
+                }),
+                Record::Blob(crate::Blob {
+                    sha256: nomos_spec_model::ContentHash::Of_Bytes(b"hi").As_String_Slice().to_owned(),
+                    byte_length: 2,
+                    encoding: crate::Encoding::Utf8,
+                    content: "hi".to_owned(),
+                }),
+            ],
+        )
+        .expect("builds");
+
+        store
+            .In_Transaction(|transaction| {
+                Insert_Each(
+                    transaction,
+                    &bundle,
+                    "INSERT INTO suites (suite_id, title, authority_root) VALUES (?1, ?2, ?3)",
+                    |insert, record| {
+                        let Record::Suite(suite) = record
+                        else
+                        {
+                            return Ok(());
+                        };
+                        insert.execute(rusqlite::params![
+                            suite.suite_id,
+                            suite.title,
+                            i64::from(suite.authority_root)
+                        ])?;
+
+                        return Ok(());
+                    },
+                )
+            })
+            .expect("inserts");
+
+        let count: i64 = store
+            .Connection()
+            .query_row("SELECT COUNT(*) FROM suites", [], |row| row.get(0))
+            .expect("reads back");
+        assert_eq!(count, 1);
+    }
+}
