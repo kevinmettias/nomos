@@ -252,7 +252,7 @@ mod tests
 
     mod judging
     {
-        use super::*;
+        use super::{ArmShape, Applicability, GateCategory, Reachability_Site, ReachabilityPayload, Source_File, Violations_In};
 
         #[test]
         fn Test_A_Payload_With_No_Sites_Should_Produce_No_Finding()
@@ -301,7 +301,10 @@ mod tests
     /// reader — the half [`Violations_In`]'s own tests do not reach.
     mod reading_a_fact
     {
-        use super::*;
+        use super::{
+            ArmShape, Assurance, Check_Unread_Reaches_A_Finding, FactVariant, Guarantee, IncrementalGranularity, Reachability_Site,
+            ReachabilityPayload, Source_File, SourceFile,
+        };
         use crate::checks::test_support::{self, Test_Context, TestOffering};
         use nomos_analysis::{InputDigest, MemoryFactStore, Reader};
         use nomos_capability::ProviderOffer;

@@ -120,29 +120,57 @@ fn Missing_Finding(source: &SourceFile, item: &PayloadItem, target_name: &str) -
 /// worked example is a claim about which names exist on each side.
 fn Field_Drift(source: &SourceFile, item: &PayloadItem, target_name: &str, fields: &FieldSets<'_>) -> Option<Finding>
 {
+    let missing = Missing_Field_Names(fields);
+
+    if missing.on_target.is_empty() && missing.on_own.is_empty()
+    {
+        return None;
+    }
+
+    return Some(Drift_Finding(source, item, target_name, &missing));
+}
+
+/// The two sides of a field-name-drift check's own verdict — which names `fields.own`
+/// lacks that `fields.target` declares, and which names `fields.target` lacks that
+/// `fields.own` declares. A named pair rather than a tuple: both sides are the same type,
+/// and a tuple would let a caller swap them without the compiler noticing.
+struct MissingFields<'a>
+{
+    on_target: Vec<&'a str>,
+    on_own: Vec<&'a str>,
+}
+
+/// The field names present on `fields.own` but absent from `fields.target`, and the field
+/// names present on `fields.target` but absent from `fields.own` — set-wise, never
+/// positional, the reasoning [`Field_Drift`]'s own doc names.
+fn Missing_Field_Names<'a>(fields: &FieldSets<'a>) -> MissingFields<'a>
+{
     use std::collections::BTreeSet;
 
     let own_names: BTreeSet<&str> = fields.own.iter().map(|(name, _)| return name.as_str()).collect();
     let target_names: BTreeSet<&str> = fields.target.iter().map(|(name, _)| return name.as_str()).collect();
 
-    let missing_on_target: Vec<&str> = own_names.difference(&target_names).copied().collect();
-    let missing_on_own: Vec<&str> = target_names.difference(&own_names).copied().collect();
+    let on_target: Vec<&str> = own_names.difference(&target_names).copied().collect();
+    let on_own: Vec<&str> = target_names.difference(&own_names).copied().collect();
 
-    if missing_on_target.is_empty() && missing_on_own.is_empty()
-    {
-        return None;
-    }
+    return MissingFields { on_target, on_own };
+}
 
-    return Some(Finding {
+/// The [`Finding`] for a declared correspondence whose two sides' field names disagree —
+/// factored out of [`Field_Drift`] so that function reads as compute-then-report rather
+/// than one longer body.
+fn Drift_Finding(source: &SourceFile, item: &PayloadItem, target_name: &str, missing: &MissingFields<'_>) -> Finding
+{
+    return Finding {
         rule: RuleId::New(CROSS_LANGUAGE_CORRESPONDENCE),
         subject: source.subject,
         subject_name: source.path.clone(),
         applicability: Applicability::Supported,
         evidence: EvidenceClass::Derived,
         gate: GateCategory::Advisory,
-        summary: Drift_Summary(DeclaringName(&item.qualified_name), TargetName(target_name), &missing_on_target, &missing_on_own),
+        summary: Drift_Summary(DeclaringName(&item.qualified_name), TargetName(target_name), &missing.on_target, &missing.on_own),
         locations: vec![source.path.clone()],
-    });
+    };
 }
 
 /// The struct a correspondence names, on the other side from [`DeclaringName`] -- its own

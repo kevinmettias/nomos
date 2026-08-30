@@ -6957,6 +6957,14 @@
       "reason": "test-code exemption (OD-GATE-018 category a, reaffirmed by P22 shared guidance): file is #[cfg(test)]-gated or the finding sits inside an inline #[cfg(test)] mod tests block; clippy.toml already permits this ergonomics class in test code",
       "owner": "@claude-p22-campaign",
       "expires": "2026-11-27"
+    },
+    {
+      "check": "check-scope-discipline",
+      "path": "crates/host/nomos-api/src/test_support.rs",
+      "fingerprint": "2b6789fe8b9dfe48",
+      "reason": "test-code exemption (OD-GATE-018 category a, reaffirmed by P22 shared guidance): file is #[cfg(test)]-gated; clippy.toml already permits this ergonomics class in test code",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
     }
   ]
 }

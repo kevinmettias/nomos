@@ -117,7 +117,7 @@ mod tests
 
     mod casing
     {
-        use super::*;
+        use super::Is_Pascal_Snake_Case;
 
         #[test]
         fn Test_A_Single_Word_Starting_Uppercase_Should_Conform()
@@ -171,7 +171,7 @@ mod tests
 
     mod scanning
     {
-        use super::*;
+        use super::{GateCategory, SyntaxPayload, Violations_In};
 
         #[test]
         fn Test_A_Conforming_Function_Should_Produce_No_Finding()

@@ -106,6 +106,8 @@ mod tests
 {
     use super::*;
 
+    const SUBJECT_COUNT: usize = 2;
+
     #[test]
     fn Test_Every_Subject_Is_Reported_As_Agent_Required()
     {
@@ -116,7 +118,6 @@ mod tests
 
         let findings = Check_Declared_Role_Matches_Surface(&subjects);
 
-        const SUBJECT_COUNT: usize = 2;
         assert_eq!(findings.len(), SUBJECT_COUNT, "{findings:?}");
         for finding in &findings
         {
