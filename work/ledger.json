@@ -38533,6 +38533,97 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P23-BOOLPRED-SPEC-RENAME",
+      "title": "rename Applicability::Was_Evaluated/Requires_Agent via the spec-change workflow",
+      "why": "check-boolean-predicate flags these two pub methods on nomos-contracts::Applicability; call sites live in crates/substrate and the names are quoted verbatim as code citations in ~6 docs/records/ governing records plus the rendered spec/domain-specification.md and two tests/contract/requirements/*.assessment files. Currently covered by a temporary suppressions.json waiver (expires 2026-11-27) recorded by P22-REGRESSION-MISC -- this item does the real fix via the nomos-spec-change skill (stage each record edit, preview, commit, then render both diagram-set and domain-specification profiles) rather than leaving the waiver to lapse",
+      "done_when": "check-boolean-predicate reports zero for nomos-contracts (no waiver needed), every governing record citing the old names is updated and re-rendered, tests/contract/requirements assessments still name a real site, and cargo build --workspace --all-targets passes",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/contracts/nomos-contracts",
+          "crates/substrate/nomos-ledger/src/claim/refusal.rs",
+          "crates/kernel/nomos-model/src/evidence/coverage.rs",
+          "crates/orchestration/nomos-check-orchestration/src/examined/claim.rs",
+          "crates/substrate/nomos-capability/tests/resolution_never_says_no.rs",
+          "docs/records",
+          "spec/domain-specification.md",
+          "tests/contract/requirements"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P22-PLACEMENT-DUP-REGRESSION",
+      "title": "waive 2 check-interfile-duplication findings the P22 languages fix introduced",
+      "why": "hoisting identical constants to module scope in nomos-lang-go and nomos-lang-rust's fact_context.rs (P22-REGRESSION-LANGUAGES, commit 2bf54dc6) pushed their already-similar Test_This_Providers_Payload_Should_Decode tests over check-interfile-duplication's similarity threshold",
+      "done_when": "check-interfile-duplication reports zero for crates/languages",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "suppressions.json"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "exit_code": 0,
+        "output_tail": "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.19s\n",
+        "verified_at": 1788067524,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "ea1b6d18b85bf3489f2ab2ef463081505fd7422f"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

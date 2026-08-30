@@ -7405,6 +7405,22 @@
       "reason": "test-code exemption, OD-GATE-018 pre-decided category (a) for the P22 sweep: this finding sits inside #[cfg(test)] mod tests, and clippy.toml already permits this ergonomics class in test code repository-wide",
       "owner": "@claude-p22-campaign",
       "expires": "2026-11-27"
+    },
+    {
+      "check": "check-interfile-duplication",
+      "path": "crates/languages/nomos-lang-go/src/fact_context.rs",
+      "fingerprint": "3ea201be5f1efb65",
+      "reason": "the go and rust syntax providers' Test_This_Providers_Payload_Should_Decode_Under_The_Schemas_Own_Reader tests are deliberately structured alike but deliberately independent -- each file's own doc comment states the agreement is checked against the shared nomos-cap-syntax grammar rather than against the other provider, specifically so a shared helper could not mask a real divergence between them; extracting a cross-crate helper would undermine that independence for a purely structural similarity",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-interfile-duplication",
+      "path": "crates/languages/nomos-lang-rust/src/fact_context.rs",
+      "fingerprint": "41c533dc94a10858",
+      "reason": "the go and rust syntax providers' Test_This_Providers_Payload_Should_Decode_Under_The_Schemas_Own_Reader tests are deliberately structured alike but deliberately independent -- each file's own doc comment states the agreement is checked against the shared nomos-cap-syntax grammar rather than against the other provider, specifically so a shared helper could not mask a real divergence between them; extracting a cross-crate helper would undermine that independence for a purely structural similarity",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
     }
   ]
 }
