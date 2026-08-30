@@ -58,8 +58,10 @@ mod tests
 
     const ARBITRARY_POSITIVE_THRESHOLD: f64 = 0.1;
 
+    const FLOAT_TOLERANCE: f64 = 1e-9;
+
     #[test]
-    fn Test_Confidence_Should_Clamp_To_The_Unit_Interval()
+    fn Test_Of_Should_Clamp_To_The_Unit_Interval()
     {
         assert!(Confidence::Of(1.5).Value() <= 1.0);
         assert!(Confidence::Of(-0.5).Value() >= 0.0);
@@ -69,9 +71,17 @@ mod tests
     /// it would silently behave as "never good enough" in one place and as "never
     /// rejected" in another depending on how the comparison was written.
     #[test]
-    fn Test_Nan_Confidence_Should_Become_None()
+    fn Test_Is_At_Least_Should_Reject_A_Nan_Confidence_Against_Any_Threshold()
     {
         assert!(Confidence::Of(f64::NAN).Value() <= 0.0);
         assert!(!Confidence::Of(f64::NAN).Is_At_Least(Confidence::Of(ARBITRARY_POSITIVE_THRESHOLD)));
+    }
+
+    /// `Value` is read out everywhere else as a side effect of asserting on `Of` or
+    /// `Is_At_Least`; this is the one test for which it is the actual subject.
+    #[test]
+    fn Test_Value_Should_Return_The_Number_A_Confidence_Was_Constructed_With()
+    {
+        assert!((Confidence::Of(0.3).Value() - 0.3).abs() < FLOAT_TOLERANCE);
     }
 }

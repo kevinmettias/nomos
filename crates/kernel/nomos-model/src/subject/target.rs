@@ -46,3 +46,31 @@ impl Target
         };
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use crate::Content_Digest;
+
+    fn Arbitrary_Entity() -> EntityId
+    {
+        return EntityId::From_Digest(Content_Digest(b"arbitrary"));
+    }
+
+    #[test]
+    fn Test_Kind_Should_Report_What_Each_Variant_Denotes()
+    {
+        assert_eq!(Target::Artifact(Arbitrary_Entity()).Kind(), SubjectKind::Artifact);
+        assert_eq!(Target::Symbol(Arbitrary_Entity()).Kind(), SubjectKind::Symbol);
+        assert_eq!(Target::Resource(Arbitrary_Entity()).Kind(), SubjectKind::Resource);
+        assert_eq!(
+            Target::Aggregate {
+                kind: "directory".to_owned(),
+                members: Vec::new(),
+            }
+            .Kind(),
+            SubjectKind::Aggregate
+        );
+    }
+}

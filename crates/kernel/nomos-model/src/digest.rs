@@ -77,7 +77,7 @@ mod tests
     use super::*;
 
     #[test]
-    fn Test_Digest_Should_Be_Stable_Across_Calls()
+    fn Test_Content_Digest_Should_Be_Stable_Across_Calls()
     {
         assert_eq!(Content_Digest(b"nomos"), Content_Digest(b"nomos"));
     }
@@ -92,7 +92,7 @@ mod tests
     /// length prefixes these two would collide, and a collision here is a fact cache
     /// serving one subject's analysis under another subject's key.
     #[test]
-    fn Test_Part_Boundaries_Should_Change_The_Digest()
+    fn Test_Digest_Of_Parts_Should_Treat_Part_Boundaries_As_Significant()
     {
         let split_early = Digest_Of_Parts(&[b"ab", b"c"]);
         let split_late = Digest_Of_Parts(&[b"a", b"bc"]);

@@ -93,7 +93,7 @@ mod tests
     struct Signature<'a>(&'a str);
 
     #[test]
-    fn Test_Identity_Should_Be_Stable_For_The_Same_Components()
+    fn Test_Entity_Id_Should_Be_Stable_For_The_Same_Components()
     {
         assert_eq!(
             Identity_From_Components(Qualified("crate::foo"), Signature("(u32) -> bool")).Entity_Id(),

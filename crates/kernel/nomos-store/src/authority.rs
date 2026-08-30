@@ -29,3 +29,25 @@ impl Authority
         return kind.Authority() as u8 == self as u8;
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Label_Should_Return_A_Stable_Lowercase_Name()
+    {
+        assert_eq!(Authority::Observed.Label(), "observed");
+        assert_eq!(Authority::Authored.Label(), "authored");
+    }
+
+    #[test]
+    fn Test_Can_Admit_Should_Agree_With_The_Document_Kinds_Own_Authority()
+    {
+        assert!(Authority::Observed.Can_Admit(DocumentKind::Fact));
+        assert!(!Authority::Authored.Can_Admit(DocumentKind::Fact));
+        assert!(Authority::Authored.Can_Admit(DocumentKind::Record));
+        assert!(!Authority::Observed.Can_Admit(DocumentKind::Record));
+    }
+}

@@ -40,11 +40,20 @@ mod tests
     use crate::Content_Digest;
 
     #[test]
-    fn Test_Entity_Id_Should_Render_As_Its_Digest()
+    fn Test_From_Digest_Should_Render_As_Its_Digest()
     {
         let digest = Content_Digest(b"symbol");
         let id = Id::From_Digest(digest);
 
         assert_eq!(id.to_string(), digest.to_string());
+    }
+
+    #[test]
+    fn Test_Digest_Should_Return_The_Wrapped_Value()
+    {
+        let digest = Content_Digest(b"symbol");
+        let id = Id::From_Digest(digest);
+
+        assert_eq!(id.Digest(), digest);
     }
 }

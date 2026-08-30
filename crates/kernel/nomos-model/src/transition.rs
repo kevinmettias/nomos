@@ -57,7 +57,7 @@ mod tests
     /// An unevidenced inference must be visibly unevidenced. This is the field a review
     /// looks at when asking why the system thinks two declarations are the same one.
     #[test]
-    fn Test_An_Asserted_Transition_Should_Report_Itself_As_Unevidenced()
+    fn Test_Is_Evidenced_Should_Be_False_For_An_Asserted_Transition()
     {
         let asserted = IdentityTransition::Asserted(
             IdentityTransitionKind::ProbableRename,
@@ -65,5 +65,15 @@ mod tests
         );
 
         assert!(!asserted.Is_Evidenced());
+    }
+
+    #[test]
+    fn Test_Asserted_Should_Construct_A_Transition_With_No_Evidence()
+    {
+        let asserted =
+            IdentityTransition::Asserted(IdentityTransitionKind::ProbableRename, Confidence::Of(0.8));
+
+        assert_eq!(asserted.kind, IdentityTransitionKind::ProbableRename);
+        assert!(asserted.evidence.is_empty());
     }
 }

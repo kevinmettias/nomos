@@ -80,7 +80,7 @@ mod tests
     /// The load-bearing case. A run that judged nothing must not be able to say it
     /// found nothing wrong.
     #[test]
-    fn Test_A_Run_That_Evaluated_Nothing_Should_Have_No_Effective_Coverage()
+    fn Test_Has_Effective_Coverage_Should_Be_False_When_A_Run_Evaluated_Nothing()
     {
         assert!(!Coverage::default().Has_Effective_Coverage());
         assert!(!Coverage::default().Is_Complete());
@@ -126,7 +126,7 @@ mod tests
     /// A run with only deliberate absences really is complete — otherwise every honest
     /// configuration reads as incomplete and the signal is worthless.
     #[test]
-    fn Test_Deliberate_Absences_Alone_Should_Still_Be_Complete()
+    fn Test_Is_Complete_Should_Be_True_When_Only_Deliberate_Absences_Remain()
     {
         let coverage = Coverage {
             evaluated: 3,

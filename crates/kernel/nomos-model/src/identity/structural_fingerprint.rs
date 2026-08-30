@@ -25,3 +25,25 @@ impl StructuralFingerprint
         return self.0;
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    const ARBITRARY_DIGEST: Digest128 = Digest128::From_Bytes([7_u8; Digest128::BYTE_LENGTH]);
+
+    #[test]
+    fn Test_From_Digest_Should_Wrap_The_Given_Digest()
+    {
+        assert_eq!(StructuralFingerprint::From_Digest(ARBITRARY_DIGEST).Digest(), ARBITRARY_DIGEST);
+    }
+
+    #[test]
+    fn Test_Digest_Should_Return_The_Value_The_Fingerprint_Was_Built_From()
+    {
+        let fingerprint = StructuralFingerprint::From_Digest(ARBITRARY_DIGEST);
+
+        assert_eq!(fingerprint.Digest(), ARBITRARY_DIGEST);
+    }
+}

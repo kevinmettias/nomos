@@ -178,6 +178,51 @@ mod tests
     }
 
     #[test]
+    fn Test_Of_Should_Build_A_Set_From_The_Given_Subjects()
+    {
+        let set = Set::Of(SetResolution::File, [Subject_Named("a.rs"), Subject_Named("b.rs")]);
+
+        assert_eq!(set.Members().count(), 2);
+        assert!(set.Members().any(|member| return *member == Subject_Named("a.rs")));
+    }
+
+    #[test]
+    fn Test_Insert_Should_Add_A_Member_To_The_Set()
+    {
+        let mut set = Set::Empty(SetResolution::File);
+
+        set.Insert(Subject_Named("a.rs"));
+
+        assert!(set.Members().any(|member| return *member == Subject_Named("a.rs")));
+    }
+
+    #[test]
+    fn Test_Resolution_Should_Report_The_Resolution_The_Set_Was_Built_At()
+    {
+        let set = Set::Of(SetResolution::Symbol, [Subject_Named("a.rs::foo")]);
+
+        assert_eq!(set.Resolution(), SetResolution::Symbol);
+    }
+
+    #[test]
+    fn Test_Is_Empty_Should_Require_No_Members_And_No_Unexpanded_Patterns()
+    {
+        assert!(Set::Empty(SetResolution::File).Is_Empty());
+        assert!(!Set::Of(SetResolution::File, [Subject_Named("a.rs")]).Is_Empty());
+        assert!(!Set::Empty(SetResolution::File)
+            .With_Unexpanded_Pattern("src/**")
+            .Is_Empty());
+    }
+
+    #[test]
+    fn Test_Length_Should_Count_How_Many_Subjects_Are_Known()
+    {
+        let set = Set::Of(SetResolution::File, [Subject_Named("a.rs"), Subject_Named("b.rs")]);
+
+        assert_eq!(set.Length(), 2);
+    }
+
+    #[test]
     fn Test_Overlapping_Sets_Should_Report_The_Shared_Members()
     {
         let left = Set::Of(SetResolution::File, [Subject_Named("a.rs"), Subject_Named("b.rs")]);
@@ -191,10 +236,11 @@ mod tests
 
     /// The property the whole type exists for. If this ever passes, two agents can be
     /// told they may proceed when nobody established that they may.
-    #[test]
-    fn Test_Unknown_Should_Never_Permit_Concurrency()
+    /// Every way independence can fail to be established, so a new `UnknownReason`
+    /// variant is a diff to this table rather than a new test.
+    fn Every_Way_Independence_Can_Go_Unresolved() -> [UnknownReason; 4]
     {
-        let reasons = [
+        [
             UnknownReason::IncomparableResolution {
                 left: SetResolution::File,
                 right: SetResolution::Symbol,
@@ -206,9 +252,13 @@ mod tests
             UnknownReason::UnexpandedPattern {
                 pattern: "src/**".to_owned(),
             },
-        ];
+        ]
+    }
 
-        for reason in reasons
+    #[test]
+    fn Test_Unknown_Should_Never_Permit_Concurrency()
+    {
+        for reason in Every_Way_Independence_Can_Go_Unresolved()
         {
             assert!(
                 !Intersection::Unknown(reason).Permits_Concurrency(),
@@ -235,7 +285,7 @@ mod tests
     /// An unexpanded pattern could match anything. Comparing against it as though it
     /// matched nothing is the quiet version of the same bug.
     #[test]
-    fn Test_An_Unexpanded_Pattern_Should_Make_The_Answer_Unknown()
+    fn Test_With_Unexpanded_Pattern_Should_Make_The_Answer_Unknown()
     {
         let wildcard =
             Set::Empty(SetResolution::File).With_Unexpanded_Pattern("src/**/*.rs");
@@ -279,7 +329,7 @@ mod tests
     /// A set overlaps itself unless it is empty. Trivial, and it is the sanity check
     /// that catches an `Intersect` accidentally written as a difference.
     #[test]
-    fn Test_A_Nonempty_Set_Should_Overlap_Itself()
+    fn Test_Intersect_Should_Have_A_Nonempty_Set_Overlap_Itself()
     {
         let set = Set::Of(SetResolution::File, [Subject_Named("a.rs")]);
 

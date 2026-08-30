@@ -181,3 +181,131 @@ impl DocumentStore
             .collect());
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use crate::Recorded;
+    use nomos_contracts::{BuildVariantId, ConfigurationId, Digest128, GenerationId, SchemaId, SnapshotId};
+
+    fn Digest(seed: u8) -> Digest128
+    {
+        return Digest128::From_Bytes([seed; Digest128::BYTE_LENGTH]);
+    }
+
+    fn Fact(payload: &str) -> Recorded
+    {
+        return Recorded::New(DocumentKind::Fact, SchemaId::New("nomos.syntax.v1"), payload.as_bytes().to_vec());
+    }
+
+    fn Taken(seed: u8) -> Commit
+    {
+        return Commit::Under(
+            SnapshotId::From_Digest(Digest(seed)),
+            BuildVariantId::From_Digest(Digest(2)),
+            ConfigurationId::From_Digest(Digest(3)),
+            GenerationId::INITIAL,
+        )
+        .Recording(Fact("fn main() {}"));
+    }
+
+    fn Observed() -> DocumentStore
+    {
+        return DocumentStore::For(Authority::Observed);
+    }
+
+    #[test]
+    fn Test_For_Should_Open_An_Empty_Store()
+    {
+        assert_eq!(Observed().Length(), 0);
+    }
+
+    #[test]
+    fn Test_Authority_Should_Report_The_Authority_The_Store_Was_Opened_For()
+    {
+        assert_eq!(DocumentStore::For(Authority::Authored).Authority(), Authority::Authored);
+    }
+
+    #[test]
+    fn Test_Commit_Should_Write_Every_Record_And_A_Manifest()
+    {
+        let mut store = Observed();
+
+        let id = store.Commit(&Taken(1)).expect("commits");
+
+        assert!(store.Read(id).is_ok());
+        assert!(store.Length() >= 2);
+    }
+
+    #[test]
+    fn Test_Read_Should_Return_A_Committed_Bytes_By_Id()
+    {
+        let mut store = Observed();
+        let id = store.Commit(&Taken(1)).expect("commits");
+
+        assert!(store.Read(id).is_ok());
+    }
+
+    #[test]
+    fn Test_Documents_Should_Expose_Every_Document_The_Store_Holds()
+    {
+        let mut store = Observed();
+        store.Commit(&Taken(1)).expect("commits");
+
+        assert_eq!(store.Documents().len(), store.Length());
+    }
+
+    #[test]
+    fn Test_Length_Should_Count_The_Stores_Entries()
+    {
+        let mut store = Observed();
+        assert_eq!(store.Length(), 0);
+
+        store.Commit(&Taken(1)).expect("commits");
+
+        assert!(store.Length() > 0);
+    }
+
+    #[test]
+    fn Test_Index_Should_Derive_When_None_Is_Cached()
+    {
+        let mut store = Observed();
+        store.Commit(&Taken(1)).expect("commits");
+        store.Drop_Index();
+
+        assert!(!store.Index().expect("indexes").Is_Empty());
+    }
+
+    #[test]
+    fn Test_Drop_Index_Should_Clear_The_Cached_Index()
+    {
+        let mut store = Observed();
+        store.Commit(&Taken(1)).expect("commits");
+        store.Index().expect("indexes");
+
+        store.Drop_Index();
+
+        assert!(!store.Has_Index());
+    }
+
+    #[test]
+    fn Test_Has_Index_Should_Report_Whether_An_Index_Is_Cached()
+    {
+        let mut store = Observed();
+        assert!(store.Has_Index(), "a fresh store starts with an empty cached index");
+
+        store.Drop_Index();
+
+        assert!(!store.Has_Index());
+    }
+
+    #[test]
+    fn Test_Unreachable_Should_Be_Empty_When_Every_Document_Is_Reachable()
+    {
+        let mut store = Observed();
+        store.Commit(&Taken(1)).expect("commits");
+
+        assert!(store.Unreachable().expect("indexes").is_empty());
+    }
+}

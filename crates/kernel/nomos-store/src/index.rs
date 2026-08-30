@@ -188,3 +188,147 @@ fn Joined_Ids(ids: &BTreeSet<DocumentId>) -> Vec<u8>
 
     return joined;
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use crate::{Recorded, COMMIT_SCHEMA};
+    use nomos_contracts::{BuildVariantId, ConfigurationId, GenerationId, SchemaId};
+
+    fn Seeded_Digest(seed: u8) -> Digest128
+    {
+        return Digest128::From_Bytes([seed; Digest128::BYTE_LENGTH]);
+    }
+
+    fn Fact(payload: &str) -> Recorded
+    {
+        return Recorded::New(DocumentKind::Fact, SchemaId::New("nomos.syntax.v1"), payload.as_bytes().to_vec());
+    }
+
+    /// A one-record commit under a snapshot derived from `seed`, recording content that is
+    /// itself derived from `seed` -- so two different seeds never share a document by
+    /// content-addressing coincidence, which would make them look reachable from each
+    /// other's snapshot for a reason that has nothing to do with `In_Snapshot` itself.
+    fn Taken(seed: u8) -> Commit
+    {
+        return Commit::Under(
+            SnapshotId::From_Digest(Seeded_Digest(seed)),
+            BuildVariantId::From_Digest(Seeded_Digest(2)),
+            ConfigurationId::From_Digest(Seeded_Digest(3)),
+            GenerationId::INITIAL,
+        )
+        .Recording(Fact(&format!("fn seed_{seed}() {{}}")));
+    }
+
+    /// The documents a commit's own write would insert: one per record, plus its manifest.
+    fn Documents_From(commit: &Commit) -> BTreeMap<DocumentId, Document>
+    {
+        let mut documents = BTreeMap::new();
+        for record in &commit.records
+        {
+            let document = record.Document();
+            documents.insert(document.Id(), document);
+        }
+        let manifest = Document::New(
+            DocumentKind::Commit,
+            SchemaId::New(COMMIT_SCHEMA),
+            commit.Encode().expect("encodes"),
+        );
+        documents.insert(manifest.Id(), manifest);
+
+        return documents;
+    }
+
+    #[test]
+    fn Test_Derive_Should_Reach_Every_Recorded_Document()
+    {
+        let commit = Taken(1);
+        let documents = Documents_From(&commit);
+
+        let index = Index::Derive(&documents).expect("derives");
+        let reachable = index.In_Snapshot(commit.snapshot);
+
+        for id in documents.keys()
+        {
+            assert!(reachable.contains(id), "{id} was recorded but is unreachable from its snapshot");
+        }
+    }
+
+    #[test]
+    fn Test_Of_Kind_Should_Group_Documents_By_Kind()
+    {
+        let documents = Documents_From(&Taken(1));
+        let index = Index::Derive(&documents).expect("derives");
+
+        assert_eq!(index.Of_Kind(DocumentKind::Fact).len(), 1);
+        assert_eq!(index.Of_Kind(DocumentKind::Commit).len(), 1);
+    }
+
+    #[test]
+    fn Test_Of_Schema_Should_Group_Documents_By_Schema()
+    {
+        let documents = Documents_From(&Taken(1));
+        let index = Index::Derive(&documents).expect("derives");
+
+        assert_eq!(index.Of_Schema("nomos.syntax.v1").len(), 1);
+        assert!(index.Of_Schema("nomos.absent.v1").is_empty());
+    }
+
+    #[test]
+    fn Test_In_Snapshot_Should_Not_Return_Members_Of_A_Different_Snapshot()
+    {
+        let first = Taken(1);
+        let second = Taken(4);
+        let second_documents = Documents_From(&second);
+        let mut documents = Documents_From(&first);
+        documents.extend(second_documents.clone());
+
+        let index = Index::Derive(&documents).expect("derives");
+        let first_members = index.In_Snapshot(first.snapshot);
+
+        for id in second_documents.keys()
+        {
+            assert!(!first_members.contains(id), "{id} belongs to a different snapshot");
+        }
+    }
+
+    #[test]
+    fn Test_Commits_Under_Should_List_Every_Commit_Made_Against_A_Snapshot()
+    {
+        let commit = Taken(1);
+        let documents = Documents_From(&commit);
+        let index = Index::Derive(&documents).expect("derives");
+
+        assert_eq!(index.Commits_Under(commit.snapshot).len(), 1);
+    }
+
+    #[test]
+    fn Test_Snapshots_Should_List_Every_Workspace_State_With_A_Commit()
+    {
+        let commit = Taken(1);
+        let documents = Documents_From(&commit);
+        let index = Index::Derive(&documents).expect("derives");
+
+        assert_eq!(index.Snapshots(), vec![commit.snapshot]);
+    }
+
+    #[test]
+    fn Test_Is_Empty_Should_Be_True_Only_When_Nothing_Was_Derived()
+    {
+        assert!(Index::default().Is_Empty());
+
+        let documents = Documents_From(&Taken(1));
+
+        assert!(!Index::Derive(&documents).expect("derives").Is_Empty());
+    }
+
+    #[test]
+    fn Test_Digest_Should_Change_When_The_Indexed_Documents_Change()
+    {
+        let first = Index::Derive(&Documents_From(&Taken(1))).expect("derives");
+        let second = Index::Derive(&Documents_From(&Taken(4))).expect("derives");
+
+        assert_ne!(first.Digest(), second.Digest());
+    }
+}

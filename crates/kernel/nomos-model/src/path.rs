@@ -83,12 +83,19 @@ mod tests
 {
     use super::*;
 
+    /// Different spellings of the same file, which `Subject_Of_Path` must fold to one
+    /// identity.
+    fn Equivalent_Spellings_Of_One_Path() -> [&'static str; 5]
+    {
+        ["./alpha/one.rs", "alpha\\one.rs", "alpha//one.rs", "Alpha/One.rs", " alpha/one.rs "]
+    }
+
     #[test]
-    fn Test_Spellings_Of_One_Path_Should_Be_One_Subject()
+    fn Test_Subject_Of_Path_Should_Treat_Different_Spellings_Of_One_Path_As_One_Subject()
     {
         let canonical = Subject_Of_Path("alpha/one.rs");
 
-        for spelling in ["./alpha/one.rs", "alpha\\one.rs", "alpha//one.rs", "Alpha/One.rs", " alpha/one.rs "]
+        for spelling in Equivalent_Spellings_Of_One_Path()
         {
             assert_eq!(Subject_Of_Path(spelling), canonical, "`{spelling}`");
         }
@@ -105,10 +112,17 @@ mod tests
         assert_ne!(Subject_Of_Path("a/b.rs"), Subject_Of_Path("a-b.rs"));
     }
 
-    #[test]
-    fn Test_The_Root_Should_Normalize_To_The_Empty_String()
+    /// Spellings that all denote the repository root, which `Normalize_Path` must reduce
+    /// to the empty string.
+    fn Spellings_Of_The_Root() -> [&'static str; 5]
     {
-        for spelling in [".", "./", "/", "", "  "]
+        [".", "./", "/", "", "  "]
+    }
+
+    #[test]
+    fn Test_Normalize_Path_Should_Reduce_The_Root_To_The_Empty_String()
+    {
+        for spelling in Spellings_Of_The_Root()
         {
             assert_eq!(Normalize_Path(spelling), "", "`{spelling}`");
         }

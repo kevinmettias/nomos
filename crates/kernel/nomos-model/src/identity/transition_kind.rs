@@ -70,7 +70,7 @@ mod tests
     }
 
     #[test]
-    fn Test_Renames_And_Moves_Should_Preserve_History()
+    fn Test_Is_History_Preserving_Should_Be_True_For_Renames_And_Moves()
     {
         assert!(TransitionKind::ExactContinuity.Is_History_Preserving());
         assert!(TransitionKind::ProbableRename.Is_History_Preserving());

@@ -83,7 +83,7 @@ mod tests
     /// arm added here fails this file to *compile*, not merely to pass — the property
     /// D-134 asks a closed enum's mirror to have.
     #[test]
-    fn Test_Every_Kind_Should_Be_Matched_Exhaustively()
+    fn Test_All_Should_Enumerate_Every_Kind_Exhaustively()
     {
         fn Expected_Ordinal(kind: Kind) -> usize
         {
@@ -109,5 +109,29 @@ mod tests
                 kind.Label()
             );
         }
+    }
+
+    #[test]
+    fn Test_Label_Should_Return_A_Stable_Lowercase_Name_For_Every_Kind()
+    {
+        assert_eq!(Kind::Commit.Label(), "commit");
+        assert_eq!(Kind::Fact.Label(), "fact");
+        assert_eq!(Kind::Finding.Label(), "finding");
+        assert_eq!(Kind::Run.Label(), "run");
+        assert_eq!(Kind::Specification.Label(), "specification");
+        assert_eq!(Kind::Record.Label(), "record");
+        assert_eq!(Kind::Projection.Label(), "projection");
+    }
+
+    #[test]
+    fn Test_Authority_Should_Assign_Every_Kind_To_Exactly_One_Authority()
+    {
+        assert_eq!(Kind::Commit.Authority(), Authority::Observed);
+        assert_eq!(Kind::Fact.Authority(), Authority::Observed);
+        assert_eq!(Kind::Finding.Authority(), Authority::Observed);
+        assert_eq!(Kind::Run.Authority(), Authority::Observed);
+        assert_eq!(Kind::Specification.Authority(), Authority::Authored);
+        assert_eq!(Kind::Record.Authority(), Authority::Authored);
+        assert_eq!(Kind::Projection.Authority(), Authority::Authored);
     }
 }

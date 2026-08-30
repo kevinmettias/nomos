@@ -49,3 +49,17 @@ impl core::fmt::Display for SetResolution
         return formatter.write_str(self.Label());
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Label_Should_Return_The_Variants_Stable_Pascal_Case_Name()
+    {
+        assert_eq!(SetResolution::File.Label(), "File");
+        assert_eq!(SetResolution::Symbol.Label(), "Symbol");
+        assert_eq!(SetResolution::Region.Label(), "Region");
+    }
+}

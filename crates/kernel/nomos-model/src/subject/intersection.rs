@@ -50,3 +50,35 @@ impl Intersection
         };
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use crate::Content_Digest;
+
+    fn Subject_Named(name: &str) -> SubjectId
+    {
+        return SubjectId::From_Digest(Content_Digest(name.as_bytes()));
+    }
+
+    #[test]
+    fn Test_Permits_Concurrency_Should_Be_True_For_Disjoint_Only()
+    {
+        assert!(Intersection::Disjoint.Permits_Concurrency());
+        assert!(!Intersection::Overlaps(vec![Subject_Named("a.rs")]).Permits_Concurrency());
+        assert!(!Intersection::Unknown(UnknownReason::IncomparableSnapshots).Permits_Concurrency());
+    }
+
+    #[test]
+    fn Test_Conflicting_Should_Report_The_Overlapping_Members_And_Nothing_Otherwise()
+    {
+        let overlap = vec![Subject_Named("a.rs"), Subject_Named("b.rs")];
+
+        assert_eq!(Intersection::Overlaps(overlap.clone()).Conflicting(), overlap.as_slice());
+        assert!(Intersection::Disjoint.Conflicting().is_empty());
+        assert!(Intersection::Unknown(UnknownReason::IncomparableSnapshots)
+            .Conflicting()
+            .is_empty());
+    }
+}

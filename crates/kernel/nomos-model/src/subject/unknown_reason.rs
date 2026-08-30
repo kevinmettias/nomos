@@ -66,3 +66,38 @@ impl UnknownReason
         };
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    const MINIMUM_USEFUL_DESCRIPTION_LENGTH: usize = 20;
+
+    #[test]
+    fn Test_Describe_Should_Name_What_Is_Unknown_For_Every_Variant()
+    {
+        let reasons = [
+            UnknownReason::IncomparableResolution {
+                left: SetResolution::File,
+                right: SetResolution::Symbol,
+            },
+            UnknownReason::ResolutionUnavailable {
+                requested: SetResolution::Region,
+            },
+            UnknownReason::IncomparableSnapshots,
+            UnknownReason::UnexpandedPattern {
+                pattern: "src/**".to_owned(),
+            },
+        ];
+
+        for reason in &reasons
+        {
+            assert!(
+                reason.Describe().len() > MINIMUM_USEFUL_DESCRIPTION_LENGTH,
+                "{} is too terse to act on",
+                reason.Describe()
+            );
+        }
+    }
+}

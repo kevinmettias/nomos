@@ -32,3 +32,32 @@ impl Recorded
         return Document::New(self.kind, self.schema.clone(), self.bytes.clone());
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    fn Arbitrary_Recorded() -> Recorded
+    {
+        return Recorded::New(DocumentKind::Fact, SchemaId::New("nomos.syntax.v1"), b"fn main() {}".to_vec());
+    }
+
+    #[test]
+    fn Test_New_Should_Build_A_Recorded_From_Its_Kind_Schema_And_Bytes()
+    {
+        let recorded = Arbitrary_Recorded();
+
+        assert_eq!(recorded.kind, DocumentKind::Fact);
+        assert_eq!(recorded.bytes, b"fn main() {}".to_vec());
+    }
+
+    #[test]
+    fn Test_Document_Should_Convert_A_Recorded_Into_A_Document_Of_The_Same_Kind()
+    {
+        let document = Arbitrary_Recorded().Document();
+
+        assert_eq!(document.kind, DocumentKind::Fact);
+        assert_eq!(document.bytes, b"fn main() {}".to_vec());
+    }
+}

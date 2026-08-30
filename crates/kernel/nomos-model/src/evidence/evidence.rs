@@ -35,7 +35,7 @@ mod tests
     use super::*;
 
     #[test]
-    fn Test_Agent_Evidence_Should_Not_Be_Mechanical()
+    fn Test_Is_Mechanical_Should_Be_False_For_Agent_Judged_Evidence()
     {
         let agent_claim = Evidence {
             class: EvidenceClass::AgentJudged,
