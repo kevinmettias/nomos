@@ -38575,7 +38575,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "territory reserved the whole docs/records directory, which P10-RECORD-LOCK's own invariant test (nomos-ledger's Test_No_Open_Item_Should_Reserve_The_Whole_Record_Directory) correctly refuses -- it excludes every other record-writing item. Superseded by P23-BOOLPRED-SPEC-RENAME-2, which reserves the 7 specific governing records that actually cite the flagged names instead of the whole directory."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -38591,7 +38595,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-p23-testing",
+        "declined_at": 1788128967
+      }
     },
     {
       "id": "P22-PLACEMENT-DUP-REGRESSION",
@@ -39237,6 +39244,51 @@
           "lease_expires_at": 1788075088
         }
       ],
+      "declined": null
+    },
+    {
+      "id": "P23-BOOLPRED-SPEC-RENAME-2",
+      "title": "rename Applicability::Was_Evaluated/Requires_Agent via the spec-change workflow",
+      "why": "check-boolean-predicate flags these two pub methods on nomos-contracts::Applicability; call sites live in crates/substrate and the names are quoted verbatim as code citations in 7 docs/records/ governing records (OD-ANALYSIS-006, OD-CAPABILITY-005, OD-COMPLETENESS-004, OD-CONTRACTS-002, OD-EXECUTOR-003, OD-GATE-015, OD-LEDGER-022) plus the rendered spec/domain-specification.md and two tests/contract/requirements/*.assessment files. Currently covered by a temporary suppressions.json waiver (expires 2026-11-27) recorded by P22-REGRESSION-MISC -- this item does the real fix via the nomos-spec-change skill (stage each record edit, preview, commit, then render both diagram-set and domain-specification profiles) rather than leaving the waiver to lapse. Supersedes P23-BOOLPRED-SPEC-RENAME, declined for reserving the whole docs/records directory instead of these specific records.",
+      "done_when": "check-boolean-predicate reports zero for nomos-contracts (no waiver needed), all 7 governing records above are updated and re-rendered, tests/contract/requirements assessments still name a real site, and cargo build --workspace --all-targets passes",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/contracts/nomos-contracts",
+          "crates/substrate/nomos-ledger/src/claim/refusal.rs",
+          "crates/kernel/nomos-model/src/evidence/coverage.rs",
+          "crates/orchestration/nomos-check-orchestration/src/examined/claim.rs",
+          "crates/substrate/nomos-capability/tests/resolution_never_says_no.rs",
+          "spec/domain-specification.md",
+          "tests/contract/requirements",
+          "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md",
+          "docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md",
+          "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md",
+          "docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md",
+          "docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md",
+          "docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md",
+          "docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
       "declined": null
     }
   ]
