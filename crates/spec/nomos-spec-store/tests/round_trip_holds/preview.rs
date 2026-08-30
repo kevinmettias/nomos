@@ -5,7 +5,7 @@ use nomos_spec_store::{BlockChange, EditPreview, NormativeOutcome};
 
 /// The mandatory sentence, in the three cases that are not the same answer.
 #[test]
-fn Test_The_Preview_Should_Say_Whether_Normative_Wording_Moved()
+fn Test_The_Preview_Should_Say_Whether_Normative_Is_Wording_Moved()
 {
     let store = With_Synthetic();
 
@@ -32,7 +32,7 @@ fn Test_The_Preview_Should_Say_Whether_Normative_Wording_Moved()
 /// The preview says whether normative wording moved, and says it in those words.
 fn Assert_Answers_The_Mandatory_Question(preview: &EditPreview, moved: bool, why: &str)
 {
-    assert_eq!(preview.Wording_Moved(), moved, "{why}: {}", preview.Describe());
+    assert_eq!(preview.Is_Wording_Moved(), moved, "{why}: {}", preview.Describe());
     assert!(
         preview.Describe().contains("normative wording"),
         "the preview does not answer the mandatory question: {}",
@@ -87,7 +87,7 @@ fn Test_A_Moved_Block_Should_Report_As_Moved()
         "a pure reordering reported something other than movement: {}",
         preview.Describe()
     );
-    assert!(preview.Wording_Moved(), "{}", preview.Describe());
+    assert!(preview.Is_Wording_Moved(), "{}", preview.Describe());
 }
 
 /// The strong answer, where the store has the evidence for it. A normative statement recorded
@@ -138,7 +138,7 @@ fn Test_A_Record_With_No_Recorded_Statement_Should_Still_Get_An_Answer()
         .expect("previews");
 
     assert!(preview.Statements().is_empty(), "the fixture recorded a statement");
-    assert!(preview.Wording_Moved());
+    assert!(preview.Is_Wording_Moved());
     assert!(
         preview.Describe().contains("no normative statement is recorded"),
         "the preview does not say what its answer rests on: {}",

@@ -91,7 +91,7 @@ impl Preview
     /// ingested for. A preview that reported only the strong answer would print nothing at
     /// all for this repository's own records, and nothing reads as *no*.
     #[must_use]
-    pub fn Wording_Moved(&self) -> bool
+    pub fn Is_Wording_Moved(&self) -> bool
     {
         use crate::NormativeOutcome;
 
@@ -106,7 +106,7 @@ impl Preview
 
     /// Whether this edit changes anything at all.
     #[must_use]
-    pub fn Changes_Nothing(&self) -> bool
+    pub fn Has_No_Changes(&self) -> bool
     {
         return self.blocks.is_empty()
             && self.identity.is_empty()
@@ -122,7 +122,7 @@ impl Preview
         let mut lines = vec![format!("{} at {}", self.Node_Id(), self.Path())];
 
         self.Describe_Changes(&mut lines);
-        if self.Changes_Nothing()
+        if self.Has_No_Changes()
         {
             lines.push("  nothing changes".to_owned());
         }
@@ -176,7 +176,7 @@ impl Preview
     /// The sentence `D-129` calls mandatory, in the two words it can take.
     fn Verdict(&self) -> &'static str
     {
-        if self.Wording_Moved()
+        if self.Is_Wording_Moved()
         {
             return "normative wording moved";
         }

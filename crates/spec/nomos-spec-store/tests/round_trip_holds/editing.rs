@@ -17,7 +17,7 @@ fn Test_An_Edit_Should_Be_Readable_Back_Out_As_What_Was_Committed()
 
     let projection = store.Record_Markdown("D-900", None).expect("projects");
     assert_eq!(projection.markdown, edited);
-    assert!(projection.Matches_Source(), "the stored bytes and the rows disagree");
+    assert!(projection.Is_Matching_Source(), "the stored bytes and the rows disagree");
 }
 
 /// `done_when`'s identity clause. The node, the block surrogates every lineage row hangs from,
@@ -127,7 +127,7 @@ fn Test_Committing_What_Was_Read_Out_Should_Change_Nothing()
         .expect("previews");
 
     assert_eq!(markdown, SYNTHETIC);
-    assert!(preview.Changes_Nothing(), "{}", preview.Describe());
-    assert!(!preview.Wording_Moved());
+    assert!(preview.Has_No_Changes(), "{}", preview.Describe());
+    assert!(!preview.Is_Wording_Moved());
     assert!(preview.Describe().contains("nothing changes"), "{}", preview.Describe());
 }

@@ -11,7 +11,7 @@ use crate::request::RecordRequest;
 /// than new logic: that method already returns the typed answer this verb needs, and a
 /// second type here would only restate it. Moved from
 /// `nomos-cli::spec::verb::markdown::Markdown`, minus the writing and the
-/// [`RecordProjection::Matches_Source`] check, which is a rendering decision (`Ok` versus
+/// [`RecordProjection::Is_Matching_Source`] check, which is a rendering decision (`Ok` versus
 /// `Stale`) rather than a resolution one.
 ///
 /// # Errors

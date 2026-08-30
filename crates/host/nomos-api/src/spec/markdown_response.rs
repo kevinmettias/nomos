@@ -70,7 +70,7 @@ impl MarkdownResponse
         {
             Ok(projection) =>
             {
-                let matches_source = projection.Matches_Source();
+                let matches_source = projection.Is_Matching_Source();
 
                 Self::Resolved {
                     node_id: projection.node_id,

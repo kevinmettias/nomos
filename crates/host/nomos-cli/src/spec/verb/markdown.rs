@@ -34,7 +34,7 @@ pub(in crate::spec) fn Render_Markdown(
 /// Whether the store can write back the bytes it was given, said out loud when it cannot.
 pub(super) fn Reproducible_Projection(projection: &RecordProjection, notes: &mut dyn std::io::Write) -> ExitCode
 {
-    if projection.Matches_Source()
+    if projection.Is_Matching_Source()
     {
         return ExitCode::Ok;
     }

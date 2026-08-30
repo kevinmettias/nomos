@@ -23,7 +23,7 @@ impl Projection
     /// answer — a v14 record carrying a byte order mark is one — and a reader who asked for
     /// markdown should get it along with the fact, not an error instead of it.
     #[must_use]
-    pub fn Matches_Source(&self) -> bool
+    pub fn Is_Matching_Source(&self) -> bool
     {
         return self.source_hash == self.projected_hash;
     }

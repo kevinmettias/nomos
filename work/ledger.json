@@ -38477,6 +38477,62 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P22-BOOLPRED-CROSS-TERRITORY",
+      "title": "rename Wording_Moved/Changes_Nothing/Matches_Source (cross-territory)",
+      "why": "P22-REGRESSION-SPEC and P22-REGRESSION-MISC both deliberately left this check-boolean-predicate fix undone since real call sites span crates/spec, crates/host and crates/orchestration -- outside either band's own territory",
+      "done_when": "check-boolean-predicate reports zero for EditPreview and RecordProjection, cargo build --workspace --all-targets passes, and the public-surface snapshot is reblessed",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-store",
+          "crates/host/nomos-api",
+          "crates/host/nomos-cli",
+          "crates/orchestration/nomos-spec-orchestration",
+          "tests/contract/surface/nomos-spec-store.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "exit_code": 0,
+        "output_tail": "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.19s\n",
+        "verified_at": 1788067239,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "b78f4bc5293eaa00c4c3446e140e581a163e2062"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

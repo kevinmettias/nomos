@@ -99,9 +99,10 @@ pub fn nomos_spec_store::EditError::from(error: RenderError) -> Self
 pub fn nomos_spec_store::EditError::from(error: StoreError) -> Self
 pub fn nomos_spec_store::EditError::from(error: rusqlite::Error) -> Self
 pub fn nomos_spec_store::EditPreview::Blocks(&self) -> &[BlockChange]
-pub fn nomos_spec_store::EditPreview::Changes_Nothing(&self) -> bool
 pub fn nomos_spec_store::EditPreview::Describe(&self) -> String
+pub fn nomos_spec_store::EditPreview::Has_No_Changes(&self) -> bool
 pub fn nomos_spec_store::EditPreview::Identity(&self) -> &[IdentityChange]
+pub fn nomos_spec_store::EditPreview::Is_Wording_Moved(&self) -> bool
 pub fn nomos_spec_store::EditPreview::Markdown(&self) -> &str
 pub fn nomos_spec_store::EditPreview::Node_Id(&self) -> &str
 pub fn nomos_spec_store::EditPreview::Path(&self) -> &str
@@ -109,14 +110,13 @@ pub fn nomos_spec_store::EditPreview::Relations_Added(&self) -> &[RecordRelation
 pub fn nomos_spec_store::EditPreview::Relations_Removed(&self) -> &[RecordRelation]
 pub fn nomos_spec_store::EditPreview::Rename(&self) -> Option<(&str, &str)>
 pub fn nomos_spec_store::EditPreview::Statements(&self) -> &[NormativeMovement]
-pub fn nomos_spec_store::EditPreview::Wording_Moved(&self) -> bool
 pub fn nomos_spec_store::FromNodeId::from(value: &'a String) -> Self
 pub fn nomos_spec_store::FromNodeId::from(value: &'a str) -> Self
 pub fn nomos_spec_store::InverseRelationType::from(value: &'a String) -> Self
 pub fn nomos_spec_store::InverseRelationType::from(value: &'a str) -> Self
 pub fn nomos_spec_store::Latest_Version() -> u32
 pub fn nomos_spec_store::NormativeOutcome::Describe(&self) -> String
-pub fn nomos_spec_store::RecordProjection::Matches_Source(&self) -> bool
+pub fn nomos_spec_store::RecordProjection::Is_Matching_Source(&self) -> bool
 pub fn nomos_spec_store::Seed_Governing_Records(store: &mut SpecificationStore) -> Result<SeedReport, StoreError>
 pub fn nomos_spec_store::SpecificationStore::Assign_Suite(&mut self, node_uid: i64, suite_uid: i64) -> Result<(), StoreError>
 pub fn nomos_spec_store::SpecificationStore::Connection(&self) -> &Connection

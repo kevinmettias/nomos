@@ -404,7 +404,7 @@ fn Test_Run_Of_Preview_Should_Describe_A_Staged_Edit_And_Write_Nothing()
     };
     let preview = preview.expect("a canonical heading rename previews cleanly");
 
-    assert!(preview.Wording_Moved(), "a heading rename must count as wording moved");
+    assert!(preview.Is_Wording_Moved(), "a heading rename must count as wording moved");
     assert!(preview.Describe().contains("normative wording moved"), "{}", preview.Describe());
 }
 

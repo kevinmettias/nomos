@@ -43,7 +43,7 @@ fn Assert_Projects_To_Its_Own_Bytes(store: &SpecificationStore, id: &str)
         projection.markdown, source.text,
         "{id} does not render back to the bytes it was seeded from"
     );
-    assert!(projection.Matches_Source(), "{id}: the content addresses disagree");
+    assert!(projection.Is_Matching_Source(), "{id}: the content addresses disagree");
 }
 
 /// The negative control for the test above, and the reason the projection is worth having:
@@ -69,7 +69,7 @@ fn Test_A_Projection_Should_Come_From_The_Rows_And_Not_The_Blob()
 
     assert_eq!(after.markdown, before.markdown, "the projection followed the blob");
     assert!(
-        !after.Matches_Source(),
+        !after.Is_Matching_Source(),
         "the document now holds different bytes, and the projection must say so"
     );
 }

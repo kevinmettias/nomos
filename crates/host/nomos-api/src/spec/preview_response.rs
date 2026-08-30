@@ -112,8 +112,8 @@ impl PreviewResponse
                 .map(RecordRelationResponse::From)
                 .collect(),
             statements: preview.Statements().iter().cloned().map(NormativeMovementResponse::From).collect(),
-            wording_moved: preview.Wording_Moved(),
-            changes_nothing: preview.Changes_Nothing(),
+            wording_moved: preview.Is_Wording_Moved(),
+            changes_nothing: preview.Has_No_Changes(),
         };
     }
 }
