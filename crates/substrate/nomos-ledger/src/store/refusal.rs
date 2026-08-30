@@ -361,40 +361,11 @@ mod tests
     use crate::ItemOrigin;
     use crate::Territory;
 
-    fn Timestamp_At_Seconds(seconds: i64) -> Timestamp
-    {
-        return Timestamp::From_Unix_Seconds(seconds);
-    }
+    /// When the fixture below acquired its claim.
+    const CLAIM_ACQUIRED_AT_SECONDS: i64 = 1_000;
 
-    fn Item_Named(id: &str) -> LedgerItem
-    {
-        return LedgerItem {
-            id: ItemId::New(id),
-            title: "an item".to_owned(),
-            why: "because".to_owned(),
-            done_when: "when it is done".to_owned(),
-            kind: ItemKind::Correction,
-            origin: ItemOrigin::Proposed,
-            territory: Territory::Empty(),
-            state: ItemState::Ready,
-            depends_on: Vec::new(),
-            blocked: None,
-            claim: None,
-            verification: None,
-            verified: None,
-            abandoned: Vec::new(),
-            displaced: Vec::new(),
-            declined: None,
-        };
-    }
-
-    fn Document_Of(items: Vec<LedgerItem>) -> LedgerDocument
-    {
-        return LedgerDocument {
-            schema_version: crate::SCHEMA_VERSION,
-            items,
-        };
-    }
+    /// When the fixture below's claim expires.
+    const CLAIM_EXPIRES_AT_SECONDS: i64 = 9_000;
 
     /// The fixture `Test_Eligible_Items_Should_Exclude_What_Claim_Refusal_Would_Refuse`
     /// asserts over: a `Ready` item held back by a live overlapping claim, the item
@@ -408,26 +379,6 @@ mod tests
         held: LedgerItem,
         contested: LedgerItem,
         free: LedgerItem,
-    }
-
-    fn Held_Contested_And_Free() -> Fixture
-    {
-        let mut held = Item_Named("P1-HELD");
-        held.territory = Territory::Of_Files(["a/shared.rs"]);
-        held.state = ItemState::Claimed;
-        held.claim = Some(Claim {
-            holder: "agent-a".to_owned(),
-            acquired_at: Timestamp_At_Seconds(1_000),
-            lease_expires_at: Timestamp_At_Seconds(9_000),
-        });
-
-        let mut contested = Item_Named("P2-CONTESTED");
-        contested.territory = Territory::Of_Files(["a/shared.rs"]);
-
-        let mut free = Item_Named("P3-FREE");
-        free.territory = Territory::Of_Files(["b/other.rs"]);
-
-        return Fixture { held, contested, free };
     }
 
     /// The property [`Eligible_Items`] exists to give a name to: a `Ready` item held back by
@@ -453,6 +404,48 @@ mod tests
         );
     }
 
+    fn Held_Contested_And_Free() -> Fixture
+    {
+        let mut held = Item_Named("P1-HELD");
+        held.territory = Territory::Of_Files(["a/shared.rs"]);
+        held.state = ItemState::Claimed;
+        held.claim = Some(Claim {
+            holder: "agent-a".to_owned(),
+            acquired_at: Timestamp_At_Seconds(CLAIM_ACQUIRED_AT_SECONDS),
+            lease_expires_at: Timestamp_At_Seconds(CLAIM_EXPIRES_AT_SECONDS),
+        });
+
+        let mut contested = Item_Named("P2-CONTESTED");
+        contested.territory = Territory::Of_Files(["a/shared.rs"]);
+
+        let mut free = Item_Named("P3-FREE");
+        free.territory = Territory::Of_Files(["b/other.rs"]);
+
+        return Fixture { held, contested, free };
+    }
+
+    fn Item_Named(id: &str) -> LedgerItem
+    {
+        return LedgerItem {
+            id: ItemId::New(id),
+            title: "an item".to_owned(),
+            why: "because".to_owned(),
+            done_when: "when it is done".to_owned(),
+            kind: ItemKind::Correction,
+            origin: ItemOrigin::Proposed,
+            territory: Territory::Empty(),
+            state: ItemState::Ready,
+            depends_on: Vec::new(),
+            blocked: None,
+            claim: None,
+            verification: None,
+            verified: None,
+            abandoned: Vec::new(),
+            displaced: Vec::new(),
+            declined: None,
+        };
+    }
+
     /// The tie-break `OD-LEDGER-023` wrote down: id order, not the order items happen to
     /// sit in the document.
     #[test]
@@ -474,5 +467,18 @@ mod tests
         let document = Document_Of(Vec::new());
 
         assert!(Eligible_Items(&document, Timestamp_At_Seconds(2_000)).is_empty());
+    }
+
+    fn Timestamp_At_Seconds(seconds: i64) -> Timestamp
+    {
+        return Timestamp::From_Unix_Seconds(seconds);
+    }
+
+    fn Document_Of(items: Vec<LedgerItem>) -> LedgerDocument
+    {
+        return LedgerDocument {
+            schema_version: crate::SCHEMA_VERSION,
+            items,
+        };
     }
 }

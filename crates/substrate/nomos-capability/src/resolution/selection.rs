@@ -194,15 +194,6 @@ mod tests
         };
     }
 
-    /// Provider names in order, which is what every ranking assertion here is about.
-    fn Named_Providers(offers: &[ProviderOffer]) -> Vec<String>
-    {
-        return offers
-            .iter()
-            .map(|offer| return offer.provider.As_Str().to_owned())
-            .collect();
-    }
-
     fn Parse() -> Guarantee
     {
         return Guarantee::New(
@@ -356,5 +347,14 @@ mod tests
     fn Test_An_Empty_Set_Should_Not_Produce_A_Selection()
     {
         assert!(Selection::Over(Vec::new(), None).is_none());
+    }
+
+    /// Provider names in order, which is what every ranking assertion here is about.
+    fn Named_Providers(offers: &[ProviderOffer]) -> Vec<String>
+    {
+        return offers
+            .iter()
+            .map(|offer| return offer.provider.As_Str().to_owned())
+            .collect();
     }
 }

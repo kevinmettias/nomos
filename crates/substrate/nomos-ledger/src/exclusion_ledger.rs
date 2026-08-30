@@ -116,15 +116,22 @@ mod tests
     use nomos_model::UnknownReason;
     use nomos_model::SetResolution;
 
-    fn Timestamp_At_Seconds(seconds: i64) -> Timestamp
-    {
-        return Timestamp::From_Unix_Seconds(seconds);
-    }
+    /// One hour, in seconds -- comfortably inside `MAXIMUM_LEASE` for the acceptance case.
+    const ONE_HOUR_SECONDS: u64 = 3_600;
+
+    /// The instant every fixture below treats as "now".
+    const NOW_SECONDS: i64 = 2_000;
+
+    /// A lease request far past any real ceiling, for the refusal case.
+    const ABSURDLY_LONG_LEASE_SECONDS: u64 = 9_999_999;
+
+    /// The shortest a refusal's `Describe()` may be and still tell an operator anything.
+    const MINIMUM_USEFUL_DESCRIPTION_LENGTH: usize = 15;
 
     #[test]
     fn Test_A_Lease_Within_The_Ceiling_Should_Be_Accepted()
     {
-        assert!(Check_Lease(Duration::from_secs(3_600)).is_ok());
+        assert!(Check_Lease(Duration::from_secs(ONE_HOUR_SECONDS)).is_ok());
         assert!(Check_Lease(MAXIMUM_LEASE).is_ok());
     }
 
@@ -144,7 +151,7 @@ mod tests
             &Intersection::Disjoint,
             &ItemId::New("T-1"),
             "agent-a",
-            Timestamp_At_Seconds(2_000),
+            Timestamp_At_Seconds(NOW_SECONDS),
         );
 
         assert!(refusal.is_none());
@@ -160,7 +167,7 @@ mod tests
             right: SetResolution::Symbol,
         });
 
-        let refusal = Refusal_From(&unknown, &ItemId::New("T-1"), "agent-a", Timestamp_At_Seconds(2_000))
+        let refusal = Refusal_From(&unknown, &ItemId::New("T-1"), "agent-a", Timestamp_At_Seconds(NOW_SECONDS))
             .expect("unknown independence must refuse");
 
         assert!(matches!(refusal, ClaimRefusal::UnknownIndependence { .. }));
@@ -177,7 +184,7 @@ mod tests
     {
         let overlaps = Intersection::Overlaps(Vec::new());
 
-        let refusal = Refusal_From(&overlaps, &ItemId::New("T-1"), "agent-b", Timestamp_At_Seconds(2_000))
+        let refusal = Refusal_From(&overlaps, &ItemId::New("T-1"), "agent-b", Timestamp_At_Seconds(NOW_SECONDS))
             .expect("an overlap must refuse");
 
         assert!(refusal.Is_Retryable());
@@ -196,7 +203,7 @@ mod tests
         let refusal = ClaimRefusal::Lapsed {
             item: ItemId::New("T-1"),
             holder: "dead-agent".to_owned(),
-            since: Timestamp_At_Seconds(2_000),
+            since: Timestamp_At_Seconds(NOW_SECONDS),
         };
 
         let said = refusal.Describe();
@@ -215,7 +222,7 @@ mod tests
         let refusals = [
             ClaimRefusal::HeldBy {
                 holder: "agent-a".to_owned(),
-                until: Timestamp_At_Seconds(2_000),
+                until: Timestamp_At_Seconds(NOW_SECONDS),
                 item: ItemId::New("T-1"),
             },
             ClaimRefusal::UnknownIndependence {
@@ -223,7 +230,7 @@ mod tests
                 reason: UnknownReason::IncomparableSnapshots,
             },
             ClaimRefusal::LeaseTooLong {
-                requested: Duration::from_secs(9_999_999),
+                requested: Duration::from_secs(ABSURDLY_LONG_LEASE_SECONDS),
                 maximum: MAXIMUM_LEASE,
             },
             ClaimRefusal::NotClaimable {
@@ -233,7 +240,7 @@ mod tests
             ClaimRefusal::Lapsed {
                 item: ItemId::New("T-5"),
                 holder: "dead-agent".to_owned(),
-                since: Timestamp_At_Seconds(2_000),
+                since: Timestamp_At_Seconds(NOW_SECONDS),
             },
             ClaimRefusal::NoSuchItem {
                 item: ItemId::New("T-4"),
@@ -243,10 +250,15 @@ mod tests
         for refusal in &refusals
         {
             assert!(
-                refusal.Describe().len() > 15,
+                refusal.Describe().len() > MINIMUM_USEFUL_DESCRIPTION_LENGTH,
                 "{} is too terse to act on",
                 refusal.Describe()
             );
         }
+    }
+
+    fn Timestamp_At_Seconds(seconds: i64) -> Timestamp
+    {
+        return Timestamp::From_Unix_Seconds(seconds);
     }
 }

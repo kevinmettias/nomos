@@ -199,6 +199,9 @@ mod tests
 {
     use super::*;
 
+    /// The shortest a refusal's `Describe()` may be and still tell an operator anything.
+    const MINIMUM_USEFUL_DESCRIPTION_LENGTH: usize = 15;
+
     const WORKFLOW: &str = "name: gate\n\
                             \n\
                             jobs:\n\
@@ -318,7 +321,7 @@ mod tests
         for refusal in &refusals
         {
             assert!(
-                refusal.Describe().len() > 15,
+                refusal.Describe().len() > MINIMUM_USEFUL_DESCRIPTION_LENGTH,
                 "{} is too terse to act on",
                 refusal.Describe()
             );

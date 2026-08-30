@@ -328,24 +328,13 @@ mod tests
 {
     use super::*;
 
-    fn Variant() -> BuildVariant
-    {
-        return BuildVariant::New("x86_64-unknown-linux-gnu", "dev", "1.85", ["analysis"]);
-    }
+    /// The byte [`Configuration`]'s digest is filled with, distinct from
+    /// [`OTHER_CONFIGURATION_BYTE`] so two configurations in the same test are never
+    /// mistaken for one.
+    const CONFIGURATION_BYTE: u8 = 0x7c;
 
-    fn Configuration() -> ConfigurationId
-    {
-        return ConfigurationId::From_Digest(Digest128::From_Bytes([0x7c; 16]));
-    }
-
-    fn Populated() -> WorkspaceSnapshot
-    {
-        let mut snapshot = WorkspaceSnapshot::Of(Variant(), Configuration());
-        snapshot.Put("src/lib.rs".to_owned(), Content_Digest(b"pub fn a() {}"));
-        snapshot.Put("src/main.rs".to_owned(), Content_Digest(b"fn main() {}"));
-
-        return snapshot;
-    }
+    /// The byte a second, distinguishable configuration is filled with.
+    const OTHER_CONFIGURATION_BYTE: u8 = 0x7d;
 
     #[test]
     fn Test_A_Snapshot_Should_Survive_A_Round_Trip()
@@ -414,7 +403,7 @@ mod tests
         let mut other_variant = WorkspaceSnapshot::Of(variant, Configuration());
         let mut other_configuration = WorkspaceSnapshot::Of(
             Variant(),
-            ConfigurationId::From_Digest(Digest128::From_Bytes([0x7d; 16])),
+            ConfigurationId::From_Digest(Digest128::From_Bytes([OTHER_CONFIGURATION_BYTE; Digest128::BYTE_LENGTH])),
         );
         for snapshot in [&mut other_variant, &mut other_configuration]
         {
@@ -460,5 +449,24 @@ mod tests
 
         assert!(decoded.Is_Empty());
         assert_eq!(decoded.Variant(), &Variant());
+    }
+
+    fn Variant() -> BuildVariant
+    {
+        return BuildVariant::New("x86_64-unknown-linux-gnu", "dev", "1.85", ["analysis"]);
+    }
+
+    fn Configuration() -> ConfigurationId
+    {
+        return ConfigurationId::From_Digest(Digest128::From_Bytes([CONFIGURATION_BYTE; Digest128::BYTE_LENGTH]));
+    }
+
+    fn Populated() -> WorkspaceSnapshot
+    {
+        let mut snapshot = WorkspaceSnapshot::Of(Variant(), Configuration());
+        snapshot.Put("src/lib.rs".to_owned(), Content_Digest(b"pub fn a() {}"));
+        snapshot.Put("src/main.rs".to_owned(), Content_Digest(b"fn main() {}"));
+
+        return snapshot;
     }
 }

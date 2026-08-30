@@ -130,40 +130,6 @@ mod tests
         }
     }
 
-    fn Digest_From_Byte(byte: u8) -> Digest128
-    {
-        return Digest128::From_Bytes([byte; 16]);
-    }
-
-    /// A dependents adjacency map built from `(from, to)` edges, one insertion per edge.
-    fn Graph_From_Edges(edges: &[(Digest128, Digest128)]) -> BTreeMap<Digest128, BTreeSet<Digest128>>
-    {
-        let mut dependents: BTreeMap<Digest128, BTreeSet<Digest128>> = BTreeMap::new();
-        for (from, to) in edges.iter().copied()
-        {
-            dependents.entry(from).or_default().insert(to);
-        }
-
-        return dependents;
-    }
-
-    fn Spread_Collecting_Reached(
-        dependents: &BTreeMap<Digest128, BTreeSet<Digest128>>,
-        roots: Vec<Digest128>,
-        mut on_reach: impl FnMut(Digest128) -> bool,
-    ) -> Vec<Digest128>
-    {
-        let mut reached: Vec<Digest128> = Vec::new();
-        LocalGraphPropagation.Spread(dependents, roots, &mut |digest| {
-            let keep_going = on_reach(digest);
-            reached.push(digest);
-
-            return keep_going;
-        });
-
-        return reached;
-    }
-
     #[test]
     fn Test_Spread_Should_Reach_Every_Downstream_Node_Once()
     {
@@ -203,5 +169,39 @@ mod tests
         let reached = Spread_Collecting_Reached(&dependents, vec![a], |digest| return digest != b);
 
         assert_eq!(reached, vec![b]);
+    }
+
+    fn Digest_From_Byte(byte: u8) -> Digest128
+    {
+        return Digest128::From_Bytes([byte; 16]);
+    }
+
+    /// A dependents adjacency map built from `(from, to)` edges, one insertion per edge.
+    fn Graph_From_Edges(edges: &[(Digest128, Digest128)]) -> BTreeMap<Digest128, BTreeSet<Digest128>>
+    {
+        let mut dependents: BTreeMap<Digest128, BTreeSet<Digest128>> = BTreeMap::new();
+        for (from, to) in edges.iter().copied()
+        {
+            dependents.entry(from).or_default().insert(to);
+        }
+
+        return dependents;
+    }
+
+    fn Spread_Collecting_Reached(
+        dependents: &BTreeMap<Digest128, BTreeSet<Digest128>>,
+        roots: Vec<Digest128>,
+        mut on_reach: impl FnMut(Digest128) -> bool,
+    ) -> Vec<Digest128>
+    {
+        let mut reached: Vec<Digest128> = Vec::new();
+        LocalGraphPropagation.Spread(dependents, roots, &mut |digest| {
+            let keep_going = on_reach(digest);
+            reached.push(digest);
+
+            return keep_going;
+        });
+
+        return reached;
     }
 }

@@ -88,16 +88,6 @@ mod tests
 {
     use super::*;
 
-    fn Host() -> BuildVariant
-    {
-        return BuildVariant::New(
-            "x86_64-pc-windows-msvc",
-            "dev",
-            "1.85",
-            ["telemetry", "analysis"],
-        );
-    }
-
     /// The property that stops a resolver's iteration order from invalidating a corpus.
     #[test]
     fn Test_Feature_Order_Should_Not_Change_The_Variant()
@@ -139,6 +129,16 @@ mod tests
         {
             assert_ne!(base.Id(), altered.Id(), "{altered:?} must not share an identity");
         }
+    }
+
+    fn Host() -> BuildVariant
+    {
+        return BuildVariant::New(
+            "x86_64-pc-windows-msvc",
+            "dev",
+            "1.85",
+            ["telemetry", "analysis"],
+        );
     }
 
     /// Components are delimited, not concatenated. Two variants whose fields differ only
