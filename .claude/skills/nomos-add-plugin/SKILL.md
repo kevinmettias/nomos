@@ -94,7 +94,7 @@ Much smaller than a provider. `crates/rules/nomos-rules` holds four rules today,
 is a fifth function of that same shape inside the same crate, not a new crate or a new
 band. There is no `Rule` trait; match the signature.
 
-**Wiring it in**: `crates/orchestration/nomos-check-orchestration/src/run.rs`'s `Run`
+**Wiring it in**: `crates/orchestration/nomos-check-orchestration/src/run_context.rs`'s `Run`
 function calls every rule it knows about unconditionally:
 
 ```rust
@@ -118,9 +118,9 @@ own stated `Requirement` against the capability it reads — not `Registered()`'
 what your rule needs.
 
 **Reserve in the ledger item's territory**: `crates/rules/nomos-rules` (your new function
-and its own test module), `crates/orchestration/nomos-check-orchestration/src/run.rs` (the
-new call site), and `tests/contract/surface/nomos-rules.txt` if the crate's public surface
-grows a new export.
+and its own test module), `crates/orchestration/nomos-check-orchestration/src/run_context.rs`
+(the new call site), and `tests/contract/surface/nomos-rules.txt` if the crate's public
+surface grows a new export.
 
 ## 4. A second language's package manifest
 

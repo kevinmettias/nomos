@@ -38365,6 +38365,62 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P22-SKILL-STALE-PATH",
+      "title": "fix nomos-add-plugin skill's stale run.rs reference",
+      "why": "the agent_harness contract test found .claude/skills/nomos-add-plugin/SKILL.md still naming crates/orchestration/nomos-check-orchestration/src/run.rs, renamed to run_context.rs long before this session (c74f11a7) -- discovered while running the full workspace test suite after the P22 regression sweep",
+      "done_when": "cargo test -p nomos-contract-tests --test agent_harness passes",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          ".claude/skills/nomos-add-plugin/SKILL.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "agent_harness"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "agent_harness"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 14 tests\ntest Test_The_Contract_Should_Name_The_Selection_Authority_Rather_Than_Instruct_Picking ... ok\ntest checks::Test_The_Contract_Should_Stay_Inside_Its_Line_Budget ... ok\ntest checks::Test_The_Adapter_Should_Import_The_Contract_Rather_Than_Repeat_It ... ok\ntest checks::Test_The_Repository_Should_Have_An_Agent_Front_Door ... ok\ntest checks::Test_The_Contract_Should_Name_Every_Authority_It_Routes_To ... ok\ntest checks::Test_Every_Committed_Skill_Should_Declare_A_Name_Matching_Its_Directory ... ok\ntest Test_A_Cited_Contract_Step_Should_Still_Say_What_Is_Quoted_From_It ... ok\ntest checks::Test_The_Harness_Should_Not_Restate_The_Ledger_Verb_Reference ... ok\ntest checks::Test_The_Harness_Should_Not_Restate_The_Gate_Command_List ... ok\ntest checks::Test_Every_Item_The_Harness_Names_Should_Be_Declared_As_A_Temporary_Hazard ... ok\ntest checks::Test_Every_Path_The_Harness_Names_Should_Exist ... ok\ntest checks::Test_Every_Temporary_Hazard_Should_Name_An_Item_That_Is_Still_Open ... ok\ntest controls::Test_Every_Check_Here_Should_Fail_On_A_Fixture_That_Breaks_It ... ok\ntest checks::Test_The_Harness_Should_Not_Restate_The_Band_Table ... ok\n\ntest result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.12s\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-5b9e565fda4ded41.exe)\n",
+        "verified_at": 1788066297,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "d5cd70ee24ea7cd2a3fbe00d358e10b821c77aca"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
