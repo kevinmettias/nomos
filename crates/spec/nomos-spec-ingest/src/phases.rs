@@ -19,10 +19,10 @@ pub use catalog::{Ingest_Catalog, Parse_Catalog};
 
 use crate::CatalogReport;
 use crate::CatalogEntity;
-use crate::StatementDivergence;
+use crate::Divergence as StatementDivergence;
 use crate::RecordedStatement;
 use crate::StatementReport;
-use crate::StatementFile;
+use crate::File as StatementFile;
 use nomos_spec_model::{ContentHash, Is_Normalized, Segment};
 use nomos_spec_store::{NodeRow, SpecificationStore, StoreError};
 use source_document::Store_Text;

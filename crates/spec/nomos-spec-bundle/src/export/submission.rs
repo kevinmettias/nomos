@@ -46,9 +46,9 @@ pub(super) fn Submission_Values(connection: &Connection, records: &mut Vec<Recor
 /// Every submission value row, in the order that makes the last one the current reading.
 fn Submission_Value_Rows(
     connection: &Connection,
-) -> Result<Vec<crate::row::submission::submission_value::SubmissionValue>, BundleError>
+) -> Result<Vec<crate::row::submission::value::Value>, BundleError>
 {
-    use crate::row::submission::submission_value::SubmissionValue;
+    use crate::row::submission::value::Value as SubmissionValue;
 
     let mut statement = connection.prepare(
         "SELECT n.node_id, v.field, v.ordinal, v.origin, v.value, v.value_hash,
@@ -81,7 +81,7 @@ fn Submission_Value_Rows(
 /// a bundle that dropped them would lose the record that a question was ever asked.
 pub(super) fn Submission_Gaps(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
 {
-    use crate::row::submission::submission_gap::SubmissionGap;
+    use crate::row::submission::gap::Gap as SubmissionGap;
 
     return Collect_Rows(
         connection,

@@ -1,7 +1,7 @@
 //! One node of the domain model, keyed by the identifier people cite.
 
-pub(crate) mod node_alias;
-pub(crate) mod node_history;
+pub(crate) mod alias;
+pub(crate) mod history;
 
 use serde::{Deserialize, Serialize};
 

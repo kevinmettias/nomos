@@ -1,14 +1,14 @@
 pub(crate) mod artifact;
 pub(crate) mod catalog_entity;
 pub(crate) mod catalog_report;
-pub(crate) mod archive_error;
-pub(crate) mod archive_error_kind;
+pub(crate) mod error;
+pub(crate) mod error_kind;
 pub(crate) mod listing;
 pub(crate) mod member;
 pub(crate) mod template;
 
-use crate::ArchiveError;
-use crate::ArchiveErrorKind;
+use crate::Error as ArchiveError;
+use crate::ErrorKind as ArchiveErrorKind;
 use crate::Listing;
 use std::io::Read as _;
 use std::path::{Path, PathBuf};

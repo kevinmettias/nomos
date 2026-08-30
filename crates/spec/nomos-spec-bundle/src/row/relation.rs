@@ -1,6 +1,6 @@
 //! One typed edge between two nodes.
 
-pub(crate) mod relation_type;
+pub(crate) mod r#type;
 
 use serde::{Deserialize, Serialize};
 

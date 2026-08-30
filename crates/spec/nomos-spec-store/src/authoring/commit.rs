@@ -1,7 +1,7 @@
 //! Applying a previewed edit to the store, as one transaction.
 
 use nomos_spec_model::{
-    RecordFrontMatter, RecordRelation, Segment, SourceBlock,
+    FrontMatter as RecordFrontMatter, RecordRelation, Segment, SourceBlock,
 };
 use rusqlite::{Connection, OptionalExtension, params};
 
@@ -15,7 +15,7 @@ use crate::store::{
     Write_Source_Blocks,
 };
 use crate::StoreError;
-use crate::{FromNodeId, RelationTypeName, ToNodeId};
+use crate::{FromNodeId, ToNodeId, TypeName as RelationTypeName};
 
 use super::write::{
     Dispose_Blocks, Write_Declared_Relations, Write_Front_Matter, Write_Headings,

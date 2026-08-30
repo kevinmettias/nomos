@@ -1,6 +1,6 @@
 //! The relation type a pairing names as the one gaining an inverse.
 
-/// The relation type a `RelationTypeName` is paired with as its inverse.
+/// The relation type a `TypeName` is paired with as its inverse.
 #[derive(Clone, Copy, Debug)]
 pub struct InverseRelationType<'a>(pub &'a str);
 

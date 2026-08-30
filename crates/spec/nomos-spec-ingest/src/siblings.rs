@@ -25,7 +25,7 @@ pub use sibling::Sibling;
 
 use crate::SuiteReport;
 use crate::Archive;
-use crate::ArchiveError;
+use crate::Error as ArchiveError;
 use crate::IngestError;
 use nomos_spec_model::{Parse_Record, Segment};
 use nomos_spec_store::{DocumentPath, NodeRow, SpecificationStore, StoreError, SuiteAuthority};

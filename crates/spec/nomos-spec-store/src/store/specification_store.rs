@@ -360,9 +360,9 @@ impl SpecificationStore
     /// or `max_per_node` is empty or zero, and [`StoreError`] on any SQL failure.
     pub fn Put_Relation_Type<'a>(
         &mut self,
-        name: impl Into<relation::RelationTypeName<'a>>,
-        tier: impl Into<relation::RelationTier<'a>>,
-        constraint: &relation::RelationConstraint<'_>,
+        name: impl Into<relation::TypeName<'a>>,
+        tier: impl Into<relation::Tier<'a>>,
+        constraint: &relation::Constraint<'_>,
     ) -> Result<(), StoreError>
     {
         let name = name.into().0;
@@ -396,7 +396,7 @@ impl SpecificationStore
     /// Returns [`StoreError`] if either name is not a relation type.
     pub fn Pair_Relation_Type<'a>(
         &mut self,
-        name: impl Into<relation::RelationTypeName<'a>>,
+        name: impl Into<relation::TypeName<'a>>,
         inverse: impl Into<relation::InverseRelationType<'a>>,
     ) -> Result<(), StoreError>
     {
@@ -429,7 +429,7 @@ impl SpecificationStore
     pub fn Put_Relation<'a>(
         &mut self,
         from_node_id: impl Into<relation::FromNodeId<'a>>,
-        relation_type: impl Into<relation::RelationTypeName<'a>>,
+        relation_type: impl Into<relation::TypeName<'a>>,
         to_node_id: impl Into<relation::ToNodeId<'a>>,
     ) -> Result<(), StoreError>
     {

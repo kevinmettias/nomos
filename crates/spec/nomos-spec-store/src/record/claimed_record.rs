@@ -1,7 +1,7 @@
 //! Step one: the record, read out and held for editing.
 
 use nomos_spec_model::Record;
-use nomos_spec_model::RecordFrontMatter;
+use nomos_spec_model::FrontMatter as RecordFrontMatter;
 
 use crate::EditError;
 use crate::RecordProjection;

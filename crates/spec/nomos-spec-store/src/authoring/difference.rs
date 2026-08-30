@@ -1,7 +1,7 @@
 //! Working out what an edit changed, before anything is written.
 
 use nomos_spec_model::{
-    ContentHash, Normalize_Whitespace, Record, RecordFrontMatter, RecordRelation,
+    ContentHash, FrontMatter as RecordFrontMatter, Normalize_Whitespace, Record, RecordRelation,
     Render_Record, Segment, SourceBlock,
 };
 

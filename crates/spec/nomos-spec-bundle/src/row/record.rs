@@ -1,28 +1,28 @@
 //! One row, carrying its own table name and only natural keys.
 
-pub(crate) mod record_front_matter;
-pub(crate) mod record_relation;
+pub(crate) mod front_matter;
+pub(crate) mod relation;
 
 use serde::{Deserialize, Serialize};
 
 use crate::Blob;
 use crate::Lineage;
 use crate::Node;
-use crate::NodeAlias;
-use crate::NodeHistory;
+use crate::Alias as NodeAlias;
+use crate::History as NodeHistory;
 use crate::NormativeStatement;
 use crate::Omission;
-use crate::RecordFrontMatter;
-use crate::RecordRelation;
+use crate::FrontMatter as RecordFrontMatter;
+use crate::row::record::relation::Relation as RecordRelation;
 use crate::Relation;
-use crate::RelationType;
-use crate::SourceBlock;
-use crate::SourceDocument;
-use crate::SourceHeading;
-use crate::SourceTableRow;
+use crate::Type as RelationType;
+use crate::Block as SourceBlock;
+use crate::Document as SourceDocument;
+use crate::Heading as SourceHeading;
+use crate::TableRow as SourceTableRow;
 use crate::row::submission::Submission;
-use crate::row::submission::submission_gap::SubmissionGap;
-use crate::row::submission::submission_value::SubmissionValue;
+use crate::row::submission::gap::Gap as SubmissionGap;
+use crate::row::submission::value::Value as SubmissionValue;
 use crate::Suite;
 
 /// One row, carrying its own table name and only natural keys.

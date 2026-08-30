@@ -1,6 +1,6 @@
 //! Writing source blocks and their typed table rows through a caller's transaction.
 
-use nomos_spec_model::{SourceBlock, TableRow, Table_Defects, Table_Rows};
+use nomos_spec_model::{Row as TableRow, SourceBlock, Table_Defects, Table_Rows};
 use rusqlite::{Connection, params};
 
 use crate::StoreError;

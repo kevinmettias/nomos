@@ -101,7 +101,7 @@ fn Test_I1_Should_Reproduce_Every_Recorded_Block()
             .mismatches
             .iter()
             .take(10)
-            .map(nomos_spec_ingest::BlockMismatch::Describe)
+            .map(nomos_spec_ingest::Mismatch::Describe)
             .collect::<Vec<String>>()
             .join("\n  ")
     );

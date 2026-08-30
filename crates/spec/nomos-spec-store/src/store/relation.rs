@@ -4,21 +4,21 @@ use crate::StoreError;
 
 mod from_node_id;
 mod inverse_relation_type;
-mod relation_constraint;
-mod relation_tier;
-mod relation_type_name;
+mod constraint;
+mod tier;
+mod type_name;
 mod to_node_id;
 
 pub use from_node_id::FromNodeId;
 pub use inverse_relation_type::InverseRelationType;
-pub use relation_constraint::RelationConstraint;
-pub use relation_tier::RelationTier;
-pub use relation_type_name::RelationTypeName;
+pub use constraint::Constraint;
+pub use tier::Tier;
+pub use type_name::TypeName;
 pub use to_node_id::ToNodeId;
 
 /// The constraint declares something at every end, or the refusal names the type that
 /// declared nothing.
-pub(super) fn Assert_Constraint_Is_Declared(name: &str, constraint: &RelationConstraint<'_>) -> Result<(), StoreError>
+pub(super) fn Assert_Constraint_Is_Declared(name: &str, constraint: &Constraint<'_>) -> Result<(), StoreError>
 {
     let is_unconstrained = constraint.domain.is_empty() || constraint.range.is_empty() || constraint.max_per_node == 0;
     if is_unconstrained
@@ -64,7 +64,7 @@ mod tests
         let refusal = store.Put_Relation_Type(
             "nothing",
             "seed",
-            &RelationConstraint { domain: &[], range: &["widget"], max_per_node: 1 },
+            &Constraint { domain: &[], range: &["widget"], max_per_node: 1 },
         );
         let message = format!("{refusal:?}");
 
@@ -82,7 +82,7 @@ mod tests
         let refusal = store.Put_Relation_Type(
             "nothing",
             "seed",
-            &RelationConstraint { domain: &["widget"], range: &["widget"], max_per_node: 0 },
+            &Constraint { domain: &["widget"], range: &["widget"], max_per_node: 0 },
         );
 
         assert!(
@@ -195,7 +195,7 @@ mod tests
             .Put_Relation_Type(
                 "joins",
                 "seed",
-                &RelationConstraint { domain: &["widget"], range: &["widget"], max_per_node },
+                &Constraint { domain: &["widget"], range: &["widget"], max_per_node },
             )
             .expect("registers");
     }

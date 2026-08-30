@@ -30,7 +30,7 @@ mod write;
 pub(crate) use difference::{Block_Changes, Identity_Changes, Relation_Changes, Why_Not_Canonical};
 
 use nomos_spec_model::{
-    BlockKind, ContentHash, Parse_Record, RecordFrontMatter, RecordRelation,
+    BlockKind, ContentHash, FrontMatter as RecordFrontMatter, Parse_Record, RecordRelation,
     Render_Record, SourceBlock,
 };
 use rusqlite::{OptionalExtension, params};
@@ -45,7 +45,7 @@ use crate::EditError;
 use crate::EditPreview;
 use crate::NormativeMovement;
 use crate::RecordProjection;
-use crate::RecordWrite;
+use crate::Write as RecordWrite;
 use crate::store::{
     Collected_Rows, SpecificationStore,
 };

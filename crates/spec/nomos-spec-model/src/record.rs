@@ -1,13 +1,13 @@
 //! An authored record: its declared identity and its body.
 
 // A record's front matter, the relations it declares, and the refusals parsing one raises.
-mod record_error;
-mod record_front_matter;
-mod record_relation;
+pub(crate) mod error;
+pub(crate) mod front_matter;
+mod relation;
 
-pub use record_error::RecordError;
-pub use record_front_matter::RecordFrontMatter;
-pub use record_relation::RecordRelation;
+use error::Error as RecordError;
+use front_matter::FrontMatter as RecordFrontMatter;
+pub use relation::Relation as RecordRelation;
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Record

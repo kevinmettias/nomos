@@ -23,7 +23,7 @@
 
 use crate::{Segment, SourceBlock};
 use crate::Parse_Record;
-use crate::RecordFrontMatter;
+use crate::record::front_matter::FrontMatter as RecordFrontMatter;
 
 /// A value the canonical layout cannot represent.
 ///

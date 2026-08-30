@@ -1,8 +1,8 @@
 use crate::RecordedBlock;
 use crate::BlockLineage;
-use crate::BlockField;
-use crate::BlockMismatch;
-use crate::BlockMismatchKind;
+use crate::Field as BlockField;
+use crate::Mismatch as BlockMismatch;
+use crate::MismatchKind as BlockMismatchKind;
 use nomos_spec_model::{ContentHash, Segment, SourceBlock};
 use std::collections::BTreeMap;
 

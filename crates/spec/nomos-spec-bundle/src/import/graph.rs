@@ -143,7 +143,7 @@ pub(super) fn Insert_Relation_Types(transaction: &Transaction<'_>, bundle: &Bund
 /// One relation type row, its domain and range encoded back to JSON.
 fn Insert_One_Relation_Type(
     insert: &mut rusqlite::Statement<'_>,
-    relation_type: &crate::RelationType,
+    relation_type: &crate::Type,
 ) -> Result<(), BundleError>
 {
     let domain_json = serde_json::to_string(&relation_type.domain)

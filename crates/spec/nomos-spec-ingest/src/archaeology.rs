@@ -44,7 +44,7 @@ use crate::Restored;
 use crate::revisions::Fingerprint_Of;
 use crate::PairChange;
 use crate::revisions::{DOMAIN_VOLUMES, RevisionFingerprint, Walk_Revisions, Within_Revision};
-use nomos_spec_model::{BlockKind, RowKind, Segment, SourceBlock, Table_Rows, TableRow};
+use nomos_spec_model::{BlockKind, Row as TableRow, RowKind, Segment, SourceBlock, Table_Rows};
 use std::collections::{BTreeMap, BTreeSet};
 
 pub const SHARED_BY: u32 = 3;

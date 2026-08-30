@@ -1,12 +1,15 @@
 //! One normative statement, as the specification store holds it.
 
 // A normative statement's identity and its kind.
-mod statement_id;
-mod statement_kind;
+pub(crate) mod id;
+pub(crate) mod kind;
 mod normative_statement;
 
-pub use statement_id::StatementId;
-pub use statement_kind::StatementKind;
+use id::Id as StatementId;
+// `Kind` would collide with `block::kind::Kind` if flattened bare, so `lib.rs` reaches this
+// module directly and keeps the longer, table-naming public name at the crate root; this
+// local alias is for this file's own use only, not part of the public surface.
+use kind::Kind as StatementKind;
 pub use normative_statement::NormativeStatement;
 
 #[cfg(test)]

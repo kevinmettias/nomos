@@ -31,7 +31,7 @@ use crate::reconciliation::collision::Collision;
 use crate::Restored;
 use crate::Member;
 use crate::IngestError;
-use nomos_spec_model::{BlockKind, RowKind, Segment, SourceBlock, Table_Rows, TableRow};
+use nomos_spec_model::{BlockKind, Row as TableRow, RowKind, Segment, SourceBlock, Table_Rows};
 use nomos_spec_store::{NodeRow, SpecificationStore, StoreError};
 use std::collections::BTreeMap;
 use extract::Refuse_Collisions;

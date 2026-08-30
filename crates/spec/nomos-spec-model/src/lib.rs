@@ -32,11 +32,20 @@ mod statement;
 mod submission;
 mod table;
 
-pub use block::{BlockKind, Segment, SourceBlock};
+// `Kind` would collide between `block::kind::Kind` and `statement::kind::Kind` if either
+// flattened bare, so both keep their longer, table-naming public names here.
+pub use block::kind::Kind as BlockKind;
+pub use block::{Segment, SourceBlock};
 pub use content_hash::{ContentHash, HASH_PREFIX, Is_Normalized, Normalize_Whitespace};
 pub use failure::{DecisionGap, Failure, Refusal, Severity};
-pub use record::{Parse_Record, Record, RecordError, RecordFrontMatter, RecordRelation};
+pub use record::error::Error;
+pub use record::front_matter::FrontMatter;
+pub use record::{Parse_Record, Record, RecordRelation};
 pub use render_error::{Is_Round_Trip, Render_Record, RenderError};
-pub use statement::{NormativeStatement, StatementId, StatementKind};
+pub use statement::id::Id;
+pub use statement::kind::Kind as StatementKind;
+pub use statement::NormativeStatement;
 pub use submission::{FieldValue, Origin, Submission, SubmissionKind, SubmissionState, Validate_Submission};
-pub use table::{RowKind, TableDefect, TableRow, Table_Defects, Table_Rows};
+pub use table::defect::Defect;
+pub use table::row::Row;
+pub use table::{RowKind, Table_Defects, Table_Rows};

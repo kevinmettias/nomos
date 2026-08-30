@@ -9,7 +9,7 @@
 //! call site "this revision contained no files" and "this revision was never read" are
 //! the same answer, and one of them is a silent loss of a whole revision.
 
-use nomos_spec_ingest::{Archive, ArchiveErrorKind, Archives_In};
+use nomos_spec_ingest::{Archive, Archives_In, ErrorKind as ArchiveErrorKind};
 use std::path::PathBuf;
 
 /// The fixture each always-on test writes and reads.

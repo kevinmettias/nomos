@@ -1,8 +1,11 @@
 // What kind of block this is, beneath the block it describes.
-mod block_kind;
+pub(crate) mod kind;
 mod source_block;
 
-pub use block_kind::BlockKind;
+// `Kind` would collide with `statement::kind::Kind` if flattened bare, so `lib.rs` reaches
+// this module directly and keeps the longer, table-naming public name at the crate root;
+// this local alias is for this file's own use only, not part of the public surface.
+use kind::Kind as BlockKind;
 pub use source_block::SourceBlock;
 
 /// Splits an authored markdown document into the blocks the preservation ledger tracks.

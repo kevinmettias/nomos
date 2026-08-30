@@ -4,7 +4,7 @@ use crate::BundleError;
 use crate::DocumentRef;
 use crate::OrdinalRef;
 use crate::Record;
-use crate::RecordFrontMatter;
+use crate::FrontMatter as RecordFrontMatter;
 use crate::TableRowRef;
 use rusqlite::Connection;
 
@@ -61,7 +61,7 @@ pub(super) fn Collect_Nodes(connection: &Connection, records: &mut Vec<Record>) 
 
 pub(super) fn Node_Aliases(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
 {
-    use crate::NodeAlias;
+    use crate::Alias as NodeAlias;
 
     return Collect_Rows(
         connection,
@@ -81,7 +81,7 @@ pub(super) fn Node_Aliases(connection: &Connection, records: &mut Vec<Record>) -
 
 pub(super) fn Node_Histories(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
 {
-    use crate::NodeHistory;
+    use crate::History as NodeHistory;
 
     return Collect_Rows(
         connection,
@@ -143,7 +143,7 @@ fn Raw_Relation_Type_Rows(connection: &Connection) -> Result<Vec<RawRelationType
 /// One relation type row, decoded and appended.
 fn Push_Relation_Type(records: &mut Vec<Record>, row: RawRelationTypeRow) -> Result<(), BundleError>
 {
-    use crate::RelationType;
+    use crate::Type as RelationType;
     let (name, tier, inverse_of, domain_json, range_json, max_per_node) = row;
 
     records.push(Record::RelationType(RelationType {
@@ -360,9 +360,9 @@ pub(super) fn Record_Relations(connection: &Connection, records: &mut Vec<Record
 }
 
 /// Every declared relation row, in the order the record declared them.
-fn Record_Relation_Rows(connection: &Connection) -> Result<Vec<crate::RecordRelation>, BundleError>
+fn Record_Relation_Rows(connection: &Connection) -> Result<Vec<crate::row::record::relation::Relation>, BundleError>
 {
-    use crate::RecordRelation;
+    use crate::row::record::relation::Relation as RecordRelation;
 
     let mut statement = connection.prepare(
         "SELECT d.path, d.revision, r.ordinal, r.target, r.relation

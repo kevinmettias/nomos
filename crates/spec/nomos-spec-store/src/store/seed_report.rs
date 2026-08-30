@@ -1,4 +1,4 @@
-use crate::{AUTHORED, RelationConstraint, RelationTypeName, SpecificationStore};
+use crate::{AUTHORED, Constraint as RelationConstraint, SpecificationStore, TypeName as RelationTypeName};
 use crate::DocumentPath;
 use crate::StoreError;
 

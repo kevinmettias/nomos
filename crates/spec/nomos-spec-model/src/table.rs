@@ -2,12 +2,12 @@
 
 // A table's rows, what kind each row is, and the defects a table carries.
 mod row_kind;
-mod table_defect;
-mod table_row;
+pub(crate) mod defect;
+pub(crate) mod row;
 
 pub use row_kind::RowKind;
-pub use table_defect::TableDefect;
-pub use table_row::TableRow;
+use defect::Defect as TableDefect;
+use row::Row as TableRow;
 
 use crate::SourceBlock;
 
@@ -306,7 +306,7 @@ mod tests
     {
         let block = SourceBlock {
             ordinal: 1,
-            kind: crate::block::BlockKind::Prose,
+            kind: crate::BlockKind::Prose,
             heading_path: Vec::new(),
             text: "| a |\n| --- |\n| 1 |\nbetween\n| b |\n| --- |\n| 2 |".to_owned(),
         };
@@ -430,7 +430,7 @@ mod tests
     {
         let block = SourceBlock {
             ordinal: 1,
-            kind: crate::block::BlockKind::Prose,
+            kind: crate::BlockKind::Prose,
             heading_path: Vec::new(),
             text: "| a |\n| --- |\nbetween\n| b |\n| --- |".to_owned(),
         };

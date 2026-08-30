@@ -1,6 +1,6 @@
 pub(crate) mod artifact;
 pub(crate) mod identifiers;
-pub(crate) mod overlay_report;
+pub(crate) mod report;
 pub(crate) mod overlaid;
 pub(crate) mod pair_change;
 pub(crate) mod reconcile;

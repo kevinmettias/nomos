@@ -37,7 +37,7 @@ pub(super) fn Insert_Blobs(transaction: &Transaction<'_>, bundle: &Bundle) -> Re
 /// A blob's bytes, in whichever form the bundle carried them.
 fn Decode_Blob_Bytes(blob: &Blob) -> Result<Vec<u8>, BundleError>
 {
-    use crate::BlobEncoding;
+    use crate::Encoding as BlobEncoding;
     use base64::engine::general_purpose::STANDARD;
 
     return match blob.encoding

@@ -2,13 +2,13 @@
 
 mod disjoint;
 mod graph;
-mod import_report;
+mod report;
 mod reference;
 mod resolve;
 mod source;
 mod submission;
 
-pub use import_report::ImportReport;
+pub use report::Report;
 
 use graph::{
     Insert_Lineage, Insert_Node_Aliases, Insert_Node_History, Insert_Nodes, Insert_Normative_Statements,
@@ -46,7 +46,7 @@ use crate::Record;
 /// carries, [`BundleError::Unresolved`] if a record names something the bundle does not
 /// carry, and [`BundleError::Incomplete`] if the import does not place exactly what the
 /// bundle declared.
-pub fn Import_Bundle(store: &mut SpecificationStore, bundle: &Bundle) -> Result<ImportReport, BundleError>
+pub fn Import_Bundle(store: &mut SpecificationStore, bundle: &Bundle) -> Result<Report, BundleError>
 {
     use disjoint::Assert_Disjoint;
     use resolve::Assert_Self_Contained;
@@ -114,7 +114,7 @@ fn Insert_All(
     transaction: &Transaction<'_>,
     bundle: &Bundle,
     before: &BTreeMap<&'static str, u32>,
-) -> Result<ImportReport, BundleError>
+) -> Result<Report, BundleError>
 {
     // The relation-type vocabulary is self-referential (`inverse_of` names another row in the
     // same table), so no insertion order satisfies it. Deferring moves every foreign-key check
@@ -126,7 +126,7 @@ fn Insert_All(
     Insert_Submission_Rows(transaction, bundle)?;
     Assert_Landed(transaction, bundle, before)?;
 
-    return Ok(ImportReport {
+    return Ok(Report {
         records: bundle.Manifest().records,
         counts: bundle.Manifest().counts.clone(),
     });

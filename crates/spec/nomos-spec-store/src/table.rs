@@ -7,7 +7,7 @@ pub(crate) mod row_census;
 pub(crate) mod row_scope;
 
 pub(crate) mod suite_authority;
-pub(crate) mod table_line;
+pub(crate) mod line;
 
 /// The counting statement each table carries.
 ///

@@ -5,7 +5,7 @@ use rusqlite::{Connection, OptionalExtension, params};
 
 use crate::StoreError;
 use crate::read::columns::Columns;
-use crate::store::relation::{FromNodeId, RelationTypeName, ToNodeId};
+use crate::store::relation::{FromNodeId, ToNodeId, TypeName as RelationTypeName};
 
 /// Records an edge and its inverse through a caller's transaction.
 ///

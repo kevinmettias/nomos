@@ -40,7 +40,7 @@ fn Test_The_Gate_Should_Pass_Against_Real_Recorded_Blocks()
             .mismatches
             .iter()
             .take(5)
-            .map(nomos_spec_ingest::BlockMismatch::Describe)
+            .map(nomos_spec_ingest::Mismatch::Describe)
             .collect::<Vec<String>>()
             .join("\n  ")
     );

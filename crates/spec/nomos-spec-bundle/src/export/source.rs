@@ -3,7 +3,7 @@
 use crate::BundleError;
 use crate::DocumentRef;
 use crate::Record;
-use crate::SourceTableRow;
+use crate::TableRow as SourceTableRow;
 use base64::Engine as _;
 use rusqlite::Connection;
 
@@ -38,7 +38,7 @@ pub(super) fn Collect_Blobs(connection: &Connection, records: &mut Vec<Record>) 
 fn A_Blob(sha256: String, byte_length: i64, content: Vec<u8>) -> Record
 {
     use crate::Blob;
-    use crate::BlobEncoding;
+    use crate::Encoding as BlobEncoding;
     use base64::engine::general_purpose::STANDARD;
 
     let (encoding, spelled) = match String::from_utf8(content)
@@ -57,7 +57,7 @@ fn A_Blob(sha256: String, byte_length: i64, content: Vec<u8>) -> Record
 
 pub(super) fn Source_Documents(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
 {
-    use crate::SourceDocument;
+    use crate::Document as SourceDocument;
 
     return Collect_Rows(
         connection,
@@ -78,7 +78,7 @@ pub(super) fn Source_Documents(connection: &Connection, records: &mut Vec<Record
 
 pub(super) fn Source_Headings(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
 {
-    use crate::SourceHeading;
+    use crate::Heading as SourceHeading;
 
     return Collect_Rows(
         connection,
@@ -103,7 +103,7 @@ pub(super) fn Source_Headings(connection: &Connection, records: &mut Vec<Record>
 
 pub(super) fn Source_Blocks(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
 {
-    use crate::SourceBlock;
+    use crate::Block as SourceBlock;
 
     return Collect_Rows(
         connection,

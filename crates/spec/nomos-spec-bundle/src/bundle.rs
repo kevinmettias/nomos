@@ -325,7 +325,7 @@ mod tests
 {
     use super::*;
     use crate::Blob;
-    use crate::BlobEncoding;
+    use crate::Encoding as BlobEncoding;
 
     fn One_Blob() -> Vec<Record>
     {

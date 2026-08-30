@@ -1,12 +1,12 @@
 //! Writing one record into the schema: its bytes, its blocks, its headings and its edges.
 
 use nomos_spec_model::{
-    BlockKind, Record, RecordFrontMatter, RecordRelation, Segment, SourceBlock,
+    BlockKind, FrontMatter as RecordFrontMatter, Record, RecordRelation, Segment, SourceBlock,
 };
 use rusqlite::{Connection, params};
 
 use crate::Disposition;
-use crate::RecordWrite;
+use crate::Write as RecordWrite;
 use crate::store::{
     Write_Node,
     Write_Source_Blocks, Write_Source_Document,

@@ -311,7 +311,7 @@ pub(super) struct Path<'a>(pub(super) &'a str);
 /// A document's revision, kept distinct from [`Path`] for the same reason.
 pub(super) struct Revision<'a>(pub(super) &'a str);
 
-/// The same key from the two parts a [`SourceDocument`] carries loose rather than as a
+/// The same key from the two parts a [`crate::Document`] carries loose rather than as a
 /// [`DocumentRef`]. One spelling of the key, so the set and its lookups cannot drift.
 pub(super) fn Document_Key_Of(path: Path<'_>, revision: Revision<'_>) -> String
 {
