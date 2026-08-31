@@ -431,6 +431,7 @@ dependencies = [
  "nomos-check-orchestration",
  "nomos-contracts",
  "nomos-gate-orchestration",
+ "nomos-lang-go",
  "nomos-lang-rust",
  "nomos-ledger",
  "nomos-model",
