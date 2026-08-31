@@ -35,7 +35,7 @@ mod tests
     /// off `env!`, which fails the build at compile time were any of them absent, so a
     /// runner that cannot supply them never reaches this test at all.
     #[test]
-    fn Test_Host_Variant_Should_Read_Every_Non_Feature_Component_Baked_In_By_Build_Rs()
+    fn Test_Host_Variant_Should_Read_Every_Non_Feature_Component_Baked_In_By_The_Build_Script()
     {
         let variant = Host_Variant();
 

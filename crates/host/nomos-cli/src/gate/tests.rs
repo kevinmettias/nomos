@@ -362,7 +362,7 @@ fn Test_Explain_Should_Parse_With_Rule_And_Location()
 /// another missing-`--rule` scenario is an entry here, not a second copy of the test below.
 fn Explain_Arguments_Missing_Rule() -> Vec<Vec<String>>
 {
-    vec![vec!["explain".to_owned(), "--location".to_owned(), "a.rs".to_owned()]]
+    return vec![vec!["explain".to_owned(), "--location".to_owned(), "a.rs".to_owned()]];
 }
 
 /// `explain` without `--rule` must not silently answer about no rule at all.
@@ -382,7 +382,7 @@ fn Test_Explain_Should_Require_Rule()
 /// below.
 fn Explain_Arguments_Missing_Location() -> Vec<Vec<String>>
 {
-    vec![vec!["explain".to_owned(), "--rule".to_owned(), "naming-convention".to_owned()]]
+    return vec![vec!["explain".to_owned(), "--rule".to_owned(), "naming-convention".to_owned()]];
 }
 
 /// `explain` without `--location` must not silently answer about no location at all.

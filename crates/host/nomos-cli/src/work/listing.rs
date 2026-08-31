@@ -242,38 +242,6 @@ mod tests
     use super::*;
     use nomos_ledger::{ItemId, ItemKind, ItemOrigin, Territory};
 
-    /// A minimal, ready item: enough to exercise the listing surface without a claim, a
-    /// history or a territory that matters to any test here.
-    fn Item(id: &str) -> LedgerItem
-    {
-        return LedgerItem {
-            id: ItemId::New(id),
-            title: format!("item {id}"),
-            why: "because".to_owned(),
-            done_when: "it prints".to_owned(),
-            kind: ItemKind::Correction,
-            origin: ItemOrigin::Proposed,
-            territory: Territory::Of_Files(vec!["src/a.rs".to_owned()]),
-            state: ItemState::Ready,
-            depends_on: Vec::new(),
-            blocked: None,
-            claim: None,
-            verification: None,
-            verified: None,
-            abandoned: Vec::new(),
-            displaced: Vec::new(),
-            declined: None,
-        };
-    }
-
-    fn Board_With(item: LedgerItem) -> LedgerDocument
-    {
-        return LedgerDocument {
-            schema_version: nomos_ledger::SCHEMA_VERSION,
-            items: vec![item],
-        };
-    }
-
     /// The column an agent reads before claiming has to say the item is over.
     ///
     /// This is the whole of what the state buys at the surface. `P10-REQUIRABLE-DECLARED` was
@@ -432,5 +400,37 @@ mod tests
         assert!(printed.contains("abandoned by agent-b"), "{printed}");
         assert!(printed.contains("verified by `cargo test`"), "{printed}");
         assert!(printed.contains("still describes this tree"), "{printed}");
+    }
+
+    /// A minimal, ready item: enough to exercise the listing surface without a claim, a
+    /// history or a territory that matters to any test here.
+    fn Item(id: &str) -> LedgerItem
+    {
+        return LedgerItem {
+            id: ItemId::New(id),
+            title: format!("item {id}"),
+            why: "because".to_owned(),
+            done_when: "it prints".to_owned(),
+            kind: ItemKind::Correction,
+            origin: ItemOrigin::Proposed,
+            territory: Territory::Of_Files(vec!["src/a.rs".to_owned()]),
+            state: ItemState::Ready,
+            depends_on: Vec::new(),
+            blocked: None,
+            claim: None,
+            verification: None,
+            verified: None,
+            abandoned: Vec::new(),
+            displaced: Vec::new(),
+            declined: None,
+        };
+    }
+
+    fn Board_With(item: LedgerItem) -> LedgerDocument
+    {
+        return LedgerDocument {
+            schema_version: nomos_ledger::SCHEMA_VERSION,
+            items: vec![item],
+        };
     }
 }

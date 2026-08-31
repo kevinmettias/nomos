@@ -7,16 +7,6 @@ mod tests
 {
     use super::*;
 
-    /// Removes and recreates `root` under the system temp directory, so a test starts
-    /// from a clean, empty tree regardless of what an earlier run left behind.
-    fn Fresh_Root(name: &str) -> PathBuf
-    {
-        let root = std::env::temp_dir().join(name);
-        let _ignored = std::fs::remove_dir_all(&root);
-        std::fs::create_dir_all(&root).expect("the temporary root is creatable");
-        return root;
-    }
-
     #[test]
     fn Test_Read_Sources_Should_Discover_A_Go_File_Alongside_A_Rust_One()
     {
@@ -108,6 +98,16 @@ mod tests
 
         assert_eq!(source.path, "nested/file.rs");
         assert_eq!(source.text, "fn Main() {}");
+    }
+
+    /// Removes and recreates `root` under the system temp directory, so a test starts
+    /// from a clean, empty tree regardless of what an earlier run left behind.
+    fn Fresh_Root(name: &str) -> PathBuf
+    {
+        let root = std::env::temp_dir().join(name);
+        let _ignored = std::fs::remove_dir_all(&root);
+        std::fs::create_dir_all(&root).expect("the temporary root is creatable");
+        return root;
     }
 }
 

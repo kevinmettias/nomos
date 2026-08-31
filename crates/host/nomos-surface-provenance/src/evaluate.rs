@@ -254,6 +254,10 @@ mod tests
         let error = match result
         {
             Err(error) => error,
+            // The launcher above is scripted to answer "git diff" with exit 128 and a bad-
+            // revision message, so Finding_For can only succeed here if it swallowed that
+            // failure -- reaching Ok means that propagation itself regressed, not a
+            // condition this test should assert around.
             Ok(_) => panic!("a bad revision must fail the diff query, not report a finding"),
         };
         assert!(error.contains("exited 128"), "{error}");

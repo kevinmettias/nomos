@@ -71,6 +71,10 @@ mod tests
         let WorkOutcome::Claim(claimed) = outcome
         else
         {
+            // This test hands Run_Reservation_Command a WorkCommand::Claim, and its own
+            // contract guarantees the WorkOutcome it returns names that same command --
+            // reaching else here means Run_Reservation_Command itself is broken, not a
+            // condition this test should assert around.
             panic!("Run_Reservation_Command must return the WorkOutcome variant naming the WorkCommand it was given")
         };
         assert!(claimed.is_ok(), "{claimed:?}");

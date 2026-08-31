@@ -78,6 +78,16 @@ mod tests
         assert!(crates.iter().all(|name| !name.is_empty()));
     }
 
+    fn Repository_Root() -> PathBuf
+    {
+        // CARGO_MANIFEST_DIR is crates/host/nomos-surface-provenance; the repository root
+        // is three levels up.
+        return Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("..")
+            .join("..")
+            .join("..");
+    }
+
     #[test]
     fn Test_Every_Snapshotted_Crate_Should_Refuse_A_Missing_Directory_Rather_Than_Reporting_Empty()
     {
@@ -107,15 +117,5 @@ mod tests
     fn Test_The_Snapshot_Path_Is_Repository_Relative()
     {
         assert_eq!(Snapshot_Path("nomos-model"), "tests/contract/surface/nomos-model.txt");
-    }
-
-    fn Repository_Root() -> PathBuf
-    {
-        // CARGO_MANIFEST_DIR is crates/host/nomos-surface-provenance; the repository root
-        // is three levels up.
-        return Path::new(env!("CARGO_MANIFEST_DIR"))
-            .join("..")
-            .join("..")
-            .join("..");
     }
 }

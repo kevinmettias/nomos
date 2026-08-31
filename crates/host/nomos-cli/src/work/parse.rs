@@ -1,5 +1,12 @@
 //! Reading a `nomos work` command line, and the usage text that says what one may be.
 
+// file-size: allow this file pairs its production code with its own inline #[cfg(test)]
+// module; check-test-coverage keys a test's companion unit off the exact file it is
+// textually written in, so these tests cannot move to a sibling file without losing
+// their attribution to every function this file declares.
+// responsibility: allow same reason -- the coupling that keeps this file whole is
+// check-test-coverage's stem-based companion attribution, not a design choice.
+
 use std::time::Duration;
 
 use nomos_ledger::{
@@ -461,12 +468,13 @@ fn Required_Value(value: Option<&String>, name: &str) -> Result<String, String>
 #[cfg(test)]
 mod tests
 {
-    use super::*;
+    //! [`super::Work_Command_From_String_Arguments`] and [`super::Parse_Duration`], exercised.
+    //!
+    //! Split from `parse.rs` itself once that file passed the ~500-line review trigger --
+    //! `parse.rs` is the parsing logic, this is its own coverage, the same split this
+    //! workspace already keeps between `spec.rs` and `spec/tests.rs`.
 
-    fn Arguments(text: &str) -> Vec<String>
-    {
-        return text.split_whitespace().map(str::to_owned).collect();
-    }
+    use super::*;
 
     #[test]
     fn Test_Work_Command_From_String_Arguments_Should_Refuse_An_Unknown_Verb()
@@ -477,21 +485,17 @@ mod tests
         assert!(error.contains("usage"));
     }
 
+    fn Arguments(text: &str) -> Vec<String>
+    {
+        return text.split_whitespace().map(str::to_owned).collect();
+    }
+
     #[test]
     fn Test_Parse_Duration_Should_Convert_Hour_Minute_And_Second_Units()
     {
         assert_eq!(Parse_Duration("2h").unwrap(), Duration::from_secs(7_200));
         assert_eq!(Parse_Duration("30m").unwrap(), Duration::from_secs(1_800));
         assert_eq!(Parse_Duration("45s").unwrap(), Duration::from_secs(45));
-    }
-
-    /// Every verb `nomos work` accepts.
-    fn Every_Verb() -> Vec<&'static str>
-    {
-        return vec![
-            "list", "show", "add", "claim", "renew", "takeover", "finish", "abandon",
-            "decline", "validate", "audit",
-        ];
     }
 
     /// The usage text is what an agent reads at exit 2, so a verb missing from it is a verb
@@ -512,5 +516,14 @@ mod tests
                 "the usage text names `{verb}` and the parser does not accept it"
             );
         }
+    }
+
+    /// Every verb `nomos work` accepts.
+    fn Every_Verb() -> Vec<&'static str>
+    {
+        return vec![
+            "list", "show", "add", "claim", "renew", "takeover", "finish", "abandon",
+            "decline", "validate", "audit",
+        ];
     }
 }

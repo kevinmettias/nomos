@@ -83,27 +83,6 @@ mod tests
         let _ignored = std::fs::remove_dir_all(&second);
     }
 
-    #[derive(Debug, Serialize)]
-    #[serde(tag = "outcome", rename_all = "snake_case")]
-    enum Sample
-    {
-        Accepted,
-        Completed,
-        Rejected,
-    }
-
-    /// Every `Sample` variant paired with the exact snake_case address `serde`'s own
-    /// `rename_all = "snake_case"` gives it -- the one outcome name `Assert_Round_Trips_As_Json`
-    /// must accept for each, and every other name it must reject.
-    fn Sample_Outcomes() -> Vec<(Sample, &'static str)>
-    {
-        return vec![
-            (Sample::Accepted, "accepted"),
-            (Sample::Completed, "completed"),
-            (Sample::Rejected, "rejected"),
-        ];
-    }
-
     #[test]
     fn Test_Assert_Round_Trips_As_Json_Should_Accept_Every_Tagged_Values_Own_Outcome_Name()
     {
@@ -138,5 +117,26 @@ mod tests
 
         assert!(content.contains("## The decision"), "{content}");
         assert!(!content.contains("## Decision\n"), "{content}");
+    }
+
+    #[derive(Debug, Serialize)]
+    #[serde(tag = "outcome", rename_all = "snake_case")]
+    enum Sample
+    {
+        Accepted,
+        Completed,
+        Rejected,
+    }
+
+    /// Every `Sample` variant paired with the exact snake_case address `serde`'s own
+    /// `rename_all = "snake_case"` gives it -- the one outcome name `Assert_Round_Trips_As_Json`
+    /// must accept for each, and every other name it must reject.
+    fn Sample_Outcomes() -> Vec<(Sample, &'static str)>
+    {
+        return vec![
+            (Sample::Accepted, "accepted"),
+            (Sample::Completed, "completed"),
+            (Sample::Rejected, "rejected"),
+        ];
     }
 }

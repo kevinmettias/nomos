@@ -1,6 +1,13 @@
 //! Turning what [`nomos_gate_orchestration::Run`] or [`nomos_gate_orchestration::Run_Gate`]
 //! answered into text and an [`ExitCode`].
 
+// file-size: allow this file pairs its production code with its own inline #[cfg(test)]
+// module; check-test-coverage keys a test's companion unit off the exact file it is
+// textually written in, so these tests cannot move to a sibling file without losing
+// their attribution to every function this file declares.
+// responsibility: allow same reason -- the coupling that keeps this file whole is
+// check-test-coverage's stem-based companion attribution, not a design choice.
+
 use super::ExitCode;
 use nomos_capability::RegistryError;
 use nomos_check_orchestration::CheckOutcome;
@@ -300,40 +307,18 @@ fn Render_Check_Unreadable(root: &Path, stderr: &mut impl Write) -> ExitCode
 #[cfg(test)]
 mod tests
 {
+    //! [`super::Render_Plan`], [`super::Render_Run`] and [`super::Render_Explain`], exercised.
+    //!
+    //! Split from `report.rs` itself once that file passed the ~500-line review trigger --
+    //! `report.rs` is the rendering logic, this is its own coverage, the same split this
+    //! workspace already keeps between `spec.rs` and `spec/tests.rs`.
+
     use super::*;
     use nomos_check_orchestration::{Claim, Examined};
     use nomos_contracts::{Applicability, Digest128, EvidenceClass, GateCategory, RuleId, SubjectId};
     use nomos_gate_orchestration::{Fresh_Run_Id, GateFindings};
     use nomos_platform::Timestamp;
     use std::path::PathBuf;
-
-    /// One real finding, distinguishable from another only by the gate category a caller
-    /// passes in -- everything else about it is incidental to what these tests check.
-    fn Example_Finding(gate: GateCategory) -> Finding
-    {
-        return Finding {
-            rule: RuleId::New("unread-reaches-finding"),
-            subject: SubjectId::From_Digest(Digest128::From_Bytes([9; Digest128::BYTE_LENGTH])),
-            subject_name: "Example::Subject".to_owned(),
-            applicability: Applicability::Supported,
-            evidence: EvidenceClass::Derived,
-            gate,
-            summary: "reaches an unread item".to_owned(),
-            locations: vec!["a.rs".to_owned()],
-        };
-    }
-
-    /// No finding blocked, calibrated, suppressed or baselined -- the starting point every
-    /// test below that does not care about one of these buckets builds on.
-    fn Empty_Findings() -> GateFindings
-    {
-        return GateFindings {
-            blocking_findings: Vec::new(),
-            calibrated_findings: Vec::new(),
-            suppressed_findings: Vec::new(),
-            baselined_findings: Vec::new(),
-        };
-    }
 
     /// A check outcome that never reached `Judged` must render as `Vacuous`, the same claim
     /// `Render_Check_Unreadable`'s siblings already make for `run`'s own non-judged arms --
@@ -510,5 +495,33 @@ mod tests
         let rendered = String::from_utf8_lossy(&stdout).into_owned();
         assert_eq!(code, ExitCode::Ok, "{rendered}{}", String::from_utf8_lossy(&stderr));
         assert!(rendered.starts_with("rules: "), "{rendered}");
+    }
+
+    /// One real finding, distinguishable from another only by the gate category a caller
+    /// passes in -- everything else about it is incidental to what these tests check.
+    fn Example_Finding(gate: GateCategory) -> Finding
+    {
+        return Finding {
+            rule: RuleId::New("unread-reaches-finding"),
+            subject: SubjectId::From_Digest(Digest128::From_Bytes([9; Digest128::BYTE_LENGTH])),
+            subject_name: "Example::Subject".to_owned(),
+            applicability: Applicability::Supported,
+            evidence: EvidenceClass::Derived,
+            gate,
+            summary: "reaches an unread item".to_owned(),
+            locations: vec!["a.rs".to_owned()],
+        };
+    }
+
+    /// No finding blocked, calibrated, suppressed or baselined -- the starting point every
+    /// test above that does not care about one of these buckets builds on.
+    fn Empty_Findings() -> GateFindings
+    {
+        return GateFindings {
+            blocking_findings: Vec::new(),
+            calibrated_findings: Vec::new(),
+            suppressed_findings: Vec::new(),
+            baselined_findings: Vec::new(),
+        };
     }
 }

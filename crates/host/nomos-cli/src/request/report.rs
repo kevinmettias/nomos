@@ -69,22 +69,6 @@ mod tests
     use nomos_spec_project::{Format, Stamp};
     use std::path::PathBuf;
 
-    /// A submission with nothing about its own content load-bearing to either test below --
-    /// only `id`, `kind` and `state` are ever rendered by [`Report_Accepted`].
-    fn Example_Submission() -> Submission
-    {
-        return Submission {
-            id: "FR-1".to_owned(),
-            kind: SubmissionKind::FeatureRequest,
-            form_contract_version: 1,
-            state: SubmissionState::Draft,
-            submitted_by: "kevin".to_owned(),
-            submitted_through: "cli".to_owned(),
-            values: Vec::new(),
-            gaps: Vec::new(),
-        };
-    }
-
     /// An accepted submission with no `--into` renders its id, kind, state and uid, and
     /// nothing about a projection that was never asked for.
     #[test]
@@ -146,5 +130,21 @@ mod tests
         let rendered = String::from_utf8_lossy(&notes).into_owned();
         assert_eq!(code, ExitCode::StoreError, "{rendered}");
         assert!(rendered.contains("subject-dossier"), "{rendered}");
+    }
+
+    /// A submission with nothing about its own content load-bearing to either test above --
+    /// only `id`, `kind` and `state` are ever rendered by [`Report_Accepted`].
+    fn Example_Submission() -> Submission
+    {
+        return Submission {
+            id: "FR-1".to_owned(),
+            kind: SubmissionKind::FeatureRequest,
+            form_contract_version: 1,
+            state: SubmissionState::Draft,
+            submitted_by: "kevin".to_owned(),
+            submitted_through: "cli".to_owned(),
+            values: Vec::new(),
+            gaps: Vec::new(),
+        };
     }
 }

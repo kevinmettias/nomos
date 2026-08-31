@@ -344,6 +344,23 @@ mod run_test
 {
     use super::*;
 
+    #[test]
+    fn Test_Run_Should_Validate_A_Real_Ledger_Through_The_Chosen_Platform()
+    {
+        let directory = Scratch_Directory("validate");
+        let mut output = Vec::new();
+
+        let code = Run(&WorkCommand::Validate, &directory, &mut output);
+
+        let _ignored = std::fs::remove_dir_all(&directory);
+
+        assert_eq!(code, ExitCode::Ok);
+        assert!(
+            String::from_utf8(output).unwrap().contains("ledger is valid"),
+            "Run must wire the real FileLedger through to Report_Validation"
+        );
+    }
+
     /// A scratch ledger directory, real enough for `Run` to open with `StdFileSystem`.
     ///
     /// Named with the process id so two suites running at once do not collide, and cleared
@@ -365,22 +382,5 @@ mod run_test
         )
         .expect("a scratch ledger");
         return root;
-    }
-
-    #[test]
-    fn Test_Run_Should_Validate_A_Real_Ledger_Through_The_Chosen_Platform()
-    {
-        let directory = Scratch_Directory("validate");
-        let mut output = Vec::new();
-
-        let code = Run(&WorkCommand::Validate, &directory, &mut output);
-
-        let _ignored = std::fs::remove_dir_all(&directory);
-
-        assert_eq!(code, ExitCode::Ok);
-        assert!(
-            String::from_utf8(output).unwrap().contains("ledger is valid"),
-            "Run must wire the real FileLedger through to Report_Validation"
-        );
     }
 }

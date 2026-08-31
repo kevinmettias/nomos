@@ -49,29 +49,24 @@ mod tests
     #[test]
     fn Test_From_Should_Map_Every_Suppression_Disposition_Variant_To_Its_Own_Response_Variant()
     {
-        assert_eq!(
-            SuppressionDispositionResponse::From(SuppressionDisposition::InlineSuppression),
-            SuppressionDispositionResponse::InlineSuppression
+        Assert_Maps(SuppressionDisposition::InlineSuppression, SuppressionDispositionResponse::InlineSuppression);
+        Assert_Maps(
+            SuppressionDisposition::RepositoryPolicyException,
+            SuppressionDispositionResponse::RepositoryPolicyException,
         );
-        assert_eq!(
-            SuppressionDispositionResponse::From(SuppressionDisposition::RepositoryPolicyException),
-            SuppressionDispositionResponse::RepositoryPolicyException
+        Assert_Maps(SuppressionDisposition::TemporaryWaiver, SuppressionDispositionResponse::TemporaryWaiver);
+        Assert_Maps(SuppressionDisposition::AcceptedBaselineDebt, SuppressionDispositionResponse::AcceptedBaselineDebt);
+        Assert_Maps(
+            SuppressionDisposition::FalsePositiveDisposition,
+            SuppressionDispositionResponse::FalsePositiveDisposition,
         );
-        assert_eq!(
-            SuppressionDispositionResponse::From(SuppressionDisposition::TemporaryWaiver),
-            SuppressionDispositionResponse::TemporaryWaiver
-        );
-        assert_eq!(
-            SuppressionDispositionResponse::From(SuppressionDisposition::AcceptedBaselineDebt),
-            SuppressionDispositionResponse::AcceptedBaselineDebt
-        );
-        assert_eq!(
-            SuppressionDispositionResponse::From(SuppressionDisposition::FalsePositiveDisposition),
-            SuppressionDispositionResponse::FalsePositiveDisposition
-        );
-        assert_eq!(
-            SuppressionDispositionResponse::From(SuppressionDisposition::FormalRiskAcceptance),
-            SuppressionDispositionResponse::FormalRiskAcceptance
-        );
+        Assert_Maps(SuppressionDisposition::FormalRiskAcceptance, SuppressionDispositionResponse::FormalRiskAcceptance);
+    }
+
+    /// One disposition's own round trip through [`SuppressionDispositionResponse::From`] --
+    /// the shared body every arm of the test above drove separately before this existed.
+    fn Assert_Maps(disposition: SuppressionDisposition, expected: SuppressionDispositionResponse)
+    {
+        assert_eq!(SuppressionDispositionResponse::From(disposition), expected);
     }
 }

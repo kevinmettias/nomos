@@ -1,5 +1,12 @@
 //! Saying what the ledger answered, and which exit code that is.
 
+// file-size: allow this file pairs its production code with its own inline #[cfg(test)]
+// module; check-test-coverage keys a test's companion unit off the exact file it is
+// textually written in, so these tests cannot move to a sibling file without losing
+// their attribution to every function this file declares.
+// responsibility: allow same reason -- the coupling that keeps this file whole is
+// check-test-coverage's stem-based companion attribution, not a design choice.
+
 use nomos_ledger::{
     AddRefusal, Claim_Refusal, ClaimRefusal, FinishRefusal, ItemId, ItemState, LedgerDocument,
     LedgerError, LedgerItem, RefusalLayer, SCHEMA_VERSION, Territory,
@@ -365,30 +372,13 @@ const fn Code_For(refusal: &ClaimRefusal) -> ExitCode
 #[cfg(test)]
 mod tests
 {
-    use super::*;
+    //! What [`super`]'s report functions say, exercised.
+    //!
+    //! Split from `report.rs` itself once that file passed the ~500-line review trigger --
+    //! `report.rs` is the rendering logic, this is its own coverage, the same split this
+    //! workspace already keeps between `spec.rs` and `spec/tests.rs`.
 
-    /// A minimal, ready item: enough to give [`Print_Blocked`] something to print.
-    fn Item(id: &str) -> LedgerItem
-    {
-        return LedgerItem {
-            id: ItemId::New(id),
-            title: format!("item {id}"),
-            why: "because".to_owned(),
-            done_when: "it prints".to_owned(),
-            kind: nomos_ledger::ItemKind::Correction,
-            origin: nomos_ledger::ItemOrigin::Proposed,
-            territory: Territory::Of_Files(vec!["src/a.rs".to_owned()]),
-            state: ItemState::Ready,
-            depends_on: Vec::new(),
-            blocked: None,
-            claim: None,
-            verification: None,
-            verified: None,
-            abandoned: Vec::new(),
-            displaced: Vec::new(),
-            declined: None,
-        };
-    }
+    use super::*;
 
     /// `work audit` answers for items somebody could act on, and nobody can act on a declined
     /// one.
@@ -702,5 +692,28 @@ mod tests
         );
 
         assert_eq!(code, ExitCode::StoreError);
+    }
+
+    /// A minimal, ready item: enough to give [`Print_Blocked`] something to print.
+    fn Item(id: &str) -> LedgerItem
+    {
+        return LedgerItem {
+            id: ItemId::New(id),
+            title: format!("item {id}"),
+            why: "because".to_owned(),
+            done_when: "it prints".to_owned(),
+            kind: nomos_ledger::ItemKind::Correction,
+            origin: nomos_ledger::ItemOrigin::Proposed,
+            territory: Territory::Of_Files(vec!["src/a.rs".to_owned()]),
+            state: ItemState::Ready,
+            depends_on: Vec::new(),
+            blocked: None,
+            claim: None,
+            verification: None,
+            verified: None,
+            abandoned: Vec::new(),
+            displaced: Vec::new(),
+            declined: None,
+        };
     }
 }

@@ -76,7 +76,7 @@
     {
       "check": "check-literals",
       "path": "crates/contracts/nomos-contracts/src/contract_version.rs",
-      "message": "magic number literal `3` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `3` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -148,7 +148,7 @@
     {
       "check": "check-literals",
       "path": "crates/contracts/nomos-contracts/src/workflow_step.rs",
-      "message": "magic number literal `3` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `3` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -196,7 +196,7 @@
     {
       "check": "check-literals",
       "path": "crates/corrections/nomos-corrections/src/correction_choice.rs",
-      "message": "magic number literal `3` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `3` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -252,7 +252,7 @@
     {
       "check": "check-literals",
       "path": "crates/host/nomos-api/src/work.rs",
-      "message": "magic number literal `3600` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `3600` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -508,7 +508,7 @@
     {
       "check": "check-literals",
       "path": "crates/kernel/nomos-model/src/evidence/coverage.rs",
-      "message": "magic number literal `3` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `3` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -580,7 +580,7 @@
     {
       "check": "check-literals",
       "path": "crates/languages/nomos-lang-go-modules/src/provider.rs",
-      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -604,7 +604,7 @@
     {
       "check": "check-literals",
       "path": "crates/languages/nomos-lang-go/src/provider.rs",
-      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -612,7 +612,7 @@
     {
       "check": "check-literals",
       "path": "crates/languages/nomos-lang-go/src/provider.rs",
-      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -620,7 +620,7 @@
     {
       "check": "check-literals",
       "path": "crates/languages/nomos-lang-go/src/provider.rs",
-      "message": "magic number literal `3` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `3` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -628,7 +628,7 @@
     {
       "check": "check-literals",
       "path": "crates/languages/nomos-lang-rust-cargo/src/provider.rs",
-      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -652,7 +652,7 @@
     {
       "check": "check-literals",
       "path": "crates/languages/nomos-lang-rust-clippy/src/provider.rs",
-      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -684,7 +684,7 @@
     {
       "check": "check-literals",
       "path": "crates/languages/nomos-lang-rust-clippy/src/reading.rs",
-      "message": "magic number literal `113` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `113` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -716,7 +716,7 @@
     {
       "check": "check-literals",
       "path": "crates/languages/nomos-lang-rust-deny/src/provider.rs",
-      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -740,7 +740,7 @@
     {
       "check": "check-literals",
       "path": "crates/languages/nomos-lang-rust-scan/src/provider.rs",
-      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -748,7 +748,7 @@
     {
       "check": "check-literals",
       "path": "crates/languages/nomos-lang-rust-scan/src/provider.rs",
-      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -780,7 +780,7 @@
     {
       "check": "check-literals",
       "path": "crates/languages/nomos-lang-rust/src/provider.rs",
-      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -788,7 +788,7 @@
     {
       "check": "check-literals",
       "path": "crates/languages/nomos-lang-rust/src/provider.rs",
-      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -796,7 +796,7 @@
     {
       "check": "check-literals",
       "path": "crates/languages/nomos-lang-rust/src/provider.rs",
-      "message": "magic number literal `3` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `3` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -804,7 +804,7 @@
     {
       "check": "check-literals",
       "path": "crates/languages/nomos-lang-rust/src/reachability/provider.rs",
-      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -868,7 +868,7 @@
     {
       "check": "check-literals",
       "path": "crates/platform/nomos-platform/src/clock.rs",
-      "message": "magic number literal `1_000` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `1_000` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -876,7 +876,7 @@
     {
       "check": "check-literals",
       "path": "crates/platform/nomos-platform/src/clock.rs",
-      "message": "magic number literal `30` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `30` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -900,7 +900,7 @@
     {
       "check": "check-literals",
       "path": "crates/platform/nomos-platform/src/launcher/exit_outcome.rs",
-      "message": "magic number literal `30` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `30` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -908,7 +908,7 @@
     {
       "check": "check-literals",
       "path": "crates/rules/nomos-rules/src/crosslang.rs",
-      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -932,7 +932,7 @@
     {
       "check": "check-literals",
       "path": "crates/rules/nomos-rules/src/dependency.rs",
-      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -956,7 +956,7 @@
     {
       "check": "check-literals",
       "path": "crates/rules/nomos-rules/src/lint.rs",
-      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -964,7 +964,7 @@
     {
       "check": "check-literals",
       "path": "crates/rules/nomos-rules/src/lint.rs",
-      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -988,7 +988,7 @@
     {
       "check": "check-literals",
       "path": "crates/rules/nomos-rules/src/naming.rs",
-      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -1012,7 +1012,7 @@
     {
       "check": "check-literals",
       "path": "crates/rules/nomos-rules/src/policy.rs",
-      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -1020,7 +1020,7 @@
     {
       "check": "check-literals",
       "path": "crates/rules/nomos-rules/src/policy.rs",
-      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -1036,7 +1036,7 @@
     {
       "check": "check-literals",
       "path": "crates/rules/nomos-rules/src/reachability.rs",
-      "message": "magic number literal `3` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `3` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -1044,7 +1044,7 @@
     {
       "check": "check-literals",
       "path": "crates/rules/nomos-rules/src/reachability.rs",
-      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -1076,7 +1076,7 @@
     {
       "check": "check-literals",
       "path": "crates/spec/nomos-spec-bundle/src/bundle.rs",
-      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -1164,7 +1164,7 @@
     {
       "check": "check-literals",
       "path": "crates/spec/nomos-spec-model/src/block.rs",
-      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -1172,7 +1172,7 @@
     {
       "check": "check-literals",
       "path": "crates/spec/nomos-spec-model/src/block.rs",
-      "message": "magic number literal `3` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `3` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -1196,7 +1196,7 @@
     {
       "check": "check-literals",
       "path": "crates/spec/nomos-spec-model/src/table.rs",
-      "message": "magic number literal `3` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `3` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -1204,7 +1204,7 @@
     {
       "check": "check-literals",
       "path": "crates/spec/nomos-spec-model/src/table.rs",
-      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -1212,7 +1212,7 @@
     {
       "check": "check-literals",
       "path": "crates/spec/nomos-spec-model/src/table.rs",
-      "message": "magic number literal `4` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `4` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -1324,7 +1324,7 @@
     {
       "check": "check-literals",
       "path": "crates/spec/nomos-spec-store/src/read.rs",
-      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -1332,7 +1332,7 @@
     {
       "check": "check-literals",
       "path": "crates/spec/nomos-spec-store/src/store/relation.rs",
-      "message": "magic number literal `4` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `4` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -1348,7 +1348,7 @@
     {
       "check": "check-literals",
       "path": "crates/spec/nomos-spec-validate/src/run.rs",
-      "message": "magic number literal `10` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `10` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -1364,7 +1364,7 @@
     {
       "check": "check-literals",
       "path": "crates/substrate/nomos-analysis/src/propagation.rs",
-      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -1372,7 +1372,7 @@
     {
       "check": "check-literals",
       "path": "crates/substrate/nomos-analysis/src/propagation.rs",
-      "message": "magic number literal `3` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `3` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -1396,7 +1396,7 @@
     {
       "check": "check-literals",
       "path": "crates/substrate/nomos-ledger/src/exclusion.rs",
-      "message": "magic number literal `2_000` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `2_000` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -1444,7 +1444,7 @@
     {
       "check": "check-literals",
       "path": "crates/substrate/nomos-ledger/src/store/refusal.rs",
-      "message": "magic number literal `2_000` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `2_000` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -1452,7 +1452,7 @@
     {
       "check": "check-literals",
       "path": "crates/substrate/nomos-workspace/src/change.rs",
-      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -1484,7 +1484,7 @@
     {
       "check": "check-literals",
       "path": "crates/substrate/nomos-workspace/src/snapshot.rs",
-      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `16` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test code and two confirmed checker front-end gaps (enum discriminants; test fixtures) set aside per OD-GATE-018; see that record for the measurement and category boundaries",
       "owner": "@kmettias",
       "expires": "2026-11-24"
@@ -1564,7 +1564,7 @@
     {
       "check": "check-presumption",
       "path": "crates/corrections/nomos-corrections/src/committed.rs",
-      "message": "`workspace.Apply(&initial).expect(\"a fresh present is always accepted\")` promises the compiler that this value is present, on your authority, and the reason it gives -- `a fresh present is always accepted` -- restates the problem rather than naming the invariant. The promise may well be true; what is missing is what MAKES it true. Name the invariant -- what has already validated this, and where -- so the next reader can check whether it still holds. A promise with a reason is an invariant; a promise without one is a bet, and the way you find out you lost it is a crash that explains nothing",
+      "message": "`workspace.Apply(\u0026initial).expect(\"a fresh present is always accepted\")` promises the compiler that this value is present, on your authority, and the reason it gives -- `a fresh present is always accepted` -- restates the problem rather than naming the invariant. The promise may well be true; what is missing is what MAKES it true. Name the invariant -- what has already validated this, and where -- so the next reader can check whether it still holds. A promise with a reason is an invariant; a promise without one is a bet, and the way you find out you lost it is a crash that explains nothing",
       "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
       "owner": "@kmettias",
       "expires": "2026-11-27"
@@ -1652,7 +1652,7 @@
     {
       "check": "check-presumption",
       "path": "crates/host/nomos-api/src/spec/commit.rs",
-      "message": "`std::fs::create_dir_all(&directory).expect(\"a fresh scratch directory can always be created\")` promises the compiler that this value is present, on your authority, and the reason it gives -- `a fresh scratch directory can always be created` -- restates the problem rather than naming the invariant. The promise may well be true; what is missing is what MAKES it true. Name the invariant -- what has already validated this, and where -- so the next reader can check whether it still holds. A promise with a reason is an invariant; a promise without one is a bet, and the way you find out you lost it is a crash that explains nothing",
+      "message": "`std::fs::create_dir_all(\u0026directory).expect(\"a fresh scratch directory can always be created\")` promises the compiler that this value is present, on your authority, and the reason it gives -- `a fresh scratch directory can always be created` -- restates the problem rather than naming the invariant. The promise may well be true; what is missing is what MAKES it true. Name the invariant -- what has already validated this, and where -- so the next reader can check whether it still holds. A promise with a reason is an invariant; a promise without one is a bet, and the way you find out you lost it is a crash that explains nothing",
       "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
       "owner": "@kmettias",
       "expires": "2026-11-27"
@@ -1964,7 +1964,7 @@
     {
       "check": "check-presumption",
       "path": "crates/host/nomos-cli/src/request.rs",
-      "message": "`Parse(&arguments).expect(\"parses\")` promises the compiler that this value is present, on your authority, and the reason it gives -- `parses` -- restates the problem rather than naming the invariant. The promise may well be true; what is missing is what MAKES it true. Name the invariant -- what has already validated this, and where -- so the next reader can check whether it still holds. A promise with a reason is an invariant; a promise without one is a bet, and the way you find out you lost it is a crash that explains nothing",
+      "message": "`Parse(\u0026arguments).expect(\"parses\")` promises the compiler that this value is present, on your authority, and the reason it gives -- `parses` -- restates the problem rather than naming the invariant. The promise may well be true; what is missing is what MAKES it true. Name the invariant -- what has already validated this, and where -- so the next reader can check whether it still holds. A promise with a reason is an invariant; a promise without one is a bet, and the way you find out you lost it is a crash that explains nothing",
       "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
       "owner": "@kmettias",
       "expires": "2026-11-27"
@@ -2028,7 +2028,7 @@
     {
       "check": "check-presumption",
       "path": "crates/languages/nomos-lang-go/src/provider.rs",
-      "message": "`nomos_cap_syntax::Parse_Payload(&fact.payload.bytes).expect(\"well formed\")` promises the compiler that this value is present, on your authority, and the reason it gives -- `well formed` -- restates the problem rather than naming the invariant. The promise may well be true; what is missing is what MAKES it true. Name the invariant -- what has already validated this, and where -- so the next reader can check whether it still holds. A promise with a reason is an invariant; a promise without one is a bet, and the way you find out you lost it is a crash that explains nothing",
+      "message": "`nomos_cap_syntax::Parse_Payload(\u0026fact.payload.bytes).expect(\"well formed\")` promises the compiler that this value is present, on your authority, and the reason it gives -- `well formed` -- restates the problem rather than naming the invariant. The promise may well be true; what is missing is what MAKES it true. Name the invariant -- what has already validated this, and where -- so the next reader can check whether it still holds. A promise with a reason is an invariant; a promise without one is a bet, and the way you find out you lost it is a crash that explains nothing",
       "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
       "owner": "@kmettias",
       "expires": "2026-11-27"
@@ -2236,7 +2236,7 @@
     {
       "check": "check-presumption",
       "path": "crates/spec/nomos-spec-ingest/src/reconciliation/lineage.rs",
-      "message": "`Ingest_Section_Lineage(&mut store, &lineage, \"v14.36\").expect(\"ingests\")` promises the compiler that this value is present, on your authority, and the reason it gives -- `ingests` -- restates the problem rather than naming the invariant. The promise may well be true; what is missing is what MAKES it true. Name the invariant -- what has already validated this, and where -- so the next reader can check whether it still holds. A promise with a reason is an invariant; a promise without one is a bet, and the way you find out you lost it is a crash that explains nothing",
+      "message": "`Ingest_Section_Lineage(\u0026mut store, \u0026lineage, \"v14.36\").expect(\"ingests\")` promises the compiler that this value is present, on your authority, and the reason it gives -- `ingests` -- restates the problem rather than naming the invariant. The promise may well be true; what is missing is what MAKES it true. Name the invariant -- what has already validated this, and where -- so the next reader can check whether it still holds. A promise with a reason is an invariant; a promise without one is a bet, and the way you find out you lost it is a crash that explains nothing",
       "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
       "owner": "@kmettias",
       "expires": "2026-11-27"
@@ -2644,7 +2644,7 @@
     {
       "check": "check-error-info",
       "path": "crates/host/nomos-surface-provenance/src/main.rs",
-      "message": "`let _ = ...` discards an error; handle it, report it, or return it (`// error-info: allow <reason>` if the failure genuinely changes nothing)",
+      "message": "`let _ = ...` discards an error; handle it, report it, or return it (`// error-info: allow \u003creason\u003e` if the failure genuinely changes nothing)",
       "reason": "test code (all findings sit inside #[cfg(test)] mod tests blocks); see OD-GATE-018 category 1",
       "owner": "@kmettias",
       "expires": "2026-11-27"
@@ -3389,7 +3389,7 @@
       "check": "check-lifetime-discipline",
       "path": "crates/platform/nomos-platform-std/src/launcher/drain.rs",
       "fingerprint": "bb192e8207fa83dc",
-      "reason": "'static is required by std::thread::spawn, which moves the reader onto a detached thread that outlives this call -- not a bound chosen here. check-lifetime-discipline is not one of the safety-critical checks an in-code marker still argues under this repository's safety-only policy, so this moves here per OD-GATE-018's own remedy for an unhonoured marker. Fingerprint refreshed 2026-08-29: P19-NAMING-ATTRS renamed the generic parameter on this line (R -> Source), which is all that changed.",
+      "reason": "'static is required by std::thread::spawn, which moves the reader onto a detached thread that outlives this call -- not a bound chosen here. check-lifetime-discipline is not one of the safety-critical checks an in-code marker still argues under this repository's safety-only policy, so this moves here per OD-GATE-018's own remedy for an unhonoured marker. Fingerprint refreshed 2026-08-29: P19-NAMING-ATTRS renamed the generic parameter on this line (R -\u003e Source), which is all that changed.",
       "owner": "@kmettias",
       "expires": "2027-02-25"
     },
@@ -3556,7 +3556,7 @@
     {
       "check": "check-error-values",
       "path": "crates/host/nomos-api/src/work/tests_support.rs",
-      "message": "`.expect()` signals a recoverable failure by unwinding the stack; return an error value the caller has to handle (`// error-type: allow <reason>` for a genuine boundary)",
+      "message": "`.expect()` signals a recoverable failure by unwinding the stack; return an error value the caller has to handle (`// error-type: allow \u003creason\u003e` for a genuine boundary)",
       "reason": "this file (or the module it is nested under) is declared #[cfg(test)] mod X; from its parent, so the whole file compiles only under cargo test -- the same governance OD-GATE-018 category 1 already gives an inline #[cfg(test)] mod tests { } block, extended to a file-level test module.",
       "owner": "@kmettias",
       "expires": "2026-11-27"
@@ -3565,7 +3565,7 @@
       "check": "check-error-values",
       "path": "crates/languages/nomos-lang-go/src/syntax/walk.rs",
       "fingerprint": "57de0e8c878e855f",
-      "reason": "parser.set_language(&tree_sitter_go::LANGUAGE.into()) can only fail from a build-time ABI mismatch between the tree_sitter runtime and the tree_sitter_go grammar crate, not from anything about the source file being parsed -- every call would fail identically, so it is a build-configuration invariant, not a per-input runtime failure. Routing it through Reading::Unparseable (the per-file failure path this function already has) would misrepresent a systemic problem as a single source's own defect.",
+      "reason": "parser.set_language(\u0026tree_sitter_go::LANGUAGE.into()) can only fail from a build-time ABI mismatch between the tree_sitter runtime and the tree_sitter_go grammar crate, not from anything about the source file being parsed -- every call would fail identically, so it is a build-configuration invariant, not a per-input runtime failure. Routing it through Reading::Unparseable (the per-file failure path this function already has) would misrepresent a systemic problem as a single source's own defect.",
       "owner": "@kmettias",
       "expires": "2027-02-25"
     },
@@ -4052,7 +4052,7 @@
     {
       "check": "check-literals",
       "path": "crates/host/nomos-api/src/work/claim.rs",
-      "message": "magic number literal `3600` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `3600` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "OD-GATE-018 category-1: value sits inside test code (a #[cfg(test)] mod block or its own file-scoped test module) -- clippy.toml already permits this test-only ergonomics repository-wide",
       "owner": "@kmettias",
       "expires": "2027-02-25"
@@ -4997,7 +4997,7 @@
       "check": "check-reference-parameter",
       "path": "crates/spec/nomos-spec-store/src/addressing/document_path.rs",
       "fingerprint": "408aed039fe7e893",
-      "reason": "the &String parameter is the concrete type argument of impl From<&'a String>, kept beside a sibling impl From<&'a str> so a generic impl Into<T> bound accepts a borrowed String too -- retyping this parameter to &str would collide with (duplicate) that sibling impl.",
+      "reason": "the \u0026String parameter is the concrete type argument of impl From\u003c\u0026'a String\u003e, kept beside a sibling impl From\u003c\u0026'a str\u003e so a generic impl Into\u003cT\u003e bound accepts a borrowed String too -- retyping this parameter to \u0026str would collide with (duplicate) that sibling impl.",
       "owner": "@claude-p19-campaign",
       "expires": "2026-11-27"
     },
@@ -5005,7 +5005,7 @@
       "check": "check-reference-parameter",
       "path": "crates/spec/nomos-spec-store/src/addressing/document_revision.rs",
       "fingerprint": "408aed039fe7e893",
-      "reason": "the &String parameter is the concrete type argument of impl From<&'a String>, kept beside a sibling impl From<&'a str> so a generic impl Into<T> bound accepts a borrowed String too -- retyping this parameter to &str would collide with (duplicate) that sibling impl.",
+      "reason": "the \u0026String parameter is the concrete type argument of impl From\u003c\u0026'a String\u003e, kept beside a sibling impl From\u003c\u0026'a str\u003e so a generic impl Into\u003cT\u003e bound accepts a borrowed String too -- retyping this parameter to \u0026str would collide with (duplicate) that sibling impl.",
       "owner": "@claude-p19-campaign",
       "expires": "2026-11-27"
     },
@@ -5013,7 +5013,7 @@
       "check": "check-reference-parameter",
       "path": "crates/spec/nomos-spec-store/src/store/relation/from_node_id.rs",
       "fingerprint": "408aed039fe7e893",
-      "reason": "the &String parameter is the concrete type argument of impl From<&'a String>, kept beside a sibling impl From<&'a str> so a generic impl Into<T> bound accepts a borrowed String too -- retyping this parameter to &str would collide with (duplicate) that sibling impl.",
+      "reason": "the \u0026String parameter is the concrete type argument of impl From\u003c\u0026'a String\u003e, kept beside a sibling impl From\u003c\u0026'a str\u003e so a generic impl Into\u003cT\u003e bound accepts a borrowed String too -- retyping this parameter to \u0026str would collide with (duplicate) that sibling impl.",
       "owner": "@claude-p19-campaign",
       "expires": "2026-11-27"
     },
@@ -5021,7 +5021,7 @@
       "check": "check-reference-parameter",
       "path": "crates/spec/nomos-spec-store/src/store/relation/inverse_relation_type.rs",
       "fingerprint": "408aed039fe7e893",
-      "reason": "the &String parameter is the concrete type argument of impl From<&'a String>, kept beside a sibling impl From<&'a str> so a generic impl Into<T> bound accepts a borrowed String too -- retyping this parameter to &str would collide with (duplicate) that sibling impl.",
+      "reason": "the \u0026String parameter is the concrete type argument of impl From\u003c\u0026'a String\u003e, kept beside a sibling impl From\u003c\u0026'a str\u003e so a generic impl Into\u003cT\u003e bound accepts a borrowed String too -- retyping this parameter to \u0026str would collide with (duplicate) that sibling impl.",
       "owner": "@claude-p19-campaign",
       "expires": "2026-11-27"
     },
@@ -5029,7 +5029,7 @@
       "check": "check-reference-parameter",
       "path": "crates/spec/nomos-spec-store/src/store/relation/relation_tier.rs",
       "fingerprint": "408aed039fe7e893",
-      "reason": "the &String parameter is the concrete type argument of impl From<&'a String>, kept beside a sibling impl From<&'a str> so a generic impl Into<T> bound accepts a borrowed String too -- retyping this parameter to &str would collide with (duplicate) that sibling impl.",
+      "reason": "the \u0026String parameter is the concrete type argument of impl From\u003c\u0026'a String\u003e, kept beside a sibling impl From\u003c\u0026'a str\u003e so a generic impl Into\u003cT\u003e bound accepts a borrowed String too -- retyping this parameter to \u0026str would collide with (duplicate) that sibling impl.",
       "owner": "@claude-p19-campaign",
       "expires": "2026-11-27"
     },
@@ -5037,7 +5037,7 @@
       "check": "check-reference-parameter",
       "path": "crates/spec/nomos-spec-store/src/store/relation/relation_type_name.rs",
       "fingerprint": "408aed039fe7e893",
-      "reason": "the &String parameter is the concrete type argument of impl From<&'a String>, kept beside a sibling impl From<&'a str> so a generic impl Into<T> bound accepts a borrowed String too -- retyping this parameter to &str would collide with (duplicate) that sibling impl.",
+      "reason": "the \u0026String parameter is the concrete type argument of impl From\u003c\u0026'a String\u003e, kept beside a sibling impl From\u003c\u0026'a str\u003e so a generic impl Into\u003cT\u003e bound accepts a borrowed String too -- retyping this parameter to \u0026str would collide with (duplicate) that sibling impl.",
       "owner": "@claude-p19-campaign",
       "expires": "2026-11-27"
     },
@@ -5045,7 +5045,7 @@
       "check": "check-reference-parameter",
       "path": "crates/spec/nomos-spec-store/src/store/relation/to_node_id.rs",
       "fingerprint": "408aed039fe7e893",
-      "reason": "the &String parameter is the concrete type argument of impl From<&'a String>, kept beside a sibling impl From<&'a str> so a generic impl Into<T> bound accepts a borrowed String too -- retyping this parameter to &str would collide with (duplicate) that sibling impl.",
+      "reason": "the \u0026String parameter is the concrete type argument of impl From\u003c\u0026'a String\u003e, kept beside a sibling impl From\u003c\u0026'a str\u003e so a generic impl Into\u003cT\u003e bound accepts a borrowed String too -- retyping this parameter to \u0026str would collide with (duplicate) that sibling impl.",
       "owner": "@claude-p19-campaign",
       "expires": "2026-11-27"
     },
@@ -5053,7 +5053,7 @@
       "check": "check-reference-parameter",
       "path": "crates/spec/nomos-spec-store/src/table/suite_authority/suite_id.rs",
       "fingerprint": "408aed039fe7e893",
-      "reason": "the &String parameter is the concrete type argument of impl From<&'a String>, kept beside a sibling impl From<&'a str> so a generic impl Into<T> bound accepts a borrowed String too -- retyping this parameter to &str would collide with (duplicate) that sibling impl.",
+      "reason": "the \u0026String parameter is the concrete type argument of impl From\u003c\u0026'a String\u003e, kept beside a sibling impl From\u003c\u0026'a str\u003e so a generic impl Into\u003cT\u003e bound accepts a borrowed String too -- retyping this parameter to \u0026str would collide with (duplicate) that sibling impl.",
       "owner": "@claude-p19-campaign",
       "expires": "2026-11-27"
     },
@@ -5061,7 +5061,7 @@
       "check": "check-reference-parameter",
       "path": "crates/spec/nomos-spec-store/src/table/suite_authority/suite_title.rs",
       "fingerprint": "408aed039fe7e893",
-      "reason": "the &String parameter is the concrete type argument of impl From<&'a String>, kept beside a sibling impl From<&'a str> so a generic impl Into<T> bound accepts a borrowed String too -- retyping this parameter to &str would collide with (duplicate) that sibling impl.",
+      "reason": "the \u0026String parameter is the concrete type argument of impl From\u003c\u0026'a String\u003e, kept beside a sibling impl From\u003c\u0026'a str\u003e so a generic impl Into\u003cT\u003e bound accepts a borrowed String too -- retyping this parameter to \u0026str would collide with (duplicate) that sibling impl.",
       "owner": "@claude-p19-campaign",
       "expires": "2026-11-27"
     },
@@ -5746,7 +5746,7 @@
       "check": "check-folder-organization",
       "path": "crates/corrections/nomos-corrections/src",
       "fingerprint": "472b5af0e004b6cd",
-      "reason": "genuinely coherent: one domain (the correction preview->stage->validate->commit->rollback lifecycle plus its supporting vocabulary), every file name is already self-descriptive, and the existing subfolders already group the multi-file concepts.",
+      "reason": "genuinely coherent: one domain (the correction preview-\u003estage-\u003evalidate-\u003ecommit-\u003erollback lifecycle plus its supporting vocabulary), every file name is already self-descriptive, and the existing subfolders already group the multi-file concepts.",
       "owner": "@claude-p19-campaign",
       "expires": "2026-11-27"
     },
@@ -7426,7 +7426,7 @@
       "check": "check-test-values",
       "path": "crates/spec/nomos-spec-ingest/src/restore/tests.rs",
       "fingerprint": "95e2cb9c3d8db86b",
-      "reason": "false positive: Numbering_In returns Option<String>, not a float. The checker's float-comparison heuristic misread the dotted version-like string literal \"D.7.1\" in the expected value as a float literal. A checker front-end gap, not a nomos defect.",
+      "reason": "false positive: Numbering_In returns Option\u003cString\u003e, not a float. The checker's float-comparison heuristic misread the dotted version-like string literal \"D.7.1\" in the expected value as a float literal. A checker front-end gap, not a nomos defect.",
       "owner": "@claude-p22-campaign",
       "expires": "2026-11-27"
     },
@@ -7602,7 +7602,7 @@
       "check": "check-test-values",
       "path": "crates/spec/nomos-spec-ingest/src/restore/extract.rs",
       "fingerprint": "5bd5969f39e1f9e5",
-      "reason": "same pre-existing checker limitation as restore/tests.rs:164 (fingerprint 95e2cb9c3d8db86b, waived by @claude-p22-campaign): the check-test-values float-literal regex has no string-literal awareness, so the dotted heading numbering 'E.1.1' inside a &str expected value matches the float pattern. Both operands are strings (Vec<Recognition> / &str), never an f32/f64 -- there is no float anywhere in this assertion.",
+      "reason": "same pre-existing checker limitation as restore/tests.rs:164 (fingerprint 95e2cb9c3d8db86b, waived by @claude-p22-campaign): the check-test-values float-literal regex has no string-literal awareness, so the dotted heading numbering 'E.1.1' inside a \u0026str expected value matches the float pattern. Both operands are strings (Vec\u003cRecognition\u003e / \u0026str), never an f32/f64 -- there is no float anywhere in this assertion.",
       "owner": "@claude-p23-testing",
       "expires": "2026-11-27"
     },
@@ -7610,7 +7610,7 @@
       "check": "check-test-values",
       "path": "crates/spec/nomos-spec-ingest/src/restore/extract.rs",
       "fingerprint": "95e2cb9c3d8db86b",
-      "reason": "same pre-existing checker limitation as restore/tests.rs:164 (fingerprint 95e2cb9c3d8db86b, already waived there by @claude-p22-campaign for the identical pattern): the check-test-values float-literal regex has no string-literal awareness, so the dotted heading numbering 'D.7.1' inside a &str expected value (Some(String)) matches the float pattern. Neither operand of Numbering_In(...) is an f32/f64.",
+      "reason": "same pre-existing checker limitation as restore/tests.rs:164 (fingerprint 95e2cb9c3d8db86b, already waived there by @claude-p22-campaign for the identical pattern): the check-test-values float-literal regex has no string-literal awareness, so the dotted heading numbering 'D.7.1' inside a \u0026str expected value (Some(String)) matches the float pattern. Neither operand of Numbering_In(...) is an f32/f64.",
       "owner": "@claude-p23-testing",
       "expires": "2026-11-27"
     },
@@ -7793,7 +7793,7 @@
     {
       "check": "check-literals",
       "path": "crates/capabilities/nomos-cap-syntax/src/payload/parse.rs",
-      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test-only helper in #[cfg(test)] mod tests; P24 regression sweep, OD-GATE-018 test-code exemption for check-literals",
       "owner": "@claude-p24-regression",
       "expires": "2026-11-28"
@@ -7897,7 +7897,7 @@
     {
       "check": "check-literals",
       "path": "crates/spec/nomos-spec-bundle/src/export.rs",
-      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test-code-exempt (OD-GATE-018 pre-decided category): finding sits inside an inline #[cfg(test)] test module; test code is out of scope for this check",
       "owner": "@claude-p24-regression",
       "expires": "2026-11-28"
@@ -7937,7 +7937,7 @@
     {
       "check": "check-literals",
       "path": "crates/spec/nomos-spec-bundle/src/import/source.rs",
-      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `2` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test-code-exempt (OD-GATE-018 pre-decided category): finding sits inside an inline #[cfg(test)] test module; test code is out of scope for this check",
       "owner": "@claude-p24-regression",
       "expires": "2026-11-28"
@@ -8601,7 +8601,7 @@
     {
       "check": "check-literals",
       "path": "crates/spec/nomos-spec-store/src/store/specification_store.rs",
-      "message": "magic number literal `3` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `3` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test-code-exempt (OD-GATE-018 pre-decided category): finding sits inside an inline #[cfg(test)] test module; test code is out of scope for this check",
       "owner": "@claude-p24-regression",
       "expires": "2026-11-28"
@@ -8705,7 +8705,7 @@
     {
       "check": "check-literals",
       "path": "crates/spec/nomos-spec-store/src/store/write/relations.rs",
-      "message": "magic number literal `5` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `5` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test-code-exempt (OD-GATE-018 pre-decided category): finding sits inside an inline #[cfg(test)] test module; test code is out of scope for this check",
       "owner": "@claude-p24-regression",
       "expires": "2026-11-28"
@@ -8801,7 +8801,7 @@
     {
       "check": "check-literals",
       "path": "crates/spec/nomos-spec-validate/src/offending.rs",
-      "message": "magic number literal `4` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `4` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test-code-exempt (OD-GATE-018 pre-decided category): finding sits inside an inline #[cfg(test)] test module; test code is out of scope for this check",
       "owner": "@claude-p24-regression",
       "expires": "2026-11-28"
@@ -9257,7 +9257,7 @@
     {
       "check": "check-presumption",
       "path": "crates/spec/nomos-spec-project/src/profile.rs",
-      "message": "`Profile::Parse(&MINIMAL.replace(\"one.md\", \"{subject}.md\")).expect(\"parses\")` promises the compiler that this value is present, on your authority, and the reason it gives -- `parses` -- restates the problem rather than naming the invariant. The promise may well be true; what is missing is what MAKES it true. Name the invariant -- what has already validated this, and where -- so the next reader can check whether it still holds. A promise with a reason is an invariant; a promise without one is a bet, and the way you find out you lost it is a crash that explains nothing",
+      "message": "`Profile::Parse(\u0026MINIMAL.replace(\"one.md\", \"{subject}.md\")).expect(\"parses\")` promises the compiler that this value is present, on your authority, and the reason it gives -- `parses` -- restates the problem rather than naming the invariant. The promise may well be true; what is missing is what MAKES it true. Name the invariant -- what has already validated this, and where -- so the next reader can check whether it still holds. A promise with a reason is an invariant; a promise without one is a bet, and the way you find out you lost it is a crash that explains nothing",
       "reason": "test-code-exempt (OD-GATE-018 pre-decided category): finding sits inside an inline #[cfg(test)] test module; test code is out of scope for this check",
       "owner": "@claude-p24-regression",
       "expires": "2026-11-28"
@@ -9593,7 +9593,7 @@
     {
       "check": "check-literals",
       "path": "crates/contracts/nomos-contracts/src/digest128/generation_id.rs",
-      "message": "magic number literal `7` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `7` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "inline #[cfg(test)] mod tests block; check-literals is test-code exempt per OD-GATE-018 (P24 regression sweep)",
       "owner": "@claude-p24-regression",
       "expires": "2026-11-28"
@@ -9777,7 +9777,7 @@
     {
       "check": "check-presumption",
       "path": "crates/kernel/nomos-store/src/index.rs",
-      "message": "`Index::Derive(&documents).expect(\"derives\")` promises the compiler that this value is present, on your authority, and the reason it gives -- `derives` -- restates the problem rather than naming the invariant. The promise may well be true; what is missing is what MAKES it true. Name the invariant -- what has already validated this, and where -- so the next reader can check whether it still holds. A promise with a reason is an invariant; a promise without one is a bet, and the way you find out you lost it is a crash that explains nothing",
+      "message": "`Index::Derive(\u0026documents).expect(\"derives\")` promises the compiler that this value is present, on your authority, and the reason it gives -- `derives` -- restates the problem rather than naming the invariant. The promise may well be true; what is missing is what MAKES it true. Name the invariant -- what has already validated this, and where -- so the next reader can check whether it still holds. A promise with a reason is an invariant; a promise without one is a bet, and the way you find out you lost it is a crash that explains nothing",
       "reason": "OD-GATE-018 test-code exemption: check-presumption (.expect(...) on a value already produced by this test's own setup) inside #[cfg(test)] mod tests is out of scope per P24 shared guidance",
       "owner": "@claude-p24-regression",
       "expires": "2026-11-28"
@@ -9873,7 +9873,7 @@
     {
       "check": "check-literals",
       "path": "crates/substrate/nomos-analysis/src/fact/identity.rs",
-      "message": "magic number literal `5` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `5` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test-only code inside #[cfg(test)] mod tests (P23 testing-campaign fixtures/constants); check-literals is test-code-exempt per OD-GATE-018's category boundaries",
       "owner": "@claude-p24-regression",
       "expires": "2026-11-28"
@@ -10121,7 +10121,7 @@
     {
       "check": "check-presumption",
       "path": "crates/substrate/nomos-analysis/src/fact/memory_fact_store.rs",
-      "message": "`store\n            .Materialize(Fact_For(&key, GenerationId::From_Raw(1)), &[])\n            .expect(\"first write\")` promises the compiler that this value is present, on your authority, and the reason it gives -- `first write` -- restates the problem rather than naming the invariant. The promise may well be true; what is missing is what MAKES it true. Name the invariant -- what has already validated this, and where -- so the next reader can check whether it still holds. A promise with a reason is an invariant; a promise without one is a bet, and the way you find out you lost it is a crash that explains nothing",
+      "message": "`store\n            .Materialize(Fact_For(\u0026key, GenerationId::From_Raw(1)), \u0026[])\n            .expect(\"first write\")` promises the compiler that this value is present, on your authority, and the reason it gives -- `first write` -- restates the problem rather than naming the invariant. The promise may well be true; what is missing is what MAKES it true. Name the invariant -- what has already validated this, and where -- so the next reader can check whether it still holds. A promise with a reason is an invariant; a promise without one is a bet, and the way you find out you lost it is a crash that explains nothing",
       "reason": "test-only .expect() inside #[cfg(test)] mod tests asserting a just-written test fixture; check-presumption is test-code-exempt per OD-GATE-018's category boundaries",
       "owner": "@claude-p24-regression",
       "expires": "2026-11-28"
@@ -10209,7 +10209,7 @@
     {
       "check": "check-literals",
       "path": "crates/substrate/nomos-analysis/src/generation_cause.rs",
-      "message": "magic number literal `3` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `3` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test-only code inside #[cfg(test)] mod tests (P23 testing-campaign fixtures/constants); check-literals is test-code-exempt per OD-GATE-018's category boundaries",
       "owner": "@claude-p24-regression",
       "expires": "2026-11-28"
@@ -10217,7 +10217,7 @@
     {
       "check": "check-literals",
       "path": "crates/substrate/nomos-analysis/src/generation_cause.rs",
-      "message": "magic number literal `4` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `4` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test-only code inside #[cfg(test)] mod tests (P23 testing-campaign fixtures/constants); check-literals is test-code-exempt per OD-GATE-018's category boundaries",
       "owner": "@claude-p24-regression",
       "expires": "2026-11-28"
@@ -10625,7 +10625,7 @@
     {
       "check": "check-literals",
       "path": "crates/substrate/nomos-ledger/src/claim/refusal.rs",
-      "message": "magic number literal `2_000` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `2_000` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test-only code inside #[cfg(test)] mod tests (P23 testing-campaign fixtures/constants); check-literals is test-code-exempt per OD-GATE-018's category boundaries",
       "owner": "@claude-p24-regression",
       "expires": "2026-11-28"
@@ -10673,7 +10673,7 @@
     {
       "check": "check-literals",
       "path": "crates/substrate/nomos-ledger/src/file_ledger.rs",
-      "message": "magic number literal `1_000` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `1_000` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test-only code inside #[cfg(test)] mod tests (P23 testing-campaign fixtures/constants); check-literals is test-code-exempt per OD-GATE-018's category boundaries",
       "owner": "@claude-p24-regression",
       "expires": "2026-11-28"
@@ -10745,7 +10745,7 @@
     {
       "check": "check-literals",
       "path": "crates/substrate/nomos-ledger/src/finish/gate_step.rs",
-      "message": "magic number literal `1_000` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `1_000` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test-only code inside #[cfg(test)] mod tests (P23 testing-campaign fixtures/constants); check-literals is test-code-exempt per OD-GATE-018's category boundaries",
       "owner": "@claude-p24-regression",
       "expires": "2026-11-28"
@@ -11009,7 +11009,7 @@
     {
       "check": "check-literals",
       "path": "crates/substrate/nomos-ledger/src/store/claiming.rs",
-      "message": "magic number literal `1_000` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `1_000` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test-only code inside #[cfg(test)] mod tests (P23 testing-campaign fixtures/constants); check-literals is test-code-exempt per OD-GATE-018's category boundaries",
       "owner": "@claude-p24-regression",
       "expires": "2026-11-28"
@@ -11017,7 +11017,7 @@
     {
       "check": "check-literals",
       "path": "crates/substrate/nomos-ledger/src/store/claiming.rs",
-      "message": "magic number literal `2_000` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `2_000` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test-only code inside #[cfg(test)] mod tests (P23 testing-campaign fixtures/constants); check-literals is test-code-exempt per OD-GATE-018's category boundaries",
       "owner": "@claude-p24-regression",
       "expires": "2026-11-28"
@@ -11073,7 +11073,7 @@
     {
       "check": "check-literals",
       "path": "crates/substrate/nomos-ledger/src/store/file.rs",
-      "message": "magic number literal `1_000` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `1_000` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test-only code inside #[cfg(test)] mod tests (P23 testing-campaign fixtures/constants); check-literals is test-code-exempt per OD-GATE-018's category boundaries",
       "owner": "@claude-p24-regression",
       "expires": "2026-11-28"
@@ -11105,7 +11105,7 @@
     {
       "check": "check-literals",
       "path": "crates/substrate/nomos-ledger/src/store/verbs.rs",
-      "message": "magic number literal `1_000` in logic; name it as a constant (`// literal: allow <reason>` if the value genuinely means only itself)",
+      "message": "magic number literal `1_000` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
       "reason": "test-only code inside #[cfg(test)] mod tests (P23 testing-campaign fixtures/constants); check-literals is test-code-exempt per OD-GATE-018's category boundaries",
       "owner": "@claude-p24-regression",
       "expires": "2026-11-28"
@@ -11193,7 +11193,7 @@
     {
       "check": "check-presumption",
       "path": "crates/substrate/nomos-workspace/src/workspace.rs",
-      "message": "`workspace.Apply(&changes).expect(\"applies\")` promises the compiler that this value is present, on your authority, and the reason it gives -- `applies` -- restates the problem rather than naming the invariant. The promise may well be true; what is missing is what MAKES it true. Name the invariant -- what has already validated this, and where -- so the next reader can check whether it still holds. A promise with a reason is an invariant; a promise without one is a bet, and the way you find out you lost it is a crash that explains nothing",
+      "message": "`workspace.Apply(\u0026changes).expect(\"applies\")` promises the compiler that this value is present, on your authority, and the reason it gives -- `applies` -- restates the problem rather than naming the invariant. The promise may well be true; what is missing is what MAKES it true. Name the invariant -- what has already validated this, and where -- so the next reader can check whether it still holds. A promise with a reason is an invariant; a promise without one is a bet, and the way you find out you lost it is a crash that explains nothing",
       "reason": "test-only .expect() inside #[cfg(test)] mod tests asserting a just-written test fixture; check-presumption is test-code-exempt per OD-GATE-018's category boundaries",
       "owner": "@claude-p24-regression",
       "expires": "2026-11-28"
@@ -13921,7 +13921,7 @@
     {
       "check": "check-presumption",
       "path": "crates/kernel/nomos-store/src/document_store.rs",
-      "message": "`store.Commit(&Taken(1)).expect(\"commits\")` promises the compiler that this value is present, on your authority, and the reason it gives -- `commits` -- restates the problem rather than naming the invariant. The promise may well be true; what is missing is what MAKES it true. Name the invariant -- what has already validated this, and where -- so the next reader can check whether it still holds. A promise with a reason is an invariant; a promise without one is a bet, and the way you find out you lost it is a crash that explains nothing",
+      "message": "`store.Commit(\u0026Taken(1)).expect(\"commits\")` promises the compiler that this value is present, on your authority, and the reason it gives -- `commits` -- restates the problem rather than naming the invariant. The promise may well be true; what is missing is what MAKES it true. Name the invariant -- what has already validated this, and where -- so the next reader can check whether it still holds. A promise with a reason is an invariant; a promise without one is a bet, and the way you find out you lost it is a crash that explains nothing",
       "reason": "OD-GATE-018 test-code exemption: check-presumption (.expect(...) on a value already produced by this test's own setup) inside #[cfg(test)] mod tests is out of scope per P24 shared guidance",
       "owner": "@claude-p24-regression",
       "expires": "2026-11-28"
@@ -15442,7 +15442,7 @@
       "check": "check-error-info",
       "path": "crates/agent/nomos-agent-contracts/src/isolated_working_directory_error.rs",
       "fingerprint": "e80e44eb0ef50567",
-      "reason": "best-effort test cleanup of a temp-root directory this test created; the surrounding comment already documents that a failure here changes nothing the test's own assertions established, and the OS reclaims the temp root regardless. The checker's own documented in-code remedy (a same-line `// error-info: allow <reason>` trailing marker) was tried and confirmed non-functional -- even an isolated minimal repro of the exact documented example is not suppressed by it -- so this is a checker front-end gap, not a missing marker.",
+      "reason": "best-effort test cleanup of a temp-root directory this test created; the surrounding comment already documents that a failure here changes nothing the test's own assertions established, and the OS reclaims the temp root regardless. The checker's own documented in-code remedy (a same-line `// error-info: allow \u003creason\u003e` trailing marker) was tried and confirmed non-functional -- even an isolated minimal repro of the exact documented example is not suppressed by it -- so this is a checker front-end gap, not a missing marker.",
       "owner": "@claude-p24-regression",
       "expires": "2026-11-28"
     },
@@ -15450,7 +15450,7 @@
       "check": "check-error-info",
       "path": "crates/agent/nomos-agent-contracts/src/isolated_working_directory_error.rs",
       "fingerprint": "400faccb84324cb5",
-      "reason": "best-effort test cleanup of a temp-root directory this test created; the surrounding comment already documents that a failure here changes nothing the test's own assertions established, and the OS reclaims the temp root regardless. The checker's own documented in-code remedy (a same-line `// error-info: allow <reason>` trailing marker) was tried and confirmed non-functional -- even an isolated minimal repro of the exact documented example is not suppressed by it -- so this is a checker front-end gap, not a missing marker.",
+      "reason": "best-effort test cleanup of a temp-root directory this test created; the surrounding comment already documents that a failure here changes nothing the test's own assertions established, and the OS reclaims the temp root regardless. The checker's own documented in-code remedy (a same-line `// error-info: allow \u003creason\u003e` trailing marker) was tried and confirmed non-functional -- even an isolated minimal repro of the exact documented example is not suppressed by it -- so this is a checker front-end gap, not a missing marker.",
       "owner": "@claude-p24-regression",
       "expires": "2026-11-28"
     },
@@ -15458,7 +15458,7 @@
       "check": "check-error-info",
       "path": "crates/agent/nomos-agent-contracts/src/isolated_working_directory_error.rs",
       "fingerprint": "c5f8e9c53ae2ec63",
-      "reason": "best-effort test cleanup of a temp-root directory this test created; the surrounding comment already documents that a failure here changes nothing the test's own assertions established, and the OS reclaims the temp root regardless. The checker's own documented in-code remedy (a same-line `// error-info: allow <reason>` trailing marker) was tried and confirmed non-functional -- even an isolated minimal repro of the exact documented example is not suppressed by it -- so this is a checker front-end gap, not a missing marker.",
+      "reason": "best-effort test cleanup of a temp-root directory this test created; the surrounding comment already documents that a failure here changes nothing the test's own assertions established, and the OS reclaims the temp root regardless. The checker's own documented in-code remedy (a same-line `// error-info: allow \u003creason\u003e` trailing marker) was tried and confirmed non-functional -- even an isolated minimal repro of the exact documented example is not suppressed by it -- so this is a checker front-end gap, not a missing marker.",
       "owner": "@claude-p24-regression",
       "expires": "2026-11-28"
     },
@@ -15505,7 +15505,7 @@
     {
       "check": "check-presumption",
       "path": "crates/orchestration/nomos-spec-orchestration/src/corpus/layer.rs",
-      "message": "`std::fs::create_dir_all(&root).expect(\"creates\")` promises the compiler that this value is present, on your authority, and the reason it gives -- `creates` -- restates the problem rather than naming the invariant. The promise may well be true; what is missing is what MAKES it true. Name the invariant -- what has already validated this, and where -- so the next reader can check whether it still holds. A promise with a reason is an invariant; a promise without one is a bet, and the way you find out you lost it is a crash that explains nothing",
+      "message": "`std::fs::create_dir_all(\u0026root).expect(\"creates\")` promises the compiler that this value is present, on your authority, and the reason it gives -- `creates` -- restates the problem rather than naming the invariant. The promise may well be true; what is missing is what MAKES it true. Name the invariant -- what has already validated this, and where -- so the next reader can check whether it still holds. A promise with a reason is an invariant; a promise without one is a bet, and the way you find out you lost it is a crash that explains nothing",
       "reason": "test-code exemption (OD-GATE-018): inside a #[cfg(test)] mod tests block, out of scope for this check per the P24 regression-sweep triage",
       "owner": "@claude-p24-regression",
       "expires": "2026-11-28"
@@ -15513,7 +15513,7 @@
     {
       "check": "check-presumption",
       "path": "crates/orchestration/nomos-spec-orchestration/src/corpus/volumes.rs",
-      "message": "`std::fs::create_dir_all(&directory).expect(\"creates\")` promises the compiler that this value is present, on your authority, and the reason it gives -- `creates` -- restates the problem rather than naming the invariant. The promise may well be true; what is missing is what MAKES it true. Name the invariant -- what has already validated this, and where -- so the next reader can check whether it still holds. A promise with a reason is an invariant; a promise without one is a bet, and the way you find out you lost it is a crash that explains nothing",
+      "message": "`std::fs::create_dir_all(\u0026directory).expect(\"creates\")` promises the compiler that this value is present, on your authority, and the reason it gives -- `creates` -- restates the problem rather than naming the invariant. The promise may well be true; what is missing is what MAKES it true. Name the invariant -- what has already validated this, and where -- so the next reader can check whether it still holds. A promise with a reason is an invariant; a promise without one is a bet, and the way you find out you lost it is a crash that explains nothing",
       "reason": "test-code exemption (OD-GATE-018): inside a #[cfg(test)] mod tests block, out of scope for this check per the P24 regression-sweep triage",
       "owner": "@claude-p24-regression",
       "expires": "2026-11-28"
@@ -15855,6 +15855,766 @@
       "expires": "2026-11-28"
     },
     {
+      "check": "check-literals",
+      "path": "crates/host/nomos-api/src/response/rule_offer_response.rs",
+      "fingerprint": "ef36b84331362f3f",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-api/src/spec/block_change_response.rs",
+      "fingerprint": "cf223b9f22414812",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-api/src/spec/block_change_response.rs",
+      "fingerprint": "ca831e04c7a0d0f5",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-api/src/spec/block_change_response.rs",
+      "fingerprint": "582d7e4300e8fadc",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-api/src/spec/block_change_response.rs",
+      "fingerprint": "e8dd01a45a4c9c39",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-api/src/spec/block_change_response.rs",
+      "fingerprint": "3af5433ce3f08339",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-api/src/spec/block_change_response.rs",
+      "fingerprint": "c03eed153a1e15b8",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-api/src/spec/block_change_response.rs",
+      "fingerprint": "a0b2941ecae2d59a",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-api/src/spec/block_change_response.rs",
+      "fingerprint": "05cc05920e304776",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-api/src/spec/block_change_response.rs",
+      "fingerprint": "e6b4706ecc978620",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-api/src/spec/block_change_response.rs",
+      "fingerprint": "bda615df40ceef3b",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-api/src/spec/commit_report_response.rs",
+      "fingerprint": "70ded6e14d8f7984",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-api/src/spec/commit_report_response.rs",
+      "fingerprint": "4f29a437676e87ab",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-nested-call",
+      "path": "crates/host/nomos-api/src/spec/committed_preview_response.rs",
+      "fingerprint": "6f1d2dfe763fa548",
+      "reason": "call inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-api/src/spec/document_source_response.rs",
+      "fingerprint": "32333a5cd94a1848",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-api/src/spec/normative_movement_response.rs",
+      "fingerprint": "56be85c6998584ed",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-api/src/spec/normative_movement_response.rs",
+      "fingerprint": "56a989a0574b9ea2",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-api/src/spec/normative_outcome_response.rs",
+      "fingerprint": "4eec9dfb7db5a0e0",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-api/src/spec/normative_outcome_response.rs",
+      "fingerprint": "821402f5b7ed9a8d",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-api/src/spec/normative_outcome_response.rs",
+      "fingerprint": "69c2341e2b09d055",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-api/src/spec/normative_outcome_response.rs",
+      "fingerprint": "8274b9cbf301ada2",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-api/src/spec/normative_outcome_response.rs",
+      "fingerprint": "eb93e646335a9463",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-api/src/spec/normative_outcome_response.rs",
+      "fingerprint": "117ab5847ec6e40b",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-api/src/spec/row_census_response.rs",
+      "fingerprint": "9852faa381d10930",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-api/src/spec/row_census_response.rs",
+      "fingerprint": "4cf60b31985bae89",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-api/src/spec/row_census_response.rs",
+      "fingerprint": "33c68b7e06ae2b95",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-api/src/spec/table_line_response.rs",
+      "fingerprint": "234c3954ed71eb17",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-api/src/spec/table_line_response.rs",
+      "fingerprint": "aa757f789434e833",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-api/src/work/reservation_outcome_response.rs",
+      "fingerprint": "ff587a02409c1d7e",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-api/src/work/reservation_outcome_response.rs",
+      "fingerprint": "fc6e2aed160ca6ae",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-api/src/work/reservation_response.rs",
+      "fingerprint": "ff587a02409c1d7e",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-api/src/work/tests_support.rs",
+      "fingerprint": "d14e891f986bc3d3",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-api/src/work/tests_support.rs",
+      "fingerprint": "117b6b3b70387ccd",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-api/src/work/tests_support.rs",
+      "fingerprint": "fe56b60bb73a67bc",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-api/src/work/tests_support.rs",
+      "fingerprint": "97742408844d0dc5",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-cli/src/agent/parsing.rs",
+      "fingerprint": "ed20e74cb8b9f40f",
+      "reason": ".expect()/.unwrap() inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-cli/src/check/parsing.rs",
+      "fingerprint": "57735a0a28c0fa9d",
+      "reason": ".expect()/.unwrap() inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-cli/src/check/parsing.rs",
+      "fingerprint": "c5fc9dfc76a98f85",
+      "reason": ".expect()/.unwrap() inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-cli/src/check/sources.rs",
+      "fingerprint": "d9c3bfa21216856c",
+      "reason": ".expect()/.unwrap() inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-cli/src/gate/parsing.rs",
+      "message": "`Gate_Invocation_From_String_Arguments(\u0026arguments).expect(\"parses\")` promises the compiler that this value is present, on your authority, and the reason it gives -- `parses` -- restates the problem rather than naming the invariant. The promise may well be true; what is missing is what MAKES it true. Name the invariant -- what has already validated this, and where -- so the next reader can check whether it still holds. A promise with a reason is an invariant; a promise without one is a bet, and the way you find out you lost it is a crash that explains nothing",
+      "reason": ".expect()/.unwrap() inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-cli/src/request/parsing.rs",
+      "fingerprint": "59b1bc44157b533a",
+      "reason": ".expect()/.unwrap() inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/request/report.rs",
+      "fingerprint": "ae537376ef6040dc",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/request/report.rs",
+      "fingerprint": "026a48ac72e5065f",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/request/report.rs",
+      "fingerprint": "458bf2f3b3775c2d",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/request/report.rs",
+      "fingerprint": "77f04052d1c61c11",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/request/report.rs",
+      "fingerprint": "2e06f1bc24bc899b",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/spec/exit_code.rs",
+      "fingerprint": "c43b9315e2b64317",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/spec/exit_code.rs",
+      "fingerprint": "e90e46704b05772e",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/spec/exit_code.rs",
+      "fingerprint": "44bce1c1314c4699",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/spec/exit_code.rs",
+      "fingerprint": "ffc0896255443802",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/spec/exit_code.rs",
+      "fingerprint": "5fa44b53d84df4b1",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/spec/exit_code.rs",
+      "fingerprint": "0cb5ece38e18cf3e",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/spec/parsing.rs",
+      "fingerprint": "349316ddfc1d0556",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/spec/parsing.rs",
+      "fingerprint": "3ce44002abdf5352",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/host/nomos-cli/src/spec/parsing.rs",
+      "fingerprint": "c405a22fae9dd8a0",
+      "reason": "private test-only helper function inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-cli/src/spec/reporting.rs",
+      "fingerprint": "a86401a6928e7654",
+      "reason": ".expect()/.unwrap() inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-allman-braces",
+      "path": "crates/host/nomos-cli/src/spec/reporting.rs",
+      "fingerprint": "5ee29525f57b4ff6",
+      "reason": "phantom finding: a backslash-continued string literal earlier in this file throws off the brace-column scanner; the flagged brace is correctly Allman-aligned by eye with the keyword that opens its block",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-closing-brace",
+      "path": "crates/host/nomos-cli/src/spec/reporting.rs",
+      "fingerprint": "f652bb398b393c11",
+      "reason": "phantom finding: a backslash-continued string literal earlier in this file throws off the brace-column scanner; the flagged brace is correctly aligned with the keyword that opened its block",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-cli/src/spec/verb/editing.rs",
+      "fingerprint": "a86401a6928e7654",
+      "reason": ".expect()/.unwrap() inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-cli/src/spec/verb/freshness.rs",
+      "fingerprint": "a86401a6928e7654",
+      "reason": ".expect()/.unwrap() inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-cli/src/spec/verb/listing.rs",
+      "fingerprint": "0eedba9d2b899a04",
+      "reason": ".expect()/.unwrap() inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-cli/src/spec/verb/listing.rs",
+      "fingerprint": "c187b42b2a694c0e",
+      "reason": ".expect()/.unwrap() inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-cli/src/spec/verb/listing.rs",
+      "fingerprint": "a86401a6928e7654",
+      "reason": ".expect()/.unwrap() inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-cli/src/spec/verb/markdown.rs",
+      "fingerprint": "a86401a6928e7654",
+      "reason": ".expect()/.unwrap() inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/spec/verb/record.rs",
+      "fingerprint": "2929d14c847f478d",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-cli/src/spec/verb/record.rs",
+      "fingerprint": "a86401a6928e7654",
+      "reason": ".expect()/.unwrap() inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/spec/verb/render.rs",
+      "fingerprint": "8cf92f9bff466171",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-cli/src/spec/verb/render.rs",
+      "fingerprint": "a86401a6928e7654",
+      "reason": ".expect()/.unwrap() inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/spec/verb/table.rs",
+      "fingerprint": "87feb851f2e7c6a1",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/spec/verb/table.rs",
+      "fingerprint": "b663d9a17fae5a25",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/spec/verb/table.rs",
+      "fingerprint": "4171668c148c3daa",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/spec/verb/table.rs",
+      "fingerprint": "b0a8e71d25058b69",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/spec/verb/table.rs",
+      "fingerprint": "9647fb7db5a1576d",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/spec/verb/table.rs",
+      "fingerprint": "eafb29a59cbf3a6f",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/spec/verb/table.rs",
+      "fingerprint": "956c3f5ee2fc7586",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/spec/verb/table.rs",
+      "fingerprint": "bb0d5c001cddadfd",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/spec/verb/table.rs",
+      "fingerprint": "afdd269c12bcda4f",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-cli/src/spec/verb/table.rs",
+      "fingerprint": "a86401a6928e7654",
+      "reason": ".expect()/.unwrap() inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/work/exit_code.rs",
+      "fingerprint": "c43b9315e2b64317",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/work/exit_code.rs",
+      "fingerprint": "d5f37981dbab3409",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/work/exit_code.rs",
+      "fingerprint": "b6268ae25983fa11",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/work/exit_code.rs",
+      "fingerprint": "e90e46704b05772e",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/work/listing.rs",
+      "fingerprint": "febe592555fa69b8",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/work/listing.rs",
+      "fingerprint": "b3234b1be44ff6ed",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/work/listing.rs",
+      "message": "magic number literal `10` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/work/listing.rs",
+      "fingerprint": "46ddf81766c7bbb3",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/work/listing.rs",
+      "fingerprint": "117e7d9f5f479c3e",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/work/listing.rs",
+      "fingerprint": "c484e054296c6857",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-cli/src/work/listing.rs",
+      "message": "`String::from_utf8(output).unwrap()` promises the compiler that this value is present, on your authority, and says nothing about why. The promise may well be true; what is missing is what MAKES it true. Name the invariant -- what has already validated this, and where -- so the next reader can check whether it still holds. A promise with a reason is an invariant; a promise without one is a bet, and the way you find out you lost it is a crash that explains nothing",
+      "reason": ".expect()/.unwrap() inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/host/nomos-cli/src/work/listing.rs",
+      "fingerprint": "3ef1c20ab65e16fc",
+      "reason": "private test-only helper function inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-allman-braces",
+      "path": "crates/host/nomos-surface-provenance/src/arguments.rs",
+      "message": "this opening brace sits at a different column from the keyword that opens the block. Align the two -- the brace column is the block's left edge, and an indented brace hides where the block begins.",
+      "reason": "phantom finding: a backslash-continued string literal earlier in this file throws off the brace-column scanner; the flagged brace is correctly Allman-aligned by eye with the keyword that opens its block",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-closing-brace",
+      "path": "crates/host/nomos-surface-provenance/src/arguments.rs",
+      "message": "this closing brace sits at a different column from the keyword that opened the block. Align the two -- a brace that drifts from its keyword makes the reader count braces to find out what just ended.",
+      "reason": "phantom finding: a backslash-continued string literal earlier in this file throws off the brace-column scanner; the flagged brace is correctly aligned with the keyword that opened its block",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-surface-provenance/src/exit_code.rs",
+      "fingerprint": "c43b9315e2b64317",
+      "reason": "test fixture value inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-interfile-duplication",
+      "path": "crates/host/nomos-api/src/spec/failure_response.rs",
+      "fingerprint": "d51df7ed75ab9430",
+      "reason": "two independent twin-response types (different domain structs) that only coincidentally share test shape; a shared generic helper would mask a real divergence between two unrelated conversions -- the sibling-independent-provider pattern named in P24 shared guidance",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-interfile-duplication",
+      "path": "crates/host/nomos-api/src/spec/identity_change_response.rs",
+      "fingerprint": "87cac8f1c686d345",
+      "reason": "two independent twin-response types (different domain structs) that only coincidentally share test shape; a shared generic helper would mask a real divergence between two unrelated conversions -- the sibling-independent-provider pattern named in P24 shared guidance",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
       "check": "check-presumption",
       "path": "crates/spec/nomos-spec-store/src/store/write/relations.rs",
       "fingerprint": "bdc9dd70edd92fa0",
@@ -15883,6 +16643,54 @@
       "path": "crates/spec/nomos-spec-store/src/store/write/relations.rs",
       "fingerprint": "d20d2a4ad63e197d",
       "reason": "test-code-exempt (OD-GATE-018 pre-decided category): finding sits inside an inline #[cfg(test)] test module; test code is out of scope for this check",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-crate-split",
+      "path": "crates/substrate/nomos-workspace",
+      "fingerprint": "5a500fd1775515fb",
+      "reason": "review, not defect, per this check own doc (when-a-module-earns-its-boundary.md): \"the module may hold two unrelated source trees on purpose... no reference graph can see intent.\" Empirically isolated (a scratch copy with workspace_snapshot.rs test module reverted inline no longer trips this check) to be a side effect of extracting workspace_snapshot.rs own oversized test module out to workspace_snapshot/tests.rs (the check-file-size remedy this same P24 sweep applied) -- the actual production reference graph is unchanged: workspace_snapshot.rs still imports and uses crate::Member exactly as before this split, verified against git HEAD by diff.",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-error-info",
+      "path": "crates/substrate/nomos-ledger/src/finish.rs",
+      "fingerprint": "171551d2c909e17c",
+      "reason": "the code carries an adjacent \"// error-info: allow\" comment immediately above the discard, stating the invariant: this is a best-effort clean slate before creating the directory fresh below via create_dir_all(...).expect(...) immediately after -- on the common first use the path does not exist yet, so removal failing is expected and uninteresting; the directory this test actually needs is proved by the following create_dir_all call, not by this one",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-error-info",
+      "path": "crates/substrate/nomos-ledger/src/finish/gate_step.rs",
+      "fingerprint": "171551d2c909e17c",
+      "reason": "the code carries an adjacent \"// error-info: allow\" comment immediately above the discard, stating the invariant: this is a best-effort clean slate before creating the directory fresh below via create_dir_all(...).expect(...) immediately after -- on the common first use the path does not exist yet, so removal failing is expected and uninteresting; the directory this test actually needs is proved by the following create_dir_all call, not by this one",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-error-info",
+      "path": "crates/substrate/nomos-ledger/src/store/file.rs",
+      "fingerprint": "171551d2c909e17c",
+      "reason": "the code carries an adjacent \"// error-info: allow\" comment immediately above the discard, stating the invariant: this is a best-effort clean slate before creating the directory fresh below via create_dir_all(...).expect(...) immediately after -- on the common first use the path does not exist yet, so removal failing is expected and uninteresting; the directory this test actually needs is proved by the following create_dir_all call, not by this one",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-error-info",
+      "path": "crates/substrate/nomos-ledger/src/store/verbs.rs",
+      "fingerprint": "171551d2c909e17c",
+      "reason": "the code carries an adjacent \"// error-info: allow\" comment immediately above the discard, stating the invariant: this is a best-effort clean slate before creating the directory fresh below via create_dir_all(...).expect(...) immediately after -- on the common first use the path does not exist yet, so removal failing is expected and uninteresting; the directory this test actually needs is proved by the following create_dir_all call, not by this one",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-file-size",
+      "path": "crates/substrate/nomos-ledger/src/file_ledger.rs",
+      "fingerprint": "4dcc93dfd813e986",
+      "reason": "the code carries an adjacent \"// file-size: allow:\" comment at the top of the file stating the invariant: past its extracted test suite (moved to file_ledger/tests.rs, the check-file-size remedy this same P24 sweep applied to bring the file from 765 to 513 lines), this file is the FileLedger struct and its two impl blocks -- one type own surface, whose doc comments carry the why for OD-LEDGER-008/009/012/015/019/021 inline. Splitting either impl block into a second file would put one types methods behind two module paths for no cohesion gained, the kind of split this workspace surface-snapshot convention already treats as a defect rather than a fix.",
       "owner": "@claude-p24-regression",
       "expires": "2026-11-28"
     },
@@ -16027,6 +16835,86 @@
       "path": "crates/spec/nomos-spec-store/src/registration/error.rs",
       "fingerprint": "00d6019076901da8",
       "reason": "phantom finding: multiple backslash-continued string literals earlier in the file (incl. line 156, immediately above) desync the checker's column-alignment scanning (known front-end bug); the match block's brace at line 125 and its close at 159 are both genuinely aligned with the match-opening line's indent (col 8)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-file-size",
+      "path": "crates/substrate/nomos-ledger/src/file_ledger.rs",
+      "fingerprint": "5881ba9a2e14ab9e",
+      "reason": "tightly-coupled: this file is one type own struct/impl plus that same type per-method test suite. check-test-coverage keys a tests companion unit off the literal file its test is textually written in (see the local_tests/self_tests convention already used elsewhere in this workspace, e.g. nomos-ledger/src/claim/refusal.rs, nomos-capability/src/registry.rs) -- moving these tests to a sibling file was tried during this same P24 sweep and empirically broke check-test-coverage for every one of this files own methods (11 new findings), so the tests stay local and the file stays over the line trigger by design.",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-responsibility-extraction",
+      "path": "crates/substrate/nomos-ledger/src/file_ledger.rs",
+      "fingerprint": "415948ed65494eb7",
+      "reason": "tightly-coupled: this file is one type own struct/impl plus that same type per-method test suite. check-test-coverage keys a tests companion unit off the literal file its test is textually written in (see the local_tests/self_tests convention already used elsewhere in this workspace, e.g. nomos-ledger/src/claim/refusal.rs, nomos-capability/src/registry.rs) -- moving these tests to a sibling file was tried during this same P24 sweep and empirically broke check-test-coverage for every one of this files own methods (11 new findings), so the tests stay local and the file stays over the line trigger by design.",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-file-size",
+      "path": "crates/substrate/nomos-ledger/src/store/refusal.rs",
+      "fingerprint": "cd10357207f0d6f2",
+      "reason": "tightly-coupled: this file is one type own struct/impl plus that same type per-method test suite. check-test-coverage keys a tests companion unit off the literal file its test is textually written in (see the local_tests/self_tests convention already used elsewhere in this workspace, e.g. nomos-ledger/src/claim/refusal.rs, nomos-capability/src/registry.rs) -- moving these tests to a sibling file was tried during this same P24 sweep and empirically broke check-test-coverage for every one of this files own methods, so the tests stay local and the file stays over the line trigger by design.",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-responsibility-extraction",
+      "path": "crates/substrate/nomos-ledger/src/store/refusal.rs",
+      "fingerprint": "483f4c12cb001192",
+      "reason": "tightly-coupled: this file is one type own struct/impl plus that same type per-method test suite. check-test-coverage keys a tests companion unit off the literal file its test is textually written in (see the local_tests/self_tests convention already used elsewhere in this workspace, e.g. nomos-ledger/src/claim/refusal.rs, nomos-capability/src/registry.rs) -- moving these tests to a sibling file was tried during this same P24 sweep and empirically broke check-test-coverage for every one of this files own methods, so the tests stay local and the file stays over the line trigger by design.",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-file-size",
+      "path": "crates/substrate/nomos-workspace/src/workspace_snapshot.rs",
+      "fingerprint": "bbd4989d3b4651d2",
+      "reason": "tightly-coupled: this file is one type own struct/impl plus that same type per-method test suite. check-test-coverage keys a tests companion unit off the literal file its test is textually written in (see the local_tests/self_tests convention already used elsewhere in this workspace, e.g. nomos-ledger/src/claim/refusal.rs, nomos-capability/src/registry.rs) -- moving these tests to a sibling file was tried during this same P24 sweep and empirically broke check-test-coverage for every one of this files own methods, so the tests stay local and the file stays over the line trigger by design.",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-responsibility-extraction",
+      "path": "crates/substrate/nomos-workspace/src/workspace_snapshot.rs",
+      "fingerprint": "f232efdca6ce5152",
+      "reason": "tightly-coupled: this file is one type own struct/impl plus that same type per-method test suite. check-test-coverage keys a tests companion unit off the literal file its test is textually written in (see the local_tests/self_tests convention already used elsewhere in this workspace, e.g. nomos-ledger/src/claim/refusal.rs, nomos-capability/src/registry.rs) -- moving these tests to a sibling file was tried during this same P24 sweep and empirically broke check-test-coverage for every one of this files own methods, so the tests stay local and the file stays over the line trigger by design.",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-error-info",
+      "path": "crates/substrate/nomos-ledger/src/file_ledger.rs",
+      "fingerprint": "171551d2c909e17c",
+      "reason": "the code carries an adjacent \"// error-info: allow\" comment immediately above the discard, stating the invariant: this is a best-effort clean slate before creating the directory fresh below via create_dir_all(...).expect(...) immediately after -- on the common first use the path does not exist yet, so removal failing is expected and uninteresting; the directory this test actually needs is proved by the following create_dir_all call, not by this one",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-responsibility-extraction",
+      "path": "crates/substrate/nomos-ledger/src/store/refusal.rs",
+      "fingerprint": "9a7a9bea0c2dbe8f",
+      "reason": "tightly-coupled: this file is one type own struct/impl plus that same type per-method test suite. check-test-coverage keys a tests companion unit off the literal file its test is textually written in (see the local_tests/self_tests convention already used elsewhere in this workspace, e.g. nomos-ledger/src/claim/refusal.rs, nomos-capability/src/registry.rs) -- moving these tests to a sibling file was tried during this same P24 sweep and empirically broke check-test-coverage for every one of this files own methods, so the tests stay local and the file stays over the line trigger by design.",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-interfile-duplication",
+      "path": "crates/substrate/nomos-ledger/src/file_ledger.rs",
+      "fingerprint": "1bf6479f7127df5e",
+      "reason": "parallel-but-independent test suites for two different architectural layers: nomos-ledger/src/file_ledger.rs tests FileLedger own inherent methods directly, nomos-ledger/src/store/verbs.rs tests the free-function verbs (Add_Item/Decline_Item/Take_Over/Validate_Current) built on top of it -- each needs its own directory/clock/ledger arrangement scaffold so one layers fixture can never mask a real divergence from the other, the same deliberately-independent-parallel-design pattern already used elsewhere in this campaign; forcing a shared helper would blur the layer boundary the two suites exist to keep separate",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-interfile-duplication",
+      "path": "crates/substrate/nomos-ledger/src/store/verbs.rs",
+      "fingerprint": "a540abbff946854c",
+      "reason": "parallel-but-independent test suites for two different architectural layers: nomos-ledger/src/file_ledger.rs tests FileLedger own inherent methods directly, nomos-ledger/src/store/verbs.rs tests the free-function verbs (Add_Item/Decline_Item/Take_Over/Validate_Current) built on top of it -- each needs its own directory/clock/ledger arrangement scaffold so one layers fixture can never mask a real divergence from the other, the same deliberately-independent-parallel-design pattern already used elsewhere in this campaign; forcing a shared helper would blur the layer boundary the two suites exist to keep separate",
       "owner": "@claude-p24-regression",
       "expires": "2026-11-28"
     },
@@ -16233,7 +17121,7 @@
     {
       "check": "check-error-info",
       "path": "crates/spec/nomos-spec-store/src/store/specification_store.rs",
-      "message": "`let _ = ...` discards an error; handle it, report it, or return it (`// error-info: allow <reason>` if the failure genuinely changes nothing)",
+      "message": "`let _ = ...` discards an error; handle it, report it, or return it (`// error-info: allow \u003creason\u003e` if the failure genuinely changes nothing)",
       "reason": "best-effort clean slate before creating the file fresh, and best-effort cleanup after the assertions already ran (same pattern documented inline above each line and already established elsewhere in this workspace, e.g. nomos-ledger's store/verbs.rs); discard genuinely changes nothing",
       "owner": "@claude-p24-regression",
       "expires": "2026-11-28"
@@ -16655,130 +17543,146 @@
       "expires": "2026-11-28"
     },
     {
-      "check": "check-crate-split",
-      "path": "crates/substrate/nomos-workspace",
-      "fingerprint": "5a500fd1775515fb",
-      "reason": "review, not defect, per this check own doc (when-a-module-earns-its-boundary.md): \"the module may hold two unrelated source trees on purpose... no reference graph can see intent.\" Empirically isolated (a scratch copy with workspace_snapshot.rs test module reverted inline no longer trips this check) to be a side effect of extracting workspace_snapshot.rs own oversized test module out to workspace_snapshot/tests.rs (the check-file-size remedy this same P24 sweep applied) -- the actual production reference graph is unchanged: workspace_snapshot.rs still imports and uses crate::Member exactly as before this split, verified against git HEAD by diff.",
-      "owner": "@claude-p24-regression",
-      "expires": "2026-11-28"
-    },
-    {
-      "check": "check-error-info",
-      "path": "crates/substrate/nomos-ledger/src/finish.rs",
-      "fingerprint": "171551d2c909e17c",
-      "reason": "the code carries an adjacent \"// error-info: allow\" comment immediately above the discard, stating the invariant: this is a best-effort clean slate before creating the directory fresh below via create_dir_all(...).expect(...) immediately after -- on the common first use the path does not exist yet, so removal failing is expected and uninteresting; the directory this test actually needs is proved by the following create_dir_all call, not by this one",
-      "owner": "@claude-p24-regression",
-      "expires": "2026-11-28"
-    },
-    {
-      "check": "check-error-info",
-      "path": "crates/substrate/nomos-ledger/src/finish/gate_step.rs",
-      "fingerprint": "171551d2c909e17c",
-      "reason": "the code carries an adjacent \"// error-info: allow\" comment immediately above the discard, stating the invariant: this is a best-effort clean slate before creating the directory fresh below via create_dir_all(...).expect(...) immediately after -- on the common first use the path does not exist yet, so removal failing is expected and uninteresting; the directory this test actually needs is proved by the following create_dir_all call, not by this one",
-      "owner": "@claude-p24-regression",
-      "expires": "2026-11-28"
-    },
-    {
-      "check": "check-error-info",
-      "path": "crates/substrate/nomos-ledger/src/store/file.rs",
-      "fingerprint": "171551d2c909e17c",
-      "reason": "the code carries an adjacent \"// error-info: allow\" comment immediately above the discard, stating the invariant: this is a best-effort clean slate before creating the directory fresh below via create_dir_all(...).expect(...) immediately after -- on the common first use the path does not exist yet, so removal failing is expected and uninteresting; the directory this test actually needs is proved by the following create_dir_all call, not by this one",
-      "owner": "@claude-p24-regression",
-      "expires": "2026-11-28"
-    },
-    {
-      "check": "check-error-info",
-      "path": "crates/substrate/nomos-ledger/src/store/verbs.rs",
-      "fingerprint": "171551d2c909e17c",
-      "reason": "the code carries an adjacent \"// error-info: allow\" comment immediately above the discard, stating the invariant: this is a best-effort clean slate before creating the directory fresh below via create_dir_all(...).expect(...) immediately after -- on the common first use the path does not exist yet, so removal failing is expected and uninteresting; the directory this test actually needs is proved by the following create_dir_all call, not by this one",
-      "owner": "@claude-p24-regression",
-      "expires": "2026-11-28"
-    },
-    {
       "check": "check-file-size",
-      "path": "crates/substrate/nomos-ledger/src/file_ledger.rs",
-      "fingerprint": "4dcc93dfd813e986",
-      "reason": "the code carries an adjacent \"// file-size: allow:\" comment at the top of the file stating the invariant: past its extracted test suite (moved to file_ledger/tests.rs, the check-file-size remedy this same P24 sweep applied to bring the file from 765 to 513 lines), this file is the FileLedger struct and its two impl blocks -- one type own surface, whose doc comments carry the why for OD-LEDGER-008/009/012/015/019/021 inline. Splitting either impl block into a second file would put one types methods behind two module paths for no cohesion gained, the kind of split this workspace surface-snapshot convention already treats as a defect rather than a fix.",
-      "owner": "@claude-p24-regression",
-      "expires": "2026-11-28"
-    },
-    {
-      "check": "check-file-size",
-      "path": "crates/substrate/nomos-ledger/src/file_ledger.rs",
-      "fingerprint": "5881ba9a2e14ab9e",
-      "reason": "tightly-coupled: this file is one type own struct/impl plus that same type per-method test suite. check-test-coverage keys a tests companion unit off the literal file its test is textually written in (see the local_tests/self_tests convention already used elsewhere in this workspace, e.g. nomos-ledger/src/claim/refusal.rs, nomos-capability/src/registry.rs) -- moving these tests to a sibling file was tried during this same P24 sweep and empirically broke check-test-coverage for every one of this files own methods (11 new findings), so the tests stay local and the file stays over the line trigger by design.",
+      "path": "crates/host/nomos-cli/src/gate/report.rs",
+      "fingerprint": "c679ccc7f1c8d041",
+      "reason": "this file pairs its production code with its own inline #[cfg(test)] module; check-test-coverage keys a test's companion unit off the exact file it is textually written in (confirmed via the Rust front end's stem-based Unit matching), so splitting the test module into a sibling file breaks coverage attribution for every function this file declares. file-size/responsibility markers are not honoured under this repository's safety-only marker policy (OD-GATE-018), so this waives per that record's remedy.",
       "owner": "@claude-p24-regression",
       "expires": "2026-11-28"
     },
     {
       "check": "check-responsibility-extraction",
-      "path": "crates/substrate/nomos-ledger/src/file_ledger.rs",
-      "fingerprint": "415948ed65494eb7",
-      "reason": "tightly-coupled: this file is one type own struct/impl plus that same type per-method test suite. check-test-coverage keys a tests companion unit off the literal file its test is textually written in (see the local_tests/self_tests convention already used elsewhere in this workspace, e.g. nomos-ledger/src/claim/refusal.rs, nomos-capability/src/registry.rs) -- moving these tests to a sibling file was tried during this same P24 sweep and empirically broke check-test-coverage for every one of this files own methods (11 new findings), so the tests stay local and the file stays over the line trigger by design.",
+      "path": "crates/host/nomos-cli/src/gate/report.rs",
+      "fingerprint": "f4dc55eb5de2ae3d",
+      "reason": "this file pairs its production code with its own inline #[cfg(test)] module; check-test-coverage keys a test's companion unit off the exact file it is textually written in (confirmed via the Rust front end's stem-based Unit matching), so splitting the test module into a sibling file breaks coverage attribution for every function this file declares. file-size/responsibility markers are not honoured under this repository's safety-only marker policy (OD-GATE-018), so this waives per that record's remedy.",
       "owner": "@claude-p24-regression",
       "expires": "2026-11-28"
     },
     {
       "check": "check-file-size",
-      "path": "crates/substrate/nomos-ledger/src/store/refusal.rs",
-      "fingerprint": "cd10357207f0d6f2",
-      "reason": "tightly-coupled: this file is one type own struct/impl plus that same type per-method test suite. check-test-coverage keys a tests companion unit off the literal file its test is textually written in (see the local_tests/self_tests convention already used elsewhere in this workspace, e.g. nomos-ledger/src/claim/refusal.rs, nomos-capability/src/registry.rs) -- moving these tests to a sibling file was tried during this same P24 sweep and empirically broke check-test-coverage for every one of this files own methods, so the tests stay local and the file stays over the line trigger by design.",
+      "path": "crates/host/nomos-cli/src/work/parse.rs",
+      "fingerprint": "c34cb97cd94430a6",
+      "reason": "this file pairs its production code with its own inline #[cfg(test)] module; check-test-coverage keys a test's companion unit off the exact file it is textually written in (confirmed via the Rust front end's stem-based Unit matching), so splitting the test module into a sibling file breaks coverage attribution for every function this file declares. file-size/responsibility markers are not honoured under this repository's safety-only marker policy (OD-GATE-018), so this waives per that record's remedy.",
       "owner": "@claude-p24-regression",
       "expires": "2026-11-28"
     },
     {
       "check": "check-responsibility-extraction",
-      "path": "crates/substrate/nomos-ledger/src/store/refusal.rs",
-      "fingerprint": "483f4c12cb001192",
-      "reason": "tightly-coupled: this file is one type own struct/impl plus that same type per-method test suite. check-test-coverage keys a tests companion unit off the literal file its test is textually written in (see the local_tests/self_tests convention already used elsewhere in this workspace, e.g. nomos-ledger/src/claim/refusal.rs, nomos-capability/src/registry.rs) -- moving these tests to a sibling file was tried during this same P24 sweep and empirically broke check-test-coverage for every one of this files own methods, so the tests stay local and the file stays over the line trigger by design.",
+      "path": "crates/host/nomos-cli/src/work/parse.rs",
+      "fingerprint": "394262b67b8d396b",
+      "reason": "this file pairs its production code with its own inline #[cfg(test)] module; check-test-coverage keys a test's companion unit off the exact file it is textually written in (confirmed via the Rust front end's stem-based Unit matching), so splitting the test module into a sibling file breaks coverage attribution for every function this file declares. file-size/responsibility markers are not honoured under this repository's safety-only marker policy (OD-GATE-018), so this waives per that record's remedy.",
       "owner": "@claude-p24-regression",
       "expires": "2026-11-28"
     },
     {
       "check": "check-file-size",
-      "path": "crates/substrate/nomos-workspace/src/workspace_snapshot.rs",
-      "fingerprint": "bbd4989d3b4651d2",
-      "reason": "tightly-coupled: this file is one type own struct/impl plus that same type per-method test suite. check-test-coverage keys a tests companion unit off the literal file its test is textually written in (see the local_tests/self_tests convention already used elsewhere in this workspace, e.g. nomos-ledger/src/claim/refusal.rs, nomos-capability/src/registry.rs) -- moving these tests to a sibling file was tried during this same P24 sweep and empirically broke check-test-coverage for every one of this files own methods, so the tests stay local and the file stays over the line trigger by design.",
+      "path": "crates/host/nomos-cli/src/work/report.rs",
+      "fingerprint": "094921fbb63fad29",
+      "reason": "this file pairs its production code with its own inline #[cfg(test)] module; check-test-coverage keys a test's companion unit off the exact file it is textually written in (confirmed via the Rust front end's stem-based Unit matching), so splitting the test module into a sibling file breaks coverage attribution for every function this file declares. file-size/responsibility markers are not honoured under this repository's safety-only marker policy (OD-GATE-018), so this waives per that record's remedy.",
       "owner": "@claude-p24-regression",
       "expires": "2026-11-28"
     },
     {
       "check": "check-responsibility-extraction",
-      "path": "crates/substrate/nomos-workspace/src/workspace_snapshot.rs",
-      "fingerprint": "f232efdca6ce5152",
-      "reason": "tightly-coupled: this file is one type own struct/impl plus that same type per-method test suite. check-test-coverage keys a tests companion unit off the literal file its test is textually written in (see the local_tests/self_tests convention already used elsewhere in this workspace, e.g. nomos-ledger/src/claim/refusal.rs, nomos-capability/src/registry.rs) -- moving these tests to a sibling file was tried during this same P24 sweep and empirically broke check-test-coverage for every one of this files own methods, so the tests stay local and the file stays over the line trigger by design.",
+      "path": "crates/host/nomos-cli/src/work/report.rs",
+      "fingerprint": "81d3c7e0debc39f9",
+      "reason": "this file pairs its production code with its own inline #[cfg(test)] module; check-test-coverage keys a test's companion unit off the exact file it is textually written in (confirmed via the Rust front end's stem-based Unit matching), so splitting the test module into a sibling file breaks coverage attribution for every function this file declares. file-size/responsibility markers are not honoured under this repository's safety-only marker policy (OD-GATE-018), so this waives per that record's remedy.",
       "owner": "@claude-p24-regression",
       "expires": "2026-11-28"
     },
     {
-      "check": "check-error-info",
-      "path": "crates/substrate/nomos-ledger/src/file_ledger.rs",
-      "fingerprint": "171551d2c909e17c",
-      "reason": "the code carries an adjacent \"// error-info: allow\" comment immediately above the discard, stating the invariant: this is a best-effort clean slate before creating the directory fresh below via create_dir_all(...).expect(...) immediately after -- on the common first use the path does not exist yet, so removal failing is expected and uninteresting; the directory this test actually needs is proved by the following create_dir_all call, not by this one",
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/gate/report.rs",
+      "fingerprint": "fa5c82f81ff24ec7",
+      "reason": "test-code exemption (OD-GATE-018): every flagged line sits inside this file's own #[cfg(test)] mod tests block",
       "owner": "@claude-p24-regression",
       "expires": "2026-11-28"
     },
     {
-      "check": "check-responsibility-extraction",
-      "path": "crates/substrate/nomos-ledger/src/store/refusal.rs",
-      "fingerprint": "9a7a9bea0c2dbe8f",
-      "reason": "tightly-coupled: this file is one type own struct/impl plus that same type per-method test suite. check-test-coverage keys a tests companion unit off the literal file its test is textually written in (see the local_tests/self_tests convention already used elsewhere in this workspace, e.g. nomos-ledger/src/claim/refusal.rs, nomos-capability/src/registry.rs) -- moving these tests to a sibling file was tried during this same P24 sweep and empirically broke check-test-coverage for every one of this files own methods, so the tests stay local and the file stays over the line trigger by design.",
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/work/parse.rs",
+      "fingerprint": "5c80c33e4adaeb8b",
+      "reason": "test-code exemption (OD-GATE-018): every flagged line sits inside this file's own #[cfg(test)] mod tests block",
       "owner": "@claude-p24-regression",
       "expires": "2026-11-28"
     },
     {
-      "check": "check-interfile-duplication",
-      "path": "crates/substrate/nomos-ledger/src/file_ledger.rs",
-      "fingerprint": "1bf6479f7127df5e",
-      "reason": "parallel-but-independent test suites for two different architectural layers: nomos-ledger/src/file_ledger.rs tests FileLedger own inherent methods directly, nomos-ledger/src/store/verbs.rs tests the free-function verbs (Add_Item/Decline_Item/Take_Over/Validate_Current) built on top of it -- each needs its own directory/clock/ledger arrangement scaffold so one layers fixture can never mask a real divergence from the other, the same deliberately-independent-parallel-design pattern already used elsewhere in this campaign; forcing a shared helper would blur the layer boundary the two suites exist to keep separate",
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/work/parse.rs",
+      "fingerprint": "b3a6ce7100c6efb1",
+      "reason": "test-code exemption (OD-GATE-018): every flagged line sits inside this file's own #[cfg(test)] mod tests block",
       "owner": "@claude-p24-regression",
       "expires": "2026-11-28"
     },
     {
-      "check": "check-interfile-duplication",
-      "path": "crates/substrate/nomos-ledger/src/store/verbs.rs",
-      "fingerprint": "a540abbff946854c",
-      "reason": "parallel-but-independent test suites for two different architectural layers: nomos-ledger/src/file_ledger.rs tests FileLedger own inherent methods directly, nomos-ledger/src/store/verbs.rs tests the free-function verbs (Add_Item/Decline_Item/Take_Over/Validate_Current) built on top of it -- each needs its own directory/clock/ledger arrangement scaffold so one layers fixture can never mask a real divergence from the other, the same deliberately-independent-parallel-design pattern already used elsewhere in this campaign; forcing a shared helper would blur the layer boundary the two suites exist to keep separate",
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/work/parse.rs",
+      "fingerprint": "5838e8cd432a7460",
+      "reason": "test-code exemption (OD-GATE-018): every flagged line sits inside this file's own #[cfg(test)] mod tests block",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/work/report.rs",
+      "fingerprint": "1d328d76cffa71c7",
+      "reason": "test-code exemption (OD-GATE-018): every flagged line sits inside this file's own #[cfg(test)] mod tests block",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/work/report.rs",
+      "fingerprint": "6b8ad373080f1754",
+      "reason": "test-code exemption (OD-GATE-018): every flagged line sits inside this file's own #[cfg(test)] mod tests block",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/work/report.rs",
+      "message": "magic number literal `10` in logic; name it as a constant (`// literal: allow \u003creason\u003e` if the value genuinely means only itself)",
+      "reason": "test-code exemption (OD-GATE-018): every flagged line sits inside this file's own #[cfg(test)] mod tests block",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/work/report.rs",
+      "fingerprint": "f8816c5f541264b3",
+      "reason": "test-code exemption (OD-GATE-018): every flagged line sits inside this file's own #[cfg(test)] mod tests block",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-literals",
+      "path": "crates/host/nomos-cli/src/work/report.rs",
+      "fingerprint": "d99a5f37bd63a4a7",
+      "reason": "test-code exemption (OD-GATE-018): every flagged line sits inside this file's own #[cfg(test)] mod tests block",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-presumption",
+      "path": "crates/host/nomos-cli/src/work/report.rs",
+      "fingerprint": "f5caf19851a8464a",
+      "reason": "test-code exemption (OD-GATE-018): every flagged line sits inside this file's own #[cfg(test)] mod tests block",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/host/nomos-cli/src/work/parse.rs",
+      "fingerprint": "c405a22fae9dd8a0",
+      "reason": "test-code exemption (OD-GATE-018): every flagged line sits inside this file's own #[cfg(test)] mod tests block",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/host/nomos-cli/src/work/report.rs",
+      "fingerprint": "3ef1c20ab65e16fc",
+      "reason": "test-code exemption (OD-GATE-018): every flagged line sits inside this file's own #[cfg(test)] mod tests block",
       "owner": "@claude-p24-regression",
       "expires": "2026-11-28"
     }

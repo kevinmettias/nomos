@@ -96,11 +96,17 @@ mod tests
         let missing_since = match Parsed_From_String_Arguments(&Arguments_From_Text("--until HEAD"))
         {
             Err(error) => error,
+            // This argument list omits --since on purpose, and Parsed_From_String_Arguments
+            // requires it unconditionally -- reaching Ok here means that requiredness check
+            // itself stopped enforcing, not a condition this test should assert around.
             Ok(_) => panic!("missing --since must refuse"),
         };
         let missing_until = match Parsed_From_String_Arguments(&Arguments_From_Text("--since HEAD~5"))
         {
             Err(error) => error,
+            // This argument list omits --until on purpose, and Parsed_From_String_Arguments
+            // requires it unconditionally -- reaching Ok here means that requiredness check
+            // itself stopped enforcing, not a condition this test should assert around.
             Ok(_) => panic!("missing --until must refuse"),
         };
 

@@ -29,7 +29,7 @@ fn Test_Command_From_String_Arguments_Should_Parse_Its_Fields_And_Default_State_
 /// below.
 fn Malformed_Field_Command_Lines() -> Vec<&'static str>
 {
-    vec!["submit --kind feature-request --id FR-101 --by kevin --field oops"]
+    return vec!["submit --kind feature-request --id FR-101 --by kevin --field oops"];
 }
 
 #[test]
@@ -50,7 +50,7 @@ fn Test_A_Field_With_No_Equals_Should_Be_A_Usage_Error()
 /// below.
 fn Unrecognised_Kind_Command_Lines() -> Vec<&'static str>
 {
-    vec!["submit --kind nonsense --id FR-102 --by kevin"]
+    return vec!["submit --kind nonsense --id FR-102 --by kevin"];
 }
 
 #[test]

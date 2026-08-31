@@ -189,11 +189,6 @@ mod tests
 {
     use super::*;
 
-    fn Arguments(text: &str) -> Vec<String>
-    {
-        return text.split_whitespace().map(str::to_owned).collect();
-    }
-
     /// The dispatcher itself: routing by verb, and its own fallback for one nothing names.
     ///
     /// `spec::tests` carries the fuller behavioral suite over every verb's own parse (one test per
@@ -391,5 +386,10 @@ mod tests
         let error = Parsed_Ordinal(Some(&"seven".to_owned()), "--block").expect_err("must refuse");
         assert!(error.contains("--block"), "{error}");
         assert!(error.contains("seven"), "{error}");
+    }
+
+    fn Arguments(text: &str) -> Vec<String>
+    {
+        return text.split_whitespace().map(str::to_owned).collect();
     }
 }

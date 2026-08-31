@@ -147,6 +147,10 @@ mod tests
         let Invocation::Plan(command) = invocation
         else
         {
+            // This test's only argument is "plan", and Gate_Invocation_From_String_Arguments
+            // dispatches that verb to Invocation::Plan unconditionally -- reaching else here
+            // means that dispatch itself broke, not a condition this test should assert
+            // around.
             panic!("expected Plan, got {invocation:?}");
         };
         assert_eq!(command.root, PathBuf::from("."));

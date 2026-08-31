@@ -86,6 +86,9 @@ mod tests
         let ReservationOutcomeResponse::Refused { retryable, .. } = response
         else
         {
+            // ReservationOutcomeResponse::From's own match (above) maps every Err into
+            // Refused unconditionally -- reaching else here means that mapping itself
+            // regressed, not a condition this test should assert around.
             panic!("a HeldBy refusal must map to Refused")
         };
         assert!(retryable);

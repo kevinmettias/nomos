@@ -354,20 +354,6 @@ mod tests
     use super::*;
     use nomos_spec_orchestration::corpus::{Assemble_Corpus, CorpusRequest, DEFAULT_REVISION};
 
-    /// A store with the embedded governing records seeded and no corpus, so
-    /// [`Assembly::Is_Complete`] is deterministically `false` -- `root: None` records an
-    /// absence unconditionally, regardless of what any real environment variable holds.
-    fn Corpus_Unset_Assembly() -> Assembly
-    {
-        let request = CorpusRequest {
-            variable: "NOMOS_SPEC_FRESHNESS_TEST_CORPUS_UNSET".to_owned(),
-            root: None,
-            revision: DEFAULT_REVISION.to_owned(),
-        };
-
-        return Assemble_Corpus(&request).expect("the embedded governing records always seed");
-    }
-
     #[test]
     fn Test_Freshness_Of_Should_Report_An_Unknown_Profile()
     {
@@ -385,5 +371,19 @@ mod tests
 
         assert_eq!(code, ExitCode::NotFound);
         assert!(String::from_utf8_lossy(&notes).contains("no-such-profile-p23-testing-host"));
+    }
+
+    /// A store with the embedded governing records seeded and no corpus, so
+    /// [`Assembly::Is_Complete`] is deterministically `false` -- `root: None` records an
+    /// absence unconditionally, regardless of what any real environment variable holds.
+    fn Corpus_Unset_Assembly() -> Assembly
+    {
+        let request = CorpusRequest {
+            variable: "NOMOS_SPEC_FRESHNESS_TEST_CORPUS_UNSET".to_owned(),
+            root: None,
+            revision: DEFAULT_REVISION.to_owned(),
+        };
+
+        return Assemble_Corpus(&request).expect("the embedded governing records always seed");
     }
 }

@@ -114,31 +114,6 @@ mod tests
     use super::*;
     use nomos_spec_orchestration::corpus::{Assemble_Corpus, CorpusRequest, DEFAULT_REVISION};
 
-    /// A store with the embedded governing records seeded and no corpus, so
-    /// [`Assembly::Is_Complete`] is deterministically `false` -- `root: None` records an
-    /// absence unconditionally, regardless of what any real environment variable holds.
-    fn Corpus_Unset_Assembly() -> Assembly
-    {
-        let request = CorpusRequest {
-            variable: "NOMOS_SPEC_RECORD_TEST_CORPUS_UNSET".to_owned(),
-            root: None,
-            revision: DEFAULT_REVISION.to_owned(),
-        };
-
-        return Assemble_Corpus(&request).expect("the embedded governing records always seed");
-    }
-
-    fn Sample_Node() -> NodeSummary
-    {
-        return NodeSummary {
-            node_id: "D-2".to_owned(),
-            kind: "record".to_owned(),
-            authority: "authored".to_owned(),
-            representation: "markdown".to_owned(),
-            title: "Some Title".to_owned(),
-        };
-    }
-
     #[test]
     fn Test_Read_Record_Should_Report_Absent_For_A_Record_The_Store_Never_Had()
     {
@@ -236,5 +211,30 @@ mod tests
         assert!(text.contains("D-2"));
         assert!(text.contains("at revision authored"));
         assert!(text.contains("record"));
+    }
+
+    /// A store with the embedded governing records seeded and no corpus, so
+    /// [`Assembly::Is_Complete`] is deterministically `false` -- `root: None` records an
+    /// absence unconditionally, regardless of what any real environment variable holds.
+    fn Corpus_Unset_Assembly() -> Assembly
+    {
+        let request = CorpusRequest {
+            variable: "NOMOS_SPEC_RECORD_TEST_CORPUS_UNSET".to_owned(),
+            root: None,
+            revision: DEFAULT_REVISION.to_owned(),
+        };
+
+        return Assemble_Corpus(&request).expect("the embedded governing records always seed");
+    }
+
+    fn Sample_Node() -> NodeSummary
+    {
+        return NodeSummary {
+            node_id: "D-2".to_owned(),
+            kind: "record".to_owned(),
+            authority: "authored".to_owned(),
+            representation: "markdown".to_owned(),
+            title: "Some Title".to_owned(),
+        };
     }
 }

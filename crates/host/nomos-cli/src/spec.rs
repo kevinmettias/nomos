@@ -171,6 +171,7 @@ const EPHEMERAL: &str = "this store was assembled for this invocation and is now
 mod run_coverage
 {
     use super::*;
+    use nomos_spec_orchestration::corpus::DEFAULT_REVISION;
 
     /// `profiles` is the one command whose dispatch inside [`Run`] never assembles a corpus at
     /// all -- see the early return past [`Assemble_Corpus`] -- so it is the one path this test can
@@ -180,10 +181,10 @@ mod run_coverage
     #[test]
     fn Test_Run_Should_Dispatch_Profiles_Without_Assembling_A_Corpus()
     {
-        let request = nomos_spec_orchestration::corpus::CorpusRequest {
+        let request = CorpusRequest {
             variable: "NOMOS_SPEC_RUN_COVERAGE_TEST_CORPUS_UNSET".to_owned(),
             root: None,
-            revision: nomos_spec_orchestration::corpus::DEFAULT_REVISION.to_owned(),
+            revision: DEFAULT_REVISION.to_owned(),
         };
         let mut output = Vec::new();
         let mut notes = Vec::new();

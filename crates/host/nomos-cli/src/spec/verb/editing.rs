@@ -266,30 +266,6 @@ mod tests
     use super::*;
     use nomos_spec_orchestration::corpus::{Assemble_Corpus, CorpusRequest, DEFAULT_REVISION};
 
-    /// A store with the embedded governing records seeded and no corpus, so
-    /// [`Assembly::Is_Complete`] is deterministically `false` -- `root: None` records an
-    /// absence unconditionally, regardless of what any real environment variable holds.
-    fn Corpus_Unset_Assembly() -> Assembly
-    {
-        let request = CorpusRequest {
-            variable: "NOMOS_SPEC_EDITING_TEST_CORPUS_UNSET".to_owned(),
-            root: None,
-            revision: DEFAULT_REVISION.to_owned(),
-        };
-
-        return Assemble_Corpus(&request).expect("the embedded governing records always seed");
-    }
-
-    /// A real file on disk, so `Preview_Staged_Edit`/`Commit_Staged_Edit` get past reading
-    /// `--from` and reach the store lookup this test is actually about.
-    fn Staged_File(name: &str) -> std::path::PathBuf
-    {
-        let path = std::env::temp_dir().join(name);
-        std::fs::write(&path, "irrelevant staged text").expect("writes a temp file");
-
-        return path;
-    }
-
     #[test]
     fn Test_Preview_Edit_Should_Report_Absent_For_A_Record_The_Store_Never_Had()
     {
@@ -354,5 +330,29 @@ mod tests
         let mut notes = Vec::new();
         let refused = EditError::NotCanonical { cause: "would change bytes".to_owned() };
         assert_eq!(Report_Edit_Error(&assembly, &refused, &mut notes), ExitCode::Refused);
+    }
+
+    /// A store with the embedded governing records seeded and no corpus, so
+    /// [`Assembly::Is_Complete`] is deterministically `false` -- `root: None` records an
+    /// absence unconditionally, regardless of what any real environment variable holds.
+    fn Corpus_Unset_Assembly() -> Assembly
+    {
+        let request = CorpusRequest {
+            variable: "NOMOS_SPEC_EDITING_TEST_CORPUS_UNSET".to_owned(),
+            root: None,
+            revision: DEFAULT_REVISION.to_owned(),
+        };
+
+        return Assemble_Corpus(&request).expect("the embedded governing records always seed");
+    }
+
+    /// A real file on disk, so `Preview_Staged_Edit`/`Commit_Staged_Edit` get past reading
+    /// `--from` and reach the store lookup this test is actually about.
+    fn Staged_File(name: &str) -> std::path::PathBuf
+    {
+        let path = std::env::temp_dir().join(name);
+        std::fs::write(&path, "irrelevant staged text").expect("writes a temp file");
+
+        return path;
     }
 }

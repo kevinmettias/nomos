@@ -62,6 +62,18 @@ mod tests
     use super::*;
     use nomos_spec_orchestration::corpus::{Assemble_Corpus, CorpusRequest, DEFAULT_REVISION};
 
+    #[test]
+    fn Test_Absent_Or_Should_Report_The_Absence_Over_A_Store_Missing_Its_Corpus()
+    {
+        let assembly = Corpus_Unset_Assembly();
+        let mut notes = Vec::new();
+
+        let code = Absent_Or(&assembly, ExitCode::NotFound, &mut notes);
+
+        assert_eq!(code, ExitCode::Absent);
+        assert!(!notes.is_empty(), "must say why NotFound became Absent");
+    }
+
     /// A store with the embedded governing records seeded and no corpus, so
     /// [`Assembly::Is_Complete`] is deterministically `false` -- `root: None` records an
     /// absence unconditionally, regardless of what any real environment variable holds.
@@ -74,18 +86,6 @@ mod tests
         };
 
         return Assemble_Corpus(&request).expect("the embedded governing records always seed");
-    }
-
-    #[test]
-    fn Test_Absent_Or_Should_Report_The_Absence_Over_A_Store_Missing_Its_Corpus()
-    {
-        let assembly = Corpus_Unset_Assembly();
-        let mut notes = Vec::new();
-
-        let code = Absent_Or(&assembly, ExitCode::NotFound, &mut notes);
-
-        assert_eq!(code, ExitCode::Absent);
-        assert!(!notes.is_empty(), "must say why NotFound became Absent");
     }
 
     #[test]

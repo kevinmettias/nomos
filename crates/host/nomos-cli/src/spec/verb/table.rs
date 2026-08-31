@@ -193,20 +193,6 @@ mod tests
     use super::*;
     use nomos_spec_orchestration::corpus::{Assemble_Corpus, CorpusRequest, DEFAULT_REVISION};
 
-    /// A store with the embedded governing records seeded and no corpus, so
-    /// [`Assembly::Is_Complete`] is deterministically `false` -- `root: None` records an
-    /// absence unconditionally, regardless of what any real environment variable holds.
-    fn Corpus_Unset_Assembly() -> Assembly
-    {
-        let request = CorpusRequest {
-            variable: "NOMOS_SPEC_TABLE_TEST_CORPUS_UNSET".to_owned(),
-            root: None,
-            revision: DEFAULT_REVISION.to_owned(),
-        };
-
-        return Assemble_Corpus(&request).expect("the embedded governing records always seed");
-    }
-
     fn Sample_Line(block_ordinal: u32, kind: &str) -> TableLine
     {
         return TableLine {
@@ -217,17 +203,6 @@ mod tests
             cells: vec!["x".to_owned()],
             text: "| x |".to_owned(),
             content_hash: "h".to_owned(),
-        };
-    }
-
-    fn Sample_Document() -> DocumentSource
-    {
-        return DocumentSource {
-            uid: 1,
-            path: "docs/records/a.md".to_owned(),
-            revision: "authored".to_owned(),
-            content_hash: "h".to_owned(),
-            text: String::new(),
         };
     }
 
@@ -370,5 +345,30 @@ mod tests
         let lines = vec![Sample_Line(2, "header"), Sample_Line(2, "content"), Sample_Line(1, "content")];
 
         assert_eq!(Block_Ordinals(&lines), "2, 1");
+    }
+
+    /// A store with the embedded governing records seeded and no corpus, so
+    /// [`Assembly::Is_Complete`] is deterministically `false` -- `root: None` records an
+    /// absence unconditionally, regardless of what any real environment variable holds.
+    fn Corpus_Unset_Assembly() -> Assembly
+    {
+        let request = CorpusRequest {
+            variable: "NOMOS_SPEC_TABLE_TEST_CORPUS_UNSET".to_owned(),
+            root: None,
+            revision: DEFAULT_REVISION.to_owned(),
+        };
+
+        return Assemble_Corpus(&request).expect("the embedded governing records always seed");
+    }
+
+    fn Sample_Document() -> DocumentSource
+    {
+        return DocumentSource {
+            uid: 1,
+            path: "docs/records/a.md".to_owned(),
+            revision: "authored".to_owned(),
+            content_hash: "h".to_owned(),
+            text: String::new(),
+        };
     }
 }
