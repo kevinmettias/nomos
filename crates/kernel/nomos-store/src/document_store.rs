@@ -189,32 +189,6 @@ mod tests
     use crate::Recorded;
     use nomos_contracts::{BuildVariantId, ConfigurationId, Digest128, GenerationId, SchemaId, SnapshotId};
 
-    fn Digest(seed: u8) -> Digest128
-    {
-        return Digest128::From_Bytes([seed; Digest128::BYTE_LENGTH]);
-    }
-
-    fn Fact(payload: &str) -> Recorded
-    {
-        return Recorded::New(DocumentKind::Fact, SchemaId::New("nomos.syntax.v1"), payload.as_bytes().to_vec());
-    }
-
-    fn Taken(seed: u8) -> Commit
-    {
-        return Commit::Under(
-            SnapshotId::From_Digest(Digest(seed)),
-            BuildVariantId::From_Digest(Digest(2)),
-            ConfigurationId::From_Digest(Digest(3)),
-            GenerationId::INITIAL,
-        )
-        .Recording(Fact("fn main() {}"));
-    }
-
-    fn Observed() -> DocumentStore
-    {
-        return DocumentStore::For(Authority::Observed);
-    }
-
     #[test]
     fn Test_For_Should_Open_An_Empty_Store()
     {
@@ -307,5 +281,31 @@ mod tests
         store.Commit(&Taken(1)).expect("commits");
 
         assert!(store.Unreachable().expect("indexes").is_empty());
+    }
+
+    fn Digest(seed: u8) -> Digest128
+    {
+        return Digest128::From_Bytes([seed; Digest128::BYTE_LENGTH]);
+    }
+
+    fn Fact(payload: &str) -> Recorded
+    {
+        return Recorded::New(DocumentKind::Fact, SchemaId::New("nomos.syntax.v1"), payload.as_bytes().to_vec());
+    }
+
+    fn Taken(seed: u8) -> Commit
+    {
+        return Commit::Under(
+            SnapshotId::From_Digest(Digest(seed)),
+            BuildVariantId::From_Digest(Digest(2)),
+            ConfigurationId::From_Digest(Digest(3)),
+            GenerationId::INITIAL,
+        )
+        .Recording(Fact("fn main() {}"));
+    }
+
+    fn Observed() -> DocumentStore
+    {
+        return DocumentStore::For(Authority::Observed);
     }
 }

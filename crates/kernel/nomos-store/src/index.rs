@@ -196,50 +196,6 @@ mod tests
     use crate::{Recorded, COMMIT_SCHEMA};
     use nomos_contracts::{BuildVariantId, ConfigurationId, GenerationId, SchemaId};
 
-    fn Seeded_Digest(seed: u8) -> Digest128
-    {
-        return Digest128::From_Bytes([seed; Digest128::BYTE_LENGTH]);
-    }
-
-    fn Fact(payload: &str) -> Recorded
-    {
-        return Recorded::New(DocumentKind::Fact, SchemaId::New("nomos.syntax.v1"), payload.as_bytes().to_vec());
-    }
-
-    /// A one-record commit under a snapshot derived from `seed`, recording content that is
-    /// itself derived from `seed` -- so two different seeds never share a document by
-    /// content-addressing coincidence, which would make them look reachable from each
-    /// other's snapshot for a reason that has nothing to do with `In_Snapshot` itself.
-    fn Taken(seed: u8) -> Commit
-    {
-        return Commit::Under(
-            SnapshotId::From_Digest(Seeded_Digest(seed)),
-            BuildVariantId::From_Digest(Seeded_Digest(2)),
-            ConfigurationId::From_Digest(Seeded_Digest(3)),
-            GenerationId::INITIAL,
-        )
-        .Recording(Fact(&format!("fn seed_{seed}() {{}}")));
-    }
-
-    /// The documents a commit's own write would insert: one per record, plus its manifest.
-    fn Documents_From(commit: &Commit) -> BTreeMap<DocumentId, Document>
-    {
-        let mut documents = BTreeMap::new();
-        for record in &commit.records
-        {
-            let document = record.Document();
-            documents.insert(document.Id(), document);
-        }
-        let manifest = Document::New(
-            DocumentKind::Commit,
-            SchemaId::New(COMMIT_SCHEMA),
-            commit.Encode().expect("encodes"),
-        );
-        documents.insert(manifest.Id(), manifest);
-
-        return documents;
-    }
-
     #[test]
     fn Test_Derive_Should_Reach_Every_Recorded_Document()
     {
@@ -330,5 +286,49 @@ mod tests
         let second = Index::Derive(&Documents_From(&Taken(4))).expect("derives");
 
         assert_ne!(first.Digest(), second.Digest());
+    }
+
+    fn Seeded_Digest(seed: u8) -> Digest128
+    {
+        return Digest128::From_Bytes([seed; Digest128::BYTE_LENGTH]);
+    }
+
+    fn Fact(payload: &str) -> Recorded
+    {
+        return Recorded::New(DocumentKind::Fact, SchemaId::New("nomos.syntax.v1"), payload.as_bytes().to_vec());
+    }
+
+    /// A one-record commit under a snapshot derived from `seed`, recording content that is
+    /// itself derived from `seed` -- so two different seeds never share a document by
+    /// content-addressing coincidence, which would make them look reachable from each
+    /// other's snapshot for a reason that has nothing to do with `In_Snapshot` itself.
+    fn Taken(seed: u8) -> Commit
+    {
+        return Commit::Under(
+            SnapshotId::From_Digest(Seeded_Digest(seed)),
+            BuildVariantId::From_Digest(Seeded_Digest(2)),
+            ConfigurationId::From_Digest(Seeded_Digest(3)),
+            GenerationId::INITIAL,
+        )
+        .Recording(Fact(&format!("fn seed_{seed}() {{}}")));
+    }
+
+    /// The documents a commit's own write would insert: one per record, plus its manifest.
+    fn Documents_From(commit: &Commit) -> BTreeMap<DocumentId, Document>
+    {
+        let mut documents = BTreeMap::new();
+        for record in &commit.records
+        {
+            let document = record.Document();
+            documents.insert(document.Id(), document);
+        }
+        let manifest = Document::New(
+            DocumentKind::Commit,
+            SchemaId::New(COMMIT_SCHEMA),
+            commit.Encode().expect("encodes"),
+        );
+        documents.insert(manifest.Id(), manifest);
+
+        return documents;
     }
 }

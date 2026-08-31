@@ -234,13 +234,25 @@ mod tests
         assert_eq!(result.Conflicting(), &[Subject_Named("b.rs")]);
     }
 
+    #[test]
+    fn Test_Unknown_Should_Never_Permit_Concurrency()
+    {
+        for reason in Every_Way_Independence_Can_Go_Unresolved()
+        {
+            assert!(
+                !Intersection::Unknown(reason).Permits_Concurrency(),
+                "unknown independence is not safe parallelism"
+            );
+        }
+    }
+
     /// The property the whole type exists for. If this ever passes, two agents can be
     /// told they may proceed when nobody established that they may.
     /// Every way independence can fail to be established, so a new `UnknownReason`
     /// variant is a diff to this table rather than a new test.
     fn Every_Way_Independence_Can_Go_Unresolved() -> [UnknownReason; 4]
     {
-        [
+        return [
             UnknownReason::IncomparableResolution {
                 left: SetResolution::File,
                 right: SetResolution::Symbol,
@@ -252,19 +264,7 @@ mod tests
             UnknownReason::UnexpandedPattern {
                 pattern: "src/**".to_owned(),
             },
-        ]
-    }
-
-    #[test]
-    fn Test_Unknown_Should_Never_Permit_Concurrency()
-    {
-        for reason in Every_Way_Independence_Can_Go_Unresolved()
-        {
-            assert!(
-                !Intersection::Unknown(reason).Permits_Concurrency(),
-                "unknown independence is not safe parallelism"
-            );
-        }
+        ];
     }
 
     /// A file set and a symbol set look disjoint if you just compare identifiers, and

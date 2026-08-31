@@ -38,11 +38,6 @@ mod tests
 {
     use super::*;
 
-    fn Arbitrary_Recorded() -> Recorded
-    {
-        return Recorded::New(DocumentKind::Fact, SchemaId::New("nomos.syntax.v1"), b"fn main() {}".to_vec());
-    }
-
     #[test]
     fn Test_New_Should_Build_A_Recorded_From_Its_Kind_Schema_And_Bytes()
     {
@@ -59,5 +54,10 @@ mod tests
 
         assert_eq!(document.kind, DocumentKind::Fact);
         assert_eq!(document.bytes, b"fn main() {}".to_vec());
+    }
+
+    fn Arbitrary_Recorded() -> Recorded
+    {
+        return Recorded::New(DocumentKind::Fact, SchemaId::New("nomos.syntax.v1"), b"fn main() {}".to_vec());
     }
 }

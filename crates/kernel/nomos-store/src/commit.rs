@@ -108,26 +108,6 @@ mod tests
     use crate::DocumentKind;
     use nomos_contracts::{Digest128, SchemaId};
 
-    fn Digest(seed: u8) -> Digest128
-    {
-        return Digest128::From_Bytes([seed; Digest128::BYTE_LENGTH]);
-    }
-
-    fn Fact(payload: &str) -> Recorded
-    {
-        return Recorded::New(DocumentKind::Fact, SchemaId::New("nomos.syntax.v1"), payload.as_bytes().to_vec());
-    }
-
-    fn Empty_Commit() -> Commit
-    {
-        return Commit::Under(
-            SnapshotId::From_Digest(Digest(1)),
-            BuildVariantId::From_Digest(Digest(2)),
-            ConfigurationId::From_Digest(Digest(3)),
-            GenerationId::INITIAL,
-        );
-    }
-
     #[test]
     fn Test_Under_Should_Start_A_Commit_With_No_Records()
     {
@@ -164,5 +144,25 @@ mod tests
         let refusal = Commit::Decode(br#"{"schema":"nomos.other.v1"}"#).expect_err("must refuse");
 
         assert!(matches!(refusal, StoreError::Malformed(_)));
+    }
+
+    fn Digest(seed: u8) -> Digest128
+    {
+        return Digest128::From_Bytes([seed; Digest128::BYTE_LENGTH]);
+    }
+
+    fn Fact(payload: &str) -> Recorded
+    {
+        return Recorded::New(DocumentKind::Fact, SchemaId::New("nomos.syntax.v1"), payload.as_bytes().to_vec());
+    }
+
+    fn Empty_Commit() -> Commit
+    {
+        return Commit::Under(
+            SnapshotId::From_Digest(Digest(1)),
+            BuildVariantId::From_Digest(Digest(2)),
+            ConfigurationId::From_Digest(Digest(3)),
+            GenerationId::INITIAL,
+        );
     }
 }

@@ -126,12 +126,24 @@ mod tests
     #[test]
     fn Test_Authority_Should_Assign_Every_Kind_To_Exactly_One_Authority()
     {
-        assert_eq!(Kind::Commit.Authority(), Authority::Observed);
-        assert_eq!(Kind::Fact.Authority(), Authority::Observed);
-        assert_eq!(Kind::Finding.Authority(), Authority::Observed);
-        assert_eq!(Kind::Run.Authority(), Authority::Observed);
-        assert_eq!(Kind::Specification.Authority(), Authority::Authored);
-        assert_eq!(Kind::Record.Authority(), Authority::Authored);
-        assert_eq!(Kind::Projection.Authority(), Authority::Authored);
+        for (kind, authority) in Every_Kinds_Authority()
+        {
+            assert_eq!(kind.Authority(), authority, "{}", kind.Label());
+        }
+    }
+
+    /// Every kind's own authority, named so a second test could point at the same table
+    /// without editing it alongside the loop that reads it.
+    fn Every_Kinds_Authority() -> [(Kind, Authority); 7]
+    {
+        return [
+            (Kind::Commit, Authority::Observed),
+            (Kind::Fact, Authority::Observed),
+            (Kind::Finding, Authority::Observed),
+            (Kind::Run, Authority::Observed),
+            (Kind::Specification, Authority::Authored),
+            (Kind::Record, Authority::Authored),
+            (Kind::Projection, Authority::Authored),
+        ];
     }
 }
