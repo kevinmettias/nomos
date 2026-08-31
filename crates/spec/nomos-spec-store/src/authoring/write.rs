@@ -231,47 +231,6 @@ mod tests
     use super::*;
     use crate::SpecificationStore;
 
-    fn Store() -> SpecificationStore
-    {
-        return SpecificationStore::In_Memory().expect("opens");
-    }
-
-    fn A_Record() -> Record
-    {
-        return Record {
-            front_matter: RecordFrontMatter {
-                id: "D-1".to_owned(),
-                kind: "decision".to_owned(),
-                title: "A record".to_owned(),
-                status: "accepted".to_owned(),
-                authority: "canonical-normative-record".to_owned(),
-                version: 1,
-                tags: vec!["testing".to_owned()],
-                relations: vec![RecordRelation {
-                    target: "D-2".to_owned(),
-                    relation: "relates-to".to_owned(),
-                }],
-            },
-            body: "# A record\n\n## Decision\n\nOne.\n".to_owned(),
-        };
-    }
-
-    fn Written(connection: &Connection) -> RecordWrite
-    {
-        let record = A_Record();
-
-        return Write_Record(
-            connection,
-            Authored {
-                path: "docs/records/D-1.md",
-                revision: "authored",
-                markdown: "# A record\n",
-            },
-            &record,
-        )
-        .expect("writes");
-    }
-
     #[test]
     fn Test_Write_Record_Should_Write_The_Node_The_Document_And_Its_Blocks()
     {
@@ -364,5 +323,46 @@ mod tests
 
         assert_eq!(replaced, 0);
         assert_eq!(remaining, 0, "an empty list must replace, not merge with, what was there");
+    }
+
+    fn Store() -> SpecificationStore
+    {
+        return SpecificationStore::In_Memory().expect("opens");
+    }
+
+    fn A_Record() -> Record
+    {
+        return Record {
+            front_matter: RecordFrontMatter {
+                id: "D-1".to_owned(),
+                kind: "decision".to_owned(),
+                title: "A record".to_owned(),
+                status: "accepted".to_owned(),
+                authority: "canonical-normative-record".to_owned(),
+                version: 1,
+                tags: vec!["testing".to_owned()],
+                relations: vec![RecordRelation {
+                    target: "D-2".to_owned(),
+                    relation: "relates-to".to_owned(),
+                }],
+            },
+            body: "# A record\n\n## Decision\n\nOne.\n".to_owned(),
+        };
+    }
+
+    fn Written(connection: &Connection) -> RecordWrite
+    {
+        let record = A_Record();
+
+        return Write_Record(
+            connection,
+            Authored {
+                path: "docs/records/D-1.md",
+                revision: "authored",
+                markdown: "# A record\n",
+            },
+            &record,
+        )
+        .expect("writes");
     }
 }

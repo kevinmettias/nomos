@@ -1,5 +1,12 @@
 //! Resolving a bundle's natural keys against the surrogates the schema assigned them.
 
+// file-size: allow this file pairs its production code with its own inline #[cfg(test)]
+// module; check-test-coverage keys a test's companion unit off the exact file it is
+// textually written in, so these tests cannot move to a sibling file without losing
+// their attribution to every function this file declares.
+// responsibility: allow same reason -- the coupling that keeps this file whole is
+// check-test-coverage's stem-based companion attribution, not a design choice.
+
 use rusqlite::{Transaction, params};
 
 use crate::BundleError;
@@ -245,43 +252,6 @@ mod tests
     use super::*;
     use nomos_spec_store::SpecificationStore;
 
-    /// One row of everything this file resolves a surrogate for: a blob, the document read
-    /// from it, one heading, one block, one table row inside that block, a suite, a node
-    /// inside it, a normative statement and a submission, both filed under that node.
-    fn Fixture() -> SpecificationStore
-    {
-        let store = SpecificationStore::In_Memory().expect("opens");
-        store
-            .Connection()
-            .execute_batch(
-                "INSERT INTO blobs (sha256, byte_length, content) VALUES ('sha256:aa', 2, x'6869');
-                 INSERT INTO source_documents (path, revision, blob_uid) VALUES ('doc.md', 'v1', 1);
-                 INSERT INTO source_headings (document_uid, ordinal, depth, title)
-                     VALUES (1, 1, 1, 'Intro');
-                 INSERT INTO source_blocks
-                     (document_uid, ordinal, kind, heading_path, text, content_hash, normalized_hash)
-                     VALUES (1, 1, 'paragraph', 'Intro', 'Hello.', 'sha256:hc', 'sha256:nh');
-                 INSERT INTO source_table_rows
-                     (source_block_uid, ordinal, table_ordinal, kind, cells_json, text,
-                      content_hash, normalized_hash)
-                     VALUES (1, 1, 1, 'content', '[\"a\"]', 'a', 'sha256:rc', 'sha256:rn');
-                 INSERT INTO suites (suite_id, title, authority_root)
-                     VALUES ('nomos', 'The Nomos Specification', 1);
-                 INSERT INTO nodes
-                     (node_id, kind, authority, representation, title, deleted_at, suite_uid)
-                     VALUES ('N1', 'requirement', 'canonical', 'record', 'Node One', NULL, 1);
-                 INSERT INTO normative_statements
-                     (node_uid, statement_id, kind, canonical_text, canonical_hash, supersedes_hash)
-                     VALUES (1, 'STMT-1', 'Requirement', 'Text', 'sha256:aa', NULL);
-                 INSERT INTO submissions
-                     (node_uid, kind, form_contract_version, state, submitted_by, submitted_through)
-                     VALUES (1, 'feature-request', 1, 'draft', 'me', 'test');",
-            )
-            .expect("populates every table this file resolves against");
-
-        return store;
-    }
-
     #[test]
     fn Test_Optional_Suite_Uid_Should_Return_None_When_No_Suite_Is_Given()
     {
@@ -342,15 +312,7 @@ mod tests
         let mut store = Fixture();
 
         let uid = store
-            .In_Transaction(|transaction| {
-                Document_Uid(
-                    transaction,
-                    &DocumentRef {
-                        path: "doc.md".to_owned(),
-                        revision: "v1".to_owned(),
-                    },
-                )
-            })
+            .In_Transaction(|transaction| Document_Uid(transaction, &A_Document_Ref()))
             .expect("resolves");
 
         assert_eq!(uid, 1);
@@ -402,18 +364,7 @@ mod tests
         let mut store = Fixture();
 
         let uid = store
-            .In_Transaction(|transaction| {
-                Block_Uid(
-                    transaction,
-                    &OrdinalRef {
-                        document: DocumentRef {
-                            path: "doc.md".to_owned(),
-                            revision: "v1".to_owned(),
-                        },
-                        ordinal: 1,
-                    },
-                )
-            })
+            .In_Transaction(|transaction| Block_Uid(transaction, &An_Ordinal_Ref()))
             .expect("resolves");
 
         assert_eq!(uid, 1);
@@ -423,16 +374,7 @@ mod tests
     fn Test_Optional_Table_Row_Uid_Should_Return_None_When_No_Row_Is_Given()
     {
         let mut store = Fixture();
-        let row = TableRowRef {
-            block: OrdinalRef {
-                document: DocumentRef {
-                    path: "doc.md".to_owned(),
-                    revision: "v1".to_owned(),
-                },
-                ordinal: 1,
-            },
-            ordinal: 1,
-        };
+        let row = TableRowRef { block: An_Ordinal_Ref(), ordinal: 1 };
 
         let found = store
             .In_Transaction(|transaction| Optional_Table_Row_Uid(transaction, Some(&row)))
@@ -448,45 +390,13 @@ mod tests
     #[test]
     fn Test_Optional_Block_Uid_Should_Return_None_When_No_Block_Reference_Is_Given()
     {
-        let mut store = Fixture();
-        let block = OrdinalRef {
-            document: DocumentRef {
-                path: "doc.md".to_owned(),
-                revision: "v1".to_owned(),
-            },
-            ordinal: 1,
-        };
-
-        let found = store
-            .In_Transaction(|transaction| Optional_Block_Uid(transaction, Some(&block)))
-            .expect("resolves");
-        let absent = store.In_Transaction(|transaction| Optional_Block_Uid(transaction, None)).expect("resolves");
-
-        assert_eq!(found, Some(1));
-        assert_eq!(absent, None);
+        Assert_Optional_Ordinal_Lookup_Resolves(Optional_Block_Uid);
     }
 
     #[test]
     fn Test_Optional_Heading_Uid_Should_Return_None_When_No_Heading_Is_Given()
     {
-        let mut store = Fixture();
-        let heading = OrdinalRef {
-            document: DocumentRef {
-                path: "doc.md".to_owned(),
-                revision: "v1".to_owned(),
-            },
-            ordinal: 1,
-        };
-
-        let found = store
-            .In_Transaction(|transaction| Optional_Heading_Uid(transaction, Some(&heading)))
-            .expect("resolves");
-        let absent = store
-            .In_Transaction(|transaction| Optional_Heading_Uid(transaction, None))
-            .expect("resolves");
-
-        assert_eq!(found, Some(1));
-        assert_eq!(absent, None);
+        Assert_Optional_Ordinal_Lookup_Resolves(Optional_Heading_Uid);
     }
 
     #[test]
@@ -497,5 +407,70 @@ mod tests
         let uid = store.In_Transaction(|transaction| Submission_Uid(transaction, "N1")).expect("resolves");
 
         assert_eq!(uid, 1);
+    }
+
+    /// Both `Optional_Block_Uid` and `Optional_Heading_Uid` resolve `Some(reference)` to the
+    /// one row [`Fixture`] seeds and `None` to nothing — the shape every test of either shares.
+    fn Assert_Optional_Ordinal_Lookup_Resolves(
+        lookup: impl Fn(&Transaction<'_>, Option<&OrdinalRef>) -> Result<Option<i64>, BundleError>,
+    )
+    {
+        let mut store = Fixture();
+        let reference = An_Ordinal_Ref();
+
+        let found = store.In_Transaction(|transaction| lookup(transaction, Some(&reference))).expect("resolves");
+        let absent = store.In_Transaction(|transaction| lookup(transaction, None)).expect("resolves");
+
+        assert_eq!(found, Some(1));
+        assert_eq!(absent, None);
+    }
+
+    /// The document [`Fixture`] seeds, named so a test asking for it does not respell it.
+    fn A_Document_Ref() -> DocumentRef
+    {
+        return DocumentRef { path: "doc.md".to_owned(), revision: "v1".to_owned() };
+    }
+
+    /// The one block, heading and table row [`Fixture`] seeds all share this ordinal.
+    fn An_Ordinal_Ref() -> OrdinalRef
+    {
+        return OrdinalRef { document: A_Document_Ref(), ordinal: 1 };
+    }
+
+    /// One row of everything this file resolves a surrogate for: a blob, the document read
+    /// from it, one heading, one block, one table row inside that block, a suite, a node
+    /// inside it, a normative statement and a submission, both filed under that node.
+    fn Fixture() -> SpecificationStore
+    {
+        let store = SpecificationStore::In_Memory().expect("opens");
+        store
+            .Connection()
+            .execute_batch(
+                "INSERT INTO blobs (sha256, byte_length, content) VALUES ('sha256:aa', 2, x'6869');
+                 INSERT INTO source_documents (path, revision, blob_uid) VALUES ('doc.md', 'v1', 1);
+                 INSERT INTO source_headings (document_uid, ordinal, depth, title)
+                     VALUES (1, 1, 1, 'Intro');
+                 INSERT INTO source_blocks
+                     (document_uid, ordinal, kind, heading_path, text, content_hash, normalized_hash)
+                     VALUES (1, 1, 'paragraph', 'Intro', 'Hello.', 'sha256:hc', 'sha256:nh');
+                 INSERT INTO source_table_rows
+                     (source_block_uid, ordinal, table_ordinal, kind, cells_json, text,
+                      content_hash, normalized_hash)
+                     VALUES (1, 1, 1, 'content', '[\"a\"]', 'a', 'sha256:rc', 'sha256:rn');
+                 INSERT INTO suites (suite_id, title, authority_root)
+                     VALUES ('nomos', 'The Nomos Specification', 1);
+                 INSERT INTO nodes
+                     (node_id, kind, authority, representation, title, deleted_at, suite_uid)
+                     VALUES ('N1', 'requirement', 'canonical', 'record', 'Node One', NULL, 1);
+                 INSERT INTO normative_statements
+                     (node_uid, statement_id, kind, canonical_text, canonical_hash, supersedes_hash)
+                     VALUES (1, 'STMT-1', 'Requirement', 'Text', 'sha256:aa', NULL);
+                 INSERT INTO submissions
+                     (node_uid, kind, form_contract_version, state, submitted_by, submitted_through)
+                     VALUES (1, 'feature-request', 1, 'draft', 'me', 'test');",
+            )
+            .expect("populates every table this file resolves against");
+
+        return store;
     }
 }

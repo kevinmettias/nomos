@@ -153,26 +153,6 @@ mod tests
 {
     use super::*;
 
-    fn Two_Entries() -> Vec<Profile>
-    {
-        let one = Profile::Parse(
-            r#"{
-                "id": "one", "title": "One", "format": "markdown", "output": "one.md",
-                "sections": [{ "title": "Nodes", "content": "nodes" }]
-            }"#,
-        )
-        .expect("parses");
-        let two = Profile::Parse(
-            r#"{
-                "id": "two", "title": "Two", "format": "markdown", "output": "two.md",
-                "sections": [{ "title": "Nodes", "content": "nodes" }]
-            }"#,
-        )
-        .expect("parses");
-
-        return vec![one, two];
-    }
-
     #[test]
     fn Test_Catalogue_Shipped_Should_Parse_Every_Bundled_Profile()
     {
@@ -190,6 +170,8 @@ mod tests
 
         let refusal = match Catalogue::Of(entries)
         {
+            // Test assertion, not a runtime escape hatch: an unrefused duplicate here is a
+            // failing test, and panicking is how the test reports it.
             Ok(_) => panic!("must refuse"),
             Err(error) => error,
         };
@@ -213,5 +195,25 @@ mod tests
 
         assert_eq!(catalogue.Named("two").map(|profile| return profile.id.as_str()), Some("two"));
         assert!(catalogue.Named("missing").is_none());
+    }
+
+    fn Two_Entries() -> Vec<Profile>
+    {
+        let one = Profile::Parse(
+            r#"{
+                "id": "one", "title": "One", "format": "markdown", "output": "one.md",
+                "sections": [{ "title": "Nodes", "content": "nodes" }]
+            }"#,
+        )
+        .expect("parses");
+        let two = Profile::Parse(
+            r#"{
+                "id": "two", "title": "Two", "format": "markdown", "output": "two.md",
+                "sections": [{ "title": "Nodes", "content": "nodes" }]
+            }"#,
+        )
+        .expect("parses");
+
+        return vec![one, two];
     }
 }

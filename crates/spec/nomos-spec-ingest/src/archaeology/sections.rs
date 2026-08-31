@@ -1,5 +1,12 @@
 //! Reading a revision into sections, and counting what repeats across them.
 
+// file-size: allow this file pairs its production code with its own inline #[cfg(test)]
+// module; check-test-coverage keys a test's companion unit off the exact file it is
+// textually written in, so these tests cannot move to a sibling file without losing
+// their attribution to every function this file declares.
+// responsibility: allow same reason -- the coupling that keeps this file whole is
+// check-test-coverage's stem-based companion attribution, not a design choice.
+
 use super::{SourceBlock, BTreeSet, BTreeMap, Get_Filler_Pattern, SHARED_BY, Segment, BlockKind, Table_Rows, RowKind, TableRow, Models_In};
 
 /// Where a section sits: which document, under what heading.
@@ -332,32 +339,6 @@ mod tests
 {
     use super::*;
 
-    fn Documents(pairs: &[(&str, &str)]) -> BTreeMap<String, String>
-    {
-        return pairs.iter().map(|(path, text)| return ((*path).to_owned(), (*text).to_owned())).collect();
-    }
-
-    fn Test_Block(text: &str) -> SourceBlock
-    {
-        return SourceBlock {
-            ordinal: 1,
-            kind: BlockKind::Prose,
-            heading_path: Vec::new(),
-            text: text.to_owned(),
-        };
-    }
-
-    fn Empty_Later() -> Later
-    {
-        return Later {
-            authored: BTreeMap::new(),
-            named_in_row: BTreeMap::new(),
-            templates: BTreeMap::new(),
-            declared: BTreeSet::new(),
-            bodies: BTreeMap::new(),
-        };
-    }
-
     #[test]
     fn Test_Read_Should_Index_Headings_As_Positions_And_Judge_Repeated_Bodies()
     {
@@ -466,6 +447,16 @@ mod tests
         assert!(later.authored.contains_key("Widget"));
     }
 
+    fn Test_Block(text: &str) -> SourceBlock
+    {
+        return SourceBlock {
+            ordinal: 1,
+            kind: BlockKind::Prose,
+            heading_path: Vec::new(),
+            text: text.to_owned(),
+        };
+    }
+
     #[test]
     fn Test_Note_Row_Should_Record_The_Rows_Subject_As_An_Authored_Position()
     {
@@ -525,5 +516,21 @@ mod tests
     fn Test_Title_Of_Should_Strip_The_Hash_Marks_From_A_Heading_Line()
     {
         assert_eq!(Title_Of(&Test_Block("## Widget\n")), "Widget");
+    }
+
+    fn Documents(pairs: &[(&str, &str)]) -> BTreeMap<String, String>
+    {
+        return pairs.iter().map(|(path, text)| return ((*path).to_owned(), (*text).to_owned())).collect();
+    }
+
+    fn Empty_Later() -> Later
+    {
+        return Later {
+            authored: BTreeMap::new(),
+            named_in_row: BTreeMap::new(),
+            templates: BTreeMap::new(),
+            declared: BTreeSet::new(),
+            bodies: BTreeMap::new(),
+        };
     }
 }

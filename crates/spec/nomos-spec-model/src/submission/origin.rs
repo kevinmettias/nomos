@@ -65,11 +65,6 @@ mod tests
 {
     use super::*;
 
-    fn All_Origins() -> [Origin; 4]
-    {
-        return [Origin::Submitted, Origin::Clarified, Origin::Inferred, Origin::Decided];
-    }
-
     #[test]
     fn Test_Label_Should_Match_The_Stored_Spelling()
     {
@@ -96,5 +91,10 @@ mod tests
         {
             assert_eq!(origin.Can_Satisfy_Acceptance(), origin != Origin::Inferred);
         }
+    }
+
+    fn All_Origins() -> [Origin; 4]
+    {
+        return [Origin::Submitted, Origin::Clarified, Origin::Inferred, Origin::Decided];
     }
 }

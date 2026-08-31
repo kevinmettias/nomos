@@ -242,11 +242,6 @@ mod tests
         assert!(format!("{refusal}").contains("declares no section"), "{refusal}");
     }
 
-    fn Escaping_Outputs() -> &'static [&'static str]
-    {
-        return &["/etc/one.md", "C:/build/one.md", "..\\one.md", "../../one.md"];
-    }
-
     #[test]
     fn Test_An_Absolute_Output_Should_Be_Refused()
     {
@@ -259,6 +254,11 @@ mod tests
                 "{output} was accepted as a projection output"
             );
         }
+    }
+
+    fn Escaping_Outputs() -> &'static [&'static str]
+    {
+        return &["/etc/one.md", "C:/build/one.md", "..\\one.md", "../../one.md"];
     }
 
     #[test]

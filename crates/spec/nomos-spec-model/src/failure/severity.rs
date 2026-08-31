@@ -48,12 +48,6 @@ mod tests
         assert_eq!(Severity::NonBlocking.Label(), "non-blocking");
     }
 
-    /// Every severity there is, so a case cannot quietly go unchecked.
-    fn All_Severities() -> [Severity; 2]
-    {
-        return [Severity::Blocking, Severity::NonBlocking];
-    }
-
     #[test]
     fn Test_Parse_Should_Round_Trip_Every_Stored_Spelling_And_Refuse_An_Unknown_One()
     {
@@ -62,5 +56,11 @@ mod tests
             assert_eq!(Severity::Parse(severity.Label()), Some(severity));
         }
         assert_eq!(Severity::Parse("unknown"), None);
+    }
+
+    /// Every severity there is, so a case cannot quietly go unchecked.
+    fn All_Severities() -> [Severity; 2]
+    {
+        return [Severity::Blocking, Severity::NonBlocking];
     }
 }

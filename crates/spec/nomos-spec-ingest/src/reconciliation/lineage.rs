@@ -211,13 +211,6 @@ mod tests
     use super::*;
     use crate::Ingest_Source_Document;
 
-    fn Prepared() -> SpecificationStore
-    {
-        let mut store = SpecificationStore::In_Memory().expect("opens");
-        Ingest_Source_Document(&mut store, "a.md", "v14.36", "# Title\n\nOne.\n").expect("ingests");
-        return store;
-    }
-
     const SECTIONS: &str = "sections:\n\
         - source_document: a.md\n  source_heading: Title\n  heading_level: 1\n  \
         disposition: preserved-or-referenced\n";
@@ -297,5 +290,12 @@ mod tests
             matches!(result, Err(IngestError::Store(StoreError::Sql(_)))),
             "expected a Store(Sql) refusal for an unknown document, got {result:?}"
         );
+    }
+
+    fn Prepared() -> SpecificationStore
+    {
+        let mut store = SpecificationStore::In_Memory().expect("opens");
+        Ingest_Source_Document(&mut store, "a.md", "v14.36", "# Title\n\nOne.\n").expect("ingests");
+        return store;
     }
 }

@@ -1,3 +1,10 @@
+// file-size: allow this file pairs its production code with its own inline #[cfg(test)]
+// module; check-test-coverage keys a test's companion unit off the exact file it is
+// textually written in, so these tests cannot move to a sibling file without losing
+// their attribution to every function this file declares.
+// responsibility: allow same reason -- the coupling that keeps this file whole is
+// check-test-coverage's stem-based companion attribution, not a design choice.
+
 use crate::Item;
 use crate::Projection;
 use crate::Section;
@@ -481,6 +488,21 @@ mod tests
     use super::*;
     use crate::{Content, Format, Name, Value};
 
+    #[test]
+    fn Test_Render_Projection_Should_Dispatch_To_The_Format_The_Projection_Declares()
+    {
+        let mut projection = One_Section_Projection();
+        let markdown = Render_Projection(&projection).expect("renders");
+
+        assert!(markdown.contains("# One"), "{markdown}");
+        assert!(markdown.contains("## Nodes"), "{markdown}");
+
+        projection.format = Format::Json;
+        let json = Render_Projection(&projection).expect("renders");
+
+        assert!(json.contains("\"title\": \"One\""), "{json}");
+    }
+
     fn One_Section_Projection() -> Projection
     {
         return Projection {
@@ -495,20 +517,5 @@ mod tests
             }],
             inputs: Vec::new(),
         };
-    }
-
-    #[test]
-    fn Test_Render_Projection_Should_Dispatch_To_The_Format_The_Projection_Declares()
-    {
-        let mut projection = One_Section_Projection();
-        let markdown = Render_Projection(&projection).expect("renders");
-
-        assert!(markdown.contains("# One"), "{markdown}");
-        assert!(markdown.contains("## Nodes"), "{markdown}");
-
-        projection.format = Format::Json;
-        let json = Render_Projection(&projection).expect("renders");
-
-        assert!(json.contains("\"title\": \"One\""), "{json}");
     }
 }

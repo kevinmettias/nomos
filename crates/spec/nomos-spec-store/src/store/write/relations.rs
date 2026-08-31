@@ -331,37 +331,6 @@ mod tests
     use crate::NodeRow;
     use crate::SpecificationStore;
 
-    fn Store_With_A_Relation_Type() -> SpecificationStore
-    {
-        let mut store = SpecificationStore::In_Memory().expect("opens");
-        store
-            .Upsert_Node(NodeRow {
-                node_id: "A",
-                kind: "widget",
-                authority: AUTHORED,
-                representation: "record",
-                title: "A",
-            })
-            .expect("mints");
-        store
-            .Upsert_Node(NodeRow {
-                node_id: "B",
-                kind: "widget",
-                authority: AUTHORED,
-                representation: "record",
-                title: "B",
-            })
-            .expect("mints");
-        store
-            .Put_Relation_Type(
-                "relates-to",
-                "seed",
-                &RelationConstraint { domain: &["widget"], range: &["widget"], max_per_node: 5 },
-            )
-            .expect("registers");
-        return store;
-    }
-
     #[test]
     fn Test_Write_Relation_Should_Record_The_Edge_Between_Two_Nodes()
     {
@@ -404,5 +373,36 @@ mod tests
             Some("relates-from".to_owned())
         );
         assert_eq!(Inverse_Of(store.Connection(), "unregistered").expect("reads"), None);
+    }
+
+    fn Store_With_A_Relation_Type() -> SpecificationStore
+    {
+        let mut store = SpecificationStore::In_Memory().expect("opens");
+        store
+            .Upsert_Node(NodeRow {
+                node_id: "A",
+                kind: "widget",
+                authority: AUTHORED,
+                representation: "record",
+                title: "A",
+            })
+            .expect("mints");
+        store
+            .Upsert_Node(NodeRow {
+                node_id: "B",
+                kind: "widget",
+                authority: AUTHORED,
+                representation: "record",
+                title: "B",
+            })
+            .expect("mints");
+        store
+            .Put_Relation_Type(
+                "relates-to",
+                "seed",
+                &RelationConstraint { domain: &["widget"], range: &["widget"], max_per_node: 5 },
+            )
+            .expect("registers");
+        return store;
     }
 }

@@ -1,5 +1,12 @@
 //! Reading the graph out: the nodes, what joins them, and what they were restored from.
 
+// file-size: allow this file pairs its production code with its own inline #[cfg(test)]
+// module; check-test-coverage keys a test's companion unit off the exact file it is
+// textually written in, so these tests cannot move to a sibling file without losing
+// their attribution to every function this file declares.
+// responsibility: allow same reason -- the coupling that keeps this file whole is
+// check-test-coverage's stem-based companion attribution, not a design choice.
+
 use crate::BundleError;
 use crate::DocumentRef;
 use crate::OrdinalRef;
@@ -409,54 +416,6 @@ mod tests
     use super::*;
     use nomos_spec_store::SpecificationStore;
 
-    /// One row of everything this file reads: a suite, two nodes (one inside it and one
-    /// not), an alias, a history entry, a relation type, a relation between the two nodes,
-    /// a normative statement, a heading-anchored lineage row, a heading-anchored omission,
-    /// and one record's declared front matter and one declared relation.
-    fn Fixture() -> SpecificationStore
-    {
-        let store = SpecificationStore::In_Memory().expect("opens");
-        store
-            .Connection()
-            .execute_batch(
-                "INSERT INTO blobs (sha256, byte_length, content) VALUES ('sha256:aa', 2, x'6869');
-                 INSERT INTO source_documents (path, revision, blob_uid) VALUES ('doc.md', 'v1', 1);
-                 INSERT INTO source_headings (document_uid, ordinal, depth, title)
-                     VALUES (1, 1, 1, 'Intro');
-                 INSERT INTO suites (suite_id, title, authority_root)
-                     VALUES ('nomos', 'The Nomos Specification', 1);
-                 INSERT INTO nodes
-                     (node_id, kind, authority, representation, title, deleted_at, suite_uid)
-                     VALUES ('N1', 'requirement', 'canonical', 'record', 'Node One', NULL, 1);
-                 INSERT INTO nodes
-                     (node_id, kind, authority, representation, title, deleted_at, suite_uid)
-                     VALUES ('N2', 'concept', 'canonical', 'record', 'Node Two', NULL, NULL);
-                 INSERT INTO node_aliases (alias, node_uid) VALUES ('N1-OLD', 1);
-                 INSERT INTO node_history
-                     (node_uid, ordinal, event, reason, previous_event_hash, event_hash, recorded_at)
-                     VALUES (1, 1, 'created', 'seeded', NULL, 'sha256:01', '2026-01-01T00:00:00Z');
-                 INSERT INTO relation_types
-                     (name, tier, inverse_of, domain_kinds_json, range_kinds_json, max_per_node)
-                     VALUES ('verifies', 'core', NULL, '[]', '[]', 4);
-                 INSERT INTO relations (from_node_uid, relation_type, to_node_uid)
-                     VALUES (2, 'verifies', 1);
-                 INSERT INTO normative_statements
-                     (node_uid, statement_id, kind, canonical_text, canonical_hash, supersedes_hash)
-                     VALUES (1, 'STMT-1', 'Requirement', 'Text', 'sha256:aa', NULL);
-                 INSERT INTO lineage (source_heading_uid, disposition, target_node_uid)
-                     VALUES (1, 'preserved-normalized', 1);
-                 INSERT INTO omissions (source_heading_uid, reason, justification, decision_record)
-                     VALUES (1, 'superseded', 'replaced', 'D-1');
-                 INSERT INTO record_front_matter (document_uid, node_uid, status, version, tags_json)
-                     VALUES (1, 1, 'accepted', 1, '[]');
-                 INSERT INTO record_relations (document_uid, ordinal, target, relation)
-                     VALUES (1, 1, 'N2', 'affects');",
-            )
-            .expect("populates every table this file reads");
-
-        return store;
-    }
-
     #[test]
     fn Test_Collect_Suites_Should_Read_A_Suite_By_Its_Natural_Key()
     {
@@ -703,5 +662,53 @@ mod tests
                 relation: "affects".to_owned(),
             })]
         );
+    }
+
+    /// One row of everything this file reads: a suite, two nodes (one inside it and one
+    /// not), an alias, a history entry, a relation type, a relation between the two nodes,
+    /// a normative statement, a heading-anchored lineage row, a heading-anchored omission,
+    /// and one record's declared front matter and one declared relation.
+    fn Fixture() -> SpecificationStore
+    {
+        let store = SpecificationStore::In_Memory().expect("opens");
+        store
+            .Connection()
+            .execute_batch(
+                "INSERT INTO blobs (sha256, byte_length, content) VALUES ('sha256:aa', 2, x'6869');
+                 INSERT INTO source_documents (path, revision, blob_uid) VALUES ('doc.md', 'v1', 1);
+                 INSERT INTO source_headings (document_uid, ordinal, depth, title)
+                     VALUES (1, 1, 1, 'Intro');
+                 INSERT INTO suites (suite_id, title, authority_root)
+                     VALUES ('nomos', 'The Nomos Specification', 1);
+                 INSERT INTO nodes
+                     (node_id, kind, authority, representation, title, deleted_at, suite_uid)
+                     VALUES ('N1', 'requirement', 'canonical', 'record', 'Node One', NULL, 1);
+                 INSERT INTO nodes
+                     (node_id, kind, authority, representation, title, deleted_at, suite_uid)
+                     VALUES ('N2', 'concept', 'canonical', 'record', 'Node Two', NULL, NULL);
+                 INSERT INTO node_aliases (alias, node_uid) VALUES ('N1-OLD', 1);
+                 INSERT INTO node_history
+                     (node_uid, ordinal, event, reason, previous_event_hash, event_hash, recorded_at)
+                     VALUES (1, 1, 'created', 'seeded', NULL, 'sha256:01', '2026-01-01T00:00:00Z');
+                 INSERT INTO relation_types
+                     (name, tier, inverse_of, domain_kinds_json, range_kinds_json, max_per_node)
+                     VALUES ('verifies', 'core', NULL, '[]', '[]', 4);
+                 INSERT INTO relations (from_node_uid, relation_type, to_node_uid)
+                     VALUES (2, 'verifies', 1);
+                 INSERT INTO normative_statements
+                     (node_uid, statement_id, kind, canonical_text, canonical_hash, supersedes_hash)
+                     VALUES (1, 'STMT-1', 'Requirement', 'Text', 'sha256:aa', NULL);
+                 INSERT INTO lineage (source_heading_uid, disposition, target_node_uid)
+                     VALUES (1, 'preserved-normalized', 1);
+                 INSERT INTO omissions (source_heading_uid, reason, justification, decision_record)
+                     VALUES (1, 'superseded', 'replaced', 'D-1');
+                 INSERT INTO record_front_matter (document_uid, node_uid, status, version, tags_json)
+                     VALUES (1, 1, 'accepted', 1, '[]');
+                 INSERT INTO record_relations (document_uid, ordinal, target, relation)
+                     VALUES (1, 1, 'N2', 'affects');",
+            )
+            .expect("populates every table this file reads");
+
+        return store;
     }
 }

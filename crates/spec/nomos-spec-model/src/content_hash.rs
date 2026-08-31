@@ -118,13 +118,6 @@ mod tests
         assert_eq!(Normalize_Whitespace("a\r\n\r\nb"), "a b");
     }
 
-    /// Texts whose normalization should be a fixed point: normalizing the already-normalized
-    /// result must change nothing, and [`Is_Normalized`] must agree.
-    fn Texts_Whose_Normalization_Should_Be_Idempotent() -> [&'static str; 5]
-    {
-        return ["a  b", "\n\na\tb\n", "", "   ", "one"];
-    }
-
     #[test]
     fn Test_Is_Normalized_Should_Recognize_Every_Normalized_Fixed_Point()
     {
@@ -134,6 +127,13 @@ mod tests
             assert_eq!(Normalize_Whitespace(&once), once);
             assert!(Is_Normalized(&once));
         }
+    }
+
+    /// Texts whose normalization should be a fixed point: normalizing the already-normalized
+    /// result must change nothing, and [`Is_Normalized`] must agree.
+    fn Texts_Whose_Normalization_Should_Be_Idempotent() -> [&'static str; 5]
+    {
+        return ["a  b", "\n\na\tb\n", "", "   ", "one"];
     }
 
     #[test]

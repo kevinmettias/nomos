@@ -61,30 +61,13 @@ impl Revision
 mod tests
 {
     use super::*;
-
-    fn Fixture(name: &str, entries: &[(&str, &str)]) -> Archive
-    {
-        use std::io::Write as _;
-
-        let path = std::env::temp_dir().join(format!("nomos-spec-ingest-archaeology-revision-{name}.zip"));
-        let file = std::fs::File::create(&path).expect("creates the fixture");
-        let mut writer = zip::ZipWriter::new(file);
-        let options: zip::write::FileOptions<'_, ()> = zip::write::FileOptions::default();
-
-        for (entry, text) in entries
-        {
-            writer.start_file(*entry, options).expect("starts");
-            writer.write_all(text.as_bytes()).expect("writes");
-        }
-        writer.finish().expect("finishes");
-
-        return Archive::Open(&path).expect("opens");
-    }
+    use crate::archive::tests::Zip_Fixture;
 
     #[test]
     fn Test_Read_Should_Collect_Every_Markdown_Entry_Under_Its_Revision_Local_Path()
     {
-        let mut archive = Fixture(
+        let mut archive = Zip_Fixture(
+            "nomos-spec-ingest-archaeology-revision",
             "read-collects-markdown",
             &[("v15.0/a.md", "# A\n"), ("v15.0/nested/b.md", "# B\n"), ("v15.0/skip.txt", "not markdown")],
         );
@@ -100,7 +83,8 @@ mod tests
     #[test]
     fn Test_Read_Should_Refuse_An_Archive_With_No_Markdown()
     {
-        let mut archive = Fixture("read-refuses-empty", &[("v15.0/notes.txt", "text")]);
+        let mut archive =
+            Zip_Fixture("nomos-spec-ingest-archaeology-revision", "read-refuses-empty", &[("v15.0/notes.txt", "text")]);
 
         let refusal = Revision::Read(&mut archive, "v15.0").err().expect("must refuse");
 

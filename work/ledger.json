@@ -39429,14 +39429,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-p24-regression",
-        "acquired_at": 1788130145,
-        "lease_expires_at": 1788137345
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -39446,7 +39442,27 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "exit_code": 0,
+        "output_tail": "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.19s\n",
+        "verified_at": 1788136567,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "ceaedc25ce08c57fb5dd2f452a4c914e87faac97"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

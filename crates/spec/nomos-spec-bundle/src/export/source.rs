@@ -208,31 +208,6 @@ mod tests
     use super::*;
     use nomos_spec_store::SpecificationStore;
 
-    /// One blob, the document read from it, one heading, one block and one table row
-    /// inside that block — one row of everything this file reads.
-    fn Fixture() -> SpecificationStore
-    {
-        let store = SpecificationStore::In_Memory().expect("opens");
-        store
-            .Connection()
-            .execute_batch(
-                "INSERT INTO blobs (sha256, byte_length, content) VALUES ('sha256:aa', 2, x'6869');
-                 INSERT INTO source_documents (path, revision, blob_uid) VALUES ('doc.md', 'v1', 1);
-                 INSERT INTO source_headings (document_uid, ordinal, depth, title)
-                     VALUES (1, 1, 1, 'Intro');
-                 INSERT INTO source_blocks
-                     (document_uid, ordinal, kind, heading_path, text, content_hash, normalized_hash)
-                     VALUES (1, 1, 'paragraph', 'Intro', 'Hello.', 'sha256:hc', 'sha256:nh');
-                 INSERT INTO source_table_rows
-                     (source_block_uid, ordinal, table_ordinal, kind, cells_json, text,
-                      content_hash, normalized_hash)
-                     VALUES (1, 1, 1, 'content', '[\"a\",\"b\"]', 'a | b', 'sha256:rc', 'sha256:rn');",
-            )
-            .expect("populates every table this file reads");
-
-        return store;
-    }
-
     #[test]
     fn Test_Collect_Blobs_Should_Spell_Utf8_Content_As_Text()
     {
@@ -344,5 +319,30 @@ mod tests
                 normalized_hash: "sha256:rn".to_owned(),
             })]
         );
+    }
+
+    /// One blob, the document read from it, one heading, one block and one table row
+    /// inside that block — one row of everything this file reads.
+    fn Fixture() -> SpecificationStore
+    {
+        let store = SpecificationStore::In_Memory().expect("opens");
+        store
+            .Connection()
+            .execute_batch(
+                "INSERT INTO blobs (sha256, byte_length, content) VALUES ('sha256:aa', 2, x'6869');
+                 INSERT INTO source_documents (path, revision, blob_uid) VALUES ('doc.md', 'v1', 1);
+                 INSERT INTO source_headings (document_uid, ordinal, depth, title)
+                     VALUES (1, 1, 1, 'Intro');
+                 INSERT INTO source_blocks
+                     (document_uid, ordinal, kind, heading_path, text, content_hash, normalized_hash)
+                     VALUES (1, 1, 'paragraph', 'Intro', 'Hello.', 'sha256:hc', 'sha256:nh');
+                 INSERT INTO source_table_rows
+                     (source_block_uid, ordinal, table_ordinal, kind, cells_json, text,
+                      content_hash, normalized_hash)
+                     VALUES (1, 1, 1, 'content', '[\"a\",\"b\"]', 'a | b', 'sha256:rc', 'sha256:rn');",
+            )
+            .expect("populates every table this file reads");
+
+        return store;
     }
 }

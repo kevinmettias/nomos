@@ -312,20 +312,6 @@ mod tests
         };
     }
 
-    fn Front_Matter(title: &str, version: u32) -> RecordFrontMatter
-    {
-        return RecordFrontMatter {
-            id: "D-1".to_owned(),
-            kind: "decision".to_owned(),
-            title: title.to_owned(),
-            status: "accepted".to_owned(),
-            authority: "canonical-normative-record".to_owned(),
-            version,
-            tags: Vec::new(),
-            relations: Vec::new(),
-        };
-    }
-
     fn A_Relation(target: &str, relation: &str) -> RecordRelation
     {
         return RecordRelation {
@@ -411,5 +397,19 @@ mod tests
         let reason = Why_Not_Canonical("not what this surface would write", &record);
 
         assert!(reason.contains("line 1"), "{reason}");
+    }
+
+    fn Front_Matter(title: &str, version: u32) -> RecordFrontMatter
+    {
+        return RecordFrontMatter {
+            id: "D-1".to_owned(),
+            kind: "decision".to_owned(),
+            title: title.to_owned(),
+            status: "accepted".to_owned(),
+            authority: "canonical-normative-record".to_owned(),
+            version,
+            tags: Vec::new(),
+            relations: Vec::new(),
+        };
     }
 }

@@ -128,39 +128,11 @@ pub(super) fn Wrap_Sql_Result<Value>(result: rusqlite::Result<Value>) -> Result<
 }
 
 #[cfg(test)]
-mod tests
+pub(super) mod tests
 {
     use super::*;
+    use crate::archive::tests::Zip_Fixture;
     use nomos_spec_store::{NodeRow, SuiteAuthority};
-
-    /// A zip written for this test alone, so it does not depend on the corpus. Named for
-    /// this file's own purpose, because these tests run concurrently and a shared path
-    /// would have one reading a file another was still writing.
-    fn Fixture(name: &str, entries: &[(&str, &str)]) -> Archive
-    {
-        use std::io::Write as _;
-
-        let path = std::env::temp_dir().join(format!("nomos-spec-ingest-document-{name}.zip"));
-        let file = std::fs::File::create(&path).expect("creates the fixture");
-        let mut writer = zip::ZipWriter::new(file);
-        let options: zip::write::FileOptions<'_, ()> = zip::write::FileOptions::default();
-
-        for (entry, text) in entries
-        {
-            writer.start_file(*entry, options).expect("starts");
-            writer.write_all(text.as_bytes()).expect("writes");
-        }
-        writer.finish().expect("finishes");
-
-        return Archive::Open(&path).expect("opens");
-    }
-
-    fn Suite_In(store: &mut SpecificationStore, sibling: Sibling) -> Suite
-    {
-        let uid = store.Put_Suite(sibling.Suite_Id(), sibling.Title(), SuiteAuthority::Sibling).expect("puts the suite");
-
-        return Suite { sibling, uid };
-    }
 
     #[test]
     fn Test_Claim_Node_Id_Should_Assign_A_Fresh_Identifier_And_Refuse_A_Different_Suites_Claim()
@@ -255,7 +227,7 @@ mod tests
     #[test]
     fn Test_Read_Text_Should_Read_An_Entrys_Bytes_As_A_String()
     {
-        let mut archive = Fixture("read-text", &[("suite/a.md", "# A\n\nBody.\n")]);
+        let mut archive = Zip_Fixture("nomos-spec-ingest-document", "read-text", &[("suite/a.md", "# A\n\nBody.\n")]);
 
         let text = Read_Text(&mut archive, "suite/a.md").expect("reads");
 
@@ -292,5 +264,12 @@ mod tests
         let wrapped = Wrap_Sql_Result(failure).expect_err("must wrap the failure");
 
         assert!(matches!(wrapped, IngestError::Store(StoreError::Sql(_))), "{wrapped}");
+    }
+
+    pub(in crate::siblings) fn Suite_In(store: &mut SpecificationStore, sibling: Sibling) -> Suite
+    {
+        let uid = store.Put_Suite(sibling.Suite_Id(), sibling.Title(), SuiteAuthority::Sibling).expect("puts the suite");
+
+        return Suite { sibling, uid };
     }
 }

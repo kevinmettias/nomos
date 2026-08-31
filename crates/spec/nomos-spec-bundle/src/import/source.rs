@@ -209,25 +209,6 @@ mod tests
     use super::*;
     use nomos_spec_store::SpecificationStore;
 
-    /// One blob, the document read from it and one block inside it — one row of every
-    /// table this file's inserts can resolve a reference against.
-    fn Fixture() -> SpecificationStore
-    {
-        let store = SpecificationStore::In_Memory().expect("opens");
-        store
-            .Connection()
-            .execute_batch(
-                "INSERT INTO blobs (sha256, byte_length, content) VALUES ('sha256:aa', 2, x'6869');
-                 INSERT INTO source_documents (path, revision, blob_uid) VALUES ('doc.md', 'v1', 1);
-                 INSERT INTO source_blocks
-                     (document_uid, ordinal, kind, heading_path, text, content_hash, normalized_hash)
-                     VALUES (1, 1, 'paragraph', 'Intro', 'Hello.', 'sha256:hc', 'sha256:nh');",
-            )
-            .expect("populates every table this file's inserts resolve against");
-
-        return store;
-    }
-
     #[test]
     fn Test_Insert_Blobs_Should_Place_A_Blob_By_Its_Declared_Digest()
     {
@@ -375,5 +356,24 @@ mod tests
             })
             .expect("reads back");
         assert_eq!(cells_json, "[\"a\",\"b\"]");
+    }
+
+    /// One blob, the document read from it and one block inside it — one row of every
+    /// table this file's inserts can resolve a reference against.
+    fn Fixture() -> SpecificationStore
+    {
+        let store = SpecificationStore::In_Memory().expect("opens");
+        store
+            .Connection()
+            .execute_batch(
+                "INSERT INTO blobs (sha256, byte_length, content) VALUES ('sha256:aa', 2, x'6869');
+                 INSERT INTO source_documents (path, revision, blob_uid) VALUES ('doc.md', 'v1', 1);
+                 INSERT INTO source_blocks
+                     (document_uid, ordinal, kind, heading_path, text, content_hash, normalized_hash)
+                     VALUES (1, 1, 'paragraph', 'Intro', 'Hello.', 'sha256:hc', 'sha256:nh');",
+            )
+            .expect("populates every table this file's inserts resolve against");
+
+        return store;
     }
 }

@@ -64,33 +64,12 @@ pub(crate) fn Within_Revision(entry: &str) -> String
 mod tests
 {
     use super::*;
-
-    /// A zip written for this test alone, so it does not depend on the corpus. Named for
-    /// this file's own purpose, because these tests run concurrently and a shared path
-    /// would have one reading a file another was still writing.
-    fn Fixture(name: &str, entries: &[(&str, &str)]) -> Archive
-    {
-        use std::io::Write as _;
-
-        let path = std::env::temp_dir().join(format!("nomos-spec-ingest-fingerprint-{name}.zip"));
-        let file = std::fs::File::create(&path).expect("creates the fixture");
-        let mut writer = zip::ZipWriter::new(file);
-        let options: zip::write::FileOptions<'_, ()> = zip::write::FileOptions::default();
-
-        for (entry, text) in entries
-        {
-            writer.start_file(*entry, options).expect("starts");
-            writer.write_all(text.as_bytes()).expect("writes");
-        }
-        writer.finish().expect("finishes");
-
-        return Archive::Open(&path).expect("opens");
-    }
+    use crate::archive::tests::Zip_Fixture;
 
     #[test]
     fn Test_Fingerprint_Revision_Should_Hash_Every_Markdown_Entry_Under_The_Label()
     {
-        let mut archive = Fixture("basic", &[("suite/a.md", "# A\n\nText.\n")]);
+        let mut archive = Zip_Fixture("nomos-spec-ingest-fingerprint", "basic", &[("suite/a.md", "# A\n\nText.\n")]);
 
         let fingerprint = Fingerprint_Revision(&mut archive, "v14.1").expect("fingerprints");
 

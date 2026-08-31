@@ -9,15 +9,23 @@
 //! attributed rows in `submission_values`, and a decision gap is a row in `submission_gaps`.
 
 mod accept_error;
+mod citation;
 
 pub use accept_error::AcceptError;
 
 use crate::SpecificationStore;
 use crate::StoreError;
 use nomos_spec_model::{
-    ContentHash, Failure, FieldValue, Origin, Refusal, Submission, SubmissionState, Validate_Submission,
+    ContentHash, FieldValue, Failure, Origin, Refusal, Submission, Validate_Submission,
 };
-use rusqlite::{OptionalExtension, Transaction};
+use rusqlite::Transaction;
+// Neither this file's own production code nor `accept_error`/`citation` needs the type by
+// name; both `inline_coverage` below and the external `submission/tests.rs` (which reaches
+// this scope through `use super::*;`) construct a `Submission` with an explicit `state`, so
+// the import is real but test-only — gated rather than dropped, to avoid the unused-import
+// warning a plain `use` would carry in a non-test build.
+#[cfg(test)]
+use nomos_spec_model::SubmissionState;
 
 /// Validates `submission` and persists it, or refuses it and stores nothing.
 ///
@@ -76,139 +84,11 @@ fn Failed_Rules(
 ) -> Result<Vec<Failure>, StoreError>
 {
     let mut failures = Validate_Submission(submission);
-    let unresolved = Unresolved_Citations(store, submission)?;
+    let unresolved = citation::Unresolved_Citations(store, submission)?;
 
     failures.extend(unresolved);
 
     return Ok(failures);
-}
-
-/// Rule 4: `implements` resolves to an accepted design, and `answers` to an accepted request.
-///
-/// A result built against a draft is a result whose target may still change under it, so this
-/// applies in both states — `draft` weakens which rules apply only for rule 5.
-///
-/// Stated as a rule on the submission rather than as a constraint on the edge, which is what
-/// `OD-SPEC-010` says it is and what it can be: `relation_types` carries no domain, range or
-/// cardinality, so nothing here stops an `implements` edge joining a suite to a table row.
-/// That is `P10-EDGE-CONSTRAINTS`, and it is a different guarantee from this one.
-fn Unresolved_Citations(
-    store: &SpecificationStore,
-    submission: &Submission,
-) -> Result<Vec<Failure>, StoreError>
-{
-    let mut failures = Vec::new();
-
-    for (field, wanted) in [("answers", "feature-request"), ("implements", "design-spec")]
-    {
-        let unresolved = Unresolved_Citation(store, submission, CitedField(field), WantedKind(wanted))?;
-
-        failures.extend(unresolved);
-    }
-
-    return Ok(failures);
-}
-
-/// The submission field a citation rule checks (`answers`, `implements`).
-#[derive(Clone, Copy)]
-struct CitedField<'a>(&'a str);
-/// The kind of submission a citation rule requires (`feature-request`, `design-spec`).
-#[derive(Clone, Copy)]
-struct WantedKind<'a>(&'a str);
-
-/// Why one cited field does not resolve to an accepted submission of the kind it must name.
-fn Unresolved_Citation(
-    store: &SpecificationStore,
-    submission: &Submission,
-    field: CitedField<'_>,
-    wanted: WantedKind<'_>,
-) -> Result<Option<Failure>, StoreError>
-{
-    let Some(target) = Cited_Target(submission, field.0)
-    else
-    {
-        return Ok(None);
-    };
-
-    let Some(remedy) = Citation_Remedy(store, target, field, wanted)?
-    else
-    {
-        return Ok(None);
-    };
-
-    return Ok(Some(Citation_Failure(field.0, remedy)));
-}
-
-/// The value a citation field names, trimmed — `None` when the submission carries no
-/// citation in that field at all.
-fn Cited_Target<'a>(submission: &'a Submission, field: &str) -> Option<&'a str>
-{
-    let cited = submission.Current(field)?;
-
-    return Some(cited.value.trim());
-}
-
-/// Why a cited target does not resolve to an accepted submission of the required kind —
-/// `None` when it does.
-fn Citation_Remedy(
-    store: &SpecificationStore,
-    target: &str,
-    field: CitedField<'_>,
-    wanted: WantedKind<'_>,
-) -> Result<Option<String>, StoreError>
-{
-    let field = field.0;
-    let wanted = wanted.0;
-    let found = Cited_State(store, target)?;
-
-    return Ok(match found
-    {
-        None => Some(format!(
-            "no submission is filed under `{target}`; cite one that exists, and one that is \
-             a {wanted}"
-        )),
-        Some((kind, _)) if kind != wanted =>
-        {
-            Some(format!("`{target}` is a {kind} and `{field}` must name a {wanted}"))
-        }
-        Some((_, state)) if state != SubmissionState::Accepted.Label() => Some(format!(
-            "`{target}` is a {state}; accept it first, because work built against a draft is \
-             work whose target may still change under it"
-        )),
-        Some(_) => None,
-    });
-}
-
-/// The kind and state of the submission filed under `node_id`, if one is.
-fn Cited_State(
-    store: &SpecificationStore,
-    node_id: &str,
-) -> Result<Option<(String, String)>, StoreError>
-{
-    let found = store
-        .Connection()
-        .query_row(
-            "SELECT s.kind, s.state
-             FROM submissions s
-             JOIN nodes n ON n.uid = s.node_uid
-             WHERE n.node_id = ?1",
-            [node_id],
-            |row| return Ok((row.get(0)?, row.get(1)?)),
-        )
-        .optional()
-        .map_err(|error| return StoreError::Sql(error.to_string()))?;
-
-    return Ok(found);
-}
-
-/// Bundles a citation rule's field and remedy into the [`Failure`] shape callers expect.
-fn Citation_Failure(field: &str, remedy: String) -> Failure
-{
-    return Failure {
-        field: field.to_owned(),
-        rule: "citation-resolves-to-an-accepted-submission".to_owned(),
-        remedy,
-    };
 }
 
 /// The submission's own node, and its row — with its values and gaps — under a caller's
@@ -444,6 +324,19 @@ mod inline_coverage
     use crate::Seed_Governing_Records;
     use nomos_spec_model::SubmissionKind;
 
+    #[test]
+    fn Test_Accept_Submission_Should_Persist_A_Valid_Request_As_A_Node()
+    {
+        let mut store = SpecificationStore::In_Memory().expect("opens");
+        Seed_Governing_Records(&mut store).expect("seeds");
+
+        let uid =
+            Accept_Submission(&mut store, &Minimal_Request("FR-900")).expect("accepted");
+
+        assert!(uid > 0);
+        assert!(store.Node_Uid("FR-900").expect("looks up").is_some());
+    }
+
     fn Minimal_Request(id: &str) -> Submission
     {
         return Submission {
@@ -482,19 +375,6 @@ mod inline_coverage
             ],
             gaps: Vec::new(),
         };
-    }
-
-    #[test]
-    fn Test_Accept_Submission_Should_Persist_A_Valid_Request_As_A_Node()
-    {
-        let mut store = SpecificationStore::In_Memory().expect("opens");
-        Seed_Governing_Records(&mut store).expect("seeds");
-
-        let uid =
-            Accept_Submission(&mut store, &Minimal_Request("FR-900")).expect("accepted");
-
-        assert!(uid > 0);
-        assert!(store.Node_Uid("FR-900").expect("looks up").is_some());
     }
 
     #[test]

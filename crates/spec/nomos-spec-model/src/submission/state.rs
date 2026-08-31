@@ -45,11 +45,6 @@ mod tests
 {
     use super::*;
 
-    fn All_States() -> [State; 2]
-    {
-        return [State::Draft, State::Accepted];
-    }
-
     #[test]
     fn Test_Label_Should_Match_The_Stored_Spelling()
     {
@@ -65,5 +60,10 @@ mod tests
             assert_eq!(State::Parse(state.Label()), Some(state));
         }
         assert_eq!(State::Parse("unknown"), None);
+    }
+
+    fn All_States() -> [State; 2]
+    {
+        return [State::Draft, State::Accepted];
     }
 }

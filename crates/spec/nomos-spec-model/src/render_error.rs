@@ -405,12 +405,6 @@ mod tests
         assert!(Render_Record(&front_matter, &Segment(&record.body)).is_ok());
     }
 
-    /// Scalars that read back as a node other than the text that was written.
-    fn Scalars_That_Read_Back_As_Something_Else() -> [(&'static str, &'static str); 3]
-    {
-        return [("status", "no"), ("status", "42"), ("authority", "")];
-    }
-
     #[test]
     fn Test_A_Status_That_Reads_Back_As_Something_Else_Should_Be_Refused()
     {
@@ -430,5 +424,11 @@ mod tests
 
             assert!(refusal.to_string().contains(field), "{refusal}");
         }
+    }
+
+    /// Scalars that read back as a node other than the text that was written.
+    fn Scalars_That_Read_Back_As_Something_Else() -> [(&'static str, &'static str); 3]
+    {
+        return [("status", "no"), ("status", "42"), ("authority", "")];
     }
 }

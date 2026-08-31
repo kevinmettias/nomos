@@ -23,6 +23,13 @@
 //! agree; `Test_Every_Governing_Record_Should_Project_To_Its_Own_Bytes` asserts they do,
 //! for all of them.
 
+// file-size: allow this file pairs its production code with its own inline #[cfg(test)]
+// module; check-test-coverage keys a test's companion unit off the exact file it is
+// textually written in, so these tests cannot move to a sibling file without losing
+// their attribution to every function this file declares.
+// responsibility: allow same reason -- the coupling that keeps this file whole is
+// check-test-coverage's stem-based companion attribution, not a design choice.
+
 mod commit;
 mod difference;
 mod write;
@@ -431,28 +438,6 @@ mod tests
     use crate::Seed_Governing_Records;
     use crate::store::AUTHORED;
 
-    const CANONICAL: &str = "---\nid: D-900\ntype: decision\ntitle: A synthetic record\n\
-                             status: accepted\nversion: 1\n\
-                             authority: canonical-normative-record\ntags:\n  - testing\n\
-                             relations:\n  - target: D-129\n    type: relates-to\n---\n\n\
-                             # A synthetic record\n\n## Decision\n\nFirst paragraph.\n\n\
-                             ## Rationale\n\nSecond paragraph.\n";
-    const PATH: &str = "docs/records/D-900-a-synthetic-record.md";
-
-    fn Seeded() -> SpecificationStore
-    {
-        let mut store = SpecificationStore::In_Memory().expect("opens");
-        Seed_Governing_Records(&mut store).expect("seeds");
-        return store;
-    }
-
-    fn With_Synthetic() -> SpecificationStore
-    {
-        let mut store = Seeded();
-        store.Put_Record(PATH, AUTHORED, CANONICAL).expect("writes the synthetic record");
-        return store;
-    }
-
     #[test]
     fn Test_Put_Record_Should_Write_An_Authored_Record_The_Store_Can_Read_Back()
     {
@@ -578,5 +563,27 @@ mod tests
         let movements = store.Statement_Movements("D-900", &[], &[]).expect("reads");
 
         assert!(movements.is_empty());
+    }
+
+    const CANONICAL: &str = "---\nid: D-900\ntype: decision\ntitle: A synthetic record\n\
+                             status: accepted\nversion: 1\n\
+                             authority: canonical-normative-record\ntags:\n  - testing\n\
+                             relations:\n  - target: D-129\n    type: relates-to\n---\n\n\
+                             # A synthetic record\n\n## Decision\n\nFirst paragraph.\n\n\
+                             ## Rationale\n\nSecond paragraph.\n";
+    const PATH: &str = "docs/records/D-900-a-synthetic-record.md";
+
+    fn Seeded() -> SpecificationStore
+    {
+        let mut store = SpecificationStore::In_Memory().expect("opens");
+        Seed_Governing_Records(&mut store).expect("seeds");
+        return store;
+    }
+
+    fn With_Synthetic() -> SpecificationStore
+    {
+        let mut store = Seeded();
+        store.Put_Record(PATH, AUTHORED, CANONICAL).expect("writes the synthetic record");
+        return store;
     }
 }

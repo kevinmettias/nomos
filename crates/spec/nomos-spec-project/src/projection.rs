@@ -68,6 +68,29 @@ mod tests
 {
     use super::*;
 
+    #[test]
+    fn Test_Items_Should_Sum_Every_Sections_Length()
+    {
+        let projection = Two_Section_Projection();
+
+        assert_eq!(projection.Items(), 3);
+    }
+
+    #[test]
+    fn Test_Inputs_Digest_Should_Change_When_An_Input_Hash_Changes()
+    {
+        let mut projection = Two_Section_Projection();
+        let original = projection.Inputs_Digest();
+
+        projection
+            .inputs
+            .get_mut(0)
+            .expect("Two_Section_Projection builds at least one input")
+            .hash = "sha256:cc".to_owned();
+
+        assert_ne!(projection.Inputs_Digest(), original);
+    }
+
     fn Two_Section_Projection() -> Projection
     {
         return Projection {
@@ -100,28 +123,5 @@ mod tests
                 },
             ],
         };
-    }
-
-    #[test]
-    fn Test_Items_Should_Sum_Every_Sections_Length()
-    {
-        let projection = Two_Section_Projection();
-
-        assert_eq!(projection.Items(), 3);
-    }
-
-    #[test]
-    fn Test_Inputs_Digest_Should_Change_When_An_Input_Hash_Changes()
-    {
-        let mut projection = Two_Section_Projection();
-        let original = projection.Inputs_Digest();
-
-        projection
-            .inputs
-            .get_mut(0)
-            .expect("Two_Section_Projection builds at least one input")
-            .hash = "sha256:cc".to_owned();
-
-        assert_ne!(projection.Inputs_Digest(), original);
     }
 }

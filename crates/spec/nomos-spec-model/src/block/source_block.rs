@@ -30,16 +30,6 @@ mod tests
 {
     use super::*;
 
-    fn Block_With_Text(text: &str) -> SourceBlock
-    {
-        return SourceBlock {
-            ordinal: 1,
-            kind: BlockKind::Prose,
-            heading_path: Vec::new(),
-            text: text.to_owned(),
-        };
-    }
-
     #[test]
     fn Test_Content_Hash_Should_Hash_The_Blocks_Text_Verbatim()
     {
@@ -55,5 +45,15 @@ mod tests
 
         assert_eq!(block.Normalized_Hash(), ContentHash::Of_Normalized("a   b"));
         assert_ne!(block.Normalized_Hash(), block.Content_Hash(), "the whitespace run must collapse");
+    }
+
+    fn Block_With_Text(text: &str) -> SourceBlock
+    {
+        return SourceBlock {
+            ordinal: 1,
+            kind: BlockKind::Prose,
+            heading_path: Vec::new(),
+            text: text.to_owned(),
+        };
     }
 }

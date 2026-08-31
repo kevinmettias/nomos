@@ -119,6 +119,8 @@ mod tests
                     "wrong Parse message: {message}"
                 );
             },
+            // Test assertion, not a runtime escape hatch: an unexpected result here is a
+            // failing test, and panicking with the actual value is how the test reports it.
             other => panic!("expected IngestError::Parse naming the missing statement, got {other:?}"),
         }
     }

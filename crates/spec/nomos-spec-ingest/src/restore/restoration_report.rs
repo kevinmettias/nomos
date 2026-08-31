@@ -89,21 +89,6 @@ mod tests
     use super::*;
     use crate::Origin;
 
-    fn Member_Named(name: &str, family: Restored) -> Member
-    {
-        return Member {
-            id: format!("{}-{}", family.Prefix(), name.to_uppercase()),
-            family,
-            name: name.to_owned(),
-            document: "02-core.md".to_owned(),
-            origin: Origin::Row {
-                block_ordinal: 1,
-                row_ordinal: 1,
-            },
-            alias: None,
-        };
-    }
-
     #[test]
     fn Test_In_Should_Filter_The_Reports_Members_By_Family()
     {
@@ -136,6 +121,21 @@ mod tests
             Some(member.id.as_str())
         );
         assert!(report.Named("NoSuchMember").is_none());
+    }
+
+    fn Member_Named(name: &str, family: Restored) -> Member
+    {
+        return Member {
+            id: format!("{}-{}", family.Prefix(), name.to_uppercase()),
+            family,
+            name: name.to_owned(),
+            document: "02-core.md".to_owned(),
+            origin: Origin::Row {
+                block_ordinal: 1,
+                row_ordinal: 1,
+            },
+            alias: None,
+        };
     }
 
     #[test]

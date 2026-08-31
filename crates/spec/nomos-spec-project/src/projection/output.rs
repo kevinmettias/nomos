@@ -25,6 +25,14 @@ mod tests
     use super::*;
     use crate::Format;
 
+    #[test]
+    fn Test_Sidecar_Should_Render_The_Stamp_As_Json()
+    {
+        let rendered = Sample_Output().Sidecar().expect("renders");
+
+        assert!(rendered.contains("\"profile\": \"one\""), "{rendered}");
+    }
+
     fn Sample_Output() -> Output
     {
         return Output {
@@ -42,13 +50,5 @@ mod tests
                 inputs: Vec::new(),
             },
         };
-    }
-
-    #[test]
-    fn Test_Sidecar_Should_Render_The_Stamp_As_Json()
-    {
-        let rendered = Sample_Output().Sidecar().expect("renders");
-
-        assert!(rendered.contains("\"profile\": \"one\""), "{rendered}");
     }
 }

@@ -189,31 +189,6 @@ mod tests
     use super::*;
     use nomos_spec_store::SpecificationStore;
 
-    fn Populated_Store() -> SpecificationStore
-    {
-        let store = SpecificationStore::In_Memory().expect("opens");
-        store
-            .Connection()
-            .execute_batch(
-                "INSERT INTO suites (suite_id, title, authority_root) \
-                 VALUES ('nomos', 'The Nomos specification', 1);",
-            )
-            .expect("seeds a suite");
-
-        return store;
-    }
-
-    fn One_Section_Profile() -> Profile
-    {
-        return Profile::Parse(
-            r#"{
-                "id": "one", "title": "One", "format": "markdown", "output": "one.md",
-                "sections": [{ "title": "Suites", "content": "suites" }]
-            }"#,
-        )
-        .expect("parses");
-    }
-
     #[test]
     fn Test_Build_Projection_Should_Render_And_Stamp_A_Whole_Store_Profile()
     {
@@ -265,5 +240,30 @@ mod tests
         assert!(freshness.stale.is_none());
         assert!(freshness.edited.is_none());
         assert!(freshness.diverged.is_none());
+    }
+
+    fn Populated_Store() -> SpecificationStore
+    {
+        let store = SpecificationStore::In_Memory().expect("opens");
+        store
+            .Connection()
+            .execute_batch(
+                "INSERT INTO suites (suite_id, title, authority_root) \
+                 VALUES ('nomos', 'The Nomos specification', 1);",
+            )
+            .expect("seeds a suite");
+
+        return store;
+    }
+
+    fn One_Section_Profile() -> Profile
+    {
+        return Profile::Parse(
+            r#"{
+                "id": "one", "title": "One", "format": "markdown", "output": "one.md",
+                "sections": [{ "title": "Suites", "content": "suites" }]
+            }"#,
+        )
+        .expect("parses");
     }
 }

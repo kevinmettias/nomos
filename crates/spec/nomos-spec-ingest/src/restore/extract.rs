@@ -1,5 +1,12 @@
 //! Recognising a family member in a heading or a table row.
 
+// file-size: allow this file pairs its production code with its own inline #[cfg(test)]
+// module; check-test-coverage keys a test's companion unit off the exact file it is
+// textually written in, so these tests cannot move to a sibling file without losing
+// their attribution to every function this file declares.
+// responsibility: allow same reason -- the coupling that keeps this file whole is
+// check-test-coverage's stem-based companion attribution, not a design choice.
+
 use super::{
     BlockKind, BTreeMap, Collision, DOMAIN_MODEL, EXTENDED_TERMS, GLOSSARY, IngestError, Member, Origin, Restored,
     RowKind, Segment, SYSTEMS_HEADING, SourceBlock, Table_Rows, TableRow,
@@ -383,16 +390,6 @@ mod tests
 {
     use super::*;
 
-    fn Block(text: &str) -> SourceBlock
-    {
-        return SourceBlock {
-            ordinal: 1,
-            kind: BlockKind::Heading,
-            heading_path: Vec::new(),
-            text: text.to_owned(),
-        };
-    }
-
     #[test]
     fn Test_Extract_Members_Should_Collect_Heading_And_Row_Members()
     {
@@ -679,5 +676,15 @@ mod tests
         assert_eq!(Slug_Of("WorkspaceContext"), "WORKSPACECONTEXT");
         assert_eq!(Slug_Of("Counterfactual Analysis Service"), "COUNTERFACTUAL-ANALYSIS-SERVICE");
         assert_eq!(Slug_Of("  Leading and trailing  "), "LEADING-AND-TRAILING");
+    }
+
+    fn Block(text: &str) -> SourceBlock
+    {
+        return SourceBlock {
+            ordinal: 1,
+            kind: BlockKind::Heading,
+            heading_path: Vec::new(),
+            text: text.to_owned(),
+        };
     }
 }

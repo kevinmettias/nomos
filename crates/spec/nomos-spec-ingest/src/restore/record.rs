@@ -1,5 +1,12 @@
 //! Writing what was recognised into the store, and finding it again by name.
 
+// file-size: allow this file pairs its production code with its own inline #[cfg(test)]
+// module; check-test-coverage keys a test's companion unit off the exact file it is
+// textually written in, so these tests cannot move to a sibling file without losing
+// their attribution to every function this file declares.
+// responsibility: allow same reason -- the coupling that keeps this file whole is
+// check-test-coverage's stem-based companion attribution, not a design choice.
+
 use super::{
     BTreeMap, Extract_Members, IngestError, Member, NodeRow, Origin, Refuse_Collisions, RestorationReport,
     SpecificationStore, StoreError,
@@ -323,28 +330,10 @@ mod tests
 {
     use super::*;
 
-    const CORE_MARKDOWN: &str = "# Core\n\n## 5. Canonical domain model\n\n\
-                                 | Model | Responsibility |\n| --- | --- |\n\
-                                 | WorkspaceContext | Repository. |\n";
-
-    /// A store already holding one ingested document, and the document set that produced it.
-    fn Store_With_Core() -> (SpecificationStore, BTreeMap<String, String>)
-    {
-        use crate::Ingest_Source_Document;
-
-        let mut store = SpecificationStore::In_Memory().expect("opens");
-        Ingest_Source_Document(&mut store, "02-core.md", "v14.36", CORE_MARKDOWN).expect("ingests");
-
-        let mut documents = BTreeMap::new();
-        documents.insert("02-core.md".to_owned(), CORE_MARKDOWN.to_owned());
-
-        return (store, documents);
-    }
-
     #[test]
     fn Test_Restore_Members_Should_Produce_A_Report_Naming_Every_Member()
     {
-        let (mut store, documents) = Store_With_Core();
+        let Core { mut store, documents } = Store_With_Core();
 
         let report = Restore_Members(&mut store, "v14.36", &documents).expect("restores");
 
@@ -360,7 +349,7 @@ mod tests
     #[test]
     fn Test_Located_Members_Should_Pair_Each_Member_With_The_Document_It_Came_From()
     {
-        let (mut store, documents) = Store_With_Core();
+        let Core { mut store, documents } = Store_With_Core();
 
         let located = Located_Members(&mut store, "v14.36", &documents).expect("locates");
 
@@ -373,7 +362,7 @@ mod tests
     #[test]
     fn Test_Record_Member_Should_Upsert_A_Node_Trace_It_And_Append_It_To_The_Report()
     {
-        let (mut store, documents) = Store_With_Core();
+        let Core { mut store, documents } = Store_With_Core();
         let located = Located_Members(&mut store, "v14.36", &documents).expect("locates");
         let (document_uid, member) = located.into_iter().next().expect("one member");
         let mut report = RestorationReport::default();
@@ -387,18 +376,8 @@ mod tests
     #[test]
     fn Test_Trace_Member_Should_Dispatch_By_Origin_Kind()
     {
-        let (mut store, documents) = Store_With_Core();
-        let located = Located_Members(&mut store, "v14.36", &documents).expect("locates");
-        let (document_uid, row_member) = located.into_iter().next().expect("one member");
-        let node_for_row = store
-            .Upsert_Node(NodeRow {
-                node_id: &row_member.id,
-                kind: "concept",
-                authority: "canonical",
-                representation: "record",
-                title: &row_member.name,
-            })
-            .expect("mints");
+        let LocatedMemberWithNode { mut store, document_uid, member: row_member, node_uid: node_for_row } =
+            A_Located_Member_With_Its_Node();
 
         Trace_Member(&mut store, document_uid, &row_member, node_for_row).expect("traces the row");
 
@@ -442,7 +421,7 @@ mod tests
     #[test]
     fn Test_Trace_Row_Should_Point_The_Row_At_Its_Node_Or_Refuse_A_Missing_One()
     {
-        let (mut store, documents) = Store_With_Core();
+        let Core { mut store, documents } = Store_With_Core();
         let located = Located_Members(&mut store, "v14.36", &documents).expect("locates");
         let (document_uid, member) = located.into_iter().next().expect("one member");
         let Origin::Row {
@@ -497,18 +476,7 @@ mod tests
     #[test]
     fn Test_Claim_Alias_Should_Point_The_Alias_At_The_Node_Unless_It_Is_Ambiguous()
     {
-        let (mut store, documents) = Store_With_Core();
-        let located = Located_Members(&mut store, "v14.36", &documents).expect("locates");
-        let (_document_uid, member) = located.into_iter().next().expect("one member");
-        let node_uid = store
-            .Upsert_Node(NodeRow {
-                node_id: &member.id,
-                kind: "concept",
-                authority: "canonical",
-                representation: "record",
-                title: &member.name,
-            })
-            .expect("mints");
+        let LocatedMemberWithNode { mut store, member, node_uid, .. } = A_Located_Member_With_Its_Node();
         let alias = member.alias.clone().expect("the domain model row carries an alias");
 
         let mut ambiguous_report = RestorationReport {
@@ -577,7 +545,7 @@ mod tests
     #[test]
     fn Test_Document_Uid_Should_Find_The_Row_For_A_Known_Revision_And_Refuse_An_Unknown_One()
     {
-        let (store, _documents) = Store_With_Core();
+        let Core { store, documents: _documents } = Store_With_Core();
 
         let uid = Document_Uid(&store, DocumentRevision("v14.36"), DocumentPath("02-core.md")).expect("finds");
         assert!(uid > 0);
@@ -590,7 +558,7 @@ mod tests
     #[test]
     fn Test_Dispose_Block_Should_Trace_A_Whole_Block_To_One_Node()
     {
-        let (mut store, _documents) = Store_With_Core();
+        let Core { mut store, documents: _documents } = Store_With_Core();
         let document_uid = Document_Uid(&store, DocumentRevision("v14.36"), DocumentPath("02-core.md")).expect("finds");
         let node_uid = store
             .Upsert_Node(NodeRow {
@@ -649,7 +617,7 @@ mod tests
     #[test]
     fn Test_Resolve_Model_Uid_Should_Answer_By_Identifier_Or_By_The_Corpus_Name()
     {
-        let (mut store, documents) = Store_With_Core();
+        let Core { mut store, documents } = Store_With_Core();
         Restore_Members(&mut store, "v14.36", &documents).expect("restores");
 
         assert!(Resolve_Model_Uid(&store, "CDM-WORKSPACECONTEXT").expect("resolves").is_some());
@@ -669,5 +637,61 @@ mod tests
 
         let ok = Sql_Result(Ok::<i64, rusqlite::Error>(42)).expect("passes through Ok");
         assert_eq!(ok, 42);
+    }
+
+    const CORE_MARKDOWN: &str = "# Core\n\n## 5. Canonical domain model\n\n\
+                                 | Model | Responsibility |\n| --- | --- |\n\
+                                 | WorkspaceContext | Repository. |\n";
+
+    /// A store already holding one ingested document, paired with the document set that produced
+    /// it — named rather than a bare tuple so a caller cannot swap the two.
+    struct Core
+    {
+        store: SpecificationStore,
+        documents: BTreeMap<String, String>,
+    }
+
+    /// A store already holding one ingested document, and the document set that produced it.
+    fn Store_With_Core() -> Core
+    {
+        use crate::Ingest_Source_Document;
+
+        let mut store = SpecificationStore::In_Memory().expect("opens");
+        Ingest_Source_Document(&mut store, "02-core.md", "v14.36", CORE_MARKDOWN).expect("ingests");
+
+        let mut documents = BTreeMap::new();
+        documents.insert("02-core.md".to_owned(), CORE_MARKDOWN.to_owned());
+
+        return Core { store, documents };
+    }
+
+    /// A store holding one located member, minted as a node of its own, and the identity of
+    /// both — named rather than a tuple so `document_uid` and `node_uid` cannot be swapped.
+    struct LocatedMemberWithNode
+    {
+        store: SpecificationStore,
+        document_uid: i64,
+        member: Member,
+        node_uid: i64,
+    }
+
+    /// A store holding one located member, minted as a node of its own — the setup every test
+    /// that traces or claims against a member's node shares.
+    fn A_Located_Member_With_Its_Node() -> LocatedMemberWithNode
+    {
+        let Core { mut store, documents } = Store_With_Core();
+        let located = Located_Members(&mut store, "v14.36", &documents).expect("locates");
+        let (document_uid, member) = located.into_iter().next().expect("one member");
+        let node_uid = store
+            .Upsert_Node(NodeRow {
+                node_id: &member.id,
+                kind: "concept",
+                authority: "canonical",
+                representation: "record",
+                title: &member.name,
+            })
+            .expect("mints");
+
+        return LocatedMemberWithNode { store, document_uid, member, node_uid };
     }
 }

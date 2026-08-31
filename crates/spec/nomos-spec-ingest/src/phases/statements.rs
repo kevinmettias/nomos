@@ -97,22 +97,6 @@ mod tests
 {
     use super::*;
 
-    fn Store() -> SpecificationStore
-    {
-        return SpecificationStore::In_Memory().expect("opens");
-    }
-
-    fn One_Statement(kind: &str, text: &str, hash: &str) -> RecordedStatement
-    {
-        return RecordedStatement {
-            id: "AGT-001".to_owned(),
-            kind: kind.to_owned(),
-            canonical_text: text.to_owned(),
-            canonical_hash: hash.to_owned(),
-            source_document: "a.md".to_owned(),
-        };
-    }
-
     #[test]
     fn Test_Parse_Statements_Should_Read_A_Yaml_Statement_File()
     {
@@ -162,5 +146,21 @@ mod tests
 
         let summary = store.Node_Summary("AGT-001").expect("reads").expect("node exists");
         assert_eq!(summary.kind, "user_story");
+    }
+
+    fn Store() -> SpecificationStore
+    {
+        return SpecificationStore::In_Memory().expect("opens");
+    }
+
+    fn One_Statement(kind: &str, text: &str, hash: &str) -> RecordedStatement
+    {
+        return RecordedStatement {
+            id: "AGT-001".to_owned(),
+            kind: kind.to_owned(),
+            canonical_text: text.to_owned(),
+            canonical_hash: hash.to_owned(),
+            source_document: "a.md".to_owned(),
+        };
     }
 }

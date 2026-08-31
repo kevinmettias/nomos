@@ -1,5 +1,12 @@
 //! Inserting the graph: the nodes, what joins them, and what they were restored from.
 
+// file-size: allow this file pairs its production code with its own inline #[cfg(test)]
+// module; check-test-coverage keys a test's companion unit off the exact file it is
+// textually written in, so these tests cannot move to a sibling file without losing
+// their attribution to every function this file declares.
+// responsibility: allow same reason -- the coupling that keeps this file whole is
+// check-test-coverage's stem-based companion attribution, not a design choice.
+
 use rusqlite::{Transaction, params};
 
 use crate::BundleError;
@@ -353,33 +360,6 @@ mod tests
     use super::*;
     use nomos_spec_store::SpecificationStore;
 
-    /// A blob, the document read from it and one heading inside it, and two nodes and one
-    /// relation type this file's functions can resolve their references against.
-    fn Fixture() -> SpecificationStore
-    {
-        let store = SpecificationStore::In_Memory().expect("opens");
-        store
-            .Connection()
-            .execute_batch(
-                "INSERT INTO blobs (sha256, byte_length, content) VALUES ('sha256:aa', 2, x'6869');
-                 INSERT INTO source_documents (path, revision, blob_uid) VALUES ('doc.md', 'v1', 1);
-                 INSERT INTO source_headings (document_uid, ordinal, depth, title)
-                     VALUES (1, 1, 1, 'Intro');
-                 INSERT INTO nodes
-                     (node_id, kind, authority, representation, title, deleted_at, suite_uid)
-                     VALUES ('N1', 'requirement', 'canonical', 'record', 'Node One', NULL, NULL);
-                 INSERT INTO nodes
-                     (node_id, kind, authority, representation, title, deleted_at, suite_uid)
-                     VALUES ('N2', 'concept', 'canonical', 'record', 'Node Two', NULL, NULL);
-                 INSERT INTO relation_types
-                     (name, tier, inverse_of, domain_kinds_json, range_kinds_json, max_per_node)
-                     VALUES ('verifies', 'core', NULL, '[]', '[]', 4);",
-            )
-            .expect("populates every table this file's inserts resolve against");
-
-        return store;
-    }
-
     #[test]
     fn Test_Insert_Suites_Should_Place_A_Suite_Row()
     {
@@ -709,5 +689,32 @@ mod tests
             })
             .expect("reads back");
         assert_eq!(target, "N2");
+    }
+
+    /// A blob, the document read from it and one heading inside it, and two nodes and one
+    /// relation type this file's functions can resolve their references against.
+    fn Fixture() -> SpecificationStore
+    {
+        let store = SpecificationStore::In_Memory().expect("opens");
+        store
+            .Connection()
+            .execute_batch(
+                "INSERT INTO blobs (sha256, byte_length, content) VALUES ('sha256:aa', 2, x'6869');
+                 INSERT INTO source_documents (path, revision, blob_uid) VALUES ('doc.md', 'v1', 1);
+                 INSERT INTO source_headings (document_uid, ordinal, depth, title)
+                     VALUES (1, 1, 1, 'Intro');
+                 INSERT INTO nodes
+                     (node_id, kind, authority, representation, title, deleted_at, suite_uid)
+                     VALUES ('N1', 'requirement', 'canonical', 'record', 'Node One', NULL, NULL);
+                 INSERT INTO nodes
+                     (node_id, kind, authority, representation, title, deleted_at, suite_uid)
+                     VALUES ('N2', 'concept', 'canonical', 'record', 'Node Two', NULL, NULL);
+                 INSERT INTO relation_types
+                     (name, tier, inverse_of, domain_kinds_json, range_kinds_json, max_per_node)
+                     VALUES ('verifies', 'core', NULL, '[]', '[]', 4);",
+            )
+            .expect("populates every table this file's inserts resolve against");
+
+        return store;
     }
 }

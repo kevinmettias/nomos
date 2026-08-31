@@ -1,3 +1,10 @@
+// file-size: allow this file pairs its production code with its own inline #[cfg(test)]
+// module; check-test-coverage keys a test's companion unit off the exact file it is
+// textually written in, so these tests cannot move to a sibling file without losing
+// their attribution to every function this file declares.
+// responsibility: allow same reason -- the coupling that keeps this file whole is
+// check-test-coverage's stem-based companion attribution, not a design choice.
+
 use crate::DocumentPath;
 use crate::DocumentRevision;
 use crate::NodeRow;
@@ -457,24 +464,14 @@ impl SpecificationStore
 mod tests
 {
     use super::*;
-    use crate::{Constraint as RelationConstraint, NodeRow, SuiteAuthority};
-
-    fn Node<'a>(id: &'a str, kind: &'a str) -> NodeRow<'a>
-    {
-        return NodeRow {
-            node_id: id,
-            kind,
-            authority: "canonical-normative-record",
-            representation: "record",
-            title: id,
-        };
-    }
+    use crate::{Constraint as RelationConstraint, NodeRow, SuiteAuthority, TableLine};
 
     #[test]
     fn Test_Open_Should_Persist_Across_A_Reopen()
     {
         let mut path = std::env::temp_dir();
         path.push(format!("nomos-spec-store-open-test-{}.db", std::process::id()));
+        // error-info: allow this is a best-effort clean slate before creating the file fresh below
         let _ = std::fs::remove_file(&path);
 
         let mut first = SpecificationStore::Open(&path).expect("opens");
@@ -484,6 +481,7 @@ mod tests
         let second = SpecificationStore::Open(&path).expect("reopens");
         assert_eq!(second.Count(Table::Blobs).expect("counts"), 1);
 
+        // error-info: allow this is best-effort cleanup after the assertions already ran
         let _ = std::fs::remove_file(&path);
     }
 
@@ -563,18 +561,7 @@ mod tests
     #[test]
     fn Test_Table_Row_Uid_Should_Address_One_Row_By_Its_Position()
     {
-        let mut store = SpecificationStore::In_Memory().expect("opens");
-        let markdown = "# Title\n\n| A | B |\n| --- | --- |\n| 1 | 2 |\n";
-        let uid = store.Put_Source_Document("a.md", "v1", markdown).expect("writes");
-        store
-            .Put_Source_Blocks(uid, &nomos_spec_model::Segment(markdown))
-            .expect("writes");
-        let content = store
-            .Table_Lines(uid, None, None)
-            .expect("queries")
-            .into_iter()
-            .find(|line| return line.kind == "content")
-            .expect("a content row");
+        let StoreWithContentRow { store, uid, content } = A_Store_With_One_Content_Row();
 
         let row_uid =
             store.Table_Row_Uid(uid, content.block_ordinal, content.row_ordinal).expect("queries");
@@ -586,18 +573,7 @@ mod tests
     #[test]
     fn Test_Put_Row_Lineage_Should_Record_What_A_Row_Became()
     {
-        let mut store = SpecificationStore::In_Memory().expect("opens");
-        let markdown = "# Title\n\n| A | B |\n| --- | --- |\n| 1 | 2 |\n";
-        let uid = store.Put_Source_Document("a.md", "v1", markdown).expect("writes");
-        store
-            .Put_Source_Blocks(uid, &nomos_spec_model::Segment(markdown))
-            .expect("writes");
-        let content = store
-            .Table_Lines(uid, None, None)
-            .expect("queries")
-            .into_iter()
-            .find(|line| return line.kind == "content")
-            .expect("a content row");
+        let StoreWithContentRow { mut store, uid, content } = A_Store_With_One_Content_Row();
         let row_uid = store
             .Table_Row_Uid(uid, content.block_ordinal, content.row_ordinal)
             .expect("queries")
@@ -804,5 +780,42 @@ mod tests
 
         assert_eq!(u32::try_from(version).unwrap_or(0), store.Version());
     }
-}
 
+    /// A store already holding one two-column, one-row table, that row's own `TableLine`, and
+    /// the document's uid — named rather than a tuple so a caller is not counting positions.
+    struct StoreWithContentRow
+    {
+        store: SpecificationStore,
+        uid: i64,
+        content: TableLine,
+    }
+
+    /// A store already holding one two-column, one-row table, and that row's own `TableLine` —
+    /// the setup every test that addresses a table row by position shares.
+    fn A_Store_With_One_Content_Row() -> StoreWithContentRow
+    {
+        let mut store = SpecificationStore::In_Memory().expect("opens");
+        let markdown = "# Title\n\n| A | B |\n| --- | --- |\n| 1 | 2 |\n";
+        let uid = store.Put_Source_Document("a.md", "v1", markdown).expect("writes");
+        store.Put_Source_Blocks(uid, &nomos_spec_model::Segment(markdown)).expect("writes");
+        let content = store
+            .Table_Lines(uid, None, None)
+            .expect("queries")
+            .into_iter()
+            .find(|line| return line.kind == "content")
+            .expect("a content row");
+
+        return StoreWithContentRow { store, uid, content };
+    }
+
+    fn Node<'a>(id: &'a str, kind: &'a str) -> NodeRow<'a>
+    {
+        return NodeRow {
+            node_id: id,
+            kind,
+            authority: "canonical-normative-record",
+            representation: "record",
+            title: id,
+        };
+    }
+}

@@ -54,17 +54,6 @@ mod tests
 {
     use super::*;
 
-    fn All_Dispositions() -> [Disposition; 5]
-    {
-        return [
-            Disposition::PreservedVerbatim,
-            Disposition::PreservedNormalized,
-            Disposition::Superseded,
-            Disposition::RegressionFiller,
-            Disposition::Omitted,
-        ];
-    }
-
     #[test]
     fn Test_Label_Should_Name_Every_Known_Disposition()
     {
@@ -83,6 +72,17 @@ mod tests
             assert_eq!(Disposition::Parse(disposition.Label()), Some(disposition));
         }
         assert_eq!(Disposition::Parse("invented"), None);
+    }
+
+    fn All_Dispositions() -> [Disposition; 5]
+    {
+        return [
+            Disposition::PreservedVerbatim,
+            Disposition::PreservedNormalized,
+            Disposition::Superseded,
+            Disposition::RegressionFiller,
+            Disposition::Omitted,
+        ];
     }
 
     /// Filler is what v15.0 shipped in place of real content. If it ever counts as

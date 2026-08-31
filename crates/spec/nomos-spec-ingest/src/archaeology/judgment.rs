@@ -118,34 +118,6 @@ mod tests
     use crate::Origin;
     use std::collections::BTreeSet;
 
-    fn Documents(pairs: &[(&str, &str)]) -> BTreeMap<String, String>
-    {
-        return pairs.iter().map(|(path, text)| return ((*path).to_owned(), (*text).to_owned())).collect();
-    }
-
-    fn A_Member(name: &str, family: Restored) -> Member
-    {
-        return Member {
-            id: format!("TEST-{name}"),
-            family,
-            name: name.to_owned(),
-            document: "source.md".to_owned(),
-            origin: Origin::Block { ordinal: 0 },
-            alias: None,
-        };
-    }
-
-    fn Empty_Later() -> Later
-    {
-        return Later {
-            authored: BTreeMap::new(),
-            named_in_row: BTreeMap::new(),
-            templates: BTreeMap::new(),
-            declared: BTreeSet::new(),
-            bodies: BTreeMap::new(),
-        };
-    }
-
     #[test]
     fn Test_Judge_Member_Should_Combine_Identity_With_Its_Computed_Fate()
     {
@@ -231,5 +203,33 @@ mod tests
             Fate::Mentioned { documents: vec!["a.md".to_owned(), "c.md".to_owned()] }
         );
         assert_eq!(Mentions_In_Documents("Nowhere", &documents), Fate::Gone);
+    }
+
+    fn Documents(pairs: &[(&str, &str)]) -> BTreeMap<String, String>
+    {
+        return pairs.iter().map(|(path, text)| return ((*path).to_owned(), (*text).to_owned())).collect();
+    }
+
+    fn A_Member(name: &str, family: Restored) -> Member
+    {
+        return Member {
+            id: format!("TEST-{name}"),
+            family,
+            name: name.to_owned(),
+            document: "source.md".to_owned(),
+            origin: Origin::Block { ordinal: 0 },
+            alias: None,
+        };
+    }
+
+    fn Empty_Later() -> Later
+    {
+        return Later {
+            authored: BTreeMap::new(),
+            named_in_row: BTreeMap::new(),
+            templates: BTreeMap::new(),
+            declared: BTreeSet::new(),
+            bodies: BTreeMap::new(),
+        };
     }
 }

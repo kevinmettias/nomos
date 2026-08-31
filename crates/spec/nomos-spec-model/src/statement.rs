@@ -13,11 +13,6 @@ mod tests
 {
     use super::*;
 
-    fn Real_Identifiers() -> [&'static str; 5]
-    {
-        return ["AGT-001", "PKG-014", "ARC-DOC-001", "NSV-PRESERVE-001", "D-129"];
-    }
-
     #[test]
     fn Test_Real_Identifiers_Should_Parse()
     {
@@ -27,9 +22,9 @@ mod tests
         }
     }
 
-    fn Malformed_Identifiers() -> [&'static str; 7]
+    fn Real_Identifiers() -> [&'static str; 5]
     {
-        return ["agt-001", "AGT-1", "AGT_001", "AGT-", "-001", "AGT001", ""];
+        return ["AGT-001", "PKG-014", "ARC-DOC-001", "NSV-PRESERVE-001", "D-129"];
     }
 
     #[test]
@@ -39,6 +34,11 @@ mod tests
         {
             assert!(StatementId::Parse(text).is_none(), "{text} should not parse");
         }
+    }
+
+    fn Malformed_Identifiers() -> [&'static str; 7]
+    {
+        return ["agt-001", "AGT-1", "AGT_001", "AGT-", "-001", "AGT001", ""];
     }
 
     #[test]

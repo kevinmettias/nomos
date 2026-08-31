@@ -327,16 +327,6 @@ mod tests
     use crate::Blob;
     use crate::Encoding as BlobEncoding;
 
-    fn One_Blob() -> Vec<Record>
-    {
-        return vec![Record::Blob(Blob {
-            sha256: "sha256:aa".to_owned(),
-            byte_length: 2,
-            encoding: BlobEncoding::Utf8,
-            content: "hi".to_owned(),
-        })];
-    }
-
     #[test]
     fn Test_Parse_Should_Recover_The_Bundle_Written_Beforehand()
     {
@@ -350,7 +340,7 @@ mod tests
     }
 
     #[test]
-    fn Test_Write_Should_End_Every_Line_With_LF_And_Never_CR()
+    fn Test_Write_Should_End_Every_Line_With_Line_Feed_And_Never_Carriage_Return()
     {
         let text = Bundle::New(1, One_Blob())
             .expect("builds")
@@ -475,5 +465,15 @@ mod tests
         let bundle = Bundle::New(1, One_Blob()).expect("builds");
 
         assert!(bundle.Verify_Counts().is_ok());
+    }
+
+    fn One_Blob() -> Vec<Record>
+    {
+        return vec![Record::Blob(Blob {
+            sha256: "sha256:aa".to_owned(),
+            byte_length: 2,
+            encoding: BlobEncoding::Utf8,
+            content: "hi".to_owned(),
+        })];
     }
 }

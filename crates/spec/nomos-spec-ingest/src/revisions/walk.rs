@@ -36,17 +36,6 @@ mod tests
 {
     use super::*;
 
-    fn Revision(label: &str, documents: &[(&str, &str)]) -> RevisionFingerprint
-    {
-        return RevisionFingerprint {
-            label: label.to_owned(),
-            documents: documents
-                .iter()
-                .map(|(path, hash)| return ((*path).to_owned(), (*hash).to_owned()))
-                .collect(),
-        };
-    }
-
     #[test]
     fn Test_Walk_Revisions_Should_Produce_One_Pair_Change_Per_Adjacent_Revision()
     {
@@ -61,5 +50,16 @@ mod tests
         assert_eq!(pair.to, "v14.2");
         assert_eq!(pair.changed, vec!["a.md".to_owned()]);
         assert_eq!(pair.appeared, vec!["b.md".to_owned()]);
+    }
+
+    fn Revision(label: &str, documents: &[(&str, &str)]) -> RevisionFingerprint
+    {
+        return RevisionFingerprint {
+            label: label.to_owned(),
+            documents: documents
+                .iter()
+                .map(|(path, hash)| return ((*path).to_owned(), (*hash).to_owned()))
+                .collect(),
+        };
     }
 }

@@ -38,11 +38,6 @@ mod tests
 {
     use super::*;
 
-    fn All_Block_Kinds() -> [BlockKind; 3]
-    {
-        return [BlockKind::Heading, BlockKind::Prose, BlockKind::Code];
-    }
-
     #[test]
     fn Test_Kind_Label_Should_Name_Every_Known_Block_Kind()
     {
@@ -59,5 +54,10 @@ mod tests
             assert_eq!(Kind_Of(Kind_Label(kind)), Some(kind));
         }
         assert_eq!(Kind_Of("paragraph"), None);
+    }
+
+    fn All_Block_Kinds() -> [BlockKind; 3]
+    {
+        return [BlockKind::Heading, BlockKind::Prose, BlockKind::Code];
     }
 }

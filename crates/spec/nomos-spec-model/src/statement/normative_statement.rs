@@ -45,17 +45,6 @@ mod tests
 {
     use super::*;
 
-    fn Sample(text: &str) -> NormativeStatement
-    {
-        return NormativeStatement {
-            id: StatementId::Parse("AGT-001").expect("valid"),
-            kind: StatementKind::Requirement,
-            canonical_text: text.to_owned(),
-            source_document: "x.md".to_owned(),
-            heading_path: Vec::new(),
-        };
-    }
-
     #[test]
     fn Test_Canonical_Hash_Should_Hash_The_Canonical_Text()
     {
@@ -78,5 +67,16 @@ mod tests
 
         assert_eq!(fixed.canonical_text, "Nomos shall do it.");
         assert!(fixed.Is_Text_Canonical());
+    }
+
+    fn Sample(text: &str) -> NormativeStatement
+    {
+        return NormativeStatement {
+            id: StatementId::Parse("AGT-001").expect("valid"),
+            kind: StatementKind::Requirement,
+            canonical_text: text.to_owned(),
+            source_document: "x.md".to_owned(),
+            heading_path: Vec::new(),
+        };
     }
 }

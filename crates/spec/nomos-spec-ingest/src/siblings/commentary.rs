@@ -66,48 +66,20 @@ mod tests
     use super::*;
     use nomos_spec_store::NodeRow;
 
-    /// Mints a node, so a test can name a real `target_node_uid` for lineage to point at.
-    fn Node(store: &mut SpecificationStore, node_id: &str, authority: &str) -> i64
+    #[test]
+    fn Test_Statements_Sourced_Only_From_Commentary_Should_Report_A_Statement_Resting_Only_On_A_Commentary_Block()
     {
-        return store
-            .Upsert_Node(NodeRow {
-                node_id,
-                kind: "document",
-                authority,
-                representation: "document",
-                title: node_id,
-            })
-            .expect("mints a node");
-    }
+        let mut store = SpecificationStore::In_Memory().expect("opens");
+        let commentary_node = Node(&mut store, "PLAN-X", "commentary");
+        let requirement_node = Node(&mut store, "AGT-100", "canonical");
+        let statement = Statement(&mut store, requirement_node, "AGT-100");
+        let block = Block_Disposed_To(&mut store, "lineage-notes", "plan.md", commentary_node);
+        Trace_Statement_To(&mut store, block, statement);
+        Prepare_Commentary_View(&store).expect("prepares");
 
-    /// A real source block, disposed to `node` by a lineage row of its own — separate from
-    /// whatever lineage a test then adds from the same block to a statement.
-    fn Block_Disposed_To(store: &mut SpecificationStore, revision: &str, path: &str, node: i64) -> i64
-    {
-        let text = "# T\n\nBody text.\n";
-        let document = store.Put_Source_Document(path, revision, text).expect("puts the document");
-        let blocks = nomos_spec_model::Segment(text);
-        store.Put_Source_Blocks(document, &blocks).expect("puts the blocks");
+        let reported = Statements_Sourced_Only_From_Commentary(&store).expect("queries");
 
-        let block: i64 = store
-            .Connection()
-            .query_row(
-                "SELECT uid FROM source_blocks WHERE document_uid = ?1 ORDER BY ordinal LIMIT 1",
-                rusqlite::params![document],
-                |row| return row.get(0),
-            )
-            .expect("reads the first block");
-
-        store
-            .Connection()
-            .execute(
-                "INSERT INTO lineage (source_block_uid, disposition, target_node_uid)
-                 VALUES (?1, 'preserved-verbatim', ?2)",
-                rusqlite::params![block, node],
-            )
-            .expect("disposes the block to the node");
-
-        return block;
+        assert_eq!(reported, vec!["AGT-100".to_owned()]);
     }
 
     fn Statement(store: &mut SpecificationStore, node: i64, statement_id: &str) -> i64
@@ -138,22 +110,6 @@ mod tests
     }
 
     #[test]
-    fn Test_Statements_Sourced_Only_From_Commentary_Should_Report_A_Statement_Resting_Only_On_A_Commentary_Block()
-    {
-        let mut store = SpecificationStore::In_Memory().expect("opens");
-        let commentary_node = Node(&mut store, "PLAN-X", "commentary");
-        let requirement_node = Node(&mut store, "AGT-100", "canonical");
-        let statement = Statement(&mut store, requirement_node, "AGT-100");
-        let block = Block_Disposed_To(&mut store, "lineage-notes", "plan.md", commentary_node);
-        Trace_Statement_To(&mut store, block, statement);
-        Prepare_Commentary_View(&store).expect("prepares");
-
-        let reported = Statements_Sourced_Only_From_Commentary(&store).expect("queries");
-
-        assert_eq!(reported, vec!["AGT-100".to_owned()]);
-    }
-
-    #[test]
     fn Test_Prepare_Commentary_View_Should_List_Only_Blocks_Disposed_To_A_Commentary_Node()
     {
         let mut store = SpecificationStore::In_Memory().expect("opens");
@@ -175,5 +131,61 @@ mod tests
 
         assert_eq!(blocks, vec![commentary_block]);
         assert!(!blocks.contains(&canonical_block));
+    }
+
+    /// Mints a node, so a test can name a real `target_node_uid` for lineage to point at.
+    fn Node(store: &mut SpecificationStore, node_id: &str, authority: &str) -> i64
+    {
+        return store
+            .Upsert_Node(NodeRow {
+                node_id,
+                kind: "document",
+                authority,
+                representation: "document",
+                title: node_id,
+            })
+            .expect("mints a node");
+    }
+
+    /// A real source block, disposed to `node` by a lineage row of its own — separate from
+    /// whatever lineage a test then adds from the same block to a statement.
+    fn Block_Disposed_To(store: &mut SpecificationStore, revision: &str, path: &str, node: i64) -> i64
+    {
+        let block = First_Block_Of(store, path, revision);
+
+        Dispose_Block_To_Node(store, block, node);
+
+        return block;
+    }
+
+    /// A one-block document, stored and segmented, answered by its one block's uid.
+    fn First_Block_Of(store: &mut SpecificationStore, path: &str, revision: &str) -> i64
+    {
+        let text = "# T\n\nBody text.\n";
+        let document = store.Put_Source_Document(path, revision, text).expect("puts the document");
+        let blocks = nomos_spec_model::Segment(text);
+        store.Put_Source_Blocks(document, &blocks).expect("puts the blocks");
+
+        return store
+            .Connection()
+            .query_row(
+                "SELECT uid FROM source_blocks WHERE document_uid = ?1 ORDER BY ordinal LIMIT 1",
+                rusqlite::params![document],
+                |row| return row.get(0),
+            )
+            .expect("reads the first block");
+    }
+
+    /// Records that `block` was preserved verbatim into `node`.
+    fn Dispose_Block_To_Node(store: &mut SpecificationStore, block: i64, node: i64)
+    {
+        store
+            .Connection()
+            .execute(
+                "INSERT INTO lineage (source_block_uid, disposition, target_node_uid)
+                 VALUES (?1, 'preserved-verbatim', ?2)",
+                rusqlite::params![block, node],
+            )
+            .expect("disposes the block to the node");
     }
 }

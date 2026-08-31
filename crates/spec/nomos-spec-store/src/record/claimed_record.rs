@@ -104,31 +104,6 @@ mod tests
                              # A synthetic record\n\n## Decision\n\nFirst paragraph.\n\n\
                              ## Rationale\n\nSecond paragraph.\n";
 
-    fn A_Claimed_Record() -> ClaimedRecord
-    {
-        return ClaimedRecord {
-            projection: RecordProjection {
-                node_id: "D-900".to_owned(),
-                path: "docs/records/D-900-a-synthetic-record.md".to_owned(),
-                revision: "v1".to_owned(),
-                markdown: CANONICAL.to_owned(),
-                source_hash: "sha256:same".to_owned(),
-                projected_hash: "sha256:same".to_owned(),
-            },
-            front_matter: RecordFrontMatter {
-                id: "D-900".to_owned(),
-                kind: "decision".to_owned(),
-                title: "A synthetic record".to_owned(),
-                status: "accepted".to_owned(),
-                authority: "canonical-normative-record".to_owned(),
-                version: 1,
-                tags: vec!["testing".to_owned()],
-                relations: Vec::new(),
-            },
-            document_uid: 1,
-        };
-    }
-
     #[test]
     fn Test_Markdown_Should_Return_The_Text_Held_For_Editing()
     {
@@ -163,5 +138,30 @@ mod tests
 
         assert_eq!(staged.path, "docs/records/renamed.md");
         assert_eq!(staged.markdown, CANONICAL);
+    }
+
+    fn A_Claimed_Record() -> ClaimedRecord
+    {
+        return ClaimedRecord {
+            projection: RecordProjection {
+                node_id: "D-900".to_owned(),
+                path: "docs/records/D-900-a-synthetic-record.md".to_owned(),
+                revision: "v1".to_owned(),
+                markdown: CANONICAL.to_owned(),
+                source_hash: "sha256:same".to_owned(),
+                projected_hash: "sha256:same".to_owned(),
+            },
+            front_matter: RecordFrontMatter {
+                id: "D-900".to_owned(),
+                kind: "decision".to_owned(),
+                title: "A synthetic record".to_owned(),
+                status: "accepted".to_owned(),
+                authority: "canonical-normative-record".to_owned(),
+                version: 1,
+                tags: vec!["testing".to_owned()],
+                relations: Vec::new(),
+            },
+            document_uid: 1,
+        };
     }
 }

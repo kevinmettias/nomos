@@ -88,18 +88,6 @@ mod tests
 {
     use super::*;
 
-    fn Entity() -> CatalogEntity
-    {
-        return CatalogEntity {
-            id: "AGT-001".to_owned(),
-            kind: "requirement".to_owned(),
-            title: "a requirement".to_owned(),
-            authority: "canonical".to_owned(),
-            representation: "record".to_owned(),
-            aliases: vec!["AGT-010".to_owned()],
-        };
-    }
-
     #[test]
     fn Test_Parse_Catalog_Should_Read_A_Json_Array_Of_Entities()
     {
@@ -135,6 +123,18 @@ mod tests
         Record_Aliases(&mut store, &entity, node_uid, &mut report).expect("records");
 
         assert_eq!(report.aliases, 1);
+    }
+
+    fn Entity() -> CatalogEntity
+    {
+        return CatalogEntity {
+            id: "AGT-001".to_owned(),
+            kind: "requirement".to_owned(),
+            title: "a requirement".to_owned(),
+            authority: "canonical".to_owned(),
+            representation: "record".to_owned(),
+            aliases: vec!["AGT-010".to_owned()],
+        };
     }
 
     #[test]

@@ -386,20 +386,6 @@ mod address_tests
     use super::*;
     use crate::Origin;
 
-    fn Minimal_Submission(values: Vec<FieldValue>) -> Submission
-    {
-        return Submission {
-            id: "FR-001".to_owned(),
-            kind: SubmissionKind::FeatureRequest,
-            form_contract_version: 1,
-            state: SubmissionState::Draft,
-            submitted_by: "kevin".to_owned(),
-            submitted_through: "cli".to_owned(),
-            values,
-            gaps: Vec::new(),
-        };
-    }
-
     #[test]
     fn Test_Current_Should_Be_The_Last_Value_Given_For_A_Field()
     {
@@ -434,5 +420,19 @@ mod address_tests
         let submission = Minimal_Submission(Vec::new());
 
         assert!(!Validate_Submission(&submission).is_empty());
+    }
+
+    fn Minimal_Submission(values: Vec<FieldValue>) -> Submission
+    {
+        return Submission {
+            id: "FR-001".to_owned(),
+            kind: SubmissionKind::FeatureRequest,
+            form_contract_version: 1,
+            state: SubmissionState::Draft,
+            submitted_by: "kevin".to_owned(),
+            submitted_through: "cli".to_owned(),
+            values,
+            gaps: Vec::new(),
+        };
     }
 }

@@ -52,11 +52,6 @@ mod tests
 {
     use super::*;
 
-    fn Sample() -> Listing
-    {
-        return Listing::Of(vec!["b.md".to_owned(), "a.md".to_owned(), "a.txt".to_owned()]);
-    }
-
     #[test]
     fn Test_Of_Should_Wrap_The_Given_Entries_Without_Reordering_Them()
     {
@@ -92,5 +87,10 @@ mod tests
         let listing = Sample();
 
         assert_eq!(listing.Ending_With(".md"), ["b.md".to_owned(), "a.md".to_owned()]);
+    }
+
+    fn Sample() -> Listing
+    {
+        return Listing::Of(vec!["b.md".to_owned(), "a.md".to_owned(), "a.txt".to_owned()]);
     }
 }

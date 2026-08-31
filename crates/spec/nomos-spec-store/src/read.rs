@@ -298,13 +298,6 @@ mod tests
     use super::*;
     use crate::Seed_Governing_Records;
 
-    fn Seeded() -> SpecificationStore
-    {
-        let mut store = SpecificationStore::In_Memory().expect("opens");
-        Seed_Governing_Records(&mut store).expect("seeds");
-        return store;
-    }
-
     #[test]
     fn Test_A_Record_Should_Come_Back_As_The_Bytes_It_Went_In_As()
     {
@@ -425,5 +418,12 @@ mod tests
         let uid = *found.first().expect("the record is seeded");
 
         assert!(store.Table_Lines(uid, None, None).expect("queries").is_empty());
+    }
+
+    fn Seeded() -> SpecificationStore
+    {
+        let mut store = SpecificationStore::In_Memory().expect("opens");
+        Seed_Governing_Records(&mut store).expect("seeds");
+        return store;
     }
 }

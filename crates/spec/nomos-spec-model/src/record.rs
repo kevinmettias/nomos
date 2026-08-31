@@ -196,13 +196,6 @@ mod tests
         );
     }
 
-    /// The separators the v15.0 archives prefix a record's heading with its own identifier
-    /// using.
-    fn Heading_Prefix_Separators() -> [&'static str; 4]
-    {
-        return [" \u{2014} ", " - ", ": ", " \u{2013} "];
-    }
-
     /// The v15.0 archives prefix a record's heading with its own identifier.
     #[test]
     fn Test_A_Heading_May_Name_The_Record_Before_Its_Title()
@@ -219,6 +212,28 @@ mod tests
                 // one stopped being accepted.
                 Parse_Record(&prefixed).unwrap_or_else(|error| panic!("{separator:?}: {error}"));
             assert_eq!(record.front_matter.title, "A title");
+        }
+    }
+
+    /// The separators the v15.0 archives prefix a record's heading with its own identifier
+    /// using.
+    fn Heading_Prefix_Separators() -> [&'static str; 4]
+    {
+        return [" \u{2014} ", " - ", ": ", " \u{2013} "];
+    }
+
+    #[test]
+    fn Test_A_Heading_Naming_A_Different_Identity_Should_Not_Corroborate()
+    {
+        for case in Headings_That_Should_Not_Corroborate()
+        {
+            let wrong = RECORD.replace("# A title", case.replacement);
+            assert_ne!(wrong, RECORD, "{}: the negative control changed nothing", case.description);
+
+            let refusal = Parse_Record(&wrong)
+                .expect_err(&format!("{} must be refused", case.description));
+
+            assert!(matches!(refusal, RecordError::TitleDiverges { .. }), "{}: {refusal}", case.description);
         }
     }
 
@@ -246,21 +261,6 @@ mod tests
                 description: "the record's own identifier prefixing a different title",
             },
         ];
-    }
-
-    #[test]
-    fn Test_A_Heading_Naming_A_Different_Identity_Should_Not_Corroborate()
-    {
-        for case in Headings_That_Should_Not_Corroborate()
-        {
-            let wrong = RECORD.replace("# A title", case.replacement);
-            assert_ne!(wrong, RECORD, "{}: the negative control changed nothing", case.description);
-
-            let refusal = Parse_Record(&wrong)
-                .expect_err(&format!("{} must be refused", case.description));
-
-            assert!(matches!(refusal, RecordError::TitleDiverges { .. }), "{}: {refusal}", case.description);
-        }
     }
 
     #[test]

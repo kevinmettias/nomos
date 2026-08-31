@@ -111,33 +111,6 @@ mod tests
     use super::*;
     use nomos_spec_store::SpecificationStore;
 
-    /// One node filed as a submission, one attributed value and one open gap.
-    fn Fixture() -> SpecificationStore
-    {
-        let store = SpecificationStore::In_Memory().expect("opens");
-        store
-            .Connection()
-            .execute_batch(
-                "INSERT INTO nodes
-                     (node_id, kind, authority, representation, title, deleted_at, suite_uid)
-                     VALUES ('N1', 'submission', 'canonical', 'record', 'A Submission', NULL, NULL);
-                 INSERT INTO submissions
-                     (node_uid, kind, form_contract_version, state, submitted_by, submitted_through)
-                     VALUES (1, 'feature-request', 1, 'draft', 'me', 'test');
-                 INSERT INTO submission_values
-                     (submission_uid, field, ordinal, origin, value, value_hash, supersedes_hash,
-                      recorded_at)
-                     VALUES (1, 'title', 1, 'submitted', 'A title', 'sha256:vv', NULL,
-                             '2026-01-01T00:00:00Z');
-                 INSERT INTO submission_gaps
-                     (submission_uid, ordinal, question, blocks, severity, closed_by)
-                     VALUES (1, 1, 'What?', '[]', 'non-blocking', NULL);",
-            )
-            .expect("populates every table this file reads");
-
-        return store;
-    }
-
     #[test]
     fn Test_Collect_Submissions_Should_Read_A_Submission_By_Its_Node()
     {
@@ -207,5 +180,32 @@ mod tests
                 closed_by: None,
             })]
         );
+    }
+
+    /// One node filed as a submission, one attributed value and one open gap.
+    fn Fixture() -> SpecificationStore
+    {
+        let store = SpecificationStore::In_Memory().expect("opens");
+        store
+            .Connection()
+            .execute_batch(
+                "INSERT INTO nodes
+                     (node_id, kind, authority, representation, title, deleted_at, suite_uid)
+                     VALUES ('N1', 'submission', 'canonical', 'record', 'A Submission', NULL, NULL);
+                 INSERT INTO submissions
+                     (node_uid, kind, form_contract_version, state, submitted_by, submitted_through)
+                     VALUES (1, 'feature-request', 1, 'draft', 'me', 'test');
+                 INSERT INTO submission_values
+                     (submission_uid, field, ordinal, origin, value, value_hash, supersedes_hash,
+                      recorded_at)
+                     VALUES (1, 'title', 1, 'submitted', 'A title', 'sha256:vv', NULL,
+                             '2026-01-01T00:00:00Z');
+                 INSERT INTO submission_gaps
+                     (submission_uid, ordinal, question, blocks, severity, closed_by)
+                     VALUES (1, 1, 'What?', '[]', 'non-blocking', NULL);",
+            )
+            .expect("populates every table this file reads");
+
+        return store;
     }
 }

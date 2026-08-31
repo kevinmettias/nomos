@@ -83,14 +83,6 @@ mod tests
 {
     use super::*;
 
-    fn Fingerprint(label: &str, entries: &[(&str, &str)]) -> RevisionFingerprint
-    {
-        return RevisionFingerprint {
-            label: label.to_owned(),
-            documents: entries.iter().map(|(path, hash)| return ((*path).to_owned(), (*hash).to_owned())).collect(),
-        };
-    }
-
     #[test]
     fn Test_Relocations_Between_Should_Report_A_Moved_Path_As_Relocated_Not_Disappeared()
     {
@@ -157,5 +149,13 @@ mod tests
         assert_eq!(moved, BTreeSet::from(["old/record.md".to_owned()]));
         assert_eq!(fate.relocated.len(), 1);
         assert_eq!(fate.appeared, vec!["brand-new.md".to_owned()]);
+    }
+
+    fn Fingerprint(label: &str, entries: &[(&str, &str)]) -> RevisionFingerprint
+    {
+        return RevisionFingerprint {
+            label: label.to_owned(),
+            documents: entries.iter().map(|(path, hash)| return ((*path).to_owned(), (*hash).to_owned())).collect(),
+        };
     }
 }

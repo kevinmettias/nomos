@@ -1,5 +1,12 @@
 //! One reader per kind of section a profile can ask for.
 
+// file-size: allow this file pairs its production code with its own inline #[cfg(test)]
+// module; check-test-coverage keys a test's companion unit off the exact file it is
+// textually written in, so these tests cannot move to a sibling file without losing
+// their attribution to every function this file declares.
+// responsibility: allow same reason -- the coupling that keeps this file whole is
+// check-test-coverage's stem-based companion attribution, not a design choice.
+
 use super::{
     Columns, Connection, Filter, FirstColumn, Item, Name, ProjectError, Query, Narrow_To_Nodes, Row,
     SecondColumn, Value,
@@ -386,14 +393,10 @@ mod tests
     #[test]
     fn Test_Gather_Suites_Should_Read_Every_Suite_As_An_Item()
     {
-        let store = SpecificationStore::In_Memory().expect("opens");
-        store
-            .Connection()
-            .execute_batch(
-                "INSERT INTO suites (suite_id, title, authority_root) \
-                 VALUES ('nomos', 'The Nomos specification', 1);",
-            )
-            .expect("seeds");
+        let store = Store_With(
+            "INSERT INTO suites (suite_id, title, authority_root) \
+             VALUES ('nomos', 'The Nomos specification', 1);",
+        );
 
         let items = Gather_Suites(store.Connection(), &Filter::default()).expect("gathers");
 
@@ -495,16 +498,12 @@ mod tests
     #[test]
     fn Test_Gather_Nodes_Should_Ignore_A_Deleted_Node()
     {
-        let store = SpecificationStore::In_Memory().expect("opens");
-        store
-            .Connection()
-            .execute_batch(
-                "INSERT INTO nodes (node_id, kind, authority, representation, title, deleted_at)
-                 VALUES ('CDM-ONE', 'concept', 'canonical', 'record', 'One', NULL);
-                 INSERT INTO nodes (node_id, kind, authority, representation, title, deleted_at)
-                 VALUES ('CDM-GONE', 'concept', 'canonical', 'record', 'Gone', '2026-01-01T00:00:00Z');",
-            )
-            .expect("seeds");
+        let store = Store_With(
+            "INSERT INTO nodes (node_id, kind, authority, representation, title, deleted_at)
+             VALUES ('CDM-ONE', 'concept', 'canonical', 'record', 'One', NULL);
+             INSERT INTO nodes (node_id, kind, authority, representation, title, deleted_at)
+             VALUES ('CDM-GONE', 'concept', 'canonical', 'record', 'Gone', '2026-01-01T00:00:00Z');",
+        );
 
         let items = Gather_Nodes(store.Connection(), &Filter::default()).expect("gathers");
 
@@ -518,18 +517,14 @@ mod tests
     #[test]
     fn Test_Gather_Statements_Should_Read_A_Statement_And_Its_Node()
     {
-        let store = SpecificationStore::In_Memory().expect("opens");
-        store
-            .Connection()
-            .execute_batch(
-                "INSERT INTO nodes (node_id, kind, authority, representation, title)
-                 VALUES ('AGT-EXEC-001', 'requirement', 'canonical', 'record', 'Ancestry');
-                 INSERT INTO normative_statements
-                     (node_uid, statement_id, kind, canonical_text, canonical_hash, supersedes_hash)
-                 SELECT uid, 'AGT-EXEC-001', 'requirement', 'Nomos shall record ancestry.',
-                        'sha256:aa', NULL FROM nodes WHERE node_id = 'AGT-EXEC-001';",
-            )
-            .expect("seeds");
+        let store = Store_With(
+            "INSERT INTO nodes (node_id, kind, authority, representation, title)
+             VALUES ('AGT-EXEC-001', 'requirement', 'canonical', 'record', 'Ancestry');
+             INSERT INTO normative_statements
+                 (node_uid, statement_id, kind, canonical_text, canonical_hash, supersedes_hash)
+             SELECT uid, 'AGT-EXEC-001', 'requirement', 'Nomos shall record ancestry.',
+                    'sha256:aa', NULL FROM nodes WHERE node_id = 'AGT-EXEC-001';",
+        );
 
         let items = Gather_Statements(store.Connection(), &Filter::default()).expect("gathers");
 
@@ -547,21 +542,17 @@ mod tests
     #[test]
     fn Test_Gather_Relations_Should_Read_A_Relations_Two_Ends()
     {
-        let store = SpecificationStore::In_Memory().expect("opens");
-        store
-            .Connection()
-            .execute_batch(
-                "INSERT INTO nodes (node_id, kind, authority, representation, title)
-                 VALUES ('CDM-ONE', 'concept', 'canonical', 'record', 'One'),
-                        ('AGT-EXEC-001', 'requirement', 'canonical', 'record', 'Ancestry');
-                 INSERT INTO relation_types
-                     (name, tier, inverse_of, domain_kinds_json, range_kinds_json, max_per_node)
-                 VALUES ('verifies', 'core', NULL, '[\"concept\"]', '[\"requirement\"]', 8);
-                 INSERT INTO relations (from_node_uid, relation_type, to_node_uid)
-                 SELECT f.uid, 'verifies', t.uid FROM nodes f, nodes t
-                 WHERE f.node_id = 'CDM-ONE' AND t.node_id = 'AGT-EXEC-001';",
-            )
-            .expect("seeds");
+        let store = Store_With(
+            "INSERT INTO nodes (node_id, kind, authority, representation, title)
+             VALUES ('CDM-ONE', 'concept', 'canonical', 'record', 'One'),
+                    ('AGT-EXEC-001', 'requirement', 'canonical', 'record', 'Ancestry');
+             INSERT INTO relation_types
+                 (name, tier, inverse_of, domain_kinds_json, range_kinds_json, max_per_node)
+             VALUES ('verifies', 'core', NULL, '[\"concept\"]', '[\"requirement\"]', 8);
+             INSERT INTO relations (from_node_uid, relation_type, to_node_uid)
+             SELECT f.uid, 'verifies', t.uid FROM nodes f, nodes t
+             WHERE f.node_id = 'CDM-ONE' AND t.node_id = 'AGT-EXEC-001';",
+        );
 
         let items = Gather_Relations(store.Connection(), &Filter::default()).expect("gathers");
 
@@ -579,21 +570,13 @@ mod tests
     #[test]
     fn Test_Gather_Lineage_Should_Read_What_A_Block_Became()
     {
-        let mut store = SpecificationStore::In_Memory().expect("opens");
-        let document = store.Put_Source_Document("volumes/one.md", "v1", "Body text.\n").expect("stores");
-        store
-            .Put_Source_Blocks(document, &nomos_spec_model::Segment("Body text.\n"))
-            .expect("stores");
-        store
-            .Connection()
-            .execute_batch(
-                "INSERT INTO nodes (node_id, kind, authority, representation, title)
-                 VALUES ('CDM-ONE', 'concept', 'canonical', 'record', 'One');
-                 INSERT INTO lineage (source_block_uid, disposition, target_node_uid)
-                 SELECT b.uid, 'preserved-verbatim', n.uid FROM source_blocks b, nodes n
-                 WHERE n.node_id = 'CDM-ONE';",
-            )
-            .expect("seeds");
+        let store = Store_With_A_Block(
+            "INSERT INTO nodes (node_id, kind, authority, representation, title)
+             VALUES ('CDM-ONE', 'concept', 'canonical', 'record', 'One');
+             INSERT INTO lineage (source_block_uid, disposition, target_node_uid)
+             SELECT b.uid, 'preserved-verbatim', n.uid FROM source_blocks b, nodes n
+             WHERE n.node_id = 'CDM-ONE';",
+        );
 
         let items = Gather_Lineage(store.Connection(), &Filter::default()).expect("gathers");
 
@@ -632,18 +615,10 @@ mod tests
     #[test]
     fn Test_Gather_Omissions_Should_Read_Why_A_Block_Was_Dropped()
     {
-        let mut store = SpecificationStore::In_Memory().expect("opens");
-        let document = store.Put_Source_Document("volumes/one.md", "v1", "Body text.\n").expect("stores");
-        store
-            .Put_Source_Blocks(document, &nomos_spec_model::Segment("Body text.\n"))
-            .expect("stores");
-        store
-            .Connection()
-            .execute_batch(
-                "INSERT INTO omissions (source_block_uid, reason, justification, decision_record)
-                 SELECT uid, 'superseded', 'replaced by the v15 records', 'D-129' FROM source_blocks;",
-            )
-            .expect("seeds");
+        let store = Store_With_A_Block(
+            "INSERT INTO omissions (source_block_uid, reason, justification, decision_record)
+             SELECT uid, 'superseded', 'replaced by the v15 records', 'D-129' FROM source_blocks;",
+        );
 
         let items = Gather_Omissions(store.Connection(), &Filter::default()).expect("gathers");
 
@@ -656,5 +631,25 @@ mod tests
             items.first().expect("asserted above to contain exactly one item").Field("decision"),
             Some("D-129")
         );
+    }
+
+    /// An in-memory store seeded by `sql` alone — the setup every `Gather_*` test that needs no
+    /// document shares.
+    fn Store_With(sql: &str) -> SpecificationStore
+    {
+        let store = SpecificationStore::In_Memory().expect("opens");
+        store.Connection().execute_batch(sql).expect("seeds");
+        return store;
+    }
+
+    /// An in-memory store holding one document and its one segmented block, seeded further by
+    /// `sql` — the setup every `Gather_*` test that needs a block already loaded shares.
+    fn Store_With_A_Block(sql: &str) -> SpecificationStore
+    {
+        let mut store = SpecificationStore::In_Memory().expect("opens");
+        let document = store.Put_Source_Document("volumes/one.md", "v1", "Body text.\n").expect("stores");
+        store.Put_Source_Blocks(document, &nomos_spec_model::Segment("Body text.\n")).expect("stores");
+        store.Connection().execute_batch(sql).expect("seeds");
+        return store;
     }
 }

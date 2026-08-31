@@ -174,13 +174,6 @@ mod tests
     /// undisposed by default.
     const DOCUMENT: &str = "---\nid: X\n---\n# Title\n\nOne.\n\n## Section\n\nTwo.\n";
 
-    fn Ingested() -> SpecificationStore
-    {
-        let mut store = SpecificationStore::In_Memory().expect("opens");
-        Ingest_Source_Document(&mut store, "a.md", "v14.36", DOCUMENT).expect("ingests");
-        return store;
-    }
-
     #[test]
     fn Test_Counted_Rows_Should_Count_The_Table_It_Is_Asked_About()
     {
@@ -280,5 +273,12 @@ mod tests
         });
 
         assert!(matches!(outcome, RuleOutcome::Violated(violations) if violations.len() == 4));
+    }
+
+    fn Ingested() -> SpecificationStore
+    {
+        let mut store = SpecificationStore::In_Memory().expect("opens");
+        Ingest_Source_Document(&mut store, "a.md", "v14.36", DOCUMENT).expect("ingests");
+        return store;
     }
 }

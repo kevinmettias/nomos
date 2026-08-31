@@ -14,3 +14,7 @@ pub(crate) mod error;
 pub(crate) mod preview;
 pub(crate) mod identity_change;
 pub(crate) mod staged_edit;
+
+/// Shared by `authoring::commit` and `staged_edit`'s own test modules — see the module doc.
+#[cfg(test)]
+pub(crate) mod fixtures;

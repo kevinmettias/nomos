@@ -86,19 +86,6 @@ mod tests
                         | Model | Responsibility |\n| --- | --- |\n\
                         | WorkspaceContext | Repository, branch, configuration. |\n";
 
-    fn Documents(pairs: &[(&str, &str)]) -> BTreeMap<String, String>
-    {
-        return pairs.iter().map(|(path, text)| return ((*path).to_owned(), (*text).to_owned())).collect();
-    }
-
-    fn From_Revision() -> Revision
-    {
-        return Revision {
-            label: "v14.36".to_owned(),
-            documents: Documents(&[(format!("{DOMAIN_VOLUMES}02-core-architecture.md").as_str(), CORE)]),
-        };
-    }
-
     #[test]
     fn Test_Regression_Between_Revisions_Should_Report_Documents_Members_And_Filler()
     {
@@ -118,6 +105,14 @@ mod tests
             Fate::Mentioned { documents: vec!["a.md".to_owned()] }
         );
         assert!(report.documents.appeared.contains(&"a.md".to_owned()));
+    }
+
+    fn From_Revision() -> Revision
+    {
+        return Revision {
+            label: "v14.36".to_owned(),
+            documents: Documents(&[(format!("{DOMAIN_VOLUMES}02-core-architecture.md").as_str(), CORE)]),
+        };
     }
 
     #[test]
@@ -162,5 +157,10 @@ mod tests
 
         assert_eq!(pair.from, "v14.35");
         assert_eq!(pair.to, "v14.36");
+    }
+
+    fn Documents(pairs: &[(&str, &str)]) -> BTreeMap<String, String>
+    {
+        return pairs.iter().map(|(path, text)| return ((*path).to_owned(), (*text).to_owned())).collect();
     }
 }

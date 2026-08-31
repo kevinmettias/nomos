@@ -63,11 +63,6 @@ mod tests
 {
     use super::*;
 
-    fn All_Kinds() -> [Kind; 3]
-    {
-        return [Kind::FeatureRequest, Kind::DesignSpec, Kind::FeatureResult];
-    }
-
     #[test]
     fn Test_Label_Should_Match_The_Stored_Spelling()
     {
@@ -84,6 +79,11 @@ mod tests
             assert_eq!(Kind::Parse(kind.Label()), Some(kind));
         }
         assert_eq!(Kind::Parse("unknown"), None);
+    }
+
+    fn All_Kinds() -> [Kind; 3]
+    {
+        return [Kind::FeatureRequest, Kind::DesignSpec, Kind::FeatureResult];
     }
 
     #[test]

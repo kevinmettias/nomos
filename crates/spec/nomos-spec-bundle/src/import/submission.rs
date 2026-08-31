@@ -113,28 +113,6 @@ mod tests
     use super::*;
     use nomos_spec_store::SpecificationStore;
 
-    /// A node already filed as a submission, and a second node not yet filed.
-    fn Fixture() -> SpecificationStore
-    {
-        let store = SpecificationStore::In_Memory().expect("opens");
-        store
-            .Connection()
-            .execute_batch(
-                "INSERT INTO nodes
-                     (node_id, kind, authority, representation, title, deleted_at, suite_uid)
-                     VALUES ('N1', 'submission', 'canonical', 'record', 'A Submission', NULL, NULL);
-                 INSERT INTO nodes
-                     (node_id, kind, authority, representation, title, deleted_at, suite_uid)
-                     VALUES ('N2', 'submission', 'canonical', 'record', 'Another Submission', NULL, NULL);
-                 INSERT INTO submissions
-                     (node_uid, kind, form_contract_version, state, submitted_by, submitted_through)
-                     VALUES (1, 'feature-request', 1, 'draft', 'me', 'test');",
-            )
-            .expect("populates every table this file's inserts resolve against");
-
-        return store;
-    }
-
     #[test]
     fn Test_Insert_Submissions_Should_Place_A_Submission_By_Its_Node()
     {
@@ -228,5 +206,27 @@ mod tests
             })
             .expect("reads back");
         assert_eq!(question, "What?");
+    }
+
+    /// A node already filed as a submission, and a second node not yet filed.
+    fn Fixture() -> SpecificationStore
+    {
+        let store = SpecificationStore::In_Memory().expect("opens");
+        store
+            .Connection()
+            .execute_batch(
+                "INSERT INTO nodes
+                     (node_id, kind, authority, representation, title, deleted_at, suite_uid)
+                     VALUES ('N1', 'submission', 'canonical', 'record', 'A Submission', NULL, NULL);
+                 INSERT INTO nodes
+                     (node_id, kind, authority, representation, title, deleted_at, suite_uid)
+                     VALUES ('N2', 'submission', 'canonical', 'record', 'Another Submission', NULL, NULL);
+                 INSERT INTO submissions
+                     (node_uid, kind, form_contract_version, state, submitted_by, submitted_through)
+                     VALUES (1, 'feature-request', 1, 'draft', 'me', 'test');",
+            )
+            .expect("populates every table this file's inserts resolve against");
+
+        return store;
     }
 }

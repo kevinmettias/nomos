@@ -201,7 +201,7 @@ pub fn Archives_In(directory: &Path) -> Result<Vec<PathBuf>, ArchiveError>
 }
 
 #[cfg(test)]
-mod tests
+pub(crate) mod tests
 {
     use super::*;
 
@@ -278,6 +278,29 @@ mod tests
         assert_eq!(text, "caf\u{e9}");
     }
 
+    /// A zip built for one test, prefixed so two files' test suites never collide on the
+    /// same temp path when they run concurrently. Shared here because `Archive` is this
+    /// file's own type, and every other file that needs to build one for a test needs
+    /// exactly this and nothing more.
+    pub(crate) fn Zip_Fixture(prefix: &str, name: &str, entries: &[(&str, &str)]) -> Archive
+    {
+        use std::io::Write as _;
+
+        let path = std::env::temp_dir().join(format!("{prefix}-{name}.zip"));
+        let file = std::fs::File::create(&path).expect("creates the fixture");
+        let mut writer = zip::ZipWriter::new(file);
+        let options: zip::write::FileOptions<'_, ()> = zip::write::FileOptions::default();
+
+        for (entry, text) in entries
+        {
+            writer.start_file(*entry, options).expect("starts");
+            writer.write_all(text.as_bytes()).expect("writes");
+        }
+        writer.finish().expect("finishes");
+
+        return Archive::Open(&path).expect("opens");
+    }
+
     /// Discards the archive so a refusal can be asserted on. `Archive` is not `Debug`,
     /// and deriving it purely for `expect_err` would put a zip reader's internals into a
     /// public trait impl.
@@ -297,20 +320,6 @@ mod tests
     /// same temp path.
     fn Fixture(name: &str, entries: &[(&str, &str)]) -> Archive
     {
-        use std::io::Write as _;
-
-        let path = std::env::temp_dir().join(format!("nomos-spec-ingest-archive-{name}.zip"));
-        let file = std::fs::File::create(&path).expect("creates the fixture");
-        let mut writer = zip::ZipWriter::new(file);
-        let options: zip::write::FileOptions<'_, ()> = zip::write::FileOptions::default();
-
-        for (entry, text) in entries
-        {
-            writer.start_file(*entry, options).expect("starts");
-            writer.write_all(text.as_bytes()).expect("writes");
-        }
-        writer.finish().expect("finishes");
-
-        return Archive::Open(&path).expect("opens");
+        return Zip_Fixture("nomos-spec-ingest-archive", name, entries);
     }
 }

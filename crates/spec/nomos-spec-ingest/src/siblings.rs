@@ -115,34 +115,14 @@ pub fn Ingest_Game_Plan<'a>(
 mod hub_tests
 {
     use super::*;
-
-    /// A zip written for this test alone, so it does not depend on the corpus. Named for
-    /// this file's own purpose, because these tests run concurrently and a shared path
-    /// would have one reading a file another was still writing.
-    fn Fixture(name: &str, entries: &[(&str, &str)]) -> Archive
-    {
-        use std::io::Write as _;
-
-        let path = std::env::temp_dir().join(format!("nomos-spec-ingest-siblings-hub-{name}.zip"));
-        let file = std::fs::File::create(&path).expect("creates the fixture");
-        let mut writer = zip::ZipWriter::new(file);
-        let options: zip::write::FileOptions<'_, ()> = zip::write::FileOptions::default();
-
-        for (entry, text) in entries
-        {
-            writer.start_file(*entry, options).expect("starts");
-            writer.write_all(text.as_bytes()).expect("writes");
-        }
-        writer.finish().expect("finishes");
-
-        return Archive::Open(&path).expect("opens");
-    }
+    use crate::archive::tests::Zip_Fixture;
 
     #[test]
     fn Test_Ingest_Sibling_Suite_Should_Ingest_Its_Prose_Documents()
     {
         let mut store = SpecificationStore::In_Memory().expect("opens");
-        let mut archive = Fixture("prose-only", &[("suite/00-index.md", "# Index\n\nSome prose.\n")]);
+        let mut archive =
+            Zip_Fixture("nomos-spec-ingest-siblings-hub", "prose-only", &[("suite/00-index.md", "# Index\n\nSome prose.\n")]);
 
         let report = Ingest_Sibling_Suite(&mut store, &mut archive, Sibling::Xvpe).expect("ingests");
 

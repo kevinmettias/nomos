@@ -58,11 +58,6 @@ mod tests
 {
     use super::*;
 
-    fn Store() -> SpecificationStore
-    {
-        return SpecificationStore::In_Memory().expect("opens");
-    }
-
     #[test]
     fn Test_Ingest_Source_Document_Should_Store_The_Document_And_Its_Blocks()
     {
@@ -110,5 +105,10 @@ mod tests
             )
             .expect("reads the row Store_Text wrote");
         assert_eq!(stored_text, "Nomos shall do the thing.");
+    }
+
+    fn Store() -> SpecificationStore
+    {
+        return SpecificationStore::In_Memory().expect("opens");
     }
 }

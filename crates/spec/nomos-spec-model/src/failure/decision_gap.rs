@@ -37,16 +37,6 @@ mod tests
 {
     use super::*;
 
-    fn Gap() -> DecisionGap
-    {
-        return DecisionGap {
-            question: "which substrate is canonical".to_owned(),
-            blocks: vec!["behaviour".to_owned()],
-            severity: Severity::Blocking,
-            closed_by: None,
-        };
-    }
-
     #[test]
     fn Test_Is_Open_Should_Be_True_Until_A_Closing_Citation_Is_Recorded()
     {
@@ -58,5 +48,15 @@ mod tests
         };
 
         assert!(!closed.Is_Open());
+    }
+
+    fn Gap() -> DecisionGap
+    {
+        return DecisionGap {
+            question: "which substrate is canonical".to_owned(),
+            blocks: vec!["behaviour".to_owned()],
+            severity: Severity::Blocking,
+            closed_by: None,
+        };
     }
 }

@@ -325,6 +325,9 @@ mod tests
     #[test]
     fn Test_Summary_Should_Combine_Rule_Error_And_Reconciliation_Counts_Into_One_Line()
     {
+        // `dyn Rule`: this fixture needs one heterogeneous list of fake rules, each returning
+        // a different canned outcome; a generic parameter cannot hold more than one concrete
+        // type in one `Vec`, and this is a handful of test fixtures, not a hot path.
         let rules: Vec<Box<dyn Rule>> = vec![
             Box::new(Fake(
                 *DECLARED_RULES.first().expect("DECLARED_RULES lists at least two rules"),

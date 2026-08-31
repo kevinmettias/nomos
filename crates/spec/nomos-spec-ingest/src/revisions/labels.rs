@@ -147,23 +147,10 @@ mod tests
     use super::*;
     use std::collections::BTreeSet;
 
-    fn Temp_Dir_With(name: &str, files: &[&str]) -> PathBuf
-    {
-        let directory = std::env::temp_dir().join(format!("nomos-spec-ingest-labels-{name}"));
-        std::fs::create_dir_all(&directory).expect("creates the directory");
-
-        for file in files
-        {
-            std::fs::write(directory.join(file), b"").expect("writes a placeholder file");
-        }
-
-        return directory;
-    }
-
     #[test]
     fn Test_Revisions_In_Should_Sort_By_Numeric_Label_Order()
     {
-        let directory = Temp_Dir_With("sort-order", &["nomos-spec-v14.36.zip", "nomos-spec-v14.9.zip"]);
+        let directory = Temporary_Directory_With("sort-order", &["nomos-spec-v14.36.zip", "nomos-spec-v14.9.zip"]);
 
         let revisions = Revisions_In(&directory).expect("finds the archives");
         let labels: Vec<&str> = revisions.iter().map(|(label, _)| return label.as_str()).collect();
@@ -174,7 +161,7 @@ mod tests
     #[test]
     fn Test_Revisions_In_Should_Refuse_A_Directory_With_No_Revision_Archive()
     {
-        let directory = Temp_Dir_With("empty", &["readme.txt"]);
+        let directory = Temporary_Directory_With("empty", &["readme.txt"]);
 
         let refusal = Revisions_In(&directory).expect_err("must refuse");
 
@@ -184,7 +171,7 @@ mod tests
     #[test]
     fn Test_Labelled_Archives_Should_Collect_Every_Archive_The_Directory_Names()
     {
-        let directory = Temp_Dir_With(
+        let directory = Temporary_Directory_With(
             "labelled",
             &["nomos-spec-v14.36.zip", "nomos-spec-internal-artifacts-v14.37.zip", "readme.txt"],
         );
@@ -236,5 +223,18 @@ mod tests
 
         let across_major = Missing_Between(Numbered { major: 14, minor: 36 }, Numbered { major: 15, minor: 0 });
         assert!(across_major.is_empty());
+    }
+
+    fn Temporary_Directory_With(name: &str, files: &[&str]) -> PathBuf
+    {
+        let directory = std::env::temp_dir().join(format!("nomos-spec-ingest-labels-{name}"));
+        std::fs::create_dir_all(&directory).expect("creates the directory");
+
+        for file in files
+        {
+            std::fs::write(directory.join(file), b"").expect("writes a placeholder file");
+        }
+
+        return directory;
     }
 }

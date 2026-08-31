@@ -69,11 +69,6 @@ mod tests
     use super::*;
     use std::collections::{BTreeMap, BTreeSet};
 
-    fn Documents(pairs: &[(&str, &str)]) -> BTreeMap<String, String>
-    {
-        return pairs.iter().map(|(path, text)| return ((*path).to_owned(), (*text).to_owned())).collect();
-    }
-
     #[test]
     fn Test_Census_Fillers_Should_Combine_Repeated_Templates_With_Stub_Documents()
     {
@@ -140,5 +135,10 @@ mod tests
         let later = Later::Read(&documents);
 
         assert_eq!(Stubs_Of(&later), vec!["stub.md".to_owned()]);
+    }
+
+    fn Documents(pairs: &[(&str, &str)]) -> BTreeMap<String, String>
+    {
+        return pairs.iter().map(|(path, text)| return ((*path).to_owned(), (*text).to_owned())).collect();
     }
 }

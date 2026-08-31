@@ -114,29 +114,9 @@ pub(super) fn Take_Node(
 mod tests
 {
     use super::*;
+    use crate::archive::tests::Zip_Fixture;
+    use crate::siblings::document::tests::Suite_In;
     use nomos_spec_store::SuiteAuthority;
-
-    /// A zip written for this test alone, so it does not depend on the corpus. Named for
-    /// this file's own purpose, because these tests run concurrently and a shared path
-    /// would have one reading a file another was still writing.
-    fn Fixture(name: &str, entries: &[(&str, &str)]) -> Archive
-    {
-        use std::io::Write as _;
-
-        let path = std::env::temp_dir().join(format!("nomos-spec-ingest-prose-{name}.zip"));
-        let file = std::fs::File::create(&path).expect("creates the fixture");
-        let mut writer = zip::ZipWriter::new(file);
-        let options: zip::write::FileOptions<'_, ()> = zip::write::FileOptions::default();
-
-        for (entry, text) in entries
-        {
-            writer.start_file(*entry, options).expect("starts");
-            writer.write_all(text.as_bytes()).expect("writes");
-        }
-        writer.finish().expect("finishes");
-
-        return Archive::Open(&path).expect("opens");
-    }
 
     #[test]
     fn Test_Ingest_Prose_Should_Ingest_Every_Markdown_Entry_In_The_Suite()
@@ -145,7 +125,8 @@ mod tests
         let suite_uid =
             store.Put_Suite(Sibling::Xvpe.Suite_Id(), Sibling::Xvpe.Title(), SuiteAuthority::Sibling).expect("puts suite");
         let suite = Suite { sibling: Sibling::Xvpe, uid: suite_uid };
-        let mut archive = Fixture("ingest-prose", &[("suite/00-index.md", "# Index\n\nSome prose.\n")]);
+        let mut archive =
+            Zip_Fixture("nomos-spec-ingest-prose", "ingest-prose", &[("suite/00-index.md", "# Index\n\nSome prose.\n")]);
         let mut report = SuiteReport::default();
 
         Ingest_Prose(&mut store, &mut archive, suite, &mut report).expect("ingests");
@@ -182,12 +163,8 @@ mod tests
     fn Test_Take_Node_Should_Report_A_Contested_Identifier_Rather_Than_A_Fresh_Claim()
     {
         let mut store = SpecificationStore::In_Memory().expect("opens");
-        let first_uid =
-            store.Put_Suite(Sibling::Xvpe.Suite_Id(), Sibling::Xvpe.Title(), SuiteAuthority::Sibling).expect("puts suite");
-        let second_uid =
-            store.Put_Suite(Sibling::Kwb.Suite_Id(), Sibling::Kwb.Title(), SuiteAuthority::Sibling).expect("puts suite");
-        let first_suite = Suite { sibling: Sibling::Xvpe, uid: first_uid };
-        let second_suite = Suite { sibling: Sibling::Kwb, uid: second_uid };
+        let first_suite = Suite_In(&mut store, Sibling::Xvpe);
+        let second_suite = Suite_In(&mut store, Sibling::Kwb);
 
         let mut first_report = SuiteReport::default();
         Take_Node(

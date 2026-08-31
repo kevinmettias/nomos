@@ -28,6 +28,18 @@
 
 use std::path::Path;
 
+// Explicit `#[path]` because this file is itself loaded two ways — `lib.rs` says
+// `#[cfg(test)] mod registration;` (ordinary resolution: children under `registration/`) but
+// `build.rs` says `#[path = "src/registration.rs"] mod registration;`, and once a module is
+// reached through an explicit `#[path]`, rustc stops inferring a same-named subdirectory for
+// ITS children and looks beside the path's own directory instead — an implicit `mod error;`
+// here would resolve to `src/error.rs` under the build-script compilation and fail to find
+// it. Spelling the path keeps both compilations pointed at the same file.
+#[path = "registration/error.rs"]
+mod error;
+
+pub(crate) use error::RegistrationError;
+
 /// The only directory, relative to the repository root, a registration may name.
 const RECORD_DIRECTORY: &str = "docs/records";
 
@@ -50,164 +62,6 @@ pub(crate) struct Registration
     pub(crate) id: String,
     /// The record file this registration names: repository-relative, forward slashes.
     pub(crate) path: String,
-}
-
-/// Why a registration directory was refused.
-///
-/// Every condition here is a refusal and not a skip. A skipped registration is a governing
-/// record that leaves the store without anybody being told, and an absent record is exactly
-/// what the guard downstream of this reader exists to catch — so absence must never become
-/// success on the way in.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub(crate) enum RegistrationError
-{
-    /// The directory, or a file in it, did not read.
-    Unreadable
-    {
-        at: String,
-        cause: String,
-    },
-    /// The directory holds no registration at all.
-    Empty
-    {
-        at: String,
-    },
-    /// A file in the directory is not named `<ID>.record`.
-    NotARegistration
-    {
-        at: String,
-    },
-    /// A registration's stem is not an identifier this store could use.
-    NotAnIdentifier
-    {
-        at: String,
-        stem: String,
-    },
-    /// A registration names no record.
-    NoPath
-    {
-        at: String,
-    },
-    /// A registration names two records.
-    RepeatedKey
-    {
-        at: String,
-        key: String,
-    },
-    /// A registration carries a line this format does not define.
-    UnknownKey
-    {
-        at: String,
-        key: String,
-    },
-    /// A registration names something that is not a record file under `docs/records`.
-    Outside
-    {
-        at: String,
-        named: String,
-    },
-    /// A registration names a record file that is not on disk.
-    Absent
-    {
-        at: String,
-        named: String,
-    },
-    /// Two registrations name one record file.
-    Shared
-    {
-        named: String,
-        first: String,
-        second: String,
-    },
-}
-
-impl RegistrationError
-{
-    /// What went wrong, and what the reader would have had to guess to continue.
-    pub(crate) fn Describe(&self) -> String
-    {
-        return format!("{} {}", self.Fault(), self.Because());
-    }
-
-    /// The fault itself, naming the file and what it said.
-    fn Fault(&self) -> String
-    {
-        return match self
-        {
-            Self::Unreadable { at, cause } => format!("{at} did not read: {cause}."),
-            Self::Empty { at } => format!("{at} holds no *.{REGISTRATION_EXTENSION} file."),
-            Self::NotARegistration { at } => format!(
-                "{at} is in the registration directory and is not a \
-                 *.{REGISTRATION_EXTENSION} file."
-            ),
-            Self::NotAnIdentifier { at, stem } =>
-            {
-                format!("{at} has the stem `{stem}`, which is not a record identifier.")
-            }
-            Self::NoPath { at } =>
-            {
-                format!("{at} carries no `{PATH_KEY}:` line, so it names no record.")
-            }
-            Self::RepeatedKey { at, key } => format!("{at} carries `{key}:` more than once."),
-            Self::UnknownKey { at, key } => format!(
-                "{at} carries `{key}`, which this format does not define; the only key is \
-                 `{PATH_KEY}:`."
-            ),
-            Self::Outside { at, named } => format!(
-                "{at} names `{named}`, which is not a markdown file under \
-                 `{RECORD_DIRECTORY}/`."
-            ),
-            Self::Absent { at, named } => format!("{at} names `{named}`, which is not on disk."),
-            Self::Shared { named, first, second } =>
-            {
-                format!("`{first}` and `{second}` both name `{named}`.")
-            }
-        };
-    }
-
-    /// Why that is refused rather than passed over.
-    ///
-    /// Held apart from the fault because it is the invariant half: the fault names a file
-    /// that differs every time, and this is the sentence that does not.
-    const fn Because(&self) -> &'static str
-    {
-        return match self
-        {
-            Self::Unreadable { .. } =>
-            {
-                "A registration directory that half-opens is a governing list that is quietly \
-                 short."
-            }
-            Self::Empty { .. } =>
-            {
-                "An empty governing table is the vacuous outcome this arrangement exists to \
-                 prevent, so it is refused rather than produced."
-            }
-            Self::NotARegistration { .. } =>
-            {
-                "A typo'd extension would be a record silently dropped, so nothing in this \
-                 directory is ignored."
-            }
-            Self::NotAnIdentifier { .. } =>
-            {
-                "The stem is the identity; `od-foo-001` is not an identifier this store uses."
-            }
-            Self::NoPath { .. } => "A registration that names nothing is a phantom governing record.",
-            Self::RepeatedKey { .. } => "Resolving that by taking the first is the defect, not the fix.",
-            Self::UnknownKey { .. } => "Comments start with `#`.",
-            Self::Outside { .. } => "A registration may only name a record.",
-            Self::Absent { .. } =>
-            {
-                "Left to `include_str!`, the error would name a generated file instead of the \
-                 registration that is wrong."
-            }
-            Self::Shared { .. } =>
-            {
-                "Two identities over one document would make the two generated tables \
-                 disagree in length."
-            }
-        };
-    }
 }
 
 /// Every registration under `directory`, sorted by identifier.
@@ -502,24 +356,6 @@ mod inline_coverage
     /// A record that is really on disk, so a fixture can be well-formed.
     const A_REAL_RECORD: &str = "docs/records/OD-GATE-001-a-skipped-test-reports-ok.md";
 
-    fn Root() -> PathBuf
-    {
-        return Path::new(env!("CARGO_MANIFEST_DIR"))
-            .ancestors()
-            .nth(3)
-            .expect("the crate sits three directories below the repository root")
-            .to_path_buf();
-    }
-
-    fn Synthetic(name: &str) -> PathBuf
-    {
-        let mut path = std::env::temp_dir();
-        path.push(format!("nomos-registration-inline-{name}-{}", std::process::id()));
-        let _ = std::fs::remove_dir_all(&path);
-        std::fs::create_dir_all(&path).expect("a test needs a temporary directory");
-        return path;
-    }
-
     #[test]
     fn Test_Registrations_In_Should_Read_A_Well_Formed_Directory()
     {
@@ -539,7 +375,27 @@ mod inline_coverage
                 path: A_REAL_RECORD.to_owned(),
             }]
         );
+        // error-info: allow this is best-effort cleanup after the assertions already ran
         let _ = std::fs::remove_dir_all(&directory);
+    }
+
+    fn Synthetic(name: &str) -> PathBuf
+    {
+        let mut path = std::env::temp_dir();
+        path.push(format!("nomos-registration-inline-{name}-{}", std::process::id()));
+        // error-info: allow this is a best-effort clean slate before creating the directory
+        let _ = std::fs::remove_dir_all(&path);
+        std::fs::create_dir_all(&path).expect("a test needs a temporary directory");
+        return path;
+    }
+
+    fn Root() -> PathBuf
+    {
+        return Path::new(env!("CARGO_MANIFEST_DIR"))
+            .ancestors()
+            .nth(3)
+            .expect("the crate sits three directories below the repository root")
+            .to_path_buf();
     }
 
     #[test]
