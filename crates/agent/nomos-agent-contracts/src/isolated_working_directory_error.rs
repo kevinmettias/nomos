@@ -94,6 +94,9 @@ mod tests
         let entries: Vec<_> = std::fs::read_dir(&directory).expect("reads the directory").collect();
         assert!(entries.is_empty(), "a freshly created isolated directory must start empty");
 
+        // Best-effort cleanup: the system temp root is reclaimed independently of this
+        // test, and a failure to remove this directory changes nothing the assertions
+        // above already established.
         let _ = std::fs::remove_dir(&directory);
     }
 
@@ -105,6 +108,9 @@ mod tests
 
         assert_ne!(first, second);
 
+        // Best-effort cleanup: the system temp root is reclaimed independently of this
+        // test, and a failure to remove either directory changes nothing the assertion
+        // above already established.
         let _ = std::fs::remove_dir(&first);
         let _ = std::fs::remove_dir(&second);
     }

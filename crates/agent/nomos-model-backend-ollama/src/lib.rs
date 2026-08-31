@@ -193,20 +193,6 @@ mod address_tests
         }
     }
 
-    fn Bare_Task(goal: &str) -> TaskEnvelope
-    {
-        return TaskEnvelope {
-            goal: goal.to_owned(),
-            scope: Territory::Of_Files(Vec::<String>::new()),
-            knowledge_context: Vec::new(),
-            applicable_rules: Vec::new(),
-            prohibited_changes: Territory::Of_Files(Vec::<String>::new()),
-            available_tools: Vec::new(),
-            expected_output_schema: nomos_contracts::SchemaId::New("nomos.model.backend.ollama.v1"),
-            effort: nomos_model_package::EffortLevel::BackendDefault,
-        };
-    }
-
     #[test]
     fn Test_Execute_Task_Should_Create_Its_Own_Isolated_Directory_And_Read_A_Clean_Response()
     {
@@ -226,5 +212,19 @@ mod address_tests
         let outcome = Execute_In(&Bare_Task("say PONG"), &launcher, &directory).expect("a well-formed scripted response");
 
         assert_eq!(outcome.response, "PONG");
+    }
+
+    fn Bare_Task(goal: &str) -> TaskEnvelope
+    {
+        return TaskEnvelope {
+            goal: goal.to_owned(),
+            scope: Territory::Of_Files(Vec::<String>::new()),
+            knowledge_context: Vec::new(),
+            applicable_rules: Vec::new(),
+            prohibited_changes: Territory::Of_Files(Vec::<String>::new()),
+            available_tools: Vec::new(),
+            expected_output_schema: nomos_contracts::SchemaId::New("nomos.model.backend.ollama.v1"),
+            effort: nomos_model_package::EffortLevel::BackendDefault,
+        };
     }
 }

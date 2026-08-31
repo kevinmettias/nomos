@@ -127,21 +127,6 @@ mod tests
     use super::*;
     use std::time::{Duration, Instant};
 
-    /// Waits until `Is_Finished` reports true, or panics -- the reader thread `Reading`
-    /// starts is asynchronous, so a test that read `Length`/`Text` immediately after
-    /// starting it would be racing the very thread it means to observe.
-    fn Awaited(drain: Drain) -> Drain
-    {
-        let started = Instant::now();
-        while !drain.Is_Finished()
-        {
-            assert!(started.elapsed() < Duration::from_secs(5), "the drain never finished");
-            std::thread::sleep(Duration::from_millis(10));
-        }
-
-        return drain;
-    }
-
     #[test]
     fn Test_Reading_Should_Collect_Everything_The_Source_Produces()
     {
@@ -182,5 +167,20 @@ mod tests
         let drain = Awaited(Drain::Reading(source));
 
         assert!(drain.Text().contains("ok"), "valid bytes around the invalid one must still survive");
+    }
+
+    /// Waits until `Is_Finished` reports true, or panics -- the reader thread `Reading`
+    /// starts is asynchronous, so a test that read `Length`/`Text` immediately after
+    /// starting it would be racing the very thread it means to observe.
+    fn Awaited(drain: Drain) -> Drain
+    {
+        let started = Instant::now();
+        while !drain.Is_Finished()
+        {
+            assert!(started.elapsed() < Duration::from_secs(5), "the drain never finished");
+            std::thread::sleep(Duration::from_millis(10));
+        }
+
+        return drain;
     }
 }

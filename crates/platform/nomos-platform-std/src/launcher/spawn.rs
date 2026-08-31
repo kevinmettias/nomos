@@ -83,17 +83,6 @@ mod tests
         assert!(stderr.is_some(), "stderr must also be piped even when the child writes nothing to it");
     }
 
-    /// Waits until a drain has finished, or panics -- the reader thread is asynchronous.
-    fn Awaited(drain: Option<&Drain>)
-    {
-        let started = std::time::Instant::now();
-        while drain.is_some_and(|drain| return !drain.Is_Finished())
-        {
-            assert!(started.elapsed() < Duration::from_secs(5), "the drain never finished");
-            std::thread::sleep(Duration::from_millis(10));
-        }
-    }
-
     fn Echo_Command(word: &str) -> Command
     {
         let argv = if cfg!(windows)
@@ -106,5 +95,16 @@ mod tests
         };
 
         return Command::New(argv, Duration::from_secs(5));
+    }
+
+    /// Waits until a drain has finished, or panics -- the reader thread is asynchronous.
+    fn Awaited(drain: Option<&Drain>)
+    {
+        let started = std::time::Instant::now();
+        while drain.is_some_and(|drain| return !drain.Is_Finished())
+        {
+            assert!(started.elapsed() < Duration::from_secs(5), "the drain never finished");
+            std::thread::sleep(Duration::from_millis(10));
+        }
     }
 }
