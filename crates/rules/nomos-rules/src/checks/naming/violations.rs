@@ -173,14 +173,6 @@ mod tests
     {
         use super::{GateCategory, SyntaxPayload, Violations_In};
 
-        /// Names conforming to `Pascal_Snake_Case` under every shape `casing`'s own table
-        /// exercises: a bare word, two segments, a numeric segment, and a stripped leading
-        /// underscore.
-        fn Conforming_Function_Names() -> Vec<&'static str>
-        {
-            return vec!["Good_Name", "New", "As_Str", "Test_CHK_003_Something_Should_Hold", "_Unused"];
-        }
-
         #[test]
         fn Test_A_Conforming_Function_Should_Produce_No_Finding()
         {
@@ -192,6 +184,14 @@ mod tests
 
                 assert!(findings.is_empty(), "{name}: {findings:?}");
             }
+        }
+
+        /// Names conforming to `Pascal_Snake_Case` under every shape `casing`'s own table
+        /// exercises: a bare word, two segments, a numeric segment, and a stripped leading
+        /// underscore.
+        fn Conforming_Function_Names() -> Vec<&'static str>
+        {
+            return vec!["Good_Name", "New", "As_Str", "Test_CHK_003_Something_Should_Hold", "_Unused"];
         }
 
         #[test]
@@ -210,18 +210,6 @@ mod tests
             assert_eq!(found.gate, GateCategory::Advisory);
         }
 
-        /// Qualified names whose *own* name is `main`, for [`Test_Main_Should_Be_Exempt`] —
-        /// visibility and nesting vary; the exemption is keyed on the item's own name alone.
-        fn Main_Qualified_Names() -> Vec<(&'static str, &'static str)>
-        {
-            return vec![
-                ("Private", "main"),
-                ("Public", "main"),
-                ("Private", "tests::main"),
-                ("Public", "examples::demo::main"),
-            ];
-        }
-
         #[test]
         fn Test_Main_Should_Be_Exempt()
         {
@@ -235,12 +223,16 @@ mod tests
             }
         }
 
-        /// Foreign trait/method pairs whose method name the trait fixes, for
-        /// [`Test_A_Trait_Methods_Non_Conforming_Name_Should_Be_Exempt`] — the compiler forces
-        /// each of these exact spellings regardless of this workspace's own convention.
-        fn Foreign_Trait_Methods() -> Vec<(&'static str, &'static str)>
+        /// Qualified names whose *own* name is `main`, for [`Test_Main_Should_Be_Exempt`] —
+        /// visibility and nesting vary; the exemption is keyed on the item's own name alone.
+        fn Main_Qualified_Names() -> Vec<(&'static str, &'static str)>
         {
-            return vec![("Display", "fmt"), ("Iterator", "next"), ("Clone", "clone"), ("Drop", "drop")];
+            return vec![
+                ("Private", "main"),
+                ("Public", "main"),
+                ("Private", "tests::main"),
+                ("Public", "examples::demo::main"),
+            ];
         }
 
         #[test]
@@ -256,6 +248,14 @@ mod tests
 
                 assert!(findings.is_empty(), "{trait_name}::{method}: a trait method's fixed name was judged: {findings:?}");
             }
+        }
+
+        /// Foreign trait/method pairs whose method name the trait fixes, for
+        /// [`Test_A_Trait_Methods_Non_Conforming_Name_Should_Be_Exempt`] — the compiler forces
+        /// each of these exact spellings regardless of this workspace's own convention.
+        fn Foreign_Trait_Methods() -> Vec<(&'static str, &'static str)>
+        {
+            return vec![("Display", "fmt"), ("Iterator", "next"), ("Clone", "clone"), ("Drop", "drop")];
         }
 
         #[test]

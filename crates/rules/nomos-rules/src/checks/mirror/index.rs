@@ -203,39 +203,6 @@ mod tests
     use nomos_analysis::{FactKey, FactPayload, GuaranteeDigest};
     use nomos_contracts::{Assurance, EvidenceClass, FactVariant, Guarantee, IncrementalGranularity, ProviderId, SchemaId};
 
-    fn Guarantee_At_Floor() -> Guarantee
-    {
-        return Guarantee::New(FactVariant::Syntactic, Assurance::Sound, Assurance::Unknown, IncrementalGranularity::File);
-    }
-
-    /// A fact carrying `schema`/`bytes`, addressed the way `test_support::Materialize`
-    /// files one — the identity fields are plumbing [`Decoded_Syntax_Payload`] never reads,
-    /// so a fixed floor-guarantee key serves every case here.
-    fn Fact_With(schema: SchemaId, bytes: Vec<u8>) -> nomos_analysis::MaterializedFact
-    {
-        let context = Test_Context();
-        let guarantee = Guarantee_At_Floor();
-        let key = FactKey {
-            contract: nomos_cap_syntax::Capability(),
-            contract_version: nomos_cap_syntax::CONTRACT_VERSION,
-            subject: SubjectId::From_Digest(Content_Digest(b"a.rs")),
-            semantic_inputs: InputDigest::Of(&[b"a.rs" as &[u8]]),
-            provider: ProviderId::New("nomos.test.index.decodes"),
-            provider_version: nomos_cap_syntax::CONTRACT_VERSION,
-            guarantee: GuaranteeDigest::Of(&guarantee),
-            variant: context.variant,
-            configuration: context.configuration,
-        };
-
-        return nomos_analysis::MaterializedFact {
-            identity: key.At(context.generation),
-            snapshot: context.snapshot,
-            evidence: EvidenceClass::Verified,
-            guarantee,
-            payload: FactPayload::New(schema, bytes),
-        };
-    }
-
     #[test]
     fn Test_Decoded_Syntax_Payload_Should_Refuse_An_Unrecognized_Schema()
     {
@@ -348,37 +315,17 @@ mod tests
         match shortfall
         {
             Shortfall::Withheld { subjects, .. } => assert_eq!(subjects, vec!["b.rs"]),
+            // test assertion: the wrong variant here is a real defect and must fail the
+            // test loudly rather than pass silently.
             Shortfall::NoIndex => panic!("expected a Withheld shortfall naming the subject"),
         }
-    }
-
-    fn Admitted_Reader() -> (nomos_capability::Registry, nomos_analysis::MemoryFactStore, nomos_capability::ProviderOffer)
-    {
-        let mut registry = nomos_capability::Registry::New();
-        let offer = nomos_capability::ProviderOffer {
-            provider: ProviderId::New("nomos.test.index.declared_by"),
-            capability: nomos_cap_syntax::Capability(),
-            version: nomos_cap_syntax::CONTRACT_VERSION,
-            guarantee: Guarantee_At_Floor(),
-        };
-        registry.Declare_And_Offer(nomos_cap_syntax::Capability_Contract(), offer.clone()).expect("declared and offered within the ceiling");
-
-        return (registry, nomos_analysis::MemoryFactStore::New(), offer);
     }
 
     #[test]
     fn Test_Declared_By_Should_Read_A_Materialized_Fact_Into_Names_And_A_Reading()
     {
         let source = SourceFile::New("a.rs", SubjectId::From_Digest(Content_Digest(b"a.rs")), "fn Test_Something() {}");
-        let (registry, mut store, offer) = Admitted_Reader();
-        crate::checks::test_support::Materialize(
-            &mut store,
-            source.subject,
-            &offer,
-            InputDigest::Of(&[source.text.as_bytes()]),
-            nomos_cap_syntax::Payload_Schema(),
-            b"unexpanded\t0\nitem\t0\tFunction\tPrivate\ttests::Test_Something_Should_Hold\t.\t+fn/0\n".to_vec(),
-        );
+        let MaterializedReader { registry, store } = Reader_With_Materialized(&source);
         let mut facts = nomos_analysis::Reader::On(&store, &registry, Test_Context());
 
         let (names, reading) = Declared_By(&source, &mut facts).expect("the fact was just materialized");
@@ -391,7 +338,7 @@ mod tests
     fn Test_Declared_By_Should_Report_Unread_When_No_Fact_Answers_For_The_Source()
     {
         let source = SourceFile::New("a.rs", SubjectId::From_Digest(Content_Digest(b"a.rs")), "fn Test_Something() {}");
-        let (registry, store, _offer) = Admitted_Reader();
+        let AdmittedOffer { registry, store, .. } = Admitted_Reader();
         let mut facts = nomos_analysis::Reader::On(&store, &registry, Test_Context());
 
         let unread = Declared_By(&source, &mut facts).expect_err("nothing was materialized for this subject");
@@ -403,15 +350,7 @@ mod tests
     fn Test_Check_Index_Of_Should_Index_Every_Source_It_Could_Read()
     {
         let readable = SourceFile::New("a.rs", SubjectId::From_Digest(Content_Digest(b"a.rs")), "fn Test_Something() {}");
-        let (registry, mut store, offer) = Admitted_Reader();
-        crate::checks::test_support::Materialize(
-            &mut store,
-            readable.subject,
-            &offer,
-            InputDigest::Of(&[readable.text.as_bytes()]),
-            nomos_cap_syntax::Payload_Schema(),
-            b"unexpanded\t0\nitem\t0\tFunction\tPrivate\ttests::Test_Something_Should_Hold\t.\t+fn/0\n".to_vec(),
-        );
+        let MaterializedReader { registry, store } = Reader_With_Materialized(&readable);
         let mut facts = nomos_analysis::Reader::On(&store, &registry, Test_Context());
 
         let sources = [readable];
@@ -419,5 +358,90 @@ mod tests
 
         assert!(index.names.contains("Test_Something_Should_Hold"), "{:?}", index.names);
         assert!(index.unread.is_empty());
+    }
+
+    fn Guarantee_At_Floor() -> Guarantee
+    {
+        return Guarantee::New(FactVariant::Syntactic, Assurance::Sound, Assurance::Unknown, IncrementalGranularity::File);
+    }
+
+    /// A fact carrying `schema`/`bytes`, addressed the way `test_support::Materialize`
+    /// files one — the identity fields are plumbing [`Decoded_Syntax_Payload`] never reads,
+    /// so a fixed floor-guarantee key serves every case here.
+    fn Fact_With(schema: SchemaId, bytes: Vec<u8>) -> nomos_analysis::MaterializedFact
+    {
+        let context = Test_Context();
+        let guarantee = Guarantee_At_Floor();
+        let key = FactKey {
+            contract: nomos_cap_syntax::Capability(),
+            contract_version: nomos_cap_syntax::CONTRACT_VERSION,
+            subject: SubjectId::From_Digest(Content_Digest(b"a.rs")),
+            semantic_inputs: InputDigest::Of(&[b"a.rs" as &[u8]]),
+            provider: ProviderId::New("nomos.test.index.decodes"),
+            provider_version: nomos_cap_syntax::CONTRACT_VERSION,
+            guarantee: GuaranteeDigest::Of(&guarantee),
+            variant: context.variant,
+            configuration: context.configuration,
+        };
+
+        return nomos_analysis::MaterializedFact {
+            identity: key.At(context.generation),
+            snapshot: context.snapshot,
+            evidence: EvidenceClass::Verified,
+            guarantee,
+            payload: FactPayload::New(schema, bytes),
+        };
+    }
+
+    /// A registry admitting one syntax provider, an empty store, and the offer just
+    /// declared into it — named so a call site reads `reader.store`, not a position it has
+    /// to count.
+    struct AdmittedOffer
+    {
+        registry: nomos_capability::Registry,
+        store: nomos_analysis::MemoryFactStore,
+        offer: nomos_capability::ProviderOffer,
+    }
+
+    fn Admitted_Reader() -> AdmittedOffer
+    {
+        let mut registry = nomos_capability::Registry::New();
+        let offer = nomos_capability::ProviderOffer {
+            provider: ProviderId::New("nomos.test.index.declared_by"),
+            capability: nomos_cap_syntax::Capability(),
+            version: nomos_cap_syntax::CONTRACT_VERSION,
+            guarantee: Guarantee_At_Floor(),
+        };
+        registry.Declare_And_Offer(nomos_cap_syntax::Capability_Contract(), offer.clone()).expect("declared and offered within the ceiling");
+
+        return AdmittedOffer { registry, store: nomos_analysis::MemoryFactStore::New(), offer };
+    }
+
+    /// A registry and a store already carrying one materialized fact, named so a call site
+    /// reads `reader.store`, not a position it has to count.
+    struct MaterializedReader
+    {
+        registry: nomos_capability::Registry,
+        store: nomos_analysis::MemoryFactStore,
+    }
+
+    /// A registry and a store already carrying one materialized fact for `source`,
+    /// declaring one test function via the fixed fixture payload every case here that just
+    /// needs a readable fact reuses — [`Test_Declared_By_Should_Read_A_Materialized_Fact_Into_Names_And_A_Reading`]
+    /// and [`Test_Check_Index_Of_Should_Index_Every_Source_It_Could_Read`] were each
+    /// rebuilding this by hand.
+    fn Reader_With_Materialized(source: &SourceFile) -> MaterializedReader
+    {
+        let AdmittedOffer { registry, mut store, offer } = Admitted_Reader();
+        crate::checks::test_support::Materialize(
+            &mut store,
+            source.subject,
+            &offer,
+            InputDigest::Of(&[source.text.as_bytes()]),
+            nomos_cap_syntax::Payload_Schema(),
+            b"unexpanded\t0\nitem\t0\tFunction\tPrivate\ttests::Test_Something_Should_Hold\t.\t+fn/0\n".to_vec(),
+        );
+
+        return MaterializedReader { registry, store };
     }
 }

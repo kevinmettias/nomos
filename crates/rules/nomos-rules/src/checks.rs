@@ -88,19 +88,11 @@ mod tests
         return SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), String::new());
     }
 
-    /// An admitted registry and an empty store — `Relay_Findings` never actually calls
-    /// `Require` itself (its closures do), so what this reader offers is beside the
-    /// point; it only has to be a real `FactReader`, the same view every real caller has.
-    fn Idle_Reader() -> (Registry, MemoryFactStore)
-    {
-        return (Registry::New(), MemoryFactStore::New());
-    }
-
     #[test]
     fn Test_Relay_Findings_Should_Push_The_Payload_Error_And_Extend_The_Findings_Of_Success()
     {
         let sources = vec![Source("a.rs"), Source("b.rs")];
-        let (registry, store) = Idle_Reader();
+        let IdleReader { registry, store } = Idle_Reader();
         let mut facts = Reader::On(&store, &registry, crate::checks::test_support::Test_Context());
 
         let findings = Relay_Findings(
@@ -143,5 +135,21 @@ mod tests
         assert_eq!(findings.len(), 3, "one pushed error plus two relayed findings: {findings:?}");
         assert!(findings.iter().any(|finding| return finding.summary == "no fact for a.rs"));
         assert_eq!(findings.iter().filter(|finding| return finding.summary == "relayed").count(), 2);
+    }
+
+    /// An admitted registry and an empty store — named so a call site reads
+    /// `reader.registry`, not a position it has to count.
+    struct IdleReader
+    {
+        registry: Registry,
+        store: MemoryFactStore,
+    }
+
+    /// An admitted registry and an empty store — `Relay_Findings` never actually calls
+    /// `Require` itself (its closures do), so what this reader offers is beside the
+    /// point; it only has to be a real `FactReader`, the same view every real caller has.
+    fn Idle_Reader() -> IdleReader
+    {
+        return IdleReader { registry: Registry::New(), store: MemoryFactStore::New() };
     }
 }

@@ -136,28 +136,6 @@ mod tests
 
     const PROVIDER: &str = "nomos.test.dependency.reading.resolves";
 
-    fn Source(package: &str) -> SourceFile
-    {
-        return SourceFile::New(package, SubjectId::From_Digest(Content_Digest(package.as_bytes())), String::new());
-    }
-
-    fn Offering() -> TestOffering
-    {
-        return test_support::Offering(
-            nomos_cap_dependency::Capability_Contract(),
-            nomos_cap_dependency::Capability(),
-            nomos_cap_dependency::CONTRACT_VERSION,
-            PROVIDER,
-            Dependency_Requirement().minimum,
-        );
-    }
-
-    fn Materialize_Dependency_Fact(store: &mut MemoryFactStore, source: &SourceFile, offer: &ProviderOffer, payload: &DependencyPayload)
-    {
-        let bytes = nomos_cap_dependency::Encode_Payload(payload);
-        test_support::Materialize(store, source.subject, offer, InputDigest::Of(&[]), nomos_cap_dependency::Payload_Schema(), bytes);
-    }
-
     #[test]
     fn Test_Dependency_Requirement_Should_Be_Met_By_The_Real_Providers_Own_Guarantee()
     {
@@ -185,6 +163,12 @@ mod tests
         assert_eq!(payload.package, "nomos-cap-syntax");
     }
 
+    fn Materialize_Dependency_Fact(store: &mut MemoryFactStore, source: &SourceFile, offer: &ProviderOffer, payload: &DependencyPayload)
+    {
+        let bytes = nomos_cap_dependency::Encode_Payload(payload);
+        test_support::Materialize(store, source.subject, offer, InputDigest::Of(&[]), nomos_cap_dependency::Payload_Schema(), bytes);
+    }
+
     #[test]
     fn Test_Payload_Of_Should_Report_An_Unread_Subject_Under_Whichever_Rule_Asked()
     {
@@ -195,5 +179,21 @@ mod tests
         let refused = Payload_Of(&source, &mut reader, "example-rule").expect_err("no fact was materialized");
 
         assert_eq!(refused.rule, RuleId::New("example-rule"));
+    }
+
+    fn Source(package: &str) -> SourceFile
+    {
+        return SourceFile::New(package, SubjectId::From_Digest(Content_Digest(package.as_bytes())), String::new());
+    }
+
+    fn Offering() -> TestOffering
+    {
+        return test_support::Offering(
+            nomos_cap_dependency::Capability_Contract(),
+            nomos_cap_dependency::Capability(),
+            nomos_cap_dependency::CONTRACT_VERSION,
+            PROVIDER,
+            Dependency_Requirement().minimum,
+        );
     }
 }

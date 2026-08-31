@@ -334,13 +334,6 @@ mod tests
         );
     }
 
-    /// Trait names an `All()` sits behind, for [`Test_A_Trait_Impl_Should_Not_Claim_The_Type`] —
-    /// whichever foreign trait it is, a trait implementation never owns the variant list.
-    fn Trait_Impl_Names() -> Vec<&'static str>
-    {
-        return vec!["Other", "Display", "Iterator", "SomeCustomTrait"];
-    }
-
     /// A trait implementation does not own the type's variant list, so attributing an
     /// `All()` to it would name the wrong universe. Two `impl` blocks for one type carry
     /// the same qualified name, and only the record each member follows tells them apart.
@@ -360,12 +353,11 @@ mod tests
         }
     }
 
-    /// Nonzero arities for `Table::All`, for
-    /// [`Test_An_All_That_Takes_A_Receiver_Should_Not_Be_A_Universe`] — any receiver or
-    /// argument at all makes it an accessor rather than the type's own list.
-    fn Nonzero_All_Arities() -> Vec<u32>
+    /// Trait names an `All()` sits behind, for [`Test_A_Trait_Impl_Should_Not_Claim_The_Type`] —
+    /// whichever foreign trait it is, a trait implementation never owns the variant list.
+    fn Trait_Impl_Names() -> Vec<&'static str>
     {
-        return vec![1, 2, 3];
+        return vec!["Other", "Display", "Iterator", "SomeCustomTrait"];
     }
 
     /// An accessor on an instance is not the type's list of itself.
@@ -383,6 +375,14 @@ mod tests
 
             assert!(found.is_empty(), "arity {arity}: {found:?}");
         }
+    }
+
+    /// Nonzero arities for `Table::All`, for
+    /// [`Test_An_All_That_Takes_A_Receiver_Should_Not_Be_A_Universe`] — any receiver or
+    /// argument at all makes it an accessor rather than the type's own list.
+    fn Nonzero_All_Arities() -> Vec<u32>
+    {
+        return vec![1, 2, 3];
     }
 
     /// A scalar constant is not a universe. Matching it would bury the real ones.

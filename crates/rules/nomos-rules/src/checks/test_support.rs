@@ -97,16 +97,6 @@ mod tests
     use super::*;
     use nomos_analysis::FactReader as _;
 
-    fn Floor() -> Guarantee
-    {
-        return Guarantee::New(
-            nomos_contracts::FactVariant::Syntactic,
-            nomos_contracts::Assurance::Sound,
-            nomos_contracts::Assurance::Unknown,
-            nomos_contracts::IncrementalGranularity::File,
-        );
-    }
-
     #[test]
     fn Test_Offering_Should_Declare_The_Contract_And_Admit_The_One_Named_Provider()
     {
@@ -137,5 +127,15 @@ mod tests
 
         assert_eq!(fact.payload.schema, nomos_cap_syntax::Payload_Schema());
         assert_eq!(fact.payload.bytes, b"unexpanded\t0\n".to_vec());
+    }
+
+    fn Floor() -> Guarantee
+    {
+        return Guarantee::New(
+            nomos_contracts::FactVariant::Syntactic,
+            nomos_contracts::Assurance::Sound,
+            nomos_contracts::Assurance::Unknown,
+            nomos_contracts::IncrementalGranularity::File,
+        );
     }
 }

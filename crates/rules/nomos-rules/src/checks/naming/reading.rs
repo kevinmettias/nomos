@@ -95,22 +95,6 @@ mod tests
 
     const PARSER: &str = "nomos.test.naming.reading.parses";
 
-    fn Source(path: &str, text: &str) -> SourceFile
-    {
-        return SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), text);
-    }
-
-    fn Offering() -> TestOffering
-    {
-        return test_support::Offering(
-            nomos_cap_syntax::Capability_Contract(),
-            nomos_cap_syntax::Capability(),
-            nomos_cap_syntax::CONTRACT_VERSION,
-            PARSER,
-            Guarantee::New(FactVariant::Syntactic, Assurance::Sound, Assurance::Unknown, IncrementalGranularity::File),
-        );
-    }
-
     #[test]
     fn Test_Payload_Of_Should_Decode_A_Materialized_Fact()
     {
@@ -141,5 +125,21 @@ mod tests
         let refused = Payload_Of(&source, &mut reader);
 
         assert!(refused.is_err(), "{refused:?}");
+    }
+
+    fn Source(path: &str, text: &str) -> SourceFile
+    {
+        return SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), text);
+    }
+
+    fn Offering() -> TestOffering
+    {
+        return test_support::Offering(
+            nomos_cap_syntax::Capability_Contract(),
+            nomos_cap_syntax::Capability(),
+            nomos_cap_syntax::CONTRACT_VERSION,
+            PARSER,
+            Guarantee::New(FactVariant::Syntactic, Assurance::Sound, Assurance::Unknown, IncrementalGranularity::File),
+        );
     }
 }

@@ -211,30 +211,10 @@ pub(super) struct Judgment
     pub(super) summary: String,
 }
 
-// Test-only: production code here never constructs an `Unread` directly, only ever an
-// index that already carries one.
-#[cfg(test)]
-use super::Unread;
-
 #[cfg(test)]
 mod tests
 {
     use super::*;
-
-    fn Empty_Index_With_Names(names: std::collections::BTreeSet<String>) -> CheckIndex<'static>
-    {
-        return CheckIndex { names, universes: Vec::new(), unobserved: Vec::new(), unread: Vec::new() };
-    }
-
-    fn Universe(claimed_mirror: Option<&str>) -> DeclaredUniverse
-    {
-        return DeclaredUniverse {
-            path: "a.rs".to_owned(),
-            name: "TABLES".to_owned(),
-            kind: UniverseKind::Constant,
-            claimed_mirror: claimed_mirror.map(str::to_owned),
-        };
-    }
 
     #[test]
     fn Test_Judgment_For_Universe_Should_Produce_No_Finding_When_The_Reach_Is_Enforced()
@@ -329,6 +309,10 @@ mod tests
     #[test]
     fn Test_Unresolved_Claim_Should_Downgrade_When_The_Index_Is_Short_Of_A_Subject_That_Could_Have_Resolved_It()
     {
+        // Test-only: production code here never constructs an `Unread` directly, only ever
+        // an index that already carries one.
+        use super::super::Unread;
+
         let breach = EnforcementBreach::Phantom { name: "Test_Renamed_Away".to_owned() };
         let index = CheckIndex {
             names: std::collections::BTreeSet::new(),
@@ -364,5 +348,20 @@ mod tests
         assert_eq!(judgment.gate, GateCategory::Advisory);
         assert_eq!(judgment.applicability, Applicability::Supported);
         assert!(judgment.summary.contains("variant"), "{}", judgment.summary);
+    }
+
+    fn Empty_Index_With_Names(names: std::collections::BTreeSet<String>) -> CheckIndex<'static>
+    {
+        return CheckIndex { names, universes: Vec::new(), unobserved: Vec::new(), unread: Vec::new() };
+    }
+
+    fn Universe(claimed_mirror: Option<&str>) -> DeclaredUniverse
+    {
+        return DeclaredUniverse {
+            path: "a.rs".to_owned(),
+            name: "TABLES".to_owned(),
+            kind: UniverseKind::Constant,
+            claimed_mirror: claimed_mirror.map(str::to_owned),
+        };
     }
 }

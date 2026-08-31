@@ -113,16 +113,6 @@ mod tests
     use super::*;
     use crate::DeclaredUniverse;
 
-    fn Universe_Claiming(mirror: Option<&str>) -> DeclaredUniverse
-    {
-        return DeclaredUniverse {
-            path: "a.rs".to_owned(),
-            name: "TABLES".to_owned(),
-            kind: crate::UniverseKind::Constant,
-            claimed_mirror: mirror.map(str::to_owned),
-        };
-    }
-
     #[test]
     fn Test_Reach_Of_Should_Report_Reviewed_When_No_Mirror_Is_Claimed()
     {
@@ -183,5 +173,15 @@ mod tests
     {
         assert_eq!(Claim::Of(true), Claim::Resolves);
         assert_eq!(Claim::Of(false), Claim::Phantom);
+    }
+
+    fn Universe_Claiming(mirror: Option<&str>) -> DeclaredUniverse
+    {
+        return DeclaredUniverse {
+            path: "a.rs".to_owned(),
+            name: "TABLES".to_owned(),
+            kind: crate::UniverseKind::Constant,
+            claimed_mirror: mirror.map(str::to_owned),
+        };
     }
 }

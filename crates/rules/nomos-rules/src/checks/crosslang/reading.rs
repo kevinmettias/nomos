@@ -55,22 +55,6 @@ mod tests
 
     const PARSER: &str = "nomos.test.crosslang.reading.parses";
 
-    fn Source(path: &str) -> SourceFile
-    {
-        return SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), String::new());
-    }
-
-    fn Offering() -> TestOffering
-    {
-        return test_support::Offering(
-            nomos_cap_syntax::Capability_Contract(),
-            nomos_cap_syntax::Capability(),
-            nomos_cap_syntax::CONTRACT_VERSION,
-            PARSER,
-            Guarantee::New(FactVariant::Syntactic, Assurance::Sound, Assurance::Unknown, IncrementalGranularity::File),
-        );
-    }
-
     #[test]
     fn Test_Struct_Index_Should_Include_Only_The_Sources_Whose_Fact_Could_Be_Read()
     {
@@ -92,5 +76,21 @@ mod tests
 
         assert_eq!(index.len(), 1, "expected exactly the readable source: {}", index.len());
         assert_eq!(index.first().map(|(source, _)| source.path.clone()), Some(readable.path));
+    }
+
+    fn Source(path: &str) -> SourceFile
+    {
+        return SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), String::new());
+    }
+
+    fn Offering() -> TestOffering
+    {
+        return test_support::Offering(
+            nomos_cap_syntax::Capability_Contract(),
+            nomos_cap_syntax::Capability(),
+            nomos_cap_syntax::CONTRACT_VERSION,
+            PARSER,
+            Guarantee::New(FactVariant::Syntactic, Assurance::Sound, Assurance::Unknown, IncrementalGranularity::File),
+        );
     }
 }

@@ -130,18 +130,6 @@ mod tests
         };
     }
 
-    /// A member and a downward edge it declares, for [`Test_A_Strictly_Downward_Edge_Should_Produce_No_Finding`] —
-    /// named for the pairing rather than `Cases()`, since what varies is which real band
-    /// gap the edge crosses.
-    fn Downward_Edges() -> Vec<(&'static str, &'static str)>
-    {
-        return vec![
-            ("nomos-rules", "nomos-cap-syntax"),
-            ("nomos-check-orchestration", "nomos-rules"),
-            ("nomos-cli", "nomos-gate-orchestration"),
-        ];
-    }
-
     #[test]
     fn Test_A_Strictly_Downward_Edge_Should_Produce_No_Finding()
     {
@@ -156,6 +144,18 @@ mod tests
 
             assert!(findings.is_empty(), "{package} -> {target}: {findings:?}");
         }
+    }
+
+    /// A member and a downward edge it declares, for [`Test_A_Strictly_Downward_Edge_Should_Produce_No_Finding`] —
+    /// named for the pairing rather than `Cases()`, since what varies is which real band
+    /// gap the edge crosses.
+    fn Downward_Edges() -> Vec<(&'static str, &'static str)>
+    {
+        return vec![
+            ("nomos-rules", "nomos-cap-syntax"),
+            ("nomos-check-orchestration", "nomos-rules"),
+            ("nomos-cli", "nomos-gate-orchestration"),
+        ];
     }
 
     #[test]
@@ -228,14 +228,6 @@ mod tests
         );
     }
 
-    /// Target names no `BANDS` entry declares, for
-    /// [`Test_An_Edge_To_An_Undeclared_Target_Should_Produce_No_Finding`] — an edge whose
-    /// target has no declared band is out of scope for direction, whatever it is called.
-    fn Undeclared_Targets() -> Vec<&'static str>
-    {
-        return vec!["not-in-bands", "totally-unknown-crate", "another-missing-crate"];
-    }
-
     #[test]
     fn Test_An_Edge_To_An_Undeclared_Target_Should_Produce_No_Finding()
     {
@@ -250,6 +242,14 @@ mod tests
 
             assert!(findings.is_empty(), "target {target}: {findings:?}");
         }
+    }
+
+    /// Target names no `BANDS` entry declares, for
+    /// [`Test_An_Edge_To_An_Undeclared_Target_Should_Produce_No_Finding`] — an edge whose
+    /// target has no declared band is out of scope for direction, whatever it is called.
+    fn Undeclared_Targets() -> Vec<&'static str>
+    {
+        return vec!["not-in-bands", "totally-unknown-crate", "another-missing-crate"];
     }
 
     #[test]

@@ -185,26 +185,6 @@ mod tests
     use nomos_contracts::SubjectId;
     use nomos_model::Content_Digest;
 
-    fn Struct_Item(qualified_name: &str, fields: &[(&str, &str)]) -> PayloadItem
-    {
-        let owned: Vec<(String, String)> = fields.iter().map(|(name, kind)| return ((*name).to_owned(), (*kind).to_owned())).collect();
-        let shape = nomos_cap_syntax::Struct_Shape(&owned).map_or(Observation::Absent, Observation::Present);
-
-        return PayloadItem {
-            ordinal: 0,
-            kind: "Struct".to_owned(),
-            visibility: PUBLIC.to_owned(),
-            qualified_name: qualified_name.to_owned(),
-            documentation: Observation::Absent,
-            shape,
-        };
-    }
-
-    fn Source(path: &str) -> SourceFile
-    {
-        return SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), String::new());
-    }
-
     #[test]
     fn Test_Judged_Correspondence_Should_Report_Nothing_When_Both_Sides_Name_The_Same_Fields()
     {
@@ -230,6 +210,26 @@ mod tests
 
         assert_eq!(judged.applicability, Applicability::Supported);
         assert!(judged.summary.contains('b'), "{}", judged.summary);
+    }
+
+    fn Struct_Item(qualified_name: &str, fields: &[(&str, &str)]) -> PayloadItem
+    {
+        let owned: Vec<(String, String)> = fields.iter().map(|(name, kind)| return ((*name).to_owned(), (*kind).to_owned())).collect();
+        let shape = nomos_cap_syntax::Struct_Shape(&owned).map_or(Observation::Absent, Observation::Present);
+
+        return PayloadItem {
+            ordinal: 0,
+            kind: "Struct".to_owned(),
+            visibility: PUBLIC.to_owned(),
+            qualified_name: qualified_name.to_owned(),
+            documentation: Observation::Absent,
+            shape,
+        };
+    }
+
+    fn Source(path: &str) -> SourceFile
+    {
+        return SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), String::new());
     }
 }
 
