@@ -50,15 +50,8 @@ mod tests
 {
     use super::*;
 
-    fn Attributes_Of(item: &str) -> Vec<syn::Attribute>
-    {
-        let parsed: syn::ItemFn = syn::parse_str(item).expect("a valid function fixture parses");
-
-        return parsed.attrs;
-    }
-
     #[test]
-    fn Test_Documentation_Of_Attributes_Should_Join_Doc_Lines_With_Newlines()
+    fn Test_Documentation_Of_Attributes_Should_Join_Documentation_Lines_With_Newlines()
     {
         let attributes = Attributes_Of("/// First line.\n/// Second line.\nfn f() {}");
 
@@ -69,7 +62,7 @@ mod tests
     }
 
     #[test]
-    fn Test_Documentation_Of_Attributes_Should_Be_None_With_No_Doc_Attribute()
+    fn Test_Documentation_Of_Attributes_Should_Be_None_With_No_Documentation_Attribute()
     {
         let attributes = Attributes_Of("#[allow(dead_code)]\nfn f() {}");
 
@@ -77,7 +70,7 @@ mod tests
     }
 
     #[test]
-    fn Test_Documentation_Line_Should_Be_None_For_A_Non_Doc_Attribute()
+    fn Test_Documentation_Line_Should_Be_None_For_A_Non_Documentation_Attribute()
     {
         let attributes = Attributes_Of("#[allow(dead_code)]\nfn f() {}");
         let attribute = attributes.first().expect("one attribute");
@@ -86,11 +79,18 @@ mod tests
     }
 
     #[test]
-    fn Test_Documentation_Line_Should_Read_A_Doc_Attributes_Own_Text()
+    fn Test_Documentation_Line_Should_Read_A_Documentation_Attributes_Own_Text()
     {
         let attributes = Attributes_Of("/// A line.\nfn f() {}");
         let attribute = attributes.first().expect("one attribute");
 
         assert_eq!(Documentation_Line(attribute), Some(" A line.".to_owned()));
+    }
+
+    fn Attributes_Of(item: &str) -> Vec<syn::Attribute>
+    {
+        let parsed: syn::ItemFn = syn::parse_str(item).expect("a valid function fixture parses");
+
+        return parsed.attrs;
     }
 }

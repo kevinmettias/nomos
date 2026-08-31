@@ -219,35 +219,6 @@ mod tests
 {
     use super::*;
 
-    fn Parse(source: &str) -> tree_sitter::Tree
-    {
-        let mut parser = tree_sitter::Parser::new();
-        parser
-            .set_language(&tree_sitter_go::LANGUAGE.into())
-            .expect("the Go grammar is compiled into this crate");
-
-        return parser.parse(source, None).expect("well-formed fixture source parses");
-    }
-
-    fn Find_Kind<'a>(node: Node<'a>, kind: &str) -> Option<Node<'a>>
-    {
-        if node.kind() == kind
-        {
-            return Some(node);
-        }
-
-        let mut cursor = node.walk();
-        for child in node.children(&mut cursor)
-        {
-            if let Some(found) = Find_Kind(child, kind)
-            {
-                return Some(found);
-            }
-        }
-
-        return None;
-    }
-
     #[test]
     fn Test_Record_Type_Spec_Should_Record_A_Struct_By_Name()
     {
@@ -276,5 +247,34 @@ mod tests
         let item = items.first().expect("one item recorded");
         assert_eq!(item.name, "Alias");
         assert_eq!(item.kind, ItemKind::TypeAlias);
+    }
+
+    fn Parse(source: &str) -> tree_sitter::Tree
+    {
+        let mut parser = tree_sitter::Parser::new();
+        parser
+            .set_language(&tree_sitter_go::LANGUAGE.into())
+            .expect("the Go grammar is compiled into this crate");
+
+        return parser.parse(source, None).expect("well-formed fixture source parses");
+    }
+
+    fn Find_Kind<'a>(node: Node<'a>, kind: &str) -> Option<Node<'a>>
+    {
+        if node.kind() == kind
+        {
+            return Some(node);
+        }
+
+        let mut cursor = node.walk();
+        for child in node.children(&mut cursor)
+        {
+            if let Some(found) = Find_Kind(child, kind)
+            {
+                return Some(found);
+            }
+        }
+
+        return None;
     }
 }

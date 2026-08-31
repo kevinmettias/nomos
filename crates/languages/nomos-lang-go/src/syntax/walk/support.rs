@@ -111,35 +111,6 @@ mod tests
 {
     use super::*;
 
-    fn Parse(source: &str) -> tree_sitter::Tree
-    {
-        let mut parser = tree_sitter::Parser::new();
-        parser
-            .set_language(&tree_sitter_go::LANGUAGE.into())
-            .expect("the Go grammar is compiled into this crate");
-
-        return parser.parse(source, None).expect("well-formed fixture source parses");
-    }
-
-    fn Find_Kind<'a>(node: Node<'a>, kind: &str) -> Option<Node<'a>>
-    {
-        if node.kind() == kind
-        {
-            return Some(node);
-        }
-
-        let mut cursor = node.walk();
-        for child in node.children(&mut cursor)
-        {
-            if let Some(found) = Find_Kind(child, kind)
-            {
-                return Some(found);
-            }
-        }
-
-        return None;
-    }
-
     #[test]
     fn Test_Push_Item_Record_Should_Assign_Dense_Zero_Based_Ordinals()
     {
@@ -204,5 +175,34 @@ mod tests
         let names = Named_Field_Children(declaration, "name");
 
         assert_eq!(names.len(), 2, "{names:?}");
+    }
+
+    fn Parse(source: &str) -> tree_sitter::Tree
+    {
+        let mut parser = tree_sitter::Parser::new();
+        parser
+            .set_language(&tree_sitter_go::LANGUAGE.into())
+            .expect("the Go grammar is compiled into this crate");
+
+        return parser.parse(source, None).expect("well-formed fixture source parses");
+    }
+
+    fn Find_Kind<'a>(node: Node<'a>, kind: &str) -> Option<Node<'a>>
+    {
+        if node.kind() == kind
+        {
+            return Some(node);
+        }
+
+        let mut cursor = node.walk();
+        for child in node.children(&mut cursor)
+        {
+            if let Some(found) = Find_Kind(child, kind)
+            {
+                return Some(found);
+            }
+        }
+
+        return None;
     }
 }

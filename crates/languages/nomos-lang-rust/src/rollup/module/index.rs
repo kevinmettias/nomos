@@ -55,11 +55,6 @@ mod tests
     use super::*;
     use nomos_model::Content_Digest;
 
-    fn Subject(path: &str) -> SubjectId
-    {
-        return SubjectId::From_Digest(Content_Digest(path.as_bytes()));
-    }
-
     fn An_Index() -> Index
     {
         return Index {
@@ -71,6 +66,11 @@ mod tests
             ],
             items: Vec::new(),
         };
+    }
+
+    fn Subject(path: &str) -> SubjectId
+    {
+        return SubjectId::From_Digest(Content_Digest(path.as_bytes()));
     }
 
     #[test]

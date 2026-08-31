@@ -247,38 +247,6 @@ mod tests
     use nomos_capability::Registry;
     use nomos_contracts::{Assurance, BuildVariantId, ConfigurationId, FactVariant, GenerationId, Guarantee, IncrementalGranularity, SnapshotId};
 
-    fn Subject(path: &str) -> SubjectId
-    {
-        use nomos_model::Content_Digest;
-
-        return SubjectId::From_Digest(Content_Digest(path.as_bytes()));
-    }
-
-    fn Test_Context() -> FactContext
-    {
-        return FactContext {
-            snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([1; Digest128::BYTE_LENGTH])),
-            variant: BuildVariantId::From_Digest(Digest128::From_Bytes([2; Digest128::BYTE_LENGTH])),
-            configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([3; Digest128::BYTE_LENGTH])),
-            generation: GenerationId::INITIAL,
-        };
-    }
-
-    /// The syntax capability's requirement every reader below asks against — an empty
-    /// registry cannot satisfy it, which is exactly the "nothing was declared" case these
-    /// tests need.
-    fn Need() -> Requirement
-    {
-        let guarantee = Guarantee::New(
-            FactVariant::Syntactic,
-            Assurance::Sound,
-            Assurance::Unknown,
-            IncrementalGranularity::File,
-        );
-
-        return Requirement::New(nomos_cap_syntax::Capability(), nomos_cap_syntax::CONTRACT_VERSION, guarantee);
-    }
-
     #[test]
     fn Test_Index_Key_Should_Not_Depend_On_The_Members_Own_Order()
     {
@@ -441,5 +409,37 @@ mod tests
         let rolled = Materialize_Index(&mut store, &against, &module).expect("materializes even with nothing readable");
 
         assert_eq!(rolled.index.Unreachable(), 1);
+    }
+
+    fn Subject(path: &str) -> SubjectId
+    {
+        use nomos_model::Content_Digest;
+
+        return SubjectId::From_Digest(Content_Digest(path.as_bytes()));
+    }
+
+    fn Test_Context() -> FactContext
+    {
+        return FactContext {
+            snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([1; Digest128::BYTE_LENGTH])),
+            variant: BuildVariantId::From_Digest(Digest128::From_Bytes([2; Digest128::BYTE_LENGTH])),
+            configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([3; Digest128::BYTE_LENGTH])),
+            generation: GenerationId::INITIAL,
+        };
+    }
+
+    /// The syntax capability's requirement every reader below asks against — an empty
+    /// registry cannot satisfy it, which is exactly the "nothing was declared" case these
+    /// tests need.
+    fn Need() -> Requirement
+    {
+        let guarantee = Guarantee::New(
+            FactVariant::Syntactic,
+            Assurance::Sound,
+            Assurance::Unknown,
+            IncrementalGranularity::File,
+        );
+
+        return Requirement::New(nomos_cap_syntax::Capability(), nomos_cap_syntax::CONTRACT_VERSION, guarantee);
     }
 }

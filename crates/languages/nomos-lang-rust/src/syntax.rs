@@ -82,6 +82,10 @@ mod local_tests
         let Reading::Parsed(facts) = reading
         else
         {
+            // rust-panic: allow: the fixture above is well-formed Rust, so a non-`Parsed`
+            // reading is this test's own fixture broken, not a reachable outcome its
+            // caller needs to handle — panicking names which reading and points straight
+            // at the fixture that regressed.
             panic!("expected a parse: {reading:?}");
         };
         assert_eq!(facts.items.len(), 1);

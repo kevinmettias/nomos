@@ -138,13 +138,6 @@ mod tests
         assert_eq!(Impl_Shape(false), nomos_cap_syntax::INHERENT);
     }
 
-    /// (use-tree leaf source, the name it binds) — a second leaf shape beside these would
-    /// extend the table rather than duplicate the test.
-    fn Bound_By_Cases() -> Vec<(&'static str, &'static str)>
-    {
-        return vec![("HashMap as Map", "Map"), ("*", "*")];
-    }
-
     #[test]
     fn Test_Bound_By_Should_Bind_A_Renamed_Leafs_Own_Alias_Or_A_Globs_Star()
     {
@@ -154,6 +147,13 @@ mod tests
 
             assert_eq!(Bound_By(&tree), expected);
         }
+    }
+
+    /// (use-tree leaf source, the name it binds) — a second leaf shape beside these would
+    /// extend the table rather than duplicate the test.
+    fn Bound_By_Cases() -> Vec<(&'static str, &'static str)>
+    {
+        return vec![("HashMap as Map", "Map"), ("*", "*")];
     }
 
     #[test]
@@ -204,13 +204,6 @@ mod tests
         assert_eq!(Path_As_Written(&path), "::std::fmt::Display");
     }
 
-    /// (type source, the head it records) — a second wrapper or headless form beside these
-    /// would extend the table rather than duplicate the test.
-    fn Type_Head_Cases() -> Vec<(&'static str, &'static str)>
-    {
-        return vec![("&Foo", "Foo"), ("(u32, u32)", "_")];
-    }
-
     #[test]
     fn Test_Type_Head_Should_See_Through_A_Reference_And_Be_An_Underscore_With_No_Single_Head()
     {
@@ -220,5 +213,12 @@ mod tests
 
             assert_eq!(Type_Head(&ty), expected);
         }
+    }
+
+    /// (type source, the head it records) — a second wrapper or headless form beside these
+    /// would extend the table rather than duplicate the test.
+    fn Type_Head_Cases() -> Vec<(&'static str, &'static str)>
+    {
+        return vec![("&Foo", "Foo"), ("(u32, u32)", "_")];
     }
 }

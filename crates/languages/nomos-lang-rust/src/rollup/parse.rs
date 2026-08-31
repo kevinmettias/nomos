@@ -256,11 +256,6 @@ mod tests
 {
     use super::*;
 
-    fn A_Subject_Hex() -> String
-    {
-        return SubjectId::From_Digest(Digest128::From_Bytes([7; Digest128::BYTE_LENGTH])).Digest().to_string();
-    }
-
     #[test]
     fn Test_Parse_Index_Should_Read_A_Module_Record_With_No_Members()
     {
@@ -270,17 +265,6 @@ mod tests
 
         assert!(index.members.is_empty());
         assert!(index.items.is_empty());
-    }
-
-    /// (payload text, a fragment its refusal reason must contain) for a payload
-    /// `Opened_Module_Index` must refuse before any member or item is ever read — a second
-    /// malformed header beside these would extend the table rather than duplicate the test.
-    fn Malformed_Header_Cases() -> Vec<(&'static str, &'static str)>
-    {
-        return vec![
-            ("", "empty"),
-            ("member\t00000000000000000000000000000000\tread", "module"),
-        ];
     }
 
     #[test]
@@ -294,6 +278,17 @@ mod tests
 
             assert!(error.contains(expected_fragment), "{error}");
         }
+    }
+
+    /// (payload text, a fragment its refusal reason must contain) for a payload
+    /// `Opened_Module_Index` must refuse before any member or item is ever read — a second
+    /// malformed header beside these would extend the table rather than duplicate the test.
+    fn Malformed_Header_Cases() -> Vec<(&'static str, &'static str)>
+    {
+        return vec![
+            ("", "empty"),
+            ("member\t00000000000000000000000000000000\tread", "module"),
+        ];
     }
 
     #[test]
@@ -372,5 +367,10 @@ mod tests
         let pairs: Vec<&str> = Hexadecimal_Byte_Pairs("0a1b2c").collect();
 
         assert_eq!(pairs, vec!["0a", "1b", "2c"]);
+    }
+
+    fn A_Subject_Hex() -> String
+    {
+        return SubjectId::From_Digest(Digest128::From_Bytes([7; Digest128::BYTE_LENGTH])).Digest().to_string();
     }
 }

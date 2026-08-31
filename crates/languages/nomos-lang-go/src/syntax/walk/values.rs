@@ -51,6 +51,20 @@ mod tests
 {
     use super::*;
 
+    #[test]
+    fn Test_Record_Const_Or_Var_Spec_Should_Record_Each_Name_Sharing_One_Value_List()
+    {
+        let source = "package main\n\nconst A, B = 1, 2\n";
+        let tree = Parse(source);
+        let spec = Find_Kind(tree.root_node(), "const_spec").expect("the fixture declares a const spec");
+        let mut items = Vec::new();
+
+        Record_Const_Or_Var_Spec(&mut items, spec, source.as_bytes(), ItemKind::Constant);
+
+        let names: Vec<&str> = items.iter().map(|item| return item.name.as_str()).collect();
+        assert_eq!(names, vec!["A", "B"]);
+    }
+
     fn Parse(source: &str) -> tree_sitter::Tree
     {
         let mut parser = tree_sitter::Parser::new();
@@ -78,19 +92,5 @@ mod tests
         }
 
         return None;
-    }
-
-    #[test]
-    fn Test_Record_Const_Or_Var_Spec_Should_Record_Each_Name_Sharing_One_Value_List()
-    {
-        let source = "package main\n\nconst A, B = 1, 2\n";
-        let tree = Parse(source);
-        let spec = Find_Kind(tree.root_node(), "const_spec").expect("the fixture declares a const spec");
-        let mut items = Vec::new();
-
-        Record_Const_Or_Var_Spec(&mut items, spec, source.as_bytes(), ItemKind::Constant);
-
-        let names: Vec<&str> = items.iter().map(|item| return item.name.as_str()).collect();
-        assert_eq!(names, vec!["A", "B"]);
     }
 }

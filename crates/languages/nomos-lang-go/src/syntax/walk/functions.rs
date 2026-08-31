@@ -114,27 +114,6 @@ mod tests
 {
     use super::*;
 
-    fn Parse(source: &str) -> tree_sitter::Tree
-    {
-        let mut parser = tree_sitter::Parser::new();
-        parser
-            .set_language(&tree_sitter_go::LANGUAGE.into())
-            .expect("the Go grammar is compiled into this crate");
-
-        return parser.parse(source, None).expect("well-formed fixture source parses");
-    }
-
-    fn Declaration_Of_Kind<'a>(tree: &'a tree_sitter::Tree, kind: &str) -> Node<'a>
-    {
-        let root = tree.root_node();
-        let mut cursor = root.walk();
-
-        return root
-            .children(&mut cursor)
-            .find(|child| return child.kind() == kind)
-            .unwrap_or_else(|| panic!("the fixture source declares a {kind}"));
-    }
-
     #[test]
     fn Test_Record_Function_Should_Record_A_Top_Level_Function()
     {
@@ -165,5 +144,29 @@ mod tests
         let item = items.first().expect("one item recorded");
         assert_eq!(item.name, "Increment");
         assert_eq!(item.scope, vec!["Counter".to_owned()]);
+    }
+
+    fn Parse(source: &str) -> tree_sitter::Tree
+    {
+        let mut parser = tree_sitter::Parser::new();
+        parser
+            .set_language(&tree_sitter_go::LANGUAGE.into())
+            .expect("the Go grammar is compiled into this crate");
+
+        return parser.parse(source, None).expect("well-formed fixture source parses");
+    }
+
+    fn Declaration_Of_Kind<'a>(tree: &'a tree_sitter::Tree, kind: &str) -> Node<'a>
+    {
+        let root = tree.root_node();
+        let mut cursor = root.walk();
+
+        return root
+            .children(&mut cursor)
+            .find(|child| return child.kind() == kind)
+            // A fixture that does not declare the requested kind is a broken fixture, not a
+            // reachable outcome this helper's callers need to handle — panicking names which
+            // kind and points straight at the test that wrote the fixture wrong.
+            .unwrap_or_else(|| panic!("the fixture source declares a {kind}"));
     }
 }
