@@ -111,12 +111,12 @@ fn Read_Sources(root: &Path) -> Vec<SourceFile>
 /// One entry of a walked directory: queued if it is a directory worth descending into, read
 /// if it is a `.rs` or `.go` file, and ignored otherwise.
 ///
-/// The extension check is a literal, the same as `nomos_lang_rust::RUST_EXTENSION` and
-/// `nomos_lang_go::GO_EXTENSION` already state, rather than a dependency on either crate:
-/// this walk decides which bytes are worth reading at all, not which registered provider
-/// answers for them -- `nomos-check-orchestration::composition::Recognized_Syntax_Provider`
-/// is where that second, real question is decided, over a path this function has already
-/// let through.
+/// The extension check is a literal, the same as the `RUST_EXTENSION` and `GO_EXTENSION`
+/// constants nomos-lang-rust and nomos-lang-go each already state, rather than a dependency on
+/// either crate: this walk decides which bytes are worth reading at all, not which registered
+/// provider answers for them -- `nomos-check-orchestration::composition::Recognized_Syntax_Provider`
+/// is where that second, real question is decided, over a path this function has already let
+/// through.
 fn Read_Entry(root: &Path, path: PathBuf, pending: &mut Vec<PathBuf>, sources: &mut Vec<SourceFile>)
 {
     if path.is_dir()

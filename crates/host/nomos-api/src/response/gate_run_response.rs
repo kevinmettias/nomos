@@ -81,8 +81,8 @@ mod tests
         );
     }
 
-    /// An empty tree cannot be judged, the same distinction `nomos_check_orchestration::
-    /// CheckOutcome::NoSource` already keeps apart from a clean judged run.
+    /// An empty tree cannot be judged, the same distinction the check-orchestration layer's
+    /// own `CheckOutcome::NoSource` already keeps apart from a clean judged run.
     #[test]
     fn Test_Host_Variant_Should_Compose_Into_A_Working_Environment_For_An_Empty_Tree()
     {
