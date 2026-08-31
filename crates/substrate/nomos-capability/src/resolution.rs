@@ -81,6 +81,17 @@ mod tests
     use super::*;
     use nomos_contracts::{Assurance, CapabilityId, ContractVersion, FactVariant, Guarantee, IncrementalGranularity, ProviderId};
 
+    fn Satisfied() -> Resolution
+    {
+        return Resolution::Satisfied {
+            selection: Selection {
+                chosen: Offer(),
+                alternatives: Vec::new(),
+            },
+            applicability: Applicability::Supported,
+        };
+    }
+
     fn Offer() -> ProviderOffer
     {
         return ProviderOffer {
@@ -93,17 +104,6 @@ mod tests
                 Assurance::Unknown,
                 IncrementalGranularity::File,
             ),
-        };
-    }
-
-    fn Satisfied() -> Resolution
-    {
-        return Resolution::Satisfied {
-            selection: Selection {
-                chosen: Offer(),
-                alternatives: Vec::new(),
-            },
-            applicability: Applicability::Supported,
         };
     }
 

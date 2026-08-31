@@ -129,6 +129,60 @@ mod tests
     use super::*;
     use nomos_contracts::{Assurance, FactVariant, IncrementalGranularity};
 
+    #[test]
+    fn Test_Declared_Registry_Should_Declare_The_Contract_Exactly_Once()
+    {
+        let registry = Declared_Registry(Contract());
+
+        assert_eq!(registry.Declared().count(), 1);
+    }
+
+    #[test]
+    fn Test_Assert_Ceiling_Admits_Should_Pass_For_A_Guarantee_At_Or_Below_The_Ceiling()
+    {
+        Assert_Ceiling_Admits(Contract(), Capability(), Version(), Weaker_Guarantee());
+    }
+
+    /// Weaker than [`Ceiling`] on every axis a ceiling can be strong on.
+    fn Weaker_Guarantee() -> Guarantee
+    {
+        return Guarantee::New(
+            FactVariant::Approximate,
+            Assurance::Unsound,
+            Assurance::Unknown,
+            IncrementalGranularity::File,
+        );
+    }
+
+    #[test]
+    fn Test_Assert_Ceiling_Refuses_Should_Pass_For_A_Guarantee_Above_The_Ceiling()
+    {
+        Assert_Ceiling_Refuses(Contract(), Stronger_Guarantee(), "stronger than the declared ceiling");
+    }
+
+    /// Claims name resolution, which [`Ceiling`]'s merely-syntactic promise cannot back.
+    fn Stronger_Guarantee() -> Guarantee
+    {
+        return Guarantee::New(
+            FactVariant::SemanticallyResolved,
+            Assurance::Sound,
+            Assurance::Sound,
+            IncrementalGranularity::Region,
+        );
+    }
+
+    #[test]
+    fn Test_Assert_Stands_With_No_Provider_Should_Pass_For_A_Declared_And_Unoffered_Contract()
+    {
+        Assert_Stands_With_No_Provider(Contract(), Capability(), Version(), Ceiling());
+    }
+
+    #[test]
+    fn Test_Assert_One_Contract_Per_Capability_Should_Pass_When_A_Second_Declaration_Is_Refused()
+    {
+        Assert_One_Contract_Per_Capability(Contract(), "one name, one meaning");
+    }
+
     fn Capability() -> CapabilityId
     {
         return CapabilityId::New("nomos.cap.test.contract_testing");
@@ -157,59 +211,5 @@ mod tests
             summary: "a contract for contract_testing.rs's own tests".to_owned(),
             ceiling: Ceiling(),
         };
-    }
-
-    /// Weaker than [`Ceiling`] on every axis a ceiling can be strong on.
-    fn Weaker_Guarantee() -> Guarantee
-    {
-        return Guarantee::New(
-            FactVariant::Approximate,
-            Assurance::Unsound,
-            Assurance::Unknown,
-            IncrementalGranularity::File,
-        );
-    }
-
-    /// Claims name resolution, which [`Ceiling`]'s merely-syntactic promise cannot back.
-    fn Stronger_Guarantee() -> Guarantee
-    {
-        return Guarantee::New(
-            FactVariant::SemanticallyResolved,
-            Assurance::Sound,
-            Assurance::Sound,
-            IncrementalGranularity::Region,
-        );
-    }
-
-    #[test]
-    fn Test_Declared_Registry_Should_Declare_The_Contract_Exactly_Once()
-    {
-        let registry = Declared_Registry(Contract());
-
-        assert_eq!(registry.Declared().count(), 1);
-    }
-
-    #[test]
-    fn Test_Assert_Ceiling_Admits_Should_Pass_For_A_Guarantee_At_Or_Below_The_Ceiling()
-    {
-        Assert_Ceiling_Admits(Contract(), Capability(), Version(), Weaker_Guarantee());
-    }
-
-    #[test]
-    fn Test_Assert_Ceiling_Refuses_Should_Pass_For_A_Guarantee_Above_The_Ceiling()
-    {
-        Assert_Ceiling_Refuses(Contract(), Stronger_Guarantee(), "stronger than the declared ceiling");
-    }
-
-    #[test]
-    fn Test_Assert_Stands_With_No_Provider_Should_Pass_For_A_Declared_And_Unoffered_Contract()
-    {
-        Assert_Stands_With_No_Provider(Contract(), Capability(), Version(), Ceiling());
-    }
-
-    #[test]
-    fn Test_Assert_One_Contract_Per_Capability_Should_Pass_When_A_Second_Declaration_Is_Refused()
-    {
-        Assert_One_Contract_Per_Capability(Contract(), "one name, one meaning");
     }
 }

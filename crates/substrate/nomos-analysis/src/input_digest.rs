@@ -46,12 +46,6 @@ mod tests
         assert_ne!(InputDigest::Of(&[b"a"]), InputDigest::Of(&[b"b"]));
     }
 
-    /// A handful of distinct byte fills, so the round trip is shown for more than one value.
-    fn Sample_Seeds() -> [u8; 3]
-    {
-        return [0, 7, 255];
-    }
-
     #[test]
     fn Test_From_Digest_Should_Wrap_The_Given_Value_Unchanged()
     {
@@ -72,5 +66,11 @@ mod tests
 
             assert_eq!(InputDigest::From_Digest(digest).Digest(), digest);
         }
+    }
+
+    /// A handful of distinct byte fills, so the round trip is shown for more than one value.
+    fn Sample_Seeds() -> [u8; 3]
+    {
+        return [0, 7, 255];
     }
 }

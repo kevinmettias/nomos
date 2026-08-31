@@ -341,19 +341,43 @@ mod tests
         FactVariant, Guarantee, GenerationId, IncrementalGranularity, ProviderId, SchemaId, SnapshotId, SubjectId,
     };
 
-    fn Seeded(seed: u8) -> Digest128
+    #[test]
+    fn Test_Is_Cycle_Should_Be_True_Only_For_A_Group_Of_More_Than_One_Member()
     {
-        return Digest128::From_Bytes([seed; Digest128::BYTE_LENGTH]);
+        assert!(!RematerializationGroup { members: vec![Key_For(1)] }.Is_Cycle());
+        assert!(RematerializationGroup { members: vec![Key_For(1), Key_For(2)] }.Is_Cycle());
     }
 
-    fn File_Guarantee() -> Guarantee
+    #[test]
+    fn Test_Condensation_Of_Should_Group_Two_Facts_That_Depend_On_Each_Other()
     {
-        return Guarantee::New(
-            FactVariant::Syntactic,
-            Assurance::Sound,
-            Assurance::Sound,
-            IncrementalGranularity::File,
-        );
+        let mut store = MemoryFactStore::New();
+        let a = Key_For(1);
+        let b = Key_For(2);
+        store
+            .Materialize(
+                Fact_For(&a, GenerationId::From_Raw(1)),
+                &[Dependency { key: b.clone(), outcome: ReadOutcome::Materialized }],
+            )
+            .expect("a depends on b");
+        store
+            .Materialize(
+                Fact_For(&b, GenerationId::From_Raw(1)),
+                &[Dependency { key: a.clone(), outcome: ReadOutcome::Materialized }],
+            )
+            .expect("b depends on a");
+
+        let report = Report_Naming(&[a.clone(), b.clone()]);
+        let groups = Condensation_Of(&report, &store);
+
+        assert_eq!(groups.len(), 1, "a mutual dependency is one group, not two: {groups:?}");
+        let group = groups.first().expect("the assertion above found exactly one group");
+        assert!(group.Is_Cycle());
+        let mut members = group.members.clone();
+        members.sort();
+        let mut expected = vec![a, b];
+        expected.sort();
+        assert_eq!(members, expected);
     }
 
     fn Key_For(subject_seed: u8) -> FactKey
@@ -394,42 +418,18 @@ mod tests
         };
     }
 
-    #[test]
-    fn Test_Is_Cycle_Should_Be_True_Only_For_A_Group_Of_More_Than_One_Member()
+    fn Seeded(seed: u8) -> Digest128
     {
-        assert!(!RematerializationGroup { members: vec![Key_For(1)] }.Is_Cycle());
-        assert!(RematerializationGroup { members: vec![Key_For(1), Key_For(2)] }.Is_Cycle());
+        return Digest128::From_Bytes([seed; Digest128::BYTE_LENGTH]);
     }
 
-    #[test]
-    fn Test_Condensation_Of_Should_Group_Two_Facts_That_Depend_On_Each_Other()
+    fn File_Guarantee() -> Guarantee
     {
-        let mut store = MemoryFactStore::New();
-        let a = Key_For(1);
-        let b = Key_For(2);
-        store
-            .Materialize(
-                Fact_For(&a, GenerationId::From_Raw(1)),
-                &[Dependency { key: b.clone(), outcome: ReadOutcome::Materialized }],
-            )
-            .expect("a depends on b");
-        store
-            .Materialize(
-                Fact_For(&b, GenerationId::From_Raw(1)),
-                &[Dependency { key: a.clone(), outcome: ReadOutcome::Materialized }],
-            )
-            .expect("b depends on a");
-
-        let report = Report_Naming(&[a.clone(), b.clone()]);
-        let groups = Condensation_Of(&report, &store);
-
-        assert_eq!(groups.len(), 1, "a mutual dependency is one group, not two: {groups:?}");
-        let group = groups.first().expect("the assertion above found exactly one group");
-        assert!(group.Is_Cycle());
-        let mut members = group.members.clone();
-        members.sort();
-        let mut expected = vec![a, b];
-        expected.sort();
-        assert_eq!(members, expected);
+        return Guarantee::New(
+            FactVariant::Syntactic,
+            Assurance::Sound,
+            Assurance::Sound,
+            IncrementalGranularity::File,
+        );
     }
 }

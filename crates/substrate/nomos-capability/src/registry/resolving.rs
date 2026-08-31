@@ -195,6 +195,48 @@ mod tests
     use crate::CapabilityContract;
     use nomos_contracts::{Assurance, CapabilityId, ContractVersion, FactVariant, Guarantee, IncrementalGranularity};
 
+    #[test]
+    fn Test_Resolve_Requirement_Should_Report_No_Provider_For_A_Declared_But_Unoffered_Capability()
+    {
+        let mut registry = Registry::New();
+        registry.Declare(Contract()).expect("declared once");
+
+        let resolution = Resolve_Requirement(&registry, &Requirement::New(Capability(), Version(), Floor()));
+
+        assert!(matches!(resolution, Resolution::Unsatisfied { reason: Unmet::NoProvider, .. }));
+    }
+
+    #[test]
+    fn Test_Resolve_Requiring_Should_Refuse_A_Requirement_Nobody_Named_Answers()
+    {
+        let registry = Registry_With_One_Offer();
+        let required = ProviderId::New("nomos.test.absent");
+
+        let resolution =
+            Resolve_Requiring(&registry, &Requirement::New(Capability(), Version(), Floor()), &required);
+
+        assert!(matches!(resolution, RequiredResolution::Unsatisfied { .. }));
+    }
+
+    fn Registry_With_One_Offer() -> Registry
+    {
+        let mut registry = Registry::New();
+        registry.Declare(Contract()).expect("declared once");
+        registry.Offer(Offer_From("nomos.test.resolving")).expect("within the ceiling");
+
+        return registry;
+    }
+
+    fn Offer_From(provider: &str) -> ProviderOffer
+    {
+        return ProviderOffer {
+            provider: ProviderId::New(provider),
+            capability: Capability(),
+            version: Version(),
+            guarantee: Floor(),
+        };
+    }
+
     fn Capability() -> CapabilityId
     {
         return CapabilityId::New("nomos.cap.test.resolving");
@@ -223,48 +265,6 @@ mod tests
             summary: "a contract for resolving.rs's own tests".to_owned(),
             ceiling: Floor(),
         };
-    }
-
-    fn Offer_From(provider: &str) -> ProviderOffer
-    {
-        return ProviderOffer {
-            provider: ProviderId::New(provider),
-            capability: Capability(),
-            version: Version(),
-            guarantee: Floor(),
-        };
-    }
-
-    fn Registry_With_One_Offer() -> Registry
-    {
-        let mut registry = Registry::New();
-        registry.Declare(Contract()).expect("declared once");
-        registry.Offer(Offer_From("nomos.test.resolving")).expect("within the ceiling");
-
-        return registry;
-    }
-
-    #[test]
-    fn Test_Resolve_Requirement_Should_Report_No_Provider_For_A_Declared_But_Unoffered_Capability()
-    {
-        let mut registry = Registry::New();
-        registry.Declare(Contract()).expect("declared once");
-
-        let resolution = Resolve_Requirement(&registry, &Requirement::New(Capability(), Version(), Floor()));
-
-        assert!(matches!(resolution, Resolution::Unsatisfied { reason: Unmet::NoProvider, .. }));
-    }
-
-    #[test]
-    fn Test_Resolve_Requiring_Should_Refuse_A_Requirement_Nobody_Named_Answers()
-    {
-        let registry = Registry_With_One_Offer();
-        let required = ProviderId::New("nomos.test.absent");
-
-        let resolution =
-            Resolve_Requiring(&registry, &Requirement::New(Capability(), Version(), Floor()), &required);
-
-        assert!(matches!(resolution, RequiredResolution::Unsatisfied { .. }));
     }
 }
 

@@ -63,19 +63,6 @@ mod tests
 {
     use super::*;
 
-    fn Sample_Effects() -> Vec<Effect>
-    {
-        return vec![Effect {
-            path: "src/a.rs".to_owned(),
-            kind: crate::EffectKind::Added,
-        }];
-    }
-
-    fn Sample_Snapshot() -> SnapshotId
-    {
-        return SnapshotId::From_Digest(nomos_contracts::Digest128::From_Bytes([0x42; 16]));
-    }
-
     #[test]
     fn Test_Generation_Should_Report_The_Generation_Of_An_Advanced_Outcome()
     {
@@ -112,5 +99,18 @@ mod tests
         };
 
         assert_eq!(applied.Effects(), effects.as_slice());
+    }
+
+    fn Sample_Effects() -> Vec<Effect>
+    {
+        return vec![Effect {
+            path: "src/a.rs".to_owned(),
+            kind: crate::EffectKind::Added,
+        }];
+    }
+
+    fn Sample_Snapshot() -> SnapshotId
+    {
+        return SnapshotId::From_Digest(nomos_contracts::Digest128::From_Bytes([0x42; 16]));
     }
 }

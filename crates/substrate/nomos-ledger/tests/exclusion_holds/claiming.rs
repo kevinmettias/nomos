@@ -61,7 +61,7 @@ fn Test_Claiming_Disjoint_Territory_Should_Succeed_Concurrently()
 /// here rather than a change to the loop that reads them.
 fn Claimants_Of_The_Pattern_Bricked_Board() -> [(&'static str, &'static str); 3]
 {
-    [("T-1", "agent-a"), ("T-2", "agent-b"), ("T-3", "agent-c")]
+    return [("T-1", "agent-a"), ("T-2", "agent-b"), ("T-3", "agent-c")];
 }
 
 #[test]

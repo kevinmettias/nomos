@@ -201,42 +201,6 @@ mod tests
 {
     use super::*;
 
-    fn Item(id: &str) -> LedgerItem
-    {
-        return LedgerItem {
-            id: ItemId::New(id),
-            title: "an item".to_owned(),
-            why: "because".to_owned(),
-            done_when: "when it is done".to_owned(),
-            kind: ItemKind::Correction,
-            origin: ItemOrigin::Proposed,
-            territory: Territory::Empty(),
-            state: ItemState::Ready,
-            depends_on: Vec::new(),
-            blocked: None,
-            claim: None,
-            verification: None,
-            verified: None,
-            abandoned: Vec::new(),
-            displaced: Vec::new(),
-            declined: None,
-        };
-    }
-
-    fn At(seconds: i64) -> Timestamp
-    {
-        return Timestamp::From_Unix_Seconds(seconds);
-    }
-
-    fn Claimed_By(holder: &str, expires: i64) -> Claim
-    {
-        return Claim {
-            holder: holder.to_owned(),
-            acquired_at: At(1_000),
-            lease_expires_at: At(expires),
-        };
-    }
-
     #[test]
     fn Test_Has_Active_Claim_Should_Be_False_Once_The_Claim_Has_Lapsed()
     {
@@ -288,5 +252,41 @@ mod tests
             .expect("Decline must record who ended it and when");
         assert_eq!(declined.holder, "agent-a");
         assert_eq!(declined.declined_at, At(2_000));
+    }
+
+    fn Item(id: &str) -> LedgerItem
+    {
+        return LedgerItem {
+            id: ItemId::New(id),
+            title: "an item".to_owned(),
+            why: "because".to_owned(),
+            done_when: "when it is done".to_owned(),
+            kind: ItemKind::Correction,
+            origin: ItemOrigin::Proposed,
+            territory: Territory::Empty(),
+            state: ItemState::Ready,
+            depends_on: Vec::new(),
+            blocked: None,
+            claim: None,
+            verification: None,
+            verified: None,
+            abandoned: Vec::new(),
+            displaced: Vec::new(),
+            declined: None,
+        };
+    }
+
+    fn At(seconds: i64) -> Timestamp
+    {
+        return Timestamp::From_Unix_Seconds(seconds);
+    }
+
+    fn Claimed_By(holder: &str, expires: i64) -> Claim
+    {
+        return Claim {
+            holder: holder.to_owned(),
+            acquired_at: At(1_000),
+            lease_expires_at: At(expires),
+        };
     }
 }

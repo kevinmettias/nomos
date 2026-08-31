@@ -16653,6 +16653,134 @@
       "reason": "this file pairs its production code with its own inline #[cfg(test)] module; check-test-coverage keys a test's companion unit off the exact file it is textually written in (confirmed via the Rust front end's stem-based Unit matching), so splitting the test module into a sibling file breaks coverage attribution for every function this file declares. file-size/responsibility markers are not honoured under this repository's safety-only marker policy (OD-GATE-018), so this waives per that record's remedy.",
       "owner": "@claude-p24-regression",
       "expires": "2026-11-28"
+    },
+    {
+      "check": "check-crate-split",
+      "path": "crates/substrate/nomos-workspace",
+      "fingerprint": "5a500fd1775515fb",
+      "reason": "review, not defect, per this check own doc (when-a-module-earns-its-boundary.md): \"the module may hold two unrelated source trees on purpose... no reference graph can see intent.\" Empirically isolated (a scratch copy with workspace_snapshot.rs test module reverted inline no longer trips this check) to be a side effect of extracting workspace_snapshot.rs own oversized test module out to workspace_snapshot/tests.rs (the check-file-size remedy this same P24 sweep applied) -- the actual production reference graph is unchanged: workspace_snapshot.rs still imports and uses crate::Member exactly as before this split, verified against git HEAD by diff.",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-error-info",
+      "path": "crates/substrate/nomos-ledger/src/finish.rs",
+      "fingerprint": "171551d2c909e17c",
+      "reason": "the code carries an adjacent \"// error-info: allow\" comment immediately above the discard, stating the invariant: this is a best-effort clean slate before creating the directory fresh below via create_dir_all(...).expect(...) immediately after -- on the common first use the path does not exist yet, so removal failing is expected and uninteresting; the directory this test actually needs is proved by the following create_dir_all call, not by this one",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-error-info",
+      "path": "crates/substrate/nomos-ledger/src/finish/gate_step.rs",
+      "fingerprint": "171551d2c909e17c",
+      "reason": "the code carries an adjacent \"// error-info: allow\" comment immediately above the discard, stating the invariant: this is a best-effort clean slate before creating the directory fresh below via create_dir_all(...).expect(...) immediately after -- on the common first use the path does not exist yet, so removal failing is expected and uninteresting; the directory this test actually needs is proved by the following create_dir_all call, not by this one",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-error-info",
+      "path": "crates/substrate/nomos-ledger/src/store/file.rs",
+      "fingerprint": "171551d2c909e17c",
+      "reason": "the code carries an adjacent \"// error-info: allow\" comment immediately above the discard, stating the invariant: this is a best-effort clean slate before creating the directory fresh below via create_dir_all(...).expect(...) immediately after -- on the common first use the path does not exist yet, so removal failing is expected and uninteresting; the directory this test actually needs is proved by the following create_dir_all call, not by this one",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-error-info",
+      "path": "crates/substrate/nomos-ledger/src/store/verbs.rs",
+      "fingerprint": "171551d2c909e17c",
+      "reason": "the code carries an adjacent \"// error-info: allow\" comment immediately above the discard, stating the invariant: this is a best-effort clean slate before creating the directory fresh below via create_dir_all(...).expect(...) immediately after -- on the common first use the path does not exist yet, so removal failing is expected and uninteresting; the directory this test actually needs is proved by the following create_dir_all call, not by this one",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-file-size",
+      "path": "crates/substrate/nomos-ledger/src/file_ledger.rs",
+      "fingerprint": "4dcc93dfd813e986",
+      "reason": "the code carries an adjacent \"// file-size: allow:\" comment at the top of the file stating the invariant: past its extracted test suite (moved to file_ledger/tests.rs, the check-file-size remedy this same P24 sweep applied to bring the file from 765 to 513 lines), this file is the FileLedger struct and its two impl blocks -- one type own surface, whose doc comments carry the why for OD-LEDGER-008/009/012/015/019/021 inline. Splitting either impl block into a second file would put one types methods behind two module paths for no cohesion gained, the kind of split this workspace surface-snapshot convention already treats as a defect rather than a fix.",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-file-size",
+      "path": "crates/substrate/nomos-ledger/src/file_ledger.rs",
+      "fingerprint": "5881ba9a2e14ab9e",
+      "reason": "tightly-coupled: this file is one type own struct/impl plus that same type per-method test suite. check-test-coverage keys a tests companion unit off the literal file its test is textually written in (see the local_tests/self_tests convention already used elsewhere in this workspace, e.g. nomos-ledger/src/claim/refusal.rs, nomos-capability/src/registry.rs) -- moving these tests to a sibling file was tried during this same P24 sweep and empirically broke check-test-coverage for every one of this files own methods (11 new findings), so the tests stay local and the file stays over the line trigger by design.",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-responsibility-extraction",
+      "path": "crates/substrate/nomos-ledger/src/file_ledger.rs",
+      "fingerprint": "415948ed65494eb7",
+      "reason": "tightly-coupled: this file is one type own struct/impl plus that same type per-method test suite. check-test-coverage keys a tests companion unit off the literal file its test is textually written in (see the local_tests/self_tests convention already used elsewhere in this workspace, e.g. nomos-ledger/src/claim/refusal.rs, nomos-capability/src/registry.rs) -- moving these tests to a sibling file was tried during this same P24 sweep and empirically broke check-test-coverage for every one of this files own methods (11 new findings), so the tests stay local and the file stays over the line trigger by design.",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-file-size",
+      "path": "crates/substrate/nomos-ledger/src/store/refusal.rs",
+      "fingerprint": "cd10357207f0d6f2",
+      "reason": "tightly-coupled: this file is one type own struct/impl plus that same type per-method test suite. check-test-coverage keys a tests companion unit off the literal file its test is textually written in (see the local_tests/self_tests convention already used elsewhere in this workspace, e.g. nomos-ledger/src/claim/refusal.rs, nomos-capability/src/registry.rs) -- moving these tests to a sibling file was tried during this same P24 sweep and empirically broke check-test-coverage for every one of this files own methods, so the tests stay local and the file stays over the line trigger by design.",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-responsibility-extraction",
+      "path": "crates/substrate/nomos-ledger/src/store/refusal.rs",
+      "fingerprint": "483f4c12cb001192",
+      "reason": "tightly-coupled: this file is one type own struct/impl plus that same type per-method test suite. check-test-coverage keys a tests companion unit off the literal file its test is textually written in (see the local_tests/self_tests convention already used elsewhere in this workspace, e.g. nomos-ledger/src/claim/refusal.rs, nomos-capability/src/registry.rs) -- moving these tests to a sibling file was tried during this same P24 sweep and empirically broke check-test-coverage for every one of this files own methods, so the tests stay local and the file stays over the line trigger by design.",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-file-size",
+      "path": "crates/substrate/nomos-workspace/src/workspace_snapshot.rs",
+      "fingerprint": "bbd4989d3b4651d2",
+      "reason": "tightly-coupled: this file is one type own struct/impl plus that same type per-method test suite. check-test-coverage keys a tests companion unit off the literal file its test is textually written in (see the local_tests/self_tests convention already used elsewhere in this workspace, e.g. nomos-ledger/src/claim/refusal.rs, nomos-capability/src/registry.rs) -- moving these tests to a sibling file was tried during this same P24 sweep and empirically broke check-test-coverage for every one of this files own methods, so the tests stay local and the file stays over the line trigger by design.",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-responsibility-extraction",
+      "path": "crates/substrate/nomos-workspace/src/workspace_snapshot.rs",
+      "fingerprint": "f232efdca6ce5152",
+      "reason": "tightly-coupled: this file is one type own struct/impl plus that same type per-method test suite. check-test-coverage keys a tests companion unit off the literal file its test is textually written in (see the local_tests/self_tests convention already used elsewhere in this workspace, e.g. nomos-ledger/src/claim/refusal.rs, nomos-capability/src/registry.rs) -- moving these tests to a sibling file was tried during this same P24 sweep and empirically broke check-test-coverage for every one of this files own methods, so the tests stay local and the file stays over the line trigger by design.",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-error-info",
+      "path": "crates/substrate/nomos-ledger/src/file_ledger.rs",
+      "fingerprint": "171551d2c909e17c",
+      "reason": "the code carries an adjacent \"// error-info: allow\" comment immediately above the discard, stating the invariant: this is a best-effort clean slate before creating the directory fresh below via create_dir_all(...).expect(...) immediately after -- on the common first use the path does not exist yet, so removal failing is expected and uninteresting; the directory this test actually needs is proved by the following create_dir_all call, not by this one",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-responsibility-extraction",
+      "path": "crates/substrate/nomos-ledger/src/store/refusal.rs",
+      "fingerprint": "9a7a9bea0c2dbe8f",
+      "reason": "tightly-coupled: this file is one type own struct/impl plus that same type per-method test suite. check-test-coverage keys a tests companion unit off the literal file its test is textually written in (see the local_tests/self_tests convention already used elsewhere in this workspace, e.g. nomos-ledger/src/claim/refusal.rs, nomos-capability/src/registry.rs) -- moving these tests to a sibling file was tried during this same P24 sweep and empirically broke check-test-coverage for every one of this files own methods, so the tests stay local and the file stays over the line trigger by design.",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-interfile-duplication",
+      "path": "crates/substrate/nomos-ledger/src/file_ledger.rs",
+      "fingerprint": "1bf6479f7127df5e",
+      "reason": "parallel-but-independent test suites for two different architectural layers: nomos-ledger/src/file_ledger.rs tests FileLedger own inherent methods directly, nomos-ledger/src/store/verbs.rs tests the free-function verbs (Add_Item/Decline_Item/Take_Over/Validate_Current) built on top of it -- each needs its own directory/clock/ledger arrangement scaffold so one layers fixture can never mask a real divergence from the other, the same deliberately-independent-parallel-design pattern already used elsewhere in this campaign; forcing a shared helper would blur the layer boundary the two suites exist to keep separate",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-interfile-duplication",
+      "path": "crates/substrate/nomos-ledger/src/store/verbs.rs",
+      "fingerprint": "a540abbff946854c",
+      "reason": "parallel-but-independent test suites for two different architectural layers: nomos-ledger/src/file_ledger.rs tests FileLedger own inherent methods directly, nomos-ledger/src/store/verbs.rs tests the free-function verbs (Add_Item/Decline_Item/Take_Over/Validate_Current) built on top of it -- each needs its own directory/clock/ledger arrangement scaffold so one layers fixture can never mask a real divergence from the other, the same deliberately-independent-parallel-design pattern already used elsewhere in this campaign; forcing a shared helper would blur the layer boundary the two suites exist to keep separate",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
     }
   ]
 }

@@ -81,31 +81,6 @@ mod tests
     use super::*;
     use nomos_contracts::{Assurance, FactVariant, Guarantee, IncrementalGranularity};
 
-    fn Seeded(seed: u8) -> Digest128
-    {
-        return Digest128::From_Bytes([seed; Digest128::BYTE_LENGTH]);
-    }
-
-    fn Sample() -> Key
-    {
-        return Key {
-            contract: CapabilityId::New("nomos.cap.test.key"),
-            contract_version: ContractVersion::New(1, 0),
-            subject: SubjectId::From_Digest(Seeded(1)),
-            semantic_inputs: InputDigest::Of(&[b"fn main() {}"]),
-            provider: ProviderId::New("nomos.provider.test"),
-            provider_version: ContractVersion::New(1, 0),
-            guarantee: GuaranteeDigest::Of(&Guarantee::New(
-                FactVariant::Syntactic,
-                Assurance::Sound,
-                Assurance::Sound,
-                IncrementalGranularity::File,
-            )),
-            variant: BuildVariantId::From_Digest(Seeded(3)),
-            configuration: ConfigurationId::From_Digest(Seeded(4)),
-        };
-    }
-
     #[test]
     fn Test_Parts_Should_Carry_Every_Field_As_A_Non_Empty_Byte_Vector()
     {
@@ -132,5 +107,30 @@ mod tests
 
         assert_eq!(identity.Key(), &key);
         assert_eq!(identity.generation, GenerationId::From_Raw(7));
+    }
+
+    fn Seeded(seed: u8) -> Digest128
+    {
+        return Digest128::From_Bytes([seed; Digest128::BYTE_LENGTH]);
+    }
+
+    fn Sample() -> Key
+    {
+        return Key {
+            contract: CapabilityId::New("nomos.cap.test.key"),
+            contract_version: ContractVersion::New(1, 0),
+            subject: SubjectId::From_Digest(Seeded(1)),
+            semantic_inputs: InputDigest::Of(&[b"fn main() {}"]),
+            provider: ProviderId::New("nomos.provider.test"),
+            provider_version: ContractVersion::New(1, 0),
+            guarantee: GuaranteeDigest::Of(&Guarantee::New(
+                FactVariant::Syntactic,
+                Assurance::Sound,
+                Assurance::Sound,
+                IncrementalGranularity::File,
+            )),
+            variant: BuildVariantId::From_Digest(Seeded(3)),
+            configuration: ConfigurationId::From_Digest(Seeded(4)),
+        };
     }
 }

@@ -106,6 +106,18 @@ mod tests
     use super::*;
     use crate::{ItemKind, ItemOrigin, ItemState, Territory};
 
+    fn Claimed_Item(id: &str, holder: &str) -> LedgerItem
+    {
+        let mut item = Item(id);
+        item.state = ItemState::Claimed;
+        item.claim = Some(Claim {
+            holder: holder.to_owned(),
+            acquired_at: Timestamp::From_Unix_Seconds(1_000),
+            lease_expires_at: Timestamp::From_Unix_Seconds(2_000),
+        });
+        return item;
+    }
+
     fn Item(id: &str) -> LedgerItem
     {
         return LedgerItem {
@@ -126,23 +138,6 @@ mod tests
             displaced: Vec::new(),
             declined: None,
         };
-    }
-
-    fn Claimed_Item(id: &str, holder: &str) -> LedgerItem
-    {
-        let mut item = Item(id);
-        item.state = ItemState::Claimed;
-        item.claim = Some(Claim {
-            holder: holder.to_owned(),
-            acquired_at: Timestamp::From_Unix_Seconds(1_000),
-            lease_expires_at: Timestamp::From_Unix_Seconds(2_000),
-        });
-        return item;
-    }
-
-    fn Document_Of(items: Vec<LedgerItem>) -> LedgerDocument
-    {
-        return LedgerDocument { schema_version: crate::SCHEMA_VERSION, items };
     }
 
     #[test]
@@ -197,5 +192,10 @@ mod tests
         let item = document.items.first().expect("Document_Of built one item");
         assert_eq!(item.claim.as_ref().map(|claim| return claim.holder.as_str()), Some("agent-c"));
         assert_eq!(item.displaced.len(), 1, "the claim the takeover replaced must be kept");
+    }
+
+    fn Document_Of(items: Vec<LedgerItem>) -> LedgerDocument
+    {
+        return LedgerDocument { schema_version: crate::SCHEMA_VERSION, items };
     }
 }

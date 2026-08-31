@@ -258,19 +258,24 @@ mod tests
         FactVariant, Guarantee, ProviderId, SchemaId, SnapshotId, SubjectId,
     };
 
-    fn Seeded(seed: u8) -> Digest128
+    #[test]
+    fn Test_Invalidate_Reached_Should_Name_The_Fact_A_Cause_Reaches_Directly()
     {
-        return Digest128::From_Bytes([seed; Digest128::BYTE_LENGTH]);
-    }
+        let mut store = MemoryFactStore::New();
+        let key = Key_For(1);
+        store
+            .Materialize(Fact_For(&key, GenerationId::From_Raw(1)), &[])
+            .expect("first materialization cannot conflict");
 
-    fn File_Guarantee() -> Guarantee
-    {
-        return Guarantee::New(
-            FactVariant::Syntactic,
-            Assurance::Sound,
-            Assurance::Sound,
-            IncrementalGranularity::File,
-        );
+        let cause = GenerationCause::SubjectChanged {
+            subject: key.subject,
+            granularity: IncrementalGranularity::File,
+        };
+
+        let report = Invalidate_Reached(&mut store, &cause, GenerationId::From_Raw(2));
+
+        assert_eq!(report.direct, vec![key]);
+        assert_eq!(report.retained, 0);
     }
 
     fn Key_For(subject_seed: u8) -> FactKey
@@ -299,23 +304,18 @@ mod tests
         };
     }
 
-    #[test]
-    fn Test_Invalidate_Reached_Should_Name_The_Fact_A_Cause_Reaches_Directly()
+    fn Seeded(seed: u8) -> Digest128
     {
-        let mut store = MemoryFactStore::New();
-        let key = Key_For(1);
-        store
-            .Materialize(Fact_For(&key, GenerationId::From_Raw(1)), &[])
-            .expect("first materialization cannot conflict");
+        return Digest128::From_Bytes([seed; Digest128::BYTE_LENGTH]);
+    }
 
-        let cause = GenerationCause::SubjectChanged {
-            subject: key.subject,
-            granularity: IncrementalGranularity::File,
-        };
-
-        let report = Invalidate_Reached(&mut store, &cause, GenerationId::From_Raw(2));
-
-        assert_eq!(report.direct, vec![key]);
-        assert_eq!(report.retained, 0);
+    fn File_Guarantee() -> Guarantee
+    {
+        return Guarantee::New(
+            FactVariant::Syntactic,
+            Assurance::Sound,
+            Assurance::Sound,
+            IncrementalGranularity::File,
+        );
     }
 }

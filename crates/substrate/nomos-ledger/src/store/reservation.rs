@@ -192,33 +192,6 @@ mod tests
     use super::*;
     use crate::{ItemId, ItemKind, ItemOrigin, ItemState};
 
-    fn Item_Reserving(id: &str, path: &str) -> LedgerItem
-    {
-        return LedgerItem {
-            id: ItemId::New(id),
-            title: "an item".to_owned(),
-            why: "because".to_owned(),
-            done_when: "when it is done".to_owned(),
-            kind: ItemKind::Decision,
-            origin: ItemOrigin::Proposed,
-            territory: Territory::Of_Files([path.to_owned()]),
-            state: ItemState::Ready,
-            depends_on: Vec::new(),
-            blocked: None,
-            claim: None,
-            verification: None,
-            verified: None,
-            abandoned: Vec::new(),
-            displaced: Vec::new(),
-            declined: None,
-        };
-    }
-
-    fn Document_Of(items: Vec<LedgerItem>) -> LedgerDocument
-    {
-        return LedgerDocument { schema_version: crate::SCHEMA_VERSION, items };
-    }
-
     #[test]
     fn Test_Refuse_A_Spent_Record_Should_Refuse_An_Undeclared_Reservation_Of_A_Published_Identifier()
     {
@@ -242,6 +215,33 @@ mod tests
             &RecordDeclaration { published: &published, amending: &amending },
         )
         .expect("a declared amendment of a published record must be accepted");
+    }
+
+    fn Document_Of(items: Vec<LedgerItem>) -> LedgerDocument
+    {
+        return LedgerDocument { schema_version: crate::SCHEMA_VERSION, items };
+    }
+
+    fn Item_Reserving(id: &str, path: &str) -> LedgerItem
+    {
+        return LedgerItem {
+            id: ItemId::New(id),
+            title: "an item".to_owned(),
+            why: "because".to_owned(),
+            done_when: "when it is done".to_owned(),
+            kind: ItemKind::Decision,
+            origin: ItemOrigin::Proposed,
+            territory: Territory::Of_Files([path.to_owned()]),
+            state: ItemState::Ready,
+            depends_on: Vec::new(),
+            blocked: None,
+            claim: None,
+            verification: None,
+            verified: None,
+            abandoned: Vec::new(),
+            displaced: Vec::new(),
+            declined: None,
+        };
     }
 
     #[test]

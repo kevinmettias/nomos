@@ -172,33 +172,6 @@ mod tests
     use crate::{ItemKind, ItemOrigin, ItemState, LedgerItem, Territory};
     use nomos_platform::ProcessOutput;
 
-    fn Item_With_Predicate(id: &str, verification: Option<VerificationPredicate>) -> LedgerItem
-    {
-        return LedgerItem {
-            id: ItemId::New(id),
-            title: "an item".to_owned(),
-            why: "because".to_owned(),
-            done_when: "when it is done".to_owned(),
-            kind: ItemKind::Correction,
-            origin: ItemOrigin::Proposed,
-            territory: Territory::Of_Files(["src/a.rs"]),
-            state: ItemState::Claimed,
-            depends_on: Vec::new(),
-            blocked: None,
-            claim: None,
-            verification,
-            verified: None,
-            abandoned: Vec::new(),
-            displaced: Vec::new(),
-            declined: None,
-        };
-    }
-
-    fn Board_Of(item: LedgerItem) -> LedgerDocument
-    {
-        return LedgerDocument { schema_version: 1, items: vec![item] };
-    }
-
     #[test]
     fn Test_Refuse_Nonzero_Should_Pass_A_Zero_Exit_Through_And_Refuse_Everything_Else()
     {
@@ -286,5 +259,32 @@ mod tests
 
         assert_eq!(command.argv, vec!["cargo".to_owned(), "test".to_owned()]);
         assert_eq!(command.working_directory, Some(std::path::PathBuf::from("some/tree")));
+    }
+
+    fn Item_With_Predicate(id: &str, verification: Option<VerificationPredicate>) -> LedgerItem
+    {
+        return LedgerItem {
+            id: ItemId::New(id),
+            title: "an item".to_owned(),
+            why: "because".to_owned(),
+            done_when: "when it is done".to_owned(),
+            kind: ItemKind::Correction,
+            origin: ItemOrigin::Proposed,
+            territory: Territory::Of_Files(["src/a.rs"]),
+            state: ItemState::Claimed,
+            depends_on: Vec::new(),
+            blocked: None,
+            claim: None,
+            verification,
+            verified: None,
+            abandoned: Vec::new(),
+            displaced: Vec::new(),
+            declined: None,
+        };
+    }
+
+    fn Board_Of(item: LedgerItem) -> LedgerDocument
+    {
+        return LedgerDocument { schema_version: 1, items: vec![item] };
     }
 }

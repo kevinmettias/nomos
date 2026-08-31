@@ -178,10 +178,95 @@ mod tests
         }
     }
 
-    fn Temp_Dir(name: &str) -> std::path::PathBuf
+    #[test]
+    fn Test_Validate_Current_Should_Load_And_Report_Todays_Violations()
+    {
+        let directory = Temporary_Directory("validate-current");
+        let clock = FixedClock(1_000);
+        let ledger = Ledger_At(&directory, &clock);
+        let mut reserves_nothing = Workable_Item("BAD-1");
+        reserves_nothing.territory = Territory::Empty();
+        let raw = serde_json::to_string(&LedgerDocument {
+            schema_version: crate::SCHEMA_VERSION,
+            items: vec![reserves_nothing],
+        })
+        .expect("the fixture document serializes");
+        std::fs::write(ledger.Path(), raw).expect("test can write the raw fixture directly");
+
+        let error = Validate_Current(&ledger).expect_err("an item reserving nothing violates an invariant");
+
+        assert!(matches!(error, LedgerError::Invalid { .. }), "got {error:?}");
+    }
+
+    #[test]
+    fn Test_Add_Item_Should_Refuse_A_Duplicate_Identifier()
+    {
+        let directory = Temporary_Directory("add-item");
+        let clock = FixedClock(1_000);
+        let mut ledger = Ledger_At(&directory, &clock);
+        let item = Workable_Item("A-1");
+        ledger
+            .Save(&LedgerDocument { schema_version: crate::SCHEMA_VERSION, items: vec![item.clone()] })
+            .expect("a fresh item is a valid document");
+        let declared = RecordDeclaration { published: &Territory::Empty(), amending: &Territory::Empty() };
+
+        let refusal = Add_Item(&mut ledger, &item, "agent-a", &declared)
+            .expect_err("the identifier is already on the board");
+
+        assert!(matches!(refusal, AddRefusal::AlreadyPresent { .. }), "got {refusal:?}");
+    }
+
+    #[test]
+    fn Test_Decline_Item_Should_Refuse_An_Item_Someone_Else_Is_Holding()
+    {
+        let directory = Temporary_Directory("decline-item");
+        let clock = FixedClock(1_000);
+        let mut ledger = Ledger_At(&directory, &clock);
+        let mut claimed = Workable_Item("D-1");
+        claimed.state = ItemState::Claimed;
+        claimed.claim = Some(Claim {
+            holder: "agent-a".to_owned(),
+            acquired_at: Timestamp::From_Unix_Seconds(1_000),
+            lease_expires_at: Timestamp::From_Unix_Seconds(9_000),
+        });
+        ledger
+            .Save(&LedgerDocument { schema_version: crate::SCHEMA_VERSION, items: vec![claimed] })
+            .expect("a claimed item is a valid document");
+
+        let refusal = Decline_Item(
+            &mut ledger,
+            &ItemId::New("D-1"),
+            Holder::from("agent-b"),
+            DeclineReason::from("not needed"),
+        )
+        .expect_err("a live claim held by somebody else must refuse the decline");
+
+        assert!(matches!(refusal, ClaimRefusal::StillHeld { .. }), "got {refusal:?}");
+    }
+
+    #[test]
+    fn Test_Take_Over_Should_Refuse_A_Lease_Request_Beyond_The_Ceiling()
+    {
+        let directory = Temporary_Directory("take-over-verb");
+        let clock = FixedClock(1_000);
+        let mut ledger = Ledger_At(&directory, &clock);
+
+        let refusal = Take_Over(
+            &mut ledger,
+            &ItemId::New("T-1"),
+            "agent-a",
+            crate::MAXIMUM_LEASE + Duration::from_secs(1),
+        )
+        .expect_err("a lease beyond the ceiling must be refused before anything is read");
+
+        assert!(matches!(refusal, ClaimRefusal::LeaseTooLong { .. }), "got {refusal:?}");
+    }
+
+    fn Temporary_Directory(name: &str) -> std::path::PathBuf
     {
         let mut path = std::env::temp_dir();
         path.push(format!("nomos-store-verbs-{name}-{}", std::process::id()));
+        // error-info: allow this is a best-effort clean slate before creating the directory fresh below
         let _ = std::fs::remove_dir_all(&path);
         std::fs::create_dir_all(&path).expect("test needs a temp directory");
         return path;
@@ -220,89 +305,5 @@ mod tests
             displaced: Vec::new(),
             declined: None,
         };
-    }
-
-    #[test]
-    fn Test_Validate_Current_Should_Load_And_Report_Todays_Violations()
-    {
-        let directory = Temp_Dir("validate-current");
-        let clock = FixedClock(1_000);
-        let ledger = Ledger_At(&directory, &clock);
-        let mut reserves_nothing = Workable_Item("BAD-1");
-        reserves_nothing.territory = Territory::Empty();
-        let raw = serde_json::to_string(&LedgerDocument {
-            schema_version: crate::SCHEMA_VERSION,
-            items: vec![reserves_nothing],
-        })
-        .expect("the fixture document serializes");
-        std::fs::write(ledger.Path(), raw).expect("test can write the raw fixture directly");
-
-        let error = Validate_Current(&ledger).expect_err("an item reserving nothing violates an invariant");
-
-        assert!(matches!(error, LedgerError::Invalid { .. }), "got {error:?}");
-    }
-
-    #[test]
-    fn Test_Add_Item_Should_Refuse_A_Duplicate_Identifier()
-    {
-        let directory = Temp_Dir("add-item");
-        let clock = FixedClock(1_000);
-        let mut ledger = Ledger_At(&directory, &clock);
-        let item = Workable_Item("A-1");
-        ledger
-            .Save(&LedgerDocument { schema_version: crate::SCHEMA_VERSION, items: vec![item.clone()] })
-            .expect("a fresh item is a valid document");
-        let declared = RecordDeclaration { published: &Territory::Empty(), amending: &Territory::Empty() };
-
-        let refusal = Add_Item(&mut ledger, &item, "agent-a", &declared)
-            .expect_err("the identifier is already on the board");
-
-        assert!(matches!(refusal, AddRefusal::AlreadyPresent { .. }), "got {refusal:?}");
-    }
-
-    #[test]
-    fn Test_Decline_Item_Should_Refuse_An_Item_Someone_Else_Is_Holding()
-    {
-        let directory = Temp_Dir("decline-item");
-        let clock = FixedClock(1_000);
-        let mut ledger = Ledger_At(&directory, &clock);
-        let mut claimed = Workable_Item("D-1");
-        claimed.state = ItemState::Claimed;
-        claimed.claim = Some(Claim {
-            holder: "agent-a".to_owned(),
-            acquired_at: Timestamp::From_Unix_Seconds(1_000),
-            lease_expires_at: Timestamp::From_Unix_Seconds(9_000),
-        });
-        ledger
-            .Save(&LedgerDocument { schema_version: crate::SCHEMA_VERSION, items: vec![claimed] })
-            .expect("a claimed item is a valid document");
-
-        let refusal = Decline_Item(
-            &mut ledger,
-            &ItemId::New("D-1"),
-            Holder::from("agent-b"),
-            DeclineReason::from("not needed"),
-        )
-        .expect_err("a live claim held by somebody else must refuse the decline");
-
-        assert!(matches!(refusal, ClaimRefusal::StillHeld { .. }), "got {refusal:?}");
-    }
-
-    #[test]
-    fn Test_Take_Over_Should_Refuse_A_Lease_Request_Beyond_The_Ceiling()
-    {
-        let directory = Temp_Dir("take-over-verb");
-        let clock = FixedClock(1_000);
-        let mut ledger = Ledger_At(&directory, &clock);
-
-        let refusal = Take_Over(
-            &mut ledger,
-            &ItemId::New("T-1"),
-            "agent-a",
-            crate::MAXIMUM_LEASE + Duration::from_secs(1),
-        )
-        .expect_err("a lease beyond the ceiling must be refused before anything is read");
-
-        assert!(matches!(refusal, ClaimRefusal::LeaseTooLong { .. }), "got {refusal:?}");
     }
 }

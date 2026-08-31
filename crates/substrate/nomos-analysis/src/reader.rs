@@ -335,41 +335,6 @@ mod tests
         Guarantee, IncrementalGranularity, ProviderId, SnapshotId,
     };
 
-    fn Seeded(seed: u8) -> Digest128
-    {
-        return Digest128::From_Bytes([seed; Digest128::BYTE_LENGTH]);
-    }
-
-    fn Sample_Context() -> Context
-    {
-        return Context {
-            snapshot: SnapshotId::From_Digest(Seeded(1)),
-            variant: BuildVariantId::From_Digest(Seeded(2)),
-            configuration: ConfigurationId::From_Digest(Seeded(3)),
-            generation: GenerationId::From_Raw(4),
-        };
-    }
-
-    fn Sample_Key() -> FactKey
-    {
-        return FactKey {
-            contract: CapabilityId::New("nomos.cap.test.reader"),
-            contract_version: ContractVersion::New(1, 0),
-            subject: SubjectId::From_Digest(Seeded(5)),
-            semantic_inputs: InputDigest::Of(&[b"fn main() {}"]),
-            provider: ProviderId::New("nomos.provider.test"),
-            provider_version: ContractVersion::New(1, 0),
-            guarantee: GuaranteeDigest::Of(&Guarantee::New(
-                FactVariant::Syntactic,
-                Assurance::Sound,
-                Assurance::Sound,
-                IncrementalGranularity::File,
-            )),
-            variant: Sample_Context().variant,
-            configuration: Sample_Context().configuration,
-        };
-    }
-
     #[test]
     fn Test_On_Should_Build_A_Reader_With_An_Empty_Trail()
     {
@@ -401,8 +366,43 @@ mod tests
         let mut reader = Reader::On(&store, &registry, Sample_Context());
 
         let identity = Sample_Key().At(Sample_Context().generation);
-        let _ = reader.Get(&identity);
+        assert!(reader.Get(&identity).is_err());
 
         assert_eq!(reader.Into_Dependencies().len(), 1);
+    }
+
+    fn Sample_Key() -> FactKey
+    {
+        return FactKey {
+            contract: CapabilityId::New("nomos.cap.test.reader"),
+            contract_version: ContractVersion::New(1, 0),
+            subject: SubjectId::From_Digest(Seeded(5)),
+            semantic_inputs: InputDigest::Of(&[b"fn main() {}"]),
+            provider: ProviderId::New("nomos.provider.test"),
+            provider_version: ContractVersion::New(1, 0),
+            guarantee: GuaranteeDigest::Of(&Guarantee::New(
+                FactVariant::Syntactic,
+                Assurance::Sound,
+                Assurance::Sound,
+                IncrementalGranularity::File,
+            )),
+            variant: Sample_Context().variant,
+            configuration: Sample_Context().configuration,
+        };
+    }
+
+    fn Seeded(seed: u8) -> Digest128
+    {
+        return Digest128::From_Bytes([seed; Digest128::BYTE_LENGTH]);
+    }
+
+    fn Sample_Context() -> Context
+    {
+        return Context {
+            snapshot: SnapshotId::From_Digest(Seeded(1)),
+            variant: BuildVariantId::From_Digest(Seeded(2)),
+            configuration: ConfigurationId::From_Digest(Seeded(3)),
+            generation: GenerationId::From_Raw(4),
+        };
     }
 }

@@ -144,10 +144,67 @@ mod tests
         }
     }
 
-    fn Temp_Dir(name: &str) -> PathBuf
+    #[test]
+    fn Test_Save_Document_Should_Refuse_An_Invalid_Document_Without_Writing_It()
+    {
+        let directory = Temporary_Directory("save-document");
+        let clock = FixedClock(1_000);
+        let ledger = Ledger_At(&directory, &clock);
+        let mut reserves_nothing = Workable_Item("BAD-1");
+        reserves_nothing.territory = Territory::Empty();
+        let invalid = LedgerDocument {
+            schema_version: SCHEMA_VERSION,
+            items: vec![reserves_nothing],
+        };
+
+        let error = Save_Document(&ledger, &invalid).expect_err("an item reserving nothing must be refused");
+
+        assert!(matches!(error, LedgerError::Invalid { .. }), "got {error:?}");
+        let after = Load_Document(&ledger).expect("a refused save leaves no file behind, which loads as empty");
+        assert!(after.items.is_empty(), "the invalid document must not have reached disk");
+    }
+
+    #[test]
+    fn Test_Decide_Under_Lock_Should_Convert_A_Store_Failure_Through_The_Callers_Own_Error()
+    {
+        let directory = Temporary_Directory("decide-under-lock");
+        let clock = FixedClock(1_000);
+        let ledger = Ledger_At(&directory, &clock);
+
+        let outcome: Result<(), AddRefusal> = Decide_Under_Lock(&ledger, "agent-a", |document, _now| {
+            document.items.push(Workable_Item("D-1"));
+            return Ok(());
+        });
+
+        outcome.expect("a plain decision must succeed");
+        let reloaded = Load_Document(&ledger).expect("the decision must have been written");
+        assert_eq!(reloaded.items.len(), 1);
+    }
+
+    #[test]
+    fn Test_Load_Document_Should_Parse_The_Text_On_Disk_Into_A_Document()
+    {
+        let directory = Temporary_Directory("load-document");
+        let clock = FixedClock(1_000);
+        let ledger = Ledger_At(&directory, &clock);
+        let raw = serde_json::to_string(&LedgerDocument {
+            schema_version: SCHEMA_VERSION,
+            items: vec![Workable_Item("L-1")],
+        })
+        .expect("the fixture document serializes");
+        std::fs::write(ledger.Path(), raw).expect("test can write the raw fixture directly");
+
+        let document = Load_Document(&ledger).expect("a well-formed file must load");
+
+        assert_eq!(document.items.len(), 1);
+        assert_eq!(document.items.first().expect("the assertion above found exactly one item").id, ItemId::New("L-1"));
+    }
+
+    fn Temporary_Directory(name: &str) -> PathBuf
     {
         let mut path = std::env::temp_dir();
         path.push(format!("nomos-store-file-{name}-{}", std::process::id()));
+        // error-info: allow this is a best-effort clean slate before creating the directory fresh below
         let _ = std::fs::remove_dir_all(&path);
         std::fs::create_dir_all(&path).expect("test needs a temp directory");
         return path;
@@ -186,61 +243,5 @@ mod tests
             displaced: Vec::new(),
             declined: None,
         };
-    }
-
-    #[test]
-    fn Test_Save_Document_Should_Refuse_An_Invalid_Document_Without_Writing_It()
-    {
-        let directory = Temp_Dir("save-document");
-        let clock = FixedClock(1_000);
-        let ledger = Ledger_At(&directory, &clock);
-        let mut reserves_nothing = Workable_Item("BAD-1");
-        reserves_nothing.territory = Territory::Empty();
-        let invalid = LedgerDocument {
-            schema_version: SCHEMA_VERSION,
-            items: vec![reserves_nothing],
-        };
-
-        let error = Save_Document(&ledger, &invalid).expect_err("an item reserving nothing must be refused");
-
-        assert!(matches!(error, LedgerError::Invalid { .. }), "got {error:?}");
-        let after = Load_Document(&ledger).expect("a refused save leaves no file behind, which loads as empty");
-        assert!(after.items.is_empty(), "the invalid document must not have reached disk");
-    }
-
-    #[test]
-    fn Test_Decide_Under_Lock_Should_Convert_A_Store_Failure_Through_The_Callers_Own_Error()
-    {
-        let directory = Temp_Dir("decide-under-lock");
-        let clock = FixedClock(1_000);
-        let ledger = Ledger_At(&directory, &clock);
-
-        let outcome: Result<(), AddRefusal> = Decide_Under_Lock(&ledger, "agent-a", |document, _now| {
-            document.items.push(Workable_Item("D-1"));
-            return Ok(());
-        });
-
-        outcome.expect("a plain decision must succeed");
-        let reloaded = Load_Document(&ledger).expect("the decision must have been written");
-        assert_eq!(reloaded.items.len(), 1);
-    }
-
-    #[test]
-    fn Test_Load_Document_Should_Parse_The_Text_On_Disk_Into_A_Document()
-    {
-        let directory = Temp_Dir("load-document");
-        let clock = FixedClock(1_000);
-        let ledger = Ledger_At(&directory, &clock);
-        let raw = serde_json::to_string(&LedgerDocument {
-            schema_version: SCHEMA_VERSION,
-            items: vec![Workable_Item("L-1")],
-        })
-        .expect("the fixture document serializes");
-        std::fs::write(ledger.Path(), raw).expect("test can write the raw fixture directly");
-
-        let document = Load_Document(&ledger).expect("a well-formed file must load");
-
-        assert_eq!(document.items.len(), 1);
-        assert_eq!(document.items.first().expect("the assertion above found exactly one item").id, ItemId::New("L-1"));
     }
 }

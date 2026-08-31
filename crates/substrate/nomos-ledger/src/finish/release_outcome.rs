@@ -75,32 +75,6 @@ mod tests
     use super::*;
     use crate::{Claim, ItemId, ItemKind, ItemOrigin, ItemState, Territory};
 
-    fn Item(id: &str) -> LedgerItem
-    {
-        return LedgerItem {
-            id: ItemId::New(id),
-            title: "an item".to_owned(),
-            why: "because".to_owned(),
-            done_when: "when it is done".to_owned(),
-            kind: ItemKind::Correction,
-            origin: ItemOrigin::Proposed,
-            territory: Territory::Of_Files(["src/a.rs"]),
-            state: ItemState::Claimed,
-            depends_on: Vec::new(),
-            blocked: None,
-            claim: Some(Claim {
-                holder: "agent-a".to_owned(),
-                acquired_at: Timestamp::From_Unix_Seconds(1_000),
-                lease_expires_at: Timestamp::From_Unix_Seconds(2_000),
-            }),
-            verification: None,
-            verified: None,
-            abandoned: Vec::new(),
-            displaced: Vec::new(),
-            declined: None,
-        };
-    }
-
     #[test]
     fn Test_Record_On_Should_Clear_The_Claim_And_Mark_A_Finished_Item_Done()
     {
@@ -135,5 +109,31 @@ mod tests
         let abandonment = item.abandoned.first().expect("the assertion above found exactly one abandonment");
         assert_eq!(abandonment.holder, "agent-b");
         assert_eq!(abandonment.reason, "wrong approach");
+    }
+
+    fn Item(id: &str) -> LedgerItem
+    {
+        return LedgerItem {
+            id: ItemId::New(id),
+            title: "an item".to_owned(),
+            why: "because".to_owned(),
+            done_when: "when it is done".to_owned(),
+            kind: ItemKind::Correction,
+            origin: ItemOrigin::Proposed,
+            territory: Territory::Of_Files(["src/a.rs"]),
+            state: ItemState::Claimed,
+            depends_on: Vec::new(),
+            blocked: None,
+            claim: Some(Claim {
+                holder: "agent-a".to_owned(),
+                acquired_at: Timestamp::From_Unix_Seconds(1_000),
+                lease_expires_at: Timestamp::From_Unix_Seconds(2_000),
+            }),
+            verification: None,
+            verified: None,
+            abandoned: Vec::new(),
+            displaced: Vec::new(),
+            declined: None,
+        };
     }
 }

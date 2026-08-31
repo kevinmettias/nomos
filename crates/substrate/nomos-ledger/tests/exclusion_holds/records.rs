@@ -151,10 +151,10 @@ fn Amending(files: &[&str]) -> ItemTerritory
 /// added here rather than a change to the loop that reads them.
 fn Spellings_Of_The_Published_Record() -> [(&'static str, &'static str); 2]
 {
-    [
+    return [
         ("the bare identifier", "docs/records/OD-LEDGER-006"),
         ("the published filename", PUBLISHED_RECORD_FILE),
-    ]
+    ];
 }
 
 #[test]
@@ -315,12 +315,12 @@ fn Test_A_Published_Identifier_And_A_Reserved_One_Should_Be_Different_Refusals()
 /// exist — is a value added here rather than a change to the loop that reads them.
 fn Closed_States() -> [ItemState; 2]
 {
-    [
+    return [
         ItemState::Done,
         ItemState::Declined {
             reason: "it turned out not to be work".to_owned(),
         },
-    ]
+    ];
 }
 
 #[test]

@@ -55,19 +55,15 @@ mod tests
         FactVariant, IncrementalGranularity, ProviderId, SchemaId, SubjectId,
     };
 
-    fn Seeded(seed: u8) -> Digest128
+    fn Sample_Fact() -> MaterializedFact
     {
-        return Digest128::From_Bytes([seed; Digest128::BYTE_LENGTH]);
-    }
-
-    fn Sample_Guarantee() -> Guarantee
-    {
-        return Guarantee::New(
-            FactVariant::Syntactic,
-            Assurance::Sound,
-            Assurance::Sound,
-            IncrementalGranularity::File,
-        );
+        return MaterializedFact {
+            identity: Sample_Key().At(GenerationId::From_Raw(5)),
+            snapshot: SnapshotId::From_Digest(Seeded(2)),
+            evidence: EvidenceClass::Derived,
+            guarantee: Sample_Guarantee(),
+            payload: FactPayload::New(SchemaId::New("nomos.test.materialized.v1"), b"tree".to_vec()),
+        };
     }
 
     fn Sample_Key() -> FactKey
@@ -85,17 +81,6 @@ mod tests
         };
     }
 
-    fn Sample_Fact() -> MaterializedFact
-    {
-        return MaterializedFact {
-            identity: Sample_Key().At(GenerationId::From_Raw(5)),
-            snapshot: SnapshotId::From_Digest(Seeded(2)),
-            evidence: EvidenceClass::Derived,
-            guarantee: Sample_Guarantee(),
-            payload: FactPayload::New(SchemaId::New("nomos.test.materialized.v1"), b"tree".to_vec()),
-        };
-    }
-
     #[test]
     fn Test_Key_Should_Return_The_Fact_Identitys_Own_Key()
     {
@@ -106,5 +91,20 @@ mod tests
     fn Test_Generation_Should_Return_The_Fact_Identitys_Own_Generation()
     {
         assert_eq!(Sample_Fact().Generation(), GenerationId::From_Raw(5));
+    }
+
+    fn Seeded(seed: u8) -> Digest128
+    {
+        return Digest128::From_Bytes([seed; Digest128::BYTE_LENGTH]);
+    }
+
+    fn Sample_Guarantee() -> Guarantee
+    {
+        return Guarantee::New(
+            FactVariant::Syntactic,
+            Assurance::Sound,
+            Assurance::Sound,
+            IncrementalGranularity::File,
+        );
     }
 }

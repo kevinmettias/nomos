@@ -49,6 +49,24 @@ mod tests
         Guarantee, IncrementalGranularity, ProviderId, SubjectId,
     };
 
+    #[test]
+    fn Test_Key_Should_Return_The_Identitys_Own_Key()
+    {
+        let key = Sample_Key();
+        let identity = key.clone().At(GenerationId::From_Raw(5));
+
+        assert_eq!(identity.Key(), &key);
+    }
+
+    #[test]
+    fn Test_Digest_Should_Match_The_Keys_Own_Digest()
+    {
+        let key = Sample_Key();
+        let identity = key.clone().At(GenerationId::From_Raw(5));
+
+        assert_eq!(identity.Digest(), key.Digest());
+    }
+
     fn Seeded(seed: u8) -> Digest128
     {
         return Digest128::From_Bytes([seed; Digest128::BYTE_LENGTH]);
@@ -72,23 +90,5 @@ mod tests
             variant: BuildVariantId::From_Digest(Seeded(3)),
             configuration: ConfigurationId::From_Digest(Seeded(4)),
         };
-    }
-
-    #[test]
-    fn Test_Key_Should_Return_The_Identitys_Own_Key()
-    {
-        let key = Sample_Key();
-        let identity = key.clone().At(GenerationId::From_Raw(5));
-
-        assert_eq!(identity.Key(), &key);
-    }
-
-    #[test]
-    fn Test_Digest_Should_Match_The_Keys_Own_Digest()
-    {
-        let key = Sample_Key();
-        let identity = key.clone().At(GenerationId::From_Raw(5));
-
-        assert_eq!(identity.Digest(), key.Digest());
     }
 }

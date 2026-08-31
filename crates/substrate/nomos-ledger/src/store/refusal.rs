@@ -424,28 +424,6 @@ mod tests
         return Fixture { held, contested, free };
     }
 
-    fn Item_Named(id: &str) -> LedgerItem
-    {
-        return LedgerItem {
-            id: ItemId::New(id),
-            title: "an item".to_owned(),
-            why: "because".to_owned(),
-            done_when: "when it is done".to_owned(),
-            kind: ItemKind::Correction,
-            origin: ItemOrigin::Proposed,
-            territory: Territory::Empty(),
-            state: ItemState::Ready,
-            depends_on: Vec::new(),
-            blocked: None,
-            claim: None,
-            verification: None,
-            verified: None,
-            abandoned: Vec::new(),
-            displaced: Vec::new(),
-            declined: None,
-        };
-    }
-
     /// The tie-break `OD-LEDGER-023` wrote down: id order, not the order items happen to
     /// sit in the document.
     #[test]
@@ -469,19 +447,6 @@ mod tests
         assert!(Eligible_Items(&document, Timestamp_At_Seconds(2_000)).is_empty());
     }
 
-    fn Timestamp_At_Seconds(seconds: i64) -> Timestamp
-    {
-        return Timestamp::From_Unix_Seconds(seconds);
-    }
-
-    fn Document_Of(items: Vec<LedgerItem>) -> LedgerDocument
-    {
-        return LedgerDocument {
-            schema_version: crate::SCHEMA_VERSION,
-            items,
-        };
-    }
-
     #[test]
     fn Test_Claim_Refusal_Should_Report_No_Such_Item_When_Absent()
     {
@@ -495,14 +460,7 @@ mod tests
     #[test]
     fn Test_Decline_Refusal_Should_Refuse_An_Item_Someone_Else_Is_Holding()
     {
-        let mut held = Item_Named("P1-HELD");
-        held.state = ItemState::Claimed;
-        held.claim = Some(Claim {
-            holder: "agent-a".to_owned(),
-            acquired_at: Timestamp_At_Seconds(CLAIM_ACQUIRED_AT_SECONDS),
-            lease_expires_at: Timestamp_At_Seconds(CLAIM_EXPIRES_AT_SECONDS),
-        });
-        let document = Document_Of(vec![held]);
+        let document = Document_With_A_Held_Claim();
 
         let refusal = Decline_Refusal(&document, &ItemId::New("P1-HELD"), Timestamp_At_Seconds(2_000));
 
@@ -515,14 +473,7 @@ mod tests
     #[test]
     fn Test_Takeover_Refusal_Should_Refuse_A_Verb_Used_On_A_Live_Claim()
     {
-        let mut held = Item_Named("P1-HELD");
-        held.state = ItemState::Claimed;
-        held.claim = Some(Claim {
-            holder: "agent-a".to_owned(),
-            acquired_at: Timestamp_At_Seconds(CLAIM_ACQUIRED_AT_SECONDS),
-            lease_expires_at: Timestamp_At_Seconds(CLAIM_EXPIRES_AT_SECONDS),
-        });
-        let document = Document_Of(vec![held]);
+        let document = Document_With_A_Held_Claim();
 
         // The claim above expires at CLAIM_EXPIRES_AT_SECONDS; asking before that means it
         // has not lapsed, so a takeover is the wrong verb rather than a valid recovery.
@@ -532,5 +483,59 @@ mod tests
             matches!(refusal, Some(ClaimRefusal::HeldBy { .. })),
             "a live claim asked about with the recovery verb must read as held, not takeable: {refusal:?}"
         );
+    }
+
+    /// A board holding exactly one item, `P1-HELD`, live-claimed by `agent-a` for the
+    /// duration `[CLAIM_ACQUIRED_AT_SECONDS, CLAIM_EXPIRES_AT_SECONDS)`.
+    ///
+    /// Both refusal tests above ask a different verb about the same claimed item, so they
+    /// share this one arrangement rather than each rebuilding it -- a change to what "held"
+    /// means here now changes for both at once instead of silently drifting between two
+    /// independently hand-written copies.
+    fn Document_With_A_Held_Claim() -> LedgerDocument
+    {
+        let mut held = Item_Named("P1-HELD");
+        held.state = ItemState::Claimed;
+        held.claim = Some(Claim {
+            holder: "agent-a".to_owned(),
+            acquired_at: Timestamp_At_Seconds(CLAIM_ACQUIRED_AT_SECONDS),
+            lease_expires_at: Timestamp_At_Seconds(CLAIM_EXPIRES_AT_SECONDS),
+        });
+        return Document_Of(vec![held]);
+    }
+
+    fn Item_Named(id: &str) -> LedgerItem
+    {
+        return LedgerItem {
+            id: ItemId::New(id),
+            title: "an item".to_owned(),
+            why: "because".to_owned(),
+            done_when: "when it is done".to_owned(),
+            kind: ItemKind::Correction,
+            origin: ItemOrigin::Proposed,
+            territory: Territory::Empty(),
+            state: ItemState::Ready,
+            depends_on: Vec::new(),
+            blocked: None,
+            claim: None,
+            verification: None,
+            verified: None,
+            abandoned: Vec::new(),
+            displaced: Vec::new(),
+            declined: None,
+        };
+    }
+
+    fn Timestamp_At_Seconds(seconds: i64) -> Timestamp
+    {
+        return Timestamp::From_Unix_Seconds(seconds);
+    }
+
+    fn Document_Of(items: Vec<LedgerItem>) -> LedgerDocument
+    {
+        return LedgerDocument {
+            schema_version: crate::SCHEMA_VERSION,
+            items,
+        };
     }
 }

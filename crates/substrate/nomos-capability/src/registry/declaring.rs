@@ -87,26 +87,6 @@ mod tests
     use super::*;
     use nomos_contracts::{Assurance, ContractVersion, FactVariant, Guarantee, IncrementalGranularity};
 
-    fn Capability() -> CapabilityId
-    {
-        return CapabilityId::New("nomos.cap.test.declaring");
-    }
-
-    fn Version() -> ContractVersion
-    {
-        return ContractVersion::New(1, 0);
-    }
-
-    fn Floor() -> Guarantee
-    {
-        return Guarantee::New(
-            FactVariant::Syntactic,
-            Assurance::Sound,
-            Assurance::Unknown,
-            IncrementalGranularity::File,
-        );
-    }
-
     fn Contract() -> CapabilityContract
     {
         return CapabilityContract {
@@ -119,16 +99,6 @@ mod tests
                 Assurance::Sound,
                 IncrementalGranularity::Region,
             ),
-        };
-    }
-
-    fn Offer() -> ProviderOffer
-    {
-        return ProviderOffer {
-            provider: ProviderId::New("nomos.test.declaring"),
-            capability: Capability(),
-            version: Version(),
-            guarantee: Floor(),
         };
     }
 
@@ -155,5 +125,35 @@ mod tests
                 refusal: OfferRefusal::ForUndeclared,
             }
         );
+    }
+
+    fn Offer() -> ProviderOffer
+    {
+        return ProviderOffer {
+            provider: ProviderId::New("nomos.test.declaring"),
+            capability: Capability(),
+            version: Version(),
+            guarantee: Floor(),
+        };
+    }
+
+    fn Floor() -> Guarantee
+    {
+        return Guarantee::New(
+            FactVariant::Syntactic,
+            Assurance::Sound,
+            Assurance::Unknown,
+            IncrementalGranularity::File,
+        );
+    }
+
+    fn Capability() -> CapabilityId
+    {
+        return CapabilityId::New("nomos.cap.test.declaring");
+    }
+
+    fn Version() -> ContractVersion
+    {
+        return ContractVersion::New(1, 0);
     }
 }

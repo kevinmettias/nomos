@@ -172,46 +172,6 @@ mod local_tests
     use super::*;
     use nomos_contracts::{Assurance, ContractVersion, FactVariant, Guarantee, IncrementalGranularity};
 
-    fn Capability() -> CapabilityId
-    {
-        return CapabilityId::New("nomos.cap.test.registry_local");
-    }
-
-    fn Version() -> ContractVersion
-    {
-        return ContractVersion::New(1, 0);
-    }
-
-    fn Floor() -> Guarantee
-    {
-        return Guarantee::New(
-            FactVariant::Syntactic,
-            Assurance::Sound,
-            Assurance::Unknown,
-            IncrementalGranularity::File,
-        );
-    }
-
-    fn Contract() -> CapabilityContract
-    {
-        return CapabilityContract {
-            id: Capability(),
-            version: Version(),
-            summary: "a contract for registry.rs's own local tests".to_owned(),
-            ceiling: Floor(),
-        };
-    }
-
-    fn Offer() -> ProviderOffer
-    {
-        return ProviderOffer {
-            provider: ProviderId::New("nomos.test.registry_local"),
-            capability: Capability(),
-            version: Version(),
-            guarantee: Floor(),
-        };
-    }
-
     #[test]
     fn Test_New_Should_Begin_Completely_Blank()
     {
@@ -304,5 +264,45 @@ mod local_tests
         assert!(registry.Offers(&Capability()).is_empty());
         registry.Offer(Offer()).expect("within the ceiling");
         assert_eq!(registry.Offers(&Capability()).len(), 1);
+    }
+
+    fn Capability() -> CapabilityId
+    {
+        return CapabilityId::New("nomos.cap.test.registry_local");
+    }
+
+    fn Version() -> ContractVersion
+    {
+        return ContractVersion::New(1, 0);
+    }
+
+    fn Floor() -> Guarantee
+    {
+        return Guarantee::New(
+            FactVariant::Syntactic,
+            Assurance::Sound,
+            Assurance::Unknown,
+            IncrementalGranularity::File,
+        );
+    }
+
+    fn Contract() -> CapabilityContract
+    {
+        return CapabilityContract {
+            id: Capability(),
+            version: Version(),
+            summary: "a contract for registry.rs's own local tests".to_owned(),
+            ceiling: Floor(),
+        };
+    }
+
+    fn Offer() -> ProviderOffer
+    {
+        return ProviderOffer {
+            provider: ProviderId::New("nomos.test.registry_local"),
+            capability: Capability(),
+            version: Version(),
+            guarantee: Floor(),
+        };
     }
 }

@@ -90,6 +90,27 @@ mod tests
 
     const SOURCE: &str = include_str!("propagation.rs");
 
+    #[test]
+    fn Test_This_Modules_Code_Should_Carry_No_Fact_Identity_Vocabulary()
+    {
+        let code = SOURCE.split("#[cfg(test)]").next().unwrap_or(SOURCE);
+        let code: String = code
+            .lines()
+            .filter(|line| return !line.trim_start().starts_with("//"))
+            .collect::<Vec<_>>()
+            .join("\n");
+
+        for forbidden in Forbidden_Fact_Identity_Vocabulary()
+        {
+            assert!(
+                !code.contains(forbidden),
+                "propagation.rs's code named {forbidden}, which is fact-identity or \
+                 invalidation-policy vocabulary this module must stay free of per D-135 \
+                 and D-138"
+            );
+        }
+    }
+
     /// `D-138`'s cost claim — a later rename is mechanical rather than a rewrite — only
     /// holds while this module's actual code never learns what a fact, a key, a
     /// generation, a broadening or a supersession is. The module doc comment above names
@@ -114,27 +135,6 @@ mod tests
             "Supersession",
             "GuaranteeDigest",
         ];
-    }
-
-    #[test]
-    fn Test_This_Modules_Code_Should_Carry_No_Fact_Identity_Vocabulary()
-    {
-        let code = SOURCE.split("#[cfg(test)]").next().unwrap_or(SOURCE);
-        let code: String = code
-            .lines()
-            .filter(|line| return !line.trim_start().starts_with("//"))
-            .collect::<Vec<_>>()
-            .join("\n");
-
-        for forbidden in Forbidden_Fact_Identity_Vocabulary()
-        {
-            assert!(
-                !code.contains(forbidden),
-                "propagation.rs's code named {forbidden}, which is fact-identity or \
-                 invalidation-policy vocabulary this module must stay free of per D-135 \
-                 and D-138"
-            );
-        }
     }
 
     #[test]

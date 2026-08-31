@@ -47,26 +47,6 @@ mod tests
     use super::*;
     use nomos_contracts::{Assurance, FactVariant, IncrementalGranularity};
 
-    fn Capability() -> CapabilityId
-    {
-        return CapabilityId::New("nomos.cap.test.requirement");
-    }
-
-    fn Version() -> ContractVersion
-    {
-        return ContractVersion::New(1, 0);
-    }
-
-    fn Floor() -> Guarantee
-    {
-        return Guarantee::New(
-            FactVariant::Syntactic,
-            Assurance::Sound,
-            Assurance::Unknown,
-            IncrementalGranularity::File,
-        );
-    }
-
     #[test]
     fn Test_New_Should_Start_With_No_Preferred_Provider()
     {
@@ -86,5 +66,25 @@ mod tests
         let requirement = Requirement::New(Capability(), Version(), Floor()).Preferring(provider.clone());
 
         assert_eq!(requirement.preferred, Some(provider));
+    }
+
+    fn Capability() -> CapabilityId
+    {
+        return CapabilityId::New("nomos.cap.test.requirement");
+    }
+
+    fn Version() -> ContractVersion
+    {
+        return ContractVersion::New(1, 0);
+    }
+
+    fn Floor() -> Guarantee
+    {
+        return Guarantee::New(
+            FactVariant::Syntactic,
+            Assurance::Sound,
+            Assurance::Unknown,
+            IncrementalGranularity::File,
+        );
     }
 }

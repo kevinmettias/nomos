@@ -50,7 +50,7 @@ fn Test_An_Item_With_A_Live_Claim_Should_Not_Be_Taken_Over()
 /// added here rather than a change to the loop that reads them.
 fn Items_A_Takeover_Must_Refuse() -> [(&'static str, &'static str); 2]
 {
-    [("T-1", "an item nobody holds"), ("T-2", "a finished item")]
+    return [("T-1", "an item nobody holds"), ("T-2", "a finished item")];
 }
 
 #[test]

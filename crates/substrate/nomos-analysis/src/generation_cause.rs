@@ -133,36 +133,6 @@ mod tests
     use crate::InputDigest;
     use nomos_contracts::{Assurance, CapabilityId, ContractVersion, Digest128, FactVariant, Guarantee};
 
-    fn Seeded(seed: u8) -> Digest128
-    {
-        return Digest128::From_Bytes([seed; Digest128::BYTE_LENGTH]);
-    }
-
-    fn Key_With(
-        subject: SubjectId,
-        configuration: ConfigurationId,
-        provider: ProviderId,
-        variant: BuildVariantId,
-    ) -> FactKey
-    {
-        return FactKey {
-            contract: CapabilityId::New("nomos.cap.test.generation_cause"),
-            contract_version: ContractVersion::New(1, 0),
-            subject,
-            semantic_inputs: InputDigest::Of(&[b"fn main() {}"]),
-            provider,
-            provider_version: ContractVersion::New(1, 0),
-            guarantee: GuaranteeDigest::Of(&Guarantee::New(
-                FactVariant::Syntactic,
-                Assurance::Sound,
-                Assurance::Sound,
-                IncrementalGranularity::File,
-            )),
-            variant,
-            configuration,
-        };
-    }
-
     #[test]
     fn Test_Describe_Should_Name_What_Changed_For_Every_Variant()
     {
@@ -220,5 +190,35 @@ mod tests
 
         assert!(cause.Is_Naming(&key));
         assert!(!cause.Is_Naming(&other_key));
+    }
+
+    fn Key_With(
+        subject: SubjectId,
+        configuration: ConfigurationId,
+        provider: ProviderId,
+        variant: BuildVariantId,
+    ) -> FactKey
+    {
+        return FactKey {
+            contract: CapabilityId::New("nomos.cap.test.generation_cause"),
+            contract_version: ContractVersion::New(1, 0),
+            subject,
+            semantic_inputs: InputDigest::Of(&[b"fn main() {}"]),
+            provider,
+            provider_version: ContractVersion::New(1, 0),
+            guarantee: GuaranteeDigest::Of(&Guarantee::New(
+                FactVariant::Syntactic,
+                Assurance::Sound,
+                Assurance::Sound,
+                IncrementalGranularity::File,
+            )),
+            variant,
+            configuration,
+        };
+    }
+
+    fn Seeded(seed: u8) -> Digest128
+    {
+        return Digest128::From_Bytes([seed; Digest128::BYTE_LENGTH]);
     }
 }

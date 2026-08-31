@@ -98,37 +98,6 @@ mod tests
                             \x20     - name: Test\n\
                             \x20       run: cargo test --workspace\n";
 
-    fn Temp_Dir(name: &str) -> std::path::PathBuf
-    {
-        let mut path = std::env::temp_dir();
-        path.push(format!("nomos-gate-step-{name}-{}", std::process::id()));
-        let _ = std::fs::remove_dir_all(&path);
-        std::fs::create_dir_all(&path).expect("test needs a temp directory");
-        return path;
-    }
-
-    fn Tree_With_Workflow(name: &str) -> std::path::PathBuf
-    {
-        let directory = Temp_Dir(name);
-        let workflows = directory.join(".github").join("workflows");
-        std::fs::create_dir_all(&workflows).expect("test needs a workflow directory");
-        std::fs::write(workflows.join("gate.yml"), WORKFLOW).expect("test needs a workflow");
-        return directory;
-    }
-
-    fn Ledger_At<'clock>(
-        directory: &Path,
-        clock: &'clock FixedClock,
-    ) -> FileLedger<StdFileSystem, &'clock FixedClock, FileLock>
-    {
-        return FileLedger::At(
-            directory.join("ledger.json"),
-            StdFileSystem,
-            clock,
-            FileLock::At(directory.join("ledger.lock")),
-        );
-    }
-
     /// A launcher standing in for a lint step that finds a problem.
     struct AlwaysFails;
 
@@ -166,7 +135,7 @@ mod tests
     #[test]
     fn Test_Gate_Argv_Should_Report_An_Undetermined_Gate_When_No_Workflow_Exists()
     {
-        let directory = Temp_Dir("gate-argv-missing");
+        let directory = Temporary_Directory("gate-argv-missing");
         let clock = FixedClock(1_000);
         let ledger = Ledger_At(&directory, &clock);
         let item = ItemId::New("G-1B");
@@ -200,6 +169,38 @@ mod tests
         assert!(
             matches!(refusal, FinishRefusal::GateFailed { exit_code: 101, .. }),
             "got {refusal:?}"
+        );
+    }
+
+    fn Temporary_Directory(name: &str) -> std::path::PathBuf
+    {
+        let mut path = std::env::temp_dir();
+        path.push(format!("nomos-gate-step-{name}-{}", std::process::id()));
+        // error-info: allow this is a best-effort clean slate before creating the directory fresh below
+        let _ = std::fs::remove_dir_all(&path);
+        std::fs::create_dir_all(&path).expect("test needs a temp directory");
+        return path;
+    }
+
+    fn Tree_With_Workflow(name: &str) -> std::path::PathBuf
+    {
+        let directory = Temporary_Directory(name);
+        let workflows = directory.join(".github").join("workflows");
+        std::fs::create_dir_all(&workflows).expect("test needs a workflow directory");
+        std::fs::write(workflows.join("gate.yml"), WORKFLOW).expect("test needs a workflow");
+        return directory;
+    }
+
+    fn Ledger_At<'clock>(
+        directory: &Path,
+        clock: &'clock FixedClock,
+    ) -> FileLedger<StdFileSystem, &'clock FixedClock, FileLock>
+    {
+        return FileLedger::At(
+            directory.join("ledger.json"),
+            StdFileSystem,
+            clock,
+            FileLock::At(directory.join("ledger.lock")),
         );
     }
 }

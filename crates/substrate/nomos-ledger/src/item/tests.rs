@@ -386,13 +386,13 @@ fn Test_Terminal_States_Should_Be_Recognized()
 /// rather than a change to the loop that reads them.
 fn Every_Declared_Item_Kind() -> [ItemKind; 5]
 {
-    [
+    return [
         ItemKind::Capability,
         ItemKind::Decision,
         ItemKind::Validation,
         ItemKind::Correction,
         ItemKind::Cleanup,
-    ]
+    ];
 }
 
 /// Every origin `ItemOrigin` declares.
@@ -401,7 +401,7 @@ fn Every_Declared_Item_Kind() -> [ItemKind; 5]
 /// is one.
 fn Every_Declared_Item_Origin() -> [ItemOrigin; 2]
 {
-    [ItemOrigin::Required, ItemOrigin::Proposed]
+    return [ItemOrigin::Required, ItemOrigin::Proposed];
 }
 
 /// `OD-LEDGER-024`'s closed set: a kind or an origin outside the five and two named

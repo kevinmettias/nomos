@@ -240,35 +240,6 @@ mod local_tests
         }
     }
 
-    fn Temp_Dir(name: &str) -> PathBuf
-    {
-        let mut path = std::env::temp_dir();
-        path.push(format!("nomos-finish-item-{name}-{}", std::process::id()));
-        let _ = std::fs::remove_dir_all(&path);
-        std::fs::create_dir_all(&path).expect("test needs a temp directory");
-        return path;
-    }
-
-    fn Write_Workflow(directory: &Path)
-    {
-        let workflows = directory.join(".github").join("workflows");
-        std::fs::create_dir_all(&workflows).expect("test needs a workflow directory");
-        std::fs::write(workflows.join("gate.yml"), WORKFLOW).expect("test needs a workflow");
-    }
-
-    fn Ledger_At<'clock>(
-        directory: &Path,
-        clock: &'clock FixedClock,
-    ) -> FileLedger<StdFileSystem, &'clock FixedClock, FileLock>
-    {
-        return FileLedger::At(
-            directory.join("ledger.json"),
-            StdFileSystem,
-            clock,
-            FileLock::At(directory.join("ledger.lock")),
-        );
-    }
-
     fn Claimed_Item(id: ItemId) -> crate::LedgerItem
     {
         return crate::LedgerItem {
@@ -303,7 +274,7 @@ mod local_tests
     #[test]
     fn Test_Finish_Item_Should_Record_A_Passing_Predicate_And_Close_The_Claim()
     {
-        let directory = Temp_Dir("passing");
+        let directory = Temporary_Directory("passing");
         Write_Workflow(&directory);
         let clock = FixedClock(NOW);
         let mut ledger = Ledger_At(&directory, &clock);
@@ -331,5 +302,35 @@ mod local_tests
         let closed = reloaded.items.first().expect("the item survives finishing");
         assert_eq!(closed.state, ItemState::Done);
         assert_eq!(closed.claim, None, "a finished item is no longer held");
+    }
+
+    fn Temporary_Directory(name: &str) -> PathBuf
+    {
+        let mut path = std::env::temp_dir();
+        path.push(format!("nomos-finish-item-{name}-{}", std::process::id()));
+        // error-info: allow this is a best-effort clean slate before creating the directory fresh below
+        let _ = std::fs::remove_dir_all(&path);
+        std::fs::create_dir_all(&path).expect("test needs a temp directory");
+        return path;
+    }
+
+    fn Write_Workflow(directory: &Path)
+    {
+        let workflows = directory.join(".github").join("workflows");
+        std::fs::create_dir_all(&workflows).expect("test needs a workflow directory");
+        std::fs::write(workflows.join("gate.yml"), WORKFLOW).expect("test needs a workflow");
+    }
+
+    fn Ledger_At<'clock>(
+        directory: &Path,
+        clock: &'clock FixedClock,
+    ) -> FileLedger<StdFileSystem, &'clock FixedClock, FileLock>
+    {
+        return FileLedger::At(
+            directory.join("ledger.json"),
+            StdFileSystem,
+            clock,
+            FileLock::At(directory.join("ledger.lock")),
+        );
     }
 }

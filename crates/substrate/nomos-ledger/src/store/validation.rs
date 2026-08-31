@@ -259,28 +259,6 @@ mod tests
     use super::*;
     use crate::{ItemKind, ItemOrigin, Territory};
 
-    fn Workable_Item(id: ItemId) -> LedgerItem
-    {
-        return LedgerItem {
-            id,
-            title: "an item".to_owned(),
-            why: "because".to_owned(),
-            done_when: "when it is done".to_owned(),
-            kind: ItemKind::Correction,
-            origin: ItemOrigin::Proposed,
-            territory: Territory::Of_Files(["src/a.rs"]),
-            state: ItemState::Ready,
-            depends_on: Vec::new(),
-            blocked: None,
-            claim: None,
-            verification: None,
-            verified: None,
-            abandoned: Vec::new(),
-            displaced: Vec::new(),
-            declined: None,
-        };
-    }
-
     #[test]
     fn Test_Validate_Document_Should_Collect_Every_Violation_Not_Just_The_First()
     {
@@ -302,5 +280,27 @@ mod tests
         assert!(violations.iter().any(|line| line.contains("more than once")), "{violations:?}");
         assert!(violations.iter().any(|line| line.contains("reserves nothing")), "{violations:?}");
         assert_eq!(violations.len(), 2, "exactly these two violations for this fixture, no more, no fewer: {violations:?}");
+    }
+
+    fn Workable_Item(id: ItemId) -> LedgerItem
+    {
+        return LedgerItem {
+            id,
+            title: "an item".to_owned(),
+            why: "because".to_owned(),
+            done_when: "when it is done".to_owned(),
+            kind: ItemKind::Correction,
+            origin: ItemOrigin::Proposed,
+            territory: Territory::Of_Files(["src/a.rs"]),
+            state: ItemState::Ready,
+            depends_on: Vec::new(),
+            blocked: None,
+            claim: None,
+            verification: None,
+            verified: None,
+            abandoned: Vec::new(),
+            displaced: Vec::new(),
+            declined: None,
+        };
     }
 }

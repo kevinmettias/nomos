@@ -261,21 +261,6 @@ mod local_tests
     use super::*;
     use crate::ChangeSource;
 
-    fn Sample_Variant() -> BuildVariant
-    {
-        return BuildVariant::New("x86_64-pc-windows-msvc", "dev", "1.85", ["analysis"]);
-    }
-
-    fn Sample_Configuration() -> ConfigurationId
-    {
-        return ConfigurationId::From_Digest(Digest128::From_Bytes([0x24; 16]));
-    }
-
-    fn Fresh_Workspace() -> Workspace
-    {
-        return Workspace::Empty(Sample_Variant(), Sample_Configuration());
-    }
-
     #[test]
     fn Test_Empty_Should_Have_No_Members_And_A_Fresh_Counter()
     {
@@ -369,5 +354,20 @@ mod local_tests
     fn Test_Authority_Should_Be_Observed_Not_Authored()
     {
         assert_eq!(Workspace::Authority(), Authority::Observed);
+    }
+
+    fn Sample_Variant() -> BuildVariant
+    {
+        return BuildVariant::New("x86_64-pc-windows-msvc", "dev", "1.85", ["analysis"]);
+    }
+
+    fn Sample_Configuration() -> ConfigurationId
+    {
+        return ConfigurationId::From_Digest(Digest128::From_Bytes([0x24; 16]));
+    }
+
+    fn Fresh_Workspace() -> Workspace
+    {
+        return Workspace::Empty(Sample_Variant(), Sample_Configuration());
     }
 }

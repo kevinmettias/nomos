@@ -127,16 +127,6 @@ mod tests
         }
     }
 
-    /// One host variant altered in each component in turn: target, profile, and toolchain.
-    fn Altered_Variants() -> Vec<BuildVariant>
-    {
-        return vec![
-            BuildVariant::New("aarch64-apple-darwin", "dev", "1.85", ["telemetry", "analysis"]),
-            BuildVariant::New("x86_64-pc-windows-msvc", "release", "1.85", ["telemetry", "analysis"]),
-            BuildVariant::New("x86_64-pc-windows-msvc", "dev", "nightly", ["telemetry", "analysis"]),
-        ];
-    }
-
     fn Host() -> BuildVariant
     {
         return BuildVariant::New(
@@ -145,6 +135,16 @@ mod tests
             "1.85",
             ["telemetry", "analysis"],
         );
+    }
+
+    /// One host variant altered in each component in turn: target, profile, and toolchain.
+    fn Altered_Variants() -> Vec<BuildVariant>
+    {
+        return vec![
+            BuildVariant::New("aarch64-apple-darwin", "dev", "1.85", ["telemetry", "analysis"]),
+            BuildVariant::New("x86_64-pc-windows-msvc", "release", "1.85", ["telemetry", "analysis"]),
+            BuildVariant::New("x86_64-pc-windows-msvc", "dev", "nightly", ["telemetry", "analysis"]),
+        ];
     }
 
     /// Components are delimited, not concatenated. Two variants whose fields differ only

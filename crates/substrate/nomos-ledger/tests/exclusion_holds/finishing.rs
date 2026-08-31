@@ -179,7 +179,7 @@ fn Test_An_Abandoned_Item_Should_Return_To_Ready_And_Stop_Excluding()
 /// here rather than a change to the loop that reads them.
 fn Two_Abandonments() -> [(&'static str, &'static str); 2]
 {
-    [("agent-a", "ran out of lease"), ("agent-b", REASON)]
+    return [("agent-a", "ran out of lease"), ("agent-b", REASON)];
 }
 
 #[test]

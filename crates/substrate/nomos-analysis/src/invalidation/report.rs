@@ -47,11 +47,6 @@ mod tests
         FactVariant, Guarantee, IncrementalGranularity, ProviderId, SubjectId,
     };
 
-    fn Seeded(seed: u8) -> Digest128
-    {
-        return Digest128::From_Bytes([seed; Digest128::BYTE_LENGTH]);
-    }
-
     fn Key_For(subject_seed: u8) -> FactKey
     {
         return FactKey {
@@ -72,18 +67,6 @@ mod tests
         };
     }
 
-    fn Empty_Report() -> Report
-    {
-        return Report {
-            cause: GenerationCause::VariantChanged { variant: BuildVariantId::From_Digest(Seeded(1)) },
-            from: GenerationId::From_Raw(2),
-            direct: Vec::new(),
-            dependent: Vec::new(),
-            broadened: Vec::new(),
-            retained: 3,
-        };
-    }
-
     #[test]
     fn Test_Invalidated_Should_Add_Direct_And_Dependent_Counts()
     {
@@ -101,5 +84,22 @@ mod tests
 
         assert!(text.contains("build variant"), "{text}");
         assert!(text.contains("retaining 3"), "{text}");
+    }
+
+    fn Seeded(seed: u8) -> Digest128
+    {
+        return Digest128::From_Bytes([seed; Digest128::BYTE_LENGTH]);
+    }
+
+    fn Empty_Report() -> Report
+    {
+        return Report {
+            cause: GenerationCause::VariantChanged { variant: BuildVariantId::From_Digest(Seeded(1)) },
+            from: GenerationId::From_Raw(2),
+            direct: Vec::new(),
+            dependent: Vec::new(),
+            broadened: Vec::new(),
+            retained: 3,
+        };
     }
 }

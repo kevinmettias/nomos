@@ -258,14 +258,6 @@ mod tests
         );
     }
 
-    /// The top-level workflow name, for [`Test_A_Workflow_Name_Should_Not_Be_Read_As_A_Step`]:
-    /// it must not be mistaken for a step, or the first `run:` in the file gets attributed to
-    /// a step that has none.
-    fn Workflow_Level_Names() -> [&'static str; 1]
-    {
-        ["gate"]
-    }
-
     #[test]
     fn Test_A_Workflow_Name_Should_Not_Be_Read_As_A_Step()
     {
@@ -277,11 +269,12 @@ mod tests
         }
     }
 
-    /// Step names the fixture workflow never declares, for
-    /// [`Test_A_Missing_Step_Should_Be_Refused`].
-    fn Names_Of_Steps_The_Workflow_Never_Declares() -> [&'static str; 1]
+    /// The top-level workflow name, for [`Test_A_Workflow_Name_Should_Not_Be_Read_As_A_Step`]:
+    /// it must not be mistaken for a step, or the first `run:` in the file gets attributed to
+    /// a step that has none.
+    fn Workflow_Level_Names() -> [&'static str; 1]
     {
-        ["Boundaries"]
+        return ["gate"];
     }
 
     #[test]
@@ -295,16 +288,11 @@ mod tests
         }
     }
 
-    /// `run:` lines that are scripts rather than a single command, for
-    /// [`Test_A_Scripted_Step_Should_Be_Refused_Rather_Than_Guessed`].
-    fn Scripted_Step_Run_Lines() -> [&'static str; 4]
+    /// Step names the fixture workflow never declares, for
+    /// [`Test_A_Missing_Step_Should_Be_Refused`].
+    fn Names_Of_Steps_The_Workflow_Never_Declares() -> [&'static str; 1]
     {
-        [
-            "cargo clippy && cargo test",
-            "cargo test | tee log",
-            "cargo test --features \"a b\"",
-            "|",
-        ]
+        return ["Boundaries"];
     }
 
     /// A shell script cannot be turned into an argv without guessing, and a guessed
@@ -324,6 +312,18 @@ mod tests
                 "`{run}` was split rather than refused"
             );
         }
+    }
+
+    /// `run:` lines that are scripts rather than a single command, for
+    /// [`Test_A_Scripted_Step_Should_Be_Refused_Rather_Than_Guessed`].
+    fn Scripted_Step_Run_Lines() -> [&'static str; 4]
+    {
+        return [
+            "cargo clippy && cargo test",
+            "cargo test | tee log",
+            "cargo test --features \"a b\"",
+            "|",
+        ];
     }
 
     #[test]
