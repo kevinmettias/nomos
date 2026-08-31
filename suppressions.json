@@ -17733,6 +17733,46 @@
       "reason": "this file pairs its production code with its own inline #[cfg(test)] module; check-test-coverage keys a test's companion unit off the exact file it is textually written in (confirmed via the Rust front end's stem-based Unit matching), so splitting the test module into a sibling file breaks coverage attribution for every function this file declares. file-size/responsibility markers are not honoured under this repository's safety-only marker policy (OD-GATE-018), so this waives per that record's remedy.",
       "owner": "@claude-p24-regression",
       "expires": "2026-11-28"
+    },
+    {
+      "check": "check-integration-coverage",
+      "path": "crates/contracts/nomos-contracts",
+      "fingerprint": "8be678bded2ce68b",
+      "reason": "checker false positive: nomos_platform is named only inside a doc comment in workflow_step/timeout.rs (explaining a resolution choice in prose), not a real dependency -- confirmed no nomos-platform line in Cargo.toml and no use/path reference in src/. The Rust front end's crate-reach detector is a regex text-scanner over the whole file including comments, and cannot tell prose from code",
+      "owner": "@claude-p25-integration",
+      "expires": "2026-11-29"
+    },
+    {
+      "check": "check-integration-coverage",
+      "path": "crates/kernel/nomos-model",
+      "fingerprint": "66c3852521908374",
+      "reason": "checker false positive: nomos_ledger is named only inside a doc comment in path.rs (explaining that nomos_ledger::Normalize_Path builds on this crate's own normalization), not a real dependency -- confirmed no nomos-ledger line in Cargo.toml and no use/path reference in src/",
+      "owner": "@claude-p25-integration",
+      "expires": "2026-11-29"
+    },
+    {
+      "check": "check-integration-coverage",
+      "path": "crates/languages/nomos-lang-go-modules",
+      "fingerprint": "e873838ba1bac28e",
+      "reason": "checker false positive: nomos_rules is named only inside a doc comment in guarantee.rs (describing what a real caller's positive control would look like), not a real dependency -- confirmed no nomos-rules line in Cargo.toml and no use/path reference in src/",
+      "owner": "@claude-p25-integration",
+      "expires": "2026-11-29"
+    },
+    {
+      "check": "check-integration-coverage",
+      "path": "crates/languages/nomos-lang-rust-cargo",
+      "fingerprint": "d69ce4d4cfd9d31e",
+      "reason": "checker false positive: nomos_gate_orchestration is named only inside a module-doc comment in lib.rs (describing today's real callers of this crate, in prose), not a real dependency -- confirmed no nomos-gate-orchestration line in Cargo.toml and no use/path reference in src/",
+      "owner": "@claude-p25-integration",
+      "expires": "2026-11-29"
+    },
+    {
+      "check": "check-integration-coverage",
+      "path": "crates/languages/nomos-lang-rust-cargo",
+      "fingerprint": "13569ad852bcb6e7",
+      "reason": "checker false positive: nomos_rules is named only in a Cargo.toml comment explaining why nomos-cap-dependency (the actual dependency) is listed instead, and inside a doc comment in provider/package_fact.rs -- confirmed no nomos-rules line in [dependencies] and no use/path reference in src/",
+      "owner": "@claude-p25-integration",
+      "expires": "2026-11-29"
     }
   ]
 }

@@ -40026,6 +40026,70 @@
         }
       ],
       "declined": null
+    },
+    {
+      "id": "P25-INTEGRATION-COVERAGE",
+      "title": "Close the cross-directory check-integration-coverage gap across crates/",
+      "why": "the testing phase reports zero when scoped to any single crate's own directory, but 55 findings surface only when the whole crates tree is scanned together: check-integration-coverage needs both sides of a crate boundary in view at once. Two sub-cases: a boundary test compiled INSIDE the crate (move it to tests/) and a boundary with NO suite at all (write one). This is the last code-fixable gap in the user's original 14-phase-zero request; attributes/docs remains separately deferred.",
+      "done_when": "phase-run testing scoped to the whole crates/ tree reports zero check-integration-coverage findings (or only waived ones, with a real reason), and cargo build --workspace --all-targets passes",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host",
+          "crates/capabilities",
+          "crates/kernel",
+          "crates/languages",
+          "crates/substrate",
+          "crates/contracts",
+          "crates/spec"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "exit_code": 0,
+        "output_tail": "associated items in this implementation\n...\n61 |     pub fn New(name: &str) -> Self\n   |            ^^^\n...\n72 |     pub fn With(self, name: &str, text: &str) -> Self\n   |            ^^^^\n...\n84 |     pub fn Root(&self) -> String\n   |            ^^^^\n   |\n   = note: `#[warn(dead_code)]` on by default\n\nwarning: fields `code` and `stdout` are never read\n  --> crates\\host\\nomos-cli\\tests\\support\\mod.rs:31:9\n   |\n29 | pub struct Ran\n   |            --- fields in this struct\n30 | {\n31 |     pub code: i32,\n   |         ^^^^\n32 |     pub stdout: String,\n   |         ^^^^^^\n   |\n   = note: `#[warn(dead_code)]` on by default\n\nwarning: function `Run` is never used\n  --> crates\\host\\nomos-cli\\tests\\support\\mod.rs:37:8\n   |\n37 | pub fn Run(arguments: &[&str]) -> Ran\n   |        ^^^\n\nwarning: `nomos-cli` (test \"gate_orchestration_seam\") generated 2 warnings\nwarning: `nomos-cli` (test \"spec_model_seam\") generated 2 warnings (1 duplicate)\nwarning: `nomos-cli` (test \"contracts_seam\") generated 1 warning (1 duplicate)\nwarning: `nomos-cli` (test \"check_orchestration_seam\") generated 1 warning (1 duplicate)\nwarning: `nomos-cli` (test \"model_backend_ollama_seam\") generated 2 warnings (1 duplicate)\nwarning: `nomos-cli` (test \"agent_contracts_seam\") generated 2 warnings (1 duplicate)\nwarning: `nomos-cli` (test \"model_seam\") generated 1 warning (1 duplicate)\nwarning: `nomos-cli` (test \"spec_store_seam\") generated 1 warning\nwarning: `nomos-cli` (test \"agent_executor_claude_code_seam\") generated 2 warnings (2 duplicates)\nwarning: `nomos-cli` (test \"spec_orchestration_seam\") generated 3 warnings (1 duplicate)\nwarning: `nomos-cli` (test \"workspace_seam\") generated 1 warning (1 duplicate)\nwarning: `nomos-cli` (test \"lang_go_seam\") generated 1 warning (1 duplicate)\nwarning: `nomos-cli` (test \"platform_std_seam\") generated 1 warning (1 duplicate)\nwarning: `nomos-cli` (test \"lang_rust_seam\") generated 1 warning (1 duplicate)\n    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.18s\n",
+        "verified_at": 1788203122,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "fc7be28e8c66561b35aedd62bd63334df504c0bb"
+      },
+      "abandoned": [],
+      "displaced": [
+        {
+          "holder": "claude-p25-integration",
+          "acquired_at": 1788138833,
+          "lease_expires_at": 1788146223
+        }
+      ],
+      "declined": null
     }
   ]
 }
