@@ -34,7 +34,8 @@ fn Test_A_Scope_Selector_Naming_Nothing_Should_Report_Vacuous_Through_A_Real_Run
     };
     assert_eq!(scope.include.len(), 1, "the fixture below must drive exactly this scope");
 
-    let ran = Run(&["gate", "run", "--root", ".", "--include", &scope.include[0]]);
+    let included = scope.include.first().expect("asserted above: the fixture names exactly one path");
+    let ran = Run(&["gate", "run", "--root", ".", "--include", included]);
 
     assert_eq!(
         ran.code, 6,

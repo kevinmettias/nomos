@@ -69,8 +69,10 @@ fn Test_Table_Lines_Should_Carry_Which_Block_They_Came_From()
         2,
         "both rows authored under block 2 must still say so"
     );
-    assert_eq!(lines[0].text, "| a |");
-    assert_ne!(lines[0].content_hash, lines[1].content_hash, "distinct rows must not share a content hash");
+    let first = lines.first().expect("asserted above: two rows were found");
+    let second = lines.get(1).expect("asserted above: two rows were found");
+    assert_eq!(first.text, "| a |");
+    assert_ne!(first.content_hash, second.content_hash, "distinct rows must not share a content hash");
 }
 
 /// The real binary, driven through the one `nomos spec` verb that answers from the
