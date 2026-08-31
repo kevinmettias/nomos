@@ -43,6 +43,24 @@ mod tests
     use super::{Suppression, SuppressionDisposition};
     use nomos_contracts::{Applicability, Digest128, EvidenceClass, Finding, GateCategory, RuleId, SubjectId};
 
+    #[test]
+    fn Test_Is_Applicable_To_Should_Match_Same_Rule_And_Subject()
+    {
+        let finding = Finding_For("naming-convention", 1);
+        let suppression = Suppression_Of(&finding);
+
+        assert!(suppression.Is_Applicable_To(&finding));
+    }
+
+    #[test]
+    fn Test_Is_Applicable_To_Should_Not_Match_A_Different_Subject()
+    {
+        let finding = Finding_For("naming-convention", 1);
+        let suppression = Suppression_Of(&Finding_For("naming-convention", 2));
+
+        assert!(!suppression.Is_Applicable_To(&finding));
+    }
+
     fn Finding_For(rule: &str, subject_seed: u8) -> Finding
     {
         return Finding {
@@ -66,23 +84,5 @@ mod tests
             rationale: "known false positive".to_owned(),
             owner: "author".to_owned(),
         };
-    }
-
-    #[test]
-    fn Test_Is_Applicable_To_Should_Match_Same_Rule_And_Subject()
-    {
-        let finding = Finding_For("naming-convention", 1);
-        let suppression = Suppression_Of(&finding);
-
-        assert!(suppression.Is_Applicable_To(&finding));
-    }
-
-    #[test]
-    fn Test_Is_Applicable_To_Should_Not_Match_A_Different_Subject()
-    {
-        let finding = Finding_For("naming-convention", 1);
-        let suppression = Suppression_Of(&Finding_For("naming-convention", 2));
-
-        assert!(!suppression.Is_Applicable_To(&finding));
     }
 }

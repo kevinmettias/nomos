@@ -138,17 +138,6 @@ mod tests
     use nomos_workspace::BuildVariant;
     use std::path::PathBuf;
 
-    fn Test_Variant() -> BuildVariant
-    {
-        return BuildVariant::New("test-target", "test-profile", "test-toolchain", std::iter::empty::<String>());
-    }
-
-    fn Repository_Root() -> PathBuf
-    {
-        let manifest = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
-        return manifest.parent().and_then(std::path::Path::parent).and_then(std::path::Path::parent).map(PathBuf::from).expect("this crate sits three levels below the workspace root");
-    }
-
     fn Source(path: &str, text: &str) -> SourceFile
     {
         return SourceFile::New(path, Subject_Of_Path(path), text);
@@ -172,8 +161,21 @@ mod tests
         let Explanation::Found { would_block, .. } = result.explanation
         else
         {
+            // this fixture's own source matches the rule it names; a refusal here is a bug
+            // in the fixture, not a caller-facing failure to route through Result.
             panic!("this fixture must produce the finding the query names");
         };
         assert!(would_block);
+    }
+
+    fn Repository_Root() -> PathBuf
+    {
+        let manifest = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+        return manifest.parent().and_then(std::path::Path::parent).and_then(std::path::Path::parent).map(PathBuf::from).expect("this crate sits three levels below the workspace root");
+    }
+
+    fn Test_Variant() -> BuildVariant
+    {
+        return BuildVariant::New("test-target", "test-profile", "test-toolchain", std::iter::empty::<String>());
     }
 }

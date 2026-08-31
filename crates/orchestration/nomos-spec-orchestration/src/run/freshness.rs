@@ -152,20 +152,6 @@ mod tests
 
     const EMBEDDED_PROFILE: &str = "domain-specification";
 
-    fn Assembled() -> Assembly
-    {
-        let request = CorpusRequest { variable: "A_FRESHNESS_TEST_CORPUS_VARIABLE".to_owned(), root: None, revision: "v14.36".to_owned() };
-        return Assemble_Corpus(&request).expect("assembles from the embedded records alone");
-    }
-
-    fn Scratch(name: &str) -> PathBuf
-    {
-        let root = std::env::temp_dir().join(format!("nomos-spec-orchestration-freshness-{name}-{}", std::process::id()));
-        let _ignored = std::fs::remove_dir_all(&root);
-        std::fs::create_dir_all(&root).expect("a scratch build root");
-        return root;
-    }
-
     #[test]
     fn Test_Freshness_Of_Render_Should_Report_An_Empty_Build_Root_As_Absent()
     {
@@ -175,6 +161,8 @@ mod tests
         let answer = Freshness_Of_Render(&assembly, &FreshnessRequest { into, profile: Some(EMBEDDED_PROFILE.to_owned()), require: Vec::new() }, &StdFileSystem)
             .expect("a resolvable single profile does not refuse");
 
+        // this call passed exactly one profile, so `examined` narrows to one entry by
+        // construction; more or fewer is a bug in Freshness_Of_Render, not a caller-facing failure.
         let [outcome] = answer.examined.try_into().unwrap_or_else(|examined: Vec<_>| panic!("--profile narrows this run to exactly one profile: {}", examined.len()));
         assert!(matches!(outcome.verdict, Verdict::Absent), "{:?}", outcome.verdict);
     }
@@ -189,5 +177,19 @@ mod tests
             .expect_err("an unknown --profile must refuse");
 
         assert!(matches!(error, FreshnessRefusal::NoSuchProfile { .. }), "{error:?}");
+    }
+
+    fn Assembled() -> Assembly
+    {
+        let request = CorpusRequest { variable: "A_FRESHNESS_TEST_CORPUS_VARIABLE".to_owned(), root: None, revision: "v14.36".to_owned() };
+        return Assemble_Corpus(&request).expect("assembles from the embedded records alone");
+    }
+
+    fn Scratch(name: &str) -> PathBuf
+    {
+        let root = std::env::temp_dir().join(format!("nomos-spec-orchestration-freshness-{name}-{}", std::process::id()));
+        let _ignored = std::fs::remove_dir_all(&root);
+        std::fs::create_dir_all(&root).expect("a scratch build root");
+        return root;
     }
 }

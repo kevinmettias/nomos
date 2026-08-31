@@ -53,22 +53,6 @@ mod tests
     use super::*;
     use nomos_contracts::{Applicability, EvidenceClass, GateCategory, RuleId};
 
-    /// A finding whose only variable is `applicability` -- every other field is a fixture
-    /// [`Claim_Of`] does not read.
-    fn Finding_With(applicability: Applicability) -> Finding
-    {
-        return Finding {
-            rule: RuleId::New("test.rule"),
-            subject: nomos_model::Subject_Of_Path("a.rs"),
-            subject_name: "a".to_owned(),
-            applicability,
-            evidence: EvidenceClass::Derived,
-            gate: GateCategory::Advisory,
-            summary: "fixture".to_owned(),
-            locations: Vec::new(),
-        };
-    }
-
     #[test]
     fn Test_Claim_Of_Should_Report_Complete_When_Nothing_Is_Coverage_Debt()
     {
@@ -103,5 +87,21 @@ mod tests
     fn Test_Claim_Of_Should_Report_Complete_For_An_Empty_Findings_List()
     {
         assert_eq!(Claim_Of(&[]), Claim::Complete);
+    }
+
+    /// A finding whose only variable is `applicability` -- every other field is a fixture
+    /// [`Claim_Of`] does not read.
+    fn Finding_With(applicability: Applicability) -> Finding
+    {
+        return Finding {
+            rule: RuleId::New("test.rule"),
+            subject: nomos_model::Subject_Of_Path("a.rs"),
+            subject_name: "a".to_owned(),
+            applicability,
+            evidence: EvidenceClass::Derived,
+            gate: GateCategory::Advisory,
+            summary: "fixture".to_owned(),
+            locations: Vec::new(),
+        };
     }
 }

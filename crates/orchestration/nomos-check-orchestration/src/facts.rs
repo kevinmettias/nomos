@@ -77,11 +77,6 @@ mod tests
 {
     use super::*;
 
-    fn Test_Variant() -> BuildVariant
-    {
-        return BuildVariant::New("test-target", "test-profile", "test-toolchain", std::iter::empty::<String>());
-    }
-
     /// A single real file ingests, and the [`Context`] it produces carries the registry's
     /// own configuration -- not a second, independently-computed one -- because a
     /// [`ConfigurationId`] is documented as a digest of the resolved policy this run
@@ -116,5 +111,10 @@ mod tests
         let ingested = Ingested_Workspace(&sources, &registry, Test_Variant());
 
         assert!(ingested.is_err(), "duplicate paths must not be ingested as one checkout");
+    }
+
+    fn Test_Variant() -> BuildVariant
+    {
+        return BuildVariant::New("test-target", "test-profile", "test-toolchain", std::iter::empty::<String>());
     }
 }

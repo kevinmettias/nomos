@@ -229,20 +229,6 @@ mod tests
     use nomos_workspace::BuildVariant;
     use std::path::PathBuf;
 
-    fn Test_Variant() -> BuildVariant
-    {
-        return BuildVariant::New("test-target", "test-profile", "test-toolchain", std::iter::empty::<String>());
-    }
-
-    /// This repository's own real root -- [`Judged_Sources`]'s dependency step, through
-    /// `nomos_check_orchestration::Run`, runs `cargo metadata` against it regardless of what
-    /// sources a test hands in.
-    fn Repository_Root() -> PathBuf
-    {
-        let manifest = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
-        return manifest.parent().and_then(std::path::Path::parent).and_then(std::path::Path::parent).map(PathBuf::from).expect("this crate sits three levels below the workspace root");
-    }
-
     fn Source(path: &str, text: &str) -> SourceFile
     {
         return SourceFile::New(path, Subject_Of_Path(path), text);
@@ -280,5 +266,19 @@ mod tests
         let result = Run_Gate(Some(sources), super::GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher }, &command, run);
 
         assert!(!result.findings.blocking_findings.is_empty());
+    }
+
+    fn Test_Variant() -> BuildVariant
+    {
+        return BuildVariant::New("test-target", "test-profile", "test-toolchain", std::iter::empty::<String>());
+    }
+
+    /// This repository's own real root -- [`Judged_Sources`]'s dependency step, through
+    /// `nomos_check_orchestration::Run`, runs `cargo metadata` against it regardless of what
+    /// sources a test hands in.
+    fn Repository_Root() -> PathBuf
+    {
+        let manifest = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+        return manifest.parent().and_then(std::path::Path::parent).and_then(std::path::Path::parent).map(PathBuf::from).expect("this crate sits three levels below the workspace root");
     }
 }

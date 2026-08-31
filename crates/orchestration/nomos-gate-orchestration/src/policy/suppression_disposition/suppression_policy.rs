@@ -36,20 +36,6 @@ mod tests
     use crate::policy::suppression_disposition::SuppressionDisposition;
     use nomos_contracts::{Applicability, Digest128, EvidenceClass, Finding, GateCategory, RuleId, SubjectId};
 
-    fn Finding_For(rule: &str) -> Finding
-    {
-        return Finding {
-            rule: RuleId::New(rule),
-            subject: SubjectId::From_Digest(Digest128::From_Bytes([1; Digest128::BYTE_LENGTH])),
-            subject_name: "Example".to_owned(),
-            applicability: Applicability::Supported,
-            evidence: EvidenceClass::Derived,
-            gate: GateCategory::Blocking,
-            summary: "example".to_owned(),
-            locations: vec!["a.rs".to_owned()],
-        };
-    }
-
     #[test]
     fn Test_Suppressing_Should_Find_The_Entry_That_Applies_To_A_Finding()
     {
@@ -64,6 +50,20 @@ mod tests
         let policy = SuppressionPolicy { suppressions: vec![suppression.clone()] };
 
         assert_eq!(policy.Suppressing(&finding), Some(&suppression));
+    }
+
+    fn Finding_For(rule: &str) -> Finding
+    {
+        return Finding {
+            rule: RuleId::New(rule),
+            subject: SubjectId::From_Digest(Digest128::From_Bytes([1; Digest128::BYTE_LENGTH])),
+            subject_name: "Example".to_owned(),
+            applicability: Applicability::Supported,
+            evidence: EvidenceClass::Derived,
+            gate: GateCategory::Blocking,
+            summary: "example".to_owned(),
+            locations: vec!["a.rs".to_owned()],
+        };
     }
 
     #[test]

@@ -121,20 +121,6 @@ mod tests
     use nomos_platform_std::StdFileSystem;
     use std::path::PathBuf;
 
-    fn Assembled() -> Assembly
-    {
-        let request = CorpusRequest { variable: "A_COMMIT_TEST_CORPUS_VARIABLE".to_owned(), root: None, revision: "v14.36".to_owned() };
-        return Assemble_Corpus(&request).expect("assembles from the embedded records alone");
-    }
-
-    fn Scratch(name: &str) -> PathBuf
-    {
-        let root = std::env::temp_dir().join(format!("nomos-spec-orchestration-commit-{name}-{}", std::process::id()));
-        let _ignored = std::fs::remove_dir_all(&root);
-        std::fs::create_dir_all(&root).expect("a scratch build root");
-        return root;
-    }
-
     #[test]
     fn Test_Commit_Staged_Edit_Should_Write_The_Record_And_Close_The_Round_Trip()
     {
@@ -154,5 +140,19 @@ mod tests
         let written = std::fs::read_to_string(&answer.destination).expect("the record was written");
         assert_eq!(written, edited, "the bytes on disk must be exactly what was staged");
         assert!(matches!(answer.reproduction, Ok(super::Reproduction::Matched { .. })), "the round trip must close: {:?}", answer.reproduction);
+    }
+
+    fn Assembled() -> Assembly
+    {
+        let request = CorpusRequest { variable: "A_COMMIT_TEST_CORPUS_VARIABLE".to_owned(), root: None, revision: "v14.36".to_owned() };
+        return Assemble_Corpus(&request).expect("assembles from the embedded records alone");
+    }
+
+    fn Scratch(name: &str) -> PathBuf
+    {
+        let root = std::env::temp_dir().join(format!("nomos-spec-orchestration-commit-{name}-{}", std::process::id()));
+        let _ignored = std::fs::remove_dir_all(&root);
+        std::fs::create_dir_all(&root).expect("a scratch build root");
+        return root;
     }
 }

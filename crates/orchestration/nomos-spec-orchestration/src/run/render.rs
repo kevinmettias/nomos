@@ -112,14 +112,6 @@ mod tests
 
     const EMBEDDED_PROFILE: &str = "domain-specification";
 
-    fn Scratch(name: &str) -> std::path::PathBuf
-    {
-        let root = std::env::temp_dir().join(format!("nomos-spec-orchestration-render-{name}-{}", std::process::id()));
-        let _ignored = std::fs::remove_dir_all(&root);
-        std::fs::create_dir_all(&root).expect("a scratch build root");
-        return root;
-    }
-
     #[test]
     fn Test_Rendered_Projection_Should_Place_A_Projection_Built_With_No_Corpus()
     {
@@ -145,5 +137,13 @@ mod tests
             .expect_err("an unknown profile must refuse");
 
         assert!(matches!(error, super::RenderRefusal::NoSuchProfile { .. }), "{error:?}");
+    }
+
+    fn Scratch(name: &str) -> std::path::PathBuf
+    {
+        let root = std::env::temp_dir().join(format!("nomos-spec-orchestration-render-{name}-{}", std::process::id()));
+        let _ignored = std::fs::remove_dir_all(&root);
+        std::fs::create_dir_all(&root).expect("a scratch build root");
+        return root;
     }
 }

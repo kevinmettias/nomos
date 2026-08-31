@@ -39,6 +39,16 @@ mod tests
     use super::{AdoptionPolicy, RuleCalibration};
     use nomos_contracts::{Applicability, Digest128, EvidenceClass, Finding, GateCategory, RuleId, SubjectId};
 
+    #[test]
+    fn Test_Calibrating_Should_Find_The_Entry_That_Applies_To_A_Finding()
+    {
+        let finding = Finding_For("naming-convention");
+        let calibration = RuleCalibration { rule: finding.rule.clone(), rationale: "adopting".to_owned() };
+        let policy = AdoptionPolicy { calibrated: vec![calibration.clone()] };
+
+        assert_eq!(policy.Calibrating(&finding), Some(&calibration));
+    }
+
     fn Finding_For(rule: &str) -> Finding
     {
         return Finding {
@@ -51,16 +61,6 @@ mod tests
             summary: "example".to_owned(),
             locations: vec!["a.rs".to_owned()],
         };
-    }
-
-    #[test]
-    fn Test_Calibrating_Should_Find_The_Entry_That_Applies_To_A_Finding()
-    {
-        let finding = Finding_For("naming-convention");
-        let calibration = RuleCalibration { rule: finding.rule.clone(), rationale: "adopting".to_owned() };
-        let policy = AdoptionPolicy { calibrated: vec![calibration.clone()] };
-
-        assert_eq!(policy.Calibrating(&finding), Some(&calibration));
     }
 
     #[test]

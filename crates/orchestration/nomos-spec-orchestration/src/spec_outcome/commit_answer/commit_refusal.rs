@@ -94,30 +94,6 @@ mod tests
     use nomos_spec_store::{CommitReport, EditError};
     use std::path::PathBuf;
 
-    /// A real, staged edit preview -- the same D-132 heading rename `run::commit`'s own
-    /// colocated tests build -- so `Refused` and `Unwritable` carry a genuine `EditPreview`
-    /// rather than a value nothing outside this module could construct.
-    fn Real_Preview() -> nomos_spec_store::EditPreview
-    {
-        let request = crate::corpus::CorpusRequest {
-            variable: "A_COMMIT_REFUSAL_TEST_CORPUS_VARIABLE".to_owned(),
-            root: None,
-            revision: "v14.36".to_owned(),
-        };
-        let assembly = crate::corpus::Assemble_Corpus(&request).expect("assembles from the embedded records alone");
-        let markdown = crate::run::Rendered_Markdown(&assembly, &crate::request::RecordRequest { id: "D-132".to_owned(), revision: None })
-            .expect("D-132 is embedded")
-            .markdown;
-        let edited = markdown.replace("## Decision", "## The decision");
-
-        return assembly
-            .store
-            .Claim_For_Edit("D-132", None)
-            .and_then(|claimed| return claimed.Stage(&edited, None))
-            .and_then(|edit| return edit.Preview(&assembly.store))
-            .expect("a canonical heading rename previews cleanly");
-    }
-
     #[test]
     fn Test_Unreadable_Should_Carry_The_Path_And_Error()
     {
@@ -171,5 +147,29 @@ mod tests
 
         assert!(matches!(refusal.kind, CommitRefusalKind::Unwritable { path: kind_path, .. } if kind_path == path));
         assert!(matches!(refusal.error, CommitRefusalError::FileSystem(_)));
+    }
+
+    /// A real, staged edit preview -- the same D-132 heading rename `run::commit`'s own
+    /// colocated tests build -- so `Refused` and `Unwritable` carry a genuine `EditPreview`
+    /// rather than a value nothing outside this module could construct.
+    fn Real_Preview() -> nomos_spec_store::EditPreview
+    {
+        let request = crate::corpus::CorpusRequest {
+            variable: "A_COMMIT_REFUSAL_TEST_CORPUS_VARIABLE".to_owned(),
+            root: None,
+            revision: "v14.36".to_owned(),
+        };
+        let assembly = crate::corpus::Assemble_Corpus(&request).expect("assembles from the embedded records alone");
+        let markdown = crate::run::Rendered_Markdown(&assembly, &crate::request::RecordRequest { id: "D-132".to_owned(), revision: None })
+            .expect("D-132 is embedded")
+            .markdown;
+        let edited = markdown.replace("## Decision", "## The decision");
+
+        return assembly
+            .store
+            .Claim_For_Edit("D-132", None)
+            .and_then(|claimed| return claimed.Stage(&edited, None))
+            .and_then(|edit| return edit.Preview(&assembly.store))
+            .expect("a canonical heading rename previews cleanly");
     }
 }

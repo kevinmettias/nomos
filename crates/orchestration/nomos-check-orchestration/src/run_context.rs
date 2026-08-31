@@ -429,11 +429,6 @@ mod tests
     use nomos_contracts::ProviderId;
     use nomos_platform_std::StdProcessLauncher;
 
-    fn Test_Variant() -> BuildVariant
-    {
-        return BuildVariant::New("test-target", "test-profile", "test-toolchain", std::iter::empty::<String>());
-    }
-
     /// `root` is never read: `COMPLETENESS_MIRROR` alone selects none of the
     /// dependency-edges, lint-diagnostics or dependency-policy materializations, so this
     /// stays a fast, self-contained proof of `Run`'s own composing-and-judging contract
@@ -451,11 +446,18 @@ mod tests
         let CheckOutcome::Judged { findings, examined, claim } = outcome
         else
         {
+            // this fixture's own source is well-formed and the provider recognizes it; a
+            // refusal here is a bug in the test's own setup, not a caller-facing failure.
             panic!("a tree the provider can read must be judged");
         };
         assert!(findings.is_empty(), "{findings:?}");
         assert_eq!(examined, crate::examined::Examined { files: 1, facts: 1 });
         assert_eq!(claim, crate::examined::Claim::Complete);
+    }
+
+    fn Test_Variant() -> BuildVariant
+    {
+        return BuildVariant::New("test-target", "test-profile", "test-toolchain", std::iter::empty::<String>());
     }
 
     /// `OD-CAPABILITY-009`'s corrected fix, exercised directly: a `.rs` path's enrichment

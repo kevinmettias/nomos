@@ -69,20 +69,6 @@ mod tests
     use nomos_platform_std::StdFileSystem;
     use std::path::PathBuf;
 
-    fn Assembled() -> Assembly
-    {
-        let request = CorpusRequest { variable: "A_PREVIEW_TEST_CORPUS_VARIABLE".to_owned(), root: None, revision: "v14.36".to_owned() };
-        return Assemble_Corpus(&request).expect("assembles from the embedded records alone");
-    }
-
-    fn Scratch(name: &str) -> PathBuf
-    {
-        let root = std::env::temp_dir().join(format!("nomos-spec-orchestration-preview-{name}-{}", std::process::id()));
-        let _ignored = std::fs::remove_dir_all(&root);
-        std::fs::create_dir_all(&root).expect("a scratch build root");
-        return root;
-    }
-
     #[test]
     fn Test_Preview_Staged_Edit_Should_Refuse_A_Staged_File_That_Cannot_Be_Read()
     {
@@ -110,5 +96,19 @@ mod tests
             .expect("a canonical heading rename previews cleanly");
 
         assert!(preview.Is_Wording_Moved(), "a heading rename must count as wording moved");
+    }
+
+    fn Scratch(name: &str) -> PathBuf
+    {
+        let root = std::env::temp_dir().join(format!("nomos-spec-orchestration-preview-{name}-{}", std::process::id()));
+        let _ignored = std::fs::remove_dir_all(&root);
+        std::fs::create_dir_all(&root).expect("a scratch build root");
+        return root;
+    }
+
+    fn Assembled() -> Assembly
+    {
+        let request = CorpusRequest { variable: "A_PREVIEW_TEST_CORPUS_VARIABLE".to_owned(), root: None, revision: "v14.36".to_owned() };
+        return Assemble_Corpus(&request).expect("assembles from the embedded records alone");
     }
 }

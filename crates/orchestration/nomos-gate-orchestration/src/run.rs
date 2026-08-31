@@ -40,11 +40,15 @@ mod tests
         let GateOutcome::Planned(here) = Run(&GateCommand { root: PathBuf::from("."), ..Default::default() })
         else
         {
+            // this crate's own rule registration is fixed at compile time; a mismatch here
+            // is a bug in the registration, not a runtime condition a caller could hit.
             panic!("this crate's own registration must not be contradictory");
         };
         let GateOutcome::Planned(elsewhere) = Run(&GateCommand { root: PathBuf::from("elsewhere"), ..Default::default() })
         else
         {
+            // this crate's own rule registration is fixed at compile time; a mismatch here
+            // is a bug in the registration, not a runtime condition a caller could hit.
             panic!("this crate's own registration must not be contradictory");
         };
 

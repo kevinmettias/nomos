@@ -37,6 +37,16 @@ mod tests
     use super::{BaselineDebt, BaselinePolicy};
     use nomos_contracts::{Applicability, Digest128, EvidenceClass, Finding, GateCategory, RuleId, SubjectId};
 
+    #[test]
+    fn Test_Tolerating_Should_Find_The_Entry_That_Applies_To_A_Finding()
+    {
+        let finding = Finding_For("naming-convention");
+        let debt = BaselineDebt { rule: finding.rule.clone(), subject: finding.subject, rationale: "tracked".to_owned() };
+        let policy = BaselinePolicy { debt: vec![debt.clone()] };
+
+        assert_eq!(policy.Tolerating(&finding), Some(&debt));
+    }
+
     fn Finding_For(rule: &str) -> Finding
     {
         return Finding {
@@ -49,16 +59,6 @@ mod tests
             summary: "example".to_owned(),
             locations: vec!["a.rs".to_owned()],
         };
-    }
-
-    #[test]
-    fn Test_Tolerating_Should_Find_The_Entry_That_Applies_To_A_Finding()
-    {
-        let finding = Finding_For("naming-convention");
-        let debt = BaselineDebt { rule: finding.rule.clone(), subject: finding.subject, rationale: "tracked".to_owned() };
-        let policy = BaselinePolicy { debt: vec![debt.clone()] };
-
-        assert_eq!(policy.Tolerating(&finding), Some(&debt));
     }
 
     #[test]

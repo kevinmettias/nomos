@@ -70,12 +70,6 @@ mod tests
     use super::{RecordRequest, Resolved_Record};
     use crate::corpus::{Assemble_Corpus, CorpusRequest};
 
-    fn Assembled() -> crate::corpus::Assembly
-    {
-        let request = CorpusRequest { variable: "A_RECORD_TEST_CORPUS_VARIABLE".to_owned(), root: None, revision: "v14.36".to_owned() };
-        return Assemble_Corpus(&request).expect("assembles from the embedded records alone");
-    }
-
     #[test]
     fn Test_Resolved_Record_Should_Resolve_A_Governing_Record_With_No_Corpus()
     {
@@ -94,5 +88,11 @@ mod tests
         let error = Resolved_Record(&assembly, &RecordRequest { id: "D-9999".to_owned(), revision: None }).expect_err("nothing in the store is identified D-9999");
 
         assert!(matches!(error, super::RecordRefusal::NotFound { node: None, .. }), "{error:?}");
+    }
+
+    fn Assembled() -> crate::corpus::Assembly
+    {
+        let request = CorpusRequest { variable: "A_RECORD_TEST_CORPUS_VARIABLE".to_owned(), root: None, revision: "v14.36".to_owned() };
+        return Assemble_Corpus(&request).expect("assembles from the embedded records alone");
     }
 }

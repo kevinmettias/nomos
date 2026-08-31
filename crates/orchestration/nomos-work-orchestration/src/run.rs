@@ -234,18 +234,6 @@ mod tests
     use nomos_ledger::{FileLedger, Territory};
     use nomos_platform_std::{FileLock, StdFileSystem, SystemClock};
 
-    /// A ledger under a directory unique to this process and this test -- the same colocated
-    /// shape [`crate::tests`]'s own `Scratch_Ledger` builds, re-homed here so this check's own
-    /// companion rule (the test must sit beside `Run`'s own file) can find it.
-    fn Scratch_Ledger() -> FileLedger<StdFileSystem, SystemClock, FileLock>
-    {
-        let root = std::env::temp_dir().join(format!("nomos-work-orchestration-run-colocated-{}", std::process::id()));
-        let _ignored = std::fs::remove_dir_all(&root);
-        std::fs::create_dir_all(&root).expect("a scratch directory");
-
-        return FileLedger::At(root.join("ledger.json"), StdFileSystem, SystemClock, FileLock::At(root.join("ledger.lock")));
-    }
-
     /// No process is ever actually launched by `list`, so any launcher would do; one that
     /// panics if called also proves it.
     struct Unreached;
@@ -254,6 +242,8 @@ mod tests
     {
         fn Run(&self, _command: &nomos_platform::Command) -> Result<nomos_platform::ProcessOutput, String>
         {
+            // this test never dispatches a command, so this must never run; reaching it is
+            // a bug in the code under test, not a condition this fixture needs to handle.
             panic!("no command dispatched by this test should run a process");
         }
     }
@@ -268,8 +258,22 @@ mod tests
         let super::WorkOutcome::List(Ok(view)) = outcome
         else
         {
+            // an unwritten ledger is a valid, empty board by contract; any other outcome
+            // here is a bug in Run's own list dispatch, not a caller-facing failure.
             panic!("an unwritten ledger loads as an empty, valid board");
         };
         assert!(view.document.items.is_empty());
+    }
+
+    /// A ledger under a directory unique to this process and this test -- the same colocated
+    /// shape [`crate::tests`]'s own `Scratch_Ledger` builds, re-homed here so this check's own
+    /// companion rule (the test must sit beside `Run`'s own file) can find it.
+    fn Scratch_Ledger() -> FileLedger<StdFileSystem, SystemClock, FileLock>
+    {
+        let root = std::env::temp_dir().join(format!("nomos-work-orchestration-run-colocated-{}", std::process::id()));
+        let _ignored = std::fs::remove_dir_all(&root);
+        std::fs::create_dir_all(&root).expect("a scratch directory");
+
+        return FileLedger::At(root.join("ledger.json"), StdFileSystem, SystemClock, FileLock::At(root.join("ledger.lock")));
     }
 }

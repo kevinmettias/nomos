@@ -221,15 +221,6 @@ mod tests
     use crate::spec_outcome::SpecOutcome;
     use nomos_platform_std::StdFileSystem;
 
-    fn No_Corpus() -> CorpusRequest
-    {
-        return CorpusRequest {
-            variable: "A_RUN_TEST_CORPUS_VARIABLE".to_owned(),
-            root: None,
-            revision: "v14.36".to_owned(),
-        };
-    }
-
     #[test]
     fn Test_Profiles_Should_List_The_Shipped_Catalogue()
     {
@@ -260,6 +251,8 @@ mod tests
         let SpecOutcome::Profiles(profiles) = outcome
         else
         {
+            // Run(Profiles, ..) always answers SpecOutcome::Profiles; any other outcome is
+            // this test's own dispatch bug, not a caller-facing failure.
             panic!("Run(Profiles, ..) must answer SpecOutcome::Profiles");
         };
         assert!(profiles.is_ok());
@@ -273,10 +266,21 @@ mod tests
         let SpecOutcome::Sources(answer) = outcome
         else
         {
+            // Run(Sources, ..) always answers SpecOutcome::Sources; any other outcome is
+            // this test's own dispatch bug, not a caller-facing failure.
             panic!("Run(Sources, ..) must answer SpecOutcome::Sources");
         };
         let answer = answer.expect("an in-memory store assembles even with no corpus");
 
         assert!(!answer.Is_Complete(), "no corpus was named, so this store is not whole");
+    }
+
+    fn No_Corpus() -> CorpusRequest
+    {
+        return CorpusRequest {
+            variable: "A_RUN_TEST_CORPUS_VARIABLE".to_owned(),
+            root: None,
+            revision: "v14.36".to_owned(),
+        };
     }
 }

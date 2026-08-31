@@ -62,6 +62,17 @@ mod tests
         assert!(selector.Is_In_Scope("README.md"));
     }
 
+    #[test]
+    fn Test_Include_Should_Admit_Only_Its_Own_Subtree()
+    {
+        let selector = ScopeSelector { include: vec!["crates/rules".to_owned()], exclude: Vec::new() };
+
+        for (path, expected) in Rules_Subtree_Paths()
+        {
+            assert_eq!(selector.Is_In_Scope(path), expected, "path: {path}");
+        }
+    }
+
     /// One path inside `crates/rules` and one outside it, against a selector whose only
     /// `include` entry is that directory -- the shape [`Test_Include_Should_Admit_Only_Its_Own_Subtree`]
     /// checks against.
@@ -74,11 +85,11 @@ mod tests
     }
 
     #[test]
-    fn Test_Include_Should_Admit_Only_Its_Own_Subtree()
+    fn Test_An_Exact_File_Should_Match_Its_Own_Include_Entry()
     {
-        let selector = ScopeSelector { include: vec!["crates/rules".to_owned()], exclude: Vec::new() };
+        let selector = ScopeSelector { include: vec!["README.md".to_owned()], exclude: Vec::new() };
 
-        for (path, expected) in Rules_Subtree_Paths()
+        for (path, expected) in Exact_File_Paths()
         {
             assert_eq!(selector.Is_In_Scope(path), expected, "path: {path}");
         }
@@ -90,17 +101,6 @@ mod tests
     fn Exact_File_Paths() -> Vec<(&'static str, bool)>
     {
         return vec![("README.md", true), ("README.md.bak", false)];
-    }
-
-    #[test]
-    fn Test_An_Exact_File_Should_Match_Its_Own_Include_Entry()
-    {
-        let selector = ScopeSelector { include: vec!["README.md".to_owned()], exclude: Vec::new() };
-
-        for (path, expected) in Exact_File_Paths()
-        {
-            assert_eq!(selector.Is_In_Scope(path), expected, "path: {path}");
-        }
     }
 
     #[test]

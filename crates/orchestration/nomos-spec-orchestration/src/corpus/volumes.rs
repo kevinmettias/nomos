@@ -191,18 +191,9 @@ mod tests
 {
     use super::{
         Assembly, BTreeMap, Empty_Volumes, Ingest_Each, Ingest_Volumes, Note_Unreadable,
-        Read_Volume, Read_Volumes, Unreadable_Volumes, Volumes_Under,
+        Read_Volume, Read_Volumes, Unreadable_Volumes, Volumes, Volumes_Under,
     };
     use nomos_spec_store::SpecificationStore;
-
-    fn Empty_Assembly() -> Assembly
-    {
-        return Assembly {
-            store: SpecificationStore::In_Memory().expect("an in-memory store always opens"),
-            read: Vec::new(),
-            absent: Vec::new(),
-        };
-    }
 
     #[test]
     fn Test_Ingest_Volumes_Should_Record_An_Absence_When_The_Directory_Is_Missing()
@@ -296,33 +287,19 @@ mod tests
     #[test]
     fn Test_Read_Volume_Should_Insert_A_Markdown_File_Into_Documents()
     {
-        let directory = std::env::temp_dir().join("nomos-spec-orchestration-read-volume-md");
-        std::fs::create_dir_all(&directory).expect("creates");
-        let path = directory.join("a.md");
-        std::fs::write(&path, "text").expect("writes");
-        let mut documents: BTreeMap<String, String> = BTreeMap::new();
-        let mut unreadable: Vec<String> = Vec::new();
+        let read = Read_Volume_Fixture("nomos-spec-orchestration-read-volume-md", "a.md", "text");
 
-        Read_Volume(&path, &mut documents, &mut unreadable);
-
-        assert_eq!(documents.get("a.md"), Some(&"text".to_owned()));
-        assert!(unreadable.is_empty());
+        assert_eq!(read.documents.get("a.md"), Some(&"text".to_owned()));
+        assert!(read.unreadable.is_empty());
     }
 
     #[test]
     fn Test_Read_Volume_Should_Ignore_A_Non_Markdown_File()
     {
-        let directory = std::env::temp_dir().join("nomos-spec-orchestration-read-volume-txt");
-        std::fs::create_dir_all(&directory).expect("creates");
-        let path = directory.join("notes.txt");
-        std::fs::write(&path, "text").expect("writes");
-        let mut documents: BTreeMap<String, String> = BTreeMap::new();
-        let mut unreadable: Vec<String> = Vec::new();
+        let read = Read_Volume_Fixture("nomos-spec-orchestration-read-volume-txt", "notes.txt", "text");
 
-        Read_Volume(&path, &mut documents, &mut unreadable);
-
-        assert!(documents.is_empty());
-        assert!(unreadable.is_empty());
+        assert!(read.documents.is_empty());
+        assert!(read.unreadable.is_empty());
     }
 
     #[test]
@@ -395,5 +372,34 @@ mod tests
 
         assert!(blocks > 0, "a document with a table should ingest at least one block");
         assert!(assembly.absent.is_empty(), "{:?}", assembly.absent);
+    }
+
+    /// A single directory holding one file with `contents`, read through [`Read_Volume`] --
+    /// the identical setup [`Test_Read_Volume_Should_Insert_A_Markdown_File_Into_Documents`]
+    /// and [`Test_Read_Volume_Should_Ignore_A_Non_Markdown_File`] both need, differing only
+    /// in which extension proves the dispatch. Returns [`Volumes`] -- the named pair
+    /// [`Read_Volumes`] already carries for the identical shape -- rather than inventing a
+    /// second, unnamed one.
+    fn Read_Volume_Fixture(scratch_name: &str, file_name: &str, contents: &str) -> Volumes
+    {
+        let directory = std::env::temp_dir().join(scratch_name);
+        std::fs::create_dir_all(&directory).expect("creates");
+        let path = directory.join(file_name);
+        std::fs::write(&path, contents).expect("writes");
+        let mut documents: BTreeMap<String, String> = BTreeMap::new();
+        let mut unreadable: Vec<String> = Vec::new();
+
+        Read_Volume(&path, &mut documents, &mut unreadable);
+
+        return Volumes { documents, unreadable };
+    }
+
+    fn Empty_Assembly() -> Assembly
+    {
+        return Assembly {
+            store: SpecificationStore::In_Memory().expect("an in-memory store always opens"),
+            read: Vec::new(),
+            absent: Vec::new(),
+        };
     }
 }

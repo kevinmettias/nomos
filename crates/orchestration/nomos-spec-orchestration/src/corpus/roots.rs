@@ -85,20 +85,6 @@ mod tests
 
     const VARIABLE: &str = "A_CORPUS_VARIABLE";
 
-    fn Assembly_With_Nothing_Read() -> Assembly
-    {
-        return Assembly {
-            store: SpecificationStore::In_Memory().expect("an in-memory store always opens"),
-            read: Vec::new(),
-            absent: Vec::new(),
-        };
-    }
-
-    fn Request(root: Option<PathBuf>) -> CorpusRequest
-    {
-        return CorpusRequest { variable: VARIABLE.to_owned(), root, revision: "v14.36".to_owned() };
-    }
-
     #[test]
     fn Test_Corpus_Root_Should_Report_An_Unnamed_Absence_When_Nothing_Was_Named()
     {
@@ -159,5 +145,19 @@ mod tests
         assert_eq!(absence.subject, "the v14 authoring corpus");
         assert!(absence.expected.contains("no/such/corpus/anywhere") || absence.expected.contains("no\\such\\corpus\\anywhere"), "{}", absence.expected);
         assert!(absence.cause.contains(VARIABLE), "{}", absence.cause);
+    }
+
+    fn Assembly_With_Nothing_Read() -> Assembly
+    {
+        return Assembly {
+            store: SpecificationStore::In_Memory().expect("an in-memory store always opens"),
+            read: Vec::new(),
+            absent: Vec::new(),
+        };
+    }
+
+    fn Request(root: Option<PathBuf>) -> CorpusRequest
+    {
+        return CorpusRequest { variable: VARIABLE.to_owned(), root, revision: "v14.36".to_owned() };
     }
 }

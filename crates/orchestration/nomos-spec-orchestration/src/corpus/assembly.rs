@@ -39,25 +39,6 @@ mod tests
     use super::{Absence, Assembly};
     use nomos_spec_store::SpecificationStore;
 
-    fn Absence_Named(subject: &str) -> Absence
-    {
-        return Absence {
-            subject: subject.to_owned(),
-            expected: "somewhere".to_owned(),
-            cause: "not there".to_owned(),
-            cost: "nothing".to_owned(),
-        };
-    }
-
-    fn Empty_Assembly() -> Assembly
-    {
-        return Assembly {
-            store: SpecificationStore::In_Memory().expect("an in-memory store always opens"),
-            read: Vec::new(),
-            absent: Vec::new(),
-        };
-    }
-
     #[test]
     fn Test_Is_Complete_Should_Be_True_With_No_Absences()
     {
@@ -93,5 +74,24 @@ mod tests
         let assembly = Empty_Assembly();
 
         assert_eq!(assembly.Describe_Absences(), "");
+    }
+
+    fn Absence_Named(subject: &str) -> Absence
+    {
+        return Absence {
+            subject: subject.to_owned(),
+            expected: "somewhere".to_owned(),
+            cause: "not there".to_owned(),
+            cost: "nothing".to_owned(),
+        };
+    }
+
+    fn Empty_Assembly() -> Assembly
+    {
+        return Assembly {
+            store: SpecificationStore::In_Memory().expect("an in-memory store always opens"),
+            read: Vec::new(),
+            absent: Vec::new(),
+        };
     }
 }

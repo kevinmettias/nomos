@@ -446,36 +446,12 @@ fn Rust_Production(context: &Context) -> FactContext
 #[cfg(test)]
 mod tests
 {
+    //! What this module promises, exercised.
+
     use super::*;
     use nomos_platform::Command;
     use nomos_workspace::BuildVariant;
     use std::path::PathBuf;
-
-    fn Test_Variant() -> BuildVariant
-    {
-        return BuildVariant::New("test-target", "test-profile", "test-toolchain", std::iter::empty::<String>());
-    }
-
-    /// What every function below needs and none of them build: a real, ingested
-    /// [`Context`] over `sources` -- the identical two-step composition
-    /// `src/tests.rs`'s own `Findings_Over` assembles, restated here because a colocated
-    /// test cannot reach that file's private helper.
-    fn Fixture_Context(sources: &[SourceFile]) -> Context
-    {
-        let registry = crate::composition::Registered().expect("fixture composition");
-        return crate::facts::Ingested_Workspace(sources, &registry, Test_Variant()).expect("the fixture is a valid tree");
-    }
-
-    /// `(path, text, expected_written)` -- a recognized, parseable source against an
-    /// unrecognized one, so a case added later (an unparseable-but-recognized path, say)
-    /// is one more row rather than one more copy of the test function.
-    fn Materialize_Syntax_Cases() -> Vec<(&'static str, &'static str, usize)>
-    {
-        return vec![
-            ("a.rs", "pub fn Ok() {}\n", 1),
-            ("readme.md", "# hi\n", 0),
-        ];
-    }
 
     /// A recognized, parseable source materializes exactly one fact; a path neither
     /// `nomos_lang_rust` nor `nomos_lang_go` recognizes materializes nothing and is not
@@ -494,6 +470,17 @@ mod tests
 
             assert_eq!(written, expected_written, "{path}");
         }
+    }
+
+    /// `(path, text, expected_written)` -- a recognized, parseable source against an
+    /// unrecognized one, so a case added later (an unparseable-but-recognized path, say)
+    /// is one more row rather than one more copy of the test function.
+    fn Materialize_Syntax_Cases() -> Vec<(&'static str, &'static str, usize)>
+    {
+        return vec![
+            ("a.rs", "pub fn Ok() {}\n", 1),
+            ("readme.md", "# hi\n", 0),
+        ];
     }
 
     /// The identical shape [`Materialize_Syntax`]'s own first test proves, for
@@ -529,9 +516,7 @@ mod tests
     #[test]
     fn Test_Materialize_Dependencies_Should_Report_A_Finding_When_The_Launcher_Refuses()
     {
-        let sources = [SourceFile::New("a.rs", nomos_model::Subject_Of_Path("a.rs"), "pub fn Ok() {}\n")];
-        let context = Fixture_Context(&sources);
-        let mut store = MemoryFactStore::New();
+        let RefusedLaunchFixture { context, mut store } = Refused_Launch_Fixture();
 
         let result = Materialize_Dependencies(&PathBuf::from("."), &context, &mut store, &RefusingLauncher);
 
@@ -549,9 +534,7 @@ mod tests
     #[test]
     fn Test_Materialize_Lint_Should_Report_A_Finding_When_The_Launcher_Refuses()
     {
-        let sources = [SourceFile::New("a.rs", nomos_model::Subject_Of_Path("a.rs"), "pub fn Ok() {}\n")];
-        let context = Fixture_Context(&sources);
-        let mut store = MemoryFactStore::New();
+        let RefusedLaunchFixture { context, mut store } = Refused_Launch_Fixture();
 
         let result = Materialize_Lint(&PathBuf::from("."), &context, &mut store, &RefusingLauncher);
 
@@ -569,9 +552,7 @@ mod tests
     #[test]
     fn Test_Materialize_Policy_Should_Report_A_Finding_When_The_Launcher_Refuses()
     {
-        let sources = [SourceFile::New("a.rs", nomos_model::Subject_Of_Path("a.rs"), "pub fn Ok() {}\n")];
-        let context = Fixture_Context(&sources);
-        let mut store = MemoryFactStore::New();
+        let RefusedLaunchFixture { context, mut store } = Refused_Launch_Fixture();
 
         let result = Materialize_Policy(&PathBuf::from("."), &context, &mut store, &RefusingLauncher);
 
@@ -581,5 +562,44 @@ mod tests
             result.findings.first().expect("the assertion above proves one finding was reported").rule,
             RuleId::New(nomos_rules::DEPENDENCY_POLICY)
         );
+    }
+
+    /// [`Refused_Launch_Fixture`]'s two halves, named rather than a tuple: a caller reading
+    /// `.context` or `.store` at the point of use does not have to hold the fixture's own
+    /// field order in mind.
+    struct RefusedLaunchFixture
+    {
+        context: Context,
+        store: MemoryFactStore,
+    }
+
+    /// The identical context-and-store fixture each launcher-refusal test above needs: one
+    /// recognized source is enough since none of the three cases inspects what was
+    /// materialized, only that the refusal itself is reported. Extracted because the three
+    /// tests above verify three separate materialization functions against three separate
+    /// expected rules -- merging the assertions would mask a real divergence between them,
+    /// but the setup itself was pure, identical boilerplate.
+    fn Refused_Launch_Fixture() -> RefusedLaunchFixture
+    {
+        let sources = [SourceFile::New("a.rs", nomos_model::Subject_Of_Path("a.rs"), "pub fn Ok() {}\n")];
+        let context = Fixture_Context(&sources);
+        let store = MemoryFactStore::New();
+
+        return RefusedLaunchFixture { context, store };
+    }
+
+    fn Test_Variant() -> BuildVariant
+    {
+        return BuildVariant::New("test-target", "test-profile", "test-toolchain", std::iter::empty::<String>());
+    }
+
+    /// What every function above needs and none of them build: a real, ingested
+    /// [`Context`] over `sources` -- the identical two-step composition
+    /// `src/tests.rs`'s own `Findings_Over` assembles, restated here because a colocated
+    /// test cannot reach that file's private helper.
+    fn Fixture_Context(sources: &[SourceFile]) -> Context
+    {
+        let registry = crate::composition::Registered().expect("fixture composition");
+        return crate::facts::Ingested_Workspace(sources, &registry, Test_Variant()).expect("the fixture is a valid tree");
     }
 }

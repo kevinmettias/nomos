@@ -165,20 +165,6 @@ mod tests
     use nomos_spec_ingest::IngestError;
     use nomos_spec_store::SpecificationStore;
 
-    fn Empty_Assembly() -> Assembly
-    {
-        return Assembly {
-            store: SpecificationStore::In_Memory().expect("an in-memory store always opens"),
-            read: Vec::new(),
-            absent: Vec::new(),
-        };
-    }
-
-    fn Input_At(path: std::path::PathBuf) -> Layered<'static>
-    {
-        return Layered { subject: "an optional input", path, unread: "it is not read", refused: "it is not in" };
-    }
-
     #[test]
     fn Test_Text_Of_Should_Read_A_File_That_Exists()
     {
@@ -255,8 +241,8 @@ mod tests
         let report = Ingest_Optional_Layer(
             &mut assembly,
             &input,
-            |_text| return Err(IngestError::Parse("cannot parse".to_owned())),
-            |_store, parsed: &String| return Ok::<String, IngestError>(parsed.clone()),
+            |_text| -> Result<String, IngestError> { return Err(IngestError::Parse("cannot parse".to_owned())); },
+            |_store, parsed| return Ok::<String, IngestError>(parsed.clone()),
         );
 
         assert_eq!(report, None);
@@ -312,5 +298,19 @@ mod tests
         assert_eq!(absence.expected, "a/path.json");
         assert_eq!(absence.cost, "nothing is in this store");
         assert!(absence.cause.contains("bad bytes"), "{}", absence.cause);
+    }
+
+    fn Empty_Assembly() -> Assembly
+    {
+        return Assembly {
+            store: SpecificationStore::In_Memory().expect("an in-memory store always opens"),
+            read: Vec::new(),
+            absent: Vec::new(),
+        };
+    }
+
+    fn Input_At(path: std::path::PathBuf) -> Layered<'static>
+    {
+        return Layered { subject: "an optional input", path, unread: "it is not read", refused: "it is not in" };
     }
 }
