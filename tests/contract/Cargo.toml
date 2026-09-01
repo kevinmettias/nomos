@@ -13,11 +13,6 @@ publish.workspace = true
 # rule is how they come to disagree. Band 3 observed from band 100, which is the
 # direction this crate exists to watch.
 nomos-rules = { workspace = true }
-# The ledger crate, for the document type rather than for its verbs. The agent contract
-# names ledger items in its temporary hazards, and checking one has not closed means
-# reading the board — through the type that writes it, because a second parser over the
-# same JSON is how the two come to disagree about what a finished item looks like.
-nomos-ledger = { workspace = true }
 # The syntax capability and the provider that answers it, to derive the universes this
 # crate quantifies over. `nomos-rules` stopped parsing under `P10-SYNTAX-V2` and reads a
 # `nomos.syntax.items.v2` payload instead, so the walk here has to produce one — through
@@ -25,6 +20,11 @@ nomos-ledger = { workspace = true }
 nomos-cap-syntax = { workspace = true }
 nomos-lang-rust = { workspace = true }
 serde_json = { workspace = true }
+
+[dev-dependencies]
+# The ledger crate is used only by integration tests that check the agent contract
+# and toolchain-floor workflow derivation.
+nomos-ledger = { workspace = true }
 
 [lints]
 workspace = true

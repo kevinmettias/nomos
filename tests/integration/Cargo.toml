@@ -17,6 +17,8 @@ nomos-analysis = { workspace = true }
 nomos-check-orchestration = { workspace = true }
 nomos-lang-rust = { workspace = true }
 nomos-lang-rust-scan = { workspace = true }
+
+[dev-dependencies]
 nomos-lang-go = { workspace = true }
 nomos-lang-rust-cargo = { workspace = true }
 nomos-lang-rust-clippy = { workspace = true }

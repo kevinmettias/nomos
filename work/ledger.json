@@ -40243,6 +40243,62 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P26-SPECULATIVE-TEST-DEPS",
+      "title": "Move test-only harness dependencies to dev-dependencies",
+      "why": "The code-standards speculative-dependency rule reports test harness crates whose normal dependencies are consumed only by integration tests; Cargo has a dev-dependencies surface for exactly that boundary.",
+      "done_when": "tests/contract and tests/integration keep only dependencies consumed by library code in [dependencies], move test-only crate edges to [dev-dependencies], and check-speculative-dependency over those two test crates reports no findings.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/Cargo.toml",
+          "tests/integration/Cargo.toml",
+          "work/ledger.json"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "speculative-dependency",
+          "--json",
+          "tests\\contract",
+          "tests\\integration"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "speculative-dependency",
+          "--json",
+          "tests\\contract",
+          "tests\\integration"
+        ],
+        "exit_code": 0,
+        "output_tail": "check-speculative-dependency: no findings.\ncheck-speculative-dependency: 2 unit(s) judged.\n",
+        "verified_at": 1788224964,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "647cdb6fe7aa11d52dd431f618779df56e44636e"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
