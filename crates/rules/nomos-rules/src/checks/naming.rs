@@ -45,6 +45,7 @@
 //! default, still real and still what an unconfigured repository gets, not what every
 //! repository is now fixed to.
 
+mod abbreviations;
 mod boolean_predicates;
 mod data_names;
 mod file_names;
@@ -61,6 +62,7 @@ use nomos_analysis::{FactReader, InputDigest};
 use nomos_cap_naming_policy::{Case, Scope};
 use nomos_contracts::Finding;
 
+pub use abbreviations::{Check_Abbreviations, ABBREVIATIONS};
 pub use boolean_predicates::{Check_Boolean_Predicates, BOOLEAN_PREDICATES};
 pub use data_names::{Check_Data_Names_Stay_Lower_Snake, DATA_NAMES_STAY_LOWER_SNAKE};
 pub use file_names::{
