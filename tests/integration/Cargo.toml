@@ -26,6 +26,9 @@ nomos-lang-rust-deny = { workspace = true }
 nomos-lang-go-modules = { workspace = true }
 nomos-corrections = { workspace = true }
 nomos-platform-std = { workspace = true }
+nomos-repo-limits = { workspace = true }
+nomos-repo-standards = { workspace = true }
+nomos-repo-scripting = { workspace = true }
 # The two spec domains this harness holds to their declarations. The spec system sits
 # beside the kernel rather than above it, and this crate is the one place both sides are
 # linked at once — which is what a harness is for.

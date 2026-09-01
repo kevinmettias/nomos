@@ -13,8 +13,9 @@ use crate::goldens::{
 };
 use crate::productions::{
     Correction_Production, Dependency_Policy_Production, Dependency_Production, Go_Dependency_Production,
-    Go_Production, Lint_Production, Parsed_Production, Reachability_Production, Reuse_Production,
-    Rolled_Production, Scanned_Production, Snapshot_Production,
+    Go_Production, Limits_Policy_Production, Lint_Production, Naming_Policy_Production, Parsed_Production,
+    Reachability_Production, Reuse_Production, Rolled_Production, Scanned_Production, Scripting_Policy_Production,
+    Snapshot_Production,
 };
 use crate::spec_productions::{Alternating, Bundle_Bytes, Projection_Bytes};
 use nomos_lang_rust::SyntaxFactProduction;
@@ -122,6 +123,48 @@ fn Test_The_Dependency_Policy_Provider_Should_Meet_Its_Declared_Strategy()
     Assert_Meets_Declared_Strategy::<DependencyPolicyFactProduction>(
         "dependency-policy-fact-production",
         &Dependency_Policy_Production,
+        "",
+    );
+}
+
+#[test]
+fn Test_The_Limits_Policy_Provider_Should_Meet_Its_Declared_Strategy()
+{
+    use nomos_repo_limits::LimitsPolicyFactProduction;
+
+    // No golden, the identical reason `DependencyPolicyFactProduction` has none above:
+    // `LimitsPolicyFactProduction` declares `CrossRun`.
+    Assert_Meets_Declared_Strategy::<LimitsPolicyFactProduction>(
+        "limits-policy-fact-production",
+        &Limits_Policy_Production,
+        "",
+    );
+}
+
+#[test]
+fn Test_The_Naming_Policy_Provider_Should_Meet_Its_Declared_Strategy()
+{
+    use nomos_repo_standards::NamingPolicyFactProduction;
+
+    // No golden, the identical reason `LimitsPolicyFactProduction` has none above:
+    // `NamingPolicyFactProduction` declares `CrossRun`.
+    Assert_Meets_Declared_Strategy::<NamingPolicyFactProduction>(
+        "naming-policy-fact-production",
+        &Naming_Policy_Production,
+        "",
+    );
+}
+
+#[test]
+fn Test_The_Scripting_Policy_Provider_Should_Meet_Its_Declared_Strategy()
+{
+    use nomos_repo_scripting::ScriptingPolicyFactProduction;
+
+    // No golden, the identical reason `NamingPolicyFactProduction` has none above:
+    // `ScriptingPolicyFactProduction` declares `CrossRun`.
+    Assert_Meets_Declared_Strategy::<ScriptingPolicyFactProduction>(
+        "scripting-policy-fact-production",
+        &Scripting_Policy_Production,
         "",
     );
 }

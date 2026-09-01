@@ -6,17 +6,39 @@ use nomos_capability::Registry;
 use nomos_contracts::{Finding, RuleId};
 use nomos_platform::ProcessLauncher;
 use nomos_rules::{
-    Check_A_Rust_Path_Stays_Within_Its_Own_Subtree, Check_A_Script_Declares_Its_Purpose, Check_Completeness_Mirrors,
-    Check_Cross_Language_Correspondence, Check_Dependency_Direction, Check_Dependency_Policy,
-    Check_Deprecation_Carries_A_Reason, Check_Every_Allow_Carries_A_Justification, Check_Every_Member_Declares_A_Band,
+    Check_A_Credential_Is_Not_Hardcoded_In_Source, Check_A_Discarded_Error_Is_Explained,
+    Check_A_Package_Is_Named_After_Its_Directory, Check_A_Rust_Path_Stays_Within_Its_Own_Subtree,
+    Check_A_Script_Declares_Its_Purpose, Check_A_Secret_Does_Not_Travel_In_A_Url, Check_A_Skipped_Test_States_Why,
+    Check_An_Excluded_File_Says_Why, Check_Atomic_Ordering_Choices_Are_Justified,
+    Check_Certificate_Verification_Is_Not_Disabled, Check_Completeness_Mirrors, Check_Cross_Language_Correspondence,
+    Check_Data_Names_Stay_Lower_Snake, Check_Declared_Tooling_Language_For_Scripts, Check_Dependency_Direction,
+    Check_Dependency_Policy, Check_Deprecation_Carries_A_Reason, Check_Every_Allow_Carries_A_Justification,
+    Check_Every_Member_Declares_A_Band, Check_Exported_Go_Functions_Use_Upper_Snake_Case,
+    Check_File_Name_Matches_Declared_Type, Check_File_Size_Justification_Trigger,
+    Check_Go_Constants_Split_By_Export, Check_Go_File_Size_Hard_Trigger, Check_Go_File_Size_Review_Trigger,
+    Check_Go_Helpers_Package_Five_Inputs, Check_Go_Type_Names_Use_Camel_Case, Check_Go_Variables_Use_Lower_Snake_Case,
     Check_Lint_Diagnostics, Check_Naming_Convention, Check_No_Mod_Rs_Files, Check_No_Trailing_Whitespace,
-    Check_Scripts_Use_A_Portable_Shebang, Check_Shared_Interior_Mutability_Says_Why, Check_Todo_Format,
-    Check_Unread_Reaches_A_Finding, Check_Unsafe_Justification, SourceFile,
-    A_RUST_PATH_STAYS_WITHIN_ITS_OWN_SUBTREE, A_SCRIPT_DECLARES_ITS_PURPOSE, COMPLETENESS_MIRROR,
-    CROSS_LANGUAGE_CORRESPONDENCE, DEPENDENCY_COMPLETENESS, DEPENDENCY_DIRECTION, DEPENDENCY_POLICY, DEPRECATION,
-    EVERY_ALLOW_CARRIES_A_JUSTIFICATION, LINT_DIAGNOSTICS, NAMING_CONVENTION, NO_MOD_RS_FILES, NO_TRAILING_WHITESPACE,
-    SCRIPTS_USE_A_PORTABLE_SHEBANG, SHARED_INTERIOR_MUTABILITY_SAYS_WHY, TODO_FORMAT, UNREAD_REACHES_FINDING,
-    UNSAFE_JUSTIFICATION,
+    Check_Parameter_Count,
+    Check_Relaxed_Not_Used_When_Ordering_Matters, Check_Scripts_Use_A_Portable_Shebang,
+    Check_Seqcst_Justified_Explicitly, Check_Shared_Interior_Mutability_Says_Why,
+    Check_Suppression_Directives_Carry_A_Reason, Check_Todo_Format,
+    Check_Unexported_Go_Functions_Lowercase_Only_The_First_Letter, Check_Unread_Reaches_A_Finding,
+    Check_Unsafe_Justification, Check_Workspace_Markers_Carry_A_Reason, SourceFile,
+    A_CREDENTIAL_IS_NOT_HARDCODED_IN_SOURCE, A_DISCARDED_ERROR_IS_EXPLAINED, A_PACKAGE_IS_NAMED_AFTER_ITS_DIRECTORY,
+    A_RUST_PATH_STAYS_WITHIN_ITS_OWN_SUBTREE, A_SCRIPT_DECLARES_ITS_PURPOSE, A_SECRET_DOES_NOT_TRAVEL_IN_A_URL,
+    A_SKIPPED_TEST_STATES_WHY, AN_EXCLUDED_FILE_SAYS_WHY, ATOMIC_ORDERING_CHOICES_ARE_JUSTIFIED,
+    CERTIFICATE_VERIFICATION_IS_NOT_DISABLED, COMPLETENESS_MIRROR, CONSTANTS_SPLIT_BY_EXPORT,
+    CROSS_LANGUAGE_CORRESPONDENCE, DATA_NAMES_STAY_LOWER_SNAKE, DECLARED_TOOLING_LANGUAGE_FOR_SCRIPTS,
+    DEPENDENCY_COMPLETENESS, DEPENDENCY_DIRECTION, DEPENDENCY_POLICY, DEPRECATION,
+    EVERY_ALLOW_CARRIES_A_JUSTIFICATION, EXPORTED_FUNCTIONS_USE_UPPER_SNAKE_CASE, FILE_NAME_MATCHES_DECLARED_TYPE,
+    FILE_SIZE_JUSTIFICATION_TRIGGER, FIVE_HUNDRED_LINE_REVIEW_TRIGGER,
+    GO_HELPERS_PACKAGE_FIVE_INPUTS, GO_VARIABLES_USE_LOWER_SNAKE_CASE, LINT_DIAGNOSTICS, NAMING_CONVENTION,
+    NO_MOD_RS_FILES, NO_TRAILING_WHITESPACE,
+    ONE_THOUSAND_LINE_HARD_TRIGGER, PARAMETER_COUNT,
+    RELAXED_NOT_USED_WHEN_ORDERING_MATTERS, SCRIPTS_USE_A_PORTABLE_SHEBANG, SEQCST_JUSTIFIED_EXPLICITLY,
+    SHARED_INTERIOR_MUTABILITY_SAYS_WHY, SUPPRESSION_DIRECTIVES_CARRY_A_REASON,
+    TODO_FORMAT, TYPES_USE_UPPER_CAMEL_CASE_LOWER_CAMEL_CASE, UNREAD_REACHES_FINDING,
+    UNEXPORTED_FUNCTIONS_LOWERCASE_ONLY_THE_FIRST_LETTER, UNSAFE_JUSTIFICATION, WORKSPACE_MARKERS_CARRY_A_REASON,
 };
 use nomos_workspace::BuildVariant;
 use std::path::Path;
@@ -30,7 +52,7 @@ use crate::CheckOutcome;
 
 /// How many rules [`Rule_Findings`] runs -- authoritative at module scope because the array
 /// literal it sizes is the one and only place this count is spent.
-const RULE_COUNT: usize = 18;
+const RULE_COUNT: usize = 43;
 
 /// [`Run`]'s build variant, its subprocess root, and the launcher those subprocesses run
 /// through -- grouped into one value so [`Run`] stays within this crate's own
@@ -364,6 +386,31 @@ fn Rule_Findings(
         (SCRIPTS_USE_A_PORTABLE_SHEBANG, &|_reader| return Check_Scripts_Use_A_Portable_Shebang(sources)),
         (A_SCRIPT_DECLARES_ITS_PURPOSE, &|_reader| return Check_A_Script_Declares_Its_Purpose(sources)),
         (NO_MOD_RS_FILES, &|_reader| return Check_No_Mod_Rs_Files(sources)),
+        (A_CREDENTIAL_IS_NOT_HARDCODED_IN_SOURCE, &|_reader| return Check_A_Credential_Is_Not_Hardcoded_In_Source(sources)),
+        (A_SECRET_DOES_NOT_TRAVEL_IN_A_URL, &|_reader| return Check_A_Secret_Does_Not_Travel_In_A_Url(sources)),
+        (CERTIFICATE_VERIFICATION_IS_NOT_DISABLED, &|_reader| return Check_Certificate_Verification_Is_Not_Disabled(sources)),
+        (A_DISCARDED_ERROR_IS_EXPLAINED, &|_reader| return Check_A_Discarded_Error_Is_Explained(sources)),
+        (A_SKIPPED_TEST_STATES_WHY, &|_reader| return Check_A_Skipped_Test_States_Why(sources)),
+        (AN_EXCLUDED_FILE_SAYS_WHY, &|_reader| return Check_An_Excluded_File_Says_Why(sources)),
+        (SUPPRESSION_DIRECTIVES_CARRY_A_REASON, &|_reader| return Check_Suppression_Directives_Carry_A_Reason(sources)),
+        (WORKSPACE_MARKERS_CARRY_A_REASON, &|_reader| return Check_Workspace_Markers_Carry_A_Reason(sources)),
+        (A_PACKAGE_IS_NAMED_AFTER_ITS_DIRECTORY, &|_reader| return Check_A_Package_Is_Named_After_Its_Directory(sources)),
+        (ATOMIC_ORDERING_CHOICES_ARE_JUSTIFIED, &|_reader| return Check_Atomic_Ordering_Choices_Are_Justified(sources)),
+        (SEQCST_JUSTIFIED_EXPLICITLY, &|_reader| return Check_Seqcst_Justified_Explicitly(sources)),
+        (RELAXED_NOT_USED_WHEN_ORDERING_MATTERS, &|_reader| return Check_Relaxed_Not_Used_When_Ordering_Matters(sources)),
+        (DATA_NAMES_STAY_LOWER_SNAKE, &|reader| return Check_Data_Names_Stay_Lower_Snake(sources, reader)),
+        (FILE_NAME_MATCHES_DECLARED_TYPE, &|reader| return Check_File_Name_Matches_Declared_Type(sources, reader)),
+        (CONSTANTS_SPLIT_BY_EXPORT, &|reader| return Check_Go_Constants_Split_By_Export(sources, reader)),
+        (GO_VARIABLES_USE_LOWER_SNAKE_CASE, &|reader| return Check_Go_Variables_Use_Lower_Snake_Case(sources, reader)),
+        (EXPORTED_FUNCTIONS_USE_UPPER_SNAKE_CASE, &|reader| return Check_Exported_Go_Functions_Use_Upper_Snake_Case(sources, reader)),
+        (UNEXPORTED_FUNCTIONS_LOWERCASE_ONLY_THE_FIRST_LETTER, &|reader| return Check_Unexported_Go_Functions_Lowercase_Only_The_First_Letter(sources, reader)),
+        (TYPES_USE_UPPER_CAMEL_CASE_LOWER_CAMEL_CASE, &|reader| return Check_Go_Type_Names_Use_Camel_Case(sources, reader)),
+        (PARAMETER_COUNT, &|reader| return Check_Parameter_Count(sources, reader)),
+        (GO_HELPERS_PACKAGE_FIVE_INPUTS, &|reader| return Check_Go_Helpers_Package_Five_Inputs(sources, reader)),
+        (DECLARED_TOOLING_LANGUAGE_FOR_SCRIPTS, &|reader| return Check_Declared_Tooling_Language_For_Scripts(sources, reader)),
+        (FILE_SIZE_JUSTIFICATION_TRIGGER, &|reader| return Check_File_Size_Justification_Trigger(sources, reader)),
+        (ONE_THOUSAND_LINE_HARD_TRIGGER, &|reader| return Check_Go_File_Size_Hard_Trigger(sources, reader)),
+        (FIVE_HUNDRED_LINE_REVIEW_TRIGGER, &|reader| return Check_Go_File_Size_Review_Trigger(sources, reader)),
     ];
 
     return Findings_For_Selected_Rules(rules, reader, selected);

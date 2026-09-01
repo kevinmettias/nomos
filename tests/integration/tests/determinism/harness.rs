@@ -120,6 +120,18 @@ pub(crate) fn Test_Name_For(domain: &str) -> &'static str
         {
             "domains::Test_The_Dependency_Policy_Provider_Should_Meet_Its_Declared_Strategy"
         }
+        "limits-policy-fact-production" =>
+        {
+            "domains::Test_The_Limits_Policy_Provider_Should_Meet_Its_Declared_Strategy"
+        }
+        "naming-policy-fact-production" =>
+        {
+            "domains::Test_The_Naming_Policy_Provider_Should_Meet_Its_Declared_Strategy"
+        }
+        "scripting-policy-fact-production" =>
+        {
+            "domains::Test_The_Scripting_Policy_Provider_Should_Meet_Its_Declared_Strategy"
+        }
         "fact-reuse" => "domains::Test_The_Fact_Cache_Should_Meet_Its_Declared_Strategy",
         "snapshot-serialization" =>
         {

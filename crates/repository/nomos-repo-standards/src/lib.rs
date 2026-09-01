@@ -34,11 +34,14 @@
 
 #![forbid(unsafe_code)]
 
+#[path = "naming_policy_fact_production.rs"]
+mod determinism;
 mod guarantee;
 #[path = "fact_context.rs"]
 mod provider;
 mod reading;
 
+pub use determinism::NamingPolicyFactProduction;
 pub use guarantee::{Declared_Guarantee, Provider_Offer, PROVIDER};
 pub use provider::{FactContext, Materialize_Workspace, PolicyFact};
 pub use reading::{Discover_Workspace, NamingPolicyError};

@@ -43838,14 +43838,14 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": {
+        "Declined": {
+          "reason": "Territory needs tests/contract/src/harnessed.rs, where the real remaining defect (a stale scanner marker) lives; re-added as -3."
+        }
+      },
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-external-review-reconciliation",
-        "acquired_at": 1788304412,
-        "lease_expires_at": 1788311612
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -43859,6 +43859,279 @@
         "timeout_seconds": 600
       },
       "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-external-review-reconciliation",
+          "reason": "Test_Every_Declaration_Should_Be_Held_To_It_By_The_Harness still fails after all three crates declare a Strategy and are registered in tests/integration/tests/determinism/: its own scanner, Harnessed_Strategies in tests/contract/src/harnessed.rs, looks for the literal marker Check::< in the harness source, but the real registering function is Assert_Meets_Declared_Strategy::<S> -- a stale marker from before that function was renamed, unrelated to my three additions and present before them too. Re-adding with that file in territory to fix the marker.",
+          "abandoned_at": 1788304898
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-external-review-reconciliation",
+        "declined_at": 1788304898
+      }
+    },
+    {
+      "id": "OD-RULES-011-WORDS-PROVIDER",
+      "title": "nomos-repo-words: the one provider of nomos.cap.words.policy",
+      "why": "OD-RULES-011's fourth capability instance needs a real provider before any rule can read it. This one reads standards.json's words.approved_abbreviations through nomos_platform::FileSystem, the same shape nomos-repo-standards/nomos-repo-limits/nomos-repo-scripting already established.",
+      "done_when": "nomos-repo-words exists at band 25 with PROVIDER/Declared_Guarantee/Provider_Offer/Materialize_Workspace, reads this repository's real standards.json into a WordsPolicyPayload, treats a missing file or missing words block as declaring nothing, refuses a malformed file, is registered in Cargo.toml/README.md/both bands.rs, and cargo test -p nomos-repo-words passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/repository/nomos-repo-words",
+          "Cargo.toml",
+          "README.md",
+          "crates/rules/nomos-rules/src/checks/dependency/bands.rs",
+          "tests/contract/tests/boundaries/bands.rs",
+          "tests/contract/surface",
+          "work/ledger.json"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "territory overlapped OD-LEDGER-DETERMINISM-STRATEGY-GAP-2 (crates/repository, held by claude-external-review-reconciliation) which is fixing a real gap in the three existing repo-provider crates (missing determinism Strategy declarations) -- waiting for that to land so nomos-repo-words is built with the Strategy from the start rather than needing its own follow-up correction"
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-repo-words"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "nomos-75",
+        "declined_at": 1788304581
+      }
+    },
+    {
+      "id": "OD-RULES-011-WORDS-RULE",
+      "title": "Add Check_Abbreviations to naming/abbreviations.rs",
+      "why": "nomos.cap.words.policy is done. This lands the rule itself, ported from code-standards' kernel/config/words/lists.go: split each declared name into words, flag one that is banned or vowel-free (digit-bearing tokens judged by their letter-core) unless it is approved -- a hardcoded default vocabulary (~100 approved, ~40 banned words, faithfully ported from defaults.go) extended by a repository's own nomos.cap.words.policy declaration. Scoped to the new abbreviations.rs module only; wiring into checks.rs/lib.rs is a follow-up once those files are free.",
+      "done_when": "Check_Abbreviations exists in crates/rules/nomos-rules/src/checks/naming/abbreviations.rs with a ported Split_Identifier_Words and focused tests covering the vowel-free rule, the banned list, the digit-bearing letter-core rule, and the approved-words exemption (both default and repository-declared).",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/naming/abbreviations.rs",
+          "work/ledger.json"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "widening territory"
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "true"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "nomos-75",
+          "reason": "widening to include naming.rs so the module can actually compile and run its own tests",
+          "abandoned_at": 1788304800
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "nomos-75",
+        "declined_at": 1788304800
+      }
+    },
+    {
+      "id": "OD-RULES-011-WORDS-RULE-2",
+      "title": "Add Check_Abbreviations to naming/abbreviations.rs",
+      "why": "nomos.cap.words.policy is done. This lands the rule itself, ported from code-standards' kernel/config/words/lists.go: split each declared name into words, flag one that is banned or vowel-free (digit-bearing tokens judged by their letter-core) unless it is approved -- a hardcoded default vocabulary (~100 approved, ~40 banned words, faithfully ported from defaults.go) extended by a repository's own nomos.cap.words.policy declaration. Scoped to naming.rs's own mod declaration and re-export -- the checks.rs/lib.rs crate-root export is a follow-up once those two files are free.",
+      "done_when": "Check_Abbreviations exists in naming/abbreviations.rs, is declared and re-exported from naming.rs, has focused tests covering the vowel-free rule, the banned list, the digit-bearing letter-core rule and the approved-words exemption (both default and repository-declared), and cargo test -p nomos-rules passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/naming/abbreviations.rs",
+          "crates/rules/nomos-rules/src/checks/naming.rs",
+          "work/ledger.json"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "exit_code": 0,
+        "output_tail": "> bool\n    |    ^^^^^^^^^^^^^^^^^\n\nwarning: function `Is_All_Digits` is never used\n   --> crates\\rules\\nomos-rules\\src\\checks\\naming\\abbreviations.rs:226:4\n    |\n226 | fn Is_All_Digits(field: &str) -> bool\n    |    ^^^^^^^^^^^^^\n\nwarning: function `Words_Policy_Requirement` is never used\n   --> crates\\rules\\nomos-rules\\src\\checks\\naming\\abbreviations.rs:236:4\n    |\n236 | fn Words_Policy_Requirement() -> nomos_capability::Requirement\n    |    ^^^^^^^^^^^^^^^^^^^^^^^^\n\nwarning: function `Resolve_Approved_Additions` is never used\n   --> crates\\rules\\nomos-rules\\src\\checks\\naming\\abbreviations.rs:249:4\n    |\n249 | fn Resolve_Approved_Additions(facts: &mut dyn FactReader) -> Vec<String>\n    |    ^^^^^^^^^^^^^^^^^^^^^^^^^^\n\nwarning: function `Violation_Finding` is never used\n   --> crates\\rules\\nomos-rules\\src\\checks\\naming\\abbreviations.rs:264:4\n    |\n264 | fn Violation_Finding(path: &str, item: &PayloadItem, name: &str, word: &str, reason: &str) -> Finding\n    |    ^^^^^^^^^^^^^^^^^\n\nwarning: function `Unread_As_This_Rule` is never used\n   --> crates\\rules\\nomos-rules\\src\\checks\\naming\\abbreviations.rs:282:4\n    |\n282 | fn Unread_As_This_Rule(mut finding: Finding) -> Finding\n    |    ^^^^^^^^^^^^^^^^^^^\n\nwarning: `nomos-rules` (lib) generated 24 warnings (run `cargo fix --lib -p nomos-rules` to apply 1 suggestion)\nwarning: function `Check_Abbreviations` is never used\n  --> crates\\rules\\nomos-rules\\src\\checks\\naming\\abbreviations.rs:67:8\n   |\n67 | pub fn Check_Abbreviations(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>\n   |        ^^^^^^^^^^^^^^^^^^^\n   |\n   = note: `#[warn(dead_code)]` on by default\n\nwarning: `nomos-rules` (lib test) generated 5 warnings (4 duplicates)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.11s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-27d32a4363304d08.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-cd1a275ce0c17f78.exe)\n   Doc-tests nomos_rules\n",
+        "verified_at": 1788305019,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "bf58137db55ad4c767338856a8d36198c175a3f2"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "OD-LEDGER-DETERMINISM-STRATEGY-GAP-3",
+      "title": "nomos-repo-limits, nomos-repo-standards and nomos-repo-scripting construct facts and declare no determinism Strategy",
+      "why": "Same as -2, plus the harness-registration check's own scanner is separately stale: Harnessed_Strategies (tests/contract/src/harnessed.rs) looks for the literal marker Check::< in tests/integration/tests/determinism/ source, but the real registering function there is Assert_Meets_Declared_Strategy::<S> -- present and stale before this item's three declarations were ever added, not caused by them, but blocking Test_Every_Declaration_Should_Be_Held_To_It_By_The_Harness from passing regardless of how many domains are correctly registered.",
+      "done_when": "All three crates declare an impl Strategy; tests/integration/tests/determinism/declarations.rs and domains.rs register and verify each; Harnessed_Strategies's marker matches the harness's real registering call; cargo test --no-fail-fast -p nomos-contract-tests --test determinism_declarations exits 0; cargo test -p nomos-integration-tests --test determinism exits 0.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/repository",
+          "tests/contract/tests/determinism_declarations.rs",
+          "tests/contract/src/harnessed.rs",
+          "tests/integration/tests/determinism",
+          "tests/integration/Cargo.toml"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "determinism_declarations"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "determinism_declarations"
+        ],
+        "exit_code": 0,
+        "output_tail": "er_Words(name: &str) -> Vec<String>\n    |    ^^^^^^^^^^^^^^^^^^^^^^\n\nwarning: function `Insert_Case_Boundaries` is never used\n   --> crates\\rules\\nomos-rules\\src\\checks\\naming\\abbreviations.rs:203:4\n    |\n203 | fn Insert_Case_Boundaries(name: &str) -> String\n    |    ^^^^^^^^^^^^^^^^^^^^^^\n\nwarning: function `Is_New_Word_Start` is never used\n   --> crates\\rules\\nomos-rules\\src\\checks\\naming\\abbreviations.rs:221:4\n    |\n221 | fn Is_New_Word_Start(previous: char, current: char) -> bool\n    |    ^^^^^^^^^^^^^^^^^\n\nwarning: function `Is_All_Digits` is never used\n   --> crates\\rules\\nomos-rules\\src\\checks\\naming\\abbreviations.rs:226:4\n    |\n226 | fn Is_All_Digits(field: &str) -> bool\n    |    ^^^^^^^^^^^^^\n\nwarning: function `Words_Policy_Requirement` is never used\n   --> crates\\rules\\nomos-rules\\src\\checks\\naming\\abbreviations.rs:236:4\n    |\n236 | fn Words_Policy_Requirement() -> nomos_capability::Requirement\n    |    ^^^^^^^^^^^^^^^^^^^^^^^^\n\nwarning: function `Resolve_Approved_Additions` is never used\n   --> crates\\rules\\nomos-rules\\src\\checks\\naming\\abbreviations.rs:249:4\n    |\n249 | fn Resolve_Approved_Additions(facts: &mut dyn FactReader) -> Vec<String>\n    |    ^^^^^^^^^^^^^^^^^^^^^^^^^^\n\nwarning: function `Violation_Finding` is never used\n   --> crates\\rules\\nomos-rules\\src\\checks\\naming\\abbreviations.rs:264:4\n    |\n264 | fn Violation_Finding(path: &str, item: &PayloadItem, name: &str, word: &str, reason: &str) -> Finding\n    |    ^^^^^^^^^^^^^^^^^\n\nwarning: function `Unread_As_This_Rule` is never used\n   --> crates\\rules\\nomos-rules\\src\\checks\\naming\\abbreviations.rs:282:4\n    |\n282 | fn Unread_As_This_Rule(mut finding: Finding) -> Finding\n    |    ^^^^^^^^^^^^^^^^^^^\n\nwarning: `nomos-rules` (lib) generated 24 warnings (run `cargo fix --lib -p nomos-rules` to apply 1 suggestion)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.44s\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-d0d43c7d6c99c42a.exe)\n",
+        "verified_at": 1788304997,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "bf58137db55ad4c767338856a8d36198c175a3f2"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "OD-RULES-013-WIRE-MORE-CLEAN-RULES",
+      "title": "Compose twenty-five more already-clean rules into nomos-check-orchestration::Run",
+      "why": "Continuing OD-RULES-012's population-coherence repair: nomos-rules still implements far more rules than Run executes (RULE_COUNT was 18 of ~55 implemented). Checked a batch of FactReader-based and text-only candidates against a real gate run --root . over this tree first (and, for FactReader-based ones needing an optional policy capability nomos-check-orchestration does not register -- naming-policy, limits-policy, scripting-policy -- confirmed OD-RULES-011-V2's decided graceful fallback to a hardcoded default applies, so no new capability registration was needed). Six candidates were dropped: single-letter-names and project-owned-function-names-use-upper-snake-case only fail synthetic test fixtures in nomos-check-orchestration's and nomos-cli's own test suites (a struct T and a fn ok()), not real repository code, but fixing those fixtures sits in tests.rs/check/tests.rs outside this item's territory; no-wildcard-imports (6), boolean-predicates (1), one-public-type-per-file (2), test-functions-use-test-subject-should-behavior (8) and 500-lines (3) have real findings against this repository's own tree.",
+      "done_when": "nomos-check-orchestration::run_context::RULE_COUNT rises from 18 to 43, composing: a-credential-is-not-hardcoded-in-source, a-secret-does-not-travel-in-a-url, certificate-verification-is-not-disabled, a-discarded-error-is-explained, a-skipped-test-states-why, an-excluded-file-says-why, suppression-directives-carry-a-reason, workspace-markers-carry-a-reason, a-package-is-named-after-its-directory, atomic-ordering-choices-are-justified, seqcst-justified-explicitly, relaxed-not-used-when-ordering-matters, data-names-stay-lower-snake, file-name-matches-declared-type, constants-split-by-export, variables-use-lower-snake-case, exported-functions-use-upper-snake-case, unexported-functions-lowercase-only-the-first-letter, types-use-upper-camel-case-lower-camel-case, parameter-count, go-helpers-package-five-inputs, declared-tooling-language-for-scripts, 1500-lines, one-thousand-line-hard-trigger and five-hundred-line-review-trigger; a real gate run --root . over this repository (nomos-cli's Test_Host_Variant_Should_Compose_Into_A_Real_Run_That_Judges_This_Workspaces_Own_Tree) still passes with all twenty-five newly composed; and cargo test -p nomos-check-orchestration -p nomos-cli --lib --bins passes.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-check-orchestration/src/run_context.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-cli",
+          "--lib",
+          "--bins"
+        ],
+        "timeout_seconds": 900
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-cli",
+          "--lib",
+          "--bins"
+        ],
+        "exit_code": 0,
+        "output_tail": "\\rules\\nomos-rules\\src\\checks\\naming\\abbreviations.rs:221:4\n    |\n221 | fn Is_New_Word_Start(previous: char, current: char) -> bool\n    |    ^^^^^^^^^^^^^^^^^\n\nwarning: function `Is_All_Digits` is never used\n   --> crates\\rules\\nomos-rules\\src\\checks\\naming\\abbreviations.rs:226:4\n    |\n226 | fn Is_All_Digits(field: &str) -> bool\n    |    ^^^^^^^^^^^^^\n\nwarning: function `Words_Policy_Requirement` is never used\n   --> crates\\rules\\nomos-rules\\src\\checks\\naming\\abbreviations.rs:236:4\n    |\n236 | fn Words_Policy_Requirement() -> nomos_capability::Requirement\n    |    ^^^^^^^^^^^^^^^^^^^^^^^^\n\nwarning: function `Resolve_Approved_Additions` is never used\n   --> crates\\rules\\nomos-rules\\src\\checks\\naming\\abbreviations.rs:249:4\n    |\n249 | fn Resolve_Approved_Additions(facts: &mut dyn FactReader) -> Vec<String>\n    |    ^^^^^^^^^^^^^^^^^^^^^^^^^^\n\nwarning: function `Violation_Finding` is never used\n   --> crates\\rules\\nomos-rules\\src\\checks\\naming\\abbreviations.rs:264:4\n    |\n264 | fn Violation_Finding(path: &str, item: &PayloadItem, name: &str, word: &str, reason: &str) -> Finding\n    |    ^^^^^^^^^^^^^^^^^\n\nwarning: function `Unread_As_This_Rule` is never used\n   --> crates\\rules\\nomos-rules\\src\\checks\\naming\\abbreviations.rs:282:4\n    |\n282 | fn Unread_As_This_Rule(mut finding: Finding) -> Finding\n    |    ^^^^^^^^^^^^^^^^^^^\n\n   Compiling nomos-check-orchestration v0.1.0 (F:\\repos\\nomos\\crates\\orchestration\\nomos-check-orchestration)\n   Compiling nomos-gate-orchestration v0.1.0 (F:\\repos\\nomos\\crates\\orchestration\\nomos-gate-orchestration)\nwarning: `nomos-rules` (lib) generated 24 warnings (run `cargo fix --lib -p nomos-rules` to apply 1 suggestion)\n   Compiling nomos-cli v0.1.0 (F:\\repos\\nomos\\crates\\host\\nomos-cli)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.35s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_check_orchestration-ebbe83e61afdc5c9.exe)\n     Running unittests src\\main.rs (target\\debug\\deps\\nomos-5102d53990fa098d.exe)\n",
+        "verified_at": 1788305010,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "bf58137db55ad4c767338856a8d36198c175a3f2"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

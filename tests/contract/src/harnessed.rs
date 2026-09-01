@@ -43,14 +43,14 @@ pub fn Harnessed_Strategies() -> BTreeSet<String>
     return found;
 }
 
-/// Every `Check::<Strategy>` in one file.
+/// Every `Assert_Meets_Declared_Strategy::<Strategy>` in one file.
 ///
 /// Assembled from its parts for the reason the fact type is: this file would otherwise
 /// find itself if the harness and the observer ever shared a directory, and the two have
 /// no rule keeping them apart.
 fn Registered_In(text: &str) -> Vec<String>
 {
-    let marker = concat!("Check", "::<");
+    let marker = concat!("Assert_Meets_Declared_Strategy", "::<");
     let mut found = Vec::new();
     let mut rest = text;
     while let Some(start) = rest.find(marker)

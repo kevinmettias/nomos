@@ -12,7 +12,7 @@ use nomos_contracts::{
 use nomos_corrections::{ChangeSet, CorrectionCandidate, CorrectionClass, CorrectionPlan, Edit};
 use nomos_lang_rust::rollup;
 use nomos_model::{Content_Digest, Evidence};
-use nomos_platform_std::StdProcessLauncher;
+use nomos_platform_std::{StdFileSystem, StdProcessLauncher};
 use nomos_workspace::{BuildVariant, ChangeSource, Workspace, WorkspaceChangeSet};
 
 /// The source every producing domain is measured over.
@@ -639,6 +639,127 @@ fn Repository_Root() -> std::path::PathBuf
         .and_then(std::path::Path::parent)
         .map(std::path::PathBuf::from)
         .expect("tests/integration sits two levels below the workspace root");
+}
+
+/// `nomos-repo-limits`'s one fact over this repository's own real `standards.json`.
+///
+/// The identical reasoning [`Dependency_Policy_Production`] gives for using the real
+/// repository rather than the shared `FIXTURE`: this provider's whole reason for existing is
+/// that it reads this repository's own declared thresholds, not bytes a caller already
+/// holds.
+pub(crate) fn Limits_Policy_Production() -> Vec<u8>
+{
+    let context = Limits_Policy_Context();
+    let fact = Discovered_Limits_Policy_Fact(context);
+
+    return Rendered_Limits_Policy_Fact(&fact);
+}
+
+fn Limits_Policy_Context() -> nomos_repo_limits::FactContext
+{
+    return nomos_repo_limits::FactContext {
+        snapshot: SnapshotId::From_Digest(Content_Digest(b"nomos.determinism.snapshot")),
+        variant: BuildVariantId::From_Digest(Content_Digest(b"nomos.determinism.variant")),
+        configuration: ConfigurationId::From_Digest(Content_Digest(b"nomos.determinism.configuration")),
+        generation: GenerationId::INITIAL,
+    };
+}
+
+/// This repository's own real workspace, materialized through the door this provider
+/// actually reads `standards.json` through.
+fn Discovered_Limits_Policy_Fact(context: nomos_repo_limits::FactContext) -> nomos_repo_limits::PolicyFact
+{
+    return nomos_repo_limits::Materialize_Workspace(&Repository_Root(), context, &StdFileSystem)
+        .expect("this repository's own standards.json is real and well-formed");
+}
+
+fn Rendered_Limits_Policy_Fact(fact: &nomos_repo_limits::PolicyFact) -> Vec<u8>
+{
+    let mut rendered = Vec::new();
+    rendered.extend_from_slice(format!("key\t{}\n", fact.fact.Key().Digest()).as_bytes());
+    rendered.extend_from_slice(&fact.fact.payload.bytes);
+
+    return rendered;
+}
+
+/// `nomos-repo-standards`'s one fact over this repository's own real `standards.json`.
+///
+/// The identical reasoning [`Limits_Policy_Production`] gives, one crate over: this
+/// provider's whole reason for existing is that it reads this repository's own declared
+/// naming convention, not bytes a caller already holds.
+pub(crate) fn Naming_Policy_Production() -> Vec<u8>
+{
+    let context = Naming_Policy_Context();
+    let fact = Discovered_Naming_Policy_Fact(context);
+
+    return Rendered_Naming_Policy_Fact(&fact);
+}
+
+fn Naming_Policy_Context() -> nomos_repo_standards::FactContext
+{
+    return nomos_repo_standards::FactContext {
+        snapshot: SnapshotId::From_Digest(Content_Digest(b"nomos.determinism.snapshot")),
+        variant: BuildVariantId::From_Digest(Content_Digest(b"nomos.determinism.variant")),
+        configuration: ConfigurationId::From_Digest(Content_Digest(b"nomos.determinism.configuration")),
+        generation: GenerationId::INITIAL,
+    };
+}
+
+/// This repository's own real workspace, materialized through the door this provider
+/// actually reads `standards.json` through.
+fn Discovered_Naming_Policy_Fact(context: nomos_repo_standards::FactContext) -> nomos_repo_standards::PolicyFact
+{
+    return nomos_repo_standards::Materialize_Workspace(&Repository_Root(), context, &StdFileSystem)
+        .expect("this repository's own standards.json is real and well-formed");
+}
+
+fn Rendered_Naming_Policy_Fact(fact: &nomos_repo_standards::PolicyFact) -> Vec<u8>
+{
+    let mut rendered = Vec::new();
+    rendered.extend_from_slice(format!("key\t{}\n", fact.fact.Key().Digest()).as_bytes());
+    rendered.extend_from_slice(&fact.fact.payload.bytes);
+
+    return rendered;
+}
+
+/// `nomos-repo-scripting`'s one fact over this repository's own real `standards.json`.
+///
+/// The identical reasoning [`Limits_Policy_Production`] gives, one crate over: this
+/// provider's whole reason for existing is that it reads this repository's own declared
+/// scripting policy, not bytes a caller already holds.
+pub(crate) fn Scripting_Policy_Production() -> Vec<u8>
+{
+    let context = Scripting_Policy_Context();
+    let fact = Discovered_Scripting_Policy_Fact(context);
+
+    return Rendered_Scripting_Policy_Fact(&fact);
+}
+
+fn Scripting_Policy_Context() -> nomos_repo_scripting::FactContext
+{
+    return nomos_repo_scripting::FactContext {
+        snapshot: SnapshotId::From_Digest(Content_Digest(b"nomos.determinism.snapshot")),
+        variant: BuildVariantId::From_Digest(Content_Digest(b"nomos.determinism.variant")),
+        configuration: ConfigurationId::From_Digest(Content_Digest(b"nomos.determinism.configuration")),
+        generation: GenerationId::INITIAL,
+    };
+}
+
+/// This repository's own real workspace, materialized through the door this provider
+/// actually reads `standards.json` through.
+fn Discovered_Scripting_Policy_Fact(context: nomos_repo_scripting::FactContext) -> nomos_repo_scripting::PolicyFact
+{
+    return nomos_repo_scripting::Materialize_Workspace(&Repository_Root(), context, &StdFileSystem)
+        .expect("this repository's own standards.json is real and well-formed");
+}
+
+fn Rendered_Scripting_Policy_Fact(fact: &nomos_repo_scripting::PolicyFact) -> Vec<u8>
+{
+    let mut rendered = Vec::new();
+    rendered.extend_from_slice(format!("key\t{}\n", fact.fact.Key().Digest()).as_bytes());
+    rendered.extend_from_slice(&fact.fact.payload.bytes);
+
+    return rendered;
 }
 
 /// The fixture `nomos-lang-go`'s production is measured over.
