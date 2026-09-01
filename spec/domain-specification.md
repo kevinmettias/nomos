@@ -161,6 +161,7 @@ profile: domain-specification
 | docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md@authored | docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md | authored | 32 | 6 | sha256:335f2ed03def8b979a66bf55ff3278c706fbc7e1105bc01a4fd5a1a75cedfe0a |
 | docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md@authored | docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md | authored | 35 | 9 | sha256:08ba049790ebab78a959ded3cff62e8e04ff89f3e3502a36dd39cdff8d560569 |
 | docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md@authored | docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md | authored | 15 | 6 | sha256:a7d5a93cd32ab0b63cbd4218801091e23d8136b7230b0990277a8dcff0f16560 |
+| docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md@authored | docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md | authored | 21 | 6 | sha256:2f8593620c13e02dbb18c7eb14ab6636f3d4e0a4fe4185ad1d62649dfa601c72 |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md@authored | docs/records/OD-SPEC-001-the-storage-backend-question.md | authored | 11 | 5 | sha256:e4feddab256024ea38e21849120fdd52d0ddf17d4e3f69cfb24eb4c8e766c8ae |
 | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md@authored | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md | authored | 20 | 7 | sha256:2c45051e43390556bfd68865152580e1ae09c2e82dc94bb20e65cdbf60d69a10 |
 | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md@authored | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md | authored | 23 | 7 | sha256:481ffd62b02df705439b4ef914adb21e24894d1d3f0295754fc13f7d95c89c85 |
@@ -1441,6 +1442,12 @@ profile: domain-specification
 | docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#8 | authored | 2 | The Decision |
 | docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#10 | authored | 2 | What This Does Not Do |
 | docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#14 | authored | 2 | Status |
+| docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#1 | authored | 1 | A rule's parameters are a fact a repository declares, not a constant the rule compiles with |
+| docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#2 | authored | 2 | Question |
+| docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#4 | authored | 2 | What Was Measured |
+| docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#10 | authored | 2 | The Decision |
+| docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#15 | authored | 2 | What This Does Not Do |
+| docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#20 | authored | 2 | Status |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#1 | authored | 1 | Whether the specification store gains a second backend, and what would decide it |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#2 | authored | 2 | Question |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#4 | authored | 2 | Current Position |
@@ -42305,6 +42312,227 @@ both `Require`-then-judge-then-emit through a native rule at `EvidenceClass::Der
 `Verified` fact, neither needing a tool-identity attribution axis or a real
 `EvidenceClass::Authoritative` consumer. The second instance confirms this decision rather
 than reopening it.
+
+### docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#1
+
+*revision: authored · kind: heading · heading: A rule's parameters are a fact a repository declares, not a constant the rule compiles with · hash: sha256:f36e30e805aee41eccbb0b835f65d88f1fed2fb6498702e1e72eb932edd6ee08*
+
+# A rule's parameters are a fact a repository declares, not a constant the rule compiles with
+
+### docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#2
+
+*revision: authored · kind: heading · heading: A rule's parameters are a fact a repository declares, not a constant the rule compiles with / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#3
+
+*revision: authored · kind: prose · heading: A rule's parameters are a fact a repository declares, not a constant the rule compiles with / Question · hash: sha256:704ebd38a22415ac47d3f5d16e19e132d1662feb23bac646ed370b939acccb00*
+
+Every rule `crates/rules/nomos-rules` ships judges its subject against a value baked into
+its own source: a casing predicate (`Is_Pascal_Snake_Case`, `Is_Upper_Snake_Case`,
+`Is_Lowercase_First_Letter_Convention`), a line-count threshold (`REVIEW_TRIGGER_LINES`,
+`GO_HARD_TRIGGER_LINES`), a suffix or a symbol-kind filter. A repository that wants a
+different convention, a different threshold, or the same rule scoped to a different
+symbol kind has no lever to pull short of forking this crate. Whether that is acceptable —
+whether "which case a name takes" is properly this crate's own decision, compiled once for
+every consumer — or whether it is a fact each repository declares and this crate resolves,
+is undecided, and every naming/threshold rule built so far assumed the first answer without
+the question ever being asked.
+
+### docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#4
+
+*revision: authored · kind: heading · heading: A rule's parameters are a fact a repository declares, not a constant the rule compiles with / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#5
+
+*revision: authored · kind: prose · heading: A rule's parameters are a fact a repository declares, not a constant the rule compiles with / What Was Measured · hash: sha256:2ed55fa6677708bfd7346f6d960ae10df2f9acb75c4ab636605d002122e806a0*
+
+This workspace's own `standards.json` already declares a `naming` block —
+
+### docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#6
+
+*revision: authored · kind: code · heading: A rule's parameters are a fact a repository declares, not a constant the rule compiles with / What Was Measured · hash: sha256:24cc906cd2a4ab504fac51ebc4f16f2af667c2b2d9bac5f01865854af60e1572*
+
+```json
+"naming": { "function": "upper-snake", "method": "upper-snake" },
+"languages": { "rust": { "naming": { "function": "upper-snake", "method": "upper-snake" } } }
+```
+
+### docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#7
+
+*revision: authored · kind: prose · heading: A rule's parameters are a fact a repository declares, not a constant the rule compiles with / What Was Measured · hash: sha256:b2ddfbff3a3ea5571fcdccd6f34cd434100f8cbbe50d8c6e3ee4de644dffa2ee*
+
+— schema-validated by this same file's own `require` section (`standards.json`'s
+`data_contracts` entry for `standards.json` itself lists `naming` as a required `object`
+field). It has held this declaration since before any of `crates/rules/nomos-rules`'
+casing rules existed. Nothing in `nomos-rules`, `nomos-check-orchestration`, or any
+capability provider in this workspace reads it: `grep -r "naming" crates/rules` finds only
+the crate's own hardcoded predicates, never a reader of this file. The repository already
+states its own convention as data and every rule that judges that convention ignores the
+statement and recompiles a guess instead.
+
+### docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#8
+
+*revision: authored · kind: prose · heading: A rule's parameters are a fact a repository declares, not a constant the rule compiles with / What Was Measured · hash: sha256:949a1f7b72d1e7f30ee487e606abcd1c993b2998e4ce1639b8be49f37506913f*
+
+The guess is not even self-consistent. `standards.json`'s `"upper-snake"` is a real,
+externally defined vocabulary word — `C:\Users\kmett\source\repos\kevinmettias\code-
+standards\rules\general\style\shared\naming\case.go` names eight closed case styles
+(`upper-camel`, `lower-camel`, `underscore-camel`, `lower-snake`, `upper-snake`,
+`screaming-snake`, `mixed-snake`, `lower-kebab`) and `case_validation.go` gives each one an
+exact shape: `upper-snake` is `Compute_Total` (`^[A-Z][A-Za-z0-9]*(_[A-Z0-9][A-Za-z0-9]*)*$`),
+`screaming-snake` is `COMPUTE_TOTAL` (`^[A-Z0-9]+(_[A-Z0-9]+)*$`) — two different shapes, not
+two names for one shape. `nomos-rules`' own `Check_Naming_Convention`
+(`checks/naming/violations.rs::Is_Pascal_Snake_Case`) correctly implements `upper-snake`.
+Its own Go sibling shipped in this same build window,
+`Check_Exported_Go_Functions_Use_Upper_Snake_Case`
+(`checks/naming/go_function_names.rs::Is_Upper_Snake_Case`), is named for the same
+convention and implements `screaming-snake` instead — checked directly against `case.go`'s
+own worked example (`Compute_Total` vs `COMPUTE_TOTAL`) while drafting this record. A second
+rule shipped in the same window, `Check_Unexported_Go_Functions_Lowercase_Only_The_First_
+Letter`, mirrors that same wrong shape rather than the `mixed-snake` shape
+(`compute_Total`, `^[a-z0-9]+(_[A-Za-z0-9]+)*$`) code-standards' own vocabulary already
+names for exactly "the first word lower, the rest cased normally." Two real, shipped,
+ledger-verified rules drifted from the vocabulary their own rule id names, in the direction
+a hand-rolled predicate always drifts: plausible, untested against the source of truth, and
+wrong in a way `cargo test` cannot see because nothing checked it against anything external.
+
+### docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#9
+
+*revision: authored · kind: prose · heading: A rule's parameters are a fact a repository declares, not a constant the rule compiles with / What Was Measured · hash: sha256:ee24cd050b1fba10cb27c4e5b9f0c6d448df9d1b50aa473676eb8facc6fa8d7f*
+
+`OD-RULES-010` already answered the adjacent question for a different shape of input: a
+`ToolProvider`'s output is a fact a native rule reads through `FactReader::Require` and
+judges, never a value the rule embeds or a `Finding` a tool emits directly. The reasoning
+transfers without alteration. A repository's declared naming/threshold policy is exactly as
+external to a rule's own judgment as `cargo clippy`'s diagnostics are — the rule's job is to
+compare a subject against a standard, and a standard a repository can restate is data the
+rule must be handed, not a constant it was compiled to already agree with.
+
+### docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#10
+
+*revision: authored · kind: heading · heading: A rule's parameters are a fact a repository declares, not a constant the rule compiles with / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#11
+
+*revision: authored · kind: prose · heading: A rule's parameters are a fact a repository declares, not a constant the rule compiles with / The Decision · hash: sha256:eb6bd5309d30f6367656f996fe28d3ba5a77bf3abb0b5922a068faeec43ab51a*
+
+A rule's configurable parameters are read as a capability fact, the same
+`Require`-then-judge-then-emit shape `OD-RULES-010` already establishes, not embedded as a
+Rust constant or a hand-rolled predicate. The first instance is `nomos.cap.naming.policy`:
+a repository's resolved naming convention, read from `standards.json`'s `naming` and
+`languages.*.naming` blocks (falling back to a stated default when a repository declares
+none), materialized once for the whole workspace
+(`IncrementalGranularity::WholeWorkspace`, `FactVariant::Syntactic` — the fact is the
+declaration itself, not an inference over it).
+
+### docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#12
+
+*revision: authored · kind: prose · heading: A rule's parameters are a fact a repository declares, not a constant the rule compiles with / The Decision · hash: sha256:cb5f5a5196e40f64910875e490383b3706f48f20a3c3241bb11f0e58416c81df*
+
+The eight case styles are read off code-standards' own closed vocabulary and its exact
+`case_validation.go` shapes, not reinvented: `UpperCamel`, `LowerCamel`, `UnderscoreCamel`,
+`LowerSnake`, `UpperSnake`, `ScreamingSnake`, `MixedSnake`, `LowerKebab`, plus `Any` (no
+rule). Each wire-round-trips to code-standards' own lowercase-hyphenated spelling
+(`"upper-snake"`, not an invented Rust-side name), so a value written in `standards.json` by
+someone who has never seen this workspace's Rust source still resolves correctly. A
+symbol's required case resolves by the most specific key present — a per-language override
+(`languages.<lang>.naming.<symbol>`) before the repository-wide default
+(`naming.<symbol>`) before an unconfigured rule's own prior hardcoded behavior, so an
+unconfigured repository regresses nothing.
+
+### docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#13
+
+*revision: authored · kind: prose · heading: A rule's parameters are a fact a repository declares, not a constant the rule compiles with / The Decision · hash: sha256:d2868db7faaa9e6673349594364be32a0981239a49732cb7f57dff7d97b7f53b*
+
+This is a capability contract, not a provider's own type (`OD-CAPABILITY-002`): the
+contract lives in its own crate, `nomos-cap-naming-policy`, below both its provider (which
+reads `standards.json` through `nomos_platform::FileSystem`, the same port-supplied-by-
+caller shape every filesystem-reading provider in this workspace already uses) and the
+`nomos-rules` functions that read it. The provider is not a `nomos-lang-*` crate: it reads
+one repository-wide configuration file, not one language's source or manifest format, and
+naming it as a language provider would misstate what it does. It is the first crate under a
+new `crates/repository/` top-level directory, parallel to `crates/languages/` for the same
+reason `crates/languages/` exists apart from `crates/capabilities/` — grouped by what kind
+of input a crate reads, not by band alone.
+
+### docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#14
+
+*revision: authored · kind: prose · heading: A rule's parameters are a fact a repository declares, not a constant the rule compiles with / The Decision · hash: sha256:a81462235b219447b3fab4ae9039da300d6fd61710114d9a62de29cd05f41593*
+
+`crates/rules/nomos-rules`' six already-shipped casing rules
+(`Check_Naming_Convention`, `Check_Project_Owned_Function_Names_Use_Upper_Snake_Case`,
+`Check_Data_Names_Stay_Lower_Snake`, `Check_Go_Type_Names_Use_Camel_Case`,
+`Check_Exported_Go_Functions_Use_Upper_Snake_Case`,
+`Check_Unexported_Go_Functions_Lowercase_Only_The_First_Letter`) are refactored onto this
+one engine as its first real consumers, each keeping its own `RuleId` and gate behavior —
+a repository's `standards.json` gains the power to override any of the six without a second
+compiled rule, and the `UpperSnake`/`ScreamingSnake`/`MixedSnake` confusion this record
+found is corrected as a direct consequence of routing every one of them through the same
+tested vocabulary rather than six independent guesses at it.
+
+### docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#15
+
+*revision: authored · kind: heading · heading: A rule's parameters are a fact a repository declares, not a constant the rule compiles with / What This Does Not Do · hash: sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf*
+
+## What This Does Not Do
+
+### docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#16
+
+*revision: authored · kind: prose · heading: A rule's parameters are a fact a repository declares, not a constant the rule compiles with / What This Does Not Do · hash: sha256:fed0b4b39fefadc37be7b12968a66baf01dd4e8a990458776cdedb3be78475bf*
+
+It does not generalize every rule in `nomos-rules` in one stroke. Casing is the first
+family because it is the most duplicated shape already shipped and the one this record's
+own measurement found a real defect in; a threshold family (the file-size triggers), a
+suffix family, and whatever else the code-standards corpus's remaining ~1,120 rule
+documents turn out to cluster into are each their own future instance of this same
+decision, not decided here.
+
+### docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#17
+
+*revision: authored · kind: prose · heading: A rule's parameters are a fact a repository declares, not a constant the rule compiles with / What This Does Not Do · hash: sha256:50bdb9af613fcf28562e6a47a2ba2ea64c82d6fc52a1bbdad89f40875215415a*
+
+It does not give `nomos-rules` general file-system access or a second way to read
+`standards.json` outside the capability/provider seam `OD-RULES-010` already established —
+a rule still takes only `&[SourceFile]` and a `FactReader`, per `crates/rules/nomos-rules/
+src/lib.rs`'s own stated invariant, and the provider is still the only place in this
+increment that touches a path.
+
+### docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#18
+
+*revision: authored · kind: prose · heading: A rule's parameters are a fact a repository declares, not a constant the rule compiles with / What This Does Not Do · hash: sha256:244ee4236518e9054101ee196e7a47890bd8f850173354de562877a234f98810*
+
+It does not compose the new provider into `nomos-check-orchestration::Run`. Several rules
+in this crate already ship additive and unwired for one build cycle before composition
+follows (`Check_Declared_Role_Matches_Surface`, `Check_Cross_Language_Correspondence` at
+their own first landing); this capability follows the same sequencing, as its own later
+item.
+
+### docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#19
+
+*revision: authored · kind: prose · heading: A rule's parameters are a fact a repository declares, not a constant the rule compiles with / What This Does Not Do · hash: sha256:23b710a006071d17a571b203c1fdc63e7e5f270e748f3c2e830757bb4b74eb80*
+
+It does not decide anything about a repository that declares a case style outside the
+eight code-standards names — such a value is a load error at the provider, the same
+"a casing scheme this check cannot read is one it would silently ignore" refusal code-
+standards' own `spec.go` already states for the identical reason.
+
+### docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#20
+
+*revision: authored · kind: heading · heading: A rule's parameters are a fact a repository declares, not a constant the rule compiles with / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#21
+
+*revision: authored · kind: prose · heading: A rule's parameters are a fact a repository declares, not a constant the rule compiles with / Status · hash: sha256:e4ed4eba9f328bfbfb7146e0c9f9df24e3f305a37bfd3e8ee15de9a1104db214*
+
+Accepted. `nomos-cap-naming-policy` is this decision's first capability contract.
 
 ### docs/records/OD-SPEC-001-the-storage-backend-question.md#1
 

@@ -40936,6 +40936,114 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P26-RULES-GENERALIZE-FUNCTION-SHAPE",
+      "title": "Generalize function-shape rule policies",
+      "why": "Code-standards imports should become configurable multidimensional Nomos rules rather than one bespoke Rust function per rule id.",
+      "done_when": "nomos-rules function-shape checks share a configurable policy object with tests covering rule id, source selection and receiver allowance dimensions, and cargo test -p nomos-rules passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules",
+          "work/ledger.json"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "exit_code": 0,
+        "output_tail": "ment ... ok\ntest universe_kind::tests::Test_A_List_With_No_Documentation_Should_Claim_No_Mirror ... ok\ntest universe_kind::tests::Test_A_Payload_From_A_Blind_Provider_Should_Not_Read_As_No_Mirror ... ok\ntest universe_kind::tests::Test_A_Private_List_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_A_Scalar_Constant_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_A_Trait_Impl_Should_Not_Claim_The_Type ... ok\ntest universe_kind::tests::Test_An_All_Should_Be_Attributed_To_Its_Type ... ok\ntest universe_kind::tests::Test_An_All_That_Takes_A_Receiver_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_Read_Universes_Should_Observe_A_File_That_Declares_Nothing_As_Empty ... ok\ntest universe_kind::tests::Test_Universes_In_Should_Find_A_Constant_Slice ... ok\n\ntest result: ok. 256 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n\n\nrunning 5 tests\ntest Test_Check_Dependency_Policy_Should_Relay_A_Real_Policy_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Lint_Diagnostics_Should_Relay_A_Real_Diagnostics_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Dependency_Direction_Should_Judge_A_Real_Dependency_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Unread_Reaches_A_Finding_Should_Judge_A_Real_Reachability_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Completeness_Mirrors_Should_Judge_A_Real_Parse_Through_The_Public_Reader ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-rules v0.1.0 (F:\\repos\\nomos\\crates\\rules\\nomos-rules)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.36s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-7f10e78205c863cd.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-08507bad4d7918e3.exe)\n   Doc-tests nomos_rules\n",
+        "verified_at": 1788295275,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "4b6c8b1799dcf94dcb9aef86e9ec11dda330995a"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "OD-RULES-011-RECORD",
+      "title": "Decide: a rule's parameters are a fact a repository declares, not a compiled constant",
+      "why": "Every casing/threshold rule in nomos-rules hardcodes its convention in Rust while standards.json already declares a schema-validated naming block nothing reads, and two shipped Go casing rules drifted from the exact vocabulary their own rule id names (upper-snake vs screaming-snake, confirmed against code-standards' own case_validation.go). The user asked for rules to be generalized/multidimensional rather than hardcoded.",
+      "done_when": "OD-RULES-011 is registered, its markdown round-trips through the store, and both diagram-set and domain-specification projections are re-rendered and fresh against the record set this commit publishes.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-store/records/OD-RULES-011.record",
+          "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "./nomos.exe",
+          "spec",
+          "markdown",
+          "--id",
+          "OD-RULES-011"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "./nomos.exe",
+          "spec",
+          "markdown",
+          "--id",
+          "OD-RULES-011"
+        ],
+        "exit_code": 0,
+        "output_tail": "are each their own future instance of this same\ndecision, not decided here.\n\nIt does not give `nomos-rules` general file-system access or a second way to read\n`standards.json` outside the capability/provider seam `OD-RULES-010` already established —\na rule still takes only `&[SourceFile]` and a `FactReader`, per `crates/rules/nomos-rules/\nsrc/lib.rs`'s own stated invariant, and the provider is still the only place in this\nincrement that touches a path.\n\nIt does not compose the new provider into `nomos-check-orchestration::Run`. Several rules\nin this crate already ship additive and unwired for one build cycle before composition\nfollows (`Check_Declared_Role_Matches_Surface`, `Check_Cross_Language_Correspondence` at\ntheir own first landing); this capability follows the same sequencing, as its own later\nitem.\n\nIt does not decide anything about a repository that declares a case style outside the\neight code-standards names — such a value is a load error at the provider, the same\n\"a casing scheme this check cannot read is one it would silently ignore\" refusal code-\nstandards' own `spec.go` already states for the identical reason.\n\n## Status\n\nAccepted. `nomos-cap-naming-policy` is this decision's first capability contract.\nabsent: the v14 authoring corpus\n  expected: a directory named by NOMOS_V14_CORPUS, holding 01_authoring/domain_volumes/, 01_authoring/source_lineage/normative-source-statements.yaml and 02_machine/catalog/catalog.json\n  cause:    NOMOS_V14_CORPUS is not set, and no --corpus was given\n  so:       the corpus documents, their table rows, the normative statements and the node catalog are not in this store. What this command can answer is what this repository authors about itself, and nothing else\nOD-RULES-011: docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md at revision authored, rendered from the store's rows as sha256:2f8593620c13e02dbb18c7eb14ab6636f3d4e0a4fe4185ad1d62649dfa601c72\n",
+        "verified_at": 1788295468,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "4b6c8b1799dcf94dcb9aef86e9ec11dda330995a"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
