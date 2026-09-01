@@ -39321,10 +39321,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-boolpred-rename-2",
+        "acquired_at": 1788298628,
+        "lease_expires_at": 1788305828
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -41842,7 +41846,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Superseded: OD-GATE-019-REGISTRY-COHERENCE-B-4 re-filed this identical item on a clean base after FUNCTION-SHAPE-2 landed, and is done (verified by cargo test -p nomos-rules -p nomos-gate-orchestration -p nomos-cli -p nomos-contract-tests --lib --bins --test rule_contract_citation --test public_surface, exit 0). B-3 was left ready after being abandoned mid-claim; declining so next: stops pointing at superseded work."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -41872,7 +41880,10 @@
         }
       ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-external-review-reconciliation",
+        "declined_at": 1788298536
+      }
     },
     {
       "id": "OD-RULES-009-FIFTH-ROUND-RECHECK-2",
@@ -41945,10 +41956,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-external-review-reconciliation",
+        "acquired_at": 1788298555,
+        "lease_expires_at": 1788305755
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -42408,6 +42423,94 @@
           "exit_code": 0
         },
         "revision": "3cbf259b93408285c7822b711fa2ff3095733ac9"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P26-RULES-RUST-TEXT-JUSTIFICATION-2",
+      "title": "Import every-allow-carries-a-justification and unsafe-justification into rust_text.rs",
+      "why": "Both are the same 'a Rust construct needs an adjacent explanatory comment' shape rust_text.rs already generalizes via Previous_Comment_Block_Has for panic primitives and shared interior mutability -- a real breadth increment (two more code-standards rule ids covered), not a new abstraction.",
+      "done_when": "Check_Every_Allow_Carries_A_Justification and Check_Unsafe_Justification are implemented in rust_text.rs reusing Previous_Comment_Block_Has, with focused tests, and cargo test -p nomos-rules passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/rust_text.rs",
+          "crates/rules/nomos-rules/src/checks.rs",
+          "crates/rules/nomos-rules/src/lib.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "OD-RULES-011-LIMITS-REFACTOR",
+      "title": "Refactor the four file-size trigger rules onto nomos.cap.limits.policy",
+      "why": "OD-RULES-011 named the threshold family as its own future instance of the naming decision; nomos-repo-limits and nomos-cap-limits-policy are done, so this item lands the third piece: the rules themselves. Mirrors checks::naming::Resolve_Case exactly, per OD-CAPABILITY-004/OD-RULES-011's settled optional-read pattern.",
+      "done_when": "Check_File_Size_Review_Trigger, Check_File_Size_Justification_Trigger, Check_Go_File_Size_Review_Trigger and Check_Go_File_Size_Hard_Trigger each take facts: &mut dyn FactReader and resolve their threshold via Resolve_Limit (repository default, or a language override, falling back to the rule's own prior hardcoded value when the capability is absent or unreadable), tests/contract/surface/nomos-rules.txt is re-blessed, and cargo test -p nomos-rules passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules",
+          "tests/contract/surface/nomos-rules.txt",
+          "work/ledger.json"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "exit_code": 0,
+        "output_tail": "nd::tests::Test_A_Declared_Mirror_Should_Be_Read_Off_The_Documentation_Comment ... ok\ntest universe_kind::tests::Test_A_List_With_No_Documentation_Should_Claim_No_Mirror ... ok\ntest universe_kind::tests::Test_A_Payload_From_A_Blind_Provider_Should_Not_Read_As_No_Mirror ... ok\ntest universe_kind::tests::Test_A_Private_List_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_A_Scalar_Constant_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_An_All_Should_Be_Attributed_To_Its_Type ... ok\ntest universe_kind::tests::Test_A_Trait_Impl_Should_Not_Claim_The_Type ... ok\ntest universe_kind::tests::Test_An_All_That_Takes_A_Receiver_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_Read_Universes_Should_Observe_A_File_That_Declares_Nothing_As_Empty ... ok\ntest universe_kind::tests::Test_Universes_In_Should_Find_A_Constant_Slice ... ok\n\ntest result: ok. 254 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n\n\nrunning 5 tests\ntest Test_Check_Lint_Diagnostics_Should_Relay_A_Real_Diagnostics_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Unread_Reaches_A_Finding_Should_Judge_A_Real_Reachability_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Dependency_Policy_Should_Relay_A_Real_Policy_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Dependency_Direction_Should_Judge_A_Real_Dependency_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Completeness_Mirrors_Should_Judge_A_Real_Parse_Through_The_Public_Reader ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.10s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-ee89c438be92be88.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-af255d5622a42965.exe)\n   Doc-tests nomos_rules\n",
+        "verified_at": 1788298673,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "ffe4f3ce7e776b86f831ab305f9769aed5fff5db"
       },
       "abandoned": [],
       "displaced": [],

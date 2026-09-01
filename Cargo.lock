@@ -756,6 +756,7 @@ dependencies = [
  "nomos-cap-controlflow",
  "nomos-cap-dependency",
  "nomos-cap-dependency-policy",
+ "nomos-cap-limits-policy",
  "nomos-cap-lint",
  "nomos-cap-naming-policy",
  "nomos-cap-syntax",

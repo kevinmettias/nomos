@@ -79,12 +79,12 @@ pub fn nomos_rules::Check_Deprecation_Carries_A_Reason(sources: &[SourceFile]) -
 pub fn nomos_rules::Check_Every_Member_Declares_A_Band(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 pub fn nomos_rules::Check_Exported_Go_Functions_Use_Upper_Snake_Case( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
 pub fn nomos_rules::Check_File_Name_Matches_Declared_Type( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
-pub fn nomos_rules::Check_File_Size_Justification_Trigger(sources: &[SourceFile]) -> Vec<Finding>
-pub fn nomos_rules::Check_File_Size_Review_Trigger(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_File_Size_Justification_Trigger(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
+pub fn nomos_rules::Check_File_Size_Review_Trigger(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 pub fn nomos_rules::Check_Function_Arity_Policy( sources: &[SourceFile], facts: &mut dyn FactReader, policy: FunctionArityPolicy, ) -> Vec<Finding>
 pub fn nomos_rules::Check_Go_Constants_Split_By_Export(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
-pub fn nomos_rules::Check_Go_File_Size_Hard_Trigger(sources: &[SourceFile]) -> Vec<Finding>
-pub fn nomos_rules::Check_Go_File_Size_Review_Trigger(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_Go_File_Size_Hard_Trigger(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
+pub fn nomos_rules::Check_Go_File_Size_Review_Trigger(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 pub fn nomos_rules::Check_Go_Helpers_Package_Five_Inputs( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
 pub fn nomos_rules::Check_Go_Type_Names_Use_Camel_Case( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
 pub fn nomos_rules::Check_Go_Variables_Use_Lower_Snake_Case(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
