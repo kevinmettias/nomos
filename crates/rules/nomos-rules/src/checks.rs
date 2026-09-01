@@ -1,5 +1,5 @@
-//! The thirty-eight rules this crate implements, one module each — `naming` holds thirteen,
-//! `rust_text` holds four, `structure` holds five, `formatting` holds four, and `dependency` holds two,
+//! The forty rules this crate implements, one module each — `naming` holds thirteen,
+//! `rust_text` holds six, `structure` holds five, `formatting` holds four, and `dependency` holds two,
 //! while `script_discipline` holds two,
 //! [`Check_Dependency_Direction`] and [`Check_Every_Member_Declares_A_Band`], since both
 //! judge the same declared architecture and observed `nomos.cap.dependency.edges` fact,
@@ -76,10 +76,12 @@ pub use reachability::{
 };
 pub use role_surface_pair::{Check_Declared_Role_Matches_Surface, RoleSurfacePair, DECLARED_ROLE_MATCHES_SURFACE};
 pub use rust_text::{
-    Check_A_Rust_Path_Stays_Within_Its_Own_Subtree, Check_Panics_Are_Justified_Documented_And_Validated,
-    Check_Shared_Interior_Mutability_Says_Why, Check_Unwrap_Expect_Discipline,
-    A_RUST_PATH_STAYS_WITHIN_ITS_OWN_SUBTREE, PANICS_ARE_JUSTIFIED_DOCUMENTED_AND_VALIDATED,
-    SHARED_INTERIOR_MUTABILITY_SAYS_WHY, UNWRAP_EXPECT_DISCIPLINE,
+    Check_A_Rust_Path_Stays_Within_Its_Own_Subtree, Check_Every_Allow_Carries_A_Justification,
+    Check_Panics_Are_Justified_Documented_And_Validated, Check_Shared_Interior_Mutability_Says_Why,
+    Check_Unsafe_Justification, Check_Unwrap_Expect_Discipline,
+    A_RUST_PATH_STAYS_WITHIN_ITS_OWN_SUBTREE, EVERY_ALLOW_CARRIES_A_JUSTIFICATION,
+    PANICS_ARE_JUSTIFIED_DOCUMENTED_AND_VALIDATED, SHARED_INTERIOR_MUTABILITY_SAYS_WHY, UNSAFE_JUSTIFICATION,
+    UNWRAP_EXPECT_DISCIPLINE,
 };
 pub use script_discipline::{
     Check_A_Script_Declares_Its_Purpose, Check_Scripts_Use_A_Portable_Shebang, A_SCRIPT_DECLARES_ITS_PURPOSE,

@@ -43,7 +43,7 @@
 //!
 //! # What is here
 //!
-//! Thirty-five rules. [`Check_Completeness_Mirrors`] was chosen first because it is the only
+//! Forty rules. [`Check_Completeness_Mirrors`] was chosen first because it is the only
 //! rule in this tree with three recorded historical instances to test a judgment against —
 //! `P10-FIRST-CHECK` shipped with exactly this one and no more, because a single check
 //! that is honest end to end is worth more than three that are nearly wired.
@@ -214,6 +214,13 @@
 //! without that split — locals, parameters and struct fields are outside what either check
 //! can see, the latter already covered by [`Check_Data_Names_Stay_Lower_Snake`] regardless
 //! of language.
+//!
+//! [`Check_Every_Allow_Carries_A_Justification`] and [`Check_Unsafe_Justification`] are the
+//! thirty-ninth and fortieth rules, the same "a Rust construct needs an adjacent
+//! explanatory comment" shape [`Check_Panics_Are_Justified_Documented_And_Validated`] and
+//! [`Check_Shared_Interior_Mutability_Says_Why`] already generalize through
+//! `rust_text::Previous_Comment_Block_Has` — a real third and fourth consumer of that
+//! primitive, not a new one invented for them.
 
 #![forbid(unsafe_code)]
 
@@ -254,10 +261,12 @@ pub use checks::{
     Check_Unread_Reaches_A_Finding, UNREAD_REACHES_FINDING, UNREAD_REACHES_FINDING_CONTRACT_RECORD,
     UNREAD_REACHES_FINDING_CONTRACT_RECORD_VERSION,
     Check_Declared_Role_Matches_Surface, RoleSurfacePair, DECLARED_ROLE_MATCHES_SURFACE,
-    Check_A_Rust_Path_Stays_Within_Its_Own_Subtree, Check_Panics_Are_Justified_Documented_And_Validated,
-    Check_Shared_Interior_Mutability_Says_Why, Check_Unwrap_Expect_Discipline,
-    A_RUST_PATH_STAYS_WITHIN_ITS_OWN_SUBTREE, PANICS_ARE_JUSTIFIED_DOCUMENTED_AND_VALIDATED,
-    SHARED_INTERIOR_MUTABILITY_SAYS_WHY, UNWRAP_EXPECT_DISCIPLINE,
+    Check_A_Rust_Path_Stays_Within_Its_Own_Subtree, Check_Every_Allow_Carries_A_Justification,
+    Check_Panics_Are_Justified_Documented_And_Validated, Check_Shared_Interior_Mutability_Says_Why,
+    Check_Unsafe_Justification, Check_Unwrap_Expect_Discipline,
+    A_RUST_PATH_STAYS_WITHIN_ITS_OWN_SUBTREE, EVERY_ALLOW_CARRIES_A_JUSTIFICATION,
+    PANICS_ARE_JUSTIFIED_DOCUMENTED_AND_VALIDATED, SHARED_INTERIOR_MUTABILITY_SAYS_WHY, UNSAFE_JUSTIFICATION,
+    UNWRAP_EXPECT_DISCIPLINE,
     Check_A_Script_Declares_Its_Purpose, Check_Scripts_Use_A_Portable_Shebang, A_SCRIPT_DECLARES_ITS_PURPOSE,
     SCRIPTS_USE_A_PORTABLE_SHEBANG,
     Check_File_Size_Justification_Trigger, Check_File_Size_Review_Trigger, Check_Go_File_Size_Hard_Trigger,

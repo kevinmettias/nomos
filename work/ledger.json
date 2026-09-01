@@ -39321,14 +39321,14 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": {
+        "Declined": {
+          "reason": "Territory omitted crates/kernel/nomos-model/tests/nomos_contracts_seam.rs, suppressions.json, and tests/contract/surface/nomos-contracts.txt; there is no work edit, so superseded by P23-BOOLPRED-SPEC-RENAME-3 with corrected territory."
+        }
+      },
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-boolpred-rename-2",
-        "acquired_at": 1788298628,
-        "lease_expires_at": 1788305828
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -39339,9 +39339,18 @@
         "timeout_seconds": 600
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "claude-boolpred-rename-2",
+          "reason": "Territory omitted three real call/artifact sites: crates/kernel/nomos-model/tests/nomos_contracts_seam.rs calls Requires_Agent, suppressions.json carries the two check-boolean-predicate waivers this rename retires, and tests/contract/surface/nomos-contracts.txt is the public-surface snapshot that must be re-blessed after the rename. Re-filing as -3 with corrected territory rather than widening mid-claim.",
+          "abandoned_at": 1788298870
+        }
+      ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-boolpred-rename-2",
+        "declined_at": 1788298945
+      }
     },
     {
       "id": "P23-PRESERVATION-ACCEPTED-TEMPLATE",
@@ -41956,14 +41965,14 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": {
+        "Declined": {
+          "reason": "Superseded by a split into three correctly-scoped items: OD-LEDGER-STALE-COMPLETENESS-CORPUS-GATES, OD-LEDGER-STALE-REQUIREMENT-TRACE-ASSESSMENTS, OD-LEDGER-DETERMINISM-STRATEGY-GAP."
+        }
+      },
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-external-review-reconciliation",
-        "acquired_at": 1788298555,
-        "lease_expires_at": 1788305755
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -41975,9 +41984,18 @@
         "timeout_seconds": 600
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "claude-external-review-reconciliation",
+          "reason": "Scope turned out larger and less uniform than one item can honestly claim: completeness_universes and corpus_gates are fixable within the territory already reserved (their own declared tables), but requirement_trace's fix needs tests/contract/requirements/*.assessment (not reserved), and determinism_declarations' fix needs new Strategy impls in nomos-repo-limits/nomos-repo-standards plus tests/integration/tests/determinism.rs (not reserved, and those crates are live peer territory right now). Splitting rather than widening mid-claim.",
+          "abandoned_at": 1788298709
+        }
+      ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-external-review-reconciliation",
+        "declined_at": 1788298709
+      }
     },
     {
       "id": "P26-RULES-GENERALIZE-FUNCTION-SHAPE-3",
@@ -42444,7 +42462,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Never claimed (refused: overlaps OD-RULES-011-LIMITS-REFACTOR's blanket crates/rules/nomos-rules territory). Coordinating with nomos-75 before re-adding with a narrower, non-overlapping scope."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -42460,7 +42482,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-nomos-12",
+        "declined_at": 1788298698
+      }
     },
     {
       "id": "OD-RULES-011-LIMITS-REFACTOR",
@@ -42512,6 +42537,330 @@
         },
         "revision": "ffe4f3ce7e776b86f831ab305f9769aed5fff5db"
       },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "OD-LEDGER-STALE-COMPLETENESS-CORPUS-GATES",
+      "title": "completeness_universes and corpus_gates are red from tables never updated as their sources grew",
+      "why": "Verified directly: completeness_universes fails because UNIVERSES (table.rs) never classified 6 enums/constants added since it was last touched, and one row names a since-renamed mirror test. corpus_gates fails because GATES never declared two corpus-reaching test files (crates/host/nomos-cli/tests/spec_model_seam.rs, spec_orchestration_seam.rs) and disagrees with the source about crates/host/nomos-api/src/spec/absence_response.rs's one gated test. Both fixes are self-contained: the declared tables these tests check live inside tests/contract/tests/completeness_universes and tests/contract/tests/corpus_gates themselves.",
+      "done_when": "UNIVERSES classifies all scanned universes (or UNMIRRORED_TOTAL is raised with a stated reason), the renamed mirror row is corrected, and GATES matches what the source actually gates; cargo test --no-fail-fast -p nomos-contract-tests --test completeness_universes --test corpus_gates exits 0.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/tests/completeness_universes",
+          "tests/contract/tests/corpus_gates"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Territory needs to widen by one file (crates/kernel/nomos-store/src/document/kind.rs, a one-line doc-comment correction); re-added as -2."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "completeness_universes",
+          "--test",
+          "corpus_gates"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-external-review-reconciliation",
+          "reason": "Fixing Kind::All's row also requires correcting kind.rs's own stale doc comment (claims a test name, Test_Every_Kind_Should_Be_Matched_Exhaustively, that does not exist; the real test is Test_All_Should_Enumerate_Every_Kind_Exhaustively) -- claims::Test_The_Scan_And_The_Table_Should_Name_The_Same_Mirror requires the table row and the site's own doc comment to agree, and only one of the two names a real test. Re-adding with that one file in territory.",
+          "abandoned_at": 1788298963
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-external-review-reconciliation",
+        "declined_at": 1788298963
+      }
+    },
+    {
+      "id": "OD-LEDGER-STALE-REQUIREMENT-TRACE-ASSESSMENTS",
+      "title": "requirement_trace: ~20 assessment files cite sites and gaps that moved or vanished across prior restructuring",
+      "why": "Verified directly at HEAD: Test_Every_Assessment_Should_Name_A_Site_That_Exists and Test_Every_Gap_Should_Resolve both fail, together naming 60+ stale site/gap citations across roughly 20 requirement ids (AGT-*, AGT-EXEC-*, COR-EXEC-*, MODEL-ROUTE-*) in tests/contract/requirements/*.assessment -- residue from file-splitting/renaming campaigns whose commits never updated these self-referential citations.",
+      "done_when": "Every site: and gap: line in tests/contract/requirements/*.assessment names a real, current path#symbol, or the entry is re-authored (verdict changed, gap promoted to Met, etc.) against what its subject became; cargo test --no-fail-fast -p nomos-contract-tests --test requirement_trace exits 0.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/requirements",
+          "tests/contract/tests/requirement_trace"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "requirement_trace"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "OD-LEDGER-DETERMINISM-STRATEGY-GAP",
+      "title": "nomos-repo-limits and nomos-repo-standards construct facts and declare no determinism Strategy",
+      "why": "Verified directly: Test_Every_Fact_Producing_Crate_Should_Declare_A_Strategy names both crates, and the harness test then finds zero registered strategies. Not claimed here: both crates landed this session under live, fast-moving peer claims (OD-RULES-011/naming-policy, limits-policy), and the fix -- an impl Strategy naming which row of the domain table each crate occupies, plus a tests/integration/tests/determinism.rs test holding it to that promise -- is a design judgment about those specific crates' reproducibility guarantees, best made by whoever is already building them.",
+      "done_when": "Both crates declare a Strategy; a test in tests/integration/tests/determinism.rs holds the harness to it; cargo test --no-fail-fast -p nomos-contract-tests --test determinism_declarations exits 0.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities/nomos-cap-naming-policy",
+          "crates/repository",
+          "tests/contract/tests/determinism_declarations.rs",
+          "tests/integration/tests/determinism.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "determinism_declarations"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P26-RULES-RUST-TEXT-JUSTIFICATION-3",
+      "title": "Import every-allow-carries-a-justification and unsafe-justification into rust_text.rs",
+      "why": "Both are the same 'a Rust construct needs an adjacent explanatory comment' shape rust_text.rs already generalizes via Previous_Comment_Block_Has for panic primitives and shared interior mutability -- a real breadth increment (two more code-standards rule ids covered), not a new abstraction.",
+      "done_when": "Check_Every_Allow_Carries_A_Justification and Check_Unsafe_Justification are implemented in rust_text.rs reusing Previous_Comment_Block_Has, with focused tests, and cargo test -p nomos-rules passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/rust_text.rs",
+          "crates/rules/nomos-rules/src/checks.rs",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "tests/contract/surface"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "exit_code": 0,
+        "output_tail": "nd::tests::Test_A_Declared_Mirror_Should_Be_Read_Off_The_Documentation_Comment ... ok\ntest universe_kind::tests::Test_A_List_With_No_Documentation_Should_Claim_No_Mirror ... ok\ntest universe_kind::tests::Test_A_Payload_From_A_Blind_Provider_Should_Not_Read_As_No_Mirror ... ok\ntest universe_kind::tests::Test_A_Private_List_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_A_Scalar_Constant_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_A_Trait_Impl_Should_Not_Claim_The_Type ... ok\ntest universe_kind::tests::Test_An_All_Should_Be_Attributed_To_Its_Type ... ok\ntest universe_kind::tests::Test_An_All_That_Takes_A_Receiver_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_Read_Universes_Should_Observe_A_File_That_Declares_Nothing_As_Empty ... ok\ntest universe_kind::tests::Test_Universes_In_Should_Find_A_Constant_Slice ... ok\n\ntest result: ok. 261 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n\n\nrunning 5 tests\ntest Test_Check_Lint_Diagnostics_Should_Relay_A_Real_Diagnostics_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Dependency_Policy_Should_Relay_A_Real_Policy_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Unread_Reaches_A_Finding_Should_Judge_A_Real_Reachability_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Dependency_Direction_Should_Judge_A_Real_Dependency_Fact_Through_The_Public_Reader ... ok\ntest Test_Check_Completeness_Mirrors_Should_Judge_A_Real_Parse_Through_The_Public_Reader ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.10s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-ee89c438be92be88.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-af255d5622a42965.exe)\n   Doc-tests nomos_rules\n",
+        "verified_at": 1788299036,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "70a8b5765fe5f96de424538f6cd537a6bf2fc692"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P23-BOOLPRED-SPEC-RENAME-3",
+      "title": "rename Applicability::Was_Evaluated/Requires_Agent via the spec-change workflow",
+      "why": "check-boolean-predicate flags these two pub methods on nomos-contracts::Applicability; call sites live in crates/substrate AND crates/kernel/nomos-model/tests (nomos_contracts_seam.rs), the names are quoted verbatim as code citations in 7 docs/records/ governing records (OD-ANALYSIS-006, OD-CAPABILITY-005, OD-COMPLETENESS-004, OD-CONTRACTS-002, OD-EXECUTOR-003, OD-GATE-015, OD-LEDGER-022) plus the rendered spec/domain-specification.md and two tests/contract/requirements/*.assessment files, and the public-surface snapshot tests/contract/surface/nomos-contracts.txt names both methods. Currently covered by a temporary suppressions.json waiver (expires 2026-11-27) recorded by P22-REGRESSION-MISC -- this item does the real fix via the nomos-spec-change skill (stage each record edit, preview, commit, then render both diagram-set and domain-specification profiles), removes the now-unneeded waiver, and re-blesses the surface snapshot. Supersedes P23-BOOLPRED-SPEC-RENAME-2, declined for omitting nomos_contracts_seam.rs, suppressions.json and the surface snapshot from territory.",
+      "done_when": "check-boolean-predicate reports zero for nomos-contracts (no waiver needed), all 7 governing records above are updated and re-rendered, tests/contract/requirements assessments still name a real site, tests/contract/surface/nomos-contracts.txt is re-blessed, and cargo build --workspace --all-targets passes",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/contracts/nomos-contracts",
+          "crates/substrate/nomos-ledger/src/claim/refusal.rs",
+          "crates/kernel/nomos-model/src/evidence/coverage.rs",
+          "crates/kernel/nomos-model/tests/nomos_contracts_seam.rs",
+          "crates/orchestration/nomos-check-orchestration/src/examined/claim.rs",
+          "crates/substrate/nomos-capability/tests/resolution_never_says_no.rs",
+          "suppressions.json",
+          "tests/contract/surface/nomos-contracts.txt",
+          "spec/domain-specification.md",
+          "tests/contract/requirements",
+          "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md",
+          "docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md",
+          "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md",
+          "docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md",
+          "docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md",
+          "docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md",
+          "docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--all-targets"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "OD-LEDGER-STALE-COMPLETENESS-CORPUS-GATES-2",
+      "title": "completeness_universes and corpus_gates are red from tables never updated as their sources grew",
+      "why": "Same as the declined -1: UNIVERSES never classified 6 enums/constants that moved since it was last touched, and GATES never declared two corpus-reaching test files plus disagreeing with the source on one gated test. Widened by one file: kind.rs's own doc comment claims a test name that does not exist (Test_Every_Kind_Should_Be_Matched_Exhaustively); the real test is Test_All_Should_Enumerate_Every_Kind_Exhaustively, and claims::Test_The_Scan_And_The_Table_Should_Name_The_Same_Mirror requires the site's doc comment and the table row to agree on a name that is real.",
+      "done_when": "UNIVERSES classifies all scanned universes (or UNMIRRORED_TOTAL is raised with a stated reason), kind.rs's doc comment names its real mirror test, and GATES matches what the source actually gates; cargo test --no-fail-fast -p nomos-contract-tests --test completeness_universes --test corpus_gates exits 0.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/tests/completeness_universes",
+          "tests/contract/tests/corpus_gates",
+          "crates/kernel/nomos-store/src/document/kind.rs"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Territory needs corpus_gates.rs, the sibling mod-parent file holding GATES itself; re-added as -3."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "completeness_universes",
+          "--test",
+          "corpus_gates"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-external-review-reconciliation",
+          "reason": "corpus_gates's GATES table is declared in tests/contract/tests/corpus_gates.rs (the mod-parent file, sibling to the corpus_gates/ directory already reserved), not inside the directory itself. Re-adding with that file in territory too.",
+          "abandoned_at": 1788299026
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-external-review-reconciliation",
+        "declined_at": 1788299026
+      }
+    },
+    {
+      "id": "OD-LEDGER-STALE-COMPLETENESS-CORPUS-GATES-3",
+      "title": "completeness_universes and corpus_gates are red from tables never updated as their sources grew",
+      "why": "Same as -2: UNIVERSES never classified 6 moved enums/constants, kind.rs's doc comment names a nonexistent test, and GATES never declared two corpus-reaching test files plus disagreeing with the source on one gated test. Widened once more: GATES/Gate/GATED_TOTAL/TESTS_IN_GATED_FILES/VARIABLES are all declared in tests/contract/tests/corpus_gates.rs itself (the mod-parent file), not inside the corpus_gates/ directory its submodules live in.",
+      "done_when": "UNIVERSES classifies all scanned universes (or UNMIRRORED_TOTAL is raised with a stated reason), kind.rs's doc comment names its real mirror test, and GATES matches what the source actually gates; cargo test --no-fail-fast -p nomos-contract-tests --test completeness_universes --test corpus_gates exits 0.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/tests/completeness_universes",
+          "tests/contract/tests/corpus_gates",
+          "tests/contract/tests/corpus_gates.rs",
+          "crates/kernel/nomos-store/src/document/kind.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-external-review-reconciliation",
+        "acquired_at": 1788299026,
+        "lease_expires_at": 1788306226
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "completeness_universes",
+          "--test",
+          "corpus_gates"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
       "abandoned": [],
       "displaced": [],
       "declined": null

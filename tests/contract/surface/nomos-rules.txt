@@ -22,6 +22,7 @@ pub const nomos_rules::DEPENDENCY_POLICY: &str
 pub const nomos_rules::DEPENDENCY_POLICY_CONTRACT_RECORD: &str
 pub const nomos_rules::DEPENDENCY_POLICY_CONTRACT_RECORD_VERSION: u32
 pub const nomos_rules::DEPRECATION: &str
+pub const nomos_rules::EVERY_ALLOW_CARRIES_A_JUSTIFICATION: &str
 pub const nomos_rules::EXPORTED_FUNCTIONS_USE_UPPER_SNAKE_CASE: &str
 pub const nomos_rules::FILE_NAME_MATCHES_DECLARED_TYPE: &str
 pub const nomos_rules::FILE_SIZE_JUSTIFICATION_TRIGGER: &str
@@ -51,6 +52,7 @@ pub const nomos_rules::UNEXPORTED_FUNCTIONS_LOWERCASE_ONLY_THE_FIRST_LETTER: &st
 pub const nomos_rules::UNREAD_REACHES_FINDING: &str
 pub const nomos_rules::UNREAD_REACHES_FINDING_CONTRACT_RECORD: &str
 pub const nomos_rules::UNREAD_REACHES_FINDING_CONTRACT_RECORD_VERSION: u32
+pub const nomos_rules::UNSAFE_JUSTIFICATION: &str
 pub const nomos_rules::UNWRAP_EXPECT_DISCIPLINE: &str
 pub enum nomos_rules::FunctionAritySource
 pub enum nomos_rules::Reading
@@ -76,6 +78,7 @@ pub fn nomos_rules::Check_Declared_Role_Matches_Surface(subjects: &[RoleSurfaceP
 pub fn nomos_rules::Check_Dependency_Direction(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 pub fn nomos_rules::Check_Dependency_Policy(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 pub fn nomos_rules::Check_Deprecation_Carries_A_Reason(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_Every_Allow_Carries_A_Justification(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Every_Member_Declares_A_Band(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 pub fn nomos_rules::Check_Exported_Go_Functions_Use_Upper_Snake_Case( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
 pub fn nomos_rules::Check_File_Name_Matches_Declared_Type( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
@@ -104,6 +107,7 @@ pub fn nomos_rules::Check_Test_Names_Describe_Behavior( sources: &[SourceFile], 
 pub fn nomos_rules::Check_Todo_Format(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Unexported_Go_Functions_Lowercase_Only_The_First_Letter( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
 pub fn nomos_rules::Check_Unread_Reaches_A_Finding(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
+pub fn nomos_rules::Check_Unsafe_Justification(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Unwrap_Expect_Discipline(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::RuleRegistry::New() -> Self
 pub fn nomos_rules::RuleRegistry::Offer(&mut self, offer: RuleOffer) -> Result<(), RuleRegistryError>

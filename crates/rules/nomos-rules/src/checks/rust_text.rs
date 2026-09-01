@@ -2,7 +2,12 @@
 //!
 //! These checks deliberately stay conservative and text-local. They import standards whose
 //! deciding evidence is visible in one Rust source file: panic primitive spelling, path
-//! attributes, and shared `Rc`/`Arc` plus `RefCell` ownership escapes.
+//! attributes, shared `Rc`/`Arc` plus `RefCell` ownership escapes, and — the two rules this
+//! file adds beyond its original four — `#[allow(...)]` and `unsafe` constructs that carry
+//! no adjacent explanatory comment. Both new rules reuse [`Previous_Comment_Block_Has`],
+//! the same "walk the contiguous comment block immediately above this line" primitive
+//! [`Panic_Findings_In`] and [`Shared_Interior_Mutability_Findings_In`] already share —
+//! a real second and third consumer, not a new abstraction invented for them.
 
 use crate::SourceFile;
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
@@ -16,6 +21,10 @@ pub const PANICS_ARE_JUSTIFIED_DOCUMENTED_AND_VALIDATED: &str = "panics-are-just
 pub const A_RUST_PATH_STAYS_WITHIN_ITS_OWN_SUBTREE: &str = "a-rust-path-stays-within-its-own-subtree";
 /// The code-standards shared-interior-mutability rule id.
 pub const SHARED_INTERIOR_MUTABILITY_SAYS_WHY: &str = "shared-interior-mutability-says-why";
+/// The code-standards `#[allow(...)]` justification rule id.
+pub const EVERY_ALLOW_CARRIES_A_JUSTIFICATION: &str = "every-allow-carries-a-justification";
+/// The code-standards `unsafe` justification rule id.
+pub const UNSAFE_JUSTIFICATION: &str = "unsafe-justification";
 
 /// Reports `unwrap()` and placeholder `expect(...)` outside test and example Rust sources.
 #[must_use]
@@ -82,6 +91,42 @@ pub fn Check_Shared_Interior_Mutability_Says_Why(sources: &[SourceFile]) -> Vec<
         if Is_Rust_Source(source)
         {
             findings.extend(Shared_Interior_Mutability_Findings_In(source));
+        }
+    }
+
+    findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
+    return findings;
+}
+
+/// Reports `#[allow(...)]`/`#![allow(...)]` attributes with no adjacent explanatory comment.
+#[must_use]
+pub fn Check_Every_Allow_Carries_A_Justification(sources: &[SourceFile]) -> Vec<Finding>
+{
+    let mut findings = Vec::new();
+
+    for source in sources
+    {
+        if Is_Rust_Source(source)
+        {
+            findings.extend(Allow_Findings_In(source));
+        }
+    }
+
+    findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
+    return findings;
+}
+
+/// Reports `unsafe` blocks, functions, impls and traits with no adjacent `// SAFETY:` comment.
+#[must_use]
+pub fn Check_Unsafe_Justification(sources: &[SourceFile]) -> Vec<Finding>
+{
+    let mut findings = Vec::new();
+
+    for source in sources
+    {
+        if Is_Rust_Source(source)
+        {
+            findings.extend(Unsafe_Findings_In(source));
         }
     }
 
@@ -180,6 +225,50 @@ fn Shared_Interior_Mutability_Findings_In(source: &SourceFile) -> Vec<Finding>
                 SHARED_INTERIOR_MUTABILITY_SAYS_WHY,
                 Line_Number(index),
                 "uses shared interior mutability without `smart-pointer: allow: <reason>`",
+            ));
+        }
+    }
+
+    return findings;
+}
+
+fn Allow_Findings_In(source: &SourceFile) -> Vec<Finding>
+{
+    let lines = Lines_Of(source);
+    let mut findings = Vec::new();
+
+    for (index, line) in lines.iter().enumerate()
+    {
+        let code = Code_Prefix(line);
+        if Has_Allow_Attribute(code) && !Has_Local_Allow_Justification(&lines, index)
+        {
+            findings.push(Finding_For_Line(
+                source,
+                EVERY_ALLOW_CARRIES_A_JUSTIFICATION,
+                Line_Number(index),
+                "carries an #[allow(...)] with no adjacent comment explaining why",
+            ));
+        }
+    }
+
+    return findings;
+}
+
+fn Unsafe_Findings_In(source: &SourceFile) -> Vec<Finding>
+{
+    let lines = Lines_Of(source);
+    let mut findings = Vec::new();
+
+    for (index, line) in lines.iter().enumerate()
+    {
+        let code = Code_Prefix(line);
+        if Has_Unsafe_Construct(code) && !Has_Local_Safety_Justification(&lines, index)
+        {
+            findings.push(Finding_For_Line(
+                source,
+                UNSAFE_JUSTIFICATION,
+                Line_Number(index),
+                "uses `unsafe` without an adjacent `// SAFETY:` comment",
             ));
         }
     }
@@ -378,6 +467,62 @@ fn Comment_Has_Smart_Pointer_Reason(line: &str) -> bool
     return !reason.trim().is_empty();
 }
 
+fn Has_Allow_Attribute(code: &str) -> bool
+{
+    return code.contains("#[allow(") || code.contains("#![allow(");
+}
+
+fn Has_Local_Allow_Justification(lines: &[&str], index: usize) -> bool
+{
+    if lines.get(index).is_some_and(|line| return Comment_Is_Non_Empty(line))
+    {
+        return true;
+    }
+
+    return Previous_Comment_Block_Has(lines, index, Comment_Is_Non_Empty);
+}
+
+/// `every-allow-carries-a-justification`'s own example is plain prose with no special
+/// marker, unlike the panic and smart-pointer rules' `panic:`/`smart-pointer: allow:`
+/// keywords — so any non-empty comment satisfies it.
+fn Comment_Is_Non_Empty(line: &str) -> bool
+{
+    return Comment_Text_Of(line).is_some_and(|comment| return !comment.trim().is_empty());
+}
+
+/// Matches `unsafe {`, `unsafe fn`, `unsafe impl` and `unsafe trait` specifically — not a
+/// bare substring search for `"unsafe"`, which would false-positive on
+/// `#![forbid(unsafe_code)]`.
+fn Has_Unsafe_Construct(code: &str) -> bool
+{
+    return code.contains("unsafe {")
+        || code.contains("unsafe fn ")
+        || code.contains("unsafe fn(")
+        || code.contains("unsafe impl")
+        || code.contains("unsafe trait");
+}
+
+fn Has_Local_Safety_Justification(lines: &[&str], index: usize) -> bool
+{
+    if lines.get(index).is_some_and(|line| return Comment_Has_Safety_Reason(line))
+    {
+        return true;
+    }
+
+    return Previous_Comment_Block_Has(lines, index, Comment_Has_Safety_Reason);
+}
+
+fn Comment_Has_Safety_Reason(line: &str) -> bool
+{
+    let Some(comment) = Comment_Text_Of(line)
+    else
+    {
+        return false;
+    };
+
+    return comment.to_ascii_lowercase().starts_with("safety:");
+}
+
 fn Previous_Comment_Block_Has(lines: &[&str], index: usize, predicate: fn(&str) -> bool) -> bool
 {
     let mut cursor = index;
@@ -573,6 +718,94 @@ mod tests
         let findings = Check_Shared_Interior_Mutability_Says_Why(&[source]);
 
         assert!(findings.is_empty(), "{findings:?}");
+    }
+
+    #[test]
+    fn Test_Check_Every_Allow_Carries_A_Justification_Should_Report_An_Unexplained_Allow()
+    {
+        let source = Source("src/lib.rs", "#[allow(clippy::redundant_clone)]\nlet processed = input.clone();\n");
+
+        let findings = Check_Every_Allow_Carries_A_Justification(&[source]);
+
+        assert_eq!(findings.len(), 1, "{findings:?}");
+        assert_eq!(
+            findings.first().expect("asserted len 1 above").rule,
+            RuleId::New(EVERY_ALLOW_CARRIES_A_JUSTIFICATION)
+        );
+    }
+
+    #[test]
+    fn Test_Check_Every_Allow_Carries_A_Justification_Should_Accept_An_Explained_Allow()
+    {
+        let source = Source(
+            "src/lib.rs",
+            "// the clone is required because the caller retains the original elsewhere\n\
+             #[allow(clippy::redundant_clone)]\n\
+             let processed = input.clone();\n",
+        );
+
+        let findings = Check_Every_Allow_Carries_A_Justification(&[source]);
+
+        assert!(findings.is_empty(), "{findings:?}");
+    }
+
+    #[test]
+    fn Test_Check_Every_Allow_Carries_A_Justification_Should_Accept_A_Crate_Level_Allow_With_A_Reason()
+    {
+        let source = Source(
+            "src/lib.rs",
+            "// this crate is a thin FFI shim and every public item is consumed externally\n#![allow(dead_code)]\n",
+        );
+
+        let findings = Check_Every_Allow_Carries_A_Justification(&[source]);
+
+        assert!(findings.is_empty(), "{findings:?}");
+    }
+
+    #[test]
+    fn Test_Check_Unsafe_Justification_Should_Report_An_Unexplained_Unsafe_Block()
+    {
+        let source = Source("src/lib.rs", "let slice = unsafe { core::slice::from_raw_parts(ptr, len) };\n");
+
+        let findings = Check_Unsafe_Justification(&[source]);
+
+        assert_eq!(findings.len(), 1, "{findings:?}");
+        assert_eq!(findings.first().expect("asserted len 1 above").rule, RuleId::New(UNSAFE_JUSTIFICATION));
+    }
+
+    #[test]
+    fn Test_Check_Unsafe_Justification_Should_Accept_A_Safety_Comment()
+    {
+        let source = Source(
+            "src/lib.rs",
+            "// SAFETY:\n\
+             // - ptr is valid for len elements, checked by the caller above\n\
+             let slice = unsafe { core::slice::from_raw_parts(ptr, len) };\n",
+        );
+
+        let findings = Check_Unsafe_Justification(&[source]);
+
+        assert!(findings.is_empty(), "{findings:?}");
+    }
+
+    #[test]
+    fn Test_Check_Unsafe_Justification_Should_Ignore_The_Forbid_Unsafe_Code_Attribute()
+    {
+        let source = Source("src/lib.rs", "#![forbid(unsafe_code)]\n");
+
+        let findings = Check_Unsafe_Justification(&[source]);
+
+        assert!(findings.is_empty(), "{findings:?}");
+    }
+
+    #[test]
+    fn Test_Check_Unsafe_Justification_Should_Report_An_Unsafe_Fn_With_No_Safety_Comment()
+    {
+        let source = Source("src/lib.rs", "pub unsafe fn Read_Raw(ptr: *const u8) -> u8\n{\n    return *ptr;\n}\n");
+
+        let findings = Check_Unsafe_Justification(&[source]);
+
+        assert_eq!(findings.len(), 1, "{findings:?}");
     }
 
     fn Source(path: &str, text: &str) -> SourceFile
