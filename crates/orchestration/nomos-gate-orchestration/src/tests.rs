@@ -14,9 +14,9 @@ use nomos_model::Subject_Of_Path;
 use nomos_platform_std::StdProcessLauncher;
 use nomos_rules::{
     SourceFile, COMPLETENESS_MIRROR, CONTRACT_RECORD, CONTRACT_RECORD_VERSION,
-    DEPENDENCY_CONTRACT_RECORD, DEPENDENCY_CONTRACT_RECORD_VERSION, DEPENDENCY_DIRECTION,
-    NAMING_CONVENTION, UNREAD_REACHES_FINDING, UNREAD_REACHES_FINDING_CONTRACT_RECORD,
-    UNREAD_REACHES_FINDING_CONTRACT_RECORD_VERSION,
+    DEPENDENCY_COMPLETENESS, DEPENDENCY_CONTRACT_RECORD, DEPENDENCY_CONTRACT_RECORD_VERSION,
+    DEPENDENCY_DIRECTION, NAMING_CONVENTION, UNREAD_REACHES_FINDING,
+    UNREAD_REACHES_FINDING_CONTRACT_RECORD, UNREAD_REACHES_FINDING_CONTRACT_RECORD_VERSION,
 };
 use nomos_workspace::BuildVariant;
 use std::path::PathBuf;
@@ -209,10 +209,11 @@ fn Repository_Root() -> PathBuf
 /// The whole plan, by identity and in `RuleId` order, rather than by length. A count agrees
 /// with itself: this registry composed two of the three shipped rules until
 /// `P13-GATE-REGISTRY-THIRD-RULE`, then three of four until
-/// `P13-CONTROLFLOW-REACHABILITY-WIRE`, and an assertion on `plan.rules.len()` would have
+/// `P13-CONTROLFLOW-REACHABILITY-WIRE`, then four of five until
+/// `OD-GATE-019-REGISTRY-COHERENCE-A-2`, and an assertion on `plan.rules.len()` would have
 /// been green throughout.
 #[test]
-fn Test_Registered_Should_Compose_All_Four_Shipped_Rules()
+fn Test_Registered_Should_Compose_All_Five_Shipped_Rules()
 {
     let GateOutcome::Planned(plan) = Run(&Command())
     else
@@ -225,6 +226,7 @@ fn Test_Registered_Should_Compose_All_Four_Shipped_Rules()
         ids,
         vec![
             RuleId::New(COMPLETENESS_MIRROR),
+            RuleId::New(DEPENDENCY_COMPLETENESS),
             RuleId::New(DEPENDENCY_DIRECTION),
             RuleId::New(NAMING_CONVENTION),
             RuleId::New(UNREAD_REACHES_FINDING)

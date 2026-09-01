@@ -12,35 +12,45 @@
 //! it describes is worse than no plan: a caller reading it concludes dependency direction is
 //! unenforced when every `nomos check` enforces it. `crate::tests` asserts the offers rather
 //! than counting them, because a count agrees with itself. `P13-CONTROLFLOW-REACHABILITY-WIRE`
-//! composed the fourth the same way.
+//! composed the fourth the same way, and `OD-GATE-019-REGISTRY-COHERENCE-A` the fifth:
+//! `nomos-check-orchestration::run_context::RULE_COUNT` had already reached eight while this
+//! registry stayed at four, so a caller reading it concluded dependency completeness was
+//! unenforced when every `nomos check` enforces it too. `DEPENDENCY_COMPLETENESS` shares
+//! `DEPENDENCY_DIRECTION`'s own `DEPENDENCY_CONTRACT_RECORD` -- both judge the same declared
+//! architecture -- so this offer needed no new citable record, unlike the three
+//! `OD-GATE-019-REGISTRY-COHERENCE-B` still has to compose.
 
 use nomos_contracts::RuleId;
 use nomos_rules::{
     RuleOffer, RuleRegistry, RuleRegistryError, COMPLETENESS_MIRROR, CONTRACT_RECORD,
-    CONTRACT_RECORD_VERSION, DEPENDENCY_CONTRACT_RECORD, DEPENDENCY_CONTRACT_RECORD_VERSION,
-    DEPENDENCY_DIRECTION, NAMING_CONVENTION, UNREAD_REACHES_FINDING,
-    UNREAD_REACHES_FINDING_CONTRACT_RECORD, UNREAD_REACHES_FINDING_CONTRACT_RECORD_VERSION,
+    CONTRACT_RECORD_VERSION, DEPENDENCY_COMPLETENESS, DEPENDENCY_CONTRACT_RECORD,
+    DEPENDENCY_CONTRACT_RECORD_VERSION, DEPENDENCY_DIRECTION, NAMING_CONVENTION,
+    UNREAD_REACHES_FINDING, UNREAD_REACHES_FINDING_CONTRACT_RECORD,
+    UNREAD_REACHES_FINDING_CONTRACT_RECORD_VERSION,
 };
 
-/// Registers this workspace's four shipped rules and hands back the registry.
+/// Registers this workspace's five shipped rules and hands back the registry.
 ///
-/// The four are exactly what `nomos-check-orchestration::run::Run` calls, and that is the
-/// property this function exists to keep true rather than a coincidence to note.
+/// The five are exactly what `nomos-check-orchestration::run::Run` calls today, and that is
+/// the property this function exists to keep true rather than a coincidence to note --
+/// `LINT_DIAGNOSTICS`, `DEPENDENCY_POLICY` and `CROSS_LANGUAGE_CORRESPONDENCE` still run
+/// through `Run` uncomposed here, left for `OD-GATE-019-REGISTRY-COHERENCE-B`.
 ///
 /// # Errors
 ///
 /// [`RuleRegistryError::AlreadyOffered`] if the same [`RuleId`] were offered twice. Not
-/// reachable today -- `COMPLETENESS_MIRROR`, `DEPENDENCY_DIRECTION`, `NAMING_CONVENTION` and
-/// `UNREAD_REACHES_FINDING` are distinct constants -- but returned rather than unwound for
-/// the same reason `nomos_check_orchestration::composition::Registered` returns its own
-/// `RegistryError`: a composition root's own defect must be representable, not panicked
-/// past.
+/// reachable today -- `COMPLETENESS_MIRROR`, `DEPENDENCY_DIRECTION`, `DEPENDENCY_COMPLETENESS`,
+/// `NAMING_CONVENTION` and `UNREAD_REACHES_FINDING` are distinct constants -- but returned
+/// rather than unwound for the same reason `nomos_check_orchestration::composition::Registered`
+/// returns its own `RegistryError`: a composition root's own defect must be representable, not
+/// panicked past.
 pub fn Registered() -> Result<RuleRegistry, RuleRegistryError>
 {
     let mut registry = RuleRegistry::New();
 
     Offer_Completeness_Mirror(&mut registry)?;
     Offer_Dependency_Direction(&mut registry)?;
+    Offer_Dependency_Completeness(&mut registry)?;
     Offer_Naming_Convention(&mut registry)?;
     Offer_Unread_Reaches_A_Finding(&mut registry)?;
 
@@ -68,6 +78,21 @@ fn Offer_Dependency_Direction(registry: &mut RuleRegistry) -> Result<(), RuleReg
 {
     registry.Offer(RuleOffer {
         rule: RuleId::New(DEPENDENCY_DIRECTION),
+        contract_record: DEPENDENCY_CONTRACT_RECORD.to_owned(),
+        contract_record_version: DEPENDENCY_CONTRACT_RECORD_VERSION,
+    })?;
+
+    return Ok(());
+}
+
+/// `Check_Every_Member_Declares_A_Band` cites the same `OD-RULES-003` as
+/// `Check_Dependency_Direction` above -- both judge the same declared architecture and the
+/// same observed `nomos.cap.dependency.edges` fact, so this offer needs no citation of its
+/// own beyond the one `DEPENDENCY_CONTRACT_RECORD` already carries.
+fn Offer_Dependency_Completeness(registry: &mut RuleRegistry) -> Result<(), RuleRegistryError>
+{
+    registry.Offer(RuleOffer {
+        rule: RuleId::New(DEPENDENCY_COMPLETENESS),
         contract_record: DEPENDENCY_CONTRACT_RECORD.to_owned(),
         contract_record_version: DEPENDENCY_CONTRACT_RECORD_VERSION,
     })?;
@@ -113,13 +138,16 @@ mod tests
 {
     use super::Registered;
     use nomos_contracts::RuleId;
-    use nomos_rules::{COMPLETENESS_MIRROR, DEPENDENCY_DIRECTION, NAMING_CONVENTION, UNREAD_REACHES_FINDING};
+    use nomos_rules::{
+        COMPLETENESS_MIRROR, DEPENDENCY_COMPLETENESS, DEPENDENCY_DIRECTION, NAMING_CONVENTION,
+        UNREAD_REACHES_FINDING,
+    };
 
     /// The whole registry, by identity and in `RuleId` order -- the same discipline
     /// `crate::tests::Test_Registered_Should_Compose_All_Four_Shipped_Rules` (over `Run`'s own
     /// output) already keeps, asserted here directly against `Registered` itself.
     #[test]
-    fn Test_Registered_Should_Offer_All_Four_Shipped_Rules()
+    fn Test_Registered_Should_Offer_All_Five_Shipped_Rules()
     {
         let registry = Registered().expect("this crate's own registration must not be contradictory");
 
@@ -128,6 +156,7 @@ mod tests
             ids,
             vec![
                 RuleId::New(COMPLETENESS_MIRROR),
+                RuleId::New(DEPENDENCY_COMPLETENESS),
                 RuleId::New(DEPENDENCY_DIRECTION),
                 RuleId::New(NAMING_CONVENTION),
                 RuleId::New(UNREAD_REACHES_FINDING),

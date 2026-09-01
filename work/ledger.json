@@ -41468,14 +41468,14 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": {
+        "Declined": {
+          "reason": "Predicate too broad -- pulls in an unrelated, pre-existing failure in nomos-cli's tests/check_command.rs caused by stray worktree pollution from other sessions. Superseded by OD-GATE-019-REGISTRY-COHERENCE-A-3 with --lib --bins."
+        }
+      },
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-gate-registry-coherence",
-        "acquired_at": 1788296436,
-        "lease_expires_at": 1788303636
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -41488,9 +41488,18 @@
         "timeout_seconds": 900
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "claude-gate-registry-coherence",
+          "reason": "Predicate cargo test -p nomos-gate-orchestration -p nomos-cli pulls in nomos-cli's tests/check_command.rs, which fails for a pre-existing, unrelated reason: stray .claude/worktrees/agent-* directories left by other concurrent sessions (dated Aug 26-30) pollute its full-tree nomos-check scan with unrelated Kind::All completeness-mirror findings. Not reachable from anything this item touches (nomos-gate-orchestration and gate/tests.rs only, not nomos-check-orchestration or nomos-store). Re-filing with --lib --bins to scope the predicate to this item's own unit tests.",
+          "abandoned_at": 1788296683
+        }
+      ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-gate-registry-coherence",
+        "declined_at": 1788296683
+      }
     },
     {
       "id": "OD-RULES-011-LIMITS",
@@ -41551,20 +41560,132 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": {
+        "Declined": {
+          "reason": "superseded by a wider item bundling crate + workspace registration into one commit, matching OD-RULES-011-NAMING-CONTRACT-2's own precedent"
+        }
+      },
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "nomos-75",
-        "acquired_at": 1788296526,
-        "lease_expires_at": 1788303726
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
           "test",
           "--manifest-path",
           "crates/capabilities/nomos-cap-limits-policy/Cargo.toml"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "nomos-75",
+          "reason": "widening scope to include workspace registration now that Cargo.toml/README.md/bands.rs are free",
+          "abandoned_at": 1788296751
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "nomos-75",
+        "declined_at": 1788296751
+      }
+    },
+    {
+      "id": "OD-GATE-019-REGISTRY-COHERENCE-A-3",
+      "title": "nomos-gate-orchestration::Registered offers DEPENDENCY_COMPLETENESS, which Run already executes",
+      "why": "composition.rs's own module doc, gate-orchestration/src/tests.rs's crate test, and nomos-cli/src/gate/tests.rs's real-tree end-to-end test all assert Registered() offers exactly four rules. nomos-check-orchestration::run_context::RULE_COUNT has wired DEPENDENCY_COMPLETENESS (sharing DEPENDENCY_CONTRACT_RECORD/DEPENDENCY_CONTRACT_RECORD_VERSION with the already-registered DEPENDENCY_DIRECTION) since before this session, so all three assertions are false for this rule specifically -- no new record or public surface needed, purely a missing Offer_ call and its three downstream assertions.",
+      "done_when": "Registered() also offers DEPENDENCY_COMPLETENESS via the existing DEPENDENCY_CONTRACT_RECORD/DEPENDENCY_CONTRACT_RECORD_VERSION constants; composition.rs's own test, gate-orchestration/src/tests.rs's Test_Registered_Should_Compose_All_Four_Shipped_Rules, and nomos-cli/src/gate/tests.rs's Test_Render_Plan_Should_Report_All_Four_Shipped_Rules no longer claim four when five are offered (renamed and asserting dependency-completeness alongside the existing four names, and 'rules: 5'); and cargo test -p nomos-gate-orchestration -p nomos-cli --lib --bins passes (--lib --bins scopes to these crates' own unit tests, excluding nomos-cli's tests/check_command.rs, whose full-tree nomos-check scan is unrelated to this item and is currently red from unrelated stray worktree pollution).",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/composition.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/tests.rs",
+          "crates/host/nomos-cli/src/gate/tests.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-cli",
+          "--lib",
+          "--bins"
+        ],
+        "timeout_seconds": 900
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-cli",
+          "--lib",
+          "--bins"
+        ],
+        "exit_code": 0,
+        "output_tail": "e_Dependency_Rule_Should_Carry_Its_Real_Contract_Citation ... ok\ntest tests::Test_The_Mirror_Rule_Should_Carry_Its_Real_Contract_Citation ... ok\ntest tests::Test_The_Naming_Rule_Should_Cite_Its_Record_Less_Contract ... ok\ntest tests::Test_The_Reachability_Rule_Should_Carry_Its_Real_Contract_Citation ... ok\ntest finding_query::tests::Test_Explain_Gate_Should_Find_A_Real_Blocking_Finding ... ok\ntest gate_environment::tests::Test_Run_Gate_Should_Fail_On_A_Blocking_Finding ... ok\ntest tests::Test_Required_Completeness_Should_Not_Touch_A_Failed_Run ... ok\ntest tests::Test_Explain_Gate_Should_Find_A_Real_Blocking_Finding ... ok\ntest tests::Test_Required_Completeness_Should_Downgrade_An_Incomplete_Passed_Run ... ok\ntest tests::Test_Explain_Should_Report_Not_Found_For_A_Query_Nothing_Answers ... ok\ntest tests::Test_An_Unset_Coverage_Policy_Should_Leave_A_Passed_Disposition_Alone ... ok\ntest tests::Test_A_Clean_Source_Should_Pass ... ok\ntest tests::Test_Run_Gate_Should_Fail_On_A_Blocking_Finding ... ok\ntest tests::Test_Explain_Should_Ignore_Scope ... ok\ntest tests::Test_A_Calibrated_Suppressed_And_Baselined_Finding_Should_Report_As_Calibrated ... ok\ntest tests::Test_A_Calibrated_Finding_Should_Not_Block ... ok\ntest tests::Test_A_Suppressed_And_Baselined_Finding_Should_Report_As_Suppressed ... ok\ntest tests::Test_A_Suppressed_Finding_Should_Not_Block ... ok\ntest tests::Test_A_Baselined_Finding_Should_Not_Block ... ok\ntest tests::Test_Explain_Should_Report_A_Calibration_That_Applies ... ok\ntest tests::Test_Explain_Should_Report_A_Suppression_That_Applies ... ok\ntest tests::Test_Explain_Should_Report_A_Baseline_That_Applies ... ok\n\ntest result: ok. 64 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 13.22s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.16s\n     Running unittests src\\main.rs (target\\debug\\deps\\nomos-9e9a4a89234985ca.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_gate_orchestration-3fa45ab85953ef02.exe)\n",
+        "verified_at": 1788296750,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "e3660dfdeb31a3af0377687eca63a13e2b67f09b"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "OD-RULES-011-LIMITS-3",
+      "title": "nomos-cap-limits-policy: the nomos.cap.limits.policy capability contract",
+      "why": "OD-RULES-011 decided a rule's configurable parameters are read as a capability fact rather than compiled as a Rust constant, and named a threshold family (the file-size triggers, parameter-count) as its own future instance of that same decision. This is that instance's contract crate, mirroring nomos-cap-naming-policy's shape: scope-qualified numeric rows (repository default or a per-language override) rather than the closed Case vocabulary naming needed.",
+      "done_when": "nomos-cap-limits-policy exists at crates/capabilities/nomos-cap-limits-policy with a contract (nomos.cap.limits.policy), a scope-qualified numeric payload and its own tests, registered in Cargo.toml, README.md's band table, and both bands.rs copies at band 23, and cargo test -p nomos-cap-limits-policy passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities/nomos-cap-limits-policy",
+          "Cargo.toml",
+          "README.md",
+          "crates/rules/nomos-rules/src/checks/dependency/bands.rs",
+          "tests/contract/tests/boundaries/bands.rs",
+          "work/ledger.json"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "nomos-75",
+        "acquired_at": 1788296760,
+        "lease_expires_at": 1788300360
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cap-limits-policy"
         ],
         "timeout_seconds": 600
       },

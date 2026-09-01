@@ -183,22 +183,23 @@ fn Run_Over_This_Tree(invocation: Invocation) -> (ExitCode, String, String)
     return (code, rendered, rendered_stderr);
 }
 
-/// A real run over this workspace's own four shipped rules reports all four, and exits
+/// A real run over this workspace's own five shipped rules reports all five, and exits
 /// clean.
 ///
 /// End to end, the way the shipped binary is actually called -- `nomos_gate_orchestration
-/// ::Registered` composes the same four real offers `P13-GATE-ORCHESTRATION-1`'s own crate
+/// ::Registered` composes the same five real offers `P13-GATE-ORCHESTRATION-1`'s own crate
 /// test already checks; this is the assertion that the CLI seam renders what came back
 /// rather than trusting the crate boundary silently.
 #[test]
-fn Test_Render_Plan_Should_Report_All_Four_Shipped_Rules()
+fn Test_Render_Plan_Should_Report_All_Five_Shipped_Rules()
 {
     let command = GateCommand { root: PathBuf::from("."), ..Default::default() };
     let (code, rendered, stderr) = Run_Over_This_Tree(Invocation::Plan(command));
 
     assert_eq!(code, ExitCode::Ok, "{rendered}");
-    assert!(rendered.contains("rules: 4"), "{rendered}");
+    assert!(rendered.contains("rules: 5"), "{rendered}");
     assert!(rendered.contains("completeness-mirror"), "{rendered}");
+    assert!(rendered.contains("dependency-completeness"), "{rendered}");
     assert!(rendered.contains("dependency-direction"), "{rendered}");
     assert!(rendered.contains("function-naming-convention"), "{rendered}");
     assert!(rendered.contains("unread-reaches-finding"), "{rendered}");
@@ -209,7 +210,7 @@ fn Test_Render_Plan_Should_Report_All_Four_Shipped_Rules()
 /// real tree" discipline the `plan` test above already uses. This repository's own `Rules`
 /// step already runs `gate run` over this same tree and expects it clean -- the exact
 /// command under test here -- so this test, exercising the same command CI actually runs,
-/// must agree with itself end to end: `Ok`, not `Violations`, and the same four rule names
+/// must agree with itself end to end: `Ok`, not `Violations`, and the same five rule names
 /// `plan` already reports must be nameable in the rendered findings' rule ids where any
 /// exist, or the finding count must be zero.
 #[test]
