@@ -704,6 +704,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "nomos-repo-standards"
+version = "0.1.0"
+dependencies = [
+ "nomos-analysis",
+ "nomos-cap-naming-policy",
+ "nomos-capability",
+ "nomos-contracts",
+ "nomos-model",
+ "nomos-platform",
+ "nomos-platform-std",
+ "serde_json",
+]
+
+[[package]]
 name = "nomos-rule-package"
 version = "0.1.0"
 dependencies = [
