@@ -40411,6 +40411,59 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P26-DEPENDENCY-TIER-POLICY",
+      "title": "Declare dependency direction tiers",
+      "why": "README.md already declares that crates are ordered into bands and may depend only on strictly lower bands; code-standards check-dependency-direction reads that same intent from standards.json.",
+      "done_when": "standards.json declares the README crate bands as dependency tiers and check.exe dependency-direction passes for the repository.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "standards.json",
+          "work/ledger.json"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "dependency-direction",
+          "--json",
+          "."
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "dependency-direction",
+          "--json",
+          "."
+        ],
+        "exit_code": 0,
+        "output_tail": "check-dependency-direction: no findings.\ncheck-dependency-direction: 333 unit(s) judged.\n",
+        "verified_at": 1788238169,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "801e6cc435e3162506f160949020ca49e760deef"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

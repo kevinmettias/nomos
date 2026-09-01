@@ -245,6 +245,185 @@
     "kwb",
     "xvpe"
   ],
+  "tiers": [
+    {
+      "tier": "band-0",
+      "paths": [
+        "crates/contracts/nomos-contracts"
+      ]
+    },
+    {
+      "tier": "band-10",
+      "paths": [
+        "crates/kernel/nomos-model"
+      ]
+    },
+    {
+      "tier": "band-11",
+      "paths": [
+        "crates/spec/nomos-spec-model"
+      ]
+    },
+    {
+      "tier": "band-12",
+      "paths": [
+        "crates/kernel/nomos-store",
+        "crates/spec/nomos-spec-store"
+      ]
+    },
+    {
+      "tier": "band-13",
+      "paths": [
+        "crates/spec/nomos-spec-bundle",
+        "crates/spec/nomos-spec-ingest"
+      ]
+    },
+    {
+      "tier": "band-14",
+      "paths": [
+        "crates/spec/nomos-spec-project",
+        "crates/spec/nomos-spec-validate"
+      ]
+    },
+    {
+      "tier": "band-15",
+      "paths": [
+        "crates/platform/nomos-platform"
+      ]
+    },
+    {
+      "tier": "band-16",
+      "paths": [
+        "crates/platform/nomos-platform-std"
+      ]
+    },
+    {
+      "tier": "band-18",
+      "paths": [
+        "crates/substrate/nomos-workspace"
+      ]
+    },
+    {
+      "tier": "band-19",
+      "paths": [
+        "crates/substrate/nomos-scope-verification"
+      ]
+    },
+    {
+      "tier": "band-20",
+      "paths": [
+        "crates/substrate/nomos-ledger"
+      ]
+    },
+    {
+      "tier": "band-21",
+      "paths": [
+        "crates/substrate/nomos-capability"
+      ]
+    },
+    {
+      "tier": "band-22",
+      "paths": [
+        "crates/substrate/nomos-analysis"
+      ]
+    },
+    {
+      "tier": "band-23",
+      "paths": [
+        "crates/capabilities/nomos-cap-controlflow",
+        "crates/capabilities/nomos-cap-dependency",
+        "crates/capabilities/nomos-cap-dependency-policy",
+        "crates/capabilities/nomos-cap-lint",
+        "crates/capabilities/nomos-cap-syntax"
+      ]
+    },
+    {
+      "tier": "band-24",
+      "paths": [
+        "crates/packages/nomos-package"
+      ]
+    },
+    {
+      "tier": "band-25",
+      "paths": [
+        "crates/languages/nomos-lang-go",
+        "crates/languages/nomos-lang-go-modules",
+        "crates/languages/nomos-lang-rust",
+        "crates/languages/nomos-lang-rust-cargo",
+        "crates/languages/nomos-lang-rust-clippy",
+        "crates/languages/nomos-lang-rust-deny",
+        "crates/languages/nomos-lang-rust-scan"
+      ]
+    },
+    {
+      "tier": "band-26",
+      "paths": [
+        "crates/packages/nomos-lang-go-package",
+        "crates/packages/nomos-lang-rust-package",
+        "crates/packages/nomos-model-package",
+        "crates/packages/nomos-rule-package"
+      ]
+    },
+    {
+      "tier": "band-30",
+      "paths": [
+        "crates/rules/nomos-rules"
+      ]
+    },
+    {
+      "tier": "band-35",
+      "paths": [
+        "crates/corrections/nomos-corrections"
+      ]
+    },
+    {
+      "tier": "band-36",
+      "paths": [
+        "crates/agent/nomos-agent-contracts"
+      ]
+    },
+    {
+      "tier": "band-37",
+      "paths": [
+        "crates/agent/nomos-agent-executor-claude-code",
+        "crates/agent/nomos-model-backend-ollama"
+      ]
+    },
+    {
+      "tier": "band-40",
+      "paths": [
+        "crates/orchestration/nomos-check-orchestration",
+        "crates/orchestration/nomos-spec-orchestration",
+        "crates/orchestration/nomos-work-orchestration"
+      ]
+    },
+    {
+      "tier": "band-41",
+      "paths": [
+        "crates/orchestration/nomos-gate-orchestration"
+      ]
+    },
+    {
+      "tier": "band-90",
+      "paths": [
+        "crates/host/nomos-api",
+        "crates/host/nomos-cli"
+      ]
+    },
+    {
+      "tier": "band-91",
+      "paths": [
+        "crates/host/nomos-surface-provenance"
+      ]
+    },
+    {
+      "tier": "band-100",
+      "paths": [
+        "tests/contract",
+        "tests/integration"
+      ]
+    }
+  ],
   "conformance_workers": 1,
   "telemetry": {
     "none": "nomos is a synchronous CLI and library toolchain: every invocation runs one command against the workspace, reports its outcome as a Result and an exit code, and exits. There is no request-handling loop, background job, or persistent process for a logger, tracer, or metrics emitter to observe."
