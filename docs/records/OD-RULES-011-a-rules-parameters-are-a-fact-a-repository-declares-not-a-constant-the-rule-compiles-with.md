@@ -3,7 +3,7 @@ id: OD-RULES-011
 type: decision
 title: A rule's parameters are a fact a repository declares, not a constant the rule compiles with
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - rules
@@ -18,6 +18,8 @@ relations:
   - target: OD-PACKAGE-008
     type: relates-to
   - target: OD-CAPABILITY-002
+    type: relates-to
+  - target: OD-CAPABILITY-004
     type: relates-to
 ---
 
@@ -117,6 +119,25 @@ new `crates/repository/` top-level directory, parallel to `crates/languages/` fo
 reason `crates/languages/` exists apart from `crates/capabilities/` — grouped by what kind
 of input a crate reads, not by band alone.
 
+Reading this capability is optional, not required, and `OD-CAPABILITY-004` already
+decided how an absent optional capability is reported: never through a rule's
+`Applicability`. `Applicability::MissingCapability` says a rule *requires* a capability
+and none is installed, which points a reader at installing something; a naming-policy
+override is not required by any of the six rules below — each is fully self-sufficient on
+its own prior hardcoded default, the same "declaring nothing leaves each language's own
+convention in force" default `check-naming`'s own `spec.go` already states. So a rule that
+calls `FactReader::Require` for `nomos.cap.naming.policy` and receives
+`Err(Applicability::MissingCapability)` — whether because no provider is composed into the
+current run, or because the repository's `standards.json` declares nothing for that
+symbol — treats it as exactly that: no override, fall back to the rule's own prior
+behavior, no `Finding` produced or altered by the absence itself. This is narrower than
+`OD-CAPABILITY-004`'s own "packet carries its resolution" obligation: that record binds a
+knowledge-context packet with its own downstream consumer that must tell "built without
+knowledge" from "built with knowledge that had nothing to add"; a naming judgment has no
+such consumer; the `Finding` a name conforms or does not is the identical statement
+whether the case it was judged against came from a default or a declared override, so
+there is no distinction here for a packet to lose.
+
 `crates/rules/nomos-rules`' six already-shipped casing rules
 (`Check_Naming_Convention`, `Check_Project_Owned_Function_Names_Use_Upper_Snake_Case`,
 `Check_Data_Names_Stay_Lower_Snake`, `Check_Go_Type_Names_Use_Camel_Case`,
@@ -156,4 +177,10 @@ standards' own `spec.go` already states for the identical reason.
 
 ## Status
 
-Accepted. `nomos-cap-naming-policy` is this decision's first capability contract.
+Accepted. `nomos-cap-naming-policy` is this decision's first capability contract,
+`nomos-repo-standards` its first provider.
+
+Version 2 adds the read-side rule this record's own text needed before the six rules
+could be refactored: how a rule reacts to an absent *optional* capability, settled by
+citing `OD-CAPABILITY-004` rather than re-deciding it, once refactoring the first rule
+onto this capability made the gap in version 1 concrete.

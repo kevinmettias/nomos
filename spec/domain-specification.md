@@ -159,9 +159,9 @@ profile: domain-specification
 | docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md@authored | docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md | authored | 18 | 6 | sha256:5e7bde3ad034017040659d44bc4b044696c4a0b33830e8596bd67906a2d2ac4c |
 | docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md@authored | docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md | authored | 19 | 6 | sha256:7f6c05ffa09f693ecfe8e7c14699257a1fe01da3a07c0614b09f227fd5be986b |
 | docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md@authored | docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md | authored | 32 | 6 | sha256:335f2ed03def8b979a66bf55ff3278c706fbc7e1105bc01a4fd5a1a75cedfe0a |
-| docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md@authored | docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md | authored | 41 | 10 | sha256:9ccf6e284cc32aa9f6c12405d202d3fb7d7e2c1994a45e40b8111f45c8863b08 |
+| docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md@authored | docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md | authored | 35 | 9 | sha256:08ba049790ebab78a959ded3cff62e8e04ff89f3e3502a36dd39cdff8d560569 |
 | docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md@authored | docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md | authored | 15 | 6 | sha256:a7d5a93cd32ab0b63cbd4218801091e23d8136b7230b0990277a8dcff0f16560 |
-| docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md@authored | docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md | authored | 21 | 6 | sha256:2f8593620c13e02dbb18c7eb14ab6636f3d4e0a4fe4185ad1d62649dfa601c72 |
+| docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md@authored | docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md | authored | 23 | 6 | sha256:841b1c5bb58bd645f7b84a43c5f4433923df78193de6b7e6e3ffecc92de628c9 |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md@authored | docs/records/OD-SPEC-001-the-storage-backend-question.md | authored | 11 | 5 | sha256:e4feddab256024ea38e21849120fdd52d0ddf17d4e3f69cfb24eb4c8e766c8ae |
 | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md@authored | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md | authored | 20 | 7 | sha256:2c45051e43390556bfd68865152580e1ae09c2e82dc94bb20e65cdbf60d69a10 |
 | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md@authored | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md | authored | 23 | 7 | sha256:481ffd62b02df705439b4ef914adb21e24894d1d3f0295754fc13f7d95c89c85 |
@@ -1435,8 +1435,7 @@ profile: domain-specification
 | docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#17 | authored | 2 | Amendment: The First Named Trigger Fired, And Was Addressed Narrowly |
 | docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#22 | authored | 2 | Amendment: A Third Round Of The Same Review, Re-Checked Against Real Growth Since The Last Amendment |
 | docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#28 | authored | 2 | Amendment: The Fourth Trigger's Named Event Finally Occurred, And Its Own Wording Already Says What It Means |
-| docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#34 | authored | 2 | Amendment: A Fifth Round Of The Same Review, Checked Against A Rule Population That Nearly Quintupled Without Touching Any Named Trigger |
-| docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#40 | authored | 2 | Status |
+| docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#34 | authored | 2 | Status |
 | docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#1 | authored | 1 | A ToolProvider's output is a fact a native rule judges, not a Finding a tool emits directly |
 | docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#2 | authored | 2 | Question |
 | docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#4 | authored | 2 | What Was Measured |
@@ -1447,8 +1446,8 @@ profile: domain-specification
 | docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#2 | authored | 2 | Question |
 | docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#4 | authored | 2 | What Was Measured |
 | docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#10 | authored | 2 | The Decision |
-| docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#15 | authored | 2 | What This Does Not Do |
-| docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#20 | authored | 2 | Status |
+| docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#16 | authored | 2 | What This Does Not Do |
+| docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#21 | authored | 2 | Status |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#1 | authored | 1 | Whether the specification store gains a second backend, and what would decide it |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#2 | authored | 2 | Question |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#4 | authored | 2 | Current Position |
@@ -42143,108 +42142,21 @@ marginal cost.
 
 ### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#34
 
-*revision: authored · kind: heading · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: A Fifth Round Of The Same Review, Checked Against A Rule Population That Nearly Quintupled Without Touching Any Named Trigger · hash: sha256:a8ef6fb1951d3f63744c3210cc57e5dd4fcbf61dbc834cb09cd4be3359348f57*
-
-## Amendment: A Fifth Round Of The Same Review, Checked Against A Rule Population That Nearly Quintupled Without Touching Any Named Trigger
-
-### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#35
-
-*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: A Fifth Round Of The Same Review, Checked Against A Rule Population That Nearly Quintupled Without Touching Any Named Trigger · hash: sha256:ab61dbc9c55b69857dc0e0fbd3b9ac91a72f9c9799cb51e216e426e1baed7788*
-
-A fifth round of the same external review repeated its P0 case for the general planner again,
-against this record's own citation, `nomos-check-orchestration::run::Run`'s hand-written
-`Materialize_X`/`Check_Y` list, now read at a HEAD (`521cd4fa`) where that list has had four
-amendments' worth of real growth to strain it. Rather than re-arguing what four prior rounds
-already settled, this amendment checks the remaining triggers against the largest single burst
-of rule growth this record has yet measured.
-
-### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#36
-
-*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: A Fifth Round Of The Same Review, Checked Against A Rule Population That Nearly Quintupled Without Touching Any Named Trigger · hash: sha256:8bca88477dc0374c705b6f8e8398ff9b688fd034cf885ca252eb04e5b1f2fac8*
-
-**The rule population grew from eight to thirty-nine, and the growth landed almost entirely
-outside anything `Run` reads.** Counted directly against the tree at this amendment's last
-checkpoint (`e4e262cf`) and again at `521cd4fa`: `nomos-rules` held exactly eight `Check_*`
-functions at the fourth amendment; it holds thirty-nine now — a fifth-round increase this
-record has not previously seen in one span. But `run_context.rs` (the file `run.rs` was split
-into since the last amendment; same mechanism, new name) still wires exactly eight of them into
-its `Wants`-gated match arms: `Check_Completeness_Mirrors`, `Check_Naming_Convention`,
-`Check_Dependency_Direction`, `Check_Every_Member_Declares_A_Band`, `Check_Lint_Diagnostics`,
-`Check_Dependency_Policy`, `Check_Unread_Reaches_A_Finding`, `Check_Cross_Language_
-Correspondence`. The other thirty-one — `Check_No_Trailing_Whitespace`, `Check_Todo_Format`,
-`Check_Boolean_Predicates`, the Go naming/constant/variable family, the deprecation-marker and
-file-size-trigger rules, and every other rule imported since — have, verified by a direct
-workspace-wide search, zero references outside `nomos-rules` itself. None is called by `Run`,
-none states a `Materialize_X` step, none cites a capability contract. Each is the identical
-"additive and unwired" shape this record's own text already established for the fifth rule,
-`Check_Declared_Role_Matches_Surface`, now multiplied roughly thirtyfold rather than resolved.
-
-### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#37
-
-*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: A Fifth Round Of The Same Review, Checked Against A Rule Population That Nearly Quintupled Without Touching Any Named Trigger · hash: sha256:a41f68cbe4a74dc730b060d0c255fea5c347ed12514a46fc43141d69ce064c22*
-
-**The one rule that did get wired reconverges again, using the mechanism already built.**
-`Check_Every_Member_Declares_A_Band` (`cf76f0de`, `DEPENDENCY_COMPLETENESS`) is `OD-RULES-003`'s
-own declared-architecture-vs-observed-fact design applied a second time, reading the identical
-`nomos.cap.dependency` fact and `BANDS` table `Check_Dependency_Direction` already reads, gated
-by `Is_Rule_Selected(selected, DEPENDENCY_DIRECTION) || Is_Rule_Selected(selected,
-DEPENDENCY_COMPLETENESS)` — the same single `selected: &[RuleId]` axis `OD-GATE-017` built,
-OR'd, not a second one. Its own commit states plainly: "No new capability, no new provider, no
-new contract citation." Trigger 2 (participation varying by a second axis) and trigger 3 (a
-materialization step measured wasting real work) remain exactly as unfired as the third and
-fourth amendments found them.
-
-### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#38
-
-*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: A Fifth Round Of The Same Review, Checked Against A Rule Population That Nearly Quintupled Without Touching Any Named Trigger · hash: sha256:44d45f6a2eef3545f94835a7540e5d915106c24977a1553f1a7e5e980cbc2f8e*
-
-**A sixth capability crate landed, and its own commit says it changes nothing yet.**
-`nomos-cap-naming-policy` (`521cd4fa`) is a new, structurally distinct capability contract — not
-a second offer against an existing one — which would ordinarily bear on trigger 4's diverging-
-vs-converging count. But its own commit message forecloses that reading before this record has
-to weigh it: "No provider and no rule reads it yet; both are this decision's own next
-increments." A capability contract with no rule and no provider is not a rule's required-
-capability shape at all, converging or diverging — it is scaffolding one commit ahead of the
-question this record tracks, the same status this record already gave the crate at its prior,
-uncommitted state. Trigger 4 remains fired only through `Check_Cross_Language_Correspondence`,
-as the fourth amendment found, and unextended by this one.
-
-### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#39
-
-*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Amendment: A Fifth Round Of The Same Review, Checked Against A Rule Population That Nearly Quintupled Without Touching Any Named Trigger · hash: sha256:c7cf79385105952d7055bf36164dc630fde3e0d44c126e63a94f248e7be49659*
-
-**This is the strongest disconfirming round yet, and for a reason the review's own model does
-not have room for.** The review's scaling argument assumes rule growth costs the hand-written
-list something — a new `Materialize_X` step, a new selection axis, a new capability crate wired
-in — proportional to rule count. This round's real growth mode is one the argument does not
-anticipate: bulk import of rule functions that cost the list nothing at all, because they are
-not wired into it. Thirty-one of thirty-nine rules now sit in that state. The list `Run` and
-`gate-orchestration`'s `RuleRegistry` maintain has not grown by thirty-one entries; it has grown
-by one, reconverging, absorbed by mechanism already built. A population multiplying nearly
-fivefold while the hand-written surface it is measured against grows by one is not evidence the
-hand-written approach is straining — it is a fifth consecutive data point that it is not.
-
-### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#40
-
 *revision: authored · kind: heading · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#41
+### docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#35
 
-*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Status · hash: sha256:c5b050a8feec4f560113f766b66a51b6e94c9eea240a726c641c6ec4be6905da*
+*revision: authored · kind: prose · heading: Whether an external review's case for building the shared analysis planner now, at P0, overrides the trigger this workspace already recorded for it / Status · hash: sha256:1001994bd4c6f07c797d1f726a4b663c8024823a094dcef18c408742a9b00884*
 
 Accepted. This record's first named trigger fired and was addressed by `OD-GATE-017`, not by
 building the `RunPlanner` this record declines. The fourth trigger has now also fired, for the
 first time, via `Check_Cross_Language_Correspondence` — and its own stated reasoning, checked
 against that real instance, argues against the planner rather than for it. The second and third
-triggers remain unfired through a fifth round, this one checked against the largest rule-count
-burst this record has yet measured, whose growth landed almost entirely in a bucket — unwired,
-zero-cost rule functions — the review's own scaling argument has no room for. Revisit if a
-materialization step is measured wasting real work, participation varies by a second axis, an
-unwired rule is wired into `Run` in a way that fires trigger 2 or reconverges/diverges under
-trigger 4, or a *diverging* rule population resumes growing the hand-written list past a point
-future evidence shows it stops absorbing cleanly.
+triggers remain unfired. Revisit if a materialization step is measured wasting real work,
+participation varies by a second axis, or a *diverging* rule population resumes growing the
+hand-written list past a point future evidence shows it stops absorbing cleanly.
 
 ### docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#1
 
@@ -42551,6 +42463,29 @@ of input a crate reads, not by band alone.
 
 ### docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#14
 
+*revision: authored · kind: prose · heading: A rule's parameters are a fact a repository declares, not a constant the rule compiles with / The Decision · hash: sha256:4f4fb0374b8a72b44a59ffe273503fe212208fb4acf656dc69b3c820b53134d8*
+
+Reading this capability is optional, not required, and `OD-CAPABILITY-004` already
+decided how an absent optional capability is reported: never through a rule's
+`Applicability`. `Applicability::MissingCapability` says a rule *requires* a capability
+and none is installed, which points a reader at installing something; a naming-policy
+override is not required by any of the six rules below — each is fully self-sufficient on
+its own prior hardcoded default, the same "declaring nothing leaves each language's own
+convention in force" default `check-naming`'s own `spec.go` already states. So a rule that
+calls `FactReader::Require` for `nomos.cap.naming.policy` and receives
+`Err(Applicability::MissingCapability)` — whether because no provider is composed into the
+current run, or because the repository's `standards.json` declares nothing for that
+symbol — treats it as exactly that: no override, fall back to the rule's own prior
+behavior, no `Finding` produced or altered by the absence itself. This is narrower than
+`OD-CAPABILITY-004`'s own "packet carries its resolution" obligation: that record binds a
+knowledge-context packet with its own downstream consumer that must tell "built without
+knowledge" from "built with knowledge that had nothing to add"; a naming judgment has no
+such consumer; the `Finding` a name conforms or does not is the identical statement
+whether the case it was judged against came from a default or a declared override, so
+there is no distinction here for a packet to lose.
+
+### docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#15
+
 *revision: authored · kind: prose · heading: A rule's parameters are a fact a repository declares, not a constant the rule compiles with / The Decision · hash: sha256:a81462235b219447b3fab4ae9039da300d6fd61710114d9a62de29cd05f41593*
 
 `crates/rules/nomos-rules`' six already-shipped casing rules
@@ -42564,13 +42499,13 @@ compiled rule, and the `UpperSnake`/`ScreamingSnake`/`MixedSnake` confusion this
 found is corrected as a direct consequence of routing every one of them through the same
 tested vocabulary rather than six independent guesses at it.
 
-### docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#15
+### docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#16
 
 *revision: authored · kind: heading · heading: A rule's parameters are a fact a repository declares, not a constant the rule compiles with / What This Does Not Do · hash: sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf*
 
 ## What This Does Not Do
 
-### docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#16
+### docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#17
 
 *revision: authored · kind: prose · heading: A rule's parameters are a fact a repository declares, not a constant the rule compiles with / What This Does Not Do · hash: sha256:fed0b4b39fefadc37be7b12968a66baf01dd4e8a990458776cdedb3be78475bf*
 
@@ -42581,7 +42516,7 @@ suffix family, and whatever else the code-standards corpus's remaining ~1,120 ru
 documents turn out to cluster into are each their own future instance of this same
 decision, not decided here.
 
-### docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#17
+### docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#18
 
 *revision: authored · kind: prose · heading: A rule's parameters are a fact a repository declares, not a constant the rule compiles with / What This Does Not Do · hash: sha256:50bdb9af613fcf28562e6a47a2ba2ea64c82d6fc52a1bbdad89f40875215415a*
 
@@ -42591,7 +42526,7 @@ a rule still takes only `&[SourceFile]` and a `FactReader`, per `crates/rules/no
 src/lib.rs`'s own stated invariant, and the provider is still the only place in this
 increment that touches a path.
 
-### docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#18
+### docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#19
 
 *revision: authored · kind: prose · heading: A rule's parameters are a fact a repository declares, not a constant the rule compiles with / What This Does Not Do · hash: sha256:244ee4236518e9054101ee196e7a47890bd8f850173354de562877a234f98810*
 
@@ -42601,7 +42536,7 @@ follows (`Check_Declared_Role_Matches_Surface`, `Check_Cross_Language_Correspond
 their own first landing); this capability follows the same sequencing, as its own later
 item.
 
-### docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#19
+### docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#20
 
 *revision: authored · kind: prose · heading: A rule's parameters are a fact a repository declares, not a constant the rule compiles with / What This Does Not Do · hash: sha256:23b710a006071d17a571b203c1fdc63e7e5f270e748f3c2e830757bb4b74eb80*
 
@@ -42610,17 +42545,27 @@ eight code-standards names — such a value is a load error at the provider, the
 "a casing scheme this check cannot read is one it would silently ignore" refusal code-
 standards' own `spec.go` already states for the identical reason.
 
-### docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#20
+### docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#21
 
 *revision: authored · kind: heading · heading: A rule's parameters are a fact a repository declares, not a constant the rule compiles with / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#21
+### docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#22
 
-*revision: authored · kind: prose · heading: A rule's parameters are a fact a repository declares, not a constant the rule compiles with / Status · hash: sha256:e4ed4eba9f328bfbfb7146e0c9f9df24e3f305a37bfd3e8ee15de9a1104db214*
+*revision: authored · kind: prose · heading: A rule's parameters are a fact a repository declares, not a constant the rule compiles with / Status · hash: sha256:9d0a629091e2cc3723be038f4b1e97c787bdecce710e8ba3a33fe3b1feb78e3d*
 
-Accepted. `nomos-cap-naming-policy` is this decision's first capability contract.
+Accepted. `nomos-cap-naming-policy` is this decision's first capability contract,
+`nomos-repo-standards` its first provider.
+
+### docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#23
+
+*revision: authored · kind: prose · heading: A rule's parameters are a fact a repository declares, not a constant the rule compiles with / Status · hash: sha256:bd793a0b1c3e7c1bb4adb61502f49b85954ca7d2e1b4c776d2514c60f3e44d77*
+
+Version 2 adds the read-side rule this record's own text needed before the six rules
+could be refactored: how a rule reacts to an absent *optional* capability, settled by
+citing `OD-CAPABILITY-004` rather than re-deciding it, once refactoring the first rule
+onto this capability made the gap in version 1 concrete.
 
 ### docs/records/OD-SPEC-001-the-storage-backend-question.md#1
 

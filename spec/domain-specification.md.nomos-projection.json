@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:5584dbefeccb1e0e0241a2c50aa39055906210c046e2e9ca5c13989cf87b93ed",
-  "inputs_digest": "sha256:6e5f084df4a5b2b75b77709bc8169544930dbc12951605551b885fd930dac96a",
+  "content_digest": "sha256:e30a88564f7e5757bad190bb9540b78078275a7a9d3866037c48ed21d2e5cb44",
+  "inputs_digest": "sha256:29cf0d8eb0d6cb9bfedddb76fc75fa6b2a2f9e412f2fbf937955965e4049220f",
   "sections": [
     [
       "Documents",
@@ -12,11 +12,11 @@
     ],
     [
       "Sections",
-      1490
+      1489
     ],
     [
       "Source blocks",
-      5200
+      5196
     ]
   ],
   "inputs": [
@@ -768,7 +768,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md@authored",
-      "hash": "sha256:9ccf6e284cc32aa9f6c12405d202d3fb7d7e2c1994a45e40b8111f45c8863b08"
+      "hash": "sha256:08ba049790ebab78a959ded3cff62e8e04ff89f3e3502a36dd39cdff8d560569"
     },
     {
       "content": "documents",
@@ -778,7 +778,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md@authored",
-      "hash": "sha256:2f8593620c13e02dbb18c7eb14ab6636f3d4e0a4fe4185ad1d62649dfa601c72"
+      "hash": "sha256:841b1c5bb58bd645f7b84a43c5f4433923df78193de6b7e6e3ffecc92de628c9"
     },
     {
       "content": "documents",
@@ -7123,12 +7123,7 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#34",
-      "hash": "sha256:b04356ec54945c4f5b52fe97eade03f9f2844a129877f7ddecc183d6ee33d9a9"
-    },
-    {
-      "content": "headings",
-      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#40",
-      "hash": "sha256:4632f724d91c39da053b00cd6b3849ec25c3269e96491e2574373a7ba7969d14"
+      "hash": "sha256:02f8ef40949084af76b3c431f29362d0dfba5dc69196b70f9d0c93688d9cb278"
     },
     {
       "content": "headings",
@@ -7182,13 +7177,13 @@
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#15",
-      "hash": "sha256:e6d88e36764c6858fe6d2db8b6d65f90bfc89c09a02f7ae0f3f7e0572189636e"
+      "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#16",
+      "hash": "sha256:2fb3f8d71ade50dbaa9c17c47354edb2cd8a7288f4eea5849fc5b5a3ca6cc2cb"
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#20",
-      "hash": "sha256:a5c79330590c95b12445f914f7aaf2968b7d1c3a6e964f8250472e32b0f622be"
+      "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#21",
+      "hash": "sha256:bbd8bee0e47ae9196f415c7c43625e83c03fe2801a06c611e9213238facc816e"
     },
     {
       "content": "headings",
@@ -30283,42 +30278,12 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#34",
-      "hash": "sha256:a8ef6fb1951d3f63744c3210cc57e5dd4fcbf61dbc834cb09cd4be3359348f57"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#35",
-      "hash": "sha256:ab61dbc9c55b69857dc0e0fbd3b9ac91a72f9c9799cb51e216e426e1baed7788"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#36",
-      "hash": "sha256:8bca88477dc0374c705b6f8e8398ff9b688fd034cf885ca252eb04e5b1f2fac8"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#37",
-      "hash": "sha256:a41f68cbe4a74dc730b060d0c255fea5c347ed12514a46fc43141d69ce064c22"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#38",
-      "hash": "sha256:44d45f6a2eef3545f94835a7540e5d915106c24977a1553f1a7e5e980cbc2f8e"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#39",
-      "hash": "sha256:c7cf79385105952d7055bf36164dc630fde3e0d44c126e63a94f248e7be49659"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#40",
       "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#41",
-      "hash": "sha256:c5b050a8feec4f560113f766b66a51b6e94c9eea240a726c641c6ec4be6905da"
+      "identity": "docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md#35",
+      "hash": "sha256:1001994bd4c6f07c797d1f726a4b663c8024823a094dcef18c408742a9b00884"
     },
     {
       "content": "blocks",
@@ -30463,42 +30428,52 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#14",
-      "hash": "sha256:a81462235b219447b3fab4ae9039da300d6fd61710114d9a62de29cd05f41593"
+      "hash": "sha256:4f4fb0374b8a72b44a59ffe273503fe212208fb4acf656dc69b3c820b53134d8"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#15",
-      "hash": "sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf"
+      "hash": "sha256:a81462235b219447b3fab4ae9039da300d6fd61710114d9a62de29cd05f41593"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#16",
-      "hash": "sha256:fed0b4b39fefadc37be7b12968a66baf01dd4e8a990458776cdedb3be78475bf"
+      "hash": "sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#17",
-      "hash": "sha256:50bdb9af613fcf28562e6a47a2ba2ea64c82d6fc52a1bbdad89f40875215415a"
+      "hash": "sha256:fed0b4b39fefadc37be7b12968a66baf01dd4e8a990458776cdedb3be78475bf"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#18",
-      "hash": "sha256:244ee4236518e9054101ee196e7a47890bd8f850173354de562877a234f98810"
+      "hash": "sha256:50bdb9af613fcf28562e6a47a2ba2ea64c82d6fc52a1bbdad89f40875215415a"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#19",
-      "hash": "sha256:23b710a006071d17a571b203c1fdc63e7e5f270e748f3c2e830757bb4b74eb80"
+      "hash": "sha256:244ee4236518e9054101ee196e7a47890bd8f850173354de562877a234f98810"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#20",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:23b710a006071d17a571b203c1fdc63e7e5f270e748f3c2e830757bb4b74eb80"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#21",
-      "hash": "sha256:e4ed4eba9f328bfbfb7146e0c9f9df24e3f305a37bfd3e8ee15de9a1104db214"
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#22",
+      "hash": "sha256:9d0a629091e2cc3723be038f4b1e97c787bdecce710e8ba3a33fe3b1feb78e3d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#23",
+      "hash": "sha256:bd793a0b1c3e7c1bb4adb61502f49b85954ca7d2e1b4c776d2514c60f3e44d77"
     },
     {
       "content": "blocks",
