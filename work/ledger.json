@@ -42086,14 +42086,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-gate-registry-coherence",
-        "acquired_at": 1788297253,
-        "lease_expires_at": 1788304453
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -42105,7 +42101,29 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "public_surface"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 8 tests\ntest scanner::Test_A_Crate_Visible_Helper_Should_Not_Be_An_Export ... ok\ntest scanner::Test_The_Scanner_Should_Find_Real_Exports_And_Stop_At_Restricted_Ones ... ok\ntest scanner::Test_An_Unfollowable_Re_Export_Should_Be_Reported_While_Its_Siblings_Resolve ... ok\ntest bless::Test_Blessing_One_Crate_Should_Leave_Another_Crates_Snapshot_Byte_Identical ... ok\ntest snapshots::Test_Every_Snapshot_Should_Belong_To_A_Crate_That_Has_One ... ok\ntest bless::Test_A_Bless_Naming_No_Crate_Should_Be_Refused_Rather_Than_Widened ... ok\ntest snapshots::Test_Every_Crates_Public_Surface_Should_Match_Its_Snapshot ... ok\ntest snapshots::Test_Every_Member_Should_Be_Snapshotted_Or_Declared_Library_Less ... ok\n\ntest result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.67s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.10s\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-a2380041e0ebe73a.exe)\n",
+        "verified_at": 1788297555,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "d11fc84b5e1ef3656fb85db22990aca01982f743"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -42133,14 +42151,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-gate-registry-coherence",
-        "acquired_at": 1788297267,
-        "lease_expires_at": 1788304467
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -42161,6 +42175,206 @@
           "public_surface"
         ],
         "timeout_seconds": 900
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--bins",
+          "--test",
+          "rule_contract_citation",
+          "--test",
+          "public_surface"
+        ],
+        "exit_code": 0,
+        "output_tail": "ule_registry::tests::Test_Offers_Should_List_Every_Registered_Rule ... ok\ntest tests::Test_New_Should_Build_A_Source_File_Whose_Preferred_Provider_Starts_Unset ... ok\ntest tests::Test_Syntax_Requirement_For_Should_Narrow_The_Floor_To_A_Named_Preference ... ok\ntest tests::Test_Syntax_Requirement_Should_Be_The_Bare_Floor_Returned_When_No_Preference_Is_Named ... ok\ntest universe_kind::tests::Test_A_Declared_Mirror_Should_Be_Read_Off_The_Documentation_Comment ... ok\ntest universe_kind::tests::Test_A_List_With_No_Documentation_Should_Claim_No_Mirror ... ok\ntest universe_kind::tests::Test_A_Payload_From_A_Blind_Provider_Should_Not_Read_As_No_Mirror ... ok\ntest universe_kind::tests::Test_A_Private_List_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_A_Scalar_Constant_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_A_Trait_Impl_Should_Not_Claim_The_Type ... ok\ntest universe_kind::tests::Test_An_All_Should_Be_Attributed_To_Its_Type ... ok\ntest universe_kind::tests::Test_An_All_That_Takes_A_Receiver_Should_Not_Be_A_Universe ... ok\ntest universe_kind::tests::Test_Read_Universes_Should_Observe_A_File_That_Declares_Nothing_As_Empty ... ok\ntest universe_kind::tests::Test_Universes_In_Should_Find_A_Constant_Slice ... ok\n\ntest result: ok. 256 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.17s\n     Running unittests src\\main.rs (target\\debug\\deps\\nomos-9e9a4a89234985ca.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-23cda7dadc087d53.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-cddb5b3e51124424.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-d2aaae54044347fd.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_gate_orchestration-3fa45ab85953ef02.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-b4ffb6a6f52d3dcf.exe)\n",
+        "verified_at": 1788297573,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "d11fc84b5e1ef3656fb85db22990aca01982f743"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "OD-RULES-011-NAMING-REFACTOR",
+      "title": "Refactor the six casing rules onto nomos.cap.naming.policy",
+      "why": "OD-RULES-011 v2 settled the read-side contract (an absent optional capability falls back silently, per OD-CAPABILITY-004); this is the increment that actually reads the fact, fixing the upper-snake/screaming-snake and mixed-snake drift as a direct consequence of routing every casing rule through the same tested Case vocabulary.",
+      "done_when": "Check_Naming_Convention, Check_Project_Owned_Function_Names_Use_Upper_Snake_Case, Check_Data_Names_Stay_Lower_Snake, Check_Go_Type_Names_Use_Camel_Case, Check_Exported_Go_Functions_Use_Upper_Snake_Case and Check_Unexported_Go_Functions_Lowercase_Only_The_First_Letter each resolve their required case from a nomos.cap.naming.policy row when standards.json declares one for that symbol key, falling back to today's hardcoded shape otherwise, keep their own RuleId and gate behavior, and cargo test -p nomos-rules passes.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules",
+          "tests/contract/surface"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Never claimed (refused: territory overlap with OD-RULES-011-LIMITS-SURFACE on tests/contract/surface). Re-adding without that path since this refactor adds no new public API."
+        }
+      },
+      "depends_on": [
+        "OD-RULES-011-V2"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-nomos-12",
+        "declined_at": 1788297376
+      }
+    },
+    {
+      "id": "OD-RULES-011-NAMING-REFACTOR-2",
+      "title": "Refactor the six casing rules onto nomos.cap.naming.policy",
+      "why": "OD-RULES-011 v2 settled the read-side contract (an absent optional capability falls back silently, per OD-CAPABILITY-004); this is the increment that actually reads the fact, fixing the upper-snake/screaming-snake and mixed-snake drift as a direct consequence of routing every casing rule through the same tested Case vocabulary.",
+      "done_when": "Check_Naming_Convention, Check_Project_Owned_Function_Names_Use_Upper_Snake_Case, Check_Data_Names_Stay_Lower_Snake, Check_Go_Type_Names_Use_Camel_Case, Check_Exported_Go_Functions_Use_Upper_Snake_Case and Check_Unexported_Go_Functions_Lowercase_Only_The_First_Letter each resolve their required case from a nomos.cap.naming.policy row when standards.json declares one for that symbol key, falling back to today's hardcoded shape otherwise, keep their own RuleId and gate behavior and add no new public export, and cargo test -p nomos-rules passes.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Never claimed (refused: territory overlap with OD-GATE-019-REGISTRY-COHERENCE-B-4 on checks.rs/lib.rs/surface, which a blanket crates/rules/nomos-rules territory swept in unnecessarily). Re-adding with the precise file list this refactor actually touches."
+        }
+      },
+      "depends_on": [
+        "OD-RULES-011-V2"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-nomos-12",
+        "declined_at": 1788297417
+      }
+    },
+    {
+      "id": "OD-RULES-011-NAMING-REFACTOR-3",
+      "title": "Refactor the six casing rules onto nomos.cap.naming.policy",
+      "why": "OD-RULES-011 v2 settled the read-side contract (an absent optional capability falls back silently, per OD-CAPABILITY-004); this is the increment that actually reads the fact, fixing the upper-snake/screaming-snake and mixed-snake drift as a direct consequence of routing every casing rule through the same tested Case vocabulary.",
+      "done_when": "Check_Naming_Convention, Check_Project_Owned_Function_Names_Use_Upper_Snake_Case, Check_Data_Names_Stay_Lower_Snake, Check_Go_Type_Names_Use_Camel_Case, Check_Exported_Go_Functions_Use_Upper_Snake_Case and Check_Unexported_Go_Functions_Lowercase_Only_The_First_Letter each resolve their required case from a nomos.cap.naming.policy row when standards.json declares one for that symbol key, falling back to today's hardcoded shape otherwise, keep their own RuleId and gate behavior and add no new public export, and cargo test -p nomos-rules passes.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/naming.rs",
+          "crates/rules/nomos-rules/src/checks/naming/violations.rs",
+          "crates/rules/nomos-rules/src/checks/naming/data_names.rs",
+          "crates/rules/nomos-rules/src/checks/naming/go_type_names.rs",
+          "crates/rules/nomos-rules/src/checks/naming/go_function_names.rs",
+          "crates/rules/nomos-rules/Cargo.toml"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [
+        "OD-RULES-011-V2"
+      ],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-nomos-12",
+        "acquired_at": 1788297442,
+        "lease_expires_at": 1788304642
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "OD-RULES-011-LIMITS-PROVIDER",
+      "title": "nomos-repo-limits: the one provider of nomos.cap.limits.policy",
+      "why": "OD-RULES-011's threshold-family instance needs a real provider before any rule can read it. This one reads standards.json's new limits and languages.*.limits blocks through nomos_platform::FileSystem, the same shape nomos-repo-standards already established for the sibling naming capability. standards.json declares no limits block yet, so this item also adds one with values matching nomos-rules' current hardcoded defaults (500/1500 review/hard lines, 1000 for Go's hard line), so an already-configured-identically repository regresses nothing once a rule reads it.",
+      "done_when": "nomos-repo-limits exists at band 25 with PROVIDER/Declared_Guarantee/Provider_Offer/Materialize_Workspace, reads a real standards.json (including a new top-level limits block and languages.go.limits override this item adds) into a LimitsPolicyPayload, treats a missing file or missing limits block as declaring nothing, refuses a malformed file or a non-numeric value, is registered in Cargo.toml/README.md/both bands.rs at band 25, and cargo test -p nomos-repo-limits passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/repository/nomos-repo-limits",
+          "standards.json",
+          "Cargo.toml",
+          "README.md",
+          "crates/rules/nomos-rules/src/checks/dependency/bands.rs",
+          "tests/contract/tests/boundaries/bands.rs",
+          "work/ledger.json"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "nomos-75",
+        "acquired_at": 1788297475,
+        "lease_expires_at": 1788304675
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-repo-limits"
+        ],
+        "timeout_seconds": 600
       },
       "verified": null,
       "abandoned": [],

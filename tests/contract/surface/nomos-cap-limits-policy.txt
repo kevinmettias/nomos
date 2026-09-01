@@ -1,0 +1,22 @@
+pub const fn nomos_cap_limits_policy::Ceiling() -> Guarantee
+pub const nomos_cap_limits_policy::CAPABILITY: &str
+pub const nomos_cap_limits_policy::CONTRACT_VERSION: ContractVersion
+pub const nomos_cap_limits_policy::SCHEMA: &str
+pub enum nomos_cap_limits_policy::Scope
+pub enum variant nomos_cap_limits_policy::Scope::Language(String)
+pub enum variant nomos_cap_limits_policy::Scope::Repository
+pub fn nomos_cap_limits_policy::Capability() -> CapabilityId
+pub fn nomos_cap_limits_policy::Capability_Contract() -> CapabilityContract
+pub fn nomos_cap_limits_policy::Encode_Payload(payload: &LimitsPolicyPayload) -> Vec<u8>
+pub fn nomos_cap_limits_policy::Parse_Payload(bytes: &[u8]) -> Result<LimitsPolicyPayload, Refusal>
+pub fn nomos_cap_limits_policy::Payload_Schema() -> SchemaId
+pub fn nomos_cap_limits_policy::Scope::From_Label(label: &str) -> Self
+pub fn nomos_cap_limits_policy::Scope::Label(&self) -> &str
+pub struct field nomos_cap_limits_policy::LimitsPolicyPayload::rows: Vec<PolicyRow>
+pub struct field nomos_cap_limits_policy::PolicyRow::key: String
+pub struct field nomos_cap_limits_policy::PolicyRow::scope: Scope
+pub struct field nomos_cap_limits_policy::PolicyRow::value: u32
+pub struct field nomos_cap_limits_policy::Refusal::reason: String
+pub struct nomos_cap_limits_policy::LimitsPolicyPayload
+pub struct nomos_cap_limits_policy::PolicyRow
+pub struct nomos_cap_limits_policy::Refusal
