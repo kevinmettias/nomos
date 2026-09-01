@@ -279,6 +279,21 @@
 //! standards' own worked example predates that marker and would pass the doc's prose but fail
 //! the tool that enforces it. No repository-configurable dimension, so a shared module rather
 //! than a capability.
+//!
+//! [`Check_Error_Message_Starts_Lowercase`], [`Check_Error_Message_Has_No_Trailing_Punctuation`]
+//! and [`Check_Eager_Vs_Lazy_Context`] are the fifty-fifth through fifty-seventh rules, a new
+//! `error_text` module: the first two judge a `#[error("...")]` message's text (an ordinary
+//! capitalized first word, or a trailing `.`/`!`/`?`, both of which fight a chain walker's own
+//! framing and separators), and the third judges whether a same-line `.With_Context(...)`
+//! call's argument was built through one of a closed, standards-named set of allocating
+//! constructors rather than passed lazily. Narrower than code-standards' own `check-error-
+//! message` tool in one respect: that tool also judges a `write!`/`writeln!` literal inside a
+//! hand-written `impl ... Display for ...` block via real parsing, which this crate's
+//! text-only convention cannot soundly bound without the brace-depth block tracking it has
+//! consistently declined to build — left unattempted rather than guessed at, the `#[error(...)]`
+//! attribute form alone being syntactically unambiguous on the line that carries it. No
+//! repository-configurable dimension in any of the three, so a shared module rather than a
+//! capability.
 
 #![forbid(unsafe_code)]
 
@@ -299,6 +314,8 @@ pub use checks::{
     Check_Completeness_Mirrors, COMPLETENESS_MIRROR, CONTRACT_RECORD, CONTRACT_RECORD_VERSION,
     Check_Dependency_Direction, Check_Every_Member_Declares_A_Band, DEPENDENCY_COMPLETENESS, DEPENDENCY_CONTRACT_RECORD,
     DEPENDENCY_CONTRACT_RECORD_VERSION, DEPENDENCY_DIRECTION,
+    Check_Eager_Vs_Lazy_Context, Check_Error_Message_Has_No_Trailing_Punctuation, Check_Error_Message_Starts_Lowercase,
+    EAGER_VS_LAZY_CONTEXT, LOWERCASE_FIRST_LETTER, NO_TRAILING_PUNCTUATION,
     Check_Deprecation_Carries_A_Reason, Check_No_Decorative_Section_Dividers, Check_No_Trailing_Whitespace,
     Check_Todo_Format, DEPRECATION, NO_DECORATIVE_SECTION_DIVIDERS, NO_TRAILING_WHITESPACE, TODO_FORMAT,
     Check_Function_Arity_Policy, Check_Go_Helpers_Package_Five_Inputs, Check_Parameter_Count, FunctionArityPolicy,

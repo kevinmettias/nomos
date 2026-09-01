@@ -44252,14 +44252,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-nomos-12",
-        "acquired_at": 1788306038,
-        "lease_expires_at": 1788313238
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -44269,7 +44265,27 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules"
+        ],
+        "exit_code": 0,
+        "output_tail": "> bool\n    |    ^^^^^^^^^^^^^^^^^\n\nwarning: function `Is_All_Digits` is never used\n   --> crates\\rules\\nomos-rules\\src\\checks\\naming\\abbreviations.rs:226:4\n    |\n226 | fn Is_All_Digits(field: &str) -> bool\n    |    ^^^^^^^^^^^^^\n\nwarning: function `Words_Policy_Requirement` is never used\n   --> crates\\rules\\nomos-rules\\src\\checks\\naming\\abbreviations.rs:236:4\n    |\n236 | fn Words_Policy_Requirement() -> nomos_capability::Requirement\n    |    ^^^^^^^^^^^^^^^^^^^^^^^^\n\nwarning: function `Resolve_Approved_Additions` is never used\n   --> crates\\rules\\nomos-rules\\src\\checks\\naming\\abbreviations.rs:249:4\n    |\n249 | fn Resolve_Approved_Additions(facts: &mut dyn FactReader) -> Vec<String>\n    |    ^^^^^^^^^^^^^^^^^^^^^^^^^^\n\nwarning: function `Violation_Finding` is never used\n   --> crates\\rules\\nomos-rules\\src\\checks\\naming\\abbreviations.rs:264:4\n    |\n264 | fn Violation_Finding(path: &str, item: &PayloadItem, name: &str, word: &str, reason: &str) -> Finding\n    |    ^^^^^^^^^^^^^^^^^\n\nwarning: function `Unread_As_This_Rule` is never used\n   --> crates\\rules\\nomos-rules\\src\\checks\\naming\\abbreviations.rs:282:4\n    |\n282 | fn Unread_As_This_Rule(mut finding: Finding) -> Finding\n    |    ^^^^^^^^^^^^^^^^^^^\n\nwarning: `nomos-rules` (lib) generated 24 warnings (run `cargo fix --lib -p nomos-rules` to apply 1 suggestion)\nwarning: function `Check_Abbreviations` is never used\n  --> crates\\rules\\nomos-rules\\src\\checks\\naming\\abbreviations.rs:67:8\n   |\n67 | pub fn Check_Abbreviations(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>\n   |        ^^^^^^^^^^^^^^^^^^^\n   |\n   = note: `#[warn(dead_code)]` on by default\n\nwarning: `nomos-rules` (lib test) generated 5 warnings (4 duplicates)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.12s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-27d32a4363304d08.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-cd1a275ce0c17f78.exe)\n   Doc-tests nomos_rules\n",
+        "verified_at": 1788306188,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "6ae4eb479168810d76f856cd8a106dd42d936d6d"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

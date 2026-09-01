@@ -1,7 +1,8 @@
-//! The fifty-four rules this crate implements, one module each — `naming` holds thirteen,
+//! The fifty-seven rules this crate implements, one module each — `naming` holds thirteen,
 //! `rust_text` holds six, `go_text` holds five, `structure` holds five, `formatting` holds
-//! four, `security_text` holds three, `concurrency_text` holds three, `placement` holds two,
-//! and `dependency` holds two, while `script_discipline` holds three,
+//! four, `security_text` holds three, `concurrency_text` holds three, `error_text` holds
+//! three, `placement` holds two, and `dependency` holds two, while `script_discipline` holds
+//! three,
 //! [`Check_Dependency_Direction`] and [`Check_Every_Member_Declares_A_Band`],
 //! since both judge the same declared architecture and observed
 //! `nomos.cap.dependency.edges` fact, while naming holds the general function convention
@@ -19,6 +20,7 @@
 mod concurrency_text;
 mod crosslang;
 mod dependency;
+mod error_text;
 mod formatting;
 mod function_shape;
 mod go_text;
@@ -52,6 +54,10 @@ pub use crosslang::{
 pub use dependency::{
     Check_Dependency_Direction, Check_Every_Member_Declares_A_Band, DEPENDENCY_COMPLETENESS, DEPENDENCY_CONTRACT_RECORD,
     DEPENDENCY_CONTRACT_RECORD_VERSION, DEPENDENCY_DIRECTION,
+};
+pub use error_text::{
+    Check_Eager_Vs_Lazy_Context, Check_Error_Message_Has_No_Trailing_Punctuation, Check_Error_Message_Starts_Lowercase,
+    EAGER_VS_LAZY_CONTEXT, LOWERCASE_FIRST_LETTER, NO_TRAILING_PUNCTUATION,
 };
 pub use formatting::{
     Check_Deprecation_Carries_A_Reason, Check_No_Decorative_Section_Dividers, Check_No_Trailing_Whitespace,
