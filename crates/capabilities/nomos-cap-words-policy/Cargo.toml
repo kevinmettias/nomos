@@ -1,0 +1,15 @@
+[package]
+name = "nomos-cap-words-policy"
+version = "0.1.0"
+description = "Band 23. The nomos.cap.words.policy contract: a repository's own additions to code-standards' default approved-abbreviation vocabulary, read as data rather than compiled as a constant. OD-RULES-011."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+nomos-capability = { workspace = true }
+nomos-contracts = { workspace = true }
+
+[lints]
+workspace = true

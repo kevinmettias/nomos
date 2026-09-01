@@ -42668,7 +42668,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Territory named tests/integration/tests/determinism.rs, a file that does not exist -- the real test binary is tests/integration/tests/determinism/main.rs (Cargo's directory-root form), so the reserved path would never actually cover declarations.rs/domains.rs. Also unclaimed crates/capabilities/nomos-cap-naming-policy is not needed for this fix (only the fact-producing crates under crates/repository and the two test harnesses are touched). A third crate, nomos-repo-scripting, has also landed with the identical shape and the identical gap since this item was written. Re-adding as -2 with corrected territory now that the pattern (3 near-identical crates) has stabilized and nothing is currently claimed under crates/repository."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -42687,7 +42691,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "n/a",
+        "declined_at": 1788304399
+      }
     },
     {
       "id": "P26-RULES-RUST-TEXT-JUSTIFICATION-3",
@@ -43707,6 +43714,151 @@
         },
         "revision": "e25b7c7d2c152489a1b773f529f0b712bfdf9186"
       },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "OD-RULES-011-WORDS",
+      "title": "nomos-cap-words-policy: the nomos.cap.words.policy capability contract",
+      "why": "standards.json already declares words.approved_abbreviations (a repository's additions to code-standards' own default approved-shortenings list) but nothing reads it -- the same gap OD-RULES-011 found for naming, limits and scripting. A fourth instance, powering the abbreviations rule: split an identifier into words, flag a banned or vowel-free one unless it is approved (default list, extended by a repository's own declaration).",
+      "done_when": "nomos-cap-words-policy exists at crates/capabilities/nomos-cap-words-policy with a contract (nomos.cap.words.policy), a payload carrying a repository's approved-word additions, its own tests, and cargo test -p nomos-cap-words-policy passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities/nomos-cap-words-policy",
+          "work/ledger.json"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "widening territory upfront"
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cap-words-policy"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "nomos-75",
+          "reason": "widening territory upfront to include workspace registration, avoiding the crate-can't-build-standalone lesson from limits",
+          "abandoned_at": 1788304371
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "nomos-75",
+        "declined_at": 1788304371
+      }
+    },
+    {
+      "id": "OD-RULES-011-WORDS-2",
+      "title": "nomos-cap-words-policy: the nomos.cap.words.policy capability contract",
+      "why": "standards.json already declares words.approved_abbreviations (a repository's additions to code-standards' own default approved-shortenings list) but nothing reads it -- the same gap OD-RULES-011 found for naming, limits and scripting. A fourth instance, powering the abbreviations rule: split an identifier into words, flag a banned or vowel-free one unless it is approved (default list, extended by a repository's own declaration).",
+      "done_when": "nomos-cap-words-policy exists with a contract (nomos.cap.words.policy), a payload carrying a repository's approved-word additions, its own tests, registered in Cargo.toml/README.md/both bands.rs at band 23, and cargo test -p nomos-cap-words-policy passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities/nomos-cap-words-policy",
+          "Cargo.toml",
+          "README.md",
+          "crates/rules/nomos-rules/src/checks/dependency/bands.rs",
+          "tests/contract/tests/boundaries/bands.rs",
+          "tests/contract/surface",
+          "work/ledger.json"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cap-words-policy"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cap-words-policy"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 5 tests\ntest payload::tests::Test_A_Line_With_No_Tag_Should_Be_Refused ... ok\ntest payload::tests::Test_An_Unrecognized_Tag_Should_Be_Refused ... ok\ntest payload::tests::Test_An_Empty_Byte_String_Should_Decode_To_A_Policy_That_Declares_Nothing ... ok\ntest payload::tests::Test_Encode_Payload_Should_Produce_Stable_Diffable_Bytes ... ok\ntest payload::tests::Test_Parse_Payload_Should_Round_Trip_A_Payload_Through_Its_Own_Encoding ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 6 tests\ntest Test_Capability_Contract_Should_Assemble_Its_Declared_Identity_And_Ceiling ... ok\ntest Test_The_Contract_Should_Stand_With_No_Provider_At_All ... ok\ntest Test_One_Capability_Should_Admit_One_Contract ... ok\ntest Test_The_Ceiling_Should_Admit_A_Weaker_Offer ... ok\ntest Test_The_Ceiling_Should_Refuse_A_Claim_Of_Semantic_Resolution ... ok\ntest Test_Payload_Schema_Should_Match_The_Declared_Schema_Constant ... ok\n\ntest result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.09s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_cap_words_policy-7f0dc572fab94f63.exe)\n     Running tests\\contract.rs (target\\debug\\deps\\contract-9bf150136a5ebb37.exe)\n   Doc-tests nomos_cap_words_policy\n",
+        "verified_at": 1788304526,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "3976cae8ccdcf788f13e5e4e882b5b8dc07c4ebc"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "OD-LEDGER-DETERMINISM-STRATEGY-GAP-2",
+      "title": "nomos-repo-limits, nomos-repo-standards and nomos-repo-scripting construct facts and declare no determinism Strategy",
+      "why": "Verified directly: Test_Every_Fact_Producing_Crate_Should_Declare_A_Strategy now names three crates (a third, nomos-repo-scripting, landed since this gap was first flagged, with the identical shape), and the harness test finds zero registered strategies. The pattern has stabilized -- all three crates share an identical file layout (fact_context.rs, guarantee.rs, provider/policy_fact.rs, reading.rs) and nothing is currently claimed under crates/repository -- so the design judgment earlier deferred to each crate's own author can now be made directly, against nomos-lang-rust-deny::DependencyPolicyFactProduction's real precedent for the same shape (a provider reading a fixed input and deterministically encoding a policy fact, no subprocess).",
+      "done_when": "All three crates declare an impl Strategy; tests/integration/tests/determinism/declarations.rs and domains.rs register and verify each; cargo test --no-fail-fast -p nomos-contract-tests --test determinism_declarations exits 0; cargo test -p tests-integration --test determinism exits 0.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/repository",
+          "tests/contract/tests/determinism_declarations.rs",
+          "tests/integration/tests/determinism"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-external-review-reconciliation",
+        "acquired_at": 1788304412,
+        "lease_expires_at": 1788311612
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "determinism_declarations"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
       "abandoned": [],
       "displaced": [],
       "declined": null

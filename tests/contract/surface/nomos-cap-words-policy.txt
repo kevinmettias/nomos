@@ -1,0 +1,13 @@
+pub const fn nomos_cap_words_policy::Ceiling() -> Guarantee
+pub const nomos_cap_words_policy::CAPABILITY: &str
+pub const nomos_cap_words_policy::CONTRACT_VERSION: ContractVersion
+pub const nomos_cap_words_policy::SCHEMA: &str
+pub fn nomos_cap_words_policy::Capability() -> CapabilityId
+pub fn nomos_cap_words_policy::Capability_Contract() -> CapabilityContract
+pub fn nomos_cap_words_policy::Encode_Payload(payload: &WordsPolicyPayload) -> Vec<u8>
+pub fn nomos_cap_words_policy::Parse_Payload(bytes: &[u8]) -> Result<WordsPolicyPayload, Refusal>
+pub fn nomos_cap_words_policy::Payload_Schema() -> SchemaId
+pub struct field nomos_cap_words_policy::Refusal::reason: String
+pub struct field nomos_cap_words_policy::WordsPolicyPayload::approved_additions: Vec<String>
+pub struct nomos_cap_words_policy::Refusal
+pub struct nomos_cap_words_policy::WordsPolicyPayload
