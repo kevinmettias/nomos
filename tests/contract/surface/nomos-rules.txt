@@ -1,3 +1,7 @@
+pub const fn nomos_rules::FunctionArityPolicy::Allow_One_Receiver_For_Qualified_Functions(mut self) -> Self
+pub const fn nomos_rules::FunctionArityPolicy::For_Extension(mut self, extension: &'static str) -> Self
+pub const fn nomos_rules::FunctionArityPolicy::New(rule: &'static str, max_value_parameters: u32) -> Self
+pub const fn nomos_rules::FunctionArityPolicy::With_Gate(mut self, gate: GateCategory) -> Self
 pub const nomos_rules::A_RUST_PATH_STAYS_WITHIN_ITS_OWN_SUBTREE: &str
 pub const nomos_rules::A_SCRIPT_DECLARES_ITS_PURPOSE: &str
 pub const nomos_rules::BOOLEAN_PREDICATES: &str
@@ -5,6 +9,8 @@ pub const nomos_rules::COMPLETENESS_MIRROR: &str
 pub const nomos_rules::CONSTANTS_SPLIT_BY_EXPORT: &str
 pub const nomos_rules::CONTRACT_RECORD: &str
 pub const nomos_rules::CONTRACT_RECORD_VERSION: u32
+pub const nomos_rules::CROSS_LANGUAGE_CONTRACT_RECORD: &str
+pub const nomos_rules::CROSS_LANGUAGE_CONTRACT_RECORD_VERSION: u32
 pub const nomos_rules::CROSS_LANGUAGE_CORRESPONDENCE: &str
 pub const nomos_rules::DATA_NAMES_STAY_LOWER_SNAKE: &str
 pub const nomos_rules::DECLARED_ROLE_MATCHES_SURFACE: &str
@@ -13,6 +19,8 @@ pub const nomos_rules::DEPENDENCY_CONTRACT_RECORD: &str
 pub const nomos_rules::DEPENDENCY_CONTRACT_RECORD_VERSION: u32
 pub const nomos_rules::DEPENDENCY_DIRECTION: &str
 pub const nomos_rules::DEPENDENCY_POLICY: &str
+pub const nomos_rules::DEPENDENCY_POLICY_CONTRACT_RECORD: &str
+pub const nomos_rules::DEPENDENCY_POLICY_CONTRACT_RECORD_VERSION: u32
 pub const nomos_rules::DEPRECATION: &str
 pub const nomos_rules::EXPORTED_FUNCTIONS_USE_UPPER_SNAKE_CASE: &str
 pub const nomos_rules::FILE_NAME_MATCHES_DECLARED_TYPE: &str
@@ -21,6 +29,8 @@ pub const nomos_rules::FILE_SIZE_REVIEW_TRIGGER: &str
 pub const nomos_rules::FIVE_HUNDRED_LINE_REVIEW_TRIGGER: &str
 pub const nomos_rules::GO_HELPERS_PACKAGE_FIVE_INPUTS: &str
 pub const nomos_rules::GO_VARIABLES_USE_LOWER_SNAKE_CASE: &str
+pub const nomos_rules::LINT_CONTRACT_RECORD: &str
+pub const nomos_rules::LINT_CONTRACT_RECORD_VERSION: u32
 pub const nomos_rules::LINT_DIAGNOSTICS: &str
 pub const nomos_rules::NAMING_CONVENTION: &str
 pub const nomos_rules::NO_DECORATIVE_SECTION_DIVIDERS: &str
@@ -42,11 +52,17 @@ pub const nomos_rules::UNREAD_REACHES_FINDING: &str
 pub const nomos_rules::UNREAD_REACHES_FINDING_CONTRACT_RECORD: &str
 pub const nomos_rules::UNREAD_REACHES_FINDING_CONTRACT_RECORD_VERSION: u32
 pub const nomos_rules::UNWRAP_EXPECT_DISCIPLINE: &str
+pub enum nomos_rules::FunctionAritySource
 pub enum nomos_rules::Reading
+pub enum nomos_rules::ReceiverAllowance
 pub enum nomos_rules::RuleRegistryError
 pub enum nomos_rules::UniverseKind
+pub enum variant nomos_rules::FunctionAritySource::All
+pub enum variant nomos_rules::FunctionAritySource::Extension(&'static str)
 pub enum variant nomos_rules::Reading::Observed(Vec<DeclaredUniverse>)
 pub enum variant nomos_rules::Reading::Unobserved { because: String, }
+pub enum variant nomos_rules::ReceiverAllowance::None
+pub enum variant nomos_rules::ReceiverAllowance::OneForQualifiedFunctions
 pub enum variant nomos_rules::RuleRegistryError::AlreadyOffered(RuleId)
 pub enum variant nomos_rules::UniverseKind::Constant
 pub enum variant nomos_rules::UniverseKind::Enumeration
@@ -65,6 +81,7 @@ pub fn nomos_rules::Check_Exported_Go_Functions_Use_Upper_Snake_Case( sources: &
 pub fn nomos_rules::Check_File_Name_Matches_Declared_Type( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
 pub fn nomos_rules::Check_File_Size_Justification_Trigger(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_File_Size_Review_Trigger(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_Function_Arity_Policy( sources: &[SourceFile], facts: &mut dyn FactReader, policy: FunctionArityPolicy, ) -> Vec<Finding>
 pub fn nomos_rules::Check_Go_Constants_Split_By_Export(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 pub fn nomos_rules::Check_Go_File_Size_Hard_Trigger(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Go_File_Size_Review_Trigger(sources: &[SourceFile]) -> Vec<Finding>
@@ -98,6 +115,11 @@ pub struct field nomos_rules::DeclaredUniverse::claimed_mirror: Option<String>
 pub struct field nomos_rules::DeclaredUniverse::kind: UniverseKind
 pub struct field nomos_rules::DeclaredUniverse::name: String
 pub struct field nomos_rules::DeclaredUniverse::path: String
+pub struct field nomos_rules::FunctionArityPolicy::gate: GateCategory
+pub struct field nomos_rules::FunctionArityPolicy::max_value_parameters: u32
+pub struct field nomos_rules::FunctionArityPolicy::receiver_allowance: ReceiverAllowance
+pub struct field nomos_rules::FunctionArityPolicy::rule: &'static str
+pub struct field nomos_rules::FunctionArityPolicy::source: FunctionAritySource
 pub struct field nomos_rules::RoleSurfacePair::actual_surface: String
 pub struct field nomos_rules::RoleSurfacePair::crate_name: String
 pub struct field nomos_rules::RoleSurfacePair::crate_root: String
@@ -110,6 +132,7 @@ pub struct field nomos_rules::SourceFile::preferred_syntax_provider: Option<Prov
 pub struct field nomos_rules::SourceFile::subject: SubjectId
 pub struct field nomos_rules::SourceFile::text: String
 pub struct nomos_rules::DeclaredUniverse
+pub struct nomos_rules::FunctionArityPolicy
 pub struct nomos_rules::RoleSurfacePair
 pub struct nomos_rules::RuleOffer
 pub struct nomos_rules::RuleRegistry

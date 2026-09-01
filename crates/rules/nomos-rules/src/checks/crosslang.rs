@@ -41,6 +41,19 @@ use nomos_contracts::Finding;
 /// This rule's own identifier.
 pub const CROSS_LANGUAGE_CORRESPONDENCE: &str = "cross-language-correspondence";
 
+/// The record this implementation's contract is written in -- `OD-CAPABILITY-010` decided
+/// the doc-comment-declared-correspondence shape this rule judges.
+/// `tests/contract/tests/rule_contract_citation.rs` reads `OD-CAPABILITY-010`'s own front
+/// matter on every run and compares it against
+/// [`CROSS_LANGUAGE_CONTRACT_RECORD_VERSION`], the same `nomos_rules::DEPENDENCY_CONTRACT_
+/// RECORD` shape, so an amendment this implementation has not caught up to is a red test
+/// rather than silent drift.
+pub const CROSS_LANGUAGE_CONTRACT_RECORD: &str = "OD-CAPABILITY-010";
+
+/// The version of [`CROSS_LANGUAGE_CONTRACT_RECORD`] this implementation was written
+/// against.
+pub const CROSS_LANGUAGE_CONTRACT_RECORD_VERSION: u32 = 1;
+
 /// Judges every struct among `sources` that declares a correspondence, against whichever
 /// other struct among `sources` its declared name resolves to.
 ///

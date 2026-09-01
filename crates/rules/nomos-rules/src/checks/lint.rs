@@ -28,6 +28,17 @@ use nomos_contracts::{
 /// This rule's own identifier.
 pub const LINT_DIAGNOSTICS: &str = "lint-diagnostics";
 
+/// The record this implementation's contract is written in -- `OD-RULES-010` decided a
+/// `ToolProvider`'s output is a fact a native rule judges, this rule's first real instance.
+/// `tests/contract/tests/rule_contract_citation.rs` reads `OD-RULES-010`'s own front matter
+/// on every run and compares it against [`LINT_CONTRACT_RECORD_VERSION`], the same
+/// `nomos_rules::DEPENDENCY_CONTRACT_RECORD` shape, so an amendment this implementation has
+/// not caught up to is a red test rather than silent drift.
+pub const LINT_CONTRACT_RECORD: &str = "OD-RULES-010";
+
+/// The version of [`LINT_CONTRACT_RECORD`] this implementation was written against.
+pub const LINT_CONTRACT_RECORD_VERSION: u32 = 2;
+
 /// Judges every workspace member `sources` names against `cargo clippy`'s own reported
 /// diagnostics for it.
 ///

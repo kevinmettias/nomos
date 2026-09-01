@@ -16,7 +16,11 @@
 //! `Check_Naming_Convention` is deliberately absent: `naming.rs`'s own "why this has no
 //! `CONTRACT_RECORD`" section says its contract is `README.md` prose, and a record-less rule
 //! has no front matter to compare against. That absence is a fact about the rule, not a hole
-//! in this file, and a fourth rule carrying a real record means a row below.
+//! in this file, and every rule carrying a real record means a row below --
+//! `OD-GATE-019-REGISTRY-COHERENCE-B-4` added `Check_Lint_Diagnostics`, `Check_Dependency_
+//! Policy` and `Check_Cross_Language_Correspondence` this way, the same shape `Check_Every_
+//! Member_Declares_A_Band` already took by citing `DEPENDENCY_CONTRACT_RECORD` rather than a
+//! record of its own.
 
 use nomos_contract_tests::Workspace;
 use std::path::Path;
@@ -41,6 +45,21 @@ const CITATIONS: &[(&str, &str, u32)] = &[
         "nomos_rules::UNREAD_REACHES_FINDING_CONTRACT_RECORD",
         nomos_rules::UNREAD_REACHES_FINDING_CONTRACT_RECORD,
         nomos_rules::UNREAD_REACHES_FINDING_CONTRACT_RECORD_VERSION,
+    ),
+    (
+        "nomos_rules::LINT_CONTRACT_RECORD",
+        nomos_rules::LINT_CONTRACT_RECORD,
+        nomos_rules::LINT_CONTRACT_RECORD_VERSION,
+    ),
+    (
+        "nomos_rules::DEPENDENCY_POLICY_CONTRACT_RECORD",
+        nomos_rules::DEPENDENCY_POLICY_CONTRACT_RECORD,
+        nomos_rules::DEPENDENCY_POLICY_CONTRACT_RECORD_VERSION,
+    ),
+    (
+        "nomos_rules::CROSS_LANGUAGE_CONTRACT_RECORD",
+        nomos_rules::CROSS_LANGUAGE_CONTRACT_RECORD,
+        nomos_rules::CROSS_LANGUAGE_CONTRACT_RECORD_VERSION,
     ),
 ];
 
@@ -82,10 +101,13 @@ fn Test_The_Citation_Table_Should_Cover_Every_Cited_Rule()
 {
     assert_eq!(
         CITATIONS.len(),
-        3,
-        "nomos-rules ships four rules, three of which cite a versioned record: \
-         Check_Completeness_Mirrors cites D-134, Check_Dependency_Direction cites \
-         OD-RULES-003, and Check_Unread_Reaches_A_Finding cites OD-RULES-008. \
+        6,
+        "nomos-rules ships many rules, six of which cite a versioned record: \
+         Check_Completeness_Mirrors cites D-134, Check_Dependency_Direction and \
+         Check_Every_Member_Declares_A_Band both cite OD-RULES-003, \
+         Check_Unread_Reaches_A_Finding cites OD-RULES-008, Check_Lint_Diagnostics and \
+         Check_Dependency_Policy both cite OD-RULES-010, and \
+         Check_Cross_Language_Correspondence cites OD-CAPABILITY-010. \
          Check_Naming_Convention cites README.md prose and has no front matter \
          to compare against. A rule added with a real record needs a row in CITATIONS and \
          this number raised with it."

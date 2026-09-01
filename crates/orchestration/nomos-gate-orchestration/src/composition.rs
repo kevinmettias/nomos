@@ -12,46 +12,52 @@
 //! it describes is worse than no plan: a caller reading it concludes dependency direction is
 //! unenforced when every `nomos check` enforces it. `crate::tests` asserts the offers rather
 //! than counting them, because a count agrees with itself. `P13-CONTROLFLOW-REACHABILITY-WIRE`
-//! composed the fourth the same way, and `OD-GATE-019-REGISTRY-COHERENCE-A` the fifth:
-//! `nomos-check-orchestration::run_context::RULE_COUNT` had already reached eight while this
-//! registry stayed at four, so a caller reading it concluded dependency completeness was
-//! unenforced when every `nomos check` enforces it too. `DEPENDENCY_COMPLETENESS` shares
-//! `DEPENDENCY_DIRECTION`'s own `DEPENDENCY_CONTRACT_RECORD` -- both judge the same declared
-//! architecture -- so this offer needed no new citable record, unlike the three
-//! `OD-GATE-019-REGISTRY-COHERENCE-B` still has to compose.
+//! composed the fourth the same way, `OD-GATE-019-REGISTRY-COHERENCE-A` the fifth, and
+//! `OD-GATE-019-REGISTRY-COHERENCE-B` the remaining three: `nomos-check-orchestration
+//! ::run_context::RULE_COUNT` had already reached eight while this registry stayed at four,
+//! so a caller reading it concluded dependency completeness, lint diagnostics, dependency
+//! policy and cross-language correspondence were unenforced when every `nomos check`
+//! enforces them too. `DEPENDENCY_COMPLETENESS` shared `DEPENDENCY_DIRECTION`'s own
+//! `DEPENDENCY_CONTRACT_RECORD`; the remaining three had no citable record at all until
+//! `nomos-rules` gained `LINT_CONTRACT_RECORD`, `DEPENDENCY_POLICY_CONTRACT_RECORD` and
+//! `CROSS_LANGUAGE_CONTRACT_RECORD`, each citing the same governing decision their own
+//! module doc already named in prose (`OD-RULES-010` for the first two,
+//! `OD-CAPABILITY-010` for the third).
 
 use nomos_contracts::RuleId;
 use nomos_rules::{
     RuleOffer, RuleRegistry, RuleRegistryError, COMPLETENESS_MIRROR, CONTRACT_RECORD,
-    CONTRACT_RECORD_VERSION, DEPENDENCY_COMPLETENESS, DEPENDENCY_CONTRACT_RECORD,
-    DEPENDENCY_CONTRACT_RECORD_VERSION, DEPENDENCY_DIRECTION, NAMING_CONVENTION,
-    UNREAD_REACHES_FINDING, UNREAD_REACHES_FINDING_CONTRACT_RECORD,
-    UNREAD_REACHES_FINDING_CONTRACT_RECORD_VERSION,
+    CONTRACT_RECORD_VERSION, CROSS_LANGUAGE_CONTRACT_RECORD, CROSS_LANGUAGE_CONTRACT_RECORD_VERSION,
+    CROSS_LANGUAGE_CORRESPONDENCE, DEPENDENCY_COMPLETENESS, DEPENDENCY_CONTRACT_RECORD,
+    DEPENDENCY_CONTRACT_RECORD_VERSION, DEPENDENCY_DIRECTION, DEPENDENCY_POLICY,
+    DEPENDENCY_POLICY_CONTRACT_RECORD, DEPENDENCY_POLICY_CONTRACT_RECORD_VERSION, LINT_CONTRACT_RECORD,
+    LINT_CONTRACT_RECORD_VERSION, LINT_DIAGNOSTICS, NAMING_CONVENTION, UNREAD_REACHES_FINDING,
+    UNREAD_REACHES_FINDING_CONTRACT_RECORD, UNREAD_REACHES_FINDING_CONTRACT_RECORD_VERSION,
 };
 
-/// Registers this workspace's five shipped rules and hands back the registry.
+/// Registers this workspace's eight shipped rules and hands back the registry.
 ///
-/// The five are exactly what `nomos-check-orchestration::run::Run` calls today, and that is
-/// the property this function exists to keep true rather than a coincidence to note --
-/// `LINT_DIAGNOSTICS`, `DEPENDENCY_POLICY` and `CROSS_LANGUAGE_CORRESPONDENCE` still run
-/// through `Run` uncomposed here, left for `OD-GATE-019-REGISTRY-COHERENCE-B`.
+/// The eight are exactly what `nomos-check-orchestration::run::Run` calls, and that is the
+/// property this function exists to keep true rather than a coincidence to note.
 ///
 /// # Errors
 ///
 /// [`RuleRegistryError::AlreadyOffered`] if the same [`RuleId`] were offered twice. Not
-/// reachable today -- `COMPLETENESS_MIRROR`, `DEPENDENCY_DIRECTION`, `DEPENDENCY_COMPLETENESS`,
-/// `NAMING_CONVENTION` and `UNREAD_REACHES_FINDING` are distinct constants -- but returned
-/// rather than unwound for the same reason `nomos_check_orchestration::composition::Registered`
-/// returns its own `RegistryError`: a composition root's own defect must be representable, not
+/// reachable today -- every offered constant below is distinct -- but returned rather than
+/// unwound for the same reason `nomos_check_orchestration::composition::Registered` returns
+/// its own `RegistryError`: a composition root's own defect must be representable, not
 /// panicked past.
 pub fn Registered() -> Result<RuleRegistry, RuleRegistryError>
 {
     let mut registry = RuleRegistry::New();
 
     Offer_Completeness_Mirror(&mut registry)?;
+    Offer_Cross_Language_Correspondence(&mut registry)?;
     Offer_Dependency_Direction(&mut registry)?;
     Offer_Dependency_Completeness(&mut registry)?;
+    Offer_Dependency_Policy(&mut registry)?;
     Offer_Naming_Convention(&mut registry)?;
+    Offer_Lint_Diagnostics(&mut registry)?;
     Offer_Unread_Reaches_A_Finding(&mut registry)?;
 
     return Ok(registry);
@@ -100,6 +106,47 @@ fn Offer_Dependency_Completeness(registry: &mut RuleRegistry) -> Result<(), Rule
     return Ok(());
 }
 
+/// `Check_Dependency_Policy` cites `OD-RULES-010` through constants beside the rule, the
+/// same shape `DEPENDENCY_DIRECTION`'s citation above already uses -- the same record
+/// `Offer_Lint_Diagnostics` below cites, since both are `OD-RULES-010`'s tool-provider-
+/// verdict-relay shape for a different capability.
+fn Offer_Dependency_Policy(registry: &mut RuleRegistry) -> Result<(), RuleRegistryError>
+{
+    registry.Offer(RuleOffer {
+        rule: RuleId::New(DEPENDENCY_POLICY),
+        contract_record: DEPENDENCY_POLICY_CONTRACT_RECORD.to_owned(),
+        contract_record_version: DEPENDENCY_POLICY_CONTRACT_RECORD_VERSION,
+    })?;
+
+    return Ok(());
+}
+
+/// `Check_Lint_Diagnostics` cites `OD-RULES-010` through constants beside the rule, the same
+/// shape `DEPENDENCY_DIRECTION`'s citation above already uses.
+fn Offer_Lint_Diagnostics(registry: &mut RuleRegistry) -> Result<(), RuleRegistryError>
+{
+    registry.Offer(RuleOffer {
+        rule: RuleId::New(LINT_DIAGNOSTICS),
+        contract_record: LINT_CONTRACT_RECORD.to_owned(),
+        contract_record_version: LINT_CONTRACT_RECORD_VERSION,
+    })?;
+
+    return Ok(());
+}
+
+/// `Check_Cross_Language_Correspondence` cites `OD-CAPABILITY-010` through constants beside
+/// the rule, the same shape `DEPENDENCY_DIRECTION`'s citation above already uses.
+fn Offer_Cross_Language_Correspondence(registry: &mut RuleRegistry) -> Result<(), RuleRegistryError>
+{
+    registry.Offer(RuleOffer {
+        rule: RuleId::New(CROSS_LANGUAGE_CORRESPONDENCE),
+        contract_record: CROSS_LANGUAGE_CONTRACT_RECORD.to_owned(),
+        contract_record_version: CROSS_LANGUAGE_CONTRACT_RECORD_VERSION,
+    })?;
+
+    return Ok(());
+}
+
 /// `Check_Naming_Convention` has no `CONTRACT_RECORD` the way `Check_Completeness_Mirrors`
 /// cites `D-134` -- `naming.rs`'s own "# Why this has no `CONTRACT_RECORD`" section says its
 /// contract is `README.md`'s Conventions section, prose rather than a versioned record
@@ -139,15 +186,15 @@ mod tests
     use super::Registered;
     use nomos_contracts::RuleId;
     use nomos_rules::{
-        COMPLETENESS_MIRROR, DEPENDENCY_COMPLETENESS, DEPENDENCY_DIRECTION, NAMING_CONVENTION,
-        UNREAD_REACHES_FINDING,
+        COMPLETENESS_MIRROR, CROSS_LANGUAGE_CORRESPONDENCE, DEPENDENCY_COMPLETENESS, DEPENDENCY_DIRECTION,
+        DEPENDENCY_POLICY, LINT_DIAGNOSTICS, NAMING_CONVENTION, UNREAD_REACHES_FINDING,
     };
 
     /// The whole registry, by identity and in `RuleId` order -- the same discipline
-    /// `crate::tests::Test_Registered_Should_Compose_All_Four_Shipped_Rules` (over `Run`'s own
+    /// `crate::tests::Test_Registered_Should_Compose_All_Eight_Shipped_Rules` (over `Run`'s own
     /// output) already keeps, asserted here directly against `Registered` itself.
     #[test]
-    fn Test_Registered_Should_Offer_All_Five_Shipped_Rules()
+    fn Test_Registered_Should_Offer_All_Eight_Shipped_Rules()
     {
         let registry = Registered().expect("this crate's own registration must not be contradictory");
 
@@ -156,9 +203,12 @@ mod tests
             ids,
             vec![
                 RuleId::New(COMPLETENESS_MIRROR),
+                RuleId::New(CROSS_LANGUAGE_CORRESPONDENCE),
                 RuleId::New(DEPENDENCY_COMPLETENESS),
                 RuleId::New(DEPENDENCY_DIRECTION),
+                RuleId::New(DEPENDENCY_POLICY),
                 RuleId::New(NAMING_CONVENTION),
+                RuleId::New(LINT_DIAGNOSTICS),
                 RuleId::New(UNREAD_REACHES_FINDING),
             ],
             "in RuleId order: {ids:?}"

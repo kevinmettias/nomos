@@ -28,6 +28,18 @@ use nomos_contracts::{
 /// This rule's own identifier.
 pub const DEPENDENCY_POLICY: &str = "dependency-policy";
 
+/// The record this implementation's contract is written in -- `OD-RULES-010` decided a
+/// `ToolProvider`'s output is a fact a native rule judges, this rule's second real instance,
+/// the same record [`crate::checks::lint::LINT_CONTRACT_RECORD`] cites.
+/// `tests/contract/tests/rule_contract_citation.rs` reads `OD-RULES-010`'s own front matter
+/// on every run and compares it against [`DEPENDENCY_POLICY_CONTRACT_RECORD_VERSION`], so an
+/// amendment this implementation has not caught up to is a red test rather than silent drift.
+pub const DEPENDENCY_POLICY_CONTRACT_RECORD: &str = "OD-RULES-010";
+
+/// The version of [`DEPENDENCY_POLICY_CONTRACT_RECORD`] this implementation was written
+/// against.
+pub const DEPENDENCY_POLICY_CONTRACT_RECORD_VERSION: u32 = 2;
+
 /// Judges the workspace's one `nomos.cap.dependency.policy` fact, if `sources` names one,
 /// against `cargo deny`'s own reported violations.
 ///
