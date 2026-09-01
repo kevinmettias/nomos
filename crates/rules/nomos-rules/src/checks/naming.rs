@@ -36,15 +36,22 @@
 //! composes the two: the rule's own identifier and [`Check_Naming_Convention`] itself, plus
 //! the end-to-end tests that exercise both together through a real reader.
 
+mod data_names;
 mod reading;
+mod test_names;
 mod violations;
 
 use crate::SourceFile;
 use nomos_analysis::FactReader;
 use nomos_contracts::Finding;
 
+pub use data_names::{Check_Data_Names_Stay_Lower_Snake, DATA_NAMES_STAY_LOWER_SNAKE};
+pub use test_names::{Check_Test_Names_Describe_Behavior, TEST_NAME_DESCRIBES_BEHAVIOR};
+
 /// This rule's own identifier.
 pub const NAMING_CONVENTION: &str = "function-naming-convention";
+/// The code-standards identifier for this workspace's function naming convention.
+pub const PROJECT_OWNED_FUNCTION_NAMES_USE_UPPER_SNAKE_CASE: &str = "project-owned-function-names-use-upper-snake-case";
 
 /// Judges every function `sources` declares against the workspace's naming convention.
 ///
@@ -77,6 +84,27 @@ pub fn Check_Naming_Convention(
     }
 
     findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
+    return findings;
+}
+
+/// Judges the same function-name convention under the code-standards rule id.
+#[must_use]
+pub fn Check_Project_Owned_Function_Names_Use_Upper_Snake_Case(
+    sources: &[SourceFile],
+    facts: &mut dyn FactReader,
+) -> Vec<Finding>
+{
+    let mut findings = Check_Naming_Convention(sources, facts);
+
+    for finding in &mut findings
+    {
+        finding.rule = nomos_contracts::RuleId::New(PROJECT_OWNED_FUNCTION_NAMES_USE_UPPER_SNAKE_CASE);
+        if finding.applicability == nomos_contracts::Applicability::Supported
+        {
+            finding.gate = nomos_contracts::GateCategory::Blocking;
+        }
+    }
+
     return findings;
 }
 
@@ -118,7 +146,10 @@ mod tests
     /// like `Source_File("src/lib.rs", "fn bad_name() {}")` reads as two interchangeable
     /// strings and a swap compiles silently. These wrappers give each position a type the
     /// other cannot satisfy.
+    #[derive(Clone, Copy)]
     struct Path<'a>(&'a str);
+
+    #[derive(Clone, Copy)]
     struct Text<'a>(&'a str);
 
     fn Materialize_Syntax_Fact(store: &mut MemoryFactStore, source: &SourceFile, offer: &ProviderOffer, payload: &str)
@@ -141,6 +172,65 @@ mod tests
             findings.first().expect("asserted len 1 above").subject_name,
             "src/lib.rs"
         );
+    }
+
+    #[test]
+    fn Test_Check_Project_Owned_Function_Names_Use_Upper_Snake_Case_Should_Report_Under_The_Code_Standards_Id()
+    {
+        let source = Source_File(Path("src/lib.rs"), Text("fn bad_name() {}"));
+        let TestOffering { mut store, registry, offer } = Offering();
+        Materialize_Syntax_Fact(
+            &mut store,
+            &source,
+            &offer,
+            "unexpanded\t0\nitem\t0\tFunction\tPublic\tbad_name\t.\t+fn/0\n",
+        );
+
+        let mut reader = Reader::On(&store, &registry, Test_Context());
+        let findings = Check_Project_Owned_Function_Names_Use_Upper_Snake_Case(&[source], &mut reader);
+
+        assert_eq!(findings.len(), 1, "{findings:?}");
+        let found = findings.first().expect("asserted len 1 above");
+        assert_eq!(found.rule, nomos_contracts::RuleId::New(PROJECT_OWNED_FUNCTION_NAMES_USE_UPPER_SNAKE_CASE));
+        assert_eq!(found.gate, nomos_contracts::GateCategory::Blocking);
+    }
+
+    #[test]
+    fn Test_Check_Test_Names_Describe_Behavior_Should_Read_And_Judge_A_Real_Fact()
+    {
+        let source = Source_File(Path("src/lib.rs"), Text("#[test]\nfn Test_Insert_Works() {}"));
+        let TestOffering { mut store, registry, offer } = Offering();
+        Materialize_Syntax_Fact(
+            &mut store,
+            &source,
+            &offer,
+            "unexpanded\t0\nitem\t0\tFunction\tPrivate\tTest_Insert_Works\t.\t+fn/0\n",
+        );
+
+        let mut reader = Reader::On(&store, &registry, Test_Context());
+        let findings = Check_Test_Names_Describe_Behavior(&[source], &mut reader);
+
+        assert_eq!(findings.len(), 1, "{findings:?}");
+        assert_eq!(findings.first().expect("asserted len 1 above").subject_name, "Test_Insert_Works");
+    }
+
+    #[test]
+    fn Test_Check_Data_Names_Stay_Lower_Snake_Should_Read_And_Judge_A_Real_Fact()
+    {
+        let source = Source_File(Path("src/lib.rs"), Text("mod BadModule {}"));
+        let TestOffering { mut store, registry, offer } = Offering();
+        Materialize_Syntax_Fact(
+            &mut store,
+            &source,
+            &offer,
+            "unexpanded\t0\nitem\t0\tModule\tPrivate\tBadModule\t.\t.\n",
+        );
+
+        let mut reader = Reader::On(&store, &registry, Test_Context());
+        let findings = Check_Data_Names_Stay_Lower_Snake(&[source], &mut reader);
+
+        assert_eq!(findings.len(), 1, "{findings:?}");
+        assert_eq!(findings.first().expect("asserted len 1 above").subject_name, "BadModule");
     }
 
     fn Guarantee_At_Floor() -> Guarantee

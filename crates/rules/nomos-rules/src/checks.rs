@@ -1,6 +1,10 @@
-//! The nine rules this crate implements, one module each — `dependency` holds two,
+//! The thirty-two rules this crate implements, one module each — `naming` holds ten,
+//! `rust_text` holds four, `structure` holds three, `formatting` holds three, and `dependency` holds two,
+//! while `script_discipline` holds two,
 //! [`Check_Dependency_Direction`] and [`Check_Every_Member_Declares_A_Band`], since both
-//! judge the same declared architecture and observed `nomos.cap.dependency.edges` fact.
+//! judge the same declared architecture and observed `nomos.cap.dependency.edges` fact,
+//! while naming holds the general function convention and the test-name behavior
+//! convention.
 //! `lib.rs`'s own module doc walks why each one exists and in what order it was built;
 //! this file only gathers them so the crate root is not itself the ninth thing that
 //! grows one module per rule forever.
@@ -13,12 +17,17 @@
 
 mod crosslang;
 mod dependency;
+mod formatting;
+mod function_shape;
 mod lint;
 mod mirror;
 mod naming;
 mod policy;
 mod reachability;
 mod role_surface_pair;
+mod rust_text;
+mod script_discipline;
+mod structure;
 #[cfg(test)]
 mod test_support;
 
@@ -31,15 +40,44 @@ pub use dependency::{
     Check_Dependency_Direction, Check_Every_Member_Declares_A_Band, DEPENDENCY_COMPLETENESS, DEPENDENCY_CONTRACT_RECORD,
     DEPENDENCY_CONTRACT_RECORD_VERSION, DEPENDENCY_DIRECTION,
 };
+pub use formatting::{
+    Check_No_Decorative_Section_Dividers, Check_No_Trailing_Whitespace, Check_Todo_Format,
+    NO_DECORATIVE_SECTION_DIVIDERS, NO_TRAILING_WHITESPACE, TODO_FORMAT,
+};
+pub use function_shape::{
+    Check_Go_Helpers_Package_Five_Inputs, Check_Parameter_Count, GO_HELPERS_PACKAGE_FIVE_INPUTS, PARAMETER_COUNT,
+};
 pub use lint::{Check_Lint_Diagnostics, LINT_DIAGNOSTICS};
 pub use mirror::{Check_Completeness_Mirrors, COMPLETENESS_MIRROR, CONTRACT_RECORD, CONTRACT_RECORD_VERSION};
-pub use naming::{Check_Naming_Convention, NAMING_CONVENTION};
+pub use naming::{
+    Check_Boolean_Predicates, Check_Data_Names_Stay_Lower_Snake, Check_File_Name_Matches_Declared_Type,
+    Check_Exported_Go_Functions_Use_Upper_Snake_Case, Check_Go_Type_Names_Use_Camel_Case,
+    Check_Naming_Convention, Check_One_Public_Type_Per_File, Check_Project_Owned_Function_Names_Use_Upper_Snake_Case,
+    Check_Single_Letter_Names, Check_Test_Names_Describe_Behavior, BOOLEAN_PREDICATES, DATA_NAMES_STAY_LOWER_SNAKE,
+    EXPORTED_FUNCTIONS_USE_UPPER_SNAKE_CASE, FILE_NAME_MATCHES_DECLARED_TYPE, NAMING_CONVENTION,
+    ONE_PUBLIC_TYPE_PER_FILE, PROJECT_OWNED_FUNCTION_NAMES_USE_UPPER_SNAKE_CASE, SINGLE_LETTER_NAMES,
+    TEST_NAME_DESCRIBES_BEHAVIOR, TYPES_USE_UPPER_CAMEL_CASE_LOWER_CAMEL_CASE,
+};
 pub use policy::{Check_Dependency_Policy, DEPENDENCY_POLICY};
 pub use reachability::{
     Check_Unread_Reaches_A_Finding, UNREAD_REACHES_FINDING, UNREAD_REACHES_FINDING_CONTRACT_RECORD,
     UNREAD_REACHES_FINDING_CONTRACT_RECORD_VERSION,
 };
 pub use role_surface_pair::{Check_Declared_Role_Matches_Surface, RoleSurfacePair, DECLARED_ROLE_MATCHES_SURFACE};
+pub use rust_text::{
+    Check_A_Rust_Path_Stays_Within_Its_Own_Subtree, Check_Panics_Are_Justified_Documented_And_Validated,
+    Check_Shared_Interior_Mutability_Says_Why, Check_Unwrap_Expect_Discipline,
+    A_RUST_PATH_STAYS_WITHIN_ITS_OWN_SUBTREE, PANICS_ARE_JUSTIFIED_DOCUMENTED_AND_VALIDATED,
+    SHARED_INTERIOR_MUTABILITY_SAYS_WHY, UNWRAP_EXPECT_DISCIPLINE,
+};
+pub use script_discipline::{
+    Check_A_Script_Declares_Its_Purpose, Check_Scripts_Use_A_Portable_Shebang, A_SCRIPT_DECLARES_ITS_PURPOSE,
+    SCRIPTS_USE_A_PORTABLE_SHEBANG,
+};
+pub use structure::{
+    Check_File_Size_Justification_Trigger, Check_File_Size_Review_Trigger, Check_No_Mod_Rs_Files,
+    FILE_SIZE_JUSTIFICATION_TRIGGER, FILE_SIZE_REVIEW_TRIGGER, NO_MOD_RS_FILES,
+};
 
 /// Requires and judges one payload per source, the identical "read the fact, judge the
 /// payload, sort by subject then summary" shape [`lint`] and [`policy`] each rebuilt by

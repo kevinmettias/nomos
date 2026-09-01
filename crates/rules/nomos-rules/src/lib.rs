@@ -43,7 +43,7 @@
 //!
 //! # What is here
 //!
-//! Nine rules. [`Check_Completeness_Mirrors`] was chosen first because it is the only
+//! Thirty-two rules. [`Check_Completeness_Mirrors`] was chosen first because it is the only
 //! rule in this tree with three recorded historical instances to test a judgment against —
 //! `P10-FIRST-CHECK` shipped with exactly this one and no more, because a single check
 //! that is honest end to end is worth more than three that are nearly wired.
@@ -116,6 +116,75 @@
 //! *coverage* judgment over the identical fact and the identical band table — no new
 //! capability, no new provider, and no new contract citation, since it is the same design
 //! rather than a second one.
+//!
+//! [`Check_No_Trailing_Whitespace`] is the tenth rule and the first imported from
+//! code-standards' plain text formatting policies: `no-trailing-whitespace` needs no
+//! provider, because the deciding evidence is the exact `SourceFile::text` this crate is
+//! already handed.
+//!
+//! [`Check_Test_Names_Describe_Behavior`] is the eleventh and reuses the same syntax fact
+//! path as [`Check_Naming_Convention`]: a function already visible as a test by its `Test_`
+//! prefix must name the expectation with `_Should_` or `_Should_Not_`.
+//!
+//! [`Check_Todo_Format`] is the twelfth and shares the text-local source hygiene shape with
+//! [`Check_No_Trailing_Whitespace`]: a TODO comment must carry owner, description and
+//! ticket in the code-standards format.
+//!
+//! [`Check_File_Size_Review_Trigger`] and [`Check_File_Size_Justification_Trigger`] are
+//! the thirteenth and fourteenth rules, importing code-standards' ~500-line review and
+//! ~1500-line justification thresholds as text-local judgments.
+//!
+//! [`Check_Data_Names_Stay_Lower_Snake`] is the fifteenth rule, importing the subset of
+//! `data-names-stay-lower-snake` visible in `nomos.cap.syntax.items`: module names and
+//! named struct fields.
+//!
+//! [`Check_Project_Owned_Function_Names_Use_Upper_Snake_Case`] is the sixteenth rule and
+//! gives the existing function-name judgment the exact code-standards rule id and blocking
+//! gate.
+//!
+//! [`Check_No_Mod_Rs_Files`] is the seventeenth rule, importing code-standards' Rust
+//! module-layout rule as a path-local check over `src/**/mod.rs` while preserving the
+//! standard's explicit shared integration-test-module exemption.
+//!
+//! [`Check_File_Name_Matches_Declared_Type`] is the eighteenth rule, importing the subset
+//! of `file-name-matches-declared-type` visible through `nomos.cap.syntax.items`: public
+//! structs, enums, traits and type aliases in files whose stem is meaningful to compare.
+//!
+//! [`Check_Scripts_Use_A_Portable_Shebang`] and [`Check_A_Script_Declares_Its_Purpose`]
+//! are the nineteenth and twentieth rules, importing the text-local script-discipline
+//! checks that can be decided from a shebang script's first lines.
+//!
+//! [`Check_Single_Letter_Names`] and [`Check_Boolean_Predicates`] are the twenty-first and
+//! twenty-second rules, importing the parts of code-standards' general naming rules that
+//! are visible in syntax item facts: declared item names and named struct fields.
+//!
+//! [`Check_One_Public_Type_Per_File`] is the twenty-third rule, importing the public-surface
+//! form of code-standards' one-file-home-type rule from top-level public type-like syntax
+//! items.
+//!
+//! [`Check_Parameter_Count`] is the twenty-fourth rule, importing the definitely decidable
+//! part of code-standards' four-value-parameter cap from syntax item arity.
+//!
+//! [`Check_No_Decorative_Section_Dividers`] is the twenty-fifth rule, importing the
+//! conservative text-local half of code-standards' comment-divider discipline.
+//!
+//! [`Check_Go_Type_Names_Use_Camel_Case`] is the twenty-sixth rule, importing
+//! code-standards' Go type-name convention from the path, type-like syntax item names and
+//! Go visibility facts the syntax payload already carries.
+//!
+//! [`Check_Exported_Go_Functions_Use_Upper_Snake_Case`] is the twenty-seventh rule,
+//! importing code-standards' Go exported-function convention from function names and Go
+//! visibility facts already present in the syntax payload.
+//!
+//! [`Check_Go_Helpers_Package_Five_Inputs`] is the twenty-eighth rule, importing the
+//! Go-specific parameter-count rule id through the same syntax arity facts as
+//! [`Check_Parameter_Count`].
+//!
+//! [`Check_Unwrap_Expect_Discipline`], [`Check_Panics_Are_Justified_Documented_And_Validated`],
+//! [`Check_A_Rust_Path_Stays_Within_Its_Own_Subtree`] and [`Check_Shared_Interior_Mutability_Says_Why`]
+//! are the twenty-ninth through thirty-second rules, importing Rust text-local standards whose
+//! evidence is visible in one source file without a new provider: panic primitive spelling, path
+//! attribute values and explicit shared `RefCell` ownership escapes.
 
 #![forbid(unsafe_code)]
 
@@ -133,13 +202,30 @@ pub use checks::{
     Check_Completeness_Mirrors, COMPLETENESS_MIRROR, CONTRACT_RECORD, CONTRACT_RECORD_VERSION,
     Check_Dependency_Direction, Check_Every_Member_Declares_A_Band, DEPENDENCY_COMPLETENESS, DEPENDENCY_CONTRACT_RECORD,
     DEPENDENCY_CONTRACT_RECORD_VERSION, DEPENDENCY_DIRECTION,
+    Check_No_Decorative_Section_Dividers, Check_No_Trailing_Whitespace, Check_Todo_Format,
+    NO_DECORATIVE_SECTION_DIVIDERS, NO_TRAILING_WHITESPACE, TODO_FORMAT,
+    Check_Go_Helpers_Package_Five_Inputs, Check_Parameter_Count, GO_HELPERS_PACKAGE_FIVE_INPUTS, PARAMETER_COUNT,
     Check_Lint_Diagnostics, LINT_DIAGNOSTICS,
     Check_Dependency_Policy, DEPENDENCY_POLICY,
     Check_Cross_Language_Correspondence, CROSS_LANGUAGE_CORRESPONDENCE,
-    Check_Naming_Convention, NAMING_CONVENTION,
+    Check_Boolean_Predicates, Check_Data_Names_Stay_Lower_Snake, Check_File_Name_Matches_Declared_Type,
+    Check_Exported_Go_Functions_Use_Upper_Snake_Case, Check_Go_Type_Names_Use_Camel_Case,
+    Check_Naming_Convention, Check_One_Public_Type_Per_File, Check_Project_Owned_Function_Names_Use_Upper_Snake_Case,
+    Check_Single_Letter_Names, Check_Test_Names_Describe_Behavior, BOOLEAN_PREDICATES, DATA_NAMES_STAY_LOWER_SNAKE,
+    EXPORTED_FUNCTIONS_USE_UPPER_SNAKE_CASE, FILE_NAME_MATCHES_DECLARED_TYPE, NAMING_CONVENTION,
+    ONE_PUBLIC_TYPE_PER_FILE, PROJECT_OWNED_FUNCTION_NAMES_USE_UPPER_SNAKE_CASE, SINGLE_LETTER_NAMES,
+    TEST_NAME_DESCRIBES_BEHAVIOR, TYPES_USE_UPPER_CAMEL_CASE_LOWER_CAMEL_CASE,
     Check_Unread_Reaches_A_Finding, UNREAD_REACHES_FINDING, UNREAD_REACHES_FINDING_CONTRACT_RECORD,
     UNREAD_REACHES_FINDING_CONTRACT_RECORD_VERSION,
     Check_Declared_Role_Matches_Surface, RoleSurfacePair, DECLARED_ROLE_MATCHES_SURFACE,
+    Check_A_Rust_Path_Stays_Within_Its_Own_Subtree, Check_Panics_Are_Justified_Documented_And_Validated,
+    Check_Shared_Interior_Mutability_Says_Why, Check_Unwrap_Expect_Discipline,
+    A_RUST_PATH_STAYS_WITHIN_ITS_OWN_SUBTREE, PANICS_ARE_JUSTIFIED_DOCUMENTED_AND_VALIDATED,
+    SHARED_INTERIOR_MUTABILITY_SAYS_WHY, UNWRAP_EXPECT_DISCIPLINE,
+    Check_A_Script_Declares_Its_Purpose, Check_Scripts_Use_A_Portable_Shebang, A_SCRIPT_DECLARES_ITS_PURPOSE,
+    SCRIPTS_USE_A_PORTABLE_SHEBANG,
+    Check_File_Size_Justification_Trigger, Check_File_Size_Review_Trigger, Check_No_Mod_Rs_Files,
+    FILE_SIZE_JUSTIFICATION_TRIGGER, FILE_SIZE_REVIEW_TRIGGER, NO_MOD_RS_FILES,
 };
 pub use declared_universe::DeclaredUniverse;
 pub use reading::Reading;
