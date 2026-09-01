@@ -265,6 +265,20 @@
 //! but not a curated-prelude wildcard: neither this crate's syntax payload nor a
 //! hand-rolled parser can tell a prelude apart from any other wildcard, so that exemption
 //! is left unattempted rather than guessed at.
+//!
+//! [`Check_Atomic_Ordering_Choices_Are_Justified`], [`Check_Seqcst_Justified_Explicitly`] and
+//! [`Check_Relaxed_Not_Used_When_Ordering_Matters`] are the fifty-second through
+//! fifty-fourth rules, a new `concurrency_text` module and this crate's first rules to touch
+//! concurrency: code-standards' own `check-atomic-ordering` is one mechanism enforcing all
+//! three, because the five `std::sync::atomic::Ordering` variants partition exactly across
+//! them — `Relaxed` to the third, `SeqCst` to the second, the rest to the first — so one
+//! flagged call site is judged by exactly one of the three. A fourth consumer of the
+//! marker-comment-carries-a-reason shape, but not [`Check_Every_Allow_Carries_A_Justification`]'s
+//! looser "any adjacent comment" reading of it: the literal marker `check-atomic-ordering`
+//! itself requires (`// atomic-ordering: allow: <reason>`) is what these three port, since the
+//! standards' own worked example predates that marker and would pass the doc's prose but fail
+//! the tool that enforces it. No repository-configurable dimension, so a shared module rather
+//! than a capability.
 
 #![forbid(unsafe_code)]
 
@@ -279,6 +293,9 @@ use nomos_capability::Requirement;
 use nomos_contracts::{Assurance, FactVariant, Guarantee, IncrementalGranularity, ProviderId, SubjectId};
 
 pub use checks::{
+    Check_Atomic_Ordering_Choices_Are_Justified, Check_Relaxed_Not_Used_When_Ordering_Matters,
+    Check_Seqcst_Justified_Explicitly, ATOMIC_ORDERING_CHOICES_ARE_JUSTIFIED, RELAXED_NOT_USED_WHEN_ORDERING_MATTERS,
+    SEQCST_JUSTIFIED_EXPLICITLY,
     Check_Completeness_Mirrors, COMPLETENESS_MIRROR, CONTRACT_RECORD, CONTRACT_RECORD_VERSION,
     Check_Dependency_Direction, Check_Every_Member_Declares_A_Band, DEPENDENCY_COMPLETENESS, DEPENDENCY_CONTRACT_RECORD,
     DEPENDENCY_CONTRACT_RECORD_VERSION, DEPENDENCY_DIRECTION,

@@ -3,6 +3,7 @@ pub const fn nomos_rules::FunctionArityPolicy::For_Extension(mut self, extension
 pub const fn nomos_rules::FunctionArityPolicy::New(rule: &'static str, max_value_parameters: u32) -> Self
 pub const fn nomos_rules::FunctionArityPolicy::With_Gate(mut self, gate: GateCategory) -> Self
 pub const nomos_rules::AN_EXCLUDED_FILE_SAYS_WHY: &str
+pub const nomos_rules::ATOMIC_ORDERING_CHOICES_ARE_JUSTIFIED: &str
 pub const nomos_rules::A_CREDENTIAL_IS_NOT_HARDCODED_IN_SOURCE: &str
 pub const nomos_rules::A_DISCARDED_ERROR_IS_EXPLAINED: &str
 pub const nomos_rules::A_PACKAGE_IS_NAMED_AFTER_ITS_DIRECTORY: &str
@@ -51,7 +52,9 @@ pub const nomos_rules::ONE_THOUSAND_LINE_HARD_TRIGGER: &str
 pub const nomos_rules::PANICS_ARE_JUSTIFIED_DOCUMENTED_AND_VALIDATED: &str
 pub const nomos_rules::PARAMETER_COUNT: &str
 pub const nomos_rules::PROJECT_OWNED_FUNCTION_NAMES_USE_UPPER_SNAKE_CASE: &str
+pub const nomos_rules::RELAXED_NOT_USED_WHEN_ORDERING_MATTERS: &str
 pub const nomos_rules::SCRIPTS_USE_A_PORTABLE_SHEBANG: &str
+pub const nomos_rules::SEQCST_JUSTIFIED_EXPLICITLY: &str
 pub const nomos_rules::SHARED_INTERIOR_MUTABILITY_SAYS_WHY: &str
 pub const nomos_rules::SINGLE_LETTER_NAMES: &str
 pub const nomos_rules::SUPPRESSION_DIRECTIVES_CARRY_A_REASON: &str
@@ -87,6 +90,7 @@ pub fn nomos_rules::Check_A_Script_Declares_Its_Purpose(sources: &[SourceFile]) 
 pub fn nomos_rules::Check_A_Secret_Does_Not_Travel_In_A_Url(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_A_Skipped_Test_States_Why(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_An_Excluded_File_Says_Why(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_Atomic_Ordering_Choices_Are_Justified(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Boolean_Predicates( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
 pub fn nomos_rules::Check_Certificate_Verification_Is_Not_Disabled(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Completeness_Mirrors( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
@@ -120,7 +124,9 @@ pub fn nomos_rules::Check_One_Public_Type_Per_File( sources: &[SourceFile], fact
 pub fn nomos_rules::Check_Panics_Are_Justified_Documented_And_Validated(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Parameter_Count( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
 pub fn nomos_rules::Check_Project_Owned_Function_Names_Use_Upper_Snake_Case( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
+pub fn nomos_rules::Check_Relaxed_Not_Used_When_Ordering_Matters(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Scripts_Use_A_Portable_Shebang(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_Seqcst_Justified_Explicitly(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Shared_Interior_Mutability_Says_Why(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Single_Letter_Names( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
 pub fn nomos_rules::Check_Suppression_Directives_Carry_A_Reason(sources: &[SourceFile]) -> Vec<Finding>

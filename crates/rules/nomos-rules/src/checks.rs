@@ -1,7 +1,7 @@
-//! The fifty-one rules this crate implements, one module each — `naming` holds thirteen,
+//! The fifty-four rules this crate implements, one module each — `naming` holds thirteen,
 //! `rust_text` holds six, `go_text` holds five, `structure` holds five, `formatting` holds
-//! four, `security_text` holds three, `placement` holds two, and `dependency` holds two,
-//! while `script_discipline` holds three,
+//! four, `security_text` holds three, `concurrency_text` holds three, `placement` holds two,
+//! and `dependency` holds two, while `script_discipline` holds three,
 //! [`Check_Dependency_Direction`] and [`Check_Every_Member_Declares_A_Band`],
 //! since both judge the same declared architecture and observed
 //! `nomos.cap.dependency.edges` fact, while naming holds the general function convention
@@ -16,6 +16,7 @@
 //! test module was separately rebuilding the registry/store/fact scaffolding
 //! [`test_support`] now states once.
 
+mod concurrency_text;
 mod crosslang;
 mod dependency;
 mod formatting;
@@ -39,6 +40,11 @@ use crate::SourceFile;
 use nomos_analysis::FactReader;
 use nomos_contracts::Finding;
 
+pub use concurrency_text::{
+    Check_Atomic_Ordering_Choices_Are_Justified, Check_Relaxed_Not_Used_When_Ordering_Matters,
+    Check_Seqcst_Justified_Explicitly, ATOMIC_ORDERING_CHOICES_ARE_JUSTIFIED, RELAXED_NOT_USED_WHEN_ORDERING_MATTERS,
+    SEQCST_JUSTIFIED_EXPLICITLY,
+};
 pub use crosslang::{
     Check_Cross_Language_Correspondence, CROSS_LANGUAGE_CONTRACT_RECORD, CROSS_LANGUAGE_CONTRACT_RECORD_VERSION,
     CROSS_LANGUAGE_CORRESPONDENCE,
